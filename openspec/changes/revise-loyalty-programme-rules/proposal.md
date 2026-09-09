@@ -40,11 +40,11 @@ tracks members who are still buying.
   The whole balance expires after twelve months with no earn and no redemption,
   and any earn or redemption resets that clock for the whole balance. Resetting
   only ever pushes the date out, so a late-arriving record shortens nothing.
-- **Tier points and redeemable points become two counts on one ledger.** Tier
-  points are cumulative and never reduced by redeeming; redeemable points are the
-  spendable balance. Both are derived from the same append-only entries, so a
-  member who spends their points no longer loses their tier progress and nothing
-  has to be kept in step.
+- **One balance, and tier progress summed beside it.** The balance rises on
+  earning and falls on redeeming; progress is what the member earned inside a
+  period, never reduced by a redemption. Both are read from the same
+  append-only entries, so a member who spends their points no longer loses
+  their tier and nothing has to be kept in step.
 - **Demotion resets tier progress.** Earnings from before a drop count toward
   nothing after it, so a lapsed term cannot re-promote a member out of its own
   earnings the next day.
@@ -109,8 +109,8 @@ None. Every change lands on the existing loyalty capability.
 
 - `grade10-site/loyalty/programme`: tier validity and downgrade replace the permanent
   tier; demotion resets progress and a claw-back re-evaluates at once;
-  activity-based balance expiry replaces per-credit expiry; tier points and
-  redeemable points separate; earning gains a defined basis, scope and rounding
+  activity-based balance expiry replaces per-credit expiry; tier progress is
+  summed apart from the balance; earning gains a defined basis, scope and rounding
   order; redemption settles by reward kind and gains an artifact-expiry rule;
   points pay at checkout; an operator can remove a tier; account deletion ends
   the membership; and the ladder gains validity and retention thresholds

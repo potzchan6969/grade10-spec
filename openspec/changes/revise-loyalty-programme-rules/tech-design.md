@@ -7,7 +7,7 @@ grade10 mainline.
 
 | Already built | Where |
 | --- | --- |
-| Tier points separate from the spendable balance | `ledger_entries.qualifying_points` |
+| Tier progress summed apart from the balance | `ledger_entries.qualifying_points` |
 | Tier activation, validity end, re-qualification, downgrade | `account_member.earned_tier_activated_at` / `_expires_at`; written in `services/tiers/evaluation.ts`, scanned and driven by `services/tiers/review.ts` |
 | Balance expiry measured from last activity | `account_member.activity_expires_at` |
 | Boot refusal on a bad retention threshold or validity term | `loyaltyProgram.ts` |
@@ -50,13 +50,14 @@ The membership capability and the store channel belong to
 
 ## Decisions
 
-### Tier points stay a column on the one ledger
+### Progress stays a column on the one ledger
 
-`qualifying_points` on each entry is the tier count; `remaining` on each credit
-is the spendable one. Both are derived by asking the same append-only ledger,
-so a single write keeps the two consistent and no reconciliation job can drift.
+`qualifying_points` on each entry is what that entry contributes to progress;
+`remaining` on each credit is what is left to spend. Both are read from the same
+append-only ledger, so a single write keeps them consistent and no
+reconciliation job can drift.
 
-Rejected: a second ledger for tier points. It doubles every write and creates a
+Rejected: a second ledger for progress. It doubles every write and creates a
 state where one landed and the other did not — on an append-only financial
 record, that is unrecoverable without a manual repair.
 
@@ -151,7 +152,7 @@ rewrites `account_member.earned_tier_id` and both tier-history columns alongside
 the config change; changing only the config would strand those members behind
 the engine's unknown-tier guard.
 
-### An operator correction adds no tier points
+### An operator correction adds no progress
 
 A correction repairs a balance the member should already have had; it is not
 spend, so it moves nothing toward a tier. A campaign or sign-up grant is a
@@ -251,11 +252,11 @@ proposal, and the specs stand whichever way they land.
 - **Retention threshold** — the spec and the deployed config say 500, the same
   number that attains the tier. The business may prefer a softer 400; boot
   validation accepts either, so the answer moves a value.
-- **Overflow tier points on large purchases** — whether a single purchase far
+- **Overflow progress on large purchases** — whether a single purchase far
   above a threshold (an HKD 7,500 spend against a 500-point bar) should carry
   its excess forward. Today it does not, and the spec says so; changing that is
   its own proposal.
-- **External naming** of the two counts ("Status points" is the working
+- **External naming** of the balance and the progress ("Status points" is the working
   candidate) — marketing to confirm before member-facing UI. It renames labels,
   not counts.
 - **Coupon-and-refund lifecycle** — a coupon spent on an order later refunded,

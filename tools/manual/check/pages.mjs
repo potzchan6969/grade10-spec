@@ -1,13 +1,20 @@
 /*
  * RULES: a page parses and is canonical, every pointer in it names something
- * on disk, and no two of its details anchor alike.
+ * on disk, no two of its details anchor alike, and a ledger is written as the
+ * block that checks it.
  */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { slugify } from "../src/api/paths.ts";
 import { findRequirement } from "../src/api/requirements.ts";
 import { fileKeyOf } from "../src/blocks/design-drift.ts";
-import { readExample } from "../src/blocks/example-shape.ts";
+import {
+  PERIOD_COLUMN,
+  PROGRESS_COLUMN,
+  readExample,
+  STEP_COLUMNS,
+  TIMELINE_COLUMNS,
+} from "../src/blocks/example-shape.ts";
 import { parsePage, serializePage } from "../src/content/grammar.ts";
 import { readDesignSync } from "../src/store/design-sync.mts";
 import { confine, readText } from "../src/store/disk.mts";
@@ -54,7 +61,73 @@ export function checkPages(ctx, pages) {
     }
     checkDetails(ctx, page);
     checkFlowCases(ctx, page);
+    checkLedgers(ctx, page);
     checkRefs(ctx, page);
+  }
+}
+
+const FENCE = /^(`{3,}|~{3,})/;
+const TABLE_ROW = /^\s*\|(.*)\|\s*$/;
+const TAILS = [
+  [],
+  [PROGRESS_COLUMN],
+  [PERIOD_COLUMN],
+  [PROGRESS_COLUMN, PERIOD_COLUMN],
+];
+const LEDGERS = new Set(
+  [STEP_COLUMNS, TIMELINE_COLUMNS].flatMap((columns) =>
+    TAILS.map((tail) => [...columns, ...tail].join("|")),
+  ),
+);
+
+/** Prose a reader meets as prose. An example's own body is the ledger the
+ * example block already checks, so it is not one. */
+function* looseProse(blocks) {
+  for (const block of blocks) {
+    if (block.type === "example") continue;
+    if (block.type === "prose") yield block;
+    else if (Array.isArray(block.body)) yield* looseProse(block.body);
+  }
+}
+
+/** The ledger columns a table carries, or null. A fenced block is
+ * documentation about the grammar rather than a use of it. */
+function ledgerColumns(markdown) {
+  let fence = null;
+  for (const line of markdown.split("\n")) {
+    if (fence !== null) {
+      if (line.startsWith(fence)) fence = null;
+      continue;
+    }
+    const opened = FENCE.exec(line);
+    if (opened) {
+      fence = opened[1];
+      continue;
+    }
+    const row = TABLE_ROW.exec(line);
+    if (row === null) continue;
+    const header = row[1]
+      .split("|")
+      .map((cell) => cell.trim())
+      .join("|");
+    if (LEDGERS.has(header)) return header.replaceAll("|", " | ");
+  }
+  return null;
+}
+
+/** A hand-written ledger is a worked case nothing holds to its own
+ * arithmetic: the example block sums the points, refuses a timeline running
+ * backwards, and folds the cases behind one toggle. A warning, never a
+ * failure — the table is readable, it just rots the day a rule changes. */
+function checkLedgers(ctx, page) {
+  for (const block of looseProse(page.ast.blocks)) {
+    const columns = ledgerColumns(block.markdown);
+    if (columns === null) continue;
+    ctx.add(
+      "ledger",
+      page.path,
+      `a \`${columns}\` table is an example's ledger — write it as \`:::example{title="…"}\` and the check holds its balances`,
+    );
   }
 }
 

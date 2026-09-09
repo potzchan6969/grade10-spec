@@ -17,93 +17,123 @@ product at boot rather than at the moment a member is evaluated
 | Tier | Earns | Reached by | Kept by |
 | --- | --- | --- | --- |
 | Silver | 1× | Every member starts here | — |
-| Gold | 1.2× | 500 tier points inside a rolling twelve months | 500 tier points inside the twelve-month term |
+| Gold | 1.2× | 500 points earned in a rolling 12 months | 500 points earned inside the 12-month term |
 | Black | 1.7× | Invitation only ([[grade10-site-loyalty-programme-SC-25]]) | Until the invitation ends or is revoked |
 
 These are deployed values, changed by a deploy and never by an operator.
 
-## Tier points and balance
+## Tier Progress
 
-Earning credits both **tier points** and the **redeemable balance**; a
-redemption spends only the balance. Tier points are the sum of what a member
-earned inside the window, and a claw-back subtracts from the same window on
-the date of the earn it cancels, so the penalty ages out with the earn. The two
-are never summed on any surface, and neither can take the other: losing the
-balance to inactivity does not lose the tier, and losing the tier does not
-lose the balance.
+A member holds **one balance**: earning adds to it, redeeming takes from it,
+and it expires only after 12 months with no activity.
 
-## Reaching a tier
+**Tier progress is not a second balance.** The progress is determined by summing the points the member earned in a period.
 
-Promotion is immediate. The instant an earn takes a member's tier points past
-500, including on a first purchase, they hold Gold and a twelve-month term
-starts that day. The higher rate applies from the next purchase: the
-multiplier is read before the purchase is priced, so one large order cannot
-claim a rate it had not reached when it was made.
+- **Reaching a tier** — what they earned in the last 12 months
+- **Keeping one** — what they earned since the term began
+
+:::callout{kind="note"}
+If an earn is cancelled — a refund, say — its points come out of progress backdated to when the earn was made, not to the cancellation date.
+:::
+
+## Earn Multiplier
+
+Customer reaches a tier upon reaching the points required for that tier.
+The multiplier is only applied starting from the next order.
 
 ## Keeping and losing a tier
 
-A term is twelve months from the day the tier was reached. Earning 500 tier
-points inside the term extends it by another twelve months from its own end,
-the moment an evaluation sees it — the anniversary is kept, and there is no
-year-end reckoning. A term that ends without that lands the member on the
-highest tier their rolling window still attains, as a fresh attainment with a
-fresh term; usually that is Silver.
+- **The term** — 12 months from the day the tier was reached
+- **Kept** — 500 points earned inside the term extend it 12 months from the
+  term's own end, the moment an evaluation sees it, so the anniversary is kept
+  and there is no year-end reckoning
+- **Lost** — a term that ends on less drops the member to the highest tier their
+  rolling window still attains, a fresh attainment on a fresh term; usually
+  Silver
+- **The drop is a floor** — it stamps a date, and only earnings after it count
+  toward climbing back; otherwise the window that just lapsed would re-promote
+  the member the next morning
+- **Spending** demotes nobody: a redemption takes from the balance and nothing
+  from the progress
+- **A refund** re-evaluates at once — returned money is spend that never
+  happened, so a tier held on that money alone drops with it, and a term
+  extension it alone bought is withdrawn
 
-Losing a tier stamps a demotion date, and only earnings dated after it count
-toward climbing back. Otherwise the window that just lapsed would re-promote
-the member the next morning. Spending points never demotes anyone.
+:::callout{kind="note"}
+**The tier history catches up overnight.** Every read resolves the tier live,
+so nothing a member or a till sees waits for the nightly pass. It runs for the
+record: one row per move with its cause, so a drop is on file even for a member
+who never comes back, and a nightly count of who fell and who re-earned.
+:::
 
-A refund re-evaluates the tier at once: refunded spend is spend that never
-happened, so a tier held only on that money drops with it, and a retention
-extension it alone supported is withdrawn.
+:::example{title="A member's two years" periods="Gold=gold"}
+| When | Event | Points | Balance | Progress | Period |
+| --- | --- | --- | --- | --- | --- |
+| 2026/01/03 | buys $3,000 · 300 at 1× | +300 | 300 | 300 | Silver |
+| 2026/03/01 | buys $2,500 · 250 at 1×, reaching 550 — **Gold** | +250 | 550 | 0 | Gold · to 2027/03/01 |
+| 2026/03/05 | redeems 500 | −500 | 50 | | |
+| 2026/09/20 | buys $5,000 · 600 at 1.2×, past 500 · the term extends | +600 | 650 | 600 | |
+| 2027/03/01 | the old term ends, the new one counts from zero | | 650 | 0 | Gold · to 2028/03/01 |
+| 2027/09/20 | twelve months with no activity · the balance lapses | −650 | 0 | | |
+| 2028/02/01 | buys $4,000 · 480 at 1.2×, twenty short | +480 | 480 | 480 | |
+| 2028/03/01 | the term ends on 480, short of 500 — **Silver** | | 480 | 0 | Silver |
+| 2028/03/04 | buys $1,000 · 100 at 1× again | +100 | 580 | 100 | |
 
-A nightly review walks every term that has ended, records the drop or the
-retention in the tier history, and counts who fell and who re-earned. It
-writes history; it decides nothing, because every read already resolved the
-tier live. Each move a member makes is one row in that history, with its
-cause ([[grade10-site-loyalty-programme-SC-16]]).
-
-:::callout{kind="warning"}
-The durable spec describes a tier that ratchets up and never drops
-([[grade10-site-loyalty-programme-SC-14]]), and names the first two rungs Platinum and Diamond. What
-runs is the twelve-month term above, with persisted ids `silver`, `gold` and
-`black`. The rewrite is in flight under `revise-loyalty-programme-rules`.
+- **The rate** is $10 a base point, then the tier's own multiplier, and it is
+  read before the order is priced — so the purchase that reaches Gold still
+  earns at 1×, and the one after the drop earns at 1× again
+- **Progress** is measured over the period on the left: the rolling twelve
+  months while no term is running, what the term has counted once one is
+- **Reaching, then keeping** — the 550 that won Gold counts toward nothing
+  afterwards, because a term counts only what is earned after it starts; the
+  same happens on 2027/03/01, so the 600 that bought the second term cannot
+  buy a third
+- **March 2026** — the redemption takes 500 from the balance and nothing from
+  the progress, so it can neither demote the member nor delay the tier
+- **September 2026** — the term extends from its own end, never from that day,
+  so the anniversary is kept
+- **September 2027** — the balance dies of inactivity while the tier lives on:
+  the member holds Gold for five more months with nothing to spend
+- **February 2028** — $4,000 is activity, so the balance lives another year,
+  and 480 is twenty short of 500, so the term is not saved: what keeps the
+  points and what keeps the tier are two different sums
+- **March 2028** — the drop is stamped, and only what is earned after it
+  counts, so the 480 counts toward nothing and the 100 three days later starts
+  the climb from zero
 :::
 
 ## Black, by invitation
 
-Black is held only through an operator's grant, which names who granted it,
-why, and optionally when it ends; it can be revoked, and a member holds at
-most one live invitation per tier ([[grade10-site-loyalty-programme-SC-26]], [[grade10-site-loyalty-programme-SC-27]],
-[[grade10-site-loyalty-programme-SC-28]]). Every evaluation runs twice, once ignoring invitations
-and once with them, so a Gold earned while invited survives losing the
-invitation, and an invitation never becomes the earned floor nor extends a
-term. An invitation whose end date passes is observed, not scheduled
-([[grade10-site-loyalty-programme-SC-15]]).
-
-An invitation granted with no end date holds until it is revoked. The annual
-cap and the approval step the owner's draft asks for are not enforced.
-
-## Test cases
-
-::cases{id="grade10-site/loyalty/programme"}
+- **The grant** — an operator's, naming who granted it, why, and optionally
+  when it ends; revocable, and a member holds at most one live invitation per
+  tier
+- **No end date** — it holds until it is revoked
+- **Its end is observed, not scheduled** — the member stops holding Black the
+  instant the date passes, and the drop is recorded at the next evaluation
+- **Never the earned floor** — every evaluation runs twice, once ignoring
+  invitations and once with them, so a Gold earned while invited survives
+  losing the invitation, and an invitation neither raises what was earned nor
+  extends a term
+- **Not enforced** — the annual cap and the approval step the owner's draft
+  asks for
 
 :::detail{title="Data model" for="engineer"}
-The member row stores the earned tier, the day it was reached, and both ends of
-its period — all four set or all four null — plus the demotion date. The period
-start is stored rather than inverted from the end, because month arithmetic
-clamps: a term stamped on 29 February ends on 28 February, and walking that
-back would open the period a day before the earn that bought it. The tier
-window is open-ended above so a backdated earn counts the moment it lands, and
-floored at the demotion date, or at a virtual one for a term that has lapsed
-and not yet been reviewed.
+- **The member row** holds the earned tier, the day it was reached, both ends of
+  its period — all four set or all four null — and the demotion date
+- **The period start is stored, not inverted** from the end, because month
+  arithmetic clamps: a term stamped on 29 February ends on 28 February, and
+  walking that back would open the period a day before the earn that bought it
+- **The window is open-ended above**, so a backdated earn counts the moment it
+  lands, and floored at the demotion date — or at a virtual one for a term that
+  has lapsed and not yet been reviewed
 :::
 
 :::detail{title="Nightly sweeps and metrics" for="engineer"}
-The nightly cron runs the expiry sweep, then the tier review, then the
-reward-template audit, then the lapsed-collection sweep, each on its own
-budget. Metrics: `loyalty.tier.changed` by tier and cause, and per review
-`loyalty.tier.review.demoted`, `.retained`, `.failures`, `.skipped`,
-`.leftover`. Invitations are granted and revoked behind `loyalty:invite`, and
-nothing sweeps them.
+- **The nightly cron**, in order and each on its own budget — the expiry sweep,
+  the tier review, the reward-template audit, the lapsed-collection sweep
+- **Metrics** — `loyalty.tier.changed` by tier and cause; per review,
+  `loyalty.tier.review.demoted`, `.retained`, `.failures`, `.skipped` and
+  `.leftover`
+- **Invitations** are granted and revoked behind `loyalty:invite`, and nothing
+  sweeps them
 :::

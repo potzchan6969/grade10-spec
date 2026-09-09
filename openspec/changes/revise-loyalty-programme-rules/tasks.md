@@ -99,7 +99,7 @@ opposite as correct.
 
 - [x] 8.1 Set `tierOnRefund` to re-evaluate in Grade10's deployed programme config, so *A claw-back can demote* passes, and cover both policy values so the switch stays a real choice — done by removing the switch: the settled spec offers no keep, so `tierOnRefund` and the `policies` block are gone rather than defaulted (packages/loyalty/backend, commit e6c08959 in grade10). 2026-08-25 disposition: re-evaluation also withdraws a retention extension when the refunded earning was what supported it, so *A claw-back withdraws an unsupported retention extension* passes.
 - [x] 8.2 Record the demotion date; no such marker exists today
-- [x] 8.3 Count attainment and retention only from earnings dated after the last demotion, so *Losing a tier resets the climb* and *Tier points are derived from the same entries* agree
+- [x] 8.3 Count attainment and retention only from earnings dated after the last demotion, so *Losing a tier resets the climb* and *Tier progress is derived from the same entries* agree
 - [x] 8.4 Invert `re-earns a tier from the rolling window instead of resurrecting the old term` in `testing/suites/tierValidity.ts` — it asserts the behaviour this group removes
 - [x] 8.5 Resolve a missing retention threshold to the tier's own attainment points and refuse a validity term that is not the qualifying window, so *A retention threshold asks more than the tier itself* and *Earned tiers measure over different windows* pass without refusing Grade10's own ladder
 - [x] 8.6 Verify: `pnpm run test:backend`

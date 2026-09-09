@@ -21,4 +21,12 @@ Before handoff, hold the draft to it:
 10. Nothing restates a testable statement from `openspec/specs/`; the prose distills and links.
 11. Superseded content is replaced, never annotated, and nothing points at "above" or "below" — it names or links the thing.
 
+12. A manual page's blocks are a contract, not a decoration: read the block
+    palette in `docs/prds/guides/writing-the-manual.md` before authoring one,
+    and reach for the block before the plain markdown it imitates. A worked
+    case is an `example`, steps are a `flow`, depth for one audience is a
+    `detail` — each is checked, so the page cannot rot when a rule changes.
+    Where a block refuses the content, that is an answer about the content:
+    say why it is not that block rather than falling back by hand.
+
 A draft that fails one of these gets rewritten, not footnoted.

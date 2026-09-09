@@ -43,8 +43,34 @@ one every point and every refund is read against.
 ## *Shop* — **Order paid**
 The shop sends the paid order: its lines, their discounts, and the goods total it stated
 
+```json
+{
+  "line_items": [
+    { "title": "Charizard VMAX", "quantity": 1, "price": "199.00" },
+    { "title": "Booster Pack", "quantity": 2, "price": "45.00",
+      "discount_allocations": [{ "amount": "10.00" }] }
+  ],
+  "current_total_discounts": "10.00",
+  "subtotal_price": "279.00"
+}
+```
+
+`subtotal_price` is the goods total after discounts, before shipping and tax — the webhook flags a gift card outright, but a grading fee or a top-up looks like real goods until the read answers
+
+## *Store* — **Asks Shopify**
+The webhook already flags a gift card, but a grading fee, a top-up, and real goods all look the same to it — only a read of each line's product type and tags can tell them apart
+
+```json
+{
+  "productType": "Trading Card",
+  "tags": ["pokemon", "singles"]
+}
+```
+
+The read for the Charizard VMAX line — a real product, so the order prices as usual
+
 ## *Store* — **Order recorded**
-The order read back from Shopify for what each line is — the paid webhook states the money and nothing else — then the lines judged, a gift card, a fee, a grading service left out, and the earning amount written on the order once, never re-priced — [Line verdicts](#detail-line-verdicts)
+The lines judged by that read, a gift card, a fee, a grading service left out, and the earning amount written on the order once, never re-priced — [Code map](#detail-code-map)
 
 ## *Loyalty* — **Points granted**
 Reached by an order event, not by the sale waiting: **$10** a base point, rounded down, then the tier rate, rounded down again — **$139** at **1.2×** = **15** — as a dated entry, never edited
@@ -52,10 +78,31 @@ Reached by an order event, not by the sale waiting: **$10** a base point, rounde
 
 :::flow{title="From a paid order to points" case="A line the shop cannot classify" diagram="assets/diagrams/loyalty-pricing-unclassified.svg"}
 ## *Shop* — **Order paid**
-A line states no product type and no tags, so the rule cannot tell goods from a gift card or a fee
+A line names a product, but nothing here says its type or tags yet — only the read can tell real goods from a fee or a top-up
+
+```json
+{
+  "line_items": [
+    { "title": "Mystery Booster Box", "quantity": 1, "price": "89.00" }
+  ],
+  "subtotal_price": "89.00"
+}
+```
+
+## *Store* — **Asks Shopify**
+A read back is what would answer for the line — the webhook alone never says what it is
+
+```json
+{
+  "productType": null,
+  "tags": null
+}
+```
+
+The product behind the Mystery Booster Box line was deleted from Shopify since the sale — the read answers with nothing, so there's nothing to judge it by
 
 ## *Store* — **Order recorded**
-The read back from Shopify is what would answer for the line. A read that answers prices the order as usual; a read that fails writes no earning amount, and the sale still stands
+A read that answers prices the order as usual; a read that fails writes no earning amount, and the sale still stands
 
 ## *Loyalty* — **Points granted**
 No amount, so no order event and no points — counted, and granted when a retry classifies the sale
@@ -64,6 +111,13 @@ No amount, so no order event and no points — counted, and granted when a retry
 :::flow{title="From a paid order to points" case="A total with no lines" diagram="assets/diagrams/loyalty-pricing-unitemised.svg"}
 ## *Shop* — **Order paid**
 One goods total and no lines at all
+
+```json
+{
+  "line_items": [],
+  "subtotal_price": "312.00"
+}
+```
 
 ## *Store* — **Order recorded**
 The store's own item prices, the whole-order discount shared across them by value; the shop's stated goods total only where the store has no prices of its own
@@ -75,6 +129,15 @@ As usual, on the amount the order carries
 :::flow{title="From a paid order to points" case="A custom sale" diagram="assets/diagrams/loyalty-pricing-custom-sale.svg"}
 ## *Shop* — **Order paid**
 A line rung at the till names no catalog product — a consignment, a repair, a price override
+
+```json
+{
+  "line_items": [
+    { "title": "Repair — screen replacement", "variant_id": null, "quantity": 1, "price": "80.00" }
+  ],
+  "subtotal_price": "80.00"
+}
+```
 
 ## *Store* — **Order recorded**
 Nothing can ever classify that line, so it is left out and the rest of the order is priced; waiting would hold the sale for a fact that is never coming
@@ -94,7 +157,7 @@ order then, in order:
 2. **Shop's stated goods total** — only where the shop sent no lines; the total still holds a line the rule threw out, so an unanswered line never falls here
 3. **Nothing** — the points wait, counted, until a source can classify the sale
 
-:::detail{title="Line verdicts" for="engineer"}
+:::detail{title="Code map" for="engineer"}
 - **Config** — one programme config, `GRADE10_LOYALTY_PROGRAM` in `packages/app-env`
 - **Design records** —
   [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
@@ -256,11 +319,11 @@ lapse that has happened is never undone.
 :::example{title="Buying or redeeming keeps the balance alive"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
-| 3 Jan 2026 | earn → lapses 3 Jan 2027 | +15 | 15 |
-| 1 Jun 2026 | earn → lapses 1 Jun 2027 | +10 | 25 |
-| 20 Nov 2026 | redeem → lapses 20 Nov 2027 | −5 | 20 |
-| 3 Jan 2027 | first earn's own year ends · date stays 20 Nov 2027 | 0 | 20 |
-| 20 Nov 2027 | lapse | −20 | 0 |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2026/06/01 | earn → lapses 2027/06/01 | +10 | 25 |
+| 2026/11/20 | redeem → lapses 2027/11/20 | −5 | 20 |
+| 2027/01/03 | first earn's own year ends · date stays 2027/11/20 | 0 | 20 |
+| 2027/11/20 | lapse | −20 | 0 |
 
 Every purchase and every redemption moves one date for the whole balance,
 so the January points live as long as the November redemption does. The
@@ -270,10 +333,10 @@ date after the arrow is when the balance lapses if nothing else happens.
 :::example{title="A spend too small to earn still counts"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
-| 3 Jan 2026 | earn → lapses 3 Jan 2027 | +15 | 15 |
-| 1 Dec 2026 | $8 order, under a point → lapses 1 Dec 2027 | 0 | 15 |
-| 3 Jan 2027 | earn's own year ends · date stays 1 Dec 2027 | 0 | 15 |
-| 1 Dec 2027 | lapse | −15 | 0 |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2026/12/01 | $8 order, under a point → lapses 2027/12/01 | 0 | 15 |
+| 2027/01/03 | earn's own year ends · date stays 2027/12/01 | 0 | 15 |
+| 2027/12/01 | lapse | −15 | 0 |
 
 The purchase is activity even when it credits nothing.
 :::
@@ -281,9 +344,9 @@ The purchase is activity even when it credits nothing.
 :::example{title="Expired points do not come back"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
-| 3 Jan 2026 | earn → lapses 3 Jan 2027 | +15 | 15 |
-| 3 Jan 2027 | lapse | −15 | 0 |
-| 8 Mar 2027 | earn → lapses 8 Mar 2028 | +15 | 15 |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2027/01/03 | lapse | −15 | 0 |
+| 2027/03/08 | earn → lapses 2028/03/08 | +15 | 15 |
 
 The new purchase starts a fresh balance. The fifteen that lapsed stay
 lapsed.
@@ -292,10 +355,10 @@ lapsed.
 :::example{title="A grant or a correction is not activity"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
-| 3 Jan 2026 | earn → lapses 3 Jan 2027 | +15 | 15 |
-| 1 Jun 2026 | campaign grant · own date 1 Jun 2027 · balance date stays 3 Jan 2027 | +100 | 115 |
-| 3 Jan 2027 | lapse, the January earn | −15 | 100 |
-| 1 Jun 2027 | lapse, the grant on its own date | −100 | 0 |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2026/06/01 | campaign grant · own date 2027/06/01 · balance date stays 2027/01/03 | +100 | 115 |
+| 2027/01/03 | lapse, the January earn | −15 | 100 |
+| 2027/06/01 | lapse, the grant on its own date | −100 | 0 |
 
 A grant moves no date, and neither does an operator correction. Each lives
 out its own year under a window that has already passed.
@@ -304,9 +367,9 @@ out its own year under a window that has already passed.
 :::example{title="A late record shortens nothing"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
-| 8 Mar 2026 | earn → lapses 8 Mar 2027 | +15 | 15 |
-| 10 Apr 2026 | order of 3 Jan, arriving late · date stays 8 Mar 2027 | +12 | 27 |
-| 8 Mar 2027 | lapse, both | −27 | 0 |
+| 2026/03/08 | earn → lapses 2027/03/08 | +15 | 15 |
+| 2026/04/10 | order of 3 Jan, arriving late · date stays 2027/03/08 | +12 | 27 |
+| 2027/03/08 | lapse, both | −27 | 0 |
 
 The date only moves forward. The January order would have put it at 3 Jan
 2027, so it moves nothing.
@@ -315,9 +378,9 @@ The date only moves forward. The January order would have put it at 3 Jan
 :::example{title="A record older than a year is written already lapsed"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
-| 3 Jan 2026 | earn → lapses 3 Jan 2027 | +15 | 15 |
-| 3 Jan 2027 | lapse | −15 | 0 |
-| 10 Feb 2027 | order of 1 Jan 2026 · 12 pts written lapsed · date stays 3 Jan 2027 | 0 | 0 |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2027/01/03 | lapse | −15 | 0 |
+| 2027/02/10 | order of 2026/01/01 · 12 pts written lapsed · date stays 2027/01/03 | 0 | 0 |
 
 A record whose own year has run out buys nothing: the points are on the
 ledger for the audit, and count nothing.
@@ -326,8 +389,8 @@ ledger for the audit, and count nothing.
 :::example{title="A leap day lapses on the 28th"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
-| 29 Feb 2028 | earn → lapses 28 Feb 2029 | +15 | 15 |
-| 28 Feb 2029 | lapse | −15 | 0 |
+| 2028/02/29 | earn → lapses 2029/02/28 | +15 | 15 |
+| 2029/02/28 | lapse | −15 | 0 |
 
 The window is calendar months, so a day the next year does not have lands
 on the last day of that month.

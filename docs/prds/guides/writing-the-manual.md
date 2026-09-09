@@ -133,8 +133,16 @@ order. Then comes a ledger, a table whose columns are
 `Step | Event | Points | Balance`, each row a thing that happened in order,
 points signed (`+15`, `−10`, or blank where none moved), the balance running
 from zero or from the first one stated. Where the day is what the reader
-follows, the first column is `When` instead: a day written `3 Jan 2026`, or
-blank to share the day above, and the rows hang on a timeline. Prose after the
+follows, the first column is `When` instead: a day written `2026/01/03`, or
+blank to share the day above, and the rows hang on a timeline. Two columns may
+follow: `Progress`, a second running figure each row states rather than the
+points reach — what a window holds, what a term has counted — and `Period`,
+what a run of days is inside, a term, a window, a tier's life, written once and
+left blank for as long as it runs, `—` closing it. A period is drawn as a
+labelled rail down the left, coloured by `periods="Gold=gold"` on the block —
+`orange`, `gold`, `blue`, `green`, `red`, `ink` — and a period named no colour
+runs with a blank rail, which is how a span that is inside nothing looks. A
+steps ledger has no span of days, so it is refused a `Period`. Prose after the
 table is the why. Examples that follow one another fold behind one `Examples`
 toggle, collapsed until opened or deep-linked into, each case open beneath it.
 The check refuses a cart line without a price, a timeline that runs back in

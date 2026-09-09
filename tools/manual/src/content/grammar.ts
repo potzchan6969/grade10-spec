@@ -110,6 +110,7 @@ export type ExampleBlock = {
   title: string;
   tier?: string;
   shipping?: string;
+  periods?: string;
   body: BodyItem[];
 };
 
@@ -233,6 +234,7 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
       { name: "title", required: true },
       { name: "tier" },
       { name: "shipping" },
+      { name: "periods" },
     ],
   },
 };

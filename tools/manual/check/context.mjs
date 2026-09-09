@@ -107,6 +107,11 @@ export const RULES = [
     level: "warn",
     title: "Prose references naming nothing, or two things",
   },
+  {
+    key: "ledger",
+    level: "warn",
+    title: "Ledgers written as a table, outside an example",
+  },
   { key: "figma", level: "warn", title: "Figma links" },
   {
     key: "suite",
