@@ -115,6 +115,11 @@ Outline first. A document is a heading and an outline, never an essay.
 - The reader's word, not the code's or the designer's. A page says "a small
   label above the headline" even where the component and the spec call it
   an eyebrow; the term belongs to the spec, the plain word to the page.
+- Name what happens, not a noun for it. "The member loses the tier", never
+  "the drop": a noun made out of an event has to be defined before it pays,
+  and the lines after it fill with pronouns pointing back at it.
+- A word already in the draft has earned nothing. Rewriting a hard line means
+  dropping the term that made it hard, not carrying it into the new sentence.
 - Group one concern per section.
 - The roadmap, stated as the product. A decided plan reads in the present
   tense as though shipped; where it stands is a status card or a ❓, never

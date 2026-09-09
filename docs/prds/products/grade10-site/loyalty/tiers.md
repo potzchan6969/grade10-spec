@@ -18,7 +18,7 @@ product at boot rather than at the moment a member is evaluated
 | --- | --- | --- | --- |
 | Silver | 1× | Every member starts here | — |
 | Gold | 1.2× | 500 points earned in a rolling 12 months | 500 points earned inside the 12-month term |
-| Black | 1.7× | Invitation only ([[grade10-site-loyalty-programme-SC-25]]) | Until the invitation ends or is revoked |
+| Black | 1.7× | Invitation only | Until the invitation ends or is revoked |
 
 These are deployed values, changed by a deploy and never by an operator.
 
@@ -30,10 +30,16 @@ and it expires only after 12 months with no activity.
 **Tier progress is not a second balance.** The progress is determined by summing the points the member earned in a period.
 
 - **Reaching a tier** — what they earned in the last 12 months
-- **Keeping one** — what they earned since the term began
+- **Keeping one** — what they earned in the tier period (12 months since the term began)
+
+Only earning moves the progress. Redeeming takes from the balance and leaves
+the progress untouched, so spending can never cost a member their tier.
 
 :::callout{kind="note"}
-If an earn is cancelled — a refund, say — its points come out of progress backdated to when the earn was made, not to the cancellation date.
+A refund takes back the points its order earned, counted against the day of
+that order rather than the day of the refund. Where those points were the only
+thing holding a tier, the member stops holding it, and a term they alone
+extended goes back to its old end.
 :::
 
 ## Earn Multiplier
@@ -43,27 +49,24 @@ The multiplier is only applied starting from the next order.
 
 ## Keeping and losing a tier
 
-- **The term** — 12 months from the day the tier was reached
-- **Kept** — 500 points earned inside the term extend it 12 months from the
-  term's own end, the moment an evaluation sees it, so the anniversary is kept
-  and there is no year-end reckoning
-- **Lost** — a term that ends on less drops the member to the highest tier their
-  rolling window still attains, a fresh attainment on a fresh term; usually
-  Silver
-- **The drop is a floor** — it stamps a date, and only earnings after it count
-  toward climbing back; otherwise the window that just lapsed would re-promote
-  the member the next morning
-- **Spending** demotes nobody: a redemption takes from the balance and nothing
-  from the progress
-- **A refund** re-evaluates at once — returned money is spend that never
-  happened, so a tier held on that money alone drops with it, and a term
-  extension it alone bought is withdrawn
+A tier is held for a **term**: 12 months from the day it was reached. What the
+member earns inside the term decides what happens at the end of it.
+
+- **500 points or more** — the term extends 12 months from its own end, the
+  moment an evaluation sees it, so the anniversary never moves and there is no
+  year-end reckoning
+- **Anything less** — the member goes back to Silver, and the climb starts
+  again at the term's end
+
+Everything earned inside the term counts toward nothing afterwards. The climb
+starts at the term's end rather than at the evaluation that records it, so the
+twelve months that just fell short cannot win the same tier back overnight.
 
 :::callout{kind="note"}
 **The tier history catches up overnight.** Every read resolves the tier live,
 so nothing a member or a till sees waits for the nightly pass. It runs for the
-record: one row per move with its cause, so a drop is on file even for a member
-who never comes back, and a nightly count of who fell and who re-earned.
+record: one row per move with its cause, so even a member who never comes back
+leaves a complete history, and a nightly count of who fell and who re-earned.
 :::
 
 :::example{title="A member's two years" periods="Gold=gold"}
@@ -81,7 +84,7 @@ who never comes back, and a nightly count of who fell and who re-earned.
 
 - **The rate** is $10 a base point, then the tier's own multiplier, and it is
   read before the order is priced — so the purchase that reaches Gold still
-  earns at 1×, and the one after the drop earns at 1× again
+  earns at 1×, and the first purchase back on Silver earns at 1× again
 - **Progress** is measured over the period on the left: the rolling twelve
   months while no term is running, what the term has counted once one is
 - **Reaching, then keeping** — the 550 that won Gold counts toward nothing
@@ -97,9 +100,8 @@ who never comes back, and a nightly count of who fell and who re-earned.
 - **February 2028** — $4,000 is activity, so the balance lives another year,
   and 480 is twenty short of 500, so the term is not saved: what keeps the
   points and what keeps the tier are two different sums
-- **March 2028** — the drop is stamped, and only what is earned after it
-  counts, so the 480 counts toward nothing and the 100 three days later starts
-  the climb from zero
+- **March 2028** — the climb starts again at the term's end, so the 480 counts
+  toward nothing and the 100 three days later is the whole of it
 :::
 
 ## Black, by invitation
@@ -109,7 +111,7 @@ who never comes back, and a nightly count of who fell and who re-earned.
   tier
 - **No end date** — it holds until it is revoked
 - **Its end is observed, not scheduled** — the member stops holding Black the
-  instant the date passes, and the drop is recorded at the next evaluation
+  instant the date passes, and the history records it at the next evaluation
 - **Never the earned floor** — every evaluation runs twice, once ignoring
   invitations and once with them, so a Gold earned while invited survives
   losing the invitation, and an invitation neither raises what was earned nor
