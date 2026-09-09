@@ -138,6 +138,60 @@ describe("archived changes", () => {
     expect(archived[0].schema).toBe("");
     expect(archived[0].error).toBeUndefined();
   });
+
+  it("keeps the follow-ons an archived proposal named", () => {
+    expect(archived[0].followOns).toEqual([
+      "The new thing, which this move was for.",
+    ]);
+  });
+});
+
+/** What a change said would come next — read like the citations beside it, and
+ * left out entirely by a proposal that named none. */
+describe("follow-on changes", () => {
+  it("reads the bullets, a wrapped one folded back into a single item", () => {
+    expect(change.followOns).toEqual([
+      "**The thing happens twice**, for the collectors who asked for a second one the same day.",
+      "A record anyone can read back.",
+    ]);
+  });
+
+  it("names none when the proposal has no such section", () => {
+    const [entry] = readChanges(
+      writeStore({
+        "openspec/changes/quiet-thing/proposal.md":
+          "# Quiet thing\n\n## Why\n\nIt says nothing about what comes after.\n",
+      }),
+      NO_GIT,
+    );
+    expect(entry.followOns).toBeUndefined();
+  });
+
+  it("leaves prose after the list out of the last bullet", () => {
+    const [entry] = readChanges(
+      writeStore({
+        "openspec/changes/wordy-thing/proposal.md": [
+          "# Wordy thing",
+          "",
+          "## Why",
+          "",
+          "It has more to say than a list.",
+          "",
+          "## Follow-on changes",
+          "",
+          "- The one thing that follows,",
+          "  written across two lines.",
+          "",
+          "None of these are scheduled.",
+          "",
+        ].join("\n"),
+      }),
+      NO_GIT,
+    );
+    expect(entry.followOns).toEqual([
+      "The one thing that follows, written across two lines.",
+    ]);
+  });
 });
 
 /** `openspec/config.yaml` tells authors to group requirements under a plain

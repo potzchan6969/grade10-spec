@@ -81,8 +81,9 @@ function blockProblems(index: ManualIndex, leaf: DraftLeaf): BlockProblem[] {
       }
       break;
     }
-    case "changes": {
-      // A ribbon may point at a capability an in-flight change is still
+    case "changes":
+    case "next": {
+      // Either may point at a capability an in-flight change is still
       // introducing, so a delta resolves it as well as a durable spec.
       const spec = value("spec");
       if (!index.specById.has(spec) && !index.changesBySpec.has(spec)) {

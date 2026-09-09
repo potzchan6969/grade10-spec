@@ -99,6 +99,7 @@ start at `##`; raw HTML is never rendered). Directives sit at column 0:
 | `spec` | `::spec{id="…" requirement="…"}` | one requirement with its scenarios; also `scenario="grade10-site-loyalty-programme-SC-04"` or `story="grade10-site-loyalty-programme-US-01"` selectors — prefer these, the ids are permanent |
 | `cases` | `::cases{id="grade10-store/loyalty"}` | the capability's test-case suite with coverage against its scenarios |
 | `changes` | `::changes{spec="grade10-store/loyalty"}` | ribbon of in-flight changes whose deltas touch that spec: status first, then tasks done/total, owners, last-moved age, link |
+| `next` | `::next{spec="grade10-store/loyalty"}` | the `## Follow-on changes` bullets of every change about that spec — one whose delta touches it, one whose `## References` cite it, in flight and archived alike — each run of bullets under the change that wrote it and dated by it, live intent first and shipped newest-first behind it; the archive rides its own artifact, so the shipped ones fill in after the page paints |
 | `figma` | `::figma{url="…" title="…" set="…"}` | titled card, embed loads on click, open-in-Figma link, design-sync verdict; optional `set` names the component set an assembly frame is about, validated against the report |
 | `story` | `::story{id="blocks-store-cart--default" title="…" height="480"}` | titled card, workbench Storybook iframe loads eagerly |
 | `image` | `::image{src="assets/…" alt="…" caption="…"}` | image from `manual/assets/`; missing `alt` is a parse error |
