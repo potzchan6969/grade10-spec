@@ -8,12 +8,12 @@
 
 ## 2. Durable enrollment, backend procedures, and contracts (grade10)
 
-- [ ] 2.1 Evolve `bidder_listing_payment_methods` or document a reviewed replacement record with an editable/locked lifecycle, safe masked-card projection, lock metadata, and a unique storefront/user/listing key; migrate legacy rows created by the current bid path as locked when an existing bid proves the binding, and fail closed for ambiguous rows
-- [ ] 2.2 Choose and implement one authoritative account/bidder owner for once-per-account age attestation, with an authenticated read/write contract; do not duplicate attestation as a public listing field or a competing per-listing source of truth
+- [ ] 2.1 Add the editable/locked lifecycle, safe masked-card projection, lock metadata, and unique storefront/user/listing key to `bidder_listing_payment_methods`; test data may be pruned while the app is not launched, and the migration must apply cleanly to a new database
+- [ ] 2.2 Add nullable `age_attested_at` to the authenticated bidder/account record with one read/write contract; set it on the first successful enrollment with a checked attestation, use it to pre-check later setup, and do not duplicate attestation as a public listing field or competing per-listing source of truth
 - [ ] 2.3 Add authenticated enrollment read and upsert/change procedures returning typed `unenrolled`, `editable`, and `locked` projections plus explicit attestation-required, locked, provider-not-ready/refused, bidder-unavailable, and idempotency-conflict refusals; accept only opaque provider method references and idempotency keys
 - [ ] 2.4 Reconcile `registerBidder`, browser provider confirmation, and webhook persistence so setup-session creation, provider confirmation, and safe display projection are retryable and idempotent; keep provider SDK objects, client secrets, and card data outside shared UI
 - [ ] 2.5 Update `placeBid` and the listing/enrollment transaction so the first accepted bid means the accepted maximum creates its pending bid and atomically locks the editable enrollment before commit; reject replacement after that lock, preserve the existing asynchronous hold confirmation, and reuse the locked method for later maximums
-- [ ] 2.6 Verify: `pnpm --filter @grade10/auction-backend run test`, `pnpm --filter @grade10/auction-backend run typecheck`, `pnpm --filter @grade10/auction-contracts run test`, `pnpm --filter @grade10/auction-contracts run typecheck`, and migration/schema checks for the affected database package
+- [ ] 2.6 Verify: apply migrations to a clean database, then run `pnpm --filter @grade10/auction-backend run test`, `pnpm --filter @grade10/auction-backend run typecheck`, `pnpm --filter @grade10/auction-contracts run test`, `pnpm --filter @grade10/auction-contracts run typecheck`, and migration/schema checks for the affected database package
 
 ## 3. Enrollment state and frontend contracts (grade10)
 

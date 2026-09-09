@@ -38,6 +38,17 @@ The listing bid panel SHALL present exactly one enrollment posture to the
 collector at a time. The consumer owns which posture applies; the shared bid
 panel SHALL render the posture it is given.
 
+| Consumer state | Bid action | Linked-card slot | Setup modal |
+| --- | --- | --- | --- |
+| `signed-out` | Sign in to bid | Hidden | Closed |
+| `setup-first` | Place bid (or equivalent) | Empty link prompt | Closed |
+| `setup-in-progress` | Setup is required before bidding | Empty link prompt | Open first-link setup |
+| `setup-editable` | Place bid (or equivalent) | Linked card with change | Open change-card setup |
+| `authorization-in-progress` | Setup is unavailable while authorization runs | Empty link prompt or prior linked card | Open with controls locked |
+| `authorization-failed` | Setup is unavailable until authorization succeeds | Empty link prompt or prior linked card | Open with failure shown and controls interactive |
+| `authorization-editable` | Place bid (or equivalent) | Linked card with change | Closed |
+| `enrolled` | Place bid (or equivalent) | Linked card without change | Closed |
+
 | State | Amount controls | Bid action | Linked-card slot | Setup modal |
 | --- | --- | --- | --- | --- |
 | Signed out | Hidden | Sign in to bid | Hidden | Closed |
@@ -45,17 +56,6 @@ panel SHALL render the posture it is given.
 | Signed in, card linked, no bid on this lot | Enabled | Set or raise maximum | Linked card with change | Closed, or open during change |
 | Signed in, card linked, bid placed on this lot | Enabled | Set or raise maximum | Linked card without change | Closed |
 
-The consumer SHALL use exactly these enrollment state names: `signed-out`,
-`setup-first`, `setup-in-progress`, `setup-editable`,
-`authorization-in-progress`, `authorization-failed`,
-`authorization-editable`, and `enrolled`. `setup-in-progress` is the
-first-link setup posture while the modal is open; `setup-first` is the
-signed-in, not-yet-enrolled posture before setup opens. `setup-editable` is
-change-card setup for an editable enrollment; `authorization-editable` is a
-successfully linked enrollment before the first accepted bid; and `enrolled`
-is the locked enrollment after the first accepted bid. Backend projections
-may use `unenrolled`, `editable`, and `locked`; those are not consumer state
-names.
 
 Standing badges for highest bid or outbid SHALL appear only when the
 collector is signed in and has auction standing on the lot. Recent public bids
@@ -157,6 +157,12 @@ attest before continue is enabled on their first link. When a collector who
 already attested on a prior lot opens setup to change card, the attestation
 SHALL be pre-checked. The collector MAY uncheck it; continue SHALL remain
 disabled while it is unchecked.
+
+The authenticated bidder/account record SHALL store a nullable
+`age_attested_at` timestamp. A non-null value means that the collector has
+completed age attestation; enrollment setup SHALL use it to pre-check the
+control on later lots, while the current enrollment attempt SHALL still
+require the control to remain checked.
 
 The setup modal SHALL use the same title and description for first link and
 change card. The title SHALL be Link a card to bid. The description SHALL be

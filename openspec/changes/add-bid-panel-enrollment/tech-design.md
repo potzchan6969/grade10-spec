@@ -12,7 +12,7 @@
 **Goals:**
 
 - **Durable enrollment** — persist one collector's opaque payment-method reference and safe display projection per listing, allow replacement while editable, and retain a locked record after the first accepted bid
-- **Account attestation** — persist the once-per-account age-attestation fact at the authoritative account/bidder boundary; the exact existing owner and field are ❓ TBC because no durable attestation field is present in the inspected auction schema
+- **Account attestation** — persist the once-per-account age-attestation fact as a nullable `age_attested_at` timestamp on the authenticated bidder/account record
 - **Authenticated projection** — provide an authenticated listing-enrollment read with `unenrolled`, `editable`, and `locked` outcomes without adding payment data to public listing state or browser caches shared with anonymous readers
 - **Controlled composition** — keep session, enrollment completion, provider integration, and the opaque method reference in the consumer while passing only display data, lifecycle flags, and callbacks to shared blocks
 - **Stable bid path** — preserve the existing authenticated auction procedure and its opaque payment-method boundary after enrollment completes; later maximums use the locked listing enrollment
@@ -30,7 +30,7 @@
 
 ### Backend-owned durable enrollment, consumer-owned render fold
 
-- **Decision** — the auction backend owns the authoritative per-listing enrollment record. Evolve the existing `bidder_listing_payment_methods` row, or replace it only if schema review proves that evolution cannot preserve existing data; do not create a second competing binding. The record must carry the opaque provider method reference, a safe masked-card projection or a server-owned lookup for that projection, an editable/locked status, and lock metadata such as `lockedAt` and the first accepted bid id. Exact column names are ❓ TBC until the migration design is reviewed
+- **Decision** — the auction backend owns the authoritative per-listing enrollment record in `bidder_listing_payment_methods`. Add the editable/locked lifecycle, opaque provider method reference, safe masked-card projection or server-owned lookup, and lock metadata such as `lockedAt` and the first accepted bid id; test data may be pruned while the schema is introduced because the app is not launched
 - **Decision** — the authenticated enrollment read returns only the safe projection needed by the listing: `unenrolled`, `editable`, or `locked`, masked brand/last digits when enrolled, whether account attestation is already recorded, and no provider secret or card details
 - **Decision** — `ListingView` owns the render fold over session, authenticated enrollment read, listing standing, setup mode, provider lifecycle, and mutation outcomes. Shared UI receives the resulting posture and callbacks; it never fetches or persists product state
 - **Alternative rejected** — treating `paymentMethodLinked` as a local display seed or adding enrollment to the public listing response would lose state on reload and leak collector-specific payment information across anonymous caches
@@ -38,7 +38,7 @@
 ### Account attestation has one authoritative owner
 
 - **Decision** — the first successful enrollment writes the once-per-account age-attestation fact through the authenticated bidder/account boundary. Later enrollment reads use that fact to pre-check setup; unchecking it makes the current enrollment attempt ineligible even when the account was previously attested
-- **Ownership** — the existing bidder/account record is the preferred owner because it is already keyed by storefront and user and participates in authenticated auction flows. Whether that record can accept the fact directly or must reference an account-profile procedure is ❓ TBC; the implementation must choose one owner and expose one read/write contract
+- **Field** — the bidder/account record stores nullable `age_attested_at`. A successful enrollment upsert sets it when the attestation control is checked, and the authenticated enrollment read returns whether it is non-null so later setup can pre-check the control
 - **Invariant** — no listing row copies the attestation as its own source of truth; an enrollment record may record audit timestamps, but the account-level fact remains authoritative
 
 ### Provider integration stays behind a provider-neutral composition seam
@@ -64,11 +64,6 @@ The UI fold distinguishes provider mount readiness, an opaque confirmed method i
 | `authorization-editable` | Authenticated enrollment read returns an editable row | Primary bid → existing bid flow; Change → `setup-editable`; first accepted bid → `enrolled` | Use the persisted opaque method id; do not reopen setup for a normal maximum | Refresh/read after enrollment, change, or bid outcome |
 | `enrolled` | Authenticated enrollment read returns a locked row or bid-lock mutation | Later maximum → existing auto-bidding/bid-payment-method flow | Hide Change; reuse the committed method; never replace the row | Refresh/read only; no card-change retry on this listing |
 
-`setup-in-progress` is the new transient outcome for first-link setup. It is
-distinct from `setup-first`, which is the signed-in, not-yet-enrolled posture
-before setup opens. Backend projections may still use `unenrolled`, `editable`,
-and `locked`; those are source values, not consumer state-machine names.
-
 Provider mount readiness (`mounting`, `ready`, `refused`) is separate from a confirmed opaque method id. The provider adapter may report `ready` before confirmation; that event alone never creates enrollment or enables Continue unless the shared sheet's controlled `cardReady` contract defines it as sufficient for the current provider flow.
 
 ### Lock ownership and transaction boundary
@@ -92,13 +87,12 @@ The change adds enrollment boundaries around the existing bidder and auction pro
 | `placeBid` → listing/enrollment transaction | Listing id, maximum, authenticated bidder, existing enrollment reference | Existing `PlaceBidOutcome`, plus typed enrollment/lock refusal where applicable | Under the listing lock, require an enrollment, create the pending accepted bid, and mark the enrollment locked atomically; create the hold record without waiting on provider network confirmation |
 | Later maximum → auto-bidding / bid-payment-method | Existing locked listing enrollment and maximum | Existing maximum/hold outcome | Reuse the committed opaque method; never reopen setup or accept a replacement method |
 
-The browser refetches the authenticated enrollment projection after enrollment upsert, replacement, and bid outcomes. Webhook delay is handled as a typed pending/refused enrollment outcome or a retryable read state ❓ TBC; the UI must not claim a durable linked card until the backend can return the safe projection.
+The browser refetches the authenticated enrollment projection after enrollment upsert, replacement, and bid outcomes. Provider confirmation and the enrollment upsert are the enrollment commit boundary; webhook reconciliation is asynchronous and does not gate the UI. The UI enters `authorization-editable` only after the upsert returns the safe projection, and otherwise remains `authorization-in-progress` during the request or enters `authorization-failed` without claiming a durable linked card.
 
 ## Risks / Trade-offs
 
 - **Provider field and shared sheet can drift** → complete the provider-neutral slot contract before implementation, keep the adapter behind `PaymentMethodField`, and exercise mount, confirmation, pending, refusal, and retry states in shared stories and the provider test adapter
-- **Webhook timing can outlive the setup modal** → make reconciliation idempotent, keep enrollment writes retryable, refetch the authenticated projection after the webhook-visible mutation, and show a refusal/pending state rather than fabricating masked-card data
-- **Legacy rows have implicit lock semantics** → migration must classify existing `bidder_listing_payment_methods` rows against existing bids; rows created by the current `placeBid` path should migrate as locked, while any ambiguous row is ❓ TBC and must fail closed for replacement
+- **Webhook reconciliation can finish after enrollment** → treat provider confirmation plus the enrollment upsert as the UI commit, reconcile webhook events asynchronously and idempotently, refetch the safe projection after enrollment mutations or later reads, and never fabricate masked-card data
 - **A stale public listing or standing could expose private state** → keep enrollment reads separate from `PublicListingState`, key client caches by authenticated identity, and derive editability from the latest enrollment read plus first-bid state
 - **Concurrent change and bid could split the method used for the hold** → hold the listing/enrollment row in one transaction and make the lock transition the only authority for replacement rejection
 - **Local setup state is lost on reload** → durable enrollment is read from the authenticated procedure on every listing composition; only an in-flight provider method id and unsaved draft are intentionally local
@@ -106,9 +100,9 @@ The browser refetches the authenticated enrollment projection after enrollment u
 
 ## Migration Plan
 
-1. **Data and contract migration** — evolve the existing listing payment-method record for editable/locked lifecycle and safe projection, choose the account-level attestation owner, add authenticated enrollment read/upsert outcomes, and add idempotency plus lock checks. Do not add enrollment fields to public listing state
+1. **Data and contract migration** — add the editable/locked lifecycle and safe projection to `bidder_listing_payment_methods`, add nullable `age_attested_at` to the bidder/account record, add authenticated enrollment read/upsert outcomes, and add idempotency plus lock checks. Apply the migration to a clean test database; test data may be pruned because the app is not launched. Do not add enrollment fields to public listing state
 2. **Provider reconciliation** — connect the existing `registerBidder` setup session, browser-owned provider confirmation, and webhook reconciliation to the enrollment write without moving provider details into shared UI
 3. **Bid lock integration** — update `placeBid` so the listing lock, enrollment lock, pending accepted bid, and hold-record creation have the defined ordering; preserve asynchronous external hold confirmation and existing later maximum behavior
 4. **Application wiring** — implement the state machine in the auction frontend, hydrate/refetch authenticated enrollment data, mount the provider-neutral setup slot, and route setup completion through enrollment upsert rather than placing a bid
-5. **Verification** — run OpenSpec/manual checks, backend migration and contract tests, auction frontend unit tests, shared UI story tests, typecheck/lint, and targeted E2E cases for setup-without-bid, dismissal, reload persistence, replacement before lock, lock after first accepted bid, provider refusal/retry, and opaque-ID-only transport
-6. **Rollback** — disable the new setup entry point and preserve existing bid behavior without deleting enrollment rows; keep reads backward-compatible and retain locked legacy bindings. Any migration rollback must be a reviewed database operation ❓ TBC
+5. **Verification** — apply migrations to a clean test database and run OpenSpec/manual checks, backend migration and contract tests, auction frontend unit tests, shared UI story tests, typecheck/lint, and targeted E2E cases for setup-without-bid, dismissal, reload persistence, replacement before lock, lock after first accepted bid, provider refusal/retry, and opaque-ID-only transport
+6. **Rollback** — disable the new setup entry point and use the repository's normal migration rollback procedure
