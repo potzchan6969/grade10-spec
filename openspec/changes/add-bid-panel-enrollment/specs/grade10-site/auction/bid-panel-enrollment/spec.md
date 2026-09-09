@@ -38,12 +38,25 @@ The listing bid panel SHALL present exactly one enrollment posture to the
 collector at a time. The consumer owns which posture applies; the shared bid
 panel SHALL render the posture it is given.
 
-| State | Amount controls | Bid action | Linked-card slot | Setup modal |
-| --- | --- | --- | --- | --- |
-| Signed out | Hidden | Sign in to bid | Hidden | Closed |
-| Signed in, no linked card | Visible, disabled | Link a card to bid | Empty link prompt, or hidden while setup is open | Closed, or open during link |
-| Signed in, card linked, no bid on this lot | Enabled | Set or raise maximum | Linked card with change | Closed, or open during change |
-| Signed in, card linked, bid placed on this lot | Enabled | Set or raise maximum | Linked card without change | Closed |
+| Panel state | Meaning | Visual group(s) | Bid action | Linked-card slot | Setup modal |
+| --- | --- | --- | --- | --- | --- |
+| `signed-out` | No authenticated session | `signed-out` | Sign in to bid | Hidden | Closed |
+| `setup-first` | Authenticated; no linked card on this lot; setup closed | `no-linked-card` | Place bid (or equivalent) | Empty link prompt | Closed |
+| `setup-in-progress` | First-link setup is open | `no-linked-card` | Setup is required before bidding | Empty link prompt | Open first-link setup |
+| `setup-editable` | Change-card setup is open for an editable enrollment | `linked-card-before-bid` | Place bid (or equivalent) | Linked card with change | Open change-card setup |
+| `authorization-in-progress` | Provider or enrollment authorization is running | `no-linked-card` or `linked-card-before-bid` | Setup or bid is unavailable while authorization runs | Empty link prompt or prior linked card | Open with controls locked |
+| `authorization-failed` | Provider or enrollment authorization failed; retry remains possible | `no-linked-card` or `linked-card-before-bid` | Setup or bid is unavailable until authorization succeeds | Empty link prompt or prior linked card | Open with failure shown and controls interactive |
+| `authorization-editable` | Enrollment succeeded before the first accepted bid | `linked-card-before-bid` | Place bid (or equivalent) | Linked card with change | Closed |
+| `enrolled` | The first accepted bid locked this lot's enrollment | `linked-card-after-bid` | Place bid (or equivalent) | Linked card without change | Closed |
+| `ready` | Derived shared bid-card signal for authenticated bidding controls; not a separate persistence state | `linked-card-after-bid` | Place bid (or equivalent) | Uses the linked-card presentation of its source state | Closed |
+
+| Visual group | Panel states | Amount controls | Bid action | Linked-card slot | Setup modal |
+| --- | --- | --- | --- | --- | --- |
+| `signed-out` — Signed out | `signed-out` | Hidden | Sign in to bid | Hidden | Closed |
+| `no-linked-card` — Signed in, no linked card | `setup-first`, `setup-in-progress`, `authorization-in-progress` or `authorization-failed` when first-linking | Visible, disabled | Link a card to bid | Empty link prompt, or hidden while setup is open | Closed, or open during link |
+| `linked-card-before-bid` — Signed in, card linked, no bid on this lot | `setup-editable`, `authorization-editable`, `authorization-in-progress` or `authorization-failed` when changing a card | Enabled | Set or raise maximum | Linked card with change | Closed, or open during change |
+| `linked-card-after-bid` — Signed in, card linked, bid placed on this lot | `enrolled`, `ready` | Enabled | Set or raise maximum | Linked card without change | Closed |
+
 
 Standing badges for highest bid or outbid SHALL appear only when the
 collector is signed in and has auction standing on the lot. Recent public bids
@@ -145,6 +158,12 @@ attest before continue is enabled on their first link. When a collector who
 already attested on a prior lot opens setup to change card, the attestation
 SHALL be pre-checked. The collector MAY uncheck it; continue SHALL remain
 disabled while it is unchecked.
+
+The authenticated bidder/account record SHALL store a nullable
+`age_attested_at` timestamp. A non-null value means that the collector has
+completed age attestation; enrollment setup SHALL use it to pre-check the
+control on later lots, while the current enrollment attempt SHALL still
+require the control to remain checked.
 
 The setup modal SHALL use the same title and description for first link and
 change card. The title SHALL be Link a card to bid. The description SHALL be
