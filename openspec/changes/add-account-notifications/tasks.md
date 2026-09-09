@@ -14,9 +14,9 @@ Independent of groups 2–8.
 
 ## 2. Shared vocabulary (grade10) (owner: @mason5991)
 
-- [ ] 2.1 Add `listing_opens_in_24h`, `listing_opened`, `listing_closes_in_24h`, `listing_extended`, and `listing_new_bid` to `AuctionPushKind` so `grade10-site-auction-notifications-SC-18` has names both ports can carry; keep push claiming on the existing eight kinds.
-- [ ] 2.2 Extend the listing shape the letter renders (`startsAt`, `scheduledEndsAt`, and optional `primaryImageUrl` beside the effective close) so `grade10-site-auction-notifications-SC-06`, `grade10-site-auction-notifications-SC-08`, `grade10-site-auction-notifications-SC-29`, and `grade10-site-auction-notifications-SC-30` can name the instants and show or omit the lot picture the spec requires.
-- [ ] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
+- [x] 2.1 Add `listing_opens_in_24h`, `listing_opened`, `listing_closes_in_24h`, `listing_extended`, and `listing_new_bid` to `AuctionPushKind` so `grade10-site-auction-notifications-SC-18` has names both ports can carry; keep push claiming on the existing eight kinds.
+- [x] 2.2 Extend the listing shape the letter renders (`startsAt`, `scheduledEndsAt`, and optional `primaryImageUrl` beside the effective close) so `grade10-site-auction-notifications-SC-06`, `grade10-site-auction-notifications-SC-08`, `grade10-site-auction-notifications-SC-29`, and `grade10-site-auction-notifications-SC-30` can name the instants and show or omit the lot picture the spec requires.
+- [x] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
 ## 3. Stamps, mute prefs, and send log (grade10)
 
