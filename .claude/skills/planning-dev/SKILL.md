@@ -114,13 +114,18 @@ tooling on both sides parses it.
   works test-first inside each task; a separate testing task invites the
   opposite.
 - **End every group with its verification step** — the checks that group runs.
-- **Carry the archive hand-copy.** When a delta has a `## Feature set`, or a
-  capability has a `user-journeys.md`, the store group carries a task to copy
-  them across at archive time. The fold keeps `## Requirements` and nothing
-  else, so the feature set and every `-US-` id die with the change unless
-  someone carries them — and the someone is decided here, at planning time,
-  not discovered by whoever archives. `pnpm run archive:preflight` refuses the
-  archive while they are uncarried.
+- **Leave the routine archive hand-copy out of the tasks.** The fold keeps
+  `## Requirements` and nothing else, so a delta's `## Feature set` and every
+  `-US-` id in a `user-journeys.md` need carrying across — but
+  `pnpm run archive:preflight` already refuses the archive while they are
+  uncarried, and a task for it cannot be ticked when the work is: it waits on a
+  deploy, so a delivered change reads as incomplete on the board. Name who
+  archives in the proposal instead. Carry a task only for what the preflight
+  cannot check — a hand-off sequenced behind another change archiving first, a
+  capability with no durable spec for the copy to land in, a README row or an
+  acceptance shelf — and write it inside the grade10-spec group that updates
+  the manual page, never as a group of its own with a verification step it
+  cannot pass.
 - **Carry the manual page.** A change whose deltas touch a capability carries a
   task to update that capability's page under `docs/prds/`; `pnpm check:manual`
   verifies it.
