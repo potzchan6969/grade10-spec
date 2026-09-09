@@ -339,16 +339,29 @@ artifacts:
     requires:
       - specs
   - id: test-cases
-    generates: specs/**/test-cases.md
+    generates: specs/**/feature-tcs.md
     description: The QA suite derived from each capability's journeys, one file per capability
-    template: test-cases.md
+    template: feature-tcs.md
     instruction: >
       Written by QA, with the `planning-qa` skill, one file beside each
       `spec.md` whose journeys are worth
 
-      walking: `specs/<capability-path>/test-cases.md`. Optional - a change
+      walking: `specs/<capability-path>/feature-tcs.md`. Optional - a change
 
       whose capabilities carry no journeys has nothing to derive.
+
+
+      A suite's file name carries its level, and `test-cases.md` is not one of
+
+      them: a capability writes `feature-tcs.md`, and a path across the
+
+      capabilities of one domain writes `specs/<product>/<domain>/domain-tcs.md`
+
+      beside them. The wider levels - a product's `product-tcs.md`, the store's
+
+      `platform-tcs.md` - are smoke passes over the durable specs, and a change
+
+      derives them there rather than under its own deltas.
 
 
       A suite is a derived reading of the `spec.md` and `user-journeys.md`
