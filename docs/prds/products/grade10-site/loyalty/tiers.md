@@ -67,9 +67,10 @@ We have a cron sweep to render the record for analytics purposes.
 :::example{title="A member's three years" periods="Gold=gold"}
 | When | Event | Points | Balance | Progress | Period |
 | --- | --- | --- | --- | --- | --- |
-| 2025/02/10 | buys $2,500 · 250 at 1× | +250 | 250 | 250 | Silver |
-| 2026/01/03 | buys $2,000 · 200 at 1× | +200 | 450 | 450 | |
-| 2026/03/01 | buys $3,000 · 300 at 1×, reaching 500 — **Gold** | +300 | 750 | 0 | Gold · to 2027/03/01 |
+| 2025/02/10 | buys $1,500 · 150 at 1× | +150 | 150 | 150 | Silver |
+| 2025/11/01 | buys $2,000 · 200 at 1× | +200 | 350 | 350 | |
+| 2026/01/03 | buys $1,000 · 100 at 1×, fifty short | +100 | 450 | 450 | |
+| 2026/03/01 | buys $3,000 · 300 at 1×, reaching 600 — **Gold** | +300 | 750 | 0 | Gold · to 2027/03/01 |
 | 2026/03/05 | redeems 500 | −500 | 250 | | |
 | 2026/09/20 | buys $5,000 · 600 at 1.2×, past 500 · the period extends | +600 | 850 | 600 | |
 | 2027/03/01 | the old period ends, the new one counts from zero | | 850 | 0 | Gold · to 2028/03/01 |
@@ -85,12 +86,12 @@ We have a cron sweep to render the record for analytics purposes.
   twelve months while no tier period is running, what the tier period has
   counted once one is
 - **A rolling twelve months** — by March 2026 the member has earned 750 points
-  and still holds every one, but the 250 from February 2025 is older than
-  twelve months, so the 500 that reaches Gold is the two later buys alone
-- **Reaching, then keeping** — the 500 that won Gold counts toward nothing
+  and still holds every one, but the 150 from February 2025 is older than
+  twelve months, so the 600 that reaches Gold is the three later buys alone
+- **Reaching, then keeping** — the 600 that won Gold counts toward nothing
   afterwards, because a period counts only what is earned after it starts; the
-  same happens on 2027/03/01, so the 600 that bought the second period cannot
-  buy a third
+  same happens on 2027/03/01, so what was earned that September cannot buy a
+  third period
 - **March 2026** — the redemption takes 500 from the balance and nothing from
   the progress, so it can neither demote the member nor delay the tier
 - **September 2026** — the period extends from its own end, never from that
