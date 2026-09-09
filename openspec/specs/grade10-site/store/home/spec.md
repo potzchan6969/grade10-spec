@@ -22,15 +22,15 @@ here: the address that used to name the catalogue now names the front door.
 - Merchandised row
   - First-collection cards: a row titled with the first collection's name
   - Shop-driven lead: which collection leads follows the catalogue
+  - Card status: a card says whether it is sold out and whether it is marked down, as the listing does
+  - Opens, never sells: the row leads to a product's page and offers no cart it cannot honour
 - Catalogue resilience
   - Hero first: the hero renders whether or not the catalogue has answered
   - Load and retry: sections say they are loading or failed, and offer retry
 - Store chrome
   - Store marked: chrome marks the store on the front door and the listing
   - Chrome destinations: store goes to the front door; all-collections to the listing
-
 ## Requirements
-
 ### Requirement: The store answers with its front door
 
 The site SHALL answer the store address with a marketing hero: an eyebrow, a
@@ -111,7 +111,13 @@ the artwork goes.
 The front door SHALL show a row of cards from the first collection the
 catalogue lists — the one the grid features — titled with that collection's
 own name, with a way on to the listing scoped to it. Each card SHALL carry the
-card's name, its image and its price.
+card's name, its image and its price, whether the shop has sold it out, and
+what it used to cost where the shop has marked it down.
+
+The row merchandises rather than sells: a card SHALL open the product's own
+page and SHALL NOT offer a way into the cart. A control a surface cannot
+honour is worse than no control — it takes a collector's press and answers
+with nothing.
 
 Which collection this is SHALL follow the catalogue rather than the
 application, so the shop decides what the front door leads with by deciding
@@ -150,6 +156,26 @@ empty row.
 - **WHEN** the front door renders
 - **THEN** neither the row nor its heading is on the page, and the rest of the
   surface renders
+
+#### Scenario: grade10-site-store-home-SC-21 - A card the shop has sold out
+
+- **GIVEN** the merchandised collection leads with a card nothing is left to buy of
+- **WHEN** the front door renders
+- **THEN** that card is shown sold out, the way the browse listing shows one
+- **AND** no way into the cart is offered on it
+
+#### Scenario: grade10-site-store-home-SC-22 - A card the shop has marked down
+
+- **GIVEN** a card in the row the shop prices below what it compares it at
+- **WHEN** the front door renders
+- **THEN** the card shows what it costs now and what it used to cost
+- **AND** a card the shop has not marked down shows one price only
+
+#### Scenario: grade10-site-store-home-SC-23 - The row does not sell
+
+- **WHEN** a collector reads the merchandised row
+- **THEN** no card offers a way into the cart
+- **AND** activating a card opens that product's own page
 
 ### Requirement: The front door stands without the catalogue
 
@@ -197,3 +223,4 @@ listing, unscoped.
 
 - **WHEN** a collector follows the chrome's all-collections destination
 - **THEN** the browse listing renders, unscoped
+
