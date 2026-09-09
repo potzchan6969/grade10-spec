@@ -1,6 +1,12 @@
+import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
+import { Bell, BellSlash } from "@phosphor-icons/react";
 import type { WatchButtonProps } from "./types";
 
+/**
+ * Watch / unwatch control — same design-system Button + Bell treatment as
+ * `ListingLotHeader` on the auction lot details page.
+ */
 function WatchButton({
   watched,
   pending = false,
@@ -9,23 +15,23 @@ function WatchButton({
   disabled = false,
   className,
 }: WatchButtonProps) {
-  const label = pending ? copy.pending : watched ? copy.unwatch : copy.watch;
+  const label = pending ? copy.pending : watched ? copy.watching : copy.watch;
   if (!label) return null;
 
   return (
-    <button
+    <Button
       aria-busy={pending || undefined}
+      aria-label={watched ? copy.unwatchAriaLabel : copy.watchAriaLabel}
       aria-pressed={watched}
-      className={cn(
-        "rounded-md border px-3 py-2 text-sm font-medium",
-        className,
-      )}
+      className={cn("shrink-0", className)}
       disabled={disabled || pending}
+      leading={watched ? <BellSlash aria-hidden /> : <Bell aria-hidden />}
       onClick={onPress}
-      type="button"
+      size="md"
+      variant="outline"
     >
       {label}
-    </button>
+    </Button>
   );
 }
 

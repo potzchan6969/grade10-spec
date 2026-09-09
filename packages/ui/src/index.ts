@@ -160,6 +160,7 @@ export type {
   ListingUserBidHistoryRow,
 } from "./blocks/auction-listing/types";
 // shared/ui/auction-record
+export { AuctionRecord } from "./blocks/auction-record/auction-record";
 export { AuctionRecordEmpty } from "./blocks/auction-record/auction-record-empty";
 export {
   BiddingList,
@@ -170,10 +171,14 @@ export { AuctionRecordTabs } from "./blocks/auction-record/auction-record-tabs";
 export type {
   AuctionRecordCopy,
   AuctionRecordEmptyProps,
+  AuctionRecordProps,
+  AuctionRecordRowCopy,
   AuctionRecordRowProps,
   AuctionRecordRowState,
   AuctionRecordTabsProps,
   BiddingListProps,
+  EmailAlertsCopy,
+  EmailAlertsToastCopy,
   WatchButtonCopy,
   WatchButtonProps,
   WatchingListProps,

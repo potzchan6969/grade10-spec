@@ -2,11 +2,11 @@
 
 ## Purpose
 The account auction-record components every store application composes: the
-two-page frame, the two lists, the row that carries one listing's standing, the
-empty state, and the control that watches a listing wherever it is shown. The
-components display what they are given and report what the collector did;
-what is stored, what a state means, and every string on screen belong to the
-application.
+My Auctions page body (breadcrumbs, title, Bidding and Watching sections),
+the lists and row that carry one listing, the empty state, and the control
+that watches a listing wherever it is shown. The components display what they
+are given and report what the collector did; what is stored, what a state
+means, and every string on screen belong to the application.
 
 ## Feature set
 
@@ -14,7 +14,7 @@ application.
   - Export contract: names the components and types an application imports, so
     the surface lands once and reaches every application unchanged.
   - Independent parts: lets a surface reuse the row or the watch control
-    without adopting the whole frame.
+    without adopting the whole page.
 - **Content ownership**
   - Copy through props: keeps message catalogs in the application and out of
     the shared package.
@@ -26,15 +26,26 @@ application.
 ### Requirement: The auction-record surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
-components for the account auction record — `AuctionRecordTabs`,
-`WatchingList`, `BiddingList`, `AuctionRecordRow`, `AuctionRecordEmpty`, and
-`WatchButton` — and exactly these types: `AuctionRecordTabsProps`,
-`WatchingListProps`, `BiddingListProps`, `AuctionRecordRowProps`,
-`AuctionRecordRowState`, `AuctionRecordEmptyProps`, `AuctionRecordCopy`,
-`WatchButtonProps`, and `WatchButtonCopy`.
+components for the account auction record — `AuctionRecord`,
+`WatchingList`, `BiddingList`, `AuctionRecordRow`, `AuctionRecordEmpty`,
+`WatchButton`, and `AuctionRecordTabs` — and exactly these types:
+`AuctionRecordProps`, `WatchingListProps`, `BiddingListProps`,
+`AuctionRecordRowProps`, `AuctionRecordRowCopy`, `AuctionRecordRowState`,
+`AuctionRecordEmptyProps`, `AuctionRecordCopy`, `AuctionRecordTabsProps`,
+`WatchButtonProps`, `WatchButtonCopy`, `EmailAlertsCopy`, and
+`EmailAlertsToastCopy`.
 
-Each of those components SHALL be renderable on its own, outside
-`AuctionRecordTabs`, so a surface may use the row or the watch control alone.
+`AuctionRecord` is the My Auctions page body: breadcrumbs slot, page title,
+Bidding and Watching sections on one page, in that order — a lot holding the
+collector's money is read before one they only follow. A section with no rows
+SHALL be omitted; when both sections are empty the page SHALL show one empty
+state.
+`AuctionRecordTabs` remains exported for transitional surfaces and SHALL NOT
+be required for a new My Auctions assembly.
+
+Each of `AuctionRecordRow` and `WatchButton` SHALL be renderable on its own,
+outside `AuctionRecord`, so a surface may use the row or the watch control
+alone.
 
 #### Scenario: shared-ui-auction-record-SC-01 - An application imports the surface
 
@@ -46,16 +57,24 @@ Each of those components SHALL be renderable on its own, outside
 #### Scenario: shared-ui-auction-record-SC-02 - A part is reused alone
 
 - **WHEN** an application renders `AuctionRecordRow` or `WatchButton` without
-  `AuctionRecordTabs`
+  `AuctionRecord`
 - **THEN** it renders and behaves as specified, with no missing-context error
-  and no requirement to supply frame props
+  and no requirement to supply page props
+
+#### Scenario: shared-ui-auction-record-SC-08 - Bidding is read before Watching
+
+- **GIVEN** an `AuctionRecord` supplied with both bidding rows and watching
+  rows
+- **WHEN** it renders
+- **THEN** the Bidding section appears before the Watching section
 
 ### Requirement: Every string on the surface is supplied by the application
 
 These components SHALL supply no user-facing string of their own — no state
-label, no empty-state copy, no watch or unwatch label, and no default for any
-of them. A string not supplied SHALL be absent rather than replaced by a
-built-in value.
+label, no empty-state copy, no watch or unwatch label, no email-alerts label,
+no label for a row's current bid or close, no wording for an email-alerts
+confirmation, and no default for any of them. A string not supplied SHALL be
+absent rather than replaced by a built-in value.
 
 #### Scenario: shared-ui-auction-record-SC-03 - No label is invented
 
@@ -68,7 +87,16 @@ These components SHALL hold no auction product state. `WatchButton` SHALL show
 watched, not watched, or a change in progress exactly as the application tells
 it to, and SHALL NOT change what it shows on its own when the collector acts.
 Acting SHALL report the collector's intent to the application through a
-callback named for the event.
+callback named for the event. `WatchButton` SHALL use the same design-system
+button and bell treatment as the auction lot details watch control.
+`AuctionRecordRow` SHALL accept an optional email-alerts control distinct from
+unwatch; when supplied with copy and `onEmailAlertsChange`, it SHALL report
+the intended on/off value and SHALL NOT invent mute or unwatch behaviour. The
+control SHALL show the value the application gives it, and one row's control
+SHALL NOT change what another row shows. When the application supplies
+confirmation copy, the row SHALL announce the change once the application has
+changed the value it gives the control — never on the collector's click
+alone.
 
 #### Scenario: shared-ui-auction-record-SC-04 - The watch control reports and waits
 
@@ -82,3 +110,39 @@ callback named for the event.
 - **GIVEN** a `WatchButton` told a change is in progress
 - **WHEN** it renders
 - **THEN** it shows the change as in progress
+
+#### Scenario: shared-ui-auction-record-SC-07 - Email alerts report without unwatching
+
+- **GIVEN** an `AuctionRecordRow` supplied with email-alerts copy and
+  `onEmailAlertsChange`
+- **WHEN** the collector turns email alerts off
+- **THEN** the component reports the intended off value
+- **AND** it does not remove the row or invent an unwatch
+
+#### Scenario: shared-ui-auction-record-SC-09 - One row's alerts stand alone
+
+- **GIVEN** an `AuctionRecord` whose rows each carry an email-alerts control
+  told alerts are on
+- **WHEN** the collector turns one row's alerts off and the application
+  changes only that row's value
+- **THEN** only that row shows alerts off
+- **AND** every other row still shows alerts on
+
+#### Scenario: shared-ui-auction-record-SC-10 - A confirmed change is announced
+
+- **GIVEN** an `AuctionRecordRow` supplied with email-alerts confirmation copy
+- **WHEN** the application changes the value it gives the control
+- **THEN** the row announces the change once, in the supplied wording
+- **AND** a row supplied without that copy announces nothing
+
+### Requirement: A watched-list row carries the lot's key image
+
+`AuctionRecordRow` SHALL accept an optional key image for the listing. When
+supplied, the row SHALL show that image beside the listing identity. When not
+supplied, the image well SHALL remain without inventing a product photograph.
+
+#### Scenario: shared-ui-auction-record-SC-06 - A row shows the key image when given
+
+- **GIVEN** an `AuctionRecordRow` supplied with a key image
+- **WHEN** it renders
+- **THEN** that image is shown on the row
