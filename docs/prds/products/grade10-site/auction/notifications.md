@@ -6,8 +6,9 @@ order: 8
 
 Auction mail exists because the close is a deadline that moves: nobody can
 plan to be there at the end, so Grade10 tells enrolled collectors when a lot
-needs them. Every message is transactional mail to the account's registered
-email address, and amounts and times in it follow
+needs them. Before-and-during mail stays here; post-close letters belong to
+[Order Notifications](/p/grade10-site/auction/notifications-order). Every
+message is transactional mail to the account's registered email address, and amounts and times in it follow
 [money amounts](/platform/shared/money-amounts) and
 [dates and times](/platform/shared/dates-and-times).
 
@@ -89,7 +90,7 @@ prefs as the mute surface. Replacing the existing bid-state receipts or the
 one-hour closing-soon reminder already sent to watchers. Auto-bidding, a
 digest across listings, or a bidder's language. One-click unsubscribe — the
 destination is a signed-in mute. Mail about winning, paying, invoicing, or
-shipping.
+shipping belongs to [Order Notifications](/p/grade10-site/auction/notifications-order).
 
 **Measurement.**
 

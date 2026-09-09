@@ -5,43 +5,25 @@ audience: operator
 order: 13
 ---
 
-The queue works every listing from live through delivered in one place. Each
-row wears exactly one operator-facing outcome, the queue filters to one
-outcome at a time, and a row waiting on an operator — not on the clock —
-carries an extra highlight. A listing opens into its facts, its winner, its
-payment and shipment state, and a trail where status changes and comments
-share one history.
+The queue works every winner order from lot close through delivery in one place. Each row wears exactly one derived outcome, the queue filters to one outcome at a time, and Expired and Processing rows carry an extra needs-action treatment. An order opens into its winner, invoice revisions, payment attempts, address snapshots, fulfilment facts, and immutable histories.
 
 | Outcome | When |
 | --- | --- |
 | Draft · Scheduled · Live · Ending soon | The sale is still the auction's |
-| Unsold · Canceled | Ended with no winner; there is no aftermath |
-| Awaiting payment | Card capture is still trying |
-| Payment failed | Card capture gave up — an operator decides what next |
-| Awaiting wire | A payment operator parked it to collect by wire |
-| Paid via Stripe · Paid via Manual | The money is in, by capture or by record |
-| Shipped · Delivered | The card has left Grade10; the winner has it |
+| Unsold · Called off | Ended without a payable winner order |
+| Pending Payment | The current invoice is payable before its deadline |
+| Expired | The current invoice passed its deadline unpaid |
+| Processing | Payment is complete and dispatch is not complete |
+| Shipped · Delivered | Fulfilment has left Grade10 or has carrier proof |
+| Cancelled · Refunded | The order has a recorded terminal outcome |
 
 ## Payment
 
-A listing with a winner reaches paid in exactly one of two ways, and the
-first successful record wins: a verified card capture becomes **Paid via
-Stripe**; a payment operator recording collection — a completed wire included
-— becomes **Paid via Manual**. The two never share a visual mark, because how
-the money arrived matters. Parking a listing at Awaiting wire, or recording
-manual collection, marks the card authorization for release and stops
-automatic capture — a winner who chose a wire is never also charged.
-Operators may email the winner to collect payment or arrange the wire, and
-every move lands on the listing's trail.
+A winner order reaches paid through one fresh charge or one operator-recorded manual settlement. The winning bid-time hold is released rather than captured, and every failed payment attempt remains in the invoice log. Manual settlement confirms the delivery address, records the amount and external reference, and points at any superseded invoice.
 
-## Shipping
+## Fulfilment
 
-Shipment is its own grant, deliberately apart from payment: the person who
-may capture money is not necessarily the person who ships cards. It runs in
-one order — a delivery address recorded when obtained offline, started when
-the card leaves Grade10, completed when the winner has it — and recording it
-never rewrites who won or how they paid. The winner reads the same facts from
-their own side on [My Auctions](/p/grade10-site/auction/account-record).
+Shipment is its own grant, deliberately apart from payment: the person who may settle money is not necessarily the person who dispatches cards. Dispatch requires a paid invoice and records the immutable address snapshot; delivery records carrier proof. The winner reads the same facts from [Winner Order](/p/grade10-site/auction/winner-order).
 
 :::detail{title="Product decisions" for="pm"}
 The queue is the operator's close-out surface: payment and shipment are
@@ -50,8 +32,8 @@ delivery state, and operational trail together.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Payment source | Decided | The queue distinguishes Paid via Stripe from Paid via Manual, and a wire request releases the card hold before collection. | Product and Finance |
+| Payment source | Decided | The queue distinguishes a fresh Stripe charge from manual settlement, and both release the bid-time hold rather than capturing it. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
-| Shipping model | Decided | Grade10 records an offline formatted address and two manual milestones; carrier integration and tracking remain follow-on work. | Operations |
-| Operational history | Decided | Status changes and comments share one immutable listing trail, separate from the compliance audit chain. | Product and Engineering |
+| Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones, and delivery proof. | Operations |
+| Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 :::

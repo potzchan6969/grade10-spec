@@ -36,11 +36,7 @@ Outbid with the minimum next valid bid, Bid submitted, or Bid not accepted —
 naming whether the bid was below the minimum, the window had closed, or the
 card authorization failed. Closed lots split into Won and Didn't win.
 
-A winner follows their own lot to the door without contacting Grade10:
-Awaiting payment, Payment problem with how to reach Grade10, one single Paid
-whether the money came by card capture or an operator's manual record, then
-Shipped and Delivered. The surface is read-only — recording payment and
-shipment belongs to the operator's [post-sale queue](/p/grade10-admin/auction/post-sale).
+A winner follows their own lot to the door through [Winner Order](/p/grade10-site/auction/winner-order): Pending Payment, Expired, Processing, Shipped, Delivered, Cancelled, or Refunded. The record shows the derived auction status and opens the invoice for payment; address, payment, fulfilment, and delivery facts stay on the order.
 
 A losing bidder is told what happened to their card authorization — being
 released, or released — because a pending hold on a bank statement reads as a
@@ -72,9 +68,8 @@ bookkeeping.
 | Losing bidder | Bid and did not win | Confirm the outcome and that their card hold is released, so a pending authorization is not read as a charge. |
 
 **Not in scope.** Retracting or editing a bid — a placed bid is binding.
-Paying, requesting a wire, or arranging delivery from this page; recording
-payment and shipment stays the operator's. Invoices, receipts, refunds, or
-dispute flows. A public watch list or collector profile — the record is
+Paying, requesting a wire, or arranging delivery from this page; detailed
+invoice, receipt, address, refund, and dispute flows belong to [Winner Order](/p/grade10-site/auction/winner-order). A public watch list or collector profile — the record is
 owner-only, and no listing shows a watch count. Search, saved searches, and
 recommendations. Seller-side records; Grade10 is the seller. ZZZ gains no
 account auction surface. History export, and any record beyond the
@@ -100,8 +95,8 @@ establishes it.
 | Two pages, not one | Decided | Watching and Bidding are different jobs — interest versus commitment — with different states, different urgency, and different empty states. One merged list would bury a won listing among idle watches, or force a filter to be usable. | Product and design |
 | A listing that is both watched and bid on | Decided | Appears on both pages, marked on Watching as one they bid on. Removing it from Watching does not touch their bids. | Product |
 | Bidding groups | Decided | Active, Won, Didn't win. Won is separated from all other closed listings because it is the only group that carries an obligation. | Product |
-| One "Paid" for the collector | Decided | The collector sees **Paid**, whether collection was card capture or manual. The operator queue's Paid via Stripe / Paid via Manual split is a finance-reconciliation need, and noise to the person who paid. | Product and finance |
-| Post-sale is read-only here | Decided | The winner reads payment and shipment state; every write stays the operator's. A winner-initiated action — paying again, requesting a wire — is follow-on and is never smuggled in as a button. | Product and operations |
+| Derived auction status | Decided | The collector sees the auction order's derived status, while the order route owns payment, address confirmation, receipt, and delivery records. The store order-status capability remains separate. | Product and engineering |
+| Order owns post-sale writes | Decided | My Auctions opens the order for the winner's allowed actions; operator-only settlement, fulfilment, cancellation, and reinstatement stay in the [Post-Sale Queue](/p/grade10-admin/auction/post-sale). | Product and operations |
 | Card holds are stated plainly | Decided | The release of a losing bidder's authorization is asynchronous, so the record names the in-between state rather than implying the money is already back. Silence here is the likeliest source of "you charged me" contacts. | Product and finance |
 | Ending soon threshold | Decided | 60 minutes or less to close, matching the operator queue, so the two surfaces cannot disagree about which listings are urgent. | Product |
 | Bids are binding | Decided | Nothing on this page retracts a bid. A collector who believes a bid was a mistake contacts Grade10. | Product |
