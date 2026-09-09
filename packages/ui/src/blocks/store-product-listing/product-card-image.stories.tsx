@@ -95,3 +95,39 @@ export const KeyboardRevealsCart: Story = {
     expect(args.onCartQuantityChange).toHaveBeenCalledWith(1);
   },
 };
+
+/**
+ * `SC-55` — a surface that merchandises rather than sells supplies no
+ * quantity-change handler, so no cart control is drawn at rest, on hover, or
+ * on focus. The tile itself still activates.
+ */
+export const DoesNotSell: Story = {
+  args: {
+    copy: { soldOut: "SOLD OUT", sale: "SALE" },
+    name: "Ninja Spinner booster box",
+    onClick: fn(),
+  },
+  decorators: well,
+  render: (args) => (
+    <ProductCardImage {...args} onCartQuantityChange={undefined} />
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const tile = canvas.getByRole("button", {
+      name: "Ninja Spinner booster box",
+    });
+
+    await userEvent.hover(tile);
+    expect(
+      canvas.queryByRole("button", { name: "Add to cart" }),
+    ).not.toBeInTheDocument();
+
+    tile.focus();
+    expect(
+      canvas.queryByRole("button", { name: "Add to cart" }),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(tile);
+    expect(args.onClick).toHaveBeenCalledTimes(1);
+  },
+};
