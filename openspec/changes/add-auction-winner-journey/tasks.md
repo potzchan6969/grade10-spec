@@ -27,7 +27,7 @@ The application work starts after the change is merged to `grade10-spec` main an
 - [x] 3.6 Expose the operator queue, order detail, invoice log, payment-attempt log, dispatch snapshot, fulfilment log, derived status, and winner contact required by `grade10-admin-auction-post-sale-SC-19`, `grade10-admin-auction-post-sale-SC-20`, `grade10-admin-auction-post-sale-SC-21`, `grade10-admin-auction-post-sale-SC-22`, `grade10-admin-auction-post-sale-SC-34`, `grade10-admin-auction-post-sale-SC-36`, `grade10-admin-auction-post-sale-SC-37`, and `grade10-admin-auction-post-sale-SC-38`
 - [x] 3.7 Verify the close, invoice, payment, fulfilment, and post-sale service tests, then run `pnpm run test:backend`
 
-## 4. Suspension and notification workers (grade10)
+## 4. Suspension and notification workers (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Implement deadline expiry, bidder suspension, scoped access, standing-maximum retraction, atomic extended-bidding retraction, and operator reinstatement for `suspension-SC-01`, `suspension-SC-02`, `suspension-SC-03`, `suspension-SC-04`, `suspension-SC-05`, `suspension-SC-06`, `suspension-SC-07`, `suspension-SC-08`, `suspension-SC-09`, `suspension-SC-10`, and `suspension-SC-11`
 - [ ] 4.2 Preserve the committed auto-bidding contract while retracting suspended bidders so `suspension-SC-05`, `suspension-SC-06`, `suspension-SC-07`, and `suspension-SC-08` pass; the auto-bidding capability itself is owned by its committed change
