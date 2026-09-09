@@ -157,9 +157,9 @@ const PRODUCT_CARD_FIXTURE = <ProductCardContent {...SKELETON_FIXTURE_PROPS} />;
  * axis; discount is a boolean that shows the SALE badge and original price.
  *
  * Hover scales the photo inside the well. The cart control morphs from a
- * hover-revealed add affordance into an inline quantity stepper, collapsing to
- * a quantity pill when in cart. Sold-out tiles are inert and do not scale on
- * hover.
+ * hover-revealed (fine pointer) or always-visible (coarse pointer) add
+ * affordance into an inline quantity stepper, collapsing to a quantity pill
+ * when in cart. Sold-out tiles are inert and do not scale on hover.
  */
 function ProductCard({
   loading = false,
