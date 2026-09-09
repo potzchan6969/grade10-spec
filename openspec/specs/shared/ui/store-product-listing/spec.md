@@ -1,13 +1,13 @@
 # shared/ui/store-product-listing Specification
 
 ## Purpose
-The surface a shopper browses a category on: a sidebar with search and
-collection navigation, a titled result header with sort and filter controls, a
-grid of product tiles, and pagination. Every store application renders it from
-one shared component source, supplying its own catalog content, copy, and
-theme. The components render a selection and report a change; which products
-match, how they are ordered, and how many pages exist are decided by the
-application.
+The surface a shopper browses a catalogue on: a sidebar with search and facet
+filters, a result header with sort and applied-filter controls, a grid of
+product tiles, and infinite scroll for more results — never pagination.
+Every store application renders it from one shared component source, supplying
+its own catalog content, copy, and theme. The components render a selection
+and report a change; which products match, how they are ordered, and whether
+more can be loaded are decided by the application.
 
 ## Feature set
 

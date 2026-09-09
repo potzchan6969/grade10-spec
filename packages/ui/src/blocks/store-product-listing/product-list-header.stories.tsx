@@ -3,16 +3,18 @@ import { expect, fn, screen, userEvent, within } from "storybook/test";
 import { APPLIED_FILTERS, SORT_OPTIONS } from "./fixtures";
 import { ProductListHeader } from "./product-list-header";
 
+const SORT_TRIGGER = "Sort by latest product";
+
 const meta = {
   title: "Store Product Listing/ProductListHeader",
   component: ProductListHeader,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
-    copy: { sortTrigger: "Sort by popularity", clearFilters: "Clear filters" },
+    copy: { sortTrigger: SORT_TRIGGER, clearFilters: "Clear filters" },
     resultCount: "100 Products",
     sortOptions: SORT_OPTIONS,
-    sortValue: "popular",
+    sortValue: "new",
     appliedFilters: APPLIED_FILTERS,
     onSortChange: fn(),
     onFilterChange: fn(),
@@ -28,7 +30,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("100 Products")).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: "Sort by popularity" }),
+      canvas.getByRole("button", { name: SORT_TRIGGER }),
     ).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
   },
@@ -50,7 +52,7 @@ export const WithoutSort: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("100 Products")).toBeInTheDocument();
     expect(
-      canvas.queryByRole("button", { name: "Sort by popularity" }),
+      canvas.queryByRole("button", { name: SORT_TRIGGER }),
     ).not.toBeInTheDocument();
   },
 };
@@ -61,20 +63,18 @@ export const SortIsReported: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
 
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Sort by popularity" }),
-    );
+    await userEvent.click(canvas.getByRole("button", { name: SORT_TRIGGER }));
     expect(
-      await screen.findByRole("menuitem", { name: "Popularity" }),
+      await screen.findByRole("menuitem", { name: "Latest product" }),
     ).toHaveAttribute("aria-current", "true");
     await userEvent.click(
-      await screen.findByRole("menuitem", { name: "Latest product" }),
+      await screen.findByRole("menuitem", { name: "Lowest price" }),
     );
 
     expect(args.onSortChange).toHaveBeenCalledTimes(1);
-    expect(args.onSortChange).toHaveBeenCalledWith("new");
+    expect(args.onSortChange).toHaveBeenCalledWith("price-asc");
     expect(
-      canvas.getByRole("button", { name: "Sort by popularity" }),
+      canvas.getByRole("button", { name: SORT_TRIGGER }),
     ).toBeInTheDocument();
   },
 };
@@ -84,11 +84,9 @@ export const ActiveSortReportsNothing: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
 
+    await userEvent.click(canvas.getByRole("button", { name: SORT_TRIGGER }));
     await userEvent.click(
-      canvas.getByRole("button", { name: "Sort by popularity" }),
-    );
-    await userEvent.click(
-      await screen.findByRole("menuitem", { name: "Popularity" }),
+      await screen.findByRole("menuitem", { name: "Latest product" }),
     );
 
     expect(args.onSortChange).not.toHaveBeenCalled();
@@ -144,7 +142,7 @@ export const SortAndAppliedFiltersCombine: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: "Sort by popularity" }),
+      canvas.getByRole("button", { name: SORT_TRIGGER }),
     ).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
     expect(

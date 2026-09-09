@@ -56,8 +56,9 @@ type ProductCardImageProps = {
  * Cart sits outside the well's activation target so nested buttons stay valid.
  * It is drawn only where a quantity-change handler was supplied, so a surface
  * that merchandises rather than sells draws none and no press is swallowed.
- * Hover and `:focus-within` reveal it when the product is available and not
- * already in the cart; in-cart always shows it; sold-out never does.
+ * Hover and `:focus-within` reveal it on fine pointers when the product is
+ * available and not already in the cart; coarse pointers keep it visible;
+ * in-cart always shows it; sold-out never does.
  */
 function ProductCardImage({
   className,
@@ -76,7 +77,7 @@ function ProductCardImage({
   const quantity = parseCartQuantity(cartCount, inCart);
 
   const photoClassName = cn(
-    "size-full rounded-(--radius-3xl) object-cover mix-blend-multiply",
+    "size-full rounded-(--radius-3xl) object-contain",
     soldOut && "opacity-50",
     !soldOut &&
       "transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card-image:scale-105",
@@ -129,6 +130,9 @@ function ProductCardImage({
         "[&:focus-within_.cart-control]:pointer-events-auto [&:focus-within_.cart-control]:opacity-100",
         "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_.cart-control]:pointer-events-auto",
         "[@media(hover:hover)_and_(pointer:fine)]:hover:[&_.cart-control]:opacity-100",
+        /* Phones / no-hover: round cart stays visible without a hover reveal. */
+        "[@media(hover:none),_(pointer:coarse)]:[&_.cart-control]:pointer-events-auto",
+        "[@media(hover:none),_(pointer:coarse)]:[&_.cart-control]:opacity-100",
         className,
       )}
     >

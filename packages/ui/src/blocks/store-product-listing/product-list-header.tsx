@@ -17,7 +17,7 @@ import type { AppliedFilter, SortOption } from "./types";
 
 /** The words the header renders, whatever it is listing. */
 type ProductListHeaderCopy = {
-  /** Whole trigger label, e.g. "Sort by popularity". */
+  /** Whole trigger label, e.g. "Sort by latest product". */
   sortTrigger?: string;
   clearFilters?: string;
 };

@@ -24,7 +24,6 @@ const PRODUCT_BADGES: ReactNode = createElement(
 );
 
 const SORT_OPTIONS: SortOption[] = [
-  { id: "popular", label: "Popularity" },
   { id: "new", label: "Latest product" },
   { id: "price-asc", label: "Lowest price" },
   { id: "price-desc", label: "Highest price" },
