@@ -2,6 +2,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import type { PropsWithChildren } from "react";
 import type { AuctionRecordTabsProps } from "./types";
 
+/** @deprecated Prefer `AuctionRecord` (one page, two sections). */
 function AuctionRecordTabs({
   activeTab,
   copy,
@@ -9,15 +10,25 @@ function AuctionRecordTabs({
   children,
   className,
 }: PropsWithChildren<AuctionRecordTabsProps>) {
+  const watchingLabel = copy.watching ?? copy.watchingHeading;
+  const biddingLabel = copy.bidding ?? copy.biddingHeading;
+
   return (
-    <section className={cn("w-full", className)} data-slot="auction-record">
+    <section
+      className={cn("w-full", className)}
+      data-slot="auction-record-tabs"
+    >
       <div
-        aria-label={copy.watching ?? ""}
+        aria-label={watchingLabel ?? ""}
         className="flex gap-2"
         role="tablist"
       >
-        {(["watching", "bidding"] as const).map((tab) => {
-          const label = copy[tab];
+        {(
+          [
+            ["watching", watchingLabel],
+            ["bidding", biddingLabel],
+          ] as const
+        ).map(([tab, label]) => {
           if (!label) return null;
           return (
             <button

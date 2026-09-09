@@ -22,13 +22,24 @@
 **As a** signed-in collector,
 **I want** to remove a watch, including after the listing has closed or been
 called off,
-**so that** my list only holds listings I still mean to follow.
+**so that** my list only holds listings I still mean to follow, and email
+alerts for that listing stop with the watch.
 
 **Accepted by:**
 
 - `grade10-site-auction-watchlist-SC-02` — A collector unwatches a listing
 - `grade10-site-auction-watchlist-SC-14` — A collector unwatches a closed listing
 - `grade10-site-auction-watchlist-SC-18` — A collector unwatches from the watched list
+
+### grade10-site-auction-watchlist-US-05: Collector mutes email alerts without unwatching
+
+**As a** signed-in collector,
+**I want** to turn off email alerts for a listing I still watch,
+**so that** it stays on Watching without filling my inbox.
+
+**Accepted by:**
+
+- `grade10-site-auction-watchlist-SC-19` — Muting alerts leaves the watch
 
 ### grade10-site-auction-watchlist-US-03: Collector reads the listings they watch
 

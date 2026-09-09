@@ -4,6 +4,9 @@ export type EmailFooterProps = {
   whyYouGotThis: string;
   brandName?: string;
   canUnsubscribe?: boolean;
+  /** Signed-in mute surface for this lot's email alerts. */
+  muteUrl?: string;
+  /** @deprecated Prefer `muteUrl`. */
   unwatchUrl?: string;
 };
 
@@ -11,18 +14,21 @@ export function EmailFooter({
   whyYouGotThis,
   brandName = "Grade10",
   canUnsubscribe = false,
+  muteUrl,
   unwatchUrl,
 }: EmailFooterProps) {
+  const alertsUrl = muteUrl ?? unwatchUrl;
+
   return (
     <>
       <Hr className="my-6 border-stroke" />
       <Text className="mb-2 mt-0 text-sm leading-base text-fg-2">
         {whyYouGotThis}
-        {canUnsubscribe && unwatchUrl ? (
+        {canUnsubscribe && alertsUrl ? (
           <>
             {" "}
-            <Link className="text-fg-2" href={unwatchUrl}>
-              Stop watching this lot
+            <Link className="text-fg-2" href={alertsUrl}>
+              Turn them off
             </Link>
           </>
         ) : null}

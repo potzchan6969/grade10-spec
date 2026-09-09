@@ -9,7 +9,7 @@
 **Accepted by:**
 
 - `grade10-site-auction-notifications-SC-02` — A watcher who also bids receives one copy
-- `grade10-site-auction-notifications-SC-04` — Unwatching ends watcher enrolment
+- `grade10-site-auction-notifications-SC-04` — Unwatching ends watcher mail
 - `grade10-site-auction-notifications-SC-05` — A watcher is told bidding opens tomorrow
 - `grade10-site-auction-notifications-SC-06` — A watcher added inside the window still hears
 - `grade10-site-auction-notifications-SC-07` — A watcher is told bidding has opened
@@ -20,6 +20,7 @@
 - `grade10-site-auction-notifications-SC-21` — A rate limit is retried
 - `grade10-site-auction-notifications-SC-29` — The lot block shows one primary image
 - `grade10-site-auction-notifications-SC-30` — A listing without an image still mails
+- `grade10-site-auction-notifications-SC-32` — Muting stops mail while watching continues
 
 ### grade10-site-auction-notifications-US-02: Collector returns before a lot closes
 
@@ -49,8 +50,9 @@ scheduled close,
 - `grade10-site-auction-notifications-SC-12` — A collector is told they have been outbid
 - `grade10-site-auction-notifications-SC-13` — An outbid collector gets one message, not two
 - `grade10-site-auction-notifications-SC-15` — Losing the lead without a new bid is not an outbid
-- `grade10-site-auction-notifications-SC-20` — An outbid letter cannot be stopped
+- `grade10-site-auction-notifications-SC-20` — An outbid letter can be stopped by muting
 - `grade10-site-auction-notifications-SC-31` — A challenge that leaves them leading is not an outbid
+- `grade10-site-auction-notifications-SC-33` — Muting stops bidder mail without ending the bid
 
 ### grade10-site-auction-notifications-US-04: Collector hears a new bid on a lot they bid on
 

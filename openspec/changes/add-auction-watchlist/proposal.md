@@ -3,8 +3,9 @@
 **Author:** @jeffffej0909 - 2026-08-24
 
 Product context: [Watchlist](../../../docs/prds/products/grade10-site/auction/watchlist.md).
-Prerequisite for [`add-auction-notifications`](../add-auction-notifications/proposal.md),
-whose before-and-during-auction mail has no trigger without it.
+Prerequisite for [`add-auction-notifications`](../add-auction-notifications/proposal.md):
+progress mail enrols when a collector watches **and** email alerts are on
+for that listing.
 
 **Terminology.** **Listing** is the domain entity. **Lot** is only the
 collector-facing label for a listing (`listingLabel` / copy such as
@@ -41,6 +42,8 @@ from their watched list without searching.
 - **A watch outlives its listing's close.** A watched listing that has closed
   stays in the list, marked closed, so a collector can see what happened to
   it.
+- **Watching defaults email alerts on.** Unwatching removes the listing from
+  Watching and turns email alerts off for that listing.
 - **Watching is available on both brands.** It is a property of the shared
   auction, so a ZZZ collector watching a listing watches the same listing.
 
@@ -49,8 +52,9 @@ from their watched list without searching.
 - **Watching anything but an auction listing.** Not store products — the
   wishlist heart was deliberately removed from `Nav` and from every product
   tile, and nothing here brings it back.
-- **Notifying anyone.** Mail is `add-auction-notifications`. This change makes
-  the trigger exist; it sends nothing.
+- **Sending mail or owning mute semantics.** Mail kinds, mute, and fanout are
+  `add-auction-notifications`. This change owns list membership and that
+  unwatch clears alerts with the watch.
 - **Bidding from the watched list.** It links to the listing.
 - **Sharing, following a collector, or a public watch count.** A watch is
   private to the collector who made it, and a listing does not display how
@@ -66,8 +70,9 @@ from their watched list without searching.
 
 - `grade10-site/auction/watchlist`: a signed-in collector marks an auction
   listing to come back to — what watching means, who can see it, what it does
-  and does not confer, how the watched list is ordered, and what happens to a
-  watch when its listing closes.
+  and does not confer, how the watched list is ordered, what happens to a
+  watch when its listing closes, and that watch / unwatch set per-lot email
+  alerts on / off without defining which messages fire.
 
 ### Modified Capabilities
 
@@ -85,9 +90,9 @@ shared UI contract does not change; see Impact.
 | `apps/frontend/zzz` | Same, on the ZZZ auction surface. |
 | `@grade10/i18n` | Watch, unwatch, and watched-list copy for every locale the sites answer. |
 
-**Ordering.** `add-auction-notifications` depends on this change; its §9.1 and
-§9.2 mail cannot fire until a watch exists. Independent of
-`add-auction-auto-bidding`.
+**Ordering.** `add-auction-notifications` depends on this change; progress
+mail needs a watch with email alerts on (or a bid with alerts on). Independent
+of `add-auction-auto-bidding`.
 
 **On the removed wishlist.** `2026-08-19-remove-wishlist-control` removed the
 store heart because no surface answered it. That reasoning is respected here:

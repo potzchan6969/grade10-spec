@@ -5,29 +5,31 @@ order: 10
 ---
 
 My Auctions is the account's own record of every lot the collector watches or
-has bid on, split into two pages: **Watching** for interest, **Bidding** for
-money. The record is resolved from the session and nothing else — no input
-selects another collector's — and it opens on Bidding once the collector has
-ever bid, on Watching before that.
+has bid on, on one page with two sections: **Watching** for interest,
+**Bidding** for money — the same shell as Order History. The record is
+resolved from the session and nothing else — no input selects another
+collector's. A section with no lots is omitted; when both are empty the page
+shows one empty state into the catalogue.
 
 ## Watching
 
-A watch is made and removed wherever a lot is shown, is private to its owner,
-and outlives the lot — an ended listing stays on the page as Ended rather
-than vanishing. A maximum number of watches keeps the list a considered one;
-past it, a further watch is refused and says so. Each row carries exactly one
-state — Scheduled with when it opens, Live, Ending soon inside the last hour,
-or Ended however it ended — ordered soonest close first, finished lots after.
-A watched lot the collector also bid on is marked, and opens its row on
-Bidding in one step; the page never reports bidder standing itself.
+A watch is made and removed wherever a lot is shown (including the lot
+details page), is private to its owner, and outlives the lot — an ended
+listing stays as Ended rather than vanishing. A maximum number of watches
+keeps the list a considered one; past it, a further watch is refused and says
+so. Each row carries the lot's key image, exactly one state — Scheduled with
+when it opens, Live, Ending soon inside the last hour, or Ended however it
+ended — and enough to act. A watched lot the collector also bid on is marked,
+and opens that lot under Bidding in one step; Watching never reports bidder
+standing itself.
 
 ## Bidding
 
-The Bidding tab is the account entry point for the durable [Bidding
+The Bidding section is the account entry point for the durable [Bidding
 History](/p/grade10-site/auction/bidding-history) record. Account record owns
-the tabs, account-level groups, and collector-facing post-close projections;
-Bidding History owns the one-per-listing index, its filters, and the private
-chronological story.
+the page sections, account-level groups, and collector-facing post-close
+projections; Bidding History owns the one-per-listing index, its filters, and
+the private chronological story.
 
 While a lot is open, the row answers where the collector stands: Leading,
 Outbid with the minimum next valid bid, Bid submitted, or Bid not accepted —
