@@ -44,7 +44,7 @@
 - `grade10-site-auction-bidding-history-SC-30` — A matching minimum creates challenger and response records
 - `grade10-site-auction-bidding-history-SC-31` — A lower maximum below A's cap creates two ordered records
 - `grade10-site-auction-bidding-history-SC-32` — A maximum one increment below A's cap stops at A's maximum
-- `grade10-site-auction-bidding-history-SC-33` — An equal maximum is accepted without changing the earlier leader
+- `grade10-site-auction-bidding-history-SC-33` — An equal maximum creates two records for the earlier leader
 - `grade10-site-auction-bidding-history-SC-34` — A maximum just above A's cap takes the lead
 - `grade10-site-auction-bidding-history-SC-35` — A maximum equal to the next increment takes the lead once
 - `grade10-site-auction-bidding-history-SC-36` — A higher maximum is capped at one increment above A's cap

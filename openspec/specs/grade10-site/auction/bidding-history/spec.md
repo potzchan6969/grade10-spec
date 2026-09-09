@@ -12,7 +12,7 @@ standing without exposing private bidding facts.
   - **Refusal meaning:** keeps a below-minimum maximum attempt private and out of public history
 - Ordered public records
   - **Automatic response:** places the existing leader's automatic response after the challenger's accepted action
-  - **Tie outcome:** accepts an equal maximum without adding a challenger record, keeping one resolved record for the earlier leader
+  - **Tie outcome:** accepts an equal maximum, records the challenger before the earlier leader's automatic response at the same resolved amount, and keeps the earlier leader
   - **Outbid outcome:** records only the bidder who submits the higher maximum when no automatic response is placed for the displaced bidder
 - Boundary cases
   - **Resolved amounts:** fixes the eight outcomes around the current bid, increment, and leader maximum
@@ -85,12 +85,14 @@ stable auction-defined order so that later pages cannot reorder them.
 
 When one accepted maximum-setting action causes an automatic response, the
 challenger's public record SHALL precede the automatic response in the same
-timestamp group. A public record SHALL show the listing pseudonym and resolved
-public amount, while a private maximum-setting event MAY show its owner's
-maximum only in that owner's history. A bidder who is outbid without
-submitting a new maximum SHALL receive the standing transition and any
-existing outbid notification, but SHALL NOT receive a new bid record for the
-other bidder's action.
+timestamp group. This ordering SHALL also apply when the challenger maximum
+equals the earlier leader's maximum: both records SHALL show the same resolved
+amount, and the earlier leader SHALL remain leading. A public record SHALL show
+the listing pseudonym and resolved public amount, while a private
+maximum-setting event MAY show its owner's maximum only in that owner's
+history. A bidder who is outbid without submitting a new maximum SHALL receive
+the standing transition and any existing outbid notification, but SHALL NOT
+receive a new bid record for the other bidder's action.
 
 The combined history SHALL render the account's auction pseudonym as **You**
 and every rival only by that listing's pseudonym. It SHALL merge two facts from
@@ -371,13 +373,15 @@ unless A submits a new maximum or Grade10 places an automatic bid for A.
 - **AND** the same timestamp group then records A's automatic response leading at 1000 minor units
 - **AND** A's response does not exceed A's maximum
 
-#### Scenario: grade10-site-auction-bidding-history-SC-33 - An equal maximum is accepted without changing the earlier leader
+#### Scenario: grade10-site-auction-bidding-history-SC-33 - An equal maximum creates two records for the earlier leader
 
 - **WHEN** bidder B submits an automatic maximum of 1000 minor units
 - **THEN** Auction accepts the maximum
-- **AND** the public history contains one record for A at 1000 minor units
+- **AND** the public history records B first at 1000 minor units
+- **AND** the public history then records A's automatic response at 1000 minor units
 - **AND** A remains the leader at 1000 minor units
-- **AND** B's accepted maximum remains private and does not create a separate public record
+- **AND** both records belong to the same timestamp group
+- **AND** B's accepted maximum remains private
 
 #### Scenario: grade10-site-auction-bidding-history-SC-34 - A maximum just above A's cap takes the lead
 
