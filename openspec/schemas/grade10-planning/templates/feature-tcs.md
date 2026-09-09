@@ -1,4 +1,8 @@
-<!-- A derived reading of the spec.md and user-journeys.md beside this file,
+<!-- One capability's suite, written as feature-tcs.md beside its spec.md: the
+     file name carries the level, and a path across the capabilities of one
+     domain is domain-tcs.md beside them instead.
+
+     A derived reading of the spec.md and user-journeys.md beside this file,
      never a second source of truth. The shape below is fixed by
      docs/governance/specs-to-test-cases.md - follow that document rather than
      this sketch where the two ever part. Generate the first draft with the

@@ -15,7 +15,7 @@ artifacts:
     instruction: |
       Who walks the requirements.
   - id: test-cases
-    generates: specs/**/test-cases.md
+    generates: specs/**/feature-tcs.md
     instruction: |
       QA's suite, derived from the journeys.
   - id: ui-design

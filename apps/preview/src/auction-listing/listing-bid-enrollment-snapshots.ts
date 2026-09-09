@@ -109,7 +109,8 @@ export const ENROLLMENT_SNAPSHOT_SETUP_SHEET_ERROR: ListingBidEnrollmentSnapshot
       requiresIframeLink: true,
       iframeLinkedPayment: ENROLLMENT_DEMO_SAVED_PAYMENT,
       defaultAgeAttested: true,
-      errorMessage: "Could not link that card. Check the details and try again.",
+      errorMessage:
+        "Could not link that card. Check the details and try again.",
     },
   };
 

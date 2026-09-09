@@ -17,7 +17,8 @@
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -261,7 +262,8 @@ An unused unexpired sign-in link for an address.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -485,7 +487,8 @@ A brand that does not have Google sign-in.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual

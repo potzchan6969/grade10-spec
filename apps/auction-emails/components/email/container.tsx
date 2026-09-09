@@ -1,17 +1,16 @@
 import type { ReactNode } from "react";
 import {
-  Section,
-  Text,
   Body,
   Head as EmailHead,
   Html,
   Preview,
+  Section,
   Tailwind,
+  Text,
 } from "react-email";
-
-import { DefaultFonts } from "@/components/email/font-default";
-import { createEmailTailwindConfig } from "@/components/email/email-theme";
 import type { EmailTheme } from "@/components/email/email-theme";
+import { createEmailTailwindConfig } from "@/components/email/email-theme";
+import { DefaultFonts } from "@/components/email/font-default";
 import { defaultTheme } from "@/components/email/theme-default";
 
 type ContainerMobile = "flush" | "gutters";

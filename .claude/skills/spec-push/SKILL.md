@@ -126,7 +126,7 @@ On the rebased commits, not the ones you started with:
   an id the spec no longer issues.
 
 **A delta with journeys and no suite does not push.** If a `spec.md` on this
-branch has a `user-journeys.md` and no `test-cases.md` beside it, stop and run
+branch has a `user-journeys.md` and no `feature-tcs.md` beside it, stop and run
 `/spec-to-tcs <change-id>`, then commit the suites before pushing —
 `pnpm run tcs:validate --require-suites` names them. Generation belongs in the
 spec's own pull request; see `docs/governance/specs-to-test-cases.md`.

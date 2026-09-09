@@ -218,7 +218,7 @@ const getSeed = (path: string) =>
 
 const getIndexedAsset = (path: string, assets: readonly string[]) => {
   const explicitIndex = path.match(
-    /(?:member|avatar|product-list|shopping-cart)-(\d+)/i
+    /(?:member|avatar|product-list|shopping-cart)-(\d+)/i,
   )?.[1];
   const index = explicitIndex
     ? Number.parseInt(explicitIndex, 10) - 1
@@ -238,7 +238,7 @@ const getIcons8Asset = (
   }: {
     color?: string;
     style?: "color" | "ios" | "ios-filled";
-  } = {}
+  } = {},
 ) =>
   color
     ? `${ICONS8_ORIGIN}/${style}/50/${color}/${slug}.png`
@@ -315,7 +315,7 @@ const getWordmarkAsset = (path: string, [width, height]: Dimensions) => {
   const foreground = isLight ? "FFFFFF" : "111827";
 
   return `https://placehold.co/${width}x${height}/${background}/${foreground}.png?text=${encodeURIComponent(
-    getLabel(path)
+    getLabel(path),
   )}`;
 };
 
@@ -351,7 +351,7 @@ export const emailAsset = (path: string) => {
     return getUnsplashAsset(
       getIndexedAsset(normalizedPath, portraitIds),
       width,
-      height
+      height,
     );
   }
 
@@ -365,13 +365,13 @@ export const emailAsset = (path: string) => {
 
   if (
     /(?:category-previews|product-detail|product-lists|products\/product|shopping-cart)/i.test(
-      normalizedPath
+      normalizedPath,
     )
   ) {
     return getUnsplashAsset(
       getIndexedAsset(normalizedPath, productIds),
       width,
-      height
+      height,
     );
   }
 
@@ -384,6 +384,6 @@ export const emailAsset = (path: string) => {
   }
 
   return `https://picsum.photos/seed/${encodeURIComponent(
-    seed
+    seed,
   )}/${width}/${height}.jpg`;
 };

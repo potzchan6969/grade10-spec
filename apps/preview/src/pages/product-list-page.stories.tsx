@@ -60,7 +60,7 @@ function ProductListPage() {
   const [selection, setSelection] =
     useState<FilterSelection>(INITIAL_SELECTION);
   const [search, setSearch] = useState("");
-  const [sort, setSort] = useState("popular");
+  const [sort, setSort] = useState("new");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [loadingMore, setLoadingMore] = useState(false);
   const [cart, setCart] = useState<Record<string, number>>({ "1": 3 });
@@ -248,7 +248,6 @@ function ProductListPage() {
         copy={STORE_CART_COPY}
         estimatedTotal={cartTotal}
         items={cartItems}
-        onBrowseMore={() => setCartOpen(false)}
         onCheckout={async () => {
           await new Promise((resolve) => setTimeout(resolve, 800));
         }}
@@ -276,7 +275,7 @@ function ProductListPage() {
         }
         open={cartOpen}
         promoState={promoState}
-        shippingEstimate="TBD"
+        shippingEstimate="Calculated at checkout"
         subtotal={cartTotal}
       />
     </div>

@@ -18,6 +18,10 @@ row of cards. Links people already hold still land here.
       collection added to the shop arrives with no deploy
    2. **Merchandised row** — cards from whichever collection the shop lists
       first
+      - **Card status** — sold out, and what it used to cost where the shop
+        has marked it down, both said the way the browse listing says them
+      - **Opens, never sells** — a card leads to the product's own page and
+        offers no cart
 
 ## Designs
 
@@ -30,3 +34,29 @@ row of cards. Links people already hold still land here.
 ::story{id="pages-store-home-page--default" title="The main page, whole"}
 
 ::story{id="store-home-storecollectiongrid--default" title="The collection grid"}
+
+:::detail{title="Product decisions" for="pm"}
+The front door is a shop window: it shows what the shop leads with, and a
+collector who means to buy goes on to the product's own page for the cart.
+
+| User | Situation | Desired outcome |
+| --- | --- | --- |
+| Collector arriving cold | Reads the row | Sees what the shop leads with, what each card costs, and whether it is still there to buy. |
+| Collector who means to buy | Presses a card | Lands on that product's own page, where the cart is. |
+
+**Not in scope.** Selling from the row — the shop window shows, and the
+product's own page sells.
+
+**Measurement.**
+
+| Signal | Definition | Owner |
+| --- | --- | --- |
+| Row-led product views | Share of front-door sessions that open a product page from the merchandised row. Unmeasured; the first delivery sets the baseline. | Product |
+
+**Decisions.**
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| The row merchandises | Decided | A card opens the product's page and offers no cart. A control the surface cannot honour is worse than none: it draws, takes the press and answers with nothing, so a collector reads the shop as broken rather than the affordance as absent. | Product |
+| Status is read the listing's way | Decided | Sold out and marked down come from the same rules the browse listing reads them by, so the two surfaces cannot disagree about what is unavailable or what counts as a saving. | Engineering |
+:::

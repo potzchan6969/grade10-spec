@@ -16,8 +16,7 @@ export const LISTING_BID_ENROLLMENT_DEMO_COPY = {
   iframeLinkedCardPlaceholder:
     "Stripe card form (iframe) — linked card on file",
   signInDemoSubmit: "Continue (Demo)",
-  authorizationDeclined:
-    "Your card could not be authorized. Try another card.",
+  authorizationDeclined: "Your card could not be authorized. Try another card.",
   authorizationProviderFailure:
     "Your bid did not go through. The card was not authorized.",
 } as const;

@@ -4,10 +4,10 @@ spec: shared/ui/store-cart
 order: 5
 ---
 
-The cart is a drawer that slides in over the page. It always shows at least five
-rows — real items first, then placeholder slots — so its shape does not jump
-when the cart is nearly empty, and it fades at the edge when there is more to
-scroll to.
+The cart is a drawer that slides in over the page. It lists the items the
+shopper is buying and fades at the edge when there is more to scroll to. When
+the cart holds nothing, it shows the design-system empty state — title and
+description only, no button to leave.
 
 Opening it re-reads current status and price against the catalogue behind
 skeleton placeholders, because a cart is the one place a stale price is
@@ -19,10 +19,10 @@ locks the page behind it while it is open. Pressing checkout puts the button
 into a redirecting state and hands the intent to the application, which is what
 actually creates the checkout session.
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493" title="Cart Drawer"}
-
 ::story{id="store-cart-cartdrawer--default" title="The drawer with items"}
 
-::story{id="store-cart-cartdrawer--empty-state" title="An empty cart, still five rows tall"}
+::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}
 
 ::story{id="store-cart-cartdrawer--fetching-on-open" title="The skeleton state while the drawer re-reads prices"}
+
+::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493" title="Historical Figma — superseded by Storybook"}

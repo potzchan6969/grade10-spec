@@ -163,7 +163,7 @@ Runs once per row of **Test data**.
 
 * Both retained lines show their current title, confirmed quantity, current price and status.
 * The subtotal is 250000 HKD minor units, excluding the sold-out line, and estimated total is the same amount.
-* Shipping reads `TBD`, no product image or points control appears, and no promotion or discount is applied.
+* Shipping reads `Calculated at checkout`, no product image or points control appears, and no promotion or discount is applied.
 * Step 3 accepts no code and leaves the summary unchanged.
 
 ---
@@ -252,7 +252,7 @@ Runs once per row of **Test data**.
 ## grade10-site-store-cart-drawer-US03: Collector continues from the cart drawer
 
 **As a** collector,
-**I want** the cart to take me to a product, more browsing, or checkout,
+**I want** the cart to take me to a product or checkout,
 **so that** I can continue the shopping path I chose.
 
 ### grade10-site-store-cart-drawer-US03-TC01-1: Reviewed line opens its existing product address
@@ -283,34 +283,6 @@ Runs once per row of **Test data**.
 
 * The drawer closes.
 * <product>'s existing Store product address opens.
-
-### grade10-site-store-cart-drawer-US03-TC02-1: Browse More opens the unscoped listing
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-store-cart-drawer-US-03
-
-**Pre-conditions:**
-
-* The cart drawer is open over a Store surface other than the unscoped listing.
-
-**Steps:**
-
-1. Activate **Browse More**.
-
-**Expected Results:**
-
-* The drawer closes.
-* The existing unscoped Store listing address opens.
 
 ### grade10-site-store-cart-drawer-US03-TC03-1: Checkout opens the existing checkout surface
 

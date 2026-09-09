@@ -5,6 +5,7 @@ export type OutbidProps = {
   brandName?: string;
   lotTitle?: string;
   listingUrl?: string;
+  muteUrl?: string;
   primaryImageUrl?: string | null;
   currentBid?: string;
   /** Standing bid when they lost the lead. Omit to hide the secondary line. */
@@ -16,6 +17,7 @@ export default function OutbidEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   listingUrl = previewLot.listingUrl,
+  muteUrl = previewLot.muteUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   currentBid = previewLot.currentBid,
   yourBid = previewLot.yourBid,
@@ -25,18 +27,18 @@ export default function OutbidEmail({
     <AuctionLetter
       body="Another bid took the lead on this lot."
       brandName={brandName}
+      canUnsubscribe
       ctaLabel="Bid again"
       facts={[`Closes ${effectiveClosesAt}`]}
       heading="You have been outbid"
       highlight={{ label: "Leading bid", value: currentBid }}
       listingUrl={listingUrl}
       lotTitle={lotTitle}
+      muteUrl={muteUrl}
       preheader={`Leading bid is now ${currentBid}. Closes ${effectiveClosesAt}.`}
       primaryImageUrl={primaryImageUrl}
-      secondary={
-        yourBid ? { label: "Your bid", value: yourBid } : undefined
-      }
-      whyYouGotThis="You receive this because you have bid on this lot."
+      secondary={yourBid ? { label: "Your bid", value: yourBid } : undefined}
+      whyYouGotThis="Email alerts are on for this lot."
     />
   );
 }
@@ -45,6 +47,7 @@ OutbidEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   listingUrl: previewLot.listingUrl,
+  muteUrl: previewLot.muteUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   currentBid: previewLot.currentBid,
   yourBid: previewLot.yourBid,

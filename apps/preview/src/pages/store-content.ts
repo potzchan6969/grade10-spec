@@ -101,7 +101,6 @@ const STORE_FOOTER = {
 };
 
 const SORT_OPTIONS: SortOption[] = [
-  { id: "popular", label: "Popularity" },
   { id: "new", label: "Latest product" },
   { id: "price-asc", label: "Lowest price" },
   { id: "price-desc", label: "Highest price" },
@@ -252,7 +251,7 @@ const STORE_CART_COPY = {
   footer: {
     subtotalLabel: "Subtotal",
     shippingLabel: "Shipping",
-    shippingValue: "TBD",
+    shippingValue: "Calculated at checkout",
     estimatedTotalLabel: "Estimated Total",
     usePromoCode: "Promo code",
     selectOrEnterPromoCode: "Select or enter code",
@@ -278,6 +277,8 @@ const STORE_CART_COPY = {
     checkoutRedirecting: "Redirecting...",
     checkoutFailed: "Couldn’t open checkout",
   },
+  emptyTitle: "Your cart is empty",
+  emptyDescription: "Items you add will appear here",
   unavailableItemsRemoved: "Items removed from cart",
   unavailableItemsRemovedDescription: "Some products are no longer available",
 };

@@ -17,7 +17,8 @@
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -170,7 +171,8 @@ A bidder with a committed maximum of 50000 minor units on an open listing.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -308,7 +310,8 @@ with whoever committed first.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -556,7 +559,8 @@ A listing whose minimum increment is 2500 minor units. Bidder A leads with a com
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** regression
+* **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -636,7 +640,8 @@ Bidder B leads a listing with a committed maximum of 60000 minor units.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -673,7 +678,8 @@ the window.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -836,7 +842,8 @@ Grade10 has raised a bidder's bid on their behalf.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** regression
+* **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual

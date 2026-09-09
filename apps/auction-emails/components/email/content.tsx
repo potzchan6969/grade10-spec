@@ -12,11 +12,10 @@ import {
   Tailwind,
   Text,
 } from "react-email";
-
-import { DefaultFonts } from "@/components/email/font-default";
-import { createEmailTailwindConfig } from "@/components/email/email-theme";
-import type { EmailTheme } from "@/components/email/email-theme";
 import { emailAsset } from "@/components/email/email-assets";
+import type { EmailTheme } from "@/components/email/email-theme";
+import { createEmailTailwindConfig } from "@/components/email/email-theme";
+import { DefaultFonts } from "@/components/email/font-default";
 import { defaultTheme } from "@/components/email/theme-default";
 
 export type ContentAlignment = "left" | "center" | "right";
@@ -259,6 +258,7 @@ export const Content = ({
     <EmailHead>
       <DefaultFonts />
       <style
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: email CSS is static and must be emitted into the generated HTML head.
         dangerouslySetInnerHTML={{
           __html: `
             @media only screen and (max-width: 600px) {

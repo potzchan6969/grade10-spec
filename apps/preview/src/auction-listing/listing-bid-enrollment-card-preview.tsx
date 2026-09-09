@@ -1,9 +1,9 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
+  type BidEnrollment,
   EnrollmentSetupSheet,
   InlineOverlayPreview,
   ListingAuctionBidCard,
-  type BidEnrollment,
   type ListingBidHistoryRow,
   type OverlayPresentation,
   PaymentMethodEmptyState,

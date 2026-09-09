@@ -24,7 +24,7 @@ describe("the artifacts a change has", () => {
       { id: "proposal", generates: "proposal.md" },
       { id: "specs", generates: "specs/**/spec.md" },
       { id: "user-journeys", generates: "specs/**/user-journeys.md" },
-      { id: "test-cases", generates: "specs/**/test-cases.md" },
+      { id: "test-cases", generates: "specs/**/feature-tcs.md" },
       { id: "ui-design", generates: "ui-design.md" },
       { id: "tech-design", generates: "tech-design.md" },
       { id: "tasks", generates: "tasks.md" },
@@ -205,7 +205,7 @@ describe("a delta with a title, journeys, and a suite beside it", () => {
       "- `beta-SC-01` — It is watched",
       "",
     ].join("\n"),
-    "openspec/changes/rich/specs/demo-product/beta/test-cases.md": [
+    "openspec/changes/rich/specs/demo-product/beta/feature-tcs.md": [
       "# Beta test cases",
       "",
       "**Status:** pending-review",
@@ -267,7 +267,7 @@ describe("a delta the reader cannot parse", () => {
       "Text.",
       "",
     ].join("\n"),
-    "openspec/changes/broken/specs/demo-product/gamma/test-cases.md":
+    "openspec/changes/broken/specs/demo-product/gamma/feature-tcs.md":
       "# Gamma cases\n\nNo status line.\n",
   });
   const [broken] = readChangeDocuments(root, NO_GIT);

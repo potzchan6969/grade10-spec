@@ -6,30 +6,44 @@ order: 8
 
 Auction mail exists because the close is a deadline that moves: nobody can
 plan to be there at the end, so Grade10 tells enrolled collectors when a lot
-needs them. Every message is transactional mail to the account's registered
-email address, and amounts and times in it follow
+needs them. Before-and-during mail stays here; post-close letters belong to
+[Order Notifications](/p/grade10-site/auction/notifications-order). Every
+message is transactional mail to the account's registered email address, and amounts and times in it follow
 [money amounts](/platform/shared/money-amounts) and
 [dates and times](/platform/shared/dates-and-times).
 
+## Vocabulary
+
+| Concept | Preferred | Avoid |
+| --- | --- | --- |
+| List membership | **Watch** / **Watching** / **Unwatch** | Using unwatch to mean mute |
+| Email preference | **Email alerts** / mute / turn off email alerts | **Stop watching** for mute |
+| Enrolment | Watching or bidding **and** email alerts on for that lot | Equating watch alone with mail |
+
 ## Enrolment
 
-Two things enrol a collector in a lot's mail, and they are different
-subscriptions. **Watching** brings the progress messages and ends on unwatch.
-**Bidding** brings the bid-activity mail plus the closing and extension
-warnings, and does not end on unwatch — a participant is owed those whatever
-they do with the watch. A collector who both watches and bids still receives
-exactly one copy of anything.
+Two relationships can enrol a collector in a lot's mail, and each needs
+**email alerts on** for that lot. **Watching** with alerts on brings the
+progress messages. **Bidding** with alerts on brings bid-activity mail plus
+closing and extension warnings. Unwatch ends the watch relationship and turns
+alerts off with it; mute turns alerts off and leaves Watching (or the bid)
+intact. A collector who both watches and bids still receives exactly one copy
+of anything.
+
+Account → Notifications also carries a global **Auction email alerts** master:
+off stops all per-lot auction progress and activity mail without clearing
+lists or bids; on restores per-lot preferences (default on for new watches).
 
 ## Messages
 
 | Message | When | Who |
 | --- | --- | --- |
-| Bidding opens in 24 hours | 24 hours before the scheduled start | Watchers |
-| Bidding has opened | When bidding starts | Watchers |
-| Bidding closes in 24 hours | 24 hours before the *scheduled* close | Watchers and bidders |
-| Extended bidding has started | The lot enters its extension window | Watchers and bidders |
-| New bid on a lot you bid on | A bid is accepted | Every other bidder |
-| You have been outbid | The leader stops leading | The displaced leader |
+| Bidding opens in 24 hours | 24 hours before the scheduled start | Watchers with alerts on |
+| Bidding has opened | When bidding starts | Watchers with alerts on |
+| Bidding closes in 24 hours | 24 hours before the *scheduled* close | Watchers and bidders with alerts on |
+| Extended bidding has started | The lot enters its extension window | Watchers and bidders with alerts on |
+| New bid on a lot you bid on | A bid is accepted | Every other bidder with alerts on |
+| You have been outbid | The leader stops leading | The displaced leader with alerts on |
 
 Outbid is losing the lead. A competing maximum that raises the current bid
 while their own maximum still holds is not outbid — Grade10 keeps bidding
@@ -44,15 +58,16 @@ leading bid rather than one per increment.
 
 ## Delivery
 
-A watch-driven letter carries a way to stop further mail about that lot — a
-signed-in page where the collector unwatches, never an unauthenticated
-one-click stop. A letter owed for the collector's own bid carries none,
-because stopping a watch could not honour it. Each letter's lot block shows
-**one** primary picture of the item when the listing has one. A temporary
-send failure retries with backoff under a bounded budget; a permanent refusal
-stops at once, and an operator can put a given-up letter back on the ladder. A
-called-off lot sends nothing further, and a letter that would state
-something no longer true is not sent late.
+Every owed letter whose per-lot alerts are on carries a short footer:
+**Email alerts are on for this lot.** **Turn them off** — a signed-in link to
+**My Auctions**, where the collector mutes that lot's Email alerts control.
+Never an unauthenticated one-click stop, never unwatch, and not the
+account-wide Auction email alerts master as the primary destination. Each
+letter's lot block shows **one** primary picture of the item when the listing
+has one. A temporary send failure retries with backoff under a bounded budget;
+a permanent refusal stops at once, and an operator can put a given-up letter
+back on the ladder. A called-off lot sends nothing further, and a letter that
+would state something no longer true is not sent late.
 
 Operators answer "I was never told" from a send log: message type, recipient
 address, lot, and when it was sent — never the body.
@@ -66,15 +81,16 @@ and never a snipe war filling an inbox.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
-| Collector watching a listing | Sale has not opened, or is about to close / extend | Hear in time to come back and bid. |
-| Collector who has bid | Someone else bid, or they lost the lead | Hear what changed on that lot, once, not once per snipe. |
+| Collector watching a listing | Sale has not opened, or is about to close / extend | Hear in time to come back and bid, if alerts are on. |
+| Collector who has bid | Someone else bid, or they lost the lead | Hear what changed on that lot, once, not once per snipe — or mute without ending the bid. |
 | Auction operator | A collector says they were never told | See which messages went to that address, without reading bodies. |
 
-**Not in scope.** Push, SMS, in-app toasts, or a notification-preferences
-centre. Replacing the existing bid-state receipts or the one-hour
-closing-soon reminder already sent to watchers. Auto-bidding, a digest across
-listings, or a bidder's language. One-click unsubscribe — the destination is a
-signed-in page. Mail about winning, paying, invoicing, or shipping.
+**Not in scope.** Push, SMS, or in-app toasts. Marketing / non-auction email
+prefs as the mute surface. Replacing the existing bid-state receipts or the
+one-hour closing-soon reminder already sent to watchers. Auto-bidding, a
+digest across listings, or a bidder's language. One-click unsubscribe — the
+destination is a signed-in mute. Mail about winning, paying, invoicing, or
+shipping belongs to [Order Notifications](/p/grade10-site/auction/notifications-order).
 
 **Measurement.**
 
@@ -88,13 +104,16 @@ signed-in page. Mail about winning, paying, invoicing, or shipping.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| Watch ≠ email alerts | Decided | Enrolment is (watching or bidding) and email alerts on for that lot. Mute ≠ unwatch. | Product |
+| Per-lot mute | Decided | Primary model: one email-alerts preference per listing for progress and bid-activity mail. | Product |
+| Account master | Decided | Account → Notifications: Auction email alerts on/off covers all watched and bid lots without clearing lists. | Product |
 | Channel | Decided | Email first. Push kinds are named so a follow-on does not rename them, and are not delivered. | Product |
 | Lot image | Decided | Every letter's lot block shows one primary listing image when available; omit when none. Not a gallery. | Design |
 | Letter stack | Decided | emailcn on React Email; shared email shell components; preview with `email dev`. Map Grade10 tokens into an email theme — do not import site CSS. | Engineering |
 | 24h close vs 1h reminder | Decided | Additive. "Closes in 24 hours" is a new letter; the one-hour watcher reminder stays. | Product |
-| Audiences | Decided | Start letters are watchers only. Close-in-24h and extended-bidding reach a participant who unwatched, by their bid. | Product |
+| Audiences | Decided | Start letters are watchers with alerts on. Close-in-24h and extended-bidding reach a participant who unwatched, by their bid, when alerts remain on. | Product |
 | New-bid volume | Decided | Coalesce: tell a previous bidder about the current leading bid they have not yet been told about, not about every increment. The previous leader gets the outbid letter, not both. | Product |
-| Unsubscribe | Decided | Watch-driven lifecycle letters can be stopped from a signed-in page. Outbid and new-bid cannot — they answer the bid. | Product |
+| Unsubscribe | Decided | Stop means mute for this lot. Footer: Email alerts are on for this lot. **Turn them off** → My Auctions. Not unwatch; not the account master. | Product |
 | Send log | Decided | Operators see type, address, listing, and Sent At. No bodies. Filter by the address sent to. | Product |
 | Language | Decided | English, matching every auction email. Locale waits on recording one. | Engineering |
 | Send-log retention | ❓ Open | How long rows are kept. | Engineering |

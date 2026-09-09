@@ -20,7 +20,7 @@ const container: Decorator[] = [
 /**
  * Scrollable item container of the cart drawer (`4735:6493`).
  *
- * Owns list composition: baseline slots, overflow, empty, and mixed item states.
+ * Owns list composition: overflow, empty, and mixed item states.
  * Per-row visuals live on [`CartItem`](?path=/docs/store-cart-cartitem--docs);
  * fetch-on-open loading lives on [`CartDrawer`](?path=/docs/store-cart-cartdrawer--docs).
  */
@@ -32,18 +32,18 @@ const meta = {
   args: {
     items: SAMPLE_CART_ITEMS,
     copy: DEFAULT_CART_COPY.item,
-    emptySlotCount: 3,
+    emptyTitle: DEFAULT_CART_COPY.emptyTitle,
+    emptyDescription: DEFAULT_CART_COPY.emptyDescription,
     onQuantityChange: fn(),
     onRemoveItem: fn(),
     onItemClick: fn(),
-    onBrowseMore: fn(),
   },
 } satisfies Meta<typeof CartDrawerBody>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Default baseline: 2 items and 3 empty placeholder slots */
+/** Default list: cart items only */
 export const Default: Story = {
   render: (args) => {
     const [items, setItems] =
@@ -53,7 +53,6 @@ export const Default: Story = {
       <CartDrawerBody
         {...args}
         items={items}
-        emptySlotCount={Math.max(0, 5 - items.length)}
         onRemoveItem={(id) =>
           setItems((prev) => prev.filter((i) => i.id !== id))
         }
@@ -73,38 +72,34 @@ export const Default: Story = {
     expect(
       canvas.getByText("2000 Neo Genesis 1st Edition Lugia Holo #9 BGS 9.5"),
     ).toBeInTheDocument();
-    const slots = canvas.getAllByLabelText("Add more items to cart");
-    expect(slots).toHaveLength(3);
+    expect(canvas.queryByText("Your cart is empty")).not.toBeInTheDocument();
   },
 };
 
-/** Overflow list: 6 items rendered with 0 empty placeholder slots */
+/** Overflow list: 6 items rendered */
 export const OverflowItems: Story = {
   args: {
     items: OVERFLOW_CART_ITEMS,
-    emptySlotCount: 0,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.queryByLabelText("Add more items to cart"),
-    ).not.toBeInTheDocument();
     expect(
       canvas.getByText("2016 Pokémon 20th Anniversary Mario Pikachu PSA 10"),
     ).toBeInTheDocument();
+    expect(canvas.queryByText("Your cart is empty")).not.toBeInTheDocument();
   },
 };
 
-/** Empty body: 5 empty placeholder slots to establish visual grid baseline */
+/** Empty body: design-system empty state with no action button */
 export const Empty: Story = {
   args: {
     items: [],
-    emptySlotCount: 5,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const slots = canvas.getAllByLabelText("Add more items to cart");
-    expect(slots).toHaveLength(5);
+    expect(canvas.getByText("Your cart is empty")).toBeInTheDocument();
+    expect(canvas.getByText("Items you add will appear here")).toBeInTheDocument();
+    expect(canvas.queryByRole("button")).not.toBeInTheDocument();
   },
 };
 
@@ -134,7 +129,6 @@ export const MixedItemStates: Story = {
       <CartDrawerBody
         {...args}
         items={items}
-        emptySlotCount={Math.max(0, 5 - items.length)}
         onRemoveItem={(id) =>
           setItems((prev) => prev.filter((i) => i.id !== id))
         }
@@ -152,7 +146,6 @@ export const MixedItemStates: Story = {
     expect(
       canvas.getByText("Low stock. Quantity adjusted"),
     ).toBeInTheDocument();
-    const slots = canvas.getAllByLabelText("Add more items to cart");
-    expect(slots).toHaveLength(2);
+    expect(canvas.queryByText("Your cart is empty")).not.toBeInTheDocument();
   },
 };

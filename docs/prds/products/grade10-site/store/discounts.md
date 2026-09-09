@@ -70,7 +70,7 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 3. **A session opens** — ten minutes from the server's clock, bound to the shop and the member, never to the staff label; a second identify of the same member at the same shop ends the first; a switch flipped mid-session only ever takes capability away
    - A scanned session outlives the modal: reopening it resumes, and it ends only when the customer on the sale becomes somebody else
 4. **The member goes on the sale** — the extension sets the cart's customer to the member's paired Shopify customer and confirms it against the cart; an attach that did not take is retried on apply
-5. **Staff read the panel** — tier, balance, window progress, renewal and points-active-until dates, recent activity, the coupons the member may spend
+5. **Staff read the panel** — tier, balance, window progress, renewal and points-active-until dates, recent activity, the coupons the member may spend, pending collections
 6. **Staff choose** — points ("Use max" is the smaller of the balance and the qualifying goods, at **HKD 1** a point) and coupons (chips from the panel or typed)
    - Qualifying goods: the cart's lines after their own discounts, without gift cards and without our gift lines
    - Apply stays off and says why while the session expired, this arm may not spend, the cart is locked for tender, the cart's customer is not the member, another cart-level discount is on the sale, the balance is empty, or the points asked exceed the goods
@@ -134,13 +134,13 @@ discount engine instead.
 
 - **Product special sale** — a scheduled cut off chosen products. Unlike an
   ad hoc Sale price edit, it blocks every other site discount and coupon on
-  that line; a member's points always redeem regardless
+  that line; a member's points always redeem regardless.
 - **Buy X get Y** — a reward product discounted or free after a trigger
-  purchase; combines with everything, no exclusivity
+  purchase; combines with everything, no exclusivity.
 - **Order threshold** — a tier ladder of spend levels and percentages inside
   one active promotion; a basket gets its highest cleared tier, combines
   with points and coupons, and both its base and its cut skip a product
-  special sale's line
+  special sale's line.
 
 Applies on both the online checkout and the POS till.
 

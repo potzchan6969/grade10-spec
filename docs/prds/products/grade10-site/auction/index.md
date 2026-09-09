@@ -10,14 +10,13 @@ and bids. The highest valid bid when the lot closes wins.
 Two people use it. An **operator** drafts a listing, fills in its catalogue
 copy, attaches a gallery, sets a starting price and a window, publishes it now
 or at a set time, and calls it off if something is wrong. A **collector**
-browses, bids, and after the close either pays for the card or gets their money
-back.
+browses, bids, and after the close follows one [Winner Order](/p/grade10-site/auction/winner-order) for each lot they win.
 
 ## Holds
 
 A bid is backed by an authorization on the bidder's card. The money is held,
-not taken. Only the winner's hold is ever captured; every other hold is
-released. Because a card hold expires after roughly a week, the auction keeps
+not taken. Every hold is released when the lot closes; the winner pays the
+invoice through a fresh charge and every other hold is released. Because a card hold expires after roughly a week, the auction keeps
 **at most one live hold per lot at any moment** — the current top bid's. When
 someone is outbid, their hold is released the same minute the new one confirms.
 
@@ -54,16 +53,17 @@ thinking, the hold is released instead and the bid is lost.
 Every bid still waiting is released. A top bid that clears the reserve wins;
 one that does not leaves the lot unsold, and nobody is charged.
 
-## The winner is captured
+## The winner pays the invoice
 
-The winner's hold is captured — this is the moment money actually moves. A
-declined capture returns the hold and retries; after five attempts it parks for
-an operator to retry by hand.
+The winner's hold is released and the invoice becomes payable. A fresh charge
+settles the final amount after the delivery address is confirmed; a declined
+payment leaves the invoice open for another attempt until its deadline.
 
 ## The card ships
 
-An operator works the sale forward only, from created to paid to shipped to
-received, and can cancel it.
+An operator works the order forward from paid to shipped to delivered, with
+the [Post-Sale Queue](/p/grade10-admin/auction/post-sale) carrying the
+operator-only controls and history.
 :::
 
 :::callout{kind="note"}

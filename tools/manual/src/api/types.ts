@@ -116,7 +116,7 @@ export type SpecEntry = {
   /** The spec file was malformed; content fields may be incomplete. */
   error?: ItemError;
   /** The suite beside it was malformed — its own channel, so a broken
-   * test-cases.md never blanks the spec's requirements or takes down the
+   * feature-tcs.md never blanks the spec's requirements or takes down the
    * pages that embed them. */
   testCasesError?: ItemError;
   /** The journeys beside it were malformed — its own channel for the same
@@ -198,7 +198,7 @@ export type Delta = {
 
 export type ChangeStatus = "in-flight" | "archived";
 
-/** A `test-cases.md` sitting beside one of a change's delta specs — the suite
+/** A `feature-tcs.md` sitting beside one of a change's delta specs — the suite
  * QA reviews while the change is still in flight, which no durable capability
  * page can show yet. */
 export type ChangeSuite = {
@@ -324,7 +324,7 @@ export type ChangeDeltaDocument = {
   /** The `user-journeys.md` beside the delta was malformed. */
   journeysError?: ItemError;
   sections: DeltaSection[];
-  /** The `test-cases.md` beside the delta, when QA has written one. */
+  /** The `feature-tcs.md` beside the delta, when QA has written one. */
   suite?: {
     status: TestSuiteStatus;
     cases: TestCase[];

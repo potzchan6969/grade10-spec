@@ -29,7 +29,7 @@ const elsewhere: CheckWarning = {
 
 const storeFile: CheckWarning = {
   rule: "coverage",
-  message: "openspec/specs/demo-product/alpha/test-cases.md: no case traces …",
+  message: "openspec/specs/demo-product/alpha/feature-tcs.md: no case traces …",
 };
 
 const render = (warnings: CheckWarning[]) =>

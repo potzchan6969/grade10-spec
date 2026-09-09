@@ -3,7 +3,10 @@ export const previewLot = {
   brandName: "Grade10",
   lotTitle: "1999 Pokémon Base Set Charizard PSA 9",
   listingUrl: "https://grade10.com/auction/listings/demo-charizard",
-  unwatchUrl: "https://grade10.com/auction/listings/demo-charizard",
+  /** Signed-in My Auctions — per-lot Email alerts mute. */
+  muteUrl: "https://grade10.com/account/auctions",
+  /** @deprecated Prefer `muteUrl`. */
+  unwatchUrl: "https://grade10.com/account/auctions",
   /** Same fixture as the auction lot details page (`product.fixture.png`). */
   primaryImageUrl: "/static/product.fixture.png",
   startsAt: "10 Sep 2026, 10:00 GMT+8",

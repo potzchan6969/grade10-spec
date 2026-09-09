@@ -29,28 +29,40 @@ test("parses regular and renamed OpenSpec files from git's NUL format", () => {
 });
 
 test("classifies file additions, updates, archive moves, and removals by scope", () => {
-  const changes = classifyChanges(
-    [
-      { oldPath: null, path: "openspec/changes/new-change/proposal.md", status: "A" },
-      { oldPath: null, path: "openspec/changes/active-change/tech-design.md", status: "A" },
-      { oldPath: null, path: "openspec/changes/active-change/specs/store/spec.md", status: "M" },
-      { oldPath: null, path: "openspec/changes/old-change/proposal.md", status: "D" },
-      {
-        oldPath: "openspec/changes/finished-change/tasks.md",
-        path: "openspec/changes/archive/2026-09-08-finished-change/tasks.md",
-        status: "R",
-      },
-    ],
-  );
+  const changes = classifyChanges([
+    {
+      oldPath: null,
+      path: "openspec/changes/new-change/proposal.md",
+      status: "A",
+    },
+    {
+      oldPath: null,
+      path: "openspec/changes/active-change/tech-design.md",
+      status: "A",
+    },
+    {
+      oldPath: null,
+      path: "openspec/changes/active-change/specs/store/spec.md",
+      status: "M",
+    },
+    {
+      oldPath: null,
+      path: "openspec/changes/old-change/proposal.md",
+      status: "D",
+    },
+    {
+      oldPath: "openspec/changes/finished-change/tasks.md",
+      path: "openspec/changes/archive/2026-09-08-finished-change/tasks.md",
+      status: "R",
+    },
+  ]);
 
   assert.deepEqual(changes, {
     new: [
       { id: "active-change", path: "active-change", scopes: ["tech-design"] },
       { id: "new-change", path: "new-change", scopes: ["proposal"] },
     ],
-    updated: [
-      { id: "active-change", path: "active-change", scopes: ["spec"] },
-    ],
+    updated: [{ id: "active-change", path: "active-change", scopes: ["spec"] }],
     archived: [
       {
         id: "finished-change",
@@ -64,14 +76,20 @@ test("classifies file additions, updates, archive moves, and removals by scope",
 
 test("classifies a deleted file inside an existing change as removed", () => {
   assert.deepEqual(
-    classifyChanges(
-      [{ oldPath: null, path: "openspec/changes/active-change/spec.md", status: "D" }],
-    ),
+    classifyChanges([
+      {
+        oldPath: null,
+        path: "openspec/changes/active-change/spec.md",
+        status: "D",
+      },
+    ]),
     {
       new: [],
       updated: [],
       archived: [],
-      removed: [{ id: "active-change", path: "active-change", scopes: ["spec"] }],
+      removed: [
+        { id: "active-change", path: "active-change", scopes: ["spec"] },
+      ],
     },
   );
 });
@@ -100,7 +118,7 @@ test("classifies durable capability files by capability and scope", () => {
       },
       {
         oldPath: null,
-        path: "openspec/specs/grade10-site/auction/winner-journey/test-cases.md",
+        path: "openspec/specs/grade10-site/auction/winner-journey/feature-tcs.md",
         status: "D",
       },
     ]),
@@ -134,10 +152,22 @@ test("classifies durable capability files by capability and scope", () => {
 test("builds one Slack section for each changed status", () => {
   const payload = slackPayload({
     changes: {
-      new: [{ id: "new-change", title: "Add a cart", scopes: ["proposal", "spec"] }],
-      updated: [{ id: "active-change", title: "Update <copy>", scopes: ["tech-design"] }],
-      archived: [{ id: "finished-change", title: "Finish a change", scopes: ["tasks"] }],
-      removed: [{ id: "old-change", title: "Remove a change", scopes: ["proposal"] }],
+      new: [
+        { id: "new-change", title: "Add a cart", scopes: ["proposal", "spec"] },
+      ],
+      updated: [
+        {
+          id: "active-change",
+          title: "Update <copy>",
+          scopes: ["tech-design"],
+        },
+      ],
+      archived: [
+        { id: "finished-change", title: "Finish a change", scopes: ["tasks"] },
+      ],
+      removed: [
+        { id: "old-change", title: "Remove a change", scopes: ["proposal"] },
+      ],
     },
     commitSha: "1234567890",
     commitUrl: "https://github.com/9gag/grade10-spec/commit/1234567890",
@@ -158,9 +188,18 @@ test("builds one Slack section for each changed status", () => {
     payload.blocks[1].text.text,
     ":pencil2: OpenSpec *Updated*\n- <https://spec.grade10-stg.com/openspec/#/change/active-change|Update &lt;copy&gt;> (`active-change`) — `tech-design`",
   );
-  assert.match(payload.blocks[1].text.text, /Update &lt;copy&gt;.*`tech-design`/);
-  assert.match(payload.blocks[2].text.text, /^:file_cabinet: OpenSpec \*Archived\*\n/);
-  assert.match(payload.blocks[3].text.text, /^:wastebasket: OpenSpec \*Removed\*\n/);
+  assert.match(
+    payload.blocks[1].text.text,
+    /Update &lt;copy&gt;.*`tech-design`/,
+  );
+  assert.match(
+    payload.blocks[2].text.text,
+    /^:file_cabinet: OpenSpec \*Archived\*\n/,
+  );
+  assert.match(
+    payload.blocks[3].text.text,
+    /^:wastebasket: OpenSpec \*Removed\*\n/,
+  );
   assert.match(payload.blocks.at(-1).elements[0].text, /1234567/);
 });
 

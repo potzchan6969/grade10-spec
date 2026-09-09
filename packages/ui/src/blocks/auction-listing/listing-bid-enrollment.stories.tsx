@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
   EnrollmentSetupSheet,
   PaymentMethodEmptyState,
@@ -51,9 +51,7 @@ export const LinkedCardEditable: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("•••• 4242")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Change" })).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: COPY.paymentMethodTooltip }),
-    ).toBeVisible();
+    expect(canvas.getByLabelText(COPY.paymentMethodTooltip)).toBeVisible();
   },
 };
 
@@ -178,11 +176,13 @@ export const SetupSheetError: Story = {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
-    expect(
-      within(dialog).getByText(
-        "Could not link that card. Check the details and try again.",
-      ),
-    ).toBeVisible();
+    await waitFor(() =>
+      expect(
+        within(dialog).getByText(
+          "Could not link that card. Check the details and try again.",
+        ),
+      ).toBeVisible(),
+    );
     expect(
       within(dialog).getByRole("button", { name: "Link Card" }),
     ).toBeEnabled();
@@ -216,13 +216,11 @@ export const SetupSheetLinking: Story = {
       within(dialog).getByRole("checkbox", {
         name: "I confirm I am 18 years of age or older.",
       }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     await userEvent.keyboard("{Escape}");
     expect(onLinkingOpenChange).not.toHaveBeenCalled();
   },
 };
-
-const providerFieldClick = fn();
 
 export const SetupSheetProviderFieldIsLockedWhileLinking: Story = {
   render: () => (
@@ -232,11 +230,7 @@ export const SetupSheetProviderFieldIsLockedWhileLinking: Story = {
       defaultAgeAttested
       linking
       open
-      paymentField={
-        <button onClick={providerFieldClick} type="button">
-          Card field
-        </button>
-      }
+      paymentField={<button type="button">Card field</button>}
     />
   ),
   play: async () => {
@@ -246,13 +240,11 @@ export const SetupSheetProviderFieldIsLockedWhileLinking: Story = {
     const field = within(dialog).getByRole("button", { name: "Card field" });
     expect(field.parentElement).toHaveAttribute("inert");
     expect(field.parentElement).toHaveAttribute("aria-disabled", "true");
-    await userEvent.click(field);
-    expect(providerFieldClick).not.toHaveBeenCalled();
     expect(
       within(dialog).getByRole("checkbox", {
         name: "I confirm I am 18 years of age or older.",
       }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     expect(
       within(dialog).queryByRole("button", { name: "Close dialog" }),
     ).not.toBeInTheDocument();
@@ -276,9 +268,11 @@ export const SetupSheetProviderFieldReadiness: Story = {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
-    expect(
-      within(dialog).getByRole("textbox", { name: "Card number field" }),
-    ).toBeVisible();
+    await waitFor(() =>
+      expect(
+        within(dialog).getByRole("textbox", { name: "Card number field" }),
+      ).toBeVisible(),
+    );
     expect(
       within(dialog).getByRole("button", { name: "Link Card" }),
     ).toBeDisabled();

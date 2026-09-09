@@ -64,7 +64,7 @@ const cases = [
 function readAlpha(): SpecEntry {
   const root = writeStore({
     "openspec/specs/demo-product/alpha/spec.md": spec,
-    "openspec/specs/demo-product/alpha/test-cases.md": cases,
+    "openspec/specs/demo-product/alpha/feature-tcs.md": cases,
   });
   return readSpecs(root, NO_GIT)[0];
 }
@@ -77,7 +77,7 @@ describe("what the reader does with the list", () => {
   it("says nothing at all when a suite lists none", () => {
     const root = writeStore({
       "openspec/specs/demo-product/alpha/spec.md": spec,
-      "openspec/specs/demo-product/alpha/test-cases.md": cases.replace(
+      "openspec/specs/demo-product/alpha/feature-tcs.md": cases.replace(
         "**Out of suite:** alpha-SC-03\n\n",
         "",
       ),

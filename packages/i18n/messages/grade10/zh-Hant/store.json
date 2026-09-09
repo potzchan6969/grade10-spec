@@ -14,7 +14,7 @@
     "footer": {
       "subtotalLabel": "小計",
       "shippingLabel": "運費",
-      "shippingValue": "待定",
+      "shippingValue": "結帳時計算",
       "estimatedTotalLabel": "預計總額",
       "usePromoCode": "優惠碼",
       "selectOrEnterPromoCode": "選擇或輸入優惠碼",
@@ -40,6 +40,8 @@
       "checkoutRedirecting": "重新導向中…",
       "checkoutFailed": "無法開啟結帳"
     },
+    "emptyTitle": "購物車是空的",
+    "emptyDescription": "加入的商品會出現在這裡",
     "unavailableItemsRemoved": "商品已從購物車移除",
     "unavailableItemsRemovedDescription": "部分商品已不再提供"
   }

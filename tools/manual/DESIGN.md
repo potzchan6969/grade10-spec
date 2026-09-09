@@ -336,7 +336,7 @@ files the manual mirrors: a malformed one becomes
 broken card, and `check:manual` fails the PR that introduced it — the
 deployed site stays up and points at the break. The split runs one level
 deeper than the store: a spec and the suite beside it are separate
-channels (`error` vs `testCasesError`), so a broken `test-cases.md`
+channels (`error` vs `testCasesError`), so a broken `feature-tcs.md`
 fails the PR naming its own file while the spec's requirements,
 journeys, and delta rules carry on.
 

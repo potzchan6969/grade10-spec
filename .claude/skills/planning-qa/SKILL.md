@@ -1,6 +1,6 @@
 ---
 name: planning-qa
-description: Write QA's artifact on an OpenSpec change - the test-cases.md beside each capability's spec and journeys. Use when deriving, reviewing, or repairing a change's test suites.
+description: Write QA's artifact on an OpenSpec change - the feature-tcs.md beside each capability's spec and journeys. Use when deriving, reviewing, or repairing a change's test suites.
 ---
 
 # QA's artifact
@@ -10,7 +10,7 @@ One of the seven artifacts in `grade10-planning` is yours:
 | Artifact | What it holds |
 | --- | --- |
 | `specs/<product>/<domain>/domain-tcs.md` | The paths a person walks across that domain's capabilities |
-| `specs/<capability>/test-cases.md` | The classified suite the journeys and scenarios imply |
+| `specs/<capability>/feature-tcs.md` | The classified suite the journeys and scenarios imply |
 
 Optional, and derived: a capability with no `user-journeys.md` has nothing to
 derive, and a suite is never a second source of truth. Where a suite and its
@@ -54,7 +54,7 @@ or an `approved` file, and shows an existing suite before touching it.
 
 **Derivation rides in the spec's own pull request.** As soon as
 `openspec validate <change> --strict` passes, `/spec-to-tcs <change>` writes a
-`test-cases.md` beside every capability that carries journeys, every case
+`feature-tcs.md` beside every capability that carries journeys, every case
 `draft`, committed to that same branch as its own
 `test(<domain>): derive test cases for <capability>` commit.
 
@@ -69,7 +69,7 @@ records each verdict as `actual`, `deprecated`, or still `draft`. Every case
 marked `actual` becomes evidence the next `/spec-to-tcs` run learns from.
 
 `/spec-push` refuses to push a change whose capabilities have a
-`user-journeys.md` but no `test-cases.md` beside it.
+`user-journeys.md` but no `feature-tcs.md` beside it.
 
 ## What a suite owes its capability
 

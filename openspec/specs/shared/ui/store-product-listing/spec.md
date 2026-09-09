@@ -1,13 +1,13 @@
 # shared/ui/store-product-listing Specification
 
 ## Purpose
-The surface a shopper browses a category on: a sidebar with search and
-collection navigation, a titled result header with sort and filter controls, a
-grid of product tiles, and pagination. Every store application renders it from
-one shared component source, supplying its own catalog content, copy, and
-theme. The components render a selection and report a change; which products
-match, how they are ordered, and how many pages exist are decided by the
-application.
+The surface a shopper browses a catalogue on: a sidebar with search and facet
+filters, a result header with sort and applied-filter controls, a grid of
+product tiles, and infinite scroll for more results — never pagination.
+Every store application renders it from one shared component source, supplying
+its own catalog content, copy, and theme. The components render a selection
+and report a change; which products match, how they are ordered, and whether
+more can be loaded are decided by the application.
 
 ## Feature set
 
@@ -16,6 +16,9 @@ application.
   - Reusable parts: each part renders without `ProductBrowse`
 - Tile contract
   - Supplied facts: price, sold-out, cart action, and image are displayed as given
+- Selling is opt-in
+  - Supplied handler: the cart control is drawn where the consumer can act on a quantity, and nowhere else
+  - No standing default: a control is never drawn over nothing, so a press cannot be swallowed
 - Browse states
   - Loading, empty, failed: the application drives display through props
 - Filters and sort
@@ -24,7 +27,6 @@ application.
   - Keyboard and announcements: controls are operable without a pointer; busy and count changes are announced
 - No defaulted content
   - Application-owned copy: nothing visible is invented by the listing
-
 ## Requirements
 ### Requirement: The listing surface exports
 
@@ -472,10 +474,16 @@ be displayed on the image. When the product is sold out, the image SHALL use
 the sold-out treatment, SHALL display the supplied sold-out label, SHALL NOT
 display a sale label, and SHALL NOT display a cart control.
 
-When the product is in the cart and not sold out, the image SHALL display the
-cart control with the supplied count collapsed on the control. When the product
-is available and not in the cart, the cart control SHALL appear on pointer hover
-and when the image receives keyboard focus, and SHALL be hidden otherwise.
+The cart control SHALL be displayed only where the consumer supplies a way to
+report a quantity change. A surface that merchandises rather than sells offers
+none, and no default stands in for one: a control drawn over nothing takes a
+shopper's press and swallows it.
+
+Where one is supplied and the product is in the cart and not sold out, the
+image SHALL display the cart control with the supplied count collapsed on the
+control. Where one is supplied and the product is available and not in the
+cart, the cart control SHALL appear on pointer hover and when the image
+receives keyboard focus, and SHALL be hidden otherwise.
 
 Activating the add affordance SHALL expand the cart control into an inline
 quantity stepper on the same primary pill. While expanded, decrement and
@@ -549,4 +557,11 @@ image SHALL contain no default, fallback, or built-in copy.
 - **GIVEN** a product supplied as in the cart with a count of `2` and a collapsed cart control
 - **WHEN** a shopper activates the collapsed control
 - **THEN** the inline quantity stepper is displayed on the same pill
+
+#### Scenario: shared-ui-store-product-listing-SC-55 - A surface that does not sell
+
+- **GIVEN** an available product rendered without a way to report a quantity change
+- **WHEN** a shopper hovers the image and moves keyboard focus onto it
+- **THEN** no cart control is displayed at either moment
+- **AND** the product's own activation still reports
 

@@ -19,7 +19,7 @@ This repository is the versioned source of truth for product requirements and th
 | Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a page or change cites as evidence; the manual renders them under References. Explanatory, never authoritative. See `docs/references/README.md`. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Who walks a capability, and what accepts their story | `user-journeys.md` beside its `spec.md` | The INVEST stories and the scenario ids that accept each. A capability nobody reaches on its own — a cross-cutting policy, a package contract, a surface only its makers reach — writes `**Walked by:** nobody` there in place of the stories; `pnpm check:manual` fails a capability with neither. |
-| Test cases for a capability | `test-cases.md` beside its `spec.md` | A derived reading of that capability's journeys and scenarios, never a second source of truth. See `docs/governance/specs-to-test-cases.md`. |
+| Test cases for a capability | `feature-tcs.md` beside its `spec.md` | A derived reading of that capability's journeys and scenarios, never a second source of truth. A suite's name carries its level — a path across the capabilities of one domain is `domain-tcs.md` beside them, and the wider smoke passes are `product-tcs.md` and `platform-tcs.md`. See `docs/governance/specs-to-test-cases.md`. |
 | Design token values | `packages/design-system/tokens.json` | Designer-owned data; the CSS themes are generated projections of it. |
 | User-facing copy and translations | `packages/i18n/messages/{shared,<brand>}/<locale>/<namespace>.json` | `shared/` answers every key no brand claims, once per language; a brand answers only what says something about itself, in every language it speaks. Assembled in `src/catalogs.ts`. Types refuse a key the vocabulary does not name; `pnpm run test` refuses layers that leave one unanswered, or answer one twice. |
 | Design-system primitive | `packages/design-system/src/components/` | shadcn primitives and their colocated stories. |
@@ -41,7 +41,7 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 | 1 | `proposal.md` | Product manager | `planning-pm` | Always |
 | 2 | `specs/<capability>/spec.md` | Product manager | `planning-pm` | Always |
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Always — a capability nobody walks says so in it |
-| 4 | `specs/<capability>/test-cases.md` | QA | `planning-qa` | Optional |
+| 4 | `specs/<capability>/feature-tcs.md` | QA | `planning-qa` | Optional |
 | 5 | `ui-design.md` | Designer | `planning-design` | Optional |
 | 6 | `tech-design.md` | Engineer | `planning-dev` | Optional |
 | 7 | `tasks.md` | Engineer | `planning-dev` | Before the change can be applied |
@@ -96,7 +96,7 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
-- `pnpm run tcs:validate` after a `test-cases.md` changes; CI runs it on every push.
+- `pnpm run tcs:validate` after a suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — changes; CI runs it on every push.
 - `pnpm run design-sync:check` after a design-system primitive changes.
 - `pnpm run diagrams` after a chart source under `docs/prds/diagrams/` changes; commit the rendered SVG, which `pnpm run diagrams:check` holds to its source in CI.
 - `pnpm run tokens:build` after `tokens.json` or `tokens.config.json` changes; commit the regenerated theme CSS.

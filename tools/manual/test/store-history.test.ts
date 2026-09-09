@@ -47,7 +47,7 @@ describe("classifying a commit's paths", () => {
     expect(
       refsOf([
         "openspec/specs/demo/alpha/spec.md",
-        "openspec/specs/demo/alpha/test-cases.md",
+        "openspec/specs/demo/alpha/feature-tcs.md",
         "openspec/changes/add-alpha/tasks.md",
         "openspec/changes/add-alpha/specs/demo/alpha/spec.md",
       ]),

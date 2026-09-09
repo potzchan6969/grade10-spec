@@ -5,7 +5,7 @@ export type ExtendedBiddingProps = {
   brandName?: string;
   lotTitle?: string;
   listingUrl?: string;
-  unwatchUrl?: string;
+  muteUrl?: string;
   primaryImageUrl?: string | null;
   effectiveClosesAt?: string;
   currentBid?: string;
@@ -16,7 +16,7 @@ export default function ExtendedBiddingEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   listingUrl = previewLot.listingUrl,
-  unwatchUrl = previewLot.unwatchUrl,
+  muteUrl = previewLot.muteUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   effectiveClosesAt = previewLot.effectiveClosesAt,
   currentBid = previewLot.currentBid,
@@ -32,10 +32,10 @@ export default function ExtendedBiddingEmail({
       highlight={{ label: "Current bid", value: currentBid }}
       listingUrl={listingUrl}
       lotTitle={lotTitle}
+      muteUrl={muteUrl}
       preheader={`The close has moved. Current close ${effectiveClosesAt}.`}
       primaryImageUrl={primaryImageUrl}
-      unwatchUrl={unwatchUrl}
-      whyYouGotThis="You receive this because you are watching or have bid on this lot."
+      whyYouGotThis="Email alerts are on for this lot."
     />
   );
 }
@@ -44,7 +44,7 @@ ExtendedBiddingEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   listingUrl: previewLot.listingUrl,
-  unwatchUrl: previewLot.unwatchUrl,
+  muteUrl: previewLot.muteUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   effectiveClosesAt: previewLot.effectiveClosesAt,
   currentBid: previewLot.currentBid,

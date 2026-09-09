@@ -1,5 +1,5 @@
-import { pixelBasedPreset } from "react-email";
 import type { TailwindConfig } from "react-email";
+import { pixelBasedPreset } from "react-email";
 import plugin from "tailwindcss/plugin";
 
 export interface EmailTheme {
@@ -108,7 +108,7 @@ const emailUtilitiesPlugin = plugin(({ addUtilities, addVariant }) => {
 });
 
 export const createEmailTailwindConfig = (
-  theme: EmailTheme
+  theme: EmailTheme,
 ): TailwindConfig => ({
   plugins: [emailUtilitiesPlugin],
   presets: [pixelBasedPreset],

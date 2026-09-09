@@ -40,7 +40,7 @@
 
 ### grade10-site-appointment-booking-US-03: A script tries to book the shop out
 
-**As a** shop protecting its booking capacity,
+**As a** shop operator protecting our booking capacity,
 **I want** an anonymous booking attempt to pass a challenge and a per-address
 budget,
 **so that** a script cannot flood the diary or hold every seat for itself.

@@ -1,20 +1,19 @@
-import { Fragment } from "react";
 import type { CSSProperties, ReactNode } from "react";
+import { Fragment } from "react";
 import {
-  Section,
-  Link,
-  Img,
   Body,
   Head as EmailHead,
   Html,
+  Img,
+  Link,
   Preview,
+  Section,
   Tailwind,
 } from "react-email";
-
-import { DefaultFonts } from "@/components/email/font-default";
-import { createEmailTailwindConfig } from "@/components/email/email-theme";
-import type { EmailTheme } from "@/components/email/email-theme";
 import { emailAsset } from "@/components/email/email-assets";
+import type { EmailTheme } from "@/components/email/email-theme";
+import { createEmailTailwindConfig } from "@/components/email/email-theme";
+import { DefaultFonts } from "@/components/email/font-default";
 import { defaultTheme } from "@/components/email/theme-default";
 
 type ButtonsVariant =
@@ -114,7 +113,7 @@ const getIconWidth = ({
 
 const getAppearanceStyles = (
   appearance: ButtonAppearance,
-  withIcon: boolean
+  withIcon: boolean,
 ) => {
   if (appearance === "primary") {
     return {
@@ -217,7 +216,7 @@ const ButtonExample = ({
     appearance !== "primary" && size === "xs" ? 6 : config.paddingY;
   const { backgroundColor, buttonClass, color } = getAppearanceStyles(
     appearance,
-    withIcon
+    withIcon,
   );
   const icon = iconPosition ? (
     <span style={msoRaise14}>

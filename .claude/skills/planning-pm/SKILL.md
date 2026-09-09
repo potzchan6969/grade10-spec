@@ -14,7 +14,7 @@ first three:
 | `specs/<capability>/spec.md` | The requirement deltas, with id'd scenarios |
 | `specs/<capability>/user-journeys.md` | Who walks them, and what accepts each story |
 
-**Stop there.** QA derives `test-cases.md`, a designer writes `ui-design.md`,
+**Stop there.** QA derives `feature-tcs.md`, a designer writes `ui-design.md`,
 and the engineer who picks the change up writes `tech-design.md` and
 `tasks.md` — on this same change, never a second one. A change with no
 `tasks.md` reads as still being planned on both boards; that is the handoff

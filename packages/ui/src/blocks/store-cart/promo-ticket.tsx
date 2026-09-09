@@ -102,7 +102,7 @@ function PromoTicket({
 
       <div
         className={cn(
-          "rounded-b-(--radius-xl) border border-t-0 bg-background p-3",
+          "rounded-b-(--radius-xl) border border-t-0 bg-background px-3 py-2",
           borderTone,
         )}
         style={TICKET_BOTTOM_MASK}

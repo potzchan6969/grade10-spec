@@ -21,7 +21,7 @@ sentence.
 | Invoke | When | Here | Example |
 | --- | --- | --- | --- |
 | `/planning-pm` | Proposal, spec deltas, and the journeys beside them. Where every change starts. Stop there — a change with no `tasks.md` is not ready to `/implement`. | Same. | "Write the requirements for watchlist notifications — specs only, no tasks." |
-| `/planning-qa` | The test-cases.md beside each capability, derived with `/spec-to-tcs` and reviewed with `/tcs-review`. | Same. | "Derive the test cases for `add-auction-watchlist`." |
+| `/planning-qa` | The feature-tcs.md beside each capability, derived with `/spec-to-tcs` and reviewed with `/tcs-review`. | Same. | "Derive the test cases for `add-auction-watchlist`." |
 | `/planning-design` | `ui-design.md`: screens to Figma frames, exports named exactly, states tied to scenarios. | Same. | "Write the UI design for the watchlist drawer." |
 | `/planning-dev` | `tech-design.md` and `tasks.md` on a change somebody else specified, or one you author yourself. | Same. | "Plan delivery for `auction-auto-bidding`; I am implementing it." |
 | `/implement` | A change with tasks, or tickets with no OpenSpec store. Runs through `/tdd`. Stops at the group boundary. | `/openspec-apply-change`. | "Implement the tasks in `auction-auto-bidding`." |
@@ -44,6 +44,12 @@ Off the delivery line, and not a sequence — pick by what you are touching. All
 | `/design-system-primitives` | A primitive's variants, sizes, or states, or its Code Connect template. The Figma component set is the contract; a component may not offer a rung the design does not define. | "Add a `destructive` variant to Button." |
 | `/design-tokens` | A token value moved — pull a designer's change in, rebuild the theme CSS, push values back. Never hand-edit the generated CSS. | "Design moved the primary colour — pull it in and rebuild the theme CSS." |
 | `/design-sync-check` | `design-sync:check` failed, the nightly reported drift, or Dev Mode is emitting something wrong. Triage what it printed. | "`design-sync:check` is failing — triage what it printed." |
+
+## Email
+
+| Invoke | When | Example |
+| --- | --- | --- |
+| `/email-templating` | Compose or revise a React Email template, shared email component, preheader, CTA, or email-safe styling. | "Draft the outbid email for the auction notification." |
 
 A contract change found this way is still an OpenSpec change: name the exact exports and the consuming applications, then rejoin at `/planning-pm`.
 

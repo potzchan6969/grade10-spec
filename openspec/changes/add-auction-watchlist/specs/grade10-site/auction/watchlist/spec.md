@@ -1,8 +1,10 @@
 ## Purpose
 
 Lets a collector mark an auction listing to come back to without bidding
-on it. A watch is a private signal that confers no standing in the sale,
-and it is the trigger auction mail fires on.
+on it. A watch is a private signal that confers no standing in the sale.
+Email alerts for a watched listing are a separate preference owned by
+`grade10-site/auction/notifications`; watching defaults alerts on, and
+unwatching turns them off.
 
 **Terminology.** **Listing** is the domain entity this capability names.
 **Lot** is only the collector-facing label for a listing
@@ -16,6 +18,7 @@ speak of listings; they do not invent a lot entity.
   - Unwatch surfaces: listing page, catalogue, and the watched listings list
   - Sign-in required: a signed-out viewer is offered sign-in, not a local watch
   - Idempotent watch: watching twice leaves one watch with the original Watched At
+  - Alerts default on: watching turns email alerts on for that listing; unwatching turns them off
 - Watch privacy
   - Private signal: only the collector who watched sees it
   - No standing: watching does not bid, reserve, or change the sale
@@ -24,6 +27,7 @@ speak of listings; they do not invent a lot entity.
   - Recency order: most recently watched first
   - Enough to act: each entry shows identity, current bid, and Closes At
   - Survives close: a closed or called-off listing stays until the collector unwatches
+  - Email alerts control: the list can mute alerts without unwatching
 
 ## ADDED Requirements
 
@@ -49,6 +53,7 @@ change the Watched At of the first.
 - **WHEN** they watch it
 - **THEN** Grade10 records the watch against that collector and listing
 - **AND** the listing shows as watched to them
+- **AND** email alerts for that listing are on
 
 #### Scenario: grade10-site-auction-watchlist-SC-02 - A collector unwatches a listing
 
@@ -56,6 +61,7 @@ change the Watched At of the first.
 - **WHEN** they unwatch it
 - **THEN** Grade10 removes the watch
 - **AND** the listing shows as not watched to them
+- **AND** email alerts for that listing are off
 
 #### Scenario: grade10-site-auction-watchlist-SC-03 - Watching twice leaves one watch
 
@@ -182,7 +188,15 @@ A collector SHALL be able to unwatch such a listing.
 - **WHEN** they unwatch an entry on that list
 - **THEN** Grade10 removes the watch
 - **AND** that listing no longer appears in the listings they watch
+- **AND** email alerts for that listing are off
 - **AND** they did not have to open the listing's own page
+
+#### Scenario: grade10-site-auction-watchlist-SC-19 - Muting alerts leaves the watch
+
+- **GIVEN** a signed-in collector watching a listing with email alerts on
+- **WHEN** they turn email alerts off for that listing
+- **THEN** the listing remains watched
+- **AND** email alerts for that listing are off
 
 ### Requirement: Watched-list entry fields
 
