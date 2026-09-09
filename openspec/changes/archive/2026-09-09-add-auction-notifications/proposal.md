@@ -2,8 +2,14 @@
 
 **Author:** @jeffffej0909 - 2026-08-24
 
-Product context: [Auction notifications](../../../docs/prds/products/grade10-auction/notifications.md).
-Depends on [`add-auction-watchlist`](../add-auction-watchlist/proposal.md):
+**Absorbed by** [`add-account-notifications`](../../add-account-notifications/proposal.md).
+Archived without folding into durable specs. Requirements, journeys, and
+permanent scenario ids under `grade10-site/auction/notifications` continue
+on that change — this archive keeps proposal, UI, tech design, and tasks as
+history; delta specs are omitted so those ids are not re-issued here.
+
+Product context: [Auction notifications](../../../../docs/prds/products/grade10-auction/notifications.md).
+Depends on [`add-auction-watchlist`](../../add-auction-watchlist/proposal.md):
 progress mail fires when a collector watches a lot **with email alerts on**.
 Watching is list membership; alerts are a separate preference.
 

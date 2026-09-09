@@ -69,7 +69,7 @@
 - Templates are composed with [emailcn](https://www.emailcn.run/) on
   React Email via the shadcn registry (`@emailcn` in
   `apps/auction-emails/components.json`). Previewable sources live in
-  [`apps/auction-emails`](../../../apps/auction-emails/): emailcn’s
+  [`apps/auction-emails`](../../../../apps/auction-emails/): emailcn’s
   `createEmailTailwindConfig` plus Grade10 `grade10Theme`, shared
   pieces under `emails/_components/`, each kind a thin copy branch.
   Day-to-day preview: `pnpm email:dev` (React Email `email dev` on
