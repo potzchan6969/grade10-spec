@@ -244,7 +244,7 @@ export const SetupSheetProviderFieldIsLockedWhileLinking: Story = {
       within(dialog).getByRole("checkbox", {
         name: "I confirm I am 18 years of age or older.",
       }),
-    ).toBeDisabled();
+    ).toHaveAttribute("aria-disabled", "true");
     expect(
       within(dialog).queryByRole("button", { name: "Close dialog" }),
     ).not.toBeInTheDocument();
