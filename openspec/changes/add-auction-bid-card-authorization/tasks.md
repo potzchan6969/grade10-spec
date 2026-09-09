@@ -23,7 +23,7 @@
 - [ ] 4.3 Make `An outbid cancels the authorization` pass through the existing release worker without invoking capture or a post-sale transition.
 - [ ] 4.4 Verify: `pnpm run test:backend` and targeted Auction bid, Stripe webhook, release, and reconciliation tests.
 
-## 5. Listing bid frontend (grade10)
+## 5. Listing bid frontend (grade10) (owner: @htonyl)
 
 - [ ] 5.1 Make `First bid requires a payment method` pass in `PlaceBidDialog`, showing the provider-hosted payment field after a collector selects a valid maximum.
 - [ ] 5.2 Make `Payment authentication stays in the dialog` and `A refused authorization does not place a bid` pass with accessible pending and refusal states, retaining the collector's bid draft.
