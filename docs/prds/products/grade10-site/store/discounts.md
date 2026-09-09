@@ -40,6 +40,11 @@ An order carries one discount, whichever kind reached it:
   both, and a second is refused rather than stacked
 - **Points as credits** — its own add-on, outside the count
 - **Free shipping** — its own add-on, outside the count
+- **Site discounts** — their own add-on too, outside the count; a product
+  special sale, a buy-X-get-Y offer, or an order threshold combines with
+  whichever of a discount code or a reward's coupon the order carries. A
+  product special sale's own exclusivity is narrower and separate — it
+  blocks a coupon only on its own product line, never the order's one slot
 - **Both channels** — the same rule in the cart and at the till
 
 ## Online draft order mechanism
