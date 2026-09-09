@@ -160,48 +160,32 @@ type EnrollmentSetupSheetCopy = {
   continue: string;
   /** Primary action label while the provider link request is in flight. */
   linking: string;
-  iframePlaceholder: string;
-  iframeLinkedCardPlaceholder: string;
 };
 
 function PaymentFieldSlot({
-  copy,
   content,
-  showsLinkedCard = false,
   disabled = false,
 }: {
-  copy: EnrollmentSetupSheetCopy;
   content?: ReactNode;
-  showsLinkedCard?: boolean;
   disabled?: boolean;
 }) {
-  const className =
-    "flex h-32 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground";
-
-  if (content != null) {
-    return (
-      <div
-        aria-disabled={disabled || undefined}
-        className={disabled ? "w-full opacity-60" : "w-full"}
-        inert={disabled ? true : undefined}
-      >
-        {content}
-      </div>
-    );
-  }
-
-  const label = showsLinkedCard
-    ? copy.iframeLinkedCardPlaceholder
-    : copy.iframePlaceholder;
-
   return (
     <div
+      aria-busy={content == null ? true : undefined}
       aria-disabled={disabled || undefined}
-      className={
-        disabled ? `${className} pointer-events-none opacity-60` : className
-      }
+      data-slot="payment-field"
+      data-state={content == null ? "empty" : "ready"}
+      className={`grid w-full overflow-hidden transition-[grid-template-rows] duration-300 ease-out motion-reduce:transition-none ${content == null ? "grid-rows-[0fr]" : "grid-rows-[1fr]"} ${disabled ? "pointer-events-none opacity-60" : ""}`}
+      inert={disabled ? true : undefined}
     >
-      {label}
+      <div className="min-h-0 w-full">
+        {content ?? (
+          <div
+            aria-hidden
+            className="h-12 w-full rounded-md border border-dashed border-border bg-muted/40"
+          />
+        )}
+      </div>
     </div>
   );
 }
@@ -242,8 +226,8 @@ function SetupSheetBody({
   linking,
   paymentField,
   stripePaymentMethodField,
-  iframeLinkedPayment,
   onAgeAttestedChange,
+  scrollsPaymentField,
 }: {
   copy: EnrollmentSetupSheetCopy;
   ageAttested: boolean;
@@ -251,24 +235,25 @@ function SetupSheetBody({
   linking: boolean;
   paymentField?: ReactNode;
   stripePaymentMethodField?: ReactNode;
-  iframeLinkedPayment?: {
-    brand: OrderDetailsPaymentBrand;
-    maskedNumber: string;
-  };
   onAgeAttestedChange: (checked: boolean) => void;
+  scrollsPaymentField?: boolean;
 }) {
   const resolvedPaymentField = paymentField ?? stripePaymentMethodField;
+  const paymentFieldSlot = (
+    <PaymentFieldSlot content={resolvedPaymentField} disabled={linking} />
+  );
 
   return (
     <VStack className="w-full" gap="md">
       <DialogDescription>{copy.linkCardDescription}</DialogDescription>
+      {scrollsPaymentField ? (
+        <DialogBody className="max-h-60 flex-none">
+          {paymentFieldSlot}
+        </DialogBody>
+      ) : (
+        paymentFieldSlot
+      )}
       <VStack className="w-full" gap="sm">
-        <PaymentFieldSlot
-          content={resolvedPaymentField}
-          copy={copy}
-          disabled={linking}
-          showsLinkedCard={iframeLinkedPayment != null}
-        />
         {errorMessage && !linking ? (
           <p
             className="text-left text-xs text-destructive"
@@ -330,18 +315,6 @@ function EnrollmentSetupSheet({
     onContinue?.();
   }
 
-  const body = (
-    <SetupSheetBody
-      ageAttested={ageAttested}
-      copy={copy}
-      errorMessage={errorMessage}
-      iframeLinkedPayment={iframeLinkedPayment}
-      linking={linking}
-      paymentField={paymentField}
-      onAgeAttestedChange={setAgeAttested}
-      stripePaymentMethodField={stripePaymentMethodField}
-    />
-  );
   const footer = (
     <Button
       disabled={!isCardReady || !ageAttested || linking}
@@ -358,7 +331,15 @@ function EnrollmentSetupSheet({
     if (!open) return null;
     return (
       <InlineOverlayPreview label={copy.getReadyToBid}>
-        {body}
+        <SetupSheetBody
+          ageAttested={ageAttested}
+          copy={copy}
+          errorMessage={errorMessage}
+          linking={linking}
+          onAgeAttestedChange={setAgeAttested}
+          paymentField={paymentField}
+          stripePaymentMethodField={stripePaymentMethodField}
+        />
         <div className="mt-4">{footer}</div>
       </InlineOverlayPreview>
     );
@@ -376,7 +357,16 @@ function EnrollmentSetupSheet({
         <DialogHeader showCloseButton={!linking}>
           <DialogTitle>{copy.getReadyToBid}</DialogTitle>
         </DialogHeader>
-        <DialogBody>{body}</DialogBody>
+        <SetupSheetBody
+          ageAttested={ageAttested}
+          copy={copy}
+          errorMessage={errorMessage}
+          linking={linking}
+          onAgeAttestedChange={setAgeAttested}
+          paymentField={paymentField}
+          scrollsPaymentField
+          stripePaymentMethodField={stripePaymentMethodField}
+        />
         <DialogFooter>{footer}</DialogFooter>
       </DialogContent>
     </Dialog>

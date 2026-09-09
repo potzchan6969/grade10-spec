@@ -18,9 +18,6 @@ const COPY = {
   ageAttestation: "I confirm I am 18 years of age or older.",
   continue: "Link Card",
   linking: "Linking",
-  iframePlaceholder: "Stripe card link (iframe)",
-  iframeLinkedCardPlaceholder:
-    "Stripe card form (iframe) — linked card on file",
 } as const;
 
 const meta = {
@@ -118,16 +115,45 @@ export const SetupSheet: Story = {
       name: "Link a card to bid",
     });
     expect(
-      within(dialog).getByText("Stripe card link (iframe)"),
-    ).toBeInTheDocument();
-    expect(
-      within(dialog).queryByRole("button", {
-        name: "Stripe card link (iframe)",
-      }),
+      within(dialog).queryByText("Stripe card link (iframe)"),
     ).not.toBeInTheDocument();
+    const field = dialog.querySelector<HTMLElement>(
+      '[data-slot="payment-field"]',
+    );
+    expect(field).not.toBeNull();
+    expect(field).toHaveAttribute("data-state", "empty");
     expect(
       within(dialog).getByRole("button", { name: "Link Card" }),
     ).toBeDisabled();
+  },
+};
+
+export const SetupSheetLoadedMockStripe: Story = {
+  render: () => (
+    <EnrollmentSetupSheet
+      cardReady
+      copy={COPY}
+      defaultAgeAttested
+      open
+      paymentField={
+        <div className="flex h-32 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground">
+          Stripe card link (iframe)
+        </div>
+      }
+    />
+  ),
+  play: async () => {
+    const dialog = within(document.body).getByRole("dialog", {
+      name: "Link a card to bid",
+    });
+    expect(
+      within(dialog).getByText("Stripe card link (iframe)"),
+    ).toBeVisible();
+    const field = dialog.querySelector<HTMLElement>(
+      '[data-slot="payment-field"]',
+    );
+    expect(field).not.toBeNull();
+    expect(field).toHaveAttribute("data-state", "ready");
   },
 };
 
@@ -145,11 +171,11 @@ export const SetupSheetFromChange: Story = {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
-    expect(
-      within(dialog).getByText(
-        "Stripe card form (iframe) — linked card on file",
-      ),
-    ).toBeInTheDocument();
+    const field = dialog.querySelector<HTMLElement>(
+      '[data-slot="payment-field"]',
+    );
+    expect(field).not.toBeNull();
+    expect(field).toHaveAttribute("data-state", "empty");
     expect(
       within(dialog).getByRole("checkbox", {
         name: "I confirm I am 18 years of age or older.",
