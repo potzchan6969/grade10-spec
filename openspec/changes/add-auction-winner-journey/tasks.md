@@ -2,7 +2,7 @@
 
 The application work starts after the change is merged to `grade10-spec` main and the application updates `external/grade10-spec` to that revision. Shared contracts and persistence land before the backend and frontend groups; the independent backend, store bridge, admin, and buyer-surface groups can then proceed in parallel. Every task below names the scenarios it must make pass.
 
-## 1. Shared contracts and interfaces (grade10)
+## 1. Shared contracts and interfaces (grade10) (owner: @htonyl)
 
 - [ ] 1.1 Add codecs for the platform shipping address book, auction orders, invoice revisions and logs, fulfilment, derived order status, bidder suspension, notifications, and the refusal unions required by `winner-order-SC-01`, `winner-order-SC-02`, `winner-order-SC-09`, `winner-order-SC-22`, `auction-status-SC-05`, `auction-status-SC-06`, `suspension-SC-01`, and `order-mail-SC-02`
 - [ ] 1.2 Add authenticated storefront and admin procedures for order issue/read, address-book selection, address amendment, invoice payment, reissue, manual settlement, cancellation, dispatch, delivery, and reinstatement, preserving the identity and grant boundaries required by `winner-order-SC-12`, `winner-order-SC-15`, `winner-order-SC-22`, `grade10-admin-auction-post-sale-SC-25`, `grade10-admin-auction-post-sale-SC-39`, `grade10-admin-auction-post-sale-SC-40`, and `suspension-SC-11`
