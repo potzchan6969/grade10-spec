@@ -1,5 +1,3 @@
-// biome-ignore-all lint/security/noDangerouslySetInnerHtml: email CSS is static and must be emitted into the generated HTML head.
-
 import { Fragment } from "react";
 import {
   Body,
@@ -318,6 +316,7 @@ const CtaBundle_CTAWithTitleAndActionLead = ({
   <Html>
     <EmailHead>
       <DefaultFonts />
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: email CSS is static and must be emitted into the generated HTML head. */}
       <style dangerouslySetInnerHTML={{ __html: CtaBundle_responsiveStyles }} />
     </EmailHead>
     <Preview>

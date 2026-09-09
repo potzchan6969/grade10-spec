@@ -1,5 +1,3 @@
-// biome-ignore-all lint/security/noDangerouslySetInnerHtml: email CSS is static and must be emitted into the generated HTML head.
-
 import type { CSSProperties } from "react";
 import {
   Body,
@@ -260,6 +258,7 @@ export const Content = ({
     <EmailHead>
       <DefaultFonts />
       <style
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: email CSS is static and must be emitted into the generated HTML head.
         dangerouslySetInnerHTML={{
           __html: `
             @media only screen and (max-width: 600px) {

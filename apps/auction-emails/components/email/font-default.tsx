@@ -1,10 +1,9 @@
-// biome-ignore-all lint/security/noDangerouslySetInnerHtml: the font stylesheet is a static email asset.
-
 import { Font } from "react-email";
 
 export const DefaultFonts = () => (
   <>
     <style
+      // biome-ignore lint/security/noDangerouslySetInnerHtml: the font stylesheet is a static email asset.
       dangerouslySetInnerHTML={{
         __html: `@import url('https://rsms.me/inter/inter.css');`,
       }}

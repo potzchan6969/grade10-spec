@@ -1,5 +1,3 @@
-// biome-ignore-all lint/security/noDangerouslySetInnerHtml: email CSS is static and must be emitted into the generated HTML head.
-
 import { Fragment } from "react";
 import {
   Body,
@@ -225,6 +223,7 @@ export const HeaderWithLogo = ({
   <Html>
     <EmailHead>
       <DefaultFonts />
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: email CSS is static and must be emitted into the generated HTML head. */}
       <style dangerouslySetInnerHTML={{ __html: responsiveStyles }} />
     </EmailHead>
     <Preview>Medium, rare, but mostly well-done HTML email components.</Preview>
