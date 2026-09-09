@@ -97,8 +97,13 @@ Outline first. A document is a heading and an outline, never an essay.
 - **Open items wear a mark** — ❓ at the start of the line with the
   question, or `TBC` after the value still missing. Never blur a decided
   fact to sit beside an undecided one.
+- **Decided but unbuilt wears 🚧** — at the start of the line, for a fact
+  that is settled and does not run yet. ❓ is for what nobody has decided;
+  the two are different states and never share a mark.
 - **Self-contained** — no bare section references ("see above"). Name or
-  link the thing.
+  link the thing. A scenario id — `…-SC-32` — is one of those: it means
+  nothing to a reader, so a page names the rule in its own words and links
+  the capability, never the scenario.
 
 ## Voice
 
@@ -122,8 +127,8 @@ Outline first. A document is a heading and an outline, never an essay.
   dropping the term that made it hard, not carrying it into the new sentence.
 - Group one concern per section.
 - The roadmap, stated as the product. A decided plan reads in the present
-  tense as though shipped; where it stands is a status card or a ❓, never
-  an apology in the prose that a spec is still being written.
+  tense as though shipped; where it stands is a status card, a 🚧 or a ❓,
+  never an apology in the prose that a spec is still being written.
 
 ## One source of truth
 
