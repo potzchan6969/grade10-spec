@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 import { ListingBidEnrollmentCardPreview } from "./listing-bid-enrollment-card-preview";
+import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 import {
+  type BidAuthorizationSnapshot,
   ENROLLMENT_DEMO_SAVED_PAYMENT,
   ENROLLMENT_SNAPSHOT_READY,
-  type BidAuthorizationSnapshot,
 } from "./listing-bid-enrollment-snapshots";
 
 function PaymentAuthorizationPreview() {

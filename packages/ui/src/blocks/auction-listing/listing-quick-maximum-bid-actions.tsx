@@ -398,7 +398,8 @@ function ListingQuickMaximumBidActions({
             const amountLabel = formatMoney(preset.amountMinor, view.currency, {
               locale,
             });
-            const selected = !amountEntryLocked && selectedPreset?.key === preset.key;
+            const selected =
+              !amountEntryLocked && selectedPreset?.key === preset.key;
             const accessibleName = (
               preset.immediate ? copy.bidImmediate : copy.bidUpTo
             ).replace("{amount}", amountLabel);
@@ -447,9 +448,7 @@ function ListingQuickMaximumBidActions({
           onKeyDown={handleCustomKeyDown}
           placeholder={customPlaceholder}
           prefix={formatMoneyPrefix(view.currency, { locale })}
-          status={
-            amountEntryLocked || !customInvalid ? "default" : "error"
-          }
+          status={amountEntryLocked || !customInvalid ? "default" : "error"}
           value={customDraft}
         />
       </VStack>

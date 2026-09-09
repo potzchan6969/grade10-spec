@@ -1,24 +1,23 @@
-import { Fragment } from "react";
 import type { CSSProperties, ReactNode } from "react";
+import { Fragment } from "react";
 import {
   Body,
+  Column,
   Container,
   Head as EmailHead,
   Html,
-  Preview,
-  Tailwind,
-  Section,
-  Row,
-  Column,
-  Link,
-  Text,
   Img,
+  Link,
+  Preview,
+  Row,
+  Section,
+  Tailwind,
+  Text,
 } from "react-email";
-
-import { DefaultFonts } from "@/components/email/font-default";
-import { createEmailTailwindConfig } from "@/components/email/email-theme";
-import type { EmailTheme } from "@/components/email/email-theme";
 import { emailAsset } from "@/components/email/email-assets";
+import type { EmailTheme } from "@/components/email/email-theme";
+import { createEmailTailwindConfig } from "@/components/email/email-theme";
+import { DefaultFonts } from "@/components/email/font-default";
 import { defaultTheme } from "@/components/email/theme-default";
 
 type DividerVariant = "center" | "left" | "right";

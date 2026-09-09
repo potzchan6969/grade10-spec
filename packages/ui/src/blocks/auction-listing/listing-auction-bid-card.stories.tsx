@@ -248,7 +248,7 @@ export const NeedsCard: Story = {
       expect(preset).toBeDisabled();
     }
     expect(
-      canvas.getByRole("textbox", { name: /Custom amount \(min\./ }),
+      canvas.getByRole("spinbutton", { name: /Custom amount \(min\./ }),
     ).toBeDisabled();
 
     await userEvent.click(

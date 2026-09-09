@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, waitFor, within } from "storybook/test";
-import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 import { ListingBidEnrollmentCardPreview } from "./listing-bid-enrollment-card-preview";
+import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "./listing-bid-enrollment-copy";
 import {
   ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_PENDING,
   ENROLLMENT_SNAPSHOT_PAYMENT_AUTHORIZATION_REFUSED,
@@ -86,11 +86,13 @@ SetupModalError.play = async () => {
   const dialog = within(document.body).getByRole("dialog", {
     name: "Link a card to bid",
   });
-  expect(
-    within(dialog).getByText(
-      "Could not link that card. Check the details and try again.",
-    ),
-  ).toBeVisible();
+  await waitFor(() =>
+    expect(
+      within(dialog).getByText(
+        "Could not link that card. Check the details and try again.",
+      ),
+    ).toBeVisible(),
+  );
   expect(
     within(dialog).getByRole("button", { name: "Link Card" }),
   ).toBeEnabled();
@@ -112,7 +114,7 @@ SetupModalLinking.play = async () => {
     within(dialog).getByRole("checkbox", {
       name: "I confirm I am 18 years of age or older.",
     }),
-  ).toBeDisabled();
+  ).toHaveAttribute("aria-disabled", "true");
 };
 
 export const PaymentAuthorizationPending = enrollmentDialogStory(

@@ -68,7 +68,8 @@ function artifactScope(relative) {
   else if (relative === "tasks.md") scope = "tasks";
   else if (relative === "feature-tcs.md" || relative === "test-cases.md")
     scope = "test-cases";
-  else if (relative === "spec.md" || relative.endsWith("/spec.md")) scope = "spec";
+  else if (relative === "spec.md" || relative.endsWith("/spec.md"))
+    scope = "spec";
   else if (
     relative === "user-journeys.md" ||
     relative.endsWith("/user-journeys.md")
@@ -141,7 +142,8 @@ export function classifyChanges(changed) {
     }
 
     if (oldItem?.kind === "active") addChange(groups, "removed", oldItem);
-    else if (newItem?.kind === "archive") addChange(groups, "archived", newItem);
+    else if (newItem?.kind === "archive")
+      addChange(groups, "archived", newItem);
     else if (oldItem?.kind === "archive") {
       if (record.status === "M") addChange(groups, "updated", oldItem);
       else addChange(groups, "removed", oldItem);
@@ -201,7 +203,10 @@ function humanize(id) {
 }
 
 function escapeSlackText(text) {
-  return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+  return text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 }
 
 function scopesText(scopes = []) {
@@ -223,9 +228,13 @@ function capabilityLink(id, openspecUrl) {
 
 async function titleAt(ref, directory, fallback) {
   try {
-    const { stdout } = await exec("git", ["show", `${ref}:${CHANGE_ROOT}${directory}/proposal.md`], {
-      cwd: rootDirectory,
-    });
+    const { stdout } = await exec(
+      "git",
+      ["show", `${ref}:${CHANGE_ROOT}${directory}/proposal.md`],
+      {
+        cwd: rootDirectory,
+      },
+    );
     const title = stdout.match(/^#\s+(.+)$/m)?.[1]?.trim();
     if (title) return title;
   } catch {
@@ -240,7 +249,11 @@ export async function titledChanges(changes, { base, head }) {
     titled[status] = await Promise.all(
       items.map(async (item) => ({
         ...item,
-        title: await titleAt(status === "removed" ? base : head, item.path, item.id),
+        title: await titleAt(
+          status === "removed" ? base : head,
+          item.path,
+          item.id,
+        ),
       })),
     );
   }
@@ -286,7 +299,9 @@ export function slackPayload({
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `${icon} OpenSpec *${label} capabilities*\n${capabilities[status]
+            text: `${icon} OpenSpec *${label} capabilities*\n${capabilities[
+              status
+            ]
               .map(
                 ({ id, scopes }) =>
                   `- ${capabilityLink(id, openspecUrl)}${scopesText(scopes)}`,
@@ -314,21 +329,31 @@ async function main() {
       base: { type: "string" },
       head: { type: "string", default: "HEAD" },
       "commit-url": { type: "string", default: "" },
-      "manual-url": { type: "string", default: "https://spec.grade10-stg.com/planning" },
-      "openspec-url": { type: "string", default: "https://spec.grade10-stg.com/openspec/" },
+      "manual-url": {
+        type: "string",
+        default: "https://spec.grade10-stg.com/planning",
+      },
+      "openspec-url": {
+        type: "string",
+        default: "https://spec.grade10-stg.com/openspec/",
+      },
       "github-output": { type: "string" },
     },
   });
   if (!values.base) throw new Error("--base is required");
 
   const changed = await changedFiles(values.base, values.head);
-  const changedPaths = changed.flatMap(({ oldPath, path }) => [oldPath, path]).filter(Boolean);
-  const changes = await titledChanges(
-    classifyChanges(changed),
-    { base: values.base, head: values.head },
-  );
+  const changedPaths = changed
+    .flatMap(({ oldPath, path }) => [oldPath, path])
+    .filter(Boolean);
+  const changes = await titledChanges(classifyChanges(changed), {
+    base: values.base,
+    head: values.head,
+  });
   const capabilities = classifyCapabilities(changed);
-  const { stdout: commitSha } = await exec("git", ["rev-parse", values.head], { cwd: rootDirectory });
+  const { stdout: commitSha } = await exec("git", ["rev-parse", values.head], {
+    cwd: rootDirectory,
+  });
   const payload = slackPayload({
     changes,
     capabilities,
@@ -347,7 +372,9 @@ async function main() {
       `has-changes=${hasChanges}\npayload=${JSON.stringify(payload)}\n`,
     );
   }
-  process.stdout.write(JSON.stringify({ changedPaths, changes, capabilities, payload }));
+  process.stdout.write(
+    JSON.stringify({ changedPaths, changes, capabilities, payload }),
+  );
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
