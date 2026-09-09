@@ -138,29 +138,30 @@ function ListingQuickMaximumBidActions({
 
     const fromCurrent = PRESET_INCREMENTS.flatMap(
       ({ multiples, captionKey }): MaximumPreset[] => {
-        // Skip "Min. bid" while leading — the custom field already states the
-        // raise floor, and a $1 nudge is not a useful quick pick.
-        if (isLeadingWithMaximum && captionKey === "nextEligible") {
-          return [];
-        }
-        const amountMinor =
-          multiples === 1 && !view.hasBids
+        const amountMinor = isLeadingWithMaximum
+          ? floorMaximumMinor + view.incrementMinor * (multiples - 1)
+          : multiples === 1 && !view.hasBids
             ? floorMaximumMinor
             : view.currentBidMinor + view.incrementMinor * multiples;
         if (amountMinor < floorMaximumMinor) return [];
         const caption =
-          captionKey === "nextEligible"
-            ? copy.nextEligibleBid
-            : raiseDeltaTemplate.replace(
+          isLeadingWithMaximum
+            ? raiseDeltaTemplate.replace(
                 "{amount}",
-                formatDelta(view.incrementMinor * multiples),
-              );
+                formatDelta(amountMinor - (view.viewerMaximumMinor ?? 0)),
+              )
+            : captionKey === "nextEligible"
+              ? copy.nextEligibleBid
+              : raiseDeltaTemplate.replace(
+                  "{amount}",
+                  formatDelta(view.incrementMinor * multiples),
+                );
         return [
           {
             key: `current-${multiples}`,
             caption,
             amountMinor,
-            immediate: multiples === 1,
+            immediate: multiples === 1 && !isLeadingWithMaximum,
           },
         ];
       },
@@ -168,8 +169,8 @@ function ListingQuickMaximumBidActions({
 
     if (fromCurrent.length > 0) return fromCurrent;
 
-    // Raise floor sits above current+step presets. While leading, skip the
-    // floor chip and offer increments above it with "vs max" captions.
+    // Keep the fallback resilient if a future currency schedule makes the
+    // regular presets fall below the raise floor.
     const fallbackSteps = isLeadingWithMaximum ? [1, 2, 4] : [0, 2, 4];
     return fallbackSteps.map((steps) => {
       const amountMinor = floorMaximumMinor + view.incrementMinor * steps;
