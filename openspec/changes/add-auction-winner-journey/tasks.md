@@ -17,7 +17,7 @@ The application work starts after the change is merged to `grade10-spec` main an
 - [x] 2.3 Preserve legacy settlement/hold rows and add the guarded read adapter and backfill markers needed for `winner-order-SC-12`, `winner-order-SC-13`, `grade10-admin-auction-post-sale-SC-36`, and `grade10-admin-auction-post-sale-SC-42`
 - [x] 2.4 Verify migration ordering, rollback-safe application boundaries, constraints, and representative fixtures with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, and the focused backend migration tests
 
-## 3. Auction close and invoice lifecycle (grade10)
+## 3. Auction close and invoice lifecycle (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Implement locked, idempotent lot close that creates one winner order and invoice, sets the seven-day deadline, releases winning and losing holds, and never captures the winning hold, making `winner-order-SC-01`, `winner-order-SC-03`, `winner-order-SC-06`, `winner-order-SC-12`, `winner-order-SC-13`, `winner-order-SC-14`, `winner-order-SC-16`, `auction-status-SC-01`, and `auction-status-SC-02` pass
 - [ ] 3.2 Implement account-default and saved-address selection, explicit confirmation, shipping-rate calculation, invoice amendment, total delta, and deadline preservation for `winner-order-SC-02`, `winner-order-SC-04`, `winner-order-SC-05`, `winner-order-SC-07`, `winner-order-SC-08`, `winner-order-SC-09`, `winner-order-SC-10`, `winner-order-SC-22`, `winner-order-SC-23`, `winner-order-SC-24`, and `winner-order-SC-25`
