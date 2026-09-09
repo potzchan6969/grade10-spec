@@ -172,3 +172,19 @@ submodule bump — the message keys must exist before the page names them.
 Rollback is the revert of that bump plus the frontend commits; no shop
 configuration, no stored state, and no address the site ever wrote becomes
 unreadable, since an address naming a collection goes on being honoured.
+
+## Archive notes
+
+Two things the archive carries by hand, and no check catches. `openspec
+archive` folds `## Requirements` and nothing else; `archive:preflight` gates
+the `## Feature set` and `user-journeys.md` copies. Neither sees these.
+
+- **The durable Purpose goes stale** — it reads "What the listing shows,
+  filters and sorts is unchanged by this capability; only its address is",
+  which the address change that wrote it made true and this change makes
+  false. Rewrite it at the fold.
+- **`Same document` loses its bullet** — the `Collection as a way in` group
+  here carries three bullets, and not the one the retired `Collection in the
+  address` group held, though the MODIFIED requirement still states that which
+  collection an address names does not change which document it serves. Decide
+  at the fold whether the feature set keeps it.

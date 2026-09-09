@@ -295,6 +295,30 @@ for (const g of groups) {
   );
 }
 
+// A group of its own for the archive hand-off is what `planning-dev` now tells
+// planners not to write. The routine copy is already mechanical —
+// `archive:preflight` refuses the archive while the feature set and the journeys
+// are uncarried — and the box cannot be ticked when the work is, since it waits
+// on a deploy. Advisory rather than a refusal: seven changes in flight still
+// carry one, and blocking their plan edits over it helps nobody.
+const handOff = groups.filter((g) => /\barchive\b/i.test(g.title));
+if (handOff.length) {
+  console.log(
+    `\n${yellow("Archive hand-off:")} group(s) ${handOff.map((g) => g.num).join(", ")} — the routine copy is the preflight's job.`,
+  );
+  console.log(
+    dim(
+      "Keep a task only for what `archive:preflight` cannot check: sequencing behind",
+    ),
+  );
+  console.log(
+    dim(
+      "another change, a capability with no durable spec yet, a README row or shelf.",
+    ),
+  );
+  console.log(dim("The rule is in `.claude/skills/planning-dev/SKILL.md`."));
+}
+
 // Renumbering is the hazard git cannot warn about: a claim is recorded against a group
 // number and a checkmark against a task id, so renumbering silently points someone's
 // claim at different work while every id still validates.
