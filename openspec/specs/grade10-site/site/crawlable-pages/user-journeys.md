@@ -29,7 +29,7 @@ after a navigation with no page load.
 
 ### grade10-site-site-crawlable-pages-US-03: Preview fetcher unfurls a shared link
 
-**As a** preview fetcher,
+**As a** collector sharing a public surface,
 **I want** Open Graph title, description, and URL readable without executing
 scripts,
 **so that** a shared link unfurls as the surface it points at.
@@ -40,7 +40,7 @@ scripts,
 
 ### grade10-site-site-crawlable-pages-US-04: Crawler discovers every public address
 
-**As a** crawler,
+**As a** site operator,
 **I want** a robots.txt naming a sitemap that is read from the catalogue when
 it is fetched,
 **so that** I fetch every public address the site answers, and none it would

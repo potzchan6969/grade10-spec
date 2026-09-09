@@ -19,7 +19,8 @@ and in my cart, and nothing on the way to buying it turns out to be for show.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -230,7 +231,8 @@ selling when out of stock.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** regression
+* **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual

@@ -17,7 +17,8 @@
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual

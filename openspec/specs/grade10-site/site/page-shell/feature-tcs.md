@@ -19,7 +19,8 @@ shipped without it.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -150,7 +151,8 @@ signing out has a single home.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual

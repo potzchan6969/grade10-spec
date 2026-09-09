@@ -284,7 +284,8 @@ when I cannot, I know exactly what to fix.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** smoke
+* **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -376,7 +377,8 @@ price.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** regression
+* **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
