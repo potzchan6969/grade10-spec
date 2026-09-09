@@ -61,21 +61,20 @@ function artifact(path) {
 }
 
 function artifactScope(relative) {
-  let scope = relative;
-  if (relative === "proposal.md") scope = "proposal";
-  else if (relative === "tech-design.md") scope = "tech-design";
-  else if (relative === "ui-design.md") scope = "ui-design";
-  else if (relative === "tasks.md") scope = "tasks";
-  else if (relative === "feature-tcs.md" || relative === "test-cases.md")
-    scope = "test-cases";
-  else if (relative === "spec.md" || relative.endsWith("/spec.md"))
-    scope = "spec";
-  else if (
-    relative === "user-journeys.md" ||
-    relative.endsWith("/user-journeys.md")
-  )
-    scope = "user-journeys";
-  return scope;
+  if (relative === "proposal.md") return "proposal";
+  if (relative === "tech-design.md") return "tech-design";
+  if (relative === "ui-design.md") return "ui-design";
+  if (relative === "tasks.md") return "tasks";
+  // The rest sit beside a capability's requirements, so they are named by the
+  // file rather than the path: a change files them under `specs/<capability>/`
+  // and the durable store hands them over bare. A suite's name carries its
+  // level (tcs-rules r3.0), and `test-cases.md` is the name they were renamed
+  // from, still carried by the archive.
+  const file = relative.slice(relative.lastIndexOf("/") + 1);
+  if (file.endsWith("-tcs.md") || file === "test-cases.md") return "test-cases";
+  if (file === "spec.md") return "spec";
+  if (file === "user-journeys.md") return "user-journeys";
+  return relative;
 }
 
 function capabilityArtifact(path) {

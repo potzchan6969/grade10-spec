@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
- * Validate every feature suite (`feature-tcs.md`, or `test-cases.md` where a
- * suite predates that name) and every domain `domain-tcs.md` against
- * `docs/governance/specs-to-test-cases.md`.
+ * Validate every suite - `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`
+ * and `platform-tcs.md` - against `docs/governance/specs-to-test-cases.md`.
  *
  *   pnpm run tcs:validate            # errors fail the run; warnings are printed
  *   pnpm run tcs:validate -- --strict   # warnings fail too
