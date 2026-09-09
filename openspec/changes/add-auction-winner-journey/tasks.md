@@ -10,7 +10,7 @@ The application work starts after the change is merged to `grade10-spec` main an
 - [x] 1.4 Update the account-data architecture and auth-service ownership map so platform shipping addresses are account-wide, while auction orders retain immutable delivery snapshots for `winner-order-SC-22`, `winner-order-SC-23`, `winner-order-SC-24`, and `winner-order-SC-25`
 - [x] 1.5 Verify contract fixtures cover successful responses and every refusal named in this group, including account-scoped address access, then run `pnpm run typecheck` and the focused auth/auction contract tests
 
-## 2. Database migration (grade10)
+## 2. Database migration (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Add additive auth migrations for `shipping_addresses` and auction migrations for `auction_orders`, `auction_invoices`, `auction_invoice_log`, suspension records/logs, notification work/logs, and `fulfilment_log`, with the one-order-per-listing, one-current-invoice, and one-default-per-account invariants required by `winner-order-SC-03`, `winner-order-SC-06`, `winner-order-SC-22`, `winner-order-SC-23`, `auction-status-SC-01`, and `auction-status-SC-03`
 - [ ] 2.2 Add minor-unit money fields, currency and estimate flags, immutable winner/address snapshots, append-only log constraints, provider idempotency keys, and retry indexes so `winner-order-SC-04`, `winner-order-SC-18`, `winner-order-SC-21`, `winner-order-SC-24`, `grade10-admin-auction-post-sale-SC-34`, `grade10-admin-auction-post-sale-SC-35`, and `order-mail-SC-06` cannot lose or duplicate facts
