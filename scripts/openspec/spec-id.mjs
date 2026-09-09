@@ -160,7 +160,9 @@ function origin(path) {
     const rest = parts.slice(2);
     const file = rest.pop();
     const capability = rest.join("/");
-    if (file === "feature-tcs.md" || file === "test-cases.md") {
+    // The suite's name carries its level (tcs-rules r3.0); `test-cases.md` is
+    // the name they were renamed from, still carried by the archive.
+    if (file.endsWith("-tcs.md") || file === "test-cases.md") {
       return { kind: "test cases", capability, durable: true };
     }
     return { kind: "durable spec", capability, durable: true };

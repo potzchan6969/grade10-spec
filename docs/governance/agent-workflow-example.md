@@ -7,7 +7,7 @@ visible in one place. Every command here is real; nothing is illustrative.
 | Artifact | Written by | Where |
 | --- | --- | --- |
 | `proposal.md`, `specs/<capability>/spec.md`, `specs/<capability>/user-journeys.md` | PM — `/planning-pm` | this store |
-| `specs/<capability>/test-cases.md` | QA — `/planning-qa` | this store |
+| `specs/<capability>/feature-tcs.md` | QA — `/planning-qa` | this store |
 | `ui-design.md` | Designer — `/planning-design` | this store |
 | `tech-design.md`, `tasks.md` | The engineer planning the delivery — `/planning-dev` | this store |
 | Owner tags, checkmarks | The engineer doing the work | `grade10`, writing through to this store |

@@ -162,7 +162,7 @@ describe("what the worklist is a list of", () => {
             ...settled,
             testCases: undefined,
             testCasesError: {
-              file: "openspec/specs/demo/settled/test-cases.md",
+              file: "openspec/specs/demo/settled/feature-tcs.md",
               message: "a test-case file states `**Status:**`",
             },
           },

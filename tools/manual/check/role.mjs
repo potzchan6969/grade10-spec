@@ -13,7 +13,7 @@
  * The pull is strongest where a capability has real actors and one contract
  * scenario without a home — a package's export list, a copy shape — and a
  * story gets invented to accept it. It should have no journey at all, named
- * under `**Out of suite:**` in the `test-cases.md` beside it.
+ * under `**Out of suite:**` in the `feature-tcs.md` beside it.
  *
  * Read off the head noun alone, so the qualifiers a real actor carries pass:
  * a `backend reviewer` reviews, a `developer running the auction service

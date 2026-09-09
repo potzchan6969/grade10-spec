@@ -240,7 +240,7 @@ describe("the artifacts row", () => {
       /aria-disabled="true"[^>]*role="tab"[^>]*>(?:<svg.*?<\/svg>)?UI<span[^>]*>missing/,
     );
     expect(html).toContain("ui-design.md is still to write");
-    expect(html).toContain("Still to write: test-cases.md, ui-design.md");
+    expect(html).toContain("Still to write: feature-tcs.md, ui-design.md");
   });
 
   it("counts what the requirements and the plan carry", () => {

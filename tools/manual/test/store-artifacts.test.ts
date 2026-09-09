@@ -98,7 +98,7 @@ const BASE = {
   "docs/prds/products/demo-product/alpha.md": ALPHA_PAGE,
   "openspec/specs/demo-product/alpha/spec.md": ALPHA_SPEC,
   "openspec/specs/demo-product/alpha/user-journeys.md": ALPHA_JOURNEYS,
-  "openspec/specs/demo-product/alpha/test-cases.md": ALPHA_CASES,
+  "openspec/specs/demo-product/alpha/feature-tcs.md": ALPHA_CASES,
 };
 
 const snapshotOfStore = async (root: string) =>
@@ -146,7 +146,7 @@ describe("the warnings the snapshot carries", () => {
       {
         rule: "suite",
         message:
-          "openspec/specs/demo-product/alpha/test-cases.md: holds 1 test case and no page shows them",
+          "openspec/specs/demo-product/alpha/feature-tcs.md: holds 1 test case and no page shows them",
       },
     ]);
   });

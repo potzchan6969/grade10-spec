@@ -39,7 +39,7 @@ const SHELF: CheckWarning = {
 const UNSHOWN: CheckWarning = {
   rule: "suite",
   message:
-    "openspec/specs/demo-product/alpha/test-cases.md: holds 2 test cases and no page shows them",
+    "openspec/specs/demo-product/alpha/feature-tcs.md: holds 2 test cases and no page shows them",
 };
 
 describe("the maintenance panel", () => {
@@ -74,7 +74,7 @@ describe("the maintenance panel", () => {
   it("names a store file that has no page to link to, and links nothing", () => {
     const html = render([UNSHOWN]);
 
-    expect(html).toContain("openspec/specs/demo-product/alpha/test-cases.md");
+    expect(html).toContain("openspec/specs/demo-product/alpha/feature-tcs.md");
     expect(html).not.toContain("<a ");
   });
 

@@ -117,7 +117,7 @@ function fileName(artifact: ChangeArtifact): string {
   // The per-capability artifacts have no one path — they are a file apiece
   // beside every delta — so they are named by the file, not the directory.
   if (artifact.kind === "journeys") return "user-journeys.md";
-  if (artifact.kind === "cases") return "test-cases.md";
+  if (artifact.kind === "cases") return "feature-tcs.md";
   return `${artifact.name}/`;
 }
 

@@ -118,7 +118,7 @@ test("classifies durable capability files by capability and scope", () => {
       },
       {
         oldPath: null,
-        path: "openspec/specs/grade10-site/auction/winner-journey/test-cases.md",
+        path: "openspec/specs/grade10-site/auction/winner-journey/feature-tcs.md",
         status: "D",
       },
     ]),

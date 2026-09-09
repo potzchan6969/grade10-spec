@@ -14,7 +14,7 @@ const lines = (result: Result, rule: string) =>
 
 const SPEC_FILE = "openspec/specs/demo-product/alpha/spec.md";
 const JOURNEYS_FILE = "openspec/specs/demo-product/alpha/user-journeys.md";
-const CASES_FILE = "openspec/specs/demo-product/alpha/test-cases.md";
+const CASES_FILE = "openspec/specs/demo-product/alpha/feature-tcs.md";
 const PAGE = "docs/prds/products/demo-product/alpha.md";
 
 const scenario = (id: string, name: string) => [
