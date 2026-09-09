@@ -12,7 +12,7 @@ stops drawing one. Why the handler is the signal rather than a flag:
 - [x] 1.2 Make the four cart words optional on the card's copy type, so a surface drawing no cart supplies none — `soldOut` and `sale` already are
 - [x] 1.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run design-sync:check`
 
-## 2. The front door merchandises (grade10)
+## 2. The front door merchandises (grade10) (owner: @sean)
 
 Needs group 1's bump.
 
