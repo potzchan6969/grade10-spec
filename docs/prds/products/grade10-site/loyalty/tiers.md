@@ -69,11 +69,12 @@ We have a cron sweep to render the record for analytics purposes.
 | --- | --- | --- | --- | --- | --- |
 | 2025/02/10 | buys $2,500 · 250 at 1× | +250 | 250 | 250 | Silver |
 | 2025/11/01 | buys $2,000 · 200 at 1×, fifty short | +200 | 450 | 450 | |
-| 2026/03/01 | buys $3,000 · 300 at 1×, reaching 500 — **Gold** | +300 | 750 | 0 | Gold · to 2027/03/01 |
-| 2026/03/05 | redeems 500 | −500 | 250 | | |
-| 2026/09/20 | buys $5,000 · 600 at 1.2×, past 500 · the period extends | +600 | 850 | 600 | |
-| 2027/03/01 | the old period ends, the new one counts from zero | | 850 | 0 | Gold · to 2028/03/01 |
-| 2027/09/20 | twelve months with no activity · the balance lapses | −850 | 0 | | |
+| 2026/02/14 | buys $1,000 · 100 at 1× · the opening 250 ages out | +100 | 550 | 300 | |
+| 2026/03/01 | buys $3,000 · 300 at 1×, reaching 600 — **Gold** | +300 | 850 | 0 | Gold · to 2027/03/01 |
+| 2026/03/05 | redeems 500 | −500 | 350 | | |
+| 2026/09/20 | buys $5,000 · 600 at 1.2×, past 500 · the period extends | +600 | 950 | 600 | |
+| 2027/03/01 | the old period ends, the new one counts from zero | | 950 | 0 | Gold · to 2028/03/01 |
+| 2027/09/20 | twelve months with no activity · the balance lapses | −950 | 0 | | |
 | 2028/02/01 | buys $4,000 · 480 at 1.2×, twenty short | +480 | 480 | 480 | |
 | 2028/03/01 | the period ends on 480, short of 500 — **Silver** | | 480 | 0 | Silver |
 | 2028/03/04 | buys $1,000 · 100 at 1× again | +100 | 580 | 100 | |
@@ -84,11 +85,11 @@ We have a cron sweep to render the record for analytics purposes.
 - **Progress** is measured over whatever the Period column names: the rolling
   twelve months while no tier period is running, what the tier period has
   counted once one is
-- **A rolling twelve months** — the three buys come to 750 and the member holds
-  every point of it, but they never sit inside one twelve-month window: by
-  March the 250 from February 2025 has fallen out, so Gold is reached on the
-  500 that is left
-- **Reaching, then keeping** — the 500 that won Gold counts toward nothing
+- **A rolling twelve months** — in February the balance climbs to 550 while the
+  progress falls to 300, because the opening 250 is older than twelve months by
+  the 14th; by March the member holds 850 points and reaches Gold on the 600
+  still inside the window
+- **Reaching, then keeping** — the 600 that won Gold counts toward nothing
   afterwards, because a period counts only what is earned after it starts; the
   same happens on 2027/03/01, so what was earned that September cannot buy a
   third period
