@@ -23,5 +23,5 @@ Needs group 1's bump.
 
 ## 3. The manual (grade10-spec) (owner: @sean)
 
-- [ ] 3.1 Say on the front door's page that its row merchandises rather than sells, and record why a control the surface cannot honour is worse than none
-- [ ] 3.2 Verify: `pnpm check:manual`
+- [x] 3.1 Say on the front door's page that its row merchandises rather than sells, and record why a control the surface cannot honour is worse than none
+- [x] 3.2 Verify: `pnpm check:manual`
