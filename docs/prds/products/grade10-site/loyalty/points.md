@@ -7,9 +7,8 @@ order: 1
 A point is $10 of qualifying goods, priced once when a paid order reaches
 the programme. Behind every member is an append-only ledger of dated point
 lots, and a balance is a query over it — nothing is edited, so nothing can
-quietly drift ([[grade10-site-loyalty-programme-SC-03]], [[grade10-site-loyalty-programme-SC-04]], [[grade10-site-loyalty-programme-SC-05]]). A
-purchase recorded twice under its own key answers once and records nothing
-twice ([[grade10-site-loyalty-programme-SC-10]], [[grade10-site-loyalty-programme-SC-11]]).
+quietly drift. A purchase recorded twice under its own key answers once and
+records nothing twice.
 
 ## Rules
 
@@ -22,7 +21,7 @@ twice ([[grade10-site-loyalty-programme-SC-10]], [[grade10-site-loyalty-programm
 | Rounding | **$139** at **1.2×** = **1.2×13** = **15 points** |
 | Timing | **After fulfillment** |
 
-## Qualification criteria
+## Qualification Criteria
 
 Points are earned from the **net paid amount after any discount, excluding shipping and tax**.
 
@@ -35,7 +34,7 @@ Points are earned from the **net paid amount after any discount, excluding shipp
 | Grading fees | **No**, excluded as a product |
 | Auction wins | **No** today, a later-phase candidate |
 
-## Pricing an order
+## Backend Flow
 
 An order is priced once, when it is paid, and the number written then is the
 one every point and every refund is read against.
@@ -62,7 +61,7 @@ The read back from Shopify is what would answer for the line. A read that answer
 No amount, so no order event and no points — counted, and granted when a retry classifies the sale
 :::
 
-:::flow{title="From a paid order to points" case="Nothing itemised" diagram="assets/diagrams/loyalty-pricing-unitemised.svg"}
+:::flow{title="From a paid order to points" case="A total with no lines" diagram="assets/diagrams/loyalty-pricing-unitemised.svg"}
 ## *Shop* — **Order paid**
 One goods total and no lines at all
 
@@ -92,7 +91,7 @@ whose tax-free money the shop never states lands there too. What prices the
 order then, in order:
 
 1. **Store's own item prices** — the whole-order discount shared across the lines by value
-2. **Shop's stated goods total** — only where the shop itemised nothing; the total still holds a line the rule threw out, so an unanswered line never falls here
+2. **Shop's stated goods total** — only where the shop sent no lines; the total still holds a line the rule threw out, so an unanswered line never falls here
 3. **Nothing** — the points wait, counted, until a source can classify the sale
 
 :::detail{title="Line verdicts" for="engineer"}
@@ -111,19 +110,15 @@ the member still holds from them.
 - **Goods only** — the store sends the goods share of a refund, priced the
   way the earn was, so refunding the shipping removes no points
 - **Same rate** — money comes back at the rate the credit that earned it
-  charged, the last money at the last rate ([[grade10-site-loyalty-programme-SC-42]])
+  charged, the last money at the last rate
 - **Once over the whole** — each refund resumes where the last stopped, so
   two halves take exactly what one refund of the whole takes
-  ([[grade10-site-loyalty-programme-SC-35]])
 - **Never below zero** — a claw-back takes only what the member still holds
   from that money; the gap is counted, spent points first, expired next
-  ([[grade10-site-loyalty-programme-SC-36]])
 - **Early refund waits** — a refund that arrives before its earn is refused
   and retried until the earn lands, then claws back once
-  ([[grade10-site-loyalty-programme-SC-37]])
 - **Tier** — the contribution the points made leaves with them, and the tier
-  is judged again at once ([[grade10-site-loyalty-programme-SC-38]]) —
-  [Tiers](/p/grade10-site/loyalty/tiers)
+  is judged again at once — [Tiers](/p/grade10-site/loyalty/tiers)
 
 :::example{title="Shipping refunded" tier="Gold" shipping="$30"}
 - Gengar single $139
@@ -243,22 +238,20 @@ lapse that has happened is never undone.
 
 - **Window** — twelve calendar months on the Hong Kong clock: the same day
   and time a year on, 365 or 366 days, never a day count; a 29 February lapses
-  on the 28th ([[grade10-site-loyalty-programme-SC-150]])
+  on the 28th
 - **Activity** — a purchase or a redemption, even a spend too small to earn a
-  point; each pushes the whole balance's date to twelve months from its own
-  day ([[grade10-site-loyalty-programme-SC-94]], [[grade10-site-loyalty-programme-SC-95]], [[grade10-site-loyalty-programme-SC-100]])
+  point; each pushes the whole balance's date to twelve months from its own day
 - **Not activity** — a campaign grant, a correction, a claw-back, a reversal;
   none moves the date, and the points a grant or a correction adds live out
-  their own twelve months ([[grade10-site-loyalty-programme-SC-98]], [[grade10-site-loyalty-programme-SC-99]])
+  their own twelve months
 - **Forwards only** — a late record shortens nothing; the date sits where the
-  latest activity put it ([[grade10-site-loyalty-programme-SC-101]])
+  latest activity put it
 - **Born lapsed** — a record older than a year is written with its date already
-  past: on the ledger, counting nothing, moving nothing ([[grade10-site-loyalty-programme-SC-151]])
+  past: on the ledger, counting nothing, moving nothing
 - **Settled first** — whatever is already dead is written off before the date
-  moves, so no extension reaches back ([[grade10-site-loyalty-programme-SC-97]])
+  moves, so no extension reaches back
 - **No sweep needed** — a lot past its date stops counting the instant it is
-  read; the nightly sweep only writes the record, and a run cut short
-  converges ([[grade10-site-loyalty-programme-SC-96]], [[grade10-site-loyalty-programme-SC-102]])
+  read; the nightly sweep only writes the record, and a run cut short converges
 
 :::example{title="Buying or redeeming keeps the balance alive"}
 | When | Event | Points | Balance |
@@ -340,33 +333,16 @@ The window is calendar months, so a day the next year does not have lands
 on the last day of that month.
 :::
 
-## Grants by operators
+## Admin Grants
 
-An operator can add points two ways, and the difference is the whole point.
-A **campaign grant** — a sign-up promotion, a goodwill gift — credits both
-counts, so it can move a member up a tier ([[grade10-site-loyalty-programme-SC-49]]). A
-**correction** credits or debits the redeemable balance alone, so fixing a
-mistake never promotes anyone ([[grade10-site-loyalty-programme-SC-48]]). Neither keeps the balance
-alive. The reason an operator types goes to the audit trail; the ledger
-carries only its digest.
+An operator moves points by hand from the admin console two ways, and the two
+part on one question: do the points count toward the tier?
 
-## Test cases
-
-::cases{id="grade10-site/loyalty/programme"}
-
-:::detail{title="Delivery and metrics" for="engineer"}
-- **Handoff** — the store writes an order event in the transaction that marks
-  the order paid and drains it to loyalty; the event id is the idempotency
-  key, so a redelivery is free ([[grade10-site-loyalty-programme-SC-39]], [[grade10-site-loyalty-programme-SC-40]],
-  [[grade10-site-loyalty-programme-SC-41]]). The retry curve, parking and the backlog gauge are the
-  store's: [Commerce](/p/grade10-site/commerce/commerce)
-- **Handshake** — a drain checks the programme's currency and earn basis
-  against its own before it delivers; a mismatch stops the drain, and a
-  refusal is reported, not swallowed ([[grade10-site-loyalty-programme-SC-43]], [[grade10-site-loyalty-programme-SC-44]])
-- **Keys** — `earn:<event id>` for a spend, `revoke:<event id>` for a refund,
-  the order id for a points capture. Loyalty prefixes the earn key again, so
-  stored keys read `earn:earn:<id>`; that is kept on purpose
-- **Metrics** — `loyalty.points.earned`, `.expired`, `.dead_on_arrival` on its
-  own series, `loyalty.clawback.shortfall` by cause;
-  `commerce.order_event.undelivered` and `.stuck` on the store side
-:::
+- **Campaign grant** — a sign-up promotion, a goodwill gift; adds to the
+  redeemable balance and to what counts toward the next tier and retention, so
+  it can promote a member
+- **Correction** — putting a mistake right; adds to or takes from the
+  redeemable balance alone, so it never promotes anyone
+- **Neither is activity** — no grant pushes the expiry date out
+- **Both carry a reason** — what the operator types goes to the audit trail;
+  the ledger carries only its digest
