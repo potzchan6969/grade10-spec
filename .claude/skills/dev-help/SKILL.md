@@ -45,6 +45,12 @@ Off the delivery line, and not a sequence — pick by what you are touching. All
 | `/design-tokens` | A token value moved — pull a designer's change in, rebuild the theme CSS, push values back. Never hand-edit the generated CSS. | "Design moved the primary colour — pull it in and rebuild the theme CSS." |
 | `/design-sync-check` | `design-sync:check` failed, the nightly reported drift, or Dev Mode is emitting something wrong. Triage what it printed. | "`design-sync:check` is failing — triage what it printed." |
 
+## Email
+
+| Invoke | When | Example |
+| --- | --- | --- |
+| `/email-drafting` | Compose or revise a React Email template, shared email component, preheader, CTA, or email-safe styling. | "Draft the outbid email for the auction notification." |
+
 A contract change found this way is still an OpenSpec change: name the exact exports and the consuming applications, then rejoin at `/planning-pm`.
 
 ## Suggest
