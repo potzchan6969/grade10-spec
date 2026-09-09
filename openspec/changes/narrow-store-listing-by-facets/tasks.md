@@ -49,9 +49,3 @@ Needs group 1's keys and group 2's reads landed.
 - [x] 4.1 Rewrite the product listing page's shape and its URL list for a listing narrowed by facets, with a collection as a way in rather than a filter, and record on its decisions why one narrowing is in force at a time
 - [x] 4.2 Verify: `pnpm check:manual`
 
-## 5. Archive hand-off (grade10-spec)
-
-Runs after the change is deployed, not when it merges.
-
-- [ ] 5.1 Copy the delta's `## Feature set` groups into the durable capability's feature set, and the change's `user-journeys.md` over the capability's own, so the `-US-` ids survive the fold
-- [ ] 5.2 Verify: `pnpm check:manual`, `pnpm run archive:preflight`
