@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
   balances,
-  elapsed,
   formatMoney,
   orderTotal,
   readExample,
@@ -104,10 +103,10 @@ describe("a timeline", () => {
   const TIMELINE = [
     "| When | Event | Points | Balance |",
     "| --- | --- | --- | --- |",
-    "| 3 Jan 2026 | earns 13 pts × 1.2 | +15 | 15 |",
+    "| 2026/01/03 | earns 13 pts × 1.2 | +15 | 15 |",
     "| | the same day, redeems | −5 | 10 |",
-    "| 20 Nov 2026 | redeems again | −5 | 5 |",
-    "| 20 Nov 2027 | lapses | −5 | 0 |",
+    "| 2026/11/20 | redeems again | −5 | 5 |",
+    "| 2027/11/20 | lapses | −5 | 0 |",
   ].join("\n");
 
   it("reads days, a blank day sharing the one above", () => {
@@ -115,10 +114,10 @@ describe("a timeline", () => {
     if ("problem" in read) throw new Error(read.problem);
     expect(read.ledger.kind).toBe("timeline");
     expect(read.ledger.rows.map((row) => row.label)).toEqual([
-      "3 Jan 2026",
+      "2026/01/03",
       "",
-      "20 Nov 2026",
-      "20 Nov 2027",
+      "2026/11/20",
+      "2027/11/20",
     ]);
     const days = read.ledger.rows.map((row) => row.day ?? Number.NaN);
     expect(days[1]).toBe(days[0]);
@@ -126,49 +125,15 @@ describe("a timeline", () => {
   });
 
   it("refuses a day that reads wrong, a first row with none, and time running back", () => {
-    expect(problemOf(TIMELINE.replace("20 Nov 2026", "Nov 2026"))).toMatch(
+    expect(problemOf(TIMELINE.replace("2026/11/20", "Nov 2026"))).toMatch(
       /row 3: a day reads/,
     );
-    expect(problemOf(TIMELINE.replace("| 3 Jan 2026 |", "| |"))).toMatch(
+    expect(problemOf(TIMELINE.replace("| 2026/01/03 |", "| |"))).toMatch(
       /row 1: a day reads/,
     );
-    expect(problemOf(TIMELINE.replace("20 Nov 2027", "1 Jan 2026"))).toMatch(
+    expect(problemOf(TIMELINE.replace("2027/11/20", "2026/01/01"))).toMatch(
       /row 4 runs back in time/,
     );
-  });
-});
-
-describe("elapsed", () => {
-  const day = (iso: string) => Date.parse(`${iso}T00:00:00Z`);
-
-  it("counts calendar months, then the days left over", () => {
-    expect(elapsed(day("2026-01-03"), day("2026-06-01"))).toEqual({
-      months: 4,
-      days: 29,
-    });
-    expect(elapsed(day("2026-01-03"), day("2027-01-03"))).toEqual({
-      months: 12,
-      days: 0,
-    });
-    expect(elapsed(day("2026-03-08"), day("2026-04-10"))).toEqual({
-      months: 1,
-      days: 2,
-    });
-    expect(elapsed(day("2026-01-03"), day("2026-01-20"))).toEqual({
-      months: 0,
-      days: 17,
-    });
-  });
-
-  it("clamps the day of month the way the programme does", () => {
-    expect(elapsed(day("2026-01-31"), day("2026-02-28"))).toEqual({
-      months: 1,
-      days: 0,
-    });
-    expect(elapsed(day("2024-02-29"), day("2025-02-28"))).toEqual({
-      months: 12,
-      days: 0,
-    });
   });
 });
 
@@ -180,5 +145,143 @@ describe("money", () => {
     expect(readMoney("$1,00")).toBeUndefined();
     expect(formatMoney(6000)).toBe("$6,000");
     expect(formatMoney(12.5)).toBe("$12.50");
+  });
+});
+
+/** A period marks what was running while the rows happened — named once, then
+ * left blank for as long as it runs. */
+describe("a ledger that marks its periods", () => {
+  const PERIODS = [
+    "| When | Event | Points | Balance | Period |",
+    "| --- | --- | --- | --- | --- |",
+    "| 2026/01/03 | earns | +300 | 300 | Silver |",
+    "| 2026/03/01 | earns | +250 | 550 | Gold |",
+    "| 2026/03/05 | redeems | −500 | 50 | |",
+  ].join("\n");
+
+  it("carries each row's period, a blank one sharing the span above", () => {
+    const read = readExample(example(PERIODS));
+    if ("problem" in read) throw new Error(read.problem);
+    expect(read.ledger.rows.map((row) => row.period)).toEqual([
+      "Silver",
+      "Gold",
+      "Gold",
+    ]);
+  });
+
+  it("leaves a ledger without the column unmarked", () => {
+    const read = readExample(example(LEDGER));
+    if ("problem" in read) throw new Error(read.problem);
+    expect(read.ledger.rows.every((row) => row.period === "")).toBe(true);
+  });
+
+  it("refuses a period on a steps ledger, which has no span of days", () => {
+    const steps = PERIODS.replace("| When |", "| Step |")
+      .replace(/\| \d+ \w+ \d{4} \|/g, "| Earns |")
+      .replace("| Earns | redeems", "| Refunds | redeems");
+    expect(problemOf(steps)).toBe(
+      "`Period` marks a span of days, which a steps ledger has none of — write it as a timeline, or put the span in the step",
+    );
+  });
+
+  it("counts the period column when a row is short", () => {
+    const short = `${PERIODS}\n| 2026/03/09 | earns | +10 | 60 |`;
+    expect(problemOf(short)).toBe("row 4 has 4 cells, not 5");
+  });
+});
+
+/** A second running figure the rows state: what a window holds while the
+ * balance goes its own way. */
+describe("a ledger that keeps a progress column", () => {
+  const PROGRESS = [
+    "| When | Event | Points | Balance | Progress |",
+    "| --- | --- | --- | --- | --- |",
+    "| 2026/01/03 | earns | +300 | 300 | 300 |",
+    "| 2026/03/05 | redeems | −500 | 50 | |",
+    "| 2027/01/03 | the earn ages out | | 50 | 0 |",
+  ].join("\n");
+
+  it("carries a stated figure until the next one, unmoved by the points", () => {
+    const read = readExample(
+      example(`| When | Event | Points | Balance | Progress |
+| --- | --- | --- | --- | --- |
+| 2026/01/03 | earns | +300 | 300 | 300 |
+| 2026/03/05 | redeems | −250 | 50 | |
+| 2027/01/03 | the earn ages out | | 50 | 0 |`),
+    );
+    if ("problem" in read) throw new Error(read.problem);
+    expect(read.ledger.progress).toBe(true);
+    expect(read.ledger.rows.map((row) => row.progress)).toEqual([300, 300, 0]);
+  });
+
+  it("leaves a ledger without the column keeping none", () => {
+    const read = readExample(example(LEDGER));
+    if ("problem" in read) throw new Error(read.problem);
+    expect(read.ledger.progress).toBe(false);
+    expect(read.ledger.rows.every((row) => row.progress === null)).toBe(true);
+  });
+
+  it("refuses a progress that is not a whole number", () => {
+    expect(problemOf(PROGRESS.replace("| 300 | 300 |", "| 300 | +300 |"))).toBe(
+      "row 1: progress is a whole number, or blank to hold the one above",
+    );
+  });
+
+  it("takes progress before the period, and reads both", () => {
+    const both = [
+      "| When | Event | Points | Balance | Progress | Period |",
+      "| --- | --- | --- | --- | --- | --- |",
+      "| 2026/01/03 | earns | +300 | 300 | 300 | Silver |",
+      "| 2026/03/01 | earns | +250 | 550 | 550 | Gold · to 2027/03/01 |",
+    ].join("\n");
+    const read = readExample(example(both));
+    if ("problem" in read) throw new Error(read.problem);
+    expect(read.ledger.rows.map((row) => [row.progress, row.period])).toEqual([
+      [300, "Silver"],
+      [550, "Gold · to 2027/03/01"],
+    ]);
+  });
+});
+
+/** The rail's colour tells one period from the next; a period named none runs
+ * blank, which is how a span inside nothing looks. */
+describe("colouring the periods", () => {
+  const PERIODS = [
+    "| When | Event | Points | Balance | Period |",
+    "| --- | --- | --- | --- | --- |",
+    "| 2026/01/03 | earns | +300 | 300 | Silver |",
+    "| 2026/03/01 | earns | +250 | 550 | Gold · to 2027/03/01 |",
+    "| 2026/03/05 | redeems | −500 | 50 | |",
+  ].join("\n");
+
+  it("keys a colour on the name before the dot, so two terms share it", () => {
+    const read = readExample(example(PERIODS, { periods: "Gold=gold" }));
+    if ("problem" in read) throw new Error(read.problem);
+    expect(read.ledger.tones).toEqual({ Gold: "gold" });
+  });
+
+  it("refuses a colour it does not have", () => {
+    expect(problemOf(PERIODS, { periods: "Gold=amber" })).toBe(
+      "`amber` is not one of the colours: orange, gold, blue, green, red, ink",
+    );
+  });
+
+  it("refuses a period no row is inside", () => {
+    expect(problemOf(PERIODS, { periods: "Black=ink" })).toBe(
+      "no row is inside `Black`",
+    );
+  });
+
+  it("refuses colours on a ledger that marks no periods", () => {
+    expect(problemOf(LEDGER, { periods: "Gold=gold" })).toBe(
+      "`periods` colours the spans a `Period` column marks, and this ledger marks none",
+    );
+  });
+
+  it("closes a period on an em dash, leaving the rows after it inside nothing", () => {
+    const closed = `${PERIODS}\n| 2026/03/09 | earns | +10 | 60 | — |`;
+    const read = readExample(example(closed));
+    if ("problem" in read) throw new Error(read.problem);
+    expect(read.ledger.rows.at(-1)?.period).toBe("");
   });
 });

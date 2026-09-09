@@ -10,6 +10,9 @@ export type ExampleOrder = {
 };
 
 export type ExampleRow = {
+  /** The span this row falls in — blank where it shares the span above, and
+   * empty on a ledger that marks none. */
+  period: string;
   /** The step's name, or on a timeline the day — blank where the row shares the day above. */
   label: string;
   /** On a timeline, the row's day as a UTC instant — shared from above where the label is blank. */
@@ -19,11 +22,35 @@ export type ExampleRow = {
   points: number | null;
   /** The balance after the row, as written; null where the row carries it. */
   balance: number | null;
+  /** A second running figure the rows state rather than reach — tier
+   * progress, a window's total. Null on a ledger that keeps none. */
+  progress: number | null;
 };
+
+/** The colours a period's rail can take. A period the block names none for
+ * runs without one, which is how a span that is inside nothing looks. */
+export const PERIOD_TONES = [
+  "orange",
+  "gold",
+  "blue",
+  "green",
+  "red",
+  "ink",
+] as const;
+export type PeriodTone = (typeof PERIOD_TONES)[number];
+
+/** What a period's colour is keyed on: the name before the first `·`, so two
+ * terms of the same tier read as the same thing wearing different dates. */
+export const periodName = (period: string): string =>
+  period.split("·")[0].trim();
 
 export type ExampleLedger = {
   /** Steps in order, or a timeline where the day is what the reader follows. */
   kind: "steps" | "timeline";
+  /** Whether the rows keep a second running figure. */
+  progress: boolean;
+  /** Period name to the colour its rail wears; empty where none is coloured. */
+  tones: Record<string, PeriodTone>;
   order: ExampleOrder | null;
   rows: ExampleRow[];
   /** Everything after the table: the why. */
@@ -32,6 +59,14 @@ export type ExampleLedger = {
 
 export const STEP_COLUMNS = ["Step", "Event", "Points", "Balance"] as const;
 export const TIMELINE_COLUMNS = ["When", "Event", "Points", "Balance"] as const;
+/** A second running figure beside the balance, stated by each row rather than
+ * reached from the points — what a rolling window holds, what a term counts. */
+export const PROGRESS_COLUMN = "Progress";
+/** The optional last column: what a run of days is inside — a term, a window,
+ * a tier's life. Named once and left blank for as long as it runs, and `—`
+ * closes it: the rows after that are inside nothing. */
+export const PERIOD_COLUMN = "Period";
+const NO_PERIOD = "—";
 const COLUMNS = STEP_COLUMNS.length;
 
 const ITEM = /^-\s+(.+?)\s+(\$\S+)\s*$/;
@@ -39,8 +74,7 @@ const MONEY = /^\$(\d{1,3}(?:,\d{3})*|\d+)(?:\.(\d{2}))?$/;
 const ROW = /^\s*\|(.*)\|\s*$/;
 const RULE = /^\s*\|(?:\s*:?-+:?\s*\|)+\s*$/;
 const SIGNED = /^([+\-−])(\d+)$/;
-const DAY = /^(\d{1,2}) ([A-Z][a-z]{2}) (\d{4})$/;
-const MONTHS = "JanFebMarAprMayJunJulAugSepOctNovDec";
+const DAY = /^(\d{4})\/(\d{2})\/(\d{2})$/;
 
 const cells = (line: string): string[] =>
   (ROW.exec(line)?.[1] ?? "").split("|").map((cell) => cell.trim());
@@ -97,27 +131,48 @@ export function readExample(
   if ("problem" in order) return order;
   while (at < lines.length && lines[at].trim() === "") at += 1;
 
-  const kind = readKind(cells(lines[at] ?? ""));
-  if (kind === undefined) {
+  const header = readKind(cells(lines[at] ?? ""));
+  if (header === undefined) {
     return {
-      problem: `the ledger's columns are \`${STEP_COLUMNS.join(" | ")}\`, or \`${TIMELINE_COLUMNS.join(" | ")}\` for a timeline`,
+      problem: `the ledger's columns are \`${STEP_COLUMNS.join(" | ")}\`, or \`${TIMELINE_COLUMNS.join(" | ")}\` for a timeline, either with \`| ${PROGRESS_COLUMN}\` then \`| ${PERIOD_COLUMN}\` after it — an example walks points moving, so anything else is a plain table`,
     };
   }
+  const { kind, progress: keepsProgress, periods } = header;
+  if (periods && kind === "steps") {
+    return {
+      problem: `\`${PERIOD_COLUMN}\` marks a span of days, which a steps ledger has none of — write it as a timeline, or put the span in the step`,
+    };
+  }
+  const width = COLUMNS + (keepsProgress ? 1 : 0) + (periods ? 1 : 0);
   if (!RULE.test(lines[at + 1] ?? "")) {
     return { problem: "the ledger's header is followed by its rule line" };
   }
 
   const rows: ExampleRow[] = [];
   let day: number | null = null;
+  let period = "";
+  let progress: number | null = null;
   let tail = at + 2;
   for (; tail < lines.length && ROW.test(lines[tail]); tail += 1) {
     const parts = cells(lines[tail]);
-    if (parts.length !== COLUMNS) {
+    if (parts.length !== width) {
       return {
-        problem: `row ${rows.length + 1} has ${parts.length} cells, not ${COLUMNS}`,
+        problem: `row ${rows.length + 1} has ${parts.length} cells, not ${width}`,
       };
     }
-    const [label, event, points, balance] = parts;
+    const [label, event, points, balance, ...extra] = parts;
+    if (keepsProgress) {
+      const stated = readBalance(extra[0]);
+      if (stated === undefined) {
+        return {
+          problem: `row ${rows.length + 1}: ${PROGRESS_COLUMN.toLowerCase()} is a whole number, or blank to hold the one above`,
+        };
+      }
+      if (stated !== null) progress = stated;
+    }
+    const span = periods ? (extra[keepsProgress ? 1 : 0] ?? "") : "";
+    if (span === NO_PERIOD) period = "";
+    else if (span !== "") period = span;
     if (kind === "steps" && label === "") {
       return { problem: `row ${rows.length + 1} names no step` };
     }
@@ -126,7 +181,7 @@ export function readExample(
       when = label === "" ? day : (readDay(label) ?? null);
       if (when === null) {
         return {
-          problem: `row ${rows.length + 1}: a day reads \`3 Jan 2026\`, or is blank to share the day above`,
+          problem: `row ${rows.length + 1}: a day reads \`2026/01/03\`, or is blank to share the day above`,
         };
       }
       if (day !== null && when < day) {
@@ -146,19 +201,72 @@ export function readExample(
         problem: `row ${rows.length + 1}: a balance is a whole number, or blank`,
       };
     }
-    rows.push({ label, day: when, event, points: delta, balance: after });
+    rows.push({
+      label,
+      day: when,
+      event,
+      points: delta,
+      balance: after,
+      progress: keepsProgress ? progress : null,
+      period,
+    });
   }
   if (rows.length === 0) return { problem: "the ledger has no rows" };
 
   const mismatch = reconcile(rows);
   if (mismatch !== null) return { problem: mismatch };
 
+  const coloured = readTones(block.periods, periods, rows);
+  if ("problem" in coloured) return coloured;
+
   const after = lines.slice(tail).join("\n").trim();
   const note: BodyItem[] =
     after === "" ? [] : [{ type: "prose", markdown: after }];
   return {
-    ledger: { kind, order: order.order, rows, note: [...note, ...rest] },
+    ledger: {
+      kind,
+      progress: keepsProgress,
+      tones: coloured.tones,
+      order: order.order,
+      rows,
+      note: [...note, ...rest],
+    },
   };
+}
+
+function readTones(
+  spec: string | undefined,
+  periods: boolean,
+  rows: ExampleRow[],
+): { tones: Record<string, PeriodTone> } | { problem: string } {
+  if (spec === undefined) return { tones: {} };
+  if (!periods) {
+    return {
+      problem: `\`periods\` colours the spans a \`${PERIOD_COLUMN}\` column marks, and this ledger marks none`,
+    };
+  }
+  const named = new Set(rows.map((row) => periodName(row.period)));
+  const tones: Record<string, PeriodTone> = {};
+  for (const entry of spec.split(",")) {
+    const [name, colour] = entry.split("=").map((part) => part.trim());
+    if (!name || colour === undefined) {
+      return {
+        problem: "`periods` pairs each period with its colour, `Gold=gold`",
+      };
+    }
+    const tone = PERIOD_TONES.find((known) => known === colour);
+    if (tone === undefined) {
+      return {
+        problem: `\`${colour}\` is not one of the colours: ${PERIOD_TONES.join(", ")}`,
+      };
+    }
+    if (tones[name] !== undefined) {
+      return { problem: `\`${name}\` is given a colour twice` };
+    }
+    if (!named.has(name)) return { problem: `no row is inside \`${name}\`` };
+    tones[name] = tone;
+  }
+  return { tones };
 }
 
 function readOrder(
@@ -181,48 +289,33 @@ function readOrder(
   return { order: { items, shipping, tier: block.tier ?? null } };
 }
 
-function readKind(header: string[]): ExampleLedger["kind"] | undefined {
+function readKind(
+  header: string[],
+):
+  | { kind: ExampleLedger["kind"]; progress: boolean; periods: boolean }
+  | undefined {
+  const periods = header.at(-1) === PERIOD_COLUMN;
+  let named = periods ? header.slice(0, -1) : header;
+  const progress = named.at(-1) === PROGRESS_COLUMN;
+  if (progress) named = named.slice(0, -1);
   const matches = (columns: readonly string[]) =>
-    header.length === columns.length &&
-    header.every((cell, index) => cell === columns[index]);
-  if (matches(STEP_COLUMNS)) return "steps";
-  if (matches(TIMELINE_COLUMNS)) return "timeline";
+    named.length === columns.length &&
+    named.every((cell, index) => cell === columns[index]);
+  if (matches(STEP_COLUMNS)) return { kind: "steps", progress, periods };
+  if (matches(TIMELINE_COLUMNS)) return { kind: "timeline", progress, periods };
   return undefined;
 }
 
-/** `3 Jan 2026` as a day number, so a timeline can be held to running forwards. */
+/** `2026/01/03` as a day number, so a timeline can be held to running
+ * forwards. A day the calendar does not have is refused, not rolled over. */
 function readDay(text: string): number | undefined {
   const match = DAY.exec(text);
   if (!match) return undefined;
-  const month = MONTHS.indexOf(match[2]) / 3;
-  if (!Number.isInteger(month)) return undefined;
-  return Date.UTC(Number(match[3]), month, Number(match[1]));
-}
-
-const DAY_MS = 86_400_000;
-
-/**
- * Whole calendar months from `start` to `end`, then the days left over —
- * the units the programme's windows are counted in. The day of month is
- * clamped the way the programme clamps it, so 31 January to 28 February is
- * one month, not 28 days.
- */
-export function elapsed(
-  start: number,
-  end: number,
-): { months: number; days: number } {
-  const from = new Date(start);
-  let months = 0;
-  while (addMonths(from, months + 1) <= end) months += 1;
-  const days = Math.round((end - addMonths(from, months)) / DAY_MS);
-  return { months, days };
-}
-
-function addMonths(from: Date, months: number): number {
-  const year = from.getUTCFullYear();
-  const month = from.getUTCMonth() + months;
-  const last = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
-  return Date.UTC(year, month, Math.min(from.getUTCDate(), last));
+  const [year, month, day] = match.slice(1).map(Number);
+  const at = Date.UTC(year, month - 1, day);
+  return new Date(at).getUTCDate() === day && month >= 1 && month <= 12
+    ? at
+    : undefined;
 }
 
 function readPoints(cell: string): number | null | undefined {

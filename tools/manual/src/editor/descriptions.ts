@@ -41,7 +41,7 @@ const INFO: Record<string, BlockInfo> = {
   },
   example: {
     label: "Example",
-    hint: "One worked case: the cart as a list, a ledger of Step | Event | Points | Balance (When, for a timeline), then the why.",
+    hint: 'One worked case: the cart as a list, a ledger of Step | Event | Points | Balance (When, for a timeline; Progress carries a second running figure, and a last Period column brackets a run of days, coloured by periods="Gold=gold"), then the why.',
   },
 };
 
