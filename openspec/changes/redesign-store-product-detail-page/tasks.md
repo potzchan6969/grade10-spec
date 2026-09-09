@@ -17,7 +17,7 @@ Depends on group 1 landing in the `grade10-spec` main branch and the
 
 Depends on group 2's contract and fixture fields being available.
 
-- [x] 3.1 Make `grade10-site-store-product-page-SC-13`, `grade10-site-store-product-page-SC-14`, and `grade10-site-store-product-page-SC-15` pass: compose the Figma product-detail layout with all media, honest no-image placeholder, breadcrumbs, price context, inventory message, badges, shipping/pickup facts, and SKU
+- [ ] 3.1 Make `grade10-site-store-product-page-SC-13`, `grade10-site-store-product-page-SC-14`, and `grade10-site-store-product-page-SC-15` pass: compose the Figma product-detail layout with all media, honest no-image placeholder, breadcrumbs, price context, inventory message, badges, shipping/pickup facts, and SKU
 - [x] 3.2 Make `grade10-site-store-product-page-SC-16` pass: add the three-line description disclosure with a real button, stable region id, and `aria-expanded` / `aria-controls`
 - [x] 3.3 Make `grade10-site-store-product-page-SC-17` and existing `grade10-site-store-product-page-SC-07` through `grade10-site-store-product-page-SC-10` pass: add the design-system quantity stepper and pending/added states while preserving chosen-variant and cart-line behavior
 - [x] 3.4 Make `grade10-site-store-product-page-SC-18` and existing `grade10-site-store-product-page-SC-11` through `grade10-site-store-product-page-SC-12` pass: keep prices visible, mark unavailable variants, and disable the sold-out action
