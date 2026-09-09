@@ -68,8 +68,7 @@ We have a cron sweep to render the record for analytics purposes.
 | When | Event | Points | Balance | Progress | Period |
 | --- | --- | --- | --- | --- | --- |
 | 2025/02/10 | buys $2,500 · 250 at 1× | +250 | 250 | 250 | Silver |
-| 2025/11/01 | buys $1,000 · 100 at 1× | +100 | 350 | 350 | |
-| 2026/01/03 | buys $1,000 · 100 at 1×, fifty short | +100 | 450 | 450 | |
+| 2025/11/01 | buys $2,000 · 200 at 1×, fifty short | +200 | 450 | 450 | |
 | 2026/03/01 | buys $3,000 · 300 at 1×, reaching 500 — **Gold** | +300 | 750 | 0 | Gold · to 2027/03/01 |
 | 2026/03/05 | redeems 500 | −500 | 250 | | |
 | 2026/09/20 | buys $5,000 · 600 at 1.2×, past 500 · the period extends | +600 | 850 | 600 | |
@@ -85,9 +84,10 @@ We have a cron sweep to render the record for analytics purposes.
 - **Progress** is measured over whatever the Period column names: the rolling
   twelve months while no tier period is running, what the tier period has
   counted once one is
-- **A rolling twelve months** — by March 2026 the member has earned 750 points
-  and still holds every one, but the 250 from February 2025 is older than
-  twelve months, so the 500 that reaches Gold is the three later buys alone
+- **A rolling twelve months** — the three buys come to 750 and the member holds
+  every point of it, but they never sit inside one twelve-month window: by
+  March the 250 from February 2025 has fallen out, so Gold is reached on the
+  500 that is left
 - **Reaching, then keeping** — the 500 that won Gold counts toward nothing
   afterwards, because a period counts only what is earned after it starts; the
   same happens on 2027/03/01, so what was earned that September cannot buy a
