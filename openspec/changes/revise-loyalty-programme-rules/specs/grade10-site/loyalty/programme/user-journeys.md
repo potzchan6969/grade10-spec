@@ -1,15 +1,15 @@
 ## User journeys
 
-### grade10-site-loyalty-programme-US-01: Member holds tier points and a redeemable balance apart
+### grade10-site-loyalty-programme-US-01: Member holds one balance, with tier progress counted apart
 
 **As a** member,
-**I want** earning to credit both counts and redeeming to spend only the balance,
+**I want** earning to count toward both and redeeming to spend only the balance,
 **so that** spending points cannot take my tier, and losing the balance cannot take it either.
 
 **Accepted by:**
 
 - `grade10-site-loyalty-programme-SC-70` — Redeeming costs no tier progress
-- `grade10-site-loyalty-programme-SC-71` — Earning credits both counts
+- `grade10-site-loyalty-programme-SC-71` — Earning adds to the balance and the progress
 - `grade10-site-loyalty-programme-SC-72` — Losing the balance does not lose the tier
 - `grade10-site-loyalty-programme-SC-73` — Losing the tier does not lose the balance
 - `grade10-site-loyalty-programme-SC-74` — A first purchase can promote
@@ -92,7 +92,7 @@
 - `grade10-site-loyalty-programme-SC-124` — A member's activity carries nothing operator-facing
 - `grade10-site-loyalty-programme-SC-125` — The components take content, not sources
 - `grade10-site-loyalty-programme-SC-03` — Balance excludes expired and spent points
-- `grade10-site-loyalty-programme-SC-126` — Tier points are derived from the same entries
+- `grade10-site-loyalty-programme-SC-126` — Tier progress is derived from the same entries
 - `grade10-site-loyalty-programme-SC-04` — A balance never goes negative
 - `grade10-site-loyalty-programme-SC-05` — Every debit is fully accounted
 - `grade10-site-loyalty-programme-SC-17` — Two tiers share an identifier

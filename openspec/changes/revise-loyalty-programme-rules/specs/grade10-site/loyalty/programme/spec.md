@@ -23,36 +23,37 @@ the spendable balance is not the tier.
 
 ## ADDED Requirements
 
-### Requirement: Tier points and redeemable points are counted separately
+### Requirement: Tier progress is a sum over a period, not a second balance
 
-The programme SHALL count two quantities for each member. Tier points are the
-points earned inside a qualifying window; they decide tier and SHALL NOT be
-reduced by a redemption. Redeemable points are the spendable balance; they rise
-on earning and fall on redemption.
+A member SHALL hold one balance, which rises on earning and falls on
+redemption. Tier progress SHALL be the points that member earned inside a
+stated period, summed from the same entries; it decides tier and SHALL NOT be
+reduced by a redemption.
 
-Every earning and every reward grant SHALL add the same amount to both
-counts; an operator correction SHALL add to the redeemable balance alone. A redemption
-SHALL reduce redeemable points alone. A claw-back SHALL reduce both.
+Every earning and every reward grant SHALL add to the balance and count toward
+progress; an operator correction SHALL add to the balance alone. A redemption
+SHALL reduce the balance alone. A claw-back SHALL reduce both, dated to the
+earning it cancels.
 
 The two SHALL run on independent clocks: a tier's validity is measured from the
-date that tier was activated for that member, and the redeemable balance's
-expiry is measured from that member's most recent earning or redemption.
+date that tier was activated for that member, and the balance's expiry is
+measured from that member's most recent earning or redemption.
 Neither clock SHALL move the other.
 
 #### Scenario: grade10-site-loyalty-programme-SC-70 - Redeeming costs no tier progress
 
-- **WHEN** a member holding 600 tier points and 600 redeemable points redeems a reward priced at 500 points
-- **THEN** their redeemable balance is 100
-- **AND** their tier points are still 600, and their tier is unchanged
+- **WHEN** a member whose balance is 600 and whose tier progress is 600 redeems a reward priced at 500 points
+- **THEN** their balance is 100
+- **AND** their tier progress is still 600, and their tier is unchanged
 
-#### Scenario: grade10-site-loyalty-programme-SC-71 - Earning credits both counts
+#### Scenario: grade10-site-loyalty-programme-SC-71 - Earning adds to the balance and the progress
 
 - **WHEN** a member earns 40 points
-- **THEN** their tier points and their redeemable balance each rise by 40
+- **THEN** their balance rises by 40, and the 40 counts toward their tier progress
 
 #### Scenario: grade10-site-loyalty-programme-SC-72 - Losing the balance does not lose the tier
 
-- **WHEN** a member's redeemable balance expires
+- **WHEN** a member's balance expires
 - **THEN** they keep the tier they hold until that tier's own validity period ends
 
 #### Scenario: grade10-site-loyalty-programme-SC-73 - Losing the tier does not lose the balance
@@ -62,8 +63,8 @@ Neither clock SHALL move the other.
 
 ### Requirement: A tier is activated the moment it is reached, and earns from the next purchase
 
-A member SHALL be promoted at the instant their tier points inside the
-qualifying window reach a tier's threshold, including on their first recorded
+A member SHALL be promoted at the instant their tier progress inside the
+qualifying window reaches a tier's threshold, including on their first recorded
 purchase, without waiting for any scheduled pass.
 
 The spend that triggers a promotion SHALL be priced at the tier the member held
@@ -72,12 +73,12 @@ onward.
 
 #### Scenario: grade10-site-loyalty-programme-SC-74 - A first purchase can promote
 
-- **WHEN** a member's first recorded purchase takes their tier points to a tier's threshold
+- **WHEN** a member's first recorded purchase takes their tier progress to a tier's threshold
 - **THEN** they hold that tier from that instant
 
 #### Scenario: grade10-site-loyalty-programme-SC-75 - The triggering purchase earns at the old rate
 
-- **WHEN** a purchase takes a member's tier points from below a tier's threshold to at or above it
+- **WHEN** a purchase takes a member's tier progress from below a tier's threshold to at or above it
 - **THEN** that purchase earns at the multiplier of the tier they held before it
 - **AND** their next purchase earns at the new tier's multiplier
 
@@ -93,8 +94,8 @@ A member's effective tier SHALL be the highest of: the entry tier, any earned
 tier whose validity period has not ended, and any live invitation.
 
 Each earned tier SHALL carry a validity period, measured from the date that tier
-was activated for that member. Earning that tier's retention threshold in tier
-points inside the validity period SHALL start a fresh validity period at the
+was activated for that member. Earning that tier's retention threshold inside
+the validity period SHALL start a fresh validity period at the
 instant the previous one ends, counted again from zero for the new period.
 
 A member who has not earned the retention threshold inside the validity period
@@ -117,7 +118,7 @@ granted or reached in error.
 
 #### Scenario: grade10-site-loyalty-programme-SC-77 - Re-qualifying keeps the tier
 
-- **WHEN** a member earns at least the retention threshold in tier points inside their tier's validity period
+- **WHEN** a member earns at least the retention threshold inside their tier's validity period
 - **THEN** they keep that tier
 - **AND** a fresh validity period starts at the instant the previous one ends
 
@@ -476,8 +477,8 @@ SHALL require no export of its own.
 ### Requirement: The ledger is the only source of a balance
 
 Every point movement SHALL be recorded as a dated entry that is never edited or
-deleted. Both the redeemable balance and the tier point count SHALL be derived
-by asking the ledger, never stored as running totals.
+deleted. Both a member's balance and their tier progress SHALL be derived by
+asking the ledger, never stored as running totals.
 
 #### Scenario: grade10-site-loyalty-programme-SC-03 - Balance excludes expired and spent points
 
@@ -485,9 +486,9 @@ by asking the ledger, never stored as running totals.
 - **THEN** it counts every credit recorded before that instant, less what has been spent or clawed back
 - **AND** it counts nothing once the member's inactivity window has passed
 
-#### Scenario: grade10-site-loyalty-programme-SC-126 - Tier points are derived from the same entries
+#### Scenario: grade10-site-loyalty-programme-SC-126 - Tier progress is derived from the same entries
 
-- **WHEN** a tier point count is asked for over a given window
+- **WHEN** tier progress is asked for over a given window
 - **THEN** it counts the earnings dated inside that window and after the member's most recent demotion, less any claw-backs against them
 - **AND** redemptions do not appear in it
 
@@ -582,7 +583,7 @@ Its ladder SHALL be, in ascending rank:
 | Tier | Earns | Reached by | Valid for | Retained by |
 | --- | --- | --- | --- | --- |
 | Silver | 1× | Every member starts here | Always | — |
-| Gold | 1.2× | 500 tier points inside a rolling twelve months | Twelve months from activation | 500 tier points inside the validity period |
+| Gold | 1.2× | 500 points earned in a rolling twelve months | Twelve months from activation | 500 points earned inside the validity period |
 | Black | 1.7× | Invitation only | The invitation's own end date | A further invitation |
 
 The persisted identifiers for those tiers SHALL be `silver`, `gold` and
@@ -618,7 +619,7 @@ threshold:
 
 #### Scenario: grade10-site-loyalty-programme-SC-24 - The second tier is reached by spending
 
-- **WHEN** a member's tier points inside the rolling twelve months reach 500
+- **WHEN** a member's tier progress over the rolling twelve months reaches 500
 - **THEN** they hold Gold from that instant
 
 #### Scenario: grade10-site-loyalty-programme-SC-132 - Tier records use the public identifiers
@@ -629,12 +630,12 @@ threshold:
 
 #### Scenario: grade10-site-loyalty-programme-SC-133 - Gold is retained by earning again
 
-- **WHEN** a Gold member earns 500 tier points inside their validity period
+- **WHEN** a Gold member earns 500 points inside their validity period
 - **THEN** they hold Gold for a further twelve months
 
 #### Scenario: grade10-site-loyalty-programme-SC-134 - Gold lapses after a quiet year
 
-- **WHEN** a Gold member earns 300 tier points in the twelve months following their upgrade
+- **WHEN** a Gold member earns 300 points in the twelve months following their upgrade
 - **THEN** they hold Silver from the instant those twelve months end
 
 #### Scenario: grade10-site-loyalty-programme-SC-135 - A quiet year empties the balance
@@ -708,8 +709,8 @@ Returned points SHALL rejoin the redeemable balance under the inactivity window
 already running: a reversal SHALL NOT reset that window, and SHALL return nothing
 to a member whose window has already passed.
 
-A member's tier points SHALL be unaffected by a reversal, because the redemption
-did not reduce them. Stock SHALL be returned only when the redemption actually
+A member's tier progress SHALL be unaffected by a reversal, because the
+redemption did not reduce it. Stock SHALL be returned only when the redemption actually
 consumed a unit.
 
 #### Scenario: grade10-site-loyalty-programme-SC-138 - A reversal voids the coupon
@@ -753,7 +754,7 @@ consumed a unit.
 #### Scenario: grade10-site-loyalty-programme-SC-144 - Tier progress is untouched by a reversal
 
 - **WHEN** a redemption is reversed
-- **THEN** the member's tier points are unchanged
+- **THEN** the member's tier progress is unchanged
 
 #### Scenario: grade10-site-loyalty-programme-SC-34 - An unlimited reward returns no stock
 
@@ -765,7 +766,7 @@ consumed a unit.
 When money is returned, the programme SHALL remove the points that money earned,
 priced at the rate each credit recorded, and SHALL never remove more than the
 member still holds from that money. A claw-back SHALL reduce both the member's
-redeemable balance and their tier points, SHALL NOT reset the member's
+balance and their tier progress, SHALL NOT reset the member's
 inactivity window, and SHALL re-evaluate the member's tier at once: money
 returned is spend that never happened, so the tier it bought does not survive
 it.
@@ -806,7 +807,7 @@ for the whole sum would have.
 
 #### Scenario: grade10-site-loyalty-programme-SC-146 - A claw-back can demote
 
-- **WHEN** a claw-back takes a member's tier points below what attained their tier
+- **WHEN** a claw-back takes a member's tier progress below what attained their tier
 - **THEN** they hold the tier their remaining points still reach, from that instant
 - **AND** the drop is recorded in tier history
 
