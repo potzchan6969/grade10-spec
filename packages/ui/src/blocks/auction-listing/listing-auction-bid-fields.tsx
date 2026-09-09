@@ -24,8 +24,8 @@ import {
 } from "./listing-countdown-digit";
 import { ListingCountdownDisplay } from "./listing-countdown-display";
 import {
-  ListingQuickMaximumBidActions,
   type BidAuthorizationStatus,
+  ListingQuickMaximumBidActions,
   type ListingQuickMaximumBidActionsCopy,
 } from "./listing-quick-maximum-bid-actions";
 import { ListingRollingMoneyDisplay } from "./listing-rolling-money-display";

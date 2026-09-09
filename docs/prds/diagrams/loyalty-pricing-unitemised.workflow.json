@@ -87,10 +87,7 @@
       "to": "loyalty-points-granted",
       "label": "order event · async",
       "variant": "dashed",
-      "labelAt": [
-        195,
-        305
-      ],
+      "labelAt": [195, 305],
       "fromSide": "bottom",
       "toSide": "top"
     }

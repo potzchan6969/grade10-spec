@@ -1,3 +1,5 @@
+// biome-ignore-all lint/security/noDangerouslySetInnerHtml: the font stylesheet is a static email asset.
+
 import { Font } from "react-email";
 
 export const DefaultFonts = () => (

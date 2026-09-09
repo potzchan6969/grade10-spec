@@ -33,9 +33,7 @@ export default function OutbidEmail({
       lotTitle={lotTitle}
       preheader={`Leading bid is now ${currentBid}. Closes ${effectiveClosesAt}.`}
       primaryImageUrl={primaryImageUrl}
-      secondary={
-        yourBid ? { label: "Your bid", value: yourBid } : undefined
-      }
+      secondary={yourBid ? { label: "Your bid", value: yourBid } : undefined}
       whyYouGotThis="You receive this because you have bid on this lot."
     />
   );

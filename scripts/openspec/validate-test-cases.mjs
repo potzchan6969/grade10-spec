@@ -28,12 +28,7 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
-import {
-  existsSync,
-  readdirSync,
-  readFileSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -908,7 +903,11 @@ if (args.swept) {
     );
     process.exit(0);
   }
-  console.log(red(`${drift.length} change${drift.length === 1 ? "" : "s"} a sweep may not make`));
+  console.log(
+    red(
+      `${drift.length} change${drift.length === 1 ? "" : "s"} a sweep may not make`,
+    ),
+  );
   for (const d of drift.slice(0, 40)) console.log(`  ${d}`);
   if (drift.length > 40) console.log(dim(`  … and ${drift.length - 40} more`));
   process.exit(1);

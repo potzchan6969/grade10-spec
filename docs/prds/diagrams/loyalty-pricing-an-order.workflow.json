@@ -89,10 +89,7 @@
       "variant": "dashed",
       "fromSide": "bottom",
       "toSide": "top",
-      "labelAt": [
-        195,
-        305
-      ]
+      "labelAt": [195, 305]
     }
   ]
 }

@@ -12,9 +12,8 @@ import {
   Tailwind,
   Text,
 } from "react-email";
-
-import { createEmailTailwindConfig } from "@/components/email/email-theme";
 import { emailAsset } from "@/components/email/email-assets";
+import { createEmailTailwindConfig } from "@/components/email/email-theme";
 import { defaultTheme } from "@/components/email/theme-default";
 
 interface Props {
