@@ -33,11 +33,10 @@
 ### grade10-site-store-cart-drawer-US-03: Collector continues from the cart drawer
 
 **As a** collector,
-**I want** the cart to take me to a product, more browsing, or checkout,
+**I want** the cart to take me to a product or checkout,
 **so that** I can continue the shopping path I chose.
 
 **Accepted by:**
 
 - `grade10-site-store-cart-drawer-SC-13` — A line opens its product
-- `grade10-site-store-cart-drawer-SC-14` — Browse More opens the catalogue
 - `grade10-site-store-cart-drawer-SC-15` — Checkout uses the existing surface

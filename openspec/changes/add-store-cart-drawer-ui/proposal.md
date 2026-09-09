@@ -26,14 +26,18 @@ leaving that surface.
 - Map only reviewed line and subtotal facts into the shared drawer, and keep
   shipping, images, promo redemption, points, tax, and discounts neutral or
   absent where the current integration supplies no answer.
-- Keep edits on the current cart, and send product, browsing, and checkout
-  actions through the site's existing addresses.
+- Keep edits on the current cart, and send product and checkout actions
+  through the site's existing addresses.
 - Add the drawer copy to the Grade10 `store` catalog overlay for English,
-  Traditional Chinese, and Simplified Chinese.
+  Traditional Chinese, and Simplified Chinese (including empty-cart title
+  fields required by `cart-drawer-empty-state`).
+- Consume `cart-drawer-empty-state` for the shared empty `EmptyState` and the
+  retirement of `CartItemSlot` / Browse More.
 
 ## Non-Goals
 
-- Changing `shared/ui/store-cart` behavior or rebuilding its components.
+- Changing `shared/ui/store-cart` behavior or rebuilding its components —
+  that is `cart-drawer-empty-state`.
 - Any backend implementation or contract change: no Worker, API procedure,
   provider read, database/schema, webhook, persistence, or checkout-creation
   work.
@@ -45,6 +49,8 @@ leaving that surface.
   routes.
 - Changing Figma annotations, components, or tokens.
 - Adding a dedicated `/cart` route or changing the existing checkout page.
+- A Browse More or catalogue handoff from the drawer (removed with
+  `CartItemSlot` in `cart-drawer-empty-state`).
 
 ## Capabilities
 
@@ -68,9 +74,12 @@ leaving that surface.
   behavior.
 - Grade10 catalogs and manual pages in `grade10-spec`: localized drawer copy,
   the Cart Drawer product record, and the corrected Cart validation record.
+- Depends on `cart-drawer-empty-state` landing in the submodule first (or the
+  same submodule bump) so `emptyTitle` and the empty `EmptyState` contract
+  exist.
 
 No backend implementation, database, admin, deployment, or new production
 dependency is part of this change.
 
-No domain impact: the drawer reuses existing product, listing, and checkout
-addresses without changing the journeys those destination capabilities own.
+No domain impact: the drawer reuses existing product and checkout addresses
+without changing the journeys those destination capabilities own.

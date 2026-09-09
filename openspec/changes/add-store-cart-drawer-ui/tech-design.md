@@ -4,7 +4,7 @@ The proposal's motivation is in `proposal.md`. The
 [Cart Drawer](specs/grade10-site/store/cart-drawer/spec.md) and
 [page-shell delta](specs/grade10-site/site/page-shell/spec.md) own the Grade10
 behavior. The durable `shared/ui/store-cart` capability and `@grade10/ui`
-already own the drawer's visual states, dismissal, slot baseline, item
+already own the drawer's visual states, dismissal, empty state, item
 statuses, and interaction contract. The Grade10 application currently has no
 drawer host or `Nav.onCartClick` handler.
 
@@ -72,8 +72,7 @@ The host calls `useCart` and uses its scope, lines, item count, currency, and
 serialized writes. It never reads browser storage directly, decides guest vs
 member, or introduces a new backend call. Quantity and removal callbacks use
 the existing optimistic scope-keyed writes. Product activation uses the
-existing product-address helper, and Browse More uses the current Store
-collections address.
+existing product-address helper. Checkout uses the current checkout route.
 
 **Alternative rejected:** retain a browser-only adapter. It would diverge from
 the member cart after sign-in and bypass the existing backend-backed cart
@@ -134,7 +133,7 @@ adding a backend enrichment read:
 | price, original price | reviewed minor-unit amounts | Format with the reviewed ISO currency; omit original price when absent. |
 | max quantity | reviewed available quantity | Pass it when present; the shared item owns the warning/stepper treatment. |
 | subtotal | reviewed lines | Sum current minor-unit price × quantity, excluding sold-out and unavailable lines. |
-| shipping | copy only | Omit `shippingEstimate` so the localized `TBD` copy renders. |
+| shipping | copy only | Omit `shippingEstimate` so the localized `Calculated at checkout` copy renders. |
 | estimated total | reviewed subtotal | Use the same formatted amount as subtotal; no shipping/tax/discount calculation. |
 | image | unavailable | Do not populate `imageSrc` or `imageAlt`; the current reviewed contract does not provide them. |
 
@@ -181,10 +180,9 @@ brand's shared vocabulary and leave the current catalog boundary ambiguous.
 
 ### Navigate through existing application addresses
 
-The drawer's item callback uses the current product-address helper. Browse More
-closes the drawer and opens the Store collections address. Checkout closes the
-drawer and navigates to `ROUTES.checkout`; the checkout page remains responsible
-for session gating, its own live review, and checkout handoff.
+The drawer's item callback uses the current product-address helper. Checkout
+closes the drawer and navigates to `ROUTES.checkout`; the checkout page remains
+responsible for session gating, its own live review, and checkout handoff.
 
 **Alternative rejected:** create checkout or a new cart route from the drawer.
 That would duplicate existing application behavior and expand the surface
@@ -203,10 +201,10 @@ require a running backend because no backend code changes. Coverage must prove:
   only on Store surfaces and checkout.
 - `grade10-site-store-cart-drawer-SC-09` through `SC-12`: reviewed facts,
   neutral totals, scoped writes, and one unavailable cleanup remain honest.
-- `grade10-site-store-cart-drawer-SC-13` through `SC-15`: product, Browse More,
-  and Checkout use existing addresses and close the drawer first.
-- The shared empty, loading, dismissal, baseline, overflow, cleanup, and
-  redirecting behaviors remain covered by `shared/ui/store-cart`.
+- `grade10-site-store-cart-drawer-SC-13` and `SC-15`: product and Checkout use
+  existing addresses and close the drawer first.
+- The shared empty, loading, dismissal, overflow, cleanup, and redirecting
+  behaviors remain covered by `shared/ui/store-cart`.
 
 ## Risks / Trade-offs
 
