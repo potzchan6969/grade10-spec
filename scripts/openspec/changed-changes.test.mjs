@@ -145,12 +145,22 @@ test("builds one Slack section for each changed status", () => {
     openspecUrl: "https://spec.grade10-stg.com/openspec/",
   });
 
-  assert.equal(payload.blocks.length, 6);
+  assert.equal(payload.blocks.length, 5);
+  assert.equal(
+    payload.blocks[0].text.text,
+    ":new: OpenSpec *New*\n- <https://spec.grade10-stg.com/openspec/#/change/new-change|Add a cart> (`new-change`) — `proposal`, `spec`",
+  );
   assert.match(
-    payload.blocks[1].text.text,
+    payload.blocks[0].text.text,
     /<https:\/\/spec\.grade10-stg\.com\/openspec\/#\/change\/new-change\|Add a cart> \(`new-change`\) — `proposal`, `spec`/,
   );
-  assert.match(payload.blocks[2].text.text, /Update &lt;copy&gt;.*`tech-design`/);
+  assert.equal(
+    payload.blocks[1].text.text,
+    ":pencil2: OpenSpec *Updated*\n- <https://spec.grade10-stg.com/openspec/#/change/active-change|Update &lt;copy&gt;> (`active-change`) — `tech-design`",
+  );
+  assert.match(payload.blocks[1].text.text, /Update &lt;copy&gt;.*`tech-design`/);
+  assert.match(payload.blocks[2].text.text, /^:file_cabinet: OpenSpec \*Archived\*\n/);
+  assert.match(payload.blocks[3].text.text, /^:wastebasket: OpenSpec \*Removed\*\n/);
   assert.match(payload.blocks.at(-1).elements[0].text, /1234567/);
 });
 
@@ -175,8 +185,8 @@ test("includes durable capability links in the Slack payload", () => {
     openspecUrl: "https://spec.grade10-stg.com/openspec/",
   });
 
-  assert.match(
-    payload.blocks[1].text.text,
-    /<https:\/\/spec\.grade10-stg\.com\/openspec\/#\/spec\/grade10-site\/auction\/winner-journey\|grade10-site\/auction\/winner-journey> — `spec`/,
+  assert.equal(
+    payload.blocks[0].text.text,
+    ":new: OpenSpec *New capabilities*\n- <https://spec.grade10-stg.com/openspec/#/spec/grade10-site/auction/winner-journey|grade10-site/auction/winner-journey> — `spec`",
   );
 });
