@@ -21,7 +21,7 @@ Needs group 1's bump.
 - [x] 2.3 Pass what a marked-down card used to cost, on the same rule the rest of the store reads a compare-at by, so *A card the shop has marked down* (`SC-22`) passes
 - [x] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 3. The manual (grade10-spec)
+## 3. The manual (grade10-spec) (owner: @sean)
 
 - [ ] 3.1 Say on the front door's page that its row merchandises rather than sells, and record why a control the surface cannot honour is worse than none
 - [ ] 3.2 Verify: `pnpm check:manual`
