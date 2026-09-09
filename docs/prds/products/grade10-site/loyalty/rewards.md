@@ -4,11 +4,12 @@ spec: grade10-site/loyalty/programme
 order: 3
 ---
 
-A reward is an item on the menu priced in points. Redeeming one is a
-redemption: a single debit of the balance, oldest points first, refused whole
-when the balance is short, and remembered at the price paid so repricing the
-menu never rewrites what an earlier redemption cost ([[grade10-site-loyalty-programme-SC-29]]). What
-the member then holds depends on what the reward is — a physical item waiting
+A reward is an item on the menu, taken with points or granted on a date the
+programme already knows. Taking one is a redemption: a single debit of the
+balance, oldest points first, refused whole when the balance is short, and
+remembered at the price paid so repricing the menu never rewrites what an
+earlier redemption cost ([[grade10-site-loyalty-programme-SC-29]]). What the
+member then holds depends on what the reward is — a physical item waiting
 at the counter, a money-off code, or nothing further to deliver.
 
 ## Menu
@@ -16,6 +17,10 @@ at the counter, a money-off code, or nothing further to deliver.
 | Field | Meaning |
 | --- | --- |
 | Cost | Points per redemption; copied onto each redemption when it is made |
+| Earned by | Points at that cost, a birthday, or registering |
+| Applies to | The whole order, or the products a custom-data group names |
+| Cap | The most one redemption takes off, where the reward is a share of the order |
+| Channel | Online, in the shop, or both |
 | Stock | Optional; a stocked reward is never oversold ([[grade10-site-loyalty-programme-SC-30]]) |
 | Window | Optional; outside it the reward cannot be redeemed ([[grade10-site-loyalty-programme-SC-31]]) |
 | Kind | How a redemption is handed over — see the table below |
@@ -36,6 +41,36 @@ menu refuses a reward whose money and points disagree, and a nightly audit
 re-checks every live reward against the running rate.
 
 ::story{id="loyalty-membership-rewardmenu--default" title="The reward menu"}
+
+## Earning a reward
+
+Points are one way onto a reward, not the only one.
+
+- **Points** — the member exchanges them at the reward's cost, oldest lots
+  first
+- **Birthday** — granted once a year, on the birthday the member's profile
+  holds
+- **Registration** — granted once, when the account is created
+
+A granted reward costs no points and is otherwise the same reward: it mints
+what its kind mints, and stock, window and archiving bind it the way they bind
+a purchase.
+
+❓ **Whose birthday** — no surface collects one today, so a birthday reward has
+nothing to fire on.
+
+## What a reward takes off
+
+- **The whole order, or a group of products** — a product reward names its
+  group through the catalogue's custom data, never a list of products written
+  on the reward, so a product joins the group by being edited
+- **A cap** — an order reward states the most one redemption can take off, so
+  a share of a large order never outgrows what the menu meant
+- **Online, in the shop, or both** — a reward says where it can be spent, and
+  a member is offered only what the channel they are in takes
+
+An order carries one discount at a time and a reward's coupon is in that
+count — [Discounts](/p/grade10-site/store/discounts).
 
 ## Fulfilment
 
@@ -91,21 +126,28 @@ pay for it twice. A reversal after the balance has already lapsed voids the
 artifact but returns nothing.
 
 :::callout{kind="warning"}
-Three things about rewards ship narrower than decided. The console's reward
-form sets only slug, name, description, cost, stock and window — every reward
-created from it is a manual handover, so a collect-in-store or money-off
-reward has to be created through the admin API. Per-unit quantities are
-switched off: the deployed programme declares no per-redemption or per-day
-bound, so every reward is redeemed one at a time. And nobody is told at
-handover: the collection notifier is a declared seam the assembly leaves
-empty.
+Rewards ship narrower than decided:
+
+- **The console's reward form** sets only slug, name, description, cost, stock
+  and window, so a collect-in-store or money-off reward has to be created
+  through the admin API
+- **Per-unit quantities** are switched off — the deployed programme declares
+  no per-redemption or per-day bound, so every reward is redeemed one at a
+  time
+- **Nobody is told at handover** — the collection notifier is a declared seam
+  the assembly leaves empty
+- **A reward's group, cap, channel and how it is earned** are read by nothing
+  yet; every reward is bought with points and takes a fixed amount off any
+  order, in either channel
 :::
 
 :::callout{kind="warning"}
 The durable spec knows a reward as an entitlement with no delivery. The
 fulfilment lifecycle, collection at the counter, paying with points and the
 member's own undo are specified only in the in-flight
-`revise-loyalty-programme-rules` and `add-shopify-membership-pos` changes.
+`revise-loyalty-programme-rules` and `add-shopify-membership-pos` changes. The
+group, the cap, the channel and the grant triggers are decided here and
+carried by no spec yet.
 :::
 
 ## Test cases
