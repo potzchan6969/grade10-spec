@@ -134,22 +134,15 @@ discount engine instead.
 
 - **Product special sale** — a scheduled cut off chosen products. Unlike an
   ad hoc Sale price edit, it blocks every other site discount and coupon on
-  that line; a member's points always redeem regardless
-  ([[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-01]],
-  [[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-02]])
+  that line; a member's points always redeem regardless.
 - **Buy X get Y** — a reward product discounted or free after a trigger
-  purchase; combines with everything, no exclusivity
-  ([[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-03]])
+  purchase; combines with everything, no exclusivity.
 - **Order threshold** — a tier ladder of spend levels and percentages inside
   one active promotion; a basket gets its highest cleared tier, combines
   with points and coupons, and both its base and its cut skip a product
-  special sale's line
-  ([[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-04]],
-  [[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-05]],
-  [[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-06]])
+  special sale's line.
 
-Applies on both the online checkout and the POS till
-([[grade10-site/store/site-discounts#grade10-site-store-site-discounts-SC-07]]).
+Applies on both the online checkout and the POS till.
 
 ## Designs
 
