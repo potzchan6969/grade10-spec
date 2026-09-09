@@ -60,22 +60,20 @@ end of it.
 Progress in one period is not carried over to the next.
 
 :::callout{kind="note"}
-**A tier is worked out on every read, never written down.** A member's own
-activity settles it in passing: an earn, a redemption or a refund records the
-move it caused. A lapse is the absence of activity, so the nightly sweep
-records it instead. That is where the numbers come from: how many members fell
-out of Gold last night, and how many re-earned it.
+**Tier history is lazily evaluated, i.e. evaluated when read.** 
+We have a cron sweep to render the record for analytics purposes.
 :::
 
-:::example{title="A member's two years" periods="Gold=gold"}
+:::example{title="A member's three years" periods="Gold=gold"}
 | When | Event | Points | Balance | Progress | Period |
 | --- | --- | --- | --- | --- | --- |
-| 2026/01/03 | buys $3,000 · 300 at 1× | +300 | 300 | 300 | Silver |
-| 2026/03/01 | buys $2,500 · 250 at 1×, reaching 550 — **Gold** | +250 | 550 | 0 | Gold · to 2027/03/01 |
-| 2026/03/05 | redeems 500 | −500 | 50 | | |
-| 2026/09/20 | buys $5,000 · 600 at 1.2×, past 500 · the period extends | +600 | 650 | 600 | |
-| 2027/03/01 | the old period ends, the new one counts from zero | | 650 | 0 | Gold · to 2028/03/01 |
-| 2027/09/20 | twelve months with no activity · the balance lapses | −650 | 0 | | |
+| 2025/02/10 | buys $2,500 · 250 at 1× | +250 | 250 | 250 | Silver |
+| 2026/01/03 | buys $2,000 · 200 at 1× | +200 | 450 | 450 | |
+| 2026/03/01 | buys $3,000 · 300 at 1×, reaching 500 — **Gold** | +300 | 750 | 0 | Gold · to 2027/03/01 |
+| 2026/03/05 | redeems 500 | −500 | 250 | | |
+| 2026/09/20 | buys $5,000 · 600 at 1.2×, past 500 · the period extends | +600 | 850 | 600 | |
+| 2027/03/01 | the old period ends, the new one counts from zero | | 850 | 0 | Gold · to 2028/03/01 |
+| 2027/09/20 | twelve months with no activity · the balance lapses | −850 | 0 | | |
 | 2028/02/01 | buys $4,000 · 480 at 1.2×, twenty short | +480 | 480 | 480 | |
 | 2028/03/01 | the period ends on 480, short of 500 — **Silver** | | 480 | 0 | Silver |
 | 2028/03/04 | buys $1,000 · 100 at 1× again | +100 | 580 | 100 | |
@@ -86,7 +84,10 @@ out of Gold last night, and how many re-earned it.
 - **Progress** is measured over whatever the Period column names: the rolling
   twelve months while no tier period is running, what the tier period has
   counted once one is
-- **Reaching, then keeping** — the 550 that won Gold counts toward nothing
+- **A rolling twelve months** — by March 2026 the member has earned 750 points
+  and still holds every one, but the 250 from February 2025 is older than
+  twelve months, so the 500 that reaches Gold is the two later buys alone
+- **Reaching, then keeping** — the 500 that won Gold counts toward nothing
   afterwards, because a period counts only what is earned after it starts; the
   same happens on 2027/03/01, so the 600 that bought the second period cannot
   buy a third
