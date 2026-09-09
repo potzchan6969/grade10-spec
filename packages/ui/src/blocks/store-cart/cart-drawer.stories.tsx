@@ -38,10 +38,9 @@ function pointsCreditHkd(points: PointsState): number | null {
  *
  * Composition and end-to-end flows only. Layer-owned states live on:
  * - [`CartDrawerHeader`](?path=/docs/store-cart-cartdrawerheader--docs) — badge / close / badge bones
- * - [`CartDrawerBody`](?path=/docs/store-cart-cartdrawerbody--docs) — baseline / overflow / empty / mixed list
+ * - [`CartDrawerBody`](?path=/docs/store-cart-cartdrawerbody--docs) — overflow / empty / mixed list
  * - [`CartDrawerFooter`](?path=/docs/store-cart-cartdrawerfooter--docs) — promo (type + held), points, checkout
  * - [`CartItem`](?path=/docs/store-cart-cartitem--docs) — sold out / adjusted / row bones
- * - [`CartItemSlot`](?path=/docs/store-cart-cartitemslot--docs) — empty placeholder
  *
  * `Default` is the one interactive composed story (promo sheet + points).
  * Typed/held/points state matrix stays on CartDrawerFooter.
@@ -63,7 +62,7 @@ const meta = {
     items: SAMPLE_CART_ITEMS,
     subtotal: "HK$42,700.00",
     estimatedTotal: "HK$42,700.00",
-    shippingEstimate: "TBD",
+    shippingEstimate: "Calculated at checkout",
     copy: DEFAULT_CART_COPY,
     pointsState: { status: "collapsed" },
     pointsBalanceLabel: "You’ve 1,200 pts.",
@@ -204,17 +203,17 @@ export const Default: Story = {
     expect(
       canvas.getByRole("button", { name: /Use points/i }),
     ).toBeInTheDocument();
-    // 2 items + 3 placeholder slots
-    const slots = canvas.getAllByLabelText("Add more items to cart");
-    expect(slots).toHaveLength(3);
+    expect(
+      canvas.queryByText("Your cart is empty"),
+    ).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("dialog", { name: "Promo code" }),
     ).not.toBeInTheDocument();
   },
 };
 
-/** Overflow state with 6 items: 0 empty slots displayed, scrollable list */
-export const OverflowItemsNoEmptySlots: Story = {
+/** Overflow state with 6 items: scrollable list */
+export const OverflowItems: Story = {
   args: {
     items: OVERFLOW_CART_ITEMS,
     subtotal: "HK$83,600.00",
@@ -223,15 +222,15 @@ export const OverflowItemsNoEmptySlots: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.queryByLabelText("Add more items to cart"),
-    ).not.toBeInTheDocument();
-    expect(
       canvas.getByText("2016 Pokémon 20th Anniversary Mario Pikachu PSA 10"),
     ).toBeInTheDocument();
+    expect(
+      canvas.queryByText("Your cart is empty"),
+    ).not.toBeInTheDocument();
   },
 };
 
-/** Empty state: 5 empty slots, hidden header count badge, and hidden footer */
+/** Empty state: design-system empty state, hidden header count badge, and hidden footer */
 export const EmptyState: Story = {
   args: {
     items: [],
@@ -240,10 +239,13 @@ export const EmptyState: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const slots = canvas.getAllByLabelText("Add more items to cart");
-    expect(slots).toHaveLength(5);
+    expect(canvas.getByText("Your cart is empty")).toBeInTheDocument();
     expect(
-      canvas.queryByRole("button", { name: "Proceed to Checkout" }),
+      canvas.getByText("Items you add will appear here"),
+    ).toBeInTheDocument();
+    expect(canvas.queryByRole("button", { name: "Proceed to Checkout" })).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: /Shop|Browse|Continue/i }),
     ).not.toBeInTheDocument();
   },
 };

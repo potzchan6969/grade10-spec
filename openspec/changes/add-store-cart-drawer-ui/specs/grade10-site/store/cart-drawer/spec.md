@@ -20,7 +20,7 @@ address.
   - Scoped edits: quantity and removal change the same cart the drawer opened
   - Delisted cleanup: lets the shared drawer remove unavailable lines once
 - Existing ways onward
-  - Product and browse: uses the Store's product and catalogue addresses
+  - Product: uses the Store's product addresses
   - Checkout handoff: opens the existing checkout surface for its own review
 
 ## ADDED Requirements
@@ -107,7 +107,7 @@ summary from these facts:
 | Line | Current title, confirmed quantity, current unit price and currency, and current status |
 | Previous price | The prior unit price and currency, only when the read reports a reprice |
 | Subtotal | Current unit price multiplied by confirmed quantity for every line except sold-out and unavailable lines |
-| Shipping | Localized `TBD`, with no calculated amount |
+| Shipping | Localized `Calculated at checkout`, with no calculated amount |
 | Estimated total | The same amount and currency as the subtotal |
 | Image | Absent while the reviewed cart supplies no authoritative image |
 | Promo code | Visible in its closed display-only state; accepts and applies nothing |
@@ -128,7 +128,7 @@ other discount unless a later capability supplies an applied quote.
 - **GIVEN** a successful cart read with no image or applied quote
 - **WHEN** the drawer shows its summary
 - **THEN** no product image is shown
-- **AND** shipping reads `TBD`
+- **AND** shipping reads `Calculated at checkout`
 - **AND** estimated total equals subtotal
 - **AND** no promotion or points credit is applied
 
@@ -153,11 +153,10 @@ the removal and single-notice behavior defined by `shared/ui/store-cart`.
 
 ### Requirement: Drawer actions use existing site addresses
 
-The drawer SHALL close before opening a product, the unscoped Store listing, or
-checkout. A product line SHALL open that product's existing address. Browse
-More SHALL open the existing unscoped Store listing. Checkout SHALL open the
-existing `/checkout` surface, which remains responsible for its own live read
-and checkout creation.
+The drawer SHALL close before opening a product or checkout. A product line
+SHALL open that product's existing address. Checkout SHALL open the existing
+`/checkout` surface, which remains responsible for its own live read and
+checkout creation.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-13 - A line opens its product
 
@@ -165,13 +164,6 @@ and checkout creation.
 - **WHEN** the collector activates that line
 - **THEN** the drawer closes
 - **AND** the line's existing Store product address opens
-
-#### Scenario: grade10-site-store-cart-drawer-SC-14 - Browse More opens the catalogue
-
-- **GIVEN** an open cart drawer
-- **WHEN** the collector activates Browse More
-- **THEN** the drawer closes
-- **AND** the unscoped Store listing address opens
 
 #### Scenario: grade10-site-store-cart-drawer-SC-15 - Checkout uses the existing surface
 

@@ -138,6 +138,10 @@ type CartDrawerCopy = {
   header: CartDrawerHeaderCopy;
   item: CartItemCopy;
   footer: CartDrawerFooterCopy;
+  /** Empty-cart title for the design-system empty state. */
+  emptyTitle: string;
+  /** Optional empty-cart description under the title. */
+  emptyDescription?: string;
   /** Toast title when delisted catalogue lines are cleared after open loading. */
   unavailableItemsRemoved: string;
   /** Optional description under `unavailableItemsRemoved`. */

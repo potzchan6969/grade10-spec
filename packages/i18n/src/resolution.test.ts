@@ -164,6 +164,8 @@ const CART_DRAWER_KEYS = [
   "footer.checkoutButton",
   "footer.checkoutRedirecting",
   "footer.checkoutFailed",
+  "emptyTitle",
+  "emptyDescription",
   "unavailableItemsRemoved",
   "unavailableItemsRemovedDescription",
 ].sort();

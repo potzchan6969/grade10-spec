@@ -278,8 +278,6 @@ export {
   type CartDrawerProps,
   CartItem,
   type CartItemProps,
-  CartItemSlot,
-  type CartItemSlotProps,
   CartPromoSheet,
   type CartPromoSheetProps,
 } from "./blocks/store-cart/cart-drawer";
