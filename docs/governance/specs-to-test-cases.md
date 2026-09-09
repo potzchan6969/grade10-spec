@@ -618,9 +618,18 @@ that fails its own validator until each suite is touched individually is worse
 than the diff that was being avoided. A major bump therefore carries its own
 sweep, in one commit, across every suite.
 
-That is safe because it is mechanical. **A sweep may not change what a case
-claims:** same case ids, same traces, same steps, same expected results, no
-`<v>` bump. `pnpm run tcs:validate --swept` asserts exactly that — the set of
+**A sweep rewrites the cases; it never only restamps them.** Moving a
+`**Drafts styled:**` line to a revision whose conventions the cases below it do
+not follow is a lie the next reader has no way to catch: the file claims to be
+current, `pnpm run tcs:stale` stops reporting it, and the drafts sit in the old
+shape forever. If a bump changes how a case reads, every draft is rewritten to
+read that way in the same commit — and if the drafts are not being rewritten,
+the revision does not move.
+
+That is safe because it stays mechanical where it counts. **A sweep may not
+change what a case claims:** same case ids, same traces, no `<v>` bump. It may
+re-word a draft freely — that is the point of it — but it may not add, drop or
+repoint coverage. `pnpm run tcs:validate --swept` asserts exactly that — the set of
 case ids and the set of traces identical before and after — and a sweep that
 cannot satisfy it is not a sweep.
 
@@ -630,6 +639,10 @@ would need approved cases re-worded to conform is not a rules bump but a
 re-review programme, and it is either scoped to drafts or budgeted
 deliberately. Three outcomes, and the bump states which one it is taking
 before it runs:
+
+A sweep of drafts is therefore a rewrite, and `--swept` is what proves the
+rewrite stayed honest: it compares every case id and trace before and after,
+so re-wording is free and a silently dropped or repointed case is not.
 
 | The new rule | The sweep does |
 | --- | --- |
