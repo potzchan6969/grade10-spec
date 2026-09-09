@@ -9,15 +9,15 @@ row of cards. Links people already hold still land here.
 
 1. **Hero** — a small label, headline, copy, image, two ways on
    - In the response HTML before any script runs, whether or not the
-     catalogue answers ([[grade10-site-store-home-SC-15]])
+     catalogue answers
 2. **Catalogue sections** — read from the shop after the hero; each says it
    is loading, or that the read failed and can be retried without a full
    page load, or is absent when there is nothing to show, never a titled
-   empty row ([[grade10-site-store-home-SC-17]])
+   empty row
    1. **Collection grid** — one tile per collection, in catalogue order; a
-      collection added to the shop arrives with no deploy ([[grade10-site-store-home-SC-06]])
+      collection added to the shop arrives with no deploy
    2. **Merchandised row** — cards from whichever collection the shop lists
-      first ([[grade10-site-store-home-SC-11]])
+      first
 
 ## Designs
 
