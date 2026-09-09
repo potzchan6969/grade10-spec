@@ -15,7 +15,7 @@ const DEFAULT_CART_COPY: CartDrawerCopy = {
   footer: {
     subtotalLabel: "Subtotal",
     shippingLabel: "Shipping",
-    shippingValue: "TBD",
+    shippingValue: "Calculated at checkout",
     estimatedTotalLabel: "Estimated Total",
     usePromoCode: "Promo code",
     selectOrEnterPromoCode: "Select or enter code",
@@ -41,6 +41,8 @@ const DEFAULT_CART_COPY: CartDrawerCopy = {
     checkoutRedirecting: "Redirecting...",
     checkoutFailed: "Couldn’t open checkout",
   },
+  emptyTitle: "Your cart is empty",
+  emptyDescription: "Items you add will appear here",
   unavailableItemsRemoved: "Items removed from cart",
   unavailableItemsRemovedDescription: "Some products are no longer available",
 };

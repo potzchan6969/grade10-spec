@@ -6,7 +6,6 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { NumberInput } from "@grade10/design-system/components/forms/number-input";
 import { StepperInput } from "@grade10/design-system/components/forms/stepper-input";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
-import { Center } from "@grade10/design-system/components/layout/center";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { toast } from "@grade10/design-system/components/overlays/toast";
@@ -15,7 +14,7 @@ import {
   CaretDown,
   CaretLeft,
   CaretRight,
-  Plus,
+  ShoppingCart,
   Tag,
   Trash,
   X,
@@ -101,36 +100,6 @@ function prefersReducedMotion() {
   return (
     typeof window !== "undefined" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches
-  );
-}
-
-type CartItemSlotProps = {
-  onClick?: () => void;
-  className?: string;
-};
-
-/**
- * Product / Cart / Cart Item Slot (`4735:5944`).
- *
- * An interactive empty placeholder row filling the baseline grid up to 5 slots.
- * Clicking closes the drawer and guides the shopper to browse more items.
- */
-function CartItemSlot({ onClick, className }: CartItemSlotProps) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "group/slot w-full shrink-0 cursor-pointer rounded-lg border border-dashed border-border bg-muted p-6 transition-all hover:bg-muted-hover focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
-        className,
-      )}
-      data-slot="cart-item-slot"
-      aria-label="Add more items to cart"
-    >
-      <Center className="h-4 text-secondary-foreground">
-        <Plus aria-hidden size={20} weight="regular" />
-      </Center>
-    </button>
   );
 }
 
@@ -446,36 +415,36 @@ function CartDrawerHeader({
 type CartDrawerBodyProps = {
   items: readonly CartItemSummary[];
   copy: CartItemCopy;
+  emptyTitle: string;
+  emptyDescription?: string;
   loading?: boolean;
-  emptySlotCount?: number;
   onQuantityChange?: (itemId: string, quantity: number) => void;
   onRemoveItem?: (itemId: string) => void;
   onItemClick?: (itemId: string) => void;
-  onBrowseMore?: () => void;
   className?: string;
 };
 
 /**
  * Product / Cart / Cart Drawer Body (`4735:6493`).
  *
- * Renders the scrollable list of active and sold-out cart items,
- * followed by baseline placeholder slots up to the minimum visual count.
- * Exceeding items receive top and bottom scroll-fade mask hints.
+ * Renders the scrollable list of active and sold-out cart items, or the
+ * design-system empty state when the cart holds nothing. Exceeding items
+ * receive top and bottom scroll-fade mask hints.
  */
 function CartDrawerBody({
   items,
   copy,
+  emptyTitle,
+  emptyDescription,
   loading = false,
-  emptySlotCount = 0,
   onQuantityChange,
   onRemoveItem,
   onItemClick,
-  onBrowseMore,
   className,
 }: CartDrawerBodyProps) {
-  const emptySlots = Array.from({ length: emptySlotCount }, (_, i) => i);
   const [exitingIds, setExitingIds] = useState(() => new Set<string>());
   const exitTimersRef = useRef<Map<string, number>>(new Map());
+  const isEmpty = items.length === 0 && !loading;
 
   useEffect(() => {
     return () => {
@@ -531,62 +500,57 @@ function CartDrawerBody({
       gap="none"
       className={cn(
         "scroll-fade min-h-0 flex-1 overflow-y-auto px-6 py-4",
+        isEmpty && "justify-center",
         className,
       )}
       data-slot="cart-drawer-body"
     >
-      {/* Populated Items */}
-      {items.map((item, index) => {
-        const exiting = exitingIds.has(item.id);
-        const hasRowBelow =
-          index < items.length - 1 || (!loading && emptySlotCount > 0);
+      {isEmpty ? (
+        <EmptyState
+          title={emptyTitle}
+          description={emptyDescription}
+          icon={<ShoppingCart aria-hidden weight="regular" />}
+        />
+      ) : (
+        items.map((item, index) => {
+          const exiting = exitingIds.has(item.id);
+          const hasRowBelow = index < items.length - 1;
 
-        return (
-          <div
-            key={item.id}
-            aria-hidden={exiting}
-            className={cn(
-              "grid transition-[grid-template-rows] duration-[220ms] motion-reduce:transition-none",
-              exiting ? "grid-rows-[0fr]" : "grid-rows-[1fr]",
-            )}
-            style={{ transitionTimingFunction: COLLAPSE_EASE }}
-          >
-            <div className="overflow-hidden">
-              <div
-                className={cn(
-                  "transition-[opacity,transform,margin] duration-[220ms] motion-reduce:transition-none",
-                  hasRowBelow && !exiting ? "mb-4" : "mb-0",
-                  exiting
-                    ? "pointer-events-none -translate-y-1 opacity-0 motion-reduce:translate-y-0"
-                    : "translate-y-0 opacity-100",
-                )}
-                style={{ transitionTimingFunction: COLLAPSE_EASE }}
-              >
-                <CartItem
-                  item={item}
-                  copy={copy}
-                  loading={loading}
-                  onQuantityChange={(q) => onQuantityChange?.(item.id, q)}
-                  onRemove={() => requestRemove(item.id)}
-                  onClickProduct={() => onItemClick?.(item.id)}
-                />
+          return (
+            <div
+              key={item.id}
+              aria-hidden={exiting}
+              className={cn(
+                "grid transition-[grid-template-rows] duration-[220ms] motion-reduce:transition-none",
+                exiting ? "grid-rows-[0fr]" : "grid-rows-[1fr]",
+              )}
+              style={{ transitionTimingFunction: COLLAPSE_EASE }}
+            >
+              <div className="overflow-hidden">
+                <div
+                  className={cn(
+                    "transition-[opacity,transform,margin] duration-[220ms] motion-reduce:transition-none",
+                    hasRowBelow && !exiting ? "mb-4" : "mb-0",
+                    exiting
+                      ? "pointer-events-none -translate-y-1 opacity-0 motion-reduce:translate-y-0"
+                      : "translate-y-0 opacity-100",
+                  )}
+                  style={{ transitionTimingFunction: COLLAPSE_EASE }}
+                >
+                  <CartItem
+                    item={item}
+                    copy={copy}
+                    loading={loading}
+                    onQuantityChange={(q) => onQuantityChange?.(item.id, q)}
+                    onRemove={() => requestRemove(item.id)}
+                    onClickProduct={() => onItemClick?.(item.id)}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        );
-      })}
-
-      {/* Baseline Placeholder Slots — hidden while status/price are fetching */}
-      {!loading
-        ? emptySlots.map((slotIdx, index) => (
-            <div
-              key={`empty-slot-${slotIdx}`}
-              className={cn(index < emptySlots.length - 1 && "mb-4")}
-            >
-              <CartItemSlot onClick={onBrowseMore} />
-            </div>
-          ))
-        : null}
+          );
+        })
+      )}
     </VStack>
   );
 }
@@ -1270,14 +1234,11 @@ type CartDrawerProps = {
   onQuantityChange?: (itemId: string, quantity: number) => void;
   onRemoveItem?: (itemId: string) => void;
   onItemClick?: (itemId: string) => void;
-  onBrowseMore?: () => void;
   /** Opens Account → Loyalty from the empty held-promo state (new tab when wired). */
   onBrowseLoyalty?: () => void;
   onCheckout?: () => Promise<void> | void;
   className?: string;
 };
-
-const MIN_ROW_BASELINE = 5;
 
 /**
  * Product / Cart / Cart Drawer (`4735:6493` & `4674:3831`).
@@ -1287,7 +1248,7 @@ const MIN_ROW_BASELINE = 5;
  * Behavior & Anatomy:
  * - On cart open: fetches product status and price info via `onFetchStatusAndPrice` or controlled `loading`.
  *   During loading, each cart item, header count badge, subtotal, discount amount, points amount, and estimated total
- *   display as Boneyard skeleton; empty item slots are hidden; checkout is disabled.
+ *   display as Boneyard skeleton; the empty-cart empty state is hidden; checkout is disabled.
  * - Footer: after subtotal (and any applied Discount / Points lines), compact
  *   **Promo code · Select or enter code ›** and **Use points** rows align like
  *   shipping. Promo opens a nested sheet; points stay typed amount on this layer
@@ -1297,11 +1258,8 @@ const MIN_ROW_BASELINE = 5;
  * - Dismissal: Closes via ✕ button, clicking dimmed backdrop overlay, or pressing Esc.
  *   When the nested promo sheet is open, Esc and backdrop collapse the sheet first;
  *   a second Esc or backdrop click closes the cart.
- * - Minimum 5-slot grid: When fewer than 5 items are in the cart, empty slot placeholders
- *   are rendered to maintain the visual baseline. When 5 or more items are present, no
- *   empty slots are rendered and the list scrolls.
- * - Empty state: Renders 5 empty slot placeholders, hides the count badge in the header,
- *   and hides the footer entirely.
+ * - Empty state: Renders the design-system empty state with no action button, hides
+ *   the count badge in the header, and hides the footer entirely.
  * - Active item badge: Counts active items, excluding sold-out items.
  * - Unavailable (delisted) items: After open loading ends, lines with status
  *   `unavailable` are removed via `onRemoveItem` without rendering a row, and
@@ -1334,7 +1292,6 @@ function CartDrawer({
   onQuantityChange,
   onRemoveItem,
   onItemClick,
-  onBrowseMore,
   onBrowseLoyalty,
   onCheckout,
   className,
@@ -1415,9 +1372,6 @@ function CartDrawer({
     (i) => i.status !== "soldOut",
   ).length;
   const isEmpty = visibleItems.length === 0;
-
-  // Compute placeholder slots up to 5-row baseline
-  const emptySlotCount = Math.max(0, MIN_ROW_BASELINE - visibleItems.length);
 
   const promoSheetOpen = promoState?.status === "expanded";
 
@@ -1512,15 +1466,12 @@ function CartDrawer({
           <CartDrawerBody
             items={visibleItems}
             copy={copy.item}
+            emptyTitle={copy.emptyTitle}
+            emptyDescription={copy.emptyDescription}
             loading={isLoading}
-            emptySlotCount={emptySlotCount}
             onQuantityChange={onQuantityChange}
             onRemoveItem={onRemoveItem}
             onItemClick={onItemClick}
-            onBrowseMore={() => {
-              onClose();
-              onBrowseMore?.();
-            }}
           />
 
           {!isEmpty ? (
@@ -1569,7 +1520,6 @@ export type {
   CartDrawerHeaderProps,
   CartDrawerProps,
   CartItemProps,
-  CartItemSlotProps,
   CartPromoSheetProps,
 };
 export {
@@ -1578,6 +1528,5 @@ export {
   CartDrawerFooter,
   CartDrawerHeader,
   CartItem,
-  CartItemSlot,
   CartPromoSheet,
 };

@@ -14,7 +14,7 @@
     "footer": {
       "subtotalLabel": "小计",
       "shippingLabel": "运费",
-      "shippingValue": "待定",
+      "shippingValue": "结算时计算",
       "estimatedTotalLabel": "预计总额",
       "usePromoCode": "优惠码",
       "selectOrEnterPromoCode": "选择或输入优惠码",
@@ -40,6 +40,8 @@
       "checkoutRedirecting": "正在跳转…",
       "checkoutFailed": "无法打开结账"
     },
+    "emptyTitle": "购物车是空的",
+    "emptyDescription": "添加的商品会出现在这里",
     "unavailableItemsRemoved": "商品已从购物车移除",
     "unavailableItemsRemovedDescription": "部分商品已不再提供"
   }

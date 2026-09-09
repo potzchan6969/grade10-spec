@@ -248,7 +248,6 @@ function ProductListPage() {
         copy={STORE_CART_COPY}
         estimatedTotal={cartTotal}
         items={cartItems}
-        onBrowseMore={() => setCartOpen(false)}
         onCheckout={async () => {
           await new Promise((resolve) => setTimeout(resolve, 800));
         }}
@@ -276,7 +275,7 @@ function ProductListPage() {
         }
         open={cartOpen}
         promoState={promoState}
-        shippingEstimate="TBD"
+        shippingEstimate="Calculated at checkout"
         subtotal={cartTotal}
       />
     </div>

@@ -87,7 +87,7 @@ const meta = {
   args: {
     subtotal: "HK$42,700.00",
     estimatedTotal: "HK$42,700.00",
-    shippingEstimate: "TBD",
+    shippingEstimate: "Calculated at checkout",
     promoState: { status: "collapsed" },
     pointsState: { status: "collapsed" },
     pointsBalanceLabel: "You’ve 1,200 pts.",
