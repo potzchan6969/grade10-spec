@@ -32,7 +32,3 @@ so a collector never has to guess which of two controls ended their session.
 ::story{id="components-nav--without-cart" title="The same header where the site answers no cart"}
 
 ::story{id="components-nav--narrow" title="The header reflowed at a small width"}
-
-## Test cases
-
-::cases{id="grade10-site/site/page-shell"}

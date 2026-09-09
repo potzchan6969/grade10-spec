@@ -31,7 +31,3 @@ product history.
   match, confirm every row, and commit the batch as one operation
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
   without losing the arithmetic
-
-## Test cases
-
-::cases{id="grade10-admin/inventory/catalog"}

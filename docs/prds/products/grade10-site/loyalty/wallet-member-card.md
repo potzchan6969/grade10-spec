@@ -1,7 +1,7 @@
 ---
 title: Member Card in a Wallet
 spec: grade10-site/store/wallet-member-card
-order: 7
+order: 8
 ---
 
 A member's card rides in Google Wallet or Apple Wallet as a second rendering

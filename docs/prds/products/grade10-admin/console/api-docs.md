@@ -22,8 +22,7 @@ production build drops it.
 ## Audiences
 
 Three audiences, read off the caller word each procedure carries and named
-beside the filter, which narrows to one of them —
-[[grade10-admin-console-api-docs-SC-16]]:
+beside the filter, which narrows to one of them:
 
 - **Site** — `public`, `session`, `session · fresh`; the brand's
   customer-facing sites, signed in or not

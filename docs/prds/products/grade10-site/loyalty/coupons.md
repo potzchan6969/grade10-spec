@@ -1,96 +1,87 @@
 ---
 title: Coupons
 spec: grade10-site/loyalty/programme
-order: 4
+order: 5
 ---
 
-A coupon is the money-off code a redemption mints: a single-use Shopify
-discount code for a fixed amount, scoped to the member's own Shopify customer,
-that the online checkout and the POS both validate natively. One redemption
-mints one code. The engine that debits the points names no vendor; the one
-Shopify-shaped piece of the loyalty product is the fulfiller that asks the
-store to mint.
+A coupon is what a redemption leaves the member holding, and what an order
+carries to spend it. A reward coupon is always welded onto the order's own
+lines — a cut on the lines it applies to, or a gift line — and never a shop
+code. What each kind takes off is on
+[Rewards](/p/grade10-site/loyalty/rewards).
 
-## Codes
+## Applying one
+
+| Channel | How it lands |
+| --- | --- |
+| Online | The draft order the checkout builds carries the weld on its lines |
+| At the till | Staff apply it from the member's panel, or type it, and the terminal welds it onto the sale |
+
+- **Reserved, then settled** — a coupon is held against the order being paid
+  and freed again if that order is not
+- **One live attempt** — a second application while one is in flight is
+  refused
+- **The order's one discount** — a reward coupon is in that count; points
+  paid against the bill, and free shipping, sit outside it —
+  [Discounts](/p/grade10-site/store/discounts)
+
+Refused, and the member is told which: nothing in the basket matches what the
+coupon applies to, the basket is under the coupon's threshold, the currency is
+not the programme's, every eligible line is already free, or a gift's variant
+is in the basket already.
+
+## When it counts as used
+
+**Settlement, never checkout.** A coupon on a draft nobody paid was never
+spent, so it is stamped used by the paid order that carried it and by nothing
+else.
+
+- **Used has no way back** — cancelling or refunding that order leaves the
+  coupon used and the points spent; only an order that never paid returns one
+  to the member, and a reservation nothing ever settles is freed a day later
+- **A mismatch is a person's to settle** — a coupon used twice, or used by
+  someone who does not hold it
+
+## Validity
 
 | Property | Value |
 | --- | --- |
-| Amount | The reward's money, at HKD 1 a point |
-| Uses | One, and once per customer |
-| Who | The member's paired Shopify customer, online and at the till |
-| Validity | From minting, for the days the reward states; a code minted near the end of a menu window is not born dying |
-| Minimum purchase | The code's own value — a code bigger than the cart is refused, never burned for less |
-| Stacking | The order's one discount, so never beside a discount code or another coupon; points as credits and free shipping sit outside that count — [Discounts](/p/grade10-site/store/discounts) |
+| What it takes off | What the reward defines |
+| Uses | One |
+| Who | The member who redeemed it, in either channel |
+| Runs from | The redemption, for the days the reward states |
+| Expiry | Read off the clock, never written down |
 
-## Minting
+A coupon whose validity passes stays spent. Bought and not used is the
+member's own, and the money is counted as breakage in the liability register,
+which reports outstanding points as a count and the money out in coupons as
+money — answering `none` where nothing is outstanding and `unavailable` with a
+reason where it cannot be read, never a zero.
 
-The store records the code before it asks Shopify for it, so a lost answer is
-finished by the retry rather than minted twice, and a code the shop already
-holds is adopted. A member whose customer pairing has not converged waits: the
-redemption reads as preparing until the pairing lands, and a member whose
-pairing was erased is parked for an operator. When a pairing moves to a
-different customer, that member's live codes are re-scoped in the same pass.
+::story{id="loyalty-membership-couponlist--default" title="The coupons a member holds"}
 
-## Code states
+## Store promotions
 
-| State | Meaning |
-| --- | --- |
-| Live | Minted and spendable; the member reads it as ready |
-| Used | A paid order carried it; the member reads it as used |
-| Void | Deactivated by a reversal; the member reads it as cancelled |
-
-Use is decided by the paid order that carried the code — from either channel —
-never by the vendor's lagging usage count. A live code whose validity passes
-stays spent: bought but not used is the member's responsibility, and the money
-is counted as breakage in the liability register rather than silently
-returned. A code used after its redemption was reversed, used twice, or used by
-another customer raises a mismatch an operator settles.
-
-## Member's view
-
-The membership page lists every code in full, with its value and expiry — a
-masked code cannot be read out at a till. Used and cancelled codes stay on the
-list and say so. A live code carries the member's own undo: the points come
-back and the code is deactivated, unless the code has already paid for
-something, in which case the points stay spent and the page says why.
-
-::story{id="loyalty-membership-couponlist--default" title="The codes a member holds"}
-
-## Spending a code
-
-Online, the buyer types the code at Shopify's checkout, or the membership page
-attaches it to the basket where the shop allows. At the till, staff apply a
-member's open code from the terminal, or the member reads it out. Where the
-till spends points as a fixed amount off the sale instead, no code is minted
-for that spend — [Shopify Integration](/p/grade10-site/loyalty/shopify-integration).
-
-Store promotions are the store's own coupons, minted by an operator with a
-prefix and a threshold, and are not part of the programme.
+An operator's own discount codes, minted with a prefix and a threshold, are
+the store's and not the programme's. They take money off the whole order, the
+shop evaluates them itself, and no reward ever defines one —
+[Discounts](/p/grade10-site/store/discounts).
 
 :::callout{kind="warning"}
-The durable spec has no notion of a code: a redemption there is an entitlement
-with no settlement. Everything on this page is specified in the in-flight
-`revise-loyalty-programme-rules` and `add-shopify-membership-pos` changes. The
-one-discount count is decided and unbuilt: a minted code still refuses order
-discounts alone and combines with the rest.
+The durable spec has no notion of a coupon: a redemption there is an
+entitlement with no settlement. Everything on this page is specified in the
+in-flight `revise-loyalty-programme-rules` and `add-shopify-membership-pos`
+changes. The one-discount count is decided and unbuilt: a welded coupon still
+refuses order discounts alone and combines with the rest.
 :::
 
-:::detail{title="Code map" for="engineer"}
-The loyalty worker's fulfiller for the `money_off_code` kind calls the store
-worker's `MembershipEntrypoint` over a service binding — mint, deactivate,
-usage, liability — so loyalty holds no Shopify credential. The store's
-`minted_codes` registry is written first; the vendor call is
-`discountCodeBasicCreate` with `usageLimit: 1`, `appliesOncePerCustomer`, a
-minimum subtotal equal to the amount, `combinesWith` refusing order discounts,
-and eligibility through `context` rather than the deprecated
-`customerSelection`. Usage is written by order ingestion matching the paid
-order's discount codes case-insensitively, and the vendor's `asyncUsageCount`
-is deliberately unreachable from the port.
-:::
-
-:::detail{title="Liability and metrics" for="engineer"}
-The liability register reports outstanding points as a count and the money
-out in codes as money, answering `none` where nothing mints and `unavailable`
-with a reason where the register cannot be read — never a zero. Metrics:
-`membership.code.minted`, `.used`, `.mismatch`, `loyalty.codes.outstanding_minor`.
+:::detail{title="Where a coupon lives" for="engineer"}
+Two registries. Loyalty's `coupon_instances` is the member's own: one row per
+redemption, carrying the definition it was bought under, with `available`,
+`reserved`, `used`, `expired` and `void`; `coupon_usages` is one attempt to
+apply one to one order, keyed for idempotency and unique on a live attempt per
+coupon. The store's own registry holds every coupon the store issued whatever
+granted it, as `live`, `used` or `void`. A reward coupon's provider artifact is
+always `draft_line_discount` — `discount_code` is the store registry's and
+never reaches loyalty. Metric: `loyalty.coupon.reservation_released`.
 :::

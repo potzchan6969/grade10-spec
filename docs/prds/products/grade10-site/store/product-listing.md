@@ -36,10 +36,6 @@ product.
 
 ::story{id="store-product-listing-productbrowse--empty-catalog" title="A catalogue with nothing in it"}
 
-## Test cases
-
-::cases{id="grade10-site/store/product-listing"}
-
 :::detail{title="Product decisions" for="pm"}
 A collector arrives knowing what they collect — a world, a kind of card — and
 the shop's collections are a merchandiser's grouping rather than that. The

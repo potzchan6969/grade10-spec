@@ -294,6 +294,11 @@ Expiry is exact — [[grade10-site-loyalty-programme-SC-96]] — and a balance i
 ([[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]).
 ```
 
+**A page never cites a scenario.** `…-SC-32` says nothing to the person
+reading the page, so a rule is stated in the page's own words and the
+capability is linked whole. The scenario form below is for the specs and the
+guides that quote them.
+
 A reference renders the target's current title as a link, so a renamed
 scenario can never orphan the prose that cites it. On a page with a `spec`
 in its frontmatter, a bare id resolves inside that spec; anywhere else —

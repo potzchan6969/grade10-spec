@@ -47,9 +47,9 @@ function runs(blocks: Block[]): Run[] {
 }
 
 /**
- * A page's blocks in order. A run of examples folds behind one collapsed
- * `Examples` toggle, so a page reads as its rules first and its worked cases
- * on request; a deep link into a case opens the run around it.
+ * A page's blocks in order. A run of examples gathers under one `Examples`
+ * toggle, open on arrival — a worked case is how the rules are read, not an
+ * appendix to them — and foldable away once it has been read.
  */
 export function BlockList({ blocks }: { blocks: Block[] }) {
   return (
@@ -88,6 +88,7 @@ function Examples({ blocks }: { blocks: ExampleBlock[] }) {
           {blocks.length}
         </Badge>
       }
+      defaultOpen
       id={`${ids[0]}-examples`}
       linkLabel="Copy link to these examples"
       targets={ids}

@@ -97,8 +97,13 @@ Outline first. A document is a heading and an outline, never an essay.
 - **Open items wear a mark** — ❓ at the start of the line with the
   question, or `TBC` after the value still missing. Never blur a decided
   fact to sit beside an undecided one.
+- **Decided but unbuilt wears 🚧** — at the start of the line, for a fact
+  that is settled and does not run yet. ❓ is for what nobody has decided;
+  the two are different states and never share a mark.
 - **Self-contained** — no bare section references ("see above"). Name or
-  link the thing.
+  link the thing. A scenario id — `…-SC-32` — is one of those: it means
+  nothing to a reader, so a page names the rule in its own words and links
+  the capability, never the scenario.
 
 ## Voice
 
@@ -115,10 +120,15 @@ Outline first. A document is a heading and an outline, never an essay.
 - The reader's word, not the code's or the designer's. A page says "a small
   label above the headline" even where the component and the spec call it
   an eyebrow; the term belongs to the spec, the plain word to the page.
+- Name what happens, not a noun for it. "The member loses the tier", never
+  "the drop": a noun made out of an event has to be defined before it pays,
+  and the lines after it fill with pronouns pointing back at it.
+- A word already in the draft has earned nothing. Rewriting a hard line means
+  dropping the term that made it hard, not carrying it into the new sentence.
 - Group one concern per section.
 - The roadmap, stated as the product. A decided plan reads in the present
-  tense as though shipped; where it stands is a status card or a ❓, never
-  an apology in the prose that a spec is still being written.
+  tense as though shipped; where it stands is a status card, a 🚧 or a ❓,
+  never an apology in the prose that a spec is still being written.
 
 ## One source of truth
 
