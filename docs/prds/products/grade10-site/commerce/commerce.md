@@ -97,7 +97,7 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 - A paid order's earning is the provider's own lines put through the eligible-goods rule, then this store's priced items, then the goods total the provider stated. Never the charge, and never the goods total where the lines answer: the rule drops a gift card and a grading fee, and the first rung is smaller than the last exactly where it does
 - Earning on the charge would pay a buyer for their own delivery and make the rate depend on the shipping they picked; a discount they entered at checkout is theirs and lowers it
 - A refund's event carries the goods that came back, priced the way the earn was — a refund of the delivery alone removes no points
-- A refund nothing itemised — an operator's amount, a total read back off the provider — gets the share of it that the earn basis is of the charge, and never more than the order earned on
+- A refund that names no lines — an operator's amount, a total read back off the provider — gets the share of it that the earn basis is of the charge, and never more than the order earned on
 - `total_paid_minor` and `refunded_minor` stay the money, and are what finance reads
 - A settlement whose currency is not the order's is refused, counted, and never written: the amount is real but the unit is not this order's
 
@@ -225,7 +225,7 @@ muted, and a muted alert is worse than none.
 - The event row's unique `source_ref` is the idempotency key for the money, so a delta is as safe to redeliver as a total
 - A refund is named by the provider's own refund id on every path — this store's refund, the webhook, the reconcile pass — through one recorder. The pass reads the refunds the provider lists rather than minting a ref of its own, so whichever path arrives second records nothing; money the provider states a total for but names no refund behind is counted (`commerce.reconcile.unnamed_refund`) and not recorded, because a ref minted here is one nothing else will ever carry
 - Refunds recorded before that rule — under `reconcile:<orderId>:<total>` — stand as they are: which of the provider's refunds they cover cannot be told, so a further refund on such an order is refused and counted (`commerce.order.refund_unkeyed_history`) rather than recorded twice
-- The goods total only ever climbs — it is the sum of every delta emitted, and the itemised and pro-rated arms answer different numbers for the same money, so a lower answer arriving second would let the refund after it re-emit goods a claw-back already took
+- The goods total only ever climbs — it is the sum of every delta emitted, and the per-line and pro-rated arms answer different numbers for the same money, so a lower answer arriving second would let the refund after it re-emit goods a claw-back already took
 - Neither running total passes what the order took: the gross stops at the charge, the goods at what the earn was written on — `goods_minor` where the provider split it out and the store's own quote where it did not, which is the only bound an order with no split has. The excess is said out loud and counted (`commerce.order.refund_over_ceiling`, tagged by basis), the way a charge that no longer matches is
 - Shopify offers no refund idempotency key: the adapter writes the caller's key as the refund note and looks for it on the order first, so a retry after a lost response finds its own refund
 
