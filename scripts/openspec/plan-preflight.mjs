@@ -299,8 +299,8 @@ for (const g of groups) {
 // planners not to write. The routine copy is already mechanical —
 // `archive:preflight` refuses the archive while the feature set and the journeys
 // are uncarried — and the box cannot be ticked when the work is, since it waits
-// on a deploy. Advisory rather than a refusal: seven changes in flight still
-// carry one, and blocking their plan edits over it helps nobody.
+// on a deploy. No change in flight carries one any more; this stays advisory
+// rather than a refusal, so a stray group is flagged and not blocked.
 const handOff = groups.filter((g) => /\barchive\b/i.test(g.title));
 if (handOff.length) {
   console.log(
