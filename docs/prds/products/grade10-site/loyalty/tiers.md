@@ -54,19 +54,17 @@ A tier is held for a **tier period**: **12 months** from the day it was
 reached. What the member earns inside the period decides what happens at the
 end of it.
 
-- **≥ 500 points** — the period extends 12 months from its own end, the
-  moment an evaluation sees it, so the anniversary never moves and there is no
-  year-end reckoning
-- **< 500 points** — the member goes back to Silver, and the climb starts
-  again at the period's end
+- **≥ 500 points** — the period extends 12 months from its own end
+- **< 500 points** — the member goes back to Silver
 
 Progress in one period is not carried over to the next.
 
 :::callout{kind="note"}
-**The tier history catches up overnight.** Every read resolves the tier live,
-so nothing a member or a till sees waits for the nightly pass. It runs for the
-record: one row per move with its cause, so even a member who never comes back
-leaves a complete history, and a nightly count of who fell and who re-earned.
+**The nightly pass writes the tier history.** A tier is worked out on every
+read, so losing one writes nothing down by itself, and a member who lapses and
+never comes back would leave no record at all. The pass writes it: one row per
+move with its cause, which an operator reads on the member's standing, and a
+nightly count of who fell and who re-earned. No read waits for it.
 :::
 
 :::example{title="A member's two years" periods="Gold=gold"}
