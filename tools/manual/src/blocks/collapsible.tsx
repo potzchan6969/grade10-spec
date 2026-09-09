@@ -10,6 +10,9 @@ import { AnchorLink, useHashTarget } from "./anchor";
  *
  * A `card` wears a border, for depth that is part of the page. A `ghost` is
  * the bare toggle, for a body that already carries its own frame.
+ *
+ * `defaultOpen` is for a body the page is incomplete without: it still folds
+ * away, but the reader is not asked to ask for it.
  */
 export function Collapsible({
   id,
@@ -18,6 +21,7 @@ export function Collapsible({
   badge,
   linkLabel,
   variant = "card",
+  defaultOpen = false,
   children,
 }: {
   id: string;
@@ -27,11 +31,12 @@ export function Collapsible({
   badge?: ReactNode;
   linkLabel: string;
   variant?: "card" | "ghost";
+  defaultOpen?: boolean;
   children: ReactNode;
 }) {
   const ghost = variant === "ghost";
   const targeted = useHashTarget(id, ...targets);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
 
   useEffect(() => {
     if (targeted) setOpen(true);
