@@ -12,10 +12,10 @@ The application work starts after the change is merged to `grade10-spec` main an
 
 ## 2. Database migration (grade10) (owner: @htonyl)
 
-- [ ] 2.1 Add additive auth migrations for `shipping_addresses` and auction migrations for `auction_orders`, `auction_invoices`, `auction_invoice_log`, suspension records/logs, notification work/logs, and `fulfilment_log`, with the one-order-per-listing, one-current-invoice, and one-default-per-account invariants required by `winner-order-SC-03`, `winner-order-SC-06`, `winner-order-SC-22`, `winner-order-SC-23`, `auction-status-SC-01`, and `auction-status-SC-03`
-- [ ] 2.2 Add minor-unit money fields, currency and estimate flags, immutable winner/address snapshots, append-only log constraints, provider idempotency keys, and retry indexes so `winner-order-SC-04`, `winner-order-SC-18`, `winner-order-SC-21`, `winner-order-SC-24`, `grade10-admin-auction-post-sale-SC-34`, `grade10-admin-auction-post-sale-SC-35`, and `order-mail-SC-06` cannot lose or duplicate facts
-- [ ] 2.3 Preserve legacy settlement/hold rows and add the guarded read adapter and backfill markers needed for `winner-order-SC-12`, `winner-order-SC-13`, `grade10-admin-auction-post-sale-SC-36`, and `grade10-admin-auction-post-sale-SC-42`
-- [ ] 2.4 Verify migration ordering, rollback-safe application boundaries, constraints, and representative fixtures with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, and the focused backend migration tests
+- [x] 2.1 Add additive auth migrations for `shipping_addresses` and auction migrations for `auction_orders`, `auction_invoices`, `auction_invoice_log`, suspension records/logs, notification work/logs, and `fulfilment_log`, with the one-order-per-listing, one-current-invoice, and one-default-per-account invariants required by `winner-order-SC-03`, `winner-order-SC-06`, `winner-order-SC-22`, `winner-order-SC-23`, `auction-status-SC-01`, and `auction-status-SC-03`
+- [x] 2.2 Add minor-unit money fields, currency and estimate flags, immutable winner/address snapshots, append-only log constraints, provider idempotency keys, and retry indexes so `winner-order-SC-04`, `winner-order-SC-18`, `winner-order-SC-21`, `winner-order-SC-24`, `grade10-admin-auction-post-sale-SC-34`, `grade10-admin-auction-post-sale-SC-35`, and `order-mail-SC-06` cannot lose or duplicate facts
+- [x] 2.3 Preserve legacy settlement/hold rows and add the guarded read adapter and backfill markers needed for `winner-order-SC-12`, `winner-order-SC-13`, `grade10-admin-auction-post-sale-SC-36`, and `grade10-admin-auction-post-sale-SC-42`
+- [x] 2.4 Verify migration ordering, rollback-safe application boundaries, constraints, and representative fixtures with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, and the focused backend migration tests
 
 ## 3. Auction close and invoice lifecycle (grade10)
 
