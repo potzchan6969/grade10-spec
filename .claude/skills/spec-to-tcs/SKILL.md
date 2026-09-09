@@ -1,6 +1,6 @@
 ---
 name: spec-to-tcs
-description: Derive classified test cases from the user journeys - a capability's test-cases.md at feature level, or a domain's cross-feature domain-tcs.md at domain level. Use when QA or a PM asks to turn a durable capability, a domain, or an OpenSpec change into test cases, or when a change's specs are finished and auto-generate suites. Invoke as /spec-to-tcs [feature|domain] <target>.
+description: Derive classified test cases from the user journeys - a capability's feature-tcs.md, a domain's domain-tcs.md, a product's product-tcs.md, or the store's cross-product platform-tcs.md. Use when QA or a PM asks to turn a durable capability, a domain, or an OpenSpec change into test cases, or when a change's specs are finished and auto-generate suites. Invoke as /spec-to-tcs [platform|product|domain|feature] <target>.
 ---
 
 # Generate test cases from a capability's user journeys
@@ -8,31 +8,65 @@ description: Derive classified test cases from the user journeys - a capability'
 Follow `docs/governance/specs-to-test-cases.md` — this skill is that
 document's workflow, automated, ensuring strict traceability, NLP automation readiness, and comprehensive behavior coverage. Read it in full before the first run in a session; it defines the format, the property vocabularies, and the review lifecycle this skill produces.
 
-Invoke as `/spec-to-tcs [feature|domain] <target>`. Reviewing a suite and transitioning it to actual/approved is handled strictly by `/tcs-review` (`.cursor/skills/tcs-review/SKILL.md`). Manual "peer review" is deprecated.
+Invoke as `/spec-to-tcs [platform|product|domain|feature] <target>`. Reviewing a suite and transitioning it to actual/approved is handled strictly by `/tcs-review` (`.cursor/skills/tcs-review/SKILL.md`). Manual "peer review" is deprecated.
 
 ## The level comes first
 
-| Level | Writes | Covers |
-| --- | --- | --- |
-| `feature` (default) | `<capability>/feature-tcs.md` | one capability's own journeys, its refusals and edge cases |
-| `domain` | `<product>/<domain>/domain-tcs.md` | the paths a person walks across the capabilities of one domain |
-| `application` | nothing yet | reserved; answer that no application suite is defined and stop |
+| Level | Writes | Covers | Owes |
+| --- | --- | --- | --- |
+| `platform` | `openspec/specs/platform-tcs.md` | paths across products | nothing — smoke |
+| `product` | `<product>/product-tcs.md` | paths across the domains of one product | nothing — smoke |
+| `domain` | `<product>/<domain>/domain-tcs.md` | paths across the capabilities of one domain | every cross-capability path its journeys imply |
+| `feature` | `<capability>/feature-tcs.md` | one capability's own journeys, its refusals and edge cases | every scenario its journeys accept |
 
-A new feature suite is written as `feature-tcs.md`. A capability whose suite
-already exists as `test-cases.md` keeps that name — update it in place, and
-never write a second file beside it.
+A suite's file name carries its level. `test-cases.md` is not a suite name —
+the suites that carried it were renamed at r3.0 — so never write one, and never
+write a second file beside a suite that already exists.
 
-The level is the first argument. Without one, take `feature` — and say which
-level you took. Ask only when the target itself is ambiguous (a path that
-names both a capability and a domain).
+**Which level owns a case is not a matter of taste.** The spec that states the
+behaviour owns the case: a capability's feature suite covers what its own
+`spec.md` says, wherever the outcome is observed. `grade10-admin/auction/listing`
+SC-16 has a collector opening `/auction/listings/<slug>`, and that case is the
+listing capability's even though the address is a site page.
 
-**Run `domain` before `feature`** when a change touches both. The domain file
-names the paths; the feature suites then cover what those paths do not reach,
-and trim what they now do. Deriving in the other order makes every feature
-trim a guess. Say so and offer the domain run first when the user asks for a
-feature suite in a domain whose `domain-tcs.md` is missing or older than the change.
+The levels above hold only **composed** paths — ones no single spec states end
+to end — and a composed case names every journey it walks:
 
-### What a domain run reads and writes
+| Level | Its cases trace |
+| --- | --- |
+| `domain` | ≥2 journeys, from ≥2 capabilities of that domain |
+| `product` | ≥2 journeys, from ≥2 domains of that product |
+| `platform` | ≥2 journeys, from ≥2 products |
+
+A case at those levels with a single trace is a feature case written at the
+wrong level, and `pnpm run tcs:validate` fails it. **Compose from evidence,
+never from imagination:** read every `user-journeys.md` and every `docs/prds/`
+page in scope first, and never write a path you cannot trace to journeys that
+exist. Read **One purpose, one case** in the governance document before
+deciding.
+
+`product` and `platform` are **smoke passes, not coverage** — a handful of long
+paths, every one `**Suites:** smoke`, written to answer *does the whole thing
+still work together*. They deliberately re-walk what the levels below cover,
+because they ask a different question. One that grows past a page has stopped
+being a smoke pass. Write neither where there is no path to hold it: a
+one-domain product has no cross-domain path, and its missing suite is not a gap.
+
+**Infer the level from the target when no argument is given** — a directory
+holding `spec.md` is `feature`, a `<product>/<domain>` directory is `domain`, a
+product directory is `product`, `openspec/specs/platform-tcs.md` is `platform`,
+and an explicit file path is whatever its name says. Say which level you took.
+Ask only when the target itself is ambiguous (a name matching both a capability
+and a domain).
+
+**Run the levels top down** — `platform`, `product`, `domain`, then `feature` —
+when a change touches more than one. The higher file names the paths; the level
+below covers what those paths do not reach. Deriving in the other order makes
+every lower suite a guess at what the level above will claim. Say so and offer
+the higher run first when the user asks for a suite whose level above is
+missing or older than the change.
+
+### What a domain, product or platform run reads and writes
 
 Read all of it before writing:
 
@@ -46,11 +80,23 @@ Read all of it before writing:
 Reading only the change loses the siblings that make a path cross-feature;
 reading only `openspec/specs/` misses the change the run exists to cover.
 
+A `product` run reads every domain's `user-journeys.md` in that product, and
+its pages under `docs/prds/`. A `platform` run reads the same way one scope
+wider: every product's `user-journeys.md` under `openspec/specs/`, and the
+product records beside them. Name the products the path crosses first, then
+read those.
+
 A domain suite issues `<product>-<domain>-e2e-US<n>-TC<m>-<v>`, its journeys
 numbered its own way — an `e2e` journey is a path, not a copy of a capability's
 story — and each case's `**Trace:**` names every capability journey it crosses,
 in the order the case reaches them. A case whose pre-conditions and steps all
 sit inside one capability does not belong there: it is that capability's.
+
+A product suite issues `<product>-e2e-US<n>-TC<m>-<v>`, and a platform suite
+`platform-e2e-US<n>-TC<m>-<v>`, both the same way — `e2e` in the capability
+slot, journeys numbered their own. A product case never leaves its product; a
+platform case crosses products. A case that stays inside one domain belongs to
+that domain, or to the capability whose spec states it.
 
 Works against **both** trees equally — durable specs and in-flight change
 deltas. The suite always lands beside the `spec.md` you resolved, next to the
@@ -83,7 +129,7 @@ each case traces scenario ids.
    (`openspec/changes/archive/`) is never a target.
 
 2. **Stop if a suite is already there.** Before reading the spec for
-   generation, check whether `test-cases.md` already sits beside the resolved
+   generation, check whether a suite already sits beside the resolved
    `spec.md`. If it does, **do not write anything yet.** Read it, then show
    the user what is there:
    - the file's `**Status:**` line;
@@ -107,7 +153,7 @@ each case traces scenario ids.
    ones become `deprecated`, reviewed cases keep their ids and properties. A
    reviewer who truly wants a clean rewrite must move those cases back to
    `draft` themselves first via `/tcs-review`; never do that for them, and never delete a
-   `test-cases.md` file.
+   suite file.
 
 3. **Digest the spec and the store's context — and upgrade the spec if
    journeys are missing.** Read the spec end to end from disk. Read the
@@ -163,17 +209,19 @@ each case traces scenario ids.
 4. **Learn the house style from the cases QA has already approved.** Before
    writing anything, read the store's approved corpus and let it settle the
    questions this skill's prose can only answer generically. Scan
-   `openspec/specs/**/test-cases.md` and
-   `openspec/changes/*/specs/**/test-cases.md` (never `archive/`) and collect
+   `openspec/specs/**/*-tcs.md` and
+   `openspec/changes/*/specs/**/*-tcs.md` (never `archive/`) and collect
    every case whose `**Status:**` is `actual` **in a file whose
-   `**Reviewed:**` line names the current `tcs_rules_rev`**. Those cases — and
-   only those — are evidence: a reviewer read each one against its spec and
+   `**Reviewed:**` line names the current **major** of `tcs_rules_rev`**. Those
+   cases — and only those — are evidence: a reviewer read each one against its spec and
    stood behind it, including any wording they changed on the way. `draft`
    cases are your own past output and prove nothing; `deprecated` cases are
    retired.
 
-   A suite approved under an older revision, or before the revision was
-   recorded at all, is **not** evidence. Its wording was right for the rules
+   A suite approved under an older **major**, or before the revision was
+   recorded at all, is **not** evidence. A minor behind still teaches: a minor
+   moves wording a little, and filtering it out would empty the corpus every
+   time one landed. Its wording was right for the rules
    of its day and nothing re-words an approved case for style alone, so
    learning from it would undo the rules change one generated suite at a time.
    Read it for nothing, and name it in the report as approved-but-stale.
@@ -227,7 +275,7 @@ each case traces scenario ids.
    ids**, a section description, or a case count. Separate one journey
    section from the next with a `---` rule on its own line.
 
-   **User-Perspective Strictness:** The actor is the role the story names — an end user (operator, admin, collector, customer). If a traced scenario represents a purely technical requirement (e.g., database schema changes, backend cron jobs, internal system state) with no observable user-facing outcome, **do not generate a test case for it**. A scenario under no journey, a purely technical scenario, or a journey listing an id the requirements never define, is reported in step 10. Every case must map 1-to-N to a User Story. Orphaned test cases are strictly prohibited.
+   **User-Perspective Strictness:** The actor is the role the story names, and it resolves to one of two classes — `customer` (anyone outside the business) or `admin` (anyone inside it). Every other role the specs name — collector, member, shopper, bidder, borrower, auction operator, shop staff, treasurer, auditor — is one of those two holding a state or a grant, which is a pre-condition, not an actor. A journey whose actor is neither class is not a journey: report it, and do not derive cases from it. If a traced scenario represents a purely technical requirement (e.g., database schema changes, backend cron jobs, internal system state) with no observable user-facing outcome, **do not generate a test case for it**. A scenario under no journey, a purely technical scenario, or a journey listing an id the requirements never define, is reported in step 10. Every case must map 1-to-N to a User Story. Orphaned test cases are strictly prohibited.
 
 6. **Write the test cases for each journey.** Number them
    `<capability>-US<n>-TC<m>-<v>` per journey (no hyphen after `US`/`TC`, no
@@ -283,11 +331,15 @@ each case traces scenario ids.
      conditions and their data once; each case then adds only what is its
      own. Background is optional and belongs only where *every* case shares
      what it holds.
-   - **Roles** — inside a case the actor is `admin` or `user` (`user A` and
-     `user B` when two act), never a product persona — no operator,
-     collector, bidder or rival. Journey titles and stories keep the
-     product's words; the cases under them do not. A role is never a test
-     data row.
+   - **Roles** — inside a case the actor is `customer` or `admin`, with the
+     state or grant the case needs in brackets after it, stated in the
+     pre-conditions: `customer(gold member) is on the shopping cart page`,
+     `admin(shop staff) is on the loyalty member page`, `admin(holds
+     `auction:operate`) is on <grade10 auction admin listings url>`. A bare
+     `customer` is one in no particular state. Two of a class acting are
+     `customer A` and `customer B`. Journey titles and stories keep the
+     product's own words; the cases under them carry the class. A role is
+     never a test data row.
    - **Test data (Optional)** — A `Field | Value` table of the values the
      case uses, taken from the scenario. Do not use hard-coded PII. When the
      case takes no input, omit the whole section — no empty table, no "None"
@@ -309,6 +361,14 @@ each case traces scenario ids.
      user A, current bid `<leader price>`"). Cases needing the same state
      share the name and repeat the row. One name for two states produces a
      suite that cannot pass against one seeded environment.
+
+     **Make the spec's markers concrete.** Where the spec names a moment or a
+     quantity abstractly ("a valid bid at time T"), give the tester a number
+     as test data, derived from the rule rather than invented against it:
+     `<bid time>` "5 minutes before the recorded close", and the expected
+     `<new time left>` "one `<extension duration>` from the accepted bid".
+     Keep the derivation in the expected result, and never let the concrete
+     value contradict the rule it came from.
 
      **One case, many rows.** When the steps are identical and only the data
      differs, write one case with a row per run — a column per varying value
@@ -465,6 +525,15 @@ each case traces scenario ids.
      heading above it uses the compact `grade10-site-store-home-US1`. One journey per case. A
      case with no trace does not belong in the file.
 
+   **Never add a case the suite already holds.** In update mode, read what is
+   there before writing: two cases asserting the same outcomes on the same
+   surface from the same starting state are one case, and a variation in data
+   alone is a row, not a case. Where a scenario looks uncovered but an existing
+   case already asserts it, extend that case rather than adding a second, and
+   report the pair either way. Check the domain suite too — a feature case
+   wholly covered by an `approved` domain case is reported as a trim
+   candidate, never deleted by this skill.
+
    **Coverage shape:** A journey whose `Accepted by` list includes refusal,
    empty-state, or failure scenarios must not ship with only `positive`
    cases — add the matching `negative` (and `destructive` when the
@@ -479,8 +548,8 @@ each case traces scenario ids.
    step 10.
 
 9. **Write the file beside the resolved `spec.md`** — durable suite under
-   `openspec/specs/.../test-cases.md`, or delta suite under
-   `openspec/changes/<change>/specs/.../test-cases.md` — with its header lines
+   `openspec/specs/.../feature-tcs.md`, or delta suite under
+   `openspec/changes/<change>/specs/.../feature-tcs.md` — with its header lines
    under the file title and no preamble paragraph between them.
 
    **The header is computed, never chosen** (see "The file header" in
@@ -492,9 +561,9 @@ each case traces scenario ids.
      suite is `pending-review` because every case in it is `draft`; an update
      that adds a `draft` to an approved suite recomputes to `in-review`, and
      you write that rather than leaving a status that is now false.
-   - `**Drafts styled:** <today>, tcs-rules r<n>` goes on every file you leave
-     holding a `draft`, where `<n>` is `tcs_rules_rev` from that document's
-     frontmatter. Omit the line entirely when the run leaves no draft.
+   - `**Drafts styled:** <today>, tcs-rules r<major>.<minor>` goes on every
+     file you leave holding a `draft`, taking the revision from
+     `tcs_rules_rev` in that document's frontmatter. Omit the line entirely when the run leaves no draft.
    - `**Reviewed:**` is `/tcs-review`'s to write. Never write it, and never
      write `**Status:** approved` — a suite reaches that only through a human.
 
@@ -563,20 +632,24 @@ each case traces scenario ids.
    line, at least one step, at least one expected result — is on every case.
 
    In **update mode** (a suite already existed and the user chose update):
-   - Keep every `actual` and `deprecated` case exactly as it is, including
-     one still written in an older shape — never reformat a reviewed case to
-     match the template or the learned conventions.
+   - Keep every `actual` and `deprecated` case whose scenarios are unchanged
+     exactly as it is, including one written in an older shape — never
+     reformat a reviewed case to match the template or the learned
+     conventions.
    - Keep the coverage of a `draft` case whose scenarios are unchanged, but
-     bring its wording to the conventions learned in step 4 (bump `<v>`,
-     leave it `draft`).
-   - Re-word a case whose scenarios changed, bump its `<v>`, set its
-     `**Status:**` back to `draft`, and write it in the shape above.
+     bring its wording to the conventions learned in step 4 — id kept, `<v>`
+     unchanged, status still `draft`. A restyle never bumps `<v>`.
+   - **Resolve every case whose traced scenario the delta moved, `actual`
+     ones included.** A reviewed case that still asserts the behaviour a
+     change replaced is worse than no coverage. Three outcomes, and no
+     fourth: the scenario changed what the case must verify → re-word it,
+     bump `<v>`, set `**Status:** draft`; the behaviour is gone →
+     `**Status:** deprecated`; the change did not touch what this case
+     asserts → leave it `actual` and say so in the report.
    - Add a case for every user-facing scenario no case covers (next unused
      `TC<m>` under that journey).
-   - Set `**Status:** deprecated` on any case whose scenario the spec no
-     longer has. Do not delete it and do not renumber around it.
-   - Set the file's `**Status:**` back to `pending-review` whenever the run
-     leaves at least one `draft` case.
+   - Recompute the file's `**Status:**` from the cases below it — never type
+     it — and report every `actual` case this run moved.
 
 10. **Report** what you learned and what you wrote. Open with the corpus:
    how many `actual` cases you read and from which capabilities, the
@@ -587,7 +660,7 @@ each case traces scenario ids.
    defaults were used. Then report the drafts you re-worded to match, with
    their old and new `<v>`.
 
-   Then report what you wrote: each `test-cases.md` path (and whether it is
+   Then report what you wrote: each suite path (and whether it is
    durable or a change delta), the journeys (US ids) and how many cases
    each holds, the ids added, re-worded, and deprecated, and — when step 3
    upgraded the spec — which `spec.md` paths you rewrote. Report separately

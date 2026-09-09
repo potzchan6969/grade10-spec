@@ -5,7 +5,7 @@
 
 Additions to the capability's approved suite, not a replacement: US1, US2, US4
 and US5 are unchanged, and US3 keeps every case it already carries. At archive
-these are merged into `openspec/specs/grade10-site/store/home/test-cases.md`
+these are merged into `openspec/specs/grade10-site/store/home/feature-tcs.md`
 rather than written over it.
 
 ## grade10-site-store-home-US3: Collector browses the merchandised collection
