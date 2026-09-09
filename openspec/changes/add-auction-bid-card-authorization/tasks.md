@@ -27,5 +27,5 @@
 
 - [x] 5.1 Make `First bid requires a payment method` pass in `PlaceBidDialog`, showing the provider-hosted payment field after a collector selects a valid maximum.
 - [x] 5.2 Make `Payment authentication stays in the dialog` and `A refused authorization does not place a bid` pass with accessible pending and refusal states, retaining the collector's bid draft.
-- [ ] 5.3 Make `A later bid retains the listing's payment method` pass by skipping the payment-method step for an existing listing authorization and refreshing the visible bid standing after success.
+- [x] 5.3 Make `A later bid retains the listing's payment method` pass by skipping the payment-method step for an existing listing authorization and refreshing the visible bid standing after success.
 - [ ] 5.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the affected Listing bid dialog stories/tests.
