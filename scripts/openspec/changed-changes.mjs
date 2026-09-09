@@ -264,15 +264,11 @@ export function slackPayload({
 
   return {
     blocks: [
-      {
-        type: "section",
-        text: { type: "mrkdwn", text: ":memo: OpenSpec updates" },
-      },
       ...sections.map(([status, label, icon]) => ({
         type: "section",
         text: {
           type: "mrkdwn",
-          text: `${icon} *${label}*\n${changes[status]
+          text: `${icon} OpenSpec *${label}*\n${changes[status]
             .map(
               ({ id, title, scopes }) =>
                 `- ${changeLink(id, title, openspecUrl)} (\`${id}\`)${scopesText(scopes)}`,
@@ -290,7 +286,7 @@ export function slackPayload({
           type: "section",
           text: {
             type: "mrkdwn",
-            text: `${icon} *${label} capabilities*\n${capabilities[status]
+            text: `${icon} OpenSpec *${label} capabilities*\n${capabilities[status]
               .map(
                 ({ id, scopes }) =>
                   `- ${capabilityLink(id, openspecUrl)}${scopesText(scopes)}`,
