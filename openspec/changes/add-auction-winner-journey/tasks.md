@@ -55,7 +55,7 @@ The application work starts after the change is merged to `grade10-spec` main an
 - [ ] 7.3 Add deterministic buyer fixtures and automate the scenarios whose test cases become eligible for Playwright, keeping provider and cron seams fakeable as required by the repository's E2E lane
 - [ ] 7.4 Verify route guards, loading/error/expired/paid/shipped/delivered/suspended states, accessibility, and responsive layout with focused frontend tests, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build`
 
-## 8. Manual pages (grade10-spec)
+## 8. Manual pages (grade10-spec) (owner: @htonyl)
 
 - [x] 8.0 Restore the checked-off predecessor delivery record as historical evidence, and reconcile its automatic-capture and stored-outcome wording with the winner-journey contract
 - [ ] 8.1 Update or create the capability pages for winner order, order status, bidder suspension, notifications-order, and admin post-sale under `docs/prds/products/`, while keeping testable requirements only in the durable specs
