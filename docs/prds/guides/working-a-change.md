@@ -30,7 +30,7 @@ the thing it acts on.
 | 1 | `proposal.md` | Product manager | `/planning-pm` | Always |
 | 2 | `specs/<capability>/spec.md` | Product manager | `/planning-pm` | Always |
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `/planning-pm` | Always — one nobody walks says so in it |
-| 4 | `specs/<capability>/test-cases.md` | QA | `/planning-qa` | Optional |
+| 4 | `specs/<capability>/feature-tcs.md` | QA | `/planning-qa` | Optional |
 | 5 | `ui-design.md` | Designer | `/planning-design` | Optional |
 | 6 | `tech-design.md` | Engineer | `/planning-dev` | Optional |
 | 7 | `tasks.md` | Engineer | `/planning-dev` | Before anyone can build it |
@@ -224,7 +224,7 @@ Nobody sends a message. The files themselves are the signal.
 | --- | --- | --- |
 | `proposal.md` alone | A reason, no requirements yet | PM |
 | Deltas, no `user-journeys.md` | The stories are owed — a capability nobody walks says `**Walked by:** nobody` in the file, so a missing one is never the exemption | PM |
-| Journeys, no `test-cases.md` | Nothing has been derived yet | QA |
+| Journeys, no `feature-tcs.md` | Nothing has been derived yet | QA |
 | A user-facing change, no `ui-design.md` | Screens unmapped | Designer |
 | No `tasks.md` | Still being planned — the only handover signal there is | Engineer |
 | Every box ticked | Waiting on a deploy, then the archive | Whoever owns it |
@@ -240,7 +240,7 @@ Different from the change id, and permanent once issued.
   `grade10-site/store/gift-receipt` issues
   `grade10-site-store-gift-receipt-*`
 - **Three kinds** — `-SC-01` a scenario in `spec.md`, `-US-01` a story in
-  `user-journeys.md`, `-US1-TC1-1` a case in `test-cases.md`
+  `user-journeys.md`, `-US1-TC1-1` a case in `feature-tcs.md`
 - **Why the whole path** — two capabilities can share a name;
   `grade10-site/site/navigation` and `zzz-site/site/navigation` would
   otherwise both issue `navigation-SC-01`, and no reader could say which
