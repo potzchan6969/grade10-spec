@@ -41,7 +41,7 @@ listing to the previous narrowing.
 - **AND** latest product, lowest price, and highest price are offered
 - **AND** popularity is not offered
 
-#### Scenario: grade10-site-store-product-listing-SC-22 - At rest the order is latest
+#### Scenario: grade10-site-store-product-listing-SC-29 - At rest the order is latest
 
 - **WHEN** a collector opens the listing with no order in the address
 - **THEN** the listing is ordered by latest product

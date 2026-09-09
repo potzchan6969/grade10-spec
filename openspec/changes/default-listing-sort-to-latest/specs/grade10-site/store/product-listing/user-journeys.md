@@ -1,6 +1,6 @@
 ## User journeys
 
-### grade10-site-store-product-listing-US-07: Collector opens the listing at rest
+### grade10-site-store-product-listing-US-09: Collector opens the listing at rest
 
 **As a** collector,
 **I want** the catalogue already ordered by latest product when I arrive,
@@ -9,4 +9,4 @@
 **Accepted by:**
 
 - `grade10-site-store-product-listing-SC-15` — The menu offers only answerable orders
-- `grade10-site-store-product-listing-SC-22` — At rest the order is latest
+- `grade10-site-store-product-listing-SC-29` — At rest the order is latest
