@@ -26,6 +26,9 @@ export type AuctionLetterProps = {
   facts: string[];
   whyYouGotThis: string;
   canUnsubscribe?: boolean;
+  /** Signed-in mute surface for this lot's email alerts. */
+  muteUrl?: string;
+  /** @deprecated Prefer `muteUrl`. */
   unwatchUrl?: string;
   ctaLabel?: string;
 };
@@ -43,6 +46,7 @@ export function AuctionLetter({
   facts,
   whyYouGotThis,
   canUnsubscribe = false,
+  muteUrl,
   unwatchUrl,
   ctaLabel,
 }: AuctionLetterProps) {
@@ -64,7 +68,7 @@ export function AuctionLetter({
       <EmailFooter
         brandName={brandName}
         canUnsubscribe={canUnsubscribe}
-        unwatchUrl={unwatchUrl}
+        muteUrl={muteUrl ?? unwatchUrl}
         whyYouGotThis={whyYouGotThis}
       />
     </AuctionEmailShell>

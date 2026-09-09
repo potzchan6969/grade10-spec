@@ -5,7 +5,7 @@ export type BiddingClosesIn24hProps = {
   brandName?: string;
   lotTitle?: string;
   listingUrl?: string;
-  unwatchUrl?: string;
+  muteUrl?: string;
   primaryImageUrl?: string | null;
   scheduledClosesAt?: string;
   currentBid?: string;
@@ -16,7 +16,7 @@ export default function BiddingClosesIn24hEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   listingUrl = previewLot.listingUrl,
-  unwatchUrl = previewLot.unwatchUrl,
+  muteUrl = previewLot.muteUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   scheduledClosesAt = previewLot.scheduledClosesAt,
   currentBid = previewLot.currentBid,
@@ -32,10 +32,10 @@ export default function BiddingClosesIn24hEmail({
       highlight={{ label: "Current bid", value: currentBid }}
       listingUrl={listingUrl}
       lotTitle={lotTitle}
+      muteUrl={muteUrl}
       preheader={`Scheduled close ${scheduledClosesAt}. The close can still move.`}
       primaryImageUrl={primaryImageUrl}
-      unwatchUrl={unwatchUrl}
-      whyYouGotThis="You receive this because you are watching or have bid on this lot."
+      whyYouGotThis="Email alerts are on for this lot."
     />
   );
 }
@@ -44,7 +44,7 @@ BiddingClosesIn24hEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   listingUrl: previewLot.listingUrl,
-  unwatchUrl: previewLot.unwatchUrl,
+  muteUrl: previewLot.muteUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   scheduledClosesAt: previewLot.scheduledClosesAt,
   currentBid: previewLot.currentBid,
