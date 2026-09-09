@@ -147,7 +147,9 @@ table is the why. Examples that follow one another fold behind one `Examples`
 toggle, collapsed until opened or deep-linked into, each case open beneath it.
 The check refuses a cart line without a price, a timeline that runs back in
 time, and a balance the points do not reach, so an example cannot rot when a
-rule changes:
+rule changes. An example is a points ledger, so a page whose rules move no
+points — money off a line, a refusal, a surface's own states — has none, and
+reaches for a table instead:
 
 ```md
 :::example{title="Refund in two parts" tier="Gold" shipping="$30"}

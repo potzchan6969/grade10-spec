@@ -167,8 +167,8 @@ the other. It is an operator's, never a member's.
   on its own original date, so a reversal never lengthens the life of points
 - **A used one does not** — used is used, and cancelling or refunding the
   order that carried it changes nothing. The points stay spent
-- **A reserved one does not** — it is attached to an order being paid, and
-  waits for that order to settle either way
+- **One held for an order does not** — it is attached to an order being paid,
+  and waits for that order to settle either way
 - **A lapsed balance does not** — there is nothing left to return into
 
 Where a reversal is refused and the member is still owed something, an

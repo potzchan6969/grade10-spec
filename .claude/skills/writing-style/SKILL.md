@@ -29,4 +29,12 @@ Before handoff, hold the draft to it:
     Where a block refuses the content, that is an answer about the content:
     say why it is not that block rather than falling back by hand.
 
+13. The fixed values the page runs on open it, as a two-column
+    `Rule | Value` table, before any prose about behaviour; a closed set the
+    reader can meet — every status, every refusal — is stated whole in the
+    reader's words, with the code's identifiers left to the engineer block;
+    a fact wearing 🚧 or ❓ is a bullet, never a table cell; a sibling's rule
+    appears here only as its outcome and a link; and a state, a role or an
+    instrument wears the same name on every page that mentions it.
+
 A draft that fails one of these gets rewritten, not footnoted.
