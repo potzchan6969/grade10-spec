@@ -30,7 +30,7 @@ The application work starts after the change is merged to `grade10-spec` main an
 ## 4. Suspension and notification workers (grade10)
 
 - [ ] 4.1 Implement deadline expiry, bidder suspension, scoped access, standing-maximum retraction, atomic extended-bidding retraction, and operator reinstatement for `suspension-SC-01`, `suspension-SC-02`, `suspension-SC-03`, `suspension-SC-04`, `suspension-SC-05`, `suspension-SC-06`, `suspension-SC-07`, `suspension-SC-08`, `suspension-SC-09`, `suspension-SC-10`, and `suspension-SC-11`
-- [ ] 4.2 Preserve the auto-bidding invariants while retracting suspended bidders so `grade10-site-auction-auto-bidding-SC-01`, `grade10-site-auction-auto-bidding-SC-02`, `grade10-site-auction-auto-bidding-SC-03`, `grade10-site-auction-auto-bidding-SC-04`, and `grade10-site-auction-auto-bidding-SC-25` pass
+- [ ] 4.2 Preserve the committed auto-bidding contract while retracting suspended bidders so `suspension-SC-05`, `suspension-SC-06`, `suspension-SC-07`, and `suspension-SC-08` pass; the auto-bidding capability itself is owned by its committed change
 - [ ] 4.3 Implement the winning-lot, expiry, manual-settlement, reminder, cancellation, and delivery notifications with notification-log idempotency for `order-mail-SC-01`, `order-mail-SC-02`, `order-mail-SC-03`, `order-mail-SC-04`, `order-mail-SC-05`, `order-mail-SC-06`, `order-mail-SC-07`, and `order-mail-SC-08`
 - [ ] 4.4 Verify retry, concurrent-sweep, suspension, auto-bidding, and notification-worker tests, then run `pnpm run test:backend`
 
@@ -58,7 +58,7 @@ The application work starts after the change is merged to `grade10-spec` main an
 ## 8. Manual pages (grade10-spec)
 
 - [x] 8.0 Restore the checked-off predecessor delivery record as historical evidence, and reconcile its automatic-capture and stored-outcome wording with the winner-journey contract
-- [ ] 8.1 Update or create the capability pages for winner order, order status, bidder suspension, order notifications, and admin post-sale under `docs/prds/products/`, while keeping testable requirements only in the durable specs
+- [ ] 8.1 Update or create the capability pages for winner order, order status, bidder suspension, notifications-order, and admin post-sale under `docs/prds/products/`, while keeping testable requirements only in the durable specs
 - [ ] 8.2 Update the relevant auction index, account-record, notifications, and admin post-sale manual links so each new capability and its buyer/operator entry point is discoverable
 - [x] 8.3 Reconcile the post-sale delta with the existing durable post-sale capability before archive: classify replacements as exact `MODIFIED` requirements or issue new permanent scenario IDs, so the fold does not duplicate the predecessor's `Winner fields` or existing `post-sale-SC-01` through `post-sale-SC-25`
 - [ ] 8.4 Validate the change and test-case traceability with `openspec validate add-auction-winner-journey --strict`, `pnpm run tcs:validate`, and `pnpm check:manual`

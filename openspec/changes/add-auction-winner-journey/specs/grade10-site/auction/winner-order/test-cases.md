@@ -38,7 +38,7 @@ An open lot whose account holds a default shipping address, with one second unti
 **Expected Results:**
 
 * Grade10 creates one auction order, invoice `pending` and fulfilment `unfulfilled`.
-* Shipping, insurance and tax are labelled as estimates.
+* Shipping, insurance, and any tax amount supplied by the separate tax capability are labelled as estimates.
 * The invoice can be paid.
 
 ### winner-order-US1-TC2-1: No default shipping address leaves the invoice unpayable
@@ -68,7 +68,7 @@ An open lot whose account holds no default shipping address, with one second unt
 **Expected Results:**
 
 * The invoice shows the hammer price and the buyer's premium.
-* Shipping, insurance and tax show as still to be calculated.
+* Shipping, insurance, and any tax amount show as still to be calculated.
 * Grade10 refuses the payment until a delivery address is supplied.
 
 ### winner-order-US1-TC3-1: Pre-filled default address still needs confirming
@@ -377,7 +377,7 @@ An auction order paid at a final amount of 316000 minor units in HKD.
 
 **Expected Results:**
 
-* The receipt shows hammer price, buyer's premium, shipping, insurance and tax.
+* The receipt shows hammer price, buyer's premium, shipping, insurance, any tax amount supplied by the separate tax capability, and final amount.
 * Those components sum to 316000 minor units in HKD.
 
 ### winner-order-US2-TC2-1: Tracker appears once the lot is dispatched

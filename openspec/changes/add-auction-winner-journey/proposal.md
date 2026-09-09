@@ -15,15 +15,20 @@ The evidence is in the specs themselves:
   releasable authorization per bidder and listing"** — releasable, never
   capturable. The bid-time hold verifies a bidder; it was never a settlement
   instrument, and nothing else in the store settles.
-- `grade10-site/auction/bid-payment-method` (8/17 delivered) ends at an
-  authorized bid and non-goals "capturing a winner's payment, checkout,
-  delivery, invoicing, orders, or fulfilment".
-- `grade10-site/auction/account-record` shows a winner a payment state
-  projected from operator records, and non-goals "paying, requesting a wire,
-  or arranging delivery from this surface". The winner reads; nobody wrote.
-- `grade10-site/auction/notifications` sends six letters before a close and
-  non-goals mail about "winning, losing, paying, invoicing, or shipping" as
-  "out of scope until the orders work is specified". This is that work.
+- The active `add-auction-bid-card-authorization` change gives a listing one
+  authorization for the committed maximum, cancels it when the bidder is
+  outbid, and explicitly excludes capturing a winner's payment, checkout,
+  delivery, invoicing, orders, and fulfilment. This change starts after that
+  authorization lifecycle.
+- The durable `grade10-site/auction/account-record` capability currently
+  projects `Awaiting payment`, `Payment problem`, `Paid`, `Shipped`, and
+  `Delivered` for a winner. Those labels do not cover the new auction-order
+  derivation, which also distinguishes `Pending Payment`, `Expired`,
+  `Processing`, `Cancelled`, and `Refunded`.
+- The active `add-auction-notifications` change owns the six before-and-during
+  auction messages and currently excludes mail about winning, paying,
+  invoicing, or shipping. The ten post-close letters remain isolated in the
+  sibling `grade10-site/auction/notifications-order` capability.
 
 So the aftermath of every Grade10 auction is a phone call. An operator learns
 the winner's address by asking, takes the money by whatever means, and records
@@ -50,9 +55,10 @@ what separates a working self-service journey from a faster phone call.
 - **The winner confirms or amends a delivery address** before payment
   completes. Amending recalculates and reissues at a revised total, shown as a
   delta. The address locks at payment.
-- **A 7-day deadline runs from lot close** and never moves — not for an
-  amendment, not for a reissue, not for a winner who never supplies an
-  address. Reminders at day 3, day 6 and day 7.
+- **A 7-day deadline runs from lot close** and does not move with a winner's
+  address amendment, payment attempt, or inaction. An operator reissue creates
+  a new deadline for the reissued invoice. Reminders run at day 3, day 6 and
+  day 7 of the current invoice deadline.
 - **Order status becomes derived, never stored.** Two writable primitives —
   invoice status and fulfilment status — plus two time-and-event conditions
   resolve one buyer-facing label through an ordered rule chain. Dispatch
@@ -96,8 +102,9 @@ and its derived order status own the replacement behaviour.
 - **A runner-up offer on non-payment.** Explicitly rejected: the second
   bidder acquires no right to a cancelled lot.
 - **Buyer-initiated returns and disputes.**
-- **Loyalty.** Whether points accrue at win or at payment, and what an expired
-  order does to them, is a separate PRD. No loyalty behaviour is assumed.
+- **Loyalty.** Auction workflows neither accrue nor consume loyalty points.
+  Points grants, redemptions, holds, and reversals are not part of a win,
+  payment, expiry, cancellation, or suspension.
 - **A shipping-rate, insurance or tax quoting capability.** Requirements name
   the components of the final amount and require recalculation on an address
   change; the rate source is an external dependency, and no rate or tax regime
@@ -134,10 +141,10 @@ and its derived order status own the replacement behaviour.
   what an account record shows. Distinct from the platform ban in
   `shared/auth/users`, which stops sign-in and is stated there to be no
   concern of auction's.
-- `grade10-site/auction/order-notifications`: the ten letters a winner
+- `grade10-site/auction/notifications-order`: the ten letters a winner
   receives after a close, what each fires on, what stops a reminder, and their
-  idempotency. Sibling to `grade10-site/auction/notifications`, which owns the
-  before-and-during mail and the shared letter shape this one reuses.
+  idempotency. This remains separate from `grade10-site/auction/notifications`,
+  which owns before-and-during auction mail.
 - `grade10-admin/auction/post-sale`: the operator's queue and order detail —
   expired-order resolution, uncapped reissue logging, manual settlement with
   address confirmation and recalculation, cancellation and lot reopen, the
@@ -146,11 +153,11 @@ and its derived order status own the replacement behaviour.
 
 ### Modified Capabilities
 
-- `grade10-site/auction/auto-bidding`: **"A bidder commits a maximum"** today
-  says Grade10 shall refuse to lower or withdraw a committed maximum. A
-  suspension retracts every standing maximum on an open lot, so that
-  requirement gains its one exception — the bidder still cannot withdraw their
-  own.
+- `grade10-site/auction/account-record`: the durable winner projection adopts
+  the derived auction-order status set, while keeping the account record
+  read-only. Auto-bidding is already durable through its own committed change;
+  this change only consumes its standing-maximum behavior when suspension
+  retracts open-lot commitments.
 
 ## Impact
 
@@ -163,7 +170,7 @@ and its derived order status own the replacement behaviour.
 | Stripe | Hold release for winner and losers alike, a fresh charge per invoice, webhooks for confirmation. Never a capture or increment of a bid-time hold. |
 | Primary warehouse (3PL) and carrier | Dispatch feed with tracking, and a carrier delivery confirmation carrying proof. Neither exists today. |
 | Shipping-rate service | Address-based recalculation, callable from the buyer flow and admin settlement alike. Does not exist today. |
-| Notification service | Ten transactional letters with idempotency and reminder cancellation. |
+| Notification service | Ten post-close transactional letters with idempotency and reminder cancellation, isolated in `notifications-order`. |
 | Shared RBAC vocabulary | Payment-processing and shipment-processing stay distinct grants, carried over from the superseded change. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | **No change.** No export, token, or catalog key is proposed. |
 
@@ -173,17 +180,18 @@ and its derived order status own the replacement behaviour.
   Its checked-off task record and archive remain historical evidence. Its
   automatic-capture, `Awaiting wire`, and stored-outcome rules do not satisfy
   this change and require migration before the winner journey can archive.
-- `add-account-auction-record` — its **"A winner reads their own payment and
-  shipment state"** requirement shows `Awaiting payment / Payment problem /
-  Paid / Shipped / Delivered`, a second buyer-facing vocabulary for the same
-  order. It must adopt the derived status set before either change archives.
-  No delta is issued here, because that capability is not yet durable and a
-  delta cannot target a spec that does not exist.
+- `add-account-auction-record` — this capability is now durable. Its
+  **"A winner reads their own payment and shipment state"** requirement is
+  modified here so the account record projects the auction-order status set
+  rather than retaining a second winner vocabulary.
 - `add-auction-bid-card-authorization` — no conflict. It cancels an
   authorization when a bidder is outbid; this change releases the winner's at
   close. Both are releases, never captures.
-- `add-auction-notifications` — no conflict. It named this mail as the
-  follow-on that waits on "the orders work".
+- `add-auction-notifications` — no conflict. Its `notifications` capability
+  remains the home for before-and-during auction mail; the post-close letters
+  stay isolated in `notifications-order`.
+- `add-auction-auto-bidding` — already committed and durable. No modified
+  auto-bidding delta is carried here.
 
 ## Measurement
 
@@ -192,21 +200,20 @@ and its derived order status own the replacement behaviour.
 | Completed-auction payment rate | Closed lots whose winner reaches paid, over closed lots with a winner. | Product and finance |
 | Self-service settlement rate | Of those, the share paid inside the deadline with no operator action. | Product |
 | Expiry rate | Lots reaching Expired, over closed lots with a winner. | Operations |
-| Reissue concentration | Reissues per expired order, and per buyer across all orders. Feeds the parked decision on a reissue cap. | Operations |
+| Reissue concentration | Reissues per expired order, and per buyer across all orders. Observes the uncapped MVP policy. | Operations |
 
 ## Open questions
 
 | # | Question | Who settles it |
 | --- | --- | --- |
-| ❓1 | Loyalty — whether points accrue at win or at payment, and what an Expired or Cancelled order does to accrued points. | A separate Loyalty PRD. Nothing here assumes an answer. |
-| ❓2 | Whether reissue gains a cap or an escalation rule. Uncapped and logged at MVP so the pattern becomes observable first. | Operations, once there is data |
-| ❓3 | Whether any served jurisdiction levies tax on a lot. Requirements name tax as a component of the final amount without asserting a regime. | Finance |
+| ❓1 | Tax — which jurisdictions, rates, exemptions, and calculation rules apply to auction orders. This change only preserves an optional tax line or estimate and does not calculate tax. | A separate tax change owned by Finance |
 
 ## Notes for promotion
 
-- **The capability split is the planner's to confirm.** Five new capabilities
-  and one modified is one defensible cut; folding the status model into
-  `winner-order`, or lifting suspension out into its own change, are others.
+- **The capability split is fixed here.** Five new capabilities and one
+  modified capability are carried in six spec files; auto-bidding and
+  before-and-during auction notifications remain owned by their committed
+  changes.
 - **This change sits at the journey budget.** Five user journeys across six
   spec files is the maximum a single change carries. A planner who wants a
   sixth should split it — the natural seam is the operator side
