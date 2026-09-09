@@ -590,9 +590,6 @@ elsewhere can neither cause nor fix a hole in the store. The rules:
   at the page's commit versus head, one `git cat-file --batch` pass); a
   spec moved since that commit is reported as moved, never as an
   everything-changed diff; a page with no commit yet is skipped
-- warning: a capability page with a `spec` but no `cases` block is
-  missing its acceptance shelf — asked only where the spec has a suite
-  to show, the same bar the QA board applies
 - warning: a `[[ref]]` in prose that resolves to nothing or to more than
   one thing, scanned with the grammar's fence tracking, inline code
   skipped

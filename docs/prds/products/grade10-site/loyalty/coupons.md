@@ -73,10 +73,6 @@ with no settlement. Everything on this page is specified in the in-flight
 `revise-loyalty-programme-rules` and `add-shopify-membership-pos` changes.
 :::
 
-## Test cases
-
-::cases{id="grade10-site/loyalty/programme"}
-
 :::detail{title="Code map" for="engineer"}
 The loyalty worker's fulfiller for the `money_off_code` kind calls the store
 worker's `MembershipEntrypoint` over a service binding — mint, deactivate,

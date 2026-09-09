@@ -1,7 +1,6 @@
 /*
  * RULES: a page parses and is canonical, every pointer in it names something
- * on disk, no two of its details anchor alike, and a capability page keeps its
- * acceptance shelf.
+ * on disk, and no two of its details anchor alike.
  */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
@@ -261,43 +260,11 @@ const productPage = (manual, path) => {
   return rest.length === 2 || rest.length === 3 ? rest : null;
 };
 
-/** `<manual>/products/<product>/<capability>.md` — a landing page is not one. */
-const capabilityPage = (manual, path) => {
-  const rest = productPage(manual, path);
-  return rest !== null && rest[rest.length - 1] !== "index.md";
-};
-
 /** `<manual>/products/<product>/index.md` — the domain's own page. */
 const landingPage = (manual, path) => {
   const rest = productPage(manual, path);
   return rest !== null && rest[rest.length - 1] === "index.md";
 };
-
-/** The shelf every capability page keeps in the same order ends in acceptance,
- * and a page that states a contract without it leaves QA nothing to read. A
- * warning, never a failure: the shelf is a habit, not a pointer that rotted.
- * A page claiming a spec that is still a delta is exempt — the acceptance
- * block can only embed a durable spec, and the change carries its own suite.
- * So is a page whose spec holds no test suite: an empty shelf shows nothing,
- * the same bar the QA board applies. */
-export function checkSkeleton(ctx, pages) {
-  for (const page of pages) {
-    if (!capabilityPage(ctx.roots.manual, page.path)) continue;
-    const spec = ctx.specs.get(page.ast.frontmatter.spec);
-    if (!spec) continue;
-    const showable = spec.testCases?.length || spec.testCasesError;
-    if (!showable) continue;
-    const shelved = [...everyBlock(page.ast.blocks)].some(
-      (block) => block.type === "cases",
-    );
-    if (shelved) continue;
-    ctx.add(
-      "skeleton",
-      page.path,
-      "has a `spec` and no `::cases` block — missing its acceptance shelf",
-    );
-  }
-}
 
 /** A domain reads as a row in the rail before it reads as a page, and a row
  * with no glyph is the one thing a reader cannot scan for. A warning, never a

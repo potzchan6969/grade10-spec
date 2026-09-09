@@ -12,8 +12,8 @@ const HOME = "---\ntitle: Demo\n---\n\nA demo store.\n";
 const LANDING =
   "---\ntitle: Demo product\nicon: storefront\n---\n\nThe one product.\n";
 
-/** A capability page that names its spec and never gets to acceptance — the
- * shelf gap the skeleton rule warns about. */
+/** A capability page that names its spec but never shows the suite behind
+ * it — the gap the `suite` rule warns about. */
 const ALPHA_PAGE =
   "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\nAlpha is a demo capability.\n";
 
@@ -143,12 +143,6 @@ describe("the warnings the snapshot carries", () => {
     const warnings = (await snapshotOfStore(writeStore(BASE))).warnings;
 
     expect(warnings).toEqual([
-      {
-        rule: "skeleton",
-        message:
-          "has a `spec` and no `::cases` block — missing its acceptance shelf",
-        page: "docs/prds/products/demo-product/alpha.md",
-      },
       {
         rule: "suite",
         message:

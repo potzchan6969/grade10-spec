@@ -60,7 +60,7 @@ import {
   readStoryIndex,
 } from "./context.mjs";
 import { checkDeltas } from "./deltas.mjs";
-import { checkIcons, checkPages, checkSkeleton, readPages } from "./pages.mjs";
+import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkAcceptance } from "./qa.mjs";
 import { checkRole } from "./role.mjs";
 import {
@@ -88,8 +88,8 @@ const EMPTY_CONFIG = {
  * both — the store documenting itself.
  *
  * Which rules run follows who can fix what they find. Page rules — parse,
- * canonical, every pointer resolves, staleness, the shelf — run everywhere:
- * they are about this repository's own pages. Store rules — coverage, suites,
+ * canonical, every pointer resolves, staleness — run everywhere: they are
+ * about this repository's own pages. Store rules — coverage, suites,
  * deltas, the fold — run only where the manual and the store share a
  * repository, because a manual mounted elsewhere can neither cause nor fix a
  * hole in the store, and failing its PRs over one would gate the wrong door.
@@ -137,7 +137,6 @@ export async function runChecks(target, git) {
   }
 
   checkTaxonomy(ctx.roots, config, shape, paths, add);
-  checkSkeleton(ctx, pages);
   checkIcons(ctx, pages);
   await checkStale(roots.store, pages, specs, shape.dirs, index, add);
 

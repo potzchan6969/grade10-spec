@@ -103,11 +103,6 @@ export const RULES = [
     title: "Pages older than the specs they embed",
   },
   {
-    key: "skeleton",
-    level: "warn",
-    title: "Capability pages missing their acceptance shelf",
-  },
-  {
     key: "ref",
     level: "warn",
     title: "Prose references naming nothing, or two things",
