@@ -139,13 +139,8 @@ Needs group 1's submodule bump and group 6's routes.
 - [x] 12.5 Wire the collector page's catalogue through `@grade10/i18n`
 - [x] 12.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:frontend-layers`, `pnpm run check:admin-bundle`, `pnpm run build`
 
-## 13. Archive hand-off (grade10-spec)
+## 13. The manual (grade10-spec)
 
-Runs after the change is deployed, not when it merges.
-
-- [ ] 13.1 Copy each delta's `## Feature set` into its durable capability — the fold carries `## Requirements` and nothing else
-- [ ] 13.2 Copy each capability's `user-journeys.md` into `openspec/specs/`, including identity-record's `**Walked by:** nobody`
-- [ ] 13.3 Carry the two approved `test-cases.md` across to their durable capabilities
-- [ ] 13.4 Bring the six manual pages to the shipped story — the two e-KYC capability pages, the e-KYC index, the vault's identity-check page, the vault index whose callout this change falsifies, and the case-lifecycle page whose signing sequence still records identity only in the shop
-- [ ] 13.5 Add the `::journeys` and `::cases` embeds to the three new capability pages, so the suites show where a reader can reach them
-- [ ] 13.6 Verify: `pnpm run tcs:validate`, `pnpm run check:manual`, `pnpm run archive:preflight`
+- [ ] 13.1 Bring the six manual pages to the shipped story — the two e-KYC capability pages, the e-KYC index, the vault's identity-check page, the vault index whose callout this change falsifies, and the case-lifecycle page whose signing sequence still records identity only in the shop
+- [ ] 13.2 Add the `::journeys` and `::cases` embeds to the three new capability pages, so the suites show where a reader can reach them
+- [ ] 13.3 Verify: `pnpm run tcs:validate`, `pnpm run check:manual`

@@ -2,7 +2,9 @@
 
 Group 1 lands in **grade10-spec** and its submodule bump is the boundary group
 6 waits on. Groups 2 to 5 land together in **grade10**; group 2 is the shared
-interface the rest read.
+interface the rest read. Archiving waits on `add-hosted-identity-verification`
+and `add-grade10-shopify-store` archiving first — two of these deltas add to
+capabilities those changes carry.
 
 Design decisions, the data model and the service contracts:
 [`tech-design.md`](tech-design.md). Screens and states:
@@ -51,13 +53,3 @@ Needs group 1's submodule bump.
 
 - [x] 6.1 Read the card's, the panel's, the dialog's and the collector's page's copy through `@grade10/i18n` and drop the interim English hooks
 - [x] 6.2 Verify: `pnpm run typecheck`, `pnpm run test`
-
-## 7. Archive hand-off (grade10-spec)
-
-Runs after the change is deployed, not when it merges, and after
-`add-hosted-identity-verification` and `add-grade10-shopify-store` archive —
-two of these deltas add to capabilities those changes carry.
-
-- [ ] 7.1 Copy each delta's `## Feature set` into its durable capability, and account-identity's `user-journeys.md` into `openspec/specs/`
-- [ ] 7.2 Carry the approved `test-cases.md` suites across
-- [ ] 7.3 Verify: `pnpm run tcs:validate`, `pnpm check:manual`, `pnpm run archive:preflight`

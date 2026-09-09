@@ -16,10 +16,11 @@ and tests against typed fixtures rather than a running backend.
 - [ ] 2.5 Wire quantity and removal actions to the scoped cart, product and Browse More actions to existing Store addresses, and Checkout to `/checkout`. Make `grade10-site-store-cart-drawer-SC-11` and `grade10-site-store-cart-drawer-SC-13` through `grade10-site-store-cart-drawer-SC-15` pass without changing cart persistence, backend contracts, or checkout creation.
 - [ ] 2.6 Verify the affected Grade10 app with focused cart, shell, route, and locale tests, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build`; do not run `pnpm run test:backend` because this change has no backend files.
 
-## 3. Cart Drawer product record and archive handoff (grade10-spec)
+## 3. Cart Drawer product record (grade10-spec)
 
 This group was appended to preserve the claimed group and task ids above. Land
 it before publishing the final Grade10 gitlink.
 
 - [ ] 3.1 Publish the Cart Drawer manual page and update the page-shell and cart-validation records to match `grade10-site-store-cart-drawer-SC-01` through `grade10-site-store-cart-drawer-SC-15`, `grade10-site-site-page-shell-SC-09`, and `grade10-site-site-page-shell-SC-16`; make `pnpm check:manual` pass.
-- [ ] 3.2 At archive, carry the Cart Drawer Feature set and journeys into the new durable capability, carry the page-shell Feature set and new journey into its durable capability, and add the Cart Drawer acceptance shelf once its spec is durable; make strict OpenSpec validation and `pnpm run tcs:validate` pass.
+- [ ] 3.2 Add the Cart Drawer acceptance shelf once its spec is durable, so the approved suite is reachable from the page.
+- [ ] 3.3 Verify: `openspec validate add-store-cart-drawer-ui --strict`, `pnpm run tcs:validate`.

@@ -55,11 +55,10 @@ The application work starts after the change is merged to `grade10-spec` main an
 - [ ] 7.3 Add deterministic buyer fixtures and automate the scenarios whose test cases become eligible for Playwright, keeping provider and cron seams fakeable as required by the repository's E2E lane
 - [ ] 7.4 Verify route guards, loading/error/expired/paid/shipped/delivered/suspended states, accessibility, and responsive layout with focused frontend tests, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build`
 
-## 8. Manual pages and archive handoff (grade10-spec)
+## 8. Manual pages (grade10-spec)
 
 - [x] 8.0 Restore the checked-off predecessor delivery record as historical evidence, and reconcile its automatic-capture and stored-outcome wording with the winner-journey contract
 - [ ] 8.1 Update or create the capability pages for winner order, order status, bidder suspension, order notifications, and admin post-sale under `docs/prds/products/`, while keeping testable requirements only in the durable specs
 - [ ] 8.2 Update the relevant auction index, account-record, notifications, and admin post-sale manual links so each new capability and its buyer/operator entry point is discoverable
 - [x] 8.3 Reconcile the post-sale delta with the existing durable post-sale capability before archive: classify replacements as exact `MODIFIED` requirements or issue new permanent scenario IDs, so the fold does not duplicate the predecessor's `Winner fields` or existing `post-sale-SC-01` through `post-sale-SC-25`
 - [ ] 8.4 Validate the change and test-case traceability with `openspec validate add-auction-winner-journey --strict`, `pnpm run tcs:validate`, and `pnpm check:manual`
-- [ ] 8.5 At archive, hand-copy the change's `## Feature set` and every `user-journeys.md` into the durable capability specs, run `pnpm run archive:preflight`, and archive only after the application implementation and deployment evidence are complete

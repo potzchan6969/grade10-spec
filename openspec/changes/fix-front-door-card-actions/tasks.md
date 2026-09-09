@@ -25,10 +25,3 @@ Needs group 1's bump.
 
 - [ ] 3.1 Say on the front door's page that its row merchandises rather than sells, and record why a control the surface cannot honour is worse than none
 - [ ] 3.2 Verify: `pnpm check:manual`
-
-## 4. Archive hand-off (grade10-spec)
-
-Runs after the change is deployed, not when it merges.
-
-- [ ] 4.1 Copy each delta's `## Feature set` groups into its durable capability, and merge the change's home test cases into the capability's approved suite rather than writing over it
-- [ ] 4.2 Verify: `pnpm check:manual`, `pnpm run archive:preflight`

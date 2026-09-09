@@ -2,8 +2,10 @@
 
 Group 1 is the store's side and lands on its own: nothing binds a gate until a
 product's first gating feature does, and that feature is its own change. Group
-2 is the manual, in **grade10-spec**. Design decisions and the one service
-call: [`tech-design.md`](tech-design.md).
+2 is the manual, in **grade10-spec**. Archiving waits on
+`add-hosted-identity-verification` archiving first — this delta adds to the
+capability that change creates. Design decisions and the one service call:
+[`tech-design.md`](tech-design.md).
 
 ## 1. The standing and the gate (grade10)
 
@@ -17,12 +19,3 @@ call: [`tech-design.md`](tech-design.md).
 
 - [x] 2.1 Record the brand and the gate on the verified identity page's decisions, and the two kinds of consumer on the identity store's page
 - [x] 2.2 Verify: `pnpm check:manual`
-
-## 3. Archive hand-off (grade10-spec)
-
-Runs after the change is deployed, not when it merges, and after
-`add-hosted-identity-verification` archives — this delta adds to the
-capability that change creates.
-
-- [ ] 3.1 Copy the delta's `## Feature set` groups into the durable capability's feature set
-- [ ] 3.2 Verify: `pnpm check:manual`, `pnpm run archive:preflight`
