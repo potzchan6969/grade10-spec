@@ -16,6 +16,8 @@ const defaults = {
   name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
   price: "HK$105",
   onClick: () => {},
+  /** The listing's tile sells, so its stories wire the handler that draws the cart. */
+  onCartQuantityChange: () => {},
 };
 
 const meta = {

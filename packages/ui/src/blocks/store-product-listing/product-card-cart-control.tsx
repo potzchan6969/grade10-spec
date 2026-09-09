@@ -12,11 +12,11 @@ import { ProductCardCartStepperRow } from "./product-card-cart-stepper-row";
 type CartControlMode = "hidden" | "collapsed" | "expanded";
 
 type ProductCardCartControlCopy = {
-  cart: string;
-  decreaseQuantity: string;
-  increaseQuantity: string;
-  removeFromCart: string;
-  adjustQuantity: string;
+  cart?: string;
+  decreaseQuantity?: string;
+  increaseQuantity?: string;
+  removeFromCart?: string;
+  adjustQuantity?: string;
 };
 
 type ProductCardCartControlProps = {
@@ -50,7 +50,7 @@ function collapsedLabel(
     cartCount != null && cartCount !== ""
       ? String(cartCount)
       : String(quantity);
-  return `${display}. ${copy.adjustQuantity}`;
+  return copy.adjustQuantity ? `${display}. ${copy.adjustQuantity}` : display;
 }
 
 function ProductCardCartControl({

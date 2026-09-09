@@ -5,9 +5,10 @@ import { useState } from "react";
 
 type ProductCardCartStepperRowProps = {
   qty: number;
-  decrementLabel: string;
-  incrementLabel: string;
-  removeLabel: string;
+  /** Accessible names, as the consumer's copy supplies them — none is invented. */
+  decrementLabel?: string;
+  incrementLabel?: string;
+  removeLabel?: string;
   onIncrement: () => void;
   onDecrement: () => void;
   className?: string;

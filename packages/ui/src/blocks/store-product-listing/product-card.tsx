@@ -41,6 +41,7 @@ type ProductCardProps = {
    */
   inCart?: boolean;
   cartCount?: ReactNode;
+  /** Supply one to sell: the cart control is drawn only where it is present. */
   onCartQuantityChange?: (quantity: number) => void;
   /**
    * Fires when the image surface is activated. No navigation target is wired

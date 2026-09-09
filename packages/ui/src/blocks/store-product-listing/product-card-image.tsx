@@ -9,18 +9,21 @@ import {
 /**
  * What the well says, whichever product is in it — supplied once for a whole
  * listing rather than restated per tile.
+ *
+ * The cart words are optional because the cart control is: a surface that
+ * merchandises rather than sells draws none and so names none.
  */
 type ProductCardImageCopy = {
   /** Accessible name for the add-to-cart affordance. */
-  cart: string;
+  cart?: string;
   /** Stepper decrement control. */
-  decreaseQuantity: string;
+  decreaseQuantity?: string;
   /** Stepper increment control. */
-  increaseQuantity: string;
+  increaseQuantity?: string;
   /** Stepper decrement at minimum (remove). */
-  removeFromCart: string;
+  removeFromCart?: string;
   /** Collapsed in-cart control when the count is already shown. */
-  adjustQuantity: string;
+  adjustQuantity?: string;
   /** Shown in place of the sale badge when the product has sold out. */
   soldOut?: string;
   /** Badge on a discounted product. Omit it and no badge is drawn. */
@@ -36,6 +39,7 @@ type ProductCardImageProps = {
   soldOut?: boolean;
   inCart?: boolean;
   cartCount?: ReactNode;
+  /** Supply one to sell: the cart control is drawn only where it is present. */
   onCartQuantityChange?: (quantity: number) => void;
   /** Tile activation for the photo well. Ignored when `soldOut`. */
   onClick?: () => void;
@@ -50,6 +54,8 @@ type ProductCardImageProps = {
  * chrome is an annotation on the set, not an axis, so `inCart` is code-only.
  *
  * Cart sits outside the well's activation target so nested buttons stay valid.
+ * It is drawn only where a quantity-change handler was supplied, so a surface
+ * that merchandises rather than sells draws none and no press is swallowed.
  * Hover and `:focus-within` reveal it when the product is available and not
  * already in the cart; in-cart always shows it; sold-out never does.
  */
@@ -66,7 +72,7 @@ function ProductCardImage({
   onClick,
   name,
 }: ProductCardImageProps) {
-  const showCart = !soldOut;
+  const showCart = !soldOut && onCartQuantityChange != null;
   const quantity = parseCartQuantity(cartCount, inCart);
 
   const photoClassName = cn(
