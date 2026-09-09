@@ -1,4 +1,4 @@
-## 1. Shared UI contract and store records (grade10-spec)
+## 1. Shared UI contract and store records (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Make `shared-ui-auction-listing-SC-15` through `SC-23` pass by keeping the enrollment blocks at the `@grade10/ui` public entry and adding a provider-neutral `paymentField` render slot with controlled provider/card-ready inputs for `authorization-in-progress` and `authorization-failed`, plus continue behavior; shared UI receives no card details and production code does not use simulated provider completion. Reconcile the slot's public prop names with the current `requiresIframeLink` / `iframeLinkedPayment` wording before implementation; ❓ do not silently diverge from the durable shared-ui requirement
 - [ ] 1.2 Add Storybook and preview fixtures for `signed-out`, `setup-first`, `setup-in-progress`, `setup-editable`, `authorization-in-progress`, `authorization-failed`, `authorization-editable`, and `enrolled` states, including provider mount-ready versus confirmed-method-id behavior
