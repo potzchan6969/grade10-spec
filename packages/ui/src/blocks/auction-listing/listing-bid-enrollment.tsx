@@ -164,40 +164,35 @@ type EnrollmentSetupSheetCopy = {
   iframeLinkedCardPlaceholder: string;
 };
 
-function CardLinkIframePlaceholder({
+function PaymentFieldSlot({
   copy,
   content,
-  onSimulateComplete,
   showsLinkedCard = false,
   disabled = false,
 }: {
   copy: EnrollmentSetupSheetCopy;
   content?: ReactNode;
-  onSimulateComplete?: () => void;
   showsLinkedCard?: boolean;
   disabled?: boolean;
 }) {
-  if (content) return <div className="w-full">{content}</div>;
-
   const className =
     "flex h-32 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground";
+
+  if (content != null) {
+    return (
+      <div
+        aria-disabled={disabled || undefined}
+        className={disabled ? "w-full opacity-60" : "w-full"}
+        inert={disabled ? true : undefined}
+      >
+        {content}
+      </div>
+    );
+  }
 
   const label = showsLinkedCard
     ? copy.iframeLinkedCardPlaceholder
     : copy.iframePlaceholder;
-
-  if (onSimulateComplete && !disabled) {
-    return (
-      <button
-        aria-label={label}
-        className={`${className} cursor-pointer transition-colors hover:bg-muted/60`}
-        onClick={onSimulateComplete}
-        type="button"
-      >
-        {label}
-      </button>
-    );
-  }
 
   return (
     <div
@@ -216,9 +211,13 @@ type EnrollmentSetupSheetProps = {
   open: boolean;
   onOpenChange?: (open: boolean) => void;
   onContinue?: () => void;
-  /** Stripe card field rendered inside the shared setup body. */
+  /** Consumer-owned provider-neutral payment field rendered in the setup body. */
+  paymentField?: ReactNode;
+  /** Whether the consumer-owned payment field is ready to submit. */
+  cardReady?: boolean;
+  /** Existing consumer-facing alias for the provider-neutral payment field. */
   stripePaymentMethodField?: ReactNode;
-  /** Whether the Stripe card field is ready to submit. */
+  /** Existing consumer-facing alias for `cardReady`. */
   paymentMethodReady?: boolean;
   presentation?: OverlayPresentation;
   /** When false, a card is already on file and only attestation is required. */
@@ -241,32 +240,33 @@ function SetupSheetBody({
   ageAttested,
   errorMessage,
   linking,
+  paymentField,
   stripePaymentMethodField,
   iframeLinkedPayment,
   onAgeAttestedChange,
-  onSimulateCardLinkComplete,
 }: {
   copy: EnrollmentSetupSheetCopy;
   ageAttested: boolean;
   errorMessage?: string;
   linking: boolean;
+  paymentField?: ReactNode;
   stripePaymentMethodField?: ReactNode;
   iframeLinkedPayment?: {
     brand: OrderDetailsPaymentBrand;
     maskedNumber: string;
   };
   onAgeAttestedChange: (checked: boolean) => void;
-  onSimulateCardLinkComplete?: () => void;
 }) {
+  const resolvedPaymentField = paymentField ?? stripePaymentMethodField;
+
   return (
     <VStack className="w-full" gap="md">
       <DialogDescription>{copy.linkCardDescription}</DialogDescription>
       <VStack className="w-full" gap="sm">
-        <CardLinkIframePlaceholder
-          content={stripePaymentMethodField}
+        <PaymentFieldSlot
+          content={resolvedPaymentField}
           copy={copy}
           disabled={linking}
-          onSimulateComplete={onSimulateCardLinkComplete}
           showsLinkedCard={iframeLinkedPayment != null}
         />
         {errorMessage && !linking ? (
@@ -302,35 +302,31 @@ function EnrollmentSetupSheet({
   defaultAgeAttested = false,
   errorMessage,
   linking = false,
+  paymentField,
+  cardReady,
   stripePaymentMethodField,
   paymentMethodReady,
 }: EnrollmentSetupSheetProps) {
   const [ageAttested, setAgeAttested] = useState(defaultAgeAttested);
-  const [iframeLinked, setIframeLinked] = useState(iframeLinkedPayment != null);
+  const resolvedPaymentField = paymentField ?? stripePaymentMethodField;
+  const resolvedCardReady = cardReady ?? paymentMethodReady;
 
-  const cardReady = requiresIframeLink
-    ? stripePaymentMethodField
-      ? paymentMethodReady === true
-      : iframeLinked
+  const isCardReady = requiresIframeLink
+    ? resolvedPaymentField
+      ? resolvedCardReady === true
+      : iframeLinkedPayment != null
     : true;
 
   useEffect(() => {
     if (open) {
       setAgeAttested(defaultAgeAttested);
-      setIframeLinked(iframeLinkedPayment != null);
       return;
     }
     setAgeAttested(false);
-    setIframeLinked(false);
-  }, [defaultAgeAttested, iframeLinkedPayment, open]);
-
-  function handleSimulateCardLinkComplete() {
-    if (linking) return;
-    setIframeLinked(true);
-  }
+  }, [defaultAgeAttested, open]);
 
   function handleContinue() {
-    if (linking || !cardReady || !ageAttested) return;
+    if (linking || !isCardReady || !ageAttested) return;
     onContinue?.();
   }
 
@@ -341,18 +337,14 @@ function EnrollmentSetupSheet({
       errorMessage={errorMessage}
       iframeLinkedPayment={iframeLinkedPayment}
       linking={linking}
+      paymentField={paymentField}
       onAgeAttestedChange={setAgeAttested}
-      onSimulateCardLinkComplete={
-        requiresIframeLink && iframeLinkedPayment == null
-          ? handleSimulateCardLinkComplete
-          : undefined
-      }
       stripePaymentMethodField={stripePaymentMethodField}
     />
   );
   const footer = (
     <Button
-      disabled={!cardReady || !ageAttested || linking}
+      disabled={!isCardReady || !ageAttested || linking}
       loading={linking}
       onClick={handleContinue}
       size="md"

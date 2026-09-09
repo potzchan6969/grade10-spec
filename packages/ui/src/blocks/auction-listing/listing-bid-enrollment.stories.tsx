@@ -70,6 +70,36 @@ export const LinkedCard: Story = {
   },
 };
 
+export const LinkedCardKeepsStableHeight: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <section aria-label="editable linked card">
+        <PaymentMethodRow
+          brand="visa"
+          copy={COPY}
+          maskedNumber="•••• 4242"
+          onChange={() => undefined}
+        />
+      </section>
+      <section aria-label="locked linked card">
+        <PaymentMethodRow brand="visa" copy={COPY} maskedNumber="•••• 4242" />
+      </section>
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const editable = canvas.getByRole("region", {
+      name: "editable linked card",
+    });
+    const locked = canvas.getByRole("region", {
+      name: "locked linked card",
+    });
+    expect(editable.getBoundingClientRect().height).toBe(
+      locked.getBoundingClientRect().height,
+    );
+  },
+};
+
 const onLinkEmpty = fn();
 
 export const EmptyLinkedCard: Story = {
@@ -92,6 +122,11 @@ export const SetupSheet: Story = {
     expect(
       within(dialog).getByText("Stripe card link (iframe)"),
     ).toBeInTheDocument();
+    expect(
+      within(dialog).queryByRole("button", {
+        name: "Stripe card link (iframe)",
+      }),
+    ).not.toBeInTheDocument();
     expect(
       within(dialog).getByRole("button", { name: "Link Card" }),
     ).toBeDisabled();
@@ -154,6 +189,8 @@ export const SetupSheetError: Story = {
   },
 };
 
+const onLinkingOpenChange = fn();
+
 export const SetupSheetLinking: Story = {
   render: () => (
     <EnrollmentSetupSheet
@@ -162,6 +199,7 @@ export const SetupSheetLinking: Story = {
       iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
       linking
       open
+      onOpenChange={onLinkingOpenChange}
       requiresIframeLink
     />
   ),
@@ -179,5 +217,92 @@ export const SetupSheetLinking: Story = {
         name: "I confirm I am 18 years of age or older.",
       }),
     ).toBeDisabled();
+    await userEvent.keyboard("{Escape}");
+    expect(onLinkingOpenChange).not.toHaveBeenCalled();
+  },
+};
+
+const providerFieldClick = fn();
+
+export const SetupSheetProviderFieldIsLockedWhileLinking: Story = {
+  render: () => (
+    <EnrollmentSetupSheet
+      cardReady
+      copy={COPY}
+      defaultAgeAttested
+      linking
+      open
+      paymentField={
+        <button onClick={providerFieldClick} type="button">
+          Card field
+        </button>
+      }
+    />
+  ),
+  play: async () => {
+    const dialog = within(document.body).getByRole("dialog", {
+      name: "Link a card to bid",
+    });
+    const field = within(dialog).getByRole("button", { name: "Card field" });
+    expect(field.parentElement).toHaveAttribute("inert");
+    expect(field.parentElement).toHaveAttribute("aria-disabled", "true");
+    await userEvent.click(field);
+    expect(providerFieldClick).not.toHaveBeenCalled();
+    expect(
+      within(dialog).getByRole("checkbox", {
+        name: "I confirm I am 18 years of age or older.",
+      }),
+    ).toBeDisabled();
+    expect(
+      within(dialog).queryByRole("button", { name: "Close dialog" }),
+    ).not.toBeInTheDocument();
+  },
+};
+
+const onContinueFromReadyField = fn();
+
+export const SetupSheetProviderFieldReadiness: Story = {
+  render: () => (
+    <EnrollmentSetupSheet
+      cardReady={false}
+      copy={COPY}
+      defaultAgeAttested
+      open
+      onContinue={onContinueFromReadyField}
+      paymentField={<input aria-label="Card number field" />}
+    />
+  ),
+  play: async () => {
+    const dialog = within(document.body).getByRole("dialog", {
+      name: "Link a card to bid",
+    });
+    expect(
+      within(dialog).getByRole("textbox", { name: "Card number field" }),
+    ).toBeVisible();
+    expect(
+      within(dialog).getByRole("button", { name: "Link Card" }),
+    ).toBeDisabled();
+  },
+};
+
+export const SetupSheetProviderFieldReady: Story = {
+  render: () => (
+    <EnrollmentSetupSheet
+      cardReady
+      copy={COPY}
+      defaultAgeAttested
+      open
+      onContinue={onContinueFromReadyField}
+      paymentField={<input aria-label="Card number field" />}
+    />
+  ),
+  play: async () => {
+    const dialog = within(document.body).getByRole("dialog", {
+      name: "Link a card to bid",
+    });
+    await userEvent.click(
+      within(dialog).getByRole("button", { name: "Link Card" }),
+    );
+    expect(onContinueFromReadyField).toHaveBeenCalledOnce();
   },
 };

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import {
   FIXTURE_ACTIVITY_TIME_COPY,
   FIXTURE_SHIPPED_LOCALE,
@@ -229,6 +229,52 @@ export const SignedOut: Story = {
     expect(canvas.queryByText("Min. bid")).not.toBeInTheDocument();
     expect(canvas.queryByText("Leading")).not.toBeInTheDocument();
     expect(canvas.queryByText("Outbid")).not.toBeInTheDocument();
+  },
+};
+
+const openSetupFromNeedsCard = fn();
+const commitMaximumFromNeedsCard = fn();
+
+export const NeedsCard: Story = {
+  args: {
+    bidEnrollment: "needs-card",
+    onCommitMaximum: commitMaximumFromNeedsCard,
+    onPlaceBid: openSetupFromNeedsCard,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const amountGroup = canvas.getByRole("group");
+    for (const preset of within(amountGroup).getAllByRole("button")) {
+      expect(preset).toBeDisabled();
+    }
+    expect(
+      canvas.getByRole("textbox", { name: /Custom amount \(min\./ }),
+    ).toBeDisabled();
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Link a card to bid" }),
+    );
+    expect(openSetupFromNeedsCard).toHaveBeenCalledOnce();
+    expect(commitMaximumFromNeedsCard).not.toHaveBeenCalled();
+  },
+};
+
+const commitMaximumWhenReady = fn();
+
+export const Ready: Story = {
+  args: {
+    bidEnrollment: "ready",
+    onCommitMaximum: commitMaximumWhenReady,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const commitButton = canvas.getByRole("button", {
+      name: /^Set maximum to/,
+    });
+    expect(commitButton).toBeEnabled();
+    await userEvent.click(commitButton);
+    expect(commitMaximumWhenReady).toHaveBeenCalledOnce();
+    expect(commitMaximumWhenReady).toHaveBeenCalledWith(6_300_000);
   },
 };
 
