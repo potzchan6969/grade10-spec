@@ -39,7 +39,7 @@
       "width": 132
     },
     {
-      "id": "store-order-recorded_unread",
+      "id": "store-asks-shopify_unread",
       "lane": "shop",
       "col": 2,
       "type": "external",
@@ -76,7 +76,7 @@
     },
     {
       "from": "store-order-recorded",
-      "to": "store-order-recorded_unread",
+      "to": "store-asks-shopify_unread",
       "label": "asks Shopify",
       "variant": "dashed",
       "fromSide": "right",

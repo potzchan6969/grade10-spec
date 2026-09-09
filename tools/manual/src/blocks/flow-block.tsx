@@ -440,7 +440,7 @@ function StepCard({ anchor }: { anchor: Anchor }) {
 
   return (
     <div
-      className="absolute z-10 w-72 select-text rounded-(--radius-xl) border border-border bg-card p-3 shadow-lg"
+      className="absolute z-10 w-[30rem] max-w-full select-text rounded-(--radius-xl) border border-border bg-card p-3 shadow-lg"
       data-pan-still=""
       ref={card}
       role="tooltip"

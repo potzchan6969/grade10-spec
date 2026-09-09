@@ -59,7 +59,7 @@ svg[data-diagram="loyalty-pricing-unclassified"] .c-lane{fill: var(--lane-fill);
         
         <path data-step="store-order-recorded" data-edge-from="shop-order-paid" data-edge-to="store-order-recorded" data-edge-key="0" data-composition-points="130.4,145;130.4,217" d="M 130.4 145 L 130.4 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#loyalty-pricing-unclassified-arrowhead-emphasis)"/>
         <path data-step="loyalty-points-granted" data-edge-from="store-order-recorded" data-edge-to="loyalty-points-granted" data-edge-label="no order event" data-edge-key="1" data-composition-points="130.4,269;130.4,341" d="M 130.4 269 L 130.4 341" class="a-dashed" stroke-width="1.4" marker-end="url(#loyalty-pricing-unclassified-arrowhead-dashed)"/>
-        <path data-step="store-order-recorded" data-edge-from="store-order-recorded" data-edge-to="store-order-recorded_unread" data-edge-label="asks Shopify" data-edge-key="2" data-composition-points="196.4,243;370.4,243;370.4,145" d="M 196.4 243 L 370.4 243 L 370.4 145" class="a-dashed" stroke-width="1.4" marker-end="url(#loyalty-pricing-unclassified-arrowhead-dashed)"/>
+        <path data-step="store-asks-shopify" data-edge-from="store-order-recorded" data-edge-to="store-asks-shopify_unread" data-edge-label="asks Shopify" data-edge-key="2" data-composition-points="196.4,243;370.4,243;370.4,145" d="M 196.4 243 L 370.4 243 L 370.4 145" class="a-dashed" stroke-width="1.4" marker-end="url(#loyalty-pricing-unclassified-arrowhead-dashed)"/>
         
         <g data-step="shop-order-paid" id="loyalty-pricing-unclassified-node-shop-order-paid" data-node-id="shop-order-paid" data-node-label="Order paid" aria-label="Focus Order paid, a line states no type, no tags, Shop" data-node-kind="external" data-node-sublabel="a line states no type, no tags" data-node-context="Shop">
           <title>Order paid · a line states no type, no tags · Shop</title>
@@ -72,7 +72,7 @@ svg[data-diagram="loyalty-pricing-unclassified"] .c-lane{fill: var(--lane-fill);
           <text data-node-label="" data-detail-anchor="" x="130.4" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Order paid</text>
           <text data-detail="context" x="130.4" y="131" class="t-muted" font-size="6.8" text-anchor="middle">a line states no type, no tags</text>
         </g>
-        <g data-step="store-order-recorded" id="loyalty-pricing-unclassified-node-store-order-recorded_unread" data-node-id="store-order-recorded_unread" data-node-label="Read fails" aria-label="Focus Read fails, the facts stay unread, Shop" data-node-kind="external" data-node-sublabel="the facts stay unread" data-node-context="Shop">
+        <g data-step="store-asks-shopify" id="loyalty-pricing-unclassified-node-store-asks-shopify_unread" data-node-id="store-asks-shopify_unread" data-node-label="Read fails" aria-label="Focus Read fails, the facts stay unread, Shop" data-node-kind="external" data-node-sublabel="the facts stay unread" data-node-context="Shop">
           <title>Read fails · the facts stay unread · Shop</title>
           <rect x="304.4" y="93" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="304.4" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
@@ -112,7 +112,7 @@ svg[data-diagram="loyalty-pricing-unclassified"] .c-lane{fill: var(--lane-fill);
           <rect x="156.4" y="295" width="77.2" height="14" rx="3" class="c-mask"/>
           <text x="195" y="305" class="t-database" font-size="8" text-anchor="middle">no order event</text>
         </g>
-        <g data-step="store-order-recorded" data-detail="context" data-edge-from="store-order-recorded" data-edge-to="store-order-recorded_unread" data-edge-label="asks Shopify" data-edge-key="2">
+        <g data-step="store-asks-shopify" data-detail="context" data-edge-from="store-order-recorded" data-edge-to="store-asks-shopify_unread" data-edge-label="asks Shopify" data-edge-key="2">
           <rect x="249.59999999999997" y="223" width="67.6" height="14" rx="3" class="c-mask"/>
           <text x="283.4" y="233" class="t-database" font-size="8" text-anchor="middle">asks Shopify</text>
         </g>
