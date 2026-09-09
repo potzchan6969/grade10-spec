@@ -4,7 +4,8 @@
 
 Product context: [Auction notifications](../../../docs/prds/products/grade10-auction/notifications.md).
 Depends on [`add-auction-watchlist`](../add-auction-watchlist/proposal.md):
-the before-and-during-auction mail fires on a watch, which does not exist yet.
+progress mail fires when a collector watches a lot **with email alerts on**.
+Watching is list membership; alerts are a separate preference.
 
 ## Why
 
@@ -36,10 +37,10 @@ their maximum before the lot closes.
   bidding opens in 24 hours, bidding has opened, bidding closes in 24 hours,
   extended bidding has started, a lot you bid on received a new bid, and you
   have been outbid.
-- **Two audiences.** The first four go to collectors watching the lot; the
-  last two go to collectors who have bid on it. Closing warning and extended
-  bidding also reach bidders. Bidding on a lot enrols the collector in its
-  bid-activity mail without watching it.
+- **Two audiences.** Progress mail goes to collectors watching the lot with
+  email alerts on; bid-activity mail goes to collectors who have bid with
+  alerts on. Closing warning and extended bidding also reach bidders with
+  alerts on. Bidding enrols bid-activity mail without watching.
 - **A collector receives a lot's mail once**, however many reasons they have
   to receive it. A collector who both watches and bids is one recipient.
 - **Mail follows the sale, not the clock.** Because the close moves, "closes
@@ -48,8 +49,12 @@ their maximum before the lot closes.
   about the current lead, not one per increment.
 - **One letter shape** for every auction email: subject, preheader,
   heading, body, lot block with one primary image when available,
-  listing action, footer. Watch-driven letters offer a signed-in way to
-  unwatch; bid-activity letters do not.
+  listing action, footer. Letters offer a signed-in way to **mute email
+  alerts** for that lot (not unwatch).
+- **Per-lot email alerts** default on when watching or bidding; mute stops
+  mail without removing the watch or ending the bid. Unwatch turns alerts
+  off. An account-level auction email alerts master can stop all auction
+  mail without clearing watches or bids.
 - **A temporary provider failure is retried; a permanent one stops.** A
   statement that has become false is not sent late.
 - **Nothing is sent about a lot that was called off** before the collector
@@ -62,8 +67,9 @@ their maximum before the lot closes.
 - **In-app, push, WhatsApp, or SMS notification.** Email only. Device push
   for the new kinds is named on the shared vocabulary so a follow-on does not
   rename them, and is not delivered here.
-- **Notification preferences or per-lot muting.** Everything here is
-  transactional mail about a lot the collector chose to engage with.
+- **Marketing preference centres** and non-auction email categories.
+  Per-lot auction email alerts and an account-level auction email alerts
+  master are in scope for this change.
 - **Marketing mail** — recommended lots, auction round-ups, re-engagement.
 - **Mail about winning, losing, paying, invoicing, or shipping.** The
   after-the-close flow is out of scope until the orders work is specified.
@@ -100,7 +106,7 @@ a separate in-flight change and is not modified here.
 | `@grade10/email` | Renders and talks to the provider. Classifies temporary vs permanent send failure. Does not own the log. |
 | `@grade10/i18n` | **No change.** Sent messages are English; nothing enters the locale catalogs. |
 | `apps/admin/grade10` | A send log showing type, recipient email, listing, and Sent At, filterable by user email. No message bodies. |
-| `apps/frontend/grade10` | No new page. Watch-driven letters link a signed-in listing page. |
+| `apps/frontend/grade10` | No new page. Letter mute links open signed-in My Auctions for per-lot Email alerts. |
 | ZZZ | Same six messages, ZZZ identity. |
 
 **Ordering.** `add-auction-watchlist` must land first. Independent of

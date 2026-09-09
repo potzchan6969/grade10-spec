@@ -1,33 +1,30 @@
 # UI: auction email notifications
 
 The collector-facing surface of this change is six email messages. Operators
-also get a send log. Nothing renders in the site shell, and no `@grade10/ui`
-or design-system export changes. Letter markup is built with emailcn (shadcn
-registry `@emailcn`) on React Email in
+also get a send log. Nothing renders in the site shell for mail itself;
+My Auctions and account notification prefs surface mute controls (see
+`add-auction-watchlist` ui-design). Letter markup is built with emailcn
+(shadcn registry `@emailcn`) on React Email in
 [`apps/auction-emails`](../../../../apps/auction-emails/); preview with
 `pnpm email:dev`. Shared pieces and send details are in `tech-design.md`.
 
 ## Screens
 
-**No Figma frame exists for these messages or the send log yet.** A message a
-collector reads is a designed surface and needs one, the same as a page does;
-`tasks.md` carries producing the letter and send-log frames. Until a letter
-frame exists, layout follows the shared chrome below and the existing auction
-letter lane.
+**No Figma frame exists for these messages or the send log yet.** Layout
+follows the shared chrome below and the existing auction letter lane.
 
 | Message | Frame | Audience |
 | --- | --- | --- |
-| Bidding opens in 24 hours | *to be produced* | Watchers |
-| Bidding has opened | *to be produced* | Watchers |
-| Bidding closes in 24 hours | *to be produced* | Watchers and bidders |
-| Extended bidding has started | *to be produced* | Watchers and bidders |
-| A lot you bid on received a new bid | *to be produced* | Bidders, excluding the one who bid |
-| You have been outbid | *to be produced* | The collector who stopped leading |
+| Bidding opens in 24 hours | *to be produced* | Watchers with email alerts on |
+| Bidding has opened | *to be produced* | Watchers with email alerts on |
+| Bidding closes in 24 hours | *to be produced* | Watchers and bidders with alerts on |
+| Extended bidding has started | *to be produced* | Watchers and bidders with alerts on |
+| A lot you bid on received a new bid | *to be produced* | Bidders with alerts on, excluding the one who bid |
+| You have been outbid | *to be produced* | The collector who stopped leading, alerts on |
 
-One template family, six messages. A single frame set covering the shared
-header, lot block (one primary image), and footer is enough if it carries all
-six bodies. The preserved one-hour closing reminder stays on its existing
-lane; Figma may show it for parity but this change does not redesign it.
+One template family, six messages. Shared header, lot block (one primary
+image), and footer. The preserved one-hour closing reminder stays on its
+existing lane.
 
 | Screen | Frame | What is on it |
 | --- | --- | --- |
@@ -35,21 +32,18 @@ lane; Figma may show it for parity but this change does not redesign it.
 
 ## Components
 
-None from `@grade10/ui` or the design-system package. Mail shares nothing with
-the site's component packages. Shared **email** pieces (`AuctionEmailShell`,
-`LotBlock`, `PrimaryCta`, `EmailFooter`, `StopWatchingLink`) live with the
-auction letter templates — see `tech-design.md`.
-
-The send log is an admin assembly from existing primitives (`Input`, `Text`,
-table layout).
+None from `@grade10/ui` or the design-system package for the letter itself.
+Shared **email** pieces (`AuctionEmailShell`, `LotBlock`, `PrimaryCta`,
+`EmailFooter` with mute link) live with the auction letter templates.
 
 `@grade10/i18n` is **not** involved: these messages are English regardless of
 the reader's locale, per `money-amounts`.
 
 ## Letter chrome
 
-Every kind uses the same chrome. Kinds differ in words and whether stop
-watching is present (`grade10-site-auction-notifications-SC-18`).
+Every kind uses the same chrome. Kinds differ in words; the mute control
+**Turn them off** follows the why sentence when `canUnsubscribe` is true
+(`grade10-site-auction-notifications-SC-18`).
 
 | Element | Content |
 | --- | --- |
@@ -57,11 +51,11 @@ watching is present (`grade10-site-auction-notifications-SC-18`).
 | Subject | Event in plain English plus lot title |
 | Preheader | One short clause that completes the subject. Not a repeat of it. |
 | Heading | Kind name |
-| Body | Why they should act |
-| Lot block | One primary listing image when available (contained, height-capped; no nested card); lot title; **bid amount as a highlight** when the kind carries one; secondary facts (close / start). Omit the image when none exists (`SC-29`, `SC-30`). Image may link to the listing URL |
+| Body | Why they should act (event-first; not “because you are watching”) |
+| Lot block | One primary listing image when available; lot title; **bid amount as a highlight** when the kind carries one; secondary facts (close / start). Omit the image when none exists (`SC-29`, `SC-30`). Image may link to the listing URL |
 | Primary CTA | **View lot** → listing URL on that brand. Outbid uses **Bid again** |
 | Footer | Why they received the letter; brand legal footer |
-| Stop watching | **Stop watching this lot** on the same line after the why-you-got-this sentence → signed-in unwatch surface, only when `canUnsubscribe` is true |
+| Mute link | Why: **Email alerts are on for this lot.** Link: **Turn them off** → signed-in **My Auctions** (per-row Email alerts), when `canUnsubscribe` is true. Not the account-wide Auction email alerts master. |
 
 ## Copy
 
@@ -70,33 +64,33 @@ and times follow `money-amounts` and `dates-and-times`.
 
 ### Bidding opens in 24 hours
 
-- **Stop watching:** yes
+- **Mute link:** yes (Turn them off)
 
 | Field | Draft |
 | --- | --- |
 | Subject | Bidding opens tomorrow: {lotTitle} |
 | Preheader | Starts {startsAt}. Be ready to bid. |
 | Heading | Bidding opens in 24 hours |
-| Body | The lot you are watching opens for bids soon. |
+| Body | This lot opens for bids soon. |
 | Lot facts | Starts {startsAt} |
-| Footer why | You receive this because you are watching this lot. Stop watching this lot |
+| Footer why | Email alerts are on for this lot. Turn them off |
 
 ### Bidding has opened
 
-- **Stop watching:** yes
+- **Mute link:** yes (Turn them off)
 
 | Field | Draft |
 | --- | --- |
 | Subject | Bidding is open: {lotTitle} |
 | Preheader | Place a bid while the lot is live. |
 | Heading | Bidding has opened |
-| Body | The lot you are watching is now open for bids. |
+| Body | This lot is now open for bids. |
 | Lot facts | Open now. Closes {scheduledClosesAt} |
-| Footer why | You receive this because you are watching this lot. Stop watching this lot |
+| Footer why | Email alerts are on for this lot. Turn them off |
 
 ### Bidding closes in 24 hours
 
-- **Stop watching:** only if watcher who never bid
+- **Mute link:** yes (Turn them off)
 
 | Field | Draft |
 | --- | --- |
@@ -106,11 +100,11 @@ and times follow `money-amounts` and `dates-and-times`.
 | Body | This lot’s scheduled close is about a day away. If bidding extends, the close may move later. You will get a separate notice when extended bidding starts. |
 | Highlight | Current bid {currentBid} |
 | Lot facts | Scheduled close {scheduledClosesAt} |
-| Footer why | You receive this because you are watching or have bid on this lot. Stop watching this lot (watcher who never bid only) |
+| Footer why | Email alerts are on for this lot. Turn them off |
 
 ### Extended bidding has started
 
-- **Stop watching:** only if watcher who never bid
+- **Mute link:** yes (Turn them off)
 
 | Field | Draft |
 | --- | --- |
@@ -120,11 +114,11 @@ and times follow `money-amounts` and `dates-and-times`.
 | Body | A late bid moved this lot’s close. Bidding continues until no further bid lands in the extension window. |
 | Highlight | Current bid {currentBid} |
 | Lot facts | Current close {effectiveClosesAt} |
-| Footer why | You receive this because you are watching or have bid on this lot. Stop watching this lot (watcher who never bid only) |
+| Footer why | Email alerts are on for this lot. Turn them off |
 
 ### New bid on a lot you bid on
 
-- **Stop watching:** no
+- **Mute link:** yes (Turn them off)
 
 | Field | Draft |
 | --- | --- |
@@ -134,11 +128,11 @@ and times follow `money-amounts` and `dates-and-times`.
 | Body | Someone else bid on this lot. |
 | Highlight | Leading bid {currentBid} |
 | Lot facts | Closes {effectiveClosesAt} |
-| Footer why | You receive this because you have bid on this lot. |
+| Footer why | Email alerts are on for this lot. Turn them off |
 
 ### You have been outbid
 
-- **Stop watching:** no
+- **Mute link:** yes (Turn them off)
 
 | Field | Draft |
 | --- | --- |
@@ -150,7 +144,7 @@ and times follow `money-amounts` and `dates-and-times`.
 | Secondary | Your bid {yourBid} — same size/weight, to the right of Leading bid, in destructive colour; omit when not supplied. Never the maximum |
 | Lot facts | Closes {effectiveClosesAt} |
 | Primary CTA | Bid again |
-| Footer why | You receive this because you have bid on this lot. |
+| Footer why | Email alerts are on for this lot. Turn them off |
 
 Do not print the reader's own prior amount unless the template supplied it
 (`grade10-site-auction-notifications` letter-shape requirement). Never print
@@ -163,20 +157,19 @@ is content, and each variation is tied to the scenario that defines it.
 
 | Variation | Scenario |
 | --- | --- |
-| A lot whose close has moved past its scheduled close | `grade10-site-auction-notifications-SC-08` — the warning states the scheduled close |
-| Start letter, listing + start instant, unsubscribe | `grade10-site-auction-notifications-SC-05`, `grade10-site-auction-notifications-SC-19` |
-| Has-started letter, unsubscribe | `grade10-site-auction-notifications-SC-07` |
-| Close-in-24h letter; unsubscribe only if they never bid | `grade10-site-auction-notifications-SC-08`; `grade10-site-auction-notifications-SC-03` for a participant who unwatched |
-| Extended-bidding letter; unsubscribe only if they never bid | `grade10-site-auction-notifications-SC-09` |
-| Outbid letter, own amount + new lead, no unsubscribe | `grade10-site-auction-notifications-SC-12`, `grade10-site-auction-notifications-SC-20` |
-| New-bid letter, listing, no unsubscribe | `grade10-site-auction-notifications-SC-11` |
+| A lot whose close has moved past its scheduled close | `grade10-site-auction-notifications-SC-08` |
+| Start letter, mute link | `grade10-site-auction-notifications-SC-05`, `SC-19` |
+| Has-started letter, mute link | `grade10-site-auction-notifications-SC-07` |
+| Close-in-24h; mute link | `grade10-site-auction-notifications-SC-08` |
+| Extended-bidding; mute link | `grade10-site-auction-notifications-SC-09` |
+| Outbid letter, mute link | `grade10-site-auction-notifications-SC-12`, `SC-20` |
+| New-bid letter, mute link | `grade10-site-auction-notifications-SC-11` |
+| Mute while watching | `grade10-site-auction-notifications-SC-32` |
+| Mute while bidding | `grade10-site-auction-notifications-SC-33` |
 | Same chrome on two kinds | `grade10-site-auction-notifications-SC-18` |
 | Lot block with one primary image | `grade10-site-auction-notifications-SC-29` |
 | Lot block without an image | `grade10-site-auction-notifications-SC-30` |
-| A recipient enrolled by both watching and bidding | `grade10-site-auction-notifications-SC-02` — one message |
+| A recipient enrolled by both watching and bidding | `grade10-site-auction-notifications-SC-02` |
 | The send log filtered to one collector | `grade10-site-auction-notifications-SC-26` |
-| A log row for a sent message | `grade10-site-auction-notifications-SC-25` — type, email, listing, Sent At; no body |
-| No letter | `grade10-site-auction-notifications-SC-04`, `grade10-site-auction-notifications-SC-15`, `grade10-site-auction-notifications-SC-23`, `grade10-site-auction-notifications-SC-27`, `grade10-site-auction-notifications-SC-28`, `grade10-site-auction-notifications-SC-31` |
-
-Every message states the lot it concerns. None recommends another lot, per the
-proposal's non-goal on marketing mail.
+| A log row for a sent message | `grade10-site-auction-notifications-SC-25` |
+| No letter | `SC-04`, `SC-15`, `SC-23`, `SC-27`, `SC-28`, `SC-31`, `SC-32`, `SC-33` |

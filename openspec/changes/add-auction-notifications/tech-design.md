@@ -77,10 +77,11 @@
   Litmus-class tools are pre-ship client QA.
 - Copy stays in the auction English catalog; draft strings are in
   `ui-design.md`.
-- `canUnsubscribe` is true for start-soon and has-started; false for
-  outbid and new-bid; true for close-soon and extended only when the
-  recipient is a watcher who never bid. The control points at a
-  signed-in listing or watched-list page, not a one-click token.
+- `canUnsubscribe` is true whenever the letter is owed with per-lot email
+  alerts on (progress and bid-activity). The control points at signed-in
+  **My Auctions** (`muteUrl`), where the collector flips that listing's
+  Email alerts toggle — not unwatch, not the account master, not a
+  one-click token.
 - Alternatives rejected:
   - A template per kind — the eight kinds already share one file.
   - Move the letter into `@grade10/email` — login mail lives there
@@ -123,19 +124,23 @@ watchers.
 
 - Do not reuse `ending_soon_notified_at`. That column holds the
   shipped one-hour watcher reminder, a different message.
-- Close-24h and extended are owed to watchers **or** participants.
-  Unwatch deletes the watch row, so those claims take (1) remaining
-  `watches` rows and (2) distinct bidders with a bid and no watch.
-  Stamps for (2) live on the bidder's latest bid row. Watchers who
-  also bid stamp the watch row only.
-- Start letters stay watch-row only.
+- Close-24h and extended are owed to watchers **or** participants with
+  email alerts on. Unwatch deletes the watch row and turns alerts off on
+  that watch; a bidder who unwatched but kept alerts on is still claimed
+  via their bid row. Stamps for bid-only recipients live on the bidder's
+  latest bid row. Watchers who also bid stamp the watch row only when
+  alerts are on.
+- Start letters stay watch-row only, and only where `email_alerts` is true
+  (and the account master is on).
 - Drop at send time if the statement is false (`stillBiddable` for
   close/extended; start-soon if `starts_at` has passed; has-started if
   `now < starts_at` or `now ≥ scheduled_ends_at`).
+- Per-lot mute: additive `email_alerts boolean not null default true` on
+  `watches`, and the same (or a shared listing mail-pref row) for bid-only
+  recipients. Fanout filters `email_alerts = true`. Account master off
+  suppresses all auction fanout for that collector.
 - Alternatives rejected:
-  - A mute flag on watches and never deleting a participant's row —
-    that changes unwatch semantics the watched list does not exist to
-    explain.
+  - Deleting the watch row to mute — that removes list membership.
   - Convert the one-hour stamp into the 24-hour letter — two
     messages, one column.
 
@@ -201,29 +206,30 @@ for one bid.
 | Table | Role |
 | --- | --- |
 | `auction_listings` | `starts_at`, `scheduled_ends_at`, `ends_at`, `status`, `current_top_bid_id`. Called-off is `canceled`. No new columns. |
-| `watches` | Watcher enrolment and progress / new-bid stamps. |
-| `bids` | Bidder enrolment fallback stamps. `outbid_notified_at` already exists. |
+| `watches` | Watcher list membership, `email_alerts`, and progress / new-bid stamps. |
+| `bids` | Bidder enrolment fallback stamps and per-bid `email_alerts` (or shared pref). `outbid_notified_at` already exists. |
 | `bidders` | Registered email snapshot at send time. |
 
-### `auction.watches` — additive stamp columns
+### `auction.watches` — additive stamp and alerts columns
 
 | Column | Type | Null | Default | Meaning |
 | --- | --- | --- | --- | --- |
+| `email_alerts` | `boolean` | no | `true` | Per-lot email alerts; mute sets false without deleting the watch. |
 | `opens_in_24h_notified_at` | `timestamptz(3)` | yes | `NULL` | Start-soon sent or dropped. |
 | `opened_notified_at` | `timestamptz(3)` | yes | `NULL` | Has-opened sent or dropped. |
 | `closes_in_24h_notified_at` | `timestamptz(3)` | yes | `NULL` | Close-soon sent or dropped. |
 | `extended_notified_at` | `timestamptz(3)` | yes | `NULL` | Extended-bidding sent or dropped. |
 | `new_bid_told_bid_id` | `text` | yes | `NULL` | Leading bid this watcher was last told about. |
 
-Indexes, partial so stamped rows leave them:
+Indexes, partial so stamped rows leave them (and muted rows leave due indexes):
 
 | Index | On | Where |
 | --- | --- | --- |
-| `idx_watches_opens_in_24h_due` | `(listing_id, created_at)` | `opens_in_24h_notified_at IS NULL` |
-| `idx_watches_opened_due` | `(listing_id, created_at)` | `opened_notified_at IS NULL` |
-| `idx_watches_closes_in_24h_due` | `(listing_id, created_at)` | `closes_in_24h_notified_at IS NULL` |
-| `idx_watches_extended_due` | `(listing_id, created_at)` | `extended_notified_at IS NULL` |
-| `idx_watches_new_bid_due` | `(listing_id, created_at)` | `new_bid_told_bid_id IS NULL` |
+| `idx_watches_opens_in_24h_due` | `(listing_id, created_at)` | `opens_in_24h_notified_at IS NULL AND email_alerts` |
+| `idx_watches_opened_due` | `(listing_id, created_at)` | `opened_notified_at IS NULL AND email_alerts` |
+| `idx_watches_closes_in_24h_due` | `(listing_id, created_at)` | `closes_in_24h_notified_at IS NULL AND email_alerts` |
+| `idx_watches_extended_due` | `(listing_id, created_at)` | `extended_notified_at IS NULL AND email_alerts` |
+| `idx_watches_new_bid_due` | `(listing_id, created_at)` | `new_bid_told_bid_id IS NULL AND email_alerts` |
 
 `idx_watches_listing_id_notified` and `ending_soon_notified_at` stay
 the one-hour ending-soon claim.
@@ -464,9 +470,10 @@ Claim predicates:
 Skip `status = 'canceled'`. `FOR UPDATE SKIP LOCKED` on the stamp
 row. Limit 50 recipients per `(storefront, listing)` chunk.
 
-`canUnsubscribe` is true for `opens_in_24h` and `opened`; for
-`closes_in_24h` and `extended` only when `stampOn = 'watch'` and the
-collector has no bid on that listing.
+`canUnsubscribe` is true for every owed letter when per-lot email alerts
+are on (and the account master is on). The link opens signed-in My
+Auctions for that brand (`muteUrl`); optional deep-link to the listing
+row is application-owned.
 
 ### `sendProgressLetters`
 
@@ -540,7 +547,8 @@ A second pass finds the stamp and claims nothing.
 bid row has `closes_in_24h_notified_at` null.
 
 Claim for `closes_in_24h` returns that bid as `stampOn: 'bid'`,
-`canUnsubscribe: false`. Send stamps the bid row, not a watch.
+`canUnsubscribe: true` when the bid (or shared pref) still has
+`email_alerts`. Send stamps the bid row, not a watch.
 
 ### Mutation example: snipe-war coalescing
 

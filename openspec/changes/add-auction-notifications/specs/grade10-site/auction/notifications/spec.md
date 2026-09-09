@@ -1,15 +1,21 @@
 ## Purpose
 
 Which messages Grade10 sends a collector about an auction listing they
-watched or bid on, what each one fires on, and who receives it. Every
-message is transactional mail to their registered account email.
+watched or bid on with email alerts on, what each one fires on, and who
+receives it. Every message is transactional mail to their registered
+account email. Watching a listing is list membership; email alerts are a
+separate preference — see `grade10-site/auction/watchlist`.
 
 ## Feature set
 
 - Enrolment
-  - Watch or bid: either action enrols the collector in that listing's mail
+  - Watch or bid with alerts on: either relationship enrols mail when
+    email alerts are on for that listing
   - One copy: a collector who both watches and bids still gets one message
-  - Unwatch ends watch mail: bidding enrolment survives unwatch
+  - Mute ends mail: turning email alerts off stops mail without unwatching
+    or ending the bid; unwatch also turns alerts off
+  - Account master: an account-level auction email alerts control can stop
+    all auction mail without clearing watches or bids
 - Progress messages
   - Opens in 24 hours: sent 24 hours before the scheduled start
   - Bidding has opened: sent when bidding starts
@@ -21,57 +27,82 @@ message is transactional mail to their registered account email.
 - Delivery
   - Registered email: every message goes to the account email
   - Shared letter: subject, preheader, heading, body, lot block (one primary image when available), listing action, footer
-  - Stop watch mail: watch-driven letters offer a signed-in way to unwatch
+  - Stop email alerts: letters say alerts are on for the lot, then **Turn them off** → My Auctions
   - Failed send: a temporary failure is retried; a permanent one stops; a false statement is not sent
   - Call-off suppresses: a called-off listing sends nothing further
   - Send log: type, recipient email, listing, and Sent At — no body — filterable by email
 
 ## ADDED Requirements
 
-### Requirement: A collector is enrolled by watching or by bidding
+### Requirement: A collector is enrolled by watching or by bidding with email alerts on
 
 A collector SHALL:
 
 1. Watch a listing, bid on it, or both.
 2. Receive each message they are enrolled for at most once, however many
    reasons they have to receive it.
-3. Unwatch to stop watcher enrolment. Bidding enrolment SHALL NOT end.
+3. Receive that mail only while email alerts are on for that listing and
+   the account-level auction email alerts control is on.
+4. Mute email alerts for a listing without unwatching and without ending
+   the bid. Unwatching SHALL turn email alerts off for that listing.
+   Bidding enrolment SHALL NOT end on unwatch or mute.
 
-| Enrolment | How it starts | Mail it receives | How it ends |
+| Relationship | How it starts | Mail it can receive (alerts on) | How mail stops |
 | --- | --- | --- | --- |
-| Watcher | The collector watches the listing | The four progress messages | Unwatch |
-| Bidder | The collector has a committed bid on the listing | Closing warning, extended bidding, new-bid, outbid | Does not end on unwatch |
+| Watcher | The collector watches the listing | The four progress messages | Mute email alerts, unwatch, or account master off |
+| Bidder | The collector has a committed bid on the listing | Closing warning, extended bidding, new-bid, outbid | Mute email alerts or account master off; not by unwatch alone |
 
+Watching a listing SHALL default email alerts **on** for that listing.
 Bidding on a listing SHALL enrol the bidder in that listing's
-bid-activity mail without requiring them to watch it. A collector who
-watches after a progress window has already opened, while they are
-still enrolled for that message, SHALL still receive it.
+bid-activity mail without requiring them to watch it, with email alerts
+default **on**. A collector who watches after a progress window has
+already opened, while they are still enrolled for that message, SHALL
+still receive it when alerts are on.
 
 #### Scenario: grade10-site-auction-notifications-SC-01 - Bidding enrols without watching
 
 - **GIVEN** a collector who has bid on a lot and does not watch it
+- **AND** email alerts are on for that lot
 - **WHEN** another collector bids on that lot
 - **THEN** Grade10 sends them the new-bid message
 
 #### Scenario: grade10-site-auction-notifications-SC-02 - A watcher who also bids receives one copy
 
 - **GIVEN** a collector who both watches a lot and has bid on it
+- **AND** email alerts are on for that lot
 - **WHEN** a message about that lot is sent
 - **THEN** they receive exactly one copy of it
 
 #### Scenario: grade10-site-auction-notifications-SC-03 - Unwatching does not end bidder enrolment
 
 - **GIVEN** a collector who watched a lot and has bid on it
+- **AND** email alerts remain on for that lot after they unwatch
 - **WHEN** they unwatch it
 - **AND** another collector bids on that lot
 - **THEN** Grade10 still sends them the new-bid message
 
-#### Scenario: grade10-site-auction-notifications-SC-04 - Unwatching ends watcher enrolment
+#### Scenario: grade10-site-auction-notifications-SC-04 - Unwatching ends watcher mail
 
 - **GIVEN** a collector who watches a lot and has never bid on it
 - **WHEN** they unwatch it
 - **AND** bidding opens on that lot
 - **THEN** Grade10 does not send them the bidding-has-opened message
+
+#### Scenario: grade10-site-auction-notifications-SC-32 - Muting stops mail while watching continues
+
+- **GIVEN** a collector who watches a lot with email alerts on
+- **WHEN** they turn email alerts off for that lot
+- **AND** bidding opens on that lot
+- **THEN** the lot remains on their Watching list
+- **AND** Grade10 does not send them the bidding-has-opened message
+
+#### Scenario: grade10-site-auction-notifications-SC-33 - Muting stops bidder mail without ending the bid
+
+- **GIVEN** a collector who has bid on a lot with email alerts on
+- **WHEN** they turn email alerts off for that lot
+- **AND** another collector bids on that lot
+- **THEN** their bid enrolment is unchanged
+- **AND** Grade10 does not send them the new-bid message
 
 ### Requirement: Grade10 sends four messages about a lot's progress
 
@@ -265,34 +296,35 @@ storefront the collector bid or watched on.
 - **THEN** the letter has no lot picture
 - **AND** it still carries the lot identity, the kind's required facts, and the listing action
 
-### Requirement: Watch-driven letters can be stopped; bid-activity letters cannot
+### Requirement: Letters can be stopped by muting email alerts
 
-A letter Grade10 sends because the collector watched the listing SHALL
-include a way to stop further letters about that listing, pointing at a
-signed-in storefront page where they can unwatch. That way out SHALL NOT
-claim that an unauthenticated request will stop the letters.
+A letter Grade10 sends about a listing SHALL include a way to stop further
+letters about that listing by turning email alerts off for it. The footer
+SHALL state that email alerts are on for that lot and SHALL offer a link
+**Turn them off** to the signed-in **My Auctions** page, where the collector
+mutes that listing's Email alerts control. That way out SHALL NOT claim that
+an unauthenticated request will stop the letters, and SHALL NOT send the
+collector to the account-wide Auction email alerts master as the primary mute
+for this letter. Muting SHALL NOT remove a watch and SHALL NOT end a bid.
 
-A letter Grade10 sends because of the collector's own bid — outbid or
-new bid — SHALL NOT offer a way to stop further letters. Stopping a
-watch SHALL NOT stop those letters.
-
-The close-in-24-hours and extended-bidding letters are owed to
-participants even after they unwatch, so they SHALL NOT offer a way to
-stop that Grade10 cannot honour for a bidder. They SHALL offer the way
-out only when the collector is owed them solely as a watcher.
+The control SHALL be offered on progress letters and on bid-activity
+letters (outbid and new-bid) whenever the recipient has email alerts on
+for that listing.
 
 #### Scenario: grade10-site-auction-notifications-SC-19 - A start letter can be stopped
 
-- **GIVEN** a collector who watched a listing and never bid
+- **GIVEN** a collector who watched a listing with email alerts on
 - **WHEN** they receive the start-soon or has-started letter
-- **THEN** the letter includes a way to stop further letters about that listing
-- **AND** that way is a signed-in storefront page, not an unauthenticated one-click stop
+- **THEN** the letter includes a way to turn email alerts off for that listing
+- **AND** that way is the signed-in My Auctions page, not an unauthenticated one-click stop
 
-#### Scenario: grade10-site-auction-notifications-SC-20 - An outbid letter cannot be stopped
+#### Scenario: grade10-site-auction-notifications-SC-20 - An outbid letter can be stopped by muting
 
 - **GIVEN** a collector who was just overtaken
+- **AND** email alerts are on for that listing
 - **WHEN** they receive the outbid letter
-- **THEN** the letter does not include a way to stop further letters
+- **THEN** the letter includes a way to turn email alerts off for that listing
+- **AND** that way is the signed-in My Auctions page
 
 ### Requirement: A temporary send failure is retried; a permanent one stops; a false letter is not sent
 
