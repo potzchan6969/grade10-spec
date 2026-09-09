@@ -46,6 +46,14 @@ Outline first. A document is a heading and an outline, never an essay.
 - **Only what the page owns** — a fact a child page, a sibling, or a
   platform page states is a link away, never repeated; a product's index
   says what no capability page carries, and nothing true of every product
+- **A sibling's rule appears as its outcome** — one line saying what the
+  reader gets, then a dash and the link: `an unused one an operator can
+  reverse — [Rewards](…)`. Never the rule behind it, and never a second
+  home for it. A fact that moves to a new owner leaves the old page in the
+  same change that moves it.
+- **One name per thing across the product** — the page that owns a state,
+  a role or an instrument names it, and every sibling uses that name.
+  A member's coupon is `held for an order` on every page or on none.
 - **What the reader asks, not what the spec enumerates** — a page says
   what a surface is for, what it shows, where each thing leads, what its
   URL looks like. The spec's cases and edge rules stay in the spec, a link
@@ -91,9 +99,19 @@ Outline first. A document is a heading and an outline, never an essay.
   in the fewest marks: `+15 pts`, `13 pts × 1.2`, `earn → lapses 3 Jan
   2027`, `·` between facts. `earns 15 points, alive to 3 January 2027` is
   prose in a cell; the arrow, the unit and the number carry it.
-- **A table** when every row carries the same three or more attributes —
-  tiers, statuses, messages. A cell that needs a paragraph belongs outside
-  the table.
+- **A table** when every row carries the same attributes — tiers, statuses,
+  messages, or a two-column `Rule | Value` of the fixed numbers a page runs
+  on. A cell that needs a paragraph belongs outside the table.
+- **Fixed values open the page** — the rates, the terms, the caps, as that
+  two-column table before any prose about behaviour, so a reader who reads
+  only it can already use the thing. Name who changes them where it is not
+  obvious: `changed by a deploy and never by an operator`.
+- **A closed set is stated whole** — every status, every refusal, every tier
+  the reader can meet, in their words and grouped by what they can do about
+  it. The code's own identifiers stay in the engineer block. A set stated in
+  part is worse than none, because nothing tells the reader it was partial.
+- **A marked fact is a bullet** — 🚧 and ❓ start a line, so a fact wearing
+  one never sits in a table cell.
 - **Open items wear a mark** — ❓ at the start of the line with the
   question, or `TBC` after the value still missing. Never blur a decided
   fact to sit beside an undecided one.
@@ -126,6 +144,8 @@ Outline first. A document is a heading and an outline, never an essay.
 - A word already in the draft has earned nothing. Rewriting a hard line means
   dropping the term that made it hard, not carrying it into the new sentence.
 - Group one concern per section.
+- A section opens the way the page does, scaled down: one fragment saying
+  what the section is, or nothing at all. Never a fact the items then repeat.
 - The roadmap, stated as the product. A decided plan reads in the present
   tense as though shipped; where it stands is a status card, a 🚧 or a ❓,
   never an apology in the prose that a spec is still being written.
