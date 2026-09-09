@@ -8,9 +8,9 @@ stops drawing one. Why the handler is the signal rather than a flag:
 
 ## 1. The card sells only where it is asked to (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Draw the cart control only where a quantity-change handler was supplied and the product is not sold out, so *A surface that does not sell* (`SC-55`) passes and the stories that keep their handler keep their cart
-- [ ] 1.2 Make the four cart words optional on the card's copy type, so a surface drawing no cart supplies none — `soldOut` and `sale` already are
-- [ ] 1.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run design-sync:check`
+- [x] 1.1 Draw the cart control only where a quantity-change handler was supplied and the product is not sold out, so *A surface that does not sell* (`SC-55`) passes and the stories that keep their handler keep their cart
+- [x] 1.2 Make the four cart words optional on the card's copy type, so a surface drawing no cart supplies none — `soldOut` and `sale` already are
+- [x] 1.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run design-sync:check`
 
 ## 2. The front door merchandises (grade10)
 
