@@ -6,7 +6,7 @@ door already supplies no handler and so loses its cart the moment the card
 stops drawing one. Why the handler is the signal rather than a flag:
 [`tech-design.md`](tech-design.md).
 
-## 1. The card sells only where it is asked to (grade10-spec)
+## 1. The card sells only where it is asked to (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Draw the cart control only where a quantity-change handler was supplied and the product is not sold out, so *A surface that does not sell* (`SC-55`) passes and the stories that keep their handler keep their cart
 - [ ] 1.2 Make the four cart words optional on the card's copy type, so a surface drawing no cart supplies none — `soldOut` and `sale` already are
