@@ -5,83 +5,126 @@ order: 5
 ---
 
 A coupon is what a redemption leaves the member holding, and what an order
-carries to spend it. A reward coupon is always welded onto the order's own
-lines — a cut on the lines it applies to, or a gift line — and never a shop
-code. What each kind takes off is on
+carries to spend it. A reward coupon is welded onto the order's own lines — a
+cut on the lines it applies to, or a free gift line — never a code the shop
+evaluates for itself.
+
+## Validity
+
+A coupon carries the reward's definition as it stood on the day it was bought,
+so redefining the reward never rewrites a coupon a member already holds —
 [Rewards](/p/grade10-site/loyalty/rewards).
+
+| Property | Value |
+| --- | --- |
+| What it takes off | What that definition says |
+| Uses | **One** |
+| Who | The member who redeemed it |
+| Channels | Only the selling channels the definition names |
+| Runs from | The redemption, for the whole days the reward states |
+| Expiry | Read off the clock, never written down |
+
+- 🚧 **Birthday month** — a definition can hold a coupon to the month of the
+  member's birthday; loyalty holds no birthday it can trust, so every coupon
+  asking for one is refused
+
+::story{id="loyalty-membership-couponlist--default" title="The coupons a member holds"}
 
 ## Applying one
 
 | Channel | How it lands |
 | --- | --- |
 | Online | The draft order the checkout builds carries the weld on its lines |
-| At the till | Staff apply it from the member's panel, or type it, and the terminal welds it onto the sale |
+| At the till | A shopkeeper applies it from the member's panel, or types it, and the terminal welds it onto the sale |
 
-- **Reserved, then settled** — a coupon is held against the order being paid
-  and freed again if that order is not
+- **Held for an order, then settled** — a coupon is held against the order
+  being paid, and freed again if that order is not
+- **A stuck hold frees itself** — **24 hours** on, a hold nothing ever settled
+  is released
 - **One live attempt** — a second application while one is in flight is
   refused
-- **The order's one discount** — a reward coupon is in that count; points
-  paid against the bill, and free shipping, sit outside it —
-  [Discounts](/p/grade10-site/store/discounts)
+- 🚧 **The order's one discount** — a reward coupon is in that count; points
+  paid against the bill, free shipping and the site's own discounts sit
+  outside it — [Discounts](/p/grade10-site/store/discounts)
 
-Refused, and the member is told which: nothing in the basket matches what the
-coupon applies to, the basket is under the coupon's threshold, the currency is
-not the programme's, every eligible line is already free, or a gift's variant
-is in the basket already.
+## Refusals
 
-## When it counts as used
+The member is told which of these answered, and never left with a basket that
+quietly lost a coupon.
 
-**Settlement, never checkout.** A coupon on a draft nobody paid was never
-spent, so it is stamped used by the paid order that carried it and by nothing
-else.
+### Coupon
+
+| Refusal | Meaning |
+| --- | --- |
+| Not held | Not a coupon this member holds |
+| Not standing | Already spent, or otherwise not available |
+| Expired | Its own validity passed |
+| Wrong channel | The definition does not name the channel it is being spent in |
+| Not eligible | The definition's eligibility is not met |
+| Attempt in flight | Another application of the same coupon is already live |
+
+### Basket
+
+| Refusal | Meaning |
+| --- | --- |
+| Under the threshold | The basket holds less than the coupon asks for |
+| Wrong currency | Not the programme's currency |
+| Nothing matches | No line matches what the coupon applies to, or the catalogue could not be read |
+| Every line free | Every eligible line is already fully discounted |
+| The cut will not split | The amount cannot be divided across the eligible lines |
+| Gift already held | A gift whose variant the basket already carries |
+
+## Spending one
+
+**The paid order stamps it used, and nothing else does.** A coupon on a draft
+nobody paid was never spent.
 
 - **Used has no way back** — cancelling or refunding that order leaves the
-  coupon used and the points spent; only an order that never paid returns one
-  to the member, and a reservation nothing ever settles is freed a day later
-- **A mismatch is a person's to settle** — a coupon used twice, or used by
-  someone who does not hold it
-
-## Validity
-
-| Property | Value |
-| --- | --- |
-| What it takes off | What the reward defines |
-| Uses | One |
-| Who | The member who redeemed it, in either channel |
-| Runs from | The redemption, for the days the reward states |
-| Expiry | Read off the clock, never written down |
-
-A coupon whose validity passes stays spent. Bought and not used is the
-member's own, and the money is counted as breakage in the liability register,
-which reports outstanding points as a count and the money out in coupons as
-money — answering `none` where nothing is outstanding and `unavailable` with a
-reason where it cannot be read, never a zero.
-
-::story{id="loyalty-membership-couponlist--default" title="The coupons a member holds"}
+  coupon used and the points spent
+- **An unused one an operator can reverse** — the coupon is voided and the
+  points that bought it come back with it —
+  [Rewards](/p/grade10-site/loyalty/rewards)
+- **A lapsed coupon stays spent** — what lapsed is counted as coupons and as
+  the points they cost, never as money
 
 ## Store promotions
 
-An operator's own discount codes, minted with a prefix and a threshold, are
-the store's and not the programme's. They take money off the whole order, the
-shop evaluates them itself, and no reward ever defines one —
-[Discounts](/p/grade10-site/store/discounts).
+The store mints its own coupons — order, product and gift alike — and they are
+the store's instrument, not the programme's.
+
+- **Minted by an operator alone** — a code prefix, a validity in days, and
+  optionally the one member it belongs to
+- **Never a reward** — no reward defines an order coupon; those are the
+  store's to mint — [Discounts](/p/grade10-site/store/discounts)
 
 :::callout{kind="warning"}
 The durable spec has no notion of a coupon: a redemption there is an
 entitlement with no settlement. Everything on this page is specified in the
 in-flight `revise-loyalty-programme-rules` and `add-shopify-membership-pos`
-changes. The one-discount count is decided and unbuilt: a welded coupon still
-refuses order discounts alone and combines with the rest.
+changes.
 :::
 
 :::detail{title="Where a coupon lives" for="engineer"}
-Two registries. Loyalty's `coupon_instances` is the member's own: one row per
-redemption, carrying the definition it was bought under, with `available`,
-`reserved`, `used`, `expired` and `void`; `coupon_usages` is one attempt to
-apply one to one order, keyed for idempotency and unique on a live attempt per
-coupon. The store's own registry holds every coupon the store issued whatever
-granted it, as `live`, `used` or `void`. A reward coupon's provider artifact is
-always `draft_line_discount` — `discount_code` is the store registry's and
-never reaches loyalty. Metric: `loyalty.coupon.reservation_released`.
+- **Two registries** — loyalty's `coupon_instances` is the member's own, one
+  row per redemption carrying the definition it was bought under, as
+  `available`, `reserved`, `used`, `expired`, `void`, with no transition out of
+  `used`; the store's own registry holds every coupon the store issued whatever
+  granted it, as `live`, `used`, `void`
+- **Expiry is read, never written** — a row reads expired the instant its date
+  passes, and no read path writes
+- **`coupon_usages`** — one attempt to apply one coupon to one order, keyed for
+  idempotency and unique on a live attempt per coupon, which is what answers
+  `idempotency_conflict`
+- **Provider artifact** — a reward coupon's is always `draft_line_discount`;
+  `discount_code` belongs to the store's registry and never reaches loyalty
+- **An order code's reach** — the whole order, named products, or named
+  variants; never a catalogue filter, since the shop knows nothing of worlds
+  and types
+- **Refusal reasons** — `not_found`, `not_available`, `expired`,
+  `wrong_channel`, `birthday_unavailable`, `not_eligible`,
+  `idempotency_conflict` from the programme's own guards; `minimum_subtotal`,
+  `currency_mismatch`, `no_eligible_lines`, `line_already_free`,
+  `cut_cannot_split`, `gift_in_basket` from the shared evaluator
+- **Stale holds** — `STALE_RESERVATION_HOURS = 24`; metric
+  `loyalty.coupon.reservation_released`
 :::

@@ -12,20 +12,24 @@ lands on the order through the same Shopify draft order.
   a product special sale, a buy-X-get-Y offer, or a spend threshold off the
   whole order — see [Site discounts](#site-discounts) below
 - **Discount code** — typed in the cart drawer; the total shows the cut, and a
-  code the shop refuses stops the checkout with the code named
+  code the shop refuses stops the checkout with the code named. An operator
+  mints one as a single-use `PREFIX-XXXXXXXX` with an expiry, open to anybody
+  or bound to one member
+  1. **Order coupon** — a fixed amount off the whole order, or off named
+     products or variants, never more than the goods it may come off; bound to
+     a Shopify Discount, and the only shape that rides as a code
 - **Rewards** — earned with points, on a birthday, or on registering
   ([Rewards](/p/grade10-site/loyalty/rewards)), selected to use in cart OR
-  auto-applied
-  1. **Order coupon** — an amount off the whole order, never more than the
-     reward's cap; a single-use code `PREFIX-XXXXXXXX` with an expiry, bind to
-     a Shopify Discount
-  2. **Product coupon** — an amount off each unit of the products a
-     custom-data group names, custom per-product discount on the draft order,
+  auto-applied. Two shapes, both welded onto the order's own lines, neither a
+  code — a reward never defines an order coupon
+  1. **Product coupon** — a fixed amount, or a percentage with a ceiling, off
+     the lines it applies to; custom per-product discount on the draft order,
      NOT bind to Shopify Discount
-  3. **Gift** — an item added free once the goods pass a threshold,
+  2. **Gift** — an item added free once the goods pass a threshold,
      custom per-item discount on the draft order, NOT bind to Shopify
      Discount
-- **Points as credits** — **HKD 1** per point
+- **Points** — **HKD 1** per point, paid straight against the bill
+  ([Paying with Points](/p/grade10-site/loyalty/paying-with-points))
   1. **Nothing is held** — points stay spendable until an order is paid; a
      checkout walked away from costs nothing, and a newer checkout replaces
      the older one
@@ -38,7 +42,7 @@ An order carries one discount, whichever kind reached it:
 
 - **In the count** — a discount code, or a reward's coupon; one of them, never
   both, and a second is refused rather than stacked
-- **Points as credits** — its own add-on, outside the count
+- **Points** — its own add-on, outside the count
 - **Free shipping** — its own add-on, outside the count
 - **Site discounts** — their own add-on too, outside the count; a product
   special sale, a buy-X-get-Y offer, or an order threshold combines with
@@ -53,7 +57,7 @@ A Draft Order is created for each checkout, with the following discounts (if any
 - **Discount code** (Shopify Discount code)
 - **Order coupon** (Shopify Discount code)
 - **Per-product coupon** (per-product custom discount)
-- **Points as credits** (order-wise discount)
+- **Points** (order-wise discount)
 - **Gift** (per-item 100% off custom discount)
 - **Shipping** ([Shipping](/p/grade10-site/store/shipping)) fee is determined by custom carrier service API, conditionally free
 
