@@ -45,6 +45,18 @@ panel SHALL render the posture it is given.
 | Signed in, card linked, no bid on this lot | Enabled | Set or raise maximum | Linked card with change | Closed, or open during change |
 | Signed in, card linked, bid placed on this lot | Enabled | Set or raise maximum | Linked card without change | Closed |
 
+The consumer SHALL use exactly these enrollment state names: `signed-out`,
+`setup-first`, `setup-in-progress`, `setup-editable`,
+`authorization-in-progress`, `authorization-failed`,
+`authorization-editable`, and `enrolled`. `setup-in-progress` is the
+first-link setup posture while the modal is open; `setup-first` is the
+signed-in, not-yet-enrolled posture before setup opens. `setup-editable` is
+change-card setup for an editable enrollment; `authorization-editable` is a
+successfully linked enrollment before the first accepted bid; and `enrolled`
+is the locked enrollment after the first accepted bid. Backend projections
+may use `unenrolled`, `editable`, and `locked`; those are not consumer state
+names.
+
 Standing badges for highest bid or outbid SHALL appear only when the
 collector is signed in and has auction standing on the lot. Recent public bids
 MAY remain visible while signed out.

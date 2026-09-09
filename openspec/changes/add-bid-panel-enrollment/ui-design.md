@@ -18,8 +18,8 @@
 
 | Surface state | Spec scenarios |
 | --- | --- |
-| Signed out: sign-in action, no standing badges, recent bids remain | `grade10-site-auction-bid-panel-enrollment-SC-01`, `grade10-site-auction-bid-panel-enrollment-SC-02`, `shared-ui-auction-listing-SC-20` |
-| Signed in and unenrolled: empty linked-card slot, setup opens, incomplete setup blocks continue, dismissal preserves empty state | `grade10-site-auction-bid-panel-enrollment-SC-03`–`SC-06`, `shared-ui-auction-listing-SC-16`, `shared-ui-auction-listing-SC-19` |
-| Enrolled before first bid: linked card with change, reusable setup copy, prior card shown, attestation pre-checked | `grade10-site-auction-bid-panel-enrollment-SC-07`–`SC-09`, `shared-ui-auction-listing-SC-17`–`SC-18` |
-| Authorizing and refused authorization: controls locked while pending; inline refusal keeps setup interactive | `shared-ui-auction-listing-SC-22`, `shared-ui-auction-listing-SC-23` |
-| Enrolled after first bid: linked card remains visible without change; later maximum does not reopen setup; standing appears when supplied | `grade10-site-auction-bid-panel-enrollment-SC-10`, `grade10-site-auction-bid-panel-enrollment-SC-11`, `shared-ui-auction-listing-SC-20`, `shared-ui-auction-listing-SC-21` |
+| `signed-out`: sign-in action, no standing badges, recent bids remain | `grade10-site-auction-bid-panel-enrollment-SC-01`, `grade10-site-auction-bid-panel-enrollment-SC-02`, `shared-ui-auction-listing-SC-20` |
+| `setup-first` and `setup-in-progress`: empty linked-card slot, first-link setup, incomplete setup blocks continue, dismissal preserves empty state | `grade10-site-auction-bid-panel-enrollment-SC-03`–`SC-06`, `shared-ui-auction-listing-SC-16`, `shared-ui-auction-listing-SC-19` |
+| `setup-editable` and `authorization-editable`: linked card with change, reusable setup copy, prior card shown, attestation pre-checked | `grade10-site-auction-bid-panel-enrollment-SC-07`–`SC-09`, `shared-ui-auction-listing-SC-17`–`SC-18` |
+| `authorization-in-progress` and `authorization-failed`: controls locked while pending; inline failure keeps setup interactive | `shared-ui-auction-listing-SC-22`, `shared-ui-auction-listing-SC-23` |
+| `enrolled`: linked card remains visible without change; later maximum does not reopen setup; standing appears when supplied | `grade10-site-auction-bid-panel-enrollment-SC-10`, `grade10-site-auction-bid-panel-enrollment-SC-11`, `shared-ui-auction-listing-SC-20`, `shared-ui-auction-listing-SC-21` |
