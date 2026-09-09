@@ -20,7 +20,7 @@ store to mint.
 | Who | The member's paired Shopify customer, online and at the till |
 | Validity | From minting, for the days the reward states; a code minted near the end of a menu window is not born dying |
 | Minimum purchase | The code's own value — a code bigger than the cart is refused, never burned for less |
-| Stacking | Combines with product and shipping discounts; never with another order-level discount, so one points code per order |
+| Stacking | The order's one discount, so never beside a discount code or another coupon; points as credits and free shipping sit outside that count — [Discounts](/p/grade10-site/store/discounts) |
 
 ## Minting
 
@@ -70,7 +70,9 @@ prefix and a threshold, and are not part of the programme.
 :::callout{kind="warning"}
 The durable spec has no notion of a code: a redemption there is an entitlement
 with no settlement. Everything on this page is specified in the in-flight
-`revise-loyalty-programme-rules` and `add-shopify-membership-pos` changes.
+`revise-loyalty-programme-rules` and `add-shopify-membership-pos` changes. The
+one-discount count is decided and unbuilt: a minted code still refuses order
+discounts alone and combines with the rest.
 :::
 
 :::detail{title="Code map" for="engineer"}

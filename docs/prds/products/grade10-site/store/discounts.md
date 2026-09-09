@@ -10,13 +10,15 @@ lands on the order through the same Shopify draft order.
   the cart show the price and, struck through, the price it was
 - **Discount code** — typed in the cart drawer; the total shows the cut, and a
   code the shop refuses stops the checkout with the code named
-- **Rewards** — redeemed by points, or from special events (e.g. birthday),
-  selected to use in cart OR auto-applied
-  1. **Order coupon** — an amount off the whole order; a single-use code
-     `PREFIX-XXXXXXXX` with an expiry, bind to a Shopify Discount
-  2. **Product coupon** — an amount off each unit of named products,
-     custom per-product discount on the draft order, NOT bind to Shopify
-     Discount
+- **Rewards** — earned with points, on a birthday, or on registering
+  ([Rewards](/p/grade10-site/loyalty/rewards)), selected to use in cart OR
+  auto-applied
+  1. **Order coupon** — an amount off the whole order, never more than the
+     reward's cap; a single-use code `PREFIX-XXXXXXXX` with an expiry, bind to
+     a Shopify Discount
+  2. **Product coupon** — an amount off each unit of the products a
+     custom-data group names, custom per-product discount on the draft order,
+     NOT bind to Shopify Discount
   3. **Gift** — an item added free once the goods pass a threshold,
      custom per-item discount on the draft order, NOT bind to Shopify
      Discount
@@ -26,6 +28,16 @@ lands on the order through the same Shopify draft order.
      the older one
   2. **Where it is on** — everywhere
 
+
+## One discount at a time
+
+An order carries one discount, whichever kind reached it:
+
+- **In the count** — a discount code, or a reward's coupon; one of them, never
+  both, and a second is refused rather than stacked
+- **Points as credits** — its own add-on, outside the count
+- **Free shipping** — its own add-on, outside the count
+- **Both channels** — the same rule in the cart and at the till
 
 ## Online draft order mechanism
 
