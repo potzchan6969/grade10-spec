@@ -30,6 +30,12 @@ artifacts:
         - **Modified Capabilities**: Existing capabilities whose REQUIREMENTS are changing. Only include if spec-level behavior changes, not implementation details. Each needs a delta spec file. Use the exact existing path under `openspec/specs/`. Leave empty if no requirement changes.
       - **Impact**: Affected code, APIs, dependencies, or systems.
 
+      - **Follow-on changes** (optional): What this change makes possible next,
+      one bullet each. The manual's `::next` block reads them onto the capability
+      pages this change is about, so they are read by a collector-facing audience
+      and carry no dates, owners, or commitments. Omit the section when there is
+      nothing to name.
+
 
       IMPORTANT: The Capabilities section is the contract between this artifact
 

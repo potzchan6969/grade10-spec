@@ -37,3 +37,11 @@
 ## Impact
 
 <!-- Affected code, APIs, dependencies, systems -->
+
+## Follow-on changes
+
+<!-- Optional. What this change makes possible next, one bullet each - no dates,
+     no owners, no commitments. The manual's ::next block collects these onto the
+     capability pages this change is about, each bullet under the change that
+     wrote it, so write them as the reader of a capability page would read them.
+     Leave the section out when there is nothing to name. -->
