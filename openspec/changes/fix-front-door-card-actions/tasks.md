@@ -16,9 +16,9 @@ stops drawing one. Why the handler is the signal rather than a flag:
 
 Needs group 1's bump.
 
-- [ ] 2.1 Stop supplying cart words the row cannot honour, so *The row does not sell* (`SC-23`) passes and a card opens its product's page instead
-- [ ] 2.2 Pass the sold-out condition the row already reads, so *A card the shop has sold out* (`SC-21`) passes
-- [ ] 2.3 Pass what a marked-down card used to cost, on the same rule the rest of the store reads a compare-at by, so *A card the shop has marked down* (`SC-22`) passes
+- [x] 2.1 Stop supplying cart words the row cannot honour, so *The row does not sell* (`SC-23`) passes and a card opens its product's page instead
+- [x] 2.2 Pass the sold-out condition the row already reads, so *A card the shop has sold out* (`SC-21`) passes
+- [x] 2.3 Pass what a marked-down card used to cost, on the same rule the rest of the store reads a compare-at by, so *A card the shop has marked down* (`SC-22`) passes
 - [ ] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 3. The manual (grade10-spec)
