@@ -49,7 +49,7 @@ Off the delivery line, and not a sequence — pick by what you are touching. All
 
 | Invoke | When | Example |
 | --- | --- | --- |
-| `/email-drafting` | Compose or revise a React Email template, shared email component, preheader, CTA, or email-safe styling. | "Draft the outbid email for the auction notification." |
+| `/email-templating` | Compose or revise a React Email template, shared email component, preheader, CTA, or email-safe styling. | "Draft the outbid email for the auction notification." |
 
 A contract change found this way is still an OpenSpec change: name the exact exports and the consuming applications, then rejoin at `/planning-pm`.
 

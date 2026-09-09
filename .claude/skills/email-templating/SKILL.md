@@ -1,5 +1,5 @@
 ---
-name: email-drafting
+name: email-templating
 description: Draft or revise React Email templates and their copy in apps/auction-emails, including preheaders, CTAs, shared shells, and email-safe styling.
 ---
 
