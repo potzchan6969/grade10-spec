@@ -19,7 +19,7 @@
 ## 4. Auction and Store backend (grade10) (owner: @htonyl)
 
 - [x] 4.1 Make `A selected payment method authorizes the maximum`, `Payment authentication stays in the dialog`, and `A refused authorization does not place a bid` pass through manual-capture PaymentIntent confirmation and the serialized listing decision.
-- [ ] 4.2 Make `Raising a maximum raises the authorization` and `Provider outcomes remain idempotent` pass by updating the listing's existing PaymentIntent before accepting the raised bid, with webhook and reconciliation recovery.
+- [x] 4.2 Make `Raising a maximum raises the authorization` and `Provider outcomes remain idempotent` pass by updating the listing's existing PaymentIntent before accepting the raised bid, with webhook and reconciliation recovery.
 - [ ] 4.3 Make `An outbid cancels the authorization` pass through the existing release worker without invoking capture or a post-sale transition.
 - [ ] 4.4 Verify: `pnpm run test:backend` and targeted Auction bid, Stripe webhook, release, and reconciliation tests.
 
