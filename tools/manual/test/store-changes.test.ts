@@ -210,7 +210,7 @@ describe("a promoted change carrying its suites", () => {
         "# Promoted thing\n\n**Author:** @priya - 2026-01-01\n\n## Why\n\nIt was time.\n",
       "openspec/changes/promoted-thing/specs/demo-product/alpha/spec.md":
         "## ADDED Requirements\n\n### Requirement: A\n\nThe system SHALL a.\n",
-      "openspec/changes/promoted-thing/specs/demo-product/alpha/test-cases.md":
+      "openspec/changes/promoted-thing/specs/demo-product/alpha/feature-tcs.md":
         [
           "# Alpha test cases",
           "",
@@ -254,7 +254,7 @@ describe("a promoted change carrying its suites", () => {
           "# Broken suite\n\n## Why\n\nStill readable.\n",
         "openspec/changes/broken-suite/specs/demo-product/alpha/spec.md":
           "## ADDED Requirements\n\n### Requirement: A\n\nThe system SHALL a.\n",
-        "openspec/changes/broken-suite/specs/demo-product/alpha/test-cases.md":
+        "openspec/changes/broken-suite/specs/demo-product/alpha/feature-tcs.md":
           "# No status here\n",
       }),
       NO_GIT,

@@ -69,7 +69,7 @@ describe("spec entries", () => {
     expect(journey?.acceptedBy).toEqual(["alpha-SC-01", "alpha-SC-02"]);
   });
 
-  it("reads a sibling test-cases.md into traced cases with their status", () => {
+  it("reads a sibling feature-tcs.md into traced cases with their status", () => {
     expect(alpha?.testCases).toEqual([
       {
         id: "alpha-TC-01",
@@ -115,7 +115,7 @@ describe("error containment", () => {
 
 const SPEC = "openspec/specs/demo-product/alpha/spec.md";
 const JOURNEYS = "openspec/specs/demo-product/alpha/user-journeys.md";
-const CASES = "openspec/specs/demo-product/alpha/test-cases.md";
+const CASES = "openspec/specs/demo-product/alpha/feature-tcs.md";
 
 const written = (files: Record<string, string>) =>
   readSpecs(writeStore(files), NO_GIT)[0];

@@ -44,7 +44,7 @@ const FALLBACK: { id: string; generates: string }[] = [
   { id: "proposal", generates: "proposal.md" },
   { id: "specs", generates: "specs/**/spec.md" },
   { id: "user-journeys", generates: "specs/**/user-journeys.md" },
-  { id: "test-cases", generates: "specs/**/test-cases.md" },
+  { id: "test-cases", generates: "specs/**/feature-tcs.md" },
   { id: "ui-design", generates: "ui-design.md" },
   { id: "tech-design", generates: "tech-design.md" },
   { id: "tasks", generates: "tasks.md" },
@@ -130,7 +130,11 @@ export function schemaArtifacts(
 function kindOf(generates: string): ChangeArtifactKind {
   if (generates.startsWith("specs/")) {
     if (generates.endsWith("/user-journeys.md")) return "journeys";
-    if (generates.endsWith("/test-cases.md")) return "cases";
+    // A suite's file name carries its level (`docs/governance/specs-to-test-cases.md`,
+    // Levels), and `test-cases.md` is the name the feature suites were renamed
+    // from - a change created before that rename still declares it.
+    if (generates.endsWith("-tcs.md") || generates.endsWith("/test-cases.md"))
+      return "cases";
     return "specs";
   }
   if (generates === "tasks.md") return "tasks";

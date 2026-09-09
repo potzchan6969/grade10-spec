@@ -32,7 +32,7 @@ const ANY_PROTOCOL = /^[a-z][a-z0-9+.-]*:/i;
 /** Store files the manual never renders: read them where they live. */
 const FILED_UNDER = ["docs/governance/", "docs/references/"];
 const CHANGE_FILE = /^openspec\/changes\/([^/]+)\/(.+)$/;
-const SPEC_FILE = /^openspec\/specs\/(.+)\/(?:spec|test-cases)\.md$/;
+const SPEC_FILE = /^openspec\/specs\/(.+)\/(?:spec|feature-tcs)\.md$/;
 const REFERENCE_FILE = /^docs\/references\/(.+)\.md$/;
 /** The routes that are the app's own rather than a page's. Prose may link to
  * any of them, and a route the app does not serve still reads as dead. */

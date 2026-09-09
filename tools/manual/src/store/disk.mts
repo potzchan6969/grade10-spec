@@ -81,18 +81,16 @@ export function readTextIfExists(file: string): string | undefined {
   return existsSync(file) ? readText(file) : undefined;
 }
 
-/** Feature suite beside a capability: prefer `feature-tcs.md`, keep reading
- * legacy `test-cases.md` until that file is renamed. Returns the
- * store-relative path when one exists. */
+/** The feature suite beside a capability, when QA has written one: its file
+ * name carries its level (`docs/governance/specs-to-test-cases.md`, Levels),
+ * so a capability's is `feature-tcs.md` and nothing else. Returns the
+ * store-relative path. */
 export function featureSuitePath(
   root: string,
   dir: string,
 ): string | undefined {
-  for (const name of ["feature-tcs.md", "test-cases.md"] as const) {
-    const relative = `${dir}/${name}`;
-    if (existsSync(join(root, relative))) return relative;
-  }
-  return undefined;
+  const relative = `${dir}/feature-tcs.md`;
+  return existsSync(join(root, relative)) ? relative : undefined;
 }
 
 export function subdirectories(dir: string): string[] {

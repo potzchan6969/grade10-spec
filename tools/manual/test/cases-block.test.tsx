@@ -79,7 +79,7 @@ describe("what a suite says about its own review state", () => {
   });
 });
 
-/** A broken `test-cases.md` used to blank the capability's contract on every
+/** A broken `feature-tcs.md` used to blank the capability's contract on every
  * page that embeds the spec. It is loud in the cases block and nowhere
  * else. */
 describe("a suite the readers could not parse", () => {
@@ -87,7 +87,7 @@ describe("a suite the readers could not parse", () => {
     ...spec([]),
     testCases: undefined,
     testCasesError: {
-      file: "openspec/specs/demo-product/alpha/test-cases.md",
+      file: "openspec/specs/demo-product/alpha/feature-tcs.md",
       line: 1,
       message: "a test-case file states `**Status:** pending-review`",
     },
@@ -97,7 +97,7 @@ describe("a suite the readers could not parse", () => {
     const html = render(broken);
 
     expect(html).toContain(`Test cases for ${SPEC} could not be read`);
-    expect(html).toContain("test-cases.md");
+    expect(html).toContain("feature-tcs.md");
   });
 
   it("leaves the contract the spec block renders alone", () => {
