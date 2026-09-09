@@ -45,6 +45,7 @@ front door.
 - `grade10-site-store-home-SC-12` — A card opens its own page
 - `grade10-site-store-home-SC-13` — The row reaches the rest of the collection
 - `grade10-site-store-home-SC-14` — Nothing to merchandise
+- `grade10-site-store-home-SC-23` — The row does not sell
 
 ### grade10-site-store-home-US-04: Collector keeps using the front door while the catalogue lags
 
@@ -70,3 +71,14 @@ reach the front door or the unscoped listing,
 - `grade10-site-store-home-SC-18` — The listing is still the store
 - `grade10-site-store-home-SC-19` — The chrome reaches the front door
 - `grade10-site-store-home-SC-20` — The chrome reaches every collection
+
+### grade10-site-store-home-US-06: Collector reads a card's standing before opening it
+
+**As a** collector scanning the front door,
+**I want** a card to say whether it is sold out and whether it is marked down,
+**so that** I open the ones worth opening rather than finding out on the page.
+
+**Accepted by:**
+
+- `grade10-site-store-home-SC-21` — A card the shop has sold out
+- `grade10-site-store-home-SC-22` — A card the shop has marked down
