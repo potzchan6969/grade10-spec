@@ -9,8 +9,8 @@ My Auctions mute UI remains on `add-auction-watchlist`.
 
 Independent of groups 2–8.
 
-- [ ] 1.1 Make `grade10-site-auction-notifications-SC-21` and `grade10-site-auction-notifications-SC-22` pass at the send seam: `@grade10/email` throws a typed permanent error on provider 4xx other than 429, and a normal throw on 429, 5xx, missing ids, and partial batches, without sleeping.
-- [ ] 1.2 Run `pnpm run typecheck`, `pnpm run lint`, and the `@grade10/email` suite (`pnpm --dir packages/email test`).
+- [x] 1.1 Make `grade10-site-auction-notifications-SC-21` and `grade10-site-auction-notifications-SC-22` pass at the send seam: `@grade10/email` throws a typed permanent error on provider 4xx other than 429, and a normal throw on 429, 5xx, missing ids, and partial batches, without sleeping.
+- [x] 1.2 Run `pnpm run typecheck`, `pnpm run lint`, and the `@grade10/email` suite (`pnpm --dir packages/email test`).
 
 ## 2. Shared vocabulary (grade10)
 
