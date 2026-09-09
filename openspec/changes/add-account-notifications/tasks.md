@@ -18,7 +18,7 @@ Independent of groups 2–8.
 - [x] 2.2 Extend the listing shape the letter renders (`startsAt`, `scheduledEndsAt`, and optional `primaryImageUrl` beside the effective close) so `grade10-site-auction-notifications-SC-06`, `grade10-site-auction-notifications-SC-08`, `grade10-site-auction-notifications-SC-29`, and `grade10-site-auction-notifications-SC-30` can name the instants and show or omit the lot picture the spec requires.
 - [x] 2.3 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
-## 3. Stamps, mute prefs, and send log (grade10)
+## 3. Stamps, mute prefs, and send log (grade10) (owner: @mason5991)
 
 Needs group 2 for the kind names the columns serve.
 
