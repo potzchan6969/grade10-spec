@@ -915,17 +915,18 @@ if (args.swept) {
 
 const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
 
-// --- every journey is walked by a customer or an admin -----------------
-// The classes are the store's two end users. Every other role a spec names is
-// one of them holding a state or a grant, and that belongs in a case's
-// pre-conditions. A capability no end user reaches writes `**Walked by:**
-// nobody on their own` instead of inventing one.
+// --- every journey is walked by a product user or outside agent ---------
+// The classes are the store's two product users. An outside agent such as a
+// crawler, preview fetcher, or provider callback may also walk a journey; a
+// capability no user or outside agent reaches writes `**Walked by:** nobody
+// on their own` instead of inventing one.
 {
   /** Checked first: a role that names one of these is not an end user at all,
    *  however many end-user words sit beside it ("QA reviewer planning a pass
    *  for one operator role"). */
   const NOT_AN_END_USER =
-    /\b(engineer|developer|qa|reviewer|application|crawler|fetcher|bot|script|scraper|service|system|tester|integrator|consumer)\b/;
+    /\b(engineer|developer|qa|reviewer|application|bot|script|scraper|service|system|tester|integrator|consumer)\b/;
+  const OUTSIDE_AGENT = /\b(crawler|fetcher|provider)\b/;
   const ADMIN =
     /\b(admin|administrator|operator|staff|treasurer|controller|auditor|manager|moderator|clerk|shopkeeper)\b/;
   const CUSTOMER =
@@ -947,7 +948,11 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
           `journey is walked by "${m[1]}", which is not an end user — a journey is walked by a customer or an admin, ` +
             "and a capability no end user reaches writes `**Walked by:** nobody on their own` instead",
         );
-      else if (!ADMIN.test(role) && !CUSTOMER.test(role))
+      else if (
+        !ADMIN.test(role) &&
+        !CUSTOMER.test(role) &&
+        !OUTSIDE_AGENT.test(role)
+      )
         record(
           "error",
           rel,
