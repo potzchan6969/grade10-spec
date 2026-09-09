@@ -60,11 +60,11 @@ end of it.
 Progress in one period is not carried over to the next.
 
 :::callout{kind="note"}
-**The nightly pass writes the tier history.** A tier is worked out on every
-read, so losing one writes nothing down by itself, and a member who lapses and
-never comes back would leave no record at all. The pass writes it: one row per
-move with its cause, which an operator reads on the member's standing, and a
-nightly count of who fell and who re-earned. No read waits for it.
+**The nightly pass counts who fell.** An earn, a redemption or a refund
+records its own tier move. A lapse is the absence of activity, so nothing
+records it, and only a pass over the lapsed set can say how many members fell
+out of Gold last night and how many re-earned it. It writes each move to the
+member's history on the way past. No read waits for it.
 :::
 
 :::example{title="A member's two years" periods="Gold=gold"}
