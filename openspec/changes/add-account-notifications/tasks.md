@@ -5,7 +5,7 @@ verified. This change absorbs archived
 `add-auction-notifications` (`openspec/changes/archive/2026-09-09-add-auction-notifications/`);
 My Auctions mute UI remains on `add-auction-watchlist`.
 
-## 1. Provider send errors (grade10)
+## 1. Provider send errors (grade10) (owner: @mason5991)
 
 Independent of groups 2–8.
 
