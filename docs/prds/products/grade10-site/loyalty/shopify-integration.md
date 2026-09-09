@@ -1,7 +1,7 @@
 ---
 title: Shopify Integration
 spec: grade10-site/store/membership
-order: 6
+order: 7
 ---
 
 Shopify is the programme's two doors: the online checkout and the POS at the
@@ -112,7 +112,7 @@ member — never to the staff label, which changes when staff switch by PIN.
 ## Read their standing
 The panel shows tier, both counts, window progress, the renewal and
 points-active-until dates, recent activity, the rewards the balance affords,
-and pending collections.
+and the coupons they hold.
 
 ## Attach them to the sale
 The terminal sets the customer on the cart and confirms it against the cart

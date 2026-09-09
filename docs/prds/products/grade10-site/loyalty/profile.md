@@ -1,15 +1,13 @@
 ---
 title: Profile
 spec: grade10-site/loyalty/programme
-order: 5
+order: 6
 ---
 
 A member runs their whole membership from one page at `/membership`: what they
-hold, what they can spend it on, what is waiting for them at the counter, the
-codes they own, their own history, and the card a till reads
-([[grade10-site-loyalty-programme-SC-62]], [[grade10-site-loyalty-programme-SC-63]], [[grade10-site-loyalty-programme-SC-64]]). Every section
-reads for itself, so a menu that failed to load is no reason to hide a
-balance.
+hold, what they can spend it on, the rewards and codes they own, their own
+history, and the card a till reads. Every section reads for itself, so a reward
+catalog that failed to load is no reason to hide a balance.
 
 ## Joining
 
@@ -17,9 +15,9 @@ A member joins at `/join`, signed in. Grade10 asks for a mobile number as part
 of joining — the number travels with the request, so a refused number enrols
 nobody. One request enrols the member in the programme and seeds their Shopify
 customer pairing behind the account; neither step waits on Shopify. A second
-tap replays the first, so joining is safe to retry ([[grade10-site-loyalty-programme-SC-02]]).
+tap replays the first, so joining is safe to retry.
 Someone whose purchases were recorded before they joined is invited to join
-and shown the points already waiting ([[grade10-site-loyalty-programme-SC-01]]).
+and shown the points already waiting.
 
 ## Membership page
 
@@ -27,10 +25,9 @@ and shown the points already waiting ([[grade10-site-loyalty-programme-SC-01]]).
 | --- | --- |
 | Summary | Tier, points to spend, points earned this year against the next threshold, when the tier renews, and when the points stay active until |
 | Your member card | The QR the till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
-| Rewards | The live menu, priced in points, with what the balance affords |
+| Reward shop | The live catalog, priced in points, with what the balance affords |
 | Spend on your basket | Points against the current basket — an offer of a code, or a pointer to checkout where the shop takes points there |
-| Waiting at the counter | Collect-in-store rewards with their deadline; a closed window says so |
-| Your codes | Every money-off code in full, with value, expiry, and the undo |
+| Your rewards | Every coupon they hold, in full, with what it takes off and when it expires |
 | Activity | The member's own ledger, each spend saying what became of what it bought |
 
 Every date reads in the programme's own time zone.
@@ -216,8 +213,7 @@ brand carrying both wallets seals both their secrets under the one key:
 ## Histories
 
 A member's activity is their own ledger, in their own words, with the
-operator's reason, retry keys and the pricing behind an entry kept out of view
-([[grade10-site-loyalty-programme-SC-59]], [[grade10-site-loyalty-programme-SC-60]]).
+operator's reason, retry keys and the pricing behind an entry kept out of view.
 
 | Entry | Meaning |
 | --- | --- |
@@ -227,7 +223,7 @@ operator's reason, retry keys and the pricing behind an entry kept out of view
 | Points expired | The balance lapsed |
 | Points added, Points taken off | An operator's correction |
 | Points revoked | A refund's claw-back |
-| Points returned | A reversal |
+| Points returned | A reversed redemption, or a cancelled or refunded sale that points paid for |
 
 Beside it sit the redemptions — each with its outcome — and the card's own
 history: the last twenty presentations and, for each one a till took, where
@@ -274,10 +270,6 @@ No Figma frame exists for any membership surface. The `@grade10/ui` blocks —
 `PendingCollectionList` and `ActivityList` — and their stories are the visual
 record.
 :::
-
-## Test cases
-
-::cases{id="grade10-site/loyalty/programme"}
 
 :::detail{title="Code map" for="engineer"}
 The page is `apps/frontend/grade10/src/pages/membership` composing the
