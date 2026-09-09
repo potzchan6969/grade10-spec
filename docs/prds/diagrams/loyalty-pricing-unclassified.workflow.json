@@ -41,7 +41,7 @@
     {
       "id": "store-order-recorded_unread",
       "lane": "shop",
-      "col": 1,
+      "col": 2,
       "type": "external",
       "label": "Read fails",
       "sublabel": "the facts stay unread",
@@ -70,21 +70,29 @@
     {
       "from": "shop-order-paid",
       "to": "store-order-recorded",
-      "variant": "emphasis"
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
     },
     {
       "from": "store-order-recorded",
       "to": "store-order-recorded_unread",
       "label": "asks Shopify",
-      "variant": "dashed"
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "bottom"
     },
     {
       "from": "store-order-recorded",
       "to": "loyalty-points-granted",
       "label": "no order event",
       "variant": "dashed",
-      "channelX": 210,
-      "labelAt": [195, 283]
+      "labelAt": [
+        195,
+        305
+      ],
+      "fromSide": "bottom",
+      "toSide": "top"
     }
   ]
 }

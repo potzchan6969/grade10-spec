@@ -2,7 +2,7 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "Nothing itemised",
+    "title": "A total with no lines",
     "animation": "none",
     "visual_preset": "editorial",
     "legend": {
@@ -41,7 +41,7 @@
     {
       "id": "store-order-recorded_stated",
       "lane": "shop",
-      "col": 1,
+      "col": 2,
       "type": "external",
       "label": "Shop's goods total",
       "sublabel": "where the store has none",
@@ -70,21 +70,29 @@
     {
       "from": "shop-order-paid",
       "to": "store-order-recorded",
-      "variant": "emphasis"
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
     },
     {
       "from": "store-order-recorded",
       "to": "store-order-recorded_stated",
       "label": "no store prices",
-      "variant": "dashed"
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "bottom"
     },
     {
       "from": "store-order-recorded",
       "to": "loyalty-points-granted",
-      "label": "order event \u00b7 async",
+      "label": "order event · async",
       "variant": "dashed",
-      "channelX": 210,
-      "labelAt": [195, 283]
+      "labelAt": [
+        195,
+        305
+      ],
+      "fromSide": "bottom",
+      "toSide": "top"
     }
   ]
 }

@@ -61,15 +61,21 @@
     {
       "from": "shop-order-paid",
       "to": "store-order-recorded",
-      "variant": "emphasis"
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
     },
     {
       "from": "store-order-recorded",
       "to": "loyalty-points-granted",
-      "label": "order event \u00b7 async",
+      "label": "order event · async",
       "variant": "dashed",
-      "channelX": 210,
-      "labelAt": [195, 283]
+      "labelAt": [
+        195,
+        305
+      ],
+      "fromSide": "bottom",
+      "toSide": "top"
     }
   ]
 }

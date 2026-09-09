@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="20 40 320 376" role="img" data-preset="editorial" aria-labelledby="loyalty-pricing-an-order-archify-diagram-title" aria-describedby="loyalty-pricing-an-order-archify-diagram-description" data-diagram="loyalty-pricing-an-order">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="28 40 429 376" role="img" data-preset="editorial" aria-labelledby="loyalty-pricing-an-order-archify-diagram-title" aria-describedby="loyalty-pricing-an-order-archify-diagram-description" data-diagram="loyalty-pricing-an-order">
 <style>
 svg[data-diagram="loyalty-pricing-an-order"]{--arrow:var(--muted-foreground, light-dark(#8a806f, #948978));--arrow-emphasis:var(--primary, light-dark(#bb4c23, #dd6b3d));--backend-fill:light-dark(rgba(42, 119, 75, 0.09), rgba(63, 132, 92, 0.16));--backend-stroke:light-dark(#397b53, #8fc29e);--database-fill:light-dark(rgba(105, 75, 130, 0.09), rgba(117, 91, 141, 0.17));--database-stroke:light-dark(#765d86, #c0a4d0);--external-fill:light-dark(rgba(101, 91, 75, 0.09), rgba(126, 115, 96, 0.18));--external-stroke:light-dark(#746b5e, #b8ad99);--grid:var(--border-subtle, light-dark(#d8d0c2, #39342a));--lane-fill:var(--background, light-dark(rgba(229, 221, 207, 0.42), rgba(52, 46, 35, 0.46)));--lane-stroke:var(--border, light-dark(#b8aa94, #726957));--mask:var(--background, light-dark(#fbf8f1, #231f18));--security-stroke:light-dark(#9e463f, #df9085);--text:var(--foreground, light-dark(#242018, #f4eddf));--text-dim:var(--muted-foreground, light-dark(#a09788, #776e60));--text-muted:var(--muted-foreground, light-dark(#6f6658, #b9ae9b))}
 svg[data-diagram="loyalty-pricing-an-order"] .c-grid{stroke: var(--grid); fill: none;}
@@ -47,70 +47,70 @@ svg[data-diagram="loyalty-pricing-an-order"] .c-lane{fill: var(--lane-fill); str
         
         <rect width="100%" height="100%" fill="url(#loyalty-pricing-an-order-grid)" />
         
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="288" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="405" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Shop</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="288" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="405" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Store</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="288" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="405" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Loyalty</text>
         
         
         
-        <path data-step="store-order-recorded" data-edge-from="shop-order-paid" data-edge-to="store-order-recorded" data-edge-key="0" data-composition-points="48,119;32,119;32,243;48,243" d="M 48 119 L 32 119 L 32 243 L 48 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#loyalty-pricing-an-order-arrowhead-emphasis)"/>
-        <path data-step="loyalty-points-granted" data-edge-from="store-order-recorded" data-edge-to="loyalty-points-granted" data-edge-label="order event · async" data-edge-key="1" data-composition-points="180,243;210,243;210,367;180,367" d="M 180 243 L 210 243 L 210 367 L 180 367" class="a-dashed" stroke-width="1.4" marker-end="url(#loyalty-pricing-an-order-arrowhead-dashed)"/>
-        <path data-step="store-order-recorded" data-edge-from="store-order-recorded" data-edge-to="store-order-recorded_read" data-edge-label="asks Shopify" data-edge-key="2" data-composition-points="180,243;196,243;196,166;254,166;254,145" d="M 180 243 L 196 243 L 196 166 L 254 166 L 254 145" class="a-dashed" stroke-width="1.4" marker-end="url(#loyalty-pricing-an-order-arrowhead-dashed)"/>
+        <path data-step="store-order-recorded" data-edge-from="shop-order-paid" data-edge-to="store-order-recorded" data-edge-key="0" data-composition-points="130.4,145;130.4,217" d="M 130.4 145 L 130.4 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#loyalty-pricing-an-order-arrowhead-emphasis)"/>
+        <path data-step="loyalty-points-granted" data-edge-from="store-order-recorded" data-edge-to="loyalty-points-granted" data-edge-label="order event · async" data-edge-key="1" data-composition-points="130.4,269;130.4,341" d="M 130.4 269 L 130.4 341" class="a-dashed" stroke-width="1.4" marker-end="url(#loyalty-pricing-an-order-arrowhead-dashed)"/>
+        <path data-step="store-order-recorded" data-edge-from="store-order-recorded" data-edge-to="store-order-recorded_read" data-edge-label="asks Shopify" data-edge-key="2" data-composition-points="196.4,243;370.4,243;370.4,145" d="M 196.4 243 L 370.4 243 L 370.4 145" class="a-dashed" stroke-width="1.4" marker-end="url(#loyalty-pricing-an-order-arrowhead-dashed)"/>
         
         <g data-step="shop-order-paid" id="loyalty-pricing-an-order-node-shop-order-paid" data-node-id="shop-order-paid" data-node-label="Order paid" aria-label="Focus Order paid, lines, discounts, total, Shop" data-node-kind="external" data-node-sublabel="lines, discounts, total" data-node-context="Shop">
           <title>Order paid · lines, discounts, total · Shop</title>
-          <rect x="48" y="93" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="48" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(54 99) scale(0.6875)">
+          <rect x="64.4" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="64.4" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(70.4 99) scale(0.6875)">
             <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="114" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Order paid</text>
-          <text data-detail="context" x="114" y="131" class="t-muted" font-size="8" text-anchor="middle">lines, discounts, total</text>
+          <text data-node-label="" data-detail-anchor="" x="130.4" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Order paid</text>
+          <text data-detail="context" x="130.4" y="131" class="t-muted" font-size="8" text-anchor="middle">lines, discounts, total</text>
         </g>
         <g data-step="store-order-recorded" id="loyalty-pricing-an-order-node-store-order-recorded_read" data-node-id="store-order-recorded_read" data-node-label="Read back" aria-label="Focus Read back, product type, tags, Shop" data-node-kind="external" data-node-sublabel="product type, tags" data-node-context="Shop">
           <title>Read back · product type, tags · Shop</title>
-          <rect x="188" y="93" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="188" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(194 99) scale(0.6875)">
+          <rect x="304.4" y="93" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="304.4" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(310.4 99) scale(0.6875)">
             <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="254" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Read back</text>
-          <text data-detail="context" x="254" y="131" class="t-muted" font-size="8" text-anchor="middle">product type, tags</text>
+          <text data-node-label="" data-detail-anchor="" x="370.4" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Read back</text>
+          <text data-detail="context" x="370.4" y="131" class="t-muted" font-size="8" text-anchor="middle">product type, tags</text>
         </g>
         <g data-step="store-order-recorded" id="loyalty-pricing-an-order-node-store-order-recorded" data-node-id="store-order-recorded" data-node-label="Order recorded" aria-label="Focus Order recorded, earning amount, written once, Store" data-node-kind="database" data-node-sublabel="earning amount, written once" data-node-context="Store">
           <title>Order recorded · earning amount, written once · Store</title>
-          <rect x="48" y="217" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="48" y="217" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(54 223) scale(0.6875)">
+          <rect x="64.4" y="217" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="64.4" y="217" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(70.4 223) scale(0.6875)">
             <ellipse cx="8" cy="4" rx="5" ry="2"/>
             <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="114" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Order recorded</text>
-          <text data-detail="context" x="114" y="255" class="t-muted" font-size="7.3" text-anchor="middle">earning amount, written once</text>
+          <text data-node-label="" data-detail-anchor="" x="130.4" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Order recorded</text>
+          <text data-detail="context" x="130.4" y="255" class="t-muted" font-size="7.3" text-anchor="middle">earning amount, written once</text>
         </g>
         <g data-step="loyalty-points-granted" id="loyalty-pricing-an-order-node-loyalty-points-granted" data-node-id="loyalty-points-granted" data-node-label="Points granted" aria-label="Focus Points granted, rounded down, then tier rate, Loyalty" data-node-kind="backend" data-node-sublabel="rounded down, then tier rate" data-node-context="Loyalty">
           <title>Points granted · rounded down, then tier rate · Loyalty</title>
-          <rect x="48" y="341" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="48" y="341" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(54 347) scale(0.6875)">
+          <rect x="64.4" y="341" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="64.4" y="341" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(70.4 347) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="114" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Points granted</text>
-          <text data-detail="context" x="114" y="379" class="t-muted" font-size="7.3" text-anchor="middle">rounded down, then tier rate</text>
+          <text data-node-label="" data-detail-anchor="" x="130.4" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Points granted</text>
+          <text data-detail="context" x="130.4" y="379" class="t-muted" font-size="7.3" text-anchor="middle">rounded down, then tier rate</text>
         </g>
         
         <g data-step="loyalty-points-granted" data-detail="context" data-edge-from="store-order-recorded" data-edge-to="loyalty-points-granted" data-edge-label="order event · async" data-edge-key="1">
-          <rect x="144.4" y="273" width="101.2" height="14" rx="3" class="c-mask"/>
-          <text x="195" y="283" class="t-database" font-size="8" text-anchor="middle">order event · async</text>
+          <rect x="144.4" y="295" width="101.2" height="14" rx="3" class="c-mask"/>
+          <text x="195" y="305" class="t-database" font-size="8" text-anchor="middle">order event · async</text>
         </g>
         <g data-step="store-order-recorded" data-detail="context" data-edge-from="store-order-recorded" data-edge-to="store-order-recorded_read" data-edge-label="asks Shopify" data-edge-key="2">
-          <rect x="191.2" y="146" width="67.6" height="14" rx="3" class="c-mask"/>
-          <text x="225" y="156" class="t-database" font-size="8" text-anchor="middle">asks Shopify</text>
+          <rect x="249.59999999999997" y="223" width="67.6" height="14" rx="3" class="c-mask"/>
+          <text x="283.4" y="233" class="t-database" font-size="8" text-anchor="middle">asks Shopify</text>
         </g>
         
       </svg>

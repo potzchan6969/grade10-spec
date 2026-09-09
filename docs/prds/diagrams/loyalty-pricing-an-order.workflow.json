@@ -41,7 +41,7 @@
     {
       "id": "store-order-recorded_read",
       "lane": "shop",
-      "col": 1,
+      "col": 2,
       "type": "external",
       "label": "Read back",
       "sublabel": "product type, tags",
@@ -70,21 +70,29 @@
     {
       "from": "shop-order-paid",
       "to": "store-order-recorded",
-      "variant": "emphasis"
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
     },
     {
       "from": "store-order-recorded",
       "to": "store-order-recorded_read",
       "label": "asks Shopify",
-      "variant": "dashed"
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "bottom"
     },
     {
       "from": "store-order-recorded",
       "to": "loyalty-points-granted",
-      "label": "order event \u00b7 async",
+      "label": "order event · async",
       "variant": "dashed",
-      "channelX": 210,
-      "labelAt": [195, 283]
+      "fromSide": "bottom",
+      "toSide": "top",
+      "labelAt": [
+        195,
+        305
+      ]
     }
   ]
 }
