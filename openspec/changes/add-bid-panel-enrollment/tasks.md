@@ -23,7 +23,7 @@
 - [ ] 3.4 Make `shared-ui-auction-listing-SC-18` through `SC-21` pass at the auction frontend seam by mapping consumer-owned card summaries, `onChange` eligibility, standing content, and the signed-out enrollment signal without adding fetches or product state to `@grade10/ui`
 - [ ] 3.5 Verify: `pnpm --filter @grade10/auction-frontend run typecheck`, `pnpm --filter @grade10/auction-frontend run test`, the affected listing stories, and package import/module tests
 
-## 4. Listing enrollment flow and cross-layer acceptance (grade10)
+## 4. Listing enrollment flow and cross-layer acceptance (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Make `grade10-site-auction-bid-panel-enrollment-SC-01`–`SC-06` pass: sign-in while signed out, setup instead of place bid for an unenrolled collector, card-and-attestation gating, dismissal with no durable write, idempotent completion, and linked-card projection after refetch
 - [ ] 4.2 Make `grade10-site-auction-bid-panel-enrollment-SC-07`–`SC-09` pass: change before the first bid, prior masked card from the authenticated read, reusable setup copy, and pre-checked account attestation that can still be unchecked
