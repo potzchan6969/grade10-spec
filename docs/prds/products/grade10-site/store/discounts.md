@@ -43,11 +43,12 @@ An order carries one discount, whichever kind reached it:
   both, and a second is refused rather than stacked
 - **Points** — its own add-on, outside the count
 - **Free shipping** — its own add-on, outside the count
-- **Site discounts** — their own add-on too, outside the count; 🚧 combined
-  or not with whichever discount code the order carries per Shopify's own
-  combine rule, set per site discount. ❓ Whether that rule can hold a product
-  special sale's exclusivity to just its own product line, or only combines
-  or excludes at the whole order — Engineering, during delivery
+- **Site discounts** — their own add-on too, outside the count; combined or
+  not with whichever discount code the order carries per Shopify's own
+  combine rule, set per site discount. That rule excludes at the whole
+  cart, never just the discount's own product line — a non-combinable site
+  discount refuses any code the order carries rather than stacking or
+  silently dropping it, confirmed on staging
 - **Both channels** — the same rule in the cart and at the till
 
 ## Online draft order mechanism
@@ -132,21 +133,23 @@ Per shop, flipped from the admin console, enforced on the next request: terminal
 
 ## Site discounts
 
-🚧 Configured directly in Shopify's own automatic discounts, and read onto
+Configured directly in Shopify's own automatic discounts, and read onto
 the draft order by accepting them there — no grade10 admin screen, and no
 discount engine of grade10's own.
 
 - **Product special sale** — a scheduled cut off chosen products; a
-  member's points always redeem regardless. ❓ Whether it can still block
-  every other site discount and coupon on just that product's line —
-  Engineering, during delivery
+  member's points always redeem regardless. A discount set not to combine
+  excludes at the whole cart, never just its own product's line — Shopify
+  offers no narrower rule, confirmed on staging where an order-wide code
+  was refused rather than stacked or silently dropped
 - **Buy X get Y** — a reward product discounted or free after a trigger
   purchase
 - **Order threshold** — a tier ladder of spend levels and percentages, the
   basket getting whichever tier it clears
 
-Applies on both the online checkout and the POS till, combined or not with
-the order's one discount code per Shopify's own combine rule.
+Applies on both the online checkout and the POS till — confirmed on
+staging for the same product on both — combined or not with the order's
+one discount code per Shopify's own combine rule.
 
 ## Designs
 
@@ -184,6 +187,6 @@ today.
 | Price preview | Decided | A live cart price is estimated locally; a coupon's Shopify Discount is minted only once the checkout is submitted. | Engineering |
 | Product special sale vs. Sale price | Decided | Kept separate — Sale price stays the ad hoc, unscheduled tool; Product special sale is the scheduled, exclusive one. | Product |
 | Points on an exclusive line | Decided | Points always redeem, even on a product special sale — points is a payment method, not a merchandising discount. | Product |
-| Product special sale exclusivity | ❓ Open | Whether Shopify's own combine rule can hold a product special sale to blocking only its own product's line, or only combines or excludes at the whole order. | Engineering |
+| Product special sale exclusivity | Decided | Shopify's combine rule excludes at the whole cart — there is no way to scope a non-combinable site discount to just its own product's line. | Engineering |
 | Two types on one product | ❓ Open | What happens when a product is configured into more than one site discount type at once. | Engineering |
 :::
