@@ -122,7 +122,17 @@ of them: the phrasing they approve is the phrasing generation will copy.
    not a restyle: that is `/spec-to-tcs`, which rewrites the case, bumps its
    `<v>` and sets it back to `draft` for review.
 
-5. **Open the suite and its journeys together.** For a domain `domain-tcs.md`, that is every `user-journeys.md` its traces name, plus the domain's pages under `docs/prds/`. Read the whole
+   **When a reviewer reshapes a pre-condition, write it the way r3.0 has
+   them:** the actor is `customer` or `admin`, with the state or grant the case
+   needs in brackets — `customer(gold member) is on the shopping cart page`,
+   `admin(shop staff) is on the loyalty member page`. Every other role the
+   specs name is one of those two holding something.
+
+5. **Open the suite and its journeys together.** Above feature level - a
+   `domain-tcs.md`, `product-tcs.md` or `platform-tcs.md` - that is every
+   `user-journeys.md` its traces name, plus the matching pages under
+   `docs/prds/`; each of those cases composes two or more journeys, so read
+   every one it names. Read the whole
    suite and the `spec.md` beside it, end to end, before the first
    question. You cannot answer "where does the spec say that?" from a
    truncated read. Then orient the reviewer: the capability, the journeys,

@@ -1,6 +1,6 @@
 ---
 name: planning-qa
-description: Write QA's artifact on an OpenSpec change - the feature-tcs.md beside each capability's spec and journeys. Use when deriving, reviewing, or repairing a change's test suites.
+description: Write QA's artifact on an OpenSpec change - the suite at every level, from the feature-tcs.md beside each capability's spec and journeys up to the domain, product and platform passes above it. Use when deriving, reviewing, or repairing a change's test suites.
 ---
 
 # QA's artifact
@@ -32,23 +32,26 @@ nothing that contradicts it.
 Two skills do the work, and they are the whole workflow:
 
 ```text
-/spec-to-tcs [feature|domain] <target>   derive or restyle the drafts
+/spec-to-tcs [platform|product|domain|feature] <target>   derive or rewrite drafts
 /tcs-review  [<capability-or-change>]    walk them with a human, record verdicts
 ```
 
-**Domain before feature, both times.** Deriving, the domain file names the
-paths and the feature suites then cover what those paths do not reach — the
-refusals, the empty states — rather than re-testing the path from each
-capability's side; a trim made before the domain file exists is a guess.
-Reviewing, the same order: `domain-tcs.md` first, so a feature suite is trimmed
-against something approved, and so the domain's approved cases are the
-house-style evidence the feature reviews inherit.
+**Top down, both times.** Platform, then product, then domain, then feature.
+Deriving, the higher file names the paths and the level below covers what they
+do not reach — the refusals, the empty states — rather than re-testing a path
+from underneath; a trim made before the file above exists is a guess.
+Reviewing, the same order, so a suite is trimmed against something approved and
+the higher level's approved cases are the house-style evidence the reviews
+below inherit.
 
-A domain run reads more than the change: every sibling capability's
-`user-journeys.md` under `openspec/specs/<product>/<domain>/`, and the
-domain's product record under `docs/prds/products/<product>/<domain>/` — the
+A run above feature level reads more than the change: every sibling
+`user-journeys.md` in its scope — a domain's under
+`openspec/specs/<product>/<domain>/`, a product's across its domains, a
+platform's across products — and the product record under `docs/prds/` for the
 decisions, the product's own names for surfaces and controls, and the seeded
-values a pass is written against.
+values a pass is written against. A case there **composes**: it traces two or
+more journeys, from two or more capabilities, domains or products, and a single
+trace means it is a feature case written at the wrong level.
 
 `/spec-to-tcs` learns this store's conventions from every `actual` case in the
 corpus before it writes, so a hand-written suite is both more work and less
@@ -93,8 +96,12 @@ them too, and CI runs it on every push.
 - **The file's `**Status:**` is derived, not chosen**: `pending-review` while
   every case is a draft, `in-review` from the first verdict, `approved` once no
   draft is left.
-- **An issued case id is permanent.** Restyling a draft bumps its `<v>` and
-  keeps its id; a retired case is `deprecated`, never renumbered.
+- **An issued case id is permanent.** Rewriting a draft keeps its id and its
+  `<v>` — `<v>` tracks behaviour, not prose — and a retired case is
+  `deprecated`, never renumbered.
+- **The actor is `customer` or `admin`**, with the state or grant the case
+  needs in brackets, written into the pre-conditions: `customer(gold member) is
+  on the shopping cart page`.
 
 ## When the journeys are missing
 
@@ -104,7 +111,8 @@ existing SHALL and scenario clause, adding no requirements — then derives the
 suite, and reports the new journeys file in the same run.
 
 A capability nobody reaches on its own says so in its `user-journeys.md` —
-`**Walked by:** nobody` in place of the stories — for a cross-cutting policy,
+`**Walked by:** nobody on their own — <who inherits it>` in place of the
+stories — for a cross-cutting policy,
 a package contract, a backend convention, or a surface only the product's
 makers reach: an internal reference, a dev-build-only page, a fixture panel.
 It gets no suite either. Never invent an actor to justify one — not an
@@ -115,12 +123,16 @@ who built the thing. A capability with no journeys file at all is not exempt:
 ## Keeping drafts current
 
 ```bash
-pnpm run tcs:validate        # errors fail CI; older shapes warn
+pnpm run tcs:validate        # errors fail CI; an older shape is one of them
 pnpm run tcs:stale           # which suites' drafts sit below the current rules rev
 ```
 
-`tcs:stale` is a report, not a sweep. Bring one suite at a time to the current
-revision with `/spec-to-tcs`, never in one pass.
+`tcs_rules_rev` is `<major>.<minor>`. A **minor** moves wording only, and
+`tcs:stale` reports the suites whose drafts sit below it — bring those up one
+at a time. A **major** changes what a file must carry, so it is swept across
+every suite in the bump's own commit, and the sweep rewrites the drafts: moving
+a `**Drafts styled:**` stamp without rewriting the cases beneath it is a lie
+the next reader cannot catch.
 
 ## Related
 
