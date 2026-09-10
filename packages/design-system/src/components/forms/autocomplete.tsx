@@ -4,7 +4,7 @@ import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomple
 import { inputBoxVariants } from "@grade10/design-system/components/forms/input";
 import { dropdownMenuItemVariants } from "@grade10/design-system/components/overlays/dropdown-menu-item";
 import { cn } from "@grade10/design-system/lib/utils";
-import { MagnifyingGlass, X } from "@phosphor-icons/react";
+import { MagnifyingGlass, X, CircleNotch } from "@phosphor-icons/react";
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { useId } from "react";
@@ -167,7 +167,12 @@ function AutocompleteList({
   return (
     <AutocompletePrimitive.List
       data-slot="autocomplete-list"
-      className={cn("flex w-full flex-col gap-1 outline-none", className)}
+      className={cn(
+        // Hide when there are no option rows so Content's `gap-1` does not
+        // pad empty / loading states past Figma's 8 + 36 + 8 (= 52) menu.
+        "flex w-full flex-col gap-1 outline-none [&:not(:has([data-slot=autocomplete-item]))]:hidden",
+        className,
+      )}
       {...props}
     />
   );
@@ -254,6 +259,10 @@ function AutocompleteItem({
   );
 }
 
+/**
+ * Figma empty row — a Dropdown Menu Item with no leading (`6554:6128`).
+ * Menu chrome is still `p-2` on the popup; this row is `sm` item metrics.
+ */
 function AutocompleteEmpty({
   className,
   ...props
@@ -262,11 +271,54 @@ function AutocompleteEmpty({
     <AutocompletePrimitive.Empty
       data-slot="autocomplete-empty"
       className={cn(
-        "px-3 py-2 text-sm text-secondary-foreground empty:m-0 empty:p-0",
+        dropdownMenuItemVariants({ size: "sm" }),
+        "pointer-events-none text-secondary-foreground hover:bg-transparent data-highlighted:bg-transparent empty:m-0 empty:hidden empty:h-0 empty:p-0",
         className,
       )}
       {...props}
     />
+  );
+}
+
+/**
+ * Async list status inside the popup. Keep mounted and swap children so Base
+ * UI can announce changes. Figma loading (`6554:6228`) is a menu item with a
+ * leading spinner — use `AutocompleteLoading` for that treatment.
+ */
+function AutocompleteStatus({
+  className,
+  ...props
+}: AutocompletePrimitive.Status.Props) {
+  return (
+    <AutocompletePrimitive.Status
+      data-slot="autocomplete-status"
+      className={cn(
+        dropdownMenuItemVariants({ size: "sm" }),
+        "pointer-events-none text-secondary-foreground hover:bg-transparent data-highlighted:bg-transparent empty:m-0 empty:hidden empty:h-0 empty:p-0",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+/** Figma loading treatment: spinning notch + “Searching…”. */
+function AutocompleteLoading({
+  className,
+  children = "Searching...",
+  ...props
+}: Omit<AutocompletePrimitive.Status.Props, "children"> & {
+  children?: ReactNode;
+}) {
+  return (
+    <AutocompleteStatus className={className} {...props}>
+      <span className="inline-flex animate-spin text-secondary-foreground">
+        <CircleNotch aria-hidden size={14} weight="regular" />
+      </span>
+      <span className="min-w-0 flex-1 whitespace-nowrap font-normal">
+        {children}
+      </span>
+    </AutocompleteStatus>
   );
 }
 
@@ -280,5 +332,7 @@ export {
   AutocompleteInput,
   AutocompleteItem,
   AutocompleteList,
+  AutocompleteLoading,
+  AutocompleteStatus,
 };
 export type { AutocompleteInputProps };

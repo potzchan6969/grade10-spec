@@ -11,6 +11,7 @@ import {
   AutocompleteInput,
   AutocompleteItem,
   AutocompleteList,
+  AutocompleteLoading,
 } from "./autocomplete";
 
 type Suggestion = { id: string; label: string };
@@ -162,6 +163,41 @@ export const Empty: Story = {
   play: async () => {
     expect(
       await within(document.body).findByText("No results found."),
+    ).toBeInTheDocument();
+  },
+};
+
+function LoadingExample() {
+  const [value, setValue] = useState("xyz");
+  const [open, setOpen] = useState(true);
+
+  return (
+    <Autocomplete
+      items={[]}
+      onOpenChange={setOpen}
+      onValueChange={setValue}
+      open={open}
+      value={value}
+    >
+      <AutocompleteInput
+        aria-label="Search tags"
+        onClear={() => setValue("")}
+        placeholder="Search..."
+      />
+      <AutocompleteContent aria-busy="true">
+        <AutocompleteLoading />
+        <AutocompleteList />
+      </AutocompleteContent>
+    </Autocomplete>
+  );
+}
+
+/** Loading — Figma Autocomplete right column (spinner + Searching…). */
+export const Loading: Story = {
+  render: () => <LoadingExample />,
+  play: async () => {
+    expect(
+      await within(document.body).findByText("Searching..."),
     ).toBeInTheDocument();
   },
 };
