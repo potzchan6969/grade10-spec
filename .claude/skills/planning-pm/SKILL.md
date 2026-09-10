@@ -70,8 +70,11 @@ assuming someone will find it.
    change turns on (`prd-authoring`). The house style is
    `docs/governance/writing.md`. The deltas derive from these lines, so a
    delta promising what no line marks is the delta's error.
-6. **Write the three artifacts**, in that order, linking every marked page
-   from the proposal.
+6. **Write the three artifacts**, in that order. Under the proposal's
+   `## References`, link every section you marked —
+   `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`
+   — so the manual shows the change under that heading; `pnpm check:manual`
+   refuses a link to a section that does not exist.
 7. **Validate, then hand to QA.**
 
    ```bash

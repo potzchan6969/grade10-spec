@@ -56,7 +56,7 @@ If an unmarked line and the spec disagree, the spec is right about what runs: fi
 
 ### 2. Mark the page
 
-A change starts on the pages it touches. For each, add one 🚧 line per outcome, in the reader's words and in the section the outcome belongs to; add a ❓ line or row for what the author left open; add or update the rows of the decisions block the change turns on. Link every page from the proposal. The deltas are then derived from the 🚧 lines, so a delta promising what no line marks is the delta's error.
+A change starts on the pages it touches. For each, add one 🚧 line per outcome, in the reader's words and in the section the outcome belongs to; add a ❓ line or row for what the author left open; add or update the rows of the decisions block the change turns on. Then link every section the change marked from the proposal's `## References`, as `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`: the manual shows the change under that heading, and `pnpm check:manual` refuses a link to a section that does not exist. The deltas are then derived from the 🚧 lines, so a delta promising what no line marks is the delta's error.
 
 ### 3. Write requirements into the change's delta
 
@@ -80,7 +80,7 @@ Keep the block readable as a standalone decision record. Replace superseded deci
 
 For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
-- `proposal.md` — scope, why now, consumer impact, non-goals, and a link to every page the change marked;
+- `proposal.md` — scope, why now, consumer impact, non-goals, and under `## References` a link to every page section the change marked;
 - `specs/<capability>/spec.md` — only the requirement deltas against `openspec/specs/`;
 - `specs/<capability>/user-journeys.md` — the stories those requirements accept, or the one line `**Walked by:** nobody on their own - <why>` when no end user reaches the capability;
 - `specs/<capability>/feature-tcs.md` — QA's derived suite, when the journeys are worth walking;

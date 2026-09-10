@@ -71,7 +71,8 @@ surface. Top to bottom:
   `spec` wears the planned pip
 - **The page is the roadmap** — a change starts here, one 🚧 line per
   outcome, and its deltas derive from those lines; a delta promising what no
-  line marks is the delta's error, not the page's
+  line marks is the delta's error, not the page's. The proposal links each
+  section it marked, and the manual shows the change under that heading
 
 ## Blocks
 
