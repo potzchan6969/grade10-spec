@@ -1,4 +1,3 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Signpost } from "@phosphor-icons/react";
@@ -95,9 +94,6 @@ function FollowOnGroup({ followOn }: { followOn: FollowOn }) {
             </Link>
           )}
         </Text>
-        <Badge size="sm" variant={archived ? "default" : "warning"}>
-          {archived ? "shipped" : "in flight"}
-        </Badge>
         {when ? (
           <Text as="span" size="xs" tone="secondary">
             {archived ? "shipped" : "written"} {relativeTime(when)}

@@ -21,7 +21,7 @@ const INFO: Record<string, BlockInfo> = {
     hint: "In-flight changes whose deltas touch a spec.",
   },
   next: {
-    label: "Named next",
+    label: "Pending Spec",
     hint: "The `## Follow-on changes` every change about a spec named, under the change that named it.",
   },
   figma: { label: "Figma", hint: "A titled frame that embeds on click." },
