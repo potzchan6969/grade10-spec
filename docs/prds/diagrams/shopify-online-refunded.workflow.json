@@ -1,0 +1,87 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Refunded",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    { "id": "member", "label": "Member" },
+    { "id": "shopify", "label": "Shopify" },
+    { "id": "store", "label": "Store" },
+    { "id": "loyalty", "label": "Loyalty" }
+  ],
+  "mainPath": [
+    "member-returns-the-goods",
+    "shopify-refund-created",
+    "store-goods-share-priced",
+    "loyalty-earn-clawed-back"
+  ],
+  "nodes": [
+    {
+      "id": "member-returns-the-goods",
+      "lane": "member",
+      "col": 0,
+      "type": "external",
+      "label": "Returns the goods",
+      "sublabel": "some of them, or all",
+      "width": 132
+    },
+    {
+      "id": "shopify-refund-created",
+      "lane": "shopify",
+      "col": 0,
+      "type": "external",
+      "label": "Refund created",
+      "sublabel": "webhook, signed",
+      "width": 132
+    },
+    {
+      "id": "store-goods-share-priced",
+      "lane": "store",
+      "col": 1,
+      "type": "database",
+      "label": "Goods share priced",
+      "sublabel": "line by line, capped",
+      "width": 132
+    },
+    {
+      "id": "loyalty-earn-clawed-back",
+      "lane": "loyalty",
+      "col": 1,
+      "type": "backend",
+      "label": "Earn clawed back",
+      "sublabel": "points back only on the whole",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "from": "member-returns-the-goods",
+      "to": "shopify-refund-created",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "shopify-refund-created",
+      "to": "store-goods-share-priced",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "from": "store-goods-share-priced",
+      "to": "loyalty-earn-clawed-back",
+      "label": "refund event · once",
+      "variant": "dashed",
+      "labelAt": [250.4, 429],
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

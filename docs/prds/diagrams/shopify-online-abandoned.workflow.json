@@ -1,0 +1,87 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Abandoned or replaced",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    { "id": "member", "label": "Member" },
+    { "id": "shopify", "label": "Shopify" },
+    { "id": "store", "label": "Store" },
+    { "id": "loyalty", "label": "Loyalty" }
+  ],
+  "mainPath": [
+    "member-leaves-the-invoice-unpaid",
+    "store-draft-deleted",
+    "loyalty-nothing-moves"
+  ],
+  "nodes": [
+    {
+      "id": "member-leaves-the-invoice-unpaid",
+      "lane": "member",
+      "col": 0,
+      "type": "external",
+      "label": "Leaves it unpaid",
+      "sublabel": "or starts another checkout",
+      "width": 132
+    },
+    {
+      "id": "store-draft-deleted_shop",
+      "lane": "shopify",
+      "col": 2,
+      "type": "external",
+      "label": "Draft gone",
+      "sublabel": "the invoice cannot collect",
+      "width": 132
+    },
+    {
+      "id": "store-draft-deleted",
+      "lane": "store",
+      "col": 1,
+      "type": "security",
+      "label": "Draft deleted",
+      "sublabel": "the order is closed",
+      "width": 132
+    },
+    {
+      "id": "loyalty-nothing-moves",
+      "lane": "loyalty",
+      "col": 1,
+      "type": "backend",
+      "label": "Nothing moves",
+      "sublabel": "the balance never changed",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "from": "member-leaves-the-invoice-unpaid",
+      "to": "store-draft-deleted",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "from": "store-draft-deleted",
+      "to": "store-draft-deleted_shop",
+      "label": "deleted at the shop first",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "bottom"
+    },
+    {
+      "from": "store-draft-deleted",
+      "to": "loyalty-nothing-moves",
+      "label": "no order event",
+      "variant": "dashed",
+      "labelAt": [234, 429],
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

@@ -19,10 +19,11 @@ a balance, a tier or a code.
 | [Rewards](/p/grade10-site/loyalty/rewards) | What a reward is, the catalog, the shop, what a member holds, and how one is given |
 | [Paying with Points](/p/grade10-site/loyalty/paying-with-points) | Points straight off a bill, online and at the till |
 | [Coupons](/p/grade10-site/loyalty/coupons) | How a coupon reaches an order at each checkout, and what happens when one goes wrong |
-| [Profile](/p/grade10-site/loyalty/profile) | Joining, the membership page, the member card and the member's own histories |
+| [Profile](/p/grade10-site/loyalty/profile) | Membership with the account, the membership page, the member card and the member's own histories |
 | [Shopify Integration](/p/grade10-site/loyalty/shopify-integration) | Customer pairing, the draft-order checkout, the POS extension, discounts and shipping |
+| [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card) | The card in Google Wallet and Apple Wallet — what each code can do, and how a pass stays current |
 
-Three audiences touch it. **Members** join at `/join`, carry a member card at
+Three audiences touch it. **Members** get the membership with their account, carry a member card at
 `/membership`, and read tier, balance, what is expiring and their own history
 on one surface. **Staff** run a loyalty terminal inside Shopify POS at the
 till. **Operators** run the programme from the admin console — finding
@@ -109,7 +110,8 @@ separate population with no programme.
 | In-store identification | Decided | A dynamic single-use code on the member card, its typed short code, or the member's exact email. One scan or lookup authorizes the till for ten minutes with no confirmation on the member's phone; the member is notified on every act they did not present for. An unrecognised member never blocks a sale | Owner |
 | The card in a phone wallet | Decided | Google Wallet. Its pass regenerates the barcode on the phone from a secret it already holds, so the code is current with no signal and a photograph of it is worthless within the minute — the card keeps the security it has and gains a lock screen | Product |
 | A pass in Apple Wallet | Decided | Apple has no rotating code, so the pass carries one durable code Grade10 makes: it identifies on every visit with no signal, and a session opened from it reads the panel and can spend nothing. A member spending points opens the card on the site | Owner |
-| Phone lookup at the till | ❓ Deferred | Grade10 asks for a mobile number at join and mirrors it to the Shopify customer, but the till's phone arm ships switched off until numbers are verified | Owner |
+| Membership comes with the account | Decided | An account is a member; the backend makes the member record and pairs the Shopify customer silently, and nothing is asked. The join page is removed from the product and still to be removed from the code | Owner |
+| Phone lookup at the till | ❓ Deferred | The mobile number is a field of the account profile, and the till's phone arm ships switched off until numbers are verified | Owner |
 | Points at the online checkout are a merchant discount, not a code | Decided | Every online checkout is a Shopify draft order, and the points come off as its one order-level fixed discount, chosen against the priced basket. Nothing is held until the invoice is paid | Engineering |
 | Points at the till are a cart discount, or a code | Decided | Which instrument the till uses is a per-shop switch: a fixed amount off the sale, or a customer-scoped single-use code. The code instrument is the default until the switch is flipped | Engineering |
 | One Shopify customer per member | Decided | Paired server-side behind the account, keyed on an opaque member id in a unique customer metafield. Pairing never blocks sign-up; it converges on retry or parks where an operator can see it. Erasure removes the vendor record irreversibly | Engineering |

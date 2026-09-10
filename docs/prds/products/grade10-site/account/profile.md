@@ -15,6 +15,9 @@ own account page and shown to nobody else.
      initials of the display name stand in
   4. **Email** — the address signed in with, shown and not editable here
   5. **Member since** — the first save; absent until then
+  6. 🚧 **Mobile number** — optional; what the till's phone lookup finds a
+     member by, once numbers are verified —
+     [Shopify Integration](/p/grade10-site/loyalty/shopify-integration)
 - **Always a page** — a collector who has never saved still sees every
   field, filled from what sign-in already knows, and an empty field says what
   it is for

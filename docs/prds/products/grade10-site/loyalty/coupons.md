@@ -4,10 +4,11 @@ spec: grade10-site/loyalty/programme
 order: 5
 ---
 
-A coupon is what a redemption leaves the member holding, and what an order
-carries to spend it. A reward coupon is welded onto the order's own lines — a
-cut on the lines it applies to, or a free gift line — never a code the shop
-evaluates for itself.
+A coupon is Grade10's own instrument: what a redemption leaves the member
+holding, and what an order carries to spend it. Grade10 prices it against
+the order's lines; a Shopify discount — a custom discount on the draft order,
+a line discount, or a code — is only how that price reaches the order and
+how the checkout shows it, never what decides it.
 
 ## Validity
 

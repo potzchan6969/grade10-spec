@@ -1,0 +1,183 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Paid",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "shopkeeper",
+      "label": "Shopkeeper"
+    },
+    {
+      "id": "shopify",
+      "label": "Shopify"
+    },
+    {
+      "id": "store",
+      "label": "Store"
+    },
+    {
+      "id": "loyalty",
+      "label": "Loyalty"
+    }
+  ],
+  "mainPath": [
+    "shopkeeper-rings-up-the-sale",
+    "shopkeeper-identifies-the-member",
+    "shopkeeper-plans-the-spend",
+    "shopify-cart-carries-the-discount",
+    "shopkeeper-takes-payment",
+    "shopify-order-paid",
+    "store-sale-marked-paid",
+    "loyalty-points-debited-earn-granted"
+  ],
+  "nodes": [
+    {
+      "id": "shopkeeper-rings-up-the-sale",
+      "lane": "shopkeeper",
+      "col": 0,
+      "type": "external",
+      "label": "Rings up",
+      "sublabel": "a sale in Shopify POS",
+      "width": 104
+    },
+    {
+      "id": "shopkeeper-identifies-the-member",
+      "lane": "shopkeeper",
+      "col": 1,
+      "type": "external",
+      "label": "Identifies them",
+      "sublabel": "one of six arms",
+      "width": 104
+    },
+    {
+      "id": "shopkeeper-identifies-the-member_session",
+      "lane": "store",
+      "col": 1,
+      "type": "backend",
+      "label": "Session opened",
+      "sublabel": "10 minutes",
+      "width": 104
+    },
+    {
+      "id": "shopkeeper-plans-the-spend",
+      "lane": "shopkeeper",
+      "col": 2,
+      "type": "external",
+      "label": "Plans the spend",
+      "sublabel": "one sale row per session",
+      "width": 104
+    },
+    {
+      "id": "shopify-cart-carries-the-discount",
+      "lane": "shopify",
+      "col": 2,
+      "type": "external",
+      "label": "Cart carries it",
+      "sublabel": "order id, then Points",
+      "width": 104
+    },
+    {
+      "id": "shopkeeper-takes-payment",
+      "lane": "shopkeeper",
+      "col": 3,
+      "type": "external",
+      "label": "Takes payment",
+      "sublabel": "at the counter",
+      "width": 104
+    },
+    {
+      "id": "shopify-order-paid",
+      "lane": "shopify",
+      "col": 3,
+      "type": "external",
+      "label": "Order paid",
+      "sublabel": "the POS channel",
+      "width": 104
+    },
+    {
+      "id": "store-sale-marked-paid",
+      "lane": "store",
+      "col": 3,
+      "type": "database",
+      "label": "Sale marked paid",
+      "sublabel": "found by the order id",
+      "width": 104
+    },
+    {
+      "id": "loyalty-points-debited-earn-granted",
+      "lane": "loyalty",
+      "col": 3,
+      "type": "backend",
+      "label": "Points debited",
+      "sublabel": "coupon used, earn granted",
+      "width": 104
+    }
+  ],
+  "edges": [
+    {
+      "from": "shopkeeper-rings-up-the-sale",
+      "to": "shopkeeper-identifies-the-member",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "shopkeeper-identifies-the-member",
+      "to": "shopkeeper-identifies-the-member_session",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "shopkeeper-identifies-the-member",
+      "to": "shopkeeper-plans-the-spend",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "shopkeeper-plans-the-spend",
+      "to": "shopify-cart-carries-the-discount",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "shopify-cart-carries-the-discount",
+      "to": "shopkeeper-takes-payment",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "shopkeeper-takes-payment",
+      "to": "shopify-order-paid",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "shopify-order-paid",
+      "to": "store-sale-marked-paid",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "store-sale-marked-paid",
+      "to": "loyalty-points-debited-earn-granted",
+      "label": "order event · once",
+      "variant": "dashed",
+      "labelAt": [500, 429],
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Paid",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "member",
+      "label": "Member"
+    },
+    {
+      "id": "shopify",
+      "label": "Shopify"
+    },
+    {
+      "id": "store",
+      "label": "Store"
+    },
+    {
+      "id": "loyalty",
+      "label": "Loyalty"
+    }
+  ],
+  "mainPath": [
+    "member-chooses-points-and-a-coupon",
+    "store-draft-order-created",
+    "shopify-invoice-link-issued",
+    "member-pays",
+    "shopify-order-paid",
+    "store-order-marked-paid",
+    "loyalty-points-debited-earn-granted"
+  ],
+  "nodes": [
+    {
+      "id": "member-chooses-points-and-a-coupon",
+      "lane": "member",
+      "col": 0,
+      "type": "external",
+      "label": "Chooses points",
+      "sublabel": "and a coupon, on /checkout",
+      "width": 132
+    },
+    {
+      "id": "store-draft-order-created",
+      "lane": "store",
+      "col": 1,
+      "type": "backend",
+      "label": "Draft order created",
+      "sublabel": "draft id recorded first",
+      "width": 132
+    },
+    {
+      "id": "shopify-invoice-link-issued",
+      "lane": "shopify",
+      "col": 1,
+      "type": "external",
+      "label": "Invoice link issued",
+      "sublabel": "the shop prices the lines",
+      "width": 132
+    },
+    {
+      "id": "member-pays",
+      "lane": "member",
+      "col": 2,
+      "type": "external",
+      "label": "Pays",
+      "sublabel": "on the invoice page",
+      "width": 132
+    },
+    {
+      "id": "shopify-order-paid",
+      "lane": "shopify",
+      "col": 3,
+      "type": "external",
+      "label": "Order paid",
+      "sublabel": "webhook, signed",
+      "width": 132
+    },
+    {
+      "id": "store-order-marked-paid",
+      "lane": "store",
+      "col": 3,
+      "type": "database",
+      "label": "Order marked paid",
+      "sublabel": "draft read back, goods stamped",
+      "width": 132
+    },
+    {
+      "id": "loyalty-points-debited-earn-granted",
+      "lane": "loyalty",
+      "col": 3,
+      "type": "backend",
+      "label": "Points debited",
+      "sublabel": "coupon used, earn granted",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "from": "member-chooses-points-and-a-coupon",
+      "to": "store-draft-order-created",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "from": "store-draft-order-created",
+      "to": "shopify-invoice-link-issued",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "shopify-invoice-link-issued",
+      "to": "member-pays",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "bottom"
+    },
+    {
+      "from": "member-pays",
+      "to": "shopify-order-paid",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "from": "shopify-order-paid",
+      "to": "store-order-marked-paid",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "store-order-marked-paid",
+      "to": "loyalty-points-debited-earn-granted",
+      "label": "order event · once",
+      "variant": "dashed",
+      "labelAt": [474, 429],
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

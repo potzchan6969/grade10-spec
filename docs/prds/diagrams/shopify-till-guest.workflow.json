@@ -1,0 +1,117 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Guest sale, claimed later",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "shopkeeper",
+      "label": "Shopkeeper"
+    },
+    {
+      "id": "shopify",
+      "label": "Shopify"
+    },
+    {
+      "id": "store",
+      "label": "Store"
+    },
+    {
+      "id": "loyalty",
+      "label": "Loyalty"
+    }
+  ],
+  "mainPath": [
+    "shopkeeper-rings-up-a-guest-sale",
+    "shopify-order-paid",
+    "store-recorded-with-no-owner",
+    "store-recorded-with-no-owner_paired",
+    "loyalty-earns-when-the-sale-is-paired"
+  ],
+  "nodes": [
+    {
+      "id": "shopkeeper-rings-up-a-guest-sale",
+      "lane": "shopkeeper",
+      "col": 0,
+      "type": "external",
+      "label": "Guest sale",
+      "sublabel": "nobody is identified",
+      "width": 132
+    },
+    {
+      "id": "shopify-order-paid",
+      "lane": "shopify",
+      "col": 0,
+      "type": "external",
+      "label": "Order paid",
+      "sublabel": "no order id on it",
+      "width": 132
+    },
+    {
+      "id": "store-recorded-with-no-owner",
+      "lane": "store",
+      "col": 0,
+      "type": "database",
+      "label": "Recorded, no owner",
+      "sublabel": "the goods are priced",
+      "width": 132
+    },
+    {
+      "id": "store-recorded-with-no-owner_paired",
+      "lane": "store",
+      "col": 2,
+      "type": "backend",
+      "label": "Paired or claimed",
+      "sublabel": "each pass, or an operator",
+      "width": 132
+    },
+    {
+      "id": "loyalty-earns-when-the-sale-is-paired",
+      "lane": "loyalty",
+      "col": 2,
+      "type": "backend",
+      "label": "Earns then",
+      "sublabel": "on the goods it settled",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "from": "shopkeeper-rings-up-a-guest-sale",
+      "to": "shopify-order-paid",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "shopify-order-paid",
+      "to": "store-recorded-with-no-owner",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "store-recorded-with-no-owner",
+      "to": "store-recorded-with-no-owner_paired",
+      "label": "the customer on it",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "store-recorded-with-no-owner_paired",
+      "to": "loyalty-earns-when-the-sale-is-paired",
+      "label": "order event · once",
+      "variant": "dashed",
+      "labelAt": [370.4, 429],
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

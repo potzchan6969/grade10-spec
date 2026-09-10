@@ -4,12 +4,6 @@ spec: grade10-site/loyalty/programme
 order: 1
 ---
 
-A point is $10 of qualifying goods, priced once when a paid order reaches
-the programme. Behind every member is an append-only ledger of dated point
-lots, and a balance is a query over it — nothing is edited, so nothing can
-quietly drift. A purchase recorded twice under its own key answers once and
-records nothing twice.
-
 ## Rules
 
 | Rule | Value |

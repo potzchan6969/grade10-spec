@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "One paid order, either channel",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "column_fit": "spread",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [600, 660]
+  },
+  "participants": [
+    {
+      "id": "buyer",
+      "type": "external",
+      "label": "Member",
+      "sublabel": "or the shopkeeper"
+    },
+    {
+      "id": "shopify",
+      "type": "external",
+      "label": "Shopify",
+      "sublabel": "checkout and till"
+    },
+    {
+      "id": "store",
+      "type": "backend",
+      "label": "Store",
+      "sublabel": "orders and promises"
+    },
+    {
+      "id": "loyalty",
+      "type": "backend",
+      "label": "Loyalty",
+      "sublabel": "balance and coupons"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 300,
+      "label": "Before payment \u00b7 the balance does not move"
+    },
+    {
+      "from": 320,
+      "to": 420,
+      "label": "Payment"
+    },
+    {
+      "from": 440,
+      "to": 570,
+      "label": "After payment \u00b7 the balance moves once"
+    }
+  ],
+  "messages": [
+    {
+      "id": "choose",
+      "from": "buyer",
+      "to": "store",
+      "y": 215,
+      "label": "points and coupons chosen",
+      "variant": "default"
+    },
+    {
+      "id": "discount",
+      "from": "store",
+      "to": "shopify",
+      "y": 275,
+      "label": "order id and the Points discount",
+      "variant": "emphasis"
+    },
+    {
+      "id": "pay",
+      "from": "buyer",
+      "to": "shopify",
+      "y": 350,
+      "label": "pays",
+      "variant": "emphasis"
+    },
+    {
+      "id": "paid",
+      "from": "shopify",
+      "to": "store",
+      "y": 400,
+      "label": "order paid",
+      "variant": "emphasis"
+    },
+    {
+      "id": "find",
+      "from": "store",
+      "to": "shopify",
+      "y": 465,
+      "label": "reads the order back",
+      "variant": "dashed"
+    },
+    {
+      "id": "event",
+      "from": "store",
+      "to": "loyalty",
+      "y": 510,
+      "label": "order event, once",
+      "variant": "emphasis"
+    },
+    {
+      "id": "settled",
+      "from": "loyalty",
+      "to": "store",
+      "y": 550,
+      "label": "points debited, earn granted",
+      "variant": "return"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "store",
+      "from": 210,
+      "to": 555,
+      "type": "backend"
+    },
+    {
+      "participant": "shopify",
+      "from": 270,
+      "to": 470,
+      "type": "external"
+    },
+    {
+      "participant": "loyalty",
+      "from": 505,
+      "to": 552,
+      "type": "backend"
+    }
+  ]
+}

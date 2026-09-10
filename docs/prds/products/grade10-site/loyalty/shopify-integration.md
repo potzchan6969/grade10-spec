@@ -4,96 +4,223 @@ spec: grade10-site/store/membership
 order: 7
 ---
 
-Shopify is the programme's two doors: the online checkout and the POS at the
-counter. It prices the basket, takes the money and validates a code natively;
-it is never the source of truth for a balance, a tier or a coupon, and no
-tier is mirrored to it. What binds the two systems is one Shopify customer
-per member, one order pipeline for every channel, and one draft-order shape
-that carries whatever the programme takes off a bill.
+Shopify is the online checkout and the till: it prices the basket, takes the
+payment and shows a discount, and never holds a balance, a tier or a coupon.
 
-## One customer per member
+## Two Channels, One Pipeline
 
-Every member has exactly one Shopify customer, paired server-side behind the
-account. The link is an opaque member key written into a unique customer
-metafield — never the account id, never anything unverified — so a lost answer
-is adopted by the retry rather than duplicated. Joining seeds the pairing and
-never waits on Shopify; a drain converges it, refusing to write until the
-member's email is verified. A customer already carrying another member's key
-parks the pairing as a conflict where an operator can see and clear it; a
-customer the shop no longer knows is repaired on the next pass. Erasing a
-member erases the customer irreversibly, and a customer merge on the shop
-repoints the pairing at the survivor and re-asserts the member key on it.
+Both channels settle the same way: the money lands at Shopify, the store
+records the order, and the programme moves the balance once.
 
-## Online checkout
+<!-- equal-width: 2,3 -->
+| Stage | Online | At the till |
+| --- | --- | --- |
+| Where points are chosen | The store's own `/checkout` page | The terminal, inside an identified session |
+| What carries the discount | One "Points" order discount on the draft order | The same "Points" amount off the cart |
+| Who takes the money | Shopify's invoice page | The counter, in Shopify POS |
+| How the paid order is found | The draft is read back for the order it became | The store's order id on the cart |
+| When points leave the balance | On the paid order, once, scaled to what the shop applied | The same |
+| What undoes it before payment | A newer checkout, or the reconciling pass, deletes the draft | Staff take the discount off, then the order id |
+| What a refund does | Claws the earn back line by line; returns the points paid only on the whole of the goods | The same |
 
-Every online checkout is a Shopify draft order and its invoice. The draft is
-the one vehicle that carries, at once, the member as the purchasing entity, a
-merchant-applied fixed discount for the points, per-line discounts for the
-store's own product coupons, and any discount code the shop evaluates.
+::image{src="assets/diagrams/shopify-order-pipeline.svg" alt="The paid path both channels share, from choosing points to the balance moving"}
 
-:::flow{title="From basket to paid order"}
-## The basket is priced
-The store prices the basket live and asks the programme what the member can
-spend: the qualifying goods after the store's own coupons, never shipping or
-tax, capped at the balance. Nothing is held.
+## Customer Pairing
 
-## The draft is created
-Line items carry no prices — the shop prices at payment. The order-level
-discount is a fixed amount titled "Points"; product and gift coupons ride as
-per-unit line discounts titled "Coupon"; order coupons go in the discount
-codes. The draft names the member's Shopify customer, so a customer-scoped
-code evaluates. The draft's id is recorded before the invoice
-link leaves the worker.
+| Rule | Value |
+| --- | --- |
+| Link | **An opaque member key** in a unique customer metafield, never the account id |
+| Count | **One Shopify customer per member** |
 
-## The buyer pays the invoice
-The store never updates, completes or sends the draft: a write unlinks an
-in-progress invoice, and the buyer pays the invoice link directly. One payable
-promised draft exists per member — a newer checkout deletes the older draft
-and its promise comes back.
+- **Seeded at join** — the pairing is written with the enrolment and waits on
+  Shopify for nothing
+- **Verified email only** — the drain writes nothing to the shop until the
+  member's email is verified
+- **A conflict parks** — a customer already carrying another member's key is
+  left for an operator to see and clear by hand
+- **A stale customer is repaired** — one the shop no longer knows is repaired
+  on the next pass
+- **A merge on the shop** — the pairing moves to the surviving customer and
+  the member key is asserted on it again
+- **Erasure** — a customer this platform created is deleted; a customer it
+  adopted keeps its record and loses the key. Where Shopify refuses to delete
+  one over its orders, the platform files Shopify's own erasure request and
+  waits for the acknowledgment
 
-## Settlement is found
-An invoice-paid order carries no cart token, so the reconcile pass reads the
-draft back and finds its order. The paid transition stamps the qualifying
-goods, writes the order event, and hands the goods amount and the points
-promise to the programme together.
+## Online Checkout
 
-## Points are captured
-The promise is scaled to what the shop actually took off. A shop that stated
-no discount debits nothing and says so loudly; a short capture debits less. A
-refund returns the points only when the whole of the goods comes back.
+Every online checkout is a Shopify draft order and its invoice.
+
+| The draft carries | As |
+| --- | --- |
+| Member | The draft's customer, so a customer-scoped code evaluates |
+| Points | One fixed-amount order discount named "Points" |
+| Product and gift coupons | Per-unit line discounts named "Coupon" |
+| Order coupon | The draft's discount code |
+| Prices | None on the lines — the shop prices at payment |
+| Shipping | None — the invoice page prices it |
+
+- **One draft per member** — a newer checkout deletes the older one, and the
+  points it promised come back
+- **Never updated** — a write unlinks an invoice already in progress, so the
+  member pays the invoice link as it was made; the draft's id is recorded
+  before that link leaves
+- **Found after payment** — a paid invoice carries no cart token, so the store
+  reads the draft back to find its order
+- **No live price, no stock held, no automatic discount** — an open invoice
+  re-reads the catalog
+- **Refused** — a shop without the draft-order scope declines the whole
+  checkout; a code the shop silently drops deletes the draft and refuses the
+  checkout
+- **On by default** — points spending is on for Grade10 in every
+  environment; one brand switch turns it off on both channels, as an
+  emergency stop, and nothing already promised or paid is touched
+
+:::flow{title="Online checkout" case="Paid" diagram="assets/diagrams/shopify-online-paid.svg"}
+## *Member* — **Chooses points and a coupon**
+On the store's own `/checkout` page, before Shopify has seen the basket.
+
+## *Store* — **Draft order created**
+The member is the draft's customer, the points are one fixed-amount order discount named "Points", each product or gift coupon is a per-unit line discount named "Coupon", and an order code goes on as the draft's own discount code. The store's order id is a custom attribute on the draft, and the lines carry no prices, because the shop prices them at payment.
+
+```json
+{
+  "input": {
+    "lineItems": [
+      {
+        "variantId": "gid://shopify/ProductVariant/44556677889900",
+        "quantity": 2,
+        "appliedDiscount": {
+          "valueType": "FIXED_AMOUNT", "value": 2.5,
+          "title": "Coupon", "description": "Coupon"
+        }
+      }
+    ],
+    "appliedDiscount": {
+      "valueType": "FIXED_AMOUNT", "value": 12,
+      "title": "Points", "description": "Points"
+    },
+    "discountCodes": ["G10-WELCOME-20"],
+    "purchasingEntity": { "customerId": "gid://shopify/Customer/7788990011" },
+    "customAttributes": [
+      { "key": "grade10_order_id", "value": "0f6c2c1e-6a0a-4c33-9d2a-1e6b0e2f9c11" }
+    ]
+  }
+}
+```
+
+A coupon's discount is per unit, so 2.5 on a quantity of 2 is the $5 the line loses; 12 is the whole $12 of points. No points leave the balance and no stock is held; a reward coupon is held against the order and freed if it is never paid — [Coupons](/p/grade10-site/loyalty/coupons)
+
+## *Shopify* — **Invoice link issued**
+The shop answers with the draft and the link the member pays at. The draft's id is recorded before that link leaves, so no payment can arrive on an order the store cannot bind.
+
+## *Member* — **Pays**
+On the invoice page, where the shipping is priced and the tax is added.
+
+## *Shopify* — **Order paid**
+The webhook, signed over its own bytes. Each discount names itself, and each line says which of them took what off it.
+
+```json
+{
+  "admin_graphql_api_id": "gid://shopify/Order/1001",
+  "name": "#G10-10482",
+  "cart_token": null,
+  "currency": "HKD",
+  "subtotal_price": "19.50",
+  "current_total_discounts": "20.50",
+  "discount_applications": [
+    { "title": "Points" },
+    { "title": "Coupon" },
+    { "code": "G10-WELCOME-20" }
+  ],
+  "line_items": [
+    {
+      "title": "Charizard VMAX",
+      "quantity": 2,
+      "price": "20.00",
+      "discount_allocations": [
+        { "amount": "12.00", "discount_application_index": 0 },
+        { "amount": "5.00", "discount_application_index": 1 },
+        { "amount": "3.50", "discount_application_index": 2 }
+      ]
+    }
+  ],
+  "note_attributes": [
+    { "name": "grade10_order_id", "value": "0f6c2c1e-6a0a-4c33-9d2a-1e6b0e2f9c11" }
+  ]
+}
+```
+
+The store finds its points by the title "Points", whatever case the shop wrote it in
+
+## *Store* — **Order marked paid**
+The bytes are verified, the delivery is deduped on Shopify's webhook id, and the draft is read back for the order it became, because a paid invoice carries no cart token. The qualifying goods are priced once and the order event is written with the status in one transaction, so a redelivery writes nothing.
+
+```json
+{
+  "orderId": "9c1e4a70-6f83-4d02-b6a1-0e3f5c9d21ab",
+  "kind": "paid",
+  "sourceRef": "9c1e4a70-6f83-4d02-b6a1-0e3f5c9d21ab",
+  "userId": "usr_01J8ZQ4X7K",
+  "earningMinor": 1950,
+  "currency": "HKD",
+  "occurredAt": "2026-09-10T04:21:07.113Z"
+}
+```
+
+## *Loyalty* — **Points debited, earn granted**
+The promised points are debited, scaled to what the shop applied and never above the promise; the coupon is marked used; the earn lands on the same goods — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) and [Points](/p/grade10-site/loyalty/points)
 :::
 
-A draft evaluates no automatic discount, guarantees no price — an open invoice
-re-reads the catalogue — and reserves no stock. Refusals are explicit: a shop
-without the draft-order scope declines the points tender rather than selling
-at full price, and a code the shop silently dropped deletes the draft and
-refuses the checkout.
+:::flow{title="Online checkout" case="Abandoned or replaced" diagram="assets/diagrams/shopify-online-abandoned.svg"}
+## *Member* — **Leaves the invoice unpaid**
+Or opens another checkout, which supersedes this one.
 
-Points off the online bill are on in every environment. The brand's switch in
-`packages/app-env` turns the online checkout off on its own; the till spends
-on the shop's POS switches and does not stop with it.
+## *Store* — **Draft deleted**
+A newer checkout deletes the older draft before it asks for anything, so that invoice can never collect, and then closes the order. A member who never comes back is closed out by the reconciling pass instead: it gives up on a checkout past its 1 hour and its retries, deletes the draft, and closes the order the same way. A draft the shop refuses to delete is logged, and its order stays open.
 
-## Orders reaching the programme
+## *Loyalty* — **Nothing moves**
+No order event was ever written, so the balance never changed and the whole of it is offered again at the next checkout.
+:::
 
-Four webhooks carry money: order paid, order cancelled, refund created, and
-order edited, which is heard as news only. Each is verified over its raw
-bytes, deduplicated on Shopify's own webhook id, and applied to the store's
-order machine; the order event written by the paid transition is what reaches
-the programme, exactly once, with the channel on it. A physical-store order
-arrives on the same webhook, is ingested once whether by webhook or by the
-reconciling sweep, and is attributed to a member through the customer on the
-sale — or later, by an operator, when the sale was rung up before the member
-joined.
+:::flow{title="Online checkout" case="Refunded" diagram="assets/diagrams/shopify-online-refunded.svg"}
+## *Member* — **Returns the goods**
+Some of them, or all of them.
 
-## POS extension
+## *Shopify* — **Refund created**
+The webhook carries what the refund actually took back.
 
-The loyalty terminal is a Shopify POS UI extension: one tile on the POS home
-screen, one modal that holds the whole staff flow, and a read-only badge on
-Shopify's own customer details. Three extension-only apps — development,
-staging, production — carry it, with no server, no scopes and no admin access
-of their own; a manager activates a published version per location and pins
-the tile. One rule decides every branch: the sale is happening whatever the
-programme thinks, so every unhappy answer lands staff in a normal sale.
+## *Store* — **Goods share priced**
+The refund's share of the qualifying goods is worked out line by line, each capped at what that line earned. Shipping and tax never enter it.
+
+## *Loyalty* — **Earn clawed back**
+The earn comes back line by line, and never more than the member still holds from that money. The points paid come back only when the goods a refund states reach the whole of the order's goods — [Points](/p/grade10-site/loyalty/points) and [Paying with Points](/p/grade10-site/loyalty/paying-with-points)
+:::
+
+What points pay for and how a spend settles is on
+[Paying with Points](/p/grade10-site/loyalty/paying-with-points); what a code
+does at each checkout is on [Coupons](/p/grade10-site/loyalty/coupons).
+
+## Orders Reaching the Programme
+
+| Webhook | Effect |
+| --- | --- |
+| Order paid | An order event to the programme, with the channel on it |
+| Order cancelled | The order is recorded cancelled; nothing promised was ever debited |
+| Refund created | The refund's goods share reaches the programme |
+| Order edited | News only |
+
+- **Verified over raw bytes** — each delivery is checked before it is read
+- **Deduplicated** — on Shopify's own webhook id, which a redelivery reuses
+- **Once** — the paid transition writes the order event exactly once
+- **A till sale** — arrives on the same webhook or through the reconciling
+  sweep, and is ingested once either way
+- **Attribution** — through the customer on the sale, or later by an operator
+  where the sale was rung up before the member joined
+
+## POS Extension
+
+The loyalty terminal is a Shopify POS UI extension.
 
 | Surface | Job | Spends |
 | --- | --- | --- |
@@ -101,122 +228,182 @@ programme thinks, so every unhappy answer lands staff in a normal sale.
 | Modal | Identify, read the panel, spend, confirm a collection | Through a session |
 | Customer details badge | Name, tier and balance for any paired customer staff find in Shopify's own search | Never |
 
-:::flow{title="Points at the till"}
-## Identify the member
-Scan the QR on the member card — from the site or from either wallet pass —
-type its eight-character short code, or type the exact email on the account. A
-miss says only that no member was found.
-Any of these opens a ten-minute session bound to the shop and the
-member — never to the staff label, which changes when staff switch by PIN.
+- **Three apps** — development, staging and production, each extension-only
+  with no server, no scopes and no admin access of its own; a manager
+  activates a version per location and pins the tile
+- **The sale always goes on** — every refusal leaves staff in a normal sale
 
-## Read their standing
-The panel shows tier, both counts, window progress, the renewal and
-points-active-until dates, recent activity, the rewards the balance affords,
-and the coupons they hold.
+### Session
 
-## Attach them to the sale
-The terminal sets the customer on the cart and confirms it against the cart
-itself. Spending stays disabled until the cart's customer is the paired one,
-the cart carries no other discount, and the cart total covers the amount;
-each unmet condition says which.
+| Rule | Value |
+| --- | --- |
+| Life | **10 minutes** |
+| Bound to | **The shop and the member**, never the staff label |
 
-## Preview the spend
-"Use max" pre-fills the smaller of the balance and the qualifying goods on the
-cart; a field takes another amount. The server computes the read-back and
-answers an intent that pins it.
+| Arm | Identifies by | Spends | Collects | Switch |
+| --- | --- | --- | --- | --- |
+| QR | The square on the member card | Yes | Yes | None |
+| Short code | The 8 letters beneath it | Yes | Yes | None |
+| Wallet pass, Google | The code the phone makes from the pass | Yes | Yes | None |
+| Wallet pass, Apple | The durable code printed in the pass | No | No | None, and no switch can grant either |
+| Email | The exact email on the account | With Email spend | Always | Email spend |
+| Phone | A number staff type | With Phone spend | Only when it may spend | Phone lookup · Phone spend |
+| Cart customer | The customer already on the sale | With Cart spend | Always | Cart identify · Cart spend |
 
-## Confirm, facing the member
-Spend N, pay HKD X, balance after Y, earns about Z. Staff tap; the member
-touches nothing. A double tap replays the same intent rather than spending
-twice.
+- **Attach** — the terminal sets the customer on the cart and checks it;
+  spending stays off until the cart's customer is the paired one, the cart
+  carries no other discount, and the cart total covers the amount
+- **Plan** — one sale row per session, rewritten on every plan, capped at 20
+  plans in 5 minutes
+- **Discount on the cart** — the store's order id first, then the "Points"
+  fixed discount; the promise is trimmed to what the cart shows
+- **Confirm** — the button locks while it runs, so a double tap spends once
+- **Undo before tender** — staff remove the discounts, then the order id, and
+  the promise is dropped
+- **Expiry** — a promise nobody tenders expires after 1 hour; a sale the cart
+  pays after that still settles
+- **Collect** — a physical reward is confirmed in the same session, and a
+  second till is refused with who took it and when. 🚧 The coupon path retires
+  this — [Rewards](/p/grade10-site/loyalty/rewards)
+- **Earning** — the customer on the sale is enough, terminal or not
 
-## The discount lands on the cart
-The terminal writes the store's order id on the cart first, then a fixed
-amount titled "Points" comes off the sale, confirmed against the cart. The
-promise is trimmed to what the cart shows; a discount that never landed is
-not one the member pays for. Nothing is held: the points leave the balance
-when the paid sale lands, never at apply.
+:::flow{title="At the till" case="Paid" diagram="assets/diagrams/shopify-till-paid.svg"}
+## *Shopkeeper* — **Rings up the sale**
+In Shopify POS, as any other sale.
 
-## Undo, before tender
-Staff remove every discount from the cart, then the order id, and the promise
-is dropped; the balance was never touched. A promise nobody tenders expires
-after an hour, and a sale the cart collects after that still settles. Once
-tendered, taking points back is a refund, on the refund's own rule.
+## *Shopkeeper* — **Identifies the member**
+One arm answers, and the store opens a session on it: 10 minutes, bound to the shop and the member. The terminal also sets the paired customer on the cart, because that customer is what attributes the sale even when nothing else answers.
+
+## *Shopkeeper* — **Plans the spend**
+Points and coupons, priced against the lines the terminal claims. The store writes one sale row per session and rewrites it on every later plan.
+
+## *Shopify* — **Cart carries the discount**
+The store's order id goes onto the cart first, then the "Points" amount comes off it. A sale carrying the id and less money off settles only what the shop took off; money off with no id is a discount the store cannot bind to a sale.
+
+```json
+{
+  "addCartProperties": { "grade10_order_id": "3b7d0c9e-2f41-4c8e-9a55-71b0d3e6c204" },
+  "applyCartDiscount": ["FixedAmount", "Points", "12.00"]
+}
+```
+
+Each write is read back off the cart and confirmed by its title, its amount and its currency before the next one goes on
+
+## *Shopkeeper* — **Takes payment**
+At the counter, in Shopify POS.
+
+## *Shopify* — **Order paid**
+The same webhook as online, carrying the shop's own counter channel.
+
+```json
+{
+  "admin_graphql_api_id": "gid://shopify/Order/1042",
+  "source_name": "pos",
+  "cart_token": null,
+  "currency": "HKD",
+  "subtotal_price": "88.00",
+  "customer": { "admin_graphql_api_id": "gid://shopify/Customer/7788990011" },
+  "discount_applications": [{ "title": "Points" }],
+  "note_attributes": [
+    { "name": "grade10_order_id", "value": "3b7d0c9e-2f41-4c8e-9a55-71b0d3e6c204" }
+  ]
+}
+```
+
+## *Store* — **Sale marked paid**
+The order id on the cart is a claim, not proof: it binds only where the shop's own counter channel rang the sale, the customer on it is the paired one, and the currency matches. Then the sale is marked paid and the order event is written once, the same shape the online order writes.
+
+## *Loyalty* — **Points debited, earn granted**
+The same debit and the same earn as online, recorded against the counter rather than the online store.
 :::
 
-Collecting a physical reward runs through the same session: the pending
-redemption shows the reward, the points paid and the date; staff verify and
-confirm, and the staff label lands in the programme's record. A second till
-gets a refusal naming when and who. Earning needs none of this — attaching
-the customer to the sale is enough, and the points arrive through the order
-webhook even with the terminal dark.
+:::flow{title="At the till" case="Guest sale, claimed later" diagram="assets/diagrams/shopify-till-guest.svg"}
+## *Shopkeeper* — **Rings up a guest sale**
+Nobody is identified, or the terminal is off, or the programme did not answer. Staff are told which, and the sale goes on as an ordinary sale.
+
+## *Shopify* — **Order paid**
+No order id on the cart, so there is no promise to bind to.
+
+## *Store* — **Recorded with no owner**
+The sale is recorded with its goods priced and nobody named. A customer on the sale is looked at again on every pass — 5 minutes after the sale, then hourly, and given up on after 30 days.
+
+## *Loyalty* — **Earns when the sale is paired**
+The earn is priced on the goods that sale settled, whenever the sale gets an owner. Past the 30 days an operator claims the sale by hand, with what they saw recorded beside their name — [Purchases Before the Account](/p/grade10-site/loyalty/profile#purchases-before-the-account)
+:::
+
+:::flow{title="At the till" case="Undone before tender" diagram="assets/diagrams/shopify-till-undone.svg"}
+## *Shopkeeper* — **Takes the benefits off**
+The gift lines, then the coupon discounts, then the "Points" discount, and the store's order id last, because a sale paid while the id is on the cart still binds to its row. The id stays on while a coupon code is on the sale, because Shopify will not remove one code at a time.
+
+## *Store* — **Promise dropped**
+The terminal reports what the sale still shows, and the row is trimmed to it: the points come off the row whether or not the discount came off the cart. Nothing was debited, because nothing was held.
+
+## *Shopkeeper* — **Takes payment as an ordinary sale**
+The sale carries on at full price.
+
+## *Loyalty* — **Nothing moves**
+No order event, so the balance never changed. A promise nobody tenders expires after 1 hour, and a cart paid after that still settles against its row.
+:::
+
+What a spend is allowed to pay for is on
+[Paying with Points](/p/grade10-site/loyalty/paying-with-points).
 
 ### Switches
 
 Every switch defaults in code, is stored per shop only as a deviation, and is
-enforced on the very next request. An operator flips them from the admin
-console.
+enforced on the next request. An operator flips them from the admin console.
 
-| Switch | Default | What it governs |
+| Switch | Default | Governs |
 | --- | --- | --- |
-| Terminal enabled | On | Off: identification refuses and sales continue as guest sales; the undo goes with it |
+| Terminal enabled | On | The whole till surface. Off: identification refuses and sales carry on as guest sales |
 | Email spend | On | Spending on a session opened by a staff-typed email |
-| Phone lookup | Off | Identification by a staff-typed number; ships dark |
-| Phone spend | Off | Spending on a phone session; pinned off until numbers are verified |
-| Cart identify | Off | A customer already on the sale identifies the member with no scan |
+| Phone lookup | Off | Identifying by a staff-typed number |
+| Phone spend | Off | Spending on a phone session |
+| Cart identify | On | The customer already on the sale identifies the member |
 | Cart spend | Off | Spending on a cart session |
 
-The QR and short-code arms carry no switch of their own: stopping the counter
-means the terminal switch, which also removes the undo staff need for spends
-already on carts.
+QR, the short code and a wallet pass have no switch of their own; the terminal
+switch is what stops them.
 
-## Discounts and shipping
+## Discounts and Shipping
 
-A tier is worth its earn multiplier and nothing else. No Shopify Function,
-automatic discount, customer segment or tag carries a tier, and no tier gets a
-percentage off or free shipping. What the programme takes off a bill is always
-the points: the draft's order-level discount online, the cart discount at the
-till.
+- **A tier is its multiplier only** — no Shopify Function, automatic discount,
+  customer segment or tag carries a tier
+- **What the programme takes off** — the points and the coupons, and nothing
+  tier-based
 
-Shipping is the store's flat rule — HKD 60, free at or above HKD 800 — served
-by one function to both the checkout preview and Shopify's carrier callback.
-Points never pay for shipping and shipping never earns, by construction: the
-tender is an order-level pre-tax discount, capped at the qualifying goods and
-spread by the shop over every line it sells, and a refund
-of the delivery alone returns no points. A shipping promotion could ride
-beside the points discount; none is created today. No draft order carries a shipping line — Shopify prices
-shipping on the invoice page — and the POS has no ship-to-customer flow, no
-draft order and no shipping at all.
+| Rule | Value |
+| --- | --- |
+| Shipping | **$60**, free at or above **$800** |
+| Served by | **One function**, answering the checkout's shipping preview and Shopify's carrier callback alike |
+| On a draft | **None** — the invoice page prices it |
+| At the till | **None** — the counter ships nothing |
 
-:::callout{kind="warning"}
-The carrier callback is written but not registered on staging: the shop's
-plan refuses it, so the invoice page charges the shop's own manual rate while
-the checkout previews ours. Whether the carrier request carries the basket
-before or after discounts is unanswered, so preview and charge can diverge
-exactly where points or coupons straddle the free bar.
-:::
+- **Points never pay shipping, shipping never earns** — the tender is an
+  order-level pre-tax discount capped at the qualifying goods, so a refund of
+  the delivery alone returns no points
+- **No shipping promotion** — one could sit beside the points discount; none
+  exists
+- **The free bar is read before discounts** — the carrier request carries the
+  shop's own line prices, gross of the draft's discounts, and the preview
+  reads the same pre-discount basis, so the two agree where points or a coupon
+  cross the bar
 
 :::detail{title="Code map" for="engineer"}
-Pairing lives in `packages/grade10-store/backend/src/services/pairing` over
-the `payment_customers` table; the metafield is `membership.member_id`, type
-`id`, unique. The draft-order client is `packages/shopify/backend`'s
-`draftOrders.ts` — create, read and delete only. The points tender is
-`services/pointsTender.ts` and `services/loyalty/pointsSpend.ts`, gated by
-`POINTS_TENDER` in `packages/app-env`. Webhooks land on one route in the
-store worker; the loyalty sink is `services/loyalty/sink.ts`.
-
-The extension is `integrations/shopify-pos/grade10`, outside `apps/` with its
-own publish lane, rendering Polaris web components on API 2026-07 with a byte
-budget per target. It talks to a tRPC gateway the loyalty package exports and
-the store worker mounts at `/api/pos`, authenticated by the POS session token
-as the shop principal `pos:<shop>` — outside every human role, holding
-exactly config, identify, plan and confirm a sale, collect, and end. The gateway session rides
-`x-pos-session`, rotated on every call; every build stamps `x-pos-client`
-and the gateway refuses below its minimum. Short-code entry is capped at ten
-misses in five minutes per shop, email and phone at twenty. Flags are the
-`pos_flags` table behind a typed registry; a till sale is one `orders` row
-per session (`services/pos/sale/sale.ts`), rewritten on every plan and trimmed to
-what the cart took, so one sale never carries two. The longer working notes are
-[the Shopify membership and POS plan](/references/shopify-membership-pos)
-and [the POS extension notes](/references/shopify-pos-extension).
+- **Pairing** — `packages/grade10-store/backend/src/services/pairing`, and
+  `sweeps/pairingDeletion.ts` for erasure
+- **Draft orders** — `packages/shopify/backend/src/admin/draftOrders.ts`
+- **Points tender** — `services/pointsTender.ts`,
+  `services/loyalty/pointsSpend.ts`, switched by `POINTS_TENDER` in
+  `packages/app-env`
+- **Webhooks** — `routes/webhooks.ts`, sink `services/loyalty/sink.ts`
+- **External orders** — `services/external`
+- **POS extension** — `integrations/shopify-pos/grade10`
+- **POS gateway** — `packages/grade10-store/backend/src/trpc/pos`, mounted at
+  `/api/pos`
+- **Till sale** — `services/pos/sale/sale.ts`
+- **Switches** — `packages/grade10-store/contracts/src/pos.ts`
+- **References** —
+  [the Shopify membership and POS plan](/references/shopify-membership-pos)
+  and [the POS extension notes](/references/shopify-pos-extension)
 :::

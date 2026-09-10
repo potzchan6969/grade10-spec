@@ -40,7 +40,7 @@ extended goes back to its old end.
 Customer reaches a tier upon reaching the points required for that tier.
 The multiplier is only applied starting from the next order.
 
-## Keeping and losing a tier
+## Keeping a Tier
 
 A tier is held for a **tier period**: **12 months** from the day it was
 reached. What the member earns inside the period decides what happens at the
@@ -72,7 +72,7 @@ We have a cron sweep to render the record for analytics purposes.
 | 2028/03/04 | buys $1,000 · 100 at 1× again | +100 | 580 | 100 | |
 :::
 
-## Black, by invitation
+## Black Tier
 
 - **The grant** — an operator's, naming who granted it, why, and optionally
   when it ends; revocable, and a member holds at most one live invitation per
@@ -86,14 +86,3 @@ We have a cron sweep to render the record for analytics purposes.
   extends a period
 - **Not enforced** — the annual cap and the approval step the owner's draft
   asks for
-
-:::detail{title="Data model" for="engineer"}
-- **The member row** holds the earned tier, the day it was reached, both ends of
-  its period — all four set or all four null — and the demotion date
-- **The period start is stored, not inverted** from the end, because month
-  arithmetic clamps: a period stamped on 29 February ends on 28 February, and
-  walking that back would open the period a day before the earn that bought it
-- **The window is open-ended above**, so a backdated earn counts the moment it
-  lands, and floored at the demotion date — or at a virtual one for a period
-  that has lapsed and not yet been reviewed
-:::

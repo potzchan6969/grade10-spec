@@ -1,0 +1,116 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Undone before tender",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "shopkeeper",
+      "label": "Shopkeeper"
+    },
+    {
+      "id": "shopify",
+      "label": "Shopify"
+    },
+    {
+      "id": "store",
+      "label": "Store"
+    },
+    {
+      "id": "loyalty",
+      "label": "Loyalty"
+    }
+  ],
+  "mainPath": [
+    "shopkeeper-takes-the-benefits-off",
+    "store-promise-dropped",
+    "shopkeeper-takes-payment-as-an-ordinary-sale",
+    "loyalty-nothing-moves"
+  ],
+  "nodes": [
+    {
+      "id": "shopkeeper-takes-the-benefits-off",
+      "lane": "shopkeeper",
+      "col": 0,
+      "type": "external",
+      "label": "Benefits taken off",
+      "sublabel": "discount first, order id last",
+      "width": 168
+    },
+    {
+      "id": "shopkeeper-takes-the-benefits-off_cart",
+      "lane": "shopify",
+      "col": 1,
+      "type": "external",
+      "label": "Full-price cart",
+      "sublabel": "nothing left to bind",
+      "width": 132
+    },
+    {
+      "id": "store-promise-dropped",
+      "lane": "store",
+      "col": 2,
+      "type": "security",
+      "label": "Promise dropped",
+      "sublabel": "nothing was debited",
+      "width": 132
+    },
+    {
+      "id": "shopkeeper-takes-payment-as-an-ordinary-sale",
+      "lane": "shopkeeper",
+      "col": 2,
+      "type": "external",
+      "label": "Takes payment",
+      "sublabel": "an ordinary sale",
+      "width": 132
+    },
+    {
+      "id": "loyalty-nothing-moves",
+      "lane": "loyalty",
+      "col": 3,
+      "type": "backend",
+      "label": "Nothing moves",
+      "sublabel": "the balance never changed",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "from": "shopkeeper-takes-the-benefits-off",
+      "to": "shopkeeper-takes-the-benefits-off_cart",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "from": "shopkeeper-takes-the-benefits-off",
+      "to": "store-promise-dropped",
+      "label": "what the sale still shows",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "from": "store-promise-dropped",
+      "to": "shopkeeper-takes-payment-as-an-ordinary-sale",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "shopkeeper-takes-payment-as-an-ordinary-sale",
+      "to": "loyalty-nothing-moves",
+      "label": "no order event",
+      "variant": "dashed",
+      "labelAt": [492, 305],
+      "fromSide": "right",
+      "toSide": "top"
+    }
+  ]
+}
