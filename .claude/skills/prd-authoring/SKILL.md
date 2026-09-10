@@ -14,8 +14,8 @@ A PRD is the capability's page in the manual: `docs/prds/products/<product>/<cap
 3. Create the page, or open the existing one, and put the record in its `Product decisions` block — the page grammar and canonical form are the guide's; `pnpm check:manual` refuses a page that breaks them.
 4. Open the block with the user problem, stated flatly in the present tense, and the intended outcome. Name the non-goals so engineering knows the edges. The page's prose and the block both take the house shape from `docs/governance/writing.md`: an outline whose items lead with the key term in bold, never an essay.
 5. Never restate a requirement, a state behavior, an accessibility obligation, or an export contract — the page's `spec:` frontmatter already embeds the spec; cite an id with `[[...]]` where one matters.
-6. Record users and their jobs, measurement, and explicit decisions as tables; assumptions and unresolved questions as rows marked ❓. Do not bury uncertainty in prose.
+6. Record users and their jobs, measurement, and explicit decisions as tables; assumptions and unresolved questions as rows marked ❓. In the prose, mark 🚧 what an active change delivers and ❓ what nobody has confirmed. Do not bury uncertainty in prose.
 7. Cite source material by linking it — a reference under `docs/references/` renders in the manual at `/references/<slug>`.
-8. Write the requirements themselves as an OpenSpec change carrying deltas against the capability spec.
+8. Write the requirements themselves as an OpenSpec change carrying deltas derived from the page's 🚧 lines against the capability spec. The page comes first; the spec is rewritten by the fold at archive.
 
 Before handoff, check that the block has a stated problem, non-goals, measurement, a decisions table with open items marked, and a risk statement where one exists; that the page's frontmatter names its spec; that it contains nothing a test could decide; and that `pnpm check:manual` passes.

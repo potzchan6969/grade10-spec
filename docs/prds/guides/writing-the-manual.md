@@ -65,12 +65,13 @@ surface. Top to bottom:
   and links, never how the code works
 - **Product decisions** — the pm block, last, where the page records one
 - **Nothing recaps the change** — no today's gap, no note that a spec is
-  still being written, no scenario id. A decided plan reads as the product
-  does, in the present tense; the in-flight cards beneath say what has not
-  shipped, and a page with no `spec` wears the planned pip
-- **The owner's roadmap, not the delta's** — an in-flight spec is one
-  author's proposal; where it promises what the code does not do, ask
-  before the page states it
+  still being written, no scenario id. A confirmed plan reads as the product
+  does, in the present tense, marked 🚧 until its change archives; the
+  in-flight cards beneath say what has not shipped, and a page with no
+  `spec` wears the planned pip
+- **The page is the roadmap** — a change starts here, one 🚧 line per
+  outcome, and its deltas derive from those lines; a delta promising what no
+  line marks is the delta's error, not the page's
 
 ## Blocks
 

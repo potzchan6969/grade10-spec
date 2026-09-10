@@ -1,25 +1,29 @@
-# PRDs and OpenSpec: one source of truth, one product record
+# PRDs and OpenSpec: the page first, the spec as what runs
 
-`openspec/specs/` is the single source of truth for what this product requires. A PRD is the capability's page in the manual under `docs/prds/`: it explains the product and the decisions behind it, and never restates a requirement.
+A capability's page under `docs/prds/` is written first. It holds everything the product should be — what runs, what is confirmed and being built, and what nobody has confirmed — each told apart by its mark. `openspec/specs/` is the production shape: every checkable requirement of what runs today, rewritten only when a change archives. An engineer in a consuming application builds from the spec alone.
 
 ## The rule
 
-Every checkable requirement and every cross-repository contract lives in `openspec/specs/<product>/<domain>/<capability>/spec.md`. An engineer in a consuming application builds from that spec alone, without reading a PRD first.
+A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. Its prose states the shape of the product in the reader's words and pictures, and never restates a requirement. Three kinds of line sit on it:
 
-A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. Its prose states the shape of the product in plain words and pictures. What a requirement cannot carry — who it is for, what was deliberately excluded, what will be measured, the decisions made and why, the risks — sits on the same page in a `:::detail{title="Product decisions" for="pm"}` block: collapsed under the prose, never hidden from search or a deep link. The page names its spec in its frontmatter, so the requirements are embedded beside the record rather than duplicated into it.
+- **Unmarked** — what runs. The spec holds the checkable form of the same fact.
+- **🚧** — confirmed and being built. An active change on the page's spec is delivering it, and the mark comes off when that change archives.
+- **❓**, or `TBC` — what nobody has confirmed. Nothing is built from it. A long draft behind it lives under `docs/references/`, and the line cites it.
 
-If a statement is testable, it belongs in the spec. If removing every testable statement leaves nothing worth a product-decisions block, the page needs none — write the change and the spec instead.
+What a requirement cannot carry — who it is for, what was deliberately excluded, what will be measured, the decisions made and why, the risks — sits on the same page in a `:::detail{title="Product decisions" for="pm"}` block: collapsed under the prose, never hidden from search or a deep link. The page names its spec in its frontmatter, so the requirements sit beside the record rather than duplicated into it.
+
+Every checkable requirement and every cross-repository contract lives in `openspec/specs/<product>/<domain>/<capability>/spec.md`, and reaches it only through a change's delta folding at archive. If a statement is testable, it belongs there; the page states the outcome in its own words and links the capability. If removing every testable statement leaves nothing worth a product-decisions block, the page needs none — write the change and the spec instead.
 
 ## Which artifact answers which question?
 
-| Dimension | `openspec/specs/` | PRD (`docs/prds/` page) | `openspec/changes/` |
+| Dimension | PRD (`docs/prds/` page) | `openspec/changes/` | `openspec/specs/` |
 | --- | --- | --- | --- |
-| Primary question | What must be true of the product today? | What is this, why did we decide it, for whom, and what did we rule out? | What is changing, and how will it be delivered? |
-| Primary audience | Engineers and implementation agents in consuming applications | Everyone who reads the manual; the decisions block is for product managers, designers, reviewers | Whoever is delivering the change |
-| Authority | Canonical. Wins any conflict. | Explanatory. Never authoritative over a requirement. | Canonical for the in-flight delta only, until archived. |
-| Lifespan | Durable; edited in place as the product changes | Durable; edited when the product or the decision changes | Archived after delivery |
-| Typical content | Requirements, scenarios, state behavior, accessibility obligations, content ownership, named component exports | The shape in prose, journeys and cases embedded from the spec, visuals; then users and jobs, non-goals, measurement, decisions, risks | Proposal, design, requirement deltas, tasks |
-| Content to keep out | Class, hook, or library names — those are `tech-design.md`'s job | Anything testable; today's gap and the intended fix, which belong to the proposal | The full product narrative |
+| Primary question | What is this, what should it be, why, for whom, and what did we rule out? | What is changing, and how will it be delivered? | What runs today, checkably? |
+| Primary audience | Everyone who reads the manual; the decisions block is for product managers, designers, reviewers | Whoever is delivering the change | Engineers and implementation agents in consuming applications |
+| Authority | Canonical for what the product should be; its marks say which lines are not yet running. Never restates a requirement. | Canonical for the in-flight delta only, until archived | Canonical for what runs. Wins any conflict with an unmarked line. |
+| Lifespan | Durable; written first, edited as intent changes, marks taken off at archive | Archived after delivery | Durable; rewritten by the fold at archive |
+| Typical content | The shape in prose with its marks, journeys and cases, visuals; then users and jobs, non-goals, measurement, decisions, risks | Proposal, design, requirement deltas, journeys, suites, tasks | Requirements, scenarios, state behavior, accessibility obligations, content ownership, named component exports |
+| Content to keep out | Anything testable; today's gap and the intended fix, which belong to the proposal; a long draft, which belongs under `docs/references/` | The full product narrative | Class, hook, or library names — those are `tech-design.md`'s job |
 
 Public component exports are the exception to "no names in a spec": the export name *is* the contract between this repository and the application that implements it, so specs name it. Internal structure still belongs in `tech-design.md`.
 
@@ -29,28 +33,32 @@ Source material behind a decision — an owner's draft, competitor research, a v
 
 | Situation | Update | Reason |
 | --- | --- | --- |
-| Exploring a new customer problem, workflow, or UI concept | The capability page's product-decisions block | The team needs outcome, scope, and rationale before choosing implementation. |
-| A requirement, state behavior, accessibility obligation, or export contract changes | `openspec/specs/`, through a change | This is the source of truth; nothing else records it. |
-| The team approves implementation | An `openspec/changes/` change carrying requirement deltas | Delivery needs a bounded proposal, design, deltas, and tasks. |
-| A technical refactor changes no product-visible behavior | Change only, with no spec delta | No requirement and no product decision changed. |
-| A discovery changes user behavior, scope, analytics, content, or accessibility | Spec delta first; update the page if the *decision* changed | The requirement is what implementers read. |
-| The rationale for a decision changes but the behavior does not | The page's product-decisions block | Nothing testable moved. |
-| A change is complete | Fold deltas into `openspec/specs/`, bring the page to the shipped story, then archive | The spec must describe current truth once delivery history moves to archive. |
+| A new problem, workflow, or idea is being explored | The page: ❓ lines and rows in its decisions block, a draft under `docs/references/` | Intent is on record before anything is confirmed |
+| A change is confirmed | The pages it touches first, each outcome a 🚧 line in the reader's words; then the change, whose deltas derive from those lines | The page is the roadmap the deltas are read against |
+| A requirement, state behavior, accessibility obligation, or export contract changes | The page's 🚧 line, then the delta in the change | The spec moves only at archive |
+| Another active change already folds the same requirement | That change is extended or superseded, never doubled | Whichever archives second reverts the first |
+| A technical refactor changes no product-visible behavior | Change only, with no delta and no page edit | Nothing the product should be has changed |
+| The rationale for a decision changes but the behavior does not | The page's product-decisions block | Nothing testable moved |
+| A change is complete | Fold the deltas into `openspec/specs/`, take the 🚧 marks off the page, then archive | The spec must describe what runs once delivery history moves to archive |
 
 ## Maintenance workflow for future agents
 
-### 1. Start with the spec
+### 1. Start with the page
 
 Before proposing or implementing a feature, read in this order:
 
-1. the relevant capability in `openspec/specs/`;
-2. any active change in `openspec/changes/` touching that capability;
-3. the capability's page in `docs/prds/`, for the shape and the rationale behind what the spec requires; and
+1. the capability's page in `docs/prds/`, for what runs, what is coming, and the rationale;
+2. any active change in `openspec/changes/` touching that capability — every 🚧 line on the page belongs to one;
+3. the capability in `openspec/specs/`, for the checkable form of what runs; and
 4. the design-system primitives in `packages/design-system/src/components/`, plus the component's implementation in the consuming application, when UI is involved.
 
-If the spec and the page disagree, the spec is correct and the page is stale — fix the page.
+If an unmarked line and the spec disagree, the spec is right about what runs: fix the line, or mark it 🚧 or ❓ if it was stating intent.
 
-### 2. Write requirements into the capability spec
+### 2. Mark the page
+
+A change starts on the pages it touches. For each, add one 🚧 line per outcome, in the reader's words and in the section the outcome belongs to; add a ❓ line or row for what the author left open; add or update the rows of the decisions block the change turns on. Link every page from the proposal. The deltas are then derived from the 🚧 lines, so a delta promising what no line marks is the delta's error.
+
+### 3. Write requirements into the change's delta
 
 A capability spec at `openspec/specs/<product>/<domain>/<capability>/spec.md` contains:
 
@@ -58,21 +66,21 @@ A capability spec at `openspec/specs/<product>/<domain>/<capability>/spec.md` co
 - `### Requirement:` entries written so an engineer in another repository can implement them without a follow-up question; and
 - `#### Scenario:` entries beneath each, every one checkable by a test or a manual pass.
 
-Do not name a class, hook, function, table, or library. Do name the public component exports a consuming application must provide, and keep them in one requirement so a contract change is easy to spot.
+The change's delta carries the same shape, and the fold at archive writes it into the spec. Do not name a class, hook, function, table, or library. Do name the public component exports a consuming application must provide, and keep them in one requirement so a contract change is easy to spot.
 
-### 3. Record a product decision only when there is one to explain
+### 4. Record a product decision only when there is one to explain
 
 Add or update the page's `Product decisions` block when a change turns on a product judgment that the requirement text will not preserve: why this problem, for whom, what was ruled out, what will be measured, what the risks are. The `prd-authoring` skill writes the block; the page grammar is in the manual's own guide, `docs/prds/guides/writing-the-manual.md`. Record assumptions as open items, marked ❓, rather than silently choosing product behavior.
 
-Update the block when the target user, problem, non-goal, measurement, risk, or a recorded decision changes. Do not update it merely because a requirement changed — that is the spec's job.
+Update the block when the target user, problem, non-goal, measurement, risk, or a recorded decision changes. Do not update it merely because a requirement changed — that is the delta's job.
 
 Keep the block readable as a standalone decision record. Replace superseded decisions and preserve the useful rationale in its decisions table; link an archived change for detailed history rather than embedding task logs.
 
-### 4. Create and maintain a change for approved implementation
+### 5. Create and maintain a change for approved implementation
 
 For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
-- `proposal.md` — scope, why now, consumer impact, non-goals, and a link to the capability's page when one exists;
+- `proposal.md` — scope, why now, consumer impact, non-goals, and a link to every page the change marked;
 - `specs/<capability>/spec.md` — only the requirement deltas against `openspec/specs/`;
 - `specs/<capability>/user-journeys.md` — the stories those requirements accept, or the one line `**Walked by:** nobody on their own - <why>` when no end user reaches the capability;
 - `specs/<capability>/feature-tcs.md` — QA's derived suite, when the journeys are worth walking;
@@ -80,13 +88,13 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 - `tech-design.md` — implementation choices, interfaces, compatibility, and validation approach; and
 - `tasks.md` — small, checkable delivery steps.
 
-Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. Update the page too only if that constraint changed a recorded product decision.
+Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. Update the page too when that constraint changed an outcome or a recorded product decision.
 
 Only the first three are always written. A change is finished as far as its author is concerned once the requirements and their journeys are right; the engineer who picks it up adds `ui-design.md`, `tech-design.md` and `tasks.md` **to that same change**, and adds `promoted_by: @handle` to its `.openspec.yaml` so the board names them. The proposal and the deltas carry over untouched — never send them back to their author for a task list.
 
 That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there, and a change with no `tasks.md` shows on the engineer's board as still being planned. A change whose requirements are finished but which nobody picks up is therefore invisible as ready work, however complete its specs are.
 
-### 5. Keep component contracts aligned
+### 6. Keep component contracts aligned
 
 A capability spec names the exact exports a consuming application must provide. The change that alters one must:
 
@@ -97,25 +105,27 @@ A capability spec names the exact exports a consuming application must provide. 
 
 Component source lives in the application. This repository carries the contract and the design-system primitives beneath it.
 
-### 6. Finish a change without losing context
+### 7. Finish a change without losing context
 
 Before archiving:
 
 1. ensure required tasks are complete and validation is recorded;
 2. fold accepted requirement deltas into `openspec/specs/`;
-3. bring the capability's page to the shipped story and confirm its decisions block still describes the decision accurately, then run `pnpm check:manual`;
+3. take the 🚧 marks off every line this change delivered — the line stays, flat — confirm the page's decisions block still describes the decision accurately, then run `pnpm check:manual`;
 4. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`; and
 5. leave links between the spec, the page, and the archive where they aid discovery.
 
-Do not archive a change as a substitute for updating `openspec/specs/`. Archives preserve history; the spec must describe the current truth.
+Do not archive a change as a substitute for updating `openspec/specs/`. Archives preserve history; the spec must describe what runs.
 
 ## Fast decision guide
 
 ```text
-Is the statement testable — could a test or a manual pass decide it?
-├─ Yes → it belongs in openspec/specs/<product>/<domain>/<capability>/spec.md,
-│        reached through an openspec/changes/ delta.
-└─ No  → Does it explain a product judgment that outlives this change?
-         ├─ Yes → record it in the capability page's Product decisions block.
-         └─ No  → use normal repository documentation or code comments.
+Is it what the product should be, in the reader's words?
+├─ Yes → the capability page — 🚧 where a change delivers it, ❓ where nobody has confirmed it.
+└─ No  → Is the statement testable — could a test or a manual pass decide it?
+         ├─ Yes → the delta in openspec/changes/, folded into
+         │        openspec/specs/<product>/<domain>/<capability>/spec.md at archive.
+         └─ No  → Does it explain a product judgment that outlives this change?
+                  ├─ Yes → the capability page's Product decisions block.
+                  └─ No  → normal repository documentation or code comments.
 ```

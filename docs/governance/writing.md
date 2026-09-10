@@ -52,7 +52,8 @@ nearest your task and keep it open while you draft.
     names who confirms it. It marks the page, not the product: nothing is
     built from it
   - 🚧 starts a line that is confirmed and being built; the page says what
-    will run. A line still open is never 🚧
+    will run, and an active change on the page's spec is delivering it. The
+    mark comes off when that change archives. A line still open is never 🚧
 
 ## Voice
 
@@ -107,8 +108,10 @@ nearest your task and keep it open while you draft.
   architecture doc, as names and links, and nothing else. Ledger kinds,
   keys, locks, metrics, columns, and what was tried and dropped are deleted
   from the page; the architecture docs and the code hold them
-- **The page states what runs** — a warning that the spec, the durable
-  text, or the code says otherwise is deleted; the gap is a change proposal.
+- **The page states what runs, and what should** — unmarked lines are what
+  runs; what should be carries its mark. A warning that the spec, the
+  durable text, or the code says otherwise is deleted; the gap is a change
+  proposal.
   A `warning` callout nobody signed with `author` and `date` is that
   warning; what it knows becomes a 🚧 or ❓ line in its section
 - **One flow per topic** — the steps between systems are walked once, on

@@ -28,9 +28,13 @@ assuming someone will find it.
    MODIFIED block copied from a stale spec silently reverts whatever landed in
    between, and an overlap scan against a stale `openspec/changes/` finds
    nothing. Then read: the capability under
-   `openspec/specs/<product>/<domain>/<capability>/`, every active change in
-   `openspec/changes/` for overlap, and the capability's page under `docs/prds/`
-   when one exists. Find facts yourself — bring only decisions to the author.
+   the capability's page under `docs/prds/` when one exists — what runs, what
+   is 🚧 and coming, what is ❓ and open — then every active change in
+   `openspec/changes/` on its spec, then the capability under
+   `openspec/specs/<product>/<domain>/<capability>/`. An active change already
+   folding a requirement this one touches is extended or superseded, never
+   doubled: whichever archives second reverts the first. Find facts yourself —
+   bring only decisions to the author.
 2. **Interview the author.** Run the `grilling` skill's round-based frontier
    interview before drafting. Do not write the proposal until the frontier is
    empty and the author confirms shared understanding. The interview scales
@@ -60,8 +64,15 @@ assuming someone will find it.
 
    These carry this store's own rules — the ones in `openspec/config.yaml` — on
    top of the schema's. Read them rather than working from memory.
-5. **Write the three artifacts**, in that order.
-6. **Validate, then hand to QA.**
+5. **Mark the pages first.** On each page the change touches, add one 🚧
+   line per outcome, in the reader's words and in the section it belongs to;
+   a ❓ line or decisions row for what the author deferred; the decisions the
+   change turns on (`prd-authoring`). The house style is
+   `docs/governance/writing.md`. The deltas derive from these lines, so a
+   delta promising what no line marks is the delta's error.
+6. **Write the three artifacts**, in that order, linking every marked page
+   from the proposal.
+7. **Validate, then hand to QA.**
 
    ```bash
    openspec validate <change-name> --strict
@@ -185,13 +196,15 @@ actor the spec already knows and scenarios that already exist.
 
 | Statement | Home |
 | --- | --- |
+| What the product should be, in the reader's words | The capability page, marked 🚧 or ❓ |
 | Anything testable | The delta spec, and nowhere else |
 | Who walks it, and what accepts their story | `user-journeys.md` beside that spec |
 | Why this problem, for whom, what was ruled out, what will be measured | The capability page's `Product decisions` block (`prd-authoring` skill) |
 | How it will be built | `tech-design.md` — not yours |
 
-A testable statement left on a page or in a proposal is the failure this store
-exists to prevent: `docs/governance/prd-and-openspec.md` draws the boundary.
+A testable statement left on a page or in a proposal, or a delta no page line
+marks, is the failure this store exists to prevent:
+`docs/governance/prd-and-openspec.md` draws the boundary.
 
 ## Related
 

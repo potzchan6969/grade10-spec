@@ -14,8 +14,8 @@ This repository is the versioned source of truth for product requirements and th
 
 | Need | Canonical location | Notes |
 | --- | --- | --- |
-| Durable requirements and component export contracts | `openspec/specs/<product>/<domain>/<capability>/spec.md` | The single source of truth. An implementing engineer builds from this alone. The four applications - `grade10-site`, `grade10-admin`, `zzz-site`, `zzz-admin` - and the `shared` layer are listed in `openspec/specs/README.md`. |
-| The product record: a capability's page, and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` | The manual (`pnpm manual`) renders these pages; each names its spec and carries the shape in prose, with problem, users, non-goals, measurement and decisions in its `Product decisions` block. Explanatory, never authoritative over a requirement. Page grammar: `docs/prds/guides/writing-the-manual.md`. |
+| Durable requirements and component export contracts | `openspec/specs/<product>/<domain>/<capability>/spec.md` | The production shape: what runs, rewritten only by a change's fold at archive. An implementing engineer builds from this alone. The four applications - `grade10-site`, `grade10-admin`, `zzz-site`, `zzz-admin` - and the `shared` layer are listed in `openspec/specs/README.md`. |
+| The product record: what a capability is and should be, and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` | Written first. The manual (`pnpm manual`) renders these pages; each names its spec and carries the shape in prose — what runs unmarked, 🚧 on what an active change delivers, ❓ on what nobody has confirmed — with problem, users, non-goals, measurement and decisions in its `Product decisions` block. Never restates a requirement. Page grammar: `docs/prds/guides/writing-the-manual.md`. |
 | Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a page or change cites as evidence; the manual renders them under References. Explanatory, never authoritative. See `docs/references/README.md`. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Who walks a capability, and what accepts their story | `user-journeys.md` beside its `spec.md` | The INVEST stories and the scenario ids that accept each. A capability nobody reaches on its own — a cross-cutting policy, a package contract, a surface only its makers reach — writes `**Walked by:** nobody` there in place of the stories; `pnpm check:manual` fails a capability with neither. |
@@ -26,7 +26,7 @@ This repository is the versioned source of truth for product requirements and th
 | Product component implementation | `packages/ui/src/blocks/` | Shared compound components, one directory per capability; the capability spec remains the export contract. |
 | Task group and owner format in `tasks.md` | `docs/governance/task-ownership.md` | Parsed independently by tooling in this repository and in the application repository. |
 
-If a statement is testable, it belongs in `openspec/specs/` and nowhere else. A PRD is the capability's manual page: it holds only what a requirement cannot carry, and names its capability spec rather than restating it. Where the two disagree, the spec is correct.
+If a statement is testable, it belongs in `openspec/specs/` and nowhere else, reached through a change's delta. A PRD is the capability's manual page, written before the change: it states the outcome in the reader's words, marked 🚧 or ❓ where it is not yet running, holds what a requirement cannot carry, and names its capability spec rather than restating it. Where an unmarked line and the spec disagree, the spec is correct.
 
 Read [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) for the required maintenance lifecycle and a format-selection guide.
 
@@ -52,10 +52,11 @@ The journeys are their own file beside each `spec.md`, never a `## User journeys
 
 For a new product feature:
 
-1. Inspect the relevant capability in `openspec/specs/`, active OpenSpec changes, and any related PRD.
-2. Write the requirements as an OpenSpec change carrying deltas against `openspec/specs/<product>/<domain>/<capability>/spec.md`. Its proposal must identify affected component exports and consumer apps.
-3. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. It lands in the capability page's `Product decisions` block; skip it when there is no such judgment.
-4. Keep task checkboxes accurate as work lands; fold accepted deltas into `openspec/specs/`, then archive under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
+1. Read the capability's page in `docs/prds/`, the active OpenSpec changes on its spec, and the capability in `openspec/specs/`.
+2. Mark the pages the feature touches: one 🚧 line per outcome, ❓ on what is still open, and the decisions the feature turns on. An active change already folding the same requirement is extended or superseded, never doubled.
+3. Write the requirements as an OpenSpec change carrying deltas derived from those lines against `openspec/specs/<product>/<domain>/<capability>/spec.md`, linking every page it marked. Its proposal must identify affected component exports and consumer apps.
+4. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. It lands in the capability page's `Product decisions` block; skip it when there is no such judgment.
+5. Keep task checkboxes accurate as work lands; fold accepted deltas into `openspec/specs/`, take the 🚧 marks off the lines the change delivered, then archive under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
 
 Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories, from `openspec new change` to archive.
 
