@@ -20,5 +20,5 @@
 **Accepted by:**
 
 - `grade10-site-auction-account-record-SC-13` — Unwatching leaves the bid alone
-- `grade10-site-auction-account-record-SC-35` — A bid bookmarks without a separate Watch
-- `grade10-site-auction-account-record-SC-36` — The bid-alerts toast is once per lot
+- `grade10-site-auction-account-record-SC-45` — A bid bookmarks without a separate Watch
+- `grade10-site-auction-account-record-SC-46` — The bid-alerts toast is once per lot

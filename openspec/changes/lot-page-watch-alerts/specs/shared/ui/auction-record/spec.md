@@ -66,14 +66,14 @@ nothing.
 - **THEN** the row announces the change once, in the supplied wording
 - **AND** a row supplied without that copy announces nothing
 
-#### Scenario: shared-ui-auction-record-SC-11 - A locked watch control does not report
+#### Scenario: shared-ui-auction-record-SC-14 - A locked watch control does not report
 
 - **GIVEN** a `WatchButton` told it is watched and locked
 - **WHEN** it renders
 - **THEN** it shows Watching and is not activatable
 - **AND** it does not report a press
 
-#### Scenario: shared-ui-auction-record-SC-12 - Watch confirmation announces after the application confirms
+#### Scenario: shared-ui-auction-record-SC-15 - Watch confirmation announces after the application confirms
 
 - **GIVEN** a `WatchButton` supplied with watch confirmation copy including an
   action label
