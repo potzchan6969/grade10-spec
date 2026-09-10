@@ -559,7 +559,9 @@ the manual mirrors: it renders as a loud broken card and the deployed site
 stays up and points at it. A gate that refused to publish over one would say
 the opposite, and would hand a store conflict the power to stop every later
 page from reaching the site. Lint has already failed the pull request that
-wrote it. The rules:
+wrote it — its step runs whatever Biome made of the same job, because a
+family enforced only where an unrelated formatting error can starve it is a
+family enforced nowhere. The rules:
 
 - every page parses and is canonical
 - every reference resolves: `spec` ids to a durable spec, `changes` ids to

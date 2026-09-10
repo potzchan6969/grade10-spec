@@ -99,9 +99,14 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
       # Last, so a manual page that has drifted never stops Biome from
-      # committing its own fixes first.
+      # committing its own fixes first — but never skipped when Biome fails.
+      # These two are the only gate the store families have now that the
+      # deploy runs page rules alone, and a job that stops at an unrelated
+      # `noUselessFragments` would leave them enforced nowhere at all.
       - name: Check manual
+        if: ${{ !cancelled() }}
         run: pnpm run check:manual
 
       - name: Check diagrams
+        if: ${{ !cancelled() }}
         run: pnpm run diagrams:check
