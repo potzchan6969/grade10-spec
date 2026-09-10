@@ -111,8 +111,8 @@ function OpenMarks({ marks }: { marks: OpenMark[] }) {
               </Link>
             </Text>
             <ul className="mt-1 ml-4 list-disc space-y-1 marker:text-border-strong">
-              {list.map((mark, at) => (
-                <li key={`${mark.where?.anchor ?? ""}:${at}`}>
+              {list.map((mark) => (
+                <li key={`${mark.where?.anchor ?? ""}:${mark.text}`}>
                   <Text as="span" size="sm">
                     <InlineMarkdown text={mark.text} />
                   </Text>
