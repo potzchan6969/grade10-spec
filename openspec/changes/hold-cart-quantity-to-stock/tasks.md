@@ -30,7 +30,7 @@ which are cover over shipped behaviour:
 - [x] 3.2 Add `remainingToSay(variant, asked)` — scarce first, else the count once the asked quantity has reached it — so the "asked for the last one" rule lives once for both surfaces
 - [x] 3.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 4. The browse listing (grade10)
+## 4. The browse listing (grade10) (owner: @sean)
 
 Needs group 1's bump and group 3's model.
 
