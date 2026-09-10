@@ -275,3 +275,44 @@ end.
 
 * Step 1 reads 100 products.
 * Step 3 reads 12 products.
+
+### grade10-site-store-product-listing-US8-TC3-1: A world's count in the panel is the listing it opens
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-listing-US-08
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| \<searched word\> | A word the catalogue holds cards for |
+| \<stocked world\> | A world holding 12 of the cards that word finds |
+
+**Pre-conditions:**
+
+* The catalogue in <test environment> holds cards whose titles carry <searched word>, 12 of them in <stocked world>.
+* The collector is on <grade10 browse listing url> with no narrowing applied.
+
+**Steps:**
+
+1. Search for <searched word>.
+2. Note the count the world filter shows beside <stocked world>.
+3. Select <stocked world>.
+4. Note the count above the grid.
+5. Scroll to the end of the listed cards and count them.
+
+**Expected Results:**
+
+* Step 2 reads 12 beside <stocked world>.
+* Step 4 reads 12 products.
+* Step 5 counts 12 cards.

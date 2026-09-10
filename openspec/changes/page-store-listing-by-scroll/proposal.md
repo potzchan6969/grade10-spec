@@ -29,6 +29,9 @@ than the shop gives them no reason to go on.
 - **The count is the whole narrowing** — how many cards the narrowed
   catalogue holds, not how many have been read; it moves when the narrowing
   moves and stays still while the collector scrolls
+- **One set, counted once** — the count above the grid and the count behind a
+  facet choice describe the same set, so a choice's count is the size of the
+  listing that choosing it opens
 - **Scrolling is how the listing pages, on the record** — reaching the end of
   what is shown adds the next cards below it, and no page number, next
   control or load-more button is offered anywhere on the surface
@@ -50,8 +53,9 @@ than the shop gives them no reason to go on.
   position in it, so returning from a product page starts at the top of the
   listing. Restoring depth is worth its own evidence
 - **A page size the collector picks** — the catalogue's own is the only one
-- **The facet counts** — their rule is settled and does not move: counted over
-  the whole narrowed set with the facet's own selection excluded
+- **The facet counts' rule** — it is settled and does not move: counted over
+  the whole narrowed set with the facet's own selection excluded. What moves is
+  that a searched listing obeys it, which the shop's advertised counts did not
 - **The auction listing** — it pages on its own terms and is not held to this
 
 ## Capabilities
@@ -71,10 +75,12 @@ than the shop gives them no reason to go on.
   already starts its walk again on a new narrowing. What moves is the number
   it renders above the grid, today the count of cards read
 - **The catalogue read** — a page answers whether more follow and a cursor,
-  and no total. Shopify's own search carries one for every narrowed, searched
-  and ordered path; a collection's products connection carries none, so a
+  and no total. Shopify's own search carries one for every narrowed and
+  ordered path; a collection's products connection carries none, so a
   collection's total is counted by walking, as the `latest` ordering already
-  walks
+  walks. A searched listing walks too: with free text in force the counts
+  Shopify advertises behind the facet choices describe a narrower set than its
+  own total, and those two numbers sit on one screen
 - **`@grade10/ui`** — unchanged. The count is a string the consumer supplies
   and the list header renders, and the header is already forbidden to derive
   it from the cards on the page

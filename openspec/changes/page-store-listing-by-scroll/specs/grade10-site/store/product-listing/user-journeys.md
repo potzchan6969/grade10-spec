@@ -28,3 +28,4 @@ end.
 
 - `grade10-site-store-product-listing-SC-27` — The count is the set, not what was read
 - `grade10-site-store-product-listing-SC-28` — The count follows the narrowing
+- `grade10-site-store-product-listing-SC-30` — A choice's count is the listing it opens

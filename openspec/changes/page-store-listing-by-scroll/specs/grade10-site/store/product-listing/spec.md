@@ -9,6 +9,7 @@
 - A count of the whole set
   - The narrowing's size: the count says how many cards the narrowed catalogue holds, so a collector knows whether to go on
   - Still while scrolling: the count moves when the narrowing moves and at no other time
+  - One set in both places: a choice's count in the panel is the size of the listing choosing it opens
 
 ## ADDED Requirements
 
@@ -93,6 +94,11 @@ This is the same rule the facet counts are held to: a count on this surface is
 the catalogue's own over the whole set the query narrows to, and is never
 counted from the cards on the page.
 
+Both counts SHALL describe one set. The count behind a facet choice SHALL be
+the number of cards the listing says when that choice is applied and nothing
+else about the query changes — whether or not the collector has searched for a
+word.
+
 #### Scenario: grade10-site-store-product-listing-SC-27 - The count is the set, not what was read
 
 - **GIVEN** a narrowed set the catalogue holds one hundred cards for, listed
@@ -107,3 +113,11 @@ counted from the cards on the page.
 - **GIVEN** a catalogue of one hundred cards, twelve of them in one world
 - **WHEN** a collector narrows the listing to that world
 - **THEN** the listing says twelve cards, before any further page is read
+
+#### Scenario: grade10-site-store-product-listing-SC-30 - A choice's count is the listing it opens
+
+- **GIVEN** a collector who has searched for a word, and a world the panel
+  counts twelve behind
+- **WHEN** they apply that world
+- **THEN** the listing says twelve cards
+- **AND** the listing lists twelve cards as they read to the end of it
