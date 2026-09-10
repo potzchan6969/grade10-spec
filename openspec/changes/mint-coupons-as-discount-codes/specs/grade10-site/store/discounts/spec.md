@@ -46,9 +46,13 @@ draft order's lines for either.
 ### Requirement: A draft order carries at most one discount code
 
 A draft order SHALL carry at most one discount code — a typed discount
-code, an order coupon, a product coupon, or a gift. A checkout eligible for
-more than one SHALL have the collector choose exactly one; none SHALL be
-applied automatically or stacked with another.
+code, an order coupon, a product coupon, or a gift — however the coupon
+reaches the order, whether typed as a code or redeemed directly as a
+reward. A checkout eligible for more than one SHALL have the collector
+choose exactly one; none SHALL be applied automatically or stacked with
+another. This is the durable requirement for `grade10-site/loyalty/programme`'s "a
+coupon is the order's one discount" too — one requirement, enforced here,
+not restated in that capability's own delta.
 
 #### Scenario: grade10-site-store-discounts-SC-03 - A checkout eligible for two coupons asks the collector to choose
 
