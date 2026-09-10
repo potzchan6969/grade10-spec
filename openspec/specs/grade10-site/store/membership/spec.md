@@ -1,12 +1,11 @@
-# Membership — delta
+# grade10-site/store/membership Specification
 
 ## Purpose
-
 Connects a Grade10 member to the commerce provider and to the physical
 store: the guaranteed commerce customer behind every member, in-store
-identification and the staff till session, points becoming discount codes
-either channel accepts, and physical-store orders earning through
-attribution.
+identification and the staff till session, points coming off as one
+order-level discount either channel accepts, and physical-store orders
+earning through attribution.
 
 ## Feature set
 
@@ -17,13 +16,13 @@ attribution.
 - Till identification
   - Dynamic code or email: a replay is refused; a miss discloses nothing
 - Spending
-  - Staff session: a double tap spends once; points become a single-use money-off code
+  - Staff session: a double tap spends once; points come off as one order-level discount, no code minted
 - Attribution
   - One recording: webhook and sweep converge; a wrong claim is one action to undo
 - Degradation
   - Sale always possible: the kill switch stops spending, not selling
 
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Every member has exactly one commerce customer
 
@@ -150,71 +149,63 @@ rate-limited.
 
 Inside a till session, staff SHALL see the member's display name, tier,
 redeemable balance, qualifying-window progress, tier renewal and
-balance-lapse dates, recent activity, affordable rewards, open discount
-codes, and pending collections — and SHALL be able to redeem points against the
-current sale, apply an open code, cancel the last redemption, and confirm
-a collection. Cancelling is the programme's operator reversal reached from
-the till: it SHALL require the permission that action requires, be recorded
-in the operator log like any other, and be refused on anything already
-consumed. Staff holding no such permission SHALL see it refused, not hidden. Spending SHALL present a read-back facing the member —
+balance-lapse dates, recent activity, open coupons, and pending
+collections — and SHALL be able to redeem points against the current sale,
+apply a coupon, and confirm a collection. Undoing a spend
+before tender SHALL simply drop the discounts from the sale, since nothing
+is debited until the order pays; reversing a completed spend SHALL stay an
+operator's action from the console, never the till. Spending SHALL present a read-back facing the member —
 points spent, money still due, balance after, points this sale will
 earn, computed by the platform — before it commits.
 
 Submitting the same spend twice SHALL cost once and answer the same both
-times. Every staff-assisted redemption and every collection SHALL notify
-the member immediately with the points, amount, and location — never the
-code itself. A cancel SHALL be refused once an order carrying the code is
-seen; a cancel that slips through before the order is visible SHALL be
-detected and surfaced for claw-back, never silent.
+times. Every collection SHALL notify the member immediately with the
+points, amount, and location.
 
 #### Scenario: grade10-site-store-membership-SC-12 - A double tap spends once
 
 - **WHEN** staff submit the same spend twice in quick succession
 - **THEN** exactly one redemption is recorded
-- **AND** both submissions answer with the same discount code
+- **AND** both submissions answer the same
 
-#### Scenario: grade10-site-store-membership-SC-13 - The member's phone is the monitor
+#### Scenario: grade10-site-store-membership-SC-13 - The member hears about a collection through the till
 
-- **WHEN** points are spent or a reward collected through a till session
+- **WHEN** a reward is collected through a till session
 - **THEN** the member is notified immediately with points, amount, and
   location
-- **AND** the notification never contains the code
 
-#### Scenario: grade10-site-store-membership-SC-14 - A cancel after tender is caught
+### Requirement: Points come off as one order-level discount either channel accepts
 
-- **WHEN** a redemption is cancelled and an order carrying its code
-  appears afterwards
-- **THEN** the mismatch is surfaced for an operator to claw back
-- **AND** it is never silently ignored
+Redeeming points for money off SHALL promise a single order-level discount
+named "Points", for a fixed amount, on the member's own draft order online
+or their cart at the till — never as a minted code. The promise SHALL sit
+outside the order's own one-coupon limit, so a reward coupon and a points
+discount can both apply to the same order. Nothing SHALL be deducted or
+held when the promise is made; the balance SHALL be debited once, when the
+order is paid, for what the provider actually applied — never more than
+promised, and scaled down where the provider applied less or the balance
+fell short meanwhile. An order abandoned, replaced, or undone before
+payment SHALL debit nothing. A promise larger than the order can carry
+SHALL be trimmed to what the order shows rather than refused.
 
-### Requirement: Points become a single-use money-off code either channel accepts
+#### Scenario: grade10-site-store-membership-SC-16 - A promise larger than the cart is trimmed, not refused
 
-Redeeming points for money off SHALL produce a discount code scoped to
-the member's own commerce customer, single-use, for a fixed amount of
-minor units, requiring a purchase of at least its own value, and refusing
-to combine with another order-level discount. The code SHALL apply
-natively at online checkout and at the till. An unused code SHALL stay
-valid until its own validity ends and SHALL be listed to the member and
-in their till session. When a member's pairing moves to a different
-customer, their outstanding codes SHALL be re-scoped to it.
+- **WHEN** the promised points amount is more than the order carries
+- **THEN** it is trimmed to what the order shows
+- **AND** the purchase completes at the trimmed amount
 
-#### Scenario: grade10-site-store-membership-SC-15 - Another member cannot use the code
+#### Scenario: grade10-site-store-membership-SC-72 - A points discount and a reward coupon apply together
 
-- **WHEN** a code is presented on a purchase by anyone but the member it
-  was minted for
-- **THEN** it is refused
+- **WHEN** an order carries both a reward coupon and a points discount
+- **THEN** both apply
+- **AND** neither is refused for the other's presence
 
-#### Scenario: grade10-site-store-membership-SC-16 - A big code on a small cart is refused, not burned
+#### Scenario: grade10-site-store-membership-SC-73 - The balance moves once, when the order is paid
 
-- **WHEN** a code exceeds the purchase total
-- **THEN** it does not apply and remains usable
-- **AND** the purchase can complete without it
-
-#### Scenario: grade10-site-store-membership-SC-17 - One points code per order
-
-- **WHEN** a second points code is presented on an order already carrying
-  one
-- **THEN** it is refused
+- **WHEN** a points promise's order is paid
+- **THEN** the balance is debited once, for what the provider actually
+  applied
+- **AND** an abandoned or undone promise debits nothing
 
 ### Requirement: Physical-store orders are recorded exactly once
 
@@ -291,7 +282,7 @@ refused earning loudly rather than priced from a guess.
 
 #### Scenario: grade10-site-store-membership-SC-25 - Points spent lower the same order's earning
 
-- **WHEN** a points discount code pays part of an order
+- **WHEN** a points discount pays part of an order
 - **THEN** earning prices only the goods amount after that discount
 
 ### Requirement: The till degrades to a normal sale, never a blocked one
@@ -314,3 +305,4 @@ the rest later.
 - **WHEN** the manager disables staff-typed-email spending
 - **THEN** identification by the member card still spends
 - **AND** email lookup still reads
+

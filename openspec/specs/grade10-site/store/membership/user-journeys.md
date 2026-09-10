@@ -21,7 +21,7 @@
 
 **As a** member,
 **I want** a dynamic code or my email to identify me, and staff to spend my points once,
-**so that** a replayed code is refused, a miss discloses nothing, and a cancel after tender is caught.
+**so that** a replayed code is refused, a miss discloses nothing, and points settle once whether paid online or at the till.
 
 **Accepted by:**
 
@@ -29,11 +29,10 @@
 - `grade10-site-store-membership-SC-10` — An email miss discloses nothing
 - `grade10-site-store-membership-SC-11` — A lookup is recorded
 - `grade10-site-store-membership-SC-12` — A double tap spends once
-- `grade10-site-store-membership-SC-13` — The member's phone is the monitor
-- `grade10-site-store-membership-SC-14` — A cancel after tender is caught
-- `grade10-site-store-membership-SC-15` — Another member cannot use the code
-- `grade10-site-store-membership-SC-16` — A big code on a small cart is refused, not burned
-- `grade10-site-store-membership-SC-17` — One points code per order
+- `grade10-site-store-membership-SC-13` — The member hears about a collection through the till
+- `grade10-site-store-membership-SC-16` — A promise larger than the cart is trimmed, not refused
+- `grade10-site-store-membership-SC-72` — A points discount and a reward coupon apply together
+- `grade10-site-store-membership-SC-73` — The balance moves once, when the order is paid
 - `grade10-site-store-membership-SC-26` — The kill switch stops spending, not selling
 - `grade10-site-store-membership-SC-27` — Email-assisted spending can be stopped alone
 
