@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10T11:29:31.842Z",
+  "generatedAt": "2026-09-10T13:19:02.753Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -22,6 +22,7 @@
     "Dialog": "ok",
     "Dialog Header": "skipped",
     "Dropdown Menu": "ok",
+    "Dropdown Menu Group Label": "warn",
     "Dropdown Menu Item": "skipped",
     "Empty State": "ok",
     "Footer": "skipped",
@@ -785,6 +786,16 @@
     "6338-3803": "Toast",
     "6507-5463": "Auction Watchlist",
     "6551-5889": "image 1",
+    "6554-5891": "Autocomplete",
+    "6554-5892": "Search Input",
+    "6554-5905": "Dropdown Menu",
+    "6554-5962": "Dropdown Menu Group Label",
+    "6554-5963": "Dropdown Menu",
+    "6554-6126": "Autocomplete",
+    "6554-6127": "Search Input",
+    "6554-6128": "Dropdown Menu",
+    "6554-6227": "Search Input",
+    "6554-6228": "Dropdown Menu",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -828,6 +839,9 @@
     ],
     "Combobox": [
       "Combobox: no code component (looked for src/components/**/combobox.tsx or combobox.tsx)"
+    ],
+    "Dropdown Menu Group Label": [
+      "Dropdown Menu Group Label: no code component (looked for src/components/**/dropdownmenugrouplabel.tsx or dropdownmenugrouplabel.tsx)"
     ],
     "Google Icon": [
       "Google Icon: no code component (looked for src/components/**/googleicon.tsx or googleicon.tsx)"
