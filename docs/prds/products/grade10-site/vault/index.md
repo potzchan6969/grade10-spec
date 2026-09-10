@@ -89,10 +89,7 @@ valued. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 e-signature vendor; online identity verification; a second custodian; storage
 fees; multi-item cases; renewing a live loan.
 
-**Measurement.** Five signals, all answered by the ledger and the position:
-financed cases per week, redemption rate, days from submission to payout,
-days from a money row's value date to its recording, and loans outstanding at
-a date.
+**Measurement.** On [Analytics](/p/grade10-site/analytics#vault).
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

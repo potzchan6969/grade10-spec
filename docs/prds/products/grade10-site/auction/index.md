@@ -122,13 +122,7 @@ invoices, refunds, disputes, or a second payment provider. Collecting a phone
 number Grade10 does not already hold. Store favourites — the term is retired;
 watching an auction lot is its own capability.
 
-**Measurement.**
-
-| Signal | Definition | Owner |
-| --- | --- | --- |
-| Completed-auction payment rate | Closed listings whose winner reaches paid state, divided by closed listings with a winner. | Product and finance |
-| Time to ship | Elapsed time from paid to shipment started, for listings that reach shipped. | Operations |
-| Bid integrity incidents | Accepted bid outcomes later found to conflict with the recorded close or highest valid bid. | Engineering and operations |
+**Measurement.** On [Analytics](/p/grade10-site/analytics#auction).
 
 **Decisions.**
 

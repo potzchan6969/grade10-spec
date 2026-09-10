@@ -47,11 +47,7 @@ collector who means to buy goes on to the product's own page for the cart.
 **Not in scope.** Selling from the row — the shop window shows, and the
 product's own page sells.
 
-**Measurement.**
-
-| Signal | Definition | Owner |
-| --- | --- | --- |
-| Row-led product views | Share of front-door sessions that open a product page from the merchandised row. Unmeasured; the first delivery sets the baseline. | Product |
+**Measurement.** On [Analytics](/p/grade10-site/analytics#store).
 
 **Decisions.**
 

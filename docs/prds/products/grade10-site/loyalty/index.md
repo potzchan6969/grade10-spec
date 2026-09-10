@@ -53,31 +53,10 @@ and giving the top tier to a named person with a reason.
 - **Cross-brand membership** — ZZZ buyers are a separate population with no
   programme
 
-## Measurement
-
-| Signal | Definition | Owner |
-| --- | --- | --- |
-| Repeat purchase rate | Share of buyers with a second purchase within 90 days, members against non-members | Product |
-| Physical attribution | Share of physical-store transactions attributed to a member | Product |
-| Staff-assisted redemption | Staff-assisted redemptions completed per week | Product |
-| Tier progression | Members reaching Gold per month | Product |
-| Tier retention | Share of Gold members who earn the retention threshold inside their validity period | Product |
-| Point redemption | Share of earned points redeemed before the balance expires | Product |
-| Coupon usage | Share of issued codes used before their own validity ends | Product |
-| Arriving by pass | Share of counter identifications made from a wallet pass, split Google against Apple | Product |
-| Codes that never landed | Counter identifications that expired or replayed before staff scanned them; a Google pass drives this to zero | Product |
-| Spend after an Apple identification | Apple identifications followed by a spend from the card on the site in the same visit — the number that would reopen the Apple pass spending nothing | Product |
-| Points outstanding | Unexpired, unredeemed points, plus the money out in unused codes, as a liability | Finance |
-| Earning delivery | Money events awaiting delivery to the programme, and their age | Engineering |
-
-At HKD 1 a point the programme returns 10% of spend at Silver, 12% at Gold and
-17% at Black — generous against retail norms, and the one input that decides
-whether the catalog's prices and the reported liability are sustainable.
-Activity-based expiry makes the outstanding balance stickier: a member who
-buys once a year never loses a point.
-
 ## References
 
+- [Analytics](/p/grade10-site/analytics#membership) — what the programme is
+  measured by, and where each number is read from
 - [The programme reference](/references/grade10-loyalty-program) — the owner's
   draft the programme implements
 - [The Shopify membership and POS notes](/references/shopify-membership-pos) —

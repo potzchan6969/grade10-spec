@@ -11,6 +11,7 @@ groups:
     - grade10-site/doc-sign
     - grade10-site/finance
     - grade10-site/site
+    - grade10-site/analytics
   ZZZ:
     - zzz-site/site
   Shared:
