@@ -8,7 +8,9 @@
 - Coupon settlement
   - One path for every reward: a physical reward settles as an ordinary
     sale, its coupon at 100% off
-  - One discount at a time: a reward coupon holds the order's single slot
+  - One discount at a time: a reward coupon holds the order's single slot,
+    per `grade10-site/store/discounts` (delivered by
+    `mint-coupons-as-discount-codes`, not by this change)
 - Operator permissions
   - Cancellation stands alone: gated by its own permission, not point
     movement
@@ -96,9 +98,10 @@ coupon, used or unused, back into points.
 
 A coupon SHALL be usable in the online store and at the counter, applied to
 the order automatically — no separate code is given to the member to type.
-A coupon SHALL hold the order's one discount at a time, the same slot any
-other coupon holds. A coupon SHALL NOT apply to an auction purchase, and
-points SHALL NOT be spent against one.
+A coupon SHALL NOT apply to an auction purchase, and points SHALL NOT be
+spent against one. That a coupon holds the order's one discount slot is a
+`grade10-site/store/discounts` requirement (`mint-coupons-as-discount-codes`
+delivers it), not restated as a scenario here.
 
 A member SHALL be able to read the coupons they hold, each with its code,
 what it is for, its validity period, and whether it has been used.
@@ -126,13 +129,6 @@ what it is for, its validity period, and whether it has been used.
 - **WHEN** a member attempts to pay for an auction purchase with points or
   with a coupon
 - **THEN** it is refused
-
-#### Scenario: grade10-site-loyalty-programme-SC-163 - A coupon is the order's one discount
-
-- **WHEN** a member attempts to apply a second reward coupon to an order
-  that already carries one
-- **THEN** the second coupon is refused
-- **AND** a points payment can still apply alongside the coupon already held
 
 ## MODIFIED Requirements
 

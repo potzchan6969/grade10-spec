@@ -61,11 +61,18 @@ Metric: share of redemptions used at the till within 30 days of being bought.
   reward definition instead of a fixed-amount default.
 - Loyalty-admin's reward form gains kind, discount and scope fields.
 - The POS extension's collection-confirm surface and the fulfilment queue it
-  serves are removed.
+  serves are removed, once `mint-coupons-as-discount-codes` task group 1
+  ships its replacement guard — see this change's tech-design.md.
 - Design decisions this change builds on:
   `openspec/changes/archive/2026-09-10-revise-loyalty-programme-rules/tech-design.md`
   and
   `openspec/changes/archive/2026-09-10-add-shopify-membership-pos/tech-design.md`.
+- Dependency: `mint-coupons-as-discount-codes` owns "a coupon is the
+  order's one discount" end to end (including the reward's own `couponId`
+  path) and mints a `gift` coupon as a real, single-use Shopify Discount —
+  this change's task group 3 (physical-reward settlement) and task group 6
+  (staff-assisted notice) both build on that work rather than duplicating
+  or racing it; see tasks.md.
 
 ## References
 

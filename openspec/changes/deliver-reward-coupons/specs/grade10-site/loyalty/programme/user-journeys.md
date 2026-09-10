@@ -3,7 +3,7 @@
 ### grade10-site-loyalty-programme-US-07: Member redeems any reward as one coupon
 
 **As a** member,
-**I want** every reward I redeem — money off, a gift, or a physical item — to become a coupon with its own kind, discount and scope, holding the order's one discount slot,
+**I want** every reward I redeem — money off, a gift, or a physical item — to become a coupon with its own kind, discount and scope,
 **so that** a physical reward settles like an ordinary purchase and I never wait for a separate collection.
 
 **Accepted by:**
@@ -15,7 +15,11 @@
 - `grade10-site-loyalty-programme-SC-156` — A gift adds a free line for its own variant
 - `grade10-site-loyalty-programme-SC-157` — A gift below its minimum spend does not apply
 - `grade10-site-loyalty-programme-SC-159` — A physical reward's coupon takes 100% off its own variant
-- `grade10-site-loyalty-programme-SC-163` — A coupon is the order's one discount
+
+The order's-one-discount-slot behavior this journey used to cite
+(`SC-163`) is accepted by `grade10-site/store/discounts`'s own scenario
+instead — `mint-coupons-as-discount-codes` delivers it, covering a reward
+coupon as one case of "any coupon," not a second copy of the rule.
 
 ### grade10-site-loyalty-programme-US-08: Member sees what a channel does to their points, before and after
 
