@@ -225,5 +225,7 @@ accepts a fabricated default label.
 
 ## Open Questions
 
-None. Badge source and omission behavior, variant compatibility, route
-ownership, and validation boundaries were settled before implementation.
+- ❓ **Typed optional product facts** — the Store contract owner has not yet
+  settled the exact optional field shape and owning change for shipping guidance
+  and pickup location. Keep group 4 unclaimed until that contract lands or
+  `grade10-site-store-product-page-SC-15` is revised.
