@@ -24,7 +24,7 @@ which are cover over shipped behaviour:
 - [x] 2.2 Say on the two site pages that a cart control stops where the shop's count stops and says how many are left when it does, and record in `product-listing.md`'s `Product decisions` block why the cap stays advisory, why one threshold serves every surface, and why a count is said as news rather than as standing pressure
 - [x] 2.3 Verify: `pnpm check:manual`
 
-## 3. The store's product model (grade10)
+## 3. The store's product model (grade10) (owner: @sean)
 
 - [ ] 3.1 Add `sellableQuantity` beside `scarceQuantity` — the finite positive count of a sellable variant, null otherwise — and read `ProductBuyBox`'s ceiling from it rather than inline, holding *The page stops at what the shop has* (`SC-19`), *A shop that counts nothing stops nothing* (`SC-20`) and *Another grade brings its own ceiling* (`SC-21`)
 - [ ] 3.2 Add `remainingToSay(variant, asked)` — scarce first, else the count once the asked quantity has reached it — so the "asked for the last one" rule lives once for both surfaces
