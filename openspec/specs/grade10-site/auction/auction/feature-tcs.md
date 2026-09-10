@@ -1,7 +1,7 @@
 # grade10-site/auction/auction Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-09-08, tcs-rules r3.0
+**Status:** approved
+**Reviewed:** 2026-09-10, tcs-rules r3.0
 
 ## grade10-site-auction-auction-US2: Collector places a card-backed bid inside the window
 
@@ -172,7 +172,7 @@ A published listing with extension window 1800 seconds, extension duration 1800 
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -211,7 +211,7 @@ A published listing with extension window 1800 seconds, extension duration 1800 
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -248,7 +248,7 @@ A published listing with extension window 1800 seconds, extension duration 1800 
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -279,7 +279,7 @@ A published listing with extension window 1800 seconds, extension duration 1800 
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -317,7 +317,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -346,7 +346,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
