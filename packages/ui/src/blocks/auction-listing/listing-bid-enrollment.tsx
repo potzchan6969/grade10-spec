@@ -357,16 +357,18 @@ function EnrollmentSetupSheet({
         <DialogHeader showCloseButton={!linking}>
           <DialogTitle>{copy.getReadyToBid}</DialogTitle>
         </DialogHeader>
-        <SetupSheetBody
-          ageAttested={ageAttested}
-          copy={copy}
-          errorMessage={errorMessage}
-          linking={linking}
-          onAgeAttestedChange={setAgeAttested}
-          paymentField={paymentField}
-          scrollsPaymentField
-          stripePaymentMethodField={stripePaymentMethodField}
-        />
+        <DialogBody className="min-h-0">
+          <SetupSheetBody
+            ageAttested={ageAttested}
+            copy={copy}
+            errorMessage={errorMessage}
+            linking={linking}
+            onAgeAttestedChange={setAgeAttested}
+            paymentField={paymentField}
+            scrollsPaymentField
+            stripePaymentMethodField={stripePaymentMethodField}
+          />
+        </DialogBody>
         <DialogFooter>{footer}</DialogFooter>
       </DialogContent>
     </Dialog>
