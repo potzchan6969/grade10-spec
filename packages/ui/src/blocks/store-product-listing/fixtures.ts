@@ -6,6 +6,7 @@ import type {
   AppliedFilter,
   FilterGroup,
   ProductSummary,
+  SearchSuggestionGroup,
   SortOption,
   UtilityLink,
 } from "./types";
@@ -101,6 +102,52 @@ const APPLIED_FILTERS: AppliedFilter[] = [
   { groupId: "types", optionId: "booster-box", label: "Booster Box" },
 ];
 
+/** Fixture hits for the listing search suggestion panel. */
+const SEARCH_SUGGESTIONS: SearchSuggestionGroup[] = [
+  {
+    id: "products",
+    label: "Products",
+    suggestions: [
+      {
+        id: "1",
+        label: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item 1",
+        imageSrc: IMAGE,
+        imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+      },
+      {
+        id: "2",
+        label: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item 2",
+        imageSrc: IMAGE,
+        imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+      },
+    ],
+  },
+  {
+    id: "filters",
+    label: "Filters",
+    suggestions: [
+      {
+        id: "worlds:pokemon",
+        label: "Pokémon",
+        trailing: createElement(
+          Badge,
+          { size: "sm", variant: "outline" },
+          "World",
+        ),
+      },
+      {
+        id: "types:booster-box",
+        label: "Booster Box",
+        trailing: createElement(
+          Badge,
+          { size: "sm", variant: "outline" },
+          "Type",
+        ),
+      },
+    ],
+  },
+];
+
 export {
   APPLIED_FILTERS,
   FILTER_GROUPS,
@@ -109,6 +156,7 @@ export {
   PRODUCT_BADGES,
   PRODUCT_CARD_CART_COPY,
   PRODUCTS,
+  SEARCH_SUGGESTIONS,
   SELECTION,
   SORT_OPTIONS,
   UTILITY_LINKS,

@@ -13,6 +13,8 @@ import type {
   FilterGroup,
   FilterSelection,
   ProductSummary,
+  SearchSuggestion,
+  SearchSuggestionGroup,
   SortOption,
   UtilityLink,
 } from "./types";
@@ -36,6 +38,12 @@ type ProductBrowseProps = {
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   onSearchClear?: () => void;
+  searchSuggestions?: readonly SearchSuggestionGroup[];
+  onSearchCommit?: (value: string) => void;
+  onSearchSuggestionSelect?: (
+    suggestion: SearchSuggestion,
+    groupId: string,
+  ) => void;
   groups: AsyncState<readonly FilterGroup[]>;
   selection?: FilterSelection;
   onFilterChange?: (
@@ -88,6 +96,9 @@ function ProductBrowse({
   searchValue,
   onSearchChange,
   onSearchClear,
+  searchSuggestions,
+  onSearchCommit,
+  onSearchSuggestionSelect,
   groups,
   selection = {},
   onFilterChange,
@@ -120,6 +131,9 @@ function ProductBrowse({
         onGroupExpand={onGroupExpand}
         onSearchChange={onSearchChange}
         onSearchClear={onSearchClear}
+        onSearchCommit={onSearchCommit}
+        onSearchSuggestionSelect={onSearchSuggestionSelect}
+        searchSuggestions={searchSuggestions}
         searchValue={searchValue}
         selection={selection}
         utilityLinks={utilityLinks}

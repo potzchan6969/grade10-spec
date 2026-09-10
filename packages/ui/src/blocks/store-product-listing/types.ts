@@ -78,6 +78,24 @@ type UtilityLink = {
   href: string;
 };
 
+/** One row under the listing search field. */
+type SearchSuggestion = {
+  id: string;
+  label: ReactNode;
+  /** Optional thumb for a product row. */
+  imageSrc?: string;
+  imageAlt?: string;
+  /** Optional trailing content — e.g. a facet-kind badge on a filter row. */
+  trailing?: ReactNode;
+};
+
+/** A labelled group of search suggestions the consumer supplies. */
+type SearchSuggestionGroup = {
+  id: string;
+  label: ReactNode;
+  suggestions: readonly SearchSuggestion[];
+};
+
 export type {
   AppliedFilter,
   AsyncAction,
@@ -86,6 +104,8 @@ export type {
   FilterOption,
   FilterSelection,
   ProductSummary,
+  SearchSuggestion,
+  SearchSuggestionGroup,
   SortOption,
   UtilityLink,
 };

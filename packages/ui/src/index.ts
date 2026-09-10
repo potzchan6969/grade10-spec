@@ -424,6 +424,8 @@ export type {
   FilterOption,
   FilterSelection,
   ProductSummary,
+  SearchSuggestion,
+  SearchSuggestionGroup,
   SortOption,
   UtilityLink,
 } from "./blocks/store-product-listing/types";
