@@ -1,5 +1,71 @@
 import type { CartDrawerCopy, CartItemSummary, HeldPromoCode } from "./types";
 
+/** Subtotal used by cart drawer Storybook stubs. */
+const STORY_CART_SUBTOTAL_HKD = 42700;
+/** Max points bill-credit in Storybook stubs (1 pt = HK$1). */
+const STORY_POINTS_MAX_HKD = 1200;
+/** Sale subtotal after the storewide −10% special sale. */
+const STORY_SPECIAL_SALE_SUBTOTAL_HKD = 38430;
+/** Extra cut when SAVE20 stacks on the sale subtotal (折上折). */
+const STORY_STACKED_PROMO_CUT_HKD = 7686;
+/** Cut when SAVE20 replaces the site sale (20% of list). */
+const STORY_REPLACE_PROMO_CUT_HKD = 8540;
+
+function parseStoryMoney(value: string): number {
+  return Number(String(value).replace(/[^0-9.]/g, "")) || 0;
+}
+
+function formatStoryHkd(amount: number): string {
+  return `HK$${amount.toLocaleString("en-HK", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+}
+
+/** Credit/discount display — Unicode minus (U+2212), not ASCII hyphen. */
+function formatStoryCreditHkd(amount: number): string {
+  return `−${formatStoryHkd(amount)}`;
+}
+
+/**
+ * Storybook estimated total: subtotal minus applied promo discount and points
+ * credit. Keeps remove/apply handlers consistent across held codes and SAVE10.
+ */
+function storyCartEstimatedTotal(
+  promoDiscountAmount: string | null | undefined,
+  pointsCreditHkd: number | null | undefined,
+): string {
+  let total = STORY_CART_SUBTOTAL_HKD;
+  if (promoDiscountAmount) {
+    total -= parseStoryMoney(promoDiscountAmount);
+  }
+  if (pointsCreditHkd != null && pointsCreditHkd > 0) {
+    total -= pointsCreditHkd;
+  }
+  return formatStoryHkd(total);
+}
+
+/** Cut when the storewide −10% special sale is named in the footer. */
+const STORY_SITE_SALE_CUT_HKD = 4270;
+const STORY_SITE_SALE_AMOUNT = formatStoryCreditHkd(STORY_SITE_SALE_CUT_HKD);
+const STORY_SITE_SALE_LABEL = "Store sale (−10%)";
+const STORY_LIST_SUBTOTAL = formatStoryHkd(STORY_CART_SUBTOTAL_HKD);
+const STORY_SPECIAL_SALE_SUBTOTAL = formatStoryHkd(
+  STORY_SPECIAL_SALE_SUBTOTAL_HKD,
+);
+const STORY_STACKED_PROMO_AMOUNT = formatStoryCreditHkd(
+  STORY_STACKED_PROMO_CUT_HKD,
+);
+const STORY_REPLACE_PROMO_AMOUNT = formatStoryCreditHkd(
+  STORY_REPLACE_PROMO_CUT_HKD,
+);
+const STORY_STACKED_TOTAL = formatStoryHkd(
+  STORY_SPECIAL_SALE_SUBTOTAL_HKD - STORY_STACKED_PROMO_CUT_HKD,
+);
+const STORY_REPLACE_TOTAL = formatStoryHkd(
+  STORY_CART_SUBTOTAL_HKD - STORY_REPLACE_PROMO_CUT_HKD,
+);
+
 const DEFAULT_CART_COPY: CartDrawerCopy = {
   header: {
     title: "Cart",
@@ -85,6 +151,38 @@ const SAMPLE_HELD_PROMO_CODES: readonly HeldPromoCode[] = [
 const SAMPLE_HELD_INAPPLICABLE_ONLY: readonly HeldPromoCode[] =
   SAMPLE_HELD_PROMO_CODES.filter((c) => !c.applicable);
 
+/**
+ * Held list while a non-combining site sale is on — SAVE20 is refused by
+ * Shopify combine rules in the refuse scenario.
+ */
+const SAMPLE_HELD_WITH_SITE_SALE_BLOCK: readonly HeldPromoCode[] = [
+  {
+    id: "held-save20",
+    label: "SAVE20",
+    title: "20% off order",
+    detailLabel: "Use by 31 Dec 2026",
+    applicable: false,
+    inapplicableReason: "Cannot combine with the store sale on this order",
+  },
+  ...SAMPLE_HELD_PROMO_CODES.filter((c) => c.id !== "held-stack"),
+];
+
+/**
+ * Held list when SAVE20 may stack or replace the site sale — ticket Apply is live.
+ */
+const SAMPLE_HELD_WITH_SITE_SALE_STACKABLE: readonly HeldPromoCode[] = [
+  {
+    id: "held-save20",
+    label: "SAVE20",
+    title: "20% off order",
+    detailLabel: "Use by 31 Dec 2026",
+    applicable: true,
+  },
+  ...SAMPLE_HELD_PROMO_CODES.filter(
+    (c) => c.applicable && c.id !== "held-stack",
+  ),
+];
+
 const SAMPLE_CART_ITEMS: CartItemSummary[] = [
   {
     id: "item-1",
@@ -103,6 +201,36 @@ const SAMPLE_CART_ITEMS: CartItemSummary[] = [
     status: "default",
   },
 ];
+
+/**
+ * Storewide product special sale (−10%) on every line — compare-at is list
+ * price. List subtotal HK$42,700 → sale subtotal HK$38,430.
+ */
+const SPECIAL_SALE_CART_ITEMS: CartItemSummary[] = [
+  {
+    id: "item-1",
+    name: "1999 Pokémon Base Set #4 Charizard Holo PSA 10",
+    price: "HK$22,050.00",
+    originalPrice: "HK$24,500.00",
+    quantity: 1,
+    maxQuantity: 1,
+    status: "default",
+  },
+  {
+    id: "item-2",
+    name: "2000 Neo Genesis 1st Edition Lugia Holo #9 BGS 9.5",
+    price: "HK$16,380.00",
+    originalPrice: "HK$18,200.00",
+    quantity: 1,
+    maxQuantity: 3,
+    status: "default",
+  },
+];
+
+/** List prices for the same basket when a promo *replaces* the site sale. */
+const LIST_PRICE_CART_ITEMS: CartItemSummary[] = SAMPLE_CART_ITEMS.map(
+  (item) => ({ ...item }),
+);
 
 const OVERFLOW_CART_ITEMS: CartItemSummary[] = [
   ...SAMPLE_CART_ITEMS,
@@ -193,57 +321,80 @@ function applyTypedPromoInStories(
   return { ok: false, error: "This promo code is invalid" };
 }
 
-/** Subtotal used by cart drawer Storybook stubs. */
-const STORY_CART_SUBTOTAL_HKD = 42700;
-/** Max points bill-credit in Storybook stubs (1 pt = HK$1). */
-const STORY_POINTS_MAX_HKD = 1200;
-
-function parseStoryMoney(value: string): number {
-  return Number(String(value).replace(/[^0-9.]/g, "")) || 0;
-}
-
-function formatStoryHkd(amount: number): string {
-  return `HK$${amount.toLocaleString("en-HK", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
-
-/** Credit/discount display — Unicode minus (U+2212), not ASCII hyphen. */
-function formatStoryCreditHkd(amount: number): string {
-  return `−${formatStoryHkd(amount)}`;
-}
-
 /**
- * Storybook estimated total: subtotal minus applied promo discount and points
- * credit. Keeps remove/apply handlers consistent across held codes and SAVE10.
+ * Storybook stub for site-sale × typed-code combine modes.
+ * - `refuse` — SAVE20 rejected; site sale stays on lines
+ * - `stack` — SAVE20 cuts the post-sale subtotal; lines keep sale + compare-at
+ * - `replace` — site sale lifts; SAVE20 cuts list alone
  */
-function storyCartEstimatedTotal(
-  promoDiscountAmount: string | null | undefined,
-  pointsCreditHkd: number | null | undefined,
-): string {
-  let total = STORY_CART_SUBTOTAL_HKD;
-  if (promoDiscountAmount) {
-    total -= parseStoryMoney(promoDiscountAmount);
+function applySiteSalePromoInStories(
+  code: string,
+  mode: "refuse" | "stack" | "replace",
+):
+  | {
+      ok: true;
+      label: string;
+      amount: string;
+      total: string;
+      items: CartItemSummary[];
+      subtotal: string;
+    }
+  | { ok: false; error: string } {
+  const trimmed = code.trim().toUpperCase();
+  if (trimmed !== "SAVE20") {
+    return { ok: false, error: "This promo code is invalid" };
   }
-  if (pointsCreditHkd != null && pointsCreditHkd > 0) {
-    total -= pointsCreditHkd;
+  if (mode === "refuse") {
+    return {
+      ok: false,
+      error: "Cannot combine with the store sale on this order",
+    };
   }
-  return formatStoryHkd(total);
+  if (mode === "stack") {
+    return {
+      ok: true,
+      label: "SAVE20",
+      amount: STORY_STACKED_PROMO_AMOUNT,
+      total: STORY_STACKED_TOTAL,
+      items: SPECIAL_SALE_CART_ITEMS,
+      subtotal: STORY_SPECIAL_SALE_SUBTOTAL,
+    };
+  }
+  return {
+    ok: true,
+    label: "SAVE20",
+    amount: STORY_REPLACE_PROMO_AMOUNT,
+    total: STORY_REPLACE_TOTAL,
+    items: LIST_PRICE_CART_ITEMS,
+    subtotal: STORY_LIST_SUBTOTAL,
+  };
 }
 
 export {
+  applySiteSalePromoInStories,
   applyTypedPromoInStories,
   DEFAULT_CART_COPY,
   formatStoryCreditHkd,
   formatStoryHkd,
+  LIST_PRICE_CART_ITEMS,
   OVERFLOW_CART_ITEMS,
   parseStoryMoney,
   SAMPLE_CART_ITEMS,
   SAMPLE_HELD_DISCOUNTS,
   SAMPLE_HELD_INAPPLICABLE_ONLY,
   SAMPLE_HELD_PROMO_CODES,
+  SAMPLE_HELD_WITH_SITE_SALE_BLOCK,
+  SAMPLE_HELD_WITH_SITE_SALE_STACKABLE,
+  SPECIAL_SALE_CART_ITEMS,
   STORY_CART_SUBTOTAL_HKD,
+  STORY_LIST_SUBTOTAL,
   STORY_POINTS_MAX_HKD,
+  STORY_REPLACE_PROMO_AMOUNT,
+  STORY_REPLACE_TOTAL,
+  STORY_SITE_SALE_AMOUNT,
+  STORY_SITE_SALE_LABEL,
+  STORY_SPECIAL_SALE_SUBTOTAL,
+  STORY_STACKED_PROMO_AMOUNT,
+  STORY_STACKED_TOTAL,
   storyCartEstimatedTotal,
 };

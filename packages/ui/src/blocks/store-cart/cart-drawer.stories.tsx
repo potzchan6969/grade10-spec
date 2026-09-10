@@ -44,6 +44,8 @@ function pointsCreditHkd(points: PointsState): number | null {
  *
  * `Default` is the one interactive composed story (promo sheet + points).
  * Typed/held/points state matrix stays on CartDrawerFooter.
+ * Site-sale × promo combine modes:
+ * [`Auto Discount`](?path=/docs/store-cart-cartdrawer-auto-discount--docs).
  *
  * App handoff: checkout is members-only (no guest checkout). Wire
  * `onApplyPromo` / `onSelectHeldPromo` / `onApplyPoints` onto the Shopify
@@ -203,9 +205,7 @@ export const Default: Story = {
     expect(
       canvas.getByRole("button", { name: /Use points/i }),
     ).toBeInTheDocument();
-    expect(
-      canvas.queryByText("Your cart is empty"),
-    ).not.toBeInTheDocument();
+    expect(canvas.queryByText("Your cart is empty")).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("dialog", { name: "Promo code" }),
     ).not.toBeInTheDocument();
@@ -224,9 +224,7 @@ export const OverflowItems: Story = {
     expect(
       canvas.getByText("2016 Pokémon 20th Anniversary Mario Pikachu PSA 10"),
     ).toBeInTheDocument();
-    expect(
-      canvas.queryByText("Your cart is empty"),
-    ).not.toBeInTheDocument();
+    expect(canvas.queryByText("Your cart is empty")).not.toBeInTheDocument();
   },
 };
 
@@ -243,7 +241,9 @@ export const EmptyState: Story = {
     expect(
       canvas.getByText("Items you add will appear here"),
     ).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: "Proceed to Checkout" })).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "Proceed to Checkout" }),
+    ).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("button", { name: /Shop|Browse|Continue/i }),
     ).not.toBeInTheDocument();
