@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
-import { FILTER_GROUPS } from "./fixtures";
 import { ProductFilter } from "./product-filter";
+import { productFilterArgs } from "./product-filter.story-shared";
 
 const meta = {
   title: "Store Product Listing/ProductFilter",
@@ -16,16 +16,13 @@ const meta = {
     ),
   ],
   args: {
-    copy: {
-      heading: "Filter",
-      searchPlaceholder: "Find product",
-      searchLabel: "Search products",
-    },
-    groups: { status: "ready", data: FILTER_GROUPS },
-    selection: {},
+    ...productFilterArgs,
     onFilterChange: fn(),
     onGroupExpand: fn(),
     onSearchChange: fn(),
+    onSearchClear: fn(),
+    onSearchCommit: fn(),
+    onSearchSuggestionSelect: fn(),
   },
 } satisfies Meta<typeof ProductFilter>;
 
