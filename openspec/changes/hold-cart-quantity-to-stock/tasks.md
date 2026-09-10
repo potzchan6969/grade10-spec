@@ -49,5 +49,5 @@ Needs group 3's model.
 
 Needs group 1's bump.
 
-- [ ] 6.1 Supply a reviewed line's remaining count from the count the review already returns, so the drawer states the cap it has always enforced — `proposal.md`, Impact
+- [x] 6.1 Supply a reviewed line's remaining count from the count the review already returns, so the drawer states the cap it has always enforced — `proposal.md`, Impact
 - [ ] 6.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
