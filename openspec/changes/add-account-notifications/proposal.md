@@ -52,8 +52,13 @@ plan for that product, including mute. Permanent scenario ids under
   about the current lead, not one per increment.
 - **One letter shape** for every auction email: subject, preheader,
   heading, body, lot block with one primary image when available,
-  listing action, footer. Letters offer a signed-in way to **mute email
-  alerts** for that lot (not unwatch).
+  listing action, footer. Brand mark opens the storefront home. Letters
+  offer **Manage alerts** → **My Auctions**
+  so a collector can mute email alerts for that lot (not unwatch). Signed
+  out, Grade10's existing sign-in flow runs first, then My Auctions.
+  Outbound links carry UTM campaign tags (`utm_source=email`,
+  `utm_medium=auction_notification`, kind as `utm_campaign`, control as
+  `utm_content`).
 - **Per-lot email alerts** default on when watching or bidding; mute stops
   mail without removing the watch or ending the bid. Unwatch turns alerts
   off. An account-level auction email alerts master can stop all auction
@@ -123,7 +128,7 @@ mute scenarios this change's UI and fanout read.
 | `@grade10/email` | Renders and talks to the provider. Classifies temporary vs permanent send failure. Does not own the log. |
 | `@grade10/i18n` | May gain English catalog keys for the six kinds; locale selection stays off this change. |
 | `apps/admin/grade10` | Send log: type, recipient email, listing, Sent At; filter by user email; no bodies. |
-| `apps/frontend/grade10` | My Auctions Email alerts + Unwatch; Account → Notifications auction email alerts master; letter mute → My Auctions. |
+| `apps/frontend/grade10` | My Auctions Email alerts + Unwatch; Account → Notifications auction email alerts master; letter **Manage alerts** → My Auctions (sign-in first when signed out). |
 | Store worker | No change. |
 | ZZZ | Out of scope this change. |
 

@@ -74,7 +74,12 @@
 
 - Markup stays subject, preheader, heading, body, lot block (one primary
   image when available), listing button, footer, optional unsubscribe.
-  The listing shape the letter renders grows `startsAt`,
+  The brand mark links to that storefront's home (`homeUrl`). Every
+  outbound URL is passed through a shared campaign-tag helper that sets
+  `utm_source=email`, `utm_medium=auction_notification`,
+  `utm_campaign` from the letter kind, and `utm_content` from the
+  control (`logo`, `cta`, `lot_image`, `lot_title`, `manage_alerts`). The
+  listing shape the letter renders grows `startsAt`,
   `scheduledEndsAt`, and optional `primaryImageUrl` beside the
   effective close.
 - Templates are composed with [emailcn](https://www.emailcn.run/) on
@@ -90,10 +95,12 @@
   `@grade10/i18n` for a later locale pass; **render always selects
   English** this change (account locale ignored at send).
 - `canUnsubscribe` is true whenever the letter is owed with per-lot email
-  alerts on (progress and bid-activity). The control points at signed-in
-  **My Auctions** (`muteUrl`), where the collector flips that listing's
-  Email alerts toggle — not unwatch, not the account master, not a
-  one-click token.
+  alerts on (progress and bid-activity). The control is labelled
+  **Manage alerts** and points at **My Auctions** (`muteUrl`), where the
+  collector flips that listing's Email alerts toggle — not unwatch, not
+  the account master, not a one-click token. A signed-out collector who
+  activates it runs Grade10's existing sign-in flow, then opens My
+  Auctions.
 - Alternatives rejected:
   - A template per kind — the eight kinds already share one file.
   - Move the letter into `@grade10/email` — login mail lives there
@@ -483,9 +490,10 @@ Skip `status = 'canceled'`. `FOR UPDATE SKIP LOCKED` on the stamp
 row. Limit 50 recipients per `(storefront, listing)` chunk.
 
 `canUnsubscribe` is true for every owed letter when per-lot email alerts
-are on (and the account master is on). The link opens signed-in My
-Auctions for that brand (`muteUrl`); optional deep-link to the listing
-row is application-owned.
+are on (and the account master is on). The link is labelled **Manage
+alerts** and opens My Auctions for that brand (`muteUrl`); a signed-out
+collector hits the existing sign-in flow with My Auctions as the return
+destination. Optional deep-link to the listing row is application-owned.
 
 ### `sendProgressLetters`
 

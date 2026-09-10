@@ -1,6 +1,8 @@
 /** Shared PreviewProps fixture for auction letter kinds. */
 export const previewLot = {
   brandName: "Grade10",
+  /** Storefront home — brand mark target. */
+  homeUrl: "https://grade10.com",
   lotTitle: "1999 Pokémon Base Set Charizard PSA 9",
   listingUrl: "https://grade10.com/auction/listings/demo-charizard",
   /** Signed-in My Auctions — per-lot Email alerts mute. */

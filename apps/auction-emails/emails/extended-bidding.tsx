@@ -26,6 +26,7 @@ export default function ExtendedBiddingEmail({
     <AuctionLetter
       body="A late bid moved this lot’s close. Bidding continues until no further bid lands in the extension window."
       brandName={brandName}
+      campaign="extended_bidding"
       canUnsubscribe={canUnsubscribe}
       facts={[`Current close ${effectiveClosesAt}`]}
       heading="Extended bidding has started"

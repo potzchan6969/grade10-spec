@@ -59,10 +59,14 @@ leading bid rather than one per increment.
 ## Delivery
 
 Every owed letter whose per-lot alerts are on carries a short footer:
-**Email alerts are on for this lot.** **Turn them off** — a signed-in link to
+**Email alerts are on for this lot.** **Manage alerts** — opens
 **My Auctions**, where the collector mutes that lot's Email alerts control.
+Signed out, Grade10's existing sign-in flow runs first, then My Auctions.
 Never an unauthenticated one-click stop, never unwatch, and not the
-account-wide Auction email alerts master as the primary destination. Each
+account-wide Auction email alerts master as the primary destination. The
+Grade10 brand mark opens the Grade10 website home. Outbound links carry
+campaign tags (`utm_source=email`, `utm_medium=auction_notification`,
+letter kind as `utm_campaign`, control as `utm_content`). Each
 letter's lot block shows **one** primary picture of the item when the listing
 has one. A temporary send failure retries with backoff under a bounded budget;
 a permanent refusal stops at once, and an operator can put a given-up letter
@@ -113,7 +117,8 @@ shipping belongs to [Order Notifications](/p/grade10-site/auction/notifications-
 | 24h close vs 1h reminder | Decided | Additive. "Closes in 24 hours" is a new letter; the one-hour watcher reminder stays. | Product |
 | Audiences | Decided | Start letters are watchers with alerts on. Close-in-24h and extended-bidding reach a participant who unwatched, by their bid, when alerts remain on. | Product |
 | New-bid volume | Decided | Coalesce: tell a previous bidder about the current leading bid they have not yet been told about, not about every increment. The previous leader gets the outbid letter, not both. | Product |
-| Unsubscribe | Decided | Stop means mute for this lot. Footer: Email alerts are on for this lot. **Turn them off** → My Auctions. Not unwatch; not the account master. | Product |
+| Unsubscribe | Decided | Stop means mute for this lot. Footer: Email alerts are on for this lot. **Manage alerts** → My Auctions (sign-in first when signed out). Not unwatch; not the account master. | Product |
+| Campaign tags | Decided | Every outbound link: `utm_source=email`, `utm_medium=auction_notification`, `utm_campaign` = letter kind, `utm_content` = control. No `utm_term`. | Product |
 | Send log | Decided | Operators see type, address, listing, and Sent At. No bodies. Filter by the address sent to. | Product |
 | Language | Decided | English, matching every auction email. Locale waits on recording one. | Engineering |
 | Send-log retention | ❓ Open | How long rows are kept. | Engineering |

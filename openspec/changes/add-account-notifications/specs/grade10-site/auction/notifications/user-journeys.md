@@ -21,6 +21,9 @@
 - `grade10-site-auction-notifications-SC-29` — The lot block shows one primary image
 - `grade10-site-auction-notifications-SC-30` — A listing without an image still mails
 - `grade10-site-auction-notifications-SC-32` — Muting stops mail while watching continues
+- `grade10-site-auction-notifications-SC-34` — Manage alerts from a letter when signed out
+- `grade10-site-auction-notifications-SC-35` — The brand mark opens the storefront home
+- `grade10-site-auction-notifications-SC-36` — Outbound links carry campaign tags
 
 ### grade10-site-auction-notifications-US-02: Collector returns before a lot closes
 
@@ -53,6 +56,7 @@ scheduled close,
 - `grade10-site-auction-notifications-SC-20` — An outbid letter can be stopped by muting
 - `grade10-site-auction-notifications-SC-31` — A challenge that leaves them leading is not an outbid
 - `grade10-site-auction-notifications-SC-33` — Muting stops bidder mail without ending the bid
+- `grade10-site-auction-notifications-SC-34` — Manage alerts from a letter when signed out
 
 ### grade10-site-auction-notifications-US-04: Collector hears a new bid on a lot they bid on
 
