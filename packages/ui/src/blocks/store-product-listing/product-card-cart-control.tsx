@@ -24,6 +24,8 @@ type ProductCardCartControlProps = {
   inCart: boolean;
   cartCount?: ReactNode;
   quantity: number;
+  /** Ceiling the consumer supplies. Omit it and the control counts on. */
+  maxQuantity?: number;
   onQuantityChange?: (quantity: number) => void;
 };
 
@@ -58,6 +60,7 @@ function ProductCardCartControl({
   inCart,
   cartCount,
   quantity,
+  maxQuantity,
   onQuantityChange,
 }: ProductCardCartControlProps) {
   const containerRef = useRef<HTMLFieldSetElement>(null);
@@ -181,6 +184,7 @@ function ProductCardCartControl({
               }
               report(quantity - 1);
             }}
+            max={maxQuantity}
             onIncrement={() => report(quantity + 1)}
             qty={quantity}
             removeLabel={copy.removeFromCart}

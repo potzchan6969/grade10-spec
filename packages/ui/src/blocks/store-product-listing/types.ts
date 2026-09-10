@@ -27,6 +27,10 @@ type ProductSummary = {
   soldOut?: boolean;
   inCart?: boolean;
   cartCount?: ReactNode;
+  /** Ceiling for this tile's cart control. Omit it and the control counts on. */
+  maxCartQuantity?: number;
+  /** How many are left, already worded. Omit it and the tile says nothing. */
+  remainingLabel?: ReactNode;
 };
 
 /**

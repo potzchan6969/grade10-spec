@@ -39,6 +39,11 @@ type ProductCardImageProps = {
   soldOut?: boolean;
   inCart?: boolean;
   cartCount?: ReactNode;
+  /**
+   * Ceiling for the cart control, as the consumer supplies it. Omit it and the
+   * control counts on: the well derives no maximum of its own.
+   */
+  maxCartQuantity?: number;
   /** Supply one to sell: the cart control is drawn only where it is present. */
   onCartQuantityChange?: (quantity: number) => void;
   /** Tile activation for the photo well. Ignored when `soldOut`. */
@@ -69,6 +74,7 @@ function ProductCardImage({
   soldOut = false,
   inCart = false,
   cartCount,
+  maxCartQuantity,
   onCartQuantityChange,
   onClick,
   name,
@@ -155,6 +161,7 @@ function ProductCardImage({
           cartCount={cartCount}
           copy={copy}
           inCart={inCart}
+          maxQuantity={maxCartQuantity}
           onQuantityChange={onCartQuantityChange}
           quantity={quantity}
         />

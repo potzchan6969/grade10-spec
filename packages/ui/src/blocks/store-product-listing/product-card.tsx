@@ -1,3 +1,4 @@
+import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
@@ -41,6 +42,18 @@ type ProductCardProps = {
    */
   inCart?: boolean;
   cartCount?: ReactNode;
+  /**
+   * Ceiling for the cart control, as the consumer supplies it. Omit it and the
+   * control counts on: the card derives no maximum from the count, the in-cart
+   * condition, or the sold-out condition.
+   */
+  maxCartQuantity?: number;
+  /**
+   * How many are left, in the consumer's own words. Displayed as supplied —
+   * the card neither formats it nor judges from it that a product is scarce.
+   * A sold-out product shows none: there is nothing left to be running out of.
+   */
+  remainingLabel?: ReactNode;
   /** Supply one to sell: the cart control is drawn only where it is present. */
   onCartQuantityChange?: (quantity: number) => void;
   /**
@@ -86,6 +99,8 @@ function ProductCardContent({
   soldOut = false,
   inCart = false,
   cartCount,
+  maxCartQuantity,
+  remainingLabel,
   onCartQuantityChange,
   onClick,
 }: ProductCardContentProps) {
@@ -106,6 +121,7 @@ function ProductCardContent({
         imageAlt={imageAlt}
         imageSrc={imageSrc}
         inCart={inCart}
+        maxCartQuantity={maxCartQuantity}
         name={name}
         onCartQuantityChange={onCartQuantityChange}
         onClick={onClick}
@@ -137,6 +153,11 @@ function ProductCardContent({
             </p>
           ) : null}
         </HStack>
+        {!soldOut && remainingLabel != null ? (
+          <Text data-slot="product-card-remaining" size="sm" tone="error">
+            {remainingLabel}
+          </Text>
+        ) : null}
       </VStack>
     </VStack>
   );

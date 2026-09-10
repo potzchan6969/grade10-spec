@@ -5,6 +5,8 @@ import { useState } from "react";
 
 type ProductCardCartStepperRowProps = {
   qty: number;
+  /** Ceiling the consumer supplies. Omit it and the row counts on unbounded. */
+  max?: number;
   /** Accessible names, as the consumer's copy supplies them — none is invented. */
   decrementLabel?: string;
   incrementLabel?: string;
@@ -20,6 +22,7 @@ type ProductCardCartStepperRowProps = {
  */
 function ProductCardCartStepperRow({
   qty,
+  max,
   decrementLabel,
   incrementLabel,
   removeLabel,
@@ -29,6 +32,7 @@ function ProductCardCartStepperRow({
 }: ProductCardCartStepperRowProps) {
   const [roll, setRoll] = useState<"up" | "down" | null>(null);
   const atMin = qty <= 1;
+  const atMax = max != null && qty >= max;
 
   const playRoll = (direction: "up" | "down") => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -37,6 +41,7 @@ function ProductCardCartStepperRow({
 
   const stepBy = (direction: 1 | -1) => {
     if (direction > 0) {
+      if (atMax) return;
       onIncrement();
       playRoll("up");
     } else {
@@ -88,6 +93,7 @@ function ProductCardCartStepperRow({
         aria-label={incrementLabel}
         className={capClassName}
         data-slot="stepper-increment"
+        disabled={atMax}
         onClick={(event) => {
           event.stopPropagation();
           stepBy(1);

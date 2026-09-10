@@ -125,6 +125,7 @@ function ProductList({
                   imageAlt={product.imageAlt}
                   imageSrc={product.imageSrc}
                   inCart={product.inCart}
+                  maxCartQuantity={product.maxCartQuantity}
                   name={product.name}
                   onCartQuantityChange={
                     onProductCartQuantityChange
@@ -139,6 +140,7 @@ function ProductList({
                   }
                   originalPrice={product.originalPrice}
                   price={product.price}
+                  remainingLabel={product.remainingLabel}
                   soldOut={product.soldOut}
                 />
               </div>
