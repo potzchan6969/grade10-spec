@@ -11,6 +11,7 @@
 - `grade10-site-store-discounts-SC-01` — A product coupon settles by its own Shopify Discount code
 - `grade10-site-store-discounts-SC-02` — A gift settles by its own Shopify Discount code
 - `grade10-site-store-discounts-SC-06` — Submitting the checkout mints the coupon's code
+- `grade10-site-store-discounts-SC-08` — A reward coupon settles by its own Shopify Discount code
 
 ### grade10-site-store-discounts-US-02: Collector holding more than one eligible coupon picks which one to spend
 

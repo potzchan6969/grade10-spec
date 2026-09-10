@@ -15,6 +15,8 @@ code, how many a draft order can carry at once, and when one is minted.
 - Reward coupon transport
   - A product coupon and a gift mint their own ephemeral Shopify Discount
     once the basket qualifies, single-use, spent once
+  - A loyalty reward's own coupon mints the same way, once an order claims
+    it, whatever kind the reward names
 - Price preview
   - A live cart price estimates locally; minting waits for the checkout to
     be submitted
@@ -42,6 +44,22 @@ draft order's lines for either.
 - **GIVEN** a member holding a gift whose basket clears its threshold
 - **WHEN** the checkout is submitted
 - **THEN** the draft order carries the gift product at a 100% cut through the gift's own single-use Shopify Discount code
+
+### Requirement: A loyalty reward's own coupon rides onto the draft order as its own ephemeral Shopify Discount
+
+A loyalty reward's own coupon, once an order claims it, SHALL reach that
+order as its own single-use Shopify Discount code, minted at the moment the
+order claims it — no order exists yet at the reward's redemption, so the
+mint SHALL NOT wait for a later checkout submission the way a percentage
+product coupon's does; it mints as soon as an order is promised. The code
+SHALL be scoped to the member's paired Shopify customer.
+
+#### Scenario: grade10-site-store-discounts-SC-08 - A reward coupon settles by its own Shopify Discount code
+
+- **GIVEN** a member redeeming a reward coupon against an order being promised
+- **WHEN** the order claims the reward coupon
+- **THEN** the order carries the reward coupon's own single-use, customer-scoped Shopify Discount code
+- **AND** the order later settles reporting that code, not a welded line discount
 
 ### Requirement: A draft order carries at most one discount code
 
