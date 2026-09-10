@@ -31,7 +31,7 @@ Frontend only. Blocked until the Store contract owner supplies the optional ship
 - [ ] 4.2 Render the supplied shipping guidance and pickup location in `ProductPage`, omitting absent facts and using catalog copy for platform labels; make `grade10-site-store-product-page-SC-15` pass while preserving badges and SKU
 - [ ] 4.3 Verify with focused product model, repository, page, serving and hydration tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`
 
-## 5. Description disclosure (grade10)
+## 5. Description disclosure (grade10) (owner: @kinisworking)
 
 - [ ] 5.1 Make `grade10-site-store-product-page-SC-16` hold across narrow and wide layouts and supported locales: replace character-count overflow estimation with a disclosure decision based on actual rendered overflow, keeping the first server and client render identical and retaining a usable disclosure while layout is measured
 - [ ] 5.2 Verify short, long, narrow, resized and expanded descriptions with focused page/browser coverage, serving and hydration tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`
