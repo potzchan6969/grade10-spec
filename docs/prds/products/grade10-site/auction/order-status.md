@@ -13,6 +13,8 @@ Auction Order Status is the single buyer-facing outcome derived from an auction 
 - **Delivered** — delivery confirmation includes the carrier's proof
 - **Cancelled** — an operator cancelled the order and returned the lot to available stock
 - **Refunded** — the payment has a recorded refund outcome
+- 🚧 **Awaiting Address** — the lot has closed and the winner has not confirmed a delivery address
+- 🚧 **Preparing Invoice** — the address is confirmed and Grade10 has not yet sent the invoice
 - **Auction outcome** — Draft, Scheduled, Live, Ending soon, Unsold, or Called off when the lot has not produced a payable winner order
 - **Needs action** — Expired and Processing receive additional operator attention in the post-sale queue
 

@@ -17,9 +17,15 @@ The queue works every winner order from lot close through delivery in one place.
 | Shipped · Delivered | Fulfilment has left Grade10 or has carrier proof |
 | Cancelled · Refunded | The order has a recorded terminal outcome |
 
+- 🚧 **Awaiting Address** — the winner has not confirmed an address
+- 🚧 **Preparing Invoice** — the address is confirmed and the invoice is ready to quote; needs action
+- 🚧 **Overdue** — an order idle 72 hours in either stage is marked and can be filtered; nothing expires on it
+
 ## Payment
 
 A winner order reaches paid through one fresh charge or one operator-recorded manual settlement. The winning bid-time hold is released rather than captured, and every failed payment attempt remains in the invoice log. Manual settlement confirms the delivery address, records the amount and external reference, and points at any superseded invoice.
+
+- 🚧 **Payment** — an operator quotes and sends the invoice, may re-quote after send, and records non-card payments with a reference and proof files
 
 ## Fulfilment
 
