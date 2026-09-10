@@ -37,8 +37,8 @@ so redefining the reward never rewrites a coupon a member already holds —
 
 | Channel | How it lands |
 | --- | --- |
-| Online | The draft order the checkout builds carries the weld on its lines |
-| At the till | A shopkeeper applies it from the member's panel, or types it, and the terminal welds it onto the sale |
+| Online | 🚧 The draft order the checkout builds carries its Shopify Discount |
+| At the till | 🚧 A shopkeeper applies it from the member's panel, or types it, and the terminal mints its Shopify Discount onto the sale |
 
 - **Held for an order, then settled** — a coupon is held against the order
   being paid, and freed again if that order is not
@@ -118,8 +118,8 @@ changes.
 - **`coupon_usages`** — one attempt to apply one coupon to one order, keyed for
   idempotency and unique on a live attempt per coupon, which is what answers
   `idempotency_conflict`
-- **Provider artifact** — a reward coupon's is always `draft_line_discount`;
-  `discount_code` belongs to the store's registry and never reaches loyalty
+- **Provider artifact** — 🚧 `discount_code`, minted once the basket
+  qualifies, the same as the store's own order coupon
 - **An order code's reach** — the whole order, named products, or named
   variants; never a catalogue filter, since the shop knows nothing of worlds
   and types
