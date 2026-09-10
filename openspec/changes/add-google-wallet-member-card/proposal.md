@@ -132,3 +132,8 @@ the pass's languages SC-71. An earlier draft of this
 change, since removed, issued SC-28 to SC-43 and US-04 to US-06 for a durable
 member card the owner did not adopt. Those numbers stay burned, and the durable
 spec carries that fact forward at archive so it outlives this change.
+
+## References
+
+- [Member Card in a Wallet · Wallets](../../../docs/prds/products/grade10-site/loyalty/wallet-member-card.md#wallets)
+- [Member Card in a Wallet · Adding and Ending](../../../docs/prds/products/grade10-site/loyalty/wallet-member-card.md#adding-and-ending)
