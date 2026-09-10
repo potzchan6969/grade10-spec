@@ -147,7 +147,13 @@ export async function runChecks(
   });
 
   checkPages(ctx, pages);
-  checkSections(ctx, changes, pages);
+  if (roots.own) {
+    checkSections(ctx, changes, pages);
+  } else {
+    notes.push(
+      "change section links not run — the store's own repository answers for the mounted store",
+    );
+  }
   checkMarks(ctx, changes, pages);
 
   if (!ctx.stories && ctx.storyIds.size > 0) {
