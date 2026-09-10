@@ -58,3 +58,38 @@ export const ActionIsReported: Story = {
     ).toBeInTheDocument();
   },
 };
+
+/**
+ * A tile's ceiling and remaining count travel on its `ProductSummary`, so the
+ * listing supplies both per product rather than once for the grid.
+ */
+export const TileCeilingAndRemainingCount: Story = {
+  args: {
+    products: [
+      {
+        ...PRODUCTS[1],
+        id: "bounded",
+        inCart: true,
+        cartCount: "2",
+        maxCartQuantity: 2,
+        remainingLabel: "Only 2 left",
+      },
+    ],
+    onProductCartQuantityChange: fn(),
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Only 2 left")).toBeInTheDocument();
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "2. Adjust cart quantity" }),
+    );
+    const increment = canvas.getByRole("button", {
+      name: "Increase quantity",
+    });
+    expect(increment).toBeDisabled();
+
+    await userEvent.click(increment, { pointerEventsCheck: 0 });
+    expect(args.onProductCartQuantityChange).not.toHaveBeenCalled();
+  },
+};

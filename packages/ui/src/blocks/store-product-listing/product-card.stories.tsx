@@ -1,5 +1,5 @@
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { PRODUCT_CARD_CART_COPY } from "./fixtures";
 import { ProductCard } from "./product-card";
 
@@ -124,5 +124,154 @@ export const NamedOnce: Story = {
       canvas.getAllByRole("button", { name: defaults.name }).length,
     ).toBeGreaterThan(0);
     expect(canvas.getByRole("button", { name: copy.cart })).toBeInTheDocument();
+  },
+};
+
+/**
+ * Scenario: shared-ui-store-product-listing-SC-56 - The control stops at the
+ * maximum. At the supplied ceiling the increment reports nothing and is
+ * exposed as unavailable.
+ */
+export const AtCartMaximum: Story = {
+  args: {
+    inCart: true,
+    cartCount: "2",
+    maxCartQuantity: 2,
+    onCartQuantityChange: fn(),
+  },
+  decorators: well,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: `2. ${copy.adjustQuantity}` }),
+    );
+
+    const increment = canvas.getByRole("button", {
+      name: copy.increaseQuantity,
+    });
+    expect(increment).toBeDisabled();
+
+    await userEvent.click(increment, { pointerEventsCheck: 0 });
+    expect(args.onCartQuantityChange).not.toHaveBeenCalled();
+  },
+};
+
+/**
+ * Scenario: shared-ui-store-product-listing-SC-57 - Below the maximum the
+ * control counts on.
+ */
+export const BelowCartMaximum: Story = {
+  args: {
+    inCart: true,
+    cartCount: "1",
+    maxCartQuantity: 2,
+    onCartQuantityChange: fn(),
+  },
+  decorators: well,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: `1. ${copy.adjustQuantity}` }),
+    );
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: copy.increaseQuantity }),
+    );
+    expect(args.onCartQuantityChange).toHaveBeenCalledTimes(1);
+    expect(args.onCartQuantityChange).toHaveBeenCalledWith(2);
+  },
+};
+
+/**
+ * Scenario: shared-ui-store-product-listing-SC-58 - No maximum supplied, so
+ * the control keeps a ceiling of none.
+ */
+export const NoCartMaximum: Story = {
+  args: {
+    inCart: true,
+    cartCount: "2",
+    onCartQuantityChange: fn(),
+  },
+  decorators: well,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: `2. ${copy.adjustQuantity}` }),
+    );
+
+    const increment = canvas.getByRole("button", {
+      name: copy.increaseQuantity,
+    });
+    expect(increment).toBeEnabled();
+
+    await userEvent.click(increment);
+    expect(args.onCartQuantityChange).toHaveBeenCalledTimes(1);
+    expect(args.onCartQuantityChange).toHaveBeenCalledWith(3);
+  },
+};
+
+/**
+ * Scenario: shared-ui-store-product-listing-SC-59 - Decrement still works at
+ * the maximum, so a shopper who reaches it can go back down.
+ */
+export const DecrementAtCartMaximum: Story = {
+  args: {
+    inCart: true,
+    cartCount: "2",
+    maxCartQuantity: 2,
+    onCartQuantityChange: fn(),
+  },
+  decorators: well,
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: `2. ${copy.adjustQuantity}` }),
+    );
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: copy.decreaseQuantity }),
+    );
+    expect(args.onCartQuantityChange).toHaveBeenCalledTimes(1);
+    expect(args.onCartQuantityChange).toHaveBeenCalledWith(1);
+  },
+};
+
+/**
+ * Scenario: shared-ui-store-product-listing-SC-60 - A remaining count is
+ * displayed as supplied, in the consumer's own words.
+ */
+export const RemainingCount: Story = {
+  args: { remainingLabel: "Only 3 left" },
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getAllByText("Only 3 left")).toHaveLength(1);
+    expect(canvas.queryByText(/\d+ left/i)).toHaveTextContent("Only 3 left");
+  },
+};
+
+/**
+ * Scenario: shared-ui-store-product-listing-SC-61 - No remaining count
+ * supplied, so the card says nothing about what is left.
+ */
+export const NoRemainingCount: Story = {
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByText(/left/i)).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Scenario: shared-ui-store-product-listing-SC-62 - A sold-out product says
+ * nothing about what is left, because there is nothing left to run out of.
+ */
+export const SoldOutWithRemainingCount: Story = {
+  args: { soldOut: true, remainingLabel: "Only 3 left" },
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByText("Only 3 left")).not.toBeInTheDocument();
+    expect(canvas.getByText(copy.soldOut)).toBeInTheDocument();
   },
 };

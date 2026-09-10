@@ -249,6 +249,15 @@ function CartItemContent({
             {copy.lowStockWarning}
           </span>
         ) : null}
+
+        {item.remainingLabel != null ? (
+          <span
+            data-slot="cart-item-remaining"
+            className="w-full text-xs font-semibold leading-4 text-destructive"
+          >
+            {item.remainingLabel}
+          </span>
+        ) : null}
       </VStack>
 
       {/* Action: StepperInput or Sold-Out Remove */}

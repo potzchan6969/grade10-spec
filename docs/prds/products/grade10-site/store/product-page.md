@@ -11,6 +11,9 @@ the button to buy it.
   price and low-stock notes where the catalogue provides them
 - **Buy** — pick a grade and quantity, add to cart, stay on the page while
   the cart total updates; the same grade added again stays on one line
+- **Stock is a ceiling** — the quantity stops where the shop's count stops, and
+  the page says how many are left when the shop is nearly out or the collector
+  has asked for the last one
 - **Sold out** — a grade sold out says so and cannot be added; a card with
   nothing to buy keeps its prices
 - **Shipping and pickup** — shown on the card where the catalogue provides

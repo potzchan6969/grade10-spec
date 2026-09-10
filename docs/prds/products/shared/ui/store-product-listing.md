@@ -12,9 +12,12 @@ width available and load more as the shopper scrolls.
 
 The surface holds no state of its own. Which products match, how they are
 ordered, how many there are and what a cart control does are all the
-application's answers; the components render a selection and report a change. An
-empty catalogue and a search that matched nothing are told apart, because they
-need different words.
+application's answers; the components render a selection and report a change.
+The ceiling a cart control stops at and the count a tile says are the
+application's too — the card derives neither and judges nothing about scarcity.
+A sold-out tile shows no count, because nothing is left to run out of. An empty
+catalogue and a search that matched nothing are told apart, because they need
+different words.
 
 :::flow{title="Browsing and filtering"}
 ## The page opens

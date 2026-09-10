@@ -12,7 +12,11 @@ description only, no button to leave.
 Opening it re-reads current status and price against the catalogue behind
 skeleton placeholders, because a cart is the one place a stale price is
 expensive. Sold-out lines are marked, and the count badge on the header ignores
-them, so the number a shopper sees is the number they can buy.
+them, so the number a shopper sees is the number they can buy. A line's stepper
+stops at a maximum the application supplies, beside a remaining count the
+application words; the drawer derives neither. A line already carrying the
+low-stock warning shows both — one says what was already changed, the other
+says what is left.
 
 It closes three ways — the close control, the dimmed backdrop, and Escape — and
 locks the page behind it while it is open. Pressing checkout puts the button
