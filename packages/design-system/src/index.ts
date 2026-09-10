@@ -54,6 +54,7 @@ export * from "./components/layout/navigation-list";
 export * from "./components/layout/stack";
 export * from "./components/layout/vstack";
 export * from "./components/overlays/dialog";
+export * from "./components/overlays/drawer";
 export * from "./components/overlays/dropdown-menu";
 export * from "./components/overlays/toast";
 export * from "./components/overlays/tooltip";
