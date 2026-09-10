@@ -8,6 +8,10 @@ import { StepperInput } from "@grade10/design-system/components/forms/stepper-in
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import {
+  Drawer,
+  DrawerContent,
+} from "@grade10/design-system/components/overlays/drawer";
 import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
@@ -1385,82 +1389,28 @@ function CartDrawer({
 
   const promoSheetOpen = promoState?.status === "expanded";
 
-  // Esc: close nested promo sheet first, then the cart.
-  useEffect(() => {
-    if (!open) return;
-    const handleKeyDown = (event: globalThis.KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      if (promoSheetOpen) {
-        onPromoStateChange?.({ status: "collapsed" });
-        return;
-      }
-      onClose();
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [open, onClose, promoSheetOpen, onPromoStateChange]);
-
-  // Lock body scroll when drawer is open
-  useEffect(() => {
-    if (open) {
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      return () => {
-        document.body.style.overflow = originalOverflow;
-      };
-    }
-  }, [open]);
-
   return (
-    <div
-      aria-hidden={!open}
-      className={cn(
-        "fixed inset-0 z-50",
-        open ? "pointer-events-auto" : "pointer-events-none",
-        className,
-      )}
+    <Drawer
+      open={open}
+      swipeDirection="right"
+      onOpenChange={(next) => {
+        if (next) return;
+        // Esc / outside press: collapse nested promo before closing the cart.
+        if (promoSheetOpen) {
+          onPromoStateChange?.({ status: "collapsed" });
+          return;
+        }
+        onClose();
+      }}
     >
-      {/* Dimmed backdrop overlay (`4674:3832`) — suppressed for nested promo (no second backdrop) */}
-      <button
-        type="button"
-        tabIndex={-1}
-        aria-label={copy.header.closeCartLabel}
-        onClick={() => {
-          if (promoSheetOpen) {
-            onPromoStateChange?.({ status: "collapsed" });
-            return;
-          }
-          onClose();
-        }}
-        className={cn(
-          // Keep mounted while closed so opacity can animate out — do not
-          // toggle visibility (that snaps the exit).
-          "fixed inset-0 cursor-pointer border-0 bg-overlay backdrop-blur-[calc(var(--blur-xl)/2)] transition-[opacity,backdrop-filter] motion-reduce:transition-none",
-          open
-            ? "opacity-100 duration-[400ms] ease-[cubic-bezier(0.32,0.72,0,1)]"
-            : "opacity-0 duration-[280ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
-        )}
-      />
-
-      {/* Slide-out Drawer Surface (`4735:6493`) */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label={copy.header.title}
-        className={cn(
-          // iOS-like drawer curve; open a beat longer than close.
-          "fixed top-2 right-2 bottom-2 z-10 flex w-(--container-md) flex-col overflow-hidden rounded-4xl border border-border/50 bg-sidebar/95 backdrop-blur-xl shadow-lg transition-transform will-change-transform motion-reduce:transition-none motion-reduce:will-change-auto",
-          open
-            ? "translate-x-0 duration-[400ms] ease-[cubic-bezier(0.32,0.72,0,1)]"
-            : "translate-x-[calc(100%+0.5rem)] duration-[280ms] ease-[cubic-bezier(0.32,0.72,0,1)]",
-        )}
-      >
+      {/* Slide-out Drawer Surface (`4735:6493`) — chrome lives on DS Drawer */}
+      <DrawerContent aria-label={copy.header.title} className={className}>
         {/* Parent cart layer — tucks back while nested promo sheet is open */}
         <VStack
           gap="none"
           data-nested-drawer-open={promoSheetOpen || undefined}
           className={cn(
-            "relative flex min-h-0 flex-1 flex-col transition-[transform,opacity] duration-[320ms] ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
+            "relative min-h-0 flex-1 transition-[transform,opacity] duration-[320ms] ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none",
             promoSheetOpen
               ? "origin-left scale-[0.96] opacity-80 pointer-events-none"
               : "scale-100 opacity-100",
@@ -1519,8 +1469,8 @@ function CartDrawer({
           onSelectHeldPromo={onSelectHeldPromo}
           onBrowseLoyalty={onBrowseLoyalty}
         />
-      </div>
-    </div>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
