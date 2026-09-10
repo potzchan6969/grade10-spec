@@ -22,6 +22,7 @@ export default function BiddingOpensIn24hEmail({
     <AuctionLetter
       body="This lot opens for bids soon."
       brandName={brandName}
+      campaign="bidding_opens_in_24h"
       canUnsubscribe
       facts={[`Starts ${startsAt}`]}
       heading="Bidding opens in 24 hours"

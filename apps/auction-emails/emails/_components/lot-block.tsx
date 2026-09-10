@@ -2,7 +2,10 @@ import { Column, Img, Link, Row, Section, Text } from "react-email";
 
 export type LotBlockProps = {
   lotTitle: string;
+  /** Listing URL for the title link (may already carry campaign tags). */
   listingUrl: string;
+  /** Listing URL for the image link when shown. Defaults to `listingUrl`. */
+  imageListingUrl?: string;
   primaryImageUrl?: string | null;
   /** Leading / current bid — rendered above secondary facts. */
   highlight?: {
@@ -44,15 +47,17 @@ function AmountColumn({
 export function LotBlock({
   lotTitle,
   listingUrl,
+  imageListingUrl,
   primaryImageUrl,
   highlight,
   secondary,
   facts,
 }: LotBlockProps) {
+  const imageHref = imageListingUrl ?? listingUrl;
   return (
     <Section className="my-6">
       {primaryImageUrl ? (
-        <Link href={listingUrl}>
+        <Link href={imageHref}>
           <Img
             alt={lotTitle}
             height={IMAGE_MAX_HEIGHT}

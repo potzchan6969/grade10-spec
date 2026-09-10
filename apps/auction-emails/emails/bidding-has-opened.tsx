@@ -22,6 +22,7 @@ export default function BiddingHasOpenedEmail({
     <AuctionLetter
       body="This lot is now open for bids."
       brandName={brandName}
+      campaign="bidding_has_opened"
       canUnsubscribe
       facts={[`Open now. Closes ${scheduledClosesAt}`]}
       heading="Bidding has opened"

@@ -7,6 +7,7 @@ export default function OutbidWithoutImageEmail() {
     <AuctionLetter
       body="Another bid took the lead on this lot."
       brandName={previewLot.brandName}
+      campaign="outbid"
       canUnsubscribe
       ctaLabel="Bid again"
       facts={[`Closes ${previewLot.effectiveClosesAt}`]}

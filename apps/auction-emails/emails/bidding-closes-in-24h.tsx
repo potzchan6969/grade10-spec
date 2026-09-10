@@ -26,6 +26,7 @@ export default function BiddingClosesIn24hEmail({
     <AuctionLetter
       body="This lot’s scheduled close is about a day away. If bidding extends, the close may move later. You will get a separate notice when extended bidding starts."
       brandName={brandName}
+      campaign="bidding_closes_in_24h"
       canUnsubscribe={canUnsubscribe}
       facts={[`Scheduled close ${scheduledClosesAt}`]}
       heading="Bidding closes in 24 hours"

@@ -27,6 +27,7 @@ export default function OutbidEmail({
     <AuctionLetter
       body="Another bid took the lead on this lot."
       brandName={brandName}
+      campaign="outbid"
       canUnsubscribe
       ctaLabel="Bid again"
       facts={[`Closes ${effectiveClosesAt}`]}

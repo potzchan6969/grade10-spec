@@ -24,6 +24,7 @@ export default function NewBidEmail({
     <AuctionLetter
       body="Someone else bid on this lot."
       brandName={brandName}
+      campaign="new_bid"
       canUnsubscribe
       facts={[`Closes ${effectiveClosesAt}`]}
       heading="A lot you bid on received a new bid"
