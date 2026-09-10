@@ -10,7 +10,7 @@ today, and only the listing tile does not. Which scenarios are new work and
 which are cover over shipped behaviour:
 [`tech-design.md`](tech-design.md) — Context.
 
-## 1. The card stops, and both components say what is left (grade10-spec)
+## 1. The card stops, and both components say what is left (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Stop the tile's cart control at a supplied maximum, disabling the increment affordance and exposing it as unavailable at the bound, so *The control stops at the maximum* (`SC-56`), *Below the maximum the control counts on* (`SC-57`), *No maximum supplied* (`SC-58`) and *Decrement still works at the maximum* (`SC-59`) pass — the number reaching `ProductCardCartStepperRow`, which is where the next quantity is computed
 - [ ] 1.2 Display a supplied remaining count on the card, suppressed on a sold-out product, so *A remaining count is displayed as supplied* (`SC-60`), *No remaining count supplied* (`SC-61`) and *A sold-out product says nothing about what is left* (`SC-62`) pass, carrying both new fields as optional on `ProductSummary`
