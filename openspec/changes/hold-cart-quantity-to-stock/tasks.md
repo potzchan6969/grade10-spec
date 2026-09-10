@@ -18,7 +18,7 @@ which are cover over shipped behaviour:
 - [x] 1.4 Cover the cart line's shipped ceiling, so *The stepper stops at the maximum* (`SC-17`), *No maximum supplied* (`SC-18`) and *Decrement still works at the maximum* (`SC-19`) hold against the `StepperInput` bound they already rely on
 - [x] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run design-sync:check`
 
-## 2. The manual (grade10-spec)
+## 2. The manual (grade10-spec) (owner: @sean)
 
 - [ ] 2.1 Say on both shared pages that the components take a ceiling and a count and judge neither — `store-product-listing.md` for the card, `store-cart.md` for the line
 - [ ] 2.2 Say on the two site pages that a cart control stops where the shop's count stops and says how many are left when it does, and record in `product-listing.md`'s `Product decisions` block why the cap stays advisory, why one threshold serves every surface, and why a count is said as news rather than as standing pressure
