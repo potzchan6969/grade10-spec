@@ -51,10 +51,10 @@ No new design-system primitive or token. No new Figma component set.
 | --- | --- |
 | Not watching (no bid) — Watch control active | `grade10-site-auction-listing-page-SC-10`, `shared-ui-auction-record-SC-04` |
 | Watching (no bid) — control shows Watching, still toggleable | `grade10-site-auction-listing-page-SC-10` (after watch) |
-| Watch confirmed — toast “email alerts on” + **View My Auctions** | `grade10-site-auction-listing-page-SC-14`, `grade10-site-auction-account-record-SC-01`, `shared-ui-auction-record-SC-12` |
+| Watch confirmed — toast “email alerts on” + **View My Auctions** | `grade10-site-auction-listing-page-SC-14`, `grade10-site-auction-account-record-SC-01`, `shared-ui-auction-record-SC-15` |
 | Unwatch confirmed — toast + **Undo** | `grade10-site-auction-listing-page-SC-15`, `grade10-site-auction-account-record-SC-03` |
-| Bid locks Watching — disabled Watching, no unwatch | `grade10-site-auction-listing-page-SC-13`, `grade10-site-auction-account-record-SC-13`, `shared-ui-auction-record-SC-11` |
-| First bid bookmarks — alerts-on toast once | `grade10-site-auction-listing-page-SC-16`, `grade10-site-auction-account-record-SC-35`, `grade10-site-auction-account-record-SC-36` |
+| Bid locks Watching — disabled Watching, no unwatch | `grade10-site-auction-listing-page-SC-13`, `grade10-site-auction-account-record-SC-13`, `shared-ui-auction-record-SC-14` |
+| First bid bookmarks — alerts-on toast once | `grade10-site-auction-listing-page-SC-16`, `grade10-site-auction-account-record-SC-45`, `grade10-site-auction-account-record-SC-46` |
 | Later visit after bid toast recorded — no toast | `grade10-site-auction-listing-page-SC-17` |
 | Closed lot (sold or unsold) — no watch control | `grade10-site-auction-listing-page-SC-18` |
 | Watch change in progress | `shared-ui-auction-record-SC-05` |

@@ -109,14 +109,14 @@ announce that email alerts are on for the lot **at most once per listing per
 collector**. That fact SHALL be stored on the account. A later bid, page
 view, or device SHALL NOT show the same announcement again for that pair.
 
-#### Scenario: grade10-site-auction-account-record-SC-35 - A bid bookmarks without a separate Watch
+#### Scenario: grade10-site-auction-account-record-SC-45 - A bid bookmarks without a separate Watch
 
 - **GIVEN** a signed-in collector who has not watched listing L
 - **WHEN** they place a bid on L that Grade10 accepts as bookmarking L
 - **THEN** L is on My Auctions
 - **AND** they did not need a separate Watch for L to appear
 
-#### Scenario: grade10-site-auction-account-record-SC-36 - The bid-alerts toast is once per lot
+#### Scenario: grade10-site-auction-account-record-SC-46 - The bid-alerts toast is once per lot
 
 - **GIVEN** a signed-in collector who has never been shown the bid-alerts
   toast for listing L

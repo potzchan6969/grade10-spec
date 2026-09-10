@@ -619,6 +619,54 @@ describe("one requirement two changes both fold", () => {
   });
 });
 
+/**
+ * The deploy's gate. A break in files the manual mirrors — a requirement two
+ * changes both fold — must not stop the site that exists to point at it; a
+ * break in the manual's own pages still must, because that page is what would
+ * publish.
+ */
+describe("page rules only", () => {
+  const pagesOnly = { pages: true };
+
+  it("drops a store family the whole check fails on", async () => {
+    const root = changing(
+      "first",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/second/proposal.md": proposal("Second"),
+        "openspec/changes/second/specs/demo-product/alpha/spec.md":
+          "## REMOVED Requirements\n\n### Requirement: Alpha does things\n",
+      },
+    );
+
+    expect(lines(await runChecks(root, NO_GIT), "overlap")).toHaveLength(2);
+    const { findings, notes }: Result = await runChecks(
+      root,
+      NO_GIT,
+      pagesOnly,
+    );
+    expect(lines({ findings, notes }, "overlap")).toEqual([]);
+    expect(notes).toContain(
+      "store rules not run — page rules only, the deploy's gate; lint runs the rest",
+    );
+  });
+
+  it("still refuses a page that would publish broken", async () => {
+    const { findings }: Result = await runChecks(
+      fixture("broken"),
+      NO_GIT,
+      pagesOnly,
+    );
+    expect(findings.some((one) => one.rule === "canonical")).toBe(true);
+    expect(findings.some((one) => one.rule === "reference")).toBe(true);
+  });
+});
+
 /** An id is issued once, ever. The fold destroys a delta's journeys, so the
  * archive folder is the only record that an archived change issued one. */
 describe("permanent ids across the whole store", () => {
