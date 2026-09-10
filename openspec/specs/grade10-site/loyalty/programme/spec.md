@@ -7,7 +7,7 @@ spend, points expire, tiers change what a member earns, and points buy items
 from a reward menu. One programme runs per product, configured with its own
 currency, earn rate, expiry window and tier ladder.
 
-Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/membership/index.md).
+Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/grade10-site/loyalty/index.md).
 
 ## Feature set
 
@@ -328,7 +328,7 @@ an operator who can rewrite what a purchase earns can mint money. The reward
 menu is the intended lever and is editable.
 
 Why these numbers, and what is still open about the top tier:
-[Grade10 loyalty programme](../../../../../docs/prds/products/membership/index.md).
+[Grade10 loyalty programme](../../../../../docs/prds/products/grade10-site/loyalty/index.md).
 
 #### Scenario: grade10-site-loyalty-programme-SC-23 - A purchase earns at the member's rate
 

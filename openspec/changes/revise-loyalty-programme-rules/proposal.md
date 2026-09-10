@@ -2,7 +2,7 @@
 
 **Author:** @echo - 2026-08-18
 
-Product context: [Grade10 loyalty programme](../../../docs/prds/products/membership/index.md).
+Product context: [Grade10 loyalty programme](../../../docs/prds/products/grade10-site/loyalty/index.md).
 
 The physical shop is a separate change, `add-shopify-membership-pos`, which
 builds on this one.
@@ -144,3 +144,18 @@ keeps its own date; a check constraint on `ledger_entries` requires it.
 **Open decisions**, recorded in the PRD rather than resolved here: the retention
 threshold (the deployed value is the same 500 that qualifies for the tier; the
 business may prefer a softer 400), and the public names for the two counts.
+
+## References
+
+- [Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)
+- [Points · Qualification Criteria](../../../docs/prds/products/grade10-site/loyalty/points.md#qualification-criteria)
+- [Points · Refunds](../../../docs/prds/products/grade10-site/loyalty/points.md#refunds)
+- [Points · Expiry](../../../docs/prds/products/grade10-site/loyalty/points.md#expiry)
+- [Tiers · Ladder](../../../docs/prds/products/grade10-site/loyalty/tiers.md#ladder)
+- [Tiers · Tier Progress](../../../docs/prds/products/grade10-site/loyalty/tiers.md#tier-progress)
+- [Tiers · Earn Multiplier](../../../docs/prds/products/grade10-site/loyalty/tiers.md#earn-multiplier)
+- [Tiers · Keeping a Tier](../../../docs/prds/products/grade10-site/loyalty/tiers.md#keeping-a-tier)
+- [Rewards · Using a Reward](../../../docs/prds/products/grade10-site/loyalty/rewards.md#using-a-reward)
+- [Rewards · Cancelling a Redemption](../../../docs/prds/products/grade10-site/loyalty/rewards.md#cancelling-a-redemption)
+- [Paying with Points · Rules](../../../docs/prds/products/grade10-site/loyalty/paying-with-points.md#rules)
+- [Profile · Privacy](../../../docs/prds/products/grade10-site/loyalty/profile.md#privacy)
