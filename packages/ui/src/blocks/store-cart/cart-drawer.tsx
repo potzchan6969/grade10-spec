@@ -516,6 +516,7 @@ function CartDrawerBody({
     >
       {isEmpty ? (
         <EmptyState
+          frameless
           title={emptyTitle}
           description={emptyDescription}
           icon={<ShoppingCart aria-hidden weight="regular" />}

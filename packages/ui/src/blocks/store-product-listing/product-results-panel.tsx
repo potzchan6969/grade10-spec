@@ -1,9 +1,34 @@
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
+import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
+import type { ReactNode } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { AsyncMessage } from "../shared/async-message";
+import type { AsyncAction } from "../shared/async";
 import type { ProductListCopy } from "./product-list";
 import { DEFAULT_LOAD_MORE_SKELETON_COUNT, ProductList } from "./product-list";
 import type { AsyncState, ProductSummary } from "./types";
+
+function ResultsCondition({
+  message,
+  action,
+}: {
+  message: ReactNode;
+  action?: AsyncAction;
+}) {
+  return (
+    <EmptyState
+      actions={
+        action ? (
+          <Button onClick={action.onAction} size="md" variant="secondary">
+            {action.label}
+          </Button>
+        ) : undefined
+      }
+      frameless
+      title={message}
+    />
+  );
+}
 
 /** What the panel's tiles say the same way. */
 type ProductResultsPanelCopy = ProductListCopy;
@@ -187,23 +212,16 @@ function ProductResultsPanel({
         data-revealed={emptyRevealed || undefined}
         data-slot="product-results-empty"
       >
-        <AsyncMessage
-          action={results.action}
-          message={results.message}
-          slot="results-empty"
-        />
+        <ResultsCondition action={results.action} message={results.message} />
       </div>
     );
   }
 
   if (status === "error") {
     return (
-      <AsyncMessage
-        action={results.action}
-        className={className}
-        message={results.message}
-        slot="results-error"
-      />
+      <div className={className} data-slot="results-error">
+        <ResultsCondition action={results.action} message={results.message} />
+      </div>
     );
   }
 
