@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { buildIndex, followOnsForProduct } from "../src/api/derive";
 import type { ChangeEntry } from "../src/api/types";
 import type { ArchiveState } from "../src/api/use-archive";
-import { ProductFollowOns } from "../src/pages/product-follow-ons";
+import { ProductPendingSpec } from "../src/pages/product-pending";
 import {
   changeEntry,
   pageEntry,
@@ -129,7 +129,7 @@ function render(state: ArchiveState) {
   archive.current = state;
   return renderToStaticMarkup(
     <MemoryRouter>
-      <ProductFollowOns id={PRODUCT} index={index()} />
+      <ProductPendingSpec id={PRODUCT} index={index()} />
     </MemoryRouter>,
   );
 }
@@ -153,7 +153,7 @@ describe("the section on the domain page", () => {
     archive.current = ready([]);
     const html = renderToStaticMarkup(
       <MemoryRouter>
-        <ProductFollowOns
+        <ProductPendingSpec
           id={PRODUCT}
           index={buildIndex(
             snapshotOf({ taxonomy: { products: [PRODUCT], topics: [] } }),
@@ -170,5 +170,66 @@ describe("the section on the domain page", () => {
 
     expect(html).toContain("A reminder before the expiry.");
     expect(html).toContain("archive unavailable");
+  });
+});
+
+describe("the pages' own open marks", () => {
+  const marked = () =>
+    buildIndex(
+      snapshotOf({
+        taxonomy: { products: [PRODUCT], topics: [] },
+        specs: [specEntry(LISTING, ["A listing is drafted"])],
+        pages: [
+          {
+            path: `docs/prds/products/${PRODUCT}/listing.md`,
+            source: [
+              "---",
+              "title: Listing",
+              `spec: ${LISTING}`,
+              "---",
+              "",
+              "## Reserve",
+              "",
+              "- **Floor** — ❓ whether a reserve is shown, and",
+              "  how it is worded",
+              "",
+              "| Item | Status |",
+              "| --- | --- |",
+              "| Gallery `TBC` | Pending |",
+              "",
+              "```",
+              "❓ not this one",
+              "```",
+              "",
+              "## Pictures",
+              "",
+              "Three at most, ❓ whether a video counts.",
+              "",
+              ':::detail{title="Product decisions" for="pm"}',
+              "| Decision | Status | Owner |",
+              "| --- | --- | --- |",
+              "| Preview size | ❓ Open | Design |",
+              ":::",
+              "",
+            ].join("\n"),
+          },
+        ],
+      }),
+    );
+
+  it("finds every ❓ and TBC line, where it sits", () => {
+    const html = renderToStaticMarkup(
+      <MemoryRouter>
+        <ProductPendingSpec id={PRODUCT} index={marked()} />
+      </MemoryRouter>,
+    );
+
+    expect(html).toContain("whether a reserve is shown, and how it is worded");
+    expect(html).toContain("/p/demo-admin/auction/listing#pictures");
+    expect(html).toContain("Gallery");
+    expect(html).toContain("Preview size · ❓ Open · Design");
+    expect(html).toContain("/p/demo-admin/auction/listing#reserve");
+    expect(html).toContain("#detail-product-decisions");
+    expect(html).not.toContain("not this one");
   });
 });
