@@ -20,9 +20,9 @@ which are cover over shipped behaviour:
 
 ## 2. The manual (grade10-spec) (owner: @sean)
 
-- [ ] 2.1 Say on both shared pages that the components take a ceiling and a count and judge neither — `store-product-listing.md` for the card, `store-cart.md` for the line
-- [ ] 2.2 Say on the two site pages that a cart control stops where the shop's count stops and says how many are left when it does, and record in `product-listing.md`'s `Product decisions` block why the cap stays advisory, why one threshold serves every surface, and why a count is said as news rather than as standing pressure
-- [ ] 2.3 Verify: `pnpm check:manual`
+- [x] 2.1 Say on both shared pages that the components take a ceiling and a count and judge neither — `store-product-listing.md` for the card, `store-cart.md` for the line
+- [x] 2.2 Say on the two site pages that a cart control stops where the shop's count stops and says how many are left when it does, and record in `product-listing.md`'s `Product decisions` block why the cap stays advisory, why one threshold serves every surface, and why a count is said as news rather than as standing pressure
+- [x] 2.3 Verify: `pnpm check:manual`
 
 ## 3. The store's product model (grade10)
 
