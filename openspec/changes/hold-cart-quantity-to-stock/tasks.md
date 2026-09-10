@@ -42,7 +42,7 @@ Needs group 1's bump and group 3's model.
 
 Needs group 3's model.
 
-- [ ] 5.1 Read the page's `onlyLeft` line from `remainingToSay` against the stepper's quantity, so *Asking for the last one is answered* (`SC-23`) passes while *Nearly out is said on the page* (`SC-22`) and *A well-stocked card says nothing* (`SC-24`) go on holding
+- [x] 5.1 Read the page's `onlyLeft` line from `remainingToSay` against the stepper's quantity, so *Asking for the last one is answered* (`SC-23`) passes while *Nearly out is said on the page* (`SC-22`) and *A well-stocked card says nothing* (`SC-24`) go on holding
 - [ ] 5.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 6. The cart drawer (grade10)
