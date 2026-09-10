@@ -2,7 +2,7 @@ import { cn } from "@grade10/design-system/lib/utils";
 import type { PropsWithChildren } from "react";
 import type { AuctionRecordTabsProps } from "./types";
 
-/** @deprecated Prefer `AuctionRecord` (one page, two sections). */
+/** @deprecated Prefer `AuctionRecord` (one table page). */
 function AuctionRecordTabs({
   activeTab,
   copy,

@@ -13,14 +13,10 @@ import {
   BIDDING_CHARIZARD,
   BIDDING_POSTER,
   biddingItem,
-  EMAIL_ALERTS_COPY,
-  WATCH_COPY,
   WATCHING_CAMERA,
   WATCHING_POSTER,
-  watchingItem,
 } from "./fixtures";
 import type { AuctionRecordRowProps } from "./types";
-import { WatchButton } from "./watch-button";
 
 const breadcrumbs = (
   <Breadcrumbs>
@@ -31,10 +27,8 @@ const breadcrumbs = (
 );
 
 const onBrowseCatalogue = fn();
-const onOpenBidding = fn();
 const onWatchToggle = fn();
 const onEmailAlertsChange = fn();
-const watchPressed = fn();
 
 const BIDDING_ROWS = [BIDDING_CHARIZARD, BIDDING_POSTER];
 const WATCHING_ROWS = [WATCHING_CAMERA, WATCHING_POSTER];
@@ -114,7 +108,7 @@ function MyAuctions({
 }
 
 const meta = {
-  title: "Auction Record/AuctionRecord",
+  title: "My Auctions/Page",
   component: AuctionRecord,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -148,12 +142,14 @@ function auctionRecordRevealed(canvasElement: HTMLElement): boolean {
     return Number(getComputedStyle(empty).opacity) > 0.9;
   }
 
-  const row = canvasElement.querySelector('[data-slot="auction-record-row"]');
-  const wrapper = row?.parentElement;
+  const table = canvasElement.querySelector('[data-slot="table"]');
+  if (!table) return false;
+  const wrapper = table.parentElement;
   if (!wrapper) return false;
   return Number(getComputedStyle(wrapper).opacity) > 0.9;
 }
 
+/** Default composition: bid rows first, watch-only after, one table. */
 export const Filled: Story = {
   name: "Filled",
   render: () => <MyAuctions />,
@@ -165,20 +161,31 @@ export const Filled: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "My Auctions" }),
     ).toBeVisible();
-
-    // Bidding leads: a lot holding money outranks one only being followed.
-    const headings = canvas.getAllByRole("heading", { level: 2 });
-    expect(headings.map((heading) => heading.textContent)).toEqual([
-      "Bidding",
-      "Watching",
-    ]);
+    expect(canvas.getByText("4")).toBeVisible();
+    expect(canvas.getByText("Auction")).toBeVisible();
+    expect(canvas.getByText("Your Standing")).toBeVisible();
     expect(
-      canvasElement.querySelectorAll('[data-slot="auction-record-row-image"]')
-        .length,
-    ).toBe(4);
+      canvas.queryByRole("heading", { level: 2, name: "Bidding" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("heading", { level: 2, name: "Watching" }),
+    ).not.toBeInTheDocument();
+
+    const rows = canvasElement.querySelectorAll(
+      '[data-slot="auction-record-row"]',
+    );
+    expect(rows).toHaveLength(4);
+    // Bid rows first: Charizard Leading before watch-only camera.
+    expect(within(rows[0] as HTMLElement).getByText("Leading")).toBeVisible();
+    expect(within(rows[2] as HTMLElement).getByText("--")).toBeVisible();
+    // Unwatch only on the two watch-only rows.
+    expect(
+      canvas.getAllByRole("button", { name: "Unwatch this lot" }),
+    ).toHaveLength(2);
   },
 };
 
+/** Sparse page: bids only — no Unwatch column actions. */
 export const BiddingOnly: Story = {
   name: "Bidding only",
   render: () => <MyAuctions watching={[]} />,
@@ -187,29 +194,11 @@ export const BiddingOnly: Story = {
     await waitFor(() =>
       expect(auctionRecordRevealed(canvasElement)).toBe(true),
     );
+    expect(canvas.getByText("2")).toBeVisible();
     expect(
-      canvas.getByRole("heading", { level: 2, name: "Bidding" }),
-    ).toBeVisible();
-    expect(
-      canvas.queryByRole("heading", { level: 2, name: "Watching" }),
+      canvas.queryByRole("button", { name: "Unwatch this lot" }),
     ).not.toBeInTheDocument();
-  },
-};
-
-export const WatchingOnly: Story = {
-  name: "Watching only",
-  render: () => <MyAuctions bidding={[]} />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await waitFor(() =>
-      expect(auctionRecordRevealed(canvasElement)).toBe(true),
-    );
-    expect(
-      canvas.getByRole("heading", { level: 2, name: "Watching" }),
-    ).toBeVisible();
-    expect(
-      canvas.queryByRole("heading", { level: 2, name: "Bidding" }),
-    ).not.toBeInTheDocument();
+    expect(canvas.getAllByRole("switch")).toHaveLength(2);
   },
 };
 
@@ -225,96 +214,9 @@ export const Empty: Story = {
       expect(auctionRecordRevealed(canvasElement)).toBe(true),
     );
     expect(canvas.getByText("No lots yet")).toBeVisible();
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Browse auctions" }),
-    );
+    expect(canvas.queryByText("0")).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("button", { name: "Browse lots" }));
     expect(onBrowseCatalogue).toHaveBeenCalled();
-  },
-};
-
-export const ClosedAndCalledOff: Story = {
-  name: "Closed and called off",
-  args: {
-    biddingItems: [],
-    watchingItems: [
-      watchingItem({
-        id: "closed",
-        title: "Studio Print, Edition of 12",
-        state: "ended",
-        stateLabel: "Closed",
-        currentBid: "HK$2,200",
-        closesAt: "Closed 8 Sep 2026, 20:00 HKT",
-        href: "#lot-print",
-        onWatchToggle,
-        onEmailAlertsChange,
-      }),
-      watchingItem({
-        id: "called-off",
-        title: "Campaign Lot A",
-        state: "ended",
-        stateLabel: "Called off",
-        currentBid: "HK$900",
-        closesAt: "Called off 7 Sep 2026",
-        href: "#lot-a",
-        onWatchToggle,
-        onEmailAlertsChange,
-      }),
-    ],
-  },
-};
-
-export const Unavailable: Story = {
-  name: "Unavailable",
-  args: {
-    biddingItems: [],
-    watchingItems: [
-      watchingItem({
-        id: "gone",
-        title: "Delisted Lot",
-        state: "ended",
-        stateLabel: "No longer listed",
-        detail: "Details are no longer available",
-        currentBid: undefined,
-        closesAt: undefined,
-        href: undefined,
-        onWatchToggle,
-        onEmailAlertsChange,
-      }),
-    ],
-  },
-};
-
-export const BidOnMark: Story = {
-  name: "Bid-on mark",
-  args: {
-    biddingItems: [],
-    watchingItems: [
-      watchingItem({
-        id: "bid-on",
-        title: "1994 Vintage Rangefinder Camera",
-        state: "live",
-        stateLabel: "Open",
-        currentBid: "HK$4,800",
-        closesAt: "9 Sep 2026, 21:00 HKT",
-        href: "#lot-camera",
-        bidPlaced: true,
-        onOpenBidding,
-        onWatchToggle,
-        onEmailAlertsChange,
-      }),
-    ],
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await waitFor(() =>
-      expect(auctionRecordRevealed(canvasElement)).toBe(true),
-    );
-    await userEvent.click(canvas.getByRole("button", { name: "Bid" }));
-    expect(onOpenBidding).toHaveBeenCalled();
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Unwatch this lot" }),
-    );
-    expect(onWatchToggle).toHaveBeenCalled();
   },
 };
 
@@ -374,43 +276,7 @@ export const EmailAlertsMuted: Story = {
     );
     expect(body.getByText("Your bid stands.")).toBeInTheDocument();
 
-    // The row stays on the page; muting is not unwatching.
     expect(canvas.getByText("1999 Base Set Charizard PSA 9")).toBeVisible();
-  },
-};
-
-export const EmailAlertsMasterOff: Story = {
-  name: "Email alerts master off",
-  args: {
-    biddingItems: [],
-    watchingItems: [
-      watchingItem({
-        id: "master-off",
-        title: "Signed Tour Poster, 1/50",
-        state: "live",
-        stateLabel: "Open",
-        currentBid: "HK$1,050",
-        closesAt: "12 Sep 2026, 18:00 HKT",
-        href: "#lot-poster",
-        emailAlerts: false,
-        emailAlertsDisabled: true,
-        emailAlertsCopy: EMAIL_ALERTS_COPY,
-        onEmailAlertsChange,
-        onWatchToggle,
-      }),
-    ],
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await waitFor(() =>
-      expect(auctionRecordRevealed(canvasElement)).toBe(true),
-    );
-    expect(canvas.getByRole("switch")).toHaveAttribute("aria-disabled", "true");
-    expect(
-      canvas.getByText(
-        "Auction email alerts are off in account notifications.",
-      ),
-    ).toBeVisible();
   },
 };
 
@@ -424,7 +290,7 @@ export const AlertsPending: Story = {
         state: "leading",
         stateLabel: "Leading",
         currentBid: "HK$12,800",
-        closesAt: "17 Sep 2026, 21:00 HKT",
+        closesAt: "Closes 17 Sep 2026, 21:00 HKT",
         href: "#lot-charizard",
         emailAlertsPending: true,
         onEmailAlertsChange,
@@ -440,20 +306,5 @@ export const AlertsPending: Story = {
     const alerts = canvas.getByRole("switch");
     expect(alerts).toHaveAttribute("aria-disabled", "true");
     expect(alerts).toHaveAttribute("aria-busy", "true");
-  },
-};
-
-export const WatchControl: Story = {
-  name: "Watch control",
-  render: () => (
-    <div className="p-8">
-      <WatchButton copy={WATCH_COPY} onPress={watchPressed} watched={false} />
-    </div>
-  ),
-  play: async ({ canvasElement }) => {
-    await userEvent.click(
-      within(canvasElement).getByRole("button", { name: "Watch this lot" }),
-    );
-    expect(watchPressed).toHaveBeenCalled();
   },
 };

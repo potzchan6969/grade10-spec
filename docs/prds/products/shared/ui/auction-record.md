@@ -4,16 +4,15 @@ spec: shared/ui/auction-record
 order: 9
 ---
 
-Six blocks make the account's auction record, written once and composed by
-every application that shows it: the two-page frame, the Bidding and
-Watching lists, the row that carries one lot's standing, the empty state, and
-the watch control that marks a lot wherever it is shown. Each renders on its
-own, so a lot page takes the watch control without adopting the frame.
+Blocks make the account's auction record, written once and composed by every
+application that shows it: the page frame (title and watching-count badge),
+the table of rows, the empty state, and the watch control that marks a lot
+wherever it is shown. Each renders on its own, so a lot page takes the watch
+control without adopting the frame.
 
-The frame reads Bidding before Watching. A row leads with the lot, then its
-current bid and close in their own labelled cells rather than one run of
-text, and carries its state as a toned badge. Watching rows carry an email
-alerts switch beside Unwatch; a bidding row carries the switch alone.
+The frame shows one table: bid rows before watch-only. A row is Auction
+(image, title, close), Current Bid, Your Standing (badge or `--`), Email
+alerts, and Unwatch when the application supplies it for a watch-only lot.
 
 As everywhere in this package, the blocks hold no product state. What lot,
 what standing, what was paid and what was released arrive as props the

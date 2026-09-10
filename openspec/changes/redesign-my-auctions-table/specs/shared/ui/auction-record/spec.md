@@ -1,46 +1,42 @@
-# shared/ui/auction-record Specification
-
-## Purpose
-The account auction-record components every store application composes: the
-My Auctions page body (breadcrumbs, title with watching-count badge, one
-table of bookmarked lots), the row that carries one listing, the empty
-state, and the control that watches a listing wherever it is shown. The
-components display what they are given and report what the collector did;
-what is stored, what a state means, and every string on screen belong to the
-application.
-
 ## Feature set
 
-- **The record surface exports**
-  - Export contract: names the components and types an application imports, so
-    the surface lands once and reaches every application unchanged.
-  - Independent parts: lets a surface reuse the row or the watch control
-    without adopting the whole page.
-- **Content ownership**
-  - Copy through props: keeps message catalogs in the application and out of
-    the shared package.
-  - Reporting, not acting: keeps product state and writes on the application's
-    side of the boundary.
+- **Table page body**
+  - AuctionRecord shell: breadcrumbs, My Auctions title with watching-count
+    badge, one table or one empty state.
+  - AuctionRecordRow as table row: Auction, Current Bid, Your Standing, Email
+    alerts, Unwatch when applicable.
+- **Export contract**
+  - Required exports: drop WatchingList and BiddingList; keep row, empty,
+    WatchButton, transitional tabs.
 
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: The auction-record surface exports
 
 The shared UI package SHALL export, from its public entry, exactly these
 components for the account auction record — `AuctionRecord`,
-`WatchingList`, `BiddingList`, `AuctionRecordRow`, `AuctionRecordEmpty`,
-`WatchButton`, and `AuctionRecordTabs` — and exactly these types:
-`AuctionRecordProps`, `WatchingListProps`, `BiddingListProps`,
+`AuctionRecordRow`, `AuctionRecordEmpty`, `WatchButton`, and
+`AuctionRecordTabs` — and exactly these types: `AuctionRecordProps`,
 `AuctionRecordRowProps`, `AuctionRecordRowCopy`, `AuctionRecordRowState`,
 `AuctionRecordEmptyProps`, `AuctionRecordCopy`, `AuctionRecordTabsProps`,
 `WatchButtonProps`, `WatchButtonCopy`, `EmailAlertsCopy`, and
 `EmailAlertsToastCopy`.
 
-`AuctionRecord` is the My Auctions page body: breadcrumbs slot, page title,
-Bidding and Watching sections on one page, in that order — a lot holding the
-collector's money is read before one they only follow. A section with no rows
-SHALL be omitted; when both sections are empty the page SHALL show one empty
-state.
+`WatchingList`, `BiddingList`, `WatchingListProps`, and `BiddingListProps`
+SHALL NOT be required exports for this surface.
+
+`AuctionRecord` is the My Auctions page body: breadcrumbs slot, page title
+with a watching-count badge whose value is the number of table rows, and one
+table of rows — or one empty state when there are no rows. It SHALL NOT
+render separate Bidding and Watching section headings.
+
+`AuctionRecordRow` SHALL render as one table row with columns for the
+listing (key image, title link, close), current bid, Your Standing (state
+badge when the application supplies a standing label; otherwise the
+application-supplied no-standing placeholder such as `--`), Email alerts when
+supplied, and Unwatch when supplied. Column widths SHALL follow content
+(auto), matching the design-system table primitives.
+
 `AuctionRecordTabs` remains exported for transitional surfaces and SHALL NOT
 be required for a new My Auctions assembly.
 
@@ -67,20 +63,22 @@ alone.
 - **GIVEN** an `AuctionRecord` supplied with both bidding rows and watching
   rows
 - **WHEN** it renders
-- **THEN** the Bidding section appears before the Watching section
+- **THEN** the bidding rows appear before the watching-only rows in one table
+- **AND** no Bidding or Watching section heading appears
 
-### Requirement: Every string on the surface is supplied by the application
+#### Scenario: shared-ui-auction-record-SC-11 - The title badge shows the row count
 
-These components SHALL supply no user-facing string of their own — no state
-label, no empty-state copy, no watch or unwatch label, no email-alerts label,
-no label for a row's current bid or close, no wording for an email-alerts
-confirmation, and no default for any of them. A string not supplied SHALL be
-absent rather than replaced by a built-in value.
+- **GIVEN** an `AuctionRecord` supplied with four rows
+- **WHEN** it renders
+- **THEN** the badge beside the page title shows 4
 
-#### Scenario: shared-ui-auction-record-SC-03 - No label is invented
+#### Scenario: shared-ui-auction-record-SC-12 - Watch-only standing shows the placeholder
 
-- **WHEN** an application renders the surface without supplying a state label
-- **THEN** no built-in label appears in its place
+- **GIVEN** an `AuctionRecordRow` supplied without a standing label and with
+  the no-standing placeholder in copy
+- **WHEN** it renders
+- **THEN** Your Standing shows that placeholder
+- **AND** it does not invent a badge label
 
 ### Requirement: The surface reports the collector's action rather than performing it
 
@@ -98,6 +96,11 @@ SHALL NOT change what another row shows. When the application supplies
 confirmation copy, the row SHALL announce the change once the application has
 changed the value it gives the control — never on the collector's click
 alone.
+
+When the application does not supply Unwatch (`onWatchToggle` / watch copy),
+the row SHALL omit the Unwatch control. When it does not supply a standing
+label, the row SHALL show the application-supplied no-standing placeholder
+rather than inventing a state badge.
 
 #### Scenario: shared-ui-auction-record-SC-04 - The watch control reports and waits
 
@@ -136,14 +139,10 @@ alone.
 - **THEN** the row announces the change once, in the supplied wording
 - **AND** a row supplied without that copy announces nothing
 
-### Requirement: A watched-list row carries the lot's key image
+#### Scenario: shared-ui-auction-record-SC-13 - A bid row omits Unwatch when not supplied
 
-`AuctionRecordRow` SHALL accept an optional key image for the listing. When
-supplied, the row SHALL show that image beside the listing identity. When not
-supplied, the image well SHALL remain without inventing a product photograph.
-
-#### Scenario: shared-ui-auction-record-SC-06 - A row shows the key image when given
-
-- **GIVEN** an `AuctionRecordRow` supplied with a key image
+- **GIVEN** an `AuctionRecordRow` supplied with email-alerts controls and no
+  Unwatch props
 - **WHEN** it renders
-- **THEN** that image is shown on the row
+- **THEN** Email alerts are shown
+- **AND** Unwatch is absent
