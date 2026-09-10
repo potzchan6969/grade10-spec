@@ -17,6 +17,12 @@ import {
   specTitle,
 } from "../api/paths";
 import { REF_PATTERN, resolveRef } from "../content/refs";
+import {
+  columnCount,
+  EQUAL_WIDTH_PROPERTY,
+  equalWidthColumns,
+  equalWidthTables,
+} from "../content/table-layout";
 import { AnchorLink } from "./anchor";
 
 /** Where a markdown href actually points, once the store layout is applied. */
@@ -330,11 +336,33 @@ export function MarkdownView({
           {children}
         </Heading>
       ),
-      table: ({ children }: ComponentProps<"table">) => (
-        <div className="manual-table-scroll">
-          <table>{children}</table>
-        </div>
-      ),
+      table: ({
+        children,
+        node,
+      }: ComponentProps<"table"> & { node?: HastNode }) => {
+        const spec = node?.properties?.[EQUAL_WIDTH_PROPERTY];
+        const tracks =
+          typeof spec === "string"
+            ? equalWidthColumns(columnCount(node), spec)
+            : null;
+        return (
+          <div
+            className={
+              tracks
+                ? "manual-table-scroll manual-table-equal"
+                : "manual-table-scroll"
+            }
+          >
+            <table
+              style={
+                tracks ? { gridTemplateColumns: tracks.join(" ") } : undefined
+              }
+            >
+              {children}
+            </table>
+          </div>
+        );
+      },
       img: ({ src, alt }: ComponentProps<"img">) => (
         <img
           alt={alt ?? ""}
@@ -351,7 +379,7 @@ export function MarkdownView({
       <Markdown
         components={components}
         rehypePlugins={refs ? REF_PLUGINS : undefined}
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={[remarkGfm, equalWidthTables]}
       >
         {text}
       </Markdown>
