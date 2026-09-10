@@ -9,9 +9,11 @@ import {
   ListingUserBidHistory,
   PaymentMethodRow,
 } from "@grade10/ui";
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import { useEffect, useState } from "react";
 import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "../auction-listing/listing-bid-enrollment-copy";
 import {
+  AUCTION_LISTING_HREF,
   AUCTION_LOT,
   AUCTION_LOT_BADGES,
   AUCTION_LOT_DETAILS_COPY,
@@ -80,6 +82,7 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
     state.startsWith("live") ? timing : undefined,
     liveFacts,
   );
+  const watchLocked = hasBidOnListing(view);
 
   useEffect(() => {
     setLiveSnapshot(
@@ -129,13 +132,33 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
 
   return (
     <>
+      <Toast position="bottom-right" />
       <AuctionLotDetailsPageShell
         header={
           <ListingLotHeader
+            auctionHref={AUCTION_LISTING_HREF}
             copy={AUCTION_LOT_DETAILS_COPY.header}
-            onWatchToggle={() => setWatched(() => !watched)}
+            onUnwatchedToastAction={
+              view.closed ? undefined : () => setWatched(true)
+            }
+            onWatchToggle={
+              view.closed
+                ? undefined
+                : () => {
+                    if (watchLocked) return;
+                    setWatched((current) => !current);
+                  }
+            }
+            onWatchedToastAction={
+              view.closed
+                ? undefined
+                : () => {
+                    /* Preview stand-in: production opens My Auctions. */
+                  }
+            }
             title={AUCTION_LOT.title}
-            watched={watched}
+            watched={view.closed ? false : watched || watchLocked}
+            watchLocked={view.closed ? false : watchLocked}
           />
         }
       >

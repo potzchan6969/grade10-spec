@@ -88,6 +88,9 @@ export const ClosedSold: Story = {
     expect(canvas.getByText("Closed")).toBeVisible();
     expect(canvas.getByText("30 Aug 2026")).toBeVisible();
     expect(canvas.getByText("Closed at 17:15. Ran 7d 15h")).toBeVisible();
+    expect(
+      canvas.queryByRole("button", { name: /watch/i }),
+    ).not.toBeInTheDocument();
   },
 };
 export const ClosedWonPaymentDue: Story = {
@@ -95,10 +98,32 @@ export const ClosedWonPaymentDue: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Continue" })).toBeVisible();
+    expect(
+      canvas.queryByRole("button", { name: /watch/i }),
+    ).not.toBeInTheDocument();
   },
 };
 export const ClosedWonSettled: Story = {
   args: { state: "closed-won-settled" },
+  play: async ({ canvasElement }) => {
+    expect(
+      within(canvasElement).queryByRole("button", { name: /watch/i }),
+    ).not.toBeInTheDocument();
+  },
 };
-export const ClosedLost: Story = { args: { state: "closed-lost" } };
-export const ClosedUnsold: Story = { args: { state: "closed-unsold" } };
+export const ClosedLost: Story = {
+  args: { state: "closed-lost" },
+  play: async ({ canvasElement }) => {
+    expect(
+      within(canvasElement).queryByRole("button", { name: /watch/i }),
+    ).not.toBeInTheDocument();
+  },
+};
+export const ClosedUnsold: Story = {
+  args: { state: "closed-unsold" },
+  play: async ({ canvasElement }) => {
+    expect(
+      within(canvasElement).queryByRole("button", { name: /watch/i }),
+    ).not.toBeInTheDocument();
+  },
+};
