@@ -39,6 +39,11 @@ release.
   invoice, sends the new **invoice-sent** letter, and locks the address.
 - **BREAKING — The 7-day deadline starts at send**, not at lot close. An order
   with no invoice has no deadline and never expires.
+- **BREAKING — Expiry becomes an invoice status.** Grade10 writes `expired` on
+  the invoice when the deadline passes unpaid. The order status **Expired** is
+  removed, so the order keeps reading **Pending Payment**. An expired invoice
+  stays payable by card or manual settlement, and an operator's reissue returns
+  it to `pending`.
 - **Idle orders are shown, not expired.** The order detail shows how long it
   has waited in its stage; after **72 hours** in either stage the order carries
   an **Overdue** mark. Nothing is automatic — the operator chases, prepares
@@ -79,13 +84,13 @@ None.
 - `grade10-site/auction/winner-order`: the order opens awaiting an address;
   the invoice carries an operator quote; the address locks and the deadline
   starts at send; the winner pays by card only; the receipt names the method.
-- `grade10-site/auction/order-status`: invoice status gains `not_issued`, a
-  third condition `address_confirmed`, and two derived states — Awaiting
-  Address and Preparing Invoice.
+- `grade10-site/auction/order-status`: invoice status gains `not_issued` and
+  `expired`; the condition `address_confirmed` replaces `deadline_elapsed`;
+  Awaiting Address and Preparing Invoice are added and Expired is removed.
 - `grade10-site/auction/notifications-order`: the auction-won letter asks for
   an address; a new invoice-sent letter.
 - `grade10-site/auction/account-record`: the winner's projection gains the two
-  pre-invoice states.
+  pre-invoice states and loses Expired.
 - `grade10-admin/auction/post-sale`: quote and send, re-quote, idle time and
   the Overdue mark, cancellation before an invoice, and manual settlement with
   method and proof.
@@ -130,9 +135,14 @@ engineer confirms the payment provider supplies them.
   admin — not shipment-processing.
 - **Proof files** are 1 to 5 per settlement, each a PDF, JPEG, or PNG of at
   most 10 MB, readable by operators only, and never shown to the winner.
-- **Re-quote applies to Pending Payment.** An Expired order is reissued, as
+- **Re-quote applies to a `pending` invoice.** An `expired` invoice is reissued, as
   today.
 - **3 days is 72 hours** in the current stage.
+- **An expired invoice still needs action in the queue.** The row reads
+  Pending Payment, shows the invoice's Expired status beside it, and carries
+  the needs-action highlight.
+- **Suspension is unchanged.** `grade10-site/auction/bidder-suspension` fires
+  when the deadline passes unpaid — the same moment Grade10 writes `expired`.
 
 ## Follow-on changes
 

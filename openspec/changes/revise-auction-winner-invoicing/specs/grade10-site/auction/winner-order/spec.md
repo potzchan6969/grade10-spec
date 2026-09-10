@@ -146,8 +146,12 @@ not leaving the order untouched. Only an operator SHALL set a new deadline:
 by reissuing an expired invoice, or by choosing to reset it on a re-quote, per
 `grade10-admin/auction/post-sale`.
 
-An auction order with no sent invoice SHALL have no payment deadline and SHALL
-never derive as Expired.
+An auction order with no sent invoice SHALL have no payment deadline, and its
+invoice status SHALL never become `expired`.
+
+When the deadline passes unpaid, Grade10 SHALL set the invoice status to
+`expired`, per `grade10-site/auction/order-status`. The order still reads
+Pending Payment, and the winner can still pay the invoice by card.
 
 #### Scenario: winner-order-SC-31 - The deadline is seven days from send
 
@@ -163,7 +167,7 @@ never derive as Expired.
   30 days after its lot closed
 - **WHEN** its derived status is read
 - **THEN** it is Awaiting Address
-- **AND** it is not Expired
+- **AND** its invoice status is `not_issued`, never `expired`
 
 #### Scenario: winner-order-SC-33 - A declined payment does not move the deadline
 
@@ -171,6 +175,13 @@ never derive as Expired.
   2026-09-19T09:00:00Z
 - **WHEN** the winner's card is declined twice
 - **THEN** the payment deadline is still 2026-09-19T09:00:00Z
+
+#### Scenario: winner-order-SC-37 - An expired invoice can still be paid by card
+
+- **GIVEN** an auction order whose invoice status is `expired`
+- **WHEN** the winner opens the order and pays by card
+- **THEN** Grade10 accepts the payment
+- **AND** the invoice status is `paid`
 
 ## MODIFIED Requirements
 
@@ -272,8 +283,8 @@ Releasing an authorization that has already expired SHALL succeed as a
 no-op. Grade10 SHALL NOT treat an expired authorization as a failure.
 
 A refused or failed payment SHALL NOT void the invoice. The invoice SHALL
-remain payable until its deadline and the winner SHALL be able to retry with
-the same or a different card.
+remain payable, before its deadline and after it has expired, and the winner
+SHALL be able to retry with the same or a different card.
 
 #### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
 

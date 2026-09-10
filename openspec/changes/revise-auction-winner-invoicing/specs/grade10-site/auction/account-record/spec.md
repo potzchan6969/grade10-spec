@@ -2,14 +2,15 @@
 
 - Winner's projection
   - Two states before an invoice: a won lot reads Awaiting Address or Preparing Invoice before it has anything to pay
+  - No Expired state: a won lot whose invoice has expired reads Pending Payment and says how to reach Grade10
 
 ## MODIFIED Requirements
 
 ### Requirement: A winner reads their own payment and shipment state
 
 A listing under Won SHALL carry the auction order's derived status, projected
-from the invoice status, fulfilment status, address confirmation, payment
-deadline, and delivery confirmation defined by
+from the invoice status, fulfilment status, address confirmation, and
+delivery confirmation defined by
 `grade10-site/auction/order-status`. The account record SHALL show the same
 status vocabulary as the auction order and SHALL NOT invent a second payment
 or shipment state.
@@ -18,8 +19,7 @@ or shipment state.
 | --- | --- |
 | Awaiting Address | No invoice has been sent, and the winner has confirmed no delivery address |
 | Preparing Invoice | No invoice has been sent, and the winner has confirmed a delivery address |
-| Pending Payment | Invoice status is `pending`, and the payment deadline has not elapsed |
-| Expired | Invoice status is `pending`, and the payment deadline has elapsed |
+| Pending Payment | Invoice status is `pending` or `expired` |
 | Processing | Invoice status is `paid`, and fulfilment status is `unfulfilled` |
 | Shipped | Invoice status is `paid`, fulfilment status is `fulfilled`, and delivery is not confirmed |
 | Delivered | Invoice status is `paid`, fulfilment status is `fulfilled`, and delivery is confirmed |
@@ -44,9 +44,9 @@ auction order's status.
 
 #### Scenario: grade10-site-auction-account-record-SC-22 - A payment problem says how to reach Grade10
 
-- **GIVEN** a won listing whose invoice status is `pending` and whose payment deadline has passed
+- **GIVEN** a won listing whose invoice status is `expired`
 - **WHEN** the winner opens their Bidding page
-- **THEN** that listing's state is Expired
+- **THEN** that listing's state is Pending Payment
 - **AND** the row carries how to reach Grade10
 
 #### Scenario: grade10-site-auction-account-record-SC-23 - Shipment states reach the winner

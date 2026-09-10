@@ -3,6 +3,7 @@
 - Queue
   - Two states before an invoice: Awaiting Address waits on the winner, Preparing Invoice waits on an operator and needs action
   - Overdue mark: an order idle 72 hours or more in either stage is marked, so a stalled order is chased rather than forgotten
+  - Expired invoices: an order whose invoice has expired reads Pending Payment and is highlighted as needing action
 - Quote and send
   - Operator quote: shipping and insurance are priced by a person for the winner's confirmed address
   - Send opens the window: sending issues the invoice, locks the address, and starts the 7-day deadline
@@ -136,8 +137,8 @@ Pending Payment:
 On send Grade10 SHALL supersede the current invoice, issue the new one as
 `pending` at the new final amount with the deadline the operator chose, lock
 the new address, write a re-quoted entry to the invoice log with the deadline
-choice, and send the winner the invoice-reissued letter. An Expired order is
-not re-quoted; it is reissued, per "An operator resolves an unpaid order".
+choice, and send the winner the invoice-reissued letter. An order whose
+invoice is `expired` is not re-quoted; it is reissued, per "An operator resolves an unpaid order".
 
 #### Scenario: grade10-admin-auction-post-sale-SC-51 - A re-quote keeps the deadline when the operator says so
 
@@ -168,7 +169,7 @@ not re-quoted; it is reissued, per "An operator resolves an unpaid order".
 
 Manual settlement is the operator's backup for money that did not arrive by
 the winner's card. An operator holding payment-processing SHALL record it on
-an order whose invoice has been sent and is `pending`:
+an order whose invoice is `pending` or `expired`:
 
 1. Open the order and read the current invoice's final amount and the locked
    delivery address.
@@ -267,8 +268,7 @@ Grade10 SHALL NOT compute a second status for the operator.
 | Called off | The lot was withdrawn before a sale | Before a sale | No |
 | Awaiting Address | Derived: no invoice sent, no confirmed address | Order | No |
 | Preparing Invoice | Derived: no invoice sent, address confirmed | Order | **Yes** |
-| Pending Payment | Derived: invoice `pending`, deadline not elapsed | Order | No |
-| Expired | Derived: invoice `pending`, deadline elapsed | Order | **Yes** |
+| Pending Payment | Derived: invoice `pending` or `expired` | Order | **Yes** when the invoice is `expired` |
 | Processing | Derived: invoice `paid`, not dispatched | Order | **Yes** |
 | Shipped | Derived: dispatched, delivery not confirmed | Order | No |
 | Delivered | Derived: delivery confirmed | Order | No |
@@ -278,7 +278,9 @@ Grade10 SHALL NOT compute a second status for the operator.
 The queue SHALL let an operator filter to one outcome. Each outcome SHALL use
 a visual mark showing this label rather than an internal code, and two
 families SHALL NOT share a mark. A row whose outcome needs action SHALL carry
-an additional highlight. A row in Awaiting Address or Preparing Invoice that
+an additional highlight. A Pending Payment row whose invoice is `expired`
+SHALL also show the invoice status Expired beside its outcome. A row in
+Awaiting Address or Preparing Invoice that
 has waited 72 hours or more in that stage SHALL also carry the Overdue mark,
 per "The order detail shows how long an order has waited".
 
@@ -296,13 +298,17 @@ per "The order detail shows how long an order has waited".
 - **THEN** that lot's outcome is Processing
 - **AND** it is the same value the winner reads on their own order
 
-#### Scenario: grade10-admin-auction-post-sale-SC-21 - Expired and Processing are highlighted as needing action
+#### Scenario: grade10-admin-auction-post-sale-SC-63 - An expired invoice and a Processing order need action
 
-- **GIVEN** a queue holding one Expired order, one Processing order, and one
-  Delivered order
+- **GIVEN** a queue holding a Pending Payment order whose invoice is `expired`,
+  a Pending Payment order whose invoice is `pending`, a Processing order, and
+  a Delivered order
 - **WHEN** an operator reads it
-- **THEN** the Expired and Processing rows carry the needs-action highlight
-- **AND** the Delivered row does not
+- **THEN** the expired-invoice row and the Processing row carry the
+  needs-action highlight
+- **AND** the expired-invoice row reads Pending Payment with the invoice
+  status Expired beside it
+- **AND** the other two rows carry no highlight
 
 #### Scenario: grade10-admin-auction-post-sale-SC-44 - An order ready for a quote needs action
 
@@ -319,9 +325,9 @@ an auction order that is unpaid.
 
 | Action | Effect | Available |
 | --- | --- | --- |
-| Reissue invoice | Issues a fresh invoice with a new 7-day payment deadline. Invoice status stays `pending`, so the derived order status returns to Pending Payment | On an Expired order |
-| Settle manually | Records a non-card payment with its method and proof, per "Manual settlement records the method and its proof". Invoice status becomes `paid`, so the order derives as Processing | On any order whose invoice has been sent and is `pending`, expired or not |
-| Cancel order | Invoice status becomes `cancelled`. The lot returns to available | On an Awaiting Address, Preparing Invoice, or Expired order |
+| Reissue invoice | Issues a fresh invoice with a new 7-day payment deadline. Invoice status returns from `expired` to `pending`; the order reads Pending Payment throughout | On an order whose invoice is `expired` |
+| Settle manually | Records a non-card payment with its method and proof, per "Manual settlement records the method and its proof". Invoice status becomes `paid`, so the order derives as Processing | On any order whose invoice is `pending` or `expired` |
+| Cancel order | Invoice status becomes `cancelled`. The lot returns to available | On an Awaiting Address or Preparing Invoice order, or one whose invoice is `expired` |
 
 Grade10 SHALL make manual settlement available before expiry as well as
 after, so a winner settling by bank transfer need not let their deadline
@@ -336,10 +342,10 @@ explicit action.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-23 - Reissue returns an expired order to Pending Payment
 
-- **GIVEN** an auction order deriving as Expired
+- **GIVEN** an auction order whose invoice is `expired`
 - **AND** an operator holding payment-processing
 - **WHEN** they reissue the invoice with a reason
-- **THEN** the invoice status is still `pending` with a new 7-day deadline
+- **THEN** the invoice status is `pending` with a new 7-day deadline
 - **AND** the derived order status is Pending Payment
 
 #### Scenario: grade10-admin-auction-post-sale-SC-24 - Reissue leaves the suspension standing
@@ -352,7 +358,7 @@ explicit action.
 #### Scenario: grade10-admin-auction-post-sale-SC-25 - An operator without the grant is refused
 
 - **GIVEN** an operator who does not hold payment-processing
-- **WHEN** they open an Expired order
+- **WHEN** they open an order whose invoice is `expired`
 - **THEN** the reissue, settle and cancel controls are visible and disabled
 - **AND** Grade10 refuses those actions on the server if they are attempted
 
@@ -372,7 +378,7 @@ these log entries in chronological order.
 
 | Field | Notes |
 | --- | --- |
-| Log type | Sent, re-quoted, reissued, paid, manually settled, cancelled, refunded, payment attempt failed |
+| Log type | Sent, expired, re-quoted, reissued, paid, manually settled, cancelled, refunded, payment attempt failed |
 | Timestamp | Stored in UTC, displayed in the operator's own timezone |
 | Invoice status after the log entry | |
 | Final amount at the log entry | Captures amount changes across re-quotes and reissues |

@@ -3,6 +3,7 @@
 - Post-close letters
   - Address first: the auction-won letter asks for a delivery address and names no amount, since none is owed yet
   - Invoice sent: a new letter carries the amount and the deadline, because sending is what opens the payment window
+  - Expiry letter: fires when Grade10 writes `expired` on the invoice at its deadline
 
 ## MODIFIED Requirements
 
@@ -19,7 +20,7 @@ collector's registered account email and SHALL follow the letter shape
 | Payment reminder | Day 3 after the current invoice is issued while invoice status is `pending` | Email |
 | Payment reminder | Day 6 after the current invoice is issued while invoice status is `pending` | Email |
 | Final notice | Day 7 after the current invoice is issued while invoice status is `pending` | Email |
-| Invoice expired | The payment deadline elapses with the invoice still `pending` | Email |
+| Invoice expired | Grade10 sets the invoice to `expired` at its payment deadline | Email |
 | Invoice reissued | An operator reissues an invoice, on a re-quote or after expiry | Email |
 | Payment received | Payment is confirmed, or an operator commits a manual settlement | Email |
 | Shipped | Fulfilment status becomes `fulfilled` and a tracking number is attached | Email |
@@ -39,9 +40,9 @@ measured from the current invoice's issue are measured from its send.
 
 #### Scenario: order-mail-SC-02 - Expiry is announced with what is owed
 
-- **GIVEN** an auction order whose payment deadline elapses with the invoice
-  status still `pending`
-- **WHEN** the expiry is processed
+- **GIVEN** an auction order whose invoice is `pending`
+- **WHEN** its payment deadline passes and Grade10 sets the invoice to
+  `expired`
 - **THEN** Grade10 sends the winner the invoice-expired letter
 - **AND** it names the outstanding amount and how to resolve it
 
