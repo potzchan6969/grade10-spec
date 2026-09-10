@@ -22,7 +22,7 @@ Independent of groups 2–8.
 
 Needs group 2 for the kind names the columns serve.
 
-- [x] 3.1 Add nullable `opens_in_24h_notified_at`, `opened_notified_at`, `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on watches, plus `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on bids for the participant fallback; add `email_alerts` (default true) on watches and the bid-only mute path; add account auction email alerts master storage; create `auction.mail_sends` per `tech-design.md`; generate and commit the Drizzle migration.
+- [x] 3.1 Add nullable `opens_in_24h_notified_at`, `opened_notified_at`, `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on watches, plus `closes_in_24h_notified_at`, `extended_notified_at`, and `new_bid_told_bid_id` on bids for the participant fallback; add `email_alerts` (default true) on watches and the bid-only mute path; add account auction email alerts master storage; create `auction.mail_logs` per `tech-design.md`; generate and commit the Drizzle migration.
 - [x] 3.2 Run `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`.
 
 ## 4. Enrolment, fanout, and coalescing (grade10) (owner: @mason5991)
@@ -71,10 +71,34 @@ Needs groups 4–7.
 - [ ] 8.3 Verify every scenario in this change, then run `openspec validate add-account-notifications --strict` and `openspec validate --specs`.
 - [ ] 8.4 Review message volume on a lot with two active maximums before staging, per `tech-design.md`'s snipe-war coalescing.
 
+## 9. Mail dispatch (parallel bulk + priority receipts) (grade10) (owner: @mason5991)
+
+Needs groups 1–4 for fanout claim/send, and group 1 for error class.
+
+- [ ] 9.1 Add auction mail job shapes and a dispatcher port: bulk
+  `(kind × listing × ≤50 keys)` and priority (one bid/settlement/order
+  row); CF Queue adapters for `MAIL_BULK_QUEUE` /
+  `MAIL_PRIORITY_QUEUE`; inline consumer when bindings are absent.
+- [ ] 9.2 Move watcher fanouts (progress, new-bid, ending-soon) to
+  claim → enqueue bulk → consumer send/stamp/park; keep Postgres as
+  the retry ledger (backoff, park, admin retry).
+- [ ] 9.3 Move bid/settlement (and order) receipt sends onto the
+  priority queue path so payment must-send and bid ASAP mail cannot be
+  starved by bulk fanout; settlements before bids inside priority.
+- [ ] 9.4 Wire wrangler queue producers/consumers on
+  `grade10-auction-service`; document that store/vault may reuse the
+  pattern with their own due rows and queues; no central mail-service
+  ledger.
+- [ ] 9.5 Verify multi-listing parallel drain, transient re-claim after
+  backoff, permanent park+ack, and priority-not-blocked-by-bulk in
+  auction backend tests.
+
 ## Remarked for a later change (not this task list)
 
 - Enable account-locale rendering for the six kinds.
-- Migrate the eight bid-state / ending-soon kinds onto this spine.
 - In-app notification center, shell badge, in-app toggler, global channel toggles.
-- ZZZ delivery of the six kinds.
+- ZZZ delivery of the six kinds (own queues / sender when catalogs exist).
 - Account deletion / retention for send log and mute prefs.
+- Brand-scoped `grade10-mail` / `zzz-mail` pipe Workers if product
+  crons still starve after queues (delivery only — due rows stay in
+  product DBs).

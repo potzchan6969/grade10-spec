@@ -86,14 +86,12 @@ plan for that product, including mute. Permanent scenario ids under
 - **Device push, WhatsApp, or SMS.** Device push kind names may join the
   shared vocabulary so a follow-on does not rename them; push is not
   delivered here.
-- **Migrating the eight existing bid-state receipts** (you lead, you won,
-  hold failed, lost at close, and kin) **or rewriting the one-hour
-  closing-soon reminder** onto this spine — ❓ remarked for a later
-  implement; those lanes stay as they are.
+- **Migrating order / invoice mail** onto `mail_logs` — order letters keep
+  `auction_order_notification_*` until that work is specified.
 - **Marketing mail** — recommended lots, auction round-ups, re-engagement.
-- **Mail about winning, losing, paying, invoicing, or shipping** beyond
-  what the six kinds already cover. After-the-close order mail stays out
-  until that work is specified.
+- **Mail about invoicing or shipping** beyond the auction letter kinds
+  already on this spine. After-the-close order mail stays out until that
+  work is specified.
 - **Telling a collector they are about to be outbid**, or that their maximum
   is nearly exhausted.
 - **A digest.** One event, one message — coalescing several increments of
@@ -127,7 +125,7 @@ mute scenarios this change's UI and fanout read.
 | `@grade10/auction-contracts` | Gains the notification events. Additive. |
 | `@grade10/email` | Renders and talks to the provider. Classifies temporary vs permanent send failure. Does not own the log. |
 | `@grade10/i18n` | May gain English catalog keys for the six kinds; locale selection stays off this change. |
-| `apps/admin/grade10` | Send log: type, recipient email, listing, Sent At; filter by user email; no bodies. |
+| `apps/admin/grade10` | Send log: type, recipient email, listing (from metadata), provider reference/status, Sent At; filter by user email; no bodies. |
 | `apps/frontend/grade10` | My Auctions Email alerts + Unwatch; Account → Notifications auction email alerts master; letter **Manage alerts** → My Auctions (sign-in first when signed out). |
 | Store worker | No change. |
 | ZZZ | Out of scope this change. |
@@ -146,5 +144,5 @@ more useful once a collector has a maximum to raise.
   global channel toggles (account notifications owner).
 - ❓ **ZZZ assembly** — same six messages under ZZZ identity (multi-brand
   owner).
-- ❓ **Retention / erasure** for `mail_sends` and mute prefs (privacy /
+- ❓ **Retention / erasure** for `mail_logs` and mute prefs (privacy /
   account-data owner).

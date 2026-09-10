@@ -148,7 +148,7 @@ function OrderHistory({
   return (
     <VStack
       className={cn(
-        "w-full max-w-7xl gap-12 overflow-hidden px-8 pt-8 pb-16",
+        "mx-auto w-full max-w-7xl gap-12 overflow-hidden px-8 pt-8 pb-16",
         className,
       )}
       data-revealed={revealed || undefined}

@@ -36,17 +36,21 @@
   output.
 - English-only sends this change (catalog keys may exist; locale
   selection stays forced to English).
+- Drain many listings/campaigns in parallel via CF Queue dispatch
+  while Postgres remains the retry ledger; keep payment/bid receipts
+  on a priority path that bulk fanout cannot starve.
 
 **Non-Goals:**
 
 - Store worker / store DB ownership of inbox, prefs, or send log.
+- An inventory-style central mail service owning due rows across
+  products or brands.
 - In-app notification center, shell badge, in-app toggler, or global
   email/in-app channel toggles (remarked; in-app treated as always-on
   for a later center).
 - Delivering device push for the new kinds. The names join
   `AuctionPushKind` so a follow-on does not rename them.
-- Migrating the eight bid-state receipts onto this spine (remarked).
-- Rewriting the one-hour ending-soon reminder.
+- Rewriting the one-hour ending-soon reminder copy.
 - Marketing mail.
 - Enabling account-locale rendering (remarked; scaffold only).
 - ZZZ delivery (remarked).
@@ -58,7 +62,7 @@
 ### Auction emits; `@grade10/email` sends; Auction owns the log
 
 - Auction names the type, the listing, and the recipient. The email
-  library renders and delivers. The send log is `auction.mail_sends`.
+  library renders and delivers. The send log is `auction.mail_logs`.
 - Alternatives rejected:
   - The auction worker talks to the mail provider — sending couples
     the worker to templates and the retry ladder.
@@ -126,8 +130,10 @@
 - Alternatives rejected:
   - In-process retry with Retry-After — burns worker CPU, fights the
     cron, and still needs the ladder for process death.
-  - Cloudflare Queues — a second durable retry next to columns every
-    money and mail list already shares.
+  - Cloudflare Queues as the **retry ledger** — a second durable
+    attempt counter next to columns every money and mail list already
+    shares. Queues may still **dispatch** parallel send work; Postgres
+    keeps claim, backoff, park, and stamps.
   - Leave 422 on the eight-attempt ladder — a bad address occupies
     the pass budget while good rows behind it wait.
 
@@ -138,6 +144,46 @@ is the existing duplicate-beats-dropped trade.
 Batch size stays 50. Fanout is `sendBatch` per `(storefront, listing)`
 in chunks of 50, including the participant fallback grouped with the
 watchers.
+
+### Postgres ledger; CF Queues dispatch parallel mail
+
+- **Ledger** — product Postgres owns due rows, claim (`SKIP LOCKED`),
+  `notify_*` backoff, park, stamps, and `mail_logs`. “Sent” means stamp
+  / log, never queue ack alone.
+- **Dispatcher** — Cloudflare Queues wake consumers so many listings or
+  campaigns due in the same window drain in parallel. Job bodies carry
+  keys only (storefront, listing, user/bid ids), never addresses.
+- **No inventory-style central mail service** — due work stays in each
+  product (auction / store / vault). Shared code is `@grade10/email`
+  send/classify plus auction dispatch helpers. Brands (grade10 / zzz)
+  keep separate Workers, queues, and Resend senders.
+- **Tiers**
+  - **A — Must-send** — payment / settlement receipts (and order money
+    mail). Never dropped for fanout budget; settlements before bids.
+  - **B — ASAP** — bid-state receipts (outbid, lost, …). Same priority
+    drain as A, after settlements.
+  - **C — Bulk** — watcher / campaign fanouts (progress, new-bid blast,
+    ending-soon). Parallel subject×chunk jobs (≤50 recipients).
+- **Queues** — `MAIL_PRIORITY_QUEUE` (A/B, one recipient per job) and
+  `MAIL_BULK_QUEUE` (C). Separate consumer budgets so a 20k-watcher
+  wave cannot delay “you won / payment captured.”
+- **Retry**
+  - Transient (429, 5xx, network, partial batch) — no stamp; DB
+    backoff; ack the queue message; cron re-claims when
+    `notify_next_attempt_at` is due and enqueues again.
+  - Permanent (other 4xx) — park immediately; ack (no poison loop).
+  - Exhausted (≥8) — park; admin `retryNotification`.
+  - Crash mid-job — queue redelivery; duplicate-beats-dropped plus
+    stamps / `mail_logs` uniqueness.
+- **Local / tests** — when queue bindings are absent, the dispatcher
+  runs the consumer inline so claim–send–stamp stays one process.
+- Alternatives rejected:
+  - One global mail Worker owning everyone’s due rows — couples
+    products and brands; inventory’s centralization reason (one stock
+    ledger) does not apply.
+  - One shared queue for grade10 and zzz — shared rate limits and
+    failure domain.
+  - Nacking forever on permanent errors — blocks concurrency.
 
 ### New 24-hour stamps; leave the one-hour reminder in place
 
@@ -163,18 +209,21 @@ watchers.
   - Convert the one-hour stamp into the 24-hour letter — two
     messages, one column.
 
-### Once is a unique row on `mail_sends`, plus sweep stamps
+### Once is a unique row on `mail_logs`, plus sweep stamps
 
-- Progress uniqueness is `(listing_id, storefront, user_id, type)`.
-  Activity uniqueness includes `cause_id` (the leading bid the
+- Progress uniqueness is `(metadata->>'listing_id', storefront, user_id,
+  type)`. Activity uniqueness includes `cause_id` (the leading bid the
   collector was told about). Sweep stamps keep a pass from claiming
   the same row twice before the log write lands. The log stores no
-  body.
+  body. Listing (and later campaign) context lives in optional
+  `metadata` jsonb, not a fixed FK column.
 - Alternatives rejected:
   - Derive once from enrolment at send time — a collector who
     unwatches and re-watches would receive the opening message twice.
   - Store the rendered body — templates go stale; the operator's
     question is which message went out.
+  - A fixed `listing_id` column — later non-listing mail (campaigns)
+    would need another schema change.
 
 Outbid-over-new-bid is chosen before emit, so the log never sees both
 for one bid.
@@ -213,12 +262,16 @@ for one bid.
 - Reuse existing stamp columns. Do not store a second copy of a
   message a stamp already holds.
 - Spec fields read from another row at query time (listing title,
-  current bid, close) are not copied onto `mail_sends`.
+  current bid, close) are not copied onto `mail_logs`.
 
-`mail_sends.type` slugs:
+`mail_logs.type` slugs:
 
-`opens_in_24h` · `opened` · `closes_in_24h` · `extended` · `new_bid` ·
-`outbid`
+`opens_in_24h` · `opened` · `closes_in_24h` · `extended` · `ending_soon` ·
+`new_bid` · `outbid` · `now_top` · `hold_failed` · `lost_at_close` ·
+`listing_canceled` · `winner` · `capture_failed`
+
+Every outbound AuctionLetter kind maps onto one of these; consumers insert
+`mail_logs` after the provider accepts the send.
 
 ### Existing tables this change touches
 
@@ -268,7 +321,7 @@ the one-hour ending-soon claim.
 
 `outbid_notified_at` is unchanged.
 
-### `auction.mail_sends` — new table
+### `auction.mail_logs` — new table
 
 Authoritative for "was this letter sent (or attempted) to this
 address". Sweep stamps are the claim cursor; they are not the
@@ -277,30 +330,32 @@ operator log.
 | Column | Type | Null | Default | Meaning |
 | --- | --- | --- | --- | --- |
 | `id` | `text` | no | — | PK. |
-| `listing_id` | `text` | no | — | FK `auction_listings.id`. |
 | `storefront` | `text` | no | — | Recipient brand. |
 | `user_id` | `text` | no | — | Recipient user id. |
 | `sent_to` | `text` | no | — | Registered address at send time. |
-| `type` | `text` | no | — | One of the six slugs. |
-| `cause_id` | `text` | yes | `NULL` | Leading bid for `new_bid` / `outbid`; null for progress. |
+| `type` | `text` | no | — | One of the mail-log type slugs. |
+| `cause_id` | `text` | yes | `NULL` | Leading bid for `new_bid` / `outbid`; null for progress, reminders, and receipts. |
 | `state` | `text` | no | `'attempted'` | `attempted` or `sent`. |
+| `metadata` | `jsonb` | yes | `NULL` | Optional context — listing letters put `{ listing_id }`; later kinds may add `campaign_id` or other keys. |
+| `provider_reference` | `text` | yes | `NULL` | Resend message id when the provider accepted the send. |
+| `provider_status` | `text` | yes | `NULL` | Status known at write time (`accepted` on Resend accept). Delivery webhooks are not wired yet. |
 | `attempted_at` | `timestamptz(3)` | no | `now()` | First claim time. |
 | `sent_at` | `timestamptz(3)` | yes | `NULL` | Confirmed send time. |
 
 Checks:
 
-- `ck_mail_sends_type`: `type` in the six slugs
-- `ck_mail_sends_state`: `state IN ('attempted', 'sent')`
-- `ck_mail_sends_sent_at`: `state = 'sent' AND sent_at IS NOT NULL` or
+- `ck_mail_logs_type`: `type` in the mail-log type slugs
+- `ck_mail_logs_state`: `state IN ('attempted', 'sent')`
+- `ck_mail_logs_sent_at`: `state = 'sent' AND sent_at IS NOT NULL` or
   `state = 'attempted' AND sent_at IS NULL`
-- `ck_mail_sends_cause`: progress types have `cause_id IS NULL`;
+- `ck_mail_logs_cause`: non-activity types have `cause_id IS NULL`;
   `new_bid` and `outbid` have `cause_id IS NOT NULL`
 
 | Index | On | Where |
 | --- | --- | --- |
-| `uq_mail_sends_progress` | `(listing_id, storefront, user_id, type)` | `cause_id IS NULL` |
-| `uq_mail_sends_activity` | `(listing_id, storefront, user_id, type, cause_id)` | `cause_id IS NOT NULL` |
-| `idx_mail_sends_sent_to_attempted_at` | `(sent_to, attempted_at DESC)` | no |
+| `uq_mail_logs_progress` | `(metadata->>'listing_id', storefront, user_id, type)` | `cause_id IS NULL` |
+| `uq_mail_logs_activity` | `(metadata->>'listing_id', storefront, user_id, type, cause_id)` | `cause_id IS NOT NULL` |
+| `idx_mail_logs_sent_to_attempted_at` | `(sent_to, attempted_at DESC)` | no |
 
 Sweeps skip `auction_listings.status = 'canceled'`; they do not
 delete log rows.
@@ -342,15 +397,17 @@ erDiagram
         timestamptz extended_notified_at
         text new_bid_told_bid_id
     }
-    MAIL_SENDS {
+    MAIL_LOGS {
         text id PK
-        text listing_id FK
         text storefront
         text user_id
         text sent_to
         text type
         text cause_id
         text state
+        jsonb metadata
+        text provider_reference
+        text provider_status
         timestamptz attempted_at
         timestamptz sent_at
     }
@@ -359,8 +416,7 @@ erDiagram
     AUCTION_LISTINGS ||--o{ BIDS : enrols_bidders
     BIDDERS ||--o{ WATCHES : watches
     BIDDERS ||--o{ BIDS : bids
-    AUCTION_LISTINGS ||--o{ MAIL_SENDS : logs
-    BIDDERS ||--o{ MAIL_SENDS : receives
+    BIDDERS ||--o{ MAIL_LOGS : receives
 ```
 
 ## Service Interfaces
@@ -375,17 +431,17 @@ erDiagram
 - `@grade10/email` owns provider error class. Auction owns park vs
   retry.
 - Unexpected faults throw. A listing that is no longer biddable is an
-  expected drop: stamp without sending, insert `mail_sends` only when
+  expected drop: stamp without sending, insert `mail_logs` only when
   a send was confirmed.
 
 | Processor | Reads | Writes |
 | --- | --- | --- |
 | `classifySendError` | none (pure) | none |
 | `claimProgressFanout` | due `watches` (+ bid fallback for close/extended), listing clock/status | claim locks |
-| `sendProgressLetters` | claimed rows, listing, bidder email | stamps, `mail_sends` |
+| `sendProgressLetters` | claimed rows, listing, bidder email | stamps, `mail_logs` |
 | `claimNewBidFanout` | bids/watches whose `new_bid_told_bid_id` differs from `current_top_bid_id`, skipping live outbid-owed | claim locks |
-| `sendNewBidLetters` | claimed rows, listing | `new_bid_told_bid_id`, `mail_sends` |
-| `listMailSends` | `mail_sends` by `sent_to` | none |
+| `sendNewBidLetters` | claimed rows, listing | `new_bid_told_bid_id`, `mail_logs` |
+| `listMailLogs` | `mail_logs` by `sent_to` | none |
 | `retryParkedLetter` | parked notify row | unpark ladder |
 
 Existing `sendDueNotifications` (outbid / now-top / …) and
@@ -401,7 +457,7 @@ flowchart LR
     Send --> Email["@grade10/email sendEmailBatch"]
     Email -->|transient throw| Ladder[notify_next_attempt_at]
     Email -->|permanent throw| Park[notify_parked_at]
-    Email -->|ok| Stamp[stamp + mail_sends sent]
+    Email -->|ok| Stamp[stamp + mail_logs sent]
 ```
 
 ### Shared processor types
@@ -509,7 +565,7 @@ function sendProgressLetters(
 Mutation steps, one transaction per chunk after the provider returns:
 
 1. Re-read listing. If the statement is now false, stamp every claimed
-   row and do not send. Do not insert `mail_sends`.
+   row and do not send. Do not insert `mail_logs`.
 2. Deduplicate recipients by `(storefront, user_id)` so a watcher who
    also bids receives one copy.
 3. Call `email.sendBatch`. On `{ sent: false }` (unconfigured), throw
@@ -518,7 +574,7 @@ Mutation steps, one transaction per chunk after the provider returns:
    from the existing ladder, leave stamps null.
 5. On permanent throw: park immediately with a named reason; leave
    stamps null so an operator retry can unpark.
-6. On success: set the type's stamp to `now`, upsert `mail_sends` to
+6. On success: set the type's stamp to `now`, upsert `mail_logs` to
    `state = 'sent'` under the progress uniqueness key.
 
 A crash after the provider confirms and before the stamp may send a
@@ -555,7 +611,7 @@ Recipient:
 After a confirmed send:
 
 - `watches.opens_in_24h_notified_at = 2026-08-29T04:00:01.000Z`
-- `mail_sends` row: `type = 'opens_in_24h'`, `sent_to =
+- `mail_logs` row: `type = 'opens_in_24h'`, `sent_to =
   'a@example.com'`, `state = 'sent'`, `cause_id` null
 - Letter names the actual `starts_at`, not a stale 24-hour remainder
 
@@ -587,7 +643,7 @@ null, new-bid skips them; the existing outbid list owns that pass.
 Operator sets `listing_42.status = 'canceled'`. Every new claim
 predicate excludes it. A close-soon row already claimed but not yet
 sent re-reads `status` and drops without mailing. Existing
-`mail_sends` rows stay.
+`mail_logs` rows stay.
 
 ### Mutation example: permanent provider refusal
 
@@ -598,10 +654,10 @@ onto the ladder. Other recipients in the same pass are still
 attempted because a permanent error is per address, not per chunk —
 a chunk that mixed a 422 with successes follows the existing
 all-or-nothing batch rule: throw, retry the chunk, unique
-`mail_sends` prevents a second logical send to addresses that already
+`mail_logs` prevents a second logical send to addresses that already
 logged `sent`.
 
-### `listMailSends`
+### `listMailLogs`
 
 ```ts
 type ListMailSendsInput = {
@@ -620,7 +676,7 @@ type MailSendRow = {
   sentAt: Date | null;
 };
 
-function listMailSends(
+function listMailLogs(
   db: AuctionDb,
   input: ListMailSendsInput,
 ): Promise<{ items: MailSendRow[]; cursor: string | null }>;
@@ -636,7 +692,7 @@ Extend `AuctionPushKind` / `EmailKind` with
 `listing_opens_in_24h`, `listing_opened`, `listing_closes_in_24h`,
 `listing_extended`, and `listing_new_bid`. `outbid` already exists.
 Existing `listing_ending_soon` stays the one-hour push slug; new
-`mail_sends` rows use `closes_in_24h`.
+`mail_logs` rows use `closes_in_24h`.
 
 The listing shape the letter renders gains `startsAt`,
 `scheduledEndsAt`, and optional `primaryImageUrl`. Additive.
@@ -653,11 +709,11 @@ beyond the kinds.
 - **In-app center, shell badge, in-app toggler, global channel toggles** —
   in-app treated as always-on for a later center; no store intake.
 - **ZZZ** — same six messages under ZZZ identity.
-- **Account deletion / retention** for `mail_sends` and mute prefs.
+- **Account deletion / retention** for `mail_logs` and mute prefs.
 
 ## Risks / Trade-offs
 
-- **[A send failure silently loses a message]** → `mail_sends.state`
+- **[A send failure silently loses a message]** → `mail_logs.state`
   distinguishes `attempted` from `sent`. A missing provider key throws
   and never stamps.
 - **[A popular listing exhausts the worker]** → Batch 50 per
@@ -667,7 +723,7 @@ beyond the kinds.
 - **[A refused address blocks the pass]** → Permanent provider error
   parks immediately.
 - **[Duplicate on partial batch or crash between send and stamp]** →
-  Existing duplicate-beats-dropped trade; the unique `mail_sends` row
+  Existing duplicate-beats-dropped trade; the unique `mail_logs` row
   still records one logical send.
 - **[24h close plus 1h reminder both fire]** → Separate stamps and
   separate copy: the 24h letter names the scheduled close.
@@ -675,7 +731,7 @@ beyond the kinds.
 ## Migration Plan
 
 1. Additive auction migration: the five watch stamps, the three bid
-   fallback columns, `mail_sends` and its indexes and checks. No
+   fallback columns, `mail_logs` and its indexes and checks. No
    backfill. Existing `ending_soon_notified_at` values stand. Listings
    already in their window become due on the next pass.
 2. Deploy after watching-with-alerts exists so progress mail and mute
@@ -684,7 +740,7 @@ beyond the kinds.
 3. Collectors who already bid on an open listing begin receiving
    bid-activity mail at release; that is the intent, not a data
    backfill.
-4. Rollback keeps the columns and `mail_sends`. Do not delete log
+4. Rollback keeps the columns and `mail_logs`. Do not delete log
    rows.
 
 `WORK_LISTS` gains the new lists before `endingSoonReminders`, after
