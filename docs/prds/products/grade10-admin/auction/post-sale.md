@@ -38,6 +38,6 @@ delivery state, and operational trail together.
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 :::
 
-## Named next
+## Pending Spec
 
 ::next{spec="grade10-admin/auction/post-sale"}

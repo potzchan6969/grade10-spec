@@ -140,7 +140,7 @@ const ready = (changes: ChangeEntry[]): ArchiveState => ({
 });
 
 describe("the block on the page", () => {
-  it("says who named each bullet, and whether it shipped", () => {
+  it("says who named each bullet, and when", () => {
     const html = render(
       ready([
         shipped("old-thing", "2026-01-02", { followOns: ["The new thing."] }),
@@ -150,7 +150,7 @@ describe("the block on the page", () => {
     expect(html).toContain("A reminder before the expiry.");
     expect(html).toContain("The new thing.");
     expect(html).toContain("Points should expire");
-    expect(html).toContain("in flight");
+    expect(html).toContain("written");
     expect(html).toContain("shipped");
   });
 
