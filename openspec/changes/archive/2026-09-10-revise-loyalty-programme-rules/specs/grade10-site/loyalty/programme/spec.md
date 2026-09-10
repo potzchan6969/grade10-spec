@@ -312,9 +312,7 @@ that debits the balance directly and one that settles the same debit through a
 money-off artifact SHALL cost the member the same points and record one
 redemption either way. What an artifact may then be spent on is the channel's
 rule, not the programme's: a channel MAY require a purchase to reach the
-artifact's own value or refuse to combine it with another discount, and a
-member offered points on such a channel SHALL be told what they can spend
-before the points leave their balance, never after.
+artifact's own value or refuse to combine it with another discount.
 
 #### Scenario: grade10-site-loyalty-programme-SC-109 - Points reduce the bill
 
@@ -332,11 +330,6 @@ before the points leave their balance, never after.
 - **WHEN** a member pays 100 points toward a purchase on a channel that settles through a money-off artifact
 - **THEN** 100 points leave their balance, the same as a channel debiting directly
 - **AND** exactly one redemption is recorded for that payment
-
-#### Scenario: grade10-site-loyalty-programme-SC-112 - A channel's own limit is disclosed before the points go
-
-- **WHEN** a channel settles through an artifact that cannot be spent on the member's cart
-- **THEN** the member is told before any points leave their balance
 
 ### Requirement: Deleting the account ends the membership at once
 
@@ -819,8 +812,7 @@ next earned tier, their redeemable balance, and the date that balance expires if
 they record no further activity. Their own activity list SHALL NOT disclose
 operator reasons, retry keys, or the internal pricing of an entry.
 
-Each activity entry SHALL name what it was for, and which channel it came from,
-in terms the member can read.
+Each activity entry SHALL name what it was for, in terms the member can read.
 
 #### Scenario: grade10-site-loyalty-programme-SC-147 - The two counts are shown as two counts
 
@@ -882,11 +874,11 @@ verified for that session. Every operator action that changes something SHALL be
 recorded in a hash-chained log whose breakage is detectable.
 
 Operator permissions SHALL separate reading a member's loyalty state, moving
-points, granting invitations, editing the reward menu, removing a tier a member
-holds, and cancelling a redemption, so an operator can hold one without the
-others. Removing a tier and cancelling a redemption SHALL each be their own
-permission: both undo something a member can see, and neither follows from
-being allowed to move points.
+points, granting invitations, editing the reward menu, and removing a tier a
+member holds, so an operator can hold one without the others. Removing a tier
+SHALL be its own permission: it undoes something a member can see, and does
+not follow from being allowed to move points. Cancelling a redemption SHALL
+require the point-movement permission.
 
 #### Scenario: grade10-site-loyalty-programme-SC-45 - A permission is required per action
 

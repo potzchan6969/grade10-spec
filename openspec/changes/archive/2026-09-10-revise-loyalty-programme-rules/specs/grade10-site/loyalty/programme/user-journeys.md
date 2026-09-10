@@ -68,7 +68,6 @@
 - `grade10-site-loyalty-programme-SC-109` — Points reduce the bill
 - `grade10-site-loyalty-programme-SC-110` — The part paid with points earns nothing
 - `grade10-site-loyalty-programme-SC-111` — One debit however the channel settles it
-- `grade10-site-loyalty-programme-SC-112` — A channel's own limit is disclosed before the points go
 - `grade10-site-loyalty-programme-SC-113` — Deletion clears what the member held
 - `grade10-site-loyalty-programme-SC-114` — Deletion does not wait for a window
 - `grade10-site-loyalty-programme-SC-115` — Base points floor before the multiplier

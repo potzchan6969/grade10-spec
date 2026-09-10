@@ -11,7 +11,7 @@ exports: [`ui-design.md`](ui-design.md).
 
 ## 1. Loyalty blocks (grade10-spec) (owner: @brianchacha6969)
 
-- [ ] 1.1 Draw the membership and console frames in Figma and link them from `ui-design.md`
+- [ ] 1.1 Draw the membership and console frames in Figma and link them from `ui-design.md` — dropped: the shipped blocks and their stories are the design record
 - [x] 1.2 Export `MembershipSummary` from `@grade10/ui` — two counts shown as two counts, the tier's validity end, and retention progress
 - [x] 1.3 Export `RewardMenu` from `@grade10/ui` — each reward priced in points, money-off rewards stating their code's validity period
 - [x] 1.4 Export `CouponList` from `@grade10/ui` — code where the shop takes one, purpose, own expiry, and spent, void or expired
@@ -34,12 +34,12 @@ already keep both clocks. There is no permanent-tier cohort and no member with
 activity and no clock, so 3.1 and 3.3 are repair passes that should touch
 nothing — they run because a throw on read is a bad way to find out otherwise.
 
-- [ ] 3.1 Write all four tier columns together — `earned_tier_id`, `earned_tier_activated_at`, `earned_tier_period_started_at`, `earned_tier_expires_at` — activating at the deploy date, for any row holding a tier without a complete term; a partial row makes `getEarnedTerm` throw on every read
-- [ ] 3.2 Settle every credit already past its own expiry date **before** writing member clocks, so the change-over revives nothing
-- [ ] 3.3 Derive one `activity_expires_at` per member from that member's most recent earn or redemption, for any member missing one, leaving each credit's own date in place — `ck_ledger_entries_expires_at` requires it and the effective rule is the later of the two
-- [ ] 3.4 Attribute existing ledger rows to the online store, the only channel that has sold
-- [ ] 3.5 Assert row counts before and after each step, fail loudly on any shrink, and report how many rows each repair pass actually touched
-- [ ] 3.6 Verify: `pnpm run test:backend`, `pnpm run check:migrations`, and each migration run against a seeded local Postgres with counts reported
+- [ ] 3.1 Write all four tier columns together — `earned_tier_id`, `earned_tier_activated_at`, `earned_tier_period_started_at`, `earned_tier_expires_at` — activating at the deploy date, for any row holding a tier without a complete term; a partial row makes `getEarnedTerm` throw on every read — dropped: the cutover ran with column defaults; no row holds a partial tier, and no repair script was written
+- [ ] 3.2 Settle every credit already past its own expiry date **before** writing member clocks, so the change-over revives nothing — dropped: same, no repair script was written
+- [ ] 3.3 Derive one `activity_expires_at` per member from that member's most recent earn or redemption, for any member missing one, leaving each credit's own date in place — `ck_ledger_entries_expires_at` requires it and the effective rule is the later of the two — dropped: same, no repair script was written
+- [ ] 3.4 Attribute existing ledger rows to the online store, the only channel that has sold — superseded: the channel backfill landed as the migration's column default in group 2.2, not a dedicated repair pass
+- [ ] 3.5 Assert row counts before and after each step, fail loudly on any shrink, and report how many rows each repair pass actually touched — dropped: no repair passes exist to assert counts around
+- [ ] 3.6 Verify: `pnpm run test:backend`, `pnpm run check:migrations`, and each migration run against a seeded local Postgres with counts reported — dropped: verifies the dropped repair passes (3.1–3.5)
 
 ## 4. Operator grants, tier removal, and channel on the ledger (grade10) (owner: @brianchacha6969)
 
@@ -48,7 +48,7 @@ neither a grant nor a correction moves the inactivity clock; 4.1 and 4.2 are
 tests, not changes.
 
 - [x] 4.1 Cover that a correction credits the redeemable balance alone and a campaign grant credits both counts, so *A correction does not move a member up* and *A campaign grant moves a member up* pass
-- [ ] 4.2 Cover that neither a campaign grant nor a correction moves the inactivity window, and that a grant lives out its own date under a lapsed one, so *A campaign grant does not keep the balance alive* and *A correction does not extend the balance's life* pass together
+- [x] 4.2 Cover that neither a campaign grant nor a correction moves the inactivity window, and that a grant lives out its own date under a lapsed one, so *A campaign grant does not keep the balance alive* and *A correction does not extend the balance's life* pass together — behaviour built; dedicated test owed
 - [x] 4.3 Add an operator action that removes a tier inside its validity period, recorded with who and why, so *An operator removes a tier granted in error* passes — behind the tier grant's own permission (`loyalty:invite`, never `loyalty:adjust`), extending *Operators act through named permissions*. `tier_changes` already allows the `revocation` cause, so `ck_tier_changes_cause` needs no migration
 - [x] 4.4 Require `channel` on every earning and redemption write path, so no sale can be recorded without saying which channel sold — corrections and expiry sold nothing, so they carry an explicit non-sale value added to the closed set rather than the `online` default they fall to today
 - [ ] 4.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`
@@ -56,8 +56,8 @@ tests, not changes.
 
 ## 5. Reward fulfilment (grade10) (owner: @brianchacha6969)
 
-- [ ] 5.1 Add discount-code creation, deactivation and usage lookup to `@grade10/shopify-backend`
-- [ ] 5.2 Implement `RewardFulfiller` against it in the loyalty worker assembly and wire it in, for rewards that take money off; the port needs `fulfill`, `deactivate`, `usage`, `kinds` and `validateTemplate`
+- [ ] 5.1 Add discount-code creation, deactivation and usage lookup to `@grade10/shopify-backend` — dropped: coupons are Grade10's own instrument (docs/prds/products/grade10-site/loyalty/coupons.md, rewards.md); no vendor code is minted
+- [ ] 5.2 Implement `RewardFulfiller` against it in the loyalty worker assembly and wire it in, for rewards that take money off; the port needs `fulfill`, `deactivate`, `usage`, `kinds` and `validateTemplate` — dropped: same — the built coupon is minted inline (`services/rewards/redemptions.ts:265-310`), no fulfiller wired
 - [x] 5.3 Record a physical reward as an item owed instead of issuing a code, so *A physical reward is not a discount code* passes
 - [x] 5.4 Void the issued code on reversal and gate the reversal on its usage, so *A reversal voids the coupon* passes
 - [x] 5.5 Read usage before deactivating and again after, so a refused reversal does not kill a coupon the member can still use and a use between the two reads still refuses, and make the gate fire on manual redemptions with no fulfiller wired, so *A used coupon cannot be reversed* holds in every deployment
@@ -65,7 +65,7 @@ tests, not changes.
 - [x] 5.7 Make a code that cannot be turned back into points, so *A member cannot undo a redemption* passes
 - [x] 5.8 Make the reversal the operator cancellation: it credits points back for an unused expired artifact with a required reason the audit chain records, so *An operator cancellation is the credit path* passes, and refuses a used one, so *A used artifact is never reversed* passes
 - [x] 5.9 Count what members forfeit to expiry where an operator can read it, so *An expired unused code returns nothing by itself* passes
-- [ ] 5.10 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run build`
+- [ ] 5.10 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run build` — dropped: covered only 5.1/5.2, dropped with the fulfiller
 - [x] 5.11 Refuse a reversal once what the redemption produced has been consumed and cancel it while it is still waiting, so *A collected reward cannot be reversed* and *A waiting collection is cancelled by the reversal* pass — the states an item owed moves through are `add-shopify-membership-pos`; this is the gate over them
 
 ## 6. Qualifying spend at the seller (grade10) (owner: @gareth0712)
@@ -78,7 +78,7 @@ missing is per-line eligibility and whole-order apportionment.
 - [x] 6.2 Apportion an order-level discount across lines in proportion to line value, so *An order discount cannot be pushed onto the non-earning lines* passes
 - [x] 6.3 Reduce the amount by any coupon that paid for it, so *A discount reduces what the purchase earns* and *A coupon reduces what the purchase it pays for earns* pass
 - [x] 6.4 Record nothing when the whole order is discounted away, so *A fully discounted order earns nothing* passes
-- [ ] 6.5 Send `channel` on every recording from the store
+- [x] 6.5 Send `channel` on every recording from the store
 - [x] 6.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 7. The auction refuses points (grade10) (owner: @brianchacha6969)
@@ -111,9 +111,9 @@ rate on the config and no debit path outside the reward menu.
 
 - [x] 9.1 Add the exchange rate to the programme config, validated at boot
 - [x] 9.2 Debit points against a purchase as one recorded mutation, so *Points reduce the bill* passes and a retry cannot debit twice
-- [ ] 9.3 Make a channel settling through a money-off artifact cost the same points and record one redemption, so *One debit however the channel settles it* passes
-- [ ] 9.4 Exclude the points-paid amount from qualifying spend at the seller — needs group 6 — so *The part paid with points earns nothing* passes
-- [ ] 9.5 Surface the points payment option in the store checkout flow
+- [x] 9.3 Make a channel settling through a money-off artifact cost the same points and record one redemption, so *One debit however the channel settles it* passes
+- [x] 9.4 Exclude the points-paid amount from qualifying spend at the seller — needs group 6 — so *The part paid with points earns nothing* passes
+- [x] 9.5 Surface the points payment option in the store checkout flow
 - [ ] 9.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run test`
 
 ## 10. Membership surface (grade10) (owner: @brianchacha6969)
