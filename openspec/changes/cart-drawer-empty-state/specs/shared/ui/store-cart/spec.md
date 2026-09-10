@@ -54,13 +54,13 @@ loading, and the checkout button SHALL be disabled.
 `CartDrawer` SHALL render only the cart's line items. It SHALL NOT render
 placeholder item slots. When items overflow the body, the list SHALL scroll.
 
-#### Scenario: shared-ui-store-cart-SC-02 - A cart with items lists only those items
+#### Scenario: shared-ui-store-cart-SC-23 - A cart with items lists only those items
 
 - **GIVEN** a cart with 2 items
 - **WHEN** `CartDrawer` renders
 - **THEN** it renders the 2 items and no placeholder item slots
 
-#### Scenario: shared-ui-store-cart-SC-03 - Overflowing items scroll
+#### Scenario: shared-ui-store-cart-SC-24 - Overflowing items scroll
 
 - **GIVEN** a cart with 6 items
 - **WHEN** `CartDrawer` renders
@@ -73,7 +73,7 @@ render the design-system `EmptyState` with the consumer-supplied `emptyTitle`
 and optional `emptyDescription`. The empty state SHALL NOT include an action
 button. The header item-count badge and the footer SHALL be hidden.
 
-#### Scenario: shared-ui-store-cart-SC-04 - Empty cart
+#### Scenario: shared-ui-store-cart-SC-25 - Empty cart
 
 - **GIVEN** a cart with 0 items
 - **WHEN** `CartDrawer` renders while not loading
@@ -93,5 +93,5 @@ hosts to invent a browse handoff the empty cart should not own. Empty carts use
 **Migration:** Replaced by "The drawer lists items without placeholder slots"
 and "An empty cart shows the design-system empty state". Drop `CartItemSlot`
 imports, `onBrowseMore`, and `emptySlotCount`. Supply `emptyTitle` on
-`CartDrawerCopy`. Scenario ids `SC-02`–`SC-04` keep their numbers under the new
-requirements.
+`CartDrawerCopy`. `SC-02`–`SC-04` retire with the requirement; the replacements
+issue `SC-23`–`SC-25`.

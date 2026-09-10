@@ -10,8 +10,8 @@ holds nothing,
 
 **Accepted by:**
 
-- `shared-ui-store-cart-SC-02` — A cart with items lists only those items
-- `shared-ui-store-cart-SC-03` — Overflowing items scroll
-- `shared-ui-store-cart-SC-04` — Empty cart
+- `shared-ui-store-cart-SC-23` — A cart with items lists only those items
+- `shared-ui-store-cart-SC-24` — Overflowing items scroll
+- `shared-ui-store-cart-SC-25` — Empty cart
 - `shared-ui-store-cart-SC-05` — Sold out item present
 - `shared-ui-store-cart-SC-07` — Overflowing items hint scrollability
