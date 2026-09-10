@@ -24,7 +24,12 @@ function TableHeader({ className, children, ...props }: TableHeaderProps) {
       role="rowgroup"
       {...props}
     >
-      <div className="flex w-full min-w-0 items-center" role="row">
+      {/*
+        `contents` so a caller can put `display: grid` / `grid-cols-subgrid` on
+        this header and have the heads participate as grid items. Default
+        `flex` on the outer still lays the heads in a row.
+      */}
+      <div className="contents" role="row">
         {children}
       </div>
     </div>
