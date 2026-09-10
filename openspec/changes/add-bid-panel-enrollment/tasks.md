@@ -4,7 +4,7 @@
 - [x] 1.2 Add Storybook and preview fixtures for `signed-out`, `setup-first`, `setup-in-progress`, `setup-editable`, `authorization-in-progress`, `authorization-failed`, `authorization-editable`, and `enrolled` states, including provider mount-ready versus confirmed-method-id behavior
 - [x] 1.3 Update the `grade10-site/auction/bid-panel-enrollment` and `shared/ui/auction-listing` capability pages under `docs/prds/` to describe the shipped collector surface and shared block decision without duplicating requirements
 - [ ] 1.4 Carry each delta's `## Feature set`, the `grade10-site/auction/bid-panel-enrollment/user-journeys.md`, and the reviewed `feature-tcs.md` into their durable capability locations when the change archives so the feature map, journey ids, and QA evidence survive the fold
-- [ ] 1.5 Verify: `openspec validate add-bid-panel-enrollment --strict`, `pnpm run check:manual`, `pnpm run tcs:validate`, and `pnpm run test:stories:ui`
+- [x] 1.5 Verify: `openspec validate add-bid-panel-enrollment --strict`, `pnpm run check:manual`, `pnpm run tcs:validate`, and `pnpm run test:stories:ui`
 
 ## 2. Durable enrollment, backend procedures, and contracts (grade10) (owner: @htonyl)
 
