@@ -33,6 +33,15 @@ const WATCH_COPY: WatchButtonCopy = {
   unwatch: "Unwatch",
   watchAriaLabel: "Watch this lot",
   unwatchAriaLabel: "Unwatch this lot",
+  watchedToast: {
+    title: "Email alerts on for this lot",
+    actionLabel: "View My Auctions",
+  },
+  unwatchedToast: {
+    title: "Unwatched this lot",
+    description: "Email alerts for this lot are off too.",
+    actionLabel: "Undo",
+  },
 };
 
 const EMAIL_ALERTS_COPY: EmailAlertsCopy = {
