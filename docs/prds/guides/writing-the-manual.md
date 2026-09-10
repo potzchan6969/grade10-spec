@@ -109,7 +109,9 @@ Every bullet stays under the change that wrote it, dated by that change, and
 the block says so out loud — a follow-on is one author's intent on one day, and
 pooling them into a bare list turns it into a promise nobody made. Nothing else
 on the page may repeat them: the prose above still describes the product as it
-is, in the present tense.
+is, in the present tense. The product page pools the same reading over every
+capability it owns, after every ❓ and `TBC` its pages carry, as its pending
+spec.
 
 Visuals. Figma URLs and Storybook ids are never invented — take them from the
 design record or the workbench, and the check now holds you to it: a url naming

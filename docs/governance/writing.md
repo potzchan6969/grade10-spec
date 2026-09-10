@@ -50,7 +50,8 @@ nearest your task and keep it open while you draft.
   - ❓, spelled `TBC` where words fit better, marks what nobody has
     confirmed — a decision, a value, a name, whether a way exists — and
     names who confirms it. It marks the page, not the product: nothing is
-    built from it
+    built from it. The product page pools every such line of its pages as
+    its pending spec, so a mark is written where a reader can act on it
   - 🚧 starts a line that is confirmed and being built; the page says what
     will run, and an active change on the page's spec is delivering it. The
     mark comes off when that change archives. A line still open is never 🚧
