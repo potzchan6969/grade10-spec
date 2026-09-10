@@ -23,6 +23,19 @@ locks the page behind it while it is open. Pressing checkout puts the button
 into a redirecting state and hands the intent to the application, which is what
 actually creates the checkout session.
 
+## Site Sale And Promo Codes
+
+🚧 An automatic storewide sale on a line shows as the sale unit price with the
+list price struck through. The summary does not add a separate Store sale row
+for that cut.
+
+🚧 When a promo code stacks on that sale, the lines keep the sale and
+compare-at, the Subtotal is their sum, and the footer names only the code's
+Discount. When the code replaces the sale, lines return to list price and the
+footer shows only the code. When the code is refused, lines stay on the sale
+and the sheet names why. Removing a code that replaced the sale puts the sale
+back on the lines.
+
 ::story{id="store-cart-cartdrawer--default" title="The drawer with items"}
 
 ::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}
