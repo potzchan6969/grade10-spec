@@ -46,8 +46,13 @@ nearest your task and keep it open while you draft.
 - **A closed set is stated whole** — every state, every refusal, every
   tier the reader can meet, in their words. A set stated in part is worse
   than none, because nothing says it was partial
-- **Marks** — ❓ starts a line nobody has decided; `TBC` sits after a
-  missing value; 🚧 starts a line that is decided and not built
+- **Marks** — three, and never two on one line:
+  - ❓ starts a line or a row nobody has decided, and names who decides
+  - `TBC` sits after a term or in a cell the manual cannot yet confirm — a
+    value, a name, whether a way exists. It marks the page, not the
+    product: nothing is built from a `TBC`
+  - 🚧 starts a line that is confirmed and being built; the page says what
+    will run. A line still ❓ or `TBC` is never 🚧
 
 ## Voice
 
@@ -252,8 +257,8 @@ Read the draft once as the least-informed reader who has to act on it.
 10. **Ownership** — is anything left that is the spec's statement, an
     embedded spec, a sibling's rule, or a flow a sibling already walks? Is
     anything about this page's topic still sitting on a sibling?
-11. **Marks** — is every undecided thing marked ❓ or `TBC`, every unbuilt
-    one 🚧?
+11. **Marks** — is every open decision ❓, every unconfirmed fact `TBC`,
+    and 🚧 only on what is confirmed and being built?
 
 A draft that fails one line is rewritten.
 
