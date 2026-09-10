@@ -17,7 +17,10 @@ order: 1
 
 ## Qualification Criteria
 
-Points are earned from the **net paid amount after any discount, excluding shipping and tax**.
+Points are earned from the **net paid amount after any discount or coupon,
+excluding shipping and tax**, so a redemption never earns back part of what it
+spent. A whole-order discount is shared across the lines by value, so it cannot
+land on the part of a basket that earns nothing.
 
 | Item | Earns points |
 | --- | --- |
@@ -403,3 +406,6 @@ part on one question: do the points count toward the tier?
 - **Neither is activity** — no grant pushes the expiry date out
 - **Both carry a reason** — what the operator types goes to the audit trail;
   the ledger carries only its digest
+
+❓ **Welcome bonus** — the owner's draft posts points at enrolment; none is
+granted until the size is set. The owner's call.

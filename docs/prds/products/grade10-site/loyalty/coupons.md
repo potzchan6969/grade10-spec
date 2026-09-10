@@ -25,6 +25,8 @@ so redefining the reward never rewrites a coupon a member already holds —
 | Runs from | The redemption, for the whole days the reward states |
 | Expiry | Read off the clock, never written down |
 
+- **Expired is spent** — an unused coupon past its end returns nothing by
+  itself; what members forfeit is counted as breakage where Finance can read it
 - **Birthday month** `TBC` — a definition can hold a coupon to the month of
   the member's birthday; loyalty holds no birthday, so every coupon asking
   for one is refused

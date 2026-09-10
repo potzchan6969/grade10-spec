@@ -12,7 +12,9 @@ order: 2
 | Gold | 1.2× | 500 points earned in a rolling 12 months | 500 points earned inside the 12-month period |
 | Black | 1.7× | Invitation only | Until the invitation ends or is revoked |
 
-These are deployed values, changed by a deploy and never by an operator.
+These are deployed values, changed by a deploy and never by an operator: an
+operator who can rewrite what a purchase earns can mint money. The reward
+catalog is the lever an operator holds.
 
 ## Tier Progress
 
@@ -35,6 +37,12 @@ thing holding a tier, the member stops holding it, and a period they alone
 extended goes back to its old end.
 :::
 
+❓ **A claw-back demotion** — the engine stamps it as a lapse, so a member
+refunded down from a higher rung reads zero progress while still holding the
+unrefunded points that landed them on the lower one, and keeps the higher
+rung's period dates. Whether that counts as losing a tier, and whether the
+lower rung gets a fresh period, is the owner's call.
+
 ## Earn Multiplier
 
 Customer reaches a tier upon reaching the points required for that tier.
@@ -48,8 +56,22 @@ end of it.
 
 - **≥ 500 points** — the period extends 12 months from its own end
 - **< 500 points** — the member goes back to Silver
+- **Taken back by an operator** — a tier reached or granted in error is
+  removed on the record, whatever its period says; it takes the same
+  permission as granting an invitation, so an operator who may only move
+  points cannot demote anyone
 
 Progress in one period is not carried over to the next.
+
+❓ **Retention threshold** — 500 today, the same figure that reaches Gold,
+because the programme sets no separate one. A softer figure around 400 is
+under review; it is a new key on the Gold rung, and it changes the size of the
+first downgrade cohort. The owner settles it before the first period ends.
+
+❓ **Re-qualifying early** — reaching 500 in month two extends the period from
+its own end, and the new period counts from zero there, so the rest of the
+year's earning counts toward neither retention nor the next rung. Whether that
+is the intended nudge is the owner's call.
 
 :::callout{kind="note"}
 **Tier history is lazily evaluated, i.e. evaluated when read.** 
@@ -84,5 +106,6 @@ We have a cron sweep to render the record for analytics purposes.
   invitations and once with them, so a Gold earned while invited survives
   losing the invitation, and an invitation neither raises what was earned nor
   extends a period
-- **Not enforced** — the annual cap and the approval step the owner's draft
-  asks for
+- ❓ **Annual cap and approval** — the owner's draft asks for both; neither is
+  fixed and the programme enforces neither, so an invitation with no end date
+  holds until revoked. The owner's call

@@ -120,6 +120,8 @@ can buy.
   event; no field carries this, so every live reward is on sale
 - **Units per redemption** `TBC` — a reward is taken one at a time until
   the per-redemption and per-day bounds are chosen
+- ❓ **The physical catalog** — which items, and their point prices; Product's
+  call
 - 🚧 **The console's reward form** sets only slug, name, description, cost,
   stock and window, so a reward with a definition is created through the
   admin API
