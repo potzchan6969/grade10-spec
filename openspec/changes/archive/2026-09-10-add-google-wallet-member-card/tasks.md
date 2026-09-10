@@ -49,7 +49,7 @@ Needs group 3.
 - [x] 5.1 Issue a pass for the signed-in member — secret, row and wallet object — and answer the address that saves it, so *A member adds their card to their wallet* passes
 - [x] 5.2 Put the wallet behind one port with a fixture on the production graph, and exercise the sweep, the expiry arm and the counter through it, so every group below is tested with no vendor in the loop
 - [x] 5.3 End a pass on the member's own action, at once, so *An ended pass identifies nobody* passes, and let them add another
-- [ ] 5.4 End a pass from the operator console under the permission an elevated act requires, recorded in the operator log and refused rather than hidden without it, so *An operator ends a pass under the permission it requires* passes
+- [ ] 5.4 End a pass from the operator console under the permission an elevated act requires, recorded in the operator log and refused rather than hidden without it, so *An operator ends a pass under the permission it requires* passes — moved to launch-wallet-passes
 - [x] 5.5 Leave the membership untouched when a member deletes the pass from their wallet, so *Removing a pass leaves the membership intact* passes
 - [x] 5.6 Declare the secret that encrypts a pass's own secret in the worker's secret list, and read it there
 - [x] 5.7 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run secrets --check`
@@ -84,7 +84,7 @@ agree, so nothing blocks the checks.
 
 - [x] 8.1 Add the pass to the member's card feature — the save action, the pass they hold, read from the server so a returning member still finds it, and ending it — behind the feature's own tokens
 - [x] 8.2 Compose `WalletPassLinks` beside the member card on the membership page, taking every word from the application's catalog
-- [ ] 8.3 Offer the same save address in the message that welcomes a new member
+- [ ] 8.3 Offer the same save address in the message that welcomes a new member — dropped: the page decided the welcome message carries no save action
 - [ ] 8.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`
 
 ## 9. What the second wallet exposes (grade10)
@@ -127,7 +127,7 @@ service that is down is a stale card rather than an exposure.
 - [x] 11.5 Hold the push credential outside the isolate, so a cron tick does not mint one every five minutes against a vendor that refuses more than one per twenty
 - [x] 11.6 Void the pass and forget its devices when it ends or a member is erased, discharging the debt with no acknowledgement to wait for, so *An erasure with no wallet to confirm it is still discharged* passes
 - [x] 11.7 Report the certificate's remaining life on every lap and refuse to sign past it, so a yearly expiry is a monitor rather than a memory
-- [ ] 11.8 Verify: `pnpm run typecheck`, `pnpm run test:backend` — both pass; `pnpm run secrets --check` reads the deployed workers and needs Cloudflare credentials, so it runs at deploy rather than here
+- [ ] 11.8 Verify: `pnpm run typecheck`, `pnpm run test:backend` — both pass; `pnpm run secrets --check` reads the deployed workers and needs Cloudflare credentials, so it runs at deploy rather than here — moved to launch-wallet-passes
 
 ## 12. Two wallets on the membership surface (grade10-spec, grade10)
 
@@ -136,9 +136,9 @@ Needs group 10.
 - [x] 12.1 Let the block carry one row per wallet, so a member holding one is still offered the other and an address already answered is not taken away before they use it
 - [x] 12.2 Offer each wallet the deployment carries and the action that ends each, so *A member who returns still finds the passes they hold* and *A deployment offers only the wallets it carries* pass
 - [x] 12.3 End one wallet's pass from the surface, leaving the other identifying, so *Ending one wallet's pass leaves the other alive* passes
-- [ ] 12.4 Draw Apple's own save artwork, which its guidelines require and a generic button does not satisfy — the badge is licensed only while the organisation is an Apple Developer Program member, and downloaded from the developer site under the Wallet Marketing Agreement, so it waits on the enrolment named in the [Apple runbook](../../../docs/prds/products/grade10-site/loyalty/profile.md)
+- [ ] 12.4 Draw Apple's own save artwork, which its guidelines require and a generic button does not satisfy — the badge is licensed only while the organisation is an Apple Developer Program member, and downloaded from the developer site under the Wallet Marketing Agreement, so it waits on the enrolment named in the [Apple runbook](../../../docs/prds/products/grade10-site/loyalty/profile.md) — moved to launch-wallet-passes
 - [x] 12.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:stories:ui`
-- [ ] 12.6 Draw the pass's own artwork — the icon and logo at every scale that `appleAssets.ts` ships as flat squares, and the class artwork the Google console takes — before the first pass is offered to anybody. Design's, and needs no enrolment
+- [ ] 12.6 Draw the pass's own artwork — the icon and logo at every scale that `appleAssets.ts` ships as flat squares, and the class artwork the Google console takes — before the first pass is offered to anybody. Design's, and needs no enrolment — moved to launch-wallet-passes
 
 ## 13. What the second audit left standing (grade10)
 
@@ -148,5 +148,5 @@ re-derived and the cost is not paid twice.
 
 - [x] 13.1 Give `pos_pass_registrations` its two foreign keys — the device with `ON DELETE CASCADE`, the pass with no action. Row hygiene rather than a fix: scoping the orphan sweep to the device it just touched already closed the reachable defect. Landed while the tables are empty, which is when a key is free; the three tables are now built by one factory, as the coupon tables already were, because a key needs both sides in scope
 - [x] 13.2 Drop `pos_pass_push_tokens.token`, superseded by the sealed pair beside it. The contract half of 0031: safe without waiting on a deploy, because the only writer is the APNs provider-token path and no environment has the key that reaches it
-- [ ] 13.3 Settle the push credential and the push type against one enrolled device, which no documentation can answer: Apple documents the pass certificate while the shipped default is a team key, and pins `apns-push-type: background` to a bundle id while a pass topic is not one. Record which of the three attempts makes the device come back and ask, never which returns 200 — a silent drop returns 200 too. The [Apple runbook](../../../docs/prds/products/grade10-site/loyalty/profile.md) carries the method
+- [ ] 13.3 Settle the push credential and the push type against one enrolled device, which no documentation can answer: Apple documents the pass certificate while the shipped default is a team key, and pins `apns-push-type: background` to a bundle id while a pass topic is not one. Record which of the three attempts makes the device come back and ask, never which returns 200 — a silent drop returns 200 too. The [Apple runbook](../../../docs/prds/products/grade10-site/loyalty/profile.md) carries the method — moved to launch-wallet-passes
 - [x] 13.4 Move focus to the save link when a mint replaces the add button with it, so a keyboard member is not dropped to the page body by the button unmounting under them. Waits while the mint is in flight, and moves nothing when it fails — the button is still there, still focused, and the failure is announced

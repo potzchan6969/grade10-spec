@@ -82,18 +82,17 @@ durable code costs a member.
 
 ### New Capabilities
 
-- `grade10-site/store/membership` — the wallet pass in either wallet, the code
-  each carries, what a session opened from one may do, its currency, and ending
-  one. Nothing is durable under this path yet:
-  `add-shopify-membership-pos` creates the spec and this change ADDs into it,
-  which is why this delta carries `## Purpose` and `## ADDED Requirements`
-  rather than a MODIFIED block.
+None. This change delivers into the existing `grade10-site/store/wallet-member-card`
+capability rather than opening a new one.
 
 ### Modified Capabilities
 
-None. `grade10-site/store/membership` has no durable spec to modify — it exists
-only inside the in-flight `add-shopify-membership-pos`, which keeps the card and
-the counter exactly as it states them.
+- `grade10-site/store/wallet-member-card` — the wallet pass in either wallet,
+  the code each carries, what a session opened from one may do, its currency,
+  and ending one. The durable spec already covers the pass row, its states,
+  the sweep and erasure at the storage layer; this delta adds the member- and
+  counter-facing behaviour on top and extends the storage-layer requirements
+  it shares scenarios with.
 
 ### Capabilities this one must agree with
 
@@ -118,20 +117,13 @@ the counter exactly as it states them.
   yearly, and an APNs key. None exists, and the enrolment is the slow step.
 
 **Ordering.** `add-shopify-membership-pos` archives first — `depends_on` in
-`.openspec.yaml` says so, and the manual shows this change as blocked by it.
-That change creates `openspec/specs/grade10-site/store/membership/`, so its head
-is the durable one and this delta's `## Purpose` and `## Feature set` are the
-fold's to discard. `archive:preflight` checks the journeys reach the durable
-file but goes blind on the feature set once one exists durably, so merging this
-delta's feature-set group into the durable one is hand work nothing will ask
-for.
+`.openspec.yaml` says so. This delta folds into the durable
+`openspec/specs/grade10-site/store/wallet-member-card/`, the capability the
+wallet page names, so its `## Feature set` group is merged into the durable
+one by hand at archive.
 
-**Scenario ids run SC-44 to SC-71 and journeys US-07 to US-10** — Google's took
-SC-44 to SC-61, Apple's SC-62 to SC-69 and US-10, the sweep's report SC-70 and
-the pass's languages SC-71. An earlier draft of this
-change, since removed, issued SC-28 to SC-43 and US-04 to US-06 for a durable
-member card the owner did not adopt. Those numbers stay burned, and the durable
-spec carries that fact forward at archive so it outlives this change.
+**Scenario ids run SC-13 to SC-37 and journeys US-06 to US-08**, the next
+unused after the durable spec's SC-01 to SC-12 and US-01 to US-05.
 
 ## References
 
