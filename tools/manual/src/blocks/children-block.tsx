@@ -11,12 +11,23 @@ import { dirOf, humanize } from "../api/paths";
 import { useBlockScope } from "./block-scope";
 import { CapabilityWord } from "./capability-status";
 
+/** The authored block: a page that asks for its children and has none is
+ * told so, where a landing rendered without asking shows nothing. */
 export function ChildrenBlockView() {
   const { index, pagePath } = useBlockScope();
-  return <ChildCards dir={dirOf(pagePath)} index={index} />;
+  const dir = dirOf(pagePath);
+  if (childPages(index, dir).length === 0) {
+    return (
+      <Text as="p" className="my-4" size="sm" tone="secondary">
+        No pages under {dir} yet.
+      </Text>
+    );
+  }
+  return <ChildCards dir={dir} index={index} />;
 }
 
-/** Cards for the pages under a directory, ordered by their own frontmatter. */
+/** Cards for the pages under a directory, ordered by their own frontmatter;
+ * nothing for a domain of one page. */
 export function ChildCards({
   index,
   dir,
@@ -26,14 +37,7 @@ export function ChildCards({
 }) {
   const children = childPages(index, dir);
   const capabilities = isProductDir(index.manualDir, dir);
-
-  if (children.length === 0) {
-    return (
-      <Text as="p" className="my-4" size="sm" tone="secondary">
-        No pages under {dir} yet.
-      </Text>
-    );
-  }
+  if (children.length === 0) return null;
 
   return (
     <ul className="my-6 grid gap-3 sm:grid-cols-2">

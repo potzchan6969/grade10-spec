@@ -7,6 +7,7 @@ export const PAGE_ICONS = [
   "bank",
   "browsers",
   "calendar-check",
+  "chart-bar",
   "gavel",
   "identification-card",
   "key",
