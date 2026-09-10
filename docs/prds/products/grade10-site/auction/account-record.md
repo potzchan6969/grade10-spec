@@ -4,37 +4,31 @@ spec: grade10-site/auction/account-record
 order: 10
 ---
 
-My Auctions is the account's own record of every lot the collector watches or
-has bid on, on one page with two sections: **Watching** for interest,
-**Bidding** for money — the same shell as Order History. The record is
-resolved from the session and nothing else — no input selects another
-collector's. A section with no lots is omitted; when both are empty the page
-shows one empty state into the catalogue.
+My Auctions is the account's own record of every lot the collector bookmarks —
+by watching or by bidding — on one table. The page title carries a count of
+those rows. The record is resolved from the session and nothing else — no
+input selects another collector's. An empty table offers the catalogue.
 
-## Watching
+## Bookmarking
 
 A watch is made and removed wherever a lot is shown (including the lot
-details page), is private to its owner, and outlives the lot — an ended
-listing stays as Ended rather than vanishing. A maximum number of watches
-keeps the list a considered one; past it, a further watch is refused and says
-so. Each row carries the lot's key image, exactly one state — Scheduled with
-when it opens, Live, Ending soon inside the last hour, or Ended however it
-ended — and enough to act. A watched lot the collector also bid on is marked,
-and opens that lot under Bidding in one step; Watching never reports bidder
-standing itself.
+details page), is private to its owner, and outlives the close while the
+listing stays published. A bid bookmarks the lot with no separate Watch. A
+maximum number of watches keeps the list a considered one; past it, a further
+watch is refused and says so. Unpublishing or removing a listing (including
+an unsold lot taken down) takes it off My Auctions.
 
-## Bidding
+## The table
 
-The Bidding section is the account entry point for the durable [Bidding
-History](/p/grade10-site/auction/bidding-history) record. Account record owns
-the page sections, account-level groups, and collector-facing post-close
-projections; Bidding History owns the one-per-listing index, its filters, and
-the private chronological story.
+Each row carries the lot's key image, title, close, current bid, **Your
+Standing**, Email alerts, and Unwatch when the collector has not bid.
+Watch-only standing is `--`. Bid standing while open: Leading, Outbid, Bid
+submitted, or Bid not accepted. After close: Won or Didn't win, with the same
+payment, shipment, and hold projections as before. Bid rows sort before
+watch-only; soonest close within each band.
 
-While a lot is open, the row answers where the collector stands: Leading,
-Outbid with the minimum next valid bid, Bid submitted, or Bid not accepted —
-naming whether the bid was below the minimum, the window had closed, or the
-card authorization failed. Closed lots split into Won and Didn't win.
+Detailed [Bidding History](/p/grade10-site/auction/bidding-history) stays its
+own surface for the one-per-listing index, filters, and private chronology.
 
 A winner follows their own lot to the door through [Winner Order](/p/grade10-site/auction/winner-order): Pending Payment, Expired, Processing, Shipped, Delivered, Cancelled, or Refunded. The record shows the derived auction status and opens the invoice for payment; address, payment, fulfilment, and delivery facts stay on the order.
 
@@ -92,9 +86,10 @@ establishes it.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | The term "favourites" is retired | Decided | The feature is **watching**, the action is **watch** and **unwatch**, and the list is the Watching page. "Favourites", "saved", and "starred" are not used in product copy, specs, message catalogs, or analytics event names. | Product |
-| Two pages, not one | Decided | Watching and Bidding are different jobs — interest versus commitment — with different states, different urgency, and different empty states. One merged list would bury a won listing among idle watches, or force a filter to be usable. | Product and design |
-| A listing that is both watched and bid on | Decided | Appears on both pages, marked on Watching as one they bid on. Removing it from Watching does not touch their bids. | Product |
-| Bidding groups | Decided | Active, Won, Didn't win. Won is separated from all other closed listings because it is the only group that carries an obligation. | Product |
+| One table, not two sections | Decided | My Auctions is one bookmark table. Bid lots sort first; Your Standing separates commitment from watch-only (`--`). Replaces the earlier two-section / two-page decision. | Product and design |
+| A listing that is both watched and bid on | Decided | Appears once. A bid bookmarks the lot; Unwatch is offered only when there is no bid. | Product |
+| Closed standing, not Bidding groups | Decided | Won and Didn't win live in Your Standing. Won uses the auction order-status vocabulary (Pending Payment through Refunded). My Auctions does not show Active / Won / Didn't win section groups; Bidding History keeps its own index groups. | Product |
+
 | Derived auction status | Decided | The collector sees the auction order's derived status, while the order route owns payment, address confirmation, receipt, and delivery records. The store order-status capability remains separate. | Product and engineering |
 | Order owns post-sale writes | Decided | My Auctions opens the order for the winner's allowed actions; operator-only settlement, fulfilment, cancellation, and reinstatement stay in the [Post-Sale Queue](/p/grade10-admin/auction/post-sale). | Product and operations |
 | Card holds are stated plainly | Decided | The release of a losing bidder's authorization is asynchronous, so the record names the in-between state rather than implying the money is already back. Silence here is the likeliest source of "you charged me" contacts. | Product and finance |
