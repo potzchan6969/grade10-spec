@@ -781,8 +781,11 @@ const productOf = (traceId) => longestPrefix(traceId, PRODUCTS);
 const domainOf = (traceId) => longestPrefix(traceId, DOMAINS);
 const suites = SUITE_NAMES.flatMap((name) =>
   dirsHolding(ROOT, name)
-    .filter(inScope)
-    .map((d) => join(d, name)),
+    .map((d) => join(d, name))
+    // Scope matches the suite's own path: `platform-tcs.md` sits directly in
+    // `openspec/specs`, so filtering on the directory alone would never find
+    // it by name.
+    .filter((p) => (args.scope ? relative(ROOT, p).includes(args.scope) : true)),
 ).sort();
 const specs = dirsHolding(ROOT, "spec.md").filter(inScope);
 

@@ -9,7 +9,7 @@ One of the seven artifacts in `grade10-planning` is yours:
 
 | Artifact | What it holds |
 | --- | --- |
-| `platform-tcs.md` | The paths a person walks across products |
+| `specs/platform-tcs.md` | The paths a person walks across products |
 | `specs/<product>/product-tcs.md` | The paths a person walks across that product's domains |
 | `specs/<product>/<domain>/domain-tcs.md` | The paths a person walks across that domain's capabilities |
 | `specs/<capability>/feature-tcs.md` | The classified suite the journeys and scenarios imply |
