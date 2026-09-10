@@ -29,8 +29,8 @@ No new primitive, variant, or token. `EmptyState` already exists.
 
 | State | Spec scenarios |
 | --- | --- |
-| Items only — no placeholder slots | `shared-ui-store-cart-SC-02` |
-| Overflow scroll | `shared-ui-store-cart-SC-03`, `shared-ui-store-cart-SC-07` |
-| Empty — `EmptyState`, no action, no badge, no footer | `shared-ui-store-cart-SC-04` |
+| Items only — no placeholder slots | `shared-ui-store-cart-SC-23` |
+| Overflow scroll | `shared-ui-store-cart-SC-24`, `shared-ui-store-cart-SC-07` |
+| Empty — `EmptyState`, no action, no badge, no footer | `shared-ui-store-cart-SC-25` |
 | Loading — skeletons; empty state hidden | `shared-ui-store-cart-SC-08` |
 | Copy carries `emptyTitle` | `shared-ui-store-cart-SC-22` |
