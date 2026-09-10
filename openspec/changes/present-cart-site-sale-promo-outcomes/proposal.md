@@ -73,6 +73,7 @@ shapes when the applied quote returns each outcome.
 | --- | --- | --- |
 | Exact money basis when a code stacks (cut of post-sale vs list) | Engineering | Display holds either; the quote owns the amounts |
 | Whether product special-sale exclusivity in `add-site-wide-discounts` still forbids stack/replace at pricing time | Product on that change | This change only presents whatever outcome the quote returns |
+| The above is unverified, not just unowned | Product on `add-site-wide-discounts` | `add-site-wide-discounts` has not shipped — `acceptAutomaticDiscounts` is not in the codebase, so no automatic discount has ever reached a draft order and the refuse/stack/replace outcome this change's four presentations assume has never been observed on staging. Re-verify against that change's real staging run (its tasks 2.1–2.3) before this change's follow-on wiring work or a `tasks.md` starts, in case the real combine-rule shape differs from what these designs assume |
 
 ## Follow-on changes
 
