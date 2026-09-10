@@ -1,6 +1,6 @@
 ---
 title: Writing the manual
-summary: The voice, the block palette, canonical form, and what happens when you save.
+summary: The page's anatomy, its blocks, canonical form, and what happens when you save.
 order: 5
 ---
 
@@ -40,48 +40,43 @@ Everything between directives is prose — GitHub markdown, headings starting at
 open a container that a bare three-colon line closes. Attribute values are
 double-quoted, and a quote character can never appear inside one.
 
-## Voice
+## Page Anatomy
 
-Pages follow the house style — `docs/governance/writing.md` in the store —
-and [Product Listing](/p/grade10-site/store/product-listing) is the page to
-copy. Its application here is short:
+Pages follow the house style — `docs/governance/writing.md` in the store.
+Copy [Points](/p/grade10-site/loyalty/points) for a page about rules and
+[Product Listing](/p/grade10-site/store/product-listing) for a page about a
+surface. Top to bottom:
 
-- **A prose block is an outline** — two sentences at most on what the
-  surface is, none of which the items then repeat, then items leading with
-  their key term in bold, fragments rather than paragraphs, one concern per
-  `##` section, enumerable facts in a table
-- **A heading is a label** — the rail lists every `##` and `###`, so each
-  names what it holds in the reader's words (`Refunds`, `Designs`, `Test
-  cases`), never a question stub (`What earns`), a sentence, or a leading
-  article (`The rate`)
-- **Define the thing flatly**, in present tense, so a reader infers the
-  rules from what it is
-- **Answer the reader, not the spec** — what the surface is for, what it
-  shows, where each thing leads, what its URL looks like; the spec's cases
-  and edge rules stay in the spec, embedded below the prose
-- **A product's index holds only what no capability page carries** — the
-  child cards beneath it already name the capabilities, and a flow or a rule
-  that belongs to one of them lives on that page
-- **A flow holds the steps** — each `#` phase named as the owner's notes
-  name one (`Phase 1 — Online connection`), each `##` step naming its actor
-  first, then the action (`User — Book a time slot`), with a line or a short
-  outline beneath, never a paragraph
-- **Never recap the change** that introduced a capability — today's gap, the
-  intended fix, and the success metric belong to the proposal and rot the
-  moment it archives
-- **The page describes the roadmap** — a decided plan reads as the product
-  does, in the present tense; never a note that its spec is still being
-  written, never a pitch. The in-flight cards beneath say what has not
-  shipped, and a page with no `spec` yet wears the planned pip for it
+- **Frontmatter** — `title`, `spec`, `order`, and the other keys in their
+  declared order
+- **No opening paragraph** — the first line after it is a `##`. A page
+  about a surface may open with one sentence naming what the surface is for
+- **Values** — the numbers the page runs on, as a `Rule | Value` table or a
+  ladder, before any behaviour
+- **One `##` per concern** — a plain label in Title Case, the rail lists
+  every one; under it one sentence stating the rule or none, then items
+  leading with their key term in bold, then a table for a closed set or an
+  `example` for a rule that moves points
+- **A flow** for the steps between systems — the normal path as the flow,
+  each odd shape as its own `case`, each step naming its actor first
+- **A callout** — `note` for a rule that reads across sections; `warning`
+  only for a divergence somebody signed
+- **An engineer block** under the section it deepens — a code map of names
+  and links, never how the code works
+- **Product decisions** — the pm block, last, where the page records one
+- **Nothing recaps the change** — no today's gap, no note that a spec is
+  still being written, no scenario id. A decided plan reads as the product
+  does, in the present tense; the in-flight cards beneath say what has not
+  shipped, and a page with no `spec` wears the planned pip
 - **The owner's roadmap, not the delta's** — an in-flight spec is one
   author's proposal; where it promises what the code does not do, ask
   before the page states it
 
-## The block palette
+## Blocks
 
 The page itself carries the shape we want — plain prose and the visuals below.
-Requirement text stays in the store: cite it by id where one matters (see
-Citing the spec), and never embed the contract into the page.
+Requirement text stays in the store: a page states the rule in its own
+words and links the capability, and never embeds the contract.
 
 What a page does embed is acceptance: the spec's test-case suite, out of the
 spec named in the frontmatter.
@@ -300,7 +295,7 @@ What it is worth.
 :::
 ```
 
-## Citing the spec
+## Citing the Spec
 
 Prose can cite the store by id, and the reference stays honest when the
 store moves. Write the id in double brackets:
@@ -322,7 +317,7 @@ this guide, say — qualify it as `spec-id#item-id`, like
 [[grade10-site/loyalty/programme#grade10-site-loyalty-programme-SC-04]]. A reference that resolves to
 nothing renders as a marked dead link and draws a check warning.
 
-## Canonical form
+## Canonical Form
 
 There is exactly one correct text for any page, and committed pages are already
 in it: frontmatter keys in the declared order, one blank line between blocks,
@@ -347,7 +342,7 @@ Each read carries a version — a content hash of the file. If somebody saved
 before you, you get their version and yours side by side rather than a
 silent overwrite.
 
-## What the check enforces
+## Checks
 
 `check:manual` runs in CI, in the same job as spec validation, so the two can
 never drift apart quietly. It fails on a page that does not parse or is not
@@ -360,7 +355,7 @@ specs changed after the page's last commit is flagged stale — a warning, not a
 failure.
 
 :::callout{kind="note"}
-Write short and straight. The page states the desired shape and shows what it
-looks like; the spec store carries the contract, and a `[[ref]]` is how the
-two meet. A paragraph a figma card can replace is a paragraph to delete.
+Write short and straight. The page states the shape and shows what it looks
+like; the spec store carries the contract, and a `[[ref]]` is how the two
+meet. Delete a paragraph a figma card can replace.
 :::
