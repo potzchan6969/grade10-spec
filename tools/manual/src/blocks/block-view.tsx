@@ -8,6 +8,7 @@ import { FigmaBlockView, StoryBlockView } from "./embed-block";
 import { ExampleBlockView } from "./example-block";
 import { FlowBlockView } from "./flow-block";
 import { ImageBlockView } from "./image-block";
+import { NextBlockView } from "./next-block";
 import { ProseBlockView } from "./prose-block";
 import { SpecBlockView } from "./spec-block";
 
@@ -22,6 +23,8 @@ export function BlockView({ block }: { block: Block | BodyItem }) {
       return <CasesBlockView block={block} />;
     case "changes":
       return <ChangesBlockView block={block} />;
+    case "next":
+      return <NextBlockView block={block} />;
     case "figma":
       return <FigmaBlockView block={block} />;
     case "story":

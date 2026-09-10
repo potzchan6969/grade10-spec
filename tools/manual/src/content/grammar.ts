@@ -30,6 +30,10 @@ export type SpecBlock = {
 };
 export type CasesBlock = { type: "cases"; id: string };
 export type ChangesBlock = { type: "changes"; spec: string };
+/** What the changes about a capability said it would lead to. Aggregated out
+ * of every proposal's `## Follow-on changes`, attributed to the change that
+ * wrote it, because intent read without its date is a promise nobody made. */
+export type NextBlock = { type: "next"; spec: string };
 export type FigmaBlock = {
   type: "figma";
   url: string;
@@ -57,6 +61,7 @@ export type LeafBlock =
   | SpecBlock
   | CasesBlock
   | ChangesBlock
+  | NextBlock
   | FigmaBlock
   | StoryBlock
   | ImageBlock
@@ -166,6 +171,7 @@ export const BLOCK_SPECS: Record<string, BlockSpec> = {
   },
   cases: { container: false, attrs: [{ name: "id", required: true }] },
   changes: { container: false, attrs: [{ name: "spec", required: true }] },
+  next: { container: false, attrs: [{ name: "spec", required: true }] },
   figma: {
     container: false,
     attrs: [

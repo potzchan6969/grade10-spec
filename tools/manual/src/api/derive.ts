@@ -96,6 +96,10 @@ export type ManualIndex = {
    * through an id it issued. A proposal has no delta, so this is the only way
    * a capability learns one is about it. */
   proposalsBySpec: Map<string, ChangeEntry[]>;
+  /** Every id a spec answers to — its own, its requirement headings, and the
+   * permanent ids it issued — mapped back to the spec. What a `## References`
+   * bullet is resolved through, for a change in the snapshot or out of it. */
+  specsByCitedId: Map<string, string[]>;
   /** Spec id → the route of the page that documents it. */
   routeBySpec: Map<string, string>;
   groups: NavGroup[];
@@ -166,6 +170,8 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
     dedupe(list);
   }
 
+  const specsByCitedId = deriveSpecsByCitedId(snapshot);
+
   const routeBySpec = new Map<string, string>();
   for (const page of pages) {
     const spec = page.ast?.frontmatter.spec;
@@ -184,7 +190,8 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
     changeById,
     changesBySpec,
     changesByOwner,
-    proposalsBySpec: deriveProposalsBySpec(snapshot),
+    proposalsBySpec: new Map(),
+    specsByCitedId,
     routeBySpec,
     groups: [],
     topicGroups: [],
@@ -195,6 +202,7 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
     incubating: [],
   };
 
+  index.proposalsBySpec = deriveProposalsBySpec(snapshot, specsByCitedId);
   index.groups = deriveGroups(index);
   index.topicGroups = deriveTopicGroups(index);
   index.topics = index.topicGroups.flatMap((group) => group.topics);
@@ -610,11 +618,7 @@ export function proposalsForSpec(
   return index.proposalsBySpec.get(specId) ?? [];
 }
 
-function deriveProposalsBySpec(snapshot: Snapshot): Map<string, ChangeEntry[]> {
-  const proposals = snapshot.changes.filter(isProposal);
-  const found = new Map<string, ChangeEntry[]>();
-  if (proposals.length === 0) return found;
-
+function deriveSpecsByCitedId(snapshot: Snapshot): Map<string, string[]> {
   const specsByCitedId = new Map<string, string[]>();
   const name = (id: string, specId: string) => {
     push(specsByCitedId, id, specId);
@@ -630,14 +634,79 @@ function deriveProposalsBySpec(snapshot: Snapshot): Map<string, ChangeEntry[]> {
     for (const journey of spec.journeys ?? []) name(journey.id, spec.id);
     for (const one of spec.testCases ?? []) name(one.id, spec.id);
   }
+  return specsByCitedId;
+}
 
-  for (const proposal of proposals) {
-    const about = new Set(
-      (proposal.cites ?? []).flatMap((id) => specsByCitedId.get(id) ?? []),
-    );
-    for (const specId of about) push(found, specId, proposal);
+function deriveProposalsBySpec(
+  snapshot: Snapshot,
+  specsByCitedId: Map<string, string[]>,
+): Map<string, ChangeEntry[]> {
+  const found = new Map<string, ChangeEntry[]>();
+  for (const proposal of snapshot.changes.filter(isProposal)) {
+    for (const specId of specsCited(specsByCitedId, proposal)) {
+      push(found, specId, proposal);
+    }
   }
   return found;
+}
+
+/** The specs a change's `## References` bullets land on. A change out of the
+ * snapshot — an archived one, fetched separately — resolves the same way, so
+ * the archive is not a second rule. */
+function specsCited(
+  specsByCitedId: Map<string, string[]>,
+  change: ChangeEntry,
+): Set<string> {
+  return new Set(
+    (change.cites ?? []).flatMap((id) => specsByCitedId.get(id) ?? []),
+  );
+}
+
+/** One change's follow-on bullets, as a capability page shows them: the
+ * change that wrote them, so a reader can date the intent. */
+export type FollowOn = { change: ChangeEntry; items: string[] };
+
+/**
+ * What the changes about a capability said would come next.
+ *
+ * Gathered from every change that is about this spec — one whose delta touches
+ * it, and one whose `## References` cite it and has no delta yet — plus the
+ * archived changes handed in, which ride their own artifact and reach a page
+ * only once it has been fetched. Never merged and never deduped: two changes
+ * naming the same next step named it on two different days, and the reader is
+ * owed both.
+ *
+ * Ordered live intent first — a change still in flight has not spent its
+ * follow-ons — then the shipped ones, newest first.
+ */
+export function followOnsForSpec(
+  index: ManualIndex,
+  specId: string,
+  archived: ChangeEntry[] = [],
+): FollowOn[] {
+  const found = new Map<string, FollowOn>();
+  const take = (change: ChangeEntry) => {
+    const items = change.followOns ?? [];
+    if (items.length === 0 || found.has(change.id)) return;
+    found.set(change.id, { change, items });
+  };
+
+  for (const change of changesForSpec(index, specId)) take(change);
+  for (const change of proposalsForSpec(index, specId)) take(change);
+  for (const change of archived) {
+    const about =
+      change.deltas.some((delta) => delta.spec === specId) ||
+      specsCited(index.specsByCitedId, change).has(specId);
+    if (about) take(change);
+  }
+
+  const shipped = (one: FollowOn) => one.change.status === "archived";
+  return [...found.values()].sort((a, b) => {
+    if (shipped(a) !== shipped(b)) return shipped(a) ? 1 : -1;
+    return shipped(a)
+      ? byShipped(a.change, b.change)
+      : byLastMoved(a.change, b.change);
+  });
 }
 
 /** A cited id as somewhere to click. `to` is absent when the id names nothing

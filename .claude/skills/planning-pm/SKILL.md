@@ -87,6 +87,13 @@ A change that alters no behavior at all — a pure refactor, tooling, docs — s
 `skip_specs: true` in its `.openspec.yaml` rather than inventing a requirement
 to satisfy validation.
 
+An optional last section, **Follow-on changes**, names what this change makes
+possible next — one bullet each, no dates, no owners, no commitments. The
+manual's `::next` block collects them onto the capability pages this change is
+about, each bullet under the change that wrote it, so write them for a reader
+of a capability page rather than for the board. Omit the section when there is
+nothing to name; a proposal that names none has decided nothing.
+
 ## The delta specs
 
 One per capability the proposal named, at `specs/<capability-path>/spec.md`,

@@ -21,7 +21,7 @@ const canonical: { name: string; text: string }[] = [
   },
   {
     name: "leaf directives",
-    text: `${fm}\n::spec{id="grade10-store/loyalty"}\n\n::spec{id="grade10-store/loyalty" scenario="loyalty-SC-04"}\n\n::cases{id="grade10-store/loyalty"}\n\n::changes{spec="grade10-store/loyalty"}\n\n::figma{url="https://www.figma.com/design/x?node-id=1-2" title="Checkout"}\n\n::story{id="blocks-store-cart--default"}\n\n::story{id="blocks-store-cart--default" title="Cart" height="640"}\n\n::image{src="assets/till.png" alt="The till screen" caption="Till"}\n\n::children\n`,
+    text: `${fm}\n::spec{id="grade10-store/loyalty"}\n\n::spec{id="grade10-store/loyalty" scenario="loyalty-SC-04"}\n\n::cases{id="grade10-store/loyalty"}\n\n::changes{spec="grade10-store/loyalty"}\n\n::next{spec="grade10-store/loyalty"}\n\n::figma{url="https://www.figma.com/design/x?node-id=1-2" title="Checkout"}\n\n::story{id="blocks-store-cart--default"}\n\n::story{id="blocks-store-cart--default" title="Cart" height="640"}\n\n::image{src="assets/till.png" alt="The till screen" caption="Till"}\n\n::children\n`,
   },
   {
     name: "containers with markdown and leaves",

@@ -274,8 +274,9 @@ function checkBlock(ctx, path, block) {
       }
       break;
     }
-    case "changes": {
-      // A ribbon may point at a capability that is still being introduced, so
+    case "changes":
+    case "next": {
+      // Either may point at a capability that is still being introduced, so
       // an in-flight change's deltas resolve it as well as a durable spec.
       if (specs.has(block.spec) || ctx.changing.has(block.spec)) break;
       add(

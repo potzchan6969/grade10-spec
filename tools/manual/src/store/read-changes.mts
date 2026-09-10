@@ -155,6 +155,8 @@ function readChange(
     if (entry.created === "") entry.created = author?.[2] ?? "";
     const cites = readCitations(body);
     if (cites.length > 0) entry.cites = cites;
+    const followOns = readFollowOns(body);
+    if (followOns.length > 0) entry.followOns = followOns;
   }
 
   const detailed = status === "in-flight";
@@ -258,6 +260,37 @@ function readCitations(sections: Section[]): string[] {
     if (id !== "") found.push(id);
   }
   return [...new Set(found)];
+}
+
+/**
+ * The bullets under a proposal's `## Follow-on changes`, verbatim and in
+ * order — what this change was said to make possible next.
+ *
+ * Optional, and read rather than required: a proposal that names no follow-on
+ * has decided nothing, and a heading nobody wrote is not a hole. A wrapped
+ * bullet folds back into one item, because the line break is the author's
+ * margin and not a second thought.
+ */
+function readFollowOns(sections: Section[]): string[] {
+  const section = sections.find((one) =>
+    /^Follow-on changes\b/i.test(one.heading),
+  );
+  if (!section) return [];
+  const items: string[] = [];
+  for (const line of section.raw.split("\n")) {
+    const bullet = BULLET.exec(line)?.[1];
+    if (bullet !== undefined) {
+      items.push(bullet);
+      continue;
+    }
+    // Only an indented line continues the bullet above it; prose sitting at
+    // column 0 after the list is prose, and swallowing it would invent a
+    // follow-on nobody wrote.
+    if (items.length > 0 && /^\s+\S/.test(line)) {
+      items[items.length - 1] += ` ${line.trim()}`;
+    }
+  }
+  return items;
 }
 
 /** `detailed` carries the checkbox lines themselves, so "5 of 6" can say which

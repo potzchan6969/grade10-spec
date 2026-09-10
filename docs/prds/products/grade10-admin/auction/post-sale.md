@@ -37,3 +37,7 @@ delivery state, and operational trail together.
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones, and delivery proof. | Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 :::
+
+## Named next
+
+::next{spec="grade10-admin/auction/post-sale"}

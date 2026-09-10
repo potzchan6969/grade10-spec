@@ -254,6 +254,11 @@ export type ChangeEntry = {
   /** Ids the proposal's `## References` names, read back so the
    * capability a proposal is about can show it before any delta exists. */
   cites?: string[];
+  /** The proposal's `## Follow-on changes` bullets, verbatim. What the author
+   * said this change makes possible next — intent recorded on the day the
+   * proposal was written, never a commitment, and only ever readable as the
+   * change that carries it. */
+  followOns?: string[];
   taskGroups: TaskGroup[];
   /** ISO date of the last commit touching any file of the change — a
    * change with no tasks.md still moves. */

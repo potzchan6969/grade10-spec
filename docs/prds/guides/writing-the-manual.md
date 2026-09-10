@@ -100,6 +100,20 @@ changes. Author this block only to show a *different* spec's:
 ::changes{spec="grade10-site/loyalty/programme"}
 ```
 
+What the changes about a capability said would come next — the
+`## Follow-on changes` bullets of every proposal whose delta touches that spec
+or whose `## References` cite it, in flight and shipped alike:
+
+```md
+::next{spec="grade10-site/loyalty/programme"}
+```
+
+Every bullet stays under the change that wrote it, dated by that change, and
+the block says so out loud — a follow-on is one author's intent on one day, and
+pooling them into a bare list turns it into a promise nobody made. Nothing else
+on the page may repeat them: the prose above still describes the product as it
+is, in the present tense.
+
 Visuals. Figma URLs and Storybook ids are never invented — take them from the
 design record or the workbench, and the check now holds you to it: a url naming
 another Figma file, or a frame the nightly design sync no longer finds, is a
