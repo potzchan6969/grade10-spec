@@ -619,11 +619,11 @@ verified for that session. Every operator action that changes something SHALL be
 recorded in a hash-chained log whose breakage is detectable.
 
 Operator permissions SHALL separate reading a member's loyalty state, moving
-points, granting invitations, editing the reward menu, and removing a tier a
-member holds, so an operator can hold one without the others. Removing a tier
-SHALL be its own permission: it undoes something a member can see, and does
-not follow from being allowed to move points. Cancelling a redemption SHALL
-require the point-movement permission.
+points, granting invitations, and editing the reward menu, so an operator can
+hold one without the others. Removing a tier a member holds SHALL take the
+invitation permission, never the point-movement one: it undoes something a
+member can see. Cancelling a redemption SHALL require the point-movement
+permission.
 
 #### Scenario: grade10-site-loyalty-programme-SC-45 - A permission is required per action
 

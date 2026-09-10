@@ -91,8 +91,9 @@ customer are the same event, so there is no prior history to mis-attach.
 
 When a member is erased, the pairing SHALL be marked terminal before any
 provider call, so no repair or retry can re-create the customer afterwards.
-The removal of the customer record SHALL be retried until the provider
-confirms it, and any customer record the erasure race left behind SHALL be
+A customer record this platform created SHALL be removed, retried until the
+provider confirms it; one the platform adopted SHALL keep its record and lose
+the member key. Any customer record the erasure race left behind SHALL be
 found and removed. A terminal pairing SHALL never return to any live
 state.
 
@@ -155,8 +156,8 @@ apply a coupon, and confirm a collection. Undoing a spend
 before tender SHALL simply drop the discounts from the sale, since nothing
 is debited until the order pays; reversing a completed spend SHALL stay an
 operator's action from the console, never the till. Spending SHALL present a read-back facing the member —
-points spent, money still due, balance after, points this sale will
-earn, computed by the platform — before it commits.
+points spent, money still due and balance after, computed by the platform —
+before the sale pays.
 
 Submitting the same spend twice SHALL cost once and answer the same both
 times. Every collection SHALL notify the member immediately with the
