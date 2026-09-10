@@ -30,6 +30,13 @@ type CartItemSummary = {
   imageAlt?: string;
   quantity: number;
   maxQuantity?: number;
+  /**
+   * How many are left, in the consumer's own words. Displayed as supplied —
+   * the line neither formats it nor decides from it that stock is low. It sits
+   * beside the low-stock warning, never in place of it: one says what was
+   * already changed, the other says what is left.
+   */
+  remainingLabel?: ReactNode;
   status?: CartItemStatus;
 };
 
