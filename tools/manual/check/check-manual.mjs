@@ -69,6 +69,7 @@ import { checkDeltas } from "./deltas.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkAcceptance } from "./qa.mjs";
 import { checkRole } from "./role.mjs";
+import { checkSections } from "./sections.mjs";
 import {
   checkCoverage,
   checkDependencies,
@@ -145,6 +146,7 @@ export async function runChecks(
   });
 
   checkPages(ctx, pages);
+  checkSections(ctx, changes, pages);
 
   if (!ctx.stories && ctx.storyIds.size > 0) {
     notes.push(

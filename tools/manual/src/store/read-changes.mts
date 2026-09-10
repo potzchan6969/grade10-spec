@@ -1,5 +1,5 @@
 import { existsSync } from "node:fs";
-import { join } from "node:path";
+import { join, posix } from "node:path";
 import YAML from "yaml";
 import type {
   ChangeEntry,
@@ -9,6 +9,7 @@ import type {
   DeltaKind,
   DeltaRequirement,
   IdleClaim,
+  PageSectionRef,
   TaskGroup,
   TaskLine,
 } from "../api/types.ts";
@@ -155,6 +156,8 @@ function readChange(
     if (entry.created === "") entry.created = author?.[2] ?? "";
     const cites = readCitations(body);
     if (cites.length > 0) entry.cites = cites;
+    const linked = readSectionLinks(body, rel);
+    if (linked.length > 0) entry.sections = linked;
     const followOns = readFollowOns(body);
     if (followOns.length > 0) entry.followOns = followOns;
   }
@@ -247,19 +250,55 @@ function handles(values: unknown[]): string[] {
   return [...new Set(named)];
 }
 
-/** The ids a proposal's `## References` bullets name — spec ids, requirement
- * headings, and the permanent ids a row already knew. */
-function readCitations(sections: Section[]): string[] {
+const MARKDOWN_LINK = /^\[[^\]]*\]\(([^)\s]+)\)$/;
+const PAGE_SECTION = /^(docs\/prds\/.+\.md)#([^#]+)$/;
+
+function referenceBullets(sections: Section[]): string[] {
   const references = sections.find((one) => /^References\b/.test(one.heading));
   if (!references) return [];
   const found: string[] = [];
   for (const line of references.raw.split("\n")) {
     const bullet = BULLET.exec(line)?.[1];
-    if (bullet === undefined) continue;
+    if (bullet !== undefined) found.push(bullet);
+  }
+  return found;
+}
+
+/** The ids a proposal's `## References` bullets name — spec ids, requirement
+ * headings, and the permanent ids a row already knew. A bullet that is a link
+ * is a page section, read by `readSectionLinks`. */
+function readCitations(sections: Section[]): string[] {
+  const found: string[] = [];
+  for (const bullet of referenceBullets(sections)) {
+    if (MARKDOWN_LINK.test(bullet)) continue;
     const id = bullet.replace(/`/g, "").trim();
     if (id !== "") found.push(id);
   }
   return [...new Set(found)];
+}
+
+/**
+ * The manual sections a proposal's `## References` link —
+ * `[Points · Rules](../../../docs/prds/products/.../points.md#rules)`,
+ * resolved from the change's own directory to a store path and the heading's
+ * slug. That is where the change lands on the page; a link with no fragment
+ * names the page whole and attaches to nothing here.
+ */
+function readSectionLinks(sections: Section[], rel: string): PageSectionRef[] {
+  const found: PageSectionRef[] = [];
+  const seen = new Set<string>();
+  for (const bullet of referenceBullets(sections)) {
+    const href = MARKDOWN_LINK.exec(bullet)?.[1];
+    if (href === undefined) continue;
+    const resolved = posix.normalize(posix.join(rel, href));
+    const target = PAGE_SECTION.exec(resolved);
+    if (!target) continue;
+    const key = `${target[1]}#${target[2]}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    found.push({ page: target[1], slug: target[2] });
+  }
+  return found;
 }
 
 /**

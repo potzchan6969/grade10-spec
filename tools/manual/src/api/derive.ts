@@ -93,6 +93,8 @@ export type ManualIndex = {
   changeById: Map<string, ChangeEntry>;
   changesBySpec: Map<string, ChangeEntry[]>;
   changesByOwner: Map<string, ChangeEntry[]>;
+  /** `page#slug` → the in-flight changes whose proposal links that section. */
+  changesBySection: Map<string, ChangeEntry[]>;
   /** Spec id → the proposals whose `## References` name it, directly or
    * through an id it issued. A proposal has no delta, so this is the only way
    * a capability learns one is about it. */
@@ -167,7 +169,17 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
       push(changesByOwner, ownerOfSpec(delta.spec, snapshot.taxonomy), change);
     }
   }
-  for (const list of [...changesBySpec.values(), ...changesByOwner.values()]) {
+  const changesBySection = new Map<string, ChangeEntry[]>();
+  for (const change of snapshot.changes) {
+    for (const section of change.sections ?? []) {
+      push(changesBySection, sectionKey(section.page, section.slug), change);
+    }
+  }
+  for (const list of [
+    ...changesBySpec.values(),
+    ...changesByOwner.values(),
+    ...changesBySection.values(),
+  ]) {
     dedupe(list);
   }
 
@@ -191,6 +203,7 @@ function deriveIndex(snapshot: Snapshot): ManualIndex {
     changeById,
     changesBySpec,
     changesByOwner,
+    changesBySection,
     proposalsBySpec: new Map(),
     specsByCitedId,
     routeBySpec,
@@ -456,6 +469,22 @@ export function changesForSpec(
   specId: string,
 ): ChangeEntry[] {
   return index.changesBySpec.get(specId) ?? [];
+}
+
+export function sectionKey(pagePath: string, slug: string): string {
+  return `${pagePath}#${slug}`;
+}
+
+/** The in-flight changes a proposal attached to one section of a page,
+ * newest movement first. */
+export function changesForSection(
+  index: ManualIndex,
+  pagePath: string,
+  slug: string,
+): ChangeEntry[] {
+  return [
+    ...(index.changesBySection.get(sectionKey(pagePath, slug)) ?? []),
+  ].sort(byLastMoved);
 }
 
 export function changesForOwner(

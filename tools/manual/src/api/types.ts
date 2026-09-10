@@ -229,6 +229,9 @@ export type MainState = {
  * open tasks, `complete` has finished them all and awaits the archive. */
 export type ChangeLane = "proposed" | "specified" | "in-progress" | "complete";
 
+/** One `## ` heading of a manual page, as a proposal links it. */
+export type PageSectionRef = { page: string; slug: string };
+
 export type ChangeEntry = {
   id: string;
   schema: string;
@@ -254,6 +257,10 @@ export type ChangeEntry = {
   /** Ids the proposal's `## References` names, read back so the
    * capability a proposal is about can show it before any delta exists. */
   cites?: string[];
+  /** The page sections the proposal's `## References` link, as a store path
+   * and the heading's slug — where on the manual this change lands, section
+   * by section. */
+  sections?: PageSectionRef[];
   /** The proposal's `## Follow-on changes` bullets, verbatim. What the author
    * said this change makes possible next — intent recorded on the day the
    * proposal was written, never a commitment, and only ever readable as the

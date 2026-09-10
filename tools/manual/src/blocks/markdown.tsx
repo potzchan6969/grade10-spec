@@ -24,6 +24,7 @@ import {
   equalWidthTables,
 } from "../content/table-layout";
 import { AnchorLink } from "./anchor";
+import { SectionChanges } from "./section-changes";
 
 /** Where a markdown href actually points, once the store layout is applied. */
 type Target =
@@ -402,9 +403,15 @@ function Heading({
   const id = slug && prefix ? `${prefix}-${slug}` : slug;
   const Tag = level === 2 ? "h2" : "h3";
   return (
-    <Tag className="group/anchor flex scroll-mt-24 items-center gap-1" id={id}>
-      <span>{children}</span>
-      {id ? <AnchorLink id={id} label="Copy link to this heading" /> : null}
-    </Tag>
+    <>
+      <Tag
+        className="group/anchor flex scroll-mt-24 items-center gap-1"
+        id={id}
+      >
+        <span>{children}</span>
+        {id ? <AnchorLink id={id} label="Copy link to this heading" /> : null}
+      </Tag>
+      {slug && !prefix && level === 2 ? <SectionChanges slug={slug} /> : null}
+    </>
   );
 }
