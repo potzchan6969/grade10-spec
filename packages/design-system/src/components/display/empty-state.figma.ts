@@ -5,11 +5,15 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
-// Figma's only VARIANT axis. `false` is the cva default, so the prop is
-// omitted there and emitted as `compact` when true.
+// Figma's VARIANT axes. `false` / `true` (hasFrame) are the cva defaults, so
+// those props are omitted there and emitted only for the non-default rungs.
 const compact = instance.getEnum("isCompact", {
   false: false,
   true: true,
+});
+const frameless = instance.getEnum("hasFrame", {
+  true: false,
+  false: true,
 });
 
 const title = instance.getString("title");
@@ -33,7 +37,7 @@ const hasActions = instance.getBoolean("hasActions");
 export default {
   // Nested Button attrs use object-spread so the design-sync prop scanner does
   // not treat `variant` as an EmptyState prop (it only matches `name={` / `name="`).
-  example: figma.code`<EmptyState${compact ? figma.code` compact` : ""}${iconCode ? figma.code` icon={${iconCode}}` : ""}${description ? figma.code` description="${description}"` : ""}${
+  example: figma.code`<EmptyState${compact ? figma.code` compact` : ""}${frameless ? figma.code` frameless` : ""}${iconCode ? figma.code` icon={${iconCode}}` : ""}${description ? figma.code` description="${description}"` : ""}${
     hasActions
       ? figma.code` actions={<>
   <Button size="md" {...{ variant: "secondary" }}>Take action</Button>
