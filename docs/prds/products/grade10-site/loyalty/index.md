@@ -61,5 +61,6 @@ and giving the top tier to a named person with a reason.
   draft the programme implements
 - [The Shopify membership and POS notes](/references/shopify-membership-pos) —
   the delivery plan for the counter
-- [[grade10-site/loyalty/programme]] — the checkable rules, with the till's in
-  the in-flight `grade10-site/store/membership` capability
+- [[grade10-site/loyalty/programme]] — the checkable rules of the programme
+- [[grade10-site/store/membership]] — the till, the commerce customer behind
+  every member, and orders reaching the programme
