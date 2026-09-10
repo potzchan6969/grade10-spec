@@ -270,7 +270,9 @@ A draft that fails one line is rewritten.
 
 - **`pnpm check:manual`** — structure and references: canonical form,
   resolving ids, block attributes, a ledger whose balance does not add up,
-  a flow whose cases cannot be told apart
+  a flow whose cases cannot be told apart, a 🚧 line no in-flight change
+  delivers; and a warning where a spec's requirements changed meaning after
+  the page that embeds it was last committed
 - **Review** — voice and shape are held here the way code is held to the
   spec
 - **The `writing-style` skill** — an agent loads it before drafting, and it
