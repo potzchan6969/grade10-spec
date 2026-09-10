@@ -11,9 +11,9 @@ import {
 } from "./manual-fixture";
 
 /**
- * One change as a page: one tab per artifact its schema asks for, the written
- * ones open, and the delta read as the contract it proposes. What used to be
- * a board card thirty screens into `/in-flight`.
+ * One change as a page: what it is, where it stands, then a rail with one row
+ * per file it has and the delta read as the contract it proposes. What used to
+ * be a board card thirty screens into `/in-flight`.
  */
 
 const SPEC = "demo-product/alpha";
@@ -61,6 +61,7 @@ const change: ChangeEntry = changeEntry(
     title: "Point of sale",
     why: "Collectors who buy in the shop are anonymous guests.",
     author: "echo",
+    cites: ["till-notes"],
     taskGroups: [
       {
         title: "Contracts",
@@ -216,53 +217,61 @@ describe("the page's head", () => {
   });
 });
 
-describe("the artifacts row", () => {
+describe("where the change stands", () => {
+  const html = render("/in-flight/pos");
+
+  it("labels each fact it carries", () => {
+    expect(html).toContain(">Owners<");
+    expect(html).toContain(">Specs<");
+    expect(html).toContain(">Tasks<");
+  });
+});
+
+describe("the rail", () => {
   const html = render("/in-flight/pos");
   const tabs = [
-    ...html.matchAll(/role="tab"[^>]*>(?:<svg.*?<\/svg>)?([^<]+)/g),
+    ...html.matchAll(/role="tab"[^>]*>(?:<svg.*?<\/svg>)?<span[^>]*>([^<]+)</g),
   ].map((match) => match[1]);
 
-  it("names every artifact the schema asks for, in writing order", () => {
+  it("names every file the change has, in writing order", () => {
     expect(html).toContain('aria-label="Artifacts of this change"');
     expect(tabs).toEqual([
       "Product",
       "Requirements",
       "Journeys",
-      "Test Cases",
-      "UI",
       "Tech Design",
       "Tasks",
     ]);
   });
 
-  it("keeps the missing one in its place, disabled and marked", () => {
-    expect(html).toMatch(
-      /aria-disabled="true"[^>]*role="tab"[^>]*>(?:<svg.*?<\/svg>)?UI<span[^>]*>missing/,
-    );
-    expect(html).toContain("ui-design.md is still to write");
-    expect(html).toContain("Still to write: feature-tcs.md, ui-design.md");
+  it("lists what is still to write rather than offering a dead tab", () => {
+    expect(html).toContain("Test Cases · feature-tcs.md");
+    expect(html).toContain("UI · ui-design.md");
+    expect(tabs).not.toContain("UI");
+    expect(html).not.toContain('aria-disabled="true"');
   });
 
   it("counts what the requirements and the plan carry", () => {
-    expect(html).toMatch(/Requirements<span[^>]*>1</);
-    expect(html).toMatch(/Tasks<span[^>]*>1\/2</);
+    expect(html).toMatch(/Requirements<\/span><span[^>]*>1</);
+    expect(html).toMatch(/Tasks<\/span><span[^>]*>1\/2</);
   });
 
-  it("wears the schema the change was created under", () => {
-    expect(html).toContain(">grade10-planning<");
+  it("says nothing about a schema the store defines", () => {
+    expect(html).not.toContain("grade10-planning");
   });
 
-  it("says when the schema cannot say what is missing", () => {
+  it("names a schema the store does not, and why nothing is listed", () => {
     const loose = render("/in-flight/pos", {
       status: "ready",
       document: { ...document, schema: "spec-driven", schemaKnown: false },
     });
+    expect(loose).toContain("spec-driven");
     expect(loose).toContain("not one this store defines");
     expect(loose).not.toContain("Still to write");
   });
 });
 
-describe("one tab per file the change has", () => {
+describe("one panel per file the change has", () => {
   it("opens on the proposal, without its own title, and names the others", () => {
     const html = render("/in-flight/pos");
 
@@ -275,6 +284,19 @@ describe("one tab per file the change has", () => {
     expect(html).toContain(">Tech Design<");
     expect(html).toContain(">Tasks<");
     expect(html).toContain("PM-driven proposal");
+  });
+
+  it("names the file it reads, relative to the change directory", () => {
+    expect(render("/in-flight/pos")).toContain(">proposal.md<");
+  });
+
+  it("ends the proposal with what it was written about", () => {
+    const html = render("/in-flight/pos");
+
+    expect(html).toContain(">About<");
+    expect(html.indexOf("till-notes")).toBeGreaterThan(
+      html.indexOf("Staff spend points"),
+    );
   });
 
   it("opens the tab the URL names", () => {

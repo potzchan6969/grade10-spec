@@ -12,7 +12,7 @@ import {
 } from "../api/derive";
 import { specTitle } from "../api/paths";
 import { useManualIndex } from "../api/use-manual-index";
-import { CopyableCommand } from "../blocks/change-detail";
+import { CopyableCommand } from "../blocks/copyable-command";
 import { InlineMarkdown } from "../blocks/inline-markdown";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";

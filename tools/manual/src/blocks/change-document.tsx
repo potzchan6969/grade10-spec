@@ -52,8 +52,10 @@ import { AnchorLink, useHashTarget } from "./anchor";
 import { BlockScopeProvider } from "./block-scope";
 import { BrokenCard } from "./broken-card";
 import { SuiteView } from "./cases-block";
-import { CopyableCommand, TaskGroupView } from "./change-detail";
+import { TaskGroupView } from "./change-detail";
+import { Cites } from "./change-facts";
 import { DeltaKinds, DeltaSpec, deltaTone, TaskProgress } from "./change-views";
+import { CopyableCommand } from "./copyable-command";
 import { BlockDiff } from "./delta-view";
 import { MarkdownView } from "./markdown";
 import { ScenarioView } from "./scenario-view";
@@ -61,8 +63,8 @@ import { JourneyCard } from "./spec-block";
 
 /**
  * A change read as the files it is made of. The schema a change was created
- * under says which artifacts it has and in what order they are written; the
- * row says which of those exist, and each present one is a tab. The tabs
+ * under says which artifacts it has and in what order they are written; each
+ * one that exists is a tab, and the rest are listed under the rail. The tabs
  * are the change's own files — two changes in one store can sit on different
  * schemas, so no tab is guaranteed to be there.
  */
@@ -82,7 +84,7 @@ function ArtifactIcon({ name }: { name: string }) {
   return <Glyph aria-hidden size={16} />;
 }
 
-/** What a tab can say about its file before it is opened: how many deltas
+/** What a rail row can say about its file before it is opened: how many deltas
  * the requirements carry, how far the plan has come. */
 function artifactCount(
   artifact: ChangeArtifact,
@@ -121,13 +123,19 @@ function fileName(artifact: ChangeArtifact): string {
   return `${artifact.name}/`;
 }
 
+/** A rail row, sized by the list so it fits a wrapping row as well as a
+ * column. The active background repeats the line variant's selector, which
+ * outranks a bare `data-active:`. */
+const RAIL_ROW =
+  "h-auto max-w-full flex-none justify-start gap-2 rounded-(--radius-lg) px-2.5 py-1.5 after:hidden data-active:font-medium data-active:text-foreground group-data-[variant=line]/tabs-list:data-active:bg-muted dark:group-data-[variant=line]/tabs-list:data-active:bg-muted";
+
 /**
- * One tab per artifact the schema asks for, in writing order. A written one
- * opens; one nobody has written yet sits in its place, disabled and marked,
- * so a single row says what the change has and what is still to come. The
- * open tab lives in the URL, so a link carries the file it was written
- * about; a hash naming a permanent id opens the requirements, whatever tab
- * the link was copied from.
+ * One tab per file the change has, in writing order — a rail beside the panel,
+ * because seven labels with their counts do not fit a row. What the schema
+ * asks for and nobody has written is listed under the rail instead: a tab onto
+ * a file that is not there is a dead end. The open tab lives in the URL, so a
+ * link carries the file it was written about; a hash naming a permanent id
+ * opens the requirements, whatever tab the link was copied from.
  */
 export function ChangeTabs({
   change,
@@ -161,7 +169,7 @@ export function ChangeTabs({
 
   return (
     <Tabs
-      className="my-5"
+      className="mt-6 mb-5 flex-col border-border-subtle border-t pt-6 lg:grid lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-8"
       onValueChange={(value) => {
         if (typeof value !== "string") return;
         // The hash names a row in the tab being left; carrying it along would
@@ -173,58 +181,48 @@ export function ChangeTabs({
           },
         );
       }}
+      orientation="vertical"
       value={active}
     >
-      <div className="flex items-end justify-between gap-3 border-border border-b">
+      <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">
         <TabsList
           aria-label="Artifacts of this change"
-          className="-mb-px min-w-0 justify-start gap-0 overflow-x-auto p-0 group-data-horizontal/tabs:h-auto"
+          className="flex w-full min-w-0 flex-row flex-wrap items-stretch justify-start gap-1 p-0 lg:flex-col"
           variant="line"
         >
-          {document.artifacts.map((artifact) => (
+          {present.map((artifact) => (
             <TabsTrigger
-              className="h-10 flex-none gap-1.5 rounded-none px-3 group-data-horizontal/tabs:after:bottom-0"
-              disabled={!artifact.present}
+              className={RAIL_ROW}
               key={artifact.name}
-              title={
-                artifact.present
-                  ? artifactMeaning(artifact.name)
-                  : `${fileName(artifact)} is still to write`
-              }
+              title={artifactMeaning(artifact.name)}
               value={artifact.name}
             >
               <ArtifactIcon name={artifact.name} />
-              {artifactLabel(artifact.name)}
-              {artifact.present ? (
-                <TabCount text={artifactCount(artifact, change, document)} />
-              ) : (
-                <span className="rounded-full bg-warning px-1.5 py-px font-medium text-[10px] text-warning-foreground uppercase tracking-wide">
-                  missing
-                </span>
-              )}
+              <span
+                className="min-w-0 flex-1 truncate text-left"
+                title={artifactLabel(artifact.name)}
+              >
+                {artifactLabel(artifact.name)}
+              </span>
+              <TabCount text={artifactCount(artifact, change, document)} />
             </TabsTrigger>
           ))}
         </TabsList>
-        <Badge
-          className="mb-2.5 shrink-0 font-mono"
-          size="sm"
-          variant="outline"
-        >
-          {document.schema || "no schema"}
-        </Badge>
+        <ArtifactNotes document={document} />
       </div>
-      <ArtifactNotes document={document} />
-      {present.map((artifact) => (
-        <TabsContent className="pt-2" key={artifact.name} value={artifact.name}>
-          <Meaning name={artifact.name} />
-          <ArtifactPanel
-            artifact={artifact}
-            change={change}
-            document={document}
-            index={index}
-          />
-        </TabsContent>
-      ))}
+      <div className="min-w-0">
+        {present.map((artifact) => (
+          <TabsContent key={artifact.name} value={artifact.name}>
+            <PanelHeading artifact={artifact} document={document} />
+            <ArtifactPanel
+              artifact={artifact}
+              change={change}
+              document={document}
+              index={index}
+            />
+          </TabsContent>
+        ))}
+      </div>
     </Tabs>
   );
 }
@@ -232,47 +230,80 @@ export function ChangeTabs({
 function TabCount({ text }: { text: string | null }) {
   if (text === null) return null;
   return (
-    <span className="rounded-full bg-muted px-1.5 py-px font-mono text-[11px] text-secondary-foreground tabular-nums">
+    <span className="shrink-0 rounded-full bg-muted px-1.5 py-px font-mono text-[11px] text-secondary-foreground tabular-nums">
       {text}
     </span>
   );
 }
 
-/** What the row cannot say on its own: that the schema is one the store does
- * not define, or which files are still to write and why in that order. */
+/** What the rail cannot say on its own: which files the schema still asks for,
+ * and — when the schema is one the store does not define — why it cannot say. */
 function ArtifactNotes({ document }: { document: ChangeDocument }) {
   const missing = missingArtifacts(document);
-  if (document.schemaKnown && missing.length === 0) return null;
+
   return (
-    <Text as="p" size="xs" tone="secondary">
+    <>
+      {missing.length > 0 ? (
+        <div className="mt-5">
+          <Text as="p" className="mb-1.5" size="xs" tone="secondary">
+            Still to write
+          </Text>
+          <ul className="space-y-1">
+            {missing.map((artifact) => (
+              <li key={artifact.name}>
+                <Text as="span" size="xs" tone="secondary">
+                  {`${artifactLabel(artifact.name)} · ${fileName(artifact)}`}
+                </Text>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
       {document.schemaKnown ? null : (
-        <>
+        <Text as="p" className="mt-5" size="xs" tone="secondary">
           {document.schema === ""
             ? "The change names no schema in its `.openspec.yaml`"
             : `Schema \`${document.schema}\` is not one this store defines`}
           , so nothing here can say what is still to write. The files it has are
           listed in the usual order.
-        </>
+        </Text>
       )}
-      {missing.length > 0 ? (
-        <>
-          Still to write:{" "}
-          {missing.map((artifact) => fileName(artifact)).join(", ")}. The schema
-          declares them in writing order, each built on the one before.
-        </>
-      ) : null}
-    </Text>
+    </>
   );
 }
 
-/** What this artifact is for, in the words of the people who write it. */
-function Meaning({ name }: { name: string }) {
-  const meaning = artifactMeaning(name);
-  if (!meaning) return null;
+/** What the panel is, what it is for, and which file it reads. */
+function PanelHeading({
+  artifact,
+  document,
+}: {
+  artifact: ChangeArtifact;
+  document: ChangeDocument;
+}) {
+  const meaning = artifactMeaning(artifact.name);
+
   return (
-    <Text as="p" className="mb-4" size="sm" tone="secondary">
-      {meaning}
-    </Text>
+    <header className="mb-4 flex flex-wrap items-start justify-between gap-x-4 gap-y-1 border-border-subtle border-b pb-3">
+      <div className="min-w-0">
+        <h2 className="font-heading font-semibold text-lg">
+          {artifactLabel(artifact.name)}
+        </h2>
+        {meaning ? (
+          <Text as="p" className="mt-1" size="sm" tone="secondary">
+            {meaning}
+          </Text>
+        ) : null}
+      </div>
+      {artifact.path ? (
+        <div className="[&>div]:mb-0">
+          <FileMeta
+            commit={artifact.lastCommit}
+            label={relativeTo(document.dir, artifact.path)}
+            path={artifact.path}
+          />
+        </div>
+      ) : null}
+    </header>
   );
 }
 
@@ -297,18 +328,34 @@ function ArtifactPanel({
     return <CasesPanel change={change} document={document} index={index} />;
   }
   if (artifact.kind === "tasks") {
-    return <TasksPanel artifact={artifact} change={change} />;
+    return <TasksPanel change={change} />;
   }
-  return <DocPanel artifact={artifact} document={document} index={index} />;
+  return (
+    <DocPanel
+      artifact={artifact}
+      change={change}
+      document={document}
+      index={index}
+    />
+  );
 }
 
-/** Where a file lives in the store, and when it last changed. */
+/** The change directory is already in the page's header; a file under it is
+ * read by the part that is not. */
+function relativeTo(dir: string, path: string): string {
+  return path.startsWith(`${dir}/`) ? path.slice(dir.length + 1) : path;
+}
+
+/** Where a file lives in the store, and when it last changed. `label` names it
+ * shorter than the href does; `path` still says where the href goes. */
 export function FileMeta({
   path,
   commit,
+  label,
 }: {
   path: string;
   commit?: CommitInfo;
+  label?: string;
 }) {
   return (
     <div className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -317,8 +364,9 @@ export function FileMeta({
         href={`${GITHUB_BLOB}/${path}`}
         rel="noreferrer noopener"
         target="_blank"
+        title={label ? path : undefined}
       >
-        {path}
+        {label ?? path}
         <ArrowSquareOut aria-hidden size={12} />
       </a>
       {commit ? (
@@ -331,23 +379,25 @@ export function FileMeta({
   );
 }
 
-/** A prose artifact as written. The file's own `# ` title goes: the page
- * already wears the change's title, and a design that opens `# Design` under
- * a tab called Tech Design says nothing twice. */
+/** A prose artifact as written. The file's own `# ` title goes: the panel
+ * already wears the artifact's label, and a design that opens `# Design` under
+ * a heading called Tech Design says nothing twice. The proposal ends with what
+ * it was written about, which is a fact about the proposal and nothing else. */
 function DocPanel({
   artifact,
+  change,
   document,
   index,
 }: {
   artifact: ChangeArtifact;
+  change: ChangeEntry;
   document: ChangeDocument;
   index: ManualIndex;
 }) {
+  const cites = artifact.name === "proposal" ? (change.cites ?? []) : [];
+
   return (
     <section>
-      {artifact.path ? (
-        <FileMeta commit={artifact.lastCommit} path={artifact.path} />
-      ) : null}
       <MarkdownView
         anchorPrefix={artifact.name}
         anchors
@@ -355,6 +405,7 @@ function DocPanel({
         index={index}
         text={withoutLeadingTitle(artifact.text ?? "")}
       />
+      {cites.length > 0 ? <Cites cites={cites} index={index} /> : null}
     </section>
   );
 }
@@ -367,20 +418,11 @@ export function withoutLeadingTitle(text: string): string {
 }
 
 /** The plan, group by group: who claimed it, which box is open. */
-function TasksPanel({
-  artifact,
-  change,
-}: {
-  artifact: ChangeArtifact;
-  change: ChangeEntry;
-}) {
+function TasksPanel({ change }: { change: ChangeEntry }) {
   const { done, total } = taskTotals(change);
 
   return (
     <section>
-      {artifact.path ? (
-        <FileMeta commit={artifact.lastCommit} path={artifact.path} />
-      ) : null}
       {change.taskGroups.length === 0 ? (
         <Text as="p" size="sm" tone="secondary">
           {
@@ -465,6 +507,7 @@ function RequirementsPanel({
         {document.deltas.map((delta) => (
           <DeltaCard
             delta={delta}
+            dir={document.dir}
             index={index}
             key={delta.spec}
             reading={reading}
@@ -617,10 +660,12 @@ function deltaAsSpec(delta: ChangeDeltaDocument): SpecEntry {
 
 function DeltaCard({
   delta,
+  dir,
   index,
   reading,
 }: {
   delta: ChangeDeltaDocument;
+  dir: string;
   index: ManualIndex;
   reading: Reading;
 }) {
@@ -654,7 +699,11 @@ function DeltaCard({
           </Text>
         </div>
         <div className="mt-1.5 [&>div]:mb-0">
-          <FileMeta commit={delta.lastCommit} path={delta.path} />
+          <FileMeta
+            commit={delta.lastCommit}
+            label={relativeTo(dir, delta.path)}
+            path={delta.path}
+          />
         </div>
       </header>
 

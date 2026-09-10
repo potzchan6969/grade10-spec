@@ -12,8 +12,8 @@ import { useArchive } from "../api/use-archive";
 import { useChangeDocument } from "../api/use-change-document";
 import { useManualIndex } from "../api/use-manual-index";
 import { BrokenCard } from "../blocks/broken-card";
-import { ChangeFacts, Cites } from "../blocks/change-detail";
 import { ChangeTabs } from "../blocks/change-document";
+import { ChangeStatus } from "../blocks/change-status";
 import { InlineMarkdown } from "../blocks/inline-markdown";
 import { MarkdownView } from "../blocks/markdown";
 import { WithdrawAction } from "../editor/withdraw-action";
@@ -28,11 +28,10 @@ const LANE_LABEL: Record<ChangeLane, string> = {
 };
 
 /**
- * One change as a page of its own: the facts a review reads off the board's
- * card, then the change read as its files — which artifacts its schema asks
- * for and which exist, and each present one under its own tab. The board
- * renders every change at once, which is the wrong shape for a link handed to
- * a colleague; this is where "look at this change" lands.
+ * One change as a page of its own: what it is, where it stands, then the files
+ * it is made of. The board renders every change at once, which is the wrong
+ * shape for a link handed to a colleague; this is where "look at this change"
+ * lands.
  */
 export function ChangePage() {
   const { change: id = "" } = useParams();
@@ -153,19 +152,16 @@ function ChangeBody({ change }: { change: ChangeEntry }) {
   const index = useManualIndex();
   const archive = useArchive();
   const document = useChangeDocument(change.id);
-  const cites = change.cites ?? [];
 
   return (
     <>
-      <ChangeFacts
+      <ChangeStatus
         archived={
           archive.status === "ready" ? archive.archive.changes : undefined
         }
         change={change}
         index={index}
-        progress
       />
-      {cites.length > 0 ? <Cites cites={cites} index={index} /> : null}
 
       {document.status === "loading" ? (
         <div aria-busy="true" className="my-5 space-y-3">
