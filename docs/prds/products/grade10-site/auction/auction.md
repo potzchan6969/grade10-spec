@@ -17,9 +17,10 @@ lower bid can never displace a higher one, however the network reorders them —
 the contract is written against races, because the last minutes of an auction
 are nothing but races.
 
-The close is a deadline that moves. Each listing carries an extension window
-and an extension duration (default 30 minutes each). A valid bid inside the
-extension window pushes the close out by the extension duration from that bid,
-again and again, until one full extension duration passes with no valid bid —
-subject to an optional cap the listing sets. Sniping buys nothing; the auction
-ends when bidding actually stops.
+🚧 The scheduled close is where extended bidding starts. At that moment a
+listing with no bid closes. A listing with at least one bid — a bid at the
+close counts — enters extended bidding for its extension duration (default 30
+minutes). Every new bid, from anyone, restarts that listing's timer at the full
+duration, and the listing closes when its timer runs out with no new bid —
+subject to an optional cap the listing sets. Each listing runs its own timer.
+Sniping buys nothing; the auction ends when bidding actually stops.
