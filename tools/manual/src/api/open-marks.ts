@@ -1,6 +1,6 @@
 import type { Block } from "../content/grammar";
 import type { ManualIndex, ParsedPage } from "./derive";
-import { pagePath, slugify } from "./paths";
+import { pagePath, slugify } from "./paths.ts";
 
 /** One line a page marked ❓ or `TBC`: what nobody has confirmed, where it
  * sits, and the anchor that opens the page there. */
@@ -13,6 +13,7 @@ export type OpenMark = {
 };
 
 const OPEN = /❓|\bTBC\b/;
+export const BUILDING = /🚧/;
 const HEADING = /^##\s+(.+?)\s*$/;
 const FENCE = /^(`{3,}|~{3,})/;
 const LIST_MARKER = /^\s*(?:[-*]|\d+\.)\s+/;
@@ -21,7 +22,11 @@ const TABLE_RULE = /^\s*\|?\s*:?-{3,}/;
 const INLINE = /[*_]/g;
 
 /** Every ❓ and `TBC` on a page, in reading order. */
-export function openMarksOfPage(page: ParsedPage): OpenMark[] {
+export const openMarksOfPage = (page: ParsedPage): OpenMark[] =>
+  marksOfPage(page, OPEN);
+
+/** Every line carrying the mark, in reading order. */
+export function marksOfPage(page: ParsedPage, mark: RegExp): OpenMark[] {
   if (!page.ast) return [];
   const marks: OpenMark[] = [];
   let section: OpenMark["where"];
@@ -36,7 +41,7 @@ export function openMarksOfPage(page: ParsedPage): OpenMark[] {
         }
         continue;
       }
-      if (!OPEN.test(line) || TABLE_RULE.test(line)) continue;
+      if (!mark.test(line) || TABLE_RULE.test(line)) continue;
       const text = textOf(line);
       if (text !== "") marks.push({ page, where: where ?? section, text });
     }

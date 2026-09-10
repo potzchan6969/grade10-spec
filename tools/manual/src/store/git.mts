@@ -124,14 +124,13 @@ export async function readGitIndex(
   const history: HistoryEvent[] = [];
   let headers = 0;
   let current: CommitInfo | undefined;
-  let subject = "";
   let touched: string[] = [];
 
   // A commit that touched no listed file — a merge, mostly — is noise in a
   // feed of what changed.
   const closeEvent = () => {
     if (current && touched.length > 0 && history.length < HISTORY_LIMIT) {
-      history.push({ ...current, subject, refs: refsOf(touched, manual) });
+      history.push({ ...current, refs: refsOf(touched, manual) });
     }
     touched = [];
   };
@@ -142,10 +141,9 @@ export async function readGitIndex(
     // a file name — no pattern has to guess which it is looking at.
     if (line.includes("\0")) {
       closeEvent();
-      const [sha, date, said] = line.split("\0");
+      const [sha, date, subject] = line.split("\0");
       headers += 1;
-      current = { sha, date };
-      subject = said;
+      current = { sha, date, subject };
       continue;
     }
     if (!current) continue;

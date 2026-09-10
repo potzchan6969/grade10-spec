@@ -87,6 +87,11 @@ export const RULES = [
   },
   { key: "issued", level: "fail", title: "Permanent ids issued twice" },
   {
+    key: "marks",
+    level: "fail",
+    title: "🚧 lines no in-flight change delivers",
+  },
+  {
     key: "fuse",
     level: "fail",
     title: "Page selectors an in-flight change would break",

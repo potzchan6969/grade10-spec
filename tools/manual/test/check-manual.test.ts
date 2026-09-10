@@ -887,9 +887,21 @@ function stalenessRepo(): string {
     "openspec/specs/demo-product/elsewhere/spec.md",
     spec("Moved", requirement("Moved does things", "moved-SC-01", "the thing")),
   );
-  // Both say who walks them, so the only findings left are the stale ones.
+  write(
+    "docs/prds/products/demo-product/tidy.md",
+    page("Tidy", "demo-product/tidy"),
+  );
+  write(
+    "openspec/specs/demo-product/tidy/spec.md",
+    spec(
+      "Tidy",
+      requirement("Tidy does things", "tidy-SC-01", "the [thing](../old.md)"),
+    ),
+  );
+  // All say who walks them, so the only findings left are the stale ones.
   write("openspec/specs/demo-product/alpha/user-journeys.md", NOBODY);
   write("openspec/specs/demo-product/elsewhere/user-journeys.md", NOBODY);
+  write("openspec/specs/demo-product/tidy/user-journeys.md", NOBODY);
   git(["add", "-A"]);
   git(["commit", "--quiet", "-m", "the pages"], "2026-01-01T00:00:00+00:00");
 
@@ -906,6 +918,14 @@ function stalenessRepo(): string {
     "openspec/specs/demo-product/elsewhere",
     "openspec/specs/demo-product/moved",
   ]);
+  // A reissued id and a moved link: maintenance, not meaning.
+  write(
+    "openspec/specs/demo-product/tidy/spec.md",
+    spec(
+      "Tidy",
+      requirement("Tidy does things", "tidy-SC-09", "the [thing](../new.md)"),
+    ),
+  );
   git(["add", "-A"]);
   git(["commit", "--quiet", "-m", "the specs"], "2026-02-01T00:00:00+00:00");
 
@@ -918,18 +938,62 @@ function stalenessRepo(): string {
 }
 
 describe("a page committed before the specs it embeds", () => {
-  it("names what changed, reports a moved spec as moved, and only warns", async () => {
+  it("names what changed and the commit, reports a moved spec as moved, passes maintenance, and only warns", async () => {
     const root = stalenessRepo();
     const result: Result = await runChecks(
       root,
       await readGitIndex(root, ["openspec", "docs/prds"]),
     );
+    const sha = execFileSync("git", ["rev-parse", "--short=7", "HEAD"], {
+      cwd: root,
+    })
+      .toString()
+      .trim();
 
     expect(lines(result, "stale")).toEqual([
-      "docs/prds/products/demo-product/alpha.md — last committed 2026-01-01; `demo-product/alpha` has since added `Alpha does more`, changed `Alpha does things`, removed `Alpha keeps a record`",
-      "docs/prds/products/demo-product/moved.md — last committed 2026-01-01; `demo-product/moved` spec moved since this page was committed",
+      `docs/prds/products/demo-product/alpha.md — last committed 2026-01-01; \`demo-product/alpha\` has since added \`Alpha does more\`, changed \`Alpha does things\`, removed \`Alpha keeps a record\`; last commit \`${sha}\` the specs`,
+      `docs/prds/products/demo-product/moved.md — last committed 2026-01-01; \`demo-product/moved\` spec moved since this page was committed; last commit \`${sha}\` the specs`,
     ]);
     expect(result.findings.every((one) => one.level === "warn")).toBe(true);
+  });
+});
+
+describe("a 🚧 line and the change delivering it", () => {
+  const marked =
+    "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\n## Rules\n\n- 🚧 **Refunds** — the points come back\n";
+  const durable = {
+    "docs/prds/products/demo-product/alpha.md": marked,
+    "openspec/specs/demo-product/alpha/spec.md": spec(
+      "Alpha",
+      requirement("Alpha does things", "alpha-SC-01", "the thing"),
+    ),
+    "openspec/specs/demo-product/alpha/user-journeys.md": NOBODY,
+  };
+
+  it("fails the line when no in-flight change touches the page or its spec", async () => {
+    const result: Result = await runChecks(writeStore(durable), NO_GIT);
+    expect(lines(result, "marks")).toEqual([
+      "docs/prds/products/demo-product/alpha.md — 🚧 `Refunds — the points come back` under `Rules` — no in-flight change on `demo-product/alpha` delivers it",
+    ]);
+    expect(result.findings.find((one) => one.rule === "marks")?.level).toBe(
+      "fail",
+    );
+  });
+
+  it("is satisfied by a delta on the spec, or a proposal linking the section", async () => {
+    const byDelta = writeStore({
+      ...durable,
+      "openspec/changes/build-alpha/proposal.md": proposal("Build alpha"),
+      "openspec/changes/build-alpha/specs/demo-product/alpha/spec.md":
+        "## MODIFIED Requirements\n\n### Requirement: Alpha does things\n\nAlpha SHALL do the thing.\n",
+    });
+    expect(lines(await runChecks(byDelta, NO_GIT), "marks")).toEqual([]);
+
+    const byLink = writeStore({
+      ...durable,
+      "openspec/changes/build-alpha/proposal.md": `${proposal("Build alpha")}\n## References\n\n- [Alpha · Rules](../../../docs/prds/products/demo-product/alpha.md#rules)\n`,
+    });
+    expect(lines(await runChecks(byLink, NO_GIT), "marks")).toEqual([]);
   });
 });
 

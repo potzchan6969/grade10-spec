@@ -119,7 +119,11 @@ describe("one reference", () => {
         path: "docs/references/owner-draft.md",
         title: "The owner's draft",
         text: "# The owner's draft\n\n## Tiers\n\n| Tier | Rate |\n| --- | --- |\n| Base | 1× |\n",
-        lastCommit: { sha: "abcdef1234567890", date: "2026-01-01T00:00:00Z" },
+        lastCommit: {
+          sha: "abcdef1234567890",
+          date: "2026-01-01T00:00:00Z",
+          subject: "the draft",
+        },
       },
     });
     expect(html).toContain('id="tiers"');

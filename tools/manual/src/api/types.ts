@@ -23,6 +23,7 @@ export type CommitInfo = {
   sha: string;
   /** ISO date of the last commit touching the file. */
   date: string;
+  subject: string;
 };
 
 /** A malformed store file, contained instead of failing the build. */

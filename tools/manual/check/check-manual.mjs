@@ -66,6 +66,7 @@ import {
   readStoryIndex,
 } from "./context.mjs";
 import { checkDeltas } from "./deltas.mjs";
+import { checkMarks } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkAcceptance } from "./qa.mjs";
 import { checkRole } from "./role.mjs";
@@ -147,6 +148,7 @@ export async function runChecks(
 
   checkPages(ctx, pages);
   checkSections(ctx, changes, pages);
+  checkMarks(ctx, changes, pages);
 
   if (!ctx.stories && ctx.storyIds.size > 0) {
     notes.push(

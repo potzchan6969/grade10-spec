@@ -4,22 +4,26 @@ import { readText } from "../src/store/disk.mts";
 import { requirementBlocks } from "../src/store/read-specs.mts";
 import { everyBlock } from "./context.mjs";
 
-/** Staleness names what moved. "A spec changed" is not an action; "these two
- * requirements changed" is. The spec as it stood at the page's own commit
- * comes from one `cat-file --batch` pass over every page at once. */
+/** Staleness names what moved, and the commit that moved it. "A spec
+ * changed" is not an action; "these two requirements changed, in that
+ * commit" is. A link path or a scenario id is maintenance, so requirements
+ * are compared by their meaning and a spec whose requirements all read the
+ * same is not reported. The spec as it stood at the page's own commit comes
+ * from one `cat-file --batch` pass over every page at once. */
 export async function checkStale(root, pages, specs, dirs, git, add) {
   const wanted = [];
   for (const page of pages) {
     if (!page.lastCommit) continue;
     const at = Date.parse(page.lastCommit.date);
     for (const id of embeddedSpecs(page.ast)) {
-      const moved = specs.get(id)?.lastCommit?.date;
+      const moved = specs.get(id)?.lastCommit;
       const dir = dirs.get(id);
       if (moved === undefined || dir === undefined) continue;
-      if (Date.parse(moved) <= at) continue;
+      if (Date.parse(moved.date) <= at) continue;
       wanted.push({
         page,
         id,
+        moved,
         file: `${dir}/spec.md`,
         ref: `${page.lastCommit.sha}:${dir}/spec.md`,
       });
@@ -33,21 +37,42 @@ export async function checkStale(root, pages, specs, dirs, git, add) {
   for (const one of wanted) {
     if (!said.has(one.ref)) {
       const before = blobs.get(one.ref);
+      const what =
+        before === undefined
+          ? "spec moved since this page was committed"
+          : changedSince(before, readText(join(root, one.file)));
       said.set(
         one.ref,
-        before === undefined
-          ? `\`${one.id}\` spec moved since this page was committed`
-          : `\`${one.id}\` has since ${changedSince(before, readText(join(root, one.file)))}`,
+        what === null
+          ? null
+          : `\`${one.id}\` ${what}; last commit \`${one.moved.sha.slice(0, 7)}\` ${one.moved.subject}`,
       );
     }
+    const reason = said.get(one.ref);
+    if (reason === null) continue;
     add(
       "stale",
       one.page.path,
-      `last committed ${one.page.lastCommit.date.slice(0, 10)}; ${said.get(one.ref)}`,
+      `last committed ${one.page.lastCommit.date.slice(0, 10)}; ${reason}`,
     );
   }
 }
 
+const LINK_TARGET = /\]\([^)]*\)/g;
+const SCENARIO_ID = /^(#{4}\s+Scenario:\s+)\S+-SC-\d+\s+-\s+/gm;
+const SPACE = /\s+/g;
+
+/** A requirement as it reads: where a link points and which permanent id a
+ * scenario wears are maintenance, not meaning. */
+const meaning = (raw) =>
+  raw
+    .replace(LINK_TARGET, "]")
+    .replace(SCENARIO_ID, "$1")
+    .replace(SPACE, " ")
+    .trim();
+
+/** What the requirements say now against what they said then, or null where
+ * every one of them reads the same. */
 function changedSince(before, after) {
   const was = requirementBlocks(before);
   const now = requirementBlocks(after);
@@ -63,7 +88,8 @@ function changedSince(before, after) {
     names(
       "changed",
       [...now.keys()].filter(
-        (name) => was.has(name) && was.get(name) !== now.get(name),
+        (name) =>
+          was.has(name) && meaning(was.get(name)) !== meaning(now.get(name)),
       ),
     ),
     names(
@@ -71,9 +97,7 @@ function changedSince(before, after) {
       [...was.keys()].filter((name) => !now.has(name)),
     ),
   ].filter(Boolean);
-  return parts.length === 0
-    ? "changed outside its requirements"
-    : parts.join(", ");
+  return parts.length === 0 ? null : `has since ${parts.join(", ")}`;
 }
 
 function embeddedSpecs(ast) {
