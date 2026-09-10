@@ -100,34 +100,16 @@ the store's instrument, not the programme's.
 - **Never a reward** — no reward defines an order coupon; those are the
   store's to mint — [Discounts](/p/grade10-site/store/discounts)
 
-:::callout{kind="warning"}
-The durable spec has no notion of a coupon: a redemption there is an
-entitlement with no settlement. Everything on this page is specified in the
-in-flight `revise-loyalty-programme-rules` and `add-shopify-membership-pos`
-changes.
-:::
-
-:::detail{title="Where a coupon lives" for="engineer"}
-- **Two registries** — loyalty's `coupon_instances` is the member's own, one
-  row per redemption carrying the definition it was bought under, as
-  `available`, `reserved`, `used`, `expired`, `void`, with no transition out of
-  `used`; the store's own registry holds every coupon the store issued whatever
-  granted it, as `live`, `used`, `void`
-- **Expiry is read, never written** — a row reads expired the instant its date
-  passes, and no read path writes
-- **`coupon_usages`** — one attempt to apply one coupon to one order, keyed for
-  idempotency and unique on a live attempt per coupon, which is what answers
-  `idempotency_conflict`
-- **Provider artifact** — 🚧 `discount_code`, minted once the basket
-  qualifies, the same as the store's own order coupon
-- **An order code's reach** — the whole order, named products, or named
-  variants; never a catalogue filter, since the shop knows nothing of worlds
-  and types
-- **Refusal reasons** — `not_found`, `not_available`, `expired`,
-  `wrong_channel`, `birthday_unavailable`, `not_eligible`,
-  `idempotency_conflict` from the programme's own guards; `minimum_subtotal`,
-  `currency_mismatch`, `no_eligible_lines`, `line_already_free`,
-  `cut_cannot_split`, `gift_in_basket` from the shared evaluator
-- **Stale holds** — `STALE_RESERVATION_HOURS = 24`; metric
-  `loyalty.coupon.reservation_released`
+:::detail{title="Code map" for="engineer"}
+- **Reward coupons** — `packages/loyalty/backend/src/services/rewards/coupons.ts`,
+  rows of `coupon_instances` and `coupon_usages` in
+  `packages/loyalty/backend/src/db/schema/rewards.ts`
+- **The store's own coupons** — `packages/grade10-store/backend/src/services/coupons`,
+  applied to a sale by `apply.ts` there
+- **One vocabulary and one evaluator** — `@grade10/coupons-contracts`,
+  `packages/coupons/contracts/src/evaluate.ts`
+- **Design records** —
+  [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
+  and
+  [commerce architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md#coupons-speak-one-vocabulary)
 :::

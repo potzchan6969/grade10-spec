@@ -55,7 +55,8 @@ reached. What the member earns inside the period decides what happens at the
 end of it.
 
 - **≥ 500 points** — the period extends 12 months from its own end
-- **< 500 points** — the member goes back to Silver
+- **< 500 points** — the member falls to the highest tier they still hold,
+  Silver unless a Black invitation is live
 - **Taken back by an operator** — a tier reached or granted in error is
   removed on the record, whatever its period says; it takes the same
   permission as granting an invitation, so an operator who may only move

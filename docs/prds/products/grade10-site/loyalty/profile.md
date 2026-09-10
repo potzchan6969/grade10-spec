@@ -59,7 +59,7 @@ A sale made as a guest is not lost: it earns once it has an owner.
 | Membership | Tier · points to spend · points earned this year toward the next tier · tier renews · points active until · expiring soon |
 | Your member card | The QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords |
-| Your coupons | Every coupon the member holds, what it takes off, and when it ends |
+| Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends |
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Waiting at the counter | Physical rewards to collect, each with the day to collect by |
 | Activity | The member's own ledger |
@@ -132,8 +132,9 @@ The same card can be added to a phone wallet —
 - **Identity lives elsewhere** — a member's identity lives in the identity
   system and never in the programme, which holds only an opaque user id, so a
   leak of the loyalty database exposes balances and identifiers, not people
-- **Deleting the account ends the membership** — balance, tier progress and
-  coupons end at once; the ledger record survives for audit
+- **Deleting the account ends the membership** — balance, tier progress
+  and coupons end at once, a waiting collection is cancelled without a
+  refund, and the ledger record survives for audit
 
 :::callout{kind="note"}
 No Figma frame exists for any membership surface, so the `@grade10/ui` blocks

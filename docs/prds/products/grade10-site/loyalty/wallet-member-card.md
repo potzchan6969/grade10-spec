@@ -27,6 +27,9 @@ Apple code identifies and moves nothing.
   needs an entitlement besides
 - **Nothing else on the pass** — no offers, stamps or messages
 - **No pass for ZZZ** — it runs no till
+- **A missing secret refuses loudly** — adding a pass on a wallet not fully
+  configured names the missing secret, rather than issuing one nobody can
+  read
 
 ## On the Pass
 
@@ -41,9 +44,15 @@ Apple code identifies and moves nothing.
 
 ## Adding and Ending
 
+- **Three states** — live, ended or erased; only a live pass identifies
+  anybody
 - **From `/membership`** — the member adds a pass from their own page
 - **One per wallet** — added and ended independently of the other
+- **A new pass replaces the old** — adding a second pass to a wallet already
+  holding one ends the earlier pass first
 - **Ending** — immediate; the vendor's own copy is discharged by the sweep
+- **Removing it is not ending** — deleting the pass from the phone's wallet
+  app changes nothing about the membership
 - 🚧 **Operator ending** — for a member who has lost their phone; no console
   surface yet
 - **Welcome message** — carries no save action, in either wallet
@@ -60,6 +69,9 @@ Apple code identifies and moves nothing.
 
 - **A spend or an earn reaches the pass on the next lap**
 - **A dormant pass** — read once a day, and sends nothing
+- **An unrecorded change is still on time** — points expiring, a tier term
+  ending or an invitation lapsing marks the pass due that instant, not on the
+  daily floor
 - **A burst of changes costs one update** — a pass is sent only when what it
   shows has moved
 - **A lap that falls behind reports it** — how deep the backlog is, and how

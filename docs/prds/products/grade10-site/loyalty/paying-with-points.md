@@ -12,9 +12,9 @@ order: 4
 | Rate | **1 point pays $1** — earning is $10 a point, on [Points](/p/grade10-site/loyalty/points) |
 | Pays for | **Qualifying goods only** — the same basis as earning: never gift cards, credit top-ups, or grading fees |
 | Never pays for | **Shipping or tax** |
-| Cap | **Goods total minus coupons and discount codes** — points come after both, so they pay only what is left |
+| Cap | **Goods total minus coupons and discount codes** — points come after both, so they pay only what is left; a bigger ask is trimmed to fit, not refused |
 | Earns | **Nothing** — the part of the bill paid with points earns no points |
-| Available | **On**, online and at the till — one brand switch turns both off as an emergency stop |
+| Available | **On**, online and at the till — a manager can turn off the till's points spending, or just typed-email spending, within seconds; a sale never waits on it |
 | Discount | **One order-level "Points" discount**, outside the order's one-coupon count, so a coupon and points can be used on the same order — [Discounts](/p/grade10-site/store/discounts) |
 
 ## Online
@@ -74,11 +74,15 @@ The debit follows what the shop applied, not what was promised.
   member card's QR, from the site or a wallet pass, or types the 8-letter
   short code, the email, or picks the customer already on the cart
 - **Applied** — the shopkeeper chooses points and/or coupons and taps Apply;
-  the extension writes the store's order id on the cart and takes the
-  "Points" amount off the sale; no code is minted for the points
+  the extension writes the store's order id on the cart, takes the "Points"
+  amount off the sale, and shows the points spent, the money still due and
+  the balance after; no code is minted for the points, and a repeated tap
+  spends once
 - **Paid** — the shopkeeper takes payment
 - **Debited** — when the paid sale lands, the same way as online; clearing
   the discounts before payment undoes the promise, and nothing was debited
+- **Reversed only by the console** — once a spend is paid, an operator
+  undoes it from the loyalty admin; the till itself never reverses one
 
 The session, the switches and the cart are on
 [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#pos-extension).

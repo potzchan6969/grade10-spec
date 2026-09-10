@@ -76,8 +76,8 @@ The second buy takes nothing; the balance stays at 200.
 
 ## Using a Reward
 
-A reward becomes a coupon the moment it is bought, carrying the definition
-it was bought under.
+A money-off or gift reward becomes a coupon the moment it is bought,
+carrying the definition it was bought under.
 
 - **Made instantly** — the coupon is idle in the member's own list the
   instant the points are spent
@@ -86,8 +86,8 @@ it was bought under.
 - **Applied by the shopkeeper** — at the till, through the POS extension
 - **Used by the paid order** — the paid order is what marks the coupon
   used, never a vendor's lagging count
-- **A physical reward is an ordinary sale** — staff ring the item up, the
-  coupon takes 100% off it, and the order goes through at nothing
+- **A physical reward waits for collection** — parked as paid but not yet
+  delivered, until the counter confirms the handover
 - **One discount at a time** — an order carries one discount at a time,
   and a reward is in that count
 
@@ -95,7 +95,9 @@ States, holding and refusals are on
 [Coupons](/p/grade10-site/loyalty/coupons).
 
 🚧 Collection at the counter and the fulfilment queue still exist in the
-running programme; the coupon path retires both.
+running programme; the coupon path retires both, and a physical reward becomes
+an ordinary sale — staff ring the item up, its coupon takes 100% off it, and
+the order goes through at nothing.
 
 ❓ **An uncollected item stays off the shelf** — a coupon that expires
 never restocks. Either reward stock is a budget rather than a shelf count,
@@ -141,9 +143,13 @@ one and not the other. It is an operator's move, never a member's.
   points
 - **Used does not** — a used coupon stays used; cancelling or refunding the
   order that carried it changes nothing, and the points stay spent
+- **A physical reward, the same way** — waiting for collection cancels like
+  an unused coupon voids; already collected stays given, like a used one
 - **Held for an order does not** — it is attached to an order being paid,
   and waits for that order to settle either way
 - **A lapsed balance does not** — there is nothing left to return into
+- **Tier is untouched** — a redemption never touched tier progress, so
+  reversing one leaves it exactly where it was
 
 Where a reversal is refused and the member is still owed something, an
 operator gives rather than takes back:

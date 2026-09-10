@@ -38,6 +38,10 @@ records the order, and the programme moves the balance once.
   member's email is verified
 - **A conflict parks** — a customer already carrying another member's key is
   left for an operator to see and clear by hand
+- **A retry lands once** — pairing retried after a lost response finds the
+  same customer, never a new one
+- **Nobody is left unpaired** — a sweep pairs members from before pairing
+  shipped, and re-running it changes nothing
 - **A stale customer is repaired** — one the shop no longer knows is repaired
   on the next pass
 - **A merge on the shop** — the pairing moves to the surviving customer and
@@ -215,6 +219,8 @@ does at each checkout is on [Coupons](/p/grade10-site/loyalty/coupons).
 - **Once** — the paid transition writes the order event exactly once
 - **A till sale** — arrives on the same webhook or through the reconciling
   sweep, and is ingested once either way
+- **A refund before the order** — one naming an order not yet recorded
+  fetches and records that order first
 - **Attribution** — through the customer on the sale, or later by an operator
   where the sale was rung up before the member joined
 
@@ -250,6 +256,8 @@ The loyalty terminal is a Shopify POS UI extension.
 | Phone | A number staff type | With Phone spend | Only when it may spend | Phone lookup · Phone spend |
 | Cart customer | The customer already on the sale | With Cart spend | Always | Cart identify · Cart spend |
 
+- **A miss says nothing** — a staff-typed email matching no member answers
+  only that none was found, and repeated lookups are throttled
 - **Attach** — the terminal sets the customer on the cart and checks it;
   spending stays off until the cart's customer is the paired one, the cart
   carries no other discount, and the cart total covers the amount
@@ -257,14 +265,21 @@ The loyalty terminal is a Shopify POS UI extension.
   plans in 5 minutes
 - **Discount on the cart** — the store's order id first, then the "Points"
   fixed discount; the promise is trimmed to what the cart shows
+- **Shown before it commits** — points spent, money still due, balance after
+  and points this sale will earn, priced by the platform
 - **Confirm** — the button locks while it runs, so a double tap spends once
 - **Undo before tender** — staff remove the discounts, then the order id, and
   the promise is dropped
+- **No reversal at the till** — undoing before tender only drops the
+  discounts; reversing a spend once it settles is the console's job, never
+  the till's
 - **Expiry** — a promise nobody tenders expires after 1 hour; a sale the cart
   pays after that still settles
 - **Collect** — a physical reward is confirmed in the same session, and a
   second till is refused with who took it and when. 🚧 The coupon path retires
   this — [Rewards](/p/grade10-site/loyalty/rewards)
+- **Notified** — a completed collection tells the member the points, amount
+  and location at once
 - **Earning** — the customer on the sale is enough, terminal or not
 
 :::flow{title="At the till" case="Paid" diagram="assets/diagrams/shopify-till-paid.svg"}

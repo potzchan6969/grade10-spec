@@ -13,7 +13,7 @@ order: 1
 | Base rate | **1 point / $10** (qualifying goods after discounts) |
 | Multiplier | **Silver** 1×, **Gold** 1.2×, **Black** 1.7× |
 | Rounding | **$139** at **1.2×** = **1.2×13** = **15 points** |
-| Timing | **After fulfillment** |
+| Timing | **When the order is paid** |
 
 ## Qualification Criteria
 
@@ -27,9 +27,11 @@ land on the part of a basket that earns nothing.
 | Products | **Yes** |
 | Shipping and tax | **No**, never in the basis |
 | Gift cards | **No**, excluded as a product rather than as a tender |
-| Credit top-ups | **No**, excluded as a product |
+| Credit top-ups | **No**, excluded as a product rather than as a tender |
 | Grading fees | **No**, excluded as a product |
 | Auction wins | **No** today, a later-phase candidate |
+
+A fully discounted order earns nothing and writes no ledger entry.
 
 ## Backend Flow
 
