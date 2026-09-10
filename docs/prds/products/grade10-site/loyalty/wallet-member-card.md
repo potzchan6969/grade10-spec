@@ -31,7 +31,7 @@ photographed Apple code identifies and moves nothing.
 - **Ending** — immediate; the vendor's own copy is discharged by the sweep
 - 🚧 **Operator ending** — for a member who has lost their phone; no console
   surface yet
-- 🚧 **Welcome message** — carries no save action, in either wallet
+- **Welcome message** — carries no save action, in either wallet
 - **Erasure** — the row stays, armed and empty; the secret goes, so a device
   fetching the pass sees nobody. Google is told; Apple keeps no copy
 
@@ -108,9 +108,9 @@ seals both their secrets under the one key. In this order:
    starting over
 7. *Engineering* — **Create the APNs key** for the same team and record its key
    id. It never expires, and it is team-wide: rotating it for another app takes
-   the wallet down with it. 🚧 A brand pushing by client certificate instead
-   sets no key and binds `WALLET_APPLE_APNS` for mTLS, which no deployment
-   declares yet
+   the wallet down with it. A brand pushing by client certificate instead
+   sets no key and binds `WALLET_APPLE_APNS` for mTLS; no deployment
+   declares one
 8. *Engineering* — **Set the secrets** with `pnpm run secrets`:
    `WALLET_APPLE_PASS_CERT`, `WALLET_APPLE_PASS_KEY`, `WALLET_APPLE_APNS_KEY`,
    `WALLET_PASS_AUTH_KEY` — which derives every pass's authentication token —

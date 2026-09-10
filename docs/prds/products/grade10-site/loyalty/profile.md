@@ -115,10 +115,10 @@ The same card can be added to a phone wallet —
 
 - **Waiting at the counter** — what the member still has to collect, each
   with the day to collect it by
-- 🚧 **Card history** — the last 20 codes, and where and when a till took
-  each; served, and no surface shows it
-- 🚧 **Redemption outcomes** — served; only what is waiting to be collected
-  is shown
+- **Card history** `TBC` — the last 20 codes, and where and when a till
+  took each; served, and no surface shows it
+- **Redemption outcomes** `TBC` — served; only what is waiting to be
+  collected is shown
 - **Notified** — every identification the member did not show a code for —
   email, phone, the customer on the cart, an Apple pass — sends a notice at
   once

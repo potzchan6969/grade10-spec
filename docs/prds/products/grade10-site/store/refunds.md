@@ -69,4 +69,3 @@ reports such a sale on both permutations and `store.points_tender.return_held`
 on one.
 
 ❓ **A physical card coming back** — an operator's move with a record of its own.
-`TBC`

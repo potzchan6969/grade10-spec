@@ -42,12 +42,12 @@ added on top of a purchase.
 | Way | When | Cost |
 | --- | --- | --- |
 | Reward shop | A member buys it | Points, the reward's cost |
-| Birthday 🚧 | Once a year, on the birthday the member's profile holds | None |
-| Registration 🚧 | Once, when the account is created | None |
-| Operator gift 🚧 | An operator hands one out, for a campaign or as goodwill | None |
+| Birthday `TBC` | Once a year, on the birthday the member's profile holds | None |
+| Registration `TBC` | Once, when the account is created | None |
+| Operator gift `TBC` | An operator hands one out, for a campaign or as goodwill | None |
 
-🚧 Nothing collects a birthday and no surface grants a reward yet, so every
-reward is bought with points.
+Every reward is bought with points; the other three ways wait to be
+confirmed.
 
 ## Reward Shop
 
@@ -116,10 +116,10 @@ can buy.
 | Window | Optional; outside it the reward cannot be redeemed |
 | Archived | Retired, still readable in the member's own history |
 
-- 🚧 **How it is obtained** — bought, or given on a birthday or at an
+- **How it is obtained** `TBC` — bought, or given on a birthday or at an
   event; no field carries this, so every live reward is on sale
-- 🚧 **Units per redemption** — the programme declares no per-redemption or
-  per-day bound, so a reward is taken one at a time
+- **Units per redemption** `TBC` — a reward is taken one at a time until
+  the per-redemption and per-day bounds are chosen
 - 🚧 **The console's reward form** sets only slug, name, description, cost,
   stock and window, so a reward with a definition is created through the
   admin API

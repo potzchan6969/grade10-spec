@@ -25,9 +25,9 @@ so redefining the reward never rewrites a coupon a member already holds —
 | Runs from | The redemption, for the whole days the reward states |
 | Expiry | Read off the clock, never written down |
 
-- 🚧 **Birthday month** — a definition can hold a coupon to the month of the
-  member's birthday; loyalty holds no birthday it can trust, so every coupon
-  asking for one is refused
+- **Birthday month** `TBC` — a definition can hold a coupon to the month of
+  the member's birthday; loyalty holds no birthday, so every coupon asking
+  for one is refused
 
 ::story{id="loyalty-membership-couponlist--default" title="The coupons a member holds"}
 
