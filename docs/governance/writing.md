@@ -272,7 +272,8 @@ A draft that fails one line is rewritten.
   resolving ids, block attributes, a ledger whose balance does not add up,
   a flow whose cases cannot be told apart, a 🚧 line no in-flight change
   delivers; and a warning where a spec's requirements changed meaning after
-  the page that embeds it was last committed
+  the page that embeds it was last committed, cleared by the edit the page
+  needs or by `reviewed:` dated in its frontmatter when it needs none
 - **Review** — voice and shape are held here the way code is held to the
   spec
 - **The `writing-style` skill** — an agent loads it before drafting, and it

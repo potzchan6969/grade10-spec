@@ -875,6 +875,11 @@ function stalenessRepo(): string {
     "docs/prds/products/demo-product/moved.md",
     page("Moved", "demo-product/moved"),
   );
+  // Read against the changed spec and found right: dated by its review.
+  write(
+    "docs/prds/products/demo-product/reviewed.md",
+    "---\ntitle: Reviewed\nspec: demo-product/alpha\nreviewed: 2026-02-01\n---\n\nReviewed is a demo capability.\n",
+  );
   write(
     "openspec/specs/demo-product/alpha/spec.md",
     spec(
@@ -938,7 +943,7 @@ function stalenessRepo(): string {
 }
 
 describe("a page committed before the specs it embeds", () => {
-  it("names what changed and the commit, reports a moved spec as moved, passes maintenance, and only warns", async () => {
+  it("names what changed and the commit, reports a moved spec as moved, passes maintenance and a reviewed page, and only warns", async () => {
     const root = stalenessRepo();
     const result: Result = await runChecks(
       root,

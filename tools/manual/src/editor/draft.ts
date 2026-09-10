@@ -41,6 +41,7 @@ export type DraftFrontmatter = {
   icon: string;
   audience: string;
   order: string;
+  reviewed: string;
 };
 
 export type Draft = {
@@ -118,6 +119,7 @@ export function draftFromAst(ast: PageAst): Draft {
         ast.frontmatter.order === undefined
           ? ""
           : String(ast.frontmatter.order),
+      reviewed: ast.frontmatter.reviewed ?? "",
     },
     blocks: ast.blocks.map(blockFromAst),
   };
@@ -268,6 +270,15 @@ export function frontmatterProblems(fm: DraftFrontmatter): BlockProblem[] {
       message: `icon is one of: ${PAGE_ICONS.join(", ")}`,
     });
   }
+  if (
+    fm.reviewed.trim() !== "" &&
+    !/^\d{4}-\d{2}-\d{2}$/.test(fm.reviewed.trim())
+  ) {
+    problems.push({
+      attr: "reviewed",
+      message: "reviewed is a date, YYYY-MM-DD",
+    });
+  }
   if (fm.audience.trim() !== "" && fm.audience.trim() !== "operator") {
     problems.push({
       attr: "audience",
@@ -285,6 +296,7 @@ function frontmatterOf(fm: DraftFrontmatter): Frontmatter {
   if (isPageIcon(icon)) built.icon = icon;
   if (fm.audience.trim() === "operator") built.audience = "operator";
   if (fm.order.trim() !== "") built.order = Number(fm.order.trim());
+  if (fm.reviewed.trim() !== "") built.reviewed = fm.reviewed.trim();
   return built;
 }
 

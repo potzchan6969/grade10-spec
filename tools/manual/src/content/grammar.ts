@@ -18,6 +18,10 @@ export type Frontmatter = {
    * `operator` moves the page into the derived Admin nav group. */
   audience?: "operator";
   order?: number;
+  /** The day the page was last read against a spec that had changed under it
+   * and found right as it stood; the stale check dates the page by the later
+   * of this and its last commit. */
+  reviewed?: string;
 };
 
 export type ProseBlock = { type: "prose"; markdown: string };
@@ -252,8 +256,10 @@ const FRONTMATTER_KEYS = [
   "icon",
   "audience",
   "order",
+  "reviewed",
 ] as const;
 
+const REVIEWED_RE = /^\d{4}-\d{2}-\d{2}$/;
 const LEAF_RE = /^::([a-z][a-z0-9-]*)(\{.*\})?\s*$/;
 const CONTAINER_OPEN_RE = /^:::([a-z][a-z0-9-]*)(\{.*\})?\s*$/;
 const CONTAINER_CLOSE_RE = /^:::\s*$/;
@@ -323,6 +329,16 @@ function parseFrontmatter(lines: string[]): {
       throw new GrammarError(1, "`order` must be an integer");
     }
     fm.order = entries.order;
+  }
+  if (entries.reviewed !== undefined) {
+    const reviewed =
+      entries.reviewed instanceof Date
+        ? entries.reviewed.toISOString().slice(0, 10)
+        : entries.reviewed;
+    if (typeof reviewed !== "string" || !REVIEWED_RE.test(reviewed)) {
+      throw new GrammarError(1, "`reviewed` must be a date, `YYYY-MM-DD`");
+    }
+    fm.reviewed = reviewed;
   }
   return { frontmatter: fm, bodyStart: close + 1 };
 }

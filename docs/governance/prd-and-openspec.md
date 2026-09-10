@@ -111,7 +111,7 @@ Before archiving:
 
 1. ensure required tasks are complete and validation is recorded;
 2. fold accepted requirement deltas into `openspec/specs/`;
-3. take the 🚧 marks off every line this change delivered — the line stays, flat — in the same commit as the fold, then run `pnpm check:manual`: a 🚧 line left on a page no in-flight change touches fails it, and a durable spec whose requirements changed meaning after its page was last committed warns on that page until the page catches up;
+3. take the 🚧 marks off every line this change delivered — the line stays, flat — in the same commit as the fold, then run `pnpm check:manual`: a 🚧 line left on a page no in-flight change touches fails it, and a durable spec whose requirements changed meaning after its page was last committed warns on that page until the page catches up — by the edit it needs, or by `reviewed: <date>` in its frontmatter when it already reads right;
 4. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`; and
 5. leave links between the spec, the page, and the archive where they aid discovery.
 

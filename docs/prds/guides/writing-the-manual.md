@@ -18,8 +18,11 @@ glyph a domain wears in the rail and on its card — one name from the fixed
 list the editor's field offers, and a landing page without one draws a
 warning. `audience` is `operator` or absent — `operator` files the page under
 the Admin nav group, absent means the product's own users. `order` sorts it
-among its siblings. Any other key is a hard error, because an editor that silently drops a field
-you typed is worse than one that refuses to save.
+among its siblings. `reviewed` is the day the page was last read against a
+spec that had changed under it and found right as it stood — set it when the
+stale warning names a page that needs no other edit, and leave it off
+otherwise. Any other key is a hard error, because an editor that silently
+drops a field you typed is worse than one that refuses to save.
 
 ```yaml
 ---
@@ -355,8 +358,10 @@ canonical, and on a reference that does not resolve: a `spec` id, a
 id, a missing image, a Storybook id no story answers. It also fails when a
 durable spec has no page mentioning it, when a product or platform topic has no
 page at all, and when `manual.yaml` lists a product twice. A page whose embedded
-specs changed after the page's last commit is flagged stale — a warning, not a
-failure.
+specs changed meaning after the page's last commit is flagged stale — a
+warning, not a failure — naming the requirements that moved and the commit
+that moved them. Read the page against them; an edit clears it, and so does
+`reviewed:` dated in the frontmatter when the page already reads right.
 
 :::callout{kind="note"}
 Write short and straight. The page states the shape and shows what it looks

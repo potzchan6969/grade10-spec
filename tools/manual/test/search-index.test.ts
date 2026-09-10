@@ -12,7 +12,8 @@ import { realStore } from "./real-store";
 
 /** Search over the store as it stands. The PM's probe was `gift card`: it came
  * back with eighteen confident results, not one of them about gift cards,
- * while two in-flight changes had already specified them. */
+ * while the scenarios that name them were already on record — in two
+ * changes then, on the pages their folds landed on now. */
 
 const hit = (result: SearchResult) =>
   result as unknown as SearchDoc & { score: number };
@@ -20,7 +21,7 @@ const hit = (result: SearchResult) =>
 describe("the query that found nothing it was about", () => {
   const { snapshot } = realStore;
 
-  it("surfaces the changes that issue the gift-card scenarios, and little else", () => {
+  it("surfaces the pages holding the gift-card scenarios, and little else", () => {
     const index = buildIndex(snapshot);
     const engine = buildSearchIndex(index);
     const { hits, partial } = runSearch(engine, "gift card");
@@ -28,8 +29,8 @@ describe("the query that found nothing it was about", () => {
 
     expect(partial).toBe(false);
     expect(where.slice(0, 2)).toEqual([
-      "/in-flight/revise-loyalty-programme-rules",
-      "/in-flight/add-shopify-membership-pos",
+      "/p/grade10-site/loyalty/shopify-integration#grade10-site-store-membership-SC-24",
+      "/p/grade10-site/loyalty/coupons#grade10-site-loyalty-programme-SC-89",
     ]);
 
     // The whole point: not eighteen pages that merely say "card". Stated as

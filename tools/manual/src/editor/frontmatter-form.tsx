@@ -70,6 +70,13 @@ export function FrontmatterForm({
           problem={problemOf("order")}
           value={frontmatter.order}
         />
+        <TextField
+          hint="The day the page was read against a spec that changed under it and found right; clears the stale warning"
+          label="reviewed"
+          onChange={(reviewed) => onChange({ ...frontmatter, reviewed })}
+          problem={problemOf("reviewed")}
+          value={frontmatter.reviewed}
+        />
       </div>
     </section>
   );
