@@ -29,15 +29,31 @@ product.
      — the catalogue narrowed
   4. `grade10.com/store/products/<handle>` — a product's details page
 
+## Search
+
+The listing search field lives with the filters. Typing drafts locally;
+Enter or a suggestion selection is what acts.
+
+- 🚧 **Suggestions while typing** — matching products and matching world or
+  type filters, at most five of each, over the whole catalogue even when
+  facets are already on; store hits only
+- 🚧 **Empty and waiting** — no match shows that nothing matched; while hits
+  are still resolving the field shows it is searching; Enter still commits
+  the typed words either way
+- 🚧 **Commit and pick** — Enter puts free text in force as a dismissible
+  chip with the other applied filters and clears the field; picking a product
+  opens that product and clears the field; picking a filter applies that
+  facet, clears the field, and does not put free text in force
+
 ## Designs
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952" title="Filter panel"}
 
 ::story{id="pages-product-list-page--default" title="The listing, whole"}
 
-::story{id="store-product-listing-productbrowse--no-match" title="A narrowing nothing matches"}
+::story{id="store-product-listing-productbrowse-states--no-match" title="A narrowing nothing matches"}
 
-::story{id="store-product-listing-productbrowse--empty-catalog" title="A catalogue with nothing in it"}
+::story{id="store-product-listing-productbrowse-states--empty-catalog" title="A catalogue with nothing in it"}
 
 :::detail{title="Product decisions" for="pm"}
 A collector arrives knowing what they collect — a world, a kind of card — and
@@ -62,6 +78,7 @@ collection. The front door's collection grid, which is unchanged.
 | --- | --- | --- |
 | Narrowed sessions | Share of listing visits that apply any narrowing. Unmeasured; the first delivery sets the baseline. | Product |
 | Time to first narrowed result | From listing open to the first narrowed grid. Unmeasured. | Product |
+| Search commit or suggestion | Share of listing sessions that commit free text or take a suggestion, and time from first keystroke to a product open or narrowed grid. Unmeasured; first delivery sets the baseline. | Product |
 
 **Decisions.**
 
@@ -80,4 +97,11 @@ collection. The front door's collection grid, which is unchanged.
 | One threshold everywhere | Decided | Nearly out is the same count on the listing, the product page and the cart. A second definition would leave the shop unable to say which of them is right. | Product |
 | A count is news, not pressure | Decided | A card says how many are left where the collector learns something — the shop is nearly out, or they have just asked for the last one. A count on every card is a shop hurrying everybody. | Product |
 | Links the site owes | ❓ Open | Drawing a placeholder departs from `grade10-site/site/page-shell`, which says a link appears only where the site answers it. The footer already departs the same way. Settling it belongs to page-shell. | Product |
+| Search stays on the listing | Decided | The field lives with the listing filters, not in the site header. Auction has no search surface yet, and a nav search would read as site-wide find. | Design |
+| Typing suggests; Enter commits | Decided | Suggestions are products and matching world or type filters. Enter commits free text as a chip with the other applied filters. Picking a product opens it; picking a filter applies that facet. The field clears after commit or pick. | Design |
+| Suggestions cover the whole catalogue | Decided | Product hits are catalogue-wide even when facets are already on, matching free-text search. | Product |
+| Five hits per group | Decided | Products and Filters each show at most five matches. More noise does not help a jump. | Design |
+| When to ask for hits | Decided | The application chooses when to supply suggestion groups — character threshold, debounce, and pending. The shared field only shows what it is given. | Engineering |
+| Filter row names the value | Decided | A filter suggestion shows the facet value as the row label and the facet kind (World or Type) as trailing chrome, not a single "World · value" string. | Design |
+| Empty panel, still commit | Decided | No match shows that nothing matched. Enter still commits the typed words. | Design |
 :::

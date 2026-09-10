@@ -60,8 +60,8 @@ The tile reports the quantity change and the application updates the cart.
 
 ::story{id="store-product-listing-productbrowse--default" title="The whole browse surface"}
 
-::story{id="store-product-listing-productbrowse--no-match" title="A search that matched nothing"}
+::story{id="store-product-listing-productbrowse-states--no-match" title="A search that matched nothing"}
 
-::story{id="store-product-listing-productbrowse--empty-catalog" title="An empty catalogue, which is a different state"}
+::story{id="store-product-listing-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
 
 ::story{id="store-product-listing-productcardimage--sold-out" title="A sold-out product tile"}

@@ -141,7 +141,7 @@ export const SearchChangeIsReported: Story = {
   args: { searchValue: "" },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const field = canvas.getByRole("searchbox");
+    const field = canvas.getByRole("combobox", { name: "Search products" });
 
     await userEvent.type(field, "pika");
 

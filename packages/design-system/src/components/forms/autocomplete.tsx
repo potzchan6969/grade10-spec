@@ -147,10 +147,10 @@ function AutocompleteContent({
         <AutocompletePrimitive.Popup
           data-slot="autocomplete-content"
           className={cn(
-            // Same surface as DropdownMenuContent. `min-w-(--anchor-width)`
-            // keeps the menu at least as wide as the Search Input pill;
-            // `w-max` lets long labels grow past it.
-            "z-50 flex max-h-(--available-height) w-max min-w-(--anchor-width) origin-(--transform-origin) flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-popover p-2 text-popover-foreground shadow-[0_4px_24px_var(--shadow-color,rgb(118_118_118_/_20%))] backdrop-blur-xl duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95",
+            // Same surface as DropdownMenuContent. At least as wide as the
+            // Search Input pill; grow with content up to the viewport, then
+            // item labels ellipsize.
+            "z-50 flex max-h-(--available-height) w-max min-w-(--anchor-width) max-w-[calc(100vw-1.5rem)] origin-(--transform-origin) flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-popover p-2 text-popover-foreground shadow-[0_4px_24px_var(--shadow-color,rgb(118_118_118_/_20%))] backdrop-blur-xl duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95",
             className,
           )}
           {...props}
@@ -241,7 +241,7 @@ function AutocompleteItem({
       {...props}
     >
       {leading}
-      <span className="min-w-0 flex-1 whitespace-nowrap font-normal">
+      <span className="min-w-0 flex-1 truncate font-normal">
         {children}
       </span>
       {trailing ? (
@@ -315,7 +315,7 @@ function AutocompleteLoading({
       <span className="inline-flex animate-spin text-secondary-foreground">
         <CircleNotch aria-hidden size={14} weight="regular" />
       </span>
-      <span className="min-w-0 flex-1 whitespace-nowrap font-normal">
+      <span className="min-w-0 flex-1 truncate font-normal">
         {children}
       </span>
     </AutocompleteStatus>
