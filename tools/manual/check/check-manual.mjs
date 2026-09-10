@@ -2,7 +2,7 @@
 /*
  * CHECK: the manual against the store it describes.
  *
- *   pnpm check:manual [store-root]
+ *   pnpm check:manual [store-root] [--pages]
  *
  * The manual restates nothing — it points at specs, changes, images and
  * stories. Every one of those pointers can rot without anyone noticing, so
@@ -30,6 +30,12 @@
  *        quoting wording the spec has since moved, a delta section the fold
  *        discards, a delta-introduced capability no page documents, a domain
  *        with no icon for its rail row. Exits 0.
+ *
+ * `--pages` keeps the page families and drops the store ones. It is the
+ * deploy's gate: a requirement two changes both fold is a break in files the
+ * manual mirrors, and the site's job there is to stay up and point at it, not
+ * to refuse to publish. Lint runs the whole check on the same push, so every
+ * store family still fails the pull request that wrote it.
  *
  * The readers in ../src are the only parser — this script never
  * grows a second one, so the check and the app can never disagree.
@@ -93,8 +99,18 @@ const EMPTY_CONFIG = {
  * deltas, the fold — run only where the manual and the store share a
  * repository, because a manual mounted elsewhere can neither cause nor fix a
  * hole in the store, and failing its PRs over one would gate the wrong door.
+ *
+ * `pages` drops the store families on a manual that owns its store too. It is
+ * for the deploy, and for nothing else: a spec two changes both fold is a
+ * break in files the manual mirrors, and the site's job is to stay up and
+ * point at it. Lint runs the whole check on the same push, so the family
+ * still fails the pull request that wrote it.
  */
-export async function runChecks(target, git) {
+export async function runChecks(
+  target,
+  git,
+  { pages: pagesOnly = false } = {},
+) {
   const roots = typeof target === "string" ? rootsOf(target) : target;
   const index = git ?? (await gitIndex(roots));
   const report = createReport();
@@ -140,7 +156,11 @@ export async function runChecks(target, git) {
   checkIcons(ctx, pages);
   await checkStale(roots.store, pages, specs, shape.dirs, index, add);
 
-  if (roots.own) {
+  if (roots.own && pagesOnly) {
+    notes.push(
+      "store rules not run — page rules only, the deploy's gate; lint runs the rest",
+    );
+  } else if (roots.own) {
     checkCoverage(ctx, shape);
     checkUnwritten(ctx, changes, shape);
     checkAcceptance(ctx, shape);
@@ -210,10 +230,14 @@ async function gitIndex(roots) {
 }
 
 if (import.meta.main) {
-  const roots = process.argv[2]
-    ? rootsOf(resolve(process.argv[2]))
-    : resolveRoots();
-  const { text, failures } = formatReport(roots, await runChecks(roots));
+  const args = process.argv.slice(2);
+  const pages = args.includes("--pages");
+  const where = args.find((one) => !one.startsWith("--"));
+  const roots = where ? rootsOf(resolve(where)) : resolveRoots();
+  const { text, failures } = formatReport(
+    roots,
+    await runChecks(roots, undefined, { pages }),
+  );
   console.log(text);
   process.exitCode = failures > 0 ? 1 : 0;
 }

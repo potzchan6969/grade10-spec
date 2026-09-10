@@ -99,8 +99,14 @@ jobs:
             exit 1
           fi
 
+      # Page rules only. A store file two changes both fold, an id issued
+      # twice, a suite that traces nothing — those are breaks in files the
+      # manual mirrors, and the site's job is to stay up and point at them.
+      # Lint runs the whole check on this same push, so a store family still
+      # fails the pull request that wrote it rather than the deploy that came
+      # after it.
       - name: Check the manual
-        run: pnpm run check:manual
+        run: pnpm run check:manual:pages
 
       - name: Build
         run: pnpm run manual:build

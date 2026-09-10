@@ -547,11 +547,19 @@ never sees a badge.
 ## Checks
 
 `check/check-manual.mjs` beside the app, wired as `check:manual` into
-the lint workflow and run before every deploy of the manual. Which rules
-run follows who can fix what they find: page rules run against any manual;
-the store families — coverage, suites, deltas, the fold — run only where
-the manual and the store share a repository, because a manual mounted
-elsewhere can neither cause nor fix a hole in the store. The rules:
+the lint workflow, which runs it whole on every pull request and every push
+to main. Which rules run follows who can fix what they find: page rules run
+against any manual; the store families — coverage, suites, deltas, the fold
+— run only where the manual and the store share a repository, because a
+manual mounted elsewhere can neither cause nor fix a hole in the store.
+
+The deploy runs `--pages`, the page families alone (`check:manual:pages`).
+Error containment says a break in a spec or a change is somebody else's file
+the manual mirrors: it renders as a loud broken card and the deployed site
+stays up and points at it. A gate that refused to publish over one would say
+the opposite, and would hand a store conflict the power to stop every later
+page from reaching the site. Lint has already failed the pull request that
+wrote it. The rules:
 
 - every page parses and is canonical
 - every reference resolves: `spec` ids to a durable spec, `changes` ids to

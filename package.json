@@ -28,6 +28,7 @@
     "manual:viewer": "bash scripts/openspec-viewer/snapshot.sh",
     "manual:deploy": "pnpm --dir tools/manual deploy",
     "check:manual": "node tools/manual/check/check-manual.mjs",
+    "check:manual:pages": "node tools/manual/check/check-manual.mjs --pages",
     "diagrams": "node scripts/diagrams/render.mjs",
     "diagrams:check": "node scripts/diagrams/render.mjs --check",
     "test:diagrams": "node --test scripts/diagrams/*.test.mjs",
