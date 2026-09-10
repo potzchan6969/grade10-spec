@@ -11,8 +11,22 @@ order: 8
 | Google | Made on the phone from a secret the pass holds · rotates · one use | Every visit, no signal needed | Yes | 🚧 Issuer account, class and key pending |
 | Apple | Made by Grade10 and printed into the pass · never changes | Every visit, no signal needed | No — the member opens the card on the site; fixed in code, not a switch | 🚧 Developer Program, pass type identifiers, certificate and artwork pending |
 
-A pass is a rendering of the member card, never a second source of it. A
-photographed Apple code identifies and moves nothing.
+A pass is a rendering of the member card, never a second source of it. What
+it solves is distribution: a code that has to be fetched cannot live on a lock
+screen, and a card shop with a metal roof does not always have signal. Apple
+gives a phone no way to make a code, so the Apple pass carries a durable one
+and is made safe by what a session opened from it may not do. A photographed
+Apple code identifies and moves nothing.
+
+- **Apple's code never rotates** — a pass that stopped updating would stop
+  identifying, a second window would rescue nobody because the horizon is the
+  last successful fetch rather than the outage, and a boundary would make the
+  whole fleet due at once; the exposure is bounded instead by the Apple
+  session spending nothing
+- **No NFC** — in either wallet: no certified reader at the counter, and Apple
+  needs an entitlement besides
+- **Nothing else on the pass** — no offers, stamps or messages
+- **No pass for ZZZ** — it runs no till
 
 ## On the Pass
 
@@ -22,7 +36,8 @@ photographed Apple code identifies and moves nothing.
   speaks; the phone picks, and a phone set to none of them reads the brand's
   default, English for Grade10
 - **Apple note** — the pass says "Identifies you at the counter. Points are
-  spent from this page."
+  spent from this page.", so a pass that identifies and cannot spend never
+  reads as broken
 
 ## Adding and Ending
 
@@ -86,6 +101,9 @@ In this order, because each step needs the one above it:
 Only `WALLET_PASS_KEY` is shared with Google: a brand carrying both wallets
 seals both their secrets under the one key. In this order:
 
+❓ **A second brand issuing** — nothing in the package is brand-specific; the
+first brand asking decides the certificate handling. Product's call.
+
 1. *Operations* — **Enrol in the Apple Developer Program** in the
    organisation's name. A pass type identifier belongs to a team, and the
    enrolment is the slow step: a D-U-N-S number and a legal-entity check,
@@ -106,9 +124,10 @@ seals both their secrets under the one key. In this order:
    unencrypted PKCS#8, the only form these workers import, and keep both where
    they can be retrieved: Workers secrets are write-only and a lost key means
    starting over
-7. *Engineering* — **Create the APNs key** for the same team and record its key
-   id. It never expires, and it is team-wide: rotating it for another app takes
-   the wallet down with it. A brand pushing by client certificate instead
+7. *Engineering* — **Create the APNs key** for the same team, scoped to the
+   pass type identifier, and record its key id. A team-scoped key pushes to
+   every app under the team, and nothing here needs that. It never expires,
+   and rotating it for another app takes the wallet down with it. A brand pushing by client certificate instead
    sets no key and binds `WALLET_APPLE_APNS` for mTLS; no deployment
    declares one
 8. *Engineering* — **Set the secrets** with `pnpm run secrets`:
@@ -120,7 +139,14 @@ seals both their secrets under the one key. In this order:
    `WALLET_PASS_AUTH_KEY` draws no save action at all
 9. *Engineering* — **Prove it on a physical iPhone.** The Simulator takes no
    push token, never registers, and never receives an update. Name whose phone,
-   and where it lives
+   and where it lives. Two things only this settles: which credential a pass
+   push takes — Apple documents the pass certificate, the shipped default is a
+   key, and `TopicDisallowed` on the push counter decides it — and whether
+   `apns-push-type: background` is right for a pass topic, which Apple pins to
+   a bundle id and may drop silently on a mismatch. Push to the one enrolled
+   device three ways — as shipped, with the header omitted, and over the
+   certificate — and record which produces a list request, not which returns
+   200
 
 ### Standing Obligations
 
@@ -175,83 +201,4 @@ names the fault.
 - **Pass building** — `packages/wallet-pass`
 - **Secrets** — `packages/grade10-store/backend/src/secrets.ts`; the issuer,
   class and pass identifiers in `packages/app-env`
-:::
-
-:::detail{title="Product decisions" for="pm"}
-A member at the counter unlocks their phone, signs in, opens the membership
-page and reads a code against a countdown with a queue behind them. The
-problem is distribution rather than the code: a code that has to be fetched
-cannot live on a lock screen, and a card shop with a metal roof does not
-always have signal. Apple has no way for a phone to make a code, so the Apple
-pass carries a durable one and is made safe by what a session opened from it
-may not do.
-
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Member with an iPhone | At the counter, no signal | Scans from the lock screen and is identified, every visit |
-| Member spending points | Wants a reward at the till | Opens the card on the site; the Apple pass identifies but never spends |
-| Someone holding a photograph of a pass | At a counter | Is identified as that member and can move nothing |
-| Member carrying both wallets | Ends one | Keeps the other |
-
-**Not in scope.** Spending or collecting from an Apple pass — both are fixed
-off in code, not behind a switch. NFC at the counter, in either wallet: no
-certified reader, and Apple needs an entitlement besides. Offers, stamps or
-messages on a pass. A pass for ZZZ, which runs no till. Any change to the card
-on the site.
-
-**Measurement.**
-
-| Signal | Definition | Owner |
-| --- | --- | --- |
-| Share by wallet | Counter identifications made from a pass, against every counter identification, split Google against Apple | Product |
-| Expired or replayed | Identifications that expire or replay before staff scan them; a Google pass drives this to zero | Product |
-| Spend after an Apple identification | Apple identifications followed by a spend on the site's card in the same visit — the number that would reopen this decision | Product |
-
-**The code does not rotate.** Rotating the proof on a slow window would bound
-a photographed barcode, and the machinery exists: the digest already covers
-the barcode, so a rotation costs one push. It is not taken, for three reasons:
-
-- **A pass that stops updating would stop identifying** — today it shows a
-  stale balance. Every reason a device stops updating — automatic updates
-  switched off, no re-registration after a restore, Apple throttling the pass
-  — would become a dead card the member finds at a counter
-- **A second window rescues nobody** — the horizon is the last successful
-  fetch rather than the outage, so it only chooses which days an offline
-  member loses
-- **A boundary makes the whole fleet due at once** — the opposite of a sweep
-  whose cost is proportional to change
-
-What bounds the same exposure at no such cost: trim the Apple session's panel,
-since a session that cannot collect has no use for a redemption id.
-
-**Owed at enrolment.** Two things nothing here can settle without a real
-device and a real Developer Program account:
-
-- **Which credential a pass push takes** — Apple documents the pass
-  certificate; the shipped default is a team-scoped key. `TopicDisallowed` on
-  the push counter is the signal that decides it
-- **Whether `apns-push-type: background` is right for a pass topic** — Apple
-  pins that value to a bundle id, and documents that a mismatch may be dropped
-  silently. Push to one enrolled device three ways — as shipped, with the
-  header omitted, and over the certificate — and record which produces a list
-  request, not which returns 200
-
-The push key is created topic-specific, scoped to the pass type identifier: a
-team-scoped key pushes to every app under the team, and nothing here needs
-that.
-
-**Risk.** An Apple pass that identifies but cannot spend reads as broken to a
-member who was not told, so the surface says what it is for rather than
-offering two identical-looking buttons.
-
-| Item | Status | Decision | Owner |
-| --- | --- | --- | --- |
-| Which wallets | Decided | Google and Apple, on their own terms; the port names neither | Product |
-| Google's code | Decided | Made on the device from a secret the pass carries, so it scans with no signal | Product |
-| Apple's code | Decided | Made by the programme and durable; made safe by identifying only — it spends nothing and collects nothing | Product |
-| One pass per wallet | Decided | Adding or ending in one leaves the other untouched | Product |
-| How current | Decided | One lap behind, and a lap refreshes before it settles the vendor's debt | Product |
-| Ending | Decided | Immediate, and by the member. 🚧 An operator's console does not end one yet | Product |
-| Erasure | Decided | The row stays armed and empty; the secret goes, so no further code identifies | Legal |
-| A second brand issuing | ❓ Open | Nothing is brand-specific in the package; the first brand asking decides the certificate handling | Product |
 :::

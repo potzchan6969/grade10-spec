@@ -34,7 +34,9 @@ land on the part of a basket that earns nothing.
 ## Backend Flow
 
 An order is priced once, when it is paid, and the number written then is the
-one every point and every refund is read against.
+one every point and every refund is read against. The earn is delivered by
+retry until the programme takes it, and taken once, so a purchase during an
+outage still earns, and never twice.
 
 :::flow{title="From a paid order to points" case="Normal" diagram="assets/diagrams/loyalty-pricing-an-order.svg"}
 ## *Shop* — **Order paid**

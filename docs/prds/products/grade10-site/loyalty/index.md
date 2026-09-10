@@ -9,6 +9,12 @@ coupon an order carries at either checkout, or straight off the bill. Grade10
 runs in HKD on Hong Kong time: one point per HKD 10 of qualifying goods, and
 one point pays HKD 1 back.
 
+Repeat purchase is the cheapest revenue Grade10 has, and the physical store —
+the majority of card sales — sells to anonymous guests. The programme gives a
+returning buyer a visible, growing reason to buy again, makes the counter a
+member channel, lets the business run promotions and reward individual members
+without a deploy, and keeps what a purchase earns auditable.
+
 The engine is brand-neutral and names no vendor. Shopify is a channel — the
 online checkout and the POS at the counter — and never the source of truth for
 a balance, a tier or a code. ZZZ has no programme.
@@ -25,46 +31,29 @@ a balance, a tier or a code. ZZZ has no programme.
 | [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card) | The card in Google Wallet and Apple Wallet — what each code can do, and how a pass stays current |
 
 Three audiences touch it. **Members** get the membership with their account,
-carry a member card at `/membership`, and read tier, balance, what is expiring
-and their own history on one surface. **Staff** run a loyalty terminal inside
-Shopify POS at the till. **Operators** run the programme from the admin
-console.
+carry a member card at `/membership`, and read tier, balance, what is expiring,
+what the next purchase moves them toward, and their own history on one
+surface. **Staff** run a loyalty terminal inside Shopify POS at the till, and
+identify a member in seconds to read, spend or hand over on their behalf.
+**Operators** run the programme from the admin console: finding a member and
+correcting a balance on the record, granting campaign points without a deploy,
+and giving the top tier to a named person with a reason.
 
-:::detail{title="Product decisions" for="pm"}
-Repeat purchase is the cheapest revenue Grade10 has, and the physical store —
-the majority of card sales — sells to anonymous guests. The programme gives a
-returning buyer a visible, growing reason to buy again, makes the counter a
-member channel, lets the business run promotions and reward individual
-members without a deploy, and keeps what a purchase earns auditable. The
-owner's draft it implements is
-[the programme reference](/references/grade10-loyalty-program); the delivery
-plan for the counter is [the Shopify membership and POS
-notes](/references/shopify-membership-pos). The checkable rules are
-[[grade10-site/loyalty/programme]] and the in-flight
-`grade10-site/store/membership` capability. Each page records the decisions
-behind its own rules, and what is still open is gathered below under Pending
-spec.
+## Not in Scope
 
-| User | Situation | Desired outcome |
-| --- | --- | --- |
-| Buyer | Has bought before, browsing again | Sees what they have accumulated and what it is nearly worth |
-| Buyer | Deciding between Grade10 and elsewhere | Knows this purchase moves them toward a better rate |
-| Buyer | At the counter | Registers, earns, spends points, and collects rewards without their own phone doing more than showing a code |
-| Store staff | Member at the counter | Identifies them in seconds and reads, spends, or hands over on their behalf |
-| Support operator | A buyer disputes a balance | Can read the member's history and correct it, on the record |
-| Marketing operator | Running a sign-up promotion | Can grant points that count toward tier, without a deploy |
-| Owner | Deciding who gets the top tier | Grants it deliberately, to a named person, with a reason |
+- **Paid membership** — every tier is free, and the top one is given
+- **Earning outside the store and the counter** — beyond operator-granted
+  campaign points; auction wins and credit top-ups are later-phase candidates
+  and earn nothing today
+- **Redeeming against an auction** — points and coupons buy nothing there, in
+  any phase
+- **SMS verification**, and NFC tap in any wallet
+- **Tier-based discounts beyond the earn multiplier** — no tier gets a
+  percentage off or free shipping
+- **Cross-brand membership** — ZZZ buyers are a separate population with no
+  programme
 
-**Not in scope.** Paid membership — every tier is free, the top one is given.
-Earning outside Grade10 store and counter purchases, beyond operator-granted
-campaign points; auction wins and credit top-ups are later-phase candidates
-and earn nothing today. Redeeming against an auction — points and coupons buy
-nothing there, in any phase. SMS verification, and NFC tap in any wallet.
-Tier-based discounts beyond the earn multiplier — no tier gets a percentage
-off or free shipping. Cross-brand membership — ZZZ buyers are a separate
-population with no programme.
-
-**Measurement.**
+## Measurement
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
@@ -75,18 +64,23 @@ population with no programme.
 | Tier retention | Share of Gold members who earn the retention threshold inside their validity period | Product |
 | Point redemption | Share of earned points redeemed before the balance expires | Product |
 | Coupon usage | Share of issued codes used before their own validity ends | Product |
-| Arriving by pass | Share of counter identifications made from a wallet pass | Product |
-| Codes that never landed | Counter identifications that expired or replayed before staff scanned them | Product |
+| Arriving by pass | Share of counter identifications made from a wallet pass, split Google against Apple | Product |
+| Codes that never landed | Counter identifications that expired or replayed before staff scanned them; a Google pass drives this to zero | Product |
+| Spend after an Apple identification | Apple identifications followed by a spend from the card on the site in the same visit — the number that would reopen the Apple pass spending nothing | Product |
 | Points outstanding | Unexpired, unredeemed points, plus the money out in unused codes, as a liability | Finance |
 | Earning delivery | Money events awaiting delivery to the programme, and their age | Engineering |
 
-**Risks.** Earning is delivered at least once and retried, so a member who
-buys during an outage still earns; the alternative is silent, uncorrectable
-point loss for real purchases. At HKD 1 per point the programme returns 10%
-of spend at the entry tier and 17% at the top — generous against retail
-norms, and the single input that decides whether the catalog's prices and the
-reported liability are sustainable. Activity-based expiry makes the
-outstanding balance stickier: a member who buys once a year never loses a
-point. A member's identity never enters the programme, so a leak of the
-loyalty database exposes balances and identifiers, not people.
-:::
+At HKD 1 a point the programme returns 10% of spend at Silver, 12% at Gold and
+17% at Black — generous against retail norms, and the one input that decides
+whether the catalog's prices and the reported liability are sustainable.
+Activity-based expiry makes the outstanding balance stickier: a member who
+buys once a year never loses a point.
+
+## References
+
+- [The programme reference](/references/grade10-loyalty-program) — the owner's
+  draft the programme implements
+- [The Shopify membership and POS notes](/references/shopify-membership-pos) —
+  the delivery plan for the counter
+- [[grade10-site/loyalty/programme]] — the checkable rules, with the till's in
+  the in-flight `grade10-site/store/membership` capability

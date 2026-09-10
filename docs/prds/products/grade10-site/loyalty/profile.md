@@ -130,7 +130,8 @@ The same card can be added to a phone wallet —
   stock counts
 - **No user id on the surface** — it reads the session
 - **Identity lives elsewhere** — a member's identity lives in the identity
-  system and never in the programme, which holds only an opaque user id
+  system and never in the programme, which holds only an opaque user id, so a
+  leak of the loyalty database exposes balances and identifiers, not people
 - **Deleting the account ends the membership** — balance, tier progress and
   coupons end at once; the ledger record survives for audit
 
