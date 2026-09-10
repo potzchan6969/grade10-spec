@@ -38,7 +38,7 @@ Needs group 1's bump and group 3's model.
 - [x] 4.2 Supply each tile's remaining count from `remainingToSay`, against the quantity that card holds in the cart, so *Nearly out is said on the card* (`SC-20`) and *Asking for the last one is answered* (`SC-21`) pass
 - [x] 4.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 5. The product page (grade10)
+## 5. The product page (grade10) (owner: @sean)
 
 Needs group 3's model.
 
