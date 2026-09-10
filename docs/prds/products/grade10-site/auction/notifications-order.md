@@ -6,7 +6,6 @@ order: 14
 
 Order Notifications are the transactional letters that begin when an auction lot closes with a winner. They identify the lot, use the winner's registered email address, and stop or retry according to the order's current facts.
 
-- **Winning** — the lot became a winner order and an invoice is ready
 - 🚧 **Winning** — the auction-won letter asks for a delivery address and names no amount
 - 🚧 **Invoice sent** — names the amount and the payment deadline, which starts at send
 - **Payment** — the address, payment, decline, receipt, and deadline events that change what the winner should do

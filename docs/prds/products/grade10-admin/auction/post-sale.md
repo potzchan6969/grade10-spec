@@ -5,27 +5,29 @@ audience: operator
 order: 13
 ---
 
-The queue works every winner order from lot close through delivery in one place. Each row wears exactly one derived outcome, the queue filters to one outcome at a time, and Expired and Processing rows carry an extra needs-action treatment. An order opens into its winner, invoice revisions, payment attempts, address snapshots, fulfilment facts, and immutable histories.
+The queue works every winner order from lot close through delivery in one place. Each row wears exactly one derived outcome, the queue filters to one outcome at a time, and rows waiting on an operator carry an extra needs-action treatment. An order opens into its winner, invoice revisions, payment attempts, address snapshots, fulfilment facts, and immutable histories.
 
 | Outcome | When |
 | --- | --- |
 | Draft · Scheduled · Live · Ending soon | The sale is still the auction's |
 | Unsold · Called off | Ended without a payable winner order |
-| Pending Payment | The current invoice is payable before its deadline |
-| Expired | The current invoice passed its deadline unpaid |
+| 🚧 Awaiting Address | The winner has not confirmed a delivery address |
+| 🚧 Preparing Invoice | The address is confirmed; the invoice is ready to quote |
+| 🚧 Pending Payment | The invoice is sent and unpaid, before or after its deadline; an expired invoice shows Expired beside the outcome |
 | Processing | Payment is complete and dispatch is not complete |
 | Shipped · Delivered | Fulfilment has left Grade10 or has carrier proof |
 | Cancelled · Refunded | The order has a recorded terminal outcome |
 
-- 🚧 **Awaiting Address** — the winner has not confirmed an address
-- 🚧 **Preparing Invoice** — the address is confirmed and the invoice is ready to quote; needs action
+- 🚧 **Needs action** — Preparing Invoice, an expired invoice, and Processing
 - 🚧 **Overdue** — an order idle 72 hours in either stage is marked and can be filtered; nothing expires on it
 
 ## Payment
 
-A winner order reaches paid through one fresh charge or one operator-recorded manual settlement. The winning bid-time hold is released rather than captured, and every failed payment attempt remains in the invoice log. Manual settlement confirms the delivery address, records the amount and external reference, and points at any superseded invoice.
+The winning bid-time hold is released rather than captured, and every failed payment attempt remains in the invoice log.
 
-- 🚧 **Payment** — an operator quotes and sends the invoice, may re-quote after send, and records non-card payments with a reference and proof files
+🚧 An operator quotes shipping and insurance for the winner's confirmed address and sends the invoice; sending starts the 7-day window and locks the address. A later address change is re-quoted, and the operator chooses to keep or restart the deadline.
+
+🚧 A winner order reaches paid through one card payment or one operator-recorded manual settlement — bank transfer, cash, or another method, with a reference and proof files. An expired invoice stays payable, and a reissue returns it to pending.
 
 ## Fulfilment
 
