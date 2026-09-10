@@ -32,8 +32,9 @@ of them: the phrasing they approve is the phrasing generation will copy.
 
    | | |
    | --- | --- |
-   | Branch | `test/tcs-<capability>` — add `-us<n>` when you are taking one journey of a large suite |
-   | Commits | `test(<domain>): approve <capability> US<n> test cases` |
+   | Branch | `tcs-review/<level>-<target>` — `<level>` is `feature`, `domain`, `product` or `platform`; `<target>` is the capability, domain or product id, and `platform` carries none |
+   | Commits | `test(<domain>): approve <target> US<n> test cases` |
+   | PR title | `test(<domain>): approve <target> US<n>–<m> test cases` — widen the range as journeys land, since the branch name never says which you took |
    | PR label | `documentation`, opened as a draft |
 
    On `main`, create the branch first (`git switch -c`). Never write verdicts
@@ -51,7 +52,7 @@ of them: the phrasing they approve is the phrasing generation will copy.
 
    Before opening a suite, check whether someone else is already in it:
    `gh pr list --state open --search "<capability>"`, or
-   `git ls-remote --heads origin "test/tcs-<capability>*"`. Report what you
+   `git ls-remote --heads origin "tcs-review/*-<target>"`. Report what you
    find — who, which journey — and let the reviewer decide. **This is
    information, never a refusal.** Nothing reserves a suite: two reviewers on
    different journeys of one file is a supported way to work, and the file's

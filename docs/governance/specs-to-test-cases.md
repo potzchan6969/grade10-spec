@@ -503,8 +503,9 @@ branch and its own pull request — never the spec's.
 
 | | |
 | --- | --- |
-| Branch | `test/tcs-<capability>`, or `test/tcs-<capability>-us<n>` when the suite is split by journey |
-| Commits | `test(<domain>): approve <capability> US<n> test cases` |
+| Branch | `tcs-review/<level>-<target>` — `<level>` is `feature`, `domain`, `product` or `platform`; `<target>` is the capability, domain or product id, and `platform` carries none |
+| Commits | `test(<domain>): approve <target> US<n> test cases` |
+| PR title | `test(<domain>): approve <target> US<n>–<m> test cases` — the journeys this branch actually carries, not the suite's full range |
 | PR label | `documentation` |
 | Merges | At journey boundaries — not only when the whole suite is finished |
 
@@ -512,7 +513,10 @@ branch and its own pull request — never the spec's.
 branch lives for days against a moving `main` and banks nothing until it lands.
 One branch per journey keeps each pull request readable and each merge small.
 Below that, take the whole file on one branch; the split costs more than it
-saves.
+saves. The branch name stays the suite's either way — which journeys a branch
+carries is the pull request's title to state, since the reviewer only knows the
+range once they stop. Two reviewers in one suite at once is the one case the
+name cannot hold: the second branch appends its range, `-US<n>-<m>`.
 
 **Merge partial progress.** A journey's worth of approved cases is worth
 landing on its own: the suite goes to `in-review`, the approved cases are
