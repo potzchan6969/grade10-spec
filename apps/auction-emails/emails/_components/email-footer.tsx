@@ -28,7 +28,7 @@ export function EmailFooter({
           <>
             {" "}
             <Link className="text-fg-2" href={alertsUrl}>
-              Turn them off
+              Manage alerts
             </Link>
           </>
         ) : null}
