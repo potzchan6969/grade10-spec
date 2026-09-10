@@ -2,6 +2,11 @@
   "title": "我的拍賣",
   "watching": "追蹤中",
   "bidding": "出價中",
+  "auctionColumn": "拍賣",
+  "currentBidColumn": "目前出價",
+  "standingColumn": "你的狀態",
+  "emailAlertsColumn": "電郵通知",
+  "noStanding": "--",
   "active": "進行中",
   "won": "得標",
   "didntWin": "未得標",
@@ -41,6 +46,6 @@
   },
   "bidPlaced": "已出價",
   "openListing": "查看拍品",
-  "catalogue": "瀏覽拍品目錄",
+  "catalogue": "瀏覽拍品",
   "undo": "復原"
 }

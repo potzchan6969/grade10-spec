@@ -2,6 +2,11 @@
   "title": "My auctions",
   "watching": "Watching",
   "bidding": "Bidding",
+  "auctionColumn": "Auction",
+  "currentBidColumn": "Current Bid",
+  "standingColumn": "Your Standing",
+  "emailAlertsColumn": "Email Alerts",
+  "noStanding": "--",
   "active": "Active",
   "won": "Won",
   "didntWin": "Didn't win",
@@ -41,6 +46,6 @@
   },
   "bidPlaced": "Bid placed",
   "openListing": "View listing",
-  "catalogue": "Browse the catalogue",
+  "catalogue": "Browse lots",
   "undo": "Undo"
 }

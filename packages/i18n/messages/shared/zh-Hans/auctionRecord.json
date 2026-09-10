@@ -2,6 +2,11 @@
   "title": "我的拍卖",
   "watching": "关注中",
   "bidding": "出价中",
+  "auctionColumn": "拍卖",
+  "currentBidColumn": "目前出价",
+  "standingColumn": "你的状态",
+  "emailAlertsColumn": "电邮通知",
+  "noStanding": "--",
   "active": "进行中",
   "won": "中拍",
   "didntWin": "未中拍",
@@ -41,6 +46,6 @@
   },
   "bidPlaced": "已出价",
   "openListing": "查看拍品",
-  "catalogue": "浏览拍品目录",
+  "catalogue": "浏览拍品",
   "undo": "撤销"
 }
