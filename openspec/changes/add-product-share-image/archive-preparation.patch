@@ -1,0 +1,46 @@
+diff --git a/openspec/specs/grade10-site/store/product-page/spec.md b/openspec/specs/grade10-site/store/product-page/spec.md
+index 7bca33ebb..31d6da3e0 100644
+--- a/openspec/specs/grade10-site/store/product-page/spec.md
++++ b/openspec/specs/grade10-site/store/product-page/spec.md
+@@ -40,6 +40,15 @@ per card rather than per page.
+   - Priced but unbuyable: a card nobody can buy keeps its prices and offers
+     nothing to press
+
++- Shared link picture
++  - First image: a product address unfurls with the card's first catalogue
++    image
++  - Preview box: the picture is served at 1200×630 and the response says so
++  - Padded, not cropped: the card is fitted inside the box and the rest is
++    filled white
++  - Honest absence: a card with no image carries no `og:image`
++  - Named shape: the response says which card shape the picture is drawn in
++
+ ## Requirements
+ ### Requirement: A card answers at its own address
+
+@@ -168,4 +177,3 @@ bought SHALL NOT become what is added by being chosen.
+ - **THEN** each variant reads as for sale or sold out on its own
+ - **AND** adding is offered for the one for sale
+ - **AND** choosing the sold-out one offers no add
+-
+diff --git a/openspec/specs/grade10-site/store/product-page/user-journeys.md b/openspec/specs/grade10-site/store/product-page/user-journeys.md
+index 9bfd82dbd..07ec2f785 100644
+--- a/openspec/specs/grade10-site/store/product-page/user-journeys.md
++++ b/openspec/specs/grade10-site/store/product-page/user-journeys.md
+@@ -52,3 +52,16 @@ still carrying its prices,
+
+ - `grade10-site-store-product-page-SC-11` — Nothing on the card is for sale
+ - `grade10-site-store-product-page-SC-12` — One grade sold, another still for sale
++
++### product-page-US-05: Collector shares a card and the preview shows it
++
++**As a** collector,
++**I want** a product link I pass on to unfurl with the card's own picture,
++whole,
++**so that** whoever receives it sees the card rather than a text-only preview
++or one with its edges cut off.
++
++**Accepted by:**
++
++- `product-page-SC-19` — A preview fetcher reads the card's picture
++- `product-page-SC-20` — A card with no picture unfurls without one

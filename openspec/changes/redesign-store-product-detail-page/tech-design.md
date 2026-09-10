@@ -15,6 +15,39 @@ The design system already publishes the components used by the frame:
 the application shell. No design-system gap requires a new component or
 token.
 
+The remaining delivery work has two boundaries:
+
+- **Optional facts** — group 4 waits for the Store contract owner to expose
+  typed shipping guidance and pickup location fields; the page does not parse
+  provider metadata or invent a location
+- **Description disclosure** — group 5 replaces the character-count estimate
+  with a post-layout overflow decision while keeping server rendering and
+  hydration deterministic
+
+The stock ceiling and remaining-count behavior in the frontend completion plan
+belongs to `hold-cart-quantity-to-stock`, groups 3 and 5. This change consumes
+that change's landed product-model and buy-box boundary; it does not introduce
+a second stock threshold or duplicate its presentation task.
+
+## Goals / Non-Goals
+
+**Goals**
+
+- **Typed product facts** — render supplied shipping guidance and pickup
+  location through the existing product read and frontend boundary
+- **Layout-aware disclosure** — decide whether the description needs a control
+  from its rendered three-line region, not from a character budget
+- **Stable purchase contract** — keep route ownership, variant choice, cart
+  mutation, and stock authority at their existing boundaries
+
+**Non-Goals**
+
+- **Provider work** — no Shopify query, API, database, webhook, or deployment
+  change for the remaining frontend groups
+- **Stock-policy work** — no new ceiling or scarcity rule; those belong to
+  `hold-cart-quantity-to-stock`
+- **Design-system work** — no new export, variant, or token
+
 ## Decisions
 
 ### Keep the route and the shell seams
@@ -82,6 +115,43 @@ The alternative is a CSS-only truncation with an anchor. Rejected: it cannot
 report disclosure state accessibly and would turn an in-place interaction into
 a navigation seam.
 
+### Measure description overflow after layout
+
+The page renders the description in its collapsed three-line state during the
+server render and the first client render. It keeps the disclosure control
+usable while the browser measures the collapsed region, then hides the control
+only when the rendered content fits. A `ResizeObserver` or equivalent layout
+signal rechecks the decision when the container width or active locale changes.
+Expanding the description removes the clamp; collapsing it restores the
+measured state without changing the product address.
+
+The alternative is to keep the fixed character budget in the product model.
+Rejected: line wrapping changes with width, font, and locale, so the model
+cannot decide whether the rendered region exceeds three lines.
+
+### Wait for typed optional facts
+
+The frontend facts group starts only after the Store contract owner supplies
+typed optional shipping guidance and pickup location fields. The page reads
+those values through the existing decoded product repository boundary, omits
+absent values, and uses catalog copy for platform labels. It does not infer a
+location from tags, title, product type, or shipping checkout text.
+
+The alternative is to parse the current provider metadata in the page.
+Rejected: it moves provider vocabulary into the application and would make an
+absent fact indistinguishable from a guessed one.
+
+### Consume stock-limit ownership from its own change
+
+The product page and buy box share the quantity state and stock feedback
+defined by `hold-cart-quantity-to-stock`. Its product-model group owns the
+finite ceiling and single scarcity rule; its product-page group owns the
+remaining-count presentation. The redesign keeps its existing quantity and
+cart scenarios and does not add parallel helpers or thresholds.
+
+The alternative is to add a second stock helper to this change. Rejected: two
+rules for the same shop count would let the stepper and the message disagree.
+
 ### Keep copy in the shared catalogs
 
 The new labels (`Shop`, `About This Item`, `Shipping & Pickup`, `Shipping
@@ -114,6 +184,9 @@ accepts a fabricated default label.
   Store catalogue response.
 - `packages/grade10-store/frontend/src/features/products/product` carries
   the same decoded values to `ProductPage`.
+- The remaining product-facts group adds no new endpoint. It consumes the
+  typed optional fields supplied by the Store contract owner once that
+  contract lands.
 
 ## Risks / Trade-offs
 
@@ -127,16 +200,32 @@ accepts a fabricated default label.
 - The page uses local display state for disclosure and the existing cart query
   for add state; neither is server-authoritative and neither enters checkout
   pricing.
+- An upstream facts contract can arrive after the frontend plan is written →
+  keep group 4 blocked until the typed fields and supplied/absent fixtures
+  exist; do not substitute provider parsing.
+- Layout measurement can briefly precede the overflow decision → keep the
+  control in the SSR-safe initial render and hide it only after a measured
+  collapsed region proves that no disclosure is needed.
+- A stock change can land beside this redesign → keep the stock model and
+  threshold in `hold-cart-quantity-to-stock`, and consume its shared boundary
+  rather than adding a second rule here.
 
 ## Migration Plan
 
 1. Land the shared product copy in the `grade10-spec` main branch.
 2. Bump `external/grade10-spec` in `grade10`.
-3. Add the provider and Store contract fields with fixture coverage.
-4. Replace the page composition and buy-box controls, then run the serving,
-   hydration, package, and application gates.
+3. Land the typed optional shipping and pickup facts contract before claiming
+   the frontend facts group.
+4. Complete the description disclosure group with layout measurement and
+   serving, hydration, package, and application coverage.
+5. Land the stock model and product-page work through
+   `hold-cart-quantity-to-stock`, without duplicating its helpers here.
+6. Run the remaining product-page acceptance checks on the chosen integration
+   build.
 
 ## Open Questions
 
-None. Badge source and omission behavior, variant compatibility, route
-ownership, and validation boundaries were settled before implementation.
+- ❓ **Typed optional product facts** — the Store contract owner has not yet
+  settled the exact optional field shape and owning change for shipping guidance
+  and pickup location. Keep group 4 unclaimed until that contract lands or
+  `grade10-site-store-product-page-SC-15` is revised.
