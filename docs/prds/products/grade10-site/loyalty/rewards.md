@@ -130,6 +130,8 @@ can buy.
 
 ## Cancelling a Redemption
 
+> Backend generic feature support, no UX is planned to support it
+
 A reversal takes back a coupon the member still holds and returns the
 points that bought it — both move together, or the member ends up holding
 one and not the other. It is an operator's move, never a member's.
