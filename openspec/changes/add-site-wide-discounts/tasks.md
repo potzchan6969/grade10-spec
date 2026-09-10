@@ -1,4 +1,4 @@
-## 1. Draft order acceptance (grade10)
+## 1. Draft order acceptance (grade10) (owner: @ecchochan)
 
 - [ ] 1.1 Set `acceptAutomaticDiscounts: true` in `draftOrderVariables()` (`packages/shopify/backend/src/admin/draftOrders.ts`), covering `grade10-site-store-site-discounts-SC-01`
 - [ ] 1.2 Add `platformDiscounts` to `DRAFT_ORDER_FIELDS` and `DRAFT_ORDER_CALCULATE`; derive `automaticDiscountMinor` and `codeDiscountMinor` from it on `ShopifyDraftOrderPricing`, replacing the `totalDiscountsSet` subtraction (tech-design.md Decisions) — grep every existing reader of `codeDiscountMinor` first and confirm none breaks under the new derivation
