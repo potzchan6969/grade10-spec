@@ -22,6 +22,13 @@ export type AuctionRecordRowState =
   | "cancelled"
   | "refunded";
 
+export type WatchToastCopy = {
+  title: string;
+  description?: string;
+  /** Nested toast action — View My Auctions on watch, Undo on unwatch. */
+  actionLabel?: string;
+};
+
 export type WatchButtonCopy = {
   watch: string;
   watching: string;
@@ -30,6 +37,10 @@ export type WatchButtonCopy = {
   watchAriaLabel: string;
   unwatchAriaLabel: string;
   pending?: string;
+  /** Toast once the application confirms watched. */
+  watchedToast?: WatchToastCopy;
+  /** Toast once the application confirms unwatched. */
+  unwatchedToast?: WatchToastCopy;
 };
 
 export type EmailAlertsToastCopy = {
@@ -55,6 +66,15 @@ export type WatchButtonProps = {
   copy: WatchButtonCopy;
   onPress: () => void;
   disabled?: boolean;
+  /**
+   * Bid stands on the lot — show Watching disabled and do not report press.
+   * Distinct from a transient `disabled` / pending lock.
+   */
+  locked?: boolean;
+  /** Toast action when watch is confirmed (opens My Auctions). */
+  onWatchedToastAction?: () => void;
+  /** Toast action when unwatch is confirmed (Undo). */
+  onUnwatchedToastAction?: () => void;
   className?: string;
 };
 

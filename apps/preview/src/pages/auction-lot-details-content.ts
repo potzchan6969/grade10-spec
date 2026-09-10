@@ -149,14 +149,26 @@ export const AUCTION_NAV = {
   onCartClick: noop,
 };
 
+/** Preview stand-in for the Auctions catalogue (Auction Listing) destination. */
+export const AUCTION_LISTING_HREF = "#auction";
+
 export const AUCTION_LOT_DETAILS_COPY = {
   header: {
-    auctionBreadcrumb: "Auction",
-    lotBreadcrumb: `Lot ${AUCTION_LOT.listingNumber}`,
+    auctionBreadcrumb: "Auctions",
+    lotBreadcrumb: "Lot",
     watch: "Watch",
     watching: "Watching",
     watchAriaLabel: "Watch this lot",
     unwatchAriaLabel: "Unwatch this lot",
+    watchedToast: {
+      title: "Email alerts on for this lot",
+      actionLabel: "View My Auctions",
+    },
+    unwatchedToast: {
+      title: "Unwatched this lot",
+      description: "Email alerts for this lot are off too.",
+      actionLabel: "Undo",
+    },
   },
   sidebar: {
     ...LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,

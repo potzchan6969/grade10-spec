@@ -175,6 +175,7 @@ export type {
   EmailAlertsCopy,
   EmailAlertsToastCopy,
   WatchButtonCopy,
+  WatchToastCopy,
   WatchButtonProps,
 } from "./blocks/auction-record/types";
 export { WatchButton } from "./blocks/auction-record/watch-button";

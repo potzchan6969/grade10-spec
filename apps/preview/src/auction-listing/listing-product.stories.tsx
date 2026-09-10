@@ -14,6 +14,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { ReactNode } from "react";
 import { expect, within } from "storybook/test";
 import {
+  AUCTION_LISTING_HREF,
   AUCTION_LOT,
   AUCTION_LOT_BADGES,
   AUCTION_LOT_DETAILS_COPY,
@@ -126,6 +127,7 @@ function lotPage(state: BiddingState) {
       />
     </>,
     <ListingLotHeader
+      auctionHref={AUCTION_LISTING_HREF}
       copy={AUCTION_LOT_DETAILS_COPY.header}
       title={AUCTION_LOT.title}
     />,
