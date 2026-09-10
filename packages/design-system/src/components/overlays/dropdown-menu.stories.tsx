@@ -181,3 +181,34 @@ export const RadioItems: Story = {
   },
   render: () => <RadioItemsExample />,
 };
+
+/** Figma Dropdown Menu with group labels (`6554:5963`). */
+export const WithGroups: Story = {
+  play: async ({ canvasElement }) => {
+    const trigger = within(canvasElement).getByRole("button", {
+      name: "Devices",
+    });
+    await userEvent.click(trigger);
+  },
+  render: () => (
+    <DropdownMenu>
+      <DropdownMenuTrigger render={<Button variant="outline" />}>
+        Devices
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>iPhone</DropdownMenuLabel>
+          <DropdownMenuItem>iPhone 17 Pro</DropdownMenuItem>
+          <DropdownMenuItem>iPhone Air</DropdownMenuItem>
+          <DropdownMenuItem>iPhone 17</DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>iPad</DropdownMenuLabel>
+          <DropdownMenuItem>iPad Pro</DropdownMenuItem>
+          <DropdownMenuItem>iPad Air</DropdownMenuItem>
+          <DropdownMenuItem>iPad</DropdownMenuItem>
+        </DropdownMenuGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  ),
+};
