@@ -3,6 +3,7 @@ import { ImageBroken } from "@phosphor-icons/react";
 import { type ReactNode, useState } from "react";
 import type { ImageBlock } from "../content/grammar";
 import { useInlineSvg } from "./inline-svg";
+import { PanStrip } from "./pan-strip";
 
 const FRAME =
   "w-full rounded-(--radius-2xl) border border-border bg-background-subtle";
@@ -41,17 +42,22 @@ function Bitmap({ block }: { block: ImageBlock }) {
 }
 
 /** An SVG is mounted as live DOM rather than an `<img>`, so a diagram's own
- * styles follow the page's theme. */
+ * styles follow the page's theme, and drawn at the magnification a flow's
+ * diagram is, panning where it is wider than the column. */
 function InlineSvg({ block }: { block: ImageBlock }) {
   const { host, state } = useInlineSvg(block.src);
   return (
     <>
-      <div
-        aria-label={block.alt}
-        className={state.status === "ready" ? `${FRAME} px-4 py-4` : "hidden"}
-        ref={host}
-        role="img"
-      />
+      <div className={state.status === "ready" ? `${FRAME} py-4` : "hidden"}>
+        <PanStrip>
+          <div
+            aria-label={block.alt}
+            className="manual-diagram px-4"
+            ref={host}
+            role="img"
+          />
+        </PanStrip>
+      </div>
       {state.status === "unavailable" ? <Broken block={block} /> : null}
     </>
   );

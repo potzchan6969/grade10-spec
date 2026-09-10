@@ -380,7 +380,7 @@ function FlowDiagram({
         {/* biome-ignore lint/a11y/noStaticElementInteractions: the drawing's parts are the targets; every step is also a row below, reachable by keyboard. */}
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: same — the rows below are the keyboard path to every step. */}
         <div
-          className="manual-flow-diagram relative px-4"
+          className="manual-diagram manual-flow-diagram relative px-4"
           data-seeking={pointed ? "" : undefined}
           onClick={(event) => {
             const step = stepOf(partUnder(event.target));

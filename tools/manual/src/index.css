@@ -244,6 +244,30 @@
     border-bottom: 0;
   }
 
+  /* A table naming an `equal-width` directive renders as a grid instead of a
+     table layout: `grid-template-columns` (set inline, per column) can hold
+     a content-sized column and equal-share columns side by side, which the
+     table layout algorithm cannot. Rows stay real `<tr>`/`<td>` elements —
+     `display: contents` only drops their own box, not their semantics. */
+  .manual-table-equal {
+    width: 100%;
+  }
+
+  .manual-table-equal table {
+    display: grid;
+    width: 100%;
+  }
+
+  .manual-table-equal thead,
+  .manual-table-equal tbody,
+  .manual-table-equal tr {
+    display: contents;
+  }
+
+  .manual-table-equal thead th {
+    white-space: normal;
+  }
+
   .manual-prose-tight {
     font-size: 0.875rem;
     line-height: 1.65;
@@ -309,18 +333,16 @@
     --pan-fade-end: transparent;
   }
 
-  /* Flow diagrams draw at one and a half times their own size, so their
-     labels read at body scale, and never narrower than the room they have.
-     Whole and lit, until a step is pointed at — then everything that step
-     does not claim recedes. */
-  .manual-flow-diagram {
+  /* Every diagram draws at one and a half times its own size, so its labels
+     read at body scale, and never narrower than the room it has. */
+  .manual-diagram {
     --diagram-scale: 1.5;
   }
 
   /* Every drawing is read at the same magnification, whatever its own size:
      a small chart is not blown up to fill the strip, and one wider than the
      strip pans. Narrower than the strip, it sits in the middle of it. */
-  .manual-flow-diagram svg {
+  .manual-diagram svg {
     display: block;
     width: calc(var(--svg-width, 720) * var(--diagram-scale) * 1px);
     max-width: none;
@@ -328,6 +350,8 @@
     margin-inline: auto;
   }
 
+  /* A flow's drawing is whole and lit, until a step is pointed at — then
+     everything that step does not claim recedes. */
   .manual-flow-diagram [data-step] {
     cursor: pointer;
     transition: opacity 200ms ease-out;
