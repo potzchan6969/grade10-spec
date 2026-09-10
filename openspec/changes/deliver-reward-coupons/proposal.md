@@ -32,8 +32,8 @@ Metric: share of redemptions used at the till within 30 days of being bought.
 - A channel that settles points through an artifact discloses its own
   spending limit before the points leave the balance.
 - An activity entry names which channel it came from.
-- A member is notified the instant staff spend their points or apply a
-  coupon at the till.
+- A member is notified once staff-spent points or an applied coupon at the
+  till actually settles, not while it is still a re-plannable claim.
 
 ## Non-Goals
 
@@ -52,7 +52,7 @@ Metric: share of redemptions used at the till within 30 days of being bought.
   for a physical reward; the order's one-discount rule; the cancellation
   permission split; channel disclosure and activity's channel name.
 - `grade10-site/store/membership`: the till session drops the collection
-  step for one coupon path, and notifies the member instantly on any
+  step for one coupon path, and notifies the member on settlement for any
   staff-assisted spend.
 
 ## Impact
@@ -61,16 +61,19 @@ Metric: share of redemptions used at the till within 30 days of being bought.
   reward definition instead of a fixed-amount default.
 - Loyalty-admin's reward form gains kind, discount and scope fields.
 - The POS extension's collection-confirm surface and the fulfilment queue it
-  serves are removed, once `mint-coupons-as-discount-codes` task group 1
-  ships its replacement guard — see this change's tech-design.md.
+  serves are removed, once `mint-coupons-as-discount-codes` task 3.7 ships
+  its replacement guard (`reserveRewardCoupon()` minting a real, single-use
+  Shopify Discount code for the reward's coupon) — see this change's
+  tech-design.md.
 - Design decisions this change builds on:
   `openspec/changes/archive/2026-09-10-revise-loyalty-programme-rules/tech-design.md`
   and
   `openspec/changes/archive/2026-09-10-add-shopify-membership-pos/tech-design.md`.
 - Dependency: `mint-coupons-as-discount-codes` owns "a coupon is the
   order's one discount" end to end (including the reward's own `couponId`
-  path) and mints a `gift` coupon as a real, single-use Shopify Discount —
-  this change's task group 3 (physical-reward settlement) and task group 6
+  path) and, via its task 3.7, mints the reward's own coupon as a real,
+  single-use Shopify Discount code the moment an order claims it — this
+  change's task group 3 (physical-reward settlement) and task group 6
   (staff-assisted notice) both build on that work rather than duplicating
   or racing it; see tasks.md.
 
