@@ -3,9 +3,6 @@ import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 
-export const IMAGE = new URL("../pages/product.fixture.png", import.meta.url)
-  .href;
-
 /** Bid-card column while the listing payload loads. */
 export function ListingAuctionBidCardLoading() {
   return (
