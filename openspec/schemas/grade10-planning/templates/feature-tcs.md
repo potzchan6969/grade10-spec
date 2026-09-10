@@ -1,6 +1,12 @@
-<!-- One capability's suite, written as feature-tcs.md beside its spec.md: the
-     file name carries the level, and a path across the capabilities of one
-     domain is domain-tcs.md beside them instead.
+<!-- One capability's suite, written as feature-tcs.md beside its spec.md.
+     The file name carries the level, and the same shape serves all four:
+     a path across the capabilities of one domain is domain-tcs.md beside
+     them, across a product's domains is <product>/product-tcs.md, and across
+     products is platform-tcs.md. Above feature level a case composes two or
+     more journeys and its **Trace:** names each of them, the heading id is
+     <product>-<domain>-e2e-US<n> (product: <product>-e2e-US<n>; platform:
+     platform-e2e-US<n>), and product and platform carry no coverage
+     obligation - they are smoke passes.
 
      A derived reading of the spec.md and user-journeys.md beside this file,
      never a second source of truth. The shape below is fixed by
@@ -32,14 +38,18 @@
 * **Priority:** high | medium | low
 * **Status:** draft
 * **Behaviour:** positive | negative | destructive
-* **Type:** functional | smoke | regression | acceptance | usability | security | performance | compatibility | integration
+* **Type:** functional | acceptance | usability | security | performance | compatibility | integration
+* **Suites:** smoke | regression | release | none
 * **Layer:** e2e | api | unit
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
 * **Trace:** <capability>-US-<n>
 
 **Pre-conditions:**
-<!-- from GIVEN — one sentence, or short bullets; or "None." -->
+
+* <!-- from GIVEN — state, not actions. The actor is customer or admin, with
+     its state or grant in brackets: customer(gold member) is on the shopping
+     cart page. Or "None." -->
 
 **Steps:**
 

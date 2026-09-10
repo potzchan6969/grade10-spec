@@ -258,7 +258,8 @@ each case traces scenario ids.
    **Apply what you learned to the drafts already in the resolved suite.**
    Every case whose `**Status:**` is `draft` — the ones you are writing now
    and the ones a previous run left behind — is brought to the learned
-   convention: reword it, bump its `<v>`, and leave it `draft`. Keep its id.
+   convention: reword it and leave it `draft`, keeping its id and its `<v>` -
+   `<v>` tracks behaviour, not prose.
    Never touch a case whose status is `actual` or `deprecated`, and never
    change a case's coverage while restyling it — the steps, pre-conditions
    and expected results still say exactly what the spec says, in the words
