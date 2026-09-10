@@ -162,10 +162,6 @@ export type {
 // shared/ui/auction-record
 export { AuctionRecord } from "./blocks/auction-record/auction-record";
 export { AuctionRecordEmpty } from "./blocks/auction-record/auction-record-empty";
-export {
-  BiddingList,
-  WatchingList,
-} from "./blocks/auction-record/auction-record-lists";
 export { AuctionRecordRow } from "./blocks/auction-record/auction-record-row";
 export { AuctionRecordTabs } from "./blocks/auction-record/auction-record-tabs";
 export type {
@@ -176,12 +172,10 @@ export type {
   AuctionRecordRowProps,
   AuctionRecordRowState,
   AuctionRecordTabsProps,
-  BiddingListProps,
   EmailAlertsCopy,
   EmailAlertsToastCopy,
   WatchButtonCopy,
   WatchButtonProps,
-  WatchingListProps,
 } from "./blocks/auction-record/types";
 export { WatchButton } from "./blocks/auction-record/watch-button";
 // shared/ui/auth-sign-in

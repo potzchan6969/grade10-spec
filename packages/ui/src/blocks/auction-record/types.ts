@@ -15,11 +15,18 @@ export type AuctionRecordRowState =
   | "shipped"
   | "delivered"
   | "hold_releasing"
-  | "hold_released";
+  | "hold_released"
+  | "pending_payment"
+  | "expired"
+  | "processing"
+  | "cancelled"
+  | "refunded";
 
 export type WatchButtonCopy = {
   watch: string;
   watching: string;
+  /** Label on the My Auctions Unwatch button (trash + text). */
+  unwatch?: string;
   watchAriaLabel: string;
   unwatchAriaLabel: string;
   pending?: string;
@@ -53,29 +60,43 @@ export type WatchButtonProps = {
 
 export type AuctionRecordCopy = {
   title: string;
-  watchingHeading: string;
-  biddingHeading: string;
+  /** Table column: listing identity. */
+  auctionColumn: string;
+  /** Table column: current bid amount. */
+  currentBidColumn: string;
+  /** Table column: bidder standing. */
+  standingColumn: string;
+  /** Table column: email alerts switch. */
+  emailAlertsColumn: string;
+  /** Your Standing when the collector has not bid. */
+  noStanding: string;
+  /** @deprecated Prefer one-table My Auctions; kept for AuctionRecordTabs. */
+  watchingHeading?: string;
+  /** @deprecated Prefer one-table My Auctions; kept for AuctionRecordTabs. */
+  biddingHeading?: string;
   emptyTitle: string;
   emptyDescription: string;
   browseCatalogue: string;
   openListing?: string;
   openBidding?: string;
-  /** Label above a row's current bid. Absent renders the amount alone. */
+  /** @deprecated Close sits under the title in the table row. */
   currentBidLabel?: string;
-  /** Label above a row's close. Absent renders the time alone. */
+  /** @deprecated Close sits under the title in the table row. */
   closesAtLabel?: string;
   state?: Partial<Record<AuctionRecordRowState, string>>;
 };
 
 export type AuctionRecordRowCopy = Pick<
   AuctionRecordCopy,
-  "openListing" | "openBidding" | "currentBidLabel" | "closesAtLabel"
+  "openListing" | "openBidding" | "noStanding"
 >;
 
-/** @deprecated Prefer AuctionRecord page sections; kept for transitional imports. */
+/** @deprecated Prefer AuctionRecord one-table page; kept for transitional imports. */
 export type AuctionRecordTabsProps = {
   activeTab: "watching" | "bidding";
-  copy: Pick<AuctionRecordCopy, "watchingHeading" | "biddingHeading"> & {
+  copy: {
+    watchingHeading?: string;
+    biddingHeading?: string;
     watching?: string;
     bidding?: string;
   };
@@ -94,6 +115,7 @@ export type AuctionRecordRowProps = {
   imageSrc?: string;
   imageAlt?: string;
   href?: string;
+  /** True when the collector has bid — Unwatch is omitted. */
   bidPlaced?: boolean;
   biddingHref?: string;
   onOpenBidding?: () => void;
@@ -112,12 +134,14 @@ export type AuctionRecordRowProps = {
   id?: string;
 };
 
+/** @deprecated Prefer composing AuctionRecord; kept for transitional imports. */
 export type WatchingListProps = {
   items: readonly AuctionRecordRowProps[];
   empty?: AuctionRecordEmptyProps;
   className?: string;
 };
 
+/** @deprecated Prefer composing AuctionRecord; kept for transitional imports. */
 export type BiddingListProps = {
   items: readonly AuctionRecordRowProps[];
   empty?: AuctionRecordEmptyProps;

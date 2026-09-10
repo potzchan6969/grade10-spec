@@ -12,21 +12,25 @@ const IMAGE = new URL(
 
 const AUCTION_RECORD_COPY: AuctionRecordCopy = {
   title: "My Auctions",
+  auctionColumn: "Auction",
+  currentBidColumn: "Current Bid",
+  standingColumn: "Your Standing",
+  emailAlertsColumn: "Email Alerts",
+  noStanding: "--",
   watchingHeading: "Watching",
   biddingHeading: "Bidding",
   emptyTitle: "No lots yet",
   emptyDescription:
-    "Watch a lot from its details page to come back to it here, or place a bid. Email alerts are optional.",
-  browseCatalogue: "Browse auctions",
+    "Watch a lot to come back to it here, or place a bid. Email alerts are optional.",
+  browseCatalogue: "Browse lots",
   openListing: "Open listing",
   openBidding: "Bid",
-  currentBidLabel: "Current bid",
-  closesAtLabel: "Closes",
 };
 
 const WATCH_COPY: WatchButtonCopy = {
   watch: "Watch",
   watching: "Watching",
+  unwatch: "Unwatch",
   watchAriaLabel: "Watch this lot",
   unwatchAriaLabel: "Unwatch this lot",
 };
@@ -39,7 +43,7 @@ const EMAIL_ALERTS_COPY: EmailAlertsCopy = {
   enabledToast: { title: "Email alerts on for this lot" },
   mutedToast: {
     title: "Email alerts off for this lot",
-    description: "It stays on Watching.",
+    description: "It stays on My Auctions.",
   },
 };
 
@@ -55,8 +59,7 @@ const BIDDING_EMAIL_ALERTS_COPY: EmailAlertsCopy = {
 const ROW_COPY = {
   openListing: AUCTION_RECORD_COPY.openListing,
   openBidding: AUCTION_RECORD_COPY.openBidding,
-  currentBidLabel: AUCTION_RECORD_COPY.currentBidLabel,
-  closesAtLabel: AUCTION_RECORD_COPY.closesAtLabel,
+  noStanding: AUCTION_RECORD_COPY.noStanding,
 };
 
 function watchingItem(
@@ -81,6 +84,7 @@ function biddingItem(
 ): AuctionRecordRowProps {
   return {
     copy: ROW_COPY,
+    bidPlaced: true,
     emailAlerts: true,
     emailAlertsCopy: BIDDING_EMAIL_ALERTS_COPY,
     imageSrc: IMAGE,
@@ -93,9 +97,8 @@ const WATCHING_CAMERA = watchingItem({
   id: "cam",
   title: "1994 Vintage Rangefinder Camera",
   state: "ending_soon",
-  stateLabel: "Ending soon",
   currentBid: "HK$4,800",
-  closesAt: "9 Sep 2026, 21:00 HKT",
+  closesAt: "Closes 9 Sep 2026, 21:00 HKT",
   href: "#lot-camera",
 });
 
@@ -103,9 +106,8 @@ const WATCHING_POSTER = watchingItem({
   id: "poster",
   title: "Signed Tour Poster, 1/50",
   state: "live",
-  stateLabel: "Open",
   currentBid: "HK$1,050",
-  closesAt: "12 Sep 2026, 18:00 HKT",
+  closesAt: "Closes 12 Sep 2026, 18:00 HKT",
   href: "#lot-poster",
 });
 
@@ -115,18 +117,16 @@ const BIDDING_POSTER = biddingItem({
   state: "outbid",
   stateLabel: "Outbid",
   currentBid: "HK$1,050",
-  closesAt: "12 Sep 2026, 18:00 HKT",
-  detail: "Next bid HK$1,100",
+  closesAt: "Closes 12 Sep 2026, 18:00 HKT",
   href: "#lot-poster",
 });
-
 const BIDDING_CHARIZARD = biddingItem({
   id: "bid-charizard",
   title: "1999 Base Set Charizard PSA 9",
   state: "leading",
   stateLabel: "Leading",
   currentBid: "HK$12,800",
-  closesAt: "17 Sep 2026, 21:00 HKT",
+  closesAt: "Closes 17 Sep 2026, 21:00 HKT",
   href: "#lot-charizard",
 });
 
