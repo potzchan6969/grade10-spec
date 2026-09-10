@@ -74,20 +74,22 @@ reader's account locale.
 ## Letter chrome
 
 Every kind uses the same chrome. Kinds differ in words; the mute control
-**Turn them off** follows the why sentence when `canUnsubscribe` is true
+**Manage alerts** follows the why sentence when `canUnsubscribe` is true
 (`grade10-site-auction-notifications-SC-18`).
 
 | Element | Content |
 | --- | --- |
+| Brand mark | Storefront logo. Activating it opens that storefront's home (`SC-35`), with campaign tags (`SC-36`). |
 | From name | Brand of the storefront the collector watched or bid on |
 | Subject | Event in plain English plus lot title |
 | Preheader | One short clause that completes the subject. Not a repeat of it. |
 | Heading | Kind name |
 | Body | Why they should act (event-first; not “because you are watching”) |
-| Lot block | One primary listing image when available; lot title; **bid amount as a highlight** when the kind carries one; secondary facts (close / start). Omit the image when none exists (`SC-29`, `SC-30`). Image may link to the listing URL |
-| Primary CTA | **View lot** → listing URL on that brand. Outbid uses **Bid again** |
+| Lot block | One primary listing image when available; lot title; **bid amount as a highlight** when the kind carries one; secondary facts (close / start). Omit the image when none exists (`SC-29`, `SC-30`). Image may link to the listing URL. Listing links carry campaign tags (`SC-36`). |
+| Primary CTA | **View lot** → listing URL on that brand. Outbid uses **Bid again**. Carries campaign tags (`SC-36`). |
 | Footer | Why they received the letter; brand legal footer |
-| Mute link | Why: **Email alerts are on for this lot.** Link: **Turn them off** → signed-in **My Auctions** (per-row Email alerts), when `canUnsubscribe` is true. Not the account-wide Auction email alerts master. |
+| Mute link | Why: **Email alerts are on for this lot.** Link: **Manage alerts** → **My Auctions** (per-row Email alerts), when `canUnsubscribe` is true. Signed out: existing sign-in flow, then My Auctions. Not the account-wide Auction email alerts master. Carries campaign tags (`SC-36`). |
+| Campaign tags | On every outbound link: `utm_source=email`, `utm_medium=auction_notification`, `utm_campaign` = letter kind, `utm_content` = `logo` \| `cta` \| `lot_image` \| `lot_title` \| `manage_alerts`. No `utm_term`. |
 
 ## Copy
 
@@ -96,7 +98,7 @@ and times follow `money-amounts` and `dates-and-times`.
 
 ### Bidding opens in 24 hours
 
-- **Mute link:** yes (Turn them off)
+- **Mute link:** yes (Manage alerts)
 
 | Field | Draft |
 | --- | --- |
@@ -105,11 +107,11 @@ and times follow `money-amounts` and `dates-and-times`.
 | Heading | Bidding opens in 24 hours |
 | Body | This lot opens for bids soon. |
 | Lot facts | Starts {startsAt} |
-| Footer why | Email alerts are on for this lot. Turn them off |
+| Footer why | Email alerts are on for this lot. Manage alerts |
 
 ### Bidding has opened
 
-- **Mute link:** yes (Turn them off)
+- **Mute link:** yes (Manage alerts)
 
 | Field | Draft |
 | --- | --- |
@@ -118,11 +120,11 @@ and times follow `money-amounts` and `dates-and-times`.
 | Heading | Bidding has opened |
 | Body | This lot is now open for bids. |
 | Lot facts | Open now. Closes {scheduledClosesAt} |
-| Footer why | Email alerts are on for this lot. Turn them off |
+| Footer why | Email alerts are on for this lot. Manage alerts |
 
 ### Bidding closes in 24 hours
 
-- **Mute link:** yes (Turn them off)
+- **Mute link:** yes (Manage alerts)
 
 | Field | Draft |
 | --- | --- |
@@ -132,11 +134,11 @@ and times follow `money-amounts` and `dates-and-times`.
 | Body | This lot’s scheduled close is about a day away. If bidding extends, the close may move later. You will get a separate notice when extended bidding starts. |
 | Highlight | Current bid {currentBid} |
 | Lot facts | Scheduled close {scheduledClosesAt} |
-| Footer why | Email alerts are on for this lot. Turn them off |
+| Footer why | Email alerts are on for this lot. Manage alerts |
 
 ### Extended bidding has started
 
-- **Mute link:** yes (Turn them off)
+- **Mute link:** yes (Manage alerts)
 
 | Field | Draft |
 | --- | --- |
@@ -146,11 +148,11 @@ and times follow `money-amounts` and `dates-and-times`.
 | Body | A late bid moved this lot’s close. Bidding continues until no further bid lands in the extension window. |
 | Highlight | Current bid {currentBid} |
 | Lot facts | Current close {effectiveClosesAt} |
-| Footer why | Email alerts are on for this lot. Turn them off |
+| Footer why | Email alerts are on for this lot. Manage alerts |
 
 ### New bid on a lot you bid on
 
-- **Mute link:** yes (Turn them off)
+- **Mute link:** yes (Manage alerts)
 
 | Field | Draft |
 | --- | --- |
@@ -160,11 +162,11 @@ and times follow `money-amounts` and `dates-and-times`.
 | Body | Someone else bid on this lot. |
 | Highlight | Leading bid {currentBid} |
 | Lot facts | Closes {effectiveClosesAt} |
-| Footer why | Email alerts are on for this lot. Turn them off |
+| Footer why | Email alerts are on for this lot. Manage alerts |
 
 ### You have been outbid
 
-- **Mute link:** yes (Turn them off)
+- **Mute link:** yes (Manage alerts)
 
 | Field | Draft |
 | --- | --- |
@@ -176,7 +178,7 @@ and times follow `money-amounts` and `dates-and-times`.
 | Secondary | Your bid {yourBid} — same size/weight, to the right of Leading bid, in destructive colour; omit when not supplied. Never the maximum |
 | Lot facts | Closes {effectiveClosesAt} |
 | Primary CTA | Bid again |
-| Footer why | Email alerts are on for this lot. Turn them off |
+| Footer why | Email alerts are on for this lot. Manage alerts |
 
 Do not print the reader's own prior amount unless the template supplied it
 (`grade10-site-auction-notifications` letter-shape requirement). Never print

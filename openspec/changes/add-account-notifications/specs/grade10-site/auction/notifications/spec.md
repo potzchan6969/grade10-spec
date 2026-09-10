@@ -26,8 +26,8 @@ separate preference — see `grade10-site/auction/watchlist`.
   - Outbid: the collector who just lost the lead hears that, not also the new-bid
 - Delivery
   - Registered email: every message goes to the account email
-  - Shared letter: subject, preheader, heading, body, lot block (one primary image when available), listing action, footer
-  - Stop email alerts: letters say alerts are on for the lot, then **Turn them off** → My Auctions
+  - Shared letter: subject, preheader, heading, body, lot block (one primary image when available), listing action, footer; brand mark opens the storefront home; outbound links carry campaign tags
+  - Stop email alerts: letters say alerts are on for the lot, then **Manage alerts** → My Auctions (sign-in first when signed out)
   - Failed send: a temporary failure is retried; a permanent one stops; a false statement is not sent
   - Call-off suppresses: a called-off listing sends nothing further
   - Send log: type, recipient email, listing, and Sent At — no body — filterable by email
@@ -263,6 +263,10 @@ preheader, a heading, a body, a lot block, a single action that opens
 the listing, and a footer. Kinds SHALL differ in their words and in
 whether a way to stop further mail is present, not in a second layout.
 
+The letter SHALL show the storefront's brand mark. Activating that mark
+SHALL open that storefront's home page — the same brand the collector bid
+or watched on.
+
 The lot block SHALL carry the listing's identity and the times or
 amounts that kind requires. When the listing has a primary image, the
 lot block SHALL show exactly one picture of that item — not a gallery.
@@ -275,12 +279,45 @@ A kind whose words name the reader's own bid amount SHALL NOT print if
 that amount was not supplied. Copy and listing links SHALL follow the
 storefront the collector bid or watched on.
 
+Every outbound link in the letter — brand mark, listing action, lot-block
+links to the listing, and **Manage alerts** when present — SHALL carry
+campaign tags as query parameters:
+
+- `utm_source` = `email`
+- `utm_medium` = `auction_notification`
+- `utm_campaign` = the letter kind (`bidding_opens_in_24h`,
+  `bidding_has_opened`, `bidding_closes_in_24h`, `extended_bidding`,
+  `new_bid`, or `outbid`)
+- `utm_content` = the control (`logo`, `cta`, `lot_image`, `lot_title`, or
+  `manage_alerts`)
+
+Grade10 SHALL NOT require `utm_term`. The destination path SHALL stay the
+same; only these query parameters are added.
+
 #### Scenario: grade10-site-auction-notifications-SC-18 - Two kinds share the layout
 
 - **GIVEN** an outbid letter and an open-bidding-has-started letter about the same listing
 - **WHEN** both are rendered
 - **THEN** both have a subject, a preheader, a heading, a body, a lot block, one listing action, and a footer
 - **AND** they differ in their words, not in a second structure
+
+#### Scenario: grade10-site-auction-notifications-SC-35 - The brand mark opens the storefront home
+
+- **GIVEN** any auction letter in this capability for the Grade10 storefront
+- **WHEN** the collector activates the Grade10 brand mark
+- **THEN** the Grade10 website home opens
+
+#### Scenario: grade10-site-auction-notifications-SC-36 - Outbound links carry campaign tags
+
+- **GIVEN** an outbid letter with email alerts on
+- **WHEN** the letter is rendered
+- **THEN** the brand mark URL carries `utm_source=email`,
+  `utm_medium=auction_notification`, `utm_campaign=outbid`, and
+  `utm_content=logo`
+- **AND** the listing action URL carries the same source and medium with
+  `utm_campaign=outbid` and `utm_content=cta`
+- **AND** the **Manage alerts** URL carries the same source and medium with
+  `utm_campaign=outbid` and `utm_content=manage_alerts`
 
 #### Scenario: grade10-site-auction-notifications-SC-29 - The lot block shows one primary image
 
@@ -301,11 +338,14 @@ storefront the collector bid or watched on.
 A letter Grade10 sends about a listing SHALL include a way to stop further
 letters about that listing by turning email alerts off for it. The footer
 SHALL state that email alerts are on for that lot and SHALL offer a link
-**Turn them off** to the signed-in **My Auctions** page, where the collector
-mutes that listing's Email alerts control. That way out SHALL NOT claim that
-an unauthenticated request will stop the letters, and SHALL NOT send the
-collector to the account-wide Auction email alerts master as the primary mute
-for this letter. Muting SHALL NOT remove a watch and SHALL NOT end a bid.
+**Manage alerts** to the **My Auctions** page, where the collector mutes that
+listing's Email alerts control. A signed-out collector who activates
+**Manage alerts** SHALL be sent through the existing Grade10 sign-in flow
+and, on success, SHALL open **My Auctions**. That way out SHALL NOT claim
+that an unauthenticated request will stop the letters, and SHALL NOT send
+the collector to the account-wide Auction email alerts master as the primary
+mute for this letter. Muting SHALL NOT remove a watch and SHALL NOT end a
+bid.
 
 The control SHALL be offered on progress letters and on bid-activity
 letters (outbid and new-bid) whenever the recipient has email alerts on
@@ -315,16 +355,25 @@ for that listing.
 
 - **GIVEN** a collector who watched a listing with email alerts on
 - **WHEN** they receive the start-soon or has-started letter
-- **THEN** the letter includes a way to turn email alerts off for that listing
-- **AND** that way is the signed-in My Auctions page, not an unauthenticated one-click stop
+- **THEN** the letter includes **Manage alerts**
+- **AND** activating it opens My Auctions when the collector is signed in
+- **AND** that way is not an unauthenticated one-click stop
 
 #### Scenario: grade10-site-auction-notifications-SC-20 - An outbid letter can be stopped by muting
 
 - **GIVEN** a collector who was just overtaken
 - **AND** email alerts are on for that listing
 - **WHEN** they receive the outbid letter
-- **THEN** the letter includes a way to turn email alerts off for that listing
-- **AND** that way is the signed-in My Auctions page
+- **THEN** the letter includes **Manage alerts**
+- **AND** activating it opens My Auctions when the collector is signed in
+
+#### Scenario: grade10-site-auction-notifications-SC-34 - Manage alerts from a letter when signed out
+
+- **GIVEN** a collector who receives a letter with email alerts on for that listing
+- **AND** they are signed out of Grade10
+- **WHEN** they activate **Manage alerts**
+- **THEN** the Grade10 site starts its existing sign-in flow
+- **AND** successful sign-in opens My Auctions
 
 ### Requirement: A temporary send failure is retried; a permanent one stops; a false letter is not sent
 
