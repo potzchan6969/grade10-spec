@@ -39,16 +39,19 @@ lands on the order through the same Shopify draft order.
 
 An order carries one discount, whichever kind reached it:
 
-- **In the count** — a discount code, or a reward's coupon; one of them, never
-  both, and a second is refused rather than stacked
+- 🚧 **In the count** — a discount code, or a reward's coupon; one of them,
+  never both, and a second is refused rather than stacked. `mint-coupons-as-discount-codes`
+  delivers this; today a product coupon or a gift can still combine with an
+  order coupon
 - **Points** — its own add-on, outside the count
 - **Free shipping** — its own add-on, outside the count
-- **Site discounts** — their own add-on too, outside the count; combined or
+- 🚧 **Site discounts** — their own add-on too, outside the count; combined or
   not with whichever discount code the order carries per Shopify's own
   combine rule, set per site discount. That rule excludes at the whole
   cart, never just the discount's own product line — a non-combinable site
-  discount refuses any code the order carries rather than stacking or
-  silently dropping it, confirmed on staging
+  discount is expected to refuse any code the order carries rather than
+  stacking or silently dropping it — ❓ unverified: no automatic discount
+  has reached a draft order on staging yet
 - **Both channels** — the same rule in the cart and at the till
 
 ## Online draft order mechanism

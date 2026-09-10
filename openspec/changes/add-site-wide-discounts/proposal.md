@@ -29,7 +29,9 @@ A draft order can now accept Shopify's own automatic discounts during pricing an
 ## Impact
 
 - `packages/shopify/backend/src/admin/draftOrders.ts` — `acceptAutomaticDiscounts: true` on the draft order create and calculate input.
-- `packages/grade10-store/backend/src/services/pos/simulator/basket.ts` — same flag for the POS simulator's draft input.
+- Accepted risk, shared with `mint-coupons-as-discount-codes`: points-basis is computed before the shop's own automatic-discount allocation is known (the order row is written before the draft-order provider call returns `totalDiscountsSet`), so a site-wide discount stacking with points is not accounted for in the points-basis deduction. See that change's tech-design.md Decisions for the accepted-risk record; not resolved by either change.
+
+Note: `packages/grade10-store/backend/src/services/pos/simulator/basket.ts`'s `simulatorDraftInput()` builds an abstract POS sale-input shape (lines, discount, discountCodes), not a literal draft-order-create payload — there is no `acceptAutomaticDiscounts` wire field to set there; the flag applies only where the real Shopify Admin API draft-order call is constructed.
 
 ## References
 
