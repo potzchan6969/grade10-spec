@@ -21,6 +21,7 @@ export * from "./components/display/table-header";
 export * from "./components/display/table-row";
 export * from "./components/display/tabs";
 export * from "./components/display/text";
+export * from "./components/forms/autocomplete";
 export * from "./components/forms/button";
 export * from "./components/forms/checkbox-button";
 export * from "./components/forms/checkbox-list";
