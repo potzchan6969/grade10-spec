@@ -11,6 +11,7 @@ import { ChangeChip } from "../blocks/change-views";
 import { ChildCards } from "../blocks/children-block";
 import { PageHeading } from "./page-heading";
 import { PageView } from "./page-view";
+import { ProductFollowOns } from "./product-follow-ons";
 import { useDocumentTitle } from "./use-document-title";
 
 export function ProductPage({ product }: { product: string }) {
@@ -26,6 +27,7 @@ export function ProductPage({ product }: { product: string }) {
     <PageView eyebrow="Product" index={index} path={`${dir}/index.md`}>
       {authored ? null : <ChildCards dir={dir} index={index} />}
       <ProductChanges id={product} index={index} />
+      <ProductFollowOns id={product} index={index} />
     </PageView>
   );
 }
@@ -53,6 +55,7 @@ function ProductWithoutLanding({
         index={index}
       />
       <ProductChanges id={id} index={index} />
+      <ProductFollowOns id={id} index={index} />
     </>
   );
 }

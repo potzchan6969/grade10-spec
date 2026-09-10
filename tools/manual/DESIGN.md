@@ -527,6 +527,13 @@ topic groups under one Cross-cutting heading, and shows a what's-moving
 strip. Capability pages end with an archived-changes timeline derived
 from the archive artifact.
 
+A product page ends with two derived sections its pages each carry a slice
+of: In flight, the changes whose deltas touch one of its specs, and Pending
+spec, the `::next` reading pooled over every capability the taxonomy gives
+it — each change named once with the capabilities it was about, because a
+change about two of them wrote its follow-ons once. Neither is authored and
+neither draws a heading over nothing.
+
 The header carries a bell against `/recent`: the badge counts events newer
 than the marker this reader last stored, capped at 9+, and a reader with no
 marker yet gets the newest date written silently rather than a badge

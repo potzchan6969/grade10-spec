@@ -15,6 +15,7 @@ import {
   pagePath,
   routeForPagePath,
   slugify,
+  specTitle,
 } from "./paths";
 import { findRequirement } from "./requirements";
 import type {
@@ -700,13 +701,72 @@ export function followOnsForSpec(
     if (about) take(change);
   }
 
+  return [...found.values()].sort(byIntent);
+}
+
+/** Live intent first — a change still in flight has not spent its follow-ons
+ * — then the shipped ones, newest first. */
+function byIntent(a: FollowOn, b: FollowOn): number {
   const shipped = (one: FollowOn) => one.change.status === "archived";
-  return [...found.values()].sort((a, b) => {
-    if (shipped(a) !== shipped(b)) return shipped(a) ? 1 : -1;
-    return shipped(a)
-      ? byShipped(a.change, b.change)
-      : byLastMoved(a.change, b.change);
-  });
+  if (shipped(a) !== shipped(b)) return shipped(a) ? 1 : -1;
+  return shipped(a)
+    ? byShipped(a.change, b.change)
+    : byLastMoved(a.change, b.change);
+}
+
+/** A domain's follow-on, which is one of its capabilities' with the
+ * capabilities named: the same change speaks for every spec it is about, and a
+ * reader arriving at the domain has not yet chosen one. */
+export type ProductFollowOn = FollowOn & { specs: string[] };
+
+/**
+ * What the changes about a domain's capabilities said would come next, pooled
+ * from the capability pages that each show their own.
+ *
+ * Deduped by change and never by bullet: a change about two capabilities wrote
+ * its follow-ons once, and both are named against it rather than the bullets
+ * being repeated under each. Ordering and dating are the capability block's —
+ * this is the same reading, one level up.
+ */
+export function followOnsForProduct(
+  index: ManualIndex,
+  productId: string,
+  archived: ChangeEntry[] = [],
+): ProductFollowOn[] {
+  const found = new Map<string, ProductFollowOn>();
+  for (const specId of specsOfProduct(index, productId, archived)) {
+    for (const followOn of followOnsForSpec(index, specId, archived)) {
+      const seen = found.get(followOn.change.id);
+      if (seen) seen.specs.push(specId);
+      else found.set(followOn.change.id, { ...followOn, specs: [specId] });
+    }
+  }
+  return [...found.values()].sort(byIntent);
+}
+
+/**
+ * The spec ids a product owns, in id order. Read off the taxonomy the same way
+ * a change's owner is, so a capability that exists only as a delta — durably
+ * unwritten, and the kind a follow-on most often names — is counted with the
+ * durable ones.
+ */
+export function specsOfProduct(
+  index: ManualIndex,
+  productId: string,
+  archived: ChangeEntry[] = [],
+): string[] {
+  const owned = new Set<string>();
+  const take = (specId: string) => {
+    if (ownerOfSpec(specId, index.snapshot.taxonomy) === productId) {
+      owned.add(specId);
+    }
+  };
+  for (const specId of index.specById.keys()) take(specId);
+  for (const specId of index.changesBySpec.keys()) take(specId);
+  for (const change of archived) {
+    for (const delta of change.deltas) take(delta.spec);
+  }
+  return [...owned].sort((a, b) => a.localeCompare(b));
 }
 
 /** A cited id as somewhere to click. `to` is absent when the id names nothing
@@ -1049,6 +1109,20 @@ export function byShipped(a: ChangeEntry, b: ChangeEntry): number {
     (Number.isNaN(right) ? 0 : right) - (Number.isNaN(left) ? 0 : left) ||
     a.id.localeCompare(b.id)
   );
+}
+
+/**
+ * What a capability is called on screen: the title of the page that documents
+ * it, the spec's own title where no page does, and the id read out where
+ * neither exists yet.
+ */
+export function capabilityTitle(index: ManualIndex, specId: string): string {
+  const route = index.routeBySpec.get(specId);
+  const page = route ? index.pageByRoute.get(route) : undefined;
+  const titled = page?.ast?.frontmatter.title;
+  if (titled) return titled;
+  const spec = index.specById.get(specId);
+  return spec ? specTitle(spec) : humanize(specId.split("/").at(-1) ?? specId);
 }
 
 /** Route to a spec's page, falling back to the route its id implies. */
