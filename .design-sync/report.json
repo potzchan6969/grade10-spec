@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10T13:55:38.964Z",
+  "generatedAt": "2026-09-10T14:20:14.933Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -796,6 +796,8 @@
     "6554-6128": "Dropdown Menu",
     "6554-6227": "Search Input",
     "6554-6228": "Dropdown Menu",
+    "6554-6278": "Empty State",
+    "6554-6287": "Empty State",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
