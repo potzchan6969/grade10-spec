@@ -43,6 +43,15 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
 
   const { frontmatter, blocks } = page.ast;
   const specId = frontmatter.spec;
+  const changes = specId ? changesForSpec(index, specId) : [];
+  const proposals = specId ? proposalsForSpec(index, specId) : [];
+  // A change a proposal placed on a section shows there and nowhere else;
+  // the ribbon keeps what has no section on this page.
+  const unplaced = changes.filter(
+    (change) => !change.sections?.some((section) => section.page === path),
+  );
+  const ribbon =
+    unplaced.length > 0 || proposals.length > 0 || changes.length === 0;
 
   return (
     <>
@@ -53,10 +62,10 @@ export function PageView({ index, path, eyebrow, children }: PageViewProps) {
         title={frontmatter.title}
       />
       <PageWarnings warnings={warningsForPage(index.snapshot.warnings, path)} />
-      {specId ? (
+      {specId && ribbon ? (
         <ChangeRibbon
-          changes={changesForSpec(index, specId)}
-          proposals={proposalsForSpec(index, specId)}
+          changes={unplaced}
+          proposals={proposals}
           specId={specId}
         />
       ) : null}
