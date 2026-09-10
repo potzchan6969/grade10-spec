@@ -23,18 +23,29 @@ const meta = {
   },
   argTypes: {
     compact: { control: "boolean" },
+    frameless: { control: "boolean" },
   },
 } satisfies Meta<typeof EmptyState>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Figma's default rung: `isCompact=false`. */
+/** Figma's default rung: `isCompact=false, hasFrame=true`. */
 export const Default: Story = {};
 
-/** Figma's compact rung: tighter padding, icon well, and description type. */
+/** Figma's compact framed rung: tighter padding, icon well, and description type. */
 export const Compact: Story = {
   args: { compact: true },
+};
+
+/** Figma's frameless rung: `hasFrame=false` — no border, fill, or radius. */
+export const Frameless: Story = {
+  args: { frameless: true },
+};
+
+/** Figma's compact frameless rung: both axes at their non-default. */
+export const CompactFrameless: Story = {
+  args: { compact: true, frameless: true },
 };
 
 export const WithoutIcon: Story = {

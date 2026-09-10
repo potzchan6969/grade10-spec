@@ -7,6 +7,11 @@ type EmptyStateProps = Omit<ComponentProps<"div">, "title"> & {
    * glyph, the header gap, and the description type scale.
    */
   compact?: boolean;
+  /**
+   * Figma's `hasFrame=false` VARIANT. Frameless drops the dashed border,
+   * subtle fill, and radius; padding and content scale stay with `compact`.
+   */
+  frameless?: boolean;
   /** Figma's `title` TEXT property. */
   title: ReactNode;
   /** Figma's `description` TEXT property. Omit to hide (Figma `hasDescription`). */
@@ -18,21 +23,24 @@ type EmptyStateProps = Omit<ComponentProps<"div">, "title"> & {
 };
 
 /**
- * Empty state placeholder for no-data scenarios.
+ * Empty state placeholder for no-data scenarios. Shows an icon, title,
+ * description, and optional actions. Use isCompact for constrained areas.
  *
- * Figma set `Empty State` (`2571:46`). The only VARIANT axis is `isCompact`:
- * compact shrinks padding (`p-6` → `p-4`), the icon well (`size-12` →
- * `size-10`), the glyph (24 → 20), the header gap (`gap-2` → `gap-1`), and
- * the description type scale (`text-sm` → `text-xs`). Title stays
- * `text-base/medium` in `Base/foreground` on both rungs; description is
- * `Base/secondary-foreground`. The shell fills `Base/background-subtle`,
- * strokes `Base/border` dashed, and rounds `Radius/radius-2xl`. Actions are
- * consumer-owned — Figma draws two `Button` `md` instances (secondary then
- * primary).
+ * Figma set `Empty State` (`2571:46`). Two VARIANT axes: `isCompact` and
+ * `hasFrame`. Compact shrinks padding (`p-6` → `p-4`), the icon well
+ * (`size-12` → `size-10`), the glyph (24 → 20), the header gap (`gap-2` →
+ * `gap-1`), and the description type scale (`text-sm` → `text-xs`). Title
+ * stays `text-base/medium` in `Base/foreground` on every rung; description
+ * is `Base/secondary-foreground`. With a frame (`hasFrame=true`, the
+ * default), the shell fills `Base/background-subtle`, strokes `Base/border`
+ * dashed, and rounds `Radius/radius-2xl`. Frameless drops that chrome and
+ * keeps the same padding. Actions are consumer-owned — Figma draws two
+ * `Button` `md` instances (secondary then primary).
  */
 function EmptyState({
   className,
   compact = false,
+  frameless = false,
   title,
   description,
   icon,
@@ -43,8 +51,12 @@ function EmptyState({
     <div
       data-slot="empty-state"
       data-compact={compact || undefined}
+      data-frameless={frameless || undefined}
       className={cn(
-        "flex w-full flex-col items-center gap-4 rounded-2xl border border-dashed border-border bg-background-subtle",
+        "flex w-full flex-col items-center gap-4",
+        frameless
+          ? null
+          : "rounded-2xl border border-dashed border-border bg-background-subtle",
         compact ? "p-4" : "p-6",
         className,
       )}
