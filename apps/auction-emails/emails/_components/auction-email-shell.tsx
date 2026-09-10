@@ -5,6 +5,7 @@ import {
   Head,
   Html,
   Img,
+  Link,
   Preview,
   Section,
   Tailwind,
@@ -19,11 +20,16 @@ export type AuctionEmailShellProps = {
   /** Absolute or /static URL for the brand mark. Defaults to the Grade10 mono logo. */
   logoUrl?: string;
   logoAlt?: string;
+  /** Storefront home. Activating the brand mark opens this URL. */
+  homeUrl?: string;
   children: ReactNode;
 };
 
 /** Preview-server path; production should pass a CDN absolute URL. */
 export const GRADE10_LOGO_STATIC = "/static/grade10-logo.png";
+
+/** Preview default for Grade10 storefront home. */
+export const GRADE10_HOME_URL = "https://grade10.com";
 
 const theme = grade10Theme;
 
@@ -34,6 +40,7 @@ export function AuctionEmailShell({
   preheader,
   logoUrl = GRADE10_LOGO_STATIC,
   logoAlt = "Grade10",
+  homeUrl = GRADE10_HOME_URL,
   children,
 }: AuctionEmailShellProps) {
   return (
@@ -49,21 +56,23 @@ export function AuctionEmailShell({
               className="border-0 border-b border-solid border-stroke px-8"
               style={{ paddingBottom: "22px", paddingTop: "18px" }}
             >
-              <Img
-                alt={logoAlt}
-                height={26}
-                src={logoUrl}
-                style={{
-                  display: "block",
-                  fontSize: 0,
-                  height: "26px",
-                  lineHeight: 0,
-                  margin: 0,
-                  padding: 0,
-                  width: "140px",
-                }}
-                width={140}
-              />
+              <Link href={homeUrl}>
+                <Img
+                  alt={logoAlt}
+                  height={26}
+                  src={logoUrl}
+                  style={{
+                    display: "block",
+                    fontSize: 0,
+                    height: "26px",
+                    lineHeight: 0,
+                    margin: 0,
+                    padding: 0,
+                    width: "140px",
+                  }}
+                  width={140}
+                />
+              </Link>
             </Section>
             <Section className="p-8">{children}</Section>
           </Container>
