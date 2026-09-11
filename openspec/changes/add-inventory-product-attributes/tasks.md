@@ -9,7 +9,7 @@
 - [x] 2.2 Add the Inventory product-display and Auction opaque-listing-attribute contracts, locale-aware live display, and dynamic filter contracts, replacing the hard-coded metadata shape for grade10-admin-inventory-catalog-SC-80 through SC-90
 - [x] 2.3 Verify contracts and fixtures with `pnpm run typecheck`, `pnpm run lint`, and the affected inventory and Auction contract tests
 
-## 3. Data Migration (grade10)
+## 3. Data Migration (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Add append-only Inventory and Auction migrations for product attributes, exact-tuple product schemas and draft/published revisions, `auction_display_attribute_keys`, and `auction.listings.listing_attributes` JSONB for grade10-admin-inventory-catalog-SC-69 through SC-90
 - [ ] 3.2 Preserve `products.metadata` as legacy unstructured data and add keys, checks, and typed-value indexes only for product attributes; listing attributes stay opaque JSONB
