@@ -139,7 +139,7 @@ function ProductCardImage({
         /* Phones / no-hover: round cart stays visible without a hover reveal. */
         "[@media(hover:none),_(pointer:coarse)]:[&_.cart-control]:pointer-events-auto",
         "[@media(hover:none),_(pointer:coarse)]:[&_.cart-control]:opacity-100",
-        /* Narrow listing (same breakpoint as the filter drawer): always on. */
+        /* Narrow listing (same breakpoint as pill chrome): always on. */
         "max-lg:[&_.cart-control]:pointer-events-auto max-lg:[&_.cart-control]:opacity-100",
         className,
       )}

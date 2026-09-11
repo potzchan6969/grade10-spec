@@ -123,11 +123,10 @@ function toAutocompleteGroups(
  * Heading, search, and facet groups. Figma set
  * `Product / Product Filter` (`4357:527`).
  *
- * On a wide viewport groups stack. In the narrow filter drawer they can be
- * tabs (`facetLayout="tabs"`) so expanding one list does not push another
- * down the scroll. Search suggestions use the design-system Autocomplete.
- * The filter reports a change and displays what it is given; it never holds
- * the selection.
+ * On a wide viewport groups stack. `facetLayout="tabs"` remains available for
+ * surfaces that present groups as tabs. Search suggestions use the
+ * design-system Autocomplete. The filter reports a change and displays what
+ * it is given; it never holds the selection.
  */
 function ProductFilter({
   copy,
