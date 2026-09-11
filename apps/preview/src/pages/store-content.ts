@@ -106,18 +106,23 @@ const SORT_OPTIONS: SortOption[] = [
   { id: "price-desc", label: "Highest price" },
 ];
 
+const ALL_WORLD_OPTIONS = [
+  { id: "pokemon", label: "Pokémon", count: "51" },
+  { id: "shohei-ohtani", label: "Shohei Ohtani", count: "15" },
+  { id: "music", label: "Music", count: "10" },
+  { id: "manga-anime", label: "Manga & Anime", count: "9" },
+  { id: "formula-1", label: "Formula 1", count: "6" },
+  { id: "one-piece", label: "One Piece", count: "4" },
+  { id: "disney", label: "Disney", count: "3" },
+  { id: "sports", label: "Sports", count: "2" },
+] as const;
+
 const FILTER_GROUPS: FilterGroup[] = [
   {
     id: "worlds",
     label: "Worlds",
     expandLabel: "See all worlds",
-    options: [
-      { id: "pokemon", label: "Pokémon", count: "51" },
-      { id: "shohei-ohtani", label: "Shohei Ohtani", count: "15" },
-      { id: "music", label: "Music", count: "10" },
-      { id: "manga-anime", label: "Manga & Anime", count: "9" },
-      { id: "formula-1", label: "Formula 1", count: "6" },
-    ],
+    options: ALL_WORLD_OPTIONS.slice(0, 5).map((option) => ({ ...option })),
   },
   {
     id: "types",
@@ -133,6 +138,15 @@ const FILTER_GROUPS: FilterGroup[] = [
       { id: "graded-manga", label: "Graded Manga", count: "5" },
     ],
   },
+];
+
+const FILTER_GROUPS_EXPANDED: FilterGroup[] = [
+  {
+    id: "worlds",
+    label: "Worlds",
+    options: ALL_WORLD_OPTIONS.map((option) => ({ ...option })),
+  },
+  FILTER_GROUPS[1],
 ];
 
 function appliedFiltersFromSelection(
@@ -286,6 +300,7 @@ const STORE_CART_COPY = {
 export {
   appliedFiltersFromSelection,
   FILTER_GROUPS,
+  FILTER_GROUPS_EXPANDED,
   INITIAL_SELECTION,
   PRODUCTS,
   SORT_OPTIONS,
