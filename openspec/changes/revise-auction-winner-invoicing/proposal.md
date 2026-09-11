@@ -60,9 +60,13 @@ release.
 - **Every paid record names its method.** A card receipt shows the brand and
   last four digits; a manual receipt shows the method and reference.
 - **The shipping-rate calculator is retired** from the invoice flow.
+- **BREAKING — Ending soon is no longer an outcome.** A lot with bidding open
+  is Live until it closes; how long it has left is read from its close.
 
 ## Non-Goals
 
+- **The catalogue's Ending soon filter and the one-hour reminder.** Neither is
+  an outcome, and both stay.
 - **Automatic expiry or suspension before an invoice exists.** A winner who
   never confirms an address is never suspended; the operator decides.
 - **Notifying operators by email or in-app notice.** The queue is how an

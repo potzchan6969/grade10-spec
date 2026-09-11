@@ -262,8 +262,7 @@ Grade10 SHALL NOT compute a second status for the operator.
 | --- | --- | --- | --- |
 | Draft | Not yet available for bidding | Before a sale | No |
 | Scheduled | Published, the start has not arrived | Before a sale | No |
-| Live | Bidding open, more than 60 minutes to close | Before a sale | No |
-| Ending soon | Bidding open, 60 minutes or less to close | Before a sale | No |
+| Live | Bidding open, until the lot closes | Before a sale | No |
 | Unsold | Bidding ended with no winner | Before a sale | No |
 | Called off | The lot was withdrawn before a sale | Before a sale | No |
 | Awaiting Address | Derived: no invoice sent, no confirmed address | Order | No |
@@ -284,12 +283,16 @@ Awaiting Address or Preparing Invoice that
 has waited 72 hours or more in that stage SHALL also carry the Overdue mark,
 per "The order detail shows how long an order has waited".
 
+There is no Ending soon outcome: how long bidding has left is read from the
+lot's close. Scenario `grade10-admin-auction-post-sale-SC-19` keeps its title
+with its id. The title is historical: a lot inside its last hour is Live.
+
 #### Scenario: grade10-admin-auction-post-sale-SC-19 - A lot inside its last hour is Ending soon
 
 - **GIVEN** a published lot whose close is 60 minutes or less away and has not
   passed
 - **WHEN** an operator reads the queue
-- **THEN** that lot's outcome is Ending soon
+- **THEN** that lot's outcome is Live
 
 #### Scenario: grade10-admin-auction-post-sale-SC-20 - A won lot's outcome is its derived order status
 
