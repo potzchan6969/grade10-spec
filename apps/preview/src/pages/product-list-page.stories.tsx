@@ -9,6 +9,7 @@ import {
   type PromoState,
   type SearchSuggestion,
   type SearchSuggestionGroup,
+  SiteHeader,
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { createElement, useEffect, useMemo, useState } from "react";
@@ -22,11 +23,11 @@ import {
   SORT_OPTIONS,
   STORE_CART_COPY,
   STORE_FOOTER,
-  STORE_NAV,
+  STORE_SITE_HEADER,
   sortTriggerLabel,
   UTILITY_LINKS,
 } from "./store-content";
-import { WorkbenchAccountNav, navigateToStory } from "./workbench-account-nav";
+import { navigateToStory } from "./workbench-story-nav";
 
 /** Storybook story id for the Product Detail page assembly. */
 const PRODUCT_DETAIL_STORY_ID = "pages-product-detail-page--default";
@@ -117,8 +118,7 @@ function suggestionsForDraft(
  * change; this workbench simulates that fetch with a short loading beat.
  *
  * The nav cart button opens the shared drawer; checkout redirect stays a
- * workbench stub (consumer-owned in a real store). Account opens a temporary
- * workbench menu with Order History.
+ * workbench stub (consumer-owned in a real store). Header is `SiteHeader`.
  */
 function ProductListPage() {
   const [selection, setSelection] =
@@ -291,8 +291,8 @@ function ProductListPage() {
 
   return (
     <div className="min-h-svh bg-white">
-      <WorkbenchAccountNav
-        {...STORE_NAV}
+      <SiteHeader
+        {...STORE_SITE_HEADER}
         promo={null}
         onCartClick={() => setCartOpen(true)}
       />

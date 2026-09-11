@@ -36,7 +36,7 @@ import { AuctionLotDetailsPageShell } from "./auction-lot-details-page-shell";
 import {
   navigateToStory,
   ORDER_DETAILS_STORY_ID,
-} from "./workbench-account-nav";
+} from "./workbench-story-nav";
 
 const LIVE_BID_INTERVAL_MS = 8_000;
 

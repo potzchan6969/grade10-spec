@@ -1,9 +1,8 @@
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { LISTING_LOT_GRID_CLASS } from "@grade10/ui";
+import { LISTING_LOT_GRID_CLASS, SiteHeader } from "@grade10/ui";
 import type { ReactNode } from "react";
-import { AUCTION_NAV } from "./auction-lot-details-content";
+import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
-import { WorkbenchAccountNav } from "./workbench-account-nav";
 
 type AuctionLotDetailsPageShellProps = {
   children: ReactNode;
@@ -16,7 +15,7 @@ function AuctionLotDetailsPageShell({
 }: AuctionLotDetailsPageShellProps) {
   return (
     <div className="flex min-h-svh flex-col bg-background">
-      <WorkbenchAccountNav {...AUCTION_NAV} promo={AUCTION_NAV.promo} />
+      <SiteHeader {...AUCTION_SITE_HEADER} />
       <main className="mx-auto w-full max-w-[1280px] flex-1 px-8 pb-16">
         <div className="flex flex-col gap-12 pt-6">
           {header}

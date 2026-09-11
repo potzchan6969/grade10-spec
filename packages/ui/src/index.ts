@@ -211,6 +211,13 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
+// shared/ui/site-chrome
+export {
+  SiteHeader,
+  type SiteHeaderCopy,
+  type SiteHeaderProps,
+  type SiteHeaderSession,
+} from "./blocks/site-chrome/site-header";
 // shared-ui/loyalty-membership
 export {
   ActivityList,
