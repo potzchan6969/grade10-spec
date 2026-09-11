@@ -28,7 +28,7 @@ Needs group 2's submodule bump for the `@grade10/ui` export set; nothing else fr
 - [x] 3.2 Collapse `SignInFlow` to the email step: no `otp` step, no code copy, `onSignedIn` kept for One Tap — satisfies *The email step has no code control* (`shared-auth-sign-in-SC-33`)
 - [x] 3.3 Drop the code words from the consoles' `consoleCopy`, so both admin panels show one email action
 - [x] 3.4 Update `signInSurface`, the fixture client, and the `useSignIn` and `SignInFlow` tests to the one-step flow
-- [ ] 3.5 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:admin-bundle`
+- [x] 3.5 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:admin-bundle`
 
 ## 4. Manual and architecture docs (grade10-spec + grade10) (owner: @sean)
 
