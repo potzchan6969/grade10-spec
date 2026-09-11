@@ -153,13 +153,25 @@ The service accepts only the documented shape: text `minLength`, `maxLength`,
 boolean has no additional rule. It rejects incompatible keys, malformed regular
 expressions, inverted ranges, and unknown keys before writing.
 
-```text
-tags ─────< product_classifications >──── products ─────< product_field_values >──── product_field_value_translations
-  │                                                   │                 │
-  └────< content_types ────< content_type_revisions ──┼────< content_type_fields >──── content_fields
-                                  │                   │                                  │
-                                  └────< content_type_auction_fields                    ├────< content_field_labels
-                                                                                          └────< content_field_options >──── content_field_option_labels
+```mermaid
+erDiagram
+  tags ||--o{ product_classifications : classifies
+  products ||--|| product_classifications : has
+  products ||--o{ product_field_values : stores
+  content_fields ||--o{ product_field_values : defines
+  product_field_values ||--o{ product_field_value_translations : localizes
+
+  tags ||--o{ content_types : selects
+  content_types ||--o{ content_type_revisions : has
+  content_type_revisions ||--o{ content_type_fields : assigns
+  content_fields ||--o{ content_type_fields : reuses
+  content_type_fields ||--o{ content_type_field_labels : overrides
+  content_type_fields ||--o{ content_type_field_options : permits
+  content_type_revisions ||--o{ content_type_auction_fields : presents
+
+  content_fields ||--o{ content_field_labels : labels
+  content_fields ||--o{ content_field_options : offers
+  content_field_options ||--o{ content_field_option_labels : localizes
 ```
 
 ## Service Interfaces
