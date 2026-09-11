@@ -27,6 +27,7 @@ export default defineConfig({
             "src/lib/format-money.test.ts",
             "src/blocks/auction-listing/listing-age-verification-form.test.ts",
             "src/blocks/auction-listing/listing-bid-money.test.ts",
+            "src/blocks/auth-sign-in/public-exports.test.ts",
             "src/blocks/store-order-detail/public-exports.test.ts",
           ],
         },

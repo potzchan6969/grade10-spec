@@ -35,8 +35,8 @@ type SignInCardProps = {
    * this component's — there is deliberately no uncontrolled fallback. */
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  /** The active step — a `SignInEmailForm`, a `SignInCodeForm`, or anything
-   * else the consumer's flow needs. */
+  /** The active step — a `SignInEmailForm`, or anything else the consumer's
+   * flow needs. */
   children: ReactNode;
   /** Progress line under the step — "check your inbox". Not an error: field
    * errors travel on the step's own `error` prop. */
@@ -71,7 +71,7 @@ type SignInCardProps = {
  * one local override is the body gap: the generic Dialog draws its body at 16
  * and this surface at 24.
  *
- * Which step renders is the consumer's decision — the flow (magic link, code,
+ * Which step renders is the consumer's decision — the flow (magic link,
  * OAuth, or any mix) is product state, so the dialog holds no step machine.
  */
 function SignInCard({

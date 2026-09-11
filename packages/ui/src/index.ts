@@ -187,11 +187,6 @@ export {
   type SignInCardProps,
 } from "./blocks/auth-sign-in/sign-in-card";
 export {
-  SignInCodeForm,
-  type SignInCodeFormCopy,
-  type SignInCodeFormProps,
-} from "./blocks/auth-sign-in/sign-in-code-form";
-export {
   SignInEmailForm,
   type SignInEmailFormCopy,
   type SignInEmailFormProps,

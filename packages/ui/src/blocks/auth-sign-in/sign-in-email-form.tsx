@@ -12,29 +12,22 @@ type SignInEmailFormCopy = {
   /** What the empty field says. Omit it and the field shows nothing. */
   emailPlaceholder?: string;
   submit: string;
-  /** Names the alternative path — email a code instead. Omit it, and the
-   * handler with it, and no second button renders. */
-  codeAction?: string;
 };
 
 type SignInEmailFormProps = {
   copy: SignInEmailFormCopy;
-  /** Controlled by the consumer: the address outlives this step — the code
-   * step shows it and the verify call sends it. */
+  /** Controlled by the consumer: the address outlives this step — what the
+   * send action reports it to belongs to the flow, not to the field. */
   email: string;
   onEmailChange: (email: string) => void;
   error?: ReactNode;
   submitting?: boolean;
   onSubmit: () => void;
-  /** Alternative path: email a one-time code instead. */
-  requestingCode?: boolean;
-  onRequestCode?: () => void;
 };
 
 /**
- * The address step: one email field, a primary send action, and optionally a
- * second path that requests a code. What each action does — magic link,
- * password reset, anything — belongs to the consumer.
+ * The address step: one email field and one send action. What that action
+ * does — magic link, password reset, anything — belongs to the consumer.
  *
  * The field carries no visible label, which is what Figma's `email-section`
  * (4666:1475) draws: a placeholder and nothing above it. `copy.email` stays
@@ -47,8 +40,6 @@ function SignInEmailForm({
   error,
   submitting = false,
   onSubmit,
-  requestingCode = false,
-  onRequestCode,
 }: SignInEmailFormProps) {
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -71,24 +62,9 @@ function SignInEmailForm({
           type="email"
           value={email}
         />
-        <Button
-          disabled={!email || requestingCode}
-          loading={submitting}
-          type="submit"
-        >
+        <Button disabled={!email} loading={submitting} type="submit">
           {copy.submit}
         </Button>
-        {onRequestCode ? (
-          <Button
-            disabled={!email || submitting}
-            loading={requestingCode}
-            onClick={onRequestCode}
-            type="button"
-            variant="secondary"
-          >
-            {copy.codeAction}
-          </Button>
-        ) : null}
       </VStack>
     </form>
   );
