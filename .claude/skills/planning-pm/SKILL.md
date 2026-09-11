@@ -13,8 +13,13 @@ first three:
 | `proposal.md` | Why this problem, for whom, what it will not do |
 | `specs/<capability>/spec.md` | The requirement deltas, with id'd scenarios |
 | `specs/<capability>/user-journeys.md` | Who walks them, and what accepts each story |
+| `specs/<capability>/feature-tcs.md` | The suite derived from those journeys, every case `draft` |
 
-**Stop there.** QA derives `feature-tcs.md`, a designer writes `ui-design.md`,
+The suite is yours to draft, beside every capability whose journeys file holds
+a story; one that says `**Walked by:** nobody` has nothing to derive. QA
+reviews and extends it with `/tcs-review`.
+
+**Stop there.** A designer writes `ui-design.md`,
 and the engineer who picks the change up writes `tech-design.md` and
 `tasks.md` — on this same change, never a second one. A change with no
 `tasks.md` reads as still being planned on both boards; that is the handoff
@@ -152,7 +157,7 @@ using the exact existing path for a modified capability.
 ## user-journeys.md
 
 One beside each `spec.md`, holding a single `## User journeys` section. This is
-what QA derives the suites from, so it is finished when every story names an
+what the suites beside it are derived from, so it is finished when every story names an
 actor the spec already knows and scenarios that already exist.
 
 - At most five journeys across every capability the change touches. A journey

@@ -5,7 +5,8 @@ schema: grade10-planning
 
 # This repo is an OpenSpec store, and more besides: PM and design own the
 # proposals, specs and journeys under openspec/ and the manual under docs/prds/,
-# QA derives the test cases beside them, engineering writes the delivery plan -
+# and the feature test cases derived from them, QA reviews those suites and
+# owns the wider ones, engineering writes the delivery plan -
 # ui-design, tech-design, tasks - on top of them, and
 # packages/design-system/ holds the components and tokens the applications
 # consume. Engineering reads and checks off the plan from grade10, which points
@@ -27,7 +28,8 @@ context: |
   `@grade10/ui` for the shared compound components a capability spec names, and
   `@grade10/i18n` for the message catalogs.
   Audience for these artifacts: a PM or designer writing the proposal, the
-  specs and the journeys and stopping there, QA deriving the test cases, a
+  specs, the journeys and the feature suites derived from them and stopping
+  there, QA reviewing those suites and deriving the wider ones, a
   designer writing the ui design, an engineer writing the tech design and the
   tasks when delivery is planned, and an engineer in the application repo
   reading all of it as the only source of truth for what to build.
@@ -118,7 +120,7 @@ rules:
     - "A suite's file name carries its level: a capability writes `feature-tcs.md`, and a path across the capabilities of one domain writes `specs/<product>/<domain>/domain-tcs.md` beside them. The wider smoke passes - a product's `product-tcs.md`, the store's `platform-tcs.md` - are derived over the durable specs, not under a change. `test-cases.md` is not a suite name; the suites that carried it were renamed at tcs-rules r3.0."
     - "A derived reading of those two files, never a second source of truth. `docs/governance/specs-to-test-cases.md` governs the whole shape - the journey sections, the case ids, the classification block, the `**Trace:**` line, and the file header. Follow that document; do not invent a variant."
     - "Draft with the `spec-to-tcs` skill and review with `tcs-review` rather than writing by hand. `pnpm run tcs:validate` checks every suite in the store, and CI runs it on every push."
-    - "A capability whose `user-journeys.md` says `**Walked by:** nobody` has nothing to derive - write no suite for it. One with no journeys file at all is a `pnpm check:manual` failure, not an exemption."
+    - "Every `user-journeys.md` pairs with a `feature-tcs.md` beside it, drafted by the PM in the same change. The one exemption is a capability whose journeys file says `**Walked by:** nobody` - nothing to derive, so write no suite for it. One with no journeys file at all is a `pnpm check:manual` failure, not an exemption."
   tech-design:
     - "Use top-level sections for Context, Goals / Non-Goals, Decisions, each material implementation contract, Risks / Trade-offs, and Migration Plan. Database Schema and Service Interfaces are implementation contracts, not subsections of Decisions. Omit a section that does not apply."
     - Use bullets and tables for dense technical material; reserve paragraphs for short connective text.

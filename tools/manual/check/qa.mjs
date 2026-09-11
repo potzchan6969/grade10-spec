@@ -50,9 +50,26 @@ function suiteOf(spec) {
   };
 }
 
+/** RULE `derived`: a capability someone walks pairs its journeys with a
+ * suite. The one exemption is the capability whose journeys file says
+ * `**Walked by:** nobody` — nobody walks it, so there is nothing to derive.
+ * Anywhere else a missing suite is a change that stopped at the stories. */
+function checkDerived(ctx, spec, dir, present) {
+  if (present || spec.journeysError) return;
+  if (spec.journeys === undefined || spec.unwalked === true) return;
+  if (spec.journeys.length === 0) return;
+  ctx.add(
+    "derived",
+    `${dir}/feature-tcs.md`,
+    `missing: \`${spec.id}\` holds journeys, so derive the suite with \`/spec-to-tcs feature ${spec.id}\``,
+  );
+}
+
 function checkSuite(ctx, spec, dir) {
   const file = `${dir}/feature-tcs.md`;
-  if (!existsSync(join(ctx.roots.store, file)) || spec.testCasesError) return;
+  const present = existsSync(join(ctx.roots.store, file));
+  checkDerived(ctx, spec, dir, present);
+  if (!present || spec.testCasesError) return;
   const suite = suiteOf(spec);
   const issued = scenarioIds(spec);
   // A case traces the journey it walks, and reaches the scenarios that
