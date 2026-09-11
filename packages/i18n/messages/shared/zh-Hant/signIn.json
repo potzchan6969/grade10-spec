@@ -7,10 +7,5 @@
   "sendLinkFailed": "無法傳送登入連結。",
   "sendWait": "請稍候一分鐘再要求另一封電郵。",
   "linkSentMessage": "請查看收件匣中的登入連結。",
-  "sendCodeFailed": "無法傳送驗證碼。",
-  "codeLabel": "驗證碼",
-  "codeSentTo": "驗證碼已傳送至 {email}",
-  "verifyLabel": "驗證",
-  "verifyFailed": "驗證碼不正確。",
   "legal": "繼續即表示你同意我們的<terms>服務條款</terms>與<privacy>隱私權政策</privacy>。"
 }
