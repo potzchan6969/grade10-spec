@@ -1,7 +1,7 @@
 # grade10-site/auction/auto-bidding Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-10, tcs-rules r3.0
+**Drafts styled:** 2026-09-11, tcs-rules r3.0
 
 ## grade10-site-auction-auto-bidding-US1: Collector commits a maximum on an open listing
 
@@ -10,6 +10,8 @@
 **so that** Grade10 bids for me only as far as needed to lead.
 
 ### grade10-site-auction-auto-bidding-US1-TC1-1: First maximum opens bidding at the starting price
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -25,28 +27,31 @@
 * **Trace:** grade10-site-auction-auto-bidding-US-01
 
 **Pre-conditions:**
-An open listing with a starting price of 20000 minor units and no bids.
+An open listing with no bids, with the row's starting price.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Starting price | 20000 minor units |
-| Maximum | 50000 minor units |
+| Currency | Starting price | Maximum |
+| --- | --- | --- |
+| USD | 20000 minor units (USD 200.00) | 50000 minor units (USD 500.00) |
+| HKD | 20000 minor units (HKD 200.00) | 50000 minor units (HKD 500.00) |
+| JPY | 20000 minor units (JPY 20,000) | 50000 minor units (JPY 50,000) |
 
 **Steps:**
 
-1. Navigate to <an open listing url>.
-2. Enter a maximum of 50000 minor units.
+1. Navigate to <an open listing url> priced in the row's currency.
+2. Enter the row's maximum.
 3. Confirm the commitment.
 
 **Expected Results:**
 
 * Grade10 accepts the commitment.
-* The current bid is 20000 minor units.
+* The current bid is the row's starting price.
 * Customer leads.
 
 ### grade10-site-auction-auto-bidding-US1-TC2-1: Maximum below the minimum next bid is refused
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -62,20 +67,20 @@ An open listing with a starting price of 20000 minor units and no bids.
 * **Trace:** grade10-site-auction-auto-bidding-US-01
 
 **Pre-conditions:**
-An open listing whose current bid is 22500 minor units and whose minimum increment is 2500 minor units.
+An open listing whose current bid and minimum increment match the row.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Current bid | 22500 minor units |
-| Minimum increment | 2500 minor units |
-| Attempted maximum | 24000 minor units |
+| Currency | Current bid | Minimum increment | Attempted maximum |
+| --- | --- | --- | --- |
+| USD | 22500 minor units (USD 225.00) | 2500 minor units (USD 25.00) | 24000 minor units (USD 240.00) |
+| HKD | 22500 minor units (HKD 225.00) | 2500 minor units (HKD 25.00) | 24000 minor units (HKD 240.00) |
+| JPY | 22500 minor units (JPY 22,500) | 2500 minor units (JPY 2,500) | 24000 minor units (JPY 24,000) |
 
 **Steps:**
 
-1. Navigate to <an open listing url>.
-2. Enter a maximum of 24000 minor units.
+1. Navigate to <an open listing url> priced in the row's currency.
+2. Enter the row's attempted maximum.
 3. Confirm the commitment.
 4. Check the current bid and the leader.
 
@@ -85,6 +90,8 @@ An open listing whose current bid is 22500 minor units and whose minimum increme
 * The current bid and the leader are unchanged.
 
 ### grade10-site-auction-auto-bidding-US1-TC3-1: Leader raises their own maximum
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -100,17 +107,19 @@ An open listing whose current bid is 22500 minor units and whose minimum increme
 * **Trace:** grade10-site-auction-auto-bidding-US-01
 
 **Pre-conditions:**
-customer(leads with a committed maximum of 50000 minor units) is on that open listing's page.
+customer(leads with a committed maximum matching the row) is on that open listing's page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Raised maximum | 80000 minor units |
+| Currency | Committed maximum | Raised maximum |
+| --- | --- | --- |
+| USD | 50000 minor units (USD 500.00) | 80000 minor units (USD 800.00) |
+| HKD | 50000 minor units (HKD 500.00) | 80000 minor units (HKD 800.00) |
+| JPY | 50000 minor units (JPY 50,000) | 80000 minor units (JPY 80,000) |
 
 **Steps:**
 
-1. Enter a maximum of 80000 minor units.
+1. Enter the row's raised maximum.
 2. Confirm the raise.
 3. Check who leads and the current bid.
 
@@ -121,6 +130,8 @@ customer(leads with a committed maximum of 50000 minor units) is on that open li
 * The current bid is unchanged.
 
 ### grade10-site-auction-auto-bidding-US1-TC4-1: Lowering a maximum is refused
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -136,25 +147,26 @@ customer(leads with a committed maximum of 50000 minor units) is on that open li
 * **Trace:** grade10-site-auction-auto-bidding-US-01
 
 **Pre-conditions:**
-customer(has a committed maximum of 50000 minor units) is on that open listing's page.
+customer(has a committed maximum matching the row) is on that open listing's page.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Committed maximum | 50000 minor units |
-| Attempted maximum | 30000 minor units |
+| Currency | Committed maximum | Attempted maximum |
+| --- | --- | --- |
+| USD | 50000 minor units (USD 500.00) | 30000 minor units (USD 300.00) |
+| HKD | 50000 minor units (HKD 500.00) | 30000 minor units (HKD 300.00) |
+| JPY | 50000 minor units (JPY 50,000) | 30000 minor units (JPY 30,000) |
 
 **Steps:**
 
-1. Enter a maximum of 30000 minor units.
+1. Enter the row's attempted maximum.
 2. Confirm the commitment.
 3. Check the committed maximum.
 
 **Expected Results:**
 
 * Grade10 refuses it.
-* Customer's committed maximum remains 50000 minor units.
+* Customer's committed maximum remains the row's committed maximum.
 
 ---
 
@@ -165,6 +177,8 @@ customer(has a committed maximum of 50000 minor units) is on that open listing's
 **so that** I know where I stand without my cap being shown to anyone else.
 
 ### grade10-site-auction-auto-bidding-US2-TC1-1: Bidder reads their own commitment apart from the current bid
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -180,7 +194,15 @@ customer(has a committed maximum of 50000 minor units) is on that open listing's
 * **Trace:** grade10-site-auction-auto-bidding-US-02
 
 **Pre-conditions:**
-customer(committed a maximum of 50000 minor units) is on a listing whose current bid is 25000 minor units.
+customer(committed a maximum matching the row) is on a listing whose current bid matches the row.
+
+**Test data:**
+
+| Currency | Committed maximum | Current bid |
+| --- | --- | --- |
+| USD | 50000 minor units (USD 500.00) | 25000 minor units (USD 250.00) |
+| HKD | 50000 minor units (HKD 500.00) | 25000 minor units (HKD 250.00) |
+| JPY | 50000 minor units (JPY 50,000) | 25000 minor units (JPY 25,000) |
 
 **Steps:**
 
@@ -188,8 +210,8 @@ customer(committed a maximum of 50000 minor units) is on a listing whose current
 
 **Expected Results:**
 
-* Customer sees their own maximum of 50000 minor units.
-* Customer sees the current bid of 25000 minor units as a separate fact.
+* Customer sees their own maximum, the row's committed maximum.
+* Customer sees the current bid, the row's value, as a separate fact.
 * Customer sees that they lead.
 
 ### grade10-site-auction-auto-bidding-US2-TC2-1: Overtaken bidder sees that they no longer lead
@@ -221,6 +243,8 @@ customer(has been overtaken on an open listing) is on that listing's page.
 
 ### grade10-site-auction-auto-bidding-US2-TC3-1: Leader's maximum is not disclosed to another bidder
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** critical
@@ -235,7 +259,15 @@ customer(has been overtaken on an open listing) is on that listing's page.
 * **Trace:** grade10-site-auction-auto-bidding-US-02
 
 **Pre-conditions:**
-customer A(leads with a committed maximum of 50000 minor units) is on a listing whose current bid is 25000 minor units.
+customer A(leads with a committed maximum matching the row) is on a listing whose current bid matches the row.
+
+**Test data:**
+
+| Currency | Customer A's maximum | Current bid |
+| --- | --- | --- |
+| USD | 50000 minor units (USD 500.00) | 25000 minor units (USD 250.00) |
+| HKD | 50000 minor units (HKD 500.00) | 25000 minor units (HKD 250.00) |
+| JPY | 50000 minor units (JPY 50,000) | 25000 minor units (JPY 25,000) |
 
 **Steps:**
 
@@ -244,8 +276,8 @@ customer A(leads with a committed maximum of 50000 minor units) is on a listing 
 
 **Expected Results:**
 
-* The facts carry the current bid of 25000 minor units.
-* The facts do not carry, and do not allow deriving, customer A's maximum of 50000 minor units.
+* The facts carry the current bid, the row's value.
+* The facts do not carry, and do not allow deriving, customer A's maximum, the row's value.
 
 ### grade10-site-auction-auto-bidding-US2-TC4-1: A tie is accepted and reported as not leading
 
@@ -552,6 +584,8 @@ the window.
 
 ### grade10-site-auction-auto-bidding-US5-TC1-1: The hold is the maximum, not the current bid
 
+Runs once per row of **Test data**.
+
 **Classification:**
 
 * **Severity:** critical
@@ -566,25 +600,29 @@ the window.
 * **Trace:** grade10-site-auction-auto-bidding-US-05
 
 **Pre-conditions:**
-An open listing whose current bid is 22500 minor units.
+An open listing whose current bid matches the row.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Committed maximum | 50000 minor units |
+| Currency | Current bid | Committed maximum |
+| --- | --- | --- |
+| USD | 22500 minor units (USD 225.00) | 50000 minor units (USD 500.00) |
+| HKD | 22500 minor units (HKD 225.00) | 50000 minor units (HKD 500.00) |
+| JPY | 22500 minor units (JPY 22,500) | 50000 minor units (JPY 50,000) |
 
 **Steps:**
 
-1. Submit and accept a maximum of 50000 minor units for a bidder.
+1. Submit and accept the row's maximum for a bidder.
 2. Read the card authorization held for that bidder and listing.
 
 **Expected Results:**
 
-* Grade10 holds an authorization for 50000 minor units.
+* Grade10 holds an authorization for the row's maximum.
 * Exactly one active authorization exists for that bidder and listing.
 
 ### grade10-site-auction-auto-bidding-US5-TC2-1: A raise that cannot be authorized changes nothing
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -600,26 +638,30 @@ An open listing whose current bid is 22500 minor units.
 * **Trace:** grade10-site-auction-auto-bidding-US-05
 
 **Pre-conditions:**
-customer A(leads with a committed maximum of 50000 minor units). The card authorization for a raise to 80000 minor units will fail.
+customer A(leads with a committed maximum matching the row). The card authorization for the row's attempted raise will fail.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Attempted raise | 80000 minor units |
+| Currency | Committed maximum | Attempted raise |
+| --- | --- | --- |
+| USD | 50000 minor units (USD 500.00) | 80000 minor units (USD 800.00) |
+| HKD | 50000 minor units (HKD 500.00) | 80000 minor units (HKD 800.00) |
+| JPY | 50000 minor units (JPY 50,000) | 80000 minor units (JPY 80,000) |
 
 **Steps:**
 
-1. Raise customer A's maximum to 80000 minor units.
+1. Raise customer A's maximum to the row's attempted raise.
 2. Read customer A's committed maximum, the leader, and the current bid.
 
 **Expected Results:**
 
 * Grade10 refuses the raise.
-* Customer A's committed maximum remains 50000 minor units.
+* Customer A's committed maximum remains the row's committed maximum.
 * The leader and the current bid are unchanged.
 
 ### grade10-site-auction-auto-bidding-US5-TC3-1: An auto-bid step needs no new card check
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -635,24 +677,26 @@ customer A(leads with a committed maximum of 50000 minor units). The card author
 * **Trace:** grade10-site-auction-auto-bidding-US-05
 
 **Pre-conditions:**
-customer A(leads with an authorized maximum of 50000 minor units) while the current bid is 25000 minor units.
+customer A(leads with an authorized maximum matching the row) while the current bid matches the row.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Challenger's maximum | 30000 minor units |
+| Currency | Customer A's maximum | Current bid | Challenger's maximum | Resolved current bid |
+| --- | --- | --- | --- | --- |
+| USD | 50000 minor units (USD 500.00) | 25000 minor units (USD 250.00) | 30000 minor units (USD 300.00) | 32500 minor units (USD 325.00) |
+| HKD | 50000 minor units (HKD 500.00) | 25000 minor units (HKD 250.00) | 30000 minor units (HKD 300.00) | 32500 minor units (HKD 325.00) |
+| JPY | 50000 minor units (JPY 50,000) | 25000 minor units (JPY 25,000) | 30000 minor units (JPY 30,000) | 32500 minor units (JPY 32,500) |
 
 **Steps:**
 
-1. Commit a maximum of 30000 minor units as a challenger.
+1. Commit the row's challenger maximum as a challenger.
 2. Read customer A's current bid on their behalf and their authorization amount.
 
 **Expected Results:**
 
 * Grade10 raises customer A's bid on their behalf without a further card authorization.
-* The current bid is 32500 minor units.
-* Customer A's authorization remains 50000 minor units.
+* The current bid is the row's resolved current bid.
+* Customer A's authorization remains the row's maximum.
 
 ### grade10-site-auction-auto-bidding-US5-TC4-1: An auto bid in the extension window extends the close once
 
