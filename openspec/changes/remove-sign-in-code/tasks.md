@@ -2,9 +2,9 @@
 
 ## 1. Shared UI and catalogs (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Remove `SignInCodeForm`, `SignInCodeFormCopy` and `SignInCodeFormProps` from the `@grade10/ui` public entry with their stories, and drop `copy.codeAction`, `requestingCode` and `onRequestCode` from `SignInEmailForm` — satisfies *An application imports the sign-in surface* (`shared-ui-auth-sign-in-SC-01`) and *The email step has no code control* (`shared-auth-sign-in-SC-33`)
-- [ ] 1.2 Keep the `link-request-running` story as the one-control in-flight state and remove every story that drew the code action — satisfies *Activating again during flight does nothing* (`shared-auth-sign-in-SC-01`)
-- [ ] 1.3 Remove `signIn.sendCodeFailed`, `codeLabel`, `codeSentTo`, `verifyLabel`, `verifyFailed` and `email.login.otpHint` from the shared and brand catalogs in every language
+- [x] 1.1 Remove `SignInCodeForm`, `SignInCodeFormCopy` and `SignInCodeFormProps` from the `@grade10/ui` public entry with their stories, and drop `copy.codeAction`, `requestingCode` and `onRequestCode` from `SignInEmailForm` — satisfies *An application imports the sign-in surface* (`shared-ui-auth-sign-in-SC-01`) and *The email step has no code control* (`shared-auth-sign-in-SC-33`)
+- [x] 1.2 Keep the `link-request-running` story as the one-control in-flight state and remove every story that drew the code action — satisfies *Activating again during flight does nothing* (`shared-auth-sign-in-SC-01`)
+- [x] 1.3 Remove `signIn.sendCodeFailed`, `codeLabel`, `codeSentTo`, `verifyLabel`, `verifyFailed` and `email.login.otpHint` from the shared and brand catalogs in every language
 - [ ] 1.4 Run `pnpm run lint`, `pnpm run typecheck`, `pnpm run test`, and `pnpm run test:stories:ui`
 
 ## 2. Auth service and login email (grade10)
