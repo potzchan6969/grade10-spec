@@ -11,7 +11,7 @@ four read paths, and one of them changes engine to answer it. Which scenarios
 are which, and why each path answers the total the way it does:
 [`tech-design.md`](tech-design.md) — Context, Decisions.
 
-## 1. The manual (grade10-spec)
+## 1. The manual (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Say on `docs/prds/products/grade10-site/store/product-listing.md` that the listing is read by scrolling — no page control, a walk that starts again on a new narrowing, and depth that never reaches the URL — and that the count above the grid is the whole narrowing's rather than the cards on screen
 - [ ] 1.2 Record in that page's `Product decisions` block why the count is the catalogue's over the whole set, alongside the facet-count row that already says the same for the sidebar, and why a collector's scroll depth is deliberately not restored
