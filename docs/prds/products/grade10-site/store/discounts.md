@@ -130,16 +130,27 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 
 A physical reward is handed over through the same session: the pending redemption shows the reward, the points paid and the date; staff verify and confirm, once. A second till is told when and by whom it was already given.
 
+🚧 This step retires. A physical reward becomes an ordinary sale — its coupon takes 100% off the reward's own variant, the member presents that coupon and the till reads it — and `deliver-reward-coupons` removes the confirm action, the queue and the waiting list once no redemption is still awaiting one.
+
 ### Switches
 
 Per shop, flipped from the admin console, enforced on the next request: terminal, email spend, phone identify, phone spend, cart identify, cart spend. QR and short code carry no switch of their own, so stopping the counter means the terminal switch.
 
 ## Site discounts
 
+::spec{id="grade10-site/store/site-discounts"}
+
 🚧 Configured directly in Shopify's own automatic discounts, and read onto
 the draft order by accepting them there — no grade10 admin screen, and no
-discount engine of grade10's own. `add-site-wide-discounts` delivers this;
-nothing on this page below is live until it ships.
+discount engine of grade10's own. At the counter there is no draft order:
+the shop's automatics are the POS cart's own and grade10 leaves them
+standing. `add-site-wide-discounts` delivers this; nothing on this page
+below is live until it ships.
+
+❓ A site discount the merchandiser marks non-combinable is expected to
+refuse a code the order carries. If the shop replaces the code instead, a
+coupon checkout fails rather than degrading — staging answers this before
+any automatic discount is created in production.
 
 - 🚧 **Product special sale** — a scheduled cut off chosen products; a
   member's points always redeem regardless. A discount set not to combine

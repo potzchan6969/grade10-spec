@@ -82,14 +82,23 @@ carrying the definition it was bought under.
 - **Made instantly** — the coupon is idle in the member's own list the
   instant the points are spent
 - **Applied online** — on the store's own checkout page, before Shopify's
-  checkout; the draft order carries it on its lines
-- **Applied by the shopkeeper** — at the till, through the POS extension
+  checkout. 🚧 The cut reaches the order as the coupon's own Shopify
+  discount code, minted for that basket, rather than welded onto the draft's
+  lines; `mint-coupons-as-discount-codes` delivers it
+- **Presented at the counter** — 🚧 the member picks the coupon in their own
+  session and the till reads what they present; staff never name a coupon on
+  a member's behalf, and no code is text for a member to type
 - **Used by the paid order** — the paid order is what marks the coupon
   used, never a vendor's lagging count
 - **A physical reward waits for collection** — parked as paid but not yet
   delivered, until the counter confirms the handover
-- **One discount at a time** — an order carries one discount at a time,
-  and a reward is in that count
+- **One discount at a time** — 🚧 an order carries one discount at a time,
+  and a reward is in that count; today a product or gift coupon still
+  combines with an order coupon, and `mint-coupons-as-discount-codes`
+  delivers the rule
+- **A refund does not give the coupon back** — a refunded sale returns the
+  goods, the money and any points spent as a discount on it; a coupon it
+  already used stays used, and the points that bought it stay spent
 
 States, holding and refusals are on
 [Coupons](/p/grade10-site/loyalty/coupons).
