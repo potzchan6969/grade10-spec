@@ -20,7 +20,7 @@ Needs the submodule bump that carries group 1, for the `email.login` catalog sha
 - [x] 2.7 Retire the code cases in both brands' `sign-in.spec.ts`, `identity.spec.ts` and `secondaryStorage.spec.ts`, re-basing the cold-read single-use case on the magic-link token
 - [ ] 2.8 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`
 
-## 3. Sign-in frontends (grade10)
+## 3. Sign-in frontends (grade10) (owner: @sean)
 
 Needs group 2's submodule bump for the `@grade10/ui` export set; nothing else from group 2.
 
