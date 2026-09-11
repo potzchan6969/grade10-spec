@@ -30,7 +30,7 @@ watch-only; soonest close within each band.
 Detailed [Bidding History](/p/grade10-site/auction/bidding-history) stays its
 own surface for the one-per-listing index, filters, and private chronology.
 
-🚧 A winner follows their own lot to the door through [Winner Order](/p/grade10-site/auction/winner-order): Awaiting Address, Preparing Invoice, Pending Payment, Processing, Shipped, Delivered, Cancelled, or Refunded. A won lot whose invoice has expired reads Pending Payment and says how to reach Grade10.
+A winner follows their own lot to the door through [Winner Order](/p/grade10-site/auction/winner-order): Pending Payment, Expired, Processing, Shipped, Delivered, Cancelled, or Refunded. A won lot whose invoice has expired reads Expired and says how to reach Grade10.
 
 The record shows the derived auction status and opens the invoice for payment; address, payment, fulfilment, and delivery facts stay on the order.
 

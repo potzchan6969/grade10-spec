@@ -6,12 +6,14 @@ order: 14
 
 Order Notifications are the transactional letters that begin when an auction lot closes with a winner. They identify the lot, use the winner's registered email address, and stop or retry according to the order's current facts.
 
-- 🚧 **Winning** — the auction-won letter asks for a delivery address and names no amount
-- 🚧 **Invoice sent** — names the amount and the payment deadline, which starts at send
+- **Winning** — the auction-won letter identifies the lot and what the winner owes
+- **Payment reminders** — day 3, day 6, and a final notice on day 7, measured from the current invoice
+- **Invoice expired** — says what remains owed and how to resolve it
+- **Invoice reissued** — confirms the new invoice and deadline
 - **Payment** — the address, payment, decline, receipt, and deadline events that change what the winner should do
-- **Reminder** — the day-3 and day-6 prompts, followed by the deadline notice on day 7; reminders stop when the invoice is paid, cancelled, or otherwise no longer payable
-- **Settlement** — manual settlement and cancellation messages that explain the operator's recorded outcome
+- **Payment received** — confirms a card payment or manual settlement
 - **Delivery** — dispatch, tracking, and delivery confirmation messages that identify the lot
+- **Cancellation** — explains that an operator cancelled the order
 - **Send log** — one idempotent record per order, message kind, and event key, with retry state but no message body exposed to operators
 
 Before-and-during auction mail remains on [Notifications](/p/grade10-site/auction/notifications). A winner follows the order and its letters from [Winner Order](/p/grade10-site/auction/winner-order).

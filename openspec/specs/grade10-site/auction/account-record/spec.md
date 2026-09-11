@@ -259,57 +259,69 @@ groups are the My Auctions presentation of that record.
 
 ### Requirement: A winner reads their own payment and shipment state
 
-A listing under Won SHALL carry the collector-facing state below, projected
-from the listing's payment and shipment records. Grade10 SHALL show a single
-**Paid**, whether collection was recorded as card capture or as an operator's
-manual record.
+A listing under Won SHALL carry the auction order's derived status, projected
+from the invoice status, fulfilment status, payment deadline, and delivery
+confirmation defined by `grade10-site/auction/order-status`. The account record
+SHALL show the same status vocabulary as the auction order and SHALL NOT invent
+a second payment or shipment state.
 
 | Collector state | Reached from |
 | --- | --- |
-| Awaiting payment | Card capture is still being attempted |
-| Payment problem | Card capture gave up, or a wire is expected. Carries how to reach Grade10 |
-| Paid | Grade10 has recorded collection, by either route |
-| Shipped | Shipment has started and is not complete |
-| Delivered | Shipment is complete |
+| Pending Payment | Invoice status is `pending`, and the payment deadline has not elapsed |
+| Expired | Invoice status is `pending`, and the payment deadline has elapsed |
+| Processing | Invoice status is `paid`, and fulfilment status is `unfulfilled` |
+| Shipped | Invoice status is `paid`, fulfilment status is `fulfilled`, and delivery is not confirmed |
+| Delivered | Invoice status is `paid`, fulfilment status is `fulfilled`, and delivery is confirmed |
+| Cancelled | Invoice status is `cancelled` |
+| Refunded | Invoice status is `refunded` |
 
-This surface SHALL be read-only. It SHALL offer no control that records
-payment, requests a wire, or records shipment.
+This surface SHALL remain read-only. It SHALL offer no control that records
+payment, requests a wire, records shipment, changes an address, or changes an
+auction order's status.
 
 #### Scenario: grade10-site-auction-account-record-SC-20 - Card capture reads as Paid
 
-- **GIVEN** a won listing whose card capture succeeded and which has not shipped
+- **GIVEN** a won listing whose invoice status is `paid` and whose fulfilment status is `unfulfilled`
 - **WHEN** the winner opens their Bidding page
-- **THEN** that listing's state is Paid
+- **THEN** that listing's state is Processing
 
 #### Scenario: grade10-site-auction-account-record-SC-21 - Manual collection reads as the same Paid
 
-- **GIVEN** a won listing whose collection an operator recorded outside Stripe,
-  and which has not shipped
+- **GIVEN** a won listing whose collection an operator recorded outside Stripe is `paid`, and which has not shipped
 - **WHEN** the winner opens their Bidding page
-- **THEN** that listing's state is Paid
-- **AND** it is the same state a card capture produces, distinguished nowhere on
-  this surface
+- **THEN** that listing's state is Processing
 
 #### Scenario: grade10-site-auction-account-record-SC-22 - A payment problem says how to reach Grade10
 
-- **GIVEN** a won listing whose card capture gave up
+- **GIVEN** a won listing whose invoice status is `pending` and whose payment deadline has passed
 - **WHEN** the winner opens their Bidding page
-- **THEN** that listing's state is Payment problem
+- **THEN** that listing's state is Expired
 - **AND** the row carries how to reach Grade10
 
 #### Scenario: grade10-site-auction-account-record-SC-23 - Shipment states reach the winner
 
-- **GIVEN** one won listing whose shipment has started and one whose shipment is
-  complete
+- **GIVEN** one won listing whose paid order is fulfilled without delivery confirmation and one whose paid order has delivery confirmation
 - **WHEN** the winner opens their Bidding page
-- **THEN** the first listing's state is Shipped and the second's is Delivered
+- **THEN** the first listing's state is Shipped
+- **AND** the second listing's state is Delivered
 
 #### Scenario: grade10-site-auction-account-record-SC-24 - The winner is offered no write
 
-- **GIVEN** a won listing in any payment or shipment state
+- **GIVEN** a won listing in any auction-order status
 - **WHEN** the winner opens their Bidding page
-- **THEN** no control on the surface records payment, requests a wire, or
-  records shipment
+- **THEN** no control on the surface records payment, requests a wire, records shipment, changes an address, or changes the order status
+
+#### Scenario: grade10-site-auction-account-record-SC-35 - A cancelled order remains Cancelled
+
+- **GIVEN** a won listing whose invoice status is `cancelled`
+- **WHEN** the winner opens their Bidding page
+- **THEN** that listing's state is Cancelled
+
+#### Scenario: grade10-site-auction-account-record-SC-36 - A refunded order remains Refunded
+
+- **GIVEN** a won listing whose invoice status is `refunded`
+- **WHEN** the winner opens their Bidding page
+- **THEN** that listing's state is Refunded
 
 ### Requirement: A losing bidder is told what happened to their card hold
 

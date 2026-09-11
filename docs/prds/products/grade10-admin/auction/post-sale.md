@@ -9,25 +9,24 @@ The queue works every winner order from lot close through delivery in one place.
 
 | Outcome | When |
 | --- | --- |
-| 🚧 Draft · Scheduled · Live | The sale is still the auction's; time left is read from the close |
+| Draft · Scheduled · Live · Ending soon | The sale is still the auction's; time left is read from the close |
 | Unsold · Called off | Ended without a payable winner order |
-| 🚧 Awaiting Address | The winner has not confirmed a delivery address |
-| 🚧 Preparing Invoice | The address is confirmed; the invoice is ready to quote |
-| 🚧 Pending Payment | The invoice is sent and unpaid, before or after its deadline; an expired invoice shows Expired beside the outcome |
+| Pending Payment | The invoice is unpaid and its deadline has not elapsed |
+| Expired | The invoice is unpaid after its deadline |
 | Processing | Payment is complete and dispatch is not complete |
-| Shipped · Delivered | Fulfilment has left Grade10 or has carrier proof |
+| Shipped | The lot has been dispatched and delivery is not confirmed |
+| Delivered | Delivery is confirmed |
 | Cancelled · Refunded | The order has a recorded terminal outcome |
 
-- 🚧 **Needs action** — Preparing Invoice, an expired invoice, and Processing
-- 🚧 **Overdue** — an order idle 72 hours in either stage is marked and can be filtered; nothing expires on it
+- **Needs action** — Expired and Processing
 
 ## Payment
 
 The winning bid-time hold is released rather than captured, and every failed payment attempt remains in the invoice log.
 
-🚧 An operator quotes shipping and insurance for the winner's confirmed address and sends the invoice; sending starts the 7-day window and locks the address. A later address change is re-quoted, and the operator chooses to keep or restart the deadline.
+An operator confirms the delivery address before manual settlement. The amount is recalculated, and the settlement records the address snapshot.
 
-🚧 A winner order reaches paid through one card payment or one operator-recorded manual settlement — bank transfer, cash, or another method, with a reference and proof files. An expired invoice stays payable, and a reissue returns it to pending.
+A winner order reaches paid through one fresh card payment or one operator-recorded manual settlement. An expired invoice stays payable, and a reissue returns it to pending with a new deadline.
 
 ## Fulfilment
 
