@@ -343,7 +343,6 @@
 **Pre-conditions:**
 
 * Two Auction listings use the same Pokémon product.
-* The Pokémon product schema defines PSA cert number as a listing attribute.
 * The second listing has no Simplified Chinese PSA cert number label or value.
 
 **Test data:**
@@ -367,6 +366,37 @@
 * The shared product's grading and product attributes remain unchanged.
 * The second listing shows the English PSA cert number label and value.
 * PSA cert number is absent from Auction search and filter controls.
+
+### grade10-admin-inventory-catalog-US7-TC5-1: Published listing keeps its product display snapshot
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-07
+
+**Pre-conditions:**
+
+* <published listing> has a saved product display snapshot and listing attributes.
+* An admin holds the inventory catalogue grant.
+
+**Steps:**
+
+1. Change the product schema, attribute, or translation for <published listing>'s product.
+2. Open <published listing> in Auction.
+
+**Expected Results:**
+
+* <published listing> renders its saved product display snapshot.
+* <published listing> renders its saved listing attributes.
+* The Auction read does not require the product's current schema.
 
 ---
 

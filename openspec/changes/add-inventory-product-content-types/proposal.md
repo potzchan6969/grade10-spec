@@ -26,15 +26,18 @@ invalid product facts.
   `created` state must have a matching product schema and valid required values.
 - **Auction listing attributes** — supports listing-specific values such as
   vaulted status, PSA certification number, or shipping origin. They belong to
-  an Auction listing, not its product. Auction stores their canonical values
-  and optional localized text values together as one listing attribute document;
-  they are displayed but not searchable or filterable.
+  an Auction listing, not its product. Auction stores an unvalidated ordered
+  display document with any supplied labels and localized values; they are
+  displayed but not searchable or filterable.
 - **Auction presentation** — lets an admin choose and order the fields shown
   for each IP + Item + Category product schema, independently from the attributes stored and
   searchable. A field keeps its own human-readable displayed label and
   localized displayed values, separate from its stable key; English is
   required and other supported locale translations are optional with English
   fallback.
+- **Published listing stability** — snapshots the selected product fields when
+  Auction publishes, so later Inventory schema or translation changes cannot
+  alter or break an existing Auction listing.
 - **Configuration publishing** — validates a draft configuration against
   existing products before publishing it; a failed validation leaves the
   current published configuration active.

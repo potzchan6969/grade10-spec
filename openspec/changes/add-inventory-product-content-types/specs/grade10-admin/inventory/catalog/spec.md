@@ -10,7 +10,7 @@
   - Publishing: validate affected products before a configuration becomes active
 - Auction discovery
   - Search and filter: use universal and product-schema attributes, including optional attributes when a value exists
-  - Listing attributes: store Auction-specific values without making them search or filter criteria
+  - Listing attributes: store flexible Auction-specific display values without making them search or filter criteria
   - Presentation: choose and order the product and listing attributes shown for each product schema
 
 ## MODIFIED Requirements
@@ -264,14 +264,21 @@ for each published IP + Item + Category product schema. The selection MAY
 include universal tags and required or optional product attributes. A product
 attribute that is stored and searchable MAY be omitted from Auction display.
 
-An authorized auction admin SHALL also define listing attributes for a product
-schema and enter their values on each Auction listing. A listing attribute
-belongs to one listing, not the product; it SHALL have a stable key, data type,
-validation, localized displayed label, and localized displayed text values by
-the same English-base and fallback rules as product attributes. Listing
-attributes SHALL be displayed only in Auction and SHALL NOT be searchable or
-filterable. Auction SHALL store the listing's canonical values and optional
-localized text values together as one listing attribute document.
+An authorized auction admin SHALL be able to enter listing attributes on each
+Auction listing. A listing attribute belongs to one listing, not the product.
+It is display-only: Grade10 SHALL not require a configured key, data type,
+validation rule, or translation. The listing attribute document SHALL preserve
+the administrator's item order and MAY carry a localized displayed label and
+value for each item. When a requested locale is absent, Auction SHALL use the
+item's English value when present, then its supplied value. Listing attributes
+SHALL NOT be searchable or filterable.
+
+When Auction publishes a listing, it SHALL save a product display snapshot
+from the product schema then active for that product. A published listing SHALL
+render that snapshot in its saved product-field order, followed by its own
+listing attribute document in its saved item order, without a live read of the
+product schema. A later Inventory schema, attribute, or translation change
+SHALL NOT change or prevent rendering of the published Auction listing.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-83 - Operator configures different Auction fields per product schema
 
@@ -297,12 +304,19 @@ localized text values together as one listing attribute document.
 - **AND** the product's grading and product attribute values remain unchanged
 - **AND** PSA cert number is not offered as an Auction search or filter criterion
 
-#### Scenario: grade10-admin-inventory-catalog-SC-89 - Listing attribute falls back to English
+#### Scenario: grade10-admin-inventory-catalog-SC-89 - Flexible listing attribute falls back to English
 
-- **GIVEN** an Auction listing has an English PSA cert number label and value but no Simplified Chinese translations
+- **GIVEN** an Auction listing has a PSA cert number item with an English label and value but no Simplified Chinese translations
 - **WHEN** a collector opens the listing in Simplified Chinese
 - **THEN** Auction displays the English PSA cert number label and value
 - **AND** no stable listing attribute key or raw translation key is displayed
+
+#### Scenario: grade10-admin-inventory-catalog-SC-90 - Published listing survives a product schema change
+
+- **GIVEN** a published Auction listing has a product display snapshot and a listing attribute document
+- **WHEN** an authorized inventory admin changes the product's schema, attributes, or translations
+- **THEN** the published Auction listing keeps rendering its saved product display snapshot and listing attribute document
+- **AND** Auction does not require a live product schema read to render that listing
 
 ### Requirement: Product schema publishing validates affected products atomically
 

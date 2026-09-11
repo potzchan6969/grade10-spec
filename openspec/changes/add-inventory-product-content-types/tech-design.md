@@ -124,37 +124,53 @@ created-state transition.
 ### Auction Owns Listing Attributes
 
 Keep product attributes in Inventory because they identify the reusable product
-and participate in creation validation and search. Move Auction presentation
-configuration and listing-specific attributes into the Auction domain. An
-Auction listing can select a product attribute for display, or hold an
-listing attribute such as `psa_cert_number`. Its value is keyed to
-the listing, so two listings of the same product can show different values.
+and participate in creation validation and search. A product-schema revision
+keeps the selected product attributes and order for an Auction display. Auction
+copies the resolved result when it publishes a listing.
 
-Keep listing-attribute definitions normalized in Auction, but store the values
-on `auction.listings.listing_attributes jsonb`. Each key holds a canonical
-value and, for text, optional localized values. The definition supplies the
-localized label and select-option labels. English remains the required base;
-missing Chinese label or text values warn in admin and display English.
+Store listing-specific display items directly on
+`auction.listings.listing_attributes jsonb`. There are no Auction listing-field
+definitions, required keys, data types, validation rules, option sets, or
+translation requirements. The document is an ordered array, so a listing can
+hold any display-only item and preserve the administrator's order. An item may
+supply localized labels and values; rendering falls back to English, then the
+supplied value.
 
 ```json
-{
-  "psa_cert_number": {
-    "value": "0001234567",
-    "translations": { "zh-Hant": "0001234567" }
+[
+  {
+    "label": { "en": "PSA cert number", "zh-Hant": "PSA 證書編號" },
+    "value": { "en": "0001234567", "zh-Hant": "0001234567" }
   },
-  "vaulted": { "value": true }
-}
+  {
+    "label": { "en": "Vaulted" },
+    "value": true
+  }
+]
 ```
 
 **Alternative considered — attach listing values to the product schema.**
 That makes a unique listing fact appear shared by every listing of the product,
 which is incorrect for certification, vaulting, and shipping facts.
 
-**Alternative considered — normalize every listing value and translation.**
-It gives direct reverse indexes, but is unnecessary while listing attributes
-are display-only. JSONB keeps each listing's flexible value document atomic;
-an Auction search projection is added only if a listing attribute later becomes
-a public filter.
+**Alternative considered — configure or validate listing fields.** This would
+make values more uniform but turns an operational display note into a CMS
+workflow. JSONB keeps listing attributes opaque and flexible; an Auction search
+projection is added only if a listing attribute later becomes a public filter.
+
+### Snapshot Inventory Data at Auction Publish
+
+Auction calls an additive Inventory contract for the selected product-display
+attributes when a listing is published. In the Auction transaction it writes
+that result to `product_display_snapshot` beside the listing's own
+`listing_attributes`. Public Auction reads use only those two values. A later
+Inventory schema, product attribute, translation, or service failure therefore
+cannot break an already published listing.
+
+**Alternative considered — resolve product fields live on every Auction
+read.** It avoids a copy but makes Auction availability and historical display
+depend on Inventory's current schema and data. Published listings need stable
+facts, so the copy is intentional.
 
 ### Respect the Inventory and Auction Boundary
 
@@ -174,8 +190,8 @@ distributed protocol and are deliberately not treated as atomic.
 ## Database Schema
 
 Product-schema tables live in the existing `inventory` PostgreSQL schema.
-Listing-attribute tables live in the Auction PostgreSQL schema. IDs are
-system-minted `text`; timestamps use the existing `msTimestamp` convention:
+Auction extends its existing `listings` table in the Auction PostgreSQL schema.
+IDs are system-minted `text`; timestamps use the existing `msTimestamp` convention:
 `timestamp with time zone`, `NOT NULL`, `DEFAULT now()`.
 
 | Table | Columns | Constraints and indexes | Authority |
@@ -183,21 +199,21 @@ system-minted `text`; timestamps use the existing `msTimestamp` convention:
 | `product_attributes` | `id text NOT NULL`; `key text NOT NULL`; `data_type text NOT NULL`; `validation jsonb NOT NULL DEFAULT '{}'::jsonb`; audit timestamps | PK `id`; unique `key`; data-type and JSON-object checks; key immutable after a value exists | Reusable product-attribute identity, type, validation |
 | `product_attribute_labels`, `product_attribute_options`, `product_attribute_option_labels` | Attribute/option id, locale or stable option key, trimmed label, audit timestamps where applicable | Composite PKs and FKs to the attribute/option; English base enforced by service | Localized reusable labels and select options |
 | `product_schemas` | `id text NOT NULL`; `ip_tag_id text NOT NULL`; `item_tag_id text NOT NULL`; `category_tag_id text NOT NULL`; audit timestamps | PK `id`; unique tuple; FKs to `tags` | Exact classification tuple |
-| `product_schema_revisions` | `id text NOT NULL`; `product_schema_id text NOT NULL`; `state text NOT NULL DEFAULT 'draft'`; audit timestamps | PK `id`; FK schema; state check; partial unique indexes: one published and one draft revision per schema | Active product configuration |
+| `product_schema_revisions` | `id text NOT NULL`; `product_schema_id text NOT NULL`; `state text NOT NULL DEFAULT 'draft'`; `auction_display_attribute_keys jsonb NOT NULL DEFAULT '[]'::jsonb`; audit timestamps | PK `id`; FK schema; state and JSON-array checks; partial unique indexes: one published and one draft revision per schema | Active product configuration and selected product-attribute display order for future Auction listings |
 | `product_schema_attributes` | `id text NOT NULL`; `revision_id text NOT NULL`; `attribute_id text NOT NULL`; `required boolean NOT NULL DEFAULT false`; `validation jsonb NOT NULL DEFAULT '{}'::jsonb`; audit timestamps | PK `id`; unique `(revision_id, attribute_id)`; FKs; JSON-object check; index `(revision_id, required)` | Product-schema assignment, requiredness, validation override |
 | `product_schema_attribute_labels`, `product_schema_attribute_options` | Schema-attribute id, locale or option id, label/order | Composite PKs, FKs, non-negative option order | Per-schema labels and allowed options |
 | `product_attribute_values` | `id text NOT NULL`; `product_id text NOT NULL`; `attribute_id text NOT NULL`; `text_value text NULL`; `number_value numeric NULL`; `boolean_value boolean NULL`; `option_keys text[] NULL`; audit timestamps | PK `id`; unique `(product_id, attribute_id)`; one canonical-value column check; btree typed-value indexes and GIN `option_keys` | Canonical product facts |
 | `product_attribute_value_translations` | `product_attribute_value_id text NOT NULL`; `locale text NOT NULL`; `value text NOT NULL` | PK `(product_attribute_value_id, locale)`; FK value cascade; trimmed non-empty check | Localized product text values |
-| `auction_listing_fields` | `id text NOT NULL`; `product_schema_id text NOT NULL`; `key text NOT NULL`; `source text NOT NULL`; `product_schema_attribute_id text NULL`; `data_type text NULL`; `validation jsonb NOT NULL DEFAULT '{}'::jsonb`; `display_order integer NOT NULL`; audit timestamps | Auction PK `id`; unique `(product_schema_id, key)`; `source` check `product-attribute`/`listing-attribute`; exactly one source shape; listing attribute validates data type; index schema/order | Auction display definition and listing-attribute definition |
-| `auction_listing_field_labels`, `auction_listing_field_options`, `auction_listing_field_option_labels` | Field/option id, locale or stable option key, trimmed label, audit timestamps where applicable | Composite PKs and FKs; English base enforced by service | Localized listing-attribute labels and select options |
-| `auction.listings.listing_attributes` | `jsonb NOT NULL DEFAULT '{}'::jsonb` | JSON-object check; values validated against `auction_listing_fields`; no public-search index while listing attributes are display-only | Canonical listing values and optional localized text values |
+| `auction.listings.product_display_snapshot` | `jsonb NOT NULL DEFAULT '[]'::jsonb` | JSON-array check; written at publish from the Inventory contract; immutable after publish | Locale-ready product fields shown by a published listing |
+| `auction.listings.listing_attributes` | `jsonb NOT NULL DEFAULT '[]'::jsonb` | JSON-array check only; preserves supplied order; no public-search index | Opaque listing-specific display items, including any supplied translations |
 
 `product_classifications` and its three tag columns remain authoritative for
 universal classification. `products.status` remains authoritative for its
 lifecycle. The matching published revision, validation report, locale fallback,
 and Auction eligibility are derived at read or command time and are not stored.
-Auction listing fields and `listing_attributes` are authoritative only for
-their own listing; they never change product validation or product facts.
+Auction `product_display_snapshot` and `listing_attributes` are authoritative
+only for their own listing; they never change product validation or product
+facts.
 
 `validation` is a JSON object because valid properties differ by field type.
 The service accepts only the documented shape: text `minLength`, `maxLength`,
@@ -224,12 +240,12 @@ erDiagram
   product_attributes ||--o{ product_attribute_options : offers
   product_attribute_options ||--o{ product_attribute_option_labels : localizes
 
-  product_schemas ||--o{ auction_listing_fields : configures
-  product_schema_attributes ||--o{ auction_listing_fields : displays
-  auction_listing_fields ||--o{ auction_listing_field_labels : labels
-  auction_listing_fields ||--o{ auction_listing_field_options : offers
-  auction_listing_field_options ||--o{ auction_listing_field_option_labels : localizes
 ```
+
+`auction_display_attribute_keys` is a JSONB column on a product-schema
+revision. `product_display_snapshot` and `listing_attributes` are JSONB
+columns on an Auction listing; they are not relation tables or configurable
+Auction field definitions.
 
 ## Service Interfaces
 
@@ -241,13 +257,13 @@ decode/authorize and map outcomes.
 | Processor | Input | Success | Refusal and controls |
 | --- | --- | --- | --- |
 | `saveProductAttribute` | `{ actorId, attribute?: { id }, key, dataType, validation, labels, options }` | `{ attribute, translationWarnings }` | Duplicate/used key, invalid rule, duplicate option key, or absent English base label/value. Transaction writes attribute → labels → options → option labels. |
-| `saveProductSchemaDraft` | `{ actorId, tuple, revisionId?, attributes }` | `{ draftRevision, translationWarnings }` | Locks the tuple's `product_schemas` row; validates tags and references; writes identity if absent → draft revision → assignments/labels/options. Replaces draft child rows atomically. |
+| `saveProductSchemaDraft` | `{ actorId, tuple, revisionId?, attributes, auctionDisplayAttributeKeys }` | `{ draftRevision, translationWarnings }` | Locks the tuple's `product_schemas` row; validates tags, references, and the selected display attributes; writes identity if absent → draft revision → assignments/labels/options. Replaces draft child rows atomically. |
 | `publishProductSchema` | `{ actorId, revisionId }` | `{ publishedRevision, translationWarnings, affectedProductCount }` | Locks schema, draft revision, and matching classifications with `FOR UPDATE`; validates English bases and every matching product. On violation, returns `{ code: 'product-schema-publish-blocked', violations[] }` and rolls back. On success, retires old published → publishes draft atomically. |
 | `upsertProductAttributeValues` | `{ actorId, productId, values }` | `{ product, validationReport }` | Locks product and resolves its published revision. Validates each supplied product attribute and locale value before replacing its values and translations. Refusal leaves prior values unchanged. Draft completeness is reported, not refused. |
 | `markProductCreated` | `{ actorId, productId }` | `{ product }` | Locks product and classification; resolves the published product schema; requires all 3 tags and every required product attribute. Returns `{ code: 'product-schema-invalid', violations[] }` without changing status/history on refusal. |
-| `saveAuctionListingFields` | `{ actorId, productSchemaId, fields }` | `{ fields, translationWarnings }` | Auction transaction validates field sources, English bases, presentation order, and listing-attribute validation. A product-attribute source must belong to the selected product schema. |
-| `upsertAuctionListingAttributeValues` | `{ actorId, listingId, values }` | `{ listing }` | Locks the listing; validates the complete JSONB value document and localized text against its product schema's Auction fields; replaces `listing_attributes` atomically. It never writes Inventory product values. |
-| `readAuctionListingContent` | `{ listingId, locale }` | `{ fields: Array<{ key, label, value, displayOrder }> }` | Reads a created product's schema-resolved product attributes and the listing's own values, resolves `locale → en`, and returns configured fields in order. Missing optional product values are omitted. |
+| `saveAuctionListingAttributes` | `{ actorId, listingId, listingAttributes: Json }` | `{ listing }` | Locks the listing and replaces the JSONB array without field-level validation. The entrypoint limits only document size and ordinary request safety; it does not interpret keys, types, labels, values, or translations. |
+| `publishAuctionListing` | `{ actorId, listingId }` | `{ listing }` | Calls Inventory's additive `readAuctionProductSnapshot` contract before publishing. In one Auction transaction it locks the listing, writes the returned `product_display_snapshot`, preserves `listing_attributes`, then publishes. A contract refusal leaves the listing unpublished. |
+| `readAuctionListingContent` | `{ listingId, locale }` | `{ fields: Array<{ label, value, displayOrder }> }` | Reads only the listing's `product_display_snapshot` followed by `listing_attributes`; resolves `locale → en → supplied value` for listing items. It never reads Inventory at render time. |
 | `searchAuctionProducts` | `{ locale, universalFilters, attributeFilters, query, page }` | `{ results, availableFilters }` | Uses Inventory's product-attribute contract or an Auction-owned projection. It never offers listing attributes as criteria. |
 
 Example: a Pokémon product has `product_classifications = (pokemon,
@@ -270,10 +286,11 @@ renderers to use resolved `label` and `value`.
 
 Add authorized inventory-admin procedures for product-attribute and
 product-schema draft/save/review/publish operations, and extend product
-create/update/read with structured values plus a validation report. Add Auction
-contracts for listing-field configuration and listing-attribute values, then
-update its public listing contract to carry ordered displayed fields. Remove
-the hard-coded metadata mapper only after consumers use the new field list.
+create/update/read with structured values plus a validation report. Add an
+additive Inventory product-snapshot read, and Auction contracts for opaque
+listing-attribute JSONB and published-listing snapshots. Update its public
+listing contract to carry the saved fields. Remove the hard-coded metadata
+mapper only after consumers use the new field list.
 
 ## Risks / Trade-offs
 
@@ -286,12 +303,15 @@ the hard-coded metadata mapper only after consumers use the new field list.
 - **[Dynamic field filters can become slow]** → Query typed canonical columns
   through per-type indexes and option-key GIN indexes; paginate from the
   inventory query rather than filtering Auction results in memory
-- **[A listing attribute later needs public search]** → Add a JSONB GIN index
-  for exact containment first; introduce an Auction-owned typed search
-  projection only for range, sort, facet, or high-volume requirements
+- **[A flexible listing attribute later needs public search]** → Add a JSONB
+  GIN index for exact containment first; introduce an Auction-owned typed
+  search projection only for range, sort, facet, or high-volume requirements
 - **[A cross-schema command hides ownership]** → Keep writes behind Inventory
   and Auction services; use one database transaction across schemas only for a
   deliberately owned operational migration or repair
+- **[Inventory changes alter a product display]** → Snapshot selected product
+  fields when Auction publishes; render every published listing from its
+  snapshot rather than Inventory's current schema or values
 - **[Legacy metadata and structured fields can show different facts]** → Make
   structured content the only source for the new Auction presentation and
   leave legacy metadata unchanged until an explicit migration change is scoped
@@ -311,10 +331,11 @@ the hard-coded metadata mapper only after consumers use the new field list.
 3. Create and publish product schemas, then backfill product structured values
    through the admin CMS. Publishing blocks until matching products meet the
    new required set.
-4. Add Auction listing-field configuration and listing-attribute values. Move
-   Auction reads and displays to the composed product-and-listing contract;
-   filters use product attributes only. Keep the legacy metadata read
-   compatible until the consuming listing contract has landed.
+4. Add `product_display_snapshot` and opaque `listing_attributes` JSONB to
+   Auction listings. Publish new listings from Inventory's additive snapshot
+   contract, then render Auction solely from the saved values; filters use
+   product attributes only. Keep the legacy metadata read compatible until the
+   consuming listing contract has landed.
 5. Roll back application code by leaving new tables and rows inert. Do not
    roll back the migration or delete configured content; forward-fix a faulty
    revision from its draft.
