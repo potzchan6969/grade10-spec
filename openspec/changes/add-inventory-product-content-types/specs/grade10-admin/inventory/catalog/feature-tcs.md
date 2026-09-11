@@ -218,6 +218,39 @@
 * PSA population remains absent.
 * Auction displays the English grading value without showing a stable key or translation key.
 
+### grade10-admin-inventory-catalog-US6-TC4-1: Attribute opens the filtered product view
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-06
+
+**Pre-conditions:**
+
+* An admin holds the inventory catalogue grant.
+* <pokemon product> shows `English` as its Language product attribute value.
+
+**Steps:**
+
+1. Open <pokemon product> in the product editor.
+2. Select its visible Language product attribute value.
+3. Inspect the product filter view.
+4. Clear the Language criterion.
+
+**Expected Results:**
+
+* The product filter view opens with Language = English applied by stable attribute identity.
+* The view shows the localized Language label and English value, not the stable keys.
+* Clearing the criterion restores the unfiltered product view.
+
 ---
 
 ## grade10-admin-inventory-catalog-US7: Collector finds and reads a card through Auction fields

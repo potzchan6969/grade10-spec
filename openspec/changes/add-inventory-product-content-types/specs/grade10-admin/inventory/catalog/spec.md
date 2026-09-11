@@ -247,6 +247,17 @@ to English when that translation is missing.
 - **THEN** the English grading value is displayed
 - **AND** no stable field key or raw translation key is displayed
 
+#### Scenario: grade10-admin-inventory-catalog-SC-92 - Admin opens a product filter from an attribute
+
+- **GIVEN** an inventory admin can see an IP, Item, Category, product attribute
+  key, or product attribute value in a product list, product editor, schema
+  review, or compatibility review
+- **WHEN** the admin selects that visible attribute
+- **THEN** Grade10 opens the product filter view with the selected stable
+  classification or attribute criterion applied
+- **AND** the filter view uses the displayed localized label and value
+- **AND** the admin can clear the applied criterion
+
 ### Requirement: Universal tags and product attributes are searchable and filterable
 
 Auction SHALL support search and filter criteria for every universal IP, Item,

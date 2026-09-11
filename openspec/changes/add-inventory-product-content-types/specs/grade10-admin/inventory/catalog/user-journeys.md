@@ -28,6 +28,7 @@
 - `grade10-admin-inventory-catalog-SC-77` — Missing required value blocks creation
 - `grade10-admin-inventory-catalog-SC-78` — Missing optional value remains valid
 - `grade10-admin-inventory-catalog-SC-79` — A missing locale falls back to English
+- `grade10-admin-inventory-catalog-SC-92` — Admin opens a product filter from an attribute
 
 ### grade10-admin-inventory-catalog-US-07: Collector finds and reads a card through Auction fields
 
