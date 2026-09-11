@@ -311,6 +311,12 @@ export const Leading: Story = {
     ).toBeInTheDocument();
     expect(canvas.getAllByText(/vs max/)).toHaveLength(3);
     expect(canvas.queryByText(/vs current/)).not.toBeInTheDocument();
+    expect(canvas.getByText("HK$97,500")).toBeInTheDocument();
+    expect(canvas.getByText("HK$100,000")).toBeInTheDocument();
+    expect(canvas.getByText("HK$105,000")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: /^Raise maximum to HK\$100,000/ }),
+    ).toBeInTheDocument();
   },
 };
 

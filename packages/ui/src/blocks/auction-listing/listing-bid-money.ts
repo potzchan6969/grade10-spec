@@ -39,13 +39,7 @@ export function resolveMaximumFloor(input: {
   standing: ListingAuctionStanding;
   currentBidMinor: number;
 }): MaximumFloor {
-  const {
-    minBidMinor,
-    incrementMinor,
-    viewerMaximumMinor,
-    standing,
-    currentBidMinor,
-  } = input;
+  const { minBidMinor, incrementMinor, viewerMaximumMinor, standing } = input;
 
   if (viewerMaximumMinor == null) {
     return { floorMinor: minBidMinor, reason: "floor-bid" };
@@ -56,26 +50,49 @@ export function resolveMaximumFloor(input: {
   }
 
   if (standing === "leading-max") {
-    const atCap = currentBidMinor >= viewerMaximumMinor;
-    if (atCap) {
-      const incrementRaiseFloor = viewerMaximumMinor + incrementMinor;
-      const floorMinor = Math.max(minBidMinor, incrementRaiseFloor);
-      const reason =
-        floorMinor === minBidMinor && minBidMinor > incrementRaiseFloor
-          ? "floor-bid"
-          : "leading-increment";
-      return { floorMinor, reason };
-    }
-    return {
-      floorMinor: Math.max(
-        minBidMinor,
-        viewerMaximumMinor + MINIMUM_MAXIMUM_RAISE_MINOR,
-      ),
-      reason: "leading-nudge",
-    };
+    const incrementRaiseFloor = viewerMaximumMinor + incrementMinor;
+    const floorMinor = Math.max(minBidMinor, incrementRaiseFloor);
+    const reason =
+      floorMinor === minBidMinor && minBidMinor > incrementRaiseFloor
+        ? "floor-bid"
+        : "leading-increment";
+    return { floorMinor, reason };
   }
 
   return { floorMinor: minBidMinor, reason: "floor-bid" };
+}
+
+/**
+ * Quick-raise preset amount. 1× / 2× / 4× the listing increment on the
+ * committed maximum when leading, or on the current bid otherwise.
+ */
+export function quickMaximumPresetAmount(input: {
+  multiples: number;
+  isLeadingWithMaximum: boolean;
+  hasBids: boolean;
+  floorMaximumMinor: number;
+  incrementMinor: number;
+  currentBidMinor: number;
+  viewerMaximumMinor?: number;
+}): number | null {
+  const {
+    multiples,
+    isLeadingWithMaximum,
+    hasBids,
+    floorMaximumMinor,
+    incrementMinor,
+    currentBidMinor,
+    viewerMaximumMinor,
+  } = input;
+
+  const amountMinor = isLeadingWithMaximum
+    ? (viewerMaximumMinor ?? floorMaximumMinor) + incrementMinor * multiples
+    : multiples === 1 && !hasBids
+      ? floorMaximumMinor
+      : currentBidMinor + incrementMinor * multiples;
+
+  if (amountMinor < floorMaximumMinor) return null;
+  return amountMinor;
 }
 
 export type MinimumMaximumCaptionCopy = {
