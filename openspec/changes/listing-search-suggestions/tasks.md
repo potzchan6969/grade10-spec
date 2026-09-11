@@ -1,4 +1,4 @@
-## 1. Searching state on the listing search field (grade10-spec)
+## 1. Searching state on the listing search field (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Give `ProductFilter` a pending indication and `ProductFilterCopy` its searching copy, rendering the design-system `AutocompleteLoading` row and inventing no suggestion row, so `shared-ui-store-product-listing-SC-74` passes; stand a `Store Product Listing/ProductFilter/Search` → `Pending` story behind it.
 - [ ] 1.2 Pass the pending indication through `FilterPanel` and `ProductBrowse` and hold the public entry to the export and type set `shared-ui-store-product-listing-SC-01` names, adding nothing beside it.
