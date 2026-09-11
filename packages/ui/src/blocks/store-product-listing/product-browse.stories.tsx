@@ -16,10 +16,12 @@ const meta = {
     ...productBrowseArgs,
     onFilterChange: fn(),
     onGroupExpand: fn(),
+    onGroupCollapse: fn(),
     onSearchChange: fn(),
     onSortChange: fn(),
     onClearFilters: fn(),
     onLoadMore: fn(),
+    onProductClick: fn(),
     onProductCartQuantityChange: fn(),
   },
 } satisfies Meta<typeof ProductBrowse>;
@@ -46,8 +48,9 @@ export const Default: Story = {
     expect(canvas.queryByRole("button", { name: "Latest" })).toBeNull();
     await waitFor(() => {
       expect(
-        canvas.getAllByText(/Pokémon TCG Sealed Booster Box – Abyss Eye \(M5\)/)
-          .length,
+        canvas.getAllByRole("button", {
+          name: /Pokémon TCG Sealed Booster Box – Abyss Eye \(M5\)/,
+        }).length,
       ).toBeGreaterThan(0);
     });
   },

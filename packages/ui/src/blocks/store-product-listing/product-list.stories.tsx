@@ -8,7 +8,11 @@ const meta = {
   component: ProductList,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
-  args: { copy: LISTING_COPY, products: PRODUCTS },
+  args: {
+    copy: LISTING_COPY,
+    products: PRODUCTS,
+    onProductClick: fn(),
+  },
 } satisfies Meta<typeof ProductList>;
 
 export default meta;

@@ -22,6 +22,7 @@ const meta = {
     onSortChange: fn(),
     onClearFilters: fn(),
     onLoadMore: fn(),
+    onProductClick: fn(),
     onProductCartQuantityChange: fn(),
   },
 } satisfies Meta<typeof ProductBrowse>;
