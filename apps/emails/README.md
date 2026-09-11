@@ -20,13 +20,20 @@ Letters compose Grade10’s `grade10Theme` through emailcn’s
 
 ## Preview
 
+This letter set lives on the `apps/emails` package. On `main` before this
+rename, `pnpm email:dev` still pointed at `apps/auction-emails` and had no
+magic-link template — check out the branch that adds `emails/magic-link.tsx`
+first, then:
+
 ```bash
 pnpm email:dev
 ```
 
 http://localhost:3333 — shared pieces under `emails/_components/` (hidden from
-the sidebar). Auction kinds live under `emails/auction/`. Site-wide letters sit
-beside that folder.
+the sidebar). The sidebar lists the `auction/` folder and top-level
+`magic-link` beside it (not inside `auction/`). Open
+http://localhost:3333/preview/magic-link directly if the tree is collapsed or
+scrolled. Restart the preview server after pulling so discovery refreshes.
 
 ## Structure
 
