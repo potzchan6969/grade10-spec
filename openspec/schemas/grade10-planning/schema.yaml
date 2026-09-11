@@ -349,12 +349,23 @@ artifacts:
     description: The QA suite derived from each capability's journeys, one file per capability
     template: feature-tcs.md
     instruction: >
-      Written by QA, with the `planning-qa` skill, one file beside each
-      `spec.md` whose journeys are worth
+      Written by the product manager, with the `planning-pm` skill, one file
+      beside each `spec.md` whose journeys are worth walking:
 
-      walking: `specs/<capability-path>/feature-tcs.md`. Optional - a change
+      `specs/<capability-path>/feature-tcs.md`. QA reviews and extends it with
 
-      whose capabilities carry no journeys has nothing to derive.
+      the `planning-qa` skill, but the first draft ships with the journeys.
+
+
+      Every `user-journeys.md` the change writes pairs with a `feature-tcs.md`
+
+      beside it. The one exemption is a capability whose journeys file says
+
+      `**Walked by:** nobody` in place of its stories - nobody walks it, so
+
+      there is nothing to derive. Any other capability missing its suite is an
+
+      unfinished change.
 
 
       A suite's file name carries its level, and `test-cases.md` is not one of

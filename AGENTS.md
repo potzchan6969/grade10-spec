@@ -41,12 +41,12 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 | 1 | `proposal.md` | Product manager | `planning-pm` | Always |
 | 2 | `specs/<capability>/spec.md` | Product manager | `planning-pm` | Always |
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Always — a capability nobody walks says so in it |
-| 4 | `specs/<capability>/feature-tcs.md` | QA | `planning-qa` | Optional |
+| 4 | `specs/<capability>/feature-tcs.md` | Product manager | `planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
 | 5 | `ui-design.md` | Designer | `planning-design` | Optional |
 | 6 | `tech-design.md` | Engineer | `planning-dev` | Optional |
 | 7 | `tasks.md` | Engineer | `planning-dev` | Before the change can be applied |
 
-Each hand writes its own artifacts on the one change and stops: a PM finishes at the journeys, QA derives the suites, a designer writes `ui-design.md`, and the engineer who picks the work up adds `tech-design.md` and `tasks.md` to the same change rather than opening a second one. That is the only route, because engineering never opens a change in the application repository: that repository's `openspec/` is config-only and resolves to this store, and until a change has a `tasks.md` it shows on the engineer's board as still being planned.
+Each hand writes its own artifacts on the one change and stops: a PM finishes at the feature suites derived from the journeys, QA reviews and extends them, a designer writes `ui-design.md`, and the engineer who picks the work up adds `tech-design.md` and `tasks.md` to the same change rather than opening a second one. That is the only route, because engineering never opens a change in the application repository: that repository's `openspec/` is config-only and resolves to this store, and until a change has a `tasks.md` it shows on the engineer's board as still being planned.
 
 The journeys are their own file beside each `spec.md`, never a `## User journeys` section inside it — `pnpm check:manual` refuses a spec that holds one, and the archive copies the file across by hand alongside the feature set. Every capability has the file: it holds the stories, or the one line `**Walked by:** nobody on their own - <why>` for a policy, a package contract, a convention, or a surface only the product's makers reach. A capability with neither fails `pnpm check:manual`, so an exemption is always a decision on record and never an omission.
 
