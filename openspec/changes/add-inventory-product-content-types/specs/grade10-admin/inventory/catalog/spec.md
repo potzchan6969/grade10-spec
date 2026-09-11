@@ -273,12 +273,17 @@ value for each item. When a requested locale is absent, Auction SHALL use the
 item's English value when present, then its supplied value. Listing attributes
 SHALL NOT be searchable or filterable.
 
-When Auction publishes a listing, it SHALL save a product display snapshot
-from the product schema then active for that product. A published listing SHALL
-render that snapshot in its saved product-field order, followed by its own
-listing attribute document in its saved item order, without a live read of the
-product schema. A later Inventory schema, attribute, or translation change
-SHALL NOT change or prevent rendering of the published Auction listing.
+Auction SHALL obtain a published listing's product fields through the current
+published product schema's Inventory display contract, then render those fields
+in that schema's configured order followed by the listing's own listing
+attribute document in saved item order. The contract SHALL return only fields
+selected by the published schema, with localized labels and values resolved
+through the supported fallback. Inventory SHALL retain published revisions and
+their referenced product attributes while an Auction listing can read them, and
+SHALL refuse a schema publication whose selected display fields cannot be
+resolved. An Inventory schema, attribute, or translation change MAY update the
+product fields shown by a published Auction listing, but SHALL NOT make that
+listing fail to render.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-83 - Operator configures different Auction fields per product schema
 
@@ -311,12 +316,15 @@ SHALL NOT change or prevent rendering of the published Auction listing.
 - **THEN** Auction displays the English PSA cert number label and value
 - **AND** no stable listing attribute key or raw translation key is displayed
 
-#### Scenario: grade10-admin-inventory-catalog-SC-90 - Published listing survives a product schema change
+#### Scenario: grade10-admin-inventory-catalog-SC-90 - Product schema change keeps an Auction listing renderable
 
-- **GIVEN** a published Auction listing has a product display snapshot and a listing attribute document
+- **GIVEN** a published Auction listing has listing attributes and its product
+  has a published product schema
 - **WHEN** an authorized inventory admin changes the product's schema, attributes, or translations
-- **THEN** the published Auction listing keeps rendering its saved product display snapshot and listing attribute document
-- **AND** Auction does not require a live product schema read to render that listing
+- **THEN** the published Auction listing renders the current resolved product
+  fields and its listing attribute document
+- **AND** Auction obtains its product fields through the Inventory display contract
+- **AND** the Inventory change does not make the listing fail to render
 
 ### Requirement: Product schema publishing validates affected products atomically
 

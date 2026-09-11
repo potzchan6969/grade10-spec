@@ -44,7 +44,7 @@
 - `grade10-admin-inventory-catalog-SC-84` — Auction shows localized labels and values in configured order
 - `grade10-admin-inventory-catalog-SC-88` — Listing-specific PSA cert number does not change the product
 - `grade10-admin-inventory-catalog-SC-89` — Flexible listing attribute falls back to English
-- `grade10-admin-inventory-catalog-SC-90` — Published listing survives a product schema change
+- `grade10-admin-inventory-catalog-SC-90` — Product schema change keeps an Auction listing renderable
 
 ### grade10-admin-inventory-catalog-US-08: Inventory admin publishes a safe product-schema configuration
 

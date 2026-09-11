@@ -367,7 +367,7 @@
 * The second listing shows the English PSA cert number label and value.
 * PSA cert number is absent from Auction search and filter controls.
 
-### grade10-admin-inventory-catalog-US7-TC5-1: Published listing keeps its product display snapshot
+### grade10-admin-inventory-catalog-US7-TC5-1: Product schema change keeps an Auction listing renderable
 
 **Classification:**
 
@@ -384,7 +384,8 @@
 
 **Pre-conditions:**
 
-* <published listing> has a saved product display snapshot and listing attributes.
+* <published listing>'s product has a published product schema.
+* <published listing> has listing attributes.
 * An admin holds the inventory catalogue grant.
 
 **Steps:**
@@ -394,9 +395,10 @@
 
 **Expected Results:**
 
-* <published listing> renders its saved product display snapshot.
+* <published listing> renders the current resolved product fields.
 * <published listing> renders its saved listing attributes.
-* The Auction read does not require the product's current schema.
+* Auction obtains product fields through the Inventory display contract.
+* The Inventory change does not make the listing fail to render.
 
 ---
 

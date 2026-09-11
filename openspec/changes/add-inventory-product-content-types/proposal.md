@@ -35,9 +35,10 @@ invalid product facts.
   localized displayed values, separate from its stable key; English is
   required and other supported locale translations are optional with English
   fallback.
-- **Published listing stability** — snapshots the selected product fields when
-  Auction publishes, so later Inventory schema or translation changes cannot
-  alter or break an existing Auction listing.
+- **Auction display compatibility** — Auction reads selected product fields
+  through an Inventory display contract. Product-schema publication keeps that
+  contract valid, so Inventory changes can update an Auction display without
+  breaking it.
 - **Configuration publishing** — validates a draft configuration against
   existing products before publishing it; a failed validation leaves the
   current published configuration active.
