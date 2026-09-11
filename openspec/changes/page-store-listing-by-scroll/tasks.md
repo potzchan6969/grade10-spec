@@ -19,9 +19,9 @@ are which, and why each path answers the total the way it does:
 
 ## 2. The catalogue's page shape (grade10) (owner: @sean)
 
-- [ ] 2.1 Add `totalCount` to `productsPageSchema` alone, leaving the shared `page()` helper and the collections page as they are, and carry it on the catalog port's counted page and the store frontend's product page — `tech-design.md`, *The total rides the page it describes*
-- [ ] 2.2 Answer `totalCount` from the fixture catalogue's paging helper, so a frontend suite renders a real count with no backend in the loop
-- [ ] 2.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 2.1 Add `totalCount` to `productsPageSchema` alone, leaving the shared `page()` helper and the collections page as they are, and carry it on the catalog port's counted page and the store frontend's product page — `tech-design.md`, *The total rides the page it describes*
+- [x] 2.2 Answer `totalCount` from the fixture catalogue's paging helper, so a frontend suite renders a real count with no backend in the loop
+- [x] 2.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 3. The catalogue's count (grade10)
 
