@@ -15,7 +15,7 @@
 - [x] 3.2 Preserve `products.metadata` as legacy unstructured data and add keys, checks, and typed-value indexes only for product attributes; listing attributes stay opaque JSONB
 - [ ] 3.3 Verify generated migration artifacts with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, and `pnpm run db:status`
 
-## 4. Inventory Backend and API (grade10)
+## 4. Inventory Backend and API (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Implement inventory-owned attribute-key and product-schema draft/publish services with exact IP + Item + Category lookup, English-base checks, missing-locale warnings, saved-change compatibility review, and transactional affected-product validation for grade10-admin-inventory-catalog-SC-69 through SC-73 and SC-91
 - [ ] 4.2 Implement typed product-attribute writes and the created-state validator so drafts may be incomplete but all supplied values validate and missing required canonical values block creation for grade10-admin-inventory-catalog-SC-74 through SC-79
