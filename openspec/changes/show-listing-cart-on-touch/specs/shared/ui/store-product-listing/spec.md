@@ -21,10 +21,11 @@ image SHALL display the cart control with the supplied count collapsed on the
 control. Where one is supplied and the product is available and not in the
 cart:
 
-- on a fine pointer with hover, the cart control SHALL appear on pointer hover
-  and when the image receives keyboard focus, and SHALL be hidden otherwise
-- on a coarse pointer, or where hover is not available, the cart control SHALL
-  remain visible without hover
+- on a wide viewport with a fine pointer and hover, the cart control SHALL
+  appear on pointer hover and when the image receives keyboard focus, and
+  SHALL be hidden otherwise
+- on a coarse pointer, where hover is not available, or below the wide
+  listing breakpoint, the cart control SHALL remain visible without hover
 
 Activating the add affordance SHALL expand the cart control into an inline
 quantity stepper on the same primary pill. While expanded, decrement and
@@ -110,5 +111,12 @@ image SHALL contain no default, fallback, or built-in copy.
 
 - **GIVEN** an available product that is not in the cart, with a way to report a quantity change
 - **AND** the pointer is coarse or hover is not available
+- **THEN** the cart control is displayed without hover
+- **AND** it can be activated
+
+#### Scenario: shared-ui-store-product-listing-SC-66 - Narrow viewport keeps the cart visible
+
+- **GIVEN** an available product that is not in the cart, with a way to report a quantity change
+- **AND** the surface is below the wide listing breakpoint
 - **THEN** the cart control is displayed without hover
 - **AND** it can be activated

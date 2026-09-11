@@ -18,6 +18,10 @@ facet groups; the search field stays on the listing outside the drawer.
 Worlds and Types sit as tabs so expanding one group does not push the other
 down the scroll. The wide sidebar still stacks them.
 
+🚧 **Cart on a small screen** — where the tile sells, the round cart control
+stays visible without hover on a narrow viewport and on touch; on a wide
+viewport with a fine pointer it still appears on hover or keyboard focus.
+
 ## Adaptive Filter
 
 Below the wide breakpoint, Filter opens a left drawer for facets. Search stays

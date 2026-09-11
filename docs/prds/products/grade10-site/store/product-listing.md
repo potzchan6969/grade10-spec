@@ -28,6 +28,8 @@ product.
 - 🚧 **Worlds and Types as tabs on a small screen** — inside the filter drawer
   the two facet groups sit as tabs so expanding worlds does not push types
   down the scroll; the wide sidebar still stacks them
+- 🚧 **Cart on a small screen** — where a tile sells, the cart control stays
+  visible without hover on a narrow viewport and on touch
 - **Search and sort** — both describe the whole catalogue, never the cards
   already on screen; the menu offers latest, lowest price and highest price,
   and nothing is in force until the collector picks one
