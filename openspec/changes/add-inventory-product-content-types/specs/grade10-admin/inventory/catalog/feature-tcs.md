@@ -344,6 +344,7 @@
 
 * Two Auction listings use the same Pokémon product.
 * The Pokémon product schema defines PSA cert number as a listing attribute.
+* The second listing has no Simplified Chinese PSA cert number label or value.
 
 **Test data:**
 
@@ -357,12 +358,14 @@
 1. Enter <listing A cert> on the first Auction listing.
 2. Enter <listing B cert> on the second Auction listing.
 3. Open both listings.
-4. Open Auction search and filter controls.
+4. Open the second listing with Simplified Chinese active.
+5. Open Auction search and filter controls.
 
 **Expected Results:**
 
 * Each listing displays its own PSA cert number.
 * The shared product's grading and product attributes remain unchanged.
+* The second listing shows the English PSA cert number label and value.
 * PSA cert number is absent from Auction search and filter controls.
 
 ---

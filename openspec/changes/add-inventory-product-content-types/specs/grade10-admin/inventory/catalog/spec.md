@@ -270,7 +270,8 @@ belongs to one listing, not the product; it SHALL have a stable key, data type,
 validation, localized displayed label, and localized displayed text values by
 the same English-base and fallback rules as product attributes. Listing
 attributes SHALL be displayed only in Auction and SHALL NOT be searchable or
-filterable.
+filterable. Auction SHALL store the listing's canonical values and optional
+localized text values together as one listing attribute document.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-83 - Operator configures different Auction fields per product schema
 
@@ -295,6 +296,13 @@ filterable.
 - **THEN** each listing displays its own PSA cert number
 - **AND** the product's grading and product attribute values remain unchanged
 - **AND** PSA cert number is not offered as an Auction search or filter criterion
+
+#### Scenario: grade10-admin-inventory-catalog-SC-89 - Listing attribute falls back to English
+
+- **GIVEN** an Auction listing has an English PSA cert number label and value but no Simplified Chinese translations
+- **WHEN** a collector opens the listing in Simplified Chinese
+- **THEN** Auction displays the English PSA cert number label and value
+- **AND** no stable listing attribute key or raw translation key is displayed
 
 ### Requirement: Product schema publishing validates affected products atomically
 
