@@ -49,8 +49,12 @@ type FilterGroup = {
   id: string;
   label: ReactNode;
   options: readonly FilterOption[];
-  /** Shown after the options. Omit it and no expand affordance is rendered. */
+  /** Shown after the options when the group is capped. Omit it and no expand
+   * affordance is rendered. */
   expandLabel?: ReactNode;
+  /** Shown after the options when the group is fully listed. Omit it and no
+   * collapse affordance is rendered. */
+  collapseLabel?: ReactNode;
   /**
    * Narrow multi-select pill label stem, e.g. `World` for `World (2)`.
    * Falls back to `label` when omitted.

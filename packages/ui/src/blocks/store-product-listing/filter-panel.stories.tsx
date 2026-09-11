@@ -28,6 +28,7 @@ const meta = {
     selection: {},
     onFilterChange: fn(),
     onGroupExpand: fn(),
+    onGroupCollapse: fn(),
     onSearchChange: fn(),
     utilityLinks: UTILITY_LINKS,
   },
@@ -113,6 +114,32 @@ export const GroupExpandIsReported: Story = {
     );
     expect(args.onGroupExpand).toHaveBeenCalledTimes(1);
     expect(args.onGroupExpand).toHaveBeenCalledWith("worlds");
+  },
+};
+
+/** Collapse reports when the consumer supplied a Show less label. */
+export const GroupCollapseIsReported: Story = {
+  args: {
+    groups: {
+      status: "ready",
+      data: [
+        {
+          id: "worlds",
+          label: "Worlds",
+          collapseLabel: "Show less",
+          options: [
+            { id: "pokemon", label: "Pokémon", count: "51" },
+            { id: "one-piece", label: "One Piece", count: "4" },
+          ],
+        },
+      ],
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Show less" }));
+    expect(args.onGroupCollapse).toHaveBeenCalledTimes(1);
+    expect(args.onGroupCollapse).toHaveBeenCalledWith("worlds");
   },
 };
 

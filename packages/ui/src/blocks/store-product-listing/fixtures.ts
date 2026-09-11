@@ -72,6 +72,7 @@ const FILTER_GROUPS_EXPANDED: FilterGroup[] = [
     id: "worlds",
     label: "Worlds",
     compactLabel: "World",
+    collapseLabel: "Show less",
     options: ALL_WORLD_OPTIONS.map((option) => ({ ...option })),
   },
   FILTER_GROUPS[1],

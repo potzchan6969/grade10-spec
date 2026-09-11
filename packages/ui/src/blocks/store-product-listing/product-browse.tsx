@@ -58,6 +58,7 @@ type ProductBrowseProps = {
     selected: boolean,
   ) => void;
   onGroupExpand?: (groupId: string) => void;
+  onGroupCollapse?: (groupId: string) => void;
   utilityLinks?: readonly UtilityLink[];
 
   results: AsyncState<readonly ProductSummary[]>;
@@ -130,6 +131,7 @@ function ProductBrowse({
   selection = {},
   onFilterChange,
   onGroupExpand,
+  onGroupCollapse,
   utilityLinks,
   results,
   resultCount,
@@ -162,6 +164,7 @@ function ProductBrowse({
   const facetProps = {
     groups,
     onFilterChange,
+    onGroupCollapse,
     onGroupExpand,
     selection,
   } as const;
