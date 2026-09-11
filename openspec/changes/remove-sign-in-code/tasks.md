@@ -7,7 +7,7 @@
 - [x] 1.3 Remove `signIn.sendCodeFailed`, `codeLabel`, `codeSentTo`, `verifyLabel`, `verifyFailed` and `email.login.otpHint` from the shared and brand catalogs in every language
 - [x] 1.4 Run `pnpm run lint`, `pnpm run typecheck`, `pnpm run test`, and `pnpm run test:stories:ui`
 
-## 2. Auth service and login email (grade10)
+## 2. Auth service and login email (grade10) (owner: @sean)
 
 Needs the submodule bump that carries group 1, for the `email.login` catalog shape.
 
