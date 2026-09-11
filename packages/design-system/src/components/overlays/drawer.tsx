@@ -220,7 +220,7 @@ function DrawerHeader({
     <div
       data-slot="drawer-header"
       className={cn(
-        "flex w-full shrink-0 items-start gap-2 px-6 pt-4",
+        "flex w-full shrink-0 items-start gap-2 px-4 pt-4 lg:px-6",
         className,
       )}
       {...props}
@@ -234,14 +234,14 @@ function DrawerHeader({
 /**
  * Scroll region between the pinned header and footer. Owns overflow when
  * content exceeds the panel. Body copy defaults to primary `text-base` (16px).
- * Top padding is 24px so body sits that far below the header description.
+ * Horizontal and top padding are 16px on small viewports, 24px from `lg`.
  */
 function DrawerBody({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       data-slot="drawer-body"
       className={cn(
-        "scroll-fade flex min-h-0 w-full flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto px-6 pt-6 pb-4 text-base leading-6 font-normal text-foreground",
+        "scroll-fade flex min-h-0 w-full flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto px-4 pt-4 pb-4 text-base leading-6 font-normal text-foreground lg:px-6 lg:pt-6",
         className,
       )}
       {...props}
@@ -264,7 +264,7 @@ function DrawerFooter({
     <div
       data-slot="drawer-footer"
       className={cn(
-        "mt-auto flex w-full shrink-0 flex-col gap-2 px-6 pb-6 pt-2",
+        "mt-auto flex w-full shrink-0 flex-col gap-2 px-4 pb-4 pt-2 lg:px-6 lg:pb-6",
         className,
       )}
       {...props}
