@@ -6,6 +6,14 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { NavigationLink } from "@grade10/design-system/components/layout/navigation-link";
 import { NavigationList } from "@grade10/design-system/components/layout/navigation-list";
 import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@grade10/design-system/components/overlays/drawer";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
@@ -15,12 +23,14 @@ import {
 import { IconProvider } from "@grade10/design-system/components/providers/icon-provider";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
-  CurrencyCircleDollar,
+  CaretRight,
+  List,
   MagnifyingGlass,
   ShoppingBag,
+  Translate,
   User,
 } from "@phosphor-icons/react";
-import type { ComponentProps, ReactNode } from "react";
+import { type ComponentProps, type ReactNode, useState } from "react";
 
 type NavLink = {
   /** What the link is called — text, so the header can name it to a reader. */
@@ -38,19 +48,30 @@ type NavLocale = {
   label: string;
 };
 
+/** How the account control looks when the application supplies `onAccountClick`. */
+type NavAccountPresentation = "icon" | "sign-in";
+
 /**
  * The words the header says. What it points at, who handles a click, and
  * which regions it draws are not words and stay their own props.
  */
 type NavCopy = {
-  /** What the locale control displays — a language, or a region and its
-   * currency. Shown whether or not the control can be switched. */
+  /** What the locale control displays — the active language label. Shown
+   * whether or not the control can be switched. */
   locale: string;
   /** Accessible names for the controls a handler backs. A control with no
    * handler is not rendered, so its name is never read. */
   search?: string;
   account?: string;
   cart?: string;
+  /** Visible label when `accountPresentation` is `"sign-in"`. */
+  signIn?: string;
+  /** Accessible name for the compact-viewport menu trigger. */
+  menu?: string;
+  /** Title shown at the top of the compact menu drawer. */
+  menuTitle?: string;
+  /** Title of the compact language nested drawer. */
+  language?: string;
 };
 
 type NavProps = ComponentProps<"header"> & {
@@ -70,27 +91,54 @@ type NavProps = ComponentProps<"header"> & {
   onLocaleChange?: (value: string) => void;
   onSearchClick?: () => void;
   onAccountClick?: () => void;
+  /**
+   * `"icon"` (default) renders the account IconButton; `"sign-in"` renders a
+   * primary Button using `copy.signIn`. Ignored when `accountSlot` is supplied.
+   */
+  accountPresentation?: NavAccountPresentation;
+  /**
+   * Replaces the built-in account control. Use when a compound header owns the
+   * account menu trigger. When set, `onAccountClick` and `accountPresentation`
+   * are unused.
+   */
+  accountSlot?: ReactNode;
   onCartClick?: () => void;
 };
 
-const currency = <CurrencyCircleDollar aria-hidden size={14} />;
+const languageIcon = <Translate aria-hidden size={14} />;
+
+/** Compact drawers leave a visible gutter; match Drawer’s x-axis specificity. */
+const COMPACT_DRAWER_CLASS =
+  "data-[swipe-axis=x]:max-w-[min(var(--container-md),calc(100vw-3.5rem))] data-[swipe-axis=x]:[--drawer-content-width:min(var(--container-md),calc(100vw-3.5rem))]";
+
+const MENU_LINK_CLASS = "min-h-11 w-full justify-start";
 
 function LocaleControl({
   localeLabel,
   locales,
   locale,
   onLocaleChange,
+  className,
 }: {
   localeLabel: string;
   locales: NavLocale[];
   locale?: string;
   onLocaleChange?: (value: string) => void;
+  className?: string;
 }) {
   if (locales.length > 0 && onLocaleChange) {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger
-          render={<Button leading={currency} size="md" variant="ghost" />}
+          className="[&_svg]:transition-none [&[data-popup-open]_svg]:rotate-0"
+          render={
+            <Button
+              className={className}
+              leading={languageIcon}
+              size="md"
+              variant="ghost"
+            />
+          }
         >
           {localeLabel}
         </DropdownMenuTrigger>
@@ -115,50 +163,133 @@ function LocaleControl({
 
   return (
     <span
-      className="flex items-center gap-2 px-3 text-sm font-medium text-foreground"
+      className={cn(
+        "flex items-center gap-2 px-3 text-sm font-medium text-foreground",
+        className,
+      )}
       data-slot="nav-locale"
     >
-      {currency}
+      {languageIcon}
       {localeLabel}
     </span>
   );
 }
 
+function CompactLanguageDrawer({
+  localeLabel,
+  languageTitle,
+  locales,
+  locale,
+  onLocaleChange,
+}: {
+  localeLabel: string;
+  languageTitle: string;
+  locales: NavLocale[];
+  locale?: string;
+  onLocaleChange: (value: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Drawer open={open} onOpenChange={setOpen} swipeDirection="left">
+      <DrawerTrigger
+        data-slot="nav-menu-language"
+        render={
+          <Button
+            className={MENU_LINK_CLASS}
+            leading={languageIcon}
+            size="md"
+            trailing={<CaretRight aria-hidden className="ml-auto" size={14} />}
+            variant="ghost"
+          />
+        }
+      >
+        {localeLabel}
+      </DrawerTrigger>
+      <DrawerContent className={COMPACT_DRAWER_CLASS} data-slot="nav-language">
+        <DrawerHeader>
+          <DrawerTitle>{languageTitle}</DrawerTitle>
+        </DrawerHeader>
+        <DrawerBody className="gap-1">
+          <NavigationList
+            aria-label={languageTitle}
+            className="w-full flex-col items-stretch gap-1"
+          >
+            {locales.map((item) => (
+              <NavigationLink
+                active={item.value === (locale ?? locales[0]?.value)}
+                className={MENU_LINK_CLASS}
+                href="#"
+                key={item.value}
+                onClick={(event) => {
+                  event.preventDefault();
+                  onLocaleChange(item.value);
+                  setOpen(false);
+                }}
+              >
+                {item.label}
+              </NavigationLink>
+            ))}
+          </NavigationList>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
+  );
+}
+
+function AccountControl({
+  copy,
+  presentation,
+  onAccountClick,
+  accountSlot,
+}: {
+  copy: NavCopy;
+  presentation: NavAccountPresentation;
+  onAccountClick?: () => void;
+  accountSlot?: ReactNode;
+}) {
+  if (accountSlot != null) {
+    return <>{accountSlot}</>;
+  }
+  if (!onAccountClick) {
+    return null;
+  }
+  if (presentation === "sign-in") {
+    return (
+      <Button
+        className="shrink-0 @max-3xl:h-8 @max-3xl:gap-1 @max-3xl:px-3 @max-3xl:text-xs"
+        onClick={onAccountClick}
+        size="md"
+        variant="default"
+      >
+        {copy.signIn ?? "Sign In"}
+      </Button>
+    );
+  }
+  return (
+    <IconButton
+      aria-label={copy.account ?? "Account"}
+      onClick={onAccountClick}
+      size="md"
+      variant="ghost"
+    >
+      <User aria-hidden size={14} />
+    </IconButton>
+  );
+}
+
 /**
- * Store chrome. Figma set `Nav` (`4171:9937`) has no variant axes — content
- * is passed in so a consumer can swap copy and callbacks without owning the
- * layout. Primary items are `NavigationList` / `NavigationLink`; the locale
- * control is a ghost `md` Button with a currency icon, and opens a dropdown
- * of the supplied locales when a handler backs it. Trailing controls are
- * ghost `md` IconButtons at `Size/size-10` with 14px glyphs, spaced
- * `Gap/gap-1`.
+ * Store chrome. Storybook is the layout source of truth.
  *
- * Annotations on the set: the logo link goes to the homepage (`logoHref`);
- * the locale control switches currency (e.g. HKD / KRW) when `locales` and
- * `onLocaleChange` are supplied. The promo bar fills at `Size/size-9` with
- * `text-sm/semibold` `Base/primary-foreground` copy — its fill resolves to
- * the same value as `secondary-foreground` in the Grade10 theme (`#75726f`),
- * not `Base/primary`. Grade10's mark is the consumer-owned `g10-logo_mono`
- * instance sized at `Size/size-7` in the bar. The main bar is `Size/size-18`
- * (72) with `Gap/gap-8` horizontal inset.
+ * Wide (`@3xl+`): utility strip, centered primary nav, language + trailing
+ * controls in the bar. Compact: a single row with a leading hamburger that
+ * opens a left drawer (primary nav, then utility links as the same link
+ * style, then language via a nested drawer), and Account / Sign In plus Cart
+ * on the trailing edge.
  *
- * Brand, navigation, and locale content is required rather than defaulted: two
- * stores render this shell, and a default would let the second one ship the
- * first one's navigation with nothing failing.
- *
- * A control renders only where a handler backs it, and a region only where it
- * has content. The handler is the switch rather than a second `showSearch`
- * prop beside it: one fact, one place, and no way for the two to disagree. A
- * site with no basket therefore shows no basket instead of a button that
- * swallows the click.
- *
- * Default locale (detect by IP, otherwise Hong Kong) is an application
- * decision. This shell only switches between the options it is given.
- *
- * The bar's rungs are container queries: below them it wraps — logo and
- * controls, navigation beneath — rather than centring the navigation over
- * them. A shell answers to the width it is given, which is the only width a
- * story can hand it.
+ * Brand, navigation, and locale content is required rather than defaulted. A
+ * control renders only where a handler backs it (or an `accountSlot` is
+ * supplied).
  */
 function Nav({
   className,
@@ -173,9 +304,17 @@ function Nav({
   onLocaleChange,
   onSearchClick,
   onAccountClick,
+  accountPresentation = "icon",
+  accountSlot,
   onCartClick,
   ...props
 }: NavProps) {
+  const showAccount = accountSlot != null || onAccountClick != null;
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuLabel = copy.menu ?? "Menu";
+  const menuTitle = copy.menuTitle ?? menuLabel;
+  const languageTitle = copy.language ?? "Language";
+
   return (
     <IconProvider>
       <header
@@ -199,7 +338,7 @@ function Nav({
         {utilityLinks.length > 0 ? (
           <div
             data-slot="nav-utility"
-            className="flex min-h-8 items-center px-8 py-1"
+            className="hidden min-h-8 items-center px-8 py-1 @3xl:flex"
           >
             <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
               {utilityLinks.map((link) => (
@@ -217,16 +356,109 @@ function Nav({
         ) : null}
         <div
           data-slot="nav-bar"
-          className="relative flex flex-wrap items-center justify-between gap-y-2 px-8 py-3 @3xl:h-[72px] @3xl:flex-nowrap @3xl:py-0"
+          className="relative flex min-w-0 items-center justify-between gap-1 px-2 py-3 @3xl:h-[72px] @3xl:gap-y-2 @3xl:px-8 @3xl:py-0"
         >
-          <a
-            className="text-2xl font-bold text-foreground"
-            data-slot="nav-logo"
-            href={logoHref}
+          <div
+            data-slot="nav-leading"
+            className="flex min-w-0 items-center gap-1"
           >
-            {logo}
-          </a>
-          <NavigationList className="order-last w-full flex-wrap @3xl:absolute @3xl:top-1/2 @3xl:left-1/2 @3xl:order-none @3xl:w-auto @3xl:-translate-x-1/2 @3xl:-translate-y-1/2 @3xl:flex-nowrap">
+            <Drawer
+              open={menuOpen}
+              onOpenChange={setMenuOpen}
+              swipeDirection="left"
+            >
+              <DrawerTrigger
+                className="@3xl:hidden"
+                render={
+                  <IconButton
+                    aria-label={menuLabel}
+                    size="md"
+                    variant="ghost"
+                  />
+                }
+              >
+                <List aria-hidden size={14} />
+              </DrawerTrigger>
+              <DrawerContent
+                className={COMPACT_DRAWER_CLASS}
+                data-slot="nav-menu"
+              >
+                <DrawerHeader>
+                  <DrawerTitle>{menuTitle}</DrawerTitle>
+                </DrawerHeader>
+                <DrawerBody className="gap-6">
+                  <NavigationList
+                    className="w-full flex-col items-stretch gap-1"
+                    data-slot="nav-menu-primary"
+                  >
+                    {navItems.map((item) => (
+                      <NavigationLink
+                        active={item.current}
+                        className={MENU_LINK_CLASS}
+                        disabled={item.disabled}
+                        href={item.href}
+                        key={String(item.label)}
+                        onClick={() => setMenuOpen(false)}
+                      >
+                        {item.label}
+                      </NavigationLink>
+                    ))}
+                  </NavigationList>
+                  {utilityLinks.length > 0 ? (
+                    <NavigationList
+                      aria-label="Utilities"
+                      className="w-full flex-col items-stretch gap-1 border-t border-border pt-4"
+                      data-slot="nav-menu-utility"
+                    >
+                      {utilityLinks.map((link) => (
+                        <NavigationLink
+                          className={MENU_LINK_CLASS}
+                          href={link.href}
+                          key={String(link.label)}
+                          onClick={() => setMenuOpen(false)}
+                        >
+                          {link.label}
+                        </NavigationLink>
+                      ))}
+                    </NavigationList>
+                  ) : null}
+                  {onSearchClick ? (
+                    <Button
+                      className={MENU_LINK_CLASS}
+                      leading={<MagnifyingGlass aria-hidden size={14} />}
+                      onClick={() => {
+                        setMenuOpen(false);
+                        onSearchClick();
+                      }}
+                      size="md"
+                      variant="ghost"
+                    >
+                      {copy.search ?? "Search"}
+                    </Button>
+                  ) : null}
+                  {locales.length > 0 && onLocaleChange ? (
+                    <div className="border-t border-border pt-4">
+                      <CompactLanguageDrawer
+                        languageTitle={languageTitle}
+                        locale={locale}
+                        localeLabel={copy.locale}
+                        locales={locales}
+                        onLocaleChange={onLocaleChange}
+                      />
+                    </div>
+                  ) : null}
+                </DrawerBody>
+              </DrawerContent>
+            </Drawer>
+            <a
+              className="min-w-0 max-w-[9rem] shrink overflow-hidden text-xl font-bold text-foreground @3xl:max-w-none @3xl:text-2xl [&_svg]:h-5 [&_svg]:w-auto @3xl:[&_svg]:h-7"
+              data-slot="nav-logo"
+              href={logoHref}
+            >
+              {logo}
+            </a>
+          </div>
+          <NavigationList className="absolute top-1/2 left-1/2 hidden w-auto -translate-x-1/2 -translate-y-1/2 flex-nowrap @3xl:flex">
             {navItems.map((item) => (
               <NavigationLink
                 active={item.current}
@@ -240,33 +472,33 @@ function Nav({
           </NavigationList>
           <div
             data-slot="nav-controls"
-            className="flex flex-wrap items-center justify-end gap-1"
+            className="flex shrink-0 items-center justify-end gap-1"
           >
-            <LocaleControl
-              locale={locale}
-              localeLabel={copy.locale}
-              locales={locales}
-              onLocaleChange={onLocaleChange}
-            />
-            {onSearchClick ? (
-              <IconButton
-                aria-label={copy.search ?? "Search"}
-                onClick={onSearchClick}
-                size="md"
-                variant="ghost"
-              >
-                <MagnifyingGlass aria-hidden size={14} />
-              </IconButton>
-            ) : null}
-            {onAccountClick ? (
-              <IconButton
-                aria-label={copy.account ?? "Account"}
-                onClick={onAccountClick}
-                size="md"
-                variant="ghost"
-              >
-                <User aria-hidden size={14} />
-              </IconButton>
+            <div className="hidden @3xl:contents">
+              <LocaleControl
+                locale={locale}
+                localeLabel={copy.locale}
+                locales={locales}
+                onLocaleChange={onLocaleChange}
+              />
+              {onSearchClick ? (
+                <IconButton
+                  aria-label={copy.search ?? "Search"}
+                  onClick={onSearchClick}
+                  size="md"
+                  variant="ghost"
+                >
+                  <MagnifyingGlass aria-hidden size={14} />
+                </IconButton>
+              ) : null}
+            </div>
+            {showAccount ? (
+              <AccountControl
+                accountSlot={accountSlot}
+                copy={copy}
+                onAccountClick={onAccountClick}
+                presentation={accountPresentation}
+              />
             ) : null}
             {onCartClick ? (
               <IconButton
@@ -285,5 +517,12 @@ function Nav({
   );
 }
 
-export type { NavCopy, NavItem, NavLink, NavLocale, NavProps };
+export type {
+  NavAccountPresentation,
+  NavCopy,
+  NavItem,
+  NavLink,
+  NavLocale,
+  NavProps,
+};
 export { Nav };
