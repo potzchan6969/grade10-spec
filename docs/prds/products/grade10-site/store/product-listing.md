@@ -13,7 +13,7 @@ product.
   ones below them, so the catalogue is read by scrolling; nothing offers a page
   number, a next control or a load-more button, and a new narrowing starts
   again at its own first page
-- 🚧 **A count of the whole set** — above the grid, how many cards the narrowed
+- **A count of the whole set** — above the grid, how many cards the narrowed
   catalogue holds, never how many are on screen; it moves when the narrowing
   moves and stays still while the collector reads on
 - **Stock is a ceiling** — a card's cart control stops where the shop's count
