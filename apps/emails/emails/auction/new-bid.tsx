@@ -1,5 +1,5 @@
-import { AuctionLetter } from "@/emails/_components/auction-letter";
-import { previewLot } from "@/emails/_components/preview-lot";
+import { AuctionLetter } from "@/emails/auction/_components/auction-letter";
+import { previewLot } from "@/emails/auction/_components/preview-lot";
 
 export type NewBidProps = {
   brandName?: string;

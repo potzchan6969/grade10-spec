@@ -15,7 +15,7 @@ import { createEmailTailwindConfig } from "@/components/email/email-theme";
 import { DefaultFonts } from "@/components/email/font-default";
 import { grade10Theme } from "@/components/email/theme-grade10";
 
-export type AuctionEmailShellProps = {
+export type Grade10EmailShellProps = {
   preheader: string;
   /** Absolute or /static URL for the brand mark. Defaults to the Grade10 mono logo. */
   logoUrl?: string;
@@ -34,15 +34,15 @@ export const GRADE10_HOME_URL = "https://grade10.com";
 const theme = grade10Theme;
 
 /**
- * Document chrome for auction letters — emailcn Tailwind theme + Grade10 tokens.
+ * Document chrome for Grade10 letters — emailcn Tailwind theme + Grade10 tokens.
  */
-export function AuctionEmailShell({
+export function Grade10EmailShell({
   preheader,
   logoUrl = GRADE10_LOGO_STATIC,
   logoAlt = "Grade10",
   homeUrl = GRADE10_HOME_URL,
   children,
-}: AuctionEmailShellProps) {
+}: Grade10EmailShellProps) {
   return (
     <Html lang="en">
       <Head>

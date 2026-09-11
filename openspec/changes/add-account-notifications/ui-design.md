@@ -4,7 +4,7 @@ The collector-facing surface of this change is six email messages, My
 Auctions mute controls, and the account-level auction email alerts master.
 Operators also get a send log. Nothing renders in the site shell for mail
 itself. Letter markup is built with emailcn (shadcn registry `@emailcn`) on
-React Email in [`apps/auction-emails`](../../../../apps/auction-emails/);
+React Email in [`apps/emails`](../../../../apps/emails/);
 preview with `pnpm email:dev`. Shared pieces and send details are in
 `tech-design.md`.
 
