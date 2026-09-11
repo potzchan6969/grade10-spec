@@ -19,34 +19,48 @@ const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 const noop = () => {};
 
 const NAV_LOGO: ReactNode = createElement(G10LogoMono, {
-  className: "h-7 w-auto",
+  className: "h-5 w-auto @3xl:h-7",
 });
 const FOOTER_LOGO: ReactNode = createElement(G10LogoMono, {
   className: "h-5 w-auto",
 });
 
-const STORE_NAV = {
-  copy: { locale: "HKD" },
+/** Store page chrome for `SiteHeader`. Includes cart; Store is in the nav. */
+const STORE_SITE_HEADER = {
+  copy: {
+    locale: "English",
+    account: "Account",
+    cart: "Cart",
+    signIn: "Sign In",
+    menu: "Menu",
+    menuTitle: "Menu",
+    language: "Language",
+    accountMenuLabel: "Account",
+    profile: "Profile",
+    myAuctions: "My Auctions",
+    signOut: "Sign out",
+  },
+  session: "signed-in" as const,
   promo: "PROMO UTILITY BAR",
   logo: NAV_LOGO,
   logoHref: "/",
   locales: [
-    { value: "HK", label: "HKD" },
-    { value: "KR", label: "KRW" },
+    { value: "en", label: "English" },
+    { value: "zh-Hant", label: "繁體中文" },
+    { value: "zh-Hans", label: "简体中文" },
   ],
-  locale: "HK",
+  locale: "en",
   utilityLinks: [],
   navItems: [
     { label: "Store", href: "#shop", current: true },
     { label: "Auction", href: "#auction" },
-    { label: "Grade", href: "#grade" },
     { label: "Store Locator", href: "#locator" },
   ],
-  /* A control renders only where a handler backs it, and this workbench
-   * assembles the storefront the Figma nav draws — locale, account, cart.
-   * A store with fewer surfaces passes fewer and shows fewer. */
   onLocaleChange: noop,
-  onAccountClick: noop,
+  onSignIn: noop,
+  onProfile: noop,
+  onMyAuctions: noop,
+  onSignOut: noop,
   onCartClick: noop,
 };
 
@@ -315,7 +329,7 @@ export {
   STORE_HOME_PRODUCT_CARD_COPY,
   STORE_HOME_PRODUCTS,
   STORE_HOME_SECTION_COPY,
-  STORE_NAV,
+  STORE_SITE_HEADER,
   sortTriggerLabel,
   UTILITY_LINKS,
 };
