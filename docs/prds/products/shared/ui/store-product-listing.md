@@ -24,8 +24,9 @@ viewport with a fine pointer it still appears on hover or keyboard focus.
 
 ## Adaptive Filter
 
-Below the wide breakpoint, Filter opens a left drawer for facets. Search stays
-on the listing. Facet groups are tabs in that drawer only.
+🚧 **Narrow pills** — below the wide breakpoint: result count and pills for
+sort and each facet group; bottom drawers; no listing search. Facet drawers
+draft until Show Results. Wide keeps the sidebar and chip header.
 
 The surface holds no state of its own. Which products match, how they are
 ordered, how many there are and what a cart control does are all the
@@ -39,21 +40,21 @@ different words.
 :::flow{title="Browsing and filtering"}
 ## The page opens
 
-On a wide viewport the sidebar shows the search box and filter groups. On a
-narrow viewport the listing shows the search field and a Filter control; the
-header shows the result count and the sort control.
+On a wide viewport the sidebar shows the search box and filter groups; the
+header shows the result count, sort, and chips. On a narrow viewport the
+listing shows the result count and pills for sort and each facet group.
 
 ## The shopper searches
 
-They type in the listing search field. The surface reports the change; the
-application decides what matches.
+On a wide viewport they type in the listing search field. The surface reports
+the change; the application decides what matches. Narrow chrome has no search.
 
-## They open filters on a narrow viewport
+## They open a facet on a narrow viewport
 
-Filter opens a left drawer with the facet tabs. They tick options there; chips
-appear on the listing. Done closes the drawer; Clear reports clearing.
+A facet pill opens a bottom drawer for that group. They tick options in a
+draft; Show Results applies and closes; Clear empties the draft for that group.
 
-## They tick a filter
+## They tick a filter on a wide viewport
 
 A chip for it appears in the result header under the applied filters, and can be
 removed from there.

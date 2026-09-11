@@ -48,11 +48,14 @@ product.
 
 ## Adaptive Filter
 
-On a narrow viewport the listing offers a Filter control that opens a left
-drawer for worlds and types. The catalogue search field stays on the listing
-outside that drawer. Inside that drawer, Worlds and Types are tabs so
-expanding worlds does not push types down the scroll. On a wide viewport the
-sidebar still stacks the groups.
+🚧 **Narrow pills** — below the wide breakpoint the listing shows the result
+count and pills for sort and each facet group (Worlds, Types). Sort opens a
+bottom drawer and applies on choose. A facet pill opens a bottom drawer for
+that group; Show Results applies the draft; Clear empties that group’s draft.
+Pill labels show the group name, a single option name, or a compact name with
+count. No listing search, Filter icon, left drawer, or chip row on that
+viewport. On a wide viewport the sidebar still stacks search and groups, and
+the header still shows chips.
 
 ## Search
 
