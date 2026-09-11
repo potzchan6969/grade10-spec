@@ -9,6 +9,13 @@ The product listing is where a collector browses the catalogue and opens a
 product.
 
 - **Every product** — a card that opens its Product Details Page
+- **One list that lengthens** — reaching the end of the cards adds the next
+  ones below them, so the catalogue is read by scrolling; nothing offers a page
+  number, a next control or a load-more button, and a new narrowing starts
+  again at its own first page
+- 🚧 **A count of the whole set** — above the grid, how many cards the narrowed
+  catalogue holds, never how many are on screen; it moves when the narrowing
+  moves and stays still while the collector reads on
 - **Stock is a ceiling** — a card's cart control stops where the shop's count
   stops, and the card says how many are left when the shop is nearly out or the
   collector has asked for the last one; a shop that counts nothing stops nothing
@@ -23,7 +30,8 @@ product.
   searching or sorting leaves it behind, because the catalogue narrows by a
   collection or by a query and never by both
 - **URL** — the narrowing is in it, so a listing can be linked and shared, and
-  Back undoes it
+  Back undoes it; how far a collector has read is not, so an address opens at
+  the first page of its narrowing
   1. `grade10.com/store/collections` — the whole catalogue
   2. `grade10.com/store/collections?collection=<handle>` — one collection
   3. `grade10.com/store/collections?worlds=<a>,<b>&types=<c>&q=<words>&sort=<order>`
@@ -89,6 +97,8 @@ collection. The front door's collection grid, which is unchanged.
 | One narrowing at a time | Decided | The catalogue narrows by a collection or by a query, never both, so applying either leaves the other behind. The alternative — a collection dimension on the query — cannot be served natively and would walk the whole catalogue for every scoped narrowing. | Engineering |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
 | Counts are the catalogue's | Decided | Counted over the whole narrowed set with the facet's own selection excluded, so ticking one world leaves the others showing what picking them instead would find. | Engineering |
+| The count above the grid is the same count | Decided | The number over the listing is the catalogue's own over the whole narrowed set, the rule the facet counts already follow, so a choice's count is the size of the listing choosing it opens. Counting the cards on screen instead read the page size back as the shop's size and grew as the collector read on, leaving the one question a count answers — whether it is worth going on — the one it could not. A narrowing whose first page has not arrived says nothing, because `0 products` is a claim the catalogue never made. | Engineering |
+| Scroll depth is not restored | Decided | An address opens a narrowing, never a place in it, so returning from a product page starts at the top of the listing. Keeping a collector's place is worth its own evidence, and an address that carried depth would no longer be the narrowing it is shared as. | Product |
 | Worlds cap at five | Decided | A shop grows worlds without bound; the types are a taxonomy the platform closes and are shown whole. | Design |
 | No popularity order | Decided | Nothing ranks products by popularity, so the menu does not claim to. At rest the catalogue's own order stands. | Product |
 | A starved facet is still offered | Decided | Once a query is in force, nothing behind a choice is the query's doing rather than the shop's. Hiding the group would strand the collector, and a selection nobody can undo is a trap. | Design |
