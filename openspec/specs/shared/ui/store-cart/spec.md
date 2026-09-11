@@ -32,6 +32,12 @@ collapsible promo code redemption, and checkout CTA.
 - Low-stock warning
   - Shown when adjusted: the consumer-supplied warning is visible on an adjusted line
   - Hidden after edit: a quantity change hides it for the rest of that mount
+- Stock is a ceiling
+  - Supplied maximum: a line's stepper stops where the consumer says the shop's count stops
+  - No maximum, no ceiling: a line supplied none keeps a stepper that counts on
+- What is left, said
+  - Supplied remaining count: the line displays how many are left, in the consumer's own words
+  - Consumer decides when: the line shows what it is given and judges nothing about scarcity
 
 ## Requirements
 

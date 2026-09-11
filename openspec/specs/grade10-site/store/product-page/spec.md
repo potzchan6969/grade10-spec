@@ -39,6 +39,12 @@ per card rather than per page.
     own, and only the ones for sale can be added
   - Priced but unbuyable: a card nobody can buy keeps its prices and offers
     nothing to press
+- Held to the shop's count
+  - Ceiling from the shop: the page stops a collector at what the shop has of the chosen variant
+  - Silent where unknown: a shop exposing no count puts no ceiling on the page
+- Said when it is news
+  - Few left: the page says how many remain once the shop is nearly out
+  - All of them asked for: the page says the same when the collector has taken the last one
 
 ## Requirements
 ### Requirement: A card answers at its own address

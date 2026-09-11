@@ -31,6 +31,13 @@ address. The catalogue narrows by one collection or by a query, never by both.
   - Visible and leaveable: the collection in force is named on the listing and can be dismissed
   - One narrowing at a time: applying a facet, free text or an order leaves the collection behind
   - Same document: which collection is named does not change which document the address serves
+- Held to the shop's count
+  - Ceiling from the shop: a card's cart stops at what the shop has, where the shop says
+  - Silent where unknown: a shop exposing no count puts no ceiling on the card
+- Said when it is news
+  - Few left: the card says how many remain once the shop is nearly out
+  - All of them asked for: the card says the same when the collector has taken the last one
+
 ## Requirements
 ### Requirement: The browse listing answers at its own address
 

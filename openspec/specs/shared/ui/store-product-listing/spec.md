@@ -27,6 +27,13 @@ more can be loaded are decided by the application.
   - Keyboard and announcements: controls are operable without a pointer; busy and count changes are announced
 - No defaulted content
   - Application-owned copy: nothing visible is invented by the listing
+- Stock is a ceiling
+  - Supplied maximum: the cart control stops where the consumer says the shop's count stops
+  - No maximum, no ceiling: a consumer that supplies none keeps a control that counts on
+- What is left, said
+  - Supplied remaining count: the card displays how many are left, in the consumer's own words
+  - Consumer decides when: the card shows what it is given and judges nothing about scarcity
+
 ## Requirements
 ### Requirement: The listing surface exports
 
