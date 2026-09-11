@@ -166,9 +166,12 @@ function ProductResultsPanel({
     onLoadMoreRef.current = onLoadMore;
   }, [onLoadMore]);
 
-  /* One report per result set: what was asked for is remembered as the count
-     the ask was made at, so a page that arrives — or a sentinel that comes
-     back into view — is asked about again, and the same one never is. */
+  /* One report per approach. What was asked for is remembered as the count
+     the ask was made at, so a page that arrives is asked about again and a
+     sentinel still in view when this effect rebuilds its observer is not.
+     Leaving the end forgets that ask, because the next approach is a new
+     one — which is how a page the consumer failed to load is asked for
+     again, the count it was asked at being unchanged by the failure. */
   useEffect(() => {
     if (!hasMore || loadingMore || status !== "ready") {
       return;
@@ -182,12 +185,12 @@ function ProductResultsPanel({
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        if (
-          !entry?.isIntersecting ||
-          requestedAtCountRef.current === readyCount
-        ) {
+        if (!entry) return;
+        if (!entry.isIntersecting) {
+          requestedAtCountRef.current = null;
           return;
         }
+        if (requestedAtCountRef.current === readyCount) return;
 
         requestedAtCountRef.current = readyCount;
         onLoadMoreRef.current?.();
