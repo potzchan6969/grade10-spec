@@ -1,7 +1,7 @@
 ## 1. Searching state on the listing search field (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Give `ProductFilter` a pending indication and `ProductFilterCopy` its searching copy, rendering the design-system `AutocompleteLoading` row and inventing no suggestion row, so `shared-ui-store-product-listing-SC-74` passes; stand a `Store Product Listing/ProductFilter/Search` → `Pending` story behind it.
-- [ ] 1.2 Pass the pending indication through `FilterPanel` and `ProductBrowse` and hold the public entry to the export and type set `shared-ui-store-product-listing-SC-01` names, adding nothing beside it.
+- [x] 1.1 Give `ProductFilter` a pending indication and `ProductFilterCopy` its searching copy, rendering the design-system `AutocompleteLoading` row and inventing no suggestion row, so `shared-ui-store-product-listing-SC-74` passes; stand a `Store Product Listing/ProductFilter/Search` → `Pending` story behind it.
+- [x] 1.2 Pass the pending indication through `FilterPanel` and `ProductBrowse` and hold the public entry to the export and type set `shared-ui-store-product-listing-SC-01` names, adding nothing beside it.
 - [ ] 1.3 Answer the listing search vocabulary in the shared `store` catalog for `en`, `zh-Hant`, `zh-Hans` and `ko` — the empty-suggestions line, the searching line, and the free-text chip label that carries the committed words.
 - [ ] 1.4 Carry the search stories into the Product Listing page's Designs block — the browse commit and the filter pick — so the manual shows what `grade10-site-store-product-listing-SC-32` and `-SC-34` deliver; make `pnpm check:manual` pass.
 - [ ] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:stories:ui`, `pnpm check:manual`.
