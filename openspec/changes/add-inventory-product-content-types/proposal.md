@@ -17,7 +17,7 @@ invalid product facts.
 - **Universal classification** — keeps IP, Item, and Category required on every
   product and available to search and filter.
 - **Product schemas** — lets an inventory admin configure one exact IP + Item +
-  Category schema with reusable product attributes, displayed labels, data types,
+  Category schema with reusable attribute keys, displayed labels, data types,
   requiredness, allowed values, validation rules, and translations for
   English, Traditional Chinese, and Simplified Chinese, with room for future
   locales.
@@ -42,6 +42,9 @@ invalid product facts.
 - **Configuration publishing** — validates a draft configuration against
   existing products before publishing it; a failed validation leaves the
   current published configuration active.
+- **Compatibility review** — returns the incompatible product attributes after
+  an admin saves an attribute-key update or product-schema draft, so the admin
+  can correct each product before publishing.
 
 ### Examples
 
@@ -81,7 +84,8 @@ None.
 ### Modified Capabilities
 
 - `grade10-admin/inventory/catalog`: adds CMS-managed IP + Item + Category
-  product schemas, validated product attributes, listing attributes,
+  product schemas, validated product attributes and their reusable attribute
+  keys, listing attributes,
   search and filter behavior, and per-product-schema Auction presentation.
 
 ## Impact

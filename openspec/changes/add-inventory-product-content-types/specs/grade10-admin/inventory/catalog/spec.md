@@ -6,7 +6,7 @@
   - Structured values: store validated facts with language-aware labels and values
 - CMS configuration
   - Reusable fields: define stable keys, data types, validation, and displayed labels once
-  - Product schemas: select product attributes, requiredness, and translations for an IP + Item + Category tuple
+  - Product schemas: select attribute keys, requiredness, and translations for an IP + Item + Category tuple
   - Publishing: validate affected products before a configuration becomes active
 - Auction discovery
   - Search and filter: use universal and product-schema attributes, including optional attributes when a value exists
@@ -83,9 +83,9 @@ product status `created`. Intake SHALL require product status `created`.
 
 ## ADDED Requirements
 
-### Requirement: Reusable product attributes carry localized labels and validation
+### Requirement: Reusable product attribute keys carry localized labels and validation
 
-An authorized inventory admin SHALL be able to define a reusable product attribute
+An authorized inventory admin SHALL be able to define a reusable product attribute key
 with a stable key, a data type, validation rules, and a displayed label for
 each supported locale. The initial Grade10 locale set SHALL be English (`en`),
 Traditional Chinese (`zh-Hant`), and Simplified Chinese (`zh-Hans`); the set
@@ -122,6 +122,27 @@ SHALL be reported to the admin and SHALL fall back to English when displayed.
 - **WHEN** they define a field with an unsupported data type, invalid validation rule, duplicate key, or a select option without an English displayed value
 - **THEN** Grade10 refuses the definition
 - **AND** no invalid field or option is available for product entry
+
+### Requirement: Admins can review and correct incompatible product attributes
+
+An authorized inventory admin SHALL be able to query the product attributes
+incompatible with a saved attribute-key update or saved product-schema draft.
+The result SHALL identify each affected product, attribute key, and reason. The
+admin SHALL be able to correct the returned product attributes through normal
+product editing. Saving the review target SHALL NOT itself change product
+attributes. Product-schema publication SHALL repeat compatibility validation
+and remain refused until the incompatible product attributes are corrected.
+
+#### Scenario: grade10-admin-inventory-catalog-SC-91 - Admin corrects product attributes after a schema change
+
+- **GIVEN** a saved product-schema draft makes a required `grading` attribute
+  missing or invalid on matching products
+- **WHEN** an authorized inventory admin reviews incompatible product attributes
+- **THEN** Grade10 returns every affected product, its `grading` attribute key,
+  and the incompatibility reason
+- **WHEN** the admin corrects each returned product through product editing
+- **THEN** the review no longer returns those product attributes
+- **AND** the product schema can publish when no other incompatibilities remain
 
 #### Scenario: grade10-admin-inventory-catalog-SC-71 - Missing non-English translations are reported without blocking publish
 

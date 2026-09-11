@@ -58,3 +58,4 @@
 - `grade10-admin-inventory-catalog-SC-85` — Invalid existing product blocks product schema publish
 - `grade10-admin-inventory-catalog-SC-86` — Valid product schema publishes atomically
 - `grade10-admin-inventory-catalog-SC-87` — Legacy product without a matching product schema stays visible but unavailable to Auction
+- `grade10-admin-inventory-catalog-SC-91` — Admin corrects product attributes after a schema change

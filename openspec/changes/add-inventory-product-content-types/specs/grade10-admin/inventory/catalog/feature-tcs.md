@@ -484,3 +484,39 @@
 * The previous published configuration remains active.
 * <legacy product> remains visible in inventory and reports its missing product schema.
 * Auction refuses to list or reserve <legacy product>.
+
+### grade10-admin-inventory-catalog-US8-TC3-1: Admin reviews and corrects incompatible product attributes
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-08
+
+**Pre-conditions:**
+
+* An admin holds the inventory catalogue grant.
+* A saved Pokémon product-schema draft requires `grading`.
+* <ungraded product> matches that schema and has no grading product attribute.
+
+**Steps:**
+
+1. Open the saved product-schema draft.
+2. Query incompatible product attributes.
+3. Open <ungraded product> from the returned result.
+4. Save a valid grading product attribute.
+5. Query incompatible product attributes again.
+
+**Expected Results:**
+
+* The first result identifies <ungraded product>, the `grading` attribute key, and the missing-required reason.
+* Querying does not change any product attribute.
+* The product editor lets the admin correct <ungraded product>.
+* The second result no longer includes <ungraded product>.

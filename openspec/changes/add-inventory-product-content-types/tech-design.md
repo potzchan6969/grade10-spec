@@ -205,14 +205,14 @@ IDs are system-minted `text`; timestamps use the existing `msTimestamp` conventi
 
 | Table | Columns | Constraints and indexes | Authority |
 | --- | --- | --- | --- |
-| `product_attributes` | `id text NOT NULL`; `key text NOT NULL`; `data_type text NOT NULL`; `validation jsonb NOT NULL DEFAULT '{}'::jsonb`; audit timestamps | PK `id`; unique `key`; data-type and JSON-object checks; key immutable after a value exists | Reusable product-attribute identity, type, validation |
-| `product_attribute_labels`, `product_attribute_options`, `product_attribute_option_labels` | Attribute/option id, locale or stable option key, trimmed label, audit timestamps where applicable | Composite PKs and FKs to the attribute/option; English base enforced by service | Localized reusable labels and select options |
+| `product_attribute_keys` | `id text NOT NULL`; `key text NOT NULL`; `data_type text NOT NULL`; `validation jsonb NOT NULL DEFAULT '{}'::jsonb`; audit timestamps | PK `id`; unique `key`; data-type and JSON-object checks; key immutable after a product attribute exists | Reusable attribute-key identity, type, validation |
+| `product_attribute_key_labels`, `product_attribute_key_options`, `product_attribute_key_option_labels` | Attribute-key or option id, locale or stable option key, trimmed label, audit timestamps where applicable | Composite PKs and FKs to the attribute key or option; English base enforced by service | Localized reusable key labels and select options |
 | `product_schemas` | `id text NOT NULL`; `ip_tag_id text NOT NULL`; `item_tag_id text NOT NULL`; `category_tag_id text NOT NULL`; audit timestamps | PK `id`; unique tuple; FKs to `tags` | Exact classification tuple |
 | `product_schema_revisions` | `id text NOT NULL`; `product_schema_id text NOT NULL`; `state text NOT NULL DEFAULT 'draft'`; `auction_display_attribute_keys jsonb NOT NULL DEFAULT '[]'::jsonb`; audit timestamps | PK `id`; FK schema; state and JSON-array checks; partial unique indexes: one published and one draft revision per schema | Active product configuration and selected product-attribute display order for future Auction listings |
-| `product_schema_attributes` | `id text NOT NULL`; `revision_id text NOT NULL`; `attribute_id text NOT NULL`; `required boolean NOT NULL DEFAULT false`; `validation jsonb NOT NULL DEFAULT '{}'::jsonb`; audit timestamps | PK `id`; unique `(revision_id, attribute_id)`; FKs; JSON-object check; index `(revision_id, required)` | Product-schema assignment, requiredness, validation override |
-| `product_schema_attribute_labels`, `product_schema_attribute_options` | Schema-attribute id, locale or option id, label/order | Composite PKs, FKs, non-negative option order | Per-schema labels and allowed options |
-| `product_attribute_values` | `id text NOT NULL`; `product_id text NOT NULL`; `attribute_id text NOT NULL`; `text_value text NULL`; `number_value numeric NULL`; `boolean_value boolean NULL`; `option_keys text[] NULL`; audit timestamps | PK `id`; unique `(product_id, attribute_id)`; one canonical-value column check; btree typed-value indexes and GIN `option_keys` | Canonical product facts |
-| `product_attribute_value_translations` | `product_attribute_value_id text NOT NULL`; `locale text NOT NULL`; `value text NOT NULL` | PK `(product_attribute_value_id, locale)`; FK value cascade; trimmed non-empty check | Localized product text values |
+| `product_schema_attribute_keys` | `id text NOT NULL`; `revision_id text NOT NULL`; `attribute_key_id text NOT NULL`; `required boolean NOT NULL DEFAULT false`; `validation jsonb NOT NULL DEFAULT '{}'::jsonb`; audit timestamps | PK `id`; unique `(revision_id, attribute_key_id)`; FKs; JSON-object check; index `(revision_id, required)` | Product-schema key assignment, requiredness, validation override |
+| `product_schema_attribute_key_labels`, `product_schema_attribute_key_options` | Schema-attribute-key id, locale or option id, label/order | Composite PKs, FKs, non-negative option order | Per-schema key labels and allowed options |
+| `product_attributes` | `id text NOT NULL`; `product_id text NOT NULL`; `attribute_key_id text NOT NULL`; `text_value text NULL`; `number_value numeric NULL`; `boolean_value boolean NULL`; `option_keys text[] NULL`; audit timestamps | PK `id`; unique `(product_id, attribute_key_id)`; one canonical-value column check; btree typed-value indexes and GIN `option_keys` | Canonical typed value for one product and attribute key |
+| `product_attribute_translations` | `product_attribute_id text NOT NULL`; `locale text NOT NULL`; `value text NOT NULL` | PK `(product_attribute_id, locale)`; FK product attribute cascade; trimmed non-empty check | Localized product text values |
 | `auction.listings.listing_attributes` | `jsonb NOT NULL DEFAULT '[]'::jsonb` | JSON-array check only; preserves supplied order; no public-search index | Opaque listing-specific display items, including any supplied translations |
 
 `product_classifications` and its three tag columns remain authoritative for
@@ -234,20 +234,20 @@ expressions, inverted ranges, and unknown keys before writing.
 erDiagram
   tags ||--o{ product_classifications : classifies
   products ||--|| product_classifications : has
-  products ||--o{ product_attribute_values : stores
-  product_attributes ||--o{ product_attribute_values : defines
-  product_attribute_values ||--o{ product_attribute_value_translations : localizes
+  products ||--o{ product_attributes : stores
+  product_attribute_keys ||--o{ product_attributes : defines
+  product_attributes ||--o{ product_attribute_translations : localizes
 
   tags ||--o{ product_schemas : selects
   product_schemas ||--o{ product_schema_revisions : has
-  product_schema_revisions ||--o{ product_schema_attributes : assigns
-  product_attributes ||--o{ product_schema_attributes : reuses
-  product_schema_attributes ||--o{ product_schema_attribute_labels : overrides
-  product_schema_attributes ||--o{ product_schema_attribute_options : permits
+  product_schema_revisions ||--o{ product_schema_attribute_keys : assigns
+  product_attribute_keys ||--o{ product_schema_attribute_keys : reuses
+  product_schema_attribute_keys ||--o{ product_schema_attribute_key_labels : overrides
+  product_schema_attribute_keys ||--o{ product_schema_attribute_key_options : permits
 
-  product_attributes ||--o{ product_attribute_labels : labels
-  product_attributes ||--o{ product_attribute_options : offers
-  product_attribute_options ||--o{ product_attribute_option_labels : localizes
+  product_attribute_keys ||--o{ product_attribute_key_labels : labels
+  product_attribute_keys ||--o{ product_attribute_key_options : offers
+  product_attribute_key_options ||--o{ product_attribute_key_option_labels : localizes
 
 ```
 
@@ -264,10 +264,11 @@ decode/authorize and map outcomes.
 
 | Processor | Input | Success | Refusal and controls |
 | --- | --- | --- | --- |
-| `saveProductAttribute` | `{ actorId, attribute?: { id }, key, dataType, validation, labels, options }` | `{ attribute, translationWarnings }` | Duplicate/used key, invalid rule, duplicate option key, or absent English base label/value. Transaction writes attribute → labels → options → option labels. |
-| `saveProductSchemaDraft` | `{ actorId, tuple, revisionId?, attributes, auctionDisplayAttributeKeys }` | `{ draftRevision, translationWarnings }` | Locks the tuple's `product_schemas` row; validates tags, references, and the selected display attributes; writes identity if absent → draft revision → assignments/labels/options. Replaces draft child rows atomically. |
+| `saveProductAttributeKey` | `{ actorId, attributeKey?: { id }, key, dataType, validation, labels, options }` | `{ attributeKey, translationWarnings }` | Duplicate/used key, invalid rule, duplicate option key, or absent English base label/value. Transaction writes attribute key → labels → options → option labels. |
+| `saveProductSchemaDraft` | `{ actorId, tuple, revisionId?, attributeKeys, auctionDisplayAttributeKeys }` | `{ draftRevision, translationWarnings }` | Locks the tuple's `product_schemas` row; validates tags, references, and the selected display attributes; writes identity if absent → draft revision → assignments/labels/options. Replaces draft child rows atomically. |
+| `queryIncompatibleProductAttributes` | `{ actorId, target: { attributeKeyId } \| { productSchemaRevisionId }, page }` | `{ affectedProductCount, incompatible: Array<{ productId, attributeKey, reason }> }` | Read-only review of a saved attribute-key update or saved schema draft. Resolves its current rules against matching product attributes without writing or locking them, so an admin can correct the returned products. A schema publish repeats validation under its write lock, so a stale review cannot authorize an incompatible change. |
 | `publishProductSchema` | `{ actorId, revisionId }` | `{ publishedRevision, translationWarnings, affectedProductCount }` | Locks schema, draft revision, and matching classifications with `FOR UPDATE`; validates English bases and every matching product. On violation, returns `{ code: 'product-schema-publish-blocked', violations[] }` and rolls back. On success, retires old published → publishes draft atomically. |
-| `upsertProductAttributeValues` | `{ actorId, productId, values }` | `{ product, validationReport }` | Locks product and resolves its published revision. Validates each supplied product attribute and locale value before replacing its values and translations. Refusal leaves prior values unchanged. Draft completeness is reported, not refused. |
+| `upsertProductAttribute` | `{ actorId, productId, attribute }` | `{ product, validationReport }` | Locks product and resolves its published revision. Validates the supplied product attribute and locale value before replacing its value and translations. Refusal leaves the prior attribute unchanged. Draft completeness is reported, not refused. |
 | `markProductCreated` | `{ actorId, productId }` | `{ product }` | Locks product and classification; resolves the published product schema; requires all 3 tags and every required product attribute. Returns `{ code: 'product-schema-invalid', violations[] }` without changing status/history on refusal. |
 | `saveAuctionListingAttributes` | `{ actorId, listingId, listingAttributes: Json }` | `{ listing }` | Locks the listing and replaces the JSONB array without field-level validation. The entrypoint limits only document size and ordinary request safety; it does not interpret keys, types, labels, values, or translations. |
 | `publishAuctionListing` | `{ actorId, listingId }` | `{ listing }` | Locks and publishes the listing without copying product fields. It requires the product to be eligible under Inventory's published schema; a refusal leaves the listing unpublished. |
@@ -276,7 +277,7 @@ decode/authorize and map outcomes.
 
 Example: a Pokémon product has `product_classifications = (pokemon,
 single-card, tcg)`, a required `grading` assignment, and no
-`product_attribute_values` row for `grading`. `markProductCreated` locks the
+`product_attributes` row for `grading`. `markProductCreated` locks the
 product and classification, reads the active tuple revision, finds the missing
 row, and returns `product-schema-invalid` with `[{ attributeKey: 'grading',
 reason: 'required' }]`; its status remains `draft`. If the product has
@@ -287,14 +288,16 @@ reason: 'required' }]`; its status remains `draft`. If the product has
 ## Contracts
 
 Extend `@grade10/inventory-contracts` additively with discriminated schemas
-for product attributes, localized labels, option keys, product-schema
+for product attribute keys, localized labels, option keys, product-schema
 revisions, canonical typed product values, translation warnings, and validation
 violations. The schemas preserve the stable key on admin reads but require
 renderers to use resolved `label` and `value`.
 
-Add authorized inventory-admin procedures for product-attribute and
+Add authorized inventory-admin procedures for attribute-key and
 product-schema draft/save/review/publish operations, and extend product
-create/update/read with structured values plus a validation report. Add an
+create/update/read with product attributes plus a validation report. Include a
+read-only incompatible-product-attributes review for saved schema and
+attribute-key updates. Add an
 additive, locale-aware Inventory product-display read and Auction contracts for
 opaque listing-attribute JSONB. Update its public listing contract to carry
 the resolved fields. Remove the hard-coded metadata mapper only after consumers
