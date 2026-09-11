@@ -1,6 +1,6 @@
 ## 1. Contracts and Manual (grade10-spec) (owner: @htonyl)
 
-- [ ] 1.1 Update the inventory catalog manual with product schemas, product attributes, English-base values, flexible listing JSONB, compatibility review, attribute-to-filter navigation, and the Inventory display contract that keeps Auction renderable for grade10-admin-inventory-catalog-SC-69 through SC-92
+- [x] 1.1 Update the inventory catalog manual with product schemas, product attributes, English-base values, flexible listing JSONB, compatibility review, attribute-to-filter navigation, and the Inventory display contract that keeps Auction renderable for grade10-admin-inventory-catalog-SC-69 through SC-92
 - [ ] 1.2 Verify the manual with `pnpm check:manual`
 
 ## 2. Shared Contracts (grade10)
