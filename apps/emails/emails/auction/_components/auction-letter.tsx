@@ -1,16 +1,15 @@
 import { Heading, Text } from "react-email";
-
+import { EmailFooter } from "@/emails/_components/email-footer";
 import {
-  AuctionEmailShell,
   GRADE10_HOME_URL,
-} from "@/emails/_components/auction-email-shell";
+  Grade10EmailShell,
+} from "@/emails/_components/grade10-email-shell";
+import { PrimaryCta } from "@/emails/_components/primary-cta";
 import {
   type AuctionEmailCampaign,
   withAuctionEmailCampaignTags,
-} from "@/emails/_components/campaign-tags";
-import { EmailFooter } from "@/emails/_components/email-footer";
-import { LotBlock } from "@/emails/_components/lot-block";
-import { PrimaryCta } from "@/emails/_components/primary-cta";
+} from "@/emails/auction/_components/campaign-tags";
+import { LotBlock } from "@/emails/auction/_components/lot-block";
 
 export type AuctionLetterProps = {
   brandName?: string;
@@ -81,7 +80,7 @@ export function AuctionLetter({
     : undefined;
 
   return (
-    <AuctionEmailShell homeUrl={taggedHome} preheader={preheader}>
+    <Grade10EmailShell homeUrl={taggedHome} preheader={preheader}>
       <Heading as="h1" className="mb-4 mt-0 text-heading font-bold text-fg">
         {heading}
       </Heading>
@@ -102,6 +101,6 @@ export function AuctionLetter({
         muteUrl={taggedMute}
         whyYouGotThis={whyYouGotThis}
       />
-    </AuctionEmailShell>
+    </Grade10EmailShell>
   );
 }

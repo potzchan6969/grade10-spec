@@ -1,6 +1,6 @@
 ---
 name: email-templating
-description: Draft or revise React Email templates and their copy in apps/auction-emails, including preheaders, CTAs, shared shells, and email-safe styling.
+description: Draft or revise React Email templates and their copy in apps/emails, including preheaders, CTAs, shared shells, and email-safe styling.
 ---
 
 # Email drafting
@@ -9,8 +9,8 @@ Use this skill when composing or revising a Grade10 email template, shared email
 
 ## Ground the draft
 
-- **Read the shell** — follow `apps/auction-emails/README.md` and `emails/_components/auction-email-shell.tsx` for the shared preview, logo, theme, fonts, and layout
-- **Reuse components** — compose existing emailcn components before adding markup; keep new components inside `apps/auction-emails/components/email/` or the owning email's `_components/` folder
+- **Read the shell** — follow `apps/emails/README.md` and `emails/_components/grade10-email-shell.tsx` for the shared preview, logo, theme, fonts, and layout
+- **Reuse components** — compose existing emailcn components before adding markup; keep new components inside `apps/emails/components/email/` or the owning email's `_components/` folder
 - **Keep copy owned** — use the email's copy contract and the i18n catalog when one exists; do not invent product names, event facts, links, or promises to fill a missing requirement
 
 ## Shape the message
@@ -30,6 +30,6 @@ Use this skill when composing or revising a Grade10 email template, shared email
 
 ## Verify the result
 
-- **Typecheck** — run `pnpm --dir apps/auction-emails run typecheck`
+- **Typecheck** — run `pnpm --dir apps/emails run typecheck`
 - **Lint** — run `pnpm run lint` and keep the security rule active outside the exact static-style exception
 - **Preview** — run `pnpm email:dev` when layout, responsive behavior, asset loading, or copy hierarchy changed; inspect the inbox preview and the rendered letter

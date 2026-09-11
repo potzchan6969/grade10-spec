@@ -1,6 +1,7 @@
-# Auction email templates
+# Email templates
 
-React Email letters for `grade10-site/auction/notifications`, built with
+React Email letters for Grade10 — site-wide messages (magic link) and
+`grade10-site/auction/notifications` — built with
 [emailcn](https://www.emailcn.run/) on the shadcn registry.
 
 ## Setup
@@ -8,14 +9,14 @@ React Email letters for `grade10-site/auction/notifications`, built with
 `components.json` registers `@emailcn`. Add or refresh registry items:
 
 ```bash
-pnpm --dir apps/auction-emails dlx shadcn@latest add @emailcn/react-email/<item> --overwrite
+pnpm --dir apps/emails dlx shadcn@latest add @emailcn/react-email/<item> --overwrite
 ```
 
 Installed so far: `theme-default`, `default-fonts`, `button`, `header-with-logo`,
 `divider`, `call-to-action`, `container`, `content`, `block-notification-default`.
 
-Auction kinds compose Grade10’s `grade10Theme` through emailcn’s
-`createEmailTailwindConfig` (see `emails/_components/auction-email-shell.tsx`).
+Letters compose Grade10’s `grade10Theme` through emailcn’s
+`createEmailTailwindConfig` (see `emails/_components/grade10-email-shell.tsx`).
 
 ## Preview
 
@@ -24,8 +25,8 @@ pnpm email:dev
 ```
 
 http://localhost:3333 — shared pieces under `emails/_components/` (hidden from
-the sidebar). Copy matches
-`openspec/changes/add-auction-notifications/ui-design.md`.
+the sidebar). Auction kinds live under `emails/auction/`. Site-wide letters sit
+beside that folder.
 
 ## Structure
 
@@ -33,8 +34,10 @@ the sidebar). Copy matches
 components.json
 components/email/     emailcn registry output + theme-grade10.ts
 emails/
-  _components/        Grade10 auction letter composition
-  *.tsx               one default-export letter per kind
+  _components/        Grade10EmailShell, PrimaryCta, EmailFooter
+  magic-link.tsx      site-wide sign-in letter
+  auction/            auction notification kinds + AuctionLetter
+  static/             preview assets
 ```
 
 Production send still goes through the application’s `@grade10/email` lane;
