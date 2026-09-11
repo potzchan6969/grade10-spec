@@ -1,129 +1,135 @@
 ## Purpose
 
-The status a collector reads for an auction lot — Upcoming, Active, or Ended —
-derived from the lot and never stored, and which lots no collector surface shows
-at all. It fixes the statuses and their mapping; whether and where a screen shows
-them is design's.
+The external lot status is the status collectors see for an auction lot:
+Upcoming, Active or Ended, worked out from the lot and never saved. This
+capability also sets which lots collectors never see.
 
 ## Feature set
 
-- Collector vocabulary
-  - Three statuses: one small set of statuses every collector surface can use,
-    apart from the operator's outcome list
-  - Derived, never stored: read from the lot, so it cannot disagree with it
-  - The lot, not the order: a winner's order status stays a separate fact
+- External lot status
+  - Three values: one set of statuses for every collector page, separate from
+    the internal lot status
+  - Worked out, not saved: taken from the lot, so it always matches the lot
+  - Lot, not order: the winner's order status is shown separately
 - Hidden lots
-  - Never shown: a lot that never opened, ended unsold, or was called off is
-    absent from every collector surface
-  - Bidder exception: a bidder still reads a called-off lot in their own record,
-    with their card hold
-- Public contract
-  - Status in the listing read: every surface reads the same status
+  - Never shown: Draft, Unsold and Called off lots do not appear on any
+    collector page
+  - Bidder exception: a collector who bid on a called-off lot still sees it in
+    My Auctions
+- Listing data
+  - Status in the listing data: every page uses the same value
 
 ## ADDED Requirements
 
-### Requirement: A lot shows a collector one status
+### Requirement: Every visible lot has one external lot status
 
-Every lot a collector can see SHALL carry exactly one collector status. Grade10
-SHALL derive it from the lot and SHALL NOT store it.
+Every lot a collector can see SHALL have exactly one external lot status.
+Grade10 SHALL work it out from the lot and SHALL NOT save it.
 
-| Collector status | The lot | Operator outcome, in `grade10-admin/auction/post-sale` |
+| External lot status | The lot | Internal lot status, in `grade10-admin/auction/post-sale` |
 | --- | --- | --- |
-| Upcoming | Published, bidding has not opened | Scheduled |
-| Active | Bidding open, until the lot closes, extended bidding included | Live |
-| Ended | Bidding over with a winner, whatever the state of the winner's order | Every outcome after a winner |
+| Upcoming | Published. Bidding has not started | Scheduled |
+| Active | Bidding is open, until the lot closes. Includes extended bidding | Live |
+| Ended | Bidding is over and the lot has a winner, whatever the state of the winner's order | Every status after the lot has a winner |
 
-A Draft, Unsold or Called off lot SHALL carry no collector status; it is hidden,
-per "Hidden lots appear on no collector surface".
+A lot whose internal lot status is Draft, Unsold or Called off SHALL have no
+external lot status. Collectors SHALL NOT see it, as "Collectors never see
+hidden lots" sets out.
 
-The collector status SHALL describe the lot, not a collector's standing and not
-a winner's order. A winner's order status, per
-`grade10-site/auction/order-status`, SHALL remain a separate fact on their own
-record. Whether and where a surface shows the collector status is design's.
+The external lot status SHALL describe the lot only. It SHALL NOT describe a
+collector's bid or the winner's order. The winner's order status, set by
+`grade10-site/auction/order-status`, SHALL be shown separately in the winner's
+My Auctions. The designer decides where and how pages show the external lot
+status.
 
-#### Scenario: grade10-site-auction-lot-status-SC-01 - A lot whose bidding has not opened is Upcoming
+#### Scenario: grade10-site-auction-lot-status-SC-01 - A lot whose bidding has not started is Upcoming
 
 - **GIVEN** a published lot whose scheduled start has not arrived
-- **WHEN** a collector's surface reads its status
-- **THEN** its collector status is Upcoming
+- **WHEN** Grade10 works out its external lot status
+- **THEN** the status is Upcoming
 
 #### Scenario: grade10-site-auction-lot-status-SC-02 - A lot open for bidding is Active
 
-- **GIVEN** a lot whose bidding is open, one with a day to its close and one
-  with a minute
-- **WHEN** a collector's surface reads their statuses
+- **GIVEN** two lots open for bidding, one closing in a day and one closing in a
+  minute
+- **WHEN** Grade10 works out their external lot status
 - **THEN** both are Active
 
 #### Scenario: grade10-site-auction-lot-status-SC-03 - A lot in extended bidding is Active
 
 - **GIVEN** a lot past its scheduled close and in extended bidding
-- **WHEN** a collector's surface reads its status
-- **THEN** its collector status is Active
+- **WHEN** Grade10 works out its external lot status
+- **THEN** the status is Active
 
-#### Scenario: grade10-site-auction-lot-status-SC-04 - A won lot is Ended whatever its order's state
+#### Scenario: grade10-site-auction-lot-status-SC-04 - A lot with a winner is Ended whatever state its order is in
 
-- **GIVEN** three won lots, whose orders are awaiting payment, shipped, and
-  cancelled
-- **WHEN** a collector's surface reads their statuses
+- **GIVEN** three lots with a winner, whose orders are awaiting payment, shipped
+  and cancelled
+- **WHEN** Grade10 works out their external lot status
 - **THEN** all three are Ended
 
-#### Scenario: grade10-site-auction-lot-status-SC-05 - A winner reads their order apart from the lot
+#### Scenario: grade10-site-auction-lot-status-SC-05 - The winner sees their order status separately
 
 - **GIVEN** a winner whose order is awaiting payment
-- **WHEN** they open their own record
-- **THEN** the lot's collector status is Ended
-- **AND** their order status is shown as its own fact
+- **WHEN** they open My Auctions
+- **THEN** the lot's external lot status is Ended
+- **AND** their order status is shown separately
 
-### Requirement: Hidden lots appear on no collector surface
+### Requirement: Collectors never see hidden lots
 
-A lot that is Draft, closed with no winner, or called off SHALL NOT appear on
-any collector surface: not in the catalogue, its search or its filters; not at
-its own address, which SHALL answer as `grade10-site/auction/listing-page`
-answers an address naming no published lot; and not on the watched list.
+A hidden lot is a lot whose internal lot status is Draft, Unsold or Called off.
+Collectors SHALL NOT see a hidden lot anywhere on the auction site:
 
-A collector who placed a bid on a called-off lot SHALL still read that lot in
-their own record, with what happened to their card hold, per
-`grade10-site/auction/account-record`. No other collector SHALL.
+- **Catalogue** — the lot SHALL NOT be listed, and catalogue search and filters
+  SHALL NOT return it
+- **Lot page** — the lot's address SHALL give the same 404 response as an
+  address with no published lot, per `grade10-site/auction/listing-page`
+- **Watchlist** — the lot SHALL NOT be listed
 
-#### Scenario: grade10-site-auction-lot-status-SC-06 - A draft or unsold lot is not in the catalogue
+A collector who bid on a called-off lot SHALL still see it in My Auctions, with
+the note that their card hold was released, per
+`grade10-site/auction/account-record`. No other collector SHALL see it.
 
-- **GIVEN** a draft lot and a lot that closed with no winner
-- **WHEN** a collector reads the auction catalogue
+#### Scenario: grade10-site-auction-lot-status-SC-06 - Draft and unsold lots are not in the catalogue
+
+- **GIVEN** a draft lot, and a lot whose bidding ended with no winner
+- **WHEN** a collector opens the auction catalogue
 - **THEN** neither lot is listed
 
-#### Scenario: grade10-site-auction-lot-status-SC-07 - A called-off lot leaves the catalogue
+#### Scenario: grade10-site-auction-lot-status-SC-07 - A called-off lot is removed from the catalogue
 
 - **GIVEN** a published lot that an operator then calls off
-- **WHEN** a collector reads the auction catalogue
-- **THEN** that lot is not listed
+- **WHEN** a collector opens the auction catalogue
+- **THEN** the lot is not listed
 
-#### Scenario: grade10-site-auction-lot-status-SC-08 - A hidden lot leaves the watched list
+#### Scenario: grade10-site-auction-lot-status-SC-08 - Hidden lots are removed from the watchlist
 
-- **GIVEN** a collector watching one lot that closes with no winner and one that
-  is called off
-- **WHEN** they read the lots they watch
+- **GIVEN** a collector watching one lot that ends with no winner and one lot
+  that is called off
+- **WHEN** they open their watchlist
 - **THEN** neither lot is listed
 
-#### Scenario: grade10-site-auction-lot-status-SC-09 - A bidder still reads a called-off lot
+#### Scenario: grade10-site-auction-lot-status-SC-09 - A bidder still sees a called-off lot
 
 - **GIVEN** a collector who bid on a lot that an operator then called off
-- **WHEN** they open their own record
-- **THEN** that lot is listed with what happened to their card hold
-- **AND** a collector who did not bid on it does not see it
+- **WHEN** they open My Auctions
+- **THEN** the lot is listed, with the note that their card hold was released
+- **AND** a collector who did not bid on the lot does not see it
 
-### Requirement: The listing read carries the collector status
+### Requirement: Listing data includes the external lot status
 
-A public listing read SHALL carry the lot's collector status as one of
-Upcoming, Active, or Ended. It SHALL NOT return a hidden lot.
+The public listing data SHALL include the lot's external lot status: Upcoming,
+Active or Ended. It SHALL NOT include hidden lots.
 
-#### Scenario: grade10-site-auction-lot-status-SC-10 - A consumer reads the collector status
+#### Scenario: grade10-site-auction-lot-status-SC-10 - Listing data includes the external lot status
 
-- **WHEN** a customer application reads a public listing for an open lot
-- **THEN** it carries the collector status Active
-- **AND** the status is one of Upcoming, Active, or Ended
+- **WHEN** a customer application reads the public listing data for a lot open
+  for bidding
+- **THEN** the data includes the external lot status Active
 
-#### Scenario: grade10-site-auction-lot-status-SC-11 - A listing read returns no hidden lot
+#### Scenario: grade10-site-auction-lot-status-SC-11 - Listing data leaves out hidden lots
 
-- **GIVEN** a lot that closed with no winner and one that was called off
-- **WHEN** a customer application reads the public listings
-- **THEN** neither lot is returned
+- **GIVEN** a lot whose bidding ended with no winner, and a lot that was called
+  off
+- **WHEN** a customer application reads the public listing data
+- **THEN** neither lot is included

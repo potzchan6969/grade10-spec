@@ -4,88 +4,89 @@ Product context: [Lot Status](../../../docs/prds/products/grade10-site/auction/l
 
 ## Why
 
-A collector reading a lot meets whichever status label the screen in front of
-them happened to pick. The site's copy carries seven labels for three situations —
-**Upcoming**, **Live**, **Extended** and **Closed** on the lot surfaces;
-**Scheduled**, **Open** and **Ended** on My Auctions — and no spec says which
-one a collector should read. The operator's outcome list, the only status
-vocabulary specified, keeps moving for operator reasons: Ending soon and
-Expired have left it and Canceled became Called off within one fortnight.
-Collector screens built on it inherit every rename.
+Collector pages use seven different labels for three lot statuses:
 
-Lots that did not sell also stay in front of collectors. A closed lot's page
-keeps answering; the watched list shows a called-off lot as called off; My
-Auctions keeps an unsold lot while it stays published. A collector meets lots
-they can do nothing with.
+- **Lot pages and catalogue** — Upcoming, Live, Extended, Closed
+- **My Auctions** — Scheduled, Open, Ended, Closed
 
-**Metric:** distinct lot-status labels on collector surfaces — seven today, three
-when this ships.
+No spec says which label to use. The only status list in the specs is the
+internal lot status, and it changes for operator needs. In the past two weeks,
+Ending soon and Expired were removed, and Canceled became Called off. Collector
+pages built on that list change every time it does.
+
+Collectors also see lots that nobody can buy. A closed lot's page still opens.
+The watchlist shows called-off lots. My Auctions shows unsold lots while they
+stay published.
+
+**Metric:** number of different lot status labels on collector pages. 7 today,
+3 after this change.
 
 ## What Changes
 
-- **Three collector statuses.** **Upcoming** — published, bidding not open.
-  **Active** — bidding open, extended bidding included. **Ended** — bidding over
-  with a winner, whatever the state of the winner's order.
-- **Derived, never stored.** The status is read from the lot's outcome and
-  times, so it cannot disagree with them.
-- **Hidden lots.** A lot that is Draft, ended Unsold, or Called off appears on no
-  collector surface: not in the catalogue, not at its own address — which
-  answers not found — and not on the watched list.
-- **One exception.** A collector who bid on a called-off lot still reads it in
-  My Auctions, with what happened to their card hold.
-- **The public listing read carries the collector status**, so every surface
-  uses the same status.
-- **Display is the designer's.** This change fixes the statuses and the mapping;
-  whether and where a screen shows them is decided in design.
+- **External lot status** — a new status for collectors, with three values:
+  - **Upcoming** — published, bidding has not started
+  - **Active** — bidding is open, including extended bidding
+  - **Ended** — bidding is over and the lot has a winner, whatever the state of
+    the winner's order
+- **Worked out, not saved** — the external lot status comes from the lot's
+  internal status and times, so the two always agree
+- **Hidden lots** — collectors never see a lot that is Draft, Unsold or Called
+  off. It is not in the catalogue or on the watchlist, and its address shows
+  the Page not found screen
+- **Bidder exception** — a collector who bid on a called-off lot still sees it
+  in My Auctions, with the note that their card hold was released
+- **Listing data** — the public listing data includes the external lot status,
+  so every page uses the same value
+- **Display** — the designer decides which pages show the status, and how
 
-**BREAKING:** unsold and called-off lots stop answering at their own address,
-and leave the watched list.
+**BREAKING:** unsold and called-off lots no longer open at their own address,
+and are removed from the watchlist.
 
 ## Non-Goals
 
-- **Operator outcomes.** The queue keeps its own list, unchanged.
-- **Order statuses.** A winner's order — Pending Payment, Shipped and the rest —
-  stays a separate fact on their own record.
-- **How any screen shows the status**, or retiring today's mixed copy. Both are
-  design's.
-- **Bidding history's Active and Completed filters.** They filter a collector's
-  own bids, not a lot's status.
-- **The catalogue's Ending soon filter and the one-hour reminder.** Neither is a
-  lot status.
+- **Internal lot status** — the operator queue keeps its own list, unchanged
+- **Order status** — the winner's order status, such as Pending Payment or
+  Shipped, is shown separately on their own record
+- **Display and labels** — how pages show the status, and replacing today's
+  labels, are design work
+- **Bidding history filters** — Active and Completed filter the collector's own
+  bids, not the lot status
+- **Ending soon filter and one-hour reminder** — neither is a lot status
 
 ## Capabilities
 
 ### New Capabilities
 
-- `grade10-site/auction/lot-status`: the three collector statuses, their
-  mapping from a lot's outcome, which lots no collector surface shows, and the
-  status in the public listing read.
+- `grade10-site/auction/lot-status`: the external lot status, how it maps from
+  the internal lot status, which lots collectors never see, and the status in
+  the public listing data.
 
 ### Modified Capabilities
 
-- `grade10-site/auction/listing-page`: an address naming a hidden lot answers
-  not found, like one naming no published lot.
+- `grade10-site/auction/listing-page`: the address of a hidden lot shows Page
+  not found, the same as an address with no published lot.
 
 ## Impact
 
-- **Auction service** — derives the collector status; drops hidden lots from
-  collector reads and from the watched list.
-- **Public listing read** — adds the collector status.
-- **Grade10 site** — catalogue, lot page, watched list and My Auctions read the
-  new status and stop showing hidden lots. Which of them display the status is
-  design's.
-- **Component exports** — none added or changed here.
+- **Auction service** — works out the external lot status, and leaves hidden
+  lots out of collector data and the watchlist
+- **Public listing data** — adds the external lot status
+- **Grade10 site** — the catalogue, lot page, watchlist and My Auctions use the
+  new status and stop showing hidden lots. The designer decides which of them
+  display it
+- **Component exports** — none added or changed
 
-Changes whose rules this one overrides for hidden lots:
+This change overrides these rules for hidden lots:
 
-| Change or spec | Says today | Needs |
+| Change or spec | Says today | Needs to say |
 | --- | --- | --- |
-| `add-auction-watchlist` SC-16, SC-17 and the watchlist page's "Survives close" decision | A closed or called-off lot stays on the list | An unsold or called-off lot leaves it |
-| `redesign-my-auctions-table` SC-10, SC-40 | A closed, published lot stays on My Auctions, unsold and called off included | Unsold and called-off lots leave it, except for their bidders |
-| `grade10-admin/auction/listing` SC-22 | A closed listing's address still returns it | True for a won lot only |
-| `revise-auction-extended-bidding` | — | Nothing. A lot in extended bidding is Active |
+| `add-auction-watchlist` SC-16, SC-17, and the watchlist page's "Survives close" decision | Closed and called-off lots stay on the watchlist | Unsold and called-off lots are removed |
+| `redesign-my-auctions-table` SC-10, SC-40 | Closed lots stay on My Auctions while published, including unsold and called-off lots | Unsold and called-off lots are removed, except for collectors who bid |
+| `grade10-admin/auction/listing` SC-22 | A closed lot's address still opens the lot | Only for a lot with a winner |
+| `revise-auction-extended-bidding` | — | No change. A lot in extended bidding is Active |
 
 ## Follow-on changes
 
-- Design decides which collector surfaces show the status, and how.
-- Today's mixed status copy is retired in favour of the three statuses.
+- The designer decides which collector pages show the external lot status, and
+  how.
+- Today's mixed labels are replaced with the three external lot statuses.

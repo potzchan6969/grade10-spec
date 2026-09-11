@@ -6,11 +6,10 @@
 ## grade10-site-auction-listing-page-US3: Collector opens an address that names no lot
 
 **As a** collector,
-**I want** an address under the auction's lots that names no published lot to
-answer with the site's not-found surface,
+**I want** an address with no published lot to show the Page not found screen,
 **so that** I am never shown an empty lot page or the catalogue in its place.
 
-### grade10-site-auction-listing-page-US3-TC3-1: Hidden lot's address answers not found
+### grade10-site-auction-listing-page-US3-TC3-1: Hidden lot's address shows Page not found
 
 Runs once per row of **Test data**.
 
@@ -29,21 +28,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<lot>` was once published and is now in the state the row names.
+* `<lot>` is in the state the row names.
 
 **Test data:**
 
 | `<lot>` |
 | --- |
-| A lot that closed with no winner |
-| A lot an operator called off |
+| A published lot whose bidding ended with no winner |
+| A published lot that an operator called off |
 
 **Steps:**
 
-1. Fetch `<lot>`'s address with no script executing.
-2. Open `<lot>`'s address in the browser.
+1. Fetch the address of `<lot>` with scripts turned off.
+2. Open the address of `<lot>` in the browser.
 
 **Expected Results:**
 
-* Step 1 answers with status 404.
-* Step 2 shows the site's not-found surface, not the lot and not the catalogue.
+* Step 1 returns status 404.
+* Step 2 shows the Page not found screen, not the lot and not the catalogue.

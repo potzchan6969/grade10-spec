@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-11, tcs-rules r3.0
 
-## grade10-site-auction-e2e-US11: Collector follows an old link to a lot that cannot sell
+## grade10-site-auction-e2e-US11: Collector follows an old link to a hidden lot
 
 **As a** collector,
-**I want** a lot that was called off or did not sell to be gone wherever I look for it,
+**I want** a lot that did not sell or was called off to be gone everywhere,
 **so that** a saved link or an old search never shows me a lot nobody can buy.
 
-### grade10-site-auction-e2e-US11-TC01-1: Called-off lot is gone from the catalogue and its link
+### grade10-site-auction-e2e-US11-TC01-1: Called-off lot is removed from the catalogue and its link
 
 **Classification:**
 
@@ -26,23 +26,23 @@
 
 **Pre-conditions:**
 
-* customer has `<lot address>` saved from when `<lot_1>` was published.
+* customer saved `<lot address>` while `<lot_1>` was published.
 * An operator then called off `<lot_1>`.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<lot_1>` | A once-published lot an operator called off |
-| `<lot address>` | `<lot_1>`'s own address |
+| `<lot_1>` | A published lot that an operator called off |
+| `<lot address>` | The address of `<lot_1>` |
 
 **Steps:**
 
 1. Navigate to <grade10 auction catalogue url>.
-2. Search the catalogue for `<lot_1>`'s title.
+2. Search the catalogue for the title of `<lot_1>`.
 3. Open `<lot address>`.
 
 **Expected Results:**
 
-* Step 2 finds no `<lot_1>`.
-* Step 3 answers with status 404 and shows the site's not-found surface.
+* Step 2 does not find `<lot_1>`.
+* Step 3 returns status 404 and shows the Page not found screen.
