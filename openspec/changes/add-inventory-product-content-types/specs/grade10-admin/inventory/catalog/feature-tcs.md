@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-10, tcs-rules r3.0
 
-## grade10-admin-inventory-catalog-US5: Inventory admin configures a localized product content type
+## grade10-admin-inventory-catalog-US5: Inventory admin configures a localized product schema
 
 **As an** inventory admin,
 **I want** to define reusable fields and assign them to an exact IP, Item, and Category,
 **so that** each product type has clear labels, structured values, and rules.
 
-### grade10-admin-inventory-catalog-US5-TC1-1: Localized field configures a Pokémon content type
+### grade10-admin-inventory-catalog-US5-TC1-1: Localized attribute configures a Pokémon product schema
 
 **Classification:**
 
@@ -38,17 +38,17 @@
 
 **Steps:**
 
-1. Navigate to <inventory content types url>.
+1. Navigate to <inventory product schemas url>.
 2. Define <card number field>.
-3. Create a content type for <pokemon tuple>.
+3. Create a product schema for <pokemon tuple>.
 4. Assign <card number field> with its displayed label.
-5. Review the configured content type.
+5. Review the configured product schema.
 
 **Expected Results:**
 
 * One reusable field keeps the stable key `card_number`.
 * Each supplied locale shows its own displayed label.
-* The Pokémon content type selects the exact three tags and its assigned field has a label separate from the key.
+* The Pokémon product schema selects the exact three tags and its assigned attribute has a label separate from the key.
 
 ### grade10-admin-inventory-catalog-US5-TC2-1: Invalid field configuration and duplicate publish are refused
 
@@ -68,7 +68,7 @@
 **Pre-conditions:**
 
 * An admin holds the inventory catalogue grant.
-* A published content type already exists for <pokemon tuple>.
+* A published product schema already exists for <pokemon tuple>.
 
 **Test data:**
 
@@ -79,7 +79,7 @@
 
 **Steps:**
 
-1. Navigate to <inventory content types url>.
+1. Navigate to <inventory product schemas url>.
 2. Try to save <invalid field>.
 3. Create another configuration for <pokemon tuple>.
 4. Try to publish that configuration.
@@ -116,7 +116,7 @@
 **Pre-conditions:**
 
 * An admin holds the inventory catalogue grant.
-* A published content type for <pokemon tuple> requires language, card number, card set, and grading.
+* A published product schema for <pokemon tuple> requires language, card number, card set, and grading.
 * A draft <pokemon product> has the <pokemon tuple> classification.
 
 **Test data:**
@@ -159,8 +159,8 @@
 **Pre-conditions:**
 
 * An admin holds the inventory catalogue grant.
-* <pattern product> has a published content type with a card-number pattern and a required grading field.
-* <unmatched product> has a complete universal classification with no matching published content type.
+* <pattern product> has a published product schema with a card-number pattern and a required grading attribute.
+* <unmatched product> has a complete universal classification with no matching published product schema.
 
 **Test data:**
 
@@ -168,7 +168,7 @@
 | --- | --- |
 | `<invalid card number>` | A value that fails the configured card-number pattern |
 | `<pattern product>` | A draft product without grading |
-| `<unmatched product>` | A draft product without a matching published content type |
+| `<unmatched product>` | A draft product without a matching published product schema |
 
 **Steps:**
 
@@ -202,7 +202,7 @@
 **Pre-conditions:**
 
 * An admin holds the inventory catalogue grant.
-* A published Pokémon content type makes PSA population optional.
+* A published Pokémon product schema makes PSA population optional.
 * <translated product> has valid required values, an English grading value, and no Simplified Chinese grading translation.
 
 **Steps:**
@@ -259,7 +259,7 @@
 * Filter labels and values use the active locale.
 * Products with other matching dimensions are not returned.
 
-### grade10-admin-inventory-catalog-US7-TC2-1: Optional and Auction-only fields follow their different rules
+### grade10-admin-inventory-catalog-US7-TC2-1: Optional and listing attributes follow their different rules
 
 **Classification:**
 
@@ -277,7 +277,7 @@
 **Pre-conditions:**
 
 * One Auction product has a PSA population value and another does not.
-* The active content type has an Auction-only vaulted field with a stored value.
+* The Auction listing has a vaulted listing attribute with a stored value.
 
 **Steps:**
 
@@ -293,7 +293,7 @@
 * Both products remain available when the filter is removed.
 * Vaulted is absent from the controls and remains available on the listing.
 
-### grade10-admin-inventory-catalog-US7-TC3-1: Auction fields vary by content type and locale
+### grade10-admin-inventory-catalog-US7-TC3-1: Auction fields vary by product schema and locale
 
 **Classification:**
 
@@ -310,7 +310,7 @@
 
 **Pre-conditions:**
 
-* Pokémon and One Piece content types configure different Auction field selections.
+* Pokémon and One Piece product schemas configure different Auction field selections.
 * A One Piece listing has Traditional Chinese labels and values for language and card number.
 
 **Steps:**
@@ -325,12 +325,52 @@
 * The One Piece listing shows card number and character.
 * The One Piece fields appear in configured order with Traditional Chinese copy or English fallback.
 
+### grade10-admin-inventory-catalog-US7-TC4-1: Listing PSA cert numbers stay separate from product facts
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-07
+
+**Pre-conditions:**
+
+* Two Auction listings use the same Pokémon product.
+* The Pokémon product schema defines PSA cert number as a listing attribute.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing A cert>` | `0001234567` |
+| `<listing B cert>` | `0007654321` |
+
+**Steps:**
+
+1. Enter <listing A cert> on the first Auction listing.
+2. Enter <listing B cert> on the second Auction listing.
+3. Open both listings.
+4. Open Auction search and filter controls.
+
+**Expected Results:**
+
+* Each listing displays its own PSA cert number.
+* The shared product's grading and product attributes remain unchanged.
+* PSA cert number is absent from Auction search and filter controls.
+
 ---
 
-## grade10-admin-inventory-catalog-US8: Inventory admin publishes a safe content-type configuration
+## grade10-admin-inventory-catalog-US8: Inventory admin publishes a safe product-schema configuration
 
 **As an** inventory admin,
-**I want** to review the impact of a content-type change before publishing it,
+**I want** to review the impact of a product-schema change before publishing it,
 **so that** the active Auction catalogue never knowingly uses invalid product data.
 
 ### grade10-admin-inventory-catalog-US8-TC1-1: Valid configuration publishes with translation warnings
@@ -362,7 +402,7 @@
 
 **Steps:**
 
-1. Navigate to <inventory content types url>.
+1. Navigate to <inventory product schemas url>.
 2. Open the draft configuration for <pokemon tuple>.
 3. Review the publication report.
 4. Publish the configuration.
@@ -392,14 +432,14 @@
 **Pre-conditions:**
 
 * An admin holds the inventory catalogue grant.
-* <invalid product> matches a draft content type but lacks its newly required grading value.
-* <legacy product> is `created`, visible in inventory, and has no matching published content type.
+* <invalid product> matches a draft product schema but lacks its newly required grading value.
+* <legacy product> is `created`, visible in inventory, and has no matching published product schema.
 * A previous published configuration exists for <invalid product>.
 
 **Steps:**
 
-1. Navigate to <inventory content types url>.
-2. Try to publish the draft content type for <invalid product>.
+1. Navigate to <inventory product schemas url>.
+2. Try to publish the draft product schema for <invalid product>.
 3. Open <legacy product> in inventory.
 4. Try to list or reserve <legacy product> in Auction.
 
@@ -407,5 +447,5 @@
 
 * Publishing reports <invalid product> and its missing grading value.
 * The previous published configuration remains active.
-* <legacy product> remains visible in inventory and reports its missing content type.
+* <legacy product> remains visible in inventory and reports its missing product schema.
 * Auction refuses to list or reserve <legacy product>.
