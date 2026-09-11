@@ -24,10 +24,10 @@ Needs the submodule bump that carries group 1, for the `email.login` catalog sha
 
 Needs group 2's submodule bump for the `@grade10/ui` export set; nothing else from group 2.
 
-- [ ] 3.1 Remove `SendSignInCode`, `VerifySignInCode`, their tokens, the repository's code methods, the client port's `emailOtp` members and `emailOtpClient()` from the browser client — the DI module test proves the graph without them
-- [ ] 3.2 Collapse `SignInFlow` to the email step: no `otp` step, no code copy, `onSignedIn` kept for One Tap — satisfies *The email step has no code control* (`shared-auth-sign-in-SC-33`)
-- [ ] 3.3 Drop the code words from the consoles' `consoleCopy`, so both admin panels show one email action
-- [ ] 3.4 Update `signInSurface`, the fixture client, and the `useSignIn` and `SignInFlow` tests to the one-step flow
+- [x] 3.1 Remove `SendSignInCode`, `VerifySignInCode`, their tokens, the repository's code methods, the client port's `emailOtp` members and `emailOtpClient()` from the browser client — the DI module test proves the graph without them
+- [x] 3.2 Collapse `SignInFlow` to the email step: no `otp` step, no code copy, `onSignedIn` kept for One Tap — satisfies *The email step has no code control* (`shared-auth-sign-in-SC-33`)
+- [x] 3.3 Drop the code words from the consoles' `consoleCopy`, so both admin panels show one email action
+- [x] 3.4 Update `signInSurface`, the fixture client, and the `useSignIn` and `SignInFlow` tests to the one-step flow
 - [ ] 3.5 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:admin-bundle`
 
 ## 4. Manual and architecture docs (grade10-spec + grade10)
