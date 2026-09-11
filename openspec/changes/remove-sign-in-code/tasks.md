@@ -30,7 +30,7 @@ Needs group 2's submodule bump for the `@grade10/ui` export set; nothing else fr
 - [x] 3.4 Update `signInSurface`, the fixture client, and the `useSignIn` and `SignInFlow` tests to the one-step flow
 - [ ] 3.5 Run `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:admin-bundle`
 
-## 4. Manual and architecture docs (grade10-spec + grade10)
+## 4. Manual and architecture docs (grade10-spec + grade10) (owner: @sean)
 
 - [ ] 4.1 Rewrite the sign-in page: take the 🚧 lines off, state the link as the one email path, retitle the in-flight story, delete the note about the archived dialog-shell change; then the sign-in dialog page, the Accounts index, and the finance, vault, admin-access and edge-cache pages that list the code — `pnpm check:manual`
 - [ ] 4.2 Update `docs/architecture/security.md` and `docs/architecture/edge-cache.md` in grade10 to name magic links alone
