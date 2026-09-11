@@ -26,7 +26,7 @@ and the lender it is made under is not the entity that holds the item.
 
 | Step | Built | Gap |
 | --- | --- | --- |
-| Sign in with Google or a magic link | yes, plus an emailed code | — |
+| Sign in with Google or a magic link | yes | — |
 | Verify the phone by SMS | no; the number is stored in E.164 and confirmed by nothing | an SMS provider and a verified-phone fact |
 | Submit photos, amount, items | the vault wizard, one item per case | a multi-card request is several requests, with one visit booked on the first |
 | Preliminary authentication and valuation | staff valuation on the case, capped at the brand's **40%** of it | — |

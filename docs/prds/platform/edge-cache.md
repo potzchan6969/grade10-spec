@@ -85,8 +85,8 @@ ctx.executionCtx.waitUntil(
 
 ### One-time tokens do not ride KV
 
-- KV's staleness is priced for sessions, not for magic links, email OTPs, and their attempt counters
-- A colo that cached a verification can serve the consumed value for up to 60 s — a single-use token redeems twice and the attempt limit softens
+- KV's staleness is priced for sessions, not for magic-link tokens
+- A colo that cached a verification can serve the consumed value for up to 60 s — a single-use token redeems twice
 - The auth worker's `secondaryStorage` splits by keyspace (`packages/grade10-auth/backend/src/secondaryStorage.ts`)
 - `verification:` keys live in the identity Postgres (`auth_kv` — KV-shaped, TTL via `expires_at`, expired rows swept on write); everything else stays on KV
 - The rule: KV holds only keys that are immutable until expiry or whose staleness has been priced
