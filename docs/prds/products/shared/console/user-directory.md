@@ -3,6 +3,7 @@ title: User Directory
 spec: shared/console/user-directory
 audience: operator
 order: 2
+reviewed: 2026-09-11
 ---
 
 This is the operator's view of the identity directory: a table of accounts, and

@@ -2,6 +2,7 @@
 title: Roles & Permissions
 spec: grade10-admin/console/roles-and-permissions
 order: 2
+reviewed: 2026-09-11
 ---
 
 What each closed role may do, and what each permission means, shown to
@@ -11,7 +12,8 @@ operators from the shipped mapping — never edited from the console.
   including `user` as a column (Allowed / Not allowed); elevated roles marked
   (every closed role except `user`)
 - **Permissions tab** — every permission with id, description, the closed
-  roles that hold it, and the elevated APIs that ask for it
+  roles that hold it, and the elevated APIs that ask for it; filter by
+  resource and by API path prefix (matched prefix highlighted)
 - **Deep link** — `/roles-and-permissions?role=<id>` opens the Roles tab with
   that role's column highlighted
 - **Sidebar** — production entry directly under Users; `admin` only (gated on

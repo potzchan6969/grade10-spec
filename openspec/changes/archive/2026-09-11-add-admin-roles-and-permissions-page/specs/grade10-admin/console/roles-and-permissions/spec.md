@@ -20,6 +20,8 @@ operators and reviewers never read authorization source to learn the boundary.
 - Permissions tab
   - Catalog: every permission with id, description, the closed roles that hold
     it, and the elevated APIs that ask for it
+  - Narrowing: filter by resource id and by API path prefix; matching API
+    prefixes are highlighted in the row
 - Derived record
   - One source: content from the shipped vocabulary and role-to-permission
     mapping; API names from the committed procedure documents
@@ -126,6 +128,21 @@ Resource and Action columns.
 - **THEN** `audit:read` appears with its description
 - **AND** at least one elevated procedure that requires `audit:read` is listed
   on that row
+
+### Requirement: The Permissions tab narrows by resource and API prefix
+
+The Permissions tab SHALL offer a filter on permission resource (the id before
+the colon) and a filter on API path that matches a prefix. When an API prefix
+filter is set, each matching API label on a row SHALL highlight the matched
+prefix. Clearing either filter SHALL restore the full catalog for that
+dimension.
+
+#### Scenario: grade10-admin-console-roles-and-permissions-SC-14 - Resource and API filters narrow the catalog
+
+- **WHEN** an operator opens the Permissions tab and filters to one resource
+- **THEN** only permissions of that resource remain listed
+- **AND** filtering APIs by a prefix leaves only rows whose APIs match that
+  prefix and highlights the matched span on those labels
 
 ### Requirement: A deep link highlights the named role on the Roles tab
 

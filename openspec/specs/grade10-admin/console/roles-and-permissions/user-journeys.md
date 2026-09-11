@@ -27,6 +27,7 @@
 
 - `grade10-admin-console-roles-and-permissions-SC-08` — Every permission appears with roles and APIs
 - `grade10-admin-console-roles-and-permissions-SC-09` — Auditor's only grant is named in the catalog
+- `grade10-admin-console-roles-and-permissions-SC-14` — Resource and API filters narrow the catalog
 - `grade10-admin-console-roles-and-permissions-SC-11` — A changed mapping fails the check until regenerated
 - `grade10-admin-console-roles-and-permissions-SC-12` — Reading the same source twice gives one view
 
