@@ -62,8 +62,10 @@ leaving that surface.
 
 ### Modified Capabilities
 
-- `grade10-site/site/page-shell` — the header now offers Cart where the site
-  answers the Store drawer and continues to omit it everywhere else.
+- `grade10-site/site/page-shell` — absorbed by `auction-first-site-header`,
+  which carries Store-gated Cart in the header alongside auction-first chrome.
+  Scenarios `grade10-site-site-page-shell-SC-09` and
+  `grade10-site-site-page-shell-SC-16` live on that change.
 
 ## Impact
 

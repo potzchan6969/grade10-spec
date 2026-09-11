@@ -15,5 +15,6 @@ a failure — a tap that appears to do nothing leaves someone believing they are
 signed out when they are not.
 
 Where the control sits and what a surface cleans up afterwards belong to the
-surface. On the grade10 site there is exactly one place: the profile. The header
-deliberately offers no second one.
+surface. On the grade10 site the profile offers sign-out, and the site header
+account menu offers it too when the collector is signed in —
+[Page Shell](/p/grade10-site/site/page-shell).
