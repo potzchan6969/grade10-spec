@@ -14,7 +14,7 @@ catalogue already answers.
 
 - [x] 2.1 Add `facetChoicesMatching` to the catalog feature's `CatalogFilters` domain model, folding a draft the way `CatalogQuery` folds free text and cutting each group to five, so the world and collectible-type hits `grade10-site-store-product-listing-SC-31` names are decided by a pure function.
 - [x] 2.2 Add a suggestions read to the catalog feature's presentation layer composing `listProducts` with the draft as `search`, `pageSize: 5` and no facets, and the unnarrowed `listFilters` taxonomy through 2.1 — reporting the two groups and whether hits are still resolving, so `grade10-site-store-product-listing-SC-31`, `-SC-37` and `-SC-38` have their data. Export it from the feature's public entry; the DI module is unchanged.
-- [ ] 2.3 Verify: focused catalog feature tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
+- [x] 2.3 Verify: focused catalog feature tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`.
 
 ## 3. The listing search field on the page (grade10)
 
