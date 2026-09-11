@@ -9,7 +9,7 @@ The queue works every winner order from lot close through delivery in one place.
 
 | Outcome | When |
 | --- | --- |
-| Draft · Scheduled · Live · Ending soon | The sale is still the auction's |
+| 🚧 Draft · Scheduled · Live | The sale is still the auction's; time left is read from the close |
 | Unsold · Called off | Ended without a payable winner order |
 | 🚧 Awaiting Address | The winner has not confirmed a delivery address |
 | 🚧 Preparing Invoice | The address is confirmed; the invoice is ready to quote |
