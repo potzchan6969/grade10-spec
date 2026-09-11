@@ -11,8 +11,8 @@
 
 ## 3. Data Migration (grade10) (owner: @htonyl)
 
-- [ ] 3.1 Add append-only Inventory and Auction migrations for product attributes, exact-tuple product schemas and draft/published revisions, `auction_display_attribute_keys`, and `auction.listings.listing_attributes` JSONB for grade10-admin-inventory-catalog-SC-69 through SC-90
-- [ ] 3.2 Preserve `products.metadata` as legacy unstructured data and add keys, checks, and typed-value indexes only for product attributes; listing attributes stay opaque JSONB
+- [x] 3.1 Add append-only Inventory and Auction migrations for product attributes, exact-tuple product schemas and draft/published revisions, `auction_display_attribute_keys`, and `auction.listings.listing_attributes` JSONB for grade10-admin-inventory-catalog-SC-69 through SC-90
+- [x] 3.2 Preserve `products.metadata` as legacy unstructured data and add keys, checks, and typed-value indexes only for product attributes; listing attributes stay opaque JSONB
 - [ ] 3.3 Verify generated migration artifacts with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, and `pnpm run db:status`
 
 ## 4. Inventory Backend and API (grade10)
