@@ -4,8 +4,8 @@ Product context: [Lot Status](../../../docs/prds/products/grade10-site/auction/l
 
 ## Why
 
-A collector reading a lot meets whichever word the screen in front of them
-happened to pick. The site's copy carries seven words for three situations —
+A collector reading a lot meets whichever status label the screen in front of
+them happened to pick. The site's copy carries seven labels for three situations —
 **Upcoming**, **Live**, **Extended** and **Closed** on the lot surfaces;
 **Scheduled**, **Open** and **Ended** on My Auctions — and no spec says which
 one a collector should read. The operator's outcome list, the only status
@@ -18,7 +18,7 @@ keeps answering; the watched list shows a called-off lot as called off; My
 Auctions keeps an unsold lot while it stays published. A collector meets lots
 they can do nothing with.
 
-**Metric:** distinct lot-status words on collector surfaces — seven today, three
+**Metric:** distinct lot-status labels on collector surfaces — seven today, three
 when this ships.
 
 ## What Changes
@@ -34,8 +34,8 @@ when this ships.
 - **One exception.** A collector who bid on a called-off lot still reads it in
   My Auctions, with what happened to their card hold.
 - **The public listing read carries the collector status**, so every surface
-  uses the same word.
-- **Display is the designer's.** This change fixes the words and the mapping;
+  uses the same status.
+- **Display is the designer's.** This change fixes the statuses and the mapping;
   whether and where a screen shows them is decided in design.
 
 **BREAKING:** unsold and called-off lots stop answering at their own address,
@@ -85,12 +85,7 @@ Changes whose rules this one overrides for hidden lots:
 | `grade10-admin/auction/listing` SC-22 | A closed listing's address still returns it | True for a won lot only |
 | `revise-auction-extended-bidding` | — | Nothing. A lot in extended bidding is Active |
 
-## Open Questions
-
-- ❓ **Watches already on hidden lots.** Whether they are removed at cutover or
-  on the lot's next change. For the engineer who plans delivery.
-
 ## Follow-on changes
 
 - Design decides which collector surfaces show the status, and how.
-- Today's mixed status copy is retired in favour of the three words.
+- Today's mixed status copy is retired in favour of the three statuses.

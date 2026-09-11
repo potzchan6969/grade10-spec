@@ -2,13 +2,13 @@
 
 The status a collector reads for an auction lot — Upcoming, Active, or Ended —
 derived from the lot and never stored, and which lots no collector surface shows
-at all. It fixes the words and their mapping; whether and where a screen shows
+at all. It fixes the statuses and their mapping; whether and where a screen shows
 them is design's.
 
 ## Feature set
 
 - Collector vocabulary
-  - Three statuses: one small set of words every collector surface can use,
+  - Three statuses: one small set of statuses every collector surface can use,
     apart from the operator's outcome list
   - Derived, never stored: read from the lot, so it cannot disagree with it
   - The lot, not the order: a winner's order status stays a separate fact
@@ -18,7 +18,7 @@ them is design's.
   - Bidder exception: a bidder still reads a called-off lot in their own record,
     with their card hold
 - Public contract
-  - Status in the listing read: every surface reads the same word
+  - Status in the listing read: every surface reads the same status
 
 ## ADDED Requirements
 
@@ -79,8 +79,7 @@ record. Whether and where a surface shows the collector status is design's.
 A lot that is Draft, closed with no winner, or called off SHALL NOT appear on
 any collector surface: not in the catalogue, its search or its filters; not at
 its own address, which SHALL answer as `grade10-site/auction/listing-page`
-answers an address naming no published lot; and not on the watched list. A
-watch on a lot SHALL end when the lot becomes hidden.
+answers an address naming no published lot; and not on the watched list.
 
 A collector who placed a bid on a called-off lot SHALL still read that lot in
 their own record, with what happened to their card hold, per

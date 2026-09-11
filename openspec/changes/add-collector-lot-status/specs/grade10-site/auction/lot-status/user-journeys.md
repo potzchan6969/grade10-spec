@@ -3,7 +3,7 @@
 ### grade10-site-auction-lot-status-US-01: Collector reads where a lot stands
 
 **As a** collector,
-**I want** every lot described in one of three words,
+**I want** every lot to show one of three statuses,
 **so that** I can tell at a glance whether I can still bid on it.
 
 **Accepted by:**
