@@ -1,7 +1,7 @@
 ## 1. Contracts and Manual (grade10-spec) (owner: @htonyl)
 
 - [x] 1.1 Update the inventory catalog manual with product schemas, product attributes, English-base values, flexible listing JSONB, compatibility review, attribute-to-filter navigation, and the Inventory display contract that keeps Auction renderable for grade10-admin-inventory-catalog-SC-69 through SC-92
-- [ ] 1.2 Verify the manual with `pnpm check:manual`
+- [x] 1.2 Verify the manual with `pnpm check:manual`
 
 ## 2. Shared Contracts (grade10) (owner: @htonyl)
 
@@ -13,7 +13,7 @@
 
 - [x] 3.1 Add append-only Inventory and Auction migrations for product attributes, exact-tuple product schemas and draft/published revisions, `auction_display_attribute_keys`, and `auction.listings.listing_attributes` JSONB for grade10-admin-inventory-catalog-SC-69 through SC-90
 - [x] 3.2 Preserve `products.metadata` as legacy unstructured data and add keys, checks, and typed-value indexes only for product attributes; listing attributes stay opaque JSONB
-- [ ] 3.3 Verify generated migration artifacts with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, and `pnpm run db:status`
+- [x] 3.3 Verify generated migration artifacts with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, and `pnpm run db:status`
 
 ## 4. Inventory Backend and API (grade10) (owner: @htonyl)
 
