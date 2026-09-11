@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T04:29:26.596Z",
+  "generatedAt": "2026-09-11T05:09:14.606Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -798,6 +798,13 @@
     "6554-6228": "Dropdown Menu",
     "6554-6278": "Empty State",
     "6554-6287": "Empty State",
+    "6586-6340": "Tab List",
+    "6586-6360": "Tab",
+    "6586-6363": "Tab",
+    "6586-6366": "Tab",
+    "6586-6369": "Tab",
+    "6586-6372": "Tab",
+    "6586-6383": "Tab List",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
