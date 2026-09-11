@@ -6,7 +6,7 @@ contract and schema groups land before the independently claimable auction,
 admin, and winner-surface groups. The database task is schema deployment only:
 there is no auction-state backfill, legacy conversion, or dual-read path.
 
-## 1. Manual and planning record (grade10-spec)
+## 1. Manual and planning record (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Update the winner-order, order-status, notification, account-record, and post-sale manual pages to describe the delivered address-first invoice flow for `winner-order-SC-26`, `winner-order-SC-31`, `auction-status-SC-06`, `order-mail-SC-09`, and `grade10-admin-auction-post-sale-SC-48`
 - [ ] 1.2 Verify the change artifacts and manual with `openspec validate revise-auction-winner-invoicing --strict` and `pnpm check:manual`
