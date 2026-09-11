@@ -11,7 +11,7 @@ there is no auction-state backfill, legacy conversion, or dual-read path.
 - [ ] 1.1 Update the winner-order, order-status, notification, account-record, and post-sale manual pages to describe the delivered address-first invoice flow for `winner-order-SC-26`, `winner-order-SC-31`, `auction-status-SC-06`, `order-mail-SC-09`, and `grade10-admin-auction-post-sale-SC-48`
 - [ ] 1.2 Verify the change artifacts and manual with `openspec validate revise-auction-winner-invoicing --strict` and `pnpm check:manual`
 
-## 2. Shared auction contracts (grade10)
+## 2. Shared auction contracts (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Extend the auction status, order, invoice, invoice-log, receipt, notification, and admin post-sale codecs with `not_issued`, `expired`, Awaiting Address, Preparing Invoice, quote values, deadline choice, payment method details, and proof metadata for `auction-status-SC-01`, `auction-status-SC-06`, `winner-order-SC-04`, and `grade10-admin-auction-post-sale-SC-61`
 - [ ] 2.2 Replace the winner and operator procedure inputs and outputs for address confirmation, quote-and-send, re-quote, expiry, card payment, manual settlement, and proof upload so `winner-order-SC-28`, `winner-order-SC-29`, `winner-order-SC-35`, `grade10-admin-auction-post-sale-SC-50`, and `grade10-admin-auction-post-sale-SC-58` have fixed authenticated contracts
