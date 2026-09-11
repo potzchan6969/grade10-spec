@@ -6,7 +6,7 @@
 - [x] 1.4 Carry the search stories into the Product Listing page's Designs block — the browse commit and the filter pick — so the manual shows what `grade10-site-store-product-listing-SC-32` and `-SC-34` deliver; make `pnpm check:manual` pass.
 - [x] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:stories:ui`, `pnpm check:manual`.
 
-## 2. Suggestion hits from the catalogue (grade10)
+## 2. Suggestion hits from the catalogue (grade10) (owner: @sean)
 
 This group touches only the catalog feature in `@grade10/store-frontend` and
 needs nothing from group 1. It adds no endpoint: both hits come from reads the
