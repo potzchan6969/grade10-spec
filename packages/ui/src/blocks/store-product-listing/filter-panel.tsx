@@ -44,6 +44,7 @@ type FilterPanelProps = {
     selected: boolean,
   ) => void;
   onGroupExpand?: (groupId: string) => void;
+  onGroupCollapse?: (groupId: string) => void;
   utilityLinks?: readonly UtilityLink[];
   showHeading?: boolean;
   showSearch?: boolean;
@@ -85,6 +86,7 @@ function FilterPanel({
   selection,
   onFilterChange,
   onGroupExpand,
+  onGroupCollapse,
   utilityLinks = [],
   showHeading = true,
   showSearch = true,
@@ -105,6 +107,7 @@ function FilterPanel({
           facetLayout={facetLayout}
           groups={groups}
           onFilterChange={onFilterChange}
+          onGroupCollapse={onGroupCollapse}
           onGroupExpand={onGroupExpand}
           onSearchChange={onSearchChange}
           onSearchClear={onSearchClear}

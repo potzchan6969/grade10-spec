@@ -34,6 +34,14 @@ function expandFilterGroups(
   return FILTER_GROUPS_EXPANDED.map((group) => ({ ...group }));
 }
 
+function collapseFilterGroups(
+  current: readonly FilterGroup[],
+  groupId: string,
+): FilterGroup[] {
+  if (groupId !== "worlds") return [...current];
+  return FILTER_GROUPS.map((group) => ({ ...group }));
+}
+
 /** Storybook wrapper: short results reload, then pages in more tiles on scroll
  * when the story asks for `hasMore` (unless it is a frozen loading-more demo). */
 export function InteractiveProductBrowse(args: ProductBrowseProps) {
@@ -192,6 +200,10 @@ export function InteractiveProductBrowse(args: ProductBrowseProps) {
         args.onClearFilters?.();
       }}
       onFilterChange={handleFilterChange}
+      onGroupCollapse={(groupId) => {
+        setFilterGroups((current) => collapseFilterGroups(current, groupId));
+        args.onGroupCollapse?.(groupId);
+      }}
       onGroupExpand={(groupId) => {
         setFilterGroups((current) => expandFilterGroups(current, groupId));
         args.onGroupExpand?.(groupId);

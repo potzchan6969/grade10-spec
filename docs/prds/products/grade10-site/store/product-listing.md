@@ -46,6 +46,12 @@ product.
      — the catalogue narrowed
   4. `grade10.com/store/products/<handle>` — a product's details page
 
+## Product Tile
+
+🚧 **Name opens the product** — the product name on a listing card opens
+Product Details the same way the photo does; a sold-out card’s name stays
+inert.
+
 ## Adaptive Filter
 
 🚧 **Narrow pills** — below the wide breakpoint the listing shows the result

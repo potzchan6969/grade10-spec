@@ -26,7 +26,10 @@ import {
   sortTriggerLabel,
   UTILITY_LINKS,
 } from "./store-content";
-import { WorkbenchAccountNav } from "./workbench-account-nav";
+import { WorkbenchAccountNav, navigateToStory } from "./workbench-account-nav";
+
+/** Storybook story id for the Product Detail page assembly. */
+const PRODUCT_DETAIL_STORY_ID = "pages-product-detail-page--default";
 
 const RESULTS_LOAD_MS = 450;
 const PAGE_SIZE = 10;
@@ -334,7 +337,13 @@ function ProductListPage() {
             setFilterGroups(FILTER_GROUPS_EXPANDED);
           }
         }}
+        onGroupCollapse={(groupId) => {
+          if (groupId === "worlds") {
+            setFilterGroups(FILTER_GROUPS);
+          }
+        }}
         onLoadMore={handleLoadMore}
+        onProductClick={() => navigateToStory(PRODUCT_DETAIL_STORY_ID)}
         onProductCartQuantityChange={(productId, quantity) =>
           setCart((previous) => {
             if (quantity <= 0) {

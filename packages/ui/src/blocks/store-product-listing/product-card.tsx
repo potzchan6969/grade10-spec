@@ -57,8 +57,9 @@ type ProductCardProps = {
   /** Supply one to sell: the cart control is drawn only where it is present. */
   onCartQuantityChange?: (quantity: number) => void;
   /**
-   * Fires when the image surface is activated. No navigation target is wired
-   * here — the consumer decides what happens (route, modal, etc.).
+   * Fires when the image or the product name is activated. No navigation
+   * target is wired here — the consumer decides what happens (route, modal,
+   * etc.). Omitted (or when sold out) leaves both inert.
    */
   onClick?: () => void;
   className?: string;
@@ -105,6 +106,7 @@ function ProductCardContent({
   onClick,
 }: ProductCardContentProps) {
   const onSale = originalPrice != null && !soldOut;
+  const nameActivates = onClick != null && !soldOut;
 
   return (
     <VStack
@@ -133,9 +135,19 @@ function ProductCardContent({
         data-slot="product-card-content"
         gap="none"
       >
-        <p className="line-clamp-2 text-base font-medium text-card-foreground">
-          {name}
-        </p>
+        {nameActivates ? (
+          <button
+            className="line-clamp-2 w-full cursor-pointer text-left text-base font-medium text-card-foreground underline-offset-2 hover:underline focus-visible:rounded-sm focus-visible:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            onClick={onClick}
+            type="button"
+          >
+            {name}
+          </button>
+        ) : (
+          <p className="line-clamp-2 text-base font-medium text-card-foreground">
+            {name}
+          </p>
+        )}
         <HStack gap="sm" vAlign="baseline">
           <p
             className={cn(

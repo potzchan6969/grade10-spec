@@ -108,6 +108,8 @@ without clearing the first. A change SHALL name the group and the option.
 An option MAY carry a consumer-supplied count, displayed as supplied. A group
 whose option list is empty SHALL not be displayed. When a group carries an
 expand label on a wide viewport, an expand affordance SHALL be offered that
+reports activation through a callback naming the group. When a group carries a
+collapse label on a wide viewport, a collapse affordance SHALL be offered that
 reports activation through a callback naming the group.
 
 Utility links SHALL be displayed in the order supplied on a wide viewport,
@@ -164,6 +166,12 @@ supplied, that region SHALL occupy no space.
 - **GIVEN** a filter group with a supplied expand label on a wide viewport
 - **WHEN** a shopper activates the expand affordance
 - **THEN** the expand callback is reported once, naming the group
+
+#### Scenario: shared-ui-store-product-listing-SC-86 - A group collapse is reported
+
+- **GIVEN** a filter group with a supplied collapse label on a wide viewport
+- **WHEN** a shopper activates the collapse affordance
+- **THEN** the collapse callback is reported once, naming the group
 
 #### Scenario: shared-ui-store-product-listing-SC-38 - No utility links
 

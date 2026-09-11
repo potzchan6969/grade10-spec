@@ -11,12 +11,10 @@ how many results there are, which filters are applied, and how the list is
 sorted. The grid shows product tiles that reflow their column count with the
 width available and load more as the shopper scrolls.
 
-🚧 **On a narrow viewport** — a Filter control opens a left drawer for the
-facet groups; the search field stays on the listing outside the drawer.
+## Product Tile
 
-🚧 **Facet groups as tabs on a small screen** — inside the filter drawer,
-Worlds and Types sit as tabs so expanding one group does not push the other
-down the scroll. The wide sidebar still stacks them.
+🚧 **Name opens the product** — when the tile can open a product, the name
+does too, the same way the photo does; a sold-out tile’s name stays inert.
 
 🚧 **Cart on a small screen** — where the tile sells, the round cart control
 stays visible without hover on a narrow viewport and on touch; on a wide

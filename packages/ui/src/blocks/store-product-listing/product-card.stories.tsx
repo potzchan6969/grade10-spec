@@ -116,14 +116,18 @@ export const BoneyardCapture: Story = {
  */
 export const NamedOnce: Story = {
   decorators: well,
-  args: { onCartQuantityChange: () => {} },
-  play: async ({ canvasElement }) => {
+  args: { onCartQuantityChange: () => {}, onClick: fn() },
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
 
-    expect(
-      canvas.getAllByRole("button", { name: defaults.name }).length,
-    ).toBeGreaterThan(0);
+    const nameControls = canvas.getAllByRole("button", {
+      name: defaults.name,
+    });
+    expect(nameControls.length).toBe(2);
     expect(canvas.getByRole("button", { name: copy.cart })).toBeInTheDocument();
+
+    await userEvent.click(nameControls[1]);
+    expect(args.onClick).toHaveBeenCalledTimes(1);
   },
 };
 

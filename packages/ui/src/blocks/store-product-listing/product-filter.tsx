@@ -23,6 +23,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -86,6 +87,8 @@ type ProductFilterProps = {
     selected: boolean,
   ) => void;
   onGroupExpand?: (groupId: string) => void;
+  /** When a group carries a collapse label, reports Show less. */
+  onGroupCollapse?: (groupId: string) => void;
   /** When false, the heading is omitted (e.g. drawer title already names it). */
   showHeading?: boolean;
   /** When false, the search field is omitted (e.g. mounted on a toolbar). */
@@ -140,6 +143,7 @@ function ProductFilter({
   selection = {},
   onFilterChange,
   onGroupExpand,
+  onGroupCollapse,
   showHeading = true,
   showSearch = true,
   showGroups = true,
@@ -338,6 +342,7 @@ function ProductFilter({
               group={group}
               key={group.id}
               onFilterChange={onFilterChange}
+              onGroupCollapse={onGroupCollapse}
               onGroupExpand={onGroupExpand}
               selection={selection}
               showGroupExpand={showGroupExpand}
@@ -364,6 +369,7 @@ function ProductFilter({
               <FacetGroupOptions
                 group={group}
                 onFilterChange={onFilterChange}
+                onGroupCollapse={onGroupCollapse}
                 onGroupExpand={onGroupExpand}
                 selection={selection}
                 showGroupExpand={showGroupExpand}
@@ -376,11 +382,76 @@ function ProductFilter({
   );
 }
 
+function FacetOptionsHeight({
+  children,
+  optionKey,
+}: {
+  children: ReactNode;
+  /** Changes when the option list should retween its height. */
+  optionKey: string;
+}) {
+  const outerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const previousHeightRef = useRef<number | null>(null);
+
+  useLayoutEffect(() => {
+    const outer = outerRef.current;
+    const inner = innerRef.current;
+    if (outer == null || inner == null) return;
+
+    const nextHeight = inner.offsetHeight;
+    const previousHeight = previousHeightRef.current;
+    previousHeightRef.current = nextHeight;
+
+    if (
+      previousHeight == null ||
+      previousHeight === nextHeight ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      outer.style.height = "";
+      outer.style.overflow = "";
+      outer.style.transition = "";
+      return;
+    }
+
+    outer.style.height = `${previousHeight}px`;
+    outer.style.overflow = "hidden";
+    outer.style.transition = "none";
+    void outer.offsetHeight;
+    outer.style.transition =
+      "height 250ms cubic-bezier(0.22, 1, 0.36, 1)";
+    outer.style.height = `${nextHeight}px`;
+
+    const onEnd = (event: TransitionEvent) => {
+      if (event.target !== outer || event.propertyName !== "height") return;
+      outer.style.height = "";
+      outer.style.overflow = "";
+      outer.style.transition = "";
+      outer.removeEventListener("transitionend", onEnd);
+    };
+    outer.addEventListener("transitionend", onEnd);
+    return () => outer.removeEventListener("transitionend", onEnd);
+  }, [optionKey]);
+
+  return (
+    <div
+      className="w-full motion-reduce:transition-none"
+      data-slot="facet-options-height"
+      ref={outerRef}
+    >
+      <div className="w-full" ref={innerRef}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function FacetGroupOptions({
   group,
   selection,
   onFilterChange,
   onGroupExpand,
+  onGroupCollapse,
   showLabel = false,
   showGroupExpand = true,
 }: {
@@ -392,35 +463,54 @@ function FacetGroupOptions({
     selected: boolean,
   ) => void;
   onGroupExpand?: (groupId: string) => void;
+  onGroupCollapse?: (groupId: string) => void;
   showLabel?: boolean;
   showGroupExpand?: boolean;
 }) {
+  const optionKey = group.options.map((option) => option.id).join("|");
+  const showExpand =
+    showGroupExpand && group.expandLabel != null && group.collapseLabel == null;
+  const showCollapse = showGroupExpand && group.collapseLabel != null;
+
   return (
     <CheckboxList label={showLabel ? group.label : undefined}>
-      {group.options.map((option) => {
-        const selected = (selection[group.id] ?? []).includes(option.id);
-        return (
-          <CheckboxListInput
-            checked={selected}
-            count={option.count}
-            disabled={option.disabled}
-            key={option.id}
-            onCheckedChange={(next) =>
-              onFilterChange?.(group.id, option.id, next === true)
-            }
-            size="sm"
-          >
-            {option.label}
-          </CheckboxListInput>
-        );
-      })}
-      {showGroupExpand && group.expandLabel != null ? (
+      <FacetOptionsHeight optionKey={optionKey}>
+        <div className="flex w-full flex-col items-start gap-2">
+          {group.options.map((option) => {
+            const selected = (selection[group.id] ?? []).includes(option.id);
+            return (
+              <CheckboxListInput
+                checked={selected}
+                count={option.count}
+                disabled={option.disabled}
+                key={option.id}
+                onCheckedChange={(next) =>
+                  onFilterChange?.(group.id, option.id, next === true)
+                }
+                size="sm"
+              >
+                {option.label}
+              </CheckboxListInput>
+            );
+          })}
+        </div>
+      </FacetOptionsHeight>
+      {showExpand ? (
         <Link
           onClick={() => onGroupExpand?.(group.id)}
           render={<button type="button" />}
           size="sm"
         >
           {group.expandLabel}
+        </Link>
+      ) : null}
+      {showCollapse ? (
+        <Link
+          onClick={() => onGroupCollapse?.(group.id)}
+          render={<button type="button" />}
+          size="sm"
+        >
+          {group.collapseLabel}
         </Link>
       ) : null}
     </CheckboxList>
