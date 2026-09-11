@@ -52,6 +52,10 @@ uncapped tail is visible.
   status. This is a choice: it closes the gap where the scheduled close was
   stored but no read was required to expose it.
 
+- **The operator queue labels a lot in extended bidding** with
+  "Extended bidding: ON" on its row. It is a label, not an outcome, and not a
+  filter.
+
 **BREAKING:** the extension window leaves the admin form and the public
 listing read, and the close rule changes for every published listing.
 
@@ -59,9 +63,8 @@ listing read, and the close rule changes for every published listing.
 
 ## Non-Goals
 
-- **A new lot status.** Live, Ending soon, and the rest are unchanged. A lot in
-  extended bidding shows Ending soon, which is measured against the recorded
-  close.
+- **A new lot status.** Extended bidding is a label on the operator's queue
+  row, not an outcome. The lot's outcome does not change.
 - **A campaign-wide close.** Lots in one campaign close independently, even
   when they share a time.
 - **Restricting who bids** during extended bidding.
@@ -84,6 +87,8 @@ None.
   restarts the timer during extended bidding.
 - `grade10-admin/auction/listing`: the extension window field is removed; the
   extension duration alone sets extended bidding.
+- `grade10-admin/auction/post-sale`: a queue row carries the label
+  "Extended bidding: ON" while its lot is in extended bidding.
 
 ## Impact
 
@@ -91,7 +96,11 @@ None.
   with a bid into extended bidding, and restarts each lot's timer on its own.
 - **Public listing contract** — drops the extension window, adds the scheduled
   close.
-- **Grade10 admin** — the listing form has one extension field, not two.
+- **Grade10 admin** — the listing form has one extension field, not two, and
+  the queue row carries the extended-bidding label.
+- **Ending soon** — `revise-auction-winner-invoicing` removes it as an outcome.
+  The label here does not depend on that: it sits beside whatever outcome the
+  row carries.
 - **Grade10 site** — the lot page and bid card read the changed contract.
 - **Component exports** — none added or changed.
 - **Scenario ids** — none retired, none reissued. Every existing scenario
@@ -121,6 +130,9 @@ and needs none.
 
 ## Open Questions
 
+- ❓ **The label beyond the queue.** Whether the lot page, the catalogue tile,
+  or My Auctions shows extended bidding, and how. For the designer.
+
 - ❓ **Lots open at cutover.** Which rule governs a lot published under the old
   rule and still open when this ships. For the engineer who plans delivery.
 - ❓ **Stored extension windows.** Whether existing window values are dropped
@@ -132,6 +144,4 @@ and needs none.
 
 ## Follow-on changes
 
-- An **extended bidding** mark beside Ending soon, derived from the scheduled
-  and recorded close.
 - Bid-card copy that tells a collector a lot is in extended bidding.
