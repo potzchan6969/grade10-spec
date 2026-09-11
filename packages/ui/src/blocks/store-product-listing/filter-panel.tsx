@@ -19,6 +19,12 @@ import type {
 type FilterPanelCopy = ProductFilterCopy & {
   /** Accessible name for the complementary landmark. */
   label: string;
+  /** Filter button on narrow viewports. */
+  openFilter: string;
+  /** Clear action in the filter drawer. */
+  drawerClear: string;
+  /** Done action that closes the filter drawer. */
+  drawerDone: string;
 };
 
 type FilterPanelProps = {
@@ -41,6 +47,11 @@ type FilterPanelProps = {
   ) => void;
   onGroupExpand?: (groupId: string) => void;
   utilityLinks?: readonly UtilityLink[];
+  showHeading?: boolean;
+  showSearch?: boolean;
+  showGroups?: boolean;
+  showGroupExpand?: boolean;
+  facetLayout?: "stack" | "tabs";
   className?: string;
 };
 
@@ -77,6 +88,11 @@ function FilterPanel({
   onFilterChange,
   onGroupExpand,
   utilityLinks = [],
+  showHeading = true,
+  showSearch = true,
+  showGroups = true,
+  showGroupExpand = true,
+  facetLayout = "stack",
   className,
 }: FilterPanelProps) {
   return (
@@ -88,6 +104,7 @@ function FilterPanel({
       <VStack className="gap-8" gap="none">
         <ProductFilter
           copy={copy}
+          facetLayout={facetLayout}
           groups={groups}
           onFilterChange={onFilterChange}
           onGroupExpand={onGroupExpand}
@@ -98,6 +115,10 @@ function FilterPanel({
           searchSuggestions={searchSuggestions}
           searchValue={searchValue}
           selection={selection}
+          showGroupExpand={showGroupExpand}
+          showGroups={showGroups}
+          showHeading={showHeading}
+          showSearch={showSearch}
         />
 
         {utilityLinks.length > 0 ? (

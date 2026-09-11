@@ -35,6 +35,9 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("heading", { name: "Filter" })).toBeInTheDocument();
     expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).not.toBeChecked();
+    expect(
+      canvas.getByRole("checkbox", { name: /Booster Box/ }),
+    ).not.toBeChecked();
   },
 };
 
@@ -44,6 +47,18 @@ export const WithSelection: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).toBeChecked();
     expect(canvas.getByRole("checkbox", { name: /Booster Box/ })).toBeChecked();
+  },
+};
+
+export const TabsInDrawerLayout: Story = {
+  args: { facetLayout: "tabs", showHeading: false },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("tab", { name: "Worlds" })).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: "Types" }));
+    expect(
+      canvas.getByRole("checkbox", { name: /Booster Box/ }),
+    ).toBeInTheDocument();
   },
 };
 

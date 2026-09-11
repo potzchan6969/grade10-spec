@@ -62,8 +62,8 @@ type ProductCardImageProps = {
  * It is drawn only where a quantity-change handler was supplied, so a surface
  * that merchandises rather than sells draws none and no press is swallowed.
  * Hover and `:focus-within` reveal it on fine pointers when the product is
- * available and not already in the cart; coarse pointers keep it visible;
- * in-cart always shows it; sold-out never does.
+ * available and not already in the cart; coarse pointers and narrow viewports
+ * keep it visible; in-cart always shows it; sold-out never does.
  */
 function ProductCardImage({
   className,
@@ -139,6 +139,8 @@ function ProductCardImage({
         /* Phones / no-hover: round cart stays visible without a hover reveal. */
         "[@media(hover:none),_(pointer:coarse)]:[&_.cart-control]:pointer-events-auto",
         "[@media(hover:none),_(pointer:coarse)]:[&_.cart-control]:opacity-100",
+        /* Narrow listing (same breakpoint as the filter drawer): always on. */
+        "max-lg:[&_.cart-control]:pointer-events-auto max-lg:[&_.cart-control]:opacity-100",
         className,
       )}
     >

@@ -3,6 +3,7 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   CartDrawer,
   type CartItemSummary,
+  type FilterGroup,
   type FilterSelection,
   ProductBrowse,
   type PromoState,
@@ -15,6 +16,7 @@ import { expect, userEvent, within } from "storybook/test";
 import {
   appliedFiltersFromSelection,
   FILTER_GROUPS,
+  FILTER_GROUPS_EXPANDED,
   INITIAL_SELECTION,
   PRODUCTS,
   SORT_OPTIONS,
@@ -118,6 +120,8 @@ function suggestionsForDraft(
 function ProductListPage() {
   const [selection, setSelection] =
     useState<FilterSelection>(INITIAL_SELECTION);
+  const [filterGroups, setFilterGroups] =
+    useState<readonly FilterGroup[]>(FILTER_GROUPS);
   const [searchDraft, setSearchDraft] = useState("");
   const [committedSearch, setCommittedSearch] = useState("");
   const [sort, setSort] = useState("new");
@@ -196,7 +200,7 @@ function ProductListPage() {
   }, [cartItems]);
 
   const appliedFilters = useMemo(() => {
-    const facetChips = appliedFiltersFromSelection(FILTER_GROUPS, selection);
+    const facetChips = appliedFiltersFromSelection(filterGroups, selection);
     if (committedSearch.length === 0) {
       return facetChips;
     }
@@ -208,7 +212,7 @@ function ProductListPage() {
       },
       ...facetChips,
     ];
-  }, [committedSearch, selection]);
+  }, [committedSearch, filterGroups, selection]);
 
   useEffect(() => {
     void committedSearch;
@@ -297,6 +301,9 @@ function ProductListPage() {
             heading: "Filter",
             searchPlaceholder: "Find product",
             searchLabel: "Search products",
+            openFilter: "Filter",
+            drawerClear: "Clear",
+            drawerDone: "Done",
           },
           listHeader: {
             sortTrigger: sortTriggerLabel(sort),
@@ -315,7 +322,7 @@ function ProductListPage() {
             },
           },
         }}
-        groups={{ status: "ready", data: FILTER_GROUPS }}
+        groups={{ status: "ready", data: filterGroups }}
         hasMore={visibleCount < TOTAL_PRODUCTS}
         loadingMore={loadingMore}
         onClearFilters={() => {
@@ -323,6 +330,11 @@ function ProductListPage() {
           setCommittedSearch("");
         }}
         onFilterChange={handleFilterChange}
+        onGroupExpand={(groupId) => {
+          if (groupId === "worlds") {
+            setFilterGroups(FILTER_GROUPS_EXPANDED);
+          }
+        }}
         onLoadMore={handleLoadMore}
         onProductCartQuantityChange={(productId, quantity) =>
           setCart((previous) => {

@@ -1,5 +1,11 @@
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@grade10/design-system/components/display/tabs";
+import {
   Autocomplete,
   AutocompleteCollection,
   AutocompleteContent,
@@ -80,6 +86,20 @@ type ProductFilterProps = {
     selected: boolean,
   ) => void;
   onGroupExpand?: (groupId: string) => void;
+  /** When false, the heading is omitted (e.g. drawer title already names it). */
+  showHeading?: boolean;
+  /** When false, the search field is omitted (e.g. mounted on a toolbar). */
+  showSearch?: boolean;
+  /** When false, facet groups are omitted (e.g. search-only toolbar). */
+  showGroups?: boolean;
+  /** When false, group expand affordances are omitted (e.g. filter drawer). */
+  showGroupExpand?: boolean;
+  /**
+   * How facet groups lay out. `stack` (default) matches the wide sidebar;
+   * `tabs` is for the narrow filter drawer so one expanded list does not bury
+   * another.
+   */
+  facetLayout?: "stack" | "tabs";
   className?: string;
 };
 
@@ -100,12 +120,14 @@ function toAutocompleteGroups(
 }
 
 /**
- * Heading, search, and stacked checkbox groups. Figma set
+ * Heading, search, and facet groups. Figma set
  * `Product / Product Filter` (`4357:527`).
  *
- * Search suggestions use the design-system Autocomplete (Search Input +
- * Dropdown Menu with group labels). The filter reports a change and displays
- * what it is given; it never holds the selection.
+ * On a wide viewport groups stack. In the narrow filter drawer they can be
+ * tabs (`facetLayout="tabs"`) so expanding one list does not push another
+ * down the scroll. Search suggestions use the design-system Autocomplete.
+ * The filter reports a change and displays what it is given; it never holds
+ * the selection.
  */
 function ProductFilter({
   copy,
@@ -119,6 +141,11 @@ function ProductFilter({
   selection = {},
   onFilterChange,
   onGroupExpand,
+  showHeading = true,
+  showSearch = true,
+  showGroups = true,
+  showGroupExpand = true,
+  facetLayout = "stack",
   className,
 }: ProductFilterProps) {
   const showClear = onSearchClear != null && (searchValue?.length ?? 0) > 0;
@@ -126,6 +153,8 @@ function ProductFilter({
     groups.status === "ready"
       ? groups.data.filter((group) => group.options.length > 0)
       : [];
+  const defaultTab = visibleGroups[0]?.id;
+  const useTabs = facetLayout === "tabs" && visibleGroups.length > 1;
 
   const suggestionGroups = useMemo(
     () => toAutocompleteGroups(searchSuggestions),
@@ -185,103 +214,109 @@ function ProductFilter({
       data-slot="product-filter"
       gap="none"
     >
-      <VStack className="w-full gap-2" gap="none">
-        <h2 className="flex h-10 w-full items-center text-2xl font-bold text-foreground">
-          {copy.heading}
-        </h2>
-        <Autocomplete
-          itemToStringValue={(item: SuggestionItem) =>
-            typeof item.suggestion.label === "string"
-              ? item.suggestion.label
-              : item.suggestion.id
-          }
-          items={suggestionGroups}
-          mode="none"
-          onItemHighlighted={(item: SuggestionItem | undefined) => {
-            highlightedRef.current = item ?? null;
-          }}
-          onOpenChange={(open) => {
-            if (!suggestionsProvided || draft.length === 0) {
-              setSuggestionsOpen(false);
-              return;
-            }
-            setSuggestionsOpen(open);
-          }}
-          onValueChange={(value, eventDetails) => {
-            // Base UI fills the input with the item label on press. Listing
-            // search must not absorb that as draft — selection is reported
-            // through the item handler, and the consumer clears the field.
-            if (eventDetails.reason === "item-press") {
-              onSearchChange?.("");
-              return;
-            }
-            onSearchChange?.(value);
-          }}
-          open={
-            suggestionsOpen && suggestionsProvided && draft.length > 0
-          }
-          value={draft}
-        >
-          <AutocompleteInput
-            aria-label={copy.searchLabel}
-            onClear={
-              showClear
-                ? () => {
-                    onSearchClear?.();
-                    setSuggestionsOpen(false);
-                    highlightedRef.current = null;
-                  }
-                : undefined
-            }
-            onFocus={() => {
-              if (suggestionsProvided && draft.length > 0) {
-                setSuggestionsOpen(true);
-              }
-            }}
-            onKeyDown={onSearchKeyDown}
-            placeholder={copy.searchPlaceholder}
-          />
-          {suggestionsProvided ? (
-            <AutocompleteContent data-slot="product-filter-search-suggestions">
-              <AutocompleteEmpty>
-                {copy.searchEmpty ?? "No results found."}
-              </AutocompleteEmpty>
-              <AutocompleteList>
-                {(group: SuggestionListGroup) => (
-                  <AutocompleteGroup key={group.value} items={group.items}>
-                    <AutocompleteGroupLabel>
-                      {group.label}
-                    </AutocompleteGroupLabel>
-                    <AutocompleteCollection>
-                      {(item: SuggestionItem) => (
-                        <AutocompleteItem
-                          key={`${item.groupId}:${item.suggestion.id}`}
-                          leading={
-                            item.suggestion.imageSrc != null ? (
-                              <img
-                                alt={item.suggestion.imageAlt ?? ""}
-                                className="size-6 shrink-0 rounded-sm object-cover"
-                                src={item.suggestion.imageSrc}
-                              />
-                            ) : undefined
-                          }
-                          onClick={() => selectItem(item)}
-                          trailing={item.suggestion.trailing}
-                          value={item}
-                        >
-                          {item.suggestion.label}
-                        </AutocompleteItem>
-                      )}
-                    </AutocompleteCollection>
-                  </AutocompleteGroup>
-                )}
-              </AutocompleteList>
-            </AutocompleteContent>
+      {showHeading || showSearch ? (
+        <VStack className="w-full gap-2" gap="none">
+          {showHeading ? (
+            <h2 className="flex h-10 w-full items-center text-2xl font-bold text-foreground">
+              {copy.heading}
+            </h2>
           ) : null}
-        </Autocomplete>
-      </VStack>
+          {showSearch ? (
+            <Autocomplete
+              itemToStringValue={(item: SuggestionItem) =>
+                typeof item.suggestion.label === "string"
+                  ? item.suggestion.label
+                  : item.suggestion.id
+              }
+              items={suggestionGroups}
+              mode="none"
+              onItemHighlighted={(item: SuggestionItem | undefined) => {
+                highlightedRef.current = item ?? null;
+              }}
+              onOpenChange={(open) => {
+                if (!suggestionsProvided || draft.length === 0) {
+                  setSuggestionsOpen(false);
+                  return;
+                }
+                setSuggestionsOpen(open);
+              }}
+              onValueChange={(value, eventDetails) => {
+                // Base UI fills the input with the item label on press. Listing
+                // search must not absorb that as draft — selection is reported
+                // through the item handler, and the consumer clears the field.
+                if (eventDetails.reason === "item-press") {
+                  onSearchChange?.("");
+                  return;
+                }
+                onSearchChange?.(value);
+              }}
+              open={
+                suggestionsOpen && suggestionsProvided && draft.length > 0
+              }
+              value={draft}
+            >
+              <AutocompleteInput
+                aria-label={copy.searchLabel}
+                onClear={
+                  showClear
+                    ? () => {
+                        onSearchClear?.();
+                        setSuggestionsOpen(false);
+                        highlightedRef.current = null;
+                      }
+                    : undefined
+                }
+                onFocus={() => {
+                  if (suggestionsProvided && draft.length > 0) {
+                    setSuggestionsOpen(true);
+                  }
+                }}
+                onKeyDown={onSearchKeyDown}
+                placeholder={copy.searchPlaceholder}
+              />
+              {suggestionsProvided ? (
+                <AutocompleteContent data-slot="product-filter-search-suggestions">
+                  <AutocompleteEmpty>
+                    {copy.searchEmpty ?? "No results found."}
+                  </AutocompleteEmpty>
+                  <AutocompleteList>
+                    {(group: SuggestionListGroup) => (
+                      <AutocompleteGroup key={group.value} items={group.items}>
+                        <AutocompleteGroupLabel>
+                          {group.label}
+                        </AutocompleteGroupLabel>
+                        <AutocompleteCollection>
+                          {(item: SuggestionItem) => (
+                            <AutocompleteItem
+                              key={`${item.groupId}:${item.suggestion.id}`}
+                              leading={
+                                item.suggestion.imageSrc != null ? (
+                                  <img
+                                    alt={item.suggestion.imageAlt ?? ""}
+                                    className="size-6 shrink-0 rounded-sm object-cover"
+                                    src={item.suggestion.imageSrc}
+                                  />
+                                ) : undefined
+                              }
+                              onClick={() => selectItem(item)}
+                              trailing={item.suggestion.trailing}
+                              value={item}
+                            >
+                              {item.suggestion.label}
+                            </AutocompleteItem>
+                          )}
+                        </AutocompleteCollection>
+                      </AutocompleteGroup>
+                    )}
+                  </AutocompleteList>
+                </AutocompleteContent>
+              ) : null}
+            </Autocomplete>
+          ) : null}
+        </VStack>
+      ) : null}
 
-      {groups.status === "loading" ? (
+      {showGroups && groups.status === "loading" ? (
         <VStack data-slot="filter-group-loading" gap="sm">
           {[0, 1, 2, 3, 4].map((item) => (
             <Skeleton className="h-5 w-full" key={item} />
@@ -289,7 +324,8 @@ function ProductFilter({
         </VStack>
       ) : null}
 
-      {groups.status === "empty" || groups.status === "error" ? (
+      {showGroups &&
+      (groups.status === "empty" || groups.status === "error") ? (
         <AsyncMessage
           action={groups.action}
           message={groups.message}
@@ -297,37 +333,98 @@ function ProductFilter({
         />
       ) : null}
 
-      {visibleGroups.map((group) => (
-        <CheckboxList key={group.id} label={group.label}>
-          {group.options.map((option) => {
-            const selected = (selection[group.id] ?? []).includes(option.id);
-            return (
-              <CheckboxListInput
-                checked={selected}
-                count={option.count}
-                disabled={option.disabled}
-                key={option.id}
-                onCheckedChange={(next) =>
-                  onFilterChange?.(group.id, option.id, next === true)
-                }
-                size="sm"
-              >
-                {option.label}
-              </CheckboxListInput>
-            );
-          })}
-          {group.expandLabel != null ? (
-            <Link
-              onClick={() => onGroupExpand?.(group.id)}
-              render={<button type="button" />}
-              size="sm"
-            >
-              {group.expandLabel}
-            </Link>
-          ) : null}
-        </CheckboxList>
-      ))}
+      {showGroups && visibleGroups.length > 0 && !useTabs
+        ? visibleGroups.map((group) => (
+            <FacetGroupOptions
+              group={group}
+              key={group.id}
+              onFilterChange={onFilterChange}
+              onGroupExpand={onGroupExpand}
+              selection={selection}
+              showGroupExpand={showGroupExpand}
+              showLabel
+            />
+          ))
+        : null}
+
+      {showGroups && useTabs && defaultTab != null ? (
+        <Tabs
+          className="w-full gap-4"
+          data-slot="product-filter-group-tabs"
+          defaultValue={defaultTab}
+        >
+          <TabsList fullWidth>
+            {visibleGroups.map((group) => (
+              <TabsTrigger key={group.id} value={group.id}>
+                {group.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {visibleGroups.map((group) => (
+            <TabsContent key={group.id} value={group.id}>
+              <FacetGroupOptions
+                group={group}
+                onFilterChange={onFilterChange}
+                onGroupExpand={onGroupExpand}
+                selection={selection}
+                showGroupExpand={showGroupExpand}
+              />
+            </TabsContent>
+          ))}
+        </Tabs>
+      ) : null}
     </VStack>
+  );
+}
+
+function FacetGroupOptions({
+  group,
+  selection,
+  onFilterChange,
+  onGroupExpand,
+  showLabel = false,
+  showGroupExpand = true,
+}: {
+  group: FilterGroup;
+  selection: FilterSelection;
+  onFilterChange?: (
+    groupId: string,
+    optionId: string,
+    selected: boolean,
+  ) => void;
+  onGroupExpand?: (groupId: string) => void;
+  showLabel?: boolean;
+  showGroupExpand?: boolean;
+}) {
+  return (
+    <CheckboxList label={showLabel ? group.label : undefined}>
+      {group.options.map((option) => {
+        const selected = (selection[group.id] ?? []).includes(option.id);
+        return (
+          <CheckboxListInput
+            checked={selected}
+            count={option.count}
+            disabled={option.disabled}
+            key={option.id}
+            onCheckedChange={(next) =>
+              onFilterChange?.(group.id, option.id, next === true)
+            }
+            size="sm"
+          >
+            {option.label}
+          </CheckboxListInput>
+        );
+      })}
+      {showGroupExpand && group.expandLabel != null ? (
+        <Link
+          onClick={() => onGroupExpand?.(group.id)}
+          render={<button type="button" />}
+          size="sm"
+        >
+          {group.expandLabel}
+        </Link>
+      ) : null}
+    </CheckboxList>
   );
 }
 

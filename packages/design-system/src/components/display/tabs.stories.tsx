@@ -11,6 +11,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Default `pill` list — muted track with a sliding white indicator. */
 export const Default: Story = {
   render: (args) => (
     <Tabs defaultValue="overview" className="w-80" {...args}>
@@ -19,73 +20,66 @@ export const Default: Story = {
         <TabsTrigger value="activity">Activity</TabsTrigger>
         <TabsTrigger value="settings">Settings</TabsTrigger>
       </TabsList>
-      <TabsContent value="overview">
-        Your open positions across every market.
-      </TabsContent>
-      <TabsContent value="activity">Recently settled rounds.</TabsContent>
-      <TabsContent value="settings">Notifications and display.</TabsContent>
+      <TabsContent value="overview" />
+      <TabsContent value="activity" />
+      <TabsContent value="settings" />
     </Tabs>
   ),
 };
 
-/** The `line` list variant swaps the pill for an underline on the active tab. */
-export const Line: Story = {
+/** The `list` variant drops the track for an underline on the active tab. */
+export const List: Story = {
   render: () => (
     <Tabs defaultValue="overview" className="w-80">
-      <TabsList variant="line">
+      <TabsList variant="list">
         <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="activity">Activity</TabsTrigger>
         <TabsTrigger value="settings">Settings</TabsTrigger>
       </TabsList>
-      <TabsContent value="overview">
-        Your open positions across every market.
-      </TabsContent>
-      <TabsContent value="activity">Recently settled rounds.</TabsContent>
-      <TabsContent value="settings">Notifications and display.</TabsContent>
+      <TabsContent value="overview" />
+      <TabsContent value="activity" />
+      <TabsContent value="settings" />
     </Tabs>
   ),
 };
 
-export const Vertical: Story = {
+/** Flush the list and share the width evenly across triggers. */
+export const FullWidth: Story = {
   render: () => (
-    <Tabs defaultValue="overview" orientation="vertical" className="w-96">
-      <TabsList>
+    <Tabs defaultValue="overview" className="w-80">
+      <TabsList fullWidth>
         <TabsTrigger value="overview">Overview</TabsTrigger>
         <TabsTrigger value="activity">Activity</TabsTrigger>
         <TabsTrigger value="settings">Settings</TabsTrigger>
       </TabsList>
-      <TabsContent value="overview">
-        Your open positions across every market.
-      </TabsContent>
-      <TabsContent value="activity">Recently settled rounds.</TabsContent>
-      <TabsContent value="settings">Notifications and display.</TabsContent>
+      <TabsContent value="overview" />
+      <TabsContent value="activity" />
+      <TabsContent value="settings" />
     </Tabs>
   ),
 };
 
-/** `data-icon` tightens the padding on the side the icon sits. */
+/** Leading icon at `Size/size-4` with `Gap/gap-2` — padding stays `Gap/gap-4`. */
 export const WithIcons: Story = {
   render: () => (
     <Tabs defaultValue="overview" className="w-80">
       <TabsList>
         <TabsTrigger value="overview">
-          <ChartLineIcon data-icon="inline-start" />
+          <ChartLineIcon />
           Overview
         </TabsTrigger>
         <TabsTrigger value="profile">
-          <UserIcon data-icon="inline-start" />
+          <UserIcon />
           Profile
         </TabsTrigger>
         <TabsTrigger value="settings">
-          <SettingsIcon data-icon="inline-start" />
+          <SettingsIcon />
           Settings
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="overview">
-        Your open positions across every market.
-      </TabsContent>
-      <TabsContent value="profile">Display name and avatar.</TabsContent>
-      <TabsContent value="settings">Notifications and display.</TabsContent>
+      <TabsContent value="overview" />
+      <TabsContent value="profile" />
+      <TabsContent value="settings" />
     </Tabs>
   ),
 };
@@ -99,10 +93,8 @@ export const DisabledTab: Story = {
           Activity
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="overview">
-        Your open positions across every market.
-      </TabsContent>
-      <TabsContent value="activity">Recently settled rounds.</TabsContent>
+      <TabsContent value="overview" />
+      <TabsContent value="activity" />
     </Tabs>
   ),
 };

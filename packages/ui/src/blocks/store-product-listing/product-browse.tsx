@@ -1,8 +1,21 @@
+import { Button } from "@grade10/design-system/components/forms/button";
+import { IconButton } from "@grade10/design-system/components/forms/icon-button";
+import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import {
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@grade10/design-system/components/overlays/drawer";
 import { cn } from "@grade10/design-system/lib/utils";
-import type { ReactNode } from "react";
+import { FadersHorizontal } from "@phosphor-icons/react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { FilterPanelCopy } from "./filter-panel";
 import { FilterPanel } from "./filter-panel";
+import { ProductFilter } from "./product-filter";
 import type { ProductListHeaderCopy } from "./product-list-header";
 import { ProductListHeader } from "./product-list-header";
 import type { ProductResultsPanelCopy } from "./product-results-panel";
@@ -76,6 +89,26 @@ type ProductBrowseProps = {
   className?: string;
 };
 
+/** Matches Tailwind `lg` so only one search Autocomplete mounts at a time. */
+const WIDE_VIEWPORT_QUERY = "(min-width: 1024px)";
+
+function useIsWideViewport() {
+  const [isWide, setIsWide] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.matchMedia(WIDE_VIEWPORT_QUERY).matches;
+  });
+
+  useEffect(() => {
+    const media = window.matchMedia(WIDE_VIEWPORT_QUERY);
+    const onChange = () => setIsWide(media.matches);
+    onChange();
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  return isWide;
+}
+
 /** Figma `ProductBrowse` (`4098:1952`): gap-16 (64px) between sidebar and
  * results; px-8 / pt-6 / pb-16 (32×24×64) on the frame. Direction is
  * prefixed because it changes at lg; a stack cannot. */
@@ -87,9 +120,10 @@ const BROWSE_CLASS =
  * header with applied-filter chips and a sort dropdown, and a grid of tiles
  * that loads more as the shopper scrolls.
  *
- * Filters and results are independent async boundaries — a failed result set
- * leaves the filter panel usable, which is the common case when facets and
- * results come from separate calls.
+ * Below `lg`, facets sit in a left drawer opened by Filter; catalogue search
+ * stays on the listing. Only one search field mounts per viewport so
+ * suggestion menus do not double. Filters and results are independent async
+ * boundaries.
  */
 function ProductBrowse({
   copy,
@@ -121,23 +155,119 @@ function ProductBrowse({
 }: ProductBrowseProps) {
   const resultsBusy =
     results.status === "loading" || loadingMore ? true : undefined;
+  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
+  const isWide = useIsWideViewport();
+
+  // Drawer shows the full facet lists — ask the consumer to expand any
+  // capped group when it opens (desktop keeps the cap + “See all”).
+  useEffect(() => {
+    if (!filterDrawerOpen || isWide) return;
+    if (groups.status !== "ready") return;
+    for (const group of groups.data) {
+      if (group.expandLabel != null) onGroupExpand?.(group.id);
+    }
+  }, [filterDrawerOpen, isWide, groups, onGroupExpand]);
+
+  const searchProps = {
+    onSearchChange,
+    onSearchClear,
+    onSearchCommit,
+    onSearchSuggestionSelect,
+    searchSuggestions,
+    searchValue,
+  } as const;
+
+  const facetProps = {
+    groups,
+    onFilterChange,
+    onGroupExpand,
+    selection,
+  } as const;
 
   return (
     <div className={cn(BROWSE_CLASS, className)} data-slot="product-browse">
-      <FilterPanel
-        copy={copy.filterPanel}
-        groups={groups}
-        onFilterChange={onFilterChange}
-        onGroupExpand={onGroupExpand}
-        onSearchChange={onSearchChange}
-        onSearchClear={onSearchClear}
-        onSearchCommit={onSearchCommit}
-        onSearchSuggestionSelect={onSearchSuggestionSelect}
-        searchSuggestions={searchSuggestions}
-        searchValue={searchValue}
-        selection={selection}
-        utilityLinks={utilityLinks}
-      />
+      {isWide ? (
+        <FilterPanel
+          copy={copy.filterPanel}
+          utilityLinks={utilityLinks}
+          {...facetProps}
+          {...searchProps}
+        />
+      ) : (
+        <div
+          className="flex w-full flex-col gap-4"
+          data-slot="product-browse-mobile-filter"
+        >
+          <HStack className="w-full items-center gap-3" gap="none">
+            <IconButton
+              aria-label={copy.filterPanel.openFilter}
+              className="shrink-0"
+              onClick={() => setFilterDrawerOpen(true)}
+              size="md"
+              type="button"
+              variant="outline"
+            >
+              <FadersHorizontal aria-hidden weight="bold" />
+            </IconButton>
+            <div className="min-w-0 flex-1">
+              <ProductFilter
+                copy={copy.filterPanel}
+                groups={groups}
+                showGroups={false}
+                showHeading={false}
+                showSearch
+                {...searchProps}
+              />
+            </div>
+          </HStack>
+
+          <Drawer
+            open={filterDrawerOpen}
+            swipeDirection="left"
+            onOpenChange={(next) => {
+              if (!next) setFilterDrawerOpen(false);
+            }}
+          >
+            <DrawerContent aria-label={copy.filterPanel.label}>
+              <DrawerHeader>
+                <DrawerTitle>{copy.filterPanel.heading}</DrawerTitle>
+              </DrawerHeader>
+              <DrawerBody className="gap-8">
+                <FilterPanel
+                  className="static w-full self-auto"
+                  copy={copy.filterPanel}
+                  facetLayout="tabs"
+                  showGroupExpand={false}
+                  showHeading={false}
+                  showSearch={false}
+                  utilityLinks={[]}
+                  {...facetProps}
+                />
+              </DrawerBody>
+              <DrawerFooter className="flex-row gap-2">
+                <Button
+                  className="flex-1"
+                  onClick={() => onClearFilters?.()}
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                >
+                  {copy.filterPanel.drawerClear}
+                </Button>
+                <Button
+                  className="flex-1"
+                  onClick={() => setFilterDrawerOpen(false)}
+                  size="sm"
+                  type="button"
+                >
+                  {copy.filterPanel.drawerDone}
+                </Button>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>
+        </div>
+      )}
+
       <VStack
         aria-busy={resultsBusy}
         aria-label={copy.results.label}

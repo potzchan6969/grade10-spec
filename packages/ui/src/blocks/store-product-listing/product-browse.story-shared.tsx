@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   FILTER_GROUPS,
+  FILTER_GROUPS_EXPANDED,
   LISTING_COPY,
   PRODUCTS,
   SEARCH_SUGGESTIONS,
@@ -8,7 +9,7 @@ import {
   UTILITY_LINKS,
 } from "./fixtures";
 import { ProductBrowse, type ProductBrowseProps } from "./product-browse";
-import type { AppliedFilter } from "./types";
+import type { AppliedFilter, FilterGroup } from "./types";
 
 const RESULTS_LOAD_MS = 450;
 const PAGE_SIZE = 10;
@@ -23,6 +24,14 @@ function extendProducts(count: number) {
       name: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
     };
   });
+}
+
+function expandFilterGroups(
+  current: readonly FilterGroup[],
+  groupId: string,
+): FilterGroup[] {
+  if (groupId !== "worlds") return [...current];
+  return FILTER_GROUPS_EXPANDED.map((group) => ({ ...group }));
 }
 
 /** Storybook wrapper: short results reload, then pages in more tiles on scroll
@@ -40,6 +49,16 @@ export function InteractiveProductBrowse(args: ProductBrowseProps) {
   >(() => (args.results.status === "ready" ? "loading" : args.results.status));
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [filterGroups, setFilterGroups] = useState<readonly FilterGroup[]>(
+    () =>
+      args.groups.status === "ready" ? args.groups.data : FILTER_GROUPS,
+  );
+
+  useEffect(() => {
+    if (args.groups.status === "ready") {
+      setFilterGroups(args.groups.data);
+    }
+  }, [args.groups]);
 
   useEffect(() => {
     if (!simulateReload) {
@@ -84,11 +103,21 @@ export function InteractiveProductBrowse(args: ProductBrowseProps) {
             }
           : { status: "loading" as const };
 
+  const groups =
+    args.groups.status === "ready"
+      ? { status: "ready" as const, data: filterGroups }
+      : args.groups;
+
   return (
     <ProductBrowse
       {...args}
+      groups={groups}
       hasMore={paginate ? visibleCount < TOTAL_PRODUCTS : args.hasMore}
       loadingMore={paginate ? loadingMore : args.loadingMore}
+      onGroupExpand={(groupId) => {
+        setFilterGroups((current) => expandFilterGroups(current, groupId));
+        args.onGroupExpand?.(groupId);
+      }}
       onLoadMore={paginate ? handleLoadMore : args.onLoadMore}
       results={results}
     />
@@ -234,6 +263,9 @@ export const productBrowseArgs = {
       heading: "Filter",
       searchPlaceholder: "Find product",
       searchLabel: "Search products",
+      openFilter: "Filter",
+      drawerClear: "Clear",
+      drawerDone: "Done",
     },
     listHeader: {
       sortTrigger: "Sort by latest product",
