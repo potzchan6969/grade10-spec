@@ -10,26 +10,28 @@ preview with `pnpm email:dev`. Shared pieces and send details are in
 
 ## Screens
 
-**No Figma frame exists for these messages or the send log yet.** Layout
-follows the shared chrome below and the existing auction letter lane.
+Letters are authored and previewed in [`apps/emails`](../../../../apps/emails/)
+(`pnpm email:dev`) and the shared React Email chrome below — not Figma.
+My Auctions states live in Storybook (`AuctionRecord`). The admin send log
+has no separate design supplement; it follows existing admin table patterns.
 
-| Message | Frame | Audience |
+| Message | Preview | Audience |
 | --- | --- | --- |
-| Bidding opens in 24 hours | *to be produced* | Watchers with email alerts on |
-| Bidding has opened | *to be produced* | Watchers with email alerts on |
-| Bidding closes in 24 hours | *to be produced* | Watchers and bidders with alerts on |
-| Extended bidding has started | *to be produced* | Watchers and bidders with alerts on |
-| A lot you bid on received a new bid | *to be produced* | Bidders with alerts on, excluding the one who bid |
-| You have been outbid | *to be produced* | The collector who stopped leading, alerts on |
+| Bidding opens in 24 hours | `apps/emails` auction letter | Watchers with email alerts on |
+| Bidding has opened | `apps/emails` auction letter | Watchers with email alerts on |
+| Bidding closes in 24 hours | `apps/emails` auction letter | Watchers and bidders with alerts on |
+| Extended bidding has started | `apps/emails` auction letter | Watchers and bidders with alerts on |
+| A lot you bid on received a new bid | `apps/emails` auction letter | Bidders with alerts on, excluding the one who bid |
+| You have been outbid | `apps/emails` auction letter | The collector who stopped leading, alerts on |
 
 One template family, six messages. Shared header, lot block (one primary
 image), and footer. The preserved one-hour closing reminder stays on its
 existing lane.
 
-| Screen | Frame / Storybook | What is on it |
+| Screen | Storybook / surface | What is on it |
 | --- | --- | --- |
-| Admin send log | *to be produced* | Rows of type, sent-to email, listing, and Sent At. Filter by user email. No message body. |
-| My Auctions | `Filled`, `Bidding only`, `Watching only`, `Empty`, `Closed and called off`, `Unavailable`, `Bid-on mark`, `Unwatch`, `Email alerts muted`, `Email alerts pending`, `Email alerts master off` | Account page: breadcrumbs, title, **Bidding** then **Watching**; per-row **Email alerts** + **Unwatch** on Watching; **Email alerts** on Bidding |
+| Admin send log | Admin auction **Send log** tab | Rows of type, sent-to email, listing, and Sent At. Filter by user email. No message body. |
+| My Auctions | `Filled`, `Bidding only`, `Watching only`, `Empty`, `Closed and called off`, `Unavailable`, `Bid-on mark`, `Unwatch`, `Email alerts muted`, `Email alerts pending` | Account page: breadcrumbs, title, **Bidding** then **Watching**; per-row **Email alerts** + **Unwatch** on Watching; **Email alerts** on Bidding |
 | Account → Notifications | *auction email alerts master only* | Global **Auction email alerts** master. Not an inbox or channel-prefs matrix this change |
 
 ## My Auctions (mute UI)

@@ -22,10 +22,13 @@ an unsold lot taken down) takes it off My Auctions.
 
 Each row carries the lot's key image, title, close, current bid, **Your
 Standing**, Email alerts, and Unwatch when the collector has not bid.
-Watch-only standing is `--`. Bid standing while open: Leading, Outbid, Bid
-submitted, or Bid not accepted. After close: Won or Didn't win, with the same
-payment, shipment, and hold projections as before. Bid rows sort before
-watch-only; soonest close within each band.
+Bidding rows carry Email alerts without Unwatch. Watch-only standing is
+`--`. Bid standing while open: Leading, Outbid, Bid submitted, or Bid not
+accepted. After close: Won or Didn't win, with the same payment, shipment,
+and hold projections as before. Bid rows sort before watch-only; soonest
+close within each band. Account → Notifications holds the global **Auction
+email alerts** master; when it is off, per-lot toggles on this page show
+off or disabled.
 
 Detailed [Bidding History](/p/grade10-site/auction/bidding-history) stays its
 own surface for the one-per-listing index, filters, and private chronology.

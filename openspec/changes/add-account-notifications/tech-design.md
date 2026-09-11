@@ -16,7 +16,7 @@
 - Worker subrequest budget: a popular listing cannot cost one provider
   call per watcher. Workers must not sleep for Retry-After.
   Duplicate-beats-dropped remains: send, then stamp.
-- Screens and Figma sources belong in [ui-design.md](ui-design.md).
+- Screens and letter preview belong in [ui-design.md](ui-design.md) (Storybook / `apps/emails`, not Figma).
 - This change owns Auction delivery only — no store worker intake.
 
 ## Goals / Non-Goals
