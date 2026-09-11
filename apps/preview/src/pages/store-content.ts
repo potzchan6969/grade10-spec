@@ -101,9 +101,9 @@ const STORE_FOOTER = {
 };
 
 const SORT_OPTIONS: SortOption[] = [
-  { id: "new", label: "Latest product" },
-  { id: "price-asc", label: "Lowest price" },
-  { id: "price-desc", label: "Highest price" },
+  { id: "new", label: "Latest product", shortLabel: "Latest" },
+  { id: "price-asc", label: "Lowest price", shortLabel: "Lowest" },
+  { id: "price-desc", label: "Highest price", shortLabel: "Highest" },
 ];
 
 const ALL_WORLD_OPTIONS = [
@@ -121,12 +121,14 @@ const FILTER_GROUPS: FilterGroup[] = [
   {
     id: "worlds",
     label: "Worlds",
+    compactLabel: "World",
     expandLabel: "See all worlds",
     options: ALL_WORLD_OPTIONS.slice(0, 5).map((option) => ({ ...option })),
   },
   {
     id: "types",
     label: "Types",
+    compactLabel: "Type",
     options: [
       { id: "booster-box", label: "Booster Box", count: "24" },
       { id: "special-box", label: "Special Box", count: "6" },
@@ -144,6 +146,7 @@ const FILTER_GROUPS_EXPANDED: FilterGroup[] = [
   {
     id: "worlds",
     label: "Worlds",
+    compactLabel: "World",
     options: ALL_WORLD_OPTIONS.map((option) => ({ ...option })),
   },
   FILTER_GROUPS[1],

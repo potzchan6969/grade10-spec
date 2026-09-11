@@ -1,21 +1,12 @@
-import { Button } from "@grade10/design-system/components/forms/button";
-import { IconButton } from "@grade10/design-system/components/forms/icon-button";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import {
-  Drawer,
-  DrawerBody,
-  DrawerContent,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-} from "@grade10/design-system/components/overlays/drawer";
 import { cn } from "@grade10/design-system/lib/utils";
-import { FadersHorizontal } from "@phosphor-icons/react";
 import { useEffect, useState, type ReactNode } from "react";
 import type { FilterPanelCopy } from "./filter-panel";
 import { FilterPanel } from "./filter-panel";
-import { ProductFilter } from "./product-filter";
+import {
+  ListingNarrowChrome,
+  type ListingNarrowChromeCopy,
+} from "./listing-narrow-chrome";
 import type { ProductListHeaderCopy } from "./product-list-header";
 import { ProductListHeader } from "./product-list-header";
 import type { ProductResultsPanelCopy } from "./product-results-panel";
@@ -39,6 +30,8 @@ import type {
  */
 type ProductBrowseCopy = {
   filterPanel: FilterPanelCopy;
+  /** Narrow facet drawers; falls back to filterPanel clear / showResults. */
+  narrowChrome?: ListingNarrowChromeCopy;
   listHeader?: ProductListHeaderCopy;
   results: ProductResultsPanelCopy & {
     /** Accessible name for the results region. */
@@ -120,10 +113,10 @@ const BROWSE_CLASS =
  * header with applied-filter chips and a sort dropdown, and a grid of tiles
  * that loads more as the shopper scrolls.
  *
- * Below `lg`, facets sit in a left drawer opened by Filter; catalogue search
- * stays on the listing. Only one search field mounts per viewport so
- * suggestion menus do not double. Filters and results are independent async
- * boundaries.
+ * Below `lg`, count and sort/facet pills open bottom drawers; there is no
+ * listing search or left Filter drawer. Only one search field mounts (wide
+ * sidebar) so suggestion menus do not double. Filters and results are
+ * independent async boundaries.
  */
 function ProductBrowse({
   copy,
@@ -155,18 +148,7 @@ function ProductBrowse({
 }: ProductBrowseProps) {
   const resultsBusy =
     results.status === "loading" || loadingMore ? true : undefined;
-  const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
   const isWide = useIsWideViewport();
-
-  // Drawer shows the full facet lists — ask the consumer to expand any
-  // capped group when it opens (desktop keeps the cap + “See all”).
-  useEffect(() => {
-    if (!filterDrawerOpen || isWide) return;
-    if (groups.status !== "ready") return;
-    for (const group of groups.data) {
-      if (group.expandLabel != null) onGroupExpand?.(group.id);
-    }
-  }, [filterDrawerOpen, isWide, groups, onGroupExpand]);
 
   const searchProps = {
     onSearchChange,
@@ -184,6 +166,11 @@ function ProductBrowse({
     selection,
   } as const;
 
+  const narrowChromeCopy: ListingNarrowChromeCopy = copy.narrowChrome ?? {
+    clear: copy.filterPanel.drawerClear,
+    showResults: copy.filterPanel.showResults,
+  };
+
   return (
     <div className={cn(BROWSE_CLASS, className)} data-slot="product-browse">
       {isWide ? (
@@ -193,80 +180,7 @@ function ProductBrowse({
           {...facetProps}
           {...searchProps}
         />
-      ) : (
-        <div
-          className="flex w-full flex-col gap-4"
-          data-slot="product-browse-mobile-filter"
-        >
-          <HStack className="w-full items-center gap-3" gap="none">
-            <IconButton
-              aria-label={copy.filterPanel.openFilter}
-              className="shrink-0"
-              onClick={() => setFilterDrawerOpen(true)}
-              size="md"
-              type="button"
-              variant="outline"
-            >
-              <FadersHorizontal aria-hidden weight="bold" />
-            </IconButton>
-            <div className="min-w-0 flex-1">
-              <ProductFilter
-                copy={copy.filterPanel}
-                groups={groups}
-                showGroups={false}
-                showHeading={false}
-                showSearch
-                {...searchProps}
-              />
-            </div>
-          </HStack>
-
-          <Drawer
-            open={filterDrawerOpen}
-            swipeDirection="left"
-            onOpenChange={(next) => {
-              if (!next) setFilterDrawerOpen(false);
-            }}
-          >
-            <DrawerContent aria-label={copy.filterPanel.label}>
-              <DrawerHeader>
-                <DrawerTitle>{copy.filterPanel.heading}</DrawerTitle>
-              </DrawerHeader>
-              <DrawerBody className="gap-8">
-                <FilterPanel
-                  className="static w-full self-auto"
-                  copy={copy.filterPanel}
-                  facetLayout="tabs"
-                  showGroupExpand={false}
-                  showHeading={false}
-                  showSearch={false}
-                  utilityLinks={[]}
-                  {...facetProps}
-                />
-              </DrawerBody>
-              <DrawerFooter className="flex-row gap-2">
-                <Button
-                  className="flex-1"
-                  onClick={() => onClearFilters?.()}
-                  size="sm"
-                  type="button"
-                  variant="outline"
-                >
-                  {copy.filterPanel.drawerClear}
-                </Button>
-                <Button
-                  className="flex-1"
-                  onClick={() => setFilterDrawerOpen(false)}
-                  size="sm"
-                  type="button"
-                >
-                  {copy.filterPanel.drawerDone}
-                </Button>
-              </DrawerFooter>
-            </DrawerContent>
-          </Drawer>
-        </div>
-      )}
+      ) : null}
 
       <VStack
         aria-busy={resultsBusy}
@@ -276,17 +190,32 @@ function ProductBrowse({
         gap="none"
         role="region"
       >
-        <ProductListHeader
-          appliedFilters={appliedFilters}
-          className="w-full"
-          copy={copy.listHeader}
-          onClearFilters={onClearFilters}
-          onFilterChange={onFilterChange}
-          onSortChange={onSortChange}
-          resultCount={resultCount}
-          sortOptions={sortOptions}
-          sortValue={sortValue}
-        />
+        {isWide ? (
+          <ProductListHeader
+            appliedFilters={appliedFilters}
+            className="w-full"
+            copy={copy.listHeader}
+            onClearFilters={onClearFilters}
+            onFilterChange={onFilterChange}
+            onSortChange={onSortChange}
+            resultCount={resultCount}
+            sortOptions={sortOptions}
+            sortValue={sortValue}
+          />
+        ) : (
+          <ListingNarrowChrome
+            className="w-full"
+            copy={narrowChromeCopy}
+            groups={groups}
+            onFilterChange={onFilterChange}
+            onGroupExpand={onGroupExpand}
+            onSortChange={onSortChange}
+            resultCount={resultCount}
+            selection={selection}
+            sortOptions={sortOptions}
+            sortValue={sortValue}
+          />
+        )}
 
         <ProductResultsPanel
           copy={copy.results}

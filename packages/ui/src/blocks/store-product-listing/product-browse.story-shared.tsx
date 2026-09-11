@@ -53,12 +53,31 @@ export function InteractiveProductBrowse(args: ProductBrowseProps) {
     () =>
       args.groups.status === "ready" ? args.groups.data : FILTER_GROUPS,
   );
+  const [selection, setSelection] = useState(() => args.selection ?? {});
+  const [appliedFilters, setAppliedFilters] = useState<readonly AppliedFilter[]>(
+    () => args.appliedFilters ?? [],
+  );
+  const [sortValue, setSortValue] = useState(
+    () => args.sortValue ?? args.sortOptions[0]?.id,
+  );
 
   useEffect(() => {
     if (args.groups.status === "ready") {
       setFilterGroups(args.groups.data);
     }
   }, [args.groups]);
+
+  useEffect(() => {
+    setSelection(args.selection ?? {});
+  }, [args.selection]);
+
+  useEffect(() => {
+    setAppliedFilters(args.appliedFilters ?? []);
+  }, [args.appliedFilters]);
+
+  useEffect(() => {
+    setSortValue(args.sortValue ?? args.sortOptions[0]?.id);
+  }, [args.sortValue, args.sortOptions]);
 
   useEffect(() => {
     if (!simulateReload) {
@@ -108,17 +127,80 @@ export function InteractiveProductBrowse(args: ProductBrowseProps) {
       ? { status: "ready" as const, data: filterGroups }
       : args.groups;
 
+  const handleFilterChange = (
+    groupId: string,
+    optionId: string,
+    selected: boolean,
+  ) => {
+    setSelection((current) => {
+      const existing = current[groupId] ?? [];
+      const nextForGroup = selected
+        ? existing.includes(optionId)
+          ? existing
+          : [...existing, optionId]
+        : existing.filter((id) => id !== optionId);
+      const next = { ...current };
+      if (nextForGroup.length === 0) {
+        delete next[groupId];
+      } else {
+        next[groupId] = nextForGroup;
+      }
+      return next;
+    });
+    setAppliedFilters((current) => {
+      if (!selected) {
+        return current.filter(
+          (filter) =>
+            !(filter.groupId === groupId && filter.optionId === optionId),
+        );
+      }
+      if (
+        current.some(
+          (filter) =>
+            filter.groupId === groupId && filter.optionId === optionId,
+        )
+      ) {
+        return current;
+      }
+      const option = filterGroups
+        .flatMap((group) => (group.id === groupId ? group.options : []))
+        .find((entry) => entry.id === optionId);
+      return [
+        ...current,
+        {
+          groupId,
+          optionId,
+          label: option?.label ?? optionId,
+        },
+      ];
+    });
+    args.onFilterChange?.(groupId, optionId, selected);
+  };
+
   return (
     <ProductBrowse
       {...args}
+      appliedFilters={appliedFilters}
       groups={groups}
       hasMore={paginate ? visibleCount < TOTAL_PRODUCTS : args.hasMore}
       loadingMore={paginate ? loadingMore : args.loadingMore}
+      selection={selection}
+      sortValue={sortValue}
+      onClearFilters={() => {
+        setAppliedFilters([]);
+        setSelection({});
+        args.onClearFilters?.();
+      }}
+      onFilterChange={handleFilterChange}
       onGroupExpand={(groupId) => {
         setFilterGroups((current) => expandFilterGroups(current, groupId));
         args.onGroupExpand?.(groupId);
       }}
       onLoadMore={paginate ? handleLoadMore : args.onLoadMore}
+      onSortChange={(optionId) => {
+        setSortValue(optionId);
+        args.onSortChange?.(optionId);
+      }}
       results={results}
     />
   );
@@ -263,9 +345,8 @@ export const productBrowseArgs = {
       heading: "Filter",
       searchPlaceholder: "Find product",
       searchLabel: "Search products",
-      openFilter: "Filter",
       drawerClear: "Clear",
-      drawerDone: "Done",
+      showResults: "Show Results",
     },
     listHeader: {
       sortTrigger: "Sort by latest product",

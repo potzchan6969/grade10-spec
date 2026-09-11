@@ -19,12 +19,10 @@ import type {
 type FilterPanelCopy = ProductFilterCopy & {
   /** Accessible name for the complementary landmark. */
   label: string;
-  /** Filter button on narrow viewports. */
-  openFilter: string;
-  /** Clear action in the filter drawer. */
+  /** Clears the open narrow facet drawer’s draft. */
   drawerClear: string;
-  /** Done action that closes the filter drawer. */
-  drawerDone: string;
+  /** Applies the open narrow facet drawer’s draft and closes. */
+  showResults: string;
 };
 
 type FilterPanelProps = {

@@ -27,6 +27,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Lets Storybook viewers follow the drawer before the next click. */
+const pause = (ms = 900) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -40,7 +43,7 @@ export const Default: Story = {
     expect(
       canvas.getByRole("checkbox", { name: /Booster Box/ }),
     ).not.toBeChecked();
-    expect(canvas.queryByRole("tab", { name: "Worlds" })).toBeNull();
+    expect(canvas.queryByRole("button", { name: "Latest" })).toBeNull();
     await waitFor(() => {
       expect(
         canvas.getAllByText(/Pokémon TCG Sealed Booster Box – Abyss Eye \(M5\)/)
@@ -52,40 +55,127 @@ export const Default: Story = {
 
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
-  play: async ({ canvasElement, args }) => {
+  play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("button", { name: "Filter" }),
-    ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("combobox", { name: "Search products" }),
-    ).toBeInTheDocument();
-    await userEvent.click(canvas.getByRole("button", { name: "Filter" }));
-    const dialog = await within(document.body).findByRole("dialog");
-    expect(within(dialog).getByRole("tab", { name: "Worlds" })).toBeInTheDocument();
-    expect(within(dialog).queryByRole("button", { name: "See all worlds" })).toBeNull();
-    expect(within(dialog).queryByRole("link", { name: "Help" })).toBeNull();
-    await waitFor(() => {
-      expect(within(dialog).getByRole("checkbox", { name: /One Piece/ })).toBeInTheDocument();
+    const user = userEvent.setup({ delay: 120 });
+    let dialog: HTMLElement;
+
+    await step("Show narrow pills, no search", async () => {
+      expect(canvas.getByRole("button", { name: "Latest" })).toBeInTheDocument();
+      expect(canvas.getByRole("button", { name: "Worlds" })).toBeInTheDocument();
+      expect(canvas.getByRole("button", { name: "Types" })).toBeInTheDocument();
+      expect(
+        canvas.queryByRole("combobox", { name: "Search products" }),
+      ).toBeNull();
+      expect(canvas.queryByRole("button", { name: "Filter" })).toBeNull();
+      await pause(600);
     });
-    expect(within(dialog).getByRole("tab", { name: "Types" })).toBeInTheDocument();
-    await userEvent.click(within(dialog).getByRole("button", { name: "Done" }));
-    expect(args.onClearFilters).not.toHaveBeenCalled();
+
+    await step("Open Worlds drawer", async () => {
+      await user.click(canvas.getByRole("button", { name: "Worlds" }));
+      dialog = await within(document.body).findByRole("dialog");
+      expect(
+        within(dialog).getByRole("heading", { name: "Worlds" }),
+      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          within(dialog).getByRole("checkbox", { name: /One Piece/ }),
+        ).toBeInTheDocument();
+      });
+      expect(args.onGroupExpand).toHaveBeenCalledWith("worlds");
+      await pause();
+    });
+
+    await step("Draft Pokémon and Show Results", async () => {
+      await user.click(within(dialog).getByRole("checkbox", { name: /Pokémon/ }));
+      await pause(500);
+      await user.click(
+        within(dialog).getByRole("button", { name: "Show Results" }),
+      );
+      expect(args.onFilterChange).toHaveBeenCalledWith(
+        "worlds",
+        "pokemon",
+        true,
+      );
+      await waitFor(() => {
+        expect(
+          canvas.getByRole("button", { name: "Pokémon" }),
+        ).toBeInTheDocument();
+      });
+      await pause(600);
+    });
   },
 };
 
-export const FacetTabsKeepTypesReachable: Story = {
+export const NarrowSortAppliesOnChoose: Story = {
   globals: { viewport: { value: "mobile1" } },
-  play: async ({ canvasElement }) => {
+  play: async ({ canvasElement, args, step }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "Filter" }));
-    const dialog = await within(document.body).findByRole("dialog");
-    expect(
-      within(dialog).queryByRole("button", { name: "See all worlds" }),
-    ).toBeNull();
-    await userEvent.click(within(dialog).getByRole("tab", { name: "Types" }));
-    expect(
-      within(dialog).getByRole("checkbox", { name: /Booster Box/ }),
-    ).toBeInTheDocument();
+    const user = userEvent.setup({ delay: 120 });
+    let dialog: HTMLElement;
+
+    await step("Open sort drawer", async () => {
+      await user.click(canvas.getByRole("button", { name: "Latest" }));
+      dialog = await within(document.body).findByRole("dialog");
+      expect(
+        within(dialog).getByRole("heading", { name: "Sort" }),
+      ).toBeInTheDocument();
+      await pause();
+    });
+
+    await step("Choose Lowest price", async () => {
+      await user.click(
+        within(dialog).getByRole("button", { name: "Lowest price" }),
+      );
+      expect(args.onSortChange).toHaveBeenCalledWith("price-asc");
+      await waitFor(() => {
+        expect(
+          canvas.getByRole("button", { name: "Lowest" }),
+        ).toBeInTheDocument();
+      });
+      await pause(600);
+    });
+  },
+};
+
+export const NarrowFacetClearDraft: Story = {
+  globals: { viewport: { value: "mobile1" } },
+  args: {
+    selection: { types: ["booster-box"] },
+  },
+  play: async ({ canvasElement, args, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup({ delay: 120 });
+    let dialog: HTMLElement;
+
+    await step("Open Types drawer from Booster Box pill", async () => {
+      expect(
+        canvas.getByRole("button", { name: "Booster Box" }),
+      ).toBeInTheDocument();
+      await user.click(canvas.getByRole("button", { name: "Booster Box" }));
+      dialog = await within(document.body).findByRole("dialog");
+      await pause();
+    });
+
+    await step("Clear draft only", async () => {
+      await user.click(within(dialog).getByRole("button", { name: "Clear" }));
+      expect(
+        within(dialog).getByRole("checkbox", { name: /Booster Box/ }),
+      ).not.toBeChecked();
+      expect(args.onFilterChange).not.toHaveBeenCalled();
+      await pause();
+    });
+
+    await step("Show Results applies the empty draft", async () => {
+      await user.click(
+        within(dialog).getByRole("button", { name: "Show Results" }),
+      );
+      expect(args.onFilterChange).toHaveBeenCalledWith(
+        "types",
+        "booster-box",
+        false,
+      );
+      await pause(600);
+    });
   },
 };

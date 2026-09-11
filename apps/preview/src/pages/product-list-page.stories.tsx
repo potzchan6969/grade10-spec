@@ -301,9 +301,8 @@ function ProductListPage() {
             heading: "Filter",
             searchPlaceholder: "Find product",
             searchLabel: "Search products",
-            openFilter: "Filter",
             drawerClear: "Clear",
-            drawerDone: "Done",
+            showResults: "Show Results",
           },
           listHeader: {
             sortTrigger: sortTriggerLabel(sort),

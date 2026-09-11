@@ -51,6 +51,11 @@ type FilterGroup = {
   options: readonly FilterOption[];
   /** Shown after the options. Omit it and no expand affordance is rendered. */
   expandLabel?: ReactNode;
+  /**
+   * Narrow multi-select pill label stem, e.g. `World` for `World (2)`.
+   * Falls back to `label` when omitted.
+   */
+  compactLabel?: ReactNode;
 };
 
 /**
@@ -70,6 +75,8 @@ type AppliedFilter = {
 type SortOption = {
   id: string;
   label: ReactNode;
+  /** Narrow sort pill; falls back to `label` when omitted. */
+  shortLabel?: ReactNode;
 };
 
 /** One utility link below the product filter. */

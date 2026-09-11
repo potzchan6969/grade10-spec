@@ -1,39 +1,30 @@
 ## Context
 
-`ProductBrowse` used to stack `FilterPanel` full width below `lg`. Facets and
-search fought the grid for the first screen. Cart already uses design-system
-`Drawer`; listing needs the same from the left. Tabs are synced in
-`sync-tabs-from-figma` (default pill).
-
-## Goals / Non-Goals
-
-**Goals:**
-
-- Below `lg`: Filter button left of search; left drawer for facets only;
-  Clear / Done; Worlds | Types as pill tabs
-- At `lg+`: sidebar with search above stacked groups
-- Controlled selection/search; drawer open is local UI state
-- Small-viewport list header: count one line; sort left under count; chips wrap
-
-**Non-Goals:**
-
-- Nested drawers, facet-value search, header search, batched Apply
-- Changing URL or catalogue facet rules
-- Owning the Tabs primitive contract (`sync-tabs-from-figma`)
+`ProductBrowse` below `lg` currently mounts a Filter icon, listing search, and
+a left facet drawer with Worlds | Types tabs. Spec rewrite replaces that with
+count + sort/facet pills and per-group bottom drawers. Wide sidebar and chips
+stay. Wide breakpoint remains Tailwind `lg` (`min-width: 1024px`).
 
 ## Decisions
 
-- **`matchMedia` for wide vs narrow** — only one search Autocomplete mounts,
-  so suggestion menus do not double
-- **`showSearch` / `showGroups` / `facetLayout` on `ProductFilter`** —
-  browse splits chrome without forking the filter
-- **Swipe `left`** — drawer from the leading edge, opposite cart
-- **Live apply + Done closes** — Clear calls `onClearFilters` when supplied
-- **No expand / no utility links in the drawer** — open expands worlds via
-  `onGroupExpand`; utilities stay sidebar-only
-- **Default pill tabs + `fullWidth`** — drawer Worlds | Types use synced Tabs
+- **Local chrome inside `ProductBrowse`** — narrow count + pills + drawers are
+  not a new public export; product state stays consumer-controlled
+- **Bottom sheet** — `Drawer` with `swipeDirection="down"`; facet sheets cap near
+  `80dvh` so long option lists scroll in `DrawerBody`
+- **Sort apply on choose** — no draft for sort
+- **Facet draft apply** — on Show Results, diff draft vs applied for that group
+  via `onFilterChange`; Clear empties draft only
+- **Expand on open** — opening a facet drawer calls `onGroupExpand` when the
+  group has `expandLabel`
+- **`shortLabel` / `compactLabel`** — optional on `SortOption` and `FilterGroup`
+- **Copy** — `FilterPanelCopy.showResults` and `drawerClear`; drop left-drawer
+  `openFilter` / `drawerDone`
+- **Wide header unchanged** — chips + sort dropdown only when wide
+- **Drawer padding** — design-system header/body/footer use 16px below `lg`,
+  24px from `lg` (shared with other sheets)
 
 ## Risks / Trade-offs
 
-- `matchMedia` needs a first paint default; prefer wide-first or narrow-first
-  consistently with SSR storybook
+- SSR / Storybook first paint still defaults wide-first via `matchMedia`
+- Without `compactLabel`, multi-select pills fall back to group label + count
+- Drawer padding change also affects other bottom/side sheets on small viewports
