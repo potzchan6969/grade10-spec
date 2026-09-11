@@ -9,7 +9,7 @@ nothing: no money is held, no standing in the sale is gained, and the sale
 never changes because somebody watches. Bidding is the other way to register
 interest, and that one holds money on a card — watching is the saved list for
 everyone still deciding. Email alerts for a lot are a separate preference;
-[notifications](/products/grade10-site/auction/notifications) owns when mail
+[notifications](/p/grade10-site/auction/notifications) owns when mail
 fires.
 
 ## Vocabulary

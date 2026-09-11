@@ -29,67 +29,65 @@ Needs group 2 for the kind names the columns serve.
 
 Needs groups 1–3.
 
-- [ ] 4.1 Resolve a lot's enrolled collectors from its watches and its bids with `email_alerts` and account master on, making `grade10-site-auction-notifications-SC-01`, `grade10-site-auction-notifications-SC-03`, `grade10-site-auction-notifications-SC-04`, `grade10-site-auction-notifications-SC-32`, and `grade10-site-auction-notifications-SC-33` pass.
-- [ ] 4.2 Make `grade10-site-auction-notifications-SC-05`, `grade10-site-auction-notifications-SC-06`, `grade10-site-auction-notifications-SC-07`, `grade10-site-auction-notifications-SC-08`, `grade10-site-auction-notifications-SC-09`, and `grade10-site-auction-notifications-SC-10` pass through batched watcher lists (50 recipients, one rendering) that drop a false statement and stamp per chunk; close-soon and extended include bid participants with no watch, anchored to `scheduled_ends_at` / first extension.
-- [ ] 4.3 Make `grade10-site-auction-notifications-SC-11`, `grade10-site-auction-notifications-SC-12`, `grade10-site-auction-notifications-SC-13`, `grade10-site-auction-notifications-SC-14`, `grade10-site-auction-notifications-SC-15`, `grade10-site-auction-notifications-SC-16`, and `grade10-site-auction-notifications-SC-31` pass: new-bid list after the existing outbid list, skip the live overtake still owed outbid, skip a leader whose maximum still holds, stamp `new_bid_told_bid_id` to the current leading bid, drop when the listing no longer takes bids.
-- [ ] 4.4 Make `grade10-site-auction-notifications-SC-02`, `grade10-site-auction-notifications-SC-23`, `grade10-site-auction-notifications-SC-27`, and `grade10-site-auction-notifications-SC-28` pass: one copy however enrolled; drop-and-stamp when no longer biddable; suppress every unsent message from call-off; leave the one-hour ending-soon list in place and after these lists in `WORK_LISTS`.
-- [ ] 4.5 Verify every scenario in this group through auction backend feature tests, including a lot whose close has moved.
+- [x] 4.1 Resolve a lot's enrolled collectors from its watches and its bids with `email_alerts` and account master on, making `grade10-site-auction-notifications-SC-01`, `grade10-site-auction-notifications-SC-03`, `grade10-site-auction-notifications-SC-04`, `grade10-site-auction-notifications-SC-32`, and `grade10-site-auction-notifications-SC-33` pass.
+- [x] 4.2 Make `grade10-site-auction-notifications-SC-05`, `grade10-site-auction-notifications-SC-06`, `grade10-site-auction-notifications-SC-07`, `grade10-site-auction-notifications-SC-08`, `grade10-site-auction-notifications-SC-09`, and `grade10-site-auction-notifications-SC-10` pass through batched watcher lists (50 recipients, one rendering) that drop a false statement and stamp per chunk; close-soon and extended include bid participants with no watch, anchored to `scheduled_ends_at` / first extension.
+- [x] 4.3 Make `grade10-site-auction-notifications-SC-11`, `grade10-site-auction-notifications-SC-12`, `grade10-site-auction-notifications-SC-13`, `grade10-site-auction-notifications-SC-14`, `grade10-site-auction-notifications-SC-15`, `grade10-site-auction-notifications-SC-16`, and `grade10-site-auction-notifications-SC-31` pass: new-bid list after the existing outbid list, skip the live overtake still owed outbid, skip a leader whose maximum still holds, stamp `new_bid_told_bid_id` to the current leading bid, drop when the listing no longer takes bids.
+- [x] 4.4 Make `grade10-site-auction-notifications-SC-02`, `grade10-site-auction-notifications-SC-23`, `grade10-site-auction-notifications-SC-27`, and `grade10-site-auction-notifications-SC-28` pass: one copy however enrolled; drop-and-stamp when no longer biddable; suppress every unsent message from call-off; leave the one-hour ending-soon list in place and after these lists in `WORK_LISTS`.
+- [x] 4.5 Verify every scenario in this group through auction backend feature tests, including a lot whose close has moved.
 
 ## 5. Rendering and delivery (grade10)
 
-Needs group 2. Claimable against the events from group 4. Auction emits; `@grade10/email` sends. English only this change.
+Needs group 2. Claimable against the events from group 4. Auction emits; `@grade10/email` sends. English only this change. Letter design is Storybook / `apps/emails` preview — not Figma.
 
-- [ ] 5.0 Produce the shared auction-letter Figma frame set named in `ui-design.md` (chrome + six bodies, one primary lot image) and link it there.
-- [ ] 5.1 Make `grade10-site-auction-notifications-SC-18`, `grade10-site-auction-notifications-SC-19`, `grade10-site-auction-notifications-SC-20`, `grade10-site-auction-notifications-SC-29`, `grade10-site-auction-notifications-SC-30`, `grade10-site-auction-notifications-SC-34`, `grade10-site-auction-notifications-SC-35`, and `grade10-site-auction-notifications-SC-36` pass by adding English copy branches for the six kinds on the shared emailcn / React Email template; optional English `@grade10/i18n` keys with locale selection forced to English; `canUnsubscribe` true whenever per-lot email alerts are on (progress and bid-activity); footer CTA **Manage alerts** (after “Email alerts are on for this lot.”) → My Auctions (existing sign-in flow first when signed out, then My Auctions); brand mark → storefront home; outbound links carry campaign tags (`utm_source`, `utm_medium`, `utm_campaign`, `utm_content`); lot block shows one primary image when present and omits it when absent.
-- [ ] 5.2 Make `grade10-site-auction-notifications-SC-17` pass, resolving the recipient by user id and sending to their registered account email.
-- [ ] 5.3 Render money and times using the sent-message shapes in `money-amounts` and `dates-and-times`.
-- [ ] 5.4 Verify the six rendered messages against those shapes (including preheader and lot image), with amounts in more than one currency exponent, using React Email `email dev` for authoring preview.
+- [x] 5.1 Make `grade10-site-auction-notifications-SC-18`, `grade10-site-auction-notifications-SC-19`, `grade10-site-auction-notifications-SC-20`, `grade10-site-auction-notifications-SC-29`, `grade10-site-auction-notifications-SC-30`, `grade10-site-auction-notifications-SC-34`, `grade10-site-auction-notifications-SC-35`, and `grade10-site-auction-notifications-SC-36` pass by adding English copy branches for the six kinds on the shared emailcn / React Email template; optional English `@grade10/i18n` keys with locale selection forced to English; `canUnsubscribe` true whenever per-lot email alerts are on (progress and bid-activity); footer CTA **Manage alerts** (after “Email alerts are on for this lot.”) → My Auctions (existing sign-in flow first when signed out, then My Auctions); brand mark → storefront home; outbound links carry campaign tags (`utm_source`, `utm_medium`, `utm_campaign`, `utm_content`); lot block shows one primary image when present and omits it when absent.
+- [x] 5.2 Make `grade10-site-auction-notifications-SC-17` pass, resolving the recipient by user id and sending to their registered account email.
+- [x] 5.3 Render money and times using the sent-message shapes in `money-amounts` and `dates-and-times`.
+- [x] 5.4 Verify the six rendered messages against those shapes (including preheader and lot image), with amounts in more than one currency exponent, using React Email `email dev` for authoring preview.
 
 ## 6. My Auctions mute and account master (grade10)
 
 Needs group 3. Owns the mute UI that replaces the older watchlist My Auctions alerts surface.
 
-- [ ] 6.1 Make `grade10-site-auction-watchlist-SC-01`, `grade10-site-auction-watchlist-SC-02`, `grade10-site-auction-watchlist-SC-18`, and `grade10-site-auction-watchlist-SC-19` pass on My Auctions: per-row Email alerts; mute leaves the watch; unwatch turns alerts off; Bidding rows carry Email alerts without Unwatch.
-- [ ] 6.2 Ship Account → Notifications with the auction email alerts master only (no inbox, no channel toggles); master off suppresses fanout and shows per-lot toggles off or disabled per `ui-design.md`.
-- [ ] 6.3 Verify Storybook / preview states named in `ui-design.md` (`Email alerts muted`, `Email alerts pending`, `Email alerts master off`).
-- [ ] 6.4 Make `grade10-site-auction-notifications-SC-34` pass on grade10: letter **Manage alerts** opens My Auctions when signed in; when signed out, existing sign-in flow then My Auctions.
+- [x] 6.1 Make `grade10-site-auction-watchlist-SC-01`, `grade10-site-auction-watchlist-SC-02`, `grade10-site-auction-watchlist-SC-18`, and `grade10-site-auction-watchlist-SC-19` pass on My Auctions: per-row Email alerts; mute leaves the watch; unwatch turns alerts off; Bidding rows carry Email alerts without Unwatch.
+- [x] 6.2 Ship Account → Notifications with the auction email alerts master only (no inbox, no channel toggles); master off suppresses fanout and shows per-lot toggles off or disabled per `ui-design.md`.
+- [x] 6.3 Verify Storybook / preview states named in `ui-design.md` (`Email alerts muted`, `Email alerts pending`).
+- [x] 6.4 Make `grade10-site-auction-notifications-SC-34` pass on grade10: letter **Manage alerts** opens My Auctions when signed in; when signed out, existing sign-in flow then My Auctions.
 
 ## 7. Operator send log (grade10)
 
-Needs group 3.
+Needs group 3. No separate design supplement — admin table patterns only.
 
-- [ ] 7.1 Produce the admin send-log Figma frame named in `ui-design.md` and link it there.
-- [ ] 7.2 Make `grade10-site-auction-notifications-SC-24`, `grade10-site-auction-notifications-SC-25`, and `grade10-site-auction-notifications-SC-26` pass: type, sent-to email, listing, and Sent At; no body; distinguishing sent from attempted per `tech-design.md`.
-- [ ] 7.3 Verify the admin auction feature lane.
+- [x] 7.2 Make `grade10-site-auction-notifications-SC-24`, `grade10-site-auction-notifications-SC-25`, and `grade10-site-auction-notifications-SC-26` pass: type, sent-to email, listing, and Sent At; no body; distinguishing sent from attempted per `tech-design.md`.
+- [x] 7.3 Verify the admin auction feature lane.
 
 ## 8. Manual and review (grade10-spec + grade10)
 
 Needs groups 4–7.
 
-- [ ] 8.1 Update the auction notifications (and watchlist alerts) pages under `docs/prds/` for this change; run `pnpm check:manual` in the store.
-- [ ] 8.2 Run the application repository's full check suite once every group above is green.
-- [ ] 8.3 Verify every scenario in this change, then run `openspec validate add-account-notifications --strict` and `openspec validate --specs`.
-- [ ] 8.4 Review message volume on a lot with two active maximums before staging, per `tech-design.md`'s snipe-war coalescing.
+- [x] 8.1 Update the auction notifications (and watchlist alerts) pages under `docs/prds/` for this change; run `pnpm check:manual` in the store.
+- [x] 8.2 Run the application repository's full check suite once every group above is green.
+- [x] 8.3 Verify every scenario in this change, then run `openspec validate add-account-notifications --strict` and `openspec validate --specs`.
+- [x] 8.4 Review message volume on a lot with two active maximums before staging, per `tech-design.md`'s snipe-war coalescing.
 
 ## 9. Mail dispatch (parallel bulk + priority receipts) (grade10) (owner: @mason5991)
 
 Needs groups 1–4 for fanout claim/send, and group 1 for error class.
 
-- [ ] 9.1 Add auction mail job shapes and a dispatcher port: bulk
+- [x] 9.1 Add auction mail job shapes and a dispatcher port: bulk
   `(kind × listing × ≤50 keys)` and priority (one bid/settlement/order
   row); CF Queue adapters for `MAIL_BULK_QUEUE` /
   `MAIL_PRIORITY_QUEUE`; inline consumer when bindings are absent.
-- [ ] 9.2 Move watcher fanouts (progress, new-bid, ending-soon) to
+- [x] 9.2 Move watcher fanouts (progress, new-bid, ending-soon) to
   claim → enqueue bulk → consumer send/stamp/park; keep Postgres as
   the retry ledger (backoff, park, admin retry).
-- [ ] 9.3 Move bid/settlement (and order) receipt sends onto the
+- [x] 9.3 Move bid/settlement (and order) receipt sends onto the
   priority queue path so payment must-send and bid ASAP mail cannot be
   starved by bulk fanout; settlements before bids inside priority.
-- [ ] 9.4 Wire wrangler queue producers/consumers on
+- [x] 9.4 Wire wrangler queue producers/consumers on
   `grade10-auction-service`; document that store/vault may reuse the
   pattern with their own due rows and queues; no central mail-service
   ledger.
-- [ ] 9.5 Verify multi-listing parallel drain, transient re-claim after
+- [x] 9.5 Verify multi-listing parallel drain, transient re-claim after
   backoff, permanent park+ack, and priority-not-blocked-by-bulk in
   auction backend tests.
 
