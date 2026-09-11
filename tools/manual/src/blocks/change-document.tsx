@@ -181,14 +181,13 @@ export function ChangeTabs({
           },
         );
       }}
-      orientation="vertical"
       value={active}
     >
       <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">
         <TabsList
           aria-label="Artifacts of this change"
           className="flex w-full min-w-0 flex-row flex-wrap items-stretch justify-start gap-1 p-0 lg:flex-col"
-          variant="line"
+          variant="list"
         >
           {present.map((artifact) => (
             <TabsTrigger
