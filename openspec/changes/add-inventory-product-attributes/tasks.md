@@ -19,13 +19,13 @@
 
 - [x] 4.1 Implement inventory-owned attribute-key and product-schema draft/publish services with exact IP + Item + Category lookup, English-base checks, missing-locale warnings, saved-change compatibility review, and transactional affected-product validation for grade10-admin-inventory-catalog-SC-69 through SC-73 and SC-91
 - [x] 4.2 Implement typed product-attribute writes and the created-state validator so drafts may be incomplete but all supplied values validate and missing required canonical values block creation for grade10-admin-inventory-catalog-SC-74 through SC-79
-- [ ] 4.3 Implement indexed Auction product-attribute reads and filters that localize only presentation and exclude absent optional values from matching for grade10-admin-inventory-catalog-SC-80 and SC-81
+- [x] 4.3 Implement indexed Auction product-attribute reads and filters that localize only presentation and exclude absent optional values from matching for grade10-admin-inventory-catalog-SC-80 and SC-81
 - [x] 4.4 Implement opaque listing-attribute JSONB writes and the live Inventory product-display contract; make Auction render current resolved product fields plus its own listing items for grade10-admin-inventory-catalog-SC-82 through SC-84 and SC-88 through SC-90
 - [x] 4.5 Verify backend behavior with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, and focused inventory/Auction contract and service tests
 
 ## 5. Admin and Auction Frontends (grade10) (owner: @htonyl)
 
 - [x] 5.1 Add `ProductSchemaWorkspace`, `AttributeKeyEditor`, `ProductSchemaDraftEditor`, `CompatibilityReviewPanel`, and `ProductAttributeFilterLink` to the inventory-admin product-schemas feature slice for reusable attribute keys, localized labels/options, saved-change compatibility review, translation warnings, and publish refusals for grade10-admin-inventory-catalog-SC-69 through SC-73 and SC-91
-- [ ] 5.2 Add `StructuredProductAttributesEditor` to replace the product editor's free-form structured-fact entry with the published product-schema form, typed controls, locale text values, field-level errors, draft/created validation feedback, and attribute-to-filter navigation for grade10-admin-inventory-catalog-SC-74 through SC-79 and SC-92
+- [x] 5.2 Add `StructuredProductAttributesEditor` to replace the product editor's free-form structured-fact entry with the published product-schema form, typed controls, locale text values, field-level errors, draft/created validation feedback, and attribute-to-filter navigation for grade10-admin-inventory-catalog-SC-74 through SC-79 and SC-92
 - [x] 5.3 Add `ListingAttributesEditor` for flexible JSONB Auction listing attributes, then render live product fields and localized listing items while limiting filters to universal tags and product attributes for grade10-admin-inventory-catalog-SC-80 through SC-84 and SC-88 through SC-90
 - [ ] 5.4 Verify frontend behavior against contract fixtures with `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and `pnpm run build`
