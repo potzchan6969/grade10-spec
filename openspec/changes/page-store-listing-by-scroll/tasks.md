@@ -23,7 +23,7 @@ are which, and why each path answers the total the way it does:
 - [x] 2.2 Answer `totalCount` from the fixture catalogue's paging helper, so a frontend suite renders a real count with no backend in the loop
 - [x] 2.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 3. The catalogue's count (grade10)
+## 3. The catalogue's count (grade10) (owner: @sean)
 
 Needs group 2's page shape.
 
