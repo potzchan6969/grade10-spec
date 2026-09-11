@@ -12,7 +12,7 @@
 Needs the submodule bump that carries group 1, for the `email.login` catalog shape.
 
 - [ ] 2.1 Bump the `external/grade10-spec` submodule SHA
-- [ ] 2.2 Add a server-only `mintSession` endpoint on a local better-auth plugin and route `devLogin` and `signInVerifiedEmail` through it — keeps *A new verified email creates the account*, *A known verified email is the same account* and *A trusted product can sign the person in* (`shared-auth-sign-in-SC-21` to `SC-23`) and the dev-login identity cases green before the code plugin goes
+- [x] 2.2 Add a server-only `mintSession` endpoint on a local better-auth plugin and route `devLogin` and `signInVerifiedEmail` through it — keeps *A new verified email creates the account*, *A known verified email is the same account* and *A trusted product can sign the person in* (`shared-auth-sign-in-SC-21` to `SC-23`) and the dev-login identity cases green before the code plugin goes
 - [ ] 2.3 Remove the email-code plugin from `createAuth`, its rate rule and its send-cap hook path, so both code routes answer 404 — satisfies *A code from an earlier email does not sign in* (`shared-auth-sign-in-SC-34`)
 - [ ] 2.4 Narrow `invalidateEarlierSignInMail` to magic-link tokens — satisfies *A new link kills the earlier link* (`shared-auth-sign-in-SC-36`)
 - [ ] 2.5 Re-point the send-cap case to the link alone — satisfies *A second link send in a minute is told to wait* (`shared-auth-sign-in-SC-35`)
