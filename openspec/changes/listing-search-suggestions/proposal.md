@@ -76,6 +76,10 @@ grid). Unmeasured today; first delivery sets the baseline.
   [`Product Listing · Search`](../../../docs/prds/products/grade10-site/store/product-listing.md#search)
   marks the outcomes
 
+No domain impact: the jump from a suggestion to a product page is stated
+end to end by this capability's own spec, so it is a feature case rather
+than a composed one, and no `grade10-site/store` domain journey moves.
+
 ## Follow-on changes
 
 - Header search once auction (or a true site-wide find) can answer it
