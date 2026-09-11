@@ -9,14 +9,14 @@
 **Accepted by:**
 
 - `grade10-site-store-site-discounts-SC-01` — An automatic discount reaches the online checkout
-- `grade10-site-store-site-discounts-SC-03` — Grade10 presents whichever outcome Shopify returns
+- `grade10-site-store-site-discounts-SC-03` — Grade10 presents what the provider priced
 
 ### grade10-site-store-site-discounts-US-02: Shop staff rings up the same discount at the till
 
 **As a** member of shop staff,
-**I want** an active site discount to apply automatically when I ring up a sale,
-**so that** a counter customer gets the same price as an online order, with no manual discount for me to remember or type in.
+**I want** an active site discount to stay on a sale I am ringing up, even when I clear the discounts grade10 put on it,
+**so that** a counter customer gets the marked-down price without me remembering or retyping anything.
 
 **Accepted by:**
 
-- `grade10-site-store-site-discounts-SC-02` — A POS sale gets the same automatic discounts as the same basket online
+- `grade10-site-store-site-discounts-SC-02` — A till sale keeps the shop's own automatic discount

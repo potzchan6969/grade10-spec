@@ -6,9 +6,9 @@ A draft order can now accept Shopify's own automatic discounts during pricing an
 
 ## What Changes
 
-- Every draft order this store creates — online checkout and POS till — accepts Shopify's automatic discounts during pricing and creation.
+- Every draft order this store creates accepts Shopify's automatic discounts during pricing and creation. At the till there is no draft order — Shopify POS rings the sale on its own cart, where the shop's automatics already apply — so grade10's part there is leaving them alone rather than turning them off.
 - A product special sale, a buy-X-get-Y offer, and an order threshold cut are authored in Shopify Admin as Shopify's own automatic discounts, not a grade10 admin screen.
-- Whether a site discount refuses, stacks with, or replaces the order's one discount code, and whether one site discount excludes another on the same product, is Shopify's own combine-rule configuration on each discount. Grade10 holds none of that logic itself.
+- Whether a site discount refuses, stacks with, or replaces the order's one discount code, and whether one site discount excludes another on the same product, is Shopify's own combine-rule configuration on each discount. Grade10 reimplements none of that evaluation; it does state one half of it, since every code it mints carries its own combine setting.
 
 ## Non-Goals
 
@@ -20,7 +20,7 @@ A draft order can now accept Shopify's own automatic discounts during pricing an
 ## Capabilities
 
 ### New Capabilities
-- `grade10-site/store/site-discounts`: every draft order this store creates accepts Shopify's own automatic discounts, so a merchandiser's site discount — authored in Shopify Admin — reaches a real sale online and at the till.
+- `grade10-site/store/site-discounts`: every draft order this store creates accepts Shopify's own automatic discounts, and the till leaves the shop's own alone, so a merchandiser's site discount — authored in Shopify Admin — reaches a real sale online and at the counter.
 
 ### Modified Capabilities
 
@@ -31,7 +31,9 @@ A draft order can now accept Shopify's own automatic discounts during pricing an
 - `packages/shopify/backend/src/admin/draftOrders.ts` — `acceptAutomaticDiscounts: true` on the draft order create and calculate input.
 - Accepted risk, shared with `mint-coupons-as-discount-codes`: points-basis is computed before the shop's own automatic-discount allocation is known (the order row is written before the draft-order provider call returns `totalDiscountsSet`), so a site-wide discount stacking with points is not accounted for in the points-basis deduction. See that change's tech-design.md Decisions for the accepted-risk record; not resolved by either change.
 
-Note: `packages/grade10-store/backend/src/services/pos/simulator/basket.ts`'s `simulatorDraftInput()` builds an abstract POS sale-input shape (lines, discount, discountCodes), not a literal draft-order-create payload — there is no `acceptAutomaticDiscounts` wire field to set there; the flag applies only where the real Shopify Admin API draft-order call is constructed.
+- Accepted risk: a non-combinable automatic discount does not degrade a coupon checkout, it fails it — `shopifyProvider` deletes the draft and refuses when a requested code does not land. Availability, not mispricing, and it covers every coupon shape once `mint-coupons-as-discount-codes` ships. Task 2.3 is the gate that settles it before any automatic discount is created in production.
+
+Note: the only production callers of `createDraftOrder` are the web checkout's provider and the admin console's till simulator. `simulatorDraftInput()` builds an abstract POS sale-input shape with no `acceptAutomaticDiscounts` wire field, and the real staff-facing till creates no draft order at all — so this flag reaches the online checkout and the simulator, and the counter's automatics are Shopify POS's own behaviour throughout.
 
 ## References
 

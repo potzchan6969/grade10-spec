@@ -7,10 +7,12 @@
 
 ## 2. Staging verification (grade10) (owner: @ecchochan)
 
-- [ ] 2.1 Create one test automatic discount in Shopify Admin (staging store), run a checkout on staging, confirm the cut applies and shows in `codeDiscountMinor` (tech-design.md Migration Plan)
-- [ ] 2.2 Run the same product through a POS sale on staging, confirm parity — `grade10-site-store-site-discounts-SC-02`
-- [ ] 2.3 Test one discount code together with the automatic discount on staging; record the actual refuse/stack/replace outcome against the spec's open combine-rule question — this is the answer `present-cart-site-sale-promo-outcomes` depends on; do not skip or shortcut it
+- [ ] 2.1 Create one test automatic discount in Shopify Admin (staging store) per named type — a product special sale, a buy-X-get-Y offer, and an order threshold — since one test discount cannot generalise across three classes; run a checkout on staging and confirm each cut applies and shows in `codeDiscountMinor`
+- [ ] 2.2 Run the same product through a POS sale on staging and assert three things against a real automatic discount on the cart: it applies, Apply is not blocked (the extension's `foreignCartDiscount` reads false, which depends on how the Cart API reports a percentage automatic's type), and "Remove every discount" confirms rather than timing out — `grade10-site-store-site-discounts-SC-02`
+- [ ] 2.3 Test a discount code of each class grade10 mints — an order coupon, a product coupon, a gift and a reward — against an automatic ORDER discount on staging, and record the actual refuse/stack/replace outcome per class; this is the answer `present-cart-site-sale-promo-outcomes` depends on, and it extends release gate 4, which today is scoped to a staff manual discount rather than an automatic one. Clear this before any automatic discount is created in production, not after
+- [ ] 2.4 Put points on one of those baskets: the points tender rides as an order-level `appliedDiscount` on the same builder this change adds the flag to, and nothing else here tests the two together
 
 ## 3. Manual page (grade10-spec) (owner: @ecchochan)
 
-- [ ] 3.1 Once 2.1–2.3 genuinely verify (a real staging run, not a restatement of this file's prior text), remove the 🚧 marks this change delivers and resolve or restate the ❓ lines on `docs/prds/products/grade10-site/store/discounts.md` per what staging showed
+- [ ] 3.1 Once 2.1–2.4 genuinely verify (a real staging run, not a restatement of this file's prior text), remove the 🚧 marks this change delivers and resolve or restate the ❓ lines on `docs/prds/products/grade10-site/store/discounts.md` per what staging showed
+- [ ] 3.2 Confirm `docs/prds/products/grade10-site/store/discounts.md` carries a `::spec` block naming `grade10-site/store/site-discounts` — this change creates a capability no page names today, which the manual fails as `unreferenced` at archive; `mint-coupons-as-discount-codes` task 9.2 adds it on the same page, so check rather than duplicate
