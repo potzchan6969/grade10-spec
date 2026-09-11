@@ -301,7 +301,7 @@ with its id. The title is historical: a lot inside its last hour is Live.
 - **THEN** that lot's outcome is Processing
 - **AND** it is the same value the winner reads on their own order
 
-#### Scenario: grade10-admin-auction-post-sale-SC-63 - An expired invoice and a Processing order need action
+#### Scenario: grade10-admin-auction-post-sale-SC-21 - Expired and Processing are highlighted as needing action
 
 - **GIVEN** a queue holding a Pending Payment order whose invoice is `expired`,
   a Pending Payment order whose invoice is `pending`, a Processing order, and

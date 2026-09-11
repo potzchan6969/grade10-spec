@@ -115,22 +115,15 @@ engineer confirms the payment provider supplies them.
 
 ## Ordering and dependencies
 
-- **Depends on archiving `add-auction-winner-journey`.** That change is built
-  (37 of 37 tasks) and not archived, so `winner-order`, `order-status`, and
-  `notifications-order` are not durable yet. This change's MODIFIED and
-  REMOVED blocks are written against its deltas. Strict validation passes
-  today, because it does not check a MODIFIED block's target; the fold at
-  archive does. This change archives only after that one.
-- **Two points for that archive.** Its `post-sale` delta carries `## Purpose`
-  and only ADDED blocks against a `post-sale` that is already durable, so the
-  archive would keep the older `Listing outcomes` and `Payment states`
-  requirements beside the new queue model. It also reuses story ids
-  `post-sale-US-01` and `post-sale-US-02`, which the durable journeys already
-  give to different stories. The validator passes it; both are semantic.
-- **Three changes rewrite one requirement.** `add-auction-winner-journey`,
-  `redesign-my-auctions-table`, and this change all modify **"A winner reads
-  their own payment and shipment state"** in `account-record`. Whichever
-  archives later must carry the others' edits.
+- **The winner journey is archived on this PR.** Its durable `winner-order`,
+  `order-status`, and `notifications-order` specs are the base for this
+  change's MODIFIED and REMOVED blocks. This change carries every inherited
+  scenario it changes, so its later archive does not drop the established
+  acceptance record.
+- **Two changes rewrite one requirement.** `redesign-my-auctions-table` and
+  this change both modify **"A winner reads their own payment and shipment
+  state"** in `account-record`. Whichever archives later must carry the
+  other's edits.
 
 ## Assumptions
 

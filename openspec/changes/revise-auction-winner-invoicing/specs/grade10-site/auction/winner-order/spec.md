@@ -208,13 +208,22 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 No component SHALL be marked as an estimate. Grade10 SHALL NOT show the winner
 an invoice amount before an operator has sent it.
 
-#### Scenario: winner-order-SC-34 - A sent invoice carries the operator's quote
+#### Scenario: winner-order-SC-04 - An estimated total is marked as one
 
 - **GIVEN** an operator sent an invoice with a hammer price of 250000, a
   buyer's premium of 50000, shipping of 8000 and insurance of 4000 minor
   units in HKD
 - **WHEN** the winner reads the invoice
 - **THEN** the final amount is 312000 minor units in HKD
+- **AND** no component is marked as an estimate
+
+#### Scenario: winner-order-SC-05 - A confirmed address makes the total firm
+
+- **GIVEN** an auction order whose winner confirmed a delivery address
+- **AND** an operator sent an invoice with shipping and insurance quoted for
+  that address
+- **WHEN** the winner reads the invoice
+- **THEN** its total is the final amount for that address
 - **AND** no component is marked as an estimate
 
 ### Requirement: One invoice and one auction order per lot

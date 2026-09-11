@@ -11,7 +11,7 @@
 - `winner-order-SC-26` — A lot close asks for an address, not payment
 - `winner-order-SC-07` — A pre-filled default still needs confirming
 - `winner-order-SC-28` — Confirming an address readies the order for a quote
-- `winner-order-SC-34` — A sent invoice carries the operator's quote
+- `winner-order-SC-04` — An estimated total is marked as one
 - `winner-order-SC-31` — The deadline is seven days from send
 - `winner-order-SC-29` — A sent invoice refuses a self-service address change
 - `winner-order-SC-35` — The winner is offered card payment only
