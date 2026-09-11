@@ -2,6 +2,7 @@
 title: Product Details
 spec: grade10-site/store/product-page
 order: 3
+reviewed: 2026-09-11
 ---
 
 The product details page is one card: what it is, what each grade costs, and

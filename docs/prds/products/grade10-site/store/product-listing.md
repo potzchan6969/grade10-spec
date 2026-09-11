@@ -2,6 +2,7 @@
 title: Product Listing
 spec: grade10-site/store/product-listing
 order: 2
+reviewed: 2026-09-11
 ---
 
 The product listing is where a collector browses the catalogue and opens a

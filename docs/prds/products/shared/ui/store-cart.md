@@ -2,6 +2,7 @@
 title: Cart Drawer
 spec: shared/ui/store-cart
 order: 5
+reviewed: 2026-09-11
 ---
 
 The cart is a drawer that slides in over the page. It lists the items the
