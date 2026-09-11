@@ -4,8 +4,6 @@ See `proposal.md`. Deltas:
 `grade10-admin/console/roles-and-permissions`,
 `shared/console/user-directory`.
 
-RBAC CI harness is `harden-roles-mapping-review`.
-
 Source of truth: `@grade10/auth-contracts`. Honesty pattern: generate → commit
 → drift in `test:backend` (same as api-docs). No live RBAC endpoint.
 
@@ -13,8 +11,7 @@ Source of truth: `@grade10/auth-contracts`. Honesty pattern: generate → commit
 
 **Goals:** committed roles view; admin-only page under Users; chip deep-links.
 
-**Non-Goals:** mutating grants in UI; ZZZ page; mapping-review CI / elevated
-census (other change).
+**Non-Goals:** mutating grants in UI; ZZZ page.
 
 ## Decisions
 

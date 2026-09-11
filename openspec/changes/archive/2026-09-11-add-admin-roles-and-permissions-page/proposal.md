@@ -21,15 +21,10 @@ alone.
   `test:backend` until regenerated; API names from committed procedure docs.
 - **Users chips** — optional per-role links into the matrix; CTAs unchanged.
 
-Mapping-review CI and elevated-grant census live in
-`harden-roles-mapping-review` (separate change / PR).
-
 ## Non-Goals
 
 - Changing grants, roles, or vocabulary; editing them from the UI; custom roles.
 - ZZZ admin page; replacing the Users roles dialog summary.
-- CI human-review gate or elevated-grant census (see
-  `harden-roles-mapping-review`).
 
 ## Capabilities
 
