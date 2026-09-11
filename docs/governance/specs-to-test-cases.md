@@ -509,14 +509,18 @@ branch and its own pull request — never the spec's.
 | PR label | `documentation` |
 | Merges | At journey boundaries — not only when the whole suite is finished |
 
-**Split a large suite by journey.** Above roughly fifteen cases, a single
-branch lives for days against a moving `main` and banks nothing until it lands.
-One branch per journey keeps each pull request readable and each merge small.
-Below that, take the whole file on one branch; the split costs more than it
-saves. The branch name stays the suite's either way — which journeys a branch
-carries is the pull request's title to state, since the reviewer only knows the
-range once they stop. Two reviewers in one suite at once is the one case the
-name cannot hold: the second branch appends its range, `-US<n>-<m>`.
+**Every review starts on a branch.** `/tcs-review` branches off `main` before
+the first verdict, whatever the suite holds. Verdicts are written to disk as
+they are taken, so `main` is never where they land, and the case count never
+decides whether a branch is worth taking.
+
+**The journey is the unit of review, not of naming.** A reviewer holds one user
+flow in their head at a time, so `/tcs-review` shows one journey, takes its
+verdicts, and commits them before opening the next. The branch name stays the
+suite's — which journeys it carries is the pull request's title to state, since
+the reviewer knows the range only once they stop. Two reviewers in one suite at
+once is the one case the name cannot hold: the second branch appends its range,
+`-US<n>-<m>`.
 
 **Merge partial progress.** A journey's worth of approved cases is worth
 landing on its own: the suite goes to `in-review`, the approved cases are
@@ -526,8 +530,10 @@ the next person.
 
 **Push at the end of each session.** When the reviewer stops for the day,
 `/tcs-review` offers to commit and push what has a verdict. Nothing is lost to
-a closed laptop, and the pull request shows the day's progress. It stays a
-draft PR until the branch's journeys are done.
+a closed laptop, and the pull request shows the day's progress. A review that
+stops before the file is finished still opens its pull request, for the
+journeys that have verdicts, with that range in the title. It stays a draft PR
+until the branch's journeys are done.
 
 **Two reviewers on one file is allowed.** Nothing here reserves a suite.
 `/tcs-review` reports any open pull request touching the file it is about to
