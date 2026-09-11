@@ -15,11 +15,34 @@
 - `grade10-site-loyalty-programme-SC-156` — A gift adds a free line for its own variant
 - `grade10-site-loyalty-programme-SC-157` — A gift below its minimum spend does not apply
 - `grade10-site-loyalty-programme-SC-159` — A physical reward's coupon takes 100% off its own variant
+- `grade10-site-loyalty-programme-SC-166` — A coupon reaches the counter by the member presenting it
+- `grade10-site-loyalty-programme-SC-104` — A member cannot undo a redemption
+- `grade10-site-loyalty-programme-SC-105` — A coupon expires on its own terms
+- `grade10-site-loyalty-programme-SC-106` — Points buy nothing at an auction
 
-The order's-one-discount-slot behavior this journey used to cite
-(`SC-163`) is accepted by `grade10-site/store/discounts`'s own scenario
-instead — `mint-coupons-as-discount-codes` delivers it, covering a reward
-coupon as one case of "any coupon," not a second copy of the rule.
+The order's-one-discount-slot behaviour this journey used to cite
+(`SC-163`) is accepted by `grade10-site/store/discounts`' own scenario
+instead, covering a reward coupon as one case of any coupon rather than a
+second copy of the rule.
+
+### grade10-site-loyalty-programme-US-06: Operator reverses a redemption a member cannot be given
+
+**As an** operator,
+**I want** to return a member's points and void their coupon while it is still unused,
+**so that** a reward we cannot honour costs the member nothing.
+
+**Accepted by:**
+
+- `grade10-site-loyalty-programme-SC-138` — A reversal voids the coupon
+- `grade10-site-loyalty-programme-SC-141` — A used coupon cannot be reversed
+- `grade10-site-loyalty-programme-SC-167` — A refunded sale does not return the coupon
+- `grade10-site-loyalty-programme-SC-142` — A member cannot reverse their own redemption
+- `grade10-site-loyalty-programme-SC-33` — Restored points keep their original expiry
+
+This journey replaces the durable `US-06`, whose story promised a physical
+reward waiting for collection and whose `SC-67`, `SC-68` and `SC-69`
+acceptances retire with the queue. `SC-65` and `SC-66` — a reward's own
+per-unit stock — are untouched and stay where they are.
 
 ### grade10-site-loyalty-programme-US-08: Member sees what a channel does to their points, before and after
 

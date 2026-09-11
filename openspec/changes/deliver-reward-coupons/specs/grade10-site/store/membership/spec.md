@@ -31,7 +31,7 @@ unpaid SHALL send a correction notice, since the member was already told it
 landed; a sale that never reaches that pass SHALL send nothing. The
 notification SHALL never carry the code.
 
-#### Scenario: grade10-site-store-membership-SC-74 - A double tap spends once
+#### Scenario: grade10-site-store-membership-SC-12 - A double tap spends once
 
 - **WHEN** staff submit the same spend twice in quick succession
 - **THEN** exactly one redemption is recorded
@@ -60,6 +60,6 @@ longer confirms one, and the notice that told a member about a collection
 broadens to cover any staff-assisted spend.
 
 **Migration**: Replaced by "A till session spends for the member and
-notifies them at once" above. Scenario SC-12 continues as SC-74; SC-13
-continues under its own id, restored to naming any staff-assisted spend
-rather than a collection alone.
+notifies them once it lands" above. SC-12 keeps its own id, because a double
+tap costing once is unchanged. SC-13 retires, its behaviour broadened from a
+collection alone to any staff-assisted spend under SC-75.

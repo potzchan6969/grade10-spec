@@ -24,7 +24,10 @@ Metric: share of redemptions used at the till within 30 days of being bought.
   the admin API.
 - A physical reward settles like any other: its coupon takes 100% off the
   reward's own variant on an ordinary sale. Counter collection and the
-  fulfilment queue are retired.
+  fulfilment queue are retired once a coupon can reach a counter.
+- A member presents a coupon at the counter from their own session and the
+  till reads it, so staff never name a coupon on the member's behalf and no
+  coupon's code is ever text for a member to type.
 - A reward coupon holds the order's one-discount slot, the same as any
   coupon.
 - Cancelling a redemption becomes its own operator permission, apart from
@@ -34,6 +37,9 @@ Metric: share of redemptions used at the till within 30 days of being bought.
 - An activity entry names which channel it came from.
 - A member is notified once staff-spent points or an applied coupon at the
   till actually settles, not while it is still a re-plannable claim.
+- A reversal returns points and voids a coupon only while that coupon is
+  unused. A refunded sale returns the goods, the money and any points spent
+  as a discount on it — never the coupon.
 
 ## Non-Goals
 
@@ -49,8 +55,9 @@ Metric: share of redemptions used at the till within 30 days of being bought.
 
 - `grade10-site/loyalty/programme`: reward definitions (kind, discount,
   scope) and the console form that authors them; unified coupon settlement
-  for a physical reward; the order's one-discount rule; the cancellation
-  permission split; channel disclosure and activity's channel name.
+  for a physical reward; how a coupon reaches a counter; reversal restated
+  over an unused coupon alone; the cancellation permission split; channel
+  disclosure and activity's channel name.
 - `grade10-site/store/membership`: the till session drops the collection
   step for one coupon path, and notifies the member on settlement for any
   staff-assisted spend.
@@ -60,22 +67,23 @@ Metric: share of redemptions used at the till within 30 days of being bought.
 - Rewards service (`packages/loyalty/backend/src/services/rewards`) gains a
   reward definition instead of a fixed-amount default.
 - Loyalty-admin's reward form gains kind, discount and scope fields.
-- The POS extension's collection-confirm surface and the fulfilment queue it
-  serves are removed, once `mint-coupons-as-discount-codes` task 3.7 ships
-  its replacement guard (`reserveRewardCoupon()` minting a real, single-use
-  Shopify Discount code for the reward's coupon) — see this change's
-  tech-design.md.
+- `packages/grade10-store/frontend/src/features/account/` gains the member's
+  coupon wallet and the presentation a till reads; it holds no coupon surface
+  today.
+- The POS extension's collection-confirm surface, the fulfilment queue it
+  serves, and `waitingCollections` are removed once a coupon can reach a
+  counter and no redemption is still awaiting one — see this change's
+  tech-design.md for the four preconditions.
 - Design decisions this change builds on:
   `openspec/changes/archive/2026-09-10-revise-loyalty-programme-rules/tech-design.md`
   and
   `openspec/changes/archive/2026-09-10-add-shopify-membership-pos/tech-design.md`.
-- Dependency: `mint-coupons-as-discount-codes` owns "a coupon is the
-  order's one discount" end to end (including the reward's own `couponId`
-  path) and, via its task 3.7, mints the reward's own coupon as a real,
-  single-use Shopify Discount code the moment an order claims it — this
-  change's task group 3 (physical-reward settlement) and task group 6
-  (staff-assisted notice) both build on that work rather than duplicating
-  or racing it; see tasks.md.
+- Dependency: `mint-coupons-as-discount-codes` owns "a coupon is the order's
+  one discount" end to end, including the reward's own `couponId` path, and
+  owns the mint machinery that turns a claimed coupon into a Shopify Discount
+  code. This change's groups 3, 4 and 6 build on that work rather than
+  duplicating or racing it; recorded as `depends_on` in `.openspec.yaml` as
+  well as in tasks.md.
 
 ## References
 

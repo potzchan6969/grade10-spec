@@ -1,13 +1,13 @@
 # Tasks
 
-Group 1 lands the reward's contract shape; group 2 and group 3 both depend on it. Group 3 additionally depends on `mint-coupons-as-discount-codes` task 3.7 (`reserveRewardCoupon()` minting a real, customer-scoped Shopify Discount code for a reward's coupon) — see group 3's note below, and its own task 3.2's prerequisite on group 3's task 3.2. Group 5 is independent. Group 6 touches the same coupon-apply path `mint-coupons-as-discount-codes` rewrites and is sequenced after that change ships.
+Group 1 lands the reward's contract shape; groups 2, 3 and 4 depend on it. Group 3 additionally depends on `mint-coupons-as-discount-codes` shipping its mint machinery, and on group 4's presentation path — see group 3's note. Group 5 is independent. Group 6 touches the same coupon-apply path `mint-coupons-as-discount-codes` rewrites and is sequenced after that change ships.
 
 ## 1. Reward definitions (grade10)
 
 - [ ] 1.1 Extend the reward contract with a kind, a discount (fixed amount, or a percentage with a maximum) and a scope (named products or variants, a worlds-and-types filter, or the whole order), plus a gift's own minimum spend, so *A reward names a kind, a discount and a scope* passes
 - [ ] 1.2 Copy the definition onto the coupon a redemption issues, unchanged by a later edit to the reward
 - [ ] 1.3 Evaluate a coupon's discount from its own definition wherever it is applied, online and at the till, so *A fixed-amount coupon takes a set amount off its scope*, *A percentage coupon is capped at its maximum discount*, *A coupon scoped to a catalog filter matches worlds and types*, *A coupon scoped to the whole order applies across every line*, *A gift adds a free line for its own variant*, and *A gift below its minimum spend does not apply* pass
-- [ ] 1.4 Fold a whole-order-scoped reward's cut (`evaluation.orderCutMinor`) into `orders/promise.ts`'s points-basis calculation alongside `rewardCuts`/`lineCuts` — today only `lineCuts` is read, so a whole-order scope (new in 1.1) would silently drop its own cut from the points-basis deduction, letting a member spend points against goods the reward already discounted
+- [ ] 1.4 Pin the points-basis invariant with a test rather than new arithmetic: a whole-order-scoped reward arrives as `lineCuts`, which `rewardCuts` already reads and the basis already subtracts, and a reward's `evaluation.orderCutMinor` is always zero because a reward's definition is a product coupon or a gift and only the `order` branch returns a non-zero order cut — the real hazard in that expression is `orderCodeMinor` being subtracted twice, which `mint-coupons-as-discount-codes` task 4.2 owns
 - [ ] 1.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 2. Console reward form (grade10)
@@ -17,20 +17,28 @@ Group 1 lands the reward's contract shape; group 2 and group 3 both depend on it
 
 ## 3. Physical reward retires collection (grade10)
 
-**Depends on `mint-coupons-as-discount-codes` task 3.7.** The collection-confirm step being retired here (3.2) is today's only guard against handing a physical reward over twice; its replacement is the real, single-use Shopify Discount code that task mints for a reward's own coupon at the moment an order claims it (`reserveRewardCoupon()`) — Shopify refuses a second redemption of a `usageLimit: 1` code outright, the same way the QR/short-code presentation already gets consumed once. Do not land 3.2 until 3.7 has shipped: a reward's coupon that still only welds a local line (today's behavior) leaves no guard at all between 3.1 shipping and 3.2 removing the one that exists. `mint-coupons-as-discount-codes` also owns the `(orderId, couponId)` uniqueness on `coupon_mints` that closes the concurrent-double-reservation race a `SELECT ... FOR UPDATE` alone would not — see that change's tech-design.md Risks; no separate mitigation is needed here.
+**Do not land 3.2 until all four preconditions hold.** The collection-confirm step being retired here is today's only guard against handing a physical reward over twice, and it is also the only enumeration of who is still owed one. Its replacement is loyalty's own single reservation and single-use coupon, delivered by 3.1 — not the Shopify code, which adds no second guard. What 3.2 waits on is that a reward coupon can reach a counter at all (group 4), that `mint-coupons-as-discount-codes` has shipped its mint machinery so the presented code actually reaches the sale, that release gates 1, 5 and 10 are recorded with date and tester, and that no redemption is still awaiting collection.
 
 - [ ] 3.1 Settle a physical reward's redemption as a 100%-off coupon on the reward's own variant instead of an item owed, so *A physical reward's coupon takes 100% off its own variant* passes
-- [ ] 3.2 Once `mint-coupons-as-discount-codes` task 3.7 has shipped (the reward's own coupon now mints a real, single-use Shopify Discount at order-claim time), remove the fulfilment queue, the till's collection-confirm action, and the "waiting at the counter" list from the till session and the member surface
+- [ ] 3.2 Once group 4 ships, `mint-coupons-as-discount-codes` has shipped, gates 1, 5 and 10 are recorded, and `select count(*) from redemptions where state='issued' and fulfillment_state='awaiting_collection'` reads zero, remove the fulfilment queue, the till's collection-confirm action, `waitingCollections` and the "waiting at the counter" list from the till session and the member surface
 - [ ] 3.3 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run test`
 
-## 4. The order's one discount
+## 4. The member presents a coupon at the counter (grade10)
 
-Removed from this change. `mint-coupons-as-discount-codes` owns "a coupon is the order's one discount" end to end, including the reward's own `couponId` path, via `grade10-site-store-discounts-SC-04` — see that change's task 3.2. This group's draft scenario (`grade10-site-loyalty-programme-SC-163`) is dropped, not folded into any spec; nothing to implement in this change for this rule.
+The till never names a coupon on the member's behalf: the member picks one from their own session and the till reads what they present. This is what lets group 3 retire collection without threading a `couponId` through `posSalePlanInputSchema`, unioning the loyalty wallet into the panel, or giving `CouponTender.reserve` a channel.
+
+- [ ] 4.1 Add the member's coupon wallet to `packages/grade10-store/frontend/src/features/account/` — what each coupon is for, its validity and whether it has been used — reading loyalty's `memberCoupons`; today that directory holds card, identity, notifications and profile and no coupon surface at all
+- [ ] 4.2 Let a member with an open till session pick a coupon to spend on it, minting its ephemeral code against that session's standing order row through `mint-coupons-as-discount-codes`' machinery, so the code names the eligible lines of the sale actually in front of them
+- [ ] 4.3 Answer that pick with a presentation the till can read, following `mintPosHandle`'s existing shape — a QR payload with a short code beneath it for a camera that will not read a dim screen, one-time, consumed by whichever reaches a till first — so *A coupon reaches the counter by the member presenting it* passes
+- [ ] 4.4 Require the member to be identified and attached to the cart before a presentation is read, and say so in the staff sentence: `host.onScan` is registered only while the extension's modal is open and routes every payload to `till.identify`, so a coupon presentation is read with the modal closed, and a customer-scoped code refuses until the customer is attached anyway
+- [ ] 4.5 Never offer a coupon's minted code as text for the member to type or keep — it is minted for one sale and is not the coupon's identity
+- [ ] 4.6 Verify: `pnpm run typecheck`, `pnpm run test`, and a staging run of a counter sale spending a coupon end to end
 
 ## 5. Cancellation is its own permission (grade10)
 
 - [ ] 5.1 Split cancelling a redemption into its own permission, apart from the point-movement permission it shares today, so *Moving points does not carry redemption cancellation* passes
-- [ ] 5.2 Verify: `pnpm run typecheck`, `pnpm run test:backend`
+- [ ] 5.2 Keep a reversal to an unused coupon and drop the collection clause from its terms, so *A reversal voids the coupon*, *A used coupon cannot be reversed* and *A refunded sale does not return the coupon* pass — a refunded sale returns the goods, the money and any points spent as a discount on it, never the coupon
+- [ ] 5.3 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 6. Member disclosure and the staff-assisted notice (grade10)
 
@@ -38,5 +46,10 @@ Removed from this change. `mint-coupons-as-discount-codes` owns "a coupon is the
 
 - [ ] 6.1 Disclose a channel's own spending limit before points leave the balance, so *A channel's own limit is disclosed before the points go* passes — moved from `revise-loyalty-programme-rules`
 - [ ] 6.2 Name the channel on every activity entry the member reads, so *An activity entry names its channel* passes — moved from `revise-loyalty-programme-rules`
-- [ ] 6.3 Notify the member on **settlement** — the paid order, or the till's trim-to-what-landed pass (`discounts.md`'s POS step 9) — for every staff-assisted act (points spent or a coupon applied), never at Apply: Apply is explicitly a re-plannable claim (`discounts.md` step 7, up to 20 plans per session per 5 minutes) that can still be trimmed or walked away from entirely, and "nothing is held" until paid. A benefit whose till session reached POS step 9's trim-to-landed pass and is later abandoned unpaid (the promise row expiring rather than paying) sends a correction notice, since step 9 already told the member it landed; a sale that never reaches step 9 at all sends nothing, since no notice went out to correct. So *The member's phone is the monitor* passes without ever showing the member a result that contradicts what actually happened. Folds together with the collection notice group 3 retires and the notice moved from `add-shopify-membership-pos` (its task 5.2)
+- [ ] 6.3 Notify the member on **settlement** — the paid order, or the till's trim-to-what-landed pass (`discounts.md`'s POS step 9) — for every staff-assisted act, never at Apply, which is explicitly a re-plannable claim that can still be trimmed or walked away from while nothing is held; a benefit step 9 reported whose sale is then abandoned unpaid sends a correction notice, and a sale that never reaches step 9 sends nothing, so *The member's phone is the monitor* and *A landed notice is corrected if the sale never pays* both pass. Folds together with the collection notice group 3 retires and the notice moved from `add-shopify-membership-pos` (its task 5.2)
 - [ ] 6.4 Verify: `pnpm run typecheck`, `pnpm run test:backend`
+
+## 7. Manual pages (grade10-spec)
+
+- [ ] 7.1 Clear the 🚧 lines this change delivers on `docs/prds/products/grade10-site/loyalty/rewards.md`, `docs/prds/products/grade10-site/loyalty/profile.md` and `docs/prds/products/grade10-site/loyalty/shopify-integration.md`, which no other change's task group claims
+- [ ] 7.2 Retire `docs/prds/products/grade10-site/store/discounts.md`'s Collection section in the same commit as the fold — it states the counter handover as running, unmarked, on a page this change's specs do not touch, so no check catches it and it would simply become false

@@ -8,9 +8,14 @@
 - Coupon settlement
   - One path for every reward: a physical reward settles as an ordinary
     sale, its coupon at 100% off
+  - Presented, never named for you: at a counter a coupon reaches the sale
+    because the member presents it and the till reads it
   - One discount at a time: a reward coupon holds the order's single slot,
-    per `grade10-site/store/discounts` (delivered by
-    `mint-coupons-as-discount-codes`, not by this change)
+    per `grade10-site/store/discounts`
+- Reversal
+  - Unused only: a reversal returns the points and voids the coupon while it
+    is unused; a refund returns goods, money and any points spent, never the
+    coupon
 - Operator permissions
   - Cancellation stands alone: gated by its own permission, not point
     movement
@@ -96,15 +101,19 @@ member's balance expiry.
 Redemption SHALL be one way: no member action SHALL convert an issued
 coupon, used or unused, back into points.
 
-A coupon SHALL be usable in the online store and at the counter, applied to
-the order automatically — no separate code is given to the member to type.
-A coupon SHALL NOT apply to an auction purchase, and points SHALL NOT be
-spent against one. That a coupon holds the order's one discount slot is a
-`grade10-site/store/discounts` requirement (`mint-coupons-as-discount-codes`
-delivers it), not restated as a scenario here.
+A coupon SHALL be usable in the online store, applied to the order without
+the member typing anything. At the counter, a coupon SHALL reach the sale by
+the member presenting it from their own session and the till reading what
+they present — no coupon reaches a till by staff naming it on the member's
+behalf. A coupon SHALL NOT apply to an auction purchase, and points SHALL NOT
+be spent against one. The order's one discount-code slot is
+`grade10-site/store/discounts`' own requirement, and a coupon is one case of
+it.
 
-A member SHALL be able to read the coupons they hold, each with its code,
-what it is for, its validity period, and whether it has been used.
+A member SHALL be able to read the coupons they hold — what each is for, its
+validity period, and whether it has been used — and to present one for a
+counter sale. A coupon's code SHALL NOT be offered as text for the member to
+type or keep: it is minted for one sale and is not the coupon's identity.
 
 #### Scenario: grade10-site-loyalty-programme-SC-159 - A physical reward's coupon takes 100% off its own variant
 
@@ -113,22 +122,84 @@ what it is for, its validity period, and whether it has been used.
   own variant
 - **AND** no separate collection record is created
 
-#### Scenario: grade10-site-loyalty-programme-SC-160 - A member cannot undo a redemption
+#### Scenario: grade10-site-loyalty-programme-SC-166 - A coupon reaches the counter by the member presenting it
+
+- **GIVEN** a member holding a coupon, identified at a till
+- **WHEN** they present that coupon from their own session and the till reads it
+- **THEN** the sale carries the coupon's cut
+- **AND** no till surface let staff name the coupon on the member's behalf
+
+#### Scenario: grade10-site-loyalty-programme-SC-104 - A member cannot undo a redemption
 
 - **WHEN** a member holding an unused coupon asks for their points back
 - **THEN** no member surface offers it, and the points are not returned
 
-#### Scenario: grade10-site-loyalty-programme-SC-161 - A coupon expires on its own terms
+#### Scenario: grade10-site-loyalty-programme-SC-105 - A coupon expires on its own terms
 
 - **WHEN** a coupon's validity period ends
 - **THEN** it can no longer be used
 - **AND** the member's redeemable balance is unaffected
 
-#### Scenario: grade10-site-loyalty-programme-SC-162 - Points buy nothing at an auction
+#### Scenario: grade10-site-loyalty-programme-SC-106 - Points buy nothing at an auction
 
 - **WHEN** a member attempts to pay for an auction purchase with points or
   with a coupon
 - **THEN** it is refused
+
+### Requirement: Reversing a redemption restores the points it consumed, while its coupon is unused
+
+Reversing a redemption SHALL be an operator action, recorded in the operator
+log. No member action SHALL reverse one.
+
+A reversal SHALL be possible only while the coupon the redemption issued is
+unused. It is the remedy for a reward that cannot be honoured, such as an
+item out of stock. It SHALL return exactly the number of points the
+redemption consumed, as entries pointing back at the credits those points
+came from so a later claw-back can still reach them, and SHALL void the
+unused coupon. A coupon already used SHALL NOT be reversed, and its points
+stay spent — including where the order that spent it is later refunded or
+cancelled: the goods and the money go back, the coupon does not, and the
+points it bought stay spent. Points a member spent as a discount on that same
+order are returned by the refund, which is a separate movement from the
+coupon. A redemption that produced nothing to consume SHALL still be
+reversible on the same terms.
+
+Returned points SHALL rejoin the redeemable balance under the inactivity
+window already running: a reversal SHALL NOT reset that window, and SHALL
+return nothing to a member whose window has already passed.
+
+A member's tier progress SHALL be unaffected by a reversal, because the
+redemption did not reduce it. Stock SHALL be returned only when the
+redemption actually consumed a unit.
+
+#### Scenario: grade10-site-loyalty-programme-SC-138 - A reversal voids the coupon
+
+- **WHEN** an operator reverses a redemption
+- **THEN** the coupon it issued can no longer be used
+- **AND** the points it consumed return to the member's redeemable balance
+
+#### Scenario: grade10-site-loyalty-programme-SC-141 - A used coupon cannot be reversed
+
+- **WHEN** an operator reverses a redemption whose coupon has already been used
+- **THEN** the reversal is refused and the points stay spent
+- **AND** the operator is told why
+
+#### Scenario: grade10-site-loyalty-programme-SC-167 - A refunded sale does not return the coupon
+
+- **GIVEN** a sale that spent a member's coupon and is then refunded
+- **WHEN** the refund settles
+- **THEN** the coupon stays used and the points it cost stay spent
+- **AND** any points the member spent as a discount on that sale are returned
+
+#### Scenario: grade10-site-loyalty-programme-SC-142 - A member cannot reverse their own redemption
+
+- **WHEN** a member asks to reverse a redemption
+- **THEN** no member surface offers it
+
+#### Scenario: grade10-site-loyalty-programme-SC-33 - Restored points keep their original expiry
+
+- **WHEN** a redemption is reversed
+- **THEN** the restored points rejoin the credits they were taken from, keeping those credits' own dates
 
 ## MODIFIED Requirements
 
@@ -277,7 +348,18 @@ coupon takes 100% off the same way a product coupon or a gift does, so the
 requirement is restated to cover every reward kind alike.
 
 **Migration**: Replaced by "A redemption settles as a coupon, whatever the
-reward" above. Scenarios SC-103 through SC-106 retire with this
-requirement; the behaviour each named — a physical reward as a coupon, no
-undoing a redemption, a coupon's own expiry, and no points at an
-auction — continues under SC-159 through SC-162.
+reward" above. SC-103 retires with the handover it describes, replaced by
+SC-159. SC-104, SC-105 and SC-106 keep their own ids under the new
+requirement, because what they assert — no undoing a redemption, a coupon's
+own expiry, and no points at an auction — is unchanged.
+
+### Requirement: Reversing a redemption restores the exact points it consumed
+
+**Reason**: A reversal's terms named a physical reward waiting to be
+collected, and the collection it cancelled. Both retire with the queue, so
+the requirement is restated over a coupon alone.
+
+**Migration**: Replaced by "Reversing a redemption restores the points it
+consumed, while its coupon is unused" below. SC-139 and SC-140 retire with
+the collection states they describe; SC-138, SC-141, SC-142 and SC-33 keep
+their own ids, because what they assert is unchanged.
