@@ -34,7 +34,7 @@ Needs group 2's page shape.
 - [x] 3.5 Take a query carrying free text to the walk for the cards, the count and the facet counts alike, behind one predicate both routes read, and refuse the search path loudly when it is reached against that decision — *A choice's count is the listing it opens* (`SC-30`); `tech-design.md`, *Free text walks*
 - [x] 3.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`
 
-## 4. The browse listing (grade10)
+## 4. The browse listing (grade10) (owner: @sean)
 
 Needs group 2's page shape; the fixture catalogue stands in for group 3.
 
