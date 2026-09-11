@@ -6,8 +6,8 @@
 ## 2. Shared Contracts (grade10) (owner: @htonyl)
 
 - [x] 2.1 Add typed inventory contracts for attribute keys, localized labels and option keys, product-schema revisions, typed product attributes, compatibility results, validation violations, and translation warnings for grade10-admin-inventory-catalog-SC-69 through SC-79 and SC-91
-- [ ] 2.2 Add the Inventory product-display and Auction opaque-listing-attribute contracts, locale-aware live display, and dynamic filter contracts, replacing the hard-coded metadata shape for grade10-admin-inventory-catalog-SC-80 through SC-90
-- [ ] 2.3 Verify contracts and fixtures with `pnpm run typecheck`, `pnpm run lint`, and the affected inventory and Auction contract tests
+- [x] 2.2 Add the Inventory product-display and Auction opaque-listing-attribute contracts, locale-aware live display, and dynamic filter contracts, replacing the hard-coded metadata shape for grade10-admin-inventory-catalog-SC-80 through SC-90
+- [x] 2.3 Verify contracts and fixtures with `pnpm run typecheck`, `pnpm run lint`, and the affected inventory and Auction contract tests
 
 ## 3. Data Migration (grade10)
 
