@@ -38,7 +38,7 @@ Needs group 2's page shape.
 
 Needs group 2's page shape; the fixture catalogue stands in for group 3.
 
-- [ ] 4.1 Render the count from the page's total rather than the cards loaded, held under the narrowing it describes and empty until that narrowing's first page answers, so *The count is the set, not what was read* (`SC-27`) and *The count follows the narrowing* (`SC-28`) pass
-- [ ] 4.2 Cover the shipped walk — *The next cards arrive at the end* (`SC-22`), *The end of the set* (`SC-23`) and *A narrowing starts the walk again* (`SC-24`), the last for a facet, free text and an order as well as the collection case already held
+- [x] 4.1 Render the count from the page's total rather than the cards loaded, held under the narrowing it describes and empty until that narrowing's first page answers, so *The count is the set, not what was read* (`SC-27`) and *The count follows the narrowing* (`SC-28`) pass
+- [x] 4.2 Cover the shipped walk — *The next cards arrive at the end* (`SC-22`), *The end of the set* (`SC-23`) and *A narrowing starts the walk again* (`SC-24`), the last for a facet, free text and an order as well as the collection case already held
 - [ ] 4.3 Cover a fresh open of an address a walk was made at and a page the catalogue does not answer, so *Depth is not carried in the address* (`SC-25`) and *A page the catalogue does not answer* (`SC-26`) hold against the walk key and the resolved-grid rule they already rely on
 - [ ] 4.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
