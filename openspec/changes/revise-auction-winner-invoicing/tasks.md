@@ -17,7 +17,7 @@ there is no auction-state backfill, legacy conversion, or dual-read path.
 - [ ] 2.2 Replace the winner and operator procedure inputs and outputs for address confirmation, quote-and-send, re-quote, expiry, card payment, manual settlement, and proof upload so `winner-order-SC-28`, `winner-order-SC-29`, `winner-order-SC-35`, `grade10-admin-auction-post-sale-SC-50`, and `grade10-admin-auction-post-sale-SC-58` have fixed authenticated contracts
 - [ ] 2.3 Verify contract fixtures and refusal unions, then run `pnpm run typecheck` and the focused auction contract tests
 
-## 3. Auction persistence (grade10)
+## 3. Auction persistence (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Add the additive auction schema migration, Drizzle snapshot, constraints, and indexes for an order with no current invoice, `expired` invoices, extended immutable invoice logs, notification work, and 1 to 5 immutable manual-settlement proof records for `auction-status-SC-01`, `auction-status-SC-02`, `grade10-admin-auction-post-sale-SC-56`, and `grade10-admin-auction-post-sale-SC-62`; do not add a record backfill or legacy adapter
 - [ ] 3.2 Update repository writes and reads to lock the order/current invoice, keep invoice revisions and logs append-only, and return one derived status for the winner and queue for `auction-status-SC-19`, `auction-status-SC-20`, `auction-status-SC-25`, `grade10-admin-auction-post-sale-SC-35`, and `grade10-admin-auction-post-sale-SC-21`
