@@ -22,6 +22,12 @@ product.
 - **Filter** — the sidebar narrows by the world a card comes from and the kind
   of collectible it is, each choice with the catalogue's count beside it;
   worlds show five and an invitation to the rest, types show whole
+- 🚧 **Filter on a small screen** — a Filter control opens a left drawer for
+  worlds and types; the catalogue search field stays on the listing outside
+  that drawer
+- 🚧 **Worlds and Types as tabs on a small screen** — inside the filter drawer
+  the two facet groups sit as tabs so expanding worlds does not push types
+  down the scroll; the wide sidebar still stacks them
 - **Search and sort** — both describe the whole catalogue, never the cards
   already on screen; the menu offers latest, lowest price and highest price,
   and nothing is in force until the collector picks one
@@ -37,6 +43,14 @@ product.
   3. `grade10.com/store/collections?worlds=<a>,<b>&types=<c>&q=<words>&sort=<order>`
      — the catalogue narrowed
   4. `grade10.com/store/products/<handle>` — a product's details page
+
+## Adaptive Filter
+
+On a narrow viewport the listing offers a Filter control that opens a left
+drawer for worlds and types. The catalogue search field stays on the listing
+outside that drawer. Inside that drawer, Worlds and Types are tabs so
+expanding worlds does not push types down the scroll. On a wide viewport the
+sidebar still stacks the groups.
 
 ## Search
 
@@ -109,6 +123,8 @@ collection. The front door's collection grid, which is unchanged.
 | A count is news, not pressure | Decided | A card says how many are left where the collector learns something — the shop is nearly out, or they have just asked for the last one. A count on every card is a shop hurrying everybody. | Product |
 | Links the site owes | ❓ Open | Drawing a placeholder departs from `grade10-site/site/page-shell`, which says a link appears only where the site answers it. The footer already departs the same way. Settling it belongs to page-shell. | Product |
 | Search stays on the listing | Decided | The field lives with the listing filters, not in the site header. Auction has no search surface yet, and a nav search would read as site-wide find. | Design |
+| Small screen: search outside the drawer | Decided | On a narrow viewport, Filter opens a left drawer for facets only. Catalogue search stays on the listing so typing does not require opening Filter. | Design |
+| Worlds and Types as tabs on small screens | Decided | Inside the filter drawer the two facet groups are tabs so expanding worlds does not push types down the scroll. The wide sidebar still stacks them. Nested drill-down was ruled out for a closed pair of groups. | Design |
 | Typing suggests; Enter commits | Decided | Suggestions are products and matching world or type filters. Enter commits free text as a chip with the other applied filters. Picking a product opens it; picking a filter applies that facet. The field clears after commit or pick. | Design |
 | Suggestions cover the whole catalogue | Decided | Product hits are catalogue-wide even when facets are already on, matching free-text search. | Product |
 | Five hits per group | Decided | Products and Filters each show at most five matches. More noise does not help a jump. | Design |

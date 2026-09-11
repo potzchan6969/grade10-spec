@@ -11,6 +11,18 @@ how many results there are, which filters are applied, and how the list is
 sorted. The grid shows product tiles that reflow their column count with the
 width available and load more as the shopper scrolls.
 
+🚧 **On a narrow viewport** — a Filter control opens a left drawer for the
+facet groups; the search field stays on the listing outside the drawer.
+
+🚧 **Facet groups as tabs on a small screen** — inside the filter drawer,
+Worlds and Types sit as tabs so expanding one group does not push the other
+down the scroll. The wide sidebar still stacks them.
+
+## Adaptive Filter
+
+Below the wide breakpoint, Filter opens a left drawer for facets. Search stays
+on the listing. Facet groups are tabs in that drawer only.
+
 The surface holds no state of its own. Which products match, how they are
 ordered, how many there are and what a cart control does are all the
 application's answers; the components render a selection and report a change.
@@ -23,13 +35,19 @@ different words.
 :::flow{title="Browsing and filtering"}
 ## The page opens
 
-The sidebar shows the search box and filter groups; the header shows the result
-count and the sort control.
+On a wide viewport the sidebar shows the search box and filter groups. On a
+narrow viewport the listing shows the search field and a Filter control; the
+header shows the result count and the sort control.
 
 ## The shopper searches
 
-They type in the sidebar. The surface reports the change; the application
-decides what matches.
+They type in the listing search field. The surface reports the change; the
+application decides what matches.
+
+## They open filters on a narrow viewport
+
+Filter opens a left drawer with the facet tabs. They tick options there; chips
+appear on the listing. Done closes the drawer; Clear reports clearing.
 
 ## They tick a filter
 
