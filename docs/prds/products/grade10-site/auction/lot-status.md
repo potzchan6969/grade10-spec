@@ -9,17 +9,38 @@ order: 15
 🚧 Every lot on the auction site shows one external lot status. It describes
 the lot only, not the collector's bid or order.
 
-| External lot status | Meaning | Internal lot status |
-| --- | --- | --- |
-| 🚧 **Upcoming** | Published. Bidding has not started | Scheduled |
-| 🚧 **Active** | Bidding is open, including extended bidding | Live |
-| 🚧 **Ended** | Bidding is over and the lot has a winner | Every status after the lot has a winner |
+| External lot status | Meaning |
+| --- | --- |
+| 🚧 **Upcoming** | Published. Bidding has not started |
+| 🚧 **Active** | Bidding is open, including extended bidding |
+| 🚧 **Ended** | Bidding is over and the lot has a winner |
 
 - 🚧 **Worked out, not saved** — the external lot status comes from the lot's
   internal status and times, so the two always agree
 - 🚧 **Winner's order** — shown separately; Ended describes the lot, not the
   order
 - 🚧 **Display** — the designer decides which pages show the status, and how
+
+## Status Mapping
+
+🚧 Each internal lot status maps to one external lot status, or is hidden from
+collectors.
+
+| Internal lot status | External lot status |
+| --- | --- |
+| Draft | **Hidden** |
+| Scheduled | **Upcoming** |
+| Live | **Active** |
+| Unsold | **Hidden** |
+| Called off | **Hidden** |
+| Awaiting Address | **Ended** |
+| Preparing Invoice | **Ended** |
+| Pending Payment | **Ended** |
+| Processing | **Ended** |
+| Shipped | **Ended** |
+| Delivered | **Ended** |
+| Cancelled | **Ended** |
+| Refunded | **Ended** |
 
 ## Hidden Lots
 

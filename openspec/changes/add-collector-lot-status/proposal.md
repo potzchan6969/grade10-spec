@@ -28,6 +28,25 @@ stay published.
   - **Active** — bidding is open, including extended bidding
   - **Ended** — bidding is over and the lot has a winner, whatever the state of
     the winner's order
+- **Mapping** — each internal lot status maps to one external lot status, or
+  is hidden:
+
+  | Internal lot status | External lot status |
+  | --- | --- |
+  | Draft | Hidden |
+  | Scheduled | Upcoming |
+  | Live | Active |
+  | Unsold | Hidden |
+  | Called off | Hidden |
+  | Awaiting Address | Ended |
+  | Preparing Invoice | Ended |
+  | Pending Payment | Ended |
+  | Processing | Ended |
+  | Shipped | Ended |
+  | Delivered | Ended |
+  | Cancelled | Ended |
+  | Refunded | Ended |
+
 - **Worked out, not saved** — the external lot status comes from the lot's
   internal status and times, so the two always agree
 - **Hidden lots** — collectors never see a lot that is Draft, Unsold or Called

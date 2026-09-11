@@ -26,15 +26,33 @@ capability also sets which lots collectors never see.
 Every lot a collector can see SHALL have exactly one external lot status.
 Grade10 SHALL work it out from the lot and SHALL NOT save it.
 
-| External lot status | The lot | Internal lot status, in `grade10-admin/auction/post-sale` |
-| --- | --- | --- |
-| Upcoming | Published. Bidding has not started | Scheduled |
-| Active | Bidding is open, until the lot closes. Includes extended bidding | Live |
-| Ended | Bidding is over and the lot has a winner, whatever the state of the winner's order | Every status after the lot has a winner |
+| External lot status | The lot |
+| --- | --- |
+| Upcoming | Published. Bidding has not started |
+| Active | Bidding is open, until the lot closes. Includes extended bidding |
+| Ended | Bidding is over and the lot has a winner, whatever the state of the winner's order |
 
-A lot whose internal lot status is Draft, Unsold or Called off SHALL have no
-external lot status. Collectors SHALL NOT see it, as "Collectors never see
-hidden lots" sets out.
+Each internal lot status in `grade10-admin/auction/post-sale` SHALL map to one
+external lot status, or to Hidden:
+
+| Internal lot status | External lot status |
+| --- | --- |
+| Draft | Hidden |
+| Scheduled | Upcoming |
+| Live | Active |
+| Unsold | Hidden |
+| Called off | Hidden |
+| Awaiting Address | Ended |
+| Preparing Invoice | Ended |
+| Pending Payment | Ended |
+| Processing | Ended |
+| Shipped | Ended |
+| Delivered | Ended |
+| Cancelled | Ended |
+| Refunded | Ended |
+
+A Hidden lot SHALL have no external lot status. Collectors SHALL NOT see it, as
+"Collectors never see hidden lots" sets out.
 
 The external lot status SHALL describe the lot only. It SHALL NOT describe a
 collector's bid or the winner's order. The winner's order status, set by
