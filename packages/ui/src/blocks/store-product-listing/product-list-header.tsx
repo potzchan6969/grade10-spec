@@ -1,7 +1,6 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Chip } from "@grade10/design-system/components/forms/chip";
 import { Link } from "@grade10/design-system/components/forms/link";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   DropdownMenu,
@@ -74,22 +73,30 @@ function ProductListHeader({
         data-slot="product-list-header"
         gap="none"
       >
-        <HStack className="w-full" hAlign="space-between" vAlign="center">
-          <p className="text-2xl font-bold text-foreground" role="status">
+        <div
+          className="flex w-full flex-col items-start gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-4 sm:gap-y-2"
+          data-slot="product-list-header-toolbar"
+        >
+          <p
+            className="shrink-0 whitespace-nowrap text-2xl font-bold text-foreground"
+            role="status"
+          >
             {resultCount}
           </p>
           {sortOptions.length > 0 ? (
             <DropdownMenu>
               <DropdownMenuTrigger
+                className="max-w-full sm:ml-auto"
                 render={
                   <Button
+                    className="max-w-full"
                     size="md"
                     trailing={<CaretDown aria-hidden size={14} />}
                     variant="ghost"
                   />
                 }
               >
-                {triggerLabel}
+                <span className="truncate">{triggerLabel}</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 {sortOptions.map((option) => {
@@ -112,29 +119,25 @@ function ProductListHeader({
               </DropdownMenuContent>
             </DropdownMenu>
           ) : null}
-        </HStack>
+        </div>
         {showFilters ? (
-          <HStack
-            className="w-full gap-4"
+          <div
+            className="flex w-full flex-wrap items-center gap-2"
             data-slot="product-list-header-filters"
-            gap="none"
-            vAlign="center"
-            wrap
           >
-            <HStack gap="sm" vAlign="center" wrap>
-              {appliedFilters.map((filter) => (
-                <Chip
-                  key={`${filter.groupId}:${filter.optionId}`}
-                  onClick={() =>
-                    onFilterChange?.(filter.groupId, filter.optionId, false)
-                  }
-                >
-                  {filter.label}
-                </Chip>
-              ))}
-            </HStack>
+            {appliedFilters.map((filter) => (
+              <Chip
+                key={`${filter.groupId}:${filter.optionId}`}
+                onClick={() =>
+                  onFilterChange?.(filter.groupId, filter.optionId, false)
+                }
+              >
+                {filter.label}
+              </Chip>
+            ))}
             {onClearFilters != null && copy?.clearFilters != null ? (
               <Link
+                className="ms-2 shrink-0"
                 onClick={onClearFilters}
                 render={<button type="button" />}
                 size="sm"
@@ -143,7 +146,7 @@ function ProductListHeader({
                 {copy.clearFilters}
               </Link>
             ) : null}
-          </HStack>
+          </div>
         ) : null}
       </VStack>
     </IconProvider>
