@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-12T01:18:12.651Z",
+  "generatedAt": "2026-09-12T04:46:39.904Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -102,10 +102,10 @@
     "layout: nav/bar": "skipped",
     "layout: nav/promo": "ok",
     "layout: navigation-list/root": "ok",
+    "overlays: drawer-overlay/root": "skipped",
     "overlays: dropdown-menu-content/items": "ok",
     "overlays: tooltip-content/body": "ok",
     "store-cart: cart-drawer/body": "ok",
-    "store-cart: cart-drawer/overlay": "skipped",
     "store-home: store-collection-tile/featured": "ok",
     "store-home: store-collection-tile/standard": "ok",
     "store-home: store-home-hero/root": "ok",
@@ -636,7 +636,7 @@
     "4666-1462": "auth-sign-in: sign-in-card/body",
     "4666-1488": "Login Dialog",
     "4674-3831": "Cart",
-    "4674-3832": "store-cart: cart-drawer/overlay",
+    "4674-3832": "overlays: drawer-overlay/root",
     "4674-4073": "Overlay",
     "4674-4180": "Google Icon",
     "4680-146": "OTP Dialog",
