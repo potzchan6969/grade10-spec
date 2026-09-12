@@ -2,7 +2,7 @@
 
 Group 1 lands the reward's contract shape; groups 2, 3 and 4 depend on it. Group 3 additionally depends on `mint-coupons-as-discount-codes` shipping its mint machinery, and on group 4's till path — see group 3's note. Group 5 is independent. Group 6 touches the same coupon-apply path `mint-coupons-as-discount-codes` rewrites and is sequenced after that change ships.
 
-## 1. Reward definitions (grade10)
+## 1. Reward definitions (grade10) (owner: @ecchochan)
 
 - [ ] 1.1 Extend the reward contract with a kind, a discount (fixed amount, or a percentage with a maximum) and a scope (named products or variants, a worlds-and-types filter, or the whole order), plus a gift's own minimum spend, so *A reward names a kind, a discount and a scope* passes
 - [ ] 1.2 Copy the definition onto the coupon a redemption issues, unchanged by a later edit to the reward
