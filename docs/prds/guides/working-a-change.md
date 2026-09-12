@@ -38,6 +38,12 @@ the thing it acts on.
 Write your part and stop. An artifact invented ahead of the person who owns
 it is worse than a missing one.
 
+The PRD under `docs/prds/` is the one file every hand writes on. It is the
+source of truth for what the product should be, so a detail you learn while
+doing your part — a state the designer decides, a constraint the engineer
+hits, a rule a QA case shows nobody wrote — goes on the PRD first, marked 🚧
+or ❓, before your own artifact cites it. The PM keeps it whole.
+
 ## What to say to the agent
 
 The skill carries the rules. You carry the feature. A whole prompt is the

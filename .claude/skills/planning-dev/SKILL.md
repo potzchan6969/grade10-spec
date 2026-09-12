@@ -126,7 +126,8 @@ tooling on both sides parses it.
   cannot pass.
 - **Carry the PRD.** A change whose deltas touch a capability carries a
   task to update that capability's PRD under `docs/prds/`; `pnpm check:manual`
-  verifies it.
+  verifies it. A constraint you learn that changes an outcome goes on the PRD
+  first, marked 🚧 or ❓, before the delta or the task that depends on it.
 - **Carry the component work** `ui-design.md` flagged — a variant, a token, or
   a compound component that does not exist yet is a grade10-spec group.
 - Keep each task to something one engineer finishes in a session.

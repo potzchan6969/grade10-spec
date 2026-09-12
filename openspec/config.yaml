@@ -154,6 +154,7 @@ operations:
     guidance:
       - "There is nothing to apply until the change carries a tasks.md. A change that stops at its requirements is finished planning as far as its author is concerned; the engineer who picks it up writes tech-design.md when the change earns one, ui-design.md when it alters something a user sees, and tasks.md always. `openspec status --change <change-name>` lists what is still missing."
       - "Run the implementing repository's `tdd` skill when it ships one (grade10 has it at `.claude/skills/tdd`); its red-green loop and test-quality rules govern the test-first work described next."
+      - "A product detail learned while implementing - an outcome the code cannot deliver as written, a state nobody specified - lands on the capability's PRD first, marked 🚧 or ❓, then in the delta spec; never in the code alone."
       - "Work test-first inside each task, one scenario at a time: the seams under test are pre-agreed - they are the spec scenarios and public export contracts the task names, never internals. Write the failing test at that seam, then only enough code to make it pass."
       - "Expected values in a test come from the spec or a worked example, never from recomputing what the code does; a test that breaks under refactor without a behavior change is testing the wrong thing."
       - "Run the implementing repository's typecheck and the touched test or story files regularly as you go; run its full check suite once at the end of each group, as that group's verification step."

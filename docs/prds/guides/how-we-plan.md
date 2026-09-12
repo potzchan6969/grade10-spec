@@ -4,7 +4,13 @@ summary: Durable specs say what is true, changes say what is moving, git says wh
 order: 3
 ---
 
-Three artifacts, and nothing else to keep in sync.
+Four artifacts, and nothing else to keep in sync.
+
+**PRDs** say what the product should be, in the reader's words. One page per
+capability under `docs/prds/`: unmarked where it runs, 🚧 where a change is
+delivering it, ❓ where nobody has confirmed it. A PRD is written first and
+moves first — whoever learns a product detail writes it there before the spec,
+the design or the code that depends on it — and the PM keeps it whole.
 
 **Durable specs** say what the platform does today. One file per capability,
 written as requirements a person can check, each with the scenarios that accept

@@ -31,7 +31,9 @@ A section that would only repeat one of them points at it instead.
 1. **Read what already exists.** The change's `specs/<capability>/spec.md` and
    `user-journeys.md` — the states you document are the scenarios those
    already define. Then the capability's PRD under `docs/prds/` when one
-   exists.
+   exists. A state or a variant you decide that changes what the product
+   should be goes on the PRD first, as a 🚧 line, before `ui-design.md`
+   cites it.
 2. **Read the enriched instructions.**
 
    ```bash

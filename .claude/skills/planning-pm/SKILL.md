@@ -19,6 +19,12 @@ The suite is yours to draft, beside every capability whose journeys file holds
 a story; one that says `**Walked by:** nobody` has nothing to derive. QA
 reviews and extends it with `/tcs-review`.
 
+The PRD under `docs/prds/` is yours to keep whole. Everyone writes on it —
+a designer's state, an engineer's constraint, a QA case that exposes a rule
+nobody wrote land there first, marked 🚧 or ❓ — and you are the hand that
+keeps it one record: the marks, the decisions block, and the prose that says
+what the product should be.
+
 **Stop there.** A designer writes `ui-design.md`,
 and the engineer who picks the change up writes `tech-design.md` and
 `tasks.md` — on this same change, never a second one. A change with no
