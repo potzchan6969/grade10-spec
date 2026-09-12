@@ -75,7 +75,7 @@ Group 3's backend refusal must not reach production ahead of group 7's picker UI
 
 - [x] 7.1 Implement `evaluateCouponsEligibility(basket, coupons)` as a dry-run `evaluateCoupon` per candidate; `tillPanelCoupon()` and `listSpendableCoupons()` both call it instead of listing every live coupon unfiltered
 - [x] 7.2 Cart and checkout UI: when a basket qualifies for more than one coupon, present the precomputed choice and apply only the one the collector picks — covers `grade10-site-store-discounts-SC-03`
-- [ ] 7.3 POS UI extension: the same choice, from the member's panel
+- [x] 7.3 POS UI extension: the same choice, from the member's panel
 - [x] 7.4 Update `test/services/checkout.test.ts` and `test/services/pos/sale/sale.test.ts`, which currently combine a product coupon and a gift and assert the combined cut, to the new refusal rather than leaving them contradicting it
 
 Do not deploy group 3's backend refusal to production ahead of group 7 — hold it behind a flag, or ship both together, so an untouched frontend never turns a working basket into an unexplained refusal.
