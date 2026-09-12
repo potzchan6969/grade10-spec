@@ -34,7 +34,7 @@ Read [`docs/governance/design-system-workflows.md`](docs/governance/design-syste
 
 ## Product specification workflow
 
-One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the whole lifecycle in seven artifacts. `openspec new change <name>` records it in the change's `.openspec.yaml`.
+One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the whole lifecycle in seven artifacts. `openspec new change <name>` records it in the change's `.openspec.yaml`. The CLI is `@fission-ai/openspec@1.8.0`; `pnpm openspec …` runs it with no global install.
 
 | # | Artifact | Written by | Skill | Required |
 | --- | --- | --- | --- | --- |
@@ -43,12 +43,12 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Always — a capability nobody walks says so in it |
 | 4 | `specs/<capability>/feature-tcs.md` | Product manager | `planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
 | 5 | `ui-design.md` | Designer | `planning-design` | Optional |
-| 6 | `tech-design.md` | Engineer | `planning-dev` | Optional |
+| 6 | `tech-design.md` | Engineer | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
 | 7 | `tasks.md` | Engineer | `planning-dev` | Before the change can be applied |
 
-Each hand writes its own artifacts on the one change and stops: a PM finishes at the feature suites derived from the journeys, QA reviews and extends them, a designer writes `ui-design.md`, and the engineer who picks the work up adds `tech-design.md` and `tasks.md` to the same change rather than opening a second one. That is the only route, because engineering never opens a change in the application repository: that repository's `openspec/` is config-only and resolves to this store, and until a change has a `tasks.md` it shows on the engineer's board as still being planned.
+Each hand writes its own artifacts on the one change and stops: a PM finishes at the feature suites derived from the journeys, QA reviews and extends them, a designer writes `ui-design.md`, and the engineer who picks the work up adds `tech-design.md` and `tasks.md` to the same change rather than opening a second one. Engineering never opens a change in the application repository: its `openspec/` is config-only and resolves to this store. Until a change has a `tasks.md` it shows on the engineer's board as still being planned. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
 
-The journeys are their own file beside each `spec.md`, never a `## User journeys` section inside it — `pnpm check:manual` refuses a spec that holds one, and the archive copies the file across by hand alongside the feature set. Every capability has the file: it holds the stories, or the one line `**Walked by:** nobody on their own - <why>` for a policy, a package contract, a convention, or a surface only the product's makers reach. A capability with neither fails `pnpm check:manual`, so an exemption is always a decision on record and never an omission.
+The journeys are their own file beside each `spec.md`, never a `## User journeys` section inside it — `pnpm check:manual` refuses a delta that holds one, and the archive copies the file across by hand alongside the feature set. Every capability has the file: it holds the stories, or the one line `**Walked by:** nobody on their own - <why>` for a policy, a package contract, a convention, or a surface only the product's makers reach. A capability with neither fails `pnpm check:manual`, so an exemption is always a decision on record and never an omission.
 
 For a new product feature:
 
@@ -97,6 +97,10 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
+- `pnpm check:manual` after a page, a change, or a suite changes; CI runs it on every push and refuses a change with an unmarked page, application work with no tech design, a capability with no journeys file, and a 🚧 line no change delivers.
+- `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
+- `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
+- `pnpm run test:openspec` after anything under `scripts/openspec/` changes.
 - `pnpm run tcs:validate` after a suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — changes; CI runs it on every push.
 - `pnpm run design-sync:check` after a design-system primitive changes.
 - `pnpm run diagrams` after a chart source under `docs/prds/diagrams/` changes; commit the rendered SVG, which `pnpm run diagrams:check` holds to its source in CI.
