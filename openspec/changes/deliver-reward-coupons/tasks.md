@@ -20,7 +20,7 @@ Group 1 lands the reward's contract shape; groups 2, 3 and 4 depend on it. Group
 
 **Do not land 3.2 until all four preconditions hold.** The collection-confirm step being retired here is today's only guard against handing a physical reward over twice, and it is also the only enumeration of who is still owed one. Its replacement is loyalty's own single reservation and single-use coupon, delivered by 3.1 — not the Shopify code, which adds no second guard. What 3.2 waits on is that a reward coupon can reach a counter at all (group 4), that `mint-coupons-as-discount-codes` has shipped its mint machinery so the applied or presented code actually reaches the sale, that release gates 1, 5 and 10 are recorded with date and tester, and that no redemption is still awaiting collection.
 
-- [ ] 3.1 Settle a physical reward's redemption as a 100%-off coupon on the reward's own variant instead of an item owed, so *A physical reward's coupon takes 100% off its own variant* passes
+- [x] 3.1 Settle a physical reward's redemption as a 100%-off coupon on the reward's own variant instead of an item owed, so *A physical reward's coupon takes 100% off its own variant* passes
 - [ ] 3.2 Once group 4 ships, `mint-coupons-as-discount-codes` has shipped, gates 1, 5 and 10 are recorded, and `select count(*) from redemptions where state='issued' and fulfillment_state='awaiting_collection'` reads zero, remove the fulfilment queue, the till's collection-confirm action, `waitingCollections` and the "waiting at the counter" list from the till session and the member surface
 - [ ] 3.3 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run test`
 
