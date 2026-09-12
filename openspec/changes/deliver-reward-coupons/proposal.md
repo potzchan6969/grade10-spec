@@ -15,9 +15,11 @@ Metric: share of redemptions used at the till within 30 days of being bought.
 ## What Changes
 
 - A reward carries a kind — a product coupon or a gift — a discount (a fixed
-  amount, or a percentage capped at a maximum) and a scope (named products or
+  amount, or a percentage capped at a maximum), a scope (named products or
   variants, a filter over the catalog's worlds and types, or the whole
-  order), read by the coupon wherever it is spent, online or at the till.
+  order) and a combine setting (which of the shop's own product, order and
+  shipping discounts its coupon stacks with), read by the coupon wherever it
+  is spent, online or at the till.
 - A gift adds a free line for the variant it names, and needs a minimum
   spend above zero.
 - The console's reward form sets that whole definition, so no reward needs
@@ -25,9 +27,12 @@ Metric: share of redemptions used at the till within 30 days of being bought.
 - A physical reward settles like any other: its coupon takes 100% off the
   reward's own variant on an ordinary sale. Counter collection and the
   fulfilment queue are retired once a coupon can reach a counter.
-- A member presents a coupon at the counter from their own session and the
-  till reads it, so staff never name a coupon on the member's behalf and no
-  coupon's code is ever text for a member to type.
+- At the counter a reward coupon reaches the sale two ways, both inside the
+  till session staff opened: staff apply it from the member's open coupons
+  in the panel, or the member presents it from their own session and the
+  till scans it. Either way its Shopify Discount code is minted the moment
+  it is chosen, reused for that sale, and never shown as the coupon's own
+  identity.
 - A reward coupon holds the order's one-discount slot, the same as any
   coupon.
 - Cancelling a redemption becomes its own operator permission, apart from
@@ -66,10 +71,14 @@ Metric: share of redemptions used at the till within 30 days of being bought.
 
 - Rewards service (`packages/loyalty/backend/src/services/rewards`) gains a
   reward definition instead of a fixed-amount default.
-- Loyalty-admin's reward form gains kind, discount and scope fields.
+- Loyalty-admin's reward form gains kind, discount, scope and combine-setting
+  fields.
 - `packages/grade10-store/frontend/src/features/account/` gains the member's
   coupon wallet and the presentation a till reads; it holds no coupon surface
   today.
+- The POS plan carries a reward coupon by id, the till panel lists the
+  member's reward coupons beside the store's own, and the coupon tender takes
+  the channel it is spent on — the till path no reward coupon has today.
 - The POS extension's collection-confirm surface, the fulfilment queue it
   serves, and `waitingCollections` are removed once a coupon can reach a
   counter and no redemption is still awaiting one — see this change's

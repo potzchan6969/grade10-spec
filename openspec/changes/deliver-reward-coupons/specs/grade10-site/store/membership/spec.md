@@ -12,8 +12,9 @@
 
 Inside a till session, staff SHALL see the member's display name, tier,
 redeemable balance, qualifying-window progress, tier renewal and
-balance-lapse dates, recent activity, and open coupons — and SHALL be able
-to redeem points against the current sale and apply a coupon. Undoing a
+balance-lapse dates, recent activity, and open coupons — the store's own
+and the member's reward coupons alike — and SHALL be able to redeem points
+against the current sale and apply a coupon from that list. Undoing a
 spend before tender SHALL simply drop the discounts from the sale, since
 nothing is debited until the order pays; reversing a completed spend SHALL
 stay an operator's action from the console, never the till. Spending SHALL
@@ -31,7 +32,7 @@ unpaid SHALL send a correction notice, since the member was already told it
 landed; a sale that never reaches that pass SHALL send nothing. The
 notification SHALL never carry the code.
 
-#### Scenario: grade10-site-store-membership-SC-12 - A double tap spends once
+#### Scenario: grade10-site-store-membership-SC-77 - A double tap spends once
 
 - **WHEN** staff submit the same spend twice in quick succession
 - **THEN** exactly one redemption is recorded
@@ -60,6 +61,8 @@ longer confirms one, and the notice that told a member about a collection
 broadens to cover any staff-assisted spend.
 
 **Migration**: Replaced by "A till session spends for the member and
-notifies them once it lands" above. SC-12 keeps its own id, because a double
-tap costing once is unchanged. SC-13 retires, its behaviour broadened from a
-collection alone to any staff-assisted spend under SC-75.
+notifies them once it lands" above. SC-12 retires with this requirement; a
+double tap costing once continues unchanged as SC-77 under the new one,
+since an id is issued once and a new requirement issues its own. SC-13
+retires, its behaviour broadened from a collection alone to any
+staff-assisted spend under SC-75.
