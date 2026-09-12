@@ -18,7 +18,7 @@ cart. A sold-out photo SHALL remain fully visible under the sold-out treatment
 - **THEN** the entire photo is visible inside the well
 - **AND** no edge of the photo is cropped by the well
 
-#### Scenario: shared-ui-store-product-listing-SC-66 - Sold-out does not scale on hover
+#### Scenario: shared-ui-store-product-listing-SC-90 - Sold-out does not scale on hover
 
 - **GIVEN** a product supplied as sold out
 - **WHEN** a shopper hovers the image on a fine pointer

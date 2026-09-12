@@ -61,41 +61,6 @@ SHALL offer Undo.
 - **THEN** nothing tells them the first collector watches it
 - **AND** no watcher count is shown
 
-### Requirement: The Watching page orders by close and marks what was bid on
-
-The Watching page SHALL order listings by the soonest recorded close first,
-with listings whose bidding is over after those still open.
-
-A watched listing the collector has also bid on SHALL be marked as one they bid
-on and SHALL open that listing's row on the Bidding page in one step.
-
-Unwatching a listing SHALL be offered only when the collector has **no bid**
-on that listing. Unwatching SHALL NOT change any bid. A listing with a bid
-SHALL stay bookmarked; Grade10 SHALL NOT offer Unwatch while a bid stands.
-
-#### Scenario: grade10-site-auction-account-record-SC-11 - The next close is first
-
-- **GIVEN** watched listings closing in two hours, in ten minutes, and one that
-  closed yesterday
-- **WHEN** the collector opens their Watching page
-- **THEN** the listing closing in ten minutes is before the one closing in two
-  hours
-- **AND** the listing that closed yesterday is after both
-
-#### Scenario: grade10-site-auction-account-record-SC-12 - A watched listing they bid on is marked
-
-- **GIVEN** a collector who watches a listing and has placed a bid on it
-- **WHEN** they open their Watching page
-- **THEN** that listing is marked as one they bid on
-- **AND** opening the mark takes them to that listing on the Bidding page
-
-#### Scenario: grade10-site-auction-account-record-SC-13 - Unwatching leaves the bid alone
-
-- **GIVEN** a collector who has bid on a listing
-- **WHEN** they read that listing's page or My Auctions
-- **THEN** Grade10 offers no Unwatch for that listing
-- **AND** the listing remains bookmarked with their standing unchanged
-
 ## ADDED Requirements
 
 ### Requirement: A bid bookmarks the lot and announces alerts once

@@ -36,7 +36,7 @@ opening the PDP. Unmeasured; this change sets the baseline.
 - **`@grade10/ui`** — `ProductCardImage` uses contain fit; Storybook stories
   show it
 - **Overlap** — `hold-cart-quantity-to-stock` issues SC-56–62; this change
-  issues SC-63 and SC-66
+  issues SC-63 and SC-90
 
 ## Open questions
 
