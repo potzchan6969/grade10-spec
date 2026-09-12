@@ -2,8 +2,8 @@
 
 ## 1. Draft order acceptance (grade10) (owner: @ecchochan)
 
-- [ ] 1.1 Set `acceptAutomaticDiscounts: true` in `draftOrderVariables()` (`packages/shopify/backend/src/admin/draftOrders.ts`) — the one builder both `draftOrderCreate` and `draftOrderCalculate` use, so this alone covers both the online checkout and the POS simulator's draft input (`services/pos/simulator/basket.ts` builds a `ShopifyDraftOrderInput` and never sets wire fields itself) — `grade10-site-store-site-discounts-SC-01`, `SC-02`
-- [ ] 1.2 Typecheck and run the shopify package's existing draft order tests
+- [x] 1.1 Set `acceptAutomaticDiscounts: true` in `draftOrderVariables()` (`packages/shopify/backend/src/admin/draftOrders.ts`) — the one builder both `draftOrderCreate` and `draftOrderCalculate` use, so this alone covers both the online checkout and the POS simulator's draft input (`services/pos/simulator/basket.ts` builds a `ShopifyDraftOrderInput` and never sets wire fields itself) — `grade10-site-store-site-discounts-SC-01`, `SC-02`
+- [x] 1.2 Typecheck and run the shopify package's existing draft order tests
 
 ## 2. Staging verification (grade10) (owner: @ecchochan)
 
