@@ -5,8 +5,8 @@ description: Write the product manager's half of an OpenSpec change - proposal.m
 
 # The product manager's artifacts
 
-Three of the seven artifacts in `grade10-planning` are yours, and they are the
-first three:
+Four of the seven artifacts in `grade10-planning` are yours, and they are the
+first four:
 
 | Artifact | What it holds |
 | --- | --- |
@@ -32,8 +32,8 @@ assuming someone will find it.
    `git log --oneline HEAD..origin/main` is not empty, update before reading. A
    MODIFIED block copied from a stale spec silently reverts whatever landed in
    between, and an overlap scan against a stale `openspec/changes/` finds
-   nothing. Then read: the capability under
-   the capability's page under `docs/prds/` when one exists — what runs, what
+   nothing. Then read the capability's page under `docs/prds/` when one
+   exists — what runs, what
    is 🚧 and coming, what is ❓ and open — then every active change in
    `openspec/changes/` on its spec, then the capability under
    `openspec/specs/<product>/<domain>/<capability>/`. An active change already
@@ -52,14 +52,27 @@ assuming someone will find it.
    who should settle it, and does not hold the draft. Sizing, export names, and
    what code a change touches are never the author's to answer: find them
    yourself, or leave them to the engineer who plans delivery.
-3. **Create the change through the CLI.**
+3. **Mark the pages first.** On each page the change touches, add one 🚧
+   line per outcome, in the reader's words and in the section it belongs to
+   (the sections are in `docs/prds/guides/writing-the-manual.md`); a ❓ line
+   or decisions row for what the author deferred; the decisions the change
+   turns on (`prd-authoring`). The house style is `docs/governance/writing.md`.
+   The deltas derive from these lines, so a delta promising what no line marks
+   is the delta's error. A capability with no page gets one first —
+   `prd-authoring` writes it — or the change records `page_waived: <why>` in
+   its `.openspec.yaml`; `pnpm check:manual` refuses a change carrying deltas
+   with neither a 🚧 line under a linked section nor the waiver. The marks and
+   the change land in the same pull request: a 🚧 line no in-flight change
+   touches fails the same check.
+4. **Create the change through the CLI.**
 
    ```bash
-   openspec new change <change-name>
+   pnpm openspec new change <change-name> --schema grade10-planning
    ```
 
    Kebab-case. A directory made by hand records nothing in `.openspec.yaml`.
-4. **Read the enriched instructions for each artifact as you reach it.**
+   `pnpm openspec` runs the pinned CLI; a global `openspec` works the same.
+5. **Read the enriched instructions for each artifact as you reach it.**
 
    ```bash
    openspec instructions proposal --change <change-name>
@@ -69,13 +82,7 @@ assuming someone will find it.
 
    These carry this store's own rules — the ones in `openspec/config.yaml` — on
    top of the schema's. Read them rather than working from memory.
-5. **Mark the pages first.** On each page the change touches, add one 🚧
-   line per outcome, in the reader's words and in the section it belongs to;
-   a ❓ line or decisions row for what the author deferred; the decisions the
-   change turns on (`prd-authoring`). The house style is
-   `docs/governance/writing.md`. The deltas derive from these lines, so a
-   delta promising what no line marks is the delta's error.
-6. **Write the three artifacts**, in that order. Under the proposal's
+6. **Write the four artifacts**, in that order. Under the proposal's
    `## References`, link every section you marked —
    `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`
    — so the manual shows the change under that heading; `pnpm check:manual`
