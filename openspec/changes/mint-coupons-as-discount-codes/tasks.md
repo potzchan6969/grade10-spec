@@ -32,12 +32,12 @@ Group 3's backend refusal must not reach production ahead of group 7's picker UI
 - [x] 2.7 Move the deactivation off `retire.ts`'s swallow-and-continue loop onto the durable `couponReleaseJobs` outbox that `transitions.ts` already enqueues inside the transition transaction, which is this repository's existing vehicle for exactly this compensation
 - [x] 2.8 Tests: submit-abandon-resubmit mints and settles exactly one code; a canceled and a failed order each deactivate their unspent mint and an expired one does not; a dropped ride marks its mint dead; a POS re-plan reuses its row and a changed cut refuses rather than stacking a second code
 
-## 3. One discount-code slot, owned end to end (grade10)
+## 3. One discount-code slot, owned end to end (grade10) (owner: @ecchochan)
 
-- [ ] 3.1 `resolveCoupons()` (`packages/grade10-store/backend/src/services/coupons/apply.ts`) refuses `requested.length > 1`, replacing the narrower `order`-only check — covers `grade10-site-store-discounts-SC-04`
-- [ ] 3.2 `orders/promise.ts`'s `reserveRewardCoupon()` gains the same refusal against any other discount code already on the basket, checked before loyalty's `coupons.reserve()` is called — the reward-coupon case of `grade10-site-store-discounts-SC-04`
-- [ ] 3.3 Take a `SELECT ... FOR UPDATE` on the requested coupon rows inside the transaction that inserts `order_coupons`, closing `openRiders()`'s plain-read race before any mint runs — a partial unique index cannot express "one open ride per coupon", because `order_coupons` has no status column and openness comes from `orders.status` through a join
-- [ ] 3.4 Name the real concurrency guards in one place and stop crediting `coupon_mints` with them: `(orderId, couponId)` dedupes a retry that reuses the same order row and nothing more, loyalty's conditional `available → reserved` update plus `uq_coupon_usages_live` is what serialises a reward, and 3.3's lock is what serialises a store coupon
+- [x] 3.1 `resolveCoupons()` (`packages/grade10-store/backend/src/services/coupons/apply.ts`) refuses `requested.length > 1`, replacing the narrower `order`-only check — covers `grade10-site-store-discounts-SC-04`
+- [x] 3.2 `orders/promise.ts`'s `reserveRewardCoupon()` gains the same refusal against any other discount code already on the basket, checked before loyalty's `coupons.reserve()` is called — the reward-coupon case of `grade10-site-store-discounts-SC-04`
+- [x] 3.3 Take a `SELECT ... FOR UPDATE` on the requested coupon rows inside the transaction that inserts `order_coupons`, closing `openRiders()`'s plain-read race before any mint runs — a partial unique index cannot express "one open ride per coupon", because `order_coupons` has no status column and openness comes from `orders.status` through a join
+- [x] 3.4 Name the real concurrency guards in one place and stop crediting `coupon_mints` with them: `(orderId, couponId)` dedupes a retry that reuses the same order row and nothing more, loyalty's conditional `available → reserved` update plus `uq_coupon_usages_live` is what serialises a reward, and 3.3's lock is what serialises a store coupon
 
 ## 4. The wire, and what reconciles it (grade10)
 
@@ -71,12 +71,12 @@ Group 3's backend refusal must not reach production ahead of group 7's picker UI
 - [ ] 6.1 Write `ui-design.md` for the choice surface
 - [ ] 6.2 Add `evaluateCouponsEligibility(basket, coupons) -> EligibilityResult[]` to this document's Service Interfaces, so the picker is fed by a precomputed eligibility pass rather than a refusal-and-retry loop
 
-## 7. Collector picks one (grade10)
+## 7. Collector picks one (grade10) (owner: @ecchochan)
 
-- [ ] 7.1 Implement `evaluateCouponsEligibility(basket, coupons)` as a dry-run `evaluateCoupon` per candidate; `tillPanelCoupon()` and `listSpendableCoupons()` both call it instead of listing every live coupon unfiltered
-- [ ] 7.2 Cart and checkout UI: when a basket qualifies for more than one coupon, present the precomputed choice and apply only the one the collector picks — covers `grade10-site-store-discounts-SC-03`
+- [x] 7.1 Implement `evaluateCouponsEligibility(basket, coupons)` as a dry-run `evaluateCoupon` per candidate; `tillPanelCoupon()` and `listSpendableCoupons()` both call it instead of listing every live coupon unfiltered
+- [x] 7.2 Cart and checkout UI: when a basket qualifies for more than one coupon, present the precomputed choice and apply only the one the collector picks — covers `grade10-site-store-discounts-SC-03`
 - [ ] 7.3 POS UI extension: the same choice, from the member's panel
-- [ ] 7.4 Update `test/services/checkout.test.ts` and `test/services/pos/sale/sale.test.ts`, which currently combine a product coupon and a gift and assert the combined cut, to the new refusal rather than leaving them contradicting it
+- [x] 7.4 Update `test/services/checkout.test.ts` and `test/services/pos/sale/sale.test.ts`, which currently combine a product coupon and a gift and assert the combined cut, to the new refusal rather than leaving them contradicting it
 
 Do not deploy group 3's backend refusal to production ahead of group 7 — hold it behind a flag, or ship both together, so an untouched frontend never turns a working basket into an unexplained refusal.
 
