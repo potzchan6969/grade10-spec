@@ -1,101 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useState } from "react";
-import { expect, fn, waitFor, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { ProductBrowse } from "./product-browse";
 import {
-  APPLIED_FILTERS,
-  FILTER_GROUPS,
-  LISTING_COPY,
-  PRODUCTS,
-  SELECTION,
-  SORT_OPTIONS,
-  UTILITY_LINKS,
-} from "./fixtures";
-import { ProductBrowse, type ProductBrowseProps } from "./product-browse";
-
-const RESULTS_LOAD_MS = 450;
-const PAGE_SIZE = 10;
-const TOTAL_PRODUCTS = 100;
-
-function extendProducts(count: number) {
-  return Array.from({ length: count }, (_, index) => {
-    const template = PRODUCTS[index % PRODUCTS.length];
-    return {
-      ...template,
-      id: String(index + 1),
-      name: `Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item ${index + 1}`,
-    };
-  });
-}
-
-/** Storybook wrapper: short results reload, then pages in more tiles on scroll
- * when the story asks for `hasMore` (unless it is a frozen loading-more demo). */
-function InteractiveProductBrowse(args: ProductBrowseProps) {
-  const simulateReload =
-    args.results.status === "ready" || args.results.status === "loading";
-  const paginate =
-    args.hasMore === true &&
-    args.loadingMore !== true &&
-    args.results.status === "ready";
-
-  const [resultsStatus, setResultsStatus] = useState<
-    ProductBrowseProps["results"]["status"]
-  >(() => (args.results.status === "ready" ? "loading" : args.results.status));
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-  const [loadingMore, setLoadingMore] = useState(false);
-
-  useEffect(() => {
-    if (!simulateReload) {
-      return;
-    }
-
-    setResultsStatus("loading");
-    setVisibleCount(PAGE_SIZE);
-    setLoadingMore(false);
-    const timeout = setTimeout(() => {
-      setResultsStatus(args.results.status === "loading" ? "loading" : "ready");
-    }, RESULTS_LOAD_MS);
-
-    return () => clearTimeout(timeout);
-  }, [args.results.status, simulateReload]);
-
-  const handleLoadMore = () => {
-    if (!paginate || loadingMore || visibleCount >= TOTAL_PRODUCTS) {
-      return;
-    }
-
-    setLoadingMore(true);
-    window.setTimeout(() => {
-      setVisibleCount((previous) =>
-        Math.min(previous + PAGE_SIZE, TOTAL_PRODUCTS),
-      );
-      setLoadingMore(false);
-    }, RESULTS_LOAD_MS);
-  };
-
-  const results =
-    args.results.status === "error" || args.results.status === "empty"
-      ? args.results
-      : resultsStatus === "loading"
-        ? { status: "loading" as const }
-        : args.results.status === "ready"
-          ? {
-              status: "ready" as const,
-              data: paginate
-                ? extendProducts(visibleCount)
-                : args.results.data,
-            }
-          : { status: "loading" as const };
-
-  return (
-    <ProductBrowse
-      {...args}
-      hasMore={paginate ? visibleCount < TOTAL_PRODUCTS : args.hasMore}
-      loadingMore={paginate ? loadingMore : args.loadingMore}
-      onLoadMore={paginate ? handleLoadMore : args.onLoadMore}
-      results={results}
-    />
-  );
-}
+  InteractiveProductBrowse,
+  productBrowseArgs,
+} from "./product-browse.story-shared";
 
 const meta = {
   title: "Store Product Listing/ProductBrowse",
@@ -104,35 +13,15 @@ const meta = {
   parameters: { layout: "fullscreen" },
   render: (args) => <InteractiveProductBrowse {...args} />,
   args: {
-    copy: {
-      filterPanel: {
-        label: "Store filters",
-        heading: "Filter",
-        searchPlaceholder: "Find product",
-        searchLabel: "Search products",
-      },
-      listHeader: {
-        sortTrigger: "Sort by latest product",
-        clearFilters: "Clear filters",
-      },
-      results: { label: "Products", ...LISTING_COPY },
-    },
-    groups: { status: "ready", data: FILTER_GROUPS },
-    selection: {},
+    ...productBrowseArgs,
     onFilterChange: fn(),
     onGroupExpand: fn(),
+    onGroupCollapse: fn(),
     onSearchChange: fn(),
-    utilityLinks: UTILITY_LINKS,
-    results: { status: "ready", data: PRODUCTS },
-    resultCount: "100 Products",
-    sortOptions: SORT_OPTIONS,
-    sortValue: "new",
-    appliedFilters: [],
     onSortChange: fn(),
     onClearFilters: fn(),
-    hasMore: true,
-    loadingMore: false,
     onLoadMore: fn(),
+    onProductClick: fn(),
     onProductCartQuantityChange: fn(),
   },
 } satisfies Meta<typeof ProductBrowse>;
@@ -140,143 +29,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+/** Lets Storybook viewers follow the drawer before the next click. */
+const pause = (ms = 900) => new Promise((resolve) => setTimeout(resolve, ms));
 
-/** Checkboxes start unselected; that empty selection does not hide results. */
-export const FiltersStartUnselected: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).not.toBeChecked();
-    expect(
-      canvas.getByRole("checkbox", { name: /Booster Box/ }),
-    ).not.toBeChecked();
-    await waitFor(() => {
-      expect(
-        canvas.getAllByText(/Pokémon TCG Sealed Booster Box – Abyss Eye \(M5\)/)
-          .length,
-      ).toBeGreaterThan(0);
-    });
-  },
-};
-
-/** Both regions loading. */
-export const Loading: Story = {
-  args: {
-    groups: { status: "loading" },
-    results: { status: "loading" },
-  },
-};
-
-/** Results failed, sidebar stands. The two boundaries resolve independently. */
-export const ResultsErrorGroupsReady: Story = {
-  args: {
-    results: {
-      status: "error",
-      message: "We could not load these products.",
-      action: { label: "Try again", onAction: fn() },
-    },
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("We could not load these products."));
-    expect(
-      canvas.getByRole("checkbox", { name: /Pokémon/ }),
-    ).toBeInTheDocument();
-  },
-};
-
-/** Filter groups still loading, results ready. The count and grid show anyway. */
-export const GroupsLoadingResultsReady: Story = {
-  args: { groups: { status: "loading" } },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("100 Products")).toBeInTheDocument();
-  },
-};
-
-/** Filters match nothing: the message and a clear-filters action, with the
- * sidebar and the current selection intact. */
-export const NoMatch: Story = {
-  args: {
-    resultCount: "0 Products",
-    selection: SELECTION,
-    appliedFilters: APPLIED_FILTERS,
-    results: {
-      status: "empty",
-      message: "No products match these filters.",
-      action: { label: "Clear filters", onAction: fn() },
-    },
-    hasMore: false,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.getAllByRole("button", { name: "Clear filters" }).length,
-    ).toBeGreaterThan(0);
-    expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).toBeChecked();
-  },
-};
-
-/** An empty catalog: a different message, and no clear-filters action. */
-export const EmptyCatalog: Story = {
-  args: {
-    resultCount: "0 Products",
-    selection: {},
-    appliedFilters: [],
-    results: {
-      status: "empty",
-      message: "This category has no products yet.",
-    },
-    hasMore: false,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("This category has no products yet."));
-    expect(
-      canvas.queryByRole("button", { name: "Clear filters" }),
-    ).not.toBeInTheDocument();
-  },
-};
-
-/** No pagination is rendered on the browse surface. */
-export const NoPagination: Story = {
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.queryByRole("navigation", { name: "Pagination" }),
-    ).not.toBeInTheDocument();
-  },
-};
-
-/** Appending the next page shows Boneyard skeleton tiles below the grid. */
-export const LoadingMore: Story = {
-  args: {
-    loadingMore: true,
-    hasMore: true,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("region", { name: "Products" })).toHaveAttribute(
-      "aria-busy",
-      "true",
-    );
-  },
-};
-
-/** The end of the catalog hides the load sentinel. */
-export const EndOfCatalog: Story = {
-  args: { hasMore: false },
-  play: async ({ canvasElement }) => {
-    expect(
-      canvasElement.querySelector(
-        '[data-slot="product-results-load-sentinel"]',
-      ),
-    ).not.toBeInTheDocument();
-  },
-};
-
-/** The sidebar is a complementary landmark and the results a named region. */
-export const Landmarks: Story = {
+export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -285,13 +41,144 @@ export const Landmarks: Story = {
     expect(
       canvas.getByRole("region", { name: "Products" }),
     ).toBeInTheDocument();
+    expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).not.toBeChecked();
+    expect(
+      canvas.getByRole("checkbox", { name: /Booster Box/ }),
+    ).not.toBeChecked();
+    expect(canvas.queryByRole("button", { name: "Latest" })).toBeNull();
+    await waitFor(() => {
+      expect(
+        canvas.getAllByRole("button", {
+          name: /Pokémon TCG Sealed Booster Box – Abyss Eye \(M5\)/,
+        }).length,
+      ).toBeGreaterThan(0);
+    });
   },
 };
 
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },
+  play: async ({ canvasElement, args, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup({ delay: 120 });
+    let dialog: HTMLElement;
+
+    await step("Show narrow pills, no search", async () => {
+      expect(canvas.getByRole("button", { name: "Latest" })).toBeInTheDocument();
+      expect(canvas.getByRole("button", { name: "Worlds" })).toBeInTheDocument();
+      expect(canvas.getByRole("button", { name: "Types" })).toBeInTheDocument();
+      expect(
+        canvas.queryByRole("combobox", { name: "Search products" }),
+      ).toBeNull();
+      expect(canvas.queryByRole("button", { name: "Filter" })).toBeNull();
+      await pause(600);
+    });
+
+    await step("Open Worlds drawer", async () => {
+      await user.click(canvas.getByRole("button", { name: "Worlds" }));
+      dialog = await within(document.body).findByRole("dialog");
+      expect(
+        within(dialog).getByRole("heading", { name: "Worlds" }),
+      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          within(dialog).getByRole("checkbox", { name: /One Piece/ }),
+        ).toBeInTheDocument();
+      });
+      expect(args.onGroupExpand).toHaveBeenCalledWith("worlds");
+      await pause();
+    });
+
+    await step("Draft Pokémon and Show Results", async () => {
+      await user.click(within(dialog).getByRole("checkbox", { name: /Pokémon/ }));
+      await pause(500);
+      await user.click(
+        within(dialog).getByRole("button", { name: "Show Results" }),
+      );
+      expect(args.onFilterChange).toHaveBeenCalledWith(
+        "worlds",
+        "pokemon",
+        true,
+      );
+      await waitFor(() => {
+        expect(
+          canvas.getByRole("button", { name: "Pokémon" }),
+        ).toBeInTheDocument();
+      });
+      await pause(600);
+    });
+  },
 };
 
-/** Same as Default — infinite scroll is wired on the interactive wrapper. */
-export const InfiniteScroll: Story = {};
+export const NarrowSortAppliesOnChoose: Story = {
+  globals: { viewport: { value: "mobile1" } },
+  play: async ({ canvasElement, args, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup({ delay: 120 });
+    let dialog: HTMLElement;
 
+    await step("Open sort drawer", async () => {
+      await user.click(canvas.getByRole("button", { name: "Latest" }));
+      dialog = await within(document.body).findByRole("dialog");
+      expect(
+        within(dialog).getByRole("heading", { name: "Sort" }),
+      ).toBeInTheDocument();
+      await pause();
+    });
+
+    await step("Choose Lowest price", async () => {
+      await user.click(
+        within(dialog).getByRole("button", { name: "Lowest price" }),
+      );
+      expect(args.onSortChange).toHaveBeenCalledWith("price-asc");
+      await waitFor(() => {
+        expect(
+          canvas.getByRole("button", { name: "Lowest" }),
+        ).toBeInTheDocument();
+      });
+      await pause(600);
+    });
+  },
+};
+
+export const NarrowFacetClearDraft: Story = {
+  globals: { viewport: { value: "mobile1" } },
+  args: {
+    selection: { types: ["booster-box"] },
+  },
+  play: async ({ canvasElement, args, step }) => {
+    const canvas = within(canvasElement);
+    const user = userEvent.setup({ delay: 120 });
+    let dialog: HTMLElement;
+
+    await step("Open Types drawer from Booster Box pill", async () => {
+      expect(
+        canvas.getByRole("button", { name: "Booster Box" }),
+      ).toBeInTheDocument();
+      await user.click(canvas.getByRole("button", { name: "Booster Box" }));
+      dialog = await within(document.body).findByRole("dialog");
+      await pause();
+    });
+
+    await step("Clear draft only", async () => {
+      await user.click(within(dialog).getByRole("button", { name: "Clear" }));
+      expect(
+        within(dialog).getByRole("checkbox", { name: /Booster Box/ }),
+      ).not.toBeChecked();
+      expect(args.onFilterChange).not.toHaveBeenCalled();
+      await pause();
+    });
+
+    await step("Show Results applies the empty draft", async () => {
+      await user.click(
+        within(dialog).getByRole("button", { name: "Show Results" }),
+      );
+      expect(args.onFilterChange).toHaveBeenCalledWith(
+        "types",
+        "booster-box",
+        false,
+      );
+      await pause(600);
+    });
+  },
+};

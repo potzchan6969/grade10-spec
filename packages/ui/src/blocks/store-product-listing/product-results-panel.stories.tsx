@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
-import { expect, waitFor } from "storybook/test";
+import { expect, fn, waitFor } from "storybook/test";
 import { LISTING_COPY, PRODUCTS } from "./fixtures";
 import { ProductResultsPanel } from "./product-results-panel";
 
@@ -9,7 +9,10 @@ const meta = {
   component: ProductResultsPanel,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
-  args: { copy: LISTING_COPY },
+  args: {
+    copy: LISTING_COPY,
+    onProductClick: fn(),
+  },
   decorators: [
     (Story) => (
       <div className="w-full max-w-6xl p-6">

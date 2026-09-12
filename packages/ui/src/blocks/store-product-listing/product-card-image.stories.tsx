@@ -97,6 +97,26 @@ export const KeyboardRevealsCart: Story = {
 };
 
 /**
+ * `SC-66` — below the wide listing breakpoint the cart stays visible without
+ * hover (Storybook mobile viewport).
+ */
+export const NarrowViewportCartVisible: Story = {
+  args: { onCartQuantityChange: fn(), name: "Ninja Spinner booster box" },
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+  },
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const cart = canvas.getByRole("button", { name: "Add to cart" });
+    expect(cart).toBeVisible();
+    const control = cart.closest(".cart-control");
+    expect(control).not.toBeNull();
+    expect(getComputedStyle(control as HTMLElement).opacity).toBe("1");
+  },
+};
+
+/**
  * `SC-55` — a surface that merchandises rather than sells supplies no
  * quantity-change handler, so no cart control is drawn at rest, on hover, or
  * on focus. The tile itself still activates.

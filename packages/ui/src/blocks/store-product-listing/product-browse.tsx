@@ -1,8 +1,12 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import type { FilterPanelCopy } from "./filter-panel";
 import { FilterPanel } from "./filter-panel";
+import {
+  ListingNarrowChrome,
+  type ListingNarrowChromeCopy,
+} from "./listing-narrow-chrome";
 import type { ProductListHeaderCopy } from "./product-list-header";
 import { ProductListHeader } from "./product-list-header";
 import type { ProductResultsPanelCopy } from "./product-results-panel";
@@ -13,6 +17,8 @@ import type {
   FilterGroup,
   FilterSelection,
   ProductSummary,
+  SearchSuggestion,
+  SearchSuggestionGroup,
   SortOption,
   UtilityLink,
 } from "./types";
@@ -24,6 +30,8 @@ import type {
  */
 type ProductBrowseCopy = {
   filterPanel: FilterPanelCopy;
+  /** Narrow facet drawers; falls back to filterPanel clear / showResults. */
+  narrowChrome?: ListingNarrowChromeCopy;
   listHeader?: ProductListHeaderCopy;
   results: ProductResultsPanelCopy & {
     /** Accessible name for the results region. */
@@ -36,6 +44,12 @@ type ProductBrowseProps = {
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   onSearchClear?: () => void;
+  searchSuggestions?: readonly SearchSuggestionGroup[];
+  onSearchCommit?: (value: string) => void;
+  onSearchSuggestionSelect?: (
+    suggestion: SearchSuggestion,
+    groupId: string,
+  ) => void;
   groups: AsyncState<readonly FilterGroup[]>;
   selection?: FilterSelection;
   onFilterChange?: (
@@ -44,6 +58,7 @@ type ProductBrowseProps = {
     selected: boolean,
   ) => void;
   onGroupExpand?: (groupId: string) => void;
+  onGroupCollapse?: (groupId: string) => void;
   utilityLinks?: readonly UtilityLink[];
 
   results: AsyncState<readonly ProductSummary[]>;
@@ -68,6 +83,26 @@ type ProductBrowseProps = {
   className?: string;
 };
 
+/** Matches Tailwind `lg` so only one search Autocomplete mounts at a time. */
+const WIDE_VIEWPORT_QUERY = "(min-width: 1024px)";
+
+function useIsWideViewport() {
+  const [isWide, setIsWide] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.matchMedia(WIDE_VIEWPORT_QUERY).matches;
+  });
+
+  useEffect(() => {
+    const media = window.matchMedia(WIDE_VIEWPORT_QUERY);
+    const onChange = () => setIsWide(media.matches);
+    onChange();
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  return isWide;
+}
+
 /** Figma `ProductBrowse` (`4098:1952`): gap-16 (64px) between sidebar and
  * results; px-8 / pt-6 / pb-16 (32×24×64) on the frame. Direction is
  * prefixed because it changes at lg; a stack cannot. */
@@ -79,19 +114,24 @@ const BROWSE_CLASS =
  * header with applied-filter chips and a sort dropdown, and a grid of tiles
  * that loads more as the shopper scrolls.
  *
- * Filters and results are independent async boundaries — a failed result set
- * leaves the filter panel usable, which is the common case when facets and
- * results come from separate calls.
+ * Below `lg`, count and sort/facet pills open bottom drawers; there is no
+ * listing search or left Filter drawer. Only one search field mounts (wide
+ * sidebar) so suggestion menus do not double. Filters and results are
+ * independent async boundaries.
  */
 function ProductBrowse({
   copy,
   searchValue,
   onSearchChange,
   onSearchClear,
+  searchSuggestions,
+  onSearchCommit,
+  onSearchSuggestionSelect,
   groups,
   selection = {},
   onFilterChange,
   onGroupExpand,
+  onGroupCollapse,
   utilityLinks,
   results,
   resultCount,
@@ -110,20 +150,41 @@ function ProductBrowse({
 }: ProductBrowseProps) {
   const resultsBusy =
     results.status === "loading" || loadingMore ? true : undefined;
+  const isWide = useIsWideViewport();
+
+  const searchProps = {
+    onSearchChange,
+    onSearchClear,
+    onSearchCommit,
+    onSearchSuggestionSelect,
+    searchSuggestions,
+    searchValue,
+  } as const;
+
+  const facetProps = {
+    groups,
+    onFilterChange,
+    onGroupCollapse,
+    onGroupExpand,
+    selection,
+  } as const;
+
+  const narrowChromeCopy: ListingNarrowChromeCopy = copy.narrowChrome ?? {
+    clear: copy.filterPanel.drawerClear,
+    showResults: copy.filterPanel.showResults,
+  };
 
   return (
     <div className={cn(BROWSE_CLASS, className)} data-slot="product-browse">
-      <FilterPanel
-        copy={copy.filterPanel}
-        groups={groups}
-        onFilterChange={onFilterChange}
-        onGroupExpand={onGroupExpand}
-        onSearchChange={onSearchChange}
-        onSearchClear={onSearchClear}
-        searchValue={searchValue}
-        selection={selection}
-        utilityLinks={utilityLinks}
-      />
+      {isWide ? (
+        <FilterPanel
+          copy={copy.filterPanel}
+          utilityLinks={utilityLinks}
+          {...facetProps}
+          {...searchProps}
+        />
+      ) : null}
+
       <VStack
         aria-busy={resultsBusy}
         aria-label={copy.results.label}
@@ -132,17 +193,32 @@ function ProductBrowse({
         gap="none"
         role="region"
       >
-        <ProductListHeader
-          appliedFilters={appliedFilters}
-          className="w-full"
-          copy={copy.listHeader}
-          onClearFilters={onClearFilters}
-          onFilterChange={onFilterChange}
-          onSortChange={onSortChange}
-          resultCount={resultCount}
-          sortOptions={sortOptions}
-          sortValue={sortValue}
-        />
+        {isWide ? (
+          <ProductListHeader
+            appliedFilters={appliedFilters}
+            className="w-full"
+            copy={copy.listHeader}
+            onClearFilters={onClearFilters}
+            onFilterChange={onFilterChange}
+            onSortChange={onSortChange}
+            resultCount={resultCount}
+            sortOptions={sortOptions}
+            sortValue={sortValue}
+          />
+        ) : (
+          <ListingNarrowChrome
+            className="w-full"
+            copy={narrowChromeCopy}
+            groups={groups}
+            onFilterChange={onFilterChange}
+            onGroupExpand={onGroupExpand}
+            onSortChange={onSortChange}
+            resultCount={resultCount}
+            selection={selection}
+            sortOptions={sortOptions}
+            sortValue={sortValue}
+          />
+        )}
 
         <ProductResultsPanel
           copy={copy.results}

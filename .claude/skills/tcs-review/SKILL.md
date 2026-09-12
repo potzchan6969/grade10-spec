@@ -37,9 +37,18 @@ of them: the phrasing they approve is the phrasing generation will copy.
    | PR title | `test(<domain>): approve <target> US<n>–<m> test cases` — widen the range as journeys land, since the branch name never says which you took |
    | PR label | `documentation`, opened as a draft |
 
-   On `main`, create the branch first (`git switch -c`). Never write verdicts
-   on `main`. Above roughly fifteen `draft` cases, offer to split by journey
-   and take one journey per branch; below that, take the file.
+   Create the branch before the first verdict, whatever the suite holds —
+   `git switch -c tcs-review/<level>-<target>` from `main`. The case count
+   never decides this: every review starts on its own branch. Never write
+   verdicts on `main`.
+
+   One branch carries the suite. The journey is the unit of review and of
+   merge, not of naming: show one journey, take its verdicts, commit them, and
+   land that commit while the rest of the file is still `draft`. Which
+   journeys the branch carried is the pull request title's job, since the
+   reviewer knows the range only once they stop. Two reviewers in one suite at
+   once is the one case the name cannot hold: the second branch appends its
+   range, `-US<n>-<m>`.
 
 1. **Find the suites awaiting review.** Search both trees, every level —
    `openspec/specs/**/feature-tcs.md`, `openspec/specs/**/domain-tcs.md`,
@@ -239,8 +248,11 @@ of them: the phrasing they approve is the phrasing generation will copy.
    its verdicts, or the reviewer stops for the day:
 
    - Run `pnpm run tcs:validate` and fix anything it names before committing.
-   - Commit the verdicts and push the branch. Ensure a draft pull request
-     exists (`/pr-push`), so a day's progress is visible even mid-review.
+   - Commit the verdicts and push the branch. Open the pull request even when
+     the file is unfinished (`/pr-push`): it carries the journeys that have
+     verdicts, and its title states that range —
+     `test(<domain>): approve <target> US<n>–<m> test cases`. A reviewer who
+     stops mid-file leaves a pull request, never an unpushed branch.
    - **Merge at journey boundaries.** A finished journey is worth landing on
      its own: mark the PR ready and merge it even while other journeys of the
      same suite are still `draft`. The file lands as `in-review`, the approved

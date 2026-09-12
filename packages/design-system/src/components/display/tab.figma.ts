@@ -12,6 +12,14 @@ import figma from "figma";
 
 const instance = figma.selectedInstance;
 
+// Visual look is owned by the parent `TabsList` `variant` (`pill` | `list`).
+// Emitting `variant` on the trigger would print a prop `TabsTrigger` does not
+// accept, so the map accounts for the axis and produces no strings.
+instance.getEnum("variant", {
+  pill: false,
+  line: false,
+});
+
 // `selected` is a two-option VARIANT, but nothing on the trigger drives it:
 // which tab is active is owned by `Tabs`, through `value` / `defaultValue`.
 // Emitting a `selected` prop would print one `TabsTrigger` does not accept, so
@@ -39,12 +47,9 @@ const disabled = instance.getEnum("isDisabled", {
 const label = instance.getString("label");
 
 // Both icons are INSTANCE_SWAPs gated by their own BOOLEAN. `TabsTrigger` has
-// no leading/trailing slot props — it takes icons as children, and the
-// `data-icon` attribute is what tightens the padding on that side (see the
-// `has-data-[icon=inline-start]` rules in tabs.tsx). A resolved template
-// returns a finished snippet that cannot have an attribute threaded into it,
-// so the icon is emitted bare and `data-icon` stays a hand-added refinement;
-// without it the tab renders correctly, just with untightened padding.
+// no leading/trailing slot props — it takes icons as children. Horizontal
+// padding stays `Gap/gap-4` on both sides with or without icons; the icon gap
+// is `Gap/gap-2` (see the `gap-2` rule in tabs.tsx).
 //
 // `hasCodeConnect()` gates the call for the same reason it does on Badge: the
 // Phosphor icon sets are not connected, and executing an unconnected

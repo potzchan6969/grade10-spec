@@ -125,28 +125,58 @@ const VIEWER_INITIALS = "john@example.com";
 
 const noop = () => {};
 
-const NAV_LOGO = createElement(G10LogoMono, { className: "h-7 w-auto" });
+const NAV_LOGO = createElement(G10LogoMono, {
+  className: "h-5 w-auto @3xl:h-7",
+});
 
-export const AUCTION_NAV = {
-  copy: { locale: "USD" },
+/** Auction-first header fixtures for `SiteHeader`. No Store entrance, no cart. */
+export const AUCTION_SITE_HEADER = {
+  copy: {
+    locale: "English",
+    account: "Account",
+    signIn: "Sign In",
+    menu: "Menu",
+    menuTitle: "Menu",
+    language: "Language",
+    accountMenuLabel: "Account",
+    profile: "Profile",
+    myAuctions: "My Auctions",
+    signOut: "Sign out",
+  },
+  session: "signed-in" as const,
   promo: "PROMO UTILITY BAR",
   logo: NAV_LOGO,
   logoHref: "/",
   locales: [
-    { value: "US", label: "USD" },
-    { value: "HK", label: "HKD" },
+    { value: "en", label: "English" },
+    { value: "zh-Hant", label: "繁體中文" },
+    { value: "zh-Hans", label: "简体中文" },
   ],
-  locale: "US",
+  locale: "en",
   utilityLinks: [],
   navItems: [
-    { label: "Store", href: "#shop" },
     { label: "Auction", href: "#auction", current: true },
-    { label: "Grade", href: "#grade" },
     { label: "Store Locator", href: "#locator" },
   ],
   onLocaleChange: noop,
+  onSignIn: noop,
+  onProfile: noop,
+  onMyAuctions: noop,
+  onSignOut: noop,
+};
+
+/** @deprecated Prefer `AUCTION_SITE_HEADER` with `SiteHeader`. */
+export const AUCTION_NAV = {
+  copy: { locale: "English" },
+  promo: AUCTION_SITE_HEADER.promo,
+  logo: NAV_LOGO,
+  logoHref: "/",
+  locales: AUCTION_SITE_HEADER.locales,
+  locale: "en",
+  utilityLinks: [],
+  navItems: AUCTION_SITE_HEADER.navItems,
+  onLocaleChange: noop,
   onAccountClick: noop,
-  onCartClick: noop,
 };
 
 /** Preview stand-in for the Auctions catalogue (Auction Listing) destination. */

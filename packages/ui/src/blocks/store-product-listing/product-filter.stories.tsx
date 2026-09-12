@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
-import { FILTER_GROUPS } from "./fixtures";
 import { ProductFilter } from "./product-filter";
+import { productFilterArgs } from "./product-filter.story-shared";
 
 const meta = {
   title: "Store Product Listing/ProductFilter",
@@ -16,16 +16,13 @@ const meta = {
     ),
   ],
   args: {
-    copy: {
-      heading: "Filter",
-      searchPlaceholder: "Find product",
-      searchLabel: "Search products",
-    },
-    groups: { status: "ready", data: FILTER_GROUPS },
-    selection: {},
+    ...productFilterArgs,
     onFilterChange: fn(),
     onGroupExpand: fn(),
     onSearchChange: fn(),
+    onSearchClear: fn(),
+    onSearchCommit: fn(),
+    onSearchSuggestionSelect: fn(),
   },
 } satisfies Meta<typeof ProductFilter>;
 
@@ -38,6 +35,9 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("heading", { name: "Filter" })).toBeInTheDocument();
     expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).not.toBeChecked();
+    expect(
+      canvas.getByRole("checkbox", { name: /Booster Box/ }),
+    ).not.toBeChecked();
   },
 };
 
@@ -47,6 +47,18 @@ export const WithSelection: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("checkbox", { name: /Pokémon/ })).toBeChecked();
     expect(canvas.getByRole("checkbox", { name: /Booster Box/ })).toBeChecked();
+  },
+};
+
+export const TabsInDrawerLayout: Story = {
+  args: { facetLayout: "tabs", showHeading: false },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("tab", { name: "Worlds" })).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: "Types" }));
+    expect(
+      canvas.getByRole("checkbox", { name: /Booster Box/ }),
+    ).toBeInTheDocument();
   },
 };
 

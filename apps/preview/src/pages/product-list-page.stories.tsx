@@ -1,31 +1,43 @@
 import { Footer } from "@grade10/design-system/components/layout/footer";
+import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   CartDrawer,
   type CartItemSummary,
+  type FilterGroup,
   type FilterSelection,
   ProductBrowse,
   type PromoState,
+  type SearchSuggestion,
+  type SearchSuggestionGroup,
+  SiteHeader,
 } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useMemo, useState } from "react";
+import { createElement, useEffect, useMemo, useState } from "react";
+import { expect, userEvent, within } from "storybook/test";
 import {
   appliedFiltersFromSelection,
   FILTER_GROUPS,
+  FILTER_GROUPS_EXPANDED,
   INITIAL_SELECTION,
   PRODUCTS,
   SORT_OPTIONS,
   STORE_CART_COPY,
   STORE_FOOTER,
-  STORE_NAV,
+  STORE_SITE_HEADER,
   sortTriggerLabel,
   UTILITY_LINKS,
 } from "./store-content";
-import { WorkbenchAccountNav } from "./workbench-account-nav";
+import { navigateToStory } from "./workbench-story-nav";
+
+/** Storybook story id for the Product Detail page assembly. */
+const PRODUCT_DETAIL_STORY_ID = "pages-product-detail-page--default";
 
 const RESULTS_LOAD_MS = 450;
 const PAGE_SIZE = 10;
 const TOTAL_PRODUCTS = 100;
 const CART_FETCH_MS = 400;
+const SUGGESTION_MIN_CHARS = 2;
+const SUGGESTION_CAP = 5;
 
 /** Parse a display price like `HK$105` or `HK$24,500.00` into a number. */
 function parseDisplayAmount(value: unknown): number {
@@ -43,6 +55,59 @@ function formatHkd(amount: number): string {
   })}`;
 }
 
+function suggestionsForDraft(
+  draft: string,
+  catalog: readonly {
+    id: string;
+    name: string;
+    imageSrc?: string;
+    imageAlt?: string;
+  }[],
+): SearchSuggestionGroup[] | undefined {
+  const query = draft.trim().toLowerCase();
+  if (query.length < SUGGESTION_MIN_CHARS) {
+    return undefined;
+  }
+
+  const products: SearchSuggestion[] = catalog
+    .filter((product) => product.name.toLowerCase().includes(query))
+    .slice(0, SUGGESTION_CAP)
+    .map((product) => ({
+      id: product.id,
+      label: product.name,
+      imageSrc: product.imageSrc,
+      imageAlt: product.imageAlt,
+    }));
+
+  const filters: SearchSuggestion[] = [];
+  for (const group of FILTER_GROUPS) {
+    for (const option of group.options) {
+      if (String(option.label).toLowerCase().includes(query)) {
+        filters.push({
+          id: `${group.id}:${option.id}`,
+          label: option.label,
+          trailing: createElement(
+            Badge,
+            { size: "sm", variant: "outline" },
+            group.id === "worlds" ? "World" : "Type",
+          ),
+        });
+      }
+      if (filters.length >= SUGGESTION_CAP) break;
+    }
+    if (filters.length >= SUGGESTION_CAP) break;
+  }
+
+  const groups: SearchSuggestionGroup[] = [];
+  if (products.length > 0) {
+    groups.push({ id: "products", label: "Products", suggestions: products });
+  }
+  if (filters.length > 0) {
+    groups.push({ id: "filters", label: "Filters", suggestions: filters });
+  }
+  return groups.length > 0 ? groups : [];
+}
+
 /**
  * The product listing page as a store assembles it: `Nav`, the shared
  * `ProductBrowse` compound, `CartDrawer`, and `Footer`.
@@ -53,13 +118,15 @@ function formatHkd(amount: number): string {
  * change; this workbench simulates that fetch with a short loading beat.
  *
  * The nav cart button opens the shared drawer; checkout redirect stays a
- * workbench stub (consumer-owned in a real store). Account opens a temporary
- * workbench menu with Order History.
+ * workbench stub (consumer-owned in a real store). Header is `SiteHeader`.
  */
 function ProductListPage() {
   const [selection, setSelection] =
     useState<FilterSelection>(INITIAL_SELECTION);
-  const [search, setSearch] = useState("");
+  const [filterGroups, setFilterGroups] =
+    useState<readonly FilterGroup[]>(FILTER_GROUPS);
+  const [searchDraft, setSearchDraft] = useState("");
+  const [committedSearch, setCommittedSearch] = useState("");
   const [sort, setSort] = useState("new");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -83,6 +150,11 @@ function ProductListPage() {
         };
       }),
     [],
+  );
+
+  const searchSuggestions = useMemo(
+    () => suggestionsForDraft(searchDraft, productCatalog),
+    [productCatalog, searchDraft],
   );
 
   const productData = useMemo(
@@ -130,13 +202,23 @@ function ProductListPage() {
     return formatHkd(amount);
   }, [cartItems]);
 
-  const appliedFilters = useMemo(
-    () => appliedFiltersFromSelection(FILTER_GROUPS, selection),
-    [selection],
-  );
+  const appliedFilters = useMemo(() => {
+    const facetChips = appliedFiltersFromSelection(filterGroups, selection);
+    if (committedSearch.length === 0) {
+      return facetChips;
+    }
+    return [
+      {
+        groupId: "search",
+        optionId: committedSearch,
+        label: `Search: "${committedSearch}"`,
+      },
+      ...facetChips,
+    ];
+  }, [committedSearch, filterGroups, selection]);
 
   useEffect(() => {
-    void search;
+    void committedSearch;
     void sort;
     void selection;
     setVisibleCount(PAGE_SIZE);
@@ -147,15 +229,25 @@ function ProductListPage() {
       RESULTS_LOAD_MS,
     );
     return () => clearTimeout(timeout);
-  }, [search, sort, selection]);
+  }, [committedSearch, sort, selection]);
 
   const handleFilterChange = (
     groupId: string,
     optionId: string,
     selected: boolean,
   ) => {
+    if (groupId === "search") {
+      if (!selected) {
+        setCommittedSearch("");
+      }
+      return;
+    }
+
     setSelection((previous) => {
       const current = previous[groupId] ?? [];
+      if (selected && current.includes(optionId)) {
+        return previous;
+      }
       return {
         ...previous,
         [groupId]: selected
@@ -163,6 +255,24 @@ function ProductListPage() {
           : current.filter((id) => id !== optionId),
       };
     });
+  };
+
+  const handleSearchSuggestionSelect = (
+    suggestion: SearchSuggestion,
+    groupId: string,
+  ) => {
+    setSearchDraft("");
+    if (groupId === "filters") {
+      const [facetGroup, facetOption] = String(suggestion.id).split(":");
+      if (facetGroup && facetOption) {
+        handleFilterChange(facetGroup, facetOption, true);
+      }
+      return;
+    }
+    if (groupId === "products") {
+      // Workbench stub for opening a product — a store would route to the PDP.
+      window.location.hash = `product-${suggestion.id}`;
+    }
   };
 
   const handleLoadMore = () => {
@@ -181,8 +291,8 @@ function ProductListPage() {
 
   return (
     <div className="min-h-svh bg-white">
-      <WorkbenchAccountNav
-        {...STORE_NAV}
+      <SiteHeader
+        {...STORE_SITE_HEADER}
         promo={null}
         onCartClick={() => setCartOpen(true)}
       />
@@ -194,6 +304,8 @@ function ProductListPage() {
             heading: "Filter",
             searchPlaceholder: "Find product",
             searchLabel: "Search products",
+            drawerClear: "Clear",
+            showResults: "Show Results",
           },
           listHeader: {
             sortTrigger: sortTriggerLabel(sort),
@@ -212,12 +324,26 @@ function ProductListPage() {
             },
           },
         }}
-        groups={{ status: "ready", data: FILTER_GROUPS }}
+        groups={{ status: "ready", data: filterGroups }}
         hasMore={visibleCount < TOTAL_PRODUCTS}
         loadingMore={loadingMore}
-        onClearFilters={() => setSelection({})}
+        onClearFilters={() => {
+          setSelection({});
+          setCommittedSearch("");
+        }}
         onFilterChange={handleFilterChange}
+        onGroupExpand={(groupId) => {
+          if (groupId === "worlds") {
+            setFilterGroups(FILTER_GROUPS_EXPANDED);
+          }
+        }}
+        onGroupCollapse={(groupId) => {
+          if (groupId === "worlds") {
+            setFilterGroups(FILTER_GROUPS);
+          }
+        }}
         onLoadMore={handleLoadMore}
+        onProductClick={() => navigateToStory(PRODUCT_DETAIL_STORY_ID)}
         onProductCartQuantityChange={(productId, quantity) =>
           setCart((previous) => {
             if (quantity <= 0) {
@@ -228,8 +354,13 @@ function ProductListPage() {
             return { ...previous, [productId]: quantity };
           })
         }
-        onSearchChange={setSearch}
-        onSearchClear={() => setSearch("")}
+        onSearchChange={setSearchDraft}
+        onSearchClear={() => setSearchDraft("")}
+        onSearchCommit={(value) => {
+          setCommittedSearch(value);
+          setSearchDraft("");
+        }}
+        onSearchSuggestionSelect={handleSearchSuggestionSelect}
         onSortChange={setSort}
         resultCount="100 Products"
         results={
@@ -237,7 +368,8 @@ function ProductListPage() {
             ? { status: "loading" }
             : { status: "ready", data: productData }
         }
-        searchValue={search}
+        searchSuggestions={searchSuggestions}
+        searchValue={searchDraft}
         selection={selection}
         sortOptions={SORT_OPTIONS}
         sortValue={sort}
@@ -292,7 +424,20 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Default: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByRole("combobox", { name: "Search products" });
+    await userEvent.type(field, "abyss");
+    const popup = within(document.body);
+    expect(await popup.findByRole("listbox")).toBeInTheDocument();
+    expect(popup.getByText("Products")).toBeInTheDocument();
+    await userEvent.keyboard("{Enter}");
+    expect(
+      canvas.getByRole("button", { name: 'Search: "abyss"' }),
+    ).toBeInTheDocument();
+  },
+};
 
 export const Narrow: Story = {
   globals: { viewport: { value: "mobile1" } },

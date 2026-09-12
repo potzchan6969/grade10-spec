@@ -1,9 +1,34 @@
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
+import { Button } from "@grade10/design-system/components/forms/button";
 import { cn } from "@grade10/design-system/lib/utils";
+import type { ReactNode } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { AsyncMessage } from "../shared/async-message";
+import type { AsyncAction } from "../shared/async";
 import type { ProductListCopy } from "./product-list";
 import { DEFAULT_LOAD_MORE_SKELETON_COUNT, ProductList } from "./product-list";
 import type { AsyncState, ProductSummary } from "./types";
+
+function ResultsCondition({
+  message,
+  action,
+}: {
+  message: ReactNode;
+  action?: AsyncAction;
+}) {
+  return (
+    <EmptyState
+      actions={
+        action ? (
+          <Button onClick={action.onAction} size="md" variant="secondary">
+            {action.label}
+          </Button>
+        ) : undefined
+      }
+      frameless
+      title={message}
+    />
+  );
+}
 
 /** What the panel's tiles say the same way. */
 type ProductResultsPanelCopy = ProductListCopy;
@@ -141,9 +166,12 @@ function ProductResultsPanel({
     onLoadMoreRef.current = onLoadMore;
   }, [onLoadMore]);
 
-  /* One report per result set: what was asked for is remembered as the count
-     the ask was made at, so a page that arrives — or a sentinel that comes
-     back into view — is asked about again, and the same one never is. */
+  /* One report per approach. What was asked for is remembered as the count
+     the ask was made at, so a page that arrives is asked about again and a
+     sentinel still in view when this effect rebuilds its observer is not.
+     Leaving the end forgets that ask, because the next approach is a new
+     one — which is how a page the consumer failed to load is asked for
+     again, the count it was asked at being unchanged by the failure. */
   useEffect(() => {
     if (!hasMore || loadingMore || status !== "ready") {
       return;
@@ -157,12 +185,12 @@ function ProductResultsPanel({
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
-        if (
-          !entry?.isIntersecting ||
-          requestedAtCountRef.current === readyCount
-        ) {
+        if (!entry) return;
+        if (!entry.isIntersecting) {
+          requestedAtCountRef.current = null;
           return;
         }
+        if (requestedAtCountRef.current === readyCount) return;
 
         requestedAtCountRef.current = readyCount;
         onLoadMoreRef.current?.();
@@ -187,23 +215,16 @@ function ProductResultsPanel({
         data-revealed={emptyRevealed || undefined}
         data-slot="product-results-empty"
       >
-        <AsyncMessage
-          action={results.action}
-          message={results.message}
-          slot="results-empty"
-        />
+        <ResultsCondition action={results.action} message={results.message} />
       </div>
     );
   }
 
   if (status === "error") {
     return (
-      <AsyncMessage
-        action={results.action}
-        className={className}
-        message={results.message}
-        slot="results-error"
-      />
+      <div className={className} data-slot="results-error">
+        <ResultsCondition action={results.action} message={results.message} />
+      </div>
     );
   }
 

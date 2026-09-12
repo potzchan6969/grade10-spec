@@ -13,6 +13,7 @@ import { StepperInput } from "@grade10/design-system/components/forms/stepper-in
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { SiteHeader } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useId, useState } from "react";
 import { expect, within } from "storybook/test";
@@ -21,8 +22,7 @@ import {
   type ProductDetailProduct,
   SOLD_OUT_PRODUCT,
 } from "./product-detail-content";
-import { STORE_FOOTER, STORE_NAV } from "./store-content";
-import { WorkbenchAccountNav } from "./workbench-account-nav";
+import { STORE_FOOTER, STORE_SITE_HEADER } from "./store-content";
 
 /**
  * The Store product detail page as a store assembles it: storefront chrome,
@@ -47,7 +47,7 @@ function ProductDetailPage({ product }: { product: ProductDetailProduct }) {
 
   return (
     <div className="flex min-h-svh flex-col bg-background">
-      <WorkbenchAccountNav {...STORE_NAV} promo={null} />
+      <SiteHeader {...STORE_SITE_HEADER} promo={null} />
       <main className="flex-1">
         <VStack
           gap="lg"

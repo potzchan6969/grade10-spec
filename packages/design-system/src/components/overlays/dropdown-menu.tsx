@@ -113,6 +113,11 @@ function DropdownMenuGroup({ className, ...props }: MenuPrimitive.Group.Props) {
   );
 }
 
+/**
+ * Figma `Dropdown Menu Group Label` (`6554:5962`) — secondary label above a
+ * group of items. Padding `pt-2 pb-1 px-3`, `text-sm` /
+ * `Base/secondary-foreground`.
+ */
 function DropdownMenuLabel({
   className,
   inset,
@@ -125,7 +130,7 @@ function DropdownMenuLabel({
       data-slot="dropdown-menu-label"
       data-inset={inset}
       className={cn(
-        "px-3 py-1.5 text-xs font-medium text-muted-foreground data-inset:pl-7",
+        "px-3 pt-2 pb-1 text-sm font-normal text-secondary-foreground data-inset:pl-7",
         className,
       )}
       {...props}

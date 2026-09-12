@@ -4,21 +4,20 @@ import {
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { Nav } from "@grade10/design-system/components/layout/nav";
-import { OrderDetails } from "@grade10/ui";
+import { OrderDetails, SiteHeader } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, waitFor, within } from "storybook/test";
 import { ORDER_DETAILS_CONTENT } from "./order-details-content";
-import { STORE_FOOTER, STORE_NAV } from "./store-content";
+import { STORE_FOOTER, STORE_SITE_HEADER } from "./store-content";
 
 /**
- * Order Details as a store assembles it: `Nav`, shared `OrderDetails`, and
- * `Footer`. Content and fixture data live in `order-details-content.ts`.
+ * Order Details as a store assembles it: `SiteHeader`, shared `OrderDetails`,
+ * and `Footer`. Content and fixture data live in `order-details-content.ts`.
  */
 function OrderDetailsPage() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
-      <Nav {...STORE_NAV} />
+      <SiteHeader {...STORE_SITE_HEADER} />
       <div className="flex w-full flex-1 justify-center">
         <OrderDetails
           breadcrumbs={

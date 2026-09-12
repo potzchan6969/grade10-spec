@@ -2,6 +2,7 @@
 title: Notifications
 spec: grade10-site/auction/notifications
 order: 8
+reviewed: 2026-09-11
 ---
 
 Auction mail exists because the close is a deadline that moves: nobody can

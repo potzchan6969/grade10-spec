@@ -65,8 +65,15 @@
     "label": "empty-state/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2571-44",
     "classes": "flex w-full flex-col items-center gap-4 rounded-2xl border border-dashed border-border bg-background-subtle",
-    "note": "isCompact=false, the cva default."
+    "note": "isCompact=false, hasFrame=true — the cva defaults."
   },
+  {
+    "label": "empty-state/frameless",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=6554-6278",
+    "classes": "flex w-full flex-col items-center gap-4",
+    "note": "hasFrame=false. Drops border, fill, and radius; padding stays with compact."
+  },
+
   {
     "label": "step-indicator/upcoming",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=5010-5569",

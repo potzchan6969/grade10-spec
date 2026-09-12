@@ -6,6 +6,7 @@ import type {
   AppliedFilter,
   FilterGroup,
   ProductSummary,
+  SearchSuggestionGroup,
   SortOption,
   UtilityLink,
 } from "./types";
@@ -24,27 +25,34 @@ const PRODUCT_BADGES: ReactNode = createElement(
 );
 
 const SORT_OPTIONS: SortOption[] = [
-  { id: "new", label: "Latest product" },
-  { id: "price-asc", label: "Lowest price" },
-  { id: "price-desc", label: "Highest price" },
+  { id: "new", label: "Latest product", shortLabel: "Latest" },
+  { id: "price-asc", label: "Lowest price", shortLabel: "Lowest" },
+  { id: "price-desc", label: "Highest price", shortLabel: "Highest" },
 ];
+
+const ALL_WORLD_OPTIONS = [
+  { id: "pokemon", label: "Pokémon", count: "51" },
+  { id: "shohei-ohtani", label: "Shohei Ohtani", count: "15" },
+  { id: "music", label: "Music", count: "10" },
+  { id: "manga-anime", label: "Manga & Anime", count: "9" },
+  { id: "formula-1", label: "Formula 1", count: "6" },
+  { id: "one-piece", label: "One Piece", count: "4" },
+  { id: "disney", label: "Disney", count: "3" },
+  { id: "sports", label: "Sports", count: "2" },
+] as const;
 
 const FILTER_GROUPS: FilterGroup[] = [
   {
     id: "worlds",
     label: "Worlds",
+    compactLabel: "World",
     expandLabel: "See all worlds",
-    options: [
-      { id: "pokemon", label: "Pokémon", count: "51" },
-      { id: "shohei-ohtani", label: "Shohei Ohtani", count: "15" },
-      { id: "music", label: "Music", count: "10" },
-      { id: "manga-anime", label: "Manga & Anime", count: "9" },
-      { id: "formula-1", label: "Formula 1", count: "6" },
-    ],
+    options: ALL_WORLD_OPTIONS.slice(0, 5).map((option) => ({ ...option })),
   },
   {
     id: "types",
     label: "Types",
+    compactLabel: "Type",
     options: [
       { id: "booster-box", label: "Booster Box", count: "24" },
       { id: "special-box", label: "Special Box", count: "6" },
@@ -56,6 +64,18 @@ const FILTER_GROUPS: FilterGroup[] = [
       { id: "graded-manga", label: "Graded Manga", count: "5" },
     ],
   },
+];
+
+/** Full worlds list after “See all worlds” / filter-drawer open. */
+const FILTER_GROUPS_EXPANDED: FilterGroup[] = [
+  {
+    id: "worlds",
+    label: "Worlds",
+    compactLabel: "World",
+    collapseLabel: "Show less",
+    options: ALL_WORLD_OPTIONS.map((option) => ({ ...option })),
+  },
+  FILTER_GROUPS[1],
 ];
 
 const UTILITY_LINKS: UtilityLink[] = [
@@ -101,14 +121,62 @@ const APPLIED_FILTERS: AppliedFilter[] = [
   { groupId: "types", optionId: "booster-box", label: "Booster Box" },
 ];
 
+/** Fixture hits for the listing search suggestion panel. */
+const SEARCH_SUGGESTIONS: SearchSuggestionGroup[] = [
+  {
+    id: "products",
+    label: "Products",
+    suggestions: [
+      {
+        id: "1",
+        label: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item 1",
+        imageSrc: IMAGE,
+        imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+      },
+      {
+        id: "2",
+        label: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5), item 2",
+        imageSrc: IMAGE,
+        imageAlt: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
+      },
+    ],
+  },
+  {
+    id: "filters",
+    label: "Filters",
+    suggestions: [
+      {
+        id: "worlds:pokemon",
+        label: "Pokémon",
+        trailing: createElement(
+          Badge,
+          { size: "sm", variant: "outline" },
+          "World",
+        ),
+      },
+      {
+        id: "types:booster-box",
+        label: "Booster Box",
+        trailing: createElement(
+          Badge,
+          { size: "sm", variant: "outline" },
+          "Type",
+        ),
+      },
+    ],
+  },
+];
+
 export {
   APPLIED_FILTERS,
   FILTER_GROUPS,
+  FILTER_GROUPS_EXPANDED,
   IMAGE,
   LISTING_COPY,
   PRODUCT_BADGES,
   PRODUCT_CARD_CART_COPY,
   PRODUCTS,
+  SEARCH_SUGGESTIONS,
   SELECTION,
   SORT_OPTIONS,
   UTILITY_LINKS,

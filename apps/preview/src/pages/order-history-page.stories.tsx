@@ -4,8 +4,7 @@ import {
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Footer } from "@grade10/design-system/components/layout/footer";
-import { Nav } from "@grade10/design-system/components/layout/nav";
-import { OrderHistory } from "@grade10/ui";
+import { OrderHistory, SiteHeader } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, waitFor, within } from "storybook/test";
 import {
@@ -13,21 +12,21 @@ import {
   ORDER_HISTORY_COPY,
   PAST_ORDERS,
 } from "./order-history-content";
-import { STORE_FOOTER, STORE_NAV } from "./store-content";
+import { STORE_FOOTER, STORE_SITE_HEADER } from "./store-content";
 import {
   navigateToStory,
   ORDER_DETAILS_STORY_ID,
-} from "./workbench-account-nav";
+} from "./workbench-story-nav";
 
 /**
- * Order History as a store assembles it: `Nav`, shared `OrderHistory`, and
- * `Footer`. Content and the Active/Past split live here — the compound only
- * renders what it is given.
+ * Order History as a store assembles it: `SiteHeader`, shared `OrderHistory`,
+ * and `Footer`. Content and the Active/Past split live here — the compound
+ * only renders what it is given.
  */
 function OrderHistoryPage({ empty = false }: { empty?: boolean }) {
   return (
     <div className="flex min-h-screen w-full flex-col bg-background">
-      <Nav {...STORE_NAV} />
+      <SiteHeader {...STORE_SITE_HEADER} />
       <div className="flex w-full flex-1 justify-center">
         <OrderHistory
           activeOrders={empty ? [] : ACTIVE_ORDERS}

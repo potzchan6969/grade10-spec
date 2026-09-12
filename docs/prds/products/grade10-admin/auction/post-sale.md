@@ -5,21 +5,28 @@ audience: operator
 order: 13
 ---
 
-The queue works every winner order from lot close through delivery in one place. Each row wears exactly one derived outcome, the queue filters to one outcome at a time, and Expired and Processing rows carry an extra needs-action treatment. An order opens into its winner, invoice revisions, payment attempts, address snapshots, fulfilment facts, and immutable histories.
+The queue works every winner order from lot close through delivery in one place. Each row wears exactly one derived outcome, the queue filters to one outcome at a time, and rows waiting on an operator carry an extra needs-action treatment. An order opens into its winner, invoice revisions, payment attempts, address snapshots, fulfilment facts, and immutable histories.
 
 | Outcome | When |
 | --- | --- |
-| Draft · Scheduled · Live · Ending soon | The sale is still the auction's |
+| Draft · Scheduled · Live · Ending soon | The sale is still the auction's; time left is read from the close |
 | Unsold · Called off | Ended without a payable winner order |
-| Pending Payment | The current invoice is payable before its deadline |
-| Expired | The current invoice passed its deadline unpaid |
+| Pending Payment | The invoice is unpaid and its deadline has not elapsed |
+| Expired | The invoice is unpaid after its deadline |
 | Processing | Payment is complete and dispatch is not complete |
-| Shipped · Delivered | Fulfilment has left Grade10 or has carrier proof |
+| Shipped | The lot has been dispatched and delivery is not confirmed |
+| Delivered | Delivery is confirmed |
 | Cancelled · Refunded | The order has a recorded terminal outcome |
+
+- **Needs action** — Expired and Processing
 
 ## Payment
 
-A winner order reaches paid through one fresh charge or one operator-recorded manual settlement. The winning bid-time hold is released rather than captured, and every failed payment attempt remains in the invoice log. Manual settlement confirms the delivery address, records the amount and external reference, and points at any superseded invoice.
+The winning bid-time hold is released rather than captured, and every failed payment attempt remains in the invoice log.
+
+An operator confirms the delivery address before manual settlement. The amount is recalculated, and the settlement records the address snapshot.
+
+A winner order reaches paid through one fresh card payment or one operator-recorded manual settlement. An expired invoice stays payable, and a reissue returns it to pending with a new deadline.
 
 ## Fulfilment
 

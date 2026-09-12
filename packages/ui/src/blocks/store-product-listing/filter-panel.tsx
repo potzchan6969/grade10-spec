@@ -8,6 +8,8 @@ import type {
   AsyncState,
   FilterGroup,
   FilterSelection,
+  SearchSuggestion,
+  SearchSuggestionGroup,
   UtilityLink,
 } from "./types";
 
@@ -17,6 +19,10 @@ import type {
 type FilterPanelCopy = ProductFilterCopy & {
   /** Accessible name for the complementary landmark. */
   label: string;
+  /** Clears the open narrow facet drawer’s draft. */
+  drawerClear: string;
+  /** Applies the open narrow facet drawer’s draft and closes. */
+  showResults: string;
 };
 
 type FilterPanelProps = {
@@ -24,6 +30,12 @@ type FilterPanelProps = {
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   onSearchClear?: () => void;
+  searchSuggestions?: readonly SearchSuggestionGroup[];
+  onSearchCommit?: (value: string) => void;
+  onSearchSuggestionSelect?: (
+    suggestion: SearchSuggestion,
+    groupId: string,
+  ) => void;
   groups: AsyncState<readonly FilterGroup[]>;
   selection?: FilterSelection;
   onFilterChange?: (
@@ -32,7 +44,13 @@ type FilterPanelProps = {
     selected: boolean,
   ) => void;
   onGroupExpand?: (groupId: string) => void;
+  onGroupCollapse?: (groupId: string) => void;
   utilityLinks?: readonly UtilityLink[];
+  showHeading?: boolean;
+  showSearch?: boolean;
+  showGroups?: boolean;
+  showGroupExpand?: boolean;
+  facetLayout?: "stack" | "tabs";
   className?: string;
 };
 
@@ -61,11 +79,20 @@ function FilterPanel({
   searchValue,
   onSearchChange,
   onSearchClear,
+  searchSuggestions,
+  onSearchCommit,
+  onSearchSuggestionSelect,
   groups,
   selection,
   onFilterChange,
   onGroupExpand,
+  onGroupCollapse,
   utilityLinks = [],
+  showHeading = true,
+  showSearch = true,
+  showGroups = true,
+  showGroupExpand = true,
+  facetLayout = "stack",
   className,
 }: FilterPanelProps) {
   return (
@@ -77,13 +104,22 @@ function FilterPanel({
       <VStack className="gap-8" gap="none">
         <ProductFilter
           copy={copy}
+          facetLayout={facetLayout}
           groups={groups}
           onFilterChange={onFilterChange}
+          onGroupCollapse={onGroupCollapse}
           onGroupExpand={onGroupExpand}
           onSearchChange={onSearchChange}
           onSearchClear={onSearchClear}
+          onSearchCommit={onSearchCommit}
+          onSearchSuggestionSelect={onSearchSuggestionSelect}
+          searchSuggestions={searchSuggestions}
           searchValue={searchValue}
           selection={selection}
+          showGroupExpand={showGroupExpand}
+          showGroups={showGroups}
+          showHeading={showHeading}
+          showSearch={showSearch}
         />
 
         {utilityLinks.length > 0 ? (

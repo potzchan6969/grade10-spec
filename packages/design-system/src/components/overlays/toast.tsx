@@ -9,7 +9,6 @@ import {
   Warning,
   XCircle,
 } from "@phosphor-icons/react";
-import { useTheme } from "next-themes";
 import type { CSSProperties, ReactNode } from "react";
 import {
   type ExternalToast,
@@ -91,9 +90,13 @@ function withDefaultIcon(data?: ExternalToast): ExternalToast | undefined {
  * and the rest. ARIA: each toast is `role="status"` with `aria-live="polite"`
  * and does not steal focus. Enter/exit, stacking, and swipe honour reduced
  * motion.
+ *
+ * Sonner's theme defaults to `light`. The shell is always the light popover
+ * surface — following `next-themes` `system`/`dark` lets Sonner's dark chrome
+ * paint a near-white description and a black close chip over it.
  */
 function Toast({
-  theme: themeProp,
+  theme = "light",
   toastOptions,
   icons,
   position = "bottom-right",
@@ -103,12 +106,11 @@ function Toast({
   style,
   ...props
 }: ToastProps) {
-  const { theme = "system" } = useTheme();
   const extra = toastOptions?.classNames;
 
   return (
     <Sonner
-      theme={themeProp ?? (theme as ToastProps["theme"])}
+      theme={theme}
       position={position}
       duration={duration}
       closeButton={closeButton}
@@ -145,7 +147,8 @@ function Toast({
             extra?.title,
           ),
           description: cn(
-            "text-sm leading-5 font-normal break-words text-secondary-foreground",
+            // `!` beats Sonner's dark-theme `[data-description]` colour rule.
+            "text-sm leading-5 font-normal break-words !text-secondary-foreground",
             extra?.description,
           ),
           actionButton: cn(
@@ -157,7 +160,8 @@ function Toast({
             extra?.cancelButton,
           ),
           closeButton: cn(
-            "col-start-3 row-start-1 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-secondary-foreground transition-colors duration-150 ease-out outline-none hover:bg-transparent hover:text-foreground focus-visible:rounded-(--radius-full) focus-visible:ring-3 focus-visible:ring-ring/50 [&_svg]:size-4",
+            // Transparent chip + secondary X; `!` beats Sonner's dark close chrome.
+            "col-start-3 row-start-1 inline-flex size-5 shrink-0 cursor-pointer items-center justify-center !border-0 !bg-transparent p-0 !text-secondary-foreground transition-colors duration-150 ease-out outline-none hover:!bg-transparent hover:!text-foreground focus-visible:rounded-(--radius-full) focus-visible:ring-3 focus-visible:ring-ring/50 [&_svg]:size-4",
             extra?.closeButton,
           ),
         },

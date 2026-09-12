@@ -2,6 +2,7 @@ import { Footer } from "@grade10/design-system/components/layout/footer";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   ProductCard,
+  SiteHeader,
   StoreCollectionGrid,
   StoreHomeHero,
   StoreSectionHeader,
@@ -15,21 +16,20 @@ import {
   STORE_HOME_PRODUCT_CARD_COPY,
   STORE_HOME_PRODUCTS,
   STORE_HOME_SECTION_COPY,
-  STORE_NAV,
+  STORE_SITE_HEADER,
 } from "./store-content";
-import { WorkbenchAccountNav } from "./workbench-account-nav";
 
 /**
- * The store home page as a store assembles it: `Nav`, the home blocks,
+ * The store home page as a store assembles it: `SiteHeader`, the home blocks,
  * a product row of `ProductCard` tiles, and `Footer`.
  *
  * Matches Figma frame `Store` (`4171:9023`). State and destinations live here,
- * not in the blocks. Account opens a temporary workbench menu with Order History.
+ * not in the blocks.
  */
 function StoreHomePage() {
   return (
     <div className="min-h-svh bg-background">
-      <WorkbenchAccountNav {...STORE_NAV} />
+      <SiteHeader {...STORE_SITE_HEADER} />
       <VStack className="w-full" gap="none">
         <VStack className="w-full px-8 pb-8" gap="none">
           <StoreHomeHero

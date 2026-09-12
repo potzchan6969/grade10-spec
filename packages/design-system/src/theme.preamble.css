@@ -117,7 +117,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    /* Relative so absolutely positioned drawer overlays cover the viewport
+       after scroll on iOS Safari (Base UI / shadcn drawer requirement). */
+    @apply relative bg-background text-foreground;
   }
   html {
     @apply font-sans;

@@ -16,13 +16,40 @@ The chrome can mark which surface is being viewed, and it invents no copy: every
 word and every destination comes from the application. That is what lets the
 same header wear another brand's words without a fork.
 
-::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937" title="Nav — the site header"}
+🚧 **Language, not currency** — the locale control switches language (English,
+Traditional Chinese, Simplified Chinese for Grade10). It does not switch
+currency.
+
+🚧 **`SiteHeader`** — a compound header wraps the design-system `Nav` with
+session-aware account entry: Sign In as a primary button when signed out; the
+account icon and a menu of Profile, My Auctions, and Sign out when signed in.
+Orders and KYC are not in that menu for auction-first launch.
+
+🚧 **Compact menu** — below the wide breakpoint, a leading menu control opens a
+left inset drawer with primary navigation, then utility links in the same
+style, then language through a nested drawer (the language label is not in the
+compact bar). Account / Sign In and Cart stay in the bar; search moves into the
+drawer when it is answered.
+
+::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937" title="Nav — the site header (reference; Storybook is SoT)"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
 
-::story{id="components-nav--default" title="The header with every control"}
+::story{id="components-nav-overview--all-controls" title="Nav — all controls"}
 
-::story{id="components-nav--another-store" title="The same header wearing another brand's copy"}
+::story{id="components-nav-account--sign-in" title="Nav — Sign In button"}
+
+::story{id="components-nav-layout--narrow" title="Nav — narrow (375px)"}
+
+::story{id="components-nav-layout--menu-open" title="Nav — menu open (375px)"}
+
+::story{id="components-nav-layout--language-nested" title="Nav — language nested (375px)"}
+
+::story{id="site-chrome-siteheader-auction-first--signed-out" title="Auction first — signed out"}
+
+::story{id="site-chrome-siteheader-auction-first--signed-in" title="Auction first — signed in"}
+
+::story{id="components-nav-overview--another-brand" title="Nav — another brand"}
 
 ::story{id="components-footer--column-with-no-links" title="A footer section with nothing to link to stays empty"}
 

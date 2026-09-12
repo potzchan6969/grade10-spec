@@ -49,8 +49,17 @@ type FilterGroup = {
   id: string;
   label: ReactNode;
   options: readonly FilterOption[];
-  /** Shown after the options. Omit it and no expand affordance is rendered. */
+  /** Shown after the options when the group is capped. Omit it and no expand
+   * affordance is rendered. */
   expandLabel?: ReactNode;
+  /** Shown after the options when the group is fully listed. Omit it and no
+   * collapse affordance is rendered. */
+  collapseLabel?: ReactNode;
+  /**
+   * Narrow multi-select pill label stem, e.g. `World` for `World (2)`.
+   * Falls back to `label` when omitted.
+   */
+  compactLabel?: ReactNode;
 };
 
 /**
@@ -70,12 +79,32 @@ type AppliedFilter = {
 type SortOption = {
   id: string;
   label: ReactNode;
+  /** Narrow sort pill; falls back to `label` when omitted. */
+  shortLabel?: ReactNode;
 };
 
 /** One utility link below the product filter. */
 type UtilityLink = {
   label: ReactNode;
   href: string;
+};
+
+/** One row under the listing search field. */
+type SearchSuggestion = {
+  id: string;
+  label: ReactNode;
+  /** Optional thumb for a product row. */
+  imageSrc?: string;
+  imageAlt?: string;
+  /** Optional trailing content — e.g. a facet-kind badge on a filter row. */
+  trailing?: ReactNode;
+};
+
+/** A labelled group of search suggestions the consumer supplies. */
+type SearchSuggestionGroup = {
+  id: string;
+  label: ReactNode;
+  suggestions: readonly SearchSuggestion[];
 };
 
 export type {
@@ -86,6 +115,8 @@ export type {
   FilterOption,
   FilterSelection,
   ProductSummary,
+  SearchSuggestion,
+  SearchSuggestionGroup,
   SortOption,
   UtilityLink,
 };

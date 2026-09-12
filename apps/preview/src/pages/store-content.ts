@@ -19,34 +19,48 @@ const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 const noop = () => {};
 
 const NAV_LOGO: ReactNode = createElement(G10LogoMono, {
-  className: "h-7 w-auto",
+  className: "h-5 w-auto @3xl:h-7",
 });
 const FOOTER_LOGO: ReactNode = createElement(G10LogoMono, {
   className: "h-5 w-auto",
 });
 
-const STORE_NAV = {
-  copy: { locale: "HKD" },
+/** Store page chrome for `SiteHeader`. Includes cart; Store is in the nav. */
+const STORE_SITE_HEADER = {
+  copy: {
+    locale: "English",
+    account: "Account",
+    cart: "Cart",
+    signIn: "Sign In",
+    menu: "Menu",
+    menuTitle: "Menu",
+    language: "Language",
+    accountMenuLabel: "Account",
+    profile: "Profile",
+    myAuctions: "My Auctions",
+    signOut: "Sign out",
+  },
+  session: "signed-in" as const,
   promo: "PROMO UTILITY BAR",
   logo: NAV_LOGO,
   logoHref: "/",
   locales: [
-    { value: "HK", label: "HKD" },
-    { value: "KR", label: "KRW" },
+    { value: "en", label: "English" },
+    { value: "zh-Hant", label: "繁體中文" },
+    { value: "zh-Hans", label: "简体中文" },
   ],
-  locale: "HK",
+  locale: "en",
   utilityLinks: [],
   navItems: [
     { label: "Store", href: "#shop", current: true },
     { label: "Auction", href: "#auction" },
-    { label: "Grade", href: "#grade" },
     { label: "Store Locator", href: "#locator" },
   ],
-  /* A control renders only where a handler backs it, and this workbench
-   * assembles the storefront the Figma nav draws — locale, account, cart.
-   * A store with fewer surfaces passes fewer and shows fewer. */
   onLocaleChange: noop,
-  onAccountClick: noop,
+  onSignIn: noop,
+  onProfile: noop,
+  onMyAuctions: noop,
+  onSignOut: noop,
   onCartClick: noop,
 };
 
@@ -101,27 +115,34 @@ const STORE_FOOTER = {
 };
 
 const SORT_OPTIONS: SortOption[] = [
-  { id: "new", label: "Latest product" },
-  { id: "price-asc", label: "Lowest price" },
-  { id: "price-desc", label: "Highest price" },
+  { id: "new", label: "Latest product", shortLabel: "Latest" },
+  { id: "price-asc", label: "Lowest price", shortLabel: "Lowest" },
+  { id: "price-desc", label: "Highest price", shortLabel: "Highest" },
 ];
+
+const ALL_WORLD_OPTIONS = [
+  { id: "pokemon", label: "Pokémon", count: "51" },
+  { id: "shohei-ohtani", label: "Shohei Ohtani", count: "15" },
+  { id: "music", label: "Music", count: "10" },
+  { id: "manga-anime", label: "Manga & Anime", count: "9" },
+  { id: "formula-1", label: "Formula 1", count: "6" },
+  { id: "one-piece", label: "One Piece", count: "4" },
+  { id: "disney", label: "Disney", count: "3" },
+  { id: "sports", label: "Sports", count: "2" },
+] as const;
 
 const FILTER_GROUPS: FilterGroup[] = [
   {
     id: "worlds",
     label: "Worlds",
+    compactLabel: "World",
     expandLabel: "See all worlds",
-    options: [
-      { id: "pokemon", label: "Pokémon", count: "51" },
-      { id: "shohei-ohtani", label: "Shohei Ohtani", count: "15" },
-      { id: "music", label: "Music", count: "10" },
-      { id: "manga-anime", label: "Manga & Anime", count: "9" },
-      { id: "formula-1", label: "Formula 1", count: "6" },
-    ],
+    options: ALL_WORLD_OPTIONS.slice(0, 5).map((option) => ({ ...option })),
   },
   {
     id: "types",
     label: "Types",
+    compactLabel: "Type",
     options: [
       { id: "booster-box", label: "Booster Box", count: "24" },
       { id: "special-box", label: "Special Box", count: "6" },
@@ -133,6 +154,17 @@ const FILTER_GROUPS: FilterGroup[] = [
       { id: "graded-manga", label: "Graded Manga", count: "5" },
     ],
   },
+];
+
+const FILTER_GROUPS_EXPANDED: FilterGroup[] = [
+  {
+    id: "worlds",
+    label: "Worlds",
+    compactLabel: "World",
+    collapseLabel: "Show less",
+    options: ALL_WORLD_OPTIONS.map((option) => ({ ...option })),
+  },
+  FILTER_GROUPS[1],
 ];
 
 function appliedFiltersFromSelection(
@@ -286,6 +318,7 @@ const STORE_CART_COPY = {
 export {
   appliedFiltersFromSelection,
   FILTER_GROUPS,
+  FILTER_GROUPS_EXPANDED,
   INITIAL_SELECTION,
   PRODUCTS,
   SORT_OPTIONS,
@@ -296,7 +329,7 @@ export {
   STORE_HOME_PRODUCT_CARD_COPY,
   STORE_HOME_PRODUCTS,
   STORE_HOME_SECTION_COPY,
-  STORE_NAV,
+  STORE_SITE_HEADER,
   sortTriggerLabel,
   UTILITY_LINKS,
 };

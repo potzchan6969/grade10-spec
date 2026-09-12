@@ -11,17 +11,14 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Gavel } from "@phosphor-icons/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   REVEAL_REDUCED_MOTION_CLASS,
   revealStaggerDelayMs,
   useFirstPaintReveal,
 } from "../shared/use-first-paint-reveal";
 import { AuctionRecordRow } from "./auction-record-row";
-import {
-  AUCTION_RECORD_COLUMNS,
-  AUCTION_RECORD_TABLE_LAYOUT,
-} from "./columns";
+import { AUCTION_RECORD_COLUMNS, AUCTION_RECORD_TABLE_LAYOUT } from "./columns";
 import type { AuctionRecordProps, AuctionRecordRowProps } from "./types";
 
 /** Enter: snappy ease-out, short travel (page content, not a panel). */
@@ -129,7 +126,10 @@ function AuctionRecord({
   className,
 }: AuctionRecordProps) {
   const revealed = useFirstPaintReveal();
-  const rows: AuctionRecordRowProps[] = [...biddingItems, ...watchingItems];
+  const rows = useMemo(
+    () => [...biddingItems, ...watchingItems],
+    [biddingItems, watchingItems],
+  );
   const isEmpty = rows.length === 0;
 
   const [exitingIds, setExitingIds] = useState(() => new Set<string>());
@@ -186,7 +186,7 @@ function AuctionRecord({
   return (
     <VStack
       className={cn(
-        "w-full max-w-7xl gap-12 overflow-x-clip px-4 pt-8 pb-16 sm:px-8",
+        "mx-auto w-full max-w-7xl gap-12 overflow-x-clip px-4 pt-8 pb-16 sm:px-8",
         className,
       )}
       data-revealed={revealed || undefined}

@@ -21,11 +21,14 @@ const meta = {
       heading: "Filter",
       searchPlaceholder: "Find product",
       searchLabel: "Search products",
+      drawerClear: "Clear",
+      showResults: "Show Results",
     },
     groups: { status: "ready", data: FILTER_GROUPS },
     selection: {},
     onFilterChange: fn(),
     onGroupExpand: fn(),
+    onGroupCollapse: fn(),
     onSearchChange: fn(),
     utilityLinks: UTILITY_LINKS,
   },
@@ -114,6 +117,32 @@ export const GroupExpandIsReported: Story = {
   },
 };
 
+/** Collapse reports when the consumer supplied a Show less label. */
+export const GroupCollapseIsReported: Story = {
+  args: {
+    groups: {
+      status: "ready",
+      data: [
+        {
+          id: "worlds",
+          label: "Worlds",
+          collapseLabel: "Show less",
+          options: [
+            { id: "pokemon", label: "Pokémon", count: "51" },
+            { id: "one-piece", label: "One Piece", count: "4" },
+          ],
+        },
+      ],
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Show less" }));
+    expect(args.onGroupCollapse).toHaveBeenCalledTimes(1);
+    expect(args.onGroupCollapse).toHaveBeenCalledWith("worlds");
+  },
+};
+
 /** A group with no options occupies no space. */
 export const EmptyFilterGroup: Story = {
   args: {
@@ -141,7 +170,7 @@ export const SearchChangeIsReported: Story = {
   args: { searchValue: "" },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const field = canvas.getByRole("searchbox");
+    const field = canvas.getByRole("combobox", { name: "Search products" });
 
     await userEvent.type(field, "pika");
 

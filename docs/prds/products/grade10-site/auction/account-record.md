@@ -22,15 +22,20 @@ an unsold lot taken down) takes it off My Auctions.
 
 Each row carries the lot's key image, title, close, current bid, **Your
 Standing**, Email alerts, and Unwatch when the collector has not bid.
-Watch-only standing is `--`. Bid standing while open: Leading, Outbid, Bid
-submitted, or Bid not accepted. After close: Won or Didn't win, with the same
-payment, shipment, and hold projections as before. Bid rows sort before
-watch-only; soonest close within each band.
+Bidding rows carry Email alerts without Unwatch. Watch-only standing is
+`--`. Bid standing while open: Leading, Outbid, Bid submitted, or Bid not
+accepted. After close: Won or Didn't win, with the same payment, shipment,
+and hold projections as before. Bid rows sort before watch-only; soonest
+close within each band. Account → Notifications holds the global **Auction
+email alerts** master; when it is off, per-lot toggles on this page show
+off or disabled.
 
 Detailed [Bidding History](/p/grade10-site/auction/bidding-history) stays its
 own surface for the one-per-listing index, filters, and private chronology.
 
-A winner follows their own lot to the door through [Winner Order](/p/grade10-site/auction/winner-order): Pending Payment, Expired, Processing, Shipped, Delivered, Cancelled, or Refunded. The record shows the derived auction status and opens the invoice for payment; address, payment, fulfilment, and delivery facts stay on the order.
+A winner follows their own lot to the door through [Winner Order](/p/grade10-site/auction/winner-order): Pending Payment, Expired, Processing, Shipped, Delivered, Cancelled, or Refunded. A won lot whose invoice has expired reads Expired and says how to reach Grade10.
+
+The record shows the derived auction status and opens the invoice for payment; address, payment, fulfilment, and delivery facts stay on the order.
 
 A losing bidder is told what happened to their card authorization — being
 released, or released — because a pending hold on a bank statement reads as a
