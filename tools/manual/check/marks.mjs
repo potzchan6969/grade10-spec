@@ -1,5 +1,6 @@
 /* RULE: a 🚧 line is confirmed and being built, so an in-flight change delivers it. */
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
+import { productPages } from "./context.mjs";
 
 const SHOWN = 72;
 
@@ -20,9 +21,9 @@ function delivering(changes, page) {
 
 /** An archive that folded the spec and left the page's marks on, or a mark
  * put on a line nobody is building: the page says something is being built
- * and nothing is. Product pages only — a guide writes the mark to explain it. */
+ * and nothing is. */
 export function checkMarks(ctx, changes, pages) {
-  const products = `${ctx.roots.manual}/products/`;
+  const products = productPages(ctx.roots);
   for (const page of pages) {
     if (!page.ast || !page.path.startsWith(products)) continue;
     const marks = marksOfPage(page, BUILDING);

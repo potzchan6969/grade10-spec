@@ -26,6 +26,18 @@ export function slugify(text: string): string {
   return slug === "" ? "item" : slug;
 }
 
+const HEADING_LINK = /\[([^\]]+)\]\([^)]*\)/g;
+const HEADING_INLINE = /[*_`]/g;
+
+/** The id a `## ` heading renders with: its text, a link unwrapped to the
+ * words it shows and the emphasis marks dropped. A proposal's `## References`
+ * link names a section by this, so it is the one slug both sides compare on. */
+export function sectionSlug(heading: string): string {
+  return slugify(
+    heading.replace(HEADING_LINK, "$1").replace(HEADING_INLINE, ""),
+  );
+}
+
 export function humanize(id: string): string {
   return id
     .split(/[-_/]/)

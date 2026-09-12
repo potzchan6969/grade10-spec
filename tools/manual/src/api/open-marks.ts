@@ -1,6 +1,6 @@
 import type { Block } from "../content/grammar";
 import type { ManualIndex, ParsedPage } from "./derive";
-import { pagePath, slugify } from "./paths.ts";
+import { pagePath, sectionSlug, slugify } from "./paths.ts";
 
 /** One line a page marked ❓ or `TBC`: what nobody has confirmed, where it
  * sits, and the anchor that opens the page there. */
@@ -8,6 +8,9 @@ export type OpenMark = {
   page: ParsedPage;
   /** The `## ` section or the titled block the line sits under. */
   where?: { title: string; anchor: string };
+  /** Slug of the `## ` section the line sits under, as a proposal's
+   * `## References` link names it. Absent above the page's first heading. */
+  section?: string;
   /** The line as written, list marker dropped; a table row as its cells. */
   text: string;
 };
@@ -36,14 +39,22 @@ export function marksOfPage(page: ParsedPage, mark: RegExp): OpenMark[] {
       const heading = HEADING.exec(line);
       if (heading) {
         if (where === null) {
-          const title = plain(heading[1]);
-          section = { title, anchor: slugify(title) };
+          section = {
+            title: plain(heading[1]),
+            anchor: sectionSlug(heading[1]),
+          };
         }
         continue;
       }
       if (!mark.test(line) || TABLE_RULE.test(line)) continue;
       const text = textOf(line);
-      if (text !== "") marks.push({ page, where: where ?? section, text });
+      if (text === "") continue;
+      marks.push({
+        page,
+        where: where ?? section,
+        ...(section ? { section: section.anchor } : {}),
+        text,
+      });
     }
   };
 

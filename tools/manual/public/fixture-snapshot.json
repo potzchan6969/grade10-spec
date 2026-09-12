@@ -158,6 +158,7 @@
   "changes": [
     {
       "id": "add-thing",
+      "dir": "openspec/changes/add-thing",
       "schema": "grade10-planning",
       "status": "in-flight",
       "owners": [
