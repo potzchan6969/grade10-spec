@@ -108,7 +108,7 @@ None.
 ## References
 
 - [Bidding History · Lot Personal Bidding](../../../docs/prds/products/grade10-site/auction/bidding-history.md#lot-personal-bidding)
-- [Bidding History · One listing's story](../../../docs/prds/products/grade10-site/auction/bidding-history.md#one-listings-story)
+- [Bidding History · One listing's story](../../../docs/prds/products/grade10-site/auction/bidding-history.md#one-listing-s-story)
 - [Listing Page Blocks · Personal Bidding](../../../docs/prds/products/shared/ui/auction-listing.md#personal-bidding)
 - [Auto-Bidding · Past Maximums](../../../docs/prds/products/grade10-site/auction/auto-bidding.md#past-maximums)
 
