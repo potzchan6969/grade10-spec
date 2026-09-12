@@ -17,7 +17,7 @@ This skill covers what to settle before drafting and routes to the right one.
 | 1 | `proposal.md` | `planning-pm` | Always |
 | 2 | `specs/<capability>/spec.md` | `planning-pm` | Always |
 | 3 | `specs/<capability>/user-journeys.md` | `planning-pm` | Always — a capability nobody walks says so in it |
-| 4 | `specs/<capability>/feature-tcs.md` | `planning-qa` | Optional |
+| 4 | `specs/<capability>/feature-tcs.md` | `planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
 | 5 | `ui-design.md` | `planning-design` | Optional |
 | 6 | `tech-design.md` | `planning-dev` | Optional |
 | 7 | `tasks.md` | `planning-dev` | Before the change can be applied |

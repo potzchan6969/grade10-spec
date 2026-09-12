@@ -21,7 +21,7 @@ sentence.
 | Invoke | When | Here | Example |
 | --- | --- | --- | --- |
 | `/planning-pm` | Proposal, spec deltas, and the journeys beside them. Where every change starts. Stop there — a change with no `tasks.md` is not ready to `/implement`. | Same. | "Write the requirements for watchlist notifications — specs only, no tasks." |
-| `/planning-qa` | The feature-tcs.md beside each capability, derived with `/spec-to-tcs` and reviewed with `/tcs-review`. | Same. | "Derive the test cases for `add-auction-watchlist`." |
+| `/planning-qa` | Review of the feature-tcs.md the PM drafted beside each capability, with `/tcs-review`, plus the domain, product and platform suites. | Same. | "Derive the test cases for `add-auction-watchlist`." |
 | `/planning-design` | `ui-design.md`: screens to Figma frames, exports named exactly, states tied to scenarios. | Same. | "Write the UI design for the watchlist drawer." |
 | `/planning-dev` | `tech-design.md` and `tasks.md` on a change somebody else specified, or one you author yourself. | Same. | "Plan delivery for `auction-auto-bidding`; I am implementing it." |
 | `/implement` | A change with tasks, or tickets with no OpenSpec store. Runs through `/tdd`. Stops at the group boundary. | `/openspec-apply-change`. | "Implement the tasks in `auction-auto-bidding`." |

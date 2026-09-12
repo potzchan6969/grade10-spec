@@ -30,7 +30,7 @@ the thing it acts on.
 | 1 | `proposal.md` | Product manager | `/planning-pm` | Always |
 | 2 | `specs/<capability>/spec.md` | Product manager | `/planning-pm` | Always |
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `/planning-pm` | Always — one nobody walks says so in it |
-| 4 | `specs/<capability>/feature-tcs.md` | QA | `/planning-qa` | Optional |
+| 4 | `specs/<capability>/feature-tcs.md` | Product manager | `/planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
 | 5 | `ui-design.md` | Designer | `/planning-design` | Optional |
 | 6 | `tech-design.md` | Engineer | `/planning-dev` | Optional |
 | 7 | `tasks.md` | Engineer | `/planning-dev` | Before anyone can build it |

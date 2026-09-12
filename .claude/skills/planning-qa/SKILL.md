@@ -17,8 +17,10 @@ One of the seven artifacts in `grade10-planning` is yours:
 The upper three are written only where a path exists to hold them, and carry
 no coverage obligation: `product` and `platform` are smoke passes.
 
-Optional, and derived: a capability with no `user-journeys.md` has nothing to
-derive, and a suite is never a second source of truth. Where a suite and its
+Derived, never a second source of truth. The PM drafts `feature-tcs.md`
+alongside the journeys with `/spec-to-tcs`; your work starts at review, and at
+the wider levels above it. A capability whose journeys file says
+`**Walked by:** nobody` has nothing to derive. Where a suite and its
 spec disagree, **the spec is correct** — regenerate the case, never the other
 way round.
 

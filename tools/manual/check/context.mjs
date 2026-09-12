@@ -61,6 +61,11 @@ export const RULES = [
     title: "Capabilities that never say who walks them",
   },
   {
+    key: "derived",
+    level: "warn",
+    title: "Walked capabilities with no suite beside them",
+  },
+  {
     key: "grouping",
     level: "fail",
     title: "Durable specs holding a heading the archive would fold",
