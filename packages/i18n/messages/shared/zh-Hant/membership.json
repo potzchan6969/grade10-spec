@@ -70,7 +70,10 @@
     "insufficient": "積分尚未足夠",
     "decreaseQuantity": "減少一件",
     "increaseQuantity": "增加一件",
-    "validFor": "兌換後 {days} 天內有效"
+    "validFor": "兌換後 {days} 天內有效",
+    "minimumSpend": "最低消費 {amount}",
+    "onlyOnline": "只限網店",
+    "onlyInStore": "只限門市"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} 只能以整件兌換。",
@@ -99,6 +102,11 @@
     "adjust_debit": "積分已扣除",
     "revoke": "積分已撤回",
     "reverse": "積分已退回"
+  },
+  "activityChannel": {
+    "online": "網店",
+    "in_store": "門市",
+    "internal": "會員計劃"
   },
   "join": {
     "title": "加入計劃",

@@ -70,7 +70,10 @@
     "insufficient": "积分尚未足够",
     "decreaseQuantity": "减少一件",
     "increaseQuantity": "增加一件",
-    "validFor": "兑换后 {days} 天内有效"
+    "validFor": "兑换后 {days} 天内有效",
+    "minimumSpend": "最低消费 {amount}",
+    "onlyOnline": "只限网店",
+    "onlyInStore": "只限门店"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} 只能以整件兑换。",
@@ -99,6 +102,11 @@
     "adjust_debit": "积分已扣除",
     "revoke": "积分已撤回",
     "reverse": "积分已退回"
+  },
+  "activityChannel": {
+    "online": "网店",
+    "in_store": "门店",
+    "internal": "会员计划"
   },
   "join": {
     "title": "加入计划",

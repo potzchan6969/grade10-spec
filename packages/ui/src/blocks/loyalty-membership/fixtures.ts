@@ -24,6 +24,7 @@ const REWARDS: RewardMenuItem[] = [
     name: "HK$50 off",
     pointCost: 500,
     validity: "Code valid 90 days from redemption",
+    limits: "Spend HK$300 or more · In store only",
   },
   {
     id: "sleeves",
@@ -80,6 +81,7 @@ const ACTIVITY: ActivityEntry[] = [
     kind: "Purchase",
     delta: 105,
     date: FIXTURE_LOYALTY_PURCHASE_DAY,
+    channel: "In store",
     context: "Order #10482",
   },
   {
@@ -87,6 +89,7 @@ const ACTIVITY: ActivityEntry[] = [
     kind: "Redeemed HK$50 off",
     delta: -500,
     date: FIXTURE_LOYALTY_REDEEM_DAY,
+    channel: "Online store",
     context: "Balance: 1,250",
   },
   {
@@ -94,6 +97,7 @@ const ACTIVITY: ActivityEntry[] = [
     kind: "Points adjusted",
     delta: 120,
     date: FIXTURE_LOYALTY_ADJUST_DAY,
+    channel: "Membership programme",
   },
 ];
 

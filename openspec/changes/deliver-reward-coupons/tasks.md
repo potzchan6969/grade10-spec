@@ -47,8 +47,8 @@ Staff applying a coupon from the panel and the member presenting one from their 
 
 **Sequence after `mint-coupons-as-discount-codes` ships, and after this change's own task 3.2** — 6.3 reads the same coupon-apply path that change rewrites, and also assumes the collection notice group 3 retires no longer fires; claiming 6.3 while 3.2 is still open reproduces the double-notification 6.3 exists to prevent.
 
-- [ ] 6.1 Disclose a channel's own spending limit before points leave the balance, so *A channel's own limit is disclosed before the points go* passes — moved from `revise-loyalty-programme-rules`
-- [ ] 6.2 Name the channel on every activity entry the member reads, so *An activity entry names its channel* passes — moved from `revise-loyalty-programme-rules`
+- [x] 6.1 Disclose a channel's own spending limit before points leave the balance, so *A channel's own limit is disclosed before the points go* passes — moved from `revise-loyalty-programme-rules`
+- [x] 6.2 Name the channel on every activity entry the member reads, so *An activity entry names its channel* passes — moved from `revise-loyalty-programme-rules`
 - [ ] 6.3 Notify the member on **settlement** — the paid order, or the till's trim-to-what-landed pass (`discounts.md`'s POS step 9) — for every staff-assisted act, never at Apply, which is explicitly a re-plannable claim that can still be trimmed or walked away from while nothing is held; a benefit step 9 reported whose sale is then abandoned unpaid sends a correction notice, and a sale that never reaches step 9 sends nothing, so *The member's phone is the monitor* and *A landed notice is corrected if the sale never pays* both pass. Folds together with the collection notice group 3 retires and the notice moved from `add-shopify-membership-pos` (its task 5.2)
 - [ ] 6.4 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 

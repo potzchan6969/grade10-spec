@@ -70,7 +70,10 @@
     "insufficient": "Not enough points yet",
     "decreaseQuantity": "One fewer",
     "increaseQuantity": "One more",
-    "validFor": "Valid for {days, plural, one {# day} other {# days}} from redemption"
+    "validFor": "Valid for {days, plural, one {# day} other {# days}} from redemption",
+    "minimumSpend": "Spend {amount} or more",
+    "onlyOnline": "Online store only",
+    "onlyInStore": "In store only"
   },
   "quantityRefusal": {
     "wholeUnits": "{name} is redeemed in whole units.",
@@ -99,6 +102,11 @@
     "adjust_debit": "Points taken off",
     "revoke": "Points revoked",
     "reverse": "Points returned"
+  },
+  "activityChannel": {
+    "online": "Online store",
+    "in_store": "In store",
+    "internal": "Membership programme"
   },
   "join": {
     "title": "Join the programme",

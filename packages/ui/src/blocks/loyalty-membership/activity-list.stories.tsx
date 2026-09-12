@@ -35,6 +35,32 @@ export const Default: Story = {
   },
 };
 
+/** Every entry says where it came from, so a counter earn and an online one
+ * are never the same line. An entry whose source did not say carries none. */
+export const ChannelIsNamed: Story = {
+  args: {
+    state: {
+      status: "ready",
+      data: [
+        ...ACTIVITY,
+        {
+          id: "entry-quiet",
+          kind: "Points expired",
+          delta: -40,
+          date: "1 Mar 2026",
+        },
+      ],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const named = [
+      ...canvasElement.querySelectorAll('[data-slot="activity-list-channel"]'),
+    ].map((node) => node.textContent);
+
+    expect(named).toEqual(["In store", "Online store", "Membership programme"]);
+  },
+};
+
 export const Loading: Story = { args: { state: { status: "loading" } } };
 
 export const Empty: Story = {

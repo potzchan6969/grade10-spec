@@ -310,6 +310,49 @@ from, in terms the member can read.
 - **THEN** it names the channel that activity came from, in terms the
   member can read
 
+### Requirement: The membership surface exports
+
+The shared UI package SHALL export, from its public entry, exactly these
+components for the membership surface — `MembershipSummary`, `RewardMenu`,
+`CouponList`, and `ActivityList` — and the props and copy type of each.
+
+`MembershipSummary` SHALL render the two counts as two counts, never one
+total, alongside the tier held, the date its validity ends, and progress
+toward retention. `RewardMenu` SHALL price each reward in points, state a
+money-off reward's own validity period, and state what its coupon cannot be
+spent without — the basket it has to reach, and the one channel it is good at
+where it names only one. `CouponList` SHALL carry each issued
+coupon — its code where the shop takes one — what it is for, its own expiry,
+and whether it is spent, void or expired.
+`ActivityList` SHALL name entries in terms a member reads, name the channel
+each came from, and SHALL NOT carry an operator reason, a retry key, or
+internal pricing.
+
+Each of those components SHALL take the words it renders in a single `copy`
+prop of its own copy type, and SHALL receive every count, date and state
+through props — none of them SHALL fetch, subscribe to, or store product
+state.
+
+The operator console composes these same exports as brand-owned view code and
+SHALL require no export of its own.
+
+#### Scenario: grade10-site-loyalty-programme-SC-123 - The two counts are never summed
+
+- **WHEN** a member holds spendable points and qualifying points that differ
+- **THEN** the summary shows both figures separately
+- **AND** no single combined total is rendered
+
+#### Scenario: grade10-site-loyalty-programme-SC-124 - A member's activity carries nothing operator-facing
+
+- **WHEN** an entry was written by an operator correction
+- **THEN** the member's activity names the entry in member-readable terms
+- **AND** it carries no operator reason, retry key or internal pricing
+
+#### Scenario: grade10-site-loyalty-programme-SC-125 - The components take content, not sources
+
+- **WHEN** any of the four components is rendered
+- **THEN** every count, date, state and word it shows arrived through props
+
 ### Requirement: Points pay at checkout, at the programme's exchange rate
 
 A member SHALL be able to pay part of a qualifying purchase with redeemable

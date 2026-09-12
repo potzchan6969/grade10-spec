@@ -78,6 +78,11 @@ function RewardRow({
               {item.validity}
             </Text>
           ) : null}
+          {item.limits ? (
+            <Text data-slot="reward-menu-limits" size="sm" tone="secondary">
+              {item.limits}
+            </Text>
+          ) : null}
           {item.collectionWindow ? (
             <Text
               data-slot="reward-menu-collection-window"

@@ -35,6 +35,11 @@ function ActivityRow({ entry }: { entry: ActivityEntry }) {
       </HStack>
       <HStack align="baseline" gap="md" justify="space-between">
         <Text size="sm" tone="secondary">
+          {entry.channel ? (
+            <>
+              <span data-slot="activity-list-channel">{entry.channel}</span> ·{" "}
+            </>
+          ) : null}
           {entry.date}
         </Text>
         {entry.context ? (

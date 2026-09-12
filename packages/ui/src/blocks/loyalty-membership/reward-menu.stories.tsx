@@ -95,6 +95,18 @@ export const CollectionWindowIsStated: Story = {
   },
 };
 
+/** What the coupon needs before it comes off anything, stated on the menu —
+ * a member decides with the limit in front of them, not after the points go. */
+export const CouponLimitsAreStated: Story = {
+  play: async ({ canvasElement }) => {
+    const stated = [
+      ...canvasElement.querySelectorAll('[data-slot="reward-menu-limits"]'),
+    ].map((node) => node.textContent);
+
+    expect(stated).toEqual(["Spend HK$300 or more · In store only"]);
+  },
+};
+
 export const Loading: Story = { args: { state: { status: "loading" } } };
 
 /** The consumer supplies the message and what to call the action. */

@@ -17,6 +17,12 @@ type RewardMenuItem = {
   collectionWindow?: string;
   /** A money-off reward's code validity period, stated as supplied. */
   validity?: string;
+  /**
+   * What its coupon cannot be spent without — a basket big enough, a counter
+   * or a checkout it is good at. Stated as supplied, and absent where the
+   * coupon limits nothing.
+   */
+  limits?: string;
 };
 
 type CouponStatus = "open" | "spent" | "void" | "expired";
@@ -46,6 +52,9 @@ type ActivityEntry = {
   delta: number;
   /** Already formatted. */
   date: string;
+  /** Where it came from, as the member reads it — the counter, the online
+   *  store, or the programme itself. Absent where the source did not say. */
+  channel?: string;
   /** Running context under the entry — an order reference, a balance line. */
   context?: ReactNode;
 };
