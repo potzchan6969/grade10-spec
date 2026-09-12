@@ -1,21 +1,23 @@
 ---
 name: planning-qa
-description: Write QA's artifact on an OpenSpec change - the suite at every level, from the feature-tcs.md beside each capability's spec and journeys up to the domain, product and platform passes above it. Use when deriving, reviewing, or repairing a change's test suites.
+description: Review the feature-tcs.md the PM derived beside each capability's journeys, and write the domain, product and platform test-case passes above it. Use when reviewing or repairing a change's test suites, or deriving the suites above feature level.
 ---
 
-# QA's artifact
+# QA's part
 
-One of the seven artifacts in `grade10-planning` is yours:
+Of the seven artifacts in `grade10-planning`, one is yours to review; the
+suites above it are yours to write, and they live beside the durable specs:
 
-| Artifact | What it holds |
-| --- | --- |
-| `specs/platform-tcs.md` | The paths a person walks across products |
-| `specs/<product>/product-tcs.md` | The paths a person walks across that product's domains |
-| `specs/<product>/<domain>/domain-tcs.md` | The paths a person walks across that domain's capabilities |
-| `specs/<capability>/feature-tcs.md` | The classified suite the journeys and scenarios imply |
+| Suite | Where it lives | What it holds |
+| --- | --- | --- |
+| `specs/<capability>/feature-tcs.md` | In the change, beside the journeys | The classified suite the PM derived; you review it with `/tcs-review` |
+| `openspec/specs/<product>/<domain>/domain-tcs.md` | Beside the durable specs | The paths a person walks across that domain's capabilities |
+| `openspec/specs/<product>/product-tcs.md` | Beside the durable specs | The paths a person walks across that product's domains |
+| `openspec/specs/platform-tcs.md` | Beside the durable specs | The paths a person walks across products |
 
-The upper three are written only where a path exists to hold them, and carry
-no coverage obligation: `product` and `platform` are smoke passes.
+The upper three are written only where a path exists to hold them, never under
+a change's deltas, and carry no coverage obligation: `product` and `platform`
+are smoke passes.
 
 Derived, never a second source of truth. The PM drafts `feature-tcs.md`
 alongside the journeys with `/spec-to-tcs`; your work starts at review, and at
