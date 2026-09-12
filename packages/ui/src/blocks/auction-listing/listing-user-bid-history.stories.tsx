@@ -7,20 +7,57 @@ import {
   FIXTURE_TIME_ZONE,
 } from "../../lib/datetime-fixtures";
 import { ListingUserBidHistory } from "./listing-user-bid-history";
-import type { ListingUserBidHistoryRow } from "./types";
+import type {
+  ListingUserBidHistoryRow,
+  ListingUserMaximumHistoryRow,
+} from "./types";
 
 const COPY = {
-  link: "Your bid history",
-  title: "Bid History",
-  samePricePriority:
-    "When bidders set the same maximum, the earlier submission takes priority.",
-  amount: "Your bid",
+  link: "Your bidding",
+  title: "Your bidding",
+  description:
+    "We bid only as needed up to your maximum. If two people set the same maximum, the earlier one leads.",
+  maximumsTab: "Your maximums",
+  bidsTab: "Bid placed",
+  maximumColumn: "Maximum",
+  bidColumn: "Bid",
   time: "Time",
+  emptyBids: "No bids placed for you yet.",
 } as const;
 
 const STORY_NOW_MS = Date.now();
 
-const SAMPLE_ROWS: ListingUserBidHistoryRow[] = [
+const SINGLE_MAXIMUM: ListingUserMaximumHistoryRow[] = [
+  {
+    id: "max-1",
+    amountLabel: "HK$5,200",
+    acceptedAtMs: STORY_NOW_MS - 5 * 60_000,
+    status: "set",
+  },
+];
+
+const RAISED_MAXIMUMS: ListingUserMaximumHistoryRow[] = [
+  {
+    id: "max-3",
+    amountLabel: "HK$6,000",
+    acceptedAtMs: STORY_NOW_MS - 8 * 60_000,
+    status: "raised",
+  },
+  {
+    id: "max-2",
+    amountLabel: "HK$5,500",
+    acceptedAtMs: STORY_NOW_MS - 45 * 60_000,
+    status: "raised",
+  },
+  {
+    id: "max-1",
+    amountLabel: "HK$5,200",
+    acceptedAtMs: STORY_NOW_MS - 3 * 60 * 60_000,
+    status: "set",
+  },
+];
+
+const SEVERAL_BIDS: ListingUserBidHistoryRow[] = [
   {
     id: "bid-1",
     amountLabel: "HK$4,800",
@@ -37,30 +74,6 @@ const SAMPLE_ROWS: ListingUserBidHistoryRow[] = [
     acceptedAtMs: STORY_NOW_MS - 60 * 60_000,
   },
 ];
-
-function createLongRows(count: number): ListingUserBidHistoryRow[] {
-  const baseMs = STORY_NOW_MS;
-
-  return Array.from({ length: count }, (_, index) => ({
-    id: `bid-long-${index}`,
-    amountLabel: `HK$${(4_800 - index * 100).toLocaleString("en-HK")}`,
-    acceptedAtMs:
-      index === 0
-        ? baseMs - 30_000
-        : index < 8
-          ? baseMs - index * 4 * 60_000
-          : baseMs - (index + 1) * 24 * 60 * 60_000,
-  }));
-}
-
-const LONG_ROWS = createLongRows(28);
-const OLDEST_BID_LABEL = LONG_ROWS.at(-1)?.amountLabel ?? "";
-
-function isWithinVerticalPort(element: Element, port: Element) {
-  const elRect = element.getBoundingClientRect();
-  const portRect = port.getBoundingClientRect();
-  return elRect.bottom > portRect.top && elRect.top < portRect.bottom;
-}
 
 const openDialogDecorator: Decorator = (Story) => {
   useEffect(() => {
@@ -83,6 +96,7 @@ const meta = {
   component: ListingUserBidHistory,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
+  decorators: [openDialogDecorator],
   args: {
     copy: COPY,
     locale: FIXTURE_SHIPPED_LOCALE,
@@ -94,61 +108,91 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const DialogOpen: Story = {
-  args: { rows: SAMPLE_ROWS },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const page = within(document.body);
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Your bid history" }),
-    );
-    const dialog = await page.findByRole("dialog", { name: "Bid History" });
-    await waitFor(() => {
-      expect(dialog).toBeVisible();
-    });
-    expect(within(dialog).getByText("HK$4,800")).toBeVisible();
-    expect(within(dialog).getByText("2 min ago")).toBeVisible();
-    expect(
-      within(dialog).getByText(
-        /When bidders set the same maximum, the earlier submission takes priority/,
-      ),
-    ).toBeVisible();
-    expect(within(dialog).queryByText("Type")).not.toBeInTheDocument();
-    expect(within(dialog).queryByText("Automatic")).not.toBeInTheDocument();
-    expect(within(dialog).queryByText("Manual")).not.toBeInTheDocument();
-  },
-};
-
-export const LongHistory: Story = {
-  args: { rows: LONG_ROWS },
-  decorators: [openDialogDecorator],
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "Twenty-eight accepted bids exceed the dialog body height. The pinned title stays visible while older bids scroll into view — the oldest entry (HK$2,100) sits below the fold until you scroll.",
-      },
-    },
+/** One maximum with several placed bids — defaults to Bid placed (leading tab). */
+export const OneMaxSeveralBids: Story = {
+  name: "One maximum, several bids",
+  args: {
+    maximumRows: SINGLE_MAXIMUM,
+    bidRows: SEVERAL_BIDS,
   },
   play: async () => {
     const page = within(document.body);
-    const dialog = await page.findByRole("dialog", { name: "Bid History" });
+    const dialog = await page.findByRole("dialog", { name: "Your bidding" });
     await waitFor(() => {
       expect(dialog).toBeVisible();
     });
-    const scrollBody = dialog.querySelector(
-      '[data-slot="listing-user-bid-history-scroll"]',
-    ) as HTMLElement;
+    const tabs = within(dialog).getAllByRole("tab");
+    expect(tabs[0]).toHaveAccessibleName("Bid placed");
+    expect(tabs[1]).toHaveAccessibleName("Your maximums");
+    expect(
+      within(dialog).getByRole("tab", {
+        name: "Bid placed",
+        selected: true,
+      }),
+    ).toBeVisible();
+    expect(within(dialog).getByText("HK$4,800")).toBeVisible();
+    expect(within(dialog).queryByText("Type")).not.toBeInTheDocument();
+  },
+};
 
-    expect(scrollBody.scrollHeight).toBeGreaterThan(scrollBody.clientHeight);
-
-    const oldestBid = within(dialog).getByText(OLDEST_BID_LABEL);
-    expect(isWithinVerticalPort(oldestBid, scrollBody)).toBe(false);
-
-    scrollBody.scrollTop = scrollBody.scrollHeight;
-    oldestBid.scrollIntoView({ block: "end" });
+/** Maximum raised over time — defaults to Bid placed; maximums list every raise. */
+export const MaxRaisedOverTime: Story = {
+  name: "Maximum raised over time",
+  args: {
+    maximumRows: RAISED_MAXIMUMS,
+    bidRows: SEVERAL_BIDS,
+  },
+  play: async () => {
+    const page = within(document.body);
+    const dialog = await page.findByRole("dialog", { name: "Your bidding" });
     await waitFor(() => {
-      expect(isWithinVerticalPort(oldestBid, scrollBody)).toBe(true);
+      expect(dialog).toBeVisible();
     });
+    expect(
+      within(dialog).getByRole("tab", {
+        name: "Bid placed",
+        selected: true,
+      }),
+    ).toBeVisible();
+    await userEvent.click(
+      within(dialog).getByRole("tab", { name: "Your maximums" }),
+    );
+    expect(within(dialog).getByText("HK$6,000")).toBeVisible();
+    expect(within(dialog).getByText("HK$5,500")).toBeVisible();
+    expect(within(dialog).getByText("HK$5,200")).toBeVisible();
+    expect(within(dialog).queryByText("Raised")).not.toBeInTheDocument();
+    expect(within(dialog).queryByText("Set")).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Single maximum, no bid steps — defaults to Your maximums; Bid placed shows
+ * the empty message (one story covers both halves of that state).
+ */
+export const SingleMaxNoBids: Story = {
+  name: "Single maximum, no bids",
+  args: {
+    maximumRows: SINGLE_MAXIMUM,
+    bidRows: [],
+  },
+  play: async () => {
+    const page = within(document.body);
+    const dialog = await page.findByRole("dialog", { name: "Your bidding" });
+    await waitFor(() => {
+      expect(dialog).toBeVisible();
+    });
+    expect(
+      within(dialog).getByRole("tab", {
+        name: "Your maximums",
+        selected: true,
+      }),
+    ).toBeVisible();
+    expect(within(dialog).getByText("HK$5,200")).toBeVisible();
+    await userEvent.click(
+      within(dialog).getByRole("tab", { name: "Bid placed" }),
+    );
+    const empty = within(dialog).getByText("No bids placed for you yet.");
+    expect(empty).toBeVisible();
+    expect(empty.className).toMatch(/text-secondary-foreground/);
   },
 };
