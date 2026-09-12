@@ -199,7 +199,11 @@ function CompactLanguageDrawer({
             className={MENU_LINK_CLASS}
             leading={languageIcon}
             size="md"
-            trailing={<CaretRight aria-hidden className="ml-auto" size={14} />}
+            trailing={
+              <span aria-hidden className="ml-auto flex">
+                <CaretRight size={14} />
+              </span>
+            }
             variant="ghost"
           />
         }
