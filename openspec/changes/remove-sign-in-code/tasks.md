@@ -11,14 +11,14 @@
 
 Needs the submodule bump that carries group 1, for the `email.login` catalog shape.
 
-- [ ] 2.1 Bump the `external/grade10-spec` submodule SHA
+- [x] 2.1 Bump the `external/grade10-spec` submodule SHA
 - [x] 2.2 Add a server-only `mintSession` endpoint on a local better-auth plugin and route `devLogin` and `signInVerifiedEmail` through it — keeps *A new verified email creates the account*, *A known verified email is the same account* and *A trusted product can sign the person in* (`shared-auth-sign-in-SC-21` to `SC-23`) and the dev-login identity cases green before the code plugin goes
 - [x] 2.3 Remove the email-code plugin from `createAuth`, its rate rule and its send-cap hook path, so both code routes answer 404 — satisfies *A code from an earlier email does not sign in* (`shared-auth-sign-in-SC-34`)
 - [x] 2.4 Narrow `invalidateEarlierSignInMail` to magic-link tokens — satisfies *A new link kills the earlier link* (`shared-auth-sign-in-SC-36`)
 - [x] 2.5 Re-point the send-cap case to the link alone — satisfies *A second link send in a minute is told to wait* (`shared-auth-sign-in-SC-35`)
 - [x] 2.6 Drop the code box from `LoginEmail.tsx`, `otp` from `sendLoginEmail`, and `otpHint` from the email package's catalog type and demo
 - [x] 2.7 Retire the code cases in both brands' `sign-in.spec.ts`, `identity.spec.ts` and `secondaryStorage.spec.ts`, re-basing the cold-read single-use case on the magic-link token
-- [ ] 2.8 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`
+- [x] 2.8 Run `pnpm run typecheck`, `pnpm run lint`, and `pnpm run test:backend`
 
 ## 3. Sign-in frontends (grade10) (owner: @sean)
 
