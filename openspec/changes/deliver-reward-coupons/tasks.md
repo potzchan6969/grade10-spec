@@ -16,7 +16,7 @@ Group 1 lands the reward's contract shape; groups 2, 3 and 4 depend on it. Group
 - [x] 2.1 Add kind, discount, scope and combine-setting fields to the loyalty-admin reward form, so *A reward with a definition is created from the console alone* passes, and drop the admin-API-only path for a reward carrying a definition
 - [x] 2.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 3. Physical reward retires collection (grade10)
+## 3. Physical reward retires collection (grade10) (owner: @ecchochan)
 
 **Do not land 3.2 until all four preconditions hold.** The collection-confirm step being retired here is today's only guard against handing a physical reward over twice, and it is also the only enumeration of who is still owed one. Its replacement is loyalty's own single reservation and single-use coupon, delivered by 3.1 — not the Shopify code, which adds no second guard. What 3.2 waits on is that a reward coupon can reach a counter at all (group 4), that `mint-coupons-as-discount-codes` has shipped its mint machinery so the applied or presented code actually reaches the sale, that release gates 1, 5 and 10 are recorded with date and tester, and that no redemption is still awaiting collection.
 
