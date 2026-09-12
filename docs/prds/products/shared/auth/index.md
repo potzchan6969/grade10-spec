@@ -11,12 +11,11 @@ rules.
 
 ## Collector half
 
-There is no password anywhere. A person signs in with an emailed link, an
-emailed six-digit code, or — where the brand offers it — Google. One verified
-email address is one account: the first successful sign-in creates it, and every
-later visit is the same person. A session covers every site of that brand and
-none of another, and signing out happens in exactly one place per surface,
-always with feedback.
+There is no password anywhere. A person signs in with an emailed link or —
+where the brand offers it — Google. One verified email address is one account:
+the first successful sign-in creates it, and every later visit is the same
+person. A session covers every site of that brand and none of another, and
+signing out happens in exactly one place per surface, always with feedback.
 
 Three capabilities carry that: **sign-in** (the methods and their limits),
 **session** (who the caller is, once they are in), and **sign-out** (leaving

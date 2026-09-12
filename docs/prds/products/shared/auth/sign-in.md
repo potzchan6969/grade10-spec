@@ -4,21 +4,15 @@ spec: shared/auth/sign-in
 order: 1
 ---
 
-A person types their email and picks a way in. The link and the code are both
-emailed; Google appears only on a brand that has enabled it, and only a verified
-Google address signs anyone in. There is no password to get wrong.
-
-- 🚧 The emailed code is withdrawn: the email step sends a link and nothing
-  else, and a code from an earlier email signs nobody in
-- 🚧 The code step leaves the dialog, so an address has one email path and
-  one screen
+A person types their email and a sign-in link is emailed to it. Google appears
+only on a brand that has enabled it, and only a verified Google address signs
+anyone in. There is no password to get wrong, and no code to type.
 
 The rule that shapes the whole surface is **one intent, one request, one
-email**. Pressing the button again while the request is running starts no second
-request, and the link and code options refuse each other while either is in
-flight. Asking again within a minute is answered with a wait rather than a
-second message, and a new send invalidates the mail sent before it, so the
-newest email in an inbox is always the one that works.
+email**. Pressing the button again while the request is running starts no
+second request. Asking again within a minute is answered with a wait rather
+than a second message, and a new link invalidates the one sent before it, so
+the newest email in an inbox is always the one that works.
 
 The first success for an address creates the account and the address becomes
 unique to it — letter case does not create a second account, though a plus-tag
@@ -32,23 +26,15 @@ followed.
 
 ::story{id="auth-sign-in-signinemailform--default" title="The email step"}
 
-::story{id="auth-sign-in-signinemailform--link-request-running" title="The in-flight lock, with the other option refused"}
+::story{id="auth-sign-in-signinemailform--link-request-running" title="The send in flight"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488" title="Login Dialog"}
 
-:::callout{kind="note"}
-Figma draws sign-in only as a dialog — a login dialog, an OTP dialog, a scrim
-and a Google mark. No card-on-a-page layout is drawn anywhere in the file, while
-what ships today is a page-level card. The in-flight change `sign-in-dialog-shell`
-is what closes that gap, so a collector asked to sign in mid-flow comes back to
-what they were doing.
-:::
-
 :::detail{title="Product decisions" for="pm"}
-The email step offers two buttons on one field, and both end in the same
-inbox. The link is one tap from there; the code is read, carried back and
-typed, and can be wrong, expired or locked. The product keeps one email path,
-the link, beside Google.
+The email step offered two buttons on one field, and both ended in the same
+inbox. The link is one tap from there; the code was read, carried back and
+typed, and could be wrong, expired or locked. The product keeps one email
+path, the link, beside Google.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

@@ -3,7 +3,6 @@
     "greeting": "Hi,",
     "body": "Use the link below to sign in. It expires in 15 minutes.",
     "action": "Sign in",
-    "otpHint": "Or enter this code: {otp}",
     "ignore": "If you didn’t request this, you can ignore this email."
   },
   "appointment": {

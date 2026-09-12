@@ -155,7 +155,7 @@ So a passing verification says the chain is internally consistent, never that it
 ## Q & A
 
 - Why step-up instead of better-auth's two-factor sign-in flow?
-  - Sign-in here is passwordless (magic link, email OTP, Google), which the two-factor plugin does not intercept — so the second factor must be proven after sign-in, per session.
+  - Sign-in here is passwordless (magic link, Google), which the two-factor plugin does not intercept — so the second factor must be proven after sign-in, per session.
 - Why does enrolling a first factor ask how old the session is, rather than for a password?
   - There is no password to ask for. The only thing an un-enrolled operator can prove is the channel they signed in through, and a session minutes old is proof somebody read that inbox; a stolen cookie is not.
 - Why both triggers and a hash chain on the audit log?

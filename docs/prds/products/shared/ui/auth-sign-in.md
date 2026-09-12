@@ -23,10 +23,7 @@ application supplies as the last node.
 
 The dialog is the surface; what a successful sign-in creates is
 [the sign-in capability](/p/shared/auth/sign-in). Every word arrives through
-the copy props, and the email and code steps are their own exports for a
-surface that composes them differently.
-
-- 🚧 The code step is no longer exported; the email step is the one step,
-  and it sends a link only
+the copy props, and the email step is its own export for a surface that
+composes it differently.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488" title="Login Dialog"}

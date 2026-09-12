@@ -17,8 +17,8 @@ balance, its documents and its visit.
      to
   3. `grade10.com/vault/sign#<token>` — the signing ceremony, opened from the
      QR code or link staff hand over; no account needed
-- **Sign-in** — magic link or emailed code, Google where enabled; no phone
-  number and no SMS anywhere
+- **Sign-in** — magic link, Google where enabled; no phone number and no
+  SMS anywhere
 - **Language** — the section, the wizard, every refusal and the signing
   screen's own words answer in English, traditional and simplified Chinese;
   the ceremony's operative wording, the documents and every email are English

@@ -7,10 +7,5 @@
   "sendLinkFailed": "无法发送登录链接。",
   "sendWait": "请稍候一分钟再请求另一封邮件。",
   "linkSentMessage": "请查看收件箱中的登录链接。",
-  "sendCodeFailed": "无法发送验证码。",
-  "codeLabel": "验证码",
-  "codeSentTo": "验证码已发送至 {email}",
-  "verifyLabel": "验证",
-  "verifyFailed": "验证码不正确。",
   "legal": "继续即表示你同意我们的<terms>服务条款</terms>与<privacy>隐私政策</privacy>。"
 }
