@@ -9,6 +9,7 @@ import {
   type ListingAuctionStanding,
   type ListingBidHistoryRow,
   type ListingUserBidHistoryRow,
+  type ListingUserMaximumHistoryRow,
   minNextBidMinor,
 } from "@grade10/ui";
 import {
@@ -317,84 +318,147 @@ export function bidHistoryForState(
   return BID_HISTORY;
 }
 
+export type UserBidHistoryFixture = {
+  maximumRows: ListingUserMaximumHistoryRow[];
+  bidRows: ListingUserBidHistoryRow[];
+};
+
+const EMPTY_USER_BID_HISTORY: UserBidHistoryFixture = {
+  maximumRows: [],
+  bidRows: [],
+};
+
 export function userBidHistoryForState(
   state: BiddingState,
-): ListingUserBidHistoryRow[] {
+): UserBidHistoryFixture {
   switch (state) {
     case "live-manual":
-      return [
-        {
-          id: "user-bid-manual-current",
-          amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
-          acceptedAtMs: msAgo(2),
-        },
-        {
-          id: "user-bid-manual-prior",
-          amountLabel: fixtureAmount(
-            BID_FIXTURE_LOT.currentBidMinor - BID_FIXTURE_LOT.incrementMinor,
-          ),
-          acceptedAtMs: msAgo(12),
-        },
-      ];
+      return {
+        maximumRows: [
+          {
+            id: "user-max-manual",
+            amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
+            acceptedAtMs: msAgo(12),
+            status: "set",
+          },
+        ],
+        bidRows: [
+          {
+            id: "user-bid-manual-current",
+            amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
+            acceptedAtMs: msAgo(2),
+          },
+          {
+            id: "user-bid-manual-prior",
+            amountLabel: fixtureAmount(
+              BID_FIXTURE_LOT.currentBidMinor - BID_FIXTURE_LOT.incrementMinor,
+            ),
+            acceptedAtMs: msAgo(12),
+          },
+        ],
+      };
     case "live-auto-leading":
-      return [
-        {
-          id: "user-bid-auto-current",
-          amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
-          acceptedAtMs: msAgo(2),
-        },
-        {
-          id: "user-bid-manual-prior",
-          amountLabel: fixtureAmount(
-            BID_FIXTURE_LOT.currentBidMinor -
-              BID_FIXTURE_LOT.incrementMinor * 2,
-          ),
-          acceptedAtMs: msAgo(25),
-        },
-      ];
+      return {
+        maximumRows: [
+          {
+            id: "user-max-auto-leading",
+            amountLabel: fixtureAmount(BID_FIXTURE_LOT.viewerMaximumMinor),
+            acceptedAtMs: msAgo(25),
+            status: "set",
+          },
+        ],
+        bidRows: [
+          {
+            id: "user-bid-auto-current",
+            amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
+            acceptedAtMs: msAgo(2),
+          },
+          {
+            id: "user-bid-manual-prior",
+            amountLabel: fixtureAmount(
+              BID_FIXTURE_LOT.currentBidMinor -
+                BID_FIXTURE_LOT.incrementMinor * 2,
+            ),
+            acceptedAtMs: msAgo(25),
+          },
+        ],
+      };
     case "live-auto-outbid":
-      return [
-        {
-          id: "user-bid-auto-max",
-          amountLabel: fixtureAmount(BID_FIXTURE_LOT.viewerMaximumMinor),
-          acceptedAtMs: msAgo(5),
-        },
-        {
-          id: "user-bid-manual-prior",
-          amountLabel: fixtureAmount(
-            BID_FIXTURE_LOT.viewerMaximumMinor - BID_FIXTURE_LOT.incrementMinor,
-          ),
-          acceptedAtMs: msAgo(18),
-        },
-      ];
+      return {
+        maximumRows: [
+          {
+            id: "user-max-auto-outbid",
+            amountLabel: fixtureAmount(BID_FIXTURE_LOT.viewerMaximumMinor),
+            acceptedAtMs: msAgo(18),
+            status: "set",
+          },
+        ],
+        bidRows: [
+          {
+            id: "user-bid-auto-max",
+            amountLabel: fixtureAmount(BID_FIXTURE_LOT.viewerMaximumMinor),
+            acceptedAtMs: msAgo(5),
+          },
+          {
+            id: "user-bid-manual-prior",
+            amountLabel: fixtureAmount(
+              BID_FIXTURE_LOT.viewerMaximumMinor -
+                BID_FIXTURE_LOT.incrementMinor,
+            ),
+            acceptedAtMs: msAgo(18),
+          },
+        ],
+      };
     case "closed-won-payment-due":
     case "closed-won-settled":
-      return [
-        {
-          id: "user-bid-won",
-          amountLabel: fixtureAmount(CLOSED_SOLD_MINOR),
-          acceptedAtMs: msAgo(60),
-        },
-        {
-          id: "user-bid-won-prior",
-          amountLabel: fixtureAmount(
-            CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
-          ),
-          acceptedAtMs: msAgo(90),
-        },
-      ];
+      return {
+        maximumRows: [
+          {
+            id: "user-max-won",
+            amountLabel: fixtureAmount(CLOSED_SOLD_MINOR),
+            acceptedAtMs: msAgo(90),
+            status: "set",
+          },
+        ],
+        bidRows: [
+          {
+            id: "user-bid-won",
+            amountLabel: fixtureAmount(CLOSED_SOLD_MINOR),
+            acceptedAtMs: msAgo(60),
+          },
+          {
+            id: "user-bid-won-prior",
+            amountLabel: fixtureAmount(
+              CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
+            ),
+            acceptedAtMs: msAgo(90),
+          },
+        ],
+      };
     case "closed-lost":
-      return [
-        {
-          id: "user-bid-lost",
-          amountLabel: fixtureAmount(
-            CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
-          ),
-          acceptedAtMs: msAgo(120),
-        },
-      ];
+      return {
+        maximumRows: [
+          {
+            id: "user-max-lost",
+            amountLabel: fixtureAmount(
+              CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
+            ),
+            acceptedAtMs: msAgo(120),
+            status: "set",
+          },
+        ],
+        bidRows: [
+          {
+            id: "user-bid-lost",
+            amountLabel: fixtureAmount(
+              CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
+            ),
+            acceptedAtMs: msAgo(120),
+          },
+        ],
+      };
     default:
-      return [];
+      return EMPTY_USER_BID_HISTORY;
   }
 }
 
