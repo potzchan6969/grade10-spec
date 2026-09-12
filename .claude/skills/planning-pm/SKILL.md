@@ -32,7 +32,7 @@ assuming someone will find it.
    `git log --oneline HEAD..origin/main` is not empty, update before reading. A
    MODIFIED block copied from a stale spec silently reverts whatever landed in
    between, and an overlap scan against a stale `openspec/changes/` finds
-   nothing. Then read the capability's page under `docs/prds/` when one
+   nothing. Then read the capability's PRD under `docs/prds/` when one
    exists — what runs, what
    is 🚧 and coming, what is ❓ and open — then every active change in
    `openspec/changes/` on its spec, then the capability under
@@ -52,13 +52,13 @@ assuming someone will find it.
    who should settle it, and does not hold the draft. Sizing, export names, and
    what code a change touches are never the author's to answer: find them
    yourself, or leave them to the engineer who plans delivery.
-3. **Mark the pages first.** On each page the change touches, add one 🚧
+3. **Mark the PRDs first.** On each PRD the change touches, add one 🚧
    line per outcome, in the reader's words and in the section it belongs to
    (the sections are in `docs/prds/guides/writing-the-manual.md`); a ❓ line
    or decisions row for what the author deferred; the decisions the change
    turns on (`prd-authoring`). The house style is `docs/governance/writing.md`.
    The deltas derive from these lines, so a delta promising what no line marks
-   is the delta's error. A capability with no page gets one first —
+   is the delta's error. A capability with no PRD gets one first —
    `prd-authoring` writes it — or the change records `page_waived: <why>` in
    its `.openspec.yaml`; `pnpm check:manual` refuses a change carrying deltas
    with neither a 🚧 line under a linked section nor the waiver. The marks and
@@ -115,9 +115,9 @@ to satisfy validation.
 
 An optional last section, **Follow-on changes**, names what this change makes
 possible next — one bullet each, no dates, no owners, no commitments. The
-manual's `::next` block collects them onto the capability pages this change is
+manual's `::next` block collects them onto the PRDs this change is
 about, each bullet under the change that wrote it, so write them for a reader
-of a capability page rather than for the board. Omit the section when there is
+of a PRD rather than for the board. Omit the section when there is
 nothing to name; a proposal that names none has decided nothing.
 
 ## The delta specs
@@ -211,10 +211,10 @@ actor the spec already knows and scenarios that already exist.
 
 | Statement | Home |
 | --- | --- |
-| What the product should be, in the reader's words | The capability page, marked 🚧 or ❓ |
+| What the product should be, in the reader's words | The PRD, marked 🚧 or ❓ |
 | Anything testable | The delta spec, and nowhere else |
 | Who walks it, and what accepts their story | `user-journeys.md` beside that spec |
-| Why this problem, for whom, what was ruled out, what will be measured | The capability page's `Product decisions` block (`prd-authoring` skill) |
+| Why this problem, for whom, what was ruled out, what will be measured | The PRD's `Product decisions` block (`prd-authoring` skill) |
 | How it will be built | `tech-design.md` — not yours |
 
 A testable statement left on a page or in a proposal, or a delta no page line

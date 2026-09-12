@@ -18,7 +18,7 @@ const STORE_GROUP = "grade10-spec";
 const fileOf = (change, name) => `${change.dir}/${name}`;
 
 /**
- * A change carrying deltas says on a capability's page what it is building,
+ * A change carrying deltas says on a capability's PRD what it is building,
  * and links that section from its proposal. The link is the binding: a rule
  * keyed on the page's `spec:` would let a change pass on a 🚧 line another
  * change put there. Linking a section for context is allowed — one marked
@@ -45,7 +45,7 @@ export function checkUnmarked(ctx, changes, pages) {
     if (linked.some((one) => marked.has(`${one.page}#${one.slug}`))) continue;
     const missing =
       linked.length === 0
-        ? "links no section of a capability's page"
+        ? "links no section of a PRD"
         : "no 🚧 line sits under a section it links";
     ctx.add(
       "unmarked",

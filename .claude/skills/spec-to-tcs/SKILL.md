@@ -74,7 +74,7 @@ Read all of it before writing:
 - every sibling capability's `user-journeys.md` under
   `openspec/specs/<product>/<domain>/`;
 - the domain's product record — `docs/prds/products/<product>/<domain>/index.md`
-  and each capability page — for the decisions, the product's own names for
+  and each PRD — for the decisions, the product's own names for
   surfaces and controls, and the seeded values a pass is written against.
 
 Reading only the change loses the siblings that make a path cross-feature;

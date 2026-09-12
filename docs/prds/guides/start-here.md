@@ -41,7 +41,7 @@ over, or hand the change id to a PM or engineer.
 - [Package Rules](/p/shared/ui/component-package) — what the shared UI
   package owes a product, and what it refuses to hold.
 - [Site Header and Footer](/p/shared/ui/site-chrome) and
-  [Cart Drawer](/p/shared/ui/store-cart) — two capability pages with real
+  [Cart Drawer](/p/shared/ui/store-cart) — two PRDs with real
   Figma and Storybook links side by side.
 - [Design sync](/p/shared/design-sync/coverage) — the unattended rail that
   compares a shipped component against the Figma node it came from.

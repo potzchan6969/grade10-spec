@@ -30,7 +30,7 @@ A section that would only repeat one of them points at it instead.
 
 1. **Read what already exists.** The change's `specs/<capability>/spec.md` and
    `user-journeys.md` — the states you document are the scenarios those
-   already define. Then the capability's page under `docs/prds/` when one
+   already define. Then the capability's PRD under `docs/prds/` when one
    exists.
 2. **Read the enriched instructions.**
 

@@ -122,10 +122,10 @@ tooling on both sides parses it.
   cannot check — a hand-off sequenced behind another change archiving first, a
   capability with no durable spec for the copy to land in, a README row or an
   acceptance shelf — and write it inside the grade10-spec group that updates
-  the manual page, never as a group of its own with a verification step it
+  the PRD, never as a group of its own with a verification step it
   cannot pass.
-- **Carry the manual page.** A change whose deltas touch a capability carries a
-  task to update that capability's page under `docs/prds/`; `pnpm check:manual`
+- **Carry the PRD.** A change whose deltas touch a capability carries a
+  task to update that capability's PRD under `docs/prds/`; `pnpm check:manual`
   verifies it.
 - **Carry the component work** `ui-design.md` flagged — a variant, a token, or
   a compound component that does not exist yet is a grade10-spec group.

@@ -1045,7 +1045,7 @@ describe("the record a change leaves", () => {
     expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([]);
   });
 
-  it("refuses a change that links no section of a capability's page", async () => {
+  it("refuses a change that links no section of a PRD", async () => {
     const root = writeStore(
       carrying(
         { "docs/prds/products/demo-product/alpha.md": MARKED },
@@ -1053,7 +1053,7 @@ describe("the record a change leaves", () => {
       ),
     );
     expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([
-      "openspec/changes/build-alpha/proposal.md — links no section of a capability's page — mark what this change delivers, or say why in `page_waived`",
+      "openspec/changes/build-alpha/proposal.md — links no section of a PRD — mark what this change delivers, or say why in `page_waived`",
     ]);
   });
 

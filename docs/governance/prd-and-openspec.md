@@ -1,6 +1,6 @@
-# PRDs and OpenSpec: the page first, the spec as what runs
+# PRDs and OpenSpec: the PRD first, the spec as what runs
 
-A capability's page under `docs/prds/` is written first. It holds everything the product should be — what runs, what is confirmed and being built, and what nobody has confirmed — each told apart by its mark. `openspec/specs/` is the production shape: every checkable requirement of what runs today, rewritten only when a change archives. An engineer in a consuming application builds from the spec alone.
+A capability's PRD under `docs/prds/` is written first. It holds everything the product should be — what runs, what is confirmed and being built, and what nobody has confirmed — each told apart by its mark. `openspec/specs/` is the production shape: every checkable requirement of what runs today, rewritten only when a change archives. An engineer in a consuming application builds from the spec alone.
 
 ## The rule
 
@@ -16,7 +16,7 @@ Every checkable requirement and every cross-repository contract lives in `opensp
 
 ## Which artifact answers which question?
 
-| Dimension | PRD (`docs/prds/` page) | `openspec/changes/` | `openspec/specs/` |
+| Dimension | PRD (`docs/prds/`) | `openspec/changes/` | `openspec/specs/` |
 | --- | --- | --- | --- |
 | Primary question | What is this, what should it be, why, for whom, and what did we rule out? | What is changing, and how will it be delivered? | What runs today, checkably? |
 | Primary audience | Everyone who reads the manual; the decisions block is for product managers, designers, reviewers | Whoever is delivering the change | Engineers and implementation agents in consuming applications |
@@ -43,18 +43,18 @@ Source material behind a decision — an owner's draft, competitor research, a v
 
 ## Maintenance workflow for future agents
 
-### 1. Start with the page
+### 1. Start with the PRD
 
 Before proposing or implementing a feature, read in this order:
 
-1. the capability's page in `docs/prds/`, for what runs, what is coming, and the rationale;
+1. the capability's PRD in `docs/prds/`, for what runs, what is coming, and the rationale;
 2. any active change in `openspec/changes/` touching that capability — every 🚧 line on the page belongs to one;
 3. the capability in `openspec/specs/`, for the checkable form of what runs; and
 4. the design-system primitives in `packages/design-system/src/components/`, plus the component's implementation in the consuming application, when UI is involved.
 
 If an unmarked line and the spec disagree, the spec is right about what runs: fix the line, or mark it 🚧 or ❓ if it was stating intent.
 
-### 2. Mark the page
+### 2. Mark the PRD
 
 A change starts on the pages it touches. For each, add one 🚧 line per outcome, in the reader's words and in the section the outcome belongs to; add a ❓ line or row for what the author left open; add or update the rows of the decisions block the change turns on. Then link every section the change marked from the proposal's `## References`, as `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`: the manual shows the change under that heading, and `pnpm check:manual` refuses a link to a section that does not exist. It also refuses a change carrying deltas whose links reach no 🚧 line at all; `page_waived: <why>` in the change's `.openspec.yaml` stands in for the mark. The deltas are then derived from the 🚧 lines, so a delta promising what no line marks is the delta's error.
 
@@ -141,11 +141,11 @@ Do not archive a change as a substitute for updating `openspec/specs/`. Archives
 
 ```text
 Is it what the product should be, in the reader's words?
-├─ Yes → the capability page — 🚧 where a change delivers it, ❓ where nobody has confirmed it.
+├─ Yes → the PRD — 🚧 where a change delivers it, ❓ where nobody has confirmed it.
 └─ No  → Is the statement testable — could a test or a manual pass decide it?
          ├─ Yes → the delta in openspec/changes/, folded into
          │        openspec/specs/<product>/<domain>/<capability>/spec.md at archive.
          └─ No  → Does it explain a product judgment that outlives this change?
-                  ├─ Yes → the capability page's Product decisions block.
+                  ├─ Yes → the PRD's Product decisions block.
                   └─ No  → normal repository documentation or code comments.
 ```

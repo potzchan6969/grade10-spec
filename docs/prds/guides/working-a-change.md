@@ -227,7 +227,7 @@ Nobody sends a message. The files themselves are the signal.
 | --- | --- | --- |
 | `proposal.md` alone | A reason, no requirements yet | PM |
 | Deltas, no `user-journeys.md` | The stories are owed — a capability nobody walks says `**Walked by:** nobody` in the file, so a missing one is never the exemption | PM |
-| Deltas, and no 🚧 line under a section the proposal links | The page is unmarked — mark it, or record `page_waived: <why>` in `.openspec.yaml` | PM |
+| Deltas, and no 🚧 line under a section the proposal links | The PRD is unmarked — mark it, or record `page_waived: <why>` in `.openspec.yaml` | PM |
 | Journeys, no `feature-tcs.md` | The suite is derived beside the journeys with `/spec-to-tcs` | PM |
 | A suite of `draft` cases | Review, in its own pull request | QA |
 | A user-facing change, no `ui-design.md` | Screens unmapped | Designer |

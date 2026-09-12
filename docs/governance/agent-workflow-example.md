@@ -114,9 +114,9 @@ tech-design.md, or tasks.md — the designer and the engineer who picks this up
 write those.
 
 Before drafting, read the relevant capability in openspec/specs/, any active
-change touching it, and the capability's page in `docs/prds/`. Identify affected component exports
+change touching it, and the capability's PRD in `docs/prds/`. Identify affected component exports
 and consumer apps in the proposal. Keep every requirement testable; rationale
-that isn't testable belongs in the page's Product decisions block, not the spec.
+that isn't testable belongs in the PRD's Product decisions block, not the spec.
 ```
 
 **Planning the whole change yourself.** When the author is the engineer who

@@ -52,15 +52,15 @@ The journeys are their own file beside each `spec.md`, never a `## User journeys
 
 For a new product feature:
 
-1. Read the capability's page in `docs/prds/`, the active OpenSpec changes on its spec, and the capability in `openspec/specs/`.
+1. Read the capability's PRD in `docs/prds/`, the active OpenSpec changes on its spec, and the capability in `openspec/specs/`.
 2. Mark the pages the feature touches: one 🚧 line per outcome, ❓ on what is still open, and the decisions the feature turns on. An active change already folding the same requirement is extended or superseded, never doubled.
 3. Write the requirements as an OpenSpec change carrying deltas derived from those lines against `openspec/specs/<product>/<domain>/<capability>/spec.md`, linking every page it marked. Its proposal must identify affected component exports and consumer apps.
-4. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. It lands in the capability page's `Product decisions` block; skip it when there is no such judgment.
+4. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. It lands in the PRD's `Product decisions` block; skip it when there is no such judgment.
 5. Keep task checkboxes accurate as work lands; fold accepted deltas into `openspec/specs/`, take the 🚧 marks off the lines the change delivered, then archive under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
 
 Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories, from `openspec new change` to archive.
 
-Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the capability page's decisions table when one exists.
+Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
 
 ## Product UI component contracts
 

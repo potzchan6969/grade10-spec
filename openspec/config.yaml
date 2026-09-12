@@ -146,7 +146,7 @@ rules:
     - 'Phrase an implementation task as the spec scenario(s) it makes pass, naming them, so the scenario''s test is the evidence behind the checkmark. Never split "write the tests" into its own task or group - the engineer works test-first inside each task.'
     - Keep each task to something one engineer finishes in a session.
     - "Follow docs/governance/task-ownership.md for the group, task-id, and owner format. Write groups without owner tags - engineers claim them at pickup - and never renumber a group or task that is claimed or has checkmarks."
-    - "A change whose deltas touch a capability carries a task to update that capability's manual page (docs/prds/ in this store, a grade10-spec group): the page tells the shipped story, and `pnpm check:manual` verifies it."
+    - "A change whose deltas touch a capability carries a task to update that capability's PRD (docs/prds/ in this store, a grade10-spec group): the PRD tells the shipped story, and `pnpm check:manual` verifies it."
 
 # Per-operation guidance (optional)
 operations:
@@ -166,4 +166,4 @@ operations:
       - "Copy the change's `## Feature set` into the durable spec, and its `user-journeys.md` into `openspec/specs/<capability-path>/user-journeys.md`, both by hand - the fold carries `## Requirements` alone, so the feature set and every `-US-` id die with the change otherwise."
       - "Carry an approved `feature-tcs.md` across to the capability beside its spec, and a `domain-tcs.md` into the domain directory beside them, so the suites outlive the change that derived them."
       - Re-read the updated main specs afterward and confirm they describe the shipped behavior.
-      - "Update the capability's manual page to the shipped story before archiving and run `pnpm check:manual` - the archive folds the spec, and a page telling the pre-change story is drift the reader sees first."
+      - "Update the capability's PRD to the shipped story before archiving and run `pnpm check:manual` - the archive folds the spec, and a PRD telling the pre-change story is drift the reader sees first."
