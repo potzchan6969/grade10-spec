@@ -6,8 +6,8 @@ Group 4 needs every secret from groups 2 and 3 set in the real deployment.
 
 ## 1. Operator ending (grade10) (owner: @ecchochan)
 
-- [ ] 1.1 End a pass from the operator console under the permission an elevated act requires, recorded in the operator log and refused rather than hidden without it, so *An operator ends a pass under the permission it requires* passes
-- [ ] 1.2 Verify: `pnpm run typecheck`, `pnpm run test:backend`
+- [x] 1.1 End a pass from the operator console under the permission an elevated act requires, recorded in the operator log and refused rather than hidden without it, so *An operator ends a pass under the permission it requires* passes
+- [x] 1.2 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 2. Google issuer enrolment (operations)
 
