@@ -5,6 +5,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { formatReport, runChecks } from "../check/check-manual.mjs";
+import { DEPLOY_RECORD_SINCE } from "../check/record.mjs";
 import { NO_GIT, readGitIndex } from "../src/store/git.mts";
 import { writeStore } from "./tmp-store";
 
@@ -999,6 +1000,233 @@ describe("a 🚧 line and the change delivering it", () => {
       "openspec/changes/build-alpha/proposal.md": `${proposal("Build alpha")}\n## References\n\n- [Alpha · Rules](../../../docs/prds/products/demo-product/alpha.md#rules)\n`,
     });
     expect(lines(await runChecks(byLink, NO_GIT), "marks")).toEqual([]);
+  });
+});
+
+/** Three rules read the change's own record: the 🚧 its deltas derive from,
+ * the design its application work needs, and the deploy its archive shipped
+ * on. Each has a key in `.openspec.yaml` that stands in for the thing. */
+describe("the record a change leaves", () => {
+  const durable = {
+    "openspec/specs/demo-product/alpha/spec.md": spec(
+      "Alpha",
+      requirement("Alpha does things", "alpha-SC-01", "the thing"),
+    ),
+    "openspec/specs/demo-product/alpha/user-journeys.md": NOBODY,
+  };
+  const page = (line: string) =>
+    `---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\n## Rules\n\n- ${line}\n`;
+  const MARKED = page("🚧 **Refunds** — the points come back");
+  const FLAT = page("**Refunds** — the points come back");
+  const delta =
+    "## MODIFIED Requirements\n\n### Requirement: Alpha does things\n\nAlpha SHALL do the thing.\n";
+  const links = (...bullets: string[]) =>
+    `${proposal("Build alpha")}\n## References\n\n${bullets.join("\n")}\n`;
+  const RULES_LINK =
+    "- [Alpha · Rules](../../../docs/prds/products/demo-product/alpha.md#rules)";
+
+  const carrying = (
+    files: Record<string, string>,
+    proposalText = links(RULES_LINK),
+  ) => ({
+    ...durable,
+    "openspec/changes/build-alpha/proposal.md": proposalText,
+    "openspec/changes/build-alpha/specs/demo-product/alpha/spec.md": delta,
+    ...files,
+  });
+
+  it("passes a change whose linked section carries a 🚧", async () => {
+    const root = writeStore(
+      carrying({ "docs/prds/products/demo-product/alpha.md": MARKED }),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([]);
+  });
+
+  it("refuses a change that links no section of a capability's page", async () => {
+    const root = writeStore(
+      carrying(
+        { "docs/prds/products/demo-product/alpha.md": MARKED },
+        proposal("Build alpha"),
+      ),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([
+      "openspec/changes/build-alpha/proposal.md — links no section of a capability's page — mark what this change delivers, or say why in `page_waived`",
+    ]);
+  });
+
+  it("refuses a change linking a section nothing under it marks", async () => {
+    const root = writeStore(
+      carrying({ "docs/prds/products/demo-product/alpha.md": FLAT }),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([
+      "openspec/changes/build-alpha/proposal.md — no 🚧 line sits under a section it links — mark what this change delivers, or say why in `page_waived`",
+    ]);
+  });
+
+  /** A mark above the page's first `## ` belongs to no section, so no link can
+   * name it — the link is what binds the change to the line. */
+  it("refuses a 🚧 sitting above every heading", async () => {
+    const root = writeStore(
+      carrying({
+        "docs/prds/products/demo-product/alpha.md":
+          "---\ntitle: Alpha\nspec: demo-product/alpha\n---\n\n🚧 **Refunds** — the points come back\n\n## Rules\n\n- **Scope** — every order\n",
+      }),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([
+      "openspec/changes/build-alpha/proposal.md — no 🚧 line sits under a section it links — mark what this change delivers, or say why in `page_waived`",
+    ]);
+  });
+
+  it("passes a change whose manifest waives the page", async () => {
+    const root = writeStore(
+      carrying(
+        {
+          "docs/prds/products/demo-product/alpha.md": FLAT,
+          "openspec/changes/build-alpha/.openspec.yaml":
+            'schema: grade10-planning\npage_waived: "predates the page rule"\n',
+        },
+        proposal("Build alpha"),
+      ),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([]);
+  });
+
+  /** A key read as absent would waive the rule it answers to, quietly. */
+  it("refuses a record key holding anything but text", async () => {
+    const root = writeStore(
+      carrying({
+        "docs/prds/products/demo-product/alpha.md": MARKED,
+        "openspec/changes/build-alpha/.openspec.yaml":
+          "schema: grade10-planning\ndeploy_waived: true\n",
+      }),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "store")).toEqual([
+      "openspec/changes/build-alpha/.openspec.yaml — build-alpha line 1: `deploy_waived` must be a line of text",
+    ]);
+  });
+
+  const planned = (group: string, files: Record<string, string> = {}) =>
+    writeStore(
+      carrying({
+        "docs/prds/products/demo-product/alpha.md": MARKED,
+        "openspec/changes/build-alpha/tasks.md": `## ${group}\n\n- [ ] 1.1 Build it\n`,
+        ...files,
+      }),
+    );
+
+  it("refuses application work with no tech design, tagged or not", async () => {
+    expect(
+      lines(
+        await runChecks(planned("1. Build it (grade10)"), NO_GIT),
+        "design",
+      ),
+    ).toEqual([
+      "openspec/changes/build-alpha/tasks.md — group 1 names `grade10`, so the work lands outside this store and has no `tech-design.md` — write it, or say why in `design_waived`",
+    ]);
+    expect(
+      lines(await runChecks(planned("1. Build it"), NO_GIT), "design"),
+    ).toEqual([
+      "openspec/changes/build-alpha/tasks.md — group 1 names no repository, so the work lands outside this store and has no `tech-design.md` — write it, or say why in `design_waived`",
+    ]);
+  });
+
+  it("passes the design written, the work that stays in this store, and the waiver", async () => {
+    const written = planned("1. Build it (grade10)", {
+      "openspec/changes/build-alpha/tech-design.md":
+        "## Context\n\nIt lands here.\n",
+    });
+    expect(lines(await runChecks(written, NO_GIT), "design")).toEqual([]);
+
+    const here = planned("1. Write the pages (grade10-spec)");
+    expect(lines(await runChecks(here, NO_GIT), "design")).toEqual([]);
+
+    const waived = planned("1. Build it (grade10)", {
+      "openspec/changes/build-alpha/.openspec.yaml":
+        'schema: grade10-planning\ndesign_waived: "predates the design rule"\n',
+    });
+    expect(lines(await runChecks(waived, NO_GIT), "design")).toEqual([]);
+  });
+
+  const EARLIER = new Date(
+    Date.parse(`${DEPLOY_RECORD_SINCE}T00:00:00Z`) - 86_400_000,
+  )
+    .toISOString()
+    .slice(0, 10);
+
+  const shipped = (
+    on: string,
+    files: Record<string, string>,
+    group = "1. Build it (grade10)",
+  ) =>
+    writeStore({
+      ...durable,
+      [`openspec/changes/archive/${on}-build-alpha/proposal.md`]:
+        proposal("Build alpha"),
+      [`openspec/changes/archive/${on}-build-alpha/tasks.md`]: `## ${group}\n\n- [x] 1.1 Build it\n`,
+      ...files,
+    });
+
+  const record = (on: string, body: string) => ({
+    [`openspec/changes/archive/${on}-build-alpha/.openspec.yaml`]: `schema: grade10-planning\n${body}`,
+  });
+
+  it("refuses an archive recording no deploy", async () => {
+    const root = shipped(
+      DEPLOY_RECORD_SINCE,
+      record(DEPLOY_RECORD_SINCE, "created: 2026-09-01\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "archived")).toEqual([
+      `openspec/changes/archive/${DEPLOY_RECORD_SINCE}-build-alpha/.openspec.yaml — records no deploy — \`pnpm plan shipped build-alpha\` writes \`deployed_at\`, or say who archived it without one in \`deploy_waived\``,
+    ]);
+  });
+
+  it("refuses an archive carrying no manifest at all", async () => {
+    const root = shipped(DEPLOY_RECORD_SINCE, {});
+    expect(lines(await runChecks(root, NO_GIT), "archived")).toEqual([
+      `openspec/changes/archive/${DEPLOY_RECORD_SINCE}-build-alpha/.openspec.yaml — carries no \`.openspec.yaml\`, so it records no deploy — \`pnpm plan shipped build-alpha\` writes \`deployed_at\`, or say who archived it without one in \`deploy_waived\``,
+    ]);
+  });
+
+  /** No task group is not "every group lands in this store" — a change that
+   * shipped deltas without a task list owes the record like any other. */
+  it("refuses an archive carrying deltas and no tasks.md", async () => {
+    const dir = `openspec/changes/archive/${DEPLOY_RECORD_SINCE}-build-alpha`;
+    const root = writeStore({
+      ...durable,
+      [`${dir}/proposal.md`]: proposal("Build alpha"),
+      [`${dir}/specs/demo-product/alpha/spec.md`]: delta,
+      ...record(DEPLOY_RECORD_SINCE, "created: 2026-09-01\n"),
+    });
+    expect(lines(await runChecks(root, NO_GIT), "archived")).toEqual([
+      `${dir}/.openspec.yaml — records no deploy — \`pnpm plan shipped build-alpha\` writes \`deployed_at\`, or say who archived it without one in \`deploy_waived\``,
+    ]);
+  });
+
+  it("passes the sha, the waiver, work that only lands in this store, and an archive that predates the rule", async () => {
+    const at = shipped(
+      DEPLOY_RECORD_SINCE,
+      record(
+        DEPLOY_RECORD_SINCE,
+        'deployed_at: "0f1e2d3"\ndeployed_env: "production"\n',
+      ),
+    );
+    expect(lines(await runChecks(at, NO_GIT), "archived")).toEqual([]);
+
+    const waived = shipped(
+      DEPLOY_RECORD_SINCE,
+      record(DEPLOY_RECORD_SINCE, 'deploy_waived: "@echo, nothing shipped"\n'),
+    );
+    expect(lines(await runChecks(waived, NO_GIT), "archived")).toEqual([]);
+
+    const here = shipped(
+      DEPLOY_RECORD_SINCE,
+      record(DEPLOY_RECORD_SINCE, "created: 2026-09-01\n"),
+      "1. Write the pages (grade10-spec)",
+    );
+    expect(lines(await runChecks(here, NO_GIT), "archived")).toEqual([]);
+
+    const earlier = shipped(EARLIER, {});
+    expect(lines(await runChecks(earlier, NO_GIT), "archived")).toEqual([]);
   });
 });
 

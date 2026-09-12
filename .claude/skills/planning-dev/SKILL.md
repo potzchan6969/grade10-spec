@@ -52,10 +52,8 @@ schema's. Read them rather than working from memory.
 
 ## tech-design.md
 
-Optional. Write one when the change is cross-cutting, introduces an
-architectural pattern or an external dependency, changes the data model,
-carries security, performance or migration complexity, or holds an ambiguity
-better settled before coding.
+Owed by every change carrying a task group outside this store — `openspec
+instructions tech-design` states the rule and the waiver that stands in for it.
 
 - **Context**: only the current state and constraints needed to explain the
   approach. Point at the proposal for motivation; never restate it.

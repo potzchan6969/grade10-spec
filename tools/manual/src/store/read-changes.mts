@@ -91,6 +91,7 @@ function readChange(
   const rel = storePath(root, dir);
   const entry: ChangeEntry = {
     id,
+    dir: rel,
     schema: "",
     status,
     owners: [],
@@ -129,6 +130,10 @@ function readChange(
       declared = handles([fields.owner, fields.owners]);
       const dependsOn = strings(fields.depends_on);
       if (dependsOn.length > 0) entry.dependsOn = dependsOn;
+      for (const [key, field] of RECORDED) {
+        const written = line(key, fields[key]);
+        if (written) entry[field] = written;
+      }
     } catch (cause) {
       fail(`${rel}/.openspec.yaml`, cause);
     }
@@ -220,6 +225,30 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
     }
   }
   return suites;
+}
+
+/** The manifest keys that stand for a deploy or for the thing a rule asks
+ * for, against the field each lands on. Every one is a line an author or
+ * `pnpm plan shipped` wrote, read back verbatim. */
+const RECORDED = [
+  ["page_waived", "pageWaived"],
+  ["design_waived", "designWaived"],
+  ["deployed_at", "deployedAt"],
+  ["deployed_env", "deployedEnv"],
+  ["deploy_waived", "deployWaived"],
+  ["tasks_waived", "tasksWaived"],
+] as const;
+
+/** A written line, or nothing where the key is absent or blank. Anything but
+ * text is a malformed manifest: a record read as absent would waive the rule
+ * the key answers to. */
+function line(key: string, value: unknown): string | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value !== "string") {
+    throw new StoreFileError(1, `\`${key}\` must be a line of text`);
+  }
+  const written = value.trim();
+  return written === "" ? undefined : written;
 }
 
 /** `YYYY-MM-DD`, however the yaml spelled it — a bare date is a `Date` by the

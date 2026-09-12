@@ -235,6 +235,12 @@ export type PageSectionRef = { page: string; slug: string };
 
 export type ChangeEntry = {
   id: string;
+  /** Store-relative change directory. An archived one carries the
+   * `YYYY-MM-DD-` prefix the id drops, so this is the only way back to its
+   * files. */
+  dir: string;
+  /** The planning schema `.openspec.yaml` declares, and `""` where the change
+   * carries no manifest at all. */
   schema: string;
   status: ChangeStatus;
   /** From `.openspec.yaml` `owner:`/`owners:`, merged with the
@@ -253,6 +259,24 @@ export type ChangeEntry = {
   /** Change ids from `.openspec.yaml` `depends_on:`; resolution against
    * the in-flight and archived sets happens in derivation. */
   dependsOn?: string[];
+  /** Why this change marks no capability page, from `.openspec.yaml`
+   * `page_waived:` — the line that stands in for the 🚧 a change with deltas
+   * owes a page. */
+  pageWaived?: string;
+  /** Why this change writes no `tech-design.md`, from `.openspec.yaml`
+   * `design_waived:`. */
+  designWaived?: string;
+  /** The deploy that carried the change, from `.openspec.yaml` `deployed_at:`
+   * and `deployed_env:` — the sha the application repository verified, and the
+   * environment it ran in. */
+  deployedAt?: string;
+  deployedEnv?: string;
+  /** Who archived the change without deploy evidence, and why, from
+   * `.openspec.yaml` `deploy_waived:`. */
+  deployWaived?: string;
+  /** Who archived the change with tasks still unchecked, and why, from
+   * `.openspec.yaml` `tasks_waived:`. */
+  tasksWaived?: string;
   title: string;
   why: string;
   /** Ids the proposal's `## References` names, read back so the

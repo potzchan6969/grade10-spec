@@ -1,9 +1,6 @@
 /* RULE: a proposal's `## References` links land on a section that exists. */
-import { slugify } from "../src/api/paths.ts";
+import { sectionSlug } from "../src/api/paths.ts";
 import { outline } from "../src/store/markdown.mts";
-
-const LINK = /\[([^\]]+)\]\([^)]*\)/g;
-const INLINE = /[*_`]/g;
 
 /** The ids the page's own `## ` headings render with: top-level prose only,
  * the same way the renderer anchors them. */
@@ -12,10 +9,7 @@ function sectionSlugs(ast) {
   for (const block of ast.blocks) {
     if (block.type !== "prose") continue;
     for (const section of outline(block.markdown)) {
-      if (section.level !== 2) continue;
-      slugs.add(
-        slugify(section.heading.replace(LINK, "$1").replace(INLINE, "")),
-      );
+      if (section.level === 2) slugs.add(sectionSlug(section.heading));
     }
   }
   return slugs;

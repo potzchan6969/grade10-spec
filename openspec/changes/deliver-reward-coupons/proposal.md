@@ -15,11 +15,12 @@ Metric: share of redemptions used at the till within 30 days of being bought.
 ## What Changes
 
 - A reward carries a kind — a product coupon or a gift — a discount (a fixed
-  amount, or a percentage capped at a maximum), a scope (named products or
+  amount, or a percentage capped at a maximum) and a scope (named products or
   variants, a filter over the catalog's worlds and types, or the whole
-  order) and a combine setting (which of the shop's own product, order and
-  shipping discounts its coupon stacks with), read by the coupon wherever it
-  is spent, online or at the till.
+  order), read by the coupon wherever it is spent, online or at the till. It
+  also carries a combine setting — which of the shop's own product, order and
+  shipping discounts its coupon stacks with — copied onto the coupon here and
+  carried to the shop by `mint-coupons-as-discount-codes`.
 - A gift adds a free line for the variant it names, and needs a minimum
   spend above zero.
 - The console's reward form sets that whole definition, so no reward needs

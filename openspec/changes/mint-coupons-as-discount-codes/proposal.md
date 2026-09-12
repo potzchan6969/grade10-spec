@@ -37,7 +37,7 @@ A product coupon and a gift currently reach the draft order as a custom discount
 ## Impact
 
 - `packages/coupons/contracts/src/` — a new `codeTargetFor()` beside `eligibleLines()`, projecting a coupon's target onto what a Shopify code can express, against one basket.
-- `packages/shopify/backend/src/admin/discounts.ts` — every coupon shape mints through the same call, customer-scoped, with `combinesWith` and `endsAt` as parameters rather than constants; `combinesWith` comes from the coupon's own definition, with today's constant as the default.
+- `packages/shopify/backend/src/admin/discounts.ts` — every coupon shape mints through the same call, customer-scoped, with `endsAt` a parameter rather than a constant; `combinesWith` already comes from the coupon's own definition, defaulting to `DEFAULT_COMBINES_WITH`.
 - `packages/grade10-store/backend/src/adapters/shopify/shopifyProvider.ts`, `services/orders/checkout.ts` — a requested code the draft did not land is answered as replaced, not refused, where the draft carries an automatic discount instead; the checkout completes, the coupon is released and the member is told.
 - `packages/grade10-store/backend/src/services/coupons/` — a product coupon and a gift stop welding a line discount; `createCoupon()` stops minting; one shared mint helper, with a code derived from the order and coupon ids so a retry recovers rather than duplicates.
 - `packages/grade10-store/backend/src/db/schema/coupons.ts`, `orders.ts` — a relaxing `ck_coupons_shape` edit, a new `coupon_mints` table with real foreign keys, and two nullable code columns on `orders` for a reward's mint.

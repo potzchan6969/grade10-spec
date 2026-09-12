@@ -52,7 +52,10 @@ import {
   readGitIndex,
   STORE_DIRS,
 } from "../src/store/git.mts";
-import { readChanges } from "../src/store/read-changes.mts";
+import {
+  readArchivedChanges,
+  readChanges,
+} from "../src/store/read-changes.mts";
 import { readManualConfig } from "../src/store/read-manual.mts";
 import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
 import { resolveRoots, rootsOf } from "../src/store/roots.mts";
@@ -69,6 +72,7 @@ import { checkDeltas } from "./deltas.mjs";
 import { checkMarks } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkAcceptance } from "./qa.mjs";
+import { checkArchived, checkDesign, checkUnmarked } from "./record.mjs";
 import { checkRole } from "./role.mjs";
 import { checkSections } from "./sections.mjs";
 import {
@@ -181,6 +185,9 @@ export async function runChecks(
     checkDeltas(ctx, { changes, shape, pages });
     checkStoreErrors(specs, changes, folded, add);
     checkDependencies(roots.store, changes, add);
+    checkUnmarked(ctx, changes, pages);
+    checkDesign(ctx, changes);
+    checkArchived(ctx, readArchivedChanges(roots.store, index));
   } else {
     notes.push(
       `store rules not run — the store's own repository answers for ${roots.store}`,

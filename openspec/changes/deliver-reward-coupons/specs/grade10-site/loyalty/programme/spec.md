@@ -40,19 +40,14 @@ greater than zero; a product coupon's minimum spend is optional.
 
 Every reward SHALL also state a combine setting: whether its coupon stacks
 with the shop's own product discounts, order discounts and shipping
-discounts, each allowed or not. A reward stating none SHALL take the
-store's default. The shop's own configuration decides the outcome together
-with that setting, per `grade10-site/store/discounts`.
+discounts, each allowed or not. A reward MAY state none. What a coupon's
+code carries, and the store's default a reward stating none takes, are
+`grade10-site/store/discounts`' own requirement, and a reward's setting is
+one case of it.
 
 This definition SHALL be copied onto the coupon a redemption issues,
 unchanged by any later edit to the reward, and SHALL be what the coupon
 takes off wherever it is applied — online or at the till, identically.
-
-#### Scenario: grade10-site-loyalty-programme-SC-173 - A reward's combine setting reaches its code
-
-- **WHEN** a member's coupon is claimed by an order and its code is minted
-- **THEN** the code carries the reward's own combine setting
-- **AND** a reward that stated none carries the store's default
 
 #### Scenario: grade10-site-loyalty-programme-SC-152 - A fixed-amount coupon takes a set amount off its scope
 

@@ -14,6 +14,7 @@ concurrency:
 
 env:
   NODE_VERSION: 24.14.1
+  OPENSPEC_VERSION: 1.8.0
   SLACK_NOTI_CHANNEL: C045K1QJVQT # web3-github
   SLACK_NOTI_FOOTER: ${{ github.repository }} | ${{ github.head_ref || github.ref_name }} | <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|view logs>
   SLACK_NOTI_FOOTER_ICON: https://slack-imgs.com/?c=1&o1=wi32.he32.si&url=https%3A%2F%2Fslack.github.com%2Fstatic%2Fimg%2Ffavicon-neutral.png
@@ -110,3 +111,30 @@ jobs:
       - name: Check diagrams
         if: ${{ !cancelled() }}
         run: pnpm run diagrams:check
+
+  # Its own job: the CLI is the only thing it needs, and a Biome failure must
+  # never be what lets a malformed change through. Read-only — it writes
+  # nothing back to the branch.
+  openspec:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install the OpenSpec CLI
+        run: npm install -g @fission-ai/openspec@${{ env.OPENSPEC_VERSION }}
+
+      - name: Validate changes
+        run: openspec validate --changes --strict
+
+      - name: Validate durable specs
+        if: ${{ !cancelled() }}
+        run: openspec validate --specs

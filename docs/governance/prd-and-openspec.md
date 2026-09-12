@@ -56,7 +56,7 @@ If an unmarked line and the spec disagree, the spec is right about what runs: fi
 
 ### 2. Mark the page
 
-A change starts on the pages it touches. For each, add one 🚧 line per outcome, in the reader's words and in the section the outcome belongs to; add a ❓ line or row for what the author left open; add or update the rows of the decisions block the change turns on. Then link every section the change marked from the proposal's `## References`, as `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`: the manual shows the change under that heading, and `pnpm check:manual` refuses a link to a section that does not exist. The deltas are then derived from the 🚧 lines, so a delta promising what no line marks is the delta's error.
+A change starts on the pages it touches. For each, add one 🚧 line per outcome, in the reader's words and in the section the outcome belongs to; add a ❓ line or row for what the author left open; add or update the rows of the decisions block the change turns on. Then link every section the change marked from the proposal's `## References`, as `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`: the manual shows the change under that heading, and `pnpm check:manual` refuses a link to a section that does not exist. It also refuses a change carrying deltas whose links reach no 🚧 line at all; `page_waived: <why>` in the change's `.openspec.yaml` stands in for the mark. The deltas are then derived from the 🚧 lines, so a delta promising what no line marks is the delta's error.
 
 ### 3. Write requirements into the change's delta
 
@@ -90,7 +90,7 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
 Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. Update the page too when that constraint changed an outcome or a recorded product decision.
 
-Only the first three are always written. A change is finished as far as its author is concerned once the requirements and their journeys are right; the engineer who picks it up adds `ui-design.md`, `tech-design.md` and `tasks.md` **to that same change**, and adds `promoted_by: @handle` to its `.openspec.yaml` so the board names them. The proposal and the deltas carry over untouched — never send them back to their author for a task list.
+Only the first three are always written. A change is finished as far as its author is concerned once the requirements and their journeys are right; the engineer who picks it up adds `ui-design.md`, `tech-design.md` and `tasks.md` **to that same change**, and adds `promoted_by: @handle` to its `.openspec.yaml` so the board names them. `tech-design.md` is owed by every change carrying a task group outside this store — the repository tag on the group heading says where the work lands, and an untagged group counts; `design_waived: <why>` in the manifest stands in for it, and `pnpm check:manual` refuses a change with neither. The proposal and the deltas carry over untouched — never send them back to their author for a task list.
 
 That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there, and a change with no `tasks.md` shows on the engineer's board as still being planned. A change whose requirements are finished but which nobody picks up is therefore invisible as ready work, however complete its specs are.
 
@@ -109,11 +109,12 @@ Component source lives in the application. This repository carries the contract 
 
 Before archiving:
 
-1. ensure required tasks are complete and validation is recorded;
-2. fold accepted requirement deltas into `openspec/specs/`;
-3. take the 🚧 marks off every line this change delivered — the line stays, flat — in the same commit as the fold, then run `pnpm check:manual`: a 🚧 line left on a page no in-flight change touches fails it, and a durable spec whose requirements changed meaning after its page was last committed warns on that page until the page catches up — by the edit it needs, or by `reviewed: <date>` in its frontmatter when it already reads right;
-4. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`; and
-5. leave links between the spec, the page, and the archive where they aid discovery.
+1. ensure required tasks are complete and validation is recorded — `pnpm run archive:preflight` refuses while a task is unchecked, unless `tasks_waived: <who, why>` names the decision;
+2. record the deploy: `pnpm plan shipped <change-id>` in the application repository writes `deployed_at` and `deployed_env` into the change's `.openspec.yaml`. `pnpm check:manual` fails an archive dated 2026-09-12 or later that carries neither those nor `deploy_waived: <who, why>`; a change whose task groups are all tagged `(grade10-spec)` deploys nothing and owes no record;
+3. fold accepted requirement deltas into `openspec/specs/`;
+4. take the 🚧 marks off every line this change delivered — the line stays, flat — in the same commit as the fold, then run `pnpm check:manual`: a 🚧 line left on a page no in-flight change touches fails it, and a durable spec whose requirements changed meaning after its page was last committed warns on that page until the page catches up — by the edit it needs, or by `reviewed: <date>` in its frontmatter when it already reads right;
+5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`; and
+6. leave links between the spec, the page, and the archive where they aid discovery.
 
 Do not archive a change as a substitute for updating `openspec/specs/`. Archives preserve history; the spec must describe what runs.
 

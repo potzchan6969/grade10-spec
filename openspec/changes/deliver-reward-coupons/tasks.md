@@ -4,17 +4,17 @@ Group 1 lands the reward's contract shape; groups 2, 3 and 4 depend on it. Group
 
 ## 1. Reward definitions (grade10) (owner: @ecchochan)
 
-- [ ] 1.1 Extend the reward contract with a kind, a discount (fixed amount, or a percentage with a maximum) and a scope (named products or variants, a worlds-and-types filter, or the whole order), plus a gift's own minimum spend, so *A reward names a kind, a discount and a scope* passes
-- [ ] 1.2 Copy the definition onto the coupon a redemption issues, unchanged by a later edit to the reward
-- [ ] 1.3 Evaluate a coupon's discount from its own definition wherever it is applied, online and at the till, so *A fixed-amount coupon takes a set amount off its scope*, *A percentage coupon is capped at its maximum discount*, *A coupon scoped to a catalog filter matches worlds and types*, *A coupon scoped to the whole order applies across every line*, *A gift adds a free line for its own variant*, and *A gift below its minimum spend does not apply* pass
-- [ ] 1.4 Pin the points-basis invariant with a test rather than new arithmetic: a whole-order-scoped reward arrives as `lineCuts`, which `rewardCuts` already reads and the basis already subtracts, and a reward's `evaluation.orderCutMinor` is always zero because a reward's definition is a product coupon or a gift and only the `order` branch returns a non-zero order cut — the real hazard in that expression is `orderCodeMinor` being subtracted twice, which `mint-coupons-as-discount-codes` task 4.2 owns
-- [ ] 1.5 Add a combine setting to the reward contract — product, order and shipping discounts each allowed or not, absent meaning the store default — copy it onto the coupon with the rest of the definition, and pass it to `mint-coupons-as-discount-codes`' `mintDiscountCode` as its `combinesWith` when the reward's code is minted, so *A reward's combine setting reaches its code* passes
-- [ ] 1.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`
+- [x] 1.1 Extend the reward contract with a kind, a discount (fixed amount, or a percentage with a maximum) and a scope (named products or variants, a worlds-and-types filter, or the whole order), plus a gift's own minimum spend, so *A reward names a kind, a discount and a scope* passes
+- [x] 1.2 Copy the definition onto the coupon a redemption issues, unchanged by a later edit to the reward
+- [x] 1.3 Evaluate a coupon's discount from its own definition wherever it is applied, online and at the till, so *A fixed-amount coupon takes a set amount off its scope*, *A percentage coupon is capped at its maximum discount*, *A coupon scoped to a catalog filter matches worlds and types*, *A coupon scoped to the whole order applies across every line*, *A gift adds a free line for its own variant*, and *A gift below its minimum spend does not apply* pass
+- [x] 1.4 Pin the points-basis invariant with a test rather than new arithmetic: a whole-order-scoped reward arrives as `lineCuts`, which `rewardCuts` already reads and the basis already subtracts, and a reward's `evaluation.orderCutMinor` is always zero because a reward's definition is a product coupon or a gift and only the `order` branch returns a non-zero order cut — the real hazard in that expression is `orderCodeMinor` being subtracted twice, which `mint-coupons-as-discount-codes` task 4.2 owns
+- [ ] 1.5 Add a combine setting to the reward contract — product, order and shipping discounts each allowed or not, absent meaning the store default — and copy it onto the coupon with the rest of the definition; carrying that setting onto the coupon's minted code is what `mint-coupons-as-discount-codes` task 1.6 owns, reading it from here
+- [x] 1.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 2. Console reward form (grade10) (owner: @ecchochan)
 
-- [ ] 2.1 Add kind, discount, scope and combine-setting fields to the loyalty-admin reward form, so *A reward with a definition is created from the console alone* passes, and drop the admin-API-only path for a reward carrying a definition
-- [ ] 2.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
+- [x] 2.1 Add kind, discount, scope and combine-setting fields to the loyalty-admin reward form, so *A reward with a definition is created from the console alone* passes, and drop the admin-API-only path for a reward carrying a definition
+- [x] 2.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
 ## 3. Physical reward retires collection (grade10)
 
@@ -39,9 +39,9 @@ Staff applying a coupon from the panel and the member presenting one from their 
 
 ## 5. Cancellation is its own permission (grade10) (owner: @ecchochan)
 
-- [ ] 5.1 Split cancelling a redemption into its own permission, apart from the point-movement permission it shares today, so *Moving points does not carry redemption cancellation* passes
-- [ ] 5.2 Keep a reversal to an unused coupon and drop the collection clause from its terms, so *A reversal voids the coupon*, *A used coupon cannot be reversed* and *A refunded sale does not return the coupon* pass — a refunded sale returns the goods, the money and any points spent as a discount on it, never the coupon
-- [ ] 5.3 Verify: `pnpm run typecheck`, `pnpm run test:backend`
+- [x] 5.1 Split cancelling a redemption into its own permission, apart from the point-movement permission it shares today, so *Moving points does not carry redemption cancellation* passes
+- [x] 5.2 Keep a reversal to an unused coupon and drop the collection clause from its terms, so *A reversal voids the coupon*, *A used coupon cannot be reversed* and *A refunded sale does not return the coupon* pass — a refunded sale returns the goods, the money and any points spent as a discount on it, never the coupon
+- [x] 5.3 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
 ## 6. Member disclosure and the staff-assisted notice (grade10)
 

@@ -3,3 +3,4 @@ promoted_by: "@ecchochan"
 created: 2026-09-10
 depends_on:
   - add-google-wallet-member-card
+design_waived: "predates the design rule"

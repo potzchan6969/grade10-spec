@@ -12,9 +12,13 @@
 A member SHALL be able to end a pass in one action, and an operator SHALL be
 able to end it for a member who asks under the permission an elevated act
 requires, recorded in the operator log like any other. An operator holding no
-such permission SHALL see it refused, not hidden. Ending SHALL take effect at
-once: every code the ended pass can make identifies nobody, whether or not the
-pass is still on the member's phone. A member SHALL be able to add a new pass
+such permission SHALL have the act refused by name rather than answered as
+though it did not exist, and the console SHALL offer it only to an operator
+who holds the permission. The console SHALL show which wallets the member is
+carrying a pass in, so the operator ends one the member holds rather than one
+they named from memory. Ending SHALL take effect at once: every code the ended
+pass can make identifies nobody, whether or not the pass is still on the
+member's phone. A member SHALL be able to add a new pass
 afterwards.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-24 - An ended pass identifies nobody
@@ -27,4 +31,5 @@ afterwards.
 
 - **WHEN** an operator ends a member's pass
 - **THEN** the act is recorded in the operator log with who and when
-- **AND** an operator without that permission sees it refused, not hidden
+- **AND** an operator without that permission is refused by name, and is never
+  offered the act in the console

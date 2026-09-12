@@ -103,6 +103,21 @@ export const RULES = [
   },
   { key: "depends", level: "fail", title: "Dependencies naming no change" },
   {
+    key: "unmarked",
+    level: "fail",
+    title: "Changes whose deltas no page marks",
+  },
+  {
+    key: "design",
+    level: "fail",
+    title: "Application work with no tech design",
+  },
+  {
+    key: "archived",
+    level: "fail",
+    title: "Archives recording no deploy",
+  },
+  {
     key: "story",
     level: "fail",
     title: "Story ids in the workbench Storybook index",
@@ -150,6 +165,10 @@ const LEVEL = new Map(RULES.map((rule) => [rule.key, rule.level]));
 
 /** The config's content-relative path, for the report's path column. */
 export const manualYaml = (roots) => `${roots.manual}/manual.yaml`;
+
+/** Where a capability's pages sit. The 🚧 rules read only these — a guide
+ * writes the mark to explain it. */
+export const productPages = (roots) => `${roots.manual}/products/`;
 
 /** The sink, opened before the readers run so a reader that refuses a file can
  * report it. */
