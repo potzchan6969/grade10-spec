@@ -22,6 +22,26 @@ use the same locale and stated time zone.
 Every accessible name and every label comes from the application. What a bid
 does, and what it must clear, belongs to [the auction](/p/grade10-site/auction).
 
+## Personal Bidding
+
+The bid card may carry a personal-bidding accessory beside the public
+recent-bids label. That block is for the signed-in owner only.
+
+- 🚧 **Your bidding** — the link and dialog title cover both maximum history
+  and bids Grade10 placed
+- 🚧 **Two tabs** — **Bid placed**, then **Your maximums**, each with its
+  own scrollable table; not one merged table and not two stacked full tables
+- 🚧 **Default tab** — **Bid placed** whenever the dialog opens (empty bids
+  state when that list has no rows)
+- 🚧 **Maximum rows** — amount and time only; no **Set** / **Raised** status
+  on the row
+- 🚧 **No dialog maximum summary** — the live private maximum stays on the
+  bid panel; this block is tabs and lists only
+- 🚧 **Copy from the application** — every label, description, empty state,
+  and column header arrives through props; the block supplies none of its own
+- 🚧 **Hidden when idle** — with no maximum rows and no bid-sequence rows,
+  the link and dialog are absent
+
 ::story{id="auction-listing-listinggallery--distinct-sources" title="One image with separate thumb, main and zoom sources"}
 
 ::story{id="auction-listing-listinggallery--single-image" title="A single-image gallery, with no strip"}

@@ -44,12 +44,12 @@ export const LiveAutoLeading: Story = {
       canvas.getByRole("button", { name: /^Raise maximum to/ }),
     ).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "Your bid history" }),
+      canvas.getByRole("button", { name: "Your bidding" }),
     ).toBeVisible();
     expect(canvas.getByText("You")).toBeVisible();
     expect(canvas.queryByText("Enable auto-bidding")).not.toBeInTheDocument();
     expect(
-      canvas.queryByRole("dialog", { name: "Bid History" }),
+      canvas.queryByRole("dialog", { name: "Your bidding" }),
     ).not.toBeInTheDocument();
   },
 };
@@ -65,7 +65,7 @@ export const LiveNoBids: Story = {
     expect(canvas.getByText("Min. bid")).toBeVisible();
     expect(canvas.getByRole("button", { name: /^Set maximum/ })).toBeVisible();
     expect(
-      canvas.queryByRole("button", { name: "Your bid history" }),
+      canvas.queryByRole("button", { name: "Your bidding" }),
     ).not.toBeInTheDocument();
   },
 };

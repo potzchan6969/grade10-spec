@@ -186,7 +186,7 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
               activityTimeCopy={FIXTURE_ACTIVITY_TIME_COPY}
               copy={AUCTION_LOT_DETAILS_COPY.userBidHistory}
               locale={FIXTURE_SHIPPED_LOCALE}
-              rows={userBidHistoryForState(state)}
+              {...userBidHistoryForState(state)}
               timeZone={FIXTURE_TIME_ZONE}
             />
           }

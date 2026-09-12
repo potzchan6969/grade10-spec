@@ -15,6 +15,16 @@ export type ListingUserBidHistoryRow = {
   timeOverride?: string;
 };
 
+/** Accepted configure or raise of the collector's private maximum on a lot. */
+export type ListingUserMaximumHistoryRow = {
+  id: string;
+  amountLabel: string;
+  acceptedAtMs: number;
+  timeOverride?: string;
+  /** First accepted maximum is `set`; later raises are `raised`. */
+  status: "set" | "raised";
+};
+
 export type ListingLotGalleryImage = {
   src: string;
   alt: string;

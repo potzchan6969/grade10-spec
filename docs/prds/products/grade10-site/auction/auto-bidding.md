@@ -24,6 +24,13 @@ One card authorization covers the whole commitment. The hold is taken for the
 maximum when it is set, so a bid Grade10 places on the collector's behalf
 never needs a fresh card check mid-auction.
 
+## Past Maximums
+
+🚧 **Re-read on the lot** — past accepted maximums and the bids Grade10
+placed for the owner are re-read from **Your bidding** on the lot bid card;
+the full audit including refusals stays under [Bidding
+History](/p/grade10-site/auction/bidding-history).
+
 :::detail{title="Product decisions" for="pm"}
 The extension rule exists because bidders arrive at the last minute, so every
 collector who cannot be there for a moving close is a bid the lot never

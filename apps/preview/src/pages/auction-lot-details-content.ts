@@ -213,12 +213,16 @@ export const AUCTION_LOT_DETAILS_COPY = {
   vaultShippingBody:
     "Stored in Grade10 Vault. Ships from our facility within 1 business day of payment.",
   userBidHistory: {
-    link: "Your bid history",
-    title: "Bid History",
-    samePricePriority:
-      "When bidders set the same maximum, the earlier submission takes priority.",
-    amount: "Your bid",
+    link: "Your bidding",
+    title: "Your bidding",
+    description:
+      "We bid only as needed up to your maximum. If two people set the same maximum, the earlier one leads.",
+    maximumsTab: "Your maximums",
+    bidsTab: "Bid placed",
+    maximumColumn: "Maximum",
+    bidColumn: "Bid",
     time: "Time",
+    emptyBids: "No bids placed for you yet.",
   },
 };
 
