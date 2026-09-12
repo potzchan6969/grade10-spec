@@ -4,10 +4,10 @@ Group 3's backend refusal must not reach production ahead of group 7's picker UI
 
 ## 0. Schema (grade10) (owner: @ecchochan)
 
-- [ ] 0.1 Drop `ck_coupons_shape`'s `shopify_node_id is not null` clause for `kind = 'order'` in both arms of the constraint (`packages/grade10-store/backend/src/db/schema/coupons.ts`), since `createCoupon()` no longer mints — a relaxing edit, so no `NOT VALID`, no `VALIDATE`, no ordering against any backfill, and safe to apply by hand ahead of the code the way this repository applies every migration
-- [ ] 0.2 Add the `coupon_mints` table: `orderId uuid references orders.id on delete cascade`, `couponId uuid references coupons.id`, `nodeId`, `code`, `state` (`'live' | 'dead' | 'spent'`), unique on `(orderId, couponId)` — both keys are real foreign keys, which the post-commit mint placement in 2.1 is what makes possible
-- [ ] 0.3 Add `loyaltyCouponCode` and `loyaltyCouponNodeId` to the `orders` table beside the three `loyaltyCoupon*` columns already there, held null-together by the same shape of check as `ck_orders_coupon_reservation` — a reward's mint records here, not in `coupon_mints`, so no polymorphic key and no `origin` discriminator exists
-- [ ] 0.4 Schema tests: an `order` coupon row with `shopify_node_id` null is accepted after 0.1 and every pre-change row still passes; a `coupon_mints` row is deleted when its order is; an `orders` row carrying one of the two new columns without the other is refused
+- [x] 0.1 Drop `ck_coupons_shape`'s `shopify_node_id is not null` clause for `kind = 'order'` in both arms of the constraint (`packages/grade10-store/backend/src/db/schema/coupons.ts`), since `createCoupon()` no longer mints — a relaxing edit, so no `NOT VALID`, no `VALIDATE`, no ordering against any backfill, and safe to apply by hand ahead of the code the way this repository applies every migration
+- [x] 0.2 Add the `coupon_mints` table: `orderId uuid references orders.id on delete cascade`, `couponId uuid references coupons.id`, `nodeId`, `code`, `state` (`'live' | 'dead' | 'spent'`), unique on `(orderId, couponId)` — both keys are real foreign keys, which the post-commit mint placement in 2.1 is what makes possible
+- [x] 0.3 Add `loyaltyCouponCode` and `loyaltyCouponNodeId` to the `orders` table beside the three `loyaltyCoupon*` columns already there, held null-together by the same shape of check as `ck_orders_coupon_reservation` — a reward's mint records here, not in `coupon_mints`, so no polymorphic key and no `origin` discriminator exists
+- [x] 0.4 Schema tests: an `order` coupon row with `shopify_node_id` null is accepted after 0.1 and every pre-change row still passes; a `coupon_mints` row is deleted when its order is; an `orders` row carrying one of the two new columns without the other is refused
 
 ## 1. Shared mint machinery (grade10) (owner: @ecchochan)
 
