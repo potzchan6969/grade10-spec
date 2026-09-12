@@ -37,7 +37,7 @@ Staff applying a coupon from the panel and the member presenting one from their 
 - [ ] 4.7 Show the minted code only as the presentation for that sale, never in the wallet as the coupon's identity — it is minted for one sale
 - [ ] 4.8 Verify: `pnpm run typecheck`, `pnpm run test`, and a staging run of a counter sale spending a coupon each way — applied by staff, and presented by the member — end to end
 
-## 5. Cancellation is its own permission (grade10)
+## 5. Cancellation is its own permission (grade10) (owner: @ecchochan)
 
 - [ ] 5.1 Split cancelling a redemption into its own permission, apart from the point-movement permission it shares today, so *Moving points does not carry redemption cancellation* passes
 - [ ] 5.2 Keep a reversal to an unused coupon and drop the collection clause from its terms, so *A reversal voids the coupon*, *A used coupon cannot be reversed* and *A refunded sale does not return the coupon* pass — a refunded sale returns the goods, the money and any points spent as a discount on it, never the coupon
