@@ -56,9 +56,9 @@ Group 3's backend refusal must not reach production ahead of group 7's picker UI
 - [x] 4.13 On `couponReplaced`, `checkout.ts` continues on the draft as priced, runs `releaseCouponTender` so the coupon returns to the wallet, marks the mint dead and deactivates it through 2.5's path, and names the coupon in the outcome the member reads — the online reading of the till's trim-to-landed pass — covers `grade10-site-store-discounts-SC-15`
 - [x] 4.14 Tests: a draft that lands an automatic and drops the code completes with the coupon released and the member's outcome naming it; a draft that drops the code with no automatic still fails as refused
 
-## 5. POS parity, including the real till extension (grade10)
+## 5. POS parity, including the real till extension (grade10) (owner: @ecchochan)
 
-- [ ] 5.1 `packages/grade10-store/backend/src/services/pos/simulator/basket.ts` and `sale.ts` carry the same one-code rule and the same discount-code transport for a product coupon — covers `grade10-site-store-discounts-SC-07`
+- [x] 5.1 `packages/grade10-store/backend/src/services/pos/simulator/basket.ts` and `sale.ts` carry the same one-code rule and the same discount-code transport for a product coupon — covers `grade10-site-store-discounts-SC-07`
 - [x] 5.2 Move a product coupon off the weld path at the till from the backend rather than the extension: `planTillSale` mints for every ride but the gift and sends no welds at all, so the extension's existing `addCartCodeDiscount` carries it and its `setLineItemDiscount` path goes quiet on its own. The gift keeps its uuid-targeted 100% weld and carries no code there, because `flow.ts` adds and zeroes that line unconditionally in every extension build, so a gift arriving with both would take the gift free and its price off the rest of the sale. A code row at the counter is labelled a discount code rather than a whole-order one, which a product coupon's code is not
 - [x] 5.3 State that the extension keeps executing both `plan.welds` and `plan.codes`, so an un-updated till is correct against the new backend for a product coupon — it stops receiving welds and starts receiving a code, and applies it — and raise `minClientVersion` once the picker build is live rather than coordinating a simultaneous deploy the POS lane cannot give
 - [x] 5.4 Fix `clearEverything`'s settle predicate to mean what its comment says — settled when nothing of ours and no code entry remains, not when `cart.discounts` is empty — because `removeAllDiscounts(false)` preserves automatics by design, so once a site-wide automatic discount exists the predicate can never hold and staff always read the incomplete sentence on the one documented last resort
@@ -66,10 +66,10 @@ Group 3's backend refusal must not reach production ahead of group 7's picker UI
 - [x] 5.6 POS undo targets a product-coupon discount code the same way it already targets an order coupon's, inheriting order-coupon's existing "codes stay, use Remove All" limitation — a product coupon loses today's clean single-tap removal; accepted and recorded rather than left implicit, and no task here builds a single-code removal path
 - [x] 5.7 Tests: an un-updated extension build applies a product coupon's code correctly; "Remove every discount" confirms on a cart carrying a site-wide automatic discount
 
-## 6. Collector picks one (grade10-spec)
+## 6. Collector picks one (grade10-spec) (owner: @ecchochan)
 
-- [ ] 6.1 Write `ui-design.md` for the choice surface
-- [ ] 6.2 Add `evaluateCouponsEligibility(basket, coupons) -> EligibilityResult[]` to this document's Service Interfaces, so the picker is fed by a precomputed eligibility pass rather than a refusal-and-retry loop
+- [x] 6.1 Write `ui-design.md` for the choice surface
+- [x] 6.2 Add `evaluateCouponsEligibility(basket, coupons) -> EligibilityResult[]` to this document's Service Interfaces, so the picker is fed by a precomputed eligibility pass rather than a refusal-and-retry loop
 
 ## 7. Collector picks one (grade10) (owner: @ecchochan)
 
