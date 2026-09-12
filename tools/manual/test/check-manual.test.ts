@@ -1130,6 +1130,17 @@ describe("the record a change leaves", () => {
     ]);
   });
 
+  it("names a product tagged as a repository, rather than asking for a design", async () => {
+    expect(
+      lines(
+        await runChecks(planned("1. Build it (demo-product)"), NO_GIT),
+        "design",
+      ),
+    ).toEqual([
+      "openspec/changes/build-alpha/tasks.md — group 1 names `demo-product`, a product under `openspec/specs/`, not a repository — tag the group `(grade10-spec)` for work landing here, or the application's clone name, and keep the product in the title",
+    ]);
+  });
+
   it("passes the design written, the work that stays in this store, and the waiver", async () => {
     const written = planned("1. Build it (grade10)", {
       "openspec/changes/build-alpha/tech-design.md":
