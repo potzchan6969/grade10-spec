@@ -75,6 +75,13 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * The design-system Drawer portals its surface to `document.body` and marks
+ * the story canvas inert while open, so every query below reads the body,
+ * never `canvasElement`.
+ */
+const drawer = () => within(document.body);
+
 /** Default: signed-in cart with interactive promo sheet and points */
 export const Default: Story = {
   render: (args) => {
@@ -190,8 +197,8 @@ export const Default: Story = {
       />
     );
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
+    const canvas = drawer();
     expect(canvas.getByRole("heading", { name: "Cart" })).toBeInTheDocument();
     expect(
       canvas.getByText("1999 Pokémon Base Set #4 Charizard Holo PSA 10"),
@@ -219,8 +226,8 @@ export const OverflowItems: Story = {
     subtotal: "HK$83,600.00",
     estimatedTotal: "HK$83,600.00",
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
+    const canvas = drawer();
     expect(
       canvas.getByText("2016 Pokémon 20th Anniversary Mario Pikachu PSA 10"),
     ).toBeInTheDocument();
@@ -235,8 +242,8 @@ export const EmptyState: Story = {
     subtotal: "HK$0.00",
     estimatedTotal: "HK$0.00",
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
+    const canvas = drawer();
     expect(canvas.getByText("Your cart is empty")).toBeInTheDocument();
     expect(
       canvas.getByText("Items you add will appear here"),
@@ -255,8 +262,8 @@ export const WithoutPoints: Story = {
   args: {
     pointsState: null,
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
+    const canvas = drawer();
     expect(
       canvas.queryByRole("button", { name: /Use points/i }),
     ).not.toBeInTheDocument();
@@ -286,8 +293,8 @@ export const NestedPromoDismiss: Story = {
       />
     );
   },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
+    const canvas = drawer();
     expect(
       canvas.getByRole("dialog", { name: "Promo code" }),
     ).toBeInTheDocument();
@@ -394,14 +401,17 @@ export const UnavailableItemsRemoved: Story = {
     );
   },
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "Open Cart" }));
+    await userEvent.click(
+      within(canvasElement).getByRole("button", { name: "Open Cart" }),
+    );
+    const canvas = drawer();
 
     // Rows render a shared sizing fixture while the open fetch runs, so no real
     // item name is in the DOM yet — wait the busy state out before asserting on
     // names, or every assertion below reads the skeleton instead.
     await waitFor(() => {
-      expect(canvasElement.querySelector('[aria-busy="true"]')).toBeNull();
+      expect(canvas.getByRole("dialog", { name: "Cart" })).toBeInTheDocument();
+      expect(document.body.querySelector('[aria-busy="true"]')).toBeNull();
     });
 
     await waitFor(() => {
@@ -412,12 +422,11 @@ export const UnavailableItemsRemoved: Story = {
       canvas.getByText("1999 Pokémon Base Set #4 Charizard Holo PSA 10"),
     ).toBeInTheDocument();
 
-    const body = within(document.body);
     await waitFor(() => {
-      expect(body.getByText("Items removed from cart")).toBeInTheDocument();
+      expect(canvas.getByText("Items removed from cart")).toBeInTheDocument();
     });
     expect(
-      body.getByText("Some products are no longer available"),
+      canvas.getByText("Some products are no longer available"),
     ).toBeInTheDocument();
   },
 };
