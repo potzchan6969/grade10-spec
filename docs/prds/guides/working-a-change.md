@@ -32,7 +32,7 @@ the thing it acts on.
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `/planning-pm` | Always — one nobody walks says so in it |
 | 4 | `specs/<capability>/feature-tcs.md` | Product manager | `/planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
 | 5 | `ui-design.md` | Designer | `/planning-design` | Optional |
-| 6 | `tech-design.md` | Engineer | `/planning-dev` | Optional |
+| 6 | `tech-design.md` | Engineer | `/planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
 | 7 | `tasks.md` | Engineer | `/planning-dev` | Before anyone can build it |
 
 Write your part and stop. An artifact invented ahead of the person who owns

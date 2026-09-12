@@ -19,7 +19,7 @@ This skill covers what to settle before drafting and routes to the right one.
 | 3 | `specs/<capability>/user-journeys.md` | `planning-pm` | Always — a capability nobody walks says so in it |
 | 4 | `specs/<capability>/feature-tcs.md` | `planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
 | 5 | `ui-design.md` | `planning-design` | Optional |
-| 6 | `tech-design.md` | `planning-dev` | Optional |
+| 6 | `tech-design.md` | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
 | 7 | `tasks.md` | `planning-dev` | Before the change can be applied |
 
 **Write your part and stop.** Each role adds its artifacts to the one change;
