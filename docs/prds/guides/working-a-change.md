@@ -149,8 +149,8 @@ being planned.
 
 # QA
 
-*QA* — **Derive the suite** — `/planning-qa`, which runs
-`/spec-to-tcs add-store-gift-receipt`
+*QA* — **Review the suite** — `/planning-qa`; the PM derived it beside the
+journeys with `/spec-to-tcs`, every case `draft`
 
 ## Read what the PM left
 
@@ -158,15 +158,17 @@ The journeys are the suite's sections; the scenarios beneath them are what
 each case is built from. A case built from no scenario is a new requirement
 in disguise — send it back to the spec.
 
-## Commit the drafts on the same branch
-
-`test(store): derive test cases for gift-receipt`. Every case lands `draft`,
-so the spec's reviewer is not being asked to stand behind one.
-
-## Review later, in its own pull request
+## Review in its own pull request
 
 `/tcs-review add-store-gift-receipt` walks the drafts with a human, one
-journey at a time, and records `actual`, `deprecated`, or still `draft`.
+journey at a time, and records `actual`, `deprecated`, or still `draft`. A
+draft commits nobody to anything, so the spec's reviewer is never asked to
+stand behind a case.
+
+## Own the passes above it
+
+`domain-tcs.md`, `product-tcs.md` and `platform-tcs.md` are QA's, and they
+live beside the durable specs, never under a change.
 
 # Designer
 
@@ -204,11 +206,12 @@ and the author never learns it was picked up.
 layer, each task phrased as the spec scenario it makes pass, groups
 unclaimed so an engineer claims one at pickup.
 
-## Carry the archive debt
+## Leave the archive copy out of the tasks
 
-The fold keeps `## Requirements` and nothing else, so `tasks.md` carries a
-task to copy the feature set and `user-journeys.md` across. The archive
-refuses to close while either is uncarried.
+The fold keeps `## Requirements` and nothing else, and
+`pnpm run archive:preflight` refuses the archive while the feature set and
+`user-journeys.md` are uncarried. A task for it could never be ticked before
+the deploy, so the plan does not carry one.
 
 ## Build, then archive
 
@@ -224,7 +227,9 @@ Nobody sends a message. The files themselves are the signal.
 | --- | --- | --- |
 | `proposal.md` alone | A reason, no requirements yet | PM |
 | Deltas, no `user-journeys.md` | The stories are owed — a capability nobody walks says `**Walked by:** nobody` in the file, so a missing one is never the exemption | PM |
-| Journeys, no `feature-tcs.md` | Nothing has been derived yet | QA |
+| Deltas, and no 🚧 line under a section the proposal links | The page is unmarked — mark it, or record `page_waived: <why>` in `.openspec.yaml` | PM |
+| Journeys, no `feature-tcs.md` | The suite is derived beside the journeys with `/spec-to-tcs` | PM |
+| A suite of `draft` cases | Review, in its own pull request | QA |
 | A user-facing change, no `ui-design.md` | Screens unmapped | Designer |
 | No `tasks.md` | Still being planned — the only handover signal there is | Engineer |
 | Every box ticked | Waiting on a deploy, then the archive | Whoever owns it |
