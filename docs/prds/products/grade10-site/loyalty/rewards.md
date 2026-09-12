@@ -138,12 +138,10 @@ can buy.
   the per-redemption and per-day bounds are chosen
 - ❓ **The physical catalog** — which items, and their point prices; Product's
   call
-- 🚧 **The console's reward form** sets only slug, name, description, cost,
-  stock and window, so a reward with a definition is created through the
-  admin API
-- 🚧 **A reward's kind, discount, scope and combine setting** are read by
-  nothing yet; every reward takes a fixed amount off any order, in either
-  channel
+- 🚧 **A reward's combine setting** is carried onto the coupon a redemption
+  issues and read by nothing yet — a reward's coupon rides as a weld, and the
+  code that would carry the setting to the shop is minted by
+  `mint-coupons-as-discount-codes`
 
 ## Cancelling a Redemption
 
