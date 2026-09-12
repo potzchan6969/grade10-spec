@@ -24,7 +24,7 @@ Group 1 lands the reward's contract shape; groups 2, 3 and 4 depend on it. Group
 - [ ] 3.2 Once group 4 ships, `mint-coupons-as-discount-codes` has shipped, gates 1, 5 and 10 are recorded, and `select count(*) from redemptions where state='issued' and fulfillment_state='awaiting_collection'` reads zero, remove the fulfilment queue, the till's collection-confirm action, `waitingCollections` and the "waiting at the counter" list from the till session and the member surface
 - [ ] 3.3 Verify: `pnpm run typecheck`, `pnpm run test:backend`, `pnpm run test`
 
-## 4. A reward coupon reaches the counter (grade10)
+## 4. A reward coupon reaches the counter (grade10) (owner: @ecchochan)
 
 Staff applying a coupon from the panel and the member presenting one from their own session are the same act: a plan on the till session, carrying the coupon's id, minted at once and reused on every later plan. Neither redeems a reward at the till; both spend one the member already holds.
 
