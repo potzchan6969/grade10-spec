@@ -2,18 +2,26 @@
 /**
  * Run this before `openspec archive <change-id>`:
  *
- *   pnpm run archive:preflight <change-id> --deployed-at <sha>
+ *   pnpm run archive:preflight <change-id> --deployed-at <sha> --deployed-env <env>
  *   pnpm run archive:preflight <change-id> --deploy-waived "<who waived it, why>"
  *
- * The archive has two gates, and both used to be prose in a skill file — which
- * made the honest path and the fast path differ by forty minutes with only one
- * leaving a record. This makes them mechanical:
+ * The application repository runs this through `pnpm plan shipped <change-id>`,
+ * which finds the deployed sha and commits the record. Run it by hand only to
+ * write a waiver.
+ *
+ * The archive has three gates, and they used to be prose in a skill file —
+ * which made the honest path and the fast path differ by forty minutes with
+ * only one leaving a record. This makes them mechanical:
  *
  * DEPLOY   A change merged is not a change shipped; merging deploys nothing.
  *          This store cannot see the application repo's deploy runs, so the
  *          gate demands the evidence instead of trusting silence: the deployed
- *          sha that contains the change's merge commit, or an explicit waiver
- *          naming who and why. Either lands in the archive commit message.
+ *          sha that contains the change's merge commit and the environment it
+ *          ran in, or an explicit waiver naming who and why.
+ *
+ * TASKS    An open checkbox at archive is work nobody did or a checkmark
+ *          nobody wrote. Either way the record says so: check them off, or
+ *          name the decision with `--tasks-waived`.
  *
  * JOURNEYS `openspec archive` folds `## Requirements` and nothing else, so a
  *          delta's `## Feature set` and its `user-journeys.md` — and every `-US-`
@@ -22,13 +30,16 @@
  *          refuses while they are not. `--journeys-copied` acknowledges a
  *          delta whose capability has no durable spec yet: the fold creates
  *          it, so the copy can only happen right after — the flag is a
- *          promise, recorded in the archive commit message.
+ *          promise, and the sections stay on `pnpm check:manual`'s list.
+ *
+ * A clear run writes what it was told into the change's `.openspec.yaml`, so
+ * the record archives with the change and `pnpm check:manual` can read it back.
  *
  * Zero dependencies, no `openspec` call — the checks read the change's own
  * files, the same way `plan-preflight.mjs` does.
  */
 
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -45,6 +56,17 @@ const CHANGES = join(ROOT, "openspec", "changes");
 
 const DOOMED = ["Feature set"];
 const US_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
+const OPEN_TASK = /^\s*-\s*\[ \]\s*(.*)$/;
+const MANIFEST_KEY = /^([A-Za-z0-9_]+):/;
+/** Every key a record owns. A write drops all of them and appends only what it
+ * was told, so a waiver never outlives the record that replaces it. */
+const RECORD_KEYS = new Set([
+  "deployed_at",
+  "deployed_env",
+  "deploy_waived",
+  "tasks_waived",
+]);
+const SHOWN = 10;
 
 function changeIds() {
   if (!existsSync(CHANGES)) return [];
@@ -95,16 +117,61 @@ function doomedSections(text) {
   return found;
 }
 
+/** The unchecked tasks of the change, in file order. A change with no
+ * `tasks.md` owes nothing here. */
+function openTasks(changeId) {
+  const file = join(CHANGES, changeId, "tasks.md");
+  if (!existsSync(file)) return [];
+  return readFileSync(file, "utf8")
+    .split("\n")
+    .map((line) => OPEN_TASK.exec(line)?.[1])
+    .filter((task) => task !== undefined);
+}
+
+/** Writes each key into the change's manifest as a quoted scalar, dropping
+ * every record line the file already holds at column 0. The file is a flat
+ * mapping, and a yaml round-trip would reformat every line around these.
+ * Returns its store path. */
+function writeRecord(changeId, entries) {
+  const rel = `openspec/changes/${changeId}/.openspec.yaml`;
+  const file = join(CHANGES, changeId, ".openspec.yaml");
+  const kept = (existsSync(file) ? readFileSync(file, "utf8") : "")
+    .split("\n")
+    .filter((line) => !RECORD_KEYS.has(MANIFEST_KEY.exec(line)?.[1]))
+    .join("\n")
+    .replace(/\n+$/, "");
+  const written = Object.entries(entries).map(
+    ([key, value]) =>
+      `${key}: "${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`,
+  );
+  writeFileSync(
+    file,
+    `${kept === "" ? "" : `${kept}\n`}${written.join("\n")}\n`,
+  );
+  return rel;
+}
+
 function help() {
   console.log(
-    `${bold("pnpm run archive:preflight")} <change-id> --deployed-at <sha> | --deploy-waived "<why>" [--journeys-copied]`,
+    `${bold("pnpm run archive:preflight")} <change-id> --deployed-at <sha> --deployed-env <env> | --deploy-waived "<why>"`,
   );
   console.log(
-    dim("  The archive's two gates, mechanical: proof of deploy, and the"),
+    dim(
+      '                             [--tasks-waived "<who, why>"] [--journeys-copied]',
+    ),
   );
   console.log(
-    dim("  Feature set / user-journeys.md hand-copy the fold would discard."),
+    dim("  The archive's three gates, mechanical: proof of deploy, every task"),
   );
+  console.log(
+    dim("  checked off, and the Feature set / user-journeys.md hand-copy the"),
+  );
+  console.log(
+    dim(
+      "  fold would discard. A clear run writes the record into the change's",
+    ),
+  );
+  console.log(dim("  .openspec.yaml and prints the commit to make."));
   const ids = changeIds();
   console.log("\nChanges in flight");
   if (ids.length === 0) console.log(dim("  none — openspec/changes is empty"));
@@ -124,11 +191,15 @@ if (!changeId || changeId === "--help" || changeId === "-h") {
 }
 
 let deployedAt = null;
+let deployedEnv = null;
 let deployWaived = null;
+let tasksWaived = null;
 let journeysCopied = false;
 for (let i = 1; i < argv.length; i += 1) {
   if (argv[i] === "--deployed-at") deployedAt = argv[++i] ?? null;
+  else if (argv[i] === "--deployed-env") deployedEnv = argv[++i] ?? null;
   else if (argv[i] === "--deploy-waived") deployWaived = argv[++i] ?? null;
+  else if (argv[i] === "--tasks-waived") tasksWaived = argv[++i] ?? null;
   else if (argv[i] === "--journeys-copied") journeysCopied = true;
   else {
     fail(`Unknown argument: ${argv[i]}`, `Run with ${cyan("--help")}.`);
@@ -158,11 +229,11 @@ if (deployedAt !== null && deployWaived !== null) {
 if (deployedAt === null && deployWaived === null) {
   fail(
     yellow(`No deploy evidence for ${changeId}.`),
-    "A change merged is not a change shipped — merging deploys nothing. Find the",
-    "deploy that contains the merge commit (the application repo's archive-change",
-    "skill has the commands), then:",
+    "A change merged is not a change shipped — merging deploys nothing. The",
+    "application repository finds the deploy that contains the merge commit and",
+    "runs this for you:",
     "",
-    `  ${cyan(`pnpm run archive:preflight ${changeId} --deployed-at <sha>`)}`,
+    `  ${cyan(`pnpm plan shipped ${changeId}`)}`,
     "",
     "Archiving anyway is an owner's call, made out loud:",
     "",
@@ -179,6 +250,46 @@ if (deployedAt !== null && !/^[0-9a-f]{7,40}$/i.test(deployedAt)) {
 }
 if (deployWaived !== null && deployWaived.trim() === "") {
   fail(yellow("--deploy-waived needs the who and the why, in quotes."));
+  process.exit();
+}
+if (
+  deployedAt !== null &&
+  (deployedEnv === null || deployedEnv.trim() === "")
+) {
+  fail(
+    yellow("--deployed-at needs --deployed-env."),
+    "A staging deploy and a production one are different archives, and the record",
+    "is read long after the run is gone:",
+    "",
+    `  ${cyan(`pnpm run archive:preflight ${changeId} --deployed-at ${deployedAt} --deployed-env production`)}`,
+  );
+  process.exit();
+}
+if (deployedAt === null && deployedEnv !== null) {
+  fail(yellow("--deployed-env names an environment for no sha."));
+  process.exit();
+}
+if (tasksWaived !== null && tasksWaived.trim() === "") {
+  fail(yellow("--tasks-waived needs the who and the why, in quotes."));
+  process.exit();
+}
+
+// ── Tasks gate ──────────────────────────────────────────────────────────────
+// An open checkbox at archive is work nobody did or a checkmark nobody wrote.
+const open = openTasks(changeId);
+if (open.length > 0 && tasksWaived === null) {
+  fail(yellow(`${changeId} archives with ${open.length} task(s) unchecked:`));
+  for (const task of open.slice(0, SHOWN)) console.error(`  - [ ] ${task}`);
+  if (open.length > SHOWN) {
+    console.error(dim(`  … and ${open.length - SHOWN} more`));
+  }
+  fail(
+    "",
+    "Check off what landed. Archiving over the rest is an owner's call, made",
+    "out loud, on the same command:",
+    "",
+    `  ${cyan('--tasks-waived "<who waived it, why>"')}`,
+  );
   process.exit();
 }
 
@@ -259,10 +370,18 @@ if (uncarried.length > 0) {
     ),
   );
 }
-console.log("\nRecord the gate in the archive commit message:");
-console.log(
+
+const rel = writeRecord(changeId, {
+  ...(deployedAt !== null
+    ? { deployed_at: deployedAt, deployed_env: deployedEnv }
+    : { deploy_waived: deployWaived }),
+  ...(tasksWaived !== null ? { tasks_waived: tasksWaived } : {}),
+});
+const subject =
   deployedAt !== null
-    ? `  Deployed-at: ${deployedAt}`
-    : `  Deploy-waived: ${deployWaived}`,
-);
+    ? `Record ${changeId} deployed at ${deployedAt} (${deployedEnv})`
+    : `Record ${changeId} archived with the deploy waived`;
+
+console.log(`\nThe record is written into ${bold(rel)}. Commit it:\n`);
+console.log(`  ${cyan(`git -C "${ROOT}" commit ${rel} -m "${subject}"`)}`);
 console.log(`\nThen:  ${cyan(`openspec archive ${changeId}`)}`);
