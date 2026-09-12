@@ -45,13 +45,13 @@ An order carries one discount, whichever kind reached it:
   order coupon
 - **Points** — its own add-on, outside the count
 - **Free shipping** — its own add-on, outside the count
-- 🚧 **Site discounts** — their own add-on too, outside the count; combined or
-  not with whichever discount code the order carries per Shopify's own
-  combine rule, set per site discount. That rule excludes at the whole
-  cart, never just the discount's own product line — a non-combinable site
-  discount is expected to refuse any code the order carries rather than
-  stacking or silently dropping it — ❓ unverified: no automatic discount
-  has reached a draft order on staging yet
+- 🚧 **Site discounts** — their own add-on too, outside the count; whether
+  one stacks with the order's discount code is Shopify's own rule, read
+  from the site discount's setting and the coupon's own
+- 🚧 **A sale that beats the coupon** — where the two cannot stack, the shop
+  keeps the larger cut; a coupon set aside that way goes back to the
+  member's wallet, the order goes through at the shop's price, and the
+  member is told. Only a code the shop refuses outright stops the checkout
 - **Both channels** — the same rule in the cart and at the till
 
 ## Online draft order mechanism
@@ -81,8 +81,8 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 3. **A session opens** — ten minutes from the server's clock, bound to the shop and the member, never to the staff label; a second identify of the same member at the same shop ends the first; a switch flipped mid-session only ever takes capability away
    - A scanned session outlives the modal: reopening it resumes, and it ends only when the customer on the sale becomes somebody else
 4. **The member goes on the sale** — the extension sets the cart's customer to the member's paired Shopify customer and confirms it against the cart; an attach that did not take is retried on apply
-5. **Staff read the panel** — tier, balance, window progress, renewal and points-active-until dates, recent activity, the coupons the member may spend, pending collections
-6. **Staff choose** — points ("Use max" is the smaller of the balance and the qualifying goods, at **HKD 1** a point) and coupons (chips from the panel or typed)
+5. **Staff read the panel** — tier, balance, window progress, renewal and points-active-until dates, recent activity, the coupons the member may spend, pending collections. 🚧 The member's reward coupons are in that list beside the store's own
+6. **Staff choose** — points ("Use max" is the smaller of the balance and the qualifying goods, at **HKD 1** a point) and coupons (chips from the panel or typed). 🚧 The member can also open a coupon on their own phone while the session is open; the till scans it, and it counts as chosen the same way
    - Qualifying goods: the cart's lines after their own discounts, without gift cards and without our gift lines
    - Apply stays off and says why while the session expired, this arm may not spend, the cart is locked for tender, the cart's customer is not the member, another cart-level discount is on the sale, the balance is empty, or the points asked exceed the goods
    - A sale already carrying **another customer** is refused rather than taken: attaching this member over them would spend their points on somebody else's basket, and earn on it
@@ -130,15 +130,13 @@ Shopify POS rings the sale on its own cart. Our POS UI extension (a home tile) p
 
 A physical reward is handed over through the same session: the pending redemption shows the reward, the points paid and the date; staff verify and confirm, once. A second till is told when and by whom it was already given.
 
-🚧 This step retires. A physical reward becomes an ordinary sale — its coupon takes 100% off the reward's own variant, the member presents that coupon and the till reads it — and `deliver-reward-coupons` removes the confirm action, the queue and the waiting list once no redemption is still awaiting one.
+🚧 This step retires. A physical reward becomes an ordinary sale — staff ring the item up, its coupon takes 100% off the reward's own variant, applied from the panel or scanned from the member's phone — and `deliver-reward-coupons` removes the confirm action, the queue and the waiting list once no redemption is still awaiting one.
 
 ### Switches
 
 Per shop, flipped from the admin console, enforced on the next request: terminal, email spend, phone identify, phone spend, cart identify, cart spend. QR and short code carry no switch of their own, so stopping the counter means the terminal switch.
 
 ## Site discounts
-
-::spec{id="grade10-site/store/site-discounts"}
 
 🚧 Configured directly in Shopify's own automatic discounts, and read onto
 the draft order by accepting them there — no grade10 admin screen, and no
@@ -147,26 +145,22 @@ the shop's automatics are the POS cart's own and grade10 leaves them
 standing. `add-site-wide-discounts` delivers this; nothing on this page
 below is live until it ships.
 
-❓ A site discount the merchandiser marks non-combinable is expected to
-refuse a code the order carries. If the shop replaces the code instead, a
-coupon checkout fails rather than degrading — staging answers this before
-any automatic discount is created in production.
-
+- 🚧 **Beside a coupon** — Shopify's own rule: the site discount's setting
+  and the coupon's own say whether they stack; where they cannot, the
+  shop keeps the larger cut and a coupon set aside goes back to the wallet
+  — [One discount at a time](#one-discount-at-a-time)
 - 🚧 **Product special sale** — a scheduled cut off chosen products; a
-  member's points always redeem regardless. A discount set not to combine
-  is expected to exclude at the whole cart, never just its own product's
-  line — Shopify offers no narrower rule — ❓ unverified: no automatic
-  discount has reached a draft order on staging yet, so whether an
-  order-wide code is refused, stacks, or silently drops has not actually
-  been observed
+  member's points always redeem regardless. ❓ A discount set not to
+  combine is expected to exclude at the whole cart, never just its own
+  product's line — Shopify offers no narrower rule — unverified until an
+  automatic discount reaches a draft order on staging
 - 🚧 **Buy X get Y** — a reward product discounted or free after a trigger
   purchase
 - 🚧 **Order threshold** — a tier ladder of spend levels and percentages,
   the basket getting whichever tier it clears
 
 🚧 Applies on both the online checkout and the POS till — ❓ parity between
-them is expected, not yet confirmed on staging — combined or not with the
-order's one discount code per Shopify's own combine rule.
+them is expected, not yet confirmed on staging.
 
 ## Designs
 
@@ -201,7 +195,11 @@ today.
 | Mechanism | Decided | Site discounts are Shopify's own automatic discounts, authored in Shopify Admin; grade10 only accepts them on the draft order. | Product |
 | Reward coupon transport | Decided | A product coupon and a gift ride as a Shopify Discount too, minted once the basket qualifies, the same as an order coupon. | Product |
 | Coupon precedence | Decided | A checkout eligible for more than one coupon has the collector pick the one to apply — the order's one discount-code slot takes only one. | Product |
+| One code slot | Decided | One coupon per order, by choice, to keep the sale simple — a free reward and a money-off coupon are two sales. The picker isolates the rule, so a later change can widen it without deleting the one-slot logic. | Product |
+| Site discount beside a coupon | Decided | Shopify's own combine rules decide; grade10 accepts what the shop priced. A coupon the shop sets aside for a larger site discount goes back to the wallet and the order completes, never fails. | Product |
+| Combine setting | Decided | Each coupon's definition states what it stacks with — a reward's definition, or the operator's mint of a store coupon — with a store default where none is stated. | Product |
 | Price preview | Decided | A live cart price is estimated locally; a coupon's Shopify Discount is minted only once the checkout is submitted. | Engineering |
+| A free item alone online | ❓ Open | A 100%-off reward with nothing else in the basket is an HKD 0 order plus shipping — whether it ships free, or is collection only. | Product |
 | Product special sale vs. Sale price | Decided | Kept separate — Sale price stays the ad hoc, unscheduled tool; Product special sale is the scheduled, exclusive one. | Product |
 | Points on an exclusive line | Decided | Points always redeem, even on a product special sale — points is a payment method, not a merchandising discount. | Product |
 | Product special sale exclusivity | ❓ Open | Shopify's combine rule is expected to exclude at the whole cart — there is no way to scope a non-combinable site discount to just its own product's line — but this has never actually been observed: `acceptAutomaticDiscounts` has not shipped, so no automatic discount has reached a draft order to test it against. Resolve when `add-site-wide-discounts` tasks 2.1–2.3 genuinely run on staging. | Engineering |
