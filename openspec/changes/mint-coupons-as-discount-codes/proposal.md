@@ -36,15 +36,14 @@ A product coupon and a gift currently reach the draft order as a custom discount
 
 ## Impact
 
-- `packages/coupons/contracts/src/` — a new `codeTargetFor()` beside `eligibleLines()`, projecting a coupon's target onto what a Shopify code can express, against one basket.
 - `packages/shopify/backend/src/admin/discounts.ts` — every coupon shape mints through the same call, customer-scoped, with `endsAt` a parameter rather than a constant; `combinesWith` already comes from the coupon's own definition, defaulting to `DEFAULT_COMBINES_WITH`.
 - `packages/grade10-store/backend/src/adapters/shopify/shopifyProvider.ts`, `services/orders/checkout.ts` — a requested code the draft did not land is answered as replaced, not refused, where the draft carries an automatic discount instead; the checkout completes, the coupon is released and the member is told.
-- `packages/grade10-store/backend/src/services/coupons/` — a product coupon and a gift stop welding a line discount; `createCoupon()` stops minting; one shared mint helper, with a code derived from the order and coupon ids so a retry recovers rather than duplicates.
+- `packages/grade10-store/backend/src/services/coupons/` — a product coupon and a gift stop welding a line discount; `createCoupon()` stops minting; one shared mint helper, with a code derived from the order and coupon ids so a retry recovers rather than duplicates, and what it says read off the cut the evaluator made.
 - `packages/grade10-store/backend/src/db/schema/coupons.ts`, `orders.ts` — a relaxing `ck_coupons_shape` edit, a new `coupon_mints` table with real foreign keys, and two nullable code columns on `orders` for a reward's mint.
 - `packages/grade10-store/backend/src/services/orders/checkout.ts`, `promise.ts` — every mint happens after the order row commits and keys on that row's own id; `reserveRewardCoupon()` gains the one-discount-code check and mints nothing itself.
 - `packages/grade10-store/backend/src/services/orders/checkoutRequest.ts`, `eventSink.ts` — the discount-code filter widens past `order`-kind and adds the reward's code; per-line discounts are sent net of every cut whose code is in the request; `providerArtifact` reports `kind: "discount_code"`.
 - `packages/grade10-store/backend/src/services/coupons/settle.ts`, `pos/sale/sale.ts` — reconciliation matches a minted code by kind uniformly, adopts an unreported code under its own kind, and keeps a gift corroborated by its line.
-- `integrations/shopify-pos/grade10` — the real staff-facing till extension's product-coupon weld converts to the discount-code transport; the gift keeps its weld there; "Remove every discount" is fixed to confirm beside the shop's own automatic discounts.
+- `integrations/shopify-pos/grade10` — the till stops receiving welds and receives codes instead, which every build there is already applies; a gift's line is still added and zeroed from the plan's own gifts; "Remove every discount" is fixed to confirm beside the shop's own automatic discounts.
 - `packages/grade10-store/admin-frontend`, cart and checkout UI — a checkout eligible for more than one coupon lets the collector choose one, from a server-precomputed eligible set.
 
 ## References
