@@ -146,7 +146,7 @@ rules:
     - 'Phrase an implementation task as the spec scenario(s) it makes pass, naming them, so the scenario''s test is the evidence behind the checkmark. Never split "write the tests" into its own task or group - the engineer works test-first inside each task.'
     - Keep each task to something one engineer finishes in a session.
     - "Follow docs/governance/task-ownership.md for the group, task-id, and owner format. Write groups without owner tags - engineers claim them at pickup - and never renumber a group or task that is claimed or has checkmarks."
-    - "A change whose deltas touch a capability carries a task to update that capability's manual page (manual/ in this store, a grade10-spec group): the page tells the shipped story, and `pnpm check:manual` verifies it."
+    - "A change whose deltas touch a capability carries a task to update that capability's manual page (docs/prds/ in this store, a grade10-spec group): the page tells the shipped story, and `pnpm check:manual` verifies it."
 
 # Per-operation guidance (optional)
 operations:
