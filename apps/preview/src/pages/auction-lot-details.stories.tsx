@@ -43,9 +43,7 @@ export const LiveAutoLeading: Story = {
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to/ }),
     ).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Your bidding" }),
-    ).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Your bidding" })).toBeVisible();
     expect(canvas.getByText("You")).toBeVisible();
     expect(canvas.queryByText("Enable auto-bidding")).not.toBeInTheDocument();
     expect(

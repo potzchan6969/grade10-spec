@@ -146,9 +146,7 @@ function ListingUserBidHistory({
               >
                 <TabsList fullWidth variant="pill">
                   <TabsTrigger value="bids">{copy.bidsTab}</TabsTrigger>
-                  <TabsTrigger value="maximums">
-                    {copy.maximumsTab}
-                  </TabsTrigger>
+                  <TabsTrigger value="maximums">{copy.maximumsTab}</TabsTrigger>
                 </TabsList>
                 <TabsContent
                   className="flex min-h-0 flex-1 flex-col overflow-hidden data-[hidden]:hidden"
@@ -180,10 +178,7 @@ function ListingUserBidHistory({
                             <TableCell className="min-w-0 flex-1">
                               {row.amountLabel}
                             </TableCell>
-                            <TableCell
-                              align="end"
-                              className={timeColumnClass}
-                            >
+                            <TableCell align="end" className={timeColumnClass}>
                               {formatRowTime(row)}
                             </TableCell>
                           </TableRow>
