@@ -11,6 +11,8 @@ A product coupon and a gift currently reach the draft order as a custom discount
 - A coupon scoped to a catalogue facet — a world, a type — has its target resolved against the claiming basket, and its code names the variants that basket holds.
 - A draft order carries at most one discount code, wherever it came from. A checkout eligible for more than one has the collector choose exactly one.
 - Every minted code is scoped to the member it was minted for, so a code that escapes cannot be spent by anyone else.
+- Every minted code carries its own coupon's combine setting — a reward's definition, or the operator's mint of a store coupon — and Shopify's own combine rules decide the outcome beside a site discount.
+- A site discount the shop applies in place of the coupon's code keeps the sale: the order completes at the shop's price, the coupon returns to the member's wallet unused, and the member is told the sale beat their coupon. Only a code the shop refuses outright fails the checkout.
 - A live cart price is estimated locally as the collector edits it; nothing mints until an order claims the coupon.
 - Applies to both the online checkout and the POS till.
 
@@ -18,7 +20,7 @@ A product coupon and a gift currently reach the draft order as a custom discount
 
 - Not changing how a coupon is redeemed, held, or priced against the basket — only how its cut reaches the order.
 - Not changing points or free shipping — points stays the order's own custom discount, outside the one discount-code count.
-- Not changing site discounts themselves — that is `add-site-wide-discounts`. This change does state which half of the combine rule grade10 holds, since it is the side that mints.
+- Not changing site discounts themselves — that is `add-site-wide-discounts`. This change carries each coupon's own combine setting onto its code, since it is the side that mints, and never re-evaluates Shopify's combine rules itself.
 - Not building a single-code removal path at the till; "Remove every discount" stays the documented fallback.
 - Not specifying the exact minting, compensation, or POS undo mechanics — deferred to tech-design.
 
@@ -35,7 +37,8 @@ A product coupon and a gift currently reach the draft order as a custom discount
 ## Impact
 
 - `packages/coupons/contracts/src/` — a new `codeTargetFor()` beside `eligibleLines()`, projecting a coupon's target onto what a Shopify code can express, against one basket.
-- `packages/shopify/backend/src/admin/discounts.ts` — every coupon shape mints through the same call, customer-scoped, with `combinesWith` and `endsAt` as parameters rather than constants.
+- `packages/shopify/backend/src/admin/discounts.ts` — every coupon shape mints through the same call, customer-scoped, with `combinesWith` and `endsAt` as parameters rather than constants; `combinesWith` comes from the coupon's own definition, with today's constant as the default.
+- `packages/grade10-store/backend/src/adapters/shopify/shopifyProvider.ts`, `services/orders/checkout.ts` — a requested code the draft did not land is answered as replaced, not refused, where the draft carries an automatic discount instead; the checkout completes, the coupon is released and the member is told.
 - `packages/grade10-store/backend/src/services/coupons/` — a product coupon and a gift stop welding a line discount; `createCoupon()` stops minting; one shared mint helper, with a code derived from the order and coupon ids so a retry recovers rather than duplicates.
 - `packages/grade10-store/backend/src/db/schema/coupons.ts`, `orders.ts` — a relaxing `ck_coupons_shape` edit, a new `coupon_mints` table with real foreign keys, and two nullable code columns on `orders` for a reward's mint.
 - `packages/grade10-store/backend/src/services/orders/checkout.ts`, `promise.ts` — every mint happens after the order row commits and keys on that row's own id; `reserveRewardCoupon()` gains the one-discount-code check and mints nothing itself.

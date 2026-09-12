@@ -16,8 +16,9 @@ own.
 - Authoring
   - A product special sale, a buy-X-get-Y offer, and an order threshold cut
     are authored in Shopify Admin, not a grade10 admin screen
-  - Shopify's own combine-rule configuration decides what a site discount
-    does beside a discount code; grade10 states only the code's own half
+  - Shopify's own combine rules decide what a site discount does beside a
+    discount code; grade10 carries each coupon's own setting onto its code
+    and accepts what the shop priced
 
 ## ADDED Requirements
 
@@ -45,23 +46,24 @@ remove what grade10 put on it and leave the shop's own automatics standing.
 - **THEN** the automatic discount is still on the sale
 - **AND** clearing confirms rather than reporting that it could not finish
 
-### Requirement: Shopify's configuration decides how a site discount meets a discount code, and grade10 states only the code's own half
+### Requirement: Shopify's rules decide how a site discount meets a discount code, and grade10 accepts what the shop priced
 
-Whether a site discount refuses, stacks with, or replaces the order's one
-discount code — and whether one site discount excludes another on the same
-product — SHALL be Shopify's own combine-rule configuration on each
-discount, authored in Shopify Admin. Grade10 SHALL NOT reimplement that
-evaluation, hold a discount type of its own, or alter what the provider
-priced.
+Whether a site discount stacks with the order's one discount code or
+applies in its place — and whether one site discount excludes another on
+the same product — SHALL be Shopify's own combine rules, evaluated from the
+site discount's setting authored in Shopify Admin and the setting the code
+carries. Grade10 SHALL NOT reimplement that evaluation, hold a discount type
+of its own, or alter what the provider priced.
 
-Grade10 does state one half of it: every code it mints carries its own
-combine setting, so what a merchandiser authors in Shopify Admin decides the
-outcome together with that setting and not alone. That setting SHALL be
-stated once, per coupon class, where the code is minted.
+The setting a code carries is its own coupon's, per
+`grade10-site/store/discounts`. Where the shop applies the site discount in
+place of the code, the sale SHALL complete at the shop's price and the
+coupon SHALL return to the member, under that capability's own rule; grade10
+SHALL NOT fail the sale for a code the shop set aside.
 
 #### Scenario: grade10-site-store-site-discounts-SC-03 - Grade10 presents what the provider priced
 
 - **GIVEN** a basket carrying both an active automatic discount and a discount code
 - **WHEN** the draft order is priced
-- **THEN** the order's discount total is exactly what the provider priced
-- **AND** grade10 neither drops the code nor alters the amount
+- **THEN** the order's discount total is exactly what the provider priced, whether the two stacked or the shop kept one
+- **AND** grade10 alters no amount and fails no sale for a code the shop set aside

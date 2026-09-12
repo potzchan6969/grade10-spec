@@ -12,12 +12,16 @@ code, how many a draft order can carry at once, and when one is minted.
     loyalty reward's own coupon all ride as one Shopify Discount code
   - At most one applies per order; a checkout eligible for more than one has
     the collector pick
+  - A site discount the shop applies in place of the code keeps the sale;
+    the coupon returns to the wallet and the member is told
 - An ephemeral code, minted once
   - A coupon is the durable record; its code is an intention to spend it on
     one basket, minted when an order claims it and spent once
   - A coupon scoped to a catalogue facet mints against the lines that
     basket actually holds
   - Every code is scoped to the member it was minted for
+  - Every code carries its own coupon's combine setting, so Shopify's rules
+    decide the outcome beside a site discount
 - Price preview
   - A live cart price estimates locally; minting waits for the order
 - Two channels
@@ -147,6 +151,37 @@ code, since such an order can still be paid.
 - **GIVEN** an order carrying a minted, unspent discount code
 - **WHEN** that order is canceled or fails
 - **THEN** the code is deactivated and the coupon returns to the member
+
+### Requirement: A site discount the shop applies in place of the code keeps the sale and returns the coupon
+
+Where the shop's own combine rules apply a site discount in place of the
+order's discount code, the checkout SHALL complete at the price the shop
+returned. The coupon whose code was set aside SHALL return to the member's
+wallet unused, its code deactivated, and the member SHALL be told that the
+sale gave more than the coupon and that the coupon is kept. Only a code the
+shop refuses outright SHALL refuse the checkout.
+
+#### Scenario: grade10-site-store-discounts-SC-15 - A site discount that beats the coupon keeps the sale
+
+- **GIVEN** a basket carrying a coupon and a site discount the shop's rules do not combine with it
+- **WHEN** the shop applies the site discount in place of the coupon's code
+- **THEN** the order completes at the shop's price
+- **AND** the coupon returns to the member's wallet unused, and the member is told the sale gave more
+
+### Requirement: A code carries its own coupon's combine setting
+
+Every minted code SHALL carry the combine setting its coupon's definition
+states — whether it combines with the shop's product discounts, order
+discounts and shipping discounts — from a reward's definition or an
+operator's mint of a store coupon. A definition stating none SHALL carry the
+store's default. Grade10 SHALL NOT evaluate the combination itself: the
+shop's own rules decide it from that setting and the site discount's own.
+
+#### Scenario: grade10-site-store-discounts-SC-16 - A coupon's combine setting is what its code carries
+
+- **GIVEN** a coupon whose definition allows combining with the shop's product discounts and not its order discounts
+- **WHEN** an order claims the coupon and its code is minted
+- **THEN** the code carries that setting, and the shop prices the basket by its own rules from it
 
 ### Requirement: The same discount-code mechanism applies online and at the POS till
 

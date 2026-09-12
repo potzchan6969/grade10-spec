@@ -38,6 +38,11 @@
 - `grade10-site-store-discounts-SC-11` — A refused mint refuses the checkout and keeps the coupon
 - `grade10-site-store-discounts-SC-12` — A member with no paired Shopify customer is refused
 - `grade10-site-store-discounts-SC-13` — A dead order's unspent code is deactivated
+- `grade10-site-store-discounts-SC-15` — A site discount that beats the coupon keeps the sale
+
+`grade10-site-store-discounts-SC-16` — a code carrying its coupon's combine
+setting — is a mint rule no collector walks; QA lists it under
+`**Out of suite:**`.
 
 ### grade10-site-store-discounts-US-04: Shop staff spends a member's product coupon at the till
 
