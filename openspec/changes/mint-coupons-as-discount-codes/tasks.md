@@ -9,7 +9,7 @@ Group 3's backend refusal must not reach production ahead of group 7's picker UI
 - [ ] 0.3 Add `loyaltyCouponCode` and `loyaltyCouponNodeId` to the `orders` table beside the three `loyaltyCoupon*` columns already there, held null-together by the same shape of check as `ck_orders_coupon_reservation` — a reward's mint records here, not in `coupon_mints`, so no polymorphic key and no `origin` discriminator exists
 - [ ] 0.4 Schema tests: an `order` coupon row with `shopify_node_id` null is accepted after 0.1 and every pre-change row still passes; a `coupon_mints` row is deleted when its order is; an `orders` row carrying one of the two new columns without the other is refused
 
-## 1. Shared mint machinery (grade10)
+## 1. Shared mint machinery (grade10) (owner: @ecchochan)
 
 - [ ] 1.1 Add `codeTargetFor(target, lines) -> CodeTarget | null` beside `eligibleLines` in `@grade10/coupons-contracts`: pass `whole_order`/`products`/`variants` through unchanged, resolve a `facets` target through `eligibleLines()` to `{ kind: "variants", variantIds }` over the lines that basket holds, and answer `null` where `eligibleLines()` does, so a catalogue that cannot supply a line's facets refuses the mint instead of targeting the wrong lines
 - [ ] 1.2 Extract `create.ts`'s generate-code/retry/compensate loop into `mintDiscountCode(deps, params) -> outcome` inside `packages/grade10-store/backend`, with `value`, `target`, `codeScope`, `endsAt`, `combinesWith` and the code text all supplied by the caller
