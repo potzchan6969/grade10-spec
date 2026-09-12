@@ -65,7 +65,11 @@ per-unit stock — are untouched and stay where they are.
 **Accepted by:**
 
 - `grade10-site-loyalty-programme-SC-158` — A reward with a definition is created from the console alone
-- `grade10-site-loyalty-programme-SC-173` — A reward's combine setting reaches its code
+
+The minted-code behaviour this journey used to cite (`SC-173`) is accepted
+by `grade10-site/store/discounts`' own scenario instead, covering a
+reward's combine setting as one case of any coupon's rather than a second
+copy of the rule.
 
 ### grade10-site-loyalty-programme-US-10: Operator cancels a redemption under its own permission
 
