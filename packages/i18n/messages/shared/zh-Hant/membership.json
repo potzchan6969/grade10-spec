@@ -132,5 +132,18 @@
     "until": "{tier} 有效至 {date}",
     "kept": "{until}——你已累積足夠積分保留此等級",
     "earnMore": "{until}——屆時再累積 {remaining} 分即可保留"
+  },
+  "present": {
+    "action": "在櫃檯使用",
+    "heading": "請向店員出示",
+    "qrAlt": "此單的優惠碼，可供掃描的方格",
+    "code": "或讀出這組編號",
+    "instruction": "店員掃描後即可為此單套用優惠，只適用於這一單。",
+    "done": "完成",
+    "noCounter": "目前沒有櫃檯開啟你的會員資料。",
+    "notAttached": "請先請店員把你加入此單。",
+    "locked": "此單已有優惠碼，請請店員清除全部折扣後再試。",
+    "refused": "此優惠券不能用於此單。",
+    "unavailable": "未能完成，請再試一次。"
   }
 }

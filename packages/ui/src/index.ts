@@ -240,6 +240,10 @@ export {
   type RewardMenuCopy,
   type RewardMenuProps,
 } from "./blocks/loyalty-membership/reward-menu";
+export {
+  ScanPlate,
+  type ScanPlateProps,
+} from "./blocks/loyalty-membership/scan-plate";
 export type {
   ActivityEntry,
   CouponItem,

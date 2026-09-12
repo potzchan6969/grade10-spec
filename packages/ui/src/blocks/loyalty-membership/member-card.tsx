@@ -9,7 +9,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { QRCodeSVG } from "qrcode.react";
+import { ScanPlate } from "./scan-plate";
 
 /** The words the card says, whoever holds it. */
 type MemberCardCopy = {
@@ -75,10 +75,6 @@ type MemberCardProps = {
  * A code that has been scanned says where and when, because the till refusing
  * the second scan says exactly that: the member standing at the counter reads
  * the same sentence as the staff member serving them.
- *
- * The QR plate keeps fixed colours for the same reason the authenticator QR
- * does: phone scanners expect dark modules on a light field, and a palette
- * that inverts under dark mode produces a code that does not scan.
  */
 function MemberCard({
   copy,
@@ -107,37 +103,14 @@ function MemberCard({
       </CardHeader>
       <CardContent>
         <VStack gap="md">
-          <div
-            aria-hidden={spent || undefined}
-            className={cn(
-              "w-fit rounded-(--radius-md) bg-white p-3",
-              spent && "opacity-30",
-            )}
-            data-slot="member-card-qr"
-          >
-            <QRCodeSVG
-              bgColor="#ffffff"
-              fgColor="#000000"
-              level="M"
-              marginSize={4}
-              size={192}
-              title={copy.qrAlt}
-              value={token}
-            />
-          </div>
-          <VStack gap="xs">
-            <Text size="sm" tone="secondary">
-              {copy.fallbackCode}
-            </Text>
-            <Text
-              className="font-mono tracking-widest"
-              data-slot="member-card-fallback-code"
-              size="lg"
-              weight="medium"
-            >
-              {fallbackCode}
-            </Text>
-          </VStack>
+          <ScanPlate
+            alt={copy.qrAlt}
+            caption={copy.fallbackCode}
+            code={fallbackCode}
+            dimmed={spent}
+            slot="member-card"
+            value={token}
+          />
           <HStack align="center" gap="sm" justify="space-between">
             <CardState copy={copy} state={state} />
             <Button

@@ -132,5 +132,18 @@
     "until": "{tier} until {date}",
     "kept": "{until} — you have earned enough to keep it",
     "earnMore": "{until} — earn {remaining} more points by then to keep it"
+  },
+  "present": {
+    "action": "Use at the counter",
+    "heading": "Show this at the counter",
+    "qrAlt": "Promo code for this sale, as a scannable square",
+    "code": "Or read this out",
+    "instruction": "Staff scan this to put the coupon on the sale. It is for this sale only.",
+    "done": "Done",
+    "noCounter": "No counter has your card open right now.",
+    "notAttached": "Ask staff to add you to the sale first.",
+    "locked": "This sale already has a promo code. Ask staff to clear the discounts, then try again.",
+    "refused": "This coupon cannot be used on this sale.",
+    "unavailable": "That did not go through. Try again."
   }
 }
