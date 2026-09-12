@@ -107,9 +107,11 @@ Create it with `openspec new change account-setting-page`, then run
 `openspec instructions proposal --change account-setting-page` and work from
 what it returns, the grilling interview included.
 
-I'm writing this as a PM: produce only proposal.md, the spec deltas, and the
-user-journeys.md beside each. Do not write ui-design.md, tech-design.md, or
-tasks.md — the engineer who picks this up writes those.
+I'm writing this as a PM: produce only proposal.md, the spec deltas, the
+user-journeys.md beside each, and the feature-tcs.md derived from them with
+`/spec-to-tcs feature <capability>`. Do not write ui-design.md,
+tech-design.md, or tasks.md — the designer and the engineer who picks this up
+write those.
 
 Before drafting, read the relevant capability in openspec/specs/, any active
 change touching it, and the capability's page in `docs/prds/`. Identify affected component exports
@@ -148,7 +150,9 @@ objective improvement. Keep the change to this one component capability.
 ```text
 Plan delivery for the account-setting-page change. Leave the proposal, the
 spec deltas and the journeys untouched; add promoted_by: @my-handle to its
-.openspec.yaml, then write tech-design.md, ui-design.md, and tasks.md.
+.openspec.yaml, then write tech-design.md and tasks.md. A designer adds
+ui-design.md with /planning-design when the change alters something a user
+sees.
 Run `openspec instructions <artifact> --change account-setting-page` for
 each, and follow docs/governance/task-ownership.md for the tasks format.
 ```
@@ -194,13 +198,17 @@ author line. The skill itself lives in the store clone at
 `.claude/skills/grilling/SKILL.md`, and the rule names that path — point your
 agent at it if it cannot find the skill by name.
 
-**4. The agent writes three things.** `proposal.md` — author line, the
+**4. The agent writes four things.** `proposal.md` — author line, the
 collector problem and its evidence, a metric that would move, non-goals, the
 capabilities touched — `specs/grade10-site/store-account-settings/spec.md`,
 where every requirement carries at least one `#### Scenario:` a test or a
-manual pass can decide, and
+manual pass can decide,
 `specs/grade10-site/store-account-settings/user-journeys.md`, where each story
-lists the scenario ids that accept it.
+lists the scenario ids that accept it, and
+`specs/grade10-site/store-account-settings/feature-tcs.md`, the suite derived
+from those journeys with every case `draft`. Before any of it, the capability's
+page carries a 🚧 line for each outcome, and the proposal links that section;
+`pnpm check:manual` refuses a change with neither the mark nor `page_waived`.
 
 **5. Check and push.**
 
@@ -235,10 +243,12 @@ still runs from `grade10`:
 openspec status --change account-setting-page   # lists what is still to write
 ```
 
-Then write `tech-design.md` (decisions and the alternatives behind them),
-`ui-design.md` (one subsection per screen, linking the Figma frame), and
-`tasks.md`. Groups split by layer, no owner tags,
-each task phrased as the spec scenario it makes pass. Validate and push.
+Then write `tech-design.md` (decisions and the alternatives behind them) and
+`tasks.md`. Groups split by layer, tagged with the clone they land in, no
+owner tags, each task phrased as the spec scenario it makes pass. A designer
+writes `ui-design.md` (one subsection per screen, linking the Figma frame) with
+`/planning-design` when the change alters something a user sees. Validate and
+push.
 
 **8. Claim and build.**
 
