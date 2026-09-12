@@ -2,7 +2,7 @@ Group 0 and group 1 land the schema and the shared mint machinery; every other g
 
 Group 3's backend refusal must not reach production ahead of group 7's picker UI — see tech-design.md's Risks.
 
-## 0. Schema (grade10)
+## 0. Schema (grade10) (owner: @ecchochan)
 
 - [ ] 0.1 Drop `ck_coupons_shape`'s `shopify_node_id is not null` clause for `kind = 'order'` in both arms of the constraint (`packages/grade10-store/backend/src/db/schema/coupons.ts`), since `createCoupon()` no longer mints — a relaxing edit, so no `NOT VALID`, no `VALIDATE`, no ordering against any backfill, and safe to apply by hand ahead of the code the way this repository applies every migration
 - [ ] 0.2 Add the `coupon_mints` table: `orderId uuid references orders.id on delete cascade`, `couponId uuid references coupons.id`, `nodeId`, `code`, `state` (`'live' | 'dead' | 'spent'`), unique on `(orderId, couponId)` — both keys are real foreign keys, which the post-commit mint placement in 2.1 is what makes possible
