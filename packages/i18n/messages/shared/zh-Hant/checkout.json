@@ -20,6 +20,19 @@
     "goodsOnly": "積分只可用於商品，不包括運費與稅項。",
     "unit": "分"
   },
+  "promo": {
+    "label": "優惠碼",
+    "usable": "此單可用的優惠碼",
+    "unusable": "此單用不到的優惠碼",
+    "none": "你未有優惠碼。",
+    "one": "每單只可用一個優惠碼。",
+    "use": "使用",
+    "using": "使用中",
+    "clear": "不使用",
+    "worth": "此單可減 {money}",
+    "expires": "直至 {date}",
+    "chosen": "用 {code} 減 {money}"
+  },
   "reason": {
     "emptyCart": "你的購物車是空的。",
     "invalidQuantity": "其中一項的數量超出商店可售的範圍。",
@@ -29,7 +42,7 @@
     "payment_declined": "付款被拒絕，請改用其他付款方式再試。",
     "payment_error": "未能建立付款，請稍後再試。",
     "points_refused": "計劃不接受在此購物車使用這麼多積分，請改用其他數量。",
-    "coupon_refused": "該優惠券不能用於此購物車。請移除優惠券或調整購物車後再試。",
+    "coupon_refused": "該優惠碼不能用於此購物車。請移除優惠碼或調整購物車後再試。",
     "contradicted": "商店的回覆改變了你的購物車。請修正標記的項目後再試。"
   },
   "review": {

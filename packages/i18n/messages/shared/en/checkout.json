@@ -20,6 +20,19 @@
     "goodsOnly": "Points pay for goods, never shipping or tax.",
     "unit": "points"
   },
+  "promo": {
+    "label": "Promo codes",
+    "usable": "Codes you can use on this basket",
+    "unusable": "Codes that do not fit this basket",
+    "none": "You have no promo codes.",
+    "one": "One promo code per basket.",
+    "use": "Use",
+    "using": "Using",
+    "clear": "Don't use it",
+    "worth": "{money} off this basket",
+    "expires": "Until {date}",
+    "chosen": "{money} off with {code}"
+  },
   "reason": {
     "emptyCart": "There is nothing in your basket.",
     "invalidQuantity": "One of these lines asks for a quantity the shop cannot sell.",
@@ -29,7 +42,7 @@
     "payment_declined": "That payment was declined. Try again with another method.",
     "payment_error": "The payment could not be set up. Try again in a moment.",
     "points_refused": "The programme would not put that many points against this basket. Choose a different amount.",
-    "coupon_refused": "That coupon cannot ride this basket. Remove it or change the basket and try again.",
+    "coupon_refused": "That promo code cannot be used on this basket. Take it off or change the basket and try again.",
     "contradicted": "The shop's answer changed your basket. Fix the marked lines and try again."
   },
   "review": {
