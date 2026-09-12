@@ -94,6 +94,25 @@ Only the first three are always written. A change is finished as far as its auth
 
 That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there, and a change with no `tasks.md` shows on the engineer's board as still being planned. A change whose requirements are finished but which nobody picks up is therefore invisible as ready work, however complete its specs are.
 
+### The change's record
+
+`.openspec.yaml` in the change directory is the record the boards and the checks read. Every key it can hold, who writes it, and what reads it:
+
+| Key | Written by | When | Read by |
+| --- | --- | --- | --- |
+| `schema` | The CLI, at `openspec new change` | Always | Every reader |
+| `created` | The CLI, at `openspec new change` | Always | The boards, for the planning age |
+| `skip_specs: true` | The author | A change altering no product behaviour | `openspec validate` |
+| `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The boards |
+| `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
+| `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
+| `deployed_at`, `deployed_env` | `pnpm plan shipped` in the application repository | At archive | `pnpm check:manual`, rule `archived` |
+| `deploy_waived: "<who, why>"` | The owner, through `archive:preflight --deploy-waived` | At archive, in place of the deploy record | `pnpm check:manual`, rule `archived` |
+| `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
+| `target`, `owner`, `owners`, `depends_on` | ❓ The manual reads them; no document says who writes them | ❓ | The boards |
+
+A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so `pnpm check:manual` refuses a record key holding anything but text.
+
 ### 6. Keep component contracts aligned
 
 A capability spec names the exact exports a consuming application must provide. The change that alters one must:
