@@ -11,7 +11,7 @@ Group 1 lands the reward's contract shape; groups 2, 3 and 4 depend on it. Group
 - [ ] 1.5 Add a combine setting to the reward contract — product, order and shipping discounts each allowed or not, absent meaning the store default — copy it onto the coupon with the rest of the definition, and pass it to `mint-coupons-as-discount-codes`' `mintDiscountCode` as its `combinesWith` when the reward's code is minted, so *A reward's combine setting reaches its code* passes
 - [ ] 1.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
-## 2. Console reward form (grade10)
+## 2. Console reward form (grade10) (owner: @ecchochan)
 
 - [ ] 2.1 Add kind, discount, scope and combine-setting fields to the loyalty-admin reward form, so *A reward with a definition is created from the console alone* passes, and drop the admin-API-only path for a reward carrying a definition
 - [ ] 2.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
