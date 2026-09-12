@@ -90,11 +90,14 @@ describe("a store that has drifted", () => {
     ]);
   });
 
-  it("warns rather than fails on a link", async () => {
+  it("warns rather than fails on a link, and on a walked capability with no suite", async () => {
     const warnings = (await result).findings.filter(
       (one) => one.level === "warn",
     );
-    expect(warnings.map((one) => one.rule).sort()).toEqual(["figma"]);
+    expect(warnings.map((one) => one.rule).sort()).toEqual([
+      "derived",
+      "figma",
+    ]);
   });
 
   it("names the capabilities that never say who walks them", async () => {
@@ -108,8 +111,8 @@ describe("a store that has drifted", () => {
     const root = fixture("broken");
     const report = formatReport(root, await result);
     expect(report.failures).toBe(11);
-    expect(report.warnings).toBe(1);
-    expect(report.text).toContain("11 failures, 1 warning");
+    expect(report.warnings).toBe(2);
+    expect(report.text).toContain("11 failures, 2 warnings");
   });
 });
 
