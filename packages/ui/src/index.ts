@@ -158,6 +158,7 @@ export type {
   ListingLotGalleryImage,
   ListingLotMetaBadge,
   ListingUserBidHistoryRow,
+  ListingUserMaximumHistoryRow,
 } from "./blocks/auction-listing/types";
 // shared/ui/auction-record
 export { AuctionRecord } from "./blocks/auction-record/auction-record";
