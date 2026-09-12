@@ -33,6 +33,8 @@ A group is a level-two heading numbered with a single integer. Its tasks are che
 
 A group title that names a repository names it by clone name — `(grade10-spec)`, `(grade10)` — never "this repo" or "here": `tasks.md` is written in this store and read from the application repository, so a deictic reference flips meaning between the two.
 
+The trailing parenthetical is read as a repository, whatever it says. A product or domain name — `grade10-site`, `auction` — goes in the title before it, never in the tag: `## 1. Vault (grade10-spec)`, not `## 1. Vault (grade10-site)`. A group tagged with a product, or not tagged at all, reads as work outside this store, and `pnpm check:manual` then asks the change for a `tech-design.md` it does not owe.
+
 Task ids are conventionally `<group>.<n>`, and they must be unique within a change — the tooling indexes tasks by id, so a duplicate makes one of them unreachable.
 
 Group headings are free for us to use because OpenSpec parses only the checkbox lines. `openspec validate --changes --strict` and the task counts are unaffected by an owner tag; both remain the check that this convention has not broken anything.
@@ -63,6 +65,8 @@ These are silent — the line is skipped or misread, and nothing reports an erro
 | Written | Result |
 | --- | --- |
 | `## 1. Build it (owner: @alice) — WIP` | Owner is read, but the tag is only stripped from the end, so the title keeps it |
+| `## 1. Vault (grade10-site)` | Read as a repository named `grade10-site`; the manual's `design` rule demands a `tech-design.md` |
+| `## 3. Admin` | No repository; read as work outside this store, the same demand |
 | `## 1.2 Build it` | Group number is `1`; the title becomes `2 Build it` |
 | `### 1. Build it` | Not a group at all; its tasks attach to the previous group |
 | `- [ ] 1.1` | Not a task — the text after the id is required, so the task is invisible to every count |
