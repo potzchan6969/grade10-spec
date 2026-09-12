@@ -43,7 +43,10 @@
   {
     "label": "product-list-header/filters",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4396-5424",
-    "classes": "w-full gap-4"
+    "classes": "w-full gap-2",
+    "diverges": {
+      "gap-2": "The applied chips wrap on small viewports (fix: wrap the product list header on small viewports), so they sit at an 8px gap on every row; Figma draws one unwrapped row at 16px."
+    }
   },
   {
     "label": "product-card/content",

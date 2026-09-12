@@ -98,7 +98,9 @@ export const Empty: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Your cart is empty")).toBeInTheDocument();
-    expect(canvas.getByText("Items you add will appear here")).toBeInTheDocument();
+    expect(
+      canvas.getByText("Items you add will appear here"),
+    ).toBeInTheDocument();
     expect(canvas.queryByRole("button")).not.toBeInTheDocument();
   },
 };

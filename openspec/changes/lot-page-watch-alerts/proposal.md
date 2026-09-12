@@ -62,9 +62,10 @@ None.
 - `grade10-site/auction/listing-page`: lot-page Watch / Watching states,
   watch and unwatch toasts, bid-locked control, once-per-lot bid alerts
   toast on that page’s surface.
-- `grade10-site/auction/account-record`: Unwatch refused while a bid
-  stands; watch/unwatch announcements and Undo; once-per-lot bid alerts
-  toast owned on the account.
+- `grade10-site/auction/account-record`: watch/unwatch announcements and
+  Undo; once-per-lot bid alerts toast owned on the account. Unwatch refused
+  while a bid stands is carried by `redesign-my-auctions-table`'s block on
+  the same requirement, so the two changes do not both fold it.
 - `shared/ui/auction-record`: `WatchButton` locked Watching; optional
   watch/unwatch toast copy with action label.
 

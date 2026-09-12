@@ -1,41 +1,99 @@
-## 1. Mint at redemption (grade10)
+Group 0 and group 1 land the schema and the shared mint machinery; every other group depends on them. Group 3 covers a reward coupon as one case of `grade10-site-store-discounts-SC-04` — this change is the sole owner of the one-discount-code rule end to end, and `deliver-reward-coupons` dropped its own draft scenario for the same rule (`grade10-site-loyalty-programme-SC-163`) in favour of it.
 
-- [ ] 1.1 Extend `createCoupon()`'s Shopify-minting branch (`packages/grade10-store/backend/src/services/coupons/create.ts`) to also cover `gift` and a fixed-amount `product` coupon, reusing `codeScope`, `shopTarget`, `COMBINES_WITH`, `compensateMint` unchanged — covers `grade10-site-store-discounts-SC-01` (fixed-amount case), `grade10-site-store-discounts-SC-02`
-- [ ] 1.2 Look up the gift variant's current catalog price in `resolveDefinition()`'s gift branch, and mint its code with that amount as the fixed value
-- [ ] 1.3 Unit tests: a gift and a fixed-amount product coupon each mint a real Shopify Discount at redemption and compensate on a failed insert, mirroring the existing `order` coupon tests
+Group 3's backend refusal must not reach production ahead of group 7's picker UI — see tech-design.md's Risks.
 
-## 2. Checkout-time minting for percentage coupons (grade10)
+## 0. Schema (grade10)
 
-- [ ] 2.1 Add `mintComputedCouponCode()` per tech-design.md's Service Interfaces, called only from the checkout-submit path
-- [ ] 2.2 Wire it into the final checkout submission for a percentage-with-ceiling product coupon ride, immediately before `createDraftOrder`, with compensation on a subsequent failure
-- [ ] 2.3 Confirm `calculateDraftOrder` (price preview) never calls it — the local evaluator number stays what the preview shows
-- [ ] 2.4 Unit tests covering `grade10-site-store-discounts-SC-05`, `grade10-site-store-discounts-SC-06`
+- [ ] 0.1 Drop `ck_coupons_shape`'s `shopify_node_id is not null` clause for `kind = 'order'` in both arms of the constraint (`packages/grade10-store/backend/src/db/schema/coupons.ts`), since `createCoupon()` no longer mints — a relaxing edit, so no `NOT VALID`, no `VALIDATE`, no ordering against any backfill, and safe to apply by hand ahead of the code the way this repository applies every migration
+- [ ] 0.2 Add the `coupon_mints` table: `orderId uuid references orders.id on delete cascade`, `couponId uuid references coupons.id`, `nodeId`, `code`, `state` (`'live' | 'dead' | 'spent'`), unique on `(orderId, couponId)` — both keys are real foreign keys, which the post-commit mint placement in 2.1 is what makes possible
+- [ ] 0.3 Add `loyaltyCouponCode` and `loyaltyCouponNodeId` to the `orders` table beside the three `loyaltyCoupon*` columns already there, held null-together by the same shape of check as `ck_orders_coupon_reservation` — a reward's mint records here, not in `coupon_mints`, so no polymorphic key and no `origin` discriminator exists
+- [ ] 0.4 Schema tests: an `order` coupon row with `shopify_node_id` null is accepted after 0.1 and every pre-change row still passes; a `coupon_mints` row is deleted when its order is; an `orders` row carrying one of the two new columns without the other is refused
 
-## 3. One discount-code slot (grade10)
+## 1. Shared mint machinery (grade10)
+
+- [ ] 1.1 Add `codeTargetFor(target, lines) -> CodeTarget | null` beside `eligibleLines` in `@grade10/coupons-contracts`: pass `whole_order`/`products`/`variants` through unchanged, resolve a `facets` target through `eligibleLines()` to `{ kind: "variants", variantIds }` over the lines that basket holds, and answer `null` where `eligibleLines()` does, so a catalogue that cannot supply a line's facets refuses the mint instead of targeting the wrong lines
+- [ ] 1.2 Extract `create.ts`'s generate-code/retry/compensate loop into `mintDiscountCode(deps, params) -> outcome` inside `packages/grade10-store/backend`, with `value`, `target`, `codeScope`, `endsAt`, `combinesWith` and the code text all supplied by the caller
+- [ ] 1.3 Derive an order-keyed mint's code from the resolved order id and the coupon id rather than generating a random suffix, so a retry after a crash re-derives the same code, Shopify answers `codeTaken`, and `discountByCode` recovers the node — idempotency and recovery with no pre-write, and nothing enumerable, since the inputs are two v4 UUIDs and every code is customer-scoped
+- [ ] 1.4 Set every mint's `endsAt` to a single store-side constant of 24 hours, commented as matching loyalty's `STALE_RESERVATION_HOURS`, so a code cannot outlive the reservation behind it and any missed deactivation self-heals within a day instead of standing for up to `MAX_COUPON_VALID_DAYS`
+- [ ] 1.5 Scope every minted code to the member's paired Shopify customer unconditionally, never `{kind:'all'}`, and refuse the mint where the member has no paired customer — with its own named refusal reason and metric, since a pairing parked in `conflict` is terminal until an operator unparks it and must not read to the member as "your coupon was refused"
+- [ ] 1.6 Make `combinesWith` a parameter of `mintDiscountCode`, sourced from the coupon's own definition — a reward's definition (`deliver-reward-coupons` task 1.5) or the operator's mint of a store coupon, which gains the three switches — with today's `COMBINES_WITH` as the default for a definition stating none — covers `grade10-site-store-discounts-SC-16`; change the default before `add-site-wide-discounts` task 2.3 reports only if that run shows it wrong
+- [ ] 1.7 Remove `createCoupon()`'s minting branch entirely: no coupon mints at redemption, no coupon writes `coupons.shopify_node_id`, and `coupons.code` stays the member-facing string it is today
+- [ ] 1.8 Skip `checkout.ts`'s `customerRef: null` retry whenever the request carries any discount code, since a customer-scoped code can only refuse on that attempt and the retry costs a second draft create and a delete
+- [ ] 1.9 Unit tests: `codeTargetFor` resolves a facets target to only the eligible variants on the basket and refuses on an unavailable catalogue; a derived code re-derives identically on retry and adopts through `codeTaken`; an unpaired member is refused rather than minted unscoped
+
+## 2. Mint at order claim (grade10)
+
+- [ ] 2.1 Add `mintOrderCodes(order, rides, reward, deps)` and call it from `checkout.ts` between `promiseOrder` and `buildCheckoutRequest` — after the order row is committed, so both keys are real and a mint failure is answered by `applyOrderTransition(failed)`, which already runs `releaseCouponTender` and returns the coupon to the member's wallet
+- [ ] 2.2 Key every mint on the resolved order row's own id, never on the caller's argument: `planTillSale` passes a fresh `crypto.randomUUID()` on every Apply while `upsertPromisedOrder` conflicts on `(paymentProvider, paymentCheckoutRef)` and keeps the first plan's id, so a mint keyed on the argument misses its own prior row on every re-plan and stacks up to `TILL_PLAN_CAP` live codes on one sale
+- [ ] 2.3 Confirm `calculateDraftOrder` (price preview) never mints — the local evaluator's number is what a preview shows, and the distinction is structural rather than a one-time check
+- [ ] 2.4 POS: mint at Apply, reusing the existing `coupon_mints` row wherever the coupon still rides; where its cut has changed, refuse that coupon on that re-plan with the sentence staff already read for a code that will not come off, rather than deactivating and minting fresh — the extension can remove all discounts or its own custom cart discount but not one code, so a re-mint leaves both on the cart
+- [ ] 2.5 Deactivate a mint only where the coupon is given back: the `canceled` and `failed` arm `releaseCouponTender` already uses, and `dropRides`, which is the single choke point where a ride is deleted off an order that still lives — mark the row `dead` rather than deleting it, since a failed `deactivateCodeDiscount` needs the `nodeId` to retry
+- [ ] 2.6 Never deactivate on `expired`: `retire.ts` expires a superseded POS promise deliberately because the cart can still collect and `paid` is reachable from `expired`, and `transitions.ts` excludes `expired` from the release for the same reason — 1.4's `endsAt` is what bounds that case instead, safely, because a lifetime fixed at mint time cannot fire mid-sale
+- [ ] 2.7 Move the deactivation off `retire.ts`'s swallow-and-continue loop onto the durable `couponReleaseJobs` outbox that `transitions.ts` already enqueues inside the transition transaction, which is this repository's existing vehicle for exactly this compensation
+- [ ] 2.8 Tests: submit-abandon-resubmit mints and settles exactly one code; a canceled and a failed order each deactivate their unspent mint and an expired one does not; a dropped ride marks its mint dead; a POS re-plan reuses its row and a changed cut refuses rather than stacking a second code
+
+## 3. One discount-code slot, owned end to end (grade10)
 
 - [ ] 3.1 `resolveCoupons()` (`packages/grade10-store/backend/src/services/coupons/apply.ts`) refuses `requested.length > 1`, replacing the narrower `order`-only check — covers `grade10-site-store-discounts-SC-04`
-- [ ] 3.2 Replace `CheckoutCouponFacts`'s `orderCodes` / `lineDiscounts` split with `discountCodes: readonly string[]` per tech-design.md; update every reader (`checkout.ts`, `checkoutRequest.ts`, order-item and order-coupon writers)
-- [ ] 3.3 Update `shopifyProvider.ts`'s `createDraftCheckout()` to place the resolved `discountCodes` (product coupon, gift, order coupon, or a typed code — whichever one rode) onto the draft order's `discountCodes`, never `appliedDiscount`, for anything but points
-- [ ] 3.4 Unit and integration tests: a basket eligible for two coupons at once is refused before evaluation; an existing test or fixture asserting the old combining behavior is found and updated, not left contradicting the new rule
+- [ ] 3.2 `orders/promise.ts`'s `reserveRewardCoupon()` gains the same refusal against any other discount code already on the basket, checked before loyalty's `coupons.reserve()` is called — the reward-coupon case of `grade10-site-store-discounts-SC-04`
+- [ ] 3.3 Take a `SELECT ... FOR UPDATE` on the requested coupon rows inside the transaction that inserts `order_coupons`, closing `openRiders()`'s plain-read race before any mint runs — a partial unique index cannot express "one open ride per coupon", because `order_coupons` has no status column and openness comes from `orders.status` through a join
+- [ ] 3.4 Name the real concurrency guards in one place and stop crediting `coupon_mints` with them: `(orderId, couponId)` dedupes a retry that reuses the same order row and nothing more, loyalty's conditional `available → reserved` update plus `uq_coupon_usages_live` is what serialises a reward, and 3.3's lock is what serialises a store coupon
 
-## 4. POS parity (grade10)
+## 4. The wire, and what reconciles it (grade10)
 
-- [ ] 4.1 `packages/grade10-store/backend/src/services/pos/simulator/basket.ts` and `sale.ts` carry the same one-code rule and the same discount-code transport for a product coupon and a gift — covers `grade10-site-store-discounts-SC-07`
-- [ ] 4.2 POS undo (Clear / Remove every discount) targets a product-coupon or gift discount code the same way it already targets an order coupon's, since neither is a welded line anymore
-- [ ] 4.3 POS settlement correlates a landed sale's coupon by its own code among the codes the sale carried, for every coupon kind uniformly
+- [ ] 4.1 Replace `CheckoutCouponFacts`'s `orderCodes` / `lineDiscounts` split with `discountCodes: readonly string[]` and `couponDiscountMinor`, and update every reader — `checkout.ts`, `checkoutRequest.ts`, the order-item and order-coupon writers, `orders/promise.ts`'s points-basis calculation and `pos/sale/sale.ts`'s `weldsOf()`
+- [ ] 4.2 Define `couponDiscountMinor` as every coupon cut on the order — each ride's `orderCutMinor` and `lineCuts` plus the reward's — and fold `facts.orderCodeMinor` into it and delete it, since both accumulate from the same `evaluation.orderCutMinor` and subtracting both under-allows a member's points against their own basket
+- [ ] 4.3 Keep `order_items.discountMinor` as the record it is, and strip the wire instead: `buildCheckoutRequest` subtracts by variant the cuts of every ride whose code it is sending, and the reward's cuts from `order.loyaltyCouponApplication` — leaving the column alone would send the coupon's money twice, as a per-line discount and again as the code
+- [ ] 4.4 Write a gift line's `discountMinor` as zero when the gift rides as a code and let the code carry the whole benefit — exact under order-claim-time minting, because the line's price is known when the code is minted, and necessary because a gift's evaluation carries `gift` with an empty `lineCuts` so no ride-based subtraction reaches it
+- [ ] 4.5 Widen `checkoutRequest.ts`'s `discountCodes` filter from `coupon.kind === "order"` to every kind that rides as a code, and add the reward's code from the `orders` row — without this a successfully-minted code never reaches the draft order and the shop prices the basket undiscounted while the local system believes it rode
+- [ ] 4.6 `orders/eventSink.ts`'s `ownedEvent()` reports `{ provider: "shopify", kind: "discount_code", externalId: nodeId, code }` for a reward from the order row's own columns, and bounds the `draft_line_discount` fallback on the order's `createdAt` against the deploy rather than on a column being absent — after the deploy window absent means a lost mint, which is counted and logged rather than written into loyalty's permanent record as plausible history
+- [ ] 4.7 `settle.ts`'s `adoptUnreportedCodes()` selects `coupons.kind` and inserts the registry row's own kind instead of the hardcoded `kind: "order"` — adopting a percentage product coupon as an order code makes `discountBesidesPointsMinor` add `benefit_value`, which for a percentage row is basis points, so a 20% coupon enters the subtraction as 2000 minor units
+- [ ] 4.8 Restrict `discountBesidesPointsMinor`'s registry-value sum to `benefit_kind = 'fixed'` rows, so a percentage code's value is never read out of a basis-points column whatever adopted it
+- [ ] 4.9 Rewrite `confirmTillSale`'s `product`-kind landing detection to match by code the way `order` already is, instead of falling through to `orderCouponCuts` weld rows that will no longer exist, and extend the same rewrite to its `gift` branch
+- [ ] 4.10 Keep a gift corroborated by its own line still showing a full cut rather than by its code alone: a gift's code can ride a sale whose gift line was removed, and corroborating by code alone would mark the coupon used while the member receives no gift
+- [ ] 4.11 Tests: an online coupon's money reaches the shop exactly once; a gift's line is sent at zero and its code carries the benefit; a landed product-coupon-as-code confirms and settles; an adopted percentage code does not enter the points subtraction as basis points
+- [ ] 4.12 Split `shopifyProvider`'s code comparison: a requested code the draft did not land while the draft carries an automatic discount answers `couponReplaced`; a code missing with no automatic on the draft stays `couponRefused` — Shopify applies the better of two discounts that cannot combine and drops the other, so a dropped code is the documented outcome, not a fault. Sequence after `add-site-wide-discounts` task 2.3 records how the draft-order response names the applied automatic
+- [ ] 4.13 On `couponReplaced`, `checkout.ts` continues on the draft as priced, runs `releaseCouponTender` so the coupon returns to the wallet, marks the mint dead and deactivates it through 2.5's path, and names the coupon in the outcome the member reads — the online reading of the till's trim-to-landed pass — covers `grade10-site-store-discounts-SC-15`
+- [ ] 4.14 Tests: a draft that lands an automatic and drops the code completes with the coupon released and the member's outcome naming it; a draft that drops the code with no automatic still fails as refused
 
-## 5. Collector picks one (grade10)
+## 5. POS parity, including the real till extension (grade10)
 
-- [ ] 5.1 Cart / checkout UI: when a basket qualifies for more than one coupon, present the choice and apply only the one the collector picks, rather than combining or auto-selecting — covers `grade10-site-store-discounts-SC-03`
-- [ ] 5.2 POS UI extension: same choice, from the member's panel
+- [ ] 5.1 `packages/grade10-store/backend/src/services/pos/simulator/basket.ts` and `sale.ts` carry the same one-code rule and the same discount-code transport for a product coupon — covers `grade10-site-store-discounts-SC-07`
+- [ ] 5.2 `integrations/shopify-pos/grade10` converts its product-coupon weld path (`setLineItemDiscount`) to `addCartCodeDiscount`, and only that path: the gift keeps its uuid-targeted 100% weld at the till and carries no code there, because `flow.ts` adds and zeroes that line unconditionally in every extension build, so a gift arriving with both would take the gift free and its price off the rest of the sale
+- [ ] 5.3 State that the extension keeps executing both `plan.welds` and `plan.codes`, so an un-updated till is correct against the new backend for a product coupon — it stops receiving welds and starts receiving a code, and applies it — and raise `minClientVersion` once the picker build is live rather than coordinating a simultaneous deploy the POS lane cannot give
+- [ ] 5.4 Fix `clearEverything`'s settle predicate to mean what its comment says — settled when nothing of ours and no code entry remains, not when `cart.discounts` is empty — because `removeAllDiscounts(false)` preserves automatics by design, so once a site-wide automatic discount exists the predicate can never hold and staff always read the incomplete sentence on the one documented last resort
+- [ ] 5.5 Count a code confirmation by code entries only (`codeDiscounts(cart)`, already defined in `flow.ts`) rather than by the cart's whole discount count, which stops being a signal once the shop's own automatics sit beside ours
+- [ ] 5.6 POS undo targets a product-coupon discount code the same way it already targets an order coupon's, inheriting order-coupon's existing "codes stay, use Remove All" limitation — a product coupon loses today's clean single-tap removal; accepted and recorded rather than left implicit, and no task here builds a single-code removal path
+- [ ] 5.7 Tests: an un-updated extension build applies a product coupon's code correctly; "Remove every discount" confirms on a cart carrying a site-wide automatic discount
 
-## 6. Staging verification (grade10)
+## 6. Collector picks one (grade10-spec)
 
-- [ ] 6.1 Redeem one product coupon (fixed-amount) and one gift on staging; confirm each mints a real Shopify Discount at redemption and a checkout settles by it
-- [ ] 6.2 Redeem a percentage-with-ceiling product coupon on staging; confirm no code mints during price preview, one mints at submit, and the amount matches the local preview's number
-- [ ] 6.3 Attempt two coupons on one basket on staging; confirm the collector is asked to choose, and only one code reaches the draft order
-- [ ] 6.4 Run a POS sale on staging spending a product coupon; confirm settlement and Undo behavior match 4.2–4.3
+- [ ] 6.1 Write `ui-design.md` for the choice surface
+- [ ] 6.2 Add `evaluateCouponsEligibility(basket, coupons) -> EligibilityResult[]` to this document's Service Interfaces, so the picker is fed by a precomputed eligibility pass rather than a refusal-and-retry loop
 
-## 7. Manual page (grade10-spec)
+## 7. Collector picks one (grade10)
 
-- [ ] 7.1 Once 6.1–6.4 verify, remove the 🚧 marks this change delivers on `docs/prds/products/grade10-site/store/discounts.md` and `docs/prds/products/grade10-site/loyalty/coupons.md`
+- [ ] 7.1 Implement `evaluateCouponsEligibility(basket, coupons)` as a dry-run `evaluateCoupon` per candidate; `tillPanelCoupon()` and `listSpendableCoupons()` both call it instead of listing every live coupon unfiltered
+- [ ] 7.2 Cart and checkout UI: when a basket qualifies for more than one coupon, present the precomputed choice and apply only the one the collector picks — covers `grade10-site-store-discounts-SC-03`
+- [ ] 7.3 POS UI extension: the same choice, from the member's panel
+- [ ] 7.4 Update `test/services/checkout.test.ts` and `test/services/pos/sale/sale.test.ts`, which currently combine a product coupon and a gift and assert the combined cut, to the new refusal rather than leaving them contradicting it
+
+Do not deploy group 3's backend refusal to production ahead of group 7 — hold it behind a flag, or ship both together, so an untouched frontend never turns a working basket into an unexplained refusal.
+
+## 8. Staging verification (grade10)
+
+- [ ] 8.1 Before group 0: run two hand probes in Shopify Admin — a variant-scoped fixed-amount code whose amount exceeds the entitled line's value, recording whether it clamps or spills; and `acceptAutomaticDiscounts: true` on a `draftOrderCalculate` carrying an order-level `appliedDiscount` and a code with one non-combinable automatic live, recording whether the flag is honoured, the code kept and the points discount survives
+- [ ] 8.2 Record release gates 1, 5 and 10 from `docs/references/shopify-membership-pos.md` with date and tester, since the guard that lets `deliver-reward-coupons` retire counter collection rests on all three and none has been run
+- [ ] 8.3 Apply a facet-scoped product coupon (an IP world) to a basket holding two worlds; confirm the minted code targets only the eligible variants and the shop takes the same amount the evaluator computed
+- [ ] 8.4 Redeem a gift; confirm it mints against the line's real price at submit, its line is sent at zero, and the sale takes the benefit exactly once
+- [ ] 8.5 Redeem a percentage-with-ceiling product coupon; confirm no code mints during price preview, one mints at submit, and the amount matches the preview
+- [ ] 8.6 Redeem a reward coupon; confirm it settles reporting `kind: "discount_code"` rather than `draft_line_discount`
+- [ ] 8.7 Attempt two coupons on one basket, including a reward alongside a typed code; confirm the collector is asked to choose and only one code reaches the draft order
+- [ ] 8.8 Run a POS sale spending a product coupon through the real till extension; confirm settlement, Undo and unreported-code adoption, and answer the split-line entitlement question from 5.2
+- [ ] 8.9 Submit, abandon and resubmit the same checkout carrying the same coupon; confirm only one live code ever exists
+- [ ] 8.10 With `add-site-wide-discounts` task 2.1's automatic order discount live on staging, submit a checkout carrying a smaller coupon; confirm the order completes at the shop's price, the coupon is back in the wallet with its mint dead, and the member's outcome names the coupon — then a larger coupon, and confirm the coupon lands and the automatic is dropped
+
+## 9. Manual page (grade10-spec)
+
+- [ ] 9.1 Once group 8 verifies, remove the 🚧 marks this change delivers on `docs/prds/products/grade10-site/store/discounts.md`, `docs/prds/products/grade10-site/loyalty/coupons.md` and `docs/prds/products/grade10-site/loyalty/rewards.md`, whose "Applied online — the draft order carries it on its lines" line this change falsifies
+- [ ] 9.2 At the fold, add `::spec{id="grade10-site/store/site-discounts"}` to `discounts.md`'s Site discounts section — `add-site-wide-discounts` creates a capability no page names, which fails the manual's `unreferenced` check once the spec is on disk; before the fold the same block fails `check:manual` as naming no spec, so it cannot be added earlier

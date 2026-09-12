@@ -87,13 +87,7 @@ function SiteHeader({
   onSignOut,
   className,
 }: SiteHeaderProps) {
-  const {
-    accountMenuLabel,
-    profile,
-    myAuctions,
-    signOut,
-    ...navCopy
-  } = copy;
+  const { accountMenuLabel, profile, myAuctions, signOut, ...navCopy } = copy;
 
   const accountSlot =
     session === "signed-in" ? (

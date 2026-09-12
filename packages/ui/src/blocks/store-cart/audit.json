@@ -1,15 +1,5 @@
 [
   {
-    "label": "cart-drawer/overlay",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4674-3832",
-    "classes": "fixed inset-0 cursor-pointer border-0 bg-overlay backdrop-blur-[calc(var(--blur-xl)/2)] transition-[opacity,backdrop-filter] motion-reduce:transition-none"
-  },
-  {
-    "label": "cart-drawer/container",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493",
-    "classes": "fixed top-2 right-2 bottom-2 z-10 w-(--container-md) overflow-hidden rounded-4xl border border-border/50 bg-sidebar/95 backdrop-blur-xl shadow-lg transition-transform will-change-transform motion-reduce:transition-none motion-reduce:will-change-auto"
-  },
-  {
     "label": "cart-drawer/header",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6260",
     "classes": "w-full shrink-0 px-6 pt-4"
@@ -18,11 +8,6 @@
     "label": "cart-drawer/body",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6321",
     "classes": "scroll-fade min-h-0 flex-1 overflow-y-auto px-6 py-4"
-  },
-  {
-    "label": "cart-drawer/slot",
-    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-5852",
-    "classes": "group/slot w-full shrink-0 cursor-pointer rounded-lg border border-dashed border-border bg-muted p-6 transition-all hover:bg-muted-hover focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
   },
   {
     "label": "cart-drawer/item",

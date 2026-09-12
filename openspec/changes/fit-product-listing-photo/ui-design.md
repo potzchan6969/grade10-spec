@@ -20,5 +20,5 @@ Layout SoT: Storybook `Store Product Listing/ProductCardImage` (and tiles on
 | State | Spec scenario |
 | --- | --- |
 | Non-square photo, any status | `shared-ui-store-product-listing-SC-63` |
-| Sold-out, no hover scale | `shared-ui-store-product-listing-SC-66` |
+| Sold-out, no hover scale | `shared-ui-store-product-listing-SC-90` |
 | Sale / in-cart / no image | existing `SC-46`–`SC-55` |

@@ -36,7 +36,9 @@ export const SuggestionsAndCommit: Story = {
     const canvas = within(canvasElement);
     const field = canvas.getByRole("combobox", { name: "Search products" });
     await userEvent.type(field, "abyss");
-    expect(await within(document.body).findByRole("listbox")).toBeInTheDocument();
+    expect(
+      await within(document.body).findByRole("listbox"),
+    ).toBeInTheDocument();
     await userEvent.keyboard("{Enter}");
     expect(
       canvas.getByRole("button", { name: 'Search: "abyss"' }),
@@ -54,9 +56,7 @@ export const SelectFilterAppliesChip: Story = {
       name: /Pokémon.*World/,
     });
     await userEvent.click(option);
-    expect(
-      canvas.getByRole("button", { name: "Pokémon" }),
-    ).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
     expect(
       canvas.queryByRole("button", { name: /Search:/ }),
     ).not.toBeInTheDocument();

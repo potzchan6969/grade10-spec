@@ -10,16 +10,13 @@ import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Trash } from "@phosphor-icons/react";
 import {
+  type CSSProperties,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
-  type CSSProperties,
 } from "react";
-import {
-  AUCTION_RECORD_COLUMNS,
-  AUCTION_RECORD_TABLE_LAYOUT,
-} from "./columns";
+import { AUCTION_RECORD_COLUMNS, AUCTION_RECORD_TABLE_LAYOUT } from "./columns";
 import type {
   AuctionRecordRowProps,
   AuctionRecordRowState,

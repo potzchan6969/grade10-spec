@@ -24,6 +24,9 @@ Both kinds state:
 - **Minimum spend** — the goods a basket must hold before the reward
   applies, read from the lines themselves, never from a total handed in
   beside them
+- 🚧 **Combines with** — which of the shop's own product, order and
+  shipping discounts the coupon stacks with; the store default where the
+  reward states none — [Discounts](/p/grade10-site/store/discounts)
 
 | Reward | Discount | Scope | Minimum spend |
 | --- | --- | --- | --- |
@@ -82,14 +85,24 @@ carrying the definition it was bought under.
 - **Made instantly** — the coupon is idle in the member's own list the
   instant the points are spent
 - **Applied online** — on the store's own checkout page, before Shopify's
-  checkout; the draft order carries it on its lines
-- **Applied by the shopkeeper** — at the till, through the POS extension
+  checkout. 🚧 The cut reaches the order as the coupon's own Shopify
+  discount code, minted for that basket, rather than welded onto the draft's
+  lines; `mint-coupons-as-discount-codes` delivers it
+- **Applied at the counter** — 🚧 inside the till session, staff apply the
+  coupon from the member's panel, or the member opens it on their own phone
+  and the till scans it; either way its code is minted the moment it is
+  chosen, for that sale alone, and never shown as the coupon itself
 - **Used by the paid order** — the paid order is what marks the coupon
   used, never a vendor's lagging count
 - **A physical reward waits for collection** — parked as paid but not yet
   delivered, until the counter confirms the handover
-- **One discount at a time** — an order carries one discount at a time,
-  and a reward is in that count
+- **One discount at a time** — 🚧 an order carries one discount at a time,
+  and a reward is in that count, so a free item and a money-off coupon are
+  two sales; today a product or gift coupon still combines with an order
+  coupon, and `mint-coupons-as-discount-codes` delivers the rule
+- **A refund does not give the coupon back** — a refunded sale returns the
+  goods, the money and any points spent as a discount on it; a coupon it
+  already used stays used, and the points that bought it stay spent
 
 States, holding and refusals are on
 [Coupons](/p/grade10-site/loyalty/coupons).
@@ -97,7 +110,8 @@ States, holding and refusals are on
 🚧 Collection at the counter and the fulfilment queue still exist in the
 running programme; the coupon path retires both, and a physical reward becomes
 an ordinary sale — staff ring the item up, its coupon takes 100% off it, and
-the order goes through at nothing.
+the order goes through at nothing. ❓ Online, that order is HKD 0 plus
+shipping — whether it ships free or is collection only is Product's call.
 
 ❓ **An uncollected item stays off the shelf** — a coupon that expires
 never restocks. Either reward stock is a budget rather than a shelf count,
@@ -113,7 +127,7 @@ can buy.
 | --- | --- |
 | Slug and name | The id it is referred to by, and what the member reads |
 | Cost | Points per redemption, copied onto the redemption when it is made |
-| Definition | Its kind, discount and scope, copied onto the redemption too, so redefining a reward never rewrites one already taken |
+| Definition | Its kind, discount, scope and what it combines with, copied onto the redemption too, so redefining a reward never rewrites one already taken |
 | Stock | Optional; a stocked reward is never oversold |
 | Window | Optional; outside it the reward cannot be redeemed |
 | Archived | Retired, still readable in the member's own history |
@@ -127,8 +141,9 @@ can buy.
 - 🚧 **The console's reward form** sets only slug, name, description, cost,
   stock and window, so a reward with a definition is created through the
   admin API
-- 🚧 **A reward's kind, discount and scope** are read by nothing yet; every
-  reward takes a fixed amount off any order, in either channel
+- 🚧 **A reward's kind, discount, scope and combine setting** are read by
+  nothing yet; every reward takes a fixed amount off any order, in either
+  channel
 
 ## Cancelling a Redemption
 

@@ -4,7 +4,7 @@ import { Autocomplete as AutocompletePrimitive } from "@base-ui/react/autocomple
 import { inputBoxVariants } from "@grade10/design-system/components/forms/input";
 import { dropdownMenuItemVariants } from "@grade10/design-system/components/overlays/dropdown-menu-item";
 import { cn } from "@grade10/design-system/lib/utils";
-import { MagnifyingGlass, X, CircleNotch } from "@phosphor-icons/react";
+import { CircleNotch, MagnifyingGlass, X } from "@phosphor-icons/react";
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
 import { useId } from "react";
@@ -28,10 +28,7 @@ import { useId } from "react";
 function Autocomplete(props: AutocompletePrimitive.Root.Props<any>) {
   // Root is overloaded for flat vs grouped `items`; forward both shapes.
   return (
-    <AutocompletePrimitive.Root
-      data-slot="autocomplete"
-      {...(props as any)}
-    />
+    <AutocompletePrimitive.Root data-slot="autocomplete" {...(props as any)} />
   );
 }
 
@@ -241,9 +238,7 @@ function AutocompleteItem({
       {...props}
     >
       {leading}
-      <span className="min-w-0 flex-1 truncate font-normal">
-        {children}
-      </span>
+      <span className="min-w-0 flex-1 truncate font-normal">{children}</span>
       {trailing ? (
         <span
           data-slot="autocomplete-item-trailing"
@@ -315,13 +310,12 @@ function AutocompleteLoading({
       <span className="inline-flex animate-spin text-secondary-foreground">
         <CircleNotch aria-hidden size={14} weight="regular" />
       </span>
-      <span className="min-w-0 flex-1 truncate font-normal">
-        {children}
-      </span>
+      <span className="min-w-0 flex-1 truncate font-normal">{children}</span>
     </AutocompleteStatus>
   );
 }
 
+export type { AutocompleteInputProps };
 export {
   Autocomplete,
   AutocompleteCollection,
@@ -335,4 +329,3 @@ export {
   AutocompleteLoading,
   AutocompleteStatus,
 };
-export type { AutocompleteInputProps };

@@ -175,8 +175,8 @@ export type {
   EmailAlertsCopy,
   EmailAlertsToastCopy,
   WatchButtonCopy,
-  WatchToastCopy,
   WatchButtonProps,
+  WatchToastCopy,
 } from "./blocks/auction-record/types";
 export { WatchButton } from "./blocks/auction-record/watch-button";
 // shared/ui/auth-sign-in
@@ -211,13 +211,6 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
-// shared/ui/site-chrome
-export {
-  SiteHeader,
-  type SiteHeaderCopy,
-  type SiteHeaderProps,
-  type SiteHeaderSession,
-} from "./blocks/site-chrome/site-header";
 // shared-ui/loyalty-membership
 export {
   ActivityList,
@@ -268,6 +261,13 @@ export {
 } from "./blocks/loyalty-membership/wallet-pass-links";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
+// shared/ui/site-chrome
+export {
+  SiteHeader,
+  type SiteHeaderCopy,
+  type SiteHeaderProps,
+  type SiteHeaderSession,
+} from "./blocks/site-chrome/site-header";
 // shared/ui/store-cart
 export {
   CartDrawer,

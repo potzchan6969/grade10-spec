@@ -58,13 +58,12 @@ export function InteractiveProductBrowse(args: ProductBrowseProps) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [loadingMore, setLoadingMore] = useState(false);
   const [filterGroups, setFilterGroups] = useState<readonly FilterGroup[]>(
-    () =>
-      args.groups.status === "ready" ? args.groups.data : FILTER_GROUPS,
+    () => (args.groups.status === "ready" ? args.groups.data : FILTER_GROUPS),
   );
   const [selection, setSelection] = useState(() => args.selection ?? {});
-  const [appliedFilters, setAppliedFilters] = useState<readonly AppliedFilter[]>(
-    () => args.appliedFilters ?? [],
-  );
+  const [appliedFilters, setAppliedFilters] = useState<
+    readonly AppliedFilter[]
+  >(() => args.appliedFilters ?? []);
   const [sortValue, setSortValue] = useState(
     () => args.sortValue ?? args.sortOptions[0]?.id,
   );
@@ -124,9 +123,7 @@ export function InteractiveProductBrowse(args: ProductBrowseProps) {
         : args.results.status === "ready"
           ? {
               status: "ready" as const,
-              data: paginate
-                ? extendProducts(visibleCount)
-                : args.results.data,
+              data: paginate ? extendProducts(visibleCount) : args.results.data,
             }
           : { status: "loading" as const };
 
@@ -225,12 +222,10 @@ export function InteractiveProductBrowse(args: ProductBrowseProps) {
  */
 export function SearchInteractiveBrowse(args: ProductBrowseProps) {
   const [searchValue, setSearchValue] = useState("");
-  const [appliedFilters, setAppliedFilters] = useState<readonly AppliedFilter[]>(
-    args.appliedFilters ?? [],
-  );
-  const [selection, setSelection] = useState(
-    () => args.selection ?? {},
-  );
+  const [appliedFilters, setAppliedFilters] = useState<
+    readonly AppliedFilter[]
+  >(args.appliedFilters ?? []);
+  const [selection, setSelection] = useState(() => args.selection ?? {});
   const showSuggestions = searchValue.trim().length >= 2;
 
   return (

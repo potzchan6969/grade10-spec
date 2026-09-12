@@ -14,7 +14,7 @@ import {
 import { IconProvider } from "@grade10/design-system/components/providers/icon-provider";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretDown, Check } from "@phosphor-icons/react";
-import { useState, type ReactNode } from "react";
+import { type ReactNode, useState } from "react";
 import type {
   AsyncState,
   FilterGroup,
@@ -46,10 +46,7 @@ type ListingNarrowChromeProps = {
   className?: string;
 };
 
-type OpenDrawer =
-  | { kind: "sort" }
-  | { kind: "facet"; groupId: string }
-  | null;
+type OpenDrawer = { kind: "sort" } | { kind: "facet"; groupId: string } | null;
 
 function facetPillLabel(
   group: FilterGroup,
@@ -110,8 +107,7 @@ function ListingNarrowChrome({
 
   const activeSort =
     sortOptions.find((option) => option.id === sortValue) ?? sortOptions[0];
-  const sortPillLabel =
-    activeSort?.shortLabel ?? activeSort?.label ?? null;
+  const sortPillLabel = activeSort?.shortLabel ?? activeSort?.label ?? null;
 
   const visibleGroups =
     groups.status === "ready"

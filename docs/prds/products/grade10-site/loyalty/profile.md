@@ -59,7 +59,7 @@ A sale made as a guest is not lost: it earns once it has an owner.
 | Membership | Tier · points to spend · points earned this year toward the next tier · tier renews · points active until · expiring soon |
 | Your member card | The QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
 | Rewards | The catalog, priced in points, and what the balance affords |
-| Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends |
+| Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. 🚧 During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Waiting at the counter | Physical rewards to collect, each with the day to collect by |
 | Activity | The member's own ledger |

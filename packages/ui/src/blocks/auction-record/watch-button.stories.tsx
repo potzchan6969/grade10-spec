@@ -117,7 +117,9 @@ export const WatchAnnounces: Story = {
       canvas.getByRole("button", { name: "Watch this lot" }),
     );
     await waitFor(() =>
-      expect(body.getByText("Email alerts on for this lot")).toBeInTheDocument(),
+      expect(
+        body.getByText("Email alerts on for this lot"),
+      ).toBeInTheDocument(),
     );
     await userEvent.click(
       body.getByRole("button", { name: "View My Auctions" }),

@@ -30,5 +30,15 @@
     "diverges": {
       "gap-1.5": "The Figma node has a single text child and states no itemSpacing. The gap only applies when a kbd child is present, which the design does not draw."
     }
+  },
+  {
+    "label": "drawer-overlay/root",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4674-3832",
+    "classes": "fixed inset-0 isolate z-50 min-h-dvh bg-overlay backdrop-blur-[calc(var(--blur-xl)/2)] transition-opacity motion-reduce:transition-none"
+  },
+  {
+    "label": "drawer-content/popup",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6493",
+    "classes": "pointer-events-auto fixed z-50 flex min-h-0 flex-col overflow-hidden rounded-(--radius-4xl) border border-border/50 bg-sidebar/95 text-base text-foreground shadow-lg outline-none backdrop-blur-xl will-change-transform motion-reduce:transition-none motion-reduce:will-change-auto"
   }
 ]

@@ -72,7 +72,10 @@ None.
   bookmark, standing column, unwatch-only-without-bid, badge count, drop
   section landing and bid-on mark, row removal when unpublished / removed.
 - `shared/ui/auction-record`: export and presentation contract for the table
-  page body and row (Figma `Auction Watchlist`).
+  page body and row (Figma `Auction Watchlist`). `WatchButton`'s own
+  behaviour — locked Watching, toast copy — is `lot-page-watch-alerts`'
+  block on the surface's reporting requirement, so the two changes do not
+  both fold it.
 
 ## Impact
 
@@ -83,10 +86,10 @@ None.
 - Overlaps in-flight `add-auction-watchlist` and `add-account-notifications`
   My Auctions mute UI — those changes' section-based copy must follow this
   table once it lands.
-- Folds the in-flight `add-auction-winner-journey` winner-standing vocabulary
-  (Pending Payment through Refunded, including Cancelled / Refunded) onto My
-  Auctions Your Standing so the two account-record deltas do not fight at
-  archive.
+- A won row's Your Standing carries whatever the winner's payment and
+  shipment requirement states; `revise-auction-winner-invoicing` folds that
+  requirement, so this change does not restate it and the two account-record
+  deltas do not fight at archive.
 - Manual pages: [My Auctions](../../../docs/prds/products/grade10-site/auction/account-record.md)
   and [Auction Record Blocks](../../../docs/prds/products/shared/ui/auction-record.md).
 

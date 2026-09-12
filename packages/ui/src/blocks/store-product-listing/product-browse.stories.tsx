@@ -64,8 +64,12 @@ export const Narrow: Story = {
     let dialog: HTMLElement;
 
     await step("Show narrow pills, no search", async () => {
-      expect(canvas.getByRole("button", { name: "Latest" })).toBeInTheDocument();
-      expect(canvas.getByRole("button", { name: "Worlds" })).toBeInTheDocument();
+      expect(
+        canvas.getByRole("button", { name: "Latest" }),
+      ).toBeInTheDocument();
+      expect(
+        canvas.getByRole("button", { name: "Worlds" }),
+      ).toBeInTheDocument();
       expect(canvas.getByRole("button", { name: "Types" })).toBeInTheDocument();
       expect(
         canvas.queryByRole("combobox", { name: "Search products" }),
@@ -90,7 +94,9 @@ export const Narrow: Story = {
     });
 
     await step("Draft Pokémon and Show Results", async () => {
-      await user.click(within(dialog).getByRole("checkbox", { name: /Pokémon/ }));
+      await user.click(
+        within(dialog).getByRole("checkbox", { name: /Pokémon/ }),
+      );
       await pause(500);
       await user.click(
         within(dialog).getByRole("button", { name: "Show Results" }),

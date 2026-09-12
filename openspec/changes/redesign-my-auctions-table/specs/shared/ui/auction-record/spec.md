@@ -44,6 +44,11 @@ Each of `AuctionRecordRow` and `WatchButton` SHALL be renderable on its own,
 outside `AuctionRecord`, so a surface may use the row or the watch control
 alone.
 
+When the application does not supply Unwatch (`onWatchToggle` / watch copy),
+the row SHALL omit the Unwatch control. When it does not supply a standing
+label, the row SHALL show the application-supplied no-standing placeholder
+rather than inventing a state badge.
+
 #### Scenario: shared-ui-auction-record-SC-01 - An application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's
@@ -79,65 +84,6 @@ alone.
 - **WHEN** it renders
 - **THEN** Your Standing shows that placeholder
 - **AND** it does not invent a badge label
-
-### Requirement: The surface reports the collector's action rather than performing it
-
-These components SHALL hold no auction product state. `WatchButton` SHALL show
-watched, not watched, or a change in progress exactly as the application tells
-it to, and SHALL NOT change what it shows on its own when the collector acts.
-Acting SHALL report the collector's intent to the application through a
-callback named for the event. `WatchButton` SHALL use the same design-system
-button and bell treatment as the auction lot details watch control.
-`AuctionRecordRow` SHALL accept an optional email-alerts control distinct from
-unwatch; when supplied with copy and `onEmailAlertsChange`, it SHALL report
-the intended on/off value and SHALL NOT invent mute or unwatch behaviour. The
-control SHALL show the value the application gives it, and one row's control
-SHALL NOT change what another row shows. When the application supplies
-confirmation copy, the row SHALL announce the change once the application has
-changed the value it gives the control — never on the collector's click
-alone.
-
-When the application does not supply Unwatch (`onWatchToggle` / watch copy),
-the row SHALL omit the Unwatch control. When it does not supply a standing
-label, the row SHALL show the application-supplied no-standing placeholder
-rather than inventing a state badge.
-
-#### Scenario: shared-ui-auction-record-SC-04 - The watch control reports and waits
-
-- **GIVEN** a `WatchButton` told it is not watched
-- **WHEN** the collector activates it
-- **THEN** the component reports the collector's intent to the application
-- **AND** it still shows not watched until the application tells it otherwise
-
-#### Scenario: shared-ui-auction-record-SC-05 - A change in progress is shown when told
-
-- **GIVEN** a `WatchButton` told a change is in progress
-- **WHEN** it renders
-- **THEN** it shows the change as in progress
-
-#### Scenario: shared-ui-auction-record-SC-07 - Email alerts report without unwatching
-
-- **GIVEN** an `AuctionRecordRow` supplied with email-alerts copy and
-  `onEmailAlertsChange`
-- **WHEN** the collector turns email alerts off
-- **THEN** the component reports the intended off value
-- **AND** it does not remove the row or invent an unwatch
-
-#### Scenario: shared-ui-auction-record-SC-09 - One row's alerts stand alone
-
-- **GIVEN** an `AuctionRecord` whose rows each carry an email-alerts control
-  told alerts are on
-- **WHEN** the collector turns one row's alerts off and the application
-  changes only that row's value
-- **THEN** only that row shows alerts off
-- **AND** every other row still shows alerts on
-
-#### Scenario: shared-ui-auction-record-SC-10 - A confirmed change is announced
-
-- **GIVEN** an `AuctionRecordRow` supplied with email-alerts confirmation copy
-- **WHEN** the application changes the value it gives the control
-- **THEN** the row announces the change once, in the supplied wording
-- **AND** a row supplied without that copy announces nothing
 
 #### Scenario: shared-ui-auction-record-SC-13 - A bid row omits Unwatch when not supplied
 
