@@ -22,13 +22,13 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
+  type KeyboardEvent,
+  type ReactNode,
   useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
   useState,
-  type KeyboardEvent,
-  type ReactNode,
 } from "react";
 import { AsyncMessage } from "../shared/async-message";
 import type {
@@ -172,6 +172,7 @@ function ProductFilter({
   /** Suppresses free-text commit when Enter also selects a highlighted row. */
   const selectingSuggestionRef = useRef(false);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: hasSuggestionRows re-opens the list once rows arrive for a draft already typed.
   useEffect(() => {
     if (!suggestionsProvided || draft.length === 0) {
       setSuggestionsOpen(false);
@@ -253,9 +254,7 @@ function ProductFilter({
                 }
                 onSearchChange?.(value);
               }}
-              open={
-                suggestionsOpen && suggestionsProvided && draft.length > 0
-              }
+              open={suggestionsOpen && suggestionsProvided && draft.length > 0}
               value={draft}
             >
               <AutocompleteInput
@@ -394,6 +393,7 @@ function FacetOptionsHeight({
   const innerRef = useRef<HTMLDivElement>(null);
   const previousHeightRef = useRef<number | null>(null);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: optionKey is the retween trigger; the effect reads the DOM, not the key.
   useLayoutEffect(() => {
     const outer = outerRef.current;
     const inner = innerRef.current;
@@ -418,8 +418,7 @@ function FacetOptionsHeight({
     outer.style.overflow = "hidden";
     outer.style.transition = "none";
     void outer.offsetHeight;
-    outer.style.transition =
-      "height 250ms cubic-bezier(0.22, 1, 0.36, 1)";
+    outer.style.transition = "height 250ms cubic-bezier(0.22, 1, 0.36, 1)";
     outer.style.height = `${nextHeight}px`;
 
     const onEnd = (event: TransitionEvent) => {

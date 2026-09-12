@@ -3,7 +3,11 @@ import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Bell, BellSlash } from "@phosphor-icons/react";
 import { useEffect, useRef } from "react";
-import type { WatchButtonCopy, WatchButtonProps, WatchToastCopy } from "./types";
+import type {
+  WatchButtonCopy,
+  WatchButtonProps,
+  WatchToastCopy,
+} from "./types";
 
 /**
  * Toasts once per confirmed change of the controlled `watched` value.
@@ -64,8 +68,8 @@ function WatchButton({
 }: WatchButtonProps) {
   const inactive = disabled || pending || locked;
   const label = pending ? copy.pending : watched ? copy.watching : copy.watch;
-  if (!label) return null;
 
+  // Hooks run on every render; the empty-label bail-out comes after them.
   useWatchToast(
     watched,
     copy,
@@ -74,16 +78,24 @@ function WatchButton({
     onUnwatchedToastAction,
   );
 
+  if (!label) return null;
+
   return (
     <Button
       aria-busy={pending || undefined}
       aria-label={
-        locked ? copy.watching : watched ? copy.unwatchAriaLabel : copy.watchAriaLabel
+        locked
+          ? copy.watching
+          : watched
+            ? copy.unwatchAriaLabel
+            : copy.watchAriaLabel
       }
       aria-pressed={watched}
       className={cn("shrink-0", className)}
       disabled={inactive}
-      leading={watched || locked ? <BellSlash aria-hidden /> : <Bell aria-hidden />}
+      leading={
+        watched || locked ? <BellSlash aria-hidden /> : <Bell aria-hidden />
+      }
       onClick={locked ? undefined : onPress}
       size="md"
       variant="outline"

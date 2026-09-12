@@ -144,18 +144,17 @@ function ListingQuickMaximumBidActions({
             ? floorMaximumMinor
             : view.currentBidMinor + view.incrementMinor * multiples;
         if (amountMinor < floorMaximumMinor) return [];
-        const caption =
-          isLeadingWithMaximum
-            ? raiseDeltaTemplate.replace(
+        const caption = isLeadingWithMaximum
+          ? raiseDeltaTemplate.replace(
+              "{amount}",
+              formatDelta(amountMinor - (view.viewerMaximumMinor ?? 0)),
+            )
+          : captionKey === "nextEligible"
+            ? copy.nextEligibleBid
+            : raiseDeltaTemplate.replace(
                 "{amount}",
-                formatDelta(amountMinor - (view.viewerMaximumMinor ?? 0)),
-              )
-            : captionKey === "nextEligible"
-              ? copy.nextEligibleBid
-              : raiseDeltaTemplate.replace(
-                  "{amount}",
-                  formatDelta(view.incrementMinor * multiples),
-                );
+                formatDelta(view.incrementMinor * multiples),
+              );
         return [
           {
             key: `current-${multiples}`,
@@ -198,6 +197,7 @@ function ListingQuickMaximumBidActions({
     view.currentBidMinor,
     view.hasBids,
     view.incrementMinor,
+    view.viewerMaximumMinor,
   ]);
 
   const customActive = customDraft.trim() !== "";
