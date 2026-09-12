@@ -1,3 +1,4 @@
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import {
   EnrollmentSetupSheet,
   FIXTURE_ACTIVITY_TIME_COPY,
@@ -9,7 +10,6 @@ import {
   ListingUserBidHistory,
   PaymentMethodRow,
 } from "@grade10/ui";
-import { Toast } from "@grade10/design-system/components/overlays/toast";
 import { useEffect, useState } from "react";
 import { LISTING_BID_ENROLLMENT_DEMO_COPY } from "../auction-listing/listing-bid-enrollment-copy";
 import {
@@ -33,10 +33,7 @@ import {
   userBidHistoryForState,
 } from "./auction-lot-details-content";
 import { AuctionLotDetailsPageShell } from "./auction-lot-details-page-shell";
-import {
-  navigateToStory,
-  ORDER_DETAILS_STORY_ID,
-} from "./workbench-story-nav";
+import { navigateToStory, ORDER_DETAILS_STORY_ID } from "./workbench-story-nav";
 
 const LIVE_BID_INTERVAL_MS = 8_000;
 

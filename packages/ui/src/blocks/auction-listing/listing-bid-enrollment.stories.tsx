@@ -130,9 +130,7 @@ export const SetupSheet: Story = {
     expect(
       scrollBody?.querySelector('[data-slot="payment-field"]'),
     ).not.toBeNull();
-    expect(
-      scrollBody?.querySelector('[data-slot="input-message"]'),
-    ).toBeNull();
+    expect(scrollBody?.querySelector('[data-slot="input-message"]')).toBeNull();
     expect(scrollBody?.querySelector('input[type="checkbox"]')).toBeNull();
     expect(
       within(dialog).getByRole("button", { name: "Link Card" }),
@@ -158,9 +156,7 @@ export const SetupSheetLoadedMockStripe: Story = {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
-    expect(
-      within(dialog).getByText("Stripe card link (iframe)"),
-    ).toBeVisible();
+    expect(within(dialog).getByText("Stripe card link (iframe)")).toBeVisible();
     const field = dialog.querySelector<HTMLElement>(
       '[data-slot="payment-field"]',
     );

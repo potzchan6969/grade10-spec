@@ -1,5 +1,5 @@
-import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Badge } from "@grade10/design-system/components/display/badge";
+import { Footer } from "@grade10/design-system/components/layout/footer";
 import {
   CartDrawer,
   type CartItemSummary,

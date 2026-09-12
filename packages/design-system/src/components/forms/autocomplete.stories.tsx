@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
 import { useState } from "react";
+import { expect, userEvent, within } from "storybook/test";
 import {
   Autocomplete,
   AutocompleteCollection,
@@ -117,8 +117,16 @@ export const Groups: Story = {
     await userEvent.click(field);
     const popup = within(document.body);
     expect(await popup.findByRole("listbox")).toBeInTheDocument();
-    expect(popup.getByText("iPhone", { selector: "[data-slot=autocomplete-group-label]" })).toBeInTheDocument();
-    expect(popup.getByText("iPad", { selector: "[data-slot=autocomplete-group-label]" })).toBeInTheDocument();
+    expect(
+      popup.getByText("iPhone", {
+        selector: "[data-slot=autocomplete-group-label]",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      popup.getByText("iPad", {
+        selector: "[data-slot=autocomplete-group-label]",
+      }),
+    ).toBeInTheDocument();
     expect(
       popup.getByRole("option", { name: "iPhone 17 Pro" }),
     ).toBeInTheDocument();

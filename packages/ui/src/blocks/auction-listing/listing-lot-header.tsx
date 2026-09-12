@@ -5,8 +5,8 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { WatchButton } from "../auction-record/watch-button";
 import type { WatchButtonCopy } from "../auction-record/types";
+import { WatchButton } from "../auction-record/watch-button";
 
 type ListingLotHeaderCopy = {
   auctionBreadcrumb: string;

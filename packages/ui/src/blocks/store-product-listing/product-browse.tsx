@@ -1,6 +1,6 @@
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { useEffect, useState, type ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import type { FilterPanelCopy } from "./filter-panel";
 import { FilterPanel } from "./filter-panel";
 import {

@@ -13,10 +13,7 @@ import {
   PAST_ORDERS,
 } from "./order-history-content";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "./store-content";
-import {
-  navigateToStory,
-  ORDER_DETAILS_STORY_ID,
-} from "./workbench-story-nav";
+import { navigateToStory, ORDER_DETAILS_STORY_ID } from "./workbench-story-nav";
 
 /**
  * Order History as a store assembles it: `SiteHeader`, shared `OrderHistory`,
