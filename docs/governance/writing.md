@@ -140,6 +140,25 @@ nearest your task and keep it open while you draft.
   deleting one the page never owned, is part of the rewrite, not a loss.
   What survives is reshaped; what does not belong is removed
 
+## Where a Rule Lives
+
+Instruction text for agents follows Placement too, with the load path as the
+page. A load path is what a worker holds when it writes: `AGENTS.md` on every
+path; the CLI's payload — the schema instruction, the template and that
+artifact's `rules` block in `openspec/config.yaml` — on a change artifact; a
+skill and the one document it names on a command.
+
+- **One home per rule per path** — a rule a check enforces is named by its
+  check and written nowhere else; a rule only prose enforces is written once
+  on each path that needs it, as a rule, never as a list of topics. A second
+  surface on the same path links the heading, in its own casing
+- **Examples live in the corpus** — point at an approved case; a pasted one
+  drifts, the corpus is validator-held
+- **A budget holds the always-loaded surfaces** — `pnpm run test:openspec`
+  fails `AGENTS.md` or a `rules` block past its recorded size, and a skill
+  pointer that names no rulebook section. Raising a budget is a commit that
+  says why
+
 ## Before and After
 
 From the loyalty pages as they were drafted, and as they were corrected.

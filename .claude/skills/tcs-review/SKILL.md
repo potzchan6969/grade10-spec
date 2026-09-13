@@ -5,10 +5,10 @@ description: Walk a QA reviewer through a pending feature-tcs.md, domain-tcs.md,
 
 # Reviewing Test Cases With QA
 
-Follow `docs/governance/specs-to-test-cases.md` — **The review lane** is this
-skill's rule book; **Step 5**, **The file header** and **What the approved
+Follow `docs/governance/specs-to-test-cases.md` — **The Review Lane** is this
+skill's rule book; **Step 5**, **The File Header** and **What the approved
 suites teach the next one** hold the properties, the statuses, and why review
-comes first. Read it in full before the first run in a session.
+comes first; a bold name below is a heading there.
 
 Invoke as `/tcs-review [<capability-or-change>]`. Generating or updating a suite is `/spec-to-tcs` (`.cursor/skills/spec-to-tcs/SKILL.md`).
 The reviewer decides, never this skill: present the case beside the spec, answer
@@ -16,8 +16,11 @@ what they ask, and record their words untidied — generation copies what they a
 
 ## Steps
 
+0. **Read the rulebook whole.** `docs/governance/specs-to-test-cases.md`,
+   one read, under 450 lines, before anything else on every run.
+
 0. **Get on a review branch before the first verdict.** Names are the table in
-   **The review lane**: `git switch -c tcs-review/<level>-<target>` from
+   **The Review Lane**: `git switch -c tcs-review/<level>-<target>` from
    `main` whatever the suite holds, `<level>` one of `feature`, `domain`,
    `product`, `platform`; commits `test(<domain>): approve <target> US<n> test
    cases`; the pull request a draft, label `documentation`. Never write
@@ -34,7 +37,7 @@ what they ask, and record their words untidied — generation copies what they a
    which journey — information, never a refusal.
 
 2. **Complete the level stack first.** Levels run top down — **Levels** and
-   **Top down here too** — so look at what sits above the suite named:
+   **Top down** under **The Review Lane** — so look at what sits above the suite named:
 
    | Level above | The suite itself | Do |
    | --- | --- | --- |
@@ -50,8 +53,8 @@ what they ask, and record their words untidied — generation copies what they a
    **Never derive silently** — say which file, level, journeys and roughly
    how many cases, and wait for a yes. Generation is `/spec-to-tcs`'s work,
    lands as its own `test(<domain>): derive <capability> test cases` commit
-   before the first verdict, and writes `draft` only. **Never author another
-   capability's journeys** — a sibling with no `user-journeys.md` is the spec
+   before the first verdict, and writes `draft` only. Never author another
+   capability's journeys — a sibling with no `user-journeys.md` is the spec
    author's gap; report it and stop.
 
 3. **Pick one suite.** None: say so, name where suites live, offer
@@ -59,12 +62,12 @@ what they ask, and record their words untidied — generation copies what they a
    More: list capability or change, path, file status and `draft` count out of
    the total, then ask. One suite per run unless the reviewer asks to continue.
 
-4. **Restyle before you present anything.** **Restyle before reviewing** and
+4. **Restyle before you present anything.** **Restyle first** under **The Review Lane** and
    the `<v>` table under **Naming** say what each status allows: `draft`
    freely, `actual` still `manual` on the reviewer's yes, `automated` and
    `deprecated` never. Report what you restyled before the first journey; a
    behaviour change is `/spec-to-tcs`'s, not a restyle. A pre-condition the
-   reviewer reshapes reads as **Who the actor is** has it —
+   reviewer reshapes reads as **Who the Actor Is** has it —
    `customer(gold member) is on the shopping cart page`.
 
 5. **Open the suite and its journeys together.** Read the whole suite and the
@@ -72,13 +75,13 @@ what they ask, and record their words untidied — generation copies what they a
    its traces name and the matching `docs/prds/` pages — then orient the
    reviewer: capability, journeys, cases per journey, drafts.
 
-6. **Walk the suite one journey at a time,** in file order, as **The review
-   lane** describes: the story, every `draft` case in full — id and title,
+6. **Walk the suite one journey at a time,** in file order, as **The Review
+   Lane** describes: the story, every `draft` case in full — id and title,
    classification block, pre-conditions, test data, steps, expected results —
    and `actual` or `deprecated` cases by id and title only. Scenarios are
    offered, never quoted unasked; when asked, quote the whole clause from
-   `spec.md`. Before asking for verdicts, report duplicates — **A case that
-   already exists is not written twice**, against the journey and the domain
+   `spec.md`. Before asking for verdicts, report duplicates — **A Case That
+   Already Exists Is Not Written Twice**, against the journey and the domain
    suite's `actual` cases — name the pair, quote both expected results, and
    ask; never merge or drop on your own. Then ask and wait. **Echo before you
    write:** repeat the ids about to be marked and what each becomes; "all
@@ -109,7 +112,7 @@ what they ask, and record their words untidied — generation copies what they a
    | Defer | Leave `**Status:** draft` and note what they want resolved |
    | Retire | `**Status:** deprecated`, only when the spec no longer states the behaviour; never delete or renumber |
 
-   Then recompute the header as **The file header** says: `**Status:**` from
+   Then recompute the header as **The File Header** says: `**Status:**` from
    the cases; `**Reviewed:** <today>, tcs-rules r<n>` added when and only
    when the file reaches `approved`, removed if it falls back; `**Drafts
    styled:**` dropped once no draft is left. Never type the status.

@@ -6,9 +6,9 @@ description: Derive classified test cases from the user journeys - a capability'
 # Generating Test Cases
 
 Follow `docs/governance/specs-to-test-cases.md` — this skill is that document's
-workflow, automated. Read it in full before the first run in a session; it
-holds the format, the vocabularies, the review lifecycle, and every rule this
-skill points at by section name. Where the two differ, the document is correct.
+workflow, automated. It holds the format, the vocabularies, the review
+lifecycle, and every rule this skill points at by section name in bold. Where
+the two differ, the document is correct.
 
 Invoke as `/spec-to-tcs [platform|product|domain|feature] <target>`. Reviewing
 a suite and moving its cases to `actual` is `/tcs-review`'s job
@@ -60,6 +60,10 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
 
 ## Steps
 
+0. **Read the rulebook whole.** `docs/governance/specs-to-test-cases.md`,
+   one read, under 450 lines, before step 1 on every run; a bold name below
+   is a heading there.
+
 1. **Resolve the target.** **When Suites Are Generated** in the document
    holds the argument table: a change name is every delta `spec.md` under
    `openspec/changes/<change>/specs/`; a path containing `openspec/specs/` or
@@ -108,8 +112,8 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
    one `## <capability>-US<n>: <title>` per `### <capability>-US-<n>` in
    `user-journeys.md`, in spec order, compact id, title and three-line story
    copied unchanged, no `Covers:` list, description or count, a `---` rule
-   between sections. The actor resolves to `customer` or `admin` — **Who the
-   actor is**; a journey with another actor gets no cases and is reported. A
+   between sections. The actor resolves to `customer` or `admin` — **Who the Actor
+   Is**; a journey with another actor gets no cases and is reported. A
    scenario with no observable user-facing outcome — a schema change, a cron
    job, internal state — gets no case. A scenario under no journey, or a
    journey naming an id the spec never defines, goes to step 10. Every case
@@ -117,8 +121,8 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
 
 6. **Write the cases.** **Step 3** and **Step 4** in the document hold the
    case's parts and their shape, the pre-condition rules, `## Background`,
-   placeholders, roles, test data, the clause map, and **The line: mechanism
-   is yours, coverage is the spec's**. What the skill adds:
+   placeholders, roles, test data, the clause map, and **Mechanism is yours,
+   coverage is the spec's**. What the skill adds:
 
    - **Id** — `<capability>-US<n>-TC<m>-<v>`; `n` from the journey, `TC`
      from `1` under each journey, `<v>` from `1`
@@ -135,7 +139,7 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
    its order with `*` bullets. On generation `**Status:**` is `draft` and
    `**Automation status:**` is `manual`; `exploratory` is never written; a
    feature case traces one journey in canonical form (`<capability>-US-<n>`).
-   **A case that already exists is not written twice**: extend the existing
+   **A Case That Already Exists Is Not Written Twice**: extend the existing
    case, report the pair, and name a feature case wholly covered by an
    `approved` domain case as a trim candidate, never deleting it. A journey
    accepted by refusal, empty-state or failure scenarios does not ship with
@@ -146,9 +150,9 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
    case under its journey. Scenario ids stay off the case; gaps go to step 10.
 
 9. **Write the file** beside the resolved `spec.md` — `feature-tcs.md`,
-   `domain-tcs.md`, `product-tcs.md` or `platform-tcs.md` — to **The format**,
+   `domain-tcs.md`, `product-tcs.md` or `platform-tcs.md` — to **The Format**,
    with the header lines directly under the title and no preamble. **The
-   file header** is computed, never chosen: `**Status:**` from the cases
+   File Header** is computed, never chosen: `**Status:**` from the cases
    (`pending-review`, `in-review`, `approved`); `**Drafts styled:** <today>,
    tcs-rules r<major>.<minor>` from `tcs_rules_rev` in the document's
    frontmatter, present exactly while a `draft` remains; `**Reviewed:**` is
@@ -172,9 +176,9 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
      `**Description:**`, `**Properties:**`, `**Covers:**`, `## Journey:` /
      `## Flow` / `## Requirement:` headings, step tables
 
-   Run it on what you wrote before reporting. In **update mode** — **When a
-   suite already exists**, **When a change moves the ground an approved case
-   stands on** — an `actual` or `deprecated` case whose scenarios are
+   Run it on what you wrote before reporting. In update mode — **When a
+   Suite Already Exists** and its **A delta that moves the ground under an
+   `actual` case** — an `actual` or `deprecated` case whose scenarios are
    unchanged stays exactly as it is, older shape included; a `draft` keeps its
    coverage and takes the step 4 conventions; a case whose traced scenario
    the delta moved is re-worded with `<v>` bumped and `**Status:** draft`, or
@@ -202,7 +206,7 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
   scenarios do not say; where the spec names a control by its role, say the
   same and never invent its label or hedge about whether the product exists
 - Never write a step that embeds its outcome, several actions in one step, an
-  empty **Expected Results** list, or a case that depends on another
+  empty `**Expected Results:**` list, or a case that depends on another
 - Never write `**Description:**`, `**Covers:**`, a summary sentence, a
   `**Properties:**` block, or `**Test data:**` on a case with no input
 - Never invent a journey the scenarios do not justify; step 3 adds no behaviour

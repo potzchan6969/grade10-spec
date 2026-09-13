@@ -58,7 +58,7 @@ rules:
     - "No class, function, hook, table or library names; public component exports are the one exception, kept in one requirement - `.claude/skills/planning-pm/SKILL.md` § The delta specs. Propose the export set yourself from `packages/ui` and say in the proposal which do not exist yet."
     - "Requirements live here and nowhere else; a testable statement never stays on a PRD (AGENTS.md § Sources of truth)."
   user-journeys:
-    - "The schema text above and `.claude/skills/planning-pm/SKILL.md` § user-journeys.md carry the rules: five journeys at most, actor-first titles, three labeled lines, INVEST's four author-owned criteria, who may be the role, the `**Walked by:** nobody` exemption, and `**Out of suite:**` for a scenario no story reaches."
+    - "The schema instruction above holds the journey rules; `pnpm check:manual` enforces the role, the `**Walked by:** nobody` exemption and every accepted-by id."
     - "The file holds one `## User journeys` section and nothing else. Story ids are `<capability prefix>-US-<n>` in the heading, permanent and never renumbered; each `**Accepted by:**` line is `` `id` — Scenario title ``, never a comma-separated dump."
   test-cases:
     - "`docs/governance/specs-to-test-cases.md` governs the shape and `.claude/skills/planning-qa/SKILL.md` the workflow: draft with `spec-to-tcs`, review with `tcs-review`, check with `pnpm run tcs:validate`. `test-cases.md` is not a suite name."

@@ -325,7 +325,7 @@ Ten properties, in this order, on every case. Starting shapes, not substitutes f
 - **Trace** — one journey per feature case; a case that would trace two is two cases or a journey not yet written, and a case with no trace does not belong in the file. Every id is defined by a `user-journeys.md` in scope; `<requirement> / <journey title>` only where a spec has no ids
 - **Scenario coverage is checked, not recorded** — generation verifies every scenario accepting a journey has a case and reports the rest as gaps
 
-## The file header
+## The File Header
 
 At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>`, `**Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>` — every one computed, never chosen.
 
@@ -402,6 +402,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 
 - **Fixed points** — header lines computed; journey heading and story copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
 - **No execution record** — no actual result, no pass/fail column; a run lives in Qase against the exported case
+- **Copy** — `openspec/specs/grade10-site/auction/auction/feature-tcs.md`, the one suite approved under the current revision; its `US2-TC1-1` is a case at the right size. A case pasted here would drift; the corpus is validator-held
 - **Deltas use the same format** — under `openspec/changes/<change>/specs/<product>/<domain>/<capability>/feature-tcs.md`
 
 ## The Tools
