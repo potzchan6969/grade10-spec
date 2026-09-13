@@ -121,3 +121,16 @@ coupon here, and loosening it would not have put the code on this cart. What
 the shop does decide is the cost of a site-wide sale — every product reward
 and product coupon is unusable at the counter for as long as one runs, unless
 whoever authors it ticks combining on.
+
+**Apply is not blocked by an automatic on the cart.** `foreignCartDiscount`
+counts only the two custom kinds, and Shopify reports an automatic as neither,
+so the blocker list stays empty and the machine plans. Read off the promise
+rows rather than the screen, because the machine reads the blockers before it
+plans anything: three POS sales carry a HK$780 subtotal against HK$741 of
+goods, the HK$39 the automatic took, with no points, no coupon and no promised
+cut on any of them. A plan that reached the store is a blocker list that was
+empty.
+
+The automatic lands as a discount no instrument accounts for, which is what
+settlement calls the shop's own promotion — counted, and never read back as
+points.
