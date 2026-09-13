@@ -35,7 +35,7 @@ Staff applying a coupon from the panel and the member presenting one from their 
 - [x] 4.5 Let a member whose till session is open pick a coupon in their own session: the same plan on the same session, made server-side, answered with a presentation in `mintPosHandle`'s shape — a QR carrying the minted code in Shopify's scannable discount form (`https://{shop}.myshopify.com/discount/{CODE}`) with the short code beneath it — so *A coupon reaches the counter by the member presenting it* passes; the till scans it natively, and nothing adopts it afterwards because settlement corroborates by the code already on the session's row
 - [x] 4.6 Offer neither path until the member is attached to the cart, and say so in the staff sentence and on the member's screen: a customer-scoped code refuses until then, and `host.onScan` routes every scan to `till.identify` while the modal is open, so the presentation is scanned with the modal closed
 - [x] 4.7 Show the minted code only as the presentation for that sale, never in the wallet as the coupon's identity — it is minted for one sale
-- [ ] 4.8 Verify: `pnpm run typecheck`, `pnpm run test`, and a staging run of a counter sale spending a coupon each way — applied by staff, and presented by the member — end to end
+- [x] 4.8 Verify: `pnpm run typecheck`, `pnpm run test`, and a staging run of a counter sale spending a coupon each way — applied by staff, and presented by the member — end to end
 
 ## 5. Cancellation is its own permission (grade10) (owner: @ecchochan)
 

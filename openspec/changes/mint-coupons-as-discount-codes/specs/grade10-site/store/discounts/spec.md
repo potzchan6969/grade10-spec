@@ -211,3 +211,10 @@ new sale rather than repeat the remedy that took the code off.
 - **WHEN** staff apply that coupon to the same sale again
 - **THEN** they are told the coupon has come off this sale and to ring it up on
   a new one, and the coupon stands live in the member's wallet
+
+#### Scenario: grade10-site-store-discounts-SC-18 - A code the sale never honoured stops standing
+
+- **GIVEN** a paid sale carrying a minted code the landed order does not name
+- **WHEN** the sale settles
+- **THEN** that code stops standing and is taken off the shop, and nothing
+  reports it to the member as money they saved
