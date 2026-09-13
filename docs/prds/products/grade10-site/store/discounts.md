@@ -168,6 +168,11 @@ it, for that cart, with no way back. It is the only way the platform offers
 to remove one discount code, so staff reaching for it give up the site sale
 too and have to be told so.
 
+**Specs** — this section documents `grade10-site/store/site-discounts`. The
+requirements are its; this page holds the decision behind them.
+
+::spec{id="grade10-site/store/site-discounts"}
+
 ## Designs
 
 ::story{id="store-cart-cartdrawerfooter--interactive-member" title="A code typed in the cart"}

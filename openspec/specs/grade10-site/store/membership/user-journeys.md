@@ -28,8 +28,6 @@
 - `grade10-site-store-membership-SC-09` — A replayed code is refused with its history
 - `grade10-site-store-membership-SC-10` — An email miss discloses nothing
 - `grade10-site-store-membership-SC-11` — A lookup is recorded
-- `grade10-site-store-membership-SC-12` — A double tap spends once
-- `grade10-site-store-membership-SC-13` — The member hears about a collection through the till
 - `grade10-site-store-membership-SC-16` — A promise larger than the cart is trimmed, not refused
 - `grade10-site-store-membership-SC-72` — A points discount and a reward coupon apply together
 - `grade10-site-store-membership-SC-73` — The balance moves once, when the order is paid
@@ -52,3 +50,15 @@
 - `grade10-site-store-membership-SC-23` — Two claimers cannot both win
 - `grade10-site-store-membership-SC-24` — A gift card earns nothing anywhere
 - `grade10-site-store-membership-SC-25` — Points spent lower the same order's earning
+
+### grade10-site-store-membership-US-04: Member is told once a staff-assisted spend or coupon lands at the till
+
+**As a** member,
+**I want** to be notified once a staff-assisted spend or coupon at the till actually lands, not while it is still a claim that could be trimmed or walked away from,
+**so that** my phone stays the record of what actually happened, without ever showing the code.
+
+**Accepted by:**
+
+- `grade10-site-store-membership-SC-77` — A double tap spends once
+- `grade10-site-store-membership-SC-75` — The member's phone is the monitor
+- `grade10-site-store-membership-SC-76` — A landed notice is corrected if the sale never pays
