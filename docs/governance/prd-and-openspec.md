@@ -22,12 +22,25 @@ Every checkable requirement and every cross-repository contract lives in `opensp
 | Primary audience | Everyone who reads the manual; the decisions block is for product managers, designers, reviewers | Whoever is delivering the change | Engineers and implementation agents in consuming applications |
 | Authority | Canonical for what the product should be; its marks say which lines are not yet running. Never restates a requirement. | Canonical for the in-flight delta only, until archived | Canonical for what runs. Wins any conflict with an unmarked line. |
 | Lifespan | Durable; written first, edited as intent changes, marks taken off at archive | Archived after delivery | Durable; rewritten by the fold at archive |
-| Typical content | The shape in prose with its marks, journeys and cases, visuals; then users and jobs, non-goals, measurement, decisions, risks | Proposal, design, requirement deltas, journeys, suites, tasks | Requirements, scenarios, state behavior, accessibility obligations, content ownership, named component exports |
-| Content to keep out | Anything testable; today's gap and the intended fix, which belong to the proposal; a long draft, which belongs under `docs/references/` | The full product narrative | Class, hook, or library names — those are `tech-design.md`'s job |
+| Typical content | The shape in prose with its marks, its values, the sets the reader meets, visuals; then users and jobs, non-goals, measurement, decisions, risks | Proposal, design, requirement deltas, journeys, suites, tasks | Requirements, scenarios, state behavior, accessibility obligations, content ownership, named component exports |
+| Content to keep out | Anything testable; a case, a state or a mechanism that only expands a stated line; today's gap and the intended fix, which belong to the proposal; a long draft, which belongs under `docs/references/` | The full product narrative | Class, hook, or library names — those are `tech-design.md`'s job |
 
 Public component exports are the exception to "no names in a spec": the export name *is* the contract between this repository and the application that implements it, so specs name it. Internal structure still belongs in `tech-design.md`.
 
 Source material behind a decision — an owner's draft, competitor research, a vendor-integration reference — lives in [`docs/references/`](../references/README.md), which the manual renders under References; a page cites it as evidence and never defers to it.
+
+## What Does Not Go on the PRD
+
+The PRD moves first, whoever learns the detail — and a detail is a line the reader would act differently without: a value, a set they can meet, an outcome they can see, a decision. That is the whole test, the first Placement rule of [`writing.md`](writing.md). Everything each hand learns beyond it has a home of its own, and the page shows it from there rather than restating it:
+
+| Hand | Goes on the PRD | Stays in its own artifact |
+| --- | --- | --- |
+| Product manager | One 🚧 line per outcome the reader can see, in the section it belongs to; a ❓ line or decisions row for what is open | The scenarios that prove an outcome, however many — the delta's. A 🚧 inside a flow step, a sub-step or mid-sentence is a scenario wearing a mark |
+| Designer | A state or a variant that changes an outcome the reader meets — what they can do, see counted, or are refused — as one 🚧 line that replaces the line it supersedes | A breakpoint, a token, a label rule, an empty, loading or error treatment — `ui-design.md`'s States table and a `::story` card on the page |
+| QA | A rule the reader would act on that no spec states, as one ❓ line stating the rule | A case, an edge, a boundary value, a precondition that only tests a stated rule — `feature-tcs.md`; the page shows the suite with `::cases`, never as prose |
+| Engineer | A constraint that changes an outcome, as a 🚧 or ❓ line | A mechanism, a key, a lock, a metric, a sweep, what was tried and dropped — the application repository's architecture doc, which the page's engineer block links as a code map |
+
+A page over the budget is the expansion, not the essence: `pnpm check:manual` warns (`dense`) past 120 lines of prose outside its examples and details, on a section opening on more than six sentences, on an engineer block holding a paragraph, and on a 🚧 inside a flow step or mid-line. The warning asks for the cut and never blocks a fold.
 
 ## When to use each
 
