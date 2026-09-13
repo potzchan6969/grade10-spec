@@ -23,10 +23,14 @@
     "other": "此拍品有新消息。",
     "spendLandedTitle": "刚在门店使用",
     "spendLanded": "一笔交易刚减免了 {amount}。",
-    "spendLandedPoints": "一笔交易刚减免了 {amount}，其中 {points} 分。",
-    "spendCorrectedTitle": "已退回",
-    "spendCorrected": "该笔交易未付款，{amount} 已退回。",
-    "spendCorrectedPoints": "该笔交易未付款，{amount} 已退回，其中 {points} 分。",
+    "spendLandedPoints": "一笔交易刚减免了 {amount}，其中 {points, number} 积分。",
+    "spendLandedOnlyPoints": "一笔交易刚使用了 {points, number} 积分。",
+    "spendLandedGift": "刚在门店兑换了你的一份赠品。",
+    "spendCorrectedTitle": "已恢复",
+    "spendCorrected": "该笔交易未付款，{amount} 已恢复。",
+    "spendCorrectedPoints": "该笔交易未付款，{amount} 已恢复，其中 {points, number} 积分。",
+    "spendCorrectedOnlyPoints": "该笔交易未付款，{points, number} 积分已恢复。",
+    "spendCorrectedGift": "该笔交易未付款，你的赠品已恢复。",
     "spendOther": "门店有一笔交易的新消息。"
   },
   "auctionEmail": {

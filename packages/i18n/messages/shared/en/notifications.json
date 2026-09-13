@@ -30,10 +30,14 @@
     "other": "There is news about this lot.",
     "spendLandedTitle": "Used at the counter",
     "spendLanded": "{amount} came off a sale just now.",
-    "spendLandedPoints": "{amount} came off a sale just now, {points} points of it.",
+    "spendLandedPoints": "{amount} came off a sale just now, {points, plural, one {# point} other {# points}} of it.",
+    "spendLandedOnlyPoints": "{points, plural, one {# point} other {# points}} came off a sale just now.",
+    "spendLandedGift": "A gift of yours was handed over just now.",
     "spendCorrectedTitle": "Put back",
     "spendCorrected": "That sale was not paid. The {amount} is back.",
-    "spendCorrectedPoints": "That sale was not paid. The {amount} is back, {points} points of it.",
+    "spendCorrectedPoints": "That sale was not paid. The {amount} is back, {points, plural, one {# point} other {# points}} of it.",
+    "spendCorrectedOnlyPoints": "That sale was not paid. {points, plural, one {# point is} other {# points are}} back.",
+    "spendCorrectedGift": "That sale was not paid. Your gift is back.",
     "spendOther": "There is news about a sale at the counter."
   }
 }
