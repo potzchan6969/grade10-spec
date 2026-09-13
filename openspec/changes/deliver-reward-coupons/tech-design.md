@@ -65,11 +65,40 @@ Two counter sales alongside it wrote nothing: one with no member on it, and one
 attributed to a member who spent nothing of theirs. A sale that gave the member
 nothing is not news.
 
-**What staging could not show: a reward coupon at the counter.** The coupons on
-that member were written straight into the store and carry no Shopify discount
-behind them, so the shop prices the code at nothing and the till drops it — the
-honest answer, and not the path this change is about. Spending a reward coupon
-at a counter needs a coupon this change minted.
+A coupon staff applied rode the same sale shape. A HK$150 whole-order coupon
+went on another HK$780 box while the shop's own 5% off stood, and the shop
+honoured the coupon: HK$630 paid, HK$150 off, the 5% beaten rather than added
+to. The coupon's own code never left the store — what the shop was handed is
+the code minted against that one basket, on a discount node created for it, and
+that code is what the sale names, what the mint records as spent for HK$150,
+and what the notice reports. The coupon is now used against that order, and the
+sale earned on HK$630 rather than on HK$780.
+
+The member presented one themselves on the next sale, and it reached the same
+place. Their own screen offered the coupon only once staff had the sale open
+with them on it, and answered with a QR and a short code — a code minted for
+that one sale on a discount node of its own, never the coupon's identity. The
+counter took it, the shop honoured HK$78 of a HK$780 box, and the redemption
+now records the code and the node it rode on.
+
+What the counter refuses is worth stating, because it is what the staff
+sentence promises. A coupon whose code is already minted on the sale cannot be
+swapped from the panel: staff typing another code are told to clear every
+discount first, because the shop takes a code off only with all of them.
+
+The notice is the two together: one row, HK$79 — a point and a reward coupon —
+and the sale earned on what the member actually paid.
+
+A fourth sale showed the notice claiming money the member never got. The coupon
+staff applied minted HK$200 against the basket and the trim pass wrote that as
+what landed; four seconds later the shop priced the sale at its own automatic's
+HK$200 and beat the code, so the paid order named no coupon and the member's
+part of the sale was nothing. The claim still stood, because the writer that
+empties one returned early rather than touching it. Settlement now takes such a
+claim back: unread, the row is dropped, by the rule a withdrawal already runs
+on — a member never told has nothing to be told back. Read, it stands and is
+reported, since the words for a taken-back notice say the sale was never paid,
+and this one was.
 
 ## Migration Plan
 

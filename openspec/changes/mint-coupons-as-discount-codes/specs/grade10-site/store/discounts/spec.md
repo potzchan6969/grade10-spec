@@ -190,6 +190,8 @@ same single-use Shopify Discount code mechanism as the online checkout. A
 re-plan of the same sale SHALL reuse the code already minted for it; where the
 coupon's cut has changed, that coupon SHALL be refused on that re-plan rather
 than a second code minted, since the till cannot remove one code from a sale.
+Where the coupon's code has already left the sale, the refusal SHALL name a
+new sale rather than repeat the remedy that took the code off.
 
 #### Scenario: grade10-site-store-discounts-SC-07 - A product coupon at the till settles by its own code
 
@@ -202,3 +204,10 @@ than a second code minted, since the till cannot remove one code from a sale.
 - **GIVEN** a till sale carrying a coupon's minted discount code
 - **WHEN** staff re-plan the sale with the same coupon still on it
 - **THEN** the sale carries exactly one code for that coupon
+
+#### Scenario: grade10-site-store-discounts-SC-17 - A coupon cleared off a sale cannot go back on it
+
+- **GIVEN** a till sale whose coupon was cleared by "Remove every discount"
+- **WHEN** staff apply that coupon to the same sale again
+- **THEN** they are told the coupon has come off this sale and to ring it up on
+  a new one, and the coupon stands live in the member's wallet
