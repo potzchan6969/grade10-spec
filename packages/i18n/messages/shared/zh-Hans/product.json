@@ -1,7 +1,7 @@
 {
   "aboutThisItem": "商品信息",
   "backToStore": "返回商店",
-  "freePickupAt": "可在我们的香港陈列室免费取货",
+  "freePickupAt": "免费取货于",
   "forSale": "在售",
   "decreaseQuantity": "减少数量",
   "increaseQuantity": "增加数量",
@@ -11,6 +11,8 @@
   "quantityLabel": "数量",
   "shippingAndPickup": "配送与取货",
   "shippingCalculatedAtCheckout": "运费将在结算时计算",
+  "shippingFee": "运费",
+  "hongKongGrade10Store": "香港 Grade10 商店",
   "showLess": "显示更少",
   "showMore": "显示更多",
   "skuLabel": "货号",

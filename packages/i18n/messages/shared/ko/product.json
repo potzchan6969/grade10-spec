@@ -1,7 +1,7 @@
 {
   "aboutThisItem": "상품 정보",
   "backToStore": "스토어로 돌아가기",
-  "freePickupAt": "홍콩 쇼룸에서 무료 픽업",
+  "freePickupAt": "무료 픽업",
   "forSale": "판매 중",
   "decreaseQuantity": "수량 줄이기",
   "increaseQuantity": "수량 늘리기",
@@ -11,6 +11,8 @@
   "quantityLabel": "수량",
   "shippingAndPickup": "배송 및 픽업",
   "shippingCalculatedAtCheckout": "배송비는 결제 시 계산됩니다",
+  "shippingFee": "배송비",
+  "hongKongGrade10Store": "홍콩 Grade10 스토어",
   "showLess": "간략히",
   "showMore": "더 보기",
   "skuLabel": "상품 코드",
