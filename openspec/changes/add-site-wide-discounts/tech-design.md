@@ -44,7 +44,7 @@ One automatic order discount live on the staging shop — `ALL 5% OFF`, 5% off t
 | Order coupon, HK$60 | The code — HK$720. The automatic is dropped |
 | Product coupon, HK$20 | The automatic. The code is dropped and the checkout completes |
 | Product coupon, HK$200 | The code, off the line — HK$580. The automatic is dropped |
-| Gift coupon, a HK$5 item | The automatic, over a basket the gift line grew — HK$745.75. The gift line stands at its own price and the buyer is charged for it |
+| Gift coupon, a HK$5 item | The automatic alone — HK$741. The gift line is taken off the basket, so the buyer is never charged for it |
 | Reward coupon, HK$30, at the counter | The automatic. The reward's code is dropped and the sale completes |
 | 100 points | Both — HK$780 less HK$39 less HK$100, HK$641 |
 

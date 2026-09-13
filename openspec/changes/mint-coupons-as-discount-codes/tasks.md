@@ -94,14 +94,15 @@ Do not deploy group 3's backend refusal to production ahead of group 7 — hold 
 
 - [x] 8.1 Before group 0: run two hand probes in Shopify Admin — a variant-scoped fixed-amount code whose amount exceeds the entitled line's value, recording whether it clamps or spills; and `acceptAutomaticDiscounts: true` on a `draftOrderCalculate` carrying an order-level `appliedDiscount` and a code with one non-combinable automatic live, recording whether the flag is honoured, the code kept and the points discount survives
 - [ ] 8.2 Record release gates 1, 5 and 10 from `docs/references/shopify-membership-pos.md` with date and tester, since the guard that lets `deliver-reward-coupons` retire counter collection rests on all three and none has been run
-- [ ] 8.3 Apply a facet-scoped product coupon (an IP world) to a basket holding two worlds; confirm the minted code targets only the eligible variants and the shop takes the same amount the evaluator computed
-- [ ] 8.4 Redeem a gift; confirm it mints against the line's real price at submit, its line is sent at zero, and the sale takes the benefit exactly once
-- [ ] 8.5 Redeem a percentage-with-ceiling product coupon; confirm no code mints during price preview, one mints at submit, and the amount matches the preview
-- [ ] 8.6 Redeem a reward coupon; confirm it settles reporting `kind: "discount_code"` rather than `draft_line_discount`
-- [ ] 8.7 Attempt two coupons on one basket, including a reward alongside a typed code; confirm the collector is asked to choose and only one code reaches the draft order
+- [x] 8.3 Apply a facet-scoped product coupon (an IP world) to a basket holding two worlds; confirm the minted code targets only the eligible variants and the shop takes the same amount the evaluator computed
+- [x] 8.4 Redeem a gift; confirm it mints against the line's real price at submit, its line is sent at zero, and the sale takes the benefit exactly once
+- [x] 8.5 Redeem a percentage-with-ceiling product coupon; confirm no code mints during price preview, one mints at submit, and the amount matches the preview
+- [x] 8.6 Redeem a reward coupon; confirm it settles reporting `kind: "discount_code"` rather than `draft_line_discount`
+- [x] 8.7 Attempt two coupons on one basket, including a reward alongside a typed code; confirm the collector is asked to choose and only one code reaches the draft order
 - [ ] 8.8 Run a POS sale spending a product coupon through the real till extension; confirm settlement, Undo and unreported-code adoption, and answer the split-line entitlement question from 5.2
-- [ ] 8.9 Submit, abandon and resubmit the same checkout carrying the same coupon; confirm only one live code ever exists
-- [ ] 8.10 With `add-site-wide-discounts` task 2.1's automatic order discount live on staging, submit a checkout carrying a smaller coupon; confirm the order completes at the shop's price, the coupon is back in the wallet with its mint dead, and the member's outcome names the coupon — then a larger coupon, and confirm the coupon lands and the automatic is dropped
+- [x] 8.9 Submit, abandon and resubmit the same checkout carrying the same coupon; confirm only one live code ever exists
+- [x] 8.10 With `add-site-wide-discounts` task 2.1's automatic order discount live on staging, submit a checkout carrying a smaller coupon; confirm the order completes at the shop's price, the coupon is back in the wallet with its mint dead, and the member's outcome names the coupon — then a larger coupon, and confirm the coupon lands and the automatic is dropped
+- [ ] 8.11 Give the reward's provider artifact a read surface — `reward_coupon_usages.provider_artifact` is written and never read back, so no operator can tell what the shop was handed for a reward, and task 8.6 is answered from the shop rather than from the record
 
 ## 9. Manual page (grade10-spec)
 

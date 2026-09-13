@@ -96,6 +96,28 @@ A gift needs its own clause, because a gift's evaluation carries `gift` and an e
 
 **`orders/eventSink.ts`'s `rewardArtifact()`** — the artifact for `order.loyaltyCouponUsageId` reports `{ provider: "shopify", kind: "discount_code", externalId: nodeId, code }` from the order row's own columns. The `draft_line_discount` fallback stays only for a reward settled before this change shipped, bounded on the order's `createdAt` against `CODES_SINCE` rather than on a column being absent — after that instant, absent means a lost mint, and it is counted and logged rather than written into loyalty's permanent record as plausible history.
 
+## What Staging Showed
+
+Every row is a checkout the store ran against the staging shop through `checkout.createCheckout`, priced as a real draft order. Two automatic discounts stood on the shop throughout: `ALL 5% OFF` over the whole order, and `Fine Sale`, 50% off the Tag Bolt (SM9) box.
+
+| What rode | What the shop priced |
+| --- | --- |
+| Product coupon HK$200, scoped to the Pokemon world, over a Tag Bolt box and a Potatoz | The code, on the box alone — HK$260 to HK$60. The Potatoz stays HK$5 |
+| Gift of an Abyss Eye box, over a Ninja Spinner box | The code — the gift line is sent at HK$0.00 and the bought line at HK$780. No order discount beside it |
+| Gift of a HK$5 Potatoz, over a HK$780 box | `ALL 5% OFF` — HK$741. The gift line is taken off the basket, so the buyer is never charged for it |
+| Product coupon, 25% capped at HK$100, over a HK$780 box | The code — HK$100, the ceiling. Nothing mints until submit |
+| Reward coupon HK$30, over 20 Potatoz | The code `RWD-5A8N39C9` — HK$100 to HK$70. The paid order names it |
+| Two coupons at once, and a reward beside a typed code | Neither. The checkout is refused and no draft is made |
+| The same coupon submitted, abandoned and submitted again | One live code. Each superseded draft's code is deactivated |
+| Order coupon HK$10, over a HK$1,560 basket | `ALL 5% OFF`, worth HK$78 there — HK$1,482. The code is dropped, the coupon goes back to the wallet, and the member's outcome names it |
+| Order coupon HK$150, over the same basket | The code — HK$1,410. The automatic is dropped |
+
+The staging catalogue sells one IP world, so the scope row names a Pokemon box beside a Potatoz that belongs to no world rather than two worlds. What it proves is the same: the code names the eligible variant and leaves the other line alone.
+
+A coupon's own code is not the code the shop is given: the mint appends its own suffix, so `QABEAT-53WFFTP2` in the wallet reaches the shop as `QABEAT-2A4BSA7M`. Staff reading a code off a receipt can still tell which coupon it stands for.
+
+**The reward's artifact kind has no read surface.** `reward_coupon_usages.provider_artifact` is written and never read back — no API answers it and no console shows it, so `kind: "discount_code"` is confirmed by what the shop holds rather than by what the record says. The code minted for the reward stands on the shop as an active `Amount off product` discount and the paid order names it, which reaches `rewardArtifact`'s first arm and no other.
+
 ## Risks / Trade-offs
 
 - **A code targeting resolved variant ids is exact for the basket it was minted against, and only that basket.** A basket edited after the mint can carry the code against lines it no longer names. Online this is closed by the mint sitting after the order row commits, so the basket is fixed; at the till it is what the re-plan rule above exists to answer.
