@@ -666,6 +666,13 @@ store-credit path — watch it before building on it.
 1. A customer-scoped `usageLimit: 1` code typed at POS applies at tender
    after the customer is attached and is refused with no customer
    attached (the whole spend mechanism rests on it).
+   **Answered 2026-09-13, Echo Chan, staging shop.** Both halves hold.
+   A HK$60 code on a HK$780 basket priced at its full value with the
+   member on the sale, and at nothing with the member taken off — the
+   order falling back to the shop's own 5%, HK$39. Paid POS orders
+   #1033 to #1039 name their codes at tender. The evaluation is the
+   shop's own, against this basket and this customer; the typing was on
+   the admin till bench rather than the POS app.
 2. The same code at online checkout on an anonymous cart with
    `buyerIdentity.email` prefilled: does checkout-email matching enforce
    customer eligibility (applies for the scoped customer's address,
@@ -698,6 +705,11 @@ store-credit path — watch it before building on it.
     at tender? The cancel flow's remove-before-deactivate ordering
     assumes nothing; this gate says whether the backstop is platform or
     reconciliation alone.
+    **Answered 2026-09-13, Echo Chan, staging shop: revalidated.** Order
+    #1039 carried a deactivated HK$60 code and read HK$720 at the tender
+    screen; it paid HK$741, naming only the shop's HK$39 automatic. The
+    code was larger than what beat it, so nothing but revalidation
+    explains the loss. The backstop is the platform.
 11. `customerSet` phone-field userErrors: the exact taken and
     invalid-format shapes, and whether the mutation fails whole or
     applies partially — the retry-without-phone degrade must hold under
