@@ -18,7 +18,7 @@ that rate without changing which variant or price the Store accepts.
 - Rebuild the Grade10 Store product-detail surface to match the supplied Figma
   frame across desktop and narrow layouts.
 - Display all product media, compare-at pricing, low-inventory context,
-  optional product badges, shipping and pickup information, and SKU data.
+  optional product badges, static shipping and pickup guidance, and SKU data.
 - Add the Figma quantity stepper and in-place add states while preserving
   existing variant selection, cart-line merging, sold-out refusal, and
   server-rendered product content.
@@ -33,8 +33,9 @@ that rate without changing which variant or price the Store accepts.
 - New product routes, checkout flows, wishlist behavior, image zoom, or a
   lightbox.
 - A product or inventory mirror in Postgres.
-- Inventing product type, world, language, shipping fee, or store-locator
-  values when the catalogue does not provide them.
+- Inventing product type, world, language, or dynamic shipping and pickup facts
+  when the catalogue does not provide them. Version 1 uses the approved static
+  fulfilment copy from the design for every product.
 - New design-system components, variants, or tokens.
 - Changes to the archived product-page routing, sitemap, or not-found
   behavior.

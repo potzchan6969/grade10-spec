@@ -87,7 +87,7 @@ and item facts,
 * The media gallery renders one accessible placeholder for <product_2>.
 * The media gallery renders no empty image and no image URL made by the page.
 
-### grade10-site-store-product-page-US6-TC3-1: Supplied item facts render without invented facts
+### grade10-site-store-product-page-US6-TC3-1: Supplied item facts and static fulfilment copy render without invented product metadata
 
 **Classification:**
 
@@ -105,13 +105,13 @@ and item facts,
 **Pre-conditions:**
 
 * customer is on <grade10 store url>.
-* The catalogue holds <product_3> with product-type, world, and language badges, shipping guidance, pickup location, and SKU, while omitting at least one optional item fact.
+* The catalogue holds <product_3> with product-type, world, and language badges, and SKU, while omitting at least one optional item fact.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <product_3> | Product with supplied product-type, world, and language badges, shipping guidance, pickup location, SKU, and at least one optional item fact omitted |
+| <product_3> | Product with supplied product-type, world, and language badges, SKU, and at least one optional item fact omitted |
 
 **Steps:**
 
@@ -121,7 +121,10 @@ and item facts,
 **Expected Results:**
 
 * The page renders the supplied product-type, world, and language badges as non-interactive labels.
-* The page renders the supplied shipping guidance, pickup location, and SKU.
+* The page renders the static fulfilment copy for every product:
+  * Shipping calculated at checkout. Shipping fee
+  * Free pick-up at Hong Kong Grade10 Store
+* The page renders the supplied SKU below the fulfilment copy.
 * The page omits each optional item fact the catalogue does not supply.
 
 ---
