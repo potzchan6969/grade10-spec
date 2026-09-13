@@ -59,12 +59,19 @@ assuming someone will find it.
    what code a change touches are never the author's to answer: find them
    yourself, or leave them to the engineer who plans delivery.
 3. **Mark the PRDs first.** On each PRD the change touches, add one 🚧
-   line per outcome, in the reader's words and in the section it belongs to
-   (the sections are in `docs/prds/guides/writing-the-manual.md`); a ❓ line
-   or decisions row for what the author deferred; the decisions the change
-   turns on (`prd-authoring`). The house style is `docs/governance/writing.md`.
+   line per outcome the reader can see, in the reader's words and in the
+   section it belongs to (the sections are in
+   `docs/prds/guides/writing-the-manual.md`); a ❓ line or decisions row for
+   what the author deferred; the decisions the change turns on
+   (`prd-authoring`). The house style is `docs/governance/writing.md`.
    The deltas derive from these lines, so a delta promising what no line marks
-   is the delta's error. A capability with no PRD gets one first —
+   is the delta's error — and the scenarios that prove one line are the
+   delta's, however many. A 🚧 inside a flow step, a sub-step or
+   mid-sentence is a scenario wearing a mark: lift it to its section as one
+   outcome, or leave it to the delta. `pnpm check:manual` warns (`dense`) on
+   a buried mark and on a page past the style's budget; a mark that would
+   tip a page over it is the sign the page is restating the delta, not the
+   sign the page needs more room. A capability with no PRD gets one first —
    `prd-authoring` writes it — or the change records `page_waived: <why>` in
    its `.openspec.yaml`; `pnpm check:manual` refuses a change carrying deltas
    with neither a 🚧 line under a linked section nor the waiver. The marks and

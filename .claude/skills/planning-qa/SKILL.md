@@ -24,9 +24,11 @@ alongside the journeys with `/spec-to-tcs`; your work starts at review, and at
 the wider levels above it. A capability whose journeys file says
 `**Walked by:** nobody` has nothing to derive. Where a suite and its
 spec disagree, **the spec is correct** — regenerate the case, never the other
-way round. A case that exposes a rule nobody wrote is a product detail: it
-goes on the PRD first, as a ❓ line, then back to the spec as a delta — never
-into the suite alone.
+way round. A case that exposes a rule no spec states is a product detail, not
+a case: write the rule on the PRD as one ❓ line in the reader's words, then
+as a delta, and derive the case from that. A case, an edge, a boundary value
+or a precondition that only tests a stated rule is the suite's; the page shows
+the suite with `::cases`, never as prose.
 
 `docs/governance/specs-to-test-cases.md` governs the whole shape — the journey
 sections, the case ids, the classification block, the `**Trace:**` line, and

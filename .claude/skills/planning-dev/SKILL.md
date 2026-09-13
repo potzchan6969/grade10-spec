@@ -127,7 +127,13 @@ tooling on both sides parses it.
 - **Carry the PRD.** A change whose deltas touch a capability carries a
   task to update that capability's PRD under `docs/prds/`; `pnpm check:manual`
   verifies it. A constraint you learn that changes an outcome goes on the PRD
-  first, marked 🚧 or ❓, before the delta or the task that depends on it.
+  first, marked 🚧 or ❓, before the delta or the task that depends on it. A
+  constraint that changes no outcome — a mechanism, a key, a lock, a metric,
+  a sweep, what was tried and dropped — is `tech-design.md`'s and the
+  application repository's architecture doc's. Your depth on the page is one
+  `detail{for="engineer"}` block, and it is a code map: the module, the
+  config name, the architecture doc, as items of a name and a link. The
+  check warns (`dense`) on an engineer block holding a paragraph.
 - **Carry the component work** `ui-design.md` flagged — a variant, a token, or
   a compound component that does not exist yet is a grade10-spec group.
 - Keep each task to something one engineer finishes in a session.
