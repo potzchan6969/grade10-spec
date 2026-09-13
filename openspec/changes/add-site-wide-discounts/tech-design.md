@@ -50,6 +50,16 @@ One automatic order discount live on the staging shop — `ALL 5% OFF`, 5% off t
 
 Shopify keeps the better of a code and an automatic that cannot combine and drops the other. Points are the exception. They ride as the draft's own order-level discount and stack with the automatic, so the flag is safe for the baskets that carry points.
 
+Each named type of automatic discount, read twice — the till's own pricing call, which is where `codeDiscountMinor` surfaces, and a web checkout's draft order.
+
+| The automatic | The basket | What the shop took |
+| --- | --- | --- |
+| Product special sale — 50% off one box | That box, HK$260 | HK$130. The line is halved |
+| Buy X get Y — buy one box, get another free | Both boxes, HK$1,560 | HK$780. The second box is sent at HK$0.00 |
+| Order threshold — HK$200 off over HK$1,000 | Two boxes, HK$1,560 | HK$200, named on the draft as `QA order threshold probe` |
+
+Two automatics never stack. Where more than one fits a basket the shop keeps the larger and drops the rest, so each probe above is measured on a basket only its own automatic reaches.
+
 Two hand probes in Shopify Admin, on a draft order carrying the same three things the store sends:
 
 - **A code worth more than the line it targets clamps.** HK$500 off a HK$5 Potatoz took the line to zero and stopped: the HK$260 box beside it stayed HK$260, and the leftover HK$495 evaporated. A fixed-amount code never spills onto a line it does not name.
