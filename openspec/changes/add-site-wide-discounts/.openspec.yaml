@@ -1,2 +1,5 @@
 schema: grade10-planning
 created: 2026-09-09
+deployed_at: "e604ab07a"
+deployed_env: "staging"
+tasks_waived: "ecchochan, 3.2 lands with the fold"
