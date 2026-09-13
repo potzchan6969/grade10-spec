@@ -73,9 +73,19 @@ surface. Top to bottom:
   in-flight cards beneath say what has not shipped, and a page with no
   `spec` wears the planned pip
 - **The page is the roadmap** — a change starts here, one 🚧 line per
-  outcome, and its deltas derive from those lines; a delta promising what no
-  line marks is the delta's error, not the page's. The proposal links each
-  section it marked, and the manual shows the change under that heading
+  outcome the reader can see, and its deltas derive from those lines; a delta
+  promising what no line marks is the delta's error, not the page's. The
+  scenarios that prove an outcome are the delta's, however many: a 🚧 inside
+  a flow step, a sub-step or mid-sentence is a scenario wearing a mark. The
+  proposal links each section it marked, and the manual shows the change
+  under that heading
+- **The page is the essence** — every line is one the reader would act
+  differently without: a value, a set they meet, an outcome they see, a
+  decision. A case that only proves a rule is the suite's, a state that only
+  dresses an outcome is the design record's, a mechanism is the architecture
+  doc's. The check warns on a page past 120 lines of prose outside its
+  examples and details, a section opening on an essay, an engineer block
+  holding a paragraph, and a buried 🚧
 
 ## Blocks
 
@@ -84,7 +94,9 @@ Requirement text stays in the store: a page states the rule in its own
 words and links the capability, and never embeds the contract.
 
 What a page does embed is acceptance: the spec's test-case suite, out of the
-spec named in the frontmatter.
+spec named in the frontmatter. The block renders the suite's index — each
+case, its status, and the journey it traces — so a page never lists a case
+in prose; the check warns on a suite no page shows.
 
 ```md
 ::cases{id="grade10-site/loyalty/programme"}
@@ -224,8 +236,9 @@ restatement:
 What ships and what the spec says have parted company here.
 :::
 
-:::detail{title="Data model" for="engineer"}
-The data shape, the architecture link, the thing a PM does not need.
+:::detail{title="Code map" for="engineer"}
+- **Config** — `GRADE10_LOYALTY_PROGRAM` in `packages/app-env`
+- **Design record** — [loyalty architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/loyalty.md)
 :::
 ```
 

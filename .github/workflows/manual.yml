@@ -51,6 +51,8 @@ concurrency:
 env:
   NODE_VERSION: 24.14.1
   WRANGLER_VERSION: 4.120.0
+  # Must match the `openspec` script in package.json;
+  # scripts/openspec/openspec-version.test.mjs holds the three together.
   OPENSPEC_VERSION: 1.8.0
 
 jobs:

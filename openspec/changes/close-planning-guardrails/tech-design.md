@@ -56,7 +56,7 @@ The three rules live in one module, `tools/manual/check/record.mjs`: they are ab
 
 **`review-changes`** gains one line on its Spec axis: a change with `page_waived` is reviewed on whether the waiver reads true.
 
-**One name.** Where this change touches prose, the thing under `docs/prds/` is "the capability's page". The application repository's `AGENTS.md` and `archive-change` say so; `development.md` names `pnpm check:manual` there as this repository's engineering manual; `validation.md` gets one row for `pnpm plan validate`.
+**One name.** Where this change touches prose, the thing under `docs/prds/` is "the PRD" — never "the capability's page", which reads as the capability spec under `openspec/specs/`. The application repository's `AGENTS.md` and `archive-change` say so; `development.md` names `pnpm check:manual` there as this repository's engineering manual; `validation.md` gets one row for `pnpm plan validate`.
 
 ## Risks / Trade-offs
 

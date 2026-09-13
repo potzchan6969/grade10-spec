@@ -128,6 +128,11 @@ export const RULES = [
     title: "Pages older than the specs they embed",
   },
   {
+    key: "dense",
+    level: "warn",
+    title: "Pages denser than the style allows",
+  },
+  {
     key: "ref",
     level: "warn",
     title: "Prose references naming nothing, or two things",

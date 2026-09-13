@@ -1,169 +1,89 @@
-# The one workflow every change in this store records. AGENTS.md documents it,
-# and four role skills draft it - planning-pm, planning-qa, planning-design,
-# planning-dev - one per hand the change passes through.
+# The one workflow every change in this store records. AGENTS.md documents
+# it; the planning-pm, planning-qa, planning-design and planning-dev skills
+# under .claude/skills/ draft it, one per hand. Engineering reads and checks
+# off the plan from grade10, which points here with `store: grade10-spec`.
 schema: grade10-planning
 
-# This repo is an OpenSpec store, and more besides: PM and design own the
-# proposals, specs and journeys under openspec/ and the manual under docs/prds/,
-# and the feature test cases derived from them, QA reviews those suites and
-# owns the wider ones, engineering writes the delivery plan -
-# ui-design, tech-design, tasks - on top of them, and
-# packages/design-system/ holds the components and tokens the applications
-# consume. Engineering reads and checks off the plan from grade10, which points
-# here with `store: grade10-spec`.
-
-# Project context (optional)
-# This is shown to AI when creating artifacts.
+# Project context (optional) - shown to AI when creating artifacts.
 context: |
-  Grade10 (grade10.com) - Trading-card and collectibles ecosystem,
-  spanning grading, vaulting, card-backed financing, retail with an online
-  marketplace, live shows, and real-time card-market indexes. The core objects
-  are cards and graded collectibles in a collector's collection; users are
-  collectors who buy, sell, grade, vault, and showcase them.
-  This store holds planning for every Grade10 surface. Today that is one
-  implementing repo, grade10 (React 19 + TypeScript on Vite),
-  which consumes this repo two ways at once - as this OpenSpec store, and as its
-  `external/grade10-spec` submodule, built from source with no published
-  artifact: `@grade10/design-system` for the tokens and primitives,
-  `@grade10/ui` for the shared compound components a capability spec names, and
-  `@grade10/i18n` for the message catalogs.
-  Audience for these artifacts: a PM or designer writing the proposal, the
-  specs, the journeys and the feature suites derived from them and stopping
-  there, QA reviewing those suites and deriving the wider ones, a
-  designer writing the ui design, an engineer writing the tech design and the
-  tasks when delivery is planned, and an engineer in the application repo
-  reading all of it as the only source of truth for what to build.
-  openspec/specs/ is the single source of truth for every checkable requirement
-  and component export contract; a change under openspec/ is the delta against
-  it. Specs are grouped by the application that ships them, as
-  openspec/specs/<product>/<domain>/<capability>/. Grade10 ships four applications and
-  they are the four product directories: grade10-site (the grade10 site - its
-  shell, how it answers an address, and every collector-facing surface inside
-  it: the store, the auction, and loyalty), grade10-admin (the grade10 admin site -
-  auction listings and campaigns, close-out, and the stock count behind them),
-  zzz-site (the ZZZ site), and zzz-admin (the ZZZ admin site, nothing
-  specified yet).
-  A fifth directory, shared, is not an application: a capability lives there only
-  when two or more of the four are held to it - auth/* for session and identity,
-  ui/* for the shared component package, console/* for the vocabulary both admin
-  sites render, design-sync/* for the Figma-to-code rails, and the platform-wide
-  formats dates-and-times, money-amounts, localization, frontend-composition.
-  Where a capability belongs is decided by who is held to it, not by what it is
-  about. Inside a product, capabilities are grouped one level further by domain -
-  grade10-site/site/*, grade10-site/store/*, grade10-site/auction/*, and
-  grade10-site/loyalty/* - so a product with twenty capabilities reads as four
-  groups rather than one alphabetical run. A capability's ID is its path, as
-  <product>/<domain>/<capability>, for example grade10-site/auction/listing-page or
-  shared/auth/sign-in; the platform-wide formats sit bare as shared/<capability>.
-  docs/prds/ is the manual - one page per capability,
-  and that page is the PRD: the product decision behind its requirements - problem,
-  users, non-goals, measurement, rationale - sits on it and never restates one.
-  docs/governance/prd-and-openspec.md explains the boundary - follow it.
-  Money is always an integer count of minor units plus an ISO 4217 currency
-  code, never a float - specs must state amounts that way.
-  A change that alters a component or a token is work in this repo:
-  packages/design-system/ holds the primitives and the Figma token pipeline,
-  packages/ui/ holds the shared compound components a capability spec names,
-  and apps/preview/ is the cross-package preview app where whole pages are
-  assembled from both. Each package colocates its own stories; apps/preview holds
-  only page assemblies, and supplies their content and state itself, the way a
-  store application does.
+  Grade10 (grade10.com) - trading cards and collectibles: grading, vaulting,
+  card-backed financing, retail with an online marketplace, live shows, and
+  card-market indexes. Users are collectors who buy, sell, grade, vault and
+  showcase the cards and graded collectibles in their collection.
+  One implementing repo, grade10 (React 19 + TypeScript on Vite), consumes
+  this repo as its OpenSpec store and as its `external/grade10-spec` submodule,
+  from source: `@grade10/design-system` (tokens, primitives), `@grade10/ui`
+  (the compound components a spec names), `@grade10/i18n` (message catalogs).
+  A component or token change is work here, in packages/design-system/,
+  packages/ui/, or apps/preview/ (page assemblies supplying their own state).
+  Readers: the PM or designer writing proposal, specs, journeys and feature
+  suites, then stopping; QA reviewing those and deriving the wider suites; the
+  designer writing ui-design; the engineer writing tech-design and tasks; and
+  the engineer in grade10 building from it all.
+  openspec/specs/ is the only source of every checkable requirement and
+  component export contract; a change is the delta against it. A capability
+  is openspec/specs/<product>/<domain>/<capability>/, and its id is that path.
+  The four products are the four applications: grade10-site (the collector
+  site - shell, addressing, store, auction, loyalty), grade10-admin (auction
+  listings and campaigns, close-out, stock count), zzz-site (the ZZZ site),
+  zzz-admin (the ZZZ admin site, nothing specified yet). shared/ is not an
+  application: a capability lives there only when two or more products are
+  held to it - auth/*, ui/*, console/*, design-sync/*, and the bare platform
+  formats shared/dates-and-times, money-amounts, localization,
+  frontend-composition. Placement follows who is held to it, not the topic.
+  Money is an integer count of minor units plus an ISO 4217 code, never a float.
+  docs/prds/ is the manual: one page per capability, and that page is the
+  PRD. It moves first - whoever learns a product detail writes it there,
+  marked 🚧 or ❓, before the artifact that depends on it - and never restates
+  a requirement. docs/governance/prd-and-openspec.md draws the boundary;
+  docs/governance/writing.md is the style of every artifact here.
+  Every path these instructions name is this store's. Run from grade10, the
+  CLI prints `Using OpenSpec root: grade10-spec (<path>)`, and a skill or
+  document named here is under that path, never the application repository's.
 
 # Per-artifact rules (optional)
 rules:
   proposal:
-    - "Start the file with an author line above `## Why`, in the form `**Author:** @handle - YYYY-MM-DD`, naming whoever wrote the proposal. Ask for the handle rather than guessing it. This is the change's creator and does not change when someone else edits the proposal - task group owners in tasks.md are a separate thing."
-    - Open with the collector problem and the evidence for it, not the solution.
-    - Include a metric that would move if this change works.
-    - Always list Non-goals so engineering knows the edges.
-    - "Before drafting, interview the author with the `grilling` skill: read `.cursor/skills/grilling/SKILL.md` at this store's root and run its round-based frontier interview. `.cursor/skills/` is the source of truth `pnpm run agent:check-parity` verifies; the byte-identical generated copies under `.claude/skills/` and `.codex/skills/` serve just as well."
-    - "Find facts (existing specs, PRDs, change history, code) yourself before asking; bring only decisions to the author. If reading the existing material leaves nothing open, say so and proceed - the interview scales with the open questions, not the change's size."
-    - "Do not write the proposal until the frontier is empty and the author confirms shared understanding. A frontier question settles three ways, not two: the author answers it, the author accepts the recommended answer, or the author defers it as a question they are not the right person for. A deferred question is recorded under the proposal's open questions, naming who should settle it, and does not hold the draft. Never press an author for a sizing estimate, an export name, a list of affected code, or any other fact about the repository - those are yours to find, or engineering's to settle when delivery is planned."
+    - "Start with `**Author:** @handle - YYYY-MM-DD` above `## Why`. Ask for the handle. It names the creator and never changes; task-group owners in tasks.md are separate."
+    - "Interview the author first with the `grilling` skill (`.claude/skills/grilling/SKILL.md`), as `.claude/skills/planning-pm/SKILL.md` step 2 says: find repository facts yourself, bring only decisions, and draft once the frontier is empty. A deferred question goes under the proposal's open questions with who settles it."
+    - "Include a metric that would move if this change works."
+    - "Mark the PRDs the change touches before the deltas, or record `page_waived: <why>` in `.openspec.yaml` - planning-pm step 3."
   specs:
-    - "Order the sections `## Purpose`, `## Feature set`, then `## ADDED Requirements` (or MODIFIED / REMOVED / RENAMED). The feature set is the spec's map and the requirements follow it. A durable spec carries `## Purpose`, and so does the delta that creates a capability; a delta for a capability that already exists carries none - the fold ignores it, and that spec's Purpose is edited in `openspec/specs/` directly."
-    - "The user journeys are not in this file. They live in `user-journeys.md` beside it, and every reader in this store reads them from there - a `## User journeys` section written in a spec.md is dropped."
-    - "Feature set is two-layer bullets. Each root group name is at most five words. Each child is `Name: purpose` - a short sentence for why that item exists, not only a label."
-    - "Keep feature-set groups coarse. Nest related work under the job it serves (for example winner contact under payment collection). Put grants in the groups they belong to; do not make grants its own group."
-    - "Give every scenario an id so a task or a review comment can name one: `<product>-<domain>-<capability>-SC-<n>` - the capability's path with slashes as hyphens, so `grade10-site/loyalty/programme` issues `grade10-site-loyalty-programme-*` and `grade10-admin/auction/listing` issues `grade10-admin-auction-listing-*`. The path form is what keeps two capabilities of the same name apart: `grade10-site/site/navigation` and `zzz-site/site/navigation` would otherwise both issue `navigation-*`. Carry the id in the scenario's own heading - `#### Scenario: grade10-admin-auction-listing-SC-01 - Operator saves an empty draft`."
-    - "A prefix is fixed at a capability's first ids and never moves again. A capability that is later renamed or moved keeps issuing what it always issued, because an issued id is permanent and every task, review comment and test case that names one would otherwise be repointed silently. Read the spec before issuing a new id and match what is there; only a capability issuing its first id derives the prefix from its path."
-    - "Number ids sequentially within a capability from 01, and treat an issued id as permanent: a delta that adds a scenario takes the next unused number, a delta that removes one retires its id rather than freeing it, and no delta renumbers an id that already exists. A task, a review, a journey's `Accepted by` line, and a downstream test all point at an id, so a reused number silently rewrites every one of them."
-    - "Every `###` heading under `## Requirements` is a `### Requirement:`, in a durable spec and in a delta alike. Never write a group heading between requirements: `openspec archive` absorbs one into the requirement above it, so a heading written in a delta lands folded into the durable spec, and `pnpm check:manual` fails a durable spec that holds one. Reading order comes from the order of the requirements instead - sequence them to follow the `## Feature set` groups, so the spec's map and its requirements read the same way down. Do not use ATX `## Group` anywhere - that ends `## ADDED Requirements` and drops every requirement."
-    - "The fold carries `## Requirements` and nothing else. A delta's `## Feature set` never reaches the durable spec. Keep writing it - it is how a change is read before it ships - and the archive workflow copies it into the durable spec by hand, alongside the change's `user-journeys.md`."
-    - "Write one requirement for the flow. Numbered steps for whoever uses the surface - collector, operator, or both. Do not write a scenario per step."
-    - "Write one requirement per entity that has fields, only when this change adds or changes those fields. Describe fields in a markdown table. Do not restate unchanged facts as a requirement."
-    - "Write one requirement per entity that has states. Describe states in a markdown table."
-    - "Keep scenarios for behavior distinctive to this capability. A scenario that only restates a platform default belongs to the capability that sets the default - find that yourself rather than asking the author which of their expectations are already guaranteed."
-    - "Keep copy brief and simple. Tables carry the detail; prose stays short."
-    - "Money is an integer count of minor units paired with an ISO 4217 code, never a float. Do the conversion yourself: an author says HKD 10, and the spec says 1000 HKD minor units - never hand that arithmetic back to them."
-    - "A scenario is WHEN/THEN. Add a GIVEN first when it needs state in place before the trigger; most do not, and both `**WHEN**` and `**THEN**` are required either way."
-    - "Before coining a shape, read the capabilities beside this one: reuse an existing requirement's wording, its table columns and its state names rather than issuing a second vocabulary for the same thing."
-    - "Before handing over, read each requirement the way the engineer in the other repository will: every term it uses is defined here or in a capability it names, every value is stated rather than implied, and every scenario can be decided without asking what was meant. Fix what fails that read - never ask the author to certify it."
-    - "Never name a class, function, hook, table, or library in a spec - that is tech-design.md's job. Public component exports are the exception: the export name is the cross-repo contract, so the spec names it and keeps the set in one requirement. Do not ask the author for it - read `packages/ui` and the capability's existing export requirement, propose the set yourself, and say in the proposal which of them do not exist yet, so the engineer confirms it when delivery is planned."
-    - Every scenario must be checkable by a test or a manual pass.
-    - Requirements live here and nowhere else. Never leave a testable statement in a PRD.
+    - "Order: `## Purpose` (new capability only), `## Feature set`, then `## ADDED Requirements` (or MODIFIED / REMOVED / RENAMED). The feature set is the spec's map; sequence the requirements to follow its groups."
+    - "Feature set is two-layer bullets: root group names of at most five words, children as `Name: purpose`. Keep groups coarse - nest work under the job it serves, and put grants in the groups they belong to, never a group of their own."
+    - "The fold carries `## Requirements` only. Keep writing the feature set - it is how a change is read - and the archive copies it and `user-journeys.md` into the durable spec by hand."
+    - "Scenario heading: `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`. The prefix is the capability path with slashes as hyphens (`grade10-site/loyalty/programme` issues `grade10-site-loyalty-programme-*`), so two capabilities of one name stay apart. Number from 01; an issued id is permanent - a removal retires it, nothing renumbers it, and a renamed or moved capability keeps issuing its first prefix. Read the ids that exist before issuing one."
+    - "Every `###` under a requirements section is a `### Requirement:` - never a group heading, in a delta or a durable spec: the fold absorbs it into the requirement above, `pnpm check:manual` fails a durable spec holding one, and an ATX `## Group` ends the ADDED section and drops every requirement after it."
+    - "One requirement for the flow, as numbered steps for whoever uses the surface - not a scenario per step. One requirement per entity with fields, only when this change adds or changes them, and one per entity with states; both as markdown tables. Never restate an unchanged fact."
+    - "A scenario is `**WHEN**` / `**THEN**`, both required; add `**GIVEN**` only when state must be in place before the trigger. Keep scenarios to behaviour distinctive to this capability: one that restates a platform default belongs to the capability that sets it - find that yourself."
+    - "Money is minor units plus an ISO 4217 code. Convert yourself: the author says HKD 10, the spec says 1000 HKD minor units."
+    - "Prose short, tables carry detail (docs/governance/writing.md). Before coining a shape, read the capabilities beside this one and reuse their wording, table columns and state names. Before handing over, read each requirement as the engineer in the other repository will - every term defined here or in a named capability, every value stated, every scenario decidable - and fix what fails; never ask the author to certify it."
+    - "No class, function, hook, table or library names; public component exports are the one exception, kept in one requirement - `.claude/skills/planning-pm/SKILL.md` § The delta specs. Propose the export set yourself from `packages/ui` and say in the proposal which do not exist yet."
+    - "Requirements live here and nowhere else; a testable statement never stays on a PRD (AGENTS.md § Sources of truth)."
   user-journeys:
-    - "One file per capability, at `specs/<capability-path>/user-journeys.md`, beside that capability's `spec.md`. It holds a single `## User journeys` section and nothing else."
-    - "At most five journeys across every capability the change touches. A journey is one actor pursuing one goal from start to finish (an operator publishes a listing; a collector bids and wins); a name that needs an `and` is two journeys. A change that wants a sixth is two changes - split it rather than shrinking the journeys to fit."
-    - "Title a journey the way a test analyst titles a case: lead with the actor, then the action, in the third person - `Collector enters the catalogue through a collection`, `Operator traces who committed what`. Not a bare verb phrase (`Enter the catalogue`), not the first person (`Read the lots I watch`), and never so vague that two journeys could share the title."
-    - "A capability no end user reaches on its own still writes the file, and says so in place of the stories: a cross-cutting policy every other spec inherits (money amounts, dates and times, localization), a package or composition contract, a backend convention. Its `## User journeys` section holds one line and no story - `**Walked by:** nobody on their own - <who inherits it, and which capability's journeys reach it instead>`. Its spec still carries `## Feature set` and id'd scenarios, because a task, a review, and a test case all name those. Never invent an actor to satisfy the artifact - the journeys live in the capability the reader actually reaches, which inherits the policy."
-    - "The exemption is a decision written down, never a file left out. `pnpm check:manual` fails a durable capability with no `user-journeys.md`, a delta introducing a capability with none, and a file that neither holds a story nor says `**Walked by:** nobody` - a user-facing capability that skipped its journeys used to look exactly like one nobody walks, and shipped with no suite QA could derive."
-    - "The exemption is capability-wide, and a single scenario needs no journey of its own. A walked capability still issues some a story never reaches - a package's export list, a copy shape, a defaulting rule no surface shows. Leave those out of every `**Accepted by:**` and name them under `**Out of suite:**` in the `feature-tcs.md` beside them. Never widen a shopper's story to cover one, and never invent an importing application to walk it."
-    - "Write each journey as one user story from the actor's side, never the system's: `As a <role>, I want <capability>, so that <benefit>`. The role is an end user the spec already names, and the benefit is one the requirements or the proposal already justify - a story never introduces either."
-    - "An actor that is not a person is the role only when it acts on its own and the requirements are written about its behaviour - a crawler, a preview fetcher, a payment provider calling back. Software this repository ships is never the role: a consuming application, a service, a caller, or a package is the system's side of the story, and the journey belongs to whoever operates it."
-    - "The people who build the product are its makers, not its users. An engineer wiring a call, a developer seeding fixtures from a test panel, a reviewer reading a contract - what each walks is a test or a working step, never a journey. A capability only they reach is unwalked and says so: an internal reference, a dev-build-only surface, a fixture panel. Its scenarios stand on their own, as every requirement does."
-    - "Hold every story to the four criteria its author owns: Independent (states a need that does not wait on another story), Negotiable (states the need and leaves the implementation open), Valuable (names a benefit the actor or the business feels), Testable (its acceptance criteria are the scenarios beneath it, each objectively pass or fail). A story that fails one of the four is split or reworded, never widened to fit. INVEST's other two - Estimable and Small - are sizing judgements: they belong to the engineer who plans delivery, and are never asked of the author who writes it."
-    - "Give every story an id, `<product>-<domain>-<capability>-US-<n>`, using the prefix the capability beside it already issues, and carry it in the story's heading - `### grade10-admin-auction-listing-US-01: Operator saves an unfinished listing and comes back to it`. Ids are permanent and never renumbered."
-    - "Format each journey for a human reader: break the story onto three labeled lines (`**As a** …`, `**I want** …`, `**so that** …`), then an `**Accepted by:**` bullet list where each line is `` `id` — Scenario title `` — never a comma-separated id dump."
-    - "Every `**Accepted by:**` line names a scenario that exists in the `spec.md` beside this file. A journey accepted by nothing is not a journey."
+    - "The schema instruction above holds the journey rules; `pnpm check:manual` enforces the role, the `**Walked by:** nobody` exemption and every accepted-by id."
+    - "The file holds one `## User journeys` section and nothing else. Story ids are `<capability prefix>-US-<n>` in the heading, permanent and never renumbered; each `**Accepted by:**` line is `` `id` — Scenario title ``, never a comma-separated dump."
   test-cases:
-    - "One file per capability, at `specs/<capability-path>/feature-tcs.md`, beside that capability's `spec.md` and `user-journeys.md`."
-    - "A suite's file name carries its level: a capability writes `feature-tcs.md`, and a path across the capabilities of one domain writes `specs/<product>/<domain>/domain-tcs.md` beside them. The wider smoke passes - a product's `product-tcs.md`, the store's `platform-tcs.md` - are derived over the durable specs, not under a change. `test-cases.md` is not a suite name; the suites that carried it were renamed at tcs-rules r3.0."
-    - "A derived reading of those two files, never a second source of truth. `docs/governance/specs-to-test-cases.md` governs the whole shape - the journey sections, the case ids, the classification block, the `**Trace:**` line, and the file header. Follow that document; do not invent a variant."
-    - "Draft with the `spec-to-tcs` skill and review with `tcs-review` rather than writing by hand. `pnpm run tcs:validate` checks every suite in the store, and CI runs it on every push."
-    - "Every `user-journeys.md` pairs with a `feature-tcs.md` beside it, drafted by the PM in the same change. The one exemption is a capability whose journeys file says `**Walked by:** nobody` - nothing to derive, so write no suite for it. One with no journeys file at all is a `pnpm check:manual` failure, not an exemption."
+    - "`docs/governance/specs-to-test-cases.md` governs the shape and `.claude/skills/planning-qa/SKILL.md` the workflow: draft with `spec-to-tcs`, review with `tcs-review`, check with `pnpm run tcs:validate`. `test-cases.md` is not a suite name."
   tech-design:
-    - "Use top-level sections for Context, Goals / Non-Goals, Decisions, each material implementation contract, Risks / Trade-offs, and Migration Plan. Database Schema and Service Interfaces are implementation contracts, not subsections of Decisions. Omit a section that does not apply."
-    - Use bullets and tables for dense technical material; reserve paragraphs for short connective text.
-    - Link the capability spec rather than restating requirements.
-    - Screens and Figma sources belong in ui-design.md.
-    - Record alternatives considered for each decision; engineering inherits these trade-offs.
-    - "For a data-model change, add a top-level Database Schema section that names owning and affected tables, gives proposed columns with types and nullability, states keys, constraints and indexes, distinguishes authoritative from derived data, and includes an ER diagram for the relevant relationships."
-    - "For each added or changed column under Database Schema section, Postgres type, nullability, and default, matching the existing schema's conventions. Reuse a table or stamp that already holds the fact; do not add a second column for the same message. Spec fields read from another row at query time are not stored."
-    - "For a service change, add a top-level Service Interfaces section that models each service function as a processor with one fixed input shape and one fixed success/refusal output shape. State transaction ownership, locks, reads, writes, idempotency, faults, and the boundary between entrypoint, service, repository, and persistence."
-    - "For every flow that mutates multiple tables, name the mutation order and atomic boundary, then give concrete example input and output values showing the affected rows before or after processing."
-    - Show end-to-end identity and data enrichment when a request crosses browser, authenticated backend, service entrypoint, service, repository, or persistence boundaries.
-    - "API contracts are optional: include them only when the wire changes in a meaningful way (breaking rename, additive authenticated field, new admin read). Do not list unchanged endpoints."
-    - "Do not mitigate a risk with 'the spec says so'. Mitigation is an implementation control - a lock, a stamp, a state column."
+    - "The schema instruction above holds the section rules; `pnpm check:manual` refuses a change that owes this file and carries neither it nor `design_waived: <why>` in `.openspec.yaml`."
   ui-design:
-    - Link each screen's Figma frame rather than describing it in prose - the frame is the layout's source of truth.
-    - "Name design-system and packages/ui exports exactly - the export name is the cross-repo contract. A component, variant, or token that does not exist yet is work in grade10-spec; flag it so tasks carries it."
-    - A state with no spec scenario behind it means the spec is missing one - fix the spec, not the ui-design doc.
+    - "The schema text above and `.claude/skills/planning-design/SKILL.md` carry the rules: link the Figma frame, name exports exactly and flag what does not exist yet, and fix the spec when a state has no scenario."
   tasks:
-    - "Split groups by layer: shared types and interfaces first, then data migration, then backend and API, then frontend. Omit a layer the change does not touch rather than writing an empty group. When a change spans grade10-spec and an application repo, the grade10-spec groups land first - the submodule bump is the boundary."
-    - "Name a group's repository by its clone name in the group title - (grade10-spec), (grade10) - never 'this repo' or 'here': tasks.md is written in this store and read from the application repo, so a deictic reference flips meaning between the two."
-    - "Once the shared-interface group lands, backend and frontend groups depend on it, not on each other: write each so it can be claimed in parallel and verified on its own - frontend against the contracts and fixtures, never a running backend. When a group truly needs another group's landed code, say so in a prose line under its heading; otherwise group order is convention, not a dependency."
-    - Order groups so an engineer can ship and verify one group at a time, ending each group with its verification step.
-    - 'Phrase an implementation task as the spec scenario(s) it makes pass, naming them, so the scenario''s test is the evidence behind the checkmark. Never split "write the tests" into its own task or group - the engineer works test-first inside each task.'
-    - Keep each task to something one engineer finishes in a session.
-    - "Follow docs/governance/task-ownership.md for the group, task-id, and owner format. Write groups without owner tags - engineers claim them at pickup - and never renumber a group or task that is claimed or has checkmarks."
-    - "A change whose deltas touch a capability carries a task to update that capability's manual page (manual/ in this store, a grade10-spec group): the page tells the shipped story, and `pnpm check:manual` verifies it."
+    - "The schema instruction above holds the rules; `docs/governance/task-ownership.md` is the format tooling on both sides parses, and `pnpm check:manual` verifies the PRD task."
 
 # Per-operation guidance (optional)
 operations:
   apply:
     guidance:
-      - "There is nothing to apply until the change carries a tasks.md. A change that stops at its requirements is finished planning as far as its author is concerned; the engineer who picks it up writes tech-design.md when the change earns one, ui-design.md when it alters something a user sees, and tasks.md always. `openspec status --change <change-name>` lists what is still missing."
-      - "Run the implementing repository's `tdd` skill when it ships one (grade10 has it at `.claude/skills/tdd`); its red-green loop and test-quality rules govern the test-first work described next."
-      - "Work test-first inside each task, one scenario at a time: the seams under test are pre-agreed - they are the spec scenarios and public export contracts the task names, never internals. Write the failing test at that seam, then only enough code to make it pass."
-      - "Expected values in a test come from the spec or a worked example, never from recomputing what the code does; a test that breaks under refactor without a behavior change is testing the wrong thing."
-      - "Run the implementing repository's typecheck and the touched test or story files regularly as you go; run its full check suite once at the end of each group, as that group's verification step."
-      - "When the change's tasks are done, review the branch's diff along two axes and report them separately, never merged: does the code follow the repository's documented conventions, and does it implement exactly the change's delta specs - flag missing or partial requirements, behavior nobody asked for, and requirements that look implemented but wrong."
-      - "Commit to the current branch as tasks complete, keeping commits atomic per the repository's commit conventions."
+      - "Nothing to apply until tasks.md exists; `openspec status --change <name>` lists what is missing. Read `.claude/skills/openspec-apply-change/SKILL.md`, and run the implementing repository's `tdd` skill when it ships one (grade10: `.claude/skills/tdd`) - it governs the test-first loop."
+      - "A product detail learned while implementing - an outcome the code cannot deliver, a state nobody specified - lands on the capability's PRD first, marked 🚧 or ❓, then in the delta spec; never in the code alone."
+      - "Work test-first inside each task, one scenario at a time, at pre-agreed seams - the spec scenarios and public exports the task names, never internals. Expected values come from the spec or a worked example, never from what the code computes. Run the repository's typecheck and the touched tests as you go, and its full check suite at the end of each group as that group's verification."
+      - "When the tasks are done, review the branch's diff on two axes and report them separately: does it follow the repository's conventions, and does it implement exactly the delta specs - missing or partial requirements, behaviour nobody asked for, requirements implemented wrong."
+      - "Commit to the current branch as tasks complete, atomically, per AGENTS.md § Pull Requests and Commits."
   archive:
     guidance:
-      - Archive only after engineering confirms the change is deployed, not when the code merges.
-      - "Never archive a change that has a tasks.md with an unchecked task: finish it, or append its disposition (dropped, moved where, blocked on what) to the task text so the record stays honest. A change that never grew a tasks.md is archived once engineering confirms the specs it carries are deployed."
-      - "Copy the change's `## Feature set` into the durable spec, and its `user-journeys.md` into `openspec/specs/<capability-path>/user-journeys.md`, both by hand - the fold carries `## Requirements` alone, so the feature set and every `-US-` id die with the change otherwise."
-      - "Carry an approved `feature-tcs.md` across to the capability beside its spec, and a `domain-tcs.md` into the domain directory beside them, so the suites outlive the change that derived them."
-      - Re-read the updated main specs afterward and confirm they describe the shipped behavior.
-      - "Update the capability's manual page to the shipped story before archiving and run `pnpm check:manual` - the archive folds the spec, and a page telling the pre-change story is drift the reader sees first."
+      - "Archive only after engineering confirms the change is deployed, not when the code merges. `.claude/skills/openspec-archive-change/SKILL.md` and `pnpm run archive:preflight <change>` carry the steps."
+      - "Never archive with an unchecked task: finish it, or append its disposition (dropped, moved where, blocked on what) to the task text. A change that never grew a tasks.md is archived once its specs are confirmed deployed."
+      - "Copy the change's `## Feature set` and its `user-journeys.md` into the durable capability by hand - the fold carries `## Requirements` alone. Carry an approved `feature-tcs.md` beside the spec and a `domain-tcs.md` into the domain directory the same way. Re-read the folded specs and confirm they describe the shipped behaviour."
+      - "Update the capability's PRD to the shipped story before archiving - take the 🚧 marks off the lines this change delivered - and run `pnpm check:manual`."

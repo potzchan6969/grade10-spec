@@ -63,7 +63,7 @@ rewritten copy of the file. People discuss the delta, because the delta is
 what there is to decide.
 ## The work ticks in git
 A full change carries a task list, and a task is done when its box is ticked
-in a commit. Capability pages show the count the moment it moves. There is no
+in a commit. PRDs show the count the moment it moves. There is no
 board to update.
 ## The archive folds it in
 Once the code is live, archiving folds the delta into the durable specs and

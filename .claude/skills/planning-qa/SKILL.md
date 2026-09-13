@@ -1,28 +1,34 @@
 ---
 name: planning-qa
-description: Write QA's artifact on an OpenSpec change - the suite at every level, from the feature-tcs.md beside each capability's spec and journeys up to the domain, product and platform passes above it. Use when deriving, reviewing, or repairing a change's test suites.
+description: Review the feature-tcs.md the PM derived beside each capability's journeys, and write the domain, product and platform test-case passes above it. Use when reviewing or repairing a change's test suites, or deriving the suites above feature level.
 ---
 
-# QA's artifact
+# QA's part
 
-One of the seven artifacts in `grade10-planning` is yours:
+Of the seven artifacts in `grade10-planning`, one is yours to review; the
+suites above it are yours to write, and they live beside the durable specs:
 
-| Artifact | What it holds |
-| --- | --- |
-| `specs/platform-tcs.md` | The paths a person walks across products |
-| `specs/<product>/product-tcs.md` | The paths a person walks across that product's domains |
-| `specs/<product>/<domain>/domain-tcs.md` | The paths a person walks across that domain's capabilities |
-| `specs/<capability>/feature-tcs.md` | The classified suite the journeys and scenarios imply |
+| Suite | Where it lives | What it holds |
+| --- | --- | --- |
+| `specs/<capability>/feature-tcs.md` | In the change, beside the journeys | The classified suite the PM derived; you review it with `/tcs-review` |
+| `openspec/specs/<product>/<domain>/domain-tcs.md` | Beside the durable specs | The paths a person walks across that domain's capabilities |
+| `openspec/specs/<product>/product-tcs.md` | Beside the durable specs | The paths a person walks across that product's domains |
+| `openspec/specs/platform-tcs.md` | Beside the durable specs | The paths a person walks across products |
 
-The upper three are written only where a path exists to hold them, and carry
-no coverage obligation: `product` and `platform` are smoke passes.
+The upper three are written only where a path exists to hold them, never under
+a change's deltas, and carry no coverage obligation: `product` and `platform`
+are smoke passes.
 
 Derived, never a second source of truth. The PM drafts `feature-tcs.md`
 alongside the journeys with `/spec-to-tcs`; your work starts at review, and at
 the wider levels above it. A capability whose journeys file says
 `**Walked by:** nobody` has nothing to derive. Where a suite and its
 spec disagree, **the spec is correct** — regenerate the case, never the other
-way round.
+way round. A case that exposes a rule no spec states is a product detail, not
+a case: write the rule on the PRD as one ❓ line in the reader's words, then
+as a delta, and derive the case from that. A case, an edge, a boundary value
+or a precondition that only tests a stated rule is the suite's; the page shows
+the suite with `::cases`, never as prose.
 
 `docs/governance/specs-to-test-cases.md` governs the whole shape — the journey
 sections, the case ids, the classification block, the `**Trace:**` line, and
@@ -49,7 +55,7 @@ below inherit.
 A run above feature level reads more than the change: every sibling
 `user-journeys.md` in its scope — a domain's under
 `openspec/specs/<product>/<domain>/`, a product's across its domains, a
-platform's across products — and the product record under `docs/prds/` for the
+platform's across products — and the PRDs under `docs/prds/` for the
 decisions, the product's own names for surfaces and controls, and the seeded
 values a pass is written against. A case there **composes**: it traces two or
 more journeys, from two or more capabilities, domains or products, and a single

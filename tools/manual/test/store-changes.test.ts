@@ -34,6 +34,42 @@ describe("in-flight changes", () => {
     expect(change.owners).toEqual(["tester", "other"]);
   });
 
+  it("reads an owner tag the way task-ownership.md defines it", () => {
+    const root = writeStore({
+      "openspec/specs/demo/alpha/spec.md":
+        "# Alpha\n\n## Purpose\n\nA.\n\n## Requirements\n",
+      "openspec/changes/tagged/proposal.md":
+        "# Tagged\n\n## Why\n\nOwners are written by hand.\n",
+      "openspec/changes/tagged/tasks.md": [
+        "## 1. Contracts (grade10-spec) (owner: alice.b)",
+        "",
+        "- [ ] 1.1 Publish it",
+        "",
+        "## 2. Surface (grade10) (owner: unassigned)",
+        "",
+        "- [ ] 2.1 Render it",
+        "",
+        "## 3. Verify (grade10) (owner: @Alice.B)",
+        "",
+        "- [ ] 3.1 Check it",
+        "",
+      ].join("\n"),
+    });
+    const [entry] = readChanges(root, NO_GIT);
+    expect(entry.owners).toEqual(["alice.b"]);
+    expect(
+      entry.taskGroups.map(({ title, repo, owner }) => ({
+        title,
+        repo,
+        owner,
+      })),
+    ).toEqual([
+      { title: "Contracts", repo: "grade10-spec", owner: "alice.b" },
+      { title: "Surface", repo: "grade10", owner: undefined },
+      { title: "Verify", repo: "grade10", owner: "alice.b" },
+    ]);
+  });
+
   it("takes the author handle from the proposal's author line", () => {
     expect(change.author).toBe("tester");
   });

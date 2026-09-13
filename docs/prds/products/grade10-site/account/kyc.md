@@ -209,47 +209,7 @@ which settles its own paperwork
 - **The gates** — `checkout.createCheckout`, `createCheckoutWithEmail` and
   `auction.placeBid` in the store's tRPC routers, on `identityGates` from
   `@grade10/app-env`
-:::
-
-:::detail{title="Service design" for="engineer"}
-`packages/e-kyc/` in the application repository, deployed once per brand —
-`grade10-e-kyc-service` for Grade10, with its own Neon project and bucket, and
-a `BRAND` var that selects the hosted template. Its entire HTTP surface is a
-health route and dev setup; everything a product asks arrives over a service
-binding, minted per product by a class factory in two kinds. The service —
-the record, its case bindings and the five hosted calls — is what a host
-holds as `KYC_SERVICE`: the vault for its cases, the store for the site's own
-accounts. The gate — one method, a person's standing and no identity field —
-is what a product that only reads would hold; none does today, and the
-factory is published for the day one does.
-
-Writes and case bindings are scoped to the calling product by the entrypoint its
-binding names. What cannot be scoped is the person: `latestForUser` and the
-standing read across every product deliberately, and that read is the whole
-reason this service left the vault.
-
-Capture keys are content-addressed, so the object name is the digest of its
-bytes and no folder scheme exists. Two mechanisms move bytes out, and only one is
-erasure: a purge drain settles rows first and bytes second, re-judging each key
-immediately before deleting it; an hourly orphan sweep is garbage collection,
-reclaiming aged objects no row names, with three proofs before every delete.
-There is no deletion-log sweep here at all — erasure arrives as the owning
-product releasing its binding, because only that product knows whether the
-evidence is under legal hold.
-
-The record carries a provider and a provider reference: constants on a counter
-check, the vendor's on a hosted one. The hosted check's own life — raise with
-reuse first, open, start, settle, withdraw, the two sweeps and the three
-routes — is published by the package over a host port the product supplies,
-and the collector's page is the package's own slice; the vault is the first
-host, and a second product mounts the same hundred lines. A case binds exactly
-one identity, enforced by the bindings table's primary key; the document-number
-digest carries no unique index and nothing queries it.
-
-Background:
-[account data](https://github.com/9gag/grade10/blob/main/docs/architecture/account-data.md)
-and
-[the vault](https://github.com/9gag/grade10/blob/main/docs/architecture/vault.md).
+- **Service design** — [the working note](/references/kyc-service-design)
 :::
 
 :::detail{title="Product decisions" for="pm"}

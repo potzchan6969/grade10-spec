@@ -28,9 +28,19 @@ import { readIdleClaims } from "./idle.mts";
 import { leadingTitle, outline, type Section } from "./markdown.mts";
 import { readTestCases } from "./read-specs.mts";
 
-const OWNER = /\(owner:\s*@([A-Za-z0-9][A-Za-z0-9_-]*)\)/g;
-const OWNER_TAG = new RegExp(OWNER.source);
-const HANDLE = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
+// The owner tag as `docs/governance/task-ownership.md` defines it: the `@` is
+// optional, a handle may hold `.`, and it matches case-insensitively.
+// `(owner: unassigned)` and no tag are the same thing.
+const OWNER = /\(owner:\s*@?([A-Za-z0-9][A-Za-z0-9._-]*)\)/gi;
+const OWNER_TAG = new RegExp(OWNER.source, "i");
+const HANDLE = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+const UNASSIGNED = "unassigned";
+
+/** The handle an owner tag names, lower-cased; nobody for `unassigned`. */
+function taggedOwner(text: string): string | undefined {
+  const handle = OWNER_TAG.exec(text)?.[1].toLowerCase();
+  return handle && handle !== UNASSIGNED ? handle : undefined;
+}
 const GROUP_HEADING = /^(\d+)\.\s*(.+)$/;
 const REPO_TAG = /\s*\(([^()@]+)\)\s*$/;
 const CHECKBOX = /^\s*-\s*\[( |x|X)\]\s?(.*)$/;
@@ -170,7 +180,10 @@ function readChange(
   const detailed = status === "in-flight";
   const tasks = readTextIfExists(join(dir, "tasks.md"));
   if (tasks !== undefined) {
-    entry.owners = [...new Set([...declared, ...matchAll(tasks, OWNER)])];
+    const tagged = matchAll(tasks, OWNER)
+      .map((one) => one.toLowerCase())
+      .filter((one) => one !== UNASSIGNED);
+    entry.owners = [...new Set([...declared, ...tagged])];
     try {
       entry.taskGroups = readTaskGroups(
         tasks,
@@ -274,8 +287,8 @@ function strings(value: unknown): string[] {
  * same people; anything that is not a handle is not one. */
 function handles(values: unknown[]): string[] {
   const named = strings(values.flat())
-    .map((one) => one.replace(/^@/, "").trim())
-    .filter((one) => HANDLE.test(one));
+    .map((one) => one.replace(/^@/, "").trim().toLowerCase())
+    .filter((one) => HANDLE.test(one) && one !== UNASSIGNED);
   return [...new Set(named)];
 }
 
@@ -378,7 +391,7 @@ function readTaskGroups(
         continue;
       }
       const num = match[1];
-      const owner = OWNER_TAG.exec(match[2])?.[1];
+      const owner = taggedOwner(match[2]);
       const title = match[2].replace(OWNER, "").trimEnd();
       const repo = REPO_TAG.exec(title);
       const tasks = readTaskLines(section.raw);
@@ -406,7 +419,7 @@ function readTaskLines(text: string): TaskLine[] {
   for (const line of text.split("\n")) {
     const box = CHECKBOX.exec(line);
     if (!box) continue;
-    const owner = OWNER_TAG.exec(box[2])?.[1];
+    const owner = taggedOwner(box[2]);
     const task: TaskLine = {
       text: box[2].replace(OWNER, "").trim(),
       done: box[1] !== " ",

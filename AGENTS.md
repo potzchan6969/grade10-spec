@@ -5,7 +5,7 @@ This repository is the versioned source of truth for product requirements and th
 ## Operating principles
 
 - Treat product managers, designers, and engineers as collaborators. Check existing PRDs, specs, primitives, and conventions before proposing a new structure.
-- Write everything — specs' prose, PRDs, manual pages, commits, replies — in the house style, [`docs/governance/writing.md`](docs/governance/writing.md): headings as plain Title Case labels, values first, items leading with the key term in bold, the reader's words, short sentences with no flourish, decided facts flat and present-tense, ❓ or `TBC` on anything unconfirmed, 🚧 only on what is confirmed and being built. Copy `docs/prds/products/grade10-site/loyalty/points.md` for a page about rules and `docs/prds/products/grade10-site/store/product-listing.md` for a page about a surface. Never cite a scenario id (`…-SC-32`) on a manual page — state the rule and link the capability.
+- Write everything — specs' prose, PRDs, manual pages, commits, replies — in the house style, [`docs/governance/writing.md`](docs/governance/writing.md): headings as plain Title Case labels, values first, items leading with the key term in bold, the reader's words, short sentences with no flourish, decided facts flat and present-tense, ❓ or `TBC` on anything unconfirmed, 🚧 only on what is confirmed and being built. Copy the page its Copy table names for the kind of page you are writing — `docs/prds/products/grade10-site/loyalty/points.md` and `tiers.md` for rules, `coupons.md` for an instrument and its refusals, `docs/prds/products/grade10-site/store/product-listing.md` for a surface. Never cite a scenario id (`…-SC-32`) on a manual page — state the rule and link the capability. A page holds only what its reader would act differently without; a case that proves a rule, a state that dresses an outcome, and a mechanism belong to the suite, the design record and the architecture doc, and `pnpm check:manual` warns (`dense`) on a page past the style's budget.
 - Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
 - Keep changes reviewable: one product decision or component capability per pull request where practical.
 - Do not modify generated `packages/design-system/src/theme.css` or `src/themes/grade10.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
@@ -15,7 +15,7 @@ This repository is the versioned source of truth for product requirements and th
 | Need | Canonical location | Notes |
 | --- | --- | --- |
 | Durable requirements and component export contracts | `openspec/specs/<product>/<domain>/<capability>/spec.md` | The production shape: what runs, rewritten only by a change's fold at archive. An implementing engineer builds from this alone. The four applications - `grade10-site`, `grade10-admin`, `zzz-site`, `zzz-admin` - and the `shared` layer are listed in `openspec/specs/README.md`. |
-| The product record: what a capability is and should be, and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` | Written first. The manual (`pnpm manual`) renders these pages; each names its spec and carries the shape in prose — what runs unmarked, 🚧 on what an active change delivers, ❓ on what nobody has confirmed — with problem, users, non-goals, measurement and decisions in its `Product decisions` block. Never restates a requirement. Page grammar: `docs/prds/guides/writing-the-manual.md`. |
+| The PRD: what a capability is and should be, and the decision behind its requirements | `docs/prds/products/<product>/<capability>.md` | Written first, and moved first by whoever learns a product detail — PM, designer, QA or engineer; the product manager keeps it whole. The manual (`pnpm manual`) renders these pages; each names its spec and carries the shape in prose — what runs unmarked, 🚧 on what an active change delivers, ❓ on what nobody has confirmed — with problem, users, non-goals, measurement and decisions in its `Product decisions` block. Never restates a requirement. Page grammar: `docs/prds/guides/writing-the-manual.md`. |
 | Source material behind a decision | `docs/references/<doc>.md` | Owner's drafts, competitor research, vendor-integration working notes — what a page or change cites as evidence; the manual renders them under References. Explanatory, never authoritative. See `docs/references/README.md`. |
 | Proposed implementation change | `openspec/changes/<change-name>/` | Delta proposal, design, specs, and tasks; archive after delivery. |
 | Who walks a capability, and what accepts their story | `user-journeys.md` beside its `spec.md` | The INVEST stories and the scenario ids that accept each. A capability nobody reaches on its own — a cross-cutting policy, a package contract, a surface only its makers reach — writes `**Walked by:** nobody` there in place of the stories; `pnpm check:manual` fails a capability with neither. |
@@ -34,7 +34,7 @@ Read [`docs/governance/design-system-workflows.md`](docs/governance/design-syste
 
 ## Product specification workflow
 
-One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the whole lifecycle in seven artifacts. `openspec new change <name>` records it in the change's `.openspec.yaml`.
+One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the whole lifecycle in seven artifacts. `openspec new change <name>` records it in the change's `.openspec.yaml`. The CLI is `@fission-ai/openspec@1.8.0`; `pnpm openspec …` runs it with no global install.
 
 | # | Artifact | Written by | Skill | Required |
 | --- | --- | --- | --- | --- |
@@ -43,24 +43,26 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Always — a capability nobody walks says so in it |
 | 4 | `specs/<capability>/feature-tcs.md` | Product manager | `planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
 | 5 | `ui-design.md` | Designer | `planning-design` | Optional |
-| 6 | `tech-design.md` | Engineer | `planning-dev` | Optional |
+| 6 | `tech-design.md` | Engineer | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
 | 7 | `tasks.md` | Engineer | `planning-dev` | Before the change can be applied |
 
-Each hand writes its own artifacts on the one change and stops: a PM finishes at the feature suites derived from the journeys, QA reviews and extends them, a designer writes `ui-design.md`, and the engineer who picks the work up adds `tech-design.md` and `tasks.md` to the same change rather than opening a second one. That is the only route, because engineering never opens a change in the application repository: that repository's `openspec/` is config-only and resolves to this store, and until a change has a `tasks.md` it shows on the engineer's board as still being planned.
+Each hand writes its own artifacts on the one change and stops: a PM finishes at the feature suites derived from the journeys, QA reviews and extends them, a designer writes `ui-design.md`, and the engineer who picks the work up adds `tech-design.md` and `tasks.md` to the same change rather than opening a second one. Engineering never opens a change in the application repository: its `openspec/` is config-only and resolves to this store. Until a change has a `tasks.md` it shows on the engineer's board as still being planned. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
 
-The journeys are their own file beside each `spec.md`, never a `## User journeys` section inside it — `pnpm check:manual` refuses a spec that holds one, and the archive copies the file across by hand alongside the feature set. Every capability has the file: it holds the stories, or the one line `**Walked by:** nobody on their own - <why>` for a policy, a package contract, a convention, or a surface only the product's makers reach. A capability with neither fails `pnpm check:manual`, so an exemption is always a decision on record and never an omission.
+The PRD is the exception to hands. It is the source of truth for what the product should be, so a product detail learned anywhere — a designer's state, an engineer's constraint, a QA case that exposes a rule nobody wrote, a delta that says more than the PRD does — lands on the PRD first, marked 🚧 or ❓, by whoever learned it, before the artifact that depends on it. A product detail is a line the reader would act differently without — a value, a set they meet, an outcome they see, a decision — and one 🚧 line carries an outcome however many scenarios prove it; what each hand learns beyond that stays in its own artifact, tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#what-does-not-go-on-the-prd). The product manager keeps the PRD whole.
+
+The journeys are their own file beside each `spec.md`, never a `## User journeys` section inside it — `pnpm check:manual` refuses a delta that holds one, and the archive copies the file across by hand alongside the feature set. Every capability has the file: it holds the stories, or the one line `**Walked by:** nobody on their own - <why>` for a policy, a package contract, a convention, or a surface only the product's makers reach. A capability with neither fails `pnpm check:manual`, so an exemption is always a decision on record and never an omission.
 
 For a new product feature:
 
-1. Read the capability's page in `docs/prds/`, the active OpenSpec changes on its spec, and the capability in `openspec/specs/`.
+1. Read the capability's PRD in `docs/prds/`, the active OpenSpec changes on its spec, and the capability in `openspec/specs/`.
 2. Mark the pages the feature touches: one 🚧 line per outcome, ❓ on what is still open, and the decisions the feature turns on. An active change already folding the same requirement is extended or superseded, never doubled.
 3. Write the requirements as an OpenSpec change carrying deltas derived from those lines against `openspec/specs/<product>/<domain>/<capability>/spec.md`, linking every page it marked. Its proposal must identify affected component exports and consumer apps.
-4. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. It lands in the capability page's `Product decisions` block; skip it when there is no such judgment.
+4. Use the `prd-authoring` skill when the feature turns on a product judgment the requirement text will not preserve — why this problem, for whom, what was ruled out, what will be measured. It lands in the PRD's `Product decisions` block; skip it when there is no such judgment.
 5. Keep task checkboxes accurate as work lands; fold accepted deltas into `openspec/specs/`, take the 🚧 marks off the lines the change delivered, then archive under `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
 
 Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflow-example.md) for one feature walked through both repositories, from `openspec new change` to archive.
 
-Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the capability page's decisions table when one exists.
+Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
 
 ## Product UI component contracts
 
@@ -97,6 +99,10 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
+- `pnpm check:manual` after a page, a change, or a suite changes; CI runs it on every push and refuses a change with an unmarked page, application work with no tech design, a capability with no journeys file, and a 🚧 line no change delivers. It warns (`dense`) on a page past the style's budget, tabled under Enforcement in `docs/governance/writing.md`.
+- `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
+- `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
+- `pnpm run test:openspec` after anything under `scripts/openspec/` changes.
 - `pnpm run tcs:validate` after a suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — changes; CI runs it on every push.
 - `pnpm run design-sync:check` after a design-system primitive changes.
 - `pnpm run diagrams` after a chart source under `docs/prds/diagrams/` changes; commit the rendered SVG, which `pnpm run diagrams:check` holds to its source in CI.

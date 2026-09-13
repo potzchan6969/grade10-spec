@@ -30,8 +30,15 @@ A section that would only repeat one of them points at it instead.
 
 1. **Read what already exists.** The change's `specs/<capability>/spec.md` and
    `user-journeys.md` — the states you document are the scenarios those
-   already define. Then the capability's page under `docs/prds/` when one
-   exists.
+   already define. Then the capability's PRD under `docs/prds/` when one
+   exists. A state or a variant you decide goes on the PRD first, before
+   `ui-design.md` cites it, only when it changes an outcome the reader
+   meets — what they can do, see counted, or are refused — and then as one
+   🚧 line that replaces the line it supersedes, never beside it. Everything
+   else — a breakpoint, a token, a label rule, an empty, loading or error
+   treatment — is a row in this file's States table and a `::story` card on
+   the page. A 🚧 line that names a control, a drawer or a pill is a
+   description: rewrite it as the outcome, or drop it.
 2. **Read the enriched instructions.**
 
    ```bash

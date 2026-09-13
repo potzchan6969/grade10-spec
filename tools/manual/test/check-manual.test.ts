@@ -90,11 +90,14 @@ describe("a store that has drifted", () => {
     ]);
   });
 
-  it("warns rather than fails on a link", async () => {
+  it("warns rather than fails on a link, and on a walked capability with no suite", async () => {
     const warnings = (await result).findings.filter(
       (one) => one.level === "warn",
     );
-    expect(warnings.map((one) => one.rule).sort()).toEqual(["figma"]);
+    expect(warnings.map((one) => one.rule).sort()).toEqual([
+      "derived",
+      "figma",
+    ]);
   });
 
   it("names the capabilities that never say who walks them", async () => {
@@ -108,8 +111,8 @@ describe("a store that has drifted", () => {
     const root = fixture("broken");
     const report = formatReport(root, await result);
     expect(report.failures).toBe(11);
-    expect(report.warnings).toBe(1);
-    expect(report.text).toContain("11 failures, 1 warning");
+    expect(report.warnings).toBe(2);
+    expect(report.text).toContain("11 failures, 2 warnings");
   });
 });
 
@@ -1042,7 +1045,7 @@ describe("the record a change leaves", () => {
     expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([]);
   });
 
-  it("refuses a change that links no section of a capability's page", async () => {
+  it("refuses a change that links no section of a PRD", async () => {
     const root = writeStore(
       carrying(
         { "docs/prds/products/demo-product/alpha.md": MARKED },
@@ -1050,7 +1053,7 @@ describe("the record a change leaves", () => {
       ),
     );
     expect(lines(await runChecks(root, NO_GIT), "unmarked")).toEqual([
-      "openspec/changes/build-alpha/proposal.md — links no section of a capability's page — mark what this change delivers, or say why in `page_waived`",
+      "openspec/changes/build-alpha/proposal.md — links no section of a PRD — mark what this change delivers, or say why in `page_waived`",
     ]);
   });
 
@@ -1127,6 +1130,17 @@ describe("the record a change leaves", () => {
       lines(await runChecks(planned("1. Build it"), NO_GIT), "design"),
     ).toEqual([
       "openspec/changes/build-alpha/tasks.md — group 1 names no repository, so the work lands outside this store and has no `tech-design.md` — write it, or say why in `design_waived`",
+    ]);
+  });
+
+  it("names a product tagged as a repository, rather than asking for a design", async () => {
+    expect(
+      lines(
+        await runChecks(planned("1. Build it (demo-product)"), NO_GIT),
+        "design",
+      ),
+    ).toEqual([
+      "openspec/changes/build-alpha/tasks.md — group 1 names `demo-product`, a product under `openspec/specs/`, not a repository — tag the group `(grade10-spec)` for work landing here, or the application's clone name, and keep the product in the title",
     ]);
   });
 

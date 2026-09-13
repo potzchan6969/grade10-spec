@@ -7,6 +7,7 @@ nearest your task and keep it open while you draft.
 | Writing | Copy |
 | --- | --- |
 | A page about rules and numbers | `docs/prds/products/grade10-site/loyalty/points.md` and `tiers.md` |
+| A page about an instrument and its refusals | `docs/prds/products/grade10-site/loyalty/coupons.md` |
 | A page about a surface | `docs/prds/products/grade10-site/store/product-listing.md` |
 | An owner's draft or a reference | `docs/references/grade10-finance.md` |
 | A page block — flow, example, detail, callout | `docs/prds/guides/writing-the-manual.md` |
@@ -43,9 +44,12 @@ nearest your task and keep it open while you draft.
   notice, or none where the table already says it
 - **A flow for steps between systems** — each step `*Actor* — **What
   happens**`, a line of plain words, and the real payload where one exists
-- **A closed set is stated whole** — every state, every refusal, every
-  tier the reader can meet, in their words. A set stated in part is worse
-  than none, because nothing says it was partial
+- **A closed set the reader meets is stated whole** — every tier, every
+  refusal they are shown, every state they can be in, as a table in their
+  words. A set stated in part is worse than none, because nothing says it
+  was partial. A set only an engineer or a tester meets is the spec's and
+  the suite's; a surface's own states — empty, loading, error, narrow —
+  are `::story` cards and the change's `ui-design.md`, never a list
 - **Marks** — two, and never both on one line:
   - ❓, spelled `TBC` where words fit better, marks what nobody has
     confirmed — a decision, a value, a name, whether a way exists — and
@@ -54,7 +58,11 @@ nearest your task and keep it open while you draft.
     its pending spec, so a mark is written where a reader can act on it
   - 🚧 starts a line that is confirmed and being built; the page says what
     will run, and an active change on the page's spec is delivering it. The
-    mark comes off when that change archives. A line still open is never 🚧
+    mark comes off when that change archives. A line still open is never 🚧.
+    One line per outcome the reader can see; the scenarios that prove it
+    are the delta's, however many. A 🚧 inside a flow step, a sub-step, or
+    mid-sentence is a scenario wearing a mark: lift it to its section as
+    one outcome, or drop it
 
 ## Voice
 
@@ -93,6 +101,15 @@ nearest your task and keep it open while you draft.
 
 ## Placement
 
+- **A line earns its place** — the reader would act differently without
+  it: a value, a set they can meet, an outcome they can see, a decision. A
+  line a stated rule already implies is the spec's; a case that only
+  proves a rule is the suite's; how a surface arranges, labels or sizes an
+  outcome is the design record's; how the code does it is the architecture
+  doc's. The page is the essence a reader expands from, never the
+  expansion: the manual renders the suite under the page's `::cases`
+  block, the change's artifacts on its In Flight entry, and the
+  architecture doc from the engineer block's links
 - **The spec holds the contract** — a testable statement lives in
   `openspec/specs/` and nowhere else. A page distills and links, never
   restates, and never cites a scenario id (`…-SC-32`): it states the rule
@@ -124,6 +141,25 @@ nearest your task and keep it open while you draft.
 - **A rewrite cuts** — moving a fact off the page to where it belongs, or
   deleting one the page never owned, is part of the rewrite, not a loss.
   What survives is reshaped; what does not belong is removed
+
+## Where a Rule Lives
+
+Instruction text for agents follows Placement too, with the load path as the
+page. A load path is what a worker holds when it writes: `AGENTS.md` on every
+path; the CLI's payload — the schema instruction, the template and that
+artifact's `rules` block in `openspec/config.yaml` — on a change artifact; a
+skill and the one document it names on a command.
+
+- **One home per rule per path** — a rule a check enforces is named by its
+  check and written nowhere else; a rule only prose enforces is written once
+  on each path that needs it, as a rule, never as a list of topics. A second
+  surface on the same path links the heading, in its own casing
+- **Examples live in the corpus** — point at an approved case; a pasted one
+  drifts, the corpus is validator-held
+- **A budget holds the always-loaded surfaces** — `pnpm run test:openspec`
+  fails `AGENTS.md` or a `rules` block past its recorded size, and a skill
+  pointer that names no rulebook section. Raising a budget is a commit that
+  says why
 
 ## Before and After
 
@@ -240,29 +276,33 @@ Words that were swapped:
 
 Read the draft once as the least-informed reader who has to act on it.
 
-1. **Opening** — does a page about rules start on a heading and a table?
-2. **Headings** — does every `##` read as a plain Title Case label?
-3. **Paragraphs** — does any section run past two sentences before its
+1. **Cut** — read every line against the first Placement rule: would the
+   reader act differently without it? A line that fails is moved to the
+   spec, the suite, the design record or the architecture doc, or deleted
+2. **Opening** — does a page about rules start on a heading and a table?
+3. **Headings** — does every `##` read as a plain Title Case label?
+4. **Paragraphs** — does any section run past two sentences before its
    items? Turn the rest into items
-4. **Items** — does every item lead with a bold term, and every sibling
+5. **Items** — does every item lead with a bold term, and every sibling
    share its form?
-5. **Examples** — does every rule that moves numbers over steps or days
-   have a worked ledger? Write one where none exists; it adds no fact
-6. **Words** — is every word one the reader would say, and the same word
+6. **Examples** — does every rule that moves numbers over steps or days
+   have a worked ledger? One ledger per rule, on the case that decides it;
+   it adds no fact
+7. **Words** — is every word one the reader would say, and the same word
    on every page?
-7. **Sentences** — is any one carrying a metaphor, a twist, or a second
+8. **Sentences** — is any one carrying a metaphor, a twist, or a second
    fact?
-8. **Drift** — is there a warning or a note that the spec or the code says
+9. **Drift** — is there a warning or a note that the spec or the code says
    otherwise, an unsigned `warning` callout, or a list of what is built
    against what is decided? Delete it; a decided-but-unbuilt fact is a 🚧
    line in the section it belongs to
-9. **Engineer block** — does it hold anything but names and links? Delete
-   the rest
-10. **Ownership** — is anything left that is the spec's statement, an
+10. **Engineer block** — does it hold anything but names and links? Delete
+    the rest
+11. **Ownership** — is anything left that is the spec's statement, an
     embedded spec, a sibling's rule, or a flow a sibling already walks? Is
     anything about this page's topic still sitting on a sibling?
-11. **Marks** — is everything unconfirmed ❓ or `TBC`, and 🚧 only on
-    what is confirmed and being built?
+12. **Marks** — is everything unconfirmed ❓ or `TBC`, and 🚧 only on
+    what is confirmed and being built, one line per outcome?
 
 A draft that fails one line is rewritten.
 
@@ -271,9 +311,14 @@ A draft that fails one line is rewritten.
 - **`pnpm check:manual`** — structure and references: canonical form,
   resolving ids, block attributes, a ledger whose balance does not add up,
   a flow whose cases cannot be told apart, a 🚧 line no in-flight change
-  delivers; and a warning where a spec's requirements changed meaning after
+  delivers; a warning where a spec's requirements changed meaning after
   the page that embeds it was last committed, cleared by the edit the page
-  needs or by `reviewed:` dated in its frontmatter when it needs none
+  needs or by `reviewed:` dated in its frontmatter when it needs none; and
+  a `dense` warning where a page runs past 120 lines of prose outside its
+  examples and details, a section opens on more than six sentences before
+  its items, an engineer block holds a paragraph, or a 🚧 sits inside a
+  flow step or mid-line. A warning asks for the rewrite and never blocks a
+  fold
 - **Review** — voice and shape are held here the way code is held to the
   spec
 - **The `writing-style` skill** — an agent loads it before drafting, and it

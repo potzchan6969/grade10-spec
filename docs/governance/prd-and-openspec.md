@@ -1,6 +1,6 @@
-# PRDs and OpenSpec: the page first, the spec as what runs
+# PRDs and OpenSpec: the PRD first, the spec as what runs
 
-A capability's page under `docs/prds/` is written first. It holds everything the product should be — what runs, what is confirmed and being built, and what nobody has confirmed — each told apart by its mark. `openspec/specs/` is the production shape: every checkable requirement of what runs today, rewritten only when a change archives. An engineer in a consuming application builds from the spec alone.
+A capability's PRD under `docs/prds/` is written first, and it moves first: whoever learns a product detail — PM, designer, QA or engineer — writes it there, marked 🚧 or ❓, before the delta, the design, the suite or the code that depends on it. The product manager keeps the PRD whole. It holds everything the product should be — what runs, what is confirmed and being built, and what nobody has confirmed — each told apart by its mark. `openspec/specs/` is the production shape: every checkable requirement of what runs today, rewritten only when a change archives. An engineer in a consuming application builds from the spec alone.
 
 ## The rule
 
@@ -16,18 +16,31 @@ Every checkable requirement and every cross-repository contract lives in `opensp
 
 ## Which artifact answers which question?
 
-| Dimension | PRD (`docs/prds/` page) | `openspec/changes/` | `openspec/specs/` |
+| Dimension | PRD (`docs/prds/`) | `openspec/changes/` | `openspec/specs/` |
 | --- | --- | --- | --- |
 | Primary question | What is this, what should it be, why, for whom, and what did we rule out? | What is changing, and how will it be delivered? | What runs today, checkably? |
 | Primary audience | Everyone who reads the manual; the decisions block is for product managers, designers, reviewers | Whoever is delivering the change | Engineers and implementation agents in consuming applications |
 | Authority | Canonical for what the product should be; its marks say which lines are not yet running. Never restates a requirement. | Canonical for the in-flight delta only, until archived | Canonical for what runs. Wins any conflict with an unmarked line. |
 | Lifespan | Durable; written first, edited as intent changes, marks taken off at archive | Archived after delivery | Durable; rewritten by the fold at archive |
-| Typical content | The shape in prose with its marks, journeys and cases, visuals; then users and jobs, non-goals, measurement, decisions, risks | Proposal, design, requirement deltas, journeys, suites, tasks | Requirements, scenarios, state behavior, accessibility obligations, content ownership, named component exports |
-| Content to keep out | Anything testable; today's gap and the intended fix, which belong to the proposal; a long draft, which belongs under `docs/references/` | The full product narrative | Class, hook, or library names — those are `tech-design.md`'s job |
+| Typical content | The shape in prose with its marks, its values, the sets the reader meets, visuals; then users and jobs, non-goals, measurement, decisions, risks | Proposal, design, requirement deltas, journeys, suites, tasks | Requirements, scenarios, state behavior, accessibility obligations, content ownership, named component exports |
+| Content to keep out | Anything testable; a case, a state or a mechanism that only expands a stated line; today's gap and the intended fix, which belong to the proposal; a long draft, which belongs under `docs/references/` | The full product narrative | Class, hook, or library names — those are `tech-design.md`'s job |
 
 Public component exports are the exception to "no names in a spec": the export name *is* the contract between this repository and the application that implements it, so specs name it. Internal structure still belongs in `tech-design.md`.
 
 Source material behind a decision — an owner's draft, competitor research, a vendor-integration reference — lives in [`docs/references/`](../references/README.md), which the manual renders under References; a page cites it as evidence and never defers to it.
+
+## What Does Not Go on the PRD
+
+The PRD moves first, whoever learns the detail — and a detail is a line the reader would act differently without: a value, a set they can meet, an outcome they can see, a decision. That is the whole test, the first Placement rule of [`writing.md`](writing.md). Everything each hand learns beyond it has a home of its own, and the page shows it from there rather than restating it:
+
+| Hand | Goes on the PRD | Stays in its own artifact |
+| --- | --- | --- |
+| Product manager | One 🚧 line per outcome the reader can see, in the section it belongs to; a ❓ line or decisions row for what is open | The scenarios that prove an outcome, however many — the delta's. A 🚧 inside a flow step, a sub-step or mid-sentence is a scenario wearing a mark |
+| Designer | A state or a variant that changes an outcome the reader meets — what they can do, see counted, or are refused — as one 🚧 line that replaces the line it supersedes | A breakpoint, a token, a label rule, an empty, loading or error treatment — `ui-design.md`'s States table and a `::story` card on the page |
+| QA | A rule the reader would act on that no spec states, as one ❓ line stating the rule | A case, an edge, a boundary value, a precondition that only tests a stated rule — `feature-tcs.md`; the page shows the suite with `::cases`, never as prose |
+| Engineer | A constraint that changes an outcome, as a 🚧 or ❓ line | A mechanism, a key, a lock, a metric, a sweep, what was tried and dropped — the application repository's architecture doc, which the page's engineer block links as a code map |
+
+A page over the budget is the expansion, not the essence: `pnpm check:manual` warns (`dense`) past 120 lines of prose outside its examples and details, on a section opening on more than six sentences, on an engineer block holding a paragraph, and on a 🚧 inside a flow step or mid-line. The warning asks for the cut and never blocks a fold.
 
 ## When to use each
 
@@ -43,20 +56,20 @@ Source material behind a decision — an owner's draft, competitor research, a v
 
 ## Maintenance workflow for future agents
 
-### 1. Start with the page
+### 1. Start with the PRD
 
 Before proposing or implementing a feature, read in this order:
 
-1. the capability's page in `docs/prds/`, for what runs, what is coming, and the rationale;
+1. the capability's PRD in `docs/prds/`, for what runs, what is coming, and the rationale;
 2. any active change in `openspec/changes/` touching that capability — every 🚧 line on the page belongs to one;
 3. the capability in `openspec/specs/`, for the checkable form of what runs; and
 4. the design-system primitives in `packages/design-system/src/components/`, plus the component's implementation in the consuming application, when UI is involved.
 
 If an unmarked line and the spec disagree, the spec is right about what runs: fix the line, or mark it 🚧 or ❓ if it was stating intent.
 
-### 2. Mark the page
+### 2. Mark the PRD
 
-A change starts on the pages it touches. For each, add one 🚧 line per outcome, in the reader's words and in the section the outcome belongs to; add a ❓ line or row for what the author left open; add or update the rows of the decisions block the change turns on. Then link every section the change marked from the proposal's `## References`, as `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`: the manual shows the change under that heading, and `pnpm check:manual` refuses a link to a section that does not exist. It also refuses a change carrying deltas whose links reach no 🚧 line at all; `page_waived: <why>` in the change's `.openspec.yaml` stands in for the mark. The deltas are then derived from the 🚧 lines, so a delta promising what no line marks is the delta's error.
+A change starts on the PRDs it touches, whoever starts it. For each, add one 🚧 line per outcome, in the reader's words and in the section the outcome belongs to; add a ❓ line or row for what the author left open; add or update the rows of the decisions block the change turns on. Then link every section the change marked from the proposal's `## References`, as `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`: the manual shows the change under that heading, and `pnpm check:manual` refuses a link to a section that does not exist. It also refuses a change carrying deltas whose links reach no 🚧 line at all; `page_waived: <why>` in the change's `.openspec.yaml` stands in for the mark. The deltas are then derived from the 🚧 lines, so a delta promising what no line marks is the delta's error.
 
 ### 3. Write requirements into the change's delta
 
@@ -88,11 +101,30 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 - `tech-design.md` — implementation choices, interfaces, compatibility, and validation approach; and
 - `tasks.md` — small, checkable delivery steps.
 
-Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. Update the page too when that constraint changed an outcome or a recorded product decision.
+Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. When the constraint changes an outcome or a recorded product decision, the PRD moves first — a 🚧 or ❓ line — and the change follows.
 
 Only the first three are always written. A change is finished as far as its author is concerned once the requirements and their journeys are right; the engineer who picks it up adds `ui-design.md`, `tech-design.md` and `tasks.md` **to that same change**, and adds `promoted_by: @handle` to its `.openspec.yaml` so the board names them. `tech-design.md` is owed by every change carrying a task group outside this store — the repository tag on the group heading says where the work lands, and an untagged group counts; `design_waived: <why>` in the manifest stands in for it, and `pnpm check:manual` refuses a change with neither. The proposal and the deltas carry over untouched — never send them back to their author for a task list.
 
 That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there, and a change with no `tasks.md` shows on the engineer's board as still being planned. A change whose requirements are finished but which nobody picks up is therefore invisible as ready work, however complete its specs are.
+
+### The change's record
+
+`.openspec.yaml` in the change directory is the record the boards and the checks read. Every key it can hold, who writes it, and what reads it:
+
+| Key | Written by | When | Read by |
+| --- | --- | --- | --- |
+| `schema` | The CLI, at `openspec new change` | Always | Every reader |
+| `created` | The CLI, at `openspec new change` | Always | The boards, for the planning age |
+| `skip_specs: true` | The author | A change altering no product behaviour | `openspec validate` |
+| `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The boards |
+| `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
+| `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
+| `deployed_at`, `deployed_env` | `pnpm plan shipped` in the application repository | At archive | `pnpm check:manual`, rule `archived` |
+| `deploy_waived: "<who, why>"` | The owner, through `archive:preflight --deploy-waived` | At archive, in place of the deploy record | `pnpm check:manual`, rule `archived` |
+| `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
+| `target`, `owner`, `owners`, `depends_on` | ❓ The manual reads them; no document says who writes them | ❓ | The boards |
+
+A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so `pnpm check:manual` refuses a record key holding anything but text.
 
 ### 6. Keep component contracts aligned
 
@@ -122,11 +154,11 @@ Do not archive a change as a substitute for updating `openspec/specs/`. Archives
 
 ```text
 Is it what the product should be, in the reader's words?
-├─ Yes → the capability page — 🚧 where a change delivers it, ❓ where nobody has confirmed it.
+├─ Yes → the PRD — 🚧 where a change delivers it, ❓ where nobody has confirmed it.
 └─ No  → Is the statement testable — could a test or a manual pass decide it?
          ├─ Yes → the delta in openspec/changes/, folded into
          │        openspec/specs/<product>/<domain>/<capability>/spec.md at archive.
          └─ No  → Does it explain a product judgment that outlives this change?
-                  ├─ Yes → the capability page's Product decisions block.
+                  ├─ Yes → the PRD's Product decisions block.
                   └─ No  → normal repository documentation or code comments.
 ```

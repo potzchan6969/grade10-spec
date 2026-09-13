@@ -4,7 +4,7 @@
  * `.openspec.yaml` that stands in for the thing itself, so an exemption is a
  * line in the record rather than a silence.
  */
-import { existsSync } from "node:fs";
+import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
 import { productPages } from "./context.mjs";
@@ -18,7 +18,7 @@ const STORE_GROUP = "grade10-spec";
 const fileOf = (change, name) => `${change.dir}/${name}`;
 
 /**
- * A change carrying deltas says on a capability's page what it is building,
+ * A change carrying deltas says on a capability's PRD what it is building,
  * and links that section from its proposal. The link is the binding: a rule
  * keyed on the page's `spec:` would let a change pass on a 🚧 line another
  * change put there. Linking a section for context is allowed — one marked
@@ -45,7 +45,7 @@ export function checkUnmarked(ctx, changes, pages) {
     if (linked.some((one) => marked.has(`${one.page}#${one.slug}`))) continue;
     const missing =
       linked.length === 0
-        ? "links no section of a capability's page"
+        ? "links no section of a PRD"
         : "no 🚧 line sits under a section it links";
     ctx.add(
       "unmarked",
@@ -55,16 +55,38 @@ export function checkUnmarked(ctx, changes, pages) {
   }
 }
 
+/** The product directories under `openspec/specs/` — the names a group tag
+ * most often carries by mistake, since a group is usually about one of them. */
+function productNames(roots) {
+  const dir = join(roots.store, "openspec", "specs");
+  if (!existsSync(dir)) return new Set();
+  return new Set(
+    readdirSync(dir, { withFileTypes: true })
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name),
+  );
+}
+
 /** A change with work outside this store writes its design. An untagged group
  * counts: the tag is what says the work lands here, and a group that claims
- * nothing claims no exemption either. */
+ * nothing claims no exemption either. A tag naming a product is a mis-tag,
+ * and the message says so rather than asking for a design. */
 export function checkDesign(ctx, changes) {
+  const products = productNames(ctx.roots);
   for (const change of changes) {
     if (change.status !== "in-flight" || change.designWaived) continue;
     const group = change.taskGroups.find((one) => one.repo !== STORE_GROUP);
     if (!group) continue;
     const design = fileOf(change, "tech-design.md");
     if (existsSync(join(ctx.roots.store, design))) continue;
+    if (products.has(group.repo)) {
+      ctx.add(
+        "design",
+        fileOf(change, "tasks.md"),
+        `group ${group.num} names \`${group.repo}\`, a product under \`openspec/specs/\`, not a repository — tag the group \`(${STORE_GROUP})\` for work landing here, or the application's clone name, and keep the product in the title`,
+      );
+      continue;
+    }
     const where = group.repo === "" ? "no repository" : `\`${group.repo}\``;
     ctx.add(
       "design",

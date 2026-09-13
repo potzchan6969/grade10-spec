@@ -5,8 +5,8 @@ description: Write the product manager's half of an OpenSpec change - proposal.m
 
 # The product manager's artifacts
 
-Three of the seven artifacts in `grade10-planning` are yours, and they are the
-first three:
+Four of the seven artifacts in `grade10-planning` are yours, and they are the
+first four:
 
 | Artifact | What it holds |
 | --- | --- |
@@ -18,6 +18,12 @@ first three:
 The suite is yours to draft, beside every capability whose journeys file holds
 a story; one that says `**Walked by:** nobody` has nothing to derive. QA
 reviews and extends it with `/tcs-review`.
+
+The PRD under `docs/prds/` is yours to keep whole. Everyone writes on it —
+a designer's state, an engineer's constraint, a QA case that exposes a rule
+nobody wrote land there first, marked 🚧 or ❓ — and you are the hand that
+keeps it one record: the marks, the decisions block, and the prose that says
+what the product should be.
 
 **Stop there.** A designer writes `ui-design.md`,
 and the engineer who picks the change up writes `tech-design.md` and
@@ -32,8 +38,8 @@ assuming someone will find it.
    `git log --oneline HEAD..origin/main` is not empty, update before reading. A
    MODIFIED block copied from a stale spec silently reverts whatever landed in
    between, and an overlap scan against a stale `openspec/changes/` finds
-   nothing. Then read: the capability under
-   the capability's page under `docs/prds/` when one exists — what runs, what
+   nothing. Then read the capability's PRD under `docs/prds/` when one
+   exists — what runs, what
    is 🚧 and coming, what is ❓ and open — then every active change in
    `openspec/changes/` on its spec, then the capability under
    `openspec/specs/<product>/<domain>/<capability>/`. An active change already
@@ -52,14 +58,34 @@ assuming someone will find it.
    who should settle it, and does not hold the draft. Sizing, export names, and
    what code a change touches are never the author's to answer: find them
    yourself, or leave them to the engineer who plans delivery.
-3. **Create the change through the CLI.**
+3. **Mark the PRDs first.** On each PRD the change touches, add one 🚧
+   line per outcome the reader can see, in the reader's words and in the
+   section it belongs to (the sections are in
+   `docs/prds/guides/writing-the-manual.md`); a ❓ line or decisions row for
+   what the author deferred; the decisions the change turns on
+   (`prd-authoring`). The house style is `docs/governance/writing.md`.
+   The deltas derive from these lines, so a delta promising what no line marks
+   is the delta's error — and the scenarios that prove one line are the
+   delta's, however many. A 🚧 inside a flow step, a sub-step or
+   mid-sentence is a scenario wearing a mark: lift it to its section as one
+   outcome, or leave it to the delta. `pnpm check:manual` warns (`dense`) on
+   a buried mark and on a page past the style's budget; a mark that would
+   tip a page over it is the sign the page is restating the delta, not the
+   sign the page needs more room. A capability with no PRD gets one first —
+   `prd-authoring` writes it — or the change records `page_waived: <why>` in
+   its `.openspec.yaml`; `pnpm check:manual` refuses a change carrying deltas
+   with neither a 🚧 line under a linked section nor the waiver. The marks and
+   the change land in the same pull request: a 🚧 line no in-flight change
+   touches fails the same check.
+4. **Create the change through the CLI.**
 
    ```bash
-   openspec new change <change-name>
+   pnpm openspec new change <change-name> --schema grade10-planning
    ```
 
    Kebab-case. A directory made by hand records nothing in `.openspec.yaml`.
-4. **Read the enriched instructions for each artifact as you reach it.**
+   `pnpm openspec` runs the pinned CLI; a global `openspec` works the same.
+5. **Read the enriched instructions for each artifact as you reach it.**
 
    ```bash
    openspec instructions proposal --change <change-name>
@@ -69,13 +95,7 @@ assuming someone will find it.
 
    These carry this store's own rules — the ones in `openspec/config.yaml` — on
    top of the schema's. Read them rather than working from memory.
-5. **Mark the pages first.** On each page the change touches, add one 🚧
-   line per outcome, in the reader's words and in the section it belongs to;
-   a ❓ line or decisions row for what the author deferred; the decisions the
-   change turns on (`prd-authoring`). The house style is
-   `docs/governance/writing.md`. The deltas derive from these lines, so a
-   delta promising what no line marks is the delta's error.
-6. **Write the three artifacts**, in that order. Under the proposal's
+6. **Write the four artifacts**, in that order. Under the proposal's
    `## References`, link every section you marked —
    `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`
    — so the manual shows the change under that heading; `pnpm check:manual`
@@ -87,12 +107,12 @@ assuming someone will find it.
    openspec status --change <change-name>
    ```
 
-   With the specs valid, run `/spec-to-tcs domain <domain>` for each domain a
-   cross-feature path runs through, then `/spec-to-tcs feature <capability>`
-   for each capability the change carries — in that order, because the domain
-   file names the paths the feature suites are trimmed against. The suites
-   belong in this same pull request, as their own commits. See
-   `/planning-qa`.
+   With the specs valid, run `/spec-to-tcs feature <capability>` for each
+   capability the change carries. The suites belong in this same pull
+   request, as their own commits. The domain, product and platform passes are
+   QA's (`/planning-qa`): where the domain file already sits beside the
+   durable specs, the feature run trims against it, and where it does not,
+   QA's review does.
 
 ## proposal.md
 
@@ -108,9 +128,9 @@ to satisfy validation.
 
 An optional last section, **Follow-on changes**, names what this change makes
 possible next — one bullet each, no dates, no owners, no commitments. The
-manual's `::next` block collects them onto the capability pages this change is
+manual's `::next` block collects them onto the PRDs this change is
 about, each bullet under the change that wrote it, so write them for a reader
-of a capability page rather than for the board. Omit the section when there is
+of a PRD rather than for the board. Omit the section when there is
 nothing to name; a proposal that names none has decided nothing.
 
 ## The delta specs
@@ -204,10 +224,10 @@ actor the spec already knows and scenarios that already exist.
 
 | Statement | Home |
 | --- | --- |
-| What the product should be, in the reader's words | The capability page, marked 🚧 or ❓ |
+| What the product should be, in the reader's words | The PRD, marked 🚧 or ❓ |
 | Anything testable | The delta spec, and nowhere else |
 | Who walks it, and what accepts their story | `user-journeys.md` beside that spec |
-| Why this problem, for whom, what was ruled out, what will be measured | The capability page's `Product decisions` block (`prd-authoring` skill) |
+| Why this problem, for whom, what was ruled out, what will be measured | The PRD's `Product decisions` block (`prd-authoring` skill) |
 | How it will be built | `tech-design.md` — not yours |
 
 A testable statement left on a page or in a proposal, or a delta no page line
