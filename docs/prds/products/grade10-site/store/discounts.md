@@ -43,9 +43,11 @@ An order carries one discount, whichever kind reached it:
   never both, and a second is refused rather than stacked
 - **Points** — its own add-on, outside the count
 - **Free shipping** — its own add-on, outside the count
-- 🚧 **Site discounts** — their own add-on too, outside the count; whether
+- **Site discounts** — their own add-on too, outside the count; whether
   one stacks with the order's discount code is Shopify's own rule, read
-  from the site discount's setting and the coupon's own
+  from the site discount's setting and the coupon's own. Both sides have to
+  allow the other, so a site discount authored not to combine refuses every
+  product coupon whatever the coupon says
 - **A sale that beats the coupon** — where the two cannot stack, the shop
   keeps the larger cut; a coupon set aside that way goes back to the
   member's wallet, the order goes through at the shop's price, and the
@@ -61,7 +63,7 @@ code and, on top of it, points:
   or a gift is minted the moment the checkout is submitted, never on an
   earlier price preview
 - **Points** (order-wise discount)
-- 🚧 **Site discounts** — read onto the draft by accepting Shopify's own
+- **Site discounts** — read onto the draft by accepting Shopify's own
   automatic discounts, combined or not with the one discount code per
   Shopify's own combine rule
 - **Shipping** ([Shipping](/p/grade10-site/store/shipping)) fee is determined by custom carrier service API, conditionally free
@@ -130,29 +132,41 @@ Per shop, flipped from the admin console, enforced on the next request: terminal
 
 ## Site discounts
 
-🚧 Configured directly in Shopify's own automatic discounts, and read onto
+Configured directly in Shopify's own automatic discounts, and read onto
 the draft order by accepting them there — no grade10 admin screen, and no
 discount engine of grade10's own. At the counter there is no draft order:
 the shop's automatics are the POS cart's own and grade10 leaves them
-standing. `add-site-wide-discounts` delivers this; nothing on this page
-below is live until it ships.
+standing.
 
-- 🚧 **Beside a coupon** — Shopify's own rule: the site discount's setting
+A site discount reaches a counter only where its own "Apply on POS Pro
+locations" switch is on, off by default, so merchandising one is two
+settings rather than one. A shop whose locations are not POS Pro cannot
+have one at the counter at all.
+
+- **Beside a coupon** — Shopify's own rule: the site discount's setting
   and the coupon's own say whether they stack; where they cannot, the
   shop keeps the larger cut and a coupon set aside goes back to the wallet
   — [One discount at a time](#one-discount-at-a-time)
-- 🚧 **Product special sale** — a scheduled cut off chosen products; a
-  member's points always redeem regardless. ❓ A discount set not to
-  combine is expected to exclude at the whole cart, never just its own
-  product's line — Shopify offers no narrower rule — unverified until an
-  automatic discount reaches a draft order on staging
-- 🚧 **Buy X get Y** — a reward product discounted or free after a trigger
+- **Product special sale** — a scheduled cut off chosen products; a
+  member's points always redeem regardless. A discount set not to combine
+  excludes at the whole cart, never just its own product's line — Shopify
+  offers no narrower rule — so every product coupon and product reward is
+  unusable for as long as one runs, unless whoever authors it ticks
+  combining on
+- **Buy X get Y** — a reward product discounted or free after a trigger
   purchase
-- 🚧 **Order threshold** — a tier ladder of spend levels and percentages,
+- **Order threshold** — a tier ladder of spend levels and percentages,
   the basket getting whichever tier it clears
 
-🚧 Applies on both the online checkout and the POS till — ❓ parity between
-them is expected, not yet confirmed on staging.
+Applies on both the online checkout and the POS till, and the two read the
+same: an automatic reaches either, the shop keeps the larger of two that
+cannot stack, and the points tender stacks with it because it rides a slot
+no code competes for.
+
+Taking every discount off a counter sale turns the shop's automatic off with
+it, for that cart, with no way back. It is the only way the platform offers
+to remove one discount code, so staff reaching for it give up the site sale
+too and have to be told so.
 
 ## Designs
 
@@ -194,6 +208,6 @@ today.
 | A free item alone online | ❓ Open | A 100%-off reward with nothing else in the basket is an HKD 0 order plus shipping — whether it ships free, or is collection only. | Product |
 | Product special sale vs. Sale price | Decided | Kept separate — Sale price stays the ad hoc, unscheduled tool; Product special sale is the scheduled, exclusive one. | Product |
 | Points on an exclusive line | Decided | Points always redeem, even on a product special sale — points is a payment method, not a merchandising discount. | Product |
-| Product special sale exclusivity | ❓ Open | Shopify's combine rule is expected to exclude at the whole cart — there is no way to scope a non-combinable site discount to just its own product's line — but this has never actually been observed: `acceptAutomaticDiscounts` has not shipped, so no automatic discount has reached a draft order to test it against. Resolve when `add-site-wide-discounts` tasks 2.1–2.3 genuinely run on staging. | Engineering |
-| Two types on one product | ❓ Open | What happens when a product is configured into more than one site discount type at once. | Engineering |
+| Product special sale exclusivity | Settled | A site discount authored not to combine excludes at the whole cart. Both sides have to allow the other, so the automatic alone decides it and a minted code's own combine setting cannot get past one. Every product coupon and product reward is unusable while such a sale runs. | Engineering |
+| Two types on one product | Settled | Two automatics never stack. Where more than one fits a basket the shop keeps the larger and drops the rest. | Engineering |
 :::

@@ -134,3 +134,15 @@ empty.
 The automatic lands as a discount no instrument accounts for, which is what
 settlement calls the shop's own promotion — counted, and never read back as
 points.
+
+**"Remove every discount" confirms, and takes the site sale with it.** The
+platform asks first — *"要移除所有折扣？此動作將移除所有已套用的折扣，且無法復原。
+系統將關閉自動折扣。"* — and the sheet stands waiting rather than timing out.
+Confirmed, the cart went from HK$4.75 back to HK$5.00 in about four seconds
+and the automatic did not return.
+
+So the last resort costs more than the code it was reached for. Taking one
+discount code off a sale turns the shop's own automatic off with it, for that
+cart, with no way back — the member pays the undiscounted price on both counts.
+Staff need telling that in the sentence, and a sale that lands this way is one
+where the site discount is gone by our hand rather than the shop's.
