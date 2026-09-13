@@ -102,7 +102,7 @@ Do not deploy group 3's backend refusal to production ahead of group 7 — hold 
 - [ ] 8.8 Run a POS sale spending a product coupon through the real till extension; confirm settlement, Undo and unreported-code adoption, and answer the split-line entitlement question from 5.2
 - [x] 8.9 Submit, abandon and resubmit the same checkout carrying the same coupon; confirm only one live code ever exists
 - [x] 8.10 With `add-site-wide-discounts` task 2.1's automatic order discount live on staging, submit a checkout carrying a smaller coupon; confirm the order completes at the shop's price, the coupon is back in the wallet with its mint dead, and the member's outcome names the coupon — then a larger coupon, and confirm the coupon lands and the automatic is dropped
-- [ ] 8.11 Give the reward's provider artifact a read surface — `reward_coupon_usages.provider_artifact` is written and never read back, so no operator can tell what the shop was handed for a reward, and task 8.6 is answered from the shop rather than from the record
+- [x] 8.11 Give the reward's provider artifact a read surface — `reward_coupon_usages.provider_artifact` is written and never read back, so no operator can tell what the shop was handed for a reward, and task 8.6 is answered from the shop rather than from the record
 
 ## 9. Manual page (grade10-spec)
 
