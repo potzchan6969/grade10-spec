@@ -69,6 +69,20 @@ has failed every push to `main` today.
   each carried the same prompts. The rulebook, the config and the example
   now state what only they hold and point at the rest; the prompts live in
   the guide alone.
+- **One home per rule per load path.** A worker holds `AGENTS.md` on every
+  path, the CLI's payload — schema instruction, template, that artifact's
+  `rules` block — on a change artifact, and a skill plus the one document it
+  names on a command. The journey rules sat on the artifact path three
+  times; the schema instruction is their home, the template keeps the
+  shape, and the config line names the checks. The two QA skills read the
+  rulebook whole as step 0 on every run, and every bold pointer in them
+  names a rulebook heading in its own casing — four named sections that had
+  been renamed. A test under `test:openspec` fails a pointer that names no
+  section, and holds `AGENTS.md` and each `rules` block to a recorded word
+  budget. Sonnet and Opus drafting the same journeys file and the same
+  feature suite under the long documents and the short ones produced the
+  same validator result, the same coverage and the same style counts; the
+  policy is written once, under `Where a Rule Lives` in `writing.md`.
 
 ## Non-Goals
 
@@ -93,8 +107,9 @@ No spec-level behaviour changes, so this change declares no deltas and sets
 `openspec/config.yaml`, `docs/governance/writing.md`,
 `docs/prds/guides/writing-the-manual.md`, seven skills, `package.json`, two
 workflows, `tools/manual/check/record.mjs`, `tools/manual/check/dense.mjs`,
-`tools/manual/src/store/read-changes.mts`, one in-flight change's `tasks.md`
-headings, and the KYC page's engineer block.
+`tools/manual/src/store/read-changes.mts`, `scripts/openspec/instruction-budget.test.mjs`,
+the `user-journeys` template, one in-flight change's `tasks.md` headings, and
+the KYC page's engineer block.
 
 The `dense` rule warns on 43 findings across 29 product pages today, every
 one a page a reader would name as heavy; the Membership pages raise none.
