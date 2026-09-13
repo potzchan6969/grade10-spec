@@ -1,3 +1,5 @@
 schema: grade10-planning
 created: 2026-09-10
 depends_on: [mint-coupons-as-discount-codes]
+deployed_at: "e604ab07a"
+deployed_env: "staging"
