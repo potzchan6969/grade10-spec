@@ -107,7 +107,9 @@ export const QuantityAndCart: Story = {
     await userEvent.click(
       canvas.getByRole("button", { name: "Increase quantity" }),
     );
-    expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toHaveValue(2);
+    expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toHaveValue(
+      "2",
+    );
     await userEvent.click(canvas.getByRole("button", { name: "Add to cart" }));
     expect(canvas.getByRole("button", { name: "Added to cart" })).toBeVisible();
   },
