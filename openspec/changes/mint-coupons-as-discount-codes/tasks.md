@@ -59,6 +59,9 @@ Group 3's backend refusal must not reach production ahead of group 7's picker UI
 - [x] 4.16 Report what the shop took rather than what the coupon promised: `couponLineDiscountMinor` still carries a replaced coupon's cut, so the created checkout states money off a basket the shop charged in full
 - [x] 4.17 Carry the replaced coupon on the wire: `replacedCouponCodes` stops at the service and `CheckoutResult` has no field for it, so nothing the member reads can name the coupon that came back — the last clause of 4.13
 - [x] 4.18 Tests: a gift whose code the shop dropped leaves the basket rather than being charged for; a replaced coupon reports no cut and rides back on the answer
+- [x] 4.19 Send the reward's code online at all: `mintOrderCodes` writes it onto the order row and `checkout.ts` went on building its request from the row it already held, so the reward rode as a merchant line discount with no code — an automatic stacked on it rather than competing with it, and every replacement path group 4 built was unreachable for a reward. The mint answers the row it wrote
+- [x] 4.20 Never send a code the release has killed: the reward's code stays on the row for the deactivation to find, so the request builder reads it only while the order still claims the reservation — one predicate, shared with the cut-stripping beside it
+- [x] 4.21 Tests: assert what the provider was handed, not what a rebuild would hand it — the matrix suite tested the builder and never the call, which is why 4.19 stood unseen
 
 ## 5. POS parity, including the real till extension (grade10) (owner: @ecchochan)
 
@@ -69,6 +72,9 @@ Group 3's backend refusal must not reach production ahead of group 7's picker UI
 - [x] 5.5 Count a code confirmation by code entries only (`codeDiscounts(cart)`, already defined in `flow.ts`) rather than by the cart's whole discount count, which stops being a signal once the shop's own automatics sit beside ours
 - [x] 5.6 POS undo targets a product-coupon discount code the same way it already targets an order coupon's, inheriting order-coupon's existing "codes stay, use Remove All" limitation — a product coupon loses today's clean single-tap removal; accepted and recorded rather than left implicit, and no task here builds a single-code removal path
 - [x] 5.7 Tests: an un-updated extension build applies a product coupon's code correctly; "Remove every discount" confirms on a cart carrying a site-wide automatic discount
+- [x] 5.8 Hold 5.2's gift rule for a reward too: the filter read a ride's `kind`, and a reward reaches the till as a definition plus an evaluation with no ride to ask — so a wallet gift arrived with both the zeroed line and a code worth it. Read off the evaluation, which is the one thing both have
+- [x] 5.9 Give the till the reverse leg the checkout has: `confirmTillSale` trims what the cart did not show by reading `order_coupons`, and a reward rides the order's own columns — so a reward the till never applied stayed spent with its cut still on the line. One drop both the counter and the checkout call
+- [x] 5.10 Tests: a gift reward plans with no code and its line only; a reward the cart never took comes back with its cut
 
 ## 6. Collector picks one (grade10-spec) (owner: @ecchochan)
 
