@@ -106,5 +106,5 @@ Do not deploy group 3's backend refusal to production ahead of group 7 — hold 
 
 ## 9. Manual page (grade10-spec)
 
-- [ ] 9.1 Once group 8 verifies, remove the 🚧 marks this change delivers on `docs/prds/products/grade10-site/store/discounts.md`, `docs/prds/products/grade10-site/loyalty/coupons.md` and `docs/prds/products/grade10-site/loyalty/rewards.md`, whose "Applied online — the draft order carries it on its lines" line this change falsifies
+- [x] 9.1 Once group 8 verifies, remove the 🚧 marks this change delivers on `docs/prds/products/grade10-site/store/discounts.md`, `docs/prds/products/grade10-site/loyalty/coupons.md` and `docs/prds/products/grade10-site/loyalty/rewards.md`, whose "Applied online — the draft order carries it on its lines" line this change falsifies
 - [ ] 9.2 At the fold, add `::spec{id="grade10-site/store/site-discounts"}` to `discounts.md`'s Site discounts section — `add-site-wide-discounts` creates a capability no page names, which fails the manual's `unreferenced` check once the spec is on disk; before the fold the same block fails `check:manual` as naming no spec, so it cannot be added earlier

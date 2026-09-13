@@ -58,11 +58,10 @@ A sale made as a guest is not lost: it earns once it has an owner.
 | --- | --- |
 | Membership | Tier · points to spend · points earned this year toward the next tier · tier renews · points active until · expiring soon |
 | Your member card | The QR a till scans, the short code beneath it, a countdown, and the actions that add the card to a phone wallet |
-| Rewards | The catalog, priced in points, and what the balance affords. 🚧 A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
-| Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. 🚧 During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
+| Rewards | The catalog, priced in points, and what the balance affords. A reward that issues a coupon states what that coupon cannot be spent without — [Rewards](/p/grade10-site/loyalty/rewards) |
+| Your coupons | Every coupon the member holds, what it takes off, its state, and when it ends. During a counter sale, one can be opened for the till to scan — [Rewards](/p/grade10-site/loyalty/rewards) |
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
-| Waiting at the counter | Physical rewards to collect, each with the day to collect by |
-| Activity | The member's own ledger. 🚧 Every line says where it came from — the counter, the online store, or the programme itself |
+| Activity | The member's own ledger. Every line says where it came from — the counter, the online store, or the programme itself |
 
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone
@@ -71,9 +70,6 @@ A sale made as a guest is not lost: it earns once it has an owner.
 
 ❓ Whether "Points to spend" and "Points earned this year" are the launch
 names.
-
-🚧 The coupon path retires the counter collection this page waits on —
-[Rewards](/p/grade10-site/loyalty/rewards).
 
 ::story{id="loyalty-membership-membershipsummary--default" title="Tier, balance and progress"}
 
@@ -113,12 +109,9 @@ The same card can be added to a phone wallet —
 | Points revoked | A refund's claw-back |
 | Points returned | A reversed redemption, or a cancelled or refunded sale that points paid for |
 
-- **Waiting at the counter** — what the member still has to collect, each
-  with the day to collect it by
 - **Card history** `TBC` — the last 20 codes, and where and when a till
   took each; served, and no surface shows it
-- **Redemption outcomes** `TBC` — served; only what is waiting to be
-  collected is shown
+- **Redemption outcomes** `TBC` — served, and no surface shows it
 - **Notified** — every identification the member did not show a code for —
   email, phone, the customer on the cart, an Apple pass — sends a notice at
   once

@@ -275,11 +275,6 @@ The loyalty terminal is a Shopify POS UI extension.
   the till's
 - **Expiry** — a promise nobody tenders expires after 1 hour; a sale the cart
   pays after that still settles
-- **Collect** — a physical reward is confirmed in the same session, and a
-  second till is refused with who took it and when. 🚧 The coupon path retires
-  this — [Rewards](/p/grade10-site/loyalty/rewards)
-- **Notified** — a completed collection tells the member the points, amount
-  and location at once
 - **Earning** — the customer on the sale is enough, terminal or not
 
 :::flow{title="At the till" case="Paid" diagram="assets/diagrams/shopify-till-paid.svg"}

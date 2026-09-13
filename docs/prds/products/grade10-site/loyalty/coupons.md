@@ -37,12 +37,12 @@ so redefining the reward never rewrites a coupon a member already holds —
 
 | Channel | How it lands |
 | --- | --- |
-| Online | 🚧 Chosen in the cart; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
-| At the till | 🚧 Chosen inside the till session — a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; its Shopify Discount is minted the moment it is chosen and reused for that sale |
+| Online | Chosen in the cart; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
+| At the till | Chosen inside the till session — a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; its Shopify Discount is minted the moment it is chosen and reused for that sale |
 
 - **Held for an order, then settled** — a coupon is held against the order
   being paid, and freed again if that order is not
-- 🚧 **A sale that beats it** — where the shop's own sale and the coupon
+- **A sale that beats it** — where the shop's own sale and the coupon
   cannot stack, the shop keeps the larger cut; the coupon goes back to the
   wallet, the order goes through, and the member is told —
   [Discounts](/p/grade10-site/store/discounts)
@@ -50,7 +50,7 @@ so redefining the reward never rewrites a coupon a member already holds —
   is released
 - **One live attempt** — a second application while one is in flight is
   refused
-- 🚧 **The order's one discount** — a reward coupon is in that count; points
+- **The order's one discount** — a reward coupon is in that count; points
   paid against the bill, free shipping and the site's own discounts sit
   outside it — [Discounts](/p/grade10-site/store/discounts)
 

@@ -54,5 +54,5 @@ Staff applying a coupon from the panel and the member presenting one from their 
 
 ## 7. Manual pages (grade10-spec)
 
-- [ ] 7.1 Clear the 🚧 lines this change delivers on `docs/prds/products/grade10-site/loyalty/rewards.md`, `docs/prds/products/grade10-site/loyalty/profile.md` and `docs/prds/products/grade10-site/loyalty/shopify-integration.md`, which no other change's task group claims
-- [ ] 7.2 Retire `docs/prds/products/grade10-site/store/discounts.md`'s Collection section in the same commit as the fold — it states the counter handover as running, unmarked, on a page this change's specs do not touch, so no check catches it and it would simply become false
+- [x] 7.1 Clear the 🚧 lines this change delivers on `docs/prds/products/grade10-site/loyalty/rewards.md`, `docs/prds/products/grade10-site/loyalty/profile.md` and `docs/prds/products/grade10-site/loyalty/shopify-integration.md`, which no other change's task group claims
+- [x] 7.2 Retire `docs/prds/products/grade10-site/store/discounts.md`'s Collection section in the same commit as the fold — it states the counter handover as running, unmarked, on a page this change's specs do not touch, so no check catches it and it would simply become false

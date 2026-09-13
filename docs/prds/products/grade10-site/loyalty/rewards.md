@@ -24,7 +24,7 @@ Both kinds state:
 - **Minimum spend** — the goods a basket must hold before the reward
   applies, read from the lines themselves, never from a total handed in
   beside them
-- 🚧 **Combines with** — which of the shop's own product, order and
+- **Combines with** — which of the shop's own product, order and
   shipping discounts the coupon stacks with; the store default where the
   reward states none — [Discounts](/p/grade10-site/store/discounts)
 
@@ -64,7 +64,7 @@ Stock reads as a yes or no, never a count.
   repricing the catalog never rewrites what an earlier redemption cost
 - **Nothing is held** — points are spent at the moment of taking, not
   reserved
-- 🚧 **What the coupon needs, before the points go** — a coupon is money off
+- **What the coupon needs, before the points go** — a coupon is money off
   somewhere, not money, so the menu states the basket it has to reach and the
   one channel it is good at where it names only one. A member who reads that
   after the redemption is holding something no cart of theirs will take
@@ -89,21 +89,18 @@ carrying the definition it was bought under.
 - **Made instantly** — the coupon is idle in the member's own list the
   instant the points are spent
 - **Applied online** — on the store's own checkout page, before Shopify's
-  checkout. 🚧 The cut reaches the order as the coupon's own Shopify
+  checkout. The cut reaches the order as the coupon's own Shopify
   discount code, minted for that basket, rather than welded onto the draft's
-  lines; `mint-coupons-as-discount-codes` delivers it
-- **Applied at the counter** — 🚧 inside the till session, staff apply the
+  lines
+- **Applied at the counter** — inside the till session, staff apply the
   coupon from the member's panel, or the member opens it on their own phone
   and the till scans it; either way its code is minted the moment it is
   chosen, for that sale alone, and never shown as the coupon itself
 - **Used by the paid order** — the paid order is what marks the coupon
   used, never a vendor's lagging count
-- **A physical reward waits for collection** — parked as paid but not yet
-  delivered, until the counter confirms the handover
-- **One discount at a time** — 🚧 an order carries one discount at a time,
+- **One discount at a time** — an order carries one discount at a time,
   and a reward is in that count, so a free item and a money-off coupon are
-  two sales; today a product or gift coupon still combines with an order
-  coupon, and `mint-coupons-as-discount-codes` delivers the rule
+  two sales
 - **A refund does not give the coupon back** — a refunded sale returns the
   goods, the money and any points spent as a discount on it; a coupon it
   already used stays used, and the points that bought it stay spent
@@ -111,15 +108,14 @@ carrying the definition it was bought under.
 States, holding and refusals are on
 [Coupons](/p/grade10-site/loyalty/coupons).
 
-🚧 Collection at the counter and the fulfilment queue still exist in the
-running programme; the coupon path retires both, and a physical reward becomes
-an ordinary sale — staff ring the item up, its coupon takes 100% off it, and
-the order goes through at nothing. ❓ Online, that order is HKD 0 plus
-shipping — whether it ships free or is collection only is Product's call.
+A physical reward is an ordinary sale — staff ring the item up, its coupon
+takes 100% off it, and the order goes through at nothing. ❓ Online, that order
+is HKD 0 plus shipping — whether it ships free or is collection only is
+Product's call.
 
-❓ **An uncollected item stays off the shelf** — a coupon that expires
-never restocks. Either reward stock is a budget rather than a shelf count,
-or an operator puts the unit back by hand.
+❓ **A redeemed item stays off the shelf** — stock comes off at the redemption,
+so a coupon that expires unspent never puts it back. Either reward stock is a
+budget rather than a shelf count, or an operator restores the unit by hand.
 
 ## Reward Catalog
 
@@ -142,10 +138,8 @@ can buy.
   the per-redemption and per-day bounds are chosen
 - ❓ **The physical catalog** — which items, and their point prices; Product's
   call
-- 🚧 **A reward's combine setting** is carried onto the coupon a redemption
-  issues and read by nothing yet — a reward's coupon rides as a weld, and the
-  code that would carry the setting to the shop is minted by
-  `mint-coupons-as-discount-codes`
+- **A reward's combine setting** is carried onto the coupon a redemption
+  issues, and onto the code that carries it to the shop
 
 ## Cancelling a Redemption
 
