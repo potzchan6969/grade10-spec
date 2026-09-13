@@ -20,7 +20,14 @@
     "winner": "你已得標。",
     "captureFailed": "付款未能完成，請檢查你的信用卡。",
     "endingSoon": "即將截止。",
-    "other": "此拍品有新消息。"
+    "other": "此拍品有新消息。",
+    "spendLandedTitle": "剛在門店使用",
+    "spendLanded": "一筆交易剛減免了 {amount}。",
+    "spendLandedPoints": "一筆交易剛減免了 {amount}，其中 {points} 分。",
+    "spendCorrectedTitle": "已退回",
+    "spendCorrected": "該筆交易未付款，{amount} 已退回。",
+    "spendCorrectedPoints": "該筆交易未付款，{amount} 已退回，其中 {points} 分。",
+    "spendOther": "門店有一筆交易的新消息。"
   },
   "auctionEmail": {
     "title": "拍賣電郵提醒",

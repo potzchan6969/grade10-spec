@@ -20,7 +20,14 @@
     "winner": "낙찰되었습니다.",
     "captureFailed": "결제가 완료되지 않았습니다. 카드를 확인해 주세요.",
     "endingSoon": "곧 마감됩니다.",
-    "other": "이 출품작에 새로운 소식이 있습니다."
+    "other": "이 출품작에 새로운 소식이 있습니다.",
+    "spendLandedTitle": "매장에서 사용됨",
+    "spendLanded": "방금 결제에서 {amount}이 할인되었습니다.",
+    "spendLandedPoints": "방금 결제에서 {amount}이 할인되었습니다. 그중 {points}포인트입니다.",
+    "spendCorrectedTitle": "복원됨",
+    "spendCorrected": "해당 결제가 이루어지지 않아 {amount}이 복원되었습니다.",
+    "spendCorrectedPoints": "해당 결제가 이루어지지 않아 {amount}이 복원되었습니다. 그중 {points}포인트입니다.",
+    "spendOther": "매장 결제에 새로운 소식이 있습니다."
   },
   "auctionEmail": {
     "title": "경매 이메일 알림",

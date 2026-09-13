@@ -27,6 +27,13 @@
     "winner": "You won this lot.",
     "captureFailed": "Payment did not go through. Check your card.",
     "endingSoon": "Closing soon.",
-    "other": "There is news about this lot."
+    "other": "There is news about this lot.",
+    "spendLandedTitle": "Used at the counter",
+    "spendLanded": "{amount} came off a sale just now.",
+    "spendLandedPoints": "{amount} came off a sale just now, {points} points of it.",
+    "spendCorrectedTitle": "Put back",
+    "spendCorrected": "That sale was not paid. The {amount} is back.",
+    "spendCorrectedPoints": "That sale was not paid. The {amount} is back, {points} points of it.",
+    "spendOther": "There is news about a sale at the counter."
   }
 }
