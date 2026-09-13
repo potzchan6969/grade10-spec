@@ -36,3 +36,10 @@ Every group lands in this store. No deploy is owed.
 - [ ] 4.5 `tools/manual/check/dense.mjs`: a warning-level rule for a page past 120 lines of prose outside its examples and details, a section opening on more than six sentences, an engineer block holding a paragraph, and a 🚧 inside a flow step or mid-line; tests in `tools/manual/test/check-dense.test.ts`
 - [ ] 4.6 The KYC page's `Service design` engineer block moves to `docs/references/kyc-service-design.md`, linked from its code map
 - [ ] 4.7 Verify: `pnpm check:manual` reports no failure, `pnpm --dir tools/manual test` passes, `pnpm run agent:check-parity` passes
+
+## 5. Less to read, less to churn (grade10-spec)
+
+- [ ] 5.1 `.github/workflows/design-sync.yml`: the commit step diffs the report with `generatedAt` ignored, and a run that moved no verdict commits nothing
+- [ ] 5.2 `docs/governance/specs-to-test-cases.md`: every rule once, under 450 lines, the format the validator reads unchanged
+- [ ] 5.3 `.claude/skills/spec-to-tcs/SKILL.md` and `.claude/skills/tcs-review/SKILL.md`: the steps, the commands and the rules only the skill holds; every restated rule becomes a pointer to the doc
+- [ ] 5.4 Verify: `node scripts/openspec/validate-test-cases.mjs` reports the same counts as before, `pnpm run agent:check-parity` passes

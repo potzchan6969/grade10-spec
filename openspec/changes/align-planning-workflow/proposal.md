@@ -55,6 +55,16 @@ has failed every push to `main` today.
   sentences, an engineer block holding a paragraph, and a 🚧 inside a flow
   step or mid-line. KYC's engineer design note moves to
   `docs/references/kyc-service-design.md` as the first cut.
+- **The bot stops committing a timestamp.** The design-sync workflow
+  committed its report on every push to `main` because the report's
+  `generatedAt` always differs: 271 of the 1,022 commits on `main` in the
+  week of 09-06 were that bot, and 16 of them moved a verdict. The commit
+  step now diffs the report with the stamp ignored, and a run that moved no
+  verdict commits nothing and rebuilds nothing.
+- **The rulebooks are a third of their length.** `specs-to-test-cases.md`
+  was 1,586 lines, four times the next longest document; the `spec-to-tcs`
+  and `tcs-review` skills restated it at 716 and 306 lines. Each rule is now
+  stated once, in the governance doc, and the skills route to it.
 
 ## Non-Goals
 
@@ -109,6 +119,18 @@ one a page a reader would name as heavy; the Membership pages raise none.
   `vault-custody` are reshaped.
 - The 29 pages `dense` names today are cut, one page per pull request,
   starting with the ten over the prose ceiling.
+- A small-change lane in the `grade10-planning` schema: a change touching
+  one capability with a handful of scenarios carries the delta, the PRD
+  line and a task list, inherits the durable journeys, and has its suite
+  generated. ❓ The scenario count that qualifies is the PM's call.
+- The warnings ratchet: `check:manual` and `tcs:validate` fail when a
+  warning count rises above the recorded baseline, so the 353 and 108
+  standing warnings stop hiding new ones.
+- In the application repository: the tick lands from the pull request
+  (`Completes <change> 1.2` in the body, applied by CI) rather than as one
+  `Claim` or `Complete` commit per action — 141 such commits landed here in
+  the week of 09-06; and the submodule bump is batched to once a day unless
+  a PR needs a newer pin — 135 bumps since August.
 
 ## References
 
