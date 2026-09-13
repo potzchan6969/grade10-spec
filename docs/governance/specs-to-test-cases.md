@@ -63,7 +63,7 @@ A suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.m
 
 - **The spec that states the behaviour owns the case** — wherever the outcome is observed: `grade10-admin/auction/listing` SC-16 opens a page on the Grade10 site, and the case is the listing capability's
 - **The levels above hold composed paths** — what no single spec states end to end; a composed case names every journey it walks, and one trace at a composed level fails `pnpm run tcs:validate`
-- **Compose from evidence** — a run reads every `user-journeys.md` and every `docs/prds/` page in its scope before writing: a domain run reads the changed capability's journeys, every sibling capability's, and the domain's product record (`index.md` and each page) for its words and seeded values; a platform run reads the same one scope wider
+- **Compose from evidence** — a run reads every `user-journeys.md` and every `docs/prds/` page in its scope before writing: a domain run reads the changed capability's journeys, every sibling capability's, and the domain's `index.md` and each PRD under it for its words and seeded values; a platform run reads the same one scope wider
 - **Within a level** — two cases whose traces and outcomes say the same thing are one case; differing only in a value, one case with a row per run
 - **Across levels** — a `product` or `platform` case re-walks lower coverage on purpose, to ask whether the seam holds. Duplication is a lower case that exists only to re-test a higher path, or two composed cases at one level on the same path
 - **The validator reports, a human decides** — identical trace sets among composed cases, and journeys traced at more than one level, are evidence, not proof
@@ -181,7 +181,7 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 ## Step 1: Digest the Capability
 
 - **Read whole** — `spec.md` (`## Purpose`, `## Feature set`, requirements and scenarios), `user-journeys.md`, and the change's `proposal.md`, whose acceptance signal makes a case's type `acceptance`
-- **Read the product record** — `docs/prds/products/<product>/<domain>/index.md` and the capability's page: a control, state or amount the manual names is written in the manual's words
+- **Read the PRD** — `docs/prds/products/<product>/<domain>/index.md` and the capability's PRD: a control, state or amount the manual names is written in the manual's words
 - **Read the store's context** — `openspec/config.yaml`'s `context` for the brands, products and conventions (money is minor units plus an ISO 4217 code): `<grade10 store url>`, never `<store front door URL>`
 - **Read the cross-cutting specs the Purpose names** — `crawlable-pages`, `localization`, `money-amounts`, `dates-and-times`. Their facts are checked on the way past (`URL contains <lang>`), never set up as a pre-condition
 - **Write missing journeys first** — to `rules.user-journeys`: keep every SHALL and scenario clause, add a Feature set if none, permanent ids, `**As a** / **I want** / **so that**`, then `**Accepted by:**` as `` `id` — title `` bullets; `openspec validate <change> --strict`

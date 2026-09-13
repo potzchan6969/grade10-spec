@@ -107,12 +107,12 @@ assuming someone will find it.
    openspec status --change <change-name>
    ```
 
-   With the specs valid, run `/spec-to-tcs domain <domain>` for each domain a
-   cross-feature path runs through, then `/spec-to-tcs feature <capability>`
-   for each capability the change carries — in that order, because the domain
-   file names the paths the feature suites are trimmed against. The suites
-   belong in this same pull request, as their own commits. See
-   `/planning-qa`.
+   With the specs valid, run `/spec-to-tcs feature <capability>` for each
+   capability the change carries. The suites belong in this same pull
+   request, as their own commits. The domain, product and platform passes are
+   QA's (`/planning-qa`): where the domain file already sits beside the
+   durable specs, the feature run trims against it, and where it does not,
+   QA's review does.
 
 ## proposal.md
 

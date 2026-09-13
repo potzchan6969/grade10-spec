@@ -55,7 +55,7 @@ below inherit.
 A run above feature level reads more than the change: every sibling
 `user-journeys.md` in its scope — a domain's under
 `openspec/specs/<product>/<domain>/`, a product's across its domains, a
-platform's across products — and the product record under `docs/prds/` for the
+platform's across products — and the PRDs under `docs/prds/` for the
 decisions, the product's own names for surfaces and controls, and the seeded
 values a pass is written against. A case there **composes**: it traces two or
 more journeys, from two or more capabilities, domains or products, and a single

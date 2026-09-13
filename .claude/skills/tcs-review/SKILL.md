@@ -19,14 +19,14 @@ what they ask, and record their words untidied — generation copies what they a
 0. **Read the rulebook whole.** `docs/governance/specs-to-test-cases.md`,
    one read, under 450 lines, before anything else on every run.
 
-0. **Get on a review branch before the first verdict.** Names are the table in
+1. **Get on a review branch before the first verdict.** Names are the table in
    **The Review Lane**: `git switch -c tcs-review/<level>-<target>` from
    `main` whatever the suite holds, `<level>` one of `feature`, `domain`,
    `product`, `platform`; commits `test(<domain>): approve <target> US<n> test
    cases`; the pull request a draft, label `documentation`. Never write
    verdicts on `main`.
 
-1. **Find the suites awaiting review.** Search `openspec/specs/**/feature-tcs.md`,
+2. **Find the suites awaiting review.** Search `openspec/specs/**/feature-tcs.md`,
    `openspec/specs/**/domain-tcs.md`, `openspec/specs/*/product-tcs.md` and
    `openspec/specs/platform-tcs.md`, plus the first two under
    `openspec/changes/*/specs/`, never `openspec/changes/archive/`. A suite is
@@ -36,7 +36,7 @@ what they ask, and record their words untidied — generation copies what they a
    --heads origin "tcs-review/*-<target>"` and report who is in it and on
    which journey — information, never a refusal.
 
-2. **Complete the level stack first.** Levels run top down — **Levels** and
+3. **Complete the level stack first.** Levels run top down — **Levels** and
    **Top down** under **The Review Lane** — so look at what sits above the suite named:
 
    | Level above | The suite itself | Do |
@@ -44,7 +44,7 @@ what they ask, and record their words untidied — generation copies what they a
    | missing | missing | Offer to derive both, top down, before any review starts |
    | missing | present | Offer to derive the level above; do not review the lower suite this run |
    | present | missing | Offer to derive it, covering what the level above does not own |
-   | present | present | Review it, once both are current (step 4) |
+   | present | present | Review it, once both are current (step 5) |
 
    A `product` or `platform` suite is a smoke pass, every case `**Suites:**
    smoke`: review whether the seam holds, not coverage. When a domain's last
@@ -57,12 +57,12 @@ what they ask, and record their words untidied — generation copies what they a
    capability's journeys — a sibling with no `user-journeys.md` is the spec
    author's gap; report it and stop.
 
-3. **Pick one suite.** None: say so, name where suites live, offer
+4. **Pick one suite.** None: say so, name where suites live, offer
    `/spec-to-tcs <capability-or-change>`. One: say which and start, no menu.
    More: list capability or change, path, file status and `draft` count out of
    the total, then ask. One suite per run unless the reviewer asks to continue.
 
-4. **Restyle before you present anything.** **Restyle first** under **The Review Lane** and
+5. **Restyle before you present anything.** **Restyle first** under **The Review Lane** and
    the `<v>` table under **Naming** say what each status allows: `draft`
    freely, `actual` still `manual` on the reviewer's yes, `automated` and
    `deprecated` never. Report what you restyled before the first journey; a
@@ -70,12 +70,12 @@ what they ask, and record their words untidied — generation copies what they a
    reviewer reshapes reads as **Who the Actor Is** has it —
    `customer(gold member) is on the shopping cart page`.
 
-5. **Open the suite and its journeys together.** Read the whole suite and the
+6. **Open the suite and its journeys together.** Read the whole suite and the
    `spec.md` beside it end to end — above feature level, every `user-journeys.md`
    its traces name and the matching `docs/prds/` pages — then orient the
    reviewer: capability, journeys, cases per journey, drafts.
 
-6. **Walk the suite one journey at a time,** in file order, as **The Review
+7. **Walk the suite one journey at a time,** in file order, as **The Review
    Lane** describes: the story, every `draft` case in full — id and title,
    classification block, pre-conditions, test data, steps, expected results —
    and `actual` or `deprecated` cases by id and title only. Scenarios are
@@ -88,13 +88,13 @@ what they ask, and record their words untidied — generation copies what they a
    good" covers the cases just shown and nothing else. **A verdict never
    carries forward:** ask again for the next journey.
 
-7. **Answer their questions from the spec,** quoting the requirement or
+8. **Answer their questions from the spec,** quoting the requirement or
    scenario clause by id. When the spec does not answer, say so — a gap for
    the spec's author, recorded at close — never how the product probably
    behaves. Never talk the reviewer out of a doubt; a doubted case is wrong
    until the spec says otherwise.
 
-8. **Add a case the reviewer asks for** only from a scenario that accepts the
+9. **Add a case the reviewer asks for** only from a scenario that accepts the
    journey — otherwise it is a new requirement, routed to the spec's author.
    Check the journey, the file, then the domain suite for one that covers it;
    on a hit show both and ask: update, add as distinct, or drop. Write it as
@@ -102,7 +102,7 @@ what they ask, and record their words untidied — generation copies what they a
    other draft — never straight to `actual`, even dictated. Record what
    distinguishes a case added over a duplicate.
 
-9. **Record each verdict in the file as you go**, re-reading it from disk
+10. **Record each verdict in the file as you go**, re-reading it from disk
    immediately before each write.
 
    | Verdict | Write |
@@ -117,7 +117,7 @@ what they ask, and record their words untidied — generation copies what they a
    when the file reaches `approved`, removed if it falls back; `**Drafts
    styled:**` dropped once no draft is left. Never type the status.
 
-10. **Close the run and land the work.** Run `pnpm run tcs:validate` and fix
+11. **Close the run and land the work.** Run `pnpm run tcs:validate` and fix
    what it names. Commit, push, and open the pull request even unfinished
    (`/pr-push`), titled with the range that has verdicts —
    `test(<domain>): approve <target> US<n>–<m> test cases`. Merge at journey

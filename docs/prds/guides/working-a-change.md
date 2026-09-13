@@ -141,7 +141,8 @@ that has to be built is work in **grade10-spec** — flag it so `tasks.md` carri
 
 ## Write the Plan, Then Build
 
-`tech-design.md` when the change earns one. `tasks.md` always — grouped by
+`tech-design.md` when a task group lands outside this store, or
+`design_waived: <why>` in its place. `tasks.md` always — grouped by
 layer, each task phrased as the spec scenario it makes pass, groups unclaimed
 so an engineer claims one at pickup. Claim a group in `grade10`, work
 test-first, and archive only once the code is **deployed** — not when the

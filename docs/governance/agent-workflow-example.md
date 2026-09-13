@@ -81,7 +81,7 @@ that path, so point your agent at it if it cannot find the skill by name.
 
 **4. The agent writes four files.** `proposal.md`, then
 `specs/grade10-site/store-account-settings/spec.md`, `user-journeys.md` and
-`feature-tcs.md` beside it — after the capability's page carries a 🚧 line per outcome
+`feature-tcs.md` beside it — after the PRD carries a 🚧 line per outcome
 and the proposal links that section; `pnpm check:manual` refuses a change with neither the mark nor `page_waived`.
 
 **5. Check and push.**

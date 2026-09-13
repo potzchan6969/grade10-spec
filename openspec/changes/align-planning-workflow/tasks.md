@@ -53,4 +53,5 @@ Every group lands in this store. No deploy is owed.
 - [ ] 6.3 `docs/governance/specs-to-test-cases.md`: `The File Header` in Title Case; `The Format` names the one suite approved under the current revision as the case to copy
 - [ ] 6.4 `scripts/openspec/instruction-budget.test.mjs`: fails a QA-skill pointer that names no rulebook section, and `AGENTS.md` or a `rules` block past its recorded word budget
 - [ ] 6.5 `docs/governance/writing.md` gains `Where a Rule Lives`; `AGENTS.md` names the `dense` budget by its home instead of enumerating it
-- [ ] 6.6 Verify: `pnpm run test:openspec`, `pnpm run agent:check-parity` and `pnpm check:manual` pass; `openspec instructions user-journeys` renders every journey rule once
+- [ ] 6.6 `openspec/schemas/grade10-planning/schema.yaml`: the `tech-design` and `tasks` instructions carry the section and group rules the `rules` blocks pointed at; those blocks name the instruction and the checks; `openspec/config.yaml` `context` says every path it names is the store's; `.claude/skills/planning-dev/SKILL.md` keeps only what the payload does not say
+- [ ] 6.7 Verify: `pnpm run test:openspec`, `pnpm run agent:check-parity` and `pnpm check:manual` pass; `openspec instructions user-journeys`, `tech-design` and `tasks` each render every rule once, run from either repository

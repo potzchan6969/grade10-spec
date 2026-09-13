@@ -82,7 +82,12 @@ has failed every push to `main` today.
   budget. Sonnet and Opus drafting the same journeys file and the same
   feature suite under the long documents and the short ones produced the
   same validator result, the same coverage and the same style counts; the
-  policy is written once, under `Where a Rule Lives` in `writing.md`.
+  policy is written once, under `Where a Rule Lives` in `writing.md`. The
+  `tasks` and `tech-design` rules had been cut to topic lists pointing at a
+  skill path, which from `grade10` resolves to a different file: the schema
+  instruction is their home, the `rules` line names the checks, the
+  `context` says every path it names is the store's, and `planning-dev`
+  keeps only what the payload does not say.
 
 ## Non-Goals
 
