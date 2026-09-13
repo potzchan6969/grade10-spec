@@ -11,13 +11,13 @@
 
 | Surface | Current implementation | Remaining work |
 | --- | --- | --- |
-| Product details | Redesign PR #149 merged as `5e05c9ea5292c5d552f3dc49607429f7514b0b22`; gallery, selected price, badges, quantity and disclosure present on main | Optional shipping/pickup facts, reliable description overflow, stock-ceiling feedback from the existing stock change |
+| Product details | Redesign PR #149 merged as `5e05c9ea5292c5d552f3dc49607429f7514b0b22`; gallery, selected price, badges, quantity and disclosure present on main | Reliable description overflow, stock-ceiling feedback from the existing stock change |
 | Shopping cart | PR #286 open at `d16c2cd307a0267633c8e7f22f15e70e4137bad9`; scoped cart, live review and mutations wired in `chrome/CartDrawerHost.tsx` | Adapt to current drawer empty-state contract and omit obsolete promo props; existing group 2 already names this work; product record group 3 remains open |
 | Order history | PR #279 open at `024348be1b318295828f24cfe2836d37bbc3ac8d`; `useOrders`, projections, session routes and tracking helpers present | Keep verification deferred; retain the tracked gitlink and product-record work; canonical status dependency below |
 | Order details | Same PR; `useOrder`, owner-read refusal, rich totals, partial address and payment projection present | Localize three literal settlement labels in appended group 6; same status dependency |
 
 - **Cart contract evidence** — current `CartDrawer` requires `emptyTitle`; the PR host supplies neither that prop nor `emptyDescription`, and still supplies `promoState`; compare against current store main when advancing the gitlink
-- **PDP facts evidence** — `Product` carries images, badges and variants but no shipping guidance or pickup location; `ProductPage` renders the generic checkout shipping label only
+- **PDP facts evidence** — `Product` carries images, badges and variants but no shipping guidance or pickup location; v1 fulfilment guidance is approved locale-catalogue copy rendered for every product
 - **PDP disclosure evidence** — `descriptionOverflows` estimates lines with a 55-character budget; actual wrapping depends on width and glyphs, so a short character count can leave more than three visible lines uncollapsed
 - **Order copy evidence** — `OrderDetailsPage` supplies literal English Discount, Shipping and Tax while the shared catalogs already define their localized keys
 - **Status dependency** — both order pages call the local `customerOrderStatus` adapter; `add-store-order-status` has no tasks yet. Its owner must settle and deliver the canonical contract before frontend migration can be planned precisely; retain the adapter and report this acceptance limitation until then
@@ -26,11 +26,10 @@
 
 1. **Planning** — review and land these additions in the registered store, then sync the application planning store before claiming implementation groups
 2. **PDP disclosure** — implement [redesign group 5](tasks.md) independently of backend work; use post-layout measurement with deterministic server rendering, never a new backend read
-3. **PDP optional facts** — contract owner supplies typed facts or product owner revises the requirement; then implement [redesign group 4](tasks.md) through the existing product repository and DI boundary
-4. **Stock feedback** — use [hold-cart-quantity-to-stock](../hold-cart-quantity-to-stock/tasks.md), groups 3 and 5 for PDP model and presentation. Expose chosen quantity from `ProductBuyBox` through a callback or controlled props so the page and buy box read the same selection; keep one scarcity threshold. Group 1 shared cart changes and group 6 cart wiring are separate dependencies; listing group 4 is outside this owner's four surfaces
-5. **Cart compatibility** — finish [cart group 2](../add-store-cart-drawer-ui/tasks.md) against the current shared contract, then its group 3 product record. Preserve the subtotal-only estimate and calculated-at-checkout shipping copy; do not add coupon, points or shipping quote calls without a separate requirement
-6. **Order copy** — finish [order group 6](../add-grade10-customer-order-pages/tasks.md) and the existing gitlink task 5.1; product-record task 1.4 stays separate from UI implementation
-7. **Acceptance later** — owner schedules desktop/mobile, locale, session, loading/error, cart quantity/refusal, owner-only order, tracking, SSR and hydration verification on the chosen integration build; then decides PR merge and deployment separately
+3. **Stock feedback** — use [hold-cart-quantity-to-stock](../hold-cart-quantity-to-stock/tasks.md), groups 3 and 5 for PDP model and presentation. Expose chosen quantity from `ProductBuyBox` through a callback or controlled props so the page and buy box read the same selection; keep one scarcity threshold. Group 1 shared cart changes and group 6 cart wiring are separate dependencies; listing group 4 is outside this owner's four surfaces
+4. **Cart compatibility** — finish [cart group 2](../add-store-cart-drawer-ui/tasks.md) against the current shared contract, then its group 3 product record. Preserve the subtotal-only estimate and calculated-at-checkout shipping copy; do not add coupon, points or shipping quote calls without a separate requirement
+5. **Order copy** — finish [order group 6](../add-grade10-customer-order-pages/tasks.md) and the existing gitlink task 5.1; product-record task 1.4 stays separate from UI implementation
+6. **Acceptance later** — owner schedules desktop/mobile, locale, session, loading/error, cart quantity/refusal, owner-only order, tracking, SSR and hydration verification on the chosen integration build; then decides PR merge and deployment separately
 
 ## Share-image archive and redesign overlap
 

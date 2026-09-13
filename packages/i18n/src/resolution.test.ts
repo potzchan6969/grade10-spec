@@ -41,6 +41,8 @@ const PRODUCT_DETAIL_KEYS = [
   "aboutThisItem",
   "shippingAndPickup",
   "shippingCalculatedAtCheckout",
+  "shippingFee",
+  "hongKongGrade10Store",
   "freePickupAt",
   "onlyLeft",
   "showMore",

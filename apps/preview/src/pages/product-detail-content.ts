@@ -63,5 +63,11 @@ const SOLD_OUT_PRODUCT: ProductDetailProduct = {
   })),
 };
 
+const SINGLE_VARIANT_PRODUCT: ProductDetailProduct = {
+  ...PRODUCT_DETAIL_PRODUCT,
+  title: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5) — Standard",
+  variants: PRODUCT_DETAIL_PRODUCT.variants.slice(0, 1),
+};
+
 export type { ProductDetailProduct, ProductDetailVariant };
-export { PRODUCT_DETAIL_PRODUCT, SOLD_OUT_PRODUCT };
+export { PRODUCT_DETAIL_PRODUCT, SINGLE_VARIANT_PRODUCT, SOLD_OUT_PRODUCT };

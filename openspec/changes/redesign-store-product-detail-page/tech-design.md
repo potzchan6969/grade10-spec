@@ -15,14 +15,9 @@ The design system already publishes the components used by the frame:
 the application shell. No design-system gap requires a new component or
 token.
 
-The remaining delivery work has two boundaries:
-
-- **Optional facts** — group 4 waits for the Store contract owner to expose
-  typed shipping guidance and pickup location fields; the page does not parse
-  provider metadata or invent a location
-- **Description disclosure** — group 5 replaces the character-count estimate
-  with a post-layout overflow decision while keeping server rendering and
-  hydration deterministic
+The remaining delivery work is the description disclosure: group 5 replaces
+the character-count estimate with a post-layout overflow decision while
+keeping server rendering and hydration deterministic.
 
 The stock ceiling and remaining-count behavior in the frontend completion plan
 belongs to `hold-cart-quantity-to-stock`, groups 3 and 5. This change consumes
@@ -33,8 +28,8 @@ a second stock threshold or duplicate its presentation task.
 
 **Goals**
 
-- **Typed product facts** — render supplied shipping guidance and pickup
-  location through the existing product read and frontend boundary
+- **Static fulfilment copy** — render the approved shipping and pickup guidance
+  from the locale catalogue for every product without extending `Product`
 - **Layout-aware disclosure** — decide whether the description needs a control
   from its rendered three-line region, not from a character budget
 - **Stable purchase contract** — keep route ownership, variant choice, cart
@@ -59,7 +54,7 @@ feature's purchase view. The shell continues to own `Nav` and `Footer`, so the
 page adds only the Figma frame's content between those landmarks.
 
 The alternative is to move the full layout into the shared package. Rejected:
-the page owns locale-aware breadcrumbs, shipping destinations, and brand copy,
+the page owns locale-aware breadcrumbs, static fulfilment copy, and brand copy,
 while the shared feature should remain free of application routing and brand
 decisions.
 
@@ -82,6 +77,20 @@ to exercise the Figma state.
 The alternative is to make the page parse arbitrary tags or infer labels from
 titles. Rejected: it would make presentation copy depend on undocumented
 catalogue strings and could show a false product facet.
+
+### Keep v1 fulfilment copy page-owned
+
+The `Product` contract does not gain shipping or pickup fields for v1. The
+page renders the same locale-catalogue fulfilment copy for every product:
+shipping is calculated at checkout with a `Shipping fee` label, and pickup is
+available at `Hong Kong Grade10 Store`. The two labels are underlined as in the
+Figma frame but are non-interactive because the annotation leaves both targets
+TBC. A later contract or navigation change can add real destinations without
+changing product metadata semantics.
+
+The alternative is to point both labels at the store surface or invent an
+external URL. Rejected: neither target represents the shipping-fee details or
+store locator promised by the annotation.
 
 ### Preserve variant semantics while matching the single-variant frame
 
@@ -129,18 +138,6 @@ The alternative is to keep the fixed character budget in the product model.
 Rejected: line wrapping changes with width, font, and locale, so the model
 cannot decide whether the rendered region exceeds three lines.
 
-### Wait for typed optional facts
-
-The frontend facts group starts only after the Store contract owner supplies
-typed optional shipping guidance and pickup location fields. The page reads
-those values through the existing decoded product repository boundary, omits
-absent values, and uses catalog copy for platform labels. It does not infer a
-location from tags, title, product type, or shipping checkout text.
-
-The alternative is to parse the current provider metadata in the page.
-Rejected: it moves provider vocabulary into the application and would make an
-absent fact indistinguishable from a guessed one.
-
 ### Consume stock-limit ownership from its own change
 
 The product page and buy box share the quantity state and stock feedback
@@ -155,15 +152,17 @@ rules for the same shop count would let the stepper and the message disagree.
 ### Keep copy in the shared catalogs
 
 The new labels (`Shop`, `About This Item`, `Shipping & Pickup`, `Shipping
-calculated at checkout`, `Free pick-up at`, `Only X left`, `Show more`,
-`Show less`, `Adding...`, `Added to cart`, and `Sold out`) are added to the
-shared product/store message catalog. Other locales fall back through the
-existing catalog-resolution mechanism until translations are supplied.
+calculated at checkout`, `Shipping fee`, `Free pick-up at`, `Hong Kong Grade10
+Store`, `Only X left`, `Show more`, `Show less`, `Adding...`, `Added to cart`,
+and `Sold out`) are added to the shared product/store message catalog. Other
+locales fall back through the existing catalog-resolution mechanism until
+translations are supplied.
 
 ## Data model
 
-No database tables or columns change. The display facts remain in Shopify and
-cross the existing catalogue wire:
+No database tables or columns change. Contract-backed display facts remain in
+Shopify and cross the existing catalogue wire; fulfilment guidance remains
+locale-catalogue copy:
 
 | Field | Shape | Owner |
 | --- | --- | --- |
@@ -184,9 +183,6 @@ accepts a fabricated default label.
   Store catalogue response.
 - `packages/grade10-store/frontend/src/features/products/product` carries
   the same decoded values to `ProductPage`.
-- The remaining product-facts group adds no new endpoint. It consumes the
-  typed optional fields supplied by the Store contract owner once that
-  contract lands.
 
 ## Risks / Trade-offs
 
@@ -200,9 +196,6 @@ accepts a fabricated default label.
 - The page uses local display state for disclosure and the existing cart query
   for add state; neither is server-authoritative and neither enters checkout
   pricing.
-- An upstream facts contract can arrive after the frontend plan is written →
-  keep group 4 blocked until the typed fields and supplied/absent fixtures
-  exist; do not substitute provider parsing.
 - Layout measurement can briefly precede the overflow decision → keep the
   control in the SSR-safe initial render and hide it only after a measured
   collapsed region proves that no disclosure is needed.
@@ -214,18 +207,14 @@ accepts a fabricated default label.
 
 1. Land the shared product copy in the `grade10-spec` main branch.
 2. Bump `external/grade10-spec` in `grade10`.
-3. Land the typed optional shipping and pickup facts contract before claiming
-   the frontend facts group.
-4. Complete the description disclosure group with layout measurement and
+3. Complete the description disclosure group with layout measurement and
    serving, hydration, package, and application coverage.
-5. Land the stock model and product-page work through
+4. Land the stock model and product-page work through
    `hold-cart-quantity-to-stock`, without duplicating its helpers here.
-6. Run the remaining product-page acceptance checks on the chosen integration
+5. Run the remaining product-page acceptance checks on the chosen integration
    build.
 
 ## Open Questions
 
-- ❓ **Typed optional product facts** — the Store contract owner has not yet
-  settled the exact optional field shape and owning change for shipping guidance
-  and pickup location. Keep group 4 unclaimed until that contract lands or
-  `grade10-site-store-product-page-SC-15` is revised.
+None. Badge source and omission behavior, static fulfilment copy, variant
+compatibility, route ownership, and validation boundaries are settled.

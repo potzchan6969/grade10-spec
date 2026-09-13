@@ -3,7 +3,7 @@
 - Product detail context
   - Media gallery: lets a collector inspect every supplied product image without a lightbox.
   - Purchase context: keeps current price, compare-at price, and inventory state together.
-  - Item facts: exposes optional product facets, shipping guidance, pickup location, and SKU.
+  - Item facts: exposes optional product facets and SKU, with static fulfilment guidance.
 - Product detail interaction
   - Description disclosure: lets a collector read the full description without losing their place.
   - Quantity purchase: lets a collector choose a quantity and add the selected variant in place.
@@ -40,11 +40,19 @@ unknown, or the variant is sold out.
 
 #### Scenario: grade10-site-store-product-page-SC-15 - A product page shows supplied item facts
 
-- **GIVEN** a product with supplied product-type, world, and language badges, shipping guidance, pickup location, and a SKU
+- **GIVEN** a product with supplied product-type, world, and language badges and a SKU
 - **WHEN** a collector opens the product page
 - **THEN** the page renders the supplied badges as non-interactive labels
-- **AND** it renders the shipping guidance, pickup location, and SKU
-- **AND** it omits each optional fact the catalogue did not supply
+- **AND** it renders this static fulfilment copy for every product:
+  - `Shipping calculated at checkout. Shipping fee`
+  - `Free pick-up at Hong Kong Grade10 Store`
+- **AND** it renders the supplied SKU below the fulfilment copy
+- **AND** it omits each optional product fact the catalogue did not supply
+
+The fulfilment copy is locale-catalogue copy in v1, not a field from the
+product contract. The `Shipping fee` and `Hong Kong Grade10 Store` labels are
+visually underlined to match the design, but remain non-interactive until real
+destinations are specified.
 
 ### Requirement: A product description can be disclosed in place
 

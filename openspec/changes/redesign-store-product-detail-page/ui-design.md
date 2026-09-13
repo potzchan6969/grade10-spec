@@ -13,8 +13,10 @@
 - `Badge` — non-interactive product facets.
 - `Stepper` — quantity control.
 - `Button` — add, loading, added, and sold-out states.
-- `Link` — breadcrumb and shipping/pickup destinations where the application
-  has a real target.
+- `Text` — static fulfilment copy and the display-only SKU.
+- `Link` — breadcrumb and other destinations where the application has a real
+  target; the v1 fulfilment labels remain non-interactive because their targets
+  are TBC.
 - `HStack`, `VStack` — page and detail-rail composition.
 
 No new `@grade10/design-system` or `@grade10/ui` export, variant, or token is
