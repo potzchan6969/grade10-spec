@@ -2,1429 +2,347 @@
 tcs_rules_rev: 3.0
 ---
 
-# Deriving test cases from a capability's spec
+# Specs to Test Cases
 
-A capability's `spec.md` is written for an implementing engineer: feature set,
-then requirements with Given/When/Then scenarios. Beside it, `user-journeys.md`
-is the product's own answer to *who is doing what, start to finish* — named and
-id'd under its one `## User journeys` heading, at most five across every
-capability a change touches (see `openspec/config.yaml`, `rules.user-journeys`).
+A suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — is a derived reading of the `spec.md` and `user-journeys.md` it names, never a second source of truth. Case shape follows [Virtuoso QA's guide](https://www.virtuosoqa.com/post/test-cases); property vocabularies are Qase's, so a suite exports without translation.
 
-A QA reviewer running a manual pass, a PM confirming acceptance before a
-change ships, or a support engineer reproducing a report needs that same
-coverage as numbered test cases: a short title, the journey it serves, what
-has to be true first, the steps to take, what should happen, and properties so
-a suite can be filtered, planned, and imported into Qase. This document
-defines that derivation — **spec journeys → classified test cases** — where
-the suites live, when they are generated, how they are reviewed, and the
-commands QA runs by hand.
+## The Rule
 
-The case components and the rules for writing them — a clean descriptive
-title, explicit pre-conditions, named test data, atomic steps, an
-expected-results list, priority, and traceability back to the journey —
-follow
-[Virtuoso QA's test case writing guide](https://www.virtuosoqa.com/post/test-cases),
-including its warnings: no vague steps, no missing expected results, no case
-that quietly depends on another having run first. The property vocabularies
-are Qase's own, so a suite exports without a translation step.
-
-## The rule
-
-`feature-tcs.md` is a derived reading of a capability's `spec.md`, not a
-second source of truth. It carries no coverage the spec does not already
-state as a scenario, and a change proposal never links it in place of a
-spec delta. Where the two disagree, `spec.md` is correct — regenerate the
-test case, never the other way round.
-
-Journeys are already written, so this file does **not** invent flows.
-Every suite section is one `user-journeys.md` story, and every test case
-traces the journey it sits under (`<capability>-US-<n>`) and is built only
-from the scenarios that accept that journey. A case built from no scenario is
-a new requirement in disguise and belongs back in `spec.md` first. A scenario
-no case covers is a hole in the suite, reported — never quietly closed by
-inventing a case.
-
-The properties are the one part QA owns outright: they classify scenarios the
-spec already states. A wrong property is fixed in review; a wrong property is
-never grounds to add, remove, or reword a step or an expected result — those
-still come from the scenario's own clauses, in its own language.
+- **The spec is correct** — a suite carries no coverage the spec does not state as a scenario; where they disagree, regenerate the case. A proposal never links a suite in place of a spec delta
+- **Journeys are given** — every section is one `user-journeys.md` story; a change holds at most five across every capability it touches (`openspec/config.yaml`, `rules.user-journeys`). A suite never invents a flow, and splitting or merging journeys is a specs edit
+- **A case comes from scenarios** — only those that accept its journey. A case built from no scenario is a requirement in disguise: back to `spec.md` first
+- **A hole is reported** — a scenario no case covers, a scenario under no journey, a journey naming a scenario the spec never defines: report it to the spec's author, never close it by inventing a case or a journey
+- **Properties are QA's** — they classify scenarios the spec states. A wrong property is fixed in review and is never grounds to change a step or an expected result
 
 ## Naming
-
-Test cases use the same journey and scenario ids as the spec they derive from,
-so a task, a review comment, and a Qase case can all name the same thing:
 
 | Id | Lives in | Example |
 | --- | --- | --- |
 | `<capability>-US-<n>` | `user-journeys.md` story | `grade10-site-store-product-listing-US-01` |
 | `<capability>-SC-<n>` | `spec.md` scenario | `grade10-site-store-product-listing-SC-01` |
-| `<capability>-US<n>` | `feature-tcs.md` journey section heading | `grade10-site-store-product-listing-US1` |
-| `<capability>-US<n>-TC<m>-<v>` | `feature-tcs.md` test case | `grade10-site-store-product-listing-US1-TC1-1` |
-| `<product>-<domain>-e2e-US<n>` | `domain-tcs.md` journey section heading | `grade10-site-auction-e2e-US1` |
-| `<product>-<domain>-e2e-US<n>-TC<m>-<v>` | `domain-tcs.md` test case | `grade10-site-auction-e2e-US1-TC1-1` |
-| `<product>-e2e-US<n>` | `product-tcs.md` journey section heading | `grade10-admin-e2e-US1` |
-| `<product>-e2e-US<n>-TC<m>-<v>` | `product-tcs.md` test case | `grade10-admin-e2e-US1-TC1-1` |
-| `platform-e2e-US<n>` | `platform-tcs.md` journey section heading | `platform-e2e-US1` |
-| `platform-e2e-US<n>-TC<m>-<v>` | `platform-tcs.md` test case | `platform-e2e-US1-TC1-1` |
+| `<capability>-US<n>` | `feature-tcs.md` journey heading | `grade10-site-store-product-listing-US1` |
+| `<capability>-US<n>-TC<m>-<v>` | `feature-tcs.md` case | `grade10-site-store-product-listing-US1-TC1-1` |
+| `<product>-<domain>-e2e-US<n>` | `domain-tcs.md` journey heading | `grade10-site-auction-e2e-US1` |
+| `<product>-<domain>-e2e-US<n>-TC<m>-<v>` | `domain-tcs.md` case | `grade10-site-auction-e2e-US1-TC1-1` |
+| `<product>-e2e-US<n>` | `product-tcs.md` journey heading | `grade10-admin-e2e-US1` |
+| `<product>-e2e-US<n>-TC<m>-<v>` | `product-tcs.md` case | `grade10-admin-e2e-US1-TC1-1` |
+| `platform-e2e-US<n>` | `platform-tcs.md` journey heading | `platform-e2e-US1` |
+| `platform-e2e-US<n>-TC<m>-<v>` | `platform-tcs.md` case | `platform-e2e-US1-TC1-1` |
 
-A domain suite issues `<product>-<domain>-e2e-*`: the same path form as a
-capability, with `e2e` where the capability segment sits. Its journey numbers
-are its own — an `e2e` journey is a path across capabilities, not a copy of
-one capability's story — and each of its cases traces the capability journeys
-it crosses, so a domain case's `**Trace:**` may name more than one id.
-
-A product suite issues `<product>-e2e-*`, with `e2e` in the capability slot
-exactly as a domain suite has it — so `grade10-admin-e2e-US1-TC1-1` reads as
-one family with the domain and feature ids beneath it. A path there crosses
-domains inside one product and never leaves it.
-
-A platform suite issues `platform-e2e-*`: one suite for the whole store, its
-journey numbers its own. A path here runs through more than one of the four
-applications — a ZZZ member bidding in a Grade10 auction, an operator action a
-collector reads back on a Grade10 page — and each case traces the capability
-journeys it crosses, in whichever products it crosses them.
-
-`<capability>` is the capability's full path with slashes as hyphens —
-`<product>-<domain>-<capability>`, so `grade10-site/store/product-listing`
-issues `grade10-site-store-product-listing-*`. The path form is what keeps
-two capabilities of the same name apart: `grade10-site/site/navigation` and
-`zzz-site/site/navigation` would otherwise both issue `navigation-*`, and no
-reader could say which a bare `navigation-SC-01` meant.
-
-A prefix is fixed at a capability's first ids and never moves again. One that
-is later renamed or moved goes on issuing what it always issued — an issued id
-is permanent, and every task, review comment and case naming one would
-otherwise be repointed silently. Read the ids that exist before issuing a new
-one; only a capability issuing its first derives the prefix from its path.
-
-Inside `feature-tcs.md` a journey id is written in its compact form — the
-hyphen after `US` dropped, the number not zero-padded — so a section heading
-and the case ids under it read as one family: spec journey
-`grade10-site-store-product-listing-US-01` becomes the section `## grade10-site-store-product-listing-US1: …`,
-holding `grade10-site-store-product-listing-US1-TC1-1`, `grade10-site-store-product-listing-US1-TC2-1`, …. The
-journeys file keeps the canonical `<capability>-US-<n>` form, and that canonical
-form is what a case's `**Trace:**` line carries.
-
-Number cases per journey from `1`. The trailing `<v>` is the case version,
-and it tracks **behaviour, not prose**: `1` is the case as first written for a
-feature, and it goes up only when a change to the requirements changes what
-the case must verify. Re-wording a case to the current rules revision never
-bumps it. Treat an issued id as permanent the same way spec ids are permanent:
-a retired case is marked `deprecated`, never renumbered away, and a new case
-takes the next unused `TC<m>` under that journey.
+- **`<capability>`** — the full path with slashes as hyphens, `<product>-<domain>-<capability>`, so two capabilities of one name stay apart
+- **`e2e` sits in the capability slot** — a domain, product or platform suite numbers its own journeys; each is a path across capabilities, domains or products, and its `**Trace:**` names every capability journey it crosses
+- **A prefix never moves** — fixed at a capability's first ids; a renamed or moved capability goes on issuing what it issued. Read the ids that exist before issuing one; only a first id derives the prefix from the path
+- **Compact form in a suite** — the hyphen after `US` dropped, no zero-pad: `…-US-01` becomes the section `## …-US1: …` holding `…-US1-TC1-1`. The journeys file and the `**Trace:**` line keep the canonical `…-US-01`
+- **Cases number per journey from 1** — an issued id is permanent; a retired case is `deprecated`, never renumbered away; a new case takes the next unused `TC<m>`
+- **`<v>` tracks behaviour, not prose** — `1` as first written; it goes up only when the requirements change what the case verifies
 
 | What happened | `<v>` | `Status` |
 | --- | --- | --- |
 | A `draft` is restyled | unchanged | stays `draft` |
 | An `actual` case still `manual` is re-worded | unchanged | stays `actual` |
-| An `actual` case that is `automated` is re-worded | — | not a restyle: it is a behaviour change or it does not happen |
-| The requirements changed what the case verifies | **bump** | back to `draft`, rewritten in the current style, reviewed again |
+| An `actual` case that is `automated` is re-worded | — | not a restyle: a behaviour change, or it does not happen |
+| The requirements changed what the case verifies | bump | back to `draft`, rewritten, reviewed again |
 
 ## Levels
 
-A suite is written at one of four levels. The level decides what the file
-covers, where it sits, and which ids it issues; everything else in this
-document applies to all of them.
+| Level | File | Covers | Derives from | Owes | A case traces |
+| --- | --- | --- | --- | --- | --- |
+| `platform` | `openspec/specs/platform-tcs.md` | paths across products | every product's `user-journeys.md`, the pages under `docs/prds/` | nothing: a few curated smoke paths | two or more journeys, from two or more products |
+| `product` | `<product>/product-tcs.md` | paths across the domains of one product | every domain's `user-journeys.md` in it, its `docs/prds/` pages | nothing: a few curated smoke paths | two or more journeys, from two or more domains of that product |
+| `domain` | `<product>/<domain>/domain-tcs.md` | paths across the capabilities of one domain | every capability's `user-journeys.md` in it, the domain's `docs/prds/` pages | every cross-capability path its journeys imply | two or more journeys, from two or more capabilities of that domain |
+| `feature` | `<capability>/feature-tcs.md` | one capability's journeys, refusals and edge cases | that capability's `spec.md` and `user-journeys.md` | every scenario its journeys accept | one journey |
 
-| Level | File | Covers | Derives from |
-| --- | --- | --- | --- |
-| `platform` | `openspec/specs/platform-tcs.md` | The paths a person walks **across** products | every product's `user-journeys.md`, and the pages under `docs/prds/` |
-| `product` | `<product>/product-tcs.md` | The paths a person walks **across** the domains of one product | every domain's `user-journeys.md` in that product, and its pages under `docs/prds/` |
-| `domain` | `<product>/<domain>/domain-tcs.md` | The paths a person walks **across** the capabilities of one domain | every capability's `user-journeys.md` in that domain, plus the domain's pages under `docs/prds/` |
-| `feature` | `<capability>/feature-tcs.md` | One capability's own journeys, including its refusals and edge cases | that capability's `spec.md` and `user-journeys.md` |
-
-**What each level owes.** The obligation is not the same at every level, and
-this is what keeps the upper suites small:
-
-| Level | Owes |
-| --- | --- |
-| `feature` | Every scenario its journeys accept |
-| `domain` | Every cross-capability path its domain's journeys imply |
-| `product`, `platform` | **Nothing.** A handful of curated paths that prove the seams hold, every one of them `**Suites:** smoke` |
-
-`product` and `platform` are health checks, not coverage. Few cases, each
-walking a long way, written to answer *does the whole thing still work
-together* — never to cover a scenario, which is the level below's job. A
-product or platform suite that grows past a page has stopped being a smoke
-pass.
-
-**A suite exists only where there is a path to hold it.** A product with one
-domain has no cross-domain path, and a product with no specs has nothing at
-all; neither gets a `product-tcs.md`, and its absence is not a gap to report.
-The same test applies to `platform-tcs.md`: it comes into being when the first
-cross-product path is written, not before.
-
-**`shared/` never gets a product suite.** It is not an application, so there is
-no surface on which to run one. Its capabilities get feature suites, and paths
-across them get `shared/<domain>/domain-tcs.md` — `shared/auth/session`
-SC-04, *signed in on Grade10, open ZZZ, not signed in*, is stated by no
-product's spec and belongs there. Everything else `shared` does is exercised in
-passing by the products that are held to it.
-
-**The file name carries the level.** A suite is `platform-tcs.md`,
-`product-tcs.md`, `domain-tcs.md` or `feature-tcs.md`, so the level is legible from the path
-without opening anything. `test-cases.md` is not a suite name: the suites that
-carried it were renamed when r3.0 landed, and nothing reads it any more.
-
-`/spec-to-tcs [platform|product|domain|feature] <target>` takes the level as
-its first argument, and infers it from the target's shape when it is not given.
-
-**Levels run top down.** Platform, then product, then domain, then feature —
-deriving and reviewing alike. Each level names the paths it owns; the level
-below covers what those paths do not reach, rather than re-testing a path from
-underneath. Deriving in the other order leaves every lower suite guessing at
-what the level above will cover.
-
-**Each level has its own job.** Which level owns a case is
-not a matter of taste — see the next section.
+- **The file name carries the level** — `test-cases.md` is not a suite name
+- **`product` and `platform` are health checks** — every case `**Suites:** smoke`; a suite past a page has stopped being a smoke pass
+- **A suite exists only where a path exists** — a product with one domain has no `product-tcs.md`, a product with no specs has nothing, and `platform-tcs.md` starts with the first cross-product path; none of those absences is a gap
+- **`shared/` gets no product suite** — its capabilities get feature suites, and paths across them `shared/<domain>/domain-tcs.md`
+- **Levels run top down** — platform, product, domain, feature, deriving and reviewing alike; each level names the paths it owns and the level below covers what those do not reach
+- **`/spec-to-tcs [platform|product|domain|feature] <target>`** — the level first, or inferred from the target's shape
 
 ### One purpose, one case
 
-**The spec that states the behaviour owns the case.** A capability's feature
-suite covers what its own `spec.md` states, wherever the outcome is observed.
-`grade10-admin/auction/listing` SC-16 says a collector opens
-`/auction/listings/<slug>`, so that case is the listing capability's, even
-though the address it checks is a page on the Grade10 site. Coverage follows
-the spec, because the spec is the only thing that says what must be true.
+- **The spec that states the behaviour owns the case** — wherever the outcome is observed: `grade10-admin/auction/listing` SC-16 opens a page on the Grade10 site, and the case is the listing capability's
+- **The levels above hold composed paths** — what no single spec states end to end; a composed case names every journey it walks, and one trace at a composed level fails `pnpm run tcs:validate`
+- **Compose from evidence** — a run reads every `user-journeys.md` and every `docs/prds/` page in its scope before writing: a domain run reads the changed capability's journeys, every sibling capability's, and the domain's product record (`index.md` and each page) for its words and seeded values; a platform run reads the same one scope wider
+- **Within a level** — two cases whose traces and outcomes say the same thing are one case; differing only in a value, one case with a row per run
+- **Across levels** — a `product` or `platform` case re-walks lower coverage on purpose, to ask whether the seam holds. Duplication is a lower case that exists only to re-test a higher path, or two composed cases at one level on the same path
+- **The validator reports, a human decides** — identical trace sets among composed cases, and journeys traced at more than one level, are evidence, not proof
 
-The levels above hold what no single spec states end to end: a path assembled
-from journeys in two or more places. That is what **composed** means, and it is
-checkable, because a composed case names every journey it walks.
+### When a Change Touches a Suite Above It
 
-| Level | Its cases trace |
-| --- | --- |
-| `domain` | two or more journeys, from two or more capabilities of that domain |
-| `product` | two or more journeys, from two or more domains of that product |
-| `platform` | two or more journeys, from two or more products |
+1. Take the capabilities the change's `## Capabilities` names and the delta `spec.md` paths it carries
+2. Intersect their journeys with the `**Trace:**` lines in that domain's `domain-tcs.md` and in `platform-tcs.md`
+3. A hit, or a capability new to a domain that has a `domain-tcs.md`, is an impact at that level
 
-A case at one of those levels tracing a single journey is not composed: it is a
-feature case written at the wrong level, and `pnpm run tcs:validate` fails it.
-**Compose from evidence, never from imagination** — a run reads every
-`user-journeys.md` and every `docs/prds/` page in its scope before it writes,
-and a path it cannot trace to journeys that exist is not a path.
+On a hit the change carries an edit to that suite or one proposal line — `No domain impact: <why>`, `No platform impact: <why>` — and `/spec-push` refuses without one. `## Impact` is not the signal: it records code, not paths.
 
-The same behaviour asserted twice *for the same reason* is a defect wherever it
-sits: one suite can go green on a product the other proves broken, and a fix
-lands in one file while the other goes on testing the shape the product has
-left. So:
-
-- **Within a level.** Two cases whose traces and outcomes say the same thing
-  are one case. Where they differ only in a value, they are one case with a row
-  per run (see **Step 4**).
-- **Across levels.** A `product` or `platform` case re-walks behaviour the
-  levels below already cover — deliberately, because its purpose is different:
-  it asks whether the seam still holds, not whether the behaviour is right.
-  That is not duplication. Duplication is a lower case that exists only to
-  re-test a path a higher suite owns, or two composed cases at one level
-  walking the same path.
-
-`pnpm run tcs:validate` reports what it can see mechanically: composed cases
-sharing an identical trace set, and journeys traced at more than one level. It
-reports, and a human decides — a shared trace is evidence, not proof.
-
-**What a domain run reads.** All of it, before writing anything:
-
-- the changed capability's `user-journeys.md` in whichever tree the change owns;
-- every sibling capability's `user-journeys.md` in `openspec/specs/<product>/<domain>/`;
-- the domain's product record under `docs/prds/products/<product>/<domain>/` —
-  its `index.md` and each capability page — for the decisions, the vocabulary,
-  and the seeded values a path is written in. A case that names a control, a
-  state, or an amount the manual already names is written in those words.
-
-Reading only the change loses the siblings that make a path cross-feature;
-reading only `openspec/specs/` misses the change the run exists to cover.
-
-**A platform run reads the same way, one scope wider:** every product's
-`user-journeys.md` under `openspec/specs/`, and the product records beside
-them. A platform path is rare and specific, so name the products it crosses
-first and read those.
-
-### When a change touches a suite above it
-
-A change does not always move a path above it, and a suite edited to satisfy
-a gate is worse than no edit. Compute it instead of asking, once for each level
-above the change:
-
-1. Take the capabilities the change's `## Capabilities` names, and the delta
-   `spec.md` paths it actually carries.
-2. Intersect their journeys with the `**Trace:**` lines in that domain's
-   `domain-tcs.md`, and in `platform-tcs.md`.
-3. A hit, or a capability new to a domain that already has a `domain-tcs.md`,
-   is an impact at that level.
-
-On a hit the change carries either an edit to that suite or one line in its
-proposal — `No domain impact: <why>`, `No platform impact: <why>` — and
-`/spec-push` refuses without one. No hit, no question asked. `## Impact` is not
-the signal: it records affected code and packages, not the paths a person walks.
-
-## Who the actor is
-
-Every journey, and every case under it, is walked by one of **two** classes:
+## Who the Actor Is
 
 | Class | Who |
 | --- | --- |
-| `customer` | Anyone outside the business — the person the product is sold to |
-| `admin` | Anyone inside it — the people who run the shop |
+| `customer` | anyone outside the business — the person the product is sold to |
+| `admin` | anyone inside it — the people who run the shop |
 
-Two, and no more. The specs name upwards of forty roles — collector, member,
-shopper, bidder, borrower, auction operator, shop staff, treasurer, controller,
-auditor, inventory admin — and every one of them is one of those two classes
-**holding a state or a grant**. That distinction is not the actor. It is a
-pre-condition.
+- **Every role is a class holding a state or a grant** — collector, bidder, shop staff, treasurer: the state is a pre-condition, not the actor
+- **Class, qualifier, place** — `customer(gold member) is on the shopping cart page.`, `admin(holds auction:operate) is on <grade10 auction admin listings url>.` The qualifier carries what the rule under test needs and nothing more; a bare `customer` is right where state does not matter; two of a class are `customer A` and `customer B`
+- **A product serves both classes** — `openspec/config.yaml` places a capability by who is held to it, not whose screen shows it
+- **Any other actor is not a journey** — engineers, QA, crawlers, preview fetchers and consuming applications are not end users; a crawler is a condition on a customer's journey. A capability nobody reaches writes `**Walked by:** nobody on their own — <who inherits it>`; `pnpm run tcs:validate` fails a journey whose actor resolves to neither class
 
-**Write the class, then the qualifier, then where they are:**
-
-```markdown
-* customer(gold member) is on the shopping cart page.
-* admin(shop staff) is on the loyalty member page.
-* customer(bidder leading `<listing_6>`) is on that lot's page.
-* admin(holds `auction:operate`) is on <grade10 auction admin listings url>.
-```
-
-The qualifier carries whatever the rule under test actually needs — a tier, a
-grant, a held position, an open loan — and nothing it does not. A bare
-`customer` is a customer in no particular state, which is right for a case
-where the state does not matter. When two of a class act, they are
-`customer A` and `customer B`.
-
-A product serves both classes. `grade10-site` holds capabilities walked by shop
-staff, and that is not a filing error: `openspec/config.yaml` places a
-capability by who is held to it, not by whose screen it appears on. A product
-suite's smoke paths cross the two routinely — an admin publishes, a customer
-buys.
-
-**A journey with any other actor is not a journey.** `openspec/config.yaml`
-already says so: the role is an end user the spec already names, and a
-capability no end user reaches on its own writes `**Walked by:** nobody on
-their own — <who inherits it>` in place of a story rather than inventing an
-actor to fill one. Engineers, developers, QA reviewers, crawlers, preview
-fetchers and consuming applications are not end users — a crawler is a
-*condition* on a customer's journey, and a backend contract is walked by
-nobody. `pnpm run tcs:validate` fails a journey whose actor resolves to
-neither class.
-
-## Where it lives
-
-A feature suite always sits beside the `spec.md` it was derived from. Both
-trees are first-class targets for `/spec-to-tcs`:
+## Where It Lives
 
 | Capability location | Suite location |
 | --- | --- |
-| Durable: `openspec/specs/<product>/<domain>/<capability>/` | `.../feature-tcs.md`, beside that directory's `spec.md` and `user-journeys.md` |
-| In-flight change: `openspec/changes/<change>/specs/<product>/<domain>/<capability>/` | `.../feature-tcs.md`, beside the same two |
-| Domain, durable: `openspec/specs/<product>/<domain>/` | `.../domain-tcs.md`, beside its capability directories |
+| Durable: `openspec/specs/<product>/<domain>/<capability>/` | `.../feature-tcs.md`, beside `spec.md` and `user-journeys.md` |
+| In-flight: `openspec/changes/<change>/specs/<product>/<domain>/<capability>/` | `.../feature-tcs.md`, beside the same two |
+| Domain, durable: `openspec/specs/<product>/<domain>/` | `.../domain-tcs.md` |
 | Domain, in-flight: `openspec/changes/<change>/specs/<product>/<domain>/` | `.../domain-tcs.md`, folded into the durable file at archive |
 | Platform | `openspec/specs/platform-tcs.md`, one for the store |
 
-`/spec-to-tcs` resolves whichever tree the argument names and writes only
-there. When a capability exists in both, ask which one — do not prefer the
-delta by default. When a change is archived, `openspec archive`'s spec sync
-carries the delta's `feature-tcs.md` into the durable location the same way
-it carries the delta `spec.md`.
+- **One tree per run** — `/spec-to-tcs` writes only to the tree the argument names; when a capability is in both, ask, never prefer the delta
+- **Archive carries the suite** — the delta's `feature-tcs.md` moves with its `spec.md`
+- **Every capability with checkable scenarios gets a suite** — missing or empty journeys are written first, from `spec.md`, to `openspec/config.yaml` (`rules.specs`, `rules.user-journeys`); a spec with no scenarios is not ready
 
-Write a suite for every capability whose spec (durable or delta) has
-checkable scenarios. When `user-journeys.md` is missing or empty,
-`/spec-to-tcs` first writes it from the behavior already in `spec.md`, to
-match `openspec/config.yaml` (`rules.specs` and `rules.user-journeys`), then
-derives the suite. A capability with no scenarios at all is not ready — finish
-the requirements first.
+## When Suites Are Generated
 
-## When suites are generated
-
-### Automatic — in the spec's own pull request
-
-When `/planning-pm` finishes the proposal, the delta specs and their
-journeys, and `openspec validate <change> --strict` passes, it **immediately**
-runs `/spec-to-tcs <change>` against that change. The suites land beside each
-delta with every case `draft`, committed to the same branch as its own
-`test(<domain>): derive test cases for <capability>` commit. Generation is part
-of finishing the planning lane, not a later favour.
-
-Drafts ride in the spec's pull request because they are derived from that
-spec in that commit: no window exists where `main` carries requirements with no
-suite, nothing has to reopen a change directory that already merged, and the
-trace check has both halves in front of it. It costs the spec's reviewer
-nothing to approve — a `draft` case carries no authority, and nobody is being
-asked to stand behind one here. Standing behind them is review, it needs a
-human with time, and it gets its own pull request later (see **The review
-lane**).
-
-`/spec-push` refuses to push a change whose capabilities have a
-`user-journeys.md` but no `feature-tcs.md` beside it, and runs
-`pnpm run tcs:validate` alongside the other checks.
-
-A change that sets `skip_specs: true` has nothing to generate. A capability
-that still lacks a `user-journeys.md` gets one from `/spec-to-tcs` before the
-suites are written — not left for a later pass.
-
-### Manual — generate or extend by agent command
-
-```text
-/spec-to-tcs <capability-or-change>
-```
-
-Runs against **either** tree. Pick the argument that names the tree you
-want:
+- **Automatic** — when `/planning-pm` has the proposal, deltas and journeys through `openspec validate <change> --strict`, it runs `/spec-to-tcs <change>` at once: every case `draft`, on the same branch, as its own `test(<domain>): derive test cases for <capability>` commit. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
+- **`/spec-push` refuses** — a change whose capability has `user-journeys.md` and no `feature-tcs.md`; it runs `pnpm run tcs:validate` with the other checks
+- **`skip_specs: true`** — nothing to generate
+- **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
 
 | Argument | Resolves to |
 | --- | --- |
-| A change name (`add-auction-auto-bidding`) | Every delta under `openspec/changes/<change>/specs/` |
-| A capability id (`grade10-site/store/home`) | The durable `openspec/specs/<product>/<domain>/<capability>/spec.md`, or — if an active delta also exists — ask which tree |
-| An explicit path under `openspec/specs/` or `openspec/changes/` | Exactly that path's tree |
+| a change name (`add-auction-auto-bidding`) | every delta under `openspec/changes/<change>/specs/` |
+| a capability id (`grade10-site/store/home`) | the durable spec, or ask when an active delta also exists |
+| a path under `openspec/specs/` or `openspec/changes/` | exactly that tree |
 
-Examples:
+### When a Suite Already Exists
 
-```text
-/spec-to-tcs grade10-site/store/home
-/spec-to-tcs add-auction-auto-bidding
-/spec-to-tcs grade10-site/auction/auto-bidding
-```
-
-If the resolved capability has no `user-journeys.md` (or an empty one),
-`/spec-to-tcs` writes one to the shape in `openspec/config.yaml` — INVEST
-stories with permanent `<capability>-US-<n>` ids, each accepted by the
-`<capability>-SC-<n>` scenarios already in `spec.md` — **without adding
-requirements**, then continues and writes `feature-tcs.md`. Report the new
-journeys file in the same run.
-
-### When a suite already exists
-
-A second run against a capability that already has `feature-tcs.md` is never a
-silent overwrite. `/spec-to-tcs` shows the suite it found — its file status,
-its journeys, its cases and their statuses, and any scenario the spec has
-gained or lost since — and asks what the user wants before writing:
+A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it found — file status, journeys, cases and statuses, scenarios gained or lost — and asks.
 
 | Choice | Does |
 | --- | --- |
-| Update | Add cases for scenarios no case traces, re-word cases whose scenarios changed, mark `deprecated` any case whose scenario the spec no longer has. Existing ids and reviewed properties survive. |
-| Another target | Leave this suite untouched and resolve a different capability or change. |
-| Regenerate | Rewrite the whole file from the spec. Destroys review history. Only after an explicit confirmation, and only when the guard below allows it. |
+| Update | new cases for untraced scenarios, re-worded cases for changed ones, `deprecated` for scenarios the spec lost; ids and reviewed properties survive |
+| Another target | leaves this suite untouched |
+| Regenerate | rewrites the whole file; destroys review history; explicit confirmation, and only when the guard allows |
 
-**The regeneration guard.** Regenerating or deleting a suite is refused when
-either is true:
-
-- the file's `**Status:**` is `approved`, or
-- any case in it has `**Status:** actual`.
-
-Those cases have a reviewer's name behind them and may already be in Qase.
-Update the suite in place instead — new scenarios become new `draft` cases,
-retired ones become `deprecated`, and reviewed cases keep their ids. A
-reviewer who genuinely wants a clean rewrite moves the affected cases back to
-`draft` by hand first — the file's own status follows them — and an agent never
-does that on its own.
-
-### When a change moves the ground an approved case stands on
-
-A delta that rewrites or removes a scenario an `actual` case traces has turned
-that case into a claim about a product that no longer exists. Left alone it is
-worse than no coverage: a suite that passes while asserting the behaviour the
-change replaced. The case is resolved in the same change, and there are only
-three ways to resolve it:
-
-| What the change did to the traced scenario | The case becomes |
-| --- | --- |
-| Changed what the case must verify | `<v>` bumped, back to `**Status:** draft`, rewritten, reviewed again |
-| Removed the behaviour | `**Status:** deprecated` |
-| Neither — it did not touch what this case asserts | left `actual`, and the run says so explicitly |
-
-**Deferring defers the review, never the marking.** A case whose scenario moved
-goes back to `draft` at once — which stops it exporting and puts it in front of
-the next `/tcs-review` — and what waits is the reviewer's time, not the file's
-honesty. `/spec-push` refuses a change that moves a scenario an `actual` case
-traces without one of the three resolutions above.
+- **Regeneration guard** — refused when the file is `approved` or any case is `actual`. A reviewer who wants a clean rewrite moves those cases back to `draft` by hand first; an agent never does
+- **A delta that moves the ground under an `actual` case** — resolved in the same change, or `/spec-push` refuses: changed what the case verifies → `<v>` bumped, `**Status:** draft`, rewritten, reviewed again; removed the behaviour → `**Status:** deprecated`; did not touch what the case asserts → left `actual`, and the run says so. Marking is never deferred: the case goes back to `draft` at once, and only the review waits
 
 ## What the approved suites teach the next one
 
-Review is not only a gate; it is the store's record of how a case should
-read. Every `actual` case has a reviewer's yes behind it, including the
-wording they changed to get there, so the approved corpus answers the
-questions this document can only answer generically: how long a title runs,
-how a pre-condition states its setup, how many steps a pass takes, which
-severity a degradation gets here.
+- **The corpus** — every `actual` case under `openspec/specs/` and `openspec/changes/`, never `archive/`, weighted capability first, then product, then store
+- **A convention** — a pattern across three or more approved cases, or two in the capability at hand; below that the defaults here stand, and a corpus under three cases teaches nothing, which the run says
+- **Only the current major teaches** — `**Reviewed:**` records the revision; the corpus is filtered on `tcs_rules_rev`'s major, so a minor behind still teaches. A bare-dated file teaches nothing until reviewed again
+- **It refines how, never what** — it cannot add coverage, loosen "mechanism is yours, coverage is the spec's", licence an invented label, or overrule this document; a contradicting approved case is reported and the written rule followed. A convention becomes permanent only by amending this document
+- **Drafts follow it** — every `draft` in the resolved suite is re-worded to the convention, id kept, `<v>` unchanged, status `draft`; coverage never moves. `actual` and `deprecated` cases are never restyled
+- **The reviewer's lever** — edit a case during `/tcs-review`, approve it, and it is evidence from then on
 
-`/spec-to-tcs` therefore reads that corpus before it writes. It collects
-every `actual` case under `openspec/specs/` and `openspec/changes/`
-(never `archive/`), weights them — the capability being generated for first,
-then the product, then the store — and treats a pattern as this store's
-convention when it holds across three or more approved cases, or two within
-the capability at hand. Below that threshold the pattern is a coincidence and
-the defaults in this document stand. A corpus with fewer than three approved
-cases teaches nothing, and the run says so.
-
-**Only cases approved under the current major revision teach.** A reviewer's
-yes is a yes to the rules as they stood that day, so a suite approved under an
-older major goes on carrying that major's shape — correctly, because nothing
-re-words an approved case for style alone — and it must not teach the current
-one. The `**Reviewed:**` line records the revision alongside the date, and the
-corpus is filtered to suites whose **major** matches `tcs_rules_rev`.
-
-The match is on the major alone, deliberately. A minor bump moves wording
-conventions a little; filtering on the exact revision would empty the corpus
-every time one landed, leaving this document the only teacher forever and never
-letting the store's own practice accumulate. Matching the major means the
-corpus teaches conventions at most one minor behind, and the defaults here
-override anything it gets wrong.
-
-When the filtered corpus falls below the threshold — which is what a major bump
-does to it — the defaults in this document stand, and the run says the corpus
-was too thin rather than reaching for stale evidence. A file approved before
-the revision was recorded at all carries a bare date and teaches nothing until
-someone reviews it again.
-
-This is what keeps a rules change from being undone one generated suite at a
-time.
-
-**The corpus refines how a case is written, never what it claims.** It cannot
-add coverage a spec does not state, loosen "mechanism is yours, coverage is
-the spec's", licence an invented label in place of a placeholder, or overrule any
-rule in this document. An approved case that appears to contradict one of
-those is not a new rule: the run reports it and follows the written rule, and
-a human decides whether the document or the case is wrong. That is how a
-convention becomes permanent — someone amends this document — rather than by
-accumulating quietly in the suites.
-
-What the run does with what it learned is settled: every `draft` case in the
-suite it resolved, whether written this run or left by an earlier one, is
-brought to the convention — re-worded, `<v>` bumped, id kept, status still
-`draft`. Cases marked `actual` or `deprecated` are never restyled, however
-far they sit from current practice; their wording is the reviewer's, and
-re-wording it would quietly discard the yes behind it. Restyling never
-changes a case's coverage: the steps, pre-conditions and expected results
-still say what the spec says, in the words the corpus favours.
-
-A reviewer who wants the loop to move faster has a direct lever: edit a case
-during `/tcs-review` until it reads the way this store should write, then
-approve it. That case is evidence from then on.
-
-## The review lane
-
-Review is the one part of this pipeline that a person does, so it gets its own
-branch and its own pull request — never the spec's.
+## The Review Lane
 
 | | |
 | --- | --- |
-| Branch | `tcs-review/<level>-<target>` — `<level>` is `feature`, `domain`, `product` or `platform`; `<target>` is the capability, domain or product id, and `platform` carries none |
-| Commits | `test(<domain>): approve <target> US<n> test cases` |
-| PR title | `test(<domain>): approve <target> US<n>–<m> test cases` — the journeys this branch actually carries, not the suite's full range |
+| Branch | `tcs-review/<level>-<target>`, off `main`, before the first verdict; a second reviewer on the same suite appends `-US<n>-<m>` |
+| Commits | `test(<domain>): approve <target> US<n> test cases`, one per journey |
+| PR title | `test(<domain>): approve <target> US<n>–<m> test cases` — the journeys the branch carries |
 | PR label | `documentation` |
-| Merges | At journey boundaries — not only when the whole suite is finished |
+| Merges | at journey boundaries; a stopped review still opens a draft PR for what has verdicts |
 
-**Every review starts on a branch.** `/tcs-review` branches off `main` before
-the first verdict, whatever the suite holds. Verdicts are written to disk as
-they are taken, so `main` is never where they land, and the case count never
-decides whether a branch is worth taking.
+- **One journey at a time** — its story, then every `draft` case in full, with `actual` and `deprecated` cases listed by id; scenarios offered, and quoted in full on request
+- **Only a human approves** — verdicts approve, change, defer or retire, in the reviewer's words; ids are echoed back and only what was named is marked. Approve → `actual`, defer → `draft`, retire → `deprecated`; the file status follows on its own
+- **Questions are answered from the spec** — quoting the clause, never from an assumption about the product
+- **Restyle first** — drafts to the current revision before review; offered for an `actual` case still `manual`; an `automated` case left as it is
+- **Finding suites** — any file holding a `draft`: none → say so and name where suites live; one → review it; more → list with pending counts and ask
+- **Top down** — platform, product, domain, then feature; when a domain's last feature suite is approved, offer its `domain-tcs.md`, then `platform-tcs.md`
+- **Two reviewers is allowed** — open PRs on the file are reported as information; the file is re-read from disk before each verdict is written
+- **Push at the end of a session** — `/tcs-review` offers to commit and push what has a verdict
 
-**The journey is the unit of review, not of naming.** A reviewer holds one user
-flow in their head at a time, so `/tcs-review` shows one journey, takes its
-verdicts, and commits them before opening the next. The branch name stays the
-suite's — which journeys it carries is the pull request's title to state, since
-the reviewer knows the range only once they stop. Two reviewers in one suite at
-once is the one case the name cannot hold: the second branch appends its range,
-`-US<n>-<m>`.
+## Rules Revisions
 
-**Merge partial progress.** A journey's worth of approved cases is worth
-landing on its own: the suite goes to `in-review`, the approved cases are
-banked, and an interrupted review leaves its work on `main` rather than on a
-branch nobody picks up again. This is also what makes `in-review` visible to
-the next person.
-
-**Push at the end of each session.** When the reviewer stops for the day,
-`/tcs-review` offers to commit and push what has a verdict. Nothing is lost to
-a closed laptop, and the pull request shows the day's progress. A review that
-stops before the file is finished still opens its pull request, for the
-journeys that have verdicts, with that range in the title. It stays a draft PR
-until the branch's journeys are done.
-
-**Two reviewers on one file is allowed.** Nothing here reserves a suite.
-`/tcs-review` reports any open pull request touching the file it is about to
-open — as information, never as a refusal — and re-reads the file from disk
-before each verdict it writes, so a long session cannot write back a stale copy
-of somebody else's approved case.
-
-```text
-/tcs-review [<capability-or-change>]
-```
-
-**Restyle before reviewing.** Opening a file brings its `draft` cases to the
-current rules revision first — the reviewer's attention belongs on coverage,
-not on wording the rules already settle — and offers the same for an `actual`
-case whose automation status is still `manual`. A case that is `automated` is
-left exactly as it is. This is the minor path: after a major bump every suite
-has already been swept, so a review opens on a file that is current by
-construction.
-
-**Top down here too.** `platform-tcs.md` before `product-tcs.md`, that before a domain suite, and a domain
-suite before the features under it. Reviewing downward settles which paths are
-covered end to end before the level beneath is judged against them, and it
-makes the higher suite's cases the first house-style evidence the reviews under
-it inherit. When the last feature suite in a domain is approved, `/tcs-review`
-offers that domain's `domain-tcs.md` if it still holds drafts, and the same
-upward for `platform-tcs.md`.
-
-Review is a conversation, one **journey** at a time, and only a human approves.
-A reviewer judges a journey's cases against each other — what is missing, what
-is duplicated, whether the negative case belongs here — and that is not
-possible one case at a time. The
-`tcs-review` skill finds every suite awaiting review — any file holding a
-`draft` case, which is every file not marked `approved`:
-
-- **None** → say so, and name where suites would live.
-- **Exactly one** → review it directly.
-- **More than one** → list the capabilities and changes with their pending
-  counts and ask which to take.
-
-A journey arrives whole: its story, then every `draft` case under it in full,
-with cases already `actual` or `deprecated` listed by id so the shape of the
-journey is visible. The spec's scenarios are **offered, not quoted** — the
-reviewer knows the flow, and a wall of Gherkin before every case buries the
-cases. Ask for the scenarios behind a case and they are quoted in full.
-
-The reviewer then answers for the journey: approve, change, defer, or retire,
-in whatever shape suits them ("all good", "approve except TC3"). Before
-anything is written the ids are echoed back, and only what was named is
-marked — an approval covers the journey just shown and never widens to a case
-nobody saw. Their questions ("why is this `critical`?", "where does the spec
-say 20000?") are answered from the spec, quoting the clause — never from an
-assumption about how the product probably works. Approving sets that case's
-`**Status:**` to `actual`; deferring leaves it `draft`; retiring sets
-`deprecated`. The file's own status follows from those verdicts without anyone
-setting it: `in-review` from the first approval, `approved` once no `draft`
-remains — and only then does it export.
-
-## Rules revisions: minor and major
-
-`tcs_rules_rev` is `<major>.<minor>`, and which part moves is not a judgement
-call:
-
-> Run the store against the new rules. If a file that was valid is now
-> rejected, the change is **major**. If nothing breaks, it is **minor**.
+`tcs_rules_rev` is `<major>.<minor>`. Run the store against the new rules: a valid file now rejected is a **major**, nothing broken is a **minor**, a typo is neither.
 
 | | Minor | Major |
 | --- | --- | --- |
-| What changed | How a case reads — wording, phrasing, the voice a step is written in | The contract — a property added or retired, a vocabulary value removed, an id form, a file name, a level |
-| Existing suites | Still valid, written in an older voice | Non-conformant until they move |
-| How it reaches them | **Restyle**, one capability at a time | **Sweep**, every suite, in the bump's own commit |
+| What changed | how a case reads | the contract: a property, a vocabulary value, an id form, a file name, a level |
+| Existing suites | valid, in an older voice | non-conformant until they move |
+| How it reaches them | restyle, one capability at a time: `pnpm run tcs:stale`, then `/spec-to-tcs <capability>`, one PR each | sweep, every suite, in the bump's own commit |
 
-### Minor: drafts drift
-
-Bump the minor and let the change reach the drafts the way every other
-convention reaches them — a `/spec-to-tcs` run on one capability at a time.
-
-```text
-pnpm run tcs:stale              # which suites' drafts sit below the current rev
-/spec-to-tcs <capability>       # bring one suite's drafts up, one PR each
-```
-
-`draft` cases are re-worded, ids kept, `<v>` unchanged, status still `draft`;
-`actual` and `deprecated` cases are never restyled; only the
-`**Drafts styled:**` line moves. There is no sweep here. Nothing is invalid in
-the meantime, and a wording diff across the whole store buys nothing that a
-capability-sized one does not.
-
-### Major: the store moves at once
-
-A contract change leaves every suite that predates it invalid, and a store
-that fails its own validator until each suite is touched individually is worse
-than the diff that was being avoided. A major bump therefore carries its own
-sweep, in one commit, across every suite.
-
-**A sweep rewrites the cases; it never only restamps them.** Moving a
-`**Drafts styled:**` line to a revision whose conventions the cases below it do
-not follow is a lie the next reader has no way to catch: the file claims to be
-current, `pnpm run tcs:stale` stops reporting it, and the drafts sit in the old
-shape forever. If a bump changes how a case reads, every draft is rewritten to
-read that way in the same commit — and if the drafts are not being rewritten,
-the revision does not move.
-
-That is safe because it stays mechanical where it counts. **A sweep may not
-change what a case claims:** same case ids, same traces, no `<v>` bump. It may
-re-word a draft freely — that is the point of it — but it may not add, drop or
-repoint coverage. `pnpm run tcs:validate --swept` asserts exactly that — the set of
-case ids and the set of traces identical before and after — and a sweep that
-cannot satisfy it is not a sweep.
-
-**A major bump may only require what is mechanically derivable on an approved
-case.** That is a constraint on the rules, not on the sweep: a change that
-would need approved cases re-worded to conform is not a rules bump but a
-re-review programme, and it is either scoped to drafts or budgeted
-deliberately. Three outcomes, and the bump states which one it is taking
-before it runs:
-
-A sweep of drafts is therefore a rewrite, and `--swept` is what proves the
-rewrite stayed honest: it compares every case id and trace before and after,
-so re-wording is free and a silently dropped or repointed case is not.
+- **A minor restyle** — drafts re-worded, ids kept, `<v>` unchanged, status `draft`; only `**Drafts styled:**` moves; `actual` and `deprecated` never
+- **A sweep rewrites, never restamps** — if the drafts are not rewritten, the revision does not move
+- **A sweep changes no claim** — same ids, same traces, no `<v>` bump; `pnpm run tcs:validate --capture-baseline=<file>` before and `--swept=<file>` after prove it
+- **A major may only require what is mechanically derivable on an approved case** — anything more is a re-review programme, scoped or budgeted, and the bump states which outcome it takes
+- **An approved case is never migrated silently** — the sweep reports what it derives, on how many cases, in which files, and waits for a yes
 
 | The new rule | The sweep does |
 | --- | --- |
-| Derivable from what the case already carries — a property split, a renamed file, a header line | Migrate it, `actual` cases included |
-| Not derivable, the old shape still readable | Grandfather it: the case keeps its shape, its `**Reviewed:**` revision records why, and it stops teaching the corpus |
-| Not derivable, not readable | That suite goes back to `draft` for re-review — one suite at a time, a human deciding each, never swept |
+| derivable from what the case carries | migrates it, `actual` included |
+| not derivable, old shape still readable | grandfathers it: shape kept, `**Reviewed:**` revision says why, it stops teaching |
+| not derivable, not readable | that suite goes back to `draft`, one at a time, a human deciding each |
 
-**An approved case is never migrated silently.** Before touching a case whose
-status is `actual`, the sweep reports what it will derive, on how many cases,
-in which files — and waits for a yes. The migration is mechanical; the decision
-to run it over a reviewer's name is not.
+## Step 1: Digest the Capability
 
-## Step 1: digest the capability (upgrade journeys if missing)
+- **Read whole** — `spec.md` (`## Purpose`, `## Feature set`, requirements and scenarios), `user-journeys.md`, and the change's `proposal.md`, whose acceptance signal makes a case's type `acceptance`
+- **Read the product record** — `docs/prds/products/<product>/<domain>/index.md` and the capability's page: a control, state or amount the manual names is written in the manual's words
+- **Read the store's context** — `openspec/config.yaml`'s `context` for the brands, products and conventions (money is minor units plus an ISO 4217 code): `<grade10 store url>`, never `<store front door URL>`
+- **Read the cross-cutting specs the Purpose names** — `crawlable-pages`, `localization`, `money-amounts`, `dates-and-times`. Their facts are checked on the way past (`URL contains <lang>`), never set up as a pre-condition
+- **Write missing journeys first** — to `rules.user-journeys`: keep every SHALL and scenario clause, add a Feature set if none, permanent ids, `**As a** / **I want** / **so that**`, then `**Accepted by:**` as `` `id` — title `` bullets; `openspec validate <change> --strict`
+- **Confirm the ids** — `### <capability>-US-<n>: …` listing its scenario ids, `#### Scenario: <capability>-SC-<n> - …`; older files get an ids-only upgrade
 
-Read the capability end to end — `spec.md`'s `## Purpose`, `## Feature set`
-and requirements with their scenarios, then `user-journeys.md` beside it. Do
-not work from a truncated view. Read the change's `proposal.md` when one exists: its
-acceptance signal is what makes a case's type `acceptance`.
+## Step 2: Journeys Become Sections
 
-Then read the product record under `docs/prds/`, because the spec is
-deliberately silent about it: `docs/prds/products/<product>/<domain>/index.md`
-and the capability's own page carry the decisions behind the requirements, the
-names the product uses for its surfaces and controls, and the seeded values a
-pass is written against. A case that names a control, a state, or an amount the
-manual already names is written in the manual's words, not invented ones.
+- **One `##` per journey** — `## <capability>-US<n>: <title copied unchanged>`, in the journeys file's order, carrying the same three-line story; the actor resolves to `customer` or `admin`
+- **Nothing else** — no `**Covers:**` list, no description, summary or count
+- **`---` between journeys** — on its own line
 
-Then read the store's own context, because a capability spec assumes it:
-
-- **`openspec/config.yaml`'s `context`** — the brands and their domains, the
-  products, what a collector is, and the conventions every spec inherits
-  (money is an integer count of minor units plus an ISO 4217 code, never a
-  float). This is where a case's vocabulary comes from: write `<grade10 store
-  url>`, not `<store front door URL>`, because the store has more than one
-  brand and the tester needs to know which one.
-- **The cross-cutting specs the Purpose names.** A public surface says so
-  outright — "every requirement of `grade10-site/site/crawlable-pages` binds it" —
-  and `localization`, `money-amounts` and `dates-and-times` bind their
-  subjects the same way. Read them. They carry facts the capability spec
-  never repeats: that every public address answers once per locale, that the
-  default is unprefixed and Traditional and Simplified Chinese sit under
-  `/tc` and `/sc`, that a title and description are per-surface.
-
-Those facts are the platform's, not the capability's, so they belong in a
-case the way the tester meets them — as something to check on the way past,
-never as a pre-condition. "The site answers in more than one language" is not
-a setup a tester performs; it is true. Where it matters, check it: `URL
-contains <lang>`.
-
-If `user-journeys.md` is missing or empty, write it first to match
-`openspec/config.yaml` `rules.user-journeys`: keep every existing SHALL and
-scenario clause in `spec.md` as it stands, adding a Feature set there if it
-has none, and derive the journeys from them. Issue permanent story and
-scenario ids, and format each journey for a human reader (`**As a**` /
-`**I want**` / `**so that**`, then `**Accepted by:**` as `` `id` — title ``
-bullets). Validate a change with `openspec validate <change> --strict`, then
-continue this document from Step 2 on the updated capability.
-
-Confirm every journey heading carries a stable id
-(`### <capability>-US-<n>: …`) and lists the scenario ids that accept it,
-and every scenario heading in `spec.md` carries its id
-(`#### Scenario: <capability>-SC-<n> - …`). Capabilities that already have
-journeys but predate these ids get the same upgrade pass for ids only.
-
-## Step 2: take the journeys as the suite's sections
-
-Do not invent flows. Each `### <capability>-US-<n>` in `user-journeys.md`
-becomes one `## <capability>-US<n>: <journey title>` section in
-`feature-tcs.md` — the compact heading id from Naming, the journey's title
-copied unchanged — in the order that file states them, carrying the same
-three-line story it carries. **Do not include a `Covers:` bullet list
-of scenario ids**, and do not add a section description, a summary, or a
-case count. The actor is the role the story names, and it resolves to one of
-the two classes in **Who the actor is** — never a developer, a worker, or
-"the system".
-
-Separate one journey section from the next with a horizontal rule (`---`) on
-its own line, so a reader can see where a journey ends.
-
-A scenario id listed under a journey belongs to that journey's cases. A
-scenario that appears under no journey is a hole in the spec (the journey
-list is incomplete) — report it; do not invent a journey to hold it. A
-journey that lists a scenario id the requirements never define is also a
-hole — report it.
-
-Across a change, keep the journey count the specs already chose (at most five
-total). Splitting or merging journeys is a specs edit, not a test-case edit.
-
-## Step 3: write the test case
-
-Each test case is one intent, written in the language of the scenarios it
-derives from. It carries the components a tester needs to run it without
-asking anyone a question — the nine properties from Step 5 first, then the
-setup, the actions, and the outcomes.
+## Step 3: Write the Case
 
 | Component | Rule |
 | --- | --- |
-| **Id** | `<capability>-US<n>-TC<m>-<v>`, numbered per journey (no hyphen after `US`/`TC`, no zero-pad). |
-| **Title** | A short, clean, descriptive line — roughly five to twelve words — naming the behaviour or condition under verification: "Core navigation is accessible before scripts run", "Collection missing cover image and title", "Recovering from a catalogue service failure". Sentence case. Do not open with the actor unless the actor is the point of the case, do not restate the journey title, and **never** append a trailing bracketed tag like `(Negative)`. |
-| **Classification** | Immediately after the title, under the label `**Classification:**` and a blank line, a `*` bulleted list of all nine properties in the Step 5 order (Severity, Priority, Status, Behaviour, Type, Layer, Automation status, Testability, Trace). Nothing comes between the title and this block — no description, no summary sentence. |
-| **Pre-conditions** | Label exactly `**Pre-conditions:**`, with the condition on the line below it. Everything that must be true before step 1: the state the actor is in, the data the catalogue holds, the configuration or network condition the scenario's GIVEN names ("Network conditions are manipulated to block static styling assets (CSS)"). Prefer one sentence; short bullets when several conditions are independent. A case that genuinely needs nothing states `None.` |
-| **Test data** | Optional. The specific values the case uses, taken from the scenario — never a placeholder like "a valid amount". A `Field \| Value` table. When the case takes no input, omit the whole section — no empty table, no "None" line. |
-| **Steps** | Under `**Steps:**` and a blank line, a numbered list of atomic actions the tester performs — navigate, observe, click, scroll, retry. No expected outcome on a step line. |
-| **Expected Results** | Under `**Expected Results:**` and a blank line, a `*` bulleted list of observable outcomes for the case as a whole. When a multi-step flow needs it, name which step produced which outcome ("Step 2 navigates successfully to the item's detail page."). |
-
-Those components appear in exactly that order, separated by blank lines.
-There is no description field: the title says what the case is, and the
-classification, pre-conditions, steps, and expected results say the rest.
-
-Within a journey, order cases the way the actor would hit them: the positive
-path first, then negatives / empty / failure paths. A journey whose cases are
-all positive while its `Accepted by` list includes refusal or empty-state
-scenarios is unfinished. Write `destructive` only when the journey's
-scenarios state cancel, remove, withdraw, or unwind behaviour.
-
-### A case reads like a run, not like a transcribed scenario
-
-A scenario is one clause; a case is the pass a person actually makes. The
-tester has to get to the surface, put the system into the state the scenario
-assumes, look at the right place, and act — and none of that is in the
-scenario's own words, because the spec is written for the engineer building
-the behaviour, not for the person exercising it. A typical case is one to
-four steps and one to three expected results. A one-step case that restates a
-single WHEN is a scenario transcribed rather than a case written: the arrival
-and the observation were left out.
-
-Related scenarios under one journey that share a condition belong in one
-case. Scenarios that verify unrelated behaviours stay separate cases, and a
-distinct way the same behaviour can be reached or broken — as long as the
-spec states what should happen when it is — is its own case with its own
-pre-condition.
-
-#### Pre-conditions: the setup a tester performs
-
-State the concrete setup, in the environment's own terms, that puts the
-system into the condition the scenario's GIVEN names. Not "the catalogue has
-not answered" — that is the spec's phrasing of a state, and it leaves the
-tester to invent the mechanism. Write what they do:
-
-- **Manipulated conditions** — "Network manipulation is applied to delay the
-  catalogue response by 5 seconds", "Network conditions are manipulated to
-  block static styling assets (CSS)", "Client-side JavaScript execution is
-  delayed or disabled in the browser settings".
-- **Stubbed upstreams** — "The catalogue endpoint is mocked to return a
-  `500 Internal Server Error`", "The store context endpoint is configured to
-  return an empty payload (`null` or `{}`)".
-- **Seeded data** — "The store catalogue contains multiple active
-  collections", "At least one collection in the catalogue is missing its
-  artwork".
-- **Where the actor already is** — "The collector is viewing the collection
-  tiles on the front door", "The catalogue section is currently displaying a
-  failed error state, and the network manipulation is removed so the next
-  request succeeds".
-
-Write them as a bulleted list, one condition per bullet, and hold to five
-rules — the same ones Gherkin holds a `Given` to:
-
-- **State, not actions.** A pre-condition says where the system is and what
-  data exists. It never clicks, submits, or navigates: "The admin is on
-  `<admin listings url>`" is state; "Open the media manager" is a step.
-- **Specific, not vague.** Not "a signed-in user" but "A user is signed in
-  with `<card>` saved and is on `<listing_4>`" — qualified by whatever the
-  rule under test actually needs.
-- **Domain words, not plumbing.** "The card authorization capability a bid
-  needs is unavailable for the payment account" — not an endpoint name, a
-  table, or a provider's product name.
-- **Independent.** Every case sets up everything it needs. A pre-condition
-  never leans on a case above it having run, and never describes an outcome
-  another case produces.
-- **Reusable.** Phrase a condition the same way everywhere it appears, so one
-  step definition binds it across the suite: "`<listing_6>` is live and its
-  current bid is `<current bid>`" reads identically in four cases.
-
-`None.` only when the case truly needs nothing.
-
-Write them against a deployed site, with placeholders where the value is the
-environment's. A pre-condition never says the feature exists — that is
-assumed — only what state it is in.
-
-A suite whose cases genuinely share the same setup may carry one
-`## Background` section before its first journey, holding those conditions
-once; each case's own pre-conditions then add only what is specific to it.
-Background is optional and earns its place only when *every* case shares what
-it holds — a suite whose actors and surfaces differ has no shared setup and no
-Background.
-
-#### Steps: arrive, look, act
-
-Number them, one action each, in the order a person performs them. A case
-must be runnable cold, so the arrival is stated somewhere: either as the first
-step — "Navigate to the store front door URL" — or as a pre-condition placing
-the actor there ("The admin is on `<admin listings url>`"), in which case the
-steps start at the first action under test. One or the other, never neither. Then the looking
-("Observe the hero section area", "Scroll to the collections section",
-"Inspect the page source for the metadata tags") and the acting ("Click the
-incomplete collection tile", "Click the browser's Back button", "Wait for the
-catalogue request to fail"). No expected outcome on a step line.
-
-#### Expected results: what the tester must see
-
-One to three bullets, each an observable outcome — the thing that worked,
-and, where the spec states it, the thing that must survive alongside it
-("Both buttons still work", "Rest of the page renders"). Name the step when a
-multi-step flow needs it ("Step 2 opens the card's page"). Every bullet is
-checkable by looking; none is a step in disguise.
-
-#### Name the UI event, not the spec's UX term
-
-A spec talks to an engineer, so it names a control by the job it does
-("shopping affordance") and a state by a product word ("unscoped",
-"narrowing"). A case talks to a tester looking at a page. Write the step or
-expected result as the UI event or page state they actually check:
-
-- **Activate** → the click that fires it (`Click the shop button in the hero`)
-- **Navigate / render** → the browser event (`The browser navigates to
-  <grade10 browse listing url>`)
-- **Unscoped / not narrowed** → what the address and the list show (`The
-  listing URL names no collection`, `Cards from the whole catalogue are
-  listed`)
-
-Do not paste UX or HCI terms into the steps or expected results —
-affordance, unscoped, narrowing, way on, scoped — even when the spec uses
-them. Translate each into the click, the navigation, the URL, or the listed
-cards it stands for. Coverage is unchanged: you are not adding a
-requirement, you are naming the event that already satisfies one.
-
-The spec still identifies *which* control (shop vs auction). A placeholder
-still stands in for a value the spec leaves open. Do not invent a visible
-label (`"Shop now"`) unless the spec itself gives it.
-
-#### Say it in as few words as possible
-
-A tester reads a case while doing something else, so every line has to land
-at a glance. Ten words is plenty for a bullet; a step is a short imperative.
-Drop the throat-clearing — "The front door renders successfully, with the
-marketing hero visible immediately" is `Front door renders, hero visible`.
-Cut "successfully", "as expected", "the application", "the user is able to".
-One idea per bullet; split rather than joining with "and" twice. Short is not
-vague: `Hero is missing` is vague, `Hero collapses, page layout intact` is
-short and checkable.
-
-#### Write for a site that is built, and name what it will have
-
-This store develops from its specs, and a suite is written for a pass that
-runs after the development is finished. So write every case as though the
-surface exists and is deployed: no conditionals about whether a page is
-there, no hedging about what the application "would" do, no case that only
-makes sense against an unbuilt product. The tester opens the site and runs it.
-
-Much of what such a pass needs is certain to exist without the spec fixing
-its value — the front door has an address, the catalogue is read from
-somewhere, a collection has a scoped listing. Name those with an
-**angle-bracket placeholder** and let the tester substitute the real value
-when they run:
-
-```markdown
-**Steps:**
-
-1. Navigate to <store front door URL>.
-2. Scroll to the collections section.
-3. Click the tile for <a collection holding cards>.
-
-**Expected Results:**
-
-* The front door renders successfully.
-* The browser navigates to <that collection's scoped listing URL>, showing
-  only that collection's cards.
-```
-
-Rules for a placeholder:
-
-- **Self-describing, in the store's own words.** A tester resolves it
-  without asking anyone, and it names the brand or product the store names:
-  `<grade10 store url>`, `<grade10 browse listing url>`, `<the catalogue
-  endpoint>`, `<a collection with no artwork>`. Never `<url1>`, never
-  `<TBD>`, and never a generic `<store url>` where the store runs more than
-  one brand.
-- **`<lang>` is the locale segment.** Public addresses answer once per locale,
-  so `<lang>` stands for the prefix in force — nothing for the default,
-  `/tc`, `/sc`. `URL contains <lang>` is the standing check that a localized
-  address behaved.
-- **Only for what the spec leaves open.** A placeholder is for the value, not
-  for the thing. Where the spec names a control, name the UI thing a tester
-  clicks (`Click the shop button in the hero`), not the spec's UX term and
-  not an invented label.
-- **Consistent within a suite.** The same surface is the same placeholder in
-  every case, so a tester resolving one resolves all of them.
-- **Anywhere in the case.** Pre-conditions, steps and expected results all
-  take placeholders; "The browser navigates to `<browse listing URL>`" is a
-  perfectly checkable outcome.
-- **Never wrapped, never capitalised.** A placeholder stays on one line so it
-  can be found and substituted mechanically, and it reads the same wherever
-  it appears — rewrite the sentence rather than break `<a collection holding
-  cards>` across a line or open one with a capital because it fell at the
-  start of a sentence.
-
-This retires the older habit of inventing a label and softening it with an
-`e.g.` — `Click the UI option (e.g., "View All")` guesses at the product,
-where `Click the row's browse-all button` states what the spec guarantees
-and leaves the visible label to the person looking at the screen. Use `e.g.`
-only where the spec itself gives the example.
-
-#### The arrival is allowed its own assertion
-
-A case may confirm, as its first expected result, that the surface it
-navigated to came up — "The front door renders successfully", "The listing
-loads". That is not new coverage; it is what lets a tester tell "I could not
-get there" apart from "the behaviour is wrong", and it is the one outcome a
-built site is assumed to provide. Everything after that first bullet is the
-spec's, and a case whose expected results are *only* the arrival is not a
-case — it is a smoke check with nothing to verify.
-
-#### The line: mechanism is yours, coverage is the spec's
-
-How the tester reaches the condition, where they look, and what they click is
-the case's own — invent it freely and concretely, because the spec never
-states it. **What must then be true is the spec's, always.** An expected
-result the traced scenarios do not state is a new requirement however
-reasonable it sounds, and a failure mode the spec says nothing about is not a
-case at all: it is a gap, reported to the spec's author. "The CSS is blocked"
-is a legitimate pre-condition only because the spec says the surface answers
-whole in the response HTML; "the page renders a fallback hero" is only a
-legitimate expected result if the spec says so somewhere.
-
-### Steps and expected results
-
-One action per numbered step. "Sign in, open settings, and change the
-password" is three steps. Outcomes live in **Expected Results**, never inline
-beside a step:
-
-```markdown
-**Pre-conditions:**
-Client-side JavaScript execution is delayed or disabled in the browser
-settings.
-
-**Steps:**
-
-1. Navigate to <store front door URL>.
-2. Observe the initial page load state.
-3. Click the shop button in the hero.
-4. Click the auction button in the hero.
-
-**Expected Results:**
-
-* Front door renders, hero visible.
-* Both buttons open their destinations without JavaScript.
-```
-
-A continuous user flow whose Then-chain is one outcome stays one case
-(several steps, one expected-results list). Prefer splitting when two
-scenarios verify unrelated behaviours.
-
-The scenario's Given/When/Then clauses fix what each part is *about*; the
-tester-facing wording of the setup, the arrival and the looking is the case's
-own:
-
-| Scenario clause | Where it lands |
-| --- | --- |
-| `GIVEN` | **Pre-conditions**, written as the setup that produces that state, or a test-data row when it carries a value. |
-| `WHEN` | A numbered **Steps** entry, preceded by the steps needed to reach it. |
-| `AND` following a `WHEN` | The next numbered step, in order. |
-| `THEN` / `AND` following a `THEN` | Bullets under **Expected Results**, in the spec's own substance. |
-
-### Every case stands alone
-
-A case never depends on another case having run, and never refers to another case or scenario for its setup. "The listing from `SC-10`, where A's maximum is 50000" becomes pre-conditions and test data written out in full, in this case. Two cases repeating the same setup is cheaper than a suite that only passes when run in order.
-
-### Say it plainly, and say only what the spec claims
-
-Write for whoever runs it: specific, unambiguous, no jargon, no internal
-names. "Click the collection tile" beats "dispatch the tile's click handler".
-Prefer the concrete over the abstract everywhere the concreteness is the
-tester's to choose — the URL they open, the section they scroll to, the way
-the environment is manipulated.
-
-The limit is on claims, not on concreteness. An expected result, or a rule a
-step assumes, that the traced scenarios do not state is a new requirement
-however reasonable it sounds. Where the spec leaves a value open, a
-placeholder names it without claiming anything; where the spec names a
-control by its role, the case uses the spec's words. If a case cannot be
-written without claiming something the spec does not say, the gap goes back
-to the spec's author.
-
-## Step 4: give the case its test data
-
-Test data is a component, not a decoration: the tester should never have to
-choose a value. State every value the case uses, as a `Field | Value` table
-when there is more than one, and refer to it from the steps rather than
-repeating it.
-
-```markdown
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Starting price | 20000 minor units |
-| Minimum increment | 2500 minor units |
-| Bidder A maximum | 50000 minor units |
-```
-
-When several scenarios differ only in a value and share an expected result,
-one case may carry a row per scenario with its own outcome column, and the
-steps refer to the row ("commit the maximum in each row") instead of
-restating a value:
-
-```markdown
-**Test data:**
-
-| Control | Renders |
-| --- | --- |
-| Shop button | the browse listing, whole catalogue |
-| Auction button | the auction surface |
-```
-
-**Prefer a readable unit for sizes and durations.** Write `100 mebibytes` or
-`30 minutes`, not `104857600 bytes` or `1800000 ms`. Keep the unit the
-requirement names — mebibyte when the spec says mebibyte, not a rounded
-megabyte that would move the bound.
-
-**Name the data, then use the name.** A value that a run could reasonably
-change — a file, an amount, a seeded record, a moment on the clock — gets a
-`<placeholder>` row and is referred to by that name from the pre-conditions,
-the steps and the expected results. A literal in a step is a value the next
-tester cannot vary without rewriting the case, and a script cannot vary at
-all. Where an expected value is derived rather than fixed, state the
-derivation: "Highest bid reads `<user B maximum>` plus `<increment>`" survives
-a change of seed, "Highest bid reads 530000" does not.
-
-**A name means one thing in the whole file.** A placeholder stands for one
-record in one state, and two cases that need the same subject in different
-states name them apart — `<listing_1>` for the draft with an empty gallery,
-`<listing_6>` for the live one led by user A — numbered in the order they
-first appear. Cases that genuinely need the same state share the name and
-repeat its row. Reusing one name for two states is how a suite acquires cases
-that cannot all pass against one seeded environment.
-
-**A row defines the state, not just the label.** Write what the placeholder
-stands for — "`<listing_6>` | A live listing led by user A, current bid
-`<leader price>`" — so the case is runnable without reading the case above it.
-This is what makes independence checkable: a case that inherits its setup from
-its neighbour has no row saying so, and its absence is visible.
-
-**Turn the spec's markers into concrete assumptions.** A spec names a moment
-or a quantity abstractly — "a valid bid at time T", "inside the extension
-window" — because it is stating a rule. A tester needs a number. Give it one
-as test data, derived from the rule rather than invented against it: `<bid
-time>` is "5 minutes before the recorded close, inside `<extension window>`",
-and the expected `<new time left>` is "30 minutes, one `<extension duration>`
-from the accepted bid" — not 35, because the spec sets the close *to* T plus
-the duration rather than adding the duration to the close it had. Write the
-assumption in the row, keep the derivation in the expected result, and never
-let a concrete value contradict the rule it came from.
-
-**A case that runs per row says so.** When the steps are identical and only
-the data differs, write one case with a row per run, a column for each varying
-value and one for the outcome, and a line under the title: "Runs once per row
-of **Test data**." Two refusals with one set of steps is one case, not two.
-
-**Roles are `customer` and `admin`.** Inside a case an actor is one of the two
-classes from **Who the actor is**, with the state or grant the case needs in
-brackets after it — `customer(gold member)`, `admin(shop staff)` — stated in
-the pre-conditions, never left to the reader. Journey titles and stories keep
-the product's own words; the cases under them carry the class. A role is not
-test data and gets no row.
-
-Every value comes from a scenario. A data table is not a place to generate
-variations the spec never stated. A case that takes no input omits the
-`**Test data:**` section entirely — it carries neither an empty table nor a
-"None" line.
-
-## A case that already exists is not written twice
-
-A duplicate case is a defect, not redundancy that pays for itself. It doubles
-the cost of every pass, and when the two copies drift — one edited, one not —
-a suite states two answers to the same question and the run that catches it is
-the one that fails for the wrong reason. So before any case is added, by an
-agent or by hand, the suite is read for one that already covers it.
-
-**What counts as a duplicate.** Not identical wording — identical *claims*.
-Two cases are the same case when they assert the same outcomes on the same
-surface from the same starting state, however differently they are phrased.
-Two cases are the same case when one's expected results are a subset of the
-other's and neither reaches the product differently to get there. And a
-variation of a case is not a new case: same steps, different data is one case
-with a row per run.
-
-Genuinely distinct: a different way of *reaching* the same behaviour where the
-spec states what should happen on each route; the same assertion at a
-different layer, where the spec states both; and a refusal beside the
-acceptance it mirrors.
-
-**What to do when one is found.** Show the reviewer the case that already
-exists — its id, its title, its steps and expected results — beside the one
-being proposed, and ask which they want:
-
-| Choice | Do |
-| --- | --- |
-| Update the existing case | Extend it — a step, a row, one more expected result — under the re-wording rules for its status. No new id. |
-| Add it anyway | It is not a duplicate after all. Record in the report what distinguishes it, so the next run does not re-raise it. |
-| Drop it | Say which case covers it, and move on. |
-
-Never add silently, and never resolve it by deleting the older case: a
-duplicate is retired as `deprecated` only when the spec no longer states the
-behaviour, exactly like any other retirement.
-
-**Across levels, too.** A feature case whose assertions are wholly covered by
-an approved domain case is a trim candidate — that is the whole point of the
-domain level — and the check runs the same way, against the domain suite's
-cases as well as the journey's own. Trim only against an `approved` domain
-case: while the domain file is `draft`, its coverage is not yet real, and
-deleting underneath it leaves a hole.
-
-## Step 5: classify the case
-
-Ten properties, in this order, every one of them on every case. The
-vocabularies are Qase's, so a suite exports without translation: `Type` is
-Qase's single-valued type, and `Suites` maps to its tags.
-
-Most cases in a UI suite land in the same place, and the shapes below are the
-starting point, not a substitute for reading the case: a core positive path
-is `critical` / `high`; a degradation the journey survives is `major` /
-`medium`; an empty state is `normal` / `medium`; a presentational fallback is
-`minor` / `low`. A case a person exercises through the interface is `e2e`, and
-a case worth both a script and an occasional human eye is
-`automation, manual`.
-
-### Severity
-
-How bad it is when this case fails:
-
-| Value | Means |
-| --- | --- |
-| `blocker` | The journey cannot start or continue; later cases in it cannot be attempted. |
-| `critical` | Money, permission, or the public record is wrong. |
-| `major` | The journey's main outcome is wrong, but nothing irreversible and no rule bypassed. |
-| `normal` | A supporting behaviour is wrong while the journey still completes. |
-| `minor` | Convenience or presentation, data correct underneath. |
-| `trivial` | Cosmetic. |
-
-A refusal that protects money or permission is `critical` even when the
-expected result is "nothing happened".
-
-### Priority
-
-How soon this case runs when a pass cannot run everything. Severity is about
-the failure; priority is about the schedule, and they diverge — a `trivial`
-bug on the first screen every collector sees can be `high` priority.
-
-| Value | Means |
-| --- | --- |
-| `high` | Runs in every pass, including a smoke pass before a release. |
-| `medium` | Runs in a full pass of this capability. |
-| `low` | Runs when there is time, or when this area changed. |
-
-### Status
-
-The case's own review state, distinct from the file's:
-
-| Value | Means |
-| --- | --- |
-| `draft` | Generated or edited since its last review. Not exported. |
-| `actual` | A reviewer read it against the scenarios it traces and stands behind it. Exports. |
-| `deprecated` | The spec no longer states this behaviour. Kept for history, never exported, never renumbered away. |
-
-Generation always writes `draft`. Only `/tcs-review` — with a human saying
-yes — writes `actual`.
-
-### Behaviour
-
-| Value | Means |
-| --- | --- |
-| `positive` | The actor does the intended thing and it works. |
-| `negative` | Invalid input, a wrong lifecycle state, or a missing permission; the product refuses and the stored facts are unchanged. |
-| `destructive` | The actor deliberately removes, withdraws, or cancels something and the product must unwind it cleanly — a called-off listing, a deleted account, a released authorization. |
-
-A case at the edge of a stated limit — the eighth item accepted, the ninth
-refused — is `positive` when the edge value is accepted and `negative` when it
-is refused; say "at the limit" in the title so the boundary is not lost.
-
-A case whose pre-condition is something broken, missing, stubbed out or cut
-off — an empty payload, a blocked asset, a `500`, a dropped connection, a
-malformed parameter — is `negative`, even when the expected result is that
-the product carries on gracefully. What makes it negative is what the case
-feeds the product, not whether the product survives it.
-
-### Type
-
-Exactly one, from Qase's vocabulary — *what kind of verification this is*, not
-which run it belongs to. Which runs it belongs to is `Suites`. Use
-`functional` when nothing more specific fits:
-
-| Value | Means |
-| --- | --- |
-| `functional` | Verifies a behaviour the requirement states. The default. |
-| `acceptance` | Traces directly to the proposal's acceptance signal. Omit when no proposal is linked. |
-| `usability` | About what renders and how it responds to a person, not about the stored result. |
-| `security` | Permission, ownership, or disclosure — who may act and what may be seen. |
-| `performance` | A timing or volume statement the spec makes. |
-| `compatibility` | Behaviour across browsers, devices, or locales the spec names. |
-| `integration` | The seam between this capability and another service the spec names. |
-| `exploratory` | Reserved for cases a reviewer adds by hand; generation never writes it. |
-
-### Suites
-
-Which runs this case belongs to. Zero or more, comma-separated — a case is
-often several at once, and this is the field a runner filters on:
-
-| Value | Means |
-| --- | --- |
-| `smoke` | Its failure means the journey is unusable. At most one per journey. |
-| `regression` | Re-run on every change to this capability or domain: an invariant that has broken before, or is easy to break. |
-| `exploratory` | A time-boxed roam a reviewer added by hand; generation never writes it. |
-| `release` | Runs in the pass before a release. |
-
-`smoke` and `regression` are suites, not types: a case can be a `functional`
-verification that runs in both. Leave the list empty when a case belongs to no
-named run; write `**Suites:** none` rather than omitting the line.
-
-An exploratory case carries `**Suites:** exploratory` and a `Type` naming what
-it verifies — usually `functional` or `usability`. It is never generated.
-
-### Layer
-
-Where the case is exercised:
-
-| Value | Means |
-| --- | --- |
-| `e2e` | Through the interface the actor actually uses. |
-| `api` | Against the contract beneath it — the scenario is about a response or a stored fact, not a rendering. |
-| `unit` | A pure rule with no I/O — a calculation, a validation, a state transition. |
-
-### Automation status
-
-Whether a test for this case exists **today**:
-
-| Value | Means |
-| --- | --- |
-| `manual` | No automated test runs it yet; a person does. |
-| `automated` | An automated test covers it and runs in CI. |
-
-Generation always writes `manual` — nothing is automated at the moment it is
-written. Engineering flips it to `automated` when the test lands. A case whose
-testability is `automation` but whose automation status is still `manual` is
-the backlog of what to automate next.
-
-**This field decides whether an approved case's wording may be edited.** A
-case still `manual` has no script to break, so `/tcs-review` may re-word it in
-place. A case that is `automated` is frozen: re-wording it silently invalidates
-the script that asserts it, so its wording changes only when the behaviour
-does — and that is a `<v>` bump back to `draft`, not a restyle.
-
-### Testability
-
-Whether the case *can* be automated. One or both values, comma-separated —
-a case that is worth both an automated assertion and an occasional manual
-pass carries both tags:
-
-| Value | Means |
-| --- | --- |
-| `automation` | Deterministic; a script can assert the expected result exactly. |
-| `manual` | Depends on a perceptual or exploratory judgment a script cannot reliably assert. |
-| `automation, manual` | Both — automatable, and still worth a human's eye. |
-
-### Trace
-
-The journey this case derives from, in the spec's canonical form —
-`<capability>-US-<n>` (`grade10-site-store-home-US-01`) — even though the section heading above
-it uses the compact `grade10-site-store-home-US1`. One journey per case: a case that would have
-to trace two journeys is two cases, or belongs to a journey the spec has not
-written yet. Fall back to `<requirement> / <journey title>` only when the
-spec has no ids yet.
-
-A case with no trace does not belong in the file.
-
-At `domain` level a case crosses capabilities by definition, so its trace is
-the list of capability journeys it walks, comma-separated and in the order the
-case reaches them. Every id must be a journey some `user-journeys.md` in that
-domain defines.
-
-Scenario-level coverage is still checked, just not recorded case by case on
-this line: generation verifies that every user-facing scenario accepting a
-journey is covered by at least one of that journey's cases, and reports any
-scenario nothing covers as a gap for the spec's author.
+| Id | `<capability>-US<n>-TC<m>-<v>` |
+| Title | five to twelve words, sentence case, naming the behaviour or condition: `Core navigation is accessible before scripts run`. Not opened with the actor unless the actor is the point; never the journey title; never a trailing `(Negative)` |
+| Classification | `**Classification:**`, a blank line, then the ten properties as `*` bullets in Step 5 order, directly under the title |
+| Pre-conditions | `**Pre-conditions:**`, the condition on the line below: one sentence, or short bullets when several are independent; `None.` when nothing is needed |
+| Test data | `**Test data:**`, a `Field \| Value` table; omitted whole when the case takes no input — no empty table, no `None` |
+| Steps | `**Steps:**`, a blank line, a numbered list of atomic actions, no outcome on a step line |
+| Expected results | `**Expected Results:**`, a blank line, `*` bullets of observable outcomes; name the step where a flow needs it (`Step 2 opens the card's page`) |
+
+- **That order, a blank line between parts** — no description field
+- **Positive first** — then refusals, empty and failure paths; a journey whose accepting scenarios include refusals but whose cases are all positive is unfinished. `destructive` only where the scenarios state cancel, remove, withdraw or unwind
+- **A case is a run, not a transcribed scenario** — one to four steps, one to three results; a one-step case restating a WHEN left out the arrival and the observation
+- **Scenarios sharing a condition share a case** — unrelated behaviours stay apart; a distinct route to the same behaviour, where the spec states its outcome, is its own case with its own pre-condition
+- **Clauses land** — GIVEN → pre-conditions or a test-data row; WHEN → a numbered step, after the steps that reach it; AND after WHEN → the next step; THEN and its ANDs → expected results, in the spec's substance
+- **One action per step** — "sign in, open settings, change the password" is three; a continuous flow with one outcome stays one case
+- **Every case stands alone** — never leans on another case having run, never cites another case or scenario for its setup; repeating a setup is cheaper than a suite that passes only in order
+- **Mechanism is yours, coverage is the spec's** — how the tester reaches the condition, where they look and what they click is invented freely; what must then be true is only what the traced scenarios state. A failure mode the spec says nothing about is a gap, reported, not a case
+- **The arrival may be the first result** — `The listing loads` tells "could not get there" from "wrong"; a case whose results are only the arrival is not a case
+- **Plain words, no internal names** — `Click the collection tile`, not `dispatch the tile's click handler`
+
+### Pre-conditions
+
+The concrete setup that produces the scenario's GIVEN, in the environment's terms, one condition per bullet: a manipulated condition (`Network conditions are manipulated to block static styling assets (CSS)`), a stubbed upstream (`The catalogue endpoint is mocked to return a 500`), seeded data (`At least one collection is missing its artwork`), or where the actor already is.
+
+- **State, not actions** — `The admin is on <admin listings url>` is state; `Open the media manager` is a step
+- **Specific** — `A user is signed in with <card> saved and is on <listing_4>`, qualified by what the rule needs
+- **Domain words, not plumbing** — never an endpoint name, a table or a provider's product
+- **Independent** — never an outcome another case produces
+- **Reusable** — the same condition in the same words everywhere it appears
+- **Never that the feature exists** — only what state it is in
+- **`## Background`** — optional, before the first journey, holding only the conditions and data every case shares
+
+### Steps and Expected Results
+
+- **Arrive once** — the first step (`Navigate to <grade10 store url>`) or a pre-condition placing the actor; one or the other, never neither
+- **Then look, then act** — `Scroll to the collections section`, `Click the incomplete collection tile`, `Wait for the catalogue request to fail`
+- **Results are checkable by looking** — the thing that worked and, where the spec states it, what survived beside it (`Both buttons still work`); none is a step in disguise
+- **The UI event, not the spec's UX term** — activate → the click; navigate or render → the browser event; unscoped → `The listing URL names no collection`. Never `affordance`, `unscoped`, `narrowing`, `way on` in a case, even when the spec says them; never an invented label (`"Shop now"`) unless the spec gives it, and `e.g.` only where the spec gives the example
+- **Few words** — ten per bullet, a step a short imperative; cut `successfully`, `as expected`, `the application`, `the user is able to`; one idea per bullet. Short is not vague: `Hero is missing` is vague, `Hero collapses, page layout intact` is short and checkable
+- **Before** — step `1. The user is able to open the store front door successfully.`, result `The front door renders successfully, with the marketing hero visible immediately, and both buttons work.`
+- **After** — steps `1. Navigate to <grade10 store url>.` `2. Click the shop button in the hero.` `3. Click the auction button in the hero.`, results `Front door renders, hero visible.` `Both buttons open their destinations without JavaScript.`
+
+### Placeholders
+
+- **For the built, deployed site** — no hedging about whether a page exists; a value the spec leaves open is an angle-bracket placeholder
+- **Self-describing, in the store's words** — `<grade10 browse listing url>`, `<a collection with no artwork>`; never `<url1>`, `<TBD>`, or a bare `<store url>` where the store runs more than one brand
+- **`<lang>`** — the locale prefix in force: nothing for the default, `/tc`, `/sc`
+- **For the value, not the thing** — where the spec names a control, name what the tester clicks
+- **Consistent within a suite** — one surface, one placeholder
+- **Anywhere in the case** — pre-conditions, steps and results alike
+- **Never wrapped, never capitalised** — rewrite the sentence instead
+
+## Step 4: Test Data
+
+- **Every value is stated** — the tester never chooses one; a `Field | Value` table when there is more than one, and the steps refer to it
+- **Every value comes from a scenario** — the table never generates variations the spec did not state; no input, no section
+- **Runs per row** — same steps, different data: one case, a column per varying value and one for the outcome, and under the title `Runs once per row of **Test data**.` Two refusals with one set of steps is one case
+- **Readable units, the requirement's unit** — `100 mebibytes`, `30 minutes`; never a rounded megabyte that moves the bound
+- **Name the data, then use the name** — a value a run could change gets a `<placeholder>` row and is named from pre-conditions, steps and results; a derived value states its derivation: `Highest bid reads <user B maximum> plus <increment>`, not `530000`
+- **A name means one thing in the file** — `<listing_1>` the draft with an empty gallery, `<listing_6>` the live one led by user A, numbered by first appearance; the same state shares the name and repeats its row
+- **A row defines the state** — `<listing_6> | A live listing led by user A, current bid <leader price>`, so independence is checkable
+- **The spec's markers become concrete assumptions** — derived from the rule, never against it: `<bid time>` is `5 minutes before the recorded close, inside <extension window>`
+- **Roles are not data** — `customer(gold member)`, `admin(shop staff)` in the pre-conditions; no row
+
+## A Case That Already Exists Is Not Written Twice
+
+Read the suite before adding a case, by agent or by hand: a duplicate is a defect.
+
+- **A duplicate is identical claims** — the same outcomes on the same surface from the same starting state, however phrased; or one case's results a subset of the other's by the same route; or same steps with different data, which is one case with rows
+- **Distinct** — a different route where the spec states each outcome; the same assertion at another layer the spec states; a refusal beside the acceptance it mirrors
+- **When one is found** — show the existing case beside the proposed one and ask: update the existing case (a step, a row, a result, under its status's re-wording rules, no new id), add anyway (record what distinguishes it), or drop it (say which case covers it). Never add silently; never delete the older case — it is `deprecated` only when the spec no longer states the behaviour
+- **Across levels** — a feature case wholly covered by an `approved` domain case is a trim candidate; never trim against a domain file still holding drafts
+
+## Step 5: Classify the Case
+
+Ten properties, in this order, on every case. Starting shapes, not substitutes for reading the case: a core positive path `critical` / `high`; a degradation the journey survives `major` / `medium`; an empty state `normal` / `medium`; a presentational fallback `minor` / `low`; a case run through the interface `e2e`; worth a script and a human eye `automation, manual`.
+
+### Values
+
+| Property | Value | Means |
+| --- | --- | --- |
+| Severity | `blocker` | the journey cannot start or continue |
+| | `critical` | money, permission or the public record is wrong |
+| | `major` | the main outcome is wrong, nothing irreversible, no rule bypassed |
+| | `normal` | a supporting behaviour is wrong while the journey completes |
+| | `minor` | convenience or presentation, data correct underneath |
+| | `trivial` | cosmetic |
+| Priority | `high` | every pass, including a smoke pass before a release |
+| | `medium` | a full pass of this capability |
+| | `low` | when there is time, or when this area changed |
+| Status | `draft` | generated or edited since its last review; not exported |
+| | `actual` | a reviewer stands behind it against its scenarios; exports |
+| | `deprecated` | the spec no longer states it; kept, never exported, never renumbered |
+| Behaviour | `positive` | the intended thing, and it works |
+| | `negative` | invalid input, a wrong state or a missing permission; refused, stored facts unchanged |
+| | `destructive` | the actor removes, withdraws or cancels, and the product unwinds cleanly |
+| Type | `functional` | a behaviour the requirement states; the default |
+| | `acceptance` | traces to the proposal's acceptance signal; only with a proposal |
+| | `usability` | what renders and how it responds to a person |
+| | `security` | permission, ownership or disclosure |
+| | `performance` | a timing or volume statement the spec makes |
+| | `compatibility` | browsers, devices or locales the spec names |
+| | `integration` | the seam with another service the spec names |
+| | `exploratory` | added by a reviewer by hand; never generated |
+| Suites | `smoke` | its failure makes the journey unusable; at most one per journey |
+| | `regression` | re-run on every change to the capability or domain |
+| | `exploratory` | a time-boxed roam a reviewer added; never generated; carries a `Type` too |
+| | `release` | the pass before a release |
+| | `none` | belongs to no named run |
+| Layer | `e2e` | through the interface the actor uses |
+| | `api` | against the contract beneath — a response or a stored fact |
+| | `unit` | a pure rule with no I/O |
+| Automation status | `manual` | no automated test runs it yet |
+| | `automated` | an automated test covers it in CI |
+| Testability | `automation` | deterministic; a script asserts it exactly |
+| | `manual` | a judgment a script cannot reliably make |
+| | `automation, manual` | both |
+| Trace | `<capability>-US-<n>` | the journey, canonical form; composed levels list every journey walked, comma-separated, in the order reached |
+
+- **Severity** — a refusal that protects money or permission is `critical` even when nothing happens
+- **Priority** — the schedule, where severity is the failure: a `trivial` bug on the first screen can be `high`
+- **Status** — generation writes `draft`; only `/tcs-review`, with a human's yes, writes `actual`
+- **Behaviour at a limit** — the accepted edge is `positive`, the refused one `negative`; say "at the limit" in the title
+- **A broken input is `negative`** — an empty payload, a blocked asset, a `500`, a dropped connection, even when the product carries on
+- **Type is exactly one** — the kind of verification; which runs it joins is `Suites`, zero or more comma-separated, written `**Suites:** none` rather than omitted
+- **Automation status** — generation writes `manual`; engineering flips it when the test lands, and `automation` testability still `manual` is the backlog. It decides whether wording may move: a `manual` case may be re-worded in review, an `automated` case is frozen and changes only with its behaviour, as a `<v>` bump back to `draft`. `automation` testability plans QA's suite; it satisfies neither `ui-component-testing.md` nor a `tasks.md` checkbox
+- **Trace** — one journey per feature case; a case that would trace two is two cases or a journey not yet written, and a case with no trace does not belong in the file. Every id is defined by a `user-journeys.md` in scope; `<requirement> / <journey title>` only where a spec has no ids
+- **Scenario coverage is checked, not recorded** — generation verifies every scenario accepting a journey has a case and reports the rest as gaps
 
 ## The file header
 
-A suite carries at most three lines under its title, and every one of them is
-computed rather than chosen:
+At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>`, `**Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>` — every one computed, never chosen.
 
-```markdown
-# <product>/<domain>/<capability> Test Cases
-
-**Status:** in-review
-**Drafts styled:** 2026-09-05, tcs-rules r3.0
-**Reviewed:** 2026-09-12, tcs-rules r3.0
-```
-
-### Status is derived, never claimed
-
-The file status is a pure function of the statuses of the cases below it:
-
-| Cases in the file | File status |
+| Cases in the file | `**Status:**` |
 | --- | --- |
-| Every case `draft` (or the file holds none yet) | `pending-review` |
-| At least one `actual` or `deprecated`, and at least one `draft` left | `in-review` |
-| No `draft` left | `approved` |
+| every case `draft`, or none yet | `pending-review` |
+| an `actual` or `deprecated`, and a `draft` left | `in-review` |
+| no `draft` left | `approved` |
 
-Nobody types it. `/spec-to-tcs` and `/tcs-review` recompute it after every
-write, and `pnpm run tcs:validate` fails a file whose header disagrees with its
-cases. Two consequences worth stating outright:
+- **Derived, never claimed** — `/spec-to-tcs` and `/tcs-review` recompute it after every write; `pnpm run tcs:validate` fails a header that disagrees with its cases. `in-review` reserves nothing, and a new `draft` drops `approved` on its own
+- **Only `approved` exports** — and only its `actual` cases, only when someone runs an export
+- **`**Drafts styled:**`** — the revision of this document the file's `draft` cases were last written against, and when; present exactly while the file holds a `draft`. `actual` cases carry no revision: a reviewer's yes is the convention
+- **`**Reviewed:**`** — the date the file reached `approved` and the revision, written by `/tcs-review` on that transition, removed when the file falls out of `approved`; no reviewer name, git records who
+- **`**Out of suite:**`** — scenario ids the suite leaves uncovered on purpose, under the header (`openspec/config.yaml`, `rules.user-journeys`); `pnpm check:manual` counts them as covered and refuses one a living case traces
+- **`tcs_rules_rev`** — this document's frontmatter, bumped by hand
 
-- **`in-review` is progress, not a claim.** It says a reviewer has started and
-  has not finished. It reserves nothing: a second reviewer may take another
-  journey of the same suite at the same time, on their own branch. Being
-  derived is what makes that safe — the one line two branches are guaranteed
-  to collide on has a single correct value that either side can recompute from
-  the merged cases, so the conflict resolves mechanically instead of by
-  judgement.
-- **A suite can lose `approved`.** A spec change that adds a `draft` case drops
-  the file back to `in-review` on its own, without anyone remembering to.
-
-Only `approved` exports. `pending-review` and `in-review` files export nothing,
-whatever the state of the individual cases inside them.
-
-### Drafts styled
-
-```markdown
-**Drafts styled:** 2026-09-05, tcs-rules r3.0
-```
-
-The revision of *this document* that the file's `draft` cases were last written
-against, and when. It is present exactly when the file holds at least one
-`draft`, and absent otherwise.
-
-The scope is the point. `actual` cases are deliberately out of it: a reviewer's
-yes is what makes a case's wording house style, so an approved case is at the
-current convention by definition and carries no revision of its own. A
-file-level stamp claiming to cover every case would be a lie the moment a suite
-is mixed — half of it re-worded this week, half frozen under whatever rules
-were current when it was approved.
-
-`tcs_rules_rev` in this document's own frontmatter is the current revision, as
-`<major>.<minor>`. Bump it by hand when you change how a case should read or
-what a file must carry — the minor when nothing that was valid stops being
-valid, the major when something does (see **Rules revisions**) — and leave it
-alone for a typo. `pnpm run tcs:stale` then lists the suites whose drafts sit
-below the current minor; a major is swept instead.
-
-### Reviewed
-
-```markdown
-**Reviewed:** 2026-09-12, tcs-rules r3.0
-```
-
-The date the file last reached `approved` and the revision of this document
-its cases were approved under, written by `/tcs-review` on that transition and
-removed if the file falls back out of `approved`. Present exactly when the
-status is `approved`. No reviewer name: git already records who, and a name in
-the file goes stale the moment a second person touches the suite.
-
-The revision is what makes the approved corpus usable as evidence: a suite
-approved under an older **major** keeps its wording and stops teaching, rather
-than quietly propagating rules the store has moved on from. A minor behind is
-still evidence — see **What the approved suites teach the next one**. A file
-approved before the revision was recorded carries a bare date; it teaches
-nothing until someone reviews it again.
-
-## The format
-
-A suite is the file title, the file status, then one section per journey,
-separated by horizontal rules. Every case is a title, a classification block,
-pre-conditions, optional test data, numbered steps, and an expected-results
-list — in that order, a blank line between each part:
+## The Format
 
 ````markdown
 # <product>/<domain>/<capability> Test Cases
@@ -1482,105 +400,24 @@ list — in that order, a blank line between each part:
 ## <capability>-US<n+1>: <the next journey>
 ````
 
-Fixed points, none of them optional:
+- **Fixed points** — header lines computed; journey heading and story copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
+- **No execution record** — no actual result, no pass/fail column; a run lives in Qase against the exported case
+- **Deltas use the same format** — under `openspec/changes/<change>/specs/<product>/<domain>/<capability>/feature-tcs.md`
 
-- The header lines are computed, not chosen — see **The file header**.
-  `**Drafts styled:**` is present exactly while the file holds a `draft`;
-  `**Reviewed:**` exactly while it is `approved`.
-- The journey heading and its three-line story are copied from `spec.md`,
-  the heading id in its compact form. No `**Covers:**` list.
-- `**Classification:**` sits immediately under the case title, its ten
-  bullets marked with `*`, in the order above. Generation always writes
-  `**Status:** draft` and `**Automation status:** manual`, and never writes
-  `exploratory` in `**Suites:**`.
-- A case that runs per data row carries one line between its title and the
-  classification block: "Runs once per row of **Test data**."
-- An optional `## Background` section may sit between the header and the first
-  journey, holding the pre-conditions and test data every case shares — and
-  only those. See **Pre-conditions**.
-- `**Test data:**` is the one section a case may omit — omitted whole when
-  the case takes no input.
-- A blank line follows every `**Label:**` that heads a list, and separates
-  every part of a case. A `---` rule separates journey sections.
-- A case with no pre-conditions line, or an empty **Expected Results** list,
-  is not finished.
+## The Tools
 
-Execution belongs to the run, not to this file. There is no Actual result and
-no Pass/Fail column here — a suite is the authored artifact, and what happened
-on a given run lives in Qase (or wherever the pass is recorded) against the
-exported case.
-
-## Workflow summary
-
-Two pull requests, two audiences.
-
-**The spec PR** — written by whoever owns the requirements:
-
-1. `/planning-pm` writes proposal + specs (Feature set, id'd scenarios)
-   and the `user-journeys.md` beside each → `openspec validate --strict`.
-2. `/spec-to-tcs` at every level above the change that it moves a path
-   through, top down: `platform` when the path crosses products, `product`
-   when it crosses that product's domains, `domain` when it crosses that
-   domain's capabilities. The higher file names the paths.
-3. `/spec-to-tcs feature <capability>` for each capability the change carries,
-   covering the scenarios its journeys accept. Every level lands as its own
-   commit on the same branch, every case `draft`.
-4. `/spec-push` validates (including `pnpm run tcs:validate`), checks the
-   domain-impact rule, pushes, and merges. `main` now carries requirements and
-   their draft coverage together.
-
-**The review PR** — written by QA, one per capability or per journey:
-
-5. `/tcs-review` walks the `draft` cases with a human: `draft` → `actual` or
-   `deprecated`, pushed at the end of each session, merged at journey
-   boundaries. Levels are reviewed top down — platform, product, domain,
-   feature. The file's status follows its cases on its own —
-   `pending-review` → `in-review` → `approved`.
-
-**Standing maintenance:**
-
-6. When a delta adds, edits, or removes a scenario or journey, run
-   `/spec-to-tcs` in the same PR and take the update path — new cases arrive
-   `draft`, retired ones become `deprecated`, reviewed ones keep their ids.
-7. When this document's rules change, bump `tcs_rules_rev` — the minor when
-   only the wording moves, the major when a file that was valid stops being
-   valid. A minor reaches drafts one capability at a time (`pnpm run
-   tcs:stale` reports what is behind); a major carries its own sweep across
-   every suite, in the bump's own commit.
-8. Only `actual` cases in `approved` suites leave this repository, and only
-   when someone runs an export. Nothing exports on its own.
-
-## What this is not
-
-- Not a spec. `prd-and-openspec.md`'s "if a statement is testable, it belongs
-  in the spec" rule is unaffected. Journeys and scenario ids live in
-  `spec.md`; this file only classifies them.
-- Not a place to invent journeys. If the actor obviously takes a step the
-  spec has no scenario for, that gap goes to the spec's author.
-- Not the automated coverage obligation in `ui-component-testing.md`. Setting
-  a case's testability to `automation` plans QA's suite; it does not satisfy
-  the browser-test gate or a `tasks.md` checkbox.
-
-## The tools
+Two pull requests: the spec PR carries the drafts, one commit per level, top down; the review PR carries the verdicts. A delta that adds, edits or removes a scenario or journey runs `/spec-to-tcs` in the same PR on the update path.
 
 | Tool | Does |
 | --- | --- |
-| `/spec-to-tcs [platform\|product\|domain\|feature] <target>` (`spec-to-tcs` skill) | Takes the level first, or infers it from the target's shape. If journeys are missing, writes the `user-journeys.md` beside the resolved `spec.md` to `openspec/config.yaml`'s rules; learns this store's conventions from every `actual` case in the corpus; then derives suites under `openspec/specs/` or `openspec/changes/` and writes the level's file — `platform-tcs.md`, `product-tcs.md`, `domain-tcs.md` or `feature-tcs.md` — with every new case `draft`, bringing the suite's existing drafts to the same conventions. Shows an existing suite and asks before touching it; refuses to regenerate over `actual` cases or an `approved` file. Read `.cursor/skills/spec-to-tcs/SKILL.md`. |
-| `/tcs-review [<capability-or-change>]` (`tcs-review` skill) | Finds suites awaiting review, walks their `draft` cases with a human one journey at a time, quotes the spec's scenarios on request, and records `actual` / `deprecated` / left-`draft`. Every case it marks `actual`, edits included, becomes evidence the next `/spec-to-tcs` run learns from. Read `.cursor/skills/tcs-review/SKILL.md`. |
-| `planning-pm` skill | After the proposal, specs and journeys validate, runs `/spec-to-tcs <change>` automatically and commits the drafts to the spec's own branch. |
-| `planning-qa` skill | QA's own entry point: routes to `/spec-to-tcs` and `/tcs-review`, and says what a suite owes its capability. |
-| `spec-push` skill | Refuses a change whose capabilities have journeys but no suite, and runs `pnpm run tcs:validate` with the other checks before pushing. |
-| `pnpm run tcs:validate` (`scripts/openspec/validate-test-cases.mjs`) | Checks every suite against this document: the header matches the cases below it, ids are unique and journey-scoped, a trace resolves against the `spec.md` and `user-journeys.md` it names, no case ships with an empty Expected Results list. Also reports duplicate-purpose candidates — overlapping trace sets across levels, identical trace sets within one. `--swept` asserts a sweep changed no case id and no trace. Errors fail. Runs in CI on every push. |
-| `pnpm run tcs:stale` | Lists the suites whose `draft` cases sit below the current **minor**. A report, not a sweep — a major bump is swept in its own commit instead. |
+| `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | writes missing journeys, learns the corpus, derives the level's file with every new case `draft`, restyles existing drafts; shows an existing suite and asks; refuses to regenerate over `actual` cases or an `approved` file |
+| `/tcs-review [<target>]` (`tcs-review` skill) | finds suites awaiting review, walks drafts one journey at a time, quotes scenarios on request, records verdicts |
+| `planning-qa` skill | QA's entry point: routes to the two commands and states what a suite owes |
+| `pnpm run tcs:validate` | header against cases, unique journey-scoped ids, traces resolving against `spec.md` and `user-journeys.md`, property vocabularies and order, no empty Expected Results, actors of a class, composed levels tracing what they compose; reports duplicate-purpose candidates; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
+| `pnpm run tcs:stale` | suites whose drafts sit below the current minor; a report, never a sweep |
 
-Change deltas use the same format under
-`openspec/changes/<change>/specs/<product>/<domain>/<capability>/feature-tcs.md`.
+## See Also
 
-## See also
-
-- [`prd-and-openspec.md`](prd-and-openspec.md) — why `spec.md` is the sole
-  source of truth
-- [`ui-component-testing.md`](ui-component-testing.md) — the separate
-  automated coverage obligation for UI components
-- `openspec/config.yaml` — Feature set, user-journeys, and id rules this
-  derivation assumes
+- [`prd-and-openspec.md`](prd-and-openspec.md) — why `spec.md` is the sole source of truth
+- [`ui-component-testing.md`](ui-component-testing.md) — the automated coverage obligation for UI components
+- `openspec/config.yaml` — Feature set, user-journeys and id rules this derivation assumes
