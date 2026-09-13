@@ -90,3 +90,20 @@ basket over, so it never sits on the till's cart — and `foreignCartDiscount`
 reads the cart. Only the POS app, where the platform puts the automatic on the
 cart itself, can say whether Apply is blocked or whether "Remove every
 discount" confirms.
+
+**An automatic reaches a POS cart only where the discount says it may.** On
+the POS app the same basket read HK$780 flat while `ALL 5% OFF` was live and
+every other surface honoured it: a discount carries its own
+"Apply on POS Pro locations" switch, off by default, and the admin names that
+state `POS excluded`. Ticked, the cart carried −HK$39 · `ALL 5% OFF` at once.
+So merchandising a site-wide sale is two settings, not one, and a shop whose
+locations are not POS Pro cannot have one at the counter at all. Staging's
+three locations are POS Pro; the switch is now on for `ALL 5% OFF`.
+
+**A member's code replaces the automatic on a POS cart, and the sale tenders
+at the code's price.** With the member attached and the automatic on the cart,
+the HK$60 code typed into the till's own discount field took the cart from
+HK$741 to HK$720, naming the code where the automatic had been — the shop
+keeps the larger and drops the other, the same rule the web checkout follows.
+Paid as order #1041. This is release gate 1's typed arm read on the POS app
+rather than the admin bench.

@@ -688,10 +688,14 @@ store-credit path — watch it before building on it.
    manual discount at POS; if they cannot coexist, `combinesWith` loosens
    and one-code-per-order moves into the till script.
 5. Two terminals cannot both complete one single-use code.
-   **Not answerable from the admin till bench (2026-09-13, Echo Chan).**
-   The bench mints one code per order row and passes no typed code
-   through to the cart, so one code cannot be put on two of its sales.
-   This one wants a second terminal running the POS app.
+   **Half answered on the POS app (2026-09-13, Echo Chan, staging
+   shop).** A code that paid order #1041 was typed on the next sale at
+   the same till and refused outright — 無效的折扣代碼, the cart falling
+   back to the shop's own 5%. So the shop will not price a completed
+   single-use code onto a second sale. What one terminal cannot show is
+   the race: two carts holding the code before either tenders, which
+   wants a second terminal running the POS app. Gate 10 says what
+   happens to the loser — the code is revalidated at tender.
 6. POS `orders/paid` and `refunds/create` expose line items well enough to
    compute the eligible-goods basis after discounts — gift-card,
    shipping, and grading-fee lines separable (gates ingestion — without
