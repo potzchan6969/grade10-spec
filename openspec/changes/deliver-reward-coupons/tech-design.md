@@ -40,6 +40,37 @@ The member's presentation follows `mintPosHandle`'s existing shape — a QR with
 - **A reward coupon at the till inherits the one-code limits of `mint-coupons-as-discount-codes`.** A code can only be cleared by "Remove every discount", and a re-plan whose cut has changed refuses the coupon rather than minting a second code. Staff read the same sentences for a reward coupon as for a product coupon.
 - **Retiring `waitingCollections` removes the only enumeration of outstanding handovers**, which is why 3.2's zero-row precondition is a literal check rather than a note.
 
+## What staging showed
+
+A counter sale on the staging shop, rung up from the admin's till against the
+real shop, told the member what it honoured and nothing else.
+
+The member spent 100 points on a HK$780 box while the shop ran its own 5% off.
+The shop priced the sale at HK$641 and named both cuts: Points HK$100.00 and
+ALL 5% OFF HK$39.00. The member's ledger was charged 100 points for HK$100 —
+the shop's own promotion was counted and never captured for — and the notice
+said HK$100 too, not the HK$139 the shop took off altogether.
+
+One row stood for the sale across both writers. The counter's trim pass wrote
+it while the shop had not yet priced the basket; the paid order rewrote it
+ninety seconds later, moving the time it says the spend landed onto the sale
+the shop actually made. The till's own location stayed on the row and out of
+what would be sent.
+
+The row is still queued. Staging holds no push keypair, so the drain answers
+that this brand offers no push at all and never claims it — the outbox fills
+and starts draining the day a keypair exists, which is what it says it does.
+
+Two counter sales alongside it wrote nothing: one with no member on it, and one
+attributed to a member who spent nothing of theirs. A sale that gave the member
+nothing is not news.
+
+**What staging could not show: a reward coupon at the counter.** The coupons on
+that member were written straight into the store and carry no Shopify discount
+behind them, so the shop prices the code at nothing and the till drops it — the
+honest answer, and not the path this change is about. Spending a reward coupon
+at a counter needs a coupon this change minted.
+
 ## Migration Plan
 
 Additive: a reward's contract gains fields it did not carry before (kind, discount, scope, combine setting), and a physical reward's redemption changes shape (a coupon instead of an item-owed record) only for redemptions issued after this change ships. No backfill of already-issued physical-reward redemptions is in scope; they settle under the collection-confirm path already in place until task 3.2's preconditions are met, and any that lapse are remedied by the operator reversal.

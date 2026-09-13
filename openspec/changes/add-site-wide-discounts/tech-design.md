@@ -70,3 +70,23 @@ A dropped coupon costs a member nothing online: `couponReplaced` releases it, an
 - **A gift's line survives its dropped code.** The code is what zeroes the line, so when the automatic beats it the buyer is charged for the free item and the larger basket earns the automatic a larger cut. A gift whose code did not land has to leave the basket with it.
 - **The answer states a cut the shop never took.** `couponLineDiscountMinor` carries what the coupon was promised to be worth, replaced or not.
 - **Nothing on the wire says a coupon came back.** `replacedCouponCodes` stops at the service; `CheckoutResult` has no field for it, so no surface can tell the member.
+
+Three counter sales through the admin's till, against the same shop with the
+same automatics live:
+
+| The sale | What the shop took |
+| --- | --- |
+| HK$3,000, nobody on it | `QA order threshold probe` — HK$200 |
+| HK$500, a member who spent nothing | `ALL 5% OFF` — HK$25 |
+| HK$780 box, 100 points | Both — `ALL 5% OFF` HK$39 and Points HK$100 |
+
+So the counter reads the way the web checkout does: an automatic reaches a till
+sale, the shop keeps the larger of two that fit, and the points tender stacks
+with it because it rides a slot no code competes for.
+
+The extension's own half of this is not answerable here. The shop applies an
+automatic while pricing the draft, seconds after the counter has handed the
+basket over, so it never sits on the till's cart — and `foreignCartDiscount`
+reads the cart. Only the POS app, where the platform puts the automatic on the
+cart itself, can say whether Apply is blocked or whether "Remove every
+discount" confirms.
