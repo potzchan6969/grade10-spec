@@ -30,7 +30,7 @@ export const Default: Story = {
     const canvas = within(canvasElement);
     expect(
       canvas.getByRole("heading", {
-        level: 2,
+        level: 1,
         name: PRODUCT_DETAIL_PRODUCT.title,
       }),
     ).toBeVisible();
