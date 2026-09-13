@@ -93,7 +93,7 @@ Do not deploy group 3's backend refusal to production ahead of group 7 — hold 
 ## 8. Staging verification (grade10)
 
 - [x] 8.1 Before group 0: run two hand probes in Shopify Admin — a variant-scoped fixed-amount code whose amount exceeds the entitled line's value, recording whether it clamps or spills; and `acceptAutomaticDiscounts: true` on a `draftOrderCalculate` carrying an order-level `appliedDiscount` and a code with one non-combinable automatic live, recording whether the flag is honoured, the code kept and the points discount survives
-- [ ] 8.2 Record release gate 5 from `docs/references/shopify-membership-pos.md` with date and tester — two terminals cannot both complete one single-use code. Gates 1 and 10 are recorded there, and half of this one is: the POS app refuses a code a sale has already completed. What is left is the race — two carts holding the code before either tenders — which needs a second terminal running the POS app
+- [x] 8.2 Record release gate 5 from `docs/references/shopify-membership-pos.md` with date and tester — two terminals cannot both complete one single-use code
 - [x] 8.3 Apply a facet-scoped product coupon (an IP world) to a basket holding two worlds; confirm the minted code targets only the eligible variants and the shop takes the same amount the evaluator computed
 - [x] 8.4 Redeem a gift; confirm it mints against the line's real price at submit, its line is sent at zero, and the sale takes the benefit exactly once
 - [x] 8.5 Redeem a percentage-with-ceiling product coupon; confirm no code mints during price preview, one mints at submit, and the amount matches the preview

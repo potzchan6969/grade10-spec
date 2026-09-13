@@ -107,3 +107,17 @@ HK$741 to HK$720, naming the code where the automatic had been — the shop
 keeps the larger and drops the other, the same rule the web checkout follows.
 Paid as order #1041. This is release gate 1's typed arm read on the POS app
 rather than the admin bench.
+
+**A member's product coupon cannot be used at all while a site-wide automatic
+runs.** The same cart refused a live `Amount off product` code with 此折扣無法與
+您現有的折扣合併使用 while `ALL 5% OFF` sat on it. An order code and an order
+automatic are the same class, so the shop picks the larger and the code wins;
+a product code is a different class, so it has to *combine* — and `ALL 5% OFF`
+is authored "won't combine with other product, order, or shipping discounts".
+Shopify needs both sides to allow the other, so the automatic alone decides
+this, whatever a minted code says. That settles the open question under
+`DEFAULT_COMBINES_WITH`: `orderDiscounts: false` is not what refuses a product
+coupon here, and loosening it would not have put the code on this cart. What
+the shop does decide is the cost of a site-wide sale — every product reward
+and product coupon is unusable at the counter for as long as one runs, unless
+whoever authors it ticks combining on.

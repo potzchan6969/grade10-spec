@@ -688,14 +688,24 @@ store-credit path — watch it before building on it.
    manual discount at POS; if they cannot coexist, `combinesWith` loosens
    and one-code-per-order moves into the till script.
 5. Two terminals cannot both complete one single-use code.
-   **Half answered on the POS app (2026-09-13, Echo Chan, staging
-   shop).** A code that paid order #1041 was typed on the next sale at
-   the same till and refused outright — 無效的折扣代碼, the cart falling
-   back to the shop's own 5%. So the shop will not price a completed
-   single-use code onto a second sale. What one terminal cannot show is
-   the race: two carts holding the code before either tenders, which
-   wants a second terminal running the POS app. Gate 10 says what
-   happens to the loser — the code is revalidated at tender.
+   **Answered (2026-09-13, Echo Chan, staging shop).** Two carts held
+   one `usageLimit: 1` code at once — the POS app's, priced at HK$390,
+   and a draft order in the admin. The draft order was completed first,
+   taking the single use. The POS cart then tendered at HK$741: the code
+   was revalidated on the way to payment, found spent, and dropped, with
+   the shop's own 5% back in its place. So the shop is the guard, and
+   gate 10's revalidation is where it acts.
+
+   **The loser is told nothing.** No banner, no refusal, no confirmation
+   — the cart reads HK$390 and the payment screen reads HK$741, and a
+   cashier taking cash reads whichever they happen to look at. A code the
+   till has already priced is a price the counter has already said out
+   loud, so this is the counter's risk, not the shop's.
+
+   Typed again on a later sale, the same code is refused by name at the
+   till — 此折扣已達到其使用限制 — so only a code claimed *before* the
+   other sale completed can reach tender at all. The admin's discount
+   list lags a use by minutes; the till does not.
 6. POS `orders/paid` and `refunds/create` expose line items well enough to
    compute the eligible-goods basis after discounts — gift-card,
    shipping, and grading-fee lines separable (gates ingestion — without
