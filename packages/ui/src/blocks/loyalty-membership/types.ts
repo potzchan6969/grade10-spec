@@ -59,9 +59,4 @@ type ActivityEntry = {
   context?: ReactNode;
 };
 
-export type {
-  ActivityEntry,
-  CouponItem,
-  CouponStatus,
-  RewardMenuItem,
-};
+export type { ActivityEntry, CouponItem, CouponStatus, RewardMenuItem };
