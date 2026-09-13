@@ -688,6 +688,10 @@ store-credit path — watch it before building on it.
    manual discount at POS; if they cannot coexist, `combinesWith` loosens
    and one-code-per-order moves into the till script.
 5. Two terminals cannot both complete one single-use code.
+   **Not answerable from the admin till bench (2026-09-13, Echo Chan).**
+   The bench mints one code per order row and passes no typed code
+   through to the cart, so one code cannot be put on two of its sales.
+   This one wants a second terminal running the POS app.
 6. POS `orders/paid` and `refunds/create` expose line items well enough to
    compute the eligible-goods basis after discounts — gift-card,
    shipping, and grading-fee lines separable (gates ingestion — without
@@ -709,7 +713,9 @@ store-credit path — watch it before building on it.
     #1039 carried a deactivated HK$60 code and read HK$720 at the tender
     screen; it paid HK$741, naming only the shop's HK$39 automatic. The
     code was larger than what beat it, so nothing but revalidation
-    explains the loss. The backstop is the platform.
+    explains the loss. The backstop is the platform. The sale was rung on
+    the admin till bench, which creates the order on the shop the way a
+    terminal does; the revalidation is the shop's either way.
 11. `customerSet` phone-field userErrors: the exact taken and
     invalid-format shapes, and whether the mutation fails whole or
     applies partially — the retry-without-phone degrade must hold under
