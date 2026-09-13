@@ -61,10 +61,14 @@ has failed every push to `main` today.
   week of 09-06 were that bot, and 16 of them moved a verdict. The commit
   step now diffs the report with the stamp ignored, and a run that moved no
   verdict commits nothing and rebuilds nothing.
-- **The rulebooks are a third of their length.** `specs-to-test-cases.md`
-  was 1,586 lines, four times the next longest document; the `spec-to-tcs`
-  and `tcs-review` skills restated it at 716 and 306 lines. Each rule is now
-  stated once, in the governance doc, and the skills route to it.
+- **Each rule is written once.** `specs-to-test-cases.md` was 1,586 lines,
+  four times the next longest document; the `spec-to-tcs` and `tcs-review`
+  skills restated it at 716 and 306 lines; `openspec/config.yaml`, which the
+  CLI appends to every artifact's instructions, restated AGENTS.md and the
+  planning skills at 4,200 words; the workflow example and the human guide
+  each carried the same prompts. The rulebook, the config and the example
+  now state what only they hold and point at the rest; the prompts live in
+  the guide alone.
 
 ## Non-Goals
 

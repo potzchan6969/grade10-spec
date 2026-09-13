@@ -42,4 +42,6 @@ Every group lands in this store. No deploy is owed.
 - [ ] 5.1 `.github/workflows/design-sync.yml`: the commit step diffs the report with `generatedAt` ignored, and a run that moved no verdict commits nothing
 - [ ] 5.2 `docs/governance/specs-to-test-cases.md`: every rule once, under 450 lines, the format the validator reads unchanged
 - [ ] 5.3 `.claude/skills/spec-to-tcs/SKILL.md` and `.claude/skills/tcs-review/SKILL.md`: the steps, the commands and the rules only the skill holds; every restated rule becomes a pointer to the doc
-- [ ] 5.4 Verify: `node scripts/openspec/validate-test-cases.mjs` reports the same counts as before, `pnpm run agent:check-parity` passes
+- [ ] 5.4 `openspec/config.yaml`: every key kept; a rule a skill or AGENTS.md states becomes a pointer; `openspec validate` and `openspec instructions` unchanged
+- [ ] 5.5 `docs/governance/agent-workflow-example.md` and `docs/prds/guides/working-a-change.md`: the prompts live in the guide once; the example keeps the commands, the record edits and where it goes wrong
+- [ ] 5.6 Verify: `node scripts/openspec/validate-test-cases.mjs` reports the same counts as before, `pnpm run test:openspec` and `pnpm run agent:check-parity` pass, `pnpm check:manual` reports no new finding
