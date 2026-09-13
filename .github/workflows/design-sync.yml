@@ -113,7 +113,11 @@ jobs:
 
       # Only from the default branch: a PR's report would be a verdict on a tree
       # nobody deploys, and the manual reads one committed file. Keys are sorted
-      # set names, so a nightly that found nothing new commits nothing.
+      # set names, so a run that found nothing new commits nothing — and
+      # `generatedAt` alone is nothing new: every run stamps it, and committing
+      # the stamp put 271 bot commits on main in one week, 16 of which moved a
+      # verdict, and every one a new pointer for the application to bump to.
+      # The committed stamp is therefore the last time the verdict moved.
       - name: Commit the design-sync report
         id: commit
         if: >-
@@ -123,7 +127,8 @@ jobs:
         env:
           COMMIT_MESSAGE: "chore(ci): record the design-sync verdict per component set"
         run: |
-          if [ -z "$(git status --porcelain --untracked-files=all -- "$REPORT")" ]; then
+          if git diff --quiet -I '"generatedAt":' -- "$REPORT"; then
+            git checkout -- "$REPORT"
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
