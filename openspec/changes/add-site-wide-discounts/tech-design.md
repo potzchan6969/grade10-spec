@@ -24,11 +24,35 @@
 
 ## Risks / Trade-offs
 
-- **Until the replaced-code split ships, a non-combinable automatic discount that beats a coupon fails the checkout.** `shopifyProvider` compares every requested code against the codes the created draft actually landed and answers `couponRefused` for any the draft skipped, which the checkout turns into a failed order. That check is good design — it is why the web path can settle a coupon without corroboration — but Shopify's documented rule is that the better of two discounts that cannot combine applies and the other is dropped, so the first automatic discount a merchandiser creates in production stops every coupon checkout it beats, one member at a time. `mint-coupons-as-discount-codes` tasks 4.12–4.13 answer a dropped code as replaced rather than refused; no automatic discount goes live in production before they ship or task 2.3 shows the outcome differs.
+- **A non-combinable automatic discount that beats a coupon completes the sale without it.** `shopifyProvider` compares every requested code against the codes the created draft landed, and `mint-coupons-as-discount-codes` tasks 4.12-4.13 answer a skipped one as replaced rather than refused: the order stands at the shop's price and the coupon goes back to the wallet. Staging confirms both halves above.
 - **Whether Shopify's own combine-rule configuration reproduces a product special sale's line-only exclusivity** (open in the spec) → Shopify Admin configuration, not code. Verify empirically on staging with a real automatic discount and a real coupon before merchandising relies on it; record the answer on the manual page's ❓ line.
-- **The points tender rides as an order-level `appliedDiscount` on the very builder this flag is added to**, and no task here puts points on a basket. If Shopify ignores or refuses the flag when `appliedDiscount` is set, this change either does nothing for the baskets that matter or breaks every points checkout.
+- **The points tender rides as an order-level `appliedDiscount` on the very builder this flag is added to.** Staging shows the two stack: a 100-point basket under a live 5% automatic is charged for both.
 - **Accepted risk, shared with `mint-coupons-as-discount-codes`**: grade10 prices every benefit it computes locally — the points basis, and a percentage benefit's base and ceiling — against a basket the shop may discount further, because the order row is written before the draft-order call returns `totalDiscountsSet`. The product record already decides the combination itself ("Points always redeem, even on a product special sale"); what is unresolved is the allocation, which task 2.3 records.
 
 ## Migration Plan
 
 Purely additive to the GraphQL input — no schema, no data migration, no new query field. No flag is needed, because deleting the automatic discount in Shopify Admin is itself a kill switch requiring no deploy — but this is not "safe to ship unguarded": until a merchandiser creates an automatic discount nothing changes, and the moment one exists the combine-rule outcome above is live for every coupon checkout. So task 2.3 is a gate to clear on staging before any automatic discount is created in production, not a verification trailing the ship.
+
+## What staging showed
+
+One automatic order discount live on the staging shop — `ALL 5% OFF`, 5% off the entire order, every customer — over a HK$780 basket, so the automatic is worth HK$39. Every row is a draft order the store created through `draftOrderVariables()` with the flag on.
+
+| What rode with it | What the shop priced |
+| --- | --- |
+| Nothing | The automatic alone — HK$741 |
+| Order coupon, HK$10 | The automatic. The code is dropped, the checkout completes, and it answers no codes |
+| Order coupon, HK$60 | The code — HK$720. The automatic is dropped |
+| Product coupon, HK$20 | The automatic. The line weld is dropped and the checkout answers no codes |
+| Product coupon, HK$200 | The weld, on the line — HK$580. The automatic is dropped |
+| Gift coupon, a HK$5 item | The automatic, over a basket the gift line grew — HK$745.75. The gift line stands at its own price and the buyer is charged for it |
+| Reward coupon, HK$30, at the counter | The automatic. The reward's code is dropped and the sale completes |
+| 100 points | Both — HK$780 less HK$39 less HK$100, HK$641 |
+
+Shopify applies the better of two discounts that cannot combine and drops the other, whatever each one's scope: an order code, a line weld and an automatic all compete as one. Points are the exception. They ride as the draft's own order-level discount and stack with the automatic, so the flag is safe for the baskets that carry points.
+
+A dropped coupon costs a member nothing online. Nothing settles until the payment lands, and every coupon above was still live once its draft stood.
+
+Two things the store still gets wrong, both on the half `shopifyProvider` does not compare:
+
+- **A gift the shop dropped is still a line.** The buyer asked for a free item, the draft charges them for it, and the larger basket earns the automatic a larger cut. A gift whose weld does not land has to come off the basket with it.
+- **A dropped weld is still reported as money off.** A product coupon or a gift the shop set aside comes back as `couponLineDiscountMinor` all the same, so the answer states a cut the shop never made. `shopifyProvider` compares requested codes against landed codes and answers `couponReplaced`; it makes no such comparison for a line weld.
