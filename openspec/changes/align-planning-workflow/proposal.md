@@ -41,6 +41,20 @@ has failed every push to `main` today.
   `(owner: alice.b)` and `(owner: unassigned)` the way `task-ownership.md` and
   `plan-preflight` already do, so a bare handle no longer reads as a
   repository.
+- **The PRD is the essence, and the check says when it is not.** Every hand
+  writes on the PRD first, and nothing said what a hand keeps to its own
+  artifact, so pages took every scenario as a 🚧 line, every state as a
+  bullet, every mechanism as an engineer paragraph. The house style gains
+  the test — a line the reader would act differently without — one 🚧 line
+  per outcome however many scenarios prove it, a closed set stated whole only
+  where the reader meets it, and a `Cut` pass; `prd-and-openspec.md` tables
+  what each hand keeps out; the four `planning-*` skills, `prd-authoring`,
+  `writing-style` and `openspec-apply-change` carry the threshold. A new
+  `dense` warning in `check:manual` names a page past 120 lines of prose
+  outside its examples and details, a section opening on more than six
+  sentences, an engineer block holding a paragraph, and a 🚧 inside a flow
+  step or mid-line. KYC's engineer design note moves to
+  `docs/references/kyc-service-design.md` as the first cut.
 
 ## Non-Goals
 
@@ -62,9 +76,14 @@ No spec-level behaviour changes, so this change declares no deltas and sets
 `AGENTS.md` and its aliases, `docs/governance/prd-and-openspec.md`,
 `docs/governance/task-ownership.md`, `docs/governance/agent-workflow-example.md`,
 `docs/prds/guides/working-a-change.md`, `openspec/README.md`,
-`openspec/config.yaml`, four skills, `package.json`, two workflows,
-`tools/manual/check/record.mjs`, `tools/manual/src/store/read-changes.mts`, and
-one in-flight change's `tasks.md` headings.
+`openspec/config.yaml`, `docs/governance/writing.md`,
+`docs/prds/guides/writing-the-manual.md`, seven skills, `package.json`, two
+workflows, `tools/manual/check/record.mjs`, `tools/manual/check/dense.mjs`,
+`tools/manual/src/store/read-changes.mts`, one in-flight change's `tasks.md`
+headings, and the KYC page's engineer block.
+
+The `dense` rule warns on 43 findings across 29 product pages today, every
+one a page a reader would name as heavy; the Membership pages raise none.
 
 ## Follow-on changes
 
@@ -80,6 +99,16 @@ one in-flight change's `tasks.md` headings.
   rule does not become the default.
 - One `tasks.md` reader for the store's own tools; the application repository
   keeps its own by design.
+- The manual renders a capability page's own suite beneath it, the way it
+  already renders the spec's in-flight changes, so a page never has to reach
+  for `::cases` and the `suite` warning retires. ❓ Whether the suite shows
+  on the page or on the capability's spec view is the PM's call.
+- The `dense` section-lead limit tightens from six sentences toward the
+  style's two once the 9 sections over six today are cut, and the prose
+  ceiling reads platform pages too once `auction-service` and
+  `vault-custody` are reshaped.
+- The 29 pages `dense` names today are cut, one page per pull request,
+  starting with the ten over the prose ceiling.
 
 ## References
 

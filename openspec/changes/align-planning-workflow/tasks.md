@@ -26,3 +26,13 @@ Every group lands in this store. No deploy is owed.
 - [ ] 3.1 `package.json` gains an `openspec` script pinned to `@fission-ai/openspec@1.8.0`; `scripts/openspec/openspec-version.test.mjs` holds it and both workflows to one version
 - [ ] 3.2 `tools/manual/src/store/read-changes.mts` reads an owner tag per `task-ownership.md`: `@` optional, `.` allowed, case-insensitive, `unassigned` is nobody; tests in `tools/manual/test/store-changes.test.ts`
 - [ ] 3.3 Verify: `pnpm run test:openspec` and `pnpm --dir tools/manual test` pass
+
+## 4. The PRD stays the essence (grade10-spec)
+
+- [ ] 4.1 `docs/governance/writing.md`: the first Placement rule is the test a line passes to sit on a page, a closed set is stated whole only where the reader meets it, one 🚧 line per outcome, a `Cut` step opens the checklist, and Enforcement names `dense`
+- [ ] 4.2 `docs/governance/prd-and-openspec.md`: a `What Does Not Go on the PRD` table, one row per hand, and the PRD's typical-content row no longer lists journeys and cases
+- [ ] 4.3 `docs/prds/guides/writing-the-manual.md`: the page is the essence, a 🚧 inside a step is a scenario wearing a mark, `::cases` is how a page shows its suite, and the engineer block example is a code map
+- [ ] 4.4 The `planning-pm`, `planning-design`, `planning-qa`, `planning-dev`, `prd-authoring`, `writing-style` and `openspec-apply-change` skills carry each hand's threshold and the `Cut` pass; `AGENTS.md` names the test and the `dense` warning
+- [ ] 4.5 `tools/manual/check/dense.mjs`: a warning-level rule for a page past 120 lines of prose outside its examples and details, a section opening on more than six sentences, an engineer block holding a paragraph, and a 🚧 inside a flow step or mid-line; tests in `tools/manual/test/check-dense.test.ts`
+- [ ] 4.6 The KYC page's `Service design` engineer block moves to `docs/references/kyc-service-design.md`, linked from its code map
+- [ ] 4.7 Verify: `pnpm check:manual` reports no failure, `pnpm --dir tools/manual test` passes, `pnpm run agent:check-parity` passes
