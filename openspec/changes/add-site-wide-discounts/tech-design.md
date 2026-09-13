@@ -35,24 +35,23 @@ Purely additive to the GraphQL input — no schema, no data migration, no new qu
 
 ## What staging showed
 
-One automatic order discount live on the staging shop — `ALL 5% OFF`, 5% off the entire order, every customer — over a HK$780 basket, so the automatic is worth HK$39. Every row is a draft order the store created through `draftOrderVariables()` with the flag on.
+One automatic order discount live on the staging shop — `ALL 5% OFF`, 5% off the entire order, every customer — over a HK$780 basket, so the automatic is worth HK$39. Every row is a draft order the store created through `draftOrderVariables()` with the flag on. Online, every coupon reaches the shop as the code minted for it and its cuts are stripped from the wire, so each row is one code against one automatic.
 
-| What rode with it | What the shop priced |
+| The coupon that rode | What the shop priced |
 | --- | --- |
-| Nothing | The automatic alone — HK$741 |
-| Order coupon, HK$10 | The automatic. The code is dropped, the checkout completes, and it answers no codes |
+| None | The automatic alone — HK$741 |
+| Order coupon, HK$10 | The automatic. The code is dropped and the checkout completes |
 | Order coupon, HK$60 | The code — HK$720. The automatic is dropped |
-| Product coupon, HK$20 | The automatic. The line weld is dropped and the checkout answers no codes |
-| Product coupon, HK$200 | The weld, on the line — HK$580. The automatic is dropped |
+| Product coupon, HK$20 | The automatic. The code is dropped and the checkout completes |
+| Product coupon, HK$200 | The code, off the line — HK$580. The automatic is dropped |
 | Gift coupon, a HK$5 item | The automatic, over a basket the gift line grew — HK$745.75. The gift line stands at its own price and the buyer is charged for it |
 | Reward coupon, HK$30, at the counter | The automatic. The reward's code is dropped and the sale completes |
 | 100 points | Both — HK$780 less HK$39 less HK$100, HK$641 |
 
-Shopify applies the better of two discounts that cannot combine and drops the other, whatever each one's scope: an order code, a line weld and an automatic all compete as one. Points are the exception. They ride as the draft's own order-level discount and stack with the automatic, so the flag is safe for the baskets that carry points.
+Shopify keeps the better of a code and an automatic that cannot combine and drops the other. Points are the exception. They ride as the draft's own order-level discount and stack with the automatic, so the flag is safe for the baskets that carry points.
 
-A dropped coupon costs a member nothing online. Nothing settles until the payment lands, and every coupon above was still live once its draft stood.
+A dropped coupon costs a member nothing online: `couponReplaced` releases it, and every coupon above was live again once its draft stood. Three things the store still owes the member:
 
-Two things the store still gets wrong, both on the half `shopifyProvider` does not compare:
-
-- **A gift the shop dropped is still a line.** The buyer asked for a free item, the draft charges them for it, and the larger basket earns the automatic a larger cut. A gift whose weld does not land has to come off the basket with it.
-- **A dropped weld is still reported as money off.** A product coupon or a gift the shop set aside comes back as `couponLineDiscountMinor` all the same, so the answer states a cut the shop never made. `shopifyProvider` compares requested codes against landed codes and answers `couponReplaced`; it makes no such comparison for a line weld.
+- **A gift's line survives its dropped code.** The code is what zeroes the line, so when the automatic beats it the buyer is charged for the free item and the larger basket earns the automatic a larger cut. A gift whose code did not land has to leave the basket with it.
+- **The answer states a cut the shop never took.** `couponLineDiscountMinor` carries what the coupon was promised to be worth, replaced or not.
+- **Nothing on the wire says a coupon came back.** `replacedCouponCodes` stops at the service; `CheckoutResult` has no field for it, so no surface can tell the member.
