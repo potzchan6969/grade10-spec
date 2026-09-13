@@ -8,6 +8,7 @@
   "leaving": "Taking you to pay",
   "leavingWith": "{money} came off with {points} points. Taking you to pay.",
   "settling": "Your order is being settled. There is nothing more to do here.",
+  "couponReplaced": "The shop's own sale took more off than {coupons}, so it is back in your wallet.",
   "points": {
     "label": "Points",
     "field": "Points to use",

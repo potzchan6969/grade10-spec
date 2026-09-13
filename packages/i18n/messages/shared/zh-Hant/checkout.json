@@ -8,6 +8,7 @@
   "leaving": "正前往付款頁面",
   "leavingWith": "已用 {points} 分折 {money}，正前往付款頁面。",
   "settling": "你的訂單正在結算，這裡不需要再做任何事。",
+  "couponReplaced": "本店的優惠比 {coupons} 更多，因此優惠券已退回你的錢包。",
   "points": {
     "label": "積分",
     "field": "要使用的積分",

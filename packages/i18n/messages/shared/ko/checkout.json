@@ -8,6 +8,7 @@
   "leaving": "결제 페이지로 이동합니다",
   "leavingWith": "{points}포인트로 {money}가 차감되었습니다. 결제 페이지로 이동합니다.",
   "settling": "주문을 정산하는 중입니다. 여기에서 더 하실 일은 없습니다.",
+  "couponReplaced": "매장 자체 할인이 {coupons}보다 더 커서 쿠폰은 지갑으로 돌아갔습니다.",
   "points": {
     "label": "포인트",
     "field": "사용할 포인트",
