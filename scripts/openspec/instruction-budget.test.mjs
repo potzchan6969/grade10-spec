@@ -25,8 +25,8 @@ const RULES_BUDGET = {
   "user-journeys": 90,
   "test-cases": 40,
   "ui-design": 40,
-  "tech-design": 120,
-  tasks: 90,
+  "tech-design": 40,
+  tasks: 40,
 };
 
 test("AGENTS.md holds to its word budget", () => {

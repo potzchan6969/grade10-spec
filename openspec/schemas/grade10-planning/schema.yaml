@@ -443,50 +443,67 @@ artifacts:
     template: tech-design.md
     instruction: >
       Written by the engineer who picks the change up, with the
-      `planning-dev` skill. Explains HOW to
-
-      implement it. Written for every change carrying a task group outside this
-      store - the repository tag on the group heading says where the work
-      lands, and an untagged group counts. A change that skips it says why as
-      `design_waived: <why>` in its `.openspec.yaml`; `pnpm check:manual`
-      refuses a change with neither.
+      `planning-dev` skill. Explains HOW to implement it. Written for every
+      change carrying a task group outside this store - the repository tag on
+      the group heading says where the work lands, and an untagged group
+      counts. A change that skips it says why as `design_waived: <why>` in its
+      `.openspec.yaml`; `pnpm check:manual` refuses a change with neither.
 
 
-      Sections:
+      Top-level sections, each omitted when it does not apply:
 
-      - **Context**: Only the current state and constraints needed to explain
-      the approach. Reference the proposal for motivation instead of restating
-      it (e.g. "See proposal.md - Why").
+      - **Context**: only the current state and constraints needed to explain
+      the approach. Point at the proposal for motivation; never restate it.
 
-      - **Goals / Non-Goals**: What this design achieves and explicitly
-      excludes. Don't restate the proposal's scope - add only design-level
-      boundaries.
+      - **Goals / Non-Goals**: design-level boundaries only; the proposal
+      already holds the scope.
 
-      - **Decisions**: Key technical choices with rationale (why X over Y?).
-      Include alternatives considered for each decision.
+      - **Decisions**: how the spec lands, not a restatement of it. Open by
+      naming what the spec already governs, then record the implementation
+      choice - which row, which service, persist or recompute, reuse or add -
+      and the alternatives rejected, which engineering inherits. A decision
+      that could be a spec scenario belongs in the spec.
 
-      - **Risks / Trade-offs**: Known limitations, things that could go wrong.
-      Format: [Risk] → Mitigation
+      - **Database Schema**, for a data-model change: owning and affected
+      tables; each added or changed column with its Postgres type, nullability
+      and default in the existing schema's conventions; keys, constraints and
+      indexes; an ER diagram of the relevant relationships; which data is
+      authoritative and which derived. Reuse a table or stamp that already
+      holds the fact, never a second column for the same message. A spec field
+      read from another row at query time is not stored.
 
-      - **Migration Plan**: Steps to deploy, rollback strategy (if applicable)
+      - **Service Interfaces**, for a service change: each service function as
+      a processor with one fixed input shape and one fixed success or refusal
+      output shape. State transaction ownership, locks, reads, writes,
+      idempotency, faults, and the boundary between entrypoint, service,
+      repository and persistence. For every flow that mutates several tables,
+      name the mutation order and the atomic boundary, then give concrete
+      example input and output values showing the affected rows. Show
+      end-to-end identity and data enrichment where a request crosses browser,
+      authenticated backend, service entrypoint, service, repository or
+      persistence.
 
-      - **Open Questions**: Unknowns that can safely be answered later without
-        changing the specs, the approach, or the task breakdown. Omit if none.
+      - **API Contracts**, only when the wire changes in a meaningful way - a
+      breaking rename, an additive authenticated field, a new admin read.
+      Never list unchanged endpoints.
 
-      Open questions are for genuinely deferrable unknowns, not decisions you
+      - **Risks / Trade-offs**: `[Risk] → Mitigation`. A mitigation is an
+      implementation control - a lock, a stamp, a state column - never "the
+      spec says so".
 
-      skipped. If a question would change the specs, the chosen approach, or
+      - **Migration Plan**: steps to deploy, and rollback where one applies.
 
-      the task breakdown, resolve it now - ask instead of guessing.
+      - **Open Questions**: unknowns that can be answered later without
+      changing the specs, the approach, or the task breakdown. One that would
+      change any of those is not an open question - resolve it now, asking
+      rather than guessing.
 
 
-      Focus on architecture and approach, not line-by-line implementation. The
-
-      proposal covers why and what; this covers how. Reference the proposal for
-
-      motivation and the specs for requirements - if a section would only
-
-      restate them, point to them instead.
+      Database Schema and Service Interfaces are top-level sections, never
+      subsections of Decisions. Bullets and tables carry dense material;
+      paragraphs are short connective text. Link the capability spec rather
+      than restating it; screens and Figma sources are `ui-design.md`'s. Focus
+      on architecture and approach, not line-by-line implementation.
     requires:
       - specs
   - id: tasks
@@ -495,67 +512,83 @@ artifacts:
     template: tasks.md
     instruction: >
       Written by the engineer who picks the change up, with the
-      `planning-dev` skill, and the artifact that
-
-      moves the change off the planning board: until it exists, the change
-
-      reads as still being planned.
+      `planning-dev` skill, and the artifact that moves the change off the
+      planning board: until it exists, the change reads as still being
+      planned. The implementing repository reads it, checks it off and claims
+      groups in it.
 
 
       Before writing tasks, check tech-design.md for Open Questions. If any of
-
       them would change what gets built, resolve them first - do not bake an
-
       unstated assumption into the task list.
 
 
       **IMPORTANT: Follow the template exactly.** The apply phase parses
-
       checkbox format to track progress. Tasks not using `- [ ]` won't be
-      tracked.
+      tracked. Group, task-id and owner format follow
+      `docs/governance/task-ownership.md`, which tooling in this repository and
+      in the application repository both parse.
 
 
-      Guidelines:
+      Rules:
 
-      - Group related tasks under ## numbered headings
+      - Group by layer, in order: shared types and interfaces, data migration,
+      backend and API, frontend. Omit a layer the change does not touch rather
+      than writing an empty group. When a change spans grade10-spec and an
+      application repository, the grade10-spec groups land first - the
+      submodule bump is the boundary.
 
-      - Each task MUST be a checkbox: `- [ ] X.Y Task description`
+      - A group title names its repository by clone name - `(grade10-spec)`,
+      `(grade10)` - never "this repo" or "here": tasks.md is written in this
+      store and read from the application repository, so a deictic reference
+      flips meaning between the two.
 
-      - Tasks should be small enough to complete in one session
+      - Once the shared-interface group lands, backend and frontend groups
+      depend on it, not on each other: write each so it can be claimed in
+      parallel and verified on its own - frontend against the contracts and
+      fixtures, never a running backend. When a group truly needs another
+      group's landed code, say so in a prose line under its heading; otherwise
+      group order is convention, not a dependency.
 
-      - Order tasks by dependency (what must be done first?)
+      - Phrase an implementation task as the spec scenario(s) it makes pass,
+      naming them, so the scenario's test is the evidence behind the
+      checkmark. Never split "write the tests" into its own task or group -
+      the engineer works test-first inside each task.
 
-      - Group ownership follows `docs/governance/task-ownership.md`, which
-      tooling in this repository and in the application repository both parse.
+      - End every group with its verification step - the checks that group
+      runs - so an engineer ships and verifies one group at a time. Keep each
+      task to something one engineer finishes in a session.
+
+      - A change whose deltas touch a capability carries a task to update that
+      capability's PRD under docs/prds/, in a grade10-spec group; `pnpm
+      check:manual` verifies it. Component work `ui-design.md` flagged - a
+      variant, a token, a compound component that does not exist yet - is a
+      grade10-spec group too.
+
+      - Write groups without owner tags - engineers claim them at pickup - and
+      never renumber a group or task that is claimed or has checkmarks.
 
 
       Example:
 
       ```
 
-      ## 1. Setup
+      ## 1. Shared interfaces (grade10-spec)
 
 
-      - [ ] 1.1 Create new module structure
+      - [ ] 1.1 Export `ListingTile` from packages/ui (grade10-site-store-product-listing-SC-01)
 
-      - [ ] 1.2 Add dependencies to package.json
-
-
-      ## 2. Core Implementation
+      - [ ] 1.2 Verify: `pnpm run typecheck && pnpm run test`
 
 
-      - [ ] 2.1 Implement data export function
+      ## 2. Frontend (grade10)
 
-      - [ ] 2.2 Add CSV formatting utilities
+
+      - [ ] 2.1 Render the tile from the catalogue row (grade10-site-store-product-listing-SC-03)
+
+      - [ ] 2.2 Verify: `pnpm run check`
 
       ```
-
-
-      Reference specs for what needs to be built, user-journeys for who walks
-      it, tech-design for how to build it, and ui-design, when the change ships
-      one, for the screens, components, and states the frontend work names.
-
-      Each task should be verifiable - you know when it's done.
     requires:
       - specs
 apply:

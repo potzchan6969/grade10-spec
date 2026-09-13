@@ -52,66 +52,21 @@ schema's. Read them rather than working from memory.
 
 ## tech-design.md
 
-Owed by every change carrying a task group outside this store — `openspec
-instructions tech-design` states the rule and the waiver that stands in for it.
-
-- **Context**: only the current state and constraints needed to explain the
-  approach. Point at the proposal for motivation; never restate it.
-- **Decisions**: how the spec lands, not a restatement of it. Open by naming
-  what the spec already governs, then record the implementation choice (which
-  row, which service, persist vs recompute, reuse vs add) and the alternatives
-  rejected. A decision that could be a spec scenario belongs in the spec. Keep
-  the implementation alternative an engineer might still try even when the spec
-  forbids the resulting behavior.
-- **Database Schema**, top-level for a data-model change: owning and affected
-  tables, each added or changed column with Postgres type, nullability and
-  default matching the existing schema, keys, constraints, indexes, an ER
-  diagram, and which data is authoritative rather than derived. Reuse a table
-  or stamp that already holds the fact. Spec fields read from another row at
-  query time are not stored.
-- **Service Interfaces**, top-level for a service change: each service function
-  as a processor with one fixed input shape and one fixed success/refusal
-  output. State transaction ownership, locks, reads, writes, idempotency,
-  faults, and the boundary between entrypoint, service, repository and
-  persistence. For every flow mutating multiple tables, name the mutation order
-  and atomic boundary, with concrete before/after rows.
-- **Contracts**: only when the wire changes in a meaningful way (breaking
-  rename, additive authenticated field, new admin read). Do not list unchanged
-  endpoints.
-- **Risks / Trade-offs** as `[Risk] → Mitigation`, and a **Migration Plan**
-  where one applies. Do not mitigate a risk with "the spec says so" —
-  mitigation is an implementation control: a lock, a stamp, a state column.
-- **Open Questions** only for unknowns answerable later *without* changing the
-  specs, the approach, or the task breakdown. Anything that would change one of
-  those is not an open question — resolve it now, asking rather than guessing.
-
-Screens and Figma sources belong in `ui-design.md`; link it rather than
-restating it.
+Owed by every change carrying a task group outside this store — the
+instructions you rendered above hold the sections, what each carries, and the
+waiver that stands in for the file. Beyond them: under **Decisions**, keep the
+implementation alternative an engineer might still try even when the spec
+forbids the resulting behavior, so the next engineer finds it rejected rather
+than untried.
 
 ## tasks.md
 
 This is the artifact the implementing repository reads, checks off, and claims
-groups in. Follow `docs/governance/task-ownership.md` for the format exactly —
-tooling on both sides parses it.
+groups in. The instructions you rendered above hold the shape — layers, clone
+names, parallel groups, tasks phrased as scenarios, a verification step per
+group, no owner tags — and `docs/governance/task-ownership.md` the format
+tooling on both sides parses. Beyond them:
 
-- **Group by layer**, in order: shared types and interfaces, data migration,
-  backend and API, frontend. Omit a layer the change does not touch rather than
-  writing an empty group. When a change spans grade10-spec and an application
-  repo, the grade10-spec groups land first — the submodule bump is the
-  boundary. A group title names its repository by clone name —
-  `(grade10-spec)`, `(grade10)` — never "this repo" or "here": tasks.md is
-  written in this store and read from the application repo, so a deictic
-  reference flips meaning between the two.
-- **Once the shared-interface group lands, the rest are parallel.** Write each
-  so it can be claimed on its own and verified on its own — frontend against
-  the contracts and fixtures, never a running backend. When a group genuinely
-  needs another's landed code, say so in a prose line under its heading.
-- **Phrase an implementation task as the spec scenario it makes pass**, naming
-  the scenario, so the scenario's test is the evidence behind the checkmark.
-- **Never split "write the tests" into its own task or group.** The engineer
-  works test-first inside each task; a separate testing task invites the
-  opposite.
-- **End every group with its verification step** — the checks that group runs.
 - **Leave the routine archive hand-copy out of the tasks.** The fold keeps
   `## Requirements` and nothing else, so a delta's `## Feature set` and every
   `-US-` id in a `user-journeys.md` need carrying across — but
@@ -124,26 +79,16 @@ tooling on both sides parses it.
   acceptance shelf — and write it inside the grade10-spec group that updates
   the PRD, never as a group of its own with a verification step it
   cannot pass.
-- **Carry the PRD.** A change whose deltas touch a capability carries a
-  task to update that capability's PRD under `docs/prds/`; `pnpm check:manual`
-  verifies it. A constraint you learn that changes an outcome goes on the PRD
-  first, marked 🚧 or ❓, before the delta or the task that depends on it. A
-  constraint that changes no outcome — a mechanism, a key, a lock, a metric,
-  a sweep, what was tried and dropped — is `tech-design.md`'s and the
+- **The PRD moves first.** A constraint you learn that changes an outcome goes
+  on the PRD, marked 🚧 or ❓, before the delta or the task that depends on
+  it. A constraint that changes no outcome — a mechanism, a key, a lock, a
+  metric, a sweep, what was tried and dropped — is `tech-design.md`'s and the
   application repository's architecture doc's. Your depth on the page is one
   `detail{for="engineer"}` block, and it is a code map: the module, the
   config name, the architecture doc, as items of a name and a link. The
   check warns (`dense`) on an engineer block holding a paragraph.
-- **Carry the component work** `ui-design.md` flagged — a variant, a token, or
-  a compound component that does not exist yet is a grade10-spec group.
-- Keep each task to something one engineer finishes in a session.
-- **Write groups without owner tags.** Engineers claim them at pickup with
-  `pnpm plan claim`. Never renumber a group or task that is claimed or already
-  has checkmarks.
-
-Before writing tasks, read `tech-design.md`'s Open Questions. If any would
-change what gets built, resolve it with the author first rather than baking an
-unstated assumption into the list.
+- **Engineers claim groups at pickup** with `pnpm plan claim`, which is why
+  the groups are written without owner tags.
 
 ## Finish
 

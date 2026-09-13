@@ -37,6 +37,9 @@ context: |
   marked 🚧 or ❓, before the artifact that depends on it - and never restates
   a requirement. docs/governance/prd-and-openspec.md draws the boundary;
   docs/governance/writing.md is the style of every artifact here.
+  Every path these instructions name is this store's. Run from grade10, the
+  CLI prints `Using OpenSpec root: grade10-spec (<path>)`, and a skill or
+  document named here is under that path, never the application repository's.
 
 # Per-artifact rules (optional)
 rules:
@@ -63,14 +66,11 @@ rules:
   test-cases:
     - "`docs/governance/specs-to-test-cases.md` governs the shape and `.claude/skills/planning-qa/SKILL.md` the workflow: draft with `spec-to-tcs`, review with `tcs-review`, check with `pnpm run tcs:validate`. `test-cases.md` is not a suite name."
   tech-design:
-    - "Owed by a change with a task group outside this store, or `design_waived: <why>` in `.openspec.yaml`. `.claude/skills/planning-dev/SKILL.md` § tech-design.md carries the section rules: Database Schema and Service Interfaces are top-level sections, never subsections of Decisions; record alternatives per decision; mitigation is an implementation control, never 'the spec says so'."
-    - "Bullets and tables for dense material, paragraphs only as short connective text. Link the capability spec rather than restating it; screens and Figma sources belong in ui-design.md. For a flow that mutates several tables, give concrete example input and output values showing the affected rows, and show end-to-end identity and data enrichment across browser, backend, service, repository and persistence."
+    - "The schema instruction above holds the section rules; `pnpm check:manual` refuses a change that owes this file and carries neither it nor `design_waived: <why>` in `.openspec.yaml`."
   ui-design:
     - "The schema text above and `.claude/skills/planning-design/SKILL.md` carry the rules: link the Figma frame, name exports exactly and flag what does not exist yet, and fix the spec when a state has no scenario."
   tasks:
-    - "`.claude/skills/planning-dev/SKILL.md` § tasks.md carries the rules: groups by layer with grade10-spec groups first, repository named by clone name, parallel groups after the shared-interface one, tasks phrased as the scenarios they pass, no separate test tasks, a verification step per group, no owner tags, no renumbering once claimed."
-    - "Format follows docs/governance/task-ownership.md - tooling on both sides parses it."
-    - "A change whose deltas touch a capability carries a task to update that capability's PRD under docs/prds/, in a grade10-spec group; `pnpm check:manual` verifies it."
+    - "The schema instruction above holds the rules; `docs/governance/task-ownership.md` is the format tooling on both sides parses, and `pnpm check:manual` verifies the PRD task."
 
 # Per-operation guidance (optional)
 operations:
