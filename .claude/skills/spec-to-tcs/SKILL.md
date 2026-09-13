@@ -46,7 +46,7 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
   under `docs/prds/`, `openspec/config.yaml`'s `context`, and the cross-cutting
   specs the Purpose names. A platform fact is checked where it matters
   (`URL contains <lang>`), never written as a pre-condition
-- **Domain** — **What a domain run reads** under **One purpose, one case**:
+- **Domain** — **Compose from evidence** under **One purpose, one case**:
   the changed capability's `user-journeys.md`, every sibling's under
   `openspec/specs/<product>/<domain>/`, and the domain's pages under
   `docs/prds/products/<product>/<domain>/`
@@ -60,7 +60,7 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
 
 ## Steps
 
-1. **Resolve the target.** **Manual — generate or extend by agent command**
+1. **Resolve the target.** **When Suites Are Generated** in the document
    holds the argument table: a change name is every delta `spec.md` under
    `openspec/changes/<change>/specs/`; a path containing `openspec/specs/` or
    `openspec/changes/` is exactly that tree. When a capability id matches both
@@ -73,8 +73,8 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
    `**Status:**` — `draft`, `actual`, `deprecated`; scenario ids no case
    traces and traced ids the spec no longer defines. Then ask, and wait:
    update (continue from step 3, in update mode), another target (back to
-   step 1, file untouched), or regenerate — only under **The regeneration
-   guard**, and only after a second explicit confirmation that review history
+   step 1, file untouched), or regenerate — only under the **Regeneration
+   guard** in **When a Suite Already Exists**, and only after a second explicit confirmation that review history
    will be lost. Say which cases block a refused regeneration and offer the
    update path. Never move a case back to `draft` for a reviewer, and never
    delete a suite file.
@@ -125,8 +125,8 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
    - **Order** — positive first, then empty, missing and failure, then
      destructive only where the scenarios state cancel, remove, withdraw or
      unwind
-   - **One pass, not one clause** — **A case reads like a run, not like a
-     transcribed scenario**; a one-step case left out arrival and observation
+   - **One pass, not one clause** — **Step 3**'s rule that a case reads like
+     a run; a one-step case left out arrival and observation
    - **Standing rules** — atomicity (one intent per case), independence (no
      case leans on another having run), NLP automation readiness (the same
      condition phrased identically everywhere, no blank expected results)
