@@ -25,7 +25,6 @@
     "title": "会员",
     "card": "你的会员卡",
     "rewards": "奖励",
-    "pending": "门店待领",
     "activity": "记录",
     "spend": "用于购物车",
     "cardUnavailable": "门店认证尚未开通，暂时没有可扫描的码——请门店店员用邮箱为你查询。",
@@ -34,7 +33,6 @@
     "loadFailed": "未能加载，请再试一次。",
     "retry": "再试一次",
     "noRewards": "目前没有可兑换的奖励。",
-    "noPending": "没有待领的项目。",
     "noExpiry": "没有期限",
     "noActivity": "你的账户尚未有任何记录。",
     "notAMember": "你尚未加入此计划。",
@@ -47,10 +45,7 @@
     "preparing": "处理中",
     "ready": "优惠码可以使用",
     "spent": "优惠码已使用",
-    "void": "优惠码已取消",
-    "awaitingCollection": "门店待领，至 {deadline} 止",
-    "collected": "已于 {day} 领取",
-    "lapsed": "未领取——期限已于 {deadline} 届满"
+    "void": "优惠码已取消"
   },
   "summary": {
     "title": "会员",
@@ -86,12 +81,6 @@
   },
   "activity": {
     "label": "记录"
-  },
-  "pending": {
-    "label": "门店待领",
-    "location": "请到门店领取。",
-    "expired": "期限已过",
-    "points": "分"
   },
   "activityKind": {
     "earn": "赚取积分",

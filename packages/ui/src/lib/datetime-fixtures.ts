@@ -30,11 +30,9 @@ export const FIXTURE_MEMBER_FIRST_USE_AT_MS = Date.UTC(2026, 7, 24, 20, 41);
 export const FIXTURE_LOYALTY_PURCHASE_AT_MS = Date.UTC(2026, 7, 18);
 export const FIXTURE_LOYALTY_REDEEM_AT_MS = Date.UTC(2026, 7, 2);
 export const FIXTURE_LOYALTY_ADJUST_AT_MS = Date.UTC(2026, 6, 28);
-export const FIXTURE_REDEEMED_AT_MS = Date.UTC(2026, 7, 20);
 export const FIXTURE_POINTS_ACTIVE_UNTIL_MS = Date.UTC(2027, 7, 18);
 export const FIXTURE_TIER_RENEWAL_AT_MS = Date.UTC(2027, 2, 1);
 export const FIXTURE_MEMBER_SINCE_AT_MS = Date.UTC(2024, 2, 12);
-export const FIXTURE_COLLECT_BY_SEP_3_AT_MS = Date.UTC(2026, 8, 3);
 
 export const FIXTURE_AUCTION_DEADLINE = formatDeadline(
   FIXTURE_AUCTION_ENDS_AT_MS,
@@ -57,13 +55,11 @@ export const FIXTURE_MEMBER_FIRST_USE_AT = formatMoment(
 );
 export const FIXTURE_PLACED_ON = `Placed on ${FIXTURE_ORDER_PLACED_DAY}`;
 export const FIXTURE_PLACED_ON_WITH_PERIOD = `Placed on ${FIXTURE_ORDER_PLACED_DAY}.`;
-export const FIXTURE_REDEEMED_ON = `Redeemed ${formatDay(FIXTURE_REDEEMED_AT_MS)}`;
 export const FIXTURE_POINTS_ACTIVE_UNTIL = formatDay(
   FIXTURE_POINTS_ACTIVE_UNTIL_MS,
 );
 export const FIXTURE_TIER_RENEWAL_DAY = formatDay(FIXTURE_TIER_RENEWAL_AT_MS);
 export const FIXTURE_MEMBER_SINCE = `Member since ${formatDay(FIXTURE_MEMBER_SINCE_AT_MS)}`;
-export const FIXTURE_COLLECT_BY_SEP_3 = `Collect by ${formatDay(FIXTURE_COLLECT_BY_SEP_3_AT_MS)}`;
 export const FIXTURE_LOYALTY_PURCHASE_DAY = formatDay(
   FIXTURE_LOYALTY_PURCHASE_AT_MS,
 );

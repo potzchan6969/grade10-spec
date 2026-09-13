@@ -231,11 +231,6 @@ export {
   type MembershipSummaryProps,
 } from "./blocks/loyalty-membership/membership-summary";
 export {
-  PendingCollectionList,
-  type PendingCollectionListCopy,
-  type PendingCollectionListProps,
-} from "./blocks/loyalty-membership/pending-collection-list";
-export {
   RewardMenu,
   type RewardMenuCopy,
   type RewardMenuProps,
@@ -248,7 +243,6 @@ export type {
   ActivityEntry,
   CouponItem,
   CouponStatus,
-  PendingCollectionItem,
   RewardMenuItem,
 } from "./blocks/loyalty-membership/types";
 export {

@@ -25,7 +25,6 @@
     "title": "會員",
     "card": "你的會員卡",
     "rewards": "獎賞",
-    "pending": "門市待領",
     "activity": "紀錄",
     "spend": "用於購物車",
     "cardUnavailable": "門市認證尚未開通，暫時沒有可掃描的碼——請門市同事以電郵為你查閱。",
@@ -34,7 +33,6 @@
     "loadFailed": "未能載入，請再試一次。",
     "retry": "再試一次",
     "noRewards": "目前沒有可換的獎賞。",
-    "noPending": "沒有待領的項目。",
     "noExpiry": "沒有期限",
     "noActivity": "你的帳戶尚未有任何紀錄。",
     "notAMember": "你尚未加入此計劃。",
@@ -47,10 +45,7 @@
     "preparing": "處理中",
     "ready": "優惠碼可以使用",
     "spent": "優惠碼已使用",
-    "void": "優惠碼已取消",
-    "awaitingCollection": "門市待領，至 {deadline} 止",
-    "collected": "已於 {day} 領取",
-    "lapsed": "未領取——期限已於 {deadline} 屆滿"
+    "void": "優惠碼已取消"
   },
   "summary": {
     "title": "會員",
@@ -86,12 +81,6 @@
   },
   "activity": {
     "label": "紀錄"
-  },
-  "pending": {
-    "label": "門市待領",
-    "location": "請到門市領取。",
-    "expired": "期限已過",
-    "points": "分"
   },
   "activityKind": {
     "earn": "賺取積分",

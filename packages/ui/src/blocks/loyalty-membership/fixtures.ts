@@ -1,17 +1,10 @@
 import {
-  FIXTURE_COLLECT_BY_SEP_3,
   FIXTURE_LOYALTY_ADJUST_DAY,
   FIXTURE_LOYALTY_PURCHASE_DAY,
   FIXTURE_LOYALTY_REDEEM_DAY,
-  FIXTURE_REDEEMED_ON,
 } from "../../lib/datetime-fixtures";
 import { formatDay } from "../../lib/format-datetime";
-import type {
-  ActivityEntry,
-  CouponItem,
-  PendingCollectionItem,
-  RewardMenuItem,
-} from "./types";
+import type { ActivityEntry, CouponItem, RewardMenuItem } from "./types";
 
 /* Grade10's own programme content, for the examples only. A consumer supplies
  * its own; nothing here is a default. */
@@ -101,24 +94,6 @@ const ACTIVITY: ActivityEntry[] = [
   },
 ];
 
-const PENDING_COLLECTIONS: PendingCollectionItem[] = [
-  {
-    id: "pending-sleeves",
-    name: "Grade10 card sleeves",
-    pointsPaid: 240,
-    redeemedDate: FIXTURE_REDEEMED_ON,
-    collectBy: FIXTURE_COLLECT_BY_SEP_3,
-  },
-  {
-    id: "pending-stand",
-    name: "Acrylic slab stand",
-    pointsPaid: 4000,
-    redeemedDate: `Redeemed ${formatDay(Date.UTC(2026, 6, 1))}`,
-    collectBy: `Collect by ${formatDay(Date.UTC(2026, 6, 31))}`,
-    expired: true,
-  },
-];
-
 /** Opaque, single-use, minted by the programme — this one only looks the part. */
 const MEMBER_TOKEN = "g10m.eyJrIjoiZml4dHVyZSJ9.5f2a9c";
 
@@ -130,6 +105,5 @@ export {
   COUPONS,
   FALLBACK_CODE,
   MEMBER_TOKEN,
-  PENDING_COLLECTIONS,
   REWARDS,
 };

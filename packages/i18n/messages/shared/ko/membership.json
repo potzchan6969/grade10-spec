@@ -25,7 +25,6 @@
     "title": "멤버십",
     "card": "회원 카드",
     "rewards": "리워드",
-    "pending": "매장 수령 대기",
     "activity": "내역",
     "spend": "장바구니에 사용",
     "cardUnavailable": "매장 인증이 아직 열리지 않아 스캔할 코드가 없습니다. 매장 직원에게 이메일로 조회를 요청해 주세요.",
@@ -34,7 +33,6 @@
     "loadFailed": "불러오지 못했습니다. 다시 시도해 주세요.",
     "retry": "다시 시도",
     "noRewards": "지금은 교환할 리워드가 없습니다.",
-    "noPending": "대기 중인 항목이 없습니다.",
     "noExpiry": "유효기간 없음",
     "noActivity": "계정에 아직 내역이 없습니다.",
     "notAMember": "아직 프로그램에 가입하지 않았습니다.",
@@ -47,10 +45,7 @@
     "preparing": "처리 중",
     "ready": "사용 가능한 코드",
     "spent": "사용한 코드",
-    "void": "취소된 코드",
-    "awaitingCollection": "{deadline}까지 매장에서 수령 대기",
-    "collected": "{day}에 수령함",
-    "lapsed": "미수령 — 기한이 {deadline}에 종료되었습니다"
+    "void": "취소된 코드"
   },
   "summary": {
     "title": "멤버십",
@@ -86,12 +81,6 @@
   },
   "activity": {
     "label": "내역"
-  },
-  "pending": {
-    "label": "매장 수령 대기",
-    "location": "매장에서 수령해 주세요.",
-    "expired": "기한 종료",
-    "points": "P"
   },
   "activityKind": {
     "earn": "포인트 적립",

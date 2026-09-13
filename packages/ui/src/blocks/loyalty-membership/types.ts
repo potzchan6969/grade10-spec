@@ -59,25 +59,9 @@ type ActivityEntry = {
   context?: ReactNode;
 };
 
-/** One redemption paid for and awaiting handover. */
-type PendingCollectionItem = {
-  id: string;
-  /** The reward's name — still readable after the reward is retired. */
-  name: string;
-  /** Points the redemption cost. */
-  pointsPaid: number;
-  /** When it was redeemed, already formatted. */
-  redeemedDate: string;
-  /** The window to collect it in, already formatted. */
-  collectBy: string;
-  /** The window has passed without a handover. */
-  expired?: boolean;
-};
-
 export type {
   ActivityEntry,
   CouponItem,
   CouponStatus,
-  PendingCollectionItem,
   RewardMenuItem,
 };

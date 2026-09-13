@@ -25,7 +25,6 @@
     "title": "Membership",
     "card": "Your member card",
     "rewards": "Rewards",
-    "pending": "Waiting at the counter",
     "activity": "Activity",
     "spend": "Spend on your basket",
     "cardUnavailable": "In-store identification is not switched on yet. Nothing to scan — ask a member of staff to look you up by email.",
@@ -34,7 +33,6 @@
     "loadFailed": "That did not load. Try again.",
     "retry": "Try again",
     "noRewards": "There is nothing on the menu right now.",
-    "noPending": "Nothing is waiting for you.",
     "noExpiry": "No expiry",
     "noActivity": "Nothing has happened on your account yet.",
     "notAMember": "You have not joined the programme yet.",
@@ -47,10 +45,7 @@
     "preparing": "On its way",
     "ready": "Code ready to use",
     "spent": "Code used",
-    "void": "Code cancelled",
-    "awaitingCollection": "Waiting at the counter until {deadline}",
-    "collected": "Collected {day}",
-    "lapsed": "Not collected — the window closed {deadline}"
+    "void": "Code cancelled"
   },
   "summary": {
     "title": "Membership",
@@ -86,12 +81,6 @@
   },
   "activity": {
     "label": "Activity"
-  },
-  "pending": {
-    "label": "Waiting at the counter",
-    "location": "Collect these in store.",
-    "expired": "Window passed",
-    "points": "pts"
   },
   "activityKind": {
     "earn": "Points earned",
