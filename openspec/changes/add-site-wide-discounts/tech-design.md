@@ -50,6 +50,11 @@ One automatic order discount live on the staging shop — `ALL 5% OFF`, 5% off t
 
 Shopify keeps the better of a code and an automatic that cannot combine and drops the other. Points are the exception. They ride as the draft's own order-level discount and stack with the automatic, so the flag is safe for the baskets that carry points.
 
+Two hand probes in Shopify Admin, on a draft order carrying the same three things the store sends:
+
+- **A code worth more than the line it targets clamps.** HK$500 off a HK$5 Potatoz took the line to zero and stopped: the HK$260 box beside it stayed HK$260, and the leftover HK$495 evaporated. A fixed-amount code never spills onto a line it does not name.
+- **The flag is honoured, the code is dropped by name, and an order-level discount survives both.** Turning on "apply all eligible automatic discounts" over a draft already carrying a code answered *"QA-SPILL-PROBE couldn't be used with your existing discounts"* and put Fire Sale on instead — HK$260 down to HK$130. The custom order discount beside it stood: HK$135 less HK$20 is HK$115. So the rule holds for a product automatic as well as an order one, and the order-level slot the points tender rides is not the slot a code and an automatic compete for.
+
 A dropped coupon costs a member nothing online: `couponReplaced` releases it, and every coupon above was live again once its draft stood. Three things the store still owes the member:
 
 - **A gift's line survives its dropped code.** The code is what zeroes the line, so when the automatic beats it the buyer is charged for the free item and the larger basket earns the automatic a larger cut. A gift whose code did not land has to leave the basket with it.
