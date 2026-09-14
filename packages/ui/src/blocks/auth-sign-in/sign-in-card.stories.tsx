@@ -116,8 +116,8 @@ export const WithProviderSlot: Story = {
 
 /**
  * The legal line is the body's last node, and stays last with a status line
- * and an exit above it — the order is the contract, not the arrangement of
- * this one example. The block supplies no wording: every word here is the
+ * above it — the order is the contract, not the arrangement of this one
+ * example. The block supplies no wording: every word here is the
  * consumer's.
  */
 export const WithLegal: Story = {
@@ -127,7 +127,6 @@ export const WithLegal: Story = {
       legal: "By continuing you agree to the Terms and the Privacy Policy.",
     },
     message: "Check your inbox for a sign-in link.",
-    exitAction: { label: "Back to home", onAction: fn() },
   },
   play: async ({ args }) => {
     const body = within(document.body);
@@ -168,17 +167,7 @@ export const ProviderThatHasNotDrawnYet: Story = {
   },
 };
 
-export const ExitActionIsReported: Story = {
-  args: { exitAction: { label: "Back to home", onAction: fn() } },
-  play: async ({ args }) => {
-    const body = within(document.body);
-    await userEvent.click(body.getByRole("button", { name: "Back to home" }));
-    expect(args.exitAction?.onAction).toHaveBeenCalledOnce();
-  },
-};
-
-/** Dismissing is not the same as exiting: the close control reports it and
- * leaves the page beneath alone. */
+/** The close control reports dismissal and leaves the page beneath alone. */
 export const CloseControlReportsDismissal: Story = {
   play: async ({ args }) => {
     const body = within(document.body);

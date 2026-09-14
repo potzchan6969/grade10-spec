@@ -183,7 +183,6 @@ export { WatchButton } from "./blocks/auction-record/watch-button";
 // shared/ui/auth-sign-in
 export {
   SignInCard,
-  type SignInCardAction,
   type SignInCardCopy,
   type SignInCardProps,
 } from "./blocks/auth-sign-in/sign-in-card";

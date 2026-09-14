@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import type {
-  SignInCardAction,
   SignInCardCopy,
   SignInCardProps,
   SignInEmailFormCopy,
@@ -10,7 +9,6 @@ import * as publicEntry from "../../index";
 import { SignInCard, SignInEmailForm } from "../../index";
 
 type PublicSignInTypes = [
-  SignInCardAction,
   SignInCardCopy,
   SignInCardProps,
   SignInEmailFormProps,
