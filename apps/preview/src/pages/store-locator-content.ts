@@ -10,6 +10,7 @@ const STORE_LOCATOR_COPY = {
   getDirections: "Get directions",
   hoursHeading: "Hours",
   mapTitle: "Map of Hong Kong Grade10 Store",
+  openMap: "Open Hong Kong Grade10 Store in Google Maps",
 } as const;
 
 const STORE_LOCATOR_STORE = {

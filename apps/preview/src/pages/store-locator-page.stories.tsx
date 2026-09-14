@@ -33,16 +33,25 @@ function StoreLocatorPage() {
           data-slot="store-locator"
         >
           <div
-            className="aspect-square w-full overflow-hidden rounded-2xl bg-muted"
+            className="relative aspect-square w-full overflow-hidden rounded-2xl bg-muted"
             data-slot="store-locator-map"
           >
             <iframe
               allowFullScreen
-              className="size-full border-0"
+              aria-hidden
+              className="pointer-events-none size-full border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               src={STORE_LOCATOR_STORE.mapEmbedSrc}
+              tabIndex={-1}
               title={STORE_LOCATOR_COPY.mapTitle}
+            />
+            <a
+              aria-label={STORE_LOCATOR_COPY.openMap}
+              className="absolute inset-0"
+              href={STORE_LOCATOR_STORE.mapsHref}
+              rel="noopener noreferrer"
+              target="_blank"
             />
           </div>
 
@@ -138,6 +147,9 @@ export const Default: Story = {
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("link", { name: STORE_LOCATOR_COPY.getDirections }),
+    ).toHaveAttribute("href", STORE_LOCATOR_STORE.mapsHref);
+    expect(
+      canvas.getByRole("link", { name: STORE_LOCATOR_COPY.openMap }),
     ).toHaveAttribute("href", STORE_LOCATOR_STORE.mapsHref);
     expect(
       canvas.getAllByRole("link", { name: "Store Locator" }).length,
