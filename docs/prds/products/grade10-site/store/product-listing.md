@@ -35,8 +35,9 @@ product.
   and nothing is in force until the collector picks one
 - ❓ **Answered from the store's own index** — narrowing, counting, ordering
   and search are one read of the store's copy of the catalogue, so a listing
-  answers in the time of one database round trip; Engineering confirms the
-  design — [the design note](/references/store-catalogue-index)
+  answers in the time of one database round trip, once the cheaper rungs are
+  measured short; Engineering confirms the design —
+  [the design note](/references/store-catalogue-index)
 - ❓ **A shop edit reaches the listing within seconds** — on the product's
   own webhook; anything the webhook missed, within the sweep's full walk.
   Engineering confirms the walk's pace
@@ -137,7 +138,7 @@ collection. The front door's collection grid, which is unchanged.
 | --- | --- | --- | --- |
 | Facets, not collections | Decided | The sidebar filters by world and collectible type. A collection is a merchandiser's grouping and stays a way in. | Design |
 | One narrowing at a time | Decided | The catalogue narrows by a collection or by a query, never both, so applying either leaves the other behind. The alternative — a collection dimension on the query — cannot be served natively and would walk the whole catalogue for every scoped narrowing. | Engineering |
-| Catalogue index | ❓ Open | The listing reads the store's own copy of the catalogue, written by the shop's product webhooks and repaired by a sweep; Shopify is never read on a listing view, and checkout still prices live. Reverses the no-product-mirror rule for display only — [the design note](/references/store-catalogue-index). | Engineering |
+| Catalogue index | ❓ Open | The cheaper rungs come first — the latest order asked of Shopify natively, the cache tier, a slim walk — each measured against the listing's answer time. When a measured ceiling survives them, or for a shape none answers, the listing reads the store's own copy of the catalogue, written by the shop's webhooks and repaired by a sweep, with Shopify never read on a listing view and checkout still pricing live. Reverses the no-product-mirror rule for display only — [the design note](/references/store-catalogue-index). | Engineering |
 | Collection with facets | ❓ Open | The one-narrowing rule rests on the walk; on the store's index a collection is one more narrowing and the reason goes. Whether to offer both together is decided once the index lands. | Product |
 | Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
