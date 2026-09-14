@@ -16,6 +16,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@grade10/design-system/components/overlays/dropdown-menu";
 import { ShoppingBag, User } from "@phosphor-icons/react";
@@ -59,6 +60,11 @@ type SiteHeaderProps = {
   onProfile: () => void;
   onMyAuctions: () => void;
   onSignOut: () => void;
+  /**
+   * Opens the account menu on first paint. Stories that are the layout SoT for
+   * the open menu pass this; production leaves it unset.
+   */
+  accountMenuDefaultOpen?: boolean;
   className?: string;
 };
 
@@ -66,13 +72,13 @@ type SiteHeaderProps = {
  * Grade10 site header: design-system `Nav` plus session-aware account entry.
  *
  * Signed out shows a primary Sign In button. Signed in shows the account icon
- * and a menu of Profile, My Auctions, and Sign out. Cart and search stay
- * optional via handlers — auction-first launches omit them. When cart is
- * present, `SiteHeader` owns the active-line count badge on the cart icon
- * (`cartItemCount`), matching the cart drawer title. On compact viewports,
- * `Nav` moves primary nav, utilities, search, and language into the left menu
- * drawer; Account / Sign In and Cart stay in the bar. Orders and KYC are not
- * in this menu.
+ * and a menu of Profile, My Auctions, then Sign out (destructive, separated).
+ * Cart and search stay optional via handlers — auction-first launches omit
+ * them. When cart is present, `SiteHeader` owns the active-line count badge on
+ * the cart icon (`cartItemCount`), matching the cart drawer title. On compact
+ * viewports, `Nav` moves primary nav, utilities, search, and language into the
+ * left menu drawer; Account / Sign In and Cart stay in the bar. Orders and KYC
+ * are not in this menu.
  *
  * All destinations and copy are application-owned. The component owns only the
  * open/close of the account menu and the cart count badge.
@@ -95,13 +101,14 @@ function SiteHeader({
   onProfile,
   onMyAuctions,
   onSignOut,
+  accountMenuDefaultOpen,
   className,
 }: SiteHeaderProps) {
   const { accountMenuLabel, profile, myAuctions, signOut, ...navCopy } = copy;
 
   const accountSlot =
     session === "signed-in" ? (
-      <DropdownMenu>
+      <DropdownMenu defaultOpen={accountMenuDefaultOpen}>
         <DropdownMenuTrigger
           className="[&_svg]:transition-none [&[data-popup-open]_svg]:rotate-0"
           render={
@@ -121,8 +128,11 @@ function SiteHeader({
             <DropdownMenuItem onClick={onMyAuctions}>
               {myAuctions}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={onSignOut}>{signOut}</DropdownMenuItem>
           </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={onSignOut} variant="destructive">
+            {signOut}
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     ) : undefined;

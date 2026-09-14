@@ -1,6 +1,12 @@
 {
   "tagline": "为收藏者、开卡玩家与整套收集者精选的日本卡牌。",
   "accountLabel": "账户",
+  "accountMenuLabel": "账户",
+  "signIn": "登录",
+  "menu": "菜单",
+  "menuTitle": "菜单",
+  "language": "语言",
+  "profile": "个人资料",
   "searchLabel": "搜索",
   "cartLabel": "购物车",
   "nav": {

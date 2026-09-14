@@ -1,6 +1,12 @@
 {
   "tagline": "등급 카드를 사고팝니다. 로그인하면 판매, 입찰, 주문이 연결되는 프로필을 만들 수 있습니다.",
   "accountLabel": "계정",
+  "accountMenuLabel": "계정",
+  "signIn": "로그인",
+  "menu": "메뉴",
+  "menuTitle": "메뉴",
+  "language": "언어",
+  "profile": "프로필",
   "searchLabel": "검색",
   "cartLabel": "장바구니",
   "nav": {
