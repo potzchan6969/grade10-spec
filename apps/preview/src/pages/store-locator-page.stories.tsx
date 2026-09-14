@@ -1,8 +1,18 @@
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import type { ReactNode } from "react";
+import { expect, waitFor, within } from "storybook/test";
+import {
+  REVEAL_HIDDEN_CLASS,
+  REVEAL_REDUCED_MOTION_CLASS,
+  REVEAL_TRANSITION_CLASS,
+  REVEAL_VISIBLE_CLASS,
+  revealStaggerDelayMs,
+  useFirstPaintReveal,
+} from "../../../../packages/ui/src/blocks/shared/use-first-paint-reveal";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "./store-content";
 import {
   STORE_LOCATOR_COPY,
@@ -10,13 +20,51 @@ import {
   STORE_LOCATOR_STORE,
 } from "./store-locator-content";
 
+function RevealSection({
+  children,
+  className,
+  dataSlot,
+  revealed,
+  staggerIndex,
+}: {
+  children: ReactNode;
+  className?: string;
+  dataSlot?: string;
+  revealed: boolean;
+  staggerIndex: number;
+}) {
+  return (
+    <div
+      className={cn(
+        REVEAL_HIDDEN_CLASS,
+        REVEAL_TRANSITION_CLASS,
+        REVEAL_REDUCED_MOTION_CLASS,
+        revealed && REVEAL_VISIBLE_CLASS,
+        className,
+      )}
+      data-slot={dataSlot}
+      style={{
+        transitionDelay: revealStaggerDelayMs(staggerIndex, revealed),
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 /**
  * Store Locator as a store assembles it: `SiteHeader`, Location & Hours
  * (map + address + hours), and `Footer`. The map overlay opens Google Maps.
  * One Hong Kong store — not a multi-store finder. Address and hours match
  * the free-pickup fixture.
+ *
+ * First paint: map then details stagger in (opacity + translateY, 280ms),
+ * matching Order Details / Order History. Settles immediately under reduced
+ * motion.
  */
 function StoreLocatorPage() {
+  const revealed = useFirstPaintReveal();
+
   return (
     <div className="@container flex min-h-svh w-full flex-col bg-background">
       <SiteHeader
@@ -30,73 +78,83 @@ function StoreLocatorPage() {
       <main className="flex w-full flex-1 justify-center px-8 py-12 @3xl:py-16">
         <div
           className="grid w-full max-w-5xl grid-cols-1 gap-10 @3xl:grid-cols-2 @3xl:gap-12"
+          data-revealed={revealed || undefined}
           data-slot="store-locator"
         >
-          <div
-            className="relative aspect-square w-full overflow-hidden rounded-2xl bg-muted"
-            data-slot="store-locator-map"
-          >
-            <iframe
-              allowFullScreen
-              aria-hidden
-              className="pointer-events-none size-full border-0"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              src={STORE_LOCATOR_STORE.mapEmbedSrc}
-              tabIndex={-1}
-              title={STORE_LOCATOR_COPY.mapTitle}
-            />
-            <a
-              className="absolute inset-0"
-              href={STORE_LOCATOR_STORE.mapsHref}
-              rel="noopener noreferrer"
-              target="_blank"
+          <RevealSection revealed={revealed} staggerIndex={0}>
+            <div
+              className="relative aspect-square w-full overflow-hidden rounded-2xl bg-muted"
+              data-slot="store-locator-map"
             >
-              <span className="sr-only">{STORE_LOCATOR_COPY.openMap}</span>
-            </a>
-          </div>
-
-          <VStack className="w-full" gap="lg" hAlign="stretch">
-            <h1 className="text-3xl font-bold text-foreground @3xl:text-4xl">
-              {STORE_LOCATOR_COPY.title}
-            </h1>
-
-            <VStack className="w-full" gap="sm" hAlign="stretch">
-              <p className="text-base font-medium text-foreground">
-                {STORE_LOCATOR_STORE.name}
-              </p>
-              {STORE_LOCATOR_STORE.addressLines.map((line) => (
-                <p
-                  className="text-sm leading-5 text-foreground"
-                  key={String(line)}
-                >
-                  {line}
-                </p>
-              ))}
-            </VStack>
-
-            <VStack className="w-full" gap="sm" hAlign="stretch">
-              <h2 className="text-sm font-medium text-secondary-foreground">
-                {STORE_LOCATOR_COPY.hoursHeading}
-              </h2>
-              <VStack
-                className="w-full max-w-xs"
-                data-slot="store-locator-hours"
-                gap="xs"
-                hAlign="stretch"
+              <iframe
+                allowFullScreen
+                aria-hidden
+                className="pointer-events-none size-full border-0"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                src={STORE_LOCATOR_STORE.mapEmbedSrc}
+                tabIndex={-1}
+                title={STORE_LOCATOR_COPY.mapTitle}
+              />
+              <a
+                className="absolute inset-0"
+                href={STORE_LOCATOR_STORE.mapsHref}
+                rel="noopener noreferrer"
+                target="_blank"
               >
-                {STORE_LOCATOR_HOURS.map((row) => (
-                  <div
-                    className="grid grid-cols-[minmax(0,1fr)_auto] gap-6 text-sm leading-5 text-foreground"
-                    key={row.day}
+                <span className="sr-only">{STORE_LOCATOR_COPY.openMap}</span>
+              </a>
+            </div>
+          </RevealSection>
+
+          <RevealSection
+            className="min-w-0"
+            dataSlot="store-locator-details"
+            revealed={revealed}
+            staggerIndex={1}
+          >
+            <VStack className="w-full" gap="lg" hAlign="stretch">
+              <h1 className="text-3xl font-bold text-foreground @3xl:text-4xl">
+                {STORE_LOCATOR_COPY.title}
+              </h1>
+
+              <VStack className="w-full" gap="sm" hAlign="stretch">
+                <p className="text-base font-medium text-foreground">
+                  {STORE_LOCATOR_STORE.name}
+                </p>
+                {STORE_LOCATOR_STORE.addressLines.map((line) => (
+                  <p
+                    className="text-sm leading-5 text-foreground"
+                    key={String(line)}
                   >
-                    <span>{row.day}</span>
-                    <span className="tabular-nums">{row.hours}</span>
-                  </div>
+                    {line}
+                  </p>
                 ))}
               </VStack>
+
+              <VStack className="w-full" gap="sm" hAlign="stretch">
+                <h2 className="text-sm font-medium text-secondary-foreground">
+                  {STORE_LOCATOR_COPY.hoursHeading}
+                </h2>
+                <VStack
+                  className="w-full max-w-xs"
+                  data-slot="store-locator-hours"
+                  gap="xs"
+                  hAlign="stretch"
+                >
+                  {STORE_LOCATOR_HOURS.map((row) => (
+                    <div
+                      className="grid grid-cols-[minmax(0,1fr)_auto] gap-6 text-sm leading-5 text-foreground"
+                      key={row.day}
+                    >
+                      <span>{row.day}</span>
+                      <span className="tabular-nums">{row.hours}</span>
+                    </div>
+                  ))}
+                </VStack>
+              </VStack>
             </VStack>
-          </VStack>
+          </RevealSection>
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
@@ -114,19 +172,35 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+function storeLocatorRevealed(canvasElement: HTMLElement): boolean {
+  const root = canvasElement.querySelector('[data-slot="store-locator"]');
+  if (root?.getAttribute("data-revealed") !== "true") return false;
+
+  const map = canvasElement.querySelector('[data-slot="store-locator-map"]');
+  const mapWrapper = map?.parentElement;
+  if (!mapWrapper || Number(getComputedStyle(mapWrapper).opacity) <= 0.9) {
+    return false;
+  }
+
+  const details = canvasElement.querySelector(
+    '[data-slot="store-locator-details"]',
+  );
+  if (!details) return false;
+  return Number(getComputedStyle(details).opacity) > 0.9;
+}
+
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await waitFor(() => expect(storeLocatorRevealed(canvasElement)).toBe(true));
     expect(
       canvas.getByRole("heading", {
         level: 1,
         name: STORE_LOCATOR_COPY.title,
       }),
-    ).toBeInTheDocument();
-    expect(canvas.getByText(STORE_LOCATOR_STORE.name)).toBeInTheDocument();
-    expect(
-      canvas.getByText(STORE_LOCATOR_STORE.addressLines[0]),
-    ).toBeInTheDocument();
+    ).toBeVisible();
+    expect(canvas.getByText(STORE_LOCATOR_STORE.name)).toBeVisible();
+    expect(canvas.getByText(STORE_LOCATOR_STORE.addressLines[0])).toBeVisible();
     expect(
       canvas.getByRole("link", { name: STORE_LOCATOR_COPY.openMap }),
     ).toHaveAttribute("href", STORE_LOCATOR_STORE.mapsHref);
