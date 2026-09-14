@@ -296,6 +296,47 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-loyalty-programme-US4-TC7-1: Expiry line warns inside the last 30 days
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-loyalty-programme-US-04
+
+**Pre-conditions:**
+
+* customer(member holding points whose balance expires in `<days>`).
+
+**Steps:**
+
+1. Navigate to <grade10 loyalty url>.
+2. Read the membership section.
+
+**Expected Results:**
+
+* The expiry line is shown in the `<tone>` tone.
+* The line says what keeps the points when the tone is the warning one.
+
+**Test data:**
+
+| days | tone |
+| --- | --- |
+| 9 | warning |
+| 0 | warning |
+| 120 | plain |
+
+---
+
 ## grade10-site-loyalty-programme-US5: Operator runs the programme from one console
 
 **As an** operator,

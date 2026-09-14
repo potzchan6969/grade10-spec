@@ -54,8 +54,8 @@
     "qualifying": "Points earned this year",
     "renewal": "Tier renews",
     "balanceExpiry": "{points, plural, one {# point expires} other {# points expire}} on {date}",
-    "balanceExpirySoon": "{points, plural, one {# point expires} other {# points expire}} on {date}. Buy or redeem before then to keep {points, plural, one {it} other {them}}.",
-    "balanceExpiryToday": "{points, plural, one {# point expires} other {# points expire}} today. Buy or redeem today to keep {points, plural, one {it} other {them}}."
+    "balanceExpirySoon": "{points, plural, one {# point expires} other {# points expire}} on {date}. Buy or redeem before then to move the date on.",
+    "balanceExpiryToday": "{points, plural, one {# point expires} other {# points expire}} today. Buy or redeem today to move the date on."
   },
   "rewards": {
     "label": "Rewards",

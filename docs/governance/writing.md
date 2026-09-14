@@ -23,7 +23,7 @@ nearest your task and keep it open while you draft.
   the cap, the clock. A reader who reads only that table can already use
   the thing
 - **A `##` is a plain label in Title Case** — `Refunds`, `Expiry`,
-  `Keeping a Tier`, `Admin Grants`: the name the reader would give the
+  `Keeping a Tier`, `Moving Points`: the name the reader would give the
   topic, the way a contents list reads. Not a sentence, not a question,
   not a play on words, no leading article. A `###` labels a part or states
   one rule

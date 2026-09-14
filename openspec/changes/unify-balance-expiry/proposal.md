@@ -35,8 +35,8 @@ within thirty days of being shown a later date — which should reach zero.
   nothing live, the points an operator adds start the window from their own
   day. Nothing that had already lapsed counts again.
 - **An operator restarts the window.** One action, no day to pick: the window
-  runs again from today. It is how points an operator gave outlive the balance
-  they joined, and it is on the record with a reason.
+  runs again from today. It is how a balance gets more time without the member
+  buying or redeeming, and it is on the record with a reason.
 - **BREAKING — Giving a reward outright stops resetting the window.** Handing
   a member a reward they did not spend points for counts as the member's
   activity today and buys their whole balance another year. It is not their

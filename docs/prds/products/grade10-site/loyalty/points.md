@@ -306,17 +306,21 @@ lapse that has happened is never undone.
 - **Activity** — a purchase or a redemption, even a spend too small to earn a
   point; each pushes the whole balance's date to twelve months from its own day
 - 🚧 **One date** — every point the member holds lapses on the same day,
-  whatever earned it and whenever
-- 🚧 **Operator points take the date** — a campaign grant, a correction, a
-  reversal take the date the balance already has and push it no further; where
-  the member holds no live point, they start one twelve months out
-- **Forwards only** — a late record shortens nothing, and whatever is already
-  dead is written off before the date moves, so no date reaches back over a
-  lapse
-- 🚧 **Born lapsed** — a purchase older than a year is written with its date
-  already past: on the ledger, counting nothing, moving nothing
-- 🚧 **An operator restarts it** — the window runs again from today, on
-  purpose — [Operator Console](/p/grade10-site/loyalty/operator-console)
+  whatever recorded it
+- 🚧 **Operator points take the date** — a campaign grant, a correction or a
+  reversal take the date the balance already has, and push it no further
+- 🚧 **An empty balance starts one** — where the member holds nothing live,
+  the points an operator adds start the window from their own day
+- **Forwards only** — a late record shortens nothing; the date sits where the
+  latest activity put it
+- **Settled first** — whatever is already dead is written off before the date
+  moves, so no date reaches back over a lapse
+- **Dead at once** — points past the date stop counting the instant they are
+  read, with nothing waiting on a nightly pass
+- **Born lapsed** — a record older than a year is written with its date already
+  past: on the ledger, counting nothing, moving nothing
+- 🚧 **An operator restarts it** — the window runs again from today —
+  [Operator Console](/p/grade10-site/loyalty/operator-console)
 
 ::image{src="assets/diagrams/loyalty-balance-expiry.svg" alt="What sets the balance's one expiry date, and what ends it"}
 
@@ -374,8 +378,7 @@ date the balance already has, so the member reads one day for everything.
 | 2027/01/03 | lapse | −15 | 0 |
 | 2027/03/08 | goodwill grant → lapses 2028/03/08 | +50 | 50 |
 
-Nothing was left to join, so the grant starts the date. The fifteen that
-lapsed stay lapsed.
+Nothing was left to join, so the grant names the date itself.
 :::
 
 :::example{title="An operator restarts the window"}
@@ -386,8 +389,8 @@ lapsed stay lapsed.
 | 2026/06/01 | operator restarts the window → lapses 2027/06/01 | 0 | 115 |
 | 2027/06/01 | lapse, all of it | −115 | 0 |
 
-The restart moves the whole balance, the grant and the earn alike. It is the
-only way a grant outlives the points it joined.
+The restart moves the whole balance, the grant and the earn alike. Nothing
+else moves the date without the member buying or redeeming.
 :::
 
 :::example{title="A late record shortens nothing"}
@@ -423,9 +426,9 @@ on the last day of that month.
 :::
 
 :::detail{title="Product decisions" for="pm"}
-Points an operator adds carry a date of their own, so a member reads two dates
-on one card and buying again moves only one of them. One date for the whole
-balance is what a member already believes they have.
+A member holds one balance and reads one day for it: every point they hold
+lapses together, whatever recorded it. Measured by the share of members who
+spend rather than lose a balance that was about to lapse.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
@@ -434,6 +437,6 @@ balance is what a member already believes they have.
 | Points that should outlive the balance | Decided | An operator restarts the window instead, on the record. | Product |
 | How long a restart runs | Decided | Twelve months from today, never a day the operator picks. | Product |
 | Dates members have already been shown | Decided | Every member's date moves up to the longest-lived point they hold, so no date moves back. | Product |
-| What moving those dates costs | ❓ | The points carried further, and the largest single move, measured before it runs. | Finance |
-| Warning a member before the day | ❓ | Nothing tells a member their points are about to lapse. | Product |
+| What moving those dates costs | ❓ Open | The points carried further, and the largest single move, measured before it runs. | Finance |
+| Warning a member before the day | ❓ Open | Whether the programme warns a member before their points lapse, and how far ahead. | Product |
 :::

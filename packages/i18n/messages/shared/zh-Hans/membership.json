@@ -53,9 +53,9 @@
     "balance": "可用积分",
     "qualifying": "本年度累计积分",
     "renewal": "等级续期",
-    "balanceExpiry": "{points} 分将于 {date} 到期",
-    "balanceExpirySoon": "{points} 分将于 {date} 到期，在此之前购物或使用积分即可保留。",
-    "balanceExpiryToday": "{points} 分将于今天到期，今天购物或使用积分即可保留。"
+    "balanceExpiry": "{points} 积分将于 {date} 到期",
+    "balanceExpirySoon": "{points} 积分将于 {date} 到期，在此之前购物或使用积分即可延长到期日。",
+    "balanceExpiryToday": "{points} 积分将于今天到期，今天购物或使用积分即可延长到期日。"
   },
   "rewards": {
     "label": "奖励",

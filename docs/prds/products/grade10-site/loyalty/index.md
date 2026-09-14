@@ -32,8 +32,7 @@ a balance, a tier or a code. ZZZ has no programme.
 | [Operator Console](/p/grade10-site/loyalty/operator-console) | Moving points by hand, and restarting a member's expiry |
 
 Three audiences touch it. **Members** get the membership with their account,
-carry a member card at `/membership`, and read tier, balance, when their points
-expire,
+carry a member card at `/membership`, and read tier, balance, what is expiring,
 what the next purchase moves them toward, and their own history on one
 surface. **Staff** run a loyalty terminal inside Shopify POS at the till, and
 identify a member in seconds to read, spend or hand over on their behalf.

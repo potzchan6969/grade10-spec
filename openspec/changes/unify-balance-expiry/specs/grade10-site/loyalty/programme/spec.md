@@ -7,8 +7,8 @@
     window names, whatever recorded it
   - Operator points: a grant, a correction or a reward given outright takes
     that date and pushes it no further; where nothing is live, it starts one
-  - Restart: an operator runs the window again from today, so points an
-    operator gave outlive the balance they joined
+  - Restart: an operator runs the window again from today, giving a balance
+    more time without the member earning or redeeming
 - Member surface
   - One expiry line: how many points expire and the day they go, warned inside
     the last part of the window
@@ -18,9 +18,9 @@
 ### Requirement: An operator restarts a member's expiry window
 
 An operator SHALL be able to run a member's inactivity window again from the
-day they do it, so that points the operator gave can outlive the balance they
-joined. The restart SHALL NOT name a day the operator chooses: it lands an
-inactivity window from that day, on the programme's clock.
+day they do it, so that a balance can be given more time without the member
+earning or redeeming. The restart SHALL NOT name a day the operator chooses: it
+lands an inactivity window from that day, on the programme's clock.
 
 The restart SHALL carry a reason, SHALL be recorded in the operator log, and
 SHALL NOT move points, so nothing about it reaches the member's activity. It
@@ -88,8 +88,9 @@ lapsed: a reversal returns what it took and no life with it.
 
 Each credit SHALL also carry its own expiry date, set when it is recorded, and a
 credit SHALL count while the later of that date and the member's inactivity
-window is still ahead. No credit SHALL be recorded with a date beyond that
-window, so the two can disagree only where the window has already passed.
+window is still ahead. Once the dates already recorded have been brought up to
+the window, no credit SHALL be recorded beyond it, and the two can disagree
+only where the window has already passed.
 
 Expiry SHALL be recorded as a dated entry like any other movement, naming the
 whole amount it removed.
@@ -161,8 +162,8 @@ whole amount it removed.
 #### Scenario: grade10-site-loyalty-programme-SC-180 - Operator points to an empty balance start the window
 
 - **WHEN** an operator adds points to a member who holds no live points
-- **THEN** those points expire an inactivity window after the day they were added
-- **AND** nothing that had already lapsed counts again
+- **THEN** those points expire an inactivity window after their own date
+- **AND** a credit whose own date is already an inactivity window past is written already lapsed, and nothing that had lapsed counts again
 
 #### Scenario: grade10-site-loyalty-programme-SC-181 - A backdated grant joins the window already running
 
@@ -249,9 +250,8 @@ operator to enrol or verify rather than reporting a refusal.
 What a member reads about themselves SHALL carry their tier, when that
 tier's validity period ends, their progress toward retaining it, their
 progress to the next earned tier, their redeemable balance, and the one date
-that balance expires on. Their own activity
-list SHALL NOT disclose operator reasons, retry keys, or the internal
-pricing of an entry.
+that balance expires on. Their own activity list SHALL NOT disclose operator
+reasons, retry keys, or the internal pricing of an entry.
 
 Each activity entry SHALL name what it was for, and which channel it came
 from, in terms the member can read.
@@ -293,10 +293,12 @@ components for the membership surface — `MembershipSummary`, `RewardMenu`,
 
 `MembershipSummary` SHALL render the two counts as two counts, never one
 total, alongside the tier held, the date its validity ends, and progress
-toward retention. Where the member holds points it SHALL render one line
-naming how many expire and the day they go, in a tone the consumer supplies,
-and where they hold none it SHALL render no such line. It SHALL NOT derive
-that line, that day, or that tone from a clock of its own. `RewardMenu` SHALL price each reward in points, state a
+toward retention. Where it is given an expiry line it SHALL render one line
+naming how many points expire and the day they go, in the tone supplied with
+it, and where it is given none it SHALL render no such line. It SHALL NOT
+derive that line, that day, or that tone from a clock or a balance of its own;
+the consumer withholds the line for a member holding no points.
+`RewardMenu` SHALL price each reward in points, state a
 money-off reward's own validity period, and state what its coupon cannot be
 spent without — the basket it has to reach, and the one channel it is good at
 where it names only one. `CouponList` SHALL carry each issued
@@ -336,3 +338,9 @@ SHALL require no export of its own.
 - **WHEN** a member holding points reads their membership
 - **THEN** one line names how many points expire and the day they go
 - **AND** a member holding no points is shown no such line
+
+#### Scenario: grade10-site-loyalty-programme-SC-186 - The expiry line warns inside the last 30 days
+
+- **WHEN** a member's balance expires in 30 days or fewer
+- **THEN** the line is rendered in the warning tone, and says what keeps the points
+- **AND** a balance expiring later is rendered in the plain tone

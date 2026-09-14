@@ -54,8 +54,8 @@
     "qualifying": "올해 적립 포인트",
     "renewal": "등급 갱신",
     "balanceExpiry": "{date}에 {points}P가 소멸됩니다",
-    "balanceExpirySoon": "{date}에 {points}P가 소멸됩니다. 그 전에 구매하거나 사용하면 소멸되지 않습니다.",
-    "balanceExpiryToday": "오늘 {points}P가 소멸됩니다. 오늘 구매하거나 사용하면 소멸되지 않습니다."
+    "balanceExpirySoon": "{date}에 {points}P가 소멸됩니다. 그 전에 구매하거나 사용하면 소멸일이 연장됩니다.",
+    "balanceExpiryToday": "오늘 {points}P가 소멸됩니다. 오늘 구매하거나 사용하면 소멸일이 연장됩니다."
   },
   "rewards": {
     "label": "리워드",
