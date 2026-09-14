@@ -9,29 +9,13 @@
 **Accepted by:**
 
 - `shared-auth-sign-in-SC-01` — Activating again during flight does nothing
-- `shared-auth-sign-in-SC-02` — One sign-in email per intent
-- `shared-auth-sign-in-SC-03` — Only the running command looks busy
-- `shared-auth-sign-in-SC-04` — A settled request frees the step
 - `shared-auth-sign-in-SC-05` — A valid link creates a session
 - `shared-auth-sign-in-SC-06` — A used link does not sign in again
 - `shared-auth-sign-in-SC-07` — An expired link does not sign in
 - `shared-auth-sign-in-SC-08` — A failed send is reported
 - `shared-auth-sign-in-SC-09` — A first send does not disclose whether the address is new
-- `shared-auth-sign-in-SC-29` — A new link kills the earlier link
-
-### shared-auth-sign-in-US-02: Collector signs in with an emailed code
-
-**As a** collector,
-**I want** a code emailed to the address I submit to sign me in,
-**so that** I can finish on the same device, and a wrong or spent code cannot.
-
-**Accepted by:**
-
-- `shared-auth-sign-in-SC-10` — A correct code creates a session
-- `shared-auth-sign-in-SC-11` — An incorrect code is refused
-- `shared-auth-sign-in-SC-12` — An expired code is refused
-- `shared-auth-sign-in-SC-13` — Too many wrong codes kill the code
-- `shared-auth-sign-in-SC-30` — A new code kills the earlier link
+- `shared-auth-sign-in-SC-36` — A new link kills the earlier link
+- `shared-auth-sign-in-SC-33` — The email step has no code control
 
 ### shared-auth-sign-in-US-03: Collector signs in with Google when the brand offers it
 
@@ -71,8 +55,6 @@
 
 **Accepted by:**
 
-- `shared-auth-sign-in-SC-26` — A second link send in a minute is told to wait
-- `shared-auth-sign-in-SC-27` — A second code send in a minute is told to wait
-- `shared-auth-sign-in-SC-28` — A code send after a link in a minute is told to wait
+- `shared-auth-sign-in-SC-35` — A second link send in a minute is told to wait
 - `shared-auth-sign-in-SC-31` — An untrusted redirect is ignored
 - `shared-auth-sign-in-SC-32` — A missing redirect stays on the brand
