@@ -47,12 +47,13 @@ function StoreLocatorPage() {
               title={STORE_LOCATOR_COPY.mapTitle}
             />
             <a
-              aria-label={STORE_LOCATOR_COPY.openMap}
               className="absolute inset-0"
               href={STORE_LOCATOR_STORE.mapsHref}
               rel="noopener noreferrer"
               target="_blank"
-            />
+            >
+              <span className="sr-only">{STORE_LOCATOR_COPY.openMap}</span>
+            </a>
           </div>
 
           <VStack className="w-full" gap="lg" hAlign="stretch">
