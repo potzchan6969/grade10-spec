@@ -14,11 +14,20 @@ never the leader's cap, so the price stays honest and a maximum is never burned
 by being seen. A bidder sees their own maximum, distinct from the current bid,
 and whether they lead; they can raise it at any time or leave it standing.
 
-**Bid panel.** Under Set your private maximum, a short always-on line in
-secondary text states that Grade10 bids only as needed up to the maximum,
-that the card hold matches that amount, and that the maximum can be raised
-but not lowered or cancelled. Place Bid is the commitment; a moved floor
-uses stale-floor recovery on the panel.
+## Bid Panel
+
+Under Set your private maximum, a short always-on line in secondary text
+states that Grade10 bids only as needed up to the maximum, that the card hold
+matches that amount, and that the maximum can be raised but not lowered or
+cancelled. Place Bid is the commitment; a moved floor uses stale-floor
+recovery on the panel.
+
+🚧 Quick bids are three chips at 1×, 2×, and 4× the listing increment: from
+the current bid when the collector does not lead, from their max when they
+do.
+
+🚧 A leader who types a raise still starts at max + $1. That floor is not
+the first chip.
 
 One card authorization covers the whole commitment. The hold is taken for the
 maximum when it is set, so a bid Grade10 places on the collector's behalf
@@ -70,7 +79,7 @@ stands.
 | Custom maximum entry | Decided | Whole major units only on the bid panel custom field; typed `.` is refused, pasted fractions are discarded. | Product |
 | Mechanism disclosure | Decided | Always-on secondary subtext under Set your private maximum: bid as needed, hold matches maximum, raise only (no lower or cancel). | Product |
 | Admin history filter | ❓ Open | Whether history can hide platform-placed bids. An operator can already see both. | Product |
-| Preset amounts | ❓ Open | Whether the bid surface offers presets alongside free entry. Presentation only. | Design |
+| Preset amounts | Decided | Three chips at 1×, 2×, and 4× the listing increment. Leader chips add those to the committed max; others add them to the current bid. A leader's typed minimum stays max + $1 and is not chip 1. | Product |
 
 **Risks.** Holding the maximum may discourage high maximums, so the bid
 surface says what is held. A failed raise leaves the previous commitment

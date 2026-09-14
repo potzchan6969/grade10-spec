@@ -81,24 +81,28 @@ open a URL or turn an upcoming step into a completed step.
 ### Requirement: Optional sidebar facts stay independent
 
 The order summary SHALL render only when at least one money row is supplied.
-Subtotal, discount, refund, shipping, tax, and total rows SHALL each render only
-when supplied. A shipping or pickup address SHALL accept an omitted recipient
-name and render only its supplied lines. A payment method SHALL accept an
-optional recognized brand, text label, and masked number; it SHALL render only
-when at least one of those display facts is supplied. A recognized brand SHALL
-render its logo, while a method without a recognized brand SHALL remain
-renderable through its text label or masked number without an unrelated logo.
-When both a wallet label and masked number are supplied, they SHALL remain
-visibly associated. Payment, one shipping or pickup address, and loyalty SHALL
-each render independently of the other optional groups. When no sidebar group
-is supplied, `OrderDetails` SHALL omit the sidebar.
+Subtotal, discount, points, refund, shipping, tax, and total rows SHALL each
+render only when supplied. When a points credit is supplied, it SHALL appear
+after the discount row (or after subtotal when discount is absent), SHALL name
+the points deducted in its label (for example `Points (100 pts)`), and SHALL
+use the same success-styled money-credit treatment as an applied cart-drawer
+Points line. A shipping or pickup address SHALL accept an omitted recipient name and
+render only its supplied lines. A payment method SHALL accept an optional
+recognized brand, text label, and masked number; it SHALL render only when at
+least one of those display facts is supplied. A recognized brand SHALL render
+its logo, while a method without a recognized brand SHALL remain renderable
+through its text label or masked number without an unrelated logo. When both a
+wallet label and masked number are supplied, they SHALL remain visibly
+associated. Payment, one shipping or pickup address, and loyalty SHALL each
+render independently of the other optional groups. When no sidebar group is
+supplied, `OrderDetails` SHALL omit the sidebar.
 
 #### Scenario: shared-ui-store-order-detail-SC-07 - A refund renders without other optional money rows
 
-- **GIVEN** a summary with subtotal, refund, and total but no discount, shipping, or tax
+- **GIVEN** a summary with subtotal, refund, and total but no discount, points, shipping, or tax
 - **WHEN** the sidebar renders
 - **THEN** subtotal, refund, and total appear
-- **AND** discount, shipping, and tax rows do not appear
+- **AND** discount, points, shipping, and tax rows do not appear
 
 #### Scenario: shared-ui-store-order-detail-SC-08 - Payment can be omitted independently
 
@@ -139,3 +143,18 @@ is supplied, `OrderDetails` SHALL omit the sidebar.
 - **GIVEN** a payment method with a wallet label and masked device-account number
 - **WHEN** the sidebar renders
 - **THEN** the wallet label and masked number appear together in the Payment Method section
+
+#### Scenario: shared-ui-store-order-detail-SC-14 - Applied points credit follows discount
+
+- **GIVEN** a summary with subtotal, discount, points credit, and total
+- **WHEN** the sidebar renders
+- **THEN** the Points row appears after Discount
+- **AND** its label names the points deducted
+- **AND** the money credit uses the success credit treatment
+
+#### Scenario: shared-ui-store-order-detail-SC-15 - Absent points credit omits the Points row
+
+- **GIVEN** a summary with discount but no points credit
+- **WHEN** the sidebar renders
+- **THEN** the Discount row appears
+- **AND** no Points row appears

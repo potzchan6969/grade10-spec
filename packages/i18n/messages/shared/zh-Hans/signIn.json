@@ -7,5 +7,8 @@
   "sendLinkFailed": "无法发送登录链接。",
   "sendWait": "请稍候一分钟再请求另一封邮件。",
   "linkSentMessage": "请查看收件箱中的登录链接。",
+  "linkExpired": "此登录链接已过期。",
+  "linkInvalid": "此登录链接已失效。",
+  "linkBanned": "此账户无法登录。",
   "legal": "继续即表示你同意我们的<terms>服务条款</terms>与<privacy>隐私政策</privacy>。"
 }

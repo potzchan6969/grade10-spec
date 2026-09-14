@@ -5,8 +5,9 @@ The proposal's motivation is in `proposal.md`. The
 [page-shell delta](specs/grade10-site/site/page-shell/spec.md) own the Grade10
 behavior. The durable `shared/ui/store-cart` capability and `@grade10/ui`
 already own the drawer's visual states, dismissal, empty state, item
-statuses, and interaction contract. The Grade10 application currently has no
-drawer host or `Nav.onCartClick` handler.
+statuses, and interaction contract. The Grade10 application now has one
+route-gated drawer host and `Nav.onCartClick` handler. That host currently
+stops at the reviewed lines and subtotal.
 
 The existing frontend integration already reaches the Store backend boundary:
 `useCart` selects the guest browser cart or the signed-in member cart, and its
@@ -28,6 +29,11 @@ capabilities, not a drawer quote: they do not return one applied cart view with
 promotion, points, shipping, tax, and total, and the current drawer hands off
 to `/checkout` instead of creating checkout itself.
 
+The checkout feature nevertheless already exposes two read-only member reads:
+the held promo codes answered against checkout items and the points quote for
+those items. The drawer can consume those reads after its cart review succeeds,
+provided it treats them as optional context rather than as a tender selection.
+
 ## Goals / Non-Goals
 
 **Goals:**
@@ -37,6 +43,8 @@ to `/checkout` instead of creating checkout itself.
 - Preserve checkout's current review and unavailable-line behavior.
 - Match the supplied populated, loading, failure, unavailable, and empty UI
   states using existing shared components and tokens.
+- Show signed-in members' held promo-code answers and points ceiling for the
+  reviewed basket without presenting either as applied tender.
 - Provide localized Grade10 drawer copy through the existing catalog resolver.
 - Keep the new product scenarios traceable to the shared drawer and
   cart-validation contracts they consume.
@@ -46,13 +54,16 @@ to `/checkout` instead of creating checkout itself.
 - Any backend implementation or wire-contract change.
 - A second cart store, local review snapshot, or product-image enrichment read.
 - Promotion redemption, shipping calculation, tax calculation, or discount
-  calculation. The shared promo affordance is rendered in its collapsed,
-  display-only form with no promo callbacks.
-- Points quoting or tender selection. The drawer receives no points state; the
-  existing checkout path remains the only owner of checkout creation.
+  calculation. The drawer has no applied quote, and its subtotal and estimated
+  total remain the reviewed subtotal.
+- Tender selection or checkout creation. The drawer may show the results of
+  the existing member-only reads, but it supplies no promo or points mutation
+  callbacks and `/checkout` remains the owner of checkout creation.
 - A dedicated `/cart` route or changes to the existing checkout page.
-- Changes to the shared `CartDrawer`, design tokens, Figma files, or other
-  brands' behavior.
+- No new `CartDrawer` visual variant, design-token, or Figma work. If the
+  current optional-callback behavior exposes a mutation control without a
+  callback, the shared component receives only the minimal callback-presence
+  guard needed for this read-only path.
 
 ## Decisions
 
@@ -137,26 +148,50 @@ adding a backend enrichment read:
 | estimated total | reviewed subtotal | Use the same formatted amount as subtotal; no shipping/tax/discount calculation. |
 | image | unavailable | Do not populate `imageSrc` or `imageAlt`; the current reviewed contract does not provide them. |
 
-The Figma promo affordance is passed a collapsed `PromoState` with no promo
-callbacks. It can be seen but cannot claim to apply a code or calculate a
-discount in this change.
+The host keeps `PromoState` as local disclosure state, not applied tender. It
+passes held codes only after a successful member review, leaves
+`selectedHeldPromoId` null, and supplies no promo-application or points-apply
+callbacks. The points state is likewise only the drawer's collapsed/expanded
+disclosure state; it never becomes `applied`. The shared UI must hide or make
+inert any action control whose mutation callback is absent, so the read-only
+surface cannot present a no-op Apply action.
 
 **Alternative rejected:** infer images, shipping, or totals from product-page
 or held-cart data. Those values are not part of the existing reviewed backend
 contract and would reintroduce stale or invented facts.
 
-### Defer tender controls until the drawer has one quote seam
+### Read the existing member context only after the cart review
 
-Do not wire `pointsQuote`, coupon inputs, held loyalty codes, or shipping
-services directly into this host. The current points read is member-only and
-prices one tender choice; checkout creation resolves coupon and points inputs
-later; shipping needs the destination collected by checkout. Combining those
-partial answers in the drawer would make its displayed total differ from the
-checkout it opens.
+Call `useSpendableCoupons(review.items)` and `usePointsTender(review.items)`
+only when the drawer is open, the scoped cart is a member cart, the review is
+successful and ready, and it has at least one reviewed item. Add an `enabled`
+option to both hooks with the current `true` default so Checkout keeps its
+existing behavior while the drawer can avoid guest, empty, pending, and failed
+reads. The query keys remain the reviewed item list, so a quantity or review
+change asks again for the basket in front of the member.
 
-A follow-up contract must define one applied drawer quote, its invalidation
-after cart edits, guest and member behavior, refusal copy, and the exact handoff
-to checkout before the interactive promo or points props are supplied.
+Map a successful coupon read to `HeldPromoCode`: the coupon code is both the
+stable id and label, the definition title remains the ticket title, the cut
+and expiry use the existing checkout promo vocabulary, and a refusal is shown
+as the inapplicable reason. A pending, failed, guest, or unavailable read maps
+to `null`, not to an empty successful list, so the drawer never turns an
+unanswered wallet into “no promo codes”.
+
+Map a successful quoted points read to `pointsState={{ status: "collapsed" }}`
+and a localized `pointsBalanceLabel` containing the balance and basket
+ceiling. The existing `CartDrawerCopy.footer.pointsRateLabel` supplies the
+conversion-rate copy. A points `unavailable` answer maps to `null`. Format the
+ceiling from its integer minor-unit amount and ISO currency with the existing
+money utility; do not derive it from the cart subtotal in the host.
+
+The drawer still uses the reviewed subtotal for both subtotal and estimated
+total. Applying a code, choosing a held code, applying points, recalculating a
+total, or creating checkout remains outside this decision.
+
+A later combined-quote contract must define invalidation after cart edits,
+guest and member behavior, refusal copy, applied line and footer amounts, and
+the exact handoff to checkout before interactive promo or points callbacks are
+supplied.
 
 **Alternative rejected:** wire the merged endpoints one control at a time.
 That would expose selectable tender without an authoritative combined total or
@@ -203,6 +238,9 @@ require a running backend because no backend code changes. Coverage must prove:
   neutral totals, scoped writes, and one unavailable cleanup remain honest.
 - `grade10-site-store-cart-drawer-SC-13` and `SC-15`: product and Checkout use
   existing addresses and close the drawer first.
+- `grade10-site-store-cart-drawer-SC-16` through `SC-19`: member-only tender
+  reads follow the latest reviewed basket, show current eligibility and the
+  points ceiling, and never become applied tender or stale guest data.
 - The shared empty, loading, dismissal, overflow, cleanup, and redirecting
   behaviors remain covered by `shared/ui/store-cart`.
 
@@ -215,10 +253,23 @@ require a running backend because no backend code changes. Coverage must prove:
   review from the same `useCart` scope and let the query key move with it.
 - **[Risk] Review failure leaves old values visible.** → Keep controlled loading
   true, emit one failure toast per open, and recheck on reopen.
-- **[Risk] The drawer's no-image and display-only promo decisions differ from
-  a future applied quote contract.** → Keep image, promo, and points inputs
-  absent or inert in the adapter and add them only with a separate approved
-  product and integration change.
+- **[Risk] The drawer's no-image and display-only tender decisions differ from
+  a future applied quote contract.** → Keep images absent, keep tender reads
+  optional, and add applied values only through a separate approved quote
+  change.
+- **[Risk] An optional read fails after the cart review succeeds.** → Treat
+  promo and points context as non-blocking; pass `null`, keep the reviewed
+  subtotal, and let Checkout perform its own reads.
+- **[Risk] A query result from an earlier basket remains visible after an edit
+  or scope change.** → Gate props on the current successful review and query
+  item key; reset disclosure state on close and never carry a selected promo
+  id across a review.
+- **[Risk] The shared drawer renders a mutation affordance without its
+  callback.** → Add or verify callback-presence guards in the shared drawer so
+  read-only mode exposes facts but no no-op action.
+- **[Risk] The read-only context is mistaken for an applied quote.** → Keep
+  `PromoState` un-applied, keep points out of applied state, and derive both
+  displayed totals only from the reviewed cart.
 - **[Risk] The spec-store pointer overlaps unrelated nested work.** → Advance
   only the parent gitlink after the catalog commit lands, preserve nested work,
   and run the submodule check.

@@ -24,9 +24,26 @@ Sign-in stays on the brand. A session covers every site of that brand and no
 other, and a redirect target the brand does not trust is ignored rather than
 followed.
 
+## Following the Link
+
+A working unused link signs the person in. A link that cannot creates no
+session, and the person lands on the brand home with a toast:
+
+- 🚧 **Expired** — the toast says the link has expired.
+- 🚧 **No longer works** — a used, replaced, or otherwise invalid link shares
+  one toast that the link no longer works.
+- 🚧 **Banned** — a banned account's link follow shows they cannot sign in,
+  and does not invite them to ask for another link.
+
 ::story{id="auth-sign-in-signinemailform--default" title="The email step"}
 
 ::story{id="auth-sign-in-signinemailform--link-request-running" title="The send in flight"}
+
+::story{id="auth-sign-in-link-follow-toasts--expired" title="Expired link toast"}
+
+::story{id="auth-sign-in-link-follow-toasts--no-longer-works" title="Link no longer works toast"}
+
+::story{id="auth-sign-in-link-follow-toasts--banned" title="Banned account toast"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488" title="Login Dialog"}
 
@@ -42,6 +59,7 @@ path, the link, beside Google.
 | Codes in flight at deploy | Decided | Stop working; the person asks for a link. | Product |
 | Operator second factor | Decided | Untouched — a different code, proven after sign-in. | Product |
 | Figma `OTP Dialog` frame | ❓ Open | Retire, or keep as reference for the second-factor dialog. | Design |
+| Failed link follow copy | Decided | Expired is its own toast; used, replaced, and invalid share one; banned is its own and does not nudge a resend. | Product |
 
 Measured on the share of email sign-ins that end in a session, from the send
 to the session.

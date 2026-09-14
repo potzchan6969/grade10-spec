@@ -52,6 +52,12 @@ type OrderDetailsSummary = {
   /** Order-level promo only — omit when every discount is on its line. Label
    *  should name the code, e.g. `Discount (WELCOME10)`. */
   discount?: OrderDetailsSummaryRow;
+  /**
+   * Points bill-credit when the settled order applied a Points tender. Label
+   * names the points deducted (e.g. `Points (100 pts)`); value is the money
+   * credit. Omit when no points were applied.
+   */
+  points?: OrderDetailsSummaryRow;
   refund?: OrderDetailsSummaryRow;
   shipping?: OrderDetailsSummaryRow;
   tax?: OrderDetailsSummaryRow;

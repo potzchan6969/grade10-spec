@@ -90,7 +90,11 @@ function ListingAuctionCardSidebar({
           timeZone={timeZone}
           view={view}
         />
-        {bidCardFooter ? <div className="mt-1">{bidCardFooter}</div> : null}
+        {bidCardFooter ? (
+          <div className="mt-1" data-slot="listing-linked-card">
+            {bidCardFooter}
+          </div>
+        ) : null}
       </VStack>
       <ListingLotMeta
         badges={badges}
