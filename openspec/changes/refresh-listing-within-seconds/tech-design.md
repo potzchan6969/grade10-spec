@@ -149,7 +149,7 @@ entries from the whole products it receives.
 
 - **Why wait rather than refresh behind.** The first request after a quiet gap is the one a collector on a quiet location sends; serving the old copy there is the day-old copy in miniature. Refreshing behind would gate on the held copy's age, which is not staleness. The hop is same-region from Asia and up to 250 ms from Europe.
 - **Why 3 seconds.** Delivery up to 5 s, a 1 s burst window, one read-back, the check and the hop: 9.5 s worst case against the 10 s bound; at 5 s the bound is missed.
-- **The purge beside it.** The webhook route runs the tag purge and the hand-over together; a purge the API refuses is logged and answered `purge_unavailable`, as a purge with no cache is, so Shopify retries the delivery.
+- **The purge beside it.** The webhook route runs the tag purge and the hand-over together. A worker with no Workers Cache has published nothing to purge, so it answers 200 with the keeper's outcome — the local stack is such a worker; a purge the API refuses leaves the tiers stale, so it is logged and answered `purge_unavailable` and Shopify retries the delivery.
 - **Whole products.** 2,031 B a product measured: 581 KB at 286, one RPC value, a few MB of heap. `store.catalog.keeper.publish_bytes` alerts at 1 MB, the point at which the copy is cut to what a card draws.
 - **What goes.** The projection's cache tier, its 24-hour keep, the 5-minute age, the build cooldown, `hydrate`, the product memory and cache tiers.
 
