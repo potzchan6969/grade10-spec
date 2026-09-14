@@ -13,7 +13,7 @@ the lot only, not the collector's bid or order.
 | --- | --- |
 | 🚧 **Upcoming** | Published. Bidding has not started |
 | 🚧 **Active** | Bidding is open, including extended bidding |
-| 🚧 **Ended** | Bidding is over and the lot has a winner |
+| 🚧 **Ended** | Bidding is over, with or without a winner |
 
 - 🚧 **Worked out, not saved** — the external lot status comes from the lot's
   internal status and times, so the two always agree
@@ -31,7 +31,7 @@ collectors.
 | Draft | **Hidden** |
 | Scheduled | **Upcoming** |
 | Live | **Active** |
-| Unsold | **Hidden** |
+| Unsold | **Ended** |
 | Called off | **Hidden** |
 | Awaiting Address | **Ended** |
 | Preparing Invoice | **Ended** |
@@ -47,7 +47,6 @@ collectors.
 🚧 Collectors never see a lot with one of these internal lot statuses:
 
 - 🚧 **Draft** — never published
-- 🚧 **Unsold** — bidding ended with no winner
 - 🚧 **Called off** — withdrawn before a sale
 
 A hidden lot is left out of every collector page:
@@ -61,7 +60,7 @@ A hidden lot is left out of every collector page:
 :::detail{title="Product decisions" for="pm"}
 Collector pages use seven different labels for three lot statuses, and the
 internal lot status changes often for operator needs. The external lot status
-gives collectors three stable statuses, and hides lots nobody can buy.
+gives collectors three stable statuses, and hides draft and called-off lots.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
@@ -85,7 +84,8 @@ history.
 | Three statuses | Decided | Upcoming, Active, Ended | Product |
 | Extended bidding | Decided | Shown as Active. The "Extended bidding: ON" label appears only in the operator queue | Product |
 | Draft | Decided | Has no external lot status. Never shown | Product |
-| Unsold and Called off | Decided | Hidden on every collector page. The lot's address shows Page not found | Product |
+| Unsold | Decided | Shown as Ended | Product |
+| Called off | Decided | Hidden on every collector page. The lot's address shows Page not found | Product |
 | Bidder exception | Decided | A collector who bid on a called-off lot still sees it in My Auctions, with the card hold note | Product |
 | Winner's order | Decided | Shown separately. Ended describes the lot, not the order | Product |
 | Display | Decided | The designer decides where and how pages show the status | Design |
