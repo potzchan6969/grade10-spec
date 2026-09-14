@@ -61,7 +61,7 @@ ctx.executionCtx.waitUntil(
 - Build it with `URLSearchParams`, so the canonical string is byte-identical to what a caller's own `searchParams.set` produces and an ordinary request never pays for the redirect
 - Cache the redirect too. Uncached it costs a worker invocation on every request, which is most of what canonicalising was meant to save
 - Canonicalising bounds *spellings*, never *values*. It collapses `?b=2&a=1` and drops `?utm=x`, but `?q=<anything>` is already canonical, so it answers — and if answering is expensive, that is an open axis. Give each such parameter its own bound: a closed vocabulary, a shape the route can only have issued, or a rate limit
-- The store's catalog routes are the pattern (`routes/catalog.ts` redirects, `routes/catalogBrowse.ts` decides the spelling): facets and cursors are bounded there, free text is not, and the walk behind it is what makes that worth knowing
+- The store's catalogue keeps the bounds without this cache: `services/catalog/query.ts` dedupes, sorts and caps facet values, folds and caps free text, and reads one offset spelling; the reads sit on tRPC, which this cache does not serve, and [Commerce](/p/grade10-site/commerce/commerce) says what answers them
 
 ### Purge is best-effort, TTL is the backstop
 
