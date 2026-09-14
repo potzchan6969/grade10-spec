@@ -16,6 +16,40 @@ product history.
 - **PriceCharting identity** — a confirmed provider match with its canonical
   link and stable provider id
 
+## Product schemas
+
+- **Exact tuple** — one IP, one Item, and one Category select the product
+  schema; one published schema is active for each tuple
+- **Reusable attribute key** — a stable key, a type, validation rules, and
+  displayed labels and option values for English, Traditional Chinese, and
+  Simplified Chinese
+- **Draft and publish** — an admin edits a draft; publishing checks every
+  matching product before the new configuration becomes active
+- **Translation warning** — missing non-English copy is reported and uses the
+  English value when displayed; it does not block publishing
+
+## Product attributes
+
+- **Universal classification** — IP, Item, and Category remain required for a
+  product to become created
+- **Typed value** — text, number, boolean, single-select, or multi-select;
+  supplied values satisfy the assigned attribute's rules
+- **Required value** — every required attribute has a valid value before a
+  draft product becomes created; an optional value may remain absent
+- **Product status** — a product without a matching published schema remains a
+  draft and cannot enter Auction or reserve stock
+
+## Auction presentation
+
+- **Product fields** — an admin selects and orders the fields Auction shows for
+  each product schema; selected values remain live and searchable by their
+  stable identity
+- **Listing attribute** — an ordered display item belongs to one Auction
+  listing, may carry localized labels and values, and is not searchable or
+  filterable
+- **Locale fallback** — a missing requested translation uses English, then
+  the supplied value for a listing attribute
+
 ## Current reference
 
 - **PSA-oriented prices** — the supplied ungraded baseline and numeric grades
