@@ -15,7 +15,7 @@ several that say almost the same.
 - `grade10-site-site-crawlable-pages-SC-19` — A narrowing has no path of its own
 - `grade10-site-site-crawlable-pages-SC-20` — Two narrowings name one address to keep
 - `grade10-site-site-crawlable-pages-SC-21` — The sitemap names no narrowing
-- `grade10-site-site-crawlable-pages-SC-22` — A channel holds no identity address of its own
+- `grade10-site-site-crawlable-pages-SC-22` — A channel holds no identity surface of its own
 - `grade10-site-site-crawlable-pages-SC-24` — Nothing names a replaced address
 
 ### grade10-site-site-crawlable-pages-US-07: Collector opens a link the site has replaced

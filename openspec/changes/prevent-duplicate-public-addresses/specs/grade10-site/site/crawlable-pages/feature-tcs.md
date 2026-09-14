@@ -173,7 +173,7 @@ Runs once per row of **Test data**.
 * No address of another sales channel names that item.
 * No entry carries a query.
 
-### grade10-site-site-crawlable-pages-US6-TC6-1: A channel holds no identity address of its own
+### grade10-site-site-crawlable-pages-US6-TC6-1: A channel holds no identity surface of its own
 
 **Classification:**
 
@@ -199,7 +199,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 returns status 404.
+* Step 1 carries the channel's own identity, not the seller's.
 * Step 2 returns status 200 and names that seller.
 
 ### grade10-site-site-crawlable-pages-US6-TC7-1: Nothing the site serves names a replaced address

@@ -85,13 +85,13 @@ A person or a shop the site names — a seller among them — SHALL answer at
 exactly one public address, and every sales channel SHALL link to that address.
 A channel SHALL NOT answer an identity address of its own.
 
-#### Scenario: grade10-site-site-crawlable-pages-SC-22 - A channel holds no identity address of its own
+#### Scenario: grade10-site-site-crawlable-pages-SC-22 - A channel holds no identity surface of its own
 
 - **GIVEN** a seller the site names at its shared address
-- **WHEN** an identity address nested under a sales channel naming that seller
-  is fetched
-- **THEN** the response has status 404
-- **AND** the shared address answers that seller with status 200
+- **WHEN** an identity address nested under a sales channel is fetched
+- **THEN** the response carries that channel's identity rather than the
+  seller's, as the deepest surface naming that address
+- **AND** the seller answers at the shared address, and at no other
 
 ### Requirement: A replaced address redirects permanently
 
