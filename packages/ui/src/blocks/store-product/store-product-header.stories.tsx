@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import {
-  PRODUCT_DETAIL_PRODUCT,
-  SOLD_OUT_PRODUCT,
-} from "../pages/product-detail-content";
+  HEADER_COPY,
+  PRODUCT_DETAIL_STORY,
+  SOLD_OUT_PRODUCT_STORY,
+} from "./fixtures";
 import { StoreProductHeader } from "./store-product-header";
 
 const meta = {
@@ -11,6 +12,11 @@ const meta = {
   component: StoreProductHeader,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
+  args: {
+    copy: HEADER_COPY,
+    homeHref: "#home",
+    shopHref: "#shop",
+  },
 } satisfies Meta<typeof StoreProductHeader>;
 
 export default meta;
@@ -18,27 +24,28 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    title: PRODUCT_DETAIL_PRODUCT.title,
-    variant: PRODUCT_DETAIL_PRODUCT.variants[0],
+    title: PRODUCT_DETAIL_STORY.title,
+    saleItem: PRODUCT_DETAIL_STORY.saleItem,
+    availabilityCount: 3,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
       canvas.getByRole("heading", {
         level: 1,
-        name: PRODUCT_DETAIL_PRODUCT.title,
+        name: PRODUCT_DETAIL_STORY.title,
       }),
     ).toBeVisible();
     expect(canvas.getByText("HK$105.00")).toBeVisible();
-    expect(canvas.getByText("For sale")).toBeVisible();
+    expect(canvas.queryByText("For sale")).toBeNull();
     expect(canvas.getByText("Only 3 left")).toBeVisible();
   },
 };
 
 export const SoldOut: Story = {
   args: {
-    title: SOLD_OUT_PRODUCT.title,
-    variant: SOLD_OUT_PRODUCT.variants[0],
+    title: SOLD_OUT_PRODUCT_STORY.title,
+    saleItem: SOLD_OUT_PRODUCT_STORY.saleItem,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

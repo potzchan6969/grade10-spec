@@ -384,6 +384,36 @@ export type {
   OrderHistoryLineSummary,
   OrderHistoryOrderSummary,
 } from "./blocks/store-order-history/types";
+// shared/ui/store-product
+export {
+  StoreProductDescription,
+  type StoreProductDescriptionCopy,
+  type StoreProductDescriptionProps,
+} from "./blocks/store-product/store-product-description";
+export {
+  StoreProductGallery,
+  type StoreProductGalleryProps,
+} from "./blocks/store-product/store-product-gallery";
+export {
+  StoreProductHeader,
+  type StoreProductHeaderCopy,
+  type StoreProductHeaderProps,
+} from "./blocks/store-product/store-product-header";
+export {
+  StoreProductMetadata,
+  type StoreProductMetadataCopy,
+  type StoreProductMetadataProps,
+} from "./blocks/store-product/store-product-metadata";
+export {
+  StoreProductPurchasePanel,
+  type StoreProductPurchasePanelCopy,
+  type StoreProductPurchasePanelProps,
+} from "./blocks/store-product/store-product-purchase-panel";
+export type {
+  StoreProductImage,
+  StoreProductPurchaseItem,
+  StoreProductSaleItem,
+} from "./blocks/store-product/types";
 // shared/ui/store-product-listing
 export {
   FilterPanel,

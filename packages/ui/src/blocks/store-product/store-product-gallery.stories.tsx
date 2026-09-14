@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { PRODUCT_DETAIL_PRODUCT } from "../pages/product-detail-content";
+import { PRODUCT_DETAIL_STORY } from "./fixtures";
 import { StoreProductGallery } from "./store-product-gallery";
 
 const meta = {
@@ -15,8 +15,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    images: PRODUCT_DETAIL_PRODUCT.images,
-    title: PRODUCT_DETAIL_PRODUCT.title,
+    images: PRODUCT_DETAIL_STORY.images,
+    title: PRODUCT_DETAIL_STORY.title,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -26,11 +26,11 @@ export const Default: Story = {
 };
 
 export const NoMedia: Story = {
-  args: { images: [], title: PRODUCT_DETAIL_PRODUCT.title },
+  args: { images: [], title: PRODUCT_DETAIL_STORY.title },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("img", { name: PRODUCT_DETAIL_PRODUCT.title }),
+      canvas.getByRole("img", { name: PRODUCT_DETAIL_STORY.title }),
     ).toBeVisible();
   },
 };

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { PRODUCT_DETAIL_PRODUCT } from "../pages/product-detail-content";
+import { DESCRIPTION_COPY, PRODUCT_DETAIL_STORY } from "./fixtures";
 import { StoreProductDescription } from "./store-product-description";
 
 const meta = {
@@ -8,13 +8,21 @@ const meta = {
   component: StoreProductDescription,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
+  decorators: [
+    (Story) => (
+      <div className="w-full max-w-md">
+        <Story />
+      </div>
+    ),
+  ],
+  args: { copy: DESCRIPTION_COPY },
 } satisfies Meta<typeof StoreProductDescription>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: { description: PRODUCT_DETAIL_PRODUCT.description },
+  args: { description: PRODUCT_DETAIL_STORY.description },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const showMore = canvas.getByRole("button", { name: "Show more" });
@@ -28,7 +36,10 @@ export const Default: Story = {
 };
 
 export const Short: Story = {
-  args: { description: "A sealed collector item." },
+  args: {
+    copy: DESCRIPTION_COPY,
+    description: "A sealed collector item.",
+  },
   play: async ({ canvasElement }) => {
     expect(
       within(canvasElement).queryByRole("button", { name: /Show/ }),
