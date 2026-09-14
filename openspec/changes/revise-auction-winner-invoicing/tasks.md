@@ -38,7 +38,7 @@ there is no auction-state backfill, legacy conversion, or dual-read path.
 - [ ] 5.3 Show the chronological invoice trail, quoted amount changes, deadline choices, payment method, reference, and operator-only proof access for `grade10-admin-auction-post-sale-SC-34`, `grade10-admin-auction-post-sale-SC-35`, and `grade10-admin-auction-post-sale-SC-61`
 - [ ] 5.4 Verify the post-sale feature module and admin route with focused frontend tests, `pnpm run lint`, `pnpm run typecheck`, and `pnpm run test`
 
-## 6. Winner auction surfaces (grade10)
+## 6. Winner auction surfaces (grade10) (owner: @htonyl)
 
 - [ ] 6.1 Change the winner order to request and confirm an address before an invoice, show no amount or payment action until send, lock the address afterwards, and offer card only for `winner-order-SC-07`, `winner-order-SC-28`, `winner-order-SC-29`, `winner-order-SC-30`, and `winner-order-SC-35`
 - [ ] 6.2 Render the sent quote, winner-local deadline, expired-but-payable state, card payment retries, and itemised card or manual receipt without proof files for `winner-order-SC-31`, `winner-order-SC-04`, `winner-order-SC-33`, `winner-order-SC-37`, `winner-order-SC-36`, and `winner-order-SC-19`
