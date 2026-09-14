@@ -39,7 +39,13 @@ export function resolveMaximumFloor(input: {
   standing: ListingAuctionStanding;
   currentBidMinor: number;
 }): MaximumFloor {
-  const { minBidMinor, incrementMinor, viewerMaximumMinor, standing } = input;
+  const {
+    minBidMinor,
+    incrementMinor,
+    viewerMaximumMinor,
+    standing,
+    currentBidMinor,
+  } = input;
 
   if (viewerMaximumMinor == null) {
     return { floorMinor: minBidMinor, reason: "floor-bid" };
@@ -50,13 +56,23 @@ export function resolveMaximumFloor(input: {
   }
 
   if (standing === "leading-max") {
-    const incrementRaiseFloor = viewerMaximumMinor + incrementMinor;
-    const floorMinor = Math.max(minBidMinor, incrementRaiseFloor);
-    const reason =
-      floorMinor === minBidMinor && minBidMinor > incrementRaiseFloor
-        ? "floor-bid"
-        : "leading-increment";
-    return { floorMinor, reason };
+    const atCap = currentBidMinor >= viewerMaximumMinor;
+    if (atCap) {
+      const incrementRaiseFloor = viewerMaximumMinor + incrementMinor;
+      const floorMinor = Math.max(minBidMinor, incrementRaiseFloor);
+      const reason =
+        floorMinor === minBidMinor && minBidMinor > incrementRaiseFloor
+          ? "floor-bid"
+          : "leading-increment";
+      return { floorMinor, reason };
+    }
+    return {
+      floorMinor: Math.max(
+        minBidMinor,
+        viewerMaximumMinor + MINIMUM_MAXIMUM_RAISE_MINOR,
+      ),
+      reason: "leading-nudge",
+    };
   }
 
   return { floorMinor: minBidMinor, reason: "floor-bid" };
@@ -64,7 +80,8 @@ export function resolveMaximumFloor(input: {
 
 /**
  * Quick-raise preset amount. 1× / 2× / 4× the listing increment on the
- * committed maximum when leading, or on the current bid otherwise.
+ * committed maximum when leading, or on the current bid otherwise. These
+ * chips are not the raise floor — a leader's minimum remains max + $1.
  */
 export function quickMaximumPresetAmount(input: {
   multiples: number;

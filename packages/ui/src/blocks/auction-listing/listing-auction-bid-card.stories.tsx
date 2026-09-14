@@ -314,6 +314,10 @@ export const Leading: Story = {
     expect(canvas.getByText("HK$97,500")).toBeInTheDocument();
     expect(canvas.getByText("HK$100,000")).toBeInTheDocument();
     expect(canvas.getByText("HK$105,000")).toBeInTheDocument();
+    expect(canvas.queryByText("HK$95,001")).not.toBeInTheDocument();
+    expect(
+      canvas.getByPlaceholderText(/Custom amount \(min\. 95,001\)/),
+    ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to HK\$100,000/ }),
     ).toBeInTheDocument();

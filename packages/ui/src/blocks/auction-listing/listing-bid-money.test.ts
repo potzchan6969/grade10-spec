@@ -3,6 +3,7 @@ import {
   moneyDraftFromMinor,
   parseExactMoneyDraftToMinor,
   quickMaximumPresetAmount,
+  resolveMaximumFloor,
   sanitizeMoneyDraft,
   validateCommittedMaximumMinor,
   wholeMajorDraftFromMinor,
@@ -81,12 +82,26 @@ describe("wholeMajorDraftFromMinor", () => {
   });
 });
 
+describe("resolveMaximumFloor", () => {
+  it("keeps a leader's minimum at max plus $1 while they are below cap", () => {
+    expect(
+      resolveMaximumFloor({
+        minBidMinor: 124_000,
+        incrementMinor: 4_000,
+        viewerMaximumMinor: 200_000,
+        standing: "leading-max",
+        currentBidMinor: 120_000,
+      }),
+    ).toEqual({ floorMinor: 200_100, reason: "leading-nudge" });
+  });
+});
+
 describe("quickMaximumPresetAmount", () => {
   it("adds 1× / 2× / 4× increment on the committed max when leading", () => {
     const leading = {
       isLeadingWithMaximum: true,
       hasBids: true,
-      floorMaximumMinor: 204_000,
+      floorMaximumMinor: 200_100,
       incrementMinor: 4_000,
       currentBidMinor: 120_000,
       viewerMaximumMinor: 200_000,

@@ -8,6 +8,7 @@ import {
   ListingLotGallery,
   ListingLotHeader,
   ListingUserBidHistory,
+  PaymentMethodEmptyState,
   PaymentMethodRow,
 } from "@grade10/ui";
 import { useEffect, useState } from "react";
@@ -163,12 +164,19 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
         <ListingAuctionCardSidebar
           badges={AUCTION_LOT_BADGES}
           bidCardFooter={
-            auctionLotShowsLinkedPaymentMethod(state) && paymentLinked ? (
-              <PaymentMethodRow
-                brand={AUCTION_LOT_LINKED_PAYMENT_METHOD.brand}
-                copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
-                maskedNumber={AUCTION_LOT_LINKED_PAYMENT_METHOD.maskedNumber}
-              />
+            auctionLotShowsLinkedPaymentMethod(state) ? (
+              paymentLinked ? (
+                <PaymentMethodRow
+                  brand={AUCTION_LOT_LINKED_PAYMENT_METHOD.brand}
+                  copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
+                  maskedNumber={AUCTION_LOT_LINKED_PAYMENT_METHOD.maskedNumber}
+                />
+              ) : (
+                <PaymentMethodEmptyState
+                  copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
+                  onLink={() => setSetupOpen(true)}
+                />
+              )
             ) : undefined
           }
           copy={AUCTION_LOT_DETAILS_COPY.sidebar}
