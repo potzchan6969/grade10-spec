@@ -67,7 +67,10 @@ export const LockedWatching: Story = {
       name: "Watching",
     });
     expect(button).toBeDisabled();
-    await userEvent.click(button);
+    /* The locked button carries `pointer-events: none`, so a plain click is
+       refused before it reaches the DOM. Forcing the pointer through proves
+       the press itself reports nothing. */
+    await userEvent.click(button, { pointerEventsCheck: 0 });
     expect(onWatchToggle).not.toHaveBeenCalled();
   },
 };

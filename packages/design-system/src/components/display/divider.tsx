@@ -96,7 +96,9 @@ function Divider({
         id={labelId}
         data-slot="divider-label"
         className={cn(
-          "shrink-0 text-muted-foreground text-sm",
+          // Figma's Login Dialog divider (`4666:1471`) binds
+          // `Base/secondary-foreground`, not muted.
+          "shrink-0 text-secondary-foreground text-sm",
           orientation === "horizontal" ? "px-3" : "py-3",
         )}
       >

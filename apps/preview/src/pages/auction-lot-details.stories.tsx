@@ -120,8 +120,11 @@ export const ClosedLost: Story = {
 export const ClosedUnsold: Story = {
   args: { state: "closed-unsold" },
   play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
     expect(
-      within(canvasElement).queryByRole("button", { name: /watch/i }),
+      canvas.queryByRole("button", { name: /watch/i }),
     ).not.toBeInTheDocument();
+    expect(canvas.getAllByText("Ended").length).toBeGreaterThan(0);
+    expect(canvas.queryByText("Unsold")).not.toBeInTheDocument();
   },
 };

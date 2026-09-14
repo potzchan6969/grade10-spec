@@ -11,7 +11,7 @@ const meta = {
     copy: {
       email: "Email",
       emailPlaceholder: "Enter your email",
-      submit: "Send magic link",
+      submit: "Send Magic Link",
     },
     email: "collector@example.com",
     onEmailChange: fn(),
@@ -36,7 +36,7 @@ export const ActionNeedsAnAddress: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: "Send magic link" }),
+      canvas.getByRole("button", { name: "Send Magic Link" }),
     ).toBeDisabled();
     expect(args.onSubmit).not.toHaveBeenCalled();
   },
@@ -46,7 +46,7 @@ export const SubmitIsReported: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
-      canvas.getByRole("button", { name: "Send magic link" }),
+      canvas.getByRole("button", { name: "Send Magic Link" }),
     );
     expect(args.onSubmit).toHaveBeenCalledOnce();
   },
@@ -58,7 +58,7 @@ export const LinkRequestRunning: Story = {
   args: { submitting: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const submit = canvas.getByRole("button", { name: "Send magic link" });
+    const submit = canvas.getByRole("button", { name: "Send Magic Link" });
     expect(submit).toHaveAttribute("aria-busy", "true");
     expect(canvas.getAllByRole("button")).toEqual([submit]);
   },

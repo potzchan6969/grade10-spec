@@ -2,6 +2,7 @@
 title: Listing Page Blocks
 spec: shared/ui/auction-listing
 order: 6
+reviewed: 2026-09-14
 ---
 
 Three blocks make an auction lot page: the media gallery, the bid panel, and the
@@ -25,7 +26,10 @@ does, and what it must clear, belongs to [the auction](/p/grade10-site/auction).
 ## Personal Bidding
 
 The bid card may carry a personal-bidding accessory beside the public
-recent-bids label. That block is for the signed-in owner only.
+recent-bids label. That block is for the signed-in owner only. When the
+consumer supplies accepted-bid rows, a link opens a dialog of amount and
+time with a same-price priority note and no bid-type column; empty rows
+hide the link. Every label arrives through props.
 
 - 🚧 **Your bidding** — the link and dialog title cover both maximum history
   and bids Grade10 placed

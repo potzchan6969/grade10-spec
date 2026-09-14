@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  CUSTOM_MAXIMUM_MAJOR_CEILING,
   moneyDraftFromMinor,
   parseExactMoneyDraftToMinor,
   quickMaximumPresetAmount,
   resolveMaximumFloor,
+  sanitizeCustomMaximumDraft,
   sanitizeMoneyDraft,
   validateCommittedMaximumMinor,
   wholeMajorDraftFromMinor,
@@ -20,6 +22,39 @@ describe("sanitizeMoneyDraft", () => {
 
   it("strips decimals for zero-exponent currencies", () => {
     expect(sanitizeMoneyDraft("1500.5", "JPY")).toBe("1500");
+  });
+});
+
+describe("sanitizeCustomMaximumDraft", () => {
+  const ceiling = String(CUSTOM_MAXIMUM_MAJOR_CEILING);
+
+  it("accepts drafts at and below the major-unit ceiling", () => {
+    expect(sanitizeCustomMaximumDraft(ceiling, "HKD", "")).toBe(ceiling);
+    expect(sanitizeCustomMaximumDraft("500", "HKD", "")).toBe("500");
+    expect(sanitizeCustomMaximumDraft("9999999998", "JPY", "1")).toBe(
+      "9999999998",
+    );
+  });
+
+  it("restores the previous draft when sanitized major units exceed the ceiling", () => {
+    expect(sanitizeCustomMaximumDraft(`${ceiling}0`, "HKD", ceiling)).toBe(
+      ceiling,
+    );
+    expect(sanitizeCustomMaximumDraft("10000000000", "HKD", "")).toBe("");
+    expect(sanitizeCustomMaximumDraft("99999999999", "HKD", "500")).toBe("500");
+  });
+
+  it("applies whole-major sanitize before the ceiling check", () => {
+    expect(sanitizeCustomMaximumDraft("10000000000.99", "HKD", "500")).toBe(
+      "500",
+    );
+    expect(sanitizeCustomMaximumDraft("9999999999.99", "HKD", "")).toBe(
+      ceiling,
+    );
+  });
+
+  it("still accepts clearing to empty", () => {
+    expect(sanitizeCustomMaximumDraft("", "HKD", "500")).toBe("");
   });
 });
 

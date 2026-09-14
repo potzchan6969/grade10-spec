@@ -17,6 +17,7 @@ import {
   type LiveListingFacts,
   stateMeta,
 } from "../auction-listing/listing-auction-bid-fixtures";
+import { STORE_LOCATOR_HREF } from "./workbench-story-nav";
 
 export {
   type AuctionTiming,
@@ -156,7 +157,7 @@ export const AUCTION_SITE_HEADER = {
   utilityLinks: [],
   navItems: [
     { label: "Auction", href: "#auction", current: true },
-    { label: "Store Locator", href: "#locator" },
+    { label: "Store Locator", href: STORE_LOCATOR_HREF },
   ],
   onLocaleChange: noop,
   onSignIn: noop,

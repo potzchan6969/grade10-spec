@@ -1,6 +1,9 @@
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import type { SiteHeaderProps } from "./site-header";
 
+/** Workbench Store Locator page — keep in sync with preview `STORE_LOCATOR_HREF`. */
+const STORE_LOCATOR_HREF = "?path=/story/pages-store-locator-page--default";
+
 export const LOCALES = [
   { value: "en", label: "English" },
   { value: "zh-Hant", label: "繁體中文" },
@@ -10,7 +13,7 @@ export const LOCALES = [
 /** Auction-first primary nav: no Store entrance, no Grade. */
 export const AUCTION_NAV_ITEMS = [
   { label: "Auction", href: "#auction", current: true },
-  { label: "Store Locator", href: "#locator" },
+  { label: "Store Locator", href: STORE_LOCATOR_HREF },
 ];
 
 export const COPY = {
