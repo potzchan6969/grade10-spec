@@ -19,7 +19,7 @@ catalog is the lever an operator holds.
 ## Tier Progress
 
 A member holds **one balance**: earning adds to it, redeeming takes from it,
-and it expires only after 12 months with no activity.
+and it expires 12 months after the last activity.
 
 **Tier progress is not a second balance.** The progress is determined by summing the points the member earned in a period.
 

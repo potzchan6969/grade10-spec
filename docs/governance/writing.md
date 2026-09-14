@@ -22,7 +22,7 @@ nearest your task and keep it open while you draft.
   the cap, the clock — come before any behaviour, as a `Rule | Value` table
   or a ladder. A reader who reads only that table can already use the thing
 - **A `##` is a plain label in Title Case** — `Refunds`, `Keeping a Tier`,
-  `Admin Grants`: the name the reader would give the topic, the way a
+  `Moving Points`: the name the reader would give the topic, the way a
   contents list reads. Not a sentence, a question or a play on words, and
   no leading article. A `###` labels a part or states one rule
 - **One concern per section** — the normal case first; failures and odd
