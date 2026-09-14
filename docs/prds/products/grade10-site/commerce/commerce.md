@@ -31,8 +31,8 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 
 - **Display** — the listing, its filter panel, the collections and a product's page answer over tRPC (`catalog.*`), read from the Storefront API on every request; nothing caches them since the public GET routes went, and the tags the product webhook still purges are tags no response publishes
 - **A narrowing** — Shopify's own `search` narrows and counts by the facets the shop configured in Search & Discovery, trusted only when Shopify advertises the facet back; free text, the latest order and a shop with the facets unconfigured walk the whole catalogue through the worker instead, once per distinct query, and refuse past 5,000 products
-- ❓ **The cheaper rungs first** — the latest order asked of Shopify natively, the worker's cache tier on the catalogue reads, one taxonomy read a view, a slim walk kept in the worker; each measured against the listing's answer time before the next — [the design note](/references/store-catalogue-index). Engineering confirms
-- ❓ **The catalogue index** — when a measured ceiling survives the rungs, or for a shape no rung answers, the store keeps its own copy of what the shop publishes and answers every listing read from it in one round trip to its own database; Shopify is read when a product changes and by a sweep, never on a listing view. Engineering confirms
+- ❓ **The catalogue projection** — the listing, its count and its sidebar answer from the catalogue cut to what a query narrows, orders and counts on, held in the worker and rebuilt from Shopify 5 minutes after it was built, behind a response; a page hydrates the products it lists by id and keeps them 5 minutes; a collection and a product's page are one Shopify read a minute. On staging a narrowed listing answers in 0.2–0.4 s where it took 1.6–3.5 s — [the design note](/references/store-catalogue-index). Engineering confirms the release
+- ❓ **A queryable index** — when a catalogue outgrows what one worker holds, the same projection lands in the store's own database and answers in one round trip; the design note carries it. Engineering, on a measured ceiling
 - Checkout pricing always fetches live from the Storefront API — a cache can never set a charge amount
 - Availability is checked when the cart is priced: a variant that does not
   sell rejects, and a cart asking past a count the catalog exposes
@@ -46,9 +46,9 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 ### A copy the shop can always rebuild
 
 - **Shopify down** — checkout down, and the listing with it
-- ❓ **Derived, never authored** — every row of the index is what a Storefront read answered, and a full walk rewrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
-- ❓ **Webhooks accelerate, the sweep repairs** — a product or collection webhook marks its row dirty and a deferred drain reads it back, so a burst of deliveries coalesces; the `catalogSync` cron pass walks the catalogue whole and deletes what the walk did not see, the rule the orders already follow
-- ❓ **Never refused for a copy** — while the index is empty or its last walk is stale, the listing answers from Shopify as it does today and counts it; on a filled index, Shopify down leaves the listing answering from its last walk
+- ❓ **Derived, never authored** — every copy of the projection is what a Storefront read answered, and the next build rewrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
+- ❓ **Rebuilt by age, never fed** — nothing feeds the projection row by row, so a shop edit reaches the listing within 5 minutes and a card's price and stock within the same; a product's own page reads live
+- ❓ **Never refused for a copy** — a worker holding no projection answers a facet, a price order or an unnarrowed latest from Shopify while it builds one; free text and a narrowed latest wait for the build, which is faster than the walk it replaced. A worker holding one keeps listing while Shopify is down
 - The catalog client's error outcomes carry the query name, so the tail worker's metrics show exactly which reads are failing
 
 ### Money arrives as decimal strings

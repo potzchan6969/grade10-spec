@@ -1,19 +1,19 @@
 # Store Catalogue Index
 
 Engineering's design note, 2026-09-14, for how the store answers a product
-listing: what runs, where it stops scaling, the cheaper rungs that come
-first, and the index that follows when a measured ceiling survives them.
-The decisions it leads to are recorded on
-[Commerce](../prds/products/grade10-site/commerce/commerce.md) and
-[Product Listing](../prds/products/grade10-site/store/product-listing.md); no
-change carries them yet. Read this as the shape engineering proposes, not as
-a requirement.
+listing: what ran, where it stopped scaling, the cheaper rungs that came
+first, what shipped to staging that day and what it measured, and the index
+that follows when a catalogue outgrows one worker. The decisions it leads to
+are recorded on [Commerce](../prds/products/grade10-site/commerce/commerce.md)
+and [Product Listing](../prds/products/grade10-site/store/product-listing.md);
+no change carries them yet. Read this as engineering's record, not as a
+requirement.
 
-## What Runs
+## What Ran
 
-Every listing read is a tRPC query — `catalog.products`, `catalog.filters`,
-`catalog.collections` — that the store backend answers by calling Shopify's
-Storefront API on the request. Nothing caches the answer: the response is
+Until 2026-09-14 every listing read was a tRPC query — `catalog.products`,
+`catalog.filters`, `catalog.collections` — that the store backend answered
+by calling Shopify's Storefront API on the request. Nothing cached the answer: the response was
 `private, no-store`, the public GET routes that once sat behind the edge
 cache are gone, and the tags the product webhook still purges are tags no
 response publishes. Why the routes went is not on record ❓ — Engineering.
@@ -72,6 +72,9 @@ response publishes. Why the routes went is not on record ❓ — Engineering.
 Each is a day's change, measured on staging against the PRD's listing
 answer time before the next is taken. The index is built when a measured
 ceiling survives them, or when Product asks for a shape no rung answers.
+Rungs 1 and 4 shipped together on 2026-09-14 as the projection below; rung
+2 shipped for the reads the projection does not answer; rung 3 has nothing
+left to do, since the projection carries the taxonomy.
 
 1. **Native latest** — `sortKey: CREATED_AT, reverse: true` on the
    `products` connection, so the resting order never walks: one Shopify
@@ -97,16 +100,57 @@ ceiling survives them, or when Product asks for a shape no rung answers.
    state, trusted the way the Search & Discovery filters are — Product and
    the shopkeeper
 
-What no rung answers: a count under free text, free text without a walk, a
-collection combined with facets, and ranked suggestions. Those are the
-index's reasons, and a listing that needs none of them stops at rung 4.
+What no rung answers: a collection combined with facets and ranked
+suggestions. A count under free text and free text without a walk are the
+projection's, since it holds the whole set in memory.
 
-## The Index
+## What Shipped
 
-The store keeps its own copy of what the shop publishes, in its own
-Postgres — the `store` schema of that brand's Neon project — and answers
-every listing read from it in one round trip. Shopify is read when a
-product changes and by a sweep, never on a listing view.
+Pull request 387 on the application repository, deployed to staging on
+2026-09-14. The **catalogue projection** (`services/catalog/projection.ts`)
+is the catalogue cut to its entries — id, handle, title, date, cheapest
+price, availability, facet handles — walked at 250 a page and held in the
+worker: the isolate's memory first, then the colo's cache. Every listing
+shape narrows, orders and counts over it in one memory pass, so the grid,
+its count and the sidebar always come from one set. The index below stays
+the step after it.
+
+- **Age, not a feed** — a projection older than 5 minutes is served as it
+  is and rebuilt behind the response; nothing feeds it row by row, so no
+  webhook, no sweep and no table
+- **Cold isolate** — a facet, a price order or an unnarrowed latest answers
+  from Shopify while the build runs, the latest order natively off
+  `products(sortKey: CREATED_AT)`; free text and a narrowed latest wait for
+  the build, a slim walk cheaper than the whole-product walk it replaced
+- **Hydration** — a page reads the products it lists by id in one `nodes`
+  call and keeps them 5 minutes, in memory and in the colo's cache
+- **Cache tier** — a collection, one collection and a product's page ride
+  the worker's cached procedure tier for 60 s
+- **Cursors** — unchanged on the wire; the offset ceiling is the
+  projection's, 50,000 products, in place of the walk's 5,000
+- **Nothing durable** — no database on the public path, no migration, no
+  new binding; every copy is derived and the next request rebuilds it
+
+| Query, staging | Before | Cold isolate | Warm |
+| --- | --- | --- | --- |
+| Narrowed by two types — products, filters and collections in one batch | 1.6–3.5 s | 2.4 s | 0.22–0.41 s |
+| Latest order, nothing narrowed | 0.55–1.7 s | 1.5–1.6 s | 0.21–0.26 s |
+| Free text `pokemon` — products and filters | 1.0–3.1 s | 1.0 s | 0.18–0.21 s |
+
+Time to first byte from one Linux host, three runs each, 2026-09-14 04:13
+UTC, the shop as staging carried it that day. Warm figures are the network
+round trip; the worker's own share is under it ❓ the p95 from real
+traffic, once the release carries it — Engineering.
+
+## The Index, When One Worker Is Outgrown
+
+The projection above holds a catalogue in one worker; past tens of
+thousands of products, or for a shape a memory pass cannot rank, the same
+projection lands in the store's own Postgres — the `store` schema of that
+brand's Neon project — and answers every listing read from it in one round
+trip. Shopify is read when a product changes and by a sweep, never on a
+listing view. Nothing below is built; it is the step after a measured
+ceiling.
 
 | Table | One row per | Holds |
 | --- | --- | --- |
@@ -231,8 +275,8 @@ follow ([Commerce](../prds/products/grade10-site/commerce/commerce.md)).
 
 ## Cutover
 
-1. **The rungs, measured** — native latest, the cache tier, one taxonomy
-   read, the slim walk; the number after each is what decides the rest
+1. **The rungs, measured** — shipped and measured above; the number after
+   the projection is what decides whether the rest is ever built
 2. **The feed** — the migration, the repositories, the dirty rows, the
    drain and the walk; staging runs a walk whole and its row count is
    checked against Shopify's own `search` total
@@ -287,4 +331,4 @@ follow ([Commerce](../prds/products/grade10-site/commerce/commerce.md)).
 | The row's shape | Whether the products contract can carry a card's shape, or a page hydrates from Shopify | Engineering |
 | Product page | A live Shopify read, or the index | Engineering |
 | Publication | Whether publishing to the channel raises `products/update` | Engineering |
-| The number | The listing answer time before the first rung and after each, and the index against the Storefront's own latency from Hong Kong | Engineering |
+| The number | The listing answer time from real traffic once the projection is released, p95, against the staging figures above | Engineering |

@@ -33,14 +33,13 @@ product.
 - **Search and sort** — both describe the whole catalogue, never the cards
   already on screen; the menu offers latest, lowest price and highest price,
   and nothing is in force until the collector picks one
-- ❓ **Answered from the store's own index** — narrowing, counting, ordering
-  and search are one read of the store's copy of the catalogue, so a listing
-  answers in the time of one database round trip, once the cheaper rungs are
-  measured short; Engineering confirms the design —
-  [the design note](/references/store-catalogue-index)
-- ❓ **A shop edit reaches the listing within seconds** — on the product's
-  own webhook; anything the webhook missed, within the sweep's full walk.
-  Engineering confirms the walk's pace
+- ❓ **Answered from the store's own copy** — narrowing, counting, ordering
+  and search are one pass over the catalogue the worker holds, so a listing
+  answers in the time of the network round trip; Engineering confirms the
+  release — [the design note](/references/store-catalogue-index)
+- ❓ **A shop edit reaches the listing within 5 minutes** — the copy is
+  rebuilt from the shop by age, and a product's own page reads live.
+  Engineering confirms the release
 - **A collection is a way in, not a filter** — the front door's tiles open the
   listing already inside one, named above the grid and dismissible; filtering,
   searching or sorting leaves it behind, because the catalogue narrows by a
@@ -130,7 +129,7 @@ collection. The front door's collection grid, which is unchanged.
 | Narrowed sessions | Share of listing visits that apply any narrowing. Unmeasured; the first delivery sets the baseline. | Product |
 | Time to first narrowed result | From listing open to the first narrowed grid. Unmeasured. | Product |
 | Search commit or suggestion | Share of listing sessions that commit free text or take a suggestion, and time from first keystroke to a product open or narrowed grid. Unmeasured; first delivery sets the baseline. | Product |
-| Listing answer time | From a narrowing to its first grid, p95, measured at the edge. Unmeasured; ❓ the target is set with the index. | Engineering |
+| Listing answer time | From a narrowing to its first grid, p95, measured at the edge. On staging, three runs from one host, 2026-09-14: 1.6–3.5 s before the store's copy, 0.2–0.4 s from it. ❓ Real traffic sets the p95 once released. | Engineering |
 
 **Decisions.**
 
@@ -138,8 +137,8 @@ collection. The front door's collection grid, which is unchanged.
 | --- | --- | --- | --- |
 | Facets, not collections | Decided | The sidebar filters by world and collectible type. A collection is a merchandiser's grouping and stays a way in. | Design |
 | One narrowing at a time | Decided | The catalogue narrows by a collection or by a query, never both, so applying either leaves the other behind. The alternative — a collection dimension on the query — cannot be served natively and would walk the whole catalogue for every scoped narrowing. | Engineering |
-| Catalogue index | ❓ Open | The cheaper rungs come first — the latest order asked of Shopify natively, the cache tier, a slim walk — each measured against the listing's answer time. When a measured ceiling survives them, or for a shape none answers, the listing reads the store's own copy of the catalogue, written by the shop's webhooks and repaired by a sweep, with Shopify never read on a listing view and checkout still pricing live. Reverses the no-product-mirror rule for display only — [the design note](/references/store-catalogue-index). | Engineering |
-| Collection with facets | ❓ Open | The one-narrowing rule rests on the walk; on the store's index a collection is one more narrowing and the reason goes. Whether to offer both together is decided once the index lands. | Product |
+| Catalogue projection | ❓ Open | The listing reads a copy of the catalogue the worker holds and rebuilds from Shopify by age; Shopify is never read on a warm listing view, and checkout still prices live. Built and measured on staging; a database index is the step after it, when a catalogue outgrows one worker — [the design note](/references/store-catalogue-index). Confirmed on release. | Engineering |
+| Collection with facets | ❓ Open | The one-narrowing rule rests on the walk; on the store's copy a collection is one more narrowing and the reason goes. Whether to offer both together is a product call. | Product |
 | Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
 | Counts are the catalogue's | Decided | Counted over the whole narrowed set with the facet's own selection excluded, so ticking one world leaves the others showing what picking them instead would find. | Engineering |
