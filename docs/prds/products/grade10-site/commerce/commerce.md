@@ -29,10 +29,12 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 
 ### Display and pricing are different reads
 
-- **Display** — the listing, its filter panel, the collections and a product's page answer over tRPC (`catalog.*`), read from the Storefront API on every request; nothing caches them since the public GET routes went, and the tags the product webhook still purges are tags no response publishes
-- **A narrowing** — Shopify's own `search` narrows and counts by the facets the shop configured in Search & Discovery, trusted only when Shopify advertises the facet back; free text, the latest order and a shop with the facets unconfigured walk the whole catalogue through the worker instead, once per distinct query, and refuse past 5,000 products
-- ❓ **The catalogue projection** — the listing, its count and its sidebar answer from the catalogue cut to what a query narrows, orders and counts on, held in the worker and rebuilt from Shopify 5 minutes after it was built, behind a response; a page hydrates the products it lists by id and keeps them 5 minutes; a collection and a product's page are one Shopify read a minute. On staging a narrowed listing answers in 0.2–0.4 s where it took 1.6–3.5 s — [the design note](/references/store-catalogue-index). Engineering confirms the release
-- ❓ **A queryable index** — when a catalogue outgrows what one worker holds, the same projection lands in the store's own database and answers in one round trip; the design note carries it. Engineering, on a measured ceiling
+- **Display** — the listing, its filter panel, the collections and a product's page answer over tRPC (`catalog.*`); a listing opens no database connection
+- 🚧 **The catalogue projection** — the listing, its count and its sidebar answer from a copy of the catalogue the worker holds, cut to what a query narrows, orders and counts on; the shop is read to build the copy and to fill in the products a page shows, never to answer a narrowing — [the design note](/references/store-catalogue-index)
+- 🚧 **Rebuilt by age** — a copy past 5 minutes is served as it is and rebuilt behind the response; a copy nothing has asked for in a day is dropped and built afresh
+- 🚧 **What lags the shop** — which products a listing holds and the counts beside the facets, by up to 5 minutes where the listing is in use and up to a day where nobody has opened it; a card's price and stock, by up to 5 minutes; a product's own page, by up to a minute. The cart's review reads live and is the authority
+- 🚧 **10,000 products** — the catalogue is held whole or the listing refuses, rather than answering from a catalogue only half read
+- ❓ **Past one worker** — a copy built once and read everywhere, then the store's own database when a memory pass can no longer rank; nobody has decided when — Engineering, on the design note's trigger
 - Checkout pricing always fetches live from the Storefront API — a cache can never set a charge amount
 - Availability is checked when the cart is priced: a variant that does not
   sell rejects, and a cart asking past a count the catalog exposes
@@ -45,10 +47,8 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 
 ### A copy the shop can always rebuild
 
-- **Shopify down** — checkout down, and the listing with it
-- ❓ **Derived, never authored** — every copy of the projection is what a Storefront read answered, and the next build rewrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
-- ❓ **Rebuilt by age, never fed** — nothing feeds the projection row by row, so a shop edit reaches the listing within 5 minutes and a card's price and stock within the same; a product's own page reads live
-- ❓ **Never refused for a copy** — a worker holding no projection answers a facet, a price order or an unnarrowed latest from Shopify while it builds one; free text and a narrowed latest wait for the build, which is faster than the walk it replaced. A worker holding one keeps listing while Shopify is down
+- **Shopify down** — checkout down, and the listing with it: the copy names the products, and the shop is read to fill them in
+- 🚧 **Derived, never authored** — every copy is what a Storefront read answered and the next build rewrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
 - The catalog client's error outcomes carry the query name, so the tail worker's metrics show exactly which reads are failing
 
 ### Money arrives as decimal strings
@@ -291,8 +291,8 @@ muted, and a muted alert is worse than none.
 
 ## Q & A
 
-- ❓ Why keep a catalogue index when the store does not own the catalogue?
-  - A listing narrows, counts, orders and searches over the whole catalogue in one answer, and Shopify's own search answers only some of those shapes correctly; the rest walked the catalogue through the worker on every request. A copy the shop rewrites at will is the one store that answers every shape in one local round trip, and checkout never reads it.
+- Why a copy of the catalogue in the worker rather than a record in Postgres?
+  - We do not own catalog data, and a record is a second store with sync obligations. A copy is a cache with a shape: rebuilt from the shop on demand, held nowhere durable, and answering every listing shape in one pass, so the public catalogue opens no database connection. A queryable store is the step after it, when a catalogue outgrows one worker.
 - Why Checkout Sessions instead of raw PaymentIntents?
   - One server surface serves hosted, embedded, and Payment Element frontends; the UX can change without a backend change.
 - Why does a refund's event carry the goods rather than the money that moved?
