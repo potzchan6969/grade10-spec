@@ -47,8 +47,8 @@ Needs group 2 and group 3's port.
 Needs every group above.
 
 - [ ] 5.1 Deploy to staging through the ordinary dispatch, read the listing from two locations cold and warm, and record the answer times on the pull request (`SC-48`); with a product edited in the staging shop's admin, record seconds from the shop's read to the listing (`SC-42`, `SC-44`)
-- [ ] 5.2 Add `apps/frontend/grade10/e2e/tests/store/catalog-keeper.spec.ts`: replay `products/delete` for a fixture product through `POST /dev/webhooks/shopify` and assert the product leaves the listing within 10 s, then replay `products/update` for it and assert it returns; runs under `pnpm run test:e2e`
-- [ ] 5.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, `pnpm run test:e2e`
+- [x] 5.2 Add `apps/frontend/grade10/e2e/tests/store/catalog-keeper.spec.ts`: replay `products/delete` for a fixture product through `POST /dev/webhooks/shopify` and assert the product leaves the listing within 10 s, then replay `products/update` for it and assert it returns; runs under `pnpm run test:e2e`
+- [x] 5.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, `pnpm run test:e2e`
 
 ## 6. The measured numbers (grade10-spec)
 

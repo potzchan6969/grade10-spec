@@ -110,7 +110,20 @@ cards always come from one set, and no listing view reads the shop.
 
 Time to first byte from one Linux host, 2026-09-14 06:20 UTC, 286 products.
 The cold column is the walk a location paid for its own copy; the keeper
-below removes it. ❓ The same table after the keeper's release — Engineering.
+below removes it.
+
+| Query, staging, with the keeper | Before the keeper | Warm |
+| --- | --- | --- |
+| Narrowed by two types — products, filters and collections in one batch | 4.5–9.0 s | 0.34–0.83 s |
+| Latest order, nothing narrowed | 0.84–3.2 s | 0.27–0.52 s |
+| Free text `pokemon` — products and filters | 0.94–1.9 s | 0.36–0.60 s |
+
+Time to first byte from one Linux host in Newark, 2026-09-14 16:40 UTC, 286
+products, the copy joined as text. No cold column: staging takes no traffic,
+so a request that reads no catalogue at all — a 404 on a procedure that does
+not exist — carries the same multi-second tail, and in most pairs a longer
+one than the catalogue read beside it. That tail is the worker starting, and
+every endpoint on the worker pays it.
 
 ## Catalogue Keeper
 
