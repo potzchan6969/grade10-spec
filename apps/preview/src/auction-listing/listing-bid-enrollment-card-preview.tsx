@@ -153,11 +153,19 @@ function ListingBidEnrollmentCardPreview({
       ) : null}
 
       <EnrollmentSetupSheet
+        cardReady={snapshot.paymentSetup?.iframeLinkedPayment != null}
         copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
         defaultAgeAttested={snapshot.paymentSetup?.defaultAgeAttested}
         errorMessage={snapshot.paymentSetup?.errorMessage}
         iframeLinkedPayment={snapshot.paymentSetup?.iframeLinkedPayment}
         linking={snapshot.paymentSetup?.linking}
+        paymentField={
+          <div className="flex h-12 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground">
+            {snapshot.paymentSetup?.iframeLinkedPayment
+              ? LISTING_BID_ENROLLMENT_DEMO_COPY.iframeLinkedCardPlaceholder
+              : LISTING_BID_ENROLLMENT_DEMO_COPY.iframePlaceholder}
+          </div>
+        }
         onContinue={onSetupContinue}
         onOpenChange={(open) => {
           if (!open) onPaymentSetupDismissed?.();

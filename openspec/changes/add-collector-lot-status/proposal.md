@@ -109,3 +109,9 @@ This change overrides these rules for hidden lots:
 - The designer decides which collector pages show the external lot status, and
   how.
 - Today's mixed labels are replaced with the three external lot statuses.
+
+## References
+
+- [Lot Status · External Lot Status](../../../docs/prds/products/grade10-site/auction/lot-status.md#external-lot-status)
+- [Lot Status · Status Mapping](../../../docs/prds/products/grade10-site/auction/lot-status.md#status-mapping)
+- [Lot Status · Hidden Lots](../../../docs/prds/products/grade10-site/auction/lot-status.md#hidden-lots)
