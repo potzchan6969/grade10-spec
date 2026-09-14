@@ -1,7 +1,7 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-09-14, tcs-rules r3.0
+**Status:** approved
+**Reviewed:** 2026-09-14, tcs-rules r3.0
 **Out of suite:** shared-auth-sign-in-SC-34
 
 ## shared-auth-sign-in-US1: Collector asks for and follows a sign-in link
@@ -721,7 +721,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -731,7 +731,7 @@ Runs once per row of **Test data**.
 * **Trace:** shared-auth-sign-in-US-05
 
 **Pre-conditions:**
-customer is on <grade10 sign-in url> with no location named, signed out.
+customer opened <grade10 sign-in url> directly, so the sign-in names no return location, and is signed out.
 
 **Test data:**
 
@@ -754,7 +754,7 @@ customer is on <grade10 sign-in url> with no location named, signed out.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -790,7 +790,7 @@ customer is on <grade10 sign-in url> with no location named, signed out.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -798,6 +798,8 @@ customer is on <grade10 sign-in url> with no location named, signed out.
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-05
+
+Runs once per row of **Test data**.
 
 **Pre-conditions:**
 customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
@@ -807,7 +809,11 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 | Field | Value |
 | --- | --- |
 | `<collector email>` | collector@example.com, an address with an account |
-| `<off-brand location>` | A location that is not this brand |
+
+| `<off-brand location>` | `<why it is off brand>` |
+| --- | --- |
+| https://collector-rewards.example.com/claim | an address outside this store |
+| <zzz sign-in url> | another brand of this store |
 
 **Steps:**
 
