@@ -14,6 +14,7 @@ has left behind.
 - `grade10-site-store-product-listing-SC-43` — A product taken down leaves within seconds
 - `grade10-site-store-product-listing-SC-44` — A card follows the shop's price and stock
 - `grade10-site-store-product-listing-SC-45` — A change the shop never reported is caught by the re-read
+- `grade10-site-store-product-listing-SC-48` — A location holding no copy answers from the one the store keeps
 
 ### grade10-site-store-product-listing-US-13: Collector browses while the shop is unreachable
 

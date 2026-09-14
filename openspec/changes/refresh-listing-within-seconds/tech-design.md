@@ -8,113 +8,155 @@ mechanism is [the design note](../../docs/references/store-catalogue-index.md).
 What runs today, on PR 387 of the application repository:
 
 - **The copy is built per location.** `services/catalog/projection.ts` walks
-  the catalogue at 250 a page, holds the result in isolate memory and the
-  location's cache, serves it past 5 minutes and rebuilds behind the response;
-  a location holding nothing walks on the request.
+  the catalogue at 250 a page, holds entries in isolate memory and the
+  location's cache, serves them past 5 minutes and rebuilds behind the
+  response; a location holding nothing walks on the request.
 - **Cards are read separately.** A page's ids are read whole by `nodes(ids:)`
   and kept 5 minutes, so the sort key and the price a card shows age apart.
 - **The shop already reports changes.** `routes/webhooks.ts` verifies
-  `products/*` and `inventory_levels/*` deliveries and purges the response
-  cache tags; nothing refreshes the copy.
+  `products/*` and `inventory_levels/*` deliveries and purges response cache
+  tags; nothing refreshes the copy.
 - **The cron runs every 5 minutes** through `CRON_PASSES`; every pass runs on
-  every tick.
-- **Workers Cache is a response cache** in front of the entrypoint, purged
-  globally, and cannot be read from inside a request; the Cache API is per
-  location; KV reads lag a write by its 30 s edge TTL. None of the three can
-  tell an isolate that a copy moved within seconds — only asking a single
-  writer can.
+  every tick and says nothing on a brand that wired none of what it needs.
+
+What the platforms hold, verified against their documentation:
+
+- **Cloudflare.** KV reads lag a write by a 30 s edge TTL; Workers Cache is
+  purged globally but cannot be read from inside a request; the Cache API is
+  per location. A Durable Object is one writer, but its input gate opens
+  across every `fetch()` it awaits; it holds one alarm, run at-least-once,
+  retried 6 times and then silent; `waitUntil` does nothing inside it. Its
+  SQLite takes 2 MB a row, 100 KB a statement, 100 bound parameters, and
+  bills every row written. An RPC value may be 32 MiB. A version upload
+  cannot carry a Durable Object class lifecycle change; only `wrangler
+  deploy` applies one.
+- **Shopify.** Nothing documents a cache on Storefront reads; one staff
+  statement from 2023 says a read can answer the old value for 5–30 s after a
+  save. An unpublished product answers nothing through a private token. A
+  webhook that fails is retried 8 times over 4 hours, then its subscription
+  is deleted. `products/update` fires when a product is edited or ordered; no
+  topic this custom app can subscribe to reports a publication change on the
+  store's channel.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
 - One copy per shop, one writer, every location following it within seconds
+  of the shop's read answering a change
 - No listing view reads the shop; no location waits on a walk
 - Fewer tiers than today: memory and the keeper, nothing in between
 
 **Non-Goals:**
 
 - Rows in Postgres and SQL listings — the step after, `proposal.md`
-- A copy faster than the shop's own report
+- A copy faster than the shop's own report and reads
+- Cards cut from products in the copy — the step at a 1 MB body
+- A listing narrowed to a collection — stays on the shop's own read
 - Changing what a query narrows, orders or counts; `browse.ts` is untouched
 
 ## Decisions
 
 ### The keeper is a Durable Object, one per shop
 
-The spec governs what the listing shows and how soon. The implementation:
-`services/catalog/keeper.ts` exports `CatalogKeeper`, a Durable Object named
-by the shop domain, bound as `CATALOG_KEEPER` in both store workers.
+`packages/grade10-store/backend/src/durables/CatalogKeeper/` holds the class,
+its RPC interface, the manager that carries every rule below over a storage
+port, and the SQLite adapter behind that port. The class leaves the package
+through `./worker` and each app exports it by name; both store workers bind
+it as `CATALOG_KEEPER`.
 
-- **Why an object.** It is the one writer: events from any location land in
-  one place, in order, and a burst is coalesced there. Every location reads
-  the same version number from it, so nothing eventually consistent sits on
-  the path.
-- **Rejected — a cron writing KV.** A KV read lags a write by its edge TTL, 30 s at the floor, and no event can shorten it.
-- **Rejected — each location rebuilding on the event.** A delivery reaches one location; the others learn nothing, and a bulk edit is a walk per delivery.
-- **Rejected — Postgres as the shared copy.** A read to one region per check, on the pool checkout shares.
-- **Rejected — `BaseDO` from `packages/durable`.** Its migrations, managers and task scheduler serve a queue; the keeper needs three tables and one alarm. A plain `DurableObject` with `ctx.storage.sql` is the whole of it.
-- **Placement.** Created with the location hint of the store's region (`apac` for both brands today), so the common check is a same-region hop.
+- **Why an object.** It is the one writer: events from any location land in one place, and a burst is coalesced there. Every location reads one version number from it, so nothing eventually consistent sits on the path. No cache or store on the platform tells an isolate that a copy moved within seconds; asking one writer does.
+- **Against the convention, on record.** `docs/conventions/backend.md` says no deployed worker binds a Durable Object and that scheduled work is a row a cron re-reads. This is the one exception: a row nobody can read within seconds from every location is not a copy every location can follow. The convention is updated to name the exception and its reason.
+- **Rejected — a cron writing KV.** A read lags a write by 30 s at the floor, and no event can shorten it.
+- **Rejected — each location rebuilding on the event.** A delivery reaches one location; the others learn nothing.
+- **Rejected — Postgres as the shared copy.** A cross-region read per check, on the pool the orders share.
+- **Rejected — `BaseDO`.** Its scheduler owns the single alarm and schedules through `waitUntil`, which has no effect in a Durable Object; its migrations serve a queue. A plain `DurableObject` over `ctx.storage.sql` is the whole of it.
+- **The manager, not the class.** The rules live in `keeper.ts` over a `KeeperStore` port with an in-memory implementation for the node lane; the class holds the SQLite implementation, the RPC methods and the alarm handler, proved in the worker lane.
+- **Placement.** One accessor, `catalogKeeper(env)`, names the object `<shop>/v1` with the location hint `apac`; only the first `get()` of an object respects a hint, so no other call site may build a stub.
+
+### Nothing serialises across a read of the shop
+
+The input gate opens on every `fetch()`, so `apply`, `sync`, the alarm and a
+walk interleave. Five rules keep the copy right whatever the order:
+
+- **No write lowers a row's `updated_at`.** Every write is an upsert guarded by it, from a read-back or a walk alike.
+- **A read-back lands only on the row it was read for.** The alarm reads `pending`, reads the shop, then writes each answer only where the pending row is still present with the same `reported_at`; a delete or a newer report that arrived meanwhile wins.
+- **One walk at a time.** The manager holds one in-flight walk promise; the cron, a wanted walk and a `sync` on an empty keeper share it.
+- **The walk writes what moved.** Every page is read first; then one synchronous transaction, in statements of at most 100 bound parameters, upserts rows whose text or position differs and deletes rows it did not see whose `updated_at` is older than the walk's start.
+- **The version is a counter.** `meta.version` is bumped only when a row changed, with `published_at` beside it; an isolate swaps only for a higher number. A hash can say "different", never "older".
 
 ### An event is applied from a read-back, never from its payload
 
-`apply(event)` records the product id and the report's `updated_at` in
-`pending` and arms the alarm; the alarm reads each pending product back with
-`product(id:)` and upserts the row.
+`apply(event)` records the product id and the report's `updated_at`, parsed
+to epoch milliseconds, in `pending` and arms the alarm; the alarm reads every
+pending product back in one `getProducts(ids)` and upserts each row.
 
-- **Why read back.** The payload carries no metafields, and the facets are metafield references; Storefront answers what the channel publishes, so "not found" is the one honest signal that a product left the store.
-- **The guard.** A read whose `updatedAt` is older than the report is not written; the product stays pending and the alarm retries at 1, 2, 4 and 8 seconds, then gives up loudly (`store.catalog.keeper.readback` `outcome:stale`) and leaves it to the walk. A duplicate or out-of-order delivery upserts the same truth or an older one the guard refuses.
-- **Stock.** `inventory_levels/update` names an inventory item, not a product. Until the dev shop shows that `products/update` fires on a tracked count change, the event arms a walk instead of a read-back — coalesced on the same alarm, so a till selling ten units in a second costs one walk. Open Questions carries the check.
+- **Why read back.** The payload carries the price and the count but no metafields, and the facets are metafield references; Storefront answers what the channel publishes, so an answer of nothing is the channel's own word that a product left the store.
+- **Why Storefront, not Admin.** Admin is not behind the read cache and can say whether a product is published to a named channel, but it needs a second product codec, the channel's publication id and a points budget. The lag is unmeasured; `store.catalog.keeper.readback_lag_ms` measures it, and Admin is the recorded step if its p95 passes 10 s.
+- **The guard and the deadline.** A read older than the report, or answering nothing, leaves the row pending and the alarm re-arms 2 s out, for up to 60 s from the report. At the deadline a product the shop answers nothing for is removed from the copy; one still answering older is left as it is and counted `stale`. The walk is the net for both.
+- **A delete is applied at once.** `products/delete` removes the row and any pending row, with no read-back; the payload carries only an id.
+- **Stock.** `inventory_levels/update` names an inventory item, not a product. It arms a walk, at most one every 30 s, so a till selling all day costs 2 pages every 30 s at today's size. Open Questions carries the check that retires it.
+- **Idempotent.** Nothing dedupes catalog deliveries, so a redelivery upserts the same pending row and the same truth.
 
-### One publish per burst, numbered by content
+### One publish per burst, from the alarm
 
-The alarm reads back everything pending, walks if a walk was asked for, and
-then publishes once: the body (entries with cards, the taxonomy) is
-serialised, its hash is the version, and both are kept in the object's memory
-and in `meta`. An unchanged body publishes nothing.
+The alarm always points at the earliest due work: the earliest pending
+`next_at`, or a wanted walk's `walk_due`. The handler catches everything and
+re-arms; the platform's own retry is not a net.
 
-- **Why a hash.** A location compares one string; an event that changed nothing visible moves no location.
-- **Coalescing.** The alarm is set 1 second after the first event of a burst and never moved earlier, so 300 saves in a minute publish a handful of times.
+- **Order.** Read-backs first, then a publish if a row changed, then a wanted walk, then a publish again if the walk moved a row.
+- **The body.** Rows `ORDER BY position, id`, the taxonomy, the shape, the version and `published_at`, assembled once into the object's memory; `sync` answers from memory and never waits on storage.
+- **Nothing before the first walk.** No publish until `meta.walked_at` exists; an event on an unwalked keeper asks for a walk instead, so a burst never publishes a copy of one product.
+- **The shape.** A constant stamped in `meta` and the body; a keeper whose stored shape differs from its code's treats itself as unwalked, so a deploy that changes the shape rewrites the copy on its first read.
 
 ### The walk is the net, on the 5-minute tick
 
-`walk()` reads the whole catalogue with the existing `buildProjection` walk
-and replaces every row in one transaction, then publishes if the hash moved.
-`CRON_PASSES` gains a `catalog` pass that calls it every tick, so a lost
-report, a renamed facet or a product the guard gave up on shows within
-5 minutes.
+`walk()` reads the whole catalogue with `listProducts` at 250 a page and the
+taxonomy with `listFilters`, then writes what moved. `CRON_PASSES` gains a
+`catalog` pass that calls it every tick.
 
-- **Ceiling.** Storefront pagination stops at 25,000; a walk that reaches page 100 refuses (`outgrown`), the pass throws like every pass, and the last copy stays. `CATALOG_MAX_OFFSET` keeps bounding the cursor at 10,000 and no longer sizes the walk.
+- **The pass says nothing** where no keeper is bound, as every pass does on a brand that wired none of what it needs; it throws on `outgrown` and on a keeper error, and counts and logs a Shopify failure without throwing — `store.catalog.projection.age_ms` past 10 minutes is the alert for a copy that stopped moving.
+- **Ceiling.** The first page's count past `CATALOG_MAX_OFFSET` refuses (`outgrown`) in one round trip; the last copy keeps serving.
+- **Position.** The walk writes each product's position in the shop's own order, so the unsorted grid keeps the order it has today and an offset cursor stays stable; a product a read-back adds appends until the next walk.
 
 ### A listing view follows the keeper from memory
 
-The request path holds `{ projection, version, checkedAt }` per isolate.
+The request path holds `{ projection, version, checkedAt }` per isolate and
+derives entries from the whole products it receives.
 
-1. If the last check is under 5 seconds old, answer from memory.
-2. Otherwise call `sync(version)` and wait: the keeper answers the current
-   version, and the body only when it differs. Swap, stamp `checkedAt`,
-   answer.
-3. If the keeper cannot answer and memory holds a copy, answer from it, stamp
-   `checkedAt` so the next try is 5 seconds away, count
-   `store.catalog.sync` `outcome:failed`.
-4. If nothing is held at all — a fresh environment before its first tick, or
-   the keeper down on a cold isolate — walk the shop into memory with the
-   existing build, never publishing it.
+1. If the last check is under 3 seconds old, answer from memory.
+2. Otherwise call `sync(version)` with a 500 ms deadline and wait: the keeper
+   answers the version, and the body only when it differs. Swap, stamp
+   `checkedAt`, answer.
+3. If the keeper does not answer in time and memory holds a copy, answer from
+   it, stamp `checkedAt`, count `store.catalog.sync` `outcome:failed` or
+   `timeout`.
+4. If nothing is held, wait on `sync` without the short deadline: an empty
+   keeper walks itself once, under its one walk latch, and answers everyone.
+   A keeper that cannot answer with nothing held fails loudly through
+   `catalog_unavailable`; the isolate never walks the shop.
 
-- **Why wait rather than refresh behind.** The first request after a quiet gap is the one a collector on a quiet location sends; serving the old copy there is the day-old copy in miniature. The wait is one same-region hop.
-- **Rejected — a version marker in the Cache API purged on change.** Workers Cache purge does not reach Cache API entries, and a zone purge needs a token the worker does not hold.
-- **What goes.** The projection's cache tier, its 24-hour keep, the 5-minute age, the build cooldown, `hydrate`, the product memory and cache tiers, `getProducts`, its query, codecs, mappers and fixtures.
+- **Why wait rather than refresh behind.** The first request after a quiet gap is the one a collector on a quiet location sends; serving the old copy there is the day-old copy in miniature. Refreshing behind would gate on the held copy's age, which is not staleness. The hop is same-region from Asia and up to 250 ms from Europe.
+- **Why 3 seconds.** Delivery up to 5 s, a 1 s burst window, one read-back, the check and the hop: 9.5 s worst case against the 10 s bound; at 5 s the bound is missed.
+- **Whole products.** 2,031 B a product measured: 581 KB at 286, one RPC value, a few MB of heap. `store.catalog.keeper.publish_bytes` alerts at 1 MB, the point at which the copy is cut to what a card draws.
+- **What goes.** The projection's cache tier, its 24-hour keep, the 5-minute age, the build cooldown, `hydrate`, the product memory and cache tiers.
 
-### Cards ride in the copy
+### The webhook route hands the event over, then answers 200
 
-The walk and the read-back select the card's fields beside the entry's:
-`handle`, `images(first: 1)`, `variants(first: 10)` with id, title, price,
-compare-at, availability and count. `CatalogCard` in
-`packages/shopify/contracts` is `{ id, handle, title, images, variants }`,
-`Product` extends it, and `productsPageSchema` pages cards.
+`shopifyCatalogPurge` awaits `apply` beside the tag purge it keeps. A keeper
+that cannot take the event is counted (`store.catalog.keeper.apply`
+`outcome:failed`) and logged, and Shopify is answered 200: eight failed
+deliveries delete the subscription, and the walk repairs within 5 minutes
+what a retry would.
 
-- **Why the array.** Three admin surfaces read every variant, and `sellableVariant` picks the first for sale; a single flattened variant would truncate both.
-- **Frontend cost.** Type-only: `CatalogCard` beside `Product` in the store frontend's domain, `sellableVariant` and `pricedVariant` widened to it, `ProductPage` over cards, the listing page's tile and walk typed by it; the admin frontends' catalogue repositories the same. Excess keys are stripped on decode, so an old worker's whole products decode as cards during rollout.
+### The first deploy ships whole
+
+`scripts/deploy/ship.mjs` uploads a version for every existing worker and
+flips it; a version cannot carry a class lifecycle change. The script gains a
+third reason a version cannot be uploaded yet, `lifecycle`, and ships that
+worker whole with its own `wrangler deploy` in the flip, as it does a worker
+that does not exist. The legacy `migrations` array is used, never the
+declarative `exports` field, which refuses every later version upload.
 
 ## Database Schema
 
@@ -123,60 +165,59 @@ The keeper's own SQLite, created on first construction with
 
 | Table | Columns | Holds |
 | --- | --- | --- |
-| `products` | `id TEXT PRIMARY KEY`, `updated_at TEXT NOT NULL`, `entry TEXT NOT NULL` | One row per product the channel publishes; `entry` is the projection entry with its card, as JSON |
-| `pending` | `id TEXT PRIMARY KEY`, `reported_at TEXT NOT NULL`, `attempts INTEGER NOT NULL DEFAULT 0` | Products reported changed and not yet read back |
-| `meta` | `key TEXT PRIMARY KEY`, `value TEXT NOT NULL` | `taxonomy` (JSON), `version` (hash), `published_at`, `walked_at`, `walk_wanted` |
+| `products` | `id TEXT PRIMARY KEY`, `position INTEGER NOT NULL`, `updated_at INTEGER NOT NULL`, `product TEXT NOT NULL` | One row per product the channel publishes: its place in the shop's order, the shop's `updatedAt` in epoch milliseconds, the whole product as JSON |
+| `pending` | `id TEXT PRIMARY KEY`, `reported_at INTEGER NOT NULL`, `next_at INTEGER NOT NULL` | Products reported and not yet read back: when the shop reported, when to read next |
+| `meta` | `key TEXT PRIMARY KEY`, `value TEXT NOT NULL` | `taxonomy` (JSON), `version`, `published_at`, `walked_at`, `walk_due`, `shape` |
 
-Every row is derived from a Storefront read; the walk may rewrite all of them.
+Every row is a Storefront answer; the walk may rewrite any of them.
 
 ## Service Interfaces
 
-`CatalogKeeper`, reached through the stub by RPC:
+`CatalogKeeper`, reached through the one accessor's stub by RPC:
 
 | Method | Input | Output | Notes |
 | --- | --- | --- | --- |
-| `apply(event)` | `{ topic, productId?, updatedAt? }` | `{ pending: number }` | Upserts `pending` or sets `walk_wanted`; arms the alarm. A throw reaches the webhook route, which answers 500 so Shopify retries |
-| `walk()` | none | `{ outcome: "ok" \| "outgrown" \| failure, entries?, version? }` | Whole read, one transaction, publish if moved. Called by the cron pass |
-| `sync(known)` | `string \| null` | `{ version }` or `{ version, projection }` | The body only when `known` differs |
-| `alarm()` | — | — | Read back `pending`, walk if wanted, publish once |
+| `apply(event)` | `{ topic, productId, updatedAt? }` | `{ outcome: "pending" \| "removed" \| "walk" }` | Upserts `pending`, removes a deleted product, or asks for a walk; arms the alarm at the earliest due work |
+| `walk()` | none | `{ outcome: "ok" \| "outgrown" \| failure, products, version }` | Whole read, writes what moved, publishes if a row changed. Called by the cron pass, and by `sync` on an empty keeper |
+| `sync(known)` | `number \| null` | `{ version, shape }` or `{ version, shape, body }` | From memory; the body only when `known` is older |
+
+The alarm handler: read back, publish, walk if due, publish, re-arm.
+
+The worker takes the keeper through a port, `CatalogKeeperPort`
+(`sync`, `apply`, `walk`), with an in-memory implementation in
+`@grade10/store-service/testing` for the node lanes.
 
 Example, a price change on product `gid://shopify/Product/95066`:
 
-1. Webhook `products/update`, `updated_at: 2026-09-14T09:00:00Z` →
-   `apply` → `pending` row, alarm at +1 s.
-2. Alarm: `product(id:)` answers `updatedAt: 2026-09-14T09:00:01Z` ≥ report →
-   `products` row replaced, `pending` row deleted, body hashed →
-   `meta.version = "5f1c…"`, `published_at` stamped.
-3. A Frankfurt isolate whose `checkedAt` is 7 s old calls `sync("2ab9…")` →
-   `{ version: "5f1c…", projection }` → memory swapped → the grid answers
-   with the new price and the price order places the card by it.
-
-The webhook route hands `products/*` and `inventory_levels/*` deliveries to
-`apply` after the existing verification and keeps the tag purge for the
-collection and product response tier. The cron pass `catalog` calls `walk()`
-and throws on anything but `ok`.
+1. Webhook `products/update`, `updated_at: 2026-09-14T17:00:00+08:00` →
+   `apply` → `pending` row with `reported_at` 1789405200000, alarm at +1 s.
+2. Alarm: `getProducts` answers `updatedAt: 2026-09-14T09:00:01Z` ≥ the report
+   → the row is replaced, `pending` emptied, a row changed → `version` 41 → 42,
+   `published_at` stamped, the body rebuilt in memory.
+3. A Frankfurt isolate whose `checkedAt` is 4 s old calls `sync(41)` →
+   `{ version: 42, shape: 1, body }` → memory swapped → the grid answers with
+   the new price, and the price order places the card by it.
 
 ## Risks / Trade-offs
 
-- [The keeper is unreachable] → the listing answers from memory and counts `sync` failures; a cold isolate walks the shop into memory; nothing publishes from a request
-- [Shopify answers the read-back before it caught up] → the `updatedAt` guard and the retry ladder; the walk is the net
-- [A burst of reports] → one alarm per burst; the read-backs run in one alarm, 20 at a time; `pending` bounds nothing but is emptied every alarm
-- [A large body over RPC] → 110 KB today, 3.8 MB at 10,000 products; measured against the RPC limit on staging before the release, with `stub.fetch` streaming as the fallback
-- [Both cron and events publish] → one object, one alarm: `walk()` from the cron and the alarm's publish serialise on the object's own input gate
+- [The keeper is unreachable] → the listing answers from memory and counts; with nothing held it fails loudly; nothing publishes from a request
+- [The shop's reads lag its report] → the guard, the 2 s re-read to 60 s, `readback_lag_ms`; the walk is the net; Admin is the recorded next step
+- [A burst of reports] → one alarm per burst; one `getProducts` of up to 250 ids per read-back
+- [A body over 1 MB] → `publish_bytes` alerts; the cut to cards is the recorded step
+- [The alarm goes silent after its retries] → the handler catches and re-arms; the cron walk lives outside the object
 - [The report never arrives] → the 5-minute walk; `store.shopify_webhook.received` flat while the shop edits is the deleted-subscription signal
+- [A quiet location off-region] → one hop of up to 250 ms on the first request after a 3 s gap, accepted over serving an old copy
 
 ## Migration Plan
 
-1. Deploy both store workers with the `CATALOG_KEEPER` binding and the
-   `new_sqlite_classes` migration; the first 5-minute tick fills the keeper,
-   and until then a cold isolate walks into memory as today.
-2. Replay a `products/update` through `/dev/webhooks/shopify` on staging and
-   read the listing back from two locations; record seconds-to-listing.
-3. Rollback: redeploy the previous build; the object stays, unused, and can
-   be deleted with its migration later.
+1. Land the contract: `updatedAt` on the product read and the walk, `updated_at` on the product webhook.
+2. Land the keeper with its tests, then the wiring: webhook, cron pass, request path, bindings and the deploy path.
+3. Deploy to staging through the ordinary dispatch; the store worker ships whole once, applying the `v1` migration. The first listing read fills the keeper.
+4. Measure on staging: cold and warm answer times from two locations, and — with a product edited in the staging shop's admin, which no script or secret here can do — seconds from the shop's read to the listing.
+5. Rollback: redeploy the previous build; the object and its rows stay, unused. A rollback cannot remove the class; its deletion is a later migration.
 
 ## Open Questions
 
-- Whether `products/update` fires on a tracked count change on the dev shop.
-  Yes: `inventory_levels/update` stops arming a walk. No: it stays. Either
-  answer keeps the design and the tasks.
+- Whether a manual stock adjustment fires `products/update` on the dev shop. Yes retires the walk on `inventory_levels/update`; no keeps it at its 30 s floor.
+- Whether a bulk publish or unpublish fires `products/update`. No leaves those changes to the walk, and the page says so.
+- How long the shop's reads lag its report on staging, at p95. Past 10 s the read-back moves to the Admin API, with the channel's publication id resolved once.

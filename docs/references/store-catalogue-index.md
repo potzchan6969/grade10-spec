@@ -5,10 +5,10 @@ listing: the Shopify reads it ran on, their limits, the cheaper steps weighed
 before an index, the catalogue projection that shipped and what it measured,
 and the index that follows when a catalogue outgrows one worker. The
 decisions it leads to are recorded on
-[Commerce](../prds/products/grade10-site/commerce/commerce.md) and
-[Product Listing](../prds/products/grade10-site/store/product-listing.md);
-no change carries them yet. Read this as engineering's record, not as a
-requirement.
+[Product Listing](../prds/products/grade10-site/store/product-listing.md) and
+[Commerce](../prds/products/grade10-site/commerce/commerce.md), and the
+change `refresh-listing-within-seconds` carries them. Read this as
+engineering's record, not as a requirement.
 
 ## Shopify Reads
 
@@ -114,67 +114,87 @@ below removes it. ❓ The same table after the keeper's release — Engineering.
 
 ## Catalogue Keeper
 
-One Durable Object per shop, `CatalogKeeper` in
-`services/catalog/keeper.ts`, bound as `CATALOG_KEEPER` in both store
-workers and placed with the store's region as its location hint. It is the
-one writer of the copy; every location follows it.
+One Durable Object per shop, `CatalogKeeper` under
+`packages/grade10-store/backend/src/durables/CatalogKeeper/`, bound as
+`CATALOG_KEEPER` in both store workers, named `<shop>/v1` and placed with the
+`apac` location hint through one accessor. It is the one writer of the copy;
+every location follows it. The rules live in a manager over a storage port,
+tested in the node lane; the class holds the SQLite store, the RPC surface
+and the alarm, tested in the app's worker lane. It is the one Durable Object
+a deployed worker binds; `docs/conventions/backend.md` records why.
 
 | Rule | Value |
 | --- | --- |
-| Publish after a report | ≤ 10 s: delivery, one read-back, a 1 s burst window |
-| A location's check | Every 5 s while the listing is in use; the first request after a longer gap waits on one hop |
+| Read-back | On the report, then every 2 s while the shop answers older or nothing, for 60 s |
+| Burst window | 1 s from the first report; one publish per burst |
+| A location's check | Every 3 s while the listing is in use; the first request after a longer gap waits on one hop, 500 ms at most when a copy is held |
 | The re-read | Every 5 minutes, on the store's cron tick |
-| Read-back retries | 1, 2, 4, 8 s, then the walk |
-| Walk ceiling | 100 pages of 250 — Shopify's own 25,000 |
-| Cursor ceiling | 10,000, unchanged |
+| A walk on a stock report | At most one every 30 s |
+| Walk ceiling | `CATALOG_MAX_OFFSET` products, refused from the first page's count |
+| Cut to cards | When a published body passes 1 MB |
+| Location | Created with the `apac` hint on its first `get()`; it never moves |
 
-- **What it holds** — its own SQLite: `products` (one row per product the channel publishes: id, the shop's `updatedAt`, the entry with its card), `pending` (products reported and not yet read back, with attempts), `meta` (the taxonomy, the version, when it published, when it walked, whether a walk is wanted). Every row is a Storefront answer; the walk may rewrite all of them
-- **Apply** — the webhook route, after verification, hands every `products/*` delivery to `apply`, which records the product and the report's `updated_at` in `pending` and arms the alarm 1 s out; `inventory_levels/update` names an inventory item and no product, so it sets `walk_wanted` instead ❓ whether `products/update` fires on a tracked count change, checked on the dev shop; yes retires the walk on stock events — Engineering
-- **Read back** — the alarm reads each pending product with `product(id:)`: not found deletes the row, an answer older than the report leaves it pending for the next retry, anything else replaces the row. The payload is never trusted: it carries no metafields, and the facets are metafield references
-- **Publish** — after the read-backs and any wanted walk, once: the body is serialised, its hash is the version, both stay in the object's memory and `meta`; an unchanged body publishes nothing
-- **Walk** — `walk()` reads the whole catalogue with the existing walk and replaces every row in one transaction; the `catalog` cron pass calls it every tick and throws on anything but `ok`, like every pass, so the cron fails loudly while the last copy keeps serving
-- **Sync** — `sync(known)` answers the version, and the body only when `known` differs
+- **What it holds** — its own SQLite: `products` (one row per product the channel publishes: its position in the shop's order, the shop's `updatedAt` in epoch milliseconds, the whole product as JSON), `pending` (products reported and not yet read back: when reported, when to read next), `meta` (the taxonomy, the version counter, when it published, when it walked, when a walk is due, the shape). Every row is a Storefront answer; the walk may rewrite any of them. A whole projection as one value is impossible past 2 MB, which is Cloudflare's row limit; per-product rows are also what lets a write touch only what moved
+- **Apply** — the webhook route, after verification, awaits `apply` beside the tag purge for every `products/*` and `inventory_levels/*` delivery. `products/create` and `products/update` upsert a `pending` row with the report's `updated_at` parsed to epoch milliseconds — the shop stamps it in its own offset, Storefront answers UTC, and only instants compare. `products/delete` removes the row at once, with no read-back. `inventory_levels/update` names an inventory item and no product, so it asks for a walk, due at most 30 s after the last. A keeper that cannot take the event is counted and logged and Shopify is still answered 200: eight failed deliveries delete the subscription, and the walk repairs within 5 minutes what a retry would
+- **Read back** — the alarm reads every pending product in one `getProducts(ids)`, up to 250. An answer with `updatedAt` at or past the report replaces the row and clears the pending row; one older, or nothing, leaves the row pending and the alarm re-arms 2 s out. At 60 s from the report a product still answering nothing is removed from the copy; one still answering older is left and counted `stale`. An answer lands only where its pending row is still present with the same `reported_at`, so a delete or a newer report that arrived during the read wins. The payload is never trusted: it carries the price and the count but no metafields, and the facets are metafield references
+- **Publish** — after the read-backs, and again after a walk, once each and only when a row changed: the body — rows in position order, the taxonomy, the shape, the version and `published_at` — is assembled into the object's memory and `meta.version` is bumped. A counter, not a hash: an isolate must be able to tell an older copy from a different one. Nothing publishes before the first walk
+- **Walk** — `walk()` reads every page of `listProducts` and the taxonomy first, then one synchronous transaction, in statements of at most 100 bound parameters, upserts rows whose text or position moved — never lowering a row's `updated_at` — and deletes rows it did not see whose `updated_at` is older than the walk's start. One walk runs at a time: the cron, a wanted walk and a `sync` on an empty keeper share the in-flight promise. The `catalog` cron pass calls it every tick: silent where no keeper is bound, throwing on `outgrown` and on a keeper error, counting a Shopify failure without throwing
+- **The alarm** — one per object, always at the earliest due work: the earliest pending `next_at` or the walk's due time. The handler catches everything and re-arms; a handler that throws is retried six times by the platform and then goes silent, so the cron outside the object is the net. `getAlarm()` answers nothing inside a running handler, so the next time is computed from the tables, never read back
+- **Sync** — `sync(known)` answers from memory: the version and the shape, and the body only when `known` is older. An empty keeper walks itself first, under the one walk latch, so a fresh environment fills on its first listing read rather than on its first tick
+- **The shape** — a constant stamped in `meta` and the body; a keeper whose stored shape differs from its code's treats itself as unwalked. The rows survive a deploy and a rollback, so the guard is needed in both directions
+- **Nothing serialises across a read of the shop** — the object's input gate opens on every `fetch()` it awaits, so `apply`, `sync`, the alarm and a walk interleave; the five rules above — never lower `updated_at`, land a read-back on its own pending row, one walk at a time, write what moved, a counter for the version — are what keep the copy right in any order
 
 ![A change reaches the listing](../prds/assets/diagrams/store-catalogue-change.svg)
 
-The flow is walked on [Commerce](../prds/products/grade10-site/commerce/commerce.md#catalog).
+The flow is walked on [Product Listing](../prds/products/grade10-site/store/product-listing.md#following-the-shop).
 
 ## Reads
 
-- **Memory** — each isolate holds `{ projection, version, checkedAt }`; a request whose last check is under 5 s old answers from it, and the memory pass is unchanged
-- **Sync** — past 5 s the request calls `sync(version)` and waits: one same-region hop, the body only when it moved. A quiet location's first collector after a gap pays that hop rather than the old copy
-- **Keeper unreachable** — memory answers, `checkedAt` is stamped so the next try is 5 s away, `store.catalog.sync` counts `outcome:failed`
-- **Nothing held** — a fresh environment before its first tick, or a cold isolate with the keeper down: the isolate walks the shop into its own memory with the existing build and never publishes
-- **The product page** — `catalog.product` reads Shopify by handle behind the 60 s cache tier, as today
-- **Cursors** — `off-N`, one spelling, bounded at 10,000; a page is answered against the copy the isolate holds, so a copy that moved between two pages can repeat or skip one product on "load more", as today's per-location rebuilds could
+- **Memory** — each isolate holds `{ projection, version, checkedAt }` and derives entries from the whole products it receives; a request whose last check is under 3 s old answers from it, and the memory pass is unchanged
+- **Sync** — past 3 s the request calls `sync(version)` and waits, 500 ms at most while a copy is held: one hop, same-region from Asia and up to 250 ms from Europe, the body only when it moved. A quiet location's first collector after a gap pays that hop rather than the old copy; refreshing behind the response would gate on the held copy's age, which is not staleness
+- **Keeper slow or unreachable** — memory answers, `checkedAt` is stamped so the next try is 3 s away, `store.catalog.sync` counts `outcome:timeout` or `failed`
+- **Nothing held** — the request waits on `sync` without the short deadline; an empty keeper walks once for everyone. A keeper that cannot answer with nothing held fails loudly through `catalog_unavailable`: the isolate never walks the shop, so a keeper outage can never become every cold isolate walking Shopify at once
+- **Whole products** — 2,031 B a product measured: 581 KB at 286 products, 4.1 MB at 2,000, 20 MB at 10,000. One RPC value up to 32 MiB, a few MB of isolate heap at today's size; `store.catalog.keeper.publish_bytes` alerts at 1 MB, about 500 products, the point at which the copy is cut to what a card draws
+- **The product page and a collection** — `catalog.product` and `catalog.collection` read Shopify behind the 60 s cache tier, as today
+- **Cursors** — `off-N`, one spelling, bounded at 10,000, over rows in the shop's own order; a copy that moved between two pages can repeat or skip one product on "load more", as today's per-location rebuilds could
 
 ## Failure
 
 | Case | The listing | The record |
 | --- | --- | --- |
-| Shopify down | Answers from the copy, cards included; the copy stops moving | The cron pass fails every tick; read-backs retry then give up loudly |
-| Keeper down | Memory answers; a cold isolate walks into memory | `store.catalog.sync` `outcome:failed` |
+| Shopify down | Answers from the copy, cards included; the copy stops moving | `walk outcome:failed` every tick; `projection.age_ms` past 10 minutes alerts |
+| Keeper down | Memory answers; a cold isolate fails loudly | `store.catalog.sync` `outcome:failed`; `store.catalog.unavailable` |
 | A report lost | Shows within 5 minutes | `store.shopify_webhook.received` flat while the shop edits |
 | A report out of order or twice | The guard refuses the older read; the same truth is written once | — |
 | A burst of reports | One publish per burst | `store.catalog.keeper.publish` with the pending count |
-| The shop's read lags its report | Pending until the read catches up, 15 s at most | `store.catalog.keeper.readback` `outcome:stale` |
-| Past 25,000 products | The last copy keeps serving | The cron pass throws `outgrown` every tick |
+| The shop's read lags its report | Pending until the read catches up, 60 s at most, then the walk | `readback outcome:older`, `readback_lag_ms` |
+| The shop answers nothing for a product it reported | Removed after 60 s of nothing; the walk restores it if the shop lists it again | `readback outcome:absent` |
+| Past the walk ceiling | The last copy keeps serving | The cron pass throws `outgrown` every tick |
+| A body past 1 MB | Keeps serving | `publish_bytes` alerts; the cut to cards is the step |
 
 ## Numbers
 
-- **Seconds after save** — Shopify's delivery (1–5 s) + the burst window (1 s) + one read-back (0.3 s) + a location's check (≤ 5 s): about 3–10 s at any location
-- **Shopify reads** — one `product(id:)` per reported product; 288 walks a day of 2 pages and the taxonomy at 286 products (864 requests), 41 pages at 10,000 (11,808); the Storefront API states no request limit for a private token
-- **The keeper's load** — one `sync` per active isolate per 5 s, microseconds each; one body per isolate per publish
-- **Bytes** — the table above; 3.8 MB of cards at 10,000 products is the figure to measure against the RPC limit before that size
+- **Seconds after save** — Shopify's delivery (1–5 s) + the burst window (1 s) + one read-back (0.3 s) + a location's check (≤ 3 s) + the hop: under 10 s at any location once the shop's read answers the change; how long that read lags the report is unmeasured — a 2023 statement by Shopify staff says 5–30 s, nothing documents it, and `readback_lag_ms` records it
+- **Shopify reads** — one `getProducts` per burst; 288 walks a day of 2 pages and the taxonomy at 286 products (864 requests), 41 pages at 10,000; the Storefront API states no request limit for a private token
+- **The keeper's load** — one `sync` per active isolate per 3 s, answered from memory; one body per isolate per publish; row writes only for what moved
+- **Cost** — requests and duration a few dollars a month for both brands at today's size; each `setAlarm` and each delete is a billed row write, and a whole-table rewrite every 5 minutes at 10,000 products would have cost ~$120 a brand a month, which writing only what moved removes
 
 ## Metrics
 
-- `store.catalog.keeper.apply` by `topic` — reports the keeper accepted
-- `store.catalog.keeper.readback` by `outcome` (`ok`, `gone`, `stale`, `failed`) — every read-back; `stale` rising is Shopify's own lag
-- `store.catalog.keeper.publish` with the pending count drained — one per burst; `store.catalog.keeper.publish_age_ms`, first report to publish
-- `store.catalog.keeper.walk` by `outcome`, `store.catalog.keeper.walk_ms` — the net
-- `store.catalog.sync` by `outcome` (`same`, `moved`, `failed`) — every location check; `store.catalog.projection.age_ms`, time since the copy an isolate answered from was published. **Alert past 10 minutes**: a copy that stopped moving is the one failure a collector cannot see
+- `store.catalog.keeper.apply` by `outcome` (`pending`, `removed`, `walk`, `failed`) — every delivery handed over; `failed` is the 200-and-count case
+- `store.catalog.keeper.readback` by `outcome` (`fresh`, `older`, `absent`, `failed`) and `store.catalog.keeper.readback_lag_ms`, report to fresh answer — the shop's own lag, measured
+- `store.catalog.keeper.publish` by `outcome` (`moved`, `same`), `store.catalog.keeper.publish_bytes` — **alert at 1 MB** — and `store.catalog.keeper.publish_age_ms`, oldest report in the burst to publish
+- `store.catalog.keeper.pending` and `store.catalog.keeper.pending_oldest_ms` on every alarm — a product stuck on the guard shows before the age alert
+- `store.catalog.keeper.walk` by `outcome` (`ok`, `outgrown`, `failed`), `store.catalog.keeper.walk_ms` — the net
+- `store.catalog.sync` by `outcome` (`same`, `moved`, `filled`, `timeout`, `failed`) and `store.catalog.sync_ms` — every location check; `store.catalog.projection.age_ms`, time since the copy an isolate answered from was published. **Alert past 10 minutes**: a copy that stopped moving is the one failure a collector cannot see
 - `store.shopify_webhook.received` by `topic:products/*` — flat while the shop edits is the deleted-subscription signal
+
+## Deploy
+
+- **The first deploy ships whole** — a version upload cannot carry a Durable Object class lifecycle change; `scripts/deploy/ship.mjs` reads that refusal as the `lifecycle` reason and ships the worker whole with `wrangler deploy` in the flip, as it ships a worker that does not exist. The legacy `migrations` array is used: the declarative `exports` field refuses every later version upload
+- **Declared six times** — `durable_objects.bindings` in the top-level, `staging` and `production` blocks of both brands' store configs; `migrations` once at the top level, which environments inherit; the class exported by name from each app; `pnpm run cf-typegen` regenerates both apps' `Env`
+- **zzz** — declares the keeper and cannot ship while its hyperdrive ids read `TODO`
+- **Rollback** — the previous build; the object and its rows stay unused; the class cannot be removed by a rollback
 
 ## Unchanged
 
@@ -182,6 +202,7 @@ The flow is walked on [Commerce](../prds/products/grade10-site/commerce/commerce
 - **Shopify owns the catalogue** — the shop edits in Shopify; the copy is what the shop last answered
 - **The query's bounds** — `services/catalog/query.ts` dedupes, caps and folds what a query asks and reads one offset spelling
 - **The edge cache rule** — tRPC stays on its own lane; collections and the product page keep the 60 s tier and the tag purge
+- **The contracts** — the listing returns whole products, as today
 
 ## Queryable Index
 
@@ -197,8 +218,10 @@ of mechanism.
 
 | Item | Question | Owner |
 | --- | --- | --- |
-| Stock reports | Whether `products/update` fires on a tracked count change; yes retires the walk on `inventory_levels/update` | Engineering, on the dev shop |
+| Stock reports | Whether a manual stock adjustment fires `products/update`; an order does. Yes retires the walk on `inventory_levels/update` | Engineering, on the dev shop |
+| Publication in bulk | Whether a bulk publish or unpublish fires `products/update`; no topic this app can subscribe to reports a channel's publication change, so no leaves it to the walk | Engineering, on the dev shop |
+| The shop's read lag | How long Storefront answers the old value after a save, at p95 on staging; past 10 s the read-back moves to the Admin API, with the channel's publication id resolved once | Engineering |
+| A collection in the copy | Whether the walk carries each product's collection handles, so a listing narrowed to a collection follows the shop too | Product, Engineering |
 | Free text | The title only, as today, or title, description, tags and vendor as Shopify's own search read; ranked, for suggestions, or not | Product |
 | Collection with facets | Nothing in the copy prevents it; offer both together, or keep the rule | Product |
-| An all-products collection | Whether the shop keeps one, so facets, latest and counts could answer natively | Product, shopkeeper |
-| The numbers | Seconds-to-listing and the answer times from real traffic once the release carries them | Engineering |
+| The numbers | Seconds-to-listing and the answer times from staging once the release carries them | Engineering |

@@ -30,11 +30,8 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 ### Display and pricing are different reads
 
 - **Display** — the listing, its filter panel, the collections and a product's page answer over tRPC (`catalog.*`); a listing opens no database connection
-- 🚧 **The store's own copy** — the listing, its count, its sidebar and its cards answer from a copy of the catalogue the store keeps: one keeper per shop holds it, every location reads it, and no listing view reads the shop — [the design note](/references/store-catalogue-index)
-- 🚧 **Seconds after save** — the shop reports each product and stock change; the keeper reads that product back and publishes a new copy within seconds, and every location takes it on its next listing view, so a change shows everywhere a few seconds after the shop saves
-- 🚧 **The re-read as the net** — every 5 minutes the keeper reads the whole catalogue again, so a change the shop never reported, or a facet renamed, shows within 5 minutes
-- 🚧 **What still lags** — a product's own page, by up to a minute; the cart's review reads live and is the authority
-- 🚧 **25,000 products** — the keeper holds the catalogue whole up to Shopify's own reading limit; past it the copy stops moving and the store says so loudly, rather than answering from half a catalogue
+- **The store's own copy** — how the listing follows the shop is [Product Listing · Following the Shop](/p/grade10-site/store/product-listing#following-the-shop)'s; the mechanism is [the design note](/references/store-catalogue-index)'s
+- **What reads the shop live** — a product's own page and a listing narrowed to a collection, behind a minute's cache; the cart's review, with no cache at all
 - Checkout pricing always fetches live from the Storefront API — a cache can never set a charge amount
 - Availability is checked when the cart is priced: a variant that does not
   sell rejects, and a cart asking past a count the catalog exposes
@@ -45,23 +42,10 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
   accepted is compared against the quantity asked for, and a cart Shopify
   shortened is refused rather than sold
 
-:::flow{title="A change reaches the listing" diagram="assets/diagrams/store-catalogue-change.svg"}
-## *Shop* — **Reports a change**
-The shopkeeper saves a product, or stock moves, and Shopify sends the store that product's event, signed.
-## *Store* — **Hands it to the keeper**
-The store checks the signature and the shop, hands the event to that shop's keeper, and answers Shopify at once.
-## *Keeper* — **Reads the product back**
-The keeper reads the product from the shop, so the copy carries what the shop shows and never only what the event said; a read older than the event is tried again.
-## *Keeper* — **Publishes a new copy**
-Changes that arrive together are folded into one copy, numbered once.
-## *Store* — **Every location follows**
-A listing view asks the keeper for the copy's number when its last check is a few seconds old, takes the new copy, and answers from it.
-:::
-
 ### A copy the shop can always rebuild
 
-- 🚧 **Shopify down** — checkout down; the listing keeps answering from the store's copy, cards included, and stops moving until the shop answers again
-- 🚧 **Derived, never authored** — every copy is what a Storefront read answered, and the next read-back or re-read overwrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
+- **Shopify down** — checkout down; the listing keeps answering from the store's copy — [Product Listing · Following the Shop](/p/grade10-site/store/product-listing#following-the-shop)
+- **Derived, never authored** — every copy is what a Storefront read answered, and the next read overwrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
 - The catalog client's error outcomes carry the query name, so the tail worker's metrics show exactly which reads are failing
 
 ### Money arrives as decimal strings

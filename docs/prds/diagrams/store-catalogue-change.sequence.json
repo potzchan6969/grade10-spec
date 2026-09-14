@@ -6,7 +6,9 @@
     "animation": "none",
     "visual_preset": "editorial",
     "column_fit": "spread",
-    "legend": { "mode": "hidden" },
+    "legend": {
+      "mode": "hidden"
+    },
     "viewBox": [720, 700]
   },
   "participants": [
@@ -29,9 +31,9 @@
       "sublabel": "at every location"
     },
     {
-      "id": "keeper",
+      "id": "copy",
       "type": "backend",
-      "label": "Keeper",
+      "label": "The copy",
       "sublabel": "one per shop"
     },
     {
@@ -42,7 +44,11 @@
     }
   ],
   "segments": [
-    { "from": 170, "to": 400, "label": "Seconds after save" },
+    {
+      "from": 170,
+      "to": 400,
+      "label": "Seconds after save"
+    },
     {
       "from": 430,
       "to": 590,
@@ -67,11 +73,11 @@
       "variant": "emphasis"
     },
     {
-      "id": "hands-it-to-the-keeper",
+      "id": "takes-the-report",
       "from": "store",
-      "to": "keeper",
+      "to": "copy",
       "y": 280,
-      "label": "the event",
+      "label": "the report",
       "variant": "emphasis"
     },
     {
@@ -84,18 +90,18 @@
     },
     {
       "id": "reads-the-product-back",
-      "from": "keeper",
+      "from": "copy",
       "to": "shopify",
       "y": 345,
-      "label": "reads the product back",
+      "label": "reads the product back, again every 2 s while it answers the old value",
       "variant": "dashed"
     },
     {
       "id": "publishes-a-new-copy",
       "from": "shopify",
-      "to": "keeper",
+      "to": "copy",
       "y": 380,
-      "label": "the product as the shop shows it · a new copy, numbered",
+      "label": "the product as the shop shows it \u00b7 a new copy, numbered",
       "variant": "return"
     },
     {
@@ -109,14 +115,14 @@
     {
       "id": "every-location-follows",
       "from": "store",
-      "to": "keeper",
+      "to": "copy",
       "y": 495,
-      "label": "copy number, and the copy if it moved",
+      "label": "copy number, and the copy if it moved \u00b7 every 3 s",
       "variant": "dashed"
     },
     {
       "id": "copy",
-      "from": "keeper",
+      "from": "copy",
       "to": "store",
       "y": 530,
       "label": "the current copy",
@@ -132,10 +138,35 @@
     }
   ],
   "activations": [
-    { "participant": "store", "from": 235, "to": 315, "type": "backend" },
-    { "participant": "keeper", "from": 275, "to": 390, "type": "backend" },
-    { "participant": "shopify", "from": 195, "to": 385, "type": "external" },
-    { "participant": "store", "from": 455, "to": 570, "type": "backend" },
-    { "participant": "keeper", "from": 490, "to": 535, "type": "backend" }
+    {
+      "participant": "store",
+      "from": 235,
+      "to": 315,
+      "type": "backend"
+    },
+    {
+      "participant": "copy",
+      "from": 275,
+      "to": 390,
+      "type": "backend"
+    },
+    {
+      "participant": "shopify",
+      "from": 195,
+      "to": 385,
+      "type": "external"
+    },
+    {
+      "participant": "store",
+      "from": 455,
+      "to": 570,
+      "type": "backend"
+    },
+    {
+      "participant": "copy",
+      "from": 490,
+      "to": 535,
+      "type": "backend"
+    }
   ]
 }

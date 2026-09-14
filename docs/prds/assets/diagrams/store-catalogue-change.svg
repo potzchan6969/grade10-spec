@@ -81,11 +81,11 @@ svg[data-diagram="store-catalogue-change"] .c-lane{fill: var(--lane-fill); strok
           <text x="305.625" y="230" class="t-backend" font-size="9" text-anchor="middle">the product&#39;s event, signed</text>
         </g>
         </g>
-        <g data-step="keeper" data-edge-from="store" data-edge-to="keeper" data-edge-label="the event" data-edge-key="2" data-edge-id="hands-it-to-the-keeper">
-          <path data-composition-edge-from="store" data-composition-edge-to="keeper" data-composition-edge-id="hands-it-to-the-keeper" data-composition-points="378,280;494.75,280" d="M 378 280 L 494.75 280" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-catalogue-change-arrowhead-emphasis)"/>
+        <g data-step="copy" data-edge-from="store" data-edge-to="copy" data-edge-label="the report" data-edge-key="2" data-edge-id="takes-the-report">
+          <path data-composition-edge-from="store" data-composition-edge-to="copy" data-composition-edge-id="takes-the-report" data-composition-points="378,280;494.75,280" d="M 378 280 L 494.75 280" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-catalogue-change-arrowhead-emphasis)"/>
         <g data-detail="context">
-          <rect x="406.975" y="260" width="58.800000000000004" height="16" rx="3" class="c-mask"/>
-          <text x="436.375" y="270" class="t-backend" font-size="9" text-anchor="middle">the event</text>
+          <rect x="404.375" y="260" width="64" height="16" rx="3" class="c-mask"/>
+          <text x="436.375" y="270" class="t-backend" font-size="9" text-anchor="middle">the report</text>
         </g>
         </g>
         <g data-step="shopify" data-edge-from="store" data-edge-to="shopify" data-edge-label="accepted" data-edge-key="3" data-edge-id="accepted">
@@ -95,15 +95,15 @@ svg[data-diagram="store-catalogue-change"] .c-lane{fill: var(--lane-fill); strok
           <text x="305.625" y="300" class="t-muted" font-size="9" text-anchor="middle">accepted</text>
         </g>
         </g>
-        <g data-step="shopify" data-edge-from="keeper" data-edge-to="shopify" data-edge-label="reads the product back" data-edge-key="4" data-edge-id="reads-the-product-back">
-          <path data-composition-edge-from="keeper" data-composition-edge-to="shopify" data-composition-edge-id="reads-the-product-back" data-composition-points="494.75,345;247.25,345" d="M 494.75 345 L 247.25 345" class="a-dashed" stroke-width="1.4" marker-end="url(#store-catalogue-change-arrowhead-dashed)"/>
+        <g data-step="shopify" data-edge-from="copy" data-edge-to="shopify" data-edge-label="reads the product back, again every 2 s while it answers the old value" data-edge-key="4" data-edge-id="reads-the-product-back">
+          <path data-composition-edge-from="copy" data-composition-edge-to="shopify" data-composition-edge-id="reads-the-product-back" data-composition-points="494.75,345;247.25,345" d="M 494.75 345 L 247.25 345" class="a-dashed" stroke-width="1.4" marker-end="url(#store-catalogue-change-arrowhead-dashed)"/>
         <g data-detail="context">
-          <rect x="307.8" y="325" width="126.4" height="16" rx="3" class="c-mask"/>
-          <text x="371" y="335" class="t-messagebus" font-size="9" text-anchor="middle">reads the product back</text>
+          <rect x="183" y="325" width="376" height="16" rx="3" class="c-mask"/>
+          <text x="371" y="335" class="t-messagebus" font-size="9" text-anchor="middle">reads the product back, again every 2 s while it answers the old value</text>
         </g>
         </g>
-        <g data-step="keeper" data-edge-from="shopify" data-edge-to="keeper" data-edge-label="the product as the shop shows it · a new copy, numbered" data-edge-key="5" data-edge-id="publishes-a-new-copy">
-          <path data-composition-edge-from="shopify" data-composition-edge-to="keeper" data-composition-edge-id="publishes-a-new-copy" data-composition-points="247.25,380;494.75,380" d="M 247.25 380 L 494.75 380" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#store-catalogue-change-arrowhead)"/>
+        <g data-step="copy" data-edge-from="shopify" data-edge-to="copy" data-edge-label="the product as the shop shows it · a new copy, numbered" data-edge-key="5" data-edge-id="publishes-a-new-copy">
+          <path data-composition-edge-from="shopify" data-composition-edge-to="copy" data-composition-edge-id="publishes-a-new-copy" data-composition-points="247.25,380;494.75,380" d="M 247.25 380 L 494.75 380" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#store-catalogue-change-arrowhead)"/>
         <g data-detail="context">
           <rect x="222" y="360" width="298" height="16" rx="3" class="c-mask"/>
           <text x="371" y="370" class="t-muted" font-size="9" text-anchor="middle">the product as the shop shows it · a new copy, numbered</text>
@@ -116,15 +116,15 @@ svg[data-diagram="store-catalogue-change"] .c-lane{fill: var(--lane-fill); strok
           <text x="501.75" y="450" class="t-backend" font-size="9" text-anchor="middle">opens the listing</text>
         </g>
         </g>
-        <g data-step="keeper" data-edge-from="store" data-edge-to="keeper" data-edge-label="copy number, and the copy if it moved" data-edge-key="7" data-edge-id="every-location-follows">
-          <path data-composition-edge-from="store" data-composition-edge-to="keeper" data-composition-edge-id="every-location-follows" data-composition-points="378,495;494.75,495" d="M 378 495 L 494.75 495" class="a-dashed" stroke-width="1.4" marker-end="url(#store-catalogue-change-arrowhead-dashed)"/>
+        <g data-step="copy" data-edge-from="store" data-edge-to="copy" data-edge-label="copy number, and the copy if it moved · every 3 s" data-edge-key="7" data-edge-id="every-location-follows">
+          <path data-composition-edge-from="store" data-composition-edge-to="copy" data-composition-edge-id="every-location-follows" data-composition-points="378,495;494.75,495" d="M 378 495 L 494.75 495" class="a-dashed" stroke-width="1.4" marker-end="url(#store-catalogue-change-arrowhead-dashed)"/>
         <g data-detail="context">
-          <rect x="334.175" y="475" width="204.4" height="16" rx="3" class="c-mask"/>
-          <text x="436.375" y="485" class="t-messagebus" font-size="9" text-anchor="middle">copy number, and the copy if it moved</text>
+          <rect x="302.975" y="475" width="266.8" height="16" rx="3" class="c-mask"/>
+          <text x="436.375" y="485" class="t-messagebus" font-size="9" text-anchor="middle">copy number, and the copy if it moved · every 3 s</text>
         </g>
         </g>
-        <g data-step="store" data-edge-from="keeper" data-edge-to="store" data-edge-label="the current copy" data-edge-key="8" data-edge-id="copy">
-          <path data-composition-edge-from="keeper" data-composition-edge-to="store" data-composition-edge-id="copy" data-composition-points="494.75,530;378,530" d="M 494.75 530 L 378 530" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#store-catalogue-change-arrowhead)"/>
+        <g data-step="store" data-edge-from="copy" data-edge-to="store" data-edge-label="the current copy" data-edge-key="8" data-edge-id="copy">
+          <path data-composition-edge-from="copy" data-composition-edge-to="store" data-composition-edge-id="copy" data-composition-points="494.75,530;378,530" d="M 494.75 530 L 378 530" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#store-catalogue-change-arrowhead)"/>
         <g data-detail="context">
           <rect x="388.775" y="510" width="95.2" height="16" rx="3" class="c-mask"/>
           <text x="436.375" y="520" class="t-muted" font-size="9" text-anchor="middle">the current copy</text>
@@ -179,14 +179,14 @@ svg[data-diagram="store-catalogue-change"] .c-lane{fill: var(--lane-fill); strok
           <text data-node-label="" data-detail-anchor="" x="371" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Store</text>
           <text data-detail="context" x="371" y="111" class="t-muted" font-size="7" text-anchor="middle">at every location</text>
         </g>
-        <g data-step="keeper" id="store-catalogue-change-node-keeper" data-node-id="keeper" data-node-label="Keeper" aria-label="Focus Keeper, one per shop, Sequence participant" data-node-kind="backend" data-node-sublabel="one per shop" data-node-context="Sequence participant">
-          <title>Keeper · one per shop · Sequence participant</title>
+        <g data-step="copy" id="store-catalogue-change-node-copy" data-node-id="copy" data-node-label="The copy" aria-label="Focus The copy, one per shop, Sequence participant" data-node-kind="backend" data-node-sublabel="one per shop" data-node-context="Sequence participant">
+          <title>The copy · one per shop · Sequence participant</title>
           <rect x="454.25" y="72" width="95" height="54" rx="6" class="c-mask"/>
           <rect x="454.25" y="72" width="95" height="54" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(460.25 78) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="501.75" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Keeper</text>
+          <text data-node-label="" data-detail-anchor="" x="501.75" y="94" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">The copy</text>
           <text data-detail="context" x="501.75" y="111" class="t-muted" font-size="7" text-anchor="middle">one per shop</text>
         </g>
         <g data-step="collector" id="store-catalogue-change-node-collector" data-node-id="collector" data-node-label="Collector" aria-label="Focus Collector, anywhere, Sequence participant" data-node-kind="external" data-node-sublabel="anywhere" data-node-context="Sequence participant">

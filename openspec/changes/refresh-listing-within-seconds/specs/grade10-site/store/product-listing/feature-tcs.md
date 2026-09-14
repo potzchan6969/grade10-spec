@@ -3,6 +3,10 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 
+**Out of suite:**
+
+- `grade10-site-store-product-listing-SC-46` — No journey lists it: the read-back guard is the store's own ordering rule, walked by the worker lane's tests rather than by a collector.
+
 ## grade10-site-store-product-listing-US12: Collector sees the shop as it is now
 
 **As a** collector,
@@ -19,7 +23,7 @@ has left behind.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** integration
+* **Type:** performance
 * **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -28,8 +32,9 @@ has left behind.
 
 **Pre-conditions:**
 
-* The listing answers and its count reads <N>.
+* The listing answers and its count reads <the listing's count>.
 * <a product> exists in the shop, not published to the store's channel, with a world and a type.
+* The shop's own reads answer a save at once.
 
 **Steps:**
 
@@ -40,7 +45,7 @@ has left behind.
 **Expected Results:**
 
 * Step 2 lists <a product> at both locations.
-* Step 3 reads <N + 1> above the grid, and each of <a product>'s facets counts one more.
+* Step 3 reads one more than <the listing's count> above the grid, and each of <a product>'s facets counts one more.
 
 ### grade10-site-store-product-listing-US12-TC2-1: A product taken down leaves within seconds
 
@@ -50,8 +55,8 @@ has left behind.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** integration
-* **Suites:** smoke, regression
+* **Type:** performance
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -59,7 +64,8 @@ has left behind.
 
 **Pre-conditions:**
 
-* The listing lists <a product> and its count reads <N>.
+* The listing lists <a product> and its count reads <the listing's count>.
+* The shop's own reads answer a save at once.
 
 **Steps:**
 
@@ -70,7 +76,7 @@ has left behind.
 **Expected Results:**
 
 * Step 2 lists <a product> at neither location.
-* Step 3 reads <N − 1> above the grid, and each of <a product>'s facets counts one fewer.
+* Step 3 reads one fewer than <the listing's count> above the grid, and each of <a product>'s facets counts one fewer.
 
 ### grade10-site-store-product-listing-US12-TC3-1: A card follows the shop's price and stock
 
@@ -80,7 +86,7 @@ has left behind.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** integration
+* **Type:** performance
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -90,17 +96,29 @@ has left behind.
 **Pre-conditions:**
 
 * The listing lists <a product> at <old price>, and the card stops at <old count>.
+* The shop's own reads answer a save at once.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <old price> | The price the card shows before the change |
+| <new price> | A price that moves <a product> in a lowest-price order |
+| <old count> | The count the card stops at before the change |
+| <new count> | A count above zero and below <old count> |
 
 **Steps:**
 
-1. In the shop, set <a product>'s price to <new price> and its count to <new count>.
+1. In the shop, save <a product> with <new price> and <new count>.
 2. Within 10 seconds, open <grade10 browse listing url> ordered by lowest price.
-3. Read <a product>'s card and raise its quantity past <new count>.
+3. Read <a product>'s card.
+4. Raise the card's quantity past <new count>.
 
 **Expected Results:**
 
-* Step 3 shows <new price> on the card and the quantity stops at <new count>.
 * Step 2 places <a product> where <new price> falls in the order.
+* Step 3 shows <new price> on the card.
+* Step 4 stops the quantity at <new count>.
 
 ### grade10-site-store-product-listing-US12-TC4-1: A change the shop never reported is caught by the re-read
 
@@ -110,7 +128,7 @@ has left behind.
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** integration
+* **Type:** performance
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
@@ -132,6 +150,39 @@ has left behind.
 
 * Step 3 names the world <new label>.
 
+### grade10-site-store-product-listing-US12-TC5-1: A location holding no copy answers from the one the store keeps
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** performance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-listing-US-12
+
+**Pre-conditions:**
+
+* The listing has answered at one location and holds <the listing's count> products.
+* A second location has not served the listing.
+
+**Steps:**
+
+1. Open <grade10 browse listing url> from the second location.
+2. Read the grid, the count above it and the sidebar.
+3. Read the store's record of what the listing read to answer.
+
+**Expected Results:**
+
+* Step 2 lists the same products, count and sidebar the first location lists.
+* Step 3 shows no read of the catalogue from the shop.
+
+---
+
 ## grade10-site-store-product-listing-US13: Collector browses while the shop is unreachable
 
 **As a** collector,
@@ -148,14 +199,14 @@ has left behind.
 * **Behaviour:** negative
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** api
+* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-product-listing-US-13
 
 **Pre-conditions:**
 
-* The listing answered while the shop could be read, listing <N> products.
+* The listing answered while the shop could be read, listing <the listing's count> products.
 * The shop's storefront reads now fail.
 
 **Steps:**
@@ -163,12 +214,10 @@ has left behind.
 1. Open <grade10 browse listing url> from a location that has served the listing, and from one that has not.
 2. Read the grid, the count above it and the sidebar.
 3. Open <a product>'s page.
+4. Open <grade10 browse listing url> again after a minute.
 
 **Expected Results:**
 
-* Step 2 lists the same <N> products, count and sidebar at both locations, with no message about the shop.
+* Step 2 lists the same products, count and sidebar at both locations, with no message about the shop.
 * Step 3 is what fails or waits, not the listing.
-
-**Out of suite:**
-
-- `grade10-site-store-product-listing-SC-46` — No journey lists it: the read-back guard is the store's own ordering rule, walked by the worker lane's tests rather than by a collector.
+* Step 4 lists the same products, count and sidebar as step 2.
