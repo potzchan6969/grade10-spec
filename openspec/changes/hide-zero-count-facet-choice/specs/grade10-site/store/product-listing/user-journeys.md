@@ -16,3 +16,4 @@ pick one,
 - `grade10-site-store-product-listing-SC-16` — A long facet group is capped
 - `grade10-site-store-product-listing-SC-17` — A narrowing that starves the catalogue
 - `grade10-site-store-product-listing-SC-42` — A choice with nothing counted behind it
+- `grade10-site-store-product-listing-SC-43` — A narrowing cannot resurrect a choice the catalogue never carries

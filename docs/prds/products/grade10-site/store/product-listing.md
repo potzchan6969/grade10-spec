@@ -22,10 +22,13 @@ product.
 - **Filter** — the sidebar narrows by the world a card comes from and the kind
   of collectible it is, each choice with the catalogue's count beside it;
   worlds show five and an invitation to the rest, types show whole
-- 🚧 **Zero behind a choice** — a facet choice with nothing counted behind it
-  does not show in the filter panel, so long as nothing is narrowed; once any
-  filter is applied, a choice already showing stays even if it now counts
-  zero, so it can be undone
+- 🚧 **Zero behind a choice** — a facet choice or group the catalogue counts
+  nothing behind, over the whole unnarrowed catalogue, never shows in the
+  filter panel; narrowing by something else does not resurrect it. A choice
+  or group the catalogue does carry something for elsewhere stays shown at
+  whatever the current narrowing counts behind it, zero included, so the
+  collector can see what a narrowing (their own or a sibling's) starved and
+  undo it
 - 🚧 **Filter on a small screen** — a Filter control opens a left drawer for
   worlds and types; the catalogue search field stays on the listing outside
   that drawer

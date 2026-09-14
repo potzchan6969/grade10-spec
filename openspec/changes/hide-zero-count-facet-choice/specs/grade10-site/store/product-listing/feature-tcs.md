@@ -40,3 +40,36 @@ pick one,
 
 * Choice counted at zero is not offered.
 * Choice counted above zero is still offered, with its count.
+
+### grade10-site-store-product-listing-US4-TC8-1: A narrowing cannot resurrect a choice the catalogue never carries
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-listing-US-04
+
+**Pre-conditions:**
+
+* Catalogue names a facet group carrying one choice it counts nothing behind
+  over the whole unnarrowed catalogue, and one choice it counts something
+  behind.
+
+**Steps:**
+
+1. Navigate to <grade10 browse listing url>, unscoped.
+2. Select a choice of a different, unrelated facet group.
+3. Check the first group's choices.
+
+**Expected Results:**
+
+* Choice the catalogue never carries stays left off the group.
+* Choice the catalogue does carry something for is still offered, at
+  whatever the narrowing now counts behind it.

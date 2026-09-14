@@ -11,26 +11,23 @@ narrows to, never counted from the cards on the page.
 Selecting no choice in a group SHALL leave that group unrestricted. A group
 SHALL admit more than one choice at once.
 
-A group the catalogue names no choices for SHALL NOT be drawn. On a listing
-nothing narrows, neither SHALL a group the catalogue counts nothing behind any
-choice of: a control whose only effect is to empty the grid is worse than no
-control. A listing left with no group to draw SHALL draw no facet group and
+A group the catalogue names no choices for SHALL NOT be drawn. Nor SHALL a
+group the catalogue counts nothing behind any choice of, over the whole
+catalogue with nothing narrowed: a control whose only effect is to empty the
+grid is worse than no control, whatever else the rest of the query narrows
+by — narrowing by something else can never resurrect a group that was never
+there. A listing left with no group to draw SHALL draw no facet group and
 SHALL say nothing in place of one — a shop that has configured no facets is not
 a fault the collector is told about. Searching and ordering are not facets and
 SHALL stay offered either way.
 
-The same rule SHALL hold one level down. On a listing nothing narrows, a group
-that does have something counted behind it SHALL still drop any choice of its
-own counted at nothing: the control that only empties the grid is no less a
-trap for sitting beside choices that work.
-
-Once a narrowing is in force, every group the catalogue names choices for SHALL
-be offered however little is counted behind them: nothing behind a choice is
-then the query's doing rather than the shop's, and the collector needs the
-groups to widen by. Every choice a narrowed group offers SHALL stay offered
-however little is counted behind it, and a choice the collector has selected
-SHALL remain selected and selectable however little is counted behind it,
-since a selection nobody can undo is a trap.
+The same rule SHALL hold one level down: a choice the catalogue counts
+nothing behind, over the whole catalogue with nothing narrowed, SHALL NOT be
+offered. A choice the catalogue does carry something for elsewhere SHALL stay
+offered however little the query in force counts behind it right now, so the
+collector can see what that query starved and undo it; and a choice the
+collector has selected SHALL remain selected and selectable however little is
+counted behind it, since a selection nobody can undo is a trap.
 
 What each group is called SHALL be the site's own words in the language the
 listing is read in; what each choice is called SHALL be the catalogue's, and
@@ -100,5 +97,16 @@ the previous narrowing.
 - **GIVEN** a collector on the unscoped listing, in a group the catalogue
   counts something behind at least one choice of
 - **WHEN** the panel offers that group
-- **THEN** every choice the catalogue counts nothing behind is left off it
+- **THEN** every choice the catalogue counts nothing behind, over the whole
+  unnarrowed catalogue, is left off it
 - **AND** every choice counted above zero is offered as before
+
+#### Scenario: grade10-site-store-product-listing-SC-43 - A narrowing cannot resurrect a choice the catalogue never carries
+
+- **GIVEN** a collector on the listing, in a group holding one choice the
+  catalogue counts nothing behind over the whole unnarrowed catalogue, and
+  one it counts something behind
+- **WHEN** they narrow the listing by an unrelated facet choice
+- **THEN** the choice the catalogue never carries stays left off the group
+- **AND** the choice the catalogue does carry stays offered, at whatever the
+  narrowing now counts behind it
