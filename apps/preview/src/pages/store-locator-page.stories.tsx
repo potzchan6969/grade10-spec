@@ -2,7 +2,6 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { SiteHeader } from "@grade10/ui";
-import { ArrowUpRight } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { STORE_FOOTER, STORE_SITE_HEADER } from "./store-content";
@@ -78,7 +77,6 @@ function StoreLocatorPage() {
                       target="_blank"
                     />
                   }
-                  trailing={<ArrowUpRight aria-hidden size={14} />}
                   variant="secondary"
                 >
                   {STORE_LOCATOR_COPY.getDirections}
