@@ -300,22 +300,26 @@ the 100 the slab's rate would price.
 The redeemable balance lapses after twelve months with no activity, and a
 lapse that has happened is never undone.
 
+🚧 Every point a member holds lapses on the same day, whatever recorded it.
+
+| What happens | The date |
+| --- | --- |
+| A purchase or a redemption, even one too small to earn a point | Twelve months from that day |
+| 🚧 A grant, a correction or a reversal | Unchanged; those points take the date the balance already has |
+| 🚧 Operator points with nothing live to join | Twelve months from the day they land |
+| 🚧 An operator restarts the window | Twelve months from today — [Operator Console](/p/grade10-site/loyalty/operator-console) |
+| A record older than the window | Unchanged; those points are written already lapsed |
+| The day arrives | Gone; the whole balance is written off, and never revived |
+
 - **Window** — twelve calendar months on the Hong Kong clock: the same day
   and time a year on, 365 or 366 days, never a day count; a 29 February lapses
   on the 28th
-- **Activity** — a purchase or a redemption, even a spend too small to earn a
-  point; each pushes the whole balance's date to twelve months from its own day
-- **Not activity** — a campaign grant, a correction, a claw-back, a reversal;
-  none moves the date, and the points a grant or a correction adds live out
-  their own twelve months
 - **Forwards only** — a late record shortens nothing; the date sits where the
   latest activity put it
-- **Born lapsed** — a record older than a year is written with its date already
-  past: on the ledger, counting nothing, moving nothing
 - **Settled first** — whatever is already dead is written off before the date
-  moves, so no extension reaches back
-- **No sweep needed** — a lot past its date stops counting the instant it is
-  read; the nightly sweep only writes the record, and a run cut short converges
+  moves, so no date reaches back over a lapse
+- **Dead at once** — points past the date stop counting the instant they are
+  read, with nothing waiting on a nightly pass
 
 :::example{title="Buying or redeeming keeps the balance alive"}
 | When | Event | Points | Balance |
@@ -353,16 +357,37 @@ The new purchase starts a fresh balance. The fifteen that lapsed stay
 lapsed.
 :::
 
-:::example{title="A grant or a correction is not activity"}
+:::example{title="A grant takes the balance's date"}
 | When | Event | Points | Balance |
 | --- | --- | --- | --- |
 | 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
-| 2026/06/01 | campaign grant · own date 2027/06/01 · balance date stays 2027/01/03 | +100 | 115 |
-| 2027/01/03 | lapse, the January earn | −15 | 100 |
-| 2027/06/01 | lapse, the grant on its own date | −100 | 0 |
+| 2026/06/01 | campaign grant · takes 2027/01/03 · date stays | +100 | 115 |
+| 2027/01/03 | lapse, all of it | −115 | 0 |
 
-A grant moves no date, and neither does an operator correction. Each lives
-out its own year under a window that has already passed.
+A grant moves no date, and neither does an operator correction. Both take the
+date the balance already has, so the member reads one day for everything.
+:::
+
+:::example{title="A grant to an empty balance starts the date"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2027/01/03 | lapse | −15 | 0 |
+| 2027/03/08 | goodwill grant → lapses 2028/03/08 | +50 | 50 |
+
+Nothing was left to join, so the grant names the date itself.
+:::
+
+:::example{title="An operator restarts the window"}
+| When | Event | Points | Balance |
+| --- | --- | --- | --- |
+| 2026/01/03 | earn → lapses 2027/01/03 | +15 | 15 |
+| 2026/06/01 | campaign grant · takes 2027/01/03 | +100 | 115 |
+| 2026/06/01 | operator restarts the window → lapses 2027/06/01 | 0 | 115 |
+| 2027/06/01 | lapse, all of it | −115 | 0 |
+
+The restart moves the whole balance, the grant and the earn alike. Nothing
+else moves the date without the member buying or redeeming.
 :::
 
 :::example{title="A late record shortens nothing"}
@@ -397,19 +422,18 @@ The window is calendar months, so a day the next year does not have lands
 on the last day of that month.
 :::
 
-## Admin Grants
+:::detail{title="Product decisions" for="pm"}
+A member holds one balance and reads one day for it: every point they hold
+lapses together, whatever recorded it. Measured by the share of members who
+spend rather than lose a balance that was about to lapse.
 
-An operator moves points by hand from the admin console two ways, and the two
-part on one question: do the points count toward the tier?
-
-- **Campaign grant** — a sign-up promotion, a goodwill gift; adds to the
-  redeemable balance and to what counts toward the next tier and retention, so
-  it can promote a member
-- **Correction** — putting a mistake right; adds to or takes from the
-  redeemable balance alone, so it never promotes anyone
-- **Neither is activity** — no grant pushes the expiry date out
-- **Both carry a reason** — what the operator types goes to the audit trail;
-  the ledger carries only its digest
-
-❓ **Welcome bonus** — the owner's draft posts points at enrolment; none is
-granted until the size is set. The owner's call.
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| What a grant's points live for | Decided | They take the date the balance already has, and push it no further. | Product |
+| A balance with nothing live | Decided | Operator points start the date, twelve months out. | Product |
+| Points that should outlive the balance | Decided | An operator restarts the window instead, on the record. | Product |
+| How long a restart runs | Decided | Twelve months from today, never a day the operator picks. | Product |
+| Dates members have already been shown | Decided | Every member's date moves up to the longest-lived point they hold, so no date moves back. | Product |
+| What moving those dates costs | ❓ Open | The points carried further, and the largest single move, measured before it runs. | Finance |
+| Warning a member before the day | ❓ Open | Whether the programme warns a member before their points lapse, and how far ahead. | Product |
+:::

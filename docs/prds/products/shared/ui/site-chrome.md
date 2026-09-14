@@ -31,11 +31,25 @@ style, then language through a nested drawer (the language label is not in the
 compact bar). Account / Sign In and Cart stay in the bar; search moves into the
 drawer when it is answered.
 
+## Cart Count
+
+🚧 When the cart control is present and the cart holds active lines, `SiteHeader`
+shows a round count on the cart icon — the same number as the cart drawer title
+badge. An empty cart hides it. Design-system `Nav` stays count-agnostic.
+
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937" title="Nav — the site header (reference; Storybook is SoT)"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
 
 ::story{id="components-nav-overview--all-controls" title="Nav — all controls"}
+
+::story{id="site-chrome-siteheader-cart--empty-cart" title="SiteHeader — empty cart, no badge"}
+
+::story{id="site-chrome-siteheader-cart--one-item" title="SiteHeader — cart count 1"}
+
+::story{id="site-chrome-siteheader-cart--multi-item" title="SiteHeader — cart count 3"}
+
+::story{id="site-chrome-siteheader-cart--large-count" title="SiteHeader — large cart count"}
 
 ::story{id="components-nav-account--sign-in" title="Nav — Sign In button"}
 

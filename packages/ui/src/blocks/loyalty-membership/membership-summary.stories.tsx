@@ -1,10 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import {
-  FIXTURE_POINTS_ACTIVE_UNTIL,
+  FIXTURE_BALANCE_EXPIRY_DAY,
+  FIXTURE_BALANCE_EXPIRY_SOON_DAY,
   FIXTURE_TIER_RENEWAL_DAY,
 } from "../../lib/datetime-fixtures";
 import { MembershipSummary } from "./membership-summary";
+
+/* The card prints the balance as the programme counts it, so the expiry line
+   spells the same figure the same way. */
+const BALANCE = 1250;
 
 const meta = {
   title: "Loyalty Membership/MembershipSummary",
@@ -18,14 +23,12 @@ const meta = {
       balance: "Points to spend",
       qualifying: "Progress to keep your tier",
       renewal: "Tier renews",
-      pointsActiveUntil: "Points active until",
     },
     tier: "Gold",
-    balance: 1250,
+    balance: BALANCE,
     qualifyingPoints: 3200,
     qualifyingThreshold: 5000,
     renewalDate: FIXTURE_TIER_RENEWAL_DAY,
-    pointsActiveUntil: FIXTURE_POINTS_ACTIVE_UNTIL,
   },
 } satisfies Meta<typeof MembershipSummary>;
 
@@ -57,5 +60,64 @@ export const ThresholdReached: Story = {
     });
     expect(progress).toHaveAttribute("aria-valuenow", "5000");
     expect(canvas.getByText("6100 / 5000")).toBeInTheDocument();
+  },
+};
+
+/** More than thirty days out: one line, the day, and no urgency. */
+export const ExpiresLater: Story = {
+  args: {
+    balanceExpiry: {
+      line: `${BALANCE} points expire on ${FIXTURE_BALANCE_EXPIRY_DAY}`,
+      tone: "normal",
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const line = canvas.getByText(
+      `${BALANCE} points expire on ${FIXTURE_BALANCE_EXPIRY_DAY}`,
+    );
+    expect(line).toBeInTheDocument();
+    expect(line.className).not.toContain("text-warning");
+  },
+};
+
+/** Inside the last thirty days: the same line, said in the warning tone. */
+export const ExpiresSoon: Story = {
+  args: {
+    balanceExpiry: {
+      line: `${BALANCE} points expire on ${FIXTURE_BALANCE_EXPIRY_SOON_DAY}. Buy or redeem before then to keep them.`,
+      tone: "warning",
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const line = canvas.getByText(/expire on/);
+    expect(line).toHaveTextContent("Buy or redeem before then to keep them.");
+    expect(line.className).toContain("text-warning");
+  },
+};
+
+/** The day itself: no date to read, only what is left of it. */
+export const ExpiresToday: Story = {
+  args: {
+    balanceExpiry: {
+      line: `${BALANCE} points expire today. Buy or redeem today to keep them.`,
+      tone: "warning",
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const line = canvas.getByText(/expire today/);
+    expect(line.className).toContain("text-warning");
+  },
+};
+
+/** A member holding nothing is told nothing: the line is absent, not empty. */
+export const NoPoints: Story = {
+  args: { balance: 0 },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("0")).toBeInTheDocument();
+    expect(canvas.queryByText(/expire/)).not.toBeInTheDocument();
   },
 };

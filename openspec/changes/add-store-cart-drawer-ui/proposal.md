@@ -26,6 +26,9 @@ leaving that surface.
 - Map only reviewed line and subtotal facts into the shared drawer, and keep
   shipping, images, promo redemption, points, tax, and discounts neutral or
   absent where the current integration supplies no answer.
+- For a signed-in collector, read held promo-code eligibility and the basket's
+  points ceiling against the reviewed lines, and show those facts without
+  selecting a code, applying points, or changing the drawer total.
 - Keep edits on the current cart, and send product and checkout actions
   through the site's existing addresses.
 - Add the drawer copy to the Grade10 `store` catalog overlay for English,
@@ -41,10 +44,10 @@ leaving that surface.
 - Any backend implementation or contract change: no Worker, API procedure,
   provider read, database/schema, webhook, persistence, or checkout-creation
   work.
-- Applying promotion codes, loyalty points, shipping, tax, or discounts in the
-  drawer. Checkout now accepts coupon and points inputs and exposes a member
-  points quote, but the drawer has no single applied-quote contract for these
-  choices and its total.
+- Applying promotion codes or loyalty points, or calculating shipping, tax, or
+  discounts in the drawer. Checkout now accepts coupon and points inputs and
+  exposes member-only reads, but the drawer has no single applied-quote
+  contract for these choices and its total.
 - Exposing Cart on auction, profile, membership, marketing, or other non-Store
   routes.
 - Changing Figma annotations, components, or tokens.
@@ -70,7 +73,8 @@ leaving that surface.
 ## Impact
 
 - `apps/frontend/grade10`: route-gated navigation trigger, one drawer host,
-  reviewed-line mapping, existing cart actions, and focused tests.
+  reviewed-line mapping, read-only member tender context, existing cart
+  actions, and focused tests.
 - `packages/grade10-store/frontend`: backwards-compatible review controls that
   let the drawer own unavailable-line cleanup while checkout keeps its current
   behavior.

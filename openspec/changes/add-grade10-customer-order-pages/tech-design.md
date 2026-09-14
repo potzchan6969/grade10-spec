@@ -98,10 +98,12 @@ same rendering and type compatibility.
 The Grade10 detail projection supplies only facts present on `Order`:
 
 - **Lines:** title, quantity, captured unit price, and derived line total.
-- **Money:** quoted subtotal, discount, shipping, tax, and paid total when each
-  is non-null, plus refund when positive. Format discount and refund as
-  deductions; normalize a zero deduction before formatting so it does not
-  become negative zero.
+- **Money:** quoted subtotal, discount, points credit, shipping, tax, and paid
+  total when each is non-null, plus refund when positive. Format discount,
+  points, and refund as deductions; normalize a zero deduction before
+  formatting so it does not become negative zero. Pass points on
+  `OrderDetailsSummary.points` separately from `discount` so the sidebar can
+  keep the cart-drawer Points line.
 - **Address:** join the supplied first and last names only when present, then
   render non-empty street, locality, country, and phone lines in postal order.
   Keep the address on the owner-only detail and never project it into history.

@@ -5,6 +5,8 @@ import {
   FILLED_PAYMENT,
   FILLED_PICKUP_ADDRESS,
   FILLED_SUMMARY,
+  FILLED_SUMMARY_ORDER_DISCOUNT,
+  FILLED_SUMMARY_WITH_POINTS,
   ORDER_DETAILS_COPY,
 } from "./fixtures";
 import { OrderDetailsSidebar } from "./order-details-sidebar";
@@ -46,6 +48,33 @@ export const PointsEarned: Story = {
   args: { status: "completed" },
 };
 
+/** Points bill-credit after Discount — label includes points deducted. */
+export const WithPointsCredit: Story = {
+  args: {
+    summary: FILLED_SUMMARY_WITH_POINTS,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Discount (WELCOME10)")).toBeVisible();
+    expect(canvas.getByText("Points (100 pts)")).toBeVisible();
+    expect(canvas.getByText("−HK$100")).toBeVisible();
+    expect(canvas.getByText("HK$1,438")).toBeVisible();
+  },
+};
+
+/** Order promo without points — Points credit row stays omitted. */
+export const WithoutPointsCredit: Story = {
+  args: {
+    summary: FILLED_SUMMARY_ORDER_DISCOUNT,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Discount (WELCOME10)")).toBeVisible();
+    expect(canvas.queryByText(/Points \(\d+ pts\)/)).not.toBeInTheDocument();
+    expect(canvas.getByText("HK$1,538")).toBeVisible();
+  },
+};
+
 export const Pickup: Story = {
   args: {
     status: "pickup",
@@ -58,18 +87,7 @@ export const Pickup: Story = {
   },
 };
 
-export const ApplePay: Story = {
-  args: {
-    payment: { brand: "apple-pay" },
-  },
-};
-
-export const GooglePay: Story = {
-  args: {
-    payment: { brand: "google-pay" },
-  },
-};
-
+/** Card brand + masked number — wallet pays still use Visa/Mastercard + number. */
 export const Mastercard: Story = {
   args: {
     payment: { brand: "mastercard", maskedNumber: "···· 4242" },
@@ -100,5 +118,13 @@ export const PaidTotalOnly: Story = {
     expect(canvas.getByText("HK$1,704.50")).toBeVisible();
     expect(canvas.queryByText("Subtotal")).not.toBeInTheDocument();
     expect(canvas.queryByText("Payment Method")).not.toBeInTheDocument();
+    // Sole summary section must not stack a divider under the Card edge.
+    const sidebar = canvasElement.querySelector(
+      '[data-slot="order-details-sidebar"]',
+    );
+    expect(sidebar).not.toBeNull();
+    const summaryBlock = sidebar?.querySelector(".border-b");
+    expect(summaryBlock).toBeNull();
+    expect(sidebar?.querySelector("hr")).toBeNull();
   },
 };

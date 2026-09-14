@@ -78,6 +78,40 @@ export function resolveMaximumFloor(input: {
   return { floorMinor: minBidMinor, reason: "floor-bid" };
 }
 
+/**
+ * Quick-raise preset amount. 1× / 2× / 4× the listing increment on the
+ * committed maximum when leading, or on the current bid otherwise. These
+ * chips are not the raise floor — a leader's minimum remains max + $1.
+ */
+export function quickMaximumPresetAmount(input: {
+  multiples: number;
+  isLeadingWithMaximum: boolean;
+  hasBids: boolean;
+  floorMaximumMinor: number;
+  incrementMinor: number;
+  currentBidMinor: number;
+  viewerMaximumMinor?: number;
+}): number | null {
+  const {
+    multiples,
+    isLeadingWithMaximum,
+    hasBids,
+    floorMaximumMinor,
+    incrementMinor,
+    currentBidMinor,
+    viewerMaximumMinor,
+  } = input;
+
+  const amountMinor = isLeadingWithMaximum
+    ? (viewerMaximumMinor ?? floorMaximumMinor) + incrementMinor * multiples
+    : multiples === 1 && !hasBids
+      ? floorMaximumMinor
+      : currentBidMinor + incrementMinor * multiples;
+
+  if (amountMinor < floorMaximumMinor) return null;
+  return amountMinor;
+}
+
 export type MinimumMaximumCaptionCopy = {
   minimumMaximumFloor: string;
   minimumMaximumLeadingNudge: string;

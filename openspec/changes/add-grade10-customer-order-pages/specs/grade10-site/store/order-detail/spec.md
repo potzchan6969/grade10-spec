@@ -59,7 +59,8 @@ available line items, fulfilment facts, and these money facts when present:
 | Fact | Meaning |
 | --- | --- |
 | Quoted subtotal | What the Store quoted before the hosted checkout |
-| Discount | What the settled order states was deducted |
+| Discount | What the settled order states was deducted as an order promo |
+| Points credit | What the settled order states was paid with points, shown separately from Discount |
 | Shipping charge | What the settled order states was charged for shipping |
 | Tax | What the settled order states was charged as tax |
 | Paid total | What the collector was charged after hosted shipping and tax |
@@ -67,9 +68,12 @@ available line items, fulfilment facts, and these money facts when present:
 
 Every amount SHALL remain integer minor units paired with its ISO 4217 currency
 code until formatted. A supplied zero discount, shipping charge, or tax SHALL
-render as a stated zero; a null value SHALL omit that row. Discount and refund
-values SHALL read as deductions without changing the paid total. A line total
-SHALL be its captured unit price multiplied by quantity.
+render as a stated zero; a null value SHALL omit that row. Discount, points
+credit, and refund values SHALL read as deductions without changing the paid
+total. A points credit SHALL appear after Discount when both are present, SHALL
+name the points deducted in its label, and SHALL use the same success-styled
+money-credit treatment as the cart drawer. A line total SHALL be its captured
+unit price multiplied by quantity.
 
 The owner-only detail SHALL render the supplied shipping-address parts in postal
 order and omit null or empty parts. A recipient name SHALL appear only when a
@@ -83,8 +87,9 @@ as text beside any supplied mask instead of receiving an unrelated logo. When a
 wallet and masked number are both supplied, the wallet identity SHALL appear
 beside that mask so the device-account digits are not presented as the card's.
 
-The page SHALL NOT infer a payment method, address, discount, shipping charge,
-tax, image, loyalty amount, or other missing value from another fact.
+The page SHALL NOT infer a payment method, address, discount, points credit,
+shipping charge, tax, image, loyalty amount, or other missing value from
+another fact.
 
 #### Scenario: grade10-site-store-order-detail-SC-04 - A web order keeps quoted and paid totals distinct
 
@@ -109,10 +114,19 @@ tax, image, loyalty amount, or other missing value from another fact.
 
 #### Scenario: grade10-site-store-order-detail-SC-07 - Unavailable optional facts are omitted
 
-- **GIVEN** an order with no payment method, address, discount, shipping charge, tax, image, or loyalty amount
+- **GIVEN** an order with no payment method, address, discount, points credit, shipping charge, tax, image, or loyalty amount
 - **WHEN** its detail renders
 - **THEN** those sections or rows are omitted
 - **AND** no placeholder is presented as a known order fact
+
+#### Scenario: grade10-site-store-order-detail-SC-17 - Points credit stays distinct from Discount
+
+- **GIVEN** an owned order with an order promo discount of 17700 minor units `HKD` and a points credit of 10000 minor units `HKD`
+- **WHEN** its money summary renders
+- **THEN** Discount and Points appear as separate deduction rows
+- **AND** Points follows Discount
+- **AND** the Points label names the 100 points deducted
+- **AND** neither amount is folded into the other
 
 #### Scenario: grade10-site-store-order-detail-SC-13 - Customer-facing identity does not replace the route id
 

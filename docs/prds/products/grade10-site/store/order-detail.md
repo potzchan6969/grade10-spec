@@ -16,8 +16,17 @@ than filling the designed page with claims the frontend cannot prove.
 
 - **URL** — `grade10.com/profile/orders/<order-id>`
 
+## Order Summary
+
+🚧 When the settled order applied points, Order Summary shows a **Points**
+credit after Discount — label names how many were deducted (for example
+`Points (100 pts)`), value is the money credit in the same success style as the
+cart drawer — and omits that row when no points were applied.
+
 ## Designs
 
 ::story{id="store-order-detail-orderdetails--item-coupon" title="One order, in detail"}
+
+::story{id="store-order-detail-orderdetails--with-points-credit" title="Points credit on the summary"}
 
 ::story{id="store-order-detail-orderdetails--no-optional-groups" title="An order with only supplied facts"}

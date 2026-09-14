@@ -1,7 +1,7 @@
 # grade10-site/store/cart-drawer Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-09, tcs-rules r2
+**Drafts styled:** 2026-09-14, tcs-rules r3.0
 
 ## grade10-site-store-cart-drawer-US01: Collector opens the current cart over the Store
 
@@ -313,3 +313,147 @@ Runs once per row of **Test data**.
 * The drawer closes.
 * The site's existing `/checkout` surface opens.
 * The drawer creates no checkout; the checkout surface performs its own read and handoff.
+
+---
+
+## grade10-site-store-cart-drawer-US04: Collector reads tender choices for the reviewed basket
+
+**As a** signed-in collector,
+**I want** to see which promo codes and how many points the reviewed basket can take,
+**so that** I can understand my available benefits before continuing to checkout.
+
+### grade10-site-store-cart-drawer-US04-TC01-1: Coupon answers remain unselected and current
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-04
+
+**Pre-conditions:**
+
+* A signed-in collector's cart review has succeeded.
+* The member holds one applicable promo code and one inapplicable code.
+
+**Steps:**
+
+1. Open the cart drawer and wait for the review and promo-code read to finish.
+2. Open the promo-code view.
+
+**Expected Results:**
+
+* Both current codes are shown.
+* The applicable code is shown as usable and remains unselected.
+* The inapplicable code shows the answer explaining why it cannot be used.
+* No promo discount is shown in the drawer summary.
+
+### grade10-site-store-cart-drawer-US04-TC02-1: Points ceiling does not change the reviewed total
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-04
+
+**Pre-conditions:**
+
+* A signed-in collector's cart review has succeeded.
+* The points read quotes a balance and a maximum for the reviewed goods.
+
+**Steps:**
+
+1. Open the cart drawer and wait for the review and points read to finish.
+2. Open the points view.
+
+**Expected Results:**
+
+* The balance, conversion rate, and maximum points and amount are shown.
+* No points amount is applied.
+* The subtotal and estimated total remain the reviewed subtotal.
+
+### grade10-site-store-cart-drawer-US04-TC03-1: Guests and unresolved reviews receive no tender facts
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-04
+
+**Pre-conditions:**
+
+* The collector is on a Store surface in <collector and review state>.
+
+**Test data:**
+
+| `<collector and review state>` |
+| --- |
+| Signed-out collector with a successful cart review |
+| Signed-in collector with a pending cart review |
+| Signed-in collector with a failed cart review |
+
+**Steps:**
+
+1. Open the cart drawer.
+2. Wait for the drawer to render <collector and review state>.
+
+**Expected Results:**
+
+* Member-only promo and points facts are not shown.
+* No member-only tender read is required to render the cart review state.
+
+### grade10-site-store-cart-drawer-US04-TC04-1: Latest basket replaces earlier tender facts
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-04
+
+**Pre-conditions:**
+
+* A signed-in collector's drawer has shown promo and points facts for a reviewed basket.
+
+**Test data:**
+
+| `<refresh trigger>` |
+| --- |
+| The cart changes |
+| The drawer closes and opens again |
+
+**Steps:**
+
+1. Perform <refresh trigger>.
+2. Wait for the next successful cart review and tender reads.
+
+**Expected Results:**
+
+* The previous tender facts are not presented as current.
+* The drawer shows only the successful reads for the latest reviewed basket.

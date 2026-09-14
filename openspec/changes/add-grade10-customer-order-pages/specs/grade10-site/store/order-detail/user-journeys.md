@@ -23,6 +23,7 @@
 - `grade10-site-store-order-detail-SC-14` — Supplied settlement rows preserve zero and absence
 - `grade10-site-store-order-detail-SC-15` — A partial shipping address remains truthful
 - `grade10-site-store-order-detail-SC-16` — Payment identity remains truthful
+- `grade10-site-store-order-detail-SC-17` — Points credit stays distinct from Discount
 
 ### grade10-site-store-order-detail-US-02: Collector signs in to the requested order
 

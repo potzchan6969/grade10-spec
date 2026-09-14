@@ -31,17 +31,21 @@ product.
 - 🚧 **Cart on a small screen** — where a tile sells, the cart control stays
   visible without hover on a narrow viewport and on touch
 - **Search and sort** — both describe the whole catalogue, never the cards
-  already on screen; the menu offers latest, lowest price and highest price,
-  and nothing is in force until the collector picks one
+  already on screen; the menu offers latest, lowest price and highest price
+- 🚧 **Latest at rest** — the listing opens ordered by latest product and the
+  sort control names that order; a link made at rest carries no order and
+  opens on latest product just the same
 - 🚧 **A listing can lag the shop** — which products it holds and the counts
   beside the facets by up to 5 minutes, or up to a day where nobody has opened
   the listing at that location in as long; a card's price and stock by up to
   5 minutes; a product's own page by up to a minute —
   [Commerce](/p/grade10-site/commerce/commerce)
 - **A collection is a way in, not a filter** — the front door's tiles open the
-  listing already inside one, named above the grid and dismissible; filtering,
-  searching or sorting leaves it behind, because the catalogue narrows by a
-  collection or by a query and never by both
+  listing already inside one, named above the grid and dismissible; filtering
+  or searching leaves it behind, because the catalogue narrows by a collection
+  or by a query and never by both
+- 🚧 **Ordering a collection** — a collection opens on latest product too, and
+  choosing another order lists that collection in it rather than leaving it
 - **URL** — the narrowing is in it, so a listing can be linked and shared, and
   Back undoes it; how far a collector has read is not, so an address opens at
   the first page of its narrowing
@@ -117,8 +121,7 @@ sidebar can say how many cards sit behind a choice before it is picked.
 | Collector sharing what they found | Pastes the address | The receiver opens the same narrowing. |
 
 **Not in scope.** Combining a collection with a facet in one query. A
-popularity ordering — nothing computes one. Ordering or searching inside a
-collection. The front door's collection grid, which is unchanged.
+popularity ordering — nothing computes one. Searching inside a collection. The front door's collection grid, which is unchanged.
 
 **Measurement.**
 
@@ -134,7 +137,7 @@ collection. The front door's collection grid, which is unchanged.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Facets, not collections | Decided | The sidebar filters by world and collectible type. A collection is a merchandiser's grouping and stays a way in. | Design |
-| One narrowing at a time | Decided | The catalogue narrows by a collection or by a query, never both, so applying either leaves the other behind. | Design |
+| One narrowing at a time | Decided | The catalogue narrows by a collection or by a query, never both, so applying either leaves the other behind. The alternative — a collection dimension on the query — cannot be served natively and would walk the whole catalogue for every scoped narrowing. An order is not a narrowing: it orders whatever set is in force, so choosing one inside a collection keeps the collection. | Engineering |
 | Catalogue projection | Decided | The listing answers from a copy of the catalogue the worker holds and rebuilds from the shop by age, so the public catalogue opens no database connection and checkout still prices live. The price is staleness and a catalogue ceiling — [Commerce](/p/grade10-site/commerce/commerce); the step past one worker is [the design note](/references/store-catalogue-index)'s. | Engineering |
 | Collection with facets | ❓ Open | Whether a collection and a facet can be applied together; nothing in the catalogue's own reads prevents it. | Product |
 | Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
@@ -144,7 +147,7 @@ collection. The front door's collection grid, which is unchanged.
 | The count above the grid is the same count | Decided | The number over the listing is the catalogue's own over the whole narrowed set, the rule the facet counts already follow, so a choice's count is the size of the listing choosing it opens. Counting the cards on screen instead read the page size back as the shop's size and grew as the collector read on, leaving the one question a count answers — whether it is worth going on — the one it could not. A narrowing whose first page has not arrived says nothing, because `0 products` is a claim the catalogue never made. | Engineering |
 | Scroll depth is not restored | Decided | An address opens a narrowing, never a place in it, so returning from a product page starts at the top of the listing. Keeping a collector's place is worth its own evidence, and an address that carried depth would no longer be the narrowing it is shared as. | Product |
 | Worlds cap at five | Decided | A shop grows worlds without bound; the types are a taxonomy the platform closes and are shown whole. | Design |
-| No popularity order | Decided | Nothing ranks products by popularity, so the menu does not claim to. At rest the catalogue's own order stands. | Product |
+| No popularity order | Decided | Nothing ranks products by popularity, so the menu does not claim to. At rest the listing is ordered by latest product instead — an order the catalogue can answer, so a collector arrives on one the control can name. | Product |
 | A starved facet is still offered | Decided | Once a query is in force, nothing behind a choice is the query's doing rather than the shop's. Hiding the group would strand the collector, and a selection nobody can undo is a trap. | Design |
 | No facets, no panel | Decided | A shop that has configured none gets no facet group and no message in its place; search and sort stay. It is not a fault the collector is told about. | Product |
 | Utility row | Decided | Help, Shipping and Orders & Returns are drawn now, each against the placeholder the site already gives a link it owes, and become real addresses as the pages land. | Product |
