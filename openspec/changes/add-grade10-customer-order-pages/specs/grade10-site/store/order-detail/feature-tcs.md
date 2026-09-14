@@ -410,7 +410,7 @@ The signed-in user owns an order with the payment instrument named by **Test dat
 * The section matches <expected presentation>.
 * No card or wallet identity is inferred beyond the supplied instrument.
 
-### grade10-site-store-order-detail-US1-TC13-1: Points credit stays distinct from Discount
+### grade10-site-store-order-detail-US1-TC14-1: Points credit stays distinct from Discount
 
 **Classification:**
 
