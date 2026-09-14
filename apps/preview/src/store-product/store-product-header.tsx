@@ -9,7 +9,6 @@ type StoreProductHeaderProps = {
 };
 
 function StoreProductHeader({ title, variant }: StoreProductHeaderProps) {
-  const forSale = variant?.availableForSale === true;
   const quantityAvailable = variant?.quantityAvailable;
 
   return (
@@ -30,11 +29,6 @@ function StoreProductHeader({ title, variant }: StoreProductHeaderProps) {
               </Text>
             ) : null}
           </HStack>
-          {forSale ? (
-            <Text size="sm" tone="success">
-              For sale
-            </Text>
-          ) : null}
           {quantityAvailable != null &&
           quantityAvailable > 0 &&
           quantityAvailable <= 3 ? (

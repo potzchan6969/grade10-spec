@@ -30,7 +30,7 @@ export const Default: Story = {
       }),
     ).toBeVisible();
     expect(canvas.getByText("HK$105.00")).toBeVisible();
-    expect(canvas.getByText("For sale")).toBeVisible();
+    expect(canvas.queryByText("For sale")).toBeNull();
     expect(canvas.getByText("Only 3 left")).toBeVisible();
   },
 };

@@ -18,14 +18,9 @@ type StoreProductDetailProps = {
 };
 
 function StoreProductDetail({ product }: StoreProductDetailProps) {
-  const [selectedVariantId, setSelectedVariantId] = useState(
-    product.variants[0]?.id ?? "",
-  );
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
-  const selectedVariant = product.variants.find(
-    (variant) => variant.id === selectedVariantId,
-  );
+  const saleItem = product.variants[0];
 
   return (
     <main className="flex-1">
@@ -47,25 +42,19 @@ function StoreProductDetail({ product }: StoreProductDetailProps) {
           <VStack gap="lg" className="lg:sticky lg:top-24">
             <StoreProductHeader
               title={product.title}
-              variant={selectedVariant}
+              variant={saleItem}
             />
             <StoreProductDescription description={product.description} />
             <StoreProductPurchasePanel
               added={added}
               onAddToCart={() => setAdded(true)}
               onQuantityChange={setQuantity}
-              onSelectedVariantIdChange={(value) => {
-                setSelectedVariantId(value);
-                setQuantity(1);
-                setAdded(false);
-              }}
               quantity={quantity}
-              selectedVariantId={selectedVariantId}
-              variants={product.variants}
+              saleItem={saleItem}
             />
             <StoreProductMetadata
               badges={product.badges}
-              sku={selectedVariant?.sku}
+              sku={saleItem?.sku}
             />
 
             <Link href="#shop" size="sm">
