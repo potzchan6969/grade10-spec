@@ -425,6 +425,9 @@ export const FromAddToCart: Story = {
     expect(
       body.getByRole("heading", { name: "Sign In to Grade10" }),
     ).toBeInTheDocument();
-    expect(canvas.queryByText(/^×/)).not.toBeInTheDocument();
+    // Consumer never marked the tile in-cart — no guest line.
+    expect(
+      canvasElement.querySelector('[data-slot="product-card-image"][data-in-cart]'),
+    ).toBeNull();
   },
 };
