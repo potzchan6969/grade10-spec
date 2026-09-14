@@ -162,6 +162,20 @@ const FILLED_SUMMARY_ORDER_DISCOUNT: OrderDetailsSummary = {
   total: { label: "Total", value: "HK$1,538" },
 };
 
+/**
+ * Order promo plus points bill-credit — Points sits after Discount, matching
+ * the cart drawer. Label carries the points deducted; value is the money credit.
+ */
+const FILLED_SUMMARY_WITH_POINTS: OrderDetailsSummary = {
+  subtotal: { label: "Subtotal", value: "HK$1,770" },
+  discount: { label: "Discount (WELCOME10)", value: "−HK$177" },
+  points: { label: "Points (100 pts)", value: "−HK$100" },
+  refund: { label: "Refund", value: "−HK$105" },
+  shipping: { label: "Shipping", value: "HK$50" },
+  tax: { label: "Tax", value: "HK$0" },
+  total: { label: "Total", value: "HK$1,438" },
+};
+
 const FILLED_PAYMENT = {
   brand: "visa",
   maskedNumber: "···· 0561",
@@ -193,6 +207,7 @@ export {
   FILLED_PICKUP_ADDRESS,
   FILLED_SUMMARY,
   FILLED_SUMMARY_ORDER_DISCOUNT,
+  FILLED_SUMMARY_WITH_POINTS,
   IMAGE,
   ORDER_DETAILS_COPY,
   PICKUP_DELIVERY,

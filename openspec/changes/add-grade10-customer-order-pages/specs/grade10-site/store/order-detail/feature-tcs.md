@@ -410,6 +410,36 @@ The signed-in user owns an order with the payment instrument named by **Test dat
 * The section matches <expected presentation>.
 * No card or wallet identity is inferred beyond the supplied instrument.
 
+### grade10-site-store-order-detail-US1-TC13-1: Points credit stays distinct from Discount
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-order-detail-US-01
+
+**Pre-conditions:**
+The signed-in user owns an order with an order promo discount of 17700 minor units `HKD` and a points credit of 10000 minor units `HKD`.
+
+**Steps:**
+
+1. Open that order's detail.
+2. Check the money summary.
+
+**Expected Results:**
+
+* Discount and Points appear as separate deduction rows.
+* Points follows Discount.
+* The Points label names the 100 points deducted.
+* Neither amount is folded into the other.
+
 ---
 
 ## grade10-site-store-order-detail-US2: Collector signs in to the requested order

@@ -103,6 +103,11 @@ type NavProps = ComponentProps<"header"> & {
    */
   accountSlot?: ReactNode;
   onCartClick?: () => void;
+  /**
+   * Replaces the built-in cart control. Use when a compound header owns the
+   * cart button (for example a count badge). When set, `onCartClick` is unused.
+   */
+  cartSlot?: ReactNode;
 };
 
 const languageIcon = <Translate aria-hidden size={14} />;
@@ -311,9 +316,11 @@ function Nav({
   accountPresentation = "icon",
   accountSlot,
   onCartClick,
+  cartSlot,
   ...props
 }: NavProps) {
   const showAccount = accountSlot != null || onAccountClick != null;
+  const showCart = cartSlot != null || onCartClick != null;
   const [menuOpen, setMenuOpen] = useState(false);
   const menuLabel = copy.menu ?? "Menu";
   const menuTitle = copy.menuTitle ?? menuLabel;
@@ -504,15 +511,19 @@ function Nav({
                 presentation={accountPresentation}
               />
             ) : null}
-            {onCartClick ? (
-              <IconButton
-                aria-label={copy.cart ?? "Cart"}
-                onClick={onCartClick}
-                size="md"
-                variant="ghost"
-              >
-                <ShoppingBag aria-hidden size={14} />
-              </IconButton>
+            {showCart ? (
+              cartSlot != null ? (
+                cartSlot
+              ) : (
+                <IconButton
+                  aria-label={copy.cart ?? "Cart"}
+                  onClick={onCartClick}
+                  size="md"
+                  variant="ghost"
+                >
+                  <ShoppingBag aria-hidden size={14} />
+                </IconButton>
+              )
             ) : null}
           </div>
         </div>
