@@ -83,6 +83,11 @@ type ListingAuctionBidFieldsCopy = ListingQuickMaximumBidActionsCopy & {
    * "Closed at {time}. Ran {duration}".
    */
   closedSummary: string;
+  /**
+   * Result amount when the lot closed with no winner. Collector-facing copy
+   * is Ended (external lot status); the internal status remains Unsold.
+   */
+  unsold: string;
 };
 
 type StandingBannerProps = {
@@ -250,7 +255,7 @@ function PriceBlock({ copy, view, locale }: PriceBlockProps) {
       </Text>
       <Text as="p" className="text-2xl font-medium leading-8">
         {view.isUnsold ? (
-          "Unsold"
+          copy.unsold
         ) : (
           <ListingRollingMoneyDisplay
             amountMinor={view.currentBidMinor}

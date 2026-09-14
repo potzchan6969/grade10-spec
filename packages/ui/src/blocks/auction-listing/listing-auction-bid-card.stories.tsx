@@ -83,6 +83,7 @@ const COPY = {
   opensLabel: "Opens",
   closedAt: "Closed {when}",
   closedSummary: "Closed at {time}. Ran {duration}",
+  unsold: "Ended",
   activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
 } as const;
 

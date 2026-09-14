@@ -185,6 +185,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   opensLabel: "Opens",
   closedAt: "Closed {when}",
   closedSummary: "Closed at {time}. Ran {duration}",
+  unsold: "Ended",
   activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
 } satisfies ListingAuctionBidCardCopy;
 

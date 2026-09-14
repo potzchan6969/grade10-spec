@@ -236,7 +236,7 @@ const BID_PANEL_STATE_RESPONSES = {
       submitUsesSignInLabel: false,
       fixtureState: "closed-unsold",
     },
-    expectedText: "Unsold",
+    expectedText: "Ended",
   },
   signInSucceeded: {
     scenarioId: "bid-panel/sign-in-succeeded",

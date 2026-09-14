@@ -93,7 +93,7 @@
   "standingAs": "{amount} as {pseudonym}",
   "startingBid": "Starting bid",
   "unpublished": "This listing is not published.",
-  "unsold": "Unsold",
+  "unsold": "Ended",
   "unwatchAriaLabel": "Stop watching this lot",
   "userBidHistoryBidColumn": "Bid",
   "userBidHistoryBidsTab": "Bid placed",
