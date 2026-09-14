@@ -12,7 +12,7 @@ back to the page they were on.
 
 | Rule | Value |
 | --- | --- |
-| Who | A guest reviews the cart; a signed-in member also uses a promo code and points |
+| Who | A signed-in member; a signed-out session holds no lines |
 | Promo codes | **1 per cart** — a second replaces the first |
 | Points | **After the code**, at **$1** a point, on qualifying goods only; an ask past the ceiling is trimmed to it — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Estimated total | **Goods − code − points** — before shipping, tax and the shop's own sale, which the invoice prices |
@@ -28,8 +28,8 @@ back to the page they were on.
   totals and Checkout wait; nothing held is shown as current
 - **Lines the shop no longer sells** — leave the cart on open, with one
   notice
-- **One scope** — a guest's browser cart, or the member cart of the
-  session; the drawer merges nothing
+- **One scope** — the member cart of the signed-in session; a signed-out
+  session holds no lines and builds none
 - **Edits** — quantity and removal write to the same cart the page holds
 
 ## Promo Code
@@ -123,8 +123,8 @@ considering. Its value is a total they can trust before they go to pay.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
-| Guest collector | Builds a cart while browsing | Reviews the browser cart without being forced to sign in. |
 | Signed-in collector | Opens Cart from a Store page | Sees what a code and points take off, and carries the choice to checkout. |
+| Signed-out collector | Presses Add to cart on the listing or product page | Meets the sign-in dialog; no guest cart is built. |
 | Collector whose cart moved | Opens Cart before checkout | Sees current facts or a clear unresolved state, never a stale claim. |
 
 **Not in scope.** A dedicated cart page. Creating the order from the
@@ -146,7 +146,7 @@ second code on one cart.
 | Overlay, not page | Decided | Cart stays attached to the browsing moment; a new route would make the collector leave before the drawer solves anything. | Product |
 | Store boundary | Decided | Cart belongs on Store surfaces and checkout, not in unrelated site chrome. | Product |
 | Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
-| One session scope | Decided | Signed-out browsing uses the browser cart; a signed-in session uses its member cart. The drawer does not merge them. | Engineering |
+| One session scope | Decided | The cart is the signed-in member's. A signed-out session holds no lines; there is no guest checkout and no guest cart to merge. | Product |
 | One quote | Decided | The drawer and `/checkout` read one store quote — the lines, the one code or reward, points after it — on the same arithmetic the checkout then writes, so no total is shown that the order records differently. | Product |
 | Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is carried to `/checkout` for the session and never stored. | Product |
 | Held list | Decided | The member's own store codes and reward coupons, answered before they are picked. | Product |
