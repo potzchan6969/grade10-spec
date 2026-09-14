@@ -3,10 +3,13 @@ import { expect, fn, within } from "storybook/test";
 import { SiteHeader } from "./site-header";
 import { SITE_HEADER_BASE_ARGS } from "./site-header.story-shared";
 
+/** Workbench Store Locator page — keep in sync with preview `STORE_LOCATOR_HREF`. */
+const STORE_LOCATOR_HREF = "?path=/story/pages-store-locator-page--default";
+
 const STORE_NAV_ITEMS = [
   { label: "Store", href: "#store", current: true },
   { label: "Auction", href: "#auction" },
-  { label: "Store Locator", href: "#locator" },
+  { label: "Store Locator", href: STORE_LOCATOR_HREF },
 ];
 
 const meta = {
