@@ -50,6 +50,18 @@ export const WithSelection: Story = {
   },
 };
 
+export const TabsInDrawerLayout: Story = {
+  args: { facetLayout: "tabs", showHeading: false },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("tab", { name: "Worlds" })).toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("tab", { name: "Types" }));
+    expect(
+      canvas.getByRole("checkbox", { name: /Booster Box/ }),
+    ).toBeInTheDocument();
+  },
+};
+
 export const Loading: Story = {
   args: { groups: { status: "loading" } },
 };
