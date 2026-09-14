@@ -167,8 +167,18 @@ export const ProviderThatHasNotDrawnYet: Story = {
   },
 };
 
-/** The close control reports dismissal and leaves the page beneath alone. */
+/**
+ * The close control reports dismissal and leaves the page beneath alone.
+ *
+ * `!dev` on this and the two below: each renders exactly what `Default`
+ * renders, so the gallery gains nothing by listing them. The tag hides a
+ * story from the sidebar and not from the run — they still prove
+ * `shared-ui-auth-sign-in-SC-04`, one route each from a pristine dialog,
+ * which is what `DismissalLeavesThePageBeneath` cannot do for the two it
+ * reaches second and third.
+ */
 export const CloseControlReportsDismissal: Story = {
+  tags: ["!dev"],
   play: async ({ args }) => {
     const body = within(document.body);
     await userEvent.click(body.getByRole("button", { name: "Close dialog" }));
@@ -179,6 +189,7 @@ export const CloseControlReportsDismissal: Story = {
 };
 
 export const EscapeReportsDismissal: Story = {
+  tags: ["!dev"],
   play: async ({ args }) => {
     await userEvent.keyboard("{Escape}");
     await waitFor(() => {
@@ -193,6 +204,7 @@ export const EscapeReportsDismissal: Story = {
  * activating what the dialog already renders — no separate mount to reach for.
  */
 export const ScrimReportsDismissal: Story = {
+  tags: ["!dev"],
   play: async ({ args }) => {
     const scrim = document.body.querySelector('[data-slot="dialog-overlay"]');
     expect(scrim).toBeInTheDocument();
