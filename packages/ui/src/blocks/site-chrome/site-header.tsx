@@ -1,5 +1,6 @@
 "use client";
 
+import { StatusIndicator } from "@grade10/design-system/components/display/status-indicator";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import {
   Nav,
@@ -17,7 +18,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@grade10/design-system/components/overlays/dropdown-menu";
-import { User } from "@phosphor-icons/react";
+import { ShoppingBag, User } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
 /**
@@ -48,6 +49,12 @@ type SiteHeaderProps = {
   onLocaleChange?: (value: string) => void;
   onSearchClick?: () => void;
   onCartClick?: () => void;
+  /**
+   * Active cart line count for the cart control badge. Same number the cart
+   * drawer title badge shows. Shown only when greater than zero; ignored when
+   * cart is omitted. Owned by `SiteHeader`, not by design-system `Nav`.
+   */
+  cartItemCount?: number;
   onSignIn: () => void;
   onProfile: () => void;
   onMyAuctions: () => void;
@@ -60,13 +67,15 @@ type SiteHeaderProps = {
  *
  * Signed out shows a primary Sign In button. Signed in shows the account icon
  * and a menu of Profile, My Auctions, and Sign out. Cart and search stay
- * optional via handlers — auction-first launches omit them. On compact
- * viewports, `Nav` moves primary nav, utilities, search, and language into the
- * left menu drawer; Account / Sign In and Cart stay in the bar. Orders and KYC
- * are not in this menu.
+ * optional via handlers — auction-first launches omit them. When cart is
+ * present, `SiteHeader` owns the active-line count badge on the cart icon
+ * (`cartItemCount`), matching the cart drawer title. On compact viewports,
+ * `Nav` moves primary nav, utilities, search, and language into the left menu
+ * drawer; Account / Sign In and Cart stay in the bar. Orders and KYC are not
+ * in this menu.
  *
  * All destinations and copy are application-owned. The component owns only the
- * open/close of the account menu.
+ * open/close of the account menu and the cart count badge.
  */
 function SiteHeader({
   copy,
@@ -81,6 +90,7 @@ function SiteHeader({
   onLocaleChange,
   onSearchClick,
   onCartClick,
+  cartItemCount,
   onSignIn,
   onProfile,
   onMyAuctions,
@@ -117,6 +127,37 @@ function SiteHeader({
       </DropdownMenu>
     ) : undefined;
 
+  const showCartBadge =
+    onCartClick != null && cartItemCount != null && cartItemCount > 0;
+
+  const cartSlot =
+    onCartClick != null ? (
+      <span className="relative inline-flex shrink-0">
+        <IconButton
+          aria-label={
+            showCartBadge
+              ? `${navCopy.cart ?? "Cart"} (${cartItemCount})`
+              : (navCopy.cart ?? "Cart")
+          }
+          onClick={onCartClick}
+          size="md"
+          variant="ghost"
+        >
+          <ShoppingBag aria-hidden size={14} />
+        </IconButton>
+        {showCartBadge ? (
+          <StatusIndicator
+            type="count"
+            variant="brand"
+            className="pointer-events-none absolute top-0 right-0"
+            aria-hidden
+          >
+            {cartItemCount}
+          </StatusIndicator>
+        ) : null}
+      </span>
+    ) : undefined;
+
   const navProps: NavProps = {
     className,
     copy: navCopy,
@@ -129,7 +170,7 @@ function SiteHeader({
     locale,
     onLocaleChange,
     onSearchClick,
-    onCartClick,
+    cartSlot,
     accountPresentation: "sign-in",
     accountSlot,
     onAccountClick: session === "signed-out" ? onSignIn : undefined,
