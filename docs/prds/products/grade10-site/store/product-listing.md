@@ -35,11 +35,6 @@ product.
 - 🚧 **Latest at rest** — the listing opens ordered by latest product and the
   sort control names that order; a link made at rest carries no order and
   opens on latest product just the same
-- 🚧 **A listing can lag the shop** — which products it holds and the counts
-  beside the facets by up to 5 minutes, or up to a day where nobody has opened
-  the listing at that location in as long; a card's price and stock by up to
-  5 minutes; a product's own page by up to a minute —
-  [Commerce](/p/grade10-site/commerce/commerce)
 - **A collection is a way in, not a filter** — the front door's tiles open the
   listing already inside one, named above the grid and dismissible; filtering
   or searching leaves it behind, because the catalogue narrows by a collection
@@ -57,7 +52,7 @@ product.
 
 :::detail{title="Code map" for="engineer"}
 - **Reads** — `catalog.products`, `catalog.filters`, `catalog.collections`, `catalog.collection` and `catalog.product` in `packages/grade10-store/backend/src/trpc/routers/catalog.ts`, mounted ahead of the session tier by `trpc/publicCatalog.ts`
-- **The copy** — `services/catalog/projection.ts`; narrowing, ordering and the counts — `services/catalog/browse.ts`; the query's bounds — `services/catalog/query.ts`
+- **The copy** — `services/catalog/projection.ts`; its keeper, one per shop — `services/catalog/keeper.ts`; narrowing, ordering and the counts — `services/catalog/browse.ts`; the query's bounds — `services/catalog/query.ts`
 - **Shopify client** — `packages/shopify/backend/src/catalog/`
 - **Frontend** — `packages/grade10-store/frontend/src/features/products/catalog/`
 - **Design note** — [the catalogue index](/references/store-catalogue-index)
@@ -97,6 +92,17 @@ Enter or a suggestion selection is what acts.
   opens that product and clears the field; picking a filter applies that
   facet, clears the field, and does not put free text in force
 
+## Following the Shop
+
+- 🚧 **Within seconds** — a product the shop publishes, takes down or
+  reprices, and stock that moves, reach the cards, the counts and the sidebar
+  a few seconds after the shop saves, the same at every location; a product's
+  own page follows within a minute, and the cart's review still reads the
+  shop live — [Commerce](/p/grade10-site/commerce/commerce)
+- 🚧 **While the shop is unreachable** — the cards, the counts and the
+  sidebar keep answering from the store's own copy of the catalogue; opening
+  a product and the cart's review wait on the shop
+
 ## Designs
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4288-13952" title="Filter panel"}
@@ -131,6 +137,7 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | Time to first narrowed result | From listing open to the first narrowed grid. Unmeasured. | Product |
 | Search commit or suggestion | Share of listing sessions that commit free text or take a suggestion, and time from first keystroke to a product open or narrowed grid. Unmeasured; first delivery sets the baseline. | Product |
 | Listing answer time | From a narrowing to its first grid, p95, measured at the edge. ❓ Unmeasured — nothing emits it; the staging figures are in [the design note](/references/store-catalogue-index). | Engineering |
+| Change to listing | From the shop's report of a change to the copy every location reads, p95. ❓ Unmeasured until the release carries it. | Engineering |
 
 **Decisions.**
 
@@ -138,10 +145,11 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | --- | --- | --- | --- |
 | Facets, not collections | Decided | The sidebar filters by world and collectible type. A collection is a merchandiser's grouping and stays a way in. | Design |
 | One narrowing at a time | Decided | The catalogue narrows by a collection or by a query, never both, so applying either leaves the other behind. The alternative — a collection dimension on the query — cannot be served natively and would walk the whole catalogue for every scoped narrowing. An order is not a narrowing: it orders whatever set is in force, so choosing one inside a collection keeps the collection. | Engineering |
-| Catalogue projection | Decided | The listing answers from a copy of the catalogue the worker holds and rebuilds from the shop by age, so the public catalogue opens no database connection and checkout still prices live. The price is staleness and a catalogue ceiling — [Commerce](/p/grade10-site/commerce/commerce); the step past one worker is [the design note](/references/store-catalogue-index)'s. | Engineering |
+| The store's own copy | Decided | The listing answers from a copy of the catalogue the store keeps: one keeper per shop applies each change the shop reports and re-reads the whole catalogue every 5 minutes, and every location follows that keeper. So the public catalogue opens no database connection, a listing view never reads the shop, and checkout still prices live — [Commerce](/p/grade10-site/commerce/commerce); the mechanism is [the design note](/references/store-catalogue-index)'s. | Engineering |
+| Seconds after save | Decided | A change reaches the listing in seconds, not minutes. The shop's own report is the floor, so nothing here can be faster than Shopify; a report that never arrives is caught by the 5-minute re-read. | Product |
 | Collection with facets | ❓ Open | Whether a collection and a facet can be applied together; nothing in the catalogue's own reads prevents it. | Product |
 | Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
-| Price order | Decided | Sorts on the product's price: the catalogue carries one variant per product, so the price a card shows is the price it sorts on. A product with several variants would sort on its cheapest, sold out or not, as Shopify's own price sort does. | Product |
+| Price order | Decided | Sorts on the product's lowest price. The card and the order come from one copy, so the price a card shows is the price it sorts on while a product has one variant; a product with several sorts on its cheapest, sold out or not, as Shopify's own price sort does, while the card shows the one for sale. | Product |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
 | Counts are the catalogue's | Decided | Counted over the whole narrowed set with the facet's own selection excluded, so ticking one world leaves the others showing what picking them instead would find. | Engineering |
 | The count above the grid is the same count | Decided | The number over the listing is the catalogue's own over the whole narrowed set, the rule the facet counts already follow, so a choice's count is the size of the listing choosing it opens. Counting the cards on screen instead read the page size back as the shop's size and grew as the collector read on, leaving the one question a count answers — whether it is worth going on — the one it could not. A narrowing whose first page has not arrived says nothing, because `0 products` is a claim the catalogue never made. | Engineering |

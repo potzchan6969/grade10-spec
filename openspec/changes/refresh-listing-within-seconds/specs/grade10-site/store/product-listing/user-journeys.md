@@ -1,0 +1,26 @@
+## User journeys
+
+### grade10-site-store-product-listing-US-12: Collector sees the shop as it is now
+
+**As a** collector,
+**I want** the listing to show what the shop sells right now — what is new,
+what is gone, what it costs and how many are left,
+**so that** I never open a product that has gone or reach for a price the shop
+has left behind.
+
+**Accepted by:**
+
+- `grade10-site-store-product-listing-SC-42` — A published product is listed within seconds
+- `grade10-site-store-product-listing-SC-43` — A product taken down leaves within seconds
+- `grade10-site-store-product-listing-SC-44` — A card follows the shop's price and stock
+- `grade10-site-store-product-listing-SC-45` — A change the shop never reported is caught by the re-read
+
+### grade10-site-store-product-listing-US-13: Collector browses while the shop is unreachable
+
+**As a** collector,
+**I want** the listing to keep answering when the shop's own service is down,
+**so that** I can go on browsing and come back to buy when it is up.
+
+**Accepted by:**
+
+- `grade10-site-store-product-listing-SC-47` — The listing lists while the shop is down

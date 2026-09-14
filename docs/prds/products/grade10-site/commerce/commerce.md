@@ -30,11 +30,11 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 ### Display and pricing are different reads
 
 - **Display** — the listing, its filter panel, the collections and a product's page answer over tRPC (`catalog.*`); a listing opens no database connection
-- 🚧 **The catalogue projection** — the listing, its count and its sidebar answer from a copy of the catalogue the worker holds, cut to what a query narrows, orders and counts on; the shop is read to build the copy and to fill in the products a page shows, never to answer a narrowing — [the design note](/references/store-catalogue-index)
-- 🚧 **Rebuilt by age** — a copy past 5 minutes is served as it is and rebuilt behind the response; a copy nothing has asked for in a day is dropped and built afresh
-- 🚧 **What lags the shop** — which products a listing holds and the counts beside the facets, by up to 5 minutes where the listing is in use and up to a day where nobody has opened it; a card's price and stock, by up to 5 minutes; a product's own page, by up to a minute. The cart's review reads live and is the authority
-- 🚧 **10,000 products** — the catalogue is held whole or the listing refuses, rather than answering from a catalogue only half read
-- ❓ **Past one worker** — a copy built once and read everywhere, then the store's own database when a memory pass can no longer rank; nobody has decided when — Engineering, on the design note's trigger
+- 🚧 **The store's own copy** — the listing, its count, its sidebar and its cards answer from a copy of the catalogue the store keeps: one keeper per shop holds it, every location reads it, and no listing view reads the shop — [the design note](/references/store-catalogue-index)
+- 🚧 **Seconds after save** — the shop reports each product and stock change; the keeper reads that product back and publishes a new copy within seconds, and every location takes it on its next listing view, so a change shows everywhere a few seconds after the shop saves
+- 🚧 **The re-read as the net** — every 5 minutes the keeper reads the whole catalogue again, so a change the shop never reported, or a facet renamed, shows within 5 minutes
+- 🚧 **What still lags** — a product's own page, by up to a minute; the cart's review reads live and is the authority
+- 🚧 **25,000 products** — the keeper holds the catalogue whole up to Shopify's own reading limit; past it the copy stops moving and the store says so loudly, rather than answering from half a catalogue
 - Checkout pricing always fetches live from the Storefront API — a cache can never set a charge amount
 - Availability is checked when the cart is priced: a variant that does not
   sell rejects, and a cart asking past a count the catalog exposes
@@ -45,10 +45,23 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
   accepted is compared against the quantity asked for, and a cart Shopify
   shortened is refused rather than sold
 
+:::flow{title="A change reaches the listing" diagram="assets/diagrams/store-catalogue-change.svg"}
+## *Shop* — **Reports a change**
+The shopkeeper saves a product, or stock moves, and Shopify sends the store that product's event, signed.
+## *Store* — **Hands it to the keeper**
+The store checks the signature and the shop, hands the event to that shop's keeper, and answers Shopify at once.
+## *Keeper* — **Reads the product back**
+The keeper reads the product from the shop, so the copy carries what the shop shows and never only what the event said; a read older than the event is tried again.
+## *Keeper* — **Publishes a new copy**
+Changes that arrive together are folded into one copy, numbered once.
+## *Store* — **Every location follows**
+A listing view asks the keeper for the copy's number when its last check is a few seconds old, takes the new copy, and answers from it.
+:::
+
 ### A copy the shop can always rebuild
 
-- **Shopify down** — checkout down, and the listing with it: the copy names the products, and the shop is read to fill them in
-- 🚧 **Derived, never authored** — every copy is what a Storefront read answered and the next build rewrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
+- 🚧 **Shopify down** — checkout down; the listing keeps answering from the store's copy, cards included, and stops moving until the shop answers again
+- 🚧 **Derived, never authored** — every copy is what a Storefront read answered, and the next read-back or re-read overwrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
 - The catalog client's error outcomes carry the query name, so the tail worker's metrics show exactly which reads are failing
 
 ### Money arrives as decimal strings
@@ -292,7 +305,7 @@ muted, and a muted alert is worse than none.
 ## Q & A
 
 - Why a copy of the catalogue in the worker rather than a record in Postgres?
-  - We do not own catalog data, and a record is a second store with sync obligations. A copy is a cache with a shape: rebuilt from the shop on demand, held nowhere durable, and answering every listing shape in one pass, so the public catalogue opens no database connection. A queryable store is the step after it, when a catalogue outgrows one worker.
+  - We do not own catalog data, and a record is a second store with sync obligations. A copy is a cache with a shape: one keeper per shop rebuilds it from the shop, every location reads it, and it answers every listing shape in one pass, so the public catalogue opens no database connection. A queryable store is the step after it, when a catalogue outgrows one memory pass.
 - Why Checkout Sessions instead of raw PaymentIntents?
   - One server surface serves hosted, embedded, and Payment Element frontends; the UX can change without a backend change.
 - Why does a refund's event carry the goods rather than the money that moved?

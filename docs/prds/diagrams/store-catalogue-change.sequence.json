@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "A change reaches the listing",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "column_fit": "spread",
+    "legend": { "mode": "hidden" },
+    "viewBox": [720, 700]
+  },
+  "participants": [
+    {
+      "id": "shop",
+      "type": "external",
+      "label": "Shop",
+      "sublabel": "the shopkeeper saves"
+    },
+    {
+      "id": "shopify",
+      "type": "external",
+      "label": "Shopify",
+      "sublabel": "events and reads"
+    },
+    {
+      "id": "store",
+      "type": "backend",
+      "label": "Store",
+      "sublabel": "at every location"
+    },
+    {
+      "id": "keeper",
+      "type": "backend",
+      "label": "Keeper",
+      "sublabel": "one per shop"
+    },
+    {
+      "id": "collector",
+      "type": "external",
+      "label": "Collector",
+      "sublabel": "anywhere"
+    }
+  ],
+  "segments": [
+    { "from": 170, "to": 400, "label": "Seconds after save" },
+    {
+      "from": 430,
+      "to": 590,
+      "label": "The next listing view, at any location"
+    }
+  ],
+  "messages": [
+    {
+      "id": "saves",
+      "from": "shop",
+      "to": "shopify",
+      "y": 200,
+      "label": "saves a product, or stock moves",
+      "variant": "default"
+    },
+    {
+      "id": "reports-a-change",
+      "from": "shopify",
+      "to": "store",
+      "y": 240,
+      "label": "the product's event, signed",
+      "variant": "emphasis"
+    },
+    {
+      "id": "hands-it-to-the-keeper",
+      "from": "store",
+      "to": "keeper",
+      "y": 280,
+      "label": "the event",
+      "variant": "emphasis"
+    },
+    {
+      "id": "accepted",
+      "from": "store",
+      "to": "shopify",
+      "y": 310,
+      "label": "accepted",
+      "variant": "return"
+    },
+    {
+      "id": "reads-the-product-back",
+      "from": "keeper",
+      "to": "shopify",
+      "y": 345,
+      "label": "reads the product back",
+      "variant": "dashed"
+    },
+    {
+      "id": "publishes-a-new-copy",
+      "from": "shopify",
+      "to": "keeper",
+      "y": 380,
+      "label": "the product as the shop shows it · a new copy, numbered",
+      "variant": "return"
+    },
+    {
+      "id": "opens",
+      "from": "collector",
+      "to": "store",
+      "y": 460,
+      "label": "opens the listing",
+      "variant": "default"
+    },
+    {
+      "id": "every-location-follows",
+      "from": "store",
+      "to": "keeper",
+      "y": 495,
+      "label": "copy number, and the copy if it moved",
+      "variant": "dashed"
+    },
+    {
+      "id": "copy",
+      "from": "keeper",
+      "to": "store",
+      "y": 530,
+      "label": "the current copy",
+      "variant": "return"
+    },
+    {
+      "id": "answer",
+      "from": "store",
+      "to": "collector",
+      "y": 565,
+      "label": "the listing, as the shop is now",
+      "variant": "emphasis"
+    }
+  ],
+  "activations": [
+    { "participant": "store", "from": 235, "to": 315, "type": "backend" },
+    { "participant": "keeper", "from": 275, "to": 390, "type": "backend" },
+    { "participant": "shopify", "from": 195, "to": 385, "type": "external" },
+    { "participant": "store", "from": 455, "to": 570, "type": "backend" },
+    { "participant": "keeper", "from": 490, "to": 535, "type": "backend" }
+  ]
+}
