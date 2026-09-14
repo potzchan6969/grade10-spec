@@ -54,13 +54,61 @@ thing splits what a search engine has learned about it between the two.
   uses sends the reader on to the one that replaced it, permanently, and
   nothing on the site links it, names it or lists it again
 
+:::callout{kind="warning"}
+What ships and what the durable spec says have parted company here: the three
+sections below already run in production, and
+`openspec/specs/grade10-site/site/crawlable-pages` has not yet folded them
+into checkable requirements.
+:::
+
+## Search Result Text
+
+- **The merchant's words come first** — a card's search-result title and
+  description are the ones written in the shop's own SEO fields when the
+  merchant wrote them; where either is blank, the catalogue's own title and
+  description stand in its place
+- **Cut on a word, not mid-sentence** — a description longer than a result
+  shows is cut at 160 characters, ending on a word and saying it was cut; the
+  whole text still lives on the page and in its structured data
+- **Vendor is the brand** — the shop's vendor field names who a card's
+  product is by, the word a search engine's own brand facet reads
+
+## One Address, Every Language
+
+- **A canonical link matches the share address** — the same address `og:url`
+  names, so a reader consolidating by either sees one page
+- **Every language answers, one default among them** — each surface names
+  its own address per language as an alternate, plus one `x-default` address
+  for a reader whose language none of them is
+- **A locale follows the shop, not the script** — a language's `og:locale`
+  carries the territory the shop trades from rather than a bare script tag;
+  Traditional Chinese carries Hong Kong's, because that is where the shop is
+
+## Structured Data
+
+- **The front door names the organisation** — the site's own name, address
+  and logo, in schema.org's words, so a search engine can attribute the site
+  rather than guessing
+- **A card is a product with an offer** — the merchant's vendor as its
+  brand, one offer per variant priced and available exactly as the page
+  shows it, a struck-through price carried as the same saving the page draws
+- **The trail above a surface is a breadcrumb** — the same steps the page
+  draws, in the order it draws them, in the page's own language
+- **Never a claim past the page** — structured data restates only what the
+  page already shows; nothing here is asserted that a collector reading the
+  page would not also see
+
 ## Server rendering
 
 :::detail{title="Code map" for="engineer"}
-An SPA's server-rendered half lives in its `src/serving/` directory; read
-[docs/architecture/serving.md](https://github.com/9gag/grade10/blob/main/docs/architecture/serving.md)
-before touching it. Per-locale addresses, alternates and the document language
-declaration bind the same surfaces and are the localization capability's.
+- **Server-rendered half** — an SPA's `src/serving/` directory; read
+  [docs/architecture/serving.md](https://github.com/9gag/grade10/blob/main/docs/architecture/serving.md)
+  before touching it
+- **Localization** — per-locale addresses, alternates and the document
+  language declaration are the localization capability's
+- **Search result text, canonical/alternate links, locale tags** —
+  `apps/frontend/grade10/src/surfaceHead.ts`
+- **Structured data** — `apps/frontend/grade10/src/structuredData.ts`
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -76,7 +124,8 @@ engine to pick.
 | Collector following an old link | Opens an address the site has replaced | Lands on what replaced it, once, without a second hop. |
 
 **Not in scope.** Which channels the site sells through. What a seller's own
-page holds. How a search engine ranks any of it.
+page holds. How a search engine ranks any of it. Which shopping engines a
+refund policy unlocks listing on.
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
@@ -93,4 +142,8 @@ page holds. How a search engine ranks any of it.
 | A replacement redirects permanently | Decided | A replaced address answers with a permanent redirect, so a reader that remembers the answer stops asking. A temporary one keeps both addresses alive indefinitely. | Engineering |
 | Identity is shared, never per channel | Decided | A seller or a shop has one address for the whole site. A copy per channel would divide what is known about one seller by the number of channels they sell in. | Product |
 | Marketplace and seller pages | ❓ Open | Neither is built, and nobody has settled what a seller's page holds or which channel a marketplace would be. The rules above already bind both; the pages themselves need their own decision. | Product |
+| Merchant SEO words override the catalogue's | Decided | A merchant's own SEO title and description win over the catalogue's when they set them, because the words closest to the sale are the ones most worth trusting a search result to show. | Product |
+| Structured data restates, never invents | Decided | Structured data carries only what the page itself shows — a price, an image, a trail — so a rich result can never claim something a collector opening the page would not also see. | Engineering |
+| Locale tags follow the shop's territory | Decided | A language's share locale names the territory the shop trades from rather than its script, because that is what a preview fetcher and a search engine route a result by. | Product |
+| Refund policy copy | ❓ Open | A shopping engine refuses to list the shop's products until it publishes an approved refund and return policy; today's page is an unapproved placeholder kept off every stage. Legal owns supplying the real wording before the surface can go live. | Product |
 :::

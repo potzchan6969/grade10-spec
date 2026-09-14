@@ -15,7 +15,8 @@
     "./theme.css": "./src/theme.css",
     "./themes/*": "./src/themes/*",
     "./components/*": "./src/components/*.tsx",
-    "./lib/*": "./src/lib/*.ts"
+    "./lib/*": "./src/lib/*.ts",
+    "./assets/*": "./src/assets/*"
   },
   "dependencies": {
     "@base-ui/react": "1.7.0",
