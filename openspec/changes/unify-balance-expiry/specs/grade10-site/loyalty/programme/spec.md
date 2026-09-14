@@ -2,16 +2,23 @@
 
 ## Feature set
 
-- Expiry
-  - One date: every point a member holds expires on the day their inactivity
-    window names, whatever recorded it
-  - Operator points: a grant, a correction or a reward given outright takes
-    that date and pushes it no further; where nothing is live, it starts one
-  - Restart: an operator runs the window again from today, giving a balance
-    more time without the member earning or redeeming
+- Earning and expiry
+  - Inactivity expiry: the whole balance lapses on one date after the
+    inactivity window with no earn and no redemption; either pushes that date
+    out, never in
+  - Operator credits: a grant, a correction, a reversal or a reward given
+    outright takes the date the balance already names and pushes it no
+    further; where nothing is live, it starts the window from its own day
+- Rewards and redemption
+  - Reversal: an operator's reversal of an unused redemption returns what it
+    took under the balance's one date, and nothing into a window that has
+    passed; a spent artifact stays spent
+- Operator console
+  - Expiry restart: an operator runs the inactivity window again from today,
+    giving a balance more time without the member earning or redeeming
 - Member surface
-  - One expiry line: how many points expire and the day they go, warned inside
-    the last part of the window
+  - Membership home: tier, balance, tier progress, the tier period and the one
+    date the balance expires on, in one place
 
 ## ADDED Requirements
 
@@ -83,8 +90,11 @@ member holds no point that is still live, such a credit SHALL start the window
 from its own date instead, which starts no life for anything that has already
 lapsed.
 
-Points restored to a balance whose window has passed SHALL come back already
-lapsed: a reversal returns what it took and no life with it.
+A reversal SHALL give back only points that still have life. Where the
+member's window has passed, what the debit took SHALL NOT be written back: no
+credit is recorded that the next sweep would only remove, and the reversal
+SHALL name the points it could not return rather than reporting a balance it
+did not restore.
 
 Each credit SHALL also carry its own expiry date, set when it is recorded, and a
 credit SHALL count while the later of that date and the member's inactivity
@@ -179,7 +189,8 @@ whole amount it removed.
 #### Scenario: grade10-site-loyalty-programme-SC-183 - A reversal into a lapsed balance returns nothing spendable
 
 - **WHEN** a payment in points is reversed after the member's window has passed
-- **THEN** the points come back already lapsed and count nothing
+- **THEN** no points are written back and the balance stays empty
+- **AND** the answer names the points it could not return, rather than refusing the reversal
 
 ### Requirement: Operator point grants distinguish correction from reward
 

@@ -34,7 +34,7 @@ Screens and states: [`ui-design.md`](ui-design.md).
 
 - [ ] 4.1 Widen the redemption's channel to the whole set and stamp a reward handed over outright as internal, so *Handing over a reward is not the member's activity* passes and the counter-share number stops counting operator grants as online sales
 - [ ] 4.2 Reset the window only for a channel that sold something
-- [ ] 4.3 Skip a lot whose date has passed when restoring what a debit took, so *A reversal into a lapsed balance returns nothing spendable* passes
+- [ ] 4.3 Skip a lot whose date has passed when restoring what a debit took, and answer with what it could not return, so *A reversal into a lapsed balance returns nothing spendable* passes
 - [ ] 4.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 5. The summary's one date (grade10)
@@ -59,7 +59,7 @@ group 6 has drained.
 
 - [ ] 7.1 Say one expiry line on the membership card, with the tone decided from the page's own clock, so *The summary names one expiry line* passes
 - [ ] 7.2 Name the date the points will carry on the form that adds points, read at submit, so *The form names the date before the points are written* passes
-- [ ] 7.3 Add the restart dialog, its refusal by name, and its note that no ledger row follows
+- [ ] 7.3 Add the restart dialog, saying the day it lands on — including for a member holding nothing live, whose later credits take that day — and its note that no ledger row follows
 - [ ] 7.4 Take the expiring-soon figure off the operator's standing card and put the time left and the last restart in its note
 - [ ] 7.5 Label the till's date as when the member's points go
 - [ ] 7.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:submodules`

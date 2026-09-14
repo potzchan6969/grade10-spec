@@ -49,8 +49,9 @@ moves no points and shares none of that form's checks.
 
 - **Asks** — a reason, and nothing else
 - **Says** — the day the window will land on, before the operator confirms
-- **Refuses** — a member holding no live points, by name, with what to do
-  instead: add the points first, and they start the date themselves
+- **Says, with nothing live** — the member holds no live points, so the dialog
+  names the date the restart sets and says that points recorded after it take
+  that date
 - **Afterwards** — the card's date moves and no ledger row appears, which the
   dialog says out loud so nobody reads it as a failure
 

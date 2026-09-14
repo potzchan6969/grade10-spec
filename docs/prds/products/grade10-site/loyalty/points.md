@@ -300,29 +300,26 @@ the 100 the slab's rate would price.
 The redeemable balance lapses after twelve months with no activity, and a
 lapse that has happened is never undone.
 
+🚧 Every point a member holds lapses on the same day, whatever recorded it.
+
+| What happens | The date |
+| --- | --- |
+| A purchase or a redemption, even one too small to earn a point | Twelve months from that day |
+| 🚧 A grant, a correction or a reversal | Unchanged; those points take the date the balance already has |
+| 🚧 Operator points with nothing live to join | Twelve months from the day they land |
+| 🚧 An operator restarts the window | Twelve months from today — [Operator Console](/p/grade10-site/loyalty/operator-console) |
+| A record older than the window | Unchanged; those points are written already lapsed |
+| The day arrives | Gone; the whole balance is written off, and never revived |
+
 - **Window** — twelve calendar months on the Hong Kong clock: the same day
   and time a year on, 365 or 366 days, never a day count; a 29 February lapses
   on the 28th
-- **Activity** — a purchase or a redemption, even a spend too small to earn a
-  point; each pushes the whole balance's date to twelve months from its own day
-- 🚧 **One date** — every point the member holds lapses on the same day,
-  whatever recorded it
-- 🚧 **Operator points take the date** — a campaign grant, a correction or a
-  reversal take the date the balance already has, and push it no further
-- 🚧 **An empty balance starts one** — where the member holds nothing live,
-  the points an operator adds start the window from their own day
 - **Forwards only** — a late record shortens nothing; the date sits where the
   latest activity put it
 - **Settled first** — whatever is already dead is written off before the date
   moves, so no date reaches back over a lapse
 - **Dead at once** — points past the date stop counting the instant they are
   read, with nothing waiting on a nightly pass
-- **Born lapsed** — a record older than a year is written with its date already
-  past: on the ledger, counting nothing, moving nothing
-- 🚧 **An operator restarts it** — the window runs again from today —
-  [Operator Console](/p/grade10-site/loyalty/operator-console)
-
-::image{src="assets/diagrams/loyalty-balance-expiry.svg" alt="What sets the balance's one expiry date, and what ends it"}
 
 :::example{title="Buying or redeeming keeps the balance alive"}
 | When | Event | Points | Balance |

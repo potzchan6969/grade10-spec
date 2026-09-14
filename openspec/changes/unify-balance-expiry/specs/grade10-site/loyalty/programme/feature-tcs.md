@@ -189,8 +189,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The <points paid> return already lapsed.
+* No points return: no credit against that payment appears in the member's activity.
 * The member has nothing to spend.
+* The answer names the <points paid> it could not return.
 
 ### grade10-site-loyalty-programme-US2-TC11-1: A refund claws points back without moving the expiry date
 
