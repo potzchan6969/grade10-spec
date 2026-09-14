@@ -123,6 +123,7 @@ function AuctionRecordRow({
   title,
   state,
   stateLabel,
+  detail,
   currentBid,
   closesAt,
   imageSrc,
@@ -233,6 +234,11 @@ function AuctionRecordRow({
             {closesAt != null ? (
               <Text className="truncate text-secondary-foreground" size="xs">
                 {closesAt}
+              </Text>
+            ) : null}
+            {detail != null ? (
+              <Text className="truncate text-secondary-foreground" size="xs">
+                {detail}
               </Text>
             ) : null}
           </VStack>

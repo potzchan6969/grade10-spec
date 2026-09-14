@@ -4,8 +4,8 @@
   - Address first: a closed lot opens an order that waits for the winner's delivery address, with no invoice and nothing yet to pay
   - One order per lot: a winner of three lots confirms three addresses and receives three invoices
 - Invoice
-  - Operator quote: shipping and insurance are quoted by an operator for the confirmed address, never estimated
-  - Final amount: names every component a winner is asked to pay, so a total is explicable line by line
+  - Operator quote: Shipping & Handling, and Insurance when added, are quoted by an operator for the confirmed address, never estimated
+  - Order total: names every component a winner is asked to pay, so a total is explicable line by line
 - Delivery address
   - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it, which is what lets an invoice be prepared
   - Locking at send: the address stops moving once the invoice is sent; a change after that goes through Grade10
@@ -195,36 +195,53 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | --- | --- |
 | Auction order | The order this invoice is the payable record for. One each way |
 | Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
-| Hammer price | The winning bid, excluding every other component |
+| Winning bid | The accepted bid that won the lot, excluding every other component |
 | Buyer's premium | The applicable fee. This capability fixes no rate |
-| Shipping | Quoted by an operator for the order's confirmed delivery address |
-| Insurance | Quoted by an operator for the order's confirmed delivery address |
+| Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
+| Insurance | Optional. Added by an operator for the order's confirmed delivery address, and greater than zero when added |
 | Tax | An optional line reserved for the separate tax change; no rate or regime is defined here |
-| Final amount | The total payable — the sum of the components above |
+| Order total | The total payable — the sum of the components above |
 | Sent at | When the operator sent the invoice. Stored in UTC |
 | Payment deadline | 7 calendar days from Sent at. Stored in UTC, displayed in the winner's own zone |
 | Invoice status | Per `grade10-site/auction/order-status` |
+
+Wherever the winner reads the invoice's lines — the order, the receipt, and
+any letter that lists them — Grade10 SHALL show Shipping & Handling of zero as
+**Free**, and SHALL leave the Insurance line out when the operator added none.
 
 No component SHALL be marked as an estimate. Grade10 SHALL NOT show the winner
 an invoice amount before an operator has sent it.
 
 #### Scenario: winner-order-SC-04 - An estimated total is marked as one
 
-- **GIVEN** an operator sent an invoice with a hammer price of 250000, a
+- **GIVEN** an operator sent an invoice with a winning bid of 250000, a
   buyer's premium of 50000, shipping of 8000 and insurance of 4000 minor
   units in HKD
 - **WHEN** the winner reads the invoice
-- **THEN** the final amount is 312000 minor units in HKD
+- **THEN** the order total is 312000 minor units in HKD
 - **AND** no component is marked as an estimate
 
 #### Scenario: winner-order-SC-05 - A confirmed address makes the total firm
 
 - **GIVEN** an auction order whose winner confirmed a delivery address
-- **AND** an operator sent an invoice with shipping and insurance quoted for
-  that address
+- **AND** an operator sent an invoice with Shipping & Handling quoted for that
+  address, with Insurance when added
 - **WHEN** the winner reads the invoice
-- **THEN** its total is the final amount for that address
+- **THEN** its total is the order total for that address
 - **AND** no component is marked as an estimate
+
+#### Scenario: winner-order-SC-38 - Shipping & Handling of zero reads Free
+
+- **GIVEN** an operator sent an invoice with Shipping & Handling of 0 minor units in HKD
+- **WHEN** the winner opens the order
+- **THEN** the Shipping & Handling line reads Free
+
+#### Scenario: winner-order-SC-39 - An invoice with no insurance shows no Insurance line
+
+- **GIVEN** an operator sent an invoice without adding insurance
+- **WHEN** the winner opens the order
+- **THEN** no Insurance line is shown
+- **AND** the order total is the sum of the lines that are shown
 
 ### Requirement: One invoice and one auction order per lot
 
@@ -283,7 +300,7 @@ authorization to expire on its own.
 
 Grade10 SHALL NOT capture or increment a bid-time authorization as any part
 of settlement. The winner's payment SHALL be a single new card transaction for
-the final amount, against a stored card or another card they enter. Grade10
+the order total, against a stored card or another card they enter. Grade10
 SHALL offer the winner no other payment method; bank transfer, cash, and every
 other method are recorded by an operator alone, per
 `grade10-admin/auction/post-sale`.
@@ -298,9 +315,10 @@ SHALL be able to retry with the same or a different card.
 #### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
 
 - **GIVEN** a winner holding an open bid-time authorization on the closing lot
-- **WHEN** the lot closes and the winner pays the invoice
-- **THEN** Grade10 released that authorization at close without capturing it
-- **AND** the payment is a single new transaction for the final amount
+- **WHEN** the lot closes
+- **THEN** Grade10 releases that authorization at close without capturing it
+- **AND** after an operator later sends the invoice, the winner's payment is a
+  single new transaction for the order total
 
 #### Scenario: winner-order-SC-13 - An expired hold releases as a no-op
 
@@ -338,7 +356,7 @@ the life of their account.
 
 | Record | When | Contents |
 | --- | --- | --- |
-| Payment receipt | Payment confirmed, by either route | Itemised: hammer price, buyer's premium, shipping, insurance, any tax amount, final amount, and the payment method |
+| Payment receipt | Payment confirmed, by either route | Itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, any tax amount, order total, and the payment method |
 | Shipping tracker | Fulfilment status is `fulfilled` | Carrier name, tracking number, and a link to the carrier |
 | Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided — handover timestamp, signature, proof-of-delivery image |
 
@@ -357,11 +375,11 @@ SHALL NOT appear on the winner's receipt.
 
 #### Scenario: winner-order-SC-18 - A receipt is itemised and stays retrievable
 
-- **GIVEN** an auction order paid at a final amount of 316000 minor units in HKD
+- **GIVEN** an auction order paid at an order total of 316000 minor units in HKD
 - **WHEN** the winner opens the order a year later
-- **THEN** the receipt shows the hammer price, buyer's premium, shipping,
-  insurance, any tax amount supplied by the separate tax capability, and the
-  final amount
+- **THEN** the receipt shows the winning bid, buyer's premium, Shipping &
+  Handling, insurance, any tax amount supplied by the separate tax capability,
+  and the order total
 
 #### Scenario: winner-order-SC-19 - A manually settled receipt says so
 
