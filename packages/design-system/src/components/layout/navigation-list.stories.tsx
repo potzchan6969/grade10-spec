@@ -19,7 +19,9 @@ export const Default: Story = {
       </NavigationLink>
       <NavigationLink href="#auction">Auction</NavigationLink>
       <NavigationLink href="#grade">Grade</NavigationLink>
-      <NavigationLink href="#locator">Store Locator</NavigationLink>
+      <NavigationLink href="?path=/story/pages-store-locator-page--default">
+        Store Locator
+      </NavigationLink>
     </NavigationList>
   ),
 };
