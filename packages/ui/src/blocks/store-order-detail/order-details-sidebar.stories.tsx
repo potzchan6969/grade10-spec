@@ -87,18 +87,7 @@ export const Pickup: Story = {
   },
 };
 
-export const ApplePay: Story = {
-  args: {
-    payment: { brand: "apple-pay" },
-  },
-};
-
-export const GooglePay: Story = {
-  args: {
-    payment: { brand: "google-pay" },
-  },
-};
-
+/** Card brand + masked number — wallet pays still use Visa/Mastercard + number. */
 export const Mastercard: Story = {
   args: {
     payment: { brand: "mastercard", maskedNumber: "···· 4242" },
@@ -129,5 +118,13 @@ export const PaidTotalOnly: Story = {
     expect(canvas.getByText("HK$1,704.50")).toBeVisible();
     expect(canvas.queryByText("Subtotal")).not.toBeInTheDocument();
     expect(canvas.queryByText("Payment Method")).not.toBeInTheDocument();
+    // Sole summary section must not stack a divider under the Card edge.
+    const sidebar = canvasElement.querySelector(
+      '[data-slot="order-details-sidebar"]',
+    );
+    expect(sidebar).not.toBeNull();
+    const summaryBlock = sidebar?.querySelector(".border-b");
+    expect(summaryBlock).toBeNull();
+    expect(sidebar?.querySelector("hr")).toBeNull();
   },
 };
