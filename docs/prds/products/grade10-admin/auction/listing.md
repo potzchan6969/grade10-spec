@@ -36,6 +36,10 @@ The listing form offers USD, HKD, and JPY. The bid floor follows the selected
 currency's [price-tier schedule](/p/grade10-site/auction/bid-increments); there
 is no minimum-increment field for an operator to set.
 
+🚧 **Inventory unit choice** — creating a listing requires an explicit choice
+of one Cert ID belonging to the selected product, or `No Cert ID` when the lot
+uses an unnumbered unit.
+
 ## Operator actions
 
 :::detail{title="Grants and the trail" for="operator"}

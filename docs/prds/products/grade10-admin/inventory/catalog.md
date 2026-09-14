@@ -11,7 +11,7 @@ product history.
 
 ## Product identity
 
-- **Collectible Cards** — the controlled product type for card stock
+- 🚧 **Product hierarchy** — IP, Category, and Item are the complete product identity
 - **Required classification** — one reusable IP, Item, and Category tag
 - **PriceCharting identity** — a confirmed provider match with its canonical
   link and stable provider id
@@ -44,6 +44,8 @@ product history.
 - **Product fields** — an admin selects and orders the fields Auction shows for
   each product schema; selected values remain live and searchable by their
   stable identity
+- 🚧 **Cert ID field** — Cert ID is always available to choose as a displayed
+  field, but an admin decides whether it appears and where it sits
 - **Listing attribute** — an ordered display item belongs to one Auction
   listing, may carry localized labels and values, and is not searchable or
   filterable
@@ -61,6 +63,8 @@ product history.
 ## Intake
 
 - **Single product** — create or edit the card identity before stock arrives
+- 🚧 **Optional Cert ID** — intake may record an individual graded item's
+  certificate identifier under the product inventory
 - **Bulk import** — upload a bounded CSV, review each taxonomy and provider
   match, confirm every row, and commit the batch as one operation
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
