@@ -226,6 +226,6 @@ export const PostUnsold: Story = {
   render: () => lotPage("closed-unsold"),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getAllByText("Unsold").length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("Ended").length).toBeGreaterThan(0);
   },
 };
