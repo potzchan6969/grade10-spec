@@ -33,19 +33,19 @@ that reads one page.
 
 ## Decisions
 
-**One sortable key, not three ordered columns.** The banded order is expressed
-as a band integer plus one signed key: the band is `1` for Active, `2` for
-Upcoming and `3` for Ended; the key is the close for Active, the start for
-Upcoming, and the negated close for Ended, so every band ascends. `ORDER BY
-band, key, id` is then one direction over three values, and the keyset cursor
-is a row comparison over that same triple — the shape the browse already uses
-for `(endsAt, id)`. Ordering by three columns with mixed directions would need
-a cursor predicate per band and a different one at each band boundary.
+**One sortable key, not three ordered columns.** The order is expressed as the
+external lot status ranked `1` for Active, `2` for Upcoming and `3` for Ended,
+plus one signed key: the close for Active, the start for Upcoming, and the
+negated close for Ended, so every status ascends. `ORDER BY rank, key, id` is
+then one direction over three values, and the keyset cursor is a row comparison
+over that same triple — the shape the browse already uses for `(endsAt, id)`.
+Ordering by three columns with mixed directions would need a cursor predicate
+per status and a different one at each boundary between them.
 
-**The band is derived in the query, never stored.** `grade10-site/auction/lot-status`
+**The rank is derived in the query, never stored.** `grade10-site/auction/lot-status`
 defines the external lot status as worked out from the lot and never saved, so
-the band is a `CASE` over status, `startsAt` and `endsAt` against the read's
-own clock. A stored band would have to be swept as lots open and close, and
+the rank is a `CASE` over status, `startsAt` and `endsAt` against the read's
+own clock. A stored rank would have to be swept as lots open and close, and
 would be wrong between the sweep and the read.
 
 **The page keeps its own sort, and its ties settle on the lot record.** The
@@ -64,13 +64,14 @@ beside it is the one a new channel's author will see.
 
 ## Risks / Trade-offs
 
-- **The banded order needs its own index.** `(status, endsAt)` and
-  `(endsAt, id)` cannot start an ordered scan over a derived band. At today's
-  catalogue size the planner sorts a few hundred rows and nobody notices; the
-  trigger for an expression index on the band key is the catalogue passing a
-  few thousand published lots, and it is recorded here rather than added now
-- **The band moves under a reader.** A lot that opens or closes between two
-  page reads changes band, so a keyset walk can show it twice or not at all.
+- **This order needs its own index.** `(status, endsAt)` and `(endsAt, id)`
+  cannot start an ordered scan over a derived rank. At today's catalogue size
+  the planner sorts a few hundred rows and nobody notices; the trigger for an
+  expression index on the sort key is the catalogue passing a few thousand
+  published lots, and it is recorded here rather than added now
+- **A lot's status moves under a reader.** A lot that opens or closes between
+  two page reads changes status, so a keyset walk can show it twice or not at
+  all.
   This is true of every time-ordered keyset and is why the spec's paging
   scenario is written against a catalogue read inside one clock
 - **Nothing yet refuses a second channel.** No item can be published twice

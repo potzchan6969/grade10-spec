@@ -1,12 +1,13 @@
 ## 1. Auction catalogue order (grade10)
 
-- [x] 1.1 Band the public listing read: Active, then Upcoming, then Ended, each
-      band ordered by close, start and close descending, ties on the lot record
-- [x] 1.2 Page the banded order with a keyset cursor over band, key and record,
-      so a page at a time reads in the same order as the whole catalogue
+- [x] 1.1 Group the public listing read by external lot status: Active, then
+      Upcoming, then Ended, each ordered by close, start and close descending,
+      ties on the lot record
+- [x] 1.2 Page that order with a keyset cursor over status, key and record, so
+      a page at a time reads in the same order as the whole catalogue
 - [x] 1.3 Settle the catalogue page's own All lots and Ending soon orders on the
       lot record, so no two lots swap places between renders
-- [x] 1.4 Verify: open lots lead the catalogue, each band holds its own order, a
+- [x] 1.4 Verify: Active lots lead the catalogue, each status holds its own order, a
       tie reads the same way twice, and paging to the end lists every lot once
       (`grade10-site-auction-auction-SC-19` to `SC-22`)
 

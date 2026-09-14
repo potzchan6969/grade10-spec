@@ -28,8 +28,8 @@ shows me a lot twice or skips one.
 
 **Pre-conditions:**
 
-* Lots in all three bands, among them an Ended lot that closed before an Active
-  lot closes.
+* Lots of all three statuses, among them an Ended lot that closed before an
+  Active lot closes.
 
 **Steps:**
 
@@ -41,7 +41,7 @@ shows me a lot twice or skips one.
 * Every Active lot is listed before every Upcoming lot.
 * Every Upcoming lot is listed before every Ended lot.
 
-### grade10-site-auction-auction-US5-TC2-1: Each band has its own order
+### grade10-site-auction-auction-US5-TC2-1: Each status has its own order
 
 **Classification:**
 
@@ -90,7 +90,7 @@ shows me a lot twice or skips one.
 
 **Pre-conditions:**
 
-* Two lots in one band that the band's order cannot tell apart.
+* Two lots of one status that its order cannot tell apart.
 
 **Steps:**
 

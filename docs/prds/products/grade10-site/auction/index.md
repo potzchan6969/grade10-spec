@@ -14,11 +14,10 @@ browses, bids, and after the close follows one [Winner Order](/p/grade10-site/au
 
 ## Catalogue Order
 
-🚧 **What the catalogue leads with** — lots open for bidding come first,
-soonest to close first; then lots that have not started, soonest to start
-first; then ended lots, most recently ended first. Two lots that would sit
-together keep one fixed order, so reading on never shows a lot twice or skips
-one.
+🚧 **What the catalogue leads with** — [Active](/p/grade10-site/auction/lot-status) lots come first,
+soonest to close first; then Upcoming lots, soonest to start first; then Ended
+lots, most recently ended first. Two lots that would sit together keep one
+fixed order, so reading on never shows a lot twice or skips one.
 
 ## Holds
 

@@ -73,7 +73,7 @@ one thing.
 - **Scenario ids** — crawlable-pages SC-16 to SC-24 added; auction SC-19 to
   SC-22 added
 - **Depends on** — `add-collector-lot-status` for Upcoming, Active and Ended,
-  the statuses the auction order is banded by
+  the statuses the auction order groups by
 
 ## Follow-on changes
 

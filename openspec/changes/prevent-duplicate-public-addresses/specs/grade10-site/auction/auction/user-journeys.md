@@ -11,6 +11,6 @@ shows me a lot twice or skips one.
 **Accepted by:**
 
 - `grade10-site-auction-auction-SC-19` — Open lots lead the catalogue
-- `grade10-site-auction-auction-SC-20` — Each band has its own order
+- `grade10-site-auction-auction-SC-20` — Each status has its own order
 - `grade10-site-auction-auction-SC-21` — A tie is settled the same way every read
 - `grade10-site-auction-auction-SC-22` — Paging does not change the order
