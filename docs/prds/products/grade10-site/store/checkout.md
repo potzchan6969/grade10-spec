@@ -16,6 +16,11 @@ In the cart drawer, signed in with Google or a magic link.
 ## Store — Read every line live
 Current price and stock, from Shopify. A line that moved comes back named.
 
+## Collector — Check the price
+The promo code and the points carried from the drawer, or chosen here, and
+the estimated total they leave — [Cart Drawer](/p/grade10-site/store/cart).
+Pay sends them with the lines.
+
 # On Shopify's page
 
 ## Collector — Fill in shipping and pay

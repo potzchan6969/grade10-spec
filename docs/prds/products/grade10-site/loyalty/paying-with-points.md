@@ -19,8 +19,10 @@ order: 4
 
 ## Online
 
-- **Chosen** — on the store's own page at `/checkout`, before Shopify's
-  checkout; the member types how many points
+- **Chosen** — in the cart drawer or on `/checkout`, before Shopify's
+  checkout; the member types how many points and sees the ceiling after the
+  promo code's cut, and an ask past it is trimmed —
+  [Cart Drawer](/p/grade10-site/store/cart)
 - **Promised** — the order is recorded with that number, and the Shopify
   draft order carries it as one fixed-amount discount named "Points"; nothing
   is deducted and nothing is held

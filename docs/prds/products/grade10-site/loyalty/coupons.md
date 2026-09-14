@@ -37,9 +37,13 @@ so redefining the reward never rewrites a coupon a member already holds —
 
 | Channel | How it lands |
 | --- | --- |
-| Online | Chosen in the cart; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
+| Online | Chosen in the cart drawer or at `/checkout` from the coupons the member holds; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
 | At the till | Chosen inside the till session — a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; its Shopify Discount is minted the moment it is chosen and reused for that sale |
 
+- **Answered before chosen** — the cart drawer reads every coupon the
+  member holds against the cart, and one that cannot ride says which refusal
+  answered; nothing is held by reading —
+  [Cart Drawer](/p/grade10-site/store/cart)
 - **Held for an order, then settled** — a coupon is held against the order
   being paid, and freed again if that order is not
 - **A sale that beats it** — where the shop's own sale and the coupon
@@ -63,7 +67,7 @@ quietly lost a coupon.
 
 | Refusal | Meaning |
 | --- | --- |
-| Not held | Not a coupon this member holds |
+| Not held | Not a coupon this member holds; a code bound to another member is answered as one nobody minted |
 | Not standing | Already spent, or otherwise not available |
 | Expired | Its own validity passed |
 | Wrong channel | The definition does not name the channel it is being spent in |
@@ -101,6 +105,8 @@ the store's instrument, not the programme's.
 
 - **Minted by an operator alone** — a code prefix, a validity in days, and
   optionally the one member it belongs to
+- **Open or bound** — an open code is typed, never listed; a code bound to a
+  member is listed with their reward coupons in the cart drawer
 - **Never a reward** — no reward defines an order coupon; those are the
   store's to mint — [Discounts](/p/grade10-site/store/discounts)
 

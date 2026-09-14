@@ -1,0 +1,127 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Quoting the cart",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "member",
+      "label": "Member"
+    },
+    {
+      "id": "store",
+      "label": "Store"
+    },
+    {
+      "id": "loyalty",
+      "label": "Loyalty"
+    }
+  ],
+  "mainPath": [
+    "member-opens-the-drawer",
+    "member-chooses-a-code-or-points",
+    "store-prices-the-cart-once",
+    "member-reads-the-total",
+    "member-proceeds-to-checkout"
+  ],
+  "nodes": [
+    {
+      "id": "member-opens-the-drawer",
+      "lane": "member",
+      "col": 0,
+      "type": "external",
+      "label": "Opens the drawer",
+      "sublabel": "every line read against the shop",
+      "width": 132
+    },
+    {
+      "id": "member-chooses-a-code-or-points",
+      "lane": "member",
+      "col": 1,
+      "type": "external",
+      "label": "Chooses a code",
+      "sublabel": "or points, typed or picked",
+      "width": 132
+    },
+    {
+      "id": "store-prices-the-cart-once",
+      "lane": "store",
+      "col": 2,
+      "type": "backend",
+      "label": "Prices the cart once",
+      "sublabel": "code cut, then the points ceiling",
+      "width": 132
+    },
+    {
+      "id": "loyalty-answers-the-wallet",
+      "lane": "loyalty",
+      "col": 2,
+      "type": "backend",
+      "label": "Answers the wallet",
+      "sublabel": "each reward fits or is refused",
+      "width": 132
+    },
+    {
+      "id": "member-reads-the-total",
+      "lane": "member",
+      "col": 3,
+      "type": "external",
+      "label": "Reads the total",
+      "sublabel": "discount, points, estimate",
+      "width": 132
+    },
+    {
+      "id": "member-proceeds-to-checkout",
+      "lane": "member",
+      "col": 4,
+      "type": "external",
+      "label": "Proceeds to checkout",
+      "sublabel": "the same choice, carried",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "from": "member-opens-the-drawer",
+      "to": "member-chooses-a-code-or-points",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "member-chooses-a-code-or-points",
+      "to": "store-prices-the-cart-once",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "left"
+    },
+    {
+      "from": "store-prices-the-cart-once",
+      "to": "loyalty-answers-the-wallet",
+      "label": "reward coupons · nothing held",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "store-prices-the-cart-once",
+      "to": "member-reads-the-total",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "bottom"
+    },
+    {
+      "from": "member-reads-the-total",
+      "to": "member-proceeds-to-checkout",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    }
+  ]
+}
