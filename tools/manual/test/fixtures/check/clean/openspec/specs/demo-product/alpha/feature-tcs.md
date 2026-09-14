@@ -11,4 +11,4 @@ Ask alpha for the thing.
 **Properties:**
 
 - **Status:** draft
-- **Trace:** alpha-SC-01
+- **Trace:** alpha-US-01

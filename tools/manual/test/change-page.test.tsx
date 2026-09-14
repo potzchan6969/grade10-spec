@@ -126,7 +126,6 @@ const document: ChangeDocument = {
           id: "alpha-US-06",
           title: "Member redeems a per-unit reward",
           text: "**As a** member, **I want** one debit.",
-          acceptedBy: ["alpha-SC-65"],
         },
       ],
       sections: [

@@ -29,7 +29,7 @@ const ALPHA: SpecEntry = {
     },
   ],
   journeys: [
-    { id: "alpha-US-01", title: "Earn points", text: "", acceptedBy: [] },
+    { id: "alpha-US-01", title: "Earn points", text: "" },
   ],
 };
 

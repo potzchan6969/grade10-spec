@@ -59,14 +59,12 @@ describe("spec entries", () => {
     expect(scenario?.name).toBe("A scenario that predates permanent ids");
   });
 
-  it("reads journeys with their accepted-by scenario ids", () => {
+  it("reads journeys, which name no scenario of their own", () => {
     expect(alpha?.journeys).toHaveLength(1);
     const journey = alpha?.journeys?.[0];
     expect(journey?.id).toBe("alpha-US-01");
     expect(journey?.title).toBe("Reader follows the thing end to end");
     expect(journey?.text).toContain("**As a** reader,");
-    expect(journey?.text).not.toContain("Accepted by");
-    expect(journey?.acceptedBy).toEqual(["alpha-SC-01", "alpha-SC-02"]);
   });
 
   it("reads a sibling feature-tcs.md into traced cases with their status", () => {
@@ -176,11 +174,11 @@ describe("a spec issuing one id twice", () => {
         "",
         "### alpha-US-01: Someone does the thing",
         "",
-        "**Accepted by:** alpha-SC-01",
+        "They do the thing.",
         "",
         "### alpha-US-01: Someone does it again",
         "",
-        "**Accepted by:** alpha-SC-01",
+        "They do it again.",
         "",
       ].join("\n"),
     });
