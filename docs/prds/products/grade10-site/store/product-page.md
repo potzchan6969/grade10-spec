@@ -30,8 +30,9 @@ button to buy it.
 
 ## Buy
 
-🚧 **Signed-out Add to cart** — opens the sign-in dialog; no guest cart;
-after a successful sign-in the add completes when practical.
+🚧 **Signed-out Add to cart** — opens the sign-in dialog titled
+**Sign in to add to cart**; no guest cart; after a successful sign-in the
+add completes when practical.
 
 ## Free Pick-up
 
@@ -72,6 +73,7 @@ auction lot's address.
 | --- | --- | --- | --- |
 | Which picture | Decided | The card's first catalogue image, in the shop's own order. | Product |
 | Sign-in to add | Decided | A signed-out Add to cart opens the sign-in dialog. There is no guest cart and no guest checkout. After sign-in the add completes when practical. Same rule as the listing. | Product |
+| Sign-in title from add | Decided | The dialog title is **Sign in to add to cart** — why, not the bare **Sign In to Grade10**. Same string as the listing. Header Sign In keeps **Sign In to Grade10**. | Product |
 | Fitted, not cropped | Decided | The card sits whole inside the box. A slab's label or a card's corner cut off is the one thing a preview of it must not do. | Product |
 | Pad colour | Decided | White, fixed. Product photographs sit on white, so the pad reads as more of the same rather than as a colour of ours. | Design |
 | No picture, no tag | Decided | A card the catalogue pictures no way unfurls without a picture. A fetcher's own placeholder beats a broken image. | Product |
