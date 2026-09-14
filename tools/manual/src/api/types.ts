@@ -53,6 +53,11 @@ export type Scenario = {
   id?: string;
   name: string;
   text: string;
+  /** The anchor this scenario serves, from its `**Serves:**` line: a story id,
+   * or a `## Feature set` root group where nobody walks the capability. This is
+   * the only link between a scenario and a story — the two files never name
+   * each other, which is how each stopped inheriting the other's blind spots. */
+  serves?: string;
 };
 
 export type Requirement = {
@@ -66,8 +71,6 @@ export type Journey = {
   id: string;
   title: string;
   text: string;
-  /** Scenario ids this story is accepted by. */
-  acceptedBy: string[];
 };
 
 /** Review state of one case (`docs/governance/specs-to-test-cases.md`):
@@ -79,9 +82,10 @@ export type TestCase = {
    * `grade10-site-loyalty-programme-TC-03` an older suite issued. */
   id: string;
   title: string;
-  /** Ids this case traces to, as written: the journey it walks
-   * (`grade10-site-loyalty-programme-US-01`), or a scenario id where an older suite named those. A
-   * journey trace reaches the scenarios its `Accepted by` lists. */
+  /** Anchors this case walks, as written: the story
+   * (`grade10-site-loyalty-programme-US-01`), a `## Feature set` root group
+   * where nobody walks the capability, or a scenario id where an older suite
+   * named those. A trace reaches the scenarios that serve the same anchor. */
   traces: string[];
   status: TestCaseStatus;
 };

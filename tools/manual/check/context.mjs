@@ -43,7 +43,7 @@ export const RULES = [
   {
     key: "trace",
     level: "fail",
-    title: "Test cases tracing a scenario the spec does not issue",
+    title: "Test cases tracing an anchor the spec does not offer",
   },
   {
     key: "authority",
@@ -51,9 +51,18 @@ export const RULES = [
     title: "Approved suites holding a draft case",
   },
   {
-    key: "accepted",
+    key: "serves",
     level: "fail",
-    title: "Journeys accepted by a scenario the spec does not issue",
+    title: "Scenarios serving an anchor the spec does not offer",
+  },
+  {
+    // Warn until the store is migrated: every scenario written before
+    // `**Serves:**` existed is missing one, and failing on that would bury
+    // every other finding behind the backlog. It becomes `fail` in the commit
+    // that finishes the migration, and that commit is the one to raise it in.
+    key: "anchorless",
+    level: "warn",
+    title: "Scenarios carrying no `**Serves:**` line",
   },
   {
     key: "walked",
@@ -63,7 +72,7 @@ export const RULES = [
   {
     key: "derived",
     level: "warn",
-    title: "Walked capabilities with no suite beside them",
+    title: "Capabilities with anchors and no suite beside them",
   },
   {
     key: "grouping",

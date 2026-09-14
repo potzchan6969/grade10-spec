@@ -48,7 +48,17 @@ const JOURNEY_HEADING = /^([a-z0-9][a-z0-9-]*-US-\d+):\s*(.+)$/;
  * renumbered to a newer shape. */
 const CASE_HEADING =
   /^([a-z0-9][a-z0-9-]*?-(?:US-?\d+-)?TC-?\d+(?:-\d+)?):\s*(.+)$/;
-const ACCEPTED_BY = /^\*\*Accepted by:\*\*\s*$/m;
+/** The anchor a scenario serves, on its own line under the heading and above
+ * `**GIVEN**` / `**WHEN**`. Machine-read up to the first dash; the prose after
+ * it is for a human. The anchor is a story id, or a `## Feature set` root group
+ * name matched verbatim where nobody walks the capability. It sits above the
+ * GIVEN/WHEN/THEN lines deliberately, so editing its prose never reads as a
+ * behaviour change. */
+const SERVES = /^\s*(?:[-*]\s+)?\*\*Serves:\*\*\s*(.+?)\s*$/m;
+/** A `## Feature set` root group: a top-level bullet, its children indented
+ * under it. The group name is the anchor; leaves carry no ids and are free to
+ * be reworded. */
+const FEATURE_GROUP = /^[-*]\s+(?:\*\*)?(.+?)(?:\*\*)?\s*$/;
 /** The one line a journeys file holds in place of stories when no end user
  * reaches the capability on its own (`openspec/config.yaml`,
  * `rules.user-journeys`): a policy, a package contract, a convention. */
@@ -184,7 +194,10 @@ function fillSpec(entry: SpecEntry, text: string): void {
   entry.purpose = purpose.body;
 
   const featureSet = findSection(sections, "Feature set");
-  if (featureSet) entry.featureSet = featureSet.body;
+  if (featureSet) {
+    entry.featureSet = featureSet.body;
+    entry.featureGroups = featureGroups(featureSet.body);
+  }
 
   const requirements = findSection(sections, "Requirements");
   if (!requirements) {
@@ -241,15 +254,31 @@ export function readJourney(section: Section): Journey {
       "a journey heading is `### <capability>-US-<n>: <title>`",
     );
   }
-  const split = ACCEPTED_BY.exec(section.body);
-  const text = split ? section.body.slice(0, split.index) : section.body;
-  const accepted = split ? section.body.slice(split.index) : "";
-  return {
-    id: match[1],
-    title: match[2],
-    text: text.trimEnd(),
-    acceptedBy: [...new Set(accepted.match(SCENARIO_ID) ?? [])],
-  };
+  return { id: match[1], title: match[2], text: section.body.trimEnd() };
+}
+
+/** The root group names of a `## Feature set`, in file order. Only column-0
+ * bullets are groups; an indented bullet is a leaf, and a leaf is never an
+ * anchor. */
+export function featureGroups(body: string): string[] {
+  const groups: string[] = [];
+  for (const line of body.split("\n")) {
+    if (/^\s/.test(line)) continue;
+    const match = FEATURE_GROUP.exec(line);
+    if (!match) continue;
+    const name = match[1].replace(/:.*$/, "").trim();
+    if (name) groups.push(name);
+  }
+  return [...new Set(groups)];
+}
+
+/** The anchor a scenario serves, or null where it names none. The prose after
+ * the first dash is a human's, and is dropped. */
+export function servedAnchor(body: string): string | null {
+  const match = SERVES.exec(body);
+  if (!match) return null;
+  const anchor = match[1].split(/\s+[-\u2013\u2014]\s+/)[0].trim();
+  return anchor.replace(/^`|`$/g, "") || null;
 }
 
 /**
@@ -332,6 +361,8 @@ function readScenario(section: Section): Scenario {
   }
   const scenario: Scenario = { name: match[2], text: section.body };
   if (match[1]) scenario.id = match[1];
+  const serves = servedAnchor(section.body);
+  if (serves) scenario.serves = serves;
   return scenario;
 }
 

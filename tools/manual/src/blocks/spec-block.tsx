@@ -338,10 +338,13 @@ export function JourneyCard({
 }) {
   const { index } = useBlockScope();
   const id = journeyAnchor(journey);
-  const accepted = journey.acceptedBy.map((scenarioId) => ({
-    id: scenarioId,
-    name: findScenario(spec, scenarioId)?.scenario.name,
-  }));
+  // Derived, never stored: a scenario names the story it serves, and the story
+  // names nothing. The two files pointing at each other is what let each be
+  // written from the other.
+  const accepted = spec.requirements
+    .flatMap((requirement) => requirement.scenarios)
+    .filter((scenario) => scenario.id && scenario.serves === journey.id)
+    .map((scenario) => ({ id: scenario.id as string, name: scenario.name }));
 
   return (
     <article
@@ -372,7 +375,7 @@ export function JourneyCard({
       {accepted.length > 0 ? (
         <div className="mt-3">
           <Text as="p" className="mb-1.5" size="xs" tone="secondary">
-            Accepted by
+            Served by
           </Text>
           <ul className="grid gap-1.5 sm:grid-cols-2">
             {accepted.map((scenario) => (

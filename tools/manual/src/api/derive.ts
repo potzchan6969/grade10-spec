@@ -915,12 +915,13 @@ export function qaRows(index: ManualIndex): QaRow[] {
       continue;
     }
 
-    const traced = tracedBy(cases, journeys);
+    const allScenarios = spec.requirements.flatMap(
+      (requirement) => requirement.scenarios,
+    );
+    const traced = tracedBy(cases, allScenarios);
     const exempt = new Set(spec.outOfSuite ?? []);
-    const issued = spec.requirements.flatMap((requirement) =>
-      requirement.scenarios.flatMap((scenario) =>
-        scenario.id ? [scenario.id] : [],
-      ),
+    const issued = allScenarios.flatMap((scenario) =>
+      scenario.id ? [scenario.id] : [],
     );
     const countable = issued.filter((id) => !exempt.has(id));
 
@@ -946,21 +947,29 @@ export function qaRows(index: ManualIndex): QaRow[] {
   return rows.sort(byReviewFirst);
 }
 
-/** The scenarios living cases trace. A case traces the journey it walks, and
- * reaches every scenario that journey's `Accepted by` lists; an older case
- * names a scenario outright, and reaches that one. A `deprecated` case is
- * history, not coverage — counting its traces is how a scenario reads as
- * covered after it loses its last case. */
+/** The scenarios living cases reach. A case walks an anchor, and reaches every
+ * scenario whose `**Serves:**` names that same anchor; an older case names a
+ * scenario outright, and reaches that one. The join runs through the anchor
+ * rather than through a link the two files keep on each other, so neither is
+ * written from the other. A `deprecated` case is history, not coverage —
+ * counting its traces is how a scenario reads as covered after it loses its
+ * last case. */
 export function tracedBy(
   cases: TestCase[],
-  journeys: Journey[] = [],
+  scenarios: Scenario[] = [],
 ): Set<string> {
-  const accepted = new Map(journeys.map((one) => [one.id, one.acceptedBy]));
+  const served = new Map<string, string[]>();
+  for (const scenario of scenarios) {
+    if (!scenario.id || !scenario.serves) continue;
+    const at = served.get(scenario.serves);
+    if (at) at.push(scenario.id);
+    else served.set(scenario.serves, [scenario.id]);
+  }
   return new Set(
     cases
       .filter((one) => one.status !== "deprecated")
       .flatMap((one) => one.traces)
-      .flatMap((trace) => accepted.get(trace) ?? [trace]),
+      .flatMap((trace) => served.get(trace) ?? [trace]),
   );
 }
 

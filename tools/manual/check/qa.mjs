@@ -1,6 +1,12 @@
 /*
- * RULES: the acceptance a spec claims — the journeys it says accept it, and
- * the suite sitting beside it.
+ * RULES: the anchors a spec claims — the story or feature-set group each
+ * scenario serves, and the suite sitting beside it.
+ *
+ * Neither the spec nor the suite names the other. A scenario points up at an
+ * anchor with `**Serves:**`, a case points up at one with `**Trace:**`, and the
+ * join between them runs through the anchor. The old `**Accepted by:**` list
+ * ran the link the other way as well, and a file written from the file it is
+ * meant to check inherits its blind spots.
  *
  * Every one of these is asked of the spec directory, never of a page. A
  * suite's integrity used to be gated on some page having authored a
@@ -18,24 +24,52 @@ export function checkAcceptance(ctx, shape) {
     // A spec the readers refused issues nothing this can measure against,
     // and the store rule already names it.
     if (!spec || spec.error) continue;
-    checkAcceptedBy(ctx, spec, dir);
+    checkServes(ctx, spec, dir);
     checkSuite(ctx, spec, dir);
   }
 }
 
-/** RULE `accepted`: a journey is accepted by scenarios, and an id that
- * resolves to none of the spec's own is a story nothing proves. */
-function checkAcceptedBy(ctx, spec, dir) {
-  const issued = scenarioIds(spec);
-  for (const journey of spec.journeys ?? []) {
-    for (const id of journey.acceptedBy) {
-      if (issued.has(id)) continue;
-      ctx.add(
-        "accepted",
-        `${dir}/user-journeys.md`,
-        `${journey.id} is accepted by \`${id}\`, which this spec issues nowhere`,
-      );
+/** Every anchor this capability offers: its stories, and the root groups of
+ * its feature set. A capability nobody walks has only the second kind, which
+ * is what `**Walked by:** nobody` routes it to. */
+function anchorsOf(spec) {
+  return new Set([
+    ...(spec.journeys ?? []).map((one) => one.id),
+    ...(spec.featureGroups ?? []),
+  ]);
+}
+
+/** RULE `serves`: a scenario names the anchor it serves, and an anchor that
+ * resolves to neither a story nor a feature set group is a scenario standing
+ * under nothing. Reported once per capability: before the store is migrated
+ * every scenario is missing the line, and one finding per scenario would bury
+ * the capabilities that are actually wrong. */
+function checkServes(ctx, spec, dir) {
+  const anchors = anchorsOf(spec);
+  const missing = [];
+  const unresolved = [];
+  for (const requirement of spec.requirements ?? []) {
+    for (const scenario of requirement.scenarios ?? []) {
+      if (!scenario.id) continue;
+      if (!scenario.serves) missing.push(scenario.id);
+      else if (!anchors.has(scenario.serves)) {
+        unresolved.push(`${scenario.id} → \`${scenario.serves}\``);
+      }
     }
+  }
+  if (missing.length > 0) {
+    ctx.add(
+      "anchorless",
+      `${dir}/spec.md`,
+      `${plural(missing.length, "scenario")} carry no \`**Serves:**\` line (${missing.slice(0, 5).join(", ")}${missing.length > 5 ? ", …" : ""})`,
+    );
+  }
+  for (const one of unresolved) {
+    ctx.add(
+      "serves",
+      `${dir}/spec.md`,
+      `${one}, which is neither a story nor a feature set group of \`${spec.id}\``,
+    );
   }
 }
 
@@ -50,18 +84,24 @@ function suiteOf(spec) {
   };
 }
 
-/** RULE `derived`: a capability someone walks pairs its journeys with a
- * suite. The one exemption is the capability whose journeys file says
- * `**Walked by:** nobody` — nobody walks it, so there is nothing to derive.
- * Anywhere else a missing suite is a change that stopped at the stories. */
+/** RULE `derived`: a capability with anchors pairs them with a suite.
+ * `**Walked by:** nobody` is no longer an exemption — it routes the anchors to
+ * the feature set instead of the stories, and the capability still carries a
+ * suite. Money amounts, dates and times and localization are where a boundary
+ * or precision miss costs most, and they were exactly what the old exemption
+ * excluded from test design. */
 function checkDerived(ctx, spec, dir, present) {
   if (present || spec.journeysError) return;
-  if (spec.journeys === undefined || spec.unwalked === true) return;
-  if (spec.journeys.length === 0) return;
+  if (spec.journeys === undefined) return;
+  const anchors = anchorsOf(spec);
+  if (anchors.size === 0) return;
+  const how = spec.unwalked
+    ? "nobody walks it, so its anchors are its feature set groups"
+    : "it holds stories";
   ctx.add(
     "derived",
     `${dir}/feature-tcs.md`,
-    `missing: \`${spec.id}\` holds journeys, so derive the suite with \`/spec-to-tcs feature ${spec.id}\``,
+    `missing: \`${spec.id}\` has anchors — ${how} — so write the suite with \`/spec-to-tcs feature ${spec.id}\``,
   );
 }
 
@@ -72,11 +112,21 @@ function checkSuite(ctx, spec, dir) {
   if (!present || spec.testCasesError) return;
   const suite = suiteOf(spec);
   const issued = scenarioIds(spec);
-  // A case traces the journey it walks, and reaches the scenarios that
-  // journey is accepted by; an older case names a scenario outright.
-  const accepted = new Map(
-    (spec.journeys ?? []).map((one) => [one.id, one.acceptedBy]),
-  );
+  // A case walks an anchor and reaches every scenario that serves the same
+  // one; an older case names a scenario outright. The join runs through the
+  // anchor, never through a link the two files keep on each other.
+  const accepted = new Map();
+  for (const requirement of spec.requirements ?? []) {
+    for (const scenario of requirement.scenarios ?? []) {
+      if (!scenario.id || !scenario.serves) continue;
+      const at = accepted.get(scenario.serves);
+      if (at) at.push(scenario.id);
+      else accepted.set(scenario.serves, [scenario.id]);
+    }
+  }
+  for (const anchor of anchorsOf(spec)) {
+    if (!accepted.has(anchor)) accepted.set(anchor, []);
+  }
   // Living cases only: a deprecated case is history, and counting its traces
   // is how a scenario read as covered after it lost its last case.
   const traced = new Map();
@@ -100,9 +150,9 @@ function checkSuite(ctx, spec, dir) {
   }
 }
 
-/** RULE `trace`: the id is the only thread between a case and the behaviour
- * it proves. One that names no journey or scenario of the spec's own is a
- * case standing behind nothing. */
+/** RULE `trace`: the anchor is the only thread between a case and the
+ * behaviour it proves. One that names no story, feature set group or scenario
+ * of the spec's own is a case standing behind nothing. */
 function checkTraces(ctx, file, spec, suite, issued, accepted) {
   for (const test of suite.cases) {
     for (const trace of test.traces) {
