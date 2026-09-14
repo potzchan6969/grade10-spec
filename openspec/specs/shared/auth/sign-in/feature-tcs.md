@@ -1,7 +1,8 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-02, tcs-rules r1
+**Status:** in-review
+**Drafts styled:** 2026-09-11, tcs-rules r1
+**Out of suite:** shared-auth-sign-in-SC-34
 
 ## shared-auth-sign-in-US1: Collector asks for and follows a sign-in link
 
@@ -43,7 +44,7 @@ A sign-in command whose request is in flight. Network manipulation holds that re
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -71,7 +72,7 @@ A collector on the email step whose send-link request is in flight.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -226,7 +227,7 @@ An email that has never signed in.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Layer:** e2e
@@ -246,19 +247,11 @@ An unused unexpired sign-in link for an address.
 
 * Following the earlier link creates no session.
 
----
-
-## shared-auth-sign-in-US2: Collector signs in with an emailed code
-
-**As a** collector,
-**I want** a code emailed to the address I submit to sign me in,
-**so that** I can finish on the same device, and a wrong or spent code cannot.
-
-### shared-auth-sign-in-US2-TC1-1: Correct unused code creates a session
+### shared-auth-sign-in-US1-TC10-1: Email step offers the link and no code control
 
 **Classification:**
 
-* **Severity:** blocker
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
@@ -267,73 +260,22 @@ An unused unexpired sign-in link for an address.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shared-auth-sign-in-US-02
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
-A person who asked for a sign-in code at an email address.
+None.
 
 **Steps:**
 
 1. Navigate to <grade10 sign-in url>.
-2. Submit the unused, unexpired code from that email.
+2. Reach the email step.
 
 **Expected Results:**
 
-* They are signed in as the account for that address.
+* The step offers sending a sign-in link.
+* No control asks for or sends a sign-in code.
 
-### shared-auth-sign-in-US2-TC2-1: Incorrect code is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-in-US-02
-
-**Pre-conditions:**
-A person on the code step for an address that has an unused code.
-
-**Steps:**
-
-1. Submit a code that is not the unused code for that address.
-
-**Expected Results:**
-
-* The surface states that the code did not work.
-* They are not signed in.
-
-### shared-auth-sign-in-US2-TC3-1: Expired code is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-02
-
-**Pre-conditions:**
-A sign-in code whose time to live has ended.
-
-**Steps:**
-
-1. Submit that code.
-
-**Expected Results:**
-
-* The surface states that the code did not work.
-* They are not signed in.
-
-### shared-auth-sign-in-US2-TC4-1: Three wrong submits kill the unused code
+### shared-auth-sign-in-US1-TC11-1: New link kills the earlier unused link
 
 **Classification:**
 
@@ -345,39 +287,14 @@ A sign-in code whose time to live has ended.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-02
-
-**Pre-conditions:**
-A person who has submitted three incorrect codes for the unused code sent to an address.
-
-**Steps:**
-
-1. Submit that unused code.
-
-**Expected Results:**
-
-* They are not signed in.
-
-### shared-auth-sign-in-US2-TC5-1: New code kills the earlier unused link
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-02
+* **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
 An unused unexpired sign-in link for an address.
 
 **Steps:**
 
-1. Ask for a later sign-in-code email to that address.
+1. Ask for a later sign-in-link email to that address.
 2. Follow the earlier link.
 
 **Expected Results:**
@@ -675,7 +592,7 @@ An account created when a product verified an email.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -702,7 +619,7 @@ A sign-in-link email already sent to one address in the last sixty seconds.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -729,7 +646,7 @@ A sign-in-code email already sent to one address in the last sixty seconds.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -799,3 +716,30 @@ A sign-in that names no location.
 **Expected Results:**
 
 * They are on this brand.
+
+### shared-auth-sign-in-US5-TC6-1: Second link send in a minute is told to wait
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-05
+
+**Pre-conditions:**
+A sign-in-link email already sent to one address in the last sixty seconds.
+
+**Steps:**
+
+1. Ask that address for another sign-in link.
+
+**Expected Results:**
+
+* No second email is sent.
+* The surface tells them to wait.
+* It does not state that the link was not sent.
