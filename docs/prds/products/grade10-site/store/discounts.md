@@ -15,9 +15,9 @@ lands on the order through the same Shopify draft order.
 - **Discount code** — typed in the cart drawer or at `/checkout`; the total
   shows the cut at once, and a code the store refuses stays in the field with
   its reason — [Cart Drawer](/p/grade10-site/store/cart). An operator mints
-  one as a single-use `PREFIX-XXXXXXXX` with an expiry, open to anybody or
-  bound to one member; a bound code is listed for its member, an open one is
-  typed
+  one as a single-use `PREFIX-XXXXXXXX` with an expiry, bound to one member,
+  who sees it listed. A public code is a Shopify discount created in the
+  shop's admin and promoted elsewhere; it is the invoice's, not the cart's
   1. **Order coupon** — a fixed amount off the whole order, or off named
      products or variants, never more than the goods it may come off; bound to
      a Shopify Discount

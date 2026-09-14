@@ -16,7 +16,7 @@ back to the page they were on.
 | Promo codes | **1 per cart** — a second replaces the first |
 | Points | **After the code**, at **$1** a point, on qualifying goods only; an ask past the ceiling is trimmed to it — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Estimated total | **Goods − code − points** — before shipping, tax and the shop's own sale, which the invoice prices |
-| Held codes | The member's own store codes and reward coupons, the ones that fit first, the soonest to expire first; an open code is typed, never listed |
+| Held codes | The member's own store codes and reward coupons, the ones that fit first, the soonest to expire first; every store code is minted to a member, so the list is complete |
 | Carried to checkout | The code and the points, for this session; `/checkout` shows the same figures and Pay sends them; a paid order clears them |
 
 ## Reviewing the Cart
@@ -45,8 +45,12 @@ read against the cart as it stands and held nowhere.
 - 🚧 **Removed** — Remove puts the code back; a cart edit that makes it
   stop fitting takes it off with a notice
 - 🚧 **Wallet not answered** — the codes the store minted are still listed
-  and a typed code still applies; the programme's rewards are missing from
-  the list until it answers
+  and a typed code still applies; `/checkout` says the programme's rewards
+  could not be read
+- 🚧 **Gift** — a code that gives an item adds it as a line at no charge;
+  taking that line out puts the code back
+- 🚧 **Refusals in the reader's language** — every reason a code or the
+  points are refused is said in the site's own words, by its cause
 
 The refusals are the coupon's own —
 [Coupons](/p/grade10-site/loyalty/coupons#refusals).
@@ -145,10 +149,10 @@ second code on one cart.
 | One session scope | Decided | Signed-out browsing uses the browser cart; a signed-in session uses its member cart. The drawer does not merge them. | Engineering |
 | One quote | Decided | The drawer and `/checkout` read one store quote — the lines, the one code or reward, points after it — on the same arithmetic the checkout then writes, so no total is shown that the order records differently. | Product |
 | Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is carried to `/checkout` for the session and never stored. | Product |
-| Held list | Decided | The member's own store codes and reward coupons, answered before they are picked. An open code is typed, never listed, so a list never names a code the member was not sent. | Product |
+| Held list | Decided | The member's own store codes and reward coupons, answered before they are picked. | Product |
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
 | Shipping and sale | Decided | Unknown until the invoice; the estimated total is the goods after this store's own tender. | Product |
 | Existing checkout surface | Decided | The drawer opens `/checkout`; that surface keeps ownership of its live read and checkout creation. | Engineering |
-| Open codes listed | ❓ Open | Whether a code minted open to anybody is also listed for the members it was sent to. | Product |
+| Public codes | Decided | The store mints every code to one member. A public code is a Shopify discount, created in the shop's admin and promoted elsewhere; the cart neither lists nor takes one. | Product |
 :::

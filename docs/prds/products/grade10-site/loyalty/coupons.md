@@ -104,9 +104,10 @@ The store mints its own coupons — order, product and gift alike — and they a
 the store's instrument, not the programme's.
 
 - **Minted by an operator alone** — a code prefix, a validity in days, and
-  optionally the one member it belongs to
-- **Open or bound** — an open code is typed, never listed; a code bound to a
-  member is listed with their reward coupons in the cart drawer
+  the one member it belongs to; a public code is a Shopify discount, not the
+  store's — [Discounts](/p/grade10-site/store/discounts)
+- **Listed for its member** — with their reward coupons in the cart drawer
+  and at `/checkout`, answered against the cart before it is picked
 - **Never a reward** — no reward defines an order coupon; those are the
   store's to mint — [Discounts](/p/grade10-site/store/discounts)
 
