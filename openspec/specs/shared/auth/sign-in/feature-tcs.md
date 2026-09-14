@@ -406,7 +406,7 @@ customer is signed out on a brand that does not have Google sign-in.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -440,7 +440,7 @@ customer is on <grade10 sign-in url>, signed out.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -453,15 +453,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <collector email> has an account created by an emailed link.
+* <link-created email> has an account created by an emailed link.
 * customer is signed out.
 
 **Test data:**
 
+| Field | Value |
+| --- | --- |
+| `<link-created email>` | collector-link@example.com, an account created by an emailed link |
+
 | `<method>` | `<outcome>` |
 | --- | --- |
-| A later emailed link at <collector email> | the same account, not a second one |
-| Google sign-in at <collector email> on a brand that has Google | the same account, not a second one |
+| A later emailed link at <link-created email> | the same account, not a second one |
+| Google sign-in at <link-created email> on a brand that has Google | the same account, not a second one |
 
 **Steps:**
 
@@ -471,7 +475,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The person enters <outcome>.
-* No second account exists for <collector email>.
+* No second account exists for <link-created email>.
 
 ### shared-auth-sign-in-US4-TC3-1: Letter case does not create a second account
 
@@ -479,7 +483,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -516,7 +520,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -553,7 +557,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -589,7 +593,7 @@ A product of this brand has verified <address>.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -599,23 +603,27 @@ A product of this brand has verified <address>.
 * **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
-A product of this brand has verified <collector email>.
+
+* customer is signed out on this brand.
+* <trusted product> has verified <product-verified email> in its own flow.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
+| `<trusted product>` | The Grade10 hosted identity verification (e-KYC), a product of this brand |
+| `<product-verified email>` | collector-verified@example.com, verified by <trusted product> (e-KYC) |
 
 **Steps:**
 
-1. Ask the auth service to sign the account for <collector email> in.
-2. Read who the caller is on this brand.
+1. Complete <trusted product>'s identity verification for <product-verified email>.
+2. Ask the auth service, as <trusted product>, to sign that account in.
+3. Read who the caller is on this brand.
 
 **Expected Results:**
 
-* The person is signed in as the account for <collector email>.
-* No link or Google sign-in was completed for it.
+* The person is signed in as the account for <product-verified email>.
+* No sign-in link or Google sign-in was completed for it.
 
 ### shared-auth-sign-in-US4-TC7-1: Sign-in after a product-created account is the same person
 
@@ -623,7 +631,7 @@ A product of this brand has verified <collector email>.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -634,25 +642,25 @@ A product of this brand has verified <collector email>.
 
 **Pre-conditions:**
 
-* <collector email> has an account created when a product verified it.
+* <product-verified email> has an account created when a product verified it.
 * customer is on <grade10 sign-in url>, signed out.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<collector email>` | collector@example.com, verified by a product of this brand |
+| `<product-verified email>` | collector-verified@example.com, verified by the hosted identity verification (e-KYC) |
 
 **Steps:**
 
-1. Submit <collector email> at the email step.
+1. Submit <product-verified email> at the email step.
 2. Follow the unused, unexpired link from that email.
 3. Read the signed-in account.
 
 **Expected Results:**
 
 * The person enters the product-created account.
-* No second account exists for <collector email>.
+* No second account exists for <product-verified email>.
 
 ### shared-auth-sign-in-US4-TC8-1: Client cannot claim an email
 
@@ -660,7 +668,7 @@ A product of this brand has verified <collector email>.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -669,23 +677,35 @@ A product of this brand has verified <collector email>.
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-04
 
+Runs once per row of **Test data**.
+
 **Pre-conditions:**
-A client that is not a trusted product of this brand.
+
+* <untrusted client> holds no trusted-product credential for this brand.
+* customer is signed out on this brand.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<claimed email>` | victim@example.com, an address the client names |
+| `<untrusted client>` | A caller outside this brand's products, such as a script posting to the auth service directly |
+
+| `<claimed email>` | `<directory after>` |
+| --- | --- |
+| victim@example.com, an address with an account on this brand | the existing account is unchanged |
+| stranger@example.com, an address with no account | no account exists for it |
 
 **Steps:**
 
-1. Ask the auth service to create an account or a session for <claimed email>.
+1. Send the auth service a create-or-sign-in request naming <claimed email>, as <untrusted client>.
+2. Read who the caller is on this brand.
+3. Look <claimed email> up in the identity directory.
 
 **Expected Results:**
 
 * No account is created from that request.
-* The person is not signed in.
+* The caller is not signed in as <claimed email>.
+* The directory shows <directory after>.
 
 ---
 
