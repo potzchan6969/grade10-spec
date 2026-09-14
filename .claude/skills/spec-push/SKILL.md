@@ -125,11 +125,17 @@ On the rebased commits, not the ones you started with:
   catches a suite whose header contradicts its cases or whose trace points at
   an id the spec no longer issues.
 
-**A delta with journeys and no suite does not push.** If a `spec.md` on this
-branch has a `user-journeys.md` and no `feature-tcs.md` beside it, stop and run
-`/spec-to-tcs <change-id>`, then commit the suites before pushing —
-`pnpm run tcs:validate --require-suites` names them. Generation belongs in the
-spec's own pull request; see `docs/governance/specs-to-test-cases.md`.
+**A delta with journeys and no suite does not push**, and that now includes a
+capability whose journeys say `**Walked by:** nobody` — it is anchored on its
+feature set, not exempt. If a `spec.md` on this branch has a `user-journeys.md`
+and no `feature-tcs.md` beside it, stop and run `/spec-to-tcs <change-id>`, then
+commit the suites before pushing — `pnpm run tcs:validate --require-suites`
+names them. The blind pass belongs in the spec's own pull request, and lands
+before the scenarios commit; see `docs/governance/specs-to-test-cases.md`.
+
+**A suite with no `## Reconciliation` does not push either.** The section is the
+only evidence the blind pass ran: without it a pass that found nothing and a
+pass that never happened are the same diff.
 
 **A change that moves a cross-feature path settles its domain suite.** Do not
 ask; compute it. For each domain the branch touches that holds an

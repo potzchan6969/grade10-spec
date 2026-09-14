@@ -94,8 +94,9 @@ what they ask, and record their words untidied — generation copies what they a
    behaves. Never talk the reviewer out of a doubt; a doubted case is wrong
    until the spec says otherwise.
 
-9. **Add a case the reviewer asks for** only from a scenario that accepts the
-   journey — otherwise it is a new requirement, routed to the spec's author.
+9. **Add a case the reviewer asks for** only where the anchor it traces already
+   carries the behaviour — otherwise it is a new requirement, routed to the
+   spec's author.
    Check the journey, the file, then the domain suite for one that covers it;
    on a hit show both and ask: update, add as distinct, or drop. Write it as
    `draft` at the next unused `TC<m>`, `<v>` at `1`, and walk it like any
@@ -130,6 +131,23 @@ what they ask, and record their words untidied — generation copies what they a
    rule. Report cases approved, edited, deferred and retired, the gaps for the
    spec's author, and any other suite still awaiting review.
 
+## Closing a feature review
+
+Before the file goes `approved`, do two things to its `## Reconciliation`.
+
+**Walk the rejected rows with the reviewer.** Dropping a blind-pass finding as a
+misreading is the cheapest way to finish a planning run, and a wrong rejection
+leaves no trace afterwards. A row survives only if no rule anywhere states what
+the case claimed.
+
+**Strip the scenario ids**, leaving the dispositions and the reasons. Those ids
+belong to the change's lifetime alone: the next blind pass reads this file for
+id continuity, and an id left here is how it stops being blind.
+
+A case carrying `**Blocked:**` is an open question, not a draft you are late in
+reviewing. It stays `draft`, it does not hold the file's status against the
+reviewer, and it is never resolved here — only by the person named on it.
+
 ## Never
 
 - Never mark a case `actual`, or a file `approved`, without the reviewer's yes
@@ -140,3 +158,7 @@ what they ask, and record their words untidied — generation copies what they a
 - Never delete a case or a suite file; retirement is `deprecated`
 - Never regenerate the suite mid-review; if it is badly out of date, stop and
   hand back to `/spec-to-tcs`
+- Never resolve, re-word or drop a case carrying `**Blocked:**`, and never
+  reclassify a deferred finding as a rejected one — a question nobody could
+  answer is not a misreading
+- Never leave scenario ids in `## Reconciliation` on a file you approved

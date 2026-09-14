@@ -15,12 +15,17 @@ This skill covers what to settle before drafting and routes to the right one.
 | # | Artifact | Skill | Required |
 | --- | --- | --- | --- |
 | 1 | `proposal.md` | `planning-pm` | Always |
-| 2 | `specs/<capability>/spec.md` | `planning-pm` | Always |
+| 2 | `specs/<capability>/spec.md` — `## Purpose`, `## Feature set` | `planning-pm` | Always |
 | 3 | `specs/<capability>/user-journeys.md` | `planning-pm` | Always — a capability nobody walks says so in it |
-| 4 | `specs/<capability>/feature-tcs.md` | `planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
-| 5 | `ui-design.md` | `planning-design` | Optional |
-| 6 | `tech-design.md` | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
-| 7 | `tasks.md` | `planning-dev` | Before the change can be applied |
+| 4 | `specs/<capability>/feature-tcs.md` | `planning-pm` | Always — a blind pass, written before the scenarios |
+| 5 | `specs/<capability>/spec.md` — the requirements and scenarios | `planning-pm` | Always — reconciled against 4 |
+| 6 | `ui-design.md` | `planning-design` | Optional |
+| 7 | `tech-design.md` | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
+| 8 | `tasks.md` | `planning-dev` | Before the change can be applied |
+
+Artifacts 2 to 5 are one `/planning-pm` run, and 2 and 5 are two passes over the
+same `spec.md`. A capability nobody walks still carries 4, anchored on its
+feature set rather than its stories.
 
 **Write your part and stop.** Each role adds its artifacts to the one change;
 nobody opens a second one, and an implementation plan invented ahead of the
@@ -48,7 +53,7 @@ Then settle two things:
 - **Where your work ends** — the table above.
 
 A change that changes no behavior at all — a pure refactor, tooling, docs —
-sets `skip_specs: true` in its `.openspec.yaml` rather than inventing a
+sets `skip_specs: <why>` in its `.openspec.yaml` rather than inventing a
 requirement to satisfy validation.
 
 ## Then hand over
