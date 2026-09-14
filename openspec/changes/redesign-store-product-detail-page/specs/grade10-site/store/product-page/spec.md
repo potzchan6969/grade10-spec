@@ -6,7 +6,66 @@
   - Item facts: exposes optional product facets and SKU, with static fulfilment guidance.
 - Product detail interaction
   - Description disclosure: lets a collector read the full description without losing their place.
-  - Quantity purchase: lets a collector choose a quantity and add the selected variant in place.
+  - Quantity purchase: lets a collector choose a quantity and add the product's one sellable item in place.
+
+## MODIFIED Requirements
+
+### Requirement: A card is added to the cart from its own page
+
+A card's page SHALL let a collector add its one sellable product item to the
+storefront's cart, without leaving the page and without returning to the grid.
+The page SHALL NOT render or require a choice among sizes, options, or
+variants. The underlying Shopify sale identifier remains an internal cart
+identity and is not a product choice or display label.
+
+After a card is added the collector SHALL still be on that card, and what the
+site says the cart holds SHALL account for what was added. Adding the same
+product again SHALL increase one cart line.
+
+#### Scenario: grade10-site-store-product-page-SC-07 - A collector adds the grade they chose
+
+- **GIVEN** a card with one sellable product item
+- **WHEN** a collector opens its product page
+- **THEN** the page offers no size, option, or variant choice
+
+#### Scenario: grade10-site-store-product-page-SC-08 - A card with one thing to buy needs no choice
+
+- **GIVEN** a card with one sellable product item
+- **WHEN** a collector adds it without choosing anything
+- **THEN** the cart holds that product item
+
+#### Scenario: grade10-site-store-product-page-SC-09 - The collector keeps their place
+
+- **WHEN** a collector adds a card from its page
+- **THEN** they are still on that card's address, reading that card
+- **AND** what the site says the cart holds has changed to account for it
+
+#### Scenario: grade10-site-store-product-page-SC-10 - The same card twice
+
+- **GIVEN** a collector who has already added a product from its page
+- **WHEN** they add the same product again
+- **THEN** the cart holds the quantity they added, as one line rather than two
+
+### Requirement: A card nobody can buy says so where the buying happens
+
+A card whose one product item is unavailable SHALL say so on its page, in the
+place a collector would otherwise buy it. It SHALL NOT show a control that
+cannot be used, and it SHALL NOT hide the price it lists.
+
+#### Scenario: grade10-site-store-product-page-SC-11 - Nothing on the card is for sale
+
+- **GIVEN** a card whose one product item is unavailable for sale
+- **WHEN** a collector opens its page
+- **THEN** the page says the product cannot be bought
+- **AND** its price is still visible
+- **AND** there is nothing to press that would add it
+
+#### Scenario: grade10-site-store-product-page-SC-12 - One grade sold, another still for sale
+
+- **GIVEN** a card whose one product item is unavailable for sale
+- **WHEN** a collector opens its page
+- **THEN** the product is marked unavailable
+- **AND** the page offers no alternate size, option, or variant to add
 
 ## ADDED Requirements
 
@@ -15,17 +74,17 @@
 The product page SHALL render every image supplied for the product in the
 catalogue order, with descriptive alternative text, and SHALL render an
 accessible placeholder when the catalogue supplies no image. It SHALL show the
-currently priced variant's current price and SHALL show a compare-at price only
-when the catalogue supplies one greater than the current price.
+product's one sellable item's current price and SHALL show a compare-at price
+only when the catalogue supplies one greater than the current price.
 
-When the priced variant is available and the catalogue supplies a finite
+When the product item is available and the catalogue supplies a finite
 quantity from one through three, the page SHALL show the remaining quantity.
 It SHALL hide that low-inventory message when quantity is greater than three,
-unknown, or the variant is sold out.
+unknown, or the product item is sold out.
 
 #### Scenario: grade10-site-store-product-page-SC-13 - A product page shows its media and price context
 
-- **GIVEN** a product with two images and a priced variant whose current price is 10500 minor units, compare-at price is 12300 minor units, and finite quantity is 3
+- **GIVEN** a product with two images and one sellable item whose current price is 10500 minor units, compare-at price is 12300 minor units, and finite quantity is 3
 - **WHEN** a collector opens the product page
 - **THEN** the page renders both images in catalogue order with descriptive alternative text
 - **AND** it renders the current price and the greater compare-at price
@@ -76,30 +135,27 @@ SHALL restore the collapsed state without navigating away.
 ### Requirement: A product page adds a chosen quantity in place
 
 The product page SHALL render a quantity stepper defaulting to one for the
-selected variant. The stepper SHALL clamp to the selected variant's finite
+product's one sellable item. The stepper SHALL clamp to that item's finite
 available quantity when one is supplied. While an add is pending, the stepper
 and add action SHALL be disabled and the action SHALL show its loading state.
 After a successful add, the page SHALL remain on the product address, report
-the added state, and reflect the resulting cart quantity. If no variant is
-available for sale, the action SHALL be disabled and labelled as sold out.
-
-The existing product-page variant rules remain in force: the page opens on the
-priced variant, a collector may choose another available variant, unavailable
-variants cannot be added, and adding the same variant increases one cart line.
+the added state, and reflect the resulting cart quantity. If the product item
+is not available for sale, the action SHALL be disabled and labelled as sold
+out.
 
 #### Scenario: grade10-site-store-product-page-SC-17 - A collector adds a chosen quantity in place
 
-- **GIVEN** a product with a selected available variant and finite quantity 3
+- **GIVEN** a product with one available sellable item and finite quantity 3
 - **WHEN** a collector changes the stepper to 2 and activates Add to cart
 - **THEN** the pending action disables the stepper and add control
 - **AND** the page remains on the product address
-- **AND** the cart records quantity 2 for the selected variant after the add settles
+- **AND** the cart records quantity 2 for the product's sellable item after the add settles
 - **AND** the action reports that the item was added
 
 #### Scenario: grade10-site-store-product-page-SC-18 - A sold-out product offers no add action
 
-- **GIVEN** a product whose variants are all unavailable for sale
+- **GIVEN** a product whose one sellable item is unavailable for sale
 - **WHEN** a collector opens the product page
-- **THEN** every variant remains priced and marked unavailable as applicable
+- **THEN** the product remains priced and marked unavailable
 - **AND** the purchase action is disabled and labelled sold out
 - **AND** no control can add the product to the cart
