@@ -5,6 +5,8 @@ import {
   FILLED_PAYMENT,
   FILLED_PICKUP_ADDRESS,
   FILLED_SUMMARY,
+  FILLED_SUMMARY_ORDER_DISCOUNT,
+  FILLED_SUMMARY_WITH_POINTS,
   ORDER_DETAILS_COPY,
 } from "./fixtures";
 import { OrderDetailsSidebar } from "./order-details-sidebar";
@@ -44,6 +46,33 @@ export const Full: Story = {};
 
 export const PointsEarned: Story = {
   args: { status: "completed" },
+};
+
+/** Points bill-credit after Discount — label includes points deducted. */
+export const WithPointsCredit: Story = {
+  args: {
+    summary: FILLED_SUMMARY_WITH_POINTS,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Discount (WELCOME10)")).toBeVisible();
+    expect(canvas.getByText("Points (100 pts)")).toBeVisible();
+    expect(canvas.getByText("−HK$100")).toBeVisible();
+    expect(canvas.getByText("HK$1,438")).toBeVisible();
+  },
+};
+
+/** Order promo without points — Points credit row stays omitted. */
+export const WithoutPointsCredit: Story = {
+  args: {
+    summary: FILLED_SUMMARY_ORDER_DISCOUNT,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Discount (WELCOME10)")).toBeVisible();
+    expect(canvas.queryByText(/Points \(\d+ pts\)/)).not.toBeInTheDocument();
+    expect(canvas.getByText("HK$1,538")).toBeVisible();
+  },
 };
 
 export const Pickup: Story = {

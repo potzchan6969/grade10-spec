@@ -15,6 +15,7 @@ import {
   FILLED_PICKUP_ADDRESS,
   FILLED_SUMMARY,
   FILLED_SUMMARY_ORDER_DISCOUNT,
+  FILLED_SUMMARY_WITH_POINTS,
   ORDER_DETAILS_COPY,
   PICKUP_DELIVERY,
 } from "./fixtures";
@@ -121,7 +122,24 @@ export const OrderDiscount: Story = {
     await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
     expect(canvas.getByText("Discount (WELCOME10)")).toBeVisible();
     expect(canvas.queryByText("SUMMER10")).not.toBeInTheDocument();
+    expect(canvas.queryByText(/Points \(\d+ pts\)/)).not.toBeInTheDocument();
     expect(canvas.getByText("HK$1,538")).toBeVisible();
+  },
+};
+
+/** Order promo plus points bill-credit in the summary. */
+export const WithPointsCredit: Story = {
+  args: {
+    lines: FILLED_LINES_ORDER_DISCOUNT,
+    summary: FILLED_SUMMARY_WITH_POINTS,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await waitFor(() => expect(orderDetailsRevealed(canvasElement)).toBe(true));
+    expect(canvas.getByText("Discount (WELCOME10)")).toBeVisible();
+    expect(canvas.getByText("Points (100 pts)")).toBeVisible();
+    expect(canvas.getByText("−HK$100")).toBeVisible();
+    expect(canvas.getByText("HK$1,438")).toBeVisible();
   },
 };
 
