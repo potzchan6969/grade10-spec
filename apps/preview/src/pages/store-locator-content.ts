@@ -7,7 +7,6 @@ import { FILLED_PICKUP_ADDRESS } from "../../../../packages/ui/src/blocks/store-
 
 const STORE_LOCATOR_COPY = {
   title: "Location & Hours",
-  getDirections: "Get directions",
   hoursHeading: "Hours",
   mapTitle: "Map of Hong Kong Grade10 Store",
   openMap: "Open Hong Kong Grade10 Store in Google Maps",

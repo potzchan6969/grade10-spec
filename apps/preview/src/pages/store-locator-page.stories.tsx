@@ -1,4 +1,3 @@
-import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { SiteHeader } from "@grade10/ui";
@@ -13,8 +12,9 @@ import {
 
 /**
  * Store Locator as a store assembles it: `SiteHeader`, Location & Hours
- * (map + address + hours + directions), and `Footer`. One Hong Kong store —
- * not a multi-store finder. Address and hours match the free-pickup fixture.
+ * (map + address + hours), and `Footer`. The map overlay opens Google Maps.
+ * One Hong Kong store — not a multi-store finder. Address and hours match
+ * the free-pickup fixture.
  */
 function StoreLocatorPage() {
   return (
@@ -78,21 +78,6 @@ function StoreLocatorPage() {
                   {STORE_LOCATOR_STORE.openingHours}
                 </p>
               ) : null}
-              <div className="pt-1">
-                <Button
-                  render={
-                    <a
-                      href={STORE_LOCATOR_STORE.mapsHref}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    />
-                  }
-                  size="md"
-                  variant="secondary"
-                >
-                  {STORE_LOCATOR_COPY.getDirections}
-                </Button>
-              </div>
             </VStack>
 
             <VStack className="w-full" gap="sm" hAlign="stretch">
@@ -147,9 +132,6 @@ export const Default: Story = {
     expect(
       canvas.getByText(STORE_LOCATOR_STORE.addressLines[0]),
     ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("link", { name: STORE_LOCATOR_COPY.getDirections }),
-    ).toHaveAttribute("href", STORE_LOCATOR_STORE.mapsHref);
     expect(
       canvas.getByRole("link", { name: STORE_LOCATOR_COPY.openMap }),
     ).toHaveAttribute("href", STORE_LOCATOR_STORE.mapsHref);
