@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { PRODUCT_DETAIL_STORY } from "./fixtures";
+import { DESCRIPTION_COPY, PRODUCT_DETAIL_STORY } from "./fixtures";
 import { StoreProductDescription } from "./store-product-description";
 
 const meta = {
@@ -8,6 +8,7 @@ const meta = {
   component: StoreProductDescription,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
+  args: { copy: DESCRIPTION_COPY },
 } satisfies Meta<typeof StoreProductDescription>;
 
 export default meta;
@@ -28,7 +29,10 @@ export const Default: Story = {
 };
 
 export const Short: Story = {
-  args: { description: "A sealed collector item." },
+  args: {
+    copy: DESCRIPTION_COPY,
+    description: "A sealed collector item.",
+  },
   play: async ({ canvasElement }) => {
     expect(
       within(canvasElement).queryByRole("button", { name: /Show/ }),

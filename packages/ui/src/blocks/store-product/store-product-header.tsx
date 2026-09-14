@@ -1,19 +1,47 @@
+import {
+  BreadcrumbItem,
+  BreadcrumbSeparator,
+  Breadcrumbs,
+} from "@grade10/design-system/components/display/breadcrumbs";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { StoreProductSaleItem } from "./types";
 
-type StoreProductHeaderProps = {
-  title: string;
-  saleItem?: StoreProductSaleItem;
+type StoreProductHeaderCopy = {
+  home: string;
+  onlyLeft: (count: number) => string;
+  shop: string;
 };
 
-function StoreProductHeader({ title, saleItem }: StoreProductHeaderProps) {
-  const quantityAvailable = saleItem?.quantityAvailable;
+type StoreProductHeaderProps = {
+  availabilityCount?: number;
+  copy: StoreProductHeaderCopy;
+  homeHref: string;
+  saleItem?: StoreProductSaleItem;
+  shopHref: string;
+  title: string;
+};
 
+function StoreProductHeader({
+  availabilityCount,
+  copy,
+  homeHref,
+  saleItem,
+  shopHref,
+  title,
+}: StoreProductHeaderProps) {
   return (
     <VStack data-slot="store-product-header" gap="sm">
-      <h1 className="text-3xl font-bold leading-snug text-foreground">
+      <Breadcrumbs>
+        <BreadcrumbItem href={homeHref}>{copy.home}</BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem href={shopHref}>{copy.shop}</BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem current>{title}</BreadcrumbItem>
+      </Breadcrumbs>
+
+      <h1 className="text-3xl font-semibold leading-9 text-foreground">
         {title}
       </h1>
 
@@ -29,11 +57,9 @@ function StoreProductHeader({ title, saleItem }: StoreProductHeaderProps) {
               </Text>
             ) : null}
           </HStack>
-          {quantityAvailable != null &&
-          quantityAvailable > 0 &&
-          quantityAvailable <= 3 ? (
+          {availabilityCount != null ? (
             <Text size="sm" tone="error">
-              Only {quantityAvailable} left
+              {copy.onlyLeft(availabilityCount)}
             </Text>
           ) : null}
         </VStack>
@@ -42,5 +68,5 @@ function StoreProductHeader({ title, saleItem }: StoreProductHeaderProps) {
   );
 }
 
-export type { StoreProductHeaderProps };
+export type { StoreProductHeaderCopy, StoreProductHeaderProps };
 export { StoreProductHeader };

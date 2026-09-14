@@ -33,6 +33,37 @@ const PRODUCT_DETAIL_STORY = {
   saleItem: SALE_ITEM,
 };
 
+const DESCRIPTION_COPY = {
+  showMore: "Show more",
+  showLess: "Show less",
+};
+
+const HEADER_COPY = {
+  home: "Home",
+  onlyLeft: (count: number) => `Only ${count} left`,
+  shop: "Shop",
+};
+
+const METADATA_COPY = {
+  aboutThisItem: "About This Item",
+  freePickupAt: "Free pick-up at",
+  hongKongGrade10Store: "Hong Kong Grade10 Store",
+  shippingAndPickup: "Shipping & Pickup",
+  shippingCalculatedAtCheckout: "Shipping calculated at checkout",
+  shippingFee: "Shipping fee",
+  skuLabel: "SKU",
+};
+
+const PURCHASE_COPY = {
+  addedToCart: "Added to cart",
+  addToCart: "Add to cart",
+  decreaseQuantity: "Decrease quantity",
+  increaseQuantity: "Increase quantity",
+  notForSaleNote: "This product is not for sale.",
+  quantityLabel: "Quantity",
+  soldOut: "Sold out",
+};
+
 const SOLD_OUT_PRODUCT_STORY = {
   ...PRODUCT_DETAIL_STORY,
   saleItem: {
@@ -42,4 +73,11 @@ const SOLD_OUT_PRODUCT_STORY = {
   },
 };
 
-export { PRODUCT_DETAIL_STORY, SOLD_OUT_PRODUCT_STORY };
+export {
+  DESCRIPTION_COPY,
+  HEADER_COPY,
+  METADATA_COPY,
+  PRODUCT_DETAIL_STORY,
+  PURCHASE_COPY,
+  SOLD_OUT_PRODUCT_STORY,
+};

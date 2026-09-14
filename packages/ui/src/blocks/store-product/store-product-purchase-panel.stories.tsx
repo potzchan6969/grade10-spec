@@ -1,14 +1,27 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, userEvent, within } from "storybook/test";
-import { PRODUCT_DETAIL_STORY, SOLD_OUT_PRODUCT_STORY } from "./fixtures";
+import { expect, fn, userEvent, within } from "storybook/test";
+import {
+  PRODUCT_DETAIL_STORY,
+  PURCHASE_COPY,
+  SOLD_OUT_PRODUCT_STORY,
+} from "./fixtures";
 import { StoreProductPurchasePanel } from "./store-product-purchase-panel";
 
 const meta = {
   title: "Store Product/Purchase Panel",
+  component: StoreProductPurchasePanel,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
-} satisfies Meta;
+  args: {
+    added: false,
+    copy: PURCHASE_COPY,
+    onAddToCart: fn(),
+    onQuantityChange: fn(),
+    quantity: 1,
+    saleItem: PRODUCT_DETAIL_STORY.saleItem,
+  },
+} satisfies Meta<typeof StoreProductPurchasePanel>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -24,6 +37,7 @@ function InteractivePurchasePanel({
   return (
     <StoreProductPurchasePanel
       added={added}
+      copy={PURCHASE_COPY}
       onAddToCart={() => setAdded(true)}
       onQuantityChange={setQuantity}
       quantity={quantity}

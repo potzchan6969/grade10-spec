@@ -1,6 +1,9 @@
 type StoreProductImage = {
   src: string;
   alt: string;
+  srcSet?: string;
+  sizes?: string;
+  fetchPriority?: "high" | "low" | "auto";
 };
 
 type StoreProductSaleItem = {
@@ -11,4 +14,13 @@ type StoreProductSaleItem = {
   sku?: string | null;
 };
 
-export type { StoreProductImage, StoreProductSaleItem };
+type StoreProductPurchaseItem = Pick<
+  StoreProductSaleItem,
+  "availableForSale" | "quantityAvailable"
+>;
+
+export type {
+  StoreProductImage,
+  StoreProductPurchaseItem,
+  StoreProductSaleItem,
+};

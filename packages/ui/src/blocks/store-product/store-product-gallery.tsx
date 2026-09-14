@@ -6,19 +6,26 @@ type StoreProductGalleryProps = {
 };
 
 function StoreProductGallery({ images, title }: StoreProductGalleryProps) {
+  const singleImage = images.length === 1;
+
   return (
     <div
-      className="grid gap-4 sm:grid-cols-2"
+      className="grid gap-4 sm:grid-cols-2 lg:pt-6"
       data-slot="store-product-gallery"
     >
       {images.length > 0 ? (
         images.map((image, index) => (
           <img
             alt={image.alt}
-            className="aspect-square w-full rounded-(--radius-4xl) bg-muted object-cover"
-            key={image.alt}
+            className={`aspect-square w-full rounded-(--radius-4xl) bg-muted object-cover ${
+              singleImage ? "sm:col-span-2" : ""
+            }`}
+            fetchPriority={image.fetchPriority}
+            key={`${image.src}-${image.alt}`}
             loading={index === 0 ? "eager" : "lazy"}
+            sizes={image.sizes}
             src={image.src}
+            srcSet={image.srcSet}
           />
         ))
       ) : (
