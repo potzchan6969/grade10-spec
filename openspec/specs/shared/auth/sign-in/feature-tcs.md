@@ -362,23 +362,25 @@ customer is signed out on a brand that does not have Google sign-in.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-03
 
 **Pre-conditions:**
-customer is signed out on a brand that has Google sign-in.
+
+* customer is signed out on a brand that has Google sign-in.
+* The Google sign-in response is stubbed to return <unverified google email> with its verified flag false.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<unverified google email>` | unverified@example.com, an email Google has not verified |
+| `<unverified google email>` | collector@workspace-example.com, returned by Google as not verified |
 
 **Steps:**
 
