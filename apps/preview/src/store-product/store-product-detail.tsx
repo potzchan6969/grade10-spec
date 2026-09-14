@@ -5,13 +5,15 @@ import {
 } from "@grade10/design-system/components/display/breadcrumbs";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import {
+  StoreProductDescription,
+  StoreProductGallery,
+  StoreProductHeader,
+  StoreProductMetadata,
+  StoreProductPurchasePanel,
+} from "@grade10/ui";
 import { useState } from "react";
 import type { ProductDetailProduct } from "../pages/product-detail-content";
-import { StoreProductDescription } from "./store-product-description";
-import { StoreProductGallery } from "./store-product-gallery";
-import { StoreProductHeader } from "./store-product-header";
-import { StoreProductMetadata } from "./store-product-metadata";
-import { StoreProductPurchasePanel } from "./store-product-purchase-panel";
 
 type StoreProductDetailProps = {
   product: ProductDetailProduct;
@@ -40,10 +42,7 @@ function StoreProductDetail({ product }: StoreProductDetailProps) {
           <StoreProductGallery images={product.images} title={product.title} />
 
           <VStack gap="lg" className="lg:sticky lg:top-24">
-            <StoreProductHeader
-              title={product.title}
-              variant={saleItem}
-            />
+            <StoreProductHeader saleItem={saleItem} title={product.title} />
             <StoreProductDescription description={product.description} />
             <StoreProductPurchasePanel
               added={added}
@@ -52,10 +51,7 @@ function StoreProductDetail({ product }: StoreProductDetailProps) {
               quantity={quantity}
               saleItem={saleItem}
             />
-            <StoreProductMetadata
-              badges={product.badges}
-              sku={saleItem?.sku}
-            />
+            <StoreProductMetadata badges={product.badges} sku={saleItem?.sku} />
 
             <Link href="#shop" size="sm">
               Back to the store

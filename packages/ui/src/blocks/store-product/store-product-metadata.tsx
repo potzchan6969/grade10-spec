@@ -5,7 +5,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 
 type StoreProductMetadataProps = {
   badges: readonly string[];
-  sku?: string;
+  sku?: string | null;
 };
 
 function StoreProductMetadata({ badges, sku }: StoreProductMetadataProps) {

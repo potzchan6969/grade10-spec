@@ -2,14 +2,14 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { StepperInput } from "@grade10/design-system/components/forms/stepper-input";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import type { ProductDetailVariant } from "../pages/product-detail-content";
+import type { StoreProductSaleItem } from "./types";
 
 type StoreProductPurchasePanelProps = {
   added: boolean;
   onAddToCart: () => void;
   onQuantityChange: (value: number) => void;
   quantity: number;
-  saleItem?: ProductDetailVariant;
+  saleItem?: StoreProductSaleItem;
 };
 
 function StoreProductPurchasePanel({

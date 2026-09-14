@@ -1,15 +1,15 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import type { ProductDetailVariant } from "../pages/product-detail-content";
+import type { StoreProductSaleItem } from "./types";
 
 type StoreProductHeaderProps = {
   title: string;
-  variant?: ProductDetailVariant;
+  saleItem?: StoreProductSaleItem;
 };
 
-function StoreProductHeader({ title, variant }: StoreProductHeaderProps) {
-  const quantityAvailable = variant?.quantityAvailable;
+function StoreProductHeader({ title, saleItem }: StoreProductHeaderProps) {
+  const quantityAvailable = saleItem?.quantityAvailable;
 
   return (
     <VStack data-slot="store-product-header" gap="sm">
@@ -17,15 +17,15 @@ function StoreProductHeader({ title, variant }: StoreProductHeaderProps) {
         {title}
       </h1>
 
-      {variant ? (
+      {saleItem ? (
         <VStack gap="xs">
           <HStack gap="sm" vAlign="center" className="flex-wrap">
             <Text size="xl" weight="bold">
-              {variant.price}
+              {saleItem.price}
             </Text>
-            {variant.compareAtPrice ? (
+            {saleItem.compareAtPrice ? (
               <Text size="base" tone="secondary" className="line-through">
-                {variant.compareAtPrice}
+                {saleItem.compareAtPrice}
               </Text>
             ) : null}
           </HStack>

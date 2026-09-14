@@ -1,7 +1,7 @@
-import type { ProductDetailProduct } from "../pages/product-detail-content";
+import type { StoreProductImage } from "./types";
 
 type StoreProductGalleryProps = {
-  images: ProductDetailProduct["images"];
+  images: readonly StoreProductImage[];
   title: string;
 };
 

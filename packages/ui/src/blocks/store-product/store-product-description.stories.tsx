@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
-import { PRODUCT_DETAIL_PRODUCT } from "../pages/product-detail-content";
+import { PRODUCT_DETAIL_STORY } from "./fixtures";
 import { StoreProductDescription } from "./store-product-description";
 
 const meta = {
@@ -14,7 +14,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: { description: PRODUCT_DETAIL_PRODUCT.description },
+  args: { description: PRODUCT_DETAIL_STORY.description },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const showMore = canvas.getByRole("button", { name: "Show more" });
