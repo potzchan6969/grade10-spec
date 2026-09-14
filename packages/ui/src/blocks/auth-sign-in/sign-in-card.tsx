@@ -122,7 +122,13 @@ function SignInCard({
           ) : null}
           {children}
           {message ? (
-            <Text data-slot="sign-in-message" size="sm" tone="success">
+            /* `primary`, not `success`: under the grade10 theme the success
+               tone resolves to `--success-foreground`, the white drawn ON a
+               success fill, so the line renders white on a white dialog. The
+               readable status tone the theme is missing is a token decision;
+               until it exists, a line the collector has to read takes the
+               body tone. */
+            <Text data-slot="sign-in-message" size="sm">
               {message}
             </Text>
           ) : null}
@@ -132,8 +138,9 @@ function SignInCard({
             </Button>
           ) : null}
           {copy.legal ? (
-            /* Figma draws this line centred across the body at 12/16 in the
-               foreground tone, not the muted one the status line uses. */
+            /* Figma draws this line centred across the body at 12/16. Size
+               and alignment are what separate it from the status line above;
+               both take the body tone. */
             <Text
               className="w-full text-center"
               data-slot="sign-in-legal"
