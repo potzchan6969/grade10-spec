@@ -296,3 +296,69 @@ customer A is suspended and holds the highest maximum on <listing_5>, which is a
 
 * customer A wins <listing_5>.
 * The auction order has its own invoice and payment deadline.
+
+---
+
+## suspension-US3: Collector suspended by an operator learns they can no longer bid
+
+**As a** collector an operator has suspended from auctions,
+**I want** to be told plainly that I can no longer bid and how to contact Grade10,
+**so that** I know where I stand without being refused on a lot first.
+
+### suspension-US3-TC1-1: Operator suspension notice leaves out the reason
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** suspension-US-03
+
+**Pre-conditions:**
+customer(suspended by an operator with <operator reason>) is signed in.
+
+**Steps:**
+
+1. Open the suspension notice.
+2. Navigate to <the collector's account record url>.
+
+**Expected Results:**
+
+* Notice and account record say they can no longer bid.
+* Both say how to contact Grade10.
+* Neither shows <operator reason>.
+
+### suspension-US3-TC2-1: Missed deadline while suspended adds a second cause
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** suspension-US-03
+
+**Pre-conditions:**
+customer(suspended by an operator) has an auction order whose invoice is `pending` and whose payment deadline is one second away.
+
+**Steps:**
+
+1. Wait for the payment deadline to pass.
+2. Sign in as the collector.
+3. Navigate to <the collector's account record url>.
+
+**Expected Results:**
+
+* The account is suspended once.
+* The account record shows both causes.
