@@ -1,6 +1,6 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 **Out of suite:** shared-auth-sign-in-SC-34
 
@@ -16,7 +16,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -50,7 +50,7 @@ customer is on <grade10 sign-in url>, signed out.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -90,7 +90,7 @@ customer is signed out.
 **Pre-conditions:**
 
 * customer is on <grade10 sign-in url>, signed out.
-* Network conditions are manipulated to hold the send-link request in flight.
+* The send-link request is held open by manipulated network conditions, so it stays in flight.
 
 **Test data:**
 
@@ -115,7 +115,7 @@ customer is signed out.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** regression
@@ -148,7 +148,7 @@ customer is on <grade10 sign-in url>, signed out.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -184,7 +184,7 @@ customer is on <grade10 sign-in url>, signed out.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -220,7 +220,7 @@ customer is on <grade10 sign-in url>, signed out.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -258,13 +258,13 @@ customer is on <grade10 sign-in url>, signed out.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
