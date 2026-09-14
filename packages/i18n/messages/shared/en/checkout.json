@@ -32,7 +32,10 @@
     "clear": "Don't use it",
     "worth": "{money} off this basket",
     "expires": "Until {date}",
-    "chosen": "{money} off with {code}"
+    "chosen": "{money} off with {code}",
+    "walletUnavailable": "Your reward promo codes could not be read right now. A code typed here still works.",
+    "gift": "Free with {code}",
+    "discountRow": "Discount ({code})"
   },
   "reason": {
     "emptyCart": "There is nothing in your basket.",
@@ -63,5 +66,38 @@
     "title": "Verify your identity to buy this",
     "message": "Orders of {threshold} or more need a verified identity, and this basket comes to {goods}. Verify from your account, then come back to pay.",
     "action": "Go to your account"
-  }
+  },
+  "refusal": {
+    "not_found": "There is no promo code by that name.",
+    "spent": "This promo code has already been used.",
+    "not_live": "This promo code is no longer active.",
+    "expired": "This promo code has expired.",
+    "no_viewer": "Sign in to use this promo code.",
+    "not_owner": "This promo code belongs to someone else.",
+    "threshold": "This promo code needs a basket of at least {money}.",
+    "wrong_currency": "This promo code is not in the currency this basket is priced in.",
+    "no_eligible_line": "The product this promo code covers is not in your basket.",
+    "catalogue_unavailable": "The shop did not answer, so this promo code could not be checked.",
+    "line_already_free": "The item this promo code covers is already free.",
+    "cut_cannot_split": "This promo code cannot be split across that quantity.",
+    "gift_in_basket": "The gift this promo code gives is already in your basket.",
+    "not_available": "This promo code is not available right now.",
+    "wrong_channel": "This promo code cannot be used here.",
+    "birthday_unavailable": "This promo code waits on a birthday the programme does not hold yet.",
+    "not_eligible": "This promo code cannot be used on this basket.",
+    "idempotency_conflict": "This promo code is held for another checkout. Try again in a moment.",
+    "one_coupon": "One promo code per basket.",
+    "riding_elsewhere": "This promo code is already on another open checkout.",
+    "no_tender": "Reward promo codes cannot be used here.",
+    "wallet_unavailable": "Your rewards could not be read right now. Try again in a moment.",
+    "gift_refused": "The gift this promo code gives cannot be added right now."
+  },
+  "pointsRefusal": {
+    "noMember": "Points are for members of the programme.",
+    "noTender": "Points cannot be used here.",
+    "noGoods": "Nothing left in this basket can be paid for with points.",
+    "unavailable": "The programme did not answer, so points cannot be used right now.",
+    "short": "Up to {points} points can go on this basket."
+  },
+  "total": "Estimated total"
 }

@@ -32,7 +32,10 @@
     "clear": "不使用",
     "worth": "此單可減 {money}",
     "expires": "直至 {date}",
-    "chosen": "用 {code} 減 {money}"
+    "chosen": "用 {code} 減 {money}",
+    "walletUnavailable": "暫時無法讀取你的獎賞優惠碼，在這裡輸入的優惠碼仍可使用。",
+    "gift": "用 {code} 免費獲得",
+    "discountRow": "折扣（{code}）"
   },
   "reason": {
     "emptyCart": "你的購物車是空的。",
@@ -63,5 +66,38 @@
     "title": "請先核實身份才可購買",
     "message": "訂單金額達 {threshold} 或以上需先核實身份，而此購物車的金額為 {goods}。請先在你的帳戶核實身份，再回來付款。",
     "action": "前往你的帳戶"
-  }
+  },
+  "refusal": {
+    "not_found": "沒有這個優惠碼。",
+    "spent": "此優惠碼已使用。",
+    "not_live": "此優惠碼已失效。",
+    "expired": "此優惠碼已過期。",
+    "no_viewer": "請先登入再使用此優惠碼。",
+    "not_owner": "此優惠碼屬於其他人。",
+    "threshold": "此優惠碼需要購物車滿 {money}。",
+    "wrong_currency": "此優惠碼的貨幣與購物車不同。",
+    "no_eligible_line": "此優惠碼適用的商品不在你的購物車。",
+    "catalogue_unavailable": "商店沒有回應，無法核對此優惠碼。",
+    "line_already_free": "此優惠碼適用的商品已經免費。",
+    "cut_cannot_split": "此優惠碼無法按該數量拆分。",
+    "gift_in_basket": "此優惠碼贈送的商品已在你的購物車。",
+    "not_available": "此優惠碼暫時無法使用。",
+    "wrong_channel": "此優惠碼不能在這裡使用。",
+    "birthday_unavailable": "此優惠碼要等計劃記錄了你的生日才可使用。",
+    "not_eligible": "此優惠碼不能用於此購物車。",
+    "idempotency_conflict": "此優惠碼正用於另一個結帳，請稍後再試。",
+    "one_coupon": "每單只可用一個優惠碼。",
+    "riding_elsewhere": "此優惠碼已用於另一個未完成的結帳。",
+    "no_tender": "這裡不能使用獎賞優惠碼。",
+    "wallet_unavailable": "暫時無法讀取你的獎賞，請稍後再試。",
+    "gift_refused": "此優惠碼贈送的商品暫時無法加入。"
+  },
+  "pointsRefusal": {
+    "noMember": "積分只供計劃會員使用。",
+    "noTender": "這裡不能使用積分。",
+    "noGoods": "此購物車已沒有可用積分支付的商品。",
+    "unavailable": "計劃沒有回應，暫時不能使用積分。",
+    "short": "此購物車最多可用 {points} 分。"
+  },
+  "total": "預計總額"
 }
