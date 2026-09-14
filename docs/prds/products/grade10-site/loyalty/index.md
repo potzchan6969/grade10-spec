@@ -21,7 +21,7 @@ a balance, a tier or a code. ZZZ has no programme.
 
 | Page | What it holds |
 | --- | --- |
-| [Points](/p/grade10-site/loyalty/points) | The earning rules, qualifying goods, refunds, expiry and operator grants |
+| [Points](/p/grade10-site/loyalty/points) | The earning rules, qualifying goods, refunds and expiry |
 | [Tiers](/p/grade10-site/loyalty/tiers) | Silver, Gold and Black — how a tier is reached, kept, lost and given |
 | [Rewards](/p/grade10-site/loyalty/rewards) | What a reward is, the catalog, the shop, what a member holds, and how one is given |
 | [Paying with Points](/p/grade10-site/loyalty/paying-with-points) | Points straight off a bill, online and at the till |
@@ -29,9 +29,11 @@ a balance, a tier or a code. ZZZ has no programme.
 | [Profile](/p/grade10-site/loyalty/profile) | Membership with the account, the membership page, the member card and the member's own histories |
 | [Shopify Integration](/p/grade10-site/loyalty/shopify-integration) | Customer pairing, the draft-order checkout, the POS extension, discounts and shipping |
 | [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card) | The card in Google Wallet and Apple Wallet — what each code can do, and how a pass stays current |
+| [Operator Console](/p/grade10-site/loyalty/operator-console) | Moving points by hand, and restarting a member's expiry |
 
 Three audiences touch it. **Members** get the membership with their account,
-carry a member card at `/membership`, and read tier, balance, what is expiring,
+carry a member card at `/membership`, and read tier, balance, when their points
+expire,
 what the next purchase moves them toward, and their own history on one
 surface. **Staff** run a loyalty terminal inside Shopify POS at the till, and
 identify a member in seconds to read, spend or hand over on their behalf.
