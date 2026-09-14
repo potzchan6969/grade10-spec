@@ -40,3 +40,16 @@
 
 - `grade10-site-store-cart-drawer-SC-13` — A line opens its product
 - `grade10-site-store-cart-drawer-SC-15` — Checkout uses the existing surface
+
+### grade10-site-store-cart-drawer-US-04: Collector reads tender choices for the reviewed basket
+
+**As a** signed-in collector,
+**I want** to see which promo codes and how many points the reviewed basket can take,
+**so that** I can understand my available benefits before continuing to checkout.
+
+**Accepted by:**
+
+- `grade10-site-store-cart-drawer-SC-16` — Held promo codes answer the reviewed basket
+- `grade10-site-store-cart-drawer-SC-17` — Points show the basket ceiling without changing the total
+- `grade10-site-store-cart-drawer-SC-18` — Guests and unresolved reviews receive no stale tender facts
+- `grade10-site-store-cart-drawer-SC-19` — Tender facts follow the latest reviewed basket

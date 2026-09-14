@@ -27,9 +27,10 @@ Storybook composition under test once the host lands: Store page assemblies in
 - Grade10 `store.cartDrawer` catalog overlay — localized copy.
 - Shared `chrome.cartLabel` — navigation label.
 
-No new primitive, variant, or token. This host does **not** wire promo apply
-callbacks or points state — collapsed display-only promo, points omitted —
-until a later applied-quote capability.
+No new primitive, variant, or token. This host wires the existing read-only
+held-promo and points states for signed-in members after cart review, but does
+not wire promo selection, promo application, points application, or an applied
+total until a later applied-quote capability.
 
 **Depends on:** `cart-drawer-empty-state` for the shared empty-state export
 contract.
@@ -46,7 +47,7 @@ States combine this change's Grade10 scenarios with durable
 | Guest vs member scoped cart | `SC-03`, `SC-04` |
 | Every open starts a fresh read | `SC-05` |
 | Pending / failed review | `SC-06`–`SC-08`; loading bones `shared-ui-store-cart-SC-08` |
-| Reviewed summary; neutral shipping/total; display-only promo; no points | `SC-09`, `SC-10` |
+| Reviewed summary; neutral shipping/total; read-only promo and points context | `SC-09`, `SC-10`, `SC-16`–`SC-19` |
 | Empty drawer (shared EmptyState) | `shared-ui-store-cart-SC-04` |
 | Unavailable cleanup | `SC-12`; `shared-ui-store-cart-SC-10`, `SC-11` |
 | Quantity / remove | `SC-11` |

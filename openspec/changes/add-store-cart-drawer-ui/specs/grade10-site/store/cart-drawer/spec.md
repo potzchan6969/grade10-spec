@@ -16,6 +16,10 @@ address.
 - Honest cart summary
   - Reviewed lines: shows only facts returned or confirmed by the live read
   - Neutral totals: adds no shipping, promotion, points, tax, or discount claim
+- Read-only member tender context
+  - Held promo codes: shows the member's current codes answered against the reviewed lines
+  - Points ceiling: shows the member's balance and the maximum points the reviewed goods can take
+  - No applied tender: keeps codes and points unselected and leaves the subtotal and estimated total unchanged
 - Cart changes
   - Scoped edits: quantity and removal change the same cart the drawer opened
   - Delisted cleanup: lets the shared drawer remove unavailable lines once
@@ -172,3 +176,45 @@ checkout creation.
 - **THEN** the drawer closes
 - **AND** the existing `/checkout` surface opens
 - **AND** no checkout is created by the drawer
+
+### Requirement: A signed-in collector sees current tender facts without applying them
+
+After the drawer has a successful review for a signed-in collector, it SHALL
+show the held promo codes and their answers for the reviewed lines. A code that
+cannot be used SHALL remain visible with its refusal, and a code that can be
+used SHALL remain unselected. The drawer SHALL NOT apply a promo code or points
+from these reads, and its subtotal and estimated total SHALL remain the
+reviewed subtotal.
+
+#### Scenario: grade10-site-store-cart-drawer-SC-16 - Held promo codes answer the reviewed basket
+
+- **GIVEN** a signed-in collector whose cart review succeeds
+- **AND** the member holds one applicable promo code and one inapplicable code
+- **WHEN** the collector opens the promo-code view in the cart drawer
+- **THEN** both current codes are shown
+- **AND** the applicable code is shown as usable without being selected
+- **AND** the inapplicable code shows the answer explaining why it cannot be used
+- **AND** no promo discount is shown in the drawer summary
+
+#### Scenario: grade10-site-store-cart-drawer-SC-17 - Points show the basket ceiling without changing the total
+
+- **GIVEN** a signed-in collector whose cart review succeeds
+- **AND** the points read quotes a balance and a maximum for the reviewed goods
+- **WHEN** the collector opens the points view in the cart drawer
+- **THEN** the balance, conversion rate, and maximum points and amount are shown
+- **AND** no points amount is applied
+- **AND** the subtotal and estimated total remain the reviewed subtotal
+
+#### Scenario: grade10-site-store-cart-drawer-SC-18 - Guests and unresolved reviews receive no stale tender facts
+
+- **GIVEN** a guest collector, or a collector whose cart review is pending or failed
+- **WHEN** the cart drawer renders
+- **THEN** member-only promo and points facts are not shown
+- **AND** no member-only tender read is required to render the cart review state
+
+#### Scenario: grade10-site-store-cart-drawer-SC-19 - Tender facts follow the latest reviewed basket
+
+- **GIVEN** a signed-in collector whose drawer has shown promo and points facts for a reviewed basket
+- **WHEN** the cart changes or the drawer closes and opens again
+- **THEN** the previous tender facts are not presented as current
+- **AND** the drawer shows only the next successful reads for the latest reviewed basket
