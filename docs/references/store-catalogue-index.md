@@ -117,17 +117,16 @@ needs it.
   that is a handful of requests a day across the colos that carry traffic;
   the step that removes it is below
 
-| Query, staging | Before | Cold isolate | Warm |
+| Query, staging | Before | Cold colo | Warm |
 | --- | --- | --- | --- |
-| Narrowed by two types — products, filters and collections in one batch | 1.6–3.5 s | 2.4 s | 0.22–0.41 s |
-| Latest order, nothing narrowed | 0.55–1.7 s | 1.5–1.6 s | 0.21–0.26 s |
-| Free text `pokemon` — products and filters | 1.0–3.1 s | 1.0 s | 0.18–0.21 s |
+| Narrowed by two types — products, filters and collections in one batch | 1.6–3.5 s | 2.4–2.5 s | 0.26–0.32 s |
+| Latest order, nothing narrowed | 0.55–1.7 s | 1.1 s | 0.23–0.35 s |
+| Free text `pokemon` — products and filters | 1.0–3.1 s | 1.0 s | 0.27–0.30 s |
 
-Time to first byte from one Linux host, three runs each, 2026-09-14 04:13
-UTC, against the staging shop's catalogue that day, with the second engine
-still in place. Warm figures are the network round trip; the worker's own
-share is under it ❓ the p95 from real traffic, once the release carries
-it — Engineering.
+Time to first byte from one Linux host, 2026-09-14 06:20 UTC, against the
+staging shop's catalogue that day — 286 products, two pages. Warm figures
+are the network round trip; the worker's own share is under it ❓ the p95
+from real traffic, once the release carries it — Engineering.
 
 ## Built Once, Read Everywhere
 
