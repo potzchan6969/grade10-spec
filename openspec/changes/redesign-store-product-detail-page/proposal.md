@@ -11,7 +11,7 @@ the point of purchase.
 
 The metric is the percentage of product-detail sessions that add an item to
 the cart, segmented by product and device width; the redesign should improve
-that rate without changing which variant or price the Store accepts.
+that rate without changing which product item or price the Store accepts.
 
 ## What Changes
 
@@ -19,9 +19,12 @@ that rate without changing which variant or price the Store accepts.
   frame across desktop and narrow layouts.
 - Display all product media, compare-at pricing, low-inventory context,
   optional product badges, static shipping and pickup guidance, and SKU data.
-- Add the Figma quantity stepper and in-place add states while preserving
-  existing variant selection, cart-line merging, sold-out refusal, and
-  server-rendered product content.
+- Add the Figma quantity stepper and in-place add states for the product's one
+  sellable item, with no size, option or variant choice on the page.
+- Keep the underlying Shopify sale identifier for cart-line merging and
+  sold-out refusal, without exposing it as a product choice or display label.
+- Remove multi-item product fixtures and copy that imply a product has sizes,
+  options or variants.
 - Extend the catalogue contract and Shopify projection with optional
   compare-at pricing and ordered product badges. Shopify remains authoritative
   and absent metadata remains absent in the UI.
@@ -63,5 +66,5 @@ None.
   Grade10 page composition.
 - `external/grade10-spec/packages/i18n` gains shared product-detail copy;
   the application submodule must be bumped after that commit lands.
-- Existing SSR, hydration, catalog-authority, variant-choice, and cart tests
-  remain required validation gates.
+- Existing SSR, hydration, catalogue-authority, single-item cart, and sold-out
+  tests remain required validation gates.

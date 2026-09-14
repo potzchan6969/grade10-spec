@@ -23,7 +23,7 @@ and item facts,
 
 - `grade10-site-store-product-page-SC-16` — A collector expands and collapses the description
 
-### grade10-site-store-product-page-US-08: Collector adds a chosen quantity from the product page
+### grade10-site-store-product-page-US-08: Collector adds a product quantity from the product page
 
 **As a** collector,
 **I want** to choose a quantity and add it from the product page,
@@ -33,10 +33,10 @@ and item facts,
 
 - `grade10-site-store-product-page-SC-17` — A collector adds a chosen quantity in place
 
-### grade10-site-store-product-page-US-09: Collector meets a product with no variant for sale
+### grade10-site-store-product-page-US-09: Collector meets a sold-out product
 
 **As a** collector,
-**I want** a product with no available variant to keep its prices and say that it is sold out,
+**I want** a product with no available item to keep its price and say that it is sold out,
 **so that** I can tell an unavailable product from a broken purchase page.
 
 **Accepted by:**

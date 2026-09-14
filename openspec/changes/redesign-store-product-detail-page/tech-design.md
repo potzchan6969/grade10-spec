@@ -3,8 +3,8 @@
 ## Context
 
 The archived `grade10-site/store/product-page` change already supplies a
-server-rendered product route, a catalogue-backed product read, variant
-selection, and cart-line semantics. The current `ProductPage` only composes a
+server-rendered product route, a catalogue-backed product read, a Shopify sale
+identifier, and cart-line semantics. The current `ProductPage` only composes a
 vertical title, one image, a price, and the existing buy box. The supplied
 Figma frame (`4098:2423`) is a visual redesign of that same surface rather
 than a new address or a new checkout boundary.
@@ -32,8 +32,8 @@ a second stock threshold or duplicate its presentation task.
   from the locale catalogue for every product without extending `Product`
 - **Layout-aware disclosure** — decide whether the description needs a control
   from its rendered three-line region, not from a character budget
-- **Stable purchase contract** — keep route ownership, variant choice, cart
-  mutation, and stock authority at their existing boundaries
+- **Stable purchase contract** — keep route ownership, cart mutation, internal
+  sale identity, and stock authority at their existing boundaries
 
 **Non-Goals**
 
@@ -92,20 +92,19 @@ The alternative is to point both labels at the store surface or invent an
 external URL. Rejected: neither target represents the shipping-fee details or
 store locator promised by the annotation.
 
-### Preserve variant semantics while matching the single-variant frame
+### Treat each product as one purchasable item
 
-The Figma frame shows one general quantity stepper, while the existing product
-capability supports multiple graded variants. The page keeps the existing
-variant chooser for products that have more than one variant, but does not
-render that extra choice for a single-variant product. The price and inventory
-context follow the variant the page prices; the selected variant passed to the
-buy box still follows the existing rules.
+The Figma frame shows one general quantity stepper because each product has one
+sellable Shopify item. The page does not render a size, option, or variant
+chooser. The price and inventory context follow that item's catalogue data, and
+its Shopify sale identifier is passed to the cart without becoming visible
+product text.
 
 The stepper uses the design-system `Stepper` with a minimum of one and a
-finite maximum when the selected variant exposes a positive quantity. The
-buy box passes the chosen quantity to the existing cart use case. Pending,
-success, and cart quantity are observed from the existing mutation/query
-state rather than duplicated in storage.
+finite maximum when the product item exposes a positive quantity. The buy box
+passes the chosen quantity to the existing cart use case. Pending, success,
+and cart quantity are observed from the existing mutation/query state rather
+than duplicated in storage.
 
 ### Make the page deterministic and accessible
 
@@ -191,8 +190,9 @@ accepts a fabricated default label.
 - The sticky rail changes only layout; it does not create a second scroll
   container, so the whole page remains vertically scrollable as the Figma
   annotation requires.
-- The old multi-variant product tests need updated queries around the new
-  visual hierarchy, but their variant/cart assertions remain required.
+- The old multi-variant product fixtures and copy are misleading for this
+  surface and are replaced with one-item fixtures; the Shopify sale identifier
+  remains covered at the cart boundary.
 - The page uses local display state for disclosure and the existing cart query
   for add state; neither is server-authoritative and neither enters checkout
   pricing.
@@ -216,5 +216,5 @@ accepts a fabricated default label.
 
 ## Open Questions
 
-None. Badge source and omission behavior, static fulfilment copy, variant
-compatibility, route ownership, and validation boundaries are settled.
+None. Badge source and omission behavior, static fulfilment copy, one-item
+product setup, route ownership, and validation boundaries are settled.
