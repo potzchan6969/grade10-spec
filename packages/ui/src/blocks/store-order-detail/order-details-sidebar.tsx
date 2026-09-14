@@ -121,6 +121,16 @@ function OrderDetailsSidebar({
       summary.tax,
       summary.total,
     ].some((row) => row != null);
+  const hasLineMoneyRows =
+    summary != null &&
+    [
+      summary.subtotal,
+      summary.discount,
+      summary.points,
+      summary.refund,
+      summary.shipping,
+      summary.tax,
+    ].some((row) => row != null);
   const hasAddress = shippingAddress != null || pickupAddress != null;
   const hasSecondaryGroups =
     payment != null || hasAddress || loyaltyPoints != null;
@@ -139,57 +149,66 @@ function OrderDetailsSidebar({
       <Card className="gap-0 overflow-hidden p-0" padding={false}>
         {hasSummary ? (
           <VStack
-            className="w-full border-b border-border bg-background-subtle p-6"
+            className={cn(
+              "w-full bg-background-subtle p-6",
+              // Only separate summary from secondary groups — avoid stacking
+              // with the Card edge when summary is the sole section.
+              hasSecondaryGroups && "border-b border-border",
+            )}
             gap="md"
             hAlign="stretch"
           >
             <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
               {copy.orderSummary}
             </h3>
-            <VStack className="w-full" gap="sm" hAlign="stretch">
-              {summary?.subtotal ? (
-                <SummaryRow
-                  label={summary.subtotal.label}
-                  value={summary.subtotal.value}
-                />
-              ) : null}
-              {summary?.discount ? (
-                <SummaryRow
-                  label={summary.discount.label}
-                  value={summary.discount.value}
-                  valueClassName="text-success"
-                />
-              ) : null}
-              {summary?.points ? (
-                <SummaryRow
-                  label={summary.points.label}
-                  value={summary.points.value}
-                  valueClassName="text-success"
-                />
-              ) : null}
-              {summary?.refund ? (
-                <SummaryRow
-                  label={summary.refund.label}
-                  value={summary.refund.value}
-                  valueClassName="text-secondary-foreground"
-                />
-              ) : null}
-              {summary?.shipping ? (
-                <SummaryRow
-                  label={summary.shipping.label}
-                  value={summary.shipping.value}
-                />
-              ) : null}
-              {summary?.tax ? (
-                <SummaryRow
-                  label={summary.tax.label}
-                  value={summary.tax.value}
-                />
-              ) : null}
-            </VStack>
+            {hasLineMoneyRows ? (
+              <VStack className="w-full" gap="sm" hAlign="stretch">
+                {summary?.subtotal ? (
+                  <SummaryRow
+                    label={summary.subtotal.label}
+                    value={summary.subtotal.value}
+                  />
+                ) : null}
+                {summary?.discount ? (
+                  <SummaryRow
+                    label={summary.discount.label}
+                    value={summary.discount.value}
+                    valueClassName="text-success"
+                  />
+                ) : null}
+                {summary?.points ? (
+                  <SummaryRow
+                    label={summary.points.label}
+                    value={summary.points.value}
+                    valueClassName="text-success"
+                  />
+                ) : null}
+                {summary?.refund ? (
+                  <SummaryRow
+                    label={summary.refund.label}
+                    value={summary.refund.value}
+                    valueClassName="text-secondary-foreground"
+                  />
+                ) : null}
+                {summary?.shipping ? (
+                  <SummaryRow
+                    label={summary.shipping.label}
+                    value={summary.shipping.value}
+                  />
+                ) : null}
+                {summary?.tax ? (
+                  <SummaryRow
+                    label={summary.tax.label}
+                    value={summary.tax.value}
+                  />
+                ) : null}
+              </VStack>
+            ) : null}
             {summary?.total ? (
               <>
-                <hr className="w-full border-border" />
+                {hasLineMoneyRows ? (
+                  <hr className="w-full border-border" />
+                ) : null}
                 <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-4">
                   <span className="text-base leading-6 font-semibold text-foreground">
                     {summary.total.label}
