@@ -73,11 +73,6 @@ function StoreLocatorPage() {
                   {line}
                 </p>
               ))}
-              {STORE_LOCATOR_STORE.openingHours != null ? (
-                <p className="text-sm leading-5 text-secondary-foreground">
-                  {STORE_LOCATOR_STORE.openingHours}
-                </p>
-              ) : null}
             </VStack>
 
             <VStack className="w-full" gap="sm" hAlign="stretch">
