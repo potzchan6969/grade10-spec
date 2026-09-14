@@ -1,8 +1,5 @@
 import { Button } from "@grade10/design-system/components/forms/button";
-import {
-  Toast,
-  toast,
-} from "@grade10/design-system/components/overlays/toast";
+import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect } from "react";
 import { expect, waitFor, within } from "storybook/test";
