@@ -186,6 +186,18 @@ function readSpecIds(specPath) {
     : "";
   const journeys = new Map();
   const scenarios = new Set();
+  // A `## Feature set` root group is an anchor too, and the only kind a
+  // capability nobody walks has. Column-0 bullets only: an indented bullet is
+  // a leaf, and a leaf carries no id and anchors nothing.
+  const groups = new Set();
+  let inFeatureSet = false;
+  for (const line of text.split("\n")) {
+    if (/^##\s/.test(line)) inFeatureSet = /^##\s+Feature set\s*$/.test(line);
+    else if (inFeatureSet) {
+      const g = line.match(/^[-*]\s+(?:\*\*)?(.+?)(?:\*\*)?\s*$/);
+      if (g) groups.add(g[1].replace(/:.*$/, "").trim());
+    }
+  }
   for (const line of `${text}\n${stories}`.split("\n")) {
     const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
     if (j) journeys.set(j[1], j[2]);
@@ -197,6 +209,11 @@ function readSpecIds(specPath) {
   return {
     journeys,
     scenarios,
+    groups,
+    // A capability nobody walks routes its anchors to the feature set. It is
+    // not exempt from a suite: it carries one section, and its cases trace
+    // groups rather than stories.
+    unwalked: /^\*\*Walked by:\*\*\s+nobody\b/m.test(stories),
     hasJourneySection: /^##\s+User journeys\s*$/m.test(stories),
   };
 }
@@ -581,6 +598,7 @@ function checkSuite(root, filePath, rulesRev) {
     if (
       !domain &&
       spec &&
+      !spec.unwalked &&
       spec.journeys.size > 0 &&
       !spec.journeys.has(canonical) &&
       !spec.journeys.has(alternate)
@@ -588,6 +606,14 @@ function checkSuite(root, filePath, rulesRev) {
       err(
         j.line,
         `journey \`${canonical}\` is not defined in the spec beside it`,
+      );
+    // A capability nobody walks carries exactly one section. More than one
+    // would have to be numbered by a feature set group's position, and an
+    // issued case id is permanent.
+    if (!domain && spec?.unwalked && j.num !== 1)
+      err(
+        j.line,
+        `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}-US1\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
       );
     const story = new Set(j.story);
     if (
@@ -684,19 +710,29 @@ function checkSuite(root, filePath, rulesRev) {
 
       const trace = (tc.props.get("Trace") ?? "").trim();
       if (trace && spec) {
-        const ids = trace.split(/[,\s]+/).filter(Boolean);
+        // Commas first: an anchor can be a feature set group name, which has
+        // spaces in it. A comma-free part that names no group is split on
+        // whitespace, so the older space-separated composed trace still reads.
+        const ids = trace
+          .split(",")
+          .map((one) => one.trim())
+          .filter(Boolean)
+          .flatMap((one) =>
+            spec.groups?.has(one) || !/\s/.test(one) ? [one] : one.split(/\s+/),
+          );
         for (const id of ids) {
           if (spec.journeys.has(id)) continue;
+          if (spec.groups?.has(id)) continue;
           if (spec.scenarios.has(id)) {
             warn(
               at,
-              `case \`${tc.id}\` traces scenario \`${id}\`; a trace carries the journey id (\`${capability}-US-<n>\`)`,
+              `case \`${tc.id}\` traces scenario \`${id}\`; a trace carries the anchor the case walks — a journey id (\`${capability}-US-<n>\`), or a \`## Feature set\` root group where nobody walks the capability`,
             );
             continue;
           }
           err(
             at,
-            `case \`${tc.id}\` traces \`${id}\`, which the spec beside it does not define`,
+            `case \`${tc.id}\` traces \`${id}\`, which is neither a journey nor a feature set group of the spec beside it`,
           );
         }
         if (ids.length > 1 && !domain)

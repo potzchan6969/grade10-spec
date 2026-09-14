@@ -11,7 +11,7 @@ A **feature** suite is written **blind**: by a reader who cannot see the spec's 
 ## The Rule
 
 - **The spec is correct** — once the scenarios exist and the two readings are reconciled, a suite that disagrees with the spec is regenerated. Before reconciliation there is nothing to disagree with: the suite is the only reading there is, and it is provisional. A proposal never links a suite in place of a spec delta
-- **Anchors are given** — every section is one `user-journeys.md` story, or, where the journeys file says `**Walked by:** nobody`, one `## Feature set` root group. There is no cap on the number of stories. A suite never invents a flow, and splitting or merging stories is a journeys edit
+- **Anchors are given** — every section is one `user-journeys.md` story. A capability nobody walks carries one section instead, `## <capability>-US1`, and names its feature set groups on the cases' `**Trace:**` lines — a section per group would number a case by that group's position, and an issued case id is permanent. There is no cap on the number of stories. A suite never invents a flow, and splitting or merging stories is a journeys edit
 - **A case comes from an anchor** — never from a scenario, which on a feature run does not exist yet. A case that carries behaviour no anchor implies is a product decision in disguise, and reconciliation is where it is settled
 - **A hole is reported** — an anchor no case covers, a case tracing an anchor nothing defines: report it, never close it by inventing a case or a story
 - **Properties are QA's** — they classify scenarios the spec states. A wrong property is fixed in review and is never grounds to change a step or an expected result
