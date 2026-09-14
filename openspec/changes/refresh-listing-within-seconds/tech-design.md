@@ -25,7 +25,8 @@ What the platforms hold, verified against their documentation:
   purged globally but cannot be read from inside a request; the Cache API is
   per location. A Durable Object is one writer, but its input gate opens
   across every `fetch()` it awaits; it holds one alarm, run at-least-once,
-  retried 6 times and then silent; `waitUntil` does nothing inside it. Its
+  retried 6 times and then silent, and consumed before its handler runs;
+  `waitUntil` does nothing inside it. Its
   SQLite takes 2 MB a row, 100 KB a statement, 100 bound parameters, and
   bills every row written. An RPC value may be 32 MiB. A version upload
   cannot carry a Durable Object class lifecycle change; only `wrangler
@@ -62,8 +63,9 @@ What the platforms hold, verified against their documentation:
 `packages/grade10-store/backend/src/durables/CatalogKeeper/` holds the class,
 its RPC interface, the manager that carries every rule below over a storage
 port, and the SQLite adapter behind that port. The class leaves the package
-through `./worker` and each app exports it by name; both store workers bind
-it as `CATALOG_KEEPER`.
+through `./worker/catalog-keeper`, a subpath of its own because it imports
+`cloudflare:workers`, which the node lane cannot resolve; each app exports it
+by name, and both store workers bind it as `CATALOG_KEEPER`.
 
 - **Why an object.** It is the one writer: events from any location land in one place, and a burst is coalesced there. Every location reads one version number from it, so nothing eventually consistent sits on the path. No cache or store on the platform tells an isolate that a copy moved within seconds; asking one writer does.
 - **Against the convention, on record.** `docs/conventions/backend.md` says no deployed worker binds a Durable Object and that scheduled work is a row a cron re-reads. This is the one exception: a row nobody can read within seconds from every location is not a copy every location can follow. The convention is updated to name the exception and its reason.
@@ -73,17 +75,19 @@ it as `CATALOG_KEEPER`.
 - **Rejected — `BaseDO`.** Its scheduler owns the single alarm and schedules through `waitUntil`, which has no effect in a Durable Object; its migrations serve a queue. A plain `DurableObject` over `ctx.storage.sql` is the whole of it.
 - **The manager, not the class.** The rules live in `keeper.ts` over a `KeeperStore` port; the store in memory is the package's test surface, and the class holds the SQLite implementation, the RPC methods and the alarm handler, proved in the worker lane. The folder holds the class, its interface, the rules and the store — none of the drizzle schema, migrations or managers a `BaseDO` folder carries, since the tables are created by the class and dropped and refilled by the next walk when their version moves.
 - **Fixtures wherever local.** The object builds its catalogue from the runtime env, which no request can override, so a local environment — development, testing, e2e — with no storefront token runs on the fixture shop throughout, the worker lane included.
-- **Placement.** One accessor, `catalogKeeper(env)`, names the object `<shop>/v1` with the location hint `apac`; only the first `get()` of an object respects a hint, so no other call site may build a stub.
+- **Placement.** One accessor, `storeKeeper(env)` in `deps.ts` over `catalogKeeperOf`, names the object `<shop>/v1` with the location hint `apac`; only the first `get()` of an object respects a hint, so no other call site may build a stub.
+- **Three versions, each its own.** The object's name carries `v1`: moving it starts a fresh object, for a copy that must be rebuilt from nothing. The wrangler migration tag `v1` is the class's lifecycle, never reused. `meta.schema` is the tables' own version: a mismatch drops and recreates them, carrying only the version counter across, so no isolate is left holding a number the rebuilt keeper never passes.
 
 ### Nothing serialises across a read of the shop
 
 The input gate opens on every `fetch()`, so `apply`, `sync`, the alarm and a
-walk interleave. Five rules keep the copy right whatever the order:
+walk interleave. Six rules keep the copy right whatever the order:
 
 - **No write lowers a row's `updated_at`.** Every write is an upsert guarded by it, from a read-back or a walk alike.
 - **A read-back lands only on the row it was read for.** The alarm reads `pending`, reads the shop, then writes each answer only where the pending row is still present with the same `reported_at`; a delete or a newer report that arrived meanwhile wins.
+- **A delete stands over any page read before it.** `products/delete` leaves a tombstone in `pending` for one deadline, 60 s: a walk whose pages were read before the delete, or a listing lagging it as it lags a change, cannot write the product back, and a report on the deleted product is ignored while it lives. Ids are never reused, so nothing waits on the tombstone.
 - **One walk at a time.** The manager holds one in-flight walk promise; the cron, a wanted walk and a `sync` on an empty keeper share it.
-- **The walk writes what moved.** Every page is read first; then one synchronous transaction, a row a statement, upserts rows whose text or position differs and deletes rows it did not see that were written before the walk began — on the keeper's own clock, since the shop's stamp says when the shop changed a product, not when the copy took it. An ask for a walk made while the walk was reading stands: its pages may not carry that change.
+- **The walk writes what moved.** Every page is read first; then one synchronous transaction, a row a statement, upserts rows whose text or position differs and deletes rows it did not see that were written before the walk began — on the keeper's own clock, since the shop's stamp says when the shop changed a product, not when the copy took it. An ask for a walk made while the walk was reading stands, told by the newest ask's time against the walk's start, and is timed 30 s from the walk it stood over: its pages may not carry that change.
 - **The version is a counter.** `meta.version` is bumped only when a row changed, with `published_at` beside it; an isolate swaps only for a higher number. A hash can say "different", never "older".
 
 ### An event is applied from a read-back, never from its payload
@@ -94,9 +98,9 @@ pending product back in one `getProducts(ids)` and upserts each row.
 
 - **Why read back.** The payload carries the price and the count but no metafields, and the facets are metafield references; Storefront answers what the channel publishes, so an answer of nothing is the channel's own word that a product left the store.
 - **Why Storefront, not Admin.** Admin is not behind the read cache and can say whether a product is published to a named channel, but it needs a second product codec, the channel's publication id and a points budget. The lag is unmeasured; `store.catalog.keeper.readback_lag_ms` measures it, and Admin is the recorded step if its p95 passes 10 s.
-- **The guard and the deadline.** A read older than the report leaves the row pending and the alarm re-arms 2 s out, timed from the shop's answer, for up to 60 s from the report; at the deadline the row is left as it is, counted `stale`, and the walk is the net. A changed product the shop answers nothing for twice in a row has left the channel and leaves the copy; a created one the shop cannot answer yet waits to the deadline, then is left to the walk.
+- **The guard and the deadline.** A read older than the report leaves the row pending and the alarm re-arms 2 s out, timed from the shop's answer, for up to 60 s from the report. The deadline is applied by the alarm before it reads, so a read that keeps failing ends there too: the row is left as it is, counted `stale` or `absent` by what the shop last answered, and the walk is the net. A changed product the shop answers nothing for on two due reads in a row has left the channel and leaves the copy — a row read before its time, along with one that was due, counts no miss, so the two stay a retry apart; a created one the shop cannot answer yet waits to the deadline, then is left to the walk.
 - **A redelivery changes nothing.** The deadline and the count of misses stand while the report is the same; a newer report restarts both. A read in flight is told apart by the report it was made for, so a delete or a newer report that lands during it wins.
-- **A delete is applied at once.** `products/delete` removes the row and any pending row, with no read-back; the payload carries only an id.
+- **A delete is applied at once.** `products/delete` removes the row and publishes, with no read-back — the payload carries only an id — and leaves the tombstone above in its place.
 - **Stock.** `inventory_levels/update` names an inventory item, not a product. It arms a walk, at most one every 30 s, so a till selling all day costs 2 pages every 30 s at today's size. Open Questions carries the check that retires it.
 - **Idempotent.** Nothing dedupes catalog deliveries, so a redelivery upserts the same pending row and the same truth.
 
@@ -106,9 +110,9 @@ The alarm always points at the earliest due work: the earliest pending
 `next_at`, or a wanted walk's `walk_due`. The handler catches everything and
 re-arms; the platform's own retry is not a net.
 
-- **Order.** Once any report is due, everything pending is read in one call — a burst spread across its window is still one read — then a publish if a row changed, then a due walk, then a publish again if the walk moved a row. The version moves in the same transaction as the rows.
+- **Order.** Once any report is due, everything pending is read in one call, the soonest due first and 250 at a time — a burst spread across its window is still one read, and a burst past a page is read a page an alarm — then a publish if a row changed, then a due walk, then a publish again if the walk moved a row. The version moves in the same transaction as the rows.
 - **The body.** Rows `ORDER BY position, id`, the taxonomy, the shape, the version and `published_at`, assembled once into the object's memory; `sync` answers from memory and never waits on storage.
-- **A throw holds the alarm off one retry** rather than firing it again at once; the alarm is written once per burst, not once per report.
+- **A throw holds the alarm off one retry** rather than firing it again at once. The alarm as last armed is remembered, so a burst writes it once rather than once per report, and forgotten when the platform fires it: the handler always arms the next, whatever it recomputes.
 - **Nothing before the first walk.** No publish until `meta.walked_at` exists; an event on an unwalked keeper asks for a walk instead, so a burst never publishes a copy of one product.
 - **The shape.** A constant stamped in `meta` and the body; a keeper whose stored shape differs from its code's treats itself as unwalked, so a deploy that changes the shape rewrites the copy on its first read.
 
@@ -124,20 +128,22 @@ taxonomy with `listFilters`, then writes what moved. `CRON_PASSES` gains a
 
 ### A listing view follows the keeper from memory
 
-The request path holds `{ projection, version, checkedAt }` per isolate and
+The request path holds `{ projection, checkedAt, syncing }` per isolate and
 derives entries from the whole products it receives.
 
 1. If the last check is under 3 seconds old, answer from memory.
-2. Otherwise call `sync(version)` with a 500 ms deadline and wait: the keeper
-   answers the version, and the body only when it differs. Swap, stamp
-   `checkedAt`, answer.
-3. If the keeper does not answer in time and memory holds a copy, answer from
-   it, stamp `checkedAt`, count `store.catalog.sync` `outcome:failed` or
-   `timeout`.
-4. If nothing is held, wait on `sync` without the short deadline: an empty
-   keeper walks itself once, under its one walk latch, and answers everyone.
-   A keeper that cannot answer with nothing held fails loudly through
-   `catalog_unavailable`; the isolate never walks the shop.
+2. Otherwise join the isolate's one check: `sync(version)`, shared by every
+   reader that arrives while it runs, which swaps the body in when it moved,
+   stamps `checkedAt`, and answers the keeper's failure rather than rejecting.
+3. A reader holding a copy waits on the check 500 ms at most, then answers
+   from memory while it finishes behind, counted `store.catalog.sync`
+   `outcome:timeout`. A keeper that fails, or publishes a body of another
+   shape or one this build cannot read, leaves memory answering, counted by
+   outcome.
+4. A reader holding nothing waits for the check: an empty keeper walks itself
+   once, under its one walk latch, and answers everyone. A keeper that cannot
+   answer with nothing held fails loudly through `catalog_unavailable`; the
+   isolate never walks the shop.
 
 - **Why wait rather than refresh behind.** The first request after a quiet gap is the one a collector on a quiet location sends; serving the old copy there is the day-old copy in miniature. Refreshing behind would gate on the held copy's age, which is not staleness. The hop is same-region from Asia and up to 250 ms from Europe.
 - **Why 3 seconds.** Delivery up to 5 s, a 1 s burst window, one read-back, the check and the hop: 9.5 s worst case against the 10 s bound; at 5 s the bound is missed.
@@ -146,11 +152,12 @@ derives entries from the whole products it receives.
 
 ### The webhook route hands the event over, then answers 200
 
-`shopifyCatalogPurge` awaits `apply` beside the tag purge it keeps. A keeper
-that cannot take the event is counted (`store.catalog.keeper.apply`
-`outcome:failed`) and logged, and Shopify is answered 200: eight failed
-deliveries delete the subscription, and the walk repairs within 5 minutes
-what a retry would.
+`shopifyCatalogPurge` awaits `apply` beside the tag purge it keeps, the two
+together, under a 2 s deadline well inside Shopify's 5 s for the delivery. A
+keeper that cannot take the event in time is counted
+(`store.catalog.keeper.apply` `outcome:failed`) and logged, and Shopify is
+answered 200: eight failed deliveries delete the subscription, and the walk
+repairs within 5 minutes what a retry would.
 
 ### The first deploy ships whole
 
@@ -159,7 +166,9 @@ flips it; a version cannot carry a class lifecycle change. The script gains a
 third reason a version cannot be uploaded yet, `lifecycle`, and ships that
 worker whole with its own `wrangler deploy` in the flip, as it does a worker
 that does not exist. The legacy `migrations` array is used, never the
-declarative `exports` field, which refuses every later version upload.
+declarative `exports` field, which refuses every later version upload. A run
+that rolls back leaves that worker on the new build, since no version before
+it carries the class, and its summary names the worker `shipped`.
 
 ## Database Schema
 
@@ -169,8 +178,8 @@ The keeper's own SQLite, created on first construction with
 | Table | Columns | Holds |
 | --- | --- | --- |
 | `products` | `id TEXT PRIMARY KEY`, `position INTEGER NOT NULL`, `updated_at INTEGER NOT NULL`, `written_at INTEGER NOT NULL`, `product TEXT NOT NULL` | One row per product the channel publishes: its place in the shop's order, the shop's `updatedAt` in epoch milliseconds, when the keeper wrote it, the whole product as JSON |
-| `pending` | `id TEXT PRIMARY KEY`, `kind TEXT NOT NULL`, `reported_at INTEGER NOT NULL`, `since INTEGER NOT NULL`, `next_at INTEGER NOT NULL`, `misses INTEGER NOT NULL` | Products reported and not yet read back: created or changed, the report's stamp, when the store first heard a report this new, when to read next, reads in a row the shop answered nothing to |
-| `meta` | `key TEXT PRIMARY KEY`, `value TEXT NOT NULL` | `schema`, `taxonomy` (JSON), `version`, `published_at`, `walked_at`, `walk_due`, `shape` |
+| `pending` | `id TEXT PRIMARY KEY`, `kind TEXT NOT NULL`, `reported_at INTEGER NOT NULL`, `since INTEGER NOT NULL`, `next_at INTEGER NOT NULL`, `misses INTEGER NOT NULL` | Products reported and not yet confirmed: created, changed or deleted, the report's stamp, when the store first heard a report this new, when to read next or when a tombstone expires, due reads in a row the shop answered nothing to |
+| `meta` | `key TEXT PRIMARY KEY`, `value TEXT NOT NULL` | `schema`, `taxonomy` (JSON), `version`, `published_at`, `walked_at`, `walk_due`, `walk_asked`, `shape` |
 
 Every row is a Storefront answer; the walk may rewrite any of them.
 
@@ -180,7 +189,7 @@ Every row is a Storefront answer; the walk may rewrite any of them.
 
 | Method | Input | Output | Notes |
 | --- | --- | --- | --- |
-| `apply(event)` | `{ topic, productId, updatedAt? }` | `{ outcome: "pending" \| "removed" \| "walk" }` | Upserts `pending`, removes a deleted product, or asks for a walk; arms the alarm at the earliest due work |
+| `apply(event)` | `{ topic, productId, updatedAt? }` | `{ outcome: "pending" \| "removed" \| "walk" \| "ignored" }` | Upserts `pending`, removes a deleted product, or asks for a walk; arms the alarm at the earliest due work. `ignored` is a topic it does not follow, a delete naming nothing, or a report on a product deleted since |
 | `walk()` | none | `{ outcome: "ok" \| "outgrown" \| failure, products, version }` | Whole read, writes what moved, publishes if a row changed. Called by the cron pass, and by `sync` on an empty keeper |
 | `sync(known)` | `number \| null` | `{ version, shape }` or `{ version, shape, body }` | From memory; the body only when `known` is older |
 
@@ -217,7 +226,7 @@ Example, a price change on product `gid://shopify/Product/95066`:
 2. Land the keeper with its tests, then the wiring: webhook, cron pass, request path, bindings and the deploy path.
 3. Deploy to staging through the ordinary dispatch; the store worker ships whole once, applying the `v1` migration. The first listing read fills the keeper.
 4. Measure on staging: cold and warm answer times from two locations, and — with a product edited in the staging shop's admin, which no script or secret here can do — seconds from the shop's read to the listing.
-5. Rollback: redeploy the previous build; the object and its rows stay, unused. A rollback cannot remove the class; its deletion is a later migration.
+5. Rollback: redeploy the previous build; the object and its rows stay, unused. A rollback cannot remove the class; its deletion is a later migration, and the ship script's own rollback leaves the worker that shipped whole where it is.
 
 ## Open Questions
 
