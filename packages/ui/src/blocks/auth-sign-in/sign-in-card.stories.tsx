@@ -1,9 +1,17 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { PRODUCT_CARD_CART_COPY } from "../store-product-listing/fixtures";
+import { ProductCard } from "../store-product-listing/product-card";
 import { SignInCard } from "./sign-in-card";
 import { SignInEmailForm } from "./sign-in-email-form";
+
+const LISTING_IMAGE = new URL(
+  "../store-product-listing/product-card.fixture.png",
+  import.meta.url,
+).href;
 
 /**
  * Sign-in is a dialog over the page the collector was already on, matching
@@ -342,5 +350,90 @@ export const DismissalLeavesThePageBeneath: Story = {
       expect(page).toBeInTheDocument();
       expect(canvas.getByText("1999 Charizard, PSA 10")).toBeInTheDocument();
     }
+  },
+};
+
+/**
+ * Signed-out Add to cart on a listing tile opens the Login Dialog — the
+ * consumer owns session and `open`, so the cart control reports quantity and
+ * this demo opens sign-in instead of adding a guest line. Narrow viewport
+ * keeps the cart control visible without hover (same as listing on touch).
+ *
+ * Why-title: `copy.title` is **Sign in to add to cart** (not the meta
+ * default **Sign In to Grade10**). Spec:
+ * `grade10-site-store-product-listing-SC-47` (product-page twin SC-29);
+ * open-from-add gate remains SC-44 / SC-26.
+ */
+export const FromAddToCart: Story = {
+  name: "From add to cart",
+  args: {
+    open: false,
+    copy: {
+      title: "Sign in to add to cart",
+      legal: figmaLegal,
+    },
+  },
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+  },
+  render: function FromAddToCartDemo(args) {
+    const [open, setOpen] = useState(false);
+    const [email, setEmail] = useState("");
+
+    return (
+      <>
+        <main className="bg-background p-6">
+          <div className="w-[260px]">
+            <ProductCard
+              copy={PRODUCT_CARD_CART_COPY}
+              imageAlt="Pokémon TCG Sealed Booster Box – Abyss Eye (M5)"
+              imageSrc={LISTING_IMAGE}
+              name="Pokémon TCG Sealed Booster Box – Abyss Eye (M5)"
+              onCartQuantityChange={() => {
+                setOpen(true);
+              }}
+              onClick={() => {}}
+              price="HK$105"
+            />
+          </div>
+        </main>
+        <SignInCard
+          {...args}
+          onOpenChange={setOpen}
+          open={open}
+        >
+          <SignInEmailForm
+            copy={{
+              email: "Email",
+              emailPlaceholder: "Enter your email",
+              submit: "Send Magic Link",
+            }}
+            email={email}
+            onEmailChange={setEmail}
+            onSubmit={fn()}
+          />
+        </SignInCard>
+      </>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const cart = canvas.getByRole("button", { name: "Add to cart" });
+
+    expect(within(document.body).queryByRole("dialog")).toBeNull();
+
+    await userEvent.click(cart);
+
+    const body = within(document.body);
+    await waitFor(() => {
+      expect(body.getByRole("dialog")).toBeInTheDocument();
+    });
+    expect(
+      body.getByRole("heading", { name: "Sign in to add to cart" }),
+    ).toBeInTheDocument();
+    // Consumer never marked the tile in-cart — no guest line.
+    expect(
+      canvasElement.querySelector('[data-slot="product-card-image"][data-in-cart]'),
+    ).toBeNull();
   },
 };

@@ -19,7 +19,9 @@ How the session check and resume wire is
   `Store Product Listing/ProductCardImage`
 - **Sign-in overlay** —
   [Login Dialog `4666:1488`](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488);
-  Storybook `Auth Sign In/SignInCard`
+  Storybook `Auth Sign In/SignInCard` → **From add to cart**
+  (`auth-sign-in-signincard--from-add-to-cart`) — listing tile Add to cart
+  opens the dialog
 - **Capability** — `grade10-site/store/product-listing`
 
 The listing chrome and cart control stay as
@@ -34,7 +36,9 @@ change only summons sign-in over that surface.
   `redesign-store-product-detail-page`)
 - **Sign-in overlay** —
   [Login Dialog `4666:1488`](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488);
-  Storybook `Auth Sign In/SignInCard`
+  Storybook `Auth Sign In/SignInCard` → **From add to cart**
+  (`auth-sign-in-signincard--from-add-to-cart`) — same overlay; PDP wiring
+  is application work
 - **Capability** — `grade10-site/store/product-page`
 
 The buy rail and Add to cart control stay as the product-page redesign draws
