@@ -32,3 +32,17 @@ only the fields I choose.
 - `grade10-admin-inventory-catalog-SC-78` — Admin hides Cert ID without changing attributes
 - `grade10-admin-inventory-catalog-SC-79` — Displayed Cert ID resolves the selected unit
 - `grade10-admin-inventory-catalog-SC-80` — No Cert ID contributes no displayed value
+
+### grade10-admin-inventory-catalog-US-71: Holder reserves a specific inventory unit
+
+**As an** inventory admin,
+**I want** to choose a specific Cert ID or explicitly choose `No Cert ID` when
+I reserve stock,
+**so that** every reservation identifies whether it owns a physical numbered
+unit or only aggregate stock.
+
+**Accepted by:**
+
+- `grade10-admin-inventory-catalog-SC-81` — Reservation selects a Cert ID
+- `grade10-admin-inventory-catalog-SC-82` — Reservation selects No Cert ID
+- `grade10-admin-inventory-catalog-SC-83` — Reservation without a unit choice is refused

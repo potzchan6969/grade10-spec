@@ -162,3 +162,78 @@ only the fields I choose.
 * Cert ID is not returned as a displayed field.
 * The listing shows no Cert ID row and no product metadata fallback.
 
+---
+
+## grade10-admin-inventory-catalog-US71: Holder reserves a specific inventory unit
+
+**As an** inventory holder,
+**I want** to choose a specific Cert ID or explicitly choose `No Cert ID` when
+I reserve stock,
+**so that** every reservation identifies whether it owns a physical numbered
+unit or only aggregate stock.
+
+### grade10-admin-inventory-catalog-US71-TC1-1: Reservation records the selected unit
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-71
+
+**Pre-conditions:**
+
+* An authorized holder can reserve inventory.
+* A created product has available Cert IDs `PSA-123` and `BGS-456`.
+
+**Steps:**
+
+1. Open the holder reservation flow for the product.
+2. Select Cert ID `PSA-123`.
+3. Save the reservation.
+4. Inspect the reservation and available unit choices.
+
+**Expected Results:**
+
+* The reservation stores the selected opaque Cert ID record.
+* The reservation quantity is one.
+* `PSA-123` is unavailable to another active reservation.
+
+### grade10-admin-inventory-catalog-US71-TC2-1: Reservation requires an explicit unit choice
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-inventory-catalog-US-71
+
+**Pre-conditions:**
+
+* An authorized holder can reserve inventory.
+* A created product has available stock and no intended numbered unit.
+
+**Steps:**
+
+1. Open the holder reservation flow for the product.
+2. Try to save without choosing a Cert ID or `No Cert ID`.
+3. Choose `No Cert ID` and quantity three.
+4. Save and inspect the reservation.
+
+**Expected Results:**
+
+* The missing-choice request is refused without changing inventory.
+* The explicit `No Cert ID` request succeeds through product-level quantity.
+* No Cert ID record is allocated.

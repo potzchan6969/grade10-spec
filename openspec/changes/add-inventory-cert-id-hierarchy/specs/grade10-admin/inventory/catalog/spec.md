@@ -141,3 +141,32 @@ is added, moved, or removed.
 - **WHEN** a collector reads the listing
 - **THEN** the configured product attributes remain available
 - **AND** no Cert ID row is rendered
+
+### Requirement: Every reservation requires an explicit inventory unit choice
+
+Any reservation created against inventory SHALL carry an explicit unit choice.
+The choice SHALL be either one available Cert ID owned by the selected product
+inventory or the literal choice `No Cert ID`. A Cert ID reservation SHALL have
+quantity one and SHALL be exclusive to one active reservation. `No Cert ID`
+SHALL use the existing product-level quantity reservation path without
+allocating a certificate record.
+
+#### Scenario: grade10-admin-inventory-catalog-SC-81 - Reservation selects a Cert ID
+
+- **GIVEN** a created product with available Cert IDs `PSA-123` and `BGS-456`
+- **WHEN** an authorized holder requests a reservation for `PSA-123`
+- **THEN** the reservation stores the opaque Cert ID record identity
+- **AND** its quantity is one and `PSA-123` is unavailable to other active reservations
+
+#### Scenario: grade10-admin-inventory-catalog-SC-82 - Reservation selects No Cert ID
+
+- **GIVEN** a created product with available stock and no intended numbered unit
+- **WHEN** an authorized holder explicitly requests `No Cert ID` for quantity three
+- **THEN** the reservation uses product-level quantity three
+- **AND** no Cert ID record is allocated
+
+#### Scenario: grade10-admin-inventory-catalog-SC-83 - Reservation without a unit choice is refused
+
+- **GIVEN** a created product with available stock
+- **WHEN** an authorized holder requests a reservation without a Cert ID or `No Cert ID`
+- **THEN** Grade10 refuses the request without changing stock, reserved, or Cert ID records

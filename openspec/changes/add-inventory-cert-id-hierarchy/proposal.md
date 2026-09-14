@@ -21,6 +21,8 @@ reduction in listing corrections caused by an incorrect certificate number.
   contracts; structured product attributes become the only product facts.
 - Add optional inventory Cert ID records. Intake may attach one identifier to
   each graded unit, while unnumbered stock remains valid.
+- Require every reservation to carry the same explicit unit choice: one Cert
+  ID or `No Cert ID`; numbered reservations are quantity one and exclusive.
 - Make Auction listing creation and editing require an explicit inventory-unit
   choice: a specific available Cert ID or `No Cert ID`.
 - Keep certificate identity in Inventory, validate it through the existing

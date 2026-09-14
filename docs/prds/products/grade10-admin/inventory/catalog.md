@@ -65,6 +65,8 @@ product history.
 - **Single product** — create or edit the card identity before stock arrives
 - 🚧 **Optional Cert ID** — intake may record an individual graded item's
   certificate identifier under the product inventory
+- 🚧 **Explicit reservation unit** — every reservation selects one Cert ID or
+  explicitly selects `No Cert ID`; a numbered reservation is one unit
 - **Bulk import** — upload a bounded CSV, review each taxonomy and provider
   match, confirm every row, and commit the batch as one operation
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting

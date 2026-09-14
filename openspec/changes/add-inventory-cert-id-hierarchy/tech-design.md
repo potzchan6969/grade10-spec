@@ -28,11 +28,13 @@ display-order contract.
 ## Decisions
 
 The capability specs govern the product hierarchy, optional Cert ID intake,
-explicit Auction unit choice, and display visibility/order. The implementation
-uses a single Inventory-owned certificate record for each supplied identifier.
-An Auction hold carries at most one certificate record and therefore has
-quantity one when numbered; the existing aggregate reservation path remains
-the implementation for `No Cert ID`.
+explicit reservation and Auction unit choice, and display visibility/order.
+The implementation uses a single Inventory-owned certificate record for each
+supplied identifier. Every reservation carries an explicit unit choice. A
+reservation carrying one certificate record has quantity one and is exclusive
+to that record; the existing aggregate reservation path remains the
+implementation for `No Cert ID`. Auction holds use this same Inventory
+reservation contract rather than a listing-only variant.
 
 The selected certificate record id, not its displayed identifier, crosses the
 Inventory/Auction boundary. Inventory validates ownership and active-hold
@@ -60,7 +62,7 @@ ledger, and certificate-held state are derived from the authoritative rows.
 | --- | --- | --- |
 | `inventory.products` | Remove legacy product type and metadata | Drop the two legacy columns |
 | `inventory.inventory_cert_ids` | New physical-unit records | `id text` PK; `inventory_id text` required; `cert_id text` required; `created_at` timestamp required; unique `(inventory_id, cert_id)` |
-| `inventory.reservations` | Identify a numbered hold | `inventory_cert_id text` nullable, default `NULL`; indexed and restricted to one active reservation per certificate |
+| `inventory.reservations` | Identify a numbered hold | `inventory_cert_id text` nullable, default `NULL`; indexed and restricted to one active reservation per certificate; `NULL` is valid only for explicit `No Cert ID` |
 | `auction.auction_listings` | Persist selected unit | `inventory_cert_id text` nullable, default `NULL`; opaque Inventory record id |
 | `inventory.product_schema_revisions` | Encode system display field | Existing JSON order entries migrate to tagged attribute entries; Cert ID uses a tagged system entry |
 
@@ -82,7 +84,7 @@ migration gates.
 | --- | --- | --- |
 | Inventory intake | product id, quantity, optional Cert ID strings, actor and reason | updated aggregate snapshot plus received records / invalid, duplicate, or too-many refusal |
 | List Auction inventory choices | optional listing id for own-hold inclusion | products with available counts and certificate choices / authenticated refusal |
-| Reserve inventory | product id, quantity, holder reference, optional opaque certificate record id | active reservation / product, certificate ownership, conflict, stock, or quantity refusal |
+| Reserve inventory | product id, explicit unit choice (`cert-id` with opaque record id or `no-cert-id`), quantity, holder reference | active reservation / missing choice, product, certificate ownership, conflict, stock, or quantity refusal |
 | Read Auction product display | product id, optional opaque certificate record id, locale | ordered typed fields plus Cert ID when configured / product or certificate refusal |
 | Create or save listing | listing fields, product id, quantity, explicit unit choice | listing and matching hold / missing choice, wrong product, held certificate, or stock refusal |
 
@@ -91,12 +93,14 @@ and the quantity bound, inserts the records, updates the aggregate counters,
 and writes one changelog entry before the transaction commits. Any failed
 identifier check rolls back the inserts and counter update.
 
-For a numbered Auction hold, Inventory locks the certificate row and its
+For a numbered reservation, Inventory locks the certificate row and its
 inventory, checks that no active reservation owns it, then increments the
 aggregate reservation counters and inserts the reservation carrying the
 certificate record id. Releasing or settling the reservation clears the
 certificate allocation in the same transaction. An unnumbered hold follows
-the existing product-level lock and counter path.
+the existing product-level lock and counter path. Omitted unit choice is
+invalid; callers must send the explicit `no-cert-id` choice for aggregate
+stock.
 
 Auction validates the product/unit pair through the binding before saving. A
 draft save synchronizes Inventory first; only after success does it persist
@@ -117,8 +121,9 @@ they no longer call a product-metadata processor.
 - Inventory Auction eligibility returns certificate choices for each eligible
   product and accepts an optional listing id so a listing can retain its own
   held unit.
-- Inventory holder APIs add certificate-aware reserve and display inputs while
-  retaining the existing product-level path for `No Cert ID`.
+- Inventory holder APIs add the shared explicit certificate-aware reserve and
+  display inputs while retaining the existing product-level path for `No Cert
+  ID`.
 - Auction listing admin read, save, and create shapes add nullable
   `inventoryCertId`; the UI separately carries the explicit `No Cert ID`
   choice.
