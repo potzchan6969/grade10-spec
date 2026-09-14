@@ -15,11 +15,13 @@ counts — SHALL answer from one copy of the catalogue the store keeps per shop
 and reads at every location. On the shop's report of a change — a product
 published, taken down or changed, or its stock moved — the store SHALL read
 that product back from the shop, and read again every 2 seconds while the
-shop answers older than the report or answers nothing, for up to 60 seconds.
-The change SHALL reach the listing at every location within 10 seconds of the
-shop's read answering it. A change the shop never reports, or one its reads
-did not answer within 60 seconds, SHALL reach the listing within 5 minutes,
-from a whole read of the catalogue.
+shop answers older than the report, for up to 60 seconds. A product the shop
+reported changed and then answers nothing for, twice, SHALL leave the copy;
+one the shop reported created and answers nothing for SHALL be left to the
+whole read. The change SHALL reach the listing at every location within 10
+seconds of the shop's read answering it. A change the shop never reports, or
+one its reads did not answer within 60 seconds, SHALL reach the listing within
+5 minutes, from a whole read of the catalogue.
 
 A copy SHALL hold what the shop answered, never what a report alone said, and
 a read older than the report that caused it SHALL NOT be published.
@@ -55,7 +57,7 @@ a read older than the report that caused it SHALL NOT be published.
 - **GIVEN** the shop reports a change before its own reads answer it
 - **WHEN** the store reads the product back and the answer is older than the report, or is nothing
 - **THEN** the older answer is not published, the store reads again every 2 seconds, and the change is listed once the shop answers it
-- **AND** a product the shop still answers nothing for after 60 seconds is left to the whole read
+- **AND** a product the shop reported created but still answers nothing for after 60 seconds is left to the whole read
 
 #### Scenario: grade10-site-store-product-listing-SC-48 - A location holding no copy answers from the one the store keeps
 

@@ -71,7 +71,8 @@ it as `CATALOG_KEEPER`.
 - **Rejected — each location rebuilding on the event.** A delivery reaches one location; the others learn nothing.
 - **Rejected — Postgres as the shared copy.** A cross-region read per check, on the pool the orders share.
 - **Rejected — `BaseDO`.** Its scheduler owns the single alarm and schedules through `waitUntil`, which has no effect in a Durable Object; its migrations serve a queue. A plain `DurableObject` over `ctx.storage.sql` is the whole of it.
-- **The manager, not the class.** The rules live in `keeper.ts` over a `KeeperStore` port with an in-memory implementation for the node lane; the class holds the SQLite implementation, the RPC methods and the alarm handler, proved in the worker lane.
+- **The manager, not the class.** The rules live in `keeper.ts` over a `KeeperStore` port; the store in memory is the package's test surface, and the class holds the SQLite implementation, the RPC methods and the alarm handler, proved in the worker lane. The folder holds the class, its interface, the rules and the store — none of the drizzle schema, migrations or managers a `BaseDO` folder carries, since the tables are created by the class and dropped and refilled by the next walk when their version moves.
+- **Fixtures wherever local.** The object builds its catalogue from the runtime env, which no request can override, so a local environment — development, testing, e2e — with no storefront token runs on the fixture shop throughout, the worker lane included.
 - **Placement.** One accessor, `catalogKeeper(env)`, names the object `<shop>/v1` with the location hint `apac`; only the first `get()` of an object respects a hint, so no other call site may build a stub.
 
 ### Nothing serialises across a read of the shop
@@ -82,7 +83,7 @@ walk interleave. Five rules keep the copy right whatever the order:
 - **No write lowers a row's `updated_at`.** Every write is an upsert guarded by it, from a read-back or a walk alike.
 - **A read-back lands only on the row it was read for.** The alarm reads `pending`, reads the shop, then writes each answer only where the pending row is still present with the same `reported_at`; a delete or a newer report that arrived meanwhile wins.
 - **One walk at a time.** The manager holds one in-flight walk promise; the cron, a wanted walk and a `sync` on an empty keeper share it.
-- **The walk writes what moved.** Every page is read first; then one synchronous transaction, in statements of at most 100 bound parameters, upserts rows whose text or position differs and deletes rows it did not see whose `updated_at` is older than the walk's start.
+- **The walk writes what moved.** Every page is read first; then one synchronous transaction, a row a statement, upserts rows whose text or position differs and deletes rows it did not see that were written before the walk began — on the keeper's own clock, since the shop's stamp says when the shop changed a product, not when the copy took it. An ask for a walk made while the walk was reading stands: its pages may not carry that change.
 - **The version is a counter.** `meta.version` is bumped only when a row changed, with `published_at` beside it; an isolate swaps only for a higher number. A hash can say "different", never "older".
 
 ### An event is applied from a read-back, never from its payload
@@ -93,7 +94,8 @@ pending product back in one `getProducts(ids)` and upserts each row.
 
 - **Why read back.** The payload carries the price and the count but no metafields, and the facets are metafield references; Storefront answers what the channel publishes, so an answer of nothing is the channel's own word that a product left the store.
 - **Why Storefront, not Admin.** Admin is not behind the read cache and can say whether a product is published to a named channel, but it needs a second product codec, the channel's publication id and a points budget. The lag is unmeasured; `store.catalog.keeper.readback_lag_ms` measures it, and Admin is the recorded step if its p95 passes 10 s.
-- **The guard and the deadline.** A read older than the report, or answering nothing, leaves the row pending and the alarm re-arms 2 s out, for up to 60 s from the report. At the deadline a product the shop answers nothing for is removed from the copy; one still answering older is left as it is and counted `stale`. The walk is the net for both.
+- **The guard and the deadline.** A read older than the report leaves the row pending and the alarm re-arms 2 s out, timed from the shop's answer, for up to 60 s from the report; at the deadline the row is left as it is, counted `stale`, and the walk is the net. A changed product the shop answers nothing for twice in a row has left the channel and leaves the copy; a created one the shop cannot answer yet waits to the deadline, then is left to the walk.
+- **A redelivery changes nothing.** The deadline and the count of misses stand while the report is the same; a newer report restarts both. A read in flight is told apart by the report it was made for, so a delete or a newer report that lands during it wins.
 - **A delete is applied at once.** `products/delete` removes the row and any pending row, with no read-back; the payload carries only an id.
 - **Stock.** `inventory_levels/update` names an inventory item, not a product. It arms a walk, at most one every 30 s, so a till selling all day costs 2 pages every 30 s at today's size. Open Questions carries the check that retires it.
 - **Idempotent.** Nothing dedupes catalog deliveries, so a redelivery upserts the same pending row and the same truth.
@@ -104,8 +106,9 @@ The alarm always points at the earliest due work: the earliest pending
 `next_at`, or a wanted walk's `walk_due`. The handler catches everything and
 re-arms; the platform's own retry is not a net.
 
-- **Order.** Read-backs first, then a publish if a row changed, then a wanted walk, then a publish again if the walk moved a row.
+- **Order.** Once any report is due, everything pending is read in one call — a burst spread across its window is still one read — then a publish if a row changed, then a due walk, then a publish again if the walk moved a row. The version moves in the same transaction as the rows.
 - **The body.** Rows `ORDER BY position, id`, the taxonomy, the shape, the version and `published_at`, assembled once into the object's memory; `sync` answers from memory and never waits on storage.
+- **A throw holds the alarm off one retry** rather than firing it again at once; the alarm is written once per burst, not once per report.
 - **Nothing before the first walk.** No publish until `meta.walked_at` exists; an event on an unwalked keeper asks for a walk instead, so a burst never publishes a copy of one product.
 - **The shape.** A constant stamped in `meta` and the body; a keeper whose stored shape differs from its code's treats itself as unwalked, so a deploy that changes the shape rewrites the copy on its first read.
 
@@ -165,9 +168,9 @@ The keeper's own SQLite, created on first construction with
 
 | Table | Columns | Holds |
 | --- | --- | --- |
-| `products` | `id TEXT PRIMARY KEY`, `position INTEGER NOT NULL`, `updated_at INTEGER NOT NULL`, `product TEXT NOT NULL` | One row per product the channel publishes: its place in the shop's order, the shop's `updatedAt` in epoch milliseconds, the whole product as JSON |
-| `pending` | `id TEXT PRIMARY KEY`, `reported_at INTEGER NOT NULL`, `next_at INTEGER NOT NULL` | Products reported and not yet read back: when the shop reported, when to read next |
-| `meta` | `key TEXT PRIMARY KEY`, `value TEXT NOT NULL` | `taxonomy` (JSON), `version`, `published_at`, `walked_at`, `walk_due`, `shape` |
+| `products` | `id TEXT PRIMARY KEY`, `position INTEGER NOT NULL`, `updated_at INTEGER NOT NULL`, `written_at INTEGER NOT NULL`, `product TEXT NOT NULL` | One row per product the channel publishes: its place in the shop's order, the shop's `updatedAt` in epoch milliseconds, when the keeper wrote it, the whole product as JSON |
+| `pending` | `id TEXT PRIMARY KEY`, `kind TEXT NOT NULL`, `reported_at INTEGER NOT NULL`, `since INTEGER NOT NULL`, `next_at INTEGER NOT NULL`, `misses INTEGER NOT NULL` | Products reported and not yet read back: created or changed, the report's stamp, when the store first heard a report this new, when to read next, reads in a row the shop answered nothing to |
+| `meta` | `key TEXT PRIMARY KEY`, `value TEXT NOT NULL` | `schema`, `taxonomy` (JSON), `version`, `published_at`, `walked_at`, `walk_due`, `shape` |
 
 Every row is a Storefront answer; the walk may rewrite any of them.
 
