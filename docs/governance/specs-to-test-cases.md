@@ -4,15 +4,43 @@ tcs_rules_rev: 3.0
 
 # Specs to Test Cases
 
-A suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — is a derived reading of the `spec.md` and `user-journeys.md` it names, never a second source of truth. Case shape follows [Virtuoso QA's guide](https://www.virtuosoqa.com/post/test-cases); property vocabularies are Qase's, so a suite exports without translation.
+A suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — is written from the anchors a capability declares, never from the scenarios beside it and never as a second source of truth. Case shape follows [Virtuoso QA's guide](https://www.virtuosoqa.com/post/test-cases); property vocabularies are Qase's, so a suite exports without translation.
+
+A **feature** suite is written **blind**: by a reader who cannot see the spec's `## Requirements` at all. A suite derived from the scenarios can only find inconsistency inside them, never the behaviour they left out — and finding that is what the second reading is for. The scenarios are drafted from the same anchors in parallel, and the two are reconciled once both land.
 
 ## The Rule
 
-- **The spec is correct** — a suite carries no coverage the spec does not state as a scenario; where they disagree, regenerate the case. A proposal never links a suite in place of a spec delta
-- **Journeys are given** — every section is one `user-journeys.md` story; a change holds at most five across every capability it touches (`openspec/config.yaml`, `rules.user-journeys`). A suite never invents a flow, and splitting or merging journeys is a specs edit
-- **A case comes from scenarios** — only those that accept its journey. A case built from no scenario is a requirement in disguise: back to `spec.md` first
-- **A hole is reported** — a scenario no case covers, a scenario under no journey, a journey naming a scenario the spec never defines: report it to the spec's author, never close it by inventing a case or a journey
+- **The spec is correct** — once the scenarios exist and the two readings are reconciled, a suite that disagrees with the spec is regenerated. Before reconciliation there is nothing to disagree with: the suite is the only reading there is, and it is provisional. A proposal never links a suite in place of a spec delta
+- **Anchors are given** — every section is one `user-journeys.md` story, or, where the journeys file says `**Walked by:** nobody`, one `## Feature set` root group. There is no cap on the number of stories. A suite never invents a flow, and splitting or merging stories is a journeys edit
+- **A case comes from an anchor** — never from a scenario, which on a feature run does not exist yet. A case that carries behaviour no anchor implies is a product decision in disguise, and reconciliation is where it is settled
+- **A hole is reported** — an anchor no case covers, a case tracing an anchor nothing defines: report it, never close it by inventing a case or a story
 - **Properties are QA's** — they classify scenarios the spec states. A wrong property is fixed in review and is never grounds to change a step or an expected result
+
+## The Isolated Input
+
+A feature run reads a bundle the caller assembles, and nothing outside it.
+
+- **Included** — `## Purpose` and `## Feature set` from the capability's `spec.md`, its `user-journeys.md`, the change's `proposal.md`, the linked pages under `docs/prds/`, `openspec/config.yaml`'s `context`, and the existing `feature-tcs.md` for id continuity with its `## Reconciliation` stripped
+- **Excluded** — every `## Requirements` section, `openspec/specs/` beyond the two included sections, and `openspec/changes/archive/` entirely. An archived change keeps an un-stripped `## Reconciliation` naming scenario ids, so reading archive reopens the leak invisibly on the next change to that capability
+- **Recorded** — a hash of the bundle goes on the `## Reconciliation` Run line. When someone later suspects the pass stopped being blind, that hash is the only thing that can be checked
+- **Assembled by hand where no caller built one** — a person running the skill directly assembles it and says so in the report. Reading the requirements "just to check" is how the property is lost, and nothing downstream can detect that it was
+- **Different methods, not the same one twice** — the blind reader works a test-design checklist: boundary values, equivalence partitions, state transitions, CRUD completeness, empty / one / many, null and missing, permission matrix, error taxonomy, SEO and indexability. Two readings that use the same method produce synonyms, and the reconciliation then finds nothing
+
+## Reconciliation
+
+Once both readings land, the caller joins them on anchors and writes a `## Reconciliation` section at the bottom of the suite. It is the evidence the blind pass ran and what it bought: without it, a pass that found nothing and a pass that never happened look identical in git.
+
+| Diff | Disposition |
+| --- | --- |
+| A case carries behaviour no scenario states, and it is real | Fold it into `spec.md` as a scenario |
+| A case carries behaviour no scenario states, and it is a misreading | Drop the case, record the reason |
+| A case carries behaviour **nobody ever decided** | Stop and ask the author |
+| A case carries behaviour **nobody present can settle** | Keep the case `draft` with `**Blocked:** <who settles it>` |
+| A scenario no case reaches | Add a case, or `**Out of suite:**` naming where it is verified instead |
+
+- **Blocked is not rejected** — a question nobody could answer is not a misreading, and filing it as one deletes the most valuable thing the pass produces. The case stays, a ❓ goes on the PRD, an open question goes on the proposal, and no scenario is written
+- **Out of suite names its verifier** — a consuming repository's build and type check, a database constraint, a design review, a higher-level suite. A scenario that can name no such place is a hole, not an exemption
+- **Scenario ids are temporary here** — they may appear in `## Reconciliation` only while the change is open; archive fold and `/tcs-review` both strip them, leaving the dispositions and the reasons
 
 ## Naming
 
@@ -180,12 +208,12 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 
 ## Step 1: Digest the Capability
 
-- **Read whole** — `spec.md` (`## Purpose`, `## Feature set`, requirements and scenarios), `user-journeys.md`, and the change's `proposal.md`, whose acceptance signal makes a case's type `acceptance`
+- **Read the isolated input** — on a feature run this is the whole of what a reader may see: `## Purpose` and `## Feature set` from `spec.md` but **never its requirements**, `user-journeys.md`, and the change's `proposal.md`, whose acceptance signal makes a case's type `acceptance`. Domain, product and platform runs already read journeys rather than scenarios and are unchanged
 - **Read the PRD** — `docs/prds/products/<product>/<domain>/index.md` and the capability's PRD: a control, state or amount the manual names is written in the manual's words
 - **Read the store's context** — `openspec/config.yaml`'s `context` for the brands, products and conventions (money is minor units plus an ISO 4217 code): `<grade10 store url>`, never `<store front door URL>`
 - **Read the cross-cutting specs the Purpose names** — `crawlable-pages`, `localization`, `money-amounts`, `dates-and-times`. Their facts are checked on the way past (`URL contains <lang>`), never set up as a pre-condition
-- **Write missing journeys first** — to `rules.user-journeys`: keep every SHALL and scenario clause, add a Feature set if none, permanent ids, `**As a** / **I want** / **so that**`, then `**Accepted by:**` as `` `id` — title `` bullets; `openspec validate <change> --strict`
-- **Confirm the ids** — `### <capability>-US-<n>: …` listing its scenario ids, `#### Scenario: <capability>-SC-<n> - …`; older files get an ids-only upgrade
+- **Write missing journeys first** — to `rules.user-journeys`: from the feature set and the PRD, adding no behaviour, with permanent ids and `**As a** / **I want** / **so that**`. There is no `**Accepted by:**` list — a scenario points up at its story through its own `**Serves:**`, and tooling joins on that; `openspec validate <change> --strict`
+- **Confirm the ids** — `### <capability>-US-<n>: …`; older files get an ids-only upgrade
 
 ## Step 2: Journeys Become Sections
 

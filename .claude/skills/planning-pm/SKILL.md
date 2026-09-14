@@ -1,36 +1,72 @@
 ---
 name: planning-pm
-description: Write the product manager's half of an OpenSpec change - proposal.md, the spec deltas, and the user journeys beside them. Use when a PM or designer is specifying a change, and stop where the requirements stop.
+description: Write the product manager's half of an OpenSpec change - proposal, purpose and feature set, user journeys, a blind test suite and the scenarios reconciled against it. Use when a PM or designer is specifying a change, and stop where the requirements stop.
 ---
 
 # The product manager's artifacts
 
-Four of the seven artifacts in `grade10-planning` are yours, and they are the
-first four:
+Five of the eight artifacts in `grade10-planning` are yours, and they are the
+first five. They live in four files:
 
-| Artifact | What it holds |
-| --- | --- |
-| `proposal.md` | Why this problem, for whom, what it will not do |
-| `specs/<capability>/spec.md` | The requirement deltas, with id'd scenarios |
-| `specs/<capability>/user-journeys.md` | Who walks them, and what accepts each story |
-| `specs/<capability>/feature-tcs.md` | The suite derived from those journeys, every case `draft` |
+| Artifact | File | What it holds |
+| --- | --- | --- |
+| `proposal` | `proposal.md` | Why this problem, for whom, what it will not do |
+| `spec-outline` | `specs/<capability>/spec.md` | `## Purpose` and `## Feature set`, then stop |
+| `user-journeys` | `specs/<capability>/user-journeys.md` | The stories added, changed or retired, and the ones this change leans on |
+| `test-cases` | `specs/<capability>/feature-tcs.md` | A blind suite, written without sight of the scenarios |
+| `spec-behaviour` | `specs/<capability>/spec.md` | The requirement deltas and their scenarios, reconciled against that suite |
 
-The suite is yours to draft, beside every capability whose journeys file holds
-a story; one that says `**Walked by:** nobody` has nothing to derive. QA
-reviews and extends it with `/tcs-review`.
+**Stop there.** A designer writes `ui-design.md`, and the engineer who picks the
+change up writes `tech-design.md` and `tasks.md` - on this same change, never a
+second one. A change with no `tasks.md` reads as still being planned on both
+boards; that is the handoff signal, and it is the only one, so say the change
+needs picking up rather than assuming someone will find it.
 
-The PRD under `docs/prds/` is yours to keep whole. Everyone writes on it —
-a designer's state, an engineer's constraint, a QA case that exposes a rule
-nobody wrote land there first, marked 🚧 or ❓ — and you are the hand that
-keeps it one record: the marks, the decisions block, and the prose that says
-what the product should be.
+The PRD under `docs/prds/` is yours to keep whole. Everyone writes on it - a
+designer's state, an engineer's constraint, a QA case that exposes a rule nobody
+wrote land there first, marked 🚧 or ❓ - and you are the hand that keeps it one
+record.
 
-**Stop there.** A designer writes `ui-design.md`,
-and the engineer who picks the change up writes `tech-design.md` and
-`tasks.md` — on this same change, never a second one. A change with no
-`tasks.md` reads as still being planned on both boards; that is the handoff
-signal, and it is the only one, so say the change needs picking up rather than
-assuming someone will find it.
+## Why this workflow has the shape it has
+
+A suite derived from the scenarios can only find inconsistency inside them. It
+can never find the behaviour they left out, because it was written from them.
+Boundary values, empty states, nulls, SEO - the details a test-design reading
+catches and a requirement-decomposition reading does not - had no mechanism in
+this store that found them.
+
+So the scenarios and the suite are now **two independent readings of the same
+anchors**, written by sub-agents that cannot see each other's work, and
+reconciled after both land. The difference between them is the finding.
+
+Ordering is not the mechanism; independence is. Writing the suite first and the
+scenarios from it would be a relay, not a cross-check - whoever writes second
+copies the first.
+
+## The run
+
+The author triggers `/planning-pm` and nothing else. Everything below happens
+inside that one invocation.
+
+```
+grilling                        author answers rounds until the frontier is empty
+    ↓
+PRD marks 🚧 / ❓                the source of the feature set's groups
+    ↓
+spec-outline                    Purpose + Feature set
+    ↓
+user-journeys
+    ↓
+    ├── sub-agent A → scenario draft      identical inputs,
+    └── sub-agent B → feature-tcs.md      neither sees the other
+    ↓
+reconciliation                  join on anchors
+    ↓
+spec-behaviour + ## Reconciliation
+```
+
+Everything this run produces is `draft`. Nothing in it claims review.
+`/tcs-review` is QA's, in its own pull request, at its own pace.
 
 ## Steps
 
@@ -38,45 +74,37 @@ assuming someone will find it.
    `git log --oneline HEAD..origin/main` is not empty, update before reading. A
    MODIFIED block copied from a stale spec silently reverts whatever landed in
    between, and an overlap scan against a stale `openspec/changes/` finds
-   nothing. Then read the capability's PRD under `docs/prds/` when one
-   exists — what runs, what
-   is 🚧 and coming, what is ❓ and open — then every active change in
-   `openspec/changes/` on its spec, then the capability under
-   `openspec/specs/<product>/<domain>/<capability>/`. An active change already
-   folding a requirement this one touches is extended or superseded, never
-   doubled: whichever archives second reverts the first. Find facts yourself —
-   bring only decisions to the author.
-2. **Interview the author.** Run the `grilling` skill's round-based frontier
-   interview before drafting. Do not write the proposal until the frontier is
-   empty and the author confirms shared understanding. The interview scales
-   with the open questions, not the change's size: if reading left nothing
-   open, say so and proceed.
+   nothing. Then read the capability's PRD under `docs/prds/` when one exists,
+   then every active change in `openspec/changes/` on its spec, then the
+   capability under `openspec/specs/<product>/<domain>/<capability>/`. An active
+   change already folding a requirement this one touches is extended or
+   superseded, never doubled: whichever archives second reverts the first. Find
+   facts yourself - bring only decisions to the author.
 
-   A question settles three ways, not two: answered, accepted as recommended,
-   or **deferred** — the author saying they are not the right person for it. A
-   deferred question goes under the proposal's open questions with a note on
-   who should settle it, and does not hold the draft. Sizing, export names, and
-   what code a change touches are never the author's to answer: find them
-   yourself, or leave them to the engineer who plans delivery.
-3. **Mark the PRDs first.** On each PRD the change touches, add one 🚧
-   line per outcome the reader can see, in the reader's words and in the
-   section it belongs to (the sections are in
-   `docs/prds/guides/writing-the-manual.md`); a ❓ line or decisions row for
-   what the author deferred; the decisions the change turns on
-   (`prd-authoring`). The house style is `docs/governance/writing.md`.
-   The deltas derive from these lines, so a delta promising what no line marks
-   is the delta's error — and the scenarios that prove one line are the
-   delta's, however many. A 🚧 inside a flow step, a sub-step or
-   mid-sentence is a scenario wearing a mark: lift it to its section as one
-   outcome, or leave it to the delta. `pnpm check:manual` warns (`dense`) on
-   a buried mark and on a page past the style's budget; a mark that would
-   tip a page over it is the sign the page is restating the delta, not the
-   sign the page needs more room. A capability with no PRD gets one first —
-   `prd-authoring` writes it — or the change records `page_waived: <why>` in
-   its `.openspec.yaml`; `pnpm check:manual` refuses a change carrying deltas
-   with neither a 🚧 line under a linked section nor the waiver. The marks and
-   the change land in the same pull request: a 🚧 line no in-flight change
-   touches fails the same check.
+2. **Interview the author.** Run the `grilling` skill's round-based frontier
+   interview before drafting. Do not write until the frontier is empty and the
+   author confirms shared understanding. The interview scales with the open
+   questions, not the change's size.
+
+   A question settles three ways: answered, accepted as recommended, or
+   **deferred** - the author saying they are not the right person for it. A
+   deferred question goes under the proposal's open questions with a note on who
+   should settle it, and does not hold the draft. Sizing, export names, and what
+   code a change touches are never the author's to answer.
+
+3. **Mark the PRDs first.** One 🚧 line per outcome the reader can see, in the
+   reader's words and in the section it belongs to; a ❓ line or decisions row
+   for what the author deferred; the decisions the change turns on
+   (`prd-authoring`). House style is `docs/governance/writing.md`.
+
+   **These marks are the source of the feature set's root groups.** Every group
+   traces back to a line here, which is also why a change that marks a 🚧 line
+   can never claim `skip_specs`.
+
+   A capability with no PRD gets one first, or the change records
+   `page_waived: <why>`. `pnpm check:manual` refuses a change carrying deltas
+   with neither a 🚧 line under a linked section nor the waiver.
+
 4. **Create the change through the CLI.**
 
    ```bash
@@ -84,141 +112,159 @@ assuming someone will find it.
    ```
 
    Kebab-case. A directory made by hand records nothing in `.openspec.yaml`.
-   `pnpm openspec` runs the pinned CLI; a global `openspec` works the same.
-5. **Read the enriched instructions for each artifact as you reach it.**
+
+5. **Read the enriched instructions as you reach each artifact.**
 
    ```bash
    openspec instructions proposal --change <change-name>
-   openspec instructions specs --change <change-name>
+   openspec instructions spec-outline --change <change-name>
    openspec instructions user-journeys --change <change-name>
+   openspec instructions test-cases --change <change-name>
+   openspec instructions spec-behaviour --change <change-name>
    ```
 
-   These carry this store's own rules — the ones in `openspec/config.yaml` — on
-   top of the schema's. Read them rather than working from memory.
-6. **Write the four artifacts**, in that order. Under the proposal's
-   `## References`, link every section you marked —
-   `[Points · Rules](../../../docs/prds/products/grade10-site/loyalty/points.md#rules)`
-   — so the manual shows the change under that heading; `pnpm check:manual`
-   refuses a link to a section that does not exist.
-7. **Validate, then hand to QA.**
+   These carry this store's own rules on top of the schema's. Read them rather
+   than working from memory.
+
+   `openspec status` cannot tell `spec-outline` and `spec-behaviour` apart -
+   both glob `spec.md`, so it marks the second complete the moment the first
+   writes the file. **`pnpm plan:preflight` is the gate that means anything.**
+
+6. **Write the proposal, the outline and the journeys**, in that order.
+   Under the proposal's `## References`, link every section you marked, so the
+   manual shows the change under that heading.
+
+7. **Run the two readings.** Dispatch both sub-agents. They get identical
+   inputs and never see each other's output. `spec-to-tcs` builds the isolated
+   input for the suite pass; the scenario pass does not read `feature-tcs.md`.
+
+8. **Reconcile, then write `spec-behaviour`.** Join on anchors, take the
+   dispositions below, and write the scenarios that survive together with the
+   `## Reconciliation` block.
+
+9. **Validate.**
 
    ```bash
    openspec validate <change-name> --strict
-   openspec status --change <change-name>
+   pnpm plan:preflight <change-name>
+   pnpm check:manual
+   pnpm run tcs:validate
    ```
 
-   With the specs valid, run `/spec-to-tcs feature <capability>` for each
-   capability the change carries. The suites belong in this same pull
-   request, as their own commits. The domain, product and platform passes are
-   QA's (`/planning-qa`): where the domain file already sits beside the
-   durable specs, the feature run trims against it, and where it does not,
-   QA's review does.
+## Anchors
 
-## proposal.md
+Neither file points at the other. Both point up.
 
-Author line first (`**Author:** @handle - YYYY-MM-DD`, ask for the handle).
-Open with the collector problem and the evidence, not the solution. Carry a
-metric that would move if this works, and always list Non-Goals. The
-**Capabilities** section is the contract with the specs: every capability named
-there needs a delta file, and nothing else gets one.
+> **Anchor set** = the capability's full story set once this change folds,
+> **union** the root groups of its `## Feature set`.
 
-A change that alters no behavior at all — a pure refactor, tooling, docs — sets
-`skip_specs: true` in its `.openspec.yaml` rather than inventing a requirement
-to satisfy validation.
+- A scenario carries `**Serves:** <anchor> - <prose>`, under its heading and
+  above `**GIVEN**` / `**WHEN**`.
+- A case carries `**Trace:** <anchor>`, as it always has - a story id, or a
+  feature set root group for a capability nobody walks.
+- **There is no `**Accepted by:**`.** It was the hand-maintained link through
+  which the two files inherited each other's blind spots. Where a story-to-
+  scenario listing is wanted, tooling joins on `**Serves:**`.
 
-An optional last section, **Follow-on changes**, names what this change makes
-possible next — one bullet each, no dates, no owners, no commitments. The
-manual's `::next` block collects them onto the PRDs this change is
-about, each bullet under the change that wrote it, so write them for a reader
-of a PRD rather than for the board. Omit the section when there is
-nothing to name; a proposal that names none has decided nothing.
+Before the dash is machine-read and must resolve; after it is prose for a human.
+An anchor that resolves to nothing fails loudly rather than dangling.
 
-## The delta specs
+Coverage is checked at group level: every anchor served by at least one scenario
+and walked by at least one case. That is coarse on purpose - the real coverage
+mechanism is the blind pass, and the rule only catches a whole group being
+forgotten.
 
-One per capability the proposal named, at `specs/<capability-path>/spec.md`,
-using the exact existing path for a modified capability.
+## The blind pass
 
-- `### Requirement: <name>` with SHALL or MUST — never should or may.
-- `#### Scenario: <capability>-SC-<n> - <name>` in WHEN/THEN form. **Exactly
-  four hashes.** Three hashes or a bullet fails silently: the scenario is
-  simply not seen.
-- Every requirement carries at least one scenario, and every scenario is
-  checkable by a test or a manual pass.
-- A **new** capability's delta opens with `## Purpose` — one or two sentences,
-  50+ characters. Archive copies it into the main spec. A delta for an
-  **existing** capability must not have one; it is ignored, and the
-  capability's Purpose is edited in `openspec/specs/` directly.
-- **No `## User journeys` section.** The stories are their own file beside this
-  one, and `pnpm check:manual` refuses a delta that holds the heading.
-- Never name a class, function, hook, table, or library. That is
-  `tech-design.md`'s job. Public component exports are the one exception — the
-  export name is the cross-repo contract, so name it, and keep the set in one
-  requirement. Read `packages/ui` and the capability's existing export
-  requirement and propose the set yourself; never ask the author for an export
-  name. Say in the proposal which exports do not exist yet, and the engineer
-  confirms the set when delivery is planned.
-- `## MODIFIED Requirements` needs the **entire** requirement block copied from
-  the main spec and then edited. Partial content loses detail at archive. When
-  you are adding a concern rather than changing existing behavior, use `ADDED`.
-- Money is an integer count of minor units plus an ISO 4217 code, never a
-  float. Convert it yourself — the author says HKD 10, the spec says 1000 HKD
-  minor units.
-- **A capability's id prefix is its path with slashes as hyphens** —
-  `grade10-site/store/product-listing` issues
-  `grade10-site-store-product-listing-SC-01`. The path form is what keeps two
-  capabilities of the same name apart: `grade10-site/site/navigation` and
-  `zzz-site/site/navigation` would otherwise both issue `navigation-*`.
-- Ids are permanent. Number from 01 within a capability and never renumber one
-  that exists — a task, a review, a journey's `Accepted by`, and a downstream
-  test all point at it. A capability that is later renamed or moved goes on
-  issuing what it always issued, so read the ids that exist before adding one;
-  only a capability issuing its first derives the prefix from its path.
+Independence that relies on an agent's restraint is not independence. The
+orchestrator builds an isolated input in scratch space, and the suite sub-agent
+sees nothing else.
 
-## user-journeys.md
+**Included:** `## Purpose`, `## Feature set`, this capability's
+`user-journeys.md`, the linked PRD sections, and the existing `feature-tcs.md`
+for id continuity, with `## Reconciliation` stripped.
 
-One beside each `spec.md`, holding a single `## User journeys` section. This is
-what the suites beside it are derived from, so it is finished when every story names an
-actor the spec already knows and scenarios that already exist.
+**Excluded:** `openspec/specs/` entirely, `openspec/changes/archive/` entirely,
+and any `## Requirements` section anywhere.
 
-- At most five journeys across every capability the change touches. A journey
-  is one actor pursuing one goal start to finish; a name that needs an `and` is
-  two journeys, and a change wanting a sixth is two changes.
-- Title actor first, then the action, in the third person — `Collector enters
-  the catalogue through a collection`. Not a bare verb phrase, not the first
-  person.
-- `### <capability>-US-<n>: <title>`, then the story on three labeled lines
-  (`**As a** …`, `**I want** …`, `**so that** …`), then an `**Accepted by:**`
-  list where each line is `` `<capability>-SC-<n>` — Scenario title ``.
-- Hold every story to the four criteria its author owns: Independent,
-  Negotiable, Valuable, Testable. A story that fails one is split or reworded,
-  never widened to fit. Estimable and Small are sizing judgements and belong to
-  the engineer who plans delivery.
-- Every accepted-by id names a scenario the `spec.md` beside it issues.
-  `pnpm check:manual` fails on one that resolves to nothing.
-- **A capability nobody reaches on its own says so in place of the stories**
-  — a cross-cutting policy, a package contract, a backend convention. Its file
-  keeps the `## User journeys` heading and holds one line and no story:
-  `**Walked by:** nobody on their own - <who inherits it, and which
-  capability's journeys reach it instead>`. Never invent an actor to fill one,
-  and never leave the file out: `pnpm check:manual` fails a capability with
-  neither stories nor the declaration, so the exemption is always a decision
-  on record.
-- **The role is a person, or an agent that acts on its own** — a crawler, a
-  preview fetcher, a provider calling back. Never software this repository
-  ships: a consuming application, a service, a caller, a package is the
-  system's side of the story, and the journey belongs to whoever operates it.
-- **Whoever builds the product is not walking it.** An engineer wiring a
-  call, a developer seeding fixtures, a reviewer reading a contract — that is
-  a test or a working step. A capability only they reach is unwalked and says
-  so: an internal reference, a dev-build-only surface, a fixture panel. Its
-  scenarios stand on their own.
-- **A single scenario needs no journey.** The exemption above is
-  capability-wide, but a walked capability still issues some no story reaches
-  — a package's export list, a copy shape, a defaulting rule no surface shows.
-  Leave those out of every `**Accepted by:**`, and tell QA to name them under
-  `**Out of suite:**`. Widening a shopper's story to cover one, or inventing
-  an application to import it, is how an actor gets invented inside a
-  capability that has real ones.
+The archive exclusion is not housekeeping. An archived change keeps an
+un-stripped `## Reconciliation` naming scenario ids, so missing that path
+reopens the leak on the next change to the same capability, invisibly.
+
+The suite pass works a test-design checklist - boundary values, equivalence
+partitions, state transitions, CRUD completeness, empty / one / many, null and
+missing, permission matrix, error taxonomy, SEO and indexability - rather than
+paraphrasing the stories. Two readings using the same method produce synonyms,
+and the reconciliation then finds nothing.
+
+## Reconciliation
+
+| Diff | Disposition |
+| --- | --- |
+| Case has it, no scenario does, and it is real behaviour | Fold it in as a scenario |
+| Case has it, no scenario does, and it is a misreading | Drop the case, record the reason |
+| Case has it, and **nobody ever decided it** | **Pause. Open a grilling round.** |
+| Case has it, and **nobody present can settle it** | Keep the case `draft` + `**Blocked:**`. See below. |
+| A scenario no case reaches | Add a case, or `**Out of suite:**` naming where it is verified instead |
+
+**The run stops for the third row.** A workflow that cannot pause there is worse
+than the one it replaces, because the agent would be deciding the product.
+Automation removes the typing, not the judgement.
+
+**On resume, patch - never re-run a pass.** The answer becomes a scenario, and a
+case where one is warranted. Re-running the blind pass once the answer is known
+produces a fake independent reading and erases the record of the real one.
+
+**When nobody can settle it**, the case stays in the suite as `draft` carrying
+`**Blocked:** <who should settle this>`, a ❓ goes on the PRD, an open question
+goes on the proposal, and no scenario is written. The run continues, consistent
+with a deferral not holding the draft. This row exists because without it the
+case gets filed as *rejected* - the nearest disposition that lets the run finish
+- and the most valuable thing the mechanism produces would be deleted because
+nobody was free that afternoon, with everything looking normal afterwards.
+
+After reconciliation the ordinary adjudication resumes: **the spec is correct**,
+and a suite that disagrees with it is regenerated.
+
+`## Reconciliation` is the evidence the pass happened and what it bought.
+Without it, a pass that found nothing and a pass that never ran look identical
+in git. Scenario ids belong there only while the change is open.
+
+## Escape hatches
+
+| Hatch | Who decides | Test |
+| --- | --- | --- |
+| `skip_specs: <why>` | Author | No spec delta exists at all |
+| `blind_pass_skipped` | **The checker** | A delta exists but carries no new behaviour |
+| `**Walked by:** nobody` | Author | Not a hatch - anchors route to the feature set |
+
+`skip_specs` is the one switch that disables the whole cross-check, and the
+cheapest line in the file to write. It takes a **reason, never `true`**, and a
+change that lays down a 🚧 mark cannot claim it: 🚧 means an outcome a reader can
+see, so claiming both is the author contradicting themselves. The realistic
+failure is not dishonesty - it is an author who sincerely believes a refactor
+changes no behaviour and is wrong.
+
+`blind_pass_skipped` is granted by the checker when the spec diff **adds no
+scenario id** and **modifies no `**GIVEN**` / `**WHEN**` / `**THEN**` line** -
+splitting a requirement for readability, a typo in a table's prose, a rename, a
+scenario moved under the requirement it always belonged to. The author cannot
+declare it. Where the checker refuses and the author disagrees, that is a
+grilling round, not a self-service waiver.
+
+## Commits
+
+| # | Commit | Proves |
+| --- | --- | --- |
+| 1 | `docs(prd): …` | The product judgement is in the reader's words |
+| 2 | `spec(<domain>): outline and journeys` | The anchor set is fixed |
+| 3 | `test(<domain>): blind pass suites` | The blind reading, uncontaminated |
+| 4 | `spec(<domain>): scenarios and reconciliation` | What the second reading caught |
+
+Commit 3 precedes commit 4 not because the suite produced the scenarios, but
+because the committed scenarios are the reconciled ones. **The scenario draft is
+never committed** - its only trace is the `## Reconciliation` block, which is
+why that block is not optional.
 
 ## Where a statement belongs
 
@@ -226,18 +272,15 @@ actor the spec already knows and scenarios that already exist.
 | --- | --- |
 | What the product should be, in the reader's words | The PRD, marked 🚧 or ❓ |
 | Anything testable | The delta spec, and nowhere else |
-| Who walks it, and what accepts their story | `user-journeys.md` beside that spec |
-| Why this problem, for whom, what was ruled out, what will be measured | The PRD's `Product decisions` block (`prd-authoring` skill) |
-| How it will be built | `tech-design.md` — not yours |
-
-A testable statement left on a page or in a proposal, or a delta no page line
-marks, is the failure this store exists to prevent:
-`docs/governance/prd-and-openspec.md` draws the boundary.
+| Who walks it | `user-journeys.md` beside that spec |
+| Why this problem, for whom, what was ruled out, what will be measured | The PRD's `Product decisions` block |
+| How it will be built | `tech-design.md` - not yours |
 
 ## Related
 
-- `openspec-propose` — what to settle before drafting, and who writes what.
-- `planning-qa` — the suites derived from your journeys.
-- `planning-design`, `planning-dev` — the artifacts that come after yours.
-- `prd-authoring` — for the product judgment a requirement will not preserve.
-- `grilling` — the interview that precedes the proposal.
+- `grilling` - the interview that precedes the proposal, and the escalation.
+- `spec-to-tcs` - the blind pass and the isolated input it builds.
+- `planning-qa` - the review that comes after, and the wider suites.
+- `openspec-propose` - who writes what across the whole change.
+- `prd-authoring` - for the product judgment a requirement will not preserve.
+- `planning-design`, `planning-dev` - the artifacts that come after yours.
