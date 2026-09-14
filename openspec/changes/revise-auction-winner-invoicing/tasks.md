@@ -23,7 +23,7 @@ there is no auction-state backfill, legacy conversion, or dual-read path.
 - [ ] 3.2 Update repository writes and reads to lock the order/current invoice, keep invoice revisions and logs append-only, and return one derived status for the winner and queue for `auction-status-SC-19`, `auction-status-SC-20`, `auction-status-SC-25`, `grade10-admin-auction-post-sale-SC-35`, and `grade10-admin-auction-post-sale-SC-21`
 - [ ] 3.3 Verify generated migration ordering, committed SQL, constraints, query shape, and PGlite repository behavior with `pnpm run db:drizzle:generate`, `pnpm run check:migrations`, and focused backend repository tests
 
-## 4. Auction lifecycle and notifications (grade10)
+## 4. Auction lifecycle and notifications (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Change the locked, idempotent close flow to create one `not_issued` order, release every bid-time hold, and send only the auction-won address request for `winner-order-SC-26`, `winner-order-SC-27`, `winner-order-SC-12`, `winner-order-SC-13`, and `winner-order-SC-14`
 - [ ] 4.2 Implement winner address confirmation before send, operator quote-and-send, and re-quote with a required reason and chosen deadline while preserving atomic invoice/log/notification writes for `winner-order-SC-07`, `winner-order-SC-08`, `winner-order-SC-29`, `grade10-admin-auction-post-sale-SC-48`, `grade10-admin-auction-post-sale-SC-49`, `grade10-admin-auction-post-sale-SC-51`, `grade10-admin-auction-post-sale-SC-52`, and `grade10-admin-auction-post-sale-SC-53`
