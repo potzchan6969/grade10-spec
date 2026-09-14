@@ -222,7 +222,8 @@ export const AUCTION_LOT_DETAILS_COPY = {
     maximumColumn: "Maximum",
     bidColumn: "Bid",
     time: "Time",
-    emptyBids: "No bids placed for you yet.",
+    emptyBidsTitle: "No bids placed yet",
+    emptyBidsDescription: "We only bid as needed up to your maximum.",
   },
 };
 

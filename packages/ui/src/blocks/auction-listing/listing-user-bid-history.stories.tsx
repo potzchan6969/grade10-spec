@@ -22,7 +22,8 @@ const COPY = {
   maximumColumn: "Maximum",
   bidColumn: "Bid",
   time: "Time",
-  emptyBids: "No bids placed for you yet.",
+  emptyBidsTitle: "No bids placed yet",
+  emptyBidsDescription: "We only bid as needed up to your maximum.",
 } as const;
 
 const STORY_NOW_MS = Date.now();
@@ -167,10 +168,10 @@ export const MaxRaisedOverTime: Story = {
 
 /**
  * Single maximum, no bid steps — defaults to Your maximums; Bid placed shows
- * the empty message (one story covers both halves of that state).
+ * the frameless empty state.
  */
-export const SingleMaxNoBids: Story = {
-  name: "Single maximum, no bids",
+export const EmptyBidsFrameless: Story = {
+  name: "Empty bids, frameless state",
   args: {
     maximumRows: SINGLE_MAXIMUM,
     bidRows: [],
@@ -191,8 +192,18 @@ export const SingleMaxNoBids: Story = {
     await userEvent.click(
       within(dialog).getByRole("tab", { name: "Bid placed" }),
     );
-    const empty = within(dialog).getByText("No bids placed for you yet.");
-    expect(empty).toBeVisible();
-    expect(empty.className).toMatch(/text-secondary-foreground/);
+    expect(within(dialog).getByText("No bids placed yet")).toBeVisible();
+    expect(
+      within(dialog).getByText("We only bid as needed up to your maximum."),
+    ).toBeVisible();
+    const shell = dialog.querySelector(
+      '[data-slot="listing-user-bid-history-empty-bids"]',
+    );
+    expect(shell).not.toBeNull();
+    expect(shell?.getAttribute("data-frameless")).toBeTruthy();
+    expect(shell?.className ?? "").not.toMatch(/border-dashed/);
+    expect(
+      within(dialog).queryByText("No bids placed for you yet."),
+    ).not.toBeInTheDocument();
   },
 };
