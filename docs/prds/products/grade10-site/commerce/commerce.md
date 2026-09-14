@@ -29,8 +29,9 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 
 ### Display and pricing are different reads
 
-- Display goes through public GET routes (`/api/public/catalog/…`) behind `edgeCache()` + `cacheTag()` — `product:<id>` on detail, `catalog:list` on lists, `catalog:any` on every catalog response, `maxAge` 300 s
-- Shopify product webhooks purge the changed product's tags; an inventory level webhook names an inventory item and no product, so it purges `catalog:any` — a register selling the last unit drops the whole catalog cache rather than showing it in stock for minutes. The TTL is the backstop for a webhook that never arrives
+- **Display** — the listing, its filter panel, the collections and a product's page answer over tRPC (`catalog.*`), read from the Storefront API on every request; nothing caches them since the public GET routes went, and the tags the product webhook still purges are tags no response publishes
+- **A narrowing** — Shopify's own `search` narrows and counts by the facets the shop configured in Search & Discovery, trusted only when Shopify advertises the facet back; free text, the latest order and a shop with the facets unconfigured walk the whole catalogue through the worker instead, once per distinct query, and refuse past 5,000 products
+- ❓ **The catalogue index** — the store keeps its own copy of what the shop publishes and answers every listing read from it in one round trip to its own database; Shopify is read when a product changes and by a sweep, never on a listing view — [the design note](/references/store-catalogue-index). Engineering confirms
 - Checkout pricing always fetches live from the Storefront API — a cache can never set a charge amount
 - Availability is checked when the cart is priced: a variant that does not
   sell rejects, and a cart asking past a count the catalog exposes
@@ -41,9 +42,12 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
   accepted is compared against the quantity asked for, and a cart Shopify
   shortened is refused rather than sold
 
-### No product mirror in Postgres
+### A copy the shop can always rebuild
 
-- Shopify down means checkout down; display keeps serving from cache
+- **Shopify down** — checkout down, and the listing with it
+- ❓ **Derived, never authored** — every row of the index is what a Storefront read answered, and a full walk rewrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
+- ❓ **Webhooks accelerate, the sweep repairs** — a product webhook reads the product back and writes its row on the same round trip; the `catalogSync` cron pass walks the catalogue a few pages a tick and deletes what the walk did not see, the rule the orders already follow
+- ❓ **Refused rather than answered empty** — until one walk has completed the listing reads `catalog_unavailable`; on the index, Shopify down leaves the listing answering from its last walk
 - The catalog client's error outcomes carry the query name, so the tail worker's metrics show exactly which reads are failing
 
 ### Money arrives as decimal strings
@@ -266,7 +270,7 @@ muted, and a muted alert is worse than none.
 
 ### Two client ports, one schema
 
-- The storefront webs own vertical slices (catalog, cart, checkout, profile) over an `ApiClient` (`get`/`post`) for the public GET routes and a `ProcedureClient` for tRPC checkout/orders
+- The storefront webs own vertical slices (catalog, cart, checkout, profile) over a `ProcedureClient` for tRPC — the catalogue, cart, checkout and orders alike
 - Each datasource decodes with the Effect Schema codecs the backend's `contract` module also enforces server-side, so a stale bundle against a newer router surfaces as a typed decode error naming the call
 - The cart is client-owned (localStorage) until pricing rules demand a server cart; checkout re-prices everything server-side regardless
 
@@ -286,8 +290,8 @@ muted, and a muted alert is worse than none.
 
 ## Q & A
 
-- Why no product mirror in Postgres?
-  - We don't own catalog data, and a mirror is a second store with sync obligations. The accepted price: Shopify down means checkout down, while display keeps serving from cache.
+- ❓ Why keep a catalogue index when the store does not own the catalogue?
+  - A listing narrows, counts, orders and searches over the whole catalogue in one answer, and Shopify's own search answers only some of those shapes correctly; the rest walked the catalogue through the worker on every request. A copy the shop rewrites at will is the one store that answers every shape in one local round trip, and checkout never reads it.
 - Why Checkout Sessions instead of raw PaymentIntents?
   - One server surface serves hosted, embedded, and Payment Element frontends; the UX can change without a backend change.
 - Why does a refund's event carry the goods rather than the money that moved?

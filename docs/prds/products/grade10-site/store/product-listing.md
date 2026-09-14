@@ -33,6 +33,13 @@ product.
 - **Search and sort** — both describe the whole catalogue, never the cards
   already on screen; the menu offers latest, lowest price and highest price,
   and nothing is in force until the collector picks one
+- ❓ **Answered from the store's own index** — narrowing, counting, ordering
+  and search are one read of the store's copy of the catalogue, so a listing
+  answers in the time of one database round trip; Engineering confirms the
+  design — [the design note](/references/store-catalogue-index)
+- ❓ **A shop edit reaches the listing within seconds** — on the product's
+  own webhook; anything the webhook missed, within the sweep's full walk.
+  Engineering confirms the walk's pace
 - **A collection is a way in, not a filter** — the front door's tiles open the
   listing already inside one, named above the grid and dismissible; filtering,
   searching or sorting leaves it behind, because the catalogue narrows by a
@@ -45,6 +52,15 @@ product.
   3. `grade10.com/store/collections?worlds=<a>,<b>&types=<c>&q=<words>&sort=<order>`
      — the catalogue narrowed
   4. `grade10.com/store/products/<handle>` — a product's details page
+
+:::detail{title="Code map" for="engineer"}
+- **Reads** — `catalog.products`, `catalog.filters`, `catalog.collections` and `catalog.collection` in `packages/grade10-store/backend/src/trpc/routers/catalog.ts`, mounted ahead of the session tier by `trpc/publicCatalog.ts`
+- **Query spelling and the walk** — `services/catalog/query.ts`; the native search and the counts — `services/catalog/browse.ts`
+- **Shopify client** — `packages/shopify/backend/src/catalog/`
+- **Frontend** — `packages/grade10-store/frontend/src/features/products/catalog/`
+- **Design note** — [the catalogue index](/references/store-catalogue-index)
+- **Commerce architecture** — [docs/architecture/commerce.md](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
+:::
 
 ## Product Tile
 
@@ -113,6 +129,7 @@ collection. The front door's collection grid, which is unchanged.
 | Narrowed sessions | Share of listing visits that apply any narrowing. Unmeasured; the first delivery sets the baseline. | Product |
 | Time to first narrowed result | From listing open to the first narrowed grid. Unmeasured. | Product |
 | Search commit or suggestion | Share of listing sessions that commit free text or take a suggestion, and time from first keystroke to a product open or narrowed grid. Unmeasured; first delivery sets the baseline. | Product |
+| Listing answer time | From a narrowing to its first grid, p95, measured at the edge. Unmeasured; ❓ the target is set with the index. | Engineering |
 
 **Decisions.**
 
@@ -120,6 +137,9 @@ collection. The front door's collection grid, which is unchanged.
 | --- | --- | --- | --- |
 | Facets, not collections | Decided | The sidebar filters by world and collectible type. A collection is a merchandiser's grouping and stays a way in. | Design |
 | One narrowing at a time | Decided | The catalogue narrows by a collection or by a query, never both, so applying either leaves the other behind. The alternative — a collection dimension on the query — cannot be served natively and would walk the whole catalogue for every scoped narrowing. | Engineering |
+| Catalogue index | ❓ Open | The listing reads the store's own copy of the catalogue, written by the shop's product webhooks and repaired by a sweep; Shopify is never read on a listing view, and checkout still prices live. Reverses the no-product-mirror rule for display only — [the design note](/references/store-catalogue-index). | Engineering |
+| Collection with facets | ❓ Open | The one-narrowing rule rests on the walk; on the store's index a collection is one more narrowing and the reason goes. Whether to offer both together is decided once the index lands. | Product |
+| Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
 | Counts are the catalogue's | Decided | Counted over the whole narrowed set with the facet's own selection excluded, so ticking one world leaves the others showing what picking them instead would find. | Engineering |
 | The count above the grid is the same count | Decided | The number over the listing is the catalogue's own over the whole narrowed set, the rule the facet counts already follow, so a choice's count is the size of the listing choosing it opens. Counting the cards on screen instead read the page size back as the shop's size and grew as the collector read on, leaving the one question a count answers — whether it is worth going on — the one it could not. A narrowing whose first page has not arrived says nothing, because `0 products` is a claim the catalogue never made. | Engineering |
