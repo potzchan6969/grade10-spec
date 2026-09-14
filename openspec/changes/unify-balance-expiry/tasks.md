@@ -13,7 +13,7 @@ Screens and states: [`ui-design.md`](ui-design.md).
 - [x] 1.1 Replace the expiring-soon keys with one expiry line in every language the programme speaks — the plain line, the line inside the last thirty days, and the line on the day itself
 - [x] 1.2 Give `MembershipSummary` the expiry line and tone, and take the expiring-soon and points-active-until props off it
 - [x] 1.3 Add the four stories the design record names — later, soon, today, and no points
-- [ ] 1.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:stories:ui`
+- [x] 1.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:stories:ui`
 
 ## 2. One date for every credit (grade10)
 
@@ -57,14 +57,14 @@ Screens and states: [`ui-design.md`](ui-design.md).
 Starts after group 1 has shipped and the submodule SHA has moved, and after
 group 6 has drained.
 
-- [ ] 7.1 Say one expiry line on the membership card, with the tone decided from the page's own clock, so *The summary names one expiry line* passes
-- [ ] 7.2 Name the date the points will carry on the form that adds points, read at submit, so *The form names the date before the points are written* passes
-- [ ] 7.3 Add the restart dialog, saying the day it lands on — including for a member holding nothing live, whose later credits take that day — and its note that no ledger row follows
-- [ ] 7.4 Take the expiring-soon figure off the operator's standing card and put the time left and the last restart in its note
-- [ ] 7.5 Label the till's date as when the member's points go
-- [ ] 7.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:submodules`
+- [x] 7.1 Say one expiry line on the membership card, with the tone decided from the page's own clock, so *The summary names one expiry line* passes
+- [x] 7.2 Name the date the points will carry on the form that adds points, read at submit, so *The form names the date before the points are written* passes
+- [x] 7.3 Add the restart dialog, saying the day it lands on — including for a member holding nothing live, whose later credits take that day — and its note that no ledger row follows
+- [x] 7.4 Take the expiring-soon figure off the operator's standing card and put the time left and the last restart in its note
+- [x] 7.5 Label the till's date as when the member's points go
+- [x] 7.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run check:submodules`
 
 ## 8. End to end (grade10)
 
-- [ ] 8.1 Walk the whole rule in one demo: earn, grant, restart, lapse — and show one date throughout
-- [ ] 8.2 Verify: the walk runs in the end-to-end lane as a guardrail on later work
+- [x] 8.1 Walk the whole rule in one demo: earn, grant, restart, lapse — and show one date throughout
+- [x] 8.2 Verify: the walk runs in the end-to-end lane as a guardrail on later work
