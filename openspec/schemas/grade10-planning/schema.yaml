@@ -314,7 +314,9 @@ artifacts:
 
       `openspec status` cannot tell the two passes apart - both glob this file,
       so it marks this artifact complete as soon as `spec.md` exists, outline
-      alone included. `pnpm plan:preflight` is the gate that means anything.
+      alone included. `pnpm check:manual` is the gate that means anything: it
+      fails a capability whose suite exists beside a `spec.md` carrying no
+      requirements section.
 
       A spec is a behaviour contract, not an implementation plan: observable
       behaviour, inputs, outputs, error conditions, external constraints,

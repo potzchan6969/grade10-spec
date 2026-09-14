@@ -128,7 +128,10 @@ Everything this run produces is `draft`. Nothing in it claims review.
 
    `openspec status` cannot tell `spec-outline` and `spec-behaviour` apart -
    both glob `spec.md`, so it marks the second complete the moment the first
-   writes the file. **`pnpm plan:preflight` is the gate that means anything.**
+   writes the file. **`pnpm check:manual` is the gate that means anything** - it
+   fails a capability whose suite sits beside a `spec.md` that carries no
+   requirements section. (`pnpm plan:preflight` is unrelated: it guards
+   `tasks.md` against being overwritten while engineering is implementing.)
 
 6. **Write the proposal, the outline and the journeys**, in that order.
    Under the proposal's `## References`, link every section you marked, so the
@@ -146,7 +149,6 @@ Everything this run produces is `draft`. Nothing in it claims review.
 
    ```bash
    openspec validate <change-name> --strict
-   pnpm plan:preflight <change-name>
    pnpm check:manual
    pnpm run tcs:validate
    ```
