@@ -7,5 +7,8 @@
   "sendLinkFailed": "Could not send the magic link.",
   "sendWait": "Please wait a minute before requesting another email.",
   "linkSentMessage": "Check your inbox for a sign-in link.",
+  "linkExpired": "This sign-in link has expired.",
+  "linkInvalid": "This sign-in link no longer works.",
+  "linkBanned": "You can’t sign in with this account.",
   "legal": "By continuing, you agree to our <terms>Terms of Service</terms> & <privacy>Privacy Policy</privacy>."
 }
