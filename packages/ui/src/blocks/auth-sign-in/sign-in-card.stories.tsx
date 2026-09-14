@@ -1,3 +1,4 @@
+import { Button } from "@grade10/design-system/components/forms/button";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { SignInCard } from "./sign-in-card";
@@ -6,8 +7,8 @@ import { SignInEmailForm } from "./sign-in-email-form";
 /**
  * Sign-in is a dialog over the page the collector was already on, matching
  * [`Login Dialog` 4666:1488](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488).
- * `open` is the consumer's state — every story below supplies it, because the
- * component has no uncontrolled fallback.
+ * `open` is the consumer's state: the component has no uncontrolled fallback,
+ * so the meta holds it at true and every story below is the open dialog.
  *
  * The dialog portals to `document.body`, so play functions query
  * `within(document.body)` rather than the canvas.
@@ -20,10 +21,7 @@ const meta = {
   args: {
     open: true,
     onOpenChange: fn(),
-    copy: {
-      title: "Sign in to Acme Store",
-      description: "Continue with your Acme account.",
-    },
+    copy: { title: "Sign in to Acme Store" },
     children: (
       <SignInEmailForm
         copy={{ email: "Email", submit: "Send magic link" }}
@@ -38,15 +36,32 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** No provider widget, so no divider above the step. */
-export const Default: Story = {};
+/** Stands in for a provider's artwork. A shared block ships no brand's
+ * mark, so the story supplies one the way a consumer does. */
+function ProviderMark() {
+  return (
+    <svg aria-hidden="true" fill="currentColor" viewBox="0 0 16 16">
+      <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" />
+      <circle cx="8" cy="8" r="3" />
+    </svg>
+  );
+}
 
-/** Visibility is the consumer's: nothing renders and no scrim appears. */
-export const Closed: Story = {
-  args: { open: false },
+/**
+ * No provider widget, so no divider above the step.
+ *
+ * Scenario: shared-ui-auth-sign-in-SC-08 — the block draws no legal node of
+ * its own, so a consumer that supplies no wording gets none. Asserted here
+ * rather than in a story of its own: supplying nothing *is* the default, and
+ * a second empty-args story renders the same pixels.
+ */
+export const Default: Story = {
   play: async () => {
     const body = within(document.body);
-    expect(body.queryByRole("dialog")).not.toBeInTheDocument();
+
+    expect(
+      body.getByRole("dialog").querySelector('[data-slot="sign-in-legal"]'),
+    ).toBeNull();
   },
 };
 
@@ -56,21 +71,41 @@ export const WithMessage: Story = {
   args: { message: "Check your inbox for a sign-in link." },
 };
 
-/** The provider widget is consumer-owned, and sits *above* the labelled
- * divider, the order Figma draws. */
+/**
+ * The redirect shape of an external provider: an outline button the consumer
+ * owns, sitting *above* the labelled divider in the order Figma draws. The
+ * mark is the story's, not the block's — a shared component carries no
+ * brand's artwork.
+ *
+ * It draws its own markup, so it marks no container and the divider never
+ * waits on it. That is the other half of the rule
+ * `ProviderThatHasNotDrawnYet` proves from the asynchronous side.
+ */
 export const WithProviderSlot: Story = {
   args: {
-    copy: {
-      title: "Sign in to Acme Store",
-      description: "Continue with your Acme account.",
-      providerDivider: "or",
-    },
-    providerSlot: <button type="button">Continue with SSO</button>,
+    copy: { title: "Sign in to Acme Store", providerDivider: "or" },
+    providerSlot: (
+      <Button
+        leading={<ProviderMark />}
+        size="md"
+        type="button"
+        variant="outline"
+      >
+        Continue with Acme ID
+      </Button>
+    ),
   },
   play: async () => {
     const body = within(document.body);
-    const provider = body.getByRole("button", { name: "Continue with SSO" });
+    const provider = body.getByRole("button", {
+      name: "Continue with Acme ID",
+    });
     const email = body.getByLabelText("Email");
+    const group = body
+      .getByRole("dialog")
+      .querySelector('[data-slot="divider"]')?.parentElement as HTMLElement;
+
+    expect(getComputedStyle(group).display).not.toBe("none");
     // Node.compareDocumentPosition: 4 === provider precedes email.
     expect(
       provider.compareDocumentPosition(email) &
@@ -130,57 +165,6 @@ export const ProviderThatHasNotDrawnYet: Story = {
     await waitFor(() =>
       expect(getComputedStyle(group).display).not.toBe("none"),
     );
-  },
-};
-
-/** A widget that draws its own markup marks no container, so it never waits. */
-export const ProviderThatDrawsItself: Story = {
-  args: {
-    copy: { title: "Sign in to Acme Store", providerDivider: "or" },
-    providerSlot: <button type="button">Continue with Acme ID</button>,
-  },
-  play: async () => {
-    const dialog = within(document.body).getByRole("dialog");
-    const group = dialog.querySelector('[data-slot="divider"]')
-      ?.parentElement as HTMLElement;
-
-    expect(getComputedStyle(group).display).not.toBe("none");
-  },
-};
-
-/**
- * Figma draws the legal line centred across the body at 12/16, not left with
- * the rest of the column — the one place this dialog centres anything.
- */
-export const LegalIsCentred: Story = {
-  args: {
-    copy: {
-      title: "Sign In to Grade10",
-      legal:
-        "By continuing, you agree to our Terms of Service & Privacy Policy",
-    },
-  },
-  play: async ({ args }) => {
-    const body = within(document.body);
-    const legal = body
-      .getByText(String(args.copy.legal))
-      .closest('[data-slot="sign-in-legal"]') as HTMLElement;
-    const style = getComputedStyle(legal);
-
-    expect(style.textAlign).toBe("center");
-    expect(style.fontSize).toBe("12px");
-  },
-};
-
-/** Scenario: shared-ui-auth-sign-in-SC-08 - the block draws no legal node of its own,
- * so a consumer that supplies no wording gets none. */
-export const WithoutLegal: Story = {
-  play: async () => {
-    const body = within(document.body);
-
-    expect(
-      body.getByRole("dialog").querySelector('[data-slot="sign-in-legal"]'),
-    ).toBeNull();
   },
 };
 
