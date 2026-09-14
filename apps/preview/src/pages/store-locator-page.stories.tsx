@@ -87,6 +87,7 @@ function StoreLocatorPage() {
                       target="_blank"
                     />
                   }
+                  size="md"
                   variant="secondary"
                 >
                   {STORE_LOCATOR_COPY.getDirections}
