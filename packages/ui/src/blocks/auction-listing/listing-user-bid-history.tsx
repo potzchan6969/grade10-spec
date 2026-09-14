@@ -1,3 +1,4 @@
+import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import {
   Table,
   TableBody,
@@ -22,6 +23,7 @@ import {
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
+import { Gavel } from "@phosphor-icons/react";
 import { useEffect, useMemo, useState } from "react";
 import {
   type ActivityTimeCopy,
@@ -45,7 +47,10 @@ type ListingUserBidHistoryCopy = {
   maximumColumn: string;
   bidColumn: string;
   time: string;
-  emptyBids: string;
+  /** Frameless empty-state title when Bid placed has no rows. */
+  emptyBidsTitle: string;
+  /** Frameless empty-state description under the title. */
+  emptyBidsDescription: string;
 };
 
 type ListingUserBidHistoryProps = {
@@ -136,15 +141,16 @@ function ListingUserBidHistory({
             <DialogHeader showCloseButton={false}>
               <DialogTitle>{copy.title}</DialogTitle>
             </DialogHeader>
-            <DialogBody className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
+            {/* scroll-fade's mask clips the pill tab shadow; table body owns scroll. */}
+            <DialogBody className="flex min-h-0 flex-1 flex-col gap-3 overflow-visible [mask-image:none]">
               <DialogDescription className="shrink-0">
                 {copy.description}
               </DialogDescription>
               <Tabs
-                className="flex min-h-0 flex-1 flex-col overflow-hidden"
+                className="flex min-h-0 flex-1 flex-col gap-4 overflow-visible"
                 defaultValue={defaultTab}
               >
-                <TabsList fullWidth variant="pill">
+                <TabsList className="shrink-0" fullWidth variant="pill">
                   <TabsTrigger value="bids">{copy.bidsTab}</TabsTrigger>
                   <TabsTrigger value="maximums">{copy.maximumsTab}</TabsTrigger>
                 </TabsList>
@@ -153,12 +159,15 @@ function ListingUserBidHistory({
                   value="bids"
                 >
                   {bidRows.length === 0 ? (
-                    <p
-                      className="py-6 text-sm text-secondary-foreground"
+                    <EmptyState
+                      className="py-2"
+                      compact
                       data-slot="listing-user-bid-history-empty-bids"
-                    >
-                      {copy.emptyBids}
-                    </p>
+                      description={copy.emptyBidsDescription}
+                      frameless
+                      icon={<Gavel aria-hidden size={20} weight="regular" />}
+                      title={copy.emptyBidsTitle}
+                    />
                   ) : (
                     <Table className="flex min-h-0 flex-1 flex-col overflow-hidden">
                       <TableHeader className="shrink-0">
