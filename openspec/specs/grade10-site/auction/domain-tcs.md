@@ -651,7 +651,7 @@ in my history,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-bidding-history-US-03
 
