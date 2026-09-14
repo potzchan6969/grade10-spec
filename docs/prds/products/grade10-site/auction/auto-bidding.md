@@ -29,6 +29,11 @@ do.
 🚧 A leader who types a raise still starts at max + $1. That floor is not
 the first chip.
 
+🚧 A custom maximum cannot go above 9,999,999,999 whole major units; an
+over-limit paste or keystroke leaves the previous draft.
+
+::story{id="auction-listing-listingauctionbidcard--custom-maximum-ceiling" title="Custom maximum ceiling"}
+
 One card authorization covers the whole commitment. The hold is taken for the
 maximum when it is set, so a bid Grade10 places on the collector's behalf
 never needs a fresh card check mid-auction.
@@ -77,6 +82,7 @@ stands.
 | Increment | Decided | The Grade10-owned USD, HKD, and JPY schedule selects the increment from the amount being beaten. No listing-level override. | Product |
 | Bid action carries a maximum | Decided | A consumer sending a bare bid amount is broken by this contract. Money stays integer minor units plus ISO 4217. | Product |
 | Custom maximum entry | Decided | Whole major units only on the bid panel custom field; typed `.` is refused, pasted fractions are discarded. | Product |
+| Custom maximum ceiling | Decided | Cap at 9,999,999,999 whole major units; over-limit paste or keystroke restores the previous valid draft (no clamp, no “too large” copy in v1). | Product |
 | Mechanism disclosure | Decided | Always-on secondary subtext under Set your private maximum: bid as needed, hold matches maximum, raise only (no lower or cancel). | Product |
 | Admin history filter | ❓ Open | Whether history can hide platform-placed bids. An operator can already see both. | Product |
 | Preset amounts | Decided | Three chips at 1×, 2×, and 4× the listing increment. Leader chips add those to the committed max; others add them to the current bid. A leader's typed minimum stays max + $1 and is not chip 1. | Product |

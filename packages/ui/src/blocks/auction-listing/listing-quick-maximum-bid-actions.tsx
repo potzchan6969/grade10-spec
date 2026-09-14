@@ -24,7 +24,7 @@ import {
   parseExactMoneyDraftToMinor,
   quickMaximumPresetAmount,
   resolveMaximumFloor,
-  sanitizeMoneyDraft,
+  sanitizeCustomMaximumDraft,
   validateCommittedMaximumMinor,
   wholeMajorDraftFromMinor,
 } from "./listing-bid-money";
@@ -285,9 +285,20 @@ function ListingQuickMaximumBidActions({
     setCustomDraft("");
   }
 
-  function handleCustomChange(next: string) {
+  function handleCustomChange(event: FormEvent<HTMLInputElement>) {
     if (amountEntryLocked) return;
-    const sanitized = sanitizeMoneyDraft(next, view.currency);
+    const target = event.currentTarget;
+    const sanitized = sanitizeCustomMaximumDraft(
+      target.value,
+      view.currency,
+      customDraft,
+    );
+    // Ceiling refuse leaves React state unchanged. A controlled type=number
+    // input will keep painting the rejected value unless we reset the DOM.
+    if (sanitized === customDraft) {
+      target.value = customDraft;
+      return;
+    }
     setCustomDraft(sanitized);
     if (sanitized.trim() === "") {
       setSelectedPresetKey(defaultPresetKey(presets));
@@ -452,7 +463,7 @@ function ListingQuickMaximumBidActions({
           inputMode="numeric"
           message={amountEntryLocked ? undefined : helperMessage}
           onBeforeInput={handleCustomBeforeInput}
-          onChange={(event) => handleCustomChange(event.target.value)}
+          onChange={handleCustomChange}
           onClear={
             amountEntryLocked || !customActive ? undefined : handleClearCustom
           }
