@@ -80,13 +80,13 @@ the invoice still `pending`. An expired invoice SHALL remain payable, by the
 winner's card or an operator's manual settlement. Reissuing an expired invoice
 SHALL return it to `pending` with a new deadline.
 
-#### Scenario: auction-status-SC-01 - A new auction order starts not issued and unfulfilled
+#### Scenario: auction-status-SC-01 - A new auction order starts pending and unfulfilled
 
 - **WHEN** a lot closes with a winner and Grade10 creates the auction order
 - **THEN** its invoice status is `not_issued`
 - **AND** its fulfilment status is `unfulfilled`
 
-#### Scenario: auction-status-SC-02 - Expiry writes an expired invoice status
+#### Scenario: auction-status-SC-02 - Expiry writes no status
 
 - **GIVEN** an auction order whose invoice is `pending` with a payment
   deadline of 2026-09-19T09:00:00Z
@@ -135,7 +135,7 @@ Refunded.
 - **WHEN** its order status is read
 - **THEN** it is Pending Payment
 
-#### Scenario: auction-status-SC-06 - The same order past its deadline remains Pending Payment
+#### Scenario: auction-status-SC-06 - The same order past its deadline is Expired
 
 - **GIVEN** an auction order with invoice status `expired` and fulfilment
   status `unfulfilled`

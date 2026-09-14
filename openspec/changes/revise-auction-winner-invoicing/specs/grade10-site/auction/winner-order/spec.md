@@ -212,7 +212,7 @@ any letter that lists them — Grade10 SHALL show Shipping & Handling of zero as
 No component SHALL be marked as an estimate. Grade10 SHALL NOT show the winner
 an invoice amount before an operator has sent it.
 
-#### Scenario: winner-order-SC-04 - A sent total is firm and itemised
+#### Scenario: winner-order-SC-04 - An estimated total is marked as one
 
 - **GIVEN** an operator sent an invoice with a winning bid of 250000, a
   buyer's premium of 50000, shipping of 8000 and insurance of 4000 minor
@@ -312,7 +312,7 @@ A refused or failed payment SHALL NOT void the invoice. The invoice SHALL
 remain payable, before its deadline and after it has expired, and the winner
 SHALL be able to retry with the same or a different card.
 
-#### Scenario: winner-order-SC-12 - The winning hold is released before the invoice is paid
+#### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
 
 - **GIVEN** a winner holding an open bid-time authorization on the closing lot
 - **WHEN** the lot closes
