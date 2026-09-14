@@ -66,7 +66,7 @@ change, p95; and the listing's answer time at a location holding no copy.
   changed whole, since a version upload cannot carry that
 - **Conventions** — `docs/conventions/backend.md` records the one Durable
   Object a deployed worker binds, and why
-- **Scenario ids** — SC-42 to SC-48 added
+- **Scenario ids** — SC-49 to SC-48 added
 - **Manual** — the pages under References; the mechanism is
   [the design note](../../../docs/references/store-catalogue-index.md)
 

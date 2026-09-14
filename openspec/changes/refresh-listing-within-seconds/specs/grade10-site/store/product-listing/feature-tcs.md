@@ -5,9 +5,9 @@
 
 **Out of suite:**
 
-- `grade10-site-store-product-listing-SC-46` — No journey lists it: the read-back guard is the store's own ordering rule, walked by the worker lane's tests rather than by a collector.
+- `grade10-site-store-product-listing-SC-53` — No journey lists it: the read-back guard is the store's own ordering rule, walked by the worker lane's tests rather than by a collector.
 
-## grade10-site-store-product-listing-US12: Collector sees the shop as it is now
+## grade10-site-store-product-listing-US14: Collector sees the shop as it is now
 
 **As a** collector,
 **I want** the listing to show what the shop sells right now — what is new,
@@ -15,7 +15,7 @@ what is gone, what it costs and how many are left,
 **so that** I never open a product that has gone or reach for a price the shop
 has left behind.
 
-### grade10-site-store-product-listing-US12-TC1-1: A published product is listed within seconds
+### grade10-site-store-product-listing-US14-TC1-1: A published product is listed within seconds
 
 **Classification:**
 
@@ -28,7 +28,7 @@ has left behind.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-store-product-listing-US-12
+* **Trace:** grade10-site-store-product-listing-US-14
 
 **Pre-conditions:**
 
@@ -47,7 +47,7 @@ has left behind.
 * Step 2 lists <a product> at both locations.
 * Step 3 reads one more than <the listing's count> above the grid, and each of <a product>'s facets counts one more.
 
-### grade10-site-store-product-listing-US12-TC2-1: A product taken down leaves within seconds
+### grade10-site-store-product-listing-US14-TC2-1: A product taken down leaves within seconds
 
 **Classification:**
 
@@ -60,7 +60,7 @@ has left behind.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-store-product-listing-US-12
+* **Trace:** grade10-site-store-product-listing-US-14
 
 **Pre-conditions:**
 
@@ -78,7 +78,7 @@ has left behind.
 * Step 2 lists <a product> at neither location.
 * Step 3 reads one fewer than <the listing's count> above the grid, and each of <a product>'s facets counts one fewer.
 
-### grade10-site-store-product-listing-US12-TC3-1: A card follows the shop's price and stock
+### grade10-site-store-product-listing-US14-TC3-1: A card follows the shop's price and stock
 
 **Classification:**
 
@@ -91,7 +91,7 @@ has left behind.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-store-product-listing-US-12
+* **Trace:** grade10-site-store-product-listing-US-14
 
 **Pre-conditions:**
 
@@ -120,7 +120,7 @@ has left behind.
 * Step 3 shows <new price> on the card.
 * Step 4 stops the quantity at <new count>.
 
-### grade10-site-store-product-listing-US12-TC4-1: A change the shop never reported is caught by the re-read
+### grade10-site-store-product-listing-US14-TC4-1: A change the shop never reported is caught by the re-read
 
 **Classification:**
 
@@ -133,7 +133,7 @@ has left behind.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** grade10-site-store-product-listing-US-12
+* **Trace:** grade10-site-store-product-listing-US-14
 
 **Pre-conditions:**
 
@@ -150,7 +150,7 @@ has left behind.
 
 * Step 3 names the world <new label>.
 
-### grade10-site-store-product-listing-US12-TC5-1: A location holding no copy answers from the one the store keeps
+### grade10-site-store-product-listing-US14-TC5-1: A location holding no copy answers from the one the store keeps
 
 **Classification:**
 
@@ -163,7 +163,7 @@ has left behind.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-store-product-listing-US-12
+* **Trace:** grade10-site-store-product-listing-US-14
 
 **Pre-conditions:**
 
@@ -183,13 +183,13 @@ has left behind.
 
 ---
 
-## grade10-site-store-product-listing-US13: Collector browses while the shop is unreachable
+## grade10-site-store-product-listing-US15: Collector browses while the shop is unreachable
 
 **As a** collector,
 **I want** the listing to keep answering when the shop's own service is down,
 **so that** I can go on browsing and come back to buy when it is up.
 
-### grade10-site-store-product-listing-US13-TC1-1: The listing lists while the shop is down
+### grade10-site-store-product-listing-US15-TC1-1: The listing lists while the shop is down
 
 **Classification:**
 
@@ -202,7 +202,7 @@ has left behind.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-store-product-listing-US-13
+* **Trace:** grade10-site-store-product-listing-US-15
 
 **Pre-conditions:**
 
