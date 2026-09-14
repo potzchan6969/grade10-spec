@@ -64,7 +64,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.5",
-    "archify": "github:tt-a1i/archify#2ead014aa8ec91f104cd052f1a6ca82de5e26c31&path:archify",
+    "archify": "file:scripts/diagrams/vendor/archify",
     "typescript": "~6.0.2"
   }
 }

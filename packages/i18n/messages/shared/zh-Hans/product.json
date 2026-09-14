@@ -6,7 +6,6 @@
   "decreaseQuantity": "减少数量",
   "increaseQuantity": "增加数量",
   "notForSale": "非卖品",
-  "gradeLabel": "评级",
   "onlyLeft": "{count, plural, other {仅剩 # 件}}",
   "quantityLabel": "数量",
   "shippingAndPickup": "配送与取货",
@@ -17,6 +16,5 @@
   "showMore": "显示更多",
   "skuLabel": "货号",
   "soldOutAction": "已售罄",
-  "soldOutSuffix": " — 已售罄",
   "notForSaleNote": "此卡暂不出售。"
 }

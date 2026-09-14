@@ -6,7 +6,6 @@
   "decreaseQuantity": "Decrease quantity",
   "increaseQuantity": "Increase quantity",
   "notForSale": "Not for sale",
-  "gradeLabel": "Grade",
   "onlyLeft": "{count, plural, one {Only # left} other {Only # left}}",
   "quantityLabel": "Quantity",
   "shippingAndPickup": "Shipping & Pickup",
@@ -17,6 +16,5 @@
   "showMore": "Show more",
   "skuLabel": "SKU",
   "soldOutAction": "Sold out",
-  "soldOutSuffix": " — sold out",
   "notForSaleNote": "This card is not for sale."
 }

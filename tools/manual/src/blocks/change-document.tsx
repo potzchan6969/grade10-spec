@@ -1,11 +1,5 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@grade10/design-system/components/display/tabs";
 import { Text } from "@grade10/design-system/components/display/text";
 import { SegmentedControl } from "@grade10/design-system/components/forms/segmented-control";
 import { SegmentedControlItem } from "@grade10/design-system/components/forms/segmented-control-item";
@@ -124,10 +118,11 @@ function fileName(artifact: ChangeArtifact): string {
 }
 
 /** A rail row, sized by the list so it fits a wrapping row as well as a
- * column. The active background repeats the line variant's selector, which
- * outranks a bare `data-active:`. */
+ * column. Plain markup, not the shared `Tabs` primitive: Figma's Tab List
+ * only draws horizontal, so this rail owns its own button and active state
+ * instead of bending a component whose contract is horizontal-only. */
 const RAIL_ROW =
-  "h-auto max-w-full flex-none justify-start gap-2 rounded-(--radius-lg) px-2.5 py-1.5 after:hidden data-active:font-medium data-active:text-foreground group-data-[variant=line]/tabs-list:data-active:bg-muted dark:group-data-[variant=line]/tabs-list:data-active:bg-muted";
+  "flex h-auto max-w-full flex-none cursor-pointer items-center justify-start gap-2 rounded-(--radius-lg) border border-transparent px-2.5 py-1.5 text-left text-foreground text-sm transition-colors duration-150 ease-out hover:bg-background-subtle focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50 data-active:bg-muted data-active:font-medium dark:data-active:bg-muted [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4";
 
 /**
  * One tab per file the change has, in writing order — a rail beside the panel,
@@ -167,34 +162,40 @@ export function ChangeTabs({
     );
   }
 
+  // `resolveTab` only ever returns a name `present` carries, or null — and
+  // null is handled above.
+  const activeArtifact = present.find((artifact) => artifact.name === active);
+  if (!activeArtifact) return null;
+
+  const selectTab = (value: string) => {
+    // The hash names a row in the tab being left; carrying it along would
+    // pull the reader straight back.
+    navigate(
+      { pathname, search: `?tab=${value}`, hash: "" },
+      { replace: true },
+    );
+  };
+
   return (
-    <Tabs
-      className="mt-6 mb-5 flex-col border-border-subtle border-t pt-6 lg:grid lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-8"
-      onValueChange={(value) => {
-        if (typeof value !== "string") return;
-        // The hash names a row in the tab being left; carrying it along would
-        // pull the reader straight back.
-        navigate(
-          { pathname, search: `?tab=${value}`, hash: "" },
-          {
-            replace: true,
-          },
-        );
-      }}
-      value={active}
-    >
+    <div className="mt-6 mb-5 grid grid-cols-1 gap-2 border-border-subtle border-t pt-6 lg:grid-cols-[11rem_minmax(0,1fr)] lg:gap-8">
       <div className="min-w-0 lg:sticky lg:top-24 lg:self-start">
-        <TabsList
+        <div
           aria-label="Artifacts of this change"
-          className="flex w-full min-w-0 flex-row flex-wrap items-stretch justify-start gap-1 p-0 lg:flex-col"
-          variant="list"
+          className="flex w-full min-w-0 flex-row flex-wrap items-stretch justify-start gap-1 lg:flex-col"
+          role="tablist"
         >
           {present.map((artifact) => (
-            <TabsTrigger
+            <button
+              aria-controls={`${artifact.name}-panel`}
+              aria-selected={artifact.name === active}
               className={RAIL_ROW}
+              data-active={artifact.name === active ? "" : undefined}
+              id={`${artifact.name}-tab`}
               key={artifact.name}
+              onClick={() => selectTab(artifact.name)}
+              role="tab"
               title={artifactMeaning(artifact.name)}
-              value={artifact.name}
+              type="button"
             >
               <ArtifactIcon name={artifact.name} />
               <span
@@ -204,25 +205,26 @@ export function ChangeTabs({
                 {artifactLabel(artifact.name)}
               </span>
               <TabCount text={artifactCount(artifact, change, document)} />
-            </TabsTrigger>
+            </button>
           ))}
-        </TabsList>
+        </div>
         <ArtifactNotes document={document} />
       </div>
-      <div className="min-w-0">
-        {present.map((artifact) => (
-          <TabsContent key={artifact.name} value={artifact.name}>
-            <PanelHeading artifact={artifact} document={document} />
-            <ArtifactPanel
-              artifact={artifact}
-              change={change}
-              document={document}
-              index={index}
-            />
-          </TabsContent>
-        ))}
+      <div
+        aria-labelledby={`${activeArtifact.name}-tab`}
+        className="min-w-0"
+        id={`${activeArtifact.name}-panel`}
+        role="tabpanel"
+      >
+        <PanelHeading artifact={activeArtifact} document={document} />
+        <ArtifactPanel
+          artifact={activeArtifact}
+          change={change}
+          document={document}
+          index={index}
+        />
       </div>
-    </Tabs>
+    </div>
   );
 }
 

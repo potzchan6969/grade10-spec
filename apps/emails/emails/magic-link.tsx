@@ -36,7 +36,7 @@ export default function MagicLinkEmail({
       <Text className="mb-2 mt-0 text-lg leading-base text-fg-2">
         You asked for a sign-in link. Use it once.
       </Text>
-      <Text className="mb-2 mt-0 text-lg leading-base text-fg-2">
+      <Text className="mb-4 mt-0 text-lg leading-base text-fg-2">
         This link expires in {expiresIn}.
       </Text>
       <PrimaryCta href={magicLinkUrl} label="Sign in" />

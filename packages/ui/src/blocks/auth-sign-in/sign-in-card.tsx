@@ -1,6 +1,5 @@
 import { Divider } from "@grade10/design-system/components/display/divider";
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
@@ -12,8 +11,6 @@ import {
 } from "@grade10/design-system/components/overlays/dialog";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-
-type SignInCardAction = { label: ReactNode; onAction: () => void };
 
 /** The words the card says, whatever step is inside it. */
 type SignInCardCopy = {
@@ -49,15 +46,14 @@ type SignInCardProps = {
    * container is empty, so a script that never answers leaves no orphaned
    * "or" behind. */
   providerSlot?: ReactNode;
-  /** A way out of the flow — "back to home". Distinct from dismissing the
-   * dialog, which the header's close control, Escape and the scrim all do. */
-  exitAction?: SignInCardAction;
   className?: string;
 };
 
 /**
  * The sign-in surface's shell: heading, an external-provider slot, the active
- * step, a status line, and an exit.
+ * step, and a status line. The way out is dismissal — the header's close
+ * control, Escape, and the scrim — which hands the collector back the page
+ * they were already on.
  *
  * A dialog rather than a page, because that is what Figma draws — the Auth
  * Sign-In page holds `Login Dialog` (4666:1488) over `Login Dialog Overlay`
@@ -81,7 +77,6 @@ function SignInCard({
   children,
   message,
   providerSlot,
-  exitAction,
   className,
 }: SignInCardProps) {
   return (
@@ -122,18 +117,20 @@ function SignInCard({
           ) : null}
           {children}
           {message ? (
-            <Text data-slot="sign-in-message" size="sm" tone="success">
+            /* `primary`, not `success`: under the grade10 theme the success
+               tone resolves to `--success-foreground`, the white drawn ON a
+               success fill, so the line renders white on a white dialog. The
+               readable status tone the theme is missing is a token decision;
+               until it exists, a line the collector has to read takes the
+               body tone. */
+            <Text data-slot="sign-in-message" size="sm">
               {message}
             </Text>
           ) : null}
-          {exitAction ? (
-            <Button onClick={exitAction.onAction} type="button" variant="ghost">
-              {exitAction.label}
-            </Button>
-          ) : null}
           {copy.legal ? (
-            /* Figma draws this line centred across the body at 12/16 in the
-               foreground tone, not the muted one the status line uses. */
+            /* Figma draws this line centred across the body at 12/16. Size
+               and alignment are what separate it from the status line above;
+               both take the body tone. */
             <Text
               className="w-full text-center"
               data-slot="sign-in-legal"
@@ -148,5 +145,5 @@ function SignInCard({
   );
 }
 
-export type { SignInCardAction, SignInCardCopy, SignInCardProps };
+export type { SignInCardCopy, SignInCardProps };
 export { SignInCard };

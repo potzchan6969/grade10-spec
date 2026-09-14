@@ -28,13 +28,13 @@ and item facts,
 **Pre-conditions:**
 
 * customer is on <grade10 store url>.
-* The catalogue holds <product_1> with two images in catalogue order, current price <current price>, compare-at price <compare-at price>, and finite quantity <available quantity>.
+* The catalogue holds <product_1> with two images in catalogue order, one sellable item, current price <current price>, compare-at price <compare-at price>, and finite quantity <available quantity>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <product_1> | Product with two catalogue images in a fixed order and a priced variant |
+| <product_1> | Product with two catalogue images in a fixed order and one sellable item |
 | <current price> | 10500 minor units |
 | <compare-at price> | 12300 minor units |
 | <available quantity> | 3 |
@@ -202,14 +202,13 @@ and item facts,
 **Pre-conditions:**
 
 * customer is on <grade10 store url>.
-* The catalogue holds <product_5> with <selected variant> selected and available, and finite available quantity <available quantity_5>.
+* The catalogue holds <product_5> with one sellable item and finite available quantity <available quantity_5>.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <product_5> | Product with a selected available variant and finite available quantity |
-| <selected variant> | Variant selected on opening and available for sale |
+| <product_5> | Product with one sellable item and finite available quantity |
 | <available quantity_5> | 3 |
 | <chosen quantity_5> | 2 |
 
@@ -226,14 +225,15 @@ and item facts,
 
 * While the add is pending, the stepper and add control are disabled and the action shows its loading state.
 * The page remains at <product_5>'s product address.
-* After the add settles, the cart records quantity <chosen quantity_5> for <selected variant> and the action reports that the item was added.
+* The page offers no size, option or variant choice.
+* After the add settles, the cart records quantity <chosen quantity_5> for <product_5> and the action reports that the item was added.
 
 ---
 
-## grade10-site-store-product-page-US9: Collector meets a product with no variant for sale
+## grade10-site-store-product-page-US9: Collector meets a sold-out product
 
 **As a** collector,
-**I want** a product with no available variant to keep its prices and say that it is sold out,
+**I want** a product with no available item to keep its price and say that it is sold out,
 **so that** I can tell an unavailable product from a broken purchase page.
 
 ### grade10-site-store-product-page-US9-TC1-1: Sold-out product keeps prices and disables purchase
@@ -254,23 +254,23 @@ and item facts,
 **Pre-conditions:**
 
 * customer is on <grade10 store url>.
-* The catalogue holds <product_6> whose variants are all unavailable for sale.
+* The catalogue holds <product_6> whose one product item is unavailable for sale.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| <product_6> | Product whose variants are all unavailable for sale |
+| <product_6> | Product whose one item is unavailable for sale |
 
 **Steps:**
 
 1. Navigate to <grade10 product details url for product_6>.
-2. Inspect every variant's price and availability state.
+2. Inspect the product's price and availability state.
 3. Inspect the purchase action.
 4. Check the available controls in the purchase area.
 
 **Expected Results:**
 
-* Every variant remains priced and is marked unavailable as applicable.
+* The product remains priced and is marked unavailable.
 * The purchase action is disabled and labelled sold out.
 * No control can add <product_6> to the cart.

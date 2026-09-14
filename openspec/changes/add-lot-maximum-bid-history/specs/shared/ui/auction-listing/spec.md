@@ -39,7 +39,8 @@ column.
 
 The dialog SHALL select `copy.bidsTab` as the initial active tab whenever it
 opens, including when `bidRows` is empty. When `bidRows` is empty and that tab
-is active, it SHALL show `copy.emptyBids`. Title, description, and tab list
+is active, it SHALL show a frameless design-system `EmptyState` using
+`copy.emptyBidsTitle` and `copy.emptyBidsDescription`. Title, description, and tab list
 SHALL stay fixed while only the active table scrolls inside the dialog body.
 
 `ListingUserBidHistoryRow` and `ListingUserMaximumHistoryRow` SHALL each carry
@@ -69,7 +70,8 @@ previously proposed under `add-lot-user-bid-history`.
 - **GIVEN** `ListingUserBidHistory` rendered with at least one maximum row and
   an empty `bidRows` array
 - **WHEN** the collector opens the dialog
-- **THEN** the initial tab is the bids tab and shows `copy.emptyBids`
+- **THEN** the initial tab is the bids tab and shows a frameless `EmptyState`
+  with `copy.emptyBidsTitle` and `copy.emptyBidsDescription`
 - **AND** activating the maximums tab shows the supplied maximum rows
 
 #### Scenario: shared-ui-auction-listing-SC-33 - No personal rows means no link

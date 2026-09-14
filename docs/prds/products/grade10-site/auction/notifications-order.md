@@ -6,7 +6,8 @@ order: 14
 
 Order Notifications are the transactional letters that begin when an auction lot closes with a winner. They identify the lot, use the winner's registered email address, and stop or retry according to the order's current facts.
 
-- **Winning** — the auction-won letter identifies the lot and what the winner owes
+- **Winning** — the auction-won letter identifies the lot and asks the winner to confirm a delivery address; it names no amount because no invoice exists yet
+- **Invoice sent** — the operator's quote, final amount, and payment deadline
 - **Payment reminders** — day 3, day 6, and a final notice on day 7, measured from the current invoice
 - **Invoice expired** — says what remains owed and how to resolve it
 - **Invoice reissued** — confirms the new invoice and deadline
