@@ -28,6 +28,11 @@ button to buy it.
 - **URL** — `grade10.com/store/products/<handle>`; a handle that is not a
   card answers 404 with the site's not-found page
 
+## Free Pick-up
+
+🚧 **Opens Store Locator** — the free pick-up claim names Hong Kong Grade10
+Store and opens Store Locator
+
 ## Designs
 
 ::story{id="pages-product-detail-page--docs" title="Product details"}

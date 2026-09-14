@@ -27,6 +27,9 @@ other surfaces that answer) without a Store entrance, and the cart stays
 absent. The header marks the item that owns the current address, and marks
 nothing when no item owns it.
 
+🚧 **Store Locator** — once that page answers, header and footer Store Locator
+lead there; until then the destination stays out of the chrome.
+
 🚧 **Compact menu** — at a narrow viewport, the leading menu opens a left inset
 drawer for primary navigation and utilities; language opens a nested drawer
 (not in the compact bar); Account / Sign In and Cart stay in the bar.
