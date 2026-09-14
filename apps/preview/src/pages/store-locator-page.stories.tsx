@@ -154,9 +154,7 @@ export const Default: Story = {
     expect(
       canvas.getAllByRole("link", { name: "Store Locator" }).length,
     ).toBeGreaterThan(0);
-    expect(
-      canvas.getByRole("link", { name: "STORE LOCATOR" }),
-    ).toHaveAttribute(
+    expect(canvas.getByRole("link", { name: "STORE LOCATOR" })).toHaveAttribute(
       "href",
       "?path=/story/pages-store-locator-page--default",
     );
