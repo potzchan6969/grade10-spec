@@ -93,11 +93,12 @@ function AddressSection({
  * pickup address, and loyalty points to earn or earned by status.
  *
  * Figma set `Product / Order / Order Details Sidebar` (`5057:6908`). Summary
- * rows are conditional: discount when present, refund when issued, shipping
- * hidden for pickup/in-store, tax optional, shipping address hidden offline,
- * loyalty points for logged-in users only. Amounts are consumer-formatted
- * (up to two decimal places, no trailing zeros). Payment row shows a brand
- * logo at `text-sm` line height beside an optional masked number.
+ * rows are conditional: discount when present, points credit after discount
+ * when applied (cart-drawer parity), refund when issued, shipping hidden for
+ * pickup/in-store, tax optional, shipping address hidden offline, loyalty
+ * points for logged-in users only. Amounts are consumer-formatted (up to two
+ * decimal places, no trailing zeros). Payment row shows a brand logo at
+ * `text-sm` line height beside an optional masked number.
  */
 function OrderDetailsSidebar({
   copy,
@@ -114,6 +115,7 @@ function OrderDetailsSidebar({
     [
       summary.subtotal,
       summary.discount,
+      summary.points,
       summary.refund,
       summary.shipping,
       summary.tax,
@@ -155,6 +157,13 @@ function OrderDetailsSidebar({
                 <SummaryRow
                   label={summary.discount.label}
                   value={summary.discount.value}
+                  valueClassName="text-success"
+                />
+              ) : null}
+              {summary?.points ? (
+                <SummaryRow
+                  label={summary.points.label}
+                  value={summary.points.value}
                   valueClassName="text-success"
                 />
               ) : null}

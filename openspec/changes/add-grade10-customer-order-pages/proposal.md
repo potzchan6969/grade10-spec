@@ -24,9 +24,10 @@ refund, or tracking information. The first delivery establishes the baseline.
   quoted, paid, refunded, fulfilment, and delivery facts distinct.
 - Prefer the Store-supplied shop order number in customer-facing order labels,
   while keeping the immutable Store order id as the route and action key.
-- Present the supplied discount, shipping charge, tax, shipping address, and
-  payment instrument on the owner-only detail without turning absent values
-  into zeroes, empty sections, or guessed facts.
+- Present the supplied discount, points credit, shipping charge, tax, shipping
+  address, and payment instrument on the owner-only detail without turning
+  absent values into zeroes, empty sections, or guessed facts. Points credit
+  stays a separate summary row after Discount, matching the cart drawer.
 - Open a valid carrier tracking URL from either page when the order is
   trackable, and never invent a tracking action from a carrier number alone.
 - Let the shared Order Details block omit payment, address, loyalty, delivery,
@@ -56,6 +57,8 @@ refund, or tracking information. The first delivery establishes the baseline.
 - Displaying a product image or loyalty amount before the typed Store order
   contract supplies that fact, or inventing a pickup address from the supplied
   shipping address.
+- Changing the cart drawer's applied Points label to include the points count;
+  Order Details owns that count-in-label treatment for this change.
 
 ## Capabilities
 
@@ -94,3 +97,13 @@ None.
 This change contains no backend or admin implementation task. Frontend tests
 exercise the typed Store contract through fixtures; live integration evidence
 belongs to the Grade10 application delivery, not to this planning store.
+
+## References
+
+- [Order Details · Order Summary](../../../docs/prds/products/grade10-site/store/order-detail.md#order-summary)
+  — points credit row after Discount, with the deducted count in the label.
+
+## Follow-on changes
+
+- Show the deducted points count on the cart drawer's applied Points row, so cart
+  and order detail share the same label shape.
