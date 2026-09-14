@@ -7,5 +7,5 @@
 
 ## 2. The manual (grade10-spec) (owner: @sean)
 
-- [ ] 2.1 Mark the PRD's `Filter` line with the zero-count choice rule this change delivers
-- [ ] 2.2 Verify: `pnpm check:manual`
+- [x] 2.1 Mark the PRD's `Filter` line with the zero-count choice rule this change delivers
+- [x] 2.2 Verify: `pnpm check:manual`
