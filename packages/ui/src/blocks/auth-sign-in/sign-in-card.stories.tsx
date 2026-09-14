@@ -397,11 +397,7 @@ export const FromAddToCart: Story = {
             />
           </div>
         </main>
-        <SignInCard
-          {...args}
-          onOpenChange={setOpen}
-          open={open}
-        >
+        <SignInCard {...args} onOpenChange={setOpen} open={open}>
           <SignInEmailForm
             copy={{
               email: "Email",
@@ -433,7 +429,9 @@ export const FromAddToCart: Story = {
     ).toBeInTheDocument();
     // Consumer never marked the tile in-cart — no guest line.
     expect(
-      canvasElement.querySelector('[data-slot="product-card-image"][data-in-cart]'),
+      canvasElement.querySelector(
+        '[data-slot="product-card-image"][data-in-cart]',
+      ),
     ).toBeNull();
   },
 };
