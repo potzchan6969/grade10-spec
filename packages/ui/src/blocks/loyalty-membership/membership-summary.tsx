@@ -20,10 +20,6 @@ type MembershipSummaryCopy = {
   qualifying: string;
   /** Names the date the tier renews or lapses. */
   renewal: string;
-  /** Names the date inactivity empties the balance. */
-  pointsActiveUntil: string;
-  /** Names the points about to expire; shown only with `expiringSoon`. */
-  expiringSoon?: string;
 };
 
 type MembershipSummaryProps = {
@@ -38,12 +34,14 @@ type MembershipSummaryProps = {
   qualifyingThreshold: number;
   /** Already formatted by the consumer. */
   renewalDate: string;
-  /** Already formatted by the consumer. */
-  pointsActiveUntil: string;
   /** The earned tier's validity and what keeps it, as one sentence. */
   tierValidity?: string;
-  /** Points expiring inside the consumer's horizon, already worded. */
-  expiringSoon?: string;
+  /**
+   * How many points expire and the day they go, as one sentence the consumer
+   * has already worded, and the tone it is said in. The consumer reads the
+   * clock and decides both; absent where the member holds no points.
+   */
+  balanceExpiry?: { line: string; tone: "normal" | "warning" };
   className?: string;
 };
 
@@ -71,9 +69,8 @@ function MembershipSummary({
   qualifyingPoints,
   qualifyingThreshold,
   renewalDate,
-  pointsActiveUntil,
   tierValidity,
-  expiringSoon,
+  balanceExpiry,
   className,
 }: MembershipSummaryProps) {
   const bounded = Math.min(qualifyingPoints, qualifyingThreshold);
@@ -136,12 +133,16 @@ function MembershipSummary({
                 {tierValidity}
               </Text>
             ) : null}
-            <SummaryRow
-              label={copy.pointsActiveUntil}
-              value={pointsActiveUntil}
-            />
-            {expiringSoon && copy.expiringSoon ? (
-              <SummaryRow label={copy.expiringSoon} value={expiringSoon} />
+            {balanceExpiry ? (
+              <Text
+                className={
+                  balanceExpiry.tone === "warning" ? "text-warning" : undefined
+                }
+                data-slot="membership-balance-expiry"
+                size="sm"
+              >
+                {balanceExpiry.line}
+              </Text>
             ) : null}
           </VStack>
         </VStack>

@@ -10,9 +10,9 @@ Screens and states: [`ui-design.md`](ui-design.md).
 
 ## 1. Member and operator words (grade10-spec)
 
-- [ ] 1.1 Replace the expiring-soon keys with one expiry line in every language the programme speaks — the plain line, the line inside the last thirty days, and the line on the day itself
-- [ ] 1.2 Give `MembershipSummary` the expiry line and tone, and take the expiring-soon and points-active-until props off it
-- [ ] 1.3 Add the four stories the design record names — later, soon, today, and no points
+- [x] 1.1 Replace the expiring-soon keys with one expiry line in every language the programme speaks — the plain line, the line inside the last thirty days, and the line on the day itself
+- [x] 1.2 Give `MembershipSummary` the expiry line and tone, and take the expiring-soon and points-active-until props off it
+- [x] 1.3 Add the four stories the design record names — later, soon, today, and no points
 - [ ] 1.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:stories:ui`
 
 ## 2. One date for every credit (grade10)

@@ -53,9 +53,9 @@
     "balance": "Points to spend",
     "qualifying": "Points earned this year",
     "renewal": "Tier renews",
-    "pointsActiveUntil": "Points active until",
-    "expiringSoon": "Expiring soon",
-    "expiringSoonLine": "{points, plural, one {# point expires} other {# points expire}} by {date}"
+    "balanceExpiry": "{points, plural, one {# point expires} other {# points expire}} on {date}",
+    "balanceExpirySoon": "{points, plural, one {# point expires} other {# points expire}} on {date}. Buy or redeem before then to keep {points, plural, one {it} other {them}}.",
+    "balanceExpiryToday": "{points, plural, one {# point expires} other {# points expire}} today. Buy or redeem today to keep {points, plural, one {it} other {them}}."
   },
   "rewards": {
     "label": "Rewards",
