@@ -138,7 +138,7 @@ function SignInCard({
           {copy.legal ? (
             /* Figma draws this line centred across the body at 12/16. */
             <Text
-              className="w-full text-center"
+              className="w-full text-center text-foreground"
               data-slot="sign-in-legal"
               size="xs"
             >
