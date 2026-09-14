@@ -301,7 +301,7 @@ customer is on <grade10 sign-in url>, signed out.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -336,7 +336,7 @@ customer is signed out on a brand that has Google sign-in.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
