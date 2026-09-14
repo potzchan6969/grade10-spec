@@ -11,9 +11,11 @@ import { AuctionRecord } from "./auction-record";
 import {
   AUCTION_RECORD_COPY,
   BIDDING_CHARIZARD,
+  BIDDING_ENDED,
   BIDDING_POSTER,
   biddingItem,
   WATCHING_CAMERA,
+  WATCHING_ENDED,
   WATCHING_POSTER,
 } from "./fixtures";
 import type { AuctionRecordRowProps } from "./types";
@@ -131,22 +133,26 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-function auctionRecordRevealed(canvasElement: HTMLElement): boolean {
-  const root = canvasElement.querySelector('[data-slot="auction-record"]');
-  if (root?.getAttribute("data-revealed") !== "true") return false;
-
-  const empty = canvasElement.querySelector(
-    '[data-slot="auction-record-empty"]',
+/**
+ * The record fades every part of itself in on its own stagger delay, so one
+ * element having arrived says nothing about the next. Waiting for the
+ * transitions themselves to finish settles the whole record at once, however
+ * many parts it has and whatever order they arrive in.
+ */
+async function auctionRecordSettled(canvasElement: HTMLElement) {
+  await waitFor(() =>
+    expect(
+      canvasElement
+        .querySelector('[data-slot="auction-record"]')
+        ?.getAttribute("data-revealed"),
+    ).toBe("true"),
   );
-  if (empty) {
-    return Number(getComputedStyle(empty).opacity) > 0.9;
-  }
-
-  const table = canvasElement.querySelector('[data-slot="table"]');
-  if (!table) return false;
-  const wrapper = table.parentElement;
-  if (!wrapper) return false;
-  return Number(getComputedStyle(wrapper).opacity) > 0.9;
+  await Promise.all(
+    canvasElement
+      .getAnimations({ subtree: true })
+      .filter((animation) => animation instanceof CSSTransition)
+      .map((animation) => animation.finished.catch(() => undefined)),
+  );
 }
 
 /** Default composition: bid rows first, watch-only after, one table. */
@@ -155,9 +161,7 @@ export const Filled: Story = {
   render: () => <MyAuctions />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await waitFor(() =>
-      expect(auctionRecordRevealed(canvasElement)).toBe(true),
-    );
+    await auctionRecordSettled(canvasElement);
     expect(
       canvas.getByRole("heading", { level: 1, name: "My Auctions" }),
     ).toBeVisible();
@@ -191,9 +195,7 @@ export const BiddingOnly: Story = {
   render: () => <MyAuctions watching={[]} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await waitFor(() =>
-      expect(auctionRecordRevealed(canvasElement)).toBe(true),
-    );
+    await auctionRecordSettled(canvasElement);
     expect(canvas.getByText("2")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Unwatch this lot" }),
@@ -210,13 +212,57 @@ export const Empty: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await waitFor(() =>
-      expect(auctionRecordRevealed(canvasElement)).toBe(true),
-    );
+    await auctionRecordSettled(canvasElement);
     expect(canvas.getByText("No lots yet")).toBeVisible();
     expect(canvas.queryByText("0")).not.toBeInTheDocument();
     await userEvent.click(canvas.getByRole("button", { name: "Browse lots" }));
     expect(onBrowseCatalogue).toHaveBeenCalled();
+  },
+};
+
+/**
+ * Closed lots stay on My Auctions while published. Unsold maps to Ended on
+ * the watched row; a bid that did not win stays with Didn't win standing.
+ */
+export const Ended: Story = {
+  name: "Ended",
+  render: () => (
+    <MyAuctions bidding={[BIDDING_ENDED]} watching={[WATCHING_ENDED]} />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await auctionRecordSettled(canvasElement);
+
+    const rows = canvasElement.querySelectorAll(
+      '[data-slot="auction-record-row"]',
+    );
+    expect(rows).toHaveLength(2);
+
+    const bidRow = within(rows[0] as HTMLElement);
+    expect(bidRow.getByText("1977 Star Wars Topps Wax Pack")).toBeVisible();
+    expect(bidRow.getByText("Didn't win")).toBeVisible();
+    expect(
+      bidRow.getByRole("link", {
+        name: "Open listing: 1977 Star Wars Topps Wax Pack",
+      }),
+    ).toHaveAttribute("href", "#lot-wax-pack");
+    expect(
+      bidRow.queryByRole("button", { name: "Unwatch this lot" }),
+    ).not.toBeInTheDocument();
+
+    const watchRow = within(rows[1] as HTMLElement);
+    expect(
+      watchRow.getByText("1986 World Cup Panini Sticker Album"),
+    ).toBeVisible();
+    expect(watchRow.getByText("Ended")).toBeVisible();
+    expect(
+      watchRow.getByRole("link", {
+        name: "Open listing: 1986 World Cup Panini Sticker Album",
+      }),
+    ).toHaveAttribute("href", "#lot-sticker-album");
+    expect(
+      watchRow.getByRole("button", { name: "Unwatch this lot" }),
+    ).toBeVisible();
   },
 };
 
@@ -226,9 +272,7 @@ export const Unwatch: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const body = within(document.body);
-    await waitFor(() =>
-      expect(auctionRecordRevealed(canvasElement)).toBe(true),
-    );
+    await auctionRecordSettled(canvasElement);
 
     await userEvent.click(
       canvas.getByRole("button", { name: "Unwatch this lot" }),
@@ -255,9 +299,7 @@ export const EmailAlertsMuted: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const body = within(document.body);
-    await waitFor(() =>
-      expect(auctionRecordRevealed(canvasElement)).toBe(true),
-    );
+    await auctionRecordSettled(canvasElement);
 
     const switches = canvas.getAllByRole("switch");
     expect(switches).toHaveLength(4);
@@ -300,9 +342,7 @@ export const AlertsPending: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await waitFor(() =>
-      expect(auctionRecordRevealed(canvasElement)).toBe(true),
-    );
+    await auctionRecordSettled(canvasElement);
     const alerts = canvas.getByRole("switch");
     expect(alerts).toHaveAttribute("aria-disabled", "true");
     expect(alerts).toHaveAttribute("aria-busy", "true");

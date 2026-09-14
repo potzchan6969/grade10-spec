@@ -161,11 +161,18 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/**
+ * The design-system Drawer portals its surface to `document.body` and marks
+ * the story canvas inert while open, so every query below reads the body,
+ * never `canvasElement`.
+ */
+const drawer = () => within(document.body);
+
 /** Storewide −10% on lines; SAVE20 refused — no code row. */
 export const Refuse: Story = {
   render: () => <SiteSalePromoHost mode="refuse" />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
+    const canvas = drawer();
     expect(canvas.getByText("HK$22,050.00")).toBeInTheDocument();
     expect(canvas.getByText("HK$24,500.00")).toBeInTheDocument();
     expect(
@@ -201,8 +208,8 @@ export const Refuse: Story = {
  */
 export const Stack: Story = {
   render: () => <SiteSalePromoHost mode="stack" />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
+    const canvas = drawer();
     expect(canvas.getByText("HK$22,050.00")).toBeInTheDocument();
     expect(canvas.getByText("HK$24,500.00")).toBeInTheDocument();
     expect(
@@ -244,8 +251,8 @@ export const Stack: Story = {
 /** Promo replaces the site sale — list lines; SAVE20 alone in the footer. */
 export const Replace: Story = {
   render: () => <SiteSalePromoHost mode="replace" initialPromoApplied />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
+    const canvas = drawer();
     expect(canvas.getByText("HK$24,500.00")).toBeInTheDocument();
     expect(canvas.queryByText("HK$22,050.00")).not.toBeInTheDocument();
     expect(canvas.queryByText(STORY_SITE_SALE_LABEL)).not.toBeInTheDocument();
@@ -260,8 +267,8 @@ export const Replace: Story = {
 export const FallbackAfterRemove: Story = {
   name: "Fallback after remove",
   render: () => <SiteSalePromoHost mode="replace" initialPromoApplied />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
+  play: async () => {
+    const canvas = drawer();
     expect(canvas.getByText(/Discount \(SAVE20\)/)).toBeInTheDocument();
     expect(canvas.queryByText("HK$22,050.00")).not.toBeInTheDocument();
 

@@ -1,7 +1,8 @@
 import { IconProvider } from "@grade10/design-system/components/providers/icon-provider";
 import type { Decorator, Preview } from "@storybook/react-vite";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect } from "react";
 import "@grade10/ui/bones/registry";
+import { interceptWorkbenchStoryLinks } from "../src/pages/workbench-story-nav";
 import "./tailwind.css";
 
 Element.prototype.scrollIntoView = () => {};
@@ -32,6 +33,16 @@ function MotionBoundary({
       {children}
     </div>
   );
+}
+
+function WorkbenchStoryLinkBridge({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    document.addEventListener("click", interceptWorkbenchStoryLinks);
+    return () => {
+      document.removeEventListener("click", interceptWorkbenchStoryLinks);
+    };
+  }, []);
+  return children;
 }
 
 /* Toolbar-driven color theme, identical to both package workbenches. Light is
@@ -96,7 +107,9 @@ const preview: Preview = {
     (Story, context) => (
       <IconProvider>
         <MotionBoundary paused={context.parameters.pauseMotion === true}>
-          <Story />
+          <WorkbenchStoryLinkBridge>
+            <Story />
+          </WorkbenchStoryLinkBridge>
         </MotionBoundary>
       </IconProvider>
     ),

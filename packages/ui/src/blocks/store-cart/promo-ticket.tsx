@@ -64,8 +64,11 @@ function PromoTicket({
     code.detailLabel != null || Boolean(code.inapplicableReason);
 
   return (
+    // biome-ignore lint/a11y/useSemanticElements: a ticket groups a name, its detail and at most one action, not form fields.
     <div
       data-slot="promo-ticket"
+      role="group"
+      aria-label={code.label}
       className={cn("w-full", muted && "opacity-70", TICKET_SHADOW, className)}
     >
       <div

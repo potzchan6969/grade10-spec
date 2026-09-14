@@ -3,5 +3,15 @@
     "label": "sign-in-card/body",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1462",
     "classes": "gap-6"
+  },
+  {
+    "label": "sign-in-email-form/section",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1475",
+    "classes": "gap-3"
+  },
+  {
+    "label": "sign-in-card/legal",
+    "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1487",
+    "classes": "w-full text-center text-foreground"
   }
 ]

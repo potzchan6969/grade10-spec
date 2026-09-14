@@ -34,8 +34,9 @@ release.
 - **Winner confirms an address.** The order moves to **Preparing Invoice**,
   which the post-sale queue shows as needing action. The winner can still
   change the address freely until the invoice is sent.
-- **An operator quotes and sends the invoice.** Shipping and insurance are
-  entered by an operator for the confirmed address. Sending issues the
+- **An operator quotes and sends the invoice.** Shipping & Handling is
+  entered by an operator for the confirmed address and may be zero. Insurance
+  is optional; once added it must be more than zero. Sending issues the
   invoice, sends the new **invoice-sent** letter, and locks the address.
 - **BREAKING — The 7-day deadline starts at send**, not at lot close. An order
   with no invoice has no deadline and never expires.
@@ -59,6 +60,11 @@ release.
   amount needs a re-quote first.
 - **Every paid record names its method.** A card receipt shows the brand and
   last four digits; a manual receipt shows the method and reference.
+- **Invoice lines are renamed.** Hammer price reads **Winning Bid**, Shipping
+  reads **Shipping & Handling**, and Final amount reads **Order Total**, for the
+  winner and the operator.
+- **Zero and absent lines.** Shipping & Handling of zero reads **Free**; an
+  invoice without Insurance shows no Insurance line.
 - **The shipping-rate calculator is retired** from the invoice flow.
 - **BREAKING — Ending soon is no longer an outcome.** A lot with bidding open
   is Live until it closes; how long it has left is read from its close.
@@ -127,7 +133,7 @@ engineer confirms the payment provider supplies them.
 
 ## Assumptions
 
-- **The quote covers shipping and insurance**, and quoting, sending,
+- **The quote covers Shipping & Handling and any Insurance**, and quoting, sending,
   re-quoting, and manual settlement need payment-processing — finance and
   admin — not shipment-processing.
 - **Proof files** are 1 to 5 per settlement, each a PDF, JPEG, or PNG of at
@@ -146,3 +152,7 @@ engineer confirms the payment provider supplies them.
 - A suggested shipping figure for the operator's quote, drawn from the
   retired calculator.
 - A reminder to a winner who has not yet confirmed an address.
+
+## References
+
+- [Post-Sale Queue · Payment](../../../docs/prds/products/grade10-admin/auction/post-sale.md#payment)

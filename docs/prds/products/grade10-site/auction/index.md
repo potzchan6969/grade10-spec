@@ -12,6 +12,13 @@ copy, attaches a gallery, sets a starting price and a window, publishes it now
 or at a set time, and calls it off if something is wrong. A **collector**
 browses, bids, and after the close follows one [Winner Order](/p/grade10-site/auction/winner-order) for each lot they win.
 
+## Catalogue Order
+
+🚧 **What the catalogue leads with** — [Active](/p/grade10-site/auction/lot-status) lots come first,
+soonest to close first; then Upcoming lots, soonest to start first; then Ended
+lots, most recently ended first. Two lots that would sit together keep one
+fixed order, so reading on never shows a lot twice or skips one.
+
 ## Holds
 
 A bid is backed by an authorization on the bidder's card. The money is held,

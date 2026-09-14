@@ -31,7 +31,10 @@ const COLUMNS = [
     links: [
       { label: "CARD SUBMISSION", href: "#submission" },
       { label: "ORDER STATUS", href: "#order-status" },
-      { label: "STORE LOCATOR", href: "#locator" },
+      {
+        label: "STORE LOCATOR",
+        href: "?path=/story/pages-store-locator-page--default",
+      },
       { label: "SHIPPING & DELIVERY", href: "#shipping" },
       { label: "RETURNS & REFUNDS", href: "#returns" },
       { label: "FAQ", href: "#faq" },

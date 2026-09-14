@@ -14,9 +14,8 @@ internal lot status, and it changes for operator needs. In the past two weeks,
 Ending soon and Expired were removed, and Canceled became Called off. Collector
 pages built on that list change every time it does.
 
-Collectors also see lots that nobody can buy. A closed lot's page still opens.
-The watchlist shows called-off lots. My Auctions shows unsold lots while they
-stay published.
+Collectors also see lots that were called off. The watchlist shows them, and My
+Auctions shows them while they stay published.
 
 **Metric:** number of different lot status labels on collector pages. 7 today,
 3 after this change.
@@ -26,8 +25,8 @@ stay published.
 - **External lot status** — a new status for collectors, with three values:
   - **Upcoming** — published, bidding has not started
   - **Active** — bidding is open, including extended bidding
-  - **Ended** — bidding is over and the lot has a winner, whatever the state of
-    the winner's order
+  - **Ended** — bidding is over, with or without a winner. For a lot with a
+    winner, whatever the state of the winner's order
 - **Mapping** — each internal lot status maps to one external lot status, or
   is hidden:
 
@@ -36,7 +35,7 @@ stay published.
   | Draft | Hidden |
   | Scheduled | Upcoming |
   | Live | Active |
-  | Unsold | Hidden |
+  | Unsold | Ended |
   | Called off | Hidden |
   | Awaiting Address | Ended |
   | Preparing Invoice | Ended |
@@ -49,8 +48,7 @@ stay published.
 
 - **Worked out, not saved** — the external lot status comes from the lot's
   internal status and times, so the two always agree
-- **Hidden lots** — collectors never see a lot that is Draft, Unsold or Called
-  off. It is not in the catalogue or on the watchlist, and its address shows
+- **Hidden lots** — collectors never see a lot that is Draft or Called off. It is not in the catalogue or on the watchlist, and its address shows
   the Page not found screen
 - **Bidder exception** — a collector who bid on a called-off lot still sees it
   in My Auctions, with the note that their card hold was released
@@ -58,7 +56,7 @@ stay published.
   so every page uses the same value
 - **Display** — the designer decides which pages show the status, and how
 
-**BREAKING:** unsold and called-off lots no longer open at their own address,
+**BREAKING:** called-off lots no longer open at their own address,
 and are removed from the watchlist.
 
 ## Non-Goals
@@ -99,9 +97,8 @@ This change overrides these rules for hidden lots:
 
 | Change or spec | Says today | Needs to say |
 | --- | --- | --- |
-| `add-auction-watchlist` SC-16, SC-17, and the watchlist page's "Survives close" decision | Closed and called-off lots stay on the watchlist | Unsold and called-off lots are removed |
-| `redesign-my-auctions-table` SC-10, SC-40 | Closed lots stay on My Auctions while published, including unsold and called-off lots | Unsold and called-off lots are removed, except for collectors who bid |
-| `grade10-admin/auction/listing` SC-22 | A closed lot's address still opens the lot | Only for a lot with a winner |
+| `add-auction-watchlist` SC-16, SC-17, and the watchlist page's "Survives close" decision | Closed and called-off lots stay on the watchlist | Called-off lots are removed |
+| `redesign-my-auctions-table` SC-10, SC-40 | Closed lots stay on My Auctions while published, including unsold and called-off lots | Called-off lots are removed, except for collectors who bid |
 | `revise-auction-extended-bidding` | — | No change. A lot in extended bidding is Active |
 
 ## Follow-on changes
@@ -109,3 +106,9 @@ This change overrides these rules for hidden lots:
 - The designer decides which collector pages show the external lot status, and
   how.
 - Today's mixed labels are replaced with the three external lot statuses.
+
+## References
+
+- [Lot Status · External Lot Status](../../../docs/prds/products/grade10-site/auction/lot-status.md#external-lot-status)
+- [Lot Status · Status Mapping](../../../docs/prds/products/grade10-site/auction/lot-status.md#status-mapping)
+- [Lot Status · Hidden Lots](../../../docs/prds/products/grade10-site/auction/lot-status.md#hidden-lots)

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-13T11:03:25.690Z",
+  "generatedAt": "2026-09-14T14:11:36.614Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -92,6 +92,8 @@
     "Toast / Close": "skipped",
     "Tooltip": "ok",
     "auth-sign-in: sign-in-card/body": "ok",
+    "auth-sign-in: sign-in-card/legal": "ok",
+    "auth-sign-in: sign-in-email-form/section": "ok",
     "display: card/slot": "ok",
     "forms: radio-button/dot": "ok",
     "forms: stepper-input/control": "ok",
@@ -634,6 +636,8 @@
     "4647-3423": "09 — Quick-add & mini-cart research",
     "4666-1452": "Auth Sign-In",
     "4666-1462": "auth-sign-in: sign-in-card/body",
+    "4666-1475": "auth-sign-in: sign-in-email-form/section",
+    "4666-1487": "auth-sign-in: sign-in-card/legal",
     "4666-1488": "Login Dialog",
     "4674-3831": "Cart",
     "4674-3832": "overlays: drawer-overlay/root",

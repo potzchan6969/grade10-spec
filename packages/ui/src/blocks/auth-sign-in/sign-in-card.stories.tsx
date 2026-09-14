@@ -1,8 +1,17 @@
 import { Button } from "@grade10/design-system/components/forms/button";
+import { Link } from "@grade10/design-system/components/forms/link";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { PRODUCT_CARD_CART_COPY } from "../store-product-listing/fixtures";
+import { ProductCard } from "../store-product-listing/product-card";
 import { SignInCard } from "./sign-in-card";
 import { SignInEmailForm } from "./sign-in-email-form";
+
+const LISTING_IMAGE = new URL(
+  "../store-product-listing/product-card.fixture.png",
+  import.meta.url,
+).href;
 
 /**
  * Sign-in is a dialog over the page the collector was already on, matching
@@ -10,9 +19,26 @@ import { SignInEmailForm } from "./sign-in-email-form";
  * `open` is the consumer's state: the component has no uncontrolled fallback,
  * so the meta holds it at true and every story below is the open dialog.
  *
+ * Figma draws a Google OAuth control above the divider. Storybook cannot host
+ * Google's real widget, so gallery stories omit it rather than faking one —
+ * the empty `providerSlot` contract stays on `ProviderThatHasNotDrawnYet`.
+ *
  * The dialog portals to `document.body`, so play functions query
  * `within(document.body)` rather than the canvas.
  */
+const figmaLegal = (
+  <>
+    By continuing, you agree to our{" "}
+    <Link href="/legal/terms" size="xs" target="_blank">
+      Terms of Service
+    </Link>{" "}
+    &{" "}
+    <Link href="/legal/privacy" size="xs" target="_blank">
+      Privacy Policy
+    </Link>
+  </>
+);
+
 const meta = {
   title: "Auth Sign In/SignInCard",
   component: SignInCard,
@@ -21,10 +47,17 @@ const meta = {
   args: {
     open: true,
     onOpenChange: fn(),
-    copy: { title: "Sign in to Acme Store" },
+    copy: {
+      title: "Sign In to Grade10",
+      legal: figmaLegal,
+    },
     children: (
       <SignInEmailForm
-        copy={{ email: "Email", submit: "Send magic link" }}
+        copy={{
+          email: "Email",
+          emailPlaceholder: "Enter your email",
+          submit: "Send Magic Link",
+        }}
         email=""
         onEmailChange={fn()}
         onSubmit={fn()}
@@ -36,26 +69,85 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Stands in for a provider's artwork. A shared block ships no brand's
- * mark, so the story supplies one the way a consumer does. */
-function ProviderMark() {
-  return (
-    <svg aria-hidden="true" fill="currentColor" viewBox="0 0 16 16">
-      <circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" />
-      <circle cx="8" cy="8" r="3" />
-    </svg>
-  );
-}
-
 /**
- * No provider widget, so no divider above the step.
- *
- * Scenario: shared-ui-auth-sign-in-SC-08 — the block draws no legal node of
- * its own, so a consumer that supplies no wording gets none. Asserted here
- * rather than in a story of its own: supplying nothing *is* the default, and
- * a second empty-args story renders the same pixels.
+ * Figma's Login Dialog without the Google control: title, email step,
+ * legal line. Empty email keeps Send Magic Link disabled, which is what the
+ * frame draws at rest.
  */
 export const Default: Story = {
+  play: async () => {
+    const body = within(document.body);
+    const dialog = body.getByRole("dialog");
+
+    expect(
+      body.getByRole("heading", { name: "Sign In to Grade10" }),
+    ).toBeInTheDocument();
+    expect(body.getByRole("textbox", { name: "Email" })).toHaveAttribute(
+      "placeholder",
+      "Enter your email",
+    );
+    expect(
+      body.getByRole("button", { name: "Send Magic Link" }),
+    ).toBeDisabled();
+    expect(
+      dialog.querySelector('[data-slot="sign-in-legal"]'),
+    ).toBeInTheDocument();
+    expect(
+      body.getByRole("link", { name: "Terms of Service" }),
+    ).toBeInTheDocument();
+    expect(
+      body.getByRole("link", { name: "Privacy Policy" }),
+    ).toBeInTheDocument();
+    expect(dialog.querySelector('[data-slot="divider"]')).toBeNull();
+  },
+};
+
+/** After Send Magic Link: progress copy sits under the button, centred at
+ * xs / secondary-foreground with the same gap-2 an input uses for its
+ * message. Field errors stay on the step's `error` prop. */
+export const WithMessage: Story = {
+  args: {
+    message: "Check your inbox for a sign-in link.",
+    children: (
+      <SignInEmailForm
+        copy={{
+          email: "Email",
+          emailPlaceholder: "Enter your email",
+          submit: "Send Magic Link",
+        }}
+        email="collector@example.com"
+        onEmailChange={fn()}
+        onSubmit={fn()}
+      />
+    ),
+  },
+  play: async () => {
+    const body = within(document.body);
+    const submit = body.getByRole("button", { name: "Send Magic Link" });
+    const message = body
+      .getByRole("dialog")
+      .querySelector('[data-slot="sign-in-message"]') as HTMLElement;
+
+    expect(message).toHaveTextContent("Check your inbox for a sign-in link.");
+    expect(
+      submit.compareDocumentPosition(message) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(message.className).toMatch(/text-center/);
+    expect(message.className).toMatch(/text-secondary-foreground/);
+    expect(message.className).toMatch(/text-xs/);
+    expect(message.parentElement?.className).toMatch(/gap-2/);
+  },
+};
+
+/**
+ * Scenario: shared-ui-auth-sign-in-SC-08 — the block draws no legal node of
+ * its own, so a consumer that supplies no wording gets none.
+ */
+export const WithoutLegal: Story = {
+  args: {
+    copy: { title: "Sign In to Grade10" },
+  },
   play: async () => {
     const body = within(document.body);
 
@@ -65,40 +157,29 @@ export const Default: Story = {
   },
 };
 
-/** The status line is progress copy, not an error — field errors travel on
- * the step's own `error` prop. */
-export const WithMessage: Story = {
-  args: { message: "Check your inbox for a sign-in link." },
-};
-
 /**
- * The redirect shape of an external provider: an outline button the consumer
- * owns, sitting *above* the labelled divider in the order Figma draws. The
- * mark is the story's, not the block's — a shared component carries no
- * brand's artwork.
- *
- * It draws its own markup, so it marks no container and the divider never
- * waits on it. That is the other half of the rule
- * `ProviderThatHasNotDrawnYet` proves from the asynchronous side.
+ * Documents `providerSlot` above the labelled divider. Not a Google stand-in —
+ * Google's real widget cannot run in Storybook; see
+ * `ProviderThatHasNotDrawnYet` for the empty async slot. This story only
+ * proves order and the divider label for a consumer-owned control.
  */
 export const WithProviderSlot: Story = {
   args: {
-    copy: { title: "Sign in to Acme Store", providerDivider: "or" },
+    copy: {
+      title: "Sign In to Grade10",
+      providerDivider: "or",
+      legal: figmaLegal,
+    },
     providerSlot: (
-      <Button
-        leading={<ProviderMark />}
-        size="md"
-        type="button"
-        variant="outline"
-      >
-        Continue with Acme ID
+      <Button size="md" type="button" variant="outline">
+        Provider widget mounts here
       </Button>
     ),
   },
   play: async () => {
     const body = within(document.body);
     const provider = body.getByRole("button", {
-      name: "Continue with Acme ID",
+      name: "Provider widget mounts here",
     });
     const email = body.getByLabelText("Email");
     const group = body
@@ -106,6 +187,7 @@ export const WithProviderSlot: Story = {
       .querySelector('[data-slot="divider"]')?.parentElement as HTMLElement;
 
     expect(getComputedStyle(group).display).not.toBe("none");
+    expect(body.getByText("or")).toBeInTheDocument();
     // Node.compareDocumentPosition: 4 === provider precedes email.
     expect(
       provider.compareDocumentPosition(email) &
@@ -122,18 +204,17 @@ export const WithProviderSlot: Story = {
  */
 export const WithLegal: Story = {
   args: {
-    copy: {
-      title: "Sign in to Acme Store",
-      legal: "By continuing you agree to the Terms and the Privacy Policy.",
-    },
     message: "Check your inbox for a sign-in link.",
   },
-  play: async ({ args }) => {
+  play: async () => {
     const body = within(document.body);
-    const legal = body.getByText(String(args.copy.legal));
+    const legal = body
+      .getByRole("dialog")
+      .querySelector('[data-slot="sign-in-legal"]');
 
-    expect(legal.closest('[data-slot="sign-in-legal"]')).toBe(
-      legal.closest('[data-slot="dialog-body"]')?.lastElementChild,
+    expect(legal).toBe(
+      body.getByRole("dialog").querySelector('[data-slot="dialog-body"]')
+        ?.lastElementChild,
     );
   },
 };
@@ -142,11 +223,15 @@ export const WithLegal: Story = {
  * A widget a script fills in later — Google's own button — marks its own
  * container, and the divider waits for it. An "or" over blank space is what
  * a collector sees when that script never answers, so the pair hides until
- * something is actually there to divide.
+ * something is actually there to divide. Gallery omits a fake Google control.
  */
 export const ProviderThatHasNotDrawnYet: Story = {
   args: {
-    copy: { title: "Sign in to Acme Store", providerDivider: "or" },
+    copy: {
+      title: "Sign In to Grade10",
+      providerDivider: "or",
+      legal: figmaLegal,
+    },
     providerSlot: <div data-slot="sign-in-provider" />,
   },
   play: async () => {
@@ -265,5 +350,88 @@ export const DismissalLeavesThePageBeneath: Story = {
       expect(page).toBeInTheDocument();
       expect(canvas.getByText("1999 Charizard, PSA 10")).toBeInTheDocument();
     }
+  },
+};
+
+/**
+ * Signed-out Add to cart on a listing tile opens the Login Dialog — the
+ * consumer owns session and `open`, so the cart control reports quantity and
+ * this demo opens sign-in instead of adding a guest line. Narrow viewport
+ * keeps the cart control visible without hover (same as listing on touch).
+ *
+ * Why-title: `copy.title` is **Sign in to add to cart** (not the meta
+ * default **Sign In to Grade10**). Spec:
+ * `grade10-site-store-product-listing-SC-47` (product-page twin SC-29);
+ * open-from-add gate remains SC-44 / SC-26.
+ */
+export const FromAddToCart: Story = {
+  name: "From add to cart",
+  args: {
+    open: false,
+    copy: {
+      title: "Sign in to add to cart",
+      legal: figmaLegal,
+    },
+  },
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+  },
+  render: function FromAddToCartDemo(args) {
+    const [open, setOpen] = useState(false);
+    const [email, setEmail] = useState("");
+
+    return (
+      <>
+        <main className="bg-background p-6">
+          <div className="w-[260px]">
+            <ProductCard
+              copy={PRODUCT_CARD_CART_COPY}
+              imageAlt="Pokémon TCG Sealed Booster Box – Abyss Eye (M5)"
+              imageSrc={LISTING_IMAGE}
+              name="Pokémon TCG Sealed Booster Box – Abyss Eye (M5)"
+              onCartQuantityChange={() => {
+                setOpen(true);
+              }}
+              onClick={() => {}}
+              price="HK$105"
+            />
+          </div>
+        </main>
+        <SignInCard {...args} onOpenChange={setOpen} open={open}>
+          <SignInEmailForm
+            copy={{
+              email: "Email",
+              emailPlaceholder: "Enter your email",
+              submit: "Send Magic Link",
+            }}
+            email={email}
+            onEmailChange={setEmail}
+            onSubmit={fn()}
+          />
+        </SignInCard>
+      </>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const cart = canvas.getByRole("button", { name: "Add to cart" });
+
+    expect(within(document.body).queryByRole("dialog")).toBeNull();
+
+    await userEvent.click(cart);
+
+    const body = within(document.body);
+    await waitFor(() => {
+      expect(body.getByRole("dialog")).toBeInTheDocument();
+    });
+    expect(
+      body.getByRole("heading", { name: "Sign in to add to cart" }),
+    ).toBeInTheDocument();
+    // Consumer never marked the tile in-cart — no guest line.
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="product-card-image"][data-in-cart]',
+      ),
+    ).toBeNull();
   },
 };

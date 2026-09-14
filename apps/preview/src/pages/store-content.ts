@@ -8,6 +8,7 @@ import type {
   UtilityLink,
 } from "@grade10/ui";
 import { createElement, type ReactNode } from "react";
+import { STORE_LOCATOR_HREF } from "./workbench-story-nav";
 
 /* Content this workbench owns, exactly as a store application owns its own.
  * None of it lives in `@grade10/ui` or `@grade10/design-system`: both packages
@@ -54,7 +55,7 @@ const STORE_SITE_HEADER = {
   navItems: [
     { label: "Store", href: "#shop", current: true },
     { label: "Auction", href: "#auction" },
-    { label: "Store Locator", href: "#locator" },
+    { label: "Store Locator", href: STORE_LOCATOR_HREF },
   ],
   onLocaleChange: noop,
   onSignIn: noop,
@@ -98,6 +99,7 @@ const STORE_FOOTER = {
       heading: "HELP",
       links: [
         { label: "ORDER STATUS", href: "#order-status" },
+        { label: "STORE LOCATOR", href: STORE_LOCATOR_HREF },
         { label: "SHIPPING & DELIVERY", href: "#shipping" },
         { label: "RETURNS & REFUNDS", href: "#returns" },
         { label: "CONTACT", href: "#contact" },

@@ -22,6 +22,12 @@ roles and delete appear only when the console supplies a handler, so a console
 can withhold a move the operator's grants do not allow. A row offers ban or
 unban according to the account's standing, and never both.
 
+## Auction Suspension
+
+🚧 The account panel offers suspending the account from auctions, or reinstating it, only when the console supplies a handler, and never both at once. Both are confirmed in the moderation dialog, suspension with a reason.
+
+## Moderation
+
 One confirmation serves every moderation move. The console supplies the words,
 the tone, and whether a reason is collected; the dialog reports back one
 signature either way, so a console reads the same result whichever move it

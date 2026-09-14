@@ -12,17 +12,20 @@ lands on the order through the same Shopify draft order.
 - **Site discounts** — admin-scheduled, auto-applied storewide with no code:
   a product special sale, a buy-X-get-Y offer, or a spend threshold off the
   whole order — see [Site discounts](#site-discounts) below
-- **Discount code** — typed in the cart drawer; the total shows the cut, and a
-  code the shop refuses stops the checkout with the code named. An operator
-  mints one as a single-use `PREFIX-XXXXXXXX` with an expiry, open to anybody
-  or bound to one member
+- **Discount code** — typed in the cart drawer or at `/checkout`; the total
+  shows the cut at once, and a code the store refuses stays in the field with
+  its reason — [Cart Drawer](/p/grade10-site/store/cart). An operator mints
+  one as a single-use `PREFIX-XXXXXXXX` with an expiry, bound to one member,
+  who sees it listed. A public code is a Shopify discount created in the
+  shop's admin and promoted elsewhere; it is the invoice's, not the cart's
   1. **Order coupon** — a fixed amount off the whole order, or off named
      products or variants, never more than the goods it may come off; bound to
      a Shopify Discount
 - **Rewards** — earned with points, on a birthday, or on registering
-  ([Rewards](/p/grade10-site/loyalty/rewards)), selected to use in cart OR
-  auto-applied. Both shapes ride as a Shopify Discount too, minted once the
-  basket qualifies and spent once, the same as an order coupon
+  ([Rewards](/p/grade10-site/loyalty/rewards)), picked in the cart drawer or
+  at `/checkout` from the coupons the member holds, each answered against the
+  cart before it is picked. Both shapes ride as a Shopify Discount too, minted
+  once the basket qualifies and spent once, the same as an order coupon
   1. **Product coupon** — a fixed amount, or a percentage with a ceiling, off
      the lines it applies to
   2. **Gift** — a 100%-off code scoped to the gift product, added once the
@@ -209,7 +212,7 @@ today.
 | One code slot | Decided | One coupon per order, by choice, to keep the sale simple — a free reward and a money-off coupon are two sales. The picker isolates the rule, so a later change can widen it without deleting the one-slot logic. | Product |
 | Site discount beside a coupon | Decided | Shopify's own combine rules decide; grade10 accepts what the shop priced. A coupon the shop sets aside for a larger site discount goes back to the wallet and the order completes, never fails. | Product |
 | Combine setting | Decided | Each coupon's definition states what it stacks with — a reward's definition, or the operator's mint of a store coupon — with a store default where none is stated. | Product |
-| Price preview | Decided | A live cart price is estimated locally; a coupon's Shopify Discount is minted only once the checkout is submitted. | Engineering |
+| Price preview | Decided | The cart drawer and `/checkout` read one store quote — the lines, the one code or reward, points after it — that holds nothing; a coupon's Shopify Discount is minted only once the checkout is submitted. | Engineering |
 | A free item alone online | ❓ Open | A 100%-off reward with nothing else in the basket is an HKD 0 order plus shipping — whether it ships free, or is collection only. | Product |
 | Product special sale vs. Sale price | Decided | Kept separate — Sale price stays the ad hoc, unscheduled tool; Product special sale is the scheduled, exclusive one. | Product |
 | Points on an exclusive line | Decided | Points always redeem, even on a product special sale — points is a payment method, not a merchandising discount. | Product |

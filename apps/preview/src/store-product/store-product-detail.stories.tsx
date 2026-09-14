@@ -2,7 +2,6 @@ import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, within } from "storybook/test";
 import {
   PRODUCT_DETAIL_PRODUCT,
-  SINGLE_VARIANT_PRODUCT,
   SOLD_OUT_PRODUCT,
 } from "../pages/product-detail-content";
 import { StoreProductDetail } from "./store-product-detail";
@@ -36,18 +35,7 @@ export const Default: Story = {
     ).toBeVisible();
     expect(canvas.getByRole("img", { name: /front view/ })).toBeVisible();
     expect(canvas.getByText("Only 3 left")).toBeVisible();
-    expect(canvas.getByRole("radio", { name: /Standard/ })).toBeChecked();
-    expect(canvas.getByRole("button", { name: "Add to cart" })).toBeVisible();
-  },
-};
-
-export const SingleVariant: Story = {
-  args: { product: SINGLE_VARIANT_PRODUCT },
-  decorators: [content],
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     expect(canvas.queryByRole("radiogroup", { name: "Grade" })).toBeNull();
-    expect(canvas.getByText("Standard")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Add to cart" })).toBeVisible();
   },
 };
@@ -71,11 +59,7 @@ export const SoldOut: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Sold out" })).toBeDisabled();
     expect(canvas.getByText("This product is not for sale.")).toBeVisible();
-    expect(
-      canvas
-        .getAllByRole("radio")
-        .every((radio) => radio.hasAttribute("aria-disabled")),
-    ).toBe(true);
+    expect(canvas.queryByRole("radiogroup", { name: "Grade" })).toBeNull();
   },
 };
 

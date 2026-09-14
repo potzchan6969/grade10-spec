@@ -120,6 +120,17 @@ const WATCHING_POSTER = watchingItem({
   href: "#lot-poster",
 });
 
+/** Watched lot that closed with no winner — external status Ended, still listed. */
+const WATCHING_ENDED = watchingItem({
+  id: "watch-ended",
+  title: "1986 World Cup Panini Sticker Album",
+  state: "ended",
+  stateLabel: "Ended",
+  currentBid: "HK$320",
+  closesAt: "Ended 8 Sep 2026, 21:00 HKT",
+  href: "#lot-sticker-album",
+});
+
 const BIDDING_POSTER = biddingItem({
   id: "bid-poster",
   title: "Signed Tour Poster, 1/50",
@@ -139,10 +150,22 @@ const BIDDING_CHARIZARD = biddingItem({
   href: "#lot-charizard",
 });
 
+/** Bid on a lot that closed with no winner — stays listed; standing Didn't win. */
+const BIDDING_ENDED = biddingItem({
+  id: "bid-ended",
+  title: "1977 Star Wars Topps Wax Pack",
+  state: "hold_released",
+  stateLabel: "Didn't win",
+  currentBid: "HK$890",
+  closesAt: "Ended 7 Sep 2026, 18:00 HKT",
+  href: "#lot-wax-pack",
+});
+
 export {
   AUCTION_RECORD_COPY,
   BIDDING_CHARIZARD,
   BIDDING_EMAIL_ALERTS_COPY,
+  BIDDING_ENDED,
   BIDDING_POSTER,
   biddingItem,
   EMAIL_ALERTS_COPY,
@@ -150,6 +173,7 @@ export {
   ROW_COPY,
   WATCH_COPY,
   WATCHING_CAMERA,
+  WATCHING_ENDED,
   WATCHING_POSTER,
   watchingItem,
 };

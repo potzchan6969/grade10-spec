@@ -9,10 +9,13 @@ export const UTILITY_LINKS = [
   { label: "Orders & Returns", href: "#orders" },
 ];
 
+/** Workbench Store Locator page — keep in sync with preview `STORE_LOCATOR_HREF`. */
+const STORE_LOCATOR_HREF = "?path=/story/pages-store-locator-page--default";
+
 export const NAV_ITEMS = [
   { label: "Store", href: "#store", current: true },
   { label: "Auction", href: "#auction" },
-  { label: "Store Locator", href: "#locator" },
+  { label: "Store Locator", href: STORE_LOCATOR_HREF },
 ];
 
 export const LOCALES = [

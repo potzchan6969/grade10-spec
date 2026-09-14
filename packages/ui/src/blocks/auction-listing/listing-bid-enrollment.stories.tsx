@@ -122,9 +122,11 @@ export const SetupSheet: Story = {
     );
     expect(field).not.toBeNull();
     expect(field).toHaveAttribute("data-state", "empty");
-    const scrollBody = dialog.querySelector<HTMLElement>(
-      '[data-slot="dialog-body"]',
-    );
+    /* The sheet nests a scrolling body inside the dialog's own body, so name
+       the one that holds the payment field rather than the first in the DOM. */
+    const scrollBody = dialog
+      .querySelector<HTMLElement>('[data-slot="payment-field"]')
+      ?.closest<HTMLElement>('[data-slot="dialog-body"]');
     expect(scrollBody).not.toBeNull();
     expect(scrollBody).toHaveClass("max-h-[28rem]", "flex-1");
     expect(
@@ -156,7 +158,11 @@ export const SetupSheetLoadedMockStripe: Story = {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
-    expect(within(dialog).getByText("Stripe card link (iframe)")).toBeVisible();
+    await waitFor(() =>
+      expect(
+        within(dialog).getByText("Stripe card link (iframe)"),
+      ).toBeVisible(),
+    );
     const field = dialog.querySelector<HTMLElement>(
       '[data-slot="payment-field"]',
     );
@@ -272,8 +278,9 @@ export const SetupSheetProviderFieldIsLockedWhileLinking: Story = {
       name: "Link a card to bid",
     });
     const field = within(dialog).getByRole("button", { name: "Card field" });
-    expect(field.parentElement).toHaveAttribute("inert");
-    expect(field.parentElement).toHaveAttribute("aria-disabled", "true");
+    const slot = field.closest<HTMLElement>('[data-slot="payment-field"]');
+    expect(slot).toHaveAttribute("inert");
+    expect(slot).toHaveAttribute("aria-disabled", "true");
     expect(
       within(dialog).getByRole("checkbox", {
         name: "I confirm I am 18 years of age or older.",

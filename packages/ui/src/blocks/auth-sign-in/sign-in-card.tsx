@@ -35,8 +35,10 @@ type SignInCardProps = {
   /** The active step — a `SignInEmailForm`, or anything else the consumer's
    * flow needs. */
   children: ReactNode;
-  /** Progress line under the step — "check your inbox". Not an error: field
-   * errors travel on the step's own `error` prop. */
+  /** Progress line under the send action — "check your inbox". Centred xs at
+   * secondary-foreground, `gap-2` below the button (same as an input field's
+   * message spacing). Not an error: field errors travel on the step's own
+   * `error` prop. */
   message?: ReactNode;
   /** External identity buttons (Google, passkeys…), rendered above the
    * divider. The consumer owns the widget; this dialog only places it.
@@ -115,24 +117,28 @@ function SignInCard({
               <Divider label={copy.providerDivider} />
             </VStack>
           ) : null}
-          {children}
-          {message ? (
-            /* `primary`, not `success`: under the grade10 theme the success
-               tone resolves to `--success-foreground`, the white drawn ON a
-               success fill, so the line renders white on a white dialog. The
-               readable status tone the theme is missing is a token decision;
-               until it exists, a line the collector has to read takes the
-               body tone. */
-            <Text data-slot="sign-in-message" size="sm">
-              {message}
-            </Text>
-          ) : null}
+          {/* Gap 8 matches `InputShell`'s field→message spacing (`gap-2`),
+              not the email-section's input→button gap of 12. */}
+          <VStack className="w-full gap-2">
+            {children}
+            {message ? (
+              /* Centred xs at `Base/secondary-foreground`, `gap-2` below the
+                 button (same spacing as an input field's message). Progress
+                 copy, not an error: field errors stay on the step's `error`
+                 prop. */
+              <Text
+                className="w-full text-center text-secondary-foreground"
+                data-slot="sign-in-message"
+                size="xs"
+              >
+                {message}
+              </Text>
+            ) : null}
+          </VStack>
           {copy.legal ? (
-            /* Figma draws this line centred across the body at 12/16. Size
-               and alignment are what separate it from the status line above;
-               both take the body tone. */
+            /* Figma draws this line centred across the body at 12/16. */
             <Text
-              className="w-full text-center"
+              className="w-full text-center text-foreground"
               data-slot="sign-in-legal"
               size="xs"
             >

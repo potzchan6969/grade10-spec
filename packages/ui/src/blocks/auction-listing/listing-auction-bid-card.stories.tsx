@@ -83,6 +83,7 @@ const COPY = {
   opensLabel: "Opens",
   closedAt: "Closed {when}",
   closedSummary: "Closed at {time}. Ran {duration}",
+  unsold: "Ended",
   activityTimeCopy: FIXTURE_ACTIVITY_TIME_COPY,
 } as const;
 
@@ -341,5 +342,30 @@ export const LiveNoBids: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Starting bid")).toBeInTheDocument();
     expect(canvas.getAllByText("No bids yet").length).toBeGreaterThan(0);
+  },
+};
+
+/**
+ * Seeds the custom field at 500. Paste (or select-all + paste) a value above
+ * 9,999,999,999 — the draft restores to 500. Typing digit-by-digit restores
+ * one keystroke at a time (e.g. 10000000000 → 1000000000), not the seed.
+ */
+export const CustomMaximumCeiling: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Custom amount starts at 500. Paste above 9,999,999,999 to see restore to 500. Digit-by-digit typing restores the previous keystroke only.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByRole("spinbutton", {
+      name: /Custom amount \(min\./,
+    });
+    await userEvent.clear(field);
+    await userEvent.type(field, "500");
+    expect(field).toHaveValue(500);
   },
 };

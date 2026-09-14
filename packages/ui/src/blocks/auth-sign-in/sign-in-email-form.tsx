@@ -62,7 +62,7 @@ function SignInEmailForm({
           type="email"
           value={email}
         />
-        <Button disabled={!email} loading={submitting} type="submit">
+        <Button disabled={!email} loading={submitting} size="md" type="submit">
           {copy.submit}
         </Button>
       </VStack>

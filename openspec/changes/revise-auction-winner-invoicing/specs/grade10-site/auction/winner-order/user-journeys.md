@@ -12,6 +12,8 @@
 - `winner-order-SC-07` — A pre-filled default still needs confirming
 - `winner-order-SC-28` — Confirming an address readies the order for a quote
 - `winner-order-SC-04` — An estimated total is marked as one
+- `winner-order-SC-38` — Shipping & Handling of zero reads Free
+- `winner-order-SC-39` — An invoice with no insurance shows no Insurance line
 - `winner-order-SC-31` — The deadline is seven days from send
 - `winner-order-SC-29` — A sent invoice refuses a self-service address change
 - `winner-order-SC-35` — The winner is offered card payment only

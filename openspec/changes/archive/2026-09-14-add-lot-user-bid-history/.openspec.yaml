@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-09-01
+page_waived: "predates the page rule"
+design_waived: "predates the design rule"
+deployed_at: "6516d39710ccecf799ed475449186959719230df"
+deployed_env: "staging"

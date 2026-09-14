@@ -16,6 +16,11 @@ In the cart drawer, signed in with Google or a magic link.
 ## Store — Read every line live
 Current price and stock, from Shopify. A line that moved comes back named.
 
+## Collector — Check the price
+The promo code and the points carried from the drawer, or chosen here, and
+the estimated total they leave — [Cart Drawer](/p/grade10-site/store/cart).
+Pay sends them with the lines.
+
 # On Shopify's page
 
 ## Collector — Fill in shipping and pay
@@ -37,8 +42,7 @@ On Shopify's confirmation page, back to the store.
 In Your Orders.
 :::
 
-- **Members only** — checkout is signed in; guest checkout is in the code,
-  launching with it `TBC`
+- **Members only** — checkout is signed in; there is no guest checkout
 - **The bar** — goods worth **HKD 120,000** or more need a verified buyer;
   an unverified one is sent to [verify from their account](/p/grade10-site/account/kyc)
   before any order is made

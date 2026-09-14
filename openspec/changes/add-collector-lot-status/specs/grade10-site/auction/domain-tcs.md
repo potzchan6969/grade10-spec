@@ -6,8 +6,8 @@
 ## grade10-site-auction-e2e-US11: Collector follows an old link to a hidden lot
 
 **As a** collector,
-**I want** a lot that did not sell or was called off to be gone everywhere,
-**so that** a saved link or an old search never shows me a lot nobody can buy.
+**I want** a called-off lot to be gone everywhere,
+**so that** a saved link or an old search never shows me a lot that was withdrawn.
 
 ### grade10-site-auction-e2e-US11-TC01-1: Called-off lot is removed from the catalogue and its link
 

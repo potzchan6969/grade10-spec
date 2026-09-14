@@ -12,7 +12,7 @@ capability also sets which lots collectors never see.
   - Worked out, not saved: taken from the lot, so it always matches the lot
   - Lot, not order: the winner's order status is shown separately
 - Hidden lots
-  - Never shown: Draft, Unsold and Called off lots do not appear on any
+  - Never shown: Draft and Called off lots do not appear on any
     collector page
   - Bidder exception: a collector who bid on a called-off lot still sees it in
     My Auctions
@@ -30,7 +30,7 @@ Grade10 SHALL work it out from the lot and SHALL NOT save it.
 | --- | --- |
 | Upcoming | Published. Bidding has not started |
 | Active | Bidding is open, until the lot closes. Includes extended bidding |
-| Ended | Bidding is over and the lot has a winner, whatever the state of the winner's order |
+| Ended | Bidding is over, with or without a winner. For a lot with a winner, whatever the state of the winner's order |
 
 Each internal lot status in `grade10-admin/auction/post-sale` SHALL map to one
 external lot status, or to Hidden:
@@ -40,7 +40,7 @@ external lot status, or to Hidden:
 | Draft | Hidden |
 | Scheduled | Upcoming |
 | Live | Active |
-| Unsold | Hidden |
+| Unsold | Ended |
 | Called off | Hidden |
 | Awaiting Address | Ended |
 | Preparing Invoice | Ended |
@@ -86,6 +86,12 @@ status.
 - **WHEN** Grade10 works out their external lot status
 - **THEN** all three are Ended
 
+#### Scenario: grade10-site-auction-lot-status-SC-12 - A lot that ended with no winner is Ended
+
+- **GIVEN** a published lot whose bidding ended with no winner
+- **WHEN** Grade10 works out its external lot status
+- **THEN** the status is Ended
+
 #### Scenario: grade10-site-auction-lot-status-SC-05 - The winner sees their order status separately
 
 - **GIVEN** a winner whose order is awaiting payment
@@ -95,7 +101,7 @@ status.
 
 ### Requirement: Collectors never see hidden lots
 
-A hidden lot is a lot whose internal lot status is Draft, Unsold or Called off.
+A hidden lot is a lot whose internal lot status is Draft or Called off.
 Collectors SHALL NOT see a hidden lot anywhere on the auction site:
 
 - **Catalogue** — the lot SHALL NOT be listed, and catalogue search and filters
@@ -108,11 +114,12 @@ A collector who bid on a called-off lot SHALL still see it in My Auctions, with
 the note that their card hold was released, per
 `grade10-site/auction/account-record`. No other collector SHALL see it.
 
-#### Scenario: grade10-site-auction-lot-status-SC-06 - Draft and unsold lots are not in the catalogue
+#### Scenario: grade10-site-auction-lot-status-SC-06 - A draft lot is not in the catalogue, but an unsold lot is
 
-- **GIVEN** a draft lot, and a lot whose bidding ended with no winner
+- **GIVEN** a draft lot, and a published lot whose bidding ended with no winner
 - **WHEN** a collector opens the auction catalogue
-- **THEN** neither lot is listed
+- **THEN** the draft lot is not listed
+- **AND** the unsold lot is listed as Ended
 
 #### Scenario: grade10-site-auction-lot-status-SC-07 - A called-off lot is removed from the catalogue
 
@@ -120,12 +127,13 @@ the note that their card hold was released, per
 - **WHEN** a collector opens the auction catalogue
 - **THEN** the lot is not listed
 
-#### Scenario: grade10-site-auction-lot-status-SC-08 - Hidden lots are removed from the watchlist
+#### Scenario: grade10-site-auction-lot-status-SC-08 - A called-off lot is removed from the watchlist
 
 - **GIVEN** a collector watching one lot that ends with no winner and one lot
   that is called off
 - **WHEN** they open their watchlist
-- **THEN** neither lot is listed
+- **THEN** the called-off lot is not listed
+- **AND** the unsold lot is listed as Ended
 
 #### Scenario: grade10-site-auction-lot-status-SC-09 - A bidder still sees a called-off lot
 
@@ -145,9 +153,10 @@ Active or Ended. It SHALL NOT include hidden lots.
   for bidding
 - **THEN** the data includes the external lot status Active
 
-#### Scenario: grade10-site-auction-lot-status-SC-11 - Listing data leaves out hidden lots
+#### Scenario: grade10-site-auction-lot-status-SC-11 - Listing data leaves out called-off lots
 
 - **GIVEN** a lot whose bidding ended with no winner, and a lot that was called
   off
 - **WHEN** a customer application reads the public listing data
-- **THEN** neither lot is included
+- **THEN** the called-off lot is not included
+- **AND** the unsold lot is included with the external lot status Ended
