@@ -53,7 +53,7 @@ function StoreProductMetadata({
         <ul className="list-disc pl-5">
           <li>
             <Text as="span" size="sm">
-              {copy.shippingCalculatedAtCheckout}.{" "}
+              {copy.shippingCalculatedAtCheckout}{" "}
             </Text>
             <Link href={shippingFeeHref} size="sm">
               {copy.shippingFee}

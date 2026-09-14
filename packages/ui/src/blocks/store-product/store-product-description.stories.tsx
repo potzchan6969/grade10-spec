@@ -8,6 +8,13 @@ const meta = {
   component: StoreProductDescription,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
+  decorators: [
+    (Story) => (
+      <div className="w-full max-w-md">
+        <Story />
+      </div>
+    ),
+  ],
   args: { copy: DESCRIPTION_COPY },
 } satisfies Meta<typeof StoreProductDescription>;
 
