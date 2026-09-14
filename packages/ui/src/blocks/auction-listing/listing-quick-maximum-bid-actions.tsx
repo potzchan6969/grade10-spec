@@ -22,6 +22,7 @@ import {
 import {
   isMaximumBelowFloor,
   parseExactMoneyDraftToMinor,
+  quickMaximumPresetAmount,
   resolveMaximumFloor,
   sanitizeMoneyDraft,
   validateCommittedMaximumMinor,
@@ -138,12 +139,16 @@ function ListingQuickMaximumBidActions({
 
     const fromCurrent = PRESET_INCREMENTS.flatMap(
       ({ multiples, captionKey }): MaximumPreset[] => {
-        const amountMinor = isLeadingWithMaximum
-          ? floorMaximumMinor + view.incrementMinor * (multiples - 1)
-          : multiples === 1 && !view.hasBids
-            ? floorMaximumMinor
-            : view.currentBidMinor + view.incrementMinor * multiples;
-        if (amountMinor < floorMaximumMinor) return [];
+        const amountMinor = quickMaximumPresetAmount({
+          multiples,
+          isLeadingWithMaximum,
+          hasBids: view.hasBids,
+          floorMaximumMinor,
+          incrementMinor: view.incrementMinor,
+          currentBidMinor: view.currentBidMinor,
+          viewerMaximumMinor: view.viewerMaximumMinor,
+        });
+        if (amountMinor == null) return [];
         const caption = isLeadingWithMaximum
           ? raiseDeltaTemplate.replace(
               "{amount}",
@@ -172,8 +177,13 @@ function ListingQuickMaximumBidActions({
     // regular presets fall below the raise floor.
     const fallbackSteps = isLeadingWithMaximum ? [1, 2, 4] : [0, 2, 4];
     return fallbackSteps.map((steps) => {
-      const amountMinor = floorMaximumMinor + view.incrementMinor * steps;
-      const deltaMinor = view.incrementMinor * steps;
+      const amountMinor = isLeadingWithMaximum
+        ? (view.viewerMaximumMinor ?? floorMaximumMinor) +
+          view.incrementMinor * steps
+        : floorMaximumMinor + view.incrementMinor * steps;
+      const deltaMinor = isLeadingWithMaximum
+        ? amountMinor - (view.viewerMaximumMinor ?? 0)
+        : view.incrementMinor * steps;
       const isFloor = steps === 0;
       const caption =
         isFloor && !isLeadingWithMaximum

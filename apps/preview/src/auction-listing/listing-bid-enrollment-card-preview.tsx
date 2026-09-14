@@ -130,7 +130,7 @@ function ListingBidEnrollmentCardPreview({
       />
 
       {snapshot.linkedPaymentMethod ? (
-        <div className="mt-1">
+        <div className="mt-1" data-slot="listing-linked-card">
           <PaymentMethodRow
             brand={snapshot.linkedPaymentMethod.brand}
             copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
@@ -144,7 +144,7 @@ function ListingBidEnrollmentCardPreview({
         </div>
       ) : null}
       {snapshot.paymentEmptyState ? (
-        <div className="mt-1">
+        <div className="mt-1" data-slot="listing-linked-card">
           <PaymentMethodEmptyState
             copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
             onLink={onLinkPayment}
