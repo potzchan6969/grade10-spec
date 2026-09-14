@@ -231,7 +231,11 @@ describe("the real store's board", () => {
       ),
     );
 
-    expect(inFlight).toBeGreaterThan(0);
+    // No floor under `inFlight`: it is 0 whenever this capability has no
+    // change in flight, which archiving the last one makes true and the next
+    // proposal makes false again. That is the store's state, not a defect,
+    // and the ceiling still has to cover whatever has been issued — the
+    // assertion below is what this test is for, and it holds either way.
     expect(loyalty?.issuedThrough?.sc).toBeGreaterThanOrEqual(
       Math.max(durable, inFlight),
     );
