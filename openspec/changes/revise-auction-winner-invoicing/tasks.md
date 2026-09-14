@@ -6,18 +6,18 @@ contract and schema groups land before the independently claimable auction,
 admin, and winner-surface groups. The database task is schema deployment only:
 there is no auction-state backfill, legacy conversion, or dual-read path.
 
-## 1. Manual and planning record (grade10-spec)
+## 1. Manual and planning record (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Update the winner-order, order-status, notification, account-record, and post-sale manual pages to describe the delivered address-first invoice flow for `winner-order-SC-26`, `winner-order-SC-31`, `auction-status-SC-06`, `order-mail-SC-09`, and `grade10-admin-auction-post-sale-SC-48`
 - [ ] 1.2 Verify the change artifacts and manual with `openspec validate revise-auction-winner-invoicing --strict` and `pnpm check:manual`
 
-## 2. Shared auction contracts (grade10)
+## 2. Shared auction contracts (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Extend the auction status, order, invoice, invoice-log, receipt, notification, and admin post-sale codecs with `not_issued`, `expired`, Awaiting Address, Preparing Invoice, quote values, deadline choice, payment method details, and proof metadata for `auction-status-SC-01`, `auction-status-SC-06`, `winner-order-SC-04`, and `grade10-admin-auction-post-sale-SC-61`
 - [ ] 2.2 Replace the winner and operator procedure inputs and outputs for address confirmation, quote-and-send, re-quote, expiry, card payment, manual settlement, and proof upload so `winner-order-SC-28`, `winner-order-SC-29`, `winner-order-SC-35`, `grade10-admin-auction-post-sale-SC-50`, and `grade10-admin-auction-post-sale-SC-58` have fixed authenticated contracts
 - [ ] 2.3 Verify contract fixtures and refusal unions, then run `pnpm run typecheck` and the focused auction contract tests
 
-## 3. Auction persistence (grade10)
+## 3. Auction persistence (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Add the additive auction schema migration, Drizzle snapshot, constraints, and indexes for an order with no current invoice, `expired` invoices, extended immutable invoice logs, notification work, and 1 to 5 immutable manual-settlement proof records for `auction-status-SC-01`, `auction-status-SC-02`, `grade10-admin-auction-post-sale-SC-56`, and `grade10-admin-auction-post-sale-SC-62`; do not add a record backfill or legacy adapter
 - [ ] 3.2 Update repository writes and reads to lock the order/current invoice, keep invoice revisions and logs append-only, and return one derived status for the winner and queue for `auction-status-SC-19`, `auction-status-SC-20`, `auction-status-SC-25`, `grade10-admin-auction-post-sale-SC-35`, and `grade10-admin-auction-post-sale-SC-21`
