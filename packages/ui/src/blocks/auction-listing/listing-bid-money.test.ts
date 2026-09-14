@@ -41,9 +41,7 @@ describe("sanitizeCustomMaximumDraft", () => {
       ceiling,
     );
     expect(sanitizeCustomMaximumDraft("10000000000", "HKD", "")).toBe("");
-    expect(sanitizeCustomMaximumDraft("99999999999", "HKD", "500")).toBe(
-      "500",
-    );
+    expect(sanitizeCustomMaximumDraft("99999999999", "HKD", "500")).toBe("500");
   });
 
   it("applies whole-major sanitize before the ceiling check", () => {
