@@ -16,7 +16,7 @@ collector's registered account email and SHALL follow the letter shape
 | Letter | Trigger | Channel |
 | --- | --- | --- |
 | Auction won | The lot closes and the winner is determined. Asks for a delivery address | Email |
-| Invoice sent | An operator sends the invoice. Names the final amount and the payment deadline | Email |
+| Invoice sent | An operator sends the invoice. Names the order total and the payment deadline | Email |
 | Payment reminder | Day 3 after the current invoice is issued while invoice status is `pending` | Email |
 | Payment reminder | Day 6 after the current invoice is issued while invoice status is `pending` | Email |
 | Final notice | Day 7 after the current invoice is issued while invoice status is `pending` | Email |
@@ -56,7 +56,7 @@ measured from the current invoice's issue are measured from its send.
 #### Scenario: order-mail-SC-09 - Sending the invoice tells the winner what to pay and by when
 
 - **GIVEN** an auction order in Preparing Invoice
-- **WHEN** an operator sends its invoice with a final amount of 312000 minor
+- **WHEN** an operator sends its invoice with a order total of 312000 minor
   units in HKD
 - **THEN** Grade10 sends the winner the invoice-sent letter by email
 - **AND** it names 312000 minor units in HKD and the payment deadline in the

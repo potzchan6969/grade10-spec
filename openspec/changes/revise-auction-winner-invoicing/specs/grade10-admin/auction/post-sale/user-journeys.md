@@ -19,13 +19,15 @@
 ### post-sale-US-05: Operator quotes and sends a winner's invoice
 
 **As an** operator,
-**I want** to price shipping and insurance for the address the winner confirmed, then send the invoice,
+**I want** to price Shipping & Handling, and Insurance when the card needs it, for the address the winner confirmed, then send the invoice,
 **so that** the winner pays an amount fixed for where the card is actually going.
 
 **Accepted by:**
 
 - `grade10-admin-auction-post-sale-SC-44` — An order ready for a quote needs action
 - `grade10-admin-auction-post-sale-SC-48` — Sending the invoice opens the payment window
+- `grade10-admin-auction-post-sale-SC-63` — An invoice sends without insurance
+- `grade10-admin-auction-post-sale-SC-64` — Insurance added at zero is refused
 - `grade10-admin-auction-post-sale-SC-49` — No invoice is sent without a confirmed address
 - `grade10-admin-auction-post-sale-SC-51` — A re-quote keeps the deadline when the operator says so
 - `grade10-admin-auction-post-sale-SC-52` — A re-quote resets the deadline when the operator says so

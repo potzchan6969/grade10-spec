@@ -5,7 +5,7 @@
   - Overdue mark: an order idle 72 hours or more in either stage is marked, so a stalled order is chased rather than forgotten
   - Expired invoices: an order whose invoice has expired reads Pending Payment and is highlighted as needing action
 - Quote and send
-  - Operator quote: shipping and insurance are priced by a person for the winner's confirmed address
+  - Operator quote: Shipping & Handling, and Insurance when added, are priced by a person for the winner's confirmed address
   - Send opens the window: sending issues the invoice, locks the address, and starts the 7-day deadline
   - Re-quote on request: an address change after send is re-priced and reissued by an operator, who decides what happens to the deadline
 - Resolving an unpaid order
@@ -78,11 +78,13 @@ An operator holding payment-processing SHALL prepare and send the invoice for
 an auction order in Preparing Invoice:
 
 1. Open the order and read the winner's confirmed delivery address, the
-   hammer price, and the buyer's premium.
-2. Enter shipping and insurance for that address, each an integer count of
-   minor units of zero or more in the lot's currency.
-3. Read the final amount Grade10 computes from every component.
-4. Send the invoice.
+   winning bid, and the buyer's premium.
+2. Enter Shipping & Handling for that address, an integer count of minor
+   units of zero or more in the lot's currency.
+3. Optionally add Insurance for that address, an integer count of minor units
+   greater than zero in the lot's currency.
+4. Read the order total Grade10 computes from every component.
+5. Send the invoice.
 
 On send Grade10 SHALL issue the invoice with invoice status `pending`, record
 Sent at, set the payment deadline to 7 calendar days from Sent at, lock the
@@ -90,18 +92,19 @@ delivery address, write a sent entry to the invoice log, and send the winner
 the invoice-sent letter, per `grade10-site/auction/notifications-order`.
 
 Grade10 SHALL refuse to send an invoice when the winner has confirmed no
-delivery address, or when shipping or insurance is missing. An operator
+delivery address, when Shipping & Handling is missing, or when Insurance is
+added at zero. An operator
 without payment-processing SHALL see the send control visible and disabled,
 and Grade10 SHALL refuse the same action on the server.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-48 - Sending the invoice opens the payment window
 
-- **GIVEN** an auction order in Preparing Invoice with a hammer price of
+- **GIVEN** an auction order in Preparing Invoice with a winning bid of
   250000 and a buyer's premium of 50000 minor units in HKD
 - **AND** an operator holding payment-processing
-- **WHEN** they enter shipping of 8000 and insurance of 4000 minor units in
+- **WHEN** they enter Shipping & Handling of 8000 and Insurance of 4000 minor units in
   HKD and send the invoice at 2026-09-12T09:00:00Z
-- **THEN** the invoice is `pending` with a final amount of 312000 minor units
+- **THEN** the invoice is `pending` with a order total of 312000 minor units
   in HKD and a payment deadline of 2026-09-19T09:00:00Z
 - **AND** the delivery address is locked
 - **AND** the order derives as Pending Payment
@@ -120,6 +123,20 @@ and Grade10 SHALL refuse the same action on the server.
 - **THEN** the send control is visible and disabled
 - **AND** Grade10 refuses a send from them on the server
 
+#### Scenario: grade10-admin-auction-post-sale-SC-63 - An invoice sends without insurance
+
+- **GIVEN** an auction order in Preparing Invoice with a winning bid of
+  250000 and a buyer's premium of 50000 minor units in HKD
+- **WHEN** an operator enters Shipping & Handling of 0, adds no Insurance, and sends
+- **THEN** the invoice is `pending` with an order total of 300000 minor units in HKD
+
+#### Scenario: grade10-admin-auction-post-sale-SC-64 - Insurance added at zero is refused
+
+- **GIVEN** an auction order in Preparing Invoice
+- **WHEN** an operator adds Insurance of 0 minor units and sends
+- **THEN** Grade10 refuses the send
+- **AND** no invoice is issued
+
 ### Requirement: An operator re-quotes a sent invoice
 
 When a winner asks to change the delivery address after the invoice is sent,
@@ -127,15 +144,16 @@ an operator holding payment-processing SHALL be able to re-quote an order in
 Pending Payment:
 
 1. Record the delivery address the winner asked for.
-2. Enter shipping and insurance for that address.
-3. Read the previous and the new final amount.
+2. Enter Shipping & Handling for that address, and optionally add Insurance,
+   under the same rules as a first quote.
+3. Read the previous and the new order total.
 4. Choose to keep the current payment deadline, or to start a fresh 7 days
    from the moment the new invoice is sent.
 5. Give a reason. The reason is mandatory.
 6. Send the new invoice.
 
 On send Grade10 SHALL supersede the current invoice, issue the new one as
-`pending` at the new final amount with the deadline the operator chose, lock
+`pending` at the new order total with the deadline the operator chose, lock
 the new address, write a re-quoted entry to the invoice log with the deadline
 choice, and send the winner the invoice-reissued letter. An order whose
 invoice is `expired` is not re-quoted; it is reissued, per "An operator resolves an unpaid order".
@@ -144,9 +162,9 @@ invoice is `expired` is not re-quoted; it is reissued, per "An operator resolves
 
 - **GIVEN** an order in Pending Payment at 312000 minor units in HKD with a
   payment deadline of 2026-09-19T09:00:00Z
-- **WHEN** an operator re-quotes it to a new address with shipping 12000 and
-  insurance 4000 minor units in HKD, keeps the deadline, and sends with a reason
-- **THEN** the new invoice's final amount is 316000 minor units in HKD
+- **WHEN** an operator re-quotes it to a new address with Shipping & Handling 12000 and
+  Insurance 4000 minor units in HKD, keeps the deadline, and sends with a reason
+- **THEN** the new invoice's order total is 316000 minor units in HKD
 - **AND** the payment deadline is still 2026-09-19T09:00:00Z
 - **AND** the operator saw 312000 and 316000 minor units in HKD before sending
 
@@ -171,7 +189,7 @@ Manual settlement is the operator's backup for money that did not arrive by
 the winner's card. An operator holding payment-processing SHALL record it on
 an order whose invoice is `pending` or `expired`:
 
-1. Open the order and read the current invoice's final amount and the locked
+1. Open the order and read the current invoice's order total and the locked
    delivery address.
 2. Choose the method: bank transfer, cash, or other. Card SHALL NOT be offered.
 3. For other, describe the method, in 1 to 200 characters.
@@ -181,7 +199,7 @@ an order whose invoice is `pending` or `expired`:
 6. Commit.
 
 On commit the invoice status SHALL become `paid` at the current invoice's
-final amount, and Grade10 SHALL write a payment record carrying the method,
+order total, and Grade10 SHALL write a payment record carrying the method,
 any description, the external reference, and the proof files. An amount
 different from the current invoice SHALL be reached through a re-quote first,
 never at settlement.
@@ -384,7 +402,7 @@ these log entries in chronological order.
 | Log type | Sent, expired, re-quoted, reissued, paid, manually settled, cancelled, refunded, payment attempt failed |
 | Timestamp | Stored in UTC, displayed in the operator's own timezone |
 | Invoice status after the log entry | |
-| Final amount at the log entry | Captures amount changes across re-quotes and reissues |
+| Order total at the log entry | Captures amount changes across re-quotes and reissues |
 | Amount delta | Where the amount changed from the prior log entry |
 | Payment deadline at the log entry | The deadline trail across re-quotes and reissues |
 | Deadline choice | Re-quotes only: kept or reset |
@@ -411,7 +429,7 @@ reinstatement.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-35 - An amendment's amount change is on the record
 
-- **GIVEN** an auction order an operator re-quoted, changing the final amount
+- **GIVEN** an auction order an operator re-quoted, changing the order total
   from 312000 to 316000 minor units in HKD
 - **WHEN** an operator reads the invoice log
 - **THEN** it shows the re-quoted entry at 316000 minor units in HKD
