@@ -19,7 +19,7 @@ collector's registered account email and SHALL follow the letter shape
 | Invoice sent | An operator sends the invoice. Names the order total and the payment deadline | Email |
 | Payment reminder | Day 3 after the current invoice is issued while invoice status is `pending` | Email |
 | Payment reminder | Day 6 after the current invoice is issued while invoice status is `pending` | Email |
-| Final notice | Day 7 after the current invoice is issued while invoice status is `pending` | Email |
+| Final notice | On day 7, immediately before the payment-deadline expiry transition, while invoice status is `pending` | Email |
 | Invoice expired | Grade10 sets the invoice to `expired` at its payment deadline | Email |
 | Invoice reissued | An operator reissues an invoice, on a re-quote or after expiry | Email |
 | Payment received | Payment is confirmed, or an operator commits a manual settlement | Email |
@@ -28,7 +28,12 @@ collector's registered account email and SHALL follow the letter shape
 | Order cancelled | An operator cancels the order | Email |
 
 An invoice is issued at the moment an operator sends it, so reminders
-measured from the current invoice's issue are measured from its send.
+measured from the current invoice's issue are measured from its send. The day 7
+final notice is due immediately before the deadline transition; Grade10 SHALL
+queue it before writing `expired`, so a final notice is never sent for an
+already-expired invoice. Re-quoting or reissuing parks reminders for the
+superseded invoice and starts the three-reminder sequence for the new current
+invoice.
 
 #### Scenario: order-mail-SC-01 - Winning a lot is announced by email
 
@@ -56,7 +61,7 @@ measured from the current invoice's issue are measured from its send.
 #### Scenario: order-mail-SC-09 - Sending the invoice tells the winner what to pay and by when
 
 - **GIVEN** an auction order in Preparing Invoice
-- **WHEN** an operator sends its invoice with a order total of 312000 minor
+- **WHEN** an operator sends its invoice with an order total of 312000 minor
   units in HKD
 - **THEN** Grade10 sends the winner the invoice-sent letter by email
 - **AND** it names 312000 minor units in HKD and the payment deadline in the

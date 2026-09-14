@@ -54,8 +54,10 @@ would need nullable money and deadline facts that are not an invoice.
 
 ### Operator actions create invoice revisions
 
-Send inserts revision 1 with the confirmed address, shipping, insurance,
-final amount, UTC `sent_at`, and a deadline seven calendar days later. A
+Send inserts revision 1 with the confirmed address, Shipping & Handling, an
+optional positive Insurance amount, final amount, UTC `sent_at`, and a deadline
+seven calendar days later. An omitted Insurance amount is stored as null; an
+explicit zero is rejected. A
 re-quote locks the order and current invoice, supersedes that invoice, inserts
 the next revision, and records whether the operator kept or reset the
 deadline. Reissue remains the expired-invoice action; it does not use the
@@ -119,7 +121,7 @@ listings 1──1 auction_orders ──0..1 current auction_invoices
 | Table | Change | Authority and invariants |
 | --- | --- | --- |
 | `auction_orders` | Keep nullable `current_invoice_id`, address snapshot, confirmation time, and lock time | No pointer means `not_issued`; `delivery_address_confirmed_at` decides the pre-invoice state; one row per listing remains unique |
-| `auction_invoices` | Add `expired` status; make quoted shipping and insurance required only for a sent revision; retain `sent_at`, UTC deadline, revision, supersession, and provider fields | The current revision is the payable invoice; its amount and address are immutable after insert |
+| `auction_invoices` | Add `expired` status; require quoted Shipping & Handling on a sent revision and allow optional positive Insurance; retain `sent_at`, UTC deadline, revision, supersession, and provider fields | The current revision is the payable invoice; its amount and address are immutable after insert; absent Insurance is null |
 | `auction_invoice_log` | Add `sent`, `expired`, and `re_quoted` log types; record deadline choice, settlement method details, and the payment-card brand/last four where applicable | Append-only, one idempotency key per order action; it is the audit trail, not a read-model cache |
 | `auction_manual_settlement_proofs` | Add `id text` primary key, `invoice_log_sequence bigint not null` foreign key, `object_key text not null`, `content_type text not null`, `byte_size integer not null`, and `created_at timestamptz not null default now()` | One to five immutable private objects for one manual-settlement log; no update or delete route |
 | `auction_order_notification_work` | Add the `invoice_sent` notification type and allow `invoice_id` only after send | Work is deduplicated by order, invoice revision, and letter type |
@@ -141,13 +143,18 @@ uncommitted objects enter the existing orphan-object sweep.
 | --- | --- | --- | --- |
 | `closeWinnerOrder` | `{ listingId, winningBidId, at }` | `{ orderId, invoiceStatus: "not_issued" }` | `ALREADY_ISSUED`, `LISTING_NOT_CLOSED` |
 | `confirmWinnerAddress` | `{ orderId, userId, address, addressBookEntryId?, at }` | `{ orderId, addressConfirmedAt }` | `NOT_FOUND`, `FORBIDDEN`, `ADDRESS_LOCKED` |
-| `sendInvoice` | `{ orderId, shippingAmount, insuranceAmount, actor, idempotencyKey, at }` | `{ invoiceId, finalAmount, deadline }` | `ADDRESS_UNCONFIRMED`, `QUOTE_INCOMPLETE`, `FORBIDDEN`, `ALREADY_SENT` |
-| `requoteInvoice` | `{ orderId, address, shippingAmount, insuranceAmount, deadlineChoice, reason, actor, idempotencyKey, at }` | `{ invoiceId, previousFinalAmount, finalAmount, deadline }` | `NOT_PAYABLE`, `REASON_REQUIRED`, `FORBIDDEN` |
+| `sendInvoice` | `{ orderId, shippingAmount, insuranceAmount?, actor, idempotencyKey, at }` | `{ invoiceId, finalAmount, deadline }` | `ADDRESS_UNCONFIRMED`, `QUOTE_INCOMPLETE`, `FORBIDDEN`, `ALREADY_SENT` |
+| `requoteInvoice` | `{ orderId, address, shippingAmount, insuranceAmount?, deadlineChoice, reason, actor, idempotencyKey, at }` | `{ invoiceId, previousFinalAmount, finalAmount, deadline }` | `NOT_PAYABLE`, `REASON_REQUIRED`, `FORBIDDEN` |
 | `recordManualSettlement` | `{ orderId, method, description?, externalReference?, proofIds, reason, actor, idempotencyKey, at }` | `{ invoiceId, status: "paid" }` | `NOT_PAYABLE`, `PROOF_INVALID`, `REFERENCE_REQUIRED`, `DESCRIPTION_REQUIRED`, `FORBIDDEN` |
 
 For a send, the transaction locks the order, verifies the confirmed unlocked
 address, inserts the invoice and `sent` log, links it as current, locks the
-address, and inserts notification work. For a manual settlement, it locks the
+address, and inserts notification work for the invoice-sent letter and day 3,
+day 6, and day 7 reminders. Re-quote and reissue park reminder work for the
+superseded invoice before scheduling the same sequence for the new current
+invoice. The day 7 work is scheduled immediately before the expiry deadline;
+the expiry transition then writes `expired` and enqueues the expiry letter.
+For a manual settlement, it locks the
 order and invoice, verifies each uploaded proof belongs to the command and is
 valid, writes `paid`, inserts the settlement log and proof rows, then inserts
 payment-received notification work. Provider card calls remain outside the

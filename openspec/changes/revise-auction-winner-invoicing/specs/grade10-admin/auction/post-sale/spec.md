@@ -104,7 +104,7 @@ and Grade10 SHALL refuse the same action on the server.
 - **AND** an operator holding payment-processing
 - **WHEN** they enter Shipping & Handling of 8000 and Insurance of 4000 minor units in
   HKD and send the invoice at 2026-09-12T09:00:00Z
-- **THEN** the invoice is `pending` with a order total of 312000 minor units
+- **THEN** the invoice is `pending` with an order total of 312000 minor units
   in HKD and a payment deadline of 2026-09-19T09:00:00Z
 - **AND** the delivery address is locked
 - **AND** the order derives as Pending Payment
@@ -252,7 +252,7 @@ files.
 #### Scenario: grade10-admin-auction-post-sale-SC-60 - Manual settlement is available before expiry
 
 - **GIVEN** an order in Pending Payment, three days from its deadline, whose
-  winner has paid by bank transfer
+  winner has arranged payment by bank transfer
 - **AND** an operator holding payment-processing
 - **WHEN** they record the settlement with its reference and proof
 - **THEN** Grade10 accepts it

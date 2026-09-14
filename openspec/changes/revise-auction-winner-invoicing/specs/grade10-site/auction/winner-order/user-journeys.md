@@ -11,13 +11,13 @@
 - `winner-order-SC-26` — A lot close asks for an address, not payment
 - `winner-order-SC-07` — A pre-filled default still needs confirming
 - `winner-order-SC-28` — Confirming an address readies the order for a quote
-- `winner-order-SC-04` — An estimated total is marked as one
+- `winner-order-SC-04` — A sent total is firm and itemised
 - `winner-order-SC-38` — Shipping & Handling of zero reads Free
 - `winner-order-SC-39` — An invoice with no insurance shows no Insurance line
 - `winner-order-SC-31` — The deadline is seven days from send
 - `winner-order-SC-29` — A sent invoice refuses a self-service address change
 - `winner-order-SC-35` — The winner is offered card payment only
-- `winner-order-SC-12` — The winning hold is released and the invoice is a fresh charge
+- `winner-order-SC-12` — The winning hold is released before the invoice is paid
 - `winner-order-SC-15` — A declined payment leaves the invoice payable
 
 ### winner-order-US-02: Winner follows a settled lot to delivery

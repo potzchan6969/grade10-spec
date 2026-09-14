@@ -212,7 +212,7 @@ any letter that lists them — Grade10 SHALL show Shipping & Handling of zero as
 No component SHALL be marked as an estimate. Grade10 SHALL NOT show the winner
 an invoice amount before an operator has sent it.
 
-#### Scenario: winner-order-SC-04 - An estimated total is marked as one
+#### Scenario: winner-order-SC-04 - A sent total is firm and itemised
 
 - **GIVEN** an operator sent an invoice with a winning bid of 250000, a
   buyer's premium of 50000, shipping of 8000 and insurance of 4000 minor
@@ -224,8 +224,8 @@ an invoice amount before an operator has sent it.
 #### Scenario: winner-order-SC-05 - A confirmed address makes the total firm
 
 - **GIVEN** an auction order whose winner confirmed a delivery address
-- **AND** an operator sent an invoice with shipping and insurance quoted for
-  that address
+- **AND** an operator sent an invoice with Shipping & Handling quoted for that
+  address, with Insurance when added
 - **WHEN** the winner reads the invoice
 - **THEN** its total is the order total for that address
 - **AND** no component is marked as an estimate
@@ -312,12 +312,13 @@ A refused or failed payment SHALL NOT void the invoice. The invoice SHALL
 remain payable, before its deadline and after it has expired, and the winner
 SHALL be able to retry with the same or a different card.
 
-#### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
+#### Scenario: winner-order-SC-12 - The winning hold is released before the invoice is paid
 
 - **GIVEN** a winner holding an open bid-time authorization on the closing lot
-- **WHEN** the lot closes and the winner pays the invoice
-- **THEN** Grade10 released that authorization at close without capturing it
-- **AND** the payment is a single new transaction for the order total
+- **WHEN** the lot closes
+- **THEN** Grade10 releases that authorization at close without capturing it
+- **AND** after an operator later sends the invoice, the winner's payment is a
+  single new transaction for the order total
 
 #### Scenario: winner-order-SC-13 - An expired hold releases as a no-op
 
@@ -374,7 +375,7 @@ SHALL NOT appear on the winner's receipt.
 
 #### Scenario: winner-order-SC-18 - A receipt is itemised and stays retrievable
 
-- **GIVEN** an auction order paid at a order total of 316000 minor units in HKD
+- **GIVEN** an auction order paid at an order total of 316000 minor units in HKD
 - **WHEN** the winner opens the order a year later
 - **THEN** the receipt shows the winning bid, buyer's premium, Shipping &
   Handling, insurance, any tax amount supplied by the separate tax capability,
