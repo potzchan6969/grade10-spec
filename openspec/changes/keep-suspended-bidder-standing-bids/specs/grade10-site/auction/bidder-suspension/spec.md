@@ -1,5 +1,10 @@
 ## Feature set
 
+- Trigger and notice
+  - Operator suspension: an operator holding `auction:moderate` suspends an account with a reason
+  - One suspension, two causes: a missed deadline and an operator's action are the same restriction
+- Reinstatement
+  - Operator review only: an operator reinstates whatever the cause, from the admin Users page
 - Scope of the suspension
   - Auction-scoped only: bidding stops and nothing else does
   - Paying stays open: an account barred from bidding must still be able to settle what it owes
@@ -44,6 +49,45 @@ signing in, and it SHALL NOT change anything `shared/auth/users` governs.
   loyalty, and read their own orders and invoices
 - **AND** they cannot place a bid or commit a maximum
 
+### Requirement: Only an operator lifts a suspension
+
+A suspension SHALL NOT lift itself. Grade10 SHALL lift one only on an
+explicit operator action following review, taken by an operator holding
+`auction:moderate` from the account's panel on the admin Users page
+(`grade10-admin/console/user-directory`).
+
+- Paying the outstanding invoice SHALL NOT lift the suspension. Settlement
+  resolves the order; reinstatement resolves the account.
+- Reissuing an invoice SHALL NOT lift the suspension. An operator may give a
+  winner a fresh chance to settle one lot while the account stays barred from
+  bidding on anything new.
+- Reinstating SHALL lift the suspension whatever caused it, and every cause
+  recorded on it.
+
+Grade10 SHALL show the suspension state and its reason on the account record.
+
+#### Scenario: suspension-SC-09 - Paying does not lift the suspension
+
+- **GIVEN** a suspended account with one outstanding invoice
+- **WHEN** the collector pays that invoice in full
+- **THEN** the invoice status becomes `paid`
+- **AND** the account is still suspended
+- **AND** the account record still shows the suspension and its reason
+
+#### Scenario: suspension-SC-10 - A reissue does not lift the suspension
+
+- **GIVEN** a suspended account with an expired auction order
+- **WHEN** an operator reissues that invoice with a new payment deadline
+- **THEN** the account is still suspended
+- **AND** the collector can pay the reissued invoice and still cannot bid
+
+#### Scenario: suspension-SC-11 - An operator reinstates the account
+
+- **GIVEN** a suspended account an operator has reviewed
+- **WHEN** the operator reinstates it
+- **THEN** the account can place bids and commit maxima again
+- **AND** the account record retains the suspension and its reason as history
+
 ## REMOVED Requirements
 
 ### Requirement: Suspension retracts every standing bid on an open lot
@@ -60,6 +104,69 @@ No `bid_retracted_suspension` event is written from this change on; events
 already written stay in history as they are.
 
 ## ADDED Requirements
+
+### Requirement: An operator suspends an account from auctions
+
+An operator holding `auction:moderate` SHALL be able to suspend an account
+from auction activity, from the account's panel on the admin Users page
+(`grade10-admin/console/user-directory`), and SHALL give a reason to do so.
+
+An operator's suspension SHALL be the same suspension a missed payment
+deadline causes: the same scope, the same effect on bids, and lifted the same
+way. Only its cause differs.
+
+| Cause | Recorded reason | Collector is told |
+| --- | --- | --- |
+| Payment deadline passed | The expired auction order | The outstanding amount and how to resolve it |
+| Operator action | The operator's reason, who suspended, and when | They can no longer bid, and how to contact Grade10 |
+
+- The operator's reason SHALL be shown to operators on the account record,
+  and SHALL NOT be shown or sent to the collector.
+- An account that is already suspended SHALL NOT be suspended again. A new
+  cause while suspended SHALL be recorded beside the first, and the account
+  SHALL stay suspended once.
+
+#### Scenario: suspension-SC-17 - An operator suspends an account with a reason
+
+- **GIVEN** an operator holding `auction:moderate` and an account that is not suspended
+- **WHEN** the operator suspends the account with a reason
+- **THEN** the account cannot place a bid or commit a maximum
+- **AND** the account record shows the operator's reason, who suspended, and when
+
+#### Scenario: suspension-SC-18 - A suspension without a reason is refused
+
+- **GIVEN** an operator holding `auction:moderate`
+- **WHEN** the operator tries to suspend an account without a reason
+- **THEN** Grade10 refuses the suspension
+- **AND** the account is not suspended
+
+#### Scenario: suspension-SC-19 - An operator without the grant cannot suspend
+
+- **GIVEN** an operator who does not hold `auction:moderate`
+- **WHEN** they try to suspend an account
+- **THEN** Grade10 refuses it on the server
+- **AND** the account is not suspended
+
+#### Scenario: suspension-SC-20 - The collector is told without the operator's reason
+
+- **GIVEN** an account an operator has just suspended with a reason
+- **WHEN** the collector reads the suspension notice and their account record
+- **THEN** both say they can no longer bid and how to contact Grade10
+- **AND** neither shows the operator's reason
+
+#### Scenario: suspension-SC-21 - A missed deadline on a suspended account adds a cause
+
+- **GIVEN** an account an operator suspended, with an auction order whose invoice is `pending`
+- **WHEN** that order's payment deadline passes
+- **THEN** the account is suspended once
+- **AND** the account record shows both causes
+
+#### Scenario: suspension-SC-22 - Reinstating lifts an operator's suspension
+
+- **GIVEN** an account an operator suspended
+- **WHEN** an operator holding `auction:moderate` reinstates it
+- **THEN** the account can place bids and commit maxima again
+- **AND** the account record keeps the suspension and its reason as history
 
 ### Requirement: Suspension stops new bids and leaves standing bids as they are
 
