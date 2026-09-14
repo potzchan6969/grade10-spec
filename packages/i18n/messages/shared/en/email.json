@@ -2,7 +2,7 @@
   "login": {
     "greeting": "Hi,",
     "body": "Use the link below to sign in. It expires in 15 minutes.",
-    "action": "Sign in",
+    "action": "Sign In",
     "ignore": "If you didn’t request this, you can ignore this email."
   },
   "appointment": {

@@ -31,7 +31,7 @@ export default function MagicLinkEmail({
       preheader={`Your sign-in link is ready. It expires in ${expiresIn}.`}
     >
       <Heading as="h1" className="mb-4 mt-0 text-heading font-bold text-fg">
-        Sign in to {brandName}
+        Sign In to {brandName}
       </Heading>
       <Text className="mb-2 mt-0 text-lg leading-base text-fg-2">
         You asked for a sign-in link. Use it once.
@@ -39,7 +39,7 @@ export default function MagicLinkEmail({
       <Text className="mb-4 mt-0 text-lg leading-base text-fg-2">
         This link expires in {expiresIn}.
       </Text>
-      <PrimaryCta href={magicLinkUrl} label="Sign in" />
+      <PrimaryCta href={magicLinkUrl} label="Sign In" />
       <EmailFooter
         brandName={brandName}
         whyYouGotThis={`You asked for a sign-in link on ${brandName}.`}
