@@ -144,6 +144,8 @@ function readChange(
         const written = line(key, fields[key]);
         if (written) entry[field] = written;
       }
+      const skipped = skipSpecsOf(fields.skip_specs);
+      if (skipped !== undefined) entry.skipSpecs = skipped;
     } catch (cause) {
       fail(`${rel}/.openspec.yaml`, cause);
     }
@@ -244,6 +246,7 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
  * for, against the field each lands on. Every one is a line an author or
  * `pnpm plan shipped` wrote, read back verbatim. */
 const RECORDED = [
+  ["workflow_rev", "workflowRev"],
   ["page_waived", "pageWaived"],
   ["design_waived", "designWaived"],
   ["deployed_at", "deployedAt"],
@@ -251,6 +254,19 @@ const RECORDED = [
   ["deploy_waived", "deployWaived"],
   ["tasks_waived", "tasksWaived"],
 ] as const;
+
+/** `skip_specs` turns the whole cross-check off, so it is read on its own. It
+ * takes a reason now; `true` is the shape every change written before that
+ * carries, and reads as a reason nobody gave. */
+export function skipSpecsOf(value: unknown): string | undefined {
+  if (value === undefined || value === null || value === false) return undefined;
+  if (value === true) return "";
+  if (typeof value !== "string") {
+    throw new StoreFileError(1, "`skip_specs` must be a line of text");
+  }
+  const written = value.trim();
+  return written === "" ? "" : written;
+}
 
 /** A written line, or nothing where the key is absent or blank. Anything but
  * text is a malformed manifest: a record read as absent would waive the rule

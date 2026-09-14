@@ -115,7 +115,8 @@ That is how the work reaches an engineer. The application repository has no plan
 | --- | --- | --- | --- |
 | `schema` | The CLI, at `openspec new change` | Always | Every reader |
 | `created` | The CLI, at `openspec new change` | Always | The boards, for the planning age |
-| `skip_specs: true` | The author | A change altering no product behaviour | `openspec validate` |
+| `skip_specs: "<why>"` | The author | A change altering no product behaviour | `openspec validate`, `pnpm check:manual` rule `hatch` |
+| `workflow_rev: "<n>"` | The CLI, at `openspec new change` | Always, from the rules revision in force | `pnpm check:manual`, to leave a change written under older rules alone |
 | `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The boards |
 | `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
 | `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
@@ -123,6 +124,23 @@ That is how the work reaches an engineer. The application repository has no plan
 | `deploy_waived: "<who, why>"` | The owner, through `archive:preflight --deploy-waived` | At archive, in place of the deploy record | `pnpm check:manual`, rule `archived` |
 | `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
 | `target`, `owner`, `owners`, `depends_on` | ❓ The manual reads them; no document says who writes them | ❓ | The boards |
+
+### The three hatches
+
+`skip_specs`, `blind_pass_skipped` and `**Walked by:** nobody` are read as one set, and only the first two are hatches.
+
+| Hatch | Who decides | Test |
+| --- | --- | --- |
+| `skip_specs: <why>` | The author | No spec delta exists at all |
+| `blind_pass_skipped` | The checker | A delta exists but carries no new behaviour |
+| `**Walked by:** nobody` | The author | Not a hatch — the capability's anchors route to its feature set, and it still owes a suite |
+
+`skip_specs` turns the entire planning cross-check off in one line: no journeys, no blind suite, no scenarios, no reconciliation. It is also the cheapest line in the manifest to write, and author-declared. The realistic failure is not dishonesty but an author who sincerely believes a refactor moves no behaviour and is wrong, which is a thing honour systems do not catch. Three guards, none of them new machinery: it takes a reason rather than `true`; a change carrying it cannot mark a 🚧 line, because 🚧 means an outcome a reader can see and claiming both is a contradiction; and QA reads the `## Why` and the reason of every change that claims it.
+
+`blind_pass_skipped` is granted by the checker, never declared: the spec diff adds no scenario id and modifies no `**GIVEN**` / `**WHEN**` / `**THEN**` line. Behaviour lives entirely in those lines, so the only way to take the shortcut is to genuinely not change behaviour. Where the checker refuses and the author disagrees, that is a question for the interview, not a self-service waiver.
+
+The strongest control is not a check. People take an escape hatch to avoid work, not responsibility, so once `/planning-pm` is one command the cost of not skipping falls from writing four documents to waiting for a run. The corollary holds too: if a run is slow or noisy, `skip_specs` use will rise, which makes the orchestrator's ergonomics part of this control rather than a separate concern.
+
 
 A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so `pnpm check:manual` refuses a record key holding anything but text.
 

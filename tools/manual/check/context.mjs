@@ -70,6 +70,18 @@ export const RULES = [
     title: "Capabilities that never say who walks them",
   },
   {
+    key: "outline",
+    level: "fail",
+    title: "Suites beside a spec whose scenarios never landed",
+  },
+  {
+    // A change's `skip_specs` is author-declared and turns every other check in
+    // the planning workflow off. This is the only guard on it.
+    key: "hatch",
+    level: "fail",
+    title: "Changes claiming `skip_specs` while marking a page",
+  },
+  {
     key: "derived",
     level: "warn",
     title: "Capabilities with anchors and no suite beside them",

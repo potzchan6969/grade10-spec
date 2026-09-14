@@ -105,10 +105,27 @@ function checkDerived(ctx, spec, dir, present) {
   );
 }
 
+/** RULE `outline`: `spec-outline` and `spec-behaviour` are two passes over one
+ * `spec.md`, and `openspec status` cannot tell them apart — both glob the file,
+ * so it calls the second done the moment the first writes anything. A suite
+ * sitting beside a spec that carries no requirements is the state that gap
+ * hides: the outline was written, the blind pass ran, and the scenarios never
+ * came back. */
+function checkOutlineOnly(ctx, spec, dir, present) {
+  if (!present) return;
+  if ((spec.requirements ?? []).length > 0) return;
+  ctx.add(
+    "outline",
+    `${dir}/spec.md`,
+    `carries no requirements, and a suite sits beside it — the outline pass landed and the scenarios did not`,
+  );
+}
+
 function checkSuite(ctx, spec, dir) {
   const file = `${dir}/feature-tcs.md`;
   const present = existsSync(join(ctx.roots.store, file));
   checkDerived(ctx, spec, dir, present);
+  checkOutlineOnly(ctx, spec, dir, present);
   if (!present || spec.testCasesError) return;
   const suite = suiteOf(spec);
   const issued = scenarioIds(spec);
