@@ -11,8 +11,6 @@
 
 ### grade10-site-auction-listing-page-US3-TC3-1: Hidden lot's address shows Page not found
 
-Runs once per row of **Test data**.
-
 **Classification:**
 
 * **Severity:** critical
@@ -28,14 +26,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<lot>` is in the state the row names.
+* `<lot>` was published, then called off.
 
 **Test data:**
 
-| `<lot>` |
-| --- |
-| A published lot whose bidding ended with no winner |
-| A published lot that an operator called off |
+| Field | Value |
+| --- | --- |
+| `<lot>` | A published lot that an operator called off |
 
 **Steps:**
 
