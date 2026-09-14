@@ -141,15 +141,16 @@ function ListingUserBidHistory({
             <DialogHeader showCloseButton={false}>
               <DialogTitle>{copy.title}</DialogTitle>
             </DialogHeader>
-            <DialogBody className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
+            {/* scroll-fade's mask clips the pill tab shadow; table body owns scroll. */}
+            <DialogBody className="flex min-h-0 flex-1 flex-col gap-3 overflow-visible [mask-image:none]">
               <DialogDescription className="shrink-0">
                 {copy.description}
               </DialogDescription>
               <Tabs
-                className="flex min-h-0 flex-1 flex-col overflow-hidden"
+                className="flex min-h-0 flex-1 flex-col gap-4 overflow-visible"
                 defaultValue={defaultTab}
               >
-                <TabsList fullWidth variant="pill">
+                <TabsList className="shrink-0" fullWidth variant="pill">
                   <TabsTrigger value="bids">{copy.bidsTab}</TabsTrigger>
                   <TabsTrigger value="maximums">{copy.maximumsTab}</TabsTrigger>
                 </TabsList>
