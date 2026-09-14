@@ -31,7 +31,7 @@ there is no auction-state backfill, legacy conversion, or dual-read path.
 - [ ] 4.4 Retire the shipping-rate calculation from invoice commands and add private proof-object validation, attachment, authorised operator reads, and orphan cleanup for `winner-order-SC-35`, `winner-order-SC-19`, `grade10-admin-auction-post-sale-SC-57`, and `grade10-admin-auction-post-sale-SC-62`
 - [ ] 4.5 Verify service, sweep, notification, and worker paths with `pnpm run test:backend`, `pnpm run test:pg`, `pnpm run lint`, and `pnpm run typecheck`
 
-## 5. Admin post-sale surface (grade10)
+## 5. Admin post-sale surface (grade10) (owner: @htonyl)
 
 - [ ] 5.1 Render Awaiting Address and Preparing Invoice queue states, elapsed stage time, the separate Overdue mark and filter, and the Pending Payment/Expired needs-action combination for `grade10-admin-auction-post-sale-SC-45`, `grade10-admin-auction-post-sale-SC-46`, `grade10-admin-auction-post-sale-SC-47`, `grade10-admin-auction-post-sale-SC-44`, and `grade10-admin-auction-post-sale-SC-21`
 - [ ] 5.2 Add authorised quote-and-send, re-quote, expired reissue, pre-invoice cancellation, and manual-settlement forms with deadline choice, reason, method, reference, and proof-file validation for `grade10-admin-auction-post-sale-SC-50`, `grade10-admin-auction-post-sale-SC-52`, `grade10-admin-auction-post-sale-SC-54`, `grade10-admin-auction-post-sale-SC-56`, `grade10-admin-auction-post-sale-SC-57`, and `grade10-admin-auction-post-sale-SC-58`
