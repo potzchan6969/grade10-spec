@@ -47,14 +47,10 @@ so redefining the reward never rewrites a coupon a member already holds —
 - 🚧 **Nothing is held** — a coupon stays available until a paid order spends
   it, so a checkout the member walks away from costs them nothing —
   [Discounts](/p/grade10-site/store/discounts)
-- 🚧 **The newer claim replaces the older** — checking out online, and
-  choosing the coupon at a counter, each cancel the member's open online
-  orders carrying it, and claim it only once that is done
-- **A sale at the counter keeps its coupon** — the shop owns that cart and it
-  can still collect, so a counter sale is never cancelled and the coupon is
-  refused online until the sale is paid or cancelled
-- ❓ **A counter sale nobody finished** — how long the member waits for a
-  coupon left on a sale that never completed; Product confirms
+- 🚧 **The newest claim is the only live one** — choosing a coupon online, at
+  a counter, or at a second counter voids every code already minted for it
+  elsewhere and cancels the online orders carrying it, so no counter sale and
+  no draft ever locks a coupon the member wants to spend somewhere else
 - **A sale that beats it** — where the shop's own sale and the coupon
   cannot stack, the shop keeps the larger cut; the coupon goes back to the
   wallet, the order goes through, and the member is told —
@@ -77,7 +73,7 @@ quietly lost a coupon.
 | Expired | Its own validity passed |
 | Wrong channel | The definition does not name the channel it is being spent in |
 | Not eligible | The definition's eligibility is not met |
-| 🚧 On a counter sale | The coupon is on a sale at a till that can still collect |
+| 🚧 An earlier code stands | A code minted for this coupon elsewhere could not be voided |
 
 ### Basket
 

@@ -74,7 +74,7 @@ spendable until a paid order takes them.
   planned at a counter, each cancel the member's earlier online orders
   carrying points or a code; the cart keeps its lines
 - **A counter sale is not replaced** — the shop owns that cart and it can
-  still collect, so it keeps what it carries until it is paid or cancelled
+  still collect, so the sale is never cancelled
 - **A reward coupon** — [Coupons](/p/grade10-site/loyalty/coupons) states how
   one is claimed
 
@@ -218,8 +218,8 @@ today.
 | One code slot | Decided | One coupon per order, by choice, to keep the sale simple — a free reward and a money-off coupon are two sales. The picker isolates the rule, so a later change can widen it without deleting the one-slot logic. | Product |
 | Site discount beside a coupon | Decided | Shopify's own combine rules decide; grade10 accepts what the shop priced. A coupon the shop sets aside for a larger site discount goes back to the wallet and the order completes, never fails. | Product |
 | Combine setting | Decided | Each coupon's definition states what it stacks with — a reward's definition, or the operator's mint of a store coupon — with a store default where none is stated. | Product |
-| Nothing is held | Decided | Points and coupons alike stay spendable until a paid order takes them, and the newer checkout cancels the member's earlier online orders carrying either. A held state a member can be locked out of costs more than the double payment it prevents, which settlement already counts. | Product |
-| A counter sale is not replaced | Decided | The shop owns that cart and it can still collect, so an online checkout never cancels it and the coupon on it is refused online until it is paid or cancelled. Nothing reprices a sale staff are standing in front of. | Product |
+| Nothing is held | Decided | Points and coupons alike stay spendable until a paid order takes them. A claim voids what the last claim minted, so one instrument never stands on two payable orders and a member is never locked out of their own coupon by a draft or a sale they walked away from. | Product |
+| A counter sale is not replaced | Decided | The shop owns that cart and it can still collect, so an online checkout never cancels the sale. A coupon claimed elsewhere has its code on that sale voided instead, and the sale collects without the cut, so no coupon is ever locked to a counter. | Product |
 | Price preview | Decided | The cart drawer and `/checkout` read one store quote — the lines, the one code or reward, points after it — that holds nothing; a coupon's Shopify Discount is minted only once the checkout is submitted. | Engineering |
 | A free item alone online | ❓ Open | A 100%-off reward with nothing else in the basket is an HKD 0 order plus shipping — whether it ships free, or is collection only. | Product |
 | Product special sale vs. Sale price | Decided | Kept separate — Sale price stays the ad hoc, unscheduled tool; Product special sale is the scheduled, exclusive one. | Product |
