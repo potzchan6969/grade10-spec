@@ -7,6 +7,7 @@ import { PRODUCT_CARD_CART_COPY } from "../store-product-listing/fixtures";
 import { ProductCard } from "../store-product-listing/product-card";
 import { SignInCard } from "./sign-in-card";
 import { SignInEmailForm } from "./sign-in-email-form";
+import { SignInLinkSent } from "./sign-in-link-sent";
 
 const LISTING_IMAGE = new URL(
   "../store-product-listing/product-card.fixture.png",
@@ -56,7 +57,7 @@ const meta = {
         copy={{
           email: "Email",
           emailPlaceholder: "Enter your email",
-          submit: "Send Magic Link",
+          submit: "Sign In with Email",
         }}
         email=""
         onEmailChange={fn()}
@@ -71,7 +72,7 @@ type Story = StoryObj<typeof meta>;
 
 /**
  * Figma's Login Dialog without the Google control: title, email step,
- * legal line. Empty email keeps Send Magic Link disabled, which is what the
+ * legal line. Empty email keeps Sign In with Email disabled, which is what the
  * frame draws at rest.
  */
 export const Default: Story = {
@@ -87,7 +88,7 @@ export const Default: Story = {
       "Enter your email",
     );
     expect(
-      body.getByRole("button", { name: "Send Magic Link" }),
+      body.getByRole("button", { name: "Sign In with Email" }),
     ).toBeDisabled();
     expect(
       dialog.querySelector('[data-slot="sign-in-legal"]'),
@@ -102,18 +103,21 @@ export const Default: Story = {
   },
 };
 
-/** After Send Magic Link: progress copy sits under the button, centred at
- * xs / secondary-foreground with the same gap-2 an input uses for its
- * message. Field errors stay on the step's `error` prop. */
+/**
+ * Progress / wait copy under the email step — field errors stay on the
+ * step's `error` prop. Post-send confirmation is `LinkSent`, not this line.
+ * Also proves legal stays the body's last node when a status line is present.
+ */
 export const WithMessage: Story = {
+  name: "Status message",
   args: {
-    message: "Check your inbox for a sign-in link.",
+    message: "Please wait a minute before requesting another email.",
     children: (
       <SignInEmailForm
         copy={{
           email: "Email",
           emailPlaceholder: "Enter your email",
-          submit: "Send Magic Link",
+          submit: "Sign In with Email",
         }}
         email="collector@example.com"
         onEmailChange={fn()}
@@ -123,12 +127,16 @@ export const WithMessage: Story = {
   },
   play: async () => {
     const body = within(document.body);
-    const submit = body.getByRole("button", { name: "Send Magic Link" });
-    const message = body
-      .getByRole("dialog")
-      .querySelector('[data-slot="sign-in-message"]') as HTMLElement;
+    const dialog = body.getByRole("dialog");
+    const submit = body.getByRole("button", { name: "Sign In with Email" });
+    const message = dialog.querySelector(
+      '[data-slot="sign-in-message"]',
+    ) as HTMLElement;
+    const legal = dialog.querySelector('[data-slot="sign-in-legal"]');
 
-    expect(message).toHaveTextContent("Check your inbox for a sign-in link.");
+    expect(message).toHaveTextContent(
+      "Please wait a minute before requesting another email.",
+    );
     expect(
       submit.compareDocumentPosition(message) &
         Node.DOCUMENT_POSITION_FOLLOWING,
@@ -137,6 +145,9 @@ export const WithMessage: Story = {
     expect(message.className).toMatch(/text-secondary-foreground/);
     expect(message.className).toMatch(/text-xs/);
     expect(message.parentElement?.className).toMatch(/gap-2/);
+    expect(legal).toBe(
+      dialog.querySelector('[data-slot="dialog-body"]')?.lastElementChild,
+    );
   },
 };
 
@@ -145,6 +156,7 @@ export const WithMessage: Story = {
  * its own, so a consumer that supplies no wording gets none.
  */
 export const WithoutLegal: Story = {
+  name: "Without legal",
   args: {
     copy: { title: "Sign In to Grade10" },
   },
@@ -164,6 +176,7 @@ export const WithoutLegal: Story = {
  * proves order and the divider label for a consumer-owned control.
  */
 export const WithProviderSlot: Story = {
+  name: "Provider slot",
   args: {
     copy: {
       title: "Sign In to Grade10",
@@ -197,35 +210,13 @@ export const WithProviderSlot: Story = {
 };
 
 /**
- * The legal line is the body's last node, and stays last with a status line
- * above it — the order is the contract, not the arrangement of this one
- * example. The block supplies no wording: every word here is the
- * consumer's.
- */
-export const WithLegal: Story = {
-  args: {
-    message: "Check your inbox for a sign-in link.",
-  },
-  play: async () => {
-    const body = within(document.body);
-    const legal = body
-      .getByRole("dialog")
-      .querySelector('[data-slot="sign-in-legal"]');
-
-    expect(legal).toBe(
-      body.getByRole("dialog").querySelector('[data-slot="dialog-body"]')
-        ?.lastElementChild,
-    );
-  },
-};
-
-/**
  * A widget a script fills in later — Google's own button — marks its own
  * container, and the divider waits for it. An "or" over blank space is what
  * a collector sees when that script never answers, so the pair hides until
  * something is actually there to divide. Gallery omits a fake Google control.
  */
 export const ProviderThatHasNotDrawnYet: Story = {
+  name: "Provider empty",
   args: {
     copy: {
       title: "Sign In to Grade10",
@@ -315,6 +306,7 @@ export const ScrimReportsDismissal: Story = {
  * show is that dismissing never unmounts or navigates.
  */
 export const DismissalLeavesThePageBeneath: Story = {
+  name: "Dismissal leaves page",
   decorators: [
     (Story) => (
       <>
@@ -350,6 +342,56 @@ export const DismissalLeavesThePageBeneath: Story = {
       expect(page).toBeInTheDocument();
       expect(canvas.getByText("1999 Charizard, PSA 10")).toBeInTheDocument();
     }
+  },
+};
+
+/**
+ * After a successful send: dialog title **Check Your Email**; confirmation
+ * lead line then the address on the next line; Resend secondary and hugging
+ * with **Resend (n)** for the sixty-second wait. No Back control — leave via
+ * dialog dismiss. Consumer omits `providerSlot` on this step.
+ *
+ * Spec: shared-auth-sign-in-SC-42 / SC-46; shared-ui-auth-sign-in-SC-13–14.
+ */
+export const LinkSent: Story = {
+  name: "Link sent",
+  args: {
+    providerSlot: undefined,
+    copy: {
+      title: "Check Your Email",
+      legal: figmaLegal,
+    },
+    children: (
+      <SignInLinkSent
+        copy={{
+          message: "We've just sent a sign-in link to",
+          resend: "Resend",
+          resendCountdown: "Resend (60)",
+        }}
+        email="collector@example.com"
+        onResend={fn()}
+        resendCooldownRemaining={60}
+      />
+    ),
+  },
+  play: async () => {
+    const body = within(document.body);
+    const dialog = body.getByRole("dialog");
+
+    expect(
+      body.getByRole("heading", { name: "Check Your Email" }),
+    ).toBeInTheDocument();
+    expect(
+      body.getByText("We've just sent a sign-in link to"),
+    ).toBeInTheDocument();
+    expect(body.getByText("collector@example.com")).toBeInTheDocument();
+    expect(body.getByRole("button", { name: "Resend (60)" })).toBeDisabled();
+    expect(body.queryByRole("button", { name: "Back" })).toBeNull();
+    expect(body.queryByRole("textbox", { name: "Email" })).toBeNull();
+    expect(dialog.querySelector('[data-slot="divider"]')).toBeNull();
+    expect(
+      dialog.querySelector('[data-slot="sign-in-link-sent"]'),
+    ).toBeInTheDocument();
   },
 };
 
@@ -402,7 +444,7 @@ export const FromAddToCart: Story = {
             copy={{
               email: "Email",
               emailPlaceholder: "Enter your email",
-              submit: "Send Magic Link",
+              submit: "Sign In with Email",
             }}
             email={email}
             onEmailChange={setEmail}

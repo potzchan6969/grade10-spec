@@ -67,7 +67,7 @@ export const Expired: Story = {
  * (shared-auth-sign-in-SC-38 through SC-40).
  */
 export const NoLongerWorks: Story = {
-  name: "No Longer Works",
+  name: "No longer works",
   render: () => <FireErrorToast message={COPY.linkInvalid} />,
   play: async () => {
     await expectToastText(COPY.linkInvalid);
