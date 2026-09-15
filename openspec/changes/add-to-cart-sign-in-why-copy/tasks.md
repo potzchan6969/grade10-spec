@@ -5,7 +5,7 @@
 - [x] 1.3 Mark Product Tile and Buy with the title a collector meets when Add to cart opens sign-in
 - [x] 1.4 Verify: `pnpm run typecheck && pnpm check:manual && pnpm run test:stories:ui`
 
-## 2. The title through the overlay (grade10)
+## 2. The title through the overlay (grade10) (owner: @sean)
 
 - [ ] 2.1 Carry the title as the sign-in dialog's subject, so an ask that names one opens under it and an ask that names none opens under the catalog title
 - [ ] 2.2 Take a `title` on `SignInFlow`, read in place of `tSignIn("title")` when the flow translates
