@@ -9,13 +9,12 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
+    email: "collector@example.com",
     copy: {
-      message: "We've just sent a sign-in link to collector@example.com.",
+      message: "We've just sent a sign-in link to",
       resend: "Resend",
-      back: "Back",
     },
     onResend: fn(),
-    onBack: fn(),
   },
 } satisfies Meta<typeof SignInLinkSent>;
 
@@ -26,12 +25,11 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByText(
-        "We've just sent a sign-in link to collector@example.com.",
-      ),
+      canvas.getByText("We've just sent a sign-in link to"),
     ).toBeInTheDocument();
+    expect(canvas.getByText("collector@example.com")).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Resend" })).toBeEnabled();
-    expect(canvas.getByRole("button", { name: "Back" })).toBeInTheDocument();
+    expect(canvas.queryByRole("button", { name: "Back" })).toBeNull();
   },
 };
 
@@ -40,14 +38,6 @@ export const ResendReportsActivation: Story = {
     const canvas = within(canvasElement);
     await userEvent.click(canvas.getByRole("button", { name: "Resend" }));
     expect(args.onResend).toHaveBeenCalledOnce();
-  },
-};
-
-export const BackReportsActivation: Story = {
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "Back" }));
-    expect(args.onBack).toHaveBeenCalledOnce();
   },
 };
 
@@ -70,10 +60,9 @@ export const ResendCooldown: Story = {
   args: {
     resendCooldownRemaining: 45,
     copy: {
-      message: "We've just sent a sign-in link to collector@example.com.",
+      message: "We've just sent a sign-in link to",
       resend: "Resend",
       resendCountdown: "Resend (45)",
-      back: "Back",
     },
   },
   play: async ({ args, canvasElement }) => {
@@ -85,8 +74,8 @@ export const ResendCooldown: Story = {
 };
 
 /**
- * Short countdown that ticks (200ms steps, three ticks) — demo only; production
- * wait is sixty seconds. Does not wait a real minute in tests.
+ * Short countdown that ticks (200ms steps) — demo only; production wait is
+ * sixty seconds. Does not wait a real minute in tests.
  */
 export const ResendCountdownTicks: Story = {
   name: "Resend countdown ticks",

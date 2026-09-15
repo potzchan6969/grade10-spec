@@ -1,25 +1,24 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import type { ReactNode } from "react";
 
 /** The words the link-sent step says, after a successful send. */
 type SignInLinkSentCopy = {
-  /** Confirmation that names the address. The consumer interpolates the
-   * email before passing — this step carries no catalog of its own. */
-  message: ReactNode;
+  /** Lead line without the address, e.g. "We've just sent a sign-in link to".
+   * The address is a separate prop and draws on the next line. */
+  message: string;
   /** Ready-state Resend label, e.g. "Resend". */
   resend: string;
   /** Cooldown label with seconds already interpolated, e.g. "Resend (45)".
    * Required whenever `resendCooldownRemaining` is greater than zero. */
   resendCountdown?: string;
-  back: string;
 };
 
 type SignInLinkSentProps = {
   copy: SignInLinkSentCopy;
+  /** Address the link was sent to — drawn on its own line under `copy.message`. */
+  email: string;
   onResend: () => void;
-  onBack: () => void;
   /** While a resend request is in flight — the Resend control looks busy. */
   resending?: boolean;
   /** Whole seconds left in the post-send wait. Greater than zero disables
@@ -29,15 +28,15 @@ type SignInLinkSentProps = {
 };
 
 /**
- * The body after a successful sign-in-link send: confirmation that names the
- * address, Resend (with an optional cooldown), and Back to the entry step.
- * What those actions do belongs to the consumer — this step does not send
- * mail or own the flow.
+ * The body after a successful sign-in-link send: confirmation with the
+ * address on its own line, and a hugging secondary Resend (optional
+ * cooldown). Dismissal of the dialog is the way back to the page beneath —
+ * this step has no Back control. What Resend does belongs to the consumer.
  */
 function SignInLinkSent({
   copy,
+  email,
   onResend,
-  onBack,
   resending = false,
   resendCooldownRemaining = 0,
 }: SignInLinkSentProps) {
@@ -47,20 +46,28 @@ function SignInLinkSent({
 
   return (
     <VStack className="w-full gap-3" data-slot="sign-in-link-sent">
-      <Text className="w-full text-center text-foreground" size="sm">
-        {copy.message}
-      </Text>
+      <VStack className="w-full gap-1">
+        <Text className="w-full text-center text-foreground" size="sm">
+          {copy.message}
+        </Text>
+        <Text
+          className="w-full break-all text-center text-foreground"
+          data-slot="sign-in-link-sent-email"
+          size="sm"
+        >
+          {email}
+        </Text>
+      </VStack>
       <Button
+        className="w-fit self-center"
         disabled={coolingDown}
         loading={resending}
         onClick={onResend}
         size="md"
         type="button"
+        variant="secondary"
       >
         {resendLabel}
-      </Button>
-      <Button onClick={onBack} size="md" type="button" variant="outline">
-        {copy.back}
       </Button>
     </VStack>
   );

@@ -356,25 +356,29 @@ export const DismissalLeavesThePageBeneath: Story = {
 };
 
 /**
- * After a successful send: confirmation names the address; Resend starts
- * disabled with **Resend (n)** for the sixty-second wait; Back replaces the
- * email step. The consumer omits `providerSlot` on this step.
+ * After a successful send: dialog title **Check Your Email**; confirmation
+ * lead line then the address on the next line; Resend secondary and hugging
+ * with **Resend (n)** for the sixty-second wait. No Back control — leave via
+ * dialog dismiss. Consumer omits `providerSlot` on this step.
  *
- * Spec: shared-auth-sign-in-SC-42 / SC-46; shared-ui-auth-sign-in-SC-14.
+ * Spec: shared-auth-sign-in-SC-42 / SC-46; shared-ui-auth-sign-in-SC-13–14.
  */
 export const LinkSent: Story = {
   name: "Link sent",
   args: {
     providerSlot: undefined,
+    copy: {
+      title: "Check Your Email",
+      legal: figmaLegal,
+    },
     children: (
       <SignInLinkSent
         copy={{
-          message: "We've just sent a sign-in link to collector@example.com.",
+          message: "We've just sent a sign-in link to",
           resend: "Resend",
           resendCountdown: "Resend (60)",
-          back: "Back",
         }}
-        onBack={fn()}
+        email="collector@example.com"
         onResend={fn()}
         resendCooldownRemaining={60}
       />
@@ -385,111 +389,18 @@ export const LinkSent: Story = {
     const dialog = body.getByRole("dialog");
 
     expect(
-      body.getByText(
-        "We've just sent a sign-in link to collector@example.com.",
-      ),
+      body.getByRole("heading", { name: "Check Your Email" }),
     ).toBeInTheDocument();
+    expect(
+      body.getByText("We've just sent a sign-in link to"),
+    ).toBeInTheDocument();
+    expect(body.getByText("collector@example.com")).toBeInTheDocument();
     expect(body.getByRole("button", { name: "Resend (60)" })).toBeDisabled();
-    expect(body.getByRole("button", { name: "Back" })).toBeInTheDocument();
+    expect(body.queryByRole("button", { name: "Back" })).toBeNull();
     expect(body.queryByRole("textbox", { name: "Email" })).toBeNull();
     expect(dialog.querySelector('[data-slot="divider"]')).toBeNull();
     expect(
       dialog.querySelector('[data-slot="sign-in-link-sent"]'),
-    ).toBeInTheDocument();
-  },
-};
-
-/**
- * Entry (Google Continue + email) → link sent → Back restores entry.
- * No real send — submit flips local step state only.
- */
-export const LinkSentBackToEntry: Story = {
-  name: "Link sent back to entry",
-  args: {
-    open: true,
-    copy: {
-      title: "Sign In to Grade10",
-      providerDivider: "or",
-      legal: figmaLegal,
-    },
-  },
-  render: function LinkSentBackToEntryDemo(args) {
-    const [step, setStep] = useState<"entry" | "sent">("entry");
-    const [email, setEmail] = useState("collector@example.com");
-
-    return (
-      <SignInCard
-        {...args}
-        providerSlot={
-          step === "entry" ? (
-            <Button size="md" type="button" variant="outline">
-              Continue with Google
-            </Button>
-          ) : undefined
-        }
-      >
-        {step === "entry" ? (
-          <SignInEmailForm
-            copy={{
-              email: "Email",
-              emailPlaceholder: "Enter your email",
-              submit: "Sign In with Email",
-            }}
-            email={email}
-            onEmailChange={setEmail}
-            onSubmit={() => setStep("sent")}
-          />
-        ) : (
-          <SignInLinkSent
-            copy={{
-              message: `We've just sent a sign-in link to ${email}.`,
-              resend: "Resend",
-              resendCountdown: "Resend (60)",
-              back: "Back",
-            }}
-            onBack={() => setStep("entry")}
-            onResend={fn()}
-            resendCooldownRemaining={60}
-          />
-        )}
-      </SignInCard>
-    );
-  },
-  play: async () => {
-    const body = within(document.body);
-
-    expect(
-      body.getByRole("button", { name: "Continue with Google" }),
-    ).toBeInTheDocument();
-    expect(
-      body.getByRole("button", { name: "Sign In with Email" }),
-    ).toBeInTheDocument();
-
-    await userEvent.click(
-      body.getByRole("button", { name: "Sign In with Email" }),
-    );
-
-    await waitFor(() => {
-      expect(
-        body.getByText(
-          "We've just sent a sign-in link to collector@example.com.",
-        ),
-      ).toBeInTheDocument();
-    });
-    expect(
-      body.queryByRole("button", { name: "Continue with Google" }),
-    ).toBeNull();
-    expect(body.getByRole("button", { name: "Resend (60)" })).toBeDisabled();
-
-    await userEvent.click(body.getByRole("button", { name: "Back" }));
-
-    await waitFor(() => {
-      expect(
-        body.getByRole("button", { name: "Continue with Google" }),
-      ).toBeInTheDocument();
-    });
-    expect(
-      body.getByRole("button", { name: "Sign In with Email" }),
     ).toBeInTheDocument();
   },
 };
