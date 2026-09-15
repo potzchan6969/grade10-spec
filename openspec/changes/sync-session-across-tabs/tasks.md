@@ -32,7 +32,7 @@ the promptness cases in each wait on 2.1.
 - [x] 4.3 Confirm a session ending elsewhere does not run the cleanup a confirmed sign-out runs, which stays the sign-out path's (shared-auth-session-SC-21)
 - [x] 4.4 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test`
 
-## 5. Cross-tab end-to-end (grade10)
+## 5. Cross-tab end-to-end (grade10) (owner: @sean)
 
 - [ ] 5.1 Walk the headline path in one browser context: a refused add in the first tab, the link followed in a second, the first tab signed in with the add completed and a third tab of the brand naming the collector without a reload (shared-auth-e2e-US7-TC1-1)
 - [ ] 5.2 Walk the negatives that bound the reach: another brand's tab and another browser's tab both stay as they were (shared-auth-session-SC-17, shared-auth-session-SC-18)
