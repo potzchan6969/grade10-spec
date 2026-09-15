@@ -8,7 +8,7 @@ export type AuctionEmailCampaign =
   | "outbid"
   | "lot_closed_didnt_win"
   | "lot_ended_watched"
-  | "lot_ended_no_sale"
+  | "lot_ended"
   | "auction_won"
   | "address_reminder";
 

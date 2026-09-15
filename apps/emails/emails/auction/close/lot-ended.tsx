@@ -1,56 +1,52 @@
 import { AuctionLetter } from "@/emails/auction/_components/auction-letter";
 import { previewLot } from "@/emails/auction/_components/preview-lot";
 
-export type LotEndedNoSaleProps = {
+export type LotEndedProps = {
   brandName?: string;
   lotTitle?: string;
   listingUrl?: string;
   muteUrl?: string;
   primaryImageUrl?: string | null;
-  highestBid?: string;
-  yourBid?: string;
   closedAt?: string;
 };
 
-/** Bidder on an unsold lot — highest bid + their bid. */
-export default function LotEndedNoSaleEmail({
+/**
+ * No-bids close — lot ended with no winner at close (unsold = no bids).
+ * Collector copy stays Ended-only; does not disclose non-sale.
+ * Not for winner default (走數); that is a later path.
+ */
+export default function LotEndedEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   listingUrl = previewLot.listingUrl,
   muteUrl = previewLot.muteUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
-  highestBid = previewLot.highestBid,
-  yourBid = previewLot.yourBid,
   closedAt = previewLot.closedAt,
-}: LotEndedNoSaleProps) {
+}: LotEndedProps) {
   return (
     <AuctionLetter
-      body="Bidding has closed. This lot did not sell."
+      body="Bidding has closed on this lot."
       brandName={brandName}
-      campaign="lot_ended_no_sale"
+      campaign="lot_ended"
       canUnsubscribe
       ctaLabel="View lot"
       facts={[`Ended ${closedAt}`]}
       heading="This lot has ended"
-      highlight={{ label: "Highest bid", value: highestBid }}
       listingUrl={listingUrl}
       lotTitle={lotTitle}
       muteUrl={muteUrl}
-      preheader={`Highest bid ${highestBid}. Your bid was ${yourBid}.`}
+      preheader="This lot has ended."
       primaryImageUrl={primaryImageUrl}
-      secondary={{ label: "Your bid", value: yourBid }}
       whyYouGotThis="Email alerts are on for this lot."
     />
   );
 }
 
-LotEndedNoSaleEmail.PreviewProps = {
+LotEndedEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   listingUrl: previewLot.listingUrl,
   muteUrl: previewLot.muteUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
-  highestBid: previewLot.highestBid,
-  yourBid: previewLot.yourBid,
   closedAt: previewLot.closedAt,
-} satisfies LotEndedNoSaleProps;
+} satisfies LotEndedProps;
