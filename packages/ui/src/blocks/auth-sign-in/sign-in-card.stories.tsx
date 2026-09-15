@@ -103,9 +103,13 @@ export const Default: Story = {
   },
 };
 
-/** Progress / wait copy under the email step — field errors stay on the
- * step's `error` prop. Post-send confirmation is `LinkSent`, not this line. */
+/**
+ * Progress / wait copy under the email step — field errors stay on the
+ * step's `error` prop. Post-send confirmation is `LinkSent`, not this line.
+ * Also proves legal stays the body's last node when a status line is present.
+ */
 export const WithMessage: Story = {
+  name: "Status message",
   args: {
     message: "Please wait a minute before requesting another email.",
     children: (
@@ -123,10 +127,12 @@ export const WithMessage: Story = {
   },
   play: async () => {
     const body = within(document.body);
+    const dialog = body.getByRole("dialog");
     const submit = body.getByRole("button", { name: "Sign In with Email" });
-    const message = body
-      .getByRole("dialog")
-      .querySelector('[data-slot="sign-in-message"]') as HTMLElement;
+    const message = dialog.querySelector(
+      '[data-slot="sign-in-message"]',
+    ) as HTMLElement;
+    const legal = dialog.querySelector('[data-slot="sign-in-legal"]');
 
     expect(message).toHaveTextContent(
       "Please wait a minute before requesting another email.",
@@ -139,6 +145,9 @@ export const WithMessage: Story = {
     expect(message.className).toMatch(/text-secondary-foreground/);
     expect(message.className).toMatch(/text-xs/);
     expect(message.parentElement?.className).toMatch(/gap-2/);
+    expect(legal).toBe(
+      dialog.querySelector('[data-slot="dialog-body"]')?.lastElementChild,
+    );
   },
 };
 
@@ -147,6 +156,7 @@ export const WithMessage: Story = {
  * its own, so a consumer that supplies no wording gets none.
  */
 export const WithoutLegal: Story = {
+  name: "Without legal",
   args: {
     copy: { title: "Sign In to Grade10" },
   },
@@ -166,6 +176,7 @@ export const WithoutLegal: Story = {
  * proves order and the divider label for a consumer-owned control.
  */
 export const WithProviderSlot: Story = {
+  name: "Provider slot",
   args: {
     copy: {
       title: "Sign In to Grade10",
@@ -199,35 +210,13 @@ export const WithProviderSlot: Story = {
 };
 
 /**
- * The legal line is the body's last node, and stays last with a status line
- * above it — the order is the contract, not the arrangement of this one
- * example. The block supplies no wording: every word here is the
- * consumer's.
- */
-export const WithLegal: Story = {
-  args: {
-    message: "Please wait a minute before requesting another email.",
-  },
-  play: async () => {
-    const body = within(document.body);
-    const legal = body
-      .getByRole("dialog")
-      .querySelector('[data-slot="sign-in-legal"]');
-
-    expect(legal).toBe(
-      body.getByRole("dialog").querySelector('[data-slot="dialog-body"]')
-        ?.lastElementChild,
-    );
-  },
-};
-
-/**
  * A widget a script fills in later — Google's own button — marks its own
  * container, and the divider waits for it. An "or" over blank space is what
  * a collector sees when that script never answers, so the pair hides until
  * something is actually there to divide. Gallery omits a fake Google control.
  */
 export const ProviderThatHasNotDrawnYet: Story = {
+  name: "Provider empty",
   args: {
     copy: {
       title: "Sign In to Grade10",
@@ -317,6 +306,7 @@ export const ScrimReportsDismissal: Story = {
  * show is that dismissing never unmounts or navigates.
  */
 export const DismissalLeavesThePageBeneath: Story = {
+  name: "Dismissal leaves page",
   decorators: [
     (Story) => (
       <>

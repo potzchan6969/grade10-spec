@@ -21,6 +21,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Ready state — lead + email on next line; Resend enabled; no Back. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -30,24 +31,6 @@ export const Default: Story = {
     expect(canvas.getByText("collector@example.com")).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Resend" })).toBeEnabled();
     expect(canvas.queryByRole("button", { name: "Back" })).toBeNull();
-  },
-};
-
-export const ResendReportsActivation: Story = {
-  play: async ({ args, canvasElement }) => {
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: "Resend" }));
-    expect(args.onResend).toHaveBeenCalledOnce();
-  },
-};
-
-/** Resend looks busy while its request is in flight. */
-export const Resending: Story = {
-  args: { resending: true },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const resend = canvas.getByRole("button", { name: "Resend" });
-    expect(resend).toHaveAttribute("aria-busy", "true");
   },
 };
 
@@ -73,12 +56,23 @@ export const ResendCooldown: Story = {
   },
 };
 
+/** Resend looks busy while its request is in flight. */
+export const Resending: Story = {
+  name: "Resending",
+  args: { resending: true },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const resend = canvas.getByRole("button", { name: "Resend" });
+    expect(resend).toHaveAttribute("aria-busy", "true");
+  },
+};
+
 /**
  * Short countdown that ticks (200ms steps) — demo only; production wait is
  * sixty seconds. Does not wait a real minute in tests.
  */
 export const ResendCountdownTicks: Story = {
-  name: "Resend countdown ticks",
+  name: "Countdown ticks",
   render: function ResendCountdownTicksDemo(args) {
     const [remaining, setRemaining] = useState(3);
 
@@ -111,5 +105,18 @@ export const ResendCountdownTicks: Story = {
       },
       { timeout: 2000 },
     );
+  },
+};
+
+/**
+ * Interaction-only — same paint as Default. Hidden from the gallery; still
+ * runs in test to prove `onResend`.
+ */
+export const ResendReportsActivation: Story = {
+  tags: ["!dev"],
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Resend" }));
+    expect(args.onResend).toHaveBeenCalledOnce();
   },
 };

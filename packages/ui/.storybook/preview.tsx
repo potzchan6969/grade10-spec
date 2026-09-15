@@ -33,6 +33,27 @@ const preview: Preview = {
     options: {
       storySort: {
         method: "alphabetical",
+        // Primary Auth Sign In journeys first; remaining stories stay
+        // alphabetical within each group via `*`.
+        order: [
+          "Auth Sign In",
+          [
+            "SignInCard",
+            ["Default", "From add to cart", "Link sent", "*"],
+            "SignInEmailForm",
+            ["Default", "Error", "Needs an email", "Sending", "*"],
+            "SignInLinkSent",
+            [
+              "Default",
+              "Resend countdown",
+              "Resending",
+              "Countdown ticks",
+              "*",
+            ],
+            "Link Follow Toasts",
+          ],
+          "*",
+        ],
       },
     },
     // 'todo' - show a11y violations in the test UI only

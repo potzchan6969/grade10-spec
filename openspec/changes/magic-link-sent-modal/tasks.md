@@ -15,8 +15,10 @@
   `backLabel` — satisfies SC-42, SC-44–SC-46
 - [x] 1.3 Storybook: `Auth Sign In/SignInCard` → **Link sent** (Check Your
   Email, address on next line, secondary hugging Resend countdown, no Back);
-  `SignInLinkSent` cooldown / ticks (sped-up); email-step CTA **Sign In with
-  Email** — leave story taxonomy renames to the Auth Sign In stories cleanup
+  `SignInLinkSent` → **Resend countdown** / **Countdown ticks** (sped-up);
+  email-step CTA **Sign In with Email**; gallery hierarchy Default → From
+  add to cart → Link sent — satisfies SC-42 through SC-49 and SC-11 / SC-14 /
+  SC-15
 - [x] 1.4 Verify: `pnpm run typecheck`, `pnpm check:manual`,
   `openspec validate magic-link-sent-modal --strict`, and the
   `auth-sign-in` suites under
