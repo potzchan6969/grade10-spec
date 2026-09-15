@@ -13,13 +13,13 @@ in the same session, versus the same rate when the dialog used the bare
 default title.
 
 **Acceptance signal:** on the listing and the product page, the sign-in
-dialog opened from Add to cart is titled **Sign in to add to cart**;
+dialog opened from Add to cart is titled **Sign In to Add to Cart**;
 header Sign In and other default entry points stay **Sign In to Grade10**.
 
 ## What Changes
 
 - **Contextual title from Add to cart** — when Add to cart opens sign-in,
-  the dialog title is **Sign in to add to cart** (cart, matching store
+  the dialog title is **Sign In to Add to Cart** (cart, matching store
   copy — not bag)
 - **Default entry points unchanged** — header Sign In and other surfaces
   that already pass **Sign In to Grade10** keep that title
@@ -48,7 +48,7 @@ header Sign In and other default entry points stay **Sign In to Grade10**.
 ### Modified Capabilities
 
 - `grade10-site/store/product-listing` — Add to cart sign-in dialog title
-  is **Sign in to add to cart**
+  is **Sign In to Add to Cart**
 - `grade10-site/store/product-page` — the same title on product-page Add
   to cart sign-in
 
@@ -65,8 +65,9 @@ header Sign In and other default entry points stay **Sign In to Grade10**.
 
 ## Open questions
 
-- none — title locked to **Sign in to add to cart**; cart not bag;
-  description omitted; default entry points keep **Sign In to Grade10**
+- none — title locked to **Sign In to Add to Cart** (Title Case for
+  Modal titles); cart not bag; description omitted; default entry points
+  keep **Sign In to Grade10**
 
 ## References
 
