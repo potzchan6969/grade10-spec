@@ -5,7 +5,7 @@
 - [x] 1.1 Mark Session · Open Tabs and Sign-In · Following the Link with what a collector sees when a tab keeps up
 - [x] 1.2 Verify: `pnpm check:manual && pnpm run tcs:validate`
 
-## 2. Session announcement and read (grade10)
+## 2. Session announcement and read (grade10) (owner: @sean)
 
 Groups 3 and 4 build against the session state this group publishes. They do
 not need it landed to be claimed — both can be verified against fixtures — but
