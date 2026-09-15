@@ -404,9 +404,9 @@ function OrderSummary({
             {payCta}
           </Button>
           {!overdue && deadline ? (
-            <Text className="w-full text-center" size="sm" tone="secondary">
+            <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
               {deadline}
-            </Text>
+            </p>
           ) : null}
         </VStack>
       ) : null}
