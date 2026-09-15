@@ -431,7 +431,7 @@ function OrderSummary({
           actions={
             <Button
               onClick={() => {
-                toast.message("Contact Grade10", {
+                toast.info("Contact Grade10", {
                   description: "support@grade10.com",
                 });
               }}
