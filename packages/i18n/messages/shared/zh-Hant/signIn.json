@@ -6,12 +6,12 @@
   "sendLinkLabel": "使用電郵登入",
   "sendLinkFailed": "無法傳送登入連結。",
   "sendWait": "請稍候一分鐘再要求另一封電郵。",
-  "linkSentMessage": "我們已向 {email} 傳送了登入連結。",
+  "linkSentMessage": "我們已將登入連結傳送至",
   "resendLabel": "重新傳送",
   "resendCountdown": "重新傳送 ({seconds})",
-  "backLabel": "返回",
   "linkExpired": "此登入連結已過期。",
   "linkInvalid": "此登入連結已失效。",
   "linkBanned": "此帳戶無法登入。",
-  "legal": "繼續即表示你同意我們的<terms>服務條款</terms>與<privacy>隱私權政策</privacy>。"
+  "legal": "繼續即表示你同意我們的<terms>服務條款</terms>與<privacy>隱私權政策</privacy>。",
+  "linkSentTitle": "請查收電郵"
 }
