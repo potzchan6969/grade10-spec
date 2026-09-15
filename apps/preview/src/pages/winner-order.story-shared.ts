@@ -1,4 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
+import { expect, waitFor } from "storybook/test";
 import {
   WINNER_ORDER_STATUS_LABELS,
   type WinnerOrderStatus,
@@ -36,4 +37,23 @@ function winnerOrderMeta(): Omit<Meta<typeof WinnerOrderPage>, "title"> {
   };
 }
 
-export { winnerOrderMeta };
+/** Same settle gate as Order Details — wait for first-paint reveal + opacity. */
+function winnerOrderRevealed(canvasElement: HTMLElement): boolean {
+  const root = canvasElement.querySelector('[data-slot="winner-order-page"]');
+  if (root?.getAttribute("data-revealed") !== "true") return false;
+
+  const groups = canvasElement.querySelectorAll(
+    '[data-slot="winner-order-reveal"]',
+  );
+  if (groups.length === 0) return false;
+  for (const group of groups) {
+    if (Number(getComputedStyle(group).opacity) <= 0.9) return false;
+  }
+  return true;
+}
+
+async function winnerOrderSettled(canvasElement: HTMLElement) {
+  await waitFor(() => expect(winnerOrderRevealed(canvasElement)).toBe(true));
+}
+
+export { winnerOrderMeta, winnerOrderRevealed, winnerOrderSettled };

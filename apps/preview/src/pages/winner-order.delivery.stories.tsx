@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { winnerOrderMeta } from "./winner-order.story-shared";
+import {
+  winnerOrderMeta,
+  winnerOrderSettled,
+} from "./winner-order.story-shared";
 import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
@@ -18,6 +21,7 @@ export const Processing: Story = {
   args: { status: "processing" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
     expect(
       canvasElement.querySelector(
         '[data-slot="winner-order-page"][data-status="processing"]',
@@ -41,6 +45,7 @@ export const Shipped: Story = {
   args: { status: "shipped" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Track shipment" }),
@@ -59,6 +64,7 @@ export const Delivered: Story = {
   args: { status: "delivered" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getByText(/Delivered 28 Sep 2026/)).toBeVisible();

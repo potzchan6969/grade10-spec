@@ -1,6 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { winnerOrderMeta } from "./winner-order.story-shared";
+import {
+  winnerOrderMeta,
+  winnerOrderSettled,
+} from "./winner-order.story-shared";
 import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
@@ -18,6 +21,7 @@ export const AwaitingAddress: Story = {
   args: { status: "awaiting_address" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
     expect(
       canvas.getByRole("heading", { level: 1, name: "Winner Order" }),
     ).toBeVisible();
@@ -68,6 +72,7 @@ export const PreparingInvoice: Story = {
   args: { status: "preparing_invoice" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
     expect(
       canvasElement.querySelector(
         '[data-slot="winner-order-page"][data-status="preparing_invoice"]',
@@ -111,6 +116,7 @@ export const ConfirmAddressFlow: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const page = within(canvasElement.ownerDocument.body);
+    await winnerOrderSettled(canvasElement);
 
     await userEvent.click(
       canvas.getByRole("button", { name: "Confirm delivery address" }),
@@ -174,6 +180,7 @@ export const AddNewAddressFlow: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const page = within(canvasElement.ownerDocument.body);
+    await winnerOrderSettled(canvasElement);
 
     await userEvent.click(
       canvas.getByRole("button", { name: "Confirm delivery address" }),

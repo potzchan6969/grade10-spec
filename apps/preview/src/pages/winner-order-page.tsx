@@ -18,6 +18,14 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
 import { ArrowUpRight } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
+import {
+  REVEAL_HIDDEN_CLASS,
+  REVEAL_REDUCED_MOTION_CLASS,
+  REVEAL_TRANSITION_CLASS,
+  REVEAL_VISIBLE_CLASS,
+  revealStaggerDelayMs,
+  useFirstPaintReveal,
+} from "../../../../packages/ui/src/blocks/shared/use-first-paint-reveal";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
 import { WinnerOrderAddressDialog } from "./winner-order-address-dialog";
@@ -33,6 +41,36 @@ const ADDRESS_CONFIRMED_TOAST = {
   title: "Address confirmed",
   description: "Grade10 is preparing your invoice for this destination.",
 } as const;
+
+function RevealGroup({
+  children,
+  className,
+  revealed,
+  staggerIndex,
+}: {
+  children: ReactNode;
+  className?: string;
+  revealed: boolean;
+  staggerIndex: number;
+}) {
+  return (
+    <div
+      className={cn(
+        REVEAL_HIDDEN_CLASS,
+        REVEAL_TRANSITION_CLASS,
+        REVEAL_REDUCED_MOTION_CLASS,
+        revealed && REVEAL_VISIBLE_CLASS,
+        className,
+      )}
+      data-slot="winner-order-reveal"
+      style={{
+        transitionDelay: revealStaggerDelayMs(staggerIndex, revealed),
+      }}
+    >
+      {children}
+    </div>
+  );
+}
 
 /**
  * Minimal placeholder PDF for Storybook — not a real invoice pipeline.
@@ -612,6 +650,10 @@ function OrderSidebar({
  * Preview-only Winner Order page. Always uses the Order Details 2-column shell
  * (main + sticky summary sidebar). Storybook-first — not a published
  * `@grade10/ui` export and not the store Order Details contract.
+ *
+ * First paint: title, progress (when present), lot, and sidebar stagger in
+ * (opacity + translateY, 280ms) via `useFirstPaintReveal` — same pattern as
+ * Order Details. Settles immediately under reduced motion.
  */
 function WinnerOrderPage({
   status: statusProp = "awaiting_address",
@@ -623,6 +665,7 @@ function WinnerOrderPage({
   const [status, setStatus] = useState(statusProp);
   const [confirmedAddress, setConfirmedAddress] = useState<string | null>(null);
   const [addressDialogOpen, setAddressDialogOpen] = useState(false);
+  const revealed = useFirstPaintReveal();
 
   useEffect(() => {
     setStatus(statusProp);
@@ -642,6 +685,9 @@ function WinnerOrderPage({
   const progress = showWinnerProgress(content.status)
     ? winnerProgressStepsFor(content.status, content)
     : null;
+  const mainStaggerIndex = progress ? 1 : 0;
+  const lotStaggerIndex = progress ? 2 : 1;
+  const sidebarStaggerIndex = progress ? 3 : 2;
 
   function handlePrimaryAction() {
     onPrimaryAction?.();
@@ -663,6 +709,7 @@ function WinnerOrderPage({
   return (
     <div
       className="flex min-h-svh w-full flex-col bg-background"
+      data-revealed={revealed || undefined}
       data-slot="winner-order-page"
       data-status={content.status}
     >
@@ -676,56 +723,77 @@ function WinnerOrderPage({
           <BreadcrumbItem current>Winner Order</BreadcrumbItem>
         </Breadcrumbs>
 
-        <h1 className="text-3xl leading-9 font-semibold text-foreground">
-          {content.title}
-        </h1>
+        <RevealGroup revealed={revealed} staggerIndex={0}>
+          <h1 className="text-3xl leading-9 font-semibold text-foreground">
+            {content.title}
+          </h1>
+        </RevealGroup>
 
         <div className="grid w-full items-start gap-8 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
           <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
             {progress ? (
-              <WinnerProgressCard
-                onTrack={
-                  content.primaryCta === "Track shipment"
-                    ? handlePrimaryAction
-                    : undefined
-                }
-                steps={progress}
-                trackLabel={
-                  content.primaryCta === "Track shipment"
-                    ? content.primaryCta
-                    : null
-                }
-              />
+              <RevealGroup revealed={revealed} staggerIndex={mainStaggerIndex}>
+                <WinnerProgressCard
+                  onTrack={
+                    content.primaryCta === "Track shipment"
+                      ? handlePrimaryAction
+                      : undefined
+                  }
+                  steps={progress}
+                  trackLabel={
+                    content.primaryCta === "Track shipment"
+                      ? content.primaryCta
+                      : null
+                  }
+                />
+              </RevealGroup>
             ) : null}
 
-            <LotCard content={content} href={lotHref} onClick={onLotClick} />
+            <RevealGroup revealed={revealed} staggerIndex={lotStaggerIndex}>
+              <VStack className="w-full" gap="lg" hAlign="stretch">
+                <LotCard
+                  content={content}
+                  href={lotHref}
+                  onClick={onLotClick}
+                />
 
-            {content.status === "preparing_invoice" && content.secondaryNote ? (
-              <Alert
-                dismissible={false}
-                layout="inline"
-                status="default"
-                title={content.secondaryNote}
-              />
-            ) : content.secondaryNote &&
-              content.status !== "shipped" &&
-              content.status !== "delivered" ? (
-              <Text size="sm" tone="secondary">
-                {content.secondaryNote}
-              </Text>
-            ) : null}
+                {content.status === "preparing_invoice" &&
+                content.secondaryNote ? (
+                  <Alert
+                    dismissible={false}
+                    layout="inline"
+                    status="default"
+                    title={content.secondaryNote}
+                  />
+                ) : content.secondaryNote &&
+                  content.status !== "shipped" &&
+                  content.status !== "delivered" ? (
+                  <Text size="sm" tone="secondary">
+                    {content.secondaryNote}
+                  </Text>
+                ) : null}
+              </VStack>
+            </RevealGroup>
           </VStack>
 
-          <OrderSidebar
-            confirmAddressCta={confirmAddressCta}
-            content={content}
-            onConfirmAddress={handleConfirmAddressClick}
-            onPay={payCta ? handlePrimaryAction : undefined}
-            onViewInvoicePdf={
-              hasIssuedInvoice(content) ? openPlaceholderInvoicePdf : undefined
-            }
-            payCta={payCta}
-          />
+          <RevealGroup
+            className="min-w-0 w-full"
+            revealed={revealed}
+            staggerIndex={sidebarStaggerIndex}
+          >
+            <OrderSidebar
+              confirmAddressCta={confirmAddressCta}
+              content={content}
+              onConfirmAddress={handleConfirmAddressClick}
+              onPay={payCta ? handlePrimaryAction : undefined}
+              onViewInvoicePdf={
+                hasIssuedInvoice(content)
+                  ? openPlaceholderInvoicePdf
+                  : undefined
+              }
+              payCta={payCta}
+            />
+          </RevealGroup>
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
