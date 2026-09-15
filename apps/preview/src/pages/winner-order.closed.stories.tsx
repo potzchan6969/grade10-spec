@@ -4,7 +4,8 @@ import { winnerOrderMeta } from "./winner-order.story-shared";
 import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
-  ...winnerOrderMeta("Closed"),
+  ...winnerOrderMeta(),
+  title: "My Auctions/Winner Order/Closed",
   args: { status: "cancelled" },
 } satisfies Meta<typeof WinnerOrderPage>;
 

@@ -5,10 +5,13 @@ import {
 } from "./winner-order-content";
 import { WinnerOrderPage } from "./winner-order-page";
 
-/** Shared CSF meta for Winner Order stage folders under My Auctions. */
-function winnerOrderMeta(folder: string): Meta<typeof WinnerOrderPage> {
+/**
+ * Shared CSF meta for Winner Order stage folders under My Auctions.
+ * Callers must set `title` as a string literal on the file's default export —
+ * Storybook's indexer cannot resolve titles returned from helpers.
+ */
+function winnerOrderMeta(): Omit<Meta<typeof WinnerOrderPage>, "title"> {
   return {
-    title: `My Auctions/Winner Order/${folder}`,
     component: WinnerOrderPage,
     tags: ["autodocs"],
     parameters: {

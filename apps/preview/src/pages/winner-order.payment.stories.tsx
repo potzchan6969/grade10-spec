@@ -4,7 +4,8 @@ import { winnerOrderMeta } from "./winner-order.story-shared";
 import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
-  ...winnerOrderMeta("Payment"),
+  ...winnerOrderMeta(),
+  title: "My Auctions/Winner Order/Payment",
   args: { status: "pending_payment" },
 } satisfies Meta<typeof WinnerOrderPage>;
 
