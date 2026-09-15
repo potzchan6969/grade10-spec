@@ -27,10 +27,14 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("Order Total")).toBeVisible();
     expect(canvas.getByText("HK$15,660")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "Pay with card" })).toBeVisible();
+    const sidebar = within(canvas.getByRole("complementary"));
+    expect(
+      sidebar.getByRole("button", { name: "Pay with card" }),
+    ).toBeVisible();
+    expect(sidebar.getByText("Pay by 24 Sep 2026, 21:30 HKT")).toBeVisible();
     expect(canvas.getByText(/Locked after invoice send/)).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "View invoice PDF" }),
+      sidebar.getByRole("button", { name: "View invoice PDF" }),
     ).toBeVisible();
   },
 };
@@ -44,10 +48,16 @@ export const ExpiredInvoice: Story = {
     expect(canvas.getByText(/expired invoice/i)).toBeVisible();
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "Pay with card" })).toBeVisible();
+    const sidebar = within(canvas.getByRole("complementary"));
+    expect(
+      sidebar.getByRole("button", { name: "Pay with card" }),
+    ).toBeVisible();
+    expect(
+      sidebar.getByText("Deadline passed 24 Sep 2026, 21:30 HKT"),
+    ).toBeVisible();
     expect(canvas.getByText(/support@grade10.com/)).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "View invoice PDF" }),
+      sidebar.getByRole("button", { name: "View invoice PDF" }),
     ).toBeVisible();
   },
 };

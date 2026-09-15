@@ -341,9 +341,15 @@ function AddressBlock({
 
 function OrderSummary({
   lines,
+  payCta,
+  deadline,
+  onPay,
   onViewInvoicePdf,
 }: {
   lines: WinnerOrderInvoiceLine[];
+  payCta?: string | null;
+  deadline?: string | null;
+  onPay?: () => void;
   onViewInvoicePdf?: () => void;
 }) {
   const total = lines.find((line) => line.label === "Order Total");
@@ -373,6 +379,16 @@ function OrderSummary({
             value={total.value}
           />
         </>
+      ) : null}
+      {payCta && onPay ? (
+        <Button className="w-full" onClick={onPay} size="lg">
+          {payCta}
+        </Button>
+      ) : null}
+      {deadline ? (
+        <Text size="sm" weight="medium">
+          {deadline}
+        </Text>
       ) : null}
       {onViewInvoicePdf ? (
         <Button
@@ -453,11 +469,15 @@ function OrderSidebar({
   content,
   confirmAddressCta,
   onConfirmAddress,
+  payCta,
+  onPay,
   onViewInvoicePdf,
 }: {
   content: WinnerOrderContent;
   confirmAddressCta?: string | null;
   onConfirmAddress?: () => void;
+  payCta?: string | null;
+  onPay?: () => void;
   onViewInvoicePdf?: () => void;
 }) {
   const lines = summaryLinesFor(content);
@@ -478,7 +498,13 @@ function OrderSidebar({
           gap="md"
           hAlign="stretch"
         >
-          <OrderSummary lines={lines} onViewInvoicePdf={onViewInvoicePdf} />
+          <OrderSummary
+            deadline={content.deadline}
+            lines={lines}
+            onPay={onPay}
+            onViewInvoicePdf={onViewInvoicePdf}
+            payCta={payCta}
+          />
         </VStack>
         {showPayment || showAddress ? (
           <VStack className="w-full p-6" gap="lg" hAlign="stretch">
@@ -548,12 +574,8 @@ function WinnerOrderPage({
     content.primaryCta === "Confirm delivery address"
       ? content.primaryCta
       : null;
-  const mainCta =
-    content.primaryCta &&
-    content.primaryCta !== "Track shipment" &&
-    content.primaryCta !== "Confirm delivery address"
-      ? content.primaryCta
-      : null;
+  const payCta =
+    content.primaryCta === "Pay with card" ? content.primaryCta : null;
   const progress = showWinnerProgress(content.status)
     ? winnerProgressStepsFor(content.status, content)
     : null;
@@ -620,27 +642,6 @@ function WinnerOrderPage({
 
             <LotCard content={content} />
 
-            {content.deadline || mainCta ? (
-              <VStack className="w-full" gap="sm" hAlign="start">
-                {content.deadline ? (
-                  <Text size="sm" weight="medium">
-                    {content.deadline}
-                  </Text>
-                ) : null}
-                {mainCta ? (
-                  <div className="w-full sm:w-auto">
-                    <Button
-                      className="w-full sm:w-auto"
-                      onClick={handlePrimaryAction}
-                      size="lg"
-                    >
-                      {mainCta}
-                    </Button>
-                  </div>
-                ) : null}
-              </VStack>
-            ) : null}
-
             {content.secondaryNote &&
             content.status !== "shipped" &&
             content.status !== "delivered" ? (
@@ -654,9 +655,11 @@ function WinnerOrderPage({
             confirmAddressCta={confirmAddressCta}
             content={content}
             onConfirmAddress={handleConfirmAddressClick}
+            onPay={payCta ? handlePrimaryAction : undefined}
             onViewInvoicePdf={
               hasIssuedInvoice(content) ? openPlaceholderInvoicePdf : undefined
             }
+            payCta={payCta}
           />
         </div>
       </main>
