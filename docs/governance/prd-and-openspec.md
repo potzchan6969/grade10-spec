@@ -31,7 +31,7 @@ Source material behind a decision — an owner's draft, competitor research, a v
 
 ## What Does Not Go on the PRD
 
-The PRD moves first, whoever learns the detail — and a detail is a line the reader would act differently without: a value, a set they can meet, an outcome they can see, a decision. That is the whole test, the first Placement rule of [`writing.md`](writing.md). Everything each hand learns beyond it has a home of its own, and the page shows it from there rather than restating it:
+The PRD moves first, whoever learns the detail — and a detail is a line the reader would act differently without: a value, a set they can meet, an outcome they can see, a decision. That is the whole test, the first Placement rule of [`writing.md`](writing.md). Everything each teammate learns beyond it has a home of its own, and the page shows it from there rather than restating it:
 
 | Hand | Goes on the PRD | Stays in its own artifact |
 | --- | --- | --- |
@@ -154,7 +154,7 @@ awaiting:
   ui-design: nothing draws the reminder banner
 ```
 
-It is written by whoever is held up, and read two ways. The [Pending](/pending) page shows the change under the hand that owes each artifact, carrying the line, so a designer sees what is waiting on them and why. And `pnpm run validate:changes` drops the one error `openspec validate` raises against a change with no delta — `awaiting: specs:` — so a confirmed outcome sits in the store as a proposal until somebody answers. Every other error that run reports still counts.
+It is written by whoever is held up, and read two ways. The [Pending](/pending) page shows the change under the teammate who owes each artifact, carrying the line, so a designer sees what is waiting on them and why. And `pnpm run validate:changes` drops the one error `openspec validate` raises against a change with no delta — `awaiting: specs:` — so a confirmed outcome sits in the store as a proposal until somebody answers. Every other error that run reports still counts.
 
 Every wait:
 

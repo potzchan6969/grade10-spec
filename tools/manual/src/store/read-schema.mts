@@ -23,11 +23,12 @@ export function schemaArtifacts(
     const fields = (entry ?? {}) as Record<string, unknown>;
     if (typeof fields.id !== "string" || typeof fields.generates !== "string")
       continue;
-    const hand = typeof fields.hand === "string" ? fields.hand : undefined;
+    const teammate =
+      typeof fields.teammate === "string" ? fields.teammate : undefined;
     artifacts.push({
       id: fields.id,
       generates: fields.generates,
-      ...(hand ? { hand } : {}),
+      ...(teammate ? { teammate } : {}),
       requires: strings(fields.requires),
       required: fields.required !== false,
     });

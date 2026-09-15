@@ -31,7 +31,7 @@ needs picking up rather than assuming someone will find it.
 
 The PRD under `docs/prds/` is yours to keep whole. Everyone writes on it - a
 designer's state, an engineer's constraint, a QA case that exposes a rule nobody
-wrote land there first, marked 🚧 or ❓ - and you are the hand that keeps it one
+wrote land there first, marked 🚧 or ❓ - and you are the teammate who keeps it one
 record.
 
 ## Why this workflow has the shape it has

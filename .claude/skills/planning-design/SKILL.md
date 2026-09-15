@@ -97,7 +97,7 @@ openspec status --change <change-name>
 
 A change that needs an artifact nobody has written yet says so: `awaiting:`
 with `<artifact>: <what is missing>` in its `.openspec.yaml`. That line is
-what puts it on [Pending](/pending) under the hand that owes it.
+what puts it on [Pending](/pending) under the teammate who owes it.
 
 Then say the change still needs its delivery plan — `ui-design.md` does not
 move it off the planning board. Only `tasks.md` does.

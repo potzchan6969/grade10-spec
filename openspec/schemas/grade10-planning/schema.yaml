@@ -9,7 +9,7 @@ description: >-
 artifacts:
   - id: proposal
     required: true
-    hand: product-manager
+    teammate: product-manager
     generates: proposal.md
     description: Why this change is needed, what changes, and what it will not do
     template: proposal.md
@@ -83,7 +83,7 @@ artifacts:
     requires: []
   - id: specs
     required: true
-    hand: product-manager
+    teammate: product-manager
     generates: specs/**/spec.md
     description: The capability's purpose, the feature set, and the requirement deltas
     template: spec.md
@@ -219,7 +219,7 @@ artifacts:
       - proposal
   - id: user-journeys
     required: true
-    hand: product-manager
+    teammate: product-manager
     generates: specs/**/user-journeys.md
     description: The journeys this change adds, changes or retires, with the ones it leans on restated
     template: user-journeys.md
@@ -320,7 +320,7 @@ artifacts:
       - specs
   - id: test-cases
     required: true
-    hand: product-manager
+    teammate: product-manager
     generates: specs/**/feature-tcs.md
     description: An independent blind reading of the anchors, written without sight of the scenarios
     template: feature-tcs.md
@@ -408,7 +408,7 @@ artifacts:
       - user-journeys
   - id: ui-design
     required: false
-    hand: designer
+    teammate: designer
     generates: ui-design.md
     description: The visual plan - screens, component exports, and states
     template: ui-design.md
@@ -445,7 +445,7 @@ artifacts:
       - specs
   - id: tech-design
     required: false
-    hand: engineer
+    teammate: engineer
     generates: tech-design.md
     description: The technical implementation's high-level design
     template: tech-design.md
@@ -516,7 +516,7 @@ artifacts:
       - specs
   - id: tasks
     required: true
-    hand: engineer
+    teammate: engineer
     generates: tasks.md
     description: The implementation plan, claimed group by group
     template: tasks.md

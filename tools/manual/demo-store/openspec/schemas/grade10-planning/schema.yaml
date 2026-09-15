@@ -3,14 +3,14 @@ version: 1
 description: Grade10 planning workflow - proposal → specs → user journeys → test cases → ui design → tech design → tasks
 artifacts:
   - id: proposal
-    hand: product-manager
+    teammate: product-manager
     required: true
     generates: proposal.md
     requires: []
     instruction: |
       Why, what changes, and what does not.
   - id: specs
-    hand: product-manager
+    teammate: product-manager
     required: true
     generates: specs/**/spec.md
     requires:
@@ -18,7 +18,7 @@ artifacts:
     instruction: |
       One delta per capability.
   - id: user-journeys
-    hand: product-manager
+    teammate: product-manager
     required: true
     generates: specs/**/user-journeys.md
     requires:
@@ -26,7 +26,7 @@ artifacts:
     instruction: |
       Who walks the requirements.
   - id: test-cases
-    hand: product-manager
+    teammate: product-manager
     required: true
     generates: specs/**/feature-tcs.md
     requires:
@@ -34,7 +34,7 @@ artifacts:
     instruction: |
       QA's suite, derived from the journeys.
   - id: ui-design
-    hand: designer
+    teammate: designer
     required: false
     generates: ui-design.md
     requires:
@@ -42,7 +42,7 @@ artifacts:
     instruction: |
       The visual plan.
   - id: tech-design
-    hand: engineer
+    teammate: engineer
     required: false
     generates: tech-design.md
     requires:
@@ -50,7 +50,7 @@ artifacts:
     instruction: |
       The technical design.
   - id: tasks
-    hand: engineer
+    teammate: engineer
     required: true
     generates: tasks.md
     requires:

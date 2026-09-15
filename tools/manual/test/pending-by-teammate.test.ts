@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { pendingByHand } from "../src/api/derive";
+import { pendingByTeammate } from "../src/api/derive";
 import type { ChangeEntry, Delta, SchemaArtifact } from "../src/api/types";
 import { changeEntry } from "./manual-fixture";
 import { realStore } from "./real-store";
 
-/** What each hand owes, derived from the artifacts a change has written
+/** What each teammate owes, derived from the artifacts a change has written
  * against the ones its schema declares — never stored, never assigned. */
 
 const delta: Delta = { spec: "demo/alpha", kinds: ["ADDED"], requirements: [] };
@@ -12,10 +12,10 @@ const delta: Delta = { spec: "demo/alpha", kinds: ["ADDED"], requirements: [] };
 const artifact = (
   id: string,
   generates: string,
-  hand: string,
+  teammate: string,
   requires: string[],
   required = true,
-): SchemaArtifact => ({ id, generates, hand, requires, required });
+): SchemaArtifact => ({ id, generates, teammate, requires, required });
 
 /** The real chain, three deep: every row on the live board comes off
  * `test-cases`, which nothing reaches until the journeys are written. */
@@ -38,13 +38,13 @@ const on = (id: string, deltas: Delta[], fields: Partial<ChangeEntry> = {}) =>
   changeEntry(id, deltas, { schema: "demo", ...fields });
 
 const owed = (changes: ChangeEntry[]) =>
-  pendingByHand(changes, SCHEMAS).map((one) => [
-    one.hand,
+  pendingByTeammate(changes, SCHEMAS).map((one) => [
+    one.teammate,
     one.items.map((item) => item.artifact),
   ]);
 
-describe("what each hand still owes", () => {
-  it("asks the hand that writes an artifact for the one it has not written", () => {
+describe("what each teammate still owes", () => {
+  it("asks the teammate that writes an artifact for the one it has not written", () => {
     expect(owed([on("idea", [], { written: ["proposal"] })])).toEqual([
       ["product-manager", ["specs"]],
       ["designer", []],
@@ -84,8 +84,8 @@ describe("what each hand still owes", () => {
       written: ["proposal", "specs"],
       awaiting: [{ artifact: "ui-design", why: "nothing draws the banner" }],
     });
-    const designer = pendingByHand([change], SCHEMAS).find(
-      (one) => one.hand === "designer",
+    const designer = pendingByTeammate([change], SCHEMAS).find(
+      (one) => one.teammate === "designer",
     );
     expect(designer?.items).toEqual([
       { change, artifact: "ui-design", why: "nothing draws the banner" },
@@ -97,7 +97,7 @@ describe("what each hand still owes", () => {
       written: ["proposal"],
       awaiting: [{ artifact: "specs", why: "legal has not answered" }],
     });
-    const [pm] = pendingByHand([change], SCHEMAS);
+    const [pm] = pendingByTeammate([change], SCHEMAS);
     expect(pm.items).toEqual([
       { change, artifact: "specs", why: "legal has not answered" },
     ]);
@@ -123,7 +123,7 @@ describe("what each hand still owes", () => {
       skipSpecs: "no capability moves",
       awaiting: [{ artifact: "specs", why: "the refactor may move a rule" }],
     });
-    const [pm] = pendingByHand([change], SCHEMAS);
+    const [pm] = pendingByTeammate([change], SCHEMAS);
     expect(pm.items.map((item) => item.artifact)).toEqual(["specs"]);
   });
 
@@ -136,7 +136,7 @@ describe("what each hand still owes", () => {
     ]);
   });
 
-  it("names every hand the schemas declare, so an idle one is still answered", () => {
+  it("names every teammate the schemas declare, so an idle one is still answered", () => {
     expect(owed([])).toEqual([
       ["product-manager", []],
       ["designer", []],
@@ -148,8 +148,8 @@ describe("what each hand still owes", () => {
     const written = ["proposal", "specs"];
     const old = on("old", [delta], { written, created: "2026-01-01" });
     const recent = on("recent", [delta], { written, created: "2026-06-01" });
-    const engineer = pendingByHand([recent, old], SCHEMAS).find(
-      (one) => one.hand === "engineer",
+    const engineer = pendingByTeammate([recent, old], SCHEMAS).find(
+      (one) => one.teammate === "engineer",
     );
     expect(engineer?.items.map((item) => item.change.id)).toEqual([
       "old",
@@ -163,7 +163,7 @@ describe("against the store as it stands", () => {
 
   it("names a role for every artifact the planning schema declares", () => {
     expect(artifacts?.length).toBeGreaterThan(0);
-    expect(artifacts?.filter((one) => one.hand === undefined)).toEqual([]);
+    expect(artifacts?.filter((one) => one.teammate === undefined)).toEqual([]);
   });
 
   it("reads the chain and the optional artifacts off the schema file", () => {
@@ -173,8 +173,8 @@ describe("against the store as it stands", () => {
     expect(byId.get("tasks")?.required).toBe(true);
   });
 
-  it("asks no hand for an artifact the change has already written", () => {
-    for (const { items } of pendingByHand(
+  it("asks no teammate for an artifact the change has already written", () => {
+    for (const { items } of pendingByTeammate(
       realStore.snapshot.changes,
       realStore.snapshot.schemas,
     )) {

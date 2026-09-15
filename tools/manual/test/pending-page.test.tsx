@@ -5,7 +5,7 @@ import { buildIndex } from "../src/api/derive";
 import type { ChangeEntry, Delta, SchemaArtifact } from "../src/api/types";
 import { changeEntry, snapshotOf } from "./manual-fixture";
 
-/** The page somebody opens to find their own work: what each hand owes,
+/** The page somebody opens to find their own work: what each teammate owes,
  * every row derived from the artifacts a change has written. */
 
 const held = vi.hoisted(() => ({ index: undefined as unknown }));
@@ -21,10 +21,10 @@ const delta: Delta = { spec: "demo/alpha", kinds: ["ADDED"], requirements: [] };
 const artifact = (
   id: string,
   generates: string,
-  hand: string,
+  teammate: string,
   requires: string[],
   required = true,
-): SchemaArtifact => ({ id, generates, hand, requires, required });
+): SchemaArtifact => ({ id, generates, teammate, requires, required });
 
 const SCHEMAS: Record<string, SchemaArtifact[]> = {
   demo: [
@@ -47,7 +47,7 @@ function render(changes: ChangeEntry[], schemas = SCHEMAS) {
 }
 
 describe("the pending page", () => {
-  it("heads a section per hand, and names the file it is asked for", () => {
+  it("heads a section per teammate, and names the file it is asked for", () => {
     const html = render([on("plan-it", [delta])]);
 
     expect(html).toContain("Engineer");
@@ -76,13 +76,13 @@ describe("the pending page", () => {
     expect(html).not.toMatch(/hours? ago/);
   });
 
-  it("answers an idle hand rather than leaving out its section", () => {
+  it("answers an idle teammate rather than leaving out its section", () => {
     const html = render([
       on("done", [delta], { written: ["proposal", "specs", "tasks"] }),
     ]);
 
     expect(html).toContain("Engineer");
-    expect(html).toContain("has written what this hand owes");
+    expect(html).toContain("has written what this teammate owes");
   });
 
   it("says so where no change names a schema this store defines", () => {

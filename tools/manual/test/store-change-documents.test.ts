@@ -21,10 +21,10 @@ describe("the artifacts a change has", () => {
     const artifact = (
       id: string,
       generates: string,
-      hand: string,
+      teammate: string,
       requires: string[],
       required = true,
-    ) => ({ id, generates, hand, requires, required });
+    ) => ({ id, generates, teammate, requires, required });
     expect(schemaArtifacts(FIXTURE, "grade10-planning")).toEqual([
       artifact("proposal", "proposal.md", "product-manager", []),
       artifact("specs", "specs/**/spec.md", "product-manager", ["proposal"]),

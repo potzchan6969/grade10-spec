@@ -99,7 +99,7 @@ openspec status --change <change-name>
 
 A change that needs an artifact nobody has written yet says so: `awaiting:`
 with `<artifact>: <what is missing>` in its `.openspec.yaml`. That line is
-what puts it on [Pending](/pending) under the hand that owes it.
+what puts it on [Pending](/pending) under the teammate who owes it.
 
 If the change has journeys but no suites beside them, run
 `/spec-to-tcs <change-name>` before pushing — `/spec-push` refuses without

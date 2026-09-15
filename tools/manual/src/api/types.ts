@@ -334,9 +334,9 @@ export type ChangeEntry = {
 export type SchemaArtifact = {
   id: string;
   generates: string;
-  /** The hand that writes it. A schema naming none leaves the artifact off
+  /** The teammate that writes it. A schema naming none leaves the artifact off
    * every worklist rather than guessing whose turn it is. */
-  hand?: string;
+  teammate?: string;
   requires: string[];
   /** Whether a change owes this artifact by default. An artifact that is not
    * required is owed only when the change says so in `awaiting:`: what makes

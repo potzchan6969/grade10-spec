@@ -617,8 +617,8 @@ export type PendingItem = {
   why?: string;
 };
 
-/** What one hand owes, oldest change first. */
-export type PendingHand = { hand: string; items: PendingItem[] };
+/** What one teammate owes, oldest change first. */
+export type PendingTeammate = { teammate: string; items: PendingItem[] };
 
 /** `skip_specs` says a change alters no behaviour, so it owes no
  * requirements — and nothing built on them either. It is the only waiver a
@@ -628,7 +628,7 @@ const waived = (id: string, change: ChangeEntry) =>
   id === "specs" && change.skipSpecs !== undefined;
 
 /**
- * Every hand's worklist, derived from the artifacts each change has written
+ * Every teammate's worklist, derived from the artifacts each change has written
  * against the ones its own schema declares. Nothing is stored: a change owes
  * an artifact when it has not written it, everything that artifact is built
  * on is settled, and nothing waived it. A change on a schema this store does
@@ -640,20 +640,20 @@ const waived = (id: string, change: ChangeEntry) =>
  * with changes that draw nothing. They appear when the change says so in
  * `awaiting:`, which is also the only way to say why a wait is a wait.
  */
-export function pendingByHand(
+export function pendingByTeammate(
   changes: ChangeEntry[],
   schemas: Record<string, SchemaArtifact[]>,
-): PendingHand[] {
-  const byHand = new Map<string, PendingItem[]>();
+): PendingTeammate[] {
+  const byTeammate = new Map<string, PendingItem[]>();
   for (const artifacts of Object.values(schemas)) {
-    for (const { hand } of artifacts) {
-      if (hand) byHand.set(hand, byHand.get(hand) ?? []);
+    for (const { teammate } of artifacts) {
+      if (teammate) byTeammate.set(teammate, byTeammate.get(teammate) ?? []);
     }
   }
 
   for (const change of [...changes].sort(byCreated)) {
     // A change the reader could not finish has an incomplete `written`, so
-    // asking a hand for a file it may already hold would be worse than
+    // asking a teammate for a file it may already hold would be worse than
     // saying nothing — the `store` rule is what reports it.
     const artifacts = change.error ? undefined : schemas[change.schema];
     if (!artifacts) continue;
@@ -662,7 +662,7 @@ export function pendingByHand(
       (change.awaiting ?? []).map((wait) => [wait.artifact, wait.why]),
     );
     for (const artifact of artifacts) {
-      if (!artifact.hand || written.has(artifact.id)) continue;
+      if (!artifact.teammate || written.has(artifact.id)) continue;
       // A waiver settles what an artifact beside the change stands on, but
       // not what lives inside a capability directory: `skip_specs` says there
       // is no capability, so there is nowhere to write a journeys file.
@@ -676,13 +676,13 @@ export function pendingByHand(
           artifact.requires.every(settled) &&
           !waived(artifact.id, change));
       if (!owed) continue;
-      byHand
-        .get(artifact.hand)
+      byTeammate
+        .get(artifact.teammate)
         ?.push({ change, artifact: artifact.id, ...(why ? { why } : {}) });
     }
   }
 
-  return [...byHand].map(([hand, items]) => ({ hand, items }));
+  return [...byTeammate].map(([teammate, items]) => ({ teammate, items }));
 }
 
 /** Oldest first: the change that has waited longest is the one to answer for. */

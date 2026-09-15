@@ -261,14 +261,14 @@
       {
         "id": "proposal",
         "generates": "proposal.md",
-        "hand": "product-manager",
+        "teammate": "product-manager",
         "requires": [],
         "required": true
       },
       {
         "id": "specs",
         "generates": "specs/**/spec.md",
-        "hand": "product-manager",
+        "teammate": "product-manager",
         "requires": [
           "proposal"
         ],
@@ -277,7 +277,7 @@
       {
         "id": "user-journeys",
         "generates": "specs/**/user-journeys.md",
-        "hand": "product-manager",
+        "teammate": "product-manager",
         "requires": [
           "specs"
         ],
@@ -286,7 +286,7 @@
       {
         "id": "test-cases",
         "generates": "specs/**/feature-tcs.md",
-        "hand": "product-manager",
+        "teammate": "product-manager",
         "requires": [
           "user-journeys"
         ],
@@ -295,7 +295,7 @@
       {
         "id": "ui-design",
         "generates": "ui-design.md",
-        "hand": "designer",
+        "teammate": "designer",
         "requires": [
           "specs"
         ],
@@ -304,7 +304,7 @@
       {
         "id": "tech-design",
         "generates": "tech-design.md",
-        "hand": "engineer",
+        "teammate": "engineer",
         "requires": [
           "specs"
         ],
@@ -313,7 +313,7 @@
       {
         "id": "tasks",
         "generates": "tasks.md",
-        "hand": "engineer",
+        "teammate": "engineer",
         "requires": [
           "specs"
         ],

@@ -2,7 +2,7 @@
 
 One feature — an account settings page — walked through both repositories with
 an agent. Every command here is real. Who writes which artifact, and the prompt
-each hand types, is one prompt per hand under
+each teammate types, is one prompt per teammate under
 [What to say to the agent](../prds/guides/working-a-change.md#what-to-say-to-the-agent).
 
 ## Where You Run This
@@ -153,7 +153,7 @@ confirm the PRD still describes the decision, then `openspec archive account-set
 
 ## See Also
 
-- [Working a change](../prds/guides/working-a-change.md) — who writes what, the prompt per hand, and how you know it is your turn
+- [Working a change](../prds/guides/working-a-change.md) — who writes what, the prompt per teammate, and how you know it is your turn
 - [`prd-and-openspec.md`](prd-and-openspec.md) — the lifecycle, and promotion in full
 - [`task-ownership.md`](task-ownership.md) — the `tasks.md` format both tools parse
 - [`ui-component-contracts.md`](ui-component-contracts.md) — before a public UI contract changes
