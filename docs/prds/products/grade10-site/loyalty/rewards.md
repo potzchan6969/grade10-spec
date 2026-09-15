@@ -8,7 +8,7 @@ order: 3
 
 | Type | Discount | Scope | Minimum spend | Example |
 | --- | --- | --- | --- | --- |
-| Product coupon | A fixed amount, or a percentage with a maximum discount | Named products or variants, a filter over the catalog's worlds and types, or the whole order | Optional | $50 off Pokémon |
+| Product coupon | A fixed amount, or a percentage with an optional maximum discount | Named products or variants, a filter over the catalog's worlds and types, or the whole order | Optional | $50 off Pokémon |
 | Gift | A free line added to the order, the variant it names | — | Required, above zero, so a gift always rides on a purchase | A free booster pack over $500 |
 
 Both are coupons, Grade10's own instrument, and a reward that takes money
@@ -37,9 +37,6 @@ Both kinds state:
 | A free booster pack | 100% | The variant it names | — |
 | A free booster pack over $500 | A free line, the pack's own variant | — | $500 |
 
-A free item a member claims is a product coupon at 100%; a gift is a line
-added on top of a purchase.
-
 ## Ways to Get a Reward
 
 | Way | When | Cost |
@@ -48,9 +45,6 @@ added on top of a purchase.
 | Birthday `TBC` | Once a year, on the birthday the member's profile holds | None |
 | Registration `TBC` | Once, when the account is created | None |
 | Operator gift `TBC` | An operator hands one out, for a campaign or as goodwill | None |
-
-Every reward is bought with points; the other three ways wait to be
-confirmed.
 
 ## Reward Shop
 
@@ -119,27 +113,25 @@ budget rather than a shelf count, or an operator restores the unit by hand.
 
 ## Reward Catalog
 
-Every reward the programme knows, on sale or not. The catalog defines what
-a reward is; the [Reward Shop](#reward-shop) is the part of it a member
-can buy.
+Every reward the programme knows, on sale or not; the
+[Reward Shop](#reward-shop) is the part of it a member can buy.
 
 | Field | Meaning |
 | --- | --- |
 | Slug and name | The id it is referred to by, and what the member reads |
 | Cost | Points per redemption, copied onto the redemption when it is made |
-| Definition | Its kind, discount, scope and what it combines with, copied onto the redemption too, so redefining a reward never rewrites one already taken |
+| Definition | Its kind, discount, scope and what it combines with, copied onto the redemption and the discount code that carries its coupon to the shop, so redefining a reward never rewrites one already taken |
 | Stock | Optional; a stocked reward is never oversold |
 | Window | Optional; outside it the reward cannot be redeemed |
 | Archived | Retired, still readable in the member's own history |
 
-- **How it is obtained** `TBC` — bought, or given on a birthday or at an
-  event; no field carries this, so every live reward is on sale
+- **How it is obtained** `TBC` — no field carries it, so every live reward
+  is on sale
 - **Units per redemption** `TBC` — a reward is taken one at a time until
   the per-redemption and per-day bounds are chosen
 - ❓ **The physical catalog** — which items, and their point prices; Product's
   call
-- **A reward's combine setting** is carried onto the coupon a redemption
-  issues, and onto the code that carries it to the shop
+- 🚧 **Free item** — its own choice in the console: one variant at 100% off
 
 ## Cancelling a Redemption
 
