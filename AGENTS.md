@@ -46,6 +46,8 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 | 6 | `tech-design.md` | Engineer | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
 | 7 | `tasks.md` | Engineer | `planning-dev` | Before the change can be applied |
 
+A change held up says so in `.openspec.yaml` `awaiting:` — an artifact id against what it needs, pooled by hand on the Pending page: [waiting for an input](docs/governance/prd-and-openspec.md#waiting-for-an-input).
+
 Each hand writes its own artifacts on the one change and stops: a PM finishes at the feature suites derived from the journeys, QA reviews and extends them, a designer writes `ui-design.md`, and the engineer who picks the work up adds `tech-design.md` and `tasks.md` to the same change rather than opening a second one. Engineering never opens a change in the application repository: its `openspec/` is config-only and resolves to this store. Until a change has a `tasks.md` it shows on the engineer's board as still being planned. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
 
 The PRD is the exception to hands. It is the source of truth for what the product should be, so a product detail learned anywhere — a designer's state, an engineer's constraint, a QA case that exposes a rule nobody wrote, a delta that says more than the PRD does — lands on the PRD first, marked 🚧 or ❓, by whoever learned it, before the artifact that depends on it. A product detail is a line the reader would act differently without — a value, a set they meet, an outcome they see, a decision — and one 🚧 line carries an outcome however many scenarios prove it; what each hand learns beyond that stays in its own artifact, tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#what-does-not-go-on-the-prd). The product manager keeps the PRD whole.
@@ -103,6 +105,7 @@ Run the appropriate checks before handoff:
 - `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
 - `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
 - `pnpm run test:openspec` after anything under `scripts/openspec/` changes.
+- `pnpm run validate:changes` after a change's artifacts or `.openspec.yaml` change; CI runs it on every push.
 - `pnpm run tcs:validate` after a suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — changes; CI runs it on every push.
 - `pnpm run design-sync:check` after a design-system primitive changes.
 - `pnpm run diagrams` after a chart source under `docs/prds/diagrams/` changes; commit the rendered SVG, which `pnpm run diagrams:check` holds to its source in CI.
