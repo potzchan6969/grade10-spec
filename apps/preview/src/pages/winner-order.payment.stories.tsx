@@ -28,6 +28,9 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Pay with card" })).toBeVisible();
     expect(canvas.getByText(/Locked after invoice send/)).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: "View invoice PDF" }),
+    ).toBeVisible();
   },
 };
 
@@ -42,5 +45,8 @@ export const ExpiredInvoice: Story = {
     expect(canvas.getByText(/Deadline passed/)).toBeVisible();
     expect(canvas.getByRole("button", { name: "Pay with card" })).toBeVisible();
     expect(canvas.getByText(/support@grade10.com/)).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: "View invoice PDF" }),
+    ).toBeVisible();
   },
 };

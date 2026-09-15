@@ -22,6 +22,9 @@ export const Cancelled: Story = {
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "View invoice PDF" }),
+    ).not.toBeInTheDocument();
   },
 };
 
@@ -35,5 +38,8 @@ export const Refunded: Story = {
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
     expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
+    expect(
+      canvas.getByRole("button", { name: "View invoice PDF" }),
+    ).toBeVisible();
   },
 };

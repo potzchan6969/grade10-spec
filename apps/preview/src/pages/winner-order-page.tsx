@@ -15,7 +15,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
-import { ArrowUpRight } from "@phosphor-icons/react";
+import { ArrowUpRight, FilePdf } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
@@ -31,6 +31,43 @@ const ADDRESS_CONFIRMED_TOAST = {
   title: "Address confirmed",
   description: "Grade10 is preparing your invoice for this destination.",
 } as const;
+
+/**
+ * Minimal placeholder PDF for Storybook — not a real invoice pipeline.
+ * Opens in a new tab so the winner can view or save from the browser.
+ */
+const PLACEHOLDER_INVOICE_PDF = `%PDF-1.4
+1 0 obj<< /Type /Catalog /Pages 2 0 R >>endobj
+2 0 obj<< /Type /Pages /Kids [3 0 R] /Count 1 >>endobj
+3 0 obj<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources<< /Font<< /F1 5 0 R >> >> >>endobj
+4 0 obj<< /Length 64 >>stream
+BT /F1 18 Tf 72 720 Td (Grade10 Winner Invoice Placeholder) Tj ET
+endstream endobj
+5 0 obj<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>endobj
+trailer<< /Root 1 0 R >>
+%%EOF
+`;
+
+function openPlaceholderInvoicePdf() {
+  const blob = new Blob([PLACEHOLDER_INVOICE_PDF], { type: "application/pdf" });
+  const url = URL.createObjectURL(blob);
+  const opened = window.open(url, "_blank", "noopener,noreferrer");
+  if (!opened) {
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = "grade10-winner-invoice.pdf";
+    anchor.rel = "noopener";
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+  }
+  window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+}
+
+/** Invoice exists from Pending Payment onward (incl. paid / delivery / refunded). */
+function hasIssuedInvoice(content: WinnerOrderContent): boolean {
+  return Boolean(content.invoiceLines?.length);
+}
 
 const STATUS_BADGE: Record<
   WinnerOrderStatus,
@@ -329,7 +366,13 @@ function AddressBlock({
   );
 }
 
-function OrderSummary({ lines }: { lines: WinnerOrderInvoiceLine[] }) {
+function OrderSummary({
+  lines,
+  onViewInvoicePdf,
+}: {
+  lines: WinnerOrderInvoiceLine[];
+  onViewInvoicePdf?: () => void;
+}) {
   const total = lines.find((line) => line.label === "Order Total");
   const rest = lines.filter((line) => line.label !== "Order Total");
   return (
@@ -357,6 +400,17 @@ function OrderSummary({ lines }: { lines: WinnerOrderInvoiceLine[] }) {
             value={total.value}
           />
         </>
+      ) : null}
+      {onViewInvoicePdf ? (
+        <Button
+          className="w-full"
+          leading={<FilePdf aria-hidden size={16} weight="regular" />}
+          onClick={onViewInvoicePdf}
+          size="sm"
+          variant="outline"
+        >
+          View invoice PDF
+        </Button>
       ) : null}
     </VStack>
   );
@@ -426,10 +480,12 @@ function OrderSidebar({
   content,
   confirmAddressCta,
   onConfirmAddress,
+  onViewInvoicePdf,
 }: {
   content: WinnerOrderContent;
   confirmAddressCta?: string | null;
   onConfirmAddress?: () => void;
+  onViewInvoicePdf?: () => void;
 }) {
   const lines = summaryLinesFor(content);
   const showPayment = Boolean(content.paymentMethod);
@@ -449,7 +505,7 @@ function OrderSidebar({
           gap="md"
           hAlign="stretch"
         >
-          <OrderSummary lines={lines} />
+          <OrderSummary lines={lines} onViewInvoicePdf={onViewInvoicePdf} />
         </VStack>
         {showPayment || showAddress ? (
           <VStack className="w-full p-6" gap="lg" hAlign="stretch">
@@ -625,6 +681,9 @@ function WinnerOrderPage({
             confirmAddressCta={confirmAddressCta}
             content={content}
             onConfirmAddress={handleConfirmAddressClick}
+            onViewInvoicePdf={
+              hasIssuedInvoice(content) ? openPlaceholderInvoicePdf : undefined
+            }
           />
         </div>
       </main>
