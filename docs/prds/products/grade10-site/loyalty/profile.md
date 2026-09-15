@@ -90,6 +90,9 @@ names.
 - **Never stored** — the QR payload is answered once, and only its digest is
   kept
 - **Letters only** — no digits, and none of I, L, O or U
+- **Card code history** — kept only to power the refusal above, naming
+  where and when a till already took a code; there is no member or
+  operator surface for it
 
 The same card can be added to a phone wallet —
 [Member Card in a Wallet](/p/grade10-site/loyalty/wallet-member-card).
@@ -111,18 +114,16 @@ The same card can be added to a phone wallet —
 | Points revoked | A refund's claw-back |
 | Points returned | A reversed redemption, or a cancelled or refunded sale that points paid for |
 
-- **Card history** `TBC` — the last 20 codes, and where and when a till
-  took each; served, and no surface shows it
-- **Redemption outcomes** `TBC` — served, and no surface shows it
 - **Notified** — every identification the member did not show a code for —
   email, phone, the customer on the cart, an Apple pass — sends a notice at
   once
 
 ## Privacy
 
-- **Hidden from the member** — an operator's reason, a retry key, the
-  fulfilment attempts behind a code, who settled or reversed something, and
-  stock counts
+- **Hidden from the member** — an operator's reason, a retry key, a
+  redemption's fulfilment outcome and attempts, who settled or reversed
+  something, and stock counts. The operator console shows this as the
+  redemption's own audit trail
 - **No user id on the surface** — it reads the session
 - **Identity lives elsewhere** — a member's identity lives in the identity
   system and never in the programme, which holds only an opaque user id, so a
