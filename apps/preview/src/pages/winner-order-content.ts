@@ -48,7 +48,7 @@ export type WinnerOrderContent = {
    */
   outcomeAlert?: {
     title: string;
-    status: "default" | "warning";
+    status: "default" | "warning" | "success" | "error";
   };
   /** Paid receipt strip — method + masked number. */
   paymentMethod?: string;
@@ -183,9 +183,9 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         invoiceLines: INVOICE_LINES,
         primaryCta: null,
         outcomeAlert: {
-          // Paid then refunded — distinct from unpaid Cancelled.
+          // Paid then refunded — success CheckCircle (not Bell/default).
           title: "Order refunded. Payment on this order was returned.",
-          status: "default",
+          status: "success",
         },
       };
   }

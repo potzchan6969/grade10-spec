@@ -75,5 +75,7 @@ export const Refunded: Story = {
     expect(lot!.compareDocumentPosition(alert)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     );
+    const alertRoot = alert.closest('[data-slot="alert"]');
+    expect(alertRoot).toHaveAttribute("data-status", "success");
   },
 };
