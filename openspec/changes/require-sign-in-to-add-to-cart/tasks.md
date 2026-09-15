@@ -11,7 +11,7 @@
 - [ ] 2.2 Perform an armed intent once the scope becomes a member, leaving a line the store refuses on the store's refusal path and dropping the intent when the surface goes (grade10-site-store-product-listing-SC-46, grade10-site-store-product-page-SC-28)
 - [ ] 2.3 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs store-frontend`
 
-## 3. Product page Add to cart (grade10)
+## 3. Product page Add to cart (grade10) (owner: @sean)
 
 Needs the gate from group 2 landed.
 
