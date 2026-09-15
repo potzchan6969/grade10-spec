@@ -34,6 +34,12 @@ lead there; until then the destination stays out of the chrome.
 drawer for primary navigation and utilities; language opens a nested drawer
 (not in the compact bar); Account / Sign In and Cart stay in the bar.
 
+## Cart
+
+🚧 **Members-only cart** — the Cart control opens sign-in for a collector
+with no session, and the cart drawer opens by itself once they sign in. There
+is no cart to show someone signed out.
+
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
 
 ::story{id="site-chrome-siteheader-auction-first--signed-out" title="Auction first — signed out"}
