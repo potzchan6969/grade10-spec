@@ -6,7 +6,7 @@
 
 ## 2. Header cart gate (grade10) (owner: @sean)
 
-- [ ] 2.1 Open sign-in from the header's Cart control while no session is signed in, leaving the drawer closed (grade10-site-site-page-shell-SC-21)
-- [ ] 2.2 Open the drawer the collector pressed for when sign-in succeeds on that surface, and leave nothing armed when the dialog is dismissed (grade10-site-site-page-shell-SC-22, grade10-site-site-page-shell-SC-23)
-- [ ] 2.3 Open the drawer directly for a signed-in collector, with no dialog (grade10-site-site-page-shell-SC-24)
-- [ ] 2.4 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs web-spa`
+- [x] 2.1 Open sign-in from the header's Cart control while no session is signed in, leaving the drawer closed (grade10-site-site-page-shell-SC-21)
+- [x] 2.2 Open the drawer the collector pressed for when sign-in succeeds on that surface, and leave nothing armed when the dialog is dismissed (grade10-site-site-page-shell-SC-22, grade10-site-site-page-shell-SC-23)
+- [x] 2.3 Open the drawer directly for a signed-in collector, with no dialog (grade10-site-site-page-shell-SC-24)
+- [x] 2.4 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs web-spa`
