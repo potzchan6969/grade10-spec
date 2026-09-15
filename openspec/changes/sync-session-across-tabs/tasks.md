@@ -12,7 +12,7 @@ not need it landed to be claimed — both can be verified against fixtures — b
 the promptness cases in each wait on 2.1.
 
 - [x] 2.1 Announce on the browser auth client once per document load, on the first session read that finds somebody, so every other tab of the site re-reads at once (shared-auth-session-SC-22)
-- [ ] 2.2 Bind that announcement into both sites' browser entries beside the existing session bind, and confirm a sign-out still reaches the other tabs on better-auth's own announcement (shared-auth-session-SC-12, shared-auth-session-SC-16)
+- [x] 2.2 Bind that announcement into both sites' browser entries beside the existing session bind, and confirm a sign-out still reaches the other tabs on better-auth's own announcement (shared-auth-session-SC-12, shared-auth-session-SC-16)
 - [ ] 2.3 Cover the read that fails: a surface that cannot reach the auth service keeps the person it last held, and only an answer of nobody signs it out (shared-auth-session-SC-25, shared-auth-session-SC-26)
 - [ ] 2.4 Cover the session that ran out and the session that became somebody else, including that the same person signing in again never flickers through signed-out (shared-auth-session-SC-13, shared-auth-session-SC-14, shared-auth-session-SC-23)
 - [ ] 2.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test`
