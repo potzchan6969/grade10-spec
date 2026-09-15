@@ -146,8 +146,6 @@ one and not the other. It is an operator's move, never a member's.
   points
 - **Used does not** — a used coupon stays used; cancelling or refunding the
   order that carried it changes nothing, and the points stay spent
-- **A physical reward, the same way** — waiting for collection cancels like
-  an unused coupon voids; already collected stays given, like a used one
 - **Held for an order does not** — it is attached to an order being paid,
   and waits for that order to settle either way
 - **A lapsed balance does not** — there is nothing left to return into
