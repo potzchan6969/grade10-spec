@@ -31,7 +31,7 @@ needs picking up rather than assuming someone will find it.
 
 The PRD under `docs/prds/` is yours to keep whole. Everyone writes on it - a
 designer's state, an engineer's constraint, a QA case that exposes a rule nobody
-wrote land there first, marked 🚧 or ❓ - and you are the hand that keeps it one
+wrote land there first, marked 🚧 or ❓ - and you are the teammate who keeps it one
 record.
 
 ## Why this workflow has the shape it has
@@ -155,10 +155,14 @@ Everything this run produces is `draft`. Nothing in it claims review.
 9. **Validate.**
 
    ```bash
-   openspec validate <change-name> --strict
+   pnpm run validate:changes <change-name>
    pnpm check:manual
    pnpm run tcs:validate
    ```
+
+   A requirement nobody can decide yet is a wait, not a guess: `awaiting:`
+   with `specs: <what is missing>` in the change's `.openspec.yaml` says so,
+   and `validate:changes` is the run that honours it.
 
 ## Anchors
 

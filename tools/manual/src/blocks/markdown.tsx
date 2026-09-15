@@ -46,6 +46,7 @@ const REFERENCE_FILE = /^docs\/references\/(.+)\.md$/;
 const APP_ROUTES = new Set([
   "/",
   "/in-flight",
+  "/pending",
   "/qa",
   "/design",
   REFERENCES_ROUTE,

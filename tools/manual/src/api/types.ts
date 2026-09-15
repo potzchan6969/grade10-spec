@@ -321,8 +321,27 @@ export type ChangeEntry = {
   suites?: ChangeSuite[];
   /** Carried only when the change is not settled on the store's main. */
   mainState?: MainState;
+  /** The schema artifact ids this change has written. */
+  written: string[];
+  /** What the change says it is waiting for, from `.openspec.yaml`
+   * `awaiting:` — an artifact id against the line its author wrote. */
+  awaiting?: { artifact: string; why: string }[];
   /** Set when a file was malformed; content fields may be incomplete. */
   error?: ItemError;
+};
+
+/** One artifact a workflow schema declares. */
+export type SchemaArtifact = {
+  id: string;
+  generates: string;
+  /** The teammate that writes it. A schema naming none leaves the artifact off
+   * every worklist rather than guessing whose turn it is. */
+  teammate?: string;
+  requires: string[];
+  /** Whether a change owes this artifact by default. An artifact that is not
+   * required is owed only when the change says so in `awaiting:`: what makes
+   * it owed is a condition no worklist can see. */
+  required: boolean;
 };
 
 /** How a change's artifact renders: a prose document, the directory of
@@ -477,6 +496,10 @@ export type Snapshot = {
   specs: SpecEntry[];
   /** In-flight only; archived changes live in `/api/archive`. */
   changes: ChangeEntry[];
+  /** Each workflow schema the changes in flight name, against the artifacts
+   * it declares, in schema order. A schema this store does not define is
+   * absent, so a change on one is left off every worklist. */
+  schemas: Record<string, SchemaArtifact[]>;
   /** Every file under the manual's `assets/`, as `assets/<name>` paths. */
   assets: string[];
   /** The store's `docs/references/`, in path order, without their text. The

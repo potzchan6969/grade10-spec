@@ -106,6 +106,11 @@ export const RULES = [
     title: "Changes moving behaviour no second reading read",
   },
   {
+    key: "awaiting",
+    level: "fail",
+    title: "Waits naming no artifact, or one already written",
+  },
+  {
     key: "grouping",
     level: "fail",
     title: "Durable specs holding a heading the archive would fold",

@@ -2,6 +2,7 @@
 title: Paying with Points
 spec: grade10-site/loyalty/programme
 order: 4
+reviewed: 2026-09-15
 ---
 
 ## Rules
@@ -103,7 +104,7 @@ The session, the switches and the cart are on
   qualifying good but keeps a gift card or a fee the same payment covered
   gets nothing back automatically; an operator returns it by hand from the
   loyalty admin, and a spend can be returned only once
-- 🚧 **No extra life** — returned points lapse with the rest of the balance,
+- **No extra life** — returned points lapse with the rest of the balance,
   so a return never lengthens the life of points
 - **Points earned** — clawed back separately, line by line —
   [Points](/p/grade10-site/loyalty/points)

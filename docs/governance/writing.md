@@ -68,7 +68,8 @@ nearest your task and keep it open while you draft.
   unprompted: `the member goes back to Silver`, not `demotion`; `points
   earned`, not `tier points`; `label`, not `eyebrow`. A plain word the
   code also uses says what it means; the identifier stays in the engineer
-  block
+  block. The reader of a governance page or a change's record is a
+  teammate, so its words are theirs
 - **The requirement's word for a defined thing** — `tier period`, because
   the spec calls it that. One name per thing, the same on every page
 - **Plain nouns, no idiom** — the reader's first language may not be
@@ -81,7 +82,14 @@ nearest your task and keep it open while you draft.
   sounds clever is rewritten plain
 - **Name what happens, not a noun for it** — `the member loses the tier`,
   never `the drop`; a noun made from an event needs defining first, and
-  the lines after it fill with pronouns
+  the lines after it fill with pronouns. This is about the product: a rule
+  says what happens, never a noun standing in for it
+- **A capability, named as one** — what the repository, the store or its
+  tooling gains is named plainly and directly: `Support pending teammates
+  in a change request`, `Support a second brand on the till`. Say
+  `Support` and the thing; the rule above does not reach these, because
+  the subject is the tooling rather than the product. A title, a heading
+  and a change's summary all take this form
 - **Digits for values** — `$139`, `1.2×`, `≥ 500`, `a rolling 12 months`
   in a table, a cell or a bold lead. Running prose may spell a small number. The currency is named once in
   the values table, then `$`
@@ -186,7 +194,7 @@ Read the draft once as the least-informed reader who has to act on it.
 6. **Examples** — every rule that moves numbers over steps or days has one
    worked ledger, on the case that decides it, adding no fact
 7. **Words** — every word is one the reader would say, the same on every
-   page
+   page; a capability the tooling gains is named as one
 8. **Sentences** — none carries a metaphor, a twist or a second fact
 9. **Drift** — no note that the spec or the code says otherwise, no
    unsigned `warning` callout, no list of what is built against what is

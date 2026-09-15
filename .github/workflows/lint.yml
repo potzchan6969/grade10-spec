@@ -126,16 +126,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      # The validator reads each change's manifest to tell a change waiting on
+      # an input from one nobody finished, with the same yaml reader the store
+      # itself uses — two readings of one key must not disagree.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Install the OpenSpec CLI
         run: npm install -g @fission-ai/openspec@${{ env.OPENSPEC_VERSION }}
 
       - name: Validate changes
-        run: openspec validate --changes --strict
+        run: node scripts/openspec/validate-changes.mjs --strict
 
       - name: Validate durable specs
         if: ${{ !cancelled() }}

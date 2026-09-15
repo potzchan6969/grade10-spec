@@ -244,6 +244,11 @@
           ]
         }
       ],
+      "written": [
+        "proposal",
+        "specs",
+        "tasks"
+      ],
       "author": "tester",
       "followOns": [
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
@@ -251,6 +256,71 @@
       ]
     }
   ],
+  "schemas": {
+    "grade10-planning": [
+      {
+        "id": "proposal",
+        "generates": "proposal.md",
+        "teammate": "product-manager",
+        "requires": [],
+        "required": true
+      },
+      {
+        "id": "specs",
+        "generates": "specs/**/spec.md",
+        "teammate": "product-manager",
+        "requires": [
+          "proposal"
+        ],
+        "required": true
+      },
+      {
+        "id": "user-journeys",
+        "generates": "specs/**/user-journeys.md",
+        "teammate": "product-manager",
+        "requires": [
+          "specs"
+        ],
+        "required": true
+      },
+      {
+        "id": "test-cases",
+        "generates": "specs/**/feature-tcs.md",
+        "teammate": "product-manager",
+        "requires": [
+          "user-journeys"
+        ],
+        "required": true
+      },
+      {
+        "id": "ui-design",
+        "generates": "ui-design.md",
+        "teammate": "designer",
+        "requires": [
+          "specs"
+        ],
+        "required": false
+      },
+      {
+        "id": "tech-design",
+        "generates": "tech-design.md",
+        "teammate": "engineer",
+        "requires": [
+          "specs"
+        ],
+        "required": false
+      },
+      {
+        "id": "tasks",
+        "generates": "tasks.md",
+        "teammate": "engineer",
+        "requires": [
+          "specs"
+        ],
+        "required": true
+      }
+    ]
+  },
   "assets": [],
   "references": [
     {

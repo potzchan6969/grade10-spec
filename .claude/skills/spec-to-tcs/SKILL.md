@@ -130,8 +130,8 @@ and are unchanged.
    behaviour, ids numbered from `01` and never reusing a retired number. There
    is no cap on the number of journeys. A capability nobody walks says
    `**Walked by:** nobody on their own - <who inherits it>` and still gets a
-   suite, anchored on its feature set. Run `openspec validate <change-name>
-   --strict` when the target is a change, report what you changed, then
+   suite, anchored on its feature set. Run `pnpm run validate:changes
+   <change-name>` when the target is a change, report what you changed, then
    continue from step 4. Refuse only when the feature set and the journeys
    together describe nothing checkable; that gap is the author's.
 

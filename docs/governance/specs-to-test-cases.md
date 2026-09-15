@@ -146,7 +146,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 
 ## When Suites Are Generated
 
-- **Automatic** — when `/planning-pm` has the proposal, deltas and journeys through `openspec validate <change> --strict`, it runs `/spec-to-tcs <change>` at once: every case `draft`, on the same branch, as its own `test(<domain>): derive test cases for <capability>` commit. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
+- **Automatic** — when `/planning-pm` has the proposal, deltas and journeys through `pnpm run validate:changes <change>`, it runs `/spec-to-tcs <change>` at once: every case `draft`, on the same branch, as its own `test(<domain>): derive test cases for <capability>` commit. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
 - **`/spec-push` refuses** — a change whose capability has `user-journeys.md` and no `feature-tcs.md`; it runs `pnpm run tcs:validate` with the other checks
 - **`skip_specs`** — nothing to generate
 - **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
@@ -239,7 +239,7 @@ Thirty capabilities carry a suite and thirty-nine do not; seventeen of those thi
 - **Read the PRD** — `docs/prds/products/<product>/<domain>/index.md` and the capability's PRD: a control, state or amount the manual names is written in the manual's words
 - **Read the store's context** — `openspec/config.yaml`'s `context` for the brands, products and conventions (money is minor units plus an ISO 4217 code): `<grade10 store url>`, never `<store front door URL>`
 - **Read the cross-cutting specs the Purpose names** — `crawlable-pages`, `localization`, `money-amounts`, `dates-and-times`. Their facts are checked on the way past (`URL contains <lang>`), never set up as a pre-condition
-- **Write missing journeys first** — to `rules.user-journeys`: from the feature set and the PRD, adding no behaviour, with permanent ids and `**As a** / **I want** / **so that**`. There is no `**Accepted by:**` list — a scenario points up at its journey through its own `**Serves:**`, and tooling joins on that; `openspec validate <change> --strict`
+- **Write missing journeys first** — to `rules.user-journeys`: from the feature set and the PRD, adding no behaviour, with permanent ids and `**As a** / **I want** / **so that**`. There is no `**Accepted by:**` list — a scenario points up at its journey through its own `**Serves:**`, and tooling joins on that; `pnpm run validate:changes <change>`
 - **Confirm the ids** — `### <capability>-US-<n>: …`; older files get an ids-only upgrade
 
 ## Step 2: Journeys Become Sections

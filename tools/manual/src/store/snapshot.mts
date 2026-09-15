@@ -2,9 +2,11 @@ import { join } from "node:path";
 import type {
   Archive,
   ChangeDocument,
+  ChangeEntry,
   CheckWarning,
   MainState,
   ReferenceDocument,
+  SchemaArtifact,
   Snapshot,
   SpecEntry,
 } from "../api/types.ts";
@@ -29,6 +31,7 @@ import {
   readManualPages,
 } from "./read-manual.mts";
 import { readReferences, readReferencesReadme } from "./read-references.mts";
+import { schemaArtifacts } from "./read-schema.mts";
 import { discoverSpecs, readSpecs } from "./read-specs.mts";
 import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
@@ -37,6 +40,22 @@ import { checkWarnings } from "./warnings.mts";
 /** The artifacts share one history walk — the only expensive part of a read.
  * `documents` is one artifact per in-flight change and `references` one per
  * reference document, each served on its own. */
+/** The artifacts of every schema the changes in flight name, for the ones
+ * this store defines. A change on a CLI built-in is left out: its artifacts
+ * live inside the CLI, and nothing here can say what it owes. */
+function schemasInUse(
+  root: string,
+  changes: ChangeEntry[],
+): Record<string, SchemaArtifact[]> {
+  const schemas: Record<string, SchemaArtifact[]> = {};
+  for (const { schema } of changes) {
+    if (schema === "" || schema in schemas) continue;
+    const artifacts = schemaArtifacts(root, schema);
+    if (artifacts) schemas[schema] = artifacts;
+  }
+  return schemas;
+}
+
 export type Store = {
   snapshot: Snapshot;
   archive: Archive;
@@ -77,6 +96,7 @@ export function composeStore(
   const shape = discoverSpecs(roots.store);
   const designSync = readDesignSync(roots.store);
   const specs = readSpecs(roots.store, git);
+  const changes = readChanges(roots.store, git);
   markIssuedIds(roots.store, specs);
   const references = readReferences(roots.store, git);
   const referencesReadme = readReferencesReadme(roots.store);
@@ -90,7 +110,8 @@ export function composeStore(
       manualDir: roots.manual,
       pages: readManualPages(roots, git),
       specs,
-      changes: readChanges(roots.store, git),
+      changes,
+      schemas: schemasInUse(roots.store, changes),
       assets: readManualAssets(roots),
       references: references.map(({ text: _text, ...entry }) => entry),
       ...(referencesReadme === undefined ? {} : { referencesReadme }),

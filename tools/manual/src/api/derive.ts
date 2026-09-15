@@ -28,6 +28,7 @@ import type {
   ItemError,
   PageEntry,
   Scenario,
+  SchemaArtifact,
   Snapshot,
   SpecEntry,
   TestCase,
@@ -605,6 +606,88 @@ export function laneOf(change: ChangeEntry): ChangeLane {
  */
 export function isProposal(change: ChangeEntry): boolean {
   return laneOf(change) === "proposed";
+}
+
+/** One artifact a change still owes, and why it is owed. */
+export type PendingItem = {
+  change: ChangeEntry;
+  /** The schema's artifact id — `specs`, `ui-design`, `tasks`. */
+  artifact: string;
+  /** The line the change's author wrote in `awaiting:`, when it wrote one. */
+  why?: string;
+};
+
+/** What one teammate owes, oldest change first. */
+export type PendingTeammate = { teammate: string; items: PendingItem[] };
+
+/** `skip_specs` says a change alters no behaviour, so it owes no
+ * requirements — and nothing built on them either. It is the only waiver a
+ * worklist reads: `design_waived` and `tasks_waived` answer for a file's
+ * absence at archive, not for whose turn it is now. */
+const waived = (id: string, change: ChangeEntry) =>
+  id === "specs" && change.skipSpecs !== undefined;
+
+/**
+ * Every teammate's worklist, derived from the artifacts each change has written
+ * against the ones its own schema declares. Nothing is stored: a change owes
+ * an artifact when it has not written it, everything that artifact is built
+ * on is settled, and nothing waived it. A change on a schema this store does
+ * not define is left alone — its artifacts are the CLI's, not ours.
+ *
+ * `ui-design` and `tech-design` are never derived as owed: both turn on
+ * something no worklist can see — whether there is a screen, whether the
+ * work lands outside this store — and guessing would fill a designer's list
+ * with changes that draw nothing. They appear when the change says so in
+ * `awaiting:`, which is also the only way to say why a wait is a wait.
+ */
+export function pendingByTeammate(
+  changes: ChangeEntry[],
+  schemas: Record<string, SchemaArtifact[]>,
+): PendingTeammate[] {
+  const byTeammate = new Map<string, PendingItem[]>();
+  for (const artifacts of Object.values(schemas)) {
+    for (const { teammate } of artifacts) {
+      if (teammate) byTeammate.set(teammate, byTeammate.get(teammate) ?? []);
+    }
+  }
+
+  for (const change of [...changes].sort(byCreated)) {
+    // A change the reader could not finish has an incomplete `written`, so
+    // asking a teammate for a file it may already hold would be worse than
+    // saying nothing — the `store` rule is what reports it.
+    const artifacts = change.error ? undefined : schemas[change.schema];
+    if (!artifacts) continue;
+    const written = new Set(change.written);
+    const declared = new Map(
+      (change.awaiting ?? []).map((wait) => [wait.artifact, wait.why]),
+    );
+    for (const artifact of artifacts) {
+      if (!artifact.teammate || written.has(artifact.id)) continue;
+      // A waiver settles what an artifact beside the change stands on, but
+      // not what lives inside a capability directory: `skip_specs` says there
+      // is no capability, so there is nowhere to write a journeys file.
+      const beside = !artifact.generates.startsWith("specs/");
+      const settled = (id: string) =>
+        written.has(id) || (beside && waived(id, change));
+      const why = declared.get(artifact.id);
+      const owed =
+        why !== undefined ||
+        (artifact.required &&
+          artifact.requires.every(settled) &&
+          !waived(artifact.id, change));
+      if (!owed) continue;
+      byTeammate
+        .get(artifact.teammate)
+        ?.push({ change, artifact: artifact.id, ...(why ? { why } : {}) });
+    }
+  }
+
+  return [...byTeammate].map(([teammate, items]) => ({ teammate, items }));
+}
+
+/** Oldest first: the change that has waited longest is the one to answer for. */
+function byCreated(a: ChangeEntry, b: ChangeEntry): number {
+  return (a.created || "9999").localeCompare(b.created || "9999");
 }
 
 /** How a `depends_on:` id resolved: still in flight and holding this change

@@ -73,7 +73,12 @@ import { checkDense } from "./dense.mjs";
 import { checkMarks } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkAcceptance } from "./qa.mjs";
-import { checkArchived, checkDesign, checkUnmarked } from "./record.mjs";
+import {
+  checkArchived,
+  checkAwaiting,
+  checkDesign,
+  checkUnmarked,
+} from "./record.mjs";
 import { checkRole } from "./role.mjs";
 import { checkSections } from "./sections.mjs";
 import {
@@ -189,6 +194,7 @@ export async function runChecks(
     checkDependencies(roots.store, changes, add);
     checkUnmarked(ctx, changes, pages);
     checkDesign(ctx, changes);
+    checkAwaiting(ctx, changes);
     checkArchived(ctx, readArchivedChanges(roots.store, index));
   } else {
     notes.push(

@@ -26,8 +26,12 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
   - Qualifying spend: what the member paid for eligible goods, after
     discounts and coupons, apportioned so a discount cannot be pushed onto
     the non-earning lines; gift cards, fees and auctions earn nothing
-  - Inactivity expiry: the whole balance lapses after the inactivity window
-    with no earn and no redemption; either pushes the date out, never in
+  - Inactivity expiry: the whole balance lapses on one date after the
+    inactivity window with no earn and no redemption; either pushes that date
+    out, never in
+  - Operator credits: a grant, a correction, a reversal or a reward given
+    outright takes the date the balance already names and pushes it no
+    further; where nothing is live, it starts the window from its own day
   - Purchase recording: a completed sale reaches the programme exactly once,
     from any channel, even when loyalty is unreachable
   - Refund claw-back: returned money loses the points it earned, never more
@@ -55,8 +59,9 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
     quantity above the bound is refused by name
   - Points at checkout: points pay part of a bill at the programme's rate,
     debited once when the paid order lands, and earn nothing on that part
-  - Reversal: an operator's reversal of an unused redemption returns each
-    credit carrying its original expiry; a spent artifact stays spent
+  - Reversal: an operator's reversal of an unused redemption returns what it
+    took under the balance's one date, and nothing into a window that has
+    passed; a spent artifact stays spent
 - Operator console
   - Permission split: reading a member, moving points, granting and removing
     tiers and editing rewards are held separately
@@ -64,9 +69,11 @@ Product context: [Grade10 loyalty programme](../../../../../docs/prds/products/g
     hash-chained record that cannot be rewritten unseen
   - Identity boundary: names and email addresses stay in the identity system,
     behind that system's own permission
+  - Expiry restart: an operator runs the inactivity window again from today,
+    giving a balance more time without the member earning or redeeming
 - Member surface
-  - Membership home: tier, balance, tier progress, the tier period and
-    points expiring soon, in one place
+  - Membership home: tier, balance, tier progress, the tier period and the one
+    date the balance expires on, in one place
   - Private activity: a member's own history without operator reasons, retry
     keys or the pricing behind an entry
   - Deletion: deleting the account ends the membership at once
@@ -165,15 +172,28 @@ late-arriving record can shorten no balance.
 
 The balance SHALL stop counting at the instant the window passes, without
 waiting for any scheduled process. A refund, a claw-back, an operator
-correction, or a campaign grant SHALL NOT reset the window. Points already
-expired SHALL NOT be revived by later activity.
+correction, a campaign grant, or a reward an operator hands over outright SHALL
+NOT reset the window. Points already expired SHALL NOT be revived by later
+activity.
+
+A member who holds any redeemable points SHALL have exactly one date on which
+all of them expire. A credit an operator records SHALL take the date the
+member's window already names, whatever date its own event carries. Where the
+member holds no point that is still live, such a credit SHALL start the window
+from its own date instead, which starts no life for anything that has already
+lapsed.
+
+A reversal SHALL give back only points that still have life. Where the
+member's window has passed, what the debit took SHALL NOT be written back: no
+credit is recorded that the next sweep would only remove, and the reversal
+SHALL name the points it could not return rather than reporting a balance it
+did not restore.
 
 Each credit SHALL also carry its own expiry date, set when it is recorded, and a
 credit SHALL count while the later of that date and the member's inactivity
-window is still ahead. The two agree for every credit an activity records; they
-differ for a credit no activity moved the window for — a campaign grant, a
-correction, a restored redemption — which lives out its own date under a window
-that has already passed.
+window is still ahead. Once the dates already recorded have been brought up to
+the window, no credit SHALL be recorded beyond it, and the two can disagree
+only where the window has already passed.
 
 Expiry SHALL be recorded as a dated entry like any other movement, naming the
 whole amount it removed.
@@ -209,13 +229,14 @@ whole amount it removed.
 
 - **WHEN** an operator corrects a balance, or a refund claws points back
 - **THEN** the member's inactivity window is unchanged
+- **AND** points the correction adds expire with the rest of the balance
 
 #### Scenario: grade10-site-loyalty-programme-SC-99 - A campaign grant does not keep the balance alive
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** an operator grants campaign points as a reward
 - **THEN** the member's inactivity window is unchanged
-- **AND** the granted points count until their own expiry date, even under a window that has already passed
+- **AND** the granted points expire with the rest of the balance, on the date that window already names
 
 #### Scenario: grade10-site-loyalty-programme-SC-100 - A spend too small to earn still counts as activity
 **Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
@@ -251,6 +272,33 @@ whole amount it removed.
 - **WHEN** a scheduled expiry pass stops before reaching every member
 - **THEN** it reports how many members it did not reach
 - **AND** the next pass covers them, with no state carried between passes
+
+#### Scenario: grade10-site-loyalty-programme-SC-180 - Operator points to an empty balance start the window
+**Serves:** grade10-site-loyalty-programme-US-05 - operator points to an empty balance start the window
+
+- **WHEN** an operator adds points to a member who holds no live points
+- **THEN** those points expire an inactivity window after their own date
+- **AND** a credit whose own date is already an inactivity window past is written already lapsed, and nothing that had lapsed counts again
+
+#### Scenario: grade10-site-loyalty-programme-SC-181 - A backdated grant joins the window already running
+**Serves:** grade10-site-loyalty-programme-US-05 - a backdated grant joins the window already running
+
+- **WHEN** an operator adds points dated before today to a member whose balance is live
+- **THEN** those points expire with the rest of the balance
+- **AND** the member's inactivity window is unchanged
+
+#### Scenario: grade10-site-loyalty-programme-SC-182 - Handing over a reward is not the member's activity
+**Serves:** grade10-site-loyalty-programme-US-05 - a reward handed over is the operator's act, not the member's
+
+- **WHEN** an operator gives a member a reward outright, without the member spending points for it
+- **THEN** the member's inactivity window is unchanged
+
+#### Scenario: grade10-site-loyalty-programme-SC-183 - A reversal into a lapsed balance returns nothing spendable
+**Serves:** grade10-site-loyalty-programme-US-06 - a reversal into a lapsed balance says what it could not return
+
+- **WHEN** a payment in points is reversed after the member's window has passed
+- **THEN** no points are written back and the balance stays empty
+- **AND** the answer names the points it could not return, rather than refusing the reversal
 
 ### Requirement: A tier ladder is ordered, and refused at boot when it is not
 
@@ -651,6 +699,9 @@ An operator SHALL be able both to correct a balance without affecting tier
 progress, and to grant points that count toward tier progress. Each SHALL carry
 a reason and SHALL be recorded in the operator log.
 
+Before either is written, the console SHALL name the date the points will
+expire on, so an operator adding points to a balance about to lapse sees it.
+
 #### Scenario: grade10-site-loyalty-programme-SC-48 - A correction does not move a member up
 **Serves:** Operator console - a correction does not move a member up
 
@@ -664,15 +715,22 @@ a reason and SHALL be recorded in the operator log.
 - **WHEN** an operator grants campaign or sign-up points
 - **THEN** those points count toward the next tier
 
+#### Scenario: grade10-site-loyalty-programme-SC-184 - The form names the date before the points are written
+**Serves:** grade10-site-loyalty-programme-US-05 - the grant form names the expiry date before writing
+
+- **WHEN** an operator opens the form that adds points to a member
+- **THEN** it names the day those points will expire
+- **AND** it says when they would start the member's window rather than join one
+
 ### Requirement: An operator runs the programme from one console
 
 An operator SHALL be able, subject to their own permissions, to: find a member
 and read their loyalty state and activity; correct a balance and grant campaign
-points; grant and revoke an invitation-only tier and list live grants; remove a
-tier a member holds; create, edit and archive rewards and see archived and
-scheduled ones; find a redemption and reverse or cancel it; read what members
-have forfeited to expiry; and read the operator log and verify it has not been
-tampered with.
+points; restart a member's expiry window; grant and revoke an invitation-only
+tier and list live grants; remove a tier a member holds; create, edit and
+archive rewards and see archived and scheduled ones; find a redemption and
+reverse or cancel it; read what members have forfeited to expiry; and read the
+operator log and verify it has not been tampered with.
 
 The console SHALL show an operator only the sections their permissions allow,
 using the same permission the action itself requires, so that what is shown and
@@ -686,7 +744,7 @@ operator to enrol or verify rather than reporting a refusal.
 
 - **WHEN** an operator holding only the loyalty read permission opens the console
 - **THEN** they can find and read members
-- **AND** no section offering point movement, invitations, rewards, tier removal, redemption cancellation or the operator log is shown
+- **AND** no section offering point movement, expiry restart, invitations, rewards, tier removal, redemption cancellation or the operator log is shown
 
 #### Scenario: grade10-site-loyalty-programme-SC-51 - A missing second factor opens the gate
 **Serves:** grade10-site-loyalty-programme-US-05 - Operator runs the programme from one console
@@ -758,10 +816,9 @@ by whom, and how many.
 
 What a member reads about themselves SHALL carry their tier, when that
 tier's validity period ends, their progress toward retaining it, their
-progress to the next earned tier, their redeemable balance, and the date
-that balance expires if they record no further activity. Their own activity
-list SHALL NOT disclose operator reasons, retry keys, or the internal
-pricing of an entry.
+progress to the next earned tier, their redeemable balance, and the one date
+that balance expires on. Their own activity list SHALL NOT disclose operator
+reasons, retry keys, or the internal pricing of an entry.
 
 Each activity entry SHALL name what it was for, and which channel it came
 from, in terms the member can read.
@@ -1284,7 +1341,12 @@ components for the membership surface — `MembershipSummary`, `RewardMenu`,
 
 `MembershipSummary` SHALL render the two counts as two counts, never one
 total, alongside the tier held, the date its validity ends, and progress
-toward retention. `RewardMenu` SHALL price each reward in points, state a
+toward retention. Where it is given an expiry line it SHALL render one line
+naming how many points expire and the day they go, in the tone supplied with
+it, and where it is given none it SHALL render no such line. It SHALL NOT
+derive that line, that day, or that tone from a clock or a balance of its own;
+the consumer withholds the line for a member holding no points.
+`RewardMenu` SHALL price each reward in points, state a
 money-off reward's own validity period, and state what its coupon cannot be
 spent without — the basket it has to reach, and the one channel it is good at
 where it names only one. `CouponList` SHALL carry each issued
@@ -1321,6 +1383,20 @@ SHALL require no export of its own.
 
 - **WHEN** any of the four components is rendered
 - **THEN** every count, date, state and word it shows arrived through props
+
+#### Scenario: grade10-site-loyalty-programme-SC-185 - The summary names one expiry line
+**Serves:** grade10-site-loyalty-programme-US-04 - the membership surface names one expiry line
+
+- **WHEN** a member holding points reads their membership
+- **THEN** one line names how many points expire and the day they go
+- **AND** a member holding no points is shown no such line
+
+#### Scenario: grade10-site-loyalty-programme-SC-186 - The expiry line warns inside the last 30 days
+**Serves:** grade10-site-loyalty-programme-US-04 - the expiry line warns inside the last 30 days
+
+- **WHEN** a member's balance expires in 30 days or fewer
+- **THEN** the line is rendered in the warning tone, and says what keeps the points
+- **AND** a balance expiring later is rendered in the plain tone
 
 ### Requirement: A reward names a kind, a discount and a scope
 
@@ -1555,3 +1631,44 @@ redemption actually consumed a unit.
 
 - **WHEN** a redemption of a reward that had unlimited stock is reversed
 - **THEN** no stock is returned
+
+### Requirement: An operator restarts a member's expiry window
+
+An operator SHALL be able to run a member's inactivity window again from the
+day they do it, so that a balance can be given more time without the member
+earning or redeeming. The restart SHALL NOT name a day the operator chooses: it
+lands an inactivity window from that day, on the programme's clock.
+
+The restart SHALL carry a reason, SHALL be recorded in the operator log, and
+SHALL NOT move points, so nothing about it reaches the member's activity. It
+SHALL settle whatever has already lapsed before it moves the date, and SHALL
+leave a window already further out where it stands. It SHALL require the same
+permission as moving points.
+
+#### Scenario: grade10-site-loyalty-programme-SC-176 - An operator restarts the window
+**Serves:** grade10-site-loyalty-programme-US-05 - an operator restarts a member's window from the console
+
+- **WHEN** an operator restarts a member's expiry window
+- **THEN** the whole balance expires an inactivity window after that day
+- **AND** the operator's reason is in the operator log
+
+#### Scenario: grade10-site-loyalty-programme-SC-177 - A restart revives nothing
+**Serves:** grade10-site-loyalty-programme-US-05 - a restart does not bring lapsed points back
+
+- **WHEN** an operator restarts the window of a member whose balance has lapsed
+- **THEN** what lapsed is written off first and does not return
+- **AND** only points recorded after the lapse expire on the new date
+
+#### Scenario: grade10-site-loyalty-programme-SC-178 - A restart never shortens a window
+**Serves:** grade10-site-loyalty-programme-US-05 - a restart only ever pushes the date out
+
+- **WHEN** an operator restarts the window of a member whose date is already further out
+- **THEN** that date is left where it stands
+
+#### Scenario: grade10-site-loyalty-programme-SC-179 - A restart moves no points
+**Serves:** grade10-site-loyalty-programme-US-05 - a restart changes the date, never the balance
+
+- **WHEN** an operator restarts a member's expiry window
+- **THEN** the balance is unchanged
+- **AND** nothing appears in the member's activity
+

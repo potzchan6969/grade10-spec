@@ -8,6 +8,8 @@ description: >-
   hand a change passes through.
 artifacts:
   - id: proposal
+    required: true
+    teammate: product-manager
     generates: proposal.md
     description: Why this change is needed, what changes, and what it will not do
     template: proposal.md
@@ -59,6 +61,16 @@ artifacts:
 
       behavior, so if behavior does not change, no spec should change either.
 
+      A requirement nobody can decide yet is a wait, not a guess: write
+
+      `awaiting:` with `specs: <the line saying what is missing>` in the
+
+      change's `.openspec.yaml` and stop there. `pnpm run validate:changes`
+
+      excuses a change that says so, and only that one error; plain
+
+      `openspec validate` does not. Delete the line when the delta lands.
+
       Do not invent a requirement just to satisfy validation.
 
 
@@ -70,6 +82,8 @@ artifacts:
       This is the foundation - everything after it builds on this.
     requires: []
   - id: specs
+    required: true
+    teammate: product-manager
     generates: specs/**/spec.md
     description: The capability's purpose, the feature set, and the requirement deltas
     template: spec.md
@@ -204,6 +218,8 @@ artifacts:
     requires:
       - proposal
   - id: user-journeys
+    required: true
+    teammate: product-manager
     generates: specs/**/user-journeys.md
     description: The journeys this change adds, changes or retires, with the ones it leans on restated
     template: user-journeys.md
@@ -303,6 +319,8 @@ artifacts:
     requires:
       - specs
   - id: test-cases
+    required: true
+    teammate: product-manager
     generates: specs/**/feature-tcs.md
     description: An independent blind reading of the anchors, written without sight of the scenarios
     template: feature-tcs.md
@@ -389,6 +407,8 @@ artifacts:
     requires:
       - user-journeys
   - id: ui-design
+    required: false
+    teammate: designer
     generates: ui-design.md
     description: The visual plan - screens, component exports, and states
     template: ui-design.md
@@ -424,6 +444,8 @@ artifacts:
     requires:
       - specs
   - id: tech-design
+    required: false
+    teammate: engineer
     generates: tech-design.md
     description: The technical implementation's high-level design
     template: tech-design.md
@@ -493,6 +515,8 @@ artifacts:
     requires:
       - specs
   - id: tasks
+    required: true
+    teammate: engineer
     generates: tasks.md
     description: The implementation plan, claimed group by group
     template: tasks.md
