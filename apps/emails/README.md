@@ -46,12 +46,13 @@ emails/
   auth/
     magic-link.tsx         site-wide sign-in letter
   auction/
-    _components/           AuctionLetter, LotBlock, campaign tags, preview fixture
+    _components/           AuctionLetter, LotBlock, LotWatchedEmail,
+                           campaign tags, preview fixture
     progress/              opens / closes-in-24h / extended (before & during)
     activity/              new-bid / outbid (while bidding is open)
     close/                 lot ended for watchers & non-winners
-                           (watcher: lot-ended-watched ± Sold for;
-                           lot-ended-watched-ended / lot-ended = Ended-only)
+                           (watcher previews: lot-watched-sold /
+                           lot-watched-ended; public lot-ended = Ended-only)
     order/                 winner success, address reminder (post-sale)
 ```
 

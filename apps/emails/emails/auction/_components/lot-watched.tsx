@@ -1,7 +1,7 @@
 import { AuctionLetter } from "@/emails/auction/_components/auction-letter";
 import { previewLot } from "@/emails/auction/_components/preview-lot";
 
-export type LotEndedWatchedProps = {
+export type LotWatchedProps = {
   brandName?: string;
   lotTitle?: string;
   listingUrl?: string;
@@ -18,8 +18,9 @@ export type LotEndedWatchedProps = {
 /**
  * Watcher — lot ended.
  * With `winningBid`: sold outcome. Without: Ended-only collector copy.
+ * Preview entry points: `close/lot-watched-sold`, `close/lot-watched-ended`.
  */
-export default function LotEndedWatchedEmail({
+export function LotWatchedEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   listingUrl = previewLot.listingUrl,
@@ -27,7 +28,7 @@ export default function LotEndedWatchedEmail({
   primaryImageUrl = previewLot.primaryImageUrl,
   winningBid,
   closedAt = previewLot.closedAt,
-}: LotEndedWatchedProps) {
+}: LotWatchedProps) {
   const sold = Boolean(winningBid);
 
   return (
@@ -53,14 +54,3 @@ export default function LotEndedWatchedEmail({
     />
   );
 }
-
-/** Default preview — sold path (Sold for). */
-LotEndedWatchedEmail.PreviewProps = {
-  brandName: previewLot.brandName,
-  lotTitle: previewLot.lotTitle,
-  listingUrl: previewLot.listingUrl,
-  muteUrl: previewLot.muteUrl,
-  primaryImageUrl: previewLot.primaryImageUrl,
-  winningBid: previewLot.winningBid,
-  closedAt: previewLot.closedAt,
-} satisfies LotEndedWatchedProps;
