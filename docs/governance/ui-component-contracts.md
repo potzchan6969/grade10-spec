@@ -170,6 +170,9 @@ one locale rule:
 - **Typography** — use curly apostrophes (`’`, U+2019) and curly quotation
   marks (`“` `”`, U+201C/U+201D) in rendered copy. Do not use straight ASCII
   `'` or `"` for contractions or quoted speech.
+- **Modal titles** — Title Case for English `DialogTitle` / Modal headings
+  (`Sign In to Add to Cart`, `Sign In to Grade10`). Short prepositions such as
+  `to` stay lower when they are not the first word. Not a sentence.
 - **Locale** — use American English spelling (for example `authorized`,
   `color`).
 - **Em dashes** — do not use the em dash (`—`, U+2014) in user-facing copy.

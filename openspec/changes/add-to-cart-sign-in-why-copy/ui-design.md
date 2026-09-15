@@ -15,7 +15,7 @@ application passes when Add to cart opens the existing dialog.
   Storybook `Auth Sign In/SignInCard` → **From add to cart**
 - **Capability** — `grade10-site/store/product-listing`
 
-Title string: **Sign in to add to cart**. Layout stays Login Dialog.
+Title string: **Sign In to Add to Cart**. Layout stays Login Dialog.
 
 ### Product details — signed-out Add to cart sign-in title
 
@@ -39,12 +39,12 @@ No new export, variant, or token. No new Figma component set.
 
 | Missing | Kind | Where |
 | --- | --- | --- |
-| App passes `copy.title` **Sign in to add to cart** when opening from Add to cart | product | application |
+| App passes `copy.title` **Sign In to Add to Cart** when opening from Add to cart | product | application |
 | Grade10 `signIn.titleAddToCart` catalog key (en / zh-Hans / zh-Hant) | product | `@grade10/i18n` |
 
 ## States
 
 | Surface state | Spec scenarios |
 | --- | --- |
-| Listing — Add to cart opens dialog titled Sign in to add to cart | `grade10-site-store-product-listing-SC-47` |
-| Product page — Add to cart opens dialog titled Sign in to add to cart | `grade10-site-store-product-page-SC-29` |
+| Listing — Add to cart opens dialog titled Sign In to Add to Cart | `grade10-site-store-product-listing-SC-47` |
+| Product page — Add to cart opens dialog titled Sign In to Add to Cart | `grade10-site-store-product-page-SC-29` |

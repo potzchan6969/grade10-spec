@@ -36,4 +36,4 @@
 
 **Expected Results:**
 
-* The dialog title is **Sign in to add to cart**.
+* The dialog title is **Sign In to Add to Cart**.

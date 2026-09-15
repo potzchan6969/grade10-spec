@@ -359,7 +359,7 @@ export const DismissalLeavesThePageBeneath: Story = {
  * this demo opens sign-in instead of adding a guest line. Narrow viewport
  * keeps the cart control visible without hover (same as listing on touch).
  *
- * Why-title: `copy.title` is **Sign in to add to cart** (not the meta
+ * Why-title: `copy.title` is **Sign In to Add to Cart** (not the meta
  * default **Sign In to Grade10**). Spec:
  * `grade10-site-store-product-listing-SC-47` (product-page twin SC-29);
  * open-from-add gate remains SC-44 / SC-26.
@@ -369,7 +369,7 @@ export const FromAddToCart: Story = {
   args: {
     open: false,
     copy: {
-      title: "Sign in to add to cart",
+      title: "Sign In to Add to Cart",
       legal: figmaLegal,
     },
   },
@@ -425,7 +425,7 @@ export const FromAddToCart: Story = {
       expect(body.getByRole("dialog")).toBeInTheDocument();
     });
     expect(
-      body.getByRole("heading", { name: "Sign in to add to cart" }),
+      body.getByRole("heading", { name: "Sign In to Add to Cart" }),
     ).toBeInTheDocument();
     // Consumer never marked the tile in-cart — no guest line.
     expect(
