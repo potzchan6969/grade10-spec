@@ -87,10 +87,11 @@ maximum; there is no manual vs auto mode toggle.
 ## Countdown
 
 [Flows / Countdown](?path=/story/auction-listing-bid-panel-flows--countdown)
-runs the signed-out card through extension evaluation, unit rollovers, close,
-and already-extended.
+runs the signed-out card through countdown boundaries, unit rollovers, close,
+and already in extended bidding.
 
-\`view.extended\` switches the time label to Time left (auto-extended).
+\`view.extended\` switches the time label to Time left (extended).
+The Time left info tooltip explains post-close extended bidding (timer restart per bid).
 \`view.countdownSeconds\` (and optional \`closesAtMs\`) drives the rolling
 countdown. Closed lots pass \`countdownSeconds: null\`, \`opensAtMs\`, and
 \`deadlineAtMs\` so the primary value is the close date and the subtext is one

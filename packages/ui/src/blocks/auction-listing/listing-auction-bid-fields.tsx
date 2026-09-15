@@ -56,7 +56,7 @@ type ListingAuctionBidFieldsCopy = ListingQuickMaximumBidActionsCopy & {
   closed: string;
   timeLeft: string;
   timeLeftAutoExtended: string;
-  /** Resolved copy naming this listing's extension window and duration. */
+  /** Resolved copy naming this listing's extended-bidding duration (and cap). */
   autoExtendedTooltip: string;
   placeBidSection: string;
   placeBid: string;

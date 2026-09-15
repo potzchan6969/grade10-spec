@@ -136,7 +136,7 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
   opensIn: "Opens in",
   closed: "Closed",
   timeLeft: "Time left",
-  timeLeftAutoExtended: "Time left (auto-extended)",
+  timeLeftAutoExtended: "Time left (extended)",
   autoExtendedTooltip: formatAutoExtendedTooltip(
     DEFAULT_LISTING_EXTENSION_POLICY,
   ),
