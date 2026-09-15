@@ -43,6 +43,9 @@ export type WinnerOrderContent = {
   overdue?: boolean;
   primaryCta: string | null;
   secondaryNote?: string;
+  /** Paid receipt strip — method + masked number. */
+  paymentMethod?: string;
+  paymentMasked?: string;
 };
 
 const LOT = {
@@ -126,7 +129,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
         primaryCta: null,
-        secondaryNote: "Paid with Visa ···· 4242",
+        paymentMethod: "Visa",
+        paymentMasked: "···· 4242",
       };
     case "shipped":
       return {
@@ -137,6 +141,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         invoiceLines: INVOICE_LINES,
         primaryCta: "Track shipment",
         secondaryNote: "SF Express · SF1234567890",
+        paymentMethod: "Visa",
+        paymentMasked: "···· 4242",
       };
     case "delivered":
       return {
@@ -147,6 +153,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         invoiceLines: INVOICE_LINES,
         primaryCta: null,
         secondaryNote: "Delivered 28 Sep 2026, 14:12 HKT",
+        paymentMethod: "Visa",
+        paymentMasked: "···· 4242",
       };
     case "cancelled":
       return {

@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Address-first auction Winner Order preview (Storybook only). Statuses follow revise-auction-winner-invoicing: Awaiting Address → Preparing Invoice → Pending Payment → fulfilment. Confirm delivery address opens a picker of selectable address cards (with remove); Add new address opens a nested form. Not a published `@grade10/ui` export yet.",
+          "Address-first auction Winner Order preview (Storybook only). Pre-invoice stays lean and single-column; from Pending Payment the layout borrows Order Details patterns (header, summary sidebar, fulfilment stepper after pay) without using the store Order Details contract. Confirm delivery address opens the picker. Not a published `@grade10/ui` export yet.",
       },
     },
   },
@@ -40,7 +40,7 @@ export const AwaitingAddress: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("heading", { level: 2, name: "Winner Order" }),
+      canvas.getByRole("heading", { level: 1, name: "Winner Order" }),
     ).toBeVisible();
     expect(canvas.getByText("Awaiting Address")).toBeVisible();
     expect(
@@ -196,6 +196,7 @@ export const PendingPayment: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Pending Payment")).toBeVisible();
+    expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
     expect(canvas.getByText("HK$15,660")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
@@ -220,7 +221,10 @@ export const Processing: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Processing")).toBeVisible();
-    expect(canvas.getByText(/Visa/)).toBeVisible();
+    expect(canvas.getByText("Delivery status")).toBeVisible();
+    expect(canvas.getByText("Paid")).toBeVisible();
+    expect(canvas.getByText("Visa")).toBeVisible();
+    expect(canvas.getByText("Order summary")).toBeVisible();
   },
 };
 
@@ -228,14 +232,21 @@ export const Shipped: Story = {
   args: { status: "shipped" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByText("Delivery status")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Track shipment" }),
     ).toBeVisible();
+    expect(canvas.getAllByText("Shipped").length).toBeGreaterThan(0);
   },
 };
 
 export const Delivered: Story = {
   args: { status: "delivered" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Delivery status")).toBeVisible();
+    expect(canvas.getAllByText("Delivered").length).toBeGreaterThan(0);
+  },
 };
 
 export const Cancelled: Story = {
