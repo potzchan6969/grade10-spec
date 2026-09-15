@@ -6,6 +6,8 @@ order: 11
 
 Winner Order is the authenticated route where a collector settles one lot after it closes. It keeps the delivery choice, invoice, payment, receipt, shipment, and delivery evidence for that lot together.
 
+## Invoice and Settlement
+
 - **Address first** — a closed lot opens asking for a delivery address; the winner confirms the account's saved or newly entered address before an operator prepares an invoice
 - **Invoice** — one operator-quoted invoice per lot; shipping and insurance are priced for the confirmed address, the address locks when the invoice is sent, and the seven-day payment window starts at send
 - 🚧 **Invoice lines** — Winning Bid, Buyer's Premium, Shipping & Handling, Insurance, Tax and Order Total; Shipping & Handling of zero reads Free, and Insurance appears only when the operator added it
@@ -48,5 +50,4 @@ The winner needs one place to understand what is owed and what happens next. The
 | Minimum values | ❓ Open | Launch at 0 in USD, HKD and JPY until the real amounts are set. | Product and finance |
 
 **Not in scope.** Combined invoices, payment plans, partial settlement, buyer-initiated returns, or changes to the bid-time auction rules.
-
 :::

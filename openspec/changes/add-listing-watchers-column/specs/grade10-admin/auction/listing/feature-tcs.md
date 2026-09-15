@@ -46,6 +46,7 @@ A published listing watched by two collectors on Grade10 and one collector on ZZ
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -71,6 +72,7 @@ A draft listing with no watches. An authorized operator is on <grade10 auction a
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
