@@ -91,7 +91,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressValue: ADDRESS,
         invoiceLines: null,
         primaryCta: null,
-        secondaryNote: "No payment yet — waiting on the operator quote.",
+        secondaryNote:
+          "We generate your invoice from this shipping address. We email you when it is ready.",
         overdue: false,
       };
     case "pending_payment":

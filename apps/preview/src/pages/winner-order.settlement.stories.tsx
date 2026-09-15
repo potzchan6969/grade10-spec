@@ -62,7 +62,7 @@ export const AwaitingAddress: Story = {
   },
 };
 
-/** Address confirmed — waiting on operator shipping quote. */
+/** Address confirmed — invoice from this destination, email when ready. */
 export const PreparingInvoice: Story = {
   name: "Preparing Invoice",
   args: { status: "preparing_invoice" },
@@ -86,9 +86,14 @@ export const PreparingInvoice: Story = {
     expect(infoAlert).toBeVisible();
     expect(
       within(infoAlert).getByText(
-        /No payment yet — waiting on the operator quote/,
+        /We generate your invoice from this shipping address/,
       ),
     ).toBeVisible();
+    expect(
+      within(infoAlert).getByText(/We email you when it is ready/),
+    ).toBeVisible();
+    expect(canvas.queryByText(/No payment yet/i)).not.toBeInTheDocument();
+    expect(canvas.queryByText(/operator quote/i)).not.toBeInTheDocument();
     expect(
       canvas.queryByText(/You can change this until the invoice is sent/i),
     ).not.toBeInTheDocument();
