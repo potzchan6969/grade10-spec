@@ -25,7 +25,7 @@ the promptness cases in each wait on 2.1.
 - [x] 3.4 Prove a follow that creates no session leaves the asking surface exactly as it was, dialog and all, announcing nothing (shared-auth-sign-in-SC-55)
 - [x] 3.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test`
 
-## 4. Per-person surfaces follow the person (grade10)
+## 4. Per-person surfaces follow the person (grade10) (owner: @sean)
 
 - [ ] 4.1 Audit every per-member read on both sites — cart, watchlist, orders, bids, member card — and key each on the person the session names, so a person change re-reads rather than serving the previous person's rows (shared-auth-session-SC-19, shared-auth-session-SC-20)
 - [ ] 4.2 Have a surface that needs a session to have anything to show answer a session that ended exactly as it answers somebody arriving with none, and stop showing what it held about the person who left (shared-auth-session-SC-21, shared-auth-session-SC-24)
