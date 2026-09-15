@@ -20,7 +20,7 @@ Needs the gate from group 2 landed.
 - [ ] 3.3 Complete the intended variant and quantity into the member cart when sign-in succeeds on the page (grade10-site-store-product-page-SC-28)
 - [ ] 3.4 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs store-frontend web-spa`
 
-## 4. Product listing Add to cart (grade10)
+## 4. Product listing Add to cart (grade10) (owner: @sean)
 
 Needs the gate from group 2 landed; claimable beside group 3.
 
