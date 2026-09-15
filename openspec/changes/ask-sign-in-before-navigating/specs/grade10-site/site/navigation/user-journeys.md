@@ -19,14 +19,15 @@ signing in puts me on the surface I asked for.
 
 **As a** collector arriving from a bookmark, a mailed link or the back button,
 **I want** the address I asked for to stay the address I am at while I sign in,
-**so that** what I came for is what renders the moment I have a session,
-without being sent anywhere else first.
+**so that** what I came for is what renders the moment I have a session, and
+leaving without one puts me somewhere I can read instead of on a blank page.
 
 **Accepted by:**
 
 - `grade10-site-site-navigation-SC-21` — A signed-out collector opens the address itself
 - `grade10-site-site-navigation-SC-22` — The session arrives and the surface renders
 - `grade10-site-site-navigation-SC-23` — Back onto a surface that asks is answered there
+- `grade10-site-site-navigation-SC-25` — Leaving the ask at the address goes to the brand home
 
 ### grade10-site-site-navigation-US-08: Collector opens a surface that asks nothing of them
 

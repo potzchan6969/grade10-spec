@@ -121,9 +121,14 @@ or forward to it — SHALL land on that address. The site SHALL NOT correct the
 address to another surface.
 
 The surface SHALL show nothing of its own, and the sign-in dialog SHALL open
-over it once the session has answered that there is none. Dismissing SHALL
-leave the collector at that address. A session arriving SHALL render the
-surface there, with no navigation in between.
+over it once the session has answered that there is none. A session arriving
+SHALL render the surface there, with no navigation in between.
+
+Dismissing that dialog SHALL take the collector to the brand home, replacing
+the entry the surface holds so that going back leads where they came from
+rather than to the surface asking again. This is the one difference from a
+collector stopped before an in-app navigation, who still has the surface they
+were reading and is left on it.
 
 #### Scenario: grade10-site-site-navigation-SC-21 - A signed-out collector opens the address itself
 
@@ -145,6 +150,13 @@ surface there, with no navigation in between.
   signed out on another surface
 - **WHEN** they go back to the vault
 - **THEN** the address reads as the vault and the sign-in dialog opens over it
+
+#### Scenario: grade10-site-site-navigation-SC-25 - Leaving the ask at the address goes to the brand home
+
+- **GIVEN** a signed-out collector asked to sign in at the vault's own address
+- **WHEN** they dismiss the dialog
+- **THEN** the brand home renders and the address reads as the brand home
+- **AND** going back leads where they came from, never to the vault
 
 ---
 

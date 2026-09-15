@@ -34,6 +34,10 @@ Where it asks decides what the collector is left holding.
   address, a bookmark, a mailed link or the back button lands on the surface
   itself, and it asks there. Nothing corrects the address, and signing in
   renders what the collector came for
+- 🚧 **Leaving the ask there goes to the front door** — a collector who
+  arrived has no page behind them to be left on, so dismissing takes them to
+  the brand home in place of the surface, and going back leads where they came
+  from. One stopped at a link still has what they were reading, and stays on it
 - 🚧 **A link carrying its own secret is never asked** — a surface opened by
   the secret in its link, and one that invites sign-in in its own words, opens
   as asked

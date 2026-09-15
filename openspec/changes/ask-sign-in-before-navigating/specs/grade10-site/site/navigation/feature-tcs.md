@@ -174,6 +174,37 @@ without being sent anywhere else first.
 * Step 2 shows <grade10 vault url>.
 * The sign-in dialog opens over it.
 
+### grade10-site-site-navigation-US7-TC3-1: Leaving the ask at the vault's address lands the brand home
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-site-navigation-US-07
+
+**Pre-conditions:**
+
+* customer is signed out and reached <grade10 vault url> from outside the site.
+
+**Steps:**
+
+1. Dismiss the sign-in dialog.
+2. Read the address bar.
+3. Press the browser's Back.
+
+**Expected Results:**
+
+* <grade10 marketing url> renders.
+* Step 2 shows the brand home's address, not the vault's.
+* Step 3 leaves the site, never returning to the vault.
+
 ---
 
 ## grade10-site-site-navigation-US8: Collector opens a surface that asks nothing of them
