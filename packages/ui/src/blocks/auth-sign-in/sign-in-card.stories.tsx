@@ -356,10 +356,11 @@ export const DismissalLeavesThePageBeneath: Story = {
 };
 
 /**
- * After a successful send: confirmation names the address; Resend and Back
- * replace the email step. The consumer omits `providerSlot` on this step.
+ * After a successful send: confirmation names the address; Resend starts
+ * disabled with **Resend (n)** for the sixty-second wait; Back replaces the
+ * email step. The consumer omits `providerSlot` on this step.
  *
- * Spec: shared-auth-sign-in-SC-42 / SC-43; shared-ui-auth-sign-in-SC-11–13.
+ * Spec: shared-auth-sign-in-SC-42 / SC-46; shared-ui-auth-sign-in-SC-14.
  */
 export const LinkSent: Story = {
   name: "Link sent",
@@ -370,10 +371,12 @@ export const LinkSent: Story = {
         copy={{
           message: "We've just sent a sign-in link to collector@example.com.",
           resend: "Resend",
+          resendCountdown: "Resend (60)",
           back: "Back",
         }}
         onBack={fn()}
         onResend={fn()}
+        resendCooldownRemaining={60}
       />
     ),
   },
@@ -386,7 +389,7 @@ export const LinkSent: Story = {
         "We've just sent a sign-in link to collector@example.com.",
       ),
     ).toBeInTheDocument();
-    expect(body.getByRole("button", { name: "Resend" })).toBeInTheDocument();
+    expect(body.getByRole("button", { name: "Resend (60)" })).toBeDisabled();
     expect(body.getByRole("button", { name: "Back" })).toBeInTheDocument();
     expect(body.queryByRole("textbox", { name: "Email" })).toBeNull();
     expect(dialog.querySelector('[data-slot="divider"]')).toBeNull();
@@ -441,10 +444,12 @@ export const LinkSentBackToEntry: Story = {
             copy={{
               message: `We've just sent a sign-in link to ${email}.`,
               resend: "Resend",
+              resendCountdown: "Resend (60)",
               back: "Back",
             }}
             onBack={() => setStep("entry")}
             onResend={fn()}
+            resendCooldownRemaining={60}
           />
         )}
       </SignInCard>
@@ -474,6 +479,7 @@ export const LinkSentBackToEntry: Story = {
     expect(
       body.queryByRole("button", { name: "Continue with Google" }),
     ).toBeNull();
+    expect(body.getByRole("button", { name: "Resend (60)" })).toBeDisabled();
 
     await userEvent.click(body.getByRole("button", { name: "Back" }));
 
