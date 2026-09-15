@@ -46,6 +46,14 @@ hide the link. Every label arrives through props.
 - 🚧 **Hidden when idle** — with no maximum rows and no bid-sequence rows,
   the link and dialog are absent
 
+
+## Extended Bidding Copy
+
+🚧 **Time left tooltip** — names the listing's extension duration only: after
+the scheduled close, each bid restarts that timer, until it runs out with no
+new bid, up to the listing cap. It does not name an extension window. When the
+lot is in extended bidding, the Time left label reads **Time left (extended)**.
+
 ::story{id="auction-listing-listinggallery--distinct-sources" title="One image with separate thumb, main and zoom sources"}
 
 ::story{id="auction-listing-listinggallery--single-image" title="A single-image gallery, with no strip"}
