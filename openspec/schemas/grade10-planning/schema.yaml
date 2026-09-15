@@ -1,10 +1,11 @@
 name: grade10-planning
 version: 1
 description: >-
-  Grade10 planning workflow - proposal → purpose and feature set → user journeys
-  → blind test suite → scenarios → ui design → tech design → tasks. The suite and
-  the scenarios are two independent readings of the same anchors, reconciled
-  after both land. One lane for every hand a change passes through.
+  Grade10 planning workflow - proposal → specs → user journeys → test cases → ui
+  design → tech design → tasks. `specs` is written in two passes over one file
+  with the blind suite between them: the suite and the scenarios are independent
+  readings of the same anchors, reconciled after both land. One lane for every
+  hand a change passes through.
 artifacts:
   - id: proposal
     generates: proposal.md
@@ -68,15 +69,27 @@ artifacts:
 
       This is the foundation - everything after it builds on this.
     requires: []
-  - id: spec-outline
+  - id: specs
     generates: specs/**/spec.md
-    description: The capability's purpose and the feature set this change maps
+    description: The capability's purpose, the feature set, and the requirement deltas
     template: spec.md
     instruction: |
-      Written by the product manager, with the `planning-pm` skill. The first
-      of two passes over `spec.md`: this one writes `## Purpose` and
-      `## Feature set`, then stops. `spec-behaviour` appends the requirements
-      and scenarios later, after the blind suite.
+      Written by the product manager, with the `planning-pm` skill, in **two
+      passes over this one file**, with the blind test suite between them.
+
+      **Pass one - the outline.** `## Purpose`, then `## Feature set`, then
+      stop. `user-journeys` comes next, then `test-cases`, and only then does
+      pass two return here.
+
+      **Pass two - the behaviour.** `## ADDED Requirements` and its siblings,
+      sequenced to follow the feature set's groups, written after the blind
+      suite and reconciled against it.
+
+      Nothing in this schema can express that order - `requires` is advisory and
+      never stopped anyone writing the scenarios first. **The only machine
+      evidence of it is `pnpm check:manual`'s `outline` rule**, which fails a
+      capability whose suite sits beside a `spec.md` carrying no requirements.
+      That check is load-bearing; it is never downgraded to a warning.
 
       ## Purpose
 
@@ -87,15 +100,15 @@ artifacts:
       differs from the durable one**. A change that does not move what the
       capability is for omits it.
 
-      When written it replaces the durable Purpose whole, and archive
-      overwrites rather than merges - the treatment `## Feature set` already
-      gets. This holds for an existing capability as much as a new one; there
-      is no longer a prohibition on a delta carrying Purpose.
+      When written it replaces the durable Purpose whole, and archive overwrites
+      rather than merges - the treatment `## Feature set` already gets. This
+      holds for an existing capability as much as a new one; there is no
+      prohibition on a delta carrying Purpose.
 
-      Purpose is not decoration. With `## Feature set` it is the only context
-      the blind suite pass gets beyond the journeys, so a Purpose that has
-      drifted degrades the cross-check silently, and the drift is the kind that
-      reads as correct.
+      Purpose is not decoration. With `## Feature set` it is the only context the
+      blind suite pass gets beyond the journeys, so a Purpose that has drifted
+      degrades the cross-check silently, and the drift is the kind that reads as
+      correct.
 
       ## Feature set
 
@@ -107,10 +120,87 @@ artifacts:
       **The root group names are machine-read.** A scenario's `**Serves:**` and,
       for a capability nobody walks, a case's `**Trace:**` may name one, matched
       verbatim, so a root group is renamed deliberately and its anchors are
-      updated in the same change.
-      Leaves carry no ids and are free to be reworded.
+      updated in the same change. Leaves carry no ids and are free to be
+      reworded.
 
-      Sequence the requirements the second pass writes to follow these groups.
+      A scenario that matches no group is worth a second look before it is
+      forced into the nearest one: five capabilities turned out to have
+      behaviour their own feature set never named, and `anchorless` is what
+      found them. Adding to the map is a product decision, so it is recorded as
+      an Open row in the capability's PRD decisions block.
+
+      ## Delta sections
+
+      `## ADDED Requirements`; `## MODIFIED Requirements`, carrying the
+      **entire** requirement block copied from the durable spec and then edited
+      - partial content loses detail at archive; `## REMOVED Requirements`, with
+      **Reason** and **Migration**; `## RENAMED Requirements`, FROM:/TO:.
+      Adding a concern without changing existing behaviour is ADDED, never
+      MODIFIED.
+
+      One file per capability the proposal names, at the exact existing path for
+      a capability that already exists. At least one delta unless the change's
+      `.openspec.yaml` sets `skip_specs: <why>`; never invent a requirement to
+      satisfy validation.
+
+      ## Requirements and scenarios
+
+      - `### Requirement: <name>` with SHALL or MUST, never should or may. Every
+        `###` under a requirements section is a `### Requirement:` and never a
+        group heading.
+      - `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`.
+        **Exactly four hashes** - three, or a bullet, fails silently.
+      - Every requirement carries at least one scenario, and every scenario is
+        decidable by a test or a manual pass.
+      - One requirement for a flow, as numbered steps for whoever uses the
+        surface - not a scenario per step. One requirement per entity with
+        fields, and one per entity with states, both as tables. Never restate an
+        unchanged fact.
+      - The scenario body is `**WHEN**` / `**THEN**`, both required; add
+        `**GIVEN**` only when state must be in place before the trigger.
+      - Ids are permanent. Number from 01 within a capability, never renumber one
+        that exists, and read the ids already issued before adding one. A renamed
+        or moved capability goes on issuing the prefix it always issued.
+      - Money is an integer count of minor units plus an ISO 4217 code, never a
+        float. Convert it yourself.
+      - No class, function, hook, table or library names. Public component
+        exports are the one exception, kept in one requirement.
+
+      ## The Serves anchor
+
+      Every scenario carries one line, directly under the heading and **above**
+      `**GIVEN**` / `**WHEN**`:
+
+      ```
+      #### Scenario: grade10-site-store-product-listing-SC-14 - Filter yields nothing
+      **Serves:** product-listing-US-02 - narrowing the catalogue by set
+
+      **WHEN** a collector applies a filter that matches no product
+      **THEN** the catalogue SHALL show the empty state and keep the filter applied
+      ```
+
+      The anchor is a user story id or a `## Feature set` root group name matched
+      verbatim; before the dash is machine-read, after it is prose. An anchor
+      resolving to neither fails `pnpm check:manual` loudly rather than dangling
+      in silence.
+
+      It sits above the GIVEN/WHEN/THEN lines deliberately: those lines are what
+      decides `blind_pass_skipped`, so editing an anchor's prose must never read
+      as a behaviour change.
+
+      **A scenario may serve several anchors**, written as code spans -
+      ``**Serves:** `…-US-03`, `…-US-07` - the refusal both stories meet``. A
+      scenario is a rule and a rule can sit on several journeys; a feature test
+      case is one walk and still traces one anchor. Commas alone do not separate
+      them, because a feature set group may hold a comma of its own.
+
+      ## A scenario no case reaches
+
+      Listed under the suite's `**Out of suite:**`, **naming where it is
+      verified instead** - a consuming repository's build and type check, a
+      database constraint, a design review, a higher-level suite - not merely
+      why it is excluded. A scenario that can name no such place is a hole, not
+      an exemption.
     requires:
       - proposal
   - id: user-journeys
@@ -211,7 +301,7 @@ artifacts:
       `**Trace:** product-listing-US-04`; delete the story outright and that
       join breaks with nothing left to recover it from.
     requires:
-      - spec-outline
+      - specs
   - id: test-cases
     generates: specs/**/feature-tcs.md
     description: An independent blind reading of the anchors, written without sight of the scenarios
@@ -298,100 +388,6 @@ artifacts:
       on every push.
     requires:
       - user-journeys
-  - id: spec-behaviour
-    generates: specs/**/spec.md
-    description: The requirement deltas and their scenarios, written after the blind suite
-    template: spec.md
-    instruction: |
-      Written by the product manager, with the `planning-pm` skill. The second
-      pass over `spec.md`, appended below the `## Purpose` and `## Feature set`
-      that `spec-outline` wrote.
-
-      The scenarios are drafted from the journeys and the feature set by a
-      sub-agent that has not seen `feature-tcs.md`, in parallel with the blind
-      suite pass. **That draft is never committed.** What lands here is the
-      draft after reconciliation, carrying whatever the suite raised.
-
-      `openspec status` cannot tell the two passes apart - both glob this file,
-      so it marks this artifact complete as soon as `spec.md` exists, outline
-      alone included. `pnpm check:manual` is the gate that means anything: it
-      fails a capability whose suite exists beside a `spec.md` carrying no
-      requirements section.
-
-      A spec is a behaviour contract, not an implementation plan: observable
-      behaviour, inputs, outputs, error conditions, external constraints,
-      scenarios that can be tested. If the implementation can change without
-      changing externally visible behaviour, it does not belong here.
-
-      ## Delta sections
-
-      `## ADDED Requirements`; `## MODIFIED Requirements`, carrying the
-      **entire** requirement block copied from the durable spec and then edited
-      - partial content loses detail at archive; `## REMOVED Requirements`,
-      with **Reason** and **Migration**; `## RENAMED Requirements`, FROM:/TO:.
-      Adding a concern without changing existing behaviour is ADDED, never
-      MODIFIED.
-
-      One file per capability the proposal names, at the exact existing path
-      for a capability that already exists. At least one delta unless the
-      change's `.openspec.yaml` sets `skip_specs: <why>`; never invent a
-      requirement to satisfy validation.
-
-      ## Requirements and scenarios
-
-      - `### Requirement: <name>` with SHALL or MUST, never should or may.
-        Every `###` under a requirements section is a `### Requirement:` and
-        never a group heading.
-      - `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`.
-        **Exactly four hashes** - three, or a bullet, fails silently.
-      - Every requirement carries at least one scenario, and every scenario is
-        decidable by a test or a manual pass.
-      - One requirement for a flow, as numbered steps for whoever uses the
-        surface - not a scenario per step. One requirement per entity with
-        fields, and one per entity with states, both as tables. Never restate
-        an unchanged fact.
-      - The scenario body is `**WHEN**` / `**THEN**`, both required; add
-        `**GIVEN**` only when state must be in place before the trigger.
-      - Ids are permanent. Number from 01 within a capability, never renumber
-        one that exists, and read the ids already issued before adding one. A
-        renamed or moved capability goes on issuing the prefix it always
-        issued.
-      - Money is an integer count of minor units plus an ISO 4217 code, never a
-        float. Convert it yourself.
-      - No class, function, hook, table or library names. Public component
-        exports are the one exception, kept in one requirement.
-
-      ## The Serves anchor
-
-      Every scenario carries one line, directly under the heading and **above**
-      `**GIVEN**` / `**WHEN**`:
-
-      ```
-      #### Scenario: grade10-site-store-product-listing-SC-14 - Filter yields nothing
-      **Serves:** product-listing-US-02 - narrowing the catalogue by set
-
-      **WHEN** a collector applies a filter that matches no product
-      **THEN** the catalogue SHALL show the empty state and keep the filter applied
-      ```
-
-      The anchor is a user story id or a `## Feature set` root group name
-      matched verbatim; before the dash is machine-read, after it is prose. An
-      anchor resolving to neither fails `pnpm check:manual` loudly rather than
-      dangling in silence.
-
-      It sits above the GIVEN/WHEN/THEN lines deliberately: those lines are
-      what decides `blind_pass_skipped`, so editing an anchor's prose must
-      never read as a behaviour change.
-
-      ## A scenario no case reaches
-
-      Listed under the suite's `**Out of suite:**`, **naming where it is
-      verified instead** - a consuming repository's build and type check, a
-      database constraint, a design review, a higher-level suite - not merely
-      why it is excluded. A scenario that can name no such place is a hole, not
-      an exemption.
-    requires:
-      - test-cases
   - id: ui-design
     generates: ui-design.md
     description: The visual plan - screens, component exports, and states
@@ -426,7 +422,7 @@ artifacts:
 
       repeat one of them, point to it instead.
     requires:
-      - spec-behaviour
+      - specs
   - id: tech-design
     generates: tech-design.md
     description: The technical implementation's high-level design
@@ -495,7 +491,7 @@ artifacts:
       than restating it; screens and Figma sources are `ui-design.md`'s. Focus
       on architecture and approach, not line-by-line implementation.
     requires:
-      - spec-behaviour
+      - specs
   - id: tasks
     generates: tasks.md
     description: The implementation plan, claimed group by group
@@ -580,7 +576,7 @@ artifacts:
 
       ```
     requires:
-      - spec-behaviour
+      - specs
 apply:
   requires:
     - tasks

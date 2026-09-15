@@ -48,28 +48,26 @@ rules:
     - "Interview the author first with the `grilling` skill (`.claude/skills/grilling/SKILL.md`), as `.claude/skills/planning-pm/SKILL.md` says: find repository facts yourself, bring only decisions, and draft once the frontier is empty. A deferred question goes under the proposal's open questions with who settles it."
     - "Include a metric that would move if this change works."
     - "Mark the PRDs the change touches before the deltas. A change carrying a 🚧 line cannot also claim `skip_specs`, and `skip_specs` takes a reason, never `true`."
-  spec-outline:
-    - "First pass over `spec.md`: `## Purpose`, then `## Feature set`, then stop. The requirements come back in `spec-behaviour`, after the blind suite."
+  specs:
+    - "Two passes over one `spec.md`, with the blind suite between them: `## Purpose` and `## Feature set` first, then journeys and suite, then the requirements. `check:manual`'s `outline` rule is the only machine evidence of that order."
     - "Write `## Purpose` only when the text composed from the durable Purpose and the PRD differs from the durable one. When written it replaces that Purpose whole, for an existing capability as much as a new one."
     - "Feature set root group names are machine-read anchors. Rename one deliberately and update every `**Serves:**` and `**Trace:**` naming it in the same change. Leaves carry no ids."
     - "The fold carries `## Requirements` only. Archive copies Purpose, the feature set and `user-journeys.md` into the durable capability by hand."
-    - "Prose short, tables carry detail (docs/governance/writing.md). Before coining a shape, read the capabilities beside this one and reuse their wording, table columns and state names."
-  user-journeys:
-    - "The schema instruction holds the rules; `pnpm check:manual` enforces the role, the `**Walked by:** nobody` routing declaration, the verbatim context copies and every anchor."
-    - "Story ids are `<capability prefix>-US-<n>`, permanent and never renumbered. There is no `**Accepted by:**` line, and no cap on the number of stories."
-  test-cases:
-    - "`docs/governance/specs-to-test-cases.md` governs the shape. Draft with `spec-to-tcs` as a blind pass against the anchors, never from the scenarios. `test-cases.md` is not a suite name."
-  spec-behaviour:
-    - "Second pass over `spec.md`, written after the blind suite and the reconciliation, and sequenced to follow the feature set's groups."
     - "Scenario heading: `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`. The prefix is the capability path with slashes as hyphens, so two capabilities of one name stay apart. Number from 01; an issued id is permanent - a removal retires it, nothing renumbers it, and a renamed or moved capability keeps issuing its first prefix."
-    - "Every scenario carries `**Serves:** <anchor> - <prose>` under its heading and above GIVEN/WHEN/THEN. The anchor is a story id or a Feature set root group, matched verbatim."
+    - "Every scenario carries `**Serves:** <anchor> - <prose>` under its heading and above GIVEN/WHEN/THEN. The anchor is a story id or a Feature set root group, matched verbatim. Several anchors are written as code spans, because a group name may hold a comma."
     - "Every `###` under a requirements section is a `### Requirement:` - never a group heading: the fold absorbs it into the requirement above, and an ATX `## Group` ends the section and drops every requirement after it."
     - "One requirement for the flow, as numbered steps for whoever uses the surface - not a scenario per step. One requirement per entity with fields, only when this change adds or changes them, and one per entity with states; both as markdown tables. Never restate an unchanged fact."
     - "A scenario is `**WHEN**` / `**THEN**`, both required; add `**GIVEN**` only when state must be in place before the trigger. Keep scenarios to behaviour distinctive to this capability: one that restates a platform default belongs to the capability that sets it - find that yourself."
     - "Money is minor units plus an ISO 4217 code. Convert yourself: the author says HKD 10, the spec says 1000 HKD minor units."
     - "No class, function, hook, table or library names; public component exports are the one exception, kept in one requirement. Propose the export set yourself from `packages/ui` and say in the proposal which do not exist yet."
     - "Requirements live here and nowhere else; a testable statement never stays on a PRD (AGENTS.md § Sources of truth)."
-    - "Before handing over, read each requirement as the engineer in the other repository will - every term defined here or in a named capability, every value stated, every scenario decidable - and fix what fails; never ask the author to certify it."
+    - "Prose short, tables carry detail (docs/governance/writing.md). Before coining a shape, read the capabilities beside this one and reuse their wording, table columns and state names. Before handing over, read each requirement as the engineer in the other repository will - every term defined, every value stated, every scenario decidable - and fix what fails."
+
+  user-journeys:
+    - "The schema instruction holds the rules; `pnpm check:manual` enforces the role, the `**Walked by:** nobody` routing declaration, the verbatim context copies and every anchor."
+    - "Story ids are `<capability prefix>-US-<n>`, permanent and never renumbered. There is no `**Accepted by:**` line, and no cap on the number of stories."
+  test-cases:
+    - "`docs/governance/specs-to-test-cases.md` governs the shape. Draft with `spec-to-tcs` as a blind pass against the anchors, never from the scenarios. `test-cases.md` is not a suite name."
   ui-design:
     - "The schema text above and `.claude/skills/planning-design/SKILL.md` carry the rules: link the Figma frame, name exports exactly and flag what does not exist yet, and fix the spec when a state has no scenario."
   tech-design:

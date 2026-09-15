@@ -21,15 +21,13 @@ const words = (text) => text.split(/\s+/).filter(Boolean).length;
 const AGENTS_BUDGET = 2500;
 const RULES_BUDGET = {
   proposal: 110,
-  // `specs` was one 500-word block. The artifact is now two passes over the
-  // same file with a blind suite between them, so the block is two: the outline
-  // pass carries the Purpose and feature-set rules, the behaviour pass the
-  // requirement and scenario rules. 530 combined, +30 for the anchor rules the
-  // split introduced.
-  "spec-outline": 150,
+  // Back to one block after the artifact split was undone: two passes over one
+  // file, so one set of rules. 500 was the budget before the anchors; the
+  // anchor and Purpose rules cost a little more than the journey cap and the
+  // `Accepted by` rule they replaced.
+  specs: 520,
   "user-journeys": 90,
   "test-cases": 40,
-  "spec-behaviour": 380,
   "ui-design": 40,
   "tech-design": 40,
   tasks: 40,

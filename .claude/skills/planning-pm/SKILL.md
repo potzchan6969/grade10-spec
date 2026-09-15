@@ -5,16 +5,23 @@ description: Write the product manager's half of an OpenSpec change - proposal, 
 
 # The product manager's artifacts
 
-Five of the eight artifacts in `grade10-planning` are yours, and they are the
-first five. They live in four files:
+Four of the seven artifacts in `grade10-planning` are yours, and they are the
+first four. `specs` is written in **two passes over one file**, with the blind
+suite between them:
 
 | Artifact | File | What it holds |
 | --- | --- | --- |
 | `proposal` | `proposal.md` | Why this problem, for whom, what it will not do |
-| `spec-outline` | `specs/<capability>/spec.md` | `## Purpose` and `## Feature set`, then stop |
+| `specs` — pass one | `specs/<capability>/spec.md` | `## Purpose` and `## Feature set`, then stop |
 | `user-journeys` | `specs/<capability>/user-journeys.md` | The stories added, changed or retired, and the ones this change leans on |
 | `test-cases` | `specs/<capability>/feature-tcs.md` | A blind suite, written without sight of the scenarios |
-| `spec-behaviour` | `specs/<capability>/spec.md` | The requirement deltas and their scenarios, reconciled against that suite |
+| `specs` — pass two | `specs/<capability>/spec.md` | The requirement deltas and their scenarios, reconciled against that suite |
+
+The schema cannot express that order — `requires` is advisory and has never
+stopped anyone writing the scenarios first. The split that used to try was
+undone because it bought nothing and cost three things: a status line that
+called the second pass done as soon as the first wrote the file, two viewer tabs
+over one document, and a change in another repository to fix the second.
 
 **Stop there.** A designer writes `ui-design.md`, and the engineer who picks the
 change up writes `tech-design.md` and `tasks.md` - on this same change, never a
@@ -117,21 +124,21 @@ Everything this run produces is `draft`. Nothing in it claims review.
 
    ```bash
    openspec instructions proposal --change <change-name>
-   openspec instructions spec-outline --change <change-name>
+   openspec instructions specs --change <change-name>
    openspec instructions user-journeys --change <change-name>
    openspec instructions test-cases --change <change-name>
-   openspec instructions spec-behaviour --change <change-name>
    ```
 
    These carry this store's own rules on top of the schema's. Read them rather
-   than working from memory.
+   than working from memory; `specs` carries both of its passes.
 
-   `openspec status` cannot tell `spec-outline` and `spec-behaviour` apart -
-   both glob `spec.md`, so it marks the second complete the moment the first
-   writes the file. **`pnpm check:manual` is the gate that means anything** - it
+   `openspec status` calls `specs` done as soon as the outline exists, because a
+   file is there. **`pnpm check:manual` is the gate that means anything** - it
    fails a capability whose suite sits beside a `spec.md` that carries no
-   requirements section. (`pnpm plan:preflight` is unrelated: it guards
-   `tasks.md` against being overwritten while engineering is implementing.)
+   requirements section, which is the only machine evidence that pass two
+   happened at all. It is never downgraded to a warning. (`pnpm plan:preflight`
+   is unrelated: it guards `tasks.md` against being overwritten while
+   engineering is implementing.)
 
 6. **Write the proposal, the outline and the journeys**, in that order.
    Under the proposal's `## References`, link every section you marked, so the
@@ -141,7 +148,7 @@ Everything this run produces is `draft`. Nothing in it claims review.
    inputs and never see each other's output. `spec-to-tcs` builds the isolated
    input for the suite pass; the scenario pass does not read `feature-tcs.md`.
 
-8. **Reconcile, then write `spec-behaviour`.** Join on anchors, take the
+8. **Reconcile, then write the second pass.** Join on anchors, take the
    dispositions below, and write the scenarios that survive together with the
    `## Reconciliation` block.
 
