@@ -20,7 +20,7 @@ export const previewLot = {
   currentBid: "HK$12,800",
   /** Hammer / winning bid at close. */
   winningBid: "HK$12,800",
-  /** Highest bid when the lot ends with no sale. */
+  /** Final standing bid fixture (bidder close letters). */
   highestBid: "HK$11,200",
   /** Standing amount when the reader lost the lead (outbid / non-winner). */
   yourBid: "HK$12,400",

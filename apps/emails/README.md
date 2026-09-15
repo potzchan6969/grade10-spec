@@ -50,6 +50,8 @@ emails/
     progress/              opens / closes-in-24h / extended (before & during)
     activity/              new-bid / outbid (while bidding is open)
     close/                 lot ended for watchers & non-winners
+                           (watcher: lot-ended-watched ± Sold for;
+                           lot-ended-watched-ended = Ended-only)
     order/                 winner success, address reminder (post-sale)
 ```
 
