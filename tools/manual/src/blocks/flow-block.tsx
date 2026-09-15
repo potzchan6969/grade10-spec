@@ -301,16 +301,23 @@ function FlowDiagram({
   const [anchor, setAnchor] = useState<Anchor | null>(null);
 
   /* The chart's nodes, as the build marks them; edges and their labels
-   * claim a step too but are nothing to rest a mouse on. The card tells the
-   * step, so a node's own tooltip would only say it twice. */
+   * claim a step too but are nothing to rest a mouse on. A node whose claim
+   * names a step tells it on the card, so its own tooltip would only say it
+   * twice; one that names none — a sequence's lifelines, where the message
+   * carries the step — keeps the tooltip the build drew it. */
   useEffect(() => {
     if (state.status !== "ready") return;
     const nodes = Array.from(
       state.svg.querySelectorAll("[data-step][data-node-id]"),
     );
-    for (const node of nodes) node.querySelector(":scope > title")?.remove();
+    for (const node of nodes) {
+      const claims = stepClaims(node.getAttribute("data-step"));
+      if (claimedStep(steps, claims)) {
+        node.querySelector(":scope > title")?.remove();
+      }
+    }
     setParts(nodes);
-  }, [state]);
+  }, [state, steps]);
 
   useEffect(() => {
     if (state.status !== "ready") return;

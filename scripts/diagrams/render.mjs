@@ -40,7 +40,7 @@ for (const file of sources) {
   const target = join(OUTPUT, `${name}.svg`);
   rendered.add(basename(target));
   try {
-    const svg = compile(deliver(type, join(SOURCES, file)), name);
+    const svg = compile(deliver(type, join(SOURCES, file)), name, type);
     const current = existsSync(target) ? readFileSync(target, "utf8") : null;
     if (current === svg) continue;
     if (check) {

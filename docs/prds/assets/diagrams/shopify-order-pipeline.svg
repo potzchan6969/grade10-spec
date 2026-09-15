@@ -63,49 +63,49 @@ svg[data-diagram="shopify-order-pipeline"] .c-lane{fill: var(--lane-fill); strok
         <rect x="507.5" y="505" width="10" height="47" rx="3" class="c-mask"/>
         <rect x="507.5" y="505" width="10" height="47" rx="3" class="c-backend" stroke-width="1"/>
         
-        <g data-step="store" data-edge-from="buyer" data-edge-to="store" data-edge-label="points and coupons chosen" data-edge-key="0" data-edge-id="choose">
+        <g data-step="choose" data-edge-from="buyer" data-edge-to="store" data-edge-label="points and coupons chosen" data-edge-key="0" data-edge-id="choose">
           <path data-composition-edge-from="buyer" data-composition-edge-to="store" data-composition-edge-id="choose" data-composition-points="116.5,215;371.1666666666667,215" d="M 116.5 215 L 371.1666666666667 215" class="a-default" stroke-width="1.4" marker-end="url(#shopify-order-pipeline-arrowhead)"/>
         <g data-detail="context">
           <rect x="172.83333333333334" y="195" width="142" height="16" rx="3" class="c-mask"/>
           <text x="243.83333333333334" y="205" class="t-backend" font-size="9" text-anchor="middle">points and coupons chosen</text>
         </g>
         </g>
-        <g data-step="shopify" data-edge-from="store" data-edge-to="shopify" data-edge-label="order id and the Points discount" data-edge-key="1" data-edge-id="discount">
+        <g data-step="discount" data-edge-from="store" data-edge-to="shopify" data-edge-label="order id and the Points discount" data-edge-key="1" data-edge-id="discount">
           <path data-composition-edge-from="store" data-composition-edge-to="shopify" data-composition-edge-id="discount" data-composition-points="371.1666666666667,275;250.83333333333334,275" d="M 371.1666666666667 275 L 250.83333333333334 275" class="a-emphasis" stroke-width="1.8" marker-end="url(#shopify-order-pipeline-arrowhead-emphasis)"/>
         <g data-detail="context">
           <rect x="221.8" y="255" width="178.4" height="16" rx="3" class="c-mask"/>
           <text x="311" y="265" class="t-backend" font-size="9" text-anchor="middle">order id and the Points discount</text>
         </g>
         </g>
-        <g data-step="shopify" data-edge-from="buyer" data-edge-to="shopify" data-edge-label="pays" data-edge-key="2" data-edge-id="pay">
+        <g data-step="pay" data-edge-from="buyer" data-edge-to="shopify" data-edge-label="pays" data-edge-key="2" data-edge-id="pay">
           <path data-composition-edge-from="buyer" data-composition-edge-to="shopify" data-composition-edge-id="pay" data-composition-points="116.5,350;236.83333333333334,350" d="M 116.5 350 L 236.83333333333334 350" class="a-emphasis" stroke-width="1.8" marker-end="url(#shopify-order-pipeline-arrowhead-emphasis)"/>
         <g data-detail="context">
           <rect x="159.66666666666669" y="330" width="34" height="16" rx="3" class="c-mask"/>
           <text x="176.66666666666669" y="340" class="t-backend" font-size="9" text-anchor="middle">pays</text>
         </g>
         </g>
-        <g data-step="store" data-edge-from="shopify" data-edge-to="store" data-edge-label="order paid" data-edge-key="3" data-edge-id="paid">
+        <g data-step="paid" data-edge-from="shopify" data-edge-to="store" data-edge-label="order paid" data-edge-key="3" data-edge-id="paid">
           <path data-composition-edge-from="shopify" data-composition-edge-to="store" data-composition-edge-id="paid" data-composition-points="250.83333333333334,400;371.1666666666667,400" d="M 250.83333333333334 400 L 371.1666666666667 400" class="a-emphasis" stroke-width="1.8" marker-end="url(#shopify-order-pipeline-arrowhead-emphasis)"/>
         <g data-detail="context">
           <rect x="279" y="380" width="64" height="16" rx="3" class="c-mask"/>
           <text x="311" y="390" class="t-backend" font-size="9" text-anchor="middle">order paid</text>
         </g>
         </g>
-        <g data-step="shopify" data-edge-from="store" data-edge-to="shopify" data-edge-label="reads the order back" data-edge-key="4" data-edge-id="find">
+        <g data-step="find" data-edge-from="store" data-edge-to="shopify" data-edge-label="reads the order back" data-edge-key="4" data-edge-id="find">
           <path data-composition-edge-from="store" data-composition-edge-to="shopify" data-composition-edge-id="find" data-composition-points="371.1666666666667,465;250.83333333333334,465" d="M 371.1666666666667 465 L 250.83333333333334 465" class="a-dashed" stroke-width="1.4" marker-end="url(#shopify-order-pipeline-arrowhead-dashed)"/>
         <g data-detail="context">
           <rect x="253" y="445" width="116" height="16" rx="3" class="c-mask"/>
           <text x="311" y="455" class="t-messagebus" font-size="9" text-anchor="middle">reads the order back</text>
         </g>
         </g>
-        <g data-step="loyalty" data-edge-from="store" data-edge-to="loyalty" data-edge-label="order event, once" data-edge-key="5" data-edge-id="event">
+        <g data-step="event" data-edge-from="store" data-edge-to="loyalty" data-edge-label="order event, once" data-edge-key="5" data-edge-id="event">
           <path data-composition-edge-from="store" data-composition-edge-to="loyalty" data-composition-edge-id="event" data-composition-points="385.1666666666667,510;505.5,510" d="M 385.1666666666667 510 L 505.5 510" class="a-emphasis" stroke-width="1.8" marker-end="url(#shopify-order-pipeline-arrowhead-emphasis)"/>
         <g data-detail="context">
           <rect x="395.1333333333334" y="490" width="100.4" height="16" rx="3" class="c-mask"/>
           <text x="445.33333333333337" y="500" class="t-backend" font-size="9" text-anchor="middle">order event, once</text>
         </g>
         </g>
-        <g data-step="store" data-edge-from="loyalty" data-edge-to="store" data-edge-label="points debited, earn granted" data-edge-key="6" data-edge-id="settled">
+        <g data-step="settled" data-edge-from="loyalty" data-edge-to="store" data-edge-label="points debited, earn granted" data-edge-key="6" data-edge-id="settled">
           <path data-composition-edge-from="loyalty" data-composition-edge-to="store" data-composition-edge-id="settled" data-composition-points="505.5,550;385.1666666666667,550" d="M 505.5 550 L 385.1666666666667 550" class="a-default" stroke-width="1.4" stroke-dasharray="3,5" marker-end="url(#shopify-order-pipeline-arrowhead)"/>
         <g data-detail="context">
           <rect x="366.53333333333336" y="530" width="157.6" height="16" rx="3" class="c-mask"/>
