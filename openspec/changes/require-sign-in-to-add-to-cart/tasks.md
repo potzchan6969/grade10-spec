@@ -5,7 +5,7 @@
 - [ ] 1.3 State on Reviewing the Cart and on Checkout that the cart is members only and there is no guest checkout
 - [ ] 1.4 Verify: `pnpm check:manual`
 
-## 2. Cart sign-in gate (grade10)
+## 2. Cart sign-in gate (grade10) (owner: @sean)
 
 - [ ] 2.1 Refuse a cart write while the scope is a guest and report the ask to the consumer's `onSignInRequired`, writing no line (grade10-site-store-product-listing-SC-44, grade10-site-store-product-page-SC-26)
 - [ ] 2.2 Perform an armed intent once the scope becomes a member, re-reading the variant and quantity and dropping it where either no longer stands (grade10-site-store-product-listing-SC-46, grade10-site-store-product-page-SC-28)
