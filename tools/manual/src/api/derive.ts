@@ -28,6 +28,7 @@ import type {
   ItemError,
   Journey,
   PageEntry,
+  SchemaArtifact,
   Snapshot,
   SpecEntry,
   TestCase,
@@ -605,6 +606,82 @@ export function laneOf(change: ChangeEntry): ChangeLane {
  */
 export function isProposal(change: ChangeEntry): boolean {
   return laneOf(change) === "proposed";
+}
+
+/** One artifact a change still owes, and why it is owed. */
+export type PendingItem = {
+  change: ChangeEntry;
+  /** The schema's artifact id — `specs`, `ui-design`, `tasks`. */
+  artifact: string;
+  /** The line the change's author wrote in `awaiting:`. Present means
+   * somebody said what is missing; absent means the artifact is simply
+   * unwritten and its turn has come. */
+  why?: string;
+};
+
+/** What one hand owes, oldest change first — the order somebody works in. */
+export type PendingRole = { role: string; items: PendingItem[] };
+
+/** The key each artifact's standing waiver lands on. An artifact nobody can
+ * waive is absent here, which is the same answer as a waiver nobody wrote. */
+const WAIVERS: Record<string, (change: ChangeEntry) => boolean> = {
+  specs: (change) => change.skipSpecs === true,
+  "tech-design": (change) => change.designWaived !== undefined,
+  tasks: (change) => change.tasksWaived !== undefined,
+};
+
+/**
+ * Every hand's worklist, derived from the artifacts each change has written
+ * against the ones its schema declares. Nothing is stored: a change owes an
+ * artifact when it has not written it, everything that artifact is built on
+ * is written, and nothing waived it.
+ *
+ * Two artifacts are never derived as owed. `ui-design` is optional, and
+ * `tech-design` is owed only when a task group lands outside this store —
+ * conditions a worklist cannot see from here, and guessing at them would
+ * fill a designer's list with changes that draw nothing. Those appear only
+ * when the change says so in `awaiting:`, which is also the only way to say
+ * why a wait is a wait rather than a gap.
+ */
+export function pendingByRole(
+  changes: ChangeEntry[],
+  artifacts: SchemaArtifact[],
+): PendingRole[] {
+  const byRole = new Map<string, PendingItem[]>();
+  for (const artifact of artifacts) {
+    if (artifact.role)
+      byRole.set(artifact.role, byRole.get(artifact.role) ?? []);
+  }
+
+  for (const change of [...changes].sort(byCreated)) {
+    const written = new Set(change.written);
+    const declared = new Map(
+      (change.awaiting ?? []).map((wait) => [wait.artifact, wait.why]),
+    );
+    for (const artifact of artifacts) {
+      if (!artifact.role || written.has(artifact.id)) continue;
+      const why = declared.get(artifact.id);
+      const owed =
+        why !== undefined ||
+        (artifact.required &&
+          artifact.requires.every((one) => written.has(one)) &&
+          !WAIVERS[artifact.id]?.(change));
+      if (!owed) continue;
+      byRole
+        .get(artifact.role)
+        ?.push({ change, artifact: artifact.id, ...(why ? { why } : {}) });
+    }
+  }
+
+  return [...byRole]
+    .map(([role, items]) => ({ role, items }))
+    .filter((one) => one.items.length > 0);
+}
+
+/** Oldest first: a worklist is read from the top, and the change that has
+ * waited longest is the one to answer for. */
+function byCreated(a: ChangeEntry, b: ChangeEntry): number {
+  return (a.created || "9999").localeCompare(b.created || "9999");
 }
 
 /** How a `depends_on:` id resolved: still in flight and holding this change

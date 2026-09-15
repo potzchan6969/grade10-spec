@@ -5,6 +5,7 @@ import { GuidePage } from "./pages/guide-page";
 import { HomePage } from "./pages/home-page";
 import { InFlightPage } from "./pages/in-flight-page";
 import { ManualPage } from "./pages/manual-page";
+import { PendingPage } from "./pages/pending-page";
 import { PlatformPage } from "./pages/platform-page";
 import { ProductRoutes } from "./pages/product-routes";
 import { QaPage } from "./pages/qa-page";
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
       { path: "guides/:slug", element: <GuidePage /> },
       { path: "in-flight", element: <InFlightPage /> },
       { path: "in-flight/:change", element: <ChangePage /> },
+      { path: "pending", element: <PendingPage /> },
       { path: "qa", element: <QaPage /> },
       { path: "design", element: <DesignPage /> },
       { path: "recent", element: <RecentPage /> },
