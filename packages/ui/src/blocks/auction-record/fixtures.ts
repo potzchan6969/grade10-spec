@@ -324,6 +324,6 @@ export {
   WATCHING_CAMERA,
   WATCHING_ENDED,
   WATCHING_POSTER,
-  watchingItem,
   WINNER_ORDER_HREF,
+  watchingItem,
 };

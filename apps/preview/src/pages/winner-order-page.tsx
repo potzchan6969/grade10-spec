@@ -35,7 +35,10 @@ import {
   type WinnerOrderInvoiceLine,
   type WinnerOrderStatus,
 } from "./winner-order-content";
-import { AUCTION_LOT_DETAILS_HREF, MY_AUCTIONS_PAGE_HREF } from "./workbench-story-nav";
+import {
+  AUCTION_LOT_DETAILS_HREF,
+  MY_AUCTIONS_PAGE_HREF,
+} from "./workbench-story-nav";
 
 const ADDRESS_CONFIRMED_TOAST = {
   title: "Address confirmed",
@@ -718,7 +721,9 @@ function WinnerOrderPage({
         <Breadcrumbs>
           <BreadcrumbItem href="#account">Account</BreadcrumbItem>
           <BreadcrumbSeparator />
-          <BreadcrumbItem href={MY_AUCTIONS_PAGE_HREF}>My Auctions</BreadcrumbItem>
+          <BreadcrumbItem href={MY_AUCTIONS_PAGE_HREF}>
+            My Auctions
+          </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem current>Winner Order</BreadcrumbItem>
         </Breadcrumbs>
