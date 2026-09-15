@@ -69,7 +69,7 @@ Highest bid highlight.
 | --- | --- |
 | Notification service | New close-outcome kinds; enrol and dedup against winner order mail |
 | Send log | New message types beside the existing six |
-| `apps/emails` | Preview templates for the kinds (implementation may trail) |
+| `apps/emails` | Preview templates for the kinds (implementation may trail). Current #433 layout for the watched campaign: composition `emails/auction/_components/lot-watched.tsx` (`lot_ended_watched`); sold preview `emails/auction/close/lot-watched-sold.tsx`; Ended-only preview `emails/auction/close/lot-watched-ended.tsx`. Requirements do not depend on those filenames. |
 | Order Notifications | Unchanged here; address reminder remains open |
 
 ## Open questions
