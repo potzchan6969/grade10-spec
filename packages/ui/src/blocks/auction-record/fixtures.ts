@@ -71,6 +71,34 @@ const ROW_COPY = {
   noStanding: AUCTION_RECORD_COPY.noStanding,
 };
 
+/** Won-row copy — title + actions-column CTA open Winner Order. */
+const ORDER_ROW_COPY = {
+  ...ROW_COPY,
+  openListing: "Open order",
+  viewOrder: "View order",
+};
+
+/**
+ * Workbench story paths for Won → Winner Order. Same ids as
+ * `apps/preview/.../workbench-story-nav.ts` so the compound My Auctions
+ * stories deep-link in `pnpm storybook:workbench`.
+ */
+const WINNER_ORDER_HREF = {
+  awaitingAddress:
+    "?path=/story/my-auctions-winner-order-settlement--awaiting-address",
+  preparingInvoice:
+    "?path=/story/my-auctions-winner-order-settlement--preparing-invoice",
+  pendingPayment:
+    "?path=/story/my-auctions-winner-order-payment--pending-payment",
+  expiredInvoice:
+    "?path=/story/my-auctions-winner-order-payment--expired-invoice",
+  processing: "?path=/story/my-auctions-winner-order-delivery--processing",
+  shipped: "?path=/story/my-auctions-winner-order-delivery--shipped",
+  delivered: "?path=/story/my-auctions-winner-order-delivery--delivered",
+  cancelled: "?path=/story/my-auctions-winner-order-closed--cancelled",
+  refunded: "?path=/story/my-auctions-winner-order-closed--refunded",
+} as const;
+
 function watchingItem(
   partial: Partial<AuctionRecordRowProps> &
     Pick<AuctionRecordRowProps, "title" | "state" | "id">,
@@ -150,30 +178,152 @@ const BIDDING_CHARIZARD = biddingItem({
   href: "#lot-charizard",
 });
 
-/** Bid on a lot that closed with no winner — stays listed; standing Didn't win. */
+/** Bid on a lot that closed with no winner — stays listed; standing Didn’t win. */
 const BIDDING_ENDED = biddingItem({
   id: "bid-ended",
   title: "1977 Star Wars Topps Wax Pack",
   state: "hold_released",
-  stateLabel: "Didn't win",
+  stateLabel: "Didn’t win",
   currentBid: "HK$890",
   closesAt: "Ended 7 Sep 2026, 18:00 HKT",
   href: "#lot-wax-pack",
 });
 
+/** Won — address-first standing vocabulary (revise-auction-winner-invoicing). */
+const BIDDING_WON_AWAITING_ADDRESS = biddingItem({
+  id: "won-awaiting-address",
+  title: "1999 Base Set Charizard PSA 9",
+  state: "awaiting_address",
+  stateLabel: "Awaiting Address",
+  currentBid: "HK$12,800",
+  closesAt: "Ended 17 Sep 2026, 21:30 HKT",
+  href: WINNER_ORDER_HREF.awaitingAddress,
+  copy: ORDER_ROW_COPY,
+});
+
+const BIDDING_WON_PREPARING_INVOICE = biddingItem({
+  id: "won-preparing-invoice",
+  title: "1998 Neo Genesis Lugia PSA 10",
+  state: "preparing_invoice",
+  stateLabel: "Preparing Invoice",
+  currentBid: "HK$9,400",
+  closesAt: "Ended 16 Sep 2026, 20:00 HKT",
+  href: WINNER_ORDER_HREF.preparingInvoice,
+  copy: ORDER_ROW_COPY,
+});
+
+const BIDDING_WON_PENDING_PAYMENT = biddingItem({
+  id: "won-pending-payment",
+  title: "2000 Skyridge Crystal Charizard PSA 9",
+  state: "pending_payment",
+  stateLabel: "Pending Payment",
+  currentBid: "HK$21,500",
+  closesAt: "Pay by 24 Sep 2026, 12:00 HKT",
+  href: WINNER_ORDER_HREF.pendingPayment,
+  copy: ORDER_ROW_COPY,
+});
+
+const BIDDING_WON_EXPIRED = biddingItem({
+  id: "won-expired",
+  title: "1999 Fossil Dragonite Holo PSA 8",
+  state: "expired",
+  stateLabel: "Pending Payment",
+  currentBid: "HK$3,600",
+  closesAt: "Payment overdue",
+  href: WINNER_ORDER_HREF.expiredInvoice,
+  copy: ORDER_ROW_COPY,
+});
+
+const BIDDING_WON_PROCESSING = biddingItem({
+  id: "won-processing",
+  title: "1999 Fossil Dragonite Holo PSA 9",
+  state: "processing",
+  stateLabel: "Processing",
+  currentBid: "HK$4,200",
+  closesAt: "Paid 18 Sep 2026",
+  href: WINNER_ORDER_HREF.processing,
+  copy: ORDER_ROW_COPY,
+});
+
+const BIDDING_WON_SHIPPED = biddingItem({
+  id: "won-shipped",
+  title: "2000 Skyridge Crobat Holo PSA 9",
+  state: "shipped",
+  stateLabel: "Shipped",
+  currentBid: "HK$2,100",
+  closesAt: "Shipped 20 Sep 2026",
+  href: WINNER_ORDER_HREF.shipped,
+  copy: ORDER_ROW_COPY,
+});
+
+const BIDDING_WON_DELIVERED = biddingItem({
+  id: "won-delivered",
+  title: "1999 Base Set Blastoise PSA 8",
+  state: "delivered",
+  stateLabel: "Delivered",
+  currentBid: "HK$6,800",
+  closesAt: "Delivered 22 Sep 2026",
+  href: WINNER_ORDER_HREF.delivered,
+  copy: ORDER_ROW_COPY,
+});
+
+const BIDDING_WON_CANCELLED = biddingItem({
+  id: "won-cancelled",
+  title: "1999 Jungle Scyther Holo PSA 9",
+  state: "cancelled",
+  stateLabel: "Cancelled",
+  currentBid: "HK$1,200",
+  closesAt: "Cancelled 19 Sep 2026",
+  href: WINNER_ORDER_HREF.cancelled,
+  copy: ORDER_ROW_COPY,
+});
+
+const BIDDING_WON_REFUNDED = biddingItem({
+  id: "won-refunded",
+  title: "1999 Fossil Kabutops Holo PSA 9",
+  state: "refunded",
+  stateLabel: "Refunded",
+  currentBid: "HK$2,450",
+  closesAt: "Refunded 21 Sep 2026",
+  href: WINNER_ORDER_HREF.refunded,
+  copy: ORDER_ROW_COPY,
+});
+
+const BIDDING_DIDNT_WIN_HOLD_RELEASING = biddingItem({
+  id: "didnt-win-releasing",
+  title: "1999 Jungle Flareon Holo PSA 8",
+  state: "hold_releasing",
+  stateLabel: "Didn’t win",
+  currentBid: "HK$1,850",
+  closesAt: "Ended 15 Sep 2026, 19:00 HKT",
+  href: "#lot-flareon",
+});
+
 export {
   AUCTION_RECORD_COPY,
   BIDDING_CHARIZARD,
+  BIDDING_DIDNT_WIN_HOLD_RELEASING,
   BIDDING_EMAIL_ALERTS_COPY,
   BIDDING_ENDED,
   BIDDING_POSTER,
+  BIDDING_WON_AWAITING_ADDRESS,
+  BIDDING_WON_CANCELLED,
+  BIDDING_WON_DELIVERED,
+  BIDDING_WON_EXPIRED,
+  BIDDING_WON_PENDING_PAYMENT,
+  BIDDING_WON_PREPARING_INVOICE,
+  BIDDING_WON_PROCESSING,
+  BIDDING_WON_REFUNDED,
+  BIDDING_WON_SHIPPED,
   biddingItem,
   EMAIL_ALERTS_COPY,
   IMAGE,
+  ORDER_ROW_COPY,
   ROW_COPY,
   WATCH_COPY,
   WATCHING_CAMERA,
   WATCHING_ENDED,
   WATCHING_POSTER,
   watchingItem,
+  WINNER_ORDER_HREF,
 };

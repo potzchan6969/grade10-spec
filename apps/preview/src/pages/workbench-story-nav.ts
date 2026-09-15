@@ -1,3 +1,7 @@
+/** Storybook story id for a closed won Auction Lot Details assembly. */
+const AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID =
+  "pages-auction-lot-details--closed-won-payment-due";
+
 /** Storybook story id for the filled Order History page assembly. */
 const ORDER_HISTORY_STORY_ID = "pages-order-history-page--filled";
 
@@ -7,6 +11,29 @@ const ORDER_DETAILS_STORY_ID = "pages-order-details-page--filled";
 /** Storybook story id for the Store Locator page assembly. */
 const STORE_LOCATOR_STORY_ID = "pages-store-locator-page--default";
 
+/** Storybook story id for the My Auctions page assembly (list → Winner Order). */
+const MY_AUCTIONS_PAGE_STORY_ID = "pages-my-auctions-page--post-auction";
+
+/** Winner Order story ids — one per derived standing a Won row may open. */
+const WINNER_ORDER_AWAITING_ADDRESS_STORY_ID =
+  "my-auctions-winner-order-settlement--awaiting-address";
+const WINNER_ORDER_PREPARING_INVOICE_STORY_ID =
+  "my-auctions-winner-order-settlement--preparing-invoice";
+const WINNER_ORDER_PENDING_PAYMENT_STORY_ID =
+  "my-auctions-winner-order-payment--pending-payment";
+const WINNER_ORDER_EXPIRED_INVOICE_STORY_ID =
+  "my-auctions-winner-order-payment--expired-invoice";
+const WINNER_ORDER_PROCESSING_STORY_ID =
+  "my-auctions-winner-order-delivery--processing";
+const WINNER_ORDER_SHIPPED_STORY_ID =
+  "my-auctions-winner-order-delivery--shipped";
+const WINNER_ORDER_DELIVERED_STORY_ID =
+  "my-auctions-winner-order-delivery--delivered";
+const WINNER_ORDER_CANCELLED_STORY_ID =
+  "my-auctions-winner-order-closed--cancelled";
+const WINNER_ORDER_REFUNDED_STORY_ID =
+  "my-auctions-winner-order-closed--refunded";
+
 /** Manager href that opens a story in the workbench (`?path=/story/…`). */
 function storyHref(storyId: string): string {
   return `?path=/story/${storyId}`;
@@ -14,6 +41,14 @@ function storyHref(storyId: string): string {
 
 /** Chrome destination for Store Locator once the page story exists. */
 const STORE_LOCATOR_HREF = storyHref(STORE_LOCATOR_STORY_ID);
+
+/** Preview href for Winner Order → lot details. */
+const AUCTION_LOT_DETAILS_HREF = storyHref(
+  AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID,
+);
+
+/** Preview href for Winner Order → My Auctions list. */
+const MY_AUCTIONS_PAGE_HREF = storyHref(MY_AUCTIONS_PAGE_STORY_ID);
 
 /** Jump the workbench Storybook iframe to another page story. */
 function navigateToStory(storyId: string) {
@@ -49,11 +84,24 @@ function interceptWorkbenchStoryLinks(event: MouseEvent) {
 }
 
 export {
+  AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID,
+  AUCTION_LOT_DETAILS_HREF,
   interceptWorkbenchStoryLinks,
+  MY_AUCTIONS_PAGE_HREF,
+  MY_AUCTIONS_PAGE_STORY_ID,
   navigateToStory,
   ORDER_DETAILS_STORY_ID,
   ORDER_HISTORY_STORY_ID,
   STORE_LOCATOR_HREF,
   STORE_LOCATOR_STORY_ID,
   storyHref,
+  WINNER_ORDER_AWAITING_ADDRESS_STORY_ID,
+  WINNER_ORDER_CANCELLED_STORY_ID,
+  WINNER_ORDER_DELIVERED_STORY_ID,
+  WINNER_ORDER_EXPIRED_INVOICE_STORY_ID,
+  WINNER_ORDER_PENDING_PAYMENT_STORY_ID,
+  WINNER_ORDER_PREPARING_INVOICE_STORY_ID,
+  WINNER_ORDER_PROCESSING_STORY_ID,
+  WINNER_ORDER_REFUNDED_STORY_ID,
+  WINNER_ORDER_SHIPPED_STORY_ID,
 };

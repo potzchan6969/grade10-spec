@@ -92,10 +92,14 @@ export const ClosedSold: Story = {
   },
 };
 export const ClosedWonPaymentDue: Story = {
+  name: "Closed — awaiting address",
   args: { state: "closed-won-payment-due" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Continue" })).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: "Confirm address" }),
+    ).toBeVisible();
+    expect(canvas.getByText("Confirm delivery address")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: /watch/i }),
     ).not.toBeInTheDocument();
