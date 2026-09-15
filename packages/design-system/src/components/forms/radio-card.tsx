@@ -72,7 +72,7 @@ function RadioCard({
           {title != null ? (
             <span
               data-slot="radio-card-title"
-              className="text-sm font-medium text-foreground"
+              className="text-sm leading-6 font-medium text-foreground"
             >
               {title}
             </span>
@@ -89,7 +89,10 @@ function RadioCard({
         </span>
       </label>
       {action != null ? (
-        <div data-slot="radio-card-action" className="shrink-0">
+        <div
+          data-slot="radio-card-action"
+          className="flex h-6 shrink-0 items-center"
+        >
           {action}
         </div>
       ) : null}
