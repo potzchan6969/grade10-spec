@@ -90,6 +90,8 @@ type WinnerOrderAddressDialogProps = {
   savedAddresses?: readonly WinnerOrderSavedAddress[];
   /** Called with the multi-line address the winner affirmed. */
   onConfirm: (addressLines: string) => void;
+  /** Open the nested add-address form when the picker opens (Storybook). */
+  initialNewAddressOpen?: boolean;
 };
 
 function formatNewAddress(draft: NewAddressDraft): string {
@@ -137,6 +139,7 @@ function WinnerOrderAddressDialog({
   onOpenChange,
   savedAddresses: savedAddressesProp = WINNER_ORDER_SAVED_ADDRESSES,
   onConfirm,
+  initialNewAddressOpen = false,
 }: WinnerOrderAddressDialogProps) {
   const formId = useId();
   const countryId = useId();
@@ -148,7 +151,7 @@ function WinnerOrderAddressDialog({
   );
   const [draftOption, setDraftOption] =
     useState<WinnerOrderSavedAddress | null>(null);
-  const [newAddressOpen, setNewAddressOpen] = useState(false);
+  const [newAddressOpen, setNewAddressOpen] = useState(initialNewAddressOpen);
   const [draft, setDraft] = useState<NewAddressDraft>(EMPTY_DRAFT);
   const [attempted, setAttempted] = useState(false);
 
@@ -157,10 +160,10 @@ function WinnerOrderAddressDialog({
     setAddresses([...savedAddressesProp]);
     setSelection(savedAddressesProp[0]?.id ?? DRAFT_VALUE);
     setDraftOption(null);
-    setNewAddressOpen(false);
+    setNewAddressOpen(initialNewAddressOpen);
     setDraft(EMPTY_DRAFT);
     setAttempted(false);
-  }, [open, savedAddressesProp]);
+  }, [open, savedAddressesProp, initialNewAddressOpen]);
 
   const selectedSaved = addresses.find((item) => item.id === selection);
   const selectedDraft =
