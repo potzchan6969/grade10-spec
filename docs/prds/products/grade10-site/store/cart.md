@@ -31,6 +31,9 @@ back to the page they were on.
 - **One scope** — the member cart of the signed-in session; a signed-out
   session holds no lines and builds none
 - **Edits** — quantity and removal write to the same cart the page holds
+- ❓ **The choice on a second visit** — the lines follow the member; the
+  code and the points are picked again after a reload and on another
+  device. Whether the cart carries them too is Product's
 
 ## Promo Code
 
@@ -155,4 +158,5 @@ second code on one cart.
 | Shipping and sale | Decided | Unknown until the invoice; the estimated total is the goods after this store's own tender. | Product |
 | Existing checkout surface | Decided | The drawer opens `/checkout`; that surface keeps ownership of its live read and checkout creation. | Engineering |
 | Public codes | Decided | The store mints every code to one member. A public code is a Shopify discount, created in the shop's admin and promoted elsewhere; the cart neither lists nor takes one. | Product |
+| The choice on a second visit | ❓ Open | Whether the cart carries which code and how many points the member means to use, so a choice survives a reload and reaches another device. What the cart would carry is the choice, never the figures: those stay the store's, read against the cart as it stands. | Product |
 :::
