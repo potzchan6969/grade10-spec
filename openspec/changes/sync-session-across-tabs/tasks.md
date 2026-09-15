@@ -17,7 +17,7 @@ the promptness cases in each wait on 2.1.
 - [x] 2.4 Cover the session that ran out and the session that became somebody else, including that the same person signing in again never flickers through signed-out (shared-auth-session-SC-13, shared-auth-session-SC-14, shared-auth-session-SC-23)
 - [x] 2.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test`
 
-## 3. Sign-in surfaces carry on (grade10)
+## 3. Sign-in surfaces carry on (grade10) (owner: @sean)
 
 - [ ] 3.1 Have each site's sign-in dialog watch the session and call the overlay's `signedIn` when one arrives while it is open, closing the dialog and announcing nothing (shared-auth-sign-in-SC-50, shared-auth-sign-in-SC-51, shared-auth-session-SC-15)
 - [ ] 3.2 Change the arrival gate to exit through `signedIn` rather than `closeSignIn`, so a held resume is carried on instead of dropped, and prove the refused add and the refused navigation both complete without a second activation (shared-auth-sign-in-SC-52, shared-auth-sign-in-SC-53)
