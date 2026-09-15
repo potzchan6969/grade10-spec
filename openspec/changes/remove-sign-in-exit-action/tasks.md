@@ -14,9 +14,9 @@ this compiles before and after that group lands.
 - [x] 2.1 Stop building an exit action in `SignInFlow` — its `onExit` handler and the `exitLabel` word go with the prop they fed, and the flow test loses the case that passed a handler nothing else passes — satisfies *The dialog offers no exit beside dismissal* (`shared-ui-auth-sign-in-SC-09`)
 - [x] 2.2 Verify: `pnpm run typecheck` and the sign-in frontend suites
 
-## 3. Submodule bump (grade10)
+## 3. Submodule bump (grade10) (owner: @sean)
 
 Lands after group 1 merges to the store's `main`.
 
-- [ ] 3.1 Move the `external/grade10-spec` pin onto the merged store SHA, so the application builds against an export set without `SignInCardAction`
-- [ ] 3.2 Verify: `pnpm run typecheck` and `pnpm run lint`
+- [x] 3.1 Move the `external/grade10-spec` pin onto the merged store SHA, so the application builds against an export set without `SignInCardAction`
+- [x] 3.2 Verify: `pnpm run typecheck` and `pnpm run lint`
