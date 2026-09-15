@@ -77,30 +77,7 @@ The refusals are the coupon's own —
   promised with them —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
 
-:::flow{title="Quoting the cart" diagram="assets/diagrams/store-cart-quote.svg"}
-## *Member* — **Opens the drawer**
-Every line is read against the shop; the drawer waits until the shop answers.
-
-## *Member* — **Chooses a code or points**
-Types a code, picks a held one, or types how many points.
-
-## *Store* — **Prices the cart once**
-The lines at the shop's price, the code's cut off them, then the points
-ceiling on what is left. A store code is answered from the store's own
-registry; a reward coupon is the programme's to answer.
-
-## *Loyalty* — **Answers the wallet**
-Every reward coupon the member holds, each fitting this cart or refused with
-its reason. Nothing is held by asking.
-
-## *Member* — **Reads the total**
-The Discount and Points rows, then the estimated total. A refused code, or
-an ask points cannot cover, is said in its field.
-
-## *Member* — **Proceeds to checkout**
-`/checkout` carries the same choice, and the order is promised from it —
-[Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout).
-:::
+::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
 
 ## Designs
 
@@ -113,9 +90,10 @@ an ask points cannot cover, is said in its field.
 ::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}
 
 :::detail{title="Code map" for="engineer"}
-- **The quote** — `checkout.quote`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
+- **The quote** — `checkout.basketQuote`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
+- **The held choice** — `cart.tender` and `cart.setTender`, `packages/grade10-store/backend/src/services/cart/tender.ts`
 - **The wallet read** — `quoteCouponsFor`, `packages/loyalty/backend/src/services/rewards/coupons.ts`
-- **The drawer** — `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`, over the `checkout` slice of `@grade10/store-frontend`
+- **The drawer** — `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`, over the `cart` and `checkout` slices of `@grade10/store-frontend`
 - **Design record** — [commerce architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 :::
 
