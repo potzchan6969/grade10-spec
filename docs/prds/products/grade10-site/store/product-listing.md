@@ -39,14 +39,14 @@ product.
   visible without hover on a narrow viewport and on touch
 - **Search and sort** — both describe the whole catalogue, never the cards
   already on screen; the menu offers latest, lowest price and highest price
-- 🚧 **Latest at rest** — the listing opens ordered by latest product and the
+- **Latest at rest** — the listing opens ordered by latest product and the
   sort control names that order; a link made at rest carries no order and
   opens on latest product just the same
 - **A collection is a way in, not a filter** — the front door's tiles open the
   listing already inside one, named above the grid and dismissible; filtering
   or searching leaves it behind, because the catalogue narrows by a collection
   or by a query and never by both
-- 🚧 **Ordering a collection** — a collection opens on latest product too, and
+- **Ordering a collection** — a collection opens on latest product too, and
   choosing another order lists that collection in it rather than leaving it
 - **URL** — the narrowing is in it, so a listing can be linked and shared, and
   Back undoes it; how far a collector has read is not, so an address opens at
