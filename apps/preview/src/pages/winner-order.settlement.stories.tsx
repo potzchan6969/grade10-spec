@@ -22,6 +22,15 @@ export const AwaitingAddress: Story = {
       canvas.getByRole("heading", { level: 1, name: "Winner Order" }),
     ).toBeVisible();
     expect(canvas.getByText("Awaiting Address")).toBeVisible();
+    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Address")).toBeVisible();
+    expect(canvas.getByText("Confirm where we ship")).toBeVisible();
+    expect(canvas.getByText("Shipping")).toBeVisible();
+    expect(canvas.getByText("Invoice")).toBeVisible();
+    expect(canvas.getByText("Payment")).toBeVisible();
+    expect(
+      canvas.getAllByText("Delivery", { exact: true }).length,
+    ).toBeGreaterThan(0);
     expect(
       canvas.getByRole("button", { name: "Confirm delivery address" }),
     ).toBeVisible();
@@ -36,9 +45,6 @@ export const AwaitingAddress: Story = {
         name: "Confirm delivery address",
       }),
     ).toBeVisible();
-    expect(
-      canvas.queryByText(/Confirm where we ship/i),
-    ).not.toBeInTheDocument();
     expect(canvas.queryByText(/pay with card/i)).not.toBeInTheDocument();
   },
 };
@@ -50,6 +56,8 @@ export const PreparingInvoice: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Preparing Invoice")).toBeVisible();
+    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Calculating shipping")).toBeVisible();
     expect(canvas.getByText(/Wan Chai/)).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);

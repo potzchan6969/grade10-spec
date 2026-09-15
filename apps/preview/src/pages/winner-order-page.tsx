@@ -55,49 +55,134 @@ type WinnerOrderPageProps = {
   onPrimaryAction?: () => void;
 };
 
-type FulfilmentStep = {
+type WinnerProgressStep = {
   label: string;
-  date?: string;
+  description?: string;
   state: "completed" | "current" | "upcoming";
 };
 
-function showFulfilmentStepper(status: WinnerOrderStatus): boolean {
+/** Happy-path winner stages — not Cancelled / Refunded. */
+function showWinnerProgress(status: WinnerOrderStatus): boolean {
   return (
-    status === "processing" || status === "shipped" || status === "delivered"
+    status === "awaiting_address" ||
+    status === "preparing_invoice" ||
+    status === "pending_payment" ||
+    status === "pending_payment_expired" ||
+    status === "processing" ||
+    status === "shipped" ||
+    status === "delivered"
   );
 }
 
-function fulfilmentStepsFor(
+/**
+ * Post-auction winner progress — not Order Details delivery status.
+ * Address → Shipping (quote) → Invoice → Payment → Delivery (ship/deliver).
+ */
+function winnerProgressStepsFor(
   status: WinnerOrderStatus,
   content: WinnerOrderContent,
-): FulfilmentStep[] {
-  if (status === "delivered") {
-    return [
-      { label: "Paid", date: content.endedAt, state: "completed" },
-      { label: "Shipped", date: "Dispatched", state: "completed" },
-      {
-        label: "Delivered",
-        date: content.secondaryNote ?? "Delivered",
-        state: "completed",
-      },
-    ];
+): WinnerProgressStep[] {
+  const address: WinnerProgressStep = {
+    label: "Address",
+    state: "upcoming",
+  };
+  const shipping: WinnerProgressStep = {
+    label: "Shipping",
+    state: "upcoming",
+  };
+  const invoice: WinnerProgressStep = {
+    label: "Invoice",
+    state: "upcoming",
+  };
+  const payment: WinnerProgressStep = {
+    label: "Payment",
+    state: "upcoming",
+  };
+  const delivery: WinnerProgressStep = {
+    label: "Delivery",
+    state: "upcoming",
+  };
+
+  switch (status) {
+    case "awaiting_address":
+      return [
+        { ...address, description: "Confirm where we ship", state: "current" },
+        shipping,
+        invoice,
+        payment,
+        delivery,
+      ];
+    case "preparing_invoice":
+      return [
+        { ...address, state: "completed" },
+        {
+          ...shipping,
+          description: "Calculating shipping",
+          state: "current",
+        },
+        invoice,
+        payment,
+        delivery,
+      ];
+    case "pending_payment":
+      return [
+        { ...address, state: "completed" },
+        { ...shipping, state: "completed" },
+        { ...invoice, description: "Invoice sent", state: "completed" },
+        { ...payment, description: "Pay by card", state: "current" },
+        delivery,
+      ];
+    case "pending_payment_expired":
+      return [
+        { ...address, state: "completed" },
+        { ...shipping, state: "completed" },
+        { ...invoice, state: "completed" },
+        {
+          ...payment,
+          description: "Deadline passed — still payable",
+          state: "current",
+        },
+        delivery,
+      ];
+    case "processing":
+      return [
+        { ...address, state: "completed" },
+        { ...shipping, state: "completed" },
+        { ...invoice, state: "completed" },
+        { ...payment, description: "Paid", state: "completed" },
+        {
+          ...delivery,
+          description: "Preparing to ship",
+          state: "current",
+        },
+      ];
+    case "shipped":
+      return [
+        { ...address, state: "completed" },
+        { ...shipping, state: "completed" },
+        { ...invoice, state: "completed" },
+        { ...payment, state: "completed" },
+        {
+          ...delivery,
+          description: content.secondaryNote ?? "In transit",
+          state: "current",
+        },
+      ];
+    case "delivered":
+      return [
+        { ...address, state: "completed" },
+        { ...shipping, state: "completed" },
+        { ...invoice, state: "completed" },
+        { ...payment, state: "completed" },
+        {
+          ...delivery,
+          description: content.secondaryNote ?? "Delivered",
+          state: "completed",
+        },
+      ];
+    default:
+      return [address, shipping, invoice, payment, delivery];
   }
-  if (status === "shipped") {
-    return [
-      { label: "Paid", date: content.endedAt, state: "completed" },
-      {
-        label: "Shipped",
-        date: content.secondaryNote ?? "In transit",
-        state: "current",
-      },
-      { label: "Delivered", state: "upcoming" },
-    ];
-  }
-  return [
-    { label: "Paid", date: content.endedAt, state: "completed" },
-    { label: "Shipped", state: "upcoming" },
-    { label: "Delivered", state: "upcoming" },
-  ];
 }
 
 /** Sidebar money rows — full invoice when issued; otherwise winning bid + TBD fees. */
@@ -277,17 +362,17 @@ function OrderSummary({ lines }: { lines: WinnerOrderInvoiceLine[] }) {
   );
 }
 
-function FulfilmentStatusCard({
+function WinnerProgressCard({
   steps,
   trackLabel,
   onTrack,
 }: {
-  steps: FulfilmentStep[];
+  steps: WinnerProgressStep[];
   trackLabel?: string | null;
   onTrack?: () => void;
 }) {
   return (
-    <div className="w-full" data-slot="winner-order-fulfilment">
+    <div className="w-full" data-slot="winner-order-progress">
       <Card className="gap-0 overflow-hidden p-0" padding={false}>
         <HStack
           className="w-full justify-between border-b border-border bg-muted px-6 py-4"
@@ -295,7 +380,7 @@ function FulfilmentStatusCard({
           vAlign="center"
         >
           <h3 className="text-base leading-6 font-medium text-foreground">
-            Delivery status
+            Order progress
           </h3>
           {trackLabel && onTrack ? (
             <Button
@@ -308,11 +393,11 @@ function FulfilmentStatusCard({
             </Button>
           ) : null}
         </HStack>
-        <div className="w-full px-0 py-4">
+        <div className="w-full overflow-x-auto px-0 py-4">
           <Stepper>
             {steps.map((step, index) => (
               <Step
-                description={step.date}
+                description={step.description}
                 key={step.label}
                 label={step.label}
                 showLeadingConnector={index > 0}
@@ -440,8 +525,8 @@ function WinnerOrderPage({
     content.primaryCta !== "Confirm delivery address"
       ? content.primaryCta
       : null;
-  const fulfilment = showFulfilmentStepper(content.status)
-    ? fulfilmentStepsFor(content.status, content)
+  const progress = showWinnerProgress(content.status)
+    ? winnerProgressStepsFor(content.status, content)
     : null;
 
   function handlePrimaryAction() {
@@ -488,14 +573,14 @@ function WinnerOrderPage({
 
         <div className="grid w-full items-start gap-8 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
           <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
-            {fulfilment ? (
-              <FulfilmentStatusCard
+            {progress ? (
+              <WinnerProgressCard
                 onTrack={
                   content.primaryCta === "Track shipment"
                     ? handlePrimaryAction
                     : undefined
                 }
-                steps={fulfilment}
+                steps={progress}
                 trackLabel={
                   content.primaryCta === "Track shipment"
                     ? content.primaryCta

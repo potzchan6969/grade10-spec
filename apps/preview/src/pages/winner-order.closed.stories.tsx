@@ -21,6 +21,7 @@ export const Cancelled: Story = {
     expect(canvas.getByText("Cancelled")).toBeVisible();
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
+    expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
   },
 };
 
@@ -33,5 +34,6 @@ export const Refunded: Story = {
     expect(canvas.getByText("Refunded")).toBeVisible();
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
+    expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
   },
 };
