@@ -37,6 +37,9 @@ followed.
   is expired.
 - 🚧 **Email-step wording** — the send action reads **Sign In with Email**;
   collectors never see the term magic link on the dialog.
+- 🚧 **Leaving the confirmation** — dismissing the dialog is the way out.
+  Opening sign-in again starts at the email step, so a mistyped address can be
+  corrected.
 
 ## Following the Link
 
