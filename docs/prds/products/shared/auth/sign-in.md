@@ -44,8 +44,12 @@ followed.
 ## Following the Link
 
 A working unused link signs the person in. A link that cannot creates no
-session, and the person lands on the brand home with a toast:
+session, and the person lands on the brand home with a toast.
 
+- 🚧 **Signed in** — the tab where the link was asked for shows the collector
+  signed in without being reloaded, and whatever they were stopped from doing
+  carries on. It is tried once, and a card that sold out while they were in
+  their inbox refuses the ordinary way — [Session](/p/shared/auth/session).
 - 🚧 **Expired** — the toast says the link has expired.
 - 🚧 **No longer works** — a used, replaced, or otherwise invalid link shares
   one toast that the link no longer works.
