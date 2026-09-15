@@ -25,10 +25,19 @@ export const AwaitingAddress: Story = {
       canvas.getByRole("button", { name: "Confirm delivery address" }),
     ).toBeVisible();
     expect(canvas.getByText("No address confirmed yet.")).toBeVisible();
+    expect(canvas.getByText("Delivery address")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
     expect(canvas.getByRole("complementary")).toBeVisible();
+    expect(
+      within(canvas.getByRole("complementary")).getByRole("button", {
+        name: "Confirm delivery address",
+      }),
+    ).toBeVisible();
+    expect(
+      canvas.queryByText(/Confirm where we ship/i),
+    ).not.toBeInTheDocument();
     expect(canvas.queryByText(/pay with card/i)).not.toBeInTheDocument();
   },
 };
@@ -48,6 +57,7 @@ export const PreparingInvoice: Story = {
       canvas.queryByRole("button", { name: /confirm|pay/i }),
     ).not.toBeInTheDocument();
     expect(canvas.getByText(/waiting on the operator quote/i)).toBeVisible();
+    expect(canvas.queryByText(/Address confirmed/i)).not.toBeInTheDocument();
   },
 };
 
@@ -99,6 +109,14 @@ export const ConfirmAddressFlow: Story = {
     expect(
       canvas.queryByRole("button", { name: "Confirm delivery address" }),
     ).not.toBeInTheDocument();
+
+    const toastEl = await waitFor(() => {
+      const found = page.getByRole("status");
+      expect(found).toBeVisible();
+      return found;
+    });
+    expect(within(toastEl).getByText("Address confirmed")).toBeVisible();
+    expect(within(toastEl).getByText(/preparing your invoice/i)).toBeVisible();
   },
 };
 
@@ -172,5 +190,12 @@ export const AddNewAddressFlow: Story = {
     });
     expect(canvas.getByText("Preparing Invoice")).toBeVisible();
     expect(canvas.getByText(/Queen's Road Central/)).toBeVisible();
+
+    const toastEl = await waitFor(() => {
+      const found = page.getByRole("status");
+      expect(found).toBeVisible();
+      return found;
+    });
+    expect(within(toastEl).getByText("Address confirmed")).toBeVisible();
   },
 };

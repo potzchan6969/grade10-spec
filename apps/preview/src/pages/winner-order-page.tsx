@@ -12,6 +12,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
 import { ArrowUpRight } from "@phosphor-icons/react";
@@ -25,6 +26,11 @@ import {
   type WinnerOrderInvoiceLine,
   type WinnerOrderStatus,
 } from "./winner-order-content";
+
+const ADDRESS_CONFIRMED_TOAST = {
+  title: "Address confirmed",
+  description: "Grade10 is preparing your invoice for this destination.",
+} as const;
 
 const STATUS_BADGE: Record<
   WinnerOrderStatus,
@@ -199,7 +205,15 @@ function LotCard({ content }: { content: WinnerOrderContent }) {
   );
 }
 
-function AddressBlock({ content }: { content: WinnerOrderContent }) {
+function AddressBlock({
+  content,
+  confirmCta,
+  onConfirmAddress,
+}: {
+  content: WinnerOrderContent;
+  confirmCta?: string | null;
+  onConfirmAddress?: () => void;
+}) {
   return (
     <VStack className="w-full" gap="sm" hAlign="start">
       <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
@@ -218,6 +232,13 @@ function AddressBlock({ content }: { content: WinnerOrderContent }) {
         <Text size="xs" tone="secondary">
           {content.addressHint}
         </Text>
+      ) : null}
+      {confirmCta && onConfirmAddress ? (
+        <div className="w-full pt-1">
+          <Button className="w-full" onClick={onConfirmAddress} size="lg">
+            {confirmCta}
+          </Button>
+        </div>
       ) : null}
     </VStack>
   );
@@ -316,7 +337,15 @@ function FulfilmentStatusCard({
  * Right sidebar — same shell as Order Details: summary, optional payment,
  * delivery address. Pre-invoice rows use TBD for unquoted fees.
  */
-function OrderSidebar({ content }: { content: WinnerOrderContent }) {
+function OrderSidebar({
+  content,
+  confirmAddressCta,
+  onConfirmAddress,
+}: {
+  content: WinnerOrderContent;
+  confirmAddressCta?: string | null;
+  onConfirmAddress?: () => void;
+}) {
   const lines = summaryLinesFor(content);
   const showPayment = Boolean(content.paymentMethod);
   const showAddress = content.status !== "cancelled";
@@ -364,7 +393,13 @@ function OrderSidebar({ content }: { content: WinnerOrderContent }) {
                 </Card>
               </VStack>
             ) : null}
-            {showAddress ? <AddressBlock content={content} /> : null}
+            {showAddress ? (
+              <AddressBlock
+                confirmCta={confirmAddressCta}
+                content={content}
+                onConfirmAddress={onConfirmAddress}
+              />
+            ) : null}
           </VStack>
         ) : null}
       </Card>
@@ -394,24 +429,35 @@ function WinnerOrderPage({
   }, [statusProp]);
 
   const content = resolveContent(status, confirmedAddress, contentProp);
-  const opensAddressDialog =
+  const confirmAddressCta =
     content.status === "awaiting_address" &&
-    content.primaryCta === "Confirm delivery address";
+    content.primaryCta === "Confirm delivery address"
+      ? content.primaryCta
+      : null;
+  const mainCta =
+    content.primaryCta &&
+    content.primaryCta !== "Track shipment" &&
+    content.primaryCta !== "Confirm delivery address"
+      ? content.primaryCta
+      : null;
   const fulfilment = showFulfilmentStepper(content.status)
     ? fulfilmentStepsFor(content.status, content)
     : null;
 
   function handlePrimaryAction() {
-    if (opensAddressDialog) {
-      setAddressDialogOpen(true);
-      return;
-    }
     onPrimaryAction?.();
+  }
+
+  function handleConfirmAddressClick() {
+    setAddressDialogOpen(true);
   }
 
   function handleAddressConfirm(addressLines: string) {
     setConfirmedAddress(addressLines);
     setStatus("preparing_invoice");
+    toast.success(ADDRESS_CONFIRMED_TOAST.title, {
+      description: ADDRESS_CONFIRMED_TOAST.description,
+    });
     onPrimaryAction?.();
   }
 
@@ -431,19 +477,14 @@ function WinnerOrderPage({
           <BreadcrumbItem current>Winner Order</BreadcrumbItem>
         </Breadcrumbs>
 
-        <VStack className="w-full gap-3" gap="sm" hAlign="stretch">
-          <HStack className="w-full flex-wrap items-center gap-3">
-            <h1 className="shrink-0 text-3xl leading-9 font-semibold text-foreground">
-              {content.title}
-            </h1>
-            <Badge size="sm" variant={STATUS_BADGE[content.status]}>
-              {content.statusLabel}
-            </Badge>
-          </HStack>
-          <Text className="text-sm leading-5 text-secondary-foreground">
-            {content.endedAt}
-          </Text>
-        </VStack>
+        <HStack className="w-full flex-wrap items-center gap-3">
+          <h1 className="shrink-0 text-3xl leading-9 font-semibold text-foreground">
+            {content.title}
+          </h1>
+          <Badge size="sm" variant={STATUS_BADGE[content.status]}>
+            {content.statusLabel}
+          </Badge>
+        </HStack>
 
         <div className="grid w-full items-start gap-8 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
           <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
@@ -463,16 +504,28 @@ function WinnerOrderPage({
               />
             ) : null}
 
-            <Text className="max-w-prose text-secondary-foreground" size="sm">
-              {content.body}
-            </Text>
-            {content.deadline ? (
-              <Text size="sm" weight="medium">
-                {content.deadline}
-              </Text>
-            ) : null}
-
             <LotCard content={content} />
+
+            {content.deadline || mainCta ? (
+              <VStack className="w-full" gap="sm" hAlign="start">
+                {content.deadline ? (
+                  <Text size="sm" weight="medium">
+                    {content.deadline}
+                  </Text>
+                ) : null}
+                {mainCta ? (
+                  <div className="w-full sm:w-auto">
+                    <Button
+                      className="w-full sm:w-auto"
+                      onClick={handlePrimaryAction}
+                      size="lg"
+                    >
+                      {mainCta}
+                    </Button>
+                  </div>
+                ) : null}
+              </VStack>
+            ) : null}
 
             {content.secondaryNote &&
             content.status !== "shipped" &&
@@ -481,24 +534,17 @@ function WinnerOrderPage({
                 {content.secondaryNote}
               </Text>
             ) : null}
-
-            {content.primaryCta && content.primaryCta !== "Track shipment" ? (
-              <div className="w-full sm:w-auto">
-                <Button
-                  className="w-full sm:w-auto"
-                  onClick={handlePrimaryAction}
-                  size="lg"
-                >
-                  {content.primaryCta}
-                </Button>
-              </div>
-            ) : null}
           </VStack>
 
-          <OrderSidebar content={content} />
+          <OrderSidebar
+            confirmAddressCta={confirmAddressCta}
+            content={content}
+            onConfirmAddress={handleConfirmAddressClick}
+          />
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
+      <Toast position="bottom-right" />
 
       <WinnerOrderAddressDialog
         onConfirm={handleAddressConfirm}
