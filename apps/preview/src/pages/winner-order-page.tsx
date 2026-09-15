@@ -444,7 +444,7 @@ function OrderSummary({
           dismissible={false}
           layout="inline"
           status="warning"
-          title={deadline ?? "Payment overdue"}
+          title={deadline ?? "Payment deadline passed"}
         />
       ) : null}
 

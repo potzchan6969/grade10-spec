@@ -50,7 +50,7 @@ export const PendingPayment: Story = {
   },
 };
 
-/** Deadline passed — no Pay CTA; contact from the overdue alert. */
+/** Payment deadline passed — no Pay CTA; contact from the overdue alert. */
 export const ExpiredInvoice: Story = {
   name: "Expired Invoice",
   args: { status: "pending_payment_expired" },
@@ -67,8 +67,9 @@ export const ExpiredInvoice: Story = {
     const alert = sidebar.getByRole("alert");
     expect(alert).toBeVisible();
     expect(
-      within(alert).getByText("Deadline passed 24 Sep 2026, 21:30 HKT"),
+      within(alert).getByText("Payment deadline passed 24 Sep 2026, 21:30 HKT"),
     ).toBeVisible();
+    expect(within(alert).getByText(/payment deadline/i)).toBeVisible();
     expect(
       within(alert).getByRole("button", { name: "Contact Us" }),
     ).toBeVisible();

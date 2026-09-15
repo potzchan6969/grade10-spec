@@ -113,7 +113,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
-        deadline: "Deadline passed 24 Sep 2026, 21:30 HKT",
+        deadline: "Payment deadline passed 24 Sep 2026, 21:30 HKT",
         primaryCta: null,
         overdue: true,
       };
