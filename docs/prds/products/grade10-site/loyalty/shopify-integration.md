@@ -258,6 +258,8 @@ The loyalty terminal is a Shopify POS UI extension.
 
 - **A miss says nothing** — a staff-typed email matching no member answers
   only that none was found, and repeated lookups are throttled
+- 🚧 **A lookup that finds nobody** — the member stays on the sale with the
+  points and coupons staff chose, and the panel says what the lookup answered
 - **Attach** — the terminal sets the customer on the cart and checks it;
   spending stays off until the cart's customer is the paired one, no staff
   order discount is on the sale, and what the shop's offers leave of the
@@ -266,6 +268,8 @@ The loyalty terminal is a Shopify POS UI extension.
   plans in 5 minutes
 - **Discount on the cart** — the store's order id first, then the "Points"
   fixed discount; the promise is trimmed to what the cart shows
+- 🚧 **Title** — "Deduction from Points"; "Points", the title older orders
+  carry, counts as the same discount
 - **Shown before it commits** — points spent, money still due, balance after
   and points this sale will earn, priced by the platform
 - **Confirm** — the button locks while it runs, so a double tap spends once
