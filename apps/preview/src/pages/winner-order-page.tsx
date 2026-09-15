@@ -29,15 +29,6 @@ import {
 } from "./winner-order-content";
 import { AUCTION_LOT_DETAILS_HREF } from "./workbench-story-nav";
 
-/** Status / alert enter — ~200ms feedback, skipped for reduced motion. */
-const WINNER_ORDER_ENTER =
-  "animate-in fade-in-0 duration-200 ease-out motion-reduce:animate-none";
-
-const WINNER_ORDER_ALERT_ENTER = cn(
-  WINNER_ORDER_ENTER,
-  "slide-in-from-bottom-1",
-);
-
 const ADDRESS_CONFIRMED_TOAST = {
   title: "Address confirmed",
   description: "Grade10 is preparing your invoice for this destination.",
@@ -451,7 +442,6 @@ function OrderSummary({
               Contact Us
             </Button>
           }
-          className={WINNER_ORDER_ALERT_ENTER}
           dismissible={false}
           layout="inline"
           status="warning"
@@ -694,12 +684,7 @@ function WinnerOrderPage({
         </h1>
 
         <div className="grid w-full items-start gap-8 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
-          <VStack
-            className={cn("min-w-0 w-full", WINNER_ORDER_ENTER)}
-            gap="lg"
-            hAlign="stretch"
-            key={content.status}
-          >
+          <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
             {progress ? (
               <WinnerProgressCard
                 onTrack={
@@ -720,7 +705,6 @@ function WinnerOrderPage({
 
             {content.status === "preparing_invoice" && content.secondaryNote ? (
               <Alert
-                className={WINNER_ORDER_ALERT_ENTER}
                 dismissible={false}
                 layout="inline"
                 status="default"
@@ -735,20 +719,16 @@ function WinnerOrderPage({
             ) : null}
           </VStack>
 
-          <div className={WINNER_ORDER_ENTER} key={`sidebar-${content.status}`}>
-            <OrderSidebar
-              confirmAddressCta={confirmAddressCta}
-              content={content}
-              onConfirmAddress={handleConfirmAddressClick}
-              onPay={payCta ? handlePrimaryAction : undefined}
-              onViewInvoicePdf={
-                hasIssuedInvoice(content)
-                  ? openPlaceholderInvoicePdf
-                  : undefined
-              }
-              payCta={payCta}
-            />
-          </div>
+          <OrderSidebar
+            confirmAddressCta={confirmAddressCta}
+            content={content}
+            onConfirmAddress={handleConfirmAddressClick}
+            onPay={payCta ? handlePrimaryAction : undefined}
+            onViewInvoicePdf={
+              hasIssuedInvoice(content) ? openPlaceholderInvoicePdf : undefined
+            }
+            payCta={payCta}
+          />
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
