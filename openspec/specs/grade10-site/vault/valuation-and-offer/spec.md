@@ -54,6 +54,7 @@ Withdrawing the offer is the way down.
 Terms SHALL NOT be agreed on either lane before a valuation exists.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-01 - A re-valuation is appended
+**Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
 - **GIVEN** a case valued at 10,000,000 HKD minor units
 - **WHEN** staff record a second valuation of 8,000,000 HKD minor units
@@ -66,6 +67,7 @@ Terms SHALL NOT be agreed on either lane before a valuation exists.
 - **THEN** it is refused by name and the valuation is not written
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-03 - Terms need a valuation
+**Serves:** grade10-site-vault-valuation-and-offer-US-03 - Collector who only wants storage agrees terms
 
 - **GIVEN** a case nobody has valued
 - **WHEN** an offer or custody terms are asked for
@@ -89,6 +91,7 @@ Outside the brand's own bounds, the outermost limits SHALL be interest of 0 to
 10,000 basis points and a term of 1 to 3,650 days.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-04 - An offer above the valuation is refused
+**Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
 - **GIVEN** a case valued at 10,000,000 HKD minor units
 - **WHEN** an offer of 11,000,000 HKD minor units is written
@@ -117,6 +120,7 @@ one gate SHALL apply all of them:
 A bound nobody has set SHALL allow everything outside production.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-06 - A rate above the band is refused
+**Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
 - **GIVEN** a brand whose band is 150 to 250 basis points per 30 days
 - **WHEN** an offer of 600 basis points over a 60-day term is written
@@ -129,6 +133,7 @@ A bound nobody has set SHALL allow everything outside production.
 - **THEN** it is accepted, because 500 over 60 days is 250 per 30 days
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-08 - A term the brand does not write is refused
+**Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
 - **GIVEN** a brand whose presets are 30, 60, 90 and 120 days
 - **WHEN** an offer over 45 days is written
@@ -166,6 +171,7 @@ flow before its values are decided.
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-12 - Custody still opens
+**Serves:** grade10-site-vault-valuation-and-offer-US-03 - Collector who only wants storage agrees terms
 
 - **GIVEN** the same brand
 - **WHEN** a storage case is taken through to the vault
@@ -195,12 +201,14 @@ An offer that reaches its expiry SHALL be closed, the collector SHALL be told,
 and the case SHALL stay where it is.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-13 - A counter-offer replaces the first
+**Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
 - **GIVEN** a case holding a live offer
 - **WHEN** staff write another
 - **THEN** the case holds exactly the new one and the first is superseded
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-14 - A declined offer leaves the request open
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
 
 - **GIVEN** a case holding a live offer
 - **WHEN** its owner declines it
@@ -226,18 +234,21 @@ Accepting SHALL start nothing that costs the collector: no term begins and no
 interest accrues until the advance is recorded.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-16 - A collector accepts from their own case
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
 
 - **GIVEN** a case holding a live offer
 - **WHEN** its owner accepts it
 - **THEN** the case is `accepted`, the offer is accepted, and the collector is recorded as the actor
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-17 - An offer that lapsed cannot be accepted
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
 
 - **GIVEN** a case whose offer expired an hour ago
 - **WHEN** anyone accepts it
 - **THEN** it is refused by name and the case stays where it is
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-18 - Accepting costs nothing yet
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
 
 - **GIVEN** an offer accepted today for a 30-day term
 - **WHEN** the money is advanced a week later
@@ -253,12 +264,14 @@ request the shop is not yet lending against leaves valuation as stored rather
 than only as declined or cancelled.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-19 - Storage terms need only the valuation
+**Serves:** grade10-site-vault-valuation-and-offer-US-03 - Collector who only wants storage agrees terms
 
 - **GIVEN** a valued storage case
 - **WHEN** staff agree its custody terms
 - **THEN** the case is `accepted` and no offer exists on it
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-20 - A loan request is stored while the shop is not lending
+**Serves:** grade10-site-vault-valuation-and-offer-US-04 - Collector whose loan request the shop cannot yet price still gets the item stored
 
 - **GIVEN** a valued financed case with no offer on the table
 - **WHEN** staff agree its custody terms

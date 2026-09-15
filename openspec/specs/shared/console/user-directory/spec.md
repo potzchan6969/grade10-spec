@@ -72,12 +72,14 @@ they were selected, and an empty selection SHALL be submitted as an empty list,
 leaving any default-role decision to the consumer.
 
 #### Scenario: shared-console-user-directory-SC-02 - A console offers its own role vocabulary
+**Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
 - **WHEN** a console renders the roles dialog with the roles its identity system defines
 - **THEN** each role is offered with the label and permission summary the console supplied
 - **AND THEN** no role the console did not supply is offered
 
 #### Scenario: shared-console-user-directory-SC-03 - A selection is submitted
+**Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
 - **WHEN** an operator changes which roles are selected and saves
 - **THEN** the submitted list holds the selected roles in the order the options were offered
@@ -98,24 +100,28 @@ row SHALL offer ban or unban according to whether the account is banned, and
 never both.
 
 #### Scenario: shared-console-user-directory-SC-05 - An operator without elevated grants opens the directory
+**Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
 - **WHEN** a console renders the table without a roles handler or a delete handler
 - **THEN** neither action appears on any row
 - **AND THEN** every move the console did supply a handler for still appears
 
 #### Scenario: shared-console-user-directory-SC-06 - A banned account is shown
+**Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
 - **WHEN** the table renders an account that is banned
 - **THEN** that row offers unban and does not offer ban
 - **AND THEN** a row for an account that is not banned offers ban and does not offer unban
 
 #### Scenario: shared-console-user-directory-SC-14 - A console withholds sessions and moderation
+**Serves:** shared-console-user-directory-US-05 - Operator changes an account's access from the panel
 
 - **WHEN** a console renders the table without a sessions handler and without a moderation handler
 - **THEN** no row offers sessions
 - **AND THEN** no row offers ban or unban
 
 #### Scenario: shared-console-user-directory-SC-15 - A row opens its account
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **GIVEN** a console that supplies a handler for opening an account
 - **WHEN** an operator opens a row's account
@@ -136,18 +142,21 @@ it ends without a revocation, and where it was raised — each supplied by the
 consumer already in words, each rendered when supplied and omitted when not.
 
 #### Scenario: shared-console-user-directory-SC-07 - An operator reads where an account is signed in
+**Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
 
 - **WHEN** the dialog renders an account's sessions
 - **THEN** each is named by its identifier
 - **AND THEN** no authenticating secret is rendered
 
 #### Scenario: shared-console-user-directory-SC-08 - An account holds no sessions
+**Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
 
 - **WHEN** the dialog renders an account with no sessions
 - **THEN** it says so
 - **AND THEN** the control that ends every session is unavailable
 
 #### Scenario: shared-console-user-directory-SC-16 - A session says where it was raised
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **GIVEN** a session the consumer supplied with where it was raised and when it ends
 - **WHEN** that session renders
@@ -162,11 +171,13 @@ confirmation with the reason collected — or with an empty reason where none wa
 collected — so a consumer reads one signature whichever move it asked for.
 
 #### Scenario: shared-console-user-directory-SC-09 - A move that collects a reason is confirmed
+**Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
 - **WHEN** an operator confirms a move the consumer said collects a reason
 - **THEN** the dialog reports the reason that was typed
 
 #### Scenario: shared-console-user-directory-SC-10 - A move that collects no reason is confirmed
+**Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
 - **WHEN** an operator confirms a move the consumer said collects no reason
 - **THEN** no reason field is rendered
@@ -182,12 +193,14 @@ the account and never navigates away. When the console supplies no per-role
 address, identity role names SHALL render without links.
 
 #### Scenario: shared-console-user-directory-SC-11 - A role name on the account opens its address
+**Serves:** shared-console-user-directory-US-03 - Operator opens a role from the account
 
 - **GIVEN** a console that supplies an address for `staff` on an account that holds it
 - **WHEN** the operator activates the `staff` name on the account's identity
 - **THEN** navigation uses the address supplied for `staff`
 
 #### Scenario: shared-console-user-directory-SC-12 - The directory's Roles cell is never a link
+**Serves:** shared-console-user-directory-US-03 - Operator opens a role from the account
 
 - **GIVEN** a console that supplies per-role addresses
 - **WHEN** the table renders a row that holds those roles
@@ -195,6 +208,7 @@ address, identity role names SHALL render without links.
 - **AND THEN** none of those names is a link
 
 #### Scenario: shared-console-user-directory-SC-13 - Roles without addresses stay plain
+**Serves:** shared-console-user-directory-US-03 - Operator opens a role from the account
 
 - **GIVEN** a console that supplies no per-role addresses
 - **WHEN** the panel renders identity roles
@@ -222,18 +236,21 @@ account's roles as blocked, the panel SHALL show that mark and SHALL NOT
 offer changing roles.
 
 #### Scenario: shared-console-user-directory-SC-17 - An operator reads one account whole
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **WHEN** a console renders the panel for an account
 - **THEN** who the account is, its actions, the grants it holds, its timeline, and its sessions each render from what the console supplied
 - **AND THEN** an area the console supplied nothing for is not rendered
 
 #### Scenario: shared-console-user-directory-SC-18 - Roles are saved from the panel
+**Serves:** shared-console-user-directory-US-05 - Operator changes an account's access from the panel
 
 - **WHEN** an operator changes which roles are selected in the panel and saves
 - **THEN** the submitted list holds the selected roles in the order the options were offered
 - **AND THEN** an operator who selected none submits an empty list
 
 #### Scenario: shared-console-user-directory-SC-29 - Roles stay blocked when the console marks them
+**Serves:** shared-console-user-directory-US-05 - Operator changes an account's access from the panel
 
 - **GIVEN** a console that marks the account's roles as blocked
 - **WHEN** the panel renders
@@ -241,6 +258,7 @@ offer changing roles.
 - **AND THEN** it does not offer changing roles
 
 #### Scenario: shared-console-user-directory-SC-19 - A ban started in the panel is confirmed outside it
+**Serves:** shared-console-user-directory-US-05 - Operator changes an account's access from the panel
 
 - **WHEN** an operator starts a ban from the panel
 - **THEN** the panel reports the move and collects no confirmation of its own
@@ -263,6 +281,7 @@ into Roles & Permissions, it does so through a role name on identity.
 | Elevated | Whether the console marks it elevated |
 
 #### Scenario: shared-console-user-directory-SC-20 - The grants an account holds are shown
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **WHEN** the panel renders the grant rows a console supplied
 - **THEN** each is shown with the label that console gave it
@@ -270,11 +289,13 @@ into Roles & Permissions, it does so through a role name on identity.
 - **AND THEN** the elevated mark appears at most once for the account
 
 #### Scenario: shared-console-user-directory-SC-21 - A grant is not a link
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **WHEN** the panel renders grant rows
 - **THEN** none of those grant labels is a link
 
 #### Scenario: shared-console-user-directory-SC-22 - An account holds no grants
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **WHEN** the panel renders an account the console supplied no grant rows for
 - **THEN** it says the account holds none
@@ -289,6 +310,7 @@ a time or a milestone the consumer did not supply. A milestone without a time
 SHALL still render its label (and detail when supplied).
 
 #### Scenario: shared-console-user-directory-SC-27 - Timeline milestones are shown as supplied
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **GIVEN** a console that supplies a joined milestone with a time, and a banned milestone with a reason and no time
 - **WHEN** the panel renders activity for that account
@@ -307,12 +329,14 @@ the consumer supplied. Status and Email SHALL each offer an Any choice that
 reports that narrowing as cleared, plus the options the consumer supplied.
 
 #### Scenario: shared-console-user-directory-SC-23 - A console supplies the filter words
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **WHEN** a console renders the filters with its Type, Roles, Status and Email copy and options
 - **THEN** each control uses the labels and options that console supplied
 - **AND THEN** no option that console did not supply is offered
 
 #### Scenario: shared-console-user-directory-SC-24 - An operator clears Status or Email
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **GIVEN** an operator who has narrowed Status or Email away from Any
 - **WHEN** they choose Any on that control
@@ -320,6 +344,7 @@ reports that narrowing as cleared, plus the options the consumer supplied.
 - **AND THEN** the other controls' selections are unchanged
 
 #### Scenario: shared-console-user-directory-SC-28 - Roles is locked under Users
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **GIVEN** Type set to Users
 - **WHEN** the filters render
@@ -349,6 +374,7 @@ reason of its own. When the consumer marks a row as erasing, the table SHALL
 show that standing and SHALL NOT offer unban for that row.
 
 #### Scenario: shared-console-user-directory-SC-26 - A banned account says why
+**Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **GIVEN** one banned account the console supplied a reason for, and one it did not
 - **WHEN** both render in the panel

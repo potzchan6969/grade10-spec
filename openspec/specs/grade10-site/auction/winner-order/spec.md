@@ -56,6 +56,7 @@ close delivered more than once SHALL produce one auction order and one
 invoice.
 
 #### Scenario: winner-order-SC-01 - An invoice is issued at lot close
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a lot closing with a winner whose account default shipping address
   is on file
@@ -67,6 +68,7 @@ invoice.
   estimates
 
 #### Scenario: winner-order-SC-02 - A winner with no default address cannot yet pay
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a lot closing with an account that has no default shipping address
 - **WHEN** the lot closes
@@ -149,6 +151,7 @@ The platform SHALL refuse to archive the address currently selected by an
 unpaid order unless the winner first selects another address for that order.
 
 #### Scenario: winner-order-SC-22 - An account keeps multiple shipping addresses
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an account with no saved shipping addresses
 - **WHEN** the winner saves a home address and a work address
@@ -156,6 +159,7 @@ unpaid order unless the winner first selects another address for that order.
 - **AND** the winner can choose either address for an auction order
 
 #### Scenario: winner-order-SC-23 - The account has one optional default
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an account with a home address set as its default
 - **WHEN** the winner makes the work address the default
@@ -163,6 +167,7 @@ unpaid order unless the winner first selects another address for that order.
 - **AND** a later order is pre-filled from the work address
 
 #### Scenario: winner-order-SC-24 - Editing a saved address does not rewrite an order
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an unpaid order whose delivery snapshot uses the home address
 - **WHEN** the winner edits the saved home address in the account address book
@@ -170,6 +175,7 @@ unpaid order unless the winner first selects another address for that order.
 - **AND** the order keeps the address snapshot it already showed
 
 #### Scenario: winner-order-SC-25 - A selected address cannot be archived silently
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an unpaid order whose delivery snapshot uses the work address
 - **WHEN** the winner tries to archive the work address
@@ -192,6 +198,7 @@ destination until the winner confirms or selects an address.
 | Winner adds or edits an address | Grade10 offers to save it to the account address book. The order amendment remains a snapshot |
 
 #### Scenario: winner-order-SC-07 - A pre-filled default still needs confirming
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order pre-filled from the account's default shipping address
 - **WHEN** the winner attempts to pay without confirming that address
@@ -220,6 +227,7 @@ they proceed to pay. Amending SHALL NOT reset or extend the payment deadline,
 however many times the address is amended.
 
 #### Scenario: winner-order-SC-09 - An amendment shows the total delta before payment
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose final amount is 312000 minor units in HKD
 - **WHEN** the winner amends the delivery address to one where shipping and
@@ -273,6 +281,7 @@ remain payable until its deadline and the winner SHALL be able to retry with
 the same or a different payment method.
 
 #### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a winner holding an open bid-time authorization on the closing lot
 - **WHEN** the lot closes and the winner pays the invoice
@@ -295,6 +304,7 @@ the same or a different payment method.
 - **AND** does not wait for them to expire
 
 #### Scenario: winner-order-SC-15 - A declined payment leaves the invoice payable
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an unpaid invoice inside its payment deadline
 - **WHEN** the winner's payment is declined
@@ -317,6 +327,7 @@ A winner who never supplies a delivery address SHALL still reach the deadline.
 Expiry SHALL NOT be contingent on the winner having completed anything.
 
 #### Scenario: winner-order-SC-16 - The deadline is seven days from lot close
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a lot whose bidding was extended twice and closed at
   2026-09-03T12:00:00Z
@@ -348,6 +359,7 @@ record the amount the operator confirmed, the settlement method, the external
 reference, and a pointer to any invoice it supersedes.
 
 #### Scenario: winner-order-SC-18 - A receipt is itemised and stays retrievable
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order paid at a final amount of 316000 minor units in HKD
 - **WHEN** the winner opens the order a year later
@@ -366,6 +378,7 @@ reference, and a pointer to any invoice it supersedes.
   reference, and the invoice it supersedes
 
 #### Scenario: winner-order-SC-20 - The tracker appears once the lot is dispatched
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order whose fulfilment status has just become
   `fulfilled` with a tracking number attached
@@ -374,6 +387,7 @@ reference, and a pointer to any invoice it supersedes.
   carrier
 
 #### Scenario: winner-order-SC-21 - Delivery proof records what the carrier provided
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** a dispatched auction order for which the carrier reports delivery
   with a handover timestamp and a signature

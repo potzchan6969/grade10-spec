@@ -34,6 +34,7 @@ Tab title, section heading, empty states, list actions, and the campaign
 editor chrome SHALL NOT use the words **Sale** or **Sales** for this entity.
 
 #### Scenario: grade10-admin-auction-campaign-SC-01 - Auction admin section is labeled Campaigns
+**Serves:** grade10-admin-auction-campaign-US-01 - Operator finds the catalogue cover called a campaign
 
 - **GIVEN** an authorized operator on the Grade10 auction admin
 - **WHEN** they open the catalogue-cover section that was previously Sales
@@ -41,6 +42,7 @@ editor chrome SHALL NOT use the words **Sale** or **Sales** for this entity.
 - **AND** they are not labeled Sales
 
 #### Scenario: grade10-admin-auction-campaign-SC-02 - Campaign editor chrome says Campaign
+**Serves:** grade10-admin-auction-campaign-US-01 - Operator finds the catalogue cover called a campaign
 
 - **GIVEN** an authorized operator opening a new or existing campaign
 - **WHEN** the campaign editor is shown
@@ -82,6 +84,7 @@ Opening from an operator who is not authorized to catalogue a campaign SHALL
 be refused.
 
 #### Scenario: grade10-admin-auction-campaign-SC-04 - Operator opens a draft campaign
+**Serves:** grade10-admin-auction-campaign-US-02 - Operator opens a campaign as a draft
 
 - **GIVEN** an authorized operator on the Grade10 auction Campaigns section
 - **WHEN** they open a campaign titled "September Slabs" with empty copy
@@ -89,6 +92,7 @@ be refused.
 - **AND** the campaign is absent from the public catalogue covers
 
 #### Scenario: grade10-admin-auction-campaign-SC-05 - Open without a title is refused
+**Serves:** grade10-admin-auction-campaign-US-02 - Operator opens a campaign as a draft
 
 - **GIVEN** an authorized operator
 - **WHEN** they open a campaign with an empty title
@@ -96,6 +100,7 @@ be refused.
 - **AND** it persists no campaign
 
 #### Scenario: grade10-admin-auction-campaign-SC-06 - Unauthorized open is refused
+**Serves:** grade10-admin-auction-campaign-US-02 - Operator opens a campaign as a draft
 
 - **GIVEN** a signed-in operator who may not catalogue a campaign
 - **WHEN** they open a new campaign
@@ -113,6 +118,7 @@ Create of a campaign that is not `draft` SHALL be refused. Create from an
 operator who is not authorized to catalogue a campaign SHALL be refused.
 
 #### Scenario: grade10-admin-auction-campaign-SC-07 - Operator creates a draft campaign
+**Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
 - **GIVEN** a draft campaign titled "September Slabs"
 - **WHEN** an authorized operator creates it
@@ -120,6 +126,7 @@ operator who is not authorized to catalogue a campaign SHALL be refused.
 - **AND** the campaign remains absent from the public catalogue covers
 
 #### Scenario: grade10-admin-auction-campaign-SC-08 - Create of a created campaign is refused
+**Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
 - **GIVEN** a created campaign
 - **WHEN** an operator creates it again
@@ -141,6 +148,7 @@ A `canceled` campaign SHALL reject every title and copy write. Edit from an
 operator who is not authorized to catalogue a campaign SHALL be refused.
 
 #### Scenario: grade10-admin-auction-campaign-SC-09 - Operator updates copy on a published campaign
+**Serves:** grade10-admin-auction-campaign-US-04 - Operator edits a campaign's cover
 
 - **GIVEN** a published campaign titled "September Slabs"
 - **WHEN** an authorized operator changes its copy to a new description
@@ -148,6 +156,7 @@ operator who is not authorized to catalogue a campaign SHALL be refused.
 - **AND** the title and status are unchanged
 
 #### Scenario: grade10-admin-auction-campaign-SC-10 - Clearing the title is refused
+**Serves:** grade10-admin-auction-campaign-US-04 - Operator edits a campaign's cover
 
 - **GIVEN** a draft campaign with a title
 - **WHEN** an operator clears the title
@@ -155,6 +164,7 @@ operator who is not authorized to catalogue a campaign SHALL be refused.
 - **AND** the title is unchanged
 
 #### Scenario: grade10-admin-auction-campaign-SC-11 - Canceled campaign rejects a title edit
+**Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
 - **GIVEN** a canceled campaign
 - **WHEN** an operator changes its title
@@ -172,6 +182,7 @@ Publish of a campaign that is not `created` SHALL be refused. Publish from an
 operator who is not authorized to catalogue a campaign SHALL be refused.
 
 #### Scenario: grade10-admin-auction-campaign-SC-12 - Operator publishes a created campaign
+**Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
 - **GIVEN** a created campaign titled "September Slabs"
 - **WHEN** an authorized operator publishes it
@@ -180,6 +191,7 @@ operator who is not authorized to catalogue a campaign SHALL be refused.
 - **AND** listings under it that are not published stay off the catalogue
 
 #### Scenario: grade10-admin-auction-campaign-SC-13 - Publish of a draft campaign is refused
+**Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
 - **GIVEN** a draft campaign
 - **WHEN** an operator publishes it
@@ -187,6 +199,7 @@ operator who is not authorized to catalogue a campaign SHALL be refused.
 - **AND** the campaign remains a draft
 
 #### Scenario: grade10-admin-auction-campaign-SC-14 - Publish of a published campaign is refused
+**Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
 - **GIVEN** a published campaign
 - **WHEN** an operator publishes it
@@ -206,6 +219,7 @@ from an operator who is not authorized to call a campaign off SHALL be
 refused.
 
 #### Scenario: grade10-admin-auction-campaign-SC-15 - Operator cancels a published campaign
+**Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
 - **GIVEN** a published campaign with two published listings under it
 - **WHEN** an authorized operator cancels the campaign
@@ -213,18 +227,21 @@ refused.
 - **AND** those listings move to `canceled` under the listing cancel rules
 
 #### Scenario: grade10-admin-auction-campaign-SC-16 - Operator cancels a draft campaign
+**Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
 - **GIVEN** a draft campaign with no listings
 - **WHEN** an authorized operator cancels it
 - **THEN** Grade10 moves it to `canceled`
 
 #### Scenario: grade10-admin-auction-campaign-SC-17 - Operator cancels a created campaign
+**Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
 - **GIVEN** a created campaign with no listings
 - **WHEN** an authorized operator cancels it
 - **THEN** Grade10 moves it to `canceled`
 
 #### Scenario: grade10-admin-auction-campaign-SC-18 - Already canceled campaign cannot be canceled again
+**Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
 - **GIVEN** a canceled campaign
 - **WHEN** an operator cancels it
@@ -232,6 +249,7 @@ refused.
 - **AND** the campaign remains canceled
 
 #### Scenario: grade10-admin-auction-campaign-SC-19 - Unauthorized cancel is refused
+**Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
 - **GIVEN** a signed-in operator who may not call a campaign off
 - **WHEN** they cancel a draft campaign
@@ -251,6 +269,7 @@ A `canceled` campaign SHALL open read-only: title and copy visible, create,
 publish, and edit controls absent, cancel absent.
 
 #### Scenario: grade10-admin-auction-campaign-SC-20 - Operator opens the editor for a new campaign
+**Serves:** grade10-admin-auction-campaign-US-02 - Operator opens a campaign as a draft
 
 - **GIVEN** an authorized operator on the Campaigns section
 - **WHEN** they start a new campaign
@@ -259,6 +278,7 @@ publish, and edit controls absent, cancel absent.
   draft
 
 #### Scenario: grade10-admin-auction-campaign-SC-21 - Operator opens the editor for a draft campaign
+**Serves:** grade10-admin-auction-campaign-US-02 - Operator opens a campaign as a draft
 
 - **GIVEN** a draft campaign titled "September Slabs"
 - **WHEN** an authorized operator opens it from the Campaigns section
@@ -267,6 +287,7 @@ publish, and edit controls absent, cancel absent.
 - **AND** publish is not offered
 
 #### Scenario: grade10-admin-auction-campaign-SC-22 - Operator opens the editor for a created campaign
+**Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
 - **GIVEN** a created campaign titled "September Slabs"
 - **WHEN** an authorized operator opens it from the Campaigns section
@@ -275,6 +296,7 @@ publish, and edit controls absent, cancel absent.
 - **AND** create is not offered
 
 #### Scenario: grade10-admin-auction-campaign-SC-23 - Canceled campaign opens read-only
+**Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
 - **GIVEN** a canceled campaign
 - **WHEN** an authorized operator opens it from the Campaigns section

@@ -37,6 +37,7 @@ Grade10 SHALL record the suspension's reason and the auction order that
 caused it, and SHALL show both on the account record.
 
 #### Scenario: suspension-SC-01 - An elapsed deadline suspends the account
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** an auction order whose invoice status is `pending`
 - **WHEN** its payment deadline passes with no payment received
@@ -68,6 +69,7 @@ A suspension SHALL NOT be a platform ban. It SHALL NOT prevent the account
 signing in, and it SHALL NOT change anything `shared/auth/users` governs.
 
 #### Scenario: suspension-SC-03 - A suspended account can still pay what it owes
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a suspended account with an outstanding invoice
 - **WHEN** the collector opens that invoice and pays it
@@ -108,6 +110,7 @@ Grade10 accepts that a seller may realise a lower hammer price on an affected
 lot. That cost is accepted against the cost of a repeat default.
 
 #### Scenario: suspension-SC-05 - Standing maxima on open lots are retracted
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a collector leading two open lots and holding a standing maximum
   on a third
@@ -117,6 +120,7 @@ lot. That cost is accepted against the cost of a repeat default.
   history
 
 #### Scenario: suspension-SC-06 - A lot already won stays won
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a suspended account that won a lot before the suspension
 - **WHEN** the retraction runs
@@ -153,6 +157,7 @@ explicit operator action following review.
 Grade10 SHALL show the suspension state and its reason on the account record.
 
 #### Scenario: suspension-SC-09 - Paying does not lift the suspension
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a suspended account with one outstanding invoice
 - **WHEN** the collector pays that invoice in full

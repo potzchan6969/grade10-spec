@@ -59,12 +59,14 @@ appear in the sitemap as such.
 Nothing the listing shows or does SHALL change with the move.
 
 #### Scenario: grade10-site-store-product-listing-SC-01 - The listing answers at its address
+**Serves:** grade10-site-store-product-listing-US-01 - Collector opens the listing at its own address
 
 - **WHEN** the browse listing's address is fetched and no script executes
 - **THEN** the response HTML contains the listing's title, meta description
   and static copy
 
 #### Scenario: grade10-site-store-product-listing-SC-02 - The listing is offered to crawlers
+**Serves:** grade10-site-store-product-listing-US-01 - Collector opens the listing at its own address
 
 - **WHEN** the sitemap is fetched
 - **THEN** it names the browse listing's address in every language the site
@@ -105,6 +107,7 @@ link to what they are looking at, and going back SHALL return the listing to
 the previous narrowing.
 
 #### Scenario: grade10-site-store-product-listing-SC-03 - An address opens the listing narrowed
+**Serves:** grade10-site-store-product-listing-US-02 - Collector opens a collection from its address
 
 - **WHEN** a collector opens the listing at an address naming a collection the
   catalogue carries
@@ -112,11 +115,13 @@ the previous narrowing.
   collection shown as the narrowing in force
 
 #### Scenario: grade10-site-store-product-listing-SC-04 - No collection named
+**Serves:** grade10-site-store-product-listing-US-02 - Collector opens a collection from its address
 
 - **WHEN** a collector opens the listing at an address naming no collection
 - **THEN** the whole catalogue is listed
 
 #### Scenario: grade10-site-store-product-listing-SC-05 - A collection the catalogue has nothing for
+**Serves:** grade10-site-store-product-listing-US-02 - Collector opens a collection from its address
 
 - **WHEN** a collector opens the listing at an address naming a collection the
   catalogue has nothing for
@@ -124,6 +129,7 @@ the previous narrowing.
   not as not-found
 
 #### Scenario: grade10-site-store-product-listing-SC-06 - Narrowing in the page is linkable
+**Serves:** grade10-site-store-product-listing-US-03 - Collector leaves the collection they arrived in
 
 - **GIVEN** a collector on the listing scoped to a collection
 - **WHEN** they select a facet choice or enter free text
@@ -133,6 +139,7 @@ the previous narrowing.
   and opening it afresh renders the same narrowing
 
 #### Scenario: grade10-site-store-product-listing-SC-07 - Back undoes a narrowing
+**Serves:** grade10-site-store-product-listing-US-03 - Collector leaves the collection they arrived in
 
 - **GIVEN** a collector who narrowed the listing from within the collection
   their address opened it in
@@ -140,6 +147,7 @@ the previous narrowing.
 - **THEN** the listing is scoped to that collection again
 
 #### Scenario: grade10-site-store-product-listing-SC-08 - The collection in force can be dismissed
+**Serves:** grade10-site-store-product-listing-US-03 - Collector leaves the collection they arrived in
 
 - **GIVEN** a collector on the listing scoped to a collection
 - **WHEN** they dismiss the collection named among the narrowings in force
@@ -147,6 +155,7 @@ the previous narrowing.
   collection
 
 #### Scenario: grade10-site-store-product-listing-SC-09 - An address carrying both
+**Serves:** grade10-site-store-product-listing-US-03 - Collector leaves the collection they arrived in
 
 - **WHEN** a collector opens the listing at an address naming both a collection
   and a facet choice or free text
@@ -206,6 +215,7 @@ link to what they are looking at, and going back SHALL return the listing to
 the previous narrowing.
 
 #### Scenario: grade10-site-store-product-listing-SC-10 - The panel is the catalogue's facets
+**Serves:** grade10-site-store-product-listing-US-04 - Collector narrows the catalogue to what they collect
 
 - **WHEN** a collector opens the listing and the catalogue names facet groups
   with choices behind them
@@ -214,6 +224,7 @@ the previous narrowing.
 - **AND** each choice is shown with the count the catalogue puts behind it
 
 #### Scenario: grade10-site-store-product-listing-SC-11 - A facet narrowing is linkable
+**Serves:** grade10-site-store-product-listing-US-04 - Collector narrows the catalogue to what they collect
 
 - **GIVEN** a collector on the unscoped listing
 - **WHEN** they select a facet choice
@@ -224,6 +235,7 @@ the previous narrowing.
 - **THEN** the listing is unnarrowed again
 
 #### Scenario: grade10-site-store-product-listing-SC-12 - A shop with no facets configured
+**Serves:** grade10-site-store-product-listing-US-04 - Collector narrows the catalogue to what they collect
 
 - **WHEN** a collector opens the listing and the catalogue names no facet
   group, or counts nothing behind every choice of every group it names
@@ -232,6 +244,7 @@ the previous narrowing.
 - **AND** the search field and the sort menu are still offered
 
 #### Scenario: grade10-site-store-product-listing-SC-16 - A long facet group is capped
+**Serves:** grade10-site-store-product-listing-US-04 - Collector narrows the catalogue to what they collect
 
 - **GIVEN** a catalogue naming more than five worlds, and more than five
   collectible types
@@ -243,6 +256,7 @@ the previous narrowing.
 - **THEN** every world the catalogue names is offered
 
 #### Scenario: grade10-site-store-product-listing-SC-17 - A narrowing that starves the catalogue
+**Serves:** grade10-site-store-product-listing-US-04 - Collector narrows the catalogue to what they collect
 
 - **GIVEN** a collector on the listing who has selected a choice the catalogue
   now counts nothing behind, leaving every choice of the other group counted
@@ -301,6 +315,7 @@ collector can link to what they are looking at, and going back SHALL return the
 listing to the previous narrowing.
 
 #### Scenario: grade10-site-store-product-listing-SC-13 - An order covers the whole catalogue
+**Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
 
 - **GIVEN** a catalogue holding more cards than one page lists, whose
   lowest-priced card is not among those first listed
@@ -308,6 +323,7 @@ listing to the previous narrowing.
 - **THEN** that lowest-priced card is listed first
 
 #### Scenario: grade10-site-store-product-listing-SC-14 - Free text covers the whole catalogue
+**Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
 
 - **GIVEN** a catalogue holding more cards than one page lists, whose only
   match for a collector's words is not among those first listed
@@ -316,6 +332,7 @@ listing to the previous narrowing.
 - **AND** the address carries the words, so opening it afresh lists the same
 
 #### Scenario: grade10-site-store-product-listing-SC-15 - The menu offers only answerable orders
+**Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
 
 - **WHEN** a collector opens the sort menu
 - **THEN** every order it offers is one the catalogue can answer
@@ -357,6 +374,7 @@ review remains what decides a quantity, and goes on reducing a line the shop
 can no longer fill.
 
 #### Scenario: grade10-site-store-product-listing-SC-18 - A card stops at what the shop has
+**Serves:** grade10-site-store-product-listing-US-06 - Collector takes the last of a card from the listing
 
 - **GIVEN** a listing holding a card the shop has three of
 - **WHEN** a collector raises that card's quantity past three
@@ -364,6 +382,7 @@ can no longer fill.
 - **AND** the cart holds three of that card
 
 #### Scenario: grade10-site-store-product-listing-SC-19 - A shop that counts nothing stops nothing
+**Serves:** grade10-site-store-product-listing-US-06 - Collector takes the last of a card from the listing
 
 - **GIVEN** a listing holding a card the shop exposes no count for
 - **WHEN** a collector raises that card's quantity above three
@@ -381,6 +400,7 @@ Three or fewer is what counts as nearly out across this store, and the
 listing SHALL NOT hold its own number.
 
 #### Scenario: grade10-site-store-product-listing-SC-20 - Nearly out is said on the card
+**Serves:** grade10-site-store-product-listing-US-06 - Collector takes the last of a card from the listing
 
 - **GIVEN** a listing holding a card the shop has three of and a card the shop has forty-one of
 - **WHEN** the listing renders
@@ -388,6 +408,7 @@ listing SHALL NOT hold its own number.
 - **AND** the card the shop has forty-one of says nothing about what is left
 
 #### Scenario: grade10-site-store-product-listing-SC-21 - Asking for the last one is answered
+**Serves:** grade10-site-store-product-listing-US-06 - Collector takes the last of a card from the listing
 
 - **GIVEN** a listing holding a card the shop has forty-one of
 - **WHEN** a collector raises that card's quantity to forty-one
@@ -423,6 +444,7 @@ standing, and the listing SHALL neither empty nor refuse. Reaching the end of
 what is shown again SHALL ask the catalogue for that page again.
 
 #### Scenario: grade10-site-store-product-listing-SC-22 - The next cards arrive at the end
+**Serves:** grade10-site-store-product-listing-US-07 - Collector reads past the first page of the listing
 
 - **GIVEN** a collector on a listing whose set holds more cards than one page
   lists
@@ -432,6 +454,7 @@ what is shown again SHALL ask the catalogue for that page again.
 - **AND** no page number, next control or load-more control is offered
 
 #### Scenario: grade10-site-store-product-listing-SC-23 - The end of the set
+**Serves:** grade10-site-store-product-listing-US-07 - Collector reads past the first page of the listing
 
 - **GIVEN** a collector who has read every card the narrowed set holds
 - **WHEN** they reach the end of the cards shown
@@ -439,6 +462,7 @@ what is shown again SHALL ask the catalogue for that page again.
 - **AND** nothing is said in place of the cards that would have followed
 
 #### Scenario: grade10-site-store-product-listing-SC-24 - A narrowing starts the walk again
+**Serves:** grade10-site-store-product-listing-US-07 - Collector reads past the first page of the listing
 
 - **GIVEN** a collector who has read three pages of the listing
 - **WHEN** they select a facet choice, enter free text, or choose an order
@@ -446,6 +470,7 @@ what is shown again SHALL ask the catalogue for that page again.
 - **AND** no card read before that narrowing is listed
 
 #### Scenario: grade10-site-store-product-listing-SC-25 - Depth is not carried in the address
+**Serves:** grade10-site-store-product-listing-US-07 - Collector reads past the first page of the listing
 
 - **GIVEN** a collector who has read three pages of a narrowing
 - **WHEN** the address they are on is opened afresh
@@ -455,6 +480,7 @@ what is shown again SHALL ask the catalogue for that page again.
   previous page of this one
 
 #### Scenario: grade10-site-store-product-listing-SC-26 - A page the catalogue does not answer
+**Serves:** grade10-site-store-product-listing-US-07 - Collector reads past the first page of the listing
 
 - **GIVEN** a collector who has read two pages, and a catalogue that fails the
   third
@@ -481,6 +507,7 @@ else about the query changes — whether or not the collector has searched for a
 word.
 
 #### Scenario: grade10-site-store-product-listing-SC-27 - The count is the set, not what was read
+**Serves:** grade10-site-store-product-listing-US-08 - Collector sees how large their narrowing is
 
 - **GIVEN** a narrowed set the catalogue holds one hundred cards for, listed
   ten at a time
@@ -490,12 +517,14 @@ word.
 - **THEN** it still says one hundred cards
 
 #### Scenario: grade10-site-store-product-listing-SC-28 - The count follows the narrowing
+**Serves:** grade10-site-store-product-listing-US-08 - Collector sees how large their narrowing is
 
 - **GIVEN** a catalogue of one hundred cards, twelve of them in one world
 - **WHEN** a collector narrows the listing to that world
 - **THEN** the listing says twelve cards, before any further page is read
 
 #### Scenario: grade10-site-store-product-listing-SC-30 - A choice's count is the listing it opens
+**Serves:** grade10-site-store-product-listing-US-08 - Collector sees how large their narrowing is
 
 - **GIVEN** a collector who has searched for a word, and a world the panel
   counts twelve behind

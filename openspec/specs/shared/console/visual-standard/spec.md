@@ -37,6 +37,7 @@ console package SHALL provide it composed from what the vocabulary does offer,
 so a gap never becomes a second supplier.
 
 #### Scenario: shared-console-visual-standard-SC-01 - Two consoles render one vocabulary
+**Serves:** shared-console-visual-standard-US-01 - Operator moves between consoles in one shift
 
 - **WHEN** two admin consoles render the same kind of control
 - **THEN** both render it from the same vocabulary
@@ -57,6 +58,7 @@ surface, that appearance SHALL be stated by this capability rather than left to
 whichever vocabulary the component happens to be written in.
 
 #### Scenario: shared-console-visual-standard-SC-03 - A shared surface appears as its console does
+**Serves:** shared-console-visual-standard-US-01 - Operator moves between consoles in one shift
 
 - **WHEN** an admin console renders a component that customer surfaces also render
 - **THEN** one definition serves both
@@ -71,6 +73,7 @@ what distinguishes one brand's console from another's is what that mechanism
 supplies, never a value written into a block.
 
 #### Scenario: shared-console-visual-standard-SC-04 - Two brands render one console
+**Serves:** shared-console-visual-standard-US-02 - Operator recognises which brand they are administering
 
 - **GIVEN** the two brands' admin applications rendering the same console
 - **WHEN** each renders it
@@ -78,6 +81,7 @@ supplies, never a value written into a block.
 - **AND THEN** neither rendering carries a brand value written into a block
 
 #### Scenario: shared-console-visual-standard-SC-05 - A brand's identity has one source
+**Serves:** shared-console-visual-standard-US-02 - Operator recognises which brand they are administering
 
 - **WHEN** an admin application sets a brand's visual value
 - **THEN** exactly one mechanism sets it
@@ -94,6 +98,7 @@ tabular amount naming its ISO 4217 code, and a queue longer than its page
 offering the way on and back.
 
 #### Scenario: shared-console-visual-standard-SC-06 - An operator reads the same states after the swap
+**Serves:** shared-console-visual-standard-US-01 - Operator moves between consoles in one shift
 
 - **WHEN** an admin surface's read is refused after the vocabulary changed
 - **THEN** the failure renders in the error tone, distinguishable from the empty state

@@ -42,21 +42,25 @@ The store address SHALL keep answering. A collector who holds a link to it
 SHALL reach this surface rather than a refusal or a redirect.
 
 #### Scenario: grade10-site-store-home-SC-01 - The front door answers whole
+**Serves:** grade10-site-store-home-US-01 - Collector arrives at the store front door
 
 - **WHEN** the store address is fetched and no script executes
 - **THEN** the response HTML contains the hero's headline and its copy
 
 #### Scenario: grade10-site-store-home-SC-02 - The store and the listing are two surfaces
+**Serves:** grade10-site-store-home-US-01 - Collector arrives at the store front door
 
 - **WHEN** the store address and the browse listing's address are compared
 - **THEN** their titles differ and their meta descriptions differ
 
 #### Scenario: grade10-site-store-home-SC-03 - The hero reaches the catalogue
+**Serves:** grade10-site-store-home-US-01 - Collector arrives at the store front door
 
 - **WHEN** a collector activates the hero's shopping affordance
 - **THEN** the browse listing renders, unscoped
 
 #### Scenario: grade10-site-store-home-SC-04 - The hero reaches the auction
+**Serves:** grade10-site-store-home-US-01 - Collector arrives at the store front door
 
 - **WHEN** a collector activates the hero's auction affordance
 - **THEN** the auction surface renders
@@ -77,6 +81,7 @@ identified by its name, rather than being left out or shown with a gap where
 the artwork goes.
 
 #### Scenario: grade10-site-store-home-SC-05 - The grid is the shop's collections
+**Serves:** grade10-site-store-home-US-02 - Collector enters the catalogue through a collection
 
 - **WHEN** the front door renders and the catalogue lists collections
 - **THEN** each is a tile, in the order the catalogue listed them, carrying
@@ -84,24 +89,28 @@ the artwork goes.
 - **AND** the first occupies the large cell
 
 #### Scenario: grade10-site-store-home-SC-06 - A collection added to the shop
+**Serves:** grade10-site-store-home-US-02 - Collector enters the catalogue through a collection
 
 - **GIVEN** a collection the catalogue did not list before
 - **WHEN** the catalogue lists it and the front door renders
 - **THEN** it is a tile, with no application change
 
 #### Scenario: grade10-site-store-home-SC-07 - A collection with no artwork
+**Serves:** grade10-site-store-home-US-02 - Collector enters the catalogue through a collection
 
 - **GIVEN** the catalogue lists a collection carrying no artwork
 - **WHEN** the front door renders
 - **THEN** that tile renders and names the collection
 
 #### Scenario: grade10-site-store-home-SC-08 - Nothing to offer
+**Serves:** grade10-site-store-home-US-02 - Collector enters the catalogue through a collection
 
 - **WHEN** the catalogue lists no collections at all
 - **THEN** neither the grid nor its heading is on the page, and the rest of
   the surface renders
 
 #### Scenario: grade10-site-store-home-SC-09 - A tile opens its collection
+**Serves:** grade10-site-store-home-US-02 - Collector enters the catalogue through a collection
 
 - **WHEN** a collector activates a collection tile
 - **THEN** the browse listing renders, scoped to that collection
@@ -128,6 +137,7 @@ collections or that collection holds no cards, rather than rendering a titled
 empty row.
 
 #### Scenario: grade10-site-store-home-SC-10 - The row is the first collection's cards
+**Serves:** grade10-site-store-home-US-03 - Collector browses the merchandised collection
 
 - **WHEN** the front door renders and the catalogue lists a collection holding
   cards
@@ -135,22 +145,26 @@ empty row.
   its cards are that collection's, each with a name, an image and a price
 
 #### Scenario: grade10-site-store-home-SC-11 - The row follows the shop
+**Serves:** grade10-site-store-home-US-03 - Collector browses the merchandised collection
 
 - **GIVEN** the catalogue lists a different collection first than it did
 - **WHEN** the front door renders
 - **THEN** the row is that collection's, with no application change
 
 #### Scenario: grade10-site-store-home-SC-12 - A card opens its own page
+**Serves:** grade10-site-store-home-US-03 - Collector browses the merchandised collection
 
 - **WHEN** a collector activates a card in the row
 - **THEN** that card's own page renders
 
 #### Scenario: grade10-site-store-home-SC-13 - The row reaches the rest of the collection
+**Serves:** grade10-site-store-home-US-03 - Collector browses the merchandised collection
 
 - **WHEN** a collector activates the row's browse-all affordance
 - **THEN** the browse listing renders, scoped to that collection
 
 #### Scenario: grade10-site-store-home-SC-14 - Nothing to merchandise
+**Serves:** grade10-site-store-home-US-03 - Collector browses the merchandised collection
 
 - **GIVEN** the catalogue lists no collection holding cards
 - **WHEN** the front door renders
@@ -158,6 +172,7 @@ empty row.
   surface renders
 
 #### Scenario: grade10-site-store-home-SC-21 - A card the shop has sold out
+**Serves:** grade10-site-store-home-US-06 - Collector reads a card's standing before opening it
 
 - **GIVEN** the merchandised collection leads with a card nothing is left to buy of
 - **WHEN** the front door renders
@@ -165,6 +180,7 @@ empty row.
 - **AND** no way into the cart is offered on it
 
 #### Scenario: grade10-site-store-home-SC-22 - A card the shop has marked down
+**Serves:** grade10-site-store-home-US-06 - Collector reads a card's standing before opening it
 
 - **GIVEN** a card in the row the shop prices below what it compares it at
 - **WHEN** the front door renders
@@ -172,6 +188,7 @@ empty row.
 - **AND** a card the shop has not marked down shows one price only
 
 #### Scenario: grade10-site-store-home-SC-23 - The row does not sell
+**Serves:** grade10-site-store-home-US-03 - Collector browses the merchandised collection
 
 - **WHEN** a collector reads the merchandised row
 - **THEN** no card offers a way into the cart
@@ -185,17 +202,20 @@ show it empty; when a read fails it SHALL say so and offer to try again, and
 trying again SHALL re-read without a page load.
 
 #### Scenario: grade10-site-store-home-SC-15 - The hero does not wait
+**Serves:** grade10-site-store-home-US-01 - Collector arrives at the store front door
 
 - **GIVEN** the catalogue has not answered
 - **WHEN** the front door renders
 - **THEN** the hero and its two ways on are on screen and usable
 
 #### Scenario: grade10-site-store-home-SC-16 - A section says it is loading
+**Serves:** grade10-site-store-home-US-04 - Collector keeps using the front door while the catalogue lags
 
 - **WHEN** the collections read or the merchandised read is in flight
 - **THEN** that section shows it is loading, and shows no empty grid or row
 
 #### Scenario: grade10-site-store-home-SC-17 - A failed read can be retried
+**Serves:** grade10-site-store-home-US-04 - Collector keeps using the front door while the catalogue lags
 
 - **GIVEN** a section's read failed
 - **WHEN** the collector takes the offer to try again
@@ -210,16 +230,19 @@ door; the destination it names for every collection SHALL be the browse
 listing, unscoped.
 
 #### Scenario: grade10-site-store-home-SC-18 - The listing is still the store
+**Serves:** grade10-site-store-home-US-05 - Collector moves around the store from the chrome
 
 - **WHEN** a collector is on the browse listing
 - **THEN** the chrome marks the store as the surface being viewed
 
 #### Scenario: grade10-site-store-home-SC-19 - The chrome reaches the front door
+**Serves:** grade10-site-store-home-US-05 - Collector moves around the store from the chrome
 
 - **WHEN** a collector follows the chrome's store destination
 - **THEN** the front door renders
 
 #### Scenario: grade10-site-store-home-SC-20 - The chrome reaches every collection
+**Serves:** grade10-site-store-home-US-05 - Collector moves around the store from the chrome
 
 - **WHEN** a collector follows the chrome's all-collections destination
 - **THEN** the browse listing renders, unscoped

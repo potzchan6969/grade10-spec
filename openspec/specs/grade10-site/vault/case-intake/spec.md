@@ -51,6 +51,7 @@ An unsent request SHALL be reopenable at the step it was left on, and SHALL
 carry photographs only while it is unsent.
 
 #### Scenario: grade10-site-vault-case-intake-SC-01 - A request is opened and reopened
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
 - **WHEN** a collector opens a request and leaves it unsent
 - **THEN** it is listed as an unsent request on their own list
@@ -79,6 +80,7 @@ one item only:
 A collector with several items SHALL open one request for each.
 
 #### Scenario: grade10-site-vault-case-intake-SC-03 - A request in another currency is refused
+**Serves:** grade10-site-vault-case-intake-US-02 - Collector sends in a card they only want kept safe
 
 - **WHEN** a request is opened naming a currency that is not the brand's
 - **THEN** it is refused by name and no case exists
@@ -96,11 +98,13 @@ amount SHALL be read as the storage lane and never as a missing value, and
 nothing later in the case SHALL ask again which lane it is on.
 
 #### Scenario: grade10-site-vault-case-intake-SC-05 - A loan asked for opens the financed lane
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
 - **WHEN** a collector opens a request asking for 5,000,000 HKD minor units
 - **THEN** the case is on the financed lane
 
 #### Scenario: grade10-site-vault-case-intake-SC-06 - No loan asked for opens the storage lane
+**Serves:** grade10-site-vault-case-intake-US-02 - Collector sends in a card they only want kept safe
 
 - **WHEN** a collector opens a request asking for no loan
 - **THEN** the case is on the storage lane and no offer is ever written for it
@@ -124,17 +128,20 @@ of at most 20 MB, and anything else SHALL be refused by name before it is
 stored. The same bytes offered twice SHALL attach one photograph.
 
 #### Scenario: grade10-site-vault-case-intake-SC-08 - An eleventh photograph is refused
+**Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
 
 - **GIVEN** a request carrying ten photographs
 - **WHEN** another is offered
 - **THEN** it is refused by name and nothing is stored
 
 #### Scenario: grade10-site-vault-case-intake-SC-09 - A file of another kind is refused
+**Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
 
 - **WHEN** a file that is not one of the three image types is offered
 - **THEN** it is refused by name and nothing is stored
 
 #### Scenario: grade10-site-vault-case-intake-SC-10 - The same photograph twice is one photograph
+**Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
 
 - **WHEN** the same bytes are offered twice for one case
 - **THEN** the case carries one photograph, not two
@@ -151,11 +158,13 @@ vault read grant, and to nobody else. Every read SHALL be recorded in a ledger
 that is never rewritten.
 
 #### Scenario: grade10-site-vault-case-intake-SC-11 - Location metadata never reaches the vault
+**Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
 
 - **WHEN** a photograph carrying a location is offered
 - **THEN** what is stored carries none
 
 #### Scenario: grade10-site-vault-case-intake-SC-12 - A photograph is not another collector's to read
+**Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
 
 - **WHEN** a signed-in collector asks for a photograph on a case that is not theirs
 - **THEN** it is refused by name
@@ -168,6 +177,7 @@ SHALL make the case one the shop can see and one a visit can be booked
 against.
 
 #### Scenario: grade10-site-vault-case-intake-SC-13 - A request with nothing to look at is refused
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
 
 - **GIVEN** a request carrying no photograph
 - **WHEN** the collector sends it in

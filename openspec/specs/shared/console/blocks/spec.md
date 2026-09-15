@@ -102,17 +102,20 @@ the read succeeds with no rows. The refused state SHALL render in the error
 tone, distinct from the tone of secondary or empty text.
 
 #### Scenario: shared-console-blocks-SC-05 - A read is in flight
+**Serves:** shared-console-blocks-US-01 - Operator distinguishes a failed read from an empty queue
 
 - **WHEN** a console surface's read has not yet resolved
 - **THEN** the surface says it is loading, and offers no rows and no empty message
 
 #### Scenario: shared-console-blocks-SC-06 - A read is refused
+**Serves:** shared-console-blocks-US-01 - Operator distinguishes a failed read from an empty queue
 
 - **WHEN** a console surface's read fails
 - **THEN** the failure renders in the error tone
 - **AND** the rendering is distinguishable from the empty state at a glance
 
 #### Scenario: shared-console-blocks-SC-07 - A read returns no rows
+**Serves:** shared-console-blocks-US-01 - Operator distinguishes a failed read from an empty queue
 
 - **WHEN** a console surface's read succeeds with nothing to show
 - **THEN** the surface says there is nothing, in the secondary tone, and renders no error
@@ -124,12 +127,14 @@ surface renders — naming the move in words the console supplies, and
 offering cancel — and SHALL NOT use the platform's native confirmation.
 
 #### Scenario: shared-console-blocks-SC-08 - An operator cancels a confirmation
+**Serves:** shared-console-blocks-US-02 - Operator confirms an irreversible move deliberately
 
 - **WHEN** an operator opens a confirmation for an irreversible move and cancels it
 - **THEN** the move is not reported to the console
 - **AND** the surface returns to where the operator was
 
 #### Scenario: shared-console-blocks-SC-09 - No move uses the native confirm
+**Serves:** shared-console-blocks-US-02 - Operator confirms an irreversible move deliberately
 
 - **WHEN** any console surface asks an operator to confirm a move
 - **THEN** the confirmation is a dialog the surface renders
@@ -142,6 +147,7 @@ tab semantics: the group is announced as tabs, and the active panel's control
 is announced as selected.
 
 #### Scenario: shared-console-blocks-SC-10 - A panel switch is announced as tabs
+**Serves:** shared-console-blocks-US-03 - Operator narrows a queue with an announced control
 
 - **WHEN** an operator moves through a panel-switching control with assistive technology
 - **THEN** the control group is announced as tabs
@@ -154,6 +160,7 @@ as one segmented choice whose selected option is announced, rather than as
 independent buttons distinguished only by styling.
 
 #### Scenario: shared-console-blocks-SC-11 - A filter announces its selected option
+**Serves:** shared-console-blocks-US-03 - Operator narrows a queue with an announced control
 
 - **WHEN** an operator reaches a row filter with assistive technology
 - **THEN** the options are announced as one choice

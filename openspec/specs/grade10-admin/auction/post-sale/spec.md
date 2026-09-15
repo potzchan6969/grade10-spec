@@ -55,6 +55,7 @@ Manual SHALL NOT share a mark. Rows with Needs action = Yes SHALL get
 an extra highlight.
 
 #### Scenario: post-sale-SC-01 - A listing inside the last hour is Ending soon
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** a published listing whose recorded close is 60 minutes or
   less away and has not passed
@@ -62,6 +63,7 @@ an extra highlight.
 - **THEN** that listing's outcome is Ending soon
 
 #### Scenario: post-sale-SC-02 - Stripe capture and manual collection are different outcomes
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** one listing whose card capture succeeded and one listing
   whose operator recorded collection, neither shipped
@@ -71,6 +73,7 @@ an extra highlight.
 - **AND** the two marks do not share the same treatment
 
 #### Scenario: post-sale-SC-03 - An operator works only listings awaiting wire
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** the queue contains Live, Awaiting wire, and Paid via Manual
   listings
@@ -78,6 +81,7 @@ an extra highlight.
 - **THEN** Grade10 returns only listings whose outcome is Awaiting wire
 
 #### Scenario: post-sale-SC-04 - Awaiting wire is highlighted as needing action
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** an Awaiting wire listing and an Awaiting payment listing in
   the queue
@@ -104,6 +108,7 @@ the trail, and SHALL still leave comments, even with neither
 payment-processing nor shipment-processing.
 
 #### Scenario: post-sale-SC-05 - Operator closes out a won listing
+**Serves:** post-sale-US-02 - Operator closes out a won listing
 
 - **GIVEN** a listing in Awaiting payment
 - **AND** the operator holds payment-processing and shipment-processing
@@ -114,6 +119,7 @@ payment-processing nor shipment-processing.
 - **AND** the winner is unchanged
 
 #### Scenario: post-sale-SC-06 - Operator opens a won listing
+**Serves:** post-sale-US-02 - Operator closes out a won listing
 
 - **GIVEN** a listing with a winner, a recorded close, and a winning amount
 - **WHEN** the operator selects that listing from the queue
@@ -141,6 +147,7 @@ An operator who can open the listing SHALL be able to leave a comment.
 Grade10 SHALL refuse an empty comment.
 
 #### Scenario: post-sale-SC-07 - Stripe paid and an operator comment share the trail
+**Serves:** post-sale-US-02 - Operator closes out a won listing
 
 - **GIVEN** a listing whose outcome is Paid via Stripe
 - **WHEN** an operator leaves a comment
@@ -164,6 +171,7 @@ identifier, or card fingerprint.
 | Storefront | Storefront the winner bid through |
 
 #### Scenario: post-sale-SC-08 - Winner email is the contact without Stripe identifiers
+**Serves:** post-sale-US-02 - Operator closes out a won listing
 
 - **GIVEN** a won listing whose winner email is on file
 - **WHEN** an operator who can open the queue views the detail
@@ -205,6 +213,7 @@ A payment control whose grant the caller lacks SHALL stay visible and
 disabled. Grade10 SHALL refuse the same action on the server.
 
 #### Scenario: post-sale-SC-09 - Wire request releases the card hold
+**Serves:** post-sale-US-03 - Operator collects payment
 
 - **GIVEN** a listing in Awaiting payment whose winner still has an
   open card authorization
@@ -215,6 +224,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **AND** it does not capture the authorization
 
 #### Scenario: post-sale-SC-10 - Stripe capture marks the listing Paid via Stripe
+**Serves:** post-sale-US-03 - Operator collects payment
 
 - **GIVEN** a listing in Awaiting payment with an open winner
   authorization
@@ -225,6 +235,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
   from an operator
 
 #### Scenario: post-sale-SC-11 - Manual collection marks Paid via Manual and releases the hold
+**Serves:** post-sale-US-03 - Operator collects payment
 
 - **GIVEN** a listing in Awaiting payment, Payment failed, or Awaiting
   wire
@@ -235,6 +246,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
   release and does not capture it
 
 #### Scenario: post-sale-SC-12 - A second paid attempt is refused
+**Serves:** post-sale-US-03 - Operator collects payment
 
 - **GIVEN** a listing already Paid via Stripe
 - **WHEN** an operator records payment as collected
@@ -243,6 +255,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **AND** the winner is unchanged
 
 #### Scenario: post-sale-SC-13 - Staff cannot record payment
+**Serves:** post-sale-US-03 - Operator collects payment
 
 - **GIVEN** an operator whose roles are exactly `staff` and a listing
   in Awaiting payment
@@ -278,6 +291,7 @@ A shipment control whose grant the caller lacks SHALL stay visible and
 disabled. Grade10 SHALL refuse the same action on the server.
 
 #### Scenario: post-sale-SC-14 - Shipment follows paid, then started, then completed
+**Serves:** post-sale-US-04 - Operator records in-house shipment
 
 - **GIVEN** a Paid via Stripe or Paid via Manual listing
 - **AND** the operator holds shipment-processing
@@ -286,6 +300,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **AND** the trail names that operator and each new outcome
 
 #### Scenario: post-sale-SC-15 - Shipment cannot skip ahead
+**Serves:** post-sale-US-04 - Operator records in-house shipment
 
 - **GIVEN** a listing in Awaiting payment
 - **WHEN** an operator records shipment started
@@ -299,6 +314,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **AND** the outcome remains Paid via Manual
 
 #### Scenario: post-sale-SC-16 - Finance cannot record shipment
+**Serves:** post-sale-US-04 - Operator records in-house shipment
 
 - **GIVEN** an operator whose roles are exactly `finance` and a Paid
   via Stripe listing
@@ -308,6 +324,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **AND** the outcome remains Paid via Stripe
 
 #### Scenario: post-sale-SC-17 - Publishing a listing does not need the shipment grant
+**Serves:** post-sale-US-04 - Operator records in-house shipment
 
 - **GIVEN** an operator who holds catalogue publishing and does not
   hold shipment-processing
@@ -323,6 +340,7 @@ An operator with shipment-processing SHALL be able to record a missing
 delivery address. That SHALL NOT mark the listing Shipped.
 
 #### Scenario: post-sale-SC-18 - Recording an address does not ship the listing
+**Serves:** post-sale-US-04 - Operator records in-house shipment
 
 - **GIVEN** a Paid via Stripe or Paid via Manual listing with no
   delivery address

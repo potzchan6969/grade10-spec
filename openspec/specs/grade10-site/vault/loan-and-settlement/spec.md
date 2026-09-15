@@ -74,24 +74,28 @@ The case SHALL become `active` in the same act, and the borrower SHALL be told
 the calendar date in writing.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-01 - The offer's maker may not pay it out
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
 - **GIVEN** an accepted offer written by one operator
 - **WHEN** that same operator records the advance
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-02 - A value date before the signature is refused
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
 - **GIVEN** a case whose signed set was sealed on the 10th
 - **WHEN** an advance is recorded with a value date of the 9th
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-03 - The term runs from the advance
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
 - **GIVEN** an offer of a 30-day term accepted on 1 September
 - **WHEN** the advance is recorded with a value date of 15 September
 - **THEN** the loan falls due at the end of 15 October on the brand's own calendar
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-04 - An amount that is not the principal is refused
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
 - **GIVEN** an accepted principal of 4,000,000 HKD minor units
 - **WHEN** an advance of 3,900,000 HKD minor units is recorded
@@ -123,12 +127,14 @@ Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
 - 9,000,000 repaid on day 10 and the rest 10 days late — 1,313,000 still owed
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-05 - Early repayment owes the whole term's interest
+**Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
 - **GIVEN** the worked loan above
 - **WHEN** it is quoted for day 10
 - **THEN** it owes 10,300,000 HKD minor units
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-06 - Overdue days charge the term's own daily rate
+**Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
 - **GIVEN** the worked loan above
 - **WHEN** it is quoted for 10 days past the due date
@@ -157,6 +163,7 @@ A recording valued after the instant being asked about SHALL be left out of
 that answer rather than subtracted from it.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-09 - A part payment cuts the arrears it runs on
+**Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
 - **GIVEN** the worked loan above
 - **WHEN** 9,000,000 HKD minor units are repaid on day 10 and the loan is quoted 10 days past due
@@ -219,6 +226,7 @@ loan and move the case to `repaid`.
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-15 - Settling moves the case
+**Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
 - **GIVEN** an active loan
 - **WHEN** a repayment leaves nothing owed at its value date
@@ -239,18 +247,21 @@ A correction SHALL restore the arithmetic to what it would have been had the
 row never been written; nothing SHALL be re-dated. The borrower SHALL be told.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-16 - Nobody takes back their own record
+**Serves:** grade10-site-vault-loan-and-settlement-US-03 - Treasurer takes back a record the bank rejected
 
 - **GIVEN** a repayment recorded by one operator
 - **WHEN** that same operator tries to take it back
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-17 - The repayments come off before the advance
+**Serves:** grade10-site-vault-loan-and-settlement-US-03 - Treasurer takes back a record the bank rejected
 
 - **GIVEN** an active loan carrying two repayments
 - **WHEN** the advance is taken back
 - **THEN** it is refused by name until both repayments have been
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-18 - A correction does not re-date the loan
+**Serves:** grade10-site-vault-loan-and-settlement-US-03 - Treasurer takes back a record the bank rejected
 
 - **GIVEN** a loan whose repayment is taken back
 - **WHEN** it is quoted afterwards
@@ -277,24 +288,28 @@ figure the item settled SHALL reach the case's audit trail, and the collector
 SHALL be told.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-19 - Nothing is taken without a notice
+**Serves:** grade10-site-vault-loan-and-settlement-US-04 - Operator takes the collateral only after warning the borrower
 
 - **GIVEN** a loan a month past its due date and no notice on the record
 - **WHEN** staff try to forfeit it
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-20 - Nothing is taken inside the cure period
+**Serves:** grade10-site-vault-loan-and-settlement-US-04 - Operator takes the collateral only after warning the borrower
 
 - **GIVEN** a notice sent three days ago naming a cure date 14 days on
 - **WHEN** staff try to forfeit the item
 - **THEN** it is refused by name, and the refusal names the earliest date it becomes possible
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-21 - A shortened notice period does not bring the date forward
+**Serves:** grade10-site-vault-loan-and-settlement-US-04 - Operator takes the collateral only after warning the borrower
 
 - **GIVEN** a notice naming a cure date, and a brand that afterwards shortens its notice period
 - **WHEN** staff try to forfeit before the date the borrower was given
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-22 - Forfeiture settles the debt with the item
+**Serves:** grade10-site-vault-loan-and-settlement-US-04 - Operator takes the collateral only after warning the borrower
 
 - **GIVEN** a loan past due whose notice period has elapsed
 - **WHEN** staff forfeit it
@@ -307,6 +322,7 @@ packet is open, and only against a signed release document. A storage case
 SHALL owe nothing, because storage carries no fee.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-23 - A loan still owing keeps the item
+**Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
 - **GIVEN** an active loan with a balance outstanding
 - **WHEN** staff try to release the item

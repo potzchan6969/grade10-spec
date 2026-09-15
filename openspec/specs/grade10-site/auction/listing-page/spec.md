@@ -49,12 +49,14 @@ Two lot addresses SHALL answer with their own lot — the page a collector
 reads is the one the address names, not the catalogue it was reached from.
 
 #### Scenario: grade10-site-auction-listing-page-SC-01 - A lot answers whole
+**Serves:** grade10-site-auction-listing-page-US-01 - Collector opens a lot at its own address
 
 - **WHEN** a lot address is fetched and no script executes
 - **THEN** the response HTML contains that lot's name, its description, and
   where its bidding stands
 
 #### Scenario: grade10-site-auction-listing-page-SC-02 - Two lots, two pages
+**Serves:** grade10-site-auction-listing-page-US-01 - Collector opens a lot at its own address
 
 - **WHEN** two lot addresses are fetched
 - **THEN** each response carries its own lot's name and standing, and its own
@@ -67,6 +69,7 @@ lot and its own canonical address, readable without executing scripts. A
 shared lot link SHALL NOT unfurl as the auction catalogue.
 
 #### Scenario: grade10-site-auction-listing-page-SC-03 - A preview fetcher reads a lot
+**Serves:** grade10-site-auction-listing-page-US-02 - Collector shares a lot link
 
 - **WHEN** a lot address is fetched and no script executes
 - **THEN** the response carries `og:title`, `og:description` and `og:url`
@@ -81,6 +84,7 @@ naming no published lot SHALL answer with status 404 and the site's not-found
 surface, never an empty lot page and never the catalogue.
 
 #### Scenario: grade10-site-auction-listing-page-SC-04 - An id the catalogue publishes no lot for
+**Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
 - **WHEN** an address under the auction's lots naming no published lot is
   fetched
@@ -103,6 +107,7 @@ replaced by a loading placeholder, and a value that follows the clock SHALL
 carry on from what was served rather than disagreeing with it.
 
 #### Scenario: grade10-site-auction-listing-page-SC-06 - The served lot stays on screen
+**Serves:** grade10-site-auction-listing-page-US-04 - Collector reads a live lot while scripts load
 
 - **GIVEN** a lot address served with that lot in the document
 - **WHEN** scripts finish loading
@@ -111,6 +116,7 @@ carry on from what was served rather than disagreeing with it.
 - **AND** none of them is replaced by a loading placeholder
 
 #### Scenario: grade10-site-auction-listing-page-SC-07 - A value that follows the clock carries on
+**Serves:** grade10-site-auction-listing-page-US-04 - Collector reads a live lot while scripts load
 
 - **GIVEN** a lot whose page shows how long its bidding has left
 - **WHEN** scripts finish loading
@@ -127,12 +133,14 @@ not one of them: which lots the auction publishes is not known when the site
 is built.
 
 #### Scenario: grade10-site-auction-listing-page-SC-08 - A lot is opened from the catalogue
+**Serves:** grade10-site-auction-listing-page-US-05 - Collector reaches a lot from the catalogue
 
 - **GIVEN** a collector reading the auction catalogue
 - **WHEN** they open a lot it lists
 - **THEN** that lot's address is what they are on, showing that lot's page
 
 #### Scenario: grade10-site-auction-listing-page-SC-09 - The sitemap names no lot
+**Serves:** grade10-site-auction-listing-page-US-05 - Collector reaches a lot from the catalogue
 
 - **WHEN** the sitemap is fetched
 - **THEN** no entry is a lot address

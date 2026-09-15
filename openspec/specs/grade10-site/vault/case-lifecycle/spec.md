@@ -74,6 +74,7 @@ statuses. A visit is a fact the diary owns and the case caches; overdue is the
 loan's arithmetic against a clock.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-01 - A terminal case takes no move
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
 - **GIVEN** a case that has been released
 - **WHEN** any move is asked of it
@@ -121,12 +122,14 @@ entry SHALL name what happened, who did it — the collector, a member of staff,
 or a sweep — and the statuses it moved between.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-04 - A case that moved under the caller is refused
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
 - **GIVEN** two operators reading one case being valued
 - **WHEN** both send the same move
 - **THEN** one is applied and the other is refused by name
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-05 - The history has no gaps
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
 - **WHEN** any move or record is made on a case
 - **THEN** the case's history carries an entry for it naming the actor
@@ -159,18 +162,21 @@ clock; a case whose ceremony is still open or whose signed set already covers
 its lane SHALL NOT be ended either.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-06 - An abandoned agreement ends after a month
+**Serves:** grade10-site-vault-case-lifecycle-US-02 - Collector who stops answering is not left with an open case
 
 - **GIVEN** a case that agreed terms 31 days ago, with no visit ahead of it
 - **WHEN** the clocks are read
 - **THEN** the case is `cancelled` and the collector is told
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-07 - A collector who rebooked keeps their case
+**Serves:** grade10-site-vault-case-lifecycle-US-02 - Collector who stops answering is not left with an open case
 
 - **GIVEN** a case that agreed terms 31 days ago and holds a visit next week
 - **WHEN** the clocks are read
 - **THEN** the case is left exactly where it is
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-08 - A settled loan waits for its owner
+**Serves:** grade10-site-vault-case-lifecycle-US-02 - Collector who stops answering is not left with an open case
 
 - **GIVEN** a case that repaid its loan six months ago and still holds the item
 - **WHEN** the clocks are read
@@ -193,12 +199,14 @@ and only while no advance stands against it; that unwind SHALL run the release
 machinery and sign no release document.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-09 - A collector cancels an offer they were made
+**Serves:** grade10-site-vault-case-lifecycle-US-01 - Collector calls off a request before the item is in the vault
 
 - **GIVEN** a case holding a live offer and a booked visit
 - **WHEN** its owner cancels the case
 - **THEN** the case is `cancelled`, the offer is closed, the visit is cancelled and the collector is told
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-10 - A case in the vault is not the collector's to cancel
+**Serves:** grade10-site-vault-case-lifecycle-US-01 - Collector calls off a request before the item is in the vault
 
 - **GIVEN** a case whose item is in the vault
 - **WHEN** its owner asks to cancel it
@@ -215,6 +223,7 @@ advanced against again. A corrected repayment on a settled loan SHALL reopen
 it to `active`. The machine SHALL hold no other move back.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-11 - An unwind is refused past the advance
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
 - **GIVEN** a case with an advance recorded against it
 - **WHEN** staff try to unwind it from the vault
