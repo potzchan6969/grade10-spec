@@ -104,6 +104,9 @@ export type SpecEntry = {
   title: string;
   purpose: string;
   featureSet?: string;
+  /** The root groups of the feature set — the anchors a scenario may serve
+   * when it stands under the map rather than under a journey. */
+  featureGroups?: string[];
   requirements: Requirement[];
   journeys?: Journey[];
   /** The journeys file says `**Walked by:** nobody`: no end user reaches
