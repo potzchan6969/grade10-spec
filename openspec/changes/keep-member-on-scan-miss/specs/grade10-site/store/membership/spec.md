@@ -65,3 +65,5 @@ membership off the till, and the sale goes on as an ordinary sale.
 - **THEN** the till shows the new member
 - **AND** every read and spend started after the switch acts for the new
   member only
+- **AND** a read or spend started before the switch does not move the till
+  off the new member

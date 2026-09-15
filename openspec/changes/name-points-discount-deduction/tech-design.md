@@ -58,6 +58,8 @@ rollout has to rule out.
 - **A till rolled back past release 1 after release 2** meets carts it does
   not recognise. → Release notes for managers say release 1 is the oldest
   version that may be activated.
-- **POS may cut a 21-character title** on the cart row or the receipt.
-  → ❓ Checked on the staging tablet before release 2 reaches production; a
-  cut title goes back to the owner.
+- **POS may cut a 21-character title.** A cut in the data the readers match
+  would leave points a till strips as somebody else's and settlement never
+  finds. → ❓ Checked on the staging tablet before release 1 reaches
+  production, with a discount keyed under the new title; a cut on screen
+  only goes back to the owner as wording.

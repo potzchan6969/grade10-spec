@@ -9,13 +9,13 @@
 ## 2. Release 1 (grade10)
 
 - [ ] 2.1 Deploy the store to staging and publish the till version for a person to release
-- [ ] 2.2 Walk the staging tablet: a spend, a strip and a paid sale settle as before
+- [ ] 2.2 Walk the staging tablet: a spend, a strip and a paid sale settle as before; a fixed order discount keyed as "Deduction from Points" keeps its whole title on the cart the extension reads and on the paid order
 - [ ] 2.3 Release 1 in production: the store deployed and the till version activated at every location
 
 ## 3. Writers switch (grade10)
 
 - [ ] 3.1 The online draft and the till write "Deduction from Points"
-- [ ] 3.2 Staging: a spend online and at the till shows the new title on the cart and the paid order; check whether POS cuts the title on the cart row or the receipt
+- [ ] 3.2 Staging: a spend online and at the till shows the new title on the cart row, the receipt and the paid order
 - [ ] 3.3 Production: once every location's manager confirms release 1 is active and the audit rows show no older till version for 7 days, deploy the store and publish the till version
 
 ## 4. Say what changed (grade10, grade10-spec)
