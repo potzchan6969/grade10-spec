@@ -1,27 +1,27 @@
 #!/usr/bin/env node
 /*
- * CHECK: every in-flight change against the OpenSpec CLI, one at a time.
+ * CHECK: every in-flight change against the OpenSpec CLI.
  *
  *   node scripts/openspec/validate-changes.mjs [--strict]
  *
- * `openspec validate --changes` refuses a change with no delta, which is the
- * right answer for a change somebody stopped writing and the wrong one for a
- * change that has said what it is waiting for. A change whose `.openspec.yaml`
- * declares `awaiting: specs:` is waiting on an input its author named, so it
- * is skipped here and validated the moment it writes a delta — everything it
- * can be held to, it already is.
- *
- * Per change rather than in bulk because the CLI reports the set as one
- * verdict, and a set holding one waiting change cannot be told from a set
- * holding one broken one.
+ * The CLI refuses a change with no delta, which is the right answer for a
+ * change somebody stopped writing and the wrong one for a change that has
+ * said what it is waiting for. That one error is dropped for a change whose
+ * `.openspec.yaml` declares `awaiting: specs:` and has written no delta yet.
+ * Every other error it reports still counts, on that change and on the rest.
  */
 import { spawnSync } from "node:child_process";
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import YAML from "yaml";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
+
+/** The one error a declared wait excuses. The CLI gives an issue no code and
+ * no rule name, so its opening sentence is the only handle; a test holds the
+ * pinned CLI to it. */
+const NO_DELTA = "Change must have at least one delta.";
 
 /**
  * What the change says it is waiting on before it can write a requirement, or
@@ -45,61 +45,68 @@ export function waitingOnSpecs(dir) {
   return existsSync(join(dir, "specs")) ? undefined : why.trim();
 }
 
-/**
- * How to run the CLI: the installed binary where there is one — CI installs it
- * globally — and otherwise the pinned `openspec` script from `package.json`,
- * so a developer runs the version CI does without installing anything. The
- * version lives in one place; `openspec-version.test.mjs` holds it to the
- * workflow.
- */
-function cli(root) {
-  if (spawnSync("openspec", ["--version"], { encoding: "utf8" }).status === 0) {
-    return ["openspec"];
-  }
+/** The pinned CLI, and only the pinned one: a binary that happens to be on
+ * PATH is whatever version its owner installed, which is the divergence
+ * `openspec-version.test.mjs` exists to prevent. */
+export function cli(root) {
   const pinned = JSON.parse(readFileSync(join(root, "package.json"), "utf8"))
     .scripts?.openspec;
   const parts = (pinned ?? "").split(" ").filter(Boolean);
-  if (parts.length === 0) {
-    throw new Error("no `openspec` binary, and package.json pins no CLI");
-  }
+  if (parts.length === 0)
+    throw new Error("package.json pins no `openspec` CLI");
   return parts;
 }
 
-function main(root, strict) {
-  const changesDir = join(root, "openspec", "changes");
-  const [command, ...lead] = cli(root);
-  const ids = readdirSync(changesDir, { withFileTypes: true })
-    .filter((one) => one.isDirectory() && one.name !== "archive")
-    .map((one) => one.name)
-    .sort();
+/** The CLI's JSON, out of a stream that also carries the package manager's
+ * own lines. One object is printed, so it runs from the first brace to the
+ * last; anything else is a run that cannot be read and must not pass. */
+function report(stdout) {
+  const open = stdout.indexOf("{");
+  const close = stdout.lastIndexOf("}");
+  if (open === -1 || close < open) throw new Error("the CLI printed no JSON");
+  return JSON.parse(stdout.slice(open, close + 1));
+}
 
-  const failed = [];
+export function main(root, strict) {
+  const changes = join(root, "openspec", "changes");
+  const [command, ...lead] = cli(root);
+  const run = spawnSync(
+    command,
+    [
+      ...lead,
+      "validate",
+      "--changes",
+      "--json",
+      ...(strict ? ["--strict"] : []),
+    ],
+    { cwd: root, encoding: "utf8" },
+  );
+  if (run.error) throw new Error(`could not run the CLI: ${run.error.message}`);
+
   const waiting = [];
-  for (const id of ids) {
-    const why = waitingOnSpecs(join(changesDir, id));
-    if (why !== undefined) {
-      waiting.push(`${id} — ${why}`);
-      continue;
-    }
-    const run = spawnSync(
-      command,
-      [...lead, "validate", id, ...(strict ? ["--strict"] : [])],
-      { cwd: root, encoding: "utf8" },
+  const failed = [];
+  for (const item of report(run.stdout ?? "").items ?? []) {
+    const why = waitingOnSpecs(join(changes, item.id));
+    const left = (item.issues ?? []).filter(
+      (issue) =>
+        issue.level !== "INFO" &&
+        !(why !== undefined && issue.message.startsWith(NO_DELTA)),
     );
-    if (run.status !== 0) {
-      failed.push(`${id}\n${(run.stdout ?? "") + (run.stderr ?? "")}`);
+    if (why !== undefined) waiting.push(`${item.id} — ${why}`);
+    if (left.length > 0) {
+      failed.push(
+        `${item.id}\n${left.map((one) => `  ${one.level} ${one.path}: ${one.message}`).join("\n")}`,
+      );
     }
   }
 
   for (const one of waiting) console.log(`waiting on an input: ${one}`);
-  console.log(
-    `${ids.length - waiting.length} of ${ids.length} changes validated, ${waiting.length} waiting`,
-  );
   if (failed.length > 0) {
-    console.error(`\n${failed.join("\n")}`);
-    console.error(`${failed.length} change(s) failed validation`);
-    process.exit(1);
+    console.error(`\n${failed.join("\n")}\n${failed.length} change(s) failed`);
+    process.exitCode = 1;
+    return;
   }
+  console.log(`every change validated, ${waiting.length} waiting on an input`);
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {

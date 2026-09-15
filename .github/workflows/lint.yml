@@ -136,7 +136,8 @@ jobs:
           cache: pnpm
 
       # The validator reads each change's manifest to tell a change waiting on
-      # an input from one nobody finished, so it needs the yaml reader.
+      # an input from one nobody finished, with the same yaml reader the store
+      # itself uses — two readings of one key must not disagree.
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
