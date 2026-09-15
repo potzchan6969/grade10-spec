@@ -10,6 +10,7 @@
 
 - [x] 2.1 Deploy the store to staging and publish the till version for a person to release
 - [ ] 2.2 Walk the staging tablet: a spend, a strip and a paid sale settle as before; a fixed order discount keyed as "Deduction from Points" keeps its whole title on the cart the extension reads and on the paid order
+  - Open: the cart as the extension reads it. The spend, the strip and a paid cash sale settled under "Points", and the whole title held on the cart row and the paid order; a tablet gives no read-only way into the extension's worker
 - [ ] 2.3 Release 1 in production: the store deployed and the till version activated at every location
 
 ## 3. Writers switch (grade10)
