@@ -23,7 +23,7 @@ the promptness cases in each wait on 2.1.
 - [x] 3.2 Change the arrival gate to exit through `signedIn` rather than `closeSignIn`, so a held resume is carried on instead of dropped, and prove the refused add and the refused navigation both complete without a second activation (shared-auth-sign-in-SC-52, shared-auth-sign-in-SC-53)
 - [x] 3.3 Prove a dialog with nothing behind it only closes, that the refused action runs at most once however often the surface is returned to, and that an action which can no longer be done reports its ordinary refusal rather than being passed over (shared-auth-sign-in-SC-54, shared-auth-sign-in-SC-56, shared-auth-sign-in-SC-57)
 - [x] 3.4 Prove a follow that creates no session leaves the asking surface exactly as it was, dialog and all, announcing nothing (shared-auth-sign-in-SC-55)
-- [ ] 3.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test`
+- [x] 3.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test`
 
 ## 4. Per-person surfaces follow the person (grade10)
 
