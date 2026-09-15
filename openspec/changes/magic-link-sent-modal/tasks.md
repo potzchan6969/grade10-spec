@@ -24,7 +24,7 @@
   `auth-sign-in` suites under
   `pnpm --filter @grade10/ui run test:stories`
 
-## 2. Link lifetime and the send window (grade10)
+## 2. Link lifetime and the send window (grade10) (owner: @sean)
 
 - [ ] 2.1 Move `SIGN_IN_SEND_WINDOW_SECONDS` into `@grade10/auth-contracts`
   beside a new `SIGN_IN_LINK_TTL_SECONDS`, both sixty, so the dialog's
