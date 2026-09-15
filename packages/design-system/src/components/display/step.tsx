@@ -61,6 +61,7 @@ function Step({
         <p
           className={cn(
             "text-sm leading-5 font-medium whitespace-nowrap",
+            /* Completed and progress share full-strength labels; only upcoming is dimmed. */
             isUpcoming ? "text-secondary-foreground" : "text-foreground",
           )}
         >
