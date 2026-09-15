@@ -193,6 +193,69 @@ An operator SHALL restore self-service pay only by reissuing the invoice to
 - **AND** the overdue alert carries Contact Us
 - **AND** a card payment attempt for that invoice is refused
 
+### Requirement: Winner Order shows five progress steps
+
+Winner Order SHALL present settlement progress as five steps in this order:
+**Address**, **Invoice**, **Payment**, **Shipped**, **Completed**. The steps
+SHALL be presentation only and SHALL NOT replace the eight-value derived order
+status vocabulary in `grade10-site/auction/order-status`.
+
+| Current step | Derived order status |
+| --- | --- |
+| Address | Awaiting Address |
+| Invoice | Preparing Invoice |
+| Payment | Pending Payment (invoice `pending` or `expired`) |
+| Shipped | Processing or Shipped |
+| Completed | Delivered |
+
+When the derived order status is **Cancelled** or **Refunded**, Winner Order
+SHALL show no progress stepper.
+
+#### Scenario: winner-order-SC-40 - Pending Payment highlights the Payment step
+
+- **GIVEN** an auction order whose derived status is Pending Payment
+- **WHEN** the winner opens Winner Order
+- **THEN** the progress stepper marks Payment as the current step
+- **AND** Address and Invoice are complete
+
+#### Scenario: winner-order-SC-41 - Processing maps under Shipped
+
+- **GIVEN** an auction order whose derived status is Processing
+- **WHEN** the winner opens Winner Order
+- **THEN** the progress stepper marks Shipped as the current step
+- **AND** does not invent a Processing step label
+
+#### Scenario: winner-order-SC-42 - Cancelled hides the stepper
+
+- **GIVEN** an auction order whose derived status is Cancelled
+- **WHEN** the winner opens Winner Order
+- **THEN** no progress stepper is shown
+
+### Requirement: The winner can view the sent invoice as a PDF
+
+Once an operator has sent an invoice on an auction order, Winner Order SHALL
+offer the winner a control to view and download that invoice as a PDF. The
+control SHALL be hidden while the invoice status is `not_issued` and SHALL be
+hidden when the invoice status is `cancelled`.
+
+#### Scenario: winner-order-SC-43 - A sent invoice offers its PDF
+
+- **GIVEN** an auction order whose invoice status is `pending`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers view and download of the invoice PDF
+
+#### Scenario: winner-order-SC-44 - No invoice PDF before send
+
+- **GIVEN** an auction order whose invoice status is `not_issued`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers no invoice PDF control
+
+#### Scenario: winner-order-SC-45 - A cancelled order hides the invoice PDF
+
+- **GIVEN** an auction order whose invoice status is `cancelled`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers no invoice PDF control
+
 ## MODIFIED Requirements
 
 ### Requirement: Invoice fields
@@ -426,66 +489,4 @@ SHALL NOT appear on the winner's receipt.
 - **WHEN** the winner opens the receipt
 - **THEN** the payment method reads as a Visa card ending 4242
 
-### Requirement: Winner Order shows five progress steps
-
-Winner Order SHALL present settlement progress as five steps in this order:
-**Address**, **Invoice**, **Payment**, **Shipped**, **Completed**. The steps
-SHALL be presentation only and SHALL NOT replace the eight-value derived order
-status vocabulary in `grade10-site/auction/order-status`.
-
-| Current step | Derived order status |
-| --- | --- |
-| Address | Awaiting Address |
-| Invoice | Preparing Invoice |
-| Payment | Pending Payment (invoice `pending` or `expired`) |
-| Shipped | Processing or Shipped |
-| Completed | Delivered |
-
-When the derived order status is **Cancelled** or **Refunded**, Winner Order
-SHALL show no progress stepper.
-
-#### Scenario: winner-order-SC-40 - Pending Payment highlights the Payment step
-
-- **GIVEN** an auction order whose derived status is Pending Payment
-- **WHEN** the winner opens Winner Order
-- **THEN** the progress stepper marks Payment as the current step
-- **AND** Address and Invoice are complete
-
-#### Scenario: winner-order-SC-41 - Processing maps under Shipped
-
-- **GIVEN** an auction order whose derived status is Processing
-- **WHEN** the winner opens Winner Order
-- **THEN** the progress stepper marks Shipped as the current step
-- **AND** does not invent a Processing step label
-
-#### Scenario: winner-order-SC-42 - Cancelled hides the stepper
-
-- **GIVEN** an auction order whose derived status is Cancelled
-- **WHEN** the winner opens Winner Order
-- **THEN** no progress stepper is shown
-
-### Requirement: The winner can view the sent invoice as a PDF
-
-Once an operator has sent an invoice on an auction order, Winner Order SHALL
-offer the winner a control to view and download that invoice as a PDF. The
-control SHALL be hidden while the invoice status is `not_issued` and SHALL be
-hidden when the invoice status is `cancelled`.
-
-#### Scenario: winner-order-SC-43 - A sent invoice offers its PDF
-
-- **GIVEN** an auction order whose invoice status is `pending`
-- **WHEN** the winner opens Winner Order
-- **THEN** Grade10 offers view and download of the invoice PDF
-
-#### Scenario: winner-order-SC-44 - No invoice PDF before send
-
-- **GIVEN** an auction order whose invoice status is `not_issued`
-- **WHEN** the winner opens Winner Order
-- **THEN** Grade10 offers no invoice PDF control
-
-#### Scenario: winner-order-SC-45 - A cancelled order hides the invoice PDF
-
-- **GIVEN** an auction order whose invoice status is `cancelled`
-- **WHEN** the winner opens Winner Order
-- **THEN** Grade10 offers no invoice PDF control
 
