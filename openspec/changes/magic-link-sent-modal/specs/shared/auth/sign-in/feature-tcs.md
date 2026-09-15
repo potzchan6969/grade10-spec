@@ -3,15 +3,14 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-15, tcs-rules r3.0
 
-## shared-auth-sign-in-US7: Collector confirms the send and can resend or go back
+## shared-auth-sign-in-US7: Collector confirms the send and can resend
 
 **As a** collector,
-**I want** the dialog to name the address the sign-in email went to, and to
-let me resend or return to Google and email entry,
-**so that** I know where to look and can fix a mistyped address without
-dismissing the dialog.
+**I want** the dialog titled Check Your Email, my address on its own line, and
+Resend after a short wait,
+**so that** I know where to look and can ask again without a Back control.
 
-### shared-auth-sign-in-US7-TC1-1: Successful send shows confirmation naming the address
+### shared-auth-sign-in-US7-TC1-1: Successful send shows Check Your Email and the address on its own line
 
 **Classification:**
 
@@ -44,50 +43,14 @@ dismissing the dialog.
 
 **Expected Results:**
 
-* The surface shows confirmation copy that names <collector email>.
+* The dialog title is **Check Your Email**.
+* A confirmation lead line is shown.
+* <collector email> appears on the line below that lead.
 * The surface does not state whether an account already exists.
 
 ---
 
-### shared-auth-sign-in-US7-TC2-1: Resend asks again for the same address
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-in-US-07
-
-**Pre-conditions:**
-
-* customer is on the link-sent confirmation after a successful send to
-  <collector email>.
-* more than sixty seconds have passed since that send.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<collector email>` | collector@example.com |
-
-**Steps:**
-
-1. Activate **Resend**.
-
-**Expected Results:**
-
-* The system treats it as another ask for a sign-in link at <collector email>.
-* The one-email-a-minute cap still applies on a further ask inside a minute.
-
----
-
-### shared-auth-sign-in-US7-TC3-1: Back returns to Google and email entry
+### shared-auth-sign-in-US7-TC2-1: Link-sent surface has no Back control
 
 **Classification:**
 
@@ -104,21 +67,20 @@ dismissing the dialog.
 
 **Pre-conditions:**
 
-* brand has Google sign-in.
 * customer is on the link-sent confirmation after a successful send.
 
 **Steps:**
 
-1. Activate **Back**.
+1. Inspect the controls on the dialog body.
 
 **Expected Results:**
 
-* The Google control and the email step are shown again.
-* The confirmation step is no longer shown.
+* No Back control is present.
+* Leaving the dialog is by dismissing it.
 
 ---
 
-### shared-auth-sign-in-US7-TC4-1: Email-step CTA is Sign In with Email
+### shared-auth-sign-in-US7-TC3-1: Email-step CTA is Sign In with Email
 
 **Classification:**
 
@@ -149,7 +111,7 @@ dismissing the dialog.
 
 ---
 
-### shared-auth-sign-in-US7-TC5-1: Resend is disabled with a countdown after a send
+### shared-auth-sign-in-US7-TC4-1: Resend is disabled with a countdown after a send
 
 **Classification:**
 
@@ -181,7 +143,7 @@ dismissing the dialog.
 
 ---
 
-### shared-auth-sign-in-US7-TC6-1: Resend re-enables when the countdown reaches zero
+### shared-auth-sign-in-US7-TC5-1: Resend re-enables when the countdown reaches zero
 
 **Classification:**
 
@@ -213,7 +175,7 @@ dismissing the dialog.
 
 ---
 
-### shared-auth-sign-in-US7-TC7-1: A successful resend restarts the countdown
+### shared-auth-sign-in-US7-TC6-1: A successful resend restarts the countdown
 
 **Classification:**
 
@@ -246,7 +208,7 @@ dismissing the dialog.
 
 ---
 
-### shared-auth-sign-in-US7-TC8-1: A link older than sixty seconds does not sign in
+### shared-auth-sign-in-US7-TC7-1: A link older than sixty seconds does not sign in
 
 **Classification:**
 

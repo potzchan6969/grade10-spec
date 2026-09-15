@@ -2,7 +2,7 @@
 
 - Emailed link
   - Only email method: the email step sends a link and nothing else
-  - Sent confirmation: after a send that went out, name the address and offer Resend and a return to entry
+  - Sent confirmation: after a send that went out, title the dialog Check Your Email, name the address on its own line, and offer Resend
   - Resend wait: Resend stays off for sixty seconds after each successful send, counting down on the button
   - Link lifetime: a sign-in link lasts sixty seconds
   - One-time session: an unused unexpired link signs in once
@@ -11,19 +11,22 @@
 
 ## ADDED Requirements
 
-### Requirement: After a successful send the surface confirms and offers Resend and return
+### Requirement: After a successful send the surface confirms and offers Resend
 
 WHEN a sign-in-link email has been sent for the address the person submitted,
-the sign-in surface SHALL show confirmation copy that names that address,
-SHALL offer a Resend control, and SHALL offer a control that returns them to
-the entry step — the Google control when the brand has Google sign-in, and the
-email step. The confirmation SHALL NOT state whether the address was new.
+the sign-in surface SHALL title the dialog **Check Your Email**, SHALL show
+confirmation copy whose lead line does not include the address and whose next
+line is that address, and SHALL offer a Resend control. The confirmation
+SHALL NOT state whether the address was new. The surface SHALL NOT offer a
+control that returns to the entry step — leaving is dialog dismissal.
 
-#### Scenario: shared-auth-sign-in-SC-42 - A successful send shows confirmation with the address
+#### Scenario: shared-auth-sign-in-SC-42 - A successful send shows Check Your Email and the address on its own line
 
 - **GIVEN** a person who asked for a sign-in link at an email address
 - **WHEN** the send goes out
-- **THEN** the surface shows confirmation copy that names that address
+- **THEN** the dialog title is **Check Your Email**
+- **AND** the surface shows a confirmation lead line
+- **AND** the address appears on the line below that lead
 - **AND** it does not state whether an account already exists
 
 #### Scenario: shared-auth-sign-in-SC-43 - Resend is offered after a successful send
@@ -35,13 +38,12 @@ email step. The confirmation SHALL NOT state whether the address was new.
   address
 - **AND** the one-email-a-minute cap still applies
 
-#### Scenario: shared-auth-sign-in-SC-44 - Back returns to the entry step
+#### Scenario: shared-auth-sign-in-SC-44 - The link-sent surface has no Back control
 
 - **GIVEN** a sign-in surface showing confirmation after a successful send
-- **AND** a brand that has Google sign-in
-- **WHEN** the person activates the control that returns to entry
-- **THEN** the Google control and the email step are shown again
-- **AND** the confirmation step is no longer shown
+- **WHEN** the dialog renders
+- **THEN** no control returns to the Google or email entry step
+- **AND** dismissal of the dialog is the way out
 
 ### Requirement: Resend waits sixty seconds with a countdown on the button
 

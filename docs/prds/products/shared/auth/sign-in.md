@@ -26,9 +26,10 @@ followed.
 
 ## After the Send
 
-- 🚧 **Confirmation** — once the sign-in email goes out, the surface names
-  the address it went to, offers Resend, and offers a way back to Google
-  Continue (when the brand has it) plus email entry.
+- 🚧 **Confirmation** — once the sign-in email goes out, the dialog is titled
+  **Check Your Email**, the lead line sits above the address on its own line,
+  and Resend is offered. There is no Back control — leave by dismissing the
+  dialog.
 - 🚧 **Resend wait** — Resend stays off for sixty seconds after each
   successful send, and the button counts down as **Resend (45)** (seconds
   left in parentheses). It turns on again at zero.

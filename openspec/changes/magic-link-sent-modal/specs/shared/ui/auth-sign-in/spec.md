@@ -3,20 +3,23 @@
 - Sign-in surface contract
   - Sign-in exports: Name exactly what the shared UI package publishes for the sign-in surface, including the link-sent step
 - Link-sent step
-  - Confirmation body: Show the consumer's confirmation, Resend, and Back
+  - Confirmation body: Show the consumer's lead line, the email on the next line, and a hugging secondary Resend
   - Resend cooldown: Disable Resend while `resendCooldownRemaining` is above zero and show the countdown label
+  - No Back: Draw no control that returns to the entry step
 
 ## ADDED Requirements
 
-### Requirement: The link-sent step exports confirmation, Resend, and Back
+### Requirement: The link-sent step exports confirmation and Resend
 
 The shared UI package SHALL export `SignInLinkSent`, `SignInLinkSentCopy`, and
 `SignInLinkSentProps` from its public entry.
 
-`SignInLinkSent` SHALL render the consumer-supplied confirmation copy, a
-Resend control that calls `onResend`, and a Back control that calls `onBack`.
-It SHALL NOT send mail, hold product state, or own the address beyond what the
-consumer puts in the copy. It SHALL carry no English of its own.
+`SignInLinkSent` SHALL render the consumer-supplied lead confirmation line, the
+`email` prop on the following line, and a Resend control that calls `onResend`.
+Resend SHALL use the secondary button treatment and SHALL hug its label width.
+`SignInLinkSent` SHALL NOT render a Back control, SHALL NOT accept `onBack`,
+SHALL NOT send mail, and SHALL NOT hold product state. It SHALL carry no
+English of its own.
 
 WHEN `resendCooldownRemaining` is a number greater than zero, Resend SHALL be
 disabled, SHALL NOT call `onResend`, and SHALL show `copy.resendCountdown`.
@@ -26,28 +29,30 @@ WHEN `resendCooldownRemaining` is absent or zero, Resend SHALL be enabled (unles
 #### Scenario: shared-ui-auth-sign-in-SC-10 - An application imports the link-sent step
 
 - **WHEN** an application imports `SignInLinkSent`, `SignInLinkSentCopy`, or
-  `SignInLinkSentProps` from the shared UI package's public entry
+  `SignInLinkSentProps` from the public entry
 - **THEN** the import resolves without error
 
 #### Scenario: shared-ui-auth-sign-in-SC-11 - Resend reports activation
 
-- **GIVEN** `SignInLinkSent` rendered with confirmation copy and callbacks
+- **GIVEN** `SignInLinkSent` rendered with confirmation copy, an email, and
+  callbacks
 - **AND** `resendCooldownRemaining` is absent or zero
 - **WHEN** the person activates Resend
 - **THEN** `onResend` is called
 
-#### Scenario: shared-ui-auth-sign-in-SC-12 - Back reports activation
+#### Scenario: shared-ui-auth-sign-in-SC-12 - The link-sent step has no Back control
 
-- **GIVEN** `SignInLinkSent` rendered with confirmation copy and callbacks
-- **WHEN** the person activates Back
-- **THEN** `onBack` is called
-
-#### Scenario: shared-ui-auth-sign-in-SC-13 - Confirmation copy is the consumer's
-
-- **GIVEN** `SignInLinkSent` whose copy carries confirmation text naming an
-  address
+- **GIVEN** `SignInLinkSent` rendered with confirmation copy and an email
 - **WHEN** the step renders
-- **THEN** that confirmation text is shown
+- **THEN** no Back control is shown
+- **AND** the props type does not require `onBack`
+
+#### Scenario: shared-ui-auth-sign-in-SC-13 - Confirmation puts the email on its own line
+
+- **GIVEN** `SignInLinkSent` with a lead message and `email` set
+- **WHEN** the step renders
+- **THEN** the lead message is shown
+- **AND** the email appears on the line below it
 - **AND** the step supplies no wording of its own
 
 #### Scenario: shared-ui-auth-sign-in-SC-14 - Resend is disabled during the cooldown
