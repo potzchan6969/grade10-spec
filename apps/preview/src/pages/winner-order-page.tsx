@@ -237,7 +237,7 @@ function summaryLinesFor(
   }
   return [
     { label: "Winning Bid", value: content.winningBid },
-    { label: "Buyer's Premium", value: "TBD", muted: true },
+    { label: "Buyer’s Premium", value: "TBD", muted: true },
     { label: "Shipping & Handling", value: "TBD", muted: true },
     { label: "Insurance", value: "TBD", muted: true },
     { label: "Order Total", value: "TBD", muted: true },

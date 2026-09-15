@@ -58,7 +58,7 @@ const ADDRESS = "12/F, Tower 1\nHarbour Road\nWan Chai, Hong Kong" as const;
 
 const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
   { label: "Winning Bid", value: "HK$12,800" },
-  { label: "Buyer's Premium", value: "HK$2,560" },
+  { label: "Buyer’s Premium", value: "HK$2,560" },
   { label: "Shipping & Handling", value: "HK$180" },
   { label: "Insurance", value: "HK$120" },
   { label: "Order Total", value: "HK$15,660" },
