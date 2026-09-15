@@ -7,7 +7,7 @@
   - Address confirmed replaces deadline elapsed: the derivation reads whether the winner has confirmed an address; the deadline is carried by the invoice status
 - Derived order status
   - Awaiting Address and Preparing Invoice: the two states before an invoice, shared by winner and operator alike
-  - No Expired order status: an order whose invoice has expired still reads Pending Payment, and stays payable
+  - No Expired order status: an order whose invoice has expired still reads Pending Payment; winner card pay stops; operator reissue, manual settlement, or cancel remain
 - Guards
   - No dispatch and no send out of order: an order with no invoice cannot ship, and no invoice is sent without a confirmed address
 
@@ -63,7 +63,7 @@ invoice per lot, so one invoice status per auction order.
 | --- | --- |
 | `not_issued` | No invoice has been sent. The value at auction order creation |
 | `pending` | An operator has sent the invoice and it is unpaid. A reissued invoice is `pending` |
-| `expired` | The payment deadline passed with the invoice unpaid. Written by Grade10 at the deadline. Still payable |
+| `expired` | The payment deadline passed with the invoice unpaid. Written by Grade10 at the deadline. Winner card pay ends; an operator may reissue, settle manually, or cancel |
 | `paid` | Payment is received in full, whether by the winner's card or recorded by an operator |
 | `cancelled` | An operator cancels an order that is unpaid. Terminal |
 | `refunded` | A paid invoice is subsequently refunded. Terminal |
@@ -76,9 +76,10 @@ invoice per lot, so one invoice status per auction order.
 | `fulfilled` | The warehouse has dispatched the lot and a tracking number is attached |
 
 Grade10 SHALL write `expired` at the moment the payment deadline passes with
-the invoice still `pending`. An expired invoice SHALL remain payable, by the
-winner's card or an operator's manual settlement. Reissuing an expired invoice
-SHALL return it to `pending` with a new deadline.
+the invoice still `pending`. An expired invoice SHALL NOT accept winner card
+payment. An operator SHALL reissue it to `pending` with a new deadline, settle
+it manually to `paid`, or cancel it. Reissuing an expired invoice SHALL return
+it to `pending` with a new deadline.
 
 #### Scenario: auction-status-SC-01 - A new auction order starts pending and unfulfilled
 
@@ -235,7 +236,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 | Invoice status | `pending` | `paid` | The winner's card payment is confirmed, or an operator commits a manual settlement |
 | Invoice status | `pending` | `cancelled` | An operator cancels an unpaid invoice; the lot reopens |
 | Invoice status | `pending` | `expired` | Grade10, at the payment deadline, with the invoice unpaid |
-| Invoice status | `expired` | `paid` | The winner's card payment is confirmed, or an operator commits a manual settlement |
+| Invoice status | `expired` | `paid` | An operator commits a manual settlement |
 | Invoice status | `expired` | `pending` | An operator reissues the invoice with a new deadline |
 | Invoice status | `expired` | `cancelled` | An operator cancels the order; the lot reopens |
 | Invoice status | `paid` | `refunded` | A refund is completed. Refund mechanics are not specified at MVP |
@@ -264,9 +265,10 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 - **THEN** Grade10 refuses it
 - **AND** the invoice status is still `not_issued`
 
-#### Scenario: auction-status-SC-25 - An expired invoice can still be paid
+#### Scenario: auction-status-SC-25 - An expired invoice refuses winner card payment
 
 - **GIVEN** an auction order whose invoice status is `expired`
-- **WHEN** the winner's card payment for it is confirmed
-- **THEN** the invoice status is `paid`
-- **AND** the order derives as Processing
+- **WHEN** the winner's card payment for it is attempted
+- **THEN** Grade10 refuses the payment
+- **AND** the invoice status remains `expired`
+- **AND** the order still derives as Pending Payment
