@@ -22,7 +22,7 @@ product.
 - **Filter** — the sidebar narrows by the world a card comes from and the kind
   of collectible it is, each choice with the catalogue's count beside it;
   worlds show five and an invitation to the rest, types show whole
-- 🚧 **Zero behind a choice** — a facet choice or group the catalogue counts
+- **Zero behind a choice** — a facet choice or group the catalogue counts
   nothing behind, over the whole unnarrowed catalogue, never shows in the
   filter panel; narrowing by something else does not resurrect it. A choice
   or group the catalogue does carry something for elsewhere stays shown at
