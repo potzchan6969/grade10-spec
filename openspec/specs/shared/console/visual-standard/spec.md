@@ -44,6 +44,7 @@ so a gap never becomes a second supplier.
 - **AND THEN** no admin surface renders a component from a second vocabulary
 
 #### Scenario: shared-console-visual-standard-SC-02 - A vocabulary gap is filled once
+**Serves:** One vocabulary, admin-wide - a vocabulary gap is filled once
 
 - **WHEN** an admin surface needs a control the vocabulary does not offer
 - **THEN** the console package provides it, composed from that vocabulary
@@ -105,12 +106,14 @@ offering the way on and back.
 - **AND THEN** the loading, refused, and empty states remain three distinguishable answers
 
 #### Scenario: shared-console-visual-standard-SC-07 - Announced selection survives the swap
+**Serves:** Nothing already won is lost - announced selection survives the swap
 
 - **WHEN** an operator reaches a panel switch or a row filter with assistive technology
 - **THEN** the panel switch is announced as tabs and the filter as one choice
 - **AND THEN** the active panel and the selected option are announced as selected
 
 #### Scenario: shared-console-visual-standard-SC-08 - A confirmation stays a rendered dialog
+**Serves:** Nothing already won is lost - a confirmation stays a rendered dialog
 
 - **WHEN** an operator confirms an irreversible move after the vocabulary changed
 - **THEN** the confirmation is a dialog the surface renders
@@ -138,6 +141,7 @@ derived later under pressure. A surface SHALL NOT depend on the runtime in a
 way that makes the described route impossible.
 
 #### Scenario: shared-console-visual-standard-SC-10 - The way back is known before it is needed
+**Serves:** The runtime is held to terms - the way back is known before it is needed
 
 - **WHEN** the admin runtime becomes unusable — abandoned, relicensed, or broken beyond an upgrade
 - **THEN** the route back to the previous vocabulary is already described

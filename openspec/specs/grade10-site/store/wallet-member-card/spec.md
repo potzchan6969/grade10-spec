@@ -75,6 +75,7 @@ which passes they are carrying.
 - **AND** the partial unique index `uq_wallet_passes_live_member` is the backstop that refuses a second live row on any path that forgets
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-03 - Ending one wallet's pass leaves the other's untouched
+**Serves:** Independent wallets - ending one wallet's pass leaves the other's untouched
 
 - **GIVEN** a member holding a live pass on both wallets
 - **WHEN** they end the Google Wallet pass alone
@@ -229,11 +230,13 @@ acknowledgement to wait for.
 - **THEN** the answer names no member, tier or balance
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-30 - An erased member's pass identifies nobody
+**Serves:** Erasure - an erased member's pass identifies nobody
 
 - **WHEN** a member is erased and a code from their pass is presented
 - **THEN** it identifies nobody
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-31 - An erasure the wallet has not confirmed is still owed
+**Serves:** Erasure - an erasure the wallet has not confirmed is still owed
 
 - **GIVEN** a wallet that keeps its own copy of the pass
 - **WHEN** it cannot be reached while a member is being erased
@@ -241,6 +244,7 @@ acknowledgement to wait for.
 - **AND** it is reported as still owed until then
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-32 - An erasure with no wallet to confirm it is still discharged
+**Serves:** Erasure - an erasure with no wallet to confirm it is still discharged
 
 - **GIVEN** a wallet that keeps no copy, holding only what a member's own
   device was sent

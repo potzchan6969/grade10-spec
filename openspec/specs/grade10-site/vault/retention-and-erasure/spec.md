@@ -182,6 +182,7 @@ does not survive their erasure.
 - **THEN** the database refuses it
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-11 - The history keeps its entries and loses the person
+**Serves:** What cannot be rewritten - the history keeps its entries and loses the person
 
 - **WHEN** a person is erased
 - **THEN** every history entry still exists and none of them names them

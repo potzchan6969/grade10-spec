@@ -63,6 +63,7 @@ inventory sell/sold vocabulary SHALL stay unchanged — they name different
 domains.
 
 #### Scenario: grade10-admin-auction-campaign-SC-03 - Admin catalogue-cover code uses campaign identifiers
+**Serves:** Rename Sales to Campaigns - admin catalogue-cover code uses campaign identifiers
 
 - **GIVEN** the Grade10 auction admin contracts and catalogue-cover backend
 - **WHEN** an engineer imports or reads catalogue-cover identifiers

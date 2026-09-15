@@ -53,6 +53,7 @@ components for the store cart surface: `CartDrawer`, `CartDrawerHeader`,
 when unavailable lines are cleared after open loading.
 
 #### Scenario: shared-ui-store-cart-SC-01 - An application imports the cart drawer
+**Serves:** Drawer export contract - an application imports the cart drawer
 
 - **WHEN** an application imports any export named above from the shared UI package's public entry
 - **THEN** the import resolves without error

@@ -69,6 +69,7 @@ still receive it when alerts are on.
 - **THEN** Grade10 sends them the new-bid message
 
 #### Scenario: grade10-site-auction-notifications-SC-02 - A watcher who also bids receives one copy
+**Serves:** Enrolment - a watcher who also bids receives one copy
 
 - **GIVEN** a collector who both watches a lot and has bid on it
 - **AND** email alerts are on for that lot
@@ -76,6 +77,7 @@ still receive it when alerts are on.
 - **THEN** they receive exactly one copy of it
 
 #### Scenario: grade10-site-auction-notifications-SC-03 - Unwatching does not end bidder enrolment
+**Serves:** Enrolment - unwatching does not end bidder enrolment
 
 - **GIVEN** a collector who watched a lot and has bid on it
 - **AND** email alerts remain on for that lot after they unwatch
@@ -246,6 +248,7 @@ a listing that has stopped taking bids.
 - **THEN** Grade10 does not send them the outbid message
 
 #### Scenario: grade10-site-auction-notifications-SC-31 - A challenge that leaves them leading is not an outbid
+**Serves:** Bid-activity messages - a challenge that leaves them leading is not an outbid
 
 - **GIVEN** a collector leading a lot whose committed maximum still exceeds a challenger's
 - **WHEN** Grade10 accepts that competing maximum and they still lead
@@ -393,6 +396,7 @@ for that listing.
 - **AND** activating it opens My Auctions when the collector is signed in
 
 #### Scenario: grade10-site-auction-notifications-SC-34 - Manage alerts from a letter when signed out
+**Serves:** Delivery - manage alerts from a letter when signed out
 
 - **GIVEN** a collector who receives a letter with email alerts on for that listing
 - **AND** they are signed out of Grade10

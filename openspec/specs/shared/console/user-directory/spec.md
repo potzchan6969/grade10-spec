@@ -58,6 +58,7 @@ components for the user directory surface: `UserTable`, `UserRolesDialog`,
 `UserDirectoryOrder`.
 
 #### Scenario: shared-console-user-directory-SC-01 - A console imports the directory
+**Serves:** The directory contract - a console imports the directory
 
 - **WHEN** an admin application imports any export named above from the console package's public entry
 - **THEN** the import resolves without error
@@ -86,6 +87,7 @@ leaving any default-role decision to the consumer.
 - **AND THEN** an operator who selected none submits an empty list
 
 #### Scenario: shared-console-user-directory-SC-04 - An account joined on a given day
+**Serves:** Consumer-owned vocabulary - an account joined on a given day
 
 - **WHEN** the table renders an account
 - **THEN** it shows the joined date exactly as the consumer supplied it

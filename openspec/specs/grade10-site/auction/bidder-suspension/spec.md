@@ -46,6 +46,7 @@ caused it, and SHALL show both on the account record.
 - **AND** records the reason and the causing auction order on the account record
 
 #### Scenario: suspension-SC-02 - One expired lot suspends a winner paid up on another
+**Serves:** Trigger and notice - one expired lot suspends a winner paid up on another
 
 - **GIVEN** a winner with two auction orders, one `paid` and one `pending`
 - **WHEN** the `pending` order's deadline passes
@@ -77,6 +78,7 @@ signing in, and it SHALL NOT change anything `shared/auth/users` governs.
 - **AND** the invoice status becomes `paid`
 
 #### Scenario: suspension-SC-04 - A suspended account still signs in and shops
+**Serves:** Scope of the suspension - a suspended account still signs in and shops
 
 - **GIVEN** a suspended account
 - **WHEN** the collector signs in
@@ -128,6 +130,7 @@ lot. That cost is accepted against the cost of a repeat default.
 - **AND** its invoice is still payable
 
 #### Scenario: suspension-SC-07 - The next bidder inherits at their own price
+**Serves:** Standing bids - the next bidder inherits at their own price
 
 - **GIVEN** an open lot led by a suspended account, with a second bidder
   holding a lower maximum
@@ -137,6 +140,7 @@ lot. That cost is accepted against the cost of a repeat default.
 - **AND** notifies that bidder that they now lead
 
 #### Scenario: suspension-SC-08 - Retraction during extended bidding is atomic
+**Serves:** Standing bids - retraction during extended bidding is atomic
 
 - **GIVEN** an open lot in extended bidding, led by an account being suspended
 - **WHEN** the retraction and re-resolution run
@@ -166,6 +170,7 @@ Grade10 SHALL show the suspension state and its reason on the account record.
 - **AND** the account record still shows the suspension and its reason
 
 #### Scenario: suspension-SC-10 - A reissue does not lift the suspension
+**Serves:** Reinstatement - a reissue does not lift the suspension
 
 - **GIVEN** a suspended account with an expired auction order
 - **WHEN** an operator reissues that invoice with a new payment deadline
@@ -173,6 +178,7 @@ Grade10 SHALL show the suspension state and its reason on the account record.
 - **AND** the collector can pay the reissued invoice and still cannot bid
 
 #### Scenario: suspension-SC-11 - An operator reinstates the account
+**Serves:** Reinstatement - an operator reinstates the account
 
 - **GIVEN** a suspended account an operator has reviewed
 - **WHEN** the operator reinstates it

@@ -93,6 +93,7 @@ Grade10 SHALL accept any whole amount at or above the minimum next amount and
 refuse an amount below it. It SHALL not create intermediate bids.
 
 #### Scenario: grade10-site-auction-bid-increments-SC-07 - A manual floor uses the current public price
+**Serves:** Minimum bid - a manual floor uses the current public price
 
 - **GIVEN** an open HKD listing whose current public price is 800000 minor units
 - **WHEN** Grade10 calculates the next minimum
@@ -105,6 +106,7 @@ listing in a currency other than USD, HKD, or JPY. The refusal SHALL leave the
 listing and its schedule-derived pricing facts unchanged.
 
 #### Scenario: grade10-site-auction-bid-increments-SC-06 - An unsupported currency cannot be scheduled
+**Serves:** Currency schedules - an unsupported currency cannot be scheduled
 
 - **GIVEN** a complete draft listing
 - **WHEN** an operator sets its currency to EUR and schedules it

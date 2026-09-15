@@ -239,6 +239,7 @@ create a session.
 - **AND** no control asks for or sends a sign-in code
 
 #### Scenario: shared-auth-sign-in-SC-34 - A code from an earlier email does not sign in
+**Serves:** Google - a code from an earlier email does not sign in
 
 - **GIVEN** a sign-in code that an earlier sign-in email carried
 - **WHEN** anyone submits that code

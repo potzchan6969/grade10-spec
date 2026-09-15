@@ -221,6 +221,7 @@ new sale rather than repeat the remedy that took the code off.
 - **THEN** the sale carries exactly one code for that coupon
 
 #### Scenario: grade10-site-store-discounts-SC-17 - A coupon cleared off a sale cannot go back on it
+**Serves:** Two channels - a coupon cleared off a sale cannot go back on it
 
 - **GIVEN** a till sale whose coupon was cleared by "Remove every discount"
 - **WHEN** staff apply that coupon to the same sale again
@@ -228,6 +229,7 @@ new sale rather than repeat the remedy that took the code off.
   a new one, and the coupon stands live in the member's wallet
 
 #### Scenario: grade10-site-store-discounts-SC-18 - A code the sale never honoured stops standing
+**Serves:** Two channels - a code the sale never honoured stops standing
 
 - **GIVEN** a paid sale carrying a minted code the landed order does not name
 - **WHEN** the sale settles

@@ -79,18 +79,21 @@ regime has named.
 - **THEN** it holds the custody agreement and the loan agreement, in that order
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-02 - A storage packet holds one
+**Serves:** The documents - a storage packet holds one
 
 - **GIVEN** a storage case with terms accepted
 - **WHEN** its packet is prepared
 - **THEN** it holds the custody agreement alone
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-03 - Production refuses paper under an unnamed party
+**Serves:** The documents - production refuses paper under an unnamed party
 
 - **GIVEN** a brand in production whose custodian has no registered name
 - **WHEN** a packet is prepared
 - **THEN** it is refused by name and nothing is rendered
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-04 - The loan agreement prints a term, not a date
+**Serves:** The documents - the loan agreement prints a term, not a date
 
 - **WHEN** a loan agreement is rendered
 - **THEN** it states the term as days from the advance and carries no due date
@@ -140,6 +143,7 @@ SHALL end nothing else: the case stays where it is and staff prepare again.
 - **THEN** the first is withdrawn and the case holds exactly one live packet
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-08 - A packet lasts as long as the visit it belongs to
+**Serves:** Preparing a packet - a packet lasts as long as the visit it belongs to
 
 - **GIVEN** a packet prepared on Monday for a visit booked on Friday
 - **WHEN** its window is read
@@ -297,6 +301,7 @@ a mismatch SHALL be reported rather than repaired.
 The verified heads of the hash chain SHALL be exported to that archive.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-20 - A sealed document reaches the archive
+**Serves:** The seal and the copies - a sealed document reaches the archive
 
 - **WHEN** a document is sealed
 - **THEN** a copy of its bytes and its digest reaches the archive, checked against the digest

@@ -87,6 +87,7 @@ minimum increment.
 - **THEN** Grade10 refuses and persists no listing
 
 #### Scenario: grade10-admin-auction-listing-SC-56 - Draft rejects an unsupported currency
+**Serves:** Draft save - draft rejects an unsupported currency
 
 - **GIVEN** a draft listing
 - **WHEN** an operator sets its currency to EUR
@@ -154,6 +155,7 @@ schedule governs the listing's bid floor.
 - **THEN** Grade10 refuses and leaves it published
 
 #### Scenario: grade10-admin-auction-listing-SC-57 - Create refuses an unsupported currency on the form and API
+**Serves:** Create and catalogue - create refuses an unsupported currency on the form and API
 
 - **GIVEN** a complete draft with currency EUR
 - **WHEN** an operator creates the listing
@@ -1221,12 +1223,14 @@ This surface and its backend procedures SHALL NOT be reachable outside a
 locally enabled dev environment (`assertDevEndpointsAllowed`).
 
 #### Scenario: grade10-admin-auction-listing-SC-64 - Listings tab is present in the Test panel
+**Serves:** Test fixture standalone seed - listings tab is present in the Test panel
 
 - **GIVEN** the Grade10 auction Test panel with `LOCAL_FIXTURES_ENABLED` true
 - **WHEN** a developer opens the Test panel
 - **THEN** a Listings tab is present beside the Campaign tab
 
 #### Scenario: grade10-admin-auction-listing-SC-65 - Developer seeds fixture listings with no campaign
+**Serves:** Test fixture standalone seed - developer seeds fixture listings with no campaign
 
 - **GIVEN** the Listings tab in the Test panel
 - **WHEN** a developer selects one or more fixture ids and clicks Add listings
@@ -1235,6 +1239,7 @@ locally enabled dev environment (`assertDevEndpointsAllowed`).
 - **AND** the instance counts on the tab update
 
 #### Scenario: grade10-admin-auction-listing-SC-66 - Seeded standalone listings appear in the Listings section with no campaign
+**Serves:** Test fixture standalone seed - seeded standalone listings appear in the Listings section with no campaign
 
 - **GIVEN** a fixture listing seeded from the Test panel Listings tab
 - **WHEN** an authorized operator reads the Listings section
@@ -1242,6 +1247,7 @@ locally enabled dev environment (`assertDevEndpointsAllowed`).
 - **AND** its campaign column shows "-"
 
 #### Scenario: grade10-admin-auction-listing-SC-67 - Developer drops standalone fixture listings
+**Serves:** Test fixture standalone seed - developer drops standalone fixture listings
 
 - **GIVEN** one or more standalone fixture listings seeded from the Listings tab
 - **WHEN** a developer selects one and clicks Drop listing

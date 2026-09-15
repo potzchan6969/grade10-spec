@@ -44,6 +44,7 @@ byte-identical output, so a difference between two documents is always a
 difference between two routers.
 
 #### Scenario: grade10-admin-console-api-docs-SC-01 - Every mounted procedure appears, and nothing else
+**Serves:** Derived, never written - every mounted procedure appears, and nothing else
 
 - **GIVEN** a service whose router mounts a known set of procedures
 - **WHEN** its document is produced
@@ -51,6 +52,7 @@ difference between two routers.
 - **AND** each entry carries its kind and its caller
 
 #### Scenario: grade10-admin-console-api-docs-SC-02 - A changed router fails the check until regenerated
+**Serves:** Derived, never written - a changed router fails the check until regenerated
 
 - **GIVEN** a committed document for a service
 - **WHEN** a procedure's input shape, output shape, kind, or grant changes in the router and the document is not regenerated
@@ -58,6 +60,7 @@ difference between two routers.
 - **AND** regenerating the document makes the check pass
 
 #### Scenario: grade10-admin-console-api-docs-SC-13 - Reading the same routers twice gives one document
+**Serves:** Derived, never written - reading the same routers twice gives one document
 
 - **WHEN** a service's document is produced twice from unchanged routers
 - **THEN** the two documents are identical byte for byte
@@ -80,6 +83,7 @@ have every ladder in its document, named apart.
 | Inventory | The elevated ladder |
 
 #### Scenario: grade10-admin-console-api-docs-SC-03 - The rail names every service with its count
+**Serves:** Derived, never written - the rail names every service with its count
 
 - **WHEN** an engineer opens the surface
 - **THEN** the rail names each service in the table above
@@ -93,6 +97,7 @@ page behind it. In a build that carries it, the surface SHALL need no grant
 beyond what opens the console.
 
 #### Scenario: grade10-admin-console-api-docs-SC-04 - A production build carries no API docs address
+**Serves:** The docs surface - a production build carries no API docs address
 
 - **GIVEN** the Grade10 console built for production
 - **WHEN** an operator opens the API docs address
@@ -100,6 +105,7 @@ beyond what opens the console.
 - **AND** the Dev heading offers no API docs entry
 
 #### Scenario: grade10-admin-console-api-docs-SC-05 - A non-production build lists the surface under Dev
+**Serves:** The docs surface - a non-production build lists the surface under Dev
 
 - **GIVEN** the Grade10 console built for staging or local development
 - **WHEN** an operator who can open the console signs in
@@ -122,6 +128,7 @@ it. A shape that is one of several alternatives SHALL show each alternative,
 named by the value that tells them apart where there is one.
 
 #### Scenario: grade10-admin-console-api-docs-SC-06 - A router's procedures are listed with kind and caller
+**Serves:** The docs surface - a router's procedures are listed with kind and caller
 
 - **GIVEN** a service picked in the rail
 - **WHEN** the engineer picks one of its routers
@@ -129,6 +136,7 @@ named by the value that tells them apart where there is one.
 - **AND** each row shows its kind, its caller, a summary of its input fields, and a summary of its output
 
 #### Scenario: grade10-admin-console-api-docs-SC-07 - A procedure's detail shows its wire path and fields
+**Serves:** The docs surface - a procedure's detail shows its wire path and fields
 
 - **WHEN** the engineer picks a procedure that declares an input of three fields, one of them bounded
 - **THEN** the detail shows the dotted path and the wire path the call lands on
@@ -136,6 +144,7 @@ named by the value that tells them apart where there is one.
 - **AND** the output table lists the declared output's fields, each alternative apart where there are several
 
 #### Scenario: grade10-admin-console-api-docs-SC-08 - A filter narrows every service by path or grant
+**Serves:** The docs surface - a filter narrows every service by path or grant
 
 - **WHEN** the engineer types a grant into the filter
 - **THEN** every service's list narrows to the procedures requiring that grant
@@ -143,6 +152,7 @@ named by the value that tells them apart where there is one.
 - **AND** typing part of a dotted path narrows the same way
 
 #### Scenario: grade10-admin-console-api-docs-SC-15 - An audience narrows every service
+**Serves:** The docs surface - an audience narrows every service
 
 - **WHEN** the engineer picks the console audience
 - **THEN** every service's list narrows to its elevated procedures
@@ -176,12 +186,14 @@ procedure it lists is internal.
 | Machine | a service principal | A service principal in place of a person; the till today |
 
 #### Scenario: grade10-admin-console-api-docs-SC-09 - An elevated procedure names its grant
+**Serves:** Honesty of the record - an elevated procedure names its grant
 
 - **WHEN** the engineer reads a procedure that requires an operator grant
 - **THEN** its caller reads elevated
 - **AND** the grant it requires is shown beside it, in the grant's own spelling
 
 #### Scenario: grade10-admin-console-api-docs-SC-10 - A fresh-session call is told apart from a session call
+**Serves:** Honesty of the record - a fresh-session call is told apart from a session call
 
 - **GIVEN** two procedures on one router, one accepting any signed-in session and one requiring a recently proven session
 - **WHEN** both are listed
@@ -217,6 +229,7 @@ beside the caller. A procedure whose worker does its own work SHALL carry no
 such note.
 
 #### Scenario: grade10-admin-console-api-docs-SC-14 - A forwarded procedure names the service that does its work
+**Serves:** Honesty of the record - a forwarded procedure names the service that does its work
 
 - **GIVEN** the store's `auction` router, every procedure of which forwards to the auction service
 - **WHEN** the engineer picks that router
@@ -230,6 +243,7 @@ The surface SHALL name the commit its documents were read from, so a reader
 can tell whether the page describes the backend in front of them.
 
 #### Scenario: grade10-admin-console-api-docs-SC-12 - The page names the commit it was read from
+**Serves:** Honesty of the record - the page names the commit it was read from
 
 - **WHEN** an engineer opens the surface
 - **THEN** the page names the commit the documents were produced from

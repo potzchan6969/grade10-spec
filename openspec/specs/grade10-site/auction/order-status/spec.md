@@ -86,6 +86,7 @@ warehouse reports dispatch and the carrier reports delivery — two parties
 reporting two events.
 
 #### Scenario: auction-status-SC-04 - Delivery cannot be confirmed before dispatch
+**Serves:** Writable primitives - delivery cannot be confirmed before dispatch
 
 - **GIVEN** an auction order whose fulfilment status is `unfulfilled`
 - **WHEN** a delivery confirmation is received for it
@@ -175,6 +176,7 @@ set fulfilment status to `fulfilled`. That assertion SHALL live in the
 system, not in a warehouse operating procedure.
 
 #### Scenario: auction-status-SC-11 - Dispatch before payment is refused
+**Serves:** Guards - dispatch before payment is refused
 
 - **GIVEN** an auction order whose invoice status is `pending`
 - **WHEN** the warehouse records a dispatch against it
@@ -182,6 +184,7 @@ system, not in a warehouse operating procedure.
 - **AND** the fulfilment status remains `unfulfilled`
 
 #### Scenario: auction-status-SC-12 - A shipped order cannot be cancelled
+**Serves:** Guards - a shipped order cannot be cancelled
 
 - **GIVEN** an auction order whose invoice status is `paid` and fulfilment
   status is `fulfilled`
@@ -202,6 +205,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 | `delivery_confirmed` | false | true | The carrier confirms delivery, with fulfilment status already `fulfilled` |
 
 #### Scenario: auction-status-SC-13 - A paid invoice cannot return to pending
+**Serves:** Guards - a paid invoice cannot return to pending
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** any caller attempts to set it to `pending`
@@ -209,6 +213,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 - **AND** the invoice status is still `paid`
 
 #### Scenario: auction-status-SC-14 - A cancelled invoice is terminal
+**Serves:** Guards - a cancelled invoice is terminal
 
 - **GIVEN** an auction order whose invoice status is `cancelled`
 - **WHEN** an operator attempts to record payment against it
@@ -223,6 +228,7 @@ SHALL NOT merge them with, alias them to, or map them onto the badges in
 imply shared meaning, and no surface SHALL derive one from the other.
 
 #### Scenario: auction-status-SC-15 - A shared label name carries no shared meaning
+**Serves:** Independence from the store - a shared label name carries no shared meaning
 
 - **GIVEN** an auction order derived as Processing and a store order badged
   `processing`

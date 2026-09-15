@@ -137,6 +137,7 @@ can be reached, no case SHALL be ended for want of a visit.
 - **THEN** the case's copy is corrected and the case is left where it is
 
 #### Scenario: grade10-site-vault-visit-booking-SC-09 - No diary, no expiry
+**Serves:** The diary and the copy - no diary, no expiry
 
 - **GIVEN** a vault with no diary reachable
 - **WHEN** the abandonment clocks are read
@@ -177,6 +178,7 @@ cancelled in the diary. A case that is forfeited while holding a visit already
 past SHALL have it recorded as a no-show, never as completed.
 
 #### Scenario: grade10-site-vault-visit-booking-SC-12 - A valuation from photographs leaves the visit open
+**Serves:** Missed and finished visits - a valuation from photographs leaves the visit open
 
 - **GIVEN** a case whose visit is booked for Friday
 - **WHEN** staff start valuing it on Monday from its photographs
@@ -190,6 +192,7 @@ past SHALL have it recorded as a no-show, never as completed.
 - **THEN** the visit is recorded as completed
 
 #### Scenario: grade10-site-vault-visit-booking-SC-14 - A forfeited case's past visit is not a completed one
+**Serves:** Missed and finished visits - a forfeited case's past visit is not a completed one
 
 - **GIVEN** an active case holding a slot that has already passed
 - **WHEN** the item is forfeited

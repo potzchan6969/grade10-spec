@@ -111,6 +111,7 @@ a clock instead.
 - **THEN** its row badges a stalled valuation
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-04 - A case being valued yesterday badges nothing for it
+**Serves:** The queue - a case being valued yesterday badges nothing for it
 
 - **GIVEN** a case being valued and touched 2 days ago
 - **WHEN** the queue is read
@@ -134,6 +135,7 @@ rows over a standing backlog SHALL say so and still offer the control.
 - **THEN** the second begins after the last row of the first, with no row seen twice and none skipped
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-06 - A full page is not the signal
+**Serves:** The queue - a full page is not the signal
 
 - **GIVEN** a filter matching exactly one page of rows
 - **WHEN** the page is read
@@ -243,12 +245,14 @@ One verification SHALL stamp the session for 12 hours, and no act inside that
 window SHALL ask for another.
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-14 - Staging asks for the second factor
+**Serves:** Who may act - staging asks for the second factor
 
 - **GIVEN** an operator signing in to staging
 - **WHEN** they open a vault surface
 - **THEN** a second factor is required
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-15 - One verification covers the shift's next act
+**Serves:** Who may act - one verification covers the shift's next act
 
 - **GIVEN** an operator who verified an hour ago
 - **WHEN** they record a payment
@@ -267,12 +271,14 @@ Nothing SHALL be emailed or pushed to staff: the queue, its badges and the
 Today and Overdue views are the signal.
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-16 - One case's trail is one query
+**Serves:** Who may act - one case's trail is one query
 
 - **GIVEN** a case that has been valued, offered, signed and paid out
 - **WHEN** its audit trail is pulled by the case id
 - **THEN** every one of those acts is on it, with who did each
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-17 - An act with nowhere to record itself is refused
+**Serves:** Who may act - an act with nowhere to record itself is refused
 
 - **GIVEN** an act whose audit trail cannot be written
 - **WHEN** an operator sends it

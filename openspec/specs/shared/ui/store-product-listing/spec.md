@@ -59,17 +59,20 @@ the next.
 outside `ProductBrowse`, so a later surface can reuse one without the others.
 
 #### Scenario: shared-ui-store-product-listing-SC-01 - An application imports the surface
+**Serves:** Surface exports - an application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's public entry
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
 #### Scenario: shared-ui-store-product-listing-SC-02 - A part is reused alone
+**Serves:** Surface exports - a part is reused alone
 
 - **WHEN** an application renders the product list, the filter panel, the product filter, the list header, a product card, or the product card image without the browse root
 - **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
 
 #### Scenario: shared-ui-store-product-listing-SC-03 - A tile is named once
+**Serves:** Surface exports - a tile is named once
 
 - **GIVEN** a product tile whose card is activatable and whose cart control needs a name
 - **WHEN** the consumer supplies the tiles and the words around them
@@ -97,34 +100,40 @@ The list SHALL NOT format a price, compute a discount, decide whether a
 product is sold out, or hold a cart quantity.
 
 #### Scenario: shared-ui-store-product-listing-SC-04 - Prices are displayed as supplied
+**Serves:** Tile contract - prices are displayed as supplied
 
 - **GIVEN** a product supplied with a current price of `HKD 105` and an original price of `HKD 123`
 - **THEN** the tile displays both exactly as supplied
 - **AND** the original price is shown with strikethrough treatment
 
 #### Scenario: shared-ui-store-product-listing-SC-05 - No original price
+**Serves:** Tile contract - no original price
 
 - **GIVEN** a product supplied with a current price and no original price
 - **THEN** only the current price is displayed
 - **AND** no strikethrough price is shown
 
 #### Scenario: shared-ui-store-product-listing-SC-06 - A cart quantity change is reported, not performed
+**Serves:** Tile contract - a cart quantity change is reported, not performed
 
 - **WHEN** a shopper changes the cart quantity on a tile through its cart control
 - **THEN** the requested quantity is reported once, identifying that product
 - **AND** the tile's cart condition is unchanged until the consumer supplies a new one
 
 #### Scenario: shared-ui-store-product-listing-SC-07 - A sold-out product
+**Serves:** Tile contract - a sold-out product
 
 - **GIVEN** a product supplied as sold out
 - **THEN** its tile displays the sold-out treatment and its cart action cannot be activated
 
 #### Scenario: shared-ui-store-product-listing-SC-08 - No wishlist control on a tile
+**Serves:** Tile contract - no wishlist control on a tile
 
 - **WHEN** a product tile renders, whether available or sold out
 - **THEN** no wishlist control appears on it
 
 #### Scenario: shared-ui-store-product-listing-SC-09 - No metadata badges on a tile
+**Serves:** Tile contract - no metadata badges on a tile
 
 - **WHEN** a product tile renders
 - **THEN** no collection, series, or region badge appears on it
@@ -205,23 +214,27 @@ without moving focus.
 A change to the displayed result count SHALL be announced without moving focus.
 
 #### Scenario: shared-ui-store-product-listing-SC-16 - Keyboard-only operation
+**Serves:** Accessibility - keyboard-only operation
 
 - **WHEN** a shopper using a keyboard alone moves through the surface
 - **THEN** the search field, every filter option, every expand affordance, every utility link, the sort control, every applied-filter chip, the clear-filters control, and every tile action can be reached and activated
 - **AND** the focused element is visibly indicated at each step
 
 #### Scenario: shared-ui-store-product-listing-SC-17 - State is exposed natively
+**Serves:** Accessibility - state is exposed natively
 
 - **WHEN** assistive technology inspects a selected filter option, the active sort option, and an applied-filter chip
 - **THEN** each state is reported through native semantics rather than styling alone
 
 #### Scenario: shared-ui-store-product-listing-SC-18 - Loading more is announced as busy
+**Serves:** Accessibility - loading more is announced as busy
 
 - **GIVEN** a resolved result list and `loadingMore` true
 - **THEN** the results region is exposed as busy
 - **AND** focus stays where the shopper left it
 
 #### Scenario: shared-ui-store-product-listing-SC-19 - A result count change is announced
+**Serves:** Accessibility - a result count change is announced
 
 - **WHEN** the consumer supplies a new result count after a filter change
 - **THEN** the new count is announced
@@ -236,6 +249,7 @@ callback. It SHALL NOT hold any of those values as its own state, and SHALL
 NOT change what it displays until the consumer supplies a new value.
 
 #### Scenario: shared-ui-store-product-listing-SC-20 - A control does not move on its own
+**Serves:** Browse states - a control does not move on its own
 
 - **GIVEN** a rendered listing surface with a filter option unselected
 - **WHEN** a shopper activates that option and the consumer supplies no new selection
@@ -243,11 +257,13 @@ NOT change what it displays until the consumer supplies a new value.
 - **AND** the change was reported once, naming the filter group and the option
 
 #### Scenario: shared-ui-store-product-listing-SC-21 - The consumer drives the display
+**Serves:** Browse states - the consumer drives the display
 
 - **WHEN** the consumer supplies a new search query, filter selection, sort option, load-more state, or product list
 - **THEN** the surface displays that value without any further interaction
 
 #### Scenario: shared-ui-store-product-listing-SC-22 - Every state is reachable from props
+**Serves:** Browse states - every state is reachable from props
 
 - **WHEN** the surface is rendered with props alone, with no application present
 - **THEN** each of loading, empty catalog, no filter matches, error, loading more, and a resolved list of results can be produced
@@ -508,18 +524,21 @@ image SHALL contain no default, fallback, or built-in copy.
 `ProductCardImage` SHALL be renderable on its own, outside `ProductCard`.
 
 #### Scenario: shared-ui-store-product-listing-SC-46 - No image source
+**Serves:** Tile contract - no image source
 
 - **WHEN** the image is rendered without an image source
 - **THEN** the well is still displayed
 - **AND** no fallback photo is shown
 
 #### Scenario: shared-ui-store-product-listing-SC-47 - A sale label is displayed as supplied
+**Serves:** Tile contract - a sale label is displayed as supplied
 
 - **GIVEN** an available product supplied with a sale label of `SALE`
 - **THEN** that label is displayed on the image
 - **AND** no other sale copy is shown
 
 #### Scenario: shared-ui-store-product-listing-SC-48 - A sold-out product
+**Serves:** Tile contract - a sold-out product
 
 - **GIVEN** a product supplied as sold out with a sold-out label of `SOLD OUT`
 - **THEN** the image uses the sold-out treatment
@@ -528,18 +547,21 @@ image SHALL contain no default, fallback, or built-in copy.
 - **AND** no cart control is displayed or operable
 
 #### Scenario: shared-ui-store-product-listing-SC-49 - An in-cart count is displayed as supplied
+**Serves:** Tile contract - an in-cart count is displayed as supplied
 
 - **GIVEN** a product supplied as in the cart with a count of `1`
 - **THEN** the collapsed cart control displays `1`
 - **AND** the image does not increment, format, or hold that count
 
 #### Scenario: shared-ui-store-product-listing-SC-50 - A cart quantity change is reported, not performed
+**Serves:** Tile contract - a cart quantity change is reported, not performed
 
 - **WHEN** a shopper changes quantity through the cart control
 - **THEN** the requested quantity is reported once
 - **AND** the in-cart condition is unchanged until the consumer supplies a new one
 
 #### Scenario: shared-ui-store-product-listing-SC-51 - Keyboard reveals the cart control
+**Serves:** Tile contract - keyboard reveals the cart control
 
 - **GIVEN** an available product that is not in the cart
 - **WHEN** a shopper moves keyboard focus onto the image
@@ -547,11 +569,13 @@ image SHALL contain no default, fallback, or built-in copy.
 - **AND** the focused control is visibly indicated
 
 #### Scenario: shared-ui-store-product-listing-SC-52 - The image is reused alone
+**Serves:** Tile contract - the image is reused alone
 
 - **WHEN** an application renders the product card image without a product card
 - **THEN** it renders and behaves as specified, with no missing-context error
 
 #### Scenario: shared-ui-store-product-listing-SC-53 - The stepper collapses after blur or pointer leave
+**Serves:** Tile contract - the stepper collapses after blur or pointer leave
 
 - **GIVEN** a product supplied as in the cart with a count of `2`
 - **WHEN** a shopper expands the cart control, then moves focus or the pointer away
@@ -559,12 +583,14 @@ image SHALL contain no default, fallback, or built-in copy.
 - **AND** the add affordance is not shown
 
 #### Scenario: shared-ui-store-product-listing-SC-54 - The collapsed control re-expands
+**Serves:** Tile contract - the collapsed control re-expands
 
 - **GIVEN** a product supplied as in the cart with a count of `2` and a collapsed cart control
 - **WHEN** a shopper activates the collapsed control
 - **THEN** the inline quantity stepper is displayed on the same pill
 
 #### Scenario: shared-ui-store-product-listing-SC-55 - A surface that does not sell
+**Serves:** Tile contract - a surface that does not sell
 
 - **GIVEN** an available product rendered without a way to report a quantity change
 - **WHEN** a shopper hovers the image and moves keyboard focus onto it
@@ -587,6 +613,7 @@ Decrement is unaffected at the maximum, so a shopper who reaches it can still
 go back down.
 
 #### Scenario: shared-ui-store-product-listing-SC-56 - The control stops at the maximum
+**Serves:** Stock is a ceiling - the control stops at the maximum
 
 - **GIVEN** a product supplied as in the cart with a count of `2` and a maximum of `2`
 - **WHEN** a shopper activates the increment affordance
@@ -594,18 +621,21 @@ go back down.
 - **AND** the affordance is exposed as unavailable
 
 #### Scenario: shared-ui-store-product-listing-SC-57 - Below the maximum the control counts on
+**Serves:** Stock is a ceiling - below the maximum the control counts on
 
 - **GIVEN** a product supplied as in the cart with a count of `1` and a maximum of `2`
 - **WHEN** a shopper activates the increment affordance
 - **THEN** `2` is reported once
 
 #### Scenario: shared-ui-store-product-listing-SC-58 - No maximum supplied
+**Serves:** Stock is a ceiling - no maximum supplied
 
 - **GIVEN** a product supplied as in the cart with a count of `2` and no maximum
 - **WHEN** a shopper activates the increment affordance
 - **THEN** `3` is reported once
 
 #### Scenario: shared-ui-store-product-listing-SC-59 - Decrement still works at the maximum
+**Serves:** Stock is a ceiling - decrement still works at the maximum
 
 - **GIVEN** a product supplied as in the cart with a count of `2` and a maximum of `2`
 - **WHEN** a shopper activates the decrement control
@@ -622,6 +652,7 @@ A sold-out product SHALL NOT display a remaining count, because there is
 nothing left to be running out of.
 
 #### Scenario: shared-ui-store-product-listing-SC-60 - A remaining count is displayed as supplied
+**Serves:** What is left, said - a remaining count is displayed as supplied
 
 - **GIVEN** an available product supplied with a remaining count of `Only 3 left`
 - **WHEN** the card is rendered
@@ -629,12 +660,14 @@ nothing left to be running out of.
 - **AND** no other remaining-count copy is shown
 
 #### Scenario: shared-ui-store-product-listing-SC-61 - No remaining count supplied
+**Serves:** What is left, said - no remaining count supplied
 
 - **GIVEN** an available product supplied with no remaining count
 - **WHEN** the card is rendered
 - **THEN** no remaining count is displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-62 - A sold-out product says nothing about what is left
+**Serves:** What is left, said - a sold-out product says nothing about what is left
 
 - **GIVEN** a product supplied as sold out and with a remaining count
 - **WHEN** the card is rendered

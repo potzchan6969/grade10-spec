@@ -58,6 +58,7 @@ carry photographs only while it is unsent.
 - **AND** reopening it returns them to its photograph step
 
 #### Scenario: grade10-site-vault-case-intake-SC-02 - A photograph is refused once the request is sent
+**Serves:** Opening a request - a photograph is refused once the request is sent
 
 - **GIVEN** a request the collector has sent in
 - **WHEN** a further photograph is offered for it
@@ -116,6 +117,7 @@ SHALL be refused by name. Sending a request in, or its ending, SHALL free a
 place.
 
 #### Scenario: grade10-site-vault-case-intake-SC-07 - A fourth unsent request is refused
+**Serves:** Opening a request - a fourth unsent request is refused
 
 - **GIVEN** an account holding three unsent requests
 - **WHEN** the collector opens another
@@ -184,6 +186,7 @@ against.
 - **THEN** it is refused by name and the request stays unsent
 
 #### Scenario: grade10-site-vault-case-intake-SC-14 - Sending it in offers the visit
+**Serves:** Sending it in - sending it in offers the visit
 
 - **GIVEN** a request carrying one photograph
 - **WHEN** the collector sends it in

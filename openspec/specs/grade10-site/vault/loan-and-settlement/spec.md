@@ -141,12 +141,14 @@ Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
 - **THEN** it owes 10,400,000 HKD minor units, and no fee has been added
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-07 - Interest stops at settlement
+**Serves:** What is owed - interest stops at settlement
 
 - **GIVEN** a loan settled in full on its due date
 - **WHEN** it is quoted a month later
 - **THEN** it owes nothing, and nothing accrued after the settlement
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-08 - Interest never passes the ceiling
+**Serves:** What is owed - interest never passes the ceiling
 
 - **GIVEN** a brand whose accrual ceiling is 10,000 basis points
 - **WHEN** a loan nobody repaid is quoted far past its due date
@@ -170,12 +172,14 @@ that answer rather than subtracted from it.
 - **THEN** it owes 1,313,000 HKD minor units, the arrears having run on the 1,300,000 of principal left
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-10 - A payment takes its place in the walk
+**Serves:** Recording money - a payment takes its place in the walk
 
 - **GIVEN** a loan carrying a repayment valued on the 20th
 - **WHEN** a repayment valued on the 5th is recorded afterwards
 - **THEN** the answer is the same as if they had been recorded in date order
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-11 - A quote for a past date ignores later money
+**Serves:** Recording money - a quote for a past date ignores later money
 
 - **GIVEN** a loan repaid in full on the 30th
 - **WHEN** it is quoted for the 20th
@@ -209,17 +213,20 @@ A repayment that leaves nothing owed at its own value date SHALL settle the
 loan and move the case to `repaid`.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-12 - A stale quote is refused rather than part-paid
+**Serves:** Recording money - a stale quote is refused rather than part-paid
 
 - **GIVEN** a quote taken before the loan stepped overdue
 - **WHEN** the repayment is recorded against that quote
 - **THEN** it is refused by name and nothing is written
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-13 - The same transfer cannot land twice
+**Serves:** Recording money - the same transfer cannot land twice
 
 - **WHEN** a repayment is recorded twice under one key
 - **THEN** the case carries one repayment and the second answers with the first
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-14 - A payment above the balance is refused
+**Serves:** Recording money - a payment above the balance is refused
 
 - **GIVEN** a loan owing 1,000,000 HKD minor units at a value date
 - **WHEN** 1,200,000 HKD minor units are recorded against it at that date
@@ -329,6 +336,7 @@ SHALL owe nothing, because storage carries no fee.
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-24 - A storage case owes nothing
+**Serves:** Ending the loan - a storage case owes nothing
 
 - **GIVEN** a storage case in the vault
 - **WHEN** its release is prepared

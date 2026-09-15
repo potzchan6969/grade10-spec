@@ -169,6 +169,7 @@ worklist SHALL never let one hide the other.
 - **THEN** the case is not in them
 
 #### Scenario: grade10-admin-vault-money-book-SC-12 - A two-currency book prints each row in its own currency
+**Serves:** The arrears - a two-currency book prints each row in its own currency
 
 - **GIVEN** loans in arrears in two different currencies
 - **WHEN** the arrears are read

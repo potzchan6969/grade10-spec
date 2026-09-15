@@ -92,6 +92,7 @@ surface, never an empty lot page and never the catalogue.
 - **AND** a collector opening it sees the site's not-found surface
 
 #### Scenario: grade10-site-auction-listing-page-SC-05 - A lot the catalogue publishes answers
+**Serves:** Unknown lot refusal - a lot the catalogue publishes answers
 
 - **GIVEN** a lot the catalogue publishes
 - **WHEN** its address is fetched

@@ -61,6 +61,7 @@ Terms SHALL NOT be agreed on either lane before a valuation exists.
 - **THEN** both figures are readable and the later one is what an offer is judged against
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-02 - A valuation under a live offer is refused
+**Serves:** The valuation - a valuation under a live offer is refused
 
 - **GIVEN** a case holding a live offer of 4,000,000 HKD minor units
 - **WHEN** staff record a valuation of 3,000,000 HKD minor units
@@ -127,6 +128,7 @@ A bound nobody has set SHALL allow everything outside production.
 - **THEN** it is refused by name, because 600 over 60 days is 300 per 30 days
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-07 - One band judges every term
+**Serves:** What the brand lends under - one band judges every term
 
 - **GIVEN** the same brand
 - **WHEN** an offer of 500 basis points over a 60-day term is written
@@ -140,6 +142,7 @@ A bound nobody has set SHALL allow everything outside production.
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-09 - An expiry past the validity window is refused
+**Serves:** What the brand lends under - an expiry past the validity window is refused
 
 - **GIVEN** a brand that leaves an offer open for 7 days
 - **WHEN** an offer expiring in 30 days is written
@@ -159,12 +162,14 @@ Outside production both SHALL be allowed, so that a brand can rehearse the
 flow before its values are decided.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-10 - A production offer under a null bound is refused
+**Serves:** What the brand lends under - a production offer under a null bound is refused
 
 - **GIVEN** a brand in production with no loan-to-value bound set
 - **WHEN** an offer is written
 - **THEN** it is refused by name, naming the bound
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-11 - A production offer with no lender named is refused
+**Serves:** What the brand lends under - a production offer with no lender named is refused
 
 - **GIVEN** a brand in production whose lender has no registered name
 - **WHEN** an offer is written
@@ -215,6 +220,7 @@ and the case SHALL stay where it is.
 - **THEN** the offer is closed as declined by the collector, the case is being valued again, and another offer may be written
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-15 - A lapsed offer is closed and the case stays
+**Serves:** Answering the offer - a lapsed offer is closed and the case stays
 
 - **GIVEN** a case holding an offer whose expiry has passed
 - **WHEN** the lapsed offers are swept

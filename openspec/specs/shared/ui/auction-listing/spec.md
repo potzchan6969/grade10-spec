@@ -63,6 +63,7 @@ back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 `src`. The gallery SHALL NOT fetch, derive, or rewrite those addresses.
 
 #### Scenario: shared-ui-auction-listing-SC-03 - Distinct sources are used in each slot
+**Serves:** Gallery sources - distinct sources are used in each slot
 
 - **GIVEN** a gallery image whose `thumbSrc`, `src`, and `zoomSrc` are three
   different addresses
@@ -73,6 +74,7 @@ back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 - **AND** the zoom dialog requests `zoomSrc`
 
 #### Scenario: shared-ui-auction-listing-SC-04 - Omitted sources fall back to src
+**Serves:** Gallery sources - omitted sources fall back to src
 
 - **GIVEN** a gallery image that supplies only `src` and `alt`
 - **WHEN** it is rendered
@@ -86,6 +88,7 @@ With exactly one item it SHALL hide the strip and disable previous/next. With
 none it SHALL render no item and SHALL NOT present previous/next as available.
 
 #### Scenario: shared-ui-auction-listing-SC-05 - Several gallery items show a strip
+**Serves:** Gallery strip - several gallery items show a strip
 
 - **GIVEN** two or more gallery items
 - **WHEN** the gallery renders
@@ -93,6 +96,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 - **AND** previous and next are enabled
 
 #### Scenario: shared-ui-auction-listing-SC-06 - One gallery item has no strip
+**Serves:** Gallery strip - one gallery item has no strip
 
 - **GIVEN** exactly one gallery item
 - **WHEN** the gallery renders
@@ -101,6 +105,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 - **AND** previous and next are disabled
 
 #### Scenario: shared-ui-auction-listing-SC-07 - No gallery items
+**Serves:** Gallery strip - no gallery items
 
 - **GIVEN** an empty gallery list
 - **WHEN** the gallery renders
@@ -114,6 +119,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 It SHALL NOT supply default user-visible copy for those slots.
 
 #### Scenario: shared-ui-auction-listing-SC-08 - Labels come from the consumer
+**Serves:** Consumer labels - labels come from the consumer
 
 - **GIVEN** a gallery rendered with
   `copy={{ zoom: "Click to zoom", previous: "Previous image", next: "Next image" }}`
@@ -133,6 +139,7 @@ extension window and extension duration. The shared components SHALL render
 the supplied strings as given.
 
 #### Scenario: shared-ui-auction-listing-SC-14 - Extension copy comes from the consumer
+**Serves:** Consumer labels - extension copy comes from the consumer
 
 - **GIVEN** a live listing whose extension window is 300 seconds and extension
   duration is 900 seconds
@@ -150,6 +157,7 @@ the supplied strings as given.
 `timeOverride?: string`.
 
 #### Scenario: auction-listing-SC-22 - A bid row preserves its accepted instant
+**Serves:** Bid history - a bid row preserves its accepted instant
 
 - **GIVEN** a bid history row with an accepted instant and a row representing a non-timestamp state
 - **WHEN** the rows are passed to the bid history surface
@@ -167,6 +175,7 @@ and `timeZone` and SHALL thread them to bid history and the collector deadline
 line.
 
 #### Scenario: auction-listing-SC-13 - Recent bids show localized activity time
+**Serves:** Bid history - recent bids show localized activity time
 
 - **GIVEN** a bid card with history rows carrying `acceptedAtMs`
 - **WHEN** it renders with a shipped locale and time zone
@@ -329,6 +338,7 @@ inside the dialog body while the dialog title, description, and close control
 remain fixed.
 
 #### Scenario: shared-ui-auction-listing-SC-09 - A signed-in user opens personal bid history
+**Serves:** Personal bid history - a signed-in user opens personal bid history
 
 - **GIVEN** `ListingUserBidHistory` rendered with at least one row
 - **WHEN** the collector activates the link
@@ -338,12 +348,14 @@ remain fixed.
 - **AND** the dialog closes via the close control or Escape
 
 #### Scenario: shared-ui-auction-listing-SC-10 - No rows means no link
+**Serves:** Personal bid history - no rows means no link
 
 - **GIVEN** `ListingUserBidHistory` rendered with an empty `rows` array
 - **WHEN** it renders
 - **THEN** no link or dialog is shown
 
 #### Scenario: shared-ui-auction-listing-SC-11 - Long history scrolls inside the dialog
+**Serves:** Personal bid history - long history scrolls inside the dialog
 
 - **GIVEN** `ListingUserBidHistory` rendered with more rows than fit the dialog
   viewport and the dialog open
@@ -358,6 +370,7 @@ When supplied, it SHALL render that node on the trailing edge of the recent-bids
 section header. It SHALL NOT require `recentBidsAccessory` to render.
 
 #### Scenario: shared-ui-auction-listing-SC-12 - An accessory composes beside recent bids
+**Serves:** Bid card accessory - an accessory composes beside recent bids
 
 - **GIVEN** a bid card with a recent-bids section and a non-empty
   `recentBidsAccessory`

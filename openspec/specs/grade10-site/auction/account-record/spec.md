@@ -336,12 +336,14 @@ auction order's status.
 - **THEN** no control on the surface records payment, requests a wire, records shipment, changes an address, or changes the order status
 
 #### Scenario: grade10-site-auction-account-record-SC-35 - A cancelled order remains Cancelled
+**Serves:** After a close - a cancelled order remains Cancelled
 
 - **GIVEN** a won listing whose invoice status is `cancelled`
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Cancelled
 
 #### Scenario: grade10-site-auction-account-record-SC-36 - A refunded order remains Refunded
+**Serves:** After a close - a refunded order remains Refunded
 
 - **GIVEN** a won listing whose invoice status is `refunded`
 - **WHEN** the winner opens their Bidding page

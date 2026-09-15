@@ -38,6 +38,7 @@ surface SHALL render these shapes from the package rather than maintaining a
 local implementation of them.
 
 #### Scenario: shared-console-blocks-SC-01 - Two consoles render one source
+**Serves:** One shared implementation - two consoles render one source
 
 - **GIVEN** two admin surfaces that render the same console shape
 - **WHEN** each surface renders it
@@ -45,6 +46,7 @@ local implementation of them.
 - **AND** every difference between the two renderings is produced by the props and theme each surface supplies, not by diverging copies
 
 #### Scenario: shared-console-blocks-SC-02 - A contract change lands once
+**Serves:** One shared implementation - a contract change lands once
 
 - **WHEN** a requirement of a shared console shape changes
 - **THEN** one implementation change in the console package satisfies it for every console
@@ -61,6 +63,7 @@ exports for debounced input and for keeping a command's refusal with the
 command.
 
 #### Scenario: shared-console-blocks-SC-03 - A console imports the blocks
+**Serves:** One shared implementation - a console imports the blocks
 
 - **WHEN** an admin surface imports any export named above from the console package's public entry
 - **THEN** the import resolves without error
@@ -73,6 +76,7 @@ two-factor enrollment — stays a shared UI export even when an admin
 application also renders it.
 
 #### Scenario: shared-console-blocks-SC-04 - The shared UI entry offers no admin-only component
+**Serves:** One shared implementation - the shared UI entry offers no admin-only component
 
 - **WHEN** an application inspects the shared UI package's public entry
 - **THEN** no admin-only console component is offered there
@@ -88,6 +92,7 @@ what distinguishes one brand's console from another's is the theme its
 application supplies.
 
 #### Scenario: shared-console-blocks-SC-12 - Two brands theme one block
+**Serves:** Built on the design system - two brands theme one block
 
 - **GIVEN** the two brands' admin applications rendering the same block with the same props
 - **WHEN** each renders it under its own stylesheet
@@ -173,6 +178,7 @@ units plus an ISO 4217 currency code, and SHALL render naming that code
 rather than a symbol two currencies could share.
 
 #### Scenario: shared-console-blocks-SC-13 - Two currencies share a column
+**Serves:** Tables tell the truth - two currencies share a column
 
 - **WHEN** a table column renders amounts in two different currencies
 - **THEN** each amount names its own ISO 4217 code
@@ -185,6 +191,7 @@ offer moving to the next page and back, rather than only saying more rows
 exist.
 
 #### Scenario: shared-console-blocks-SC-14 - A queue exceeds its page
+**Serves:** Tables tell the truth - a queue exceeds its page
 
 - **WHEN** a console queue holds more rows than one page shows
 - **THEN** the surface offers moving to the older rows

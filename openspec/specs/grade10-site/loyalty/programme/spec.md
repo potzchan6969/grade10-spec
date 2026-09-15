@@ -81,12 +81,14 @@ The member record SHALL hold no personal data beyond the user identity. Names,
 email addresses and every other identity attribute stay in the identity system.
 
 #### Scenario: grade10-site-loyalty-programme-SC-01 - Activity precedes joining
+**Serves:** Membership and ledger - activity precedes joining
 
 - **WHEN** points are recorded for a user who has never joined
 - **THEN** a member record exists and holds those points
 - **AND** the member is reported as not joined until they join
 
 #### Scenario: grade10-site-loyalty-programme-SC-02 - Joining is idempotent
+**Serves:** Membership and ledger - joining is idempotent
 
 - **WHEN** a member joins more than once
 - **THEN** the first join date stands and later attempts change nothing
@@ -133,11 +135,13 @@ anything again. The same key carrying different input SHALL be refused as a
 conflict.
 
 #### Scenario: grade10-site-loyalty-programme-SC-10 - A retry is free
+**Serves:** Membership and ledger - a retry is free
 
 - **WHEN** a caller repeats a mutation under a key it already used
 - **THEN** the original answer is returned and no new entry is recorded
 
 #### Scenario: grade10-site-loyalty-programme-SC-11 - A reused key with new input is refused
+**Serves:** Membership and ledger - a reused key with new input is refused
 
 - **WHEN** a caller repeats a key with input that differs from the first call
 - **THEN** the call is refused as a conflict
@@ -228,12 +232,14 @@ whole amount it removed.
 - **AND** it is never pulled back toward the older date
 
 #### Scenario: grade10-site-loyalty-programme-SC-150 - The window is calendar months, not a day count
+**Serves:** Earning and expiry - the window is calendar months, not a day count
 
 - **WHEN** a member's last activity is 3 January at 10:00 in the programme's zone
 - **THEN** the balance lapses on 3 January the next year at 10:00, whether that is 365 or 366 days on
 - **AND** an activity on 29 February lapses on 28 February the next year
 
 #### Scenario: grade10-site-loyalty-programme-SC-151 - A record older than the window is written already lapsed
+**Serves:** Earning and expiry - a record older than the window is written already lapsed
 
 - **WHEN** an earning dated more than an inactivity window ago is recorded
 - **THEN** its points are recorded with their own date already past, and count nothing
@@ -426,16 +432,19 @@ revoked, and SHALL be able to read which tiers the programme defines rather than
 naming one from memory.
 
 #### Scenario: grade10-site-loyalty-programme-SC-26 - A grant names an unknown tier
+**Serves:** Tiers and invitations - a grant names an unknown tier
 
 - **WHEN** a grant names a tier the programme does not define
 - **THEN** it is refused as not found and nothing is recorded
 
 #### Scenario: grade10-site-loyalty-programme-SC-27 - A grant names the entry tier
+**Serves:** Tiers and invitations - a grant names the entry tier
 
 - **WHEN** a grant names the tier every member starts on
 - **THEN** it is refused as invalid
 
 #### Scenario: grade10-site-loyalty-programme-SC-28 - Live grants can be found
+**Serves:** Tiers and invitations - live grants can be found
 
 - **WHEN** an operator lists invitations
 - **THEN** every live grant is listed with its member, tier, reason and end date
@@ -552,33 +561,39 @@ mismatch SHALL be detected when the product starts, not when a member buys
 something.
 
 #### Scenario: grade10-site-loyalty-programme-SC-39 - Points survive an outage
+**Serves:** Earning and expiry - points survive an outage
 
 - **WHEN** a purchase completes while the programme is unreachable
 - **THEN** the purchase still completes for the buyer
 - **AND** the points are granted once the programme is reachable again, without anyone re-entering them
 
 #### Scenario: grade10-site-loyalty-programme-SC-40 - A repeated delivery grants nothing twice
+**Serves:** Earning and expiry - a repeated delivery grants nothing twice
 
 - **WHEN** the same money event is delivered to the programme more than once
 - **THEN** the points are granted once
 
 #### Scenario: grade10-site-loyalty-programme-SC-41 - One money event, one identity
+**Serves:** Earning and expiry - one money event, one identity
 
 - **WHEN** a purchase reaches its completed state through any path — a payment
   notification, a scheduled reconciliation, or a read that repairs it
 - **THEN** exactly one money event is recorded for it, carrying an identity stable across retries
 
 #### Scenario: grade10-site-loyalty-programme-SC-42 - A partial refund claws back only its own part
+**Serves:** Earning and expiry - a partial refund claws back only its own part
 
 - **WHEN** part of a purchase is refunded, and later another part
 - **THEN** each refund claws back only the points its own amount earned
 
 #### Scenario: grade10-site-loyalty-programme-SC-43 - A currency mismatch stops the product from starting
+**Serves:** Earning and expiry - a currency mismatch stops the product from starting
 
 - **WHEN** a product sells in a currency the programme does not run in
 - **THEN** the product fails to start, naming both currencies
 
 #### Scenario: grade10-site-loyalty-programme-SC-44 - A refused recording is reported, not swallowed
+**Serves:** Earning and expiry - a refused recording is reported, not swallowed
 
 - **WHEN** the programme refuses a recording
 - **THEN** the refusal is logged and counted by its reason
@@ -705,28 +720,33 @@ or written into the operator log; the log SHALL record which records were read,
 by whom, and how many.
 
 #### Scenario: grade10-site-loyalty-programme-SC-54 - A loyalty permission alone shows no identities
+**Serves:** Operator console - a loyalty permission alone shows no identities
 
 - **WHEN** an operator holding loyalty permissions but not the identity permission finds a member
 - **THEN** the member's loyalty state is shown
 - **AND** no name or email address is shown
 
 #### Scenario: grade10-site-loyalty-programme-SC-55 - A service connection is not an authorisation
+**Serves:** Operator console - a service connection is not an authorisation
 
 - **WHEN** a service holding a connection to the identity system requests identities without an operator session carrying the identity permission
 - **THEN** the request is refused
 
 #### Scenario: grade10-site-loyalty-programme-SC-56 - Identity is never served from a shared cache
+**Serves:** Operator console - identity is never served from a shared cache
 
 - **WHEN** a response carrying identity is returned
 - **THEN** it is marked as belonging to that caller alone and is not stored in a shared cache
 
 #### Scenario: grade10-site-loyalty-programme-SC-57 - An identity read is recorded without copying the identities
+**Serves:** Operator console - an identity read is recorded without copying the identities
 
 - **WHEN** an operator reads member identities
 - **THEN** the log records who read, which records, and how many
 - **AND** it does not record the names or email addresses themselves
 
 #### Scenario: grade10-site-loyalty-programme-SC-58 - A failed identity read does not degrade to blanks
+**Serves:** Operator console - a failed identity read does not degrade to blanks
 
 - **WHEN** the identity system cannot be reached
 - **THEN** the console reports the failure
@@ -1408,6 +1428,7 @@ offered for the member to keep: it is minted for one sale, and what the
 member presents is the code for that sale alone.
 
 #### Scenario: grade10-site-loyalty-programme-SC-159 - A physical reward's coupon takes 100% off its own variant
+**Serves:** Rewards and redemption - a physical reward's coupon takes 100% off its own variant
 
 - **WHEN** a member redeems a reward that is a physical item
 - **THEN** the redemption issues a coupon that takes 100% off the reward's
@@ -1436,17 +1457,20 @@ member presents is the code for that sale alone.
   second code
 
 #### Scenario: grade10-site-loyalty-programme-SC-160 - A member cannot undo a redemption
+**Serves:** Rewards and redemption - a member cannot undo a redemption
 
 - **WHEN** a member holding an unused coupon asks for their points back
 - **THEN** no member surface offers it, and the points are not returned
 
 #### Scenario: grade10-site-loyalty-programme-SC-161 - A coupon expires on its own terms
+**Serves:** Rewards and redemption - a coupon expires on its own terms
 
 - **WHEN** a coupon's validity period ends
 - **THEN** it can no longer be used
 - **AND** the member's redeemable balance is unaffected
 
 #### Scenario: grade10-site-loyalty-programme-SC-162 - Points buy nothing at an auction
+**Serves:** Rewards and redemption - points buy nothing at an auction
 
 - **WHEN** a member attempts to pay for an auction purchase with points or
   with a coupon
@@ -1479,12 +1503,14 @@ redemption did not reduce it. Stock SHALL be returned only when the
 redemption actually consumed a unit.
 
 #### Scenario: grade10-site-loyalty-programme-SC-168 - A reversal voids the coupon
+**Serves:** Rewards and redemption - a reversal voids the coupon
 
 - **WHEN** an operator reverses a redemption
 - **THEN** the coupon it issued can no longer be used
 - **AND** the points it consumed return to the member's redeemable balance
 
 #### Scenario: grade10-site-loyalty-programme-SC-169 - A used coupon cannot be reversed
+**Serves:** Rewards and redemption - a used coupon cannot be reversed
 
 - **WHEN** an operator reverses a redemption whose coupon has already been used
 - **THEN** the reversal is refused and the points stay spent
@@ -1499,11 +1525,13 @@ redemption actually consumed a unit.
 - **AND** any points the member spent as a discount on that sale are returned
 
 #### Scenario: grade10-site-loyalty-programme-SC-170 - A member cannot reverse their own redemption
+**Serves:** Rewards and redemption - a member cannot reverse their own redemption
 
 - **WHEN** a member asks to reverse a redemption
 - **THEN** no member surface offers it
 
 #### Scenario: grade10-site-loyalty-programme-SC-171 - Restored points keep their original expiry
+**Serves:** Rewards and redemption - restored points keep their original expiry
 
 - **WHEN** a redemption is reversed
 - **THEN** the restored points rejoin the credits they were taken from, keeping those credits' own dates

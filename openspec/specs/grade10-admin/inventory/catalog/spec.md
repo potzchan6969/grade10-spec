@@ -134,6 +134,7 @@ Holder-facing available on a **`created`** product is that inventory's
 available.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-03 - Counts reconcile across current and terminal stock
+**Serves:** Product stock - counts reconcile across current and terminal stock
 
 - **GIVEN** an inventory with stock five, reserved two, vaulted one, sold three,
   and withdrawn one
@@ -142,6 +143,7 @@ available.
 - **AND** derived ledger is ten
 
 #### Scenario: grade10-admin-inventory-catalog-SC-04 - Product owns only one inventory
+**Serves:** Product stock - product owns only one inventory
 
 - **GIVEN** an existing product and its inventory
 - **WHEN** more stock is received for that product
@@ -208,6 +210,7 @@ SHALL be settled through the reservation before it can leave stock via these
 free-pool transitions.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-10 - Operator records a sale
+**Serves:** Product stock - operator records a sale
 
 - **GIVEN** an inventory with stock five and reserved one
 - **WHEN** an authorized caller sells quantity two for 10000 minor units in HKD
@@ -215,6 +218,7 @@ free-pool transitions.
 - **AND** reserved and derived ledger are unchanged
 
 #### Scenario: grade10-admin-inventory-catalog-SC-11 - Operator records a withdrawal
+**Serves:** Product stock - operator records a withdrawal
 
 - **GIVEN** an inventory with three available stock
 - **WHEN** an authorized caller withdraws quantity one with a reason
@@ -222,6 +226,7 @@ free-pool transitions.
 - **AND** derived ledger is unchanged
 
 #### Scenario: grade10-admin-inventory-catalog-SC-12 - Terminal transition cannot consume reserved stock
+**Serves:** Product stock - terminal transition cannot consume reserved stock
 
 - **GIVEN** an inventory with stock three and reserved two
 - **WHEN** an authorized caller sells or withdraws quantity two
@@ -237,6 +242,7 @@ inventory counts, id, created at, created by, or status. An update SHALL
 refresh product updated at.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-13 - Operator lists products with aggregate counts
+**Serves:** Admin console - operator lists products with aggregate counts
 
 - **GIVEN** two products with different inventory snapshots and statuses
 - **WHEN** an authorized inventory admin lists products
@@ -245,6 +251,7 @@ refresh product updated at.
 - **AND** each row's counts satisfy both reconciliation equations
 
 #### Scenario: grade10-admin-inventory-catalog-SC-57 - Operator edits product fields
+**Serves:** Admin console - operator edits product fields
 
 - **GIVEN** a draft or created product
 - **WHEN** an authorized inventory admin updates name, description, and
@@ -834,6 +841,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **AND** Auction and Vault rows show no settlement actions on this page
 
 #### Scenario: grade10-admin-inventory-catalog-SC-29 - Operator oversees inventory and holds on the product page
+**Serves:** Admin console - operator oversees inventory and holds on the product page
 
 - **GIVEN** a created product with Auction, Vault, and `admin` reservations and
   prior vaulted and sold transitions
@@ -843,12 +851,14 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **AND** both count equations reconcile
 
 #### Scenario: grade10-admin-inventory-catalog-SC-30 - Empty products table
+**Serves:** Admin console - empty products table
 
 - **GIVEN** no products
 - **WHEN** an authorized inventory admin opens Inventory
 - **THEN** the products table shows an empty state
 
 #### Scenario: grade10-admin-inventory-catalog-SC-31 - Intake form updates the snapshot on the product page
+**Serves:** Admin console - intake form updates the snapshot on the product page
 
 - **GIVEN** a product page for an existing product
 - **WHEN** an authorized inventory admin intakes quantity two
@@ -856,6 +866,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **AND** one intake entry appears in history
 
 #### Scenario: grade10-admin-inventory-catalog-SC-58 - Operator creates a product from the products list
+**Serves:** Admin console - operator creates a product from the products list
 
 - **GIVEN** an authorized inventory admin on the products list
 - **WHEN** they create a product with a valid name

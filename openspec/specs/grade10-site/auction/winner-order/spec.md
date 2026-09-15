@@ -107,6 +107,7 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Invoice status | Per `grade10-site/auction/order-status` |
 
 #### Scenario: winner-order-SC-04 - An estimated total is marked as one
+**Serves:** Invoice at lot close - an estimated total is marked as one
 
 - **GIVEN** an auction order whose delivery address has not been confirmed
 - **WHEN** the winner reads the invoice
@@ -114,6 +115,7 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 - **AND** the final amount is marked as an estimate
 
 #### Scenario: winner-order-SC-05 - A confirmed address makes the total firm
+**Serves:** Invoice at lot close - a confirmed address makes the total firm
 
 - **GIVEN** an auction order whose winner has confirmed a delivery address
 - **WHEN** the winner reads the invoice
@@ -127,6 +129,7 @@ one deadline, or one shipment. Each order SHALL carry its own payment
 deadline, its own shipping charge, and its own fulfilment lifecycle.
 
 #### Scenario: winner-order-SC-06 - Two lots won together stay two orders
+**Serves:** Invoice at lot close - two lots won together stay two orders
 
 - **GIVEN** one winner who wins two lots in the same auction, closing at
   different times
@@ -206,6 +209,7 @@ destination until the winner confirms or selects an address.
 - **AND** asks the winner to confirm the delivery address
 
 #### Scenario: winner-order-SC-08 - An amendment does not touch the address book by default
+**Serves:** Delivery address - an amendment does not touch the address book by default
 
 - **GIVEN** a winner amending the delivery address on one auction order
 - **AND** they leave the offer to save the amendment to the account address book untaken
@@ -289,6 +293,7 @@ the same or a different payment method.
 - **AND** the payment is a single new transaction for the final amount
 
 #### Scenario: winner-order-SC-13 - An expired hold releases as a no-op
+**Serves:** Settlement - an expired hold releases as a no-op
 
 - **GIVEN** a winner whose bid-time authorization expired before the lot closed
 - **WHEN** the lot closes
@@ -296,6 +301,7 @@ the same or a different payment method.
 - **AND** creates the auction order and issues the invoice as normal
 
 #### Scenario: winner-order-SC-14 - A losing bidder's hold is released at close
+**Serves:** Settlement - a losing bidder's hold is released at close
 
 - **GIVEN** a lot closing with one winner and three losing bidders holding
   open authorizations
@@ -336,6 +342,7 @@ Expiry SHALL NOT be contingent on the winner having completed anything.
 - **AND** it is displayed in the winner's own timezone
 
 #### Scenario: winner-order-SC-17 - A winner who never gives an address still expires
+**Serves:** Payment deadline - a winner who never gives an address still expires
 
 - **GIVEN** an auction order whose winner has supplied no delivery address
 - **WHEN** the payment deadline passes with the invoice still `pending`
@@ -368,6 +375,7 @@ reference, and a pointer to any invoice it supersedes.
   final amount
 
 #### Scenario: winner-order-SC-19 - A manually settled receipt says so
+**Serves:** Records the winner keeps - a manually settled receipt says so
 
 - **GIVEN** an auction order an operator settled manually at a revised final
   amount, superseding an earlier invoice

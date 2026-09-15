@@ -379,6 +379,7 @@ families SHALL NOT share a mark. A row whose outcome needs action SHALL carry
 an additional highlight.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-19 - A lot inside its last hour is Ending soon
+**Serves:** Queue - a lot inside its last hour is Ending soon
 
 - **GIVEN** a published lot whose close is 60 minutes or less away and has not
   passed
@@ -386,6 +387,7 @@ an additional highlight.
 - **THEN** that lot's outcome is Ending soon
 
 #### Scenario: grade10-admin-auction-post-sale-SC-20 - A won lot's outcome is its derived order status
+**Serves:** Queue - a won lot's outcome is its derived order status
 
 - **GIVEN** a closed lot whose auction order derives as Processing
 - **WHEN** an operator reads the queue
@@ -393,6 +395,7 @@ an additional highlight.
 - **AND** it is the same value the winner reads on their own order
 
 #### Scenario: grade10-admin-auction-post-sale-SC-21 - Expired and Processing are highlighted as needing action
+**Serves:** Queue - expired and Processing are highlighted as needing action
 
 - **GIVEN** a queue holding one Expired order, one Processing order, and one
   Delivered order
@@ -491,6 +494,7 @@ address, the prior final amount, the revised final amount, the settlement
 method, and the external reference.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-26 - Settlement cannot proceed without confirming the address
+**Serves:** Resolving an unpaid order - settlement cannot proceed without confirming the address
 
 - **GIVEN** an unpaid auction order whose delivery address is unchanged from
   the account default shipping address
@@ -500,6 +504,7 @@ method, and the external reference.
 - **AND** the invoice status is still `pending`
 
 #### Scenario: grade10-admin-auction-post-sale-SC-27 - Updating the address recalculates before commit
+**Serves:** Resolving an unpaid order - updating the address recalculates before commit
 
 - **GIVEN** an unpaid auction order whose final amount is 312000 minor units
   in HKD
@@ -509,6 +514,7 @@ method, and the external reference.
   before the operator commits
 
 #### Scenario: grade10-admin-auction-post-sale-SC-28 - The payment record carries the revised amount
+**Serves:** Resolving an unpaid order - the payment record carries the revised amount
 
 - **GIVEN** that same order, committed at a revised final amount of 316000
   minor units in HKD against a last invoice of 312000 minor units in HKD
@@ -519,6 +525,7 @@ method, and the external reference.
 - **AND** the delivery address is locked
 
 #### Scenario: grade10-admin-auction-post-sale-SC-29 - Manual settlement is available before expiry
+**Serves:** Resolving an unpaid order - manual settlement is available before expiry
 
 - **GIVEN** an auction order deriving as Pending Payment, three days from its
   deadline, whose winner has said they will pay by bank transfer
@@ -528,6 +535,7 @@ method, and the external reference.
 - **AND** the order derives as Processing without having expired first
 
 #### Scenario: grade10-admin-auction-post-sale-SC-30 - A settled order refuses a second settlement
+**Serves:** Resolving an unpaid order - a settled order refuses a second settlement
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** an operator attempts to record a second settlement against it
@@ -615,6 +623,7 @@ engaged, and the difference SHALL be visible to whoever decides on
 reinstatement.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-34 - Failed payment attempts appear in the invoice log
+**Serves:** Audit trail - failed payment attempts appear in the invoice log
 
 - **GIVEN** a winner whose card was declined three times before the deadline
   elapsed
@@ -624,6 +633,7 @@ reinstatement.
   issued log entry
 
 #### Scenario: grade10-admin-auction-post-sale-SC-35 - An amendment's amount change is on the record
+**Serves:** Audit trail - an amendment's amount change is on the record
 
 - **GIVEN** an auction order whose winner amended the address, changing the
   final amount from 312000 to 316000 minor units in HKD
@@ -653,6 +663,7 @@ the invoice amount history SHALL be independently reconstructable and
 cross-referenceable, so an amount change can be explained afterwards.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-36 - The address at dispatch survives a later edit
+**Serves:** Audit trail - the address at dispatch survives a later edit
 
 - **GIVEN** an auction order dispatched to one address, whose address an
   operator later corrects
@@ -676,6 +687,7 @@ An auction order's detail SHALL show:
 - A link to the source lot and its bid history.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-37 - The detail explains the status it derived
+**Serves:** Queue - the detail explains the status it derived
 
 - **GIVEN** an auction order whose invoice is `pending` and whose deadline
   elapsed two days ago
@@ -685,6 +697,7 @@ An auction order's detail SHALL show:
   an elapsed deadline — rather than the label alone
 
 #### Scenario: grade10-admin-auction-post-sale-SC-38 - A buyer's reissue history spans all their orders
+**Serves:** Queue - a buyer's reissue history spans all their orders
 
 - **GIVEN** a buyer with reissues on three different auction orders
 - **WHEN** an operator opens any one of those orders
@@ -710,6 +723,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 Recording a delivery address SHALL NOT dispatch the lot.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-39 - Staff cannot record payment
+**Serves:** Grants - staff cannot record payment
 
 - **GIVEN** an operator holding the staff role
 - **WHEN** they open an Expired order
@@ -717,6 +731,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 - **AND** Grade10 refuses those actions on the server
 
 #### Scenario: grade10-admin-auction-post-sale-SC-40 - Finance cannot record dispatch
+**Serves:** Grants - finance cannot record dispatch
 
 - **GIVEN** an operator holding the finance role
 - **WHEN** they open a Processing order
@@ -724,6 +739,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 - **AND** Grade10 refuses a dispatch from them on the server
 
 #### Scenario: grade10-admin-auction-post-sale-SC-41 - Recording an address does not dispatch the lot
+**Serves:** Grants - recording an address does not dispatch the lot
 
 - **GIVEN** a Processing order with no delivery address
 - **AND** an operator holding shipment-processing
@@ -741,6 +757,7 @@ Every operator-initiated log entry SHALL carry a named operator and a reason.
 A system-initiated log entry SHALL record the event that triggered it.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-42 - A relisted lot's cancelled order is retained
+**Serves:** Queue - a relisted lot's cancelled order is retained
 
 - **GIVEN** a cancelled auction order whose lot has since been relisted and
   sold again
@@ -749,6 +766,7 @@ A system-initiated log entry SHALL record the event that triggered it.
 - **AND** no record has been deleted or edited in place
 
 #### Scenario: grade10-admin-auction-post-sale-SC-43 - An operator event without a reason is refused
+**Serves:** Queue - an operator event without a reason is refused
 
 - **GIVEN** an operator holding payment-processing
 - **WHEN** they attempt to reissue an invoice without giving a reason

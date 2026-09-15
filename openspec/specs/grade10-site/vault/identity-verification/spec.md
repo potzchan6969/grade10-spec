@@ -104,6 +104,7 @@ applied when the item is released: discharging an agreement asks neither.
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-identity-verification-SC-05 - A birthday is judged on the shop's day
+**Serves:** What it refuses - a birthday is judged on the shop's day
 
 - **GIVEN** a person whose eighteenth birthday is today at the shop and tomorrow in Coordinated Universal Time
 - **WHEN** their identity is judged
@@ -205,11 +206,13 @@ identity read grant, and every read SHALL be recorded on the case's audit
 trail naming who read it and when.
 
 #### Scenario: grade10-site-vault-identity-verification-SC-14 - A read without the grant is refused
+**Serves:** Reading the photograph - a read without the grant is refused
 
 - **WHEN** an operator without the identity read grant asks for the photograph
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-identity-verification-SC-15 - A read leaves a trail
+**Serves:** Reading the photograph - a read leaves a trail
 
 - **WHEN** an operator holding the grant downloads the photograph
 - **THEN** the case's audit trail names them and the instant

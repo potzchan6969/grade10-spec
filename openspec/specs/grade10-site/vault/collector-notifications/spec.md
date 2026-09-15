@@ -140,6 +140,7 @@ further reminder SHALL be sent.
 - **AND** the first sweep after 09:00 on the brand's clock sends it
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-06 - A pass that runs twice sends once
+**Serves:** Reminders - a pass that runs twice sends once
 
 - **GIVEN** a loan whose 7-day reminder has been sent
 - **WHEN** the reminders are swept again the same day
@@ -197,6 +198,7 @@ a failed attempt like any other.
 - **THEN** the message is back on the queue and the case's flag clears when it goes
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-12 - A send that never answers gives up
+**Serves:** When a send fails - a send that never answers gives up
 
 - **GIVEN** a provider that accepts the request and never answers
 - **WHEN** ten seconds pass
@@ -257,6 +259,7 @@ SHALL leave the queue.
 - **THEN** it goes to the corrected address
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-17 - An erased case is not posted to
+**Serves:** The reader - an erased case is not posted to
 
 - **GIVEN** a case whose contact has been erased
 - **WHEN** a message for it is attempted
@@ -271,6 +274,7 @@ for an operator to press, and there SHALL be no inbound channel.
 A number SHALL be treated as unverified.
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-18 - Nothing is sent to a phone
+**Serves:** The reader - nothing is sent to a phone
 
 - **WHEN** any event decides a message
 - **THEN** it is sent by email alone
