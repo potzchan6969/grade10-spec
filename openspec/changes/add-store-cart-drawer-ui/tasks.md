@@ -27,7 +27,7 @@ it before publishing the final Grade10 gitlink.
   `pnpm run tcs:validate` after the Cart Drawer feature suite represents the
   new US-04 journey; the current suite predates that journey.
 
-## 4. Cart Drawer read-only tender context (grade10)
+## 4. Cart Drawer read-only tender context (grade10) (owner: @kinisworking)
 
 This group consumes the existing Checkout read hooks and shared Cart Drawer
 props. It does not add a combined quote, mutate a promo or points balance, or
