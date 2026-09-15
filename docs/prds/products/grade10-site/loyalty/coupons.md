@@ -48,9 +48,12 @@ so redefining the reward never rewrites a coupon a member already holds —
   it, so a checkout the member walks away from costs them nothing —
   [Discounts](/p/grade10-site/store/discounts)
 - 🚧 **The newest claim is the only live one** — choosing a coupon online, at
-  a counter, or at a second counter voids every code already minted for it
-  elsewhere and cancels the online orders carrying it, so no counter sale and
-  no draft ever locks a coupon the member wants to spend somewhere else
+  a counter, or at a second counter takes it off every earlier sale first:
+  their online orders are cancelled, a counter sale keeps its cart and
+  collects without the cut, and the code minted for it is voided
+- 🚧 **A sale that took the money keeps it** — a coupon on an order that has
+  been paid is spent, and one on a checkout the shop will not close is
+  refused rather than taken, because the same cut cannot stand on two bills
 - **A sale that beats it** — where the shop's own sale and the coupon
   cannot stack, the shop keeps the larger cut; the coupon goes back to the
   wallet, the order goes through, and the member is told —
@@ -73,7 +76,7 @@ quietly lost a coupon.
 | Expired | Its own validity passed |
 | Wrong channel | The definition does not name the channel it is being spent in |
 | Not eligible | The definition's eligibility is not met |
-| 🚧 An earlier code stands | A code minted for this coupon elsewhere could not be voided |
+| 🚧 An earlier sale stands | A sale carrying this coupon that could not be closed, so its cut still stands |
 
 ### Basket
 
@@ -91,6 +94,9 @@ quietly lost a coupon.
 **The paid order stamps it used, and nothing else does.** A coupon on a draft
 nobody paid was never spent.
 
+- 🚧 **A sale that did not carry it did not spend it** — a counter sale whose
+  cut the shop never gave hands the coupon back, and a sale that gave a cut
+  the order had already taken back is reported rather than counted twice
 - **Used has no way back** — cancelling or refunding that order leaves the
   coupon used and the points spent
 - **An unused one an operator can reverse** — the coupon is voided and the
