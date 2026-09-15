@@ -95,8 +95,17 @@ describe("a store that has drifted", () => {
       (one) => one.level === "warn",
     );
     expect(warnings.map((one) => one.rule).sort()).toEqual([
+      "blind",
       "derived",
       "figma",
+    ]);
+  });
+
+  /** The hatch is granted by this rule staying quiet, so what it says is the
+   * only place a change that owes a second reading is named. */
+  it("names the change that moves behaviour nothing read independently", async () => {
+    expect(lines(await result, "blind")).toEqual([
+      "openspec/changes/add-gamma/specs/demo-product/gamma/feature-tcs.md — `add-gamma` moves behaviour in `demo-product/gamma` and no suite reads it independently — run the feature pass, or say which line of behaviour moved if you think none did",
     ]);
   });
 
@@ -111,8 +120,8 @@ describe("a store that has drifted", () => {
     const root = fixture("broken");
     const report = formatReport(root, await result);
     expect(report.failures).toBe(11);
-    expect(report.warnings).toBe(2);
-    expect(report.text).toContain("11 failures, 2 warnings");
+    expect(report.warnings).toBe(3);
+    expect(report.text).toContain("11 failures, 3 warnings");
   });
 });
 

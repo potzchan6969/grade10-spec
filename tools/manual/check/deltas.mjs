@@ -33,6 +33,8 @@ const CARRIED = new Set(["Purpose", "Feature set"]);
 const ISSUED_ID = /[a-z0-9][a-z0-9-]*-(?:SC|US|TC)-\d+/g;
 const LEADING_ID = /^([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
 const SCENARIO_HEADING = /^Scenario:\s*/i;
+const SCENARIO_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
+const GWT = /^\s*(?:[-*]\s+)?\*\*(?:GIVEN|WHEN|THEN)\*\*/;
 const ARCHIVE_DATE = /^\d{4}-\d{2}-\d{2}-/;
 
 export function checkDeltas(ctx, { changes, shape, pages }) {
@@ -44,7 +46,109 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   checkIssued(ctx, files);
   checkFuse(ctx, files, pages);
   checkContext(ctx, files);
+  checkBlind(ctx, files, shape);
 }
+
+/** RULE `blind`: a delta that moves behaviour owes a second, independent
+ * reading of the same anchors — the suite beside it, and the
+ * `## Reconciliation` that says the two readings were brought together. A
+ * suite derived from the scenarios can only find inconsistency inside them,
+ * never the behaviour they left out, which is the one thing the pass exists
+ * to find; so a change without one ships whatever its scenarios forgot, and
+ * nothing anywhere says so.
+ *
+ * This is where `blind_pass_skipped` is granted, and granting it is this
+ * rule staying quiet. The author cannot declare it: behaviour lives in the
+ * `**GIVEN**` / `**WHEN**` / `**THEN**` lines and the scenario ids, so a
+ * delta that adds no id and moves no such line — a requirement split for
+ * readability, a rename, a typo in prose, a scenario moved under the
+ * requirement it always belonged to — has nothing for a second reading to
+ * read. Where this refuses and the author disagrees, that is a grilling
+ * round, not a self-service waiver.
+ *
+ * A `warn` while the store is full of changes written before the blind pass
+ * existed. It is the register of which ones they are, the way `derived` is
+ * for capabilities; a fail today would be 50 red lines nobody can act on,
+ * which is how a check teaches people to read past it. It goes to `fail` when
+ * the register empties. */
+function checkBlind(ctx, files, shape) {
+  const durable = durableBlocks(ctx.roots.store, shape);
+  for (const one of files) {
+    if (!movesBehaviour(one, durable)) continue;
+    const at = one.file.replace(/spec\.md$/, "feature-tcs.md");
+    const suite = readTextIfExists(join(ctx.roots.store, at));
+    if (suite === undefined) {
+      ctx.add(
+        "blind",
+        at,
+        `\`${one.change}\` moves behaviour in \`${one.spec}\` and no suite reads it independently — run the feature pass, or say which line of behaviour moved if you think none did`,
+      );
+      continue;
+    }
+    if (/^##\s+Reconciliation\s*$/m.test(suite)) continue;
+    ctx.add(
+      "blind",
+      at,
+      `carries no \`## Reconciliation\` — a suite without one is a reading nobody brought back to the scenarios, and what the two disagreed about is the finding`,
+    );
+  }
+}
+
+/** Whether a delta moves behaviour, judged the way the hatch is written: a
+ * scenario id the durable spec does not hold, or a GIVEN/WHEN/THEN line that
+ * is not the durable one. A REMOVED requirement moves behaviour when the
+ * requirement it removes had any. */
+function movesBehaviour(one, durable) {
+  const blocks = durable(one.spec);
+  for (const requirement of one.requirements) {
+    if (requirement.kind === "renamed") continue;
+    if (requirement.kind === "removed") {
+      if (behaviourOf(blocks.get(requirement.name)).lines.length > 0) {
+        return true;
+      }
+      continue;
+    }
+    const written = behaviourOf(requirement.block?.raw);
+    if (requirement.kind === "added") {
+      if (written.lines.length > 0) return true;
+      continue;
+    }
+    const held = blocks.get(requirement.name);
+    // MODIFIED against a requirement the durable spec does not hold. The
+    // fold refuses it and `delta` already says so; nothing here can compare.
+    if (held === undefined) return true;
+    if (!sameBehaviour(written, behaviourOf(held))) return true;
+  }
+  return false;
+}
+
+/** What a requirement block states as behaviour: the scenario ids it issues
+ * and its GIVEN/WHEN/THEN lines, whitespace collapsed. Everything else — the
+ * heading prose, a table, the `**Serves:**` anchor above the lines — is how
+ * the behaviour is explained rather than what it is, which is why the anchor
+ * sits where it does. */
+function behaviourOf(raw) {
+  const text = raw ?? "";
+  return {
+    ids: new Set(text.match(SCENARIO_ID) ?? []),
+    lines: text
+      .split("\n")
+      .filter((line) => GWT.test(line))
+      // The bullet marker is not behaviour: a list rewritten as plain lines
+      // moves none, and the hatch is about what the lines say.
+      .map((line) =>
+        line
+          .replace(/^\s*(?:[-*]\s+)?/, "")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+  };
+}
+
+const sameBehaviour = (written, held) =>
+  written.lines.length === held.lines.length &&
+  written.lines.every((line, at) => line === held.lines[at]) &&
+  [...written.ids].every((id) => held.ids.has(id));
 
 /** RULE `context`: a change restates the stories it anchors on under
  * `## Context user stories`, and the copy is the durable text or it is a lie.

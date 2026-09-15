@@ -284,10 +284,18 @@ export function featureGroups(body: string): string[] {
 export function servedAnchors(body: string): string[] {
   const match = SERVES.exec(body);
   if (!match) return [];
-  const head = match[1].split(/\s+[-\u2013\u2014]\s+/)[0];
-  // Several anchors are written as code spans, because a feature set group name
-  // may hold a comma of its own - `Derived, never written` is one - and
-  // splitting on commas would cut it in half. A lone anchor needs no span.
+  return anchorsIn(match[1]);
+}
+
+/** The anchors one `**Serves:**` or `**Trace:**` line names: everything before
+ * the prose dash, read as code spans when it holds any and as one bare name
+ * when it does not.
+ *
+ * Several anchors are written as code spans because a feature set group name
+ * may hold a comma of its own - `Derived, never written` is one - and
+ * splitting on commas would cut it in half. A lone anchor needs no span. */
+function anchorsIn(line: string): string[] {
+  const head = line.split(/\s+[-\u2013\u2014]\s+/)[0];
   const spans = [...head.matchAll(/`([^`]+)`/g)].map((m) => m[1].trim());
   const found = spans.length > 0 ? spans : [head.trim()];
   return [...new Set(found.filter(Boolean))];
@@ -501,11 +509,18 @@ function traces(section: Section): string[] {
     );
   }
   const ids = [...new Set(line[1].match(TRACE_ID) ?? [])];
-  if (ids.length === 0) {
+  if (ids.length > 0) return ids;
+  // A case may walk a `## Feature set` root group instead of a story - that is
+  // where a capability nobody walks routes its anchors - and a group is named
+  // verbatim rather than by id. Whether the name resolves is the `trace`
+  // rule's question, asked against the spec beside the suite; the reader's
+  // question is only whether the line names anything at all.
+  const named = anchorsIn(line[1]);
+  if (named.length === 0) {
     throw new StoreFileError(
       section.line,
-      `test case \`${section.heading}\` traces no journey or scenario id`,
+      `test case \`${section.heading}\` traces nothing - name a story, a scenario id, or a \`## Feature set\` group`,
     );
   }
-  return ids;
+  return named;
 }

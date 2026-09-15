@@ -97,6 +97,15 @@ export const RULES = [
     title: "Capabilities with anchors and no suite beside them",
   },
   {
+    // Granted silently when the delta moves no behaviour: that is
+    // `blind_pass_skipped`, and it is the checker's to grant, never the
+    // author's to declare. A `warn` until the register of changes written
+    // before the blind pass existed empties.
+    key: "blind",
+    level: "warn",
+    title: "Changes moving behaviour no second reading read",
+  },
+  {
     key: "grouping",
     level: "fail",
     title: "Durable specs holding a heading the archive would fold",

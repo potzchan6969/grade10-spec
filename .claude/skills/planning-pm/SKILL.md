@@ -277,8 +277,9 @@ see, so claiming both is the author contradicting themselves. The realistic
 failure is not dishonesty - it is an author who sincerely believes a refactor
 changes no behaviour and is wrong.
 
-`blind_pass_skipped` is granted by the checker when the spec diff **adds no
-scenario id** and **modifies no `**GIVEN**` / `**WHEN**` / `**THEN**` line** -
+`blind_pass_skipped` is granted by `pnpm check:manual`'s `blind` rule - by it
+staying quiet - when the spec diff **adds no scenario id** and **modifies no
+`**GIVEN**` / `**WHEN**` / `**THEN**` line** -
 splitting a requirement for readability, a typo in a table's prose, a rename, a
 scenario moved under the requirement it always belonged to. The author cannot
 declare it. Where the checker refuses and the author disagrees, that is a
