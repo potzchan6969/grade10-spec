@@ -2,3 +2,4 @@ schema: grade10-planning
 promoted_by: "@seankcw"
 created: 2026-09-14
 page_waived: the exit action never rendered on any surface, so no page line changes for a reader
+deploy_waived: "@sean: shipped to staging (commit 7610d01f4, deploy run 34804248318, 2026-09-14); production hasn't deployed anything since 2026-09-03 for unrelated reasons, and staging is the accepted bar for this change"
