@@ -52,9 +52,7 @@ const drafty = spec("demo/drafty", {
 });
 
 const holey = spec("demo/holey", {
-  journeys: [
-    { id: "holey-US-01", title: "Somebody does it", text: "" },
-  ],
+  journeys: [{ id: "holey-US-01", title: "Somebody does it", text: "" }],
   testCasesStatus: "approved",
   testCases: [testCase("holey-TC-01", "actual", ["holey-SC-01"])],
 });
@@ -67,9 +65,7 @@ const settled = spec("demo/settled", {
 });
 
 const journeysOnly = spec("demo/journeys-only", {
-  journeys: [
-    { id: "journeys-only-US-01", title: "Unproven", text: "" },
-  ],
+  journeys: [{ id: "journeys-only-US-01", title: "Unproven", text: "" }],
 });
 
 const quiet = spec("demo/quiet");

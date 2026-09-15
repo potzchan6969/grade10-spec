@@ -37,9 +37,7 @@ const document: ChangeDocument = {
       spec: "demo-product/alpha",
       path: "openspec/changes/pos/specs/demo-product/alpha/spec.md",
       text: "",
-      journeys: [
-        { id: "alpha-US-06", title: "A story", text: "" },
-      ],
+      journeys: [{ id: "alpha-US-06", title: "A story", text: "" }],
       sections: [
         {
           kind: "added",

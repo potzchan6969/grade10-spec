@@ -96,9 +96,12 @@ test("a clear run writes the record quoted, over the waiver it replaces", () => 
 const CAP = "site/store/listing";
 const PURPOSE = "## Purpose\n\nCollectors find a card and buy it.\n\n";
 const FEATURE_SET = "## Feature set\n\n- Search\n\n";
-const REQUIREMENTS = "## Requirements\n\n### Requirement: Search\n\nIt searches.\n";
-const STORY = "### listing-US-01: Collector searches the catalogue\n\n**As a** collector,\n**I want** to search,\n**so that** I find a card.\n";
-const SUITE = "# Feature test cases\n\n## Settled\n\n- A sold listing is not an error state · refused 2026-09-01\n";
+const REQUIREMENTS =
+  "## Requirements\n\n### Requirement: Search\n\nIt searches.\n";
+const STORY =
+  "### listing-US-01: Collector searches the catalogue\n\n**As a** collector,\n**I want** to search,\n**so that** I find a card.\n";
+const SUITE =
+  "# Feature test cases\n\n## Settled\n\n- A sold listing is not an error state · refused 2026-09-01\n";
 
 const CARRIED = {
   ...PROPOSAL,
@@ -129,7 +132,10 @@ test("refuses a scenario the fold would land with no anchor", () => {
   const result = run(sandbox(files, DURABLE).script, ...SHIPPED);
 
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /1 scenario\(s\) carrying no `\*\*Serves:\*\*` line/);
+  assert.match(
+    result.stderr,
+    /1 scenario\(s\) carrying no `\*\*Serves:\*\*` line/,
+  );
   assert.match(result.stderr, /listing-SC-01/);
 });
 
@@ -216,7 +222,10 @@ test("refuses a carried Reconciliation that keeps its scenario ids", () => {
   const result = run(sandbox(CARRIED, withIds).script, ...SHIPPED);
 
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /scenario id\(s\) not stripped \(listing-SC-04\)/);
+  assert.match(
+    result.stderr,
+    /scenario id\(s\) not stripped \(listing-SC-04\)/,
+  );
 });
 
 test("refuses a suite carried without its Settled lines, waiver or no waiver", () => {
@@ -241,7 +250,7 @@ test("a suite with no durable file yet is a promise --journeys-copied can make",
   const { [`${CAP}/feature-tcs.md`]: _suite, ...missing } = DURABLE;
   const refused = run(sandbox(CARRIED, missing).script, ...SHIPPED);
   assert.equal(refused.status, 1);
-  assert.match(refused.stderr, /feature-tcs\.md`  · nothing durable yet/);
+  assert.match(refused.stderr, /feature-tcs\.md` {2}· nothing durable yet/);
 
   const acknowledged = run(
     sandbox(CARRIED, missing).script,

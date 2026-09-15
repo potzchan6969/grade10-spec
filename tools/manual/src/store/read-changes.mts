@@ -262,7 +262,8 @@ const RECORDED = [
  * switch with no reason reads as the empty string — declared, unexplained —
  * which is what rule `hatch` refuses. */
 export function skipSpecsOf(value: unknown, why: unknown): string | undefined {
-  if (value === undefined || value === null || value === false) return undefined;
+  if (value === undefined || value === null || value === false)
+    return undefined;
   if (value !== true) {
     throw new StoreFileError(
       1,

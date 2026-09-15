@@ -23,7 +23,7 @@ const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 const SELF = "scripts/openspec/journey-vocabulary.test.mjs";
 
 /** Split so this file does not fail itself. */
-const BANNED = new RegExp(`user\\s+stor(?:y|ies)`, "i");
+const BANNED = /user\s+stor(?:y|ies)/i;
 
 const TEXT = /\.(md|mts|ts|tsx|mjs|js|yaml|yml|json)$/;
 

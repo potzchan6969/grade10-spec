@@ -261,7 +261,9 @@ function parseSuite(text) {
       for (let j = i + 1; j < lines.length && !/^##\s/.test(lines[j]); j++) {
         body.push(lines[j]);
       }
-      suite[key] = body.filter((one) => one.trim() && !one.trim().startsWith("<!--")).length;
+      suite[key] = body.filter(
+        (one) => one.trim() && !one.trim().startsWith("<!--"),
+      ).length;
       continue;
     }
 

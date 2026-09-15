@@ -144,7 +144,8 @@ function anchorlessScenarios(text) {
   const found = [];
   let current = null;
   const close = () => {
-    if (current && !SERVES.test(current.body.join("\n"))) found.push(current.id);
+    if (current && !SERVES.test(current.body.join("\n")))
+      found.push(current.id);
   };
   for (const line of lines) {
     const heading = line.match(SCENARIO_HEADING);
@@ -243,14 +244,18 @@ function help() {
     dim("  The archive's three gates, mechanical: proof of deploy, every task"),
   );
   console.log(
-    dim("  checked off, and the purpose / feature set / journeys / suites copy"),
+    dim(
+      "  checked off, and the purpose / feature set / journeys / suites copy",
+    ),
   );
   console.log(
     dim(
       "  the fold would discard, done and done right. A clear run writes the",
     ),
   );
-  console.log(dim("  record into the change's .openspec.yaml and prints the commit."));
+  console.log(
+    dim("  record into the change's .openspec.yaml and prints the commit."),
+  );
   const ids = changeIds();
   console.log("\nChanges in flight");
   if (ids.length === 0) console.log(dim("  none — openspec/changes is empty"));
@@ -491,7 +496,9 @@ for (const { file, capability } of deltaFiles(changeId)) {
 
     // Scenario ids belong to the change. A `## Reconciliation` that keeps
     // them past the fold points at a change that is about to stop existing.
-    const ids = [...new Set(sectionBody(arrived, "Reconciliation")?.match(SC_ID) ?? [])];
+    const ids = [
+      ...new Set(sectionBody(arrived, "Reconciliation")?.match(SC_ID) ?? []),
+    ];
     if (ids.length > 0) {
       wrong.push({
         capability: dir,
@@ -517,7 +524,9 @@ for (const { file, capability } of deltaFiles(changeId)) {
 
 if (wrong.length > 0) {
   fail(
-    yellow(`${changeId} carries ${wrong.length} section(s) across incorrectly:`),
+    yellow(
+      `${changeId} carries ${wrong.length} section(s) across incorrectly:`,
+    ),
   );
   for (const { capability, what } of wrong) {
     console.error(`  ${capability} — ${what}`);

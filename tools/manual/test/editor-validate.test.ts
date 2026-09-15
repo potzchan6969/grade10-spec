@@ -28,9 +28,7 @@ const ALPHA: SpecEntry = {
       scenarios: [{ id: "alpha-SC-01", name: "earning", text: "" }],
     },
   ],
-  journeys: [
-    { id: "alpha-US-01", title: "Earn points", text: "" },
-  ],
+  journeys: [{ id: "alpha-US-01", title: "Earn points", text: "" }],
 };
 
 const CHANGING: ChangeEntry = {
