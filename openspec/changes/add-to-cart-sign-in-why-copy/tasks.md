@@ -17,7 +17,7 @@ Needs the title seam from group 2, and the dialog that
 [`require-sign-in-to-add-to-cart`](../require-sign-in-to-add-to-cart/tasks.md)
 opens from Add to cart — until that change lands there is nothing to title.
 
-- [ ] 3.1 Bump the `external/grade10-spec` submodule to the commit carrying `signIn.titleAddToCart`
-- [ ] 3.2 Title the dialog **Sign In to Add to Cart** when the listing's cart control opens it (grade10-site-store-product-listing-SC-47)
-- [ ] 3.3 Title the dialog **Sign In to Add to Cart** when the product page's Add to cart opens it (grade10-site-store-product-page-SC-29)
-- [ ] 3.4 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs web-spa`
+- [x] 3.1 Bump the `external/grade10-spec` submodule to the commit carrying `signIn.titleAddToCart`
+- [x] 3.2 Title the dialog **Sign In to Add to Cart** when the listing's cart control opens it (grade10-site-store-product-listing-SC-47)
+- [x] 3.3 Title the dialog **Sign In to Add to Cart** when the product page's Add to cart opens it (grade10-site-store-product-page-SC-29)
+- [x] 3.4 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs web-spa`
