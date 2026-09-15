@@ -235,6 +235,7 @@ function parseSuite(text) {
     // skipped the step, the other a claim that nothing was left open.
     raised: null,
     settled: null,
+    reconciliation: null,
   };
   let journey = null;
   let tc = null;
@@ -252,7 +253,7 @@ function parseSuite(text) {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    const meta = line.match(/^##\s+(Raised|Settled)\s*$/);
+    const meta = line.match(/^##\s+(Raised|Settled|Reconciliation)\s*$/);
     if (meta) {
       pushJourney();
       const key = meta[1].toLowerCase();
@@ -555,17 +556,19 @@ function checkSuite(root, filePath, rulesRev) {
   // empty means the reader claims the input settled everything, which is a
   // claim worth being able to make and worth being read as one.
   //
-  // A warning, not an error, for as long as the corpus predates it: every suite
-  // in the store was derived from the scenarios before the blind reading
-  // existed, and none of them can grow a `## Raised` without being written
-  // again. Failing now would put thirty files behind a red check and teach
-  // everyone to read past it — the same mistake `anchorless` made. It becomes
-  // an error in the commit that finishes regenerating them.
-  if (!domain) {
+  // `## Reconciliation` is what says a blind reading happened, so it is what
+  // decides whether `## Raised` is owed. A suite with both is one this workflow
+  // wrote; a suite with neither predates it and is left alone, which is why no
+  // rules revision was bumped — the cases these files hold did not change, and
+  // a major would have demanded thirty rewrites to say so.
+  //
+  // A reconciliation with no raised list is the shape that must fail: the blind
+  // reading ran and its findings were dropped.
+  if (!domain && suite.reconciliation !== null) {
     if (suite.raised === null)
-      warn(
+      err(
         1,
-        "no `## Raised` section — a blind reading ends with what the input did not settle, and an empty section is how it says nothing was left open",
+        "has `## Reconciliation` and no `## Raised` — the blind reading ran and what it could not settle was thrown away; an empty section is how a reader says nothing was left open",
       );
     else if (suite.raised === 0)
       warn(

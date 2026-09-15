@@ -33,7 +33,7 @@ The blind reading ends with a `## Raised` section: every point the input did not
 
 - **What belongs** — a rule the input is silent on. "Is a scheduled lot open to bid on? The spec names not-yet-published, ended and called off as failures and never places scheduled on either side." That is a question the material cannot answer, and it is how a state nobody had thought about gets found
 - **What does not** — anything the input settles and the reader missed; anything for the technical design rather than the behaviour; anything the reader merely wants to know more about
-- **It is required, and may be empty** — a suite with no `## Raised` at all is refused. A suite with an empty one is a claim, made on the record, that the input settled everything
+- **It is owed by any suite that carries a `## Reconciliation`** — that section is what says a blind reading happened, so it is what makes the raised list due. A reconciliation with no raised list fails: the reading ran and what it could not settle was thrown away. A suite with an empty raised list is a claim, made on the record, that the input settled everything
 - **It survives the run** — QA's review is largely a check on what was done with these, and a reviewer cannot check a list that was deleted once it was processed
 
 ## Reconciliation
@@ -197,6 +197,19 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 - **Top down** — platform, product, domain, then feature; when a domain's last feature suite is approved, offer its `domain-tcs.md`, then `platform-tcs.md`
 - **Two reviewers is allowed** — open PRs on the file are reported as information; the file is re-read from disk before each verdict is written
 - **Push at the end of a session** — `/tcs-review` offers to commit and push what has a verdict
+
+## The Suites This Store Does Not Yet Have
+
+Thirty capabilities carry a suite and thirty-nine do not; seventeen of those thirty-nine are ones nobody walks, which used to be exempt and no longer are. That is eight hundred scenarios with no cases beside them, and the thirty that do have cases were derived from the scenarios rather than read independently.
+
+**None of it is being filled in one pass, and that is a decision rather than a backlog nobody got to.**
+
+- **A blind reading of a finished spec is not a blind reading.** These scenarios are written, reviewed and shipped. The second reading's whole value is that it happens beside the first without seeing it; run against a spec that already exists, it can only be a derived reading wearing the new shape, and its `## Raised` would come back empty — which is the signal this document names as the mechanism having failed
+- **The suites are written when a change touches the capability.** `/planning-pm` runs the blind pass as part of its own work, on the anchors as they stand at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
+- **`pnpm check:manual`'s `derived` finding is the register.** It names every capability with anchors and no suite, recomputed on every run, so it cannot go stale the way a checklist in a document would. There is no second list to keep
+- **No rules revision was bumped for this.** The cases these files hold did not change; what changed is what a *new* run must record about itself. A major revision would have required sweeping thirty suites to say so, which is the work this section exists to decline
+
+`## Raised` and the anchors are gated accordingly: a suite is held to the new shape when it carries a `## Reconciliation`, and left alone when it does not.
 
 ## Rules Revisions
 
