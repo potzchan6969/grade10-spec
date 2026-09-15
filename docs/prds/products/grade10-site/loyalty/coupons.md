@@ -44,16 +44,21 @@ so redefining the reward never rewrites a coupon a member already holds —
   member holds against the cart, and one that cannot ride says which refusal
   answered; nothing is held by reading —
   [Cart Drawer](/p/grade10-site/store/cart)
-- **Held for an order, then settled** — a coupon is held against the order
-  being paid, and freed again if that order is not
+- 🚧 **Nothing is held** — a coupon stays available until a paid order spends
+  it, so a checkout the member walks away from costs them nothing —
+  [Discounts](/p/grade10-site/store/discounts)
+- 🚧 **The newer checkout replaces the older** — starting an online checkout
+  cancels the member's earlier online orders carrying a coupon before the new
+  one claims it, so one coupon never stands on two online orders
+- **A sale at the counter keeps its coupon** — a counter sale holds the coupon
+  it carries for as long as it can still collect, and the coupon is refused
+  online until that sale is paid or cancelled
+- ❓ **A counter sale nobody finished** — how long the member waits for a
+  coupon left on a sale that never completed; Product confirms
 - **A sale that beats it** — where the shop's own sale and the coupon
   cannot stack, the shop keeps the larger cut; the coupon goes back to the
   wallet, the order goes through, and the member is told —
   [Discounts](/p/grade10-site/store/discounts)
-- **A stuck hold frees itself** — **24 hours** on, a hold nothing ever settled
-  is released
-- **One live attempt** — a second application while one is in flight is
-  refused
 - **The order's one discount** — a reward coupon is in that count; points
   paid against the bill, free shipping and the site's own discounts sit
   outside it — [Discounts](/p/grade10-site/store/discounts)
@@ -72,7 +77,7 @@ quietly lost a coupon.
 | Expired | Its own validity passed |
 | Wrong channel | The definition does not name the channel it is being spent in |
 | Not eligible | The definition's eligibility is not met |
-| Attempt in flight | Another application of the same coupon is already live |
+| 🚧 On a counter sale | The coupon is on a sale at a till that can still collect |
 
 ### Basket
 
