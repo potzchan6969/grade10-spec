@@ -25,6 +25,7 @@ The package SHALL NOT export `SignInCodeForm`, `SignInCodeFormProps`,
 `SignInCodeFormCopy`, or `SignInCardAction`.
 
 #### Scenario: shared-ui-auth-sign-in-SC-01 - An application imports the sign-in surface
+**Serves:** Sign-in surface contract - an application imports the sign-in surface
 
 - **WHEN** an application imports any export named above from the shared UI package's public entry
 - **THEN** the import resolves without error
@@ -40,6 +41,7 @@ prop and a required `onOpenChange` callback. `SignInCard` SHALL NOT hold open
 state of its own.
 
 #### Scenario: shared-ui-auth-sign-in-SC-02 - The triggering page stays mounted
+**Serves:** Sign-in surface contract - the triggering page stays mounted
 
 - **GIVEN** a collector on a page that triggers sign-in
 - **WHEN** the consumer sets `open` to `true`
@@ -47,6 +49,7 @@ state of its own.
 - **AND** the page beneath remains mounted with its state intact
 
 #### Scenario: shared-ui-auth-sign-in-SC-03 - Visibility is the consumer's
+**Serves:** Sign-in surface contract - visibility is the consumer's
 
 - **GIVEN** `SignInCard` rendered with `open` set to `false`
 - **WHEN** nothing else changes
@@ -65,6 +68,7 @@ Dismissal SHALL be the only way out of the dialog the block offers.
 leaves the flow by any other route.
 
 #### Scenario: shared-ui-auth-sign-in-SC-04 - Dismissing returns the collector to what they were doing
+**Serves:** Sign-in surface contract - dismissing returns the collector to what they were doing
 
 - **GIVEN** an open sign-in dialog over a page
 - **WHEN** the collector activates the close control, presses Escape, or activates the scrim
@@ -72,6 +76,7 @@ leaves the flow by any other route.
 - **AND** the collector is left on the page beneath with its state intact
 
 #### Scenario: shared-ui-auth-sign-in-SC-09 - The dialog offers no exit beside dismissal
+**Serves:** Sign-in surface contract - the dialog offers no exit beside dismissal
 
 - **GIVEN** `SignInCard` rendered with a step, a status message, and legal copy
 - **WHEN** the dialog renders
@@ -85,6 +90,7 @@ divider, and SHALL render the active step after the divider. When
 slot nor the divider.
 
 #### Scenario: shared-ui-auth-sign-in-SC-05 - A provider widget is supplied
+**Serves:** Sign-in body composition - a provider widget is supplied
 
 - **GIVEN** `SignInCard` with a `providerSlot` and a step as its children
 - **WHEN** the dialog renders
@@ -92,6 +98,7 @@ slot nor the divider.
 - **AND** the step appears below the divider
 
 #### Scenario: shared-ui-auth-sign-in-SC-06 - No provider widget
+**Serves:** Sign-in body composition - no provider widget
 
 - **GIVEN** `SignInCard` with no `providerSlot`
 - **WHEN** the dialog renders
@@ -110,12 +117,14 @@ render.
 English.
 
 #### Scenario: shared-ui-auth-sign-in-SC-07 - Legal copy is supplied
+**Serves:** Sign-in body composition - legal copy is supplied
 
 - **GIVEN** `SignInCard` whose `copy.legal` is set
 - **WHEN** the dialog renders
 - **THEN** that text renders as the last node in the dialog body
 
 #### Scenario: shared-ui-auth-sign-in-SC-08 - Legal copy is omitted
+**Serves:** Sign-in body composition - legal copy is omitted
 
 - **GIVEN** `SignInCard` whose `copy.legal` is not set
 - **WHEN** the dialog renders

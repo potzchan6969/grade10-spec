@@ -55,6 +55,7 @@ Manual SHALL NOT share a mark. Rows with Needs action = Yes SHALL get
 an extra highlight.
 
 #### Scenario: post-sale-SC-01 - A listing inside the last hour is Ending soon
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** a published listing whose recorded close is 60 minutes or
   less away and has not passed
@@ -62,6 +63,7 @@ an extra highlight.
 - **THEN** that listing's outcome is Ending soon
 
 #### Scenario: post-sale-SC-02 - Stripe capture and manual collection are different outcomes
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** one listing whose card capture succeeded and one listing
   whose operator recorded collection, neither shipped
@@ -71,6 +73,7 @@ an extra highlight.
 - **AND** the two marks do not share the same treatment
 
 #### Scenario: post-sale-SC-03 - An operator works only listings awaiting wire
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** the queue contains Live, Awaiting wire, and Paid via Manual
   listings
@@ -78,6 +81,7 @@ an extra highlight.
 - **THEN** Grade10 returns only listings whose outcome is Awaiting wire
 
 #### Scenario: post-sale-SC-04 - Awaiting wire is highlighted as needing action
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** an Awaiting wire listing and an Awaiting payment listing in
   the queue
@@ -104,6 +108,7 @@ the trail, and SHALL still leave comments, even with neither
 payment-processing nor shipment-processing.
 
 #### Scenario: post-sale-SC-05 - Operator closes out a won listing
+**Serves:** post-sale-US-02 - Operator closes out a won listing
 
 - **GIVEN** a listing in Awaiting payment
 - **AND** the operator holds payment-processing and shipment-processing
@@ -114,6 +119,7 @@ payment-processing nor shipment-processing.
 - **AND** the winner is unchanged
 
 #### Scenario: post-sale-SC-06 - Operator opens a won listing
+**Serves:** post-sale-US-02 - Operator closes out a won listing
 
 - **GIVEN** a listing with a winner, a recorded close, and a winning amount
 - **WHEN** the operator selects that listing from the queue
@@ -141,6 +147,7 @@ An operator who can open the listing SHALL be able to leave a comment.
 Grade10 SHALL refuse an empty comment.
 
 #### Scenario: post-sale-SC-07 - Stripe paid and an operator comment share the trail
+**Serves:** post-sale-US-02 - Operator closes out a won listing
 
 - **GIVEN** a listing whose outcome is Paid via Stripe
 - **WHEN** an operator leaves a comment
@@ -164,6 +171,7 @@ identifier, or card fingerprint.
 | Storefront | Storefront the winner bid through |
 
 #### Scenario: post-sale-SC-08 - Winner email is the contact without Stripe identifiers
+**Serves:** post-sale-US-02 - Operator closes out a won listing
 
 - **GIVEN** a won listing whose winner email is on file
 - **WHEN** an operator who can open the queue views the detail
@@ -205,6 +213,7 @@ A payment control whose grant the caller lacks SHALL stay visible and
 disabled. Grade10 SHALL refuse the same action on the server.
 
 #### Scenario: post-sale-SC-09 - Wire request releases the card hold
+**Serves:** post-sale-US-03 - Operator collects payment
 
 - **GIVEN** a listing in Awaiting payment whose winner still has an
   open card authorization
@@ -215,6 +224,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **AND** it does not capture the authorization
 
 #### Scenario: post-sale-SC-10 - Stripe capture marks the listing Paid via Stripe
+**Serves:** post-sale-US-03 - Operator collects payment
 
 - **GIVEN** a listing in Awaiting payment with an open winner
   authorization
@@ -225,6 +235,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
   from an operator
 
 #### Scenario: post-sale-SC-11 - Manual collection marks Paid via Manual and releases the hold
+**Serves:** post-sale-US-03 - Operator collects payment
 
 - **GIVEN** a listing in Awaiting payment, Payment failed, or Awaiting
   wire
@@ -235,6 +246,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
   release and does not capture it
 
 #### Scenario: post-sale-SC-12 - A second paid attempt is refused
+**Serves:** post-sale-US-03 - Operator collects payment
 
 - **GIVEN** a listing already Paid via Stripe
 - **WHEN** an operator records payment as collected
@@ -243,6 +255,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **AND** the winner is unchanged
 
 #### Scenario: post-sale-SC-13 - Staff cannot record payment
+**Serves:** post-sale-US-03 - Operator collects payment
 
 - **GIVEN** an operator whose roles are exactly `staff` and a listing
   in Awaiting payment
@@ -278,6 +291,7 @@ A shipment control whose grant the caller lacks SHALL stay visible and
 disabled. Grade10 SHALL refuse the same action on the server.
 
 #### Scenario: post-sale-SC-14 - Shipment follows paid, then started, then completed
+**Serves:** post-sale-US-04 - Operator records in-house shipment
 
 - **GIVEN** a Paid via Stripe or Paid via Manual listing
 - **AND** the operator holds shipment-processing
@@ -286,6 +300,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **AND** the trail names that operator and each new outcome
 
 #### Scenario: post-sale-SC-15 - Shipment cannot skip ahead
+**Serves:** post-sale-US-04 - Operator records in-house shipment
 
 - **GIVEN** a listing in Awaiting payment
 - **WHEN** an operator records shipment started
@@ -299,6 +314,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **AND** the outcome remains Paid via Manual
 
 #### Scenario: post-sale-SC-16 - Finance cannot record shipment
+**Serves:** post-sale-US-04 - Operator records in-house shipment
 
 - **GIVEN** an operator whose roles are exactly `finance` and a Paid
   via Stripe listing
@@ -308,6 +324,7 @@ disabled. Grade10 SHALL refuse the same action on the server.
 - **AND** the outcome remains Paid via Stripe
 
 #### Scenario: post-sale-SC-17 - Publishing a listing does not need the shipment grant
+**Serves:** post-sale-US-04 - Operator records in-house shipment
 
 - **GIVEN** an operator who holds catalogue publishing and does not
   hold shipment-processing
@@ -323,6 +340,7 @@ An operator with shipment-processing SHALL be able to record a missing
 delivery address. That SHALL NOT mark the listing Shipped.
 
 #### Scenario: post-sale-SC-18 - Recording an address does not ship the listing
+**Serves:** post-sale-US-04 - Operator records in-house shipment
 
 - **GIVEN** a Paid via Stripe or Paid via Manual listing with no
   delivery address
@@ -361,6 +379,7 @@ families SHALL NOT share a mark. A row whose outcome needs action SHALL carry
 an additional highlight.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-19 - A lot inside its last hour is Ending soon
+**Serves:** Queue - a lot inside its last hour is Ending soon
 
 - **GIVEN** a published lot whose close is 60 minutes or less away and has not
   passed
@@ -368,6 +387,7 @@ an additional highlight.
 - **THEN** that lot's outcome is Ending soon
 
 #### Scenario: grade10-admin-auction-post-sale-SC-20 - A won lot's outcome is its derived order status
+**Serves:** Queue - a won lot's outcome is its derived order status
 
 - **GIVEN** a closed lot whose auction order derives as Processing
 - **WHEN** an operator reads the queue
@@ -375,6 +395,7 @@ an additional highlight.
 - **AND** it is the same value the winner reads on their own order
 
 #### Scenario: grade10-admin-auction-post-sale-SC-21 - Expired and Processing are highlighted as needing action
+**Serves:** Queue - expired and Processing are highlighted as needing action
 
 - **GIVEN** a queue holding one Expired order, one Processing order, and one
   Delivered order
@@ -390,6 +411,7 @@ phone number Grade10 already holds. Grade10 SHALL NOT show a payment-provider
 customer or payment identifier as the winner's contact.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-22 - The winner's email is the contact
+**Serves:** Queue - the winner's email is the contact
 
 - **GIVEN** an auction order with a winner
 - **WHEN** an operator opens it
@@ -420,6 +442,7 @@ Reissuing an invoice SHALL NOT lift the winner's account suspension, per
 explicit action.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-23 - Reissue returns an expired order to Pending Payment
+**Serves:** Resolving an unpaid order - reissue returns an expired order to Pending Payment
 
 - **GIVEN** an auction order deriving as Expired
 - **AND** an operator holding payment-processing
@@ -428,6 +451,7 @@ explicit action.
 - **AND** the derived order status is Pending Payment
 
 #### Scenario: grade10-admin-auction-post-sale-SC-24 - Reissue leaves the suspension standing
+**Serves:** Resolving an unpaid order - reissue leaves the suspension standing
 
 - **GIVEN** a suspended winner whose expired order an operator reissues
 - **WHEN** the reissue is committed
@@ -435,6 +459,7 @@ explicit action.
 - **AND** the operator is not offered reinstatement as part of the reissue
 
 #### Scenario: grade10-admin-auction-post-sale-SC-25 - An operator without the grant is refused
+**Serves:** Grants - an operator without the grant is refused
 
 - **GIVEN** an operator who does not hold payment-processing
 - **WHEN** they open an Expired order
@@ -473,6 +498,7 @@ address, the prior final amount, the revised final amount, the settlement
 method, and the external reference.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-26 - Settlement cannot proceed without confirming the address
+**Serves:** Resolving an unpaid order - settlement cannot proceed without confirming the address
 
 - **GIVEN** an unpaid auction order whose delivery address is unchanged from
   the account default shipping address
@@ -482,6 +508,7 @@ method, and the external reference.
 - **AND** the invoice status is still `pending`
 
 #### Scenario: grade10-admin-auction-post-sale-SC-27 - Updating the address recalculates before commit
+**Serves:** Resolving an unpaid order - updating the address recalculates before commit
 
 - **GIVEN** an unpaid auction order whose final amount is 312000 minor units
   in HKD
@@ -491,6 +518,7 @@ method, and the external reference.
   before the operator commits
 
 #### Scenario: grade10-admin-auction-post-sale-SC-28 - The payment record carries the revised amount
+**Serves:** Resolving an unpaid order - the payment record carries the revised amount
 
 - **GIVEN** that same order, committed at a revised final amount of 316000
   minor units in HKD against a last invoice of 312000 minor units in HKD
@@ -501,6 +529,7 @@ method, and the external reference.
 - **AND** the delivery address is locked
 
 #### Scenario: grade10-admin-auction-post-sale-SC-29 - Manual settlement is available before expiry
+**Serves:** Resolving an unpaid order - manual settlement is available before expiry
 
 - **GIVEN** an auction order deriving as Pending Payment, three days from its
   deadline, whose winner has said they will pay by bank transfer
@@ -510,6 +539,7 @@ method, and the external reference.
 - **AND** the order derives as Processing without having expired first
 
 #### Scenario: grade10-admin-auction-post-sale-SC-30 - A settled order refuses a second settlement
+**Serves:** Resolving an unpaid order - a settled order refuses a second settlement
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** an operator attempts to record a second settlement against it
@@ -537,6 +567,7 @@ reissue history across **all** their orders on the account record, so a
 reviewer sees the pattern before granting another.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-33 - A third reissue is accepted and numbered
+**Serves:** Resolving an unpaid order - a third reissue is accepted and numbered
 
 - **GIVEN** an auction order already reissued twice
 - **WHEN** an operator reissues it a third time with a reason
@@ -558,6 +589,7 @@ On cancellation Grade10 SHALL:
   audit, and SHALL NOT carry it into the new listing.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-31 - Cancelling returns the lot to available
+**Serves:** Resolving an unpaid order - cancelling returns the lot to available
 
 - **GIVEN** an auction order deriving as Expired
 - **WHEN** an operator cancels it with a reason
@@ -565,6 +597,7 @@ On cancellation Grade10 SHALL:
 - **AND** the lot's inventory status is available and it can be listed again
 
 #### Scenario: grade10-admin-auction-post-sale-SC-32 - No runner-up is offered the cancelled lot
+**Serves:** Resolving an unpaid order - no runner-up is offered the cancelled lot
 
 - **GIVEN** a cancelled auction order whose lot had a second-highest bidder
 - **WHEN** the cancellation completes
@@ -597,6 +630,7 @@ engaged, and the difference SHALL be visible to whoever decides on
 reinstatement.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-34 - Failed payment attempts appear in the invoice log
+**Serves:** Audit trail - failed payment attempts appear in the invoice log
 
 - **GIVEN** a winner whose card was declined three times before the deadline
   elapsed
@@ -606,6 +640,7 @@ reinstatement.
   issued log entry
 
 #### Scenario: grade10-admin-auction-post-sale-SC-35 - An amendment's amount change is on the record
+**Serves:** Audit trail - an amendment's amount change is on the record
 
 - **GIVEN** an auction order whose winner amended the address, changing the
   final amount from 312000 to 316000 minor units in HKD
@@ -635,6 +670,7 @@ the invoice amount history SHALL be independently reconstructable and
 cross-referenceable, so an amount change can be explained afterwards.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-36 - The address at dispatch survives a later edit
+**Serves:** Audit trail - the address at dispatch survives a later edit
 
 - **GIVEN** an auction order dispatched to one address, whose address an
   operator later corrects
@@ -658,6 +694,7 @@ An auction order's detail SHALL show:
 - A link to the source lot and its bid history.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-37 - The detail explains the status it derived
+**Serves:** Queue - the detail explains the status it derived
 
 - **GIVEN** an auction order whose invoice is `pending` and whose deadline
   elapsed two days ago
@@ -667,6 +704,7 @@ An auction order's detail SHALL show:
   an elapsed deadline — rather than the label alone
 
 #### Scenario: grade10-admin-auction-post-sale-SC-38 - A buyer's reissue history spans all their orders
+**Serves:** Queue - a buyer's reissue history spans all their orders
 
 - **GIVEN** a buyer with reissues on three different auction orders
 - **WHEN** an operator opens any one of those orders
@@ -692,6 +730,7 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 Recording a delivery address SHALL NOT dispatch the lot.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-39 - Staff cannot record payment
+**Serves:** Grants - staff cannot record payment
 
 - **GIVEN** an operator holding the staff role
 - **WHEN** they open an Expired order
@@ -699,6 +738,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 - **AND** Grade10 refuses those actions on the server
 
 #### Scenario: grade10-admin-auction-post-sale-SC-40 - Finance cannot record dispatch
+**Serves:** Grants - finance cannot record dispatch
 
 - **GIVEN** an operator holding the finance role
 - **WHEN** they open a Processing order
@@ -706,6 +746,7 @@ Recording a delivery address SHALL NOT dispatch the lot.
 - **AND** Grade10 refuses a dispatch from them on the server
 
 #### Scenario: grade10-admin-auction-post-sale-SC-41 - Recording an address does not dispatch the lot
+**Serves:** Grants - recording an address does not dispatch the lot
 
 - **GIVEN** a Processing order with no delivery address
 - **AND** an operator holding shipment-processing
@@ -723,6 +764,7 @@ Every operator-initiated log entry SHALL carry a named operator and a reason.
 A system-initiated log entry SHALL record the event that triggered it.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-42 - A relisted lot's cancelled order is retained
+**Serves:** Queue - a relisted lot's cancelled order is retained
 
 - **GIVEN** a cancelled auction order whose lot has since been relisted and
   sold again
@@ -731,6 +773,7 @@ A system-initiated log entry SHALL record the event that triggered it.
 - **AND** no record has been deleted or edited in place
 
 #### Scenario: grade10-admin-auction-post-sale-SC-43 - An operator event without a reason is refused
+**Serves:** Queue - an operator event without a reason is refused
 
 - **GIVEN** an operator holding payment-processing
 - **WHEN** they attempt to reissue an invoice without giving a reason

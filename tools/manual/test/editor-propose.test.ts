@@ -312,7 +312,6 @@ describe("what a proposal can cite", () => {
         id: "alpha-US-01",
         title: "Collector does it",
         text: "",
-        acceptedBy: [],
       },
     ],
     testCases: [

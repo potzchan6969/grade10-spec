@@ -39,6 +39,7 @@ filter for listings whose bidding has ended or been canceled. Retained entries
 SHALL have no account control to delete or hide them.
 
 #### Scenario: grade10-site-auction-bidding-history-SC-01 - Repeated activity is grouped under one listing
+**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
 
 - **GIVEN** a collector has configured an automatic maximum and raised that maximum on one listing
 - **WHEN** the collector reads their bidding index
@@ -46,6 +47,7 @@ SHALL have no account control to delete or hide them.
 - **AND** its summary carries the collector's current standing rather than one row per action
 
 #### Scenario: grade10-site-auction-bidding-history-SC-02 - A failed-only listing remains explainable
+**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
 
 - **GIVEN** a collector's server-evaluated maximum attempts on a listing all failed
 - **AND** no automatic maximum or automatic bid was accepted for that account
@@ -54,6 +56,7 @@ SHALL have no account control to delete or hide them.
 - **AND** the collector can open its history to read each safe failure reason
 
 #### Scenario: grade10-site-auction-bidding-history-SC-03 - Active and completed activity separate cleanly
+**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
 
 - **GIVEN** a signed-in collector has activity on one open listing, one closed listing, and one canceled listing
 - **WHEN** the collector selects **Active**
@@ -62,12 +65,14 @@ SHALL have no account control to delete or hide them.
 - **THEN** the closed and canceled listings appear
 
 #### Scenario: grade10-site-auction-bidding-history-SC-04 - Paging does not repeat or skip a listing
+**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
 
 - **GIVEN** a collector has more bidding listings than one page holds
 - **WHEN** the collector follows every returned cursor while no newer activity is added
 - **THEN** every matching listing appears exactly once in latest-activity order
 
 #### Scenario: grade10-site-auction-bidding-history-SC-05 - An account with no bidding activity has an empty index
+**Serves:** grade10-site-auction-bidding-history-US-01 - Collector reads their bidding index
 
 - **GIVEN** a signed-in storefront account with no retained maximum attempt or automatic-bid activity
 - **WHEN** the collector reads their bidding index
@@ -100,6 +105,7 @@ one auction decision into one understandable step rather than presenting
 contradictory duplicates.
 
 #### Scenario: grade10-site-auction-bidding-history-SC-11 - A competing bid visibly causes an outbid state
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **GIVEN** the collector is leading a listing
 - **WHEN** a rival's accepted public history record displaces the collector
@@ -108,6 +114,7 @@ contradictory duplicates.
 - **AND** it reveals neither account's still-hidden private maximum
 
 #### Scenario: grade10-site-auction-bidding-history-SC-12 - An automatic response is attributed to You
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **GIVEN** a rival maximum-setting action causes the collector's automatic maximum to advance the public price
 - **WHEN** the collector reads the combined history
@@ -116,6 +123,7 @@ contradictory duplicates.
 - **AND** the private automatic event is not rendered as a contradictory second accepted bid
 
 #### Scenario: grade10-site-auction-bidding-history-SC-13 - A failed attempt sits beside the unchanged auction state
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **GIVEN** a collector's maximum attempt fails while another bidder remains leading
 - **WHEN** the collector reads the combined history
@@ -123,6 +131,7 @@ contradictory duplicates.
 - **AND** the auction's accepted price and leading pseudonym remain unchanged
 
 #### Scenario: grade10-site-auction-bidding-history-SC-14 - Full retained history remains pageable
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **GIVEN** one listing has more public and private events than one page holds
 - **WHEN** the collector follows every returned cursor while no new event is added
@@ -142,6 +151,7 @@ automatic maximums, private event kinds, payment facts, or the identity behind
 a pseudonym. Reading history SHALL NOT place a bid or change any auction fact.
 
 #### Scenario: grade10-site-auction-bidding-history-SC-15 - A storefront account reads its own history
+**Serves:** grade10-site-auction-bidding-history-US-04 - Collector's bidding history stays on their storefront account
 
 - **GIVEN** a Grade10 storefront session for account A
 - **WHEN** its backend requests A's bidding history through the Grade10-pinned
@@ -150,6 +160,7 @@ a pseudonym. Reading history SHALL NOT place a bid or change any auction fact.
   that belong in its combined histories
 
 #### Scenario: grade10-site-auction-bidding-history-SC-16 - The same account id on another storefront is unrelated
+**Serves:** grade10-site-auction-bidding-history-US-04 - Collector's bidding history stays on their storefront account
 
 - **GIVEN** Grade10 and ZZZ each have an account with the same account id
 - **WHEN** the ZZZ account reads its bidding history
@@ -157,6 +168,7 @@ a pseudonym. Reading history SHALL NOT place a bid or change any auction fact.
 - **AND** no Grade10 private event or maximum is returned
 
 #### Scenario: grade10-site-auction-bidding-history-SC-17 - An anonymous reader cannot read private history
+**Serves:** grade10-site-auction-bidding-history-US-04 - Collector's bidding history stays on their storefront account
 
 - **WHEN** a request without a storefront session attempts to read an account
   index or combined history
@@ -164,6 +176,7 @@ a pseudonym. Reading history SHALL NOT place a bid or change any auction fact.
 - **AND** the anonymous public auction response gains no private field
 
 #### Scenario: grade10-site-auction-bidding-history-SC-18 - Reading history is inert
+**Serves:** grade10-site-auction-bidding-history-US-04 - Collector's bidding history stays on their storefront account
 
 - **GIVEN** any retained bidding history
 - **WHEN** an authorized collector reads or pages it
@@ -188,6 +201,7 @@ empty Completed, page failure, history loading, history failure, and further
 pages without blanking summaries that are already available.
 
 #### Scenario: grade10-site-auction-bidding-history-SC-19 - A signed-in collector opens active bids
+**Serves:** grade10-site-auction-bidding-history-US-05 - Collector opens their bids at /bids
 
 - **GIVEN** a signed-in Grade10 collector with active and completed bidding
   activity
@@ -196,6 +210,7 @@ pages without blanking summaries that are already available.
 - **AND** the collector can switch to Completed without a document reload
 
 #### Scenario: grade10-site-auction-bidding-history-SC-20 - An outbid summary leads to its explanation and listing
+**Serves:** grade10-site-auction-bidding-history-US-05 - Collector opens their bids at /bids
 
 - **GIVEN** an open listing on which the collector is outbid
 - **WHEN** the collector expands that summary
@@ -204,12 +219,14 @@ pages without blanking summaries that are already available.
 - **AND** the page offers a route to the still-open listing
 
 #### Scenario: grade10-site-auction-bidding-history-SC-21 - A signed-out visitor preserves the destination
+**Serves:** grade10-site-auction-bidding-history-US-05 - Collector opens their bids at /bids
 
 - **WHEN** a signed-out visitor opens `/bids`
 - **THEN** the Grade10 site starts its existing sign-in flow
 - **AND** successful sign-in returns the collector to `/bids`
 
 #### Scenario: grade10-site-auction-bidding-history-SC-22 - An empty filter is explicit
+**Serves:** grade10-site-auction-bidding-history-US-05 - Collector opens their bids at /bids
 
 - **GIVEN** a signed-in collector with no entries in the selected filter
 - **WHEN** the filter finishes loading
@@ -217,6 +234,7 @@ pages without blanking summaries that are already available.
 - **AND** it does not show a loading placeholder or failure message
 
 #### Scenario: grade10-site-auction-bidding-history-SC-23 - Initial loading reserves the bidding list
+**Serves:** grade10-site-auction-bidding-history-US-05 - Collector opens their bids at /bids
 
 - **GIVEN** a signed-in collector opening `/bids`
 - **WHEN** the selected index page has not answered yet
@@ -225,6 +243,7 @@ pages without blanking summaries that are already available.
 - **AND** it does not claim that the selected filter is empty or failed
 
 #### Scenario: grade10-site-auction-bidding-history-SC-24 - An index failure is retryable
+**Serves:** grade10-site-auction-bidding-history-US-05 - Collector opens their bids at /bids
 
 - **GIVEN** a signed-in collector opening `/bids`
 - **WHEN** the selected index page fails to load
@@ -232,6 +251,7 @@ pages without blanking summaries that are already available.
 - **AND** it does not claim that the selected filter is empty
 
 #### Scenario: grade10-site-auction-bidding-history-SC-25 - Expanding history preserves its summary while loading
+**Serves:** grade10-site-auction-bidding-history-US-05 - Collector opens their bids at /bids
 
 - **GIVEN** a visible bidding summary
 - **WHEN** the collector expands it and its combined history has not answered
@@ -240,6 +260,7 @@ pages without blanking summaries that are already available.
 - **AND** the page does not show an empty history or failure message
 
 #### Scenario: grade10-site-auction-bidding-history-SC-26 - Loading more preserves entries already shown
+**Serves:** grade10-site-auction-bidding-history-US-05 - Collector opens their bids at /bids
 
 - **GIVEN** a visible index or combined history page with a further cursor
 - **WHEN** the collector requests the next page
@@ -247,6 +268,7 @@ pages without blanking summaries that are already available.
 - **AND** the control cannot submit the same next-page request twice
 
 #### Scenario: grade10-site-auction-bidding-history-SC-27 - A history failure preserves the listing summary
+**Serves:** grade10-site-auction-bidding-history-US-05 - Collector opens their bids at /bids
 
 - **GIVEN** the bidding index is visible
 - **WHEN** one expanded listing history fails to load
@@ -254,6 +276,7 @@ pages without blanking summaries that are already available.
 - **AND** other summaries and their histories remain usable
 
 #### Scenario: grade10-site-auction-bidding-history-SC-28 - ZZZ receives no bidding-history page
+**Serves:** grade10-site-auction-bidding-history-US-05 - Collector opens their bids at /bids
 
 - **WHEN** this change is delivered
 - **THEN** the ZZZ storefront has no new bidding-history route or screen
@@ -297,6 +320,7 @@ The safe failure-code vocabulary SHALL contain exactly:
 - `unavailable` — bidding could not be evaluated because the capability was unavailable.
 
 #### Scenario: grade10-site-auction-bidding-history-SC-37 - A manual bid is not accepted
+**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every retained maximum action
 
 - **WHEN** a collector submits a manual bid request
 - **THEN** Auction refuses it because bidding accepts automatic maximums only
@@ -304,24 +328,28 @@ The safe failure-code vocabulary SHALL contain exactly:
 - **AND** the collector is directed to submit an automatic maximum instead
 
 #### Scenario: grade10-site-auction-bidding-history-SC-38 - A server-evaluated maximum fails
+**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every retained maximum action
 
 - **WHEN** Auction refuses a collector's maximum attempt after evaluating it
 - **THEN** the collector's history records the attempted amount, failure time, and safe reason category
 - **AND** the failed attempt does not appear in the anonymous auction log or accepted bid count
 
 #### Scenario: grade10-site-auction-bidding-history-SC-39 - Browser-only validation creates no Auction event
+**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every retained maximum action
 
 - **GIVEN** a collector enters a malformed maximum that the browser refuses to submit
 - **WHEN** the collector later reads the listing's history
 - **THEN** that local validation failure is absent from the Auction history
 
 #### Scenario: grade10-site-auction-bidding-history-SC-40 - An automatic maximum is configured and raised
+**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every retained maximum action
 
 - **WHEN** a collector configures an automatic maximum and later raises it
 - **THEN** the collector's private history records both resulting maximums in order
 - **AND** neither maximum appears in any rival's history or anonymous read while it remains hidden
 
 #### Scenario: grade10-site-auction-bidding-history-SC-41 - The engine bids for the collector
+**Serves:** grade10-site-auction-bidding-history-US-02 - Collector audits every retained maximum action
 
 - **GIVEN** a collector has an active automatic maximum
 - **WHEN** the automatic-bidding engine places a bid for that account
@@ -346,6 +374,7 @@ notification or standing transition for A SHALL NOT create an A bid record
 unless A submits a new maximum or Grade10 places an automatic bid for A.
 
 #### Scenario: grade10-site-auction-bidding-history-SC-29 - A maximum below the next bid is refused
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **WHEN** bidder B submits an automatic maximum of 450 minor units
 - **THEN** Auction refuses the submission because it is below the current bid plus one increment, 500 minor units
@@ -353,6 +382,7 @@ unless A submits a new maximum or Grade10 places an automatic bid for A.
 - **AND** B's private history records the refused maximum with the `minimum` reason
 
 #### Scenario: grade10-site-auction-bidding-history-SC-30 - A matching minimum creates challenger and response records
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **WHEN** bidder B submits an automatic maximum of 500 minor units
 - **THEN** the public history records B leading at 500 minor units
@@ -360,6 +390,7 @@ unless A submits a new maximum or Grade10 places an automatic bid for A.
 - **AND** B's private history retains the submitted maximum of 500 minor units
 
 #### Scenario: grade10-site-auction-bidding-history-SC-31 - A lower maximum below A's cap creates two ordered records
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **WHEN** bidder B submits an automatic maximum of 700 minor units
 - **THEN** the public history records B leading at 700 minor units
@@ -367,6 +398,7 @@ unless A submits a new maximum or Grade10 places an automatic bid for A.
 - **AND** B's private history retains the submitted maximum of 700 minor units
 
 #### Scenario: grade10-site-auction-bidding-history-SC-32 - A maximum one increment below A's cap stops at A's maximum
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **WHEN** bidder B submits an automatic maximum of 950 minor units
 - **THEN** the public history records B leading at 950 minor units
@@ -374,6 +406,7 @@ unless A submits a new maximum or Grade10 places an automatic bid for A.
 - **AND** A's response does not exceed A's maximum
 
 #### Scenario: grade10-site-auction-bidding-history-SC-33 - An equal maximum creates two records for the earlier leader
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **WHEN** bidder B submits an automatic maximum of 1000 minor units
 - **THEN** Auction accepts the maximum
@@ -384,6 +417,7 @@ unless A submits a new maximum or Grade10 places an automatic bid for A.
 - **AND** B's accepted maximum remains private
 
 #### Scenario: grade10-site-auction-bidding-history-SC-34 - A maximum just above A's cap takes the lead
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **WHEN** bidder B submits an automatic maximum of 1001 minor units
 - **THEN** the public history records B leading at 1001 minor units
@@ -391,6 +425,7 @@ unless A submits a new maximum or Grade10 places an automatic bid for A.
 - **AND** B's private history retains the submitted maximum of 1001 minor units
 
 #### Scenario: grade10-site-auction-bidding-history-SC-35 - A maximum equal to the next increment takes the lead once
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **WHEN** bidder B submits an automatic maximum of 1100 minor units
 - **THEN** the public history records B leading at 1100 minor units
@@ -398,6 +433,7 @@ unless A submits a new maximum or Grade10 places an automatic bid for A.
 - **AND** no intermediate public records are created
 
 #### Scenario: grade10-site-auction-bidding-history-SC-36 - A higher maximum is capped at one increment above A's cap
+**Serves:** grade10-site-auction-bidding-history-US-03 - Collector reads one listing's combined history
 
 - **WHEN** bidder B submits an automatic maximum of 1120 minor units
 - **THEN** the public history records B leading at 1100 minor units, which is one increment above A's 1000-minor-unit maximum

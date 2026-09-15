@@ -53,6 +53,14 @@ export type Scenario = {
   id?: string;
   name: string;
   text: string;
+  /** The anchors this scenario serves, from its `**Serves:**` line: story ids,
+   * or `## Feature set` root group names where no story reaches it. This is the
+   * only link between a scenario and a story — the two files never name each
+   * other, which is how each stopped inheriting the other's blind spots.
+   *
+   * More than one is allowed: a scenario is a rule, and one rule can sit on
+   * several journeys. A case is a walk and still traces one. */
+  serves?: string[];
 };
 
 export type Requirement = {
@@ -66,8 +74,6 @@ export type Journey = {
   id: string;
   title: string;
   text: string;
-  /** Scenario ids this story is accepted by. */
-  acceptedBy: string[];
 };
 
 /** Review state of one case (`docs/governance/specs-to-test-cases.md`):
@@ -79,9 +85,10 @@ export type TestCase = {
    * `grade10-site-loyalty-programme-TC-03` an older suite issued. */
   id: string;
   title: string;
-  /** Ids this case traces to, as written: the journey it walks
-   * (`grade10-site-loyalty-programme-US-01`), or a scenario id where an older suite named those. A
-   * journey trace reaches the scenarios its `Accepted by` lists. */
+  /** Anchors this case walks, as written: the story
+   * (`grade10-site-loyalty-programme-US-01`), a `## Feature set` root group
+   * where nobody walks the capability, or a scenario id where an older suite
+   * named those. A trace reaches the scenarios that serve the same anchor. */
   traces: string[];
   status: TestCaseStatus;
 };
@@ -97,6 +104,9 @@ export type SpecEntry = {
   title: string;
   purpose: string;
   featureSet?: string;
+  /** The root groups of the feature set — the anchors a scenario may serve
+   * when it stands under the map rather than under a journey. */
+  featureGroups?: string[];
   requirements: Requirement[];
   journeys?: Journey[];
   /** The journeys file says `**Walked by:** nobody`: no end user reaches
@@ -259,6 +269,13 @@ export type ChangeEntry = {
   /** Change ids from `.openspec.yaml` `depends_on:`; resolution against
    * the in-flight and archived sets happens in derivation. */
   dependsOn?: string[];
+  /** Why this change carries no spec delta at all, from `.openspec.yaml`
+   * `skip_specs_why:`. `skip_specs: true` is the one switch that turns the
+   * whole cross-check off — no journeys, no blind suite, no scenarios, no
+   * reconciliation — and it is author-declared, so it owes a reason beside it.
+   * An empty string is a switch thrown with no `skip_specs_why`: declared,
+   * with no reason given. */
+  skipSpecs?: string;
   /** Why this change marks no capability page, from `.openspec.yaml`
    * `page_waived:` — the line that stands in for the 🚧 a change with deltas
    * owes a page. */

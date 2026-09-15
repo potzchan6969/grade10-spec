@@ -46,12 +46,14 @@ These strings SHALL not use em dashes. Localized catalogs SHALL answer the same
 meanings under keys the consumer supplies to the bid surface.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-12 - Decline copy on the bid action
+**Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
 - **GIVEN** a collector is authorizing a maximum on commit
 - **WHEN** the provider declines the method or authorization
 - **THEN** the listing bid surface shows: Your card could not be authorized. Try another card.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-13 - Provider-failure copy on the bid action
+**Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
 - **GIVEN** a collector is authorizing a maximum on commit
 - **WHEN** Stripe or Grade10 cannot complete the authorize call
@@ -79,6 +81,7 @@ Change for subsequent raises. The method committed for a collector and listing
 after the first accepted bid SHALL remain that listing's method for raises.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-01 - Commit without a linked method is refused
+**Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
 - **GIVEN** a signed-in collector with no linked card on an open listing
 - **WHEN** they attempt to submit a valid maximum
@@ -87,6 +90,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **AND** link-card setup remains available under bid-panel-enrollment
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-02 - Linked method authorizes the maximum on commit
+**Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
 - **GIVEN** a collector with a linked method who submits a valid maximum on a listing
 - **WHEN** the provider confirms authorization for that maximum
@@ -96,6 +100,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **AND** it does not open a payment-method or confirmation modal for that authorize step
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-03 - Payment authentication stays on the bid surface
+**Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
 - **GIVEN** a collector is authorizing a maximum on commit
 - **WHEN** the provider requires authentication or reports that authorization is pending
@@ -104,6 +109,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **AND** Grade10 does not open the enrollment setup modal for that pending state
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-04 - A refused authorization does not place a bid
+**Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
 - **GIVEN** a collector is authorizing a maximum on commit
 - **WHEN** the provider declines the method or authorization, or the linked method is unusable
@@ -112,6 +118,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **AND** the collector may change card under bid-panel-enrollment before the first bid on that listing
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-09 - Provider failure on commit does not place a bid
+**Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
 - **GIVEN** a collector is authorizing a maximum on commit
 - **WHEN** Stripe or Grade10 cannot complete the authorize call (timeout, provider error, or cancelled intent)
@@ -119,6 +126,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **AND** Grade10 records no accepted bid and no active authorization for that attempt
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-05 - A later bid retains the listing's payment method
+**Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
 
 - **GIVEN** a collector has an active authorization for a listing
 - **WHEN** they submit a higher valid bid or maximum for that listing
@@ -126,6 +134,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **AND** it does not open a payment-method step
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-10 - Linked method carries over to a new listing
+**Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
 - **GIVEN** a collector who linked a method on a prior listing and has not bid on a new open listing
 - **WHEN** they submit a valid maximum on the new listing
@@ -152,6 +161,7 @@ already-recorded outcome and SHALL not create another active authorization,
 accepted bid, or provider charge.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-06 - Raising a maximum raises the authorization
+**Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
 
 - **GIVEN** a collector has an active authorization for a listing at one maximum
 - **WHEN** they submit a higher valid maximum for that listing
@@ -159,6 +169,7 @@ accepted bid, or provider charge.
 - **AND** it accepts the raised bid only after the raised authorization is confirmed
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-11 - Raise authorization failure keeps the prior maximum
+**Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
 
 - **GIVEN** a collector has an active authorization for a listing at one maximum
 - **WHEN** they submit a higher valid maximum and the raise authorization fails
@@ -168,6 +179,7 @@ accepted bid, or provider charge.
 - **AND** the prior maximum and active authorization remain unchanged
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-08 - Provider outcomes remain idempotent
+**Serves:** grade10-site-auction-bid-payment-method-US-03 - Collector is released when outbid
 
 - **GIVEN** Grade10 has begun an authorization for a collector and listing
 - **WHEN** the bid request or its provider outcome is delivered again
@@ -183,6 +195,7 @@ of an authorization SHALL not capture funds or create a payment, order, or
 fulfilment outcome.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-07 - An outbid cancels the authorization
+**Serves:** grade10-site-auction-bid-payment-method-US-03 - Collector is released when outbid
 
 - **GIVEN** a collector has an active authorization for a listing
 - **WHEN** Grade10 accepts a higher bid from another collector

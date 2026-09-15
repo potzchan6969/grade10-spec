@@ -34,17 +34,20 @@ re-runnable check SHALL be able to report every member's pairing state,
 so members from before this capability shipped can be verified paired.
 
 #### Scenario: grade10-site-store-membership-SC-01 - Sign-up never waits on the provider
+**Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
 - **WHEN** a collector registers while the commerce provider is unreachable
 - **THEN** their account is created and usable at once
 - **AND** the pairing completes on its own once the provider answers
 
 #### Scenario: grade10-site-store-membership-SC-02 - A lost response does not duplicate a customer
+**Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
 - **WHEN** pairing retries after a creation whose response was lost
 - **THEN** the retry lands on the customer the first attempt created
 
 #### Scenario: grade10-site-store-membership-SC-03 - A conflict parks visibly
+**Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
 - **WHEN** pairing cannot complete because the member's email already
   belongs to a customer of another member
@@ -68,18 +71,21 @@ that purchase made. Nothing is being adopted there — the account and the
 customer are the same event, so there is no prior history to mis-attach.
 
 #### Scenario: grade10-site-store-membership-SC-04 - The account identifier never leaves Grade10
+**Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
 - **WHEN** a member's customer record is created or updated at the provider
 - **THEN** it carries the opaque membership key and no platform account
   identifier
 
 #### Scenario: grade10-site-store-membership-SC-05 - An unverified email attaches nothing to a member who already existed
+**Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
 - **WHEN** a guest checkout used an email address matching a member who
   never verified it
 - **THEN** that customer is not adopted as the member's pair
 
 #### Scenario: grade10-site-store-membership-SC-06 - A purchase that creates the account also pairs it
+**Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
 - **WHEN** a guest buys with an email belonging to no account, and the
   account is created once the purchase is paid
@@ -96,6 +102,7 @@ found and removed. A terminal pairing SHALL never return to any live
 state.
 
 #### Scenario: grade10-site-store-membership-SC-07 - A crash mid-erasure does not resurrect the customer
+**Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
 - **WHEN** erasure fails after removing the customer record but before
   finishing
@@ -103,6 +110,7 @@ state.
 - **AND** no automatic repair re-creates the customer in the meantime
 
 #### Scenario: grade10-site-store-membership-SC-08 - A racing creation is cleaned up
+**Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
 - **WHEN** a pairing retry creates the customer at the provider while the
   member's erasure is completing
@@ -127,18 +135,21 @@ claimed staff and location labels; identifier-typed lookups SHALL be
 rate-limited.
 
 #### Scenario: grade10-site-store-membership-SC-09 - A replayed code is refused with its history
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** an identification code is presented a second time
 - **THEN** it is refused, naming where and when it was first used
 - **AND** the member's own card shows the same
 
 #### Scenario: grade10-site-store-membership-SC-10 - An email miss discloses nothing
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** staff enter an email that matches no member
 - **THEN** the answer says only that no member was found
 - **AND** it does not distinguish an unknown address from an unpaired one
 
 #### Scenario: grade10-site-store-membership-SC-11 - A lookup is recorded
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** staff identify a member by typed email
 - **THEN** the lookup is recorded with the staff and location labels and
@@ -159,18 +170,21 @@ payment SHALL debit nothing. A promise larger than the order can carry
 SHALL be trimmed to what the order shows rather than refused.
 
 #### Scenario: grade10-site-store-membership-SC-16 - A promise larger than the cart is trimmed, not refused
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** the promised points amount is more than the order carries
 - **THEN** it is trimmed to what the order shows
 - **AND** the purchase completes at the trimmed amount
 
 #### Scenario: grade10-site-store-membership-SC-72 - A points discount and a reward coupon apply together
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** an order carries both a reward coupon and a points discount
 - **THEN** both apply
 - **AND** neither is refused for the other's presence
 
 #### Scenario: grade10-site-store-membership-SC-73 - The balance moves once, when the order is paid
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** a points promise's order is paid
 - **THEN** the balance is debited once, for what the provider actually
@@ -188,17 +202,20 @@ known even when no owner is known yet, and a refund on an ownerless order
 SHALL be kept exactly-once for replay when an owner appears.
 
 #### Scenario: grade10-site-store-membership-SC-18 - Webhook and sweep converge
+**Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
 - **WHEN** the same provider order arrives by webhook and by the sweep
 - **THEN** exactly one order is recorded
 
 #### Scenario: grade10-site-store-membership-SC-19 - The platform's own checkout is not re-ingested
+**Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
 - **WHEN** the sweep or a webhook carries an order the platform's own
   checkout created
 - **THEN** no second record is created for it
 
 #### Scenario: grade10-site-store-membership-SC-20 - A refund before identity is not lost or doubled
+**Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
 - **WHEN** a refund arrives twice for an order with no owner yet
 - **THEN** the refund is recorded once
@@ -217,6 +234,7 @@ whose earnable amount is not yet known SHALL be refused attribution
 loudly, never guessed.
 
 #### Scenario: grade10-site-store-membership-SC-21 - A sale rung up before registration is not lost
+**Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
 - **WHEN** a collector completes registration after their sale was
   finalised as a guest
@@ -225,12 +243,14 @@ loudly, never guessed.
 - **AND** the earning lands as if the sale had been theirs
 
 #### Scenario: grade10-site-store-membership-SC-22 - A wrong attribution is one action to undo
+**Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
 - **WHEN** an operator revokes a claim
 - **THEN** the points it granted are clawed back
 - **AND** a re-attribution to the right member earns correctly
 
 #### Scenario: grade10-site-store-membership-SC-23 - Two claimers cannot both win
+**Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
 - **WHEN** two attributions race for one order
 - **THEN** exactly one claim lives and the other is refused naming the
@@ -245,12 +265,14 @@ around it. An order whose eligible amount cannot be determined SHALL be
 refused earning loudly rather than priced from a guess.
 
 #### Scenario: grade10-site-store-membership-SC-24 - A gift card earns nothing anywhere
+**Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
 - **WHEN** an order containing a gift card completes, online or at the
   till
 - **THEN** the gift card's amount earns no points
 
 #### Scenario: grade10-site-store-membership-SC-25 - Points spent lower the same order's earning
+**Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
 - **WHEN** a points discount pays part of an order
 - **THEN** earning prices only the goods amount after that discount
@@ -265,12 +287,14 @@ customer still arrives through order recording, and attribution repairs
 the rest later.
 
 #### Scenario: grade10-site-store-membership-SC-26 - The kill switch stops spending, not selling
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** the manager disables the membership surface mid-day
 - **THEN** every till completes sales normally
 - **AND** orders with an attached customer still earn
 
 #### Scenario: grade10-site-store-membership-SC-27 - Email-assisted spending can be stopped alone
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** the manager disables staff-typed-email spending
 - **THEN** identification by the member card still spends
@@ -301,12 +325,14 @@ landed; a sale that never reaches that pass SHALL send nothing. The
 notification SHALL never carry the code.
 
 #### Scenario: grade10-site-store-membership-SC-77 - A double tap spends once
+**Serves:** grade10-site-store-membership-US-04 - Member is told once a staff-assisted spend or coupon lands at the till
 
 - **WHEN** staff submit the same spend twice in quick succession
 - **THEN** exactly one redemption is recorded
 - **AND** both submissions answer the same
 
 #### Scenario: grade10-site-store-membership-SC-75 - The member's phone is the monitor
+**Serves:** grade10-site-store-membership-US-04 - Member is told once a staff-assisted spend or coupon lands at the till
 
 - **WHEN** points are spent or a coupon is applied through a till session
   and the sale reaches settlement (paid, or the till's trim-to-landed pass)
@@ -314,6 +340,7 @@ notification SHALL never carry the code.
 - **AND** the notification never contains the code
 
 #### Scenario: grade10-site-store-membership-SC-76 - A landed notice is corrected if the sale never pays
+**Serves:** grade10-site-store-membership-US-04 - Member is told once a staff-assisted spend or coupon lands at the till
 
 - **GIVEN** the till's trim-to-landed pass already notified the member a
   spend landed

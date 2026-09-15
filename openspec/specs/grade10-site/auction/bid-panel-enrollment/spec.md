@@ -80,6 +80,7 @@ Sign-in behavior SHALL follow `shared-auth/session`. Card authorization on
 commit SHALL follow `grade10-site/auction/bid-payment-method`.
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-01 - Sign-in is offered instead of place bid
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-01 - Collector signs in to bid on a lot
 
 - **GIVEN** a signed-out collector on a live lot's bid panel
 - **WHEN** they view the primary bid action
@@ -87,6 +88,7 @@ commit SHALL follow `grade10-site/auction/bid-payment-method`.
 - **AND** it does not offer place bid or link a card
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-02 - Standing badges stay hidden while signed out
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-01 - Collector signs in to bid on a lot
 
 - **GIVEN** a signed-out collector on a lot where recent bids are shown
 - **WHEN** the bid panel renders
@@ -94,6 +96,7 @@ commit SHALL follow `grade10-site/auction/bid-payment-method`.
 - **AND** recent bids remain visible
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-03 - Link CTA opens setup when no card is linked
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** a signed-in collector with no linked card on an open listing
 - **WHEN** they view the bid panel
@@ -104,6 +107,7 @@ commit SHALL follow `grade10-site/auction/bid-payment-method`.
 - **AND** the bid is not treated as placed
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-04 - Setup requires card and attestation
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** a signed-in collector in the first-link setup modal
 - **WHEN** they have not completed provider card entry and age attestation
@@ -112,6 +116,7 @@ commit SHALL follow `grade10-site/auction/bid-payment-method`.
 - **AND** continue is labeled Link Card
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-14 - Setup linking locks dismiss and controls
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** a signed-in collector who submitted Link Card and the provider link is in flight
 - **WHEN** the setup modal shows the linking state
@@ -120,6 +125,7 @@ commit SHALL follow `grade10-site/auction/bid-payment-method`.
 - **AND** the collector cannot dismiss the modal
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-05 - Dismissing setup leaves no linked card
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** a signed-in collector who opened setup with no linked card
 - **WHEN** they close the modal without continuing
@@ -128,6 +134,7 @@ commit SHALL follow `grade10-site/auction/bid-payment-method`.
 - **AND** amount controls remain visible and disabled
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-06 - Completing setup unlocks amount controls
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** a signed-in collector who completes setup and links a card
 - **WHEN** the modal closes
@@ -137,6 +144,7 @@ commit SHALL follow `grade10-site/auction/bid-payment-method`.
 - **AND** the primary bid action offers set or raise maximum
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-12 - Empty linked-card slot opens setup
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** a signed-in collector with no linked card and the empty linked-card slot visible
 - **WHEN** they activate the empty-slot link control
@@ -144,6 +152,7 @@ commit SHALL follow `grade10-site/auction/bid-payment-method`.
 - **AND** disabled presets and the custom maximum field do not open setup
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-13 - Card on file carries over to a new lot
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-05 - Collector returns to a new lot with a card already linked
 
 - **GIVEN** a signed-in collector who linked a card on a prior lot and has not bid on a new open listing
 - **WHEN** they view that listing's bid panel
@@ -176,6 +185,7 @@ interactive, and the collector SHALL NOT dismiss the modal. Card entry SHALL use
 a provider-hosted field; card details SHALL not pass through Grade10.
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-07 - Change opens the setup modal
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-03 - Collector changes the linked card before their first bid
 
 - **GIVEN** a collector with a linked card on a lot who has not bid on it
 - **WHEN** they activate change on the linked card
@@ -183,6 +193,7 @@ a provider-hosted field; card details SHALL not pass through Grade10.
 - **AND** the linked-card row remains visible behind the modal
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-08 - Change reuses setup copy with prior card shown
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-03 - Collector changes the linked card before their first bid
 
 - **GIVEN** a collector changing the linked card before their first bid
 - **WHEN** the setup modal opens
@@ -191,6 +202,7 @@ a provider-hosted field; card details SHALL not pass through Grade10.
   file rather than an empty first-link placeholder
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-09 - Attestation is pre-checked when already given
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-03 - Collector changes the linked card before their first bid
 
 - **GIVEN** a collector who already attested on a prior lot
 - **WHEN** they open setup to change card on a new lot
@@ -205,6 +217,7 @@ listing. Raising a bid on the same listing SHALL NOT reopen setup for card
 selection.
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-10 - Change is hidden after the first bid
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-04 - Collector bids after linking a card
 
 - **GIVEN** a collector with a linked card on a lot who has placed at least one
   bid on it
@@ -213,6 +226,7 @@ selection.
 - **AND** change is not offered
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-11 - First maximum does not reopen setup
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-04 - Collector bids after linking a card
 
 - **GIVEN** a collector with a linked card on a lot who has not yet placed a
   bid on it

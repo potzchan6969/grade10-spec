@@ -43,11 +43,11 @@ required by this change. No missing component work is carried into `tasks.md`.
 
 | Screen | State | Spec scenario |
 | --- | --- | --- |
-| Inventory product page | Product identity shows IP, Category, and Item with no legacy fields | `grade10-admin-inventory-catalog-SC-69` |
-| Inventory product page | Empty Cert ID set remains valid for unnumbered stock | `grade10-admin-inventory-catalog-SC-71` |
-| Inventory product page | Intake accepts identifiers up to the quantity and shows received records | `grade10-admin-inventory-catalog-SC-72`, `SC-75` |
-| Inventory product page | Duplicate or too-many identifiers show refusal and preserve stock | `grade10-admin-inventory-catalog-SC-73`, `SC-76` |
-| Displayed Attributes panel | Cert ID is available, selected, reordered, or removed without an ordinary key | `grade10-admin-inventory-catalog-SC-77`, `SC-78` |
+| Inventory product page | Product identity shows IP, Category, and Item with no legacy fields | `grade10-admin-inventory-catalog-SC-93` |
+| Inventory product page | Empty Cert ID set remains valid for unnumbered stock | `grade10-admin-inventory-catalog-SC-95` |
+| Inventory product page | Intake accepts identifiers up to the quantity and shows received records | `grade10-admin-inventory-catalog-SC-96`, `SC-75` |
+| Inventory product page | Duplicate or too-many identifiers show refusal and preserve stock | `grade10-admin-inventory-catalog-SC-97`, `SC-76` |
+| Displayed Attributes panel | Cert ID is available, selected, reordered, or removed without an ordinary key | `grade10-admin-inventory-catalog-SC-101`, `SC-78` |
 | Auction listing editor | Product with records offers each record and `No Cert ID` | `grade10-admin-auction-listing-SC-70` |
 | Auction listing editor | Product without records offers `No Cert ID` and can proceed | `grade10-admin-auction-listing-SC-71` |
 | Auction listing editor | Product change clears the prior Cert ID choice | `grade10-admin-auction-listing-SC-72` |

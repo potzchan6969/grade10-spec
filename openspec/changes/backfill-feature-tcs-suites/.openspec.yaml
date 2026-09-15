@@ -1,3 +1,4 @@
 schema: grade10-planning
 created: 2026-09-12
 skip_specs: true
+skip_specs_why: "suites only - it derives cases from journeys that already exist and states no new requirement"

@@ -70,17 +70,20 @@ Recording a check again on the same case SHALL replace the case's check rather
 than add a second, and the check it displaces SHALL be discarded durably.
 
 #### Scenario: grade10-site-vault-identity-verification-SC-01 - A check binds to the case
+**Serves:** grade10-site-vault-identity-verification-US-01 - Operator checks who is standing at the counter
 
 - **WHEN** staff record a check against a case being valued
 - **THEN** the case names that check and the counter sees the verified name
 
 #### Scenario: grade10-site-vault-identity-verification-SC-02 - Recording again rebinds rather than duplicating
+**Serves:** Reuse and duplicates - recording again rebinds rather than duplicating
 
 - **GIVEN** a case already carrying a check
 - **WHEN** staff record another
 - **THEN** the case carries exactly one check and the displaced one is discarded
 
 #### Scenario: grade10-site-vault-identity-verification-SC-03 - A case in custody takes no new check
+**Serves:** What it refuses - a case in custody takes no new check
 
 - **GIVEN** a case whose item is in the vault
 - **WHEN** staff try to record a check
@@ -97,23 +100,27 @@ another case, and again when a packet is prepared from it. Neither SHALL be
 applied when the item is released: discharging an agreement asks neither.
 
 #### Scenario: grade10-site-vault-identity-verification-SC-04 - Under eighteen is refused
+**Serves:** grade10-site-vault-identity-verification-US-01 - Operator checks who is standing at the counter
 
 - **WHEN** a check is recorded for somebody whose eighteenth birthday has not passed on the shop's day
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-identity-verification-SC-05 - A birthday is judged on the shop's day
+**Serves:** What it refuses - a birthday is judged on the shop's day
 
 - **GIVEN** a person whose eighteenth birthday is today at the shop and tomorrow in Coordinated Universal Time
 - **WHEN** their identity is judged
 - **THEN** they are an adult
 
 #### Scenario: grade10-site-vault-identity-verification-SC-06 - A document that lapsed before the signature is refused
+**Serves:** grade10-site-vault-identity-verification-US-01 - Operator checks who is standing at the counter
 
 - **GIVEN** a case whose check was recorded against a document that has since expired
 - **WHEN** a packet is prepared
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-identity-verification-SC-07 - A lapsed document does not hold somebody's property
+**Serves:** grade10-site-vault-identity-verification-US-04 - Collector collects an item on a passport that has since lapsed
 
 - **GIVEN** a case in the vault whose customer's document has expired
 - **WHEN** the release is prepared and signed
@@ -131,6 +138,7 @@ that account's erasure request. There SHALL be no identity keyed to a case
 alone.
 
 #### Scenario: grade10-site-vault-identity-verification-SC-08 - The case says nothing about the person
+**Serves:** grade10-site-vault-identity-verification-US-01 - Operator checks who is standing at the counter
 
 - **WHEN** a case carrying a check is read
 - **THEN** it names the check and carries no name, birth date or document number of its own
@@ -144,12 +152,14 @@ reuse.
 A case with no account behind it SHALL have nothing to reuse from.
 
 #### Scenario: grade10-site-vault-identity-verification-SC-09 - The last check binds to the new case
+**Serves:** grade10-site-vault-identity-verification-US-02 - Returning customer is not asked for their passport again
 
 - **GIVEN** a customer whose previous case carries a valid check
 - **WHEN** staff reuse it on a new case
 - **THEN** the new case names that check and no new photograph was taken
 
 #### Scenario: grade10-site-vault-identity-verification-SC-10 - A check that has aged out cannot be reused
+**Serves:** grade10-site-vault-identity-verification-US-02 - Returning customer is not asked for their passport again
 
 - **GIVEN** a customer whose last check was made against a document that has since expired
 - **WHEN** staff reuse it
@@ -166,12 +176,14 @@ Nothing SHALL be refused for it, and which accounts they are SHALL never leave
 the identity store.
 
 #### Scenario: grade10-site-vault-identity-verification-SC-11 - A duplicate document flags the case
+**Serves:** grade10-site-vault-identity-verification-US-03 - Operator is warned when one document is on several accounts
 
 - **GIVEN** a document already held under two other accounts
 - **WHEN** a check against it is bound to a case
 - **THEN** the case records the count for staff, the case is flagged, and the binding stands
 
 #### Scenario: grade10-site-vault-identity-verification-SC-12 - The other accounts are never named
+**Serves:** grade10-site-vault-identity-verification-US-03 - Operator is warned when one document is on several accounts
 
 - **WHEN** the duplicate flag is read
 - **THEN** it carries a count and no account, on any surface
@@ -183,6 +195,7 @@ Where a seal lands between a check being taken and it being written down, the
 case's own binding SHALL stand and the check just taken SHALL be discarded.
 
 #### Scenario: grade10-site-vault-identity-verification-SC-13 - A signed case refuses a re-record
+**Serves:** grade10-site-vault-identity-verification-US-04 - Collector collects an item on a passport that has since lapsed
 
 - **GIVEN** a case carrying a sealed agreement
 - **WHEN** staff try to record another check
@@ -195,11 +208,13 @@ identity read grant, and every read SHALL be recorded on the case's audit
 trail naming who read it and when.
 
 #### Scenario: grade10-site-vault-identity-verification-SC-14 - A read without the grant is refused
+**Serves:** Reading the photograph - a read without the grant is refused
 
 - **WHEN** an operator without the identity read grant asks for the photograph
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-identity-verification-SC-15 - A read leaves a trail
+**Serves:** Reading the photograph - a read leaves a trail
 
 - **WHEN** an operator holding the grant downloads the photograph
 - **THEN** the case's audit trail names them and the instant

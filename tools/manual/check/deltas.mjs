@@ -27,12 +27,14 @@ import { everyBlock } from "./context.mjs";
 
 /** The only `## ` headings a delta may hold: the four the fold reads, plus
  * the two a spec's own head carries. `User journeys` is not among them — the
- * stories are their own file beside the delta, and one written here is read
+ * journeys are their own file beside the delta, and one written here is read
  * by nothing. */
 const CARRIED = new Set(["Purpose", "Feature set"]);
 const ISSUED_ID = /[a-z0-9][a-z0-9-]*-(?:SC|US|TC)-\d+/g;
 const LEADING_ID = /^([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
 const SCENARIO_HEADING = /^Scenario:\s*/i;
+const SCENARIO_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
+const GWT = /^\s*(?:[-*]\s+)?\*\*(?:GIVEN|WHEN|THEN)\*\*/;
 const ARCHIVE_DATE = /^\d{4}-\d{2}-\d{2}-/;
 
 export function checkDeltas(ctx, { changes, shape, pages }) {
@@ -43,6 +45,186 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   checkOverlap(files, ctx.add);
   checkIssued(ctx, files);
   checkFuse(ctx, files, pages);
+  checkContext(ctx, files);
+  checkBlind(ctx, files, shape);
+}
+
+/** RULE `blind`: a delta that moves behaviour owes a second, independent
+ * reading of the same anchors — the suite beside it, and the
+ * `## Reconciliation` that says the two readings were brought together. A
+ * suite derived from the scenarios can only find inconsistency inside them,
+ * never the behaviour they left out, which is the one thing the pass exists
+ * to find; so a change without one ships whatever its scenarios forgot, and
+ * nothing anywhere says so.
+ *
+ * This is where `blind_pass_skipped` is granted, and granting it is this
+ * rule staying quiet. The author cannot declare it: behaviour lives in the
+ * `**GIVEN**` / `**WHEN**` / `**THEN**` lines and the scenario ids, so a
+ * delta that adds no id and moves no such line — a requirement split for
+ * readability, a rename, a typo in prose, a scenario moved under the
+ * requirement it always belonged to — has nothing for a second reading to
+ * read. Where this refuses and the author disagrees, that is a grilling
+ * round, not a self-service waiver.
+ *
+ * A `warn` while the store is full of changes written before the blind pass
+ * existed. It is the register of which ones they are, the way `derived` is
+ * for capabilities; a fail today would be 50 red lines nobody can act on,
+ * which is how a check teaches people to read past it. It goes to `fail` when
+ * the register empties. */
+function checkBlind(ctx, files, shape) {
+  const durable = durableBlocks(ctx.roots.store, shape);
+  for (const one of files) {
+    if (!movesBehaviour(one, durable)) continue;
+    const at = one.file.replace(/spec\.md$/, "feature-tcs.md");
+    const suite = readTextIfExists(join(ctx.roots.store, at));
+    if (suite === undefined) {
+      ctx.add(
+        "blind",
+        at,
+        `\`${one.change}\` moves behaviour in \`${one.spec}\` and no suite reads it independently — run the feature pass, or say which line of behaviour moved if you think none did`,
+      );
+      continue;
+    }
+    if (/^##\s+Reconciliation\s*$/m.test(suite)) continue;
+    ctx.add(
+      "blind",
+      at,
+      `carries no \`## Reconciliation\` — a suite without one is a reading nobody brought back to the scenarios, and what the two disagreed about is the finding`,
+    );
+  }
+}
+
+/** Whether a delta moves behaviour, judged the way the hatch is written: a
+ * scenario id the durable spec does not hold, or a GIVEN/WHEN/THEN line that
+ * is not the durable one. A REMOVED requirement moves behaviour when the
+ * requirement it removes had any. */
+function movesBehaviour(one, durable) {
+  const blocks = durable(one.spec);
+  for (const requirement of one.requirements) {
+    if (requirement.kind === "renamed") continue;
+    if (requirement.kind === "removed") {
+      if (behaviourOf(blocks.get(requirement.name)).lines.length > 0) {
+        return true;
+      }
+      continue;
+    }
+    const written = behaviourOf(requirement.block?.raw);
+    if (requirement.kind === "added") {
+      if (written.lines.length > 0) return true;
+      continue;
+    }
+    const held = blocks.get(requirement.name);
+    // MODIFIED against a requirement the durable spec does not hold. The
+    // fold refuses it and `delta` already says so; nothing here can compare.
+    if (held === undefined) return true;
+    if (!sameBehaviour(written, behaviourOf(held))) return true;
+  }
+  return false;
+}
+
+/** What a requirement block states as behaviour: the scenario ids it issues
+ * and its GIVEN/WHEN/THEN lines, whitespace collapsed. Everything else — the
+ * heading prose, a table, the `**Serves:**` anchor above the lines — is how
+ * the behaviour is explained rather than what it is, which is why the anchor
+ * sits where it does. */
+function behaviourOf(raw) {
+  const text = raw ?? "";
+  return {
+    ids: new Set(text.match(SCENARIO_ID) ?? []),
+    lines: text
+      .split("\n")
+      .filter((line) => GWT.test(line))
+      // The bullet marker is not behaviour: a list rewritten as plain lines
+      // moves none, and the hatch is about what the lines say.
+      .map((line) =>
+        line
+          .replace(/^\s*(?:[-*]\s+)?/, "")
+          .replace(/\s+/g, " ")
+          .trim(),
+      ),
+  };
+}
+
+const sameBehaviour = (written, held) =>
+  written.lines.length === held.lines.length &&
+  written.lines.every((line, at) => line === held.lines[at]) &&
+  [...written.ids].every((id) => held.ids.has(id));
+
+/** RULE `context`: a change restates the journeys it anchors on under
+ * `## Context user journeys`, and the copy is the durable text or it is a lie.
+ *
+ * The section exists so the blind suite pass can read the journeys without being
+ * handed the durable capability — reading `openspec/specs/` is how it would see
+ * the scenarios it must not see. That makes the copy load-bearing rather than a
+ * convenience, and a copy nobody checks drifts: the change is then written
+ * against a journey the store no longer holds, and archive quietly reverts
+ * whatever landed in between.
+ *
+ * Only the restated block is compared. A journey the change also modifies belongs
+ * under `## MODIFIED User journeys`, where it is meant to differ. */
+function checkContext(ctx, files) {
+  for (const file of files) {
+    const text = journeysBeside(ctx.roots.store, file.file);
+    const restated = journeysUnder(text, "Context user journeys");
+    if (restated.size === 0) continue;
+    const durablePath = `openspec/specs/${file.spec}/user-journeys.md`;
+    const durable = journeysUnder(
+      readTextIfExists(join(ctx.roots.store, durablePath)) ?? "",
+      "User journeys",
+    );
+    const at = file.file.replace(/spec\.md$/, "user-journeys.md");
+    for (const [id, copied] of restated) {
+      const original = durable.get(id);
+      if (original === undefined) {
+        ctx.add(
+          "context",
+          at,
+          `restates \`${id}\`, which \`${file.spec}\` does not hold — a context journey is a copy of a durable one, not a new journey filed under the wrong heading`,
+        );
+      } else if (original !== copied) {
+        ctx.add(
+          "context",
+          at,
+          `the restated \`${id}\` is not what \`${file.spec}\` holds — bring the copy back to the durable text, or move the journey under \`## MODIFIED User journeys\` where it is meant to differ`,
+        );
+      }
+    }
+  }
+}
+
+/** Journey id → its block, normalised only for trailing whitespace. Everything
+ * else is compared as written: the point is to catch an edit, and an edit that
+ * looks like formatting is still an edit. */
+function journeysUnder(text, heading) {
+  const out = new Map();
+  const lines = text.split("\n");
+  let inside = false;
+  let id = null;
+  let body = [];
+  const flush = () => {
+    if (id) out.set(id, body.join("\n").trimEnd());
+    id = null;
+    body = [];
+  };
+  for (const line of lines) {
+    const head = /^##\s+(.+?)\s*$/.exec(line);
+    if (head) {
+      flush();
+      inside = head[1].trim() === heading;
+      continue;
+    }
+    if (!inside) continue;
+    const story = /^###\s+([a-z0-9][a-z0-9-]*-US-\d+):/.exec(line);
+    if (story) {
+      flush();
+      id = story[1];
+      body = [line.trimEnd()];
+      continue;
+    }
+    if (id) body.push(line.trimEnd());
+  }
+  flush();
+  return out;
 }
 
 /** Every in-flight delta file, read once and parsed by the store's own
@@ -61,7 +243,7 @@ function readDeltaFiles(root, changes) {
         file,
         text,
         sections,
-        // The stories live beside the delta now, so the ids a change issues
+        // The journeys live beside the delta now, so the ids a change issues
         // are the two files' together — scanning spec.md alone would let a
         // `-US-` number be handed out twice.
         ids: [...idsIn(text), ...idsIn(journeysBeside(root, file))],
@@ -329,7 +511,7 @@ function durableBlocks(root, shape) {
 }
 
 /** Ids every archived change issues, by change id — its deltas and the
- * stories beside them. The fold leaves no durable trace of a delta's
+ * journeys beside them. The fold leaves no durable trace of a delta's
  * journeys, so this is the only record they exist. */
 function archivedIds(root) {
   const dir = join(root, "openspec", "changes", "archive");
