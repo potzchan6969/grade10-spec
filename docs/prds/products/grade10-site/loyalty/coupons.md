@@ -47,12 +47,12 @@ so redefining the reward never rewrites a coupon a member already holds —
 - 🚧 **Nothing is held** — a coupon stays available until a paid order spends
   it, so a checkout the member walks away from costs them nothing —
   [Discounts](/p/grade10-site/store/discounts)
-- 🚧 **The newer checkout replaces the older** — starting an online checkout
-  cancels the member's earlier online orders carrying a coupon before the new
-  one claims it, so one coupon never stands on two online orders
-- **A sale at the counter keeps its coupon** — a counter sale holds the coupon
-  it carries for as long as it can still collect, and the coupon is refused
-  online until that sale is paid or cancelled
+- 🚧 **The newer claim replaces the older** — checking out online, and
+  choosing the coupon at a counter, each cancel the member's open online
+  orders carrying it, and claim it only once that is done
+- **A sale at the counter keeps its coupon** — the shop owns that cart and it
+  can still collect, so a counter sale is never cancelled and the coupon is
+  refused online until the sale is paid or cancelled
 - ❓ **A counter sale nobody finished** — how long the member waits for a
   coupon left on a sale that never completed; Product confirms
 - **A sale that beats it** — where the shop's own sale and the coupon
