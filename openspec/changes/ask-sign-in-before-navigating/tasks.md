@@ -1,7 +1,7 @@
-## 1. Manual (grade10-spec)
+## 1. Manual (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Mark Navigation with what a collector without a session meets on a surface that needs an account: asked before the address changes, signing in finishing the move, an address opened from outside answered where it lands, and a link carrying its own secret never asked (grade10-site-site-navigation-SC-15, grade10-site-site-navigation-SC-17, grade10-site-site-navigation-SC-21)
-- [ ] 1.2 Verify: `pnpm check:manual`
+- [x] 1.1 Mark Navigation with what a collector without a session meets on a surface that needs an account: asked before the address changes, signing in finishing the move, an address opened from outside answered where it lands, and a link carrying its own secret never asked (grade10-site-site-navigation-SC-15, grade10-site-site-navigation-SC-17, grade10-site-site-navigation-SC-21)
+- [x] 1.2 Verify: `pnpm check:manual`
 
 ## 2. Shared sign-in overlay (grade10)
 
