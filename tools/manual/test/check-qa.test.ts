@@ -383,8 +383,8 @@ describe("a suite no page shows", () => {
   });
 });
 
-/** A scenario names the anchor it serves; one resolving to neither a story nor
- * a feature set group is a scenario standing under nothing. */
+/** A scenario names the anchor it serves; one resolving to neither a journey
+ * nor a feature set group is a scenario standing under nothing. */
 describe("a scenario serving an anchor the spec does not offer", () => {
   it("fails naming the scenario, the anchor and the spec", async () => {
     const root = store({
@@ -393,12 +393,12 @@ describe("a scenario serving an anchor the spec does not offer", () => {
       }),
     });
     expect(lines(await check(root), "serves")).toEqual([
-      `${SPEC_FILE} — alpha-SC-01 → \`alpha-US-99\`, which is neither a story nor a feature set group of \`demo-product/alpha\``,
+      `${SPEC_FILE} — alpha-SC-01 → \`alpha-US-99\`, which is neither a journey nor a feature set group of \`demo-product/alpha\``,
     ]);
   });
 
-  it("says nothing when the anchor is a story", async () => {
-    const root = store({});
+  it("says nothing when the anchor is a journey", async () => {
+    const root = store({ journeys: journeysText([journey("alpha-US-01")]) });
     expect(lines(await check(root), "serves")).toEqual([]);
   });
 

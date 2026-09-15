@@ -139,6 +139,7 @@ const document: ChangeDocument = {
                 {
                   id: "alpha-SC-65",
                   name: "One redemption, one debit",
+                  serves: ["alpha-US-06"],
                   text: "- **WHEN** redeemed\n- **THEN** one debit",
                 },
               ],

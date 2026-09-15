@@ -152,6 +152,7 @@ const requirement = (name: string, id: string, then: string) => [
   `Alpha SHALL ${then}.`,
   "",
   `#### Scenario: ${id} - it does the thing`,
+  "**Serves:** Doing things - it does the thing",
   "",
   "- **WHEN** asked",
   `- **THEN** it does ${then}`,

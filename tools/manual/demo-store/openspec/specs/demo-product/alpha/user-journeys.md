@@ -5,8 +5,3 @@
 **As a** reader,
 **I want** the thing to happen once and leave a record,
 **so that** I can tell whether it already happened.
-
-**Accepted by:**
-
-- `alpha-SC-01` — The thing happens
-- `alpha-SC-02` — The thing is refused a second time
