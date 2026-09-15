@@ -56,12 +56,13 @@ export const RULES = [
     title: "Scenarios serving an anchor the spec does not offer",
   },
   {
-    // Warn until the store is migrated: every scenario written before
-    // `**Serves:**` existed is missing one, and failing on that would bury
-    // every other finding behind the backlog. It becomes `fail` in the commit
-    // that finishes the migration, and that commit is the one to raise it in.
+    // Raised from `warn` by the commit that finished the migration: every
+    // scenario in the store names an anchor, so one that does not is new work
+    // and not a backlog. Finding a scenario no part of the feature set covers
+    // is the useful half — five capabilities turned out to have behaviour their
+    // own map never named, and nothing else in this store looks for that.
     key: "anchorless",
-    level: "warn",
+    level: "fail",
     title: "Scenarios carrying no `**Serves:**` line",
   },
   {
