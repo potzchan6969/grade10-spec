@@ -55,3 +55,7 @@ legible without a second file.
 
 - Grade10 site serves the adaptive SVG (and regenerated rasters) from this
   package instead of a local copy
+
+## References
+
+- [Favicon](../../../docs/prds/platform/favicon.md)
