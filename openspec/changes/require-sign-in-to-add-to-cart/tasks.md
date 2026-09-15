@@ -8,7 +8,7 @@
 ## 2. Cart sign-in gate (grade10) (owner: @sean)
 
 - [ ] 2.1 Refuse a cart write while the scope is a guest and report the ask to the consumer's `onSignInRequired`, writing no line (grade10-site-store-product-listing-SC-44, grade10-site-store-product-page-SC-26)
-- [ ] 2.2 Perform an armed intent once the scope becomes a member, re-reading the variant and quantity and dropping it where either no longer stands (grade10-site-store-product-listing-SC-46, grade10-site-store-product-page-SC-28)
+- [ ] 2.2 Perform an armed intent once the scope becomes a member, leaving a line the store refuses on the store's refusal path and dropping the intent when the surface goes (grade10-site-store-product-listing-SC-46, grade10-site-store-product-page-SC-28)
 - [ ] 2.3 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs store-frontend`
 
 ## 3. Product page Add to cart (grade10)

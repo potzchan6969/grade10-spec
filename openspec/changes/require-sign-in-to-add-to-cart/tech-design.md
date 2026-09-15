@@ -74,12 +74,18 @@ unchanged with no second wire from the app.
   then have to be told the dialog was dismissed to drop it, which is exactly
   the wire the overlay's `resume` already saves.
 
-### The intent is re-read before it is written
+### The store answers a line that can no longer be written
 
-The spec refuses an invented later add. The effect re-reads the product's
-sellable variant and the quantity it holds before writing, and drops the
-intent where either no longer stands. Leaving the surface unmounts the state,
-which answers "sign-in takes the collector away" without a check.
+The spec refuses an invented later add, and the cart holds a `CartLine`, not
+the product — availability is the surface's, through `sellableQuantity`. So
+the effect writes the line the collector asked for and the store's existing
+`SetLineOutcome` refusal answers one it will not take, rolling the optimistic
+fold back as it already does for a full cart. Leaving the surface unmounts
+the state, which answers "sign-in takes the collector away" without a check.
+
+- **Rejected: the intent holding a callback the surface re-runs.** The cart's
+  intent would become lazy and the surface would owe it a second entry point,
+  to re-derive what the collector already asked for.
 
 ## Risks / Trade-offs
 
