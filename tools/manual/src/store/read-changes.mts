@@ -246,7 +246,6 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
  * for, against the field each lands on. Every one is a line an author or
  * `pnpm plan shipped` wrote, read back verbatim. */
 const RECORDED = [
-  ["workflow_rev", "workflowRev"],
   ["page_waived", "pageWaived"],
   ["design_waived", "designWaived"],
   ["deployed_at", "deployedAt"],

@@ -272,10 +272,6 @@ export type ChangeEntry = {
    * author-declared, so it takes a reason. An empty string is the legacy
    * `skip_specs: true`: declared, with no reason given. */
   skipSpecs?: string;
-  /** The planning rules this change was written under, from `.openspec.yaml`
-   * `workflow_rev:`. Absent means the rules before anchors and the blind pass,
-   * and the checks that arrived with them do not apply to it. */
-  workflowRev?: string;
   /** Why this change marks no capability page, from `.openspec.yaml`
    * `page_waived:` — the line that stands in for the 🚧 a change with deltas
    * owes a page. */

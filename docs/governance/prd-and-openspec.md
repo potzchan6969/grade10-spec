@@ -116,7 +116,6 @@ That is how the work reaches an engineer. The application repository has no plan
 | `schema` | The CLI, at `openspec new change` | Always | Every reader |
 | `created` | The CLI, at `openspec new change` | Always | The boards, for the planning age |
 | `skip_specs: "<why>"` | The author | A change altering no product behaviour | `openspec validate`, `pnpm check:manual` rule `hatch` |
-| `workflow_rev: "<n>"` | The CLI, at `openspec new change` | Always, from the rules revision in force | `pnpm check:manual`, to leave a change written under older rules alone |
 | `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The boards |
 | `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
 | `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
