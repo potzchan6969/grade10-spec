@@ -43,7 +43,7 @@ hand on a durable capability - assemble it yourself and say so in the report.
 Never read the requirements "just to check": that is how the property is lost,
 and nothing downstream can detect that it was.
 
-Work an explicit test-design checklist rather than paraphrasing the stories:
+Work an explicit test-design checklist rather than paraphrasing the journeys:
 boundary values, equivalence partitions, state transitions, CRUD completeness,
 empty / one / many, null and missing, permission matrix, error taxonomy, SEO
 and indexability. Two readings that use the same method produce synonyms, and
@@ -59,7 +59,7 @@ and are unchanged.
 | `platform` | `openspec/specs/platform-tcs.md` | nothing — smoke |
 | `product` | `<product>/product-tcs.md` | nothing — smoke |
 | `domain` | `<product>/<domain>/domain-tcs.md` | every cross-capability path its journeys imply |
-| `feature` | `<capability>/feature-tcs.md` | every anchor - each story, or each feature set root group where nobody walks the capability |
+| `feature` | `<capability>/feature-tcs.md` | every anchor - each journey, or each feature set root group where nobody walks the capability |
 
 - **Which level owns a case** — **Levels** and **One purpose, one case**. A
   composed case traces two or more journeys that exist, from two or more
@@ -128,7 +128,7 @@ and are unchanged.
    (`rules.spec-outline`, `rules.user-journeys`) direct — from the feature set
    and the PRD rather than the requirements you cannot see, adding no
    behaviour, ids numbered from `01` and never reusing a retired number. There
-   is no cap on the number of stories. A capability nobody walks says
+   is no cap on the number of journeys. A capability nobody walks says
    `**Walked by:** nobody on their own - <who inherits it>` and still gets a
    suite, anchored on its feature set. Run `openspec validate <change-name>
    --strict` when the target is a change, report what you changed, then
@@ -152,7 +152,7 @@ and are unchanged.
 
 5. **Take the journeys as the suite's sections.** **Step 2** in the document:
    one `## <capability>-US<n>: <title>` per `### <capability>-US-<n>` in
-   `user-journeys.md`, in spec order, compact id, title and three-line story
+   `user-journeys.md`, in spec order, compact id, title and three-line statement
    copied unchanged, no `Covers:` list, description or count, a `---` rule
    between sections. The actor resolves to `customer` or `admin` — **Who the Actor
    Is**; a journey with another actor gets no cases and is reported. A
@@ -160,7 +160,7 @@ and are unchanged.
    internal state — is not written. Where the journeys file says
    `**Walked by:** nobody`, the file carries exactly one section,
    `## <capability>-US1: <what the capability holds>`, with the declaration's
-   line in place of the story — never one section per feature set group, which
+   line in place of the journey — never one section per feature set group, which
    would number a case by that group's position and renumber it the day the
    groups are reordered. The groups go on the cases instead: each `**Trace:**`
    names the one it walks. Every case sits under a section; an orphan is not
@@ -215,7 +215,7 @@ and are unchanged.
      with no draft under it or missing above one; `**Reviewed:**` on a file
      not `approved`; a revision above the store's
    - **Journey** — a heading not `## <capability>-US<n>: <title>`, a prefix
-     the spec does not issue, a journey it does not define, a story missing
+     the spec does not issue, a journey it does not define, one missing
      `**As a**`, `**I want**` or `**so that**`
    - **Case** — an id not `<capability>-US<n>-TC<m>-<v>`, under the wrong
      journey, `TC<m>` repeated, `<v>` below `1`; a property missing, out of

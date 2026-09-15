@@ -1,5 +1,5 @@
 /*
- * RULES: the anchors a spec claims — the story or feature-set group each
+ * RULES: the anchors a spec claims — the journey or feature-set group each
  * scenario serves, and the suite sitting beside it.
  *
  * Neither the spec nor the suite names the other. A scenario points up at an
@@ -29,7 +29,7 @@ export function checkAcceptance(ctx, shape) {
   }
 }
 
-/** Every anchor this capability offers: its stories, and the root groups of
+/** Every anchor this capability offers: its journeys, and the root groups of
  * its feature set. A capability nobody walks has only the second kind, which
  * is what `**Walked by:** nobody` routes it to. */
 function anchorsOf(spec) {
@@ -40,7 +40,7 @@ function anchorsOf(spec) {
 }
 
 /** RULE `serves`: a scenario names the anchor it serves, and an anchor that
- * resolves to neither a story nor a feature set group is a scenario standing
+ * resolves to neither a journey nor a feature set group is a scenario standing
  * under nothing. Reported once per capability: before the store is migrated
  * every scenario is missing the line, and one finding per scenario would bury
  * the capabilities that are actually wrong. */
@@ -70,7 +70,7 @@ function checkServes(ctx, spec, dir) {
     ctx.add(
       "serves",
       `${dir}/spec.md`,
-      `${one}, which is neither a story nor a feature set group of \`${spec.id}\``,
+      `${one}, which is neither a journey nor a feature set group of \`${spec.id}\``,
     );
   }
 }
@@ -88,7 +88,7 @@ function suiteOf(spec) {
 
 /** RULE `derived`: a capability with anchors pairs them with a suite.
  * `**Walked by:** nobody` is no longer an exemption — it routes the anchors to
- * the feature set instead of the stories, and the capability still carries a
+ * the feature set instead of the journeys, and the capability still carries a
  * suite. Money amounts, dates and times and localization are where a boundary
  * or precision miss costs most, and they were exactly what the old exemption
  * excluded from test design. */
@@ -99,7 +99,7 @@ function checkDerived(ctx, spec, dir, present) {
   if (anchors.size === 0) return;
   const how = spec.unwalked
     ? "nobody walks it, so its anchors are its feature set groups"
-    : "it holds stories";
+    : "it holds journeys";
   ctx.add(
     "derived",
     `${dir}/feature-tcs.md`,
@@ -172,7 +172,7 @@ function checkSuite(ctx, spec, dir) {
 }
 
 /** RULE `trace`: the anchor is the only thread between a case and the
- * behaviour it proves. One that names no story, feature set group or scenario
+ * behaviour it proves. One that names no journey, feature set group or scenario
  * of the spec's own is a case standing behind nothing. */
 function checkTraces(ctx, file, spec, suite, issued, accepted) {
   for (const test of suite.cases) {

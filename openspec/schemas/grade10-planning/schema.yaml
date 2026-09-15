@@ -179,7 +179,7 @@ artifacts:
       **THEN** the catalogue SHALL show the empty state and keep the filter applied
       ```
 
-      The anchor is a user story id or a `## Feature set` root group name matched
+      The anchor is a user journey id or a `## Feature set` root group name matched
       verbatim; before the dash is machine-read, after it is prose. An anchor
       resolving to neither fails `pnpm check:manual` loudly rather than dangling
       in silence.
@@ -189,7 +189,7 @@ artifacts:
       as a behaviour change.
 
       **A scenario may serve several anchors**, written as code spans -
-      ``**Serves:** `…-US-03`, `…-US-07` - the refusal both stories meet``. A
+      ``**Serves:** `…-US-03`, `…-US-07` - the refusal both journeys meet``. A
       scenario is a rule and a rule can sit on several journeys; a feature test
       case is one walk and still traces one anchor. Commas alone do not separate
       them, because a feature set group may hold a comma of its own.
@@ -205,7 +205,7 @@ artifacts:
       - proposal
   - id: user-journeys
     generates: specs/**/user-journeys.md
-    description: The stories this change adds, changes or retires, with the ones it leans on restated
+    description: The journeys this change adds, changes or retires, with the ones it leans on restated
     template: user-journeys.md
     instruction: |
       Written by the product manager, with the `planning-pm` skill, one file
@@ -214,27 +214,27 @@ artifacts:
       Sections, in this order:
 
       ```
-      ## Context user stories     restated verbatim, read-only, never folded
-      ## ADDED User stories
-      ## MODIFIED User stories    the whole story block copied, then edited
-      ## REMOVED User stories     each with **Reason:**
+      ## Context user journeys     restated verbatim, read-only, never folded
+      ## ADDED User journeys
+      ## MODIFIED User journeys    the whole journey block copied, then edited
+      ## REMOVED User journeys     each with **Reason:**
       ```
 
-      **All three delta sections may be empty.** Most changes move no story. A
-      `**Serves:**` or `**Trace:**` anchor may name a story that already exists
+      **All three delta sections may be empty.** Most changes move no journey. A
+      `**Serves:**` or `**Trace:**` anchor may name a journey that already exists
       under `openspec/specs/`, not only one this change introduces, so a change
-      is never pushed into inventing a story to hang itself on.
+      is never pushed into inventing a journey to hang itself on.
 
-      ## Context user stories
+      ## Context user journeys
 
-      Every story this change's scenarios or cases anchor on, copied from the
+      Every journey this change's scenarios or cases anchor on, copied from the
       durable file **byte for byte**. It makes the change self-contained: the
       blind suite pass reads it here instead of reaching into
-      `openspec/specs/`, and a reviewer reads the story without leaving the
+      `openspec/specs/`, and a reviewer reads the journey without leaving the
       diff. `pnpm check:manual` fails a copy that has drifted, so drift is
       caught rather than silently reverting the durable file at archive.
 
-      ## Writing a story
+      ## Writing a journey
 
       `### <capability>-US-<n>: <title>`, then three labeled lines:
 
@@ -247,25 +247,25 @@ artifacts:
       ```
 
       **There is no `**Accepted by:**` line.** Nothing in this file names a
-      scenario. Scenarios point up at stories through their own `**Serves:**`
+      scenario. Scenarios point up at journeys through their own `**Serves:**`
       and tooling joins on that. A hand-maintained link in both directions is
       how the two files came to inherit each other's blind spots.
 
       Title actor first, then the action, in the third person - `Collector
       enters the catalogue through a collection`. Not a bare verb phrase, not
-      the first person, never so vague that two stories could share it. A name
-      that needs an `and` is two stories.
+      the first person, never so vague that two journeys could share it. A name
+      that needs an `and` is two journeys.
 
-      **There is no cap on the number of stories.** Write as few as cover the
+      **There is no cap on the number of journeys.** Write as few as cover the
       change and no fewer. Hold each to the four criteria its author owns:
-      Independent, Negotiable, Valuable, Testable. A story that fails one is
+      Independent, Negotiable, Valuable, Testable. A journey that fails one is
       split or reworded, never widened to fit. Estimable and Small are sizing
       judgements and belong to the engineer who plans delivery.
 
       The role is an end user the spec already names, and the benefit is one
       the requirements or the proposal already justify. Software this
       repository ships is never the role - a consuming application, a service,
-      a caller, a package is the system's side of the story, and the journey
+      a caller, a package is the system's side of it, and the journey
       belongs to whoever operates it. Neither are the people who build the
       product: an engineer wiring a call, a developer seeding fixtures, a
       reviewer reading a contract each walk a test or a working step. An
@@ -274,22 +274,22 @@ artifacts:
 
       ## A capability nobody walks
 
-      Still writes the file, and says so in place of the stories:
+      Still writes the file, and says so in place of the journeys:
       `**Walked by:** nobody on their own - <who inherits it, and which
       capability's journeys reach it instead>`.
 
       This is a **routing declaration, not an exemption**: the capability's
-      anchors are its `## Feature set` root groups rather than its stories, and
+      anchors are its `## Feature set` root groups rather than its journeys, and
       it still gets a suite. `Walked by: nobody` is not `Tested by: nobody` - a
       cross-cutting policy is exactly where a boundary, precision or timezone
       miss costs most, and exempting one from test design is how those ship.
 
       Never invent an actor to fill the file. `pnpm check:manual` fails a
-      capability with neither stories nor the declaration.
+      capability with neither journeys nor the declaration.
 
-      ## Retiring a story
+      ## Retiring a journey
 
-      A removed story keeps its id forever. Archive leaves a one-line tombstone
+      A removed journey keeps its id forever. Archive leaves a one-line tombstone
       under a `## Retired` section at the bottom of the durable file:
 
       ```
@@ -297,8 +297,8 @@ artifacts:
         removed in `remove-listing-search` · 2026-09-14
       ```
 
-      One line, not the story. Archived suites still carry
-      `**Trace:** product-listing-US-04`; delete the story outright and that
+      One line, not the journey. Archived suites still carry
+      `**Trace:** product-listing-US-04`; delete the journey outright and that
       join breaks with nothing left to recover it from.
     requires:
       - specs
@@ -339,14 +339,14 @@ artifacts:
       ## Method
 
       Work an explicit test-design checklist rather than paraphrasing the
-      stories: boundary values, equivalence partitions, state transitions, CRUD
+      journeys: boundary values, equivalence partitions, state transitions, CRUD
       completeness, empty / one / many, null and missing, permission matrix,
       error taxonomy, SEO and indexability. Two readings that use the same
       method produce synonyms, and the reconciliation then finds nothing.
 
       ## Anchors
 
-      Every case's `**Trace:**` names an anchor: a user story id, as it always
+      Every case's `**Trace:**` names an anchor: a user journey id, as it always
       has, or - for a capability nobody walks - a `## Feature set` root group
       name matched verbatim. A case still never names a scenario id; the suite
       is written before the scenarios exist, and `tcs:validate` has always

@@ -103,7 +103,7 @@ const SUITE = "# Feature test cases\n\n## Settled\n\n- A sold listing is not an 
 const CARRIED = {
   ...PROPOSAL,
   [`specs/${CAP}/spec.md`]: PURPOSE + FEATURE_SET + REQUIREMENTS,
-  [`specs/${CAP}/user-journeys.md`]: `# User journeys\n\n## ADDED User stories\n\n${STORY}`,
+  [`specs/${CAP}/user-journeys.md`]: `# User journeys\n\n## ADDED User journeys\n\n${STORY}`,
   [`specs/${CAP}/feature-tcs.md`]: SUITE,
 };
 const DURABLE = {
@@ -130,10 +130,10 @@ test("refuses a durable purpose the change replaced and archive left behind", ()
   assert.match(result.stderr, /still holds a different one/);
 });
 
-test("refuses a removed story that leaves no tombstone, and takes one that does", () => {
+test("refuses a removed journey that leaves no tombstone, and takes one that does", () => {
   const files = {
     ...CARRIED,
-    [`specs/${CAP}/user-journeys.md`]: `# User journeys\n\n## REMOVED User stories\n\n${STORY}\n**Reason:** search is gone.\n`,
+    [`specs/${CAP}/user-journeys.md`]: `# User journeys\n\n## REMOVED User journeys\n\n${STORY}\n**Reason:** search is gone.\n`,
   };
   const deleted = {
     ...DURABLE,

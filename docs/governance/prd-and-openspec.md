@@ -95,8 +95,8 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
 - `proposal.md` — scope, why now, consumer impact, non-goals, and under `## References` a link to every page section the change marked;
 - `specs/<capability>/spec.md` — only the requirement deltas against `openspec/specs/`;
-- `specs/<capability>/user-journeys.md` — the stories those requirements accept, or the one line `**Walked by:** nobody on their own - <why>` when no end user reaches the capability;
-- `specs/<capability>/feature-tcs.md` — the suite derived from those journeys, beside every capability whose journeys file holds a story;
+- `specs/<capability>/user-journeys.md` — the journeys those requirements accept, or the one line `**Walked by:** nobody on their own - <why>` when no end user reaches the capability;
+- `specs/<capability>/feature-tcs.md` — the suite derived from those journeys, beside every capability whose journeys file holds a journey;
 - `ui-design.md` — screens, exports and states, when the change alters something a user sees;
 - `tech-design.md` — implementation choices, interfaces, compatibility, and validation approach; and
 - `tasks.md` — small, checkable delivery steps.

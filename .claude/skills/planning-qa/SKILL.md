@@ -126,7 +126,7 @@ them too, and CI runs it on every push.
 
 - **Every section is an anchor.** One `## <capability>-US<n>: <title>` per
   `### <capability>-US-<n>` in `user-journeys.md`, in that file's order, with
-  the same three-line story carried over unchanged — or, where nobody walks the
+  the same three-line statement carried over unchanged — or, where nobody walks the
   capability, one section per `## Feature set` root group.
 - **Every case traces the anchor it walks**, and never a scenario id: the suite
   was written before the scenarios existed.
@@ -152,9 +152,9 @@ suite, and reports the new journeys file in the same run.
 
 A capability nobody reaches on its own says so in its `user-journeys.md` —
 `**Walked by:** nobody on their own — <who inherits it>` in place of the
-stories — for a cross-cutting policy, a package contract, a backend convention,
+journeys — for a cross-cutting policy, a package contract, a backend convention,
 or a surface only the product's makers reach. Never invent an actor to justify a
-story — not an application importing a package, and not the engineer, developer
+journey — not an application importing a package, and not the engineer, developer
 or reviewer who built the thing.
 
 **It still gets a suite**, anchored on its `## Feature set` root groups. Money

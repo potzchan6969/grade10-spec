@@ -8,12 +8,12 @@
      grade10-site/store/product-listing issues
      grade10-site-store-product-listing-SC-01, -US-01, -US1-TC1-1. -->
 
-## Context user stories
-<!-- Every story this change's scenarios or cases anchor on, copied from the
+## Context user journeys
+<!-- Every journey this change's scenarios or cases anchor on, copied from the
      durable file BYTE FOR BYTE. Read-only: archive never folds this section.
-     Delete the section when the change anchors on no existing story. -->
+     Delete the section when the change anchors on no existing journey. -->
 
-## ADDED User stories
+## ADDED User journeys
 
 ### <capability>-US-01: <!-- Collector does the thing -->
 
@@ -21,13 +21,13 @@
 **I want** <!-- capability -->,
 **so that** <!-- benefit the requirements already justify -->.
 
-<!-- No **Accepted by:** line. Scenarios point up at stories through their own
+<!-- No **Accepted by:** line. Scenarios point up at journeys through their own
      **Serves:**, and tooling joins on that. -->
 
-## MODIFIED User stories
-<!-- The whole story block copied from the durable file, then edited. -->
+## MODIFIED User journeys
+<!-- The whole journey block copied from the durable file, then edited. -->
 
-## REMOVED User stories
+## REMOVED User journeys
 <!-- Each with **Reason:**. The id is retired, never reused or renumbered. -->
 
-<!-- All three delta sections may be empty; most changes move no story. -->
+<!-- All three delta sections may be empty; most changes move no journey. -->

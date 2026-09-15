@@ -175,7 +175,7 @@ function dirsHolding(root, filename) {
 }
 
 /** Journey and scenario ids the capability issues, plus the journey titles.
- * The stories are their own file beside the spec, so both are read: the
+ * The journeys are their own file beside the spec, so both are read: the
  * scenarios come from `spec.md` and the journeys from `user-journeys.md`. */
 function readSpecIds(specPath) {
   if (!existsSync(specPath)) return null;
@@ -212,7 +212,7 @@ function readSpecIds(specPath) {
     groups,
     // A capability nobody walks routes its anchors to the feature set. It is
     // not exempt from a suite: it carries one section, and its cases trace
-    // groups rather than stories.
+    // groups rather than journeys.
     unwalked: /^\*\*Walked by:\*\*\s+nobody\b/m.test(stories),
     hasJourneySection: /^##\s+User journeys\s*$/m.test(stories),
   };

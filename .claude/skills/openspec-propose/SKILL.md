@@ -25,7 +25,7 @@ This skill covers what to settle before drafting and routes to the right one.
 Artifacts 2 to 4 are one `/planning-pm` run. `spec.md` is written twice: its
 purpose and feature set before the journeys, its requirements after the blind
 suite. A capability nobody walks still carries 4, anchored on its feature set
-rather than its stories.
+rather than its journeys.
 
 **Write your part and stop.** Each role adds its artifacts to the one change;
 nobody opens a second one, and an implementation plan invented ahead of the

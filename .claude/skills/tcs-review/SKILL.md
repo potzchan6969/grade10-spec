@@ -76,7 +76,7 @@ what they ask, and record their words untidied — generation copies what they a
    reviewer: capability, journeys, cases per journey, drafts.
 
 7. **Walk the suite one journey at a time,** in file order, as **The Review
-   Lane** describes: the story, every `draft` case in full — id and title,
+   Lane** describes: the journey, every `draft` case in full — id and title,
    classification block, pre-conditions, test data, steps, expected results —
    and `actual` or `deprecated` cases by id and title only. Scenarios are
    offered, never quoted unasked; when asked, quote the whole clause from

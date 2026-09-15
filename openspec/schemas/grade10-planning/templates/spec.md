@@ -14,7 +14,7 @@
 - <!-- group name -->
   - <!-- Name: why this item exists -->
 
-<!-- The user stories live in user-journeys.md beside this file, never in it. -->
+<!-- The user journeys live in user-journeys.md beside this file, never in it. -->
 
 <!-- <capability> is the capability's path with slashes as hyphens:
      grade10-site/store/product-listing issues

@@ -35,7 +35,7 @@
  *
  *          A copy that did land is read for the four things only archive can
  *          get wrong: a written `## Purpose` replaces the durable one whole, a
- *          removed story leaves a `## Retired` tombstone instead of vanishing
+ *          removed journey leaves a `## Retired` tombstone instead of vanishing
  *          (archived suites still trace its id), a carried `## Reconciliation`
  *          has its scenario ids stripped, and `## Settled` travels with the
  *          suite — drop it and every later blind pass raises the same refused
@@ -378,7 +378,7 @@ for (const { file, capability } of deltaFiles(changeId)) {
     });
   }
 
-  // The stories are their own file on both sides, so the fold never touches
+  // The journeys are their own file on both sides, so the fold never touches
   // them: the change's user-journeys.md has to be copied across whole.
   const journeysFile = file.replace(/spec\.md$/, "user-journeys.md");
   const durableJourneys = join(
@@ -393,8 +393,8 @@ for (const { file, capability } of deltaFiles(changeId)) {
     : null;
 
   if (existsSync(journeysFile)) {
-    const stories = readFileSync(journeysFile, "utf8");
-    const ids = new Set(stories.match(US_ID) ?? []);
+    const journeys = readFileSync(journeysFile, "utf8");
+    const ids = new Set(journeys.match(US_ID) ?? []);
     const carried =
       landed !== null && [...ids].every((id) => landed.includes(id));
     if (!carried) {
@@ -405,11 +405,11 @@ for (const { file, capability } of deltaFiles(changeId)) {
       });
     }
 
-    // A removed story keeps its id forever — archived suites still carry
-    // `**Trace:** <id>`, and nothing recovers that join once the story is
+    // A removed journey keeps its id forever — archived suites still carry
+    // `**Trace:** <id>`, and nothing recovers that join once the journey is
     // gone. Archive leaves a one-line tombstone instead of deleting it.
     const removed = new Set(
-      sectionBody(stories, "REMOVED User stories")?.match(US_ID) ?? [],
+      sectionBody(journeys, "REMOVED User journeys")?.match(US_ID) ?? [],
     );
     const retired = landed === null ? null : sectionBody(landed, "Retired");
     for (const id of removed) {
@@ -422,7 +422,7 @@ for (const { file, capability } of deltaFiles(changeId)) {
       } else if (new RegExp(`^###\\s+${id}\\b`, "m").test(landed)) {
         wrong.push({
           capability,
-          what: `\`${id}\` is tombstoned under \`## Retired\` and its story is still written above it`,
+          what: `\`${id}\` is tombstoned under \`## Retired\` and its journey is still written above it`,
         });
       }
     }

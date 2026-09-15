@@ -50,7 +50,7 @@ const CASE_HEADING =
   /^([a-z0-9][a-z0-9-]*?-(?:US-?\d+-)?TC-?\d+(?:-\d+)?):\s*(.+)$/;
 /** The anchor a scenario serves, on its own line under the heading and above
  * `**GIVEN**` / `**WHEN**`. Machine-read up to the first dash; the prose after
- * it is for a human. The anchor is a story id, or a `## Feature set` root group
+ * it is for a human. The anchor is a journey id, or a `## Feature set` root group
  * name matched verbatim where nobody walks the capability. It sits above the
  * GIVEN/WHEN/THEN lines deliberately, so editing its prose never reads as a
  * behaviour change. */
@@ -59,7 +59,7 @@ const SERVES = /^\s*(?:[-*]\s+)?\*\*Serves:\*\*\s*(.+?)\s*$/m;
  * under it. The group name is the anchor; leaves carry no ids and are free to
  * be reworded. */
 const FEATURE_GROUP = /^[-*]\s+(?:\*\*)?(.+?)(?:\*\*)?\s*$/;
-/** The one line a journeys file holds in place of stories when no end user
+/** The one line a journeys file holds in place of journeys when no end user
  * reaches the capability on its own (`openspec/config.yaml`,
  * `rules.user-journeys`): a policy, a package contract, a convention. */
 const WALKED_BY_NOBODY = /^\*\*Walked by:\*\*\s+nobody\b/m;
@@ -226,7 +226,7 @@ function issuedIn(
 }
 
 /** An id is issued once, ever. A file that issues one twice splits a
- * scenario, story or case into two things wearing the same name — the ref
+ * scenario, journey or case into two things wearing the same name — the ref
  * resolves to one and the anchor lands on the other — so it is refused
  * where it was written rather than rendered twice. */
 function refuseRepeats(
@@ -303,7 +303,7 @@ function anchorsIn(line: string): string[] {
 
 /**
  * A `user-journeys.md`, whole: one `## User journeys` section holding a `###`
- * story apiece. The heading is required rather than assumed, so a file that
+ * journey apiece. The heading is required rather than assumed, so a file that
  * grew a second section says so instead of silently dropping it.
  */
 export function readJourneys(text: string): Journey[] {
@@ -319,7 +319,7 @@ export function readJourneys(text: string): Journey[] {
   return section.children.map(readJourney);
 }
 
-/** Whether a journeys file declares, in place of stories, that no end user
+/** Whether a journeys file declares, in place of journeys, that no end user
  * reaches the capability on its own. The declaration is the file's only
  * line under `## User journeys`; a file holding both is a check finding. */
 export function walkedByNobody(text: string): boolean {
@@ -510,7 +510,7 @@ function traces(section: Section): string[] {
   }
   const ids = [...new Set(line[1].match(TRACE_ID) ?? [])];
   if (ids.length > 0) return ids;
-  // A case may walk a `## Feature set` root group instead of a story - that is
+  // A case may walk a `## Feature set` root group instead of a journey - that is
   // where a capability nobody walks routes its anchors - and a group is named
   // verbatim rather than by id. Whether the name resolves is the `trace`
   // rule's question, asked against the spec beside the suite; the reader's
@@ -519,7 +519,7 @@ function traces(section: Section): string[] {
   if (named.length === 0) {
     throw new StoreFileError(
       section.line,
-      `test case \`${section.heading}\` traces nothing - name a story, a scenario id, or a \`## Feature set\` group`,
+      `test case \`${section.heading}\` traces nothing - name a journey, a scenario id, or a \`## Feature set\` group`,
     );
   }
   return named;

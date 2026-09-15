@@ -18,7 +18,7 @@ export type ResolvedRef =
 
 type ItemHit = { spec: string; title: string };
 
-/** Every id an item ref can name: scenarios, user stories, test cases. */
+/** Every id an item ref can name: scenarios, user journeys, test cases. */
 function itemsOf(spec: SpecEntry): Map<string, string> {
   const items = new Map<string, string>();
   for (const requirement of spec.requirements)

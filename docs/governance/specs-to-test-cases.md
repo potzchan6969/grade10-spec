@@ -11,9 +11,9 @@ A **feature** suite is written **blind**: by a reader who cannot see the spec's 
 ## The Rule
 
 - **The spec is correct** — once the scenarios exist and the two readings are reconciled, a suite that disagrees with the spec is regenerated. Before reconciliation there is nothing to disagree with: the suite is the only reading there is, and it is provisional. A proposal never links a suite in place of a spec delta
-- **Anchors are given** — every section is one `user-journeys.md` story. A capability nobody walks carries one section instead, `## <capability>-US1`, and names its feature set groups on the cases' `**Trace:**` lines — a section per group would number a case by that group's position, and an issued case id is permanent. There is no cap on the number of stories. A suite never invents a flow, and splitting or merging stories is a journeys edit
+- **Anchors are given** — every section is one `user-journeys.md` journey. A capability nobody walks carries one section instead, `## <capability>-US1`, and names its feature set groups on the cases' `**Trace:**` lines — a section per group would number a case by that group's position, and an issued case id is permanent. There is no cap on the number of journeys. A suite never invents a flow, and splitting or merging journeys is an edit to the journeys file
 - **A case comes from an anchor** — never from a scenario, which on a feature run does not exist yet. A case that carries behaviour no anchor implies is a product decision in disguise, and reconciliation is where it is settled
-- **A hole is reported** — an anchor no case covers, a case tracing an anchor nothing defines: report it, never close it by inventing a case or a story
+- **A hole is reported** — an anchor no case covers, a case tracing an anchor nothing defines: report it, never close it by inventing a case or a journey
 - **Properties are QA's** — they classify scenarios the spec states. A wrong property is fixed in review and is never grounds to change a step or an expected result
 
 ## The Isolated Input
@@ -60,7 +60,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 
 | Id | Lives in | Example |
 | --- | --- | --- |
-| `<capability>-US-<n>` | `user-journeys.md` story | `grade10-site-store-product-listing-US-01` |
+| `<capability>-US-<n>` | `user-journeys.md` journey | `grade10-site-store-product-listing-US-01` |
 | `<capability>-SC-<n>` | `spec.md` scenario | `grade10-site-store-product-listing-SC-01` |
 | `<capability>-US<n>` | `feature-tcs.md` journey heading | `grade10-site-store-product-listing-US1` |
 | `<capability>-US<n>-TC<m>-<v>` | `feature-tcs.md` case | `grade10-site-store-product-listing-US1-TC1-1` |
@@ -189,7 +189,7 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 | PR label | `documentation` |
 | Merges | at journey boundaries; a stopped review still opens a draft PR for what has verdicts |
 
-- **One journey at a time** — its story, then every `draft` case in full, with `actual` and `deprecated` cases listed by id; scenarios offered, and quoted in full on request
+- **One journey at a time** — its three-line statement, then every `draft` case in full, with `actual` and `deprecated` cases listed by id; scenarios offered, and quoted in full on request
 - **Only a human approves** — verdicts approve, change, defer or retire, in the reviewer's words; ids are echoed back and only what was named is marked. Approve → `actual`, defer → `draft`, retire → `deprecated`; the file status follows on its own
 - **Questions are answered from the spec** — quoting the clause, never from an assumption about the product
 - **Restyle first** — drafts to the current revision before review; offered for an `actual` case still `manual`; an `automated` case left as it is
@@ -239,12 +239,12 @@ Thirty capabilities carry a suite and thirty-nine do not; seventeen of those thi
 - **Read the PRD** — `docs/prds/products/<product>/<domain>/index.md` and the capability's PRD: a control, state or amount the manual names is written in the manual's words
 - **Read the store's context** — `openspec/config.yaml`'s `context` for the brands, products and conventions (money is minor units plus an ISO 4217 code): `<grade10 store url>`, never `<store front door URL>`
 - **Read the cross-cutting specs the Purpose names** — `crawlable-pages`, `localization`, `money-amounts`, `dates-and-times`. Their facts are checked on the way past (`URL contains <lang>`), never set up as a pre-condition
-- **Write missing journeys first** — to `rules.user-journeys`: from the feature set and the PRD, adding no behaviour, with permanent ids and `**As a** / **I want** / **so that**`. There is no `**Accepted by:**` list — a scenario points up at its story through its own `**Serves:**`, and tooling joins on that; `openspec validate <change> --strict`
+- **Write missing journeys first** — to `rules.user-journeys`: from the feature set and the PRD, adding no behaviour, with permanent ids and `**As a** / **I want** / **so that**`. There is no `**Accepted by:**` list — a scenario points up at its journey through its own `**Serves:**`, and tooling joins on that; `openspec validate <change> --strict`
 - **Confirm the ids** — `### <capability>-US-<n>: …`; older files get an ids-only upgrade
 
 ## Step 2: Journeys Become Sections
 
-- **One `##` per journey** — `## <capability>-US<n>: <title copied unchanged>`, in the journeys file's order, carrying the same three-line story; the actor resolves to `customer` or `admin`
+- **One `##` per journey** — `## <capability>-US<n>: <title copied unchanged>`, in the journeys file's order, carrying the same three-line statement; the actor resolves to `customer` or `admin`
 - **Nothing else** — no `**Covers:**` list, no description, summary or count
 - **`---` between journeys** — on its own line
 
@@ -455,7 +455,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 ## <capability>-US<n+1>: <the next journey>
 ````
 
-- **Fixed points** — header lines computed; journey heading and story copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
+- **Fixed points** — header lines computed; journey heading and its three-line statement copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
 - **No execution record** — no actual result, no pass/fail column; a run lives in Qase against the exported case
 - **Copy** — `openspec/specs/grade10-site/auction/auction/feature-tcs.md`, the one suite approved under the current revision; its `US2-TC1-1` is a case at the right size. A case pasted here would drift; the corpus is validator-held
 - **Deltas use the same format** — under `openspec/changes/<change>/specs/<product>/<domain>/<capability>/feature-tcs.md`

@@ -27,7 +27,7 @@ import { everyBlock } from "./context.mjs";
 
 /** The only `## ` headings a delta may hold: the four the fold reads, plus
  * the two a spec's own head carries. `User journeys` is not among them — the
- * stories are their own file beside the delta, and one written here is read
+ * journeys are their own file beside the delta, and one written here is read
  * by nothing. */
 const CARRIED = new Set(["Purpose", "Feature set"]);
 const ISSUED_ID = /[a-z0-9][a-z0-9-]*-(?:SC|US|TC)-\d+/g;
@@ -150,25 +150,25 @@ const sameBehaviour = (written, held) =>
   written.lines.every((line, at) => line === held.lines[at]) &&
   [...written.ids].every((id) => held.ids.has(id));
 
-/** RULE `context`: a change restates the stories it anchors on under
- * `## Context user stories`, and the copy is the durable text or it is a lie.
+/** RULE `context`: a change restates the journeys it anchors on under
+ * `## Context user journeys`, and the copy is the durable text or it is a lie.
  *
- * The section exists so the blind suite pass can read the stories without being
+ * The section exists so the blind suite pass can read the journeys without being
  * handed the durable capability — reading `openspec/specs/` is how it would see
  * the scenarios it must not see. That makes the copy load-bearing rather than a
  * convenience, and a copy nobody checks drifts: the change is then written
- * against a story the store no longer holds, and archive quietly reverts
+ * against a journey the store no longer holds, and archive quietly reverts
  * whatever landed in between.
  *
- * Only the restated block is compared. A story the change also modifies belongs
- * under `## MODIFIED User stories`, where it is meant to differ. */
+ * Only the restated block is compared. A journey the change also modifies belongs
+ * under `## MODIFIED User journeys`, where it is meant to differ. */
 function checkContext(ctx, files) {
   for (const file of files) {
     const text = journeysBeside(ctx.roots.store, file.file);
-    const restated = storiesUnder(text, "Context user stories");
+    const restated = journeysUnder(text, "Context user journeys");
     if (restated.size === 0) continue;
     const durablePath = `openspec/specs/${file.spec}/user-journeys.md`;
-    const durable = storiesUnder(
+    const durable = journeysUnder(
       readTextIfExists(join(ctx.roots.store, durablePath)) ?? "",
       "User journeys",
     );
@@ -179,23 +179,23 @@ function checkContext(ctx, files) {
         ctx.add(
           "context",
           at,
-          `restates \`${id}\`, which \`${file.spec}\` does not hold — a context story is a copy of a durable one, not a new story filed under the wrong heading`,
+          `restates \`${id}\`, which \`${file.spec}\` does not hold — a context journey is a copy of a durable one, not a new journey filed under the wrong heading`,
         );
       } else if (original !== copied) {
         ctx.add(
           "context",
           at,
-          `the restated \`${id}\` is not what \`${file.spec}\` holds — bring the copy back to the durable text, or move the story under \`## MODIFIED User stories\` where it is meant to differ`,
+          `the restated \`${id}\` is not what \`${file.spec}\` holds — bring the copy back to the durable text, or move the journey under \`## MODIFIED User journeys\` where it is meant to differ`,
         );
       }
     }
   }
 }
 
-/** Story id → its block, normalised only for trailing whitespace. Everything
+/** Journey id → its block, normalised only for trailing whitespace. Everything
  * else is compared as written: the point is to catch an edit, and an edit that
  * looks like formatting is still an edit. */
-function storiesUnder(text, heading) {
+function journeysUnder(text, heading) {
   const out = new Map();
   const lines = text.split("\n");
   let inside = false;
@@ -243,7 +243,7 @@ function readDeltaFiles(root, changes) {
         file,
         text,
         sections,
-        // The stories live beside the delta now, so the ids a change issues
+        // The journeys live beside the delta now, so the ids a change issues
         // are the two files' together — scanning spec.md alone would let a
         // `-US-` number be handed out twice.
         ids: [...idsIn(text), ...idsIn(journeysBeside(root, file))],
@@ -511,7 +511,7 @@ function durableBlocks(root, shape) {
 }
 
 /** Ids every archived change issues, by change id — its deltas and the
- * stories beside them. The fold leaves no durable trace of a delta's
+ * journeys beside them. The fold leaves no durable trace of a delta's
  * journeys, so this is the only record they exist. */
 function archivedIds(root) {
   const dir = join(root, "openspec", "changes", "archive");

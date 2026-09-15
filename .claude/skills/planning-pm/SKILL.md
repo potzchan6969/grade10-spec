@@ -13,7 +13,7 @@ suite between them:
 | --- | --- | --- |
 | `proposal` | `proposal.md` | Why this problem, for whom, what it will not do |
 | `specs` — pass one | `specs/<capability>/spec.md` | `## Purpose` and `## Feature set`, then stop |
-| `user-journeys` | `specs/<capability>/user-journeys.md` | The stories added, changed or retired, and the ones this change leans on |
+| `user-journeys` | `specs/<capability>/user-journeys.md` | The journeys added, changed or retired, and the ones this change leans on |
 | `test-cases` | `specs/<capability>/feature-tcs.md` | A blind suite, written without sight of the scenarios |
 | `specs` — pass two | `specs/<capability>/spec.md` | The requirement deltas and their scenarios, reconciled against that suite |
 
@@ -164,15 +164,15 @@ Everything this run produces is `draft`. Nothing in it claims review.
 
 Neither file points at the other. Both point up.
 
-> **Anchor set** = the capability's full story set once this change folds,
+> **Anchor set** = the capability's full journey set once this change folds,
 > **union** the root groups of its `## Feature set`.
 
 - A scenario carries `**Serves:** <anchor> - <prose>`, under its heading and
   above `**GIVEN**` / `**WHEN**`.
-- A case carries `**Trace:** <anchor>`, as it always has - a story id, or a
+- A case carries `**Trace:** <anchor>`, as it always has - a journey id, or a
   feature set root group for a capability nobody walks.
 - **There is no `**Accepted by:**`.** It was the hand-maintained link through
-  which the two files inherited each other's blind spots. Where a story-to-
+  which the two files inherited each other's blind spots. Where a journey-to-
   scenario listing is wanted, tooling joins on `**Serves:**`.
 
 Before the dash is machine-read and must resolve; after it is prose for a human.
@@ -203,7 +203,7 @@ reopens the leak on the next change to the same capability, invisibly.
 The suite pass works a test-design checklist - boundary values, equivalence
 partitions, state transitions, CRUD completeness, empty / one / many, null and
 missing, permission matrix, error taxonomy, SEO and indexability - rather than
-paraphrasing the stories. Two readings using the same method produce synonyms,
+paraphrasing the journeys. Two readings using the same method produce synonyms,
 and the reconciliation then finds nothing.
 
 ## Reconciliation
