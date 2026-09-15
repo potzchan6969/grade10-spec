@@ -11,7 +11,7 @@
 - [x] 2.2 Take a `title` on `SignInFlow`, read in place of `tSignIn("title")` when the flow translates
 - [x] 2.3 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs auth-frontend`
 
-## 3. Add to cart names why (grade10)
+## 3. Add to cart names why (grade10) (owner: @sean)
 
 Needs the title seam from group 2, and the dialog that
 [`require-sign-in-to-add-to-cart`](../require-sign-in-to-add-to-cart/tasks.md)
