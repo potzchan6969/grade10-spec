@@ -256,6 +256,7 @@ function AuctionRecord({
                       openListing: copy.openListing,
                       openBidding: copy.openBidding,
                       noStanding: copy.noStanding,
+                      viewOrder: copy.viewOrder,
                       ...item.copy,
                     }}
                     enterStyle={enterStyle(index + 2, revealed)}

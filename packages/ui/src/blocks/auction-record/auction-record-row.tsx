@@ -2,7 +2,10 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { TableCell } from "@grade10/design-system/components/display/table-cell";
 import { TableRow } from "@grade10/design-system/components/display/table-row";
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
+import {
+  Button,
+  buttonVariants,
+} from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { Switch } from "@grade10/design-system/components/forms/switch";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
@@ -157,11 +160,16 @@ function AuctionRecordRow({
   const showEmailAlerts = Boolean(onEmailAlertsChange && emailAlertsCopy);
   // Unwatch only when the application supplies it — bid rows omit these props.
   const showUnwatch = Boolean(onWatchToggle && watchCopy) && !bidPlaced;
+  // Winner Order entry — consumer supplies viewOrder + href only on won rows.
+  const showViewOrder = Boolean(copy?.viewOrder && href) && !showUnwatch;
   const noStanding = copy?.noStanding ?? "--";
   const unwatchLabel = watchCopy?.unwatch ?? watchCopy?.watching ?? "Unwatch";
   const listingLabel = copy?.openListing
     ? `${copy.openListing}: ${title}`
     : title;
+  const viewOrderLabel = copy?.viewOrder
+    ? `${copy.viewOrder}: ${title}`
+    : undefined;
 
   const rowRef = useRef<HTMLDivElement>(null);
   const [collapseHeight, setCollapseHeight] = useState<number | null>(null);
@@ -299,6 +307,15 @@ function AuctionRecordRow({
       </TableCell>
 
       <TableCell className={AUCTION_RECORD_COLUMNS.actions}>
+        {showViewOrder && href && copy?.viewOrder ? (
+          <a
+            aria-label={viewOrderLabel}
+            className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
+            href={href}
+          >
+            {copy.viewOrder}
+          </a>
+        ) : null}
         {showUnwatch && watchCopy && onWatchToggle ? (
           <Button
             aria-busy={watchPending || undefined}

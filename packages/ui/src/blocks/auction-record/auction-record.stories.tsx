@@ -15,13 +15,19 @@ import {
   BIDDING_ENDED,
   BIDDING_POSTER,
   BIDDING_WON_AWAITING_ADDRESS,
+  BIDDING_WON_CANCELLED,
+  BIDDING_WON_DELIVERED,
+  BIDDING_WON_EXPIRED,
   BIDDING_WON_PENDING_PAYMENT,
   BIDDING_WON_PREPARING_INVOICE,
   BIDDING_WON_PROCESSING,
+  BIDDING_WON_REFUNDED,
+  BIDDING_WON_SHIPPED,
   biddingItem,
   WATCHING_CAMERA,
   WATCHING_ENDED,
   WATCHING_POSTER,
+  WINNER_ORDER_HREF,
 } from "./fixtures";
 import type { AuctionRecordRowProps } from "./types";
 
@@ -272,7 +278,8 @@ export const Ended: Story = {
 
 /**
  * Address-first post-auction standing on Won rows, plus Didn’t win hold copy
- * and watch-only Ended. Read-only — opens the order / listing; no pay control.
+ * and watch-only Ended. Read-only — Won title links open Winner Order; no pay
+ * control on this surface.
  */
 export const PostAuctionStanding: Story = {
   name: "Post-auction standing",
@@ -282,7 +289,12 @@ export const PostAuctionStanding: Story = {
         BIDDING_WON_AWAITING_ADDRESS,
         BIDDING_WON_PREPARING_INVOICE,
         BIDDING_WON_PENDING_PAYMENT,
+        BIDDING_WON_EXPIRED,
         BIDDING_WON_PROCESSING,
+        BIDDING_WON_SHIPPED,
+        BIDDING_WON_DELIVERED,
+        BIDDING_WON_CANCELLED,
+        BIDDING_WON_REFUNDED,
         BIDDING_DIDNT_WIN_HOLD_RELEASING,
         BIDDING_ENDED,
       ]}
@@ -293,11 +305,15 @@ export const PostAuctionStanding: Story = {
     const canvas = within(canvasElement);
     await auctionRecordSettled(canvasElement);
 
-    expect(canvas.getByText("7")).toBeVisible();
+    expect(canvas.getByText("12")).toBeVisible();
     expect(canvas.getByText("Awaiting Address")).toBeVisible();
     expect(canvas.getByText("Preparing Invoice")).toBeVisible();
-    expect(canvas.getByText("Pending Payment")).toBeVisible();
+    expect(canvas.getAllByText("Pending Payment")).toHaveLength(2);
     expect(canvas.getByText("Processing")).toBeVisible();
+    expect(canvas.getByText("Shipped")).toBeVisible();
+    expect(canvas.getByText("Delivered")).toBeVisible();
+    expect(canvas.getByText("Cancelled")).toBeVisible();
+    expect(canvas.getByText("Refunded")).toBeVisible();
     expect(canvas.getByText("Confirm delivery address")).toBeVisible();
     expect(canvas.getByText("Card hold being released")).toBeVisible();
     expect(canvas.getAllByText("Didn’t win")).toHaveLength(2);
@@ -305,6 +321,107 @@ export const PostAuctionStanding: Story = {
     expect(
       canvas.queryByRole("button", { name: /pay/i }),
     ).not.toBeInTheDocument();
+
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Base Set Charizard PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.awaitingAddress);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1998 Neo Genesis Lugia PSA 10",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.preparingInvoice);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 2000 Skyridge Crystal Charizard PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.pendingPayment);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Fossil Dragonite Holo PSA 8",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.expiredInvoice);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Fossil Dragonite Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.processing);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 2000 Skyridge Crobat Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.shipped);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Base Set Blastoise PSA 8",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.delivered);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Jungle Scyther Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.cancelled);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Fossil Kabutops Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.refunded);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Base Set Charizard PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.awaitingAddress);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1998 Neo Genesis Lugia PSA 10",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.preparingInvoice);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 2000 Skyridge Crystal Charizard PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.pendingPayment);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Fossil Dragonite Holo PSA 8",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.expiredInvoice);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Fossil Dragonite Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.processing);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 2000 Skyridge Crobat Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.shipped);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Base Set Blastoise PSA 8",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.delivered);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Jungle Scyther Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.cancelled);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Fossil Kabutops Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.refunded);
+    expect(
+      canvas.queryByRole("link", {
+        name: "View order: 1999 Jungle Flareon Holo PSA 8",
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", {
+        name: "Open listing: 1999 Jungle Flareon Holo PSA 8",
+      }),
+    ).toHaveAttribute("href", "#lot-flareon");
   },
 };
 
