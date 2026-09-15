@@ -145,6 +145,17 @@ export const AddDeliveryAddress: Story = {
     });
     expect(page.getByRole("option", { name: "Hong Kong" })).toBeVisible();
     expect(page.getByRole("option", { name: "Japan" })).toBeVisible();
+
+    // A–Z order + typeahead: "A" highlights Australia.
+    const options = page.getAllByRole("option");
+    expect(options[0]).toHaveTextContent("Australia");
+    expect(options[options.length - 1]).toHaveTextContent("United States");
+    await userEvent.keyboard("a");
+    await waitFor(() => {
+      expect(page.getByRole("option", { name: "Australia" })).toHaveAttribute(
+        "data-highlighted",
+      );
+    });
   },
 };
 

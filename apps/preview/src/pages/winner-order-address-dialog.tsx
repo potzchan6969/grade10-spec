@@ -51,7 +51,8 @@ export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
     },
   ] as const;
 
-const COUNTRY_OPTIONS = [
+/** Storybook-only country list — owned options, not a geo package. A–Z via localeCompare. */
+const COUNTRY_OPTIONS: readonly string[] = [
   "Australia",
   "Canada",
   "China",
@@ -64,11 +65,13 @@ const COUNTRY_OPTIONS = [
   "Taiwan",
   "United Kingdom",
   "United States",
-] as const;
+].toSorted((a, b) => a.localeCompare(b));
 
-const COUNTRY_ITEMS: Record<string, string> = Object.fromEntries(
-  COUNTRY_OPTIONS.map((country) => [country, country]),
-);
+/** Array form for Base UI `items` — do not use a Record (key order is not a contract). */
+const COUNTRY_SELECT_ITEMS = COUNTRY_OPTIONS.map((country) => ({
+  value: country,
+  label: country,
+}));
 
 const DRAFT_VALUE = "use_this_address";
 /** Occasional list feedback — same budget as cart row exit. */
@@ -561,7 +564,7 @@ function WinnerOrderAddressDialog({
                     Country
                   </label>
                   <Select
-                    items={COUNTRY_ITEMS}
+                    items={COUNTRY_SELECT_ITEMS}
                     onValueChange={(value) => {
                       if (typeof value === "string") {
                         patchDraft("country", value);
@@ -578,7 +581,11 @@ function WinnerOrderAddressDialog({
                     >
                       <SelectValue placeholder="Select a country" />
                     </SelectTrigger>
-                    <SelectContent>
+                    {/*
+                      Menu-style popup (not align-with-trigger): typeahead /
+                      data-highlighted work like DropdownMenu in the nested dialog.
+                    */}
+                    <SelectContent alignItemWithTrigger={false}>
                       {COUNTRY_OPTIONS.map((country) => (
                         <SelectItem
                           key={country}
@@ -600,6 +607,7 @@ function WinnerOrderAddressDialog({
 
               <CheckboxListInput
                 checked={draft.saveForFuture}
+                className="mt-4"
                 onCheckedChange={(checked) =>
                   patchDraft("saveForFuture", checked === true)
                 }

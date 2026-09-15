@@ -1,6 +1,7 @@
 "use client";
 
 import { Select as SelectPrimitive } from "@base-ui/react/select";
+import { dropdownMenuItemVariants } from "@grade10/design-system/components/overlays/dropdown-menu-item";
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretDown } from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
@@ -93,7 +94,8 @@ function SelectContent({
           data-slot="select-content"
           data-align-trigger={alignItemWithTrigger}
           className={cn(
-            "relative isolate z-[100] max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) overflow-x-hidden overflow-y-auto rounded-lg bg-popover text-popover-foreground shadow-md ring-1 ring-foreground/10 duration-100 data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
+            // Match DropdownMenuContent chrome so Select rows read like menu items.
+            "relative isolate z-[100] flex max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-popover p-2 text-popover-foreground shadow-[0_4px_24px_var(--shadow-color,rgb(118_118_118_/_20%))] backdrop-blur-xl duration-100 outline-none data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95",
             className,
           )}
           {...props}
@@ -129,20 +131,23 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-default items-center gap-1.5 rounded-md py-1 pr-8 pl-1.5 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2",
+        // Same rung as DropdownMenuItem / AutocompleteItem — hover +
+        // `data-highlighted` (keyboard / typeahead), not `focus:bg-accent`.
+        dropdownMenuItemVariants({ size: "sm" }),
+        "w-full pr-8",
         className,
       )}
       {...props}
     >
-      <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap">
+      <SelectPrimitive.ItemText className="min-w-0 flex-1 whitespace-nowrap font-normal">
         {children}
       </SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator
         render={
-          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center" />
+          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center text-secondary-foreground" />
         }
       >
-        <CheckIcon className="pointer-events-none" />
+        <CheckIcon className="pointer-events-none size-3.5" />
       </SelectPrimitive.ItemIndicator>
     </SelectPrimitive.Item>
   );
