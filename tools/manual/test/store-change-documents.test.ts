@@ -14,7 +14,7 @@ import { writeStore } from "./tmp-store";
 
 const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
 
-const [document] = readChangeDocuments(FIXTURE, NO_GIT);
+const [document] = readChangeDocuments(FIXTURE, NO_GIT, null);
 
 describe("the artifacts a change has", () => {
   it("reads the schema's artifacts in the order it declares them", () => {
@@ -134,7 +134,7 @@ describe("a change the schema cannot account for", () => {
     "openspec/changes/loose/tech-design.md": "# Design\n\nA sketch.\n",
     "openspec/changes/bare/proposal.md": "# Bare\n\n## Why\n\nBecause.\n",
   });
-  const documents = readChangeDocuments(root, NO_GIT);
+  const documents = readChangeDocuments(root, NO_GIT, null);
   const loose = documents.find((one) => one.id === "loose");
   const bare = documents.find((one) => one.id === "bare");
 
@@ -227,7 +227,7 @@ describe("a delta with a title, journeys, and a suite beside it", () => {
       "",
     ].join("\n"),
   });
-  const [rich] = readChangeDocuments(root, NO_GIT);
+  const [rich] = readChangeDocuments(root, NO_GIT, null);
   const [delta] = rich.deltas;
 
   it("reads title, purpose, feature set and journeys", () => {
@@ -276,7 +276,7 @@ describe("a delta the reader cannot parse", () => {
     "openspec/changes/broken/specs/demo-product/gamma/feature-tcs.md":
       "# Gamma cases\n\nNo status line.\n",
   });
-  const [broken] = readChangeDocuments(root, NO_GIT);
+  const [broken] = readChangeDocuments(root, NO_GIT, null);
   const [delta] = broken.deltas;
 
   it("keeps the text and says what broke, without taking the suite with it", () => {
@@ -296,7 +296,7 @@ describe("the document over the wire", () => {
     "docs/prds/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
     "openspec/changes/one/proposal.md": "# One\n\n## Why\n\nBecause.\n",
   });
-  const artifacts = async () => composeStore(rootsOf(root), NO_GIT);
+  const artifacts = async () => composeStore(rootsOf(root), NO_GIT, null);
   const endpoints = storeEndpoints(rootsOf(root), artifacts);
 
   it("rides the store beside the snapshot and the archive", async () => {

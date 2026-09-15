@@ -1,7 +1,5 @@
 import { createRequire } from "node:module";
-import { join } from "node:path";
 import type { IdleClaim } from "../api/types.ts";
-import { readTextIfExists } from "./disk.mts";
 
 /**
  * How long a claimed task group has sat without progress, read from git.
@@ -28,14 +26,18 @@ import { readTextIfExists } from "./disk.mts";
  * is unavailable would be a worse answer than a page that stays quiet.
  */
 
-/** The shape `lib/store` exports, narrowed to the two functions used here. */
+/** The shape `lib/store` exports, narrowed to the functions used here. */
 type ViewerStore = {
   parseTasks: (text: string) => {
     num: string;
     owner: string | null;
     tasks: { done: boolean; id: string; text: string }[];
   }[];
-  snapshots: (storePath: string, changeId: string) => unknown[];
+  snapshots: (
+    storePath: string,
+    changeId: string,
+    commit: string | null,
+  ) => unknown[];
   idleness: (
     group: unknown,
     snaps: unknown[],
@@ -62,33 +64,31 @@ function viewer(): ViewerStore | null {
 }
 
 /**
- * Every claimed group of one change that git can date, keyed by the group
- * number its heading carries.
+ * Every claimed group of one change's task list that git can date, keyed by
+ * the group number its heading carries.
+ *
+ * `text` is the task list as it stands at `commit`, and the history is read
+ * back from there: the store's main for a change on it, HEAD (`null`) for one
+ * only this checkout has.
  *
  * Keyed by number because that is what the convention makes an address: an
  * owner is recorded against a group number, and `pnpm plan done <change> 3.1`
  * names a task under one. Titles are not addresses and two groups may share
  * one.
- *
- * Empty for an archived change, which is finished, and for a change with no
- * task list, which has nothing to claim.
  */
 export function readIdleClaims(
   root: string,
   changeId: string,
+  text: string,
+  commit: string | null,
   now = Date.now(),
 ): Map<string, IdleClaim> {
   const claims = new Map<string, IdleClaim>();
   const lib = viewer();
   if (!lib) return claims;
 
-  const text = readTextIfExists(
-    join(root, "openspec", "changes", changeId, "tasks.md"),
-  );
-  if (text === undefined) return claims;
-
   try {
-    const snaps = lib.snapshots(root, changeId);
+    const snaps = lib.snapshots(root, changeId, commit);
     for (const group of lib.parseTasks(text)) {
       const idle = lib.idleness(group, snaps, now);
       // Null is the honest answer three ways: unclaimed, finished, or a

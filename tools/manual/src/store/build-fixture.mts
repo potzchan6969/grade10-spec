@@ -22,7 +22,7 @@ const DEMO_STORE = fileURLToPath(new URL("../../demo-store", import.meta.url));
 const GENERATED_AT = "2026-01-01T00:00:00.000Z";
 
 export function fixtureSnapshot(): Snapshot {
-  const { snapshot } = composeStore(rootsOf(DEMO_STORE), NO_GIT);
+  const { snapshot } = composeStore(rootsOf(DEMO_STORE), NO_GIT, null);
   return { ...snapshot, generatedAt: GENERATED_AT };
 }
 

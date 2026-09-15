@@ -24,7 +24,7 @@ import {
   toItemError,
   walkFiles,
 } from "./disk.mts";
-import type { GitIndex } from "./git.mts";
+import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
 import { leadingTitle, outline, type Section } from "./markdown.mts";
 import { schemaArtifacts } from "./read-schema.mts";
@@ -57,13 +57,23 @@ const AUTHOR =
   /^\*\*Author:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
 const ARCHIVE_PREFIX = /^(\d{4}-\d{2}-\d{2})-(.+)$/;
 
-export function readChanges(root: string, git: GitIndex): ChangeEntry[] {
+/**
+ * The changes in flight in this checkout. A change on `main` has its task
+ * list read there, where every claim and checkmark is recorded, and carries
+ * where it stands against main. `null` reads every task list from disk: the
+ * checker, which judges the branch's own files, and a store with no git.
+ */
+export function readChanges(
+  root: string,
+  git: GitIndex,
+  main: StoreMain | null,
+): ChangeEntry[] {
   const dir = join(root, "openspec", "changes");
   const schemas: SchemaCache = new Map();
   return subdirectories(dir)
     .filter((name) => name !== "archive")
     .map((name) =>
-      readChange(root, join(dir, name), name, "in-flight", git, schemas),
+      readChange(root, join(dir, name), name, "in-flight", git, schemas, main),
     );
 }
 
@@ -91,6 +101,7 @@ export function readArchivedChanges(
       "archived",
       git,
       schemas,
+      null,
     );
     if (dated) entry.shippedOn = dated[1];
     if (entry.created === "" && dated) entry.created = dated[1];
@@ -105,6 +116,7 @@ function readChange(
   status: ChangeStatus,
   git: GitIndex,
   schemas: SchemaCache,
+  main: StoreMain | null,
 ): ChangeEntry {
   const rel = storePath(root, dir);
   const entry: ChangeEntry = {
@@ -191,7 +203,11 @@ function readChange(
   }
 
   const detailed = status === "in-flight";
-  const tasks = readTextIfExists(join(dir, "tasks.md"));
+  if (main) {
+    const state = mainStateOf(main, id);
+    if (state) entry.mainState = state;
+  }
+  const { text: tasks, commit } = planOf(dir, id, main);
   if (tasks !== undefined) {
     const tagged = matchAll(tasks, OWNER)
       .map((one) => one.toLowerCase())
@@ -204,7 +220,7 @@ function readChange(
         // Only for work still in flight: an archived change is finished, and
         // its groups are the record of who did it rather than a claim anyone
         // could still be sitting on.
-        detailed ? readIdleClaims(root, id) : new Map(),
+        detailed ? readIdleClaims(root, id, tasks, commit) : new Map(),
       );
     } catch (cause) {
       fail(`${rel}/tasks.md`, cause);
@@ -220,8 +236,26 @@ function readChange(
     dir,
     entry,
     artifactsOf(root, entry.schema, schemas),
+    tasks !== undefined,
   );
   return entry;
+}
+
+/**
+ * A change's task list and the commit its history is read back from. A change
+ * on `main` is read there, where every claim and checkmark is recorded; one
+ * only this checkout has, or any change when `main` is null, from disk and
+ * HEAD.
+ */
+export function planOf(
+  dir: string,
+  id: string,
+  main: StoreMain | null,
+): { text: string | undefined; commit: string | null } {
+  if (main?.changes.has(id)) {
+    return { text: main.tasks.get(id), commit: main.commit };
+  }
+  return { text: readTextIfExists(join(dir, "tasks.md")), commit: null };
 }
 
 /** Nearly every change names the same schema, so one read parses it once
@@ -254,9 +288,11 @@ function writtenArtifacts(
   dir: string,
   entry: ChangeEntry,
   artifacts: SchemaArtifact[],
+  planned: boolean,
 ): string[] {
   const capabilities = entry.deltas.map(({ spec }) => join(dir, "specs", spec));
   const present = ({ generates }: SchemaArtifact) => {
+    if (generates === "tasks.md") return planned;
     if (!generates.startsWith("specs/"))
       return existsSync(join(dir, generates));
     const name = generates.slice(generates.lastIndexOf("/") + 1);
