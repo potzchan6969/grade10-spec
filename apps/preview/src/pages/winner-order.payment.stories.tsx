@@ -50,7 +50,7 @@ export const PendingPayment: Story = {
   },
 };
 
-/** Deadline passed — invoice stays payable. */
+/** Deadline passed — no Pay CTA; contact from the overdue alert. */
 export const ExpiredInvoice: Story = {
   name: "Expired Invoice",
   args: { status: "pending_payment_expired" },
@@ -67,19 +67,16 @@ export const ExpiredInvoice: Story = {
     const alert = sidebar.getByRole("alert");
     expect(alert).toBeVisible();
     expect(
-      within(alert).getByText(
-        /Deadline passed 24 Sep 2026, 21:30 HKT — invoice still payable/,
-      ),
+      within(alert).getByText("Deadline passed 24 Sep 2026, 21:30 HKT"),
     ).toBeVisible();
     expect(
-      sidebar.getByRole("button", { name: "Pay with card" }),
+      within(alert).getByRole("button", { name: "Contact Us" }),
     ).toBeVisible();
     expect(
-      sidebar.queryByText("Deadline passed 24 Sep 2026, 21:30 HKT", {
-        exact: true,
-      }),
+      sidebar.queryByRole("button", { name: "Pay with card" }),
     ).not.toBeInTheDocument();
-    expect(canvas.getByText(/support@grade10.com/)).toBeVisible();
+    expect(canvas.queryByText(/how to reach Grade10/i)).not.toBeInTheDocument();
+    expect(canvas.queryByText(/support@grade10.com/)).not.toBeInTheDocument();
     expect(
       sidebar.getByRole("link", { name: "View invoice PDF" }),
     ).toBeVisible();

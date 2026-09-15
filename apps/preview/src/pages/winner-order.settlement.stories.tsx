@@ -85,7 +85,9 @@ export const PreparingInvoice: Story = {
     const infoAlert = canvas.getByRole("alert");
     expect(infoAlert).toBeVisible();
     expect(
-      within(infoAlert).getByText(/No payment yet — waiting on the operator quote/),
+      within(infoAlert).getByText(
+        /No payment yet — waiting on the operator quote/,
+      ),
     ).toBeVisible();
     expect(
       canvas.queryByText(/You can change this until the invoice is sent/i),

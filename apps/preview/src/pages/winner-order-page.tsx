@@ -428,23 +428,32 @@ function OrderSummary({
 
       {overdue ? (
         <Alert
+          actions={
+            <Button
+              onClick={() => {
+                toast.message("Contact Grade10", {
+                  description: "support@grade10.com",
+                });
+              }}
+              size="sm"
+              variant="outline"
+            >
+              Contact Us
+            </Button>
+          }
           dismissible={false}
           layout="inline"
           status="warning"
-          title={
-            deadline
-              ? `${deadline} — invoice still payable`
-              : "Payment overdue — invoice still payable"
-          }
+          title={deadline ?? "Payment overdue"}
         />
       ) : null}
 
-      {payCta && onPay ? (
+      {payCta && onPay && !overdue ? (
         <VStack className="w-full" gap="sm" hAlign="stretch">
           <Button className="w-full" onClick={onPay} size="md">
             {payCta}
           </Button>
-          {!overdue && deadline ? (
+          {deadline ? (
             <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
               {deadline}
             </p>
@@ -690,8 +699,7 @@ function WinnerOrderPage({
 
             <LotCard content={content} href={lotHref} onClick={onLotClick} />
 
-            {content.status === "preparing_invoice" &&
-            content.secondaryNote ? (
+            {content.status === "preparing_invoice" && content.secondaryNote ? (
               <Alert
                 dismissible={false}
                 layout="inline"

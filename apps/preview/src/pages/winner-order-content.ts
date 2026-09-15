@@ -108,13 +108,12 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
     case "pending_payment_expired":
       return {
         ...base,
-        body: "The payment deadline has passed. The invoice stays payable — contact Grade10 if you need a reissue.",
+        body: "The payment deadline has passed. Contact Grade10 if you need a reissue.",
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
         deadline: "Deadline passed 24 Sep 2026, 21:30 HKT",
-        primaryCta: "Pay with card",
-        secondaryNote: "How to reach Grade10: support@grade10.com",
+        primaryCta: null,
         overdue: true,
       };
     case "processing":
