@@ -12,7 +12,7 @@ A second failure mode is already visible in preview copy that was corrected:
 a no-bids close letter must not say the lot did not sell or show a Highest
 bid. Collector lot status is **Ended** for sold and unsold alike; disclosing
 non-sale in mail contradicts that and confuses no-bids close with a later
-winner default (走數).
+winner default.
 
 **Metric:** share of enrolled non-winner and watcher closes that send exactly
 one close-outcome letter before the collector next opens the lot or My

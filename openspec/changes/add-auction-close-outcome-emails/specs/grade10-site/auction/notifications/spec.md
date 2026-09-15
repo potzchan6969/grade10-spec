@@ -61,7 +61,7 @@ that amount is supplied.
 When the lot closes with **no bids**, every close-outcome letter for that
 close SHALL state that the lot has **ended** (or that bidding has ended or
 closed). At close-email time, no bids means nobody won — not a later winner
-default (走數) after a win. Grade10 SHALL NOT send a bidder close-outcome
+default after a win. Grade10 SHALL NOT send a bidder close-outcome
 letter for a no-bids close: nobody bid. Enrolled watchers SHALL receive
 Ended-only mail for that close: campaign `lot_ended_watched` with no winning
 amount, and/or campaign `lot_ended` for the public no-bids kind. A collector
