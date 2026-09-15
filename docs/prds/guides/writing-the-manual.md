@@ -143,8 +143,11 @@ A chart is an SVG the build renders from a source under `docs/prds/diagrams/`
 — into `assets/diagrams/<slug>.svg` with `pnpm diagrams`, and CI refuses a
 chart that is stale against its source. A flow names its chart and lights, at
 each step, every node whose id is that step's slug (an id's tail after `_`
-lets several nodes share one) and every edge pointing at such a node; an
-`::image` shows a chart anywhere else, in the page's own theme:
+lets several nodes share one) and every edge pointing at such a node. A
+sequence draws its participants as lifelines rather than as steps, so there
+the message carries the step: every message whose id is that step's slug
+lights, and a lifeline lights and tells a step only when its own id is one.
+An `::image` shows a chart anywhere else, in the page's own theme:
 
 ```md
 :::flow{title="The hosted check" diagram="assets/diagrams/kyc-hosted-check.svg"}

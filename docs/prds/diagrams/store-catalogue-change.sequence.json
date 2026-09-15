@@ -9,11 +9,11 @@
     "legend": {
       "mode": "hidden"
     },
-    "viewBox": [720, 700]
+    "viewBox": [980, 780]
   },
   "participants": [
     {
-      "id": "shop",
+      "id": "shop-reports-a-change",
       "type": "external",
       "label": "Shop",
       "sublabel": "the shopkeeper saves"
@@ -25,19 +25,25 @@
       "sublabel": "events and reads"
     },
     {
-      "id": "store",
+      "id": "mirror-answers-every-location",
+      "type": "backend",
+      "label": "Mirror",
+      "sublabel": "one per shop"
+    },
+    {
+      "id": "store-takes-the-report",
       "type": "backend",
       "label": "Store",
       "sublabel": "at every location"
     },
     {
-      "id": "copy",
-      "type": "backend",
-      "label": "The copy",
-      "sublabel": "one per shop"
+      "id": "store-answers-from-the-location",
+      "type": "database",
+      "label": "Memory",
+      "sublabel": "the copy a location holds"
     },
     {
-      "id": "collector",
+      "id": "collector-opens-the-listing",
       "type": "external",
       "label": "Collector",
       "sublabel": "anywhere"
@@ -47,125 +53,147 @@
     {
       "from": 170,
       "to": 400,
-      "label": "Seconds after save"
+      "label": "Seconds after the shop saves"
     },
     {
-      "from": 430,
-      "to": 590,
+      "from": 432,
+      "to": 672,
       "label": "The next listing view, at any location"
     }
   ],
   "messages": [
     {
-      "id": "saves",
-      "from": "shop",
+      "id": "shop-reports-a-change_saves",
+      "from": "shop-reports-a-change",
       "to": "shopify",
       "y": 200,
       "label": "saves a product, or stock moves",
       "variant": "default"
     },
     {
-      "id": "reports-a-change",
+      "id": "shop-reports-a-change",
       "from": "shopify",
-      "to": "store",
-      "y": 240,
+      "to": "store-takes-the-report",
+      "y": 236,
       "label": "the product's event, signed",
       "variant": "emphasis"
     },
     {
-      "id": "takes-the-report",
-      "from": "store",
-      "to": "copy",
-      "y": 280,
+      "id": "store-takes-the-report",
+      "from": "store-takes-the-report",
+      "to": "mirror-answers-every-location",
+      "y": 272,
       "label": "the report",
       "variant": "emphasis"
     },
     {
-      "id": "accepted",
-      "from": "store",
+      "id": "store-takes-the-report_accepted",
+      "from": "store-takes-the-report",
       "to": "shopify",
-      "y": 310,
+      "y": 306,
       "label": "accepted",
       "variant": "return"
     },
     {
-      "id": "reads-the-product-back",
-      "from": "copy",
+      "id": "mirror-reads-the-product-back",
+      "from": "mirror-answers-every-location",
       "to": "shopify",
-      "y": 345,
-      "label": "reads the product back, again every 2 s while it answers the old value",
+      "y": 342,
+      "label": "reads it back, again every 2 s while the shop answers older",
       "variant": "dashed"
     },
     {
-      "id": "publishes-a-new-copy",
+      "id": "mirror-publishes-a-new-copy",
       "from": "shopify",
-      "to": "copy",
-      "y": 380,
-      "label": "the product as the shop shows it \u00b7 a new copy, numbered",
+      "to": "mirror-answers-every-location",
+      "y": 378,
+      "label": "the product as the shop shows it · a new copy, numbered",
       "variant": "return"
     },
     {
-      "id": "opens",
-      "from": "collector",
-      "to": "store",
-      "y": 460,
+      "id": "collector-opens-the-listing",
+      "from": "collector-opens-the-listing",
+      "to": "store-takes-the-report",
+      "y": 462,
       "label": "opens the listing",
       "variant": "default"
     },
     {
-      "id": "every-location-follows",
-      "from": "store",
-      "to": "copy",
-      "y": 495,
-      "label": "copy number, and the copy if it moved \u00b7 every 3 s",
-      "variant": "dashed"
+      "id": "store-answers-from-the-location",
+      "from": "store-takes-the-report",
+      "to": "store-answers-from-the-location",
+      "y": 498,
+      "label": "the copy this location holds",
+      "variant": "default"
     },
     {
-      "id": "copy",
-      "from": "copy",
-      "to": "store",
-      "y": 530,
-      "label": "the current copy",
+      "id": "store-answers-from-the-location_held",
+      "from": "store-answers-from-the-location",
+      "to": "store-takes-the-report",
+      "y": 534,
+      "label": "cards, counts and sidebar · no hop under 3 s",
       "variant": "return"
     },
     {
-      "id": "answer",
-      "from": "store",
-      "to": "collector",
-      "y": 565,
+      "id": "mirror-answers-every-location",
+      "from": "store-takes-the-report",
+      "to": "mirror-answers-every-location",
+      "y": 570,
+      "label": "the copy's number · once the check is 3 s old",
+      "variant": "dashed"
+    },
+    {
+      "id": "mirror-answers-every-location_body",
+      "from": "mirror-answers-every-location",
+      "to": "store-takes-the-report",
+      "y": 606,
+      "label": "the number, and the copy only when it moved",
+      "variant": "return"
+    },
+    {
+      "id": "store-answers-from-the-location_answer",
+      "from": "store-takes-the-report",
+      "to": "collector-opens-the-listing",
+      "y": 642,
       "label": "the listing, as the shop is now",
       "variant": "emphasis"
     }
   ],
   "activations": [
     {
-      "participant": "store",
-      "from": 235,
-      "to": 315,
-      "type": "backend"
-    },
-    {
-      "participant": "copy",
-      "from": 275,
-      "to": 390,
-      "type": "backend"
-    },
-    {
       "participant": "shopify",
       "from": 195,
-      "to": 385,
+      "to": 383,
       "type": "external"
     },
     {
-      "participant": "store",
-      "from": 455,
-      "to": 570,
+      "participant": "store-takes-the-report",
+      "from": 231,
+      "to": 311,
       "type": "backend"
     },
     {
-      "participant": "copy",
-      "from": 490,
-      "to": 535,
+      "participant": "mirror-answers-every-location",
+      "from": 267,
+      "to": 388,
+      "type": "backend"
+    },
+    {
+      "participant": "store-takes-the-report",
+      "from": 457,
+      "to": 648,
+      "type": "backend"
+    },
+    {
+      "participant": "store-answers-from-the-location",
+      "from": 493,
+      "to": 540,
+      "type": "database"
+    },
+    {
+      "participant": "mirror-answers-every-location",
+      "from": 565,
+      "to": 612,
       "type": "backend"
     }
   ]

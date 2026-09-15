@@ -1,6 +1,6 @@
 ## Feature set
 
-- Following the shop
+- Product data
   - Within seconds: a change the shop reports reaches the listing everywhere within seconds of the shop's read answering it
   - The re-read as the net: a change the shop never reported reaches the listing within 5 minutes
   - A quiet location answers too: a location holding no copy answers from the store's, without reading the shop

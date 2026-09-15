@@ -53,7 +53,7 @@ change, p95; and the listing's answer time at a location holding no copy.
 
 ## Impact
 
-- **Store worker** — a catalogue keeper, one Durable Object per shop, the
+- **Store worker** — a catalogue mirror, one Durable Object per shop, the
   first a deployed worker of this repository binds; the webhook route hands
   product and stock events to it; the 5-minute cron re-reads through it; the
   listing reads follow it; the per-location cache tiers and product hydration
@@ -61,7 +61,7 @@ change, p95; and the listing's answer time at a location holding no copy.
 - **Shopify port** — the product read and the walk carry the shop's
   `updatedAt`; the product webhook carries its `updated_at`
 - **Contracts** — unchanged: the listing returns whole products, as today
-- **Bindings and deploy** — both brands' store workers declare the keeper and
+- **Bindings and deploy** — both brands' store workers declare the mirror and
   its migration; the deploy pipeline ships a worker whose class lifecycle
   changed whole, since a version upload cannot carry that
 - **Conventions** — `docs/conventions/backend.md` records the one Durable
@@ -84,5 +84,5 @@ what the listing holds moves sooner.
 
 ## References
 
-- [Product Listing · Following the Shop](../../../docs/prds/products/grade10-site/store/product-listing.md#following-the-shop)
+- [Product Listing · Product Data](../../../docs/prds/products/grade10-site/store/product-listing.md#product-data)
 - [Commerce · Catalog](../../../docs/prds/products/grade10-site/commerce/commerce.md#catalog)

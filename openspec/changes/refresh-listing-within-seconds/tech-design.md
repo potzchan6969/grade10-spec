@@ -46,7 +46,7 @@ What the platforms hold, verified against their documentation:
 - One copy per shop, one writer, every location following it within seconds
   of the shop's read answering a change
 - No listing view reads the shop; no location waits on a walk
-- Fewer tiers than today: memory and the keeper, nothing in between
+- Fewer tiers than today: memory and the mirror, nothing in between
 
 **Non-Goals:**
 
@@ -58,7 +58,7 @@ What the platforms hold, verified against their documentation:
 
 ## Decisions
 
-### The keeper is a Durable Object, one per shop
+### The mirror is a Durable Object, one per shop
 
 `packages/grade10-store/backend/src/durables/CatalogKeeper/` holds the class,
 its RPC interface, the manager that carries every rule below over a storage
@@ -76,7 +76,7 @@ by name, and both store workers bind it as `CATALOG_KEEPER`.
 - **The manager, not the class.** The rules live in `keeper.ts` over a `KeeperStore` port; the store in memory is the package's test surface, and the class holds the SQLite implementation, the RPC methods and the alarm handler, proved in the worker lane. The folder holds the class, its interface, the rules and the store — none of the drizzle schema, migrations or managers a `BaseDO` folder carries, since the tables are created by the class and dropped and refilled by the next walk when their version moves.
 - **Fixtures wherever local.** The object builds its catalogue from the runtime env, which no request can override, so a local environment — development, testing, e2e — with no storefront token runs on the fixture shop throughout, the worker lane included.
 - **Placement.** One accessor, `storeKeeper(env)` in `deps.ts` over `catalogKeeperOf`, names the object `<shop>/v1` with the location hint `apac`; only the first `get()` of an object respects a hint, so no other call site may build a stub.
-- **Three versions, each its own.** The object's name carries `v1`: moving it starts a fresh object, for a copy that must be rebuilt from nothing. The wrangler migration tag `v1` is the class's lifecycle, never reused. `meta.schema` is the tables' own version: a mismatch drops and recreates them, carrying only the version counter across, so no isolate is left holding a number the rebuilt keeper never passes.
+- **Three versions, each its own.** The object's name carries `v1`: moving it starts a fresh object, for a copy that must be rebuilt from nothing. The wrangler migration tag `v1` is the class's lifecycle, never reused. `meta.schema` is the tables' own version: a mismatch drops and recreates them, carrying only the version counter across, so no isolate is left holding a number the rebuilt mirror never passes.
 
 ### Nothing serialises across a read of the shop
 
@@ -86,8 +86,8 @@ walk interleave. Six rules keep the copy right whatever the order:
 - **No write lowers a row's `updated_at`.** Every write is an upsert guarded by it, from a read-back or a walk alike.
 - **A read-back lands only on the row it was read for.** The alarm reads `pending`, reads the shop, then writes each answer only where the pending row is still present with the same `reported_at`; a delete or a newer report that arrived meanwhile wins.
 - **A delete stands over any page read before it.** `products/delete` leaves a tombstone, its own row, for one deadline, 60 s: a walk whose pages were read before the delete, or a listing lagging it as it lags a change, cannot write the product back. A report on the deleted product is read back as any other, and a read the shop answers clears the tombstone — the shop's word that the product is there outranks the delete. Ids are never reused, so nothing else waits on it.
-- **One walk at a time.** The manager holds one in-flight walk promise; the cron, a wanted walk and a `sync` on an empty keeper share it.
-- **The walk writes what moved.** Every page is read first; then one synchronous transaction, a row a statement, upserts rows whose text or position differs and deletes rows it did not see that were written before the walk began — on the keeper's own clock, since the shop's stamp says when the shop changed a product, not when the copy took it. An ask for a walk made while a walk is reading — the in-flight walk promise says so — names a change its pages may not carry, so it stands, timed 30 s from when it was made; a walk settles every ask due before it began, and one that fails backs any standing ask off 30 s.
+- **One walk at a time.** The manager holds one in-flight walk promise; the cron, a wanted walk and a `sync` on an empty mirror share it.
+- **The walk writes what moved.** Every page is read first; then one synchronous transaction, a row a statement, upserts rows whose text or position differs and deletes rows it did not see that were written before the walk began — on the mirror's own clock, since the shop's stamp says when the shop changed a product, not when the copy took it. An ask for a walk made while a walk is reading — the in-flight walk promise says so — names a change its pages may not carry, so it stands, timed 30 s from when it was made; a walk settles every ask due before it began, and one that fails backs any standing ask off 30 s.
 - **The version is a counter.** `meta.version` is bumped only when a row changed, with `published_at` beside it; an isolate swaps only for a higher number. A hash can say "different", never "older".
 
 ### An event is applied from a read-back, never from its payload
@@ -113,8 +113,8 @@ re-arms; the platform's own retry is not a net.
 - **Order.** Once any report is due, everything pending is read in one call, the soonest due first and 250 at a time — a burst spread across its window is still one read, and a burst past a page is read a page an alarm — then a publish if a row changed, then a due walk, then a publish again if the walk moved a row. A read that throws is counted and does not hold the walk, which is its net. The version moves in the same transaction as the rows.
 - **The body.** Rows `ORDER BY position, id`, the taxonomy, the shape, the version and `published_at`, assembled once into the object's memory; `sync` answers from memory and never waits on storage.
 - **A throw holds the alarm off one retry** rather than firing it again at once. Every re-arm writes the alarm from the tables — a memo of what was last armed was the one state the platform could make stale, and a storage write per report is cheaper than that.
-- **Nothing before the first walk.** No publish until `meta.walked_at` exists; an event on an unwalked keeper asks for a walk instead, so a burst never publishes a copy of one product.
-- **The shape.** A constant stamped in `meta` and the body; a keeper whose stored shape differs from its code's treats itself as unwalked, so a deploy that changes the shape rewrites the copy on its first read.
+- **Nothing before the first walk.** No publish until `meta.walked_at` exists; an event on an unwalked mirror asks for a walk instead, so a burst never publishes a copy of one product.
+- **The shape.** A constant stamped in `meta` and the body; a mirror whose stored shape differs from its code's treats itself as unwalked, so a deploy that changes the shape rewrites the copy on its first read.
 
 ### The walk is the net, on the 5-minute tick
 
@@ -122,11 +122,11 @@ re-arms; the platform's own retry is not a net.
 taxonomy with `listFilters`, then writes what moved. `CRON_PASSES` gains a
 `catalog` pass that calls it every tick.
 
-- **The pass says nothing** where no keeper is bound, as every pass does on a brand that wired none of what it needs; it throws on `outgrown` and on a keeper error, and counts and logs a Shopify failure without throwing — `store.catalog.projection.age_ms` past 10 minutes is the alert for a copy that stopped moving.
+- **The pass says nothing** where no mirror is bound, as every pass does on a brand that wired none of what it needs; it throws on `outgrown` and on a mirror error, and counts and logs a Shopify failure without throwing — `store.catalog.projection.age_ms` past 10 minutes is the alert for a copy that stopped moving.
 - **Ceiling.** The first page's count past `CATALOG_MAX_OFFSET` refuses (`outgrown`) in one round trip; the last copy keeps serving.
 - **Position.** The walk writes each product's position in the shop's own order, so the unsorted grid keeps the order it has today and an offset cursor stays stable; a product a read-back adds appends until the next walk.
 
-### A listing view follows the keeper from memory
+### A listing view follows the mirror from memory
 
 The request path holds `{ projection, checkedAt }` per isolate and derives
 entries from the whole products it receives.
@@ -136,20 +136,20 @@ entries from the whole products it receives.
    as it starts, so readers arriving meanwhile answer from memory — the
    runtime refuses I/O on behalf of another request, so no promise is shared
    across requests — and it swaps the body in when it moved, answering the
-   keeper's failure rather than rejecting.
+   mirror's failure rather than rejecting.
 3. A reader holding a copy waits on its check 500 ms at most, then answers
    from memory, counted `store.catalog.sync` `outcome:timeout`; the check is
    handed to the request's `waitUntil` and lands behind the response. A
-   keeper that fails, or publishes a body of another shape or one this build
+   mirror that fails, or publishes a body of another shape or one this build
    cannot read, leaves memory answering, counted by outcome.
-4. A reader holding nothing waits on the keeper, as every such reader does:
-   an empty keeper walks itself once, under its one walk latch, and answers
-   everyone. A keeper that cannot answer with nothing held fails loudly
+4. A reader holding nothing waits on the mirror, as every such reader does:
+   an empty mirror walks itself once, under its one walk latch, and answers
+   everyone. A mirror that cannot answer with nothing held fails loudly
    through `catalog_unavailable`; the isolate never walks the shop.
 
 - **Why wait rather than refresh behind.** The first request after a quiet gap is the one a collector on a quiet location sends; serving the old copy there is the day-old copy in miniature. Refreshing behind would gate on the held copy's age, which is not staleness. The hop is same-region from Asia and up to 250 ms from Europe.
 - **Why 3 seconds.** Delivery up to 5 s, a 1 s burst window, one read-back, the check and the hop: 9.5 s worst case against the 10 s bound; at 5 s the bound is missed.
-- **The purge beside it.** The webhook route runs the tag purge and the hand-over together. A worker with no Workers Cache has published nothing to purge, so it answers 200 with the keeper's outcome — the local stack is such a worker; a purge the API refuses leaves the tiers stale, so it is logged and answered `purge_unavailable` and Shopify retries the delivery.
+- **The purge beside it.** The webhook route runs the tag purge and the hand-over together. A worker with no Workers Cache has published nothing to purge, so it answers 200 with the mirror's outcome — the local stack is such a worker; a purge the API refuses leaves the tiers stale, so it is logged and answered `purge_unavailable` and Shopify retries the delivery.
 - **Whole products.** 2,031 B a product measured: 581 KB at 286, one RPC value, a few MB of heap. `store.catalog.keeper.publish_bytes` alerts at 1 MB, the point at which the copy is cut to what a card draws.
 - **What goes.** The projection's cache tier, its 24-hour keep, the 5-minute age, the build cooldown, `hydrate`, the product memory and cache tiers.
 
@@ -157,7 +157,7 @@ entries from the whole products it receives.
 
 `shopifyCatalogPurge` awaits `apply` beside the tag purge it keeps, the two
 together, under a 2 s deadline well inside Shopify's 5 s for the delivery. A
-keeper that cannot take the event in time is counted
+mirror that cannot take the event in time is counted
 (`store.catalog.keeper.apply` `outcome:failed`) and logged, and Shopify is
 answered 200: eight failed deliveries delete the subscription, and the walk
 repairs within 5 minutes what a retry would.
@@ -176,12 +176,12 @@ it carries the class, and its summary names the worker `shipped`.
 
 ## Database Schema
 
-The keeper's own SQLite, created on first construction with
+The mirror's own SQLite, created on first construction with
 `CREATE TABLE IF NOT EXISTS`; nothing in Postgres.
 
 | Table | Columns | Holds |
 | --- | --- | --- |
-| `products` | `id TEXT PRIMARY KEY`, `position INTEGER NOT NULL`, `updated_at INTEGER NOT NULL`, `written_at INTEGER NOT NULL`, `product TEXT NOT NULL` | One row per product the channel publishes: its place in the shop's order, the shop's `updatedAt` in epoch milliseconds, when the keeper wrote it, the whole product as JSON |
+| `products` | `id TEXT PRIMARY KEY`, `position INTEGER NOT NULL`, `updated_at INTEGER NOT NULL`, `written_at INTEGER NOT NULL`, `product TEXT NOT NULL` | One row per product the channel publishes: its place in the shop's order, the shop's `updatedAt` in epoch milliseconds, when the mirror wrote it, the whole product as JSON |
 | `pending` | `id TEXT PRIMARY KEY`, `kind TEXT NOT NULL`, `reported_at INTEGER NOT NULL`, `since INTEGER NOT NULL`, `next_at INTEGER NOT NULL`, `misses INTEGER NOT NULL` | Products reported and not yet read back: created or changed, the report's stamp, when the store first heard a report this new, when to read next, reads in a row the shop answered nothing to |
 | `tombstones` | `id TEXT PRIMARY KEY`, `at INTEGER NOT NULL` | Products reported deleted and when: no walk writes one back within 60 s of the delete; a read-back the shop answers removes it |
 | `meta` | `key TEXT PRIMARY KEY`, `value TEXT NOT NULL` | `schema`, `taxonomy` (JSON), `version`, `published_at`, `walked_at`, `walk_due`, `shape` |
@@ -195,12 +195,12 @@ Every row is a Storefront answer; the walk may rewrite any of them.
 | Method | Input | Output | Notes |
 | --- | --- | --- | --- |
 | `apply(event)` | `{ topic, productId, updatedAt? }` | `{ outcome: "pending" \| "removed" \| "walk" \| "ignored" }` | Upserts `pending`, removes a deleted product, or asks for a walk; arms the alarm at the earliest due work. `ignored` is a topic it does not follow, or a delete naming nothing |
-| `walk()` | none | `{ outcome: "ok" \| "outgrown" \| failure, products, version }` | Whole read, writes what moved, publishes if a row changed. Called by the cron pass, and by `sync` on an empty keeper |
+| `walk()` | none | `{ outcome: "ok" \| "outgrown" \| failure, products, version }` | Whole read, writes what moved, publishes if a row changed. Called by the cron pass, and by `sync` on an empty mirror |
 | `sync(known)` | `number \| null` | `{ version, shape }` or `{ version, shape, body }` | From memory; the body only when `known` is older |
 
 The alarm handler: read back, publish, walk if due, publish, re-arm.
 
-The worker takes the keeper through a port, `CatalogKeeperPort`
+The worker takes the mirror through a port, `CatalogKeeperPort`
 (`sync`, `apply`, `walk`), with an in-memory implementation in
 `@grade10/store-service/testing` for the node lanes.
 
@@ -217,7 +217,7 @@ Example, a price change on product `gid://shopify/Product/95066`:
 
 ## Risks / Trade-offs
 
-- [The keeper is unreachable] → the listing answers from memory and counts; with nothing held it fails loudly; nothing publishes from a request
+- [The mirror is unreachable] → the listing answers from memory and counts; with nothing held it fails loudly; nothing publishes from a request
 - [The shop's reads lag its report] → the guard, the 2 s re-read to 60 s, `readback_lag_ms`; the walk is the net; Admin is the recorded next step
 - [A burst of reports] → one alarm per burst; one `getProducts` of up to 250 ids per read-back
 - [A body over 1 MB] → `publish_bytes` alerts; the cut to cards is the recorded step
@@ -228,8 +228,8 @@ Example, a price change on product `gid://shopify/Product/95066`:
 ## Migration Plan
 
 1. Land the contract: `updatedAt` on the product read and the walk, `updated_at` on the product webhook.
-2. Land the keeper with its tests, then the wiring: webhook, cron pass, request path, bindings and the deploy path.
-3. Deploy to staging through the ordinary dispatch; the store worker ships whole once, applying the `v1` migration. The first listing read fills the keeper.
+2. Land the mirror with its tests, then the wiring: webhook, cron pass, request path, bindings and the deploy path.
+3. Deploy to staging through the ordinary dispatch; the store worker ships whole once, applying the `v1` migration. The first listing read fills the mirror.
 4. Measure on staging: cold and warm answer times from two locations, and — with a product edited in the staging shop's admin, which no script or secret here can do — seconds from the shop's read to the listing.
 5. Rollback: redeploy the previous build; the object and its rows stay, unused. A rollback cannot remove the class; its deletion is a later migration, and the ship script's own rollback leaves the worker that shipped whole where it is.
 
