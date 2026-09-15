@@ -148,12 +148,13 @@ export type TaskLine = {
  * when the current owner's unbroken hold began and the newest commit that
  * raised its checked count.
  *
- * Derived from the git history of one `tasks.md` by `openspec-viewer`'s
- * published `lib/store`, at build time. Absent wherever there is no honest
- * number: an unclaimed group, a finished one, a history that cannot account for
- * the current owner, a store that is not a git checkout, or a checkout with no
- * viewer submodule. An age invented from missing history would aim the nudge at
- * the wrong person.
+ * Derived from the history of one `tasks.md` on the store's main — HEAD for a
+ * change only the checkout has — by `openspec-viewer`'s published `lib/store`,
+ * at build time. Absent wherever there is no honest number: an unclaimed
+ * group, a finished one, a history that cannot account for the current owner,
+ * a store that is not a git checkout, or a checkout with no viewer submodule.
+ * An age invented from missing history would aim the nudge at the wrong
+ * person.
  */
 export type IdleClaim = {
   /** ISO date the clock started from. */
@@ -230,8 +231,9 @@ export type MainState = {
   state: "unmerged" | "diverged";
   /** The remote-tracking ref compared against, e.g. `origin/main`. */
   ref: string;
-  /** Diverged only: files of this change that differ from the ref, `tasks.md`
-   * excluded — every claim and checkmark moves it on main. */
+  /** Diverged only: files of this change that differ from the ref. `tasks.md`
+   * counts only where the ref has none — every claim and checkmark moves it
+   * on main. */
   files?: number;
 };
 
@@ -308,6 +310,8 @@ export type ChangeEntry = {
    * proposal was written, never a commitment, and only ever readable as the
    * change that carries it. */
   followOns?: string[];
+  /** From `tasks.md` on the store's main for an in-flight change there, where
+   * every claim and checkmark is recorded; from the checkout otherwise. */
   taskGroups: TaskGroup[];
   /** ISO date of the last commit touching any file of the change — a
    * change with no tasks.md still moves. */

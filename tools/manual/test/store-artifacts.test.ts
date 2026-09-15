@@ -101,6 +101,7 @@ const snapshotOfStore = async (root: string) =>
   composeStore(
     rootsOf(root),
     NO_GIT,
+    null,
     await checkWarnings(rootsOf(root), NO_GIT),
   ).snapshot;
 

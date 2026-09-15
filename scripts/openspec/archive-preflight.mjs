@@ -47,12 +47,14 @@
  * the record archives with the change and `pnpm check:manual` can read it back.
  *
  * Zero dependencies, no `openspec` call — the checks read the change's own
- * files, the same way `plan-preflight.mjs` does.
+ * files, and its checkmarks on the store's main, where `plan-preflight.mjs`
+ * reads claims too.
  */
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
@@ -197,12 +199,9 @@ function bullets(body) {
   return found.map((line) => line.replace(/\s+/g, " ").trim()).filter(Boolean);
 }
 
-/** The unchecked tasks of the change, in file order. A change with no
- * `tasks.md` owes nothing here. */
-function openTasks(changeId) {
-  const file = join(CHANGES, changeId, "tasks.md");
-  if (!existsSync(file)) return [];
-  return readFileSync(file, "utf8")
+/** The unchecked tasks of a task list, in file order. */
+function openTasks(text) {
+  return text
     .split("\n")
     .map((line) => OPEN_TASK.exec(line)?.[1])
     .filter((task) => task !== undefined);
@@ -255,6 +254,11 @@ function help() {
   );
   console.log(
     dim("  record into the change's .openspec.yaml and prints the commit."),
+  );
+  console.log(
+    dim(
+      "  Checkmarks are read on the store's main, fetched first; PLAN_NO_FETCH=1 skips the fetch.",
+    ),
   );
   const ids = changeIds();
   console.log("\nChanges in flight");
@@ -360,7 +364,26 @@ if (tasksWaived !== null && tasksWaived.trim() === "") {
 
 // ── Tasks gate ──────────────────────────────────────────────────────────────
 // An open checkbox at archive is work nobody did or a checkmark nobody wrote.
-const open = openTasks(changeId);
+// `pnpm plan` records checkmarks on the store's main, so they are read there:
+// this checkout can be behind main, or ticked by hand where main is not.
+const main = storeMain(ROOT);
+if (!main) {
+  fail(
+    yellow(`The store at ${ROOT} has no origin main to read checkmarks on.`),
+    "Run `git remote set-head origin --auto`, then re-run.",
+  );
+  process.exit();
+}
+const tasksFile = `openspec/changes/${changeId}/tasks.md`;
+const tasks = textAt(ROOT, main.commit, tasksFile);
+if (tasks === null && existsSync(join(ROOT, tasksFile))) {
+  fail(
+    yellow(`${tasksFile} is not on ${main.ref}.`),
+    "Nobody can claim or check off a plan main does not hold — merge it first.",
+  );
+  process.exit();
+}
+const open = openTasks(tasks ?? "");
 if (open.length > 0 && tasksWaived === null) {
   fail(yellow(`${changeId} archives with ${open.length} task(s) unchecked:`));
   for (const task of open.slice(0, SHOWN)) console.error(`  - [ ] ${task}`);

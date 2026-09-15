@@ -141,7 +141,8 @@ export async function runChecks(
   const specs = new Map(
     readSpecs(roots.store, index).map((spec) => [spec.id, spec]),
   );
-  const changes = readChanges(roots.store, index);
+  // The branch's own task lists: a check judges the files a pull request changes.
+  const changes = readChanges(roots.store, index, null);
 
   const paths = walkFiles(
     roots.content,

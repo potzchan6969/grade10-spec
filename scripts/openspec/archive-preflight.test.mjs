@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import {
   copyFileSync,
   mkdirSync,
@@ -12,20 +12,21 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
-const SCRIPT = fileURLToPath(
-  new URL("./archive-preflight.mjs", import.meta.url),
-);
+const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
 const CHANGE = "build-alpha";
 
 /** The script roots itself on its own location, so a throwaway store carries a
- * throwaway copy of it. `files` are written under the change, `durable` under
- * `openspec/specs`; both take `a/b/c.md` keys. Returns the copy to run and the
- * manifest it writes. */
+ * throwaway copy of it, committed with `origin/main` at that commit. `files`
+ * are written under the change, `durable` under `openspec/specs`; both take
+ * `a/b/c.md` keys. Returns the copy to run, the manifest it writes, the
+ * change's `tasks.md`, and git in the store. */
 function sandbox(files, durable = {}) {
   const root = mkdtempSync(join(tmpdir(), "archive-preflight-"));
-  const script = join(root, "scripts", "openspec", "archive-preflight.mjs");
-  mkdirSync(dirname(script), { recursive: true });
-  copyFileSync(SCRIPT, script);
+  const scripts = join(root, "scripts", "openspec");
+  mkdirSync(scripts, { recursive: true });
+  for (const name of ["archive-preflight.mjs", "store-main.mjs"]) {
+    copyFileSync(join(SCRIPTS, name), join(scripts, name));
+  }
   const dir = join(root, "openspec", "changes", CHANGE);
   mkdirSync(dir, { recursive: true });
   const write = (base, tree) => {
@@ -37,13 +38,30 @@ function sandbox(files, durable = {}) {
   };
   write(dir, files);
   write(join(root, "openspec", "specs"), durable);
-  return { script, manifest: join(dir, ".openspec.yaml") };
+
+  const git = (...args) =>
+    execFileSync(
+      "git",
+      ["-c", "user.email=preflight@test", "-c", "user.name=preflight", ...args],
+      { cwd: root, stdio: "ignore" },
+    );
+  git("init", "--quiet", ".");
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "the store");
+  git("update-ref", "refs/remotes/origin/main", "HEAD");
+
+  return {
+    script: join(scripts, "archive-preflight.mjs"),
+    manifest: join(dir, ".openspec.yaml"),
+    tasks: join(dir, "tasks.md"),
+    git,
+  };
 }
 
 const run = (script, ...args) =>
   spawnSync(process.execPath, [script, CHANGE, ...args], {
     encoding: "utf8",
-    env: { ...process.env, NO_COLOR: "1" },
+    env: { ...process.env, NO_COLOR: "1", PLAN_NO_FETCH: "1" },
   });
 
 const PROPOSAL = { "proposal.md": "# Build alpha\n\n## Why\n\nTo ship it.\n" };
@@ -74,6 +92,36 @@ test("refuses an unchecked task until a waiver names the decision", () => {
     "@echo, the logging ships separately",
   );
   assert.equal(waived.status, 0);
+});
+
+const DONE = "## 1. Build it\n\n- [x] 1.1 Ship it\n- [x] 1.2 Log it\n";
+const OPEN = "## 1. Build it\n\n- [x] 1.1 Ship it\n- [ ] 1.2 Log it\n";
+
+test("reads the checkmarks on the store's main, not in this checkout", () => {
+  const behind = sandbox({ ...PROPOSAL, "tasks.md": DONE });
+  writeFileSync(behind.tasks, OPEN);
+  const passed = run(behind.script, ...SHIPPED);
+  assert.equal(passed.status, 0, passed.stderr);
+
+  const ticked = sandbox({ ...PROPOSAL, "tasks.md": OPEN });
+  writeFileSync(ticked.tasks, DONE);
+  const refused = run(ticked.script, ...SHIPPED);
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, /1 task\(s\) unchecked/);
+});
+
+test("refuses a plan main does not hold, and a store with no main", () => {
+  const unmerged = sandbox(PROPOSAL);
+  writeFileSync(unmerged.tasks, DONE);
+  const notOnMain = run(unmerged.script, ...SHIPPED);
+  assert.equal(notOnMain.status, 1);
+  assert.match(notOnMain.stderr, /tasks\.md is not on origin\/main/);
+
+  const orphan = sandbox({ ...PROPOSAL, "tasks.md": DONE });
+  orphan.git("update-ref", "-d", "refs/remotes/origin/main");
+  const noMain = run(orphan.script, ...SHIPPED);
+  assert.equal(noMain.status, 1);
+  assert.match(noMain.stderr, /no origin main/);
 });
 
 test("a clear run writes the record quoted, over the waiver it replaces", () => {

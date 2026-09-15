@@ -52,6 +52,9 @@ jobs:
           # viewer's published entry in tools/openspec-viewer. They skip
           # themselves without it, so leaving it out would pass by not asking.
           submodules: true
+          # They read the real store's claims at its main, and a pull
+          # request's shallow checkout has no origin/main to read.
+          fetch-depth: 0
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4

@@ -28,10 +28,10 @@
  * layout — because the two are read as one tool from opposite ends.
  */
 
-import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { git as gitIn, storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
@@ -51,17 +51,7 @@ const padVisible = (s, width) =>
 // no registry lookup and no dependence on the cwd you happen to run this from.
 const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
-function git(args) {
-  try {
-    return execFileSync("git", args, {
-      cwd: ROOT,
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
-  } catch {
-    return null;
-  }
-}
+const git = (args) => gitIn(ROOT, args);
 
 /** Task groups for one change, with owner and per-group progress. */
 function readGroups(text) {
@@ -99,19 +89,37 @@ function changeIds() {
     .sort();
 }
 
-/** Every change in flight with its task counts — the list `help` prints. */
-function changeSummaries() {
-  return changeIds().map((id) => {
-    const path = join(ROOT, "openspec", "changes", id, "tasks.md");
-    if (!existsSync(path)) return { id, planned: false };
-    const tasks = readGroups(readFileSync(path, "utf8")).flatMap(
-      (g) => g.tasks,
+/**
+ * Every change in flight with its task counts as `main` records them — the list
+ * `help` prints. Read from this checkout only where the clone has no main.
+ */
+function changeSummaries(main) {
+  const onMain =
+    main &&
+    new Set(
+      (
+        git([
+          "ls-tree",
+          "-d",
+          "--name-only",
+          `${main.commit}:openspec/changes`,
+        ]) ?? ""
+      ).split("\n"),
     );
+  return changeIds().map((id) => {
+    const dir = `openspec/changes/${id}`;
+    if (onMain && !onMain.has(id)) return { id, state: `not on ${main.ref}` };
+    const abs = join(ROOT, dir, "tasks.md");
+    const text = main
+      ? textAt(ROOT, main.commit, `${dir}/tasks.md`)
+      : existsSync(abs)
+        ? readFileSync(abs, "utf8")
+        : null;
+    if (text === null) return { id, state: "no tasks.md yet" };
+    const tasks = readGroups(text).flatMap((g) => g.tasks);
     return {
       id,
-      planned: true,
-      done: tasks.filter((t) => t.done).length,
-      total: tasks.length,
+      state: `${tasks.filter((t) => t.done).length}/${tasks.length} tasks`,
     };
   });
 }
@@ -150,18 +158,17 @@ function help() {
   for (const [name, blurb] of CHECKS)
     console.log(`  ${padVisible(cyan(name), width + 2)}${dim(blurb)}`);
 
-  console.log("\nChanges in flight");
-  const changes = changeSummaries();
+  const main = storeMain(ROOT, { fetch: false });
+  console.log(
+    `\nChanges in flight${main ? `, counted on ${main.ref}` : " — no origin main, counted in this checkout"}`,
+  );
+  const changes = changeSummaries(main);
   if (!changes.length) {
     console.log(dim("  none — openspec/changes is empty"));
   } else {
     const idWidth = Math.max(...changes.map((ch) => ch.id.length));
-    for (const ch of changes) {
-      const state = ch.planned
-        ? `${ch.done}/${ch.total} tasks`
-        : "no tasks.md yet";
-      console.log(`  ${ch.id.padEnd(idWidth + 2)}${dim(state)}`);
-    }
+    for (const ch of changes)
+      console.log(`  ${ch.id.padEnd(idWidth + 2)}${dim(ch.state)}`);
   }
 
   console.log(`\n${dim("Store")}  ${ROOT}`);
@@ -217,51 +224,38 @@ if (git(["status", "--porcelain", "--", rel])) {
 }
 
 // Claims and checkmarks are commits on the store's main, whatever branch this clone is
-// on, so that is what tasks.md has to be current with: `origin/HEAD` where the clone
-// recorded it, else `origin/main`. Fetched first, since a claim made a minute ago is
-// otherwise invisible. Best-effort — offline is not an error. PLAN_NO_FETCH=1 skips it.
-const mainRef =
-  git(["symbolic-ref", "--quiet", "refs/remotes/origin/HEAD"])?.replace(
-    /^refs\/remotes\//,
-    "",
-  ) ?? "origin/main";
-if (process.env.PLAN_NO_FETCH !== "1")
-  git([
-    "fetch",
-    "--quiet",
-    "origin",
-    `+refs/heads/${mainRef.replace(/^origin\//, "")}:refs/remotes/${mainRef}`,
-  ]);
-const main = git(["rev-parse", "--verify", "--quiet", `${mainRef}^{commit}`])
-  ? mainRef
-  : null;
+// on, so that is what tasks.md has to be current with. Without main every check below
+// would pass vacuously, as it would without a repo.
+const main = storeMain(ROOT)?.ref;
+if (!main) {
+  fail(
+    yellow(`The store at ${ROOT} has no origin main to check claims against.`),
+    "Run `git remote set-head origin --auto`, then re-run.",
+  );
+  process.exit();
+}
 
-let unmerged = 0;
-if (main) {
-  const commitsTouching = (range) =>
-    Number(git(["rev-list", "--count", range, "--", rel]) || 0);
-  const behind = commitsTouching(`HEAD..${main}`);
-  if (behind) {
-    fail(
-      yellow(`${main} has ${behind} commit(s) to ${rel} this clone does not.`),
-      "",
-      `  git rebase ${main}`,
-      "",
-      "Editing tasks.md from here is what causes conflicts, and resolving one toward",
-      `your own side silently drops the claims and checkmarks engineering recorded on ${main}.`,
-    );
-    process.exit();
-  }
-  unmerged = commitsTouching(`${main}..HEAD`);
-  if (unmerged) {
-    console.log(
-      yellow(
-        `${unmerged} commit(s) to ${rel} not yet on ${main} — engineering cannot see them.`,
-      ),
-    );
-  }
-} else {
-  console.log(dim("No origin main — nothing to be stale against."));
+const commitsTouching = (range) =>
+  Number(git(["rev-list", "--count", range, "--", rel]) || 0);
+const behind = commitsTouching(`HEAD..${main}`);
+if (behind) {
+  fail(
+    yellow(`${main} has ${behind} commit(s) to ${rel} this clone does not.`),
+    "",
+    `  git rebase ${main}`,
+    "",
+    "Editing tasks.md from here is what causes conflicts, and resolving one toward",
+    `your own side silently drops the claims and checkmarks engineering recorded on ${main}.`,
+  );
+  process.exit();
+}
+const unmerged = commitsTouching(`${main}..HEAD`);
+if (unmerged) {
+  console.log(
+    yellow(
+      `${unmerged} commit(s) to ${rel} not yet on ${main} — engineering cannot see them.`,
+    ),
+  );
 }
 
 if (!existsSync(abs)) {
@@ -280,7 +274,7 @@ const doneTotal = groups.reduce(
 );
 
 console.log(
-  `${green("✓")} Safe to edit ${bold(changeId)}${main && !unmerged ? ` — up to date with ${main}` : ""}.`,
+  `${green("✓")} Safe to edit ${bold(changeId)}${unmerged ? "" : ` — up to date with ${main}`}.`,
 );
 console.log(`\n${bold(changeId)}  ${dim(`${doneTotal}/${total} tasks`)}\n`);
 

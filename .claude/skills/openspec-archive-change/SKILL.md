@@ -5,7 +5,7 @@ description: Finalize a completed OpenSpec change and preserve its decision hist
 
 # Archive an OpenSpec change
 
-1. Read `tasks.md` and confirm every required task is complete; call out any intentional exception. `pnpm run archive:preflight <change>` prints what still refuses the archive.
+1. Confirm every required task is checked off on this store's `main`, where `pnpm plan` records checkmarks; call out any intentional exception. `pnpm run archive:preflight <change>` reads them there and prints what still refuses the archive.
 2. Record the deploy: `pnpm plan shipped <change>` in the application repository. It finds the deploy run that contains every merge commit of the change, runs this store's preflight with that sha, and commits `deployed_at` and `deployed_env` into the change's `.openspec.yaml`. A change whose task groups are all tagged `(grade10-spec)` deploys nothing and needs no record. On an owner's explicit say-so the waiver is written here by hand instead — `pnpm run archive:preflight <change> --deploy-waived "<who, why>"`, with `--tasks-waived "<who, why>"` where tasks are still unchecked. The preflight refuses either way while the change's `## Feature set` and its `user-journeys.md` are not carried across to the durable capability — the fold keeps `## Requirements` only. Carry an approved `feature-tcs.md` across to the capability beside its spec, and a `domain-tcs.md` into the domain directory, by hand as well: the preflight does not check the suites.
 3. Fold accepted delta requirements from `openspec/changes/<change>/specs/` into `openspec/specs/`, then re-read the capability spec and confirm it describes the shipped behavior. It is the only record consuming applications build from.
 4. Run `openspec validate --specs`.
