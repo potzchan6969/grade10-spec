@@ -7,6 +7,7 @@ import { PRODUCT_CARD_CART_COPY } from "../store-product-listing/fixtures";
 import { ProductCard } from "../store-product-listing/product-card";
 import { SignInCard } from "./sign-in-card";
 import { SignInEmailForm } from "./sign-in-email-form";
+import { SignInLinkSent } from "./sign-in-link-sent";
 
 const LISTING_IMAGE = new URL(
   "../store-product-listing/product-card.fixture.png",
@@ -56,7 +57,7 @@ const meta = {
         copy={{
           email: "Email",
           emailPlaceholder: "Enter your email",
-          submit: "Send Magic Link",
+          submit: "Sign In with Email",
         }}
         email=""
         onEmailChange={fn()}
@@ -71,7 +72,7 @@ type Story = StoryObj<typeof meta>;
 
 /**
  * Figma's Login Dialog without the Google control: title, email step,
- * legal line. Empty email keeps Send Magic Link disabled, which is what the
+ * legal line. Empty email keeps Sign In with Email disabled, which is what the
  * frame draws at rest.
  */
 export const Default: Story = {
@@ -87,7 +88,7 @@ export const Default: Story = {
       "Enter your email",
     );
     expect(
-      body.getByRole("button", { name: "Send Magic Link" }),
+      body.getByRole("button", { name: "Sign In with Email" }),
     ).toBeDisabled();
     expect(
       dialog.querySelector('[data-slot="sign-in-legal"]'),
@@ -102,18 +103,17 @@ export const Default: Story = {
   },
 };
 
-/** After Send Magic Link: progress copy sits under the button, centred at
- * xs / secondary-foreground with the same gap-2 an input uses for its
- * message. Field errors stay on the step's `error` prop. */
+/** Progress / wait copy under the email step — field errors stay on the
+ * step's `error` prop. Post-send confirmation is `LinkSent`, not this line. */
 export const WithMessage: Story = {
   args: {
-    message: "Check your inbox for a sign-in link.",
+    message: "Please wait a minute before requesting another email.",
     children: (
       <SignInEmailForm
         copy={{
           email: "Email",
           emailPlaceholder: "Enter your email",
-          submit: "Send Magic Link",
+          submit: "Sign In with Email",
         }}
         email="collector@example.com"
         onEmailChange={fn()}
@@ -123,12 +123,14 @@ export const WithMessage: Story = {
   },
   play: async () => {
     const body = within(document.body);
-    const submit = body.getByRole("button", { name: "Send Magic Link" });
+    const submit = body.getByRole("button", { name: "Sign In with Email" });
     const message = body
       .getByRole("dialog")
       .querySelector('[data-slot="sign-in-message"]') as HTMLElement;
 
-    expect(message).toHaveTextContent("Check your inbox for a sign-in link.");
+    expect(message).toHaveTextContent(
+      "Please wait a minute before requesting another email.",
+    );
     expect(
       submit.compareDocumentPosition(message) &
         Node.DOCUMENT_POSITION_FOLLOWING,
@@ -204,7 +206,7 @@ export const WithProviderSlot: Story = {
  */
 export const WithLegal: Story = {
   args: {
-    message: "Check your inbox for a sign-in link.",
+    message: "Please wait a minute before requesting another email.",
   },
   play: async () => {
     const body = within(document.body);
@@ -354,6 +356,139 @@ export const DismissalLeavesThePageBeneath: Story = {
 };
 
 /**
+ * After a successful send: confirmation names the address; Resend and Back
+ * replace the email step. The consumer omits `providerSlot` on this step.
+ *
+ * Spec: shared-auth-sign-in-SC-42 / SC-43; shared-ui-auth-sign-in-SC-11–13.
+ */
+export const LinkSent: Story = {
+  name: "Link sent",
+  args: {
+    providerSlot: undefined,
+    children: (
+      <SignInLinkSent
+        copy={{
+          message: "We've just sent a sign-in link to collector@example.com.",
+          resend: "Resend",
+          back: "Back",
+        }}
+        onBack={fn()}
+        onResend={fn()}
+      />
+    ),
+  },
+  play: async () => {
+    const body = within(document.body);
+    const dialog = body.getByRole("dialog");
+
+    expect(
+      body.getByText(
+        "We've just sent a sign-in link to collector@example.com.",
+      ),
+    ).toBeInTheDocument();
+    expect(body.getByRole("button", { name: "Resend" })).toBeInTheDocument();
+    expect(body.getByRole("button", { name: "Back" })).toBeInTheDocument();
+    expect(body.queryByRole("textbox", { name: "Email" })).toBeNull();
+    expect(dialog.querySelector('[data-slot="divider"]')).toBeNull();
+    expect(
+      dialog.querySelector('[data-slot="sign-in-link-sent"]'),
+    ).toBeInTheDocument();
+  },
+};
+
+/**
+ * Entry (Google Continue + email) → link sent → Back restores entry.
+ * No real send — submit flips local step state only.
+ */
+export const LinkSentBackToEntry: Story = {
+  name: "Link sent back to entry",
+  args: {
+    open: true,
+    copy: {
+      title: "Sign In to Grade10",
+      providerDivider: "or",
+      legal: figmaLegal,
+    },
+  },
+  render: function LinkSentBackToEntryDemo(args) {
+    const [step, setStep] = useState<"entry" | "sent">("entry");
+    const [email, setEmail] = useState("collector@example.com");
+
+    return (
+      <SignInCard
+        {...args}
+        providerSlot={
+          step === "entry" ? (
+            <Button size="md" type="button" variant="outline">
+              Continue with Google
+            </Button>
+          ) : undefined
+        }
+      >
+        {step === "entry" ? (
+          <SignInEmailForm
+            copy={{
+              email: "Email",
+              emailPlaceholder: "Enter your email",
+              submit: "Sign In with Email",
+            }}
+            email={email}
+            onEmailChange={setEmail}
+            onSubmit={() => setStep("sent")}
+          />
+        ) : (
+          <SignInLinkSent
+            copy={{
+              message: `We've just sent a sign-in link to ${email}.`,
+              resend: "Resend",
+              back: "Back",
+            }}
+            onBack={() => setStep("entry")}
+            onResend={fn()}
+          />
+        )}
+      </SignInCard>
+    );
+  },
+  play: async () => {
+    const body = within(document.body);
+
+    expect(
+      body.getByRole("button", { name: "Continue with Google" }),
+    ).toBeInTheDocument();
+    expect(
+      body.getByRole("button", { name: "Sign In with Email" }),
+    ).toBeInTheDocument();
+
+    await userEvent.click(
+      body.getByRole("button", { name: "Sign In with Email" }),
+    );
+
+    await waitFor(() => {
+      expect(
+        body.getByText(
+          "We've just sent a sign-in link to collector@example.com.",
+        ),
+      ).toBeInTheDocument();
+    });
+    expect(
+      body.queryByRole("button", { name: "Continue with Google" }),
+    ).toBeNull();
+
+    await userEvent.click(body.getByRole("button", { name: "Back" }));
+
+    await waitFor(() => {
+      expect(
+        body.getByRole("button", { name: "Continue with Google" }),
+      ).toBeInTheDocument();
+    });
+    expect(
+      body.getByRole("button", { name: "Sign In with Email" }),
+    ).toBeInTheDocument();
+  },
+};
+
+/**
  * Signed-out Add to cart on a listing tile opens the Login Dialog — the
  * consumer owns session and `open`, so the cart control reports quantity and
  * this demo opens sign-in instead of adding a guest line. Narrow viewport
@@ -402,7 +537,7 @@ export const FromAddToCart: Story = {
             copy={{
               email: "Email",
               emailPlaceholder: "Enter your email",
-              submit: "Send Magic Link",
+              submit: "Sign In with Email",
             }}
             email={email}
             onEmailChange={setEmail}

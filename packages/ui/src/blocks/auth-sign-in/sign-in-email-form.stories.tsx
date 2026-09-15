@@ -11,7 +11,7 @@ const meta = {
     copy: {
       email: "Email",
       emailPlaceholder: "Enter your email",
-      submit: "Send Magic Link",
+      submit: "Sign In with Email",
     },
     email: "collector@example.com",
     onEmailChange: fn(),
@@ -26,7 +26,7 @@ export const Default: Story = {};
 
 /** The consumer supplies the failure copy. */
 export const ErrorState: Story = {
-  args: { error: "Could not send the magic link." },
+  args: { error: "Could not send the sign-in link." },
 };
 
 /** The send action holds until an address exists; submit fires without the
@@ -36,7 +36,7 @@ export const ActionNeedsAnAddress: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: "Send Magic Link" }),
+      canvas.getByRole("button", { name: "Sign In with Email" }),
     ).toBeDisabled();
     expect(args.onSubmit).not.toHaveBeenCalled();
   },
@@ -46,7 +46,7 @@ export const SubmitIsReported: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
-      canvas.getByRole("button", { name: "Send Magic Link" }),
+      canvas.getByRole("button", { name: "Sign In with Email" }),
     );
     expect(args.onSubmit).toHaveBeenCalledOnce();
   },
@@ -58,7 +58,7 @@ export const LinkRequestRunning: Story = {
   args: { submitting: true },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    const submit = canvas.getByRole("button", { name: "Send Magic Link" });
+    const submit = canvas.getByRole("button", { name: "Sign In with Email" });
     expect(submit).toHaveAttribute("aria-busy", "true");
     expect(canvas.getAllByRole("button")).toEqual([submit]);
   },

@@ -194,6 +194,11 @@ export {
   type SignInEmailFormProps,
 } from "./blocks/auth-sign-in/sign-in-email-form";
 export {
+  SignInLinkSent,
+  type SignInLinkSentCopy,
+  type SignInLinkSentProps,
+} from "./blocks/auth-sign-in/sign-in-link-sent";
+export {
   parseTotpUri,
   type TotpEnrollment,
 } from "./blocks/auth-two-factor/totp-uri";
