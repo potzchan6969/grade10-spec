@@ -112,113 +112,86 @@ function showWinnerProgress(status: WinnerOrderStatus): boolean {
 }
 
 /**
- * Post-auction winner progress — not Order Details delivery status.
- * Address → Shipping (quote) → Invoice → Payment → Delivery (ship/deliver).
+ * Post-auction winner progress — designer-required five steps.
+ * Address → Invoice → Payment → Shipped → Completed.
+ * Cancelled / Refunded omit the stepper.
  */
 function winnerProgressStepsFor(
   status: WinnerOrderStatus,
   content: WinnerOrderContent,
 ): WinnerProgressStep[] {
-  const address: WinnerProgressStep = {
-    label: "Address",
-    state: "upcoming",
-  };
-  const shipping: WinnerProgressStep = {
-    label: "Shipping",
-    state: "upcoming",
-  };
-  const invoice: WinnerProgressStep = {
-    label: "Invoice",
-    state: "upcoming",
-  };
-  const payment: WinnerProgressStep = {
-    label: "Payment",
-    state: "upcoming",
-  };
-  const delivery: WinnerProgressStep = {
-    label: "Delivery",
+  const address: WinnerProgressStep = { label: "Address", state: "upcoming" };
+  const invoice: WinnerProgressStep = { label: "Invoice", state: "upcoming" };
+  const payment: WinnerProgressStep = { label: "Payment", state: "upcoming" };
+  const shipped: WinnerProgressStep = { label: "Shipped", state: "upcoming" };
+  const completed: WinnerProgressStep = {
+    label: "Completed",
     state: "upcoming",
   };
 
   switch (status) {
     case "awaiting_address":
       return [
-        { ...address, description: "Confirm where we ship", state: "current" },
-        shipping,
+        { ...address, state: "current" },
         invoice,
         payment,
-        delivery,
+        shipped,
+        completed,
       ];
     case "preparing_invoice":
       return [
         { ...address, state: "completed" },
-        {
-          ...shipping,
-          description: "Calculating shipping",
-          state: "current",
-        },
-        invoice,
+        { ...invoice, state: "current" },
         payment,
-        delivery,
+        shipped,
+        completed,
       ];
     case "pending_payment":
       return [
         { ...address, state: "completed" },
-        { ...shipping, state: "completed" },
-        { ...invoice, description: "Invoice sent", state: "completed" },
-        { ...payment, description: "Pay by card", state: "current" },
-        delivery,
+        { ...invoice, state: "completed" },
+        { ...payment, state: "current" },
+        shipped,
+        completed,
       ];
     case "pending_payment_expired":
       return [
         { ...address, state: "completed" },
-        { ...shipping, state: "completed" },
         { ...invoice, state: "completed" },
-        {
-          ...payment,
-          description: "Deadline passed — still payable",
-          state: "current",
-        },
-        delivery,
+        { ...payment, state: "current" },
+        shipped,
+        completed,
       ];
     case "processing":
-      return [
-        { ...address, state: "completed" },
-        { ...shipping, state: "completed" },
-        { ...invoice, state: "completed" },
-        { ...payment, description: "Paid", state: "completed" },
-        {
-          ...delivery,
-          description: "Preparing to ship",
-          state: "current",
-        },
-      ];
     case "shipped":
       return [
         { ...address, state: "completed" },
-        { ...shipping, state: "completed" },
         { ...invoice, state: "completed" },
         { ...payment, state: "completed" },
         {
-          ...delivery,
-          description: content.secondaryNote ?? "In transit",
+          ...shipped,
+          description:
+            status === "shipped"
+              ? (content.secondaryNote ?? "In transit")
+              : undefined,
           state: "current",
         },
+        completed,
       ];
     case "delivered":
       return [
         { ...address, state: "completed" },
-        { ...shipping, state: "completed" },
         { ...invoice, state: "completed" },
         { ...payment, state: "completed" },
+        { ...shipped, state: "completed" },
         {
-          ...delivery,
+          ...completed,
           description: content.secondaryNote ?? "Delivered",
           state: "completed",
         },
       ];
     default:
-      return [address, shipping, invoice, payment, delivery];
+      return [address, invoice, payment, shipped, completed];
   }
 }
 

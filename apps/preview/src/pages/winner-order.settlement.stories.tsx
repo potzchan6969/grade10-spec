@@ -24,13 +24,10 @@ export const AwaitingAddress: Story = {
     expect(canvas.getByText("Awaiting Address")).toBeVisible();
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Address")).toBeVisible();
-    expect(canvas.getByText("Confirm where we ship")).toBeVisible();
-    expect(canvas.getByText("Shipping")).toBeVisible();
     expect(canvas.getByText("Invoice")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
-    expect(
-      canvas.getAllByText("Delivery", { exact: true }).length,
-    ).toBeGreaterThan(0);
+    expect(canvas.getByText("Shipped")).toBeVisible();
+    expect(canvas.getByText("Completed")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Confirm delivery address" }),
     ).toBeVisible();
@@ -60,7 +57,7 @@ export const PreparingInvoice: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Preparing Invoice")).toBeVisible();
     expect(canvas.getByText("Order progress")).toBeVisible();
-    expect(canvas.getByText("Calculating shipping")).toBeVisible();
+    expect(canvas.getByText("Invoice")).toBeVisible();
     expect(canvas.getByText(/Wan Chai/)).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);

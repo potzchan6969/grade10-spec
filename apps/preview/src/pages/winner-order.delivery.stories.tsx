@@ -12,7 +12,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Paid — preparing to ship (Delivery step current). */
+/** Paid — preparing to ship (Shipped step current). */
 export const Processing: Story = {
   name: "Processing",
   args: { status: "processing" },
@@ -21,7 +21,8 @@ export const Processing: Story = {
     expect(canvas.getByText("Processing")).toBeVisible();
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Address")).toBeVisible();
-    expect(canvas.getByText("Preparing to ship")).toBeVisible();
+    expect(canvas.getByText("Shipped")).toBeVisible();
+    expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getByText("Visa")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(
@@ -30,7 +31,7 @@ export const Processing: Story = {
   },
 };
 
-/** Dispatched — track shipment (Delivery step in transit). */
+/** Dispatched — track shipment (Shipped step current). */
 export const Shipped: Story = {
   name: "Shipped",
   args: { status: "shipped" },
@@ -40,7 +41,7 @@ export const Shipped: Story = {
     expect(
       canvas.getByRole("button", { name: "Track shipment" }),
     ).toBeVisible();
-    expect(canvas.getAllByText("Delivery").length).toBeGreaterThan(0);
+    expect(canvas.getAllByText("Shipped").length).toBeGreaterThan(0);
     expect(canvas.getByText(/SF Express/)).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "View invoice PDF" }),
@@ -48,13 +49,14 @@ export const Shipped: Story = {
   },
 };
 
-/** Carrier delivery confirmed — all winner steps complete. */
+/** Carrier delivery confirmed — Completed. */
 export const Delivered: Story = {
   name: "Delivered",
   args: { status: "delivered" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getAllByText("Delivered").length).toBeGreaterThan(0);
     expect(canvas.getByText(/28 Sep 2026/)).toBeVisible();
     expect(

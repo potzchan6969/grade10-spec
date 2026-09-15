@@ -20,8 +20,9 @@ export const PendingPayment: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Pending Payment")).toBeVisible();
     expect(canvas.getByText("Order progress")).toBeVisible();
-    expect(canvas.getByText("Invoice sent")).toBeVisible();
-    expect(canvas.getByText("Pay by card")).toBeVisible();
+    expect(canvas.getByText("Payment")).toBeVisible();
+    expect(canvas.getByText("Shipped")).toBeVisible();
+    expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
     expect(canvas.getByText("HK$15,660")).toBeVisible();
@@ -42,7 +43,7 @@ export const ExpiredInvoice: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText(/expired invoice/i)).toBeVisible();
     expect(canvas.getByText("Order progress")).toBeVisible();
-    expect(canvas.getByText(/Deadline passed/)).toBeVisible();
+    expect(canvas.getByText("Payment")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Pay with card" })).toBeVisible();
     expect(canvas.getByText(/support@grade10.com/)).toBeVisible();
     expect(
