@@ -27,6 +27,7 @@ import {
   type WinnerOrderInvoiceLine,
   type WinnerOrderStatus,
 } from "./winner-order-content";
+import { AUCTION_LOT_DETAILS_HREF } from "./workbench-story-nav";
 
 const ADDRESS_CONFIRMED_TOAST = {
   title: "Address confirmed",
@@ -76,6 +77,9 @@ type WinnerOrderPageProps = {
   status?: WinnerOrderStatus;
   content?: WinnerOrderContent;
   onPrimaryAction?: () => void;
+  /** Opens lot details — preview defaults to the closed-won lot story. */
+  lotHref?: string;
+  onLotClick?: () => void;
 };
 
 type WinnerProgressStep = {
@@ -255,18 +259,29 @@ function SummaryRow({
   );
 }
 
-function LotCard({ content }: { content: WinnerOrderContent }) {
-  return (
-    <section
-      aria-label="Lot"
-      className="flex w-full flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center"
-    >
+function LotCard({
+  content,
+  href,
+  onClick,
+}: {
+  content: WinnerOrderContent;
+  href?: string;
+  onClick?: () => void;
+}) {
+  const className = cn(
+    "flex w-full flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center",
+    "transition-colors duration-150 ease-out",
+    "hover:bg-muted/40 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
+  );
+
+  const body = (
+    <>
       <div
         className="relative size-14 shrink-0 overflow-hidden rounded-lg border border-border bg-gradient-to-b from-background-subtle to-muted"
         data-slot="winner-order-lot-image"
       >
         <img
-          alt={content.lotTitle}
+          alt=""
           className="absolute inset-0 size-full object-contain p-0.5"
           src={PRODUCT_IMAGE}
         />
@@ -275,13 +290,37 @@ function LotCard({ content }: { content: WinnerOrderContent }) {
         <Text className="truncate" size="sm" weight="medium">
           {content.lotTitle}
         </Text>
-        <Text size="sm" tone="secondary">
-          {content.endedAt}
-        </Text>
         <Text className="tabular-nums" size="sm" weight="medium">
-          Winning bid · {content.winningBid}
+          Winning bid: {content.winningBid}
         </Text>
+        <p className="text-sm leading-5 text-secondary-foreground">
+          {content.endedAt}
+        </p>
       </VStack>
+    </>
+  );
+
+  if (href) {
+    return (
+      <a
+        aria-label={`${content.lotTitle} — open lot details`}
+        className={className}
+        data-slot="winner-order-lot"
+        href={href}
+        onClick={onClick}
+      >
+        {body}
+      </a>
+    );
+  }
+
+  return (
+    <section
+      aria-label="Lot"
+      className={className}
+      data-slot="winner-order-lot"
+    >
+      {body}
     </section>
   );
 }
@@ -566,6 +605,8 @@ function WinnerOrderPage({
   status: statusProp = "awaiting_address",
   content: contentProp,
   onPrimaryAction,
+  lotHref = AUCTION_LOT_DETAILS_HREF,
+  onLotClick,
 }: WinnerOrderPageProps) {
   const [status, setStatus] = useState(statusProp);
   const [confirmedAddress, setConfirmedAddress] = useState<string | null>(null);
@@ -645,7 +686,7 @@ function WinnerOrderPage({
               />
             ) : null}
 
-            <LotCard content={content} />
+            <LotCard content={content} href={lotHref} onClick={onLotClick} />
 
             {content.secondaryNote &&
             content.status !== "shipped" &&

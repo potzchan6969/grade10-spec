@@ -39,6 +39,12 @@ export const AwaitingAddress: Story = {
     expect(canvas.getByText("Delivery address")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Winning Bid")).toBeVisible();
+    expect(canvas.getByText(/^Winning bid:/)).toBeVisible();
+    expect(
+      canvas.getByRole("link", {
+        name: /open lot details/i,
+      }),
+    ).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(

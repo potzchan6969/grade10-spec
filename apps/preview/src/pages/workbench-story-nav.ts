@@ -1,3 +1,7 @@
+/** Storybook story id for a closed won Auction Lot Details assembly. */
+const AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID =
+  "pages-auction-lot-details--closed-won-payment-due";
+
 /** Storybook story id for the filled Order History page assembly. */
 const ORDER_HISTORY_STORY_ID = "pages-order-history-page--filled";
 
@@ -14,6 +18,11 @@ function storyHref(storyId: string): string {
 
 /** Chrome destination for Store Locator once the page story exists. */
 const STORE_LOCATOR_HREF = storyHref(STORE_LOCATOR_STORY_ID);
+
+/** Preview href for Winner Order → lot details. */
+const AUCTION_LOT_DETAILS_HREF = storyHref(
+  AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID,
+);
 
 /** Jump the workbench Storybook iframe to another page story. */
 function navigateToStory(storyId: string) {
@@ -49,6 +58,8 @@ function interceptWorkbenchStoryLinks(event: MouseEvent) {
 }
 
 export {
+  AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID,
+  AUCTION_LOT_DETAILS_HREF,
   interceptWorkbenchStoryLinks,
   navigateToStory,
   ORDER_DETAILS_STORY_ID,
