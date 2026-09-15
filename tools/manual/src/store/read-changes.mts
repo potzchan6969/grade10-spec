@@ -110,6 +110,7 @@ function readChange(
     why: "",
     taskGroups: [],
     deltas: [],
+    written: [],
   };
 
   // Any file of the change, not only tasks.md — a plan that writes specs and
@@ -140,6 +141,9 @@ function readChange(
       declared = handles([fields.owner, fields.owners]);
       const dependsOn = strings(fields.depends_on);
       if (dependsOn.length > 0) entry.dependsOn = dependsOn;
+      const awaiting = readAwaiting(fields.awaiting);
+      if (awaiting.length > 0) entry.awaiting = awaiting;
+      if (fields.skip_specs === true) entry.skipSpecs = true;
       for (const [key, field] of RECORDED) {
         const written = line(key, fields[key]);
         if (written) entry[field] = written;
@@ -203,7 +207,58 @@ function readChange(
     const suites = readSuites(root, dir);
     if (suites.length > 0) entry.suites = suites;
   }
+  entry.written = writtenArtifacts(root, dir, entry);
   return entry;
+}
+
+/**
+ * The schema artifact ids this change has written. The three that live in a
+ * capability directory are read off what was already parsed rather than the
+ * disk a second time; the rest are files at the change root.
+ *
+ * Ids are the schema's, so a schema that renames an artifact renames it here
+ * too. What a change still owes is not decided here — that is a judgement
+ * about which artifacts this change needs, and it belongs with the reader
+ * who is asking.
+ */
+function writtenArtifacts(
+  root: string,
+  dir: string,
+  entry: ChangeEntry,
+): string[] {
+  const capabilities = deltaFiles(root, dir).map(({ file }) =>
+    file.replace(/\/spec\.md$/, ""),
+  );
+  const beside = (name: string) =>
+    capabilities.some((one) => existsSync(join(root, one, name)));
+
+  const written: string[] = [];
+  if (existsSync(join(dir, "proposal.md"))) written.push("proposal");
+  if (entry.deltas.length > 0) written.push("specs");
+  if (beside("user-journeys.md")) written.push("user-journeys");
+  if (beside("feature-tcs.md")) written.push("test-cases");
+  if (existsSync(join(dir, "ui-design.md"))) written.push("ui-design");
+  if (existsSync(join(dir, "tech-design.md"))) written.push("tech-design");
+  if (entry.taskGroups.length > 0) written.push("tasks");
+  return written;
+}
+
+/**
+ * `awaiting:` as a mapping of artifact id to the line its author wrote. A
+ * value that is not a line is dropped rather than shown as a wait nobody
+ * wrote — the `awaiting` rule names it instead.
+ */
+function readAwaiting(value: unknown): { artifact: string; why: string }[] {
+  if (value === undefined || value === null) return [];
+  if (typeof value !== "object" || Array.isArray(value)) {
+    throw new StoreFileError(1, "`awaiting` must be a mapping");
+  }
+  const waits: { artifact: string; why: string }[] = [];
+  for (const [artifact, why] of Object.entries(value)) {
+    const written = line(`awaiting.${artifact}`, why);
+    if (written) waits.push({ artifact, why: written });
+  }
+  return waits;
 }
 
 /** The feature suite beside each delta — the suite QA reviews while the

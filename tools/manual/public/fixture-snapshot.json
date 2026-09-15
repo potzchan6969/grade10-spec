@@ -239,11 +239,67 @@
           ]
         }
       ],
+      "written": [
+        "proposal",
+        "specs",
+        "tasks"
+      ],
       "author": "tester",
       "followOns": [
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
         "A record anyone can read back."
       ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "proposal",
+      "generates": "proposal.md",
+      "role": "product-manager",
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "specs",
+      "generates": "specs/**/spec.md",
+      "role": "product-manager",
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "user-journeys",
+      "generates": "specs/**/user-journeys.md",
+      "role": "product-manager",
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "test-cases",
+      "generates": "specs/**/feature-tcs.md",
+      "role": "product-manager",
+      "requires": [],
+      "required": true
+    },
+    {
+      "id": "ui-design",
+      "generates": "ui-design.md",
+      "role": "designer",
+      "requires": [],
+      "required": false
+    },
+    {
+      "id": "tech-design",
+      "generates": "tech-design.md",
+      "role": "engineer",
+      "requires": [],
+      "required": false
+    },
+    {
+      "id": "tasks",
+      "generates": "tasks.md",
+      "role": "engineer",
+      "requires": [],
+      "required": true
     }
   ],
   "assets": [],

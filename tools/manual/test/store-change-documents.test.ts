@@ -20,14 +20,26 @@ const [document] = readChangeDocuments(FIXTURE, NO_GIT);
 
 describe("the artifacts a change has", () => {
   it("reads the schema's artifacts in the order it declares them", () => {
-    expect(schemaArtifacts(FIXTURE, "grade10-planning")).toEqual([
-      { id: "proposal", generates: "proposal.md" },
-      { id: "specs", generates: "specs/**/spec.md" },
-      { id: "user-journeys", generates: "specs/**/user-journeys.md" },
-      { id: "test-cases", generates: "specs/**/feature-tcs.md" },
-      { id: "ui-design", generates: "ui-design.md" },
-      { id: "tech-design", generates: "tech-design.md" },
-      { id: "tasks", generates: "tasks.md" },
+    expect(
+      schemaArtifacts(FIXTURE, "grade10-planning")?.map(
+        ({ id, generates, role }) => ({ id, generates, role }),
+      ),
+    ).toEqual([
+      { id: "proposal", generates: "proposal.md", role: "product-manager" },
+      { id: "specs", generates: "specs/**/spec.md", role: "product-manager" },
+      {
+        id: "user-journeys",
+        generates: "specs/**/user-journeys.md",
+        role: "product-manager",
+      },
+      {
+        id: "test-cases",
+        generates: "specs/**/feature-tcs.md",
+        role: "product-manager",
+      },
+      { id: "ui-design", generates: "ui-design.md", role: "designer" },
+      { id: "tech-design", generates: "tech-design.md", role: "engineer" },
+      { id: "tasks", generates: "tasks.md", role: "engineer" },
     ]);
     expect(schemaArtifacts(FIXTURE, "spec-driven")).toBeUndefined();
   });

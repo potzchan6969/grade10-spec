@@ -5,6 +5,8 @@ description: >-
   design → tech design → tasks. One lane for every hand a change passes through.
 artifacts:
   - id: proposal
+    required: true
+    role: product-manager
     generates: proposal.md
     description: Why this change is needed, what changes, and what it will not do
     template: proposal.md
@@ -67,6 +69,8 @@ artifacts:
       This is the foundation - everything after it builds on this.
     requires: []
   - id: specs
+    required: true
+    role: product-manager
     generates: specs/**/spec.md
     description: The requirement deltas each capability's spec will fold in
     template: spec.md
@@ -211,6 +215,8 @@ artifacts:
     requires:
       - proposal
   - id: user-journeys
+    required: true
+    role: product-manager
     generates: specs/**/user-journeys.md
     description: The user stories each capability's scenarios accept, one file per capability
     template: user-journeys.md
@@ -345,6 +351,8 @@ artifacts:
     requires:
       - specs
   - id: test-cases
+    required: true
+    role: product-manager
     generates: specs/**/feature-tcs.md
     description: The QA suite derived from each capability's journeys, one file per capability
     template: feature-tcs.md
@@ -403,6 +411,8 @@ artifacts:
     requires:
       - user-journeys
   - id: ui-design
+    required: false
+    role: designer
     generates: ui-design.md
     description: The visual plan - screens, component exports, and states
     template: ui-design.md
@@ -438,6 +448,8 @@ artifacts:
     requires:
       - specs
   - id: tech-design
+    required: false
+    role: engineer
     generates: tech-design.md
     description: The technical implementation's high-level design
     template: tech-design.md
@@ -507,6 +519,8 @@ artifacts:
     requires:
       - specs
   - id: tasks
+    required: true
+    role: engineer
     generates: tasks.md
     description: The implementation plan, claimed group by group
     template: tasks.md

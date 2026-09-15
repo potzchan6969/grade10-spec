@@ -66,6 +66,11 @@ export const RULES = [
     title: "Walked capabilities with no suite beside them",
   },
   {
+    key: "awaiting",
+    level: "warn",
+    title: "Waits naming no artifact, or one already written",
+  },
+  {
     key: "grouping",
     level: "fail",
     title: "Durable specs holding a heading the archive would fold",

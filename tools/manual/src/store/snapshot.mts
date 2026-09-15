@@ -16,7 +16,10 @@ import {
   readRootsGitIndex,
   git as runGit,
 } from "./git.mts";
-import { readChangeDocuments } from "./read-change-documents.mts";
+import {
+  readChangeDocuments,
+  schemaArtifacts,
+} from "./read-change-documents.mts";
 import {
   readArchivedChanges,
   readChanges,
@@ -37,6 +40,11 @@ import { checkWarnings } from "./warnings.mts";
 /** The artifacts share one history walk — the only expensive part of a read.
  * `documents` is one artifact per in-flight change and `references` one per
  * reference document, each served on its own. */
+/** The one workflow schema this store defines. A change naming another is the
+ * CLI's own built-in, whose artifacts live inside it — nothing here can say
+ * what such a change owes. */
+const PLANNING_SCHEMA = "grade10-planning";
+
 export type Store = {
   snapshot: Snapshot;
   archive: Archive;
@@ -91,6 +99,7 @@ export function composeStore(
       pages: readManualPages(roots, git),
       specs,
       changes: readChanges(roots.store, git),
+      artifacts: schemaArtifacts(roots.store, PLANNING_SCHEMA) ?? [],
       assets: readManualAssets(roots),
       references: references.map(({ text: _text, ...entry }) => entry),
       ...(referencesReadme === undefined ? {} : { referencesReadme }),
