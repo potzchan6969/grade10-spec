@@ -34,7 +34,7 @@
   sent creates no session — satisfies `shared-auth-sign-in-SC-49`
 - [ ] 2.3 Verify: `pnpm run typecheck` and `pnpm run test:backend`
 
-## 3. Link-sent step in the sign-in dialog (grade10)
+## 3. Link-sent step in the sign-in dialog (grade10) (owner: @sean)
 
 - [ ] 3.1 After a send that went out, title the dialog from `linkSentTitle`,
   draw no provider slot, and render `SignInLinkSent` with the address the link
