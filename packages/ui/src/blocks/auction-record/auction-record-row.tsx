@@ -178,13 +178,18 @@ function AuctionRecordRow({
   useEmailAlertsToast(alertsEnabled, emailAlertsCopy, showEmailAlerts);
 
   const titleNode = href ? (
-    <Link aria-label={listingLabel} className="truncate" href={href} size="sm">
+    <Link
+      aria-label={listingLabel}
+      className="truncate font-medium"
+      href={href}
+      size="sm"
+    >
       {title}
     </Link>
   ) : onOpen ? (
     <Link
       aria-label={listingLabel}
-      className="truncate"
+      className="truncate font-medium"
       render={<button onClick={onOpen} type="button" />}
       size="sm"
     >
