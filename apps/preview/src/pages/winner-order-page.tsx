@@ -86,10 +86,13 @@ function WinnerOrderPage({
             aria-label="Lot"
             className="flex w-full flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center"
           >
-            <div className="relative size-20 shrink-0 overflow-hidden rounded-lg border border-border bg-muted sm:size-24">
+            <div
+              className="relative size-14 shrink-0 overflow-hidden rounded-lg border border-border bg-gradient-to-b from-background-subtle to-muted"
+              data-slot="winner-order-lot-image"
+            >
               <img
                 alt={content.lotTitle}
-                className="absolute inset-0 size-full object-cover"
+                className="absolute inset-0 size-full object-contain p-0.5"
                 src={PRODUCT_IMAGE}
               />
             </div>
