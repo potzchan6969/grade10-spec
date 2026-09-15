@@ -121,9 +121,9 @@ export function NextAction({ change }: { change: ChangeEntry }) {
 }
 
 /**
- * Where the change stands against the store's main. The plan is read there, so
- * an unsettled change looks buildable on the board while `pnpm plan claim` and
- * the archive both refuse it — the one fact the browser used to hide.
+ * Where the change stands against the store's main, where the plan is read.
+ * `pnpm plan claim` refuses a change that is not there, and a checkout copy
+ * that differs from it is not the brief the team settled.
  */
 export function MainStateNote({ change }: { change: ChangeEntry }) {
   const state = change.mainState;
@@ -139,7 +139,7 @@ export function MainStateNote({ change }: { change: ChangeEntry }) {
       <Text as="span" size="xs">
         {state.state === "unmerged"
           ? `not on ${state.ref} — it cannot be ${blocked} until the store branch merges`
-          : `${state.files} artifact(s) ahead of ${state.ref} — push them before building against this`}
+          : `${state.files} artifact(s) in this checkout differ from ${state.ref} — merge these edits, or update this checkout to ${state.ref}, before building against this`}
       </Text>
     </div>
   );

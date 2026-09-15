@@ -221,17 +221,17 @@ export type ChangeSuite = {
 };
 
 /**
- * Where a change stands against the store's shared branch. The plan is read at
- * `origin/main`, so a change that is not settled there cannot be claimed or
- * archived — carried only when that is the case, read from the refs the clone
- * already has (the build never fetches).
+ * Where a change stands against the store's shared branch, where the plan is
+ * read: a change missing there cannot be claimed, and a checkout copy that
+ * differs from it is not the settled brief. Carried only when one of those
+ * holds, read from the refs the clone already has (the build never fetches).
  */
 export type MainState = {
   state: "unmerged" | "diverged";
   /** The remote-tracking ref compared against, e.g. `origin/main`. */
   ref: string;
-  /** Diverged only: files of this change ahead of the ref, `tasks.md`
-   * excluded — claim and done churn it by design. */
+  /** Diverged only: files of this change that differ from the ref, `tasks.md`
+   * excluded — every claim and checkmark moves it on main. */
   files?: number;
 };
 
