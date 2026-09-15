@@ -5,7 +5,7 @@ other group reads. Groups 3 and 4 need group 2; group 4 needs group 3's port
 and stands in for its object with the fake until it lands. Group 5 needs all
 of them; group 6 needs group 5's numbers.
 
-How the keeper applies, publishes and is followed:
+How the mirror applies, publishes and is followed:
 [`tech-design.md`](tech-design.md) — Decisions.
 
 ## 1. The manual (grade10-spec)
@@ -19,13 +19,13 @@ How the keeper applies, publishes and is followed:
 - [x] 2.2 Carry the report's `updated_at` out of `parseProductWebhook` as epoch milliseconds, absent on a delete
 - [x] 2.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`
 
-## 3. The keeper (grade10)
+## 3. The mirror (grade10)
 
 Needs group 2.
 
-- [x] 3.1 Add the keeper's manager over a `KeeperStore` port under `packages/grade10-store/backend/src/durables/CatalogKeeper/`, with an in-memory store for the node lane: `apply` recording a report or removing a deleted product, the read-back in one `getProducts` landing only on the pending row it was read for, the 2 s re-read to the 60 s deadline, and one publish per burst numbered by a counter, so *A read older than the report is not published* (`SC-53`) holds
+- [x] 3.1 Add the mirror's manager over a `KeeperStore` port under `packages/grade10-store/backend/src/durables/CatalogKeeper/`, with an in-memory store for the node lane: `apply` recording a report or removing a deleted product, the read-back in one `getProducts` landing only on the pending row it was read for, the 2 s re-read to the 60 s deadline, and one publish per burst numbered by a counter, so *A read older than the report is not published* (`SC-53`) holds
 - [x] 3.2 Add the walk: every page first, then one transaction writing rows whose text or position moved and deleting what it did not see, refusing past the cursor ceiling, sharing one in-flight walk, and publishing nothing before the first walk, so *A change the shop never reported is caught by the re-read* (`SC-52`) holds
-- [x] 3.3 Add `sync(known)` from memory, answering the version and shape, and the body only when `known` is older; an empty keeper walks itself first (`SC-48`)
+- [x] 3.3 Add `sync(known)` from memory, answering the version and shape, and the body only when `known` is older; an empty mirror walks itself first (`SC-48`)
 - [x] 3.4 Add the Durable Object class: the SQLite store behind the port, the RPC methods, the alarm handler that catches, re-arms at the earliest due work and never throws, and the one accessor naming `<shop>/v1` with the `apac` hint; export it through `@grade10/store-service/worker`
 - [x] 3.5 Add `CatalogKeeperPort` with its in-memory implementation in `@grade10/store-service/testing`, so the request path and the cron pass are proved without an object
 - [x] 3.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend` — the class, its binding, its migration and the alarm run in `apps/backend/grade10/store/test/worker/`, driven by `runDurableObjectAlarm` and `runInDurableObject` from `cloudflare:test`, never by wall-clock time; the rules run in the store package's node lane over the in-memory store
@@ -34,12 +34,12 @@ Needs group 2.
 
 Needs group 2 and group 3's port.
 
-- [x] 4.1 Hand `products/*` and `inventory_levels/*` deliveries to `apply` from `shopifyCatalogPurge`, awaited beside the tag purge, answering 200 and counting when the keeper cannot take the event, so *A published product is listed within seconds* (`SC-49`), *A product taken down leaves within seconds* (`SC-50`) and *A card follows the shop's price and stock* (`SC-51`) are reached by the shop's own report
-- [x] 4.2 Add the `catalog` cron pass: silent where no keeper is bound, throwing on `outgrown` and a keeper error, counting a Shopify failure (`SC-52`); move `apps/backend/grade10/store/test/db/cron.spec.ts` from `4 of 7` to `4 of 8`
-- [x] 4.3 Make the listing reads follow the keeper from isolate memory — check every 3 s, `sync` with a 500 ms deadline, memory when the keeper cannot answer, `catalog_unavailable` with nothing held — deriving entries from the whole products it receives, and delete the projection's cache tier, its age and cooldown, hydration and the product tiers, so *The listing lists while the shop is down* (`SC-54`) and *A location holding no copy answers from the one the store keeps* (`SC-48`) hold
+- [x] 4.1 Hand `products/*` and `inventory_levels/*` deliveries to `apply` from `shopifyCatalogPurge`, awaited beside the tag purge, answering 200 and counting when the mirror cannot take the event, so *A published product is listed within seconds* (`SC-49`), *A product taken down leaves within seconds* (`SC-50`) and *A card follows the shop's price and stock* (`SC-51`) are reached by the shop's own report
+- [x] 4.2 Add the `catalog` cron pass: silent where no mirror is bound, throwing on `outgrown` and a mirror error, counting a Shopify failure (`SC-52`); move `apps/backend/grade10/store/test/db/cron.spec.ts` from `4 of 7` to `4 of 8`
+- [x] 4.3 Make the listing reads follow the mirror from isolate memory — check every 3 s, `sync` with a 500 ms deadline, memory when the mirror cannot answer, `catalog_unavailable` with nothing held — deriving entries from the whole products it receives, and delete the projection's cache tier, its age and cooldown, hydration and the product tiers, so *The listing lists while the shop is down* (`SC-54`) and *A location holding no copy answers from the one the store keeps* (`SC-48`) hold
 - [x] 4.4 Declare `durable_objects.bindings` in the top-level, `staging` and `production` blocks of both brands' store `wrangler.jsonc`, the `v1` `new_sqlite_classes` migration at the top level, and export the class by name from each app's `src/index.ts`; run `pnpm run cf-typegen` and commit both apps' `worker-configuration.d.ts`
 - [x] 4.5 Teach `scripts/deploy/ship.mjs` the `lifecycle` reason a version cannot be uploaded, shipping that worker whole in the flip as it ships one that does not exist
-- [x] 4.6 Rewrite the catalogue section of `docs/architecture/commerce.md` and the layer table of `docs/architecture/edge-cache.md` for the keeper, and record on `docs/conventions/backend.md` the one Durable Object a deployed worker binds and why
+- [x] 4.6 Rewrite the catalogue section of `docs/architecture/commerce.md` and the layer table of `docs/architecture/edge-cache.md` for the mirror, and record on `docs/conventions/backend.md` the one Durable Object a deployed worker binds and why
 - [x] 4.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`
 
 ## 5. Staging proof and the guardrail (grade10)
