@@ -10,7 +10,7 @@
     coupon, and names that order
 - Member surface
   - Coupon wallet: every coupon the member holds reads as spendable until a
-    paid order takes it, with no claimed state of its own
+    paid order takes it, and no surface names the sale claiming one
 
 ## ADDED Requirements
 
@@ -30,12 +30,16 @@ it can still be tendered.
 
 The earlier claim SHALL be released before the new one is made. A claim SHALL
 be refused only where the earlier one cannot be released — a sale that has
-already taken money, a checkout the provider will not kill, or a code the shop
-will not deactivate — and that refusal SHALL name itself as such rather than as
-the coupon being unavailable.
+already taken money, or a checkout the provider will not kill — and that
+refusal SHALL say so rather than say the coupon is unavailable. A code the shop
+will not deactivate SHALL NOT refuse a claim: the shop goes on honouring a code
+a sale already carries whatever becomes of it, so refusing there would cost a
+member their coupon and guard nothing.
 
-A sale that collects a code this store deactivated SHALL be counted and
-reported with the order on it. The coupon SHALL be spent by whichever sale
+A sale SHALL spend a coupon only where the shop gave its cut. A paid sale that
+does not carry the coupon it promised SHALL give it back rather than spend it,
+and one that carries a coupon the sale no longer claims SHALL be counted and
+reported with the order on it. A coupon SHALL be spent by whichever sale
 settles first, and never twice.
 
 The member SHALL NOT be told anything when an earlier claim is released, and
@@ -68,12 +72,25 @@ SHALL NOT be shown which sale claims a coupon.
 - **WHEN** they present the same coupon at another till
 - **THEN** the second sale carries the cut and the first sale's code is deactivated
 
-#### Scenario: grade10-site-loyalty-programme-SC-194 - A claim is refused where the earlier code will not die
+#### Scenario: grade10-site-loyalty-programme-SC-194 - A claim is refused where the earlier checkout will not die
 
-- **GIVEN** a member claiming a coupon whose earlier code the shop will not deactivate
+- **GIVEN** a member claiming a coupon carried by an online checkout the provider will not kill
 - **WHEN** the claim is made
-- **THEN** it is refused, saying an earlier code stands rather than that the coupon is unavailable
-- **AND** the earlier sale keeps the cut
+- **THEN** it is refused, saying an earlier sale stands rather than that the coupon is unavailable
+- **AND** the earlier checkout keeps the cut
+
+#### Scenario: grade10-site-loyalty-programme-SC-201 - A counter sale never refuses a claim
+
+- **GIVEN** a member claiming a coupon carried by a counter sale, and a shop that will not deactivate its code
+- **WHEN** the claim is made
+- **THEN** it stands and the new sale carries the cut
+- **AND** the deactivation is retried until the shop agrees the code is gone
+
+#### Scenario: grade10-site-loyalty-programme-SC-202 - A sale that did not carry the coupon gives it back
+
+- **GIVEN** a counter sale that promised a coupon and collected without its cut
+- **WHEN** the sale settles
+- **THEN** the coupon is unused and spendable, and nothing is recorded as having come off that sale
 
 #### Scenario: grade10-site-loyalty-programme-SC-200 - A coupon on a sale that took money is not moved
 
@@ -88,10 +105,10 @@ SHALL NOT be shown which sale claims a coupon.
 - **THEN** the coupon is spent by whichever settles first
 - **AND** the other is reported with the order on it, and is not spent again
 
-#### Scenario: grade10-site-loyalty-programme-SC-196 - The wallet shows no claimed state
+#### Scenario: grade10-site-loyalty-programme-SC-196 - No surface names the sale claiming a coupon
 
 - **GIVEN** a member whose coupon is claimed by a sale
-- **WHEN** they read their coupons, or the cart prices them
+- **WHEN** they read their coupons, the cart prices them, or staff open the member's panel
 - **THEN** every coupon reads as spendable, and none names the sale claiming it
 
 ## MODIFIED Requirements
@@ -199,8 +216,9 @@ reversible on the same terms.
 
 A reversal SHALL be refused while a sale is claiming the coupon, and SHALL
 name that sale, because voiding a coupon whose code a sale can still collect
-would return the points and give the discount. A claim SHALL stop standing in
-the way once the code minted for it can no longer be collected.
+would return the points and give the discount. A claim that nothing else ever
+moves SHALL be released on the programme's own clock, so a reversal is never
+refused forever.
 
 Returned points SHALL rejoin the redeemable balance under the inactivity
 window already running: a reversal SHALL NOT reset that window, and SHALL
@@ -228,11 +246,11 @@ redemption actually consumed a unit.
 - **WHEN** an operator reverses the redemption that issued it
 - **THEN** the reversal is refused, naming that sale
 
-#### Scenario: grade10-site-loyalty-programme-SC-199 - A claim whose code has lapsed stops refusing the operator
+#### Scenario: grade10-site-loyalty-programme-SC-199 - A claim nothing moves is released on the programme's clock
 
-- **GIVEN** a counter sale claiming a coupon, whose minted code has passed its own lifetime
-- **WHEN** an operator reverses the redemption that issued it
-- **THEN** the reversal succeeds and the points return
+- **GIVEN** a counter sale claiming a coupon that nobody tendered and nobody claimed elsewhere
+- **WHEN** the claim has stood longer than any code minted for it can be collected
+- **THEN** the coupon is spendable again and an operator can reverse the redemption that issued it
 
 #### Scenario: grade10-site-loyalty-programme-SC-167 - A refunded sale does not return the coupon
 
