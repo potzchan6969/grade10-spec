@@ -7,7 +7,8 @@ reviewed: 2026-09-11
 
 Auction mail exists because the close is a deadline that moves: nobody can
 plan to be there at the end, so Grade10 tells enrolled collectors when a lot
-needs them. Before-and-during mail stays here; post-close letters belong to
+needs them. Before-and-during mail stays here; so do close-outcome letters for
+watchers and non-winners. Winner order letters belong to
 [Order Notifications](/p/grade10-site/auction/notifications-order). Every
 message is transactional mail to the account's registered email address, and amounts and times in it follow
 [money amounts](/platform/shared/money-amounts) and
@@ -57,6 +58,31 @@ an outbid collector gets the outbid message rather than that plus a new-bid
 one, and a snipe war collapses into one new-bid message naming the current
 leading bid rather than one per increment.
 
+## Close Outcome
+
+When a lot stops taking bids, enrolled collectors who did not win hear once
+that it closed — same alerts-on enrolment as progress mail.
+
+- 🚧 **Non-winner** — a bidder who lost to someone else gets a letter that the
+  lot closed and they did not win, with Winning bid and Their bid when those
+  amounts are supplied
+- 🚧 **Watcher, sold** — a watch-only collector with alerts on gets a letter
+  that the lot has ended, with Sold for when a winning bid is supplied
+  (`lot_ended_watched`)
+- 🚧 **No bids at close** — watchers get **Ended** only (`lot_ended_watched`
+  without a winning amount, and/or public `lot_ended`). Subject, preheader and
+  body never say unsold, did not sell, no sale, or no bids, and never show
+  Highest bid. At close this means nobody bid — not a later winner default.
+  There is no bidder close letter when nobody bid
+- 🚧 **One letter** — a watcher who also bid gets the non-winner letter, not
+  also the watcher letter. The winner gets only the auction-won order letter
+- ❓ **Hold line on the non-winner letter** — whether the body also says the
+  card hold is being released; My Auctions already carries hold state
+- ❓ **One or both no-bids campaigns** — whether watchers get only the
+  watched Ended-only letter (`lot_ended_watched` without a winning amount),
+  only the public `lot_ended` letter, or both under one-copy dedup. Template
+  preview filenames stay out of this page.
+
 ## Delivery
 
 Every owed letter whose per-lot alerts are on carries a short footer:
@@ -88,14 +114,18 @@ and never a snipe war filling an inbox.
 | --- | --- | --- |
 | Collector watching a listing | Sale has not opened, or is about to close / extend | Hear in time to come back and bid, if alerts are on. |
 | Collector who has bid | Someone else bid, or they lost the lead | Hear what changed on that lot, once, not once per snipe — or mute without ending the bid. |
+| Collector watching or who bid | Lot stops taking bids and they did not win | Hear that it ended or closed, once; on a no-bids close, Ended only with no non-sale disclosure. |
 | Auction operator | A collector says they were never told | See which messages went to that address, without reading bodies. |
 
 **Not in scope.** Push, SMS, or in-app toasts. Marketing / non-auction email
 prefs as the mute surface. Replacing the existing bid-state receipts or the
 one-hour closing-soon reminder already sent to watchers. Auto-bidding, a
 digest across listings, or a bidder's language. One-click unsubscribe — the
-destination is a signed-in mute. Mail about winning, paying, invoicing, or
-shipping belongs to [Order Notifications](/p/grade10-site/auction/notifications-order).
+destination is a signed-in mute. Mail about winning, paying, invoicing,
+address reminders, or shipping belongs to
+[Order Notifications](/p/grade10-site/auction/notifications-order). Called-off
+lots still send nothing further. Winner default after a win is order mail, not
+a close-outcome letter.
 
 **Measurement.**
 
@@ -122,6 +152,10 @@ shipping belongs to [Order Notifications](/p/grade10-site/auction/notifications-
 | Campaign tags | Decided | Every outbound link: `utm_source=email`, `utm_medium=auction_notification`, `utm_campaign` = letter kind, `utm_content` = control. No `utm_term`. | Product |
 | Send log | Decided | Operators see type, address, listing, and Sent At. No bodies. Filter by the address sent to. | Product |
 | Language | Decided | English, matching every auction email. Locale waits on recording one. | Engineering |
+| Close-outcome audiences | Decided | Watchers and non-winners with alerts on; winner gets only Order Notifications. Dedup: bid beats watch; win beats both. | Product |
+| No-bids close copy | Decided | Ended only — never unsold, did not sell, no sale, no bids, or Highest bid. No bidder letter when nobody bid. No-bids ≠ winner default. | Product |
+| Hold line on non-winner letter | ❓ Open | Draft omits it; My Auctions keeps hold state. | Product |
+| No-bids campaign split | ❓ Open | `lot_ended_watched` Ended-only vs public `lot_ended` — one send or both. | Product |
 | Send-log retention | ❓ Open | How long rows are kept. | Engineering |
 
 **Risks.** A popular listing's watcher fanout stays batched; per-recipient
