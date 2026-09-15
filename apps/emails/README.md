@@ -1,7 +1,7 @@
 # Email templates
 
-React Email letters for Grade10 — site-wide messages (magic link) and
-`grade10-site/auction/notifications` — built with
+React Email letters for Grade10 — auth (magic link) and
+`grade10-site/auction/notifications` (+ post-close order letters) — built with
 [emailcn](https://www.emailcn.run/) on the shadcn registry.
 
 ## Setup
@@ -20,31 +20,37 @@ Letters compose Grade10’s `grade10Theme` through emailcn’s
 
 ## Preview
 
-This letter set lives on the `apps/emails` package. On `main` before this
-rename, `pnpm email:dev` still pointed at `apps/auction-emails` and had no
-magic-link template — check out the branch that adds `emails/magic-link.tsx`
-first, then:
-
 ```bash
 pnpm email:dev
 ```
 
-http://localhost:3333 — shared pieces under `emails/_components/` (hidden from
-the sidebar). The sidebar lists the `auction/` folder and top-level
-`magic-link` beside it (not inside `auction/`). Open
-http://localhost:3333/preview/magic-link directly if the tree is collapsed or
-scrolled. Restart the preview server after pulling so discovery refreshes.
+http://localhost:3333 — `_components/` folders are hidden from the sidebar.
+Restart the preview server after pulling so discovery refreshes.
+
+| Folder | Preview path example |
+| --- | --- |
+| Auth | `/preview/auth/magic-link` |
+| Auction progress | `/preview/auction/progress/bidding-opens-in-24h` |
+| Auction activity | `/preview/auction/activity/outbid` |
+| Auction close | `/preview/auction/close/lot-closed-didnt-win` |
+| Auction order | `/preview/auction/order/auction-won` |
 
 ## Structure
 
 ```
 components.json
-components/email/     emailcn registry output + theme-grade10.ts
+components/email/          emailcn registry output + theme-grade10.ts
 emails/
-  _components/        Grade10EmailShell, PrimaryCta, EmailFooter
-  magic-link.tsx      site-wide sign-in letter
-  auction/            auction notification kinds + AuctionLetter
-  static/             preview assets
+  _components/             Grade10EmailShell, PrimaryCta, EmailFooter
+  static/                  preview assets
+  auth/
+    magic-link.tsx         site-wide sign-in letter
+  auction/
+    _components/           AuctionLetter, LotBlock, campaign tags, preview fixture
+    progress/              opens / closes-in-24h / extended (before & during)
+    activity/              new-bid / outbid (while bidding is open)
+    close/                 lot ended for watchers & non-winners
+    order/                 winner success, address reminder (post-sale)
 ```
 
 Production send still goes through the application’s `@grade10/email` lane;

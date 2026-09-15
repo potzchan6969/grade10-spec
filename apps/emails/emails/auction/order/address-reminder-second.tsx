@@ -1,6 +1,6 @@
 import AddressReminderEmail, {
   type AddressReminderProps,
-} from "@/emails/auction/address-reminder";
+} from "@/emails/auction/order/address-reminder";
 import { previewLot } from "@/emails/auction/_components/preview-lot";
 
 /** Preview variant — second address reminder (draft 72h). */
