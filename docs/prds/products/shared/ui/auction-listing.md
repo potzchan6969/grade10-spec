@@ -68,9 +68,8 @@ mapping. The listing details page is the largest surface in the system with no d
 counterpart, so these stories are its reference until frames are produced.
 :::
 
-::::detail{title="Product decisions" for="pm"}
+:::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Bid enrollment | Open | Twelve scenarios cover the enrollment setup blocks, their gates, and the signal the bid card reads — a feature the size of the gallery — and no part of the feature set named it. Named as its own part of the map. Confirm, or fold it into the bid panel's part. | Product |
 :::
-

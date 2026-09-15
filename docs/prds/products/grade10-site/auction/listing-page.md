@@ -29,9 +29,8 @@ applied per lot.
 
 ::story{id="auction-listing-listing-product--default" title="A live lot page, gallery and bid panel assembled"}
 
-::::detail{title="Product decisions" for="pm"}
+:::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Watching a lot | Open | The page has offered a watch control for some time and the feature set never said so, while two changes in flight build on it. Named as its own part of the map. Confirm, or fold it where it belongs. | Product |
 :::
-
