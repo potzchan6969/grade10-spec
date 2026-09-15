@@ -199,7 +199,6 @@ const BIDDING_WON_AWAITING_ADDRESS = biddingItem({
   closesAt: "Ended 17 Sep 2026, 21:30 HKT",
   href: WINNER_ORDER_HREF.awaitingAddress,
   copy: ORDER_ROW_COPY,
-  detail: "Confirm delivery address",
 });
 
 const BIDDING_WON_PREPARING_INVOICE = biddingItem({
@@ -211,7 +210,6 @@ const BIDDING_WON_PREPARING_INVOICE = biddingItem({
   closesAt: "Ended 16 Sep 2026, 20:00 HKT",
   href: WINNER_ORDER_HREF.preparingInvoice,
   copy: ORDER_ROW_COPY,
-  detail: "Address confirmed — invoice coming",
 });
 
 const BIDDING_WON_PENDING_PAYMENT = biddingItem({
@@ -223,7 +221,6 @@ const BIDDING_WON_PENDING_PAYMENT = biddingItem({
   closesAt: "Pay by 24 Sep 2026, 12:00 HKT",
   href: WINNER_ORDER_HREF.pendingPayment,
   copy: ORDER_ROW_COPY,
-  detail: "Order total HK$24,180",
 });
 
 const BIDDING_WON_EXPIRED = biddingItem({
@@ -235,7 +232,6 @@ const BIDDING_WON_EXPIRED = biddingItem({
   closesAt: "Payment overdue",
   href: WINNER_ORDER_HREF.expiredInvoice,
   copy: ORDER_ROW_COPY,
-  detail: "Contact Grade10 about payment",
 });
 
 const BIDDING_WON_PROCESSING = biddingItem({
@@ -301,7 +297,6 @@ const BIDDING_DIDNT_WIN_HOLD_RELEASING = biddingItem({
   currentBid: "HK$1,850",
   closesAt: "Ended 15 Sep 2026, 19:00 HKT",
   href: "#lot-flareon",
-  detail: "Card hold being released",
 });
 
 export {

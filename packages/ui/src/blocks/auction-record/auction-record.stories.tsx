@@ -277,9 +277,9 @@ export const Ended: Story = {
 };
 
 /**
- * Address-first post-auction standing on Won rows, plus Didn’t win hold copy
- * and watch-only Ended. Read-only — Won title links open Winner Order; no pay
- * control on this surface.
+ * Address-first post-auction standing on Won rows, plus Didn’t win and
+ * watch-only Ended. Read-only — Won title / View order open Winner Order; no
+ * pay control and no row detail helper copy on this surface.
  */
 export const PostAuctionStanding: Story = {
   name: "Post-auction standing",
@@ -314,8 +314,19 @@ export const PostAuctionStanding: Story = {
     expect(canvas.getByText("Delivered")).toBeVisible();
     expect(canvas.getByText("Cancelled")).toBeVisible();
     expect(canvas.getByText("Refunded")).toBeVisible();
-    expect(canvas.getByText("Confirm delivery address")).toBeVisible();
-    expect(canvas.getByText("Card hold being released")).toBeVisible();
+    expect(
+      canvas.queryByText("Confirm delivery address"),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByText("Address confirmed — invoice coming"),
+    ).not.toBeInTheDocument();
+    expect(canvas.queryByText(/Order total/i)).not.toBeInTheDocument();
+    expect(
+      canvas.queryByText("Contact Grade10 about payment"),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByText("Card hold being released"),
+    ).not.toBeInTheDocument();
     expect(canvas.getAllByText("Didn’t win")).toHaveLength(2);
     expect(canvas.getByText("Ended")).toBeVisible();
     expect(
