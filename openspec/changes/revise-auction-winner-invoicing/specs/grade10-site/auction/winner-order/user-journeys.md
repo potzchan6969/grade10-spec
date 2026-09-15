@@ -19,6 +19,8 @@
 - `winner-order-SC-35` — The winner is offered card payment only
 - `winner-order-SC-12` — The winning hold is released and the invoice is a fresh charge
 - `winner-order-SC-15` — A declined payment leaves the invoice payable
+- `winner-order-SC-40` — Pending Payment highlights the Payment step
+- `winner-order-SC-43` — A sent invoice offers its PDF
 
 ### winner-order-US-02: Winner follows a settled lot to delivery
 
@@ -33,3 +35,17 @@
 - `winner-order-SC-19` — A manually settled receipt says so
 - `winner-order-SC-20` — The tracker appears once the lot is dispatched
 - `winner-order-SC-21` — Delivery proof records what the carrier provided
+- `winner-order-SC-41` — Processing maps under Shipped
+
+### winner-order-US-03: Winner misses the payment deadline
+
+**As a** winner whose invoice deadline has passed unpaid,
+**I want** clear Contact Us and no card Pay,
+**so that** I know self-service payment has stopped and how to reach Grade10.
+
+**Accepted by:**
+
+- `winner-order-SC-37` — An expired invoice refuses card payment
+- `winner-order-SC-42` — Cancelled hides the stepper
+- `winner-order-SC-44` — No invoice PDF before send
+- `winner-order-SC-45` — A cancelled order hides the invoice PDF

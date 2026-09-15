@@ -2,7 +2,10 @@
 
 - Winner's projection
   - Two states before an invoice: a won lot reads Awaiting Address or Preparing Invoice before it has anything to pay
-  - No Expired state: a won lot whose invoice has expired reads Pending Payment and says how to reach Grade10
+  - No Expired state: a won lot whose invoice has expired reads Pending Payment; how to reach Grade10 lives on Winner Order, not on this row
+  - View order: every Won standing opens that lot's Winner Order; Didn’t win and watch-only do not
+  - Calm Won rows: status badge and View order only; no secondary Won helper lines
+  - Didn’t win hold copy: being-released and released stay; other Didn’t win helpers do not
 
 ## MODIFIED Requirements
 
@@ -30,6 +33,19 @@ This surface SHALL remain read-only. It SHALL offer no control that records
 payment, requests a wire, records shipment, changes an address, or changes an
 auction order's status.
 
+Every Won listing SHALL offer a clear **View order** (or equivalent) entry that
+opens that lot's Winner Order, including when the derived status is Cancelled
+or Refunded. Listings that are not Won SHALL NOT offer that entry.
+
+A Won listing SHALL NOT carry secondary helper detail lines under its standing
+(address prompts, invoice-coming copy, order totals, or how to reach Grade10).
+How to reach Grade10 when the invoice is `expired` SHALL appear on Winner Order
+only.
+
+Didn’t win hold being-released and released copy remains governed by the durable
+hold requirements folded with `redesign-my-auctions-table`; this change does not
+remove them.
+
 #### Scenario: grade10-site-auction-account-record-SC-20 - Card capture reads as Paid
 
 - **GIVEN** a won listing whose invoice status is `paid` and whose fulfilment status is `unfulfilled`
@@ -47,7 +63,8 @@ auction order's status.
 - **GIVEN** a won listing whose invoice status is `expired`
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Pending Payment
-- **AND** the row carries how to reach Grade10
+- **AND** the row offers View order into Winner Order
+- **AND** the row does not itself carry how to reach Grade10
 
 #### Scenario: grade10-site-auction-account-record-SC-23 - Shipment states reach the winner
 
@@ -85,3 +102,22 @@ auction order's status.
 - **GIVEN** a won listing whose winner has confirmed a delivery address and whose invoice has not been sent
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Preparing Invoice
+
+#### Scenario: grade10-site-auction-account-record-SC-49 - Every Won standing offers View order
+
+- **GIVEN** won listings in Awaiting Address, Pending Payment, Shipped, and Refunded
+- **WHEN** the winner opens My Auctions
+- **THEN** each of those rows offers View order into that lot's Winner Order
+
+#### Scenario: grade10-site-auction-account-record-SC-50 - Didn’t win offers no View order
+
+- **GIVEN** a listing whose standing is Didn’t win
+- **WHEN** the winner opens My Auctions
+- **THEN** that row offers no View order entry to Winner Order
+
+#### Scenario: grade10-site-auction-account-record-SC-51 - A Won row carries no secondary helper lines
+
+- **GIVEN** a won listing in Awaiting Address and a won listing whose invoice is `expired`
+- **WHEN** the winner opens My Auctions
+- **THEN** neither row shows secondary helper detail under its standing
+- **AND** both rows still show their standing and View order

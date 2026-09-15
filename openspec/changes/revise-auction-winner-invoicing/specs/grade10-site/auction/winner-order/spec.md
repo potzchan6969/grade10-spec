@@ -6,14 +6,19 @@
 - Invoice
   - Operator quote: Shipping & Handling, and Insurance when added, are quoted by an operator for the confirmed address, never estimated
   - Order total: names every component a winner is asked to pay, so a total is explicable line by line
+  - Invoice PDF: once sent, the winner can view and download the invoice; hidden before send and when Cancelled
 - Delivery address
   - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it, which is what lets an invoice be prepared
   - Locking at send: the address stops moving once the invoice is sent; a change after that goes through Grade10
 - Settlement
-  - Card only for the winner: the order offers one payment method; every other method is an operator's backup
+  - Card only for the winner while `pending`: the order offers one payment method; every other method is an operator's backup
+  - Expired ends self-service Pay: when the invoice is `expired`, card Pay is hidden and Contact Us appears in the overdue alert
   - Hold release: the bid-time authorization verified a bidder and is not the instrument that settles
 - Payment deadline
   - Seven days from send: the window opens when the winner has an amount to pay, not before
+  - Absolute datetime display: the deadline is shown as a datetime in the winner's zone; no countdown
+- Progress presentation
+  - Five steps: Address → Invoice → Payment → Shipped → Completed; Cancelled and Refunded show no stepper
 - Records the winner keeps
   - Payment receipt: what was paid, itemised, with the method that paid it
   - Shipping tracker and delivery proof: unchanged
@@ -151,7 +156,10 @@ invoice status SHALL never become `expired`.
 
 When the deadline passes unpaid, Grade10 SHALL set the invoice status to
 `expired`, per `grade10-site/auction/order-status`. The order still reads
-Pending Payment, and the winner can still pay the invoice by card.
+Pending Payment. The winner SHALL NOT be offered card payment while the
+invoice is `expired`; the order SHALL show Contact Us in its overdue alert.
+An operator SHALL restore self-service pay only by reissuing the invoice to
+`pending`, or SHALL settle manually or cancel, per `grade10-admin/auction/post-sale`.
 
 #### Scenario: winner-order-SC-31 - The deadline is seven days from send
 
@@ -159,7 +167,8 @@ Pending Payment, and the winner can still pay the invoice by card.
   2026-09-12T09:00:00Z
 - **WHEN** the winner reads the invoice
 - **THEN** the payment deadline is 2026-09-19T09:00:00Z
-- **AND** it is displayed in the winner's own timezone
+- **AND** it is displayed in the winner's own timezone as an absolute datetime
+- **AND** no countdown is shown
 
 #### Scenario: winner-order-SC-32 - An order waiting on an address never expires
 
@@ -176,12 +185,13 @@ Pending Payment, and the winner can still pay the invoice by card.
 - **WHEN** the winner's card is declined twice
 - **THEN** the payment deadline is still 2026-09-19T09:00:00Z
 
-#### Scenario: winner-order-SC-37 - An expired invoice can still be paid by card
+#### Scenario: winner-order-SC-37 - An expired invoice refuses card payment
 
 - **GIVEN** an auction order whose invoice status is `expired`
-- **WHEN** the winner opens the order and pays by card
-- **THEN** Grade10 accepts the payment
-- **AND** the invoice status is `paid`
+- **WHEN** the winner opens the order
+- **THEN** Grade10 offers no card Pay control
+- **AND** the overdue alert carries Contact Us
+- **AND** a card payment attempt for that invoice is refused
 
 ## MODIFIED Requirements
 
@@ -308,9 +318,11 @@ other method are recorded by an operator alone, per
 Releasing an authorization that has already expired SHALL succeed as a
 no-op. Grade10 SHALL NOT treat an expired authorization as a failure.
 
-A refused or failed payment SHALL NOT void the invoice. The invoice SHALL
-remain payable, before its deadline and after it has expired, and the winner
-SHALL be able to retry with the same or a different card.
+A refused or failed payment SHALL NOT void the invoice. While the invoice
+status is `pending`, the invoice SHALL remain payable by card and the winner
+SHALL be able to retry with the same or a different card. When the invoice
+status is `expired`, Grade10 SHALL NOT offer or accept winner card payment
+until an operator reissues the invoice to `pending`.
 
 #### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
 
@@ -413,3 +425,67 @@ SHALL NOT appear on the winner's receipt.
 - **GIVEN** an auction order the winner paid by a Visa card ending 4242
 - **WHEN** the winner opens the receipt
 - **THEN** the payment method reads as a Visa card ending 4242
+
+### Requirement: Winner Order shows five progress steps
+
+Winner Order SHALL present settlement progress as five steps in this order:
+**Address**, **Invoice**, **Payment**, **Shipped**, **Completed**. The steps
+SHALL be presentation only and SHALL NOT replace the eight-value derived order
+status vocabulary in `grade10-site/auction/order-status`.
+
+| Current step | Derived order status |
+| --- | --- |
+| Address | Awaiting Address |
+| Invoice | Preparing Invoice |
+| Payment | Pending Payment (invoice `pending` or `expired`) |
+| Shipped | Processing or Shipped |
+| Completed | Delivered |
+
+When the derived order status is **Cancelled** or **Refunded**, Winner Order
+SHALL show no progress stepper.
+
+#### Scenario: winner-order-SC-40 - Pending Payment highlights the Payment step
+
+- **GIVEN** an auction order whose derived status is Pending Payment
+- **WHEN** the winner opens Winner Order
+- **THEN** the progress stepper marks Payment as the current step
+- **AND** Address and Invoice are complete
+
+#### Scenario: winner-order-SC-41 - Processing maps under Shipped
+
+- **GIVEN** an auction order whose derived status is Processing
+- **WHEN** the winner opens Winner Order
+- **THEN** the progress stepper marks Shipped as the current step
+- **AND** does not invent a Processing step label
+
+#### Scenario: winner-order-SC-42 - Cancelled hides the stepper
+
+- **GIVEN** an auction order whose derived status is Cancelled
+- **WHEN** the winner opens Winner Order
+- **THEN** no progress stepper is shown
+
+### Requirement: The winner can view the sent invoice as a PDF
+
+Once an operator has sent an invoice on an auction order, Winner Order SHALL
+offer the winner a control to view and download that invoice as a PDF. The
+control SHALL be hidden while the invoice status is `not_issued` and SHALL be
+hidden when the invoice status is `cancelled`.
+
+#### Scenario: winner-order-SC-43 - A sent invoice offers its PDF
+
+- **GIVEN** an auction order whose invoice status is `pending`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers view and download of the invoice PDF
+
+#### Scenario: winner-order-SC-44 - No invoice PDF before send
+
+- **GIVEN** an auction order whose invoice status is `not_issued`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers no invoice PDF control
+
+#### Scenario: winner-order-SC-45 - A cancelled order hides the invoice PDF
+
+- **GIVEN** an auction order whose invoice status is `cancelled`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers no invoice PDF control
+
