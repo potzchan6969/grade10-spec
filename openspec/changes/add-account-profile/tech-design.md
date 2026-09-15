@@ -75,13 +75,24 @@ Makes pass: `A collector who has never saved sees a profile`, `A collector
 whose session carries no name`, `A read stores nothing`, `Saved values win over
 session defaults`, `The address shown is the one signed in with`.
 
-### `display_name` becomes nullable, and the placeholder is backfilled away
+### `display_name` becomes nullable, and the placeholder is cleared after the deploy
 
 A name the collector never chose has to be distinguishable from one they did.
 `account_profile.display_name` drops its NOT NULL, `ensureAccount` inserts no
-name, and the read falls back to the session. The migration backfills existing
-rows to NULL where the value equals `Member <first 8 of user id>` — the exact
-string `defaultDisplayName` produced.
+name, and every surface fills a NULL name by the rule the next decision sets.
+
+Two migrations, in this order, because deploys never migrate and Migrate
+applies every pending file at once:
+
+1. **Nullable** — drops NOT NULL and nothing else, before the worker deploys.
+   The old worker is unaffected: it still writes the placeholder, and no row
+   holds NULL until the new worker writes one.
+2. **Placeholder cleared** — `UPDATE store.account_profile SET display_name =
+   NULL WHERE display_name = 'Member ' || left(user_id, 8)`, the exact string
+   the old `ensureAccount` wrote. It runs in an environment only once the
+   worker that reads a NULL name is live there: the rows it clears are rows
+   the old worker wrote and still reads, and the old `profile.get` rejects a
+   NULL name. Until it runs, those rows show the placeholder.
 
 *Alternatives:* a `display_name_set` boolean — rejected, a second source of
 truth for a fact the column already carries. Compare the placeholder pattern at
@@ -89,6 +100,34 @@ read time — rejected, it makes a collector who genuinely typed that string
 invisible to themselves, and the comparison would live forever.
 
 Makes pass: `A display name the collector never chose is not shown as theirs`.
+
+### One member name, resolved by one store rule
+
+The profile, the till, the wallet pass and the membership page show one name,
+resolved by the store rule `memberName`:
+
+1. The name the member chose for the shop.
+2. The account name, auth's `users.name` — a Google sign-up's Google name, an
+   email sign-up's email handle.
+3. The part of the email before the `@`.
+
+`profile.get` and `profile.update` read the account name from the session. The
+POS directory's `displayNames` and the wallet sweep have no session, so auth's
+`AccountIdentity` gains a required `name`, returned by `accountsByUserIds` and
+`accountByEmail`. The directory asks for it in one uncached batch, and only
+for members with no shop name.
+
+Auth deploys before the store. A store that gets no name fails loudly rather
+than guessing: the till shows 會員, and a wallet lap fails and is retried
+later, so no pass is blanked. A pass whose account name changes is refreshed
+at its next due time. A `Member xxxxxxxx` placeholder is a shop name to this
+rule, so it still wins until the placeholder-clearing migration runs.
+
+*Alternatives:* a pass and a till that show no name — rejected by the owner:
+a member sees one name on every surface.
+
+Makes pass: `An unreachable account service leaves a pass as it was`, `An
+unreachable account service shows the member as 會員`.
 
 ### Member-since is a timestamp the first save writes
 
@@ -204,7 +243,8 @@ the display name`, `No image source`, `An image that fails to load`.
   the row already names, so a failed write leaves nothing referenced; the
   previous object is deleted only after the new key is recorded.
 - **A backfill that under-matches leaves a placeholder visible** → the
-  migration matches the exact string `defaultDisplayName` produced, and the
+  migration matches `'Member ' || left(user_id, 8)`, the exact string the old
+  `ensureAccount` wrote, and the
   read falls back only on NULL, so a miss shows a stale name rather than
   corrupting one.
 - **Bio is a single-line input** — the design system publishes no textarea, so
@@ -216,22 +256,25 @@ the display name`, `No image source`, `An image that fails to load`.
 1. Shared components land in grade10-spec and the submodule is bumped in
    grade10 — the components tolerate an absent avatar and email, so the bump is
    safe before the backend ships.
-2. `drizzle:generate` produces the migration: `avatar_key` and
-   `first_saved_at` added, `display_name` nullable, placeholder backfilled to
-   NULL. Additive and backward-compatible — the current worker ignores both new
-   columns, and it never reads a NULL name because it only reads rows it wrote.
-   Existing rows carry a NULL `first_saved_at`: a collector who saved before
+2. The nullable migration runs before the worker deploys. `drizzle:generate`
+   adds `avatar_key` and `first_saved_at` as nullable columns the old worker
+   ignores. Existing rows carry a NULL `first_saved_at`: a collector who saved before
    this ships shows no member-since date until their next save. The alternative
    — backfilling from `created_at` — would date them by the bookkeeping this
    decision rejects.
 3. The `AVATARS` bucket is created per environment and bound in
    `wrangler.jsonc` before the worker deploys; the storage port fails loudly by
    binding name when it is missing.
-4. Worker, then SPA.
+4. Auth, then the store worker, then the SPA: the store requires the account
+   name auth now returns.
+5. The placeholder-clearing migration, in each environment once the worker
+   from step 4 is live there.
 
-*Rollback:* revert the worker; the added column and the NULL names are inert
-for the previous version, which reads `display_name` only for rows it wrote
-itself. Stored objects are orphaned, not broken.
+*Rollback:* reverting the worker breaks the profile read for every member
+created after the deploy who has not saved a name, and for every placeholder
+row once step 5 has cleared it: those rows hold no name, and the old
+`profile.get` requires one. The added columns are inert for the old worker;
+stored objects are orphaned, not broken.
 
 ## Open Questions
 
