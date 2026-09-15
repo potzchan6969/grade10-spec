@@ -53,6 +53,7 @@ required by this change. No missing component work is carried into `tasks.md`.
 | Auction listing editor | Product change clears the prior Cert ID choice | `grade10-admin-auction-listing-SC-72` |
 | Auction listing editor | Wrong or already-held Cert ID shows refusal; no-cert uses aggregate quantity | `grade10-admin-auction-listing-SC-73` through `SC-75` |
 | Auction listing page | Selected Cert ID displays in configured order; `No Cert ID` displays no certificate row | `grade10-admin-auction-listing-SC-79`, `SC-80` |
+| Auction listing editor | Distinct available Cert IDs on one product can each have a separate live listing; a repeated Cert ID is refused | `grade10-admin-auction-listing-SC-81` |
 | Product schema workspace | Shared card template has required Year, Set, and Subject; Card Number and Variety are optional | `grade10-admin-inventory-catalog-SC-108` |
 | Product schema workspace | Source classification fields remain visible while the admin maps a sufficiently specific key to one existing taxonomy tuple; Category-only is unavailable when broad TCG rows target different tuples | `grade10-admin-inventory-catalog-SC-109` |
 | Product schema workspace | Valid schema manifest creates drafts; invalid rows report reasons without partial revisions | `grade10-admin-inventory-catalog-SC-110`, `SC-111` |

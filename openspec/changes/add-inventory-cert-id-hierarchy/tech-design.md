@@ -151,6 +151,11 @@ opaque Inventory record ids through its existing binding.
   increments stock by one. A RAW row must not have a Cert ID; its Grade Issuer
   and other copy facts still persist on that record. Existing aggregate
   counters remain the authority for `No Cert ID` reservations.
+- **Auction listing identity** — Replace product-wide live-listing uniqueness
+  for certified units with a unique live listing per `inventory_cert_id`.
+  Distinct Cert IDs belonging to one product can therefore be listed at once;
+  a held Cert ID cannot be reused. Keep the existing product-wide uniqueness
+  for the aggregate `No Cert ID` listing.
 - **Import sessions** — Use new generic `catalog_import_sessions` and
   `catalog_import_rows` tables for `schema-manifest`, `product-entry`, and
   `inventory` sessions. Do not reuse the PriceCharting preview tables because

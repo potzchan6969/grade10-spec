@@ -28,6 +28,7 @@
 
 - [ ] 5.1 Persist and validate the selected inventory Cert ID or explicit No Cert ID choice through listing save and create (grade10-admin-auction-listing-SC-70 through SC-78)
 - [ ] 5.2 Add the product-scoped Cert ID picker, reset-on-product-change behavior, own-hold retention, and create refusal feedback (grade10-admin-auction-listing-SC-70 through SC-78)
+- [ ] 5.2a Allow separate live listings for distinct Cert IDs of one product while keeping one active listing per Cert ID and one aggregate `No Cert ID` listing (grade10-admin-auction-listing-SC-81)
 - [ ] 5.3 Resolve selected Cert ID through the configured public product display and remove product metadata fallback (grade10-admin-auction-listing-SC-79, grade10-admin-auction-listing-SC-80)
 - [ ] 5.4 Verify with `pnpm run test:backend -- packages/grade10-auction/backend/test/services/inventory.test.ts packages/grade10-auction/backend/test/services/listings/standalone.test.ts && pnpm run test -- packages/grade10-auction/admin-frontend/src/features/catalog/listings/presentation/views/ListingsPanel.test.tsx && pnpm run build`
 

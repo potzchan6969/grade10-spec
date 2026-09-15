@@ -81,6 +81,37 @@ blocking unnumbered stock.
 * The wrong-product and already-held choices are refused.
 * A missing explicit choice is refused and the listing stays a draft.
 
+### grade10-admin-auction-listing-US70-TC3-1: Distinct copies of one product can have separate live listings
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-70
+
+**Pre-conditions:**
+
+* An admin holds the auction operate grant.
+* One created product has available Cert IDs `PSA-123` and `BGS-456`.
+
+**Steps:**
+
+1. Open the listing editor for the product.
+2. Save one live listing with `PSA-123` and another with `BGS-456`.
+3. Try to save a third live listing with `PSA-123`.
+
+**Expected Results:**
+
+* The first two listings each hold their selected unit.
+* The third save is refused because `PSA-123` is already held.
+
 ---
 
 ## grade10-admin-auction-listing-US71: Operator creates and presents the selected unit
@@ -157,4 +188,3 @@ its configured identity,
 * The listing becomes `created`.
 * No Cert ID is stored for the listing.
 * No Cert ID row or product metadata fallback appears publicly.
-

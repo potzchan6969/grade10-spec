@@ -16,6 +16,7 @@ blocking unnumbered stock.
 - `grade10-admin-auction-listing-SC-73` — Wrong-product Cert ID is refused
 - `grade10-admin-auction-listing-SC-74` — A Cert ID cannot be held twice
 - `grade10-admin-auction-listing-SC-75` — No Cert ID uses aggregate reservation
+- `grade10-admin-auction-listing-SC-81` — Distinct copies of one product can be listed separately
 
 ### grade10-admin-auction-listing-US-71: Operator creates and presents the selected unit
 
