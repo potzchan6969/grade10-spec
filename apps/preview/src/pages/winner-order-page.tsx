@@ -757,6 +757,15 @@ function WinnerOrderPage({
                   onClick={onLotClick}
                 />
 
+                {content.outcomeAlert ? (
+                  <Alert
+                    dismissible={false}
+                    layout="inline"
+                    status={content.outcomeAlert.status}
+                    title={content.outcomeAlert.title}
+                  />
+                ) : null}
+
                 {content.status === "preparing_invoice" &&
                 content.secondaryNote ? (
                   <Alert

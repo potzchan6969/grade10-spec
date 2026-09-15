@@ -33,6 +33,15 @@ export const Cancelled: Story = {
     expect(
       canvas.queryByRole("link", { name: "View invoice PDF" }),
     ).not.toBeInTheDocument();
+    const lot = canvasElement.querySelector('[data-slot="winner-order-lot"]');
+    expect(lot).not.toBeNull();
+    const alert = canvas.getByText(
+      "Order cancelled. The lot returned to available stock.",
+    );
+    expect(alert).toBeVisible();
+    expect(lot!.compareDocumentPosition(alert)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
   },
 };
 
@@ -57,5 +66,14 @@ export const Refunded: Story = {
     expect(
       canvas.getByRole("link", { name: "View invoice PDF" }),
     ).toBeVisible();
+    const lot = canvasElement.querySelector('[data-slot="winner-order-lot"]');
+    expect(lot).not.toBeNull();
+    const alert = canvas.getByText(
+      "Order refunded. Payment on this order was returned.",
+    );
+    expect(alert).toBeVisible();
+    expect(lot!.compareDocumentPosition(alert)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
   },
 };

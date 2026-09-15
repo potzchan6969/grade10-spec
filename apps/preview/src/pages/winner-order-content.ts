@@ -42,6 +42,14 @@ export type WinnerOrderContent = {
   overdue?: boolean;
   primaryCta: string | null;
   secondaryNote?: string;
+  /**
+   * Inline Alert under the lot for terminal closed outcomes (Cancelled /
+   * Refunded). Status matches design-system Alert variants.
+   */
+  outcomeAlert?: {
+    title: string;
+    status: "default" | "warning";
+  };
   /** Paid receipt strip — method + masked number. */
   paymentMethod?: string;
   paymentMasked?: string;
@@ -160,15 +168,25 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressValue: null,
         invoiceLines: null,
         primaryCta: null,
+        outcomeAlert: {
+          // Unpaid cancel path — operator cancelled a pending invoice.
+          title: "Order cancelled. The lot returned to available stock.",
+          status: "warning",
+        },
       };
     case "refunded":
       return {
         ...base,
-        body: "This order was refunded.",
+        body: "This order was refunded after payment.",
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
         primaryCta: null,
+        outcomeAlert: {
+          // Paid then refunded — distinct from unpaid Cancelled.
+          title: "Order refunded. Payment on this order was returned.",
+          status: "default",
+        },
       };
   }
 }
