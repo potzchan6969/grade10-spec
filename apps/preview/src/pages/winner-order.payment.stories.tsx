@@ -38,7 +38,7 @@ export const PendingPayment: Story = {
     expect(sidebar.getByText("Pay by 24 Sep 2026, 21:30 HKT")).toBeVisible();
     expect(canvas.getByText(/Locked after invoice send/)).toBeVisible();
     expect(
-      sidebar.getByRole("button", { name: "View invoice PDF" }),
+      sidebar.getByRole("link", { name: "View invoice PDF" }),
     ).toBeVisible();
     expect(sidebar.queryByRole("alert")).not.toBeInTheDocument();
   },
@@ -75,7 +75,7 @@ export const ExpiredInvoice: Story = {
     ).not.toBeInTheDocument();
     expect(canvas.getByText(/support@grade10.com/)).toBeVisible();
     expect(
-      sidebar.getByRole("button", { name: "View invoice PDF" }),
+      sidebar.getByRole("link", { name: "View invoice PDF" }),
     ).toBeVisible();
     expect(
       canvas.queryByText("Pending Payment (expired invoice)"),

@@ -30,7 +30,7 @@ export const Processing: Story = {
     expect(canvas.getByText("Visa")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "View invoice PDF" }),
+      canvas.getByRole("link", { name: "View invoice PDF" }),
     ).toBeVisible();
   },
 };
@@ -48,7 +48,7 @@ export const Shipped: Story = {
     expect(canvas.getAllByText("Shipped").length).toBeGreaterThan(0);
     expect(canvas.getByText(/SF Express/)).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "View invoice PDF" }),
+      canvas.getByRole("link", { name: "View invoice PDF" }),
     ).toBeVisible();
   },
 };
@@ -64,7 +64,7 @@ export const Delivered: Story = {
     expect(canvas.getAllByText("Delivered").length).toBeGreaterThan(0);
     expect(canvas.getByText(/28 Sep 2026/)).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "View invoice PDF" }),
+      canvas.getByRole("link", { name: "View invoice PDF" }),
     ).toBeVisible();
   },
 };

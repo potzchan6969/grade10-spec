@@ -48,7 +48,7 @@ export const AwaitingAddress: Story = {
     ).toBeVisible();
     expect(canvas.queryByText(/pay with card/i)).not.toBeInTheDocument();
     expect(
-      canvas.queryByRole("button", { name: "View invoice PDF" }),
+      canvas.queryByRole("link", { name: "View invoice PDF" }),
     ).not.toBeInTheDocument();
   },
 };
@@ -76,7 +76,7 @@ export const PreparingInvoice: Story = {
     expect(canvas.getByText(/waiting on the operator quote/i)).toBeVisible();
     expect(canvas.queryByText(/Address confirmed/i)).not.toBeInTheDocument();
     expect(
-      canvas.queryByRole("button", { name: "View invoice PDF" }),
+      canvas.queryByRole("link", { name: "View invoice PDF" }),
     ).not.toBeInTheDocument();
   },
 };

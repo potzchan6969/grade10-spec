@@ -9,13 +9,14 @@ import { Step } from "@grade10/design-system/components/display/step";
 import { Stepper } from "@grade10/design-system/components/display/stepper";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { Link } from "@grade10/design-system/components/forms/link";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
-import { ArrowUpRight, FilePdf } from "@phosphor-icons/react";
+import { ArrowUpRight } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
@@ -341,7 +342,6 @@ function OrderSummary({
 }) {
   const total = lines.find((line) => line.label === "Order Total");
   const rest = lines.filter((line) => line.label !== "Order Total");
-  const showPayStack = Boolean(payCta && onPay) || Boolean(onViewInvoicePdf);
 
   return (
     <VStack className="w-full" gap="md" hAlign="stretch">
@@ -370,9 +370,23 @@ function OrderSummary({
         </>
       ) : null}
 
+      {onViewInvoicePdf ? (
+        <Link
+          className="self-start"
+          href="#view-invoice-pdf"
+          onClick={(event) => {
+            event.preventDefault();
+            onViewInvoicePdf();
+          }}
+          size="sm"
+          variant="secondary"
+        >
+          View invoice PDF
+        </Link>
+      ) : null}
+
       {overdue ? (
         <Alert
-          className="mt-1"
           dismissible={false}
           layout="inline"
           status="warning"
@@ -384,32 +398,15 @@ function OrderSummary({
         />
       ) : null}
 
-      {showPayStack ? (
-        <VStack
-          className={cn("w-full", overdue && "mt-1")}
-          gap="sm"
-          hAlign="stretch"
-        >
-          {payCta && onPay ? (
-            <Button className="w-full" onClick={onPay} size="lg">
-              {payCta}
-            </Button>
-          ) : null}
+      {payCta && onPay ? (
+        <VStack className="w-full" gap="sm" hAlign="stretch">
+          <Button className="w-full" onClick={onPay} size="md">
+            {payCta}
+          </Button>
           {!overdue && deadline ? (
-            <Text size="sm" tone="secondary">
+            <Text className="w-full text-center" size="sm" tone="secondary">
               {deadline}
             </Text>
-          ) : null}
-          {onViewInvoicePdf ? (
-            <Button
-              className="w-full"
-              leading={<FilePdf aria-hidden size={16} weight="regular" />}
-              onClick={onViewInvoicePdf}
-              size="sm"
-              variant="outline"
-            >
-              View invoice PDF
-            </Button>
           ) : null}
         </VStack>
       ) : null}
