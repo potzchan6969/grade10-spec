@@ -2,6 +2,7 @@
 title: Rewards
 spec: grade10-site/loyalty/programme
 order: 3
+reviewed: 2026-09-15
 ---
 
 ## Reward Types
