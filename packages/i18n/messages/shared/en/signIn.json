@@ -8,6 +8,7 @@
   "sendWait": "Please wait a minute before requesting another email.",
   "linkSentMessage": "We've just sent a sign-in link to {email}.",
   "resendLabel": "Resend",
+  "resendCountdown": "Resend ({seconds})",
   "backLabel": "Back",
   "linkExpired": "This sign-in link has expired.",
   "linkInvalid": "This sign-in link no longer works.",
