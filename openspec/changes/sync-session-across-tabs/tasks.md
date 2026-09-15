@@ -36,4 +36,4 @@ the promptness cases in each wait on 2.1.
 
 - [x] 5.1 Walk the headline path in one browser context: a refused add in the first tab, the link followed in a second, the first tab signed in with the add completed and a third tab of the brand naming the collector without a reload (shared-auth-e2e-US7-TC1-1)
 - [x] 5.2 Walk the negatives that bound the reach: another brand's tab and another browser's tab both stay as they were (shared-auth-session-SC-17, shared-auth-session-SC-18)
-- [ ] 5.3 Verify: the site's e2e suite, then `pnpm run build`
+- [x] 5.3 Verify: the site's e2e suite, then `pnpm run build`
