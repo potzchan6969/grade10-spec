@@ -141,12 +141,13 @@ row.
 
 ## What each surface reads
 
-`RECLAIMABLE_STATUSES` — every status except `paid`, `processing` and
-`refunded` — is the complement of the refusal table above, named once and read
-by both the give-back and the drawer. `BINDABLE_STATUSES` is the wrong
-borrowing: it answers *still open at a counter*, so it would offer a coupon
-held by a `processing` order the claim then refuses, and hide one held by a
-`canceled` order whose release has not drained yet.
+`BINDABLE_STATUSES` — the statuses a sale can still be paid from — is what the
+give-back and the drawer both read, so the drawer offers what the pass can
+free. A dead order is deliberately not in it: its release is already enqueued,
+and listing every order a member ever abandoned would grow that read without
+bound on the checkout's own path. The cost is a short window, while a
+cancelled order's release has not drained, in which the drawer does not offer
+its coupon.
 
 A claimed coupon already reads as spendable in the wallet, the SPA and the
 shared coupon list. What is owed there is one line in the programme: expiry is
@@ -189,12 +190,16 @@ the sweep frees a coupon while its code is still live, which is the one money
 defect running in production today.
 
 Raising the horizon alone does not close it, because the gap between the two is
-not bounded. A till sale whose mint the shop refuses keeps its reservation —
-the web path fails the order and releases, the till path just answers and
-leaves it — so staff can fix the cause and re-plan hours later, and the code
-then outlives any fixed horizon. **The till releases on a refused mint, like
-the web path.** With the gap back to one request, the horizon clears the code's
-own life and there is nothing left to collect.
+not bounded: a till sale whose mint the shop refuses keeps its claim, and staff
+can fix the cause and re-plan hours later. **So a reward's code runs from the
+order's own creation rather than from the mint**, which is never later than the
+claim it stands for. The horizon then clears it by an hour, and the two numbers
+are held apart by a test that reads both.
+
+A claim left standing by a refused mint is not released at the till — failing a
+sale over a throttled shop costs more than it saves — and it costs nothing:
+that row has no code, so the settlement frees the coupon rather than spending
+it for a cut nobody gave.
 
 ## Risks
 
