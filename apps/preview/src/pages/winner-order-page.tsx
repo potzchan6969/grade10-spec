@@ -218,7 +218,6 @@ function resolveContent(
     return {
       ...base,
       addressValue: confirmedAddress,
-      addressHint: "You can change this until the invoice is sent.",
     };
   }
   return base;
@@ -340,16 +339,9 @@ function AddressBlock({
         {content.addressLabel}
       </h3>
       {content.addressValue ? (
-        <>
-          <Text className="whitespace-pre-line text-foreground" size="sm">
-            {content.addressValue}
-          </Text>
-          {content.addressHint ? (
-            <Text size="xs" tone="secondary">
-              {content.addressHint}
-            </Text>
-          ) : null}
-        </>
+        <Text className="whitespace-pre-line text-foreground" size="sm">
+          {content.addressValue}
+        </Text>
       ) : null}
       {confirmCta && onConfirmAddress ? (
         <Button className="w-full" onClick={onConfirmAddress} size="md">
@@ -698,9 +690,17 @@ function WinnerOrderPage({
 
             <LotCard content={content} href={lotHref} onClick={onLotClick} />
 
-            {content.secondaryNote &&
-            content.status !== "shipped" &&
-            content.status !== "delivered" ? (
+            {content.status === "preparing_invoice" &&
+            content.secondaryNote ? (
+              <Alert
+                dismissible={false}
+                layout="inline"
+                status="default"
+                title={content.secondaryNote}
+              />
+            ) : content.secondaryNote &&
+              content.status !== "shipped" &&
+              content.status !== "delivered" ? (
               <Text size="sm" tone="secondary">
                 {content.secondaryNote}
               </Text>

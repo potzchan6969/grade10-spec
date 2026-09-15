@@ -37,7 +37,6 @@ export type WinnerOrderContent = {
   body: string;
   addressLabel: string;
   addressValue: string | null;
-  addressHint?: string;
   invoiceLines: WinnerOrderInvoiceLine[] | null;
   deadline?: string;
   overdue?: boolean;
@@ -90,7 +89,6 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         body: "Address confirmed. Grade10 is preparing your invoice for this destination.",
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
-        addressHint: "You can change this until the invoice is sent.",
         invoiceLines: null,
         primaryCta: null,
         secondaryNote: "No payment yet — waiting on the operator quote.",
@@ -102,7 +100,6 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         body: "Your invoice is ready. Pay by card before the deadline.",
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
-        addressHint: "Locked after invoice send. Contact Grade10 to change it.",
         invoiceLines: INVOICE_LINES,
         deadline: "Pay by 24 Sep 2026, 21:30 HKT",
         primaryCta: "Pay with card",

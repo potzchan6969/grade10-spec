@@ -82,7 +82,14 @@ export const PreparingInvoice: Story = {
     expect(
       canvas.queryByRole("button", { name: /confirm|pay/i }),
     ).not.toBeInTheDocument();
-    expect(canvas.getByText(/waiting on the operator quote/i)).toBeVisible();
+    const infoAlert = canvas.getByRole("alert");
+    expect(infoAlert).toBeVisible();
+    expect(
+      within(infoAlert).getByText(/No payment yet — waiting on the operator quote/),
+    ).toBeVisible();
+    expect(
+      canvas.queryByText(/You can change this until the invoice is sent/i),
+    ).not.toBeInTheDocument();
     expect(canvas.queryByText(/Address confirmed/i)).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("link", { name: "View invoice PDF" }),
