@@ -84,5 +84,5 @@ what the listing holds moves sooner.
 
 ## References
 
-- [Product Listing · Following the Shop](../../../docs/prds/products/grade10-site/store/product-listing.md#following-the-shop)
+- [Product Listing · Product Data](../../../docs/prds/products/grade10-site/store/product-listing.md#product-data)
 - [Commerce · Catalog](../../../docs/prds/products/grade10-site/commerce/commerce.md#catalog)

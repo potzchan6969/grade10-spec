@@ -134,7 +134,9 @@ One Durable Object per shop, `CatalogKeeper` under
 every location follows it. The rules live in a manager over a storage port,
 tested in the node lane; the class holds the SQLite store, the RPC surface
 and the alarm, tested in the app's worker lane. It is the one Durable Object
-a deployed worker binds; `docs/conventions/backend.md` records why.
+a deployed worker binds; `docs/conventions/backend.md` records why. The
+manual calls it the store's mirror of the catalogue —
+[Product Listing](../prds/products/grade10-site/store/product-listing.md#product-data).
 
 | Rule | Value |
 | --- | --- |
@@ -159,7 +161,7 @@ a deployed worker binds; `docs/conventions/backend.md` records why.
 
 ![A change reaches the listing](../prds/assets/diagrams/store-catalogue-change.svg)
 
-The flow is walked on [Product Listing](../prds/products/grade10-site/store/product-listing.md#following-the-shop).
+The flow is walked on [Product Listing](../prds/products/grade10-site/store/product-listing.md#product-data).
 
 ## Reads
 

@@ -59,7 +59,7 @@ product.
 
 :::detail{title="Code map" for="engineer"}
 - **Reads** — `catalog.products`, `catalog.filters`, `catalog.collections`, `catalog.collection` and `catalog.product` in `packages/grade10-store/backend/src/trpc/routers/catalog.ts`, mounted ahead of the session tier by `trpc/publicCatalog.ts`
-- **The copy** — `services/catalog/projection.ts`; its keeper, one per shop — `services/catalog/keeper.ts`; narrowing, ordering and the counts — `services/catalog/browse.ts`; the query's bounds — `services/catalog/query.ts`
+- **The mirror** — one Durable Object a shop, `durables/CatalogKeeper/`; the entries it publishes — `services/catalog/projection.ts`; narrowing, ordering and the counts — `services/catalog/browse.ts`; the query's bounds — `services/catalog/query.ts`
 - **Shopify client** — `packages/shopify/backend/src/catalog/`
 - **Frontend** — `packages/grade10-store/frontend/src/features/products/catalog/`
 - **Design note** — [the catalogue index](/references/store-catalogue-index)
@@ -103,39 +103,51 @@ Enter or a suggestion selection is what acts.
   opens that product and clears the field; picking a filter applies that
   facet, clears the field, and does not put free text in force
 
-## Following the Shop
+## Product Data
+
+The listing answers from the store's mirror of the shop's catalogue.
+
+| Rule | Value |
+| --- | --- |
+| A change the shop reports | On the listing within 10 s of the shop's own read answering it |
+| A change the shop never reports | Within 5 minutes |
+| A location's check on the mirror | Every 3 s while the listing is in use |
 
 - 🚧 **Within seconds** — a product the shop publishes, takes down or
   reprices, and stock that moves, reach the cards, the counts and the sidebar
-  within seconds of the shop's own reads answering the change, the same at
-  every location; the store reads the product back from the shop rather than
-  trusting the report, and reads again while the shop still answers the old
-  value
+  within seconds, the same at every location; the store reads the product back
+  from the shop rather than trusting the report
 - 🚧 **The re-read as the net** — the store reads the whole catalogue again
-  every 5 minutes, so a change the shop never reported, or one its reads did
-  not answer within a minute, shows within 5 minutes
-- 🚧 **A quiet location answers too** — the first collector at a location
-  that has not served the listing gets the same cards, counts and sidebar as
-  everyone else, without waiting on a read of the catalogue
-- 🚧 **While the shop is unreachable** — the cards, the counts and the
-  sidebar keep answering from the store's own copy of the catalogue, the same
-  until the shop answers again; opening a product and the cart's review wait
-  on the shop
+  every 5 minutes, so a change the shop never reported shows within 5 minutes
+- 🚧 **No collector waits on the mirror** — a listing view answers from the
+  copy its own location holds, and the location asks the mirror for a newer one
+  at most every 3 seconds, however many collectors it is serving
+- 🚧 **A quiet location answers too** — the first collector at a location that
+  has not served the listing waits on no read of the catalogue, and gets the
+  cards, counts and sidebar everyone else gets
+- 🚧 **While the shop is unreachable** — the cards, the counts and the sidebar
+  keep answering from the mirror until the shop answers again; opening a
+  product and the cart's review wait on the shop
 - **What still lags** — a product's own page and a listing narrowed to a
-  collection, by up to a minute; the cart's review reads the shop live and
-  is the authority — [Commerce](/p/grade10-site/commerce/commerce)
+  collection, by up to a minute; the cart's review reads the shop live and is
+  the authority — [Commerce](/p/grade10-site/commerce/commerce)
 
 :::flow{title="A change reaches the listing" diagram="assets/diagrams/store-catalogue-change.svg"}
+# Seconds after the shop saves
 ## *Shop* — **Reports a change**
 The shopkeeper saves a product, or stock moves, and Shopify sends the store that product's event, signed.
 ## *Store* — **Takes the report**
-The store checks the signature and the shop, records the report against the shop's copy, and answers Shopify at once.
-## *Store* — **Reads the product back**
-The store reads the product from the shop, so the copy carries what the shop shows and never only what the event said; a read that still answers the old value is tried again every 2 seconds, for up to a minute.
-## *Store* — **Publishes a new copy**
+The store checks the signature and the shop, records the report against the mirror, and answers Shopify at once.
+## *Mirror* — **Reads the product back**
+The mirror reads the product from the shop, so it carries what the shop shows and never only what the event said; a read that still answers the old value is tried again every 2 seconds, for up to a minute.
+## *Mirror* — **Publishes a new copy**
 Changes that arrive together are folded into one copy, numbered once.
-## *Store* — **Every location follows**
-A listing view asks for the copy's number when its last check is 3 seconds old, takes the new copy, and answers from it.
+# The next listing view, at any location
+## *Collector* — **Opens the listing**
+## *Store* — **Answers from the location**
+The cards, the counts and the sidebar come from the copy the location already holds in its own memory, so a view whose location checked less than 3 seconds ago leaves the location for nothing.
+## *Mirror* — **Answers every location**
+A location past 3 seconds asks the mirror for the copy's number, and takes the copy itself only when the number moved. The mirror is one thread for the whole shop, and thousands of collectors are not thousands of asks: a location asks 20 times a minute at most however many it is serving, an ask already holding the current number is answered with that number, and the copy crosses only after an edit — 0.5 ms of the thread at today's 286 products. What bounds the mirror is locations times catalogue, never collectors — [the design note](/references/store-catalogue-index).
 :::
 
 ## Designs
@@ -172,7 +184,7 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | Time to first narrowed result | From listing open to the first narrowed grid. Unmeasured. | Product |
 | Search commit or suggestion | Share of listing sessions that commit free text or take a suggestion, and time from first keystroke to a product open or narrowed grid. Unmeasured; first delivery sets the baseline. | Product |
 | Listing answer time | From a narrowing to its first grid, p95, measured at the edge. ❓ Unmeasured — nothing emits it; the staging figures are in [the design note](/references/store-catalogue-index). | Engineering |
-| Change to listing | From the shop's read answering a change to the copy every location reads, p95; and from the shop's report to its read answering, p95. ❓ Unmeasured until the release carries it. | Engineering |
+| Change to listing | From the shop's read answering a change to the mirror every location reads, p95; and from the shop's report to its read answering, p95. ❓ Unmeasured until the release carries it. | Engineering |
 
 **Decisions.**
 
@@ -180,11 +192,11 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | --- | --- | --- | --- |
 | Facets, not collections | Decided | The sidebar filters by world and collectible type. A collection is a merchandiser's grouping and stays a way in. | Design |
 | One narrowing at a time | Decided | The catalogue narrows by a collection or by a query, never both, so applying either leaves the other behind. The alternative — a collection dimension on the query — cannot be served natively and would walk the whole catalogue for every scoped narrowing. An order is not a narrowing: it orders whatever set is in force, so choosing one inside a collection keeps the collection. | Engineering |
-| The store's own copy | Decided | The listing answers from a copy of the catalogue the store keeps: the store applies each change the shop reports and reads the whole catalogue again every 5 minutes, so every location answers from one copy. The public catalogue opens no database connection, a listing view never reads the shop, and checkout still prices live — [Commerce](/p/grade10-site/commerce/commerce); the mechanism is [the design note](/references/store-catalogue-index)'s. | Engineering |
-| Seconds after save | Decided | A change reaches the listing in seconds, not minutes. The shop's report and its own reads are the floor, so nothing here can be faster than Shopify: the store reads a change back rather than trusting the report, and a report that never arrives is caught by the 5-minute re-read. A listing narrowed to a collection stays on the shop's own read, which no copy reproduces in the collection's own order. | Product |
+| The mirror, not a read of the shop | Decided | The listing answers from one mirror of the catalogue the store keeps per shop: the store applies each change the shop reports and reads the whole catalogue again every 5 minutes, so every location answers from one copy of it. A location that has its own copy asks the mirror rather than the shop, so the shop's reads do not grow with the traffic. The public catalogue opens no database connection, a listing view never reads the shop, and checkout still prices live — [Commerce](/p/grade10-site/commerce/commerce); the mechanism is [the design note](/references/store-catalogue-index)'s. | Engineering |
+| Seconds after save | Decided | A change reaches the listing in seconds, not minutes. The shop's report and its own reads are the floor, so nothing here can be faster than Shopify: the store reads a change back rather than trusting the report, and a report that never arrives is caught by the 5-minute re-read. A listing narrowed to a collection stays on the shop's own read, which the mirror does not reproduce in the collection's own order. | Product |
 | Collection with facets | ❓ Open | Whether a collection and a facet can be applied together; nothing in the catalogue's own reads prevents it. | Product |
 | Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
-| Price order | Decided | Sorts on the product's lowest price. The card and the order come from one copy, so the price a card shows is the price it sorts on while a product has one variant; a product with several sorts on its cheapest, sold out or not, as Shopify's own price sort does, while the card shows the one for sale. | Product |
+| Price order | Decided | Sorts on the product's lowest price. The card and the order come from one copy of the mirror, so the price a card shows is the price it sorts on while a product has one variant; a product with several sorts on its cheapest, sold out or not, as Shopify's own price sort does, while the card shows the one for sale. | Product |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
 | Counts are the catalogue's | Decided | Counted over the whole narrowed set with the facet's own selection excluded, so ticking one world leaves the others showing what picking them instead would find. | Engineering |
 | The count above the grid is the same count | Decided | The number over the listing is the catalogue's own over the whole narrowed set, the rule the facet counts already follow, so a choice's count is the size of the listing choosing it opens. Counting the cards on screen instead read the page size back as the shop's size and grew as the collector read on, leaving the one question a count answers — whether it is worth going on — the one it could not. A narrowing whose first page has not arrived says nothing, because `0 products` is a claim the catalogue never made. | Engineering |

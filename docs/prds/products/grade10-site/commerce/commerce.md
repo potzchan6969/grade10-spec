@@ -30,7 +30,7 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 ### Display and pricing are different reads
 
 - **Display** — the listing, its filter panel, the collections and a product's page answer over tRPC (`catalog.*`); a listing opens no database connection
-- **The store's own copy** — how the listing follows the shop is [Product Listing · Following the Shop](/p/grade10-site/store/product-listing#following-the-shop)'s; the mechanism is [the design note](/references/store-catalogue-index)'s
+- **The store's mirror** — how fresh the listing's product data is, and what it answers from, is [Product Listing · Product Data](/p/grade10-site/store/product-listing#product-data)'s; the mechanism is [the design note](/references/store-catalogue-index)'s
 - **What reads the shop live** — a product's own page and a listing narrowed to a collection, behind a minute's cache; the cart's review, with no cache at all
 - Checkout pricing always fetches live from the Storefront API — a cache can never set a charge amount
 - Availability is checked when the cart is priced: a variant that does not
@@ -44,7 +44,7 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 
 ### A copy the shop can always rebuild
 
-- **Shopify down** — checkout down; the listing keeps answering from the store's copy — [Product Listing · Following the Shop](/p/grade10-site/store/product-listing#following-the-shop)
+- **Shopify down** — checkout down; the listing keeps answering from the store's mirror — [Product Listing · Product Data](/p/grade10-site/store/product-listing#product-data)
 - **Derived, never authored** — every copy is what a Storefront read answered, and the next read overwrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
 - The catalog client's error outcomes carry the query name, so the tail worker's metrics show exactly which reads are failing
 
