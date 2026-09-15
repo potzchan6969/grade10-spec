@@ -15,12 +15,12 @@ const SCHEMA = [
   "version: 1",
   "artifacts:",
   "  - id: proposal",
-  "    role: product-manager",
+  "    hand: product-manager",
   "    required: true",
   "    generates: proposal.md",
   "    requires: []",
   "  - id: ui-design",
-  "    role: designer",
+  "    hand: designer",
   "    required: false",
   "    generates: ui-design.md",
   "    requires:",
@@ -37,7 +37,7 @@ const PROPOSAL = [
   "",
 ].join("\n");
 
-const waits = async (awaiting: string): Promise<Finding[]> => {
+const findings = async (awaiting: string, rule: string): Promise<Finding[]> => {
   const root = writeStore({
     "docs/prds/manual.yaml":
       "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
@@ -49,8 +49,10 @@ const waits = async (awaiting: string): Promise<Finding[]> => {
     [`${CHANGE}/proposal.md`]: PROPOSAL,
   });
   const result: { findings: Finding[] } = await runChecks(root, NO_GIT);
-  return result.findings.filter((one) => one.rule === "awaiting");
+  return result.findings.filter((one) => one.rule === rule);
 };
+
+const waits = (awaiting: string) => findings(awaiting, "awaiting");
 
 describe("a wait on the change's record", () => {
   it("says nothing about a wait naming an artifact nobody has written", async () => {
@@ -62,7 +64,7 @@ describe("a wait on the change's record", () => {
   it("names a wait on an artifact the schema does not declare", async () => {
     const [found] = await waits("awaiting:\n  ui-desgin: a typo\n");
 
-    expect(found.level).toBe("warn");
+    expect(found.level).toBe("fail");
     expect(found.path).toBe(`${CHANGE}/.openspec.yaml`);
     expect(found.reason).toContain("`ui-desgin`");
     expect(found.reason).toContain("does not declare");
@@ -75,11 +77,11 @@ describe("a wait on the change's record", () => {
     expect(found.reason).toContain("the wait is over");
   });
 
-  it("warns rather than fails — nothing ends a wait but its author", async () => {
-    const found = await waits("awaiting:\n  ui-desgin: a typo\n");
+  it("refuses a wait that says nothing rather than dropping it", async () => {
+    const found = await findings("awaiting:\n  proposal:\n", "store");
 
     expect(found).toHaveLength(1);
-    expect(found.every((one) => one.level === "warn")).toBe(true);
+    expect(found[0].reason).toContain("must say what is missing");
   });
 
   it("reads a change that declares no wait at all", async () => {

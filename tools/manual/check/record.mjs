@@ -7,7 +7,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
-import { schemaArtifacts } from "../src/store/read-change-documents.mts";
+import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { productPages } from "./context.mjs";
 
 /** The day the deploy record became a rule: every archive before it shipped
@@ -65,7 +65,11 @@ export function checkUnmarked(ctx, changes, pages) {
         );
       }
     }
-    if (change.deltas.length === 0) continue;
+    // A change waiting on its requirements has no delta yet, and is still
+    // about an outcome somebody confirmed — so it marks its pages like any
+    // other. Without this it could sit for months, counted on Pending and
+    // invisible on every PRD.
+    if (change.deltas.length === 0 && !waitsOnSpecs(change)) continue;
     if (change.pageWaived) continue;
     const linked = (change.sections ?? []).filter((one) =>
       one.page.startsWith(products),
@@ -152,12 +156,15 @@ export function checkArchived(ctx, archived) {
 
 /**
  * A wait names an artifact of the change's own schema, and stops being a wait
- * once that artifact exists. Nothing ends a wait but its author, so both of
- * these are warnings: the first is a typo nobody would see otherwise — a wait
- * on an artifact that does not exist reaches no worklist and holds nothing
- * up — and the second is a line whose job is done, still telling a designer
- * they owe a screen they drew.
+ * once that artifact exists. Neither of these is a judgement about whether
+ * the wait is over — only its author ends that — but about whether the line
+ * says anything: an artifact the schema does not declare reaches no worklist
+ * at all, and one already written is a record that contradicts the tree.
+ * Both are one line to delete, in a file the author has just edited.
  */
+const waitsOnSpecs = (change) =>
+  (change.awaiting ?? []).some((one) => one.artifact === "specs");
+
 export function checkAwaiting(ctx, changes) {
   const declared = new Map();
   for (const change of changes) {
@@ -174,6 +181,13 @@ export function checkAwaiting(ctx, changes) {
     if (artifacts === undefined) continue;
     const known = new Set(artifacts.map((one) => one.id));
     const written = new Set(change.written);
+    if (change.skipSpecs !== undefined && waitsOnSpecs(change)) {
+      ctx.add(
+        "awaiting",
+        fileOf(change, ".openspec.yaml"),
+        "waits on `specs` and claims `skip_specs` — one says requirements are coming, the other that none are owed; drop whichever is untrue",
+      );
+    }
     for (const { artifact } of change.awaiting) {
       const file = fileOf(change, ".openspec.yaml");
       if (!known.has(artifact)) {

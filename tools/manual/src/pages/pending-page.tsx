@@ -3,9 +3,9 @@ import { EmptyState } from "@grade10/design-system/components/display/empty-stat
 import { Text } from "@grade10/design-system/components/display/text";
 import { PauseCircle, Tray } from "@phosphor-icons/react";
 import { Link } from "react-router";
-import { type PendingItem, pendingByRole } from "../api/derive";
+import { type PendingItem, pendingByHand } from "../api/derive";
 import { humanize } from "../api/paths";
-import { relativeTime } from "../api/time";
+import { formatDate } from "../api/time";
 import type { SchemaArtifact } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
 import { InlineMarkdown } from "../blocks/inline-markdown";
@@ -27,9 +27,12 @@ import { useDocumentTitle } from "./use-document-title";
 export function PendingPage() {
   const index = useManualIndex();
   useDocumentTitle("Pending");
-  const roles = pendingByRole(index.snapshot.changes, index.snapshot.artifacts);
+  const schemas = index.snapshot.schemas;
+  const hands = pendingByHand(index.snapshot.changes, schemas);
   const named = new Map(
-    index.snapshot.artifacts.map((one) => [one.id, fileOf(one)]),
+    Object.values(schemas).flatMap((artifacts) =>
+      artifacts.map((one) => [one.id, fileOf(one)] as const),
+    ),
   );
 
   return (
@@ -39,30 +42,39 @@ export function PendingPage() {
         title="Pending"
       />
 
-      {roles.length === 0 ? (
+      {hands.length === 0 ? (
         <EmptyState
-          description="Every change in flight has written what its schema asks of it."
+          description="No change in flight names a workflow schema this store defines, so nothing here knows what one owes."
           icon={<Tray aria-hidden />}
-          title="Nothing pending"
+          title="No schema to read"
         />
       ) : (
-        roles.map(({ role, items }) => (
-          <section className="mt-8 first:mt-0" key={role}>
+        hands.map(({ hand, items }) => (
+          <section className="mt-8 first:mt-0" key={hand}>
             <div className="mb-2.5 flex items-baseline gap-2">
               <h2 className="font-heading font-bold text-base">
-                {humanize(role)}
+                {humanize(hand)}
               </h2>
-              <Text as="span" size="sm" tone="secondary">
+              <Badge size="sm" variant="outline">
                 {items.length}
-              </Text>
+              </Badge>
             </div>
-            <ul className="space-y-2.5">
-              {items.map((item) => (
-                <li key={`${item.change.id}/${item.artifact}`}>
-                  <Row file={named.get(item.artifact)} item={item} />
-                </li>
-              ))}
-            </ul>
+            {items.length === 0 ? (
+              <Text as="p" size="sm" tone="secondary">
+                Nothing — every change in flight has written what this hand
+                owes. A change asks for one it has not by writing{" "}
+                <code className="font-mono">awaiting:</code> in its{" "}
+                <code className="font-mono">.openspec.yaml</code>.
+              </Text>
+            ) : (
+              <ul className="space-y-2.5">
+                {items.map((item) => (
+                  <li key={`${item.change.id}/${item.artifact}`}>
+                    <Row file={named.get(item.artifact)} item={item} />
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
         ))
       )}
@@ -97,11 +109,11 @@ function Row({ item, file }: { item: PendingItem; file?: string }) {
               waiting
             </Badge>
           ) : null}
-          {item.change.created ? (
-            <Text as="span" size="xs" tone="secondary">
-              {relativeTime(item.change.created)}
-            </Text>
-          ) : null}
+          <Text as="span" size="xs" tone="secondary">
+            {item.change.created
+              ? `filed ${formatDate(item.change.created)}`
+              : "undated"}
+          </Text>
         </span>
       </div>
       {item.why ? (
@@ -111,19 +123,18 @@ function Row({ item, file }: { item: PendingItem; file?: string }) {
           size="sm"
           tone="secondary"
         >
-          <span aria-hidden className="mt-0.5 shrink-0">
-            <PauseCircle />
+          <span className="mt-0.5 inline-flex shrink-0">
+            <PauseCircle aria-hidden size={13} />
           </span>
-          {item.why}
+          <InlineMarkdown text={item.why} />
         </Text>
       ) : null}
     </article>
   );
 }
 
-/** The file the hand is being asked for. A per-capability artifact generates
- * one file in each delta directory, so the pattern's last segment is the name
- * somebody actually writes. */
-function fileOf(artifact: SchemaArtifact): string {
-  return artifact.generates.split("/").at(-1) ?? artifact.id;
+/** A per-capability artifact generates one file in each delta directory, so
+ * the pattern's last segment is the name somebody writes. */
+function fileOf({ generates }: SchemaArtifact): string {
+  return generates.slice(generates.lastIndexOf("/") + 1);
 }

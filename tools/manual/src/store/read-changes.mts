@@ -10,6 +10,7 @@ import type {
   DeltaRequirement,
   IdleClaim,
   PageSectionRef,
+  SchemaArtifact,
   TaskGroup,
   TaskLine,
 } from "../api/types.ts";
@@ -26,6 +27,7 @@ import {
 import type { GitIndex } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
 import { leadingTitle, outline, type Section } from "./markdown.mts";
+import { schemaArtifacts } from "./read-schema.mts";
 import { readTestCases } from "./read-specs.mts";
 
 // The owner tag as `docs/governance/task-ownership.md` defines it: the `@` is
@@ -57,9 +59,12 @@ const ARCHIVE_PREFIX = /^(\d{4}-\d{2}-\d{2})-(.+)$/;
 
 export function readChanges(root: string, git: GitIndex): ChangeEntry[] {
   const dir = join(root, "openspec", "changes");
+  const schemas: SchemaCache = new Map();
   return subdirectories(dir)
     .filter((name) => name !== "archive")
-    .map((name) => readChange(root, join(dir, name), name, "in-flight", git));
+    .map((name) =>
+      readChange(root, join(dir, name), name, "in-flight", git, schemas),
+    );
 }
 
 /**
@@ -76,6 +81,7 @@ export function readArchivedChanges(
   git: GitIndex,
 ): ChangeEntry[] {
   const dir = join(root, "openspec", "changes", "archive");
+  const schemas: SchemaCache = new Map();
   return subdirectories(dir).map((name) => {
     const dated = ARCHIVE_PREFIX.exec(name);
     const entry = readChange(
@@ -84,6 +90,7 @@ export function readArchivedChanges(
       dated ? dated[2] : name,
       "archived",
       git,
+      schemas,
     );
     if (dated) entry.shippedOn = dated[1];
     if (entry.created === "" && dated) entry.created = dated[1];
@@ -97,6 +104,7 @@ function readChange(
   id: string,
   status: ChangeStatus,
   git: GitIndex,
+  schemas: SchemaCache,
 ): ChangeEntry {
   const rel = storePath(root, dir);
   const entry: ChangeEntry = {
@@ -141,14 +149,14 @@ function readChange(
       declared = handles([fields.owner, fields.owners]);
       const dependsOn = strings(fields.depends_on);
       if (dependsOn.length > 0) entry.dependsOn = dependsOn;
-      const awaiting = readAwaiting(fields.awaiting);
-      if (awaiting.length > 0) entry.awaiting = awaiting;
       for (const [key, field] of RECORDED) {
         const written = line(key, fields[key]);
         if (written) entry[field] = written;
       }
       const skipped = skipSpecsOf(fields.skip_specs, fields.skip_specs_why);
       if (skipped !== undefined) entry.skipSpecs = skipped;
+      const awaiting = readAwaiting(fields.awaiting);
+      if (awaiting.length > 0) entry.awaiting = awaiting;
     } catch (cause) {
       fail(`${rel}/.openspec.yaml`, cause);
     }
@@ -208,46 +216,62 @@ function readChange(
     const suites = readSuites(root, dir);
     if (suites.length > 0) entry.suites = suites;
   }
-  entry.written = writtenArtifacts(root, dir, entry);
+  entry.written = writtenArtifacts(
+    dir,
+    entry,
+    artifactsOf(root, entry.schema, schemas),
+  );
   return entry;
 }
 
+/** Nearly every change names the same schema, so one read parses it once
+ * rather than once a change. The cache lives for that read alone: a schema
+ * edited between two of them is read again. A schema this store does not
+ * define declares no artifacts, and a change on one owes nothing here. */
+type SchemaCache = Map<string, SchemaArtifact[]>;
+
+function artifactsOf(
+  root: string,
+  schema: string,
+  cache: SchemaCache,
+): SchemaArtifact[] {
+  const known = cache.get(schema);
+  if (known) return known;
+  const read =
+    (schema === "" ? undefined : schemaArtifacts(root, schema)) ?? [];
+  cache.set(schema, read);
+  return read;
+}
+
 /**
- * The schema artifact ids this change has written. The three that live in a
- * capability directory are read off what was already parsed rather than the
- * disk a second time; the rest are files at the change root.
- *
- * Ids are the schema's, so a schema that renames an artifact renames it here
- * too. What a change still owes is not decided here — that is a judgement
- * about which artifacts this change needs, and it belongs with the reader
- * who is asking.
+ * The schema artifact ids this change has written, read against the schema's
+ * own `generates` rather than a second list of ids here. An artifact that
+ * generates a file inside a capability directory is written only when every
+ * delta capability carries it — one capability's suite does not answer for
+ * the others, which is how `blind` and `walked` already read them.
  */
 function writtenArtifacts(
-  root: string,
   dir: string,
   entry: ChangeEntry,
+  artifacts: SchemaArtifact[],
 ): string[] {
-  const capabilities = deltaFiles(root, dir).map(({ file }) =>
-    file.replace(/\/spec\.md$/, ""),
-  );
-  const beside = (name: string) =>
-    capabilities.some((one) => existsSync(join(root, one, name)));
-
-  const written: string[] = [];
-  if (existsSync(join(dir, "proposal.md"))) written.push("proposal");
-  if (entry.deltas.length > 0) written.push("specs");
-  if (beside("user-journeys.md")) written.push("user-journeys");
-  if (beside("feature-tcs.md")) written.push("test-cases");
-  if (existsSync(join(dir, "ui-design.md"))) written.push("ui-design");
-  if (existsSync(join(dir, "tech-design.md"))) written.push("tech-design");
-  if (entry.taskGroups.length > 0) written.push("tasks");
-  return written;
+  const capabilities = entry.deltas.map(({ spec }) => join(dir, "specs", spec));
+  const present = ({ generates }: SchemaArtifact) => {
+    if (!generates.startsWith("specs/"))
+      return existsSync(join(dir, generates));
+    const name = generates.slice(generates.lastIndexOf("/") + 1);
+    return (
+      capabilities.length > 0 &&
+      capabilities.every((one) => existsSync(join(one, name)))
+    );
+  };
+  return artifacts.filter(present).map(({ id }) => id);
 }
 
 /**
  * `awaiting:` as a mapping of artifact id to the line its author wrote. A
- * value that is not a line is dropped rather than shown as a wait nobody
- * wrote — the `awaiting` rule names it instead.
+ * wait with nothing written against it is refused: a key read as absent
+ * would waive the artifact it names without saying why.
  */
 function readAwaiting(value: unknown): { artifact: string; why: string }[] {
   if (value === undefined || value === null) return [];
@@ -256,8 +280,12 @@ function readAwaiting(value: unknown): { artifact: string; why: string }[] {
   }
   const waits: { artifact: string; why: string }[] = [];
   for (const [artifact, why] of Object.entries(value)) {
-    const written = line(`awaiting.${artifact}`, why);
-    if (written) waits.push({ artifact, why: written });
+    const key = `awaiting.${artifact}`;
+    const written = line(key, why);
+    if (written === undefined) {
+      throw new StoreFileError(1, `\`${key}\` must say what is missing`);
+    }
+    waits.push({ artifact, why: written });
   }
   return waits;
 }

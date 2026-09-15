@@ -1,10 +1,8 @@
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { NO_GIT } from "../src/store/git.mts";
-import {
-  readChangeDocuments,
-  schemaArtifacts,
-} from "../src/store/read-change-documents.mts";
+import { readChangeDocuments } from "../src/store/read-change-documents.mts";
+import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { rootsOf } from "../src/store/roots.mts";
 import { composeStore } from "../src/store/snapshot.mts";
 import { storeEndpoints } from "../src/store/vite-plugin.mts";
@@ -20,26 +18,28 @@ const [document] = readChangeDocuments(FIXTURE, NO_GIT);
 
 describe("the artifacts a change has", () => {
   it("reads the schema's artifacts in the order it declares them", () => {
-    expect(
-      schemaArtifacts(FIXTURE, "grade10-planning")?.map(
-        ({ id, generates, role }) => ({ id, generates, role }),
+    const artifact = (
+      id: string,
+      generates: string,
+      hand: string,
+      requires: string[],
+      required = true,
+    ) => ({ id, generates, hand, requires, required });
+    expect(schemaArtifacts(FIXTURE, "grade10-planning")).toEqual([
+      artifact("proposal", "proposal.md", "product-manager", []),
+      artifact("specs", "specs/**/spec.md", "product-manager", ["proposal"]),
+      artifact(
+        "user-journeys",
+        "specs/**/user-journeys.md",
+        "product-manager",
+        ["specs"],
       ),
-    ).toEqual([
-      { id: "proposal", generates: "proposal.md", role: "product-manager" },
-      { id: "specs", generates: "specs/**/spec.md", role: "product-manager" },
-      {
-        id: "user-journeys",
-        generates: "specs/**/user-journeys.md",
-        role: "product-manager",
-      },
-      {
-        id: "test-cases",
-        generates: "specs/**/feature-tcs.md",
-        role: "product-manager",
-      },
-      { id: "ui-design", generates: "ui-design.md", role: "designer" },
-      { id: "tech-design", generates: "tech-design.md", role: "engineer" },
-      { id: "tasks", generates: "tasks.md", role: "engineer" },
+      artifact("test-cases", "specs/**/feature-tcs.md", "product-manager", [
+        "user-journeys",
+      ]),
+      artifact("ui-design", "ui-design.md", "designer", ["specs"], false),
+      artifact("tech-design", "tech-design.md", "engineer", ["specs"], false),
+      artifact("tasks", "tasks.md", "engineer", ["specs"]),
     ]);
     expect(schemaArtifacts(FIXTURE, "spec-driven")).toBeUndefined();
   });

@@ -7,7 +7,6 @@ import type {
   ChangeDeltaDocument,
   ChangeDocument,
   DeltaSection,
-  SchemaArtifact,
 } from "../api/types.ts";
 import {
   featureSuitePath,
@@ -26,6 +25,7 @@ import {
   deltaSections,
   renamedPairs,
 } from "./read-changes.mts";
+import { schemaArtifacts } from "./read-schema.mts";
 import { readJourneys, readRequirement, readTestCases } from "./read-specs.mts";
 
 /**
@@ -99,43 +99,6 @@ function schemaOf(dir: string): string {
     return "";
   }
 }
-
-/** The artifacts a schema declares, in the order it declares them — the
- * order they are written in, each built on the one before. Undefined for a
- * schema this store does not define: the built-ins live inside the CLI, and
- * guessing their shape would let the strip claim a file is missing that the
- * schema never asked for. */
-export function schemaArtifacts(
-  root: string,
-  schema: string,
-): SchemaArtifact[] | undefined {
-  const text = readTextIfExists(
-    join(root, "openspec", "schemas", schema, "schema.yaml"),
-  );
-  if (text === undefined) return undefined;
-  const parsed = YAML.parse(text) as { artifacts?: unknown } | null;
-  const listed = Array.isArray(parsed?.artifacts) ? parsed.artifacts : [];
-  const artifacts: SchemaArtifact[] = [];
-  for (const entry of listed) {
-    const fields = (entry ?? {}) as Record<string, unknown>;
-    if (typeof fields.id !== "string" || typeof fields.generates !== "string")
-      continue;
-    // A schema that names no role for an artifact leaves it off every
-    // worklist rather than guessing a hand to hand it to.
-    const role = typeof fields.role === "string" ? fields.role : undefined;
-    artifacts.push({
-      id: fields.id,
-      generates: fields.generates,
-      ...(role ? { role } : {}),
-      requires: strings(fields.requires),
-      required: fields.required !== false,
-    });
-  }
-  return artifacts;
-}
-
-const strings = (value: unknown): string[] =>
-  Array.isArray(value) ? value.filter((one) => typeof one === "string") : [];
 
 /** How an artifact renders, from what the schema says it generates: the
  * three files a capability directory holds and the checklist are read

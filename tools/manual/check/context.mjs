@@ -107,7 +107,7 @@ export const RULES = [
   },
   {
     key: "awaiting",
-    level: "warn",
+    level: "fail",
     title: "Waits naming no artifact, or one already written",
   },
   {

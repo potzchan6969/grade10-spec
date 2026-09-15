@@ -613,73 +613,79 @@ export type PendingItem = {
   change: ChangeEntry;
   /** The schema's artifact id — `specs`, `ui-design`, `tasks`. */
   artifact: string;
-  /** The line the change's author wrote in `awaiting:`. Present means
-   * somebody said what is missing; absent means the artifact is simply
-   * unwritten and its turn has come. */
+  /** The line the change's author wrote in `awaiting:`, when it wrote one. */
   why?: string;
 };
 
-/** What one hand owes, oldest change first — the order somebody works in. */
-export type PendingRole = { role: string; items: PendingItem[] };
+/** What one hand owes, oldest change first. */
+export type PendingHand = { hand: string; items: PendingItem[] };
 
-/** The key each artifact's standing waiver lands on. An artifact nobody can
- * waive is absent here, which is the same answer as a waiver nobody wrote. */
-const WAIVERS: Record<string, (change: ChangeEntry) => boolean> = {
-  specs: (change) => change.skipSpecs !== undefined,
-  "tech-design": (change) => change.designWaived !== undefined,
-  tasks: (change) => change.tasksWaived !== undefined,
-};
+/** `skip_specs` says a change alters no behaviour, so it owes no
+ * requirements — and nothing built on them either. It is the only waiver a
+ * worklist reads: `design_waived` and `tasks_waived` answer for a file's
+ * absence at archive, not for whose turn it is now. */
+const waived = (id: string, change: ChangeEntry) =>
+  id === "specs" && change.skipSpecs !== undefined;
 
 /**
  * Every hand's worklist, derived from the artifacts each change has written
- * against the ones its schema declares. Nothing is stored: a change owes an
- * artifact when it has not written it, everything that artifact is built on
- * is written, and nothing waived it.
+ * against the ones its own schema declares. Nothing is stored: a change owes
+ * an artifact when it has not written it, everything that artifact is built
+ * on is settled, and nothing waived it. A change on a schema this store does
+ * not define is left alone — its artifacts are the CLI's, not ours.
  *
- * Two artifacts are never derived as owed. `ui-design` is optional, and
- * `tech-design` is owed only when a task group lands outside this store —
- * conditions a worklist cannot see from here, and guessing at them would
- * fill a designer's list with changes that draw nothing. Those appear only
- * when the change says so in `awaiting:`, which is also the only way to say
- * why a wait is a wait rather than a gap.
+ * `ui-design` and `tech-design` are never derived as owed: both turn on
+ * something no worklist can see — whether there is a screen, whether the
+ * work lands outside this store — and guessing would fill a designer's list
+ * with changes that draw nothing. They appear when the change says so in
+ * `awaiting:`, which is also the only way to say why a wait is a wait.
  */
-export function pendingByRole(
+export function pendingByHand(
   changes: ChangeEntry[],
-  artifacts: SchemaArtifact[],
-): PendingRole[] {
-  const byRole = new Map<string, PendingItem[]>();
-  for (const artifact of artifacts) {
-    if (artifact.role)
-      byRole.set(artifact.role, byRole.get(artifact.role) ?? []);
+  schemas: Record<string, SchemaArtifact[]>,
+): PendingHand[] {
+  const byHand = new Map<string, PendingItem[]>();
+  for (const artifacts of Object.values(schemas)) {
+    for (const { hand } of artifacts) {
+      if (hand) byHand.set(hand, byHand.get(hand) ?? []);
+    }
   }
 
   for (const change of [...changes].sort(byCreated)) {
+    // A change the reader could not finish has an incomplete `written`, so
+    // asking a hand for a file it may already hold would be worse than
+    // saying nothing — the `store` rule is what reports it.
+    const artifacts = change.error ? undefined : schemas[change.schema];
+    if (!artifacts) continue;
     const written = new Set(change.written);
     const declared = new Map(
       (change.awaiting ?? []).map((wait) => [wait.artifact, wait.why]),
     );
     for (const artifact of artifacts) {
-      if (!artifact.role || written.has(artifact.id)) continue;
+      if (!artifact.hand || written.has(artifact.id)) continue;
+      // A waiver settles what an artifact beside the change stands on, but
+      // not what lives inside a capability directory: `skip_specs` says there
+      // is no capability, so there is nowhere to write a journeys file.
+      const beside = !artifact.generates.startsWith("specs/");
+      const settled = (id: string) =>
+        written.has(id) || (beside && waived(id, change));
       const why = declared.get(artifact.id);
       const owed =
         why !== undefined ||
         (artifact.required &&
-          artifact.requires.every((one) => written.has(one)) &&
-          !WAIVERS[artifact.id]?.(change));
+          artifact.requires.every(settled) &&
+          !waived(artifact.id, change));
       if (!owed) continue;
-      byRole
-        .get(artifact.role)
+      byHand
+        .get(artifact.hand)
         ?.push({ change, artifact: artifact.id, ...(why ? { why } : {}) });
     }
   }
 
-  return [...byRole]
-    .map(([role, items]) => ({ role, items }))
-    .filter((one) => one.items.length > 0);
+  return [...byHand].map(([hand, items]) => ({ hand, items }));
 }
 
-/** Oldest first: a worklist is read from the top, and the change that has
- * waited longest is the one to answer for. */
+/** Oldest first: the change that has waited longest is the one to answer for. */
 function byCreated(a: ChangeEntry, b: ChangeEntry): number {
   return (a.created || "9999").localeCompare(b.created || "9999");
 }

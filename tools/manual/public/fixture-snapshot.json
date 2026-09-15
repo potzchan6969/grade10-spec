@@ -256,57 +256,71 @@
       ]
     }
   ],
-  "artifacts": [
-    {
-      "id": "proposal",
-      "generates": "proposal.md",
-      "role": "product-manager",
-      "requires": [],
-      "required": true
-    },
-    {
-      "id": "specs",
-      "generates": "specs/**/spec.md",
-      "role": "product-manager",
-      "requires": [],
-      "required": true
-    },
-    {
-      "id": "user-journeys",
-      "generates": "specs/**/user-journeys.md",
-      "role": "product-manager",
-      "requires": [],
-      "required": true
-    },
-    {
-      "id": "test-cases",
-      "generates": "specs/**/feature-tcs.md",
-      "role": "product-manager",
-      "requires": [],
-      "required": true
-    },
-    {
-      "id": "ui-design",
-      "generates": "ui-design.md",
-      "role": "designer",
-      "requires": [],
-      "required": false
-    },
-    {
-      "id": "tech-design",
-      "generates": "tech-design.md",
-      "role": "engineer",
-      "requires": [],
-      "required": false
-    },
-    {
-      "id": "tasks",
-      "generates": "tasks.md",
-      "role": "engineer",
-      "requires": [],
-      "required": true
-    }
-  ],
+  "schemas": {
+    "grade10-planning": [
+      {
+        "id": "proposal",
+        "generates": "proposal.md",
+        "hand": "product-manager",
+        "requires": [],
+        "required": true
+      },
+      {
+        "id": "specs",
+        "generates": "specs/**/spec.md",
+        "hand": "product-manager",
+        "requires": [
+          "proposal"
+        ],
+        "required": true
+      },
+      {
+        "id": "user-journeys",
+        "generates": "specs/**/user-journeys.md",
+        "hand": "product-manager",
+        "requires": [
+          "specs"
+        ],
+        "required": true
+      },
+      {
+        "id": "test-cases",
+        "generates": "specs/**/feature-tcs.md",
+        "hand": "product-manager",
+        "requires": [
+          "user-journeys"
+        ],
+        "required": true
+      },
+      {
+        "id": "ui-design",
+        "generates": "ui-design.md",
+        "hand": "designer",
+        "requires": [
+          "specs"
+        ],
+        "required": false
+      },
+      {
+        "id": "tech-design",
+        "generates": "tech-design.md",
+        "hand": "engineer",
+        "requires": [
+          "specs"
+        ],
+        "required": false
+      },
+      {
+        "id": "tasks",
+        "generates": "tasks.md",
+        "hand": "engineer",
+        "requires": [
+          "specs"
+        ],
+        "required": true
+      }
+    ]
+  },
   "assets": [],
   "references": [
     {

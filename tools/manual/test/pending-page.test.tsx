@@ -18,32 +18,27 @@ const { PendingPage } = await import("../src/pages/pending-page");
 
 const delta: Delta = { spec: "demo/alpha", kinds: ["ADDED"], requirements: [] };
 
-const ARTIFACTS: SchemaArtifact[] = [
-  {
-    id: "specs",
-    generates: "specs/**/spec.md",
-    role: "product-manager",
-    requires: [],
-    required: true,
-  },
-  {
-    id: "ui-design",
-    generates: "ui-design.md",
-    role: "designer",
-    requires: ["specs"],
-    required: false,
-  },
-  {
-    id: "tasks",
-    generates: "tasks.md",
-    role: "engineer",
-    requires: ["specs"],
-    required: true,
-  },
-];
+const artifact = (
+  id: string,
+  generates: string,
+  hand: string,
+  requires: string[],
+  required = true,
+): SchemaArtifact => ({ id, generates, hand, requires, required });
 
-function render(changes: ChangeEntry[]) {
-  held.index = buildIndex(snapshotOf({ changes, artifacts: ARTIFACTS }));
+const SCHEMAS: Record<string, SchemaArtifact[]> = {
+  demo: [
+    artifact("specs", "specs/**/spec.md", "product-manager", []),
+    artifact("ui-design", "ui-design.md", "designer", ["specs"], false),
+    artifact("tasks", "tasks.md", "engineer", ["specs"]),
+  ],
+};
+
+const on = (id: string, deltas: Delta[], fields: Partial<ChangeEntry> = {}) =>
+  changeEntry(id, deltas, { schema: "demo", ...fields });
+
+function render(changes: ChangeEntry[], schemas = SCHEMAS) {
+  held.index = buildIndex(snapshotOf({ changes, schemas }));
   return renderToStaticMarkup(
     <MemoryRouter>
       <PendingPage />
@@ -53,7 +48,7 @@ function render(changes: ChangeEntry[]) {
 
 describe("the pending page", () => {
   it("heads a section per hand, and names the file it is asked for", () => {
-    const html = render([changeEntry("plan-it", [delta])]);
+    const html = render([on("plan-it", [delta])]);
 
     expect(html).toContain("Engineer");
     expect(html).toContain("tasks.md");
@@ -62,26 +57,36 @@ describe("the pending page", () => {
 
   it("carries the line a change wrote about what it is waiting on", () => {
     const html = render([
-      changeEntry("draw-it", [delta], {
+      on("draw-it", [delta], {
         awaiting: [
-          { artifact: "ui-design", why: "nothing draws the reminder banner" },
+          { artifact: "ui-design", why: "nothing draws the `reminder` banner" },
         ],
       }),
     ]);
 
     expect(html).toContain("Designer");
-    expect(html).toContain("nothing draws the reminder banner");
+    // The line is the author's prose, read the way every other card reads it.
+    expect(html).toContain(">reminder</code>");
   });
 
-  it("says nothing where every change has written what it owes", () => {
+  it("dates a change by the day it was filed, not by the hour", () => {
+    const html = render([on("plan-it", [delta], { created: "2026-09-15" })]);
+
+    expect(html).toContain("filed");
+    expect(html).not.toMatch(/hours? ago/);
+  });
+
+  it("answers an idle hand rather than leaving out its section", () => {
     const html = render([
-      changeEntry("done", [delta], {
-        written: ["proposal", "specs", "tasks"],
-      }),
+      on("done", [delta], { written: ["proposal", "specs", "tasks"] }),
     ]);
 
-    expect(html).toContain("Nothing pending");
-    expect(html).not.toContain("Engineer");
+    expect(html).toContain("Engineer");
+    expect(html).toContain("has written what this hand owes");
+  });
+
+  it("says so where no change names a schema this store defines", () => {
+    expect(render([on("plan-it", [delta])], {})).toContain("No schema to read");
   });
 
   it("points a reviewer at the QA worklist rather than repeating it", () => {

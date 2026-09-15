@@ -321,31 +321,26 @@ export type ChangeEntry = {
   suites?: ChangeSuite[];
   /** Carried only when the change is not settled on the store's main. */
   mainState?: MainState;
-  /** The schema artifact ids this change has written, read off the change
-   * directory. What it still owes is derived against the schema, never
-   * stored. */
+  /** The schema artifact ids this change has written. */
   written: string[];
   /** What the change says it is waiting for, from `.openspec.yaml`
-   * `awaiting:` — an artifact id against the line its author wrote. Only for
-   * what nothing can derive: a design nobody has drawn, an answer nobody has
-   * given. Nothing ends a wait but the author who wrote it. */
+   * `awaiting:` — an artifact id against the line its author wrote. */
   awaiting?: { artifact: string; why: string }[];
   /** Set when a file was malformed; content fields may be incomplete. */
   error?: ItemError;
 };
 
-/** One artifact a workflow schema declares. `role` is the hand that writes
- * it, and the reason a worklist can be split by hand without any change
- * saying who owes what. */
+/** One artifact a workflow schema declares. */
 export type SchemaArtifact = {
   id: string;
   generates: string;
-  role?: string;
+  /** The hand that writes it. A schema naming none leaves the artifact off
+   * every worklist rather than guessing whose turn it is. */
+  hand?: string;
   requires: string[];
-  /** Whether every change owes this artifact. The two that are false —
-   * `ui-design` and `tech-design` — are owed only under a condition no
-   * worklist can see, so a change that needs one says so in `awaiting:`
-   * rather than being told it is late. */
+  /** Whether a change owes this artifact by default. An artifact that is not
+   * required is owed only when the change says so in `awaiting:`: what makes
+   * it owed is a condition no worklist can see. */
   required: boolean;
 };
 
@@ -501,10 +496,10 @@ export type Snapshot = {
   specs: SpecEntry[];
   /** In-flight only; archived changes live in `/api/archive`. */
   changes: ChangeEntry[];
-  /** The artifacts this store's own planning schema declares, in schema
-   * order. Read once so a worklist can ask what a change still owes without
-   * reaching for the schema file. */
-  artifacts: SchemaArtifact[];
+  /** Each workflow schema the changes in flight name, against the artifacts
+   * it declares, in schema order. A schema this store does not define is
+   * absent, so a change on one is left off every worklist. */
+  schemas: Record<string, SchemaArtifact[]>;
   /** Every file under the manual's `assets/`, as `assets/<name>` paths. */
   assets: string[];
   /** The store's `docs/references/`, in path order, without their text. The
