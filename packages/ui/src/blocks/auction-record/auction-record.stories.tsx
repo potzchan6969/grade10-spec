@@ -115,7 +115,7 @@ function MyAuctions({
 }
 
 const meta = {
-  title: "My Auctions/Page",
+  title: "My Auctions/My Auctions",
   component: AuctionRecord,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
