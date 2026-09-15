@@ -52,8 +52,9 @@ over, or hand the change id to a PM or engineer.
 - [Dates and times](/platform/shared/dates-and-times) — the four shapes a date takes
   on screen, before you invent a fifth.
 - [Pending](/pending) — the changes waiting on a designer, each with the line
-  its author wrote saying what is missing. A change appears here only when it
-  says it needs a design, so the list is short and every row is real.
+  its author wrote saying what is missing. A change asks by writing
+  `awaiting:` with `ui-design: <what nobody has drawn>` in its
+  `.openspec.yaml`; nothing else puts it on your section.
 - [Working a change](/guides/working-a-change) — `/planning-design`, and when a
   change needs no `ui-design.md` at all.
 

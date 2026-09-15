@@ -93,9 +93,13 @@ tooling on both sides parses. Beyond them:
 ## Finish
 
 ```bash
-openspec validate <change-name> --strict
+pnpm run validate:changes
 openspec status --change <change-name>
 ```
+
+A change that needs an artifact nobody has written yet says so: `awaiting:`
+with `<artifact>: <what is missing>` in its `.openspec.yaml`. That line is
+what puts it on [Pending](/pending) under the hand that owes it.
 
 If the change has journeys but no suites beside them, run
 `/spec-to-tcs <change-name>` before pushing — `/spec-push` refuses without

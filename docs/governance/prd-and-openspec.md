@@ -117,7 +117,7 @@ That is how the work reaches an engineer. The application repository has no plan
 | `created` | The CLI, at `openspec new change` | Always | The boards, for the planning age |
 | `skip_specs: true` with `skip_specs_why: "<why>"` | The author | A change altering no product behaviour | `openspec validate`, `pnpm check:manual` rule `hatch` |
 | `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The boards |
-| `awaiting:` | Whoever is held up | A change that cannot write its next artifact until somebody answers | The Pending page; `pnpm check:manual`, rule `awaiting` |
+| `awaiting:` with `<artifact>: "<what is missing>"` | Whoever is held up | A change that cannot write its next artifact until somebody answers; deleted when it writes it | The Pending page; `pnpm run validate:changes`; `pnpm check:manual`, rule `awaiting` |
 | `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
 | `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
 | `deployed_at`, `deployed_env` | `pnpm plan shipped` in the application repository | At archive | `pnpm check:manual`, rule `archived` |
@@ -144,25 +144,25 @@ The strongest control is not a check. People take an escape hatch to avoid work,
 
 A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so `pnpm check:manual` refuses a record key holding anything but text. `skip_specs` is the one exception, and not a waiver of the rule but the switch beneath it: the OpenSpec CLI owns that key and reads it as a boolean, so a reason written there invalidates the manifest and the marker stops being honoured at all. The switch stays `true`, and `skip_specs_why` carries the line.
 
-#### Waiting for an input
+### Waiting for an input
 
-A change moves before it is finished. `awaiting:` is how it says so: a mapping of the schema's artifact ids against the line saying what is missing.
+`awaiting:` is how a change says it cannot write its next artifact until somebody answers. It maps a schema artifact id — `proposal`, `specs`, `user-journeys`, `test-cases`, `ui-design`, `tech-design`, `tasks` — to the line saying what is missing, in the change's `.openspec.yaml`:
 
 ```yaml
 awaiting:
-  specs: the expiry window nobody has decided
+  specs: 2026-09-15, waiting on legal to decide the expiry window
   ui-design: nothing draws the reminder banner
 ```
 
-It is written by whoever is held up, and read two ways. The [Pending](/pending) page shows the change under the hand that owes each artifact, carrying the line, so a designer sees what is waiting on them and why. And `awaiting: specs:` excuses the change from `openspec validate`, which otherwise refuses a change with no delta — so a confirmed outcome can sit as a proposal until somebody answers, rather than waiting outside the store where nothing counts it.
+It is written by whoever is held up, and read two ways. The [Pending](/pending) page shows the change under the hand that owes each artifact, carrying the line, so a designer sees what is waiting on them and why. And `pnpm run validate:changes` drops the one error `openspec validate` raises against a change with no delta — `awaiting: specs:` — so a confirmed outcome sits in the store as a proposal until somebody answers. Every other error that run reports still counts.
 
-Three things are true of every wait:
+Every wait:
 
-- **Nothing ends a wait but its author.** No tool resolves one, because what a wait names — a decision, a screen, an answer from outside — is not something a tool can see the end of.
-- **A wait is not a way to defer a change indefinitely.** A proposal that has waited months is a proposal to drop or to answer, and the Pending page's age column is what makes that visible.
-- **It never lowers a bar.** Everything the change can be held to, it is: the proposal still needs its `## Why`, the page it marks still needs its 🚧 line, and the moment a delta exists the requirements are validated in full.
+- **Ends when its author deletes the line.** A wait names a decision, a screen or an answer from outside, and no tool reads those. `pnpm check:manual` refuses a wait on an artifact the change has already written, so the line does not outlive the wait, and one naming an artifact the schema does not declare, which would reach no worklist at all.
+- **Carries the date it started.** Pending dates the change, not the wait, so a wait that has run for months is only visible in its own line. A proposal that has waited that long is one to drop or to answer.
+- **Lowers no bar.** The page the change marks still needs its 🚧 line, the proposal still needs its `## Why`, and the moment a delta exists the requirements are validated in full.
 
-`pnpm check:manual` warns on a wait naming an artifact the schema does not declare, and on a wait the change has already answered.
+A wait on `specs` and `skip_specs: true` are opposites and never appear together: one says requirements are coming, the other that none are owed.
 
 ### 6. Keep component contracts aligned
 

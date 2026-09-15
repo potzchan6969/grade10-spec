@@ -155,10 +155,14 @@ Everything this run produces is `draft`. Nothing in it claims review.
 9. **Validate.**
 
    ```bash
-   openspec validate <change-name> --strict
+   pnpm run validate:changes
    pnpm check:manual
    pnpm run tcs:validate
    ```
+
+   A requirement nobody can decide yet is a wait, not a guess: `awaiting:`
+   with `specs: <what is missing>` in the change's `.openspec.yaml` says so,
+   and `validate:changes` is the run that honours it.
 
 ## Anchors
 
