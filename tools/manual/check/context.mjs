@@ -71,6 +71,15 @@ export const RULES = [
     title: "Capabilities that never say who walks them",
   },
   {
+    // The blind suite pass reads the restated stories instead of the durable
+    // capability, because reading `openspec/specs/` is how it would see the
+    // scenarios it must not see. That makes the copy load-bearing, and a
+    // load-bearing copy nobody compares is one that drifts.
+    key: "context",
+    level: "fail",
+    title: "Restated stories that are not what the store holds",
+  },
+  {
     key: "outline",
     level: "fail",
     title: "Suites beside a spec whose scenarios never landed",

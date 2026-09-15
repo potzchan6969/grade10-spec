@@ -43,6 +43,84 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   checkOverlap(files, ctx.add);
   checkIssued(ctx, files);
   checkFuse(ctx, files, pages);
+  checkContext(ctx, files);
+}
+
+/** RULE `context`: a change restates the stories it anchors on under
+ * `## Context user stories`, and the copy is the durable text or it is a lie.
+ *
+ * The section exists so the blind suite pass can read the stories without being
+ * handed the durable capability — reading `openspec/specs/` is how it would see
+ * the scenarios it must not see. That makes the copy load-bearing rather than a
+ * convenience, and a copy nobody checks drifts: the change is then written
+ * against a story the store no longer holds, and archive quietly reverts
+ * whatever landed in between.
+ *
+ * Only the restated block is compared. A story the change also modifies belongs
+ * under `## MODIFIED User stories`, where it is meant to differ. */
+function checkContext(ctx, files) {
+  for (const file of files) {
+    const text = journeysBeside(ctx.roots.store, file.file);
+    const restated = storiesUnder(text, "Context user stories");
+    if (restated.size === 0) continue;
+    const durablePath = `openspec/specs/${file.spec}/user-journeys.md`;
+    const durable = storiesUnder(
+      readTextIfExists(join(ctx.roots.store, durablePath)) ?? "",
+      "User journeys",
+    );
+    const at = file.file.replace(/spec\.md$/, "user-journeys.md");
+    for (const [id, copied] of restated) {
+      const original = durable.get(id);
+      if (original === undefined) {
+        ctx.add(
+          "context",
+          at,
+          `restates \`${id}\`, which \`${file.spec}\` does not hold — a context story is a copy of a durable one, not a new story filed under the wrong heading`,
+        );
+      } else if (original !== copied) {
+        ctx.add(
+          "context",
+          at,
+          `the restated \`${id}\` is not what \`${file.spec}\` holds — bring the copy back to the durable text, or move the story under \`## MODIFIED User stories\` where it is meant to differ`,
+        );
+      }
+    }
+  }
+}
+
+/** Story id → its block, normalised only for trailing whitespace. Everything
+ * else is compared as written: the point is to catch an edit, and an edit that
+ * looks like formatting is still an edit. */
+function storiesUnder(text, heading) {
+  const out = new Map();
+  const lines = text.split("\n");
+  let inside = false;
+  let id = null;
+  let body = [];
+  const flush = () => {
+    if (id) out.set(id, body.join("\n").trimEnd());
+    id = null;
+    body = [];
+  };
+  for (const line of lines) {
+    const head = /^##\s+(.+?)\s*$/.exec(line);
+    if (head) {
+      flush();
+      inside = head[1].trim() === heading;
+      continue;
+    }
+    if (!inside) continue;
+    const story = /^###\s+([a-z0-9][a-z0-9-]*-US-\d+):/.exec(line);
+    if (story) {
+      flush();
+      id = story[1];
+      body = [line.trimEnd()];
+      continue;
+    }
+    if (id) body.push(line.trimEnd());
+  }
+  flush();
+  return out;
 }
 
 /** Every in-flight delta file, read once and parsed by the store's own
