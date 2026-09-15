@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
   WINNER_ORDER_STATUS_LABELS,
   type WinnerOrderStatus,
@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Address-first auction Winner Order preview (Storybook only). Statuses follow revise-auction-winner-invoicing: Awaiting Address → Preparing Invoice → Pending Payment → fulfilment. Not a published `@grade10/ui` export yet.",
+          "Address-first auction Winner Order preview (Storybook only). Statuses follow revise-auction-winner-invoicing: Awaiting Address → Preparing Invoice → Pending Payment → fulfilment. Confirm delivery address opens a dialog to pick or add an address. Not a published `@grade10/ui` export yet.",
       },
     },
   },
@@ -49,6 +49,41 @@ export const AwaitingAddress: Story = {
     expect(canvas.getByText("No address confirmed yet.")).toBeVisible();
     expect(canvas.queryByText("Invoice")).not.toBeInTheDocument();
     expect(canvas.queryByText(/pay with card/i)).not.toBeInTheDocument();
+  },
+};
+
+/** Opens the address dialog, confirms a saved address, lands on Preparing Invoice. */
+export const ConfirmAddressFlow: Story = {
+  name: "Confirm address flow",
+  args: { status: "awaiting_address" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Confirm delivery address" }),
+    );
+
+    const dialog = await page.findByRole("dialog");
+    const modal = within(dialog);
+    expect(
+      modal.getByRole("heading", { name: "Confirm Delivery Address" }),
+    ).toBeVisible();
+    expect(modal.getByText("Wan Chai home")).toBeVisible();
+    expect(modal.getByText("Add a new address")).toBeVisible();
+
+    await userEvent.click(
+      modal.getByRole("button", { name: "Confirm address" }),
+    );
+
+    await waitFor(() => {
+      expect(page.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+    expect(canvas.getByText("Preparing Invoice")).toBeVisible();
+    expect(canvas.getByText(/Harbour Road/)).toBeVisible();
+    expect(
+      canvas.queryByRole("button", { name: "Confirm delivery address" }),
+    ).not.toBeInTheDocument();
   },
 };
 

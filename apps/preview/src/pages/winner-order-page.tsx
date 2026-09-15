@@ -10,8 +10,10 @@ import { Footer } from "@grade10/design-system/components/layout/footer";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { SiteHeader } from "@grade10/ui";
+import { useEffect, useState } from "react";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
+import { WinnerOrderAddressDialog } from "./winner-order-address-dialog";
 import {
   WINNER_ORDER_CONTENTS,
   type WinnerOrderContent,
@@ -41,11 +43,58 @@ type WinnerOrderPageProps = {
   onPrimaryAction?: () => void;
 };
 
+function resolveContent(
+  status: WinnerOrderStatus,
+  confirmedAddress: string | null,
+  content?: WinnerOrderContent,
+): WinnerOrderContent {
+  if (content) return content;
+  const base = WINNER_ORDER_CONTENTS[status];
+  if (status === "preparing_invoice" && confirmedAddress) {
+    return {
+      ...base,
+      addressValue: confirmedAddress,
+      addressHint: "You can change this until the invoice is sent.",
+    };
+  }
+  return base;
+}
+
 function WinnerOrderPage({
-  status = "awaiting_address",
-  content = WINNER_ORDER_CONTENTS[status],
+  status: statusProp = "awaiting_address",
+  content: contentProp,
   onPrimaryAction,
 }: WinnerOrderPageProps) {
+  const [status, setStatus] = useState(statusProp);
+  const [confirmedAddress, setConfirmedAddress] = useState<string | null>(null);
+  const [addressDialogOpen, setAddressDialogOpen] = useState(false);
+
+  useEffect(() => {
+    setStatus(statusProp);
+    if (statusProp !== "preparing_invoice") {
+      setConfirmedAddress(null);
+    }
+  }, [statusProp]);
+
+  const content = resolveContent(status, confirmedAddress, contentProp);
+  const opensAddressDialog =
+    content.status === "awaiting_address" &&
+    content.primaryCta === "Confirm delivery address";
+
+  function handlePrimaryAction() {
+    if (opensAddressDialog) {
+      setAddressDialogOpen(true);
+      return;
+    }
+    onPrimaryAction?.();
+  }
+
+  function handleAddressConfirm(addressLines: string) {
+    setConfirmedAddress(addressLines);
+    setStatus("preparing_invoice");
+    onPrimaryAction?.();
+  }
+
   return (
     <div
       className="flex min-h-svh w-full flex-col bg-background"
@@ -189,7 +238,7 @@ function WinnerOrderPage({
             <div className="w-full sm:w-auto">
               <Button
                 className="w-full sm:w-auto"
-                onClick={onPrimaryAction}
+                onClick={handlePrimaryAction}
                 size="lg"
               >
                 {content.primaryCta}
@@ -199,6 +248,12 @@ function WinnerOrderPage({
         </VStack>
       </main>
       <Footer {...STORE_FOOTER} />
+
+      <WinnerOrderAddressDialog
+        onConfirm={handleAddressConfirm}
+        onOpenChange={setAddressDialogOpen}
+        open={addressDialogOpen}
+      />
     </div>
   );
 }
