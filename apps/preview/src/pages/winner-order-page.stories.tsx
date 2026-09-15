@@ -7,7 +7,7 @@ import {
 import { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
-  title: "Pages/Winner Order",
+  title: "My Auctions/Winner Order",
   component: WinnerOrderPage,
   tags: ["autodocs"],
   parameters: {
