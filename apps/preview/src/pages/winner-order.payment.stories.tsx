@@ -40,6 +40,7 @@ export const PendingPayment: Story = {
     expect(
       sidebar.getByRole("button", { name: "View invoice PDF" }),
     ).toBeVisible();
+    expect(sidebar.queryByRole("alert")).not.toBeInTheDocument();
   },
 };
 
@@ -57,6 +58,10 @@ export const ExpiredInvoice: Story = {
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
+    expect(sidebar.getByRole("alert")).toBeVisible();
+    expect(
+      sidebar.getByText("Payment overdue — invoice still payable"),
+    ).toBeVisible();
     expect(
       sidebar.getByRole("button", { name: "Pay with card" }),
     ).toBeVisible();
@@ -67,5 +72,8 @@ export const ExpiredInvoice: Story = {
     expect(
       sidebar.getByRole("button", { name: "View invoice PDF" }),
     ).toBeVisible();
+    expect(
+      canvas.queryByText("Pending Payment (expired invoice)"),
+    ).not.toBeInTheDocument();
   },
 };

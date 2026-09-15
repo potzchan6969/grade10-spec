@@ -1,3 +1,4 @@
+import { Alert } from "@grade10/design-system/components/display/alert";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
@@ -327,12 +328,14 @@ function OrderSummary({
   lines,
   payCta,
   deadline,
+  overdue = false,
   onPay,
   onViewInvoicePdf,
 }: {
   lines: WinnerOrderInvoiceLine[];
   payCta?: string | null;
   deadline?: string | null;
+  overdue?: boolean;
   onPay?: () => void;
   onViewInvoicePdf?: () => void;
 }) {
@@ -363,6 +366,14 @@ function OrderSummary({
             value={total.value}
           />
         </>
+      ) : null}
+      {overdue ? (
+        <Alert
+          dismissible={false}
+          layout="inline"
+          status="warning"
+          title="Payment overdue — invoice still payable"
+        />
       ) : null}
       {payCta && onPay ? (
         <Button className="w-full" onClick={onPay} size="lg">
@@ -487,6 +498,7 @@ function OrderSidebar({
             lines={lines}
             onPay={onPay}
             onViewInvoicePdf={onViewInvoicePdf}
+            overdue={Boolean(content.overdue)}
             payCta={payCta}
           />
         </VStack>

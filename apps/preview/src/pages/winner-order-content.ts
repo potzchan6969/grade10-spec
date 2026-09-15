@@ -119,7 +119,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         deadline: "Deadline passed 24 Sep 2026, 21:30 HKT",
         primaryCta: "Pay with card",
         secondaryNote: "How to reach Grade10: support@grade10.com",
-        overdue: false,
+        overdue: true,
       };
     case "processing":
       return {
