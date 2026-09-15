@@ -66,7 +66,7 @@ export const ConfirmAddressFlow: Story = {
 
     const dialog = await waitFor(() => {
       const found = page.getByRole("dialog", {
-        name: "Confirm delivery address",
+        name: "Confirm Delivery Address",
       });
       expect(found).toBeVisible();
       return found;
@@ -74,16 +74,16 @@ export const ConfirmAddressFlow: Story = {
     const modal = within(dialog);
     await waitFor(() => {
       expect(
-        modal.getByRole("heading", { name: "Confirm delivery address" }),
+        modal.getByRole("heading", { name: "Confirm Delivery Address" }),
       ).toBeVisible();
     });
     expect(
       modal.getByText(/ship this lot here and use the address to calculate/i),
     ).toBeVisible();
-    expect(modal.getByText("Wan Chai home")).toBeVisible();
+    expect(modal.getAllByText("Alex Chan").length).toBeGreaterThan(0);
     expect(
-      modal.getByRole("button", { name: "Remove Wan Chai home" }),
-    ).toBeVisible();
+      modal.getAllByRole("button", { name: "Remove Alex Chan" }).length,
+    ).toBeGreaterThan(0);
     expect(
       modal.getByRole("button", { name: "Add new address" }),
     ).toBeVisible();
@@ -117,7 +117,7 @@ export const AddNewAddressFlow: Story = {
 
     const outerDialog = await waitFor(() => {
       const found = page.getByRole("dialog", {
-        name: "Confirm delivery address",
+        name: "Confirm Delivery Address",
       });
       expect(found).toBeVisible();
       return found;
@@ -127,7 +127,7 @@ export const AddNewAddressFlow: Story = {
     );
 
     const nestedDialog = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "Add delivery address" });
+      const found = page.getByRole("dialog", { name: "Add Delivery Address" });
       expect(found).toBeVisible();
       return found;
     });
@@ -148,14 +148,14 @@ export const AddNewAddressFlow: Story = {
 
     await waitFor(() => {
       expect(
-        page.queryByRole("dialog", { name: "Add delivery address" }),
+        page.queryByRole("dialog", { name: "Add Delivery Address" }),
       ).not.toBeInTheDocument();
     });
 
     const picker = within(
       await waitFor(() => {
         const found = page.getByRole("dialog", {
-          name: "Confirm delivery address",
+          name: "Confirm Delivery Address",
         });
         expect(found).toBeVisible();
         return found;

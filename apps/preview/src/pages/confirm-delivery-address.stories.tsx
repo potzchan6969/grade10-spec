@@ -70,7 +70,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Standalone Storybook preview of the Winner Order Confirm delivery address picker and its nested Add delivery address form. Same dialog Winner Order opens from Awaiting Address. Address options use design-system `RadioCard`.",
+          "Standalone Storybook preview of the Winner Order Confirm Delivery Address picker and its nested Add Delivery Address form. Same dialog Winner Order opens from Awaiting Address. Address options use design-system `RadioCard`; an empty book uses `EmptyState`.",
       },
     },
   },
@@ -99,31 +99,32 @@ export const Picker: Story = {
   name: "Picker",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Confirm delivery address");
+    const dialog = await findVisibleDialog(page, "Confirm Delivery Address");
     const modal = within(dialog);
     await waitFor(() => {
-      expect(modal.getByText("Wan Chai home")).toBeVisible();
+      expect(modal.getAllByText("Alex Chan").length).toBeGreaterThan(0);
     });
     expect(
-      modal.getByRole("button", { name: "Remove Wan Chai home" }),
-    ).toBeVisible();
+      modal.getAllByRole("button", { name: "Remove Alex Chan" }).length,
+    ).toBe(2);
+    expect(modal.getByText(/Harbour Road/)).toBeVisible();
     expect(
       modal.getByRole("button", { name: "Add new address" }),
     ).toBeVisible();
   },
 };
 
-/** Nested Add delivery address form — open via CTA (reliable vs dual-open mount). */
+/** Nested Add Delivery Address form — open via CTA (reliable vs dual-open mount). */
 export const AddDeliveryAddress: Story = {
   name: "Add delivery address",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const outer = await findVisibleDialog(page, "Confirm delivery address");
+    const outer = await findVisibleDialog(page, "Confirm Delivery Address");
     await userEvent.click(
       within(outer).getByRole("button", { name: "Add new address" }),
     );
 
-    const nested = await findVisibleDialog(page, "Add delivery address");
+    const nested = await findVisibleDialog(page, "Add Delivery Address");
     const form = within(nested);
     expect(form.getByLabelText("First name")).toBeVisible();
     expect(form.getByLabelText("Street address")).toBeVisible();
@@ -134,6 +135,9 @@ export const AddDeliveryAddress: Story = {
     expect(
       form.getByRole("button", { name: "Use this address" }),
     ).toBeVisible();
+    expect(
+      form.queryByText(/shipping fee on the invoice/i),
+    ).not.toBeInTheDocument();
 
     await userEvent.click(form.getByLabelText("Country"));
     await waitFor(() => {
@@ -144,23 +148,32 @@ export const AddDeliveryAddress: Story = {
   },
 };
 
-/** Empty account address book — prompt to add. */
+/** Empty account address book — EmptyState CTA opens the nested form. */
 export const NoSavedAddresses: Story = {
   name: "No saved addresses",
   args: { savedAddresses: [] },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Confirm delivery address");
+    const dialog = await findVisibleDialog(page, "Confirm Delivery Address");
     const modal = within(dialog);
     await waitFor(() => {
-      expect(modal.getByText(/No saved addresses yet/i)).toBeVisible();
+      expect(modal.getByText("No saved addresses")).toBeVisible();
     });
+    expect(
+      modal.getByText("Add a delivery address to continue."),
+    ).toBeVisible();
     expect(
       modal.getByRole("button", { name: "Add new address" }),
     ).toBeVisible();
     expect(
       modal.getByRole("button", { name: "Confirm address" }),
     ).toBeDisabled();
+
+    await userEvent.click(
+      modal.getByRole("button", { name: "Add new address" }),
+    );
+    const nested = await findVisibleDialog(page, "Add Delivery Address");
+    expect(within(nested).getByLabelText("First name")).toBeVisible();
   },
 };
 
@@ -169,17 +182,19 @@ export const RemoveSavedAddress: Story = {
   name: "Remove saved address",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Confirm delivery address");
+    const dialog = await findVisibleDialog(page, "Confirm Delivery Address");
     const modal = within(dialog);
     await waitFor(() => {
-      expect(modal.getByText("Wan Chai home")).toBeVisible();
+      expect(modal.getByText(/Harbour Road/)).toBeVisible();
     });
-    await userEvent.click(
-      modal.getByRole("button", { name: "Remove Wan Chai home" }),
-    );
+    const removeButtons = modal.getAllByRole("button", {
+      name: "Remove Alex Chan",
+    });
+    expect(removeButtons[0]).toBeTruthy();
+    await userEvent.click(removeButtons[0] as HTMLElement);
     await waitFor(() => {
-      expect(modal.queryByText("Wan Chai home")).not.toBeInTheDocument();
+      expect(modal.queryByText(/Harbour Road/)).not.toBeInTheDocument();
     });
-    expect(modal.getByText("Tsim Sha Tsui")).toBeVisible();
+    expect(modal.getByText(/Canton Road/)).toBeVisible();
   },
 };
