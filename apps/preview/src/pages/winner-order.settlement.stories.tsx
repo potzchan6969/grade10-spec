@@ -1,39 +1,17 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import {
-  WINNER_ORDER_STATUS_LABELS,
-  type WinnerOrderStatus,
-} from "./winner-order-content";
-import { WinnerOrderPage } from "./winner-order-page";
+import { winnerOrderMeta } from "./winner-order.story-shared";
+import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
-  title: "My Auctions/Winner Order",
-  component: WinnerOrderPage,
-  tags: ["autodocs"],
-  parameters: {
-    layout: "fullscreen",
-    docs: {
-      description: {
-        component:
-          "Address-first auction Winner Order preview (Storybook only). Every status uses the Order Details 2-column shell (main + sticky summary sidebar) — pre-invoice shows winning bid with TBD fees; post-invoice shows full totals; fulfilment stepper after pay. Not a published `@grade10/ui` export and not the store Order Details contract.",
-      },
-    },
-  },
-  argTypes: {
-    status: {
-      control: "select",
-      options: Object.keys(WINNER_ORDER_STATUS_LABELS) as WinnerOrderStatus[],
-      labels: WINNER_ORDER_STATUS_LABELS,
-    },
-  },
-  args: {
-    status: "awaiting_address",
-  },
+  ...winnerOrderMeta("Settlement"),
+  args: { status: "awaiting_address" },
 } satisfies Meta<typeof WinnerOrderPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Pre-invoice — confirm delivery address before quote. */
 export const AwaitingAddress: Story = {
   name: "Awaiting Address",
   args: { status: "awaiting_address" },
@@ -55,9 +33,27 @@ export const AwaitingAddress: Story = {
   },
 };
 
+/** Address confirmed — waiting on operator shipping quote. */
+export const PreparingInvoice: Story = {
+  name: "Preparing Invoice",
+  args: { status: "preparing_invoice" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Preparing Invoice")).toBeVisible();
+    expect(canvas.getByText(/Wan Chai/)).toBeVisible();
+    expect(canvas.getByText("Order summary")).toBeVisible();
+    expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
+    expect(canvas.getByRole("complementary")).toBeVisible();
+    expect(
+      canvas.queryByRole("button", { name: /confirm|pay/i }),
+    ).not.toBeInTheDocument();
+    expect(canvas.getByText(/waiting on the operator quote/i)).toBeVisible();
+  },
+};
+
 /** Opens the address dialog, confirms a saved address, lands on Preparing Invoice. */
 export const ConfirmAddressFlow: Story = {
-  name: "Confirm address flow",
+  name: "Confirm Address Flow",
   args: { status: "awaiting_address" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -108,7 +104,7 @@ export const ConfirmAddressFlow: Story = {
 
 /** Nested add-address form → Use this address → confirm → Preparing Invoice. */
 export const AddNewAddressFlow: Story = {
-  name: "Add new address flow",
+  name: "Add New Address Flow",
   args: { status: "awaiting_address" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -176,101 +172,5 @@ export const AddNewAddressFlow: Story = {
     });
     expect(canvas.getByText("Preparing Invoice")).toBeVisible();
     expect(canvas.getByText(/Queen's Road Central/)).toBeVisible();
-  },
-};
-
-export const PreparingInvoice: Story = {
-  name: "Preparing Invoice",
-  args: { status: "preparing_invoice" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Preparing Invoice")).toBeVisible();
-    expect(canvas.getByText(/Wan Chai/)).toBeVisible();
-    expect(canvas.getByText("Order summary")).toBeVisible();
-    expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
-    expect(canvas.getByRole("complementary")).toBeVisible();
-    expect(
-      canvas.queryByRole("button", { name: /confirm|pay/i }),
-    ).not.toBeInTheDocument();
-    expect(canvas.getByText(/waiting on the operator quote/i)).toBeVisible();
-  },
-};
-
-export const PendingPayment: Story = {
-  name: "Pending Payment",
-  args: { status: "pending_payment" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Pending Payment")).toBeVisible();
-    expect(canvas.getByText("Order summary")).toBeVisible();
-    expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$15,660")).toBeVisible();
-    expect(canvas.getByText("Shipping & Handling")).toBeVisible();
-    expect(canvas.getByRole("button", { name: "Pay with card" })).toBeVisible();
-    expect(canvas.getByText(/Locked after invoice send/)).toBeVisible();
-  },
-};
-
-export const PendingPaymentExpired: Story = {
-  name: "Pending Payment — expired invoice",
-  args: { status: "pending_payment_expired" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText(/expired invoice/i)).toBeVisible();
-    expect(canvas.getByRole("button", { name: "Pay with card" })).toBeVisible();
-    expect(canvas.getByText(/support@grade10.com/)).toBeVisible();
-  },
-};
-
-export const Processing: Story = {
-  args: { status: "processing" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Processing")).toBeVisible();
-    expect(canvas.getByText("Delivery status")).toBeVisible();
-    expect(canvas.getByText("Paid")).toBeVisible();
-    expect(canvas.getByText("Visa")).toBeVisible();
-    expect(canvas.getByText("Order summary")).toBeVisible();
-  },
-};
-
-export const Shipped: Story = {
-  args: { status: "shipped" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Delivery status")).toBeVisible();
-    expect(
-      canvas.getByRole("button", { name: "Track shipment" }),
-    ).toBeVisible();
-    expect(canvas.getAllByText("Shipped").length).toBeGreaterThan(0);
-  },
-};
-
-export const Delivered: Story = {
-  args: { status: "delivered" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Delivery status")).toBeVisible();
-    expect(canvas.getAllByText("Delivered").length).toBeGreaterThan(0);
-  },
-};
-
-export const Cancelled: Story = {
-  args: { status: "cancelled" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Cancelled")).toBeVisible();
-    expect(canvas.getByRole("complementary")).toBeVisible();
-    expect(canvas.getByText("Order summary")).toBeVisible();
-  },
-};
-
-export const Refunded: Story = {
-  args: { status: "refunded" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Refunded")).toBeVisible();
-    expect(canvas.getByRole("complementary")).toBeVisible();
-    expect(canvas.getByText("Order Total")).toBeVisible();
   },
 };
