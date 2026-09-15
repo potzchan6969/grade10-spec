@@ -192,11 +192,11 @@ pretending.
 Spec entry shape:
 
 ```
-{ id, title, purpose, featureSet?, lastCommit,
+{ id, title, purpose, featureSet?, featureGroups?, lastCommit,
   requirements: [{ name, text,
-    scenarios: [{ id?, name, text }] }],
-  journeys?:  [{ id, title, text, acceptedBy: [scenarioId] }],
-  testCases?: [{ id, title, traces: [scenarioId], status }],
+    scenarios: [{ id?, name, text, serves? }] }],   serves: the anchor
+  journeys?:  [{ id, title, text }],                names no scenario
+  testCases?: [{ id, title, traces: [anchor], status }],
   testCasesStatus?,
   testCaseCitations?: [{ id, title }],   the suite's **Covers:** quotes
   outOfSuite?: [scenarioId],             deliberately uncovered, named

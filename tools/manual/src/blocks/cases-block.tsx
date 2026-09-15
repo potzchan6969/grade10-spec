@@ -57,12 +57,12 @@ export function SuiteView({ spec }: { spec: SpecEntry }) {
     );
   }
 
-  // Living cases only — a retired case's traces are history, not coverage.
-  const covered = tracedBy(cases, spec.journeys);
-  const exempt = new Set(spec.outOfSuite ?? []);
   const scenarios = spec.requirements.flatMap(
     (requirement) => requirement.scenarios,
   );
+  // Living cases only — a retired case's traces are history, not coverage.
+  const covered = tracedBy(cases, scenarios);
+  const exempt = new Set(spec.outOfSuite ?? []);
   const uncovered = scenarios.filter(
     (scenario) =>
       scenario.id && !covered.has(scenario.id) && !exempt.has(scenario.id),

@@ -4,21 +4,63 @@ tcs_rules_rev: 3.0
 
 # Specs to Test Cases
 
-A suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — is a derived reading of the `spec.md` and `user-journeys.md` it names, never a second source of truth. Case shape follows [Virtuoso QA's guide](https://www.virtuosoqa.com/post/test-cases); property vocabularies are Qase's, so a suite exports without translation.
+A suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — is written from the anchors a capability declares, never from the scenarios beside it and never as a second source of truth. Case shape follows [Virtuoso QA's guide](https://www.virtuosoqa.com/post/test-cases); property vocabularies are Qase's, so a suite exports without translation.
+
+A **feature** suite is written **blind**: by a reader who cannot see the spec's `## Requirements` at all. A suite derived from the scenarios can only find inconsistency inside them, never the behaviour they left out — and finding that is what the second reading is for. The scenarios are drafted from the same anchors in parallel, and the two are reconciled once both land.
 
 ## The Rule
 
-- **The spec is correct** — a suite carries no coverage the spec does not state as a scenario; where they disagree, regenerate the case. A proposal never links a suite in place of a spec delta
-- **Journeys are given** — every section is one `user-journeys.md` story; a change holds at most five across every capability it touches (`openspec/config.yaml`, `rules.user-journeys`). A suite never invents a flow, and splitting or merging journeys is a specs edit
-- **A case comes from scenarios** — only those that accept its journey. A case built from no scenario is a requirement in disguise: back to `spec.md` first
-- **A hole is reported** — a scenario no case covers, a scenario under no journey, a journey naming a scenario the spec never defines: report it to the spec's author, never close it by inventing a case or a journey
+- **The spec is correct** — once the scenarios exist and the two readings are reconciled, a suite that disagrees with the spec is regenerated. Before reconciliation there is nothing to disagree with: the suite is the only reading there is, and it is provisional. A proposal never links a suite in place of a spec delta
+- **Anchors are given** — every section is one `user-journeys.md` journey. A capability nobody walks carries one section instead, `## <capability>-US1`, and names its feature set groups on the cases' `**Trace:**` lines — a section per group would number a case by that group's position, and an issued case id is permanent. There is no cap on the number of journeys. A suite never invents a flow, and splitting or merging journeys is an edit to the journeys file
+- **A case comes from an anchor** — never from a scenario, which on a feature run does not exist yet. A case that carries behaviour no anchor implies is a product decision in disguise, and reconciliation is where it is settled
+- **A hole is reported** — an anchor no case covers, a case tracing an anchor nothing defines: report it, never close it by inventing a case or a journey
 - **Properties are QA's** — they classify scenarios the spec states. A wrong property is fixed in review and is never grounds to change a step or an expected result
+
+## The Isolated Input
+
+A feature run reads a bundle the caller assembles, and nothing outside it.
+
+- **Included** — `## Purpose` and `## Feature set` from the capability's `spec.md`, its `user-journeys.md`, the change's `proposal.md`, the linked pages under `docs/prds/`, `openspec/config.yaml`'s `context`, the existing `feature-tcs.md` for id continuity with its `## Reconciliation` stripped, and that suite's `## Settled` — the questions earlier runs asked and had answered, which is what keeps a refused reading from being raised again every time
+- **Excluded** — every `## Requirements` section, `openspec/specs/` beyond the two included sections, and `openspec/changes/archive/` entirely. An archived change keeps an un-stripped `## Reconciliation` naming scenario ids, so reading archive reopens the leak invisibly on the next change to that capability
+- **Recorded** — a hash of the bundle goes on the `## Reconciliation` Run line. When someone later suspects the pass stopped being blind, that hash is the only thing that can be checked
+- **Assembled by hand where no caller built one** — a person running the skill directly assembles it and says so in the report. Reading the requirements "just to check" is how the property is lost, and nothing downstream can detect that it was
+- **An empty `## Raised`, run after run, is the failure signal** — the input hash proves what the reader saw, never how it read. A second reading that asks nothing, several runs running, has either stopped being blind or stopped being a different method, and the suite is not passed on that basis until someone has checked why
+- **Different methods, not the same one twice** — the blind reader works a test-design checklist: boundary values, equivalence partitions, state transitions, CRUD completeness, empty / one / many, null and missing, permission matrix, error taxonomy, SEO and indexability. Two readings that use the same method produce synonyms, and the reconciliation then finds nothing
+
+## Raised
+
+The blind reading ends with a `## Raised` section: every point the input did not settle, as a question for the author. Not cases, not defects — the things the reader had to decide for itself in order to write anything at all.
+
+- **What belongs** — a rule the input is silent on. "Is a scheduled lot open to bid on? The spec names not-yet-published, ended and called off as failures and never places scheduled on either side." That is a question the material cannot answer, and it is how a state nobody had thought about gets found
+- **What does not** — anything the input settles and the reader missed; anything for the technical design rather than the behaviour; anything the reader merely wants to know more about
+- **It is owed by any suite that carries a `## Reconciliation`** — that section is what says a blind reading happened, so it is what makes the raised list due. A reconciliation with no raised list fails: the reading ran and what it could not settle was thrown away. A suite with an empty raised list is a claim, made on the record, that the input settled everything
+- **It survives the run** — QA's review is largely a check on what was done with these, and a reviewer cannot check a list that was deleted once it was processed
+
+## Reconciliation
+
+Once both readings land, the caller joins them on anchors and writes a `## Reconciliation` section at the bottom of the suite. It is the evidence the blind pass ran and what it bought: without it, a pass that found nothing and a pass that never happened look identical in git.
+
+| Diff | Disposition |
+| --- | --- |
+| A case carries behaviour no scenario states, and it is real | Fold it into `spec.md` as a scenario |
+| A case carries behaviour no scenario states, and it is a misreading | Drop the case, record the reason |
+| A case carries behaviour **nobody ever decided** | Stop and ask the author |
+| A case carries behaviour **nobody present can settle** | Keep the case `draft` with `**Blocked:** <who settles it>` |
+| A scenario no case reaches | Add a case, or `**Out of suite:**` naming where it is verified instead |
+| The two readings **state opposite things** | Stop and ask the author |
+
+- **A contradiction is never resolved by the run** — where a case and a scenario both describe the same behaviour and disagree, one of them is wrong and nothing in the material says which. Filing it as a misreading is how the blind reading gets overruled by the reading it exists to check, so it goes to the author like any undecided behaviour
+- **A finding is recorded where it was found, and folded where it belongs** — a capability's reconciliation names what its own blind pass raised, even when the rule lands in another capability's spec. The disposition line says where it went, so the two are findable from each other
+- **Settled stays settled** — a rejection is copied into the durable suite's `## Settled` at fold, one line, no scenario ids. That section is a legal part of the next blind pass's isolated input: it tells the reader what has already been asked and answered, which is not the same as telling it what the scenarios say. Without it the same misreading is raised by every future run, nobody remembers why it was refused last time, and reconciliation fills with noise until someone starts rubber-stamping it
+- **Blocked is not rejected** — a question nobody could answer is not a misreading, and filing it as one deletes the most valuable thing the pass produces. The case stays, a ❓ goes on the PRD, an open question goes on the proposal, and no scenario is written
+- **Out of suite names its verifier** — a consuming repository's build and type check, a database constraint, a design review, a higher-level suite. A scenario that can name no such place is a hole, not an exemption
+- **Scenario ids are temporary here** — they may appear in `## Reconciliation` only while the change is open; archive fold and `/tcs-review` both strip them, leaving the dispositions and the reasons
 
 ## Naming
 
 | Id | Lives in | Example |
 | --- | --- | --- |
-| `<capability>-US-<n>` | `user-journeys.md` story | `grade10-site-store-product-listing-US-01` |
+| `<capability>-US-<n>` | `user-journeys.md` journey | `grade10-site-store-product-listing-US-01` |
 | `<capability>-SC-<n>` | `spec.md` scenario | `grade10-site-store-product-listing-SC-01` |
 | `<capability>-US<n>` | `feature-tcs.md` journey heading | `grade10-site-store-product-listing-US1` |
 | `<capability>-US<n>-TC<m>-<v>` | `feature-tcs.md` case | `grade10-site-store-product-listing-US1-TC1-1` |
@@ -106,7 +148,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 
 - **Automatic** — when `/planning-pm` has the proposal, deltas and journeys through `openspec validate <change> --strict`, it runs `/spec-to-tcs <change>` at once: every case `draft`, on the same branch, as its own `test(<domain>): derive test cases for <capability>` commit. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
 - **`/spec-push` refuses** — a change whose capability has `user-journeys.md` and no `feature-tcs.md`; it runs `pnpm run tcs:validate` with the other checks
-- **`skip_specs: true`** — nothing to generate
+- **`skip_specs`** — nothing to generate
 - **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
 
 | Argument | Resolves to |
@@ -147,7 +189,7 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 | PR label | `documentation` |
 | Merges | at journey boundaries; a stopped review still opens a draft PR for what has verdicts |
 
-- **One journey at a time** — its story, then every `draft` case in full, with `actual` and `deprecated` cases listed by id; scenarios offered, and quoted in full on request
+- **One journey at a time** — its three-line statement, then every `draft` case in full, with `actual` and `deprecated` cases listed by id; scenarios offered, and quoted in full on request
 - **Only a human approves** — verdicts approve, change, defer or retire, in the reviewer's words; ids are echoed back and only what was named is marked. Approve → `actual`, defer → `draft`, retire → `deprecated`; the file status follows on its own
 - **Questions are answered from the spec** — quoting the clause, never from an assumption about the product
 - **Restyle first** — drafts to the current revision before review; offered for an `actual` case still `manual`; an `automated` case left as it is
@@ -155,6 +197,19 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 - **Top down** — platform, product, domain, then feature; when a domain's last feature suite is approved, offer its `domain-tcs.md`, then `platform-tcs.md`
 - **Two reviewers is allowed** — open PRs on the file are reported as information; the file is re-read from disk before each verdict is written
 - **Push at the end of a session** — `/tcs-review` offers to commit and push what has a verdict
+
+## The Suites This Store Does Not Yet Have
+
+Thirty capabilities carry a suite and thirty-nine do not; seventeen of those thirty-nine are ones nobody walks, which used to be exempt and no longer are. That is eight hundred scenarios with no cases beside them, and the thirty that do have cases were derived from the scenarios rather than read independently.
+
+**None of it is being filled in one pass, and that is a decision rather than a backlog nobody got to.**
+
+- **A blind reading of a finished spec is not a blind reading.** These scenarios are written, reviewed and shipped. The second reading's whole value is that it happens beside the first without seeing it; run against a spec that already exists, it can only be a derived reading wearing the new shape, and its `## Raised` would come back empty — which is the signal this document names as the mechanism having failed
+- **The suites are written when a change touches the capability.** `/planning-pm` runs the blind pass as part of its own work, on the anchors as they stand at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
+- **`pnpm check:manual`'s `derived` finding is the register.** It names every capability with anchors and no suite, recomputed on every run, so it cannot go stale the way a checklist in a document would. There is no second list to keep
+- **No rules revision was bumped for this.** The cases these files hold did not change; what changed is what a *new* run must record about itself. A major revision would have required sweeping thirty suites to say so, which is the work this section exists to decline
+
+`## Raised` and the anchors are gated accordingly: a suite is held to the new shape when it carries a `## Reconciliation`, and left alone when it does not.
 
 ## Rules Revisions
 
@@ -180,16 +235,16 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 
 ## Step 1: Digest the Capability
 
-- **Read whole** — `spec.md` (`## Purpose`, `## Feature set`, requirements and scenarios), `user-journeys.md`, and the change's `proposal.md`, whose acceptance signal makes a case's type `acceptance`
+- **Read the isolated input** — on a feature run this is the whole of what a reader may see: `## Purpose` and `## Feature set` from `spec.md` but **never its requirements**, `user-journeys.md`, and the change's `proposal.md`, whose acceptance signal makes a case's type `acceptance`. Domain, product and platform runs already read journeys rather than scenarios and are unchanged
 - **Read the PRD** — `docs/prds/products/<product>/<domain>/index.md` and the capability's PRD: a control, state or amount the manual names is written in the manual's words
 - **Read the store's context** — `openspec/config.yaml`'s `context` for the brands, products and conventions (money is minor units plus an ISO 4217 code): `<grade10 store url>`, never `<store front door URL>`
 - **Read the cross-cutting specs the Purpose names** — `crawlable-pages`, `localization`, `money-amounts`, `dates-and-times`. Their facts are checked on the way past (`URL contains <lang>`), never set up as a pre-condition
-- **Write missing journeys first** — to `rules.user-journeys`: keep every SHALL and scenario clause, add a Feature set if none, permanent ids, `**As a** / **I want** / **so that**`, then `**Accepted by:**` as `` `id` — title `` bullets; `openspec validate <change> --strict`
-- **Confirm the ids** — `### <capability>-US-<n>: …` listing its scenario ids, `#### Scenario: <capability>-SC-<n> - …`; older files get an ids-only upgrade
+- **Write missing journeys first** — to `rules.user-journeys`: from the feature set and the PRD, adding no behaviour, with permanent ids and `**As a** / **I want** / **so that**`. There is no `**Accepted by:**` list — a scenario points up at its journey through its own `**Serves:**`, and tooling joins on that; `openspec validate <change> --strict`
+- **Confirm the ids** — `### <capability>-US-<n>: …`; older files get an ids-only upgrade
 
 ## Step 2: Journeys Become Sections
 
-- **One `##` per journey** — `## <capability>-US<n>: <title copied unchanged>`, in the journeys file's order, carrying the same three-line story; the actor resolves to `customer` or `admin`
+- **One `##` per journey** — `## <capability>-US<n>: <title copied unchanged>`, in the journeys file's order, carrying the same three-line statement; the actor resolves to `customer` or `admin`
 - **Nothing else** — no `**Covers:**` list, no description, summary or count
 - **`---` between journeys** — on its own line
 
@@ -400,7 +455,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 ## <capability>-US<n+1>: <the next journey>
 ````
 
-- **Fixed points** — header lines computed; journey heading and story copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
+- **Fixed points** — header lines computed; journey heading and its three-line statement copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
 - **No execution record** — no actual result, no pass/fail column; a run lives in Qase against the exported case
 - **Copy** — `openspec/specs/grade10-site/auction/auction/feature-tcs.md`, the one suite approved under the current revision; its `US2-TC1-1` is a case at the right size. A case pasted here would drift; the corpus is validator-held
 - **Deltas use the same format** — under `openspec/changes/<change>/specs/<product>/<domain>/<capability>/feature-tcs.md`

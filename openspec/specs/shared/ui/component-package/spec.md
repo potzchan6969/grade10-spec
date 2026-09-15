@@ -43,6 +43,7 @@ application SHALL render those exports from the package rather than
 maintaining an application-local implementation of them.
 
 #### Scenario: shared-ui-component-package-SC-01 - Two stores render one source
+**Serves:** One shared implementation - two stores render one source
 
 - **GIVEN** two applications that render a surface a capability spec names
 - **WHEN** each application renders that surface
@@ -50,6 +51,7 @@ maintaining an application-local implementation of them.
 - **AND** every difference between the two renderings is produced by the props and theme tokens each application supplies, not by diverging component copies
 
 #### Scenario: shared-ui-component-package-SC-02 - A contract change lands once
+**Serves:** One shared implementation - a contract change lands once
 
 - **WHEN** a capability spec changes a requirement of a shared compound component
 - **THEN** one implementation change in the package satisfies it for every consuming application
@@ -62,6 +64,7 @@ through the repository submodule, with no build step and no committed build
 artifact.
 
 #### Scenario: shared-ui-component-package-SC-03 - An application consumes without building
+**Serves:** One shared implementation - an application consumes without building
 
 - **WHEN** an application installs the workspace with this repository pinned as its submodule
 - **THEN** imports from the shared UI package resolve to source files without running any build in this repository
@@ -77,11 +80,13 @@ message catalogs, or import application code. Internal, transient
 presentation state and DOM-renderer lifecycle remain permitted.
 
 #### Scenario: shared-ui-component-package-SC-04 - Every state is reachable with props alone
+**Serves:** App-neutral components - every state is reachable with props alone
 
 - **WHEN** a package component is rendered in a story or test with props alone
 - **THEN** every consumer-observable state — loading, empty, error, resolved, selected, and disabled where they exist — can be produced without any application setup
 
 #### Scenario: shared-ui-component-package-SC-05 - A forbidden integration is rejected
+**Serves:** App-neutral components - a forbidden integration is rejected
 
 - **WHEN** a change to a package component introduces data fetching, product-state persistence, navigation, analytics, feature flags, message-catalog imports, or an import of application code
 - **THEN** review rejects the change as a contract violation
@@ -93,12 +98,14 @@ every style through design-system token values, and the design system SHALL
 NOT depend on the shared UI package.
 
 #### Scenario: shared-ui-component-package-SC-06 - Styling stays on tokens
+**Serves:** Design-system foundation - styling stays on tokens
 
 - **WHEN** a package component needs a color, spacing, radius, or type style
 - **THEN** it uses a design-system token value rather than an ad-hoc literal
 - **AND** re-theming the token values re-brands the component without a source change
 
 #### Scenario: shared-ui-component-package-SC-07 - The dependency does not invert
+**Serves:** Design-system foundation - the dependency does not invert
 
 - **WHEN** a design-system primitive is changed
 - **THEN** it compiles and its checks pass without the shared UI package present
@@ -128,6 +135,7 @@ SHALL emit every required prop, so the snippet a designer copies from Dev Mode
 compiles.
 
 #### Scenario: shared-ui-component-package-SC-08 - A second store renders the chrome
+**Serves:** No store's content built in - a second store renders the chrome
 
 - **GIVEN** a store application other than the one a shared component was first built for
 - **WHEN** that application renders the component without supplying navigation, brand, or copy
@@ -135,17 +143,20 @@ compiles.
 - **AND** no other store's brand name, navigation, or links can be displayed
 
 #### Scenario: shared-ui-component-package-SC-09 - The store's own content is supplied
+**Serves:** No store's content built in - the store's own content is supplied
 
 - **WHEN** an application supplies its own brand, navigation, links, locale label, and copy
 - **THEN** the component displays exactly what was supplied
 - **AND** the component's layout, spacing, and token-derived styling are unchanged from the design source
 
 #### Scenario: shared-ui-component-package-SC-10 - A non-content default is kept
+**Serves:** No store's content built in - a non-content default is kept
 
 - **WHEN** a shared component offers a default for a variant, size, layout, accessibility behavior, or the accessible name of a standard control
 - **THEN** that default is permitted, because omitting it displays no store's content
 
 #### Scenario: shared-ui-component-package-SC-11 - The design snippet still compiles
+**Serves:** No store's content built in - the design snippet still compiles
 
 - **GIVEN** a shared component with a Figma Code Connect template
 - **WHEN** a designer copies the component's snippet from Dev Mode
@@ -153,6 +164,7 @@ compiles.
 - **AND** it compiles against the component's current types
 
 #### Scenario: shared-ui-component-package-SC-12 - Review catches a reintroduced default
+**Serves:** No store's content built in - review catches a reintroduced default
 
 - **WHEN** a change adds a default value for a prop carrying brand, navigation, catalog, locale, or copy on a shared component
 - **THEN** review rejects the change as a contract violation
@@ -175,23 +187,27 @@ several components SHALL be able to declare its own copy as theirs together,
 rather than restating the words each of them already declares.
 
 #### Scenario: shared-ui-component-package-SC-13 - A consumer reads what a block needs
+**Serves:** Typed copy contract - a consumer reads what a block needs
 
 - **WHEN** an engineer opens a shared component's exported copy type
 - **THEN** it lists every word that component renders, and nothing else
 
 #### Scenario: shared-ui-component-package-SC-14 - A word can be an accessible name
+**Serves:** Typed copy contract - a word can be an accessible name
 
 - **GIVEN** a component that renders a control labelled by one of its words
 - **WHEN** that control needs an accessible name, a title, or a truncation
 - **THEN** the word itself serves, without a second prop carrying the same text
 
 #### Scenario: shared-ui-component-package-SC-15 - A slot takes markup, a word does not
+**Serves:** Typed copy contract - a slot takes markup, a word does not
 
 - **WHEN** a consumer passes an element where a component expects a word
 - **THEN** it is a type error
 - **AND** the slots the component does offer accept that element
 
 #### Scenario: shared-ui-component-package-SC-16 - A surface declares its words once
+**Serves:** Typed copy contract - a surface declares its words once
 
 - **GIVEN** a surface that renders several shared components
 - **WHEN** it declares the copy it needs
@@ -210,18 +226,21 @@ arbitrary-property form naming the same token: `rounded-md` and
 `rounded-(--radius-md)` SHALL render the same value.
 
 #### Scenario: shared-ui-component-package-SC-17 - A designer changes a token value
+**Serves:** Design-system foundation - a designer changes a token value
 
 - **WHEN** a token's value changes in `tokens.json` and the theme CSS is rebuilt
 - **THEN** every utility named after that token renders the new value
 - **AND** no component source changes
 
 #### Scenario: shared-ui-component-package-SC-18 - A utility is named after a token
+**Serves:** Design-system foundation - a utility is named after a token
 
 - **WHEN** a component applies a utility named after a design token
 - **THEN** the rendered value equals that token's value in `tokens.json`
 - **AND** it equals what the arbitrary-property form of the same token renders
 
 #### Scenario: shared-ui-component-package-SC-19 - A scale is projected
+**Serves:** Design-system foundation - a scale is projected
 
 - **WHEN** the design system exposes a token scale as utilities
 - **THEN** each rung reads its own token
@@ -235,6 +254,7 @@ components and types named by `shared/ui/store-home`: `StoreHomeHero`,
 of their prop and copy types.
 
 #### Scenario: shared-ui-component-package-SC-20 - An application imports a store-home block
+**Serves:** Package entry exports - an application imports a store-home block
 
 - **WHEN** an application imports any store-home export named above from the package's public entry
 - **THEN** the import resolves to the implementation in `packages/ui`

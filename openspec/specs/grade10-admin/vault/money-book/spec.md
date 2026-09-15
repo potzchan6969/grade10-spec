@@ -60,12 +60,14 @@ Narrowing to a repayment method SHALL narrow to repayments, because an advance
 and a correction have no method to be one of.
 
 #### Scenario: grade10-admin-vault-money-book-SC-01 - The register is ordered by when it was written
+**Serves:** grade10-admin-vault-money-book-US-01 - Controller ties a month's money to the bank statement
 
 - **GIVEN** a repayment recorded today against a value date last week
 - **WHEN** the register for today is read
 - **THEN** the row is in it, at today's position
 
 #### Scenario: grade10-admin-vault-money-book-SC-02 - A correction names the record it takes back
+**Serves:** grade10-admin-vault-money-book-US-01 - Controller ties a month's money to the bank statement
 
 - **WHEN** a correction is read in the register
 - **THEN** it names the kind and the record it reverses
@@ -85,12 +87,14 @@ The page and the totals SHALL be read as one answer, so a record landing
 between them cannot put the totals outside the range they claim.
 
 #### Scenario: grade10-admin-vault-money-book-SC-03 - Totals do not move as the reader pages
+**Serves:** grade10-admin-vault-money-book-US-01 - Controller ties a month's money to the bank statement
 
 - **GIVEN** a range of three pages of records
 - **WHEN** each page is read in turn
 - **THEN** every page reports the same totals for the range
 
 #### Scenario: grade10-admin-vault-money-book-SC-04 - A book in two currencies totals in each
+**Serves:** grade10-admin-vault-money-book-US-01 - Controller ties a month's money to the bank statement
 
 - **GIVEN** records in two currencies inside one range
 - **WHEN** the register is read
@@ -114,18 +118,21 @@ It SHALL state one currency. Where the book holds loans in more than one, it
 SHALL be refused by name rather than summed.
 
 #### Scenario: grade10-admin-vault-money-book-SC-05 - The position agrees with the case screens
+**Serves:** grade10-admin-vault-money-book-US-02 - Treasurer reads what the loan book stands at
 
 - **GIVEN** three live loans
 - **WHEN** the position is read
 - **THEN** its outstanding is the sum of what each case's own screen says it owes at that instant
 
 #### Scenario: grade10-admin-vault-money-book-SC-06 - A second currency is refused, not summed
+**Serves:** grade10-admin-vault-money-book-US-02 - Treasurer reads what the loan book stands at
 
 - **GIVEN** live loans in two currencies
 - **WHEN** the position is read
 - **THEN** it is refused by name
 
 #### Scenario: grade10-admin-vault-money-book-SC-11 - A past instant replays the book as it stood
+**Serves:** grade10-admin-vault-money-book-US-02 - Treasurer reads what the loan book stands at
 
 - **GIVEN** a loan advanced in June, settled in July and its item released in August
 - **WHEN** the position is read as at the end of June, as at the end of July, and now
@@ -148,18 +155,21 @@ The arrears SHALL be their own read: a page limit shared with any other
 worklist SHALL never let one hide the other.
 
 #### Scenario: grade10-admin-vault-money-book-SC-07 - The arrears resume after the row the last page stopped at
+**Serves:** grade10-admin-vault-money-book-US-03 - Operator works the loans that are running late
 
 - **GIVEN** three loans in arrears and a page size of two
 - **WHEN** the second page is read
 - **THEN** it begins after the row the first stopped at, and says there is nothing behind it
 
 #### Scenario: grade10-admin-vault-money-book-SC-08 - A corrected advance leaves the arrears
+**Serves:** grade10-admin-vault-money-book-US-03 - Operator works the loans that are running late
 
 - **GIVEN** a loan in arrears whose advance is taken back
 - **WHEN** the arrears are read
 - **THEN** the case is not in them
 
 #### Scenario: grade10-admin-vault-money-book-SC-12 - A two-currency book prints each row in its own currency
+**Serves:** The arrears - a two-currency book prints each row in its own currency
 
 - **GIVEN** loans in arrears in two different currencies
 - **WHEN** the arrears are read
@@ -177,12 +187,14 @@ needs in front of a customer.
 Staff and treasurer SHALL share no money grant; an admin SHALL hold both.
 
 #### Scenario: grade10-admin-vault-money-book-SC-09 - A staff operator reads the case but not the book
+**Serves:** grade10-admin-vault-money-book-US-03 - Operator works the loans that are running late
 
 - **GIVEN** an operator holding the staff grants
 - **WHEN** they open a case and then the register
 - **THEN** the case's balance is shown and the register is refused by name
 
 #### Scenario: grade10-admin-vault-money-book-SC-10 - A treasurer reads the book
+**Serves:** grade10-admin-vault-money-book-US-02 - Treasurer reads what the loan book stands at
 
 - **GIVEN** an operator holding the vault payout grant
 - **WHEN** they read the register and the position

@@ -212,10 +212,6 @@ describe("a delta with a title, journeys, and a suite beside it", () => {
       "",
       "**As a** reader, **I want** to watch.",
       "",
-      "**Accepted by:**",
-      "",
-      "- `beta-SC-01` — It is watched",
-      "",
     ].join("\n"),
     "openspec/changes/rich/specs/demo-product/beta/feature-tcs.md": [
       "# Beta test cases",
@@ -238,9 +234,7 @@ describe("a delta with a title, journeys, and a suite beside it", () => {
     expect(delta.title).toBe("Beta — delta");
     expect(delta.purpose).toBe("Beta exists.");
     expect(delta.featureSet).toBe("- Watching");
-    expect(delta.journeys?.map((one) => [one.id, one.acceptedBy])).toEqual([
-      ["beta-US-01", ["beta-SC-01"]],
-    ]);
+    expect(delta.journeys?.map((one) => one.id)).toEqual(["beta-US-01"]);
   });
 
   it("reads rows under a group heading, and a rename as its pair", () => {

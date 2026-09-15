@@ -40,10 +40,6 @@ const journeysText = (roles: string[]) =>
       "**I want** the thing,",
       "**so that** it is done.",
       "",
-      "**Accepted by:**",
-      "",
-      "- `alpha-SC-01` — it does the thing",
-      "",
     ]),
   ].join("\n");
 

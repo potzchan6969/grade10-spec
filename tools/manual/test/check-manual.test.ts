@@ -95,8 +95,17 @@ describe("a store that has drifted", () => {
       (one) => one.level === "warn",
     );
     expect(warnings.map((one) => one.rule).sort()).toEqual([
+      "blind",
       "derived",
       "figma",
+    ]);
+  });
+
+  /** The hatch is granted by this rule staying quiet, so what it says is the
+   * only place a change that owes a second reading is named. */
+  it("names the change that moves behaviour nothing read independently", async () => {
+    expect(lines(await result, "blind")).toEqual([
+      "openspec/changes/add-gamma/specs/demo-product/gamma/feature-tcs.md — `add-gamma` moves behaviour in `demo-product/gamma` and no suite reads it independently — run the feature pass, or say which line of behaviour moved if you think none did",
     ]);
   });
 
@@ -111,8 +120,8 @@ describe("a store that has drifted", () => {
     const root = fixture("broken");
     const report = formatReport(root, await result);
     expect(report.failures).toBe(11);
-    expect(report.warnings).toBe(2);
-    expect(report.text).toContain("11 failures, 2 warnings");
+    expect(report.warnings).toBe(3);
+    expect(report.text).toContain("11 failures, 3 warnings");
   });
 });
 
@@ -143,6 +152,7 @@ const requirement = (name: string, id: string, then: string) => [
   `Alpha SHALL ${then}.`,
   "",
   `#### Scenario: ${id} - it does the thing`,
+  "**Serves:** Doing things - it does the thing",
   "",
   "- **WHEN** asked",
   `- **THEN** it does ${then}`,
@@ -172,17 +182,15 @@ const proposal = (title: string) =>
 const NOBODY =
   "## User journeys\n\n**Walked by:** nobody on their own — a policy every product inherits\n";
 
-const story = (id: string, accepted: string) =>
+/** A story names no scenario. The scenarios name the story, through their own
+ * `**Serves:**`, and the join runs through that anchor. */
+const story = (id: string) =>
   [
     `### ${id}: Collector does the thing`,
     "",
     "**As a** collector,",
     "**I want** the thing,",
     "**so that** it is done.",
-    "",
-    "**Accepted by:**",
-    "",
-    `- \`${accepted}\` — the thing`,
   ].join("\n");
 
 /** A journeys file holds stories, or says nobody walks the capability: the
@@ -197,7 +205,7 @@ describe("who walks a capability", () => {
   it("passes stories, and passes the declaration", async () => {
     const root = writeStore({
       "openspec/specs/demo-product/alpha/spec.md": alpha,
-      "openspec/specs/demo-product/alpha/user-journeys.md": `## User journeys\n\n${story("alpha-US-01", "alpha-SC-01")}\n`,
+      "openspec/specs/demo-product/alpha/user-journeys.md": `## User journeys\n\n${story("alpha-US-01")}\n`,
       "openspec/specs/demo-topic/spec.md": spec(
         "Topic",
         requirement("The topic holds", "demo-topic-SC-01", "it holds"),
@@ -216,7 +224,7 @@ describe("who walks a capability", () => {
         "Beta",
         requirement("Beta holds", "beta-SC-01", "it holds"),
       ),
-      "openspec/specs/demo-product/beta/user-journeys.md": `${NOBODY}\n${story("beta-US-01", "beta-SC-01")}\n`,
+      "openspec/specs/demo-product/beta/user-journeys.md": `${NOBODY}\n${story("beta-US-01")}\n`,
     });
     expect(lines(await runChecks(root, NO_GIT), "walked")).toEqual([
       "openspec/specs/demo-product/alpha/user-journeys.md — holds no story and does not say `**Walked by:** nobody`: one or the other",
@@ -227,7 +235,7 @@ describe("who walks a capability", () => {
   it("asks a delta only while its capability has no durable journeys", async () => {
     const root = writeStore({
       "openspec/specs/demo-product/alpha/spec.md": alpha,
-      "openspec/specs/demo-product/alpha/user-journeys.md": `## User journeys\n\n${story("alpha-US-01", "alpha-SC-01")}\n`,
+      "openspec/specs/demo-product/alpha/user-journeys.md": `## User journeys\n\n${story("alpha-US-01")}\n`,
       "openspec/changes/lean/proposal.md": proposal("Lean"),
       "openspec/changes/lean/specs/demo-product/alpha/spec.md":
         "## MODIFIED Requirements\n\n### Requirement: Alpha does things\n\nAlpha SHALL do the thing.\n",
@@ -336,10 +344,6 @@ describe("callout signatures on a capability page", () => {
     "### alpha-US-01: Someone does the thing",
     "",
     "They open alpha and do the thing.",
-    "",
-    "**Accepted by:**",
-    "",
-    "- alpha-SC-01",
     "",
   ].join("\n");
 
@@ -497,7 +501,7 @@ describe("a delta holding a heading the fold cannot carry", () => {
         "",
         "### alpha-US-01: Someone counts",
         "",
-        "**Accepted by:** alpha-SC-03",
+        "They count what alpha counts.",
         "",
       ].join("\n"),
     );
@@ -714,7 +718,7 @@ describe("permanent ids across the whole store", () => {
       "openspec/changes/archive/2026-01-01-add-beta/proposal.md":
         proposal("Add beta"),
       "openspec/changes/archive/2026-01-01-add-beta/specs/demo-product/beta/spec.md":
-        "## ADDED Requirements\n\n### Requirement: Beta was here\n\n**Accepted by:** beta-SC-01\n",
+        "## ADDED Requirements\n\n### Requirement: Beta was here\n\n#### Scenario: beta-SC-01 - it was here\n\n- **WHEN** asked\n- **THEN** it happened\n",
     });
     expect(lines(await runChecks(root, NO_GIT), "issued")).toEqual([
       "openspec/changes/first/specs/demo-product/alpha/spec.md — reuses `beta-SC-01`, which the archived `add-beta` also issues — an id is issued once and never freed",
@@ -755,7 +759,7 @@ describe("permanent ids across the whole store", () => {
         "",
         "### alpha-US-09: Someone counts",
         "",
-        "**Accepted by:** alpha-SC-03, alpha-SC-03",
+        "They count what alpha counts, twice over.",
         "",
       ].join("\n"),
     );

@@ -14,7 +14,7 @@ export const COUNTDOWN_FLOW_SCENARIOS: ReadonlyArray<
   readonly [string, CountdownScenario]
 > = [
   ["15 minutes", { initialSeconds: 15 * 60 }],
-  ["30 minutes · extension evaluation", { initialSeconds: 30 * 60 }],
+  ["30 minutes", { initialSeconds: 30 * 60 }],
   [
     "1 day 5 seconds · zero day",
     { initialSeconds: DAY_SECONDS + 5, replayBelowSeconds: DAY_SECONDS },
@@ -25,11 +25,11 @@ export const COUNTDOWN_FLOW_SCENARIOS: ReadonlyArray<
   ],
   ["5 seconds · final countdown", { initialSeconds: 5 }],
   [
-    "15 minutes · extension started",
+    "15 minutes · extended bidding",
     { initialSeconds: 15 * 60, extensionStarted: true },
   ],
   [
-    "5 seconds · extension started",
+    "5 seconds · extended bidding",
     { initialSeconds: 5, extensionStarted: true },
   ],
 ];

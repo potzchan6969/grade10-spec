@@ -37,6 +37,11 @@ name and avatar both set) within 7 days of first sign-in.
   defaults to the part of the signed-in address before the `@` — never a
   generated identifier, which is what the current placeholder is and what
   collectors were being shown as themselves.
+- **One name everywhere.** The profile, the till, the wallet pass and the
+  membership page show one name: the name the member chose for the shop, else
+  their account name, else the part of their email before the `@`. When the
+  account service cannot give it, the till shows 會員 and a pass stays as it
+  was.
 - **Avatars.** A collector uploads a JPEG, PNG, or WebP up to 5 MB, cropped
   square, and can remove it again; with none set, the profile shows initials
   derived from the display name.
@@ -87,7 +92,11 @@ limits.
 
 ### Modified Capabilities
 
-None. No existing capability's requirements change.
+- `grade10-site/store/wallet-member-card`: a pass shows the member's name by
+  the store's one rule, and a refresh that cannot get it leaves the pass as it
+  was.
+- `grade10-site/store/membership`: the till shows the member's name by the
+  same rule, and 會員 when the account service cannot give one.
 
 ## Impact
 
@@ -110,6 +119,7 @@ None. No existing capability's requirements change.
 - **Figma** — the `store-profile` block has no published frames and no
   `.figma.ts` mappings, unlike `store-product-listing`. It stays that way here:
   the components are built from the requirements below.
-- **Auth service** — read-only consumer of the session's name and email. No
-  change.
+- **Auth service** — its account lookups return the account name, so the till
+  and the wallet sweep can name a member with no session. It deploys before
+  the store.
 - **Admin panels** — unaffected.

@@ -6,34 +6,32 @@
 **I want** to change an account's roles or standing through a confirmation that speaks my console's words
 **so that** every change is deliberate and my console's own vocabulary is what I act in.
 
-**Accepted by:**
-
-- `shared-console-user-directory-SC-02` — A console offers its own role vocabulary
-- `shared-console-user-directory-SC-03` — A selection is submitted
-- `shared-console-user-directory-SC-05` — An operator without elevated grants opens the directory
-- `shared-console-user-directory-SC-06` — A banned account is shown
-- `shared-console-user-directory-SC-09` — A move that collects a reason is confirmed
-- `shared-console-user-directory-SC-10` — A move that collects no reason is confirmed
-
 ### shared-console-user-directory-US-02: Operator reviews where an account is signed in
 
 **As an** operator
 **I want** to see and end an account's sessions without ever seeing what authenticates them
 **so that** I can act on a compromised account without the console itself becoming the leak.
 
-**Accepted by:**
-
-- `shared-console-user-directory-SC-07` — An operator reads where an account is signed in
-- `shared-console-user-directory-SC-08` — An account holds no sessions
-
-### shared-console-user-directory-US-03: Operator opens a role's grants from a directory chip
+### shared-console-user-directory-US-03: Operator opens a role from the account
 
 **As an** operator,
-**I want** each role name in a Users row's Roles cell to open that role on the grants page when the console supplies an address,
-**so that** I can move from who holds a role to what that role can do without losing the edit-roles CTA.
+**I want** a role name on the open account to open that role on the grants page
+when the console supplies an address,
+**so that** I move from who holds a role to what it can do without the list
+navigating away when I meant to open the account.
 
-**Accepted by:**
+### shared-console-user-directory-US-04: Operator reads one account beside the directory
 
-- `shared-console-user-directory-SC-11` — A role chip links to the supplied address
-- `shared-console-user-directory-SC-12` — CTAs stay beside linked role chips
-- `shared-console-user-directory-SC-13` — Roles without addresses stay plain text
+**As an** operator,
+**I want** an account's identity and actions, the grants it holds, when it
+joined, and where it is signed in to open together beside the list,
+**so that** I judge the account from one reading instead of three
+confirmations that never meet.
+
+### shared-console-user-directory-US-05: Operator changes an account's access from the panel
+
+**As an** operator,
+**I want** to change roles where I read the account, and still be stopped for
+a confirmation on a move I cannot undo,
+**so that** an ordinary change costs one step and a ban never happens by
+accident.

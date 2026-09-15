@@ -17,27 +17,30 @@ const JOURNEYS_FILE = "openspec/specs/demo-product/alpha/user-journeys.md";
 const CASES_FILE = "openspec/specs/demo-product/alpha/feature-tcs.md";
 const PAGE = "docs/prds/products/demo-product/alpha.md";
 
-const scenario = (id: string, name: string) => [
+/** `**Serves:**` sits under the heading and above the steps, so that editing
+ * the prose after the dash never reads as a behaviour change. */
+const scenario = (id: string, name: string, serves = "alpha-US-01") => [
   `#### Scenario: ${id} - ${name}`,
+  ...(serves ? [`**Serves:** ${serves} - the thing`] : []),
   "",
   "- **WHEN** asked",
   "- **THEN** it happens",
   "",
 ];
 
-const journey = (id: string, accepted: string[]) => [
+/** A story names nothing. The scenarios name it. */
+const journey = (id: string) => [
   `### ${id}: Someone does the thing`,
   "",
   "They open alpha and do the thing.",
   "",
-  "**Accepted by:**",
-  "",
-  ...accepted.map((one) => `- ${one}`),
-  "",
 ];
 
+type ScenarioLine = [id: string, name: string, serves?: string];
+
 const specText = ({
-  scenarios = [["alpha-SC-01", "it does the thing"]] as [string, string][],
+  scenarios = [["alpha-SC-01", "it does the thing"]] as ScenarioLine[],
+  featureSet = ["Doing things"],
 } = {}) =>
   [
     "# Alpha",
@@ -46,13 +49,20 @@ const specText = ({
     "",
     "Alpha exists so the checker has a spec to read.",
     "",
+    "## Feature set",
+    "",
+    ...featureSet.flatMap((group) => [
+      `- ${group}`,
+      "  - Something: why it is here",
+    ]),
+    "",
     "## Requirements",
     "",
     "### Requirement: Alpha does things",
     "",
     "Alpha SHALL do the thing when asked.",
     "",
-    ...scenarios.flatMap(([id, name]) => scenario(id, name)),
+    ...scenarios.flatMap(([id, name, serves]) => scenario(id, name, serves)),
   ].join("\n");
 
 type CaseLine = [id: string, status: string, trace: string];
@@ -100,6 +110,15 @@ const pageText = (blocks: string[] = shown) =>
 /** The stories beside the spec, as their own file. */
 const journeysText = (journeys: string[][]) =>
   ["## User journeys", "", ...journeys.flat()].join("\n");
+
+/** The routing declaration a capability nobody walks carries in place of
+ * stories: its anchors are its feature set groups. It is not an exemption —
+ * the capability still owes a suite. */
+const nobodyWalksText = [
+  "## User journeys",
+  "",
+  "**Walked by:** nobody on their own - the capabilities that inherit it walk it.",
+].join("\n");
 
 const store = ({
   spec = specText(),
@@ -262,20 +281,18 @@ describe("scenarios no case traces", () => {
   });
 });
 
-/** A case traces the journey it walks, and reaches every scenario that
- * journey is accepted by — the suite never has to name a scenario twice. */
-describe("a case tracing the journey it walks", () => {
+/** A case walks an anchor and reaches every scenario serving the same one —
+ * the join runs through the anchor, and neither file names the other. */
+describe("a case tracing the anchor it walks", () => {
   const two = specText({
     scenarios: [
       ["alpha-SC-01", "it does the thing"],
       ["alpha-SC-02", "it says so"],
     ],
   });
-  const both = journeysText([
-    journey("alpha-US-01", ["alpha-SC-01", "alpha-SC-02"]),
-  ]);
+  const both = journeysText([journey("alpha-US-01")]);
 
-  it("lands, and covers what the journey is accepted by", async () => {
+  it("lands, and covers every scenario serving that anchor", async () => {
     const root = store({
       spec: two,
       journeys: both,
@@ -300,15 +317,17 @@ describe("a case tracing the journey it walks", () => {
     ]);
   });
 
-  it("leaves a scenario no journey reaches for the coverage rule", async () => {
+  it("leaves a scenario no case reaches for the coverage rule", async () => {
     const root = store({
       spec: specText({
         scenarios: [
           ["alpha-SC-01", "it does the thing"],
-          ["alpha-SC-02", "it says so"],
+          // Serving a feature set group no case walks: reachable behaviour
+          // the suite has not covered.
+          ["alpha-SC-02", "it says so", "Doing things"],
         ],
       }),
-      journeys: journeysText([journey("alpha-US-01", ["alpha-SC-01"])]),
+      journeys: journeysText([journey("alpha-US-01")]),
       cases: suiteText({
         cases: [["alpha-US1-TC1-1", "actual", "alpha-US-01"]],
       }),
@@ -364,25 +383,52 @@ describe("a suite no page shows", () => {
   });
 });
 
-/** A journey is accepted by scenarios; an id resolving to none of the spec's
- * own is a story nothing proves. */
-describe("a journey accepted by a scenario the spec never issued", () => {
-  it("fails naming the journey, the id and the spec file", async () => {
+/** A scenario names the anchor it serves; one resolving to neither a journey
+ * nor a feature set group is a scenario standing under nothing. */
+describe("a scenario serving an anchor the spec does not offer", () => {
+  it("fails naming the scenario, the anchor and the spec", async () => {
     const root = store({
-      journeys: journeysText([
-        journey("alpha-US-01", ["alpha-SC-01", "alpha-SC-88"]),
-      ]),
+      spec: specText({
+        scenarios: [["alpha-SC-01", "it does the thing", "alpha-US-99"]],
+      }),
     });
-    expect(lines(await check(root), "accepted")).toEqual([
-      `${JOURNEYS_FILE} — alpha-US-01 is accepted by \`alpha-SC-88\`, which this spec issues nowhere`,
+    expect(lines(await check(root), "serves")).toEqual([
+      `${SPEC_FILE} — alpha-SC-01 → \`alpha-US-99\`, which is neither a journey nor a feature set group of \`demo-product/alpha\``,
     ]);
   });
 
-  it("says nothing when every accepted-by id resolves", async () => {
+  it("says nothing when the anchor is a journey", async () => {
+    const root = store({ journeys: journeysText([journey("alpha-US-01")]) });
+    expect(lines(await check(root), "serves")).toEqual([]);
+  });
+
+  it("says nothing when the anchor is a feature set group", async () => {
     const root = store({
-      journeys: journeysText([journey("alpha-US-01", ["alpha-SC-01"])]),
+      spec: specText({
+        scenarios: [["alpha-SC-01", "it does the thing", "Doing things"]],
+      }),
+      journeys: nobodyWalksText,
     });
-    expect(lines(await check(root), "accepted")).toEqual([]);
+    expect(lines(await check(root), "serves")).toEqual([]);
+  });
+});
+
+/** Every scenario written before `**Serves:**` existed carries no line. That
+ * is a warning until the store is migrated, not a failure — failing on it now
+ * would bury every other finding behind the backlog. */
+describe("a scenario carrying no Serves line", () => {
+  it("warns once for the capability, not once per scenario", async () => {
+    const root = store({
+      spec: specText({
+        scenarios: [
+          ["alpha-SC-01", "it does the thing", ""],
+          ["alpha-SC-02", "it says so", ""],
+        ],
+      }),
+    });
+    expect(lines(await check(root), "anchorless")).toEqual([
+      `${SPEC_FILE} — 2 scenarios carry no \`**Serves:**\` line (alpha-SC-01, alpha-SC-02)`,
+    ]);
   });
 });
 

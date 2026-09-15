@@ -31,6 +31,8 @@ when a close extends stay `grade10-site/auction/auction`'s.
     nothing it showed is replaced by a loading placeholder
   - Clock values carry on: a value that follows the clock continues from what
     was served rather than contradicting it
+- Watching a lot
+  - Watch from the page: a collector marks the lot they are reading, and nothing else on the page moves
 - Catalogue and sitemap
   - Opened from the catalogue: the catalogue reaches a lot's own address
     without a page load
@@ -49,12 +51,14 @@ Two lot addresses SHALL answer with their own lot — the page a collector
 reads is the one the address names, not the catalogue it was reached from.
 
 #### Scenario: grade10-site-auction-listing-page-SC-01 - A lot answers whole
+**Serves:** grade10-site-auction-listing-page-US-01 - Collector opens a lot at its own address
 
 - **WHEN** a lot address is fetched and no script executes
 - **THEN** the response HTML contains that lot's name, its description, and
   where its bidding stands
 
 #### Scenario: grade10-site-auction-listing-page-SC-02 - Two lots, two pages
+**Serves:** grade10-site-auction-listing-page-US-01 - Collector opens a lot at its own address
 
 - **WHEN** two lot addresses are fetched
 - **THEN** each response carries its own lot's name and standing, and its own
@@ -67,6 +71,7 @@ lot and its own canonical address, readable without executing scripts. A
 shared lot link SHALL NOT unfurl as the auction catalogue.
 
 #### Scenario: grade10-site-auction-listing-page-SC-03 - A preview fetcher reads a lot
+**Serves:** grade10-site-auction-listing-page-US-02 - Collector shares a lot link
 
 - **WHEN** a lot address is fetched and no script executes
 - **THEN** the response carries `og:title`, `og:description` and `og:url`
@@ -81,6 +86,7 @@ naming no published lot SHALL answer with status 404 and the site's not-found
 surface, never an empty lot page and never the catalogue.
 
 #### Scenario: grade10-site-auction-listing-page-SC-04 - An id the catalogue publishes no lot for
+**Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
 - **WHEN** an address under the auction's lots naming no published lot is
   fetched
@@ -88,6 +94,7 @@ surface, never an empty lot page and never the catalogue.
 - **AND** a collector opening it sees the site's not-found surface
 
 #### Scenario: grade10-site-auction-listing-page-SC-05 - A lot the catalogue publishes answers
+**Serves:** `grade10-site-auction-listing-page-US-01`, `grade10-site-auction-listing-page-US-03` - a lot the catalogue publishes answers
 
 - **GIVEN** a lot the catalogue publishes
 - **WHEN** its address is fetched
@@ -103,6 +110,7 @@ replaced by a loading placeholder, and a value that follows the clock SHALL
 carry on from what was served rather than disagreeing with it.
 
 #### Scenario: grade10-site-auction-listing-page-SC-06 - The served lot stays on screen
+**Serves:** grade10-site-auction-listing-page-US-04 - Collector reads a live lot while scripts load
 
 - **GIVEN** a lot address served with that lot in the document
 - **WHEN** scripts finish loading
@@ -111,6 +119,7 @@ carry on from what was served rather than disagreeing with it.
 - **AND** none of them is replaced by a loading placeholder
 
 #### Scenario: grade10-site-auction-listing-page-SC-07 - A value that follows the clock carries on
+**Serves:** grade10-site-auction-listing-page-US-04 - Collector reads a live lot while scripts load
 
 - **GIVEN** a lot whose page shows how long its bidding has left
 - **WHEN** scripts finish loading
@@ -127,12 +136,14 @@ not one of them: which lots the auction publishes is not known when the site
 is built.
 
 #### Scenario: grade10-site-auction-listing-page-SC-08 - A lot is opened from the catalogue
+**Serves:** grade10-site-auction-listing-page-US-05 - Collector reaches a lot from the catalogue
 
 - **GIVEN** a collector reading the auction catalogue
 - **WHEN** they open a lot it lists
 - **THEN** that lot's address is what they are on, showing that lot's page
 
 #### Scenario: grade10-site-auction-listing-page-SC-09 - The sitemap names no lot
+**Serves:** grade10-site-auction-listing-page-US-05 - Collector reaches a lot from the catalogue
 
 - **WHEN** the sitemap is fetched
 - **THEN** no entry is a lot address
@@ -157,6 +168,7 @@ required, and `grade10-site-auction-listing-page-SC-01` through `grade10-site-au
 for them.
 
 #### Scenario: grade10-site-auction-listing-page-SC-10 - A collector watches the lot they are reading
+**Serves:** Watching a lot - a collector watches the lot they are reading
 
 - **GIVEN** a signed-in collector on a published lot's own page who does not
   watch it
@@ -165,12 +177,14 @@ for them.
 - **AND** they are still on that lot's page
 
 #### Scenario: grade10-site-auction-listing-page-SC-11 - The control acts on the addressed lot
+**Serves:** Watching a lot - the control acts on the addressed lot
 
 - **GIVEN** two published lots with their own addresses
 - **WHEN** a collector watches the lot from one of those addresses
 - **THEN** only the lot that address names is watched
 
 #### Scenario: grade10-site-auction-listing-page-SC-12 - Watching changes nothing else on the page
+**Serves:** Watching a lot - watching changes nothing else on the page
 
 - **GIVEN** a signed-in collector on a live lot's page
 - **WHEN** they watch it

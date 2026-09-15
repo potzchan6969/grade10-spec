@@ -1,3 +1,4 @@
 schema: grade10-planning
 created: 2026-09-12
 skip_specs: true
+skip_specs_why: "documentation only - it brings the workflow's scattered descriptions into one shape and moves no product behaviour"

@@ -16,6 +16,7 @@ Beta exists and no page mentions it.
 Beta SHALL hold.
 
 #### Scenario: beta-SC-01 - it holds
+**Serves:** Doing the thing - it holds
 
 - **WHEN** read
 - **THEN** it holds

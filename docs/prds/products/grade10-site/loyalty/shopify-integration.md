@@ -259,8 +259,9 @@ The loyalty terminal is a Shopify POS UI extension.
 - **A miss says nothing** — a staff-typed email matching no member answers
   only that none was found, and repeated lookups are throttled
 - **Attach** — the terminal sets the customer on the cart and checks it;
-  spending stays off until the cart's customer is the paired one, the cart
-  carries no other discount, and the cart total covers the amount
+  spending stays off until the cart's customer is the paired one, no staff
+  order discount is on the sale, and what the shop's offers leave of the
+  goods covers the amount — [Discounts](/p/grade10-site/store/discounts)
 - **Plan** — one sale row per session, rewritten on every plan, capped at 20
   plans in 5 minutes
 - **Discount on the cart** — the store's order id first, then the "Points"

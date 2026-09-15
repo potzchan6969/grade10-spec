@@ -38,7 +38,34 @@ export function checkUnmarked(ctx, changes, pages) {
   );
 
   for (const change of changes) {
-    if (change.status !== "in-flight" || change.deltas.length === 0) continue;
+    if (change.status !== "in-flight") continue;
+    // RULE `hatch`: `skip_specs` says this change alters no product behaviour.
+    // A 🚧 line says a reader will see something new. An author claiming both
+    // is contradicting themselves, and `skip_specs` is the switch that turns
+    // every other check in this workflow off, so the contradiction is the one
+    // guard it has.
+    if (change.skipSpecs !== undefined) {
+      const claims = (change.sections ?? []).filter(
+        (one) =>
+          one.page.startsWith(products) &&
+          marked.has(`${one.page}#${one.slug}`),
+      );
+      if (claims.length > 0) {
+        ctx.add(
+          "hatch",
+          fileOf(change, ".openspec.yaml"),
+          `claims \`skip_specs\` and marks 🚧 under ${claims[0].page}#${claims[0].slug} — a 🚧 line is an outcome a reader can see, so the change alters behaviour after all`,
+        );
+      }
+      if (change.skipSpecs === "") {
+        ctx.add(
+          "hatch",
+          fileOf(change, ".openspec.yaml"),
+          "`skip_specs` gives no reason — add `skip_specs_why` with the line that says why no behaviour moves",
+        );
+      }
+    }
+    if (change.deltas.length === 0) continue;
     if (change.pageWaived) continue;
     const linked = (change.sections ?? []).filter((one) =>
       one.page.startsWith(products),

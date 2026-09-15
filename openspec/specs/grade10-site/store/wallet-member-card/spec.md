@@ -51,6 +51,7 @@ each refresh, never stored as the pass's own truth beyond what it last
 rendered.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-01 - A pass renders the programme's current standing
+**Serves:** grade10-site-store-wallet-member-card-US-01 - Member adds their card to a phone wallet
 
 - **GIVEN** a member whose tier changed since their pass last refreshed
 - **WHEN** the pass next refreshes
@@ -66,6 +67,7 @@ member holds in the other untouched, and the membership surface SHALL say
 which passes they are carrying.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-02 - A second pass on the same wallet is refused while one is live
+**Serves:** grade10-site-store-wallet-member-card-US-01 - Member adds their card to a phone wallet
 
 - **GIVEN** a member holding a live Google Wallet pass
 - **WHEN** they try to add a second Google Wallet pass
@@ -73,12 +75,14 @@ which passes they are carrying.
 - **AND** the partial unique index `uq_wallet_passes_live_member` is the backstop that refuses a second live row on any path that forgets
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-03 - Ending one wallet's pass leaves the other's untouched
+**Serves:** `grade10-site-store-wallet-member-card-US-03`, `grade10-site-store-wallet-member-card-US-07` - ending one wallet's pass leaves the other's untouched
 
 - **GIVEN** a member holding a live pass on both wallets
 - **WHEN** they end the Google Wallet pass alone
 - **THEN** the Apple Wallet pass stays live
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-21 - Adding one wallet's pass leaves the other alive
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **GIVEN** a member carrying a pass in one wallet
 - **WHEN** they add a pass in the other
@@ -90,6 +94,7 @@ A pass SHALL hold exactly one of `live`, `ended`, `erased`, held by a CHECK
 constraint, with `ended_at` present if and only if the pass is not live.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-04 - A non-live pass carries its ended timestamp
+**Serves:** grade10-site-store-wallet-member-card-US-03 - Member ends one pass and keeps the other
 
 - **GIVEN** a pass moved to `ended` or `erased`
 - **WHEN** its row is read
@@ -118,18 +123,21 @@ shows was current, and a sweep with more due than it reads SHALL report how
 far behind its oldest due pass is.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-05 - A member whose balance moved is current by the end of the next lap
+**Serves:** grade10-site-store-wallet-member-card-US-02 - Member scans at the counter after their balance moved
 
 - **GIVEN** a member whose balance changed and whose pass is due
 - **WHEN** the next sweep lap runs
 - **THEN** the pass renders the new balance
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-06 - A dormant member's pass is read once a day and sends nothing
+**Serves:** grade10-site-store-wallet-member-card-US-05 - Operator reads what the sweep costs
 
 - **GIVEN** a member with no activity and a pass with nothing due sooner
 - **WHEN** a day passes
 - **THEN** the pass is read once by the daily floor and no push is sent if nothing changed
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-25 - A recorded change reaches the wallet on the next sweep
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** staff spend a member's points
 - **THEN** the first sweep beginning after that spend sends the wallet the
@@ -137,6 +145,7 @@ far behind its oldest due pass is.
 - **AND** it does so whether or not the spend itself marked the pass due
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-26 - A change nobody recorded is due at the instant it happens
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** a member's points reach their expiry, their earned tier term runs
   out, or an invitation holding their tier lapses, with nothing written
@@ -145,18 +154,21 @@ far behind its oldest due pass is.
   member's own surfaces then read
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-27 - A sweep that has fallen behind says so
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **GIVEN** more passes due than one sweep reads
 - **WHEN** the sweep runs
 - **THEN** it reports the age of its oldest due pass
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-28 - A burst costs one update
+**Serves:** One sweep behind - a burst costs one update
 
 - **WHEN** a member's points change several times inside one interval
 - **THEN** the pass is updated once
 - **AND** it carries what stands after the last of those changes
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-29 - A pass says how current it is
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** a member opens their pass
 - **THEN** it says when what it shows was current
@@ -168,6 +180,7 @@ per wallet, the refresh arm; and only then what the vendor is owed for a
 non-live pass. The two arms SHALL never share one lap's budget.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-07 - A live member's refresh is not starved by the vendor-debt arm
+**Serves:** grade10-site-store-wallet-member-card-US-02 - Member scans at the counter after their balance moved
 
 - **GIVEN** a lap with both refreshes and vendor debt due
 - **WHEN** the lap runs
@@ -181,6 +194,7 @@ copy is owed a call. There SHALL be no separate dueness column and no
 mark-due script. The sweep's expiry arm SHALL drain this debt.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-08 - An ended pass's vendor copy is discharged by the sweep
+**Serves:** grade10-site-store-wallet-member-card-US-03 - Member ends one pass and keeps the other
 
 - **GIVEN** a pass just moved to `ended`
 - **WHEN** the sweep's expiry arm next runs
@@ -203,23 +217,27 @@ identifying nobody and the devices it was sent to being forgotten, with no
 acknowledgement to wait for.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-09 - An erased pass's secret is emptied
+**Serves:** grade10-site-store-wallet-member-card-US-04 - Member asks to be erased
 
 - **GIVEN** a member who asks to be erased
 - **WHEN** their passes are erased
 - **THEN** the secret column on each is empty and no further code can be made from it
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-10 - A device fetching an erased pass sees nobody
+**Serves:** grade10-site-store-wallet-member-card-US-04 - Member asks to be erased
 
 - **GIVEN** an erased pass whose device still pulls updates
 - **WHEN** the device fetches it
 - **THEN** the answer names no member, tier or balance
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-30 - An erased member's pass identifies nobody
+**Serves:** Erasure - an erased member's pass identifies nobody
 
 - **WHEN** a member is erased and a code from their pass is presented
 - **THEN** it identifies nobody
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-31 - An erasure the wallet has not confirmed is still owed
+**Serves:** Erasure - an erasure the wallet has not confirmed is still owed
 
 - **GIVEN** a wallet that keeps its own copy of the pass
 - **WHEN** it cannot be reached while a member is being erased
@@ -227,6 +245,7 @@ acknowledgement to wait for.
 - **AND** it is reported as still owed until then
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-32 - An erasure with no wallet to confirm it is still discharged
+**Serves:** Erasure - an erasure with no wallet to confirm it is still discharged
 
 - **GIVEN** a wallet that keeps no copy, holding only what a member's own
   device was sent
@@ -247,6 +266,7 @@ Apple adapter, and the cursor to the store's sweeps — plus the writers the
 registry exempts by name, each with a reason.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-11 - A write-surface check pins every wallet table's writer
+**Serves:** grade10-site-store-wallet-member-card-US-05 - Operator reads what the sweep costs
 
 - **WHEN** the write-surfaces check runs
 - **THEN** every wallet table names exactly one writer
@@ -258,6 +278,7 @@ refuse loudly, naming the missing secret, rather than issuing a pass nobody
 can read.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-12 - A missing credential names itself
+**Serves:** grade10-site-store-wallet-member-card-US-01 - Member adds their card to a phone wallet
 
 - **GIVEN** a deployment missing one wallet credential
 - **WHEN** a member tries to add that wallet's pass
@@ -281,28 +302,33 @@ card on the site, and removing a pass SHALL change nothing about the
 membership.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-13 - A member adds their card to their wallet
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** a member opens their card on the membership surface
 - **THEN** they are offered the pass, and adding it carries their name, tier,
   points to spend and a scannable code
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-14 - A pass identifies as the card does
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** staff scan a member's pass
 - **THEN** a session opens for that member on the same terms a scanned card opens
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-15 - A photographed code is worth nothing
+**Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
 - **WHEN** a code copied from a member's pass is presented after its period
 - **THEN** it identifies nobody
 - **AND** a code presented twice inside its own period is refused the second time
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-16 - A pass identifies with no signal
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** a member with no network on their phone presents their pass
 - **THEN** the code it shows is current and opens a session
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-17 - Removing a pass leaves the membership intact
+**Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
 - **WHEN** a member deletes the pass from their wallet
 - **THEN** their membership, balance, tier and member card are unchanged
@@ -327,18 +353,21 @@ SHALL be served by the card on the site, as they are today.
 Removing a pass SHALL change nothing about the membership.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-18 - A member adds their card to Apple Wallet
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** a member opens their card on the membership surface
 - **THEN** they are offered the pass, and adding it carries their name, tier,
   points to spend and a scannable code
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-19 - An Apple pass identifies every time
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **GIVEN** a member whose phone has no network
 - **WHEN** they present the same pass on two visits
 - **THEN** a session opens both times
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-20 - An Apple pass cannot move value
+**Serves:** grade10-site-store-wallet-member-card-US-08 - Member spends points when the pass they carry cannot
 
 - **WHEN** a session is opened from an Apple pass
 - **THEN** the member's panel is read
@@ -352,6 +381,7 @@ of those languages SHALL be shown it; a phone set to any other SHALL read the
 surface's default.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-22 - A pass speaks the phone's language
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **GIVEN** a member whose phone is set to a language the membership surface
   speaks
@@ -372,6 +402,7 @@ device was present. A pass whose code the programme made SHALL prove only that
 the pass reached a device once, and SHALL be neither.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-23 - Arriving by pass is countable
+**Serves:** The wallet pass - arriving by pass is countable
 
 - **WHEN** members are identified, some from a pass and some from the site's card
 - **THEN** the two are counted apart
@@ -385,6 +416,7 @@ the pass is still on the member's phone. A member SHALL be able to add a new
 pass afterwards.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-24 - An ended pass identifies nobody
+**Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
 - **WHEN** a member ends their pass and a code it makes is then presented
 - **THEN** it identifies nobody
@@ -417,24 +449,28 @@ drawn as an empty offer, which a member reads as carrying nothing.
 The consuming application is the Grade10 site.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-33 - The save action is offered beside the card
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** a member opens their card on the membership surface
 - **THEN** the action that adds the pass is offered beside it
 - **AND** every word it shows came from the application
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-34 - A failure names the wallet it belongs to
+**Serves:** The wallet pass - a failure names the wallet it belongs to
 
 - **GIVEN** a member carrying a pass in each of two wallets
 - **WHEN** ending one fails and an act on the other then succeeds
 - **THEN** the failure is still shown, and it names the wallet it belongs to
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-35 - A standing that could not be read says so
+**Serves:** The wallet pass - a standing that could not be read says so
 
 - **GIVEN** a member who carries a pass
 - **WHEN** the surface cannot read what they hold
 - **THEN** it says so, and the control that ends the pass is not taken away
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-36 - A deployment offers only the wallets it carries
+**Serves:** Configuration - a deployment offers only the wallets it carries
 
 - **WHEN** a member opens their card on a deployment configured for one wallet
   and not the other
@@ -442,6 +478,7 @@ The consuming application is the Grade10 site.
 - **AND** nothing is asked of either wallet to find that out
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-37 - A member who returns still finds the passes they hold
+**Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
 - **GIVEN** a member added a pass on an earlier visit
 - **WHEN** they open their card again

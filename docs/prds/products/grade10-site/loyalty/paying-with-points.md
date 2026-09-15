@@ -81,6 +81,9 @@ The debit follows what the shop applied, not what was promised.
   amount off the sale, and shows the points spent, the money still due and
   the balance after; no code is minted for the points, and a repeated tap
   spends once
+- **Beside the shop's offer** — points go on beside an automatic offer,
+  capped at what the offers leave of the goods; a staff order discount on
+  the sale refuses the spend until staff take it off
 - **Paid** — the shopkeeper takes payment
 - **Debited** — when the paid sale lands, the same way as online; clearing
   the discounts before payment undoes the promise, and nothing was debited

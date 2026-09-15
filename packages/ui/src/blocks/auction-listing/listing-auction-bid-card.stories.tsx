@@ -34,7 +34,7 @@ const COPY = {
   opensIn: "Opens in",
   closed: "Closed",
   timeLeft: "Time left",
-  timeLeftAutoExtended: "Time left (auto-extended)",
+  timeLeftAutoExtended: "Time left (extended)",
   autoExtendedTooltip: formatAutoExtendedTooltip(
     DEFAULT_LISTING_EXTENSION_POLICY,
   ),
@@ -321,6 +321,33 @@ export const Leading: Story = {
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /^Raise maximum to HK\$100,000/ }),
+    ).toBeInTheDocument();
+  },
+};
+
+export const ExtendedBidding: Story = {
+  args: {
+    view: liveView({
+      extended: true,
+      countdown: "29m 58s",
+      countdownSeconds: 1798,
+    }),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Past scheduled close with extended bidding on. Time left label reads Time left (extended); the info tooltip explains the post-close timer restart.",
+      },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Time left (extended)")).toBeInTheDocument();
+    expect(
+      canvas.getByLabelText(
+        /After the scheduled close, each bid restarts a 30-minute timer/,
+      ),
     ).toBeInTheDocument();
   },
 };

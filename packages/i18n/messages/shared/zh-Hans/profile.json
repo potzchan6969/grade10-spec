@@ -1,10 +1,8 @@
 {
   "title": "我的个人资料",
   "loadFailed": "无法加载你的个人资料。",
-  "emptyHint": "你还没有个人资料。首次写入时，商店会为你创建。",
   "displayNameLabel": "显示名称",
   "bioLabel": "简介",
-  "createLabel": "创建个人资料",
   "editLabel": "编辑个人资料",
   "emptyBio": "还没有填写简介。",
   "memberSince": "{date} 起成为会员"

@@ -175,7 +175,7 @@ function dirsHolding(root, filename) {
 }
 
 /** Journey and scenario ids the capability issues, plus the journey titles.
- * The stories are their own file beside the spec, so both are read: the
+ * The journeys are their own file beside the spec, so both are read: the
  * scenarios come from `spec.md` and the journeys from `user-journeys.md`. */
 function readSpecIds(specPath) {
   if (!existsSync(specPath)) return null;
@@ -186,6 +186,18 @@ function readSpecIds(specPath) {
     : "";
   const journeys = new Map();
   const scenarios = new Set();
+  // A `## Feature set` root group is an anchor too, and the only kind a
+  // capability nobody walks has. Column-0 bullets only: an indented bullet is
+  // a leaf, and a leaf carries no id and anchors nothing.
+  const groups = new Set();
+  let inFeatureSet = false;
+  for (const line of text.split("\n")) {
+    if (/^##\s/.test(line)) inFeatureSet = /^##\s+Feature set\s*$/.test(line);
+    else if (inFeatureSet) {
+      const g = line.match(/^[-*]\s+(?:\*\*)?(.+?)(?:\*\*)?\s*$/);
+      if (g) groups.add(g[1].replace(/:.*$/, "").trim());
+    }
+  }
   for (const line of `${text}\n${stories}`.split("\n")) {
     const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
     if (j) journeys.set(j[1], j[2]);
@@ -197,6 +209,11 @@ function readSpecIds(specPath) {
   return {
     journeys,
     scenarios,
+    groups,
+    // A capability nobody walks routes its anchors to the feature set. It is
+    // not exempt from a suite: it carries one section, and its cases trace
+    // groups rather than journeys.
+    unwalked: /^\*\*Walked by:\*\*\s+nobody\b/m.test(stories),
     hasJourneySection: /^##\s+User journeys\s*$/m.test(stories),
   };
 }
@@ -212,6 +229,13 @@ function parseSuite(text) {
     reviewed: null,
     journeys: [],
     legacy: new Set(),
+    // The blind reading's own output: what the isolated input did not settle.
+    // Tracked as present-or-absent and as empty-or-not, because an absent
+    // section and an empty one say different things — one is a suite that
+    // skipped the step, the other a claim that nothing was left open.
+    raised: null,
+    settled: null,
+    reconciliation: null,
   };
   let journey = null;
   let tc = null;
@@ -228,6 +252,20 @@ function parseSuite(text) {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+
+    const meta = line.match(/^##\s+(Raised|Settled|Reconciliation)\s*$/);
+    if (meta) {
+      pushJourney();
+      const key = meta[1].toLowerCase();
+      const body = [];
+      for (let j = i + 1; j < lines.length && !/^##\s/.test(lines[j]); j++) {
+        body.push(lines[j]);
+      }
+      suite[key] = body.filter(
+        (one) => one.trim() && !one.trim().startsWith("<!--"),
+      ).length;
+      continue;
+    }
 
     const h1 = line.match(/^#\s+(.+?)\s*$/);
     if (h1 && suite.title === null) {
@@ -514,6 +552,33 @@ function checkSuite(root, filePath, rulesRev) {
         "the file status is derived, never chosen",
     );
 
+  // --- the blind reading's own output ------------------------------------
+  // A feature suite is an independent reading, and `## Raised` is the half a
+  // derived reading could not have produced. Absent means the step was skipped;
+  // empty means the reader claims the input settled everything, which is a
+  // claim worth being able to make and worth being read as one.
+  //
+  // `## Reconciliation` is what says a blind reading happened, so it is what
+  // decides whether `## Raised` is owed. A suite with both is one this workflow
+  // wrote; a suite with neither predates it and is left alone, which is why no
+  // rules revision was bumped — the cases these files hold did not change, and
+  // a major would have demanded thirty rewrites to say so.
+  //
+  // A reconciliation with no raised list is the shape that must fail: the blind
+  // reading ran and its findings were dropped.
+  if (!domain && suite.reconciliation !== null) {
+    if (suite.raised === null)
+      err(
+        1,
+        "has `## Reconciliation` and no `## Raised` — the blind reading ran and what it could not settle was thrown away; an empty section is how a reader says nothing was left open",
+      );
+    else if (suite.raised === 0)
+      warn(
+        1,
+        "`## Raised` is empty — the input hash says what the reader saw, never how it read; several empty runs mean the second reading has stopped being a second reading",
+      );
+  }
+
   if (counts.draft > 0 && !suite.draftsStyled)
     err(
       1,
@@ -581,6 +646,7 @@ function checkSuite(root, filePath, rulesRev) {
     if (
       !domain &&
       spec &&
+      !spec.unwalked &&
       spec.journeys.size > 0 &&
       !spec.journeys.has(canonical) &&
       !spec.journeys.has(alternate)
@@ -588,6 +654,14 @@ function checkSuite(root, filePath, rulesRev) {
       err(
         j.line,
         `journey \`${canonical}\` is not defined in the spec beside it`,
+      );
+    // A capability nobody walks carries exactly one section. More than one
+    // would have to be numbered by a feature set group's position, and an
+    // issued case id is permanent.
+    if (!domain && spec?.unwalked && j.num !== 1)
+      err(
+        j.line,
+        `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}-US1\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
       );
     const story = new Set(j.story);
     if (
@@ -684,19 +758,29 @@ function checkSuite(root, filePath, rulesRev) {
 
       const trace = (tc.props.get("Trace") ?? "").trim();
       if (trace && spec) {
-        const ids = trace.split(/[,\s]+/).filter(Boolean);
+        // Commas first: an anchor can be a feature set group name, which has
+        // spaces in it. A comma-free part that names no group is split on
+        // whitespace, so the older space-separated composed trace still reads.
+        const ids = trace
+          .split(",")
+          .map((one) => one.trim())
+          .filter(Boolean)
+          .flatMap((one) =>
+            spec.groups?.has(one) || !/\s/.test(one) ? [one] : one.split(/\s+/),
+          );
         for (const id of ids) {
           if (spec.journeys.has(id)) continue;
+          if (spec.groups?.has(id)) continue;
           if (spec.scenarios.has(id)) {
             warn(
               at,
-              `case \`${tc.id}\` traces scenario \`${id}\`; a trace carries the journey id (\`${capability}-US-<n>\`)`,
+              `case \`${tc.id}\` traces scenario \`${id}\`; a trace carries the anchor the case walks — a journey id (\`${capability}-US-<n>\`), or a \`## Feature set\` root group where nobody walks the capability`,
             );
             continue;
           }
           err(
             at,
-            `case \`${tc.id}\` traces \`${id}\`, which the spec beside it does not define`,
+            `case \`${tc.id}\` traces \`${id}\`, which is neither a journey nor a feature set group of the spec beside it`,
           );
         }
         if (ids.length > 1 && !domain)

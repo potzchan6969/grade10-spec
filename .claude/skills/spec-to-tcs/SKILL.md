@@ -1,6 +1,6 @@
 ---
 name: spec-to-tcs
-description: Derive classified test cases from the user journeys - a capability's feature-tcs.md, a domain's domain-tcs.md, a product's product-tcs.md, or the store's cross-product platform-tcs.md. Use when QA or a PM asks to turn a durable capability, a domain, or an OpenSpec change into test cases, or when a change's specs are finished and auto-generate suites. Invoke as /spec-to-tcs [platform|product|domain|feature] <target>.
+description: Write classified test cases from the anchors - a capability's feature-tcs.md as a blind pass that never reads the scenarios, or a domain's domain-tcs.md, a product's product-tcs.md, or the store's cross-product platform-tcs.md. Use when QA or a PM asks to turn a durable capability, a domain, or an OpenSpec change into test cases, or when a change's specs are finished and auto-generate suites. Invoke as /spec-to-tcs [platform|product|domain|feature] <target>.
 ---
 
 # Generating Test Cases
@@ -12,7 +12,45 @@ the two differ, the document is correct.
 
 Invoke as `/spec-to-tcs [platform|product|domain|feature] <target>`. Reviewing
 a suite and moving its cases to `actual` is `/tcs-review`'s job
-(`.cursor/skills/tcs-review/SKILL.md`). Manual "peer review" is deprecated.
+(`.claude/skills/tcs-review/SKILL.md`). Manual "peer review" is deprecated.
+
+## A feature run is blind
+
+**A feature-level run never reads `## Requirements`.** The suite is not derived
+from the scenarios; it is an independent second reading of the same anchors,
+and a suite derived from the scenarios can only find inconsistency inside them,
+never the behaviour they left out. Holding that property is this skill's first
+obligation, above every convention below.
+
+The blind pass reads the bundle **The Isolated Input** describes in the
+rulebook, assembled by the caller, and nothing outside it:
+
+- **Included** - `## Purpose` and `## Feature set` from the capability's
+  `spec.md`, its `user-journeys.md`, the change's `proposal.md` where one
+  exists, the linked pages under `docs/prds/`, `openspec/config.yaml`'s
+  `context`, the existing `feature-tcs.md` for id continuity with its
+  `## Reconciliation` stripped, and that suite's `## Settled` - the questions
+  earlier runs asked and had answered. Reading those is what stops you raising
+  a refused reading again, and it tells you nothing about what the scenarios
+  say.
+- **Excluded** - every `## Requirements` section, `openspec/specs/` beyond the
+  two included sections, and `openspec/changes/archive/` entirely. An archived
+  change keeps an un-stripped `## Reconciliation` naming scenario ids, so
+  reading archive reopens the leak invisibly on the next change.
+
+When the caller has not built an isolated input - a human running this skill by
+hand on a durable capability - assemble it yourself and say so in the report.
+Never read the requirements "just to check": that is how the property is lost,
+and nothing downstream can detect that it was.
+
+Work an explicit test-design checklist rather than paraphrasing the journeys:
+boundary values, equivalence partitions, state transitions, CRUD completeness,
+empty / one / many, null and missing, permission matrix, error taxonomy, SEO
+and indexability. Two readings that use the same method produce synonyms, and
+the reconciliation then finds nothing.
+
+Domain, product and platform runs already read journeys rather than scenarios
+and are unchanged.
 
 ## The Level
 
@@ -21,7 +59,7 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
 | `platform` | `openspec/specs/platform-tcs.md` | nothing — smoke |
 | `product` | `<product>/product-tcs.md` | nothing — smoke |
 | `domain` | `<product>/<domain>/domain-tcs.md` | every cross-capability path its journeys imply |
-| `feature` | `<capability>/feature-tcs.md` | every scenario its journeys accept |
+| `feature` | `<capability>/feature-tcs.md` | every anchor - each journey, or each feature set root group where nobody walks the capability |
 
 - **Which level owns a case** — **Levels** and **One purpose, one case**. A
   composed case traces two or more journeys that exist, from two or more
@@ -41,11 +79,12 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
 
 ## What a Run Reads
 
-- **Feature** — **Step 1** in the document: `spec.md` end to end,
+- **Feature** — the isolated input above, and nothing else: `## Purpose` and
+  `## Feature set` from `spec.md` but never its requirements,
   `user-journeys.md`, the change's `proposal.md` when one exists, the pages
-  under `docs/prds/`, `openspec/config.yaml`'s `context`, and the cross-cutting
-  specs the Purpose names. A platform fact is checked where it matters
-  (`URL contains <lang>`), never written as a pre-condition
+  under `docs/prds/`, and `openspec/config.yaml`'s `context`. A platform fact
+  is checked where it matters (`URL contains <lang>`), never written as a
+  pre-condition
 - **Domain** — **Compose from evidence** under **One purpose, one case**:
   the changed capability's `user-journeys.md`, every sibling's under
   `openspec/specs/<product>/<domain>/`, and the domain's pages under
@@ -86,12 +125,15 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
 3. **Digest the capability, and upgrade the journeys if missing.** Read as
    **What a Run Reads** says. When `user-journeys.md` is missing or empty, do
    not stop: write it as **Step 1** in the document and `openspec/config.yaml`
-   (`rules.specs`, `rules.user-journeys`) direct — no new requirements, every
-   SHALL and scenario clause kept, ids numbered from `01` and never reusing a
-   retired number, the journey cap held across every capability the change
-   touches. Run `openspec validate <change-name> --strict` when the target is
-   a change, report what you changed, then continue from step 4. Refuse only
-   when the spec has no checkable scenarios at all; that gap is the author's.
+   (`rules.spec-outline`, `rules.user-journeys`) direct — from the feature set
+   and the PRD rather than the requirements you cannot see, adding no
+   behaviour, ids numbered from `01` and never reusing a retired number. There
+   is no cap on the number of journeys. A capability nobody walks says
+   `**Walked by:** nobody on their own - <who inherits it>` and still gets a
+   suite, anchored on its feature set. Run `openspec validate <change-name>
+   --strict` when the target is a change, report what you changed, then
+   continue from step 4. Refuse only when the feature set and the journeys
+   together describe nothing checkable; that gap is the author's.
 
 4. **Learn the house style from the approved corpus.** **What the approved
    suites teach the next one** holds which cases count, the weighting, the
@@ -110,14 +152,19 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
 
 5. **Take the journeys as the suite's sections.** **Step 2** in the document:
    one `## <capability>-US<n>: <title>` per `### <capability>-US-<n>` in
-   `user-journeys.md`, in spec order, compact id, title and three-line story
+   `user-journeys.md`, in spec order, compact id, title and three-line statement
    copied unchanged, no `Covers:` list, description or count, a `---` rule
    between sections. The actor resolves to `customer` or `admin` — **Who the Actor
    Is**; a journey with another actor gets no cases and is reported. A
-   scenario with no observable user-facing outcome — a schema change, a cron
-   job, internal state — gets no case. A scenario under no journey, or a
-   journey naming an id the spec never defines, goes to step 10. Every case
-   sits under a journey; an orphan is not written.
+   case with no observable user-facing outcome — a schema change, a cron job,
+   internal state — is not written. Where the journeys file says
+   `**Walked by:** nobody`, the file carries exactly one section,
+   `## <capability>-US1: <what the capability holds>`, with the declaration's
+   line in place of the journey — never one section per feature set group, which
+   would number a case by that group's position and renumber it the day the
+   groups are reordered. The groups go on the cases instead: each `**Trace:**`
+   names the one it walks. Every case sits under a section; an orphan is not
+   written.
 
 6. **Write the cases.** **Step 3** and **Step 4** in the document hold the
    case's parts and their shape, the pre-condition rules, `## Background`,
@@ -138,16 +185,21 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
 7. **Classify every case** — **Step 5** in the document, ten properties in
    its order with `*` bullets. On generation `**Status:**` is `draft` and
    `**Automation status:**` is `manual`; `exploratory` is never written; a
-   feature case traces one journey in canonical form (`<capability>-US-<n>`).
+   feature case traces one anchor — a journey in canonical form
+   (`<capability>-US-<n>`), or, where nobody walks the capability, a
+   `## Feature set` root group name matched verbatim. A case never traces a
+   scenario id: on a feature run the scenarios do not exist yet.
    **A Case That Already Exists Is Not Written Twice**: extend the existing
    case, report the pair, and name a feature case wholly covered by an
    `approved` domain case as a trim candidate, never deleting it. A journey
    accepted by refusal, empty-state or failure scenarios does not ship with
    only `positive` cases.
 
-8. **Check coverage both ways** before writing: every case is built only from
-   scenarios that accept its journey, and every user-facing scenario has a
-   case under its journey. Scenario ids stay off the case; gaps go to step 10.
+8. **Check coverage against the anchors** before writing: every case traces an
+   anchor that exists, and every anchor has at least one case under it. The
+   other direction — a scenario no case reaches — is not this run's to check:
+   the scenarios are written after this suite, and reconciliation compares the
+   two. Scenario ids stay off the case. Gaps go to step 10.
 
 9. **Write the file** beside the resolved `spec.md` — `feature-tcs.md`,
    `domain-tcs.md`, `product-tcs.md` or `platform-tcs.md` — to **The Format**,
@@ -163,13 +215,14 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
      with no draft under it or missing above one; `**Reviewed:**` on a file
      not `approved`; a revision above the store's
    - **Journey** — a heading not `## <capability>-US<n>: <title>`, a prefix
-     the spec does not issue, a journey it does not define, a story missing
+     the spec does not issue, a journey it does not define, one missing
      `**As a**`, `**I want**` or `**so that**`
    - **Case** — an id not `<capability>-US<n>-TC<m>-<v>`, under the wrong
      journey, `TC<m>` repeated, `<v>` below `1`; a property missing, out of
      order or outside its vocabulary; `Suites` empty or `none` beside another
-     value; `Type` holding `smoke` or `regression`; a trace the spec does not
-     define, two on a feature case, fewer than two on a composed one; no
+     value; `Type` holding `smoke` or `regression`; a trace naming neither a
+     journey the spec defines nor a feature set root group, two on a feature
+     case, fewer than two on a composed one; no
      `**Pre-conditions:**` text, no numbered step, an empty
      `**Expected Results:**` list
    - **Older shapes** — `-` property bullets, `**Preconditions:**`,
@@ -200,6 +253,39 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
    say the revision it moved from and to and how many drafts moved; each
    capability is its own run and pull request, so do not offer the rest.
 
+## End with what you had to decide
+
+The suite closes with a `## Raised` section: every point the isolated input did
+not settle, written as a question for the author. It is the most valuable
+thing the run produces: the cases are the part a derived reading could also
+have written, and this is the part it could not.
+
+A question belongs there when the input is *silent*, not when you missed
+something it says and not when you would simply like to know more. "Is a
+scheduled lot open to bid on? The rule names not-yet-published, ended and called
+off as failures and never places scheduled on either side" is the shape: a state
+the material walked past, which you cannot write a case without choosing.
+
+The section is required and may be empty. Empty is a claim on the record that
+the input settled everything; make it only when it is true.
+
+## What happens to this suite next
+
+On a feature run inside `/planning-pm`, the scenarios are being drafted in
+parallel by a sub-agent that cannot see this file. When both land, the caller
+joins them on anchors and writes a `## Reconciliation` section at the bottom of
+this suite: what was raised and folded into the spec, what was raised and
+rejected and why, what was escalated to the author, what was deferred because
+nobody could settle it, and which anchors no case reaches.
+
+That section is not yours to write, and not yours to read on a later run — it
+is stripped from the isolated input, because it names scenario ids.
+
+A case the reconciliation could not settle stays here as `draft` carrying
+`**Blocked:** <who should settle this>`. Never re-word it, never resolve it, and
+never let a later run quietly drop it: an unanswered question is not a
+misreading.
+
 ## Never
 
 - Never state a step, pre-condition, expected result or data value the traced
@@ -221,3 +307,7 @@ a suite and moving its cases to `actual` is `/tcs-review`'s job
 - Never learn from a `draft` or `deprecated` case, and never let the corpus
   add coverage, soften a prohibition or overrule the spec
 - Never restyle, renumber or re-word an `actual` case
+- Never read a `## Requirements` section, a durable `spec.md` beyond its Purpose
+  and feature set, or anything under `openspec/changes/archive/` on a feature
+  run — the blind property cannot be recovered once lost, and nothing
+  downstream can tell that it was

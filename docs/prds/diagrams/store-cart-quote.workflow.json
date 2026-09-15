@@ -15,6 +15,10 @@
       "label": "Member"
     },
     {
+      "id": "drawer",
+      "label": "Drawer"
+    },
+    {
       "id": "store",
       "label": "Store"
     },
@@ -25,10 +29,11 @@
   ],
   "mainPath": [
     "member-opens-the-drawer",
+    "drawer-reads-the-cart",
     "member-chooses-a-code-or-points",
-    "store-prices-the-cart-once",
-    "member-reads-the-total",
-    "member-proceeds-to-checkout"
+    "drawer-asks-the-store",
+    "store-prices-the-cart",
+    "drawer-shows-the-total"
   ],
   "nodes": [
     {
@@ -37,91 +42,121 @@
       "col": 0,
       "type": "external",
       "label": "Opens the drawer",
-      "sublabel": "every line read against the shop",
-      "width": 132
+      "sublabel": "signed in; a guest has no cart",
+      "width": 138
+    },
+    {
+      "id": "store-holds-the-cart",
+      "lane": "store",
+      "col": 0,
+      "type": "database",
+      "label": "Holds the cart",
+      "sublabel": "the lines and the choice",
+      "width": 138
+    },
+    {
+      "id": "drawer-reads-the-cart",
+      "lane": "drawer",
+      "col": 1,
+      "type": "frontend",
+      "label": "Reads the cart",
+      "sublabel": "then waits for the shop",
+      "width": 138
     },
     {
       "id": "member-chooses-a-code-or-points",
       "lane": "member",
-      "col": 1,
+      "col": 2,
       "type": "external",
       "label": "Chooses a code",
       "sublabel": "or points, typed or picked",
-      "width": 132
+      "width": 138
     },
     {
-      "id": "store-prices-the-cart-once",
+      "id": "drawer-asks-the-store",
+      "lane": "drawer",
+      "col": 3,
+      "type": "frontend",
+      "label": "Asks the store",
+      "sublabel": "keeps only what it took",
+      "width": 138
+    },
+    {
+      "id": "store-prices-the-cart",
       "lane": "store",
-      "col": 2,
+      "col": 4,
       "type": "backend",
-      "label": "Prices the cart once",
-      "sublabel": "code cut, then the points ceiling",
-      "width": 132
+      "label": "Prices the cart",
+      "sublabel": "the code first, then the points",
+      "width": 138
     },
     {
       "id": "loyalty-answers-the-wallet",
       "lane": "loyalty",
-      "col": 2,
+      "col": 4,
       "type": "backend",
       "label": "Answers the wallet",
       "sublabel": "each reward fits or is refused",
-      "width": 132
+      "width": 138
     },
     {
-      "id": "member-reads-the-total",
-      "lane": "member",
-      "col": 3,
-      "type": "external",
-      "label": "Reads the total",
+      "id": "drawer-shows-the-total",
+      "lane": "drawer",
+      "col": 5,
+      "type": "frontend",
+      "label": "Shows the total",
       "sublabel": "discount, points, estimate",
-      "width": 132
-    },
-    {
-      "id": "member-proceeds-to-checkout",
-      "lane": "member",
-      "col": 4,
-      "type": "external",
-      "label": "Proceeds to checkout",
-      "sublabel": "the same choice, carried",
-      "width": 132
+      "width": 138
     }
   ],
   "edges": [
     {
       "from": "member-opens-the-drawer",
+      "to": "drawer-reads-the-cart",
+      "variant": "emphasis"
+    },
+    {
+      "from": "store-holds-the-cart",
+      "to": "drawer-reads-the-cart",
+      "label": "the lines and the choice"
+    },
+    {
+      "from": "drawer-reads-the-cart",
       "to": "member-chooses-a-code-or-points",
-      "variant": "emphasis",
-      "fromSide": "right",
-      "toSide": "left"
+      "variant": "emphasis"
     },
     {
       "from": "member-chooses-a-code-or-points",
-      "to": "store-prices-the-cart-once",
+      "to": "drawer-asks-the-store",
+      "variant": "emphasis"
+    },
+    {
+      "from": "drawer-asks-the-store",
+      "to": "store-prices-the-cart",
+      "label": "the try, not the choice",
       "variant": "emphasis",
       "fromSide": "bottom",
       "toSide": "left"
     },
     {
-      "from": "store-prices-the-cart-once",
+      "from": "store-prices-the-cart",
       "to": "loyalty-answers-the-wallet",
-      "label": "reward coupons · nothing held",
       "variant": "dashed",
       "fromSide": "bottom",
       "toSide": "top"
     },
     {
-      "from": "store-prices-the-cart-once",
-      "to": "member-reads-the-total",
-      "variant": "emphasis",
-      "fromSide": "right",
-      "toSide": "bottom"
+      "from": "store-prices-the-cart",
+      "to": "drawer-shows-the-total",
+      "variant": "emphasis"
     },
     {
-      "from": "member-reads-the-total",
-      "to": "member-proceeds-to-checkout",
-      "variant": "emphasis",
-      "fromSide": "right",
-      "toSide": "left"
+      "from": "drawer-asks-the-store",
+      "to": "store-holds-the-cart",
+      "label": "the choice, sent back",
+      "variant": "dashed",
+      "fromSide": "left",
+      "toSide": "bottom"
     }
   ]
 }

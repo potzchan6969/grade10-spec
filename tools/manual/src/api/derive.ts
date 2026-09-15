@@ -26,8 +26,8 @@ import type {
   DeltaRequirement,
   HistoryRef,
   ItemError,
-  Journey,
   PageEntry,
+  Scenario,
   SchemaArtifact,
   Snapshot,
   SpecEntry,
@@ -625,7 +625,7 @@ export type PendingRole = { role: string; items: PendingItem[] };
 /** The key each artifact's standing waiver lands on. An artifact nobody can
  * waive is absent here, which is the same answer as a waiver nobody wrote. */
 const WAIVERS: Record<string, (change: ChangeEntry) => boolean> = {
-  specs: (change) => change.skipSpecs === true,
+  specs: (change) => change.skipSpecs !== undefined,
   "tech-design": (change) => change.designWaived !== undefined,
   tasks: (change) => change.tasksWaived !== undefined,
 };
@@ -992,12 +992,13 @@ export function qaRows(index: ManualIndex): QaRow[] {
       continue;
     }
 
-    const traced = tracedBy(cases, journeys);
+    const allScenarios = spec.requirements.flatMap(
+      (requirement) => requirement.scenarios,
+    );
+    const traced = tracedBy(cases, allScenarios);
     const exempt = new Set(spec.outOfSuite ?? []);
-    const issued = spec.requirements.flatMap((requirement) =>
-      requirement.scenarios.flatMap((scenario) =>
-        scenario.id ? [scenario.id] : [],
-      ),
+    const issued = allScenarios.flatMap((scenario) =>
+      scenario.id ? [scenario.id] : [],
     );
     const countable = issued.filter((id) => !exempt.has(id));
 
@@ -1023,21 +1024,31 @@ export function qaRows(index: ManualIndex): QaRow[] {
   return rows.sort(byReviewFirst);
 }
 
-/** The scenarios living cases trace. A case traces the journey it walks, and
- * reaches every scenario that journey's `Accepted by` lists; an older case
- * names a scenario outright, and reaches that one. A `deprecated` case is
- * history, not coverage — counting its traces is how a scenario reads as
- * covered after it loses its last case. */
+/** The scenarios living cases reach. A case walks an anchor, and reaches every
+ * scenario whose `**Serves:**` names that same anchor; an older case names a
+ * scenario outright, and reaches that one. The join runs through the anchor
+ * rather than through a link the two files keep on each other, so neither is
+ * written from the other. A `deprecated` case is history, not coverage —
+ * counting its traces is how a scenario reads as covered after it loses its
+ * last case. */
 export function tracedBy(
   cases: TestCase[],
-  journeys: Journey[] = [],
+  scenarios: Scenario[] = [],
 ): Set<string> {
-  const accepted = new Map(journeys.map((one) => [one.id, one.acceptedBy]));
+  const served = new Map<string, string[]>();
+  for (const scenario of scenarios) {
+    if (!scenario.id) continue;
+    for (const anchor of scenario.serves ?? []) {
+      const at = served.get(anchor);
+      if (at) at.push(scenario.id);
+      else served.set(anchor, [scenario.id]);
+    }
+  }
   return new Set(
     cases
       .filter((one) => one.status !== "deprecated")
       .flatMap((one) => one.traces)
-      .flatMap((trace) => accepted.get(trace) ?? [trace]),
+      .flatMap((trace) => served.get(trace) ?? [trace]),
   );
 }
 

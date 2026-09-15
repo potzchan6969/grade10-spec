@@ -1,13 +1,19 @@
-<!-- The rules — the cap, the title shape, who may be the role, the
-     `**Walked by:** nobody` exemption — are the `user-journeys` artifact's
-     `instruction` in openspec/schemas/grade10-planning/schema.yaml, which
+<!-- The rules — the section order, the title shape, who may be the role, the
+     `**Walked by:** nobody` routing declaration, the Retired tombstone — are
+     the `user-journeys` artifact's `instruction` in
+     openspec/schemas/grade10-planning/schema.yaml, which
      `openspec instructions user-journeys` prints above this shape. -->
 
 <!-- <capability> is the capability's path with slashes as hyphens:
      grade10-site/store/product-listing issues
      grade10-site-store-product-listing-SC-01, -US-01, -US1-TC1-1. -->
 
-## User journeys
+## Context user journeys
+<!-- Every journey this change's scenarios or cases anchor on, copied from the
+     durable file BYTE FOR BYTE. Read-only: archive never folds this section.
+     Delete the section when the change anchors on no existing journey. -->
+
+## ADDED User journeys
 
 ### <capability>-US-01: <!-- Collector does the thing -->
 
@@ -15,6 +21,13 @@
 **I want** <!-- capability -->,
 **so that** <!-- benefit the requirements already justify -->.
 
-**Accepted by:**
+<!-- No **Accepted by:** line. Scenarios point up at journeys through their own
+     **Serves:**, and tooling joins on that. -->
 
-- `<capability>-SC-01` — <!-- scenario title, as written in spec.md -->
+## MODIFIED User journeys
+<!-- The whole journey block copied from the durable file, then edited. -->
+
+## REMOVED User journeys
+<!-- Each with **Reason:**. The id is retired, never reused or renumbered. -->
+
+<!-- All three delta sections may be empty; most changes move no journey. -->
