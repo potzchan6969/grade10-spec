@@ -29,6 +29,15 @@ import {
 } from "./winner-order-content";
 import { AUCTION_LOT_DETAILS_HREF } from "./workbench-story-nav";
 
+/** Status / alert enter — ~200ms feedback, skipped for reduced motion. */
+const WINNER_ORDER_ENTER =
+  "animate-in fade-in-0 duration-200 ease-out motion-reduce:animate-none";
+
+const WINNER_ORDER_ALERT_ENTER = cn(
+  WINNER_ORDER_ENTER,
+  "slide-in-from-bottom-1",
+);
+
 const ADDRESS_CONFIRMED_TOAST = {
   title: "Address confirmed",
   description: "Grade10 is preparing your invoice for this destination.",
@@ -269,8 +278,9 @@ function LotCard({
 }) {
   const className = cn(
     "flex w-full flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center",
-    "transition-colors duration-150 ease-out",
-    "hover:bg-muted/40 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
+    "transition-[background-color,border-color] duration-200 ease-out",
+    "hover:bg-muted/25 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
+    "motion-reduce:transition-none",
   );
 
   const body = (
@@ -441,6 +451,7 @@ function OrderSummary({
               Contact Us
             </Button>
           }
+          className={WINNER_ORDER_ALERT_ENTER}
           dismissible={false}
           layout="inline"
           status="warning"
@@ -653,9 +664,12 @@ function WinnerOrderPage({
   function handleAddressConfirm(addressLines: string) {
     setConfirmedAddress(addressLines);
     setStatus("preparing_invoice");
-    toast.success(ADDRESS_CONFIRMED_TOAST.title, {
-      description: ADDRESS_CONFIRMED_TOAST.description,
-    });
+    // After dialog close (~100ms) so toast rise does not fight the overlay.
+    window.setTimeout(() => {
+      toast.success(ADDRESS_CONFIRMED_TOAST.title, {
+        description: ADDRESS_CONFIRMED_TOAST.description,
+      });
+    }, 150);
     onPrimaryAction?.();
   }
 
@@ -680,7 +694,12 @@ function WinnerOrderPage({
         </h1>
 
         <div className="grid w-full items-start gap-8 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
-          <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
+          <VStack
+            className={cn("min-w-0 w-full", WINNER_ORDER_ENTER)}
+            gap="lg"
+            hAlign="stretch"
+            key={content.status}
+          >
             {progress ? (
               <WinnerProgressCard
                 onTrack={
@@ -701,6 +720,7 @@ function WinnerOrderPage({
 
             {content.status === "preparing_invoice" && content.secondaryNote ? (
               <Alert
+                className={WINNER_ORDER_ALERT_ENTER}
                 dismissible={false}
                 layout="inline"
                 status="default"
@@ -715,16 +735,20 @@ function WinnerOrderPage({
             ) : null}
           </VStack>
 
-          <OrderSidebar
-            confirmAddressCta={confirmAddressCta}
-            content={content}
-            onConfirmAddress={handleConfirmAddressClick}
-            onPay={payCta ? handlePrimaryAction : undefined}
-            onViewInvoicePdf={
-              hasIssuedInvoice(content) ? openPlaceholderInvoicePdf : undefined
-            }
-            payCta={payCta}
-          />
+          <div className={WINNER_ORDER_ENTER} key={`sidebar-${content.status}`}>
+            <OrderSidebar
+              confirmAddressCta={confirmAddressCta}
+              content={content}
+              onConfirmAddress={handleConfirmAddressClick}
+              onPay={payCta ? handlePrimaryAction : undefined}
+              onViewInvoicePdf={
+                hasIssuedInvoice(content)
+                  ? openPlaceholderInvoicePdf
+                  : undefined
+              }
+              payCta={payCta}
+            />
+          </div>
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
