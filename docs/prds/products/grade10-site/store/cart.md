@@ -79,27 +79,35 @@ The refusals are the coupon's own —
 
 :::flow{title="Quoting the cart" diagram="assets/diagrams/store-cart-quote.svg"}
 ## *Member* — **Opens the drawer**
-Every line is read against the shop; the drawer waits until the shop answers.
+The cart is the signed-in member's; a signed-out session has none.
 
-## *Member* — **Chooses a code or points**
+## *Store* — **Holds the cart**
+The lines and the choice — which code, how many points — are kept together. No
+amount is kept with them.
+
+## *Drawer* — **Reads the cart**
+The lines against the shop, and the choice held with them. Nothing is shown
+until both answer.
+
+## *Member* — **Chooses a code**
 Types a code, picks a held one, or types how many points.
 
-## *Store* — **Prices the cart once**
-The lines at the shop's price, the code's cut off them, then the points
-ceiling on what is left. A store code is answered from the store's own
-registry; a reward coupon is the programme's to answer.
+## *Drawer* — **Asks the store**
+The new choice is priced before it is kept. A refused code, or an ask points
+cannot cover, is said in its field, and the choice does not change.
+
+## *Store* — **Prices the cart**
+The lines at the shop's price, the code taken off first, then the points
+ceiling on what is left. Every read is priced again — on open, and on every
+ask.
 
 ## *Loyalty* — **Answers the wallet**
 Every reward coupon the member holds, each fitting this cart or refused with
-its reason. Nothing is held by asking.
+its reason. Asking for the list reserves nothing.
 
-## *Member* — **Reads the total**
-The Discount and Points rows, then the estimated total. A refused code, or
-an ask points cannot cover, is said in its field.
-
-## *Member* — **Proceeds to checkout**
-`/checkout` carries the same choice, and the order is promised from it —
-[Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout).
+## *Drawer* — **Shows the total**
+The Discount and Points rows, then the estimated total. The choice the store
+took goes back to the cart, so a reload and another device find it.
 :::
 
 ## Designs
@@ -113,9 +121,10 @@ an ask points cannot cover, is said in its field.
 ::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}
 
 :::detail{title="Code map" for="engineer"}
-- **The quote** — `checkout.quote`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
+- **The quote** — `checkout.basketQuote`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
+- **The held choice** — `cart.tender` and `cart.setTender`, `packages/grade10-store/backend/src/services/cart/tender.ts`
 - **The wallet read** — `quoteCouponsFor`, `packages/loyalty/backend/src/services/rewards/coupons.ts`
-- **The drawer** — `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`, over the `checkout` slice of `@grade10/store-frontend`
+- **The drawer** — `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`, over the `cart` and `checkout` slices of `@grade10/store-frontend`
 - **Design record** — [commerce architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 :::
 

@@ -1,18 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="28 40 848 376" role="img" data-preset="editorial" aria-labelledby="store-cart-quote-archify-diagram-title" aria-describedby="store-cart-quote-archify-diagram-description" data-diagram="store-cart-quote">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="28 40 778 500" role="img" data-preset="editorial" aria-labelledby="store-cart-quote-archify-diagram-title" aria-describedby="store-cart-quote-archify-diagram-description" data-diagram="store-cart-quote">
 <style>
-svg[data-diagram="store-cart-quote"]{--arrow:var(--muted-foreground, light-dark(#8a806f, #948978));--arrow-emphasis:var(--primary, light-dark(#bb4c23, #dd6b3d));--backend-fill:light-dark(rgba(42, 119, 75, 0.09), rgba(63, 132, 92, 0.16));--backend-stroke:light-dark(#397b53, #8fc29e);--database-stroke:light-dark(#765d86, #c0a4d0);--external-fill:light-dark(rgba(101, 91, 75, 0.09), rgba(126, 115, 96, 0.18));--external-stroke:light-dark(#746b5e, #b8ad99);--grid:var(--border-subtle, light-dark(#d8d0c2, #39342a));--lane-fill:var(--background, light-dark(rgba(229, 221, 207, 0.42), rgba(52, 46, 35, 0.46)));--lane-stroke:var(--border, light-dark(#b8aa94, #726957));--mask:var(--background, light-dark(#fbf8f1, #231f18));--security-stroke:light-dark(#9e463f, #df9085);--text:var(--foreground, light-dark(#242018, #f4eddf));--text-dim:var(--muted-foreground, light-dark(#a09788, #776e60));--text-muted:var(--muted-foreground, light-dark(#6f6658, #b9ae9b))}
+svg[data-diagram="store-cart-quote"]{--arrow:var(--muted-foreground, light-dark(#8a806f, #948978));--arrow-emphasis:var(--primary, light-dark(#bb4c23, #dd6b3d));--backend-fill:light-dark(rgba(42, 119, 75, 0.09), rgba(63, 132, 92, 0.16));--backend-stroke:light-dark(#397b53, #8fc29e);--database-fill:light-dark(rgba(105, 75, 130, 0.09), rgba(117, 91, 141, 0.17));--database-stroke:light-dark(#765d86, #c0a4d0);--external-fill:light-dark(rgba(101, 91, 75, 0.09), rgba(126, 115, 96, 0.18));--external-stroke:light-dark(#746b5e, #b8ad99);--frontend-fill:light-dark(rgba(31, 117, 126, 0.09), rgba(43, 133, 142, 0.16));--frontend-stroke:light-dark(#287e84, #7fc6c7);--grid:var(--border-subtle, light-dark(#d8d0c2, #39342a));--lane-fill:var(--background, light-dark(rgba(229, 221, 207, 0.42), rgba(52, 46, 35, 0.46)));--lane-stroke:var(--border, light-dark(#b8aa94, #726957));--mask:var(--background, light-dark(#fbf8f1, #231f18));--security-stroke:light-dark(#9e463f, #df9085);--text:var(--foreground, light-dark(#242018, #f4eddf));--text-dim:var(--muted-foreground, light-dark(#a09788, #776e60));--text-muted:var(--muted-foreground, light-dark(#6f6658, #b9ae9b))}
 svg[data-diagram="store-cart-quote"] .c-grid{stroke: var(--grid); fill: none;}
 svg[data-diagram="store-cart-quote"] .c-mask{fill: var(--mask); stroke: none;}
+svg[data-diagram="store-cart-quote"] .c-frontend{fill: var(--frontend-fill); stroke: var(--frontend-stroke);}
 svg[data-diagram="store-cart-quote"] .c-backend{fill: var(--backend-fill); stroke: var(--backend-stroke);}
+svg[data-diagram="store-cart-quote"] .c-database{fill: var(--database-fill); stroke: var(--database-stroke);}
 svg[data-diagram="store-cart-quote"] .c-external{fill: var(--external-fill); stroke: var(--external-stroke);}
 svg[data-diagram="store-cart-quote"] .t-primary{fill: var(--text);}
 svg[data-diagram="store-cart-quote"] .t-muted{fill: var(--text-muted);}
 svg[data-diagram="store-cart-quote"] .t-dim{fill: var(--text-dim);}
+svg[data-diagram="store-cart-quote"] .t-backend{fill: var(--backend-stroke);}
 svg[data-diagram="store-cart-quote"] .t-database{fill: var(--database-stroke);}
 svg[data-diagram="store-cart-quote"] .semantic-sigil{fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; opacity: 0.76; pointer-events: none;}
 svg[data-diagram="store-cart-quote"] .semantic-sigil > *{vector-effect: non-scaling-stroke;}
+svg[data-diagram="store-cart-quote"] .semantic-sigil .sigil-fill{fill: currentColor; stroke: none;}
+svg[data-diagram="store-cart-quote"] .s-frontend{color: var(--frontend-stroke);}
 svg[data-diagram="store-cart-quote"] .s-backend{color: var(--backend-stroke);}
+svg[data-diagram="store-cart-quote"] .s-database{color: var(--database-stroke);}
 svg[data-diagram="store-cart-quote"] .s-external{color: var(--external-stroke);}
+svg[data-diagram="store-cart-quote"] .a-default{stroke: var(--arrow); fill: none;}
 svg[data-diagram="store-cart-quote"] .a-emphasis{stroke: var(--arrow-emphasis); fill: none;}
 svg[data-diagram="store-cart-quote"] .a-dashed{stroke: var(--database-stroke); fill: none; stroke-dasharray: 4,4;}
 svg[data-diagram="store-cart-quote"] .m-default{fill: var(--arrow);}
@@ -45,89 +52,130 @@ svg[data-diagram="store-cart-quote"] .c-lane{fill: var(--lane-fill); stroke: var
         
         <rect width="100%" height="100%" fill="url(#store-cart-quote-grid)" />
         
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="812" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="754" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Member</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="812" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Store</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="812" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Loyalty</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="754" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Drawer</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="754" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Store</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="754" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Loyalty</text>
         
         
         
-        <path data-step="store-prices-the-cart-once" data-edge-from="member-chooses-a-code-or-points" data-edge-to="store-prices-the-cart-once" data-edge-key="0" data-composition-points="274,145;274,243;328,243" d="M 274 145 L 274 243 L 328 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-cart-quote-arrowhead-emphasis)"/>
-        <path data-step="member-chooses-a-code-or-points" data-edge-from="member-opens-the-drawer" data-edge-to="member-chooses-a-code-or-points" data-edge-key="1" data-composition-points="180,119;208,119" d="M 180 119 L 208 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-cart-quote-arrowhead-emphasis)"/>
-        <path data-step="member-proceeds-to-checkout" data-edge-from="member-reads-the-total" data-edge-to="member-proceeds-to-checkout" data-edge-key="2" data-composition-points="580,119;608,119" d="M 580 119 L 608 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-cart-quote-arrowhead-emphasis)"/>
-        <path data-step="loyalty-answers-the-wallet" data-edge-from="store-prices-the-cart-once" data-edge-to="loyalty-answers-the-wallet" data-edge-label="reward coupons · nothing held" data-edge-key="3" data-composition-points="394,269;394,285;864,285;864,325;394,325;394,341" d="M 394 269 L 394 285 L 864 285 L 864 325 L 394 325 L 394 341" class="a-dashed" stroke-width="1.4" marker-end="url(#store-cart-quote-arrowhead-dashed)"/>
-        <path data-step="member-reads-the-total" data-edge-from="store-prices-the-cart-once" data-edge-to="member-reads-the-total" data-edge-key="4" data-composition-points="460,243;514,243;514,145" d="M 460 243 L 514 243 L 514 145" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-cart-quote-arrowhead-emphasis)"/>
+        <path data-step="store-holds-the-cart" data-edge-from="drawer-asks-the-store" data-edge-to="store-holds-the-cart" data-edge-label="the choice, sent back" data-edge-key="0" data-composition-points="408,250;392,250;392,420;117,420;117,393" d="M 408 250 L 392 250 L 392 420 L 117 420 L 117 393" class="a-dashed" stroke-width="1.4" marker-end="url(#store-cart-quote-arrowhead-dashed)"/>
+        <path data-step="store-prices-the-cart" data-edge-from="drawer-asks-the-store" data-edge-to="store-prices-the-cart" data-edge-label="the try, not the choice" data-edge-key="1" data-composition-points="477,269;477,290;512,290;512,367;528,367" d="M 477 269 L 477 290 L 512 290 L 512 367 L 528 367" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-cart-quote-arrowhead-emphasis)"/>
+        <path data-step="member-chooses-a-code-or-points" data-edge-from="drawer-reads-the-cart" data-edge-to="member-chooses-a-code-or-points" data-edge-key="2" data-composition-points="237,217;237,119;288,119" d="M 237 217 L 237 119 L 288 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-cart-quote-arrowhead-emphasis)"/>
+        <path data-step="drawer-asks-the-store" data-edge-from="member-chooses-a-code-or-points" data-edge-to="drawer-asks-the-store" data-edge-key="3" data-composition-points="426,119;477,119;477,217" d="M 426 119 L 477 119 L 477 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-cart-quote-arrowhead-emphasis)"/>
+        <path data-step="drawer-reads-the-cart" data-edge-from="member-opens-the-drawer" data-edge-to="drawer-reads-the-cart" data-edge-key="4" data-composition-points="186,119;237,119;237,217" d="M 186 119 L 237 119 L 237 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-cart-quote-arrowhead-emphasis)"/>
+        <path data-step="drawer-reads-the-cart" data-edge-from="store-holds-the-cart" data-edge-to="drawer-reads-the-cart" data-edge-label="the lines and the choice" data-edge-key="5" data-composition-points="117,341;117,290;237,290;237,269" d="M 117 341 L 117 290 L 237 290 L 237 269" class="a-default" stroke-width="1.4" marker-end="url(#store-cart-quote-arrowhead)"/>
+        <path data-step="drawer-shows-the-total" data-edge-from="store-prices-the-cart" data-edge-to="drawer-shows-the-total" data-edge-key="6" data-composition-points="597,341;597,243;648,243" d="M 597 341 L 597 243 L 648 243" class="a-emphasis" stroke-width="1.8" marker-end="url(#store-cart-quote-arrowhead-emphasis)"/>
+        <path data-step="loyalty-answers-the-wallet" data-edge-from="store-prices-the-cart" data-edge-to="loyalty-answers-the-wallet" data-edge-key="7" data-composition-points="597,393;597,465" d="M 597 393 L 597 465" class="a-dashed" stroke-width="1.4" marker-end="url(#store-cart-quote-arrowhead-dashed)"/>
         
-        <g data-step="member-opens-the-drawer" id="store-cart-quote-node-member-opens-the-drawer" data-node-id="member-opens-the-drawer" data-node-label="Opens the drawer" aria-label="Focus Opens the drawer, every line read against the shop, Member" data-node-kind="external" data-node-sublabel="every line read against the shop" data-node-context="Member">
-          <title>Opens the drawer · every line read against the shop · Member</title>
-          <rect x="48" y="93" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="48" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+        <g data-step="member-opens-the-drawer" id="store-cart-quote-node-member-opens-the-drawer" data-node-id="member-opens-the-drawer" data-node-label="Opens the drawer" aria-label="Focus Opens the drawer, signed in; a guest has no cart, Member" data-node-kind="external" data-node-sublabel="signed in; a guest has no cart" data-node-context="Member">
+          <title>Opens the drawer · signed in; a guest has no cart · Member</title>
+          <rect x="48" y="93" width="138" height="52" rx="6" class="c-mask"/>
+          <rect x="48" y="93" width="138" height="52" rx="6" class="c-external" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(54 99) scale(0.6875)">
             <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="114" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Opens the drawer</text>
-          <text data-detail="context" x="114" y="131" class="t-muted" font-size="6.4" text-anchor="middle">every line read against the shop</text>
+          <text data-node-label="" data-detail-anchor="" x="117" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Opens the drawer</text>
+          <text data-detail="context" x="117" y="131" class="t-muted" font-size="7.2" text-anchor="middle">signed in; a guest has no cart</text>
         </g>
         <g data-step="member-chooses-a-code-or-points" id="store-cart-quote-node-member-chooses-a-code-or-points" data-node-id="member-chooses-a-code-or-points" data-node-label="Chooses a code" aria-label="Focus Chooses a code, or points, typed or picked, Member" data-node-kind="external" data-node-sublabel="or points, typed or picked" data-node-context="Member">
           <title>Chooses a code · or points, typed or picked · Member</title>
-          <rect x="208" y="93" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="208" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(214 99) scale(0.6875)">
+          <rect x="288" y="93" width="138" height="52" rx="6" class="c-mask"/>
+          <rect x="288" y="93" width="138" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(294 99) scale(0.6875)">
             <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
             <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="274" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Chooses a code</text>
-          <text data-detail="context" x="274" y="131" class="t-muted" font-size="7.9" text-anchor="middle">or points, typed or picked</text>
+          <text data-node-label="" data-detail-anchor="" x="357" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Chooses a code</text>
+          <text data-detail="context" x="357" y="131" class="t-muted" font-size="8" text-anchor="middle">or points, typed or picked</text>
         </g>
-        <g data-step="member-reads-the-total" id="store-cart-quote-node-member-reads-the-total" data-node-id="member-reads-the-total" data-node-label="Reads the total" aria-label="Focus Reads the total, discount, points, estimate, Member" data-node-kind="external" data-node-sublabel="discount, points, estimate" data-node-context="Member">
-          <title>Reads the total · discount, points, estimate · Member</title>
-          <rect x="448" y="93" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="448" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(454 99) scale(0.6875)">
-            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
-            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+        <g data-step="drawer-reads-the-cart" id="store-cart-quote-node-drawer-reads-the-cart" data-node-id="drawer-reads-the-cart" data-node-label="Reads the cart" aria-label="Focus Reads the cart, then waits for the shop, Drawer" data-node-kind="frontend" data-node-sublabel="then waits for the shop" data-node-context="Drawer">
+          <title>Reads the cart · then waits for the shop · Drawer</title>
+          <rect x="168" y="217" width="138" height="52" rx="6" class="c-mask"/>
+          <rect x="168" y="217" width="138" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(174 223) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="514" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Reads the total</text>
-          <text data-detail="context" x="514" y="131" class="t-muted" font-size="7.9" text-anchor="middle">discount, points, estimate</text>
+          <text data-node-label="" data-detail-anchor="" x="237" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Reads the cart</text>
+          <text data-detail="context" x="237" y="255" class="t-muted" font-size="8" text-anchor="middle">then waits for the shop</text>
         </g>
-        <g data-step="member-proceeds-to-checkout" id="store-cart-quote-node-member-proceeds-to-checkout" data-node-id="member-proceeds-to-checkout" data-node-label="Proceeds to checkout" aria-label="Focus Proceeds to checkout, the same choice, carried, Member" data-node-kind="external" data-node-sublabel="the same choice, carried" data-node-context="Member">
-          <title>Proceeds to checkout · the same choice, carried · Member</title>
-          <rect x="608" y="93" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="608" y="93" width="132" height="52" rx="6" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(614 99) scale(0.6875)">
-            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
-            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
+        <g data-step="drawer-asks-the-store" id="store-cart-quote-node-drawer-asks-the-store" data-node-id="drawer-asks-the-store" data-node-label="Asks the store" aria-label="Focus Asks the store, keeps only what it took, Drawer" data-node-kind="frontend" data-node-sublabel="keeps only what it took" data-node-context="Drawer">
+          <title>Asks the store · keeps only what it took · Drawer</title>
+          <rect x="408" y="217" width="138" height="52" rx="6" class="c-mask"/>
+          <rect x="408" y="217" width="138" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(414 223) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="674" y="114" class="t-primary" font-size="10.3" font-weight="600" text-anchor="middle">Proceeds to checkout</text>
-          <text data-detail="context" x="674" y="131" class="t-muted" font-size="8" text-anchor="middle">the same choice, carried</text>
+          <text data-node-label="" data-detail-anchor="" x="477" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Asks the store</text>
+          <text data-detail="context" x="477" y="255" class="t-muted" font-size="8" text-anchor="middle">keeps only what it took</text>
         </g>
-        <g data-step="store-prices-the-cart-once" id="store-cart-quote-node-store-prices-the-cart-once" data-node-id="store-prices-the-cart-once" data-node-label="Prices the cart once" aria-label="Focus Prices the cart once, code cut, then the points ceiling, Store" data-node-kind="backend" data-node-sublabel="code cut, then the points ceiling" data-node-context="Store">
-          <title>Prices the cart once · code cut, then the points ceiling · Store</title>
-          <rect x="328" y="217" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="328" y="217" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(334 223) scale(0.6875)">
+        <g data-step="drawer-shows-the-total" id="store-cart-quote-node-drawer-shows-the-total" data-node-id="drawer-shows-the-total" data-node-label="Shows the total" aria-label="Focus Shows the total, discount, points, estimate, Drawer" data-node-kind="frontend" data-node-sublabel="discount, points, estimate" data-node-context="Drawer">
+          <title>Shows the total · discount, points, estimate · Drawer</title>
+          <rect x="648" y="217" width="138" height="52" rx="6" class="c-mask"/>
+          <rect x="648" y="217" width="138" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(654 223) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="717" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Shows the total</text>
+          <text data-detail="context" x="717" y="255" class="t-muted" font-size="8" text-anchor="middle">discount, points, estimate</text>
+        </g>
+        <g data-step="store-holds-the-cart" id="store-cart-quote-node-store-holds-the-cart" data-node-id="store-holds-the-cart" data-node-label="Holds the cart" aria-label="Focus Holds the cart, the lines and the choice, Store" data-node-kind="database" data-node-sublabel="the lines and the choice" data-node-context="Store">
+          <title>Holds the cart · the lines and the choice · Store</title>
+          <rect x="48" y="341" width="138" height="52" rx="6" class="c-mask"/>
+          <rect x="48" y="341" width="138" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(54 347) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="117" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Holds the cart</text>
+          <text data-detail="context" x="117" y="379" class="t-muted" font-size="8" text-anchor="middle">the lines and the choice</text>
+        </g>
+        <g data-step="store-prices-the-cart" id="store-cart-quote-node-store-prices-the-cart" data-node-id="store-prices-the-cart" data-node-label="Prices the cart" aria-label="Focus Prices the cart, the code first, then the points, Store" data-node-kind="backend" data-node-sublabel="the code first, then the points" data-node-context="Store">
+          <title>Prices the cart · the code first, then the points · Store</title>
+          <rect x="528" y="341" width="138" height="52" rx="6" class="c-mask"/>
+          <rect x="528" y="341" width="138" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(534 347) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="394" y="238" class="t-primary" font-size="10.3" font-weight="600" text-anchor="middle">Prices the cart once</text>
-          <text data-detail="context" x="394" y="255" class="t-muted" font-size="6.2" text-anchor="middle">code cut, then the points ceiling</text>
+          <text data-node-label="" data-detail-anchor="" x="597" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Prices the cart</text>
+          <text data-detail="context" x="597" y="379" class="t-muted" font-size="6.9" text-anchor="middle">the code first, then the points</text>
         </g>
         <g data-step="loyalty-answers-the-wallet" id="store-cart-quote-node-loyalty-answers-the-wallet" data-node-id="loyalty-answers-the-wallet" data-node-label="Answers the wallet" aria-label="Focus Answers the wallet, each reward fits or is refused, Loyalty" data-node-kind="backend" data-node-sublabel="each reward fits or is refused" data-node-context="Loyalty">
           <title>Answers the wallet · each reward fits or is refused · Loyalty</title>
-          <rect x="328" y="341" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="328" y="341" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(334 347) scale(0.6875)">
+          <rect x="528" y="465" width="138" height="52" rx="6" class="c-mask"/>
+          <rect x="528" y="465" width="138" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(534 471) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="394" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Answers the wallet</text>
-          <text data-detail="context" x="394" y="379" class="t-muted" font-size="6.8" text-anchor="middle">each reward fits or is refused</text>
+          <text data-node-label="" data-detail-anchor="" x="597" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Answers the wallet</text>
+          <text data-detail="context" x="597" y="503" class="t-muted" font-size="7.2" text-anchor="middle">each reward fits or is refused</text>
         </g>
         
-        <g data-step="loyalty-answers-the-wallet" data-detail="context" data-edge-from="store-prices-the-cart-once" data-edge-to="loyalty-answers-the-wallet" data-edge-label="reward coupons · nothing held" data-edge-key="3">
-          <rect x="554.4" y="265" width="149.2" height="14" rx="3" class="c-mask"/>
-          <text x="629" y="275" class="t-database" font-size="8" text-anchor="middle">reward coupons · nothing held</text>
+        <g data-step="store-holds-the-cart" data-detail="context" data-edge-from="drawer-asks-the-store" data-edge-to="store-holds-the-cart" data-edge-label="the choice, sent back" data-edge-key="0">
+          <rect x="199.1" y="400" width="110.8" height="14" rx="3" class="c-mask"/>
+          <text x="254.5" y="410" class="t-database" font-size="8" text-anchor="middle">the choice, sent back</text>
+        </g>
+        <g data-step="store-prices-the-cart" data-detail="context" data-edge-from="drawer-asks-the-store" data-edge-to="store-prices-the-cart" data-edge-label="the try, not the choice" data-edge-key="1">
+          <rect x="434.3" y="270" width="120.39999999999999" height="14" rx="3" class="c-mask"/>
+          <text x="494.5" y="280" class="t-backend" font-size="8" text-anchor="middle">the try, not the choice</text>
+        </g>
+        <g data-step="drawer-reads-the-cart" data-detail="context" data-edge-from="store-holds-the-cart" data-edge-to="drawer-reads-the-cart" data-edge-label="the lines and the choice" data-edge-key="5">
+          <rect x="114.4" y="270" width="125.19999999999999" height="14" rx="3" class="c-mask"/>
+          <text x="177" y="280" class="t-muted" font-size="8" text-anchor="middle">the lines and the choice</text>
         </g>
         
       </svg>
