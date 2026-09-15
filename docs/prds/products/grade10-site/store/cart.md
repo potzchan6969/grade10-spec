@@ -77,38 +77,7 @@ The refusals are the coupon's own —
   promised with them —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
 
-:::flow{title="Quoting the cart" diagram="assets/diagrams/store-cart-quote.svg"}
-## *Member* — **Opens the drawer**
-The cart is the signed-in member's; a signed-out session has none.
-
-## *Store* — **Holds the cart**
-The lines and the choice — which code, how many points — are kept together. No
-amount is kept with them.
-
-## *Drawer* — **Reads the cart**
-The lines against the shop, and the choice held with them. Nothing is shown
-until both answer.
-
-## *Member* — **Chooses a code**
-Types a code, picks a held one, or types how many points.
-
-## *Drawer* — **Asks the store**
-The new choice is priced before it is kept. A refused code, or an ask points
-cannot cover, is said in its field, and the choice does not change.
-
-## *Store* — **Prices the cart**
-The lines at the shop's price, the code taken off first, then the points
-ceiling on what is left. Every read is priced again — on open, and on every
-ask.
-
-## *Loyalty* — **Answers the wallet**
-Every reward coupon the member holds, each fitting this cart or refused with
-its reason. Asking for the list reserves nothing.
-
-## *Drawer* — **Shows the total**
-The Discount and Points rows, then the estimated total. The choice the store
-took goes back to the cart, so a reload and another device find it.
-:::
+::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
 
 ## Designs
 
