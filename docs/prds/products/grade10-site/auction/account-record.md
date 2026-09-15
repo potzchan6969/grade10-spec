@@ -33,14 +33,16 @@ off or disabled.
 Detailed [Bidding History](/p/grade10-site/auction/bidding-history) stays its
 own surface for the one-per-listing index, filters, and private chronology.
 
-A winner follows their own lot to the door through [Winner Order](/p/grade10-site/auction/winner-order): Awaiting Address, Preparing Invoice, Pending Payment, Processing, Shipped, Delivered, Cancelled, or Refunded. A won lot whose invoice has expired still reads Pending Payment and says how to reach Grade10.
+A winner follows their own lot to the door through [Winner Order](/p/grade10-site/auction/winner-order): Awaiting Address, Preparing Invoice, Pending Payment, Processing, Shipped, Delivered, Cancelled, or Refunded. A won lot whose invoice has expired still reads Pending Payment.
 
-The record shows the derived auction status and opens the order; address, payment, fulfilment, and delivery facts stay on the order. It remains read-only: the winner confirms an address and pays only from Winner Order.
+🚧 **View order** — every Won standing offers a clear entry to that lot’s Winner Order (including Cancelled and Refunded); Didn’t win and watch-only rows do not.
+
+🚧 **Calm Won rows** — Won standing shows the status badge and View order only; no secondary helper lines under the standing (confirm address, invoice coming, order total, contact Grade10). How to reach Grade10 for an expired invoice lives on Winner Order.
 
 A losing bidder is told what happened to their card authorization — being
 released, or released — because a pending hold on a bank statement reads as a
 charge for a lot they did not win. A hold is never called released while its
-release is still in flight.
+release is still in flight. That hold copy stays; other Didn’t win helpers do not.
 
 ## Honest reads
 
@@ -97,7 +99,9 @@ establishes it.
 
 | Derived auction status | Decided | The collector sees the auction order's derived status, while the order route owns payment, address confirmation, receipt, and delivery records. The store order-status capability remains separate. | Product and engineering |
 | Order owns post-sale writes | Decided | My Auctions opens the order for the winner's allowed actions; operator-only settlement, fulfilment, cancellation, and reinstatement stay in the [Post-Sale Queue](/p/grade10-admin/auction/post-sale). | Product and operations |
-| Card holds are stated plainly | Decided | The release of a losing bidder's authorization is asynchronous, so the record names the in-between state rather than implying the money is already back. Silence here is the likeliest source of "you charged me" contacts. | Product and finance |
+| View order on Won | Decided | Every Won row offers View order / open order into Winner Order; non-won rows do not. | Product (@tangconst) |
+| Calm Won detail | Decided | No secondary helper lines under Won standing; contact for expired payment is on Winner Order only. | Product (@tangconst) |
+| Card holds are stated plainly | Decided | The release of a losing bidder's authorization is asynchronous, so the record names the in-between state rather than implying the money is already back. Silence here is the likeliest source of "you charged me" contacts. Hold being-released / released copy stays for Didn’t win. | Product and finance |
 | Ending soon threshold | Decided | 60 minutes or less to close, matching the operator queue, so the two surfaces cannot disagree about which listings are urgent. | Product |
 | Bids are binding | Decided | Nothing on this page retracts a bid. A collector who believes a bid was a mistake contacts Grade10. | Product |
 | Ordering | Decided | Soonest close first on both pages, with closed listings after open ones. | Product and design |
