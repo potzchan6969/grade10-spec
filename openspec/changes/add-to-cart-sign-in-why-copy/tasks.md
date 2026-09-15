@@ -1,4 +1,4 @@
-## 1. Catalog and story (grade10-spec)
+## 1. Catalog and story (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Add `signIn.titleAddToCart` to the Grade10 catalogs in en, zh-Hans and zh-Hant, holding **Sign In to Add to Cart**
 - [ ] 1.2 Add a **From add to cart** story to `Auth Sign In/SignInCard` showing the dialog under that title
