@@ -53,11 +53,14 @@ export type Scenario = {
   id?: string;
   name: string;
   text: string;
-  /** The anchor this scenario serves, from its `**Serves:**` line: a story id,
-   * or a `## Feature set` root group where nobody walks the capability. This is
-   * the only link between a scenario and a story — the two files never name
-   * each other, which is how each stopped inheriting the other's blind spots. */
-  serves?: string;
+  /** The anchors this scenario serves, from its `**Serves:**` line: story ids,
+   * or `## Feature set` root group names where no story reaches it. This is the
+   * only link between a scenario and a story — the two files never name each
+   * other, which is how each stopped inheriting the other's blind spots.
+   *
+   * More than one is allowed: a scenario is a rule, and one rule can sit on
+   * several journeys. A case is a walk and still traces one. */
+  serves?: string[];
 };
 
 export type Requirement = {

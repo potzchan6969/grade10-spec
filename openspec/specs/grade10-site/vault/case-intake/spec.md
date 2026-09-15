@@ -186,7 +186,7 @@ against.
 - **THEN** it is refused by name and the request stays unsent
 
 #### Scenario: grade10-site-vault-case-intake-SC-14 - Sending it in offers the visit
-**Serves:** Sending it in - sending it in offers the visit
+**Serves:** `grade10-site-vault-case-intake-US-01`, `grade10-site-vault-case-intake-US-02` - sending it in offers the visit
 
 - **GIVEN** a request carrying one photograph
 - **WHEN** the collector sends it in

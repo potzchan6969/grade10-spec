@@ -163,7 +163,7 @@ the previous narrowing.
 - **AND** the collection is not in force
 
 #### Scenario: grade10-site-store-product-listing-SC-40 - An order holds the collection it was chosen in
-**Serves:** Collection as a way in - an order holds the collection it was chosen in
+**Serves:** grade10-site-store-product-listing-US-11 - an order holds the collection it was chosen in
 
 - **GIVEN** a collector on the listing scoped to a collection
 - **WHEN** they choose another order
@@ -335,7 +335,7 @@ listing to the previous narrowing.
 - **AND** the address carries the words, so opening it afresh lists the same
 
 #### Scenario: grade10-site-store-product-listing-SC-15 - The menu offers only answerable orders
-**Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
+**Serves:** `grade10-site-store-product-listing-US-05`, `grade10-site-store-product-listing-US-09` - the menu offers only answerable orders
 
 - **WHEN** a collector opens the sort menu
 - **THEN** every order it offers is one the catalogue can answer
@@ -343,7 +343,7 @@ listing to the previous narrowing.
 - **AND** popularity is not offered
 
 #### Scenario: grade10-site-store-product-listing-SC-29 - At rest the order is latest
-**Serves:** Collection as a way in - at rest the order is latest
+**Serves:** grade10-site-store-product-listing-US-09 - at rest the order is latest
 
 - **WHEN** a collector opens the listing with no order in the address
 - **THEN** the listing is ordered by latest product
@@ -351,7 +351,7 @@ listing to the previous narrowing.
 - **AND** that option is marked selected in the menu
 
 #### Scenario: grade10-site-store-product-listing-SC-41 - The resting order is not named in the address
-**Serves:** Collection as a way in - the resting order is not named in the address
+**Serves:** grade10-site-store-product-listing-US-09 - the resting order is not named in the address
 
 - **GIVEN** a collector on the listing with the resting order in force
 - **WHEN** they narrow the listing by a facet choice
@@ -359,7 +359,7 @@ listing to the previous narrowing.
 - **AND** opening that address afresh lists the narrowing by latest product
 
 #### Scenario: grade10-site-store-product-listing-SC-39 - A collection opens on the resting order
-**Serves:** Collection as a way in - a collection opens on the resting order
+**Serves:** grade10-site-store-product-listing-US-11 - a collection opens on the resting order
 
 - **WHEN** a collector opens the listing at an address naming a collection and
   no order

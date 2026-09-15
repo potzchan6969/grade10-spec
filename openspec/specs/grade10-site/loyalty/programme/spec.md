@@ -1428,7 +1428,7 @@ offered for the member to keep: it is minted for one sale, and what the
 member presents is the code for that sale alone.
 
 #### Scenario: grade10-site-loyalty-programme-SC-159 - A physical reward's coupon takes 100% off its own variant
-**Serves:** Rewards and redemption - a physical reward's coupon takes 100% off its own variant
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - a physical reward's coupon takes 100% off its own variant
 
 - **WHEN** a member redeems a reward that is a physical item
 - **THEN** the redemption issues a coupon that takes 100% off the reward's
@@ -1457,20 +1457,20 @@ member presents is the code for that sale alone.
   second code
 
 #### Scenario: grade10-site-loyalty-programme-SC-160 - A member cannot undo a redemption
-**Serves:** Rewards and redemption - a member cannot undo a redemption
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - a member cannot undo a redemption
 
 - **WHEN** a member holding an unused coupon asks for their points back
 - **THEN** no member surface offers it, and the points are not returned
 
 #### Scenario: grade10-site-loyalty-programme-SC-161 - A coupon expires on its own terms
-**Serves:** Rewards and redemption - a coupon expires on its own terms
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - a coupon expires on its own terms
 
 - **WHEN** a coupon's validity period ends
 - **THEN** it can no longer be used
 - **AND** the member's redeemable balance is unaffected
 
 #### Scenario: grade10-site-loyalty-programme-SC-162 - Points buy nothing at an auction
-**Serves:** Rewards and redemption - points buy nothing at an auction
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - points buy nothing at an auction
 
 - **WHEN** a member attempts to pay for an auction purchase with points or
   with a coupon
@@ -1503,14 +1503,14 @@ redemption did not reduce it. Stock SHALL be returned only when the
 redemption actually consumed a unit.
 
 #### Scenario: grade10-site-loyalty-programme-SC-168 - A reversal voids the coupon
-**Serves:** Rewards and redemption - a reversal voids the coupon
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - a reversal voids the coupon
 
 - **WHEN** an operator reverses a redemption
 - **THEN** the coupon it issued can no longer be used
 - **AND** the points it consumed return to the member's redeemable balance
 
 #### Scenario: grade10-site-loyalty-programme-SC-169 - A used coupon cannot be reversed
-**Serves:** Rewards and redemption - a used coupon cannot be reversed
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - a used coupon cannot be reversed
 
 - **WHEN** an operator reverses a redemption whose coupon has already been used
 - **THEN** the reversal is refused and the points stay spent
@@ -1525,13 +1525,13 @@ redemption actually consumed a unit.
 - **AND** any points the member spent as a discount on that sale are returned
 
 #### Scenario: grade10-site-loyalty-programme-SC-170 - A member cannot reverse their own redemption
-**Serves:** Rewards and redemption - a member cannot reverse their own redemption
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - a member cannot reverse their own redemption
 
 - **WHEN** a member asks to reverse a redemption
 - **THEN** no member surface offers it
 
 #### Scenario: grade10-site-loyalty-programme-SC-171 - Restored points keep their original expiry
-**Serves:** Rewards and redemption - restored points keep their original expiry
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - restored points keep their original expiry
 
 - **WHEN** a redemption is reversed
 - **THEN** the restored points rejoin the credits they were taken from, keeping those credits' own dates

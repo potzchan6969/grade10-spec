@@ -343,7 +343,7 @@ export function JourneyCard({
   // written from the other.
   const accepted = spec.requirements
     .flatMap((requirement) => requirement.scenarios)
-    .filter((scenario) => scenario.id && scenario.serves === journey.id)
+    .filter((scenario) => scenario.id && scenario.serves?.includes(journey.id))
     .map((scenario) => ({ id: scenario.id as string, name: scenario.name }));
 
   return (

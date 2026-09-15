@@ -61,3 +61,16 @@ where a narrowing left off rather than to a page number.
 scrolled past,
 **so that** I can tell whether it is worth reading on before I have read to the
 end.
+### grade10-site-store-product-listing-US-09: Collector opens the listing at rest
+
+**As a** collector,
+**I want** the catalogue already ordered by latest product when I arrive,
+**so that** I see new stock first without picking a sort.
+
+### grade10-site-store-product-listing-US-11: Collector orders the collection they arrived in
+
+**As a** collector who followed a front-door tile into a collection,
+**I want** to order that collection without leaving it,
+**so that** I can read it newest or cheapest first and still be in the
+collection I came for.
+

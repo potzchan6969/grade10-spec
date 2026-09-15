@@ -960,10 +960,12 @@ export function tracedBy(
 ): Set<string> {
   const served = new Map<string, string[]>();
   for (const scenario of scenarios) {
-    if (!scenario.id || !scenario.serves) continue;
-    const at = served.get(scenario.serves);
-    if (at) at.push(scenario.id);
-    else served.set(scenario.serves, [scenario.id]);
+    if (!scenario.id) continue;
+    for (const anchor of scenario.serves ?? []) {
+      const at = served.get(anchor);
+      if (at) at.push(scenario.id);
+      else served.set(anchor, [scenario.id]);
+    }
   }
   return new Set(
     cases

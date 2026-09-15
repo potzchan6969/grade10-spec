@@ -272,13 +272,25 @@ export function featureGroups(body: string): string[] {
   return [...new Set(groups)];
 }
 
-/** The anchor a scenario serves, or null where it names none. The prose after
- * the first dash is a human's, and is dropped. */
-export function servedAnchor(body: string): string | null {
+/** The anchors a scenario serves, in the order written. The prose after the
+ * first dash is a human's and is dropped.
+ *
+ * More than one is allowed, comma-separated, because a scenario is a rule and a
+ * rule can sit on several paths — a refusal reached from two journeys is one
+ * rule, not two. A test case is the other shape: one case is one walk, so a
+ * feature case still traces one anchor. The old `Accepted by` lists were
+ * already many-to-many and 16 scenarios used it; a single anchor could not hold
+ * them. */
+export function servedAnchors(body: string): string[] {
   const match = SERVES.exec(body);
-  if (!match) return null;
-  const anchor = match[1].split(/\s+[-\u2013\u2014]\s+/)[0].trim();
-  return anchor.replace(/^`|`$/g, "") || null;
+  if (!match) return [];
+  const head = match[1].split(/\s+[-\u2013\u2014]\s+/)[0];
+  // Several anchors are written as code spans, because a feature set group name
+  // may hold a comma of its own - `Derived, never written` is one - and
+  // splitting on commas would cut it in half. A lone anchor needs no span.
+  const spans = [...head.matchAll(/`([^`]+)`/g)].map((m) => m[1].trim());
+  const found = spans.length > 0 ? spans : [head.trim()];
+  return [...new Set(found.filter(Boolean))];
 }
 
 /**
@@ -361,8 +373,8 @@ function readScenario(section: Section): Scenario {
   }
   const scenario: Scenario = { name: match[2], text: section.body };
   if (match[1]) scenario.id = match[1];
-  const serves = servedAnchor(section.body);
-  if (serves) scenario.serves = serves;
+  const serves = servedAnchors(section.body);
+  if (serves.length > 0) scenario.serves = serves;
   return scenario;
 }
 

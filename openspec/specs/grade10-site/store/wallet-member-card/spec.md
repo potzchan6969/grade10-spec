@@ -75,7 +75,7 @@ which passes they are carrying.
 - **AND** the partial unique index `uq_wallet_passes_live_member` is the backstop that refuses a second live row on any path that forgets
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-03 - Ending one wallet's pass leaves the other's untouched
-**Serves:** Independent wallets - ending one wallet's pass leaves the other's untouched
+**Serves:** `grade10-site-store-wallet-member-card-US-03`, `grade10-site-store-wallet-member-card-US-07` - ending one wallet's pass leaves the other's untouched
 
 - **GIVEN** a member holding a live pass on both wallets
 - **WHEN** they end the Google Wallet pass alone

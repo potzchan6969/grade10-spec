@@ -51,9 +51,11 @@ function checkServes(ctx, spec, dir) {
   for (const requirement of spec.requirements ?? []) {
     for (const scenario of requirement.scenarios ?? []) {
       if (!scenario.id) continue;
-      if (!scenario.serves) missing.push(scenario.id);
-      else if (!anchors.has(scenario.serves)) {
-        unresolved.push(`${scenario.id} → \`${scenario.serves}\``);
+      const serves = scenario.serves ?? [];
+      if (serves.length === 0) missing.push(scenario.id);
+      for (const anchor of serves) {
+        if (anchors.has(anchor)) continue;
+        unresolved.push(`${scenario.id} → \`${anchor}\``);
       }
     }
   }
@@ -135,10 +137,12 @@ function checkSuite(ctx, spec, dir) {
   const accepted = new Map();
   for (const requirement of spec.requirements ?? []) {
     for (const scenario of requirement.scenarios ?? []) {
-      if (!scenario.id || !scenario.serves) continue;
-      const at = accepted.get(scenario.serves);
-      if (at) at.push(scenario.id);
-      else accepted.set(scenario.serves, [scenario.id]);
+      if (!scenario.id) continue;
+      for (const anchor of scenario.serves ?? []) {
+        const at = accepted.get(anchor);
+        if (at) at.push(scenario.id);
+        else accepted.set(anchor, [scenario.id]);
+      }
     }
   }
   for (const anchor of anchorsOf(spec)) {
