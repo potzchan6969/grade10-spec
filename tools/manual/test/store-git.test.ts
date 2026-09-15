@@ -63,8 +63,9 @@ describe.each(["sha1", "sha256"] as const)("a %s repository", (format) => {
   });
 });
 
-/** The plan is read at the store's main; a change not settled there cannot be
- * claimed or archived, and the board has to say so. The states are read off
+/** The plan is read at the store's main; a change missing there cannot be
+ * claimed, a checkout copy that differs from it is not the settled brief, and
+ * the board has to say both. The states are read off
  * the refs the clone has — `origin/main` here is a plain remote-tracking ref,
  * which is all the reader asks for. */
 describe("where a change stands against origin/main", () => {

@@ -88,10 +88,10 @@ By what conflicted:
 - **`openspec/specs/**/spec.md`** — a durable spec, usually because `main`
   archived a change that folded its deltas in. The durable spec is the source
   of truth: your side survives only where it says something that one does not.
-- **`openspec/changes/<id>/tasks.md`** — checkmarks written from the other
-  clone. **Never resolve toward your side.** A checked box is a fact about work
-  that landed, and dropping one under-reports the board with nothing to catch
-  it. `pnpm run plan:preflight <change-id>` prints the state you are resolving
+- **`openspec/changes/<id>/tasks.md`** — claims and checkmarks `pnpm plan`
+  recorded on `main`. **Never resolve toward your side.** A checked box is a
+  fact about work that landed, and dropping one under-reports the board with
+  nothing to catch it. `pnpm run plan:preflight <change-id>` prints the state you are resolving
   against.
 - **`proposal.md`, `tech-design.md`, `ui-design.md`** — prose. Both sides usually belong;
   say the merged thing once rather than stacking two paragraphs.
@@ -225,7 +225,7 @@ conflict and how each was settled, what validation ran, and anything left for a
 human.
 
 Then say the handoff out loud: the change is on `main`, so an engineer can
-`pnpm plan sync` in the application repository and claim it.
+claim it with `pnpm plan claim` in the application repository.
 
 ## Related
 

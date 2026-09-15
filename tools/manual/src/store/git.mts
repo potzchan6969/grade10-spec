@@ -271,12 +271,12 @@ async function mainRef(root: string): Promise<string | null> {
 const CHANGES_DIR = "openspec/changes";
 
 /**
- * Where each in-flight change stands against the store's main — the terminal
- * board prints this and the browser used to hide it, which left three of four
- * "Complete" cards silently unarchivable. Same convention as the application
- * repo's `plan.mjs`: `tasks.md` is excluded from the divergence count because
- * claim and done churn it by design. Reads the refs the clone already has;
- * fetching is `pnpm plan sync`'s job, not a build's.
+ * Where each in-flight change stands against the store's main, as the
+ * application repo's `plan.mjs` board reads it: a change not on main is
+ * unmerged, and artifacts that differ from main are not the settled brief.
+ * `tasks.md` is left out of the difference because every claim and checkmark
+ * moves it on main. Reads the refs the clone already has: `pnpm plan` fetches
+ * main, a build does not.
  */
 export async function readMainStates(
   root: string,
@@ -298,7 +298,7 @@ export async function readMainStates(
       .split("\n")
       .filter(Boolean),
   );
-  const ahead = [
+  const differ = [
     await tryGit(root, ["diff", "--name-only", ref, "--", CHANGES_DIR]),
     await tryGit(root, [
       "ls-files",
@@ -315,7 +315,7 @@ export async function readMainStates(
       continue;
     }
     const prefix = `${CHANGES_DIR}/${id}/`;
-    const files = ahead.filter(
+    const files = differ.filter(
       (file) => file.startsWith(prefix) && file !== `${prefix}tasks.md`,
     ).length;
     if (files > 0) states.set(id, { state: "diverged", ref, files });
