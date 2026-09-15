@@ -23,6 +23,11 @@ more can be loaded are decided by the application.
   - Loading, empty, failed: the application drives display through props
 - Filters and sort
   - Reported changes: search, filters, and sort are displayed and reported, never decided by the blocks
+- Responsive layout
+  - Column count: the list answers the width it is given, and the consumer sets none of it
+- Load more
+  - Reported reach: arriving at the end is reported like any other change, never acted on by the blocks
+  - Loading more: the wait for the next products is shown without disturbing the ones already read
 - Accessibility
   - Keyboard and announcements: controls are operable without a pointer; busy and count changes are announced
 - No defaulted content
@@ -147,12 +152,14 @@ A tile SHALL remain fully readable and its controls fully operable at every
 column count.
 
 #### Scenario: shared-ui-store-product-listing-SC-10 - Narrow viewport
+**Serves:** Responsive layout - narrow viewport
 
 - **WHEN** the surface is rendered at mobile width
 - **THEN** the list displays one column
 - **AND** no content overflows the viewport horizontally
 
 #### Scenario: shared-ui-store-product-listing-SC-11 - Wide viewport
+**Serves:** Responsive layout - wide viewport
 
 - **WHEN** the surface is rendered with enough width for four 240px tiles
 - **THEN** the list displays four columns
@@ -167,6 +174,7 @@ supplying a different message and an optional action for each.
 The sidebar SHALL remain displayed and usable in both conditions.
 
 #### Scenario: shared-ui-store-product-listing-SC-12 - Filters match nothing
+**Serves:** Browse states - filters match nothing
 
 - **GIVEN** a resolved result set with no products and a supplied no-match message
 - **THEN** that message is displayed in place of the list
@@ -174,6 +182,7 @@ The sidebar SHALL remain displayed and usable in both conditions.
 - **AND** a clear-filters action is offered when the consumer supplied one, reporting activation through a callback
 
 #### Scenario: shared-ui-store-product-listing-SC-13 - An empty catalog
+**Serves:** Browse states - an empty catalog
 
 - **GIVEN** a resolved result set with no products, no filter selected, and a supplied empty message
 - **THEN** that message is displayed and no clear-filters action is offered
@@ -189,12 +198,14 @@ heading. The components SHALL contain no default, fallback, or built-in copy,
 and SHALL NOT read a message catalog.
 
 #### Scenario: shared-ui-store-product-listing-SC-14 - Nothing renders unsupplied copy
+**Serves:** No defaulted content - nothing renders unsupplied copy
 
 - **WHEN** the surface is rendered with only its required props
 - **THEN** every string displayed traces to a prop the consumer supplied
 - **AND** no store name, catalog term, currency, or locale appears that the consumer did not supply
 
 #### Scenario: shared-ui-store-product-listing-SC-15 - A second locale needs no source change
+**Serves:** No defaulted content - a second locale needs no source change
 
 - **WHEN** a consumer supplies the same props with every string translated
 - **THEN** the surface displays the translated strings with no change to the package
@@ -286,6 +297,7 @@ When results are loading, empty, or in error, the surface SHALL NOT report
 `onLoadMore`.
 
 #### Scenario: shared-ui-store-product-listing-SC-23 - More products are reported on scroll
+**Serves:** Load more - more products are reported on scroll
 
 - **GIVEN** a resolved result list, `hasMore` true, and a supplied `onLoadMore` callback
 - **WHEN** a shopper scrolls the product list near its end
@@ -293,18 +305,21 @@ When results are loading, empty, or in error, the surface SHALL NOT report
 - **AND** the displayed products are unchanged until the consumer supplies a longer list
 
 #### Scenario: shared-ui-store-product-listing-SC-24 - Loading more shows skeleton tiles
+**Serves:** Load more - loading more shows skeleton tiles
 
 - **GIVEN** a resolved result list and `loadingMore` true
 - **THEN** Boneyard skeleton tiles are displayed below the resolved products
 - **AND** the resolved products remain displayed above them
 
 #### Scenario: shared-ui-store-product-listing-SC-25 - The end of the catalog
+**Serves:** Load more - the end of the catalog
 
 - **GIVEN** `hasMore` false
 - **THEN** no load trigger is displayed
 - **AND** no further load is reported
 
 #### Scenario: shared-ui-store-product-listing-SC-26 - Initial load does not report load more
+**Serves:** Load more - initial load does not report load more
 
 - **GIVEN** results in a loading, empty, or error condition
 - **THEN** `onLoadMore` is not reported
@@ -317,6 +332,7 @@ error, and resolved condition. A condition on one SHALL NOT change what the
 other displays.
 
 #### Scenario: shared-ui-store-product-listing-SC-27 - Results fail while filter groups stand
+**Serves:** Browse states - results fail while filter groups stand
 
 - **GIVEN** filter groups that have resolved and results that are in an error condition
 - **THEN** the sidebar still displays its heading, search field, filter groups, and utility links, still usable
@@ -324,12 +340,14 @@ other displays.
 - **AND** a retry affordance is offered when the consumer supplied one, reporting activation through a callback
 
 #### Scenario: shared-ui-store-product-listing-SC-28 - Filter groups load while results are ready
+**Serves:** Browse states - filter groups load while results are ready
 
 - **GIVEN** filter groups that are still loading and results that have resolved
 - **THEN** the results and their count are displayed
 - **AND** the sidebar displays a loading treatment rather than an empty filter list
 
 #### Scenario: shared-ui-store-product-listing-SC-29 - One boundary is not inferred from the other
+**Serves:** Browse states - one boundary is not inferred from the other
 
 - **WHEN** either boundary is in a loading condition
 - **THEN** the surface displays no global blocking treatment over the region that has resolved
@@ -366,6 +384,7 @@ supplied label and destination. When no utility links are supplied, that
 region SHALL occupy no space.
 
 #### Scenario: shared-ui-store-product-listing-SC-30 - Search is displayed and reported as supplied
+**Serves:** Filters and sort - search is displayed and reported as supplied
 
 - **GIVEN** a supplied search query of `pika`
 - **THEN** the search field displays `pika`
@@ -374,6 +393,7 @@ region SHALL occupy no space.
 - **AND** the change was reported once through the callback
 
 #### Scenario: shared-ui-store-product-listing-SC-31 - Search clear is offered only when appropriate
+**Serves:** Filters and sort - search clear is offered only when appropriate
 
 - **GIVEN** a non-empty supplied search query and a supplied clear handler
 - **THEN** a clear affordance is displayed
@@ -382,17 +402,20 @@ region SHALL occupy no space.
 - **AND** the field still displays the supplied query until the consumer supplies a new one
 
 #### Scenario: shared-ui-store-product-listing-SC-32 - No clear affordance without a handler
+**Serves:** No defaulted content - no clear affordance without a handler
 
 - **GIVEN** a non-empty supplied search query and no clear handler
 - **THEN** no clear affordance is displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-33 - No filter selected is unrestricted
+**Serves:** Filters and sort - no filter selected is unrestricted
 
 - **GIVEN** a filter group whose supplied selection contains no option
 - **THEN** every option is displayed as unselected
 - **AND** the supplied results are still displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-34 - A sidebar filter is reported
+**Serves:** Filters and sort - a sidebar filter is reported
 
 - **GIVEN** a filter group with no option selected
 - **WHEN** a shopper activates one option and the consumer supplies no new selection
@@ -401,22 +424,26 @@ region SHALL occupy no space.
 - **AND** the change was reported once, naming the group and the option
 
 #### Scenario: shared-ui-store-product-listing-SC-35 - Two filter options selected
+**Serves:** Filters and sort - two filter options selected
 
 - **GIVEN** a filter group whose supplied selection contains two options
 - **THEN** both options are displayed as selected together
 
 #### Scenario: shared-ui-store-product-listing-SC-36 - An empty filter group
+**Serves:** Filters and sort - an empty filter group
 
 - **GIVEN** a resolved filter list that includes a group with no options
 - **THEN** that group is not displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-37 - A group expand is reported
+**Serves:** Filters and sort - a group expand is reported
 
 - **GIVEN** a filter group with a supplied expand label
 - **WHEN** a shopper activates the expand affordance
 - **THEN** the expand handler is reported once, naming the group
 
 #### Scenario: shared-ui-store-product-listing-SC-38 - No utility links
+**Serves:** No defaulted content - no utility links
 
 - **GIVEN** no utility links supplied
 - **THEN** no utility-link region is displayed
@@ -444,11 +471,13 @@ occupy no space. Sort and applied filters SHALL be selectable at the same
 time.
 
 #### Scenario: shared-ui-store-product-listing-SC-39 - The count is not derived
+**Serves:** Filters and sort - the count is not derived
 
 - **GIVEN** a supplied result count of `38` and a page carrying 8 products
 - **THEN** the header displays the supplied `38`
 
 #### Scenario: shared-ui-store-product-listing-SC-40 - Sorting is reported
+**Serves:** Filters and sort - sorting is reported
 
 - **WHEN** a shopper chooses a sort option other than the active one
 - **THEN** that option is reported once through the callback
@@ -456,17 +485,20 @@ time.
 - **AND** the previously active option stays marked as selected until the consumer supplies a new one
 
 #### Scenario: shared-ui-store-product-listing-SC-41 - No sort options supplied
+**Serves:** Filters and sort - no sort options supplied
 
 - **GIVEN** an empty list of sort options
 - **THEN** the sort control is not displayed and the result count is still displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-42 - No applied filters
+**Serves:** Filters and sort - no applied filters
 
 - **GIVEN** no applied filters supplied
 - **THEN** the applied-filter region is not displayed
 - **AND** the result count is still displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-43 - An applied filter is removed
+**Serves:** Filters and sort - an applied filter is removed
 
 - **GIVEN** a supplied applied filter
 - **WHEN** a shopper dismisses that chip and the consumer supplies no new list
@@ -474,6 +506,7 @@ time.
 - **AND** the change was reported once, naming the group and the option as unselected
 
 #### Scenario: shared-ui-store-product-listing-SC-44 - Applied filters are cleared
+**Serves:** Filters and sort - applied filters are cleared
 
 - **GIVEN** at least one supplied applied filter and a supplied clear handler
 - **WHEN** a shopper activates the clear affordance
@@ -481,6 +514,7 @@ time.
 - **AND** the chips are still displayed until the consumer supplies a new list
 
 #### Scenario: shared-ui-store-product-listing-SC-45 - Sort and applied filters combine
+**Serves:** Filters and sort - sort and applied filters combine
 
 - **WHEN** a sort option is selected and at least one applied filter is supplied
 - **THEN** both remain displayed together
