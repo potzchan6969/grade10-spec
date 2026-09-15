@@ -35,18 +35,15 @@ export function formatExtensionMinutes(seconds: number): string {
 export function formatAutoExtendedTooltip(
   policy: ListingExtensionPolicy,
 ): string {
-  const windowLabel = formatExtensionMinutes(policy.windowSeconds);
-  const durationLabel = formatExtensionMinutes(policy.durationSeconds);
-  return `A bid in the last ${windowLabel} adds ${durationLabel} to the close. Repeats until ${durationLabel} pass with no bids, up to the listing cap.`;
+  const minutes = Math.max(1, Math.round(policy.durationSeconds / 60));
+  return `After the scheduled close, each bid restarts a ${minutes}-minute timer. Bidding ends when the timer runs out with no new bid, up to the listing cap.`;
 }
 
 /** English stand-in for `auctionListing.extendedBiddingRules` in demos. */
 export function formatExtendedBiddingRules(
   policy: ListingExtensionPolicy,
 ): string {
-  const windowLabel = formatExtensionMinutes(policy.windowSeconds);
-  const durationLabel = formatExtensionMinutes(policy.durationSeconds);
-  return `If a bid is placed during the final ${windowLabel}, the auction extends by ${durationLabel}. Extensions continue until no bid is placed in the final window.`;
+  return formatAutoExtendedTooltip(policy);
 }
 
 export function formatExtensionDurationValue(
