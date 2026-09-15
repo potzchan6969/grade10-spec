@@ -1,9 +1,9 @@
 ## 1. Manual (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Mark Product Tile with what Add to cart does for a collector with no session: sign-in opens, the tile gains nothing, and the add completes after a sign-in taken on the listing
-- [ ] 1.2 Mark Buy with the same outcome on the product page
-- [ ] 1.3 State on Reviewing the Cart and on Checkout that the cart is members only and there is no guest checkout
-- [ ] 1.4 Verify: `pnpm check:manual`
+- [x] 1.1 Mark Product Tile with what Add to cart does for a collector with no session: sign-in opens, the tile gains nothing, and the add completes after a sign-in taken on the listing
+- [x] 1.2 Mark Buy with the same outcome on the product page
+- [x] 1.3 State on Reviewing the Cart and on Checkout that the cart is members only and there is no guest checkout
+- [x] 1.4 Verify: `pnpm check:manual`
 
 ## 2. Cart sign-in gate (grade10) (owner: @sean)
 
