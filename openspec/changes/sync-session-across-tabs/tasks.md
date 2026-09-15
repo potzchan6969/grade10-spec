@@ -30,7 +30,7 @@ the promptness cases in each wait on 2.1.
 - [x] 4.1 Audit every per-member read on both sites — cart, watchlist, orders, bids, member card — and key each on the person the session names, so a person change re-reads rather than serving the previous person's rows (shared-auth-session-SC-19, shared-auth-session-SC-20)
 - [x] 4.2 Have a surface that needs a session to have anything to show answer a session that ended exactly as it answers somebody arriving with none, and stop showing what it held about the person who left (shared-auth-session-SC-21, shared-auth-session-SC-24)
 - [x] 4.3 Confirm a session ending elsewhere does not run the cleanup a confirmed sign-out runs, which stays the sign-out path's (shared-auth-session-SC-21)
-- [ ] 4.4 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test`
+- [x] 4.4 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test`
 
 ## 5. Cross-tab end-to-end (grade10)
 
