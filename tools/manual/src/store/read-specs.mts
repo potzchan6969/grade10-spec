@@ -48,8 +48,18 @@ const JOURNEY_HEADING = /^([a-z0-9][a-z0-9-]*-US-\d+):\s*(.+)$/;
  * renumbered to a newer shape. */
 const CASE_HEADING =
   /^([a-z0-9][a-z0-9-]*?-(?:US-?\d+-)?TC-?\d+(?:-\d+)?):\s*(.+)$/;
-const ACCEPTED_BY = /^\*\*Accepted by:\*\*\s*$/m;
-/** The one line a journeys file holds in place of stories when no end user
+/** The anchor a scenario serves, on its own line under the heading and above
+ * `**GIVEN**` / `**WHEN**`. Machine-read up to the first dash; the prose after
+ * it is for a human. The anchor is a journey id, or a `## Feature set` root group
+ * name matched verbatim where nobody walks the capability. It sits above the
+ * GIVEN/WHEN/THEN lines deliberately, so editing its prose never reads as a
+ * behaviour change. */
+const SERVES = /^\s*(?:[-*]\s+)?\*\*Serves:\*\*\s*(.+?)\s*$/m;
+/** A `## Feature set` root group: a top-level bullet, its children indented
+ * under it. The group name is the anchor; leaves carry no ids and are free to
+ * be reworded. */
+const FEATURE_GROUP = /^[-*]\s+(?:\*\*)?(.+?)(?:\*\*)?\s*$/;
+/** The one line a journeys file holds in place of journeys when no end user
  * reaches the capability on its own (`openspec/config.yaml`,
  * `rules.user-journeys`): a policy, a package contract, a convention. */
 const WALKED_BY_NOBODY = /^\*\*Walked by:\*\*\s+nobody\b/m;
@@ -184,7 +194,10 @@ function fillSpec(entry: SpecEntry, text: string): void {
   entry.purpose = purpose.body;
 
   const featureSet = findSection(sections, "Feature set");
-  if (featureSet) entry.featureSet = featureSet.body;
+  if (featureSet) {
+    entry.featureSet = featureSet.body;
+    entry.featureGroups = featureGroups(featureSet.body);
+  }
 
   const requirements = findSection(sections, "Requirements");
   if (!requirements) {
@@ -213,7 +226,7 @@ function issuedIn(
 }
 
 /** An id is issued once, ever. A file that issues one twice splits a
- * scenario, story or case into two things wearing the same name — the ref
+ * scenario, journey or case into two things wearing the same name — the ref
  * resolves to one and the anchor lands on the other — so it is refused
  * where it was written rather than rendered twice. */
 function refuseRepeats(
@@ -241,20 +254,56 @@ export function readJourney(section: Section): Journey {
       "a journey heading is `### <capability>-US-<n>: <title>`",
     );
   }
-  const split = ACCEPTED_BY.exec(section.body);
-  const text = split ? section.body.slice(0, split.index) : section.body;
-  const accepted = split ? section.body.slice(split.index) : "";
-  return {
-    id: match[1],
-    title: match[2],
-    text: text.trimEnd(),
-    acceptedBy: [...new Set(accepted.match(SCENARIO_ID) ?? [])],
-  };
+  return { id: match[1], title: match[2], text: section.body.trimEnd() };
+}
+
+/** The root group names of a `## Feature set`, in file order. Only column-0
+ * bullets are groups; an indented bullet is a leaf, and a leaf is never an
+ * anchor. */
+export function featureGroups(body: string): string[] {
+  const groups: string[] = [];
+  for (const line of body.split("\n")) {
+    if (/^\s/.test(line)) continue;
+    const match = FEATURE_GROUP.exec(line);
+    if (!match) continue;
+    const name = match[1].replace(/:.*$/, "").trim();
+    if (name) groups.push(name);
+  }
+  return [...new Set(groups)];
+}
+
+/** The anchors a scenario serves, in the order written. The prose after the
+ * first dash is a human's and is dropped.
+ *
+ * More than one is allowed, comma-separated, because a scenario is a rule and a
+ * rule can sit on several paths — a refusal reached from two journeys is one
+ * rule, not two. A test case is the other shape: one case is one walk, so a
+ * feature case still traces one anchor. The old `Accepted by` lists were
+ * already many-to-many and 16 scenarios used it; a single anchor could not hold
+ * them. */
+export function servedAnchors(body: string): string[] {
+  const match = SERVES.exec(body);
+  if (!match) return [];
+  return anchorsIn(match[1]);
+}
+
+/** The anchors one `**Serves:**` or `**Trace:**` line names: everything before
+ * the prose dash, read as code spans when it holds any and as one bare name
+ * when it does not.
+ *
+ * Several anchors are written as code spans because a feature set group name
+ * may hold a comma of its own - `Derived, never written` is one - and
+ * splitting on commas would cut it in half. A lone anchor needs no span. */
+function anchorsIn(line: string): string[] {
+  const head = line.split(/\s+[-\u2013\u2014]\s+/)[0];
+  const spans = [...head.matchAll(/`([^`]+)`/g)].map((m) => m[1].trim());
+  const found = spans.length > 0 ? spans : [head.trim()];
+  return [...new Set(found.filter(Boolean))];
 }
 
 /**
  * A `user-journeys.md`, whole: one `## User journeys` section holding a `###`
- * story apiece. The heading is required rather than assumed, so a file that
+ * journey apiece. The heading is required rather than assumed, so a file that
  * grew a second section says so instead of silently dropping it.
  */
 export function readJourneys(text: string): Journey[] {
@@ -270,7 +319,7 @@ export function readJourneys(text: string): Journey[] {
   return section.children.map(readJourney);
 }
 
-/** Whether a journeys file declares, in place of stories, that no end user
+/** Whether a journeys file declares, in place of journeys, that no end user
  * reaches the capability on its own. The declaration is the file's only
  * line under `## User journeys`; a file holding both is a check finding. */
 export function walkedByNobody(text: string): boolean {
@@ -332,6 +381,8 @@ function readScenario(section: Section): Scenario {
   }
   const scenario: Scenario = { name: match[2], text: section.body };
   if (match[1]) scenario.id = match[1];
+  const serves = servedAnchors(section.body);
+  if (serves.length > 0) scenario.serves = serves;
   return scenario;
 }
 
@@ -458,11 +509,18 @@ function traces(section: Section): string[] {
     );
   }
   const ids = [...new Set(line[1].match(TRACE_ID) ?? [])];
-  if (ids.length === 0) {
+  if (ids.length > 0) return ids;
+  // A case may walk a `## Feature set` root group instead of a journey - that is
+  // where a capability nobody walks routes its anchors - and a group is named
+  // verbatim rather than by id. Whether the name resolves is the `trace`
+  // rule's question, asked against the spec beside the suite; the reader's
+  // question is only whether the line names anything at all.
+  const named = anchorsIn(line[1]);
+  if (named.length === 0) {
     throw new StoreFileError(
       section.line,
-      `test case \`${section.heading}\` traces no journey or scenario id`,
+      `test case \`${section.heading}\` traces nothing - name a journey, a scenario id, or a \`## Feature set\` group`,
     );
   }
-  return ids;
+  return named;
 }

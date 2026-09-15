@@ -15,11 +15,13 @@ Alpha does one thing, and this fixture is what proves the reader sees it.
 The system SHALL do the thing exactly once and SHALL refuse a second ask.
 
 #### Scenario: alpha-SC-01 - The thing happens
+**Serves:** alpha-US-01 - Reader follows the thing end to end
 
 - **WHEN** a reader asks for the thing
 - **THEN** the thing happens
 
 #### Scenario: alpha-SC-02 - The thing is refused a second time
+**Serves:** alpha-US-01 - Reader follows the thing end to end
 
 - **GIVEN** the thing already happened
 - **WHEN** a reader asks again

@@ -81,12 +81,14 @@ The member record SHALL hold no personal data beyond the user identity. Names,
 email addresses and every other identity attribute stay in the identity system.
 
 #### Scenario: grade10-site-loyalty-programme-SC-01 - Activity precedes joining
+**Serves:** Membership and ledger - activity precedes joining
 
 - **WHEN** points are recorded for a user who has never joined
 - **THEN** a member record exists and holds those points
 - **AND** the member is reported as not joined until they join
 
 #### Scenario: grade10-site-loyalty-programme-SC-02 - Joining is idempotent
+**Serves:** Membership and ledger - joining is idempotent
 
 - **WHEN** a member joins more than once
 - **THEN** the first join date stands and later attempts change nothing
@@ -98,24 +100,28 @@ deleted. Both a member's balance and their tier progress SHALL be derived by
 asking the ledger, never stored as running totals.
 
 #### Scenario: grade10-site-loyalty-programme-SC-03 - Balance excludes expired and spent points
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a redeemable balance is asked for at a given instant
 - **THEN** it counts every credit recorded before that instant, less what has been spent or clawed back
 - **AND** it counts nothing once the member's inactivity window has passed
 
 #### Scenario: grade10-site-loyalty-programme-SC-126 - Tier progress is derived from the same entries
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** tier progress is asked for over a given window
 - **THEN** it counts the earnings dated inside that window and after the member's most recent demotion, less any claw-backs against them
 - **AND** redemptions do not appear in it
 
 #### Scenario: grade10-site-loyalty-programme-SC-04 - A balance never goes negative
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** any debit is recorded
 - **THEN** it draws only on credits that have points remaining
 - **AND** no sequence of recorded activity can drive a member below zero
 
 #### Scenario: grade10-site-loyalty-programme-SC-05 - Every debit is fully accounted
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a debit is recorded
 - **THEN** the credits it drew from, and how much it took from each, are recorded
@@ -129,11 +135,13 @@ anything again. The same key carrying different input SHALL be refused as a
 conflict.
 
 #### Scenario: grade10-site-loyalty-programme-SC-10 - A retry is free
+**Serves:** Membership and ledger - a retry is free
 
 - **WHEN** a caller repeats a mutation under a key it already used
 - **THEN** the original answer is returned and no new entry is recorded
 
 #### Scenario: grade10-site-loyalty-programme-SC-11 - A reused key with new input is refused
+**Serves:** Membership and ledger - a reused key with new input is refused
 
 - **WHEN** a caller repeats a key with input that differs from the first call
 - **THEN** the call is refused as a conflict
@@ -171,63 +179,74 @@ Expiry SHALL be recorded as a dated entry like any other movement, naming the
 whole amount it removed.
 
 #### Scenario: grade10-site-loyalty-programme-SC-94 - Buying keeps the whole balance alive
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a member earns points eleven months after their previous activity
 - **THEN** the whole balance, oldest points included, expires an inactivity window after this earning
 - **AND** not an inactivity window after the earning that produced those older points
 
 #### Scenario: grade10-site-loyalty-programme-SC-95 - Redeeming also resets the window
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a member redeems and records no other activity
 - **THEN** the remaining balance expires an inactivity window after that redemption
 
 #### Scenario: grade10-site-loyalty-programme-SC-96 - Expiry needs no sweep
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a member's inactivity window passes
 - **THEN** their balance stops counting toward what they can spend immediately
 
 #### Scenario: grade10-site-loyalty-programme-SC-97 - Expired points do not come back
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a member whose balance has expired makes a purchase
 - **THEN** the new earning starts a fresh balance and a fresh inactivity window
 - **AND** nothing that expired returns
 
 #### Scenario: grade10-site-loyalty-programme-SC-98 - A correction does not extend the balance's life
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** an operator corrects a balance, or a refund claws points back
 - **THEN** the member's inactivity window is unchanged
 
 #### Scenario: grade10-site-loyalty-programme-SC-99 - A campaign grant does not keep the balance alive
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** an operator grants campaign points as a reward
 - **THEN** the member's inactivity window is unchanged
 - **AND** the granted points count until their own expiry date, even under a window that has already passed
 
 #### Scenario: grade10-site-loyalty-programme-SC-100 - A spend too small to earn still counts as activity
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a member's qualifying spend is below the price of one point
 - **THEN** no points are credited
 - **AND** the member's inactivity window is reset from that spend
 
 #### Scenario: grade10-site-loyalty-programme-SC-101 - A late record cannot shorten the balance's life
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a purchase dated before the member's most recent activity is recorded
 - **THEN** the balance's expiry is left where the later activity put it
 - **AND** it is never pulled back toward the older date
 
 #### Scenario: grade10-site-loyalty-programme-SC-150 - The window is calendar months, not a day count
+**Serves:** Earning and expiry - the window is calendar months, not a day count
 
 - **WHEN** a member's last activity is 3 January at 10:00 in the programme's zone
 - **THEN** the balance lapses on 3 January the next year at 10:00, whether that is 365 or 366 days on
 - **AND** an activity on 29 February lapses on 28 February the next year
 
 #### Scenario: grade10-site-loyalty-programme-SC-151 - A record older than the window is written already lapsed
+**Serves:** Earning and expiry - a record older than the window is written already lapsed
 
 - **WHEN** an earning dated more than an inactivity window ago is recorded
 - **THEN** its points are recorded with their own date already past, and count nothing
 - **AND** the member's inactivity window is unchanged
 
 #### Scenario: grade10-site-loyalty-programme-SC-102 - A partial sweep converges
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a scheduled expiry pass stops before reaching every member
 - **THEN** it reports how many members it did not reach
@@ -254,47 +273,56 @@ refused. The programme SHALL carry an inactivity window longer than zero. The
 programme's time zone SHALL name a real zone.
 
 #### Scenario: grade10-site-loyalty-programme-SC-17 - Two tiers share an identifier
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a ladder repeats a tier identifier
 - **THEN** the product fails to start, naming the identifier
 
 #### Scenario: grade10-site-loyalty-programme-SC-18 - No entry tier, or more than one
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a ladder has other than exactly one tier every member starts on
 - **THEN** the product fails to start, saying how many it found
 
 #### Scenario: grade10-site-loyalty-programme-SC-19 - The entry tier is not the lowest rung
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** the tier every member starts on is not first in the ladder
 - **THEN** the product fails to start
 
 #### Scenario: grade10-site-loyalty-programme-SC-20 - A higher tier is cheaper than the one below it
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** an earned tier asks no more qualifying points than the tier beneath it
 - **THEN** the product fails to start, naming both amounts
 - **AND** no member can hold a tier they skipped past
 
 #### Scenario: grade10-site-loyalty-programme-SC-21 - Earned tiers measure over different windows
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** two earned tiers count qualifying points over different periods
 - **THEN** the product fails to start, naming the periods
 
 #### Scenario: grade10-site-loyalty-programme-SC-127 - A retention threshold asks more than the tier itself
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** an earned tier's retention threshold is greater than the qualifying points that tier asks for
 - **THEN** the product fails to start, naming both amounts
 
 #### Scenario: grade10-site-loyalty-programme-SC-128 - An earned tier has no validity period
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** an earned tier carries a validity period of zero or less
 - **THEN** the product fails to start, naming the tier
 
 #### Scenario: grade10-site-loyalty-programme-SC-129 - The programme has no inactivity window
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** the programme's inactivity window is zero or less
 - **THEN** the product fails to start
 
 #### Scenario: grade10-site-loyalty-programme-SC-22 - The programme names a zone that does not exist
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** the programme's time zone is not a real IANA zone
 - **THEN** the product fails to start, naming it
@@ -332,53 +360,63 @@ threshold:
 [Grade10 loyalty programme](../../../../../../../docs/prds/products/membership/index.md).
 
 #### Scenario: grade10-site-loyalty-programme-SC-23 - A purchase earns at the member's rate
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a Gold member completes a HKD 1,000 qualifying purchase
 - **THEN** they earn 120 points
 
 #### Scenario: grade10-site-loyalty-programme-SC-130 - A fractional point is dropped
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a Silver member's qualifying spend is HKD 125.50
 - **THEN** they earn 12 points
 
 #### Scenario: grade10-site-loyalty-programme-SC-131 - Grade10 floors base points before the multiplier
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a Gold member's qualifying spend is HKD 139
 - **THEN** they earn 15 points, never 16
 
 #### Scenario: grade10-site-loyalty-programme-SC-24 - The second tier is reached by spending
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member's tier progress over the rolling twelve months reaches 500
 - **THEN** they hold Gold from that instant
 
 #### Scenario: grade10-site-loyalty-programme-SC-132 - Tier records use the public identifiers
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** enrollment, promotion or demotion records a Silver or Gold tier
 - **THEN** the persisted identifier is `silver` or `gold`, respectively
 - **AND** no record uses `platinum` or `diamond`
 
 #### Scenario: grade10-site-loyalty-programme-SC-133 - Gold is retained by earning again
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a Gold member earns 500 points inside their validity period
 - **THEN** they hold Gold for a further twelve months
 
 #### Scenario: grade10-site-loyalty-programme-SC-134 - Gold lapses after a quiet year
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a Gold member earns 300 points in the twelve months following their upgrade
 - **THEN** they hold Silver from the instant those twelve months end
 
 #### Scenario: grade10-site-loyalty-programme-SC-135 - A quiet year empties the balance
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member records no earning and no redemption for twelve months
 - **THEN** their redeemable balance is zero
 
 #### Scenario: grade10-site-loyalty-programme-SC-136 - A point is worth one Hong Kong dollar at checkout
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member pays 100 points toward an HKD 800 purchase
 - **THEN** HKD 100 is covered by points and HKD 700 remains payable in money
 - **AND** the purchase earns on HKD 700
 
 #### Scenario: grade10-site-loyalty-programme-SC-25 - The top tier cannot be bought
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member earns any number of points
 - **THEN** they never reach Black by earning alone
@@ -394,16 +432,19 @@ revoked, and SHALL be able to read which tiers the programme defines rather than
 naming one from memory.
 
 #### Scenario: grade10-site-loyalty-programme-SC-26 - A grant names an unknown tier
+**Serves:** Tiers and invitations - a grant names an unknown tier
 
 - **WHEN** a grant names a tier the programme does not define
 - **THEN** it is refused as not found and nothing is recorded
 
 #### Scenario: grade10-site-loyalty-programme-SC-27 - A grant names the entry tier
+**Serves:** Tiers and invitations - a grant names the entry tier
 
 - **WHEN** a grant names the tier every member starts on
 - **THEN** it is refused as invalid
 
 #### Scenario: grade10-site-loyalty-programme-SC-28 - Live grants can be found
+**Serves:** Tiers and invitations - live grants can be found
 
 - **WHEN** an operator lists invitations
 - **THEN** every live grant is listed with its member, tier, reason and end date
@@ -420,26 +461,31 @@ cost or how long its coupon runs.
 A member SHALL be able to list what they have redeemed and the state of each.
 
 #### Scenario: grade10-site-loyalty-programme-SC-29 - Repricing does not rewrite history
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a reward's point cost changes after a member redeemed it
 - **THEN** the earlier redemption still records the price the member paid
 
 #### Scenario: grade10-site-loyalty-programme-SC-137 - Re-dating a reward's coupon does not shorten one already issued
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a reward's coupon validity period changes after a member redeemed it
 - **THEN** the coupon already issued keeps the validity it was issued with
 
 #### Scenario: grade10-site-loyalty-programme-SC-30 - Stock is not oversold
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** two members redeem the last unit of a limited reward at once
 - **THEN** exactly one succeeds and the other is refused as out of stock
 
 #### Scenario: grade10-site-loyalty-programme-SC-31 - A reward outside its window cannot be redeemed
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member redeems a reward that is archived, or outside its live window
 - **THEN** the redemption is refused
 
 #### Scenario: grade10-site-loyalty-programme-SC-32 - The public menu shows only what a member can buy
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** the reward menu is read without signing in
 - **THEN** it lists only live, unarchived rewards, each with its point price and the validity of the coupon it issues
@@ -459,29 +505,34 @@ Splitting a refund into several parts SHALL claw back exactly what one refund
 for the whole sum would have.
 
 #### Scenario: grade10-site-loyalty-programme-SC-35 - A split refund matches a single refund
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a refund is recorded in two parts
 - **THEN** the total clawed back equals what one refund of the combined amount removes
 
 #### Scenario: grade10-site-loyalty-programme-SC-36 - A member who already spent the points is not driven negative
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a refund exceeds what the member still holds from that money
 - **THEN** the shortfall is recorded and counted by cause
 - **AND** the member's balance does not go below zero
 
 #### Scenario: grade10-site-loyalty-programme-SC-37 - A refund before its earning is not lost
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a refund names money that has not yet earned anything
 - **THEN** it is refused as not found and nothing is recorded
 - **AND** a later retry claws back once the earning lands
 
 #### Scenario: grade10-site-loyalty-programme-SC-38 - A claw-back cancels the tier contribution it removes
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** points are clawed back
 - **THEN** the tier contribution of the earning they came from is reduced by the same amount
 - **AND** it leaves the qualifying window at the same time that earning does
 
 #### Scenario: grade10-site-loyalty-programme-SC-145 - A claw-back withdraws an unsupported retention extension
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **GIVEN** a purchase inside a tier's validity period reached its retention threshold and started a fresh validity period
 - **WHEN** that purchase is fully refunded and the remaining points inside the original validity period no longer reach the retention threshold
@@ -490,6 +541,7 @@ for the whole sum would have.
 - **AND** their retention progress reflects only the points that remain
 
 #### Scenario: grade10-site-loyalty-programme-SC-146 - A claw-back can demote
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a claw-back takes a member's tier progress below what attained their tier
 - **THEN** they hold the tier their remaining points still reach, from that instant
@@ -509,33 +561,39 @@ mismatch SHALL be detected when the product starts, not when a member buys
 something.
 
 #### Scenario: grade10-site-loyalty-programme-SC-39 - Points survive an outage
+**Serves:** Earning and expiry - points survive an outage
 
 - **WHEN** a purchase completes while the programme is unreachable
 - **THEN** the purchase still completes for the buyer
 - **AND** the points are granted once the programme is reachable again, without anyone re-entering them
 
 #### Scenario: grade10-site-loyalty-programme-SC-40 - A repeated delivery grants nothing twice
+**Serves:** Earning and expiry - a repeated delivery grants nothing twice
 
 - **WHEN** the same money event is delivered to the programme more than once
 - **THEN** the points are granted once
 
 #### Scenario: grade10-site-loyalty-programme-SC-41 - One money event, one identity
+**Serves:** Earning and expiry - one money event, one identity
 
 - **WHEN** a purchase reaches its completed state through any path — a payment
   notification, a scheduled reconciliation, or a read that repairs it
 - **THEN** exactly one money event is recorded for it, carrying an identity stable across retries
 
 #### Scenario: grade10-site-loyalty-programme-SC-42 - A partial refund claws back only its own part
+**Serves:** Earning and expiry - a partial refund claws back only its own part
 
 - **WHEN** part of a purchase is refunded, and later another part
 - **THEN** each refund claws back only the points its own amount earned
 
 #### Scenario: grade10-site-loyalty-programme-SC-43 - A currency mismatch stops the product from starting
+**Serves:** Earning and expiry - a currency mismatch stops the product from starting
 
 - **WHEN** a product sells in a currency the programme does not run in
 - **THEN** the product fails to start, naming both currencies
 
 #### Scenario: grade10-site-loyalty-programme-SC-44 - A refused recording is reported, not swallowed
+**Serves:** Earning and expiry - a refused recording is reported, not swallowed
 
 - **WHEN** the programme refuses a recording
 - **THEN** the refusal is logged and counted by its reason
@@ -556,28 +614,33 @@ be their own permission: both undo something a member can see, and neither
 follows from being allowed to move points.
 
 #### Scenario: grade10-site-loyalty-programme-SC-45 - A permission is required per action
+**Serves:** grade10-site-loyalty-programme-US-05 - Operator runs the programme from one console
 
 - **WHEN** an operator without the action's permission attempts it
 - **THEN** the action is refused
 
 #### Scenario: grade10-site-loyalty-programme-SC-149 - Moving points does not carry tier removal
+**Serves:** grade10-site-loyalty-programme-US-05 - Operator runs the programme from one console
 
 - **WHEN** an operator holding only the point-movement permission attempts
   to remove a tier
 - **THEN** the action is refused
 
 #### Scenario: grade10-site-loyalty-programme-SC-164 - Moving points does not carry redemption cancellation
+**Serves:** grade10-site-loyalty-programme-US-10 - Operator cancels a redemption under its own permission
 
 - **WHEN** an operator holding only the point-movement permission attempts
   to cancel a redemption
 - **THEN** the action is refused
 
 #### Scenario: grade10-site-loyalty-programme-SC-46 - The record survives an attempt to rewrite it
+**Serves:** grade10-site-loyalty-programme-US-05 - Operator runs the programme from one console
 
 - **WHEN** any recorded operator action is altered or removed
 - **THEN** verifying the log reports the position at which it breaks
 
 #### Scenario: grade10-site-loyalty-programme-SC-47 - An action with no place to record it does not run
+**Serves:** grade10-site-loyalty-programme-US-05 - Operator runs the programme from one console
 
 - **WHEN** the operator log cannot be written
 - **THEN** the action is refused rather than completed unrecorded
@@ -589,12 +652,14 @@ progress, and to grant points that count toward tier progress. Each SHALL carry
 a reason and SHALL be recorded in the operator log.
 
 #### Scenario: grade10-site-loyalty-programme-SC-48 - A correction does not move a member up
+**Serves:** Operator console - a correction does not move a member up
 
 - **WHEN** an operator corrects a balance
 - **THEN** the points are spendable
 - **AND** the member's progress toward the next tier is unchanged
 
 #### Scenario: grade10-site-loyalty-programme-SC-49 - A campaign grant moves a member up
+**Serves:** Operator console - a campaign grant moves a member up
 
 - **WHEN** an operator grants campaign or sign-up points
 - **THEN** those points count toward the next tier
@@ -617,22 +682,26 @@ Where a second factor is required and missing, the console SHALL take the
 operator to enrol or verify rather than reporting a refusal.
 
 #### Scenario: grade10-site-loyalty-programme-SC-50 - Sections match permissions
+**Serves:** grade10-site-loyalty-programme-US-05 - Operator runs the programme from one console
 
 - **WHEN** an operator holding only the loyalty read permission opens the console
 - **THEN** they can find and read members
 - **AND** no section offering point movement, invitations, rewards, tier removal, redemption cancellation or the operator log is shown
 
 #### Scenario: grade10-site-loyalty-programme-SC-51 - A missing second factor opens the gate
+**Serves:** grade10-site-loyalty-programme-US-05 - Operator runs the programme from one console
 
 - **WHEN** an operator attempts an action their role allows but their session has no verified second factor
 - **THEN** the console takes them to verify, and the action completes afterwards
 
 #### Scenario: grade10-site-loyalty-programme-SC-52 - A stale console reports what broke
+**Serves:** grade10-site-loyalty-programme-US-05 - Operator runs the programme from one console
 
 - **WHEN** the console reads a response whose shape it does not recognise
 - **THEN** it reports which call failed to decode, rather than showing missing values
 
 #### Scenario: grade10-site-loyalty-programme-SC-53 - A member can be found again later
+**Serves:** grade10-site-loyalty-programme-US-05 - Operator runs the programme from one console
 
 - **WHEN** an operator opens a member and shares the address of that view
 - **THEN** the same member opens for the recipient
@@ -653,28 +722,33 @@ or written into the operator log; the log SHALL record which records were read,
 by whom, and how many.
 
 #### Scenario: grade10-site-loyalty-programme-SC-54 - A loyalty permission alone shows no identities
+**Serves:** Operator console - a loyalty permission alone shows no identities
 
 - **WHEN** an operator holding loyalty permissions but not the identity permission finds a member
 - **THEN** the member's loyalty state is shown
 - **AND** no name or email address is shown
 
 #### Scenario: grade10-site-loyalty-programme-SC-55 - A service connection is not an authorisation
+**Serves:** Operator console - a service connection is not an authorisation
 
 - **WHEN** a service holding a connection to the identity system requests identities without an operator session carrying the identity permission
 - **THEN** the request is refused
 
 #### Scenario: grade10-site-loyalty-programme-SC-56 - Identity is never served from a shared cache
+**Serves:** Operator console - identity is never served from a shared cache
 
 - **WHEN** a response carrying identity is returned
 - **THEN** it is marked as belonging to that caller alone and is not stored in a shared cache
 
 #### Scenario: grade10-site-loyalty-programme-SC-57 - An identity read is recorded without copying the identities
+**Serves:** Operator console - an identity read is recorded without copying the identities
 
 - **WHEN** an operator reads member identities
 - **THEN** the log records who read, which records, and how many
 - **AND** it does not record the names or email addresses themselves
 
 #### Scenario: grade10-site-loyalty-programme-SC-58 - A failed identity read does not degrade to blanks
+**Serves:** Operator console - a failed identity read does not degrade to blanks
 
 - **WHEN** the identity system cannot be reached
 - **THEN** the console reports the failure
@@ -693,29 +767,34 @@ Each activity entry SHALL name what it was for, and which channel it came
 from, in terms the member can read.
 
 #### Scenario: grade10-site-loyalty-programme-SC-147 - The two counts are shown as two counts
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member reads their membership
 - **THEN** the points that decide their tier and the points they can spend
   are shown as separate named figures
 
 #### Scenario: grade10-site-loyalty-programme-SC-59 - An operator's reason stays out of a member's view
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** an operator corrects a member's balance with a written reason
 - **THEN** that reason does not appear anywhere in what the member can read
 
 #### Scenario: grade10-site-loyalty-programme-SC-60 - Retry keys and internal pricing stay out of a member's view
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member reads their activity
 - **THEN** no entry carries a retry key, a request record, or the tier and
   money arithmetic the entry was priced from
 
 #### Scenario: grade10-site-loyalty-programme-SC-61 - A retired reward is still readable in history
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member reads an activity entry for a reward that has since been
   archived
 - **THEN** the entry still names that reward
 
 #### Scenario: grade10-site-loyalty-programme-SC-165 - An activity entry names its channel
+**Serves:** grade10-site-loyalty-programme-US-08 - Member sees what a channel does to their points, before and after
 
 - **WHEN** a member reads an activity entry
 - **THEN** it names the channel that activity came from, in terms the
@@ -733,21 +812,25 @@ Redeeming twice by accident SHALL cost nothing, including when the member
 reloads between attempts.
 
 #### Scenario: grade10-site-loyalty-programme-SC-62 - A member who never joined is invited to
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member with recorded activity but no join date opens the surface
 - **THEN** they are shown how to join, and their existing points
 
 #### Scenario: grade10-site-loyalty-programme-SC-63 - A double redemption costs one
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member submits the same redemption twice, with or without a reload in between
 - **THEN** exactly one redemption is recorded
 
 #### Scenario: grade10-site-loyalty-programme-SC-148 - A coupon is readable as soon as it is issued
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member completes a redemption
 - **THEN** the coupon's code and validity period are shown to them without a further step
 
 #### Scenario: grade10-site-loyalty-programme-SC-64 - Dates read in the programme's time zone
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member reads a date the programme computed
 - **THEN** it reads the same wherever the member is, in the programme's time zone
@@ -765,12 +848,14 @@ at boot when either is missing. A quantity above either bound SHALL be refused
 naming the bound it broke — never silently clipped.
 
 #### Scenario: grade10-site-loyalty-programme-SC-65 - One redemption, one debit
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a member redeems a per-unit reward at quantity five
 - **THEN** exactly one redemption records five times the unit price
 - **AND** the balance falls by exactly that amount
 
 #### Scenario: grade10-site-loyalty-programme-SC-66 - A quantity above the bound is refused
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a redemption asks for more than the programme's per-redemption
   bound allows
@@ -794,22 +879,26 @@ measured from that member's most recent earning or redemption.
 Neither clock SHALL move the other.
 
 #### Scenario: grade10-site-loyalty-programme-SC-70 - Redeeming costs no tier progress
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member whose balance is 600 and whose tier progress is 600 redeems a reward priced at 500 points
 - **THEN** their balance is 100
 - **AND** their tier progress is still 600, and their tier is unchanged
 
 #### Scenario: grade10-site-loyalty-programme-SC-71 - Earning adds to the balance and the progress
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member earns 40 points
 - **THEN** their balance rises by 40, and the 40 counts toward their tier progress
 
 #### Scenario: grade10-site-loyalty-programme-SC-72 - Losing the balance does not lose the tier
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member's balance expires
 - **THEN** they keep the tier they hold until that tier's own validity period ends
 
 #### Scenario: grade10-site-loyalty-programme-SC-73 - Losing the tier does not lose the balance
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member is downgraded at the end of a validity period
 - **THEN** their redeemable balance is unchanged
@@ -825,17 +914,20 @@ before it. The higher multiplier SHALL apply from the member's next earning
 onward.
 
 #### Scenario: grade10-site-loyalty-programme-SC-74 - A first purchase can promote
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member's first recorded purchase takes their tier progress to a tier's threshold
 - **THEN** they hold that tier from that instant
 
 #### Scenario: grade10-site-loyalty-programme-SC-75 - The triggering purchase earns at the old rate
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a purchase takes a member's tier progress from below a tier's threshold to at or above it
 - **THEN** that purchase earns at the multiplier of the tier they held before it
 - **AND** their next purchase earns at the new tier's multiplier
 
 #### Scenario: grade10-site-loyalty-programme-SC-76 - A promotion dates the validity period
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member is promoted
 - **THEN** one tier history entry records the move and that earning caused it
@@ -870,40 +962,47 @@ whatever its period says, recorded with who and why — the remedy for a tier
 granted or reached in error.
 
 #### Scenario: grade10-site-loyalty-programme-SC-77 - Re-qualifying keeps the tier
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member earns at least the retention threshold inside their tier's validity period
 - **THEN** they keep that tier
 - **AND** a fresh validity period starts at the instant the previous one ends
 
 #### Scenario: grade10-site-loyalty-programme-SC-78 - Not re-qualifying drops the tier
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member's validity period ends and they earned less than the retention threshold inside it
 - **THEN** they hold the entry tier from that instant, unless a higher tier is still live by earning or invitation
 
 #### Scenario: grade10-site-loyalty-programme-SC-79 - Losing a tier resets the climb
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member is demoted at the end of a validity period and then makes a small purchase
 - **THEN** only earnings dated after the demotion count toward reaching the tier again
 - **AND** the earnings from the lapsed period do not re-promote them
 
 #### Scenario: grade10-site-loyalty-programme-SC-80 - Spending points does not demote
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member redeems every point that qualified them for their tier
 - **THEN** they keep that tier until its validity period ends
 
 #### Scenario: grade10-site-loyalty-programme-SC-81 - A drop is observed, not scheduled
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a validity period or a dated invitation passes its end
 - **THEN** the member stops holding that tier from that instant
 - **AND** the drop is recorded the next time that member is evaluated
 
 #### Scenario: grade10-site-loyalty-programme-SC-82 - An operator removes a tier granted in error
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** an operator with the permission removes a tier inside its validity period
 - **THEN** the member falls to the highest tier they still hold
 - **AND** the removal is recorded with who did it and why
 
 #### Scenario: grade10-site-loyalty-programme-SC-83 - Tier history records each move
+**Serves:** grade10-site-loyalty-programme-US-01 - Member holds one balance, with tier progress counted apart
 
 - **WHEN** a member's effective tier changes
 - **THEN** one entry records the move and what caused it
@@ -921,22 +1020,26 @@ falling on qualifying lines SHALL reduce qualifying spend.
 Qualifying spend SHALL never be less than zero.
 
 #### Scenario: grade10-site-loyalty-programme-SC-84 - A discount reduces what the purchase earns
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a discount reduces what a member pays for qualifying goods
 - **THEN** qualifying spend is the amount after the discount, not the amount before it
 
 #### Scenario: grade10-site-loyalty-programme-SC-85 - A coupon reduces what the purchase it pays for earns
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a member pays for part of a qualifying basket with a redeemed coupon
 - **THEN** qualifying spend is the basket less the coupon's value
 
 #### Scenario: grade10-site-loyalty-programme-SC-86 - An order discount cannot be pushed onto the non-earning lines
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** an order-level discount applies to an order that is four fifths qualifying goods and one fifth shipping, measured before the discount
 - **THEN** four fifths of the discount reduces qualifying spend
 - **AND** the fifth falling on shipping reduces nothing
 
 #### Scenario: grade10-site-loyalty-programme-SC-87 - A fully discounted order earns nothing
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** discounts and coupons reduce qualifying spend to zero or below
 - **THEN** no points are granted and no ledger entry is written
@@ -959,27 +1062,32 @@ row no channel sold — a correction, an expiry, a campaign grant. Nothing
 defaults: a writer that names no channel is refused.
 
 #### Scenario: grade10-site-loyalty-programme-SC-88 - Shipping and service fees earn nothing
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a purchase carries qualifying goods, a shipping charge and a grading service fee
 - **THEN** qualifying spend is the qualifying goods alone
 
 #### Scenario: grade10-site-loyalty-programme-SC-89 - A gift card earns once, not twice
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a member buys a gift card
 - **THEN** that purchase earns nothing
 - **AND** spending that gift card on qualifying goods later earns as any other purchase does
 
 #### Scenario: grade10-site-loyalty-programme-SC-90 - An auction win earns nothing
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a member wins an auction
 - **THEN** no points are granted
 
 #### Scenario: grade10-site-loyalty-programme-SC-91 - A credit top-up earns nothing
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a member tops up store credit
 - **THEN** no points are granted
 
 #### Scenario: grade10-site-loyalty-programme-SC-92 - A non-earning line earns nothing
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** a purchase carries a line the programme names as non-earning — a grading service fee, a gift card, a credit top-up
 - **THEN** that line is excluded from qualifying spend
@@ -987,6 +1095,7 @@ defaults: a writer that names no channel is refused.
 - **AND** ❓ a line in no named category earns until a catalogue taxonomy exists to list qualifying categories; the seller reads a reserved SKU-prefix blocklist, and the white list this rule was drafted as is revisited when the taxonomy lands
 
 #### Scenario: grade10-site-loyalty-programme-SC-93 - An entry names its channel
+**Serves:** grade10-site-loyalty-programme-US-02 - Member earns only on what they actually paid
 
 - **WHEN** any earning or redemption is recorded
 - **THEN** the entry carries the channel that sold, taken from the programme's closed set
@@ -1005,11 +1114,13 @@ counter. A channel the programme does not run on SHALL neither earn nor redeem,
 and a purchase there SHALL complete regardless.
 
 #### Scenario: grade10-site-loyalty-programme-SC-107 - One balance across both channels
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a member earns online and then redeems at the counter
 - **THEN** both act on the same balance, and the counter sees the online earning
 
 #### Scenario: grade10-site-loyalty-programme-SC-108 - The channel's copy is not the balance
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a channel has recorded a purchase the programme has not yet accepted
 - **THEN** what the member reads as their balance is the programme's, not the channel's
@@ -1032,6 +1143,7 @@ another discount. A member offered points on such a channel SHALL be told
 what they can spend before the points leave their balance, never after.
 
 #### Scenario: grade10-site-loyalty-programme-SC-109 - Points reduce the bill
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a member pays points toward a purchase
 - **THEN** the amount they owe in money falls by those points at the
@@ -1039,11 +1151,13 @@ what they can spend before the points leave their balance, never after.
 - **AND** their redeemable balance falls by the points paid
 
 #### Scenario: grade10-site-loyalty-programme-SC-110 - The part paid with points earns nothing
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a purchase is paid partly with points and partly with money
 - **THEN** points are earned on the money part alone
 
 #### Scenario: grade10-site-loyalty-programme-SC-111 - One debit however the channel settles it
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a member pays 100 points toward a purchase on a channel that
   settles through a money-off artifact
@@ -1052,6 +1166,7 @@ what they can spend before the points leave their balance, never after.
 - **AND** exactly one redemption is recorded for that payment
 
 #### Scenario: grade10-site-loyalty-programme-SC-112 - A channel's own limit is disclosed before the points go
+**Serves:** grade10-site-loyalty-programme-US-08 - Member sees what a channel does to their points, before and after
 
 - **WHEN** a channel settles through an artifact that cannot be spent on the
   member's cart
@@ -1066,11 +1181,13 @@ SHALL be cancelled without refund. The ledger's record SHALL survive — nothing
 is erased, the identity simply holds nothing any more.
 
 #### Scenario: grade10-site-loyalty-programme-SC-113 - Deletion clears what the member held
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a member's account is deleted
 - **THEN** their balance and tier progress are zero, their coupons are void, and their pending collections are cancelled
 
 #### Scenario: grade10-site-loyalty-programme-SC-114 - Deletion does not wait for a window
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** an account is deleted inside a live inactivity window or tier term
 - **THEN** the clearing is immediate, not deferred to either clock
@@ -1092,24 +1209,28 @@ A spend recorded in a currency other than the programme's SHALL be refused as
 invalid rather than converted.
 
 #### Scenario: grade10-site-loyalty-programme-SC-115 - Base points floor before the multiplier
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** the deployed order floors base points first
 - **THEN** the money becomes whole base points at the earn rate
 - **AND** the multiplier applies to those whole points, floored again
 
 #### Scenario: grade10-site-loyalty-programme-SC-116 - A single floor at the end
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** the deployed order floors once at the end
 - **THEN** the point total is floored once after applying the rate and the
   multiplier, not at each step
 
 #### Scenario: grade10-site-loyalty-programme-SC-117 - A foreign currency is refused
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a spend arrives in a currency the programme does not run in
 - **THEN** it is refused as invalid, naming both currencies
 - **AND** no ledger entry is written
 
 #### Scenario: grade10-site-loyalty-programme-SC-118 - Backdated activity keeps its own date
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a spend carries a date in the past
 - **THEN** its tier contribution follows that date
@@ -1117,6 +1238,7 @@ invalid rather than converted.
 - **AND** the multiplier applied is the tier the member held immediately before it is priced
 
 #### Scenario: grade10-site-loyalty-programme-SC-119 - Future-dated activity is refused
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a spend carries a date more than five minutes ahead of now
 - **THEN** it is refused as invalid
@@ -1135,18 +1257,21 @@ What members forfeit to expiry SHALL be counted and readable by an
 operator, never silent.
 
 #### Scenario: grade10-site-loyalty-programme-SC-120 - An expired unused code returns nothing by itself
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a discount code passes its validity with no use
 - **THEN** the points remain spent
 - **AND** the forfeit is counted where an operator can read it
 
 #### Scenario: grade10-site-loyalty-programme-SC-121 - An operator cancellation is the credit path
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** an operator cancels a redemption whose artifact went unused
 - **THEN** the points return per the reversal rules
 - **AND** the cancellation records who and why
 
 #### Scenario: grade10-site-loyalty-programme-SC-122 - A used artifact is never reversed
+**Serves:** grade10-site-loyalty-programme-US-03 - Member redeems and can pay with points at checkout
 
 - **WHEN** a cancellation names a redemption whose artifact was used
 - **THEN** it is refused
@@ -1178,18 +1303,21 @@ The operator console composes these same exports as brand-owned view code and
 SHALL require no export of its own.
 
 #### Scenario: grade10-site-loyalty-programme-SC-123 - The two counts are never summed
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a member holds spendable points and qualifying points that differ
 - **THEN** the summary shows both figures separately
 - **AND** no single combined total is rendered
 
 #### Scenario: grade10-site-loyalty-programme-SC-124 - A member's activity carries nothing operator-facing
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** an entry was written by an operator correction
 - **THEN** the member's activity names the entry in member-readable terms
 - **AND** it carries no operator reason, retry key or internal pricing
 
 #### Scenario: grade10-site-loyalty-programme-SC-125 - The components take content, not sources
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** any of the four components is rendered
 - **THEN** every count, date, state and word it shows arrived through props
@@ -1216,12 +1344,14 @@ unchanged by any later edit to the reward, and SHALL be what the coupon
 takes off wherever it is applied — online or at the till, identically.
 
 #### Scenario: grade10-site-loyalty-programme-SC-152 - A fixed-amount coupon takes a set amount off its scope
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon whose discount is a fixed amount
 - **THEN** that amount comes off the lines its scope matches, online or at
   the till alike
 
 #### Scenario: grade10-site-loyalty-programme-SC-153 - A percentage coupon is capped at its maximum discount
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon whose discount is a percentage with a
   maximum
@@ -1229,22 +1359,26 @@ takes off wherever it is applied — online or at the till, identically.
   the matching lines are
 
 #### Scenario: grade10-site-loyalty-programme-SC-154 - A coupon scoped to a catalog filter matches worlds and types
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon scoped to a filter over the catalog's
   worlds and types
 - **THEN** only the lines matching that filter are discounted
 
 #### Scenario: grade10-site-loyalty-programme-SC-155 - A coupon scoped to the whole order applies across every line
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon scoped to the whole order
 - **THEN** every line in the order shares the discount
 
 #### Scenario: grade10-site-loyalty-programme-SC-156 - A gift adds a free line for its own variant
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon whose kind is a gift
 - **THEN** a free line for the variant it names is added to the order
 
 #### Scenario: grade10-site-loyalty-programme-SC-157 - A gift below its minimum spend does not apply
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a basket does not yet reach a gift's minimum spend
 - **THEN** the gift is refused until the basket reaches it
@@ -1257,6 +1391,7 @@ and window, so that creating or editing any reward — including one carrying
 a definition — needs no direct use of an administrative API.
 
 #### Scenario: grade10-site-loyalty-programme-SC-158 - A reward with a definition is created from the console alone
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **WHEN** an operator creates a reward naming its kind, discount, scope and
   combine setting in the console
@@ -1295,6 +1430,7 @@ offered for the member to keep: it is minted for one sale, and what the
 member presents is the code for that sale alone.
 
 #### Scenario: grade10-site-loyalty-programme-SC-159 - A physical reward's coupon takes 100% off its own variant
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - a physical reward's coupon takes 100% off its own variant
 
 - **WHEN** a member redeems a reward that is a physical item
 - **THEN** the redemption issues a coupon that takes 100% off the reward's
@@ -1302,6 +1438,7 @@ member presents is the code for that sale alone.
 - **AND** no separate collection record is created
 
 #### Scenario: grade10-site-loyalty-programme-SC-166 - A coupon reaches the counter by the member presenting it
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **GIVEN** a member holding a coupon, identified at a till and attached to
   the sale
@@ -1311,6 +1448,7 @@ member presents is the code for that sale alone.
 - **AND** the code was minted when the member chose the coupon, not before
 
 #### Scenario: grade10-site-loyalty-programme-SC-172 - Staff apply a member's coupon from the till session
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **GIVEN** a member holding a coupon, identified at a till and attached to
   the sale
@@ -1321,17 +1459,20 @@ member presents is the code for that sale alone.
   second code
 
 #### Scenario: grade10-site-loyalty-programme-SC-160 - A member cannot undo a redemption
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - a member cannot undo a redemption
 
 - **WHEN** a member holding an unused coupon asks for their points back
 - **THEN** no member surface offers it, and the points are not returned
 
 #### Scenario: grade10-site-loyalty-programme-SC-161 - A coupon expires on its own terms
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - a coupon expires on its own terms
 
 - **WHEN** a coupon's validity period ends
 - **THEN** it can no longer be used
 - **AND** the member's redeemable balance is unaffected
 
 #### Scenario: grade10-site-loyalty-programme-SC-162 - Points buy nothing at an auction
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - points buy nothing at an auction
 
 - **WHEN** a member attempts to pay for an auction purchase with points or
   with a coupon
@@ -1364,18 +1505,21 @@ redemption did not reduce it. Stock SHALL be returned only when the
 redemption actually consumed a unit.
 
 #### Scenario: grade10-site-loyalty-programme-SC-168 - A reversal voids the coupon
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - a reversal voids the coupon
 
 - **WHEN** an operator reverses a redemption
 - **THEN** the coupon it issued can no longer be used
 - **AND** the points it consumed return to the member's redeemable balance
 
 #### Scenario: grade10-site-loyalty-programme-SC-169 - A used coupon cannot be reversed
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - a used coupon cannot be reversed
 
 - **WHEN** an operator reverses a redemption whose coupon has already been used
 - **THEN** the reversal is refused and the points stay spent
 - **AND** the operator is told why
 
 #### Scenario: grade10-site-loyalty-programme-SC-167 - A refunded sale does not return the coupon
+**Serves:** grade10-site-loyalty-programme-US-06 - Operator reverses a redemption a member cannot be given
 
 - **GIVEN** a sale that spent a member's coupon and is then refunded
 - **WHEN** the refund settles
@@ -1383,26 +1527,31 @@ redemption actually consumed a unit.
 - **AND** any points the member spent as a discount on that sale are returned
 
 #### Scenario: grade10-site-loyalty-programme-SC-170 - A member cannot reverse their own redemption
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - a member cannot reverse their own redemption
 
 - **WHEN** a member asks to reverse a redemption
 - **THEN** no member surface offers it
 
 #### Scenario: grade10-site-loyalty-programme-SC-171 - Restored points keep their original expiry
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - restored points keep their original expiry
 
 - **WHEN** a redemption is reversed
 - **THEN** the restored points rejoin the credits they were taken from, keeping those credits' own dates
 
 #### Scenario: grade10-site-loyalty-programme-SC-173 - A reversal after the balance expired returns nothing
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** an operator reverses a redemption for a member whose inactivity window has already passed
 - **THEN** no points are returned, and the operator is told why
 
 #### Scenario: grade10-site-loyalty-programme-SC-174 - Tier progress is untouched by a reversal
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a redemption is reversed
 - **THEN** the member's tier progress is unchanged
 
 #### Scenario: grade10-site-loyalty-programme-SC-175 - An unlimited reward returns no stock
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a redemption of a reward that had unlimited stock is reversed
 - **THEN** no stock is returned

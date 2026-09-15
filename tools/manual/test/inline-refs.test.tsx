@@ -29,7 +29,6 @@ const alpha: SpecEntry = {
       id: "alpha-US-01",
       title: "A shopper collects points",
       text: "",
-      acceptedBy: ["alpha-SC-01"],
     },
   ],
   testCases: [

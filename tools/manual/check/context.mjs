@@ -43,7 +43,7 @@ export const RULES = [
   {
     key: "trace",
     level: "fail",
-    title: "Test cases tracing a scenario the spec does not issue",
+    title: "Test cases tracing an anchor the spec does not offer",
   },
   {
     key: "authority",
@@ -51,9 +51,19 @@ export const RULES = [
     title: "Approved suites holding a draft case",
   },
   {
-    key: "accepted",
+    key: "serves",
     level: "fail",
-    title: "Journeys accepted by a scenario the spec does not issue",
+    title: "Scenarios serving an anchor the spec does not offer",
+  },
+  {
+    // Raised from `warn` by the commit that finished the migration: every
+    // scenario in the store names an anchor, so one that does not is new work
+    // and not a backlog. Finding a scenario no part of the feature set covers
+    // is the useful half — five capabilities turned out to have behaviour their
+    // own map never named, and nothing else in this store looks for that.
+    key: "anchorless",
+    level: "fail",
+    title: "Scenarios carrying no `**Serves:**` line",
   },
   {
     key: "walked",
@@ -61,9 +71,39 @@ export const RULES = [
     title: "Capabilities that never say who walks them",
   },
   {
+    // The blind suite pass reads the restated stories instead of the durable
+    // capability, because reading `openspec/specs/` is how it would see the
+    // scenarios it must not see. That makes the copy load-bearing, and a
+    // load-bearing copy nobody compares is one that drifts.
+    key: "context",
+    level: "fail",
+    title: "Restated stories that are not what the store holds",
+  },
+  {
+    key: "outline",
+    level: "fail",
+    title: "Suites beside a spec whose scenarios never landed",
+  },
+  {
+    // A change's `skip_specs` is author-declared and turns every other check in
+    // the planning workflow off. This is the only guard on it.
+    key: "hatch",
+    level: "fail",
+    title: "Changes claiming `skip_specs` while marking a page",
+  },
+  {
     key: "derived",
     level: "warn",
-    title: "Walked capabilities with no suite beside them",
+    title: "Capabilities with anchors and no suite beside them",
+  },
+  {
+    // Granted silently when the delta moves no behaviour: that is
+    // `blind_pass_skipped`, and it is the checker's to grant, never the
+    // author's to declare. A `warn` until the register of changes written
+    // before the blind pass existed empties.
+    key: "blind",
+    level: "warn",
+    title: "Changes moving behaviour no second reading read",
   },
   {
     key: "grouping",

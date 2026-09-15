@@ -52,24 +52,28 @@ with them; a sibling case SHALL NOT need a visit of its own to reach the
 vault.
 
 #### Scenario: grade10-site-vault-visit-booking-SC-01 - A visit is booked after the offer
+**Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
 
 - **GIVEN** a case holding a live offer
 - **WHEN** its owner books a slot
 - **THEN** the visit is held and the case names it
 
 #### Scenario: grade10-site-vault-visit-booking-SC-02 - A live loan books its pickup
+**Serves:** grade10-site-vault-visit-booking-US-02 - Borrower books the visit they repay and collect on
 
 - **GIVEN** a case with a running loan
 - **WHEN** its owner books a slot to repay and collect
 - **THEN** the visit is held
 
 #### Scenario: grade10-site-vault-visit-booking-SC-03 - A draft takes no visit
+**Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
 
 - **GIVEN** a request that has not been sent in
 - **WHEN** a slot is asked for
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-visit-booking-SC-04 - A sibling case is vaulted without a visit
+**Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
 
 - **GIVEN** two cases from one collector, one of which holds the visit
 - **WHEN** both items are taken in at that visit
@@ -96,18 +100,21 @@ Cancelling SHALL be idempotent: a case whose booking the diary no longer holds
 SHALL end with no live visit rather than a refusal.
 
 #### Scenario: grade10-site-vault-visit-booking-SC-05 - The same slot asked for twice is one visit
+**Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
 
 - **GIVEN** a case holding a booked slot
 - **WHEN** the same slot is asked for again
 - **THEN** the case holds the one booking and no message is sent
 
 #### Scenario: grade10-site-vault-visit-booking-SC-06 - Staff move a visit and the collector hears
+**Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
 
 - **GIVEN** a case holding a booked slot
 - **WHEN** a member of staff moves it to another slot
 - **THEN** the case names the new slot and the collector is told it moved
 
 #### Scenario: grade10-site-vault-visit-booking-SC-07 - A slot in the past is refused
+**Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
 
 - **WHEN** a slot that has already passed is asked for
 - **THEN** it is refused by name and the case's visit does not change
@@ -123,12 +130,14 @@ says holds a visit still ahead of it SHALL be left where it is. Where no diary
 can be reached, no case SHALL be ended for want of a visit.
 
 #### Scenario: grade10-site-vault-visit-booking-SC-08 - A stale copy is repaired rather than acted on
+**Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
 
 - **GIVEN** a case whose copy names no visit and a diary that holds one for next week
 - **WHEN** the abandonment clocks are read
 - **THEN** the case's copy is corrected and the case is left where it is
 
 #### Scenario: grade10-site-vault-visit-booking-SC-09 - No diary, no expiry
+**Serves:** The diary and the copy - no diary, no expiry
 
 - **GIVEN** a vault with no diary reachable
 - **WHEN** the abandonment clocks are read
@@ -144,12 +153,14 @@ was holding it. A case in any other bookable status SHALL keep its status, its
 item and its loan, and SHALL be free to book another visit.
 
 #### Scenario: grade10-site-vault-visit-booking-SC-10 - A missed drop-off ends the request
+**Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
 
 - **GIVEN** a submitted case whose slot passed 25 hours ago
 - **WHEN** the missed visits are swept
 - **THEN** the case is `expired` and the collector is told the visit was missed
 
 #### Scenario: grade10-site-vault-visit-booking-SC-11 - A missed pickup keeps the case
+**Serves:** grade10-site-vault-visit-booking-US-02 - Borrower books the visit they repay and collect on
 
 - **GIVEN** a case with a running loan whose slot passed 25 hours ago
 - **WHEN** the missed visits are swept
@@ -167,18 +178,21 @@ cancelled in the diary. A case that is forfeited while holding a visit already
 past SHALL have it recorded as a no-show, never as completed.
 
 #### Scenario: grade10-site-vault-visit-booking-SC-12 - A valuation from photographs leaves the visit open
+**Serves:** Missed and finished visits - a valuation from photographs leaves the visit open
 
 - **GIVEN** a case whose visit is booked for Friday
 - **WHEN** staff start valuing it on Monday from its photographs
 - **THEN** the visit is still open for Friday
 
 #### Scenario: grade10-site-vault-visit-booking-SC-13 - Taking the item in closes the visit
+**Serves:** grade10-site-vault-visit-booking-US-02 - Borrower books the visit they repay and collect on
 
 - **GIVEN** a case whose slot started this morning
 - **WHEN** staff take the item into the vault
 - **THEN** the visit is recorded as completed
 
 #### Scenario: grade10-site-vault-visit-booking-SC-14 - A forfeited case's past visit is not a completed one
+**Serves:** Missed and finished visits - a forfeited case's past visit is not a completed one
 
 - **GIVEN** an active case holding a slot that has already passed
 - **WHEN** the item is forfeited

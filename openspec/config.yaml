@@ -45,30 +45,33 @@ context: |
 rules:
   proposal:
     - "Start with `**Author:** @handle - YYYY-MM-DD` above `## Why`. Ask for the handle. It names the creator and never changes; task-group owners in tasks.md are separate."
-    - "Interview the author first with the `grilling` skill (`.claude/skills/grilling/SKILL.md`), as `.claude/skills/planning-pm/SKILL.md` step 2 says: find repository facts yourself, bring only decisions, and draft once the frontier is empty. A deferred question goes under the proposal's open questions with who settles it."
+    - "Interview the author first with the `grilling` skill (`.claude/skills/grilling/SKILL.md`), as `.claude/skills/planning-pm/SKILL.md` says: find repository facts yourself, bring only decisions, and draft once the frontier is empty. A deferred question goes under the proposal's open questions with who settles it."
     - "Include a metric that would move if this change works."
-    - "Mark the PRDs the change touches before the deltas, or record `page_waived: <why>` in `.openspec.yaml` - planning-pm step 3."
+    - "Mark the PRDs the change touches before the deltas. A change carrying a 🚧 line cannot also claim `skip_specs`, and `skip_specs: true` owes a `skip_specs_why` beside it."
   specs:
-    - "Order: `## Purpose` (new capability only), `## Feature set`, then `## ADDED Requirements` (or MODIFIED / REMOVED / RENAMED). The feature set is the spec's map; sequence the requirements to follow its groups."
-    - "Feature set is two-layer bullets: root group names of at most five words, children as `Name: purpose`. Keep groups coarse - nest work under the job it serves, and put grants in the groups they belong to, never a group of their own."
-    - "The fold carries `## Requirements` only. Keep writing the feature set - it is how a change is read - and the archive copies it and `user-journeys.md` into the durable spec by hand."
-    - "Scenario heading: `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`. The prefix is the capability path with slashes as hyphens (`grade10-site/loyalty/programme` issues `grade10-site-loyalty-programme-*`), so two capabilities of one name stay apart. Number from 01; an issued id is permanent - a removal retires it, nothing renumbers it, and a renamed or moved capability keeps issuing its first prefix. Read the ids that exist before issuing one."
-    - "Every `###` under a requirements section is a `### Requirement:` - never a group heading, in a delta or a durable spec: the fold absorbs it into the requirement above, `pnpm check:manual` fails a durable spec holding one, and an ATX `## Group` ends the ADDED section and drops every requirement after it."
+    - "Two passes over one `spec.md`, with the blind suite between them: `## Purpose` and `## Feature set` first, then journeys and suite, then the requirements. `check:manual`'s `outline` rule is the only machine evidence of that order."
+    - "Write `## Purpose` only when the text composed from the durable Purpose and the PRD differs from the durable one. When written it replaces that Purpose whole, for an existing capability as much as a new one."
+    - "Feature set root group names are machine-read anchors. Rename one deliberately and update every `**Serves:**` and `**Trace:**` naming it in the same change. Leaves carry no ids."
+    - "The fold carries `## Requirements` only. Archive copies Purpose, the feature set and `user-journeys.md` into the durable capability by hand."
+    - "Scenario heading: `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`. The prefix is the capability path with slashes as hyphens, so two capabilities of one name stay apart. Number from 01; an issued id is permanent - a removal retires it, nothing renumbers it, and a renamed or moved capability keeps issuing its first prefix."
+    - "Every scenario carries `**Serves:** <anchor> - <prose>` under its heading and above GIVEN/WHEN/THEN. The anchor is a journey id or a Feature set root group, matched verbatim. Several anchors are written as code spans, because a group name may hold a comma."
+    - "Every `###` under a requirements section is a `### Requirement:` - never a group heading: the fold absorbs it into the requirement above, and an ATX `## Group` ends the section and drops every requirement after it."
     - "One requirement for the flow, as numbered steps for whoever uses the surface - not a scenario per step. One requirement per entity with fields, only when this change adds or changes them, and one per entity with states; both as markdown tables. Never restate an unchanged fact."
     - "A scenario is `**WHEN**` / `**THEN**`, both required; add `**GIVEN**` only when state must be in place before the trigger. Keep scenarios to behaviour distinctive to this capability: one that restates a platform default belongs to the capability that sets it - find that yourself."
     - "Money is minor units plus an ISO 4217 code. Convert yourself: the author says HKD 10, the spec says 1000 HKD minor units."
-    - "Prose short, tables carry detail (docs/governance/writing.md). Before coining a shape, read the capabilities beside this one and reuse their wording, table columns and state names. Before handing over, read each requirement as the engineer in the other repository will - every term defined here or in a named capability, every value stated, every scenario decidable - and fix what fails; never ask the author to certify it."
-    - "No class, function, hook, table or library names; public component exports are the one exception, kept in one requirement - `.claude/skills/planning-pm/SKILL.md` § The delta specs. Propose the export set yourself from `packages/ui` and say in the proposal which do not exist yet."
+    - "No class, function, hook, table or library names; public component exports are the one exception, kept in one requirement. Propose the export set yourself from `packages/ui` and say in the proposal which do not exist yet."
     - "Requirements live here and nowhere else; a testable statement never stays on a PRD (AGENTS.md § Sources of truth)."
+    - "Prose short, tables carry detail (docs/governance/writing.md). Before coining a shape, read the capabilities beside this one and reuse their wording, table columns and state names. Before handing over, read each requirement as the engineer in the other repository will - every term defined, every value stated, every scenario decidable - and fix what fails."
+
   user-journeys:
-    - "The schema instruction above holds the journey rules; `pnpm check:manual` enforces the role, the `**Walked by:** nobody` exemption and every accepted-by id."
-    - "The file holds one `## User journeys` section and nothing else. Story ids are `<capability prefix>-US-<n>` in the heading, permanent and never renumbered; each `**Accepted by:**` line is `` `id` — Scenario title ``, never a comma-separated dump."
+    - "The schema instruction holds the rules; `pnpm check:manual` enforces the role, the `**Walked by:** nobody` routing declaration, the verbatim context copies and every anchor."
+    - "Journey ids are `<capability prefix>-US-<n>`, permanent and never renumbered. There is no `**Accepted by:**` line, and no cap on the number of journeys."
   test-cases:
-    - "`docs/governance/specs-to-test-cases.md` governs the shape and `.claude/skills/planning-qa/SKILL.md` the workflow: draft with `spec-to-tcs`, review with `tcs-review`, check with `pnpm run tcs:validate`. `test-cases.md` is not a suite name."
-  tech-design:
-    - "The schema instruction above holds the section rules; `pnpm check:manual` refuses a change that owes this file and carries neither it nor `design_waived: <why>` in `.openspec.yaml`."
+    - "`docs/governance/specs-to-test-cases.md` governs the shape. Draft with `spec-to-tcs` as a blind pass against the anchors, never from the scenarios. `test-cases.md` is not a suite name."
   ui-design:
     - "The schema text above and `.claude/skills/planning-design/SKILL.md` carry the rules: link the Figma frame, name exports exactly and flag what does not exist yet, and fix the spec when a state has no scenario."
+  tech-design:
+    - "The schema instruction above holds the section rules; `pnpm check:manual` refuses a change that owes this file and carries neither it nor `design_waived: <why>` in `.openspec.yaml`."
   tasks:
     - "The schema instruction above holds the rules; `docs/governance/task-ownership.md` is the format tooling on both sides parses, and `pnpm check:manual` verifies the PRD task."
 
@@ -85,5 +88,5 @@ operations:
     guidance:
       - "Archive only after engineering confirms the change is deployed, not when the code merges. `.claude/skills/openspec-archive-change/SKILL.md` and `pnpm run archive:preflight <change>` carry the steps."
       - "Never archive with an unchecked task: finish it, or append its disposition (dropped, moved where, blocked on what) to the task text. A change that never grew a tasks.md is archived once its specs are confirmed deployed."
-      - "Copy the change's `## Feature set` and its `user-journeys.md` into the durable capability by hand - the fold carries `## Requirements` alone. Carry an approved `feature-tcs.md` beside the spec and a `domain-tcs.md` into the domain directory the same way. Re-read the folded specs and confirm they describe the shipped behaviour."
-      - "Update the capability's PRD to the shipped story before archiving - take the 🚧 marks off the lines this change delivered - and run `pnpm check:manual`."
+      - "Copy the change's `## Purpose` where it wrote one, its `## Feature set` and its `user-journeys.md` into the durable capability by hand - the fold carries `## Requirements` alone, and a written Purpose replaces the durable one whole. Leave a one-line tombstone under the durable journeys' `## Retired` for every removed journey, and never delete the journey outright: archived suites still trace its id. Carry an approved `feature-tcs.md` beside the spec and a `domain-tcs.md` into the domain directory the same way, stripping the scenario ids from its `## Reconciliation` as you go and carrying its `## Settled` across whole - that section is what stops the next blind pass raising a reading this one already refused. Re-read the folded specs and confirm they describe the shipped behaviour. `pnpm run archive:preflight` reads all six of these and refuses while any is undone."
+      - "Update the capability's PRD to what shipped before archiving - take the 🚧 marks off the lines this change delivered - and run `pnpm check:manual`."

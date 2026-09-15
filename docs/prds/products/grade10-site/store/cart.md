@@ -17,7 +17,7 @@ back to the page they were on.
 | Points | **After the code**, at **$1** a point, on qualifying goods only; an ask past the ceiling is trimmed to it — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Estimated total | **Goods − code − points** — before shipping, tax and the shop's own sale, which the invoice prices |
 | Held codes | The member's own store codes and reward coupons, the ones that fit first, the soonest to expire first; every store code is minted to a member, so the list is complete |
-| Carried to checkout | The code and the points, for this session; `/checkout` shows the same figures and Pay sends them; a paid order clears them |
+| Carried to checkout | The code and the points, held with the cart; `/checkout` shows the same figures and Pay sends them; a paid order clears them |
 
 ## Reviewing the Cart
 
@@ -31,6 +31,9 @@ back to the page they were on.
 - **One scope** — the member cart of the signed-in session; a signed-out
   session holds no lines and builds none
 - **Edits** — quantity and removal write to the same cart the page holds
+- **The choice follows the cart** — the code and the points the member
+  chose are held with the lines, so both are still there after a reload and
+  on another device; the figures are read again either way
 
 ## Promo Code
 
@@ -74,30 +77,7 @@ The refusals are the coupon's own —
   promised with them —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
 
-:::flow{title="Quoting the cart" diagram="assets/diagrams/store-cart-quote.svg"}
-## *Member* — **Opens the drawer**
-Every line is read against the shop; the drawer waits until the shop answers.
-
-## *Member* — **Chooses a code or points**
-Types a code, picks a held one, or types how many points.
-
-## *Store* — **Prices the cart once**
-The lines at the shop's price, the code's cut off them, then the points
-ceiling on what is left. A store code is answered from the store's own
-registry; a reward coupon is the programme's to answer.
-
-## *Loyalty* — **Answers the wallet**
-Every reward coupon the member holds, each fitting this cart or refused with
-its reason. Nothing is held by asking.
-
-## *Member* — **Reads the total**
-The Discount and Points rows, then the estimated total. A refused code, or
-an ask points cannot cover, is said in its field.
-
-## *Member* — **Proceeds to checkout**
-`/checkout` carries the same choice, and the order is promised from it —
-[Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout).
-:::
+::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
 
 ## Designs
 
@@ -110,9 +90,10 @@ an ask points cannot cover, is said in its field.
 ::story{id="store-cart-cartdrawer--empty-state" title="An empty cart"}
 
 :::detail{title="Code map" for="engineer"}
-- **The quote** — `checkout.quote`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
+- **The quote** — `checkout.basketQuote`, `packages/grade10-store/backend/src/services/orders/quote.ts`, on the same `orders/tender.ts` the checkout's promise prices with
+- **The held choice** — `cart.tender` and `cart.setTender`, `packages/grade10-store/backend/src/services/cart/tender.ts`
 - **The wallet read** — `quoteCouponsFor`, `packages/loyalty/backend/src/services/rewards/coupons.ts`
-- **The drawer** — `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`, over the `checkout` slice of `@grade10/store-frontend`
+- **The drawer** — `apps/frontend/grade10/src/chrome/CartDrawerHost.tsx`, over the `cart` and `checkout` slices of `@grade10/store-frontend`
 - **Design record** — [commerce architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
 :::
 
@@ -148,11 +129,12 @@ second code on one cart.
 | Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
 | One session scope | Decided | The cart is the signed-in member's. A signed-out session holds no lines; there is no guest checkout and no guest cart to merge. | Product |
 | One quote | Decided | The drawer and `/checkout` read one store quote — the lines, the one code or reward, points after it — on the same arithmetic the checkout then writes, so no total is shown that the order records differently. | Product |
-| Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is carried to `/checkout` for the session and never stored. | Product |
+| Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and carried to `/checkout`. | Product |
 | Held list | Decided | The member's own store codes and reward coupons, answered before they are picked. | Product |
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
 | Shipping and sale | Decided | Unknown until the invoice; the estimated total is the goods after this store's own tender. | Product |
 | Existing checkout surface | Decided | The drawer opens `/checkout`; that surface keeps ownership of its live read and checkout creation. | Engineering |
 | Public codes | Decided | The store mints every code to one member. A public code is a Shopify discount, created in the shop's admin and promoted elsewhere; the cart neither lists nor takes one. | Product |
+| The choice on a second visit | Decided | The cart holds which code and how many points the member means to use, so a choice survives a reload and reaches another device. The cart holds the choice, never the figures: those stay the store's, read against the cart as it stands. | Product |
 :::

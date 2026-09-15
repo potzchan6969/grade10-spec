@@ -62,11 +62,13 @@ the message: a request that ran out untouched, one that ran out unbooked, and
 one closed after a missed visit are three messages, not one.
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-01 - Every event is decided
+**Serves:** grade10-site-vault-collector-notifications-US-02 - Collector hears about everything that happens to their case
 
 - **WHEN** the map from events to messages is read
 - **THEN** every kind of event names a message or names silence, and none is unanswered
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-02 - Three endings, three messages
+**Serves:** grade10-site-vault-collector-notifications-US-02 - Collector hears about everything that happens to their case
 
 - **GIVEN** three cases ended by an untouched draft, by nobody booking, and by a missed visit
 - **THEN** each collector is told the true one of the three, not one shared wording
@@ -87,11 +89,13 @@ address, each carrying an action link to the case:
 | The paper | the signed documents, attached |
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-03 - The advance names the due date
+**Serves:** grade10-site-vault-collector-notifications-US-02 - Collector hears about everything that happens to their case
 
 - **WHEN** an advance is recorded
 - **THEN** the collector is sent a message naming the amount and the calendar date the loan is repayable by
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-04 - A correction reaches the borrower
+**Serves:** grade10-site-vault-collector-notifications-US-02 - Collector hears about everything that happens to their case
 
 - **WHEN** a money record is taken back
 - **THEN** the collector is told, with the amount and what the case now stands at, and never with who recorded it
@@ -120,6 +124,7 @@ The ladder SHALL stop at a forfeiture notice: once one stands on the case, no
 further reminder SHALL be sent.
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-05 - A week before, and the day before
+**Serves:** grade10-site-vault-collector-notifications-US-01 - Borrower is warned before the due date and while it runs late
 
 - **GIVEN** a live loan due in 7 days
 - **WHEN** the reminders are swept
@@ -127,6 +132,7 @@ further reminder SHALL be sent.
 - **AND** one more is sent the day before it
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-19 - The reminder waits for the morning
+**Serves:** grade10-site-vault-collector-notifications-US-01 - Borrower is warned before the due date and while it runs late
 
 - **GIVEN** a live loan whose 7-day offset the brand's calendar reaches at midnight
 - **WHEN** the reminders are swept in the small hours
@@ -134,18 +140,21 @@ further reminder SHALL be sent.
 - **AND** the first sweep after 09:00 on the brand's clock sends it
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-06 - A pass that runs twice sends once
+**Serves:** Reminders - a pass that runs twice sends once
 
 - **GIVEN** a loan whose 7-day reminder has been sent
 - **WHEN** the reminders are swept again the same day
 - **THEN** nothing further is sent
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-07 - A long-overdue loan is told once where it stands
+**Serves:** grade10-site-vault-collector-notifications-US-01 - Borrower is warned before the due date and while it runs late
 
 - **GIVEN** a loan 90 days overdue that has had no reminder
 - **WHEN** the reminders are swept
 - **THEN** one overdue reminder is sent, not one for every seventh day that has passed
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-08 - The notice stops the reminders
+**Serves:** grade10-site-vault-collector-notifications-US-01 - Borrower is warned before the due date and while it runs late
 
 - **GIVEN** an overdue loan carrying a forfeiture notice
 - **WHEN** the reminders are swept
@@ -168,24 +177,28 @@ Every attempt SHALL give up at ten seconds, and a send that gives up SHALL be
 a failed attempt like any other.
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-09 - The item is vaulted even though the mail failed
+**Serves:** grade10-site-vault-collector-notifications-US-04 - Operator picks up a message that never went
 
 - **GIVEN** a mail provider refusing every send
 - **WHEN** an item is taken into the vault
 - **THEN** the case is vaulted and the message is owed
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-10 - Five attempts, then parked
+**Serves:** grade10-site-vault-collector-notifications-US-04 - Operator picks up a message that never went
 
 - **GIVEN** an owed message the provider keeps refusing
 - **WHEN** the retries are swept until the ladder is spent
 - **THEN** the message is parked with its reason, the case is flagged, and no further attempt is made
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-11 - An operator hands a parked message back
+**Serves:** grade10-site-vault-collector-notifications-US-04 - Operator picks up a message that never went
 
 - **GIVEN** a case carrying a parked message
 - **WHEN** an operator sends it again
 - **THEN** the message is back on the queue and the case's flag clears when it goes
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-12 - A send that never answers gives up
+**Serves:** When a send fails - a send that never answers gives up
 
 - **GIVEN** a provider that accepts the request and never answers
 - **WHEN** ten seconds pass
@@ -207,18 +220,21 @@ where they should be — the fault SHALL be logged and the message SHALL still
 go, with its link to the case, where the copies are.
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-13 - One signer, one set
+**Serves:** grade10-site-vault-collector-notifications-US-03 - Signer leaves with the documents they signed
 
 - **GIVEN** a sealed packet whose delivery has not run
 - **WHEN** two passes read it at once
 - **THEN** the signer is mailed the set once
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-14 - A retried delivery re-reads the documents
+**Serves:** grade10-site-vault-collector-notifications-US-03 - Signer leaves with the documents they signed
 
 - **GIVEN** a sealed set whose first send failed
 - **WHEN** the retry runs hours later
 - **THEN** the same documents are read again from the packet and attached
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-15 - A set too heavy to attach still tells the signer
+**Serves:** grade10-site-vault-collector-notifications-US-03 - Signer leaves with the documents they signed
 
 - **GIVEN** a sealed set over the mail's size cap
 - **WHEN** the delivery runs
@@ -236,12 +252,14 @@ A case with no address SHALL be counted as unreachable rather than mailed, and
 SHALL leave the queue.
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-16 - A corrected address gets the retry
+**Serves:** grade10-site-vault-collector-notifications-US-04 - Operator picks up a message that never went
 
 - **GIVEN** an owed message and a collector who has since corrected their address
 - **WHEN** the retry runs
 - **THEN** it goes to the corrected address
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-17 - An erased case is not posted to
+**Serves:** The reader - an erased case is not posted to
 
 - **GIVEN** a case whose contact has been erased
 - **WHEN** a message for it is attempted
@@ -256,6 +274,7 @@ for an operator to press, and there SHALL be no inbound channel.
 A number SHALL be treated as unverified.
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-18 - Nothing is sent to a phone
+**Serves:** The reader - nothing is sent to a phone
 
 - **WHEN** any event decides a message
 - **THEN** it is sent by email alone

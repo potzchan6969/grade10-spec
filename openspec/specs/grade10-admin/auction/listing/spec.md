@@ -52,36 +52,42 @@ The draft form and write contract SHALL NOT offer or accept a listing-level
 minimum increment.
 
 #### Scenario: grade10-admin-auction-listing-SC-01 - Operator saves an empty draft
+**Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
 - **GIVEN** an authorized operator on the auction listings section
 - **WHEN** they save a listing with no title, prices, or window
 - **THEN** Grade10 persists a draft that is absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-02 - Operator saves a partial draft
+**Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
 - **GIVEN** an authorized operator
 - **WHEN** they save a draft with a title and no starting price
 - **THEN** Grade10 persists the title and leaves the listing a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-03 - Draft rejects a malformed price
+**Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
 - **GIVEN** a draft listing
 - **WHEN** an operator sets its starting price to a non-positive or non-integer amount
 - **THEN** Grade10 refuses the write and leaves the starting price unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-04 - Draft rejects a malformed slug
+**Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
 - **GIVEN** a draft listing
 - **WHEN** an operator sets its slug to `Charizard PSA 9`
 - **THEN** Grade10 refuses the write and leaves the slug unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-05 - Unauthorized draft save is refused
+**Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
 - **GIVEN** a signed-in operator without auction price-and-window permission
 - **WHEN** they save a draft
 - **THEN** Grade10 refuses and persists no listing
 
 #### Scenario: grade10-admin-auction-listing-SC-56 - Draft rejects an unsupported currency
+**Serves:** Draft save - draft rejects an unsupported currency
 
 - **GIVEN** a draft listing
 - **WHEN** an operator sets its currency to EUR
@@ -99,6 +105,7 @@ SHALL NOT display a minimum-increment field. The selected currency's Grade10
 schedule governs the listing's bid floor.
 
 #### Scenario: grade10-admin-auction-listing-SC-06 - Operator creates a filled draft
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a complete draft with currency JPY and no minimum-increment value
 - **WHEN** an authorized operator creates the listing
@@ -106,42 +113,49 @@ schedule governs the listing's bid floor.
 - **AND** its bid floor uses the JPY schedule
 
 #### Scenario: grade10-admin-auction-listing-SC-07 - Create without a title is refused on the form and the API
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft with every required field except title
 - **WHEN** the operator creates it
 - **THEN** the form and API refuse it and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-08 - Create without a slug is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft with every required field except slug
 - **WHEN** the operator creates it
 - **THEN** Grade10 refuses and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-09 - Create without a starting price is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft with every required field except starting price
 - **WHEN** the operator creates it
 - **THEN** Grade10 refuses and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-10 - Create without media is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft with every required field except media
 - **WHEN** the operator creates it
 - **THEN** Grade10 refuses and the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-11 - Created listing cannot clear a required field
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a created listing with a title
 - **WHEN** an operator clears the title
 - **THEN** Grade10 refuses and leaves the title unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-12 - Create of a published listing is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a published listing
 - **WHEN** an operator creates it
 - **THEN** Grade10 refuses and leaves it published
 
 #### Scenario: grade10-admin-auction-listing-SC-57 - Create refuses an unsupported currency on the form and API
+**Serves:** Create and catalogue - create refuses an unsupported currency on the form and API
 
 - **GIVEN** a complete draft with currency EUR
 - **WHEN** an operator creates the listing
@@ -172,6 +186,7 @@ An operator who may catalogue a listing and not operate its window SHALL
 still be able to write these fields on an existing editable listing.
 
 #### Scenario: grade10-admin-auction-listing-SC-13 - Operator updates copy on a published listing
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a published listing titled "Charizard 1st Edition"
 - **WHEN** an authorized operator changes its copy to a new description
@@ -180,6 +195,7 @@ still be able to write these fields on an existing editable listing.
 - **AND** the title, prices, and window are unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-14 - Two categories from one taxonomy are refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a taxonomy with categories Pokémon and Sport
 - **WHEN** an operator assigns both to the same listing
@@ -187,6 +203,7 @@ still be able to write these fields on an existing editable listing.
 - **AND** the listing's categories are unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-15 - Canceled sale cannot receive a listing
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a canceled sale
 - **WHEN** an operator attaches a draft listing to it
@@ -218,18 +235,21 @@ listing's public address `/auction/listings/<slug>`.
   answer at that address.
 
 #### Scenario: grade10-admin-auction-listing-SC-16 - Collector opens a listing by slug
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a published listing whose slug is `charizard-psa-9`
 - **WHEN** a collector opens `/auction/listings/charizard-psa-9`
 - **THEN** Grade10 returns that listing
 
 #### Scenario: grade10-admin-auction-listing-SC-17 - Unknown slug is not found
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** no published, closed, or settled listing with slug `no-such-lot`
 - **WHEN** a collector opens `/auction/listings/no-such-lot`
 - **THEN** Grade10 answers as not found
 
 #### Scenario: grade10-admin-auction-listing-SC-18 - Duplicate slug is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a listing that is not canceled whose slug is `charizard-psa-9`
 - **WHEN** an operator sets another listing's slug to `charizard-psa-9`
@@ -237,6 +257,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** the second listing's slug is unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-19 - Two drafts cannot share a slug
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft whose slug is `charizard-psa-9`
 - **WHEN** an operator sets another draft's slug to `charizard-psa-9`
@@ -244,6 +265,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** the second draft's slug is unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-20 - Empty slugs on drafts are not a collision
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft with no slug
 - **WHEN** an operator saves another draft with no slug
@@ -251,6 +273,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** neither draft occupies a slug
 
 #### Scenario: grade10-admin-auction-listing-SC-21 - Create can reuse a canceled listing's original slug
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a canceled listing that previously used slug `charizard-psa-9`
 - **AND** a draft with every required field set, including slug
@@ -260,6 +283,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** the canceled listing still does not hold `charizard-psa-9`
 
 #### Scenario: grade10-admin-auction-listing-SC-22 - Create cannot reuse a closed listing's slug
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a closed listing whose slug is `charizard-psa-9`
 - **AND** a draft with every required field set, including slug
@@ -270,6 +294,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** `/auction/listings/charizard-psa-9` still returns the closed listing
 
 #### Scenario: grade10-admin-auction-listing-SC-23 - Published slug cannot change
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a published listing whose slug is `charizard-psa-9`
 - **WHEN** an operator sets slug to `charizard-psa-9-copy`
@@ -318,6 +343,7 @@ rehearse a sale. A write of sandbox on a `created` or later listing SHALL
 be refused.
 
 #### Scenario: grade10-admin-auction-listing-SC-24 - Operator corrects a created listing's starting price
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a created listing with starting price 100000 minor units `HKD`
 - **WHEN** an authorized operator sets starting price to 150000 minor units
@@ -325,6 +351,7 @@ be refused.
 - **AND** the listing remains created
 
 #### Scenario: grade10-admin-auction-listing-SC-25 - Published listing refuses a price change
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a published listing with starting price 100000 minor units
 - **WHEN** an operator sets starting price to 150000 minor units
@@ -332,6 +359,7 @@ be refused.
 - **AND** the starting price remains 100000 minor units
 
 #### Scenario: grade10-admin-auction-listing-SC-26 - Scheduled close at in the past is refused at create
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft listing whose scheduled close at is not after now
 - **WHEN** the operator creates the listing
@@ -339,6 +367,7 @@ be refused.
 - **AND** the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-27 - Extension window without a duration is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a created listing
 - **WHEN** an operator sets an extension window of 1800 seconds and an
@@ -347,6 +376,7 @@ be refused.
 - **AND** the listing's extension settings are unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-27a - Omitted extension fields default to 30 minutes
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft listing with every required field set and no extension
   window or duration supplied
@@ -355,6 +385,7 @@ be refused.
   1800 seconds
 
 #### Scenario: grade10-admin-auction-listing-SC-28 - Sandbox cannot change after create
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a created listing that was drafted as sandbox
 - **WHEN** an operator clears sandbox
@@ -382,6 +413,7 @@ timestamp that MUST be after now.
   arrives. Publish of a listing that is not `created` SHALL be refused.
 
 #### Scenario: grade10-admin-auction-listing-SC-29 - Operator publishes a created listing immediately
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a created listing with no publish at
 - **WHEN** an authorized operator publishes it
@@ -389,6 +421,7 @@ timestamp that MUST be after now.
 - **AND** a collector can read it on the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-30 - Created listing publishes at the scheduled time
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a created listing whose publish at is in the future
 - **WHEN** that time arrives
@@ -397,6 +430,7 @@ timestamp that MUST be after now.
 - **AND** no further operator action was required
 
 #### Scenario: grade10-admin-auction-listing-SC-31 - A publish at in the past is refused
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a created listing
 - **WHEN** an operator sets publish at to a time that is not after now
@@ -404,6 +438,7 @@ timestamp that MUST be after now.
 - **AND** the listing remains created and unpublished
 
 #### Scenario: grade10-admin-auction-listing-SC-32 - Create with a past publish at is refused
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a draft listing with every required field set and publish at in
   the past
@@ -413,6 +448,7 @@ timestamp that MUST be after now.
 - **AND** it stays absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-33 - Draft is not published when publish at arrives
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a draft listing with a publish at that has arrived and a missing
   title
@@ -422,6 +458,7 @@ timestamp that MUST be after now.
 - **AND** it stays absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-34 - Manual publish of a draft is refused
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a draft listing
 - **WHEN** an operator publishes it
@@ -429,6 +466,7 @@ timestamp that MUST be after now.
 - **AND** the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-35 - Publish at cannot change after publish
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a published listing
 - **WHEN** an operator sets a new publish at
@@ -466,6 +504,7 @@ Cancel from an operator who is not authorized to call a listing off SHALL
 be refused, and the listing and slug SHALL be unchanged.
 
 #### Scenario: grade10-admin-auction-listing-SC-36 - Operator calls off a draft
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a draft listing
 - **WHEN** an authorized operator calls it off
@@ -473,6 +512,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** it stays absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-37 - Operator calls off a created listing before publish at
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a created listing with a publish at still in the future
 - **WHEN** an authorized operator calls it off
@@ -481,6 +521,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** it stays absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-38 - Operator calls off a published listing that has bids
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a published listing with accepted bids and live authorizations
 - **WHEN** an authorized operator calls it off
@@ -489,6 +530,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** it is absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-39 - Closed listing cannot be called off
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a closed listing
 - **WHEN** an operator calls it off
@@ -496,6 +538,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the listing remains closed
 
 #### Scenario: grade10-admin-auction-listing-SC-40 - Settled listing cannot be called off
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a settled listing
 - **WHEN** an operator calls it off
@@ -503,6 +546,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the listing remains settled
 
 #### Scenario: grade10-admin-auction-listing-SC-41 - Already canceled listing cannot be called off again
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a canceled listing
 - **WHEN** an operator calls it off
@@ -510,6 +554,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the listing remains canceled
 
 #### Scenario: grade10-admin-auction-listing-SC-42 - Cancel rewrites the slug and frees the original
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a published listing whose id is
   `auc_550e8400-e29b-41d4-a716-446655440000` and whose slug is
@@ -521,6 +566,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** a later listing may be created with slug `charizard-psa-9`
 
 #### Scenario: grade10-admin-auction-listing-SC-43 - Cancel of a draft with no slug does not invent one
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a draft listing with no slug
 - **WHEN** an authorized operator calls it off
@@ -528,6 +574,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** the listing still has no slug
 
 #### Scenario: grade10-admin-auction-listing-SC-44 - Unauthorized cancel is refused
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a published listing
 - **AND** a signed-in operator who may not call a listing off
@@ -543,6 +590,7 @@ price, window, sandbox, publish at, and media write from this form. Its facts
 are the record of what was offered and sold.
 
 #### Scenario: grade10-admin-auction-listing-SC-45 - Closed listing rejects a title edit
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a closed listing
 - **WHEN** an operator changes its title
@@ -583,12 +631,14 @@ order. An image item SHALL display as an image. A video item SHALL play as a
 video from the uploaded bytes.
 
 #### Scenario: grade10-admin-auction-listing-SC-46 - Operator uploads an eighth file
+**Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a draft listing with seven media items
 - **WHEN** the operator uploads an eighth JPEG
 - **THEN** Grade10 stores eight media items in the operator's order
 
 #### Scenario: grade10-admin-auction-listing-SC-47 - A ninth file is refused
+**Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a draft listing with eight media items
 - **WHEN** the operator uploads a ninth file
@@ -596,6 +646,7 @@ video from the uploaded bytes.
 - **AND** the gallery still has eight items
 
 #### Scenario: grade10-admin-auction-listing-SC-48 - Mixed images and videos are accepted
+**Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a draft listing with no media
 - **WHEN** an operator uploads a JPEG, then an MP4, then a WebP
@@ -605,6 +656,7 @@ video from the uploaded bytes.
 - **AND** the MP4 plays as video from the uploaded bytes
 
 #### Scenario: grade10-admin-auction-listing-SC-49 - Upload is stored without processing
+**Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads a JPEG whose body is 2 mebibytes
@@ -615,6 +667,7 @@ video from the uploaded bytes.
   at upload
 
 #### Scenario: grade10-admin-auction-listing-SC-50 - Unsupported type is refused
+**Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads a file that is not JPEG, PNG, WebP, AVIF, MP4,
@@ -623,6 +676,7 @@ video from the uploaded bytes.
 - **AND** the gallery is unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-51 - File over 100 mebibytes is refused
+**Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a draft listing
 - **WHEN** an operator uploads a file larger than 104857600 bytes
@@ -630,6 +684,7 @@ video from the uploaded bytes.
 - **AND** the gallery is unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-52 - First item is the catalogue card
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a published listing whose gallery is a video then a JPEG
 - **WHEN** a collector opens the Auction catalogue
@@ -637,6 +692,7 @@ video from the uploaded bytes.
 - **AND** it does not require a named physical side such as `front`
 
 #### Scenario: grade10-admin-auction-listing-SC-53 - Operator reorders and removes media
+**Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a published listing with three images in order A, B, C
 - **WHEN** an operator moves C first and removes B
@@ -644,6 +700,7 @@ video from the uploaded bytes.
 - **AND** a collector's catalogue card is C
 
 #### Scenario: grade10-admin-auction-listing-SC-54 - Last media item cannot be removed after create
+**Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a published listing with one JPEG
 - **WHEN** an operator removes that JPEG
@@ -651,6 +708,7 @@ video from the uploaded bytes.
 - **AND** the gallery still has that JPEG
 
 #### Scenario: grade10-admin-auction-listing-SC-55 - Closed listing rejects a media upload
+**Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
 - **GIVEN** a closed listing
 - **WHEN** an operator uploads an image
@@ -1078,12 +1136,14 @@ An operator without the `auction:operate` grant SHALL NOT be offered Create
 listing. A draft save sent without that grant SHALL be refused.
 
 #### Scenario: grade10-admin-auction-listing-SC-68 - Create listing is offered on the Listings section
+**Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
 - **GIVEN** an authorized operator on the Grade10 auction Listings section
 - **WHEN** they read the section heading row
 - **THEN** a Create listing action is present
 
 #### Scenario: grade10-admin-auction-listing-SC-69 - Listing editor opens with no campaign selected
+**Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
 - **GIVEN** an authorized operator who activates Create listing on the
   Listings section
@@ -1091,6 +1151,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **THEN** the Campaign control has no campaign selected
 
 #### Scenario: grade10-admin-auction-listing-SC-58 - Draft saves with the campaign left empty
+**Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
 - **GIVEN** a new listing opened from the Listings section with no campaign
 - **WHEN** an authorized operator saves a draft with a title and no campaign
@@ -1098,6 +1159,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **AND** the listing is absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-59 - Listing creates with no campaign
+**Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
 - **GIVEN** a draft listing with every required create field set and no campaign
 - **WHEN** an authorized operator creates the listing
@@ -1106,6 +1168,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **AND** it is still absent from the public catalogue
 
 #### Scenario: grade10-admin-auction-listing-SC-60 - Listing publishes with no campaign
+**Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
 - **GIVEN** a created listing with no campaign and no publish at
 - **WHEN** an authorized operator publishes it
@@ -1113,6 +1176,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **AND** the listing still has no campaign
 
 #### Scenario: grade10-admin-auction-listing-SC-61 - Collector opens the published listing by slug
+**Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
 - **GIVEN** a published listing with no campaign whose slug is
   `standalone-lot-1`
@@ -1120,6 +1184,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **THEN** Grade10 returns that listing
 
 #### Scenario: grade10-admin-auction-listing-SC-62 - Listings table shows an unattached listing
+**Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
 - **GIVEN** a listing with no campaign
 - **WHEN** an authorized operator reads the Listings section table
@@ -1127,6 +1192,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **AND** it does not display a campaign id as a label
 
 #### Scenario: grade10-admin-auction-listing-SC-63 - Create listing is not offered to an unauthorized operator
+**Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
 - **GIVEN** a signed-in operator without the `auction:operate` grant
 - **WHEN** they read the Grade10 auction Listings section
@@ -1157,12 +1223,14 @@ This surface and its backend procedures SHALL NOT be reachable outside a
 locally enabled dev environment (`assertDevEndpointsAllowed`).
 
 #### Scenario: grade10-admin-auction-listing-SC-64 - Listings tab is present in the Test panel
+**Serves:** Test fixture standalone seed - listings tab is present in the Test panel
 
 - **GIVEN** the Grade10 auction Test panel with `LOCAL_FIXTURES_ENABLED` true
 - **WHEN** a developer opens the Test panel
 - **THEN** a Listings tab is present beside the Campaign tab
 
 #### Scenario: grade10-admin-auction-listing-SC-65 - Developer seeds fixture listings with no campaign
+**Serves:** Test fixture standalone seed - developer seeds fixture listings with no campaign
 
 - **GIVEN** the Listings tab in the Test panel
 - **WHEN** a developer selects one or more fixture ids and clicks Add listings
@@ -1171,6 +1239,7 @@ locally enabled dev environment (`assertDevEndpointsAllowed`).
 - **AND** the instance counts on the tab update
 
 #### Scenario: grade10-admin-auction-listing-SC-66 - Seeded standalone listings appear in the Listings section with no campaign
+**Serves:** Test fixture standalone seed - seeded standalone listings appear in the Listings section with no campaign
 
 - **GIVEN** a fixture listing seeded from the Test panel Listings tab
 - **WHEN** an authorized operator reads the Listings section
@@ -1178,6 +1247,7 @@ locally enabled dev environment (`assertDevEndpointsAllowed`).
 - **AND** its campaign column shows "-"
 
 #### Scenario: grade10-admin-auction-listing-SC-67 - Developer drops standalone fixture listings
+**Serves:** Test fixture standalone seed - developer drops standalone fixture listings
 
 - **GIVEN** one or more standalone fixture listings seeded from the Listings tab
 - **WHEN** a developer selects one and clicks Drop listing

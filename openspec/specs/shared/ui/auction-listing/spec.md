@@ -25,6 +25,10 @@ without changing the listing's authoritative event data.
   - Named export: ListingUserBidHistory and its copy, props, and row types
   - Empty rows: the block renders nothing
   - Dialog: amount and time, same-price priority note, no bid-type column
+- Bid enrollment
+  - Named exports: the enrollment setup blocks and the signal the bid card reads
+  - Setup gates: continuing waits on a card and an attestation, and says which is missing
+  - Enrollment signal: the bid card shows standing, or disables what a collector cannot yet do
 - Bid card accessory
   - Optional recentBidsAccessory: trailing edge of the recent-bids header
 
@@ -43,12 +47,14 @@ Each of those components SHALL be renderable on its own, so a later surface can
 reuse the gallery without the bid panel.
 
 #### Scenario: shared-ui-auction-listing-SC-01 - An application imports the surface
+**Serves:** Surface exports - an application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's
   public entry
 - **THEN** every import resolves
 
 #### Scenario: shared-ui-auction-listing-SC-02 - A part is reused alone
+**Serves:** Surface exports - a part is reused alone
 
 - **WHEN** an application renders `ListingGallery` without `ListingAuctionBidCard`
   or `ListingDetails`
@@ -63,6 +69,7 @@ back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 `src`. The gallery SHALL NOT fetch, derive, or rewrite those addresses.
 
 #### Scenario: shared-ui-auction-listing-SC-03 - Distinct sources are used in each slot
+**Serves:** Gallery sources - distinct sources are used in each slot
 
 - **GIVEN** a gallery image whose `thumbSrc`, `src`, and `zoomSrc` are three
   different addresses
@@ -73,6 +80,7 @@ back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 - **AND** the zoom dialog requests `zoomSrc`
 
 #### Scenario: shared-ui-auction-listing-SC-04 - Omitted sources fall back to src
+**Serves:** Gallery sources - omitted sources fall back to src
 
 - **GIVEN** a gallery image that supplies only `src` and `alt`
 - **WHEN** it is rendered
@@ -86,6 +94,7 @@ With exactly one item it SHALL hide the strip and disable previous/next. With
 none it SHALL render no item and SHALL NOT present previous/next as available.
 
 #### Scenario: shared-ui-auction-listing-SC-05 - Several gallery items show a strip
+**Serves:** Gallery strip - several gallery items show a strip
 
 - **GIVEN** two or more gallery items
 - **WHEN** the gallery renders
@@ -93,6 +102,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 - **AND** previous and next are enabled
 
 #### Scenario: shared-ui-auction-listing-SC-06 - One gallery item has no strip
+**Serves:** Gallery strip - one gallery item has no strip
 
 - **GIVEN** exactly one gallery item
 - **WHEN** the gallery renders
@@ -101,6 +111,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 - **AND** previous and next are disabled
 
 #### Scenario: shared-ui-auction-listing-SC-07 - No gallery items
+**Serves:** Gallery strip - no gallery items
 
 - **GIVEN** an empty gallery list
 - **WHEN** the gallery renders
@@ -114,6 +125,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 It SHALL NOT supply default user-visible copy for those slots.
 
 #### Scenario: shared-ui-auction-listing-SC-08 - Labels come from the consumer
+**Serves:** Consumer labels - labels come from the consumer
 
 - **GIVEN** a gallery rendered with
   `copy={{ zoom: "Click to zoom", previous: "Previous image", next: "Next image" }}`
@@ -133,6 +145,7 @@ extension window and extension duration. The shared components SHALL render
 the supplied strings as given.
 
 #### Scenario: shared-ui-auction-listing-SC-14 - Extension copy comes from the consumer
+**Serves:** Consumer labels - extension copy comes from the consumer
 
 - **GIVEN** a live listing whose extension window is 300 seconds and extension
   duration is 900 seconds
@@ -150,6 +163,7 @@ the supplied strings as given.
 `timeOverride?: string`.
 
 #### Scenario: auction-listing-SC-22 - A bid row preserves its accepted instant
+**Serves:** Bid history - a bid row preserves its accepted instant
 
 - **GIVEN** a bid history row with an accepted instant and a row representing a non-timestamp state
 - **WHEN** the rows are passed to the bid history surface
@@ -167,6 +181,7 @@ and `timeZone` and SHALL thread them to bid history and the collector deadline
 line.
 
 #### Scenario: auction-listing-SC-13 - Recent bids show localized activity time
+**Serves:** Bid history - recent bids show localized activity time
 
 - **GIVEN** a bid card with history rows carrying `acceptedAtMs`
 - **WHEN** it renders with a shipped locale and time zone
@@ -210,6 +225,7 @@ empty linked-card prompt that activates `onLink` when supplied.
 None of these blocks SHALL fetch, persist, or subscribe to product state.
 
 #### Scenario: shared-ui-auction-listing-SC-15 - Enrollment setup exports resolve
+**Serves:** Bid enrollment - enrollment setup exports resolve
 
 - **WHEN** an application imports `EnrollmentSetupSheet`,
   `PaymentMethodRow`, and `PaymentMethodEmptyState` from the shared UI
@@ -217,6 +233,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **THEN** every import resolves
 
 #### Scenario: shared-ui-auction-listing-SC-16 - Setup continue respects card and attestation
+**Serves:** Bid enrollment - setup continue respects card and attestation
 
 - **GIVEN** `EnrollmentSetupSheet` open with `requiresIframeLink` true and
   no `iframeLinkedPayment`
@@ -224,6 +241,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **THEN** continue is disabled
 
 #### Scenario: shared-ui-auction-listing-SC-17 - Change-card setup enables continue when pre-checked
+**Serves:** Bid enrollment - change-card setup enables continue when pre-checked
 
 - **GIVEN** `EnrollmentSetupSheet` open with `iframeLinkedPayment` supplied
   and `defaultAgeAttested` true
@@ -232,6 +250,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **AND** the provider field area uses the linked-card placeholder copy
 
 #### Scenario: shared-ui-auction-listing-SC-28 - Setup shows a link error under the card field
+**Serves:** Bid enrollment - setup shows a link error under the card field
 
 - **GIVEN** `EnrollmentSetupSheet` open with `errorMessage` supplied
 - **WHEN** it renders
@@ -239,6 +258,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **AND** continue remains available when card entry and attestation are satisfied
 
 #### Scenario: shared-ui-auction-listing-SC-29 - Setup linking locks the sheet
+**Serves:** Bid enrollment - setup linking locks the sheet
 
 - **GIVEN** `EnrollmentSetupSheet` open with `linking` true
 - **WHEN** it renders
@@ -247,6 +267,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **AND** dismiss is unavailable
 
 #### Scenario: shared-ui-auction-listing-SC-18 - Payment row hides change when not editable
+**Serves:** Bid enrollment - payment row hides change when not editable
 
 - **GIVEN** `PaymentMethodRow` rendered without `onChange`
 - **WHEN** it renders
@@ -255,12 +276,14 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **AND** the row keeps the same height as with Change shown
 
 #### Scenario: shared-ui-auction-listing-SC-30 - Linked-card label exposes hold tooltip
+**Serves:** Bid enrollment - linked-card label exposes hold tooltip
 
 - **GIVEN** `PaymentMethodRow` rendered with `paymentMethodTooltip` copy
 - **WHEN** it renders
 - **THEN** an info control beside the linked-card label exposes that tooltip copy
 
 #### Scenario: shared-ui-auction-listing-SC-19 - Empty linked-card slot activates link
+**Serves:** Bid enrollment - empty linked-card slot activates link
 
 - **GIVEN** `PaymentMethodEmptyState` with `onLink` supplied
 - **WHEN** the collector activates the empty-state control
@@ -281,6 +304,7 @@ Standing banners SHALL render only when `bidEnrollment` is not `signed-out`
 and the consumer supplies standing content.
 
 #### Scenario: shared-ui-auction-listing-SC-20 - Signed-out enrollment hides standing badges
+**Serves:** Bid enrollment - signed-out enrollment hides standing badges
 
 - **GIVEN** a bid card with `bidEnrollment` `signed-out` and standing
   content that would show highest bid or outbid
@@ -288,6 +312,7 @@ and the consumer supplies standing content.
 - **THEN** standing badges are not shown
 
 #### Scenario: shared-ui-auction-listing-SC-21 - Ready enrollment shows standing when supplied
+**Serves:** Bid enrollment - ready enrollment shows standing when supplied
 
 - **GIVEN** a bid card with `bidEnrollment` `ready` and outbid standing
   content
@@ -295,6 +320,7 @@ and the consumer supplies standing content.
 - **THEN** the outbid standing badge is shown
 
 #### Scenario: shared-ui-auction-listing-SC-26 - Needs-card disables amount controls
+**Serves:** Bid enrollment - needs-card disables amount controls
 
 - **GIVEN** a bid card with `bidEnrollment` `needs-card`
 - **WHEN** it renders
@@ -302,6 +328,7 @@ and the consumer supplies standing content.
 - **AND** the primary bid action uses the consumer's link-card label
 
 #### Scenario: shared-ui-auction-listing-SC-27 - Needs-card primary action opens setup
+**Serves:** Bid enrollment - needs-card primary action opens setup
 
 - **GIVEN** a bid card with `bidEnrollment` `needs-card` and an open-setup callback
 - **WHEN** the collector activates the primary bid action
@@ -329,6 +356,7 @@ inside the dialog body while the dialog title, description, and close control
 remain fixed.
 
 #### Scenario: shared-ui-auction-listing-SC-09 - A signed-in user opens personal bid history
+**Serves:** Personal bid history - a signed-in user opens personal bid history
 
 - **GIVEN** `ListingUserBidHistory` rendered with at least one row
 - **WHEN** the collector activates the link
@@ -338,12 +366,14 @@ remain fixed.
 - **AND** the dialog closes via the close control or Escape
 
 #### Scenario: shared-ui-auction-listing-SC-10 - No rows means no link
+**Serves:** Personal bid history - no rows means no link
 
 - **GIVEN** `ListingUserBidHistory` rendered with an empty `rows` array
 - **WHEN** it renders
 - **THEN** no link or dialog is shown
 
 #### Scenario: shared-ui-auction-listing-SC-11 - Long history scrolls inside the dialog
+**Serves:** Personal bid history - long history scrolls inside the dialog
 
 - **GIVEN** `ListingUserBidHistory` rendered with more rows than fit the dialog
   viewport and the dialog open
@@ -358,6 +388,7 @@ When supplied, it SHALL render that node on the trailing edge of the recent-bids
 section header. It SHALL NOT require `recentBidsAccessory` to render.
 
 #### Scenario: shared-ui-auction-listing-SC-12 - An accessory composes beside recent bids
+**Serves:** Bid card accessory - an accessory composes beside recent bids
 
 - **GIVEN** a bid card with a recent-bids section and a non-empty
   `recentBidsAccessory`

@@ -56,12 +56,14 @@ Two product addresses SHALL answer with their own card — the page a collector
 reads is the one the address names, not the catalogue it came from.
 
 #### Scenario: grade10-site-store-product-page-SC-01 - A card answers whole
+**Serves:** grade10-site-store-product-page-US-01 - Collector reads a card at its own address
 
 - **WHEN** a product address is fetched and no script executes
 - **THEN** the response HTML contains that card's name, its description, and
   a price for every variant it lists
 
 #### Scenario: grade10-site-store-product-page-SC-02 - Two cards, two pages
+**Serves:** grade10-site-store-product-page-US-01 - Collector reads a card at its own address
 
 - **WHEN** two product addresses are fetched
 - **THEN** each response carries its own card's name and price, and its own
@@ -75,12 +77,14 @@ card in the catalogue SHALL answer with status 404 and the site's not-found
 surface, never an empty product page.
 
 #### Scenario: grade10-site-store-product-page-SC-03 - A handle the catalogue has nothing for
+**Serves:** grade10-site-store-product-page-US-01 - Collector reads a card at its own address
 
 - **WHEN** an address under the store's products naming no card is fetched
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the site's not-found surface
 
 #### Scenario: grade10-site-store-product-page-SC-04 - A card added to the catalogue answers
+**Serves:** grade10-site-store-product-page-US-01 - Collector reads a card at its own address
 
 - **GIVEN** a card the catalogue holds
 - **WHEN** its address is fetched
@@ -97,12 +101,14 @@ site is built. It SHALL never list an address carrying an unfilled parameter
 in place of them.
 
 #### Scenario: grade10-site-store-product-page-SC-05 - A card is opened from the grid
+**Serves:** grade10-site-store-product-page-US-02 - Collector opens a card from the storefront
 
 - **GIVEN** a collector on the storefront
 - **WHEN** they open a card in the grid
 - **THEN** that card's address is what they are on, showing that card's page
 
 #### Scenario: grade10-site-store-product-page-SC-06 - The sitemap names no pattern
+**Serves:** grade10-site-store-product-page-US-02 - Collector opens a card from the storefront
 
 - **WHEN** the sitemap is fetched
 - **THEN** every entry is an address a collector can fetch
@@ -122,6 +128,7 @@ After a card is added the collector SHALL still be on that card, and what the
 site says the cart holds SHALL account for what was added.
 
 #### Scenario: grade10-site-store-product-page-SC-07 - A collector adds the grade they chose
+**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
 - **GIVEN** a card whose page lists more than one variant for sale
 - **WHEN** a collector chooses one that is not the one the page opened with,
@@ -129,18 +136,21 @@ site says the cart holds SHALL account for what was added.
 - **THEN** the cart holds that variant, and not the one the page opened with
 
 #### Scenario: grade10-site-store-product-page-SC-08 - A card with one thing to buy needs no choice
+**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
 - **GIVEN** a card whose page lists one variant for sale
 - **WHEN** a collector adds it without choosing anything
 - **THEN** the cart holds that variant
 
 #### Scenario: grade10-site-store-product-page-SC-09 - The collector keeps their place
+**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
 - **WHEN** a collector adds a card from its page
 - **THEN** they are still on that card's address, reading that card
 - **AND** what the site says the cart holds has changed to account for it
 
 #### Scenario: grade10-site-store-product-page-SC-10 - The same card twice
+**Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
 - **GIVEN** a collector who has already added a variant from a card's page
 - **WHEN** they add the same variant again
@@ -159,6 +169,7 @@ sale and refuse the ones not, each said per variant. A variant that cannot be
 bought SHALL NOT become what is added by being chosen.
 
 #### Scenario: grade10-site-store-product-page-SC-11 - Nothing on the card is for sale
+**Serves:** grade10-site-store-product-page-US-04 - Collector meets a card with nothing for sale
 
 - **GIVEN** a card the catalogue lists with no variant for sale
 - **WHEN** a collector opens its page
@@ -167,6 +178,7 @@ bought SHALL NOT become what is added by being chosen.
 - **AND** there is nothing to press that would add it
 
 #### Scenario: grade10-site-store-product-page-SC-12 - One grade sold, another still for sale
+**Serves:** grade10-site-store-product-page-US-04 - Collector meets a card with nothing for sale
 
 - **GIVEN** a card listing one variant for sale and one sold out
 - **WHEN** a collector opens its page
@@ -188,18 +200,21 @@ Choosing a different variant SHALL bring that variant's ceiling with it, since
 one grade of a card selling out says nothing about another.
 
 #### Scenario: grade10-site-store-product-page-SC-19 - The page stops at what the shop has
+**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
 - **GIVEN** a card whose chosen variant the shop has three of
 - **WHEN** a collector raises the quantity past three
 - **THEN** the quantity stays at three
 
 #### Scenario: grade10-site-store-product-page-SC-20 - A shop that counts nothing stops nothing
+**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
 - **GIVEN** a card whose chosen variant the shop exposes no count for
 - **WHEN** a collector raises the quantity above three
 - **THEN** the quantity rises as asked
 
 #### Scenario: grade10-site-store-product-page-SC-21 - Another grade brings its own ceiling
+**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
 - **GIVEN** a card listing one variant the shop has two of and another it has ten of
 - **WHEN** a collector chooses the one the shop has ten of and raises the quantity to ten
@@ -215,12 +230,14 @@ Three or fewer is what counts as nearly out across this store, and the page
 SHALL NOT hold its own number.
 
 #### Scenario: grade10-site-store-product-page-SC-22 - Nearly out is said on the page
+**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
 - **GIVEN** a card whose chosen variant the shop has three of
 - **WHEN** the page renders
 - **THEN** the page says three are left
 
 #### Scenario: grade10-site-store-product-page-SC-23 - Asking for the last one is answered
+**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
 - **GIVEN** a card whose chosen variant the shop has forty-one of
 - **WHEN** a collector raises the quantity to forty-one
@@ -228,6 +245,7 @@ SHALL NOT hold its own number.
 - **AND** the quantity does not rise past forty-one
 
 #### Scenario: grade10-site-store-product-page-SC-24 - A well-stocked card says nothing
+**Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
 - **GIVEN** a card whose chosen variant the shop has forty-one of
 - **WHEN** the page renders

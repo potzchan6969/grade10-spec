@@ -20,14 +20,14 @@ carry a Collectible type or free-form product metadata. Product facts beyond
 the classification SHALL be stored as typed attributes governed by the
 product's schema.
 
-#### Scenario: grade10-admin-inventory-catalog-SC-69 - Product form shows the complete hierarchy
+#### Scenario: grade10-admin-inventory-catalog-SC-93 - Product form shows the complete hierarchy
 
 - **GIVEN** an authorized inventory admin opens a product form
 - **WHEN** they inspect the identity fields
 - **THEN** IP, Category, and Item are available
 - **AND** no Collectible type field or product metadata editor is available
 
-#### Scenario: grade10-admin-inventory-catalog-SC-70 - Product contract has no legacy identity fields
+#### Scenario: grade10-admin-inventory-catalog-SC-94 - Product contract has no legacy identity fields
 
 - **GIVEN** an authorized inventory admin creates or reads a product
 - **WHEN** Grade10 returns the product
@@ -50,7 +50,7 @@ product attribute.
 | Cert ID | Trimmed, non-empty identifier, unique within the owning inventory |
 | Created at | Set when the record is received, immutable |
 
-#### Scenario: grade10-admin-inventory-catalog-SC-71 - Inventory has no Cert ID records by default
+#### Scenario: grade10-admin-inventory-catalog-SC-95 - Inventory has no Cert ID records by default
 
 - **GIVEN** an authorized inventory admin creates a product without a
   certificate identifier
@@ -58,14 +58,14 @@ product attribute.
 - **THEN** the inventory has zero Cert ID records
 - **AND** the product remains valid for ordinary unnumbered stock
 
-#### Scenario: grade10-admin-inventory-catalog-SC-72 - Intake records a Cert ID under its product
+#### Scenario: grade10-admin-inventory-catalog-SC-96 - Intake records a Cert ID under its product
 
 - **GIVEN** a created product with an inventory
 - **WHEN** an authorized inventory admin intakes one unit with Cert ID `PSA-123`
 - **THEN** the inventory owns one record whose displayed identifier is `PSA-123`
 - **AND** that record belongs to the intaken product and no other product
 
-#### Scenario: grade10-admin-inventory-catalog-SC-73 - Duplicate Cert ID is refused
+#### Scenario: grade10-admin-inventory-catalog-SC-97 - Duplicate Cert ID is refused
 
 - **GIVEN** an inventory already owns Cert ID `PSA-123`
 - **WHEN** an authorized inventory admin intakes another unit with `PSA-123`
@@ -83,14 +83,14 @@ overlapping identifiers SHALL refuse the whole operation. A successful intake
 SHALL append one history entry whose after state carries the received Cert IDs
 when any were supplied.
 
-#### Scenario: grade10-admin-inventory-catalog-SC-74 - Unnumbered intake increases stock
+#### Scenario: grade10-admin-inventory-catalog-SC-98 - Unnumbered intake increases stock
 
 - **GIVEN** a created product with stock two
 - **WHEN** an authorized inventory admin intakes quantity three without Cert IDs
 - **THEN** stock increases to five
 - **AND** no Cert ID record is created
 
-#### Scenario: grade10-admin-inventory-catalog-SC-75 - Multiple Cert IDs match intake quantity
+#### Scenario: grade10-admin-inventory-catalog-SC-99 - Multiple Cert IDs match intake quantity
 
 - **GIVEN** a created product with an inventory
 - **WHEN** an authorized inventory admin intakes quantity two with Cert IDs
@@ -99,7 +99,7 @@ when any were supplied.
 - **AND** both identifiers are recorded under that inventory
 - **AND** one intake history entry records the two received identifiers
 
-#### Scenario: grade10-admin-inventory-catalog-SC-76 - Too many Cert IDs refuse the intake
+#### Scenario: grade10-admin-inventory-catalog-SC-100 - Too many Cert IDs refuse the intake
 
 - **GIVEN** a created product with an inventory
 - **WHEN** an authorized inventory admin intakes quantity one with two Cert IDs
@@ -115,27 +115,27 @@ or exclude the field and place it at any position in the displayed order.
 Existing typed attribute display choices SHALL remain unchanged when Cert ID
 is added, moved, or removed.
 
-#### Scenario: grade10-admin-inventory-catalog-SC-77 - Admin adds Cert ID to displayed attributes
+#### Scenario: grade10-admin-inventory-catalog-SC-101 - Admin adds Cert ID to displayed attributes
 
 - **GIVEN** an authorized inventory admin edits a product schema's Displayed Attributes panel
 - **WHEN** they include Cert ID and place it before the first product attribute
 - **THEN** the saved display order contains Cert ID first
 - **AND** no ordinary Cert ID attribute key is created
 
-#### Scenario: grade10-admin-inventory-catalog-SC-78 - Admin hides Cert ID without changing attributes
+#### Scenario: grade10-admin-inventory-catalog-SC-102 - Admin hides Cert ID without changing attributes
 
 - **GIVEN** a published product schema displaying Cert ID and two typed attributes
 - **WHEN** an authorized inventory admin removes Cert ID from the displayed set
 - **THEN** the two typed attributes remain in their prior order
 - **AND** Cert ID is not returned as a displayed field
 
-#### Scenario: grade10-admin-inventory-catalog-SC-79 - Displayed Cert ID resolves the selected unit
+#### Scenario: grade10-admin-inventory-catalog-SC-103 - Displayed Cert ID resolves the selected unit
 
 - **GIVEN** an Auction listing selects Cert ID `PSA-123` and its product schema displays Cert ID
 - **WHEN** a collector reads the listing
 - **THEN** the displayed product fields include `PSA-123` in the configured position
 
-#### Scenario: grade10-admin-inventory-catalog-SC-80 - No Cert ID contributes no displayed value
+#### Scenario: grade10-admin-inventory-catalog-SC-104 - No Cert ID contributes no displayed value
 
 - **GIVEN** an Auction listing explicitly selects `No Cert ID` and its product schema displays Cert ID
 - **WHEN** a collector reads the listing
@@ -151,21 +151,21 @@ quantity one and SHALL be exclusive to one active reservation. `No Cert ID`
 SHALL use the existing product-level quantity reservation path without
 allocating a certificate record.
 
-#### Scenario: grade10-admin-inventory-catalog-SC-81 - Reservation selects a Cert ID
+#### Scenario: grade10-admin-inventory-catalog-SC-105 - Reservation selects a Cert ID
 
 - **GIVEN** a created product with available Cert IDs `PSA-123` and `BGS-456`
 - **WHEN** an authorized holder requests a reservation for `PSA-123`
 - **THEN** the reservation stores the opaque Cert ID record identity
 - **AND** its quantity is one and `PSA-123` is unavailable to other active reservations
 
-#### Scenario: grade10-admin-inventory-catalog-SC-82 - Reservation selects No Cert ID
+#### Scenario: grade10-admin-inventory-catalog-SC-106 - Reservation selects No Cert ID
 
 - **GIVEN** a created product with available stock and no intended numbered unit
 - **WHEN** an authorized holder explicitly requests `No Cert ID` for quantity three
 - **THEN** the reservation uses product-level quantity three
 - **AND** no Cert ID record is allocated
 
-#### Scenario: grade10-admin-inventory-catalog-SC-83 - Reservation without a unit choice is refused
+#### Scenario: grade10-admin-inventory-catalog-SC-107 - Reservation without a unit choice is refused
 
 - **GIVEN** a created product with available stock
 - **WHEN** an authorized holder requests a reservation without a Cert ID or `No Cert ID`

@@ -24,10 +24,6 @@ const ALPHA_JOURNEYS = [
   "",
   "They open alpha and do the thing.",
   "",
-  "**Accepted by:**",
-  "",
-  "- alpha-SC-01",
-  "",
 ].join("\n");
 
 const ALPHA_SPEC = [

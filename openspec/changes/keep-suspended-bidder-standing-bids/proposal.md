@@ -40,7 +40,7 @@ None.
 - `grade10-admin/console/user-directory`: the account panel suspends and reinstates an account's bidding.
 - `shared/console/user-directory`: the panel offers auction suspend and reinstate only with a handler.
 
-**Depends on** `focus-the-user-directory-on-access`, which creates `grade10-admin/console/user-directory` and `UserAccountPanel`. This change archives after it. Its ids start at `grade10-admin-console-user-directory-SC-11` / `-US-03` and `shared-console-user-directory-SC-27`.
+**Depends on** `focus-the-user-directory-on-access`, which creates `grade10-admin/console/user-directory` and `UserAccountPanel`. This change archives after it. Its ids start at `grade10-admin-console-user-directory-SC-16` / `-US-03` and `shared-console-user-directory-SC-30`.
 
 ## Impact
 

@@ -72,24 +72,28 @@ zone, and SHALL print neither a cooling-off period nor a redemption period no
 regime has named.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-01 - A financed packet holds both agreements
+**Serves:** grade10-site-vault-documents-and-signing-US-03 - Operator prepares the papers for the visit in front of them
 
 - **GIVEN** a financed case with terms accepted
 - **WHEN** its packet is prepared
 - **THEN** it holds the custody agreement and the loan agreement, in that order
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-02 - A storage packet holds one
+**Serves:** The documents - a storage packet holds one
 
 - **GIVEN** a storage case with terms accepted
 - **WHEN** its packet is prepared
 - **THEN** it holds the custody agreement alone
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-03 - Production refuses paper under an unnamed party
+**Serves:** The documents - production refuses paper under an unnamed party
 
 - **GIVEN** a brand in production whose custodian has no registered name
 - **WHEN** a packet is prepared
 - **THEN** it is refused by name and nothing is rendered
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-04 - The loan agreement prints a term, not a date
+**Serves:** The documents - the loan agreement prints a term, not a date
 
 - **WHEN** a loan agreement is rendered
 - **THEN** it states the term as days from the advance and carries no due date
@@ -118,30 +122,35 @@ A packet reaching the end of its window SHALL be closed with its links, and
 SHALL end nothing else: the case stays where it is and staff prepare again.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-05 - A packet that can name no shop is refused
+**Serves:** grade10-site-vault-documents-and-signing-US-03 - Operator prepares the papers for the visit in front of them
 
 - **GIVEN** a case with no visit and no shop named by the operator
 - **WHEN** a packet is prepared
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-06 - A loan packet waits for the terms to be explained
+**Serves:** grade10-site-vault-documents-and-signing-US-03 - Operator prepares the papers for the visit in front of them
 
 - **GIVEN** a financed case with no record that its terms were explained
 - **WHEN** a packet is prepared
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-07 - Preparing again withdraws what was out
+**Serves:** grade10-site-vault-documents-and-signing-US-03 - Operator prepares the papers for the visit in front of them
 
 - **GIVEN** a case holding an unsigned packet
 - **WHEN** staff prepare a new one
 - **THEN** the first is withdrawn and the case holds exactly one live packet
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-08 - A packet lasts as long as the visit it belongs to
+**Serves:** Preparing a packet - a packet lasts as long as the visit it belongs to
 
 - **GIVEN** a packet prepared on Monday for a visit booked on Friday
 - **WHEN** its window is read
 - **THEN** it is still signable on Friday
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-09 - An expired packet ends the packet only
+**Serves:** grade10-site-vault-documents-and-signing-US-02 - Collector refuses to sign electronically
 
 - **GIVEN** a case in `signing` whose packet has run out of window
 - **WHEN** the expired packets are swept
@@ -157,12 +166,14 @@ The link SHALL last 30 minutes, SHALL be usable once, and SHALL be bound to
 the first device that opens it. A signer needs no account.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-10 - A link opened on a second device is refused
+**Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
 
 - **GIVEN** a signing link already opened on one device
 - **WHEN** it is opened on another
 - **THEN** it is refused by name and nothing is shown
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-11 - A link past its window is refused
+**Serves:** The ceremony - a link past its window is refused
 
 - **GIVEN** a signing link minted 31 minutes ago
 - **WHEN** it is opened
@@ -188,18 +199,21 @@ that was shown, beside its digest, so the record says which wording was on
 screen.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-12 - Every page is turned before the signature is taken
+**Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
 
 - **GIVEN** a document the signer has not read to the end
 - **WHEN** they sign it
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-13 - The typed name must be the verified one
+**Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
 
 - **GIVEN** a case whose identity check names one person
 - **WHEN** the signer types another name
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-14 - Declining withdraws the whole set
+**Serves:** grade10-site-vault-documents-and-signing-US-02 - Collector refuses to sign electronically
 
 - **GIVEN** a packet of two documents, neither signed
 - **WHEN** the signer declines
@@ -223,12 +237,14 @@ verifying staff member's name, the full event log, every source digest, and
 the disclosure and consent wording in full above their digests.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-15 - Bytes that changed refuse the seal
+**Serves:** grade10-site-vault-documents-and-signing-US-04 - Auditor proves what a document was when it was signed
 
 - **GIVEN** a prepared document whose stored bytes no longer match the digest taken at preparation
 - **WHEN** the signer signs it
 - **THEN** the seal is refused by name and nothing is sealed
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-16 - The certificate carries the words that were shown
+**Serves:** grade10-site-vault-documents-and-signing-US-04 - Auditor proves what a document was when it was signed
 
 - **WHEN** a packet is sealed
 - **THEN** each sealed document's certificate prints the disclosure and that document's consent text in full, each above its own digest
@@ -244,6 +260,7 @@ Every case belongs to an account, so every signer SHALL have a durable copy
 path.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-17 - The copies reach the signer
+**Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
 
 - **WHEN** a packet is sealed
 - **THEN** the signer can download each document there and then, the sealed set is mailed to the case's address, and the case page lists each document with its digest
@@ -262,11 +279,13 @@ describes. The answer SHALL be computed afresh every time and never cached,
 and an operator's re-check SHALL itself be recorded.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-18 - A digest nobody sealed answers as unknown
+**Serves:** grade10-site-vault-documents-and-signing-US-04 - Auditor proves what a document was when it was signed
 
 - **WHEN** a digest the vault never sealed is verified
 - **THEN** the answer says it is not one of ours and names nobody
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-19 - A packet is re-derived rather than asserted
+**Serves:** grade10-site-vault-documents-and-signing-US-04 - Auditor proves what a document was when it was signed
 
 - **WHEN** an operator re-checks a sealed packet
 - **THEN** the answer is recomputed from the stored bytes and the chain, and the re-check is recorded against the case
@@ -283,11 +302,13 @@ a mismatch SHALL be reported rather than repaired.
 The verified heads of the hash chain SHALL be exported to that archive.
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-20 - A sealed document reaches the archive
+**Serves:** The seal and the copies - a sealed document reaches the archive
 
 - **WHEN** a document is sealed
 - **THEN** a copy of its bytes and its digest reaches the archive, checked against the digest
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-21 - Bytes that no longer match are reported
+**Serves:** grade10-site-vault-documents-and-signing-US-04 - Auditor proves what a document was when it was signed
 
 - **GIVEN** a stored sealed document whose bytes no longer match its recorded digest
 - **WHEN** the integrity pass reaches it

@@ -55,6 +55,7 @@ A class with no window SHALL be reported as undecided; it SHALL NOT be read as
 zero and SHALL NOT be flagged as due.
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-01 - A class nobody has decided is reported as such
+**Serves:** grade10-site-vault-retention-and-erasure-US-03 - Compliance officer sees what is being kept too long
 
 - **GIVEN** a brand with no window set for its identity records
 - **WHEN** the review runs
@@ -75,6 +76,7 @@ It SHALL write nothing, delete nothing and stamp nothing: the same case SHALL
 be reported again next pass until a person acts on it.
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-02 - A case past its window is flagged and left
+**Serves:** grade10-site-vault-retention-and-erasure-US-03 - Compliance officer sees what is being kept too long
 
 - **GIVEN** a case released 2,600 days ago under a brand keeping agreements for 2,555
 - **WHEN** the review runs
@@ -82,6 +84,7 @@ be reported again next pass until a person acts on it.
 - **AND** nothing about the case has changed
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-03 - The window runs from the case's own ending
+**Serves:** grade10-site-vault-retention-and-erasure-US-03 - Compliance officer sees what is being kept too long
 
 - **GIVEN** a case that ended long ago and was written to since for another reason
 - **WHEN** the review runs
@@ -99,12 +102,14 @@ its own data. A run that stops part-way SHALL leave the rest for the next run
 rather than failing the whole.
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-04 - A live loan blocks the erasure
+**Serves:** grade10-site-vault-retention-and-erasure-US-02 - Admin runs an erasure without touching a live case
 
 - **GIVEN** a person with one closed case and one running loan
 - **WHEN** their erasure is run
 - **THEN** it is refused, naming the running case, and neither case is touched
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-05 - A case that goes live mid-run is not erased
+**Serves:** grade10-site-vault-retention-and-erasure-US-02 - Admin runs an erasure without touching a live case
 
 - **GIVEN** an erasure running over a person's cases
 - **WHEN** one of them becomes live between being listed and being reached
@@ -132,24 +137,28 @@ Which class a case falls in SHALL be decided under the case's own lock at the
 moment of erasure, never from a list read earlier.
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-06 - A cancelled case keeps nothing
+**Serves:** grade10-site-vault-retention-and-erasure-US-01 - Collector asks to be forgotten and the vault answers for its own data
 
 - **GIVEN** a case cancelled before anything was signed
 - **WHEN** the person is erased
 - **THEN** its photographs and item text are gone, its identity is released, and the case names no person
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-07 - A released case keeps its evidence
+**Serves:** grade10-site-vault-retention-and-erasure-US-01 - Collector asks to be forgotten and the vault answers for its own data
 
 - **GIVEN** a case whose item was released after a signed agreement
 - **WHEN** the person is erased
 - **THEN** the sealed documents, the identity record and its photograph are kept under a named hold, and the contact details are gone
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-08 - Owed mail goes with the person
+**Serves:** grade10-site-vault-retention-and-erasure-US-01 - Collector asks to be forgotten and the vault answers for its own data
 
 - **GIVEN** a case carrying an owed or parked message
 - **WHEN** the person is erased
 - **THEN** the message is deleted whichever class the case fell in
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-09 - The collector's own history entries are anonymised
+**Serves:** grade10-site-vault-retention-and-erasure-US-01 - Collector asks to be forgotten and the vault answers for its own data
 
 - **GIVEN** a case whose history names the collector as the actor on their own moves
 - **WHEN** the person is erased
@@ -167,11 +176,13 @@ photograph-read trail, which an erasure rewrites so that a person's own id
 does not survive their erasure.
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-10 - An update to a money record is refused
+**Serves:** grade10-site-vault-retention-and-erasure-US-02 - Admin runs an erasure without touching a live case
 
 - **WHEN** any session tries to update or delete a recorded payment
 - **THEN** the database refuses it
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-11 - The history keeps its entries and loses the person
+**Serves:** What cannot be rewritten - the history keeps its entries and loses the person
 
 - **WHEN** a person is erased
 - **THEN** every history entry still exists and none of them names them

@@ -53,11 +53,13 @@ components for the store cart surface: `CartDrawer`, `CartDrawerHeader`,
 when unavailable lines are cleared after open loading.
 
 #### Scenario: shared-ui-store-cart-SC-01 - An application imports the cart drawer
+**Serves:** Drawer export contract - an application imports the cart drawer
 
 - **WHEN** an application imports any export named above from the shared UI package's public entry
 - **THEN** the import resolves without error
 
 #### Scenario: shared-ui-store-cart-SC-13 - Drawer copy carries the unavailable-removal toast message
+**Serves:** shared-ui-store-cart-US-06 - Shopper opens a cart that held a delisted product
 
 - **WHEN** a consumer supplies `CartDrawerCopy`
 - **THEN** the copy includes `unavailableItemsRemoved`
@@ -75,6 +77,7 @@ when unavailable lines are cleared after open loading.
 | `unavailable` | Product is no longer in the store catalogue; removed after open loading |
 
 #### Scenario: shared-ui-store-cart-SC-12 - Status values are the four named states
+**Serves:** shared-ui-store-cart-US-06 - Shopper opens a cart that held a delisted product
 
 - **WHEN** a consumer assigns `CartItemStatus` on a cart line
 - **THEN** the allowed values are only `default`, `adjusted`, `soldOut`, and
@@ -88,18 +91,21 @@ When the cart holds 5 or more items, `CartDrawer` SHALL NOT render empty slot
 placeholders and SHALL scroll all items.
 
 #### Scenario: shared-ui-store-cart-SC-02 - Fewer than 5 items
+**Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
 - **GIVEN** a cart with 2 items
 - **WHEN** `CartDrawer` renders
 - **THEN** it renders the 2 items followed by 3 `CartItemSlot` placeholders
 
 #### Scenario: shared-ui-store-cart-SC-03 - 5 or more items
+**Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
 - **GIVEN** a cart with 6 items
 - **WHEN** `CartDrawer` renders
 - **THEN** all 6 items render and no `CartItemSlot` placeholders are shown
 
 #### Scenario: shared-ui-store-cart-SC-04 - Empty cart
+**Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
 - **GIVEN** a cart with 0 items
 - **WHEN** `CartDrawer` renders
@@ -113,6 +119,7 @@ placeholders and SHALL scroll all items.
 SHALL NOT count sold-out items towards the badge total.
 
 #### Scenario: shared-ui-store-cart-SC-05 - Sold out item present
+**Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
 - **GIVEN** a cart with 1 active item and 1 sold-out item
 - **WHEN** `CartDrawer` renders
@@ -125,6 +132,7 @@ dimmed backdrop overlay, or presses the <kbd>Escape</kbd> key. When open,
 background body scrolling SHALL be prevented.
 
 #### Scenario: shared-ui-store-cart-SC-06 - Backdrop tap or Escape key
+**Serves:** shared-ui-store-cart-US-04 - Shopper dismisses the cart drawer
 
 - **GIVEN** an open cart drawer
 - **WHEN** the backdrop overlay is clicked or the Escape key is pressed
@@ -136,6 +144,7 @@ When cart items exceed the visible body container, `CartDrawerBody` SHALL displa
 shadcn scroll-fade mask styling at the top and bottom edges to indicate scrollable content.
 
 #### Scenario: shared-ui-store-cart-SC-07 - Overflowing items hint scrollability
+**Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
 - **GIVEN** a cart with overflowing items
 - **WHEN** `CartDrawerBody` renders
@@ -150,6 +159,7 @@ skeleton loading state. Empty `CartItemSlot` placeholders SHALL NOT render while
 loading, and the checkout button SHALL be disabled.
 
 #### Scenario: shared-ui-store-cart-SC-08 - Cart opened in loading state
+**Serves:** shared-ui-store-cart-US-03 - Shopper opens the cart on current prices
 
 - **GIVEN** an opening or loading cart drawer
 - **WHEN** `CartDrawer` renders while `loading` is true
@@ -171,6 +181,7 @@ SHALL NOT show that toast.
 sale). It is not `soldOut` and not `adjusted`.
 
 #### Scenario: shared-ui-store-cart-SC-10 - Delisted items clear after loading with one toast
+**Serves:** shared-ui-store-cart-US-06 - Shopper opens a cart that held a delisted product
 
 - **GIVEN** an open cart drawer whose status-and-price loading has finished
 - **AND** the cart includes at least one item with status `unavailable` and at
@@ -182,6 +193,7 @@ sale). It is not `soldOut` and not `adjusted`.
 - **AND** non-unavailable items remain in the cart
 
 #### Scenario: shared-ui-store-cart-SC-11 - No unavailable items means no removal toast
+**Serves:** shared-ui-store-cart-US-06 - Shopper opens a cart that held a delisted product
 
 - **GIVEN** an open cart drawer whose status-and-price loading has finished
 - **AND** no cart item has status `unavailable`
@@ -200,6 +212,7 @@ button SHALL remain in the loading state until navigation occurs or `onCheckout`
 rejects, in which case the button SHALL return to its enabled label.
 
 #### Scenario: shared-ui-store-cart-SC-09 - Shopper proceeds to checkout
+**Serves:** shared-ui-store-cart-US-05 - Shopper proceeds from the cart to checkout
 
 - **GIVEN** an enabled checkout button
 - **WHEN** the shopper activates it
@@ -220,12 +233,14 @@ When the line’s status leaves `adjusted` and later becomes `adjusted` again,
 shows the warning again).
 
 #### Scenario: shared-ui-store-cart-SC-14 - Adjusted line shows the low-stock warning
+**Serves:** shared-ui-store-cart-US-07 - Shopper edits a low-stock line and the warning quiets
 
 - **GIVEN** a cart line with status `adjusted`
 - **WHEN** `CartItem` renders
 - **THEN** the low-stock warning copy is visible
 
 #### Scenario: shared-ui-store-cart-SC-15 - Quantity change hides the warning
+**Serves:** shared-ui-store-cart-US-07 - Shopper edits a low-stock line and the warning quiets
 
 - **GIVEN** a cart line with status `adjusted` showing the low-stock warning
 - **AND** the stepper can change quantity without removing the line
@@ -234,6 +249,7 @@ shows the warning again).
 - **AND** `onQuantityChange` is invoked with the new quantity
 
 #### Scenario: shared-ui-store-cart-SC-16 - New adjusted status shows the warning again
+**Serves:** shared-ui-store-cart-US-07 - Shopper edits a low-stock line and the warning quiets
 
 - **GIVEN** a cart line that was `adjusted` and whose warning was hidden after
   a quantity change
@@ -255,6 +271,7 @@ Decrement is unaffected at the maximum, and removal at quantity one SHALL go
 on being reported as it is today.
 
 #### Scenario: shared-ui-store-cart-SC-17 - The stepper stops at the maximum
+**Serves:** shared-ui-store-cart-US-08 - Shopper raises a line to the last unit the shop has
 
 - **GIVEN** a line supplied with a quantity of `2` and a maximum of `2`
 - **WHEN** the shopper activates its increment control
@@ -262,12 +279,14 @@ on being reported as it is today.
 - **AND** the control is exposed as unavailable
 
 #### Scenario: shared-ui-store-cart-SC-18 - No maximum supplied
+**Serves:** shared-ui-store-cart-US-08 - Shopper raises a line to the last unit the shop has
 
 - **GIVEN** a line supplied with a quantity of `2` and no maximum
 - **WHEN** the shopper activates its increment control
 - **THEN** `onQuantityChange` is invoked with `3`
 
 #### Scenario: shared-ui-store-cart-SC-19 - Decrement still works at the maximum
+**Serves:** shared-ui-store-cart-US-08 - Shopper raises a line to the last unit the shop has
 
 - **GIVEN** a line supplied with a quantity of `2` and a maximum of `2`
 - **WHEN** the shopper activates its decrement control
@@ -284,6 +303,7 @@ A line displaying the low-stock warning SHALL be able to display both, since
 one says what was already changed and the other says what is left.
 
 #### Scenario: shared-ui-store-cart-SC-20 - A remaining count is displayed as supplied
+**Serves:** shared-ui-store-cart-US-08 - Shopper raises a line to the last unit the shop has
 
 - **GIVEN** a line supplied with a remaining count of `Only 2 left`
 - **WHEN** the drawer is rendered
@@ -291,6 +311,7 @@ one says what was already changed and the other says what is left.
 - **AND** no other remaining-count copy is shown
 
 #### Scenario: shared-ui-store-cart-SC-21 - No remaining count supplied
+**Serves:** shared-ui-store-cart-US-08 - Shopper raises a line to the last unit the shop has
 
 - **GIVEN** a line supplied with no remaining count
 - **WHEN** the drawer is rendered

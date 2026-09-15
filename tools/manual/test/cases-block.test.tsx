@@ -30,7 +30,6 @@ const spec = (
       id: "alpha-US-01",
       title: "Someone does the thing",
       text: "",
-      acceptedBy: ["alpha-SC-01"],
     },
   ],
   testCases,

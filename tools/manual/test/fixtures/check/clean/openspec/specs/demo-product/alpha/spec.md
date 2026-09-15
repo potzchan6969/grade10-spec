@@ -16,6 +16,7 @@ Alpha exists so the checker has a spec with every part filled in.
 Alpha SHALL do the thing when asked.
 
 #### Scenario: alpha-SC-01 - it does the thing
+**Serves:** alpha-US-01 - doing the thing
 
 - **WHEN** asked
 - **THEN** it does the thing
