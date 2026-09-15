@@ -300,14 +300,14 @@ the 100 the slab's rate would price.
 The redeemable balance lapses after twelve months with no activity, and a
 lapse that has happened is never undone.
 
-🚧 Every point a member holds lapses on the same day, whatever recorded it.
+Every point a member holds lapses on the same day, whatever recorded it.
 
 | What happens | The date |
 | --- | --- |
 | A purchase or a redemption, even one too small to earn a point | Twelve months from that day |
-| 🚧 A grant, a correction or a reversal | Unchanged; those points take the date the balance already has |
-| 🚧 Operator points with nothing live to join | Twelve months from the day they land |
-| 🚧 An operator restarts the window | Twelve months from today — [Operator Console](/p/grade10-site/loyalty/operator-console) |
+| A grant, a correction or a reversal | Unchanged; those points take the date the balance already has |
+| Operator points with nothing live to join | Twelve months from the day they land |
+| An operator restarts the window | Twelve months from today — [Operator Console](/p/grade10-site/loyalty/operator-console) |
 | A record older than the window | Unchanged; those points are written already lapsed |
 | The day arrives | Gone; the whole balance is written off, and never revived |
 
@@ -434,6 +434,6 @@ spend rather than lose a balance that was about to lapse.
 | Points that should outlive the balance | Decided | An operator restarts the window instead, on the record. | Product |
 | How long a restart runs | Decided | Twelve months from today, never a day the operator picks. | Product |
 | Dates members have already been shown | Decided | Every member's date moves up to the longest-lived point they hold, so no date moves back. | Product |
-| What moving those dates costs | ❓ Open | The points carried further, and the largest single move, measured before it runs. | Finance |
+| What moving those dates costs | Decided | Nothing; the move ran on staging alone, which holds play data. A production database starts under the one date. | Finance |
 | Warning a member before the day | ❓ Open | Whether the programme warns a member before their points lapse, and how far ahead. | Product |
 :::

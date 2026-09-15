@@ -50,6 +50,10 @@
 - `grade10-site-loyalty-programme-SC-100` — A spend too small to earn still counts as activity
 - `grade10-site-loyalty-programme-SC-101` — A late record cannot shorten the balance's life
 - `grade10-site-loyalty-programme-SC-102` — A partial sweep converges
+- `grade10-site-loyalty-programme-SC-180` — Operator points to an empty balance start the window
+- `grade10-site-loyalty-programme-SC-181` — A backdated grant joins the window already running
+- `grade10-site-loyalty-programme-SC-182` — Handing over a reward is not the member's activity
+- `grade10-site-loyalty-programme-SC-183` — A reversal into a lapsed balance returns nothing spendable
 
 ### grade10-site-loyalty-programme-US-03: Member redeems and can pay with points at checkout
 
@@ -141,6 +145,8 @@
 - `grade10-site-loyalty-programme-SC-63` — A double redemption costs one
 - `grade10-site-loyalty-programme-SC-148` — A coupon is readable as soon as it is issued
 - `grade10-site-loyalty-programme-SC-64` — Dates read in the programme's time zone
+- `grade10-site-loyalty-programme-SC-185` — The summary names one expiry line
+- `grade10-site-loyalty-programme-SC-186` — The expiry line warns inside the last 30 days
 
 ### grade10-site-loyalty-programme-US-05: Operator runs the programme from one console
 
@@ -158,6 +164,11 @@
 - `grade10-site-loyalty-programme-SC-51` — A missing second factor opens the gate
 - `grade10-site-loyalty-programme-SC-52` — A stale console reports what broke
 - `grade10-site-loyalty-programme-SC-53` — A member can be found again later
+- `grade10-site-loyalty-programme-SC-176` — An operator restarts the window
+- `grade10-site-loyalty-programme-SC-177` — A restart revives nothing
+- `grade10-site-loyalty-programme-SC-178` — A restart never shortens a window
+- `grade10-site-loyalty-programme-SC-179` — A restart moves no points
+- `grade10-site-loyalty-programme-SC-184` — The form names the date before the points are written
 
 ### grade10-site-loyalty-programme-US-06: Operator reverses a redemption a member cannot be given
 

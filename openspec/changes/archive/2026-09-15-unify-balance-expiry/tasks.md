@@ -48,9 +48,9 @@ Screens and states: [`ui-design.md`](ui-design.md).
 
 - [x] 6.1 Add the repair pass: per member under the member lock, settle to zero, read the balance's date, advance the clock to it; a state predicate with no cursor
 - [x] 6.2 Run it ahead of the expiry sweep in the nightly pass
-- [ ] 6.3 Report the points carried further and the largest single move, before the pass first runs, for the decision the Points page holds open
-- [ ] 6.4 Back the database up before the first run; the pass overwrites the only copy of each member's previous date
-- [ ] 6.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, and the pass drained on two consecutive nightly runs
+- [ ] 6.3 Report the points carried further and the largest single move, before the pass first runs, for the decision the Points page holds open — **dropped**: the platform runs staging alone, on play data, so the move costs nothing anybody owns. The pass reports both numbers on every run, for a production database that does not exist yet
+- [ ] 6.4 Back the database up before the first run; the pass overwrites the only copy of each member's previous date — **dropped**: the only date the pass overwrote was staging's, on play data. The nightly backup is red, and is scheduled at 03:17, after the 03:00 pass it was meant to precede
+- [ ] 6.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`, and the pass drained on two consecutive nightly runs — **checks done** on the change's pull request; **the drain dropped**: a backlog that stops draining holds up play data only, and the nightly pass already alarms on one through `raisedClocks`
 
 ## 7. What the member and the operator read (grade10)
 
