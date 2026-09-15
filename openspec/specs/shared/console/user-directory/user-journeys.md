@@ -35,4 +35,3 @@ confirmations that never meet.
 a confirmation on a move I cannot undo,
 **so that** an ordinary change costs one step and a ban never happens by
 accident.
-

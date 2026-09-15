@@ -360,6 +360,7 @@ the column and direction the consumer supplied as the one in force, and SHALL
 report an operator's change to it. It SHALL NOT reorder the rows it was given.
 
 #### Scenario: shared-console-user-directory-SC-25 - An operator asks for a different order
+**Serves:** Narrowing and order - an operator asks for a different order
 
 - **GIVEN** a table showing the column and direction the console supplied
 - **WHEN** an operator asks to order by another column that the table marks as ordering
