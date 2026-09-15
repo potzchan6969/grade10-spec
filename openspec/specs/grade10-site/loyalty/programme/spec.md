@@ -274,23 +274,27 @@ whole amount it removed.
 - **AND** the next pass covers them, with no state carried between passes
 
 #### Scenario: grade10-site-loyalty-programme-SC-180 - Operator points to an empty balance start the window
+**Serves:** grade10-site-loyalty-programme-US-05 - operator points to an empty balance start the window
 
 - **WHEN** an operator adds points to a member who holds no live points
 - **THEN** those points expire an inactivity window after their own date
 - **AND** a credit whose own date is already an inactivity window past is written already lapsed, and nothing that had lapsed counts again
 
 #### Scenario: grade10-site-loyalty-programme-SC-181 - A backdated grant joins the window already running
+**Serves:** grade10-site-loyalty-programme-US-05 - a backdated grant joins the window already running
 
 - **WHEN** an operator adds points dated before today to a member whose balance is live
 - **THEN** those points expire with the rest of the balance
 - **AND** the member's inactivity window is unchanged
 
 #### Scenario: grade10-site-loyalty-programme-SC-182 - Handing over a reward is not the member's activity
+**Serves:** grade10-site-loyalty-programme-US-05 - a reward handed over is the operator's act, not the member's
 
 - **WHEN** an operator gives a member a reward outright, without the member spending points for it
 - **THEN** the member's inactivity window is unchanged
 
 #### Scenario: grade10-site-loyalty-programme-SC-183 - A reversal into a lapsed balance returns nothing spendable
+**Serves:** grade10-site-loyalty-programme-US-06 - a reversal into a lapsed balance says what it could not return
 
 - **WHEN** a payment in points is reversed after the member's window has passed
 - **THEN** no points are written back and the balance stays empty
@@ -712,6 +716,7 @@ expire on, so an operator adding points to a balance about to lapse sees it.
 - **THEN** those points count toward the next tier
 
 #### Scenario: grade10-site-loyalty-programme-SC-184 - The form names the date before the points are written
+**Serves:** grade10-site-loyalty-programme-US-05 - the grant form names the expiry date before writing
 
 - **WHEN** an operator opens the form that adds points to a member
 - **THEN** it names the day those points will expire
@@ -1380,12 +1385,14 @@ SHALL require no export of its own.
 - **THEN** every count, date, state and word it shows arrived through props
 
 #### Scenario: grade10-site-loyalty-programme-SC-185 - The summary names one expiry line
+**Serves:** grade10-site-loyalty-programme-US-04 - the membership surface names one expiry line
 
 - **WHEN** a member holding points reads their membership
 - **THEN** one line names how many points expire and the day they go
 - **AND** a member holding no points is shown no such line
 
 #### Scenario: grade10-site-loyalty-programme-SC-186 - The expiry line warns inside the last 30 days
+**Serves:** grade10-site-loyalty-programme-US-04 - the expiry line warns inside the last 30 days
 
 - **WHEN** a member's balance expires in 30 days or fewer
 - **THEN** the line is rendered in the warning tone, and says what keeps the points
@@ -1639,23 +1646,27 @@ leave a window already further out where it stands. It SHALL require the same
 permission as moving points.
 
 #### Scenario: grade10-site-loyalty-programme-SC-176 - An operator restarts the window
+**Serves:** grade10-site-loyalty-programme-US-05 - an operator restarts a member's window from the console
 
 - **WHEN** an operator restarts a member's expiry window
 - **THEN** the whole balance expires an inactivity window after that day
 - **AND** the operator's reason is in the operator log
 
 #### Scenario: grade10-site-loyalty-programme-SC-177 - A restart revives nothing
+**Serves:** grade10-site-loyalty-programme-US-05 - a restart does not bring lapsed points back
 
 - **WHEN** an operator restarts the window of a member whose balance has lapsed
 - **THEN** what lapsed is written off first and does not return
 - **AND** only points recorded after the lapse expire on the new date
 
 #### Scenario: grade10-site-loyalty-programme-SC-178 - A restart never shortens a window
+**Serves:** grade10-site-loyalty-programme-US-05 - a restart only ever pushes the date out
 
 - **WHEN** an operator restarts the window of a member whose date is already further out
 - **THEN** that date is left where it stands
 
 #### Scenario: grade10-site-loyalty-programme-SC-179 - A restart moves no points
+**Serves:** grade10-site-loyalty-programme-US-05 - a restart changes the date, never the balance
 
 - **WHEN** an operator restarts a member's expiry window
 - **THEN** the balance is unchanged
