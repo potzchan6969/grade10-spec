@@ -29,6 +29,11 @@ followed.
 - 🚧 **Confirmation** — once the sign-in email goes out, the surface names
   the address it went to, offers Resend, and offers a way back to Google
   Continue (when the brand has it) plus email entry.
+- 🚧 **Resend wait** — Resend stays off for sixty seconds after each
+  successful send, and the button counts down as **Resend (45)** (seconds
+  left in parentheses). It turns on again at zero.
+- 🚧 **Link lifetime** — a sign-in link lasts sixty seconds; after that it
+  is expired.
 - 🚧 **Email-step wording** — the send action reads **Sign In with Email**;
   collectors never see the term magic link on the dialog.
 

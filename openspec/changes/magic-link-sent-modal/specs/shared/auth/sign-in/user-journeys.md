@@ -14,3 +14,7 @@ dismissing the dialog.
 - `shared-auth-sign-in-SC-43` — Resend is offered after a successful send
 - `shared-auth-sign-in-SC-44` — Back returns to the entry step
 - `shared-auth-sign-in-SC-45` — The email-step CTA says Sign In with Email
+- `shared-auth-sign-in-SC-46` — Resend is disabled with a countdown after a send
+- `shared-auth-sign-in-SC-47` — Resend re-enables when the countdown reaches zero
+- `shared-auth-sign-in-SC-48` — A successful resend restarts the countdown
+- `shared-auth-sign-in-SC-49` — A link older than sixty seconds does not sign in

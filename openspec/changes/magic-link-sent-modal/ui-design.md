@@ -35,7 +35,7 @@ entry composition (Google when offered + email step).
 | --- | --- | --- |
 | `SignInCard` | `@grade10/ui` | Existing dialog shell; consumer owns `open` / `onOpenChange` and which step is `children` |
 | `SignInEmailForm` | `@grade10/ui` | Existing email step; `copy.submit` is **Sign In with Email** |
-| `SignInLinkSent` | `@grade10/ui` | **New** — confirmation copy, Resend (`onResend`), Back (`onBack`) |
+| `SignInLinkSent` | `@grade10/ui` | **New** — confirmation copy, Resend (`onResend`, cooldown via `resendCooldownRemaining`), Back (`onBack`) |
 | `Button` | `@grade10/design-system` | Resend and Back controls |
 | `Text` | `@grade10/design-system` | Confirmation message |
 
@@ -50,7 +50,9 @@ entry composition (Google when offered + email step).
 
 | Surface state | Spec scenarios |
 | --- | --- |
-| Link sent — confirmation names address; Resend and Back present | `shared-auth-sign-in-SC-42`, `shared-ui-auth-sign-in-SC-13` |
-| Resend activates `onResend` | `shared-auth-sign-in-SC-43`, `shared-ui-auth-sign-in-SC-11` |
+| Link sent — confirmation names address; Resend counts down (**Resend (n)**); Back present | `shared-auth-sign-in-SC-42`, `shared-auth-sign-in-SC-46`, `shared-ui-auth-sign-in-SC-13`, `shared-ui-auth-sign-in-SC-14` |
+| Resend activates `onResend` when cooldown is over | `shared-auth-sign-in-SC-43`, `shared-auth-sign-in-SC-47`, `shared-ui-auth-sign-in-SC-11`, `shared-ui-auth-sign-in-SC-15` |
+| Successful resend restarts the sixty-second countdown | `shared-auth-sign-in-SC-48` |
 | Back activates `onBack`; entry step (Google + email) returns | `shared-auth-sign-in-SC-44`, `shared-ui-auth-sign-in-SC-12` |
 | Email-step CTA is **Sign In with Email** | `shared-auth-sign-in-SC-45` |
+| Sign-in link lasts sixty seconds | `shared-auth-sign-in-SC-49` |

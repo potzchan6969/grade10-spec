@@ -4,6 +4,7 @@
   - Sign-in exports: Name exactly what the shared UI package publishes for the sign-in surface, including the link-sent step
 - Link-sent step
   - Confirmation body: Show the consumer's confirmation, Resend, and Back
+  - Resend cooldown: Disable Resend while `resendCooldownRemaining` is above zero and show the countdown label
 
 ## ADDED Requirements
 
@@ -17,6 +18,11 @@ Resend control that calls `onResend`, and a Back control that calls `onBack`.
 It SHALL NOT send mail, hold product state, or own the address beyond what the
 consumer puts in the copy. It SHALL carry no English of its own.
 
+WHEN `resendCooldownRemaining` is a number greater than zero, Resend SHALL be
+disabled, SHALL NOT call `onResend`, and SHALL show `copy.resendCountdown`.
+WHEN `resendCooldownRemaining` is absent or zero, Resend SHALL be enabled (unless
+`resending` is true) and SHALL show `copy.resend`.
+
 #### Scenario: shared-ui-auth-sign-in-SC-10 - An application imports the link-sent step
 
 - **WHEN** an application imports `SignInLinkSent`, `SignInLinkSentCopy`, or
@@ -26,6 +32,7 @@ consumer puts in the copy. It SHALL carry no English of its own.
 #### Scenario: shared-ui-auth-sign-in-SC-11 - Resend reports activation
 
 - **GIVEN** `SignInLinkSent` rendered with confirmation copy and callbacks
+- **AND** `resendCooldownRemaining` is absent or zero
 - **WHEN** the person activates Resend
 - **THEN** `onResend` is called
 
@@ -42,6 +49,22 @@ consumer puts in the copy. It SHALL carry no English of its own.
 - **WHEN** the step renders
 - **THEN** that confirmation text is shown
 - **AND** the step supplies no wording of its own
+
+#### Scenario: shared-ui-auth-sign-in-SC-14 - Resend is disabled during the cooldown
+
+- **GIVEN** `SignInLinkSent` with `resendCooldownRemaining` set to a number
+  greater than zero and `copy.resendCountdown` set
+- **WHEN** the step renders
+- **THEN** Resend is disabled
+- **AND** it shows `copy.resendCountdown`
+- **AND** activating it does not call `onResend`
+
+#### Scenario: shared-ui-auth-sign-in-SC-15 - Resend uses the ready label when the cooldown is over
+
+- **GIVEN** `SignInLinkSent` with `resendCooldownRemaining` set to zero
+- **WHEN** the step renders
+- **THEN** Resend is enabled
+- **AND** it shows `copy.resend`
 
 ## MODIFIED Requirements
 
