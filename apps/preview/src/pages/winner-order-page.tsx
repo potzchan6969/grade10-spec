@@ -654,12 +654,9 @@ function WinnerOrderPage({
   function handleAddressConfirm(addressLines: string) {
     setConfirmedAddress(addressLines);
     setStatus("preparing_invoice");
-    // After dialog close (~100ms) so toast rise does not fight the overlay.
-    window.setTimeout(() => {
-      toast.success(ADDRESS_CONFIRMED_TOAST.title, {
-        description: ADDRESS_CONFIRMED_TOAST.description,
-      });
-    }, 150);
+    toast.success(ADDRESS_CONFIRMED_TOAST.title, {
+      description: ADDRESS_CONFIRMED_TOAST.description,
+    });
     onPrimaryAction?.();
   }
 

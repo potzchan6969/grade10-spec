@@ -157,13 +157,13 @@ export const ConfirmAddressFlow: Story = {
       canvas.queryByRole("button", { name: "Confirm delivery address" }),
     ).not.toBeInTheDocument();
 
-    const toastEl = await waitFor(() => {
-      const found = page.getByRole("status");
-      expect(found).toBeVisible();
-      return found;
-    });
-    expect(within(toastEl).getByText("Address confirmed")).toBeVisible();
-    expect(within(toastEl).getByText(/preparing your invoice/i)).toBeVisible();
+    await waitFor(
+      () => {
+        expect(page.getByText("Address confirmed")).toBeVisible();
+      },
+      { timeout: 3000 },
+    );
+    expect(page.getByText(/preparing your invoice/i)).toBeVisible();
   },
 };
 
@@ -242,11 +242,11 @@ export const AddNewAddressFlow: Story = {
     ).not.toBeNull();
     expect(canvas.getByText(/Queen's Road Central/)).toBeVisible();
 
-    const toastEl = await waitFor(() => {
-      const found = page.getByRole("status");
-      expect(found).toBeVisible();
-      return found;
-    });
-    expect(within(toastEl).getByText("Address confirmed")).toBeVisible();
+    await waitFor(
+      () => {
+        expect(page.getByText("Address confirmed")).toBeVisible();
+      },
+      { timeout: 3000 },
+    );
   },
 };

@@ -61,8 +61,7 @@ export const Delivered: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
-    expect(canvas.getAllByText("Delivered").length).toBeGreaterThan(0);
-    expect(canvas.getByText(/28 Sep 2026/)).toBeVisible();
+    expect(canvas.getByText(/Delivered 28 Sep 2026/)).toBeVisible();
     expect(
       canvas.getByRole("link", { name: "View invoice PDF" }),
     ).toBeVisible();
