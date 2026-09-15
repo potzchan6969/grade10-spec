@@ -56,7 +56,7 @@ Group headings are free for us to use because OpenSpec parses only the checkbox 
 
 A PM or designer writes the proposal, the specs and the journeys, and nothing else: a change of theirs carries no `tasks.md` until an engineer plans the delivery, whether by picking their change up or by writing the whole thing themselves. Whoever writes the task text is therefore the person who will implement it, which is why groups carry no owner tags at that point — an engineer claims a group at pickup, and may be claiming their own.
 
-Both sides commit to this store from their own clone of it, and nothing merges the two automatically. Whoever is editing should commit and push promptly; the longer `tasks.md` is held, the more there is to conflict.
+`pnpm plan` records claims and checkmarks as commits on this store's `main` and never touches a clone, so nobody syncs or pushes for them. A hand edit to `tasks.md` is made in a clone: merge it soon, because every claim and checkmark that lands on `main` meanwhile can conflict with it.
 
 ## What the parser does not forgive
 
@@ -80,7 +80,7 @@ A task line before the first group heading is ignored.
 
 | Tool | Repository | Purpose |
 | --- | --- | --- |
-| `scripts/openspec/plan-preflight.mjs` | this one | Before anyone edits a `tasks.md` engineering is implementing: refuses a stale or dirty copy, then prints the owners and counts being edited on top of |
-| `scripts/openspec/plan.mjs` | `grade10` | The engineer's board, plus `claim`, `unclaim`, `done`, and `undone`, each writing through to this store as a commit |
+| `scripts/openspec/plan-preflight.mjs` | this one | Before anyone edits a `tasks.md` engineering is implementing: refuses a dirty copy, or one behind this store's `main`, then prints the owners and counts being edited on top of |
+| `scripts/openspec/plan.mjs` | `grade10` | The engineer's board, plus `claim`, `unclaim`, `done`, and `undone`, each pushing one commit to this store's `main` |
 
 Both parse this format independently — the application repository consumes this repository as a submodule and an OpenSpec store, not as a library, so there is no shared module to import. Change this document first when the convention changes, then both implementations, and check the table above for anything a change would silently invalidate.

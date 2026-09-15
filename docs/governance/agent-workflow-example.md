@@ -112,19 +112,19 @@ openspec status --change account-setting-page   # lists what is still to write
 
 Then `tech-design.md` and `tasks.md` as `/planning-dev` says, with
 `openspec instructions <artifact> --change account-setting-page` before each; a
-designer adds `ui-design.md` with `/planning-design`. Validate and push.
+designer adds `ui-design.md` with `/planning-design`. Validate, then land it on `main` with `/spec-push`: a group can be claimed only once its `tasks.md` is there.
 
 **8. Claim and build.**
 
 ```bash
-pnpm plan sync
 pnpm plan claim account-setting-page 2
+pnpm plan sync
 openspec instructions apply --change account-setting-page
 ```
 
-The instructions return the tasks plus this store's apply guidance, which sends the agent to `grade10`'s own `tdd` skill: a failing test at a spec scenario first.
+The claim lands on this store's `main`, whatever branch the store clone is on, so it needs no sync first. `sync` is for reading: it fast-forwards a store clone on `main`, so the instructions read the merged artifacts. On any other branch it refuses — switch the clone to `main` first. The instructions return the tasks plus this store's apply guidance, which sends the agent to `grade10`'s own `tdd` skill: a failing test at a spec scenario first.
 
-**9. Check off after pushing, never before.** Each lands as a commit to this store from the engineer's clone.
+**9. Check off after pushing, never before.** Each lands as a commit on this store's `main`, and the engineer's store clone is left untouched.
 
 ```bash
 pnpm plan done account-setting-page 2.1 2.2
