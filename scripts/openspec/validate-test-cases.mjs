@@ -229,6 +229,12 @@ function parseSuite(text) {
     reviewed: null,
     journeys: [],
     legacy: new Set(),
+    // The blind reading's own output: what the isolated input did not settle.
+    // Tracked as present-or-absent and as empty-or-not, because an absent
+    // section and an empty one say different things — one is a suite that
+    // skipped the step, the other a claim that nothing was left open.
+    raised: null,
+    settled: null,
   };
   let journey = null;
   let tc = null;
@@ -245,6 +251,18 @@ function parseSuite(text) {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
+
+    const meta = line.match(/^##\s+(Raised|Settled)\s*$/);
+    if (meta) {
+      pushJourney();
+      const key = meta[1].toLowerCase();
+      const body = [];
+      for (let j = i + 1; j < lines.length && !/^##\s/.test(lines[j]); j++) {
+        body.push(lines[j]);
+      }
+      suite[key] = body.filter((one) => one.trim() && !one.trim().startsWith("<!--")).length;
+      continue;
+    }
 
     const h1 = line.match(/^#\s+(.+?)\s*$/);
     if (h1 && suite.title === null) {
@@ -530,6 +548,31 @@ function checkSuite(root, filePath, rulesRev) {
         `(${counts.draft} draft, ${counts.actual} actual, ${counts.deprecated} deprecated) — ` +
         "the file status is derived, never chosen",
     );
+
+  // --- the blind reading's own output ------------------------------------
+  // A feature suite is an independent reading, and `## Raised` is the half a
+  // derived reading could not have produced. Absent means the step was skipped;
+  // empty means the reader claims the input settled everything, which is a
+  // claim worth being able to make and worth being read as one.
+  //
+  // A warning, not an error, for as long as the corpus predates it: every suite
+  // in the store was derived from the scenarios before the blind reading
+  // existed, and none of them can grow a `## Raised` without being written
+  // again. Failing now would put thirty files behind a red check and teach
+  // everyone to read past it — the same mistake `anchorless` made. It becomes
+  // an error in the commit that finishes regenerating them.
+  if (!domain) {
+    if (suite.raised === null)
+      warn(
+        1,
+        "no `## Raised` section — a blind reading ends with what the input did not settle, and an empty section is how it says nothing was left open",
+      );
+    else if (suite.raised === 0)
+      warn(
+        1,
+        "`## Raised` is empty — the input hash says what the reader saw, never how it read; several empty runs mean the second reading has stopped being a second reading",
+      );
+  }
 
   if (counts.draft > 0 && !suite.draftsStyled)
     err(

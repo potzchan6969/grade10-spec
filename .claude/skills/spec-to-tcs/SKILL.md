@@ -28,8 +28,11 @@ rulebook, assembled by the caller, and nothing outside it:
 - **Included** - `## Purpose` and `## Feature set` from the capability's
   `spec.md`, its `user-journeys.md`, the change's `proposal.md` where one
   exists, the linked pages under `docs/prds/`, `openspec/config.yaml`'s
-  `context`, and the existing `feature-tcs.md` for id continuity with its
-  `## Reconciliation` stripped.
+  `context`, the existing `feature-tcs.md` for id continuity with its
+  `## Reconciliation` stripped, and that suite's `## Settled` - the questions
+  earlier runs asked and had answered. Reading those is what stops you raising
+  a refused reading again, and it tells you nothing about what the scenarios
+  say.
 - **Excluded** - every `## Requirements` section, `openspec/specs/` beyond the
   two included sections, and `openspec/changes/archive/` entirely. An archived
   change keeps an un-stripped `## Reconciliation` naming scenario ids, so
@@ -249,6 +252,22 @@ and are unchanged.
    until every case is `actual`. When `pnpm run tcs:stale` named this suite,
    say the revision it moved from and to and how many drafts moved; each
    capability is its own run and pull request, so do not offer the rest.
+
+## End with what you had to decide
+
+The suite closes with a `## Raised` section: every point the isolated input did
+not settle, written as a question for the author. It is the most valuable
+thing the run produces: the cases are the part a derived reading could also
+have written, and this is the part it could not.
+
+A question belongs there when the input is *silent*, not when you missed
+something it says and not when you would simply like to know more. "Is a
+scheduled lot open to bid on? The rule names not-yet-published, ended and called
+off as failures and never places scheduled on either side" is the shape: a state
+the material walked past, which you cannot write a case without choosing.
+
+The section is required and may be empty. Empty is a claim on the record that
+the input settled everything; make it only when it is true.
 
 ## What happens to this suite next
 

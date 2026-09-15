@@ -20,11 +20,21 @@ A **feature** suite is written **blind**: by a reader who cannot see the spec's 
 
 A feature run reads a bundle the caller assembles, and nothing outside it.
 
-- **Included** — `## Purpose` and `## Feature set` from the capability's `spec.md`, its `user-journeys.md`, the change's `proposal.md`, the linked pages under `docs/prds/`, `openspec/config.yaml`'s `context`, and the existing `feature-tcs.md` for id continuity with its `## Reconciliation` stripped
+- **Included** — `## Purpose` and `## Feature set` from the capability's `spec.md`, its `user-journeys.md`, the change's `proposal.md`, the linked pages under `docs/prds/`, `openspec/config.yaml`'s `context`, the existing `feature-tcs.md` for id continuity with its `## Reconciliation` stripped, and that suite's `## Settled` — the questions earlier runs asked and had answered, which is what keeps a refused reading from being raised again every time
 - **Excluded** — every `## Requirements` section, `openspec/specs/` beyond the two included sections, and `openspec/changes/archive/` entirely. An archived change keeps an un-stripped `## Reconciliation` naming scenario ids, so reading archive reopens the leak invisibly on the next change to that capability
 - **Recorded** — a hash of the bundle goes on the `## Reconciliation` Run line. When someone later suspects the pass stopped being blind, that hash is the only thing that can be checked
 - **Assembled by hand where no caller built one** — a person running the skill directly assembles it and says so in the report. Reading the requirements "just to check" is how the property is lost, and nothing downstream can detect that it was
+- **An empty `## Raised`, run after run, is the failure signal** — the input hash proves what the reader saw, never how it read. A second reading that asks nothing, several runs running, has either stopped being blind or stopped being a different method, and the suite is not passed on that basis until someone has checked why
 - **Different methods, not the same one twice** — the blind reader works a test-design checklist: boundary values, equivalence partitions, state transitions, CRUD completeness, empty / one / many, null and missing, permission matrix, error taxonomy, SEO and indexability. Two readings that use the same method produce synonyms, and the reconciliation then finds nothing
+
+## Raised
+
+The blind reading ends with a `## Raised` section: every point the input did not settle, as a question for the author. Not cases, not defects — the things the reader had to decide for itself in order to write anything at all.
+
+- **What belongs** — a rule the input is silent on. "Is a scheduled lot open to bid on? The spec names not-yet-published, ended and called off as failures and never places scheduled on either side." That is a question the material cannot answer, and it is how a state nobody had thought about gets found
+- **What does not** — anything the input settles and the reader missed; anything for the technical design rather than the behaviour; anything the reader merely wants to know more about
+- **It is required, and may be empty** — a suite with no `## Raised` at all is refused. A suite with an empty one is a claim, made on the record, that the input settled everything
+- **It survives the run** — QA's review is largely a check on what was done with these, and a reviewer cannot check a list that was deleted once it was processed
 
 ## Reconciliation
 
@@ -37,7 +47,11 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 | A case carries behaviour **nobody ever decided** | Stop and ask the author |
 | A case carries behaviour **nobody present can settle** | Keep the case `draft` with `**Blocked:** <who settles it>` |
 | A scenario no case reaches | Add a case, or `**Out of suite:**` naming where it is verified instead |
+| The two readings **state opposite things** | Stop and ask the author |
 
+- **A contradiction is never resolved by the run** — where a case and a scenario both describe the same behaviour and disagree, one of them is wrong and nothing in the material says which. Filing it as a misreading is how the blind reading gets overruled by the reading it exists to check, so it goes to the author like any undecided behaviour
+- **A finding is recorded where it was found, and folded where it belongs** — a capability's reconciliation names what its own blind pass raised, even when the rule lands in another capability's spec. The disposition line says where it went, so the two are findable from each other
+- **Settled stays settled** — a rejection is copied into the durable suite's `## Settled` at fold, one line, no scenario ids. That section is a legal part of the next blind pass's isolated input: it tells the reader what has already been asked and answered, which is not the same as telling it what the scenarios say. Without it the same misreading is raised by every future run, nobody remembers why it was refused last time, and reconciliation fills with noise until someone starts rubber-stamping it
 - **Blocked is not rejected** — a question nobody could answer is not a misreading, and filing it as one deletes the most valuable thing the pass produces. The case stays, a ❓ goes on the PRD, an open question goes on the proposal, and no scenario is written
 - **Out of suite names its verifier** — a consuming repository's build and type check, a database constraint, a design review, a higher-level suite. A scenario that can name no such place is a hole, not an exemption
 - **Scenario ids are temporary here** — they may appear in `## Reconciliation` only while the change is open; archive fold and `/tcs-review` both strip them, leaving the dispositions and the reasons

@@ -140,7 +140,13 @@ misreading is the cheapest way to finish a planning run, and a wrong rejection
 leaves no trace afterwards. A row survives only if no rule anywhere states what
 the case claimed.
 
-**Strip the scenario ids**, leaving the dispositions and the reasons. Those ids
+**Copy each surviving rejection into `## Settled`** — one line, the claim and
+why no rule states it, no scenario ids. The next blind pass reads that section,
+so a rejection you agree with is answered once rather than raised by every run
+from here on.
+
+**Strip the scenario ids** from `## Reconciliation`, leaving the dispositions
+and the reasons. Those ids
 belong to the change's lifetime alone: the next blind pass reads this file for
 id continuity, and an id left here is how it stops being blind.
 

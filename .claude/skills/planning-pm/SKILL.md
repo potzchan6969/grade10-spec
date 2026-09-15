@@ -215,8 +215,18 @@ and the reconciliation then finds nothing.
 | Case has it, and **nobody ever decided it** | **Pause. Open a grilling round.** |
 | Case has it, and **nobody present can settle it** | Keep the case `draft` + `**Blocked:**`. See below. |
 | A scenario no case reaches | Add a case, or `**Out of suite:**` naming where it is verified instead |
+| The two readings state **opposite things** | **Pause. Open a grilling round.** |
 
-**The run stops for the third row.** A workflow that cannot pause there is worse
+A contradiction is never settled by the run. Where a case and a scenario
+describe the same behaviour and disagree, one is wrong and nothing in the
+material says which — and filing it as a misreading is how the blind reading
+gets overruled by the very reading it exists to check.
+
+A finding is recorded in the reconciliation of the capability whose pass raised
+it, even when the rule it becomes belongs to another capability's spec. The
+disposition line names where it went.
+
+**The run stops for the third and sixth rows.** A workflow that cannot pause there is worse
 than the one it replaces, because the agent would be deciding the product.
 Automation removes the typing, not the judgement.
 
@@ -238,6 +248,19 @@ and a suite that disagrees with it is regenerated.
 `## Reconciliation` is the evidence the pass happened and what it bought.
 Without it, a pass that found nothing and a pass that never ran look identical
 in git. Scenario ids belong there only while the change is open.
+
+**Write it when you pause, not when you finish.** A run stopped at an
+escalation and a run nobody has started look the same on the board otherwise:
+`openspec status` counts files, and the file is there either way. The section
+goes in as soon as the escalation is raised, naming what is being asked and of
+whom, so a change waiting on an answer says so.
+
+A rejection is copied into the durable suite's `## Settled` at archive — one
+line, no scenario ids. That section is read by the next blind pass on purpose:
+it says what has already been asked and answered, which is not the same as
+saying what the scenarios contain. Without it every future run raises the same
+misreading, nobody remembers why it was refused, and the reconciliation fills
+with noise until someone starts waving it through.
 
 ## Escape hatches
 
