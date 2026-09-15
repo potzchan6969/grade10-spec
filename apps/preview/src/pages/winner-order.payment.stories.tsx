@@ -58,16 +58,21 @@ export const ExpiredInvoice: Story = {
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
-    expect(sidebar.getByRole("alert")).toBeVisible();
+    const alert = sidebar.getByRole("alert");
+    expect(alert).toBeVisible();
     expect(
-      sidebar.getByText("Payment overdue — invoice still payable"),
+      within(alert).getByText(
+        /Deadline passed 24 Sep 2026, 21:30 HKT — invoice still payable/,
+      ),
     ).toBeVisible();
     expect(
       sidebar.getByRole("button", { name: "Pay with card" }),
     ).toBeVisible();
     expect(
-      sidebar.getByText("Deadline passed 24 Sep 2026, 21:30 HKT"),
-    ).toBeVisible();
+      sidebar.queryByText("Deadline passed 24 Sep 2026, 21:30 HKT", {
+        exact: true,
+      }),
+    ).not.toBeInTheDocument();
     expect(canvas.getByText(/support@grade10.com/)).toBeVisible();
     expect(
       sidebar.getByRole("button", { name: "View invoice PDF" }),

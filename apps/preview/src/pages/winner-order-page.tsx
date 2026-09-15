@@ -341,6 +341,8 @@ function OrderSummary({
 }) {
   const total = lines.find((line) => line.label === "Order Total");
   const rest = lines.filter((line) => line.label !== "Order Total");
+  const showPayStack = Boolean(payCta && onPay) || Boolean(onViewInvoicePdf);
+
   return (
     <VStack className="w-full" gap="md" hAlign="stretch">
       <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
@@ -367,34 +369,49 @@ function OrderSummary({
           />
         </>
       ) : null}
+
       {overdue ? (
         <Alert
+          className="mt-1"
           dismissible={false}
           layout="inline"
           status="warning"
-          title="Payment overdue — invoice still payable"
+          title={
+            deadline
+              ? `${deadline} — invoice still payable`
+              : "Payment overdue — invoice still payable"
+          }
         />
       ) : null}
-      {payCta && onPay ? (
-        <Button className="w-full" onClick={onPay} size="lg">
-          {payCta}
-        </Button>
-      ) : null}
-      {deadline ? (
-        <Text size="sm" weight="medium">
-          {deadline}
-        </Text>
-      ) : null}
-      {onViewInvoicePdf ? (
-        <Button
-          className="w-full"
-          leading={<FilePdf aria-hidden size={16} weight="regular" />}
-          onClick={onViewInvoicePdf}
-          size="sm"
-          variant="outline"
+
+      {showPayStack ? (
+        <VStack
+          className={cn("w-full", overdue && "mt-1")}
+          gap="sm"
+          hAlign="stretch"
         >
-          View invoice PDF
-        </Button>
+          {payCta && onPay ? (
+            <Button className="w-full" onClick={onPay} size="lg">
+              {payCta}
+            </Button>
+          ) : null}
+          {!overdue && deadline ? (
+            <Text size="sm" tone="secondary">
+              {deadline}
+            </Text>
+          ) : null}
+          {onViewInvoicePdf ? (
+            <Button
+              className="w-full"
+              leading={<FilePdf aria-hidden size={16} weight="regular" />}
+              onClick={onViewInvoicePdf}
+              size="sm"
+              variant="outline"
+            >
+              View invoice PDF
+            </Button>
+          ) : null}
+        </VStack>
       ) : null}
     </VStack>
   );
