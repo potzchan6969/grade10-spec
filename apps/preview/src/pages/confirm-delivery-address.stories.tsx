@@ -114,7 +114,7 @@ export const Picker: Story = {
   },
 };
 
-/** Nested Add Delivery Address form — open via CTA (reliable vs dual-open mount). */
+/** Nested Add Delivery Address form — open via CTA; Country stays closed. */
 export const AddDeliveryAddress: Story = {
   name: "Add delivery address",
   play: async ({ canvasElement }) => {
@@ -138,28 +138,12 @@ export const AddDeliveryAddress: Story = {
     expect(
       form.queryByText(/shipping fee on the invoice/i),
     ).not.toBeInTheDocument();
-
-    await userEvent.click(form.getByLabelText("Country"));
-    await waitFor(() => {
-      expect(page.getByRole("option", { name: "United States" })).toBeVisible();
-    });
-    expect(page.getByRole("option", { name: "Hong Kong" })).toBeVisible();
-    expect(page.getByRole("option", { name: "Japan" })).toBeVisible();
-
-    // A–Z order + typeahead: "A" highlights Australia.
-    const options = page.getAllByRole("option");
-    expect(options[0]).toHaveTextContent("Australia");
-    expect(options[options.length - 1]).toHaveTextContent("United States");
-    await userEvent.keyboard("a");
-    await waitFor(() => {
-      expect(page.getByRole("option", { name: "Australia" })).toHaveAttribute(
-        "data-highlighted",
-      );
-    });
+    // Leave Country closed until the viewer opens it.
+    expect(page.queryByRole("option", { name: "Australia" })).toBeNull();
   },
 };
 
-/** Empty account address book — EmptyState CTA opens the nested form. */
+/** Empty account address book — EmptyState only; viewer opens nested form via CTA. */
 export const NoSavedAddresses: Story = {
   name: "No saved addresses",
   args: { savedAddresses: [] },
@@ -179,12 +163,9 @@ export const NoSavedAddresses: Story = {
     expect(
       modal.getByRole("button", { name: "Confirm address" }),
     ).toBeDisabled();
-
-    await userEvent.click(
-      modal.getByRole("button", { name: "Add new address" }),
-    );
-    const nested = await findVisibleDialog(page, "Add Delivery Address");
-    expect(within(nested).getByLabelText("First name")).toBeVisible();
+    expect(
+      page.queryByRole("dialog", { name: "Add Delivery Address" }),
+    ).toBeNull();
   },
 };
 
