@@ -4,7 +4,7 @@
 - [ ] 1.2 Hand the fold over only after `auction-first-site-header` archives, so the widened session sentence it carries is in the durable spec before this change's requirement joins it
 - [ ] 1.3 Verify: `pnpm check:manual`
 
-## 2. Header cart gate (grade10)
+## 2. Header cart gate (grade10) (owner: @sean)
 
 - [ ] 2.1 Open sign-in from the header's Cart control while no session is signed in, leaving the drawer closed (grade10-site-site-page-shell-SC-21)
 - [ ] 2.2 Open the drawer the collector pressed for when sign-in succeeds on that surface, and leave nothing armed when the dialog is dismissed (grade10-site-site-page-shell-SC-22, grade10-site-site-page-shell-SC-23)
