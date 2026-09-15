@@ -64,11 +64,19 @@ export const ConfirmAddressFlow: Story = {
       canvas.getByRole("button", { name: "Confirm delivery address" }),
     );
 
-    const dialog = await page.findByRole("dialog");
+    const dialog = await waitFor(() => {
+      const found = page.getByRole("dialog", {
+        name: "Confirm delivery address",
+      });
+      expect(found).toBeVisible();
+      return found;
+    });
     const modal = within(dialog);
-    expect(
-      modal.getByRole("heading", { name: "Confirm delivery address" }),
-    ).toBeVisible();
+    await waitFor(() => {
+      expect(
+        modal.getByRole("heading", { name: "Confirm delivery address" }),
+      ).toBeVisible();
+    });
     expect(
       modal.getByText(/ship this lot here and use the address to calculate/i),
     ).toBeVisible();
@@ -107,23 +115,23 @@ export const AddNewAddressFlow: Story = {
       canvas.getByRole("button", { name: "Confirm delivery address" }),
     );
 
-    const outer = within(await page.findByRole("dialog"));
+    const outerDialog = await waitFor(() => {
+      const found = page.getByRole("dialog", {
+        name: "Confirm delivery address",
+      });
+      expect(found).toBeVisible();
+      return found;
+    });
     await userEvent.click(
-      outer.getByRole("button", { name: "Add new address" }),
+      within(outerDialog).getByRole("button", { name: "Add new address" }),
     );
 
-    await waitFor(() => {
-      expect(
-        page.getByRole("heading", { name: "Add delivery address" }),
-      ).toBeVisible();
+    const nestedDialog = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "Add delivery address" });
+      expect(found).toBeVisible();
+      return found;
     });
-
-    const nestedHeading = page.getByRole("heading", {
-      name: "Add delivery address",
-    });
-    const nestedDialog = nestedHeading.closest('[role="dialog"]');
-    expect(nestedDialog).toBeTruthy();
-    const nested = within(nestedDialog as HTMLElement);
+    const nested = within(nestedDialog);
 
     await userEvent.type(nested.getByLabelText("First name"), "Jordan");
     await userEvent.type(nested.getByLabelText("Last name"), "Lee");
@@ -140,11 +148,19 @@ export const AddNewAddressFlow: Story = {
 
     await waitFor(() => {
       expect(
-        page.queryByRole("heading", { name: "Add delivery address" }),
+        page.queryByRole("dialog", { name: "Add delivery address" }),
       ).not.toBeInTheDocument();
     });
 
-    const picker = within(await page.findByRole("dialog"));
+    const picker = within(
+      await waitFor(() => {
+        const found = page.getByRole("dialog", {
+          name: "Confirm delivery address",
+        });
+        expect(found).toBeVisible();
+        return found;
+      }),
+    );
     expect(picker.getByText("Jordan Lee")).toBeVisible();
     expect(picker.getByText(/Queen's Road Central/)).toBeVisible();
 
