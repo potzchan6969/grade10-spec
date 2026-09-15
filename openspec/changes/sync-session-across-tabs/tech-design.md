@@ -75,10 +75,15 @@ pulling the auth container in behind it. That stays. The site's `SignInDialog`
 already resolves the auth container, so it is what watches the session and
 calls `signedIn()`.
 
-**`SessionDecided` must call `signedIn()`, not `closeSignIn()`.** The two exits
-mean opposite things: `closeSignIn()` is the collector saying no and drops the
-held resume. On arrival it is the wrong one, and it is a live defect today
-whenever a collector is asked on arrival while something else holds a resume.
+**The dialog answers the ask; the surfaces that already handle arrival keep
+what they have.** Corrected from an earlier draft of this design, which said
+the arrival gate drops a held resume and called that a live defect. It does
+not: that gate asks with no resume of its own, and the guard before a blocked
+navigation already carries on when a session arrives by any route — there is a
+passing test for it. The real gap is narrower. An ask made on behalf of a
+refused write — an add, a bid — registers a resume that only an in-page Google
+sign-in ever ran, so a session arriving from another tab left the dialog
+standing and the add undone. One watch on the dialog answers all of them.
 
 **The refused action is attempted, not re-checked first.** `SC-56` asks for the
 ordinary refusal when the thing can no longer be done. Running the held
