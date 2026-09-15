@@ -17,6 +17,9 @@ Winner Order is the authenticated route where a collector settles one lot after 
 - 🚧 **Payment Processing Fee** — the card fee added on top of the Subtotal so Grade10 keeps the Subtotal in full; priced when the invoice is sent and fixed from then on, and dropped when an operator settles the order manually
 - 🚧 **Fee transparency** — Buyer’s Premium, Shipping & Handling, and Payment Processing Fee carry brief info tooltips on the order summary
 - **Address** — changeable by the winner until the invoice is sent; a later change is handled by Grade10 through an operator re-quote and reissue
+- 🚧 **Address form** — First Name, Last Name, Phone, Country/Region, Town/City, Address Line 1, State/Province/Region and Postal Code are required; Company Name, Address Line 2 and Apt./Suite/Building are optional; the phone number's format is not checked
+- 🚧 **Page sections** — Order Information (with **Invoice Status**, formerly Paid Status), Collection Method, Order Status with a timestamp per step, and Lots
+- 🚧 **Unfinished payment** — a card payment that times out or is abandoned says it was not completed and leaves Pay Now ready. A completed one reads Confirming payment until Grade10 records it paid.
 - **Payment** — a fresh card payment, the only self-service method offered while the invoice is `pending`; a declined attempt leaves the invoice payable until the deadline
 - **Payment deadline** — 7 calendar days from when Grade10 sends the invoice to the winner, not from lot close
 - 🚧 **After the deadline** — card Pay is hidden; the overdue alert carries Contact Us; an operator reissues, settles manually, or cancels
@@ -46,6 +49,8 @@ The winner needs one place to understand what is owed and what happens next. The
 | --- | --- | --- | --- |
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, and Final amount reads Order Total, for the winner and the operator. | Product |
 | Insurance | Decided | Optional per invoice; when added it is more than zero. An invoice without it shows no Insurance line. Separate from Payment Processing Fee. | Product |
+| Changing a confirmed address | ❓ Open | How an operator changes an address before quoting, when a winner asks. Operations to settle. | Operations |
+| Postal Code in Hong Kong | ❓ Open | Postal Code is required, but Hong Kong addresses have none. Product to confirm whether it stays required everywhere. | Product |
 | Payment processing fee | Decided | Charged to the winner, grossed up from the Subtotal so Grade10 nets it in full. Priced at send from the payment provider's live fees, never from a rate set in the admin portal. | Product |
 | Fee on a manual settlement | Decided | Dropped: bank transfer, cash and other methods settle the Subtotal. | Product |
 | A fee that costs more than quoted | Decided | Grade10 absorbs the difference; the sent invoice never re-prices. | Product |

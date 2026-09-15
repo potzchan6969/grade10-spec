@@ -30,6 +30,12 @@ close within each band. Account → Notifications holds the global **Auction
 email alerts** master; when it is off, per-lot toggles on this page show
 off or disabled.
 
+🚧 The table sits under three tabs: **Active** (bidding open, shown first),
+**Upcoming** (bidding not yet open) and **Ended** (closed). The title count
+stays the total across all three.
+
+🚧 Email alerts on an Ended row show disabled and cannot be changed.
+
 Detailed [Bidding History](/p/grade10-site/auction/bidding-history) stays its
 own surface for the one-per-listing index, filters, and private chronology.
 
@@ -105,5 +111,7 @@ establishes it.
 | Ending soon threshold | Decided | 60 minutes or less to close, matching the operator queue, so the two surfaces cannot disagree about which listings are urgent. | Product |
 | Bids are binding | Decided | Nothing on this page retracts a bid. A collector who believes a bid was a mistake contacts Grade10. | Product |
 | Ordering | Decided | Soonest close first on both pages, with closed listings after open ones. | Product and design |
+| Tabs by bidding window | Decided | Active, Upcoming and Ended tabs group the one table by bidding window, not by outcome. Replaces "one table, no groups" for presentation; the row rules stay. | Product |
+| Won hands off to orders | Decided | A won lot will read Won and link to its order, with the order status read on [My Auction Orders](/p/grade10-site/auction/auction-orders). Specified in a follow-on change once `revise-auction-winner-invoicing` archives. | Product |
 | Watch limit | ❓ Open | A limit exists, so a watch list stays a considered list and the read stays bounded. The designer sets the value and owns what the collector sees on reaching it; revisit against Watch depth after the first release. | Design |
 :::
