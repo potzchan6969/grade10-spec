@@ -47,10 +47,11 @@ The shell SHALL NOT rely on a currency switch.
 ### Requirement: The chrome does not wait for the session
 
 The site SHALL render the header and the footer before the session has
-resolved. Only the account entry's presentation and destination SHALL depend
-on the session: signed out shows a primary Sign In button; signed in shows the
-account icon that opens the account menu. No other chrome control SHALL
-appear, disappear, or move when the session arrives.
+resolved. The account entry's presentation and destination SHALL depend on the
+session: signed out shows a primary Sign In button; signed in shows the account
+icon that opens the account menu. What the Cart control opens SHALL depend on
+it too, and nothing else in the chrome SHALL. No chrome control SHALL appear,
+disappear, or move when the session arrives.
 
 #### Scenario: grade10-site-site-page-shell-SC-04 - A first paint while the session resolves
 
