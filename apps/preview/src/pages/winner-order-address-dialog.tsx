@@ -1,8 +1,19 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
+import { IconButton } from "@grade10/design-system/components/forms/icon-button";
+import { Label } from "@grade10/design-system/components/forms/label";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { RadioListItem } from "@grade10/design-system/components/forms/radio-list-item";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@grade10/design-system/components/forms/select";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
+import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
@@ -14,6 +25,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import { cn } from "@grade10/design-system/lib/utils";
+import { Trash } from "@phosphor-icons/react";
 import { useEffect, useId, useState } from "react";
 
 export type WinnerOrderSavedAddress = {
@@ -27,33 +40,48 @@ export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
     {
       id: "wan-chai",
       label: "Wan Chai home",
-      lines: "12/F, Tower 1\nHarbour Road\nWan Chai, Hong Kong",
+      lines:
+        "Alex Chan\n12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong\nHong Kong",
     },
     {
       id: "tst",
       label: "Tsim Sha Tsui",
-      lines: "Flat 8B, Harbour View\nCanton Road\nTsim Sha Tsui, Hong Kong",
+      lines:
+        "Alex Chan\nFlat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong\nHong Kong",
     },
   ] as const;
 
-const ADD_NEW_VALUE = "add_new";
+const COUNTRY_OPTIONS = [
+  "Hong Kong",
+  "Japan",
+  "Singapore",
+  "Taiwan",
+  "United States",
+  "United Kingdom",
+] as const;
+
+const DRAFT_VALUE = "use_this_address";
 
 type NewAddressDraft = {
-  fullName: string;
-  line1: string;
-  line2: string;
+  firstName: string;
+  lastName: string;
+  street: string;
   city: string;
-  region: string;
+  state: string;
+  postalCode: string;
   country: string;
+  saveForFuture: boolean;
 };
 
 const EMPTY_DRAFT: NewAddressDraft = {
-  fullName: "",
-  line1: "",
-  line2: "",
+  firstName: "",
+  lastName: "",
+  street: "",
   city: "",
-  region: "",
+  state: "",
+  postalCode: "",
   country: "Hong Kong",
+  saveForFuture: true,
 };
 
 type WinnerOrderAddressDialogProps = {
@@ -65,63 +93,90 @@ type WinnerOrderAddressDialogProps = {
 };
 
 function formatNewAddress(draft: NewAddressDraft): string {
-  const lines = [
-    draft.fullName.trim(),
-    draft.line1.trim(),
-    draft.line2.trim(),
-    [draft.city.trim(), draft.region.trim()].filter(Boolean).join(", "),
-    draft.country.trim(),
-  ].filter(Boolean);
-  return lines.join("\n");
+  const name = [draft.firstName.trim(), draft.lastName.trim()]
+    .filter(Boolean)
+    .join(" ");
+  const locality = [
+    draft.city.trim(),
+    draft.state.trim(),
+    draft.postalCode.trim(),
+  ]
+    .filter(Boolean)
+    .join(", ");
+  return [name, draft.street.trim(), locality, draft.country.trim()]
+    .filter(Boolean)
+    .join("\n");
 }
 
 function newAddressReady(draft: NewAddressDraft): boolean {
   return Boolean(
-    draft.fullName.trim() &&
-      draft.line1.trim() &&
+    draft.firstName.trim() &&
+      draft.lastName.trim() &&
+      draft.street.trim() &&
       draft.city.trim() &&
+      draft.postalCode.trim() &&
       draft.country.trim(),
   );
 }
 
+function addressLabelFromDraft(draft: NewAddressDraft): string {
+  const name = [draft.firstName.trim(), draft.lastName.trim()]
+    .filter(Boolean)
+    .join(" ");
+  if (name) return name;
+  return "New address";
+}
+
 /**
- * Preview-only: pick a saved account address or add one, then confirm for the
- * Winner Order. Not a published `@grade10/ui` export.
+ * Preview-only: pick a saved account address (or a draft just entered), or open
+ * a nested form to add one, then confirm for the Winner Order. Not a published
+ * `@grade10/ui` export.
  */
 function WinnerOrderAddressDialog({
   open,
   onOpenChange,
-  savedAddresses = WINNER_ORDER_SAVED_ADDRESSES,
+  savedAddresses: savedAddressesProp = WINNER_ORDER_SAVED_ADDRESSES,
   onConfirm,
 }: WinnerOrderAddressDialogProps) {
   const formId = useId();
-  const defaultSaved = savedAddresses[0]?.id ?? ADD_NEW_VALUE;
-  const [selection, setSelection] = useState(defaultSaved);
+  const countryId = useId();
+  const [addresses, setAddresses] = useState<WinnerOrderSavedAddress[]>(() => [
+    ...savedAddressesProp,
+  ]);
+  const [selection, setSelection] = useState(
+    savedAddressesProp[0]?.id ?? DRAFT_VALUE,
+  );
+  const [draftOption, setDraftOption] =
+    useState<WinnerOrderSavedAddress | null>(null);
+  const [newAddressOpen, setNewAddressOpen] = useState(false);
   const [draft, setDraft] = useState<NewAddressDraft>(EMPTY_DRAFT);
   const [attempted, setAttempted] = useState(false);
 
   useEffect(() => {
     if (!open) return;
-    setSelection(savedAddresses[0]?.id ?? ADD_NEW_VALUE);
+    setAddresses([...savedAddressesProp]);
+    setSelection(savedAddressesProp[0]?.id ?? DRAFT_VALUE);
+    setDraftOption(null);
+    setNewAddressOpen(false);
     setDraft(EMPTY_DRAFT);
     setAttempted(false);
-  }, [open, savedAddresses]);
+  }, [open, savedAddressesProp]);
 
-  const addingNew = selection === ADD_NEW_VALUE;
-  const selectedSaved = savedAddresses.find((item) => item.id === selection);
-  const canConfirm = addingNew
-    ? newAddressReady(draft)
-    : Boolean(selectedSaved);
+  const selectedSaved = addresses.find((item) => item.id === selection);
+  const selectedDraft =
+    selection === DRAFT_VALUE && draftOption ? draftOption : null;
+  const canConfirm = Boolean(selectedSaved || selectedDraft);
 
   function confirm() {
-    if (addingNew) {
-      setAttempted(true);
-      if (!newAddressReady(draft)) return;
-      onConfirm(formatNewAddress(draft));
-    } else if (selectedSaved) {
+    if (selectedSaved) {
       onConfirm(selectedSaved.lines);
+      onOpenChange(false);
+      return;
     }
-    onOpenChange(false);
+    if (selectedDraft) {
+      onConfirm(selectedDraft.lines);
+      onOpenChange(false);
+    }
   }
 
   function patchDraft<K extends keyof NewAddressDraft>(
@@ -131,140 +186,358 @@ function WinnerOrderAddressDialog({
     setDraft((held) => ({ ...held, [key]: value }));
   }
 
+  function removeAddress(id: string) {
+    setAddresses((held) => {
+      const next = held.filter((item) => item.id !== id);
+      setSelection((current) => {
+        if (current !== id) return current;
+        if (draftOption) return DRAFT_VALUE;
+        return next[0]?.id ?? "";
+      });
+      return next;
+    });
+  }
+
+  function openNewAddress() {
+    setDraft(EMPTY_DRAFT);
+    setAttempted(false);
+    setNewAddressOpen(true);
+  }
+
+  function saveNewAddress() {
+    setAttempted(true);
+    if (!newAddressReady(draft)) return;
+
+    const lines = formatNewAddress(draft);
+    const label = addressLabelFromDraft(draft);
+
+    if (draft.saveForFuture) {
+      const id = `saved-${Date.now()}`;
+      const saved: WinnerOrderSavedAddress = { id, label, lines };
+      setAddresses((held) => [...held, saved]);
+      setSelection(id);
+      setDraftOption(null);
+    } else {
+      setDraftOption({ id: DRAFT_VALUE, label: "Use this address", lines });
+      setSelection(DRAFT_VALUE);
+    }
+
+    setNewAddressOpen(false);
+    setDraft(EMPTY_DRAFT);
+    setAttempted(false);
+  }
+
+  function handleOuterOpenChange(next: boolean) {
+    if (!next && newAddressOpen) return;
+    onOpenChange(next);
+  }
+
   return (
-    <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="max-w-lg" showCloseButton={false}>
-        <DialogHeader>
-          <DialogTitle>Confirm Delivery Address</DialogTitle>
-        </DialogHeader>
-        <DialogBody>
-          <DialogDescription>
-            Choose a saved address or add one. Grade10 prepares the invoice for
-            this destination next — nothing is due yet.
-          </DialogDescription>
+    <>
+      <Dialog onOpenChange={handleOuterOpenChange} open={open}>
+        <DialogContent className="max-w-lg" showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>Confirm delivery address</DialogTitle>
+          </DialogHeader>
+          <DialogBody>
+            <DialogDescription>
+              We ship this lot here and use the address to calculate the
+              shipping fee on your invoice. Nothing is due until Grade10 sends
+              the invoice.
+            </DialogDescription>
 
-          <RadioList
-            aria-label="Delivery address"
-            onValueChange={setSelection}
-            value={selection}
-          >
-            {savedAddresses.map((address) => (
-              <RadioListItem key={address.id} value={address.id}>
-                <VStack className="min-w-0 flex-1" gap="xs" hAlign="start">
-                  <Text size="sm" weight="medium">
-                    {address.label}
-                  </Text>
-                  <Text
-                    className="whitespace-pre-line text-secondary-foreground"
-                    size="xs"
-                  >
-                    {address.lines}
-                  </Text>
-                </VStack>
-              </RadioListItem>
-            ))}
-            <RadioListItem value={ADD_NEW_VALUE}>
-              <Text size="sm" weight="medium">
-                Add a new address
+            {addresses.length > 0 || draftOption ? (
+              <RadioList
+                aria-label="Delivery address"
+                className="gap-3"
+                onValueChange={setSelection}
+                value={selection}
+              >
+                <div
+                  className="flex w-full flex-col gap-2"
+                  data-slot="address-option-cards"
+                >
+                  {addresses.map((address) => {
+                    const selected = selection === address.id;
+                    return (
+                      <div
+                        className={cn(
+                          "flex w-full items-start gap-2 rounded-xl border p-3 transition-colors",
+                          selected
+                            ? "border-primary bg-muted/40"
+                            : "border-border bg-card",
+                        )}
+                        data-selected={selected || undefined}
+                        key={address.id}
+                      >
+                        <RadioListItem
+                          className="min-w-0 flex-1 items-start"
+                          value={address.id}
+                        >
+                          <VStack
+                            className="min-w-0 flex-1"
+                            gap="xs"
+                            hAlign="start"
+                          >
+                            <Text size="sm" weight="medium">
+                              {address.label}
+                            </Text>
+                            <Text
+                              className="whitespace-pre-line text-secondary-foreground"
+                              size="xs"
+                            >
+                              {address.lines}
+                            </Text>
+                          </VStack>
+                        </RadioListItem>
+                        <IconButton
+                          aria-label={`Remove ${address.label}`}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            removeAddress(address.id);
+                          }}
+                          size="sm"
+                          type="button"
+                          variant="ghost"
+                        >
+                          <Trash aria-hidden />
+                        </IconButton>
+                      </div>
+                    );
+                  })}
+
+                  {draftOption ? (
+                    <div
+                      className={cn(
+                        "flex w-full items-start gap-2 rounded-xl border p-3 transition-colors",
+                        selection === DRAFT_VALUE
+                          ? "border-primary bg-muted/40"
+                          : "border-border bg-card",
+                      )}
+                      data-selected={selection === DRAFT_VALUE || undefined}
+                      data-slot="use-this-address-card"
+                    >
+                      <RadioListItem
+                        className="min-w-0 flex-1 items-start"
+                        value={DRAFT_VALUE}
+                      >
+                        <VStack
+                          className="min-w-0 flex-1"
+                          gap="xs"
+                          hAlign="start"
+                        >
+                          <Text size="sm" weight="medium">
+                            {draftOption.label}
+                          </Text>
+                          <Text
+                            className="whitespace-pre-line text-secondary-foreground"
+                            size="xs"
+                          >
+                            {draftOption.lines}
+                          </Text>
+                        </VStack>
+                      </RadioListItem>
+                    </div>
+                  ) : null}
+                </div>
+              </RadioList>
+            ) : (
+              <Text size="sm" tone="secondary">
+                No saved addresses yet. Add a delivery address to continue.
               </Text>
-            </RadioListItem>
-          </RadioList>
+            )}
 
-          {addingNew ? (
+            <Button
+              className="w-full sm:w-auto"
+              onClick={openNewAddress}
+              size="md"
+              type="button"
+              variant="outline"
+            >
+              Add new address
+            </Button>
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose render={<Button size="md" variant="outline" />}>
+              Cancel
+            </DialogClose>
+            <Button disabled={!canConfirm} onClick={confirm} size="md">
+              Confirm address
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog onOpenChange={setNewAddressOpen} open={newAddressOpen}>
+        <DialogContent className="z-[60] max-w-lg" showCloseButton={false}>
+          <DialogHeader>
+            <DialogTitle>Add delivery address</DialogTitle>
+          </DialogHeader>
+          <DialogBody>
+            <DialogDescription>
+              Enter the shipping address for this lot. Grade10 uses it to quote
+              the shipping fee on the invoice.
+            </DialogDescription>
+
             <VStack className="w-full" gap="sm" hAlign="stretch" id={formId}>
+              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+                <TextInput
+                  autoComplete="given-name"
+                  label="First name"
+                  message={
+                    attempted && !draft.firstName.trim()
+                      ? "Enter a first name."
+                      : undefined
+                  }
+                  onChange={(event) =>
+                    patchDraft("firstName", event.currentTarget.value)
+                  }
+                  status={
+                    attempted && !draft.firstName.trim() ? "error" : "default"
+                  }
+                  value={draft.firstName}
+                />
+                <TextInput
+                  autoComplete="family-name"
+                  label="Last name"
+                  message={
+                    attempted && !draft.lastName.trim()
+                      ? "Enter a last name."
+                      : undefined
+                  }
+                  onChange={(event) =>
+                    patchDraft("lastName", event.currentTarget.value)
+                  }
+                  status={
+                    attempted && !draft.lastName.trim() ? "error" : "default"
+                  }
+                  value={draft.lastName}
+                />
+              </div>
+
               <TextInput
-                autoComplete="name"
-                label="Full name"
+                autoComplete="street-address"
+                label="Street address"
                 message={
-                  attempted && !draft.fullName.trim()
-                    ? "Enter a full name."
+                  attempted && !draft.street.trim()
+                    ? "Enter a street address."
                     : undefined
                 }
                 onChange={(event) =>
-                  patchDraft("fullName", event.currentTarget.value)
+                  patchDraft("street", event.currentTarget.value)
                 }
-                status={
-                  attempted && !draft.fullName.trim() ? "error" : "default"
-                }
-                value={draft.fullName}
+                status={attempted && !draft.street.trim() ? "error" : "default"}
+                value={draft.street}
               />
-              <TextInput
-                autoComplete="address-line1"
-                label="Address line 1"
-                message={
-                  attempted && !draft.line1.trim()
-                    ? "Enter an address."
-                    : undefined
+
+              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+                <TextInput
+                  autoComplete="address-level2"
+                  label="City"
+                  message={
+                    attempted && !draft.city.trim()
+                      ? "Enter a city."
+                      : undefined
+                  }
+                  onChange={(event) =>
+                    patchDraft("city", event.currentTarget.value)
+                  }
+                  status={attempted && !draft.city.trim() ? "error" : "default"}
+                  value={draft.city}
+                />
+                <TextInput
+                  autoComplete="address-level1"
+                  label="State"
+                  message="Optional"
+                  onChange={(event) =>
+                    patchDraft("state", event.currentTarget.value)
+                  }
+                  value={draft.state}
+                />
+              </div>
+
+              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
+                <TextInput
+                  autoComplete="postal-code"
+                  label="Postal code"
+                  message={
+                    attempted && !draft.postalCode.trim()
+                      ? "Enter a postal code."
+                      : undefined
+                  }
+                  onChange={(event) =>
+                    patchDraft("postalCode", event.currentTarget.value)
+                  }
+                  status={
+                    attempted && !draft.postalCode.trim() ? "error" : "default"
+                  }
+                  value={draft.postalCode}
+                />
+                <VStack className="w-full" gap="xs" hAlign="stretch">
+                  <Label htmlFor={countryId}>Country</Label>
+                  <Select
+                    onValueChange={(value) => {
+                      if (typeof value === "string") {
+                        patchDraft("country", value);
+                      }
+                    }}
+                    value={draft.country}
+                  >
+                    <SelectTrigger
+                      aria-invalid={
+                        attempted && !draft.country.trim() ? true : undefined
+                      }
+                      className="w-full"
+                      id={countryId}
+                    >
+                      <SelectValue placeholder="Select a country" />
+                    </SelectTrigger>
+                    <SelectContent className="z-[70]">
+                      {COUNTRY_OPTIONS.map((country) => (
+                        <SelectItem key={country} value={country}>
+                          {country}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {attempted && !draft.country.trim() ? (
+                    <Text size="xs" tone="secondary">
+                      Choose a country.
+                    </Text>
+                  ) : null}
+                </VStack>
+              </div>
+
+              <CheckboxListInput
+                checked={draft.saveForFuture}
+                onCheckedChange={(checked) =>
+                  patchDraft("saveForFuture", checked === true)
                 }
-                onChange={(event) =>
-                  patchDraft("line1", event.currentTarget.value)
-                }
-                status={attempted && !draft.line1.trim() ? "error" : "default"}
-                value={draft.line1}
-              />
-              <TextInput
-                autoComplete="address-line2"
-                label="Address line 2"
-                message="Optional"
-                onChange={(event) =>
-                  patchDraft("line2", event.currentTarget.value)
-                }
-                value={draft.line2}
-              />
-              <TextInput
-                autoComplete="address-level2"
-                label="City"
-                message={
-                  attempted && !draft.city.trim() ? "Enter a city." : undefined
-                }
-                onChange={(event) =>
-                  patchDraft("city", event.currentTarget.value)
-                }
-                status={attempted && !draft.city.trim() ? "error" : "default"}
-                value={draft.city}
-              />
-              <TextInput
-                autoComplete="address-level1"
-                label="Region / district"
-                message="Optional"
-                onChange={(event) =>
-                  patchDraft("region", event.currentTarget.value)
-                }
-                value={draft.region}
-              />
-              <TextInput
-                autoComplete="country-name"
-                label="Country"
-                message={
-                  attempted && !draft.country.trim()
-                    ? "Enter a country."
-                    : undefined
-                }
-                onChange={(event) =>
-                  patchDraft("country", event.currentTarget.value)
-                }
-                status={
-                  attempted && !draft.country.trim() ? "error" : "default"
-                }
-                value={draft.country}
-              />
+                size="sm"
+              >
+                Save this address for future orders
+              </CheckboxListInput>
             </VStack>
-          ) : null}
-        </DialogBody>
-        <DialogFooter>
-          <DialogClose render={<Button size="md" variant="outline" />}>
-            Cancel
-          </DialogClose>
-          <Button
-            disabled={!canConfirm && !addingNew}
-            onClick={confirm}
-            size="md"
-          >
-            Confirm address
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          </DialogBody>
+          <DialogFooter>
+            <HStack className="w-full justify-end gap-2">
+              <Button
+                onClick={() => setNewAddressOpen(false)}
+                size="md"
+                type="button"
+                variant="outline"
+              >
+                Cancel
+              </Button>
+              <Button onClick={saveNewAddress} size="md" type="button">
+                Use this address
+              </Button>
+            </HStack>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

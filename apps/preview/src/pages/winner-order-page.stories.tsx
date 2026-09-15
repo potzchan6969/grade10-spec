@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Address-first auction Winner Order preview (Storybook only). Statuses follow revise-auction-winner-invoicing: Awaiting Address → Preparing Invoice → Pending Payment → fulfilment. Confirm delivery address opens a dialog to pick or add an address. Not a published `@grade10/ui` export yet.",
+          "Address-first auction Winner Order preview (Storybook only). Statuses follow revise-auction-winner-invoicing: Awaiting Address → Preparing Invoice → Pending Payment → fulfilment. Confirm delivery address opens a picker of selectable address cards (with remove); Add new address opens a nested form. Not a published `@grade10/ui` export yet.",
       },
     },
   },
@@ -67,10 +67,18 @@ export const ConfirmAddressFlow: Story = {
     const dialog = await page.findByRole("dialog");
     const modal = within(dialog);
     expect(
-      modal.getByRole("heading", { name: "Confirm Delivery Address" }),
+      modal.getByRole("heading", { name: "Confirm delivery address" }),
+    ).toBeVisible();
+    expect(
+      modal.getByText(/ship this lot here and use the address to calculate/i),
     ).toBeVisible();
     expect(modal.getByText("Wan Chai home")).toBeVisible();
-    expect(modal.getByText("Add a new address")).toBeVisible();
+    expect(
+      modal.getByRole("button", { name: "Remove Wan Chai home" }),
+    ).toBeVisible();
+    expect(
+      modal.getByRole("button", { name: "Add new address" }),
+    ).toBeVisible();
 
     await userEvent.click(
       modal.getByRole("button", { name: "Confirm address" }),
@@ -84,6 +92,71 @@ export const ConfirmAddressFlow: Story = {
     expect(
       canvas.queryByRole("button", { name: "Confirm delivery address" }),
     ).not.toBeInTheDocument();
+  },
+};
+
+/** Nested add-address form → Use this address → confirm → Preparing Invoice. */
+export const AddNewAddressFlow: Story = {
+  name: "Add new address flow",
+  args: { status: "awaiting_address" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const page = within(canvasElement.ownerDocument.body);
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Confirm delivery address" }),
+    );
+
+    const outer = within(await page.findByRole("dialog"));
+    await userEvent.click(
+      outer.getByRole("button", { name: "Add new address" }),
+    );
+
+    await waitFor(() => {
+      expect(
+        page.getByRole("heading", { name: "Add delivery address" }),
+      ).toBeVisible();
+    });
+
+    const nestedHeading = page.getByRole("heading", {
+      name: "Add delivery address",
+    });
+    const nestedDialog = nestedHeading.closest('[role="dialog"]');
+    expect(nestedDialog).toBeTruthy();
+    const nested = within(nestedDialog as HTMLElement);
+
+    await userEvent.type(nested.getByLabelText("First name"), "Jordan");
+    await userEvent.type(nested.getByLabelText("Last name"), "Lee");
+    await userEvent.type(
+      nested.getByLabelText("Street address"),
+      "88 Queen's Road Central",
+    );
+    await userEvent.type(nested.getByLabelText("City"), "Central");
+    await userEvent.type(nested.getByLabelText("Postal code"), "000000");
+
+    await userEvent.click(
+      nested.getByRole("button", { name: "Use this address" }),
+    );
+
+    await waitFor(() => {
+      expect(
+        page.queryByRole("heading", { name: "Add delivery address" }),
+      ).not.toBeInTheDocument();
+    });
+
+    const picker = within(await page.findByRole("dialog"));
+    expect(picker.getByText("Jordan Lee")).toBeVisible();
+    expect(picker.getByText(/Queen's Road Central/)).toBeVisible();
+
+    await userEvent.click(
+      picker.getByRole("button", { name: "Confirm address" }),
+    );
+
+    await waitFor(() => {
+      expect(page.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+    expect(canvas.getByText("Preparing Invoice")).toBeVisible();
+    expect(canvas.getByText(/Queen's Road Central/)).toBeVisible();
   },
 };
 

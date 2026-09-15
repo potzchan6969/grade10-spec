@@ -74,7 +74,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
     case "awaiting_address":
       return {
         ...base,
-        body: "Confirm where we ship this lot. Grade10 prepares the invoice after your address is confirmed — nothing is due yet.",
+        body: "Confirm where we ship this lot. Grade10 uses the address to calculate the shipping fee on the invoice — nothing is due yet.",
         addressLabel: "Delivery address",
         addressValue: null,
         addressHint: "Choose a saved address or add one, then confirm.",
