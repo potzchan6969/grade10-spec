@@ -5,7 +5,7 @@ See `proposal.md`. Deltas: `shared/auth/users`,
 
 Today the Users page reads better-auth `admin.listUsers` through
 `SearchDirectory` — one search field or one filter field per call, never both
-name and email in one page, never role ∧ standing ∧ verification together.
+name and email in one page, never role ∧ status ∧ verification together.
 Ban and Sessions buttons are always rendered; only Roles and Erase are
 handler-gated. `?user=` seeds the search box and does not open an account.
 Session IP / user-agent / expiry and `banReason` already return from the API
@@ -47,9 +47,9 @@ Add `users.listDirectory` on the existing auth `usersRouter` (elevated on
 `{ users, total }` with the fields the table and panel need (`role`,
 `banned`, `banReason`, `emailVerified`, `twoFactorEnabled`, `createdAt`, …).
 
-Role filter: account holds the named closed role (token match on the
-comma-separated `role` column, or `parseRoles`-equivalent SQL), or "any
-operator role" / "no operator role" against `ADMIN_ROLES`.
+Role filter: account holds the named closed elevated role (token match on the
+comma-separated `role` column, or `parseRoles`-equivalent SQL), or elevated /
+user population against `ADMIN_ROLES`.
 
 _Rejected:_ extending `listUsers` alone — one `searchField` and one
 `filterField` cannot OR name+email or AND three narrowings in one page.
@@ -65,7 +65,7 @@ Users page read; keep the client methods that mutations still need.
 | Export | Land |
 | --- | --- |
 | `UserAccountPanel` | Props-only sections; roles submit under the roles-dialog contract; ban / unban / erase report out for `UserModerationDialog` |
-| `UserDirectoryFilters` | Consumer-supplied groups/options; report selection; no role vocabulary inside |
+| `UserDirectoryFilters` | Fixed Type / Roles / Status / Email selects; consumer supplies labels and options; no role vocabulary inside |
 | `UserTable` | Optional `onBan` / `onUnban` / `onSessions` / `onOpen` (same gate as roles/delete); optional ban reason; sortable headings report order, do not reorder rows |
 | `UserSessionRow` | Optional display-ready `origin` and `expires` (extend copy headings); still never a secret |
 | `UserRolesDialog` / `UserSessionsDialog` | Stay exported; panel is the Grade10 path |
@@ -78,10 +78,10 @@ do not route the directory through `useClientTable` (in-memory only).
 | Choice | Land |
 | --- | --- |
 | Home | `apps/admin/grade10/src/pages/users/` + existing `UserDirectorySection` (or thin rewrite that owns URL + grants) |
-| URL | Audit-style `useSearchParams`: `user` opens the panel; `q`, filter keys, `order`, `offset` survive a paste; `{ replace: true }` on filter edits |
+| URL | Audit-style `useSearchParams`: `user` opens the panel; `q`, `roles` (default `elevated`), `status`, `email`, `order`, `offset` survive a paste; `{ replace: true }` on filter edits |
 | Grants | Union of `ROLE_PERMISSIONS[role]` for `parseRoles(account.role)`; elevated when the permission is held only by roles in `ADMIN_ROLES` (or the same mark `RBAC_DOCS_VIEW` uses) |
-| Grant href | `/roles-and-permissions?permission=<id>` — Permissions tab highlight (additive query on that page; omit href when session lacks `user:set-role`) |
-| Loyalty | `memberAddress(userId)` when the account holds no operator role |
+| Role href | `/roles-and-permissions?role=<id>` — highlights that role column (omit when session lacks `user:set-role`) |
+| Loyalty | `memberAddress(userId)` when the account holds no elevated role |
 | Audit | `/audit?actor=<id>` (and subject when the trail filter supports it) when session holds audit list |
 | Action gates | Pass handlers only for grants held: `user:ban`, `session:list` / `session:revoke`, `user:set-role`, `user:delete` |
 
@@ -99,7 +99,7 @@ accounts whose email **or** name contains the fragment, case-insensitive
 | --- | --- |
 | Entrypoint | auth tRPC `users.listDirectory` |
 | Grant | `user:list` (elevated procedure) |
-| Input | `{ query?: string, holds?: "operator" \| "none" \| <closed role>, standing?: "banned" \| "active", email?: "verified" \| "unverified", orderBy?: "createdAt" \| "email", order?: "asc" \| "desc", limit: number, offset: number }` |
+| Input | `{ query?: string, roles?: "elevated" \| "user" \| <closed elevated role>, status?: "banned" \| "active", email?: "verified" \| "unverified", orderBy?: "createdAt" \| "email", order?: "asc" \| "desc", limit: number, offset: number }` |
 | Success | `{ users: DirectoryListUser[], total: number }` |
 | Refusal | missing grant; invalid input |
 
@@ -125,7 +125,7 @@ revoke*; tRPC `users.requestErasure`.
 | Change | Shape |
 | --- | --- |
 | **New** `users.listDirectory` | Auth tRPC; request/response as above |
-| **Additive** Roles & Permissions address | Optional `?permission=<id>` selects Permissions tab and highlights that row |
+| **Additive** Roles & Permissions address | Optional `?role=<id>` highlights that role's column |
 | **Additive** console package exports | `UserAccountPanel`, `UserDirectoryFilters`, and the types named in the delta |
 | **Breaking for consumers that type-narrow** | `UserTable` ban/sessions handlers become optional (runtime default: omit = hide) |
 
@@ -139,9 +139,9 @@ Unchanged wire: better-auth admin mutation paths; erasure procedures;
   tests for multi-role accounts.
 - [Email contains on a large table] → keep page size 20; prefix indexes help
   name/email prefix paths; measure if contains scans become hot.
-- [Grant href needs Roles & Permissions `?permission=`] → small additive on
-  that page; if the page is not yet shipped, panel omits grant hrefs until
-  the address exists (grants still render).
+- [Role href needs Roles & Permissions `?role=`] → small additive on that
+  page; if the page is not yet shipped, panel omits role hrefs until the
+  address exists (grants still render).
 - [ZZZ still on listUsers + always-on ban/sessions] → optional handlers keep
   ZZZ compiling; it adopts the panel when it chooses.
 
@@ -151,11 +151,11 @@ Unchanged wire: better-auth admin mutation paths; erasure procedures;
 2. Console package: optional handlers, session/ban-reason fields, filters,
    panel.
 3. Grade10 Users page: URL state, filters, panel, grant resolution, hand-offs;
-   Roles & Permissions `?permission=` if not already present.
+   Roles & Permissions `?role=` if not already present.
 4. Manual pages; archive after deploy.
 
 ## Open Questions
 
-None — the loyalty hand-off follows the delta (`SC-09`: no operator role).
+None — the loyalty hand-off follows the delta (`SC-09`: no elevated role).
 If staff who also shop need the link, that is a spec change, not an
 implementation fork.

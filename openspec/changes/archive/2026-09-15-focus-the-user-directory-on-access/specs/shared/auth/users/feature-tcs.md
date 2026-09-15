@@ -70,7 +70,7 @@ Signed in as admin(holds `user:list`). Directory holds accounts with and without
 **Expected Results:**
 
 * Every listed account holds `admin`.
-* An account that holds no operator role is not listed.
+* An account that holds no elevated role is not listed.
 
 ### shared-auth-users-US4-TC3-1: Two narrowings and chosen order apply
 

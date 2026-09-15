@@ -1,26 +1,15 @@
-# shared/auth/users Specification
-
-## Purpose
-How an operator on either brand lists people in the identity directory, bans
-and unbans them, and changes their roles. Listing and ending their sessions
-is `shared/auth/sessions`. Recording those actions is `shared/auth/audit`.
-Auction bidder bans belong to auction, not here.
-
 ## Feature set
 
-- Directory
-  - Grant-gated list: only `user:list` sees accounts; search matches email or name without letter case; open by user id
-  - Narrowed list: elevated or user population, a named elevated role, status, and verification combine; caller chooses order (newest first when none)
-  - Banned remain: a banned account stays in the directory
-- Ban and unban
-  - Stops money and sign-in: a ban ends sessions and refuses new ones; unban restores sign-in
-  - No ban of admin: no caller bans an account that holds `admin` (peers included); self-ban stays refused
-- Role changes
-  - Set-role edits: clearing operator roles leaves a user; own account included
-  - Peer strip refused: an operator cannot remove `admin` from another admin
-  - Self-strip: an admin may remove their own `admin` when not last
+- Finding a person
+  - Name or email: search matches either without letter case, so the name on a ticket is enough to start
+  - Narrowed directory: elevated or user population, a named elevated role, status and verification each narrow the list, and combine
+  - Chosen order: the caller asks for the order accounts come back in; newest first when it asks for none
+- Peer admin lockout refused
+  - No ban of admin: no caller bans an account that holds `admin`, peers included
+  - No peer demote: an operator cannot strip `admin` from another admin
+  - Self edits: an operator may change their own roles; self-strip of `admin` when not last
 
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Only operators who can list users see the directory
 
@@ -132,58 +121,6 @@ remaining `admin` SHALL NOT be banned. A caller without the grant SHALL be
 refused, and the account SHALL be unchanged. Banning an already-banned
 account SHALL leave it banned.
 
-#### Scenario: shared-auth-users-SC-06 - A ban stops money-moving
-
-- **GIVEN** an operator who holds `user:ban`
-- **WHEN** they ban an account
-- **THEN** that person cannot complete a money-moving action
-
-#### Scenario: shared-auth-users-SC-07 - A banned person cannot sign in
-
-- **GIVEN** a banned account
-- **WHEN** that person completes a sign-in method
-- **THEN** they are not signed in
-
-#### Scenario: shared-auth-users-SC-08 - A banned person is not signed in
-
-- **GIVEN** a person who signed in and is then banned
-- **WHEN** a product reads who is calling
-- **THEN** it reports no person
-
-#### Scenario: shared-auth-users-SC-09 - An unban lets them sign in again
-
-- **GIVEN** a banned account
-- **WHEN** an operator who can ban unbans it
-- **THEN** that person can sign in again
-
-#### Scenario: shared-auth-users-SC-10 - A caller who cannot ban is refused
-
-- **GIVEN** a signed-in operator who does not hold `user:ban`
-- **WHEN** they try to ban an account
-- **THEN** the system refuses the request
-- **AND** the account remains unbanned
-
-#### Scenario: shared-auth-users-SC-11 - An operator cannot ban themselves
-
-- **GIVEN** an operator who holds `user:ban`
-- **WHEN** they try to ban their own account
-- **THEN** the system refuses the request
-- **AND** their account remains unbanned
-
-#### Scenario: shared-auth-users-SC-12 - Support cannot ban an admin
-
-- **GIVEN** a person whose operator role is `support`
-- **WHEN** they try to ban an account that holds `admin`
-- **THEN** the system refuses the request
-- **AND** the account remains unbanned
-
-#### Scenario: shared-auth-users-SC-13 - The last admin cannot be banned
-
-- **GIVEN** the only account that holds `admin`
-- **WHEN** an operator who can ban tries to ban it
-- **THEN** the system refuses the request
-- **AND** the account remains unbanned
-
 #### Scenario: shared-auth-users-SC-25 - An admin cannot ban another admin
 
 - **GIVEN** an operator who holds `admin` and `user:ban`
@@ -204,36 +141,11 @@ account still holds `admin`. The last remaining `admin` SHALL NOT have `admin`
 removed, by self or by another caller. A caller without the grant SHALL be
 refused, and the roles SHALL be unchanged.
 
-#### Scenario: shared-auth-users-SC-14 - Admin changes another person's roles
-
-- **GIVEN** an operator who holds `user:set-role`
-- **WHEN** they set another account to `staff`
-- **THEN** that account's roles include `staff`
-
-#### Scenario: shared-auth-users-SC-15 - Clearing operator roles leaves a user
-
-- **GIVEN** an operator who can set roles
-- **WHEN** they save another account with no operator role selected
-- **THEN** that account's roles are `user` only
-
-#### Scenario: shared-auth-users-SC-16 - Support cannot set roles
-
-- **GIVEN** an operator who holds `user:ban` but not `user:set-role`
-- **WHEN** they try to change another account's roles
-- **THEN** the system refuses the request
-- **AND** the roles are unchanged
-
 #### Scenario: shared-auth-users-SC-17 - An operator may change their own roles
 
 - **GIVEN** an operator who holds `user:set-role` and `admin`
 - **WHEN** they save their own account with `staff` and still with `admin`
 - **THEN** their account's roles include `staff` and `admin`
-
-#### Scenario: shared-auth-users-SC-18 - The last admin keeps admin
-
-- **GIVEN** the only account that holds `admin`
-- **WHEN** that admin or another operator who can set roles saves it without `admin`
-- **THEN** that account still holds `admin`
 
 #### Scenario: shared-auth-users-SC-26 - An admin cannot remove admin from another admin
 

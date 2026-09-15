@@ -37,8 +37,9 @@ Signed in as admin(holds `user:list`). Directory lists <account with identity, g
 
 **Expected Results:**
 
-* Panel shows who the account is, its grants, its standing, and its sessions from what the console supplied.
+* Panel shows who the account is, its actions, its grants, its timeline, and its sessions from what the console supplied.
 * The directory list remains visible beside the panel.
+* Role names in the list are not links.
 
 ### shared-console-user-directory-US4-TC2-1: Session detail and ban reason show when supplied
 
@@ -61,16 +62,16 @@ Signed in as admin(holds `user:list`). Directory lists <banned account with reas
 **Steps:**
 
 1. Navigate to <grade10 admin users url>.
-2. Open <banned account with reason> and check standing and sessions.
-3. Open <banned account without reason> and check standing.
+2. Open <banned account with reason> and check standing, timeline, and sessions.
+3. Open <banned account without reason> and check standing and timeline.
 
 **Expected Results:**
 
-* First panel shows the ban reason and the session's origin and expiry as supplied.
-* Second panel shows banned with no reason.
+* First panel shows the ban reason, the joined milestone, the banned milestone without an invented time, and the session's origin and expiry as supplied.
+* Second panel shows banned with no reason and the joined milestone.
 * No authenticating secret is shown.
 
-### shared-console-user-directory-US4-TC3-1: Grant rows, linked grant, and empty grants
+### shared-console-user-directory-US4-TC3-1: Grant rows, elevated mark, and empty grants
 
 **Classification:**
 
@@ -86,19 +87,19 @@ Signed in as admin(holds `user:list`). Directory lists <banned account with reas
 * **Trace:** shared-console-user-directory-US-04
 
 **Pre-conditions:**
-Signed in as admin(holds `user:list`). Directory lists <account with elevated and plain grants, one grant address supplied> and <account with no grants>.
+Signed in as admin(holds `user:list`). Directory lists <account with elevated and plain grants> and <account with no grants>.
 
 **Steps:**
 
 1. Navigate to <grade10 admin users url>.
-2. Open <account with elevated and plain grants, one grant address supplied>.
-3. Activate the grant that has an address.
+2. Open <account with elevated and plain grants>.
+3. Check the grant labels.
 4. Open <account with no grants>.
 
 **Expected Results:**
 
-* Step 2 shows each grant label; elevated grants are distinguishable.
-* Step 3 uses the supplied address; a grant without an address is not a link.
+* Step 2 shows each grant label; the elevated mark appears at most once for the account.
+* Step 3: no grant label is a link.
 * Step 4 says the account holds no grants.
 
 ---

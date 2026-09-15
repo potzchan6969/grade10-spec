@@ -34,16 +34,16 @@ Signed in as admin(holds `user:list` and `user:set-role`). Directory holds <supp
 1. Navigate to <grade10 admin users url>.
 2. Narrow to accounts that hold `admin`.
 3. Note the stated count.
-4. Narrow to banned accounts that hold no operator role.
+4. Narrow to banned accounts under Users.
 5. Open <support account> and check its grants.
-6. Open one grant from the panel.
+6. Open `support` from the account's identity.
 
 **Expected Results:**
 
 * Step 2 lists only `admin` accounts; step 3 states how many.
-* Step 4 lists only banned accounts with no operator role.
-* Step 5 shows exactly the grants the mapping gives `support`, elevated ones marked.
-* Step 6 opens Roles & Permissions on that grant.
+* Step 4 lists only banned accounts with no elevated role.
+* Step 5 shows exactly the grants the mapping gives `support`, elevated ones marked once.
+* Step 6 opens Roles & Permissions on that role.
 
 ### grade10-admin-console-user-directory-US1-TC2-1: Ungranted moves are not offered
 
@@ -130,15 +130,15 @@ Signed in as admin(holds `user:list`). Directory holds <known account>.
 * **Trace:** grade10-admin-console-user-directory-US-02
 
 **Pre-conditions:**
-Signed in as admin(holds `user:list` and may read the audit trail). Directory lists <customer account with no operator role> and <operator account>.
+Signed in as admin(holds `user:list` and may read the audit trail). Directory lists <customer account with no elevated role> and <elevated account>.
 
 **Steps:**
 
 1. Navigate to <grade10 admin users url>.
-2. Open <customer account with no operator role>.
-3. Open <operator account>.
+2. Open <customer account with no elevated role>.
+3. Open <elevated account>.
 
 **Expected Results:**
 
-* Step 2 panel offers that person's loyalty record and what the account has done.
-* Step 3 panel offers what the account has done and does not offer a loyalty record.
+* Step 2 panel offers that person's loyalty record and what the account has done among its actions, ahead of ban, unban, or erase.
+* Step 3 panel offers what the account has done among its actions and does not offer a loyalty record.

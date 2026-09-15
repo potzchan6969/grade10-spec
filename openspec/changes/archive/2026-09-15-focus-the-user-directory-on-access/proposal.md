@@ -27,8 +27,10 @@ person on this ticket* from the directory alone.
   the two link rather than merge.
 - **Search matches a person** — name as well as email, without letter case,
   alongside opening an account by user id.
-- **The directory narrows** — by role, by standing, and by whether the email is
-  verified, with the operator choosing the order the accounts come back in.
+- **The directory narrows** — by elevated or user population, by a named
+  elevated role, by status, and by whether the email is verified, with Users
+  opening on elevated accounts and the operator choosing the order the
+  accounts come back in.
 - **An account opens beside the list** — one panel carrying identity, the grants
   the account actually holds with elevated ones marked, standing with the reason
   it was set, and each session with where it was raised. Roles are changed in
@@ -41,9 +43,14 @@ person on this ticket* from the directory alone.
   a page position survive being pasted to a colleague.
 - **The panel reaches the rest of the person** — the loyalty record when the
   account is a customer, and what the account has done.
+- **A search miss offers the other Type** — the query stays; ban and unban are
+  not offered while erasure is filed.
+- **Peer admin lockout refused** — an operator cannot ban an account that holds
+  `admin`, and cannot strip `admin` from another admin, peers included.
 
 New component exports: `UserAccountPanel` and `UserDirectoryFilters`, with
-`UserAccountPanelProps`, `UserAccountPanelCopy`, `UserDirectoryFiltersProps`,
+`UserAccountPanelProps`, `UserAccountPanelCopy`, `UserAccountRelatedLink`,
+`UserAccountTimeline`, `UserTimelineEvent`, `UserDirectoryFiltersProps`,
 `UserDirectoryFiltersCopy`, `UserFilterOption`, `UserFilterGroup`,
 `UserGrantRow`, and `UserDirectoryOrder`. None of them exist yet. The roles
 dialog and the sessions dialog stay exported, so a console that renders no
@@ -75,7 +82,8 @@ starts that capability at `-SC-14` and `-US-04`; neither set moves.
 ### Modified Capabilities
 
 - `shared/auth/users`: search matches name as well as email, the caller may
-  narrow the directory and choose its order.
+  narrow the directory and choose its order; peer ban and peer demote of
+  `admin` are refused.
 - `shared/console/user-directory`: the export set gains the panel and the
   filters; sessions, ban and unban become handler-gated; the panel, the grant
   rows, the session detail, and the filter vocabulary are new requirements.

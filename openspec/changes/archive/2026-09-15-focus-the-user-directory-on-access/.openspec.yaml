@@ -2,3 +2,5 @@ schema: grade10-planning
 created: 2026-09-11
 promoted_by: "@rita-liu"
 page_waived: "predates the page rule"
+deployed_at: "8f99d1072"
+deployed_env: "staging"

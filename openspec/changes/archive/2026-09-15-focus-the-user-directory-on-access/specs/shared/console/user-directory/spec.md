@@ -1,18 +1,25 @@
 ## Feature set
 
 - One account, open beside the list
-  - Account panel: identity, grants, standing and sessions in one place, so an account is read whole
+  - Account panel: identity and actions, roles and grants, and timeline with sessions — each area only when the console supplies it
   - Roles in the panel: the selection is changed where the account is read, under the roles dialog's contract
   - Confirmations stay dialogs: a move that cannot be undone is reported, never confirmed in the panel
 - What an account can do
-  - Grant rows: the grants the console resolved, elevated ones marked, each optionally addressable
+  - Grant rows: the grants the console resolved, elevated ones marked once for the account
+  - Actions together: hand-offs and standing moves the console offered, hand-offs before ban, unban, or erase
   - Standing with its reason: a banned account shows why, when the console supplies it
+  - Timeline: when the account joined, and that it is banned when it is, without inventing a time the console did not supply
   - Session detail: where a session was raised and when it ends, never what authenticates it
 - Narrowing and order
-  - Consumer-offered filters: the narrowing choices are the console's vocabulary, never the component's
+  - Fixed filter shape: Type, Roles, Status and Email — labels and option words from the consumer; no role vocabulary inside the component
+  - Exclusive Type: Elevated or Users; Roles is choosable only for Elevated
+  - Any on Status and Email: choosing Any reports that narrowing as cleared
   - Reported order: the table marks the columns that order the list and reports the choice; the console applies it
 - Permitted moves only
   - Every move gated: sessions, ban and unban join roles and delete in appearing only with a handler
+- Role names
+  - Plain in the list: the table's Roles cell is never a link
+  - Linked on the account: a role name on identity may open the address the console supplied for that role
 
 ## MODIFIED Requirements
 
@@ -25,7 +32,8 @@ components for the user directory surface: `UserTable`, `UserRolesDialog`,
 `UserTableCopy`, `UserRolesDialogProps`, `UserRolesDialogCopy`,
 `UserModerationDialogProps`, `UserModerationDialogCopy`,
 `UserModerationTone`, `UserSessionsDialogProps`, `UserSessionsDialogCopy`,
-`UserAccountPanelProps`, `UserAccountPanelCopy`, `UserDirectoryFiltersProps`,
+`UserAccountPanelProps`, `UserAccountPanelCopy`, `UserAccountRelatedLink`,
+`UserAccountTimeline`, `UserTimelineEvent`, `UserDirectoryFiltersProps`,
 `UserDirectoryFiltersCopy`, `UserDirectoryRow`, `UserRoleOption`,
 `UserSessionRow`, `UserFilterGroup`, `UserFilterOption`, `UserGrantRow`, and
 `UserDirectoryOrder`.
@@ -100,34 +108,74 @@ consumer already in words, each rendered when supplied and omitted when not.
 - **THEN** both are shown as the consumer supplied them
 - **AND THEN** a session supplied with neither shows its identifier alone
 
+### Requirement: A role chip may link to that role's grants page
+
+When the console supplies a per-role address, `UserAccountPanel` SHALL render
+each matching role name on the account's identity as a link to that address.
+`UserTable` SHALL show role names without links, so opening a row always opens
+the account and never navigates away. When the console supplies no per-role
+address, identity role names SHALL render without links.
+
+#### Scenario: shared-console-user-directory-SC-11 - A role name on the account opens its address
+
+- **GIVEN** a console that supplies an address for `staff` on an account that holds it
+- **WHEN** the operator activates the `staff` name on the account's identity
+- **THEN** navigation uses the address supplied for `staff`
+
+#### Scenario: shared-console-user-directory-SC-12 - The directory's Roles cell is never a link
+
+- **GIVEN** a console that supplies per-role addresses
+- **WHEN** the table renders a row that holds those roles
+- **THEN** each role name is shown
+- **AND THEN** none of those names is a link
+
+#### Scenario: shared-console-user-directory-SC-13 - Roles without addresses stay plain
+
+- **GIVEN** a console that supplies no per-role addresses
+- **WHEN** the panel renders identity roles
+- **THEN** each role name is shown
+- **AND** none of those names is a link
+
 ## ADDED Requirements
 
 ### Requirement: An account opens beside the directory
 
-`UserAccountPanel` SHALL render one account in four sections, in this order:
-who the account is, the grants it holds, its standing, and its sessions.
-Whether the panel is open, which account it holds, and every value it renders
-SHALL arrive as props; it SHALL NOT fetch, navigate, or decide which account
-is open. It SHALL report closing through a callback, and SHALL omit a section
-the consumer supplied nothing for.
+`UserAccountPanel` SHALL render one account under these areas, each only when
+the console supplies it: who the account is and the actions offered for it;
+the roles and grants it holds; the account's timeline milestones and its
+sessions. Whether the panel is open, which account it holds, and every value
+it renders SHALL arrive as props; it SHALL NOT fetch, navigate, or decide
+which account is open. It SHALL report closing through a callback.
+
+Actions SHALL gather the hand-offs and standing moves the console offered —
+audit, loyalty, and the like before ban, unban, or erase — and SHALL NOT
+confirm a move that cannot be undone: ban, unban and delete are reported to
+the console, which confirms them in `UserModerationDialog`.
 
 The panel SHALL offer changing the account's roles, submitting the selection
 under the same contract as `UserRolesDialog` — ordered as the options were
-offered, and an empty selection as an empty list. It SHALL NOT confirm a move
-that cannot be undone: ban, unban and delete are reported to the console,
-which confirms them in `UserModerationDialog`.
+offered, and an empty selection as an empty list. When the console marks the
+account's roles as blocked, the panel SHALL show that mark and SHALL NOT
+offer changing roles.
 
 #### Scenario: shared-console-user-directory-SC-17 - An operator reads one account whole
 
 - **WHEN** a console renders the panel for an account
-- **THEN** who the account is, the grants it holds, its standing, and its sessions each render from what the console supplied
-- **AND THEN** a section the console supplied nothing for is not rendered
+- **THEN** who the account is, its actions, the grants it holds, its timeline, and its sessions each render from what the console supplied
+- **AND THEN** an area the console supplied nothing for is not rendered
 
 #### Scenario: shared-console-user-directory-SC-18 - Roles are saved from the panel
 
 - **WHEN** an operator changes which roles are selected in the panel and saves
 - **THEN** the submitted list holds the selected roles in the order the options were offered
 - **AND THEN** an operator who selected none submits an empty list
+
+#### Scenario: shared-console-user-directory-SC-29 - Roles stay blocked when the console marks them
+
+- **GIVEN** a console that marks the account's roles as blocked
+- **WHEN** the panel renders
+- **THEN** it shows that mark
+- **AND THEN** it does not offer changing roles
 
 #### Scenario: shared-console-user-directory-SC-19 - A ban started in the panel is confirmed outside it
 
@@ -140,27 +188,28 @@ which confirms them in `UserModerationDialog`.
 The panel SHALL render the grants an account holds from rows the consumer
 supplies, each carrying the fields below. It SHALL NOT derive a grant from a
 role, name a grant of its own, or decide which grant is elevated. A row marked
-elevated SHALL be distinguishable from one that is not.
+elevated SHALL be distinguishable from one that is not. When any grant is
+elevated, that mark SHALL appear once for the account rather than once per
+grant. A grant row SHALL NOT be a link; where the console offers a hand-off
+into Roles & Permissions, it does so through a role name on identity.
 
 | Field | Meaning |
 | --- | --- |
 | Id | What the console's identity system calls the grant |
 | Label | What the console shows for it |
 | Elevated | Whether the console marks it elevated |
-| Address | Optional; where the console sends an operator who opens it |
 
 #### Scenario: shared-console-user-directory-SC-20 - The grants an account holds are shown
 
 - **WHEN** the panel renders the grant rows a console supplied
 - **THEN** each is shown with the label that console gave it
 - **AND THEN** a row the console marked elevated is distinguishable from one it did not
+- **AND THEN** the elevated mark appears at most once for the account
 
-#### Scenario: shared-console-user-directory-SC-21 - A grant with an address opens it
+#### Scenario: shared-console-user-directory-SC-21 - A grant is not a link
 
-- **GIVEN** a grant row the console supplied with an address, and one it supplied without
-- **WHEN** the panel renders both
-- **THEN** activating the first uses the address the console supplied
-- **AND THEN** the second is shown without being a link
+- **WHEN** the panel renders grant rows
+- **THEN** none of those grant labels is a link
 
 #### Scenario: shared-console-user-directory-SC-22 - An account holds no grants
 
@@ -168,27 +217,51 @@ elevated SHALL be distinguishable from one that is not.
 - **THEN** it says the account holds none
 - **AND THEN** it names no grant of its own
 
-### Requirement: The directory narrows by what the console offers
+### Requirement: The account's timeline is shown with its sessions
 
-`UserDirectoryFilters` SHALL render the narrowing choices from groups the
-consumer supplies — each group an id, a label, and its options; each option an
-id and a label — and SHALL NOT name a role, a standing, or any other value of
-its own. It SHALL report the selection through a callback, holding the groups
-in the order they were offered, and SHALL report a group an operator cleared
-as having nothing selected.
+Where the panel shows activity, it SHALL render the timeline milestones the
+consumer supplied — each a label, and optionally when it happened and a
+detail — before the sessions list when both are supplied. It SHALL NOT invent
+a time or a milestone the consumer did not supply. A milestone without a time
+SHALL still render its label (and detail when supplied).
 
-#### Scenario: shared-console-user-directory-SC-23 - A console offers its own narrowing choices
+#### Scenario: shared-console-user-directory-SC-27 - Timeline milestones are shown as supplied
 
-- **WHEN** a console renders the filters with the groups its identity system defines
-- **THEN** each group is offered with the label and options that console supplied
-- **AND THEN** no group and no option the console did not supply is offered
+- **GIVEN** a console that supplies a joined milestone with a time, and a banned milestone with a reason and no time
+- **WHEN** the panel renders activity for that account
+- **THEN** both milestones are shown with the labels and detail the console supplied
+- **AND THEN** the banned milestone shows no invented time
 
-#### Scenario: shared-console-user-directory-SC-24 - An operator clears a choice
+### Requirement: The directory narrows by Type, Roles, Status and Email
 
-- **GIVEN** an operator who has narrowed the directory by one group
-- **WHEN** they clear that group
-- **THEN** the reported selection holds nothing for it
-- **AND THEN** the other groups' selections are unchanged
+`UserDirectoryFilters` SHALL offer Type, Roles, Status and Email as single
+choices. It SHALL take its visible labels and option words from the consumer,
+and SHALL NOT invent a role name, a status, or an email state of its own.
+Type SHALL be Elevated or Users. When Type is Users, Roles SHALL show the
+consumer's user label and SHALL NOT be choosable. When Type is Elevated, Roles
+SHALL offer the consumer's any-elevated option plus each elevated role option
+the consumer supplied. Status and Email SHALL each offer an Any choice that
+reports that narrowing as cleared, plus the options the consumer supplied.
+
+#### Scenario: shared-console-user-directory-SC-23 - A console supplies the filter words
+
+- **WHEN** a console renders the filters with its Type, Roles, Status and Email copy and options
+- **THEN** each control uses the labels and options that console supplied
+- **AND THEN** no option that console did not supply is offered
+
+#### Scenario: shared-console-user-directory-SC-24 - An operator clears Status or Email
+
+- **GIVEN** an operator who has narrowed Status or Email away from Any
+- **WHEN** they choose Any on that control
+- **THEN** the reported selection for it is cleared
+- **AND THEN** the other controls' selections are unchanged
+
+#### Scenario: shared-console-user-directory-SC-28 - Roles is locked under Users
+
+- **GIVEN** Type set to Users
+- **WHEN** the filters render
+- **THEN** Roles shows the consumer's user label
+- **AND THEN** Roles is not choosable
 
 ### Requirement: The operator chooses the order and the console applies it
 
@@ -205,14 +278,17 @@ report an operator's change to it. It SHALL NOT reorder the rows it was given.
 
 ### Requirement: An account's standing shows why it was set
 
-Where `UserTable` and `UserAccountPanel` show an account's standing, they SHALL
-render the reason the consumer supplied with it, and SHALL show the standing
-alone when the consumer supplied none. Neither SHALL supply a reason of its
-own.
+`UserAccountPanel` SHALL render the ban reason the consumer supplied with the
+account's standing, and SHALL show the standing alone when the consumer
+supplied none. `UserTable` SHALL show banned or erasing standing on the row
+without the ban reason, so the row stays one line. Neither SHALL supply a
+reason of its own. When the consumer marks a row as erasing, the table SHALL
+show that standing and SHALL NOT offer unban for that row.
 
 #### Scenario: shared-console-user-directory-SC-26 - A banned account says why
 
 - **GIVEN** one banned account the console supplied a reason for, and one it did not
-- **WHEN** both render
+- **WHEN** both render in the panel
 - **THEN** the first shows the reason the console supplied
 - **AND THEN** the second shows that it is banned and no reason
+- **AND THEN** the table's Status cell for a banned row shows banned without that reason
