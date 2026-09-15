@@ -1,4 +1,4 @@
-## 1. Manual (grade10-spec)
+## 1. Manual (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Mark Product Tile with what Add to cart does for a collector with no session: sign-in opens, the tile gains nothing, and the add completes after a sign-in taken on the listing
 - [ ] 1.2 Mark Buy with the same outcome on the product page
