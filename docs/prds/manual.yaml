@@ -44,6 +44,7 @@ platform:
     - edge-cache
     - shared/frontend-composition
     - shared/backend-service-repository
+    - favicon
   Services:
     - auction-service
     - vault-custody
