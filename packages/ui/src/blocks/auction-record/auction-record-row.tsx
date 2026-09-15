@@ -37,6 +37,8 @@ const STATE_VARIANT: Record<
   bid_submitted: "info",
   bid_not_accepted: "error",
   awaiting_payment: "warning",
+  awaiting_address: "warning",
+  preparing_invoice: "info",
   payment_problem: "error",
   paid: "success",
   shipped: "info",

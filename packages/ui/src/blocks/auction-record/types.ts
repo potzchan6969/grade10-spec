@@ -10,6 +10,8 @@ export type AuctionRecordRowState =
   | "bid_submitted"
   | "bid_not_accepted"
   | "awaiting_payment"
+  | "awaiting_address"
+  | "preparing_invoice"
   | "payment_problem"
   | "paid"
   | "shipped"

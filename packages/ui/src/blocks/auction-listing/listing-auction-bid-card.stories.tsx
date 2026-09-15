@@ -17,10 +17,10 @@ const COPY = {
   recentBids: "Recent Bids",
   bidHistory: { you: "You", empty: "No bids yet" },
   auctionWon: "Auction won",
-  completePurchase: "Confirm shipping and payment",
+  completePurchase: "Confirm delivery address",
   completePurchaseBody:
-    "Choose where we ship and how you pay. You cannot pay until both are confirmed.",
-  completePurchaseAction: "Continue",
+    "Confirm where we ship this lot. Grade10 prepares the invoice next — nothing is due yet.",
+  completePurchaseAction: "Confirm address",
   paid: "Paid",
   paidBody: "Track shipping and delivery for this lot.",
   viewOrderDetails: "View order details",

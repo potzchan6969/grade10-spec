@@ -11,8 +11,13 @@ import { AuctionRecord } from "./auction-record";
 import {
   AUCTION_RECORD_COPY,
   BIDDING_CHARIZARD,
+  BIDDING_DIDNT_WIN_HOLD_RELEASING,
   BIDDING_ENDED,
   BIDDING_POSTER,
+  BIDDING_WON_AWAITING_ADDRESS,
+  BIDDING_WON_PENDING_PAYMENT,
+  BIDDING_WON_PREPARING_INVOICE,
+  BIDDING_WON_PROCESSING,
   biddingItem,
   WATCHING_CAMERA,
   WATCHING_ENDED,
@@ -230,7 +235,6 @@ export const Ended: Story = {
     <MyAuctions bidding={[BIDDING_ENDED]} watching={[WATCHING_ENDED]} />
   ),
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     await auctionRecordSettled(canvasElement);
 
     const rows = canvasElement.querySelectorAll(
@@ -263,6 +267,44 @@ export const Ended: Story = {
     expect(
       watchRow.getByRole("button", { name: "Unwatch this lot" }),
     ).toBeVisible();
+  },
+};
+
+/**
+ * Address-first post-auction standing on Won rows, plus Didn't win hold copy
+ * and watch-only Ended. Read-only — opens the order / listing; no pay control.
+ */
+export const PostAuctionStanding: Story = {
+  name: "Post-auction standing",
+  render: () => (
+    <MyAuctions
+      bidding={[
+        BIDDING_WON_AWAITING_ADDRESS,
+        BIDDING_WON_PREPARING_INVOICE,
+        BIDDING_WON_PENDING_PAYMENT,
+        BIDDING_WON_PROCESSING,
+        BIDDING_DIDNT_WIN_HOLD_RELEASING,
+        BIDDING_ENDED,
+      ]}
+      watching={[WATCHING_ENDED]}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await auctionRecordSettled(canvasElement);
+
+    expect(canvas.getByText("7")).toBeVisible();
+    expect(canvas.getByText("Awaiting Address")).toBeVisible();
+    expect(canvas.getByText("Preparing Invoice")).toBeVisible();
+    expect(canvas.getByText("Pending Payment")).toBeVisible();
+    expect(canvas.getByText("Processing")).toBeVisible();
+    expect(canvas.getByText("Confirm delivery address")).toBeVisible();
+    expect(canvas.getByText("Card hold being released")).toBeVisible();
+    expect(canvas.getAllByText("Didn't win")).toHaveLength(2);
+    expect(canvas.getByText("Ended")).toBeVisible();
+    expect(
+      canvas.queryByRole("button", { name: /pay/i }),
+    ).not.toBeInTheDocument();
   },
 };
 

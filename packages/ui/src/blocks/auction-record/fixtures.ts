@@ -161,12 +161,72 @@ const BIDDING_ENDED = biddingItem({
   href: "#lot-wax-pack",
 });
 
+/** Won — address-first standing vocabulary (revise-auction-winner-invoicing). */
+const BIDDING_WON_AWAITING_ADDRESS = biddingItem({
+  id: "won-awaiting-address",
+  title: "1999 Base Set Charizard PSA 9",
+  state: "awaiting_address",
+  stateLabel: "Awaiting Address",
+  currentBid: "HK$12,800",
+  closesAt: "Ended 17 Sep 2026, 21:30 HKT",
+  href: "#order-charizard",
+  detail: "Confirm delivery address",
+});
+
+const BIDDING_WON_PREPARING_INVOICE = biddingItem({
+  id: "won-preparing-invoice",
+  title: "1998 Neo Genesis Lugia PSA 10",
+  state: "preparing_invoice",
+  stateLabel: "Preparing Invoice",
+  currentBid: "HK$9,400",
+  closesAt: "Ended 16 Sep 2026, 20:00 HKT",
+  href: "#order-lugia",
+  detail: "Address confirmed — invoice coming",
+});
+
+const BIDDING_WON_PENDING_PAYMENT = biddingItem({
+  id: "won-pending-payment",
+  title: "2000 Skyridge Crystal Charizard PSA 9",
+  state: "pending_payment",
+  stateLabel: "Pending Payment",
+  currentBid: "HK$21,500",
+  closesAt: "Pay by 24 Sep 2026, 12:00 HKT",
+  href: "#order-skyridge",
+  detail: "Order total HK$24,180",
+});
+
+const BIDDING_WON_PROCESSING = biddingItem({
+  id: "won-processing",
+  title: "1999 Fossil Dragonite Holo PSA 9",
+  state: "processing",
+  stateLabel: "Processing",
+  currentBid: "HK$4,200",
+  closesAt: "Paid 18 Sep 2026",
+  href: "#order-dragonite",
+});
+
+const BIDDING_DIDNT_WIN_HOLD_RELEASING = biddingItem({
+  id: "didnt-win-releasing",
+  title: "1999 Jungle Flareon Holo PSA 8",
+  state: "hold_releasing",
+  stateLabel: "Didn't win",
+  currentBid: "HK$1,850",
+  closesAt: "Ended 15 Sep 2026, 19:00 HKT",
+  href: "#lot-flareon",
+  detail: "Card hold being released",
+});
+
 export {
   AUCTION_RECORD_COPY,
   BIDDING_CHARIZARD,
+  BIDDING_DIDNT_WIN_HOLD_RELEASING,
   BIDDING_EMAIL_ALERTS_COPY,
   BIDDING_ENDED,
   BIDDING_POSTER,
+  BIDDING_WON_AWAITING_ADDRESS,
+  BIDDING_WON_PENDING_PAYMENT,
+  BIDDING_WON_PREPARING_INVOICE,
+  BIDDING_WON_PROCESSING,
   biddingItem,
   EMAIL_ALERTS_COPY,
   IMAGE,
