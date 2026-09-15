@@ -80,7 +80,6 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         body: "Confirm where we ship this lot. Grade10 uses the address to calculate the shipping fee on the invoice — nothing is due yet.",
         addressLabel: "Delivery address",
         addressValue: null,
-        addressHint: "Choose a saved address or add one, then confirm.",
         invoiceLines: null,
         primaryCta: "Confirm delivery address",
         overdue: false,

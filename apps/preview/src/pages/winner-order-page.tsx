@@ -340,25 +340,21 @@ function AddressBlock({
         {content.addressLabel}
       </h3>
       {content.addressValue ? (
-        <Text className="whitespace-pre-line text-foreground" size="sm">
-          {content.addressValue}
-        </Text>
-      ) : (
-        <Text size="sm" tone="secondary">
-          No address confirmed yet.
-        </Text>
-      )}
-      {content.addressHint ? (
-        <Text size="xs" tone="secondary">
-          {content.addressHint}
-        </Text>
+        <>
+          <Text className="whitespace-pre-line text-foreground" size="sm">
+            {content.addressValue}
+          </Text>
+          {content.addressHint ? (
+            <Text size="xs" tone="secondary">
+              {content.addressHint}
+            </Text>
+          ) : null}
+        </>
       ) : null}
       {confirmCta && onConfirmAddress ? (
-        <div className="w-full pt-1">
-          <Button className="w-full" onClick={onConfirmAddress} size="lg">
-            {confirmCta}
-          </Button>
-        </div>
+        <Button className="w-full" onClick={onConfirmAddress} size="md">
+          {confirmCta}
+        </Button>
       ) : null}
     </VStack>
   );

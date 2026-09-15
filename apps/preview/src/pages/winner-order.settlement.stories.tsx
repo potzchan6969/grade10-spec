@@ -35,8 +35,11 @@ export const AwaitingAddress: Story = {
     expect(
       canvas.getByRole("button", { name: "Confirm delivery address" }),
     ).toBeVisible();
-    expect(canvas.getByText("No address confirmed yet.")).toBeVisible();
     expect(canvas.getByText("Delivery address")).toBeVisible();
+    expect(canvas.queryByText(/No address confirmed/i)).not.toBeInTheDocument();
+    expect(
+      canvas.queryByText(/choose a saved address/i),
+    ).not.toBeInTheDocument();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getByText(/^Winning bid:/)).toBeVisible();
