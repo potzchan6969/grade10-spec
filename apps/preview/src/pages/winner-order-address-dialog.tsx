@@ -2,9 +2,8 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
-import { Label } from "@grade10/design-system/components/forms/label";
+import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
-import { RadioListItem } from "@grade10/design-system/components/forms/radio-list-item";
 import {
   Select,
   SelectContent,
@@ -25,7 +24,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
-import { cn } from "@grade10/design-system/lib/utils";
 import { Trash } from "@phosphor-icons/react";
 import { useEffect, useId, useState } from "react";
 
@@ -52,13 +50,23 @@ export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
   ] as const;
 
 const COUNTRY_OPTIONS = [
+  "Australia",
+  "Canada",
+  "China",
   "Hong Kong",
   "Japan",
+  "Macau",
+  "Malaysia",
   "Singapore",
+  "South Korea",
   "Taiwan",
-  "United States",
   "United Kingdom",
+  "United States",
 ] as const;
+
+const COUNTRY_ITEMS: Record<string, string> = Object.fromEntries(
+  COUNTRY_OPTIONS.map((country) => [country, country]),
+);
 
 const DRAFT_VALUE = "use_this_address";
 
@@ -260,39 +268,9 @@ function WinnerOrderAddressDialog({
                   className="flex w-full flex-col gap-2"
                   data-slot="address-option-cards"
                 >
-                  {addresses.map((address) => {
-                    const selected = selection === address.id;
-                    return (
-                      <div
-                        className={cn(
-                          "flex w-full items-start gap-2 rounded-xl border p-3 transition-colors",
-                          selected
-                            ? "border-primary bg-muted/40"
-                            : "border-border bg-card",
-                        )}
-                        data-selected={selected || undefined}
-                        key={address.id}
-                      >
-                        <RadioListItem
-                          className="min-w-0 flex-1 items-start"
-                          value={address.id}
-                        >
-                          <VStack
-                            className="min-w-0 flex-1"
-                            gap="xs"
-                            hAlign="start"
-                          >
-                            <Text size="sm" weight="medium">
-                              {address.label}
-                            </Text>
-                            <Text
-                              className="whitespace-pre-line text-secondary-foreground"
-                              size="xs"
-                            >
-                              {address.lines}
-                            </Text>
-                          </VStack>
-                        </RadioListItem>
+                  {addresses.map((address) => (
+                    <RadioCard
+                      action={
                         <IconButton
                           aria-label={`Remove ${address.label}`}
                           onClick={(event) => {
@@ -306,42 +284,20 @@ function WinnerOrderAddressDialog({
                         >
                           <Trash aria-hidden />
                         </IconButton>
-                      </div>
-                    );
-                  })}
+                      }
+                      description={address.lines}
+                      key={address.id}
+                      title={address.label}
+                      value={address.id}
+                    />
+                  ))}
 
                   {draftOption ? (
-                    <div
-                      className={cn(
-                        "flex w-full items-start gap-2 rounded-xl border p-3 transition-colors",
-                        selection === DRAFT_VALUE
-                          ? "border-primary bg-muted/40"
-                          : "border-border bg-card",
-                      )}
-                      data-selected={selection === DRAFT_VALUE || undefined}
-                      data-slot="use-this-address-card"
-                    >
-                      <RadioListItem
-                        className="min-w-0 flex-1 items-start"
-                        value={DRAFT_VALUE}
-                      >
-                        <VStack
-                          className="min-w-0 flex-1"
-                          gap="xs"
-                          hAlign="start"
-                        >
-                          <Text size="sm" weight="medium">
-                            {draftOption.label}
-                          </Text>
-                          <Text
-                            className="whitespace-pre-line text-secondary-foreground"
-                            size="xs"
-                          >
-                            {draftOption.lines}
-                          </Text>
-                        </VStack>
-                      </RadioListItem>
-                    </div>
+                    <RadioCard
+                      description={draftOption.lines}
+                      title={draftOption.label}
+                      value={DRAFT_VALUE}
+                    />
                   ) : null}
                 </div>
               </RadioList>
@@ -452,10 +408,10 @@ function WinnerOrderAddressDialog({
                 <TextInput
                   autoComplete="address-level1"
                   label="State"
-                  message="Optional"
                   onChange={(event) =>
                     patchDraft("state", event.currentTarget.value)
                   }
+                  placeholder="Optional"
                   value={draft.state}
                 />
               </div>
@@ -477,9 +433,16 @@ function WinnerOrderAddressDialog({
                   }
                   value={draft.postalCode}
                 />
-                <VStack className="w-full" gap="xs" hAlign="stretch">
-                  <Label htmlFor={countryId}>Country</Label>
+                {/* Label + message match InputShell; control is design-system Select. */}
+                <div className="flex w-full flex-col gap-2">
+                  <label
+                    className="text-sm font-medium text-secondary-foreground"
+                    htmlFor={countryId}
+                  >
+                    Country
+                  </label>
                   <Select
+                    items={COUNTRY_ITEMS}
                     onValueChange={(value) => {
                       if (typeof value === "string") {
                         patchDraft("country", value);
@@ -496,20 +459,24 @@ function WinnerOrderAddressDialog({
                     >
                       <SelectValue placeholder="Select a country" />
                     </SelectTrigger>
-                    <SelectContent className="z-[70]">
+                    <SelectContent>
                       {COUNTRY_OPTIONS.map((country) => (
-                        <SelectItem key={country} value={country}>
+                        <SelectItem
+                          key={country}
+                          label={country}
+                          value={country}
+                        >
                           {country}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                   {attempted && !draft.country.trim() ? (
-                    <Text size="xs" tone="secondary">
+                    <span className="text-xs text-secondary-foreground">
                       Choose a country.
-                    </Text>
+                    </span>
                   ) : null}
-                </VStack>
+                </div>
               </div>
 
               <CheckboxListInput
