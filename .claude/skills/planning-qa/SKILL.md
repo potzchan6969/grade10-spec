@@ -64,7 +64,7 @@ leaving the dispositions and the reasons. Beyond the change's life those ids are
 a leak: the next blind pass reads this file for id continuity.
 
 A `skip_specs` change is yours to spot-check too. Read its `## Why` and its
-reason string — nothing more. It is the one switch that turns the whole
+`skip_specs_why` — nothing more. It is the one switch that turns the whole
 cross-check off, and it is author-declared.
 
 ## Do not write a suite by hand

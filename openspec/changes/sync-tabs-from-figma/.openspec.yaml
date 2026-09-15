@@ -1,3 +1,4 @@
 schema: grade10-planning
 created: 2026-09-11
-skip_specs: "a design-system primitive realigned to its published Figma sets; the contract the specs state is unchanged"
+skip_specs: true
+skip_specs_why: "a design-system primitive realigned to its published Figma sets; the contract the specs state is unchanged"

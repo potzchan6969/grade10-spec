@@ -148,7 +148,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 
 - **Automatic** — when `/planning-pm` has the proposal, deltas and journeys through `openspec validate <change> --strict`, it runs `/spec-to-tcs <change>` at once: every case `draft`, on the same branch, as its own `test(<domain>): derive test cases for <capability>` commit. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
 - **`/spec-push` refuses** — a change whose capability has `user-journeys.md` and no `feature-tcs.md`; it runs `pnpm run tcs:validate` with the other checks
-- **`skip_specs: true`** — nothing to generate
+- **`skip_specs`** — nothing to generate
 - **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
 
 | Argument | Resolves to |

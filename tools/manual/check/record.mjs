@@ -60,7 +60,7 @@ export function checkUnmarked(ctx, changes, pages) {
         ctx.add(
           "hatch",
           fileOf(change, ".openspec.yaml"),
-          "`skip_specs` gives no reason — write the line that says why no behaviour moves, rather than `true`",
+          "`skip_specs` gives no reason — add `skip_specs_why` with the line that says why no behaviour moves",
         );
       }
     }

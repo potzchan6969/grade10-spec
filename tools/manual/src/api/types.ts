@@ -270,10 +270,11 @@ export type ChangeEntry = {
    * the in-flight and archived sets happens in derivation. */
   dependsOn?: string[];
   /** Why this change carries no spec delta at all, from `.openspec.yaml`
-   * `skip_specs:`. It is the one switch that turns the whole cross-check off —
-   * no journeys, no blind suite, no scenarios, no reconciliation — and it is
-   * author-declared, so it takes a reason. An empty string is the legacy
-   * `skip_specs: true`: declared, with no reason given. */
+   * `skip_specs_why:`. `skip_specs: true` is the one switch that turns the
+   * whole cross-check off — no journeys, no blind suite, no scenarios, no
+   * reconciliation — and it is author-declared, so it owes a reason beside it.
+   * An empty string is a switch thrown with no `skip_specs_why`: declared,
+   * with no reason given. */
   skipSpecs?: string;
   /** Why this change marks no capability page, from `.openspec.yaml`
    * `page_waived:` — the line that stands in for the 🚧 a change with deltas

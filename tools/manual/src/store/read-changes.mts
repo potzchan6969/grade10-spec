@@ -144,7 +144,7 @@ function readChange(
         const written = line(key, fields[key]);
         if (written) entry[field] = written;
       }
-      const skipped = skipSpecsOf(fields.skip_specs);
+      const skipped = skipSpecsOf(fields.skip_specs, fields.skip_specs_why);
       if (skipped !== undefined) entry.skipSpecs = skipped;
     } catch (cause) {
       fail(`${rel}/.openspec.yaml`, cause);
@@ -254,17 +254,22 @@ const RECORDED = [
   ["tasks_waived", "tasksWaived"],
 ] as const;
 
-/** `skip_specs` turns the whole cross-check off, so it is read on its own. It
- * takes a reason now; `true` is the shape every change written before that
- * carries, and reads as a reason nobody gave. */
-export function skipSpecsOf(value: unknown): string | undefined {
+/** `skip_specs` turns the whole cross-check off, so it is read on its own. The
+ * switch and its reason are two keys because the OpenSpec CLI owns
+ * `skip_specs` and reads it as a boolean: a reason written there invalidates
+ * the manifest and the marker stops being honoured at all. So `skip_specs:
+ * true` is the switch and `skip_specs_why` is the line the author owes. A
+ * switch with no reason reads as the empty string — declared, unexplained —
+ * which is what rule `hatch` refuses. */
+export function skipSpecsOf(value: unknown, why: unknown): string | undefined {
   if (value === undefined || value === null || value === false) return undefined;
-  if (value === true) return "";
-  if (typeof value !== "string") {
-    throw new StoreFileError(1, "`skip_specs` must be a line of text");
+  if (value !== true) {
+    throw new StoreFileError(
+      1,
+      "`skip_specs` must be `true`; the reason goes on `skip_specs_why`",
+    );
   }
-  const written = value.trim();
-  return written === "" ? "" : written;
+  return line("skip_specs_why", why) ?? "";
 }
 
 /** A written line, or nothing where the key is absent or blank. Anything but

@@ -115,7 +115,7 @@ That is how the work reaches an engineer. The application repository has no plan
 | --- | --- | --- | --- |
 | `schema` | The CLI, at `openspec new change` | Always | Every reader |
 | `created` | The CLI, at `openspec new change` | Always | The boards, for the planning age |
-| `skip_specs: "<why>"` | The author | A change altering no product behaviour | `openspec validate`, `pnpm check:manual` rule `hatch` |
+| `skip_specs: true` with `skip_specs_why: "<why>"` | The author | A change altering no product behaviour | `openspec validate`, `pnpm check:manual` rule `hatch` |
 | `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The boards |
 | `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
 | `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
@@ -130,18 +130,18 @@ That is how the work reaches an engineer. The application repository has no plan
 
 | Hatch | Who decides | Test |
 | --- | --- | --- |
-| `skip_specs: <why>` | The author | No spec delta exists at all |
+| `skip_specs: true` + `skip_specs_why: <why>` | The author | No spec delta exists at all |
 | `blind_pass_skipped` | The checker | A delta exists but carries no new behaviour |
 | `**Walked by:** nobody` | The author | Not a hatch — the capability's anchors route to its feature set, and it still owes a suite |
 
-`skip_specs` turns the entire planning cross-check off in one line: no journeys, no blind suite, no scenarios, no reconciliation. It is also the cheapest line in the manifest to write, and author-declared. The realistic failure is not dishonesty but an author who sincerely believes a refactor moves no behaviour and is wrong, which is a thing honour systems do not catch. Three guards, none of them new machinery: it takes a reason rather than `true`; a change carrying it cannot mark a 🚧 line, because 🚧 means an outcome a reader can see and claiming both is a contradiction; and QA reads the `## Why` and the reason of every change that claims it.
+`skip_specs` turns the entire planning cross-check off in one line: no journeys, no blind suite, no scenarios, no reconciliation. It is also the cheapest line in the manifest to write, and author-declared. The realistic failure is not dishonesty but an author who sincerely believes a refactor moves no behaviour and is wrong, which is a thing honour systems do not catch. Three guards, none of them new machinery: it owes a `skip_specs_why` beside it; a change carrying it cannot mark a 🚧 line, because 🚧 means an outcome a reader can see and claiming both is a contradiction; and QA reads the `## Why` and the reason of every change that claims it.
 
 `blind_pass_skipped` is granted by the checker, never declared, and granting it is `pnpm check:manual`'s `blind` rule staying quiet: the spec diff adds no scenario id and modifies no `**GIVEN**` / `**WHEN**` / `**THEN**` line. It is nothing the manifest records - a key would go stale the moment behaviour moved under it, and the verdict is cheap to recompute. Behaviour lives entirely in those lines, so the only way to take the shortcut is to genuinely not change behaviour. Where the checker refuses and the author disagrees, that is a question for the interview, not a self-service waiver.
 
 The strongest control is not a check. People take an escape hatch to avoid work, not responsibility, so once `/planning-pm` is one command the cost of not skipping falls from writing four documents to waiting for a run. The corollary holds too: if a run is slow or noisy, `skip_specs` use will rise, which makes the orchestrator's ergonomics part of this control rather than a separate concern.
 
 
-A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so `pnpm check:manual` refuses a record key holding anything but text.
+A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so `pnpm check:manual` refuses a record key holding anything but text. `skip_specs` is the one exception, and not a waiver of the rule but the switch beneath it: the OpenSpec CLI owns that key and reads it as a boolean, so a reason written there invalidates the manifest and the marker stops being honoured at all. The switch stays `true`, and `skip_specs_why` carries the line.
 
 ### 6. Keep component contracts aligned
 

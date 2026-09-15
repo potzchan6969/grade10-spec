@@ -266,13 +266,14 @@ with noise until someone starts waving it through.
 
 | Hatch | Who decides | Test |
 | --- | --- | --- |
-| `skip_specs: <why>` | Author | No spec delta exists at all |
+| `skip_specs: true` + `skip_specs_why: <why>` | Author | No spec delta exists at all |
 | `blind_pass_skipped` | **The checker** | A delta exists but carries no new behaviour |
 | `**Walked by:** nobody` | Author | Not a hatch - anchors route to the feature set |
 
 `skip_specs` is the one switch that disables the whole cross-check, and the
-cheapest line in the file to write. It takes a **reason, never `true`**, and a
-change that lays down a 🚧 mark cannot claim it: 🚧 means an outcome a reader can
+cheapest line in the file to write. The switch stays `true` — the OpenSpec CLI
+owns that key and reads it as a boolean — and **`skip_specs_why` beside it
+carries the reason**. A change that lays down a 🚧 mark cannot claim it: 🚧 means an outcome a reader can
 see, so claiming both is the author contradicting themselves. The realistic
 failure is not dishonesty - it is an author who sincerely believes a refactor
 changes no behaviour and is wrong.

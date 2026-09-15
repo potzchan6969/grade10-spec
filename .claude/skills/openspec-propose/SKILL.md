@@ -53,8 +53,8 @@ Then settle two things:
 - **Where your work ends** — the table above.
 
 A change that changes no behavior at all — a pure refactor, tooling, docs —
-sets `skip_specs: <why>` in its `.openspec.yaml` rather than inventing a
-requirement to satisfy validation.
+sets `skip_specs: true` with `skip_specs_why: <why>` in its `.openspec.yaml`
+rather than inventing a requirement to satisfy validation.
 
 ## Then hand over
 
