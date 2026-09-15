@@ -114,7 +114,8 @@ git add <paths> && git rebase --continue
 
 On the rebased commits, not the ones you started with:
 
-- `openspec validate <change-id> --strict` — every change on the branch.
+- `pnpm run validate:changes <change-id>` — every change on the branch. It
+  honours a declared wait; the bare CLI refuses one.
 - `openspec validate --specs` — a durable spec was touched or conflicted.
 - `pnpm run lint` and `pnpm run typecheck` — always.
 - `pnpm run design-sync:check` — a primitive under

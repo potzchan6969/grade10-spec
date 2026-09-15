@@ -91,7 +91,7 @@ tie: it is how a designer's edge case becomes something a test can decide.
 ## Finish
 
 ```bash
-pnpm run validate:changes
+pnpm run validate:changes <change-name>
 openspec status --change <change-name>
 ```
 

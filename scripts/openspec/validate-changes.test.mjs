@@ -93,7 +93,7 @@ const PROPOSAL =
 
 /** `main` reports through the process's exit code and the console, so a run
  * is one call with both captured and put back. */
-function validate(root) {
+function validate(root, only) {
   const said = [];
   const { log, error } = console;
   const before = process.exitCode;
@@ -101,7 +101,7 @@ function validate(root) {
   console.error = (line) => said.push(String(line));
   process.exitCode = 0;
   try {
-    main(root, true);
+    main(root, true, only);
     return { status: process.exitCode, said: said.join("\n") };
   } finally {
     Object.assign(console, { log, error });
@@ -162,4 +162,23 @@ test("a change that said nothing is still refused its missing delta", () => {
   );
   assert.equal(run.status, 1);
   assert.match(run.said, /at least one delta/);
+});
+
+test("a named change is the only one read, and a typo says so", () => {
+  const root = store({
+    waiting: {
+      "proposal.md": PROPOSAL,
+      ".openspec.yaml":
+        "schema: grade10-planning\nawaiting:\n  specs: nobody has answered\n",
+    },
+    silent: {
+      "proposal.md": PROPOSAL,
+      ".openspec.yaml": "schema: grade10-planning\n",
+    },
+  });
+  const run = validate(root, "waiting");
+  assert.equal(run.status, 0, run.said);
+  assert.doesNotMatch(run.said, /silent/);
+  assert.equal(validate(root, "silent").status, 1);
+  assert.throws(() => main(root, true, "no-such-change"), /no change named/);
 });

@@ -87,7 +87,7 @@ and the proposal links that section; `pnpm check:manual` refuses a change with n
 **5. Check and push.**
 
 ```bash
-openspec validate account-setting-page --strict
+pnpm run validate:changes account-setting-page
 openspec status --change account-setting-page   # proposal, specs, journeys written
 ```
 

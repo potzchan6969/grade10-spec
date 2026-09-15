@@ -155,7 +155,7 @@ Everything this run produces is `draft`. Nothing in it claims review.
 9. **Validate.**
 
    ```bash
-   pnpm run validate:changes
+   pnpm run validate:changes <change-name>
    pnpm check:manual
    pnpm run tcs:validate
    ```

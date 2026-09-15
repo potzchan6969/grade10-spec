@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /*
- * CHECK: every in-flight change against the OpenSpec CLI.
+ * CHECK: one in-flight change against the OpenSpec CLI, or every one.
  *
- *   node scripts/openspec/validate-changes.mjs [--strict]
+ *   node scripts/openspec/validate-changes.mjs [<change-id>] [--strict]
  *
  * The CLI refuses a change with no delta, which is the right answer for a
  * change somebody stopped writing and the wrong one for a change that has
@@ -67,15 +67,19 @@ function report(stdout) {
   return JSON.parse(stdout.slice(open, close + 1));
 }
 
-export function main(root, strict) {
+export function main(root, strict, only) {
   const changes = join(root, "openspec", "changes");
+  // Named but absent, the CLI answers with the no-delta advice rather than
+  // with the typo.
+  if (only && !existsSync(join(changes, only)))
+    throw new Error(`no change named \`${only}\``);
   const [command, ...lead] = cli(root);
   const run = spawnSync(
     command,
     [
       ...lead,
       "validate",
-      "--changes",
+      ...(only ? [only, "--type", "change"] : ["--changes"]),
       "--json",
       ...(strict ? ["--strict"] : []),
     ],
@@ -83,9 +87,10 @@ export function main(root, strict) {
   );
   if (run.error) throw new Error(`could not run the CLI: ${run.error.message}`);
 
+  const items = report(run.stdout ?? "").items ?? [];
   const waiting = [];
   const failed = [];
-  for (const item of report(run.stdout ?? "").items ?? []) {
+  for (const item of items) {
     const why = waitingOnSpecs(join(changes, item.id));
     const left = (item.issues ?? []).filter(
       (issue) =>
@@ -106,9 +111,16 @@ export function main(root, strict) {
     process.exitCode = 1;
     return;
   }
-  console.log(`every change validated, ${waiting.length} waiting on an input`);
+  console.log(
+    `${items.length} change(s) validated, ${waiting.length} waiting on an input`,
+  );
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
-  main(ROOT, process.argv.includes("--strict"));
+  const args = process.argv.slice(2);
+  main(
+    ROOT,
+    args.includes("--strict"),
+    args.find((one) => !one.startsWith("-")),
+  );
 }

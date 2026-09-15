@@ -93,7 +93,7 @@ tooling on both sides parses. Beyond them:
 ## Finish
 
 ```bash
-pnpm run validate:changes
+pnpm run validate:changes <change-name>
 openspec status --change <change-name>
 ```
 
