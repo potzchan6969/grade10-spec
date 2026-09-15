@@ -652,12 +652,14 @@ progress, and to grant points that count toward tier progress. Each SHALL carry
 a reason and SHALL be recorded in the operator log.
 
 #### Scenario: grade10-site-loyalty-programme-SC-48 - A correction does not move a member up
+**Serves:** Operator console - a correction does not move a member up
 
 - **WHEN** an operator corrects a balance
 - **THEN** the points are spendable
 - **AND** the member's progress toward the next tier is unchanged
 
 #### Scenario: grade10-site-loyalty-programme-SC-49 - A campaign grant moves a member up
+**Serves:** Operator console - a campaign grant moves a member up
 
 - **WHEN** an operator grants campaign or sign-up points
 - **THEN** those points count toward the next tier

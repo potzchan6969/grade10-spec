@@ -42,12 +42,14 @@ renderable on their own, outside `StoreCollectionGrid`, so a later surface can
 reuse one without the others.
 
 #### Scenario: shared-ui-store-home-SC-01 - An application imports the surface
+**Serves:** Surface exports - an application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's public entry
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
 #### Scenario: shared-ui-store-home-SC-02 - A part is reused alone
+**Serves:** Surface exports - a part is reused alone
 
 - **WHEN** an application renders the hero, the section header, or a collection tile without the collection grid
 - **THEN** it renders and behaves as specified, with no missing-context error

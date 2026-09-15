@@ -31,6 +31,8 @@ when a close extends stay `grade10-site/auction/auction`'s.
     nothing it showed is replaced by a loading placeholder
   - Clock values carry on: a value that follows the clock continues from what
     was served rather than contradicting it
+- Watching a lot
+  - Watch from the page: a collector marks the lot they are reading, and nothing else on the page moves
 - Catalogue and sitemap
   - Opened from the catalogue: the catalogue reaches a lot's own address
     without a page load
@@ -166,6 +168,7 @@ required, and `grade10-site-auction-listing-page-SC-01` through `grade10-site-au
 for them.
 
 #### Scenario: grade10-site-auction-listing-page-SC-10 - A collector watches the lot they are reading
+**Serves:** Watching a lot - a collector watches the lot they are reading
 
 - **GIVEN** a signed-in collector on a published lot's own page who does not
   watch it
@@ -174,12 +177,14 @@ for them.
 - **AND** they are still on that lot's page
 
 #### Scenario: grade10-site-auction-listing-page-SC-11 - The control acts on the addressed lot
+**Serves:** Watching a lot - the control acts on the addressed lot
 
 - **GIVEN** two published lots with their own addresses
 - **WHEN** a collector watches the lot from one of those addresses
 - **THEN** only the lot that address names is watched
 
 #### Scenario: grade10-site-auction-listing-page-SC-12 - Watching changes nothing else on the page
+**Serves:** Watching a lot - watching changes nothing else on the page
 
 - **GIVEN** a signed-in collector on a live lot's page
 - **WHEN** they watch it

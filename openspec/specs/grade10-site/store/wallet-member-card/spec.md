@@ -161,6 +161,7 @@ far behind its oldest due pass is.
 - **THEN** it reports the age of its oldest due pass
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-28 - A burst costs one update
+**Serves:** One sweep behind - a burst costs one update
 
 - **WHEN** a member's points change several times inside one interval
 - **THEN** the pass is updated once
@@ -401,6 +402,7 @@ device was present. A pass whose code the programme made SHALL prove only that
 the pass reached a device once, and SHALL be neither.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-23 - Arriving by pass is countable
+**Serves:** The wallet pass - arriving by pass is countable
 
 - **WHEN** members are identified, some from a pass and some from the site's card
 - **THEN** the two are counted apart
@@ -454,18 +456,21 @@ The consuming application is the Grade10 site.
 - **AND** every word it shows came from the application
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-34 - A failure names the wallet it belongs to
+**Serves:** The wallet pass - a failure names the wallet it belongs to
 
 - **GIVEN** a member carrying a pass in each of two wallets
 - **WHEN** ending one fails and an act on the other then succeeds
 - **THEN** the failure is still shown, and it names the wallet it belongs to
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-35 - A standing that could not be read says so
+**Serves:** The wallet pass - a standing that could not be read says so
 
 - **GIVEN** a member who carries a pass
 - **WHEN** the surface cannot read what they hold
 - **THEN** it says so, and the control that ends the pass is not taken away
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-36 - A deployment offers only the wallets it carries
+**Serves:** Configuration - a deployment offers only the wallets it carries
 
 - **WHEN** a member opens their card on a deployment configured for one wallet
   and not the other

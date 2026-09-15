@@ -25,6 +25,10 @@ without changing the listing's authoritative event data.
   - Named export: ListingUserBidHistory and its copy, props, and row types
   - Empty rows: the block renders nothing
   - Dialog: amount and time, same-price priority note, no bid-type column
+- Bid enrollment
+  - Named exports: the enrollment setup blocks and the signal the bid card reads
+  - Setup gates: continuing waits on a card and an attestation, and says which is missing
+  - Enrollment signal: the bid card shows standing, or disables what a collector cannot yet do
 - Bid card accessory
   - Optional recentBidsAccessory: trailing edge of the recent-bids header
 
@@ -43,12 +47,14 @@ Each of those components SHALL be renderable on its own, so a later surface can
 reuse the gallery without the bid panel.
 
 #### Scenario: shared-ui-auction-listing-SC-01 - An application imports the surface
+**Serves:** Surface exports - an application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's
   public entry
 - **THEN** every import resolves
 
 #### Scenario: shared-ui-auction-listing-SC-02 - A part is reused alone
+**Serves:** Surface exports - a part is reused alone
 
 - **WHEN** an application renders `ListingGallery` without `ListingAuctionBidCard`
   or `ListingDetails`
@@ -219,6 +225,7 @@ empty linked-card prompt that activates `onLink` when supplied.
 None of these blocks SHALL fetch, persist, or subscribe to product state.
 
 #### Scenario: shared-ui-auction-listing-SC-15 - Enrollment setup exports resolve
+**Serves:** Bid enrollment - enrollment setup exports resolve
 
 - **WHEN** an application imports `EnrollmentSetupSheet`,
   `PaymentMethodRow`, and `PaymentMethodEmptyState` from the shared UI
@@ -226,6 +233,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **THEN** every import resolves
 
 #### Scenario: shared-ui-auction-listing-SC-16 - Setup continue respects card and attestation
+**Serves:** Bid enrollment - setup continue respects card and attestation
 
 - **GIVEN** `EnrollmentSetupSheet` open with `requiresIframeLink` true and
   no `iframeLinkedPayment`
@@ -233,6 +241,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **THEN** continue is disabled
 
 #### Scenario: shared-ui-auction-listing-SC-17 - Change-card setup enables continue when pre-checked
+**Serves:** Bid enrollment - change-card setup enables continue when pre-checked
 
 - **GIVEN** `EnrollmentSetupSheet` open with `iframeLinkedPayment` supplied
   and `defaultAgeAttested` true
@@ -241,6 +250,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **AND** the provider field area uses the linked-card placeholder copy
 
 #### Scenario: shared-ui-auction-listing-SC-28 - Setup shows a link error under the card field
+**Serves:** Bid enrollment - setup shows a link error under the card field
 
 - **GIVEN** `EnrollmentSetupSheet` open with `errorMessage` supplied
 - **WHEN** it renders
@@ -248,6 +258,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **AND** continue remains available when card entry and attestation are satisfied
 
 #### Scenario: shared-ui-auction-listing-SC-29 - Setup linking locks the sheet
+**Serves:** Bid enrollment - setup linking locks the sheet
 
 - **GIVEN** `EnrollmentSetupSheet` open with `linking` true
 - **WHEN** it renders
@@ -256,6 +267,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **AND** dismiss is unavailable
 
 #### Scenario: shared-ui-auction-listing-SC-18 - Payment row hides change when not editable
+**Serves:** Bid enrollment - payment row hides change when not editable
 
 - **GIVEN** `PaymentMethodRow` rendered without `onChange`
 - **WHEN** it renders
@@ -264,12 +276,14 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **AND** the row keeps the same height as with Change shown
 
 #### Scenario: shared-ui-auction-listing-SC-30 - Linked-card label exposes hold tooltip
+**Serves:** Bid enrollment - linked-card label exposes hold tooltip
 
 - **GIVEN** `PaymentMethodRow` rendered with `paymentMethodTooltip` copy
 - **WHEN** it renders
 - **THEN** an info control beside the linked-card label exposes that tooltip copy
 
 #### Scenario: shared-ui-auction-listing-SC-19 - Empty linked-card slot activates link
+**Serves:** Bid enrollment - empty linked-card slot activates link
 
 - **GIVEN** `PaymentMethodEmptyState` with `onLink` supplied
 - **WHEN** the collector activates the empty-state control
@@ -290,6 +304,7 @@ Standing banners SHALL render only when `bidEnrollment` is not `signed-out`
 and the consumer supplies standing content.
 
 #### Scenario: shared-ui-auction-listing-SC-20 - Signed-out enrollment hides standing badges
+**Serves:** Bid enrollment - signed-out enrollment hides standing badges
 
 - **GIVEN** a bid card with `bidEnrollment` `signed-out` and standing
   content that would show highest bid or outbid
@@ -297,6 +312,7 @@ and the consumer supplies standing content.
 - **THEN** standing badges are not shown
 
 #### Scenario: shared-ui-auction-listing-SC-21 - Ready enrollment shows standing when supplied
+**Serves:** Bid enrollment - ready enrollment shows standing when supplied
 
 - **GIVEN** a bid card with `bidEnrollment` `ready` and outbid standing
   content
@@ -304,6 +320,7 @@ and the consumer supplies standing content.
 - **THEN** the outbid standing badge is shown
 
 #### Scenario: shared-ui-auction-listing-SC-26 - Needs-card disables amount controls
+**Serves:** Bid enrollment - needs-card disables amount controls
 
 - **GIVEN** a bid card with `bidEnrollment` `needs-card`
 - **WHEN** it renders
@@ -311,6 +328,7 @@ and the consumer supplies standing content.
 - **AND** the primary bid action uses the consumer's link-card label
 
 #### Scenario: shared-ui-auction-listing-SC-27 - Needs-card primary action opens setup
+**Serves:** Bid enrollment - needs-card primary action opens setup
 
 - **GIVEN** a bid card with `bidEnrollment` `needs-card` and an open-setup callback
 - **WHEN** the collector activates the primary bid action

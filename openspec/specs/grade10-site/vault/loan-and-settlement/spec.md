@@ -352,12 +352,14 @@ A bank reference SHALL be kept on the money record and SHALL NOT be written
 into the case's history or its audit trail, and SHALL be shown to staff only.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-25 - Two clocks on one record
+**Serves:** Recording money - two clocks on one record
 
 - **GIVEN** a transfer that arrived on Friday and was written down on Monday
 - **WHEN** the record is read
 - **THEN** it names Friday as the value date and Monday as when it was recorded, and the balance follows Friday
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-26 - The bank reference stays out of the trail
+**Serves:** Recording money - the bank reference stays out of the trail
 
 - **WHEN** a repayment carrying a bank reference is recorded
 - **THEN** the case's audit trail carries the case, the amount and the method, and not the reference

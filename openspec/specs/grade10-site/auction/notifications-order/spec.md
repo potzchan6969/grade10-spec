@@ -112,6 +112,7 @@ the auction order itself.
 - **THEN** Grade10 sends no second letter
 
 #### Scenario: order-mail-SC-07 - Three won lots produce three identifiable letters
+**Serves:** Post-close letters - three won lots produce three identifiable letters
 
 - **GIVEN** one winner who wins three lots in the same auction
 - **WHEN** all three lots close

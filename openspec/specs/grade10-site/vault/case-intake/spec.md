@@ -87,6 +87,7 @@ A collector with several items SHALL open one request for each.
 - **THEN** it is refused by name and no case exists
 
 #### Scenario: grade10-site-vault-case-intake-SC-04 - A number is stored one way
+**Serves:** Describing the item - a number is stored one way
 
 - **WHEN** two collectors give the same number typed differently
 - **THEN** both cases store it in the same canonical form

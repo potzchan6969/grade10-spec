@@ -78,6 +78,7 @@ invoice.
   supplied
 
 #### Scenario: winner-order-SC-03 - A repeated lot close creates nothing twice
+**Serves:** Invoice at lot close - a repeated lot close creates nothing twice
 
 - **GIVEN** a lot whose close has already created an auction order and an
   invoice
@@ -242,6 +243,7 @@ however many times the address is amended.
 - **AND** raises no separate charge for 4000 minor units
 
 #### Scenario: winner-order-SC-10 - Amending does not move the deadline
+**Serves:** Payment deadline - amending does not move the deadline
 
 - **GIVEN** an auction order whose payment deadline is seven days from its
   lot's close
@@ -260,6 +262,7 @@ Grade10 SHALL NOT offer a partial refund or a supplementary charge for a
 shipping difference discovered after payment.
 
 #### Scenario: winner-order-SC-11 - A paid order refuses a self-service address change
+**Serves:** Delivery address - a paid order refuses a self-service address change
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** the winner attempts to change the delivery address

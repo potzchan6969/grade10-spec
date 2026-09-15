@@ -113,6 +113,7 @@ than as passing, so an unaudited component reads as a gap.
 - **AND** a drifted or omitted value fails the run
 
 #### Scenario: shared-design-sync-coverage-SC-08 - A component with no audit table
+**Serves:** Sweep coverage - a component with no audit table
 
 - **WHEN** the sweep meets a component directory carrying no audit table
 - **THEN** it names that directory as uncovered

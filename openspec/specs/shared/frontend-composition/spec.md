@@ -79,12 +79,14 @@ An application MUST load a product's published list in its composition root and 
 The exported name of a frontend package's core-module factory MUST identify the product it binds the shared ports of. A name that identifies only the layer, or that identifies nothing, MUST NOT be used, because a composition root installing several products would then read as repeated identical calls.
 
 #### Scenario: shared-frontend-composition-SC-07 - A composition root installs several core modules
+**Serves:** Named core modules - a composition root installs several core modules
 
 - **WHEN** an application installs the core module of more than one product
 - **THEN** each call names its product at the call site
 - **AND THEN** a reader identifies which product each set of client dependencies belongs to without opening the package
 
 #### Scenario: shared-frontend-composition-SC-08 - A package publishes a core-module factory
+**Serves:** Named core modules - a package publishes a core-module factory
 
 - **WHEN** a frontend package publishes a factory that binds its shared ports
 - **THEN** the exported name carries the product, distinguishing the user-facing package from the operator-facing one for the same product

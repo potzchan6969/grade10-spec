@@ -411,6 +411,7 @@ phone number Grade10 already holds. Grade10 SHALL NOT show a payment-provider
 customer or payment identifier as the winner's contact.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-22 - The winner's email is the contact
+**Serves:** Queue - the winner's email is the contact
 
 - **GIVEN** an auction order with a winner
 - **WHEN** an operator opens it
@@ -441,6 +442,7 @@ Reissuing an invoice SHALL NOT lift the winner's account suspension, per
 explicit action.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-23 - Reissue returns an expired order to Pending Payment
+**Serves:** Resolving an unpaid order - reissue returns an expired order to Pending Payment
 
 - **GIVEN** an auction order deriving as Expired
 - **AND** an operator holding payment-processing
@@ -449,6 +451,7 @@ explicit action.
 - **AND** the derived order status is Pending Payment
 
 #### Scenario: grade10-admin-auction-post-sale-SC-24 - Reissue leaves the suspension standing
+**Serves:** Resolving an unpaid order - reissue leaves the suspension standing
 
 - **GIVEN** a suspended winner whose expired order an operator reissues
 - **WHEN** the reissue is committed
@@ -456,6 +459,7 @@ explicit action.
 - **AND** the operator is not offered reinstatement as part of the reissue
 
 #### Scenario: grade10-admin-auction-post-sale-SC-25 - An operator without the grant is refused
+**Serves:** Grants - an operator without the grant is refused
 
 - **GIVEN** an operator who does not hold payment-processing
 - **WHEN** they open an Expired order
@@ -563,6 +567,7 @@ reissue history across **all** their orders on the account record, so a
 reviewer sees the pattern before granting another.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-33 - A third reissue is accepted and numbered
+**Serves:** Resolving an unpaid order - a third reissue is accepted and numbered
 
 - **GIVEN** an auction order already reissued twice
 - **WHEN** an operator reissues it a third time with a reason
@@ -584,6 +589,7 @@ On cancellation Grade10 SHALL:
   audit, and SHALL NOT carry it into the new listing.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-31 - Cancelling returns the lot to available
+**Serves:** Resolving an unpaid order - cancelling returns the lot to available
 
 - **GIVEN** an auction order deriving as Expired
 - **WHEN** an operator cancels it with a reason
@@ -591,6 +597,7 @@ On cancellation Grade10 SHALL:
 - **AND** the lot's inventory status is available and it can be listed again
 
 #### Scenario: grade10-admin-auction-post-sale-SC-32 - No runner-up is offered the cancelled lot
+**Serves:** Resolving an unpaid order - no runner-up is offered the cancelled lot
 
 - **GIVEN** a cancelled auction order whose lot had a second-highest bidder
 - **WHEN** the cancellation completes

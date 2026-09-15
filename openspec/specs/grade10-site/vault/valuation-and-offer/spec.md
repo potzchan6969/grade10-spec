@@ -99,6 +99,7 @@ Outside the brand's own bounds, the outermost limits SHALL be interest of 0 to
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-05 - An offer already expired is refused
+**Serves:** Answering the offer - an offer already expired is refused
 
 - **WHEN** an offer is written with an expiry that has already passed
 - **THEN** it is refused by name

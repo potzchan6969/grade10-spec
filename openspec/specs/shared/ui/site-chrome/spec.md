@@ -36,17 +36,20 @@ prop.
 neither SHALL require the other.
 
 #### Scenario: shared-ui-site-chrome-SC-01 - An application imports the chrome
+**Serves:** Chrome exports - an application imports the chrome
 
 - **WHEN** an application imports each name above from the design system's public entry
 - **THEN** every import resolves
 
 #### Scenario: shared-ui-site-chrome-SC-02 - A page renders one without the other
+**Serves:** Chrome exports - a page renders one without the other
 
 - **WHEN** an application renders the header without the footer, or the footer
   without the header
 - **THEN** it renders as specified, with no missing-context error
 
 #### Scenario: shared-ui-site-chrome-SC-03 - The chrome's words arrive as one group
+**Serves:** Chrome exports - the chrome's words arrive as one group
 
 - **WHEN** an application supplies the chrome's words
 - **THEN** it passes one object per component, typed by that component's copy type
@@ -118,6 +121,7 @@ both visually and to assistive technology, and SHALL mark no item when the
 application identifies none.
 
 #### Scenario: shared-ui-site-chrome-SC-10 - A surface is current
+**Serves:** Current surface - a surface is current
 
 - **GIVEN** navigation items of which one is marked current
 - **WHEN** the header renders
@@ -126,6 +130,7 @@ application identifies none.
 - **AND** no other item is
 
 #### Scenario: shared-ui-site-chrome-SC-11 - No surface is current
+**Serves:** Current surface - no surface is current
 
 - **WHEN** the header renders with no item marked current
 - **THEN** no item is announced as the current page

@@ -76,12 +76,14 @@ than add a second, and the check it displaces SHALL be discarded durably.
 - **THEN** the case names that check and the counter sees the verified name
 
 #### Scenario: grade10-site-vault-identity-verification-SC-02 - Recording again rebinds rather than duplicating
+**Serves:** Reuse and duplicates - recording again rebinds rather than duplicating
 
 - **GIVEN** a case already carrying a check
 - **WHEN** staff record another
 - **THEN** the case carries exactly one check and the displaced one is discarded
 
 #### Scenario: grade10-site-vault-identity-verification-SC-03 - A case in custody takes no new check
+**Serves:** What it refuses - a case in custody takes no new check
 
 - **GIVEN** a case whose item is in the vault
 - **WHEN** staff try to record a check

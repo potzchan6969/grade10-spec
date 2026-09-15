@@ -128,6 +128,7 @@ it lands. Where the runtime's own versioning does not promise compatibility
 between releases, the admin SHALL treat every upgrade as breaking.
 
 #### Scenario: shared-console-visual-standard-SC-09 - An upgrade is not silent
+**Serves:** The runtime is held to terms - an upgrade is not silent
 
 - **WHEN** the admin runtime publishes a new version
 - **THEN** no admin application takes it without a change that re-establishes this capability's scenarios

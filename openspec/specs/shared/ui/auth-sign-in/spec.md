@@ -90,6 +90,7 @@ divider, and SHALL render the active step after the divider. When
 slot nor the divider.
 
 #### Scenario: shared-ui-auth-sign-in-SC-05 - A provider widget is supplied
+**Serves:** Sign-in body composition - a provider widget is supplied
 
 - **GIVEN** `SignInCard` with a `providerSlot` and a step as its children
 - **WHEN** the dialog renders
@@ -97,6 +98,7 @@ slot nor the divider.
 - **AND** the step appears below the divider
 
 #### Scenario: shared-ui-auth-sign-in-SC-06 - No provider widget
+**Serves:** Sign-in body composition - no provider widget
 
 - **GIVEN** `SignInCard` with no `providerSlot`
 - **WHEN** the dialog renders

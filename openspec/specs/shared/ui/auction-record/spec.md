@@ -81,6 +81,7 @@ confirmation, and no default for any of them. A string not supplied SHALL be
 absent rather than replaced by a built-in value.
 
 #### Scenario: shared-ui-auction-record-SC-03 - No label is invented
+**Serves:** Content ownership - no label is invented
 
 - **WHEN** an application renders the surface without supplying a state label
 - **THEN** no built-in label appears in its place
@@ -151,6 +152,7 @@ supplied, the row SHALL show that image beside the listing identity. When not
 supplied, the image well SHALL remain without inventing a product photograph.
 
 #### Scenario: shared-ui-auction-record-SC-06 - A row shows the key image when given
+**Serves:** Content ownership - a row shows the key image when given
 
 - **GIVEN** an `AuctionRecordRow` supplied with a key image
 - **WHEN** it renders

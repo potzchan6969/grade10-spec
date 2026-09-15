@@ -65,6 +65,7 @@ product status `created`.
 - **AND** created by is that operator
 
 #### Scenario: grade10-admin-inventory-catalog-SC-02 - Product create without a name is refused
+**Serves:** Product stock - product create without a name is refused
 
 - **GIVEN** an authorized inventory admin
 - **WHEN** they create a product with an empty name
@@ -183,6 +184,7 @@ product SHALL be refused.
 - **AND** its before and after snapshots show stock increasing by ten
 
 #### Scenario: grade10-admin-inventory-catalog-SC-08 - Invalid intake quantity is refused
+**Serves:** Product stock - invalid intake quantity is refused
 
 - **GIVEN** an existing product
 - **WHEN** an authorized inventory admin intakes quantity zero or quantity 501
@@ -190,6 +192,7 @@ product SHALL be refused.
 - **AND** the inventory and history are unchanged
 
 #### Scenario: grade10-admin-inventory-catalog-SC-09 - Intake for unknown product is refused
+**Serves:** Product stock - intake for unknown product is refused
 
 - **GIVEN** no product with the requested id
 - **WHEN** an authorized inventory admin intakes stock for that id
@@ -907,18 +910,21 @@ Inventory section. Holder-scoped service entrypoints are machine-only
 capability grants and SHALL NOT be reachable through the public API gateway.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-32 - Unauthorized inventory read is refused
+**Serves:** Admin console - unauthorized inventory read is refused
 
 - **GIVEN** a signed-in person without inventory admin grants
 - **WHEN** they request the product list
 - **THEN** Grade10 refuses the request
 
 #### Scenario: grade10-admin-inventory-catalog-SC-33 - Inventory section hidden without grants
+**Serves:** Admin console - inventory section hidden without grants
 
 - **GIVEN** a signed-in person without inventory admin grants
 - **WHEN** they use the Grade10 admin panel
 - **THEN** the Inventory section is not offered
 
 #### Scenario: grade10-admin-inventory-catalog-SC-34 - Public caller cannot reach holder methods
+**Serves:** Admin console - public caller cannot reach holder methods
 
 - **GIVEN** a collector or unauthenticated caller
 - **WHEN** they request an inventory HTTP route

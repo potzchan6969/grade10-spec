@@ -200,6 +200,7 @@ procedure it lists is internal.
 - **THEN** the first reads session and the second reads session · fresh
 
 #### Scenario: grade10-admin-console-api-docs-SC-16 - The page says who each caller word means
+**Serves:** The docs surface - the page says who each caller word means
 
 - **WHEN** an engineer opens the surface
 - **THEN** the page names the three audiences, each with the caller words under it and who holds the client
@@ -213,6 +214,7 @@ procedures declare no output. The document SHALL NOT infer an output shape
 from anything other than the declaration.
 
 #### Scenario: grade10-admin-console-api-docs-SC-11 - An undeclared output is said, not invented
+**Serves:** Honesty of the record - an undeclared output is said, not invented
 
 - **WHEN** the engineer picks a procedure that declares no output shape
 - **THEN** its output panel says the output is not declared

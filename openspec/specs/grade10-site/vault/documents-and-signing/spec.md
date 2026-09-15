@@ -173,6 +173,7 @@ the first device that opens it. A signer needs no account.
 - **THEN** it is refused by name and nothing is shown
 
 #### Scenario: grade10-site-vault-documents-and-signing-SC-11 - A link past its window is refused
+**Serves:** The ceremony - a link past its window is refused
 
 - **GIVEN** a signing link minted 31 minutes ago
 - **WHEN** it is opened
