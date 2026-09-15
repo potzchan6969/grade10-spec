@@ -25,9 +25,9 @@ one and resumes through the other.
 - [x] 4.3 Finish the held navigation when a session arrives, withdrawing the dialog with it (grade10-site-site-navigation-SC-19)
 - [x] 4.4 Let a surface that answers the signed-out through unheld, so it renders its own invitation (grade10-site-site-navigation-SC-15, grade10-site-site-navigation-SC-16)
 - [x] 4.5 Leave an address opened from outside the site, and back and forward, to the surface itself, uncorrected (grade10-site-site-navigation-SC-21, grade10-site-site-navigation-SC-22, grade10-site-site-navigation-SC-23)
-- [ ] 4.6 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs web-spa`
+- [x] 4.6 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs web-spa`
 
-## 5. Leaving the ask at the address (grade10)
+## 5. Leaving the ask at the address (grade10) (owner: @sean)
 
-- [ ] 5.1 Take a collector who dismisses the ask at the address they opened to the brand home, replacing the entry the surface holds (grade10-site-site-navigation-SC-25)
-- [ ] 5.2 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs web-spa`
+- [x] 5.1 Take a collector who dismisses the ask at the address they opened to the brand home, replacing the entry the surface holds (grade10-site-site-navigation-SC-25)
+- [x] 5.2 Verify: `pnpm run typecheck && pnpm run lint && node scripts/test.mjs web-spa`
