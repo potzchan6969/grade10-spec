@@ -400,16 +400,30 @@ function OrderSummary({
       {total ? (
         <>
           <hr className="w-full border-border" />
-          <SummaryRow
-            emphasize
-            label={total.label}
-            muted={total.muted || total.value === "TBD"}
-            value={total.value}
-          />
+          <VStack className="w-full" gap="sm" hAlign="stretch">
+            <SummaryRow
+              emphasize
+              label={total.label}
+              muted={total.muted || total.value === "TBD"}
+              value={total.value}
+            />
+            {onViewInvoicePdf ? (
+              <Link
+                className="self-start"
+                href="#view-invoice-pdf"
+                onClick={(event) => {
+                  event.preventDefault();
+                  onViewInvoicePdf();
+                }}
+                size="sm"
+                variant="secondary"
+              >
+                View invoice PDF
+              </Link>
+            ) : null}
+          </VStack>
         </>
-      ) : null}
-
-      {onViewInvoicePdf ? (
+      ) : onViewInvoicePdf ? (
         <Link
           className="self-start"
           href="#view-invoice-pdf"
