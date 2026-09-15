@@ -1,9 +1,9 @@
 ## 1. Catalog and story (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Add `signIn.titleAddToCart` to the Grade10 catalogs in en, zh-Hans and zh-Hant, holding **Sign In to Add to Cart**
-- [ ] 1.2 Add a **From add to cart** story to `Auth Sign In/SignInCard` showing the dialog under that title
-- [ ] 1.3 Mark Product Tile and Buy with the title a collector meets when Add to cart opens sign-in
-- [ ] 1.4 Verify: `pnpm run typecheck && pnpm check:manual && pnpm run test:stories:ui`
+- [x] 1.1 Add `signIn.titleAddToCart` to the Grade10 catalogs in en, zh-Hans and zh-Hant, holding **Sign In to Add to Cart**
+- [x] 1.2 Add a **From add to cart** story to `Auth Sign In/SignInCard` showing the dialog under that title
+- [x] 1.3 Mark Product Tile and Buy with the title a collector meets when Add to cart opens sign-in
+- [x] 1.4 Verify: `pnpm run typecheck && pnpm check:manual && pnpm run test:stories:ui`
 
 ## 2. The title through the overlay (grade10)
 
