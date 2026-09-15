@@ -227,7 +227,7 @@ export const Empty: Story = {
 
 /**
  * Closed lots stay on My Auctions while published. Unsold maps to Ended on
- * the watched row; a bid that did not win stays with Didn't win standing.
+ * the watched row; a bid that did not win stays with Didn’t win standing.
  */
 export const Ended: Story = {
   name: "Ended",
@@ -244,7 +244,7 @@ export const Ended: Story = {
 
     const bidRow = within(rows[0] as HTMLElement);
     expect(bidRow.getByText("1977 Star Wars Topps Wax Pack")).toBeVisible();
-    expect(bidRow.getByText("Didn't win")).toBeVisible();
+    expect(bidRow.getByText("Didn’t win")).toBeVisible();
     expect(
       bidRow.getByRole("link", {
         name: "Open listing: 1977 Star Wars Topps Wax Pack",
@@ -271,7 +271,7 @@ export const Ended: Story = {
 };
 
 /**
- * Address-first post-auction standing on Won rows, plus Didn't win hold copy
+ * Address-first post-auction standing on Won rows, plus Didn’t win hold copy
  * and watch-only Ended. Read-only — opens the order / listing; no pay control.
  */
 export const PostAuctionStanding: Story = {
@@ -300,7 +300,7 @@ export const PostAuctionStanding: Story = {
     expect(canvas.getByText("Processing")).toBeVisible();
     expect(canvas.getByText("Confirm delivery address")).toBeVisible();
     expect(canvas.getByText("Card hold being released")).toBeVisible();
-    expect(canvas.getAllByText("Didn't win")).toHaveLength(2);
+    expect(canvas.getAllByText("Didn’t win")).toHaveLength(2);
     expect(canvas.getByText("Ended")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: /pay/i }),

@@ -150,12 +150,12 @@ const BIDDING_CHARIZARD = biddingItem({
   href: "#lot-charizard",
 });
 
-/** Bid on a lot that closed with no winner — stays listed; standing Didn't win. */
+/** Bid on a lot that closed with no winner — stays listed; standing Didn’t win. */
 const BIDDING_ENDED = biddingItem({
   id: "bid-ended",
   title: "1977 Star Wars Topps Wax Pack",
   state: "hold_released",
-  stateLabel: "Didn't win",
+  stateLabel: "Didn’t win",
   currentBid: "HK$890",
   closesAt: "Ended 7 Sep 2026, 18:00 HKT",
   href: "#lot-wax-pack",
@@ -209,7 +209,7 @@ const BIDDING_DIDNT_WIN_HOLD_RELEASING = biddingItem({
   id: "didnt-win-releasing",
   title: "1999 Jungle Flareon Holo PSA 8",
   state: "hold_releasing",
-  stateLabel: "Didn't win",
+  stateLabel: "Didn’t win",
   currentBid: "HK$1,850",
   closesAt: "Ended 15 Sep 2026, 19:00 HKT",
   href: "#lot-flareon",

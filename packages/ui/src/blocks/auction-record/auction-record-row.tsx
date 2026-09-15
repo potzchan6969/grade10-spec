@@ -23,33 +23,38 @@ import type {
   EmailAlertsCopy,
 } from "./types";
 
-/** Badge tone per sale / bid state. The label itself stays consumer-supplied. */
+/** Badge tone per sale / bid state. The label itself stays consumer-supplied.
+ *
+ * Keep the table calm: most standings use muted `default` / `outline`. Reserve
+ * colour for attention (`warning`), failure (`error`), and a single positive
+ * live signal (`success` on Leading) — same restraint as Order History status.
+ */
 const STATE_VARIANT: Record<
   AuctionRecordRowState,
   "default" | "success" | "error" | "warning" | "info" | "outline"
 > = {
   scheduled: "outline",
-  live: "success",
+  live: "default",
   ending_soon: "warning",
-  ended: "default",
+  ended: "outline",
   leading: "success",
-  outbid: "error",
-  bid_submitted: "info",
+  outbid: "warning",
+  bid_submitted: "default",
   bid_not_accepted: "error",
   awaiting_payment: "warning",
   awaiting_address: "warning",
-  preparing_invoice: "info",
+  preparing_invoice: "default",
   payment_problem: "error",
-  paid: "success",
-  shipped: "info",
-  delivered: "success",
-  hold_releasing: "info",
-  hold_released: "default",
+  paid: "outline",
+  shipped: "outline",
+  delivered: "outline",
+  hold_releasing: "default",
+  hold_released: "outline",
   pending_payment: "warning",
   expired: "error",
-  processing: "info",
-  cancelled: "default",
-  refunded: "default",
+  processing: "default",
+  cancelled: "outline",
+  refunded: "outline",
 };
 
 type AuctionRecordRowViewProps = AuctionRecordRowProps & {
