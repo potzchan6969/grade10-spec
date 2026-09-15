@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Address-first auction Winner Order preview (Storybook only). Pre-invoice stays lean and single-column; from Pending Payment the layout borrows Order Details patterns (header, summary sidebar, fulfilment stepper after pay) without using the store Order Details contract. Confirm delivery address opens the picker. Not a published `@grade10/ui` export yet.",
+          "Address-first auction Winner Order preview (Storybook only). Every status uses the Order Details 2-column shell (main + sticky summary sidebar) — pre-invoice shows winning bid with TBD fees; post-invoice shows full totals; fulfilment stepper after pay. Not a published `@grade10/ui` export and not the store Order Details contract.",
       },
     },
   },
@@ -47,7 +47,10 @@ export const AwaitingAddress: Story = {
       canvas.getByRole("button", { name: "Confirm delivery address" }),
     ).toBeVisible();
     expect(canvas.getByText("No address confirmed yet.")).toBeVisible();
-    expect(canvas.queryByText("Invoice")).not.toBeInTheDocument();
+    expect(canvas.getByText("Order summary")).toBeVisible();
+    expect(canvas.getByText("Winning Bid")).toBeVisible();
+    expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
+    expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.queryByText(/pay with card/i)).not.toBeInTheDocument();
   },
 };
@@ -183,6 +186,9 @@ export const PreparingInvoice: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Preparing Invoice")).toBeVisible();
     expect(canvas.getByText(/Wan Chai/)).toBeVisible();
+    expect(canvas.getByText("Order summary")).toBeVisible();
+    expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
+    expect(canvas.getByRole("complementary")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: /confirm|pay/i }),
     ).not.toBeInTheDocument();
@@ -251,8 +257,20 @@ export const Delivered: Story = {
 
 export const Cancelled: Story = {
   args: { status: "cancelled" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Cancelled")).toBeVisible();
+    expect(canvas.getByRole("complementary")).toBeVisible();
+    expect(canvas.getByText("Order summary")).toBeVisible();
+  },
 };
 
 export const Refunded: Story = {
   args: { status: "refunded" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Refunded")).toBeVisible();
+    expect(canvas.getByRole("complementary")).toBeVisible();
+    expect(canvas.getByText("Order Total")).toBeVisible();
+  },
 };

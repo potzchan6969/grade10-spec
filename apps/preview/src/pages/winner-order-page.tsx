@@ -55,10 +55,6 @@ type FulfilmentStep = {
   state: "completed" | "current" | "upcoming";
 };
 
-function isPreInvoice(status: WinnerOrderStatus): boolean {
-  return status === "awaiting_address" || status === "preparing_invoice";
-}
-
 function showFulfilmentStepper(status: WinnerOrderStatus): boolean {
   return (
     status === "processing" || status === "shipped" || status === "delivered"
@@ -91,11 +87,32 @@ function fulfilmentStepsFor(
       { label: "Delivered", state: "upcoming" },
     ];
   }
-  // processing
   return [
     { label: "Paid", date: content.endedAt, state: "completed" },
     { label: "Shipped", state: "upcoming" },
     { label: "Delivered", state: "upcoming" },
+  ];
+}
+
+/** Sidebar money rows — full invoice when issued; otherwise winning bid + TBD fees. */
+function summaryLinesFor(
+  content: WinnerOrderContent,
+): WinnerOrderInvoiceLine[] {
+  if (content.invoiceLines?.length) {
+    return [...content.invoiceLines];
+  }
+  if (content.status === "cancelled") {
+    return [
+      { label: "Winning Bid", value: content.winningBid },
+      { label: "Order Total", value: "—" },
+    ];
+  }
+  return [
+    { label: "Winning Bid", value: content.winningBid },
+    { label: "Buyer's Premium", value: "TBD", muted: true },
+    { label: "Shipping & Handling", value: "TBD", muted: true },
+    { label: "Insurance", value: "TBD", muted: true },
+    { label: "Order Total", value: "TBD", muted: true },
   ];
 }
 
@@ -120,10 +137,12 @@ function SummaryRow({
   label,
   value,
   emphasize = false,
+  muted = false,
 }: {
   label: ReactNode;
   value: ReactNode;
   emphasize?: boolean;
+  muted?: boolean;
 }) {
   return (
     <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
@@ -131,14 +150,16 @@ function SummaryRow({
         className={cn(
           "text-sm leading-5 text-foreground",
           emphasize && "text-base font-semibold",
+          muted && !emphasize && "text-secondary-foreground",
         )}
       >
         {label}
       </span>
       <span
         className={cn(
-          "text-right text-sm leading-5 whitespace-nowrap text-foreground tabular-nums",
+          "text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
           emphasize && "text-base font-semibold",
+          muted && "text-secondary-foreground",
         )}
       >
         {value}
@@ -202,7 +223,7 @@ function AddressBlock({ content }: { content: WinnerOrderContent }) {
   );
 }
 
-function InvoiceSummary({ lines }: { lines: WinnerOrderInvoiceLine[] }) {
+function OrderSummary({ lines }: { lines: WinnerOrderInvoiceLine[] }) {
   const total = lines.find((line) => line.label === "Order Total");
   const rest = lines.filter((line) => line.label !== "Order Total");
   return (
@@ -212,13 +233,23 @@ function InvoiceSummary({ lines }: { lines: WinnerOrderInvoiceLine[] }) {
       </h3>
       <VStack className="w-full" gap="sm" hAlign="stretch">
         {rest.map((line) => (
-          <SummaryRow key={line.label} label={line.label} value={line.value} />
+          <SummaryRow
+            key={line.label}
+            label={line.label}
+            muted={line.muted || line.value === "TBD"}
+            value={line.value}
+          />
         ))}
       </VStack>
       {total ? (
         <>
           <hr className="w-full border-border" />
-          <SummaryRow emphasize label={total.label} value={total.value} />
+          <SummaryRow
+            emphasize
+            label={total.label}
+            muted={total.muted || total.value === "TBD"}
+            value={total.value}
+          />
         </>
       ) : null}
     </VStack>
@@ -281,61 +312,70 @@ function FulfilmentStatusCard({
   );
 }
 
+/**
+ * Right sidebar — same shell as Order Details: summary, optional payment,
+ * delivery address. Pre-invoice rows use TBD for unquoted fees.
+ */
 function OrderSidebar({ content }: { content: WinnerOrderContent }) {
+  const lines = summaryLinesFor(content);
+  const showPayment = Boolean(content.paymentMethod);
+  const showAddress = content.status !== "cancelled";
+
   return (
-    <aside className="w-full bg-background" data-slot="winner-order-sidebar">
+    <aside
+      className="w-full bg-background lg:sticky lg:top-8"
+      data-slot="winner-order-sidebar"
+    >
       <Card className="gap-0 overflow-hidden p-0" padding={false}>
-        {content.invoiceLines ? (
-          <VStack
-            className={cn(
-              "w-full bg-background-subtle p-6",
-              (content.addressValue || content.paymentMethod) &&
-                "border-b border-border",
-            )}
-            gap="md"
-            hAlign="stretch"
-          >
-            <InvoiceSummary lines={[...content.invoiceLines]} />
+        <VStack
+          className={cn(
+            "w-full bg-background-subtle p-6",
+            (showPayment || showAddress) && "border-b border-border",
+          )}
+          gap="md"
+          hAlign="stretch"
+        >
+          <OrderSummary lines={lines} />
+        </VStack>
+        {showPayment || showAddress ? (
+          <VStack className="w-full p-6" gap="lg" hAlign="stretch">
+            {showPayment ? (
+              <VStack className="w-full" gap="sm" hAlign="stretch">
+                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+                  Payment method
+                </h3>
+                <Card className="gap-0 p-3" padding={false}>
+                  <HStack className="w-full" gap="sm" vAlign="center">
+                    <span className="text-sm leading-5 font-medium text-foreground">
+                      {content.paymentMethod}
+                    </span>
+                    {content.paymentMasked ? (
+                      <>
+                        <span
+                          aria-hidden
+                          className="h-5 w-px shrink-0 bg-border"
+                        />
+                        <span className="text-sm leading-5 font-medium text-foreground">
+                          {content.paymentMasked}
+                        </span>
+                      </>
+                    ) : null}
+                  </HStack>
+                </Card>
+              </VStack>
+            ) : null}
+            {showAddress ? <AddressBlock content={content} /> : null}
           </VStack>
         ) : null}
-        <VStack className="w-full p-6" gap="lg" hAlign="stretch">
-          {content.paymentMethod ? (
-            <VStack className="w-full" gap="sm" hAlign="stretch">
-              <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-                Payment method
-              </h3>
-              <Card className="gap-0 p-3" padding={false}>
-                <HStack className="w-full" gap="sm" vAlign="center">
-                  <span className="text-sm leading-5 font-medium text-foreground">
-                    {content.paymentMethod}
-                  </span>
-                  {content.paymentMasked ? (
-                    <>
-                      <span
-                        aria-hidden
-                        className="h-5 w-px shrink-0 bg-border"
-                      />
-                      <span className="text-sm leading-5 font-medium text-foreground">
-                        {content.paymentMasked}
-                      </span>
-                    </>
-                  ) : null}
-                </HStack>
-              </Card>
-            </VStack>
-          ) : null}
-          <AddressBlock content={content} />
-        </VStack>
       </Card>
     </aside>
   );
 }
 
 /**
- * Preview-only Winner Order page. Storybook-first layout: lean single column
- * pre-invoice; after invoice, Order Details–like header + main/sidebar with
- * optional fulfilment stepper. Not a published `@grade10/ui` export and not
- * the store Order Details contract.
+ * Preview-only Winner Order page. Always uses the Order Details 2-column shell
+ * (main + sticky summary sidebar). Storybook-first — not a published
+ * `@grade10/ui` export and not the store Order Details contract.
  */
 function WinnerOrderPage({
   status: statusProp = "awaiting_address",
@@ -357,11 +397,9 @@ function WinnerOrderPage({
   const opensAddressDialog =
     content.status === "awaiting_address" &&
     content.primaryCta === "Confirm delivery address";
-  const preInvoice = isPreInvoice(content.status);
-  const withSidebar = !preInvoice && content.invoiceLines != null;
-  const fulfilment =
-    showFulfilmentStepper(content.status) &&
-    fulfilmentStepsFor(content.status, content);
+  const fulfilment = showFulfilmentStepper(content.status)
+    ? fulfilmentStepsFor(content.status, content)
+    : null;
 
   function handlePrimaryAction() {
     if (opensAddressDialog) {
@@ -384,12 +422,7 @@ function WinnerOrderPage({
       data-status={content.status}
     >
       <SiteHeader {...AUCTION_SITE_HEADER} />
-      <main
-        className={cn(
-          "mx-auto flex w-full flex-1 flex-col gap-8 px-4 py-8 sm:px-8",
-          withSidebar ? "max-w-7xl gap-12 pb-16" : "max-w-3xl",
-        )}
-      >
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-12 px-4 pt-8 pb-16 sm:px-8">
         <Breadcrumbs>
           <BreadcrumbItem href="#account">Account</BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -412,8 +445,24 @@ function WinnerOrderPage({
           </Text>
         </VStack>
 
-        {preInvoice ? (
-          <VStack className="w-full gap-6" gap="lg" hAlign="start">
+        <div className="grid w-full items-start gap-8 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
+          <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
+            {fulfilment ? (
+              <FulfilmentStatusCard
+                onTrack={
+                  content.primaryCta === "Track shipment"
+                    ? handlePrimaryAction
+                    : undefined
+                }
+                steps={fulfilment}
+                trackLabel={
+                  content.primaryCta === "Track shipment"
+                    ? content.primaryCta
+                    : null
+                }
+              />
+            ) : null}
+
             <Text className="max-w-prose text-secondary-foreground" size="sm">
               {content.body}
             </Text>
@@ -425,20 +474,15 @@ function WinnerOrderPage({
 
             <LotCard content={content} />
 
-            <section
-              aria-label="Delivery address"
-              className="w-full rounded-xl border border-border p-4"
-            >
-              <AddressBlock content={content} />
-            </section>
-
-            {content.secondaryNote ? (
+            {content.secondaryNote &&
+            content.status !== "shipped" &&
+            content.status !== "delivered" ? (
               <Text size="sm" tone="secondary">
                 {content.secondaryNote}
               </Text>
             ) : null}
 
-            {content.primaryCta ? (
+            {content.primaryCta && content.primaryCta !== "Track shipment" ? (
               <div className="w-full sm:w-auto">
                 <Button
                   className="w-full sm:w-auto"
@@ -450,67 +494,9 @@ function WinnerOrderPage({
               </div>
             ) : null}
           </VStack>
-        ) : (
-          <div
-            className={cn(
-              "grid w-full items-start gap-8 lg:gap-12",
-              withSidebar
-                ? "grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
-                : "grid-cols-1",
-            )}
-          >
-            <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
-              {fulfilment ? (
-                <FulfilmentStatusCard
-                  onTrack={
-                    content.primaryCta === "Track shipment"
-                      ? handlePrimaryAction
-                      : undefined
-                  }
-                  steps={fulfilment}
-                  trackLabel={
-                    content.primaryCta === "Track shipment"
-                      ? content.primaryCta
-                      : null
-                  }
-                />
-              ) : null}
 
-              <Text className="max-w-prose text-secondary-foreground" size="sm">
-                {content.body}
-              </Text>
-              {content.deadline ? (
-                <Text size="sm" weight="medium">
-                  {content.deadline}
-                </Text>
-              ) : null}
-
-              <LotCard content={content} />
-
-              {content.secondaryNote &&
-              content.status !== "shipped" &&
-              content.status !== "delivered" ? (
-                <Text size="sm" tone="secondary">
-                  {content.secondaryNote}
-                </Text>
-              ) : null}
-
-              {content.primaryCta && content.primaryCta !== "Track shipment" ? (
-                <div className="w-full sm:w-auto">
-                  <Button
-                    className="w-full sm:w-auto"
-                    onClick={handlePrimaryAction}
-                    size="lg"
-                  >
-                    {content.primaryCta}
-                  </Button>
-                </div>
-              ) : null}
-            </VStack>
-
-            {withSidebar ? <OrderSidebar content={content} /> : null}
-          </div>
-        )}
+          <OrderSidebar content={content} />
+        </div>
       </main>
       <Footer {...STORE_FOOTER} />
 
