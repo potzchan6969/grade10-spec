@@ -20,9 +20,10 @@ const LISTING_IMAGE = new URL(
  * `open` is the consumer's state: the component has no uncontrolled fallback,
  * so the meta holds it at true and every story below is the open dialog.
  *
- * Figma draws a Google OAuth control above the divider. Storybook cannot host
- * Google's real widget, so gallery stories omit it rather than faking one —
- * the empty `providerSlot` contract stays on `ProviderThatHasNotDrawnYet`.
+ * Figma draws Google Continue above an or-divider, then email. Storybook cannot
+ * host Google's real widget, so gallery stories mount a stand-in Continue with
+ * Google control in `providerSlot`. The empty async-slot contract stays on
+ * `ProviderThatHasNotDrawnYet`.
  *
  * The dialog portals to `document.body`, so play functions query
  * `within(document.body)` rather than the canvas.
@@ -40,6 +41,13 @@ const figmaLegal = (
   </>
 );
 
+/** Stand-in for Google's OAuth control — Storybook cannot host the real widget. */
+const googleContinue = (
+  <Button size="md" type="button" variant="outline">
+    Continue with Google
+  </Button>
+);
+
 const meta = {
   title: "Auth Sign In/SignInCard",
   component: SignInCard,
@@ -50,8 +58,10 @@ const meta = {
     onOpenChange: fn(),
     copy: {
       title: "Sign In to Grade10",
+      providerDivider: "or",
       legal: figmaLegal,
     },
+    providerSlot: googleContinue,
     children: (
       <SignInEmailForm
         copy={{
@@ -71,18 +81,25 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Figma's Login Dialog without the Google control: title, email step,
- * legal line. Empty email keeps Sign In with Email disabled, which is what the
+ * Primary gallery entry: Google Continue, or-divider, email / Sign In with
+ * Email, legal line. Empty email keeps the CTA disabled, which is what the
  * frame draws at rest.
  */
 export const Default: Story = {
   play: async () => {
     const body = within(document.body);
     const dialog = body.getByRole("dialog");
+    const google = body.getByRole("button", { name: "Continue with Google" });
+    const email = body.getByLabelText("Email");
 
     expect(
       body.getByRole("heading", { name: "Sign In to Grade10" }),
     ).toBeInTheDocument();
+    expect(body.getByText("or")).toBeInTheDocument();
+    expect(dialog.querySelector('[data-slot="divider"]')).not.toBeNull();
+    expect(
+      google.compareDocumentPosition(email) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
     expect(body.getByRole("textbox", { name: "Email" })).toHaveAttribute(
       "placeholder",
       "Enter your email",
@@ -99,7 +116,6 @@ export const Default: Story = {
     expect(
       body.getByRole("link", { name: "Privacy Policy" }),
     ).toBeInTheDocument();
-    expect(dialog.querySelector('[data-slot="divider"]')).toBeNull();
   },
 };
 
@@ -396,14 +412,14 @@ export const LinkSent: Story = {
 };
 
 /**
- * Signed-out Add to cart on a listing tile opens the Login Dialog — the
+ * Signed-out Add to cart on a listing tile opens the Login Dialog — same
+ * entry composition as a normal sign-in (Google Continue, or-divider, email
+ * / Sign In with Email), with why-title **Sign In to Add to Cart**. The
  * consumer owns session and `open`, so the cart control reports quantity and
  * this demo opens sign-in instead of adding a guest line. Narrow viewport
  * keeps the cart control visible without hover (same as listing on touch).
  *
- * Why-title: `copy.title` is **Sign In to Add to Cart** (not the meta
- * default **Sign In to Grade10**). Spec:
- * `grade10-site-store-product-listing-SC-47` (product-page twin SC-29);
+ * Spec: `grade10-site-store-product-listing-SC-47` (product-page twin SC-29);
  * open-from-add gate remains SC-44 / SC-26.
  */
 export const FromAddToCart: Story = {
@@ -412,8 +428,10 @@ export const FromAddToCart: Story = {
     open: false,
     copy: {
       title: "Sign In to Add to Cart",
+      providerDivider: "or",
       legal: figmaLegal,
     },
+    providerSlot: googleContinue,
   },
   parameters: {
     viewport: { defaultViewport: "mobile1" },
@@ -466,9 +484,20 @@ export const FromAddToCart: Story = {
     await waitFor(() => {
       expect(body.getByRole("dialog")).toBeInTheDocument();
     });
+    const dialog = body.getByRole("dialog");
     expect(
       body.getByRole("heading", { name: "Sign In to Add to Cart" }),
     ).toBeInTheDocument();
+    const google = body.getByRole("button", { name: "Continue with Google" });
+    const email = body.getByLabelText("Email");
+    expect(body.getByText("or")).toBeInTheDocument();
+    expect(dialog.querySelector('[data-slot="divider"]')).not.toBeNull();
+    expect(
+      google.compareDocumentPosition(email) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      body.getByRole("button", { name: "Sign In with Email" }),
+    ).toBeDisabled();
     // Consumer never marked the tile in-cart — no guest line.
     expect(
       canvasElement.querySelector(
