@@ -48,7 +48,7 @@ const STATE_VARIANT: Record<
   paid: "outline",
   shipped: "outline",
   delivered: "outline",
-  hold_releasing: "default",
+  hold_releasing: "outline",
   hold_released: "outline",
   pending_payment: "warning",
   expired: "error",
