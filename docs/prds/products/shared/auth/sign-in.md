@@ -24,6 +24,14 @@ Sign-in stays on the brand. A session covers every site of that brand and no
 other, and a redirect target the brand does not trust is ignored rather than
 followed.
 
+## After the Send
+
+- 🚧 **Confirmation** — once the sign-in email goes out, the surface names
+  the address it went to, offers Resend, and offers a way back to Google
+  Continue (when the brand has it) plus email entry.
+- 🚧 **Email-step wording** — the send action reads **Sign In with Email**;
+  collectors never see the term magic link on the dialog.
+
 ## Following the Link
 
 A working unused link signs the person in. A link that cannot creates no

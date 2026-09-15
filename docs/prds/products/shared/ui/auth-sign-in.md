@@ -19,6 +19,13 @@ body renders in the order design draws it — the provider slot above the
 divider, the email step below it — and closes on a legal line the
 application supplies as the last node.
 
+- 🚧 **After a successful send** — the dialog body shows confirmation that
+  names the address, a Resend control, and a control that returns to the
+  entry step (Google Continue when offered, plus email). The email-step
+  action reads **Sign In with Email**.
+
+::story{id="auth-sign-in-signincard--link-sent" title="Link sent"}
+
 ## Boundaries
 
 The dialog is the surface; what a successful sign-in creates is
