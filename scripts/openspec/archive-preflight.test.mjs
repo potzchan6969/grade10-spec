@@ -117,6 +117,53 @@ test("a change whose sections all landed is clear", () => {
   assert.equal(result.status, 0);
 });
 
+test("refuses a scenario the fold would land with no anchor", () => {
+  const files = {
+    ...CARRIED,
+    [`specs/${CAP}/spec.md`]:
+      PURPOSE +
+      FEATURE_SET +
+      REQUIREMENTS +
+      "\n#### Scenario: listing-SC-01 - It searches\n\n- **WHEN** asked\n- **THEN** it searches\n",
+  };
+  const result = run(sandbox(files, DURABLE).script, ...SHIPPED);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /1 scenario\(s\) carrying no `\*\*Serves:\*\*` line/);
+  assert.match(result.stderr, /listing-SC-01/);
+});
+
+test("takes the anchor written as its own line or as a bullet", () => {
+  for (const serves of [
+    "**Serves:** listing-US-01 - Collector searches the catalogue",
+    "- **Serves:** `Search`",
+  ]) {
+    const files = {
+      ...CARRIED,
+      [`specs/${CAP}/spec.md`]:
+        PURPOSE +
+        FEATURE_SET +
+        REQUIREMENTS +
+        `\n#### Scenario: listing-SC-01 - It searches\n${serves}\n\n- **WHEN** asked\n- **THEN** it searches\n`,
+    };
+    const result = run(sandbox(files, DURABLE).script, ...SHIPPED);
+    assert.equal(result.status, 0, `${serves} was refused: ${result.stderr}`);
+  }
+});
+
+test("says nothing about a scenario that predates permanent ids", () => {
+  const files = {
+    ...CARRIED,
+    [`specs/${CAP}/spec.md`]:
+      PURPOSE +
+      FEATURE_SET +
+      REQUIREMENTS +
+      "\n#### Scenario: It searches\n\n- **WHEN** asked\n- **THEN** it searches\n",
+  };
+  const result = run(sandbox(files, DURABLE).script, ...SHIPPED);
+  assert.equal(result.status, 0, result.stderr);
+});
+
 test("refuses a durable purpose the change replaced and archive left behind", () => {
   const stale = {
     ...DURABLE,

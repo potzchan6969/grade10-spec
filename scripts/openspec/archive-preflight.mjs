@@ -68,6 +68,10 @@ const CHANGES = join(ROOT, "openspec", "changes");
 const DOOMED = ["Feature set"];
 const US_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
 const SC_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
+// The anchor line as `read-specs.mts` reads it: anywhere in the scenario's
+// body, bulleted or not, so this gate and the checker agree on what counts.
+const SERVES = /^\s*(?:[-*]\s+)?\*\*Serves:\*\*\s*\S/m;
+const SCENARIO_HEADING = /^####\s+Scenario:\s+([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
 const OPEN_TASK = /^\s*-\s*\[ \]\s*(.*)$/;
 const MANIFEST_KEY = /^([A-Za-z0-9_]+):/;
 /** Every key a record owns. A write drops all of them and appends only what it
@@ -126,6 +130,37 @@ function doomedSections(text) {
     if (!current) continue;
     for (const id of line.match(US_ID) ?? []) current.ids.add(id);
   }
+  return found;
+}
+
+/** The scenarios one delta issues that name no anchor. `anchorless` is a
+ * failure on the durable store and the fold is what moves a scenario there, so
+ * a delta nothing refuses here breaks `pnpm check:manual` the moment it lands.
+ * The anchor belongs in the delta, where the journeys that resolve it are
+ * still sitting beside it. A scenario carrying no permanent id is not one the
+ * rule counts, so it is not one this counts either. */
+function anchorlessScenarios(text) {
+  const lines = text.split("\n");
+  const found = [];
+  let current = null;
+  const close = () => {
+    if (current && !SERVES.test(current.body.join("\n"))) found.push(current.id);
+  };
+  for (const line of lines) {
+    const heading = line.match(SCENARIO_HEADING);
+    if (heading) {
+      close();
+      current = { id: heading[1], body: [] };
+      continue;
+    }
+    if (/^#{2,4}\s/.test(line)) {
+      close();
+      current = null;
+      continue;
+    }
+    if (current) current.body.push(line);
+  }
+  close();
   return found;
 }
 
@@ -345,10 +380,14 @@ if (open.length > 0 && tasksWaived === null) {
 // no flag defers it.
 const uncarried = [];
 const wrong = [];
+const anchorless = [];
 const suitesSeen = new Set();
 
 for (const { file, capability } of deltaFiles(changeId)) {
   const delta = readFileSync(file, "utf8");
+
+  const unanchored = anchorlessScenarios(delta);
+  if (unanchored.length > 0) anchorless.push({ capability, ids: unanchored });
   const durableFile = join(ROOT, "openspec", "specs", capability, "spec.md");
   const durable = existsSync(durableFile)
     ? readFileSync(durableFile, "utf8")
@@ -488,6 +527,29 @@ if (wrong.length > 0) {
     "The copy landed; what archive owes it did not. Every file involved is",
     "still here, so none of this is waivable — the fold is what makes it",
     "unrecoverable. Fix them, then re-run this.",
+  );
+  process.exit();
+}
+
+if (anchorless.length > 0) {
+  const total = anchorless.reduce((sum, one) => sum + one.ids.length, 0);
+  fail(
+    yellow(
+      `The fold would add ${total} scenario(s) carrying no \`**Serves:**\` line:`,
+    ),
+  );
+  for (const { capability, ids } of anchorless) {
+    const shown = ids.slice(0, SHOWN).join(", ");
+    const more = ids.length > SHOWN ? `, … and ${ids.length - SHOWN} more` : "";
+    console.error(`  ${capability} — ${shown}${more}`);
+  }
+  fail(
+    "",
+    "A scenario names the journey or feature set group it serves, and",
+    "`anchorless` fails on the durable store. Nothing refuses it inside a",
+    "change, so the break lands on whoever folds it. Anchor them here, where",
+    "the journeys that resolve them are still beside the delta, then re-run",
+    "this.",
   );
   process.exit();
 }
