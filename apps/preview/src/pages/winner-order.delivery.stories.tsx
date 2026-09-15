@@ -18,7 +18,11 @@ export const Processing: Story = {
   args: { status: "processing" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Processing")).toBeVisible();
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="processing"]',
+      ),
+    ).not.toBeNull();
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Address")).toBeVisible();
     expect(canvas.getByText("Shipped")).toBeVisible();

@@ -1,4 +1,3 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
@@ -68,21 +67,6 @@ function openPlaceholderInvoicePdf() {
 function hasIssuedInvoice(content: WinnerOrderContent): boolean {
   return Boolean(content.invoiceLines?.length);
 }
-
-const STATUS_BADGE: Record<
-  WinnerOrderStatus,
-  "default" | "success" | "error" | "warning" | "info" | "outline"
-> = {
-  awaiting_address: "warning",
-  preparing_invoice: "info",
-  pending_payment: "warning",
-  pending_payment_expired: "error",
-  processing: "info",
-  shipped: "info",
-  delivered: "success",
-  cancelled: "default",
-  refunded: "default",
-};
 
 const PRODUCT_IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
@@ -613,14 +597,9 @@ function WinnerOrderPage({
           <BreadcrumbItem current>Winner Order</BreadcrumbItem>
         </Breadcrumbs>
 
-        <HStack className="w-full flex-wrap items-center gap-3">
-          <h1 className="shrink-0 text-3xl leading-9 font-semibold text-foreground">
-            {content.title}
-          </h1>
-          <Badge size="sm" variant={STATUS_BADGE[content.status]}>
-            {content.statusLabel}
-          </Badge>
-        </HStack>
+        <h1 className="text-3xl leading-9 font-semibold text-foreground">
+          {content.title}
+        </h1>
 
         <div className="grid w-full items-start gap-8 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
           <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">

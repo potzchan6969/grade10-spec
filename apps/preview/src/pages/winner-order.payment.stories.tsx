@@ -18,7 +18,11 @@ export const PendingPayment: Story = {
   args: { status: "pending_payment" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Pending Payment")).toBeVisible();
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="pending_payment"]',
+      ),
+    ).not.toBeNull();
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     expect(canvas.getByText("Shipped")).toBeVisible();
@@ -45,7 +49,11 @@ export const ExpiredInvoice: Story = {
   args: { status: "pending_payment_expired" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(/expired invoice/i)).toBeVisible();
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="pending_payment_expired"]',
+      ),
+    ).not.toBeNull();
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Payment")).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));

@@ -21,7 +21,11 @@ export const AwaitingAddress: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "Winner Order" }),
     ).toBeVisible();
-    expect(canvas.getByText("Awaiting Address")).toBeVisible();
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="awaiting_address"]',
+      ),
+    ).not.toBeNull();
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Address")).toBeVisible();
     expect(canvas.getByText("Invoice")).toBeVisible();
@@ -55,7 +59,11 @@ export const PreparingInvoice: Story = {
   args: { status: "preparing_invoice" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Preparing Invoice")).toBeVisible();
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="preparing_invoice"]',
+      ),
+    ).not.toBeNull();
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Invoice")).toBeVisible();
     expect(canvas.getByText(/Wan Chai/)).toBeVisible();
@@ -116,7 +124,11 @@ export const ConfirmAddressFlow: Story = {
     await waitFor(() => {
       expect(page.queryByRole("dialog")).not.toBeInTheDocument();
     });
-    expect(canvas.getByText("Preparing Invoice")).toBeVisible();
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="preparing_invoice"]',
+      ),
+    ).not.toBeNull();
     expect(canvas.getByText(/Harbour Road/)).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Confirm delivery address" }),
@@ -200,7 +212,11 @@ export const AddNewAddressFlow: Story = {
     await waitFor(() => {
       expect(page.queryByRole("dialog")).not.toBeInTheDocument();
     });
-    expect(canvas.getByText("Preparing Invoice")).toBeVisible();
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="preparing_invoice"]',
+      ),
+    ).not.toBeNull();
     expect(canvas.getByText(/Queen's Road Central/)).toBeVisible();
 
     const toastEl = await waitFor(() => {

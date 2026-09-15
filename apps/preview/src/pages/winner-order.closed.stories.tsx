@@ -12,13 +12,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Order cancelled — lot returned to available. */
+/** Operator cancelled an unpaid invoice — lot returned to available. */
 export const Cancelled: Story = {
   name: "Cancelled",
   args: { status: "cancelled" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Cancelled")).toBeVisible();
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="cancelled"]',
+      ),
+    ).not.toBeNull();
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
@@ -28,13 +32,20 @@ export const Cancelled: Story = {
   },
 };
 
-/** Paid order later refunded. */
+/**
+ * Paid invoice later refunded (order-status `paid` → `refunded`).
+ * Not a non-payment outcome — fail-to-pay stays Pending Payment / Cancelled.
+ */
 export const Refunded: Story = {
   name: "Refunded",
   args: { status: "refunded" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Refunded")).toBeVisible();
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="refunded"]',
+      ),
+    ).not.toBeNull();
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
     expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
