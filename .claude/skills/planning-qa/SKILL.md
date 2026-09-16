@@ -408,5 +408,7 @@ the next reader cannot catch.
 - `spec-to-tcs`, `tcs-review` — the two skills that do this work.
 - `planning-pm` — the anchor set you read from, and the author your escalations go to.
 - `grilling` — the round a paused reconciliation opens.
+- `planning-dev` — the engineer downstream, who routes a change back here
+  rather than planning delivery against an outline.
 - `openspec-propose` — who writes what across the whole change.
 - `docs/governance/specs-to-test-cases.md` — the governing document.
