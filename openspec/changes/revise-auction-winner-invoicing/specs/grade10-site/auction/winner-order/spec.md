@@ -257,14 +257,14 @@ hidden when the invoice status is `cancelled`.
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers view and download of the invoice PDF
 
-#### Scenario: winner-order-SC-44 - No invoice PDF before send
+#### Scenario: winner-order-SC-64 - No invoice PDF before send
 **Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose invoice status is `not_issued`
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers no invoice PDF control
 
-#### Scenario: winner-order-SC-45 - A cancelled order hides the invoice PDF
+#### Scenario: winner-order-SC-65 - A cancelled order hides the invoice PDF
 **Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose invoice status is `cancelled`

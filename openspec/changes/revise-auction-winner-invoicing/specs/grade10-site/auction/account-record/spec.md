@@ -112,21 +112,21 @@ remove them.
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Preparing Invoice
 
-#### Scenario: grade10-site-auction-account-record-SC-49 - Every Won standing offers View order
+#### Scenario: grade10-site-auction-account-record-SC-56 - Every Won standing offers View order
 **Serves:** grade10-site-auction-account-record-US-01 - Winner opens settlement from My Auctions
 
 - **GIVEN** won listings in Awaiting Address, Pending Payment, Shipped, and Refunded
 - **WHEN** the winner opens My Auctions
 - **THEN** each of those rows offers View order into that lot's Winner Order
 
-#### Scenario: grade10-site-auction-account-record-SC-50 - Didn’t win offers no View order
+#### Scenario: grade10-site-auction-account-record-SC-57 - Didn’t win offers no View order
 **Serves:** grade10-site-auction-account-record-US-01 - Winner opens settlement from My Auctions
 
 - **GIVEN** a listing whose standing is Didn’t win
 - **WHEN** the winner opens My Auctions
 - **THEN** that row offers no View order entry to Winner Order
 
-#### Scenario: grade10-site-auction-account-record-SC-51 - A Won row carries no secondary helper lines
+#### Scenario: grade10-site-auction-account-record-SC-58 - A Won row carries no secondary helper lines
 **Serves:** grade10-site-auction-account-record-US-01 - Winner opens settlement from My Auctions
 
 - **GIVEN** a won listing in Awaiting Address and a won listing whose invoice is `expired`
