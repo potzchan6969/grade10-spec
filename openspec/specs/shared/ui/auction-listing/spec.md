@@ -31,6 +31,8 @@ without changing the listing's authoritative event data.
   - Enrollment signal: the bid card shows standing, or disables what a collector cannot yet do
 - Bid card accessory
   - Optional recentBidsAccessory: trailing edge of the recent-bids header
+- Lost standing
+  - Badge only: Did not win remains; no authorization-release banner
 
 ## Requirements
 
@@ -395,3 +397,17 @@ section header. It SHALL NOT require `recentBidsAccessory` to render.
 - **WHEN** the card renders
 - **THEN** the accessory appears beside the recent-bids label
 - **AND** the public recent-bids list below is unchanged
+
+### Requirement: Lost standing does not show card-release banner copy
+
+`ListingAuctionBidCard` SHALL NOT require a `cardRelease` copy field. When
+viewer standing is lost, the card SHALL show the Did not win status treatment
+and SHALL NOT render authorization-release banner copy under that standing.
+
+#### Scenario: shared-ui-auction-listing-SC-46 - Lost standing omits release banner
+**Serves:** Lost standing - lost standing omits the release banner
+
+- **GIVEN** a closed listing where the viewer lost
+- **WHEN** the bid card renders
+- **THEN** Did not win status is shown
+- **AND** no card-authorization-release banner copy is shown
