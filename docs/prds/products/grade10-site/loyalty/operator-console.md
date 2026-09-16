@@ -3,6 +3,7 @@ title: Operator Console
 spec: grade10-site/loyalty/programme
 audience: operator
 order: 9
+reviewed: 2026-09-16
 ---
 
 ## Moving Points

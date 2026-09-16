@@ -2,6 +2,7 @@
 title: Profile
 spec: grade10-site/loyalty/programme
 order: 6
+reviewed: 2026-09-16
 ---
 
 An account is a member. The membership is run from `/membership`; the
