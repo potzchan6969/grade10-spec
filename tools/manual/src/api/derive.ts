@@ -620,12 +620,26 @@ export type PendingItem = {
 /** What one teammate owes, oldest change first. */
 export type PendingTeammate = { teammate: string; items: PendingItem[] };
 
-/** `skip_specs` says a change alters no behaviour, so it owes no
- * requirements — and nothing built on them either. It is the only waiver a
- * worklist reads: `design_waived` and `tasks_waived` answer for a file's
- * absence at archive, not for whose turn it is now. */
-const waived = (id: string, change: ChangeEntry) =>
-  id === "specs" && change.skipSpecs !== undefined;
+/**
+ * `skip_specs` says a change alters no behaviour, so it owes no requirements —
+ * and nothing that lives inside a capability directory either. There is no
+ * capability, so there is nowhere for a journeys file or a suite to be
+ * written, and asking for one put an impossible row on the product manager's
+ * list for every tooling change in the store.
+ *
+ * It is the only waiver a worklist reads: `design_waived` and `tasks_waived`
+ * answer for a file's absence at archive, not for whose turn it is now.
+ */
+const waivedBySkip = (artifacts: SchemaArtifact[], change: ChangeEntry) =>
+  change.skipSpecs === undefined
+    ? new Set<string>()
+    : new Set(
+        artifacts
+          .filter(
+            (one) => one.id === "specs" || one.generates.startsWith("specs/"),
+          )
+          .map((one) => one.id),
+      );
 
 /**
  * Every teammate's worklist, derived from the artifacts each change has written
@@ -657,24 +671,20 @@ export function pendingByTeammate(
     // saying nothing — the `store` rule is what reports it.
     const artifacts = change.error ? undefined : schemas[change.schema];
     if (!artifacts) continue;
+    const waived = waivedBySkip(artifacts, change);
     const written = new Set(change.written);
     const declared = new Map(
       (change.awaiting ?? []).map((wait) => [wait.artifact, wait.why]),
     );
     for (const artifact of artifacts) {
       if (!artifact.teammate || written.has(artifact.id)) continue;
-      // A waiver settles what an artifact beside the change stands on, but
-      // not what lives inside a capability directory: `skip_specs` says there
-      // is no capability, so there is nowhere to write a journeys file.
-      const beside = !artifact.generates.startsWith("specs/");
-      const settled = (id: string) =>
-        written.has(id) || (beside && waived(id, change));
+      const settled = (id: string) => written.has(id) || waived.has(id);
       const why = declared.get(artifact.id);
       const owed =
         why !== undefined ||
         (artifact.required &&
           artifact.requires.every(settled) &&
-          !waived(artifact.id, change));
+          !waived.has(artifact.id));
       if (!owed) continue;
       byTeammate
         .get(artifact.teammate)

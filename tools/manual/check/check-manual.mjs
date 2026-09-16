@@ -78,6 +78,7 @@ import { checkAcceptance } from "./qa.mjs";
 import {
   checkArchived,
   checkAwaiting,
+  checkDecided,
   checkDesign,
   checkUnmarked,
 } from "./record.mjs";
@@ -198,6 +199,7 @@ export async function runChecks(
     checkDependencies(roots.store, changes, add);
     checkUnmarked(ctx, changes, pages);
     checkDesign(ctx, changes);
+    checkDecided(ctx, changes);
     checkAwaiting(ctx, changes);
     checkArchived(ctx, readArchivedChanges(roots.store, index));
   } else {

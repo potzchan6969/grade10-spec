@@ -376,6 +376,7 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
  * `pnpm plan shipped` wrote, read back verbatim. */
 const RECORDED = [
   ["page_waived", "pageWaived"],
+  ["decisions_waived", "decisionsWaived"],
   ["design_waived", "designWaived"],
   ["deployed_at", "deployedAt"],
   ["deployed_env", "deployedEnv"],

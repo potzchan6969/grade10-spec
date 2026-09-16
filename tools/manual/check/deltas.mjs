@@ -28,7 +28,7 @@ import {
   readRequirement,
   requirementBlocks,
 } from "../src/store/read-specs.mts";
-import { everyBlock, plural } from "./context.mjs";
+import { everyBlock, journeysOf, plural } from "./context.mjs";
 
 /** The only `## ` headings a delta may hold: the four the fold reads, plus
  * the two a spec's own head carries. `User journeys` is not among them — the
@@ -43,6 +43,11 @@ const GWT = /^\s*(?:[-*]\s+)?\*\*(?:GIVEN|WHEN|THEN)\*\*/;
 const ARCHIVE_DATE = /^\d{4}-\d{2}-\d{2}-/;
 
 export function checkDeltas(ctx, { changes, shape, pages }) {
+  // Before the guard: a change can carry journeys and no delta at all — the
+  // state the product manager hands over in — and the restated copies in it
+  // are checkable without a `spec.md` anywhere near them.
+  checkContext(ctx, journeysOf(ctx.roots.store, changes));
+
   const files = readDeltaFiles(ctx.roots.store, changes);
   if (files.length === 0) return;
   checkShape(files, ctx.add);
@@ -50,7 +55,6 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   checkOverlap(files, ctx.add);
   checkIssued(ctx, files);
   checkFuse(ctx, files, pages);
-  checkContext(ctx, files);
   checkAnchors(ctx, files);
   checkBlind(ctx, files, shape);
 }
@@ -243,6 +247,9 @@ const sameBehaviour = (written, held) =>
 /** RULE `context`: a change restates the journeys it anchors on under
  * `## Context user journeys`, and the copy is the durable text or it is a lie.
  *
+ * Asked of every journeys file a change carries, not of its deltas: the copy
+ * lands in the product manager's commit, which has no `spec.md` in it at all.
+ *
  * The section exists so the blind suite pass can read the journeys without being
  * handed the durable capability — reading `openspec/specs/` is how it would see
  * the scenarios it must not see. That makes the copy load-bearing rather than a
@@ -252,30 +259,29 @@ const sameBehaviour = (written, held) =>
  *
  * Only the restated block is compared. A journey the change also modifies belongs
  * under `## MODIFIED User journeys`, where it is meant to differ. */
-function checkContext(ctx, files) {
-  for (const file of files) {
-    const text = journeysBeside(ctx.roots.store, file.file);
+function checkContext(ctx, journeys) {
+  for (const { spec, file: at } of journeys) {
+    const text = readTextIfExists(join(ctx.roots.store, at)) ?? "";
     const restated = journeysUnder(text, "Context user journeys");
     if (restated.size === 0) continue;
-    const durablePath = `openspec/specs/${file.spec}/user-journeys.md`;
+    const durablePath = `openspec/specs/${spec}/user-journeys.md`;
     const durable = journeysUnder(
       readTextIfExists(join(ctx.roots.store, durablePath)) ?? "",
       "User journeys",
     );
-    const at = file.file.replace(/spec\.md$/, "user-journeys.md");
     for (const [id, copied] of restated) {
       const original = durable.get(id);
       if (original === undefined) {
         ctx.add(
           "context",
           at,
-          `restates \`${id}\`, which \`${file.spec}\` does not hold — a context journey is a copy of a durable one, not a new journey filed under the wrong heading`,
+          `restates \`${id}\`, which \`${spec}\` does not hold — a context journey is a copy of a durable one, not a new journey filed under the wrong heading`,
         );
       } else if (original !== copied) {
         ctx.add(
           "context",
           at,
-          `the restated \`${id}\` is not what \`${file.spec}\` holds — bring the copy back to the durable text, or move the journey under \`## MODIFIED User journeys\` where it is meant to differ`,
+          `the restated \`${id}\` is not what \`${spec}\` holds — bring the copy back to the durable text, or move the journey under \`## MODIFIED User journeys\` where it is meant to differ`,
         );
       }
     }

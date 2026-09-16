@@ -18,7 +18,9 @@ they are the first three:
 that scope: the journeys, the design, the feature set. Every change carries it,
 and a change that had little to settle carries a short one — an empty
 `## Decisions` table says nothing had to be chosen, which is a claim worth
-being able to make.
+being able to make. `check:manual`'s `decided` rule asks for the file on every
+change opened since it shipped; `decisions_waived: <why>` stands in where there
+was truly nothing, and a lint sweep is the shape of that.
 
 A fourth is yours **when you already have the design**: `ui-design.md` is the
 designer's file, and a PM who has the screens in hand writes it in the same
@@ -76,11 +78,15 @@ happens inside that one invocation.
 ```
 grilling                        author answers rounds until the frontier is empty
     ↓
-decisions                       yours: the frontier as settled, and its edges
-    ↓
 PRD marks 🚧 / ❓                the source of the feature set's groups
     ↓
-user-journeys                   yours, written
+openspec new change             the directory the rest lands in
+    ↓
+proposal                        yours: why, what changes, what it will not do
+    ↓
+decisions                       yours: the frontier as settled, and its edges
+    ↓
+user-journeys                   yours: who walks it, inside those edges
     ─────────────────────────────────────────────────────────────
     ↓
 /planning-qa                    spec.md's outline, then the two readings

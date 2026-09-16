@@ -266,6 +266,7 @@ artifacts:
       `**Trace:** grade10-site-store-product-listing-US-04`; delete the journey
       outright and that join breaks with nothing left to recover it from.
     requires:
+      - decisions
       - proposal
   - id: ui-design
     required: false
