@@ -12,6 +12,7 @@ order keeps afterwards.
   - One invoice per lot: a winner of three lots owes three amounts on three deadlines, never one consolidated bill
   - Estimate-first pricing: the invoice is payable from the moment of close rather than waiting on an address
   - Final amount: names every component a winner is asked to pay, so a total is explicable line by line
+  - Buyer's premium: 20% of the winning bid or the currency's minimum charge, whichever is higher, computed by Grade10
 - Delivery address
   - Account-wide address book: the platform keeps multiple named shipping addresses and one optional default for the account
   - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it before payment
@@ -98,7 +99,7 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Auction order | The order this invoice is the payable record for. One each way |
 | Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
 | Hammer price | The winning bid, excluding every other component |
-| Buyer's premium | The applicable fee. This capability fixes no rate |
+| Buyer's premium | 20% of the winning bid or the currency's minimum charge, whichever is higher |
 | Shipping | Priced against the address currently on the order |
 | Insurance | Priced against the address currently on the order |
 | Tax | An optional line reserved for the separate tax change; no rate or regime is defined here |
@@ -121,6 +122,63 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 - **GIVEN** an auction order whose winner has confirmed a delivery address
 - **WHEN** the winner reads the invoice
 - **THEN** no component is marked as an estimate
+
+### Requirement: Grade10 computes the buyer's premium
+
+Grade10 SHALL compute every invoice's buyer's premium; no operator SHALL
+enter, waive or change it. The premium SHALL be the larger of:
+
+1. 20% of the hammer price (read by the winner as Winning Bid) alone,
+   rounded half up to the nearest minor unit, and
+2. the minimum charge for the lot's currency.
+
+Shipping, insurance and tax SHALL NOT be part of its base. The premium SHALL be
+an integer count of minor units in the lot's currency.
+
+Grade10 owns one minimum charge per supported currency:
+
+| Currency | Minimum charge (minor units) |
+| --- | --- |
+| USD | 0 |
+| HKD | 0 |
+| JPY | 0 |
+
+A minimum of 0 SHALL mean no minimum. A changed rate or minimum SHALL apply
+to invoices sent or reissued after it takes effect; an invoice already sent
+SHALL keep its amounts.
+
+#### Scenario: winner-order-SC-40 - The premium is 20% of the winning bid
+**Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
+
+- **GIVEN** the HKD minimum charge is 20000 minor units
+- **AND** an auction order with a hammer price of 250000 minor units in HKD
+- **WHEN** an operator sends its invoice
+- **THEN** the buyer's premium is 50000 minor units in HKD
+- **AND** the operator was not asked to enter it
+
+#### Scenario: winner-order-SC-41 - The minimum charge applies when it is higher
+**Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
+
+- **GIVEN** the HKD minimum charge is 20000 minor units
+- **AND** an auction order with a hammer price of 50000 minor units in HKD
+- **WHEN** an operator sends its invoice
+- **THEN** the buyer's premium is 20000 minor units in HKD
+
+#### Scenario: winner-order-SC-42 - A zero minimum leaves the rounded 20%
+**Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
+
+- **GIVEN** the JPY minimum charge is 0
+- **AND** an auction order with a hammer price of 1003 minor units in JPY
+- **WHEN** an operator sends its invoice
+- **THEN** the buyer's premium is 201 minor units in JPY
+
+#### Scenario: winner-order-SC-43 - A sent invoice keeps its premium when the minimum changes
+**Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
+
+- **GIVEN** an invoice sent with a hammer price of 50000 and a buyer's premium of 10000 minor units in HKD while the HKD minimum was 0
+- **WHEN** the HKD minimum changes to 20000 minor units
+- **THEN** that invoice's buyer's premium stays 10000 minor units in HKD
+- **AND** an invoice reissued for that order afterwards carries 20000 minor units in HKD
 
 ### Requirement: One invoice and one auction order per lot
 

@@ -3,3 +3,4 @@ created: 2026-09-15
 depends_on:
   - revise-auction-winner-invoicing
 decisions_waived: "opened before decisions.md existed; the scope is in the proposal, and the requirements and suites are written"
+deploy_waived: "@htonyl explicitly waived deployment evidence in the archive request"
