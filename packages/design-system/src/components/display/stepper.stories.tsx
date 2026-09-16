@@ -15,6 +15,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Last step upcoming: empty ring matches connector `border-border` at full strength. */
 export const ThreeSteps: Story = {
   render: () => (
     <Stepper>
