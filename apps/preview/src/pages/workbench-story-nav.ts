@@ -45,7 +45,7 @@ const STORE_LOCATOR_HREF = storyHref(STORE_LOCATOR_STORY_ID);
 /** TBC — provisional docs host for collector Help in the primary nav. */
 const HELP_HREF = "https://grade10.mintlify.io/";
 
-/** Primary-nav Help after Store Locator; opens the docs host in a new tab. */
+/** Primary-nav Help; after Store Locator when present, else after Auction. */
 const HELP_NAV_ITEM = {
   label: "Help",
   href: HELP_HREF,

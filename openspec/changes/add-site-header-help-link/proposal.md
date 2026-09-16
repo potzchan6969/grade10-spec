@@ -15,8 +15,9 @@ confirmed).
 ## What Changes
 
 - **Help in the primary nav** — auction-only and full primary nav both list
-  Help after Store Locator (wide bar and compact menu), styled like Auction
-  and Store Locator
+  Help (wide bar and compact menu), styled like other primary items. When
+  Store Locator is present, Help follows it; on auction-first, Help follows
+  Auction
 - **Opens documentation in a new tab** — Help leaves the site for the docs
   host; the current page stays open
 - **`NavLink.external`** — design-system `Nav` opens a link marked `external`
@@ -45,16 +46,17 @@ confirmed).
 ### Modified Capabilities
 
 - `shared/ui/site-chrome`: `NavLink.external` opens marked links in a new tab
-- `grade10-site/site/page-shell`: Help primary-nav item after Store Locator;
-  documentation destination allowed in primary nav
+- `grade10-site/site/page-shell`: Help primary-nav item (after Store Locator
+  when present, after Auction on auction-first); documentation destination
+  allowed in primary nav
 
 ## Impact
 
 - **`@grade10/design-system`** — `NavLink` gains optional `external`; primary
   nav and utility regions honour it
 - **`@grade10/ui`** — `SiteHeader` fixtures pass Help as an external nav item
-- **`apps/preview`** — auction and store chrome fixtures include Help after
-  Store Locator
+- **`apps/preview`** — auction chrome lists Help after Auction; store chrome
+  lists Help after Store Locator
 - **Consumers** — grade10-site supplies Help href and `external: true` once
   Product confirms the host (provisional Mintlify URL acceptable until then)
 

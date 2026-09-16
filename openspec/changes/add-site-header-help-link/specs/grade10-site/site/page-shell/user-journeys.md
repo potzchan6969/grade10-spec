@@ -3,8 +3,8 @@
 ### grade10-site-site-page-shell-US-07: Collector opens Help from the header
 
 **As a** collector,
-**I want** Help in the primary nav after Store Locator to open the
-documentation site in a new tab,
+**I want** Help in the primary nav to open the documentation site in a new tab
+(after Store Locator when present, after Auction on auction-only),
 **so that** I can read help without losing the page I was on, whether I am on
 auction-only or full primary nav.
 
