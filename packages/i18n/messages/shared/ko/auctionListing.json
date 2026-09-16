@@ -56,6 +56,7 @@
   "maximumMechanismSubtext": "필요한 만큼만 최대 금액까지 입찰합니다. 보류 금액은 최대 금액과 같고, 올리기만 가능하며 낮추거나 취소할 수 없습니다.",
   "minAmount": "최소: {amount}",
   "minimumBidIs": "최소 입찰가는 {amount}입니다.",
+  "ceilingBidIs": "최대 입찰가는 {amount}입니다.",
   "minimumMaximumFloor": "최소 {amount}(현재 입찰가 + {increment})",
   "minimumMaximumLeadingIncrement": "최소 {amount}(최고 입찰가 + {increment})",
   "minimumMaximumLeadingNudge": "최소 {amount}(최고 입찰가 + {increment})",

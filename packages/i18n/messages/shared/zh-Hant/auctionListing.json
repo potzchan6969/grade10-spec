@@ -56,6 +56,7 @@
   "maximumMechanismSubtext": "我們只會按需出價至你的最高金額。預授權與該金額一致；只能上調，不能下調或取消。",
   "minAmount": "最低：{amount}",
   "minimumBidIs": "最低出價為 {amount}。",
+  "ceilingBidIs": "最高出價為 {amount}。",
   "minimumMaximumFloor": "至少 {amount}（目前出價 + {increment}）",
   "minimumMaximumLeadingIncrement": "至少 {amount}（你的最高出價 + {increment}）",
   "minimumMaximumLeadingNudge": "至少 {amount}（你的最高出價 + {increment}）",

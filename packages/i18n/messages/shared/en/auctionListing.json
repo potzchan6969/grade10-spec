@@ -56,6 +56,7 @@
   "maximumMechanismSubtext": "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
   "minAmount": "Min: {amount}",
   "minimumBidIs": "Minimum bid is {amount}.",
+  "ceilingBidIs": "Maximum bid is {amount}.",
   "minimumMaximumFloor": "At least {amount} (current bid + {increment})",
   "minimumMaximumLeadingIncrement": "At least {amount} (your maximum + {increment})",
   "minimumMaximumLeadingNudge": "At least {amount} (your maximum + {increment})",
