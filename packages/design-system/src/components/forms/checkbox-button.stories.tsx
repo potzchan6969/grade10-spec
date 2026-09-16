@@ -16,7 +16,18 @@ export const Unchecked: Story = {};
 export const Disabled: Story = {
   args: { disabled: true, defaultChecked: true },
 };
-export const DisabledUnchecked: Story = { args: { disabled: true } };
+export const DisabledUnchecked: Story = {
+  name: "Disabled unchecked",
+  args: { disabled: true },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Figma `2176:4095`: background-subtle fill and dashed border — not an opacity wash.",
+      },
+    },
+  },
+};
 
 /** The four states Figma draws, as a 2x2. */
 export const States: Story = {

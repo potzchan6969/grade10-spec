@@ -18,10 +18,30 @@ export const Default: Story = {};
 export const Unchecked: Story = { args: { defaultChecked: false } };
 export const Small: Story = { args: { size: "sm" } };
 
-/** `disabled` is Figma's other axis here — `Opacity/opacity-50` over the row. */
-export const Disabled: Story = { args: { disabled: true } };
+/** `disabled` dims the label and count; the control keeps its own disabled drawing. */
+export const Disabled: Story = {
+  name: "Disabled checked",
+  args: { disabled: true },
+};
 
-export const DisabledSmall: Story = { args: { disabled: true, size: "sm" } };
+/** Cap-refuse pattern: dashed unchecked control beside a dimmed label. */
+export const DisabledUnchecked: Story = {
+  name: "Disabled unchecked",
+  args: { disabled: true, defaultChecked: false },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Matches Winner Order Save for future at the address-book cap: label dimmed, CheckboxButton dashed / background-subtle.",
+      },
+    },
+  },
+};
+
+export const DisabledSmall: Story = {
+  name: "Disabled small",
+  args: { disabled: true, size: "sm" },
+};
 
 /** Omit `count` and the trailing number is not rendered — Figma's `showCount`. */
 export const WithoutCount: Story = { args: { count: undefined } };

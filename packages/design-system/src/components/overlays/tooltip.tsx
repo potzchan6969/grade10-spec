@@ -154,7 +154,7 @@ function TooltipContent({
         arrowPadding={16}
         side={side}
         sideOffset={resolvePositionerSideOffset(sideOffset)}
-        className="isolate z-50"
+        className="isolate z-[100]"
       >
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
