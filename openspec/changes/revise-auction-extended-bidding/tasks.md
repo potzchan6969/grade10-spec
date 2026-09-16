@@ -9,7 +9,7 @@
 - [ ] 2.2 Update contract fixtures and compile-time contract tests for the breaking public and admin shapes (`grade10-site-auction-auction-SC-13`, `grade10-admin-auction-listing-SC-27a`)
 - [ ] 2.3 Verify the affected contracts with `pnpm --dir packages/grade10-auction/contracts run typecheck && pnpm --dir packages/grade10-auction/contracts run test`
 
-## 3. Auction data migration (grade10)
+## 3. Auction data migration (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Remove `extension_window_seconds` and its constraint references from the auction listing schema, preserve the duration default and cap constraint, and generate the migration without rewriting effective closes (`grade10-admin-auction-listing-SC-27`, `grade10-admin-auction-listing-SC-27a`, `grade10-admin-auction-listing-SC-70`)
 - [ ] 3.2 Verify the schema and migration with `pnpm run db:drizzle:generate && pnpm run check:migrations`
