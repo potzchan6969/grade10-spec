@@ -5,7 +5,7 @@ description: Write the engineer's artifacts on an OpenSpec change - tech-design.
 
 # The engineer's artifacts
 
-Two of the seven artifacts in `grade10-planning` are yours, and they are the
+Two of the eight artifacts in `grade10-planning` are yours, and they are the
 last two:
 
 | Artifact | What it holds |

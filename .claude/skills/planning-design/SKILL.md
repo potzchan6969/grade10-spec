@@ -5,7 +5,7 @@ description: Write the ui-design.md artifact on an OpenSpec change - the designe
 
 # The designer's artifact
 
-One of the seven artifacts in `grade10-planning` is yours:
+One of the eight artifacts in `grade10-planning` is yours:
 
 | Artifact | What it holds |
 | --- | --- |

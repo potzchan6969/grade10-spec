@@ -34,19 +34,20 @@ Read [`docs/governance/design-system-workflows.md`](docs/governance/design-syste
 
 ## Product specification workflow
 
-One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the whole lifecycle in seven artifacts. `openspec new change <name>` records it in the change's `.openspec.yaml`. The CLI is `@fission-ai/openspec@1.8.0`; `pnpm openspec …` runs it with no global install.
+One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the whole lifecycle in eight artifacts. `openspec new change <name>` records it in the change's `.openspec.yaml`. The CLI is `@fission-ai/openspec@1.8.0`; `pnpm openspec …` runs it with no global install.
 
 | # | Artifact | Written by | Skill | Required |
 | --- | --- | --- | --- | --- |
 | 1 | `proposal.md` | Product manager | `planning-pm` | Always |
-| 2 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Always — a capability nobody walks says so in it |
-| 3 | `ui-design.md` | Designer, or the PM with the design | `planning-design` | Optional — from the journeys |
-| 4 | `specs/<capability>/spec.md` | Generated, the PM reviews | `planning-pm`, then `planning-qa` | Always — two passes, with 5 between them |
-| 5 | `specs/<capability>/feature-tcs.md` | Generated, QA reviews | `planning-qa` | Always — a blind pass, before the scenarios |
-| 6 | `tech-design.md` | Engineer | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
-| 7 | `tasks.md` | Engineer | `planning-dev` | Before the change can be applied |
+| 2 | `decisions.md` | Product manager | `planning-pm` | The interview's record — goals, non-goals, what it settled |
+| 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Always — a capability nobody walks says so in it |
+| 4 | `ui-design.md` | Designer, or the PM with the design | `planning-design` | Optional — from the journeys |
+| 5 | `specs/<capability>/spec.md` | Generated, the PM reviews | `planning-pm`, then `planning-qa` | Always — two passes, with 6 between them |
+| 6 | `specs/<capability>/feature-tcs.md` | Generated, QA reviews | `planning-qa` | Always — a blind pass, before the scenarios |
+| 7 | `tech-design.md` | Engineer | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
+| 8 | `tasks.md` | Engineer | `planning-dev` | Before the change can be applied |
 
-The PM writes 1 and 2; `/planning-pm` generates 4's `## Purpose` and `## Feature set` — the anchor set — then stops. A designer hangs 3 off it unless the PM has the design. `/planning-qa` reads it twice over on the same branch: 5, blind to the scenarios, then 4's requirements, reconciled against it. The engineer adds `tech-design.md` and `tasks.md` to that change, never a second one. Engineering never opens a change in the application repository: its `openspec/` is config-only and resolves to this store. Until a change has a `tasks.md` it shows on the engineer's board as still being planned. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
+The PM writes 1 to 3; `/planning-pm` generates 5's `## Purpose` and `## Feature set` — the anchor set — then stops. 2 records what the interview settled, and 3, 4 and 5 are drawn from that scope: a journey outside its goals, or inside a non-goal, is the artifact disagreeing with the change. Its non-goals are the proposal's too, written once. A designer hangs 4 off it unless the PM has the design. `/planning-qa` reads 5 twice over on the same branch: 6, blind to the scenarios, then 5's requirements, reconciled against it. The engineer adds `tech-design.md` and `tasks.md` to that change, never a second one. Engineering never opens a change in the application repository: its `openspec/` is config-only and resolves to this store. Until a change has a `tasks.md` it shows on the engineer's board as still being planned. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
 
 The PRD is the exception to teammates. It is the source of truth for what the product should be, so a product detail learned anywhere — a designer's state, an engineer's constraint, a QA case that exposes a rule nobody wrote, a delta that says more than the PRD does — lands on the PRD first, marked 🚧 or ❓, by whoever learned it, before the artifact that depends on it. A product detail is a line the reader would act differently without — a value, a set they meet, an outcome they see, a decision — and one 🚧 line carries an outcome however many scenarios prove it; what each teammate learns beyond that stays in its own artifact, tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#what-does-not-go-on-the-prd). The product manager keeps the PRD whole.
 

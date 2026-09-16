@@ -93,7 +93,8 @@ Keep the block readable as a standalone decision record. Replace superseded deci
 
 For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
-- `proposal.md` — scope, why now, consumer impact, non-goals, and under `## References` a link to every page section the change marked;
+- `proposal.md` — scope, why now, consumer impact, and under `## References` a link to every page section the change marked;
+- `decisions.md` — the interview's record: the change's goals, its non-goals, and one row per question the rounds settled with the option it dropped. The proposal points here for the edges rather than restating them, and the journeys, the design and the requirements are all drawn from this scope;
 - `specs/<capability>/user-journeys.md` — who walks the capability, written before the requirements, or the one line `**Walked by:** nobody on their own - <why>` when no end user reaches it;
 - `specs/<capability>/spec.md` — the capability's `## Purpose` and `## Feature set`, then the requirement deltas against `openspec/specs/`; two passes over one file, with the blind suite between them;
 - `specs/<capability>/feature-tcs.md` — a blind reading of those journeys and the feature set, written without sight of the scenarios, beside every capability;
@@ -103,7 +104,7 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 
 Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. When the constraint changes an outcome or a recorded product decision, the PRD moves first — a 🚧 or ❓ line — and the change follows.
 
-Only the first four are always written. A change is finished as far as its author is concerned once the requirements and their journeys are right; `ui-design.md` is the designer's, on that same change, unless the author already had the design; the engineer who picks it up adds `tech-design.md` and `tasks.md` **to that same change**, and adds `promoted_by: @handle` to its `.openspec.yaml` so the board names them. `tech-design.md` is owed by every change carrying a task group outside this store — the repository tag on the group heading says where the work lands, and an untagged group counts; `design_waived: <why>` in the manifest stands in for it, and `pnpm check:manual` refuses a change with neither. The proposal and the deltas carry over untouched — never send them back to their author for a task list.
+Only the first five are always written. A change is finished as far as its author is concerned once the requirements and their journeys are right; `ui-design.md` is the designer's, on that same change, unless the author already had the design; the engineer who picks it up adds `tech-design.md` and `tasks.md` **to that same change**, and adds `promoted_by: @handle` to its `.openspec.yaml` so the board names them. `tech-design.md` is owed by every change carrying a task group outside this store — the repository tag on the group heading says where the work lands, and an untagged group counts; `design_waived: <why>` in the manifest stands in for it, and `pnpm check:manual` refuses a change with neither. The proposal and the deltas carry over untouched — never send them back to their author for a task list.
 
 That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there, and a change with no `tasks.md` shows on the engineer's board as still being planned. A change whose requirements are finished but which nobody picks up is therefore invisible as ready work, however complete its specs are.
 

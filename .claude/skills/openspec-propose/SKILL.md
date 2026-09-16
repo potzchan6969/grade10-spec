@@ -7,7 +7,7 @@ description: Start a new OpenSpec change - what to read first, and which role sk
 
 `openspec/specs/` is the single source of truth for requirements; a change is
 the delta against it. Every change in this store is drafted on one schema,
-`grade10-planning`, whose seven artifacts are split across four role skills.
+`grade10-planning`, whose eight artifacts are split across four role skills.
 This skill covers what to settle before drafting and routes to the right one.
 
 ## Who writes what
@@ -15,22 +15,26 @@ This skill covers what to settle before drafting and routes to the right one.
 | # | Artifact | Skill | Required |
 | --- | --- | --- | --- |
 | 1 | `proposal.md` | `planning-pm` | Always |
-| 2 | `specs/<capability>/user-journeys.md` | `planning-pm` | Always — a capability nobody walks says so in it |
-| 3 | `ui-design.md` | `planning-design` | Optional — the designer's, or the PM's when they have the design |
-| 4 | `specs/<capability>/spec.md` | `planning-pm`, then `planning-qa` | Always — generated, two passes with 5 between them |
-| 5 | `specs/<capability>/feature-tcs.md` | `planning-qa` | Always — generated blind, before the scenarios |
-| 6 | `tech-design.md` | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
-| 7 | `tasks.md` | `planning-dev` | Before the change can be applied |
+| 2 | `decisions.md` | `planning-pm` | The interview's record — goals, non-goals, what it settled |
+| 3 | `specs/<capability>/user-journeys.md` | `planning-pm` | Always — a capability nobody walks says so in it |
+| 4 | `ui-design.md` | `planning-design` | Optional — the designer's, or the PM's when they have the design |
+| 5 | `specs/<capability>/spec.md` | `planning-pm`, then `planning-qa` | Always — generated, two passes with 6 between them |
+| 6 | `specs/<capability>/feature-tcs.md` | `planning-qa` | Always — generated blind, before the scenarios |
+| 7 | `tech-design.md` | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
+| 8 | `tasks.md` | `planning-dev` | Before the change can be applied |
 
-**The product manager writes 1 and 2**, and `/planning-pm` generates the first
-pass of 4 from them - its purpose and feature set, the anchor set, then stops.
-A designer maps 3 onto that same set where the change has a surface, working
-from the journeys and the PRD rather than requirements nobody has written yet.
-`/planning-qa` then takes the set and runs two independent readings of it: 5,
-blind to the scenarios, then 4's requirements, reconciled against it. Neither 4
-nor 5 names a teammate or sits on a worklist - the PM reviews 4, QA reviews 5
-later with `/tcs-review`. A capability nobody walks still carries 5, anchored on
-its feature set rather than its journeys.
+**The product manager writes 1 to 3**, and `/planning-pm` generates the first
+pass of 5 from them - its purpose and feature set, the anchor set, then stops.
+2 is the interview's record, and 3, 4 and 5 are all drawn from the scope it
+settles: a journey outside its goals, or inside a non-goal, is the artifact
+disagreeing with the change. A designer maps 4 onto that same set where the
+change has a surface, working from the journeys and the PRD rather than
+requirements nobody has written yet. `/planning-qa` then takes the set and runs
+two independent readings of it: 6, blind to the scenarios, then 5's
+requirements, reconciled against it. Neither 5 nor 6 names a teammate or sits on
+a worklist - the PM reviews 5, QA reviews 6 later with `/tcs-review`. A
+capability nobody walks still carries 6, anchored on its feature set rather than
+its journeys.
 
 **Write your part and stop.** Each role adds its artifacts to the one change;
 nobody opens a second one, and an implementation plan invented ahead of the

@@ -1,11 +1,13 @@
 name: grade10-planning
 version: 1
 description: >-
-  Grade10 planning workflow - proposal → user journeys → specs → test cases → ui
-  design → tech design → tasks. `specs` is written in two passes over one file
-  with the blind suite between them: the suite and the scenarios are independent
-  readings of the same anchors, reconciled after both land. One lane for every
-  hand a change passes through.
+  Grade10 planning workflow - proposal → decisions → user journeys → ui design →
+  specs → test cases → tech design → tasks. The interview settles the frontier
+  and `decisions` records it, so the journeys, the design and the requirements
+  are all drawn from one settled scope. `specs` is written in two passes over
+  one file with the blind suite between them: the suite and the scenarios are
+  independent readings of the same anchors, reconciled after both land. One
+  lane for every hand a change passes through.
 artifacts:
   - id: proposal
     required: true
@@ -27,8 +29,9 @@ artifacts:
       capabilities, modifications, or removals. Mark breaking changes with
       **BREAKING**.
 
-      - **Non-Goals**: What this change deliberately does not do, so the people
-      downstream know the edges.
+      - **Non-Goals**: One line pointing at `decisions.md`, which holds them.
+      They are decided in the interview, and two homes for one boundary is two
+      answers the day somebody edits one.
 
       - **Capabilities**: Which specs will be created or modified:
         - **New Capabilities**: Each becomes a new `specs/<capability-path>/spec.md`. Use kebab-case for path segments you introduce (e.g. `user-auth` or `identity/user-auth`) and follow the project's existing spec organization.
@@ -81,6 +84,63 @@ artifacts:
 
       This is the foundation - everything after it builds on this.
     requires: []
+  - id: decisions
+    required: false
+    teammate: product-manager
+    generates: decisions.md
+    description: The change's decided frontier - its goals, its edges, and what the interview settled
+    template: decisions.md
+    instruction: >
+      Written by the product manager, with the `planning-pm` skill, out of the
+      same `grilling` round that produced the proposal. It lands before the
+      journeys, the design and the requirements, because all three are drawn
+      from what it settles.
+
+
+      Sections:
+
+      - **Goals**: what this change is for, as outcomes a reader would notice,
+      one line each. The change's own boundary, never the capability's - the PRD
+      holds what the product should be.
+
+      - **Non-Goals**: what this change deliberately does not do. This is their
+      one home; the proposal points here. Every artifact drawn from this one
+      reads them as its edges.
+
+      - **Decisions**: a table, one row per question the interview settled, in
+      the order the rounds asked them - `Q | Asked | Decided | Instead of`. The
+      `Q` number is the round's own, so a decision leads back to the question
+      that raised it. `(recommended)` marks one the author took as offered
+      rather than chose.
+
+
+      **Confirmed decisions only.** A question nobody present could settle is a
+      deferral: it goes under the proposal's open questions naming who owes the
+      answer, and as a ❓ row on the capability's PRD. Recording a deferral here
+      as though it were decided is how an open question stops being read as one.
+
+
+      `Instead of` is the column that earns the file. A decision without its
+      rejected option is re-opened next quarter and answered the other way, with
+      nothing in the record to say which reading is newer. It is the same
+      service `## Settled` does for the blind suite: what has already been
+      asked, which is not what the artifacts downstream say.
+
+
+      What belongs elsewhere: a decision a requirement can carry goes in the
+      delta spec and nowhere else; one the manual's reader needs goes in the
+      PRD's `Product decisions` block; an implementation choice - a lock, a
+      column, persist or recompute - goes in `tech-design.md` under its own
+      `## Decisions`. What stays here is what the interview closed about scope.
+
+
+      Optional in the schema and expected in practice: a change nobody
+      interviewed has nothing to record, and one whose scope turned on a
+      judgement has everything. `planning-pm` writes it on every change it
+      runs. It is never a reason to hold a draft - an empty frontier is a short
+      file, not a missing one.
+    requires:
+      - proposal
   - id: user-journeys
     required: true
     teammate: product-manager
@@ -89,7 +149,9 @@ artifacts:
     template: user-journeys.md
     instruction: |
       Written by the product manager, with the `planning-pm` skill, one file
-      beside each `spec.md` the change touches.
+      beside each `spec.md` the change touches. Its scope is `decisions.md`'s:
+      a journey outside those goals, or inside a non-goal, is the file
+      disagreeing with the change.
 
       Sections, in this order:
 

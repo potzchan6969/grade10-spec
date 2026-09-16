@@ -5,13 +5,19 @@ description: Write the product manager's half of an OpenSpec change - the propos
 
 # The product manager's artifacts
 
-**Two of the seven artifacts in `grade10-planning` are yours to write**, and
-they are the first two:
+**Three of the eight artifacts in `grade10-planning` are yours to write**, and
+they are the first three:
 
 | Artifact | File | What it holds |
 | --- | --- | --- |
-| `proposal` | `proposal.md` | Why this problem, for whom, what it will not do |
+| `proposal` | `proposal.md` | Why this problem, for whom, what changes |
+| `decisions` | `decisions.md` | The goals, the non-goals, and what the interview settled |
 | `user-journeys` | `specs/<capability>/user-journeys.md` | The journeys added, changed or retired, and the ones this change leans on |
+
+`decisions.md` is the interview's record, and everything after it is drawn from
+that scope: the journeys, the design, the feature set. It is optional in the
+schema so an in-flight backlog does not read as work you owe — write it on
+every change you run.
 
 A third is yours **when you already have the design**: `ui-design.md` is the
 designer's file, and a PM who has the screens in hand writes it in the same
@@ -54,6 +60,8 @@ happens inside that one invocation.
 ```
 grilling                        author answers rounds until the frontier is empty
     ↓
+decisions                       yours: the frontier as settled, and its edges
+    ↓
 PRD marks 🚧 / ❓                the source of the feature set's groups
     ↓
 user-journeys                   yours, written
@@ -87,10 +95,12 @@ Everything this run produces is `draft`. Nothing in it claims review.
    questions, not the change's size.
 
    A question settles three ways: answered, accepted as recommended, or
-   **deferred** - the author saying they are not the right person for it. A
-   deferred question goes under the proposal's open questions with a note on who
-   should settle it, and does not hold the draft. Sizing, export names, and what
-   code a change touches are never the author's to answer.
+   **deferred** - the author saying they are not the right person for it. The
+   first two are rows in `decisions.md`, the second marked `(recommended)` so a
+   later reader knows how firm it is. A deferred question is not a decision: it
+   goes under the proposal's open questions with a note on who should settle it,
+   and as a ❓ row on the PRD, and it does not hold the draft. Sizing, export
+   names, and what code a change touches are never the author's to answer.
 
 3. **Mark the PRDs first.** One 🚧 line per outcome the reader can see, in the
    reader's words and in the section it belongs to; a ❓ line or decisions row
@@ -135,9 +145,18 @@ Everything this run produces is `draft`. Nothing in it claims review.
    (`pnpm plan:preflight` is unrelated: it guards `tasks.md` against being
    overwritten while engineering is implementing.)
 
-6. **Write the proposal and the journeys**, in that order - the two files
-   that are yours. Under the proposal's `## References`, link every section you
-   marked, so the manual shows the change under that heading.
+6. **Write the proposal, the decisions and the journeys**, in that order -
+   the three files that are yours. Under the proposal's `## References`, link
+   every section you marked, so the manual shows the change under that heading;
+   its `## Non-Goals` points at `decisions.md` rather than restating the edges.
+
+   `decisions.md` carries the frontier you just closed: the goals, the
+   non-goals, and one row per question the rounds settled with the option it
+   dropped. Write the rejected option every time - a decision without it is
+   re-opened next quarter and answered the other way, with nothing to say which
+   reading is newer. What a requirement can carry belongs in the delta instead,
+   what the manual's reader needs in the PRD, and an implementation choice in
+   `tech-design.md`.
 
 7. **Generate the outline**, then read it. `## Purpose` and `## Feature set`
    come from the proposal, the marks and the journeys, and together with the
@@ -206,7 +225,7 @@ grilling round, not a self-service waiver.
 | # | Commit | Proves |
 | --- | --- | --- |
 | 1 | `docs(prd): …` | The product judgement is in the reader's words |
-| 2 | `spec(<domain>): journeys and outline` | The anchor set is fixed |
+| 2 | `spec(<domain>): decisions, journeys and outline` | The scope is settled and the anchor set is fixed |
 
 Commits 3 and 4 are `/planning-qa`'s, on this same branch: the blind suites, then
 the scenarios and the reconciliation. The diff between them is what the second
@@ -217,6 +236,9 @@ reading bought.
 | Statement | Home |
 | --- | --- |
 | What the product should be, in the reader's words | The PRD, marked 🚧 or ❓ |
+| This change's goals and edges | `decisions.md`, and the proposal points there |
+| A question the interview settled, and what it dropped | `decisions.md`'s table |
+| A question nobody present could settle | The proposal's open questions, and a ❓ on the PRD |
 | Anything testable | The delta spec, and nowhere else - generated, and yours to check |
 | Who walks it | `user-journeys.md` beside that spec |
 | Why this problem, for whom, what was ruled out, what will be measured | The PRD's `Product decisions` block |
