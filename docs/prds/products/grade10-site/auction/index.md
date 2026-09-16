@@ -31,7 +31,7 @@ A bid only counts once its hold confirms, so an accepted amount always beats
 every amount already standing, and no two bids ever tie. A lot with a reserve
 that nobody clears closes unsold and nobody is charged at all.
 
-🚧 The clock moves after the close. A lot that has a bid when its scheduled
+The clock moves after the close. A lot that has a bid when its scheduled
 close arrives keeps running, and every new bid restarts its timer, so a lot
 scheduled to end at six can still be running at eight. That tail is capped:
 past the cap the extension truncates rather than refuses the bid.

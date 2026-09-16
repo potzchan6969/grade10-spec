@@ -3,3 +3,5 @@ created: 2026-09-10
 promoted_by: "@htonyl"
 decisions_waived: "Opened before decisions.md existed; the proposal already records the settled scope, and the requirements and suites are complete. Engineering alternatives and cutover choices are recorded in tech-design.md."
 design_waived: "The change reuses existing listing-form controls, queue-row layout, outcome badges, design tokens, and public listing presentation; no new component or Figma frame is needed."
+deploy_waived: "@htonyl explicitly waived deployment evidence: archive and push to main without evidence"
+tasks_waived: "@htonyl explicitly waived task verification: archive and push to main without evidence"

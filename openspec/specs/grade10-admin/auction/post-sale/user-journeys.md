@@ -44,3 +44,9 @@ payments that failed,
 **As a** shipment operator,
 **I want** shipment to follow paid, then started, then completed,
 **so that** finance cannot ship, publishing does not need the shipment grant, and recording an address does not ship.
+
+### post-sale-US-06: Operator sees which lots are still in extended bidding
+
+**As an** auction operator,
+**I want** the queue to label a lot still taking bids past its scheduled close,
+**so that** I can tell a lot running long from one that closed on time.

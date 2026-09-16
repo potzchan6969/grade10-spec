@@ -18,7 +18,7 @@ while it has not closed. Named image sizes and optional alt live in
   - Slug as public key: collectors open a listing by slug; collisions and reuse follow the listing's state
   - Catalogue fields: an operator may write copy and taxonomy before publish
 - Prices and window
-  - Writable before publish: starting price and close can change until the listing is live
+  - Writable before publish: starting price, close, extension duration, and cap can change until the listing is live
 - Publish
   - Now or scheduled: a created listing publishes immediately or at a set time
 - Call off
@@ -322,20 +322,25 @@ to set:
   `draft`. When both starts at and scheduled close at are set, scheduled
   close at MUST be after starts at. At create, scheduled close at MUST also
   be after now.
-- **Extension window (seconds)** and **Extension duration (seconds)** —
-  whole numbers ≥ 0, set together or both zero (extension off). A bid
-  inside the extension window of the close moves the close to now plus the
-  extension duration. The extension window MUST NOT be greater than the
-  extension duration. Empty on draft is allowed. Omitted at create SHALL
-  store both as `1800`. Both zero together means extension off.
+- **Extension duration (seconds)** — how long extended bidding runs after the
+  scheduled close, and after each bid during it, per
+  `grade10-site/auction/auction`. A whole number ≥ 0. Zero turns extended
+  bidding off. Empty on draft is allowed. Omitted at create SHALL store
+  `1800`.
 - **Extension cap (seconds)** — optional whole number ≥ 0, or absent for an
   uncapped listing. The close MUST NOT move past scheduled close at plus
   this cap. A cap below the extension duration is a hard final deadline,
   not an error.
 
+A listing SHALL carry no extension window, and this form SHALL NOT offer one.
+
+Scenario `grade10-admin-auction-listing-SC-27` keeps its title with its id. The
+title is historical: any extension window is now refused, with or without a
+duration.
+
 A write of any of these fields on a `published`, `closed`, `settled`, or
 `canceled` listing SHALL be refused. The effective close is not an operator
-field: extension writes it, and this form SHALL NOT accept it.
+field: extended bidding writes it, and this form SHALL NOT accept it.
 
 **Sandbox** SHALL be writable only while `draft`. A sandbox listing runs on
 test-mode payment credentials instead of live money, so the house can
@@ -370,8 +375,7 @@ be refused.
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a created listing
-- **WHEN** an operator sets an extension window of 1800 seconds and an
-  extension duration of 0
+- **WHEN** an operator submits an extension window of 1800 seconds
 - **THEN** Grade10 refuses the write
 - **AND** the listing's extension settings are unchanged
 
@@ -379,10 +383,9 @@ be refused.
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft listing with every required field set and no extension
-  window or duration supplied
+  duration supplied
 - **WHEN** an authorized operator creates the listing
-- **THEN** Grade10 stores extension window 1800 seconds and extension duration
-  1800 seconds
+- **THEN** Grade10 stores an extension duration of 1800 seconds
 
 #### Scenario: grade10-admin-auction-listing-SC-28 - Sandbox cannot change after create
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
@@ -391,6 +394,14 @@ be refused.
 - **WHEN** an operator clears sandbox
 - **THEN** Grade10 refuses the write
 - **AND** the listing remains sandbox
+
+#### Scenario: grade10-admin-auction-listing-SC-70 - A negative extension duration is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
+
+- **GIVEN** a created listing
+- **WHEN** an operator sets an extension duration of -60 seconds
+- **THEN** Grade10 refuses the write
+- **AND** the listing's extension settings are unchanged
 
 ### Requirement: Publish happens now or at a scheduled time
 

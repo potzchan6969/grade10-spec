@@ -8,11 +8,11 @@ order: 11
 Every lot starts as an operator's draft. The first save mints the auctionable
 unit behind it and lets the operator walk away — nothing is required yet, so a
 listing can be half-written for a week. When they come back they add the
-catalogue copy and taxonomy, attach the gallery, and set a starting price and a
-window.
+catalogue copy and taxonomy, attach the gallery, and set a starting price,
+extension duration, and optional cap.
 
 Creating the listing is the moment the rules bite: a title, a slug, a starting
-price, a window and at least one media item are all checked on the form and
+price, scheduled times, and at least one media item are all checked on the form and
 again at the API, so a script cannot slip past what the form refuses. After
 that the listing is ready to sell but not yet visible; publishing is a separate
 move, either immediately or at a future time the operator sets.
