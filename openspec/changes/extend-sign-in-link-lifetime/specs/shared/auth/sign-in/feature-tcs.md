@@ -303,6 +303,7 @@ Runs once per row of **Test data**.
 
 | `<follow delay>` | Grade10 answers |
 | --- | --- |
+| exactly 5 minutes after the send | creates no session |
 | 5 minutes 1 second after the send | creates no session |
 | 6 minutes after the send | creates no session |
 
@@ -402,3 +403,27 @@ Runs once per row of **Test data**.
 * Does a used link stay refused for the rest of its five minutes, or does its record clear at first use? At sixty seconds the used and expired windows nearly coincided; at five minutes there is a four-minute stretch where a link is used and unexpired at once.
 * Is five minutes a fixed number or one an environment can set? The E2E impact line ends the lifetime "on the record" for the expired case, which is a test seam rather than an answer, and a configurable number would need the email's promise to follow it.
 * Does the confirmation dialog tell a collector how long they have, or does the promise live only in the email? "Check Your Email" names Resend and its countdown and no lifetime, so a collector who never opens the mail sees only the sixty-second number.
+
+## Reconciliation
+
+**Run:** 2026-09-17, input `98c18f1aa3e6` — outline, journeys, decisions,
+proposal, the PRD's After the Send section, and the existing US1 cases for id
+continuity. The suite pass read no requirements section anywhere; the scenario
+pass read the durable requirements and no suite.
+
+| Raised | Disposition |
+| --- | --- |
+| A device clock reading inside the five minutes revives an expired link (TC18-1) | **Folded in.** No scenario said whose clock measures the lifetime, and a follower's device answering the question is exactly the misreading a reader would ship. Now stated in the requirement and carried by `shared-auth-sign-in-SC-62` |
+| The boundary at exactly five minutes is unstated | **Folded in.** `shared-auth-sign-in-SC-59` refuses at five minutes rather than after them, and TC16-1 gained a row at the mark |
+| A resent link's five minutes run from its own send (TC11-1) | **Already stated.** The requirement measures the lifetime from the send, per link; the case walks that rule and no scenario was added |
+| The recorded expiry sits five minutes after the send (TC13-1) | **Already stated**, at a different layer. Kept as the deterministic reading of `shared-auth-sign-in-SC-59` |
+| The promised duration is the enforced one (TC15-1) | **Already stated**, jointly by `shared-auth-sign-in-SC-61` and `shared-auth-sign-in-SC-59`. Kept: the agreement between the two is this change's second goal, and neither scenario proves it alone |
+| A used link stays refused inside its five minutes (TC17-1) | **Already stated** by one-time use, which this change does not move. The five-minute lifetime is what makes the used-and-unexpired window worth walking |
+| The session outlives the link that made it (TC12-1) | **Real, and belongs to `shared/auth/session`** — which states no session lifetime at all, and neither does `shared/auth/sessions`. Raised here because the lifetime is this change's subject; recorded as a ❓ on the Session page rather than specified here, where it would be a second capability's requirement |
+| Which instant starts the clock, and which locales the email speaks | **Answered from the store.** The clock starts at the send, and the shared catalog speaks the four languages it is written in; both are in the requirement's own words |
+| Whether the email may also carry an absolute expiry time | **Rejected.** Nobody asked for a second form of the promise; this change corrects the number the email already gives |
+| Whether the confirmation dialog should state the lifetime | **Rejected.** The dialog says nothing about the lifetime today, and adding a surface is not this change's scope — `decisions.md` holds the edge |
+| Whether five minutes is settable per environment or brand | **Rejected.** One lifetime, everywhere; the E2E seam ends a link's life on the record and sets no second number |
+
+No anchor went uncovered, and no case is blocked: every question above was
+settled from the store or from the author's own decisions.
