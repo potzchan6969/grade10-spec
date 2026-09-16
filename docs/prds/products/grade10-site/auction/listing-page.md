@@ -15,6 +15,9 @@ auction's own, and the sizing a store card's preview picture rests on is the
 shop CDN's. Whether an id names a published lot is asked of the catalogue at
 the moment the address is requested, so an address naming no lot answers an
 honest 404 with the site's not-found surface rather than an empty lot page.
+🚧 The same 404 meets a lot that was published but is now hidden — Draft or
+Called off, per [Lot Status](/p/grade10-site/auction/lot-status) — even at the
+address it once answered from.
 
 When scripts do load, they take over the page that was already served. Nothing
 on screen is replaced by a loading placeholder, and a value that follows the

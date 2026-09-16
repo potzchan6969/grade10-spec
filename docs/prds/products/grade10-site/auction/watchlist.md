@@ -33,16 +33,17 @@ watches from collectors of either brand — each collector sees only their own.
 
 The lots a collector watches read most recently watched first, and each entry
 carries enough to act on: the lot, its current bid, its close, whether the
-sale is open, closed, or called off, and an **Email alerts** control beside
-**Unwatch**. Lots the collector is bidding on read above the ones they are
-only watching. Turning a lot's alerts off is confirmed on screen and says
-what it left alone — the watch, or the bid. A close or a call-off never
-removes a watch — the entry stays,
-honestly labelled, until its owner unwatches it. Mute leaves the lot on
-Watching. A collector watching nothing is told so rather than shown an error
-or an empty page. Unwatch is available on the listing page, the catalogue, and
-this list — email mute links to signed-in My Auctions; it is not the only way
-out.
+sale is open or closed, and an **Email alerts** control beside **Unwatch**.
+Lots the collector is bidding on read above the ones they are only watching.
+Turning a lot's alerts off is confirmed on screen and says what it left
+alone — the watch, or the bid. A close never removes a watch — the entry
+stays, honestly labelled, until its owner unwatches it.
+🚧 A called-off lot is different: it leaves the watched list rather than
+staying on it, per [Lot Status](/p/grade10-site/auction/lot-status).
+Mute leaves the lot on Watching. A collector watching nothing is told so
+rather than shown an error or an empty page. Unwatch is available on the
+listing page, the catalogue, and this list — email mute links to signed-in My
+Auctions; it is not the only way out.
 
 ## Visibility
 
@@ -90,7 +91,8 @@ most-recent first.
 | Privacy | Decided | A watch is visible only to the collector who made it. No public count. | Product |
 | No standing | Decided | Watching does not bid, reserve, or change the sale. | Product |
 | Sign-in | Decided | Signed-out viewers are offered sign-in. Nothing is stored in the browser. | Product |
-| Survives close | Decided | A closed or called-off lot stays in the list until the collector unwatches. | Product |
+| Survives close | Decided | A closed lot stays in the list until the collector unwatches. | Product |
+| Called-off leaves the list | 🚧 In flight | A called-off lot is hidden, so it leaves the watched list instead of surviving on it — [Lot Status](/p/grade10-site/auction/lot-status). Supersedes "Survives close" for called-off lots. | Product |
 | Unwatch surfaces | Decided | Listing page, catalogue tile, and watched list. Email mute → My Auctions for that lot's alerts; it does not unwatch. | Product |
 | Store heart | Decided | Not restored. This control exists because a list answers it. | Product |
 | List placement | Decided | My Auctions in the account area — Bidding then Watching as sections on one page (Order History shell). Per-row Email alerts + Unwatch. Entrance copy names lots / auction. No header-only destination. | Design |
