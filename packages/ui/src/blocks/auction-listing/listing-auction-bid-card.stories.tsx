@@ -25,7 +25,6 @@ const COPY = {
   paidBody: "Track shipping and delivery for this lot.",
   viewOrderDetails: "View order details",
   didNotWin: "Did not win",
-  cardRelease: "Your card authorization will be released.",
   outbid: "Outbid",
   highestBid: "Leading",
   yourMaximum: "Your maximum",
@@ -45,12 +44,12 @@ const COPY = {
   confirmMaximum: "Confirm",
   raiseMaximum: "Raise",
   confirmMaximumTooltip:
-    "The most we’ll bid for you. Authorizes a card hold for this amount—you may pay less if the auction ends below it.",
+    "The most we’ll bid for you. You may pay less if the auction ends below it.",
   confirmMaximumAriaLabel: "Confirm Maximum",
   raiseMaximumAriaLabel: "Raise Maximum",
   enableAutoBidding: "Enable auto-bidding",
   autoBiddingTooltip:
-    "We bid for you as needed, up to your maximum. Your card hold matches that amount—you may pay less if the auction ends below it.",
+    "We bid for you as needed, up to your maximum. You may pay less if the auction ends below it.",
   setPrivateMaximum: "Set your private maximum",
   raisePrivateMaximum: "Raise your private maximum",
   currentMaximum: "Max: {amount}",
@@ -60,7 +59,7 @@ const COPY = {
   privateMaximumTooltip:
     "Your maximum is the most you are willing to pay before buyer fees. Other bidders cannot see it. We only bid as needed to keep you leading.",
   maximumMechanismSubtext:
-    "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
+    "We bid only as needed up to your maximum. You can raise, not lower or cancel.",
   customAmountPlaceholder: "Custom amount (min. {amount})",
   stepperMessage: "Min.: {amount}",
   invalidAmount: "Enter a valid amount.",
@@ -75,9 +74,7 @@ const COPY = {
   minimumMaximumLeadingIncrement:
     "At least {amount} (your maximum + {increment})",
   maximumBelowMinimum: "Enter at least {amount}",
-  buyerFeeHint: "Buyer fee is added on top of the winning bid",
-  buyerFeeTooltip:
-    "Winners pay a percentage of the hammer price as a buyer fee. The rate is confirmed at checkout.",
+  buyerFeeHint: "20% buyer fee is added on top of the winning bid",
   noBidsYet: "No bids yet",
   endsLabel: "Ends",
   opensLabel: "Opens",
@@ -183,7 +180,7 @@ const meta = {
     onCommitMaximum: {
       control: false,
       description:
-        "Fires when Bid now / Set maximum / Raise maximum commits the selected preset or custom amount. The consumer validates the maximum, takes the hold, and writes the cap.",
+        "Fires when Bid now / Set maximum / Raise maximum commits the selected preset or custom amount. The consumer validates the maximum and writes the cap. First launch does not take a bid-time hold.",
     },
   },
   decorators: [

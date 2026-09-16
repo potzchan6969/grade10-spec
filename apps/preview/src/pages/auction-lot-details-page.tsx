@@ -34,7 +34,11 @@ import {
   userBidHistoryForState,
 } from "./auction-lot-details-content";
 import { AuctionLotDetailsPageShell } from "./auction-lot-details-page-shell";
-import { navigateToStory, ORDER_DETAILS_STORY_ID } from "./workbench-story-nav";
+import {
+  navigateToStory,
+  WINNER_ORDER_AWAITING_ADDRESS_STORY_ID,
+  WINNER_ORDER_PROCESSING_STORY_ID,
+} from "./workbench-story-nav";
 
 const LIVE_BID_INTERVAL_MS = 8_000;
 
@@ -187,8 +191,13 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
           locale={FIXTURE_SHIPPED_LOCALE}
           marketComps={view.closed ? undefined : AUCTION_LOT_MARKET_COMPS}
           onCommitMaximum={requestBidAction}
+          onCompletePurchase={() =>
+            navigateToStory(WINNER_ORDER_AWAITING_ADDRESS_STORY_ID)
+          }
           onPlaceBid={requestBidAction}
-          onViewOrderDetails={() => navigateToStory(ORDER_DETAILS_STORY_ID)}
+          onViewOrderDetails={() =>
+            navigateToStory(WINNER_ORDER_PROCESSING_STORY_ID)
+          }
           recentBidsAccessory={
             <ListingUserBidHistory
               activityTimeCopy={FIXTURE_ACTIVITY_TIME_COPY}
@@ -204,10 +213,16 @@ function AuctionLotDetailsPage({ state }: AuctionLotDetailsPageProps) {
         />
       </AuctionLotDetailsPageShell>
       <EnrollmentSetupSheet
+        cardReady
         copy={LISTING_BID_ENROLLMENT_DEMO_COPY}
         onContinue={completeEnrollment}
         onOpenChange={setSetupOpen}
         open={setupOpen}
+        paymentField={
+          <div className="flex h-12 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground">
+            {LISTING_BID_ENROLLMENT_DEMO_COPY.iframePlaceholder}
+          </div>
+        }
       />
     </>
   );

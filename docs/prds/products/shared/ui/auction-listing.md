@@ -47,6 +47,18 @@ hide the link. Every label arrives through props.
   the link and dialog are absent
 
 
+## Bid Panel Fee
+
+🚧 **Buyer fee on the panel** — under the bid action, always-on secondary copy
+states that a 20% buyer fee is added on top of the winning bid. The rate is not
+behind a tooltip.
+
+## Lost Standing
+
+🚧 **No release banner on the lot card** — when the viewer lost, the bid card
+shows Did not win without card-authorization-release banner copy. Hold release
+copy on My Auctions stays with that capability when a hold exists.
+
 ## Extended Bidding Copy
 
 🚧 **Time left tooltip** — names the listing's extension duration only: after

@@ -9,3 +9,5 @@
 **Accepted by:**
 
 - `grade10-site-auction-auto-bidding-SC-25` — A maximum works without a bid-time authorization
+- `grade10-site-auction-auto-bidding-SC-28` — Default mechanism copy omits hold language
+- `grade10-site-auction-auto-bidding-SC-29` — Enabled-hold mechanism copy names the hold

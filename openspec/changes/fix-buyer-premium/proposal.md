@@ -62,4 +62,4 @@ None.
 
 - Correct the Invoice fields row that says the capability fixes no rate, once
   the invoicing change is archived.
-- Tell a collector before they bid that a buyer's premium applies.
+- Pre-bid premium disclosure is owned by `disclose-buyer-premium-on-bid-panel`.

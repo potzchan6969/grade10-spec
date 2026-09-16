@@ -8,5 +8,8 @@
 
 **Accepted by:**
 
-- `grade10-site-auction-bid-panel-enrollment-SC-15` — Default setup copy does not promise a bid-time hold
-- `grade10-site-auction-bid-panel-enrollment-SC-16` — Enabled hold setup copy discloses the authorization
+- `grade10-site-auction-bid-panel-enrollment-SC-15` — Card linking leaves the collector ready to bid
+- `grade10-site-auction-bid-panel-enrollment-SC-16` — An accepted bid moves directly to enrolled
+- `grade10-site-auction-bid-panel-enrollment-SC-17` — Default setup copy does not promise a bid-time hold
+- `grade10-site-auction-bid-panel-enrollment-SC-18` — Enabled hold setup copy discloses the authorization
+- `grade10-site-auction-bid-panel-enrollment-SC-19` — Default payment-method tooltip does not promise a hold

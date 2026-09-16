@@ -21,7 +21,14 @@ complete without a bid-time authorization hold; expected: 100%.
 - **Bid panel enrollment** — keep the existing states and authorization
   handling; after card link the collector is ready to bid, and an accepted
   first bid moves directly to `enrolled`. The backend decides whether a
-  bid-time authorization is needed.
+  bid-time authorization is needed. Default setup and payment-method copy
+  authorize the card only; they do not promise a bid-time hold. When holds
+  are enabled, setup still discloses that setting a maximum authorizes a
+  hold.
+- **Mechanism and standing copy** — default mechanism subtext and bid-panel
+  tooltips omit hold language; lost standing shows Did not win without
+  card-release banner copy. Hold-matching mechanism copy applies only when
+  holds are enabled.
 - **Related in-flight specs** — condition the increment, winner-close,
   My Auctions, and called-off-lot hold outcomes on an authorization actually
   existing in their owning changes.
@@ -54,7 +61,10 @@ None.
   work without holds by default; hold outcomes are conditional.
 - `grade10-site/auction/bid-panel-enrollment`: existing panel states remain
   unchanged; the backend-selected path moves a linked collector directly to
-  ready-to-bid and moves an accepted first bid directly to `enrolled`.
+  ready-to-bid and moves an accepted first bid directly to `enrolled`;
+  default setup and payment-method copy do not promise a bid-time hold.
+- `shared/ui/auction-listing`: lost standing does not render card-release
+  banner copy.
 
 ## Impact
 
@@ -72,5 +82,6 @@ None.
 ## References
 
 - [Auction · Holds](../../../docs/prds/products/grade10-site/auction/index.md#holds)
+- [Listing Page Blocks · Lost Standing](../../../docs/prds/products/shared/ui/auction-listing.md#lost-standing)
 - [Auto-Bidding · Bid Panel](../../../docs/prds/products/grade10-site/auction/auto-bidding.md#bid-panel)
 - [Bid Panel Enrollment](../../../docs/prds/products/grade10-site/auction/bid-panel-enrollment.md)

@@ -72,6 +72,95 @@ backend does not require.
 * Change is no longer offered for that listing.
 * The panel does not add or display a client-side hold state.
 
+### grade10-site-auction-bid-panel-enrollment-US2-TC9-1: Default setup copy does not promise a bid-time hold
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
+
+**Pre-conditions:**
+
+* A signed-in collector has no linked card on an open listing.
+* Bid-time authorization holds are disabled.
+
+**Steps:**
+
+1. Open the setup modal.
+2. Read the modal description.
+
+**Expected Results:**
+
+* The description is "Link a card for bidding. You're only charged if you win."
+* The description does not promise a bid-time hold.
+
+### grade10-site-auction-bid-panel-enrollment-US2-TC10-1: Enabled hold setup copy discloses the authorization
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
+
+**Pre-conditions:**
+
+* A signed-in collector has no linked card on an open listing.
+* Bid-time authorization holds are enabled.
+
+**Steps:**
+
+1. Open the setup modal.
+2. Read the modal description and primary action.
+
+**Expected Results:**
+
+* The description discloses that setting a maximum authorizes a hold.
+* Continue remains labeled Link Card.
+
+### grade10-site-auction-bid-panel-enrollment-US2-TC11-1: Default payment-method tooltip does not promise a hold
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-bid-panel-enrollment-US-02
+
+**Pre-conditions:**
+
+* A signed-in collector has a linked card on an open listing.
+* Bid-time authorization holds are disabled.
+
+**Steps:**
+
+1. Open the linked-card payment-method tooltip.
+
+**Expected Results:**
+
+* The copy authorizes the card for bidding.
+* The copy does not promise a bid-time hold.
+
 ## Raised
 
 - None; this change introduces no unresolved product question.
@@ -82,3 +171,6 @@ backend does not require.
 | --- | --- |
 | Linking remains a readiness step, not a bid-time hold trigger | Covered as `grade10-site-auction-bid-panel-enrollment-US2-TC7-1` |
 | The first accepted bid still locks Change without changing panel states | Covered as `grade10-site-auction-bid-panel-enrollment-US2-TC8-1` |
+| Default setup copy must not promise a hold | Covered as `grade10-site-auction-bid-panel-enrollment-US2-TC9-1` |
+| Enabled-hold setup still discloses authorization | Covered as `grade10-site-auction-bid-panel-enrollment-US2-TC10-1` |
+| Default payment-method tooltip must not promise a hold | Covered as `grade10-site-auction-bid-panel-enrollment-US2-TC11-1` |
