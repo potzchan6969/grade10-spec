@@ -22,6 +22,7 @@
   "bidRowDescription": "{state} · {when}",
   "bindingBid": "出价具有约束力。一旦中拍，你须以 {amount} 完成购买。",
   "buyerFeeHint": "中标金额需另加 20% 买家手续费",
+  "buyerFeeTooltip": "买家手续费为成交价的 20%，计算后的金额会显示在发票上。",
   "clickToZoom": "点击放大",
   "closedAt": "已于{when}结束",
   "closedSummary": "于 {time} 结束。历时 {duration}",

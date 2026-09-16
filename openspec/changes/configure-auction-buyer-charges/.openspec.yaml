@@ -1,0 +1,4 @@
+schema: grade10-planning
+promoted_by: '@htonyl'
+design_waived: "The change composes the existing auction bid and admin console primitives; no new visual contract or Figma-owned component is introduced."
+created: 2026-09-16

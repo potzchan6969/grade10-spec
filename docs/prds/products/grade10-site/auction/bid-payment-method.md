@@ -19,6 +19,10 @@ maximum in place. The linked card's Change action stays enabled until the first
 bid on that lot is accepted; afterward the listing locks that method for later
 raises.
 
+🚧 The bid panel shows the buyer's premium rate as **20%** of the winning bid.
+It shows the rate only: the calculated premium amount is not shown on the bid
+surface and is first shown on the invoice.
+
 ::story{id="auction-listing-bid-panel--payment-authorization" title="Payment authorization"}
 
 ::story{id="auction-listing-bid-panel-dialogs--payment-authorization-pending" title="Payment authorization pending"}
