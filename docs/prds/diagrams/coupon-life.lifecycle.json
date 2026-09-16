@@ -60,11 +60,11 @@
     },
     {
       "id": "returned",
-      "type": "active",
-      "label": "Back to available",
-      "sublabel": "the claim and its code come off",
+      "type": "neutral",
+      "label": "The claim comes off",
+      "sublabel": "and the code with it",
       "lane": "given-back",
-      "col": 2
+      "col": 1
     },
     {
       "id": "voided",
@@ -72,7 +72,7 @@
       "label": "Voided",
       "sublabel": "points come back",
       "lane": "main",
-      "col": 1,
+      "col": 2,
       "tag": "an operator reversed it",
       "yOffset": 324
     },
@@ -82,7 +82,7 @@
       "label": "Lapsed",
       "sublabel": "read off the clock",
       "lane": "main",
-      "col": 2,
+      "col": 0,
       "tag": "its date passed",
       "yOffset": 324
     }
@@ -112,8 +112,7 @@
       "to": "returned",
       "label": "the sale ends, or the next sale takes it",
       "fromSide": "bottom",
-      "toSide": "top",
-      "labelDy": 34
+      "toSide": "top"
     },
     {
       "id": "reversed",
@@ -129,7 +128,14 @@
       "to": "lapsed",
       "variant": "dashed",
       "fromSide": "bottom",
-      "toSide": "top"
+      "toSide": "right"
+    },
+    {
+      "id": "free",
+      "from": "returned",
+      "to": "available",
+      "fromSide": "left",
+      "toSide": "bottom"
     }
   ]
 }
