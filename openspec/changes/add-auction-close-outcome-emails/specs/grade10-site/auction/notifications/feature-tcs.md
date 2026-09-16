@@ -227,6 +227,8 @@
 
 **Expected Results:**
 
-* No bidder close-outcome letter is sent.
-* No letter with campaign `lot_ended` is sent.
-* Each enrolled watcher receives the watched ended letter (campaign `lot_ended_watched`) with no winning amount: no Sold for, Winning bid, or Highest bid highlight; no unsold / did not sell / didn't sell / no sale / no bids wording.
+## Reconciliation
+
+**Run:** 2026-09-16; scenario and suite readings were reconciled by the author.
+
+- **Uncovered anchors:** none.
