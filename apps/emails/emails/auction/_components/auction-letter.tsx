@@ -99,11 +99,7 @@ export function AuctionLetter({
   const taggedHome = withAuctionEmailCampaignTags(homeUrl, campaign, "logo");
   const taggedCta = withAuctionEmailCampaignTags(primaryHref, campaign, "cta");
   const taggedSecondaryCta = secondaryCtaHref
-    ? withAuctionEmailCampaignTags(
-        secondaryCtaHref,
-        campaign,
-        "secondary_cta",
-      )
+    ? withAuctionEmailCampaignTags(secondaryCtaHref, campaign, "secondary_cta")
     : undefined;
   const taggedLotImage = withAuctionEmailCampaignTags(
     listingUrl,

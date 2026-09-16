@@ -105,7 +105,9 @@ export function LotBlock({
         </Link>
       </Text>
       {lotSubtext ? (
-        <Text className="mb-5 mt-0 text-sm text-secondary-fg">{lotSubtext}</Text>
+        <Text className="mb-5 mt-0 text-sm text-secondary-fg">
+          {lotSubtext}
+        </Text>
       ) : null}
       {highlight && secondary ? (
         <Row>
