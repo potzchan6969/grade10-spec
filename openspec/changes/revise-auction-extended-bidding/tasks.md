@@ -1,4 +1,4 @@
-## 1. Product records and plan boundary (grade10-spec)
+## 1. Product records and plan boundary (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Update the auction, auction index, auto-bidding, and post-sale PRD pages to state the scheduled-close trigger, duration-only policy, and queue label without duplicating the capability requirements (`grade10-site-auction-auction-SC-19`, `grade10-site-auction-auto-bidding-SC-25`, `grade10-admin-auction-post-sale-SC-64`)
 - [ ] 1.2 Verify the manual and change artifacts with `pnpm check:manual` and `openspec validate revise-auction-extended-bidding --strict`
