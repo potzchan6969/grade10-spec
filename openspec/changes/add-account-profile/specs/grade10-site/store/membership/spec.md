@@ -36,12 +36,14 @@ landed; a sale that never reaches that pass SHALL send nothing. The
 notification SHALL never carry the code.
 
 #### Scenario: grade10-site-store-membership-SC-77 - A double tap spends once
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **WHEN** staff submit the same spend twice in quick succession
 - **THEN** exactly one redemption is recorded
 - **AND** both submissions answer the same
 
 #### Scenario: grade10-site-store-membership-SC-75 - The member's phone is the monitor
+**Serves:** grade10-site-store-membership-US-04 - Member is told once a staff-assisted spend or coupon lands at the till
 
 - **WHEN** points are spent or a coupon is applied through a till session
   and the sale reaches settlement (paid, or the till's trim-to-landed pass)
@@ -49,6 +51,7 @@ notification SHALL never carry the code.
 - **AND** the notification never contains the code
 
 #### Scenario: grade10-site-store-membership-SC-76 - A landed notice is corrected if the sale never pays
+**Serves:** grade10-site-store-membership-US-04 - Member is told once a staff-assisted spend or coupon lands at the till
 
 - **GIVEN** the till's trim-to-landed pass already notified the member a
   spend landed
@@ -56,6 +59,7 @@ notification SHALL never carry the code.
 - **THEN** the member receives a correction notice
 
 #### Scenario: grade10-site-store-membership-SC-78 - An unreachable account service shows the member as 會員
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
 - **GIVEN** a member with no name chosen for the shop
 - **WHEN** staff open a till session for them while the account service cannot be reached

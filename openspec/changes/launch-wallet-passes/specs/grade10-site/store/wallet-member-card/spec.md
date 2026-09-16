@@ -22,12 +22,14 @@ member's phone. A member SHALL be able to add a new pass
 afterwards.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-24 - An ended pass identifies nobody
+**Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
 - **WHEN** a member ends their pass and a code it makes is then presented
 - **THEN** it identifies nobody
 - **AND** the member can add a new pass that does
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-38 - An operator ends a pass under the permission it requires
+**Serves:** grade10-site-store-wallet-member-card-US-09 - Operator ends a member's pass from the console
 
 - **WHEN** an operator ends a member's pass
 - **THEN** the act is recorded in the operator log with who and when

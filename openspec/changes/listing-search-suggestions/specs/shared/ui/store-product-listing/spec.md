@@ -33,17 +33,20 @@ the next.
 outside `ProductBrowse`, so a later surface can reuse one without the others.
 
 #### Scenario: shared-ui-store-product-listing-SC-01 - An application imports the surface
+**Serves:** Surface exports - an application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's public entry
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
 #### Scenario: shared-ui-store-product-listing-SC-02 - A part is reused alone
+**Serves:** Surface exports - a part is reused alone
 
 - **WHEN** an application renders the product list, the filter panel, the product filter, the list header, a product card, or the product card image without the browse root
 - **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
 
 #### Scenario: shared-ui-store-product-listing-SC-03 - A tile is named once
+**Serves:** Surface exports - a tile is named once
 
 - **GIVEN** a product tile whose card is activatable and whose cart control needs a name
 - **WHEN** the consumer supplies the tiles and the words around them
@@ -69,6 +72,7 @@ invent either.
 | `trailing` | no | Optional trailing chrome the consumer assembles |
 
 #### Scenario: shared-ui-store-product-listing-SC-73 - Optional image and trailing render as supplied
+**Serves:** Listing search suggestions - optional image and trailing render as supplied
 
 - **GIVEN** a suggestion supplied with an image URL and trailing content
 - **WHEN** that suggestion is displayed
@@ -104,6 +108,7 @@ callbacks. `ProductFilterCopy` SHALL admit empty-suggestions and searching
 copy.
 
 #### Scenario: shared-ui-store-product-listing-SC-67 - Suggestions are displayed as supplied
+**Serves:** Listing search suggestions - suggestions are displayed as supplied
 
 - **GIVEN** a draft query and supplied suggestion groups with product and
   filter rows
@@ -112,6 +117,7 @@ copy.
 - **AND** no other suggestion is invented
 
 #### Scenario: shared-ui-store-product-listing-SC-68 - A draft change is reported
+**Serves:** Listing search suggestions - a draft change is reported
 
 - **GIVEN** a supplied search query of `pi`
 - **WHEN** a shopper edits the field and the consumer supplies no new query
@@ -119,6 +125,7 @@ copy.
 - **AND** the change was reported once through the draft callback
 
 #### Scenario: shared-ui-store-product-listing-SC-69 - Committing reports a search commit
+**Serves:** Listing search suggestions - committing reports a search commit
 
 - **GIVEN** a non-empty draft query and no suggestion selected
 - **WHEN** a shopper commits the search field
@@ -127,6 +134,7 @@ copy.
   supplies a new one
 
 #### Scenario: shared-ui-store-product-listing-SC-70 - Selecting a suggestion is reported
+**Serves:** Listing search suggestions - selecting a suggestion is reported
 
 - **GIVEN** a displayed suggestion row
 - **WHEN** a shopper activates that row
@@ -134,6 +142,7 @@ copy.
 - **AND** the surface does not navigate or change filters itself
 
 #### Scenario: shared-ui-store-product-listing-SC-71 - No suggestions still commits
+**Serves:** Listing search suggestions - no suggestions still commits
 
 - **GIVEN** a non-empty draft query and an empty suggestion list supplied
 - **WHEN** a shopper commits the search field
@@ -141,6 +150,7 @@ copy.
 - **AND** before commit the field showed its empty-suggestions copy
 
 #### Scenario: shared-ui-store-product-listing-SC-72 - Suggestions are keyboard operable
+**Serves:** Listing search suggestions - suggestions are keyboard operable
 
 - **WHEN** a shopper using a keyboard alone opens suggestions under the
   search field
@@ -148,6 +158,7 @@ copy.
 - **AND** the focused row is visibly indicated
 
 #### Scenario: shared-ui-store-product-listing-SC-74 - Pending suggestions show searching
+**Serves:** Listing search suggestions - pending suggestions show searching
 
 - **GIVEN** a non-empty draft query and suggestions marked pending
 - **WHEN** the search field is open

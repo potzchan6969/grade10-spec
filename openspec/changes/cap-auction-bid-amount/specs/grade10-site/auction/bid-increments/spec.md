@@ -24,12 +24,14 @@ minimum next amount would exceed the ceiling, Grade10 SHALL refuse every
 further bid on that listing.
 
 #### Scenario: grade10-site-auction-bid-increments-SC-08 - A bid at the ceiling is accepted
+**Serves:** grade10-site-auction-bid-increments-US-02 - Collector bids up to the currency ceiling
 
 - **GIVEN** an open USD listing whose minimum bid is 999990000 minor units
 - **WHEN** a collector bids 1000000000 minor units
 - **THEN** Grade10 accepts the bid
 
 #### Scenario: grade10-site-auction-bid-increments-SC-09 - A bid above the ceiling is refused
+**Serves:** grade10-site-auction-bid-increments-US-02 - Collector bids up to the currency ceiling
 
 - **GIVEN** an open HKD listing whose minimum bid is 820000 minor units
 - **WHEN** a collector bids 8000000001 minor units
@@ -37,6 +39,7 @@ further bid on that listing.
 - **AND** the listing's price and leader are unchanged
 
 #### Scenario: grade10-site-auction-bid-increments-SC-10 - An auto-bid maximum above the ceiling is refused
+**Serves:** grade10-site-auction-bid-increments-US-02 - Collector bids up to the currency ceiling
 
 - **GIVEN** an open JPY listing whose minimum bid is 150000 minor units
 - **WHEN** a collector commits an auto-bid maximum of 150000000001 minor units
@@ -44,6 +47,7 @@ further bid on that listing.
 - **AND** no maximum is recorded for that collector
 
 #### Scenario: grade10-site-auction-bid-increments-SC-11 - A listing at the ceiling takes no further bid
+**Serves:** grade10-site-auction-bid-increments-US-02 - Collector bids up to the currency ceiling
 
 - **GIVEN** an open USD listing whose current bid is 1000000000 minor units
 - **WHEN** another collector bids on it

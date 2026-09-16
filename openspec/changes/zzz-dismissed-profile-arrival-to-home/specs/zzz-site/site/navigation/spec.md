@@ -48,18 +48,21 @@ session-decided addresses, and the profile, SHALL wait for the session to
 resolve.
 
 #### Scenario: zzz-site-site-navigation-SC-17 - A signed-in collector lands on home
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
 
 - **GIVEN** a signed-in collector
 - **WHEN** they open the home address
 - **THEN** their profile renders and the address reads as the profile
 
 #### Scenario: zzz-site-site-navigation-SC-18 - A signed-in collector asks for sign-in
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
 
 - **GIVEN** a signed-in collector
 - **WHEN** they open the sign-in address
 - **THEN** their profile renders and the address reads as the profile
 
 #### Scenario: zzz-site-site-navigation-SC-19 - Back never returns to a corrected address
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
 
 - **GIVEN** a collector whose navigation was just corrected
 - **WHEN** they go back
@@ -67,6 +70,7 @@ resolve.
   that corrected them forward
 
 #### Scenario: zzz-site-site-navigation-SC-20 - Not-found does not wait
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
 
 - **GIVEN** the session has not yet resolved
 - **WHEN** a collector opens an address under no surface the site answers
@@ -87,6 +91,7 @@ the profile holds so that going back leads where they came from rather than
 to the profile asking again.
 
 #### Scenario: zzz-site-site-navigation-SC-21 - A signed-out collector opens the profile address
+**Serves:** zzz-site-site-navigation-US-06 - Collector opens the profile with no session
 
 - **GIVEN** a collector who is not signed in
 - **WHEN** they open the profile address directly
@@ -94,6 +99,7 @@ to the profile asking again.
 - **AND** the address still reads as the profile
 
 #### Scenario: zzz-site-site-navigation-SC-22 - The session arrives and the profile renders
+**Serves:** zzz-site-site-navigation-US-06 - Collector opens the profile with no session
 
 - **GIVEN** a signed-out collector asked to sign in at the profile's own
   address
@@ -102,6 +108,7 @@ to the profile asking again.
   between
 
 #### Scenario: zzz-site-site-navigation-SC-23 - Leaving the ask at the profile's address goes home
+**Serves:** zzz-site-site-navigation-US-06 - Collector opens the profile with no session
 
 - **GIVEN** a signed-out collector asked to sign in at the profile's own
   address

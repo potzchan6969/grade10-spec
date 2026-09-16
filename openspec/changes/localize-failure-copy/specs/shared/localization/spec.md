@@ -31,6 +31,7 @@ An admin console SHALL supply its own English words for each kind, and is
 outside the message catalogs as every other admin string is.
 
 #### Scenario: shared-localization-SC-33 - Two products meet the same failure
+**Serves:** Failure notices - two products meet the same failure
 
 - **GIVEN** the same backend fault reached from the store and from the auction
 - **WHEN** each surface shows its notice
@@ -38,6 +39,7 @@ outside the message catalogs as every other admin string is.
 - **AND** both notices say the same thing in the page's language
 
 #### Scenario: shared-localization-SC-34 - An operator sees a failure
+**Serves:** Failure notices - an operator sees a failure
 
 - **WHEN** an admin console shows a failed call
 - **THEN** its notice is that console's own English for the kind the platform assigned
@@ -55,12 +57,14 @@ as a failure notice. The failing call and whatever the backend said SHALL be
 kept as the technical account, reaching logs and never a screen.
 
 #### Scenario: shared-localization-SC-35 - A Korean page loses its connection
+**Serves:** Failure notices - a Korean page loses its connection
 
 - **GIVEN** a collector on the ZZZ site whose request never reaches a backend
 - **WHEN** the notice renders
 - **THEN** its words are Korean
 
 #### Scenario: shared-localization-SC-36 - The backend's own words stay off screen
+**Serves:** Failure notices - the backend's own words stay off screen
 
 - **GIVEN** a refused request whose answer carries the backend's text and the name of the call
 - **WHEN** a collector-facing surface shows the notice
@@ -68,6 +72,7 @@ kept as the technical account, reaching logs and never a screen.
 - **AND** neither the backend's text nor the call's name appears on screen
 
 #### Scenario: shared-localization-SC-37 - An outage and a refusal read differently
+**Serves:** Failure notices - an outage and a refusal read differently
 
 - **GIVEN** a Traditional Chinese page that meets a backend fault, and one that meets a refused request
 - **WHEN** each notice renders

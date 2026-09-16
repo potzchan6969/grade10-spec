@@ -6,17 +6,6 @@
 **I want** to mark a listing to come back to without bidding on it,
 **so that** I can leave the page and find it again without searching.
 
-**Accepted by:**
-
-- `grade10-site-auction-watchlist-SC-01` — A collector watches a listing
-- `grade10-site-auction-watchlist-SC-03` — Watching twice leaves one watch
-- `grade10-site-auction-watchlist-SC-04` — A signed-out viewer is offered sign-in
-- `grade10-site-auction-watchlist-SC-05` — A watch follows the collector, not the browser
-- `grade10-site-auction-watchlist-SC-06` — A watch belongs to one collector
-- `grade10-site-auction-watchlist-SC-07` — A watch count is not public
-- `grade10-site-auction-watchlist-SC-08` — One collector cannot see another's watch
-- `grade10-site-auction-watchlist-SC-09` — Watching does not change the sale
-
 ### grade10-site-auction-watchlist-US-02: Collector unwatches a listing they no longer follow
 
 **As a** signed-in collector,
@@ -25,21 +14,11 @@ called off,
 **so that** my list only holds listings I still mean to follow, and email
 alerts for that listing stop with the watch.
 
-**Accepted by:**
-
-- `grade10-site-auction-watchlist-SC-02` — A collector unwatches a listing
-- `grade10-site-auction-watchlist-SC-14` — A collector unwatches a closed listing
-- `grade10-site-auction-watchlist-SC-18` — A collector unwatches from the watched list
-
 ### grade10-site-auction-watchlist-US-05: Collector mutes email alerts without unwatching
 
 **As a** signed-in collector,
 **I want** to turn off email alerts for a listing I still watch,
 **so that** it stays on Watching without filling my inbox.
-
-**Accepted by:**
-
-- `grade10-site-auction-watchlist-SC-19` — Muting alerts leaves the watch
 
 ### grade10-site-auction-watchlist-US-03: Collector reads the listings they watch
 
@@ -48,22 +27,9 @@ alerts for that listing stop with the watch.
 enough to decide whether to act,
 **so that** I can return to a listing from one place.
 
-**Accepted by:**
-
-- `grade10-site-auction-watchlist-SC-11` — The list is ordered by when each watch was made
-- `grade10-site-auction-watchlist-SC-12` — A collector watching nothing
-- `grade10-site-auction-watchlist-SC-13` — An entry leads to its listing
-- `grade10-site-auction-watchlist-SC-15` — An entry carries the facts needed to act
-- `grade10-site-auction-watchlist-SC-16` — A closed listing stays in the list
-- `grade10-site-auction-watchlist-SC-17` — A called-off listing is shown as called off
-
 ### grade10-site-auction-watchlist-US-04: Operator judges interest from the watch count
 
 **As an** auction operator,
 **I want** to see how many collectors watch a listing, across both brands,
 **so that** I can judge interest without treating a watch as a commitment
 to buy.
-
-**Accepted by:**
-
-- `grade10-site-auction-watchlist-SC-10` — An operator counts every watch on a listing

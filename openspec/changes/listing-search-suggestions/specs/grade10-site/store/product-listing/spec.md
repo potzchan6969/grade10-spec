@@ -30,6 +30,7 @@ store search: suggestion hits SHALL NOT include auction lots or other site
 surfaces.
 
 #### Scenario: grade10-site-store-product-listing-SC-31 - Typing offers product and filter suggestions
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
 - **GIVEN** a catalogue holding a product named for words a collector types,
   and a world or collectible type whose name matches those words
@@ -41,6 +42,7 @@ surfaces.
   or select
 
 #### Scenario: grade10-site-store-product-listing-SC-32 - Enter commits free text as a chip
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
 - **GIVEN** a collector who has typed words in the listing search field with
   no suggestion selected
@@ -51,6 +53,7 @@ surfaces.
 - **AND** the search field is empty
 
 #### Scenario: grade10-site-store-product-listing-SC-33 - A product suggestion opens the product
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
 - **GIVEN** suggestions offering a product
 - **WHEN** the collector selects that product suggestion
@@ -59,6 +62,7 @@ surfaces.
 - **AND** the search field is empty
 
 #### Scenario: grade10-site-store-product-listing-SC-34 - A filter suggestion applies the facet
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
 - **GIVEN** suggestions offering a world or collectible-type choice
 - **WHEN** the collector selects that filter suggestion
@@ -69,6 +73,7 @@ surfaces.
 - **AND** the search field is empty
 
 #### Scenario: grade10-site-store-product-listing-SC-35 - Dismissing the search chip clears free text
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
 - **GIVEN** free text in force, shown among the applied narrowings
 - **WHEN** the collector dismisses that chip
@@ -76,6 +81,7 @@ surfaces.
 - **AND** the address no longer carries the words
 
 #### Scenario: grade10-site-store-product-listing-SC-36 - No suggestions still allows commit
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
 - **GIVEN** typed words that match no product and no facet choice
 - **WHEN** the collector commits those words
@@ -84,6 +90,7 @@ surfaces.
 - **AND** before commit the field showed that nothing matched
 
 #### Scenario: grade10-site-store-product-listing-SC-37 - Suggestions stay on the store catalogue
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
 - **WHEN** a collector types in the listing search field
 - **THEN** every suggestion offered is a store catalogue product or a store
@@ -91,6 +98,7 @@ surfaces.
 - **AND** no auction lot or other site surface is offered
 
 #### Scenario: grade10-site-store-product-listing-SC-38 - Waiting for suggestions shows searching
+**Serves:** grade10-site-store-product-listing-US-10 - Collector finds a card by typing in search
 
 - **GIVEN** a collector who has typed words and whose suggestion hits are
   still being resolved

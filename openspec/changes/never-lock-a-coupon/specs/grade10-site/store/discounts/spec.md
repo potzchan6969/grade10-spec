@@ -29,18 +29,21 @@ A code SHALL NOT go back on an order it has left. The remedy SHALL name a new
 sale.
 
 #### Scenario: grade10-site-store-discounts-SC-05 - Editing the cart does not mint a coupon's code
+**Serves:** grade10-site-store-discounts-US-01 - Collector redeems a coupon at checkout
 
 - **GIVEN** a basket that qualifies for a product coupon
 - **WHEN** the collector adds or removes a line and the cart price re-previews
 - **THEN** no Shopify Discount code is minted for that coupon
 
 #### Scenario: grade10-site-store-discounts-SC-06 - An order claiming the coupon mints its code
+**Serves:** grade10-site-store-discounts-US-01 - Collector redeems a coupon at checkout
 
 - **GIVEN** a basket that qualifies for a product coupon
 - **WHEN** the collector submits the checkout
 - **THEN** the coupon's Shopify Discount code is minted and carried on the draft order
 
 #### Scenario: grade10-site-store-discounts-SC-11 - A refused mint refuses the checkout and keeps the coupon
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
 - **GIVEN** a basket that qualifies for a coupon
 - **WHEN** the shop refuses the mint
@@ -48,12 +51,14 @@ sale.
 - **AND** no order is left behind, and the coupon is still spendable
 
 #### Scenario: grade10-site-store-discounts-SC-13 - A dead order's unspent code is deactivated
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
 - **GIVEN** an order carrying a minted, unspent discount code
 - **WHEN** that order is canceled or fails
 - **THEN** the code is deactivated and the coupon returns to the member
 
 #### Scenario: grade10-site-store-discounts-SC-19 - An expired sale's code dies when the coupon is claimed elsewhere
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
 - **GIVEN** an expired counter sale carrying a live code for the member's coupon
 - **WHEN** the member claims that coupon on another sale
@@ -61,12 +66,14 @@ sale.
 - **AND** the sale is not cancelled and can still collect at full price
 
 #### Scenario: grade10-site-store-discounts-SC-20 - A code does not go back on the sale it left
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
 - **GIVEN** a sale whose coupon's code was deactivated when the member claimed it elsewhere
 - **WHEN** that coupon is offered to the same sale again
 - **THEN** it is refused, naming a new sale as the remedy
 
 #### Scenario: grade10-site-store-discounts-SC-21 - A sale that collects a deactivated code is reported
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
 
 - **GIVEN** a sale that collected a code this store had deactivated
 - **WHEN** it settles

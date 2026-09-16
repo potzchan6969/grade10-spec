@@ -23,6 +23,7 @@ While a session is signed in, activating the Cart control SHALL open the cart
 drawer.
 
 #### Scenario: grade10-site-site-page-shell-SC-21 - A signed-out collector presses Cart
+**Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
 
 - **GIVEN** a signed-out collector on a surface whose header offers Cart
 - **WHEN** they activate the Cart control
@@ -30,6 +31,7 @@ drawer.
 - **AND** the cart drawer does not open
 
 #### Scenario: grade10-site-site-page-shell-SC-22 - Sign-in opens the cart they asked for
+**Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
 
 - **GIVEN** a signed-out collector who opened sign-in from the Cart control
 - **WHEN** they sign in successfully and remain on that surface
@@ -37,6 +39,7 @@ drawer.
 - **AND** the sign-in dialog is closed
 
 #### Scenario: grade10-site-site-page-shell-SC-23 - Dismissing sign-in opens nothing
+**Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
 
 - **GIVEN** a signed-out collector who opened sign-in from the Cart control
 - **WHEN** they dismiss the dialog without signing in
@@ -44,6 +47,7 @@ drawer.
 - **AND** no cart drawer is open
 
 #### Scenario: grade10-site-site-page-shell-SC-24 - A member presses Cart
+**Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
 
 - **GIVEN** a signed-in collector on a surface whose header offers Cart
 - **WHEN** they activate the Cart control

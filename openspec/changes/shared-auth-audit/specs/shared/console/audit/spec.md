@@ -37,6 +37,7 @@ SHALL remain available on the row. The trail SHALL order by time: newest-first
 unless the auditor chooses oldest-first. Newest-first SHALL be the default.
 
 #### Scenario: shared-console-audit-SC-10 - A row names the subject user id
+**Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
 - **GIVEN** a recorded write whose subject is a user id
 - **WHEN** the auditor opens the Audit section
@@ -44,17 +45,20 @@ unless the auditor chooses oldest-first. Newest-first SHALL be the default.
 - **AND** it does not name them by email
 
 #### Scenario: shared-console-audit-SC-11 - The action has a readable name
+**Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
 - **WHEN** a trail row is shown
 - **THEN** the action is shown as a readable name
 - **AND** the recorded action identity is still available on the row
 
 #### Scenario: shared-console-audit-SC-03 - Newest-first is the default
+**Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
 - **WHEN** the auditor opens the Audit section with no sort chosen
 - **THEN** later writes appear before earlier writes
 
 #### Scenario: shared-console-audit-SC-04 - Oldest-first orders by time
+**Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
 - **WHEN** the auditor chooses oldest-first
 - **THEN** earlier writes appear before later writes
@@ -87,18 +91,21 @@ WHEN a filtered read succeeds and matches no rows, the surface SHALL say
 there are no matches, distinct from a trail that has no writes.
 
 #### Scenario: shared-console-audit-SC-01 - Filters combine
+**Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
 - **GIVEN** writes on more than one product, for more than one subject
 - **WHEN** the auditor filters to one product and one subject user id
 - **THEN** only rows for that product and that subject remain
 
 #### Scenario: shared-console-audit-SC-02 - A date range covers both calendar days
+**Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
 - **GIVEN** a write in the final second of a calendar day
 - **WHEN** the auditor sets a date range whose end day is that day
 - **THEN** that write remains
 
 #### Scenario: shared-console-audit-SC-05 - Audit offers no email filter
+**Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
 - **GIVEN** an operator who holds `user:list`
 - **WHEN** they open the Audit section
@@ -106,18 +113,21 @@ there are no matches, distinct from a trail that has no writes.
 - **AND** they can still filter by actor or subject user id
 
 #### Scenario: shared-console-audit-SC-06 - The trail never returns an email
+**Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
 - **WHEN** the auditor lists the trail
 - **THEN** no row has an email field
 - **AND** the list input has no email field
 
 #### Scenario: shared-console-audit-SC-07 - The location restores filters and sort
+**Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
 - **GIVEN** filters and oldest-first sort applied
 - **WHEN** the auditor opens that same location
 - **THEN** the same filters and sort are applied
 
 #### Scenario: shared-console-audit-SC-08 - No matches is not an empty trail
+**Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
 - **GIVEN** a trail that has writes
 - **WHEN** the auditor applies filters that match none of them
@@ -125,6 +135,7 @@ there are no matches, distinct from a trail that has no writes.
 - **AND** that message is distinct from a trail with no writes
 
 #### Scenario: shared-console-audit-SC-09 - One product's silence does not hold a filtered page
+**Serves:** shared-console-audit-US-01 - Auditor isolates writes on the merged trail
 
 - **GIVEN** one product that does not answer
 - **WHEN** the auditor filters to a different product that does answer
@@ -144,17 +155,20 @@ id and the subject user id SHALL be links to that account. WHEN they cannot,
 the ids SHALL be shown and SHALL NOT link.
 
 #### Scenario: shared-console-audit-SC-12 - Expanding shows roles and details
+**Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
 - **WHEN** the auditor expands a row that has recorded details
 - **THEN** they see the actor's roles at the time of the write
 - **AND** they see those details
 
 #### Scenario: shared-console-audit-SC-13 - Actor and subject ids can be copied
+**Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
 - **WHEN** a row names an actor user id and a subject user id
 - **THEN** the auditor can copy each id
 
 #### Scenario: shared-console-audit-SC-14 - Directory links only when the operator can open Users
+**Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
 - **GIVEN** an operator who can open an account in the users directory
 - **WHEN** they read a row that names a subject user id
@@ -162,6 +176,7 @@ the ids SHALL be shown and SHALL NOT link.
 - **AND** an operator who cannot open the directory sees the id and no link
 
 #### Scenario: shared-console-audit-SC-15 - Email and hashes stay off the row
+**Serves:** shared-console-audit-US-02 - Auditor inspects a trail row
 
 - **WHEN** the auditor expands a row
 - **THEN** the row does not show an email
@@ -179,6 +194,7 @@ position. A chain that does not answer the page SHALL still say paging is
 held.
 
 #### Scenario: shared-console-audit-SC-17 - A quiet trail is one line; an issue is a notice
+**Serves:** shared-console-audit-US-04 - Auditor sees chain health without a product list
 
 - **GIVEN** every requested chain is reading and internally consistent
 - **WHEN** the auditor opens the Audit section
@@ -192,6 +208,7 @@ held.
 - **AND** products that answered are not listed on the strip
 
 #### Scenario: shared-console-audit-SC-16 - A broken chain opens at that position
+**Serves:** shared-console-audit-US-03 - Auditor jumps to a chain break
 
 - **GIVEN** a product chain reported broken at a position
 - **WHEN** the auditor jumps to that break

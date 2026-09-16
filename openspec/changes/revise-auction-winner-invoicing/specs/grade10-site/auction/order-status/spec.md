@@ -44,6 +44,7 @@ warehouse reports dispatch and the carrier reports delivery — two parties
 reporting two events.
 
 #### Scenario: auction-status-SC-17 - Delivery cannot be confirmed before dispatch
+**Serves:** Supplementary conditions - delivery cannot be confirmed before dispatch
 
 - **GIVEN** an auction order whose fulfilment status is `unfulfilled`
 - **WHEN** a delivery confirmation is received for it
@@ -82,12 +83,14 @@ it manually to `paid`, or cancel it. Reissuing an expired invoice SHALL return
 it to `pending` with a new deadline.
 
 #### Scenario: auction-status-SC-01 - A new auction order starts pending and unfulfilled
+**Serves:** Writable primitives - a new auction order starts pending and unfulfilled
 
 - **WHEN** a lot closes with a winner and Grade10 creates the auction order
 - **THEN** its invoice status is `not_issued`
 - **AND** its fulfilment status is `unfulfilled`
 
 #### Scenario: auction-status-SC-02 - Expiry writes no status
+**Serves:** Writable primitives - expiry writes no status
 
 - **GIVEN** an auction order whose invoice is `pending` with a payment
   deadline of 2026-09-19T09:00:00Z
@@ -96,6 +99,7 @@ it to `pending` with a new deadline.
 - **AND** the fulfilment status is still `unfulfilled`
 
 #### Scenario: auction-status-SC-03 - A reissue keeps the invoice pending
+**Serves:** Writable primitives - a reissue keeps the invoice pending
 
 - **GIVEN** an auction order whose invoice status is `expired`
 - **WHEN** an operator reissues the invoice
@@ -130,6 +134,7 @@ overrides where the goods are: a refunded order that already shipped is
 Refunded.
 
 #### Scenario: auction-status-SC-05 - An unpaid order inside its deadline is Pending Payment
+**Serves:** Derived order status - an unpaid order inside its deadline is Pending Payment
 
 - **GIVEN** an auction order with invoice status `pending`, fulfilment status
   `unfulfilled`, and a payment deadline that has not passed
@@ -137,6 +142,7 @@ Refunded.
 - **THEN** it is Pending Payment
 
 #### Scenario: auction-status-SC-06 - The same order past its deadline is Expired
+**Serves:** auction-status-US-01 - Expired invoice keeps Pending Payment without winner card pay
 
 - **GIVEN** an auction order with invoice status `expired` and fulfilment
   status `unfulfilled`
@@ -145,6 +151,7 @@ Refunded.
 - **AND** no order status reads Expired
 
 #### Scenario: auction-status-SC-07 - A paid, undispatched order is Processing
+**Serves:** Derived order status - a paid, undispatched order is Processing
 
 - **GIVEN** an auction order with invoice status `paid` and fulfilment status
   `unfulfilled`
@@ -152,6 +159,7 @@ Refunded.
 - **THEN** it is Processing
 
 #### Scenario: auction-status-SC-08 - Dispatch and delivery separate Shipped from Delivered
+**Serves:** Derived order status - dispatch and delivery separate Shipped from Delivered
 
 - **GIVEN** two auction orders, both `paid` and `fulfilled`, one with
   `delivery_confirmed` true and one with it false
@@ -159,6 +167,7 @@ Refunded.
 - **THEN** the first is Delivered and the second is Shipped
 
 #### Scenario: auction-status-SC-09 - A refund overrides a shipped order
+**Serves:** Derived order status - a refund overrides a shipped order
 
 - **GIVEN** an auction order with invoice status `refunded` and fulfilment
   status `fulfilled`
@@ -167,6 +176,7 @@ Refunded.
 - **AND** it is neither Shipped nor Delivered
 
 #### Scenario: auction-status-SC-10 - Order status refuses a direct write
+**Serves:** Derived order status - order status refuses a direct write
 
 - **GIVEN** an auction order whose derived order status is Pending Payment
 - **WHEN** any caller attempts to set its order status to Processing
@@ -174,6 +184,7 @@ Refunded.
 - **AND** the order status is still Pending Payment
 
 #### Scenario: auction-status-SC-19 - An order with no address is Awaiting Address
+**Serves:** Derived order status - an order with no address is Awaiting Address
 
 - **GIVEN** an auction order with invoice status `not_issued` whose winner has
   confirmed no delivery address
@@ -181,6 +192,7 @@ Refunded.
 - **THEN** it is Awaiting Address
 
 #### Scenario: auction-status-SC-20 - A confirmed address with no invoice is Preparing Invoice
+**Serves:** Derived order status - a confirmed address with no invoice is Preparing Invoice
 
 - **GIVEN** an auction order with invoice status `not_issued` whose winner has
   confirmed a delivery address
@@ -204,6 +216,7 @@ set fulfilment status to `fulfilled`. That assertion SHALL live in the
 system, not in a warehouse operating procedure.
 
 #### Scenario: auction-status-SC-11 - Dispatch before payment is refused
+**Serves:** Guards - dispatch before payment is refused
 
 - **GIVEN** an auction order whose invoice status is `pending`
 - **WHEN** the warehouse records a dispatch against it
@@ -211,6 +224,7 @@ system, not in a warehouse operating procedure.
 - **AND** the fulfilment status remains `unfulfilled`
 
 #### Scenario: auction-status-SC-12 - A shipped order cannot be cancelled
+**Serves:** Guards - a shipped order cannot be cancelled
 
 - **GIVEN** an auction order whose invoice status is `paid` and fulfilment
   status is `fulfilled`
@@ -219,6 +233,7 @@ system, not in a warehouse operating procedure.
 - **AND** the invoice status remains `paid`
 
 #### Scenario: auction-status-SC-21 - An order with no invoice cannot be dispatched
+**Serves:** Guards - an order with no invoice cannot be dispatched
 
 - **GIVEN** an auction order whose invoice status is `not_issued`
 - **WHEN** the warehouse records a dispatch against it
@@ -244,6 +259,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 | `delivery_confirmed` | false | true | The carrier confirms delivery, with fulfilment status already `fulfilled` |
 
 #### Scenario: auction-status-SC-13 - A paid invoice cannot return to pending
+**Serves:** Guards - a paid invoice cannot return to pending
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** any caller attempts to set it to `pending`
@@ -251,6 +267,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 - **AND** the invoice status is still `paid`
 
 #### Scenario: auction-status-SC-14 - A cancelled invoice is terminal
+**Serves:** Guards - a cancelled invoice is terminal
 
 - **GIVEN** an auction order whose invoice status is `cancelled`
 - **WHEN** an operator attempts to record payment against it
@@ -258,6 +275,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 - **AND** the invoice status is still `cancelled`
 
 #### Scenario: auction-status-SC-22 - An invoice cannot be sent without a confirmed address
+**Serves:** Guards - an invoice cannot be sent without a confirmed address
 
 - **GIVEN** an auction order whose invoice status is `not_issued` and whose
   winner has confirmed no delivery address
@@ -266,6 +284,7 @@ Grade10 SHALL allow only these transitions and SHALL refuse every other.
 - **AND** the invoice status is still `not_issued`
 
 #### Scenario: auction-status-SC-25 - An expired invoice refuses winner card payment
+**Serves:** auction-status-US-01 - Expired invoice keeps Pending Payment without winner card pay
 
 - **GIVEN** an auction order whose invoice status is `expired`
 - **WHEN** the winner's card payment for it is attempted

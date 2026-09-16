@@ -51,6 +51,7 @@ session: its link carries the secret that opens it, or the surface invites
 sign-in in its own words, and an ask in front of it would hide what it is for.
 
 #### Scenario: grade10-site-site-navigation-SC-15 - A surface that answers the signed-out opens as asked
+**Serves:** grade10-site-site-navigation-US-08 - Collector opens a surface that asks nothing of them
 
 - **GIVEN** a collector who is not signed in
 - **WHEN** they follow a link to their own visits
@@ -58,6 +59,7 @@ sign-in in its own words, and an ask in front of it would hide what it is for.
 - **AND** no sign-in dialog opens in front of it
 
 #### Scenario: grade10-site-site-navigation-SC-16 - A secret in the link opens its surface
+**Serves:** grade10-site-site-navigation-US-08 - Collector opens a surface that asks nothing of them
 
 - **GIVEN** the holder of a booking's private link who has no account on the
   site
@@ -82,6 +84,7 @@ A session arriving while the dialog is open SHALL close it and take the
 collector to the surface they asked for, with no further action from them.
 
 #### Scenario: grade10-site-site-navigation-SC-17 - A signed-out collector follows a link to a surface that asks
+**Serves:** grade10-site-site-navigation-US-06 - Collector follows a link to a surface that needs an account
 
 - **GIVEN** a collector who is not signed in, reading the store
 - **WHEN** they follow a link to the vault
@@ -89,6 +92,7 @@ collector to the surface they asked for, with no further action from them.
 - **AND** the address still reads as the store
 
 #### Scenario: grade10-site-site-navigation-SC-18 - Dismissing leaves the collector where they were
+**Serves:** grade10-site-site-navigation-US-06 - Collector follows a link to a surface that needs an account
 
 - **GIVEN** a signed-out collector asked to sign in after following a link to
   the vault from the store
@@ -97,6 +101,7 @@ collector to the surface they asked for, with no further action from them.
 - **AND** the address still reads as the store
 
 #### Scenario: grade10-site-site-navigation-SC-19 - Signing in finishes the navigation
+**Serves:** grade10-site-site-navigation-US-06 - Collector follows a link to a surface that needs an account
 
 - **GIVEN** a signed-out collector asked to sign in after following a link to
   the vault
@@ -105,6 +110,7 @@ collector to the surface they asked for, with no further action from them.
 - **AND** the vault renders at its own address, with nothing else to press
 
 #### Scenario: grade10-site-site-navigation-SC-20 - The dropped navigation leaves no entry behind
+**Serves:** grade10-site-site-navigation-US-06 - Collector follows a link to a surface that needs an account
 
 - **GIVEN** a signed-out collector who dismissed the ask after following a link
   to the vault from the store
@@ -131,6 +137,7 @@ collector stopped before an in-app navigation, who still has the surface they
 were reading and is left on it.
 
 #### Scenario: grade10-site-site-navigation-SC-21 - A signed-out collector opens the address itself
+**Serves:** grade10-site-site-navigation-US-07 - Collector opens a surface that needs an account at its own address
 
 - **GIVEN** a collector who is not signed in
 - **WHEN** they open the vault's address directly
@@ -138,6 +145,7 @@ were reading and is left on it.
 - **AND** the address still reads as the vault
 
 #### Scenario: grade10-site-site-navigation-SC-22 - The session arrives and the surface renders
+**Serves:** grade10-site-site-navigation-US-07 - Collector opens a surface that needs an account at its own address
 
 - **GIVEN** a signed-out collector asked to sign in at the vault's own address
 - **WHEN** their session arrives
@@ -145,6 +153,7 @@ were reading and is left on it.
   between
 
 #### Scenario: grade10-site-site-navigation-SC-23 - Back onto a surface that asks is answered there
+**Serves:** grade10-site-site-navigation-US-07 - Collector opens a surface that needs an account at its own address
 
 - **GIVEN** a signed-out collector who was signed in on the vault and has since
   signed out on another surface
@@ -152,6 +161,7 @@ were reading and is left on it.
 - **THEN** the address reads as the vault and the sign-in dialog opens over it
 
 #### Scenario: grade10-site-site-navigation-SC-25 - Leaving the ask at the address goes to the brand home
+**Serves:** grade10-site-site-navigation-US-07 - Collector opens a surface that needs an account at its own address
 
 - **GIVEN** a signed-out collector asked to sign in at the vault's own address
 - **WHEN** they dismiss the dialog
@@ -166,6 +176,7 @@ A public surface SHALL render before the session has answered. Waiting for it
 SHALL be confined to the surfaces that have nothing to show without one.
 
 #### Scenario: grade10-site-site-navigation-SC-24 - A public surface does not wait
+**Serves:** grade10-site-site-navigation-US-08 - Collector opens a surface that asks nothing of them
 
 - **GIVEN** the session has not yet answered
 - **WHEN** a collector opens any public surface

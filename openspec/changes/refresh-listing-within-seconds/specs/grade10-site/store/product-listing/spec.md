@@ -27,6 +27,7 @@ A copy SHALL hold what the shop answered, never what a report alone said, and
 a read older than the report that caused it SHALL NOT be published.
 
 #### Scenario: grade10-site-store-product-listing-SC-49 - A published product is listed within seconds
+**Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
 - **GIVEN** a listing whose count is N
 - **WHEN** the shop publishes a product to the store's channel and reports it
@@ -34,12 +35,14 @@ a read older than the report that caused it SHALL NOT be published.
 - **AND** its count reads N + 1, and the product's facets count it
 
 #### Scenario: grade10-site-store-product-listing-SC-50 - A product taken down leaves within seconds
+**Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
 - **GIVEN** a listing holding a product
 - **WHEN** the shop takes that product off the store's channel and reports it
 - **THEN** within 10 seconds of the shop's read no longer answering it, no location lists it, and no count counts it
 
 #### Scenario: grade10-site-store-product-listing-SC-51 - A card follows the shop's price and stock
+**Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
 - **GIVEN** a card showing a price and stopping at the shop's count
 - **WHEN** the shop changes that product's price or its count and reports it
@@ -47,12 +50,14 @@ a read older than the report that caused it SHALL NOT be published.
 - **AND** a price order places the card by the new price
 
 #### Scenario: grade10-site-store-product-listing-SC-52 - A change the shop never reported is caught by the re-read
+**Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
 - **GIVEN** a change the shop made without a report reaching the store — a facet renamed, or a report lost
 - **WHEN** 5 minutes pass
 - **THEN** the listing at any location shows the change
 
 #### Scenario: grade10-site-store-product-listing-SC-53 - A read older than the report is not published
+**Serves:** Product data - a read older than the report is not published
 
 - **GIVEN** the shop reports a change before its own reads answer it
 - **WHEN** the store reads the product back and the answer is older than the report, or is nothing
@@ -60,6 +65,7 @@ a read older than the report that caused it SHALL NOT be published.
 - **AND** a product the shop reported created but still answers nothing for after 60 seconds is left to the whole read
 
 #### Scenario: grade10-site-store-product-listing-SC-48 - A location holding no copy answers from the one the store keeps
+**Serves:** grade10-site-store-product-listing-US-14 - Collector sees the shop as it is now
 
 - **GIVEN** a location that has not served the listing, and a copy the store already holds
 - **WHEN** a collector opens the listing there
@@ -74,6 +80,7 @@ collector about the shop. The copy SHALL stop moving until the shop answers
 again.
 
 #### Scenario: grade10-site-store-product-listing-SC-54 - The listing lists while the shop is down
+**Serves:** grade10-site-store-product-listing-US-15 - Collector browses while the shop is unreachable
 
 - **GIVEN** a listing that answered while the shop could be read
 - **WHEN** the shop stops answering and a collector opens the listing at any location

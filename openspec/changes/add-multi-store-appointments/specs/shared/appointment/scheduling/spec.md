@@ -71,17 +71,20 @@ leave every booking that names it readable.
 | Sort order | Integer; ties sort by name |
 
 #### Scenario: shared-appointment-scheduling-SC-01 - A service is created with its shape
+**Serves:** What a collector books - a service is created with its shape
 
 - **WHEN** a service is created with a name, a slug, a duration of 30, an increment of 15, buffers of 0 and 10, a minimum notice of 120, a horizon of 60 and customer bookable `true`
 - **THEN** the diary persists it with a new id, active, and offers it at no shop until a resource is assigned
 
 #### Scenario: shared-appointment-scheduling-SC-02 - A service outside its bounds is refused
+**Serves:** What a collector books - a service outside its bounds is refused
 
 - **WHEN** a service is created with a duration of 0, or an increment of 7, or a horizon of 400
 - **THEN** the diary refuses the create
 - **AND** no service is persisted
 
 #### Scenario: shared-appointment-scheduling-SC-03 - A retired service is offered nowhere and its bookings remain
+**Serves:** What a collector books - a retired service is offered nowhere and its bookings remain
 
 - **GIVEN** an active service with one live booking
 - **WHEN** the service is retired
@@ -89,6 +92,7 @@ leave every booking that names it readable.
 - **AND** the live booking still reads with the service's name and keeps its resource
 
 #### Scenario: shared-appointment-scheduling-SC-04 - A product-bound service is never customer bookable
+**Serves:** What a collector books - a product-bound service is never customer bookable
 
 - **WHEN** a service is created with product `vault` and customer bookable `true`
 - **THEN** the diary refuses the create
@@ -110,6 +114,7 @@ questions later change.
 | Required | `true` or `false` |
 
 #### Scenario: shared-appointment-scheduling-SC-05 - A required question left unanswered refuses the booking
+**Serves:** What a collector books - a required question left unanswered refuses the booking
 
 - **GIVEN** a service asking one required `text` question
 - **WHEN** a booking is requested without an answer to it
@@ -117,12 +122,14 @@ questions later change.
 - **AND** nothing is written
 
 #### Scenario: shared-appointment-scheduling-SC-06 - A choice outside the options refuses the booking
+**Serves:** What a collector books - a choice outside the options refuses the booking
 
 - **GIVEN** a service asking a `choice` question with options `Raw` and `Slabbed`
 - **WHEN** a booking answers it `Loose`
 - **THEN** the diary refuses the booking with `ANSWERS_INVALID`
 
 #### Scenario: shared-appointment-scheduling-SC-07 - Answers stay on the booking as given
+**Serves:** What a collector books - answers stay on the booking as given
 
 - **GIVEN** a booking that answered a question `Slabbed`
 - **WHEN** the service's question is later relabelled or removed
@@ -147,12 +154,14 @@ it readable.
 | Sort order | Integer; ties sort by name |
 
 #### Scenario: shared-appointment-scheduling-SC-08 - A wall clock is read in the shop's zone
+**Serves:** Where a booking happens - a wall clock is read in the shop's zone
 
 - **GIVEN** a shop in `Asia/Hong_Kong` open Tuesdays 09:00 to 18:00
 - **WHEN** slots are listed for a Tuesday
 - **THEN** the first slot starts at 01:00 UTC that day and the last visit ends at 10:00 UTC
 
 #### Scenario: shared-appointment-scheduling-SC-09 - A retired shop offers nothing and keeps its bookings
+**Serves:** Where a booking happens - a retired shop offers nothing and keeps its bookings
 
 - **GIVEN** an active shop with one live booking
 - **WHEN** the shop is retired
@@ -178,18 +187,21 @@ and SHALL leave its bookings in place.
 | Sort order | Integer; the order a free resource is assigned in, ties by name |
 
 #### Scenario: shared-appointment-scheduling-SC-10 - Capacity is the count of free assigned resources
+**Serves:** Where a booking happens - capacity is the count of free assigned resources
 
 - **GIVEN** a shop with two active desks assigned to a service and one live booking on the first desk at 10:00
 - **WHEN** slots are listed for that day
 - **THEN** the 10:00 slot reads a capacity of 2 and a remaining of 1
 
 #### Scenario: shared-appointment-scheduling-SC-11 - A service is offered only where a resource can take it
+**Serves:** Where a booking happens - a service is offered only where a resource can take it
 
 - **GIVEN** a shop whose only resource assigned to a service is retired
 - **WHEN** the shops offering that service are listed
 - **THEN** the shop is not among them
 
 #### Scenario: shared-appointment-scheduling-SC-12 - A retired resource keeps its bookings and takes no more
+**Serves:** Where a booking happens - a retired resource keeps its bookings and takes no more
 
 - **GIVEN** a desk with one live booking tomorrow
 - **WHEN** the desk is retired
@@ -215,6 +227,7 @@ The effective windows of a resource on a date SHALL be derived in this order:
 4. *Diary* — **Subtract every block** that covers the shop or the resource
 
 #### Scenario: shared-appointment-scheduling-SC-13 - A weekly rule opens that weekday
+**Serves:** When a shop is open - a weekly rule opens that weekday
 
 - **GIVEN** a shop with one rule, Mondays 10:00 to 14:00, and one desk assigned to a 60-minute service
 - **WHEN** slots are listed for the coming Monday and Tuesday
@@ -222,24 +235,28 @@ The effective windows of a resource on a date SHALL be derived in this order:
 - **AND** Tuesday offers nothing
 
 #### Scenario: shared-appointment-scheduling-SC-14 - A closed date offers nothing
+**Serves:** When a shop is open - a closed date offers nothing
 
 - **GIVEN** a shop open Mondays and a special date `closed` on the coming Monday
 - **WHEN** slots are listed for that Monday
 - **THEN** nothing is offered
 
 #### Scenario: shared-appointment-scheduling-SC-15 - A special date replaces the rules for that date
+**Serves:** When a shop is open - a special date replaces the rules for that date
 
 - **GIVEN** a shop open Mondays 10:00 to 18:00 and a special date on the coming Monday of 12:00 to 15:00
 - **WHEN** slots are listed for that Monday
 - **THEN** every offered start falls between 12:00 and the last start whose visit ends by 15:00
 
 #### Scenario: shared-appointment-scheduling-SC-16 - A resource with its own hours is open only inside both
+**Serves:** When a shop is open - a resource with its own hours is open only inside both
 
 - **GIVEN** a shop open Mondays 10:00 to 18:00 and a room of it with its own rule Mondays 08:00 to 13:00
 - **WHEN** slots are listed on that room for a Monday
 - **THEN** starts are offered from 10:00 and the last visit ends by 13:00
 
 #### Scenario: shared-appointment-scheduling-SC-17 - A second special date on one date is refused
+**Serves:** When a shop is open - a second special date on one date is refused
 
 - **GIVEN** a shop holding a special date on the coming Monday
 - **WHEN** another special date is set for the shop on that Monday
@@ -254,18 +271,21 @@ whose visit overlaps the block on that resource. A block SHALL NOT cancel or
 move a booking already inside its span.
 
 #### Scenario: shared-appointment-scheduling-SC-18 - A shop block closes every resource
+**Serves:** When a shop is open - a shop block closes every resource
 
 - **GIVEN** a shop with two desks open all Monday
 - **WHEN** the shop is blocked from 12:00 to 14:00 on Monday
 - **THEN** no slot whose visit overlaps 12:00 to 14:00 is offered on either desk
 
 #### Scenario: shared-appointment-scheduling-SC-19 - A resource block closes that resource alone
+**Serves:** When a shop is open - a resource block closes that resource alone
 
 - **GIVEN** a shop with two desks open all Monday
 - **WHEN** the first desk is blocked from 12:00 to 14:00 on Monday
 - **THEN** the 12:00 slot reads a capacity of 1 and is still offered on the second desk
 
 #### Scenario: shared-appointment-scheduling-SC-20 - A block over a booking leaves the booking in place
+**Serves:** When a shop is open - a block over a booking leaves the booking in place
 
 - **GIVEN** a live booking at 12:00 on a desk
 - **WHEN** the desk is blocked from 11:00 to 15:00 that day
@@ -284,6 +304,7 @@ offered slot with its start, its end, its capacity and its remaining count,
 and SHALL cover at most **62 days**.
 
 #### Scenario: shared-appointment-scheduling-SC-21 - Starts fall on the increment inside the window
+**Serves:** How a slot is derived - starts fall on the increment inside the window
 
 - **GIVEN** a shop open 09:00 to 18:00 and a 45-minute service with a 15-minute increment
 - **WHEN** slots are listed for that day
@@ -291,11 +312,13 @@ and SHALL cover at most **62 days**.
 - **AND** 17:30 is not offered because its visit would end after 18:00
 
 #### Scenario: shared-appointment-scheduling-SC-22 - A listing wider than 62 days is refused
+**Serves:** How a slot is derived - a listing wider than 62 days is refused
 
 - **WHEN** slots are listed for a range of 63 days
 - **THEN** the diary refuses the listing with `INVALID_RANGE`
 
 #### Scenario: shared-appointment-scheduling-SC-23 - A slot nobody can take is not listed
+**Serves:** How a slot is derived - a slot nobody can take is not listed
 
 - **GIVEN** a shop with one desk and a live booking at 10:00 for a 60-minute service
 - **WHEN** slots are listed for that day
@@ -310,18 +333,21 @@ rules place but the notice or the horizon excludes SHALL be refused with
 `SLOT_NOT_OFFERED`.
 
 #### Scenario: shared-appointment-scheduling-SC-24 - Nothing sooner than the notice
+**Serves:** How a slot is derived - nothing sooner than the notice
 
 - **GIVEN** a service with a minimum notice of 120 minutes and a shop open now
 - **WHEN** slots are listed for today at 10:00
 - **THEN** no start before 12:00 is offered
 
 #### Scenario: shared-appointment-scheduling-SC-25 - Nothing beyond the horizon
+**Serves:** How a slot is derived - nothing beyond the horizon
 
 - **GIVEN** a service with a booking horizon of 30 days
 - **WHEN** slots are listed for the 31st day from today
 - **THEN** nothing is offered
 
 #### Scenario: shared-appointment-scheduling-SC-26 - A start the notice excludes cannot be booked
+**Serves:** How a slot is derived - a start the notice excludes cannot be booked
 
 - **GIVEN** a service with a minimum notice of 120 minutes
 - **WHEN** a booking is requested for a start 30 minutes from now
@@ -335,6 +361,7 @@ resource SHALL never overlap. A buffer SHALL NOT need to fit inside an opening
 window: only the visit itself must.
 
 #### Scenario: shared-appointment-scheduling-SC-27 - A buffer after holds the resource
+**Serves:** How a slot is derived - a buffer after holds the resource
 
 - **GIVEN** a 30-minute service with a buffer after of 15 minutes and a shop with one desk
 - **WHEN** a visit is booked at 10:00
@@ -342,6 +369,7 @@ window: only the visit itself must.
 - **AND** 10:45 is offered
 
 #### Scenario: shared-appointment-scheduling-SC-28 - The first visit of the day may start at opening
+**Serves:** How a slot is derived - the first visit of the day may start at opening
 
 - **GIVEN** a 30-minute service with a buffer before of 15 minutes and a shop opening at 09:00
 - **WHEN** slots are listed for that day
@@ -354,6 +382,7 @@ wall-clock start the fall-back hour reads twice SHALL be offered once, at its
 earlier instant. A day's offered starts SHALL be strictly increasing instants.
 
 #### Scenario: shared-appointment-scheduling-SC-29 - The spring-forward gap drops its starts
+**Serves:** How a slot is derived - the spring-forward gap drops its starts
 
 - **GIVEN** a shop in a zone that skips 02:00 to 03:00 on a given date, open 01:00 to 05:00
 - **WHEN** slots are listed for that date
@@ -361,6 +390,7 @@ earlier instant. A day's offered starts SHALL be strictly increasing instants.
 - **AND** the offered instants are strictly increasing
 
 #### Scenario: shared-appointment-scheduling-SC-30 - The fall-back hour is offered once
+**Serves:** How a slot is derived - the fall-back hour is offered once
 
 - **GIVEN** a shop in a zone that repeats 01:00 to 02:00 on a given date, open 00:00 to 04:00
 - **WHEN** slots are listed for that date
@@ -403,6 +433,7 @@ address has no identity, so it neither replays nor conflicts.
 | `ALREADY_BOOKED` | The identity holds a live booking of this service elsewhere; the refusal carries that booking's start as `heldSlotStart`, so a screen can word the clash |
 
 #### Scenario: shared-appointment-scheduling-SC-31 - Two requests for the last resource resolve to one booking
+**Serves:** How a booking is held - two requests for the last resource resolve to one booking
 
 - **GIVEN** a slot with one free resource
 - **WHEN** two bookings for it are requested at the same instant
@@ -410,12 +441,14 @@ address has no identity, so it neither replays nor conflicts.
 - **AND** the other is refused with `SLOT_FULL`
 
 #### Scenario: shared-appointment-scheduling-SC-32 - The free resource with the lowest sort order is assigned
+**Serves:** How a booking is held - the free resource with the lowest sort order is assigned
 
 - **GIVEN** a shop with desks sorted 1, 2 and 3, all free, all assigned to the service
 - **WHEN** a booking is requested without naming a desk
 - **THEN** it occupies desk 1
 
 #### Scenario: shared-appointment-scheduling-SC-33 - A named resource is that one or nothing
+**Serves:** How a booking is held - a named resource is that one or nothing
 
 - **GIVEN** a shop whose desk 1 is occupied at 10:00 and whose desk 2 is free
 - **WHEN** a booking at 10:00 names desk 1
@@ -423,6 +456,7 @@ address has no identity, so it neither replays nor conflicts.
 - **AND** desk 2 stays free
 
 #### Scenario: shared-appointment-scheduling-SC-34 - A start in the past is refused before anything is written
+**Serves:** How a booking is held - a start in the past is refused before anything is written
 
 - **WHEN** a booking is requested for a start one minute ago
 - **THEN** the diary refuses it with `SLOT_IN_THE_PAST`
@@ -445,6 +479,7 @@ the same outcome SHALL answer with the booking unchanged.
 | `no_show` | no | The visit was expected and nobody came |
 
 #### Scenario: shared-appointment-scheduling-SC-35 - Cancelling frees the resource
+**Serves:** How a booking is held - cancelling frees the resource
 
 - **GIVEN** a live booking on the only desk at 10:00
 - **WHEN** it is cancelled
@@ -452,12 +487,14 @@ the same outcome SHALL answer with the booking unchanged.
 - **AND** 10:00 is offered on that desk again
 
 #### Scenario: shared-appointment-scheduling-SC-36 - A closed booking refuses a move
+**Serves:** How a booking is held - a closed booking refuses a move
 
 - **GIVEN** a booking in `completed`
 - **WHEN** a reschedule is requested for it
 - **THEN** the diary refuses it with `BOOKING_CLOSED`
 
 #### Scenario: shared-appointment-scheduling-SC-37 - Repeating an outcome answers the same booking
+**Serves:** How a booking is held - repeating an outcome answers the same booking
 
 - **GIVEN** a booking already in `no_show`
 - **WHEN** `no_show` is recorded for it again
@@ -473,18 +510,21 @@ refused with `ALREADY_BOOKED`, carrying the live booking's start as
 has closed.
 
 #### Scenario: shared-appointment-scheduling-SC-38 - A repeated request replays
+**Serves:** How a booking is held - a repeated request replays
 
 - **GIVEN** a live booking for a service, shop and start
 - **WHEN** the same identity requests the same service, shop and start again
 - **THEN** the diary answers with the existing booking and `created: false`
 
 #### Scenario: shared-appointment-scheduling-SC-39 - A second live booking of one service is refused
+**Serves:** How a booking is held - a second live booking of one service is refused
 
 - **GIVEN** a live booking for a service tomorrow at 10:00
 - **WHEN** the same identity requests the same service the day after
 - **THEN** the diary refuses it with `ALREADY_BOOKED`, naming tomorrow at 10:00 as `heldSlotStart`
 
 #### Scenario: shared-appointment-scheduling-SC-40 - A closed booking no longer blocks a new one
+**Serves:** How a booking is held - a closed booking no longer blocks a new one
 
 - **GIVEN** a booking for a service in `cancelled`
 - **WHEN** the same identity requests the same service at another start
@@ -500,6 +540,7 @@ another shop, both shops' locks SHALL be taken in one fixed order. A target
 the diary cannot give SHALL leave the booking where it was.
 
 #### Scenario: shared-appointment-scheduling-SC-41 - A booking moves within its shop
+**Serves:** How a booking is held - a booking moves within its shop
 
 - **GIVEN** a live booking at 10:00 on desk 1
 - **WHEN** it is rescheduled to 14:00
@@ -507,6 +548,7 @@ the diary cannot give SHALL leave the booking where it was.
 - **AND** 10:00 is offered on desk 1 again
 
 #### Scenario: shared-appointment-scheduling-SC-42 - A booking moves to another shop
+**Serves:** How a booking is held - a booking moves to another shop
 
 - **GIVEN** a live booking at shop A
 - **WHEN** it is rescheduled to a start at shop B
@@ -514,6 +556,7 @@ the diary cannot give SHALL leave the booking where it was.
 - **AND** the resource it held at shop A is free
 
 #### Scenario: shared-appointment-scheduling-SC-43 - A full target leaves the booking where it was
+**Serves:** How a booking is held - a full target leaves the booking where it was
 
 - **GIVEN** a live booking at 10:00 and a target start whose every resource is occupied
 - **WHEN** a reschedule to that target is requested
@@ -532,17 +575,20 @@ and MAY book again once that one has closed. Every refusal SHALL travel as
 data the product can act on.
 
 #### Scenario: shared-appointment-scheduling-SC-44 - A product sees only its own services and bookings
+**Serves:** What a product may ask - a product sees only its own services and bookings
 
 - **GIVEN** a service bound to `vault` and a customer-bookable grading service, each with a live booking
 - **WHEN** the vault lists its services and reads bookings
 - **THEN** it sees the vault service and its own booking only
 
 #### Scenario: shared-appointment-scheduling-SC-45 - A product cannot book a service not bound to it
+**Serves:** What a product may ask - a product cannot book a service not bound to it
 
 - **WHEN** the vault requests a booking naming the grading service
 - **THEN** the diary refuses it with `SERVICE_NOT_FOUND`
 
 #### Scenario: shared-appointment-scheduling-SC-46 - A case holds one live booking at a time
+**Serves:** What a product may ask - a case holds one live booking at a time
 
 - **GIVEN** a case with a live booking
 - **WHEN** the product requests a booking for that case at another start
@@ -581,12 +627,14 @@ edited or removed.
 | `reminder_sent` | The diary |
 
 #### Scenario: shared-appointment-scheduling-SC-47 - Every transition leaves an event
+**Serves:** What a booking says - every transition leaves an event
 
 - **GIVEN** a booking made, moved once and then cancelled
 - **WHEN** its events are read
 - **THEN** they are `booked`, `rescheduled` and `cancelled`, in that order, each with its actor and instant
 
 #### Scenario: shared-appointment-scheduling-SC-48 - An operator booking names the operator
+**Serves:** What a booking says - an operator booking names the operator
 
 - **WHEN** an operator books a visit for a collector at the counter
 - **THEN** the booking's source is `operator`, its booked-by is that operator, and its `booked` event names them
@@ -608,29 +656,34 @@ secret, so a reminder and a mail about a change an operator made SHALL carry
 no link.
 
 #### Scenario: shared-appointment-scheduling-SC-49 - A confirmation carries a calendar file
+**Serves:** What a booking says - a confirmation carries a calendar file
 
 - **WHEN** a booking with an address is written
 - **THEN** one confirmation is sent to that address, carrying a calendar file whose event runs from the booking's start to its end at the shop's address
 
 #### Scenario: shared-appointment-scheduling-SC-50 - One reminder goes out at the lead
+**Serves:** What a booking says - one reminder goes out at the lead
 
 - **GIVEN** a live booking with an address and a service with a reminder lead of 1440 minutes
 - **WHEN** the diary runs its reminders at 1440 minutes before the start, and again an hour later
 - **THEN** exactly one reminder is sent and one `reminder_sent` event is recorded
 
 #### Scenario: shared-appointment-scheduling-SC-51 - A booking without an address is told nothing
+**Serves:** What a booking says - a booking without an address is told nothing
 
 - **GIVEN** a product booking carrying no attendee
 - **WHEN** it is booked, moved and cancelled
 - **THEN** no mail is sent
 
 #### Scenario: shared-appointment-scheduling-SC-52 - A booking inside its lead gets no reminder
+**Serves:** What a booking says - a booking inside its lead gets no reminder
 
 - **GIVEN** a service with a reminder lead of 1440 minutes
 - **WHEN** a visit is booked for a start 60 minutes from now
 - **THEN** a confirmation is sent and no reminder ever is
 
 #### Scenario: shared-appointment-scheduling-SC-53 - A cancelled booking gets no reminder
+**Serves:** What a booking says - a cancelled booking gets no reminder
 
 - **GIVEN** a live booking with an address, cancelled before its reminder lead
 - **WHEN** the lead arrives
@@ -646,6 +699,7 @@ attempts are `grade10-site/appointment/booking`'s rows, and that capability
 says how erasure and retention treat them.
 
 #### Scenario: shared-appointment-scheduling-SC-54 - An erased person's booking keeps its occupancy
+**Serves:** Erasure - an erased person's booking keeps its occupancy
 
 - **GIVEN** a completed booking last week under a person's address
 - **WHEN** that person is erased

@@ -17,16 +17,19 @@ when unavailable lines are cleared after open loading, and `emptyTitle` (with
 optional `emptyDescription`) for the empty-cart state.
 
 #### Scenario: shared-ui-store-cart-SC-01 - An application imports the cart drawer
+**Serves:** Drawer export contract - an application imports the cart drawer
 
 - **WHEN** an application imports any export named above from the shared UI package's public entry
 - **THEN** the import resolves without error
 
 #### Scenario: shared-ui-store-cart-SC-13 - Drawer copy carries the unavailable-removal toast message
+**Serves:** shared-ui-store-cart-US-06 - Shopper opens a cart that held a delisted product
 
 - **WHEN** a consumer supplies `CartDrawerCopy`
 - **THEN** the copy includes `unavailableItemsRemoved`
 
 #### Scenario: shared-ui-store-cart-SC-22 - Drawer copy carries the empty-cart title
+**Serves:** Drawer export contract - drawer copy carries the empty-cart title
 
 - **WHEN** a consumer supplies `CartDrawerCopy`
 - **THEN** the copy includes `emptyTitle`
@@ -40,6 +43,7 @@ skeleton loading state. The empty-cart empty state SHALL NOT render while
 loading, and the checkout button SHALL be disabled.
 
 #### Scenario: shared-ui-store-cart-SC-08 - Cart opened in loading state
+**Serves:** shared-ui-store-cart-US-03 - Shopper opens the cart on current prices
 
 - **GIVEN** an opening or loading cart drawer
 - **WHEN** `CartDrawer` renders while `loading` is true
@@ -55,12 +59,14 @@ loading, and the checkout button SHALL be disabled.
 placeholder item slots. When items overflow the body, the list SHALL scroll.
 
 #### Scenario: shared-ui-store-cart-SC-23 - A cart with items lists only those items
+**Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
 - **GIVEN** a cart with 2 items
 - **WHEN** `CartDrawer` renders
 - **THEN** it renders the 2 items and no placeholder item slots
 
 #### Scenario: shared-ui-store-cart-SC-24 - Overflowing items scroll
+**Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
 - **GIVEN** a cart with 6 items
 - **WHEN** `CartDrawer` renders
@@ -74,6 +80,7 @@ and optional `emptyDescription`. The empty state SHALL NOT include an action
 button. The header item-count badge and the footer SHALL be hidden.
 
 #### Scenario: shared-ui-store-cart-SC-25 - Empty cart
+**Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
 - **GIVEN** a cart with 0 items
 - **WHEN** `CartDrawer` renders while not loading

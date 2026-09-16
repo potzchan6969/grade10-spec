@@ -44,18 +44,21 @@ image SHALL contain no default, fallback, or built-in copy.
 `ProductCardImage` SHALL be renderable on its own, outside `ProductCard`.
 
 #### Scenario: shared-ui-store-product-listing-SC-46 - No image source
+**Serves:** Tile contract - no image source
 
 - **WHEN** the image is rendered without an image source
 - **THEN** the well is still displayed
 - **AND** no fallback photo is shown
 
 #### Scenario: shared-ui-store-product-listing-SC-47 - A sale label is displayed as supplied
+**Serves:** Tile contract - a sale label is displayed as supplied
 
 - **GIVEN** an available product supplied with a sale label of `SALE`
 - **THEN** that label is displayed on the image
 - **AND** no other sale copy is shown
 
 #### Scenario: shared-ui-store-product-listing-SC-48 - A sold-out product
+**Serves:** Tile contract - a sold-out product
 
 - **GIVEN** a product supplied as sold out with a sold-out label of `SOLD OUT`
 - **THEN** the image uses the sold-out treatment
@@ -64,18 +67,21 @@ image SHALL contain no default, fallback, or built-in copy.
 - **AND** no cart control is displayed or operable
 
 #### Scenario: shared-ui-store-product-listing-SC-49 - An in-cart count is displayed as supplied
+**Serves:** Tile contract - an in-cart count is displayed as supplied
 
 - **GIVEN** a product supplied as in the cart with a count of `1`
 - **THEN** the collapsed cart control displays `1`
 - **AND** the image does not increment, format, or hold that count
 
 #### Scenario: shared-ui-store-product-listing-SC-50 - A cart quantity change is reported, not performed
+**Serves:** Tile contract - a cart quantity change is reported, not performed
 
 - **WHEN** a shopper changes quantity through the cart control
 - **THEN** the requested quantity is reported once
 - **AND** the in-cart condition is unchanged until the consumer supplies a new one
 
 #### Scenario: shared-ui-store-product-listing-SC-51 - Keyboard reveals the cart control
+**Serves:** Tile contract - keyboard reveals the cart control
 
 - **GIVEN** an available product that is not in the cart
 - **WHEN** a shopper moves keyboard focus onto the image
@@ -83,11 +89,13 @@ image SHALL contain no default, fallback, or built-in copy.
 - **AND** the focused control is visibly indicated
 
 #### Scenario: shared-ui-store-product-listing-SC-52 - The image is reused alone
+**Serves:** Tile contract - the image is reused alone
 
 - **WHEN** an application renders the product card image without a product card
 - **THEN** it renders and behaves as specified, with no missing-context error
 
 #### Scenario: shared-ui-store-product-listing-SC-53 - The stepper collapses after blur or pointer leave
+**Serves:** Tile contract - the stepper collapses after blur or pointer leave
 
 - **GIVEN** a product supplied as in the cart with a count of `2`
 - **WHEN** a shopper expands the cart control, then moves focus or the pointer away
@@ -95,12 +103,14 @@ image SHALL contain no default, fallback, or built-in copy.
 - **AND** the add affordance is not shown
 
 #### Scenario: shared-ui-store-product-listing-SC-54 - The collapsed control re-expands
+**Serves:** Tile contract - the collapsed control re-expands
 
 - **GIVEN** a product supplied as in the cart with a count of `2` and a collapsed cart control
 - **WHEN** a shopper activates the collapsed control
 - **THEN** the inline quantity stepper is displayed on the same pill
 
 #### Scenario: shared-ui-store-product-listing-SC-55 - A surface that does not sell
+**Serves:** Tile contract - a surface that does not sell
 
 - **GIVEN** an available product rendered without a way to report a quantity change
 - **WHEN** a shopper hovers the image and moves keyboard focus onto it
@@ -108,6 +118,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **AND** the product's own activation still reports
 
 #### Scenario: shared-ui-store-product-listing-SC-65 - Coarse pointer keeps the cart visible
+**Serves:** Responsive layout - coarse pointer keeps the cart visible
 
 - **GIVEN** an available product that is not in the cart, with a way to report a quantity change
 - **AND** the pointer is coarse or hover is not available
@@ -115,6 +126,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **AND** it can be activated
 
 #### Scenario: shared-ui-store-product-listing-SC-66 - Narrow viewport keeps the cart visible
+**Serves:** Responsive layout - narrow viewport keeps the cart visible
 
 - **GIVEN** an available product that is not in the cart, with a way to report a quantity change
 - **AND** the surface is below the wide listing breakpoint

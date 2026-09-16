@@ -27,12 +27,14 @@ unchanged by any later edit to the reward, and SHALL be what the coupon
 takes off wherever it is applied — online or at the till, identically.
 
 #### Scenario: grade10-site-loyalty-programme-SC-152 - A fixed-amount coupon takes a set amount off its scope
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon whose discount is a fixed amount
 - **THEN** that amount comes off the lines its scope matches, online or at
   the till alike
 
 #### Scenario: grade10-site-loyalty-programme-SC-153 - A percentage coupon is capped at its maximum discount
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon whose discount is a percentage with a
   maximum
@@ -40,22 +42,26 @@ takes off wherever it is applied — online or at the till, identically.
   the matching lines are
 
 #### Scenario: grade10-site-loyalty-programme-SC-154 - A coupon scoped to a catalog filter matches worlds and types
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon scoped to a filter over the catalog's
   worlds and types
 - **THEN** only the lines matching that filter are discounted
 
 #### Scenario: grade10-site-loyalty-programme-SC-155 - A coupon scoped to the whole order applies across every line
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon scoped to the whole order
 - **THEN** every line in the order shares the discount
 
 #### Scenario: grade10-site-loyalty-programme-SC-156 - A gift adds a free line for its own variant
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a member applies a coupon whose kind is a gift
 - **THEN** a free line for the variant it names is added to the order
 
 #### Scenario: grade10-site-loyalty-programme-SC-157 - A gift below its minimum spend does not apply
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **WHEN** a basket does not yet reach a gift's minimum spend
 - **THEN** the gift is refused until the basket reaches it
@@ -81,6 +87,7 @@ opened or duplicated into a new one. Any other stored product coupon SHALL
 open as money off, a capped or wider 100% discount included.
 
 #### Scenario: grade10-site-loyalty-programme-SC-158 - A reward with a definition is created from the console alone
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **WHEN** an operator creates a reward naming its kind, discount, scope and
   combine setting in the console
@@ -88,12 +95,14 @@ open as money off, a capped or wider 100% discount included.
   call
 
 #### Scenario: grade10-site-loyalty-programme-SC-187 - A free item is created from one variant
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **WHEN** an operator chooses Free item, picks one variant and saves
 - **THEN** the reward is saved as a product coupon at 100%, with no maximum
   discount, scoped to that variant
 
 #### Scenario: grade10-site-loyalty-programme-SC-188 - A stored free item reopens as a free item
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **GIVEN** a reward stored as a product coupon at 100%, with no maximum
   discount, scoped to one variant, with a minimum spend of 50000 HKD minor
@@ -103,6 +112,7 @@ open as money off, a capped or wider 100% discount included.
 - **AND** 50000 HKD minor units is its minimum spend
 
 #### Scenario: grade10-site-loyalty-programme-SC-189 - A capped or wider 100% discount stays money off
+**Serves:** grade10-site-loyalty-programme-US-09 - Operator authors a reward's full definition from the console
 
 - **GIVEN** a reward stored as a product coupon at 100%, either with a
   maximum discount or scoped to two variants

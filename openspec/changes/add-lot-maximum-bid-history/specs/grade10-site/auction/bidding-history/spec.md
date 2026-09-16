@@ -45,6 +45,7 @@ Amounts SHALL be integer counts of minor units paired with an ISO 4217 currency
 code.
 
 #### Scenario: grade10-site-auction-bidding-history-SC-42 - Collector opens maximum history on the lot
+**Serves:** grade10-site-auction-bidding-history-US-07 - Collector reviews bids Grade10 placed on the lot
 
 - **GIVEN** a signed-in collector with an accepted automatic maximum on a listing
   and no automatic bid placed for them yet
@@ -56,6 +57,7 @@ code.
 - **AND** the dialog shows no sticky current-maximum summary
 
 #### Scenario: grade10-site-auction-bidding-history-SC-43 - Bid placed remains the default when bids exist
+**Serves:** grade10-site-auction-bidding-history-US-07 - Collector reviews bids Grade10 placed on the lot
 
 - **GIVEN** a signed-in collector with at least one automatic bid Grade10 placed
   for them on a listing and at least one accepted maximum on that listing
@@ -65,6 +67,7 @@ code.
   that owner on that listing, newest first
 
 #### Scenario: grade10-site-auction-bidding-history-SC-44 - Raised maximums appear on the lot without refusals
+**Serves:** grade10-site-auction-bidding-history-US-06 - Collector reviews maximum history on the lot
 
 - **GIVEN** a signed-in collector who configured a maximum, later raised it, and
   also has a retained refused maximum attempt on the same listing
@@ -76,6 +79,7 @@ code.
   combined chronology at `/bids`
 
 #### Scenario: grade10-site-auction-bidding-history-SC-45 - Lot personal bidding stays private and inert
+**Serves:** grade10-site-auction-bidding-history-US-07 - Collector reviews bids Grade10 placed on the lot
 
 - **GIVEN** a signed-in collector viewing a listing where a rival also has a
   private maximum
@@ -93,6 +97,7 @@ maximum refused. The page SHALL NOT add a new tab, filter, or maximums-only
 route for this distinction. ZZZ SHALL NOT gain a screen from this requirement.
 
 #### Scenario: grade10-site-auction-bidding-history-SC-46 - Account chronology names maximum set, raise, and refusal
+**Serves:** grade10-site-auction-bidding-history-US-08 - Collector reads clearer maximum labels on /bids
 
 - **GIVEN** a signed-in collector whose listing chronology includes an accepted
   automatic maximum configuration, a later accepted raise, and a retained

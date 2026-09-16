@@ -36,6 +36,7 @@ record SHALL NOT be recomputed afterwards, so every money rule reading it answer
 the same on every replay.
 
 #### Scenario: grade10-site-store-order-settlement-SC-01 - A settled order keeps its lines
+**Serves:** Settled lines - a settled order keeps its lines
 
 - **WHEN** an order the provider itemised reaches paid
 - **THEN** the Store records one line per line the provider settled
@@ -43,6 +44,7 @@ the same on every replay.
 - **AND** the order earns on the recorded lines the rule let earn
 
 #### Scenario: grade10-site-store-order-settlement-SC-02 - A redelivered settlement records the lines once
+**Serves:** Settled lines - a redelivered settlement records the lines once
 
 - **WHEN** the same paid order arrives a second time
 - **THEN** the lines already recorded are unchanged
@@ -58,17 +60,20 @@ what the order earned on, and SHALL never fall as the refunds accumulate, howeve
 many refunds a return arrives in.
 
 #### Scenario: grade10-site-store-order-settlement-SC-03 - Returning goods that never earned reverses nothing
+**Serves:** grade10-site-store-order-settlement-US-01 - Collector returns part of an order and keeps the rest
 
 - **WHEN** a member who paid partly with points returns only the gift card
 - **THEN** no earning is clawed back
 
 #### Scenario: grade10-site-store-order-settlement-SC-04 - A split return claws back what one refund would
+**Serves:** grade10-site-store-order-settlement-US-01 - Collector returns part of an order and keeps the rest
 
 - **WHEN** a member returns every good that earned, across several refunds
 - **THEN** the whole earn basis is clawed back
 - **AND** the answer is the same as for the same return in one refund
 
 #### Scenario: grade10-site-store-order-settlement-SC-05 - A refund naming nothing is estimated and says so
+**Serves:** Sources that cannot answer - a refund naming nothing is estimated and says so
 
 - **WHEN** an operator refunds an amount against an order, naming nothing back
 - **THEN** the claw-back is that amount's share of the order's goods
@@ -76,6 +81,7 @@ many refunds a return arrives in.
   is counted apart from it
 
 #### Scenario: grade10-site-store-order-settlement-SC-13 - A refund of the delivery alone claws back nothing
+**Serves:** grade10-site-store-order-settlement-US-03 - Collector returns a sale their points paid part of
 
 - **WHEN** an operator returns the delivery on an order, itemising no goods
 - **THEN** nothing is clawed back
@@ -96,6 +102,7 @@ goods are still recorded as held SHALL be reported apart from that, whether or
 not a tender was spent on it.
 
 #### Scenario: grade10-site-store-order-settlement-SC-11 - A sale still holding a gift card returns no tender
+**Serves:** grade10-site-store-order-settlement-US-03 - Collector returns a sale their points paid part of
 
 - **WHEN** a member returns every good that earned
 - **AND** keeps the gift card the same tender paid part of
@@ -103,12 +110,14 @@ not a tender was spent on it.
 - **AND** the member is reported for an operator to settle by hand
 
 #### Scenario: grade10-site-store-order-settlement-SC-12 - Every good back returns the whole tender
+**Serves:** grade10-site-store-order-settlement-US-03 - Collector returns a sale their points paid part of
 
 - **WHEN** every good of a sale a member tendered points on comes back
 - **THEN** the whole tender is returned to their balance
 - **AND** the answer is the same whether the return arrives as one refund or many
 
 #### Scenario: grade10-site-store-order-settlement-SC-14 - A sale paid back in full whose goods stop short is reported
+**Serves:** grade10-site-store-order-settlement-US-03 - Collector returns a sale their points paid part of
 
 - **WHEN** an operator returns a sale as an amount typed for the goods and the
   delivery ticked beside it
@@ -117,6 +126,7 @@ not a tender was spent on it.
   or not
 
 #### Scenario: grade10-site-store-order-settlement-SC-15 - A sale returned as a typed amount holds its tender
+**Serves:** grade10-site-store-order-settlement-US-03 - Collector returns a sale their points paid part of
 
 - **WHEN** a sale a member tendered points on is returned as an amount typed for
   the goods and the delivery ticked beside it
@@ -134,12 +144,14 @@ carries that code. A coupon the settled lines do not show SHALL be returned to
 the member and counted.
 
 #### Scenario: grade10-site-store-order-settlement-SC-06 - A coupon whose cut is gone is not spent
+**Serves:** grade10-site-store-order-settlement-US-02 - Shopkeeper takes a coupon's cut off before tender
 
 - **WHEN** a shopkeeper removes a product coupon's cut before tender
 - **AND** the sale still sells that variant
 - **THEN** the coupon returns to the member unspent
 
 #### Scenario: grade10-site-store-order-settlement-SC-07 - A coupon the sale still shows is spent
+**Serves:** Money read from them - a coupon the sale still shows is spent
 
 - **WHEN** a sale settles carrying a product coupon's own cut on its line
 - **THEN** the coupon is spent against that order
@@ -154,6 +166,7 @@ instrument accounts for SHALL be counted and reported, and SHALL never be read a
 a points tender.
 
 #### Scenario: grade10-site-store-order-settlement-SC-08 - A code applied for less than its face value captures no extra points
+**Serves:** Money read from them - a code applied for less than its face value captures no extra points
 
 - **WHEN** a settled order carries an order code the shop applied for less than
   its face value
@@ -161,6 +174,7 @@ a points tender.
   allocation paid for
 
 #### Scenario: grade10-site-store-order-settlement-SC-09 - A points tender is worth its own allocation
+**Serves:** Money read from them - a points tender is worth its own allocation
 
 - **WHEN** a settled order carries a points discount the shop applied for less
   than the Store promised
@@ -170,6 +184,7 @@ a points tender.
 - **AND** the discount the shopkeeper made is not read as points
 
 #### Scenario: grade10-site-store-order-settlement-SC-10 - A discount no instrument explains is reported
+**Serves:** Money read from them - a discount no instrument explains is reported
 
 - **WHEN** a settled order's discounts exceed what its instruments account for
 - **THEN** the difference is reported for an operator

@@ -39,6 +39,7 @@ product status `created`. Intake SHALL require product status `created`.
 | Remarks | Trimmed text, may be empty |
 
 #### Scenario: grade10-admin-inventory-catalog-SC-01 - Operator creates a draft product with empty inventory
+**Serves:** grade10-admin-inventory-catalog-US-01 - Record received stock
 
 - **GIVEN** an authorized inventory admin
 - **WHEN** they create a product with a valid name
@@ -47,6 +48,7 @@ product status `created`. Intake SHALL require product status `created`.
 - **AND** created by is that operator
 
 #### Scenario: grade10-admin-inventory-catalog-SC-02 - Product create without a name is refused
+**Serves:** Product stock - product create without a name is refused
 
 - **GIVEN** an authorized inventory admin
 - **WHEN** they create a product with an empty name
@@ -54,6 +56,7 @@ product status `created`. Intake SHALL require product status `created`.
 - **AND** no product or inventory is persisted
 
 #### Scenario: grade10-admin-inventory-catalog-SC-52 - Operator marks a draft product created
+**Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
 - **GIVEN** a draft product with complete universal classification and valid required values for its published product schema
 - **WHEN** an authorized inventory admin marks it created
@@ -62,6 +65,7 @@ product status `created`. Intake SHALL require product status `created`.
 - **AND** one `product-update` history entry records the transition
 
 #### Scenario: grade10-admin-inventory-catalog-SC-53 - Reserve requires a created product
+**Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
 - **GIVEN** a draft product whose inventory has available stock
 - **WHEN** Auction reserves quantity one
@@ -75,6 +79,7 @@ product status `created`. Intake SHALL require product status `created`.
 - **AND** no reservation is written
 
 #### Scenario: grade10-admin-inventory-catalog-SC-54 - Created to draft is refused
+**Serves:** grade10-admin-inventory-catalog-US-01 - Record received stock
 
 - **GIVEN** a created product
 - **WHEN** an authorized inventory admin attempts to set status to `draft`
@@ -109,6 +114,7 @@ SHALL be reported to the admin and SHALL fall back to English when displayed.
 | Search/filter | Enabled for attributes assigned as required or optional product attributes |
 
 #### Scenario: grade10-admin-inventory-catalog-SC-69 - Operator defines a localized reusable field
+**Serves:** grade10-admin-inventory-catalog-US-05 - Inventory admin configures a localized product schema
 
 - **GIVEN** an authorized inventory admin
 - **WHEN** they define `card_number` as a text field with English, Traditional Chinese, and Simplified Chinese labels and a text pattern
@@ -117,6 +123,7 @@ SHALL be reported to the admin and SHALL fall back to English when displayed.
 - **AND** the attribute is available for assignment to product schemas
 
 #### Scenario: grade10-admin-inventory-catalog-SC-70 - Invalid field definition is refused
+**Serves:** grade10-admin-inventory-catalog-US-05 - Inventory admin configures a localized product schema
 
 - **GIVEN** an authorized inventory admin
 - **WHEN** they define a field with an unsupported data type, invalid validation rule, duplicate key, or a select option without an English displayed value
@@ -134,6 +141,7 @@ attributes. Product-schema publication SHALL repeat compatibility validation
 and remain refused until the incompatible product attributes are corrected.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-91 - Admin corrects product attributes after a schema change
+**Serves:** grade10-admin-inventory-catalog-US-08 - Inventory admin publishes a safe product-schema configuration
 
 - **GIVEN** a saved product-schema draft makes a required `grading` attribute
   missing or invalid on matching products
@@ -145,6 +153,7 @@ and remain refused until the incompatible product attributes are corrected.
 - **AND** the product schema can publish when no other incompatibilities remain
 
 #### Scenario: grade10-admin-inventory-catalog-SC-71 - Missing non-English translations are reported without blocking publish
+**Serves:** grade10-admin-inventory-catalog-US-08 - Inventory admin publishes a safe product-schema configuration
 
 - **GIVEN** a reusable field has an English label and no Simplified Chinese label
 - **WHEN** an authorized inventory admin reviews or publishes a product schema that uses it
@@ -173,6 +182,7 @@ type.
 | Option values | Stable option keys with localized displayed values; English required, other supported locales optional |
 
 #### Scenario: grade10-admin-inventory-catalog-SC-72 - Operator configures a Pokémon TCG product schema
+**Serves:** grade10-admin-inventory-catalog-US-05 - Inventory admin configures a localized product schema
 
 - **GIVEN** reusable fields for language, card number, card set, grading, and PSA population
 - **WHEN** an authorized inventory admin configures the exact `Pokémon` + `Single card` + `TCG` product schema
@@ -181,6 +191,7 @@ type.
 - **AND** every assigned attribute has its own displayed label separate from its stable key
 
 #### Scenario: grade10-admin-inventory-catalog-SC-73 - Duplicate published product schema for exact tuple is refused
+**Serves:** grade10-admin-inventory-catalog-US-05 - Inventory admin configures a localized product schema
 
 - **GIVEN** a published product schema for the exact `Pokémon` + `Single card` + `TCG` tuple
 - **WHEN** an authorized inventory admin attempts to publish another product schema for that exact tuple
@@ -205,6 +216,7 @@ value is displayed, Grade10 SHALL use the active locale's value or fall back
 to English when that translation is missing.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-74 - Product without a matching product schema remains a draft
+**Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
 - **GIVEN** an authorized inventory admin creates a product with valid universal classification but no published product schema for its IP + Item + Category tuple
 - **WHEN** they save the product
@@ -213,6 +225,7 @@ to English when that translation is missing.
 - **AND** no Auction reservation or listing may use it
 
 #### Scenario: grade10-admin-inventory-catalog-SC-75 - Operator saves localized Pokémon TCG values
+**Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
 - **GIVEN** a published Pokémon + Single card + TCG product schema with required language, card number, card set, and grading attributes
 - **WHEN** an authorized inventory admin supplies valid English, Traditional Chinese, and Simplified Chinese values where translations are available
@@ -220,6 +233,7 @@ to English when that translation is missing.
 - **AND** each product read returns the field's displayed label and the value for the requested locale
 
 #### Scenario: grade10-admin-inventory-catalog-SC-76 - Invalid structured value is refused
+**Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
 - **GIVEN** a product with a published product schema whose card number requires a configured pattern
 - **WHEN** an authorized inventory admin supplies a value that fails that pattern or the field's data type
@@ -227,6 +241,7 @@ to English when that translation is missing.
 - **AND** the product's previous structured values remain unchanged
 
 #### Scenario: grade10-admin-inventory-catalog-SC-77 - Missing required value blocks creation
+**Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
 - **GIVEN** a draft product with a published product schema and no grading value
 - **WHEN** an authorized inventory admin attempts to mark it `created`
@@ -234,6 +249,7 @@ to English when that translation is missing.
 - **AND** reports grading as a missing required value
 
 #### Scenario: grade10-admin-inventory-catalog-SC-78 - Missing optional value remains valid
+**Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
 - **GIVEN** a published Pokémon + Single card + TCG product schema where PSA population is optional
 - **WHEN** an authorized inventory admin marks a product with no PSA population value `created`
@@ -241,6 +257,7 @@ to English when that translation is missing.
 - **AND** the missing optional value remains absent
 
 #### Scenario: grade10-admin-inventory-catalog-SC-79 - A missing locale falls back to English
+**Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
 - **GIVEN** a product has an English grading value and no Simplified Chinese grading translation
 - **WHEN** Auction reads the product in Simplified Chinese
@@ -248,6 +265,7 @@ to English when that translation is missing.
 - **AND** no stable field key or raw translation key is displayed
 
 #### Scenario: grade10-admin-inventory-catalog-SC-92 - Admin opens a product filter from an attribute
+**Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
 - **GIVEN** an inventory admin can see an IP, Item, Category, product attribute
   key, or product attribute value in a product list, product editor, schema
@@ -269,6 +287,7 @@ filtered, and SHALL remain in an unfiltered result.
 
 
 #### Scenario: grade10-admin-inventory-catalog-SC-80 - Auction filters by universal and structured fields
+**Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
 - **GIVEN** Auction products with different IP, Category, language, and grading values
 - **WHEN** a collector filters by an IP tag, a product attribute, or both
@@ -276,6 +295,7 @@ filtered, and SHALL remain in an unfiltered result.
 - **AND** the filter labels and values use the active locale
 
 #### Scenario: grade10-admin-inventory-catalog-SC-81 - Missing optional value is excluded from its filter
+**Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
 - **GIVEN** one Auction product has a PSA population value and another has no PSA population value
 - **WHEN** a collector filters by a PSA population value
@@ -283,6 +303,7 @@ filtered, and SHALL remain in an unfiltered result.
 - **AND** the product without a value remains available in an unfiltered result
 
 #### Scenario: grade10-admin-inventory-catalog-SC-82 - Listing attribute cannot be filtered
+**Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
 - **GIVEN** an Auction listing has a `vaulted` listing attribute
 - **WHEN** a collector opens Auction search and filter controls
@@ -318,6 +339,7 @@ product fields shown by a published Auction listing, but SHALL NOT make that
 listing fail to render.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-83 - Operator configures different Auction fields per product schema
+**Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
 - **GIVEN** Pokémon and One Piece product schemas with card number, language, and grading attributes
 - **WHEN** an authorized inventory admin selects card number for Pokémon and card number plus character for One Piece
@@ -326,6 +348,7 @@ listing fail to render.
 - **AND** both product schemas retain grading for validation and search/filter when assigned
 
 #### Scenario: grade10-admin-inventory-catalog-SC-84 - Auction shows localized labels and values in configured order
+**Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
 - **GIVEN** an Auction listing whose product schema selects language before card number and supplies Traditional Chinese translations
 - **WHEN** a collector opens the listing in Traditional Chinese
@@ -334,6 +357,7 @@ listing fail to render.
 - **AND** a missing translation falls back to English
 
 #### Scenario: grade10-admin-inventory-catalog-SC-88 - Listing-specific PSA cert number does not change the product
+**Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
 - **GIVEN** two Auction listings use the same Pokémon product
 - **WHEN** an authorized auction admin enters a different PSA cert number on each listing
@@ -342,6 +366,7 @@ listing fail to render.
 - **AND** PSA cert number is not offered as an Auction search or filter criterion
 
 #### Scenario: grade10-admin-inventory-catalog-SC-89 - Flexible listing attribute falls back to English
+**Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
 - **GIVEN** an Auction listing has a PSA cert number item with an English label and value but no Simplified Chinese translations
 - **WHEN** a collector opens the listing in Simplified Chinese
@@ -349,6 +374,7 @@ listing fail to render.
 - **AND** no stable listing attribute key or raw translation key is displayed
 
 #### Scenario: grade10-admin-inventory-catalog-SC-90 - Product schema change keeps an Auction listing renderable
+**Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
 - **GIVEN** a published Auction listing has listing attributes and its product
   has a published product schema
@@ -375,6 +401,7 @@ and reasons.
 | Published | One active configuration for an exact IP + Item + Category tuple; used for product validation and search/filter |
 
 #### Scenario: grade10-admin-inventory-catalog-SC-85 - Invalid existing product blocks product schema publish
+**Serves:** grade10-admin-inventory-catalog-US-08 - Inventory admin publishes a safe product-schema configuration
 
 - **GIVEN** an existing product matches the product schema's IP + Item + Category tuple but lacks a newly required grading value
 - **WHEN** an authorized inventory admin attempts to publish that product schema
@@ -383,6 +410,7 @@ and reasons.
 - **AND** the previously published product schema remains active
 
 #### Scenario: grade10-admin-inventory-catalog-SC-86 - Valid product schema publishes atomically
+**Serves:** grade10-admin-inventory-catalog-US-08 - Inventory admin publishes a safe product-schema configuration
 
 - **GIVEN** every affected product has valid required values and optional fields may be absent
 - **WHEN** an authorized inventory admin publishes the product schema
@@ -390,6 +418,7 @@ and reasons.
 - **AND** its attributes and search/filter behavior take effect together
 
 #### Scenario: grade10-admin-inventory-catalog-SC-87 - Legacy product without a matching product schema stays visible but unavailable to Auction
+**Serves:** grade10-admin-inventory-catalog-US-08 - Inventory admin publishes a safe product-schema configuration
 
 - **GIVEN** a `created` product predates product schemas and has no published product schema for its IP + Item + Category tuple
 - **WHEN** an authorized inventory admin opens the product and Auction evaluates its eligibility

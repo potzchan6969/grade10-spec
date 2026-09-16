@@ -28,6 +28,7 @@ product's schema, except for facts that describe an individual inventory
 unit.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-93 - Product form shows the complete hierarchy
+**Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
 - **GIVEN** an authorized inventory admin opens a product form
 - **WHEN** they inspect the identity fields
@@ -35,6 +36,7 @@ unit.
 - **AND** no Collectible type field or product metadata editor is available
 
 #### Scenario: grade10-admin-inventory-catalog-SC-94 - Product contract has no legacy identity fields
+**Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
 - **GIVEN** an authorized inventory admin creates or reads a product
 - **WHEN** Grade10 returns the product
@@ -65,6 +67,7 @@ attributes. Grade SHALL be stored as text.
 | Created at | Set when the record is received, immutable |
 
 #### Scenario: grade10-admin-inventory-catalog-SC-95 - Inventory has no Cert ID records by default
+**Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
 - **GIVEN** an authorized inventory admin creates a product without a
   certificate identifier
@@ -73,6 +76,7 @@ attributes. Grade SHALL be stored as text.
 - **AND** the product remains valid for ordinary unnumbered stock
 
 #### Scenario: grade10-admin-inventory-catalog-SC-96 - Intake records a Cert ID under its product
+**Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
 - **GIVEN** a created product with an inventory
 - **WHEN** an authorized inventory admin intakes one unit with Grade Issuer `PSA` and Cert ID `PSA-123`
@@ -80,6 +84,7 @@ attributes. Grade SHALL be stored as text.
 - **AND** that record belongs to the intaken product and no other product
 
 #### Scenario: grade10-admin-inventory-catalog-SC-97 - Duplicate Cert ID is refused
+**Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
 - **GIVEN** an inventory already owns Grade Issuer `PSA` and Cert ID `PSA-123`
 - **WHEN** an authorized inventory admin intakes another unit with Grade Issuer `PSA` and Cert ID `PSA-123`
@@ -110,6 +115,7 @@ inventory facts and SHALL NOT be assigned as product attributes by this card
 template.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-108 - Shared card template defines product facts
+**Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
 - **GIVEN** an authorized inventory admin opens product schema management
 - **WHEN** they create a card schema from the shared template
@@ -118,6 +124,7 @@ template.
 - **AND** Serial, Cert ID, Grade Issuer, Grade, and Autograph Grade are not product attributes
 
 #### Scenario: grade10-admin-inventory-catalog-SC-109 - Source classification maps to existing tags
+**Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
 - **GIVEN** workbook rows share a broad Category but have different Set values or other source fields that identify distinct product families
 - **WHEN** an authorized inventory admin maps a source classification key for a card schema
@@ -143,6 +150,7 @@ and publish each schema through the existing publish flow, including its
 validation of affected products.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-110 - Schema manifest imports as drafts
+**Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
 - **GIVEN** an authorized inventory admin has mapped each distinct source classification key to an existing tag tuple
 - **WHEN** they preview and import a valid manifest
@@ -150,6 +158,7 @@ validation of affected products.
 - **AND** the current published schemas remain active until each revision is published
 
 #### Scenario: grade10-admin-inventory-catalog-SC-111 - Invalid schema manifest creates no revisions
+**Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
 - **GIVEN** a schema manifest contains an unmapped source classification key, an ambiguous Category-only mapping, or an invalid attribute definition
 - **WHEN** an authorized inventory admin validates and imports the manifest
@@ -165,6 +174,7 @@ of that value. An absent required value SHALL fail row validation. An absent
 optional value SHALL remain absent. Import SHALL NOT modify the uploaded file.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-115 - Mapped values trim and omit blank placeholders
+**Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
 - **GIVEN** product rows contain surrounding whitespace and optional Card Number or Variety cells that are blank or `-`
 - **WHEN** an authorized inventory admin previews the product upload
@@ -195,6 +205,7 @@ Missing mappings, missing required values, or invalid values SHALL block the
 entire commit.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-112 - Product upload creates one draft per identity
+**Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
 - **GIVEN** an authorized inventory admin has mapped each source classification key and a published card schema exists for each target tuple
 - **WHEN** they preview and commit product rows containing repeated identical card identities
@@ -204,6 +215,7 @@ entire commit.
 - **THEN** only products with complete classification and valid required schema values become `created`
 
 #### Scenario: grade10-admin-inventory-catalog-SC-114 - Same name keeps distinct card identities
+**Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
 - **GIVEN** uploaded rows share a product name and exact tuple but differ by Card Number or Set
 - **WHEN** an authorized inventory admin previews and commits the product upload
@@ -212,6 +224,7 @@ entire commit.
 - **AND** no inventory quantity, unit record, or Cert ID is created
 
 #### Scenario: grade10-admin-inventory-catalog-SC-113 - Product upload refuses incomplete rows atomically
+**Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
 - **GIVEN** an authorized inventory admin uploads product rows with an unmapped Category label, missing required value, or invalid schema value
 - **WHEN** they validate and attempt to commit the upload
@@ -252,6 +265,7 @@ corresponding inventory history in one atomic operation.
 | Serial | Optional copy-level text |
 
 #### Scenario: grade10-admin-inventory-catalog-SC-116 - Inventory upload previews matched copy facts
+**Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
 - **GIVEN** an authorized inventory admin uploads rows that each match one created product
 - **WHEN** they preview and confirm the inventory upload
@@ -260,6 +274,7 @@ corresponding inventory history in one atomic operation.
 - **AND** the rows are committed only after confirmation
 
 #### Scenario: grade10-admin-inventory-catalog-SC-117 - Blank status requires per-row choice and RAW has no Cert ID
+**Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
 - **GIVEN** an inventory upload has two blank Item Status rows, one `RAW` row without Cert ID and one graded row with Cert ID
 - **WHEN** an authorized inventory admin previews the upload without deciding either row
@@ -269,6 +284,7 @@ corresponding inventory history in one atomic operation.
 - **AND** only the included RAW row adds a unit and stock
 
 #### Scenario: grade10-admin-inventory-catalog-SC-118 - Missing or ambiguous product match blocks import
+**Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
 - **GIVEN** an inventory upload contains a row with no matching product or more than one matching product
 - **WHEN** an authorized inventory admin attempts to commit the upload
@@ -276,6 +292,7 @@ corresponding inventory history in one atomic operation.
 - **AND** no row in the upload changes inventory or history
 
 #### Scenario: grade10-admin-inventory-catalog-SC-119 - Duplicate Cert ID blocks the whole upload
+**Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
 - **GIVEN** an inventory upload contains a Cert ID already present under its matched product inventory or repeated in another upload row
 - **WHEN** an authorized inventory admin attempts to commit the upload
@@ -283,6 +300,7 @@ corresponding inventory history in one atomic operation.
 - **AND** no row in the upload changes inventory, unit records, or history
 
 #### Scenario: grade10-admin-inventory-catalog-SC-120 - Invalid inventory row leaves every unit unchanged
+**Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
 - **GIVEN** an inventory upload contains a row with an invalid value or unresolved required mapping
 - **WHEN** an authorized inventory admin validates and attempts to commit the upload
@@ -290,6 +308,7 @@ corresponding inventory history in one atomic operation.
 - **AND** no inventory count, unit fact, or history entry from that upload is committed
 
 #### Scenario: grade10-admin-inventory-catalog-SC-121 - Copy facts trim and omit blank placeholders
+**Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
 - **GIVEN** inventory rows contain surrounding whitespace and optional copy facts that are blank or `-`
 - **WHEN** an authorized inventory admin previews the inventory upload
@@ -298,6 +317,7 @@ corresponding inventory history in one atomic operation.
 - **AND** the uploaded workbook is unchanged
 
 #### Scenario: grade10-admin-inventory-catalog-SC-122 - Graded rows require Cert ID and RAW rows forbid it
+**Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
 - **GIVEN** an inventory upload contains one `RAW` row with Cert ID and one graded row without Cert ID
 - **WHEN** an authorized inventory admin validates the upload
@@ -317,6 +337,7 @@ SHALL append one history entry whose after state carries the received unit
 records when any were supplied.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-98 - Unnumbered intake increases stock
+**Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
 - **GIVEN** a created product with stock two
 - **WHEN** an authorized inventory admin intakes quantity three without unit records
@@ -324,6 +345,7 @@ records when any were supplied.
 - **AND** no individually tracked unit record is created
 
 #### Scenario: grade10-admin-inventory-catalog-SC-99 - Multiple Cert IDs match intake quantity
+**Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
 - **GIVEN** a created product with an inventory
 - **WHEN** an authorized inventory admin intakes quantity two with one unit
@@ -334,6 +356,7 @@ records when any were supplied.
 - **AND** one intake history entry records the two received identifiers
 
 #### Scenario: grade10-admin-inventory-catalog-SC-100 - Too many Cert IDs refuse the intake
+**Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
 - **GIVEN** a created product with an inventory
 - **WHEN** an authorized inventory admin intakes quantity one with two graded
@@ -351,6 +374,7 @@ Existing typed attribute display choices SHALL remain unchanged when Cert ID
 is added, moved, or removed.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-101 - Admin adds Cert ID to displayed attributes
+**Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
 - **GIVEN** an authorized inventory admin edits a product schema's Displayed Attributes panel
 - **WHEN** they include Cert ID and place it before the first product attribute
@@ -358,6 +382,7 @@ is added, moved, or removed.
 - **AND** no ordinary Cert ID attribute key is created
 
 #### Scenario: grade10-admin-inventory-catalog-SC-102 - Admin hides Cert ID without changing attributes
+**Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
 - **GIVEN** a published product schema displaying Cert ID and two typed attributes
 - **WHEN** an authorized inventory admin removes Cert ID from the displayed set
@@ -365,12 +390,14 @@ is added, moved, or removed.
 - **AND** Cert ID is not returned as a displayed field
 
 #### Scenario: grade10-admin-inventory-catalog-SC-103 - Displayed Cert ID resolves the selected unit
+**Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
 - **GIVEN** an Auction listing selects Cert ID `PSA-123` and its product schema displays Cert ID
 - **WHEN** a collector reads the listing
 - **THEN** the displayed product fields include `PSA-123` in the configured position
 
 #### Scenario: grade10-admin-inventory-catalog-SC-104 - No Cert ID contributes no displayed value
+**Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
 - **GIVEN** an Auction listing explicitly selects `No Cert ID` and its product schema displays Cert ID
 - **WHEN** a collector reads the listing
@@ -387,6 +414,7 @@ SHALL use the existing product-level quantity reservation path without
 allocating a certificate record.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-105 - Reservation selects a Cert ID
+**Serves:** grade10-admin-inventory-catalog-US-71 - Holder reserves a specific inventory unit
 
 - **GIVEN** a created product with available Cert IDs `PSA-123` and `BGS-456`
 - **WHEN** an authorized holder requests a reservation for `PSA-123`
@@ -394,6 +422,7 @@ allocating a certificate record.
 - **AND** its quantity is one and `PSA-123` is unavailable to other active reservations
 
 #### Scenario: grade10-admin-inventory-catalog-SC-106 - Reservation selects No Cert ID
+**Serves:** grade10-admin-inventory-catalog-US-71 - Holder reserves a specific inventory unit
 
 - **GIVEN** a created product with available stock and no intended numbered unit
 - **WHEN** an authorized holder explicitly requests `No Cert ID` for quantity three
@@ -401,6 +430,7 @@ allocating a certificate record.
 - **AND** no Cert ID record is allocated
 
 #### Scenario: grade10-admin-inventory-catalog-SC-107 - Reservation without a unit choice is refused
+**Serves:** grade10-admin-inventory-catalog-US-71 - Holder reserves a specific inventory unit
 
 - **GIVEN** a created product with available stock
 - **WHEN** an authorized holder requests a reservation without a Cert ID or `No Cert ID`

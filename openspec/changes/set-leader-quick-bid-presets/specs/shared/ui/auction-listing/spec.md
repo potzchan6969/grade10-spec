@@ -22,6 +22,7 @@ the current bid plus those multiples.
 The first chip SHALL NOT be replaced by the typed raise floor.
 
 #### Scenario: shared-ui-auction-listing-SC-35 - A leader's chips step from the committed max
+**Serves:** Quick bids - a leader's chips step from the committed max
 
 - **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
   increment is 4000 minor units, and whose viewer leads with a maximum of
@@ -30,6 +31,7 @@ The first chip SHALL NOT be replaced by the typed raise floor.
 - **THEN** the three amounts are 204000, 208000, and 216000 HKD minor units
 
 #### Scenario: shared-ui-auction-listing-SC-36 - A collector who does not lead steps from the current bid
+**Serves:** Quick bids - a collector who does not lead steps from the current bid
 
 - **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
   increment is 4000 minor units, and whose viewer has a maximum of 116000
@@ -45,6 +47,7 @@ the greater of the listing's minimum next bid and that maximum plus 100
 minor units. That floor SHALL NOT be used as the first quick-bid amount.
 
 #### Scenario: shared-ui-auction-listing-SC-37 - A leader's typed minimum stays max plus $1
+**Serves:** Raise floor - a leader's typed minimum stays max plus $1
 
 - **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
   increment is 4000 minor units, whose minimum next bid is 124000 minor
