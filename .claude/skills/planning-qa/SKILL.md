@@ -236,7 +236,10 @@ because the agent would be deciding the product. Automation removes the typing,
 not the judgement.
 
 **On resume, patch - never re-run a pass.** The answer becomes a scenario, and a
-case where one is warranted. Re-running the blind pass once the answer is known
+case where one is warranted - and a row in `decisions.md` where what the round
+settled was the change's scope rather than a rule inside it. A grilling round
+that moved the goals and left no trace there is a decision the next reader will
+re-open. Re-running the blind pass once the answer is known
 produces a fake independent reading and erases the record of the real one.
 
 **When nobody can settle it**, the case stays in the suite as `draft` carrying

@@ -61,6 +61,13 @@ designer's state, an engineer's constraint, a QA case that exposes a rule nobody
 wrote land there first, marked 🚧 or ❓ - and you are the teammate who keeps it one
 record.
 
+`decisions.md` is yours the same way, for its own kind of fact. A scope decision
+learned after the interview - a non-goal that turns out to be load-bearing, a
+goal no screen can deliver, an option dropped for a reason that did not survive
+the screens - is a row revised there by whoever learned it, before the artifact
+that depends on it changes. When one of those arrives, read it: a change whose
+goals moved may owe a journey it does not have, and that journey is yours.
+
 ## The run
 
 The author triggers `/planning-pm` and nothing else. Everything above the line

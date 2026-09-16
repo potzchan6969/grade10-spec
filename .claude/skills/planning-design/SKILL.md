@@ -38,7 +38,12 @@ the proposal, the decisions and the journeys are already written, `spec.md` is
 usually not — you come before it — and what is missing is the surface. Add `ui-design.md` to that change,
 never a second one, and flag what does not exist yet so `tasks.md` carries it.
 A product detail you learn while drawing goes on the PRD first, marked 🚧 or ❓,
-before this file cites it.
+before this file cites it. A **scope** fact goes on `decisions.md` first, as a
+revised row: a non-goal that turns out to be load-bearing, a goal no screen can
+deliver, an option the interview dropped that the screens will not support. The
+two are different records - the PRD is what the product should be, `decisions.md`
+is what this change chose - and a state that contradicts a recorded decision is
+not automatically your error to absorb.
 
 Optional: **a change with no user-facing surface skips the file entirely.**
 Nothing downstream waits on it, and `openspec status` simply lists it as not
@@ -59,7 +64,8 @@ A section that would only repeat one of them points at it instead.
 
 ## Steps
 
-1. **Read what already exists.** The change's `decisions.md` for its goals and
+1. **Read what already exists**, and write back to it where drawing moves it.
+   The change's `decisions.md` for its goals and
    edges, its `user-journeys.md` for who walks it, and the durable
    `specs/<capability>/spec.md` for the capability's current `## Purpose` and
    `## Feature set`. **Do not wait for the change's own `spec.md`**: your file

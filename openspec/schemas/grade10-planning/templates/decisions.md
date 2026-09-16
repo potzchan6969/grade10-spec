@@ -5,7 +5,13 @@
 
      Confirmed decisions only. A question nobody present could settle is a
      deferral, not a decision: it goes under the proposal's open questions
-     naming who owes the answer, and as a ❓ row on the capability's PRD. -->
+     naming who owes the answer, and as a ❓ row on the capability's PRD.
+
+     A decision learned later lands here first. Drawing the design or refining
+     the journeys can show the frontier closed on the wrong answer - revise the
+     row in place, by whoever learned it, before the artifact that depends on
+     it changes. A conflict between this file and something drawn from it is
+     not automatically the other file's error. -->
 
 ## Goals
 

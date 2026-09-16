@@ -120,6 +120,24 @@ artifacts:
       as though it were decided is how an open question stops being read as one.
 
 
+      **A decision learned later lands here first.** Refining the journeys or
+      the design can show that the frontier closed on the wrong answer - a
+      non-goal that turns out to be load-bearing, a goal no screen can deliver,
+      an option the interview dropped for a reason that did not survive the
+      screens. That is a row revised or added here, by whoever learned it,
+      before the artifact that depends on it changes. **A conflict between this
+      file and an artifact drawn from it is not automatically the artifact's
+      error**: one of the two is newer, and which one is a question to settle
+      rather than assume. Without that path this file is a snapshot of one
+      afternoon, and every artifact after it drifts from the record quietly -
+      which is the rot it was added to stop.
+
+      Revise the row in place, and say in `Instead of` what it now drops. Git
+      carries what it used to say, this file lives only as long as the change,
+      and a section of superseded rows is something nobody prunes. The product
+      manager keeps the file whole, as they keep the PRD whole; the row is
+      written by whoever learned the fact.
+
       `Instead of` is the column that earns the file. A decision without its
       rejected option is re-opened next quarter and answered the other way, with
       nothing in the record to say which reading is newer. It is the same
@@ -151,8 +169,9 @@ artifacts:
     instruction: |
       Written by the product manager, with the `planning-pm` skill, one file
       beside each `spec.md` the change touches. Its scope is `decisions.md`'s:
-      a journey outside those goals, or inside a non-goal, is the file
-      disagreeing with the change.
+      a journey outside those goals, or inside a non-goal, is a disagreement to
+      settle rather than a line to force - either the journey is wrong, or the
+      scope was, and `decisions.md` is where the second answer lands.
 
       Sections, in this order:
 
