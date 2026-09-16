@@ -21,7 +21,7 @@ and tests against typed fixtures rather than a running backend.
 This group was appended to preserve the claimed group and task ids above. Land
 it before publishing the final Grade10 gitlink.
 
-- [ ] 3.1 Publish the Cart Drawer manual page and update the page-shell and cart-validation records to match `grade10-site-store-cart-drawer-SC-01` through `grade10-site-store-cart-drawer-SC-13`, `grade10-site-store-cart-drawer-SC-15` through `grade10-site-store-cart-drawer-SC-19`, `grade10-site-site-page-shell-SC-09`, and `grade10-site-site-page-shell-SC-16`; make `pnpm check:manual` pass.
+- [x] 3.1 Publish the Cart Drawer manual page and update the page-shell and cart-validation records to match `grade10-site-store-cart-drawer-SC-01` through `grade10-site-store-cart-drawer-SC-13`, `grade10-site-store-cart-drawer-SC-15` through `grade10-site-store-cart-drawer-SC-19`, `grade10-site-site-page-shell-SC-09`, and `grade10-site-site-page-shell-SC-16`; make `pnpm check:manual` pass.
 - [ ] 3.2 Add the Cart Drawer acceptance shelf once its spec is durable, so the approved suite is reachable from the page.
 - [ ] 3.3 Re-verify `openspec validate add-store-cart-drawer-ui --strict` and
   `pnpm run tcs:validate` after the Cart Drawer feature suite represents the
