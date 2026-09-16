@@ -337,7 +337,6 @@ export function userBidHistoryForState(
             id: "user-max-manual",
             amountLabel: fixtureAmount(BID_FIXTURE_LOT.currentBidMinor),
             acceptedAtMs: msAgo(12),
-            status: "set",
           },
         ],
         bidRows: [
@@ -362,7 +361,6 @@ export function userBidHistoryForState(
             id: "user-max-auto-leading",
             amountLabel: fixtureAmount(BID_FIXTURE_LOT.viewerMaximumMinor),
             acceptedAtMs: msAgo(25),
-            status: "set",
           },
         ],
         bidRows: [
@@ -388,7 +386,6 @@ export function userBidHistoryForState(
             id: "user-max-auto-outbid",
             amountLabel: fixtureAmount(BID_FIXTURE_LOT.viewerMaximumMinor),
             acceptedAtMs: msAgo(18),
-            status: "set",
           },
         ],
         bidRows: [
@@ -415,7 +412,6 @@ export function userBidHistoryForState(
             id: "user-max-won",
             amountLabel: fixtureAmount(CLOSED_SOLD_MINOR),
             acceptedAtMs: msAgo(90),
-            status: "set",
           },
         ],
         bidRows: [
@@ -442,7 +438,6 @@ export function userBidHistoryForState(
               CLOSED_SOLD_MINOR - BID_FIXTURE_LOT.incrementMinor,
             ),
             acceptedAtMs: msAgo(120),
-            status: "set",
           },
         ],
         bidRows: [
