@@ -80,7 +80,8 @@ export const WINNER_ORDER_FULL_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress
     {
       id: "central",
       label: "Alex Chan",
-      lines: "Unit 3, Chater House, 8 Connaught Road\nCentral, Hong Kong\nHong Kong",
+      lines:
+        "Unit 3, Chater House, 8 Connaught Road\nCentral, Hong Kong\nHong Kong",
     },
     {
       id: "causeway",
@@ -353,8 +354,7 @@ function WinnerOrderAddressDialog({
     const lines = formatAddressLines(draft);
     const label = addressLabelFromDraft(draft);
     const saveToBook =
-      draft.saveForFuture &&
-      addresses.length < WINNER_ORDER_SAVED_ADDRESS_CAP;
+      draft.saveForFuture && addresses.length < WINNER_ORDER_SAVED_ADDRESS_CAP;
 
     if (saveToBook) {
       const id = `saved-${Date.now()}`;

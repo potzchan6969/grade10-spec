@@ -263,7 +263,9 @@ export const AddressBookFull: Story = {
     expect(confirmedPicker.getByText(/Queen's Road Central/)).toBeVisible();
     // Draft leads the list; five removable saved cards remain below.
     const cards = confirmedPicker.getByLabelText("Delivery address");
-    const firstCardTitle = within(cards).getAllByText(/Pat Ng|Alex Chan|Jordan Lee|Sam Wong/)[0];
+    const firstCardTitle = within(cards).getAllByText(
+      /Pat Ng|Alex Chan|Jordan Lee|Sam Wong/,
+    )[0];
     expect(firstCardTitle).toHaveTextContent("Pat Ng");
     expect(
       confirmedPicker.getAllByRole("button", { name: /^Remove / }).length,
