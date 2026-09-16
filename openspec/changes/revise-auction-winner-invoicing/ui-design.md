@@ -42,6 +42,25 @@ icon + label), once each document exists.
 Won rows: standing badge + View order only. Didn’t win: hold being-released /
 released copy retained.
 
+### Order notification letters
+
+React Email under `apps/emails` is the layout source of truth for post-close
+order mail (no Figma frames). Preview: `pnpm email:dev` →
+`/preview/auction/order/…`.
+
+| Surface | Preview path |
+| --- | --- |
+| Auction won | `/preview/auction/order/auction-won` |
+| Address reminder (first / second) | `/preview/auction/order/address-reminder`, `…/address-reminder-second` |
+| Invoice sent | `/preview/auction/order/invoice-sent` |
+| Payment received | `/preview/auction/order/payment-received` |
+| Shipped | `/preview/auction/order/order-shipped` |
+
+Shared composition: `AuctionLetter` → `LotBlock` + `PrimaryCta` (optional
+secondary on one row) + `Grade10EmailShell`. Order letters pass Winner Order
+as the lot image/title destination; shipped uses track-and-trace as primary
+CTA and Winner Order as secondary.
+
 ## Components
 
 ### Winner Order
@@ -103,3 +122,4 @@ released copy retained.
 | Missing | Kind | Notes |
 | --- | --- | --- |
 | Shared Winner Order export naming | Delivery planning | Confirm when the page leaves preview-only Storybook. |
+| Litmus / client pass on dual CTA nowrap | Email QA | Shipped dual buttons use `nowrap` on one row — verify narrow clients. |
