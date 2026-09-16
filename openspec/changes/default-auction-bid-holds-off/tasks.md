@@ -4,7 +4,7 @@
 - [ ] 1.2 Reconcile the related in-flight deltas for increment, winner close, My Auctions and called-off lots with the actual-hold condition, then verify `openspec validate default-auction-bid-holds-off --strict` and `pnpm check:manual`.
 - [ ] 1.3 Add or update the feature and auction-domain cases for `grade10-site-auction-auction-SC-23`, `grade10-site-auction-auto-bidding-SC-25`, `grade10-site-auction-bid-panel-enrollment-SC-15` and `SC-16`; retain the enabled hold cases as separate coverage and run `pnpm run tcs:validate`.
 
-## 2. Flag resolution and bid service mode (grade10)
+## 2. Flag resolution and bid service mode (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Make the auction environment resolver treat only `AUCTION_AUTHORIZATION_HOLD_ENABLED="1"` as enabled, covering missing, `"0"` and unknown values in unit tests; keep the worker deployments explicit and type-safe.
 - [ ] 2.2 Make the bid service default `authorizationHoldEnabled` to false and audit every storefront and RPC caller so the effective mode is passed once without changing public bid inputs or results.
