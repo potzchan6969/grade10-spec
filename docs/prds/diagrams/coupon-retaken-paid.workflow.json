@@ -21,6 +21,7 @@
     "newer-picks",
     "newer-checkout",
     "newer-pays",
+    "newer-pays_order",
     "newer-pays_used"
   ],
   "nodes": [
@@ -106,9 +107,18 @@
       "width": 156
     },
     {
+      "id": "newer-pays_order",
+      "lane": "shopify",
+      "col": 4,
+      "type": "external",
+      "label": "Order paid",
+      "sublabel": "Shopify marks it paid",
+      "width": 156
+    },
+    {
       "id": "newer-pays_used",
       "lane": "store",
-      "col": 4,
+      "col": 5,
       "type": "backend",
       "label": "Coupon used",
       "sublabel": "the claim is spent",
@@ -174,11 +184,18 @@
     },
     {
       "from": "newer-pays",
-      "to": "newer-pays_used",
+      "to": "newer-pays_order",
       "label": "order event",
       "variant": "dashed",
       "fromSide": "top",
       "toSide": "bottom"
+    },
+    {
+      "from": "newer-pays_order",
+      "to": "newer-pays_used",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
     }
   ]
 }
