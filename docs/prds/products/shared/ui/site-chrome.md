@@ -57,6 +57,8 @@ badge. An empty cart hides it. Design-system `Nav` stays count-agnostic.
 
 ::story{id="site-chrome-siteheader-cart--large-count" title="SiteHeader — large cart count"}
 
+::story{id="site-chrome-siteheader-cart--on-auction-surface" title="SiteHeader — cart on auction surface (post-store)"}
+
 ::story{id="components-nav-account--sign-in" title="Nav — Sign In button"}
 
 ::story{id="components-nav-layout--narrow" title="Nav — narrow (375px)"}
