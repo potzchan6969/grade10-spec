@@ -127,7 +127,7 @@ and are unchanged.
 3. **Digest the capability, and upgrade the journeys if missing.** Read as
    **What a Run Reads** says. When `user-journeys.md` is missing or empty, do
    not stop: write it as **Step 1** in the document and `openspec/config.yaml`
-   (`rules.spec-outline`, `rules.user-journeys`) direct — from the feature set
+   (`rules.specs`, `rules.user-journeys`) direct — from the feature set
    and the PRD rather than the requirements you cannot see, adding no
    behaviour, ids numbered from `01` and never reusing a retired number. There
    is no cap on the number of journeys. A capability nobody walks says

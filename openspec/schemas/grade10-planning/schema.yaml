@@ -165,7 +165,10 @@ artifacts:
       miss costs most, and exempting one from test design is how those ship.
 
       Never invent an actor to fill the file. `pnpm check:manual` fails a
-      capability with neither journeys nor the declaration.
+      capability with neither journeys nor the declaration, and a file holding
+      both. It reads the declaration's first words alone, so the reason after
+      them is owed to the next reader rather than to the checker - write it
+      anyway; it is the whole value of the line.
 
       ## Retiring a journey
 
@@ -306,8 +309,12 @@ artifacts:
 
       One file per capability the proposal names, at the exact existing path for
       a capability that already exists. At least one delta unless the change's
-      `.openspec.yaml` sets `skip_specs: <why>`; never invent a requirement to
-      satisfy validation.
+      `.openspec.yaml` sets `skip_specs: true` with `skip_specs_why: <why>`
+      beside it - the CLI owns that key and reads it as a boolean, so a reason
+      written on it invalidates the manifest. Never invent a requirement to
+      satisfy validation. A change that has written its outline and owes its
+      requirements to a later pass says so in `awaiting:` with
+      `specs: <what is still to come>`, and deletes the line as they land.
 
       ## Requirements and scenarios
 
@@ -411,9 +418,11 @@ artifacts:
       `## Reconciliation` naming scenario ids, so missing that path reopens the
       leak on the next change to the same capability, invisibly.
 
-      Record a hash of the input manifest in `## Reconciliation`. When someone
-      later suspects the pass stopped being blind, that hash is the only thing
-      that can be checked.
+      Name the bundle on `## Reconciliation`'s Run line: what the pass read,
+      and what it was denied. Nothing computes or verifies a digest of it, so
+      the line is the run's own statement rather than proof - write it as one.
+      What actually catches a pass that stopped being blind is an empty
+      `## Raised`, run after run, and `tcs:validate` warns on it.
 
       ## Method
 
@@ -431,13 +440,25 @@ artifacts:
       is written before the scenarios exist, and `tcs:validate` has always
       warned on a scenario in a trace.
 
-      ## Reconciliation
+      ## Raised, Settled and Reconciliation
 
-      Once both readings land, the run joins them on anchors and records the
-      outcome in a `## Reconciliation` section at the bottom of this file: what
-      was raised and folded into the spec, what was raised and rejected and
-      why, what was escalated to the author, what was deferred because nobody
-      could settle it, and which anchors no case reaches.
+      Three sections at the bottom of the file, and `pnpm run tcs:validate`
+      reads them as a set.
+
+      `## Raised` is the blind reading's own output: every point the isolated
+      input did not settle, written as a question for the author. Required, and
+      may be empty - empty is a claim on the record that the input settled
+      everything. **A suite carrying `## Reconciliation` and no `## Raised`
+      fails**: the pass ran and what it could not settle was thrown away.
+
+      `## Settled` carries the questions earlier runs had answered, one line
+      each and no scenario ids. The next blind pass reads it on purpose - it
+      says what has already been asked, which is not what the scenarios say.
+
+      `## Reconciliation` is written by the run once both readings land, joining
+      them on anchors: what was raised and folded into the spec, what was raised
+      and rejected and why, what was escalated to the author, what was deferred
+      because nobody could settle it, and which anchors no case reaches.
 
       That section is the evidence the blind pass ran and what it bought.
       Without it, a pass that finds nothing and a pass that never happened look
@@ -613,7 +634,7 @@ artifacts:
       ## 1. Shared interfaces (grade10-spec)
 
 
-      - [ ] 1.1 Export `ListingTile` from packages/ui (grade10-site-store-product-listing-SC-01)
+      - [ ] 1.1 Export `ListingTile` from packages/ui (`grade10-site-store-product-listing-SC-01`)
 
       - [ ] 1.2 Verify: `pnpm run typecheck && pnpm run test`
 
@@ -621,7 +642,7 @@ artifacts:
       ## 2. Frontend (grade10)
 
 
-      - [ ] 2.1 Render the tile from the catalogue row (grade10-site-store-product-listing-SC-03)
+      - [ ] 2.1 Render the tile from the catalogue row (`grade10-site-store-product-listing-SC-03`)
 
       - [ ] 2.2 Verify: `pnpm run check`
 

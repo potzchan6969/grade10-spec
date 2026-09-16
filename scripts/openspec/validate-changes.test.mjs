@@ -62,9 +62,7 @@ const OUTLINE = [
  * was told to make. */
 test("the outline is not the requirements, so the wait stands", () => {
   const dir = change({
-    ".openspec.yaml": manifest(
-      "awaiting:\n  specs: the second pass is QA's\n",
-    ),
+    ".openspec.yaml": manifest("awaiting:\n  specs: the second pass is QA's\n"),
     "specs/demo/alpha/spec.md": OUTLINE,
     "specs/demo/alpha/user-journeys.md":
       "## ADDED User journeys\n\n### alpha-US-01: Someone does the thing\n",
@@ -76,9 +74,7 @@ test("the outline is not the requirements, so the wait stands", () => {
  * `written` reads the same pass. */
 test("a change half through its capabilities is still waiting", () => {
   const dir = change({
-    ".openspec.yaml": manifest(
-      "awaiting:\n  specs: the second pass is QA's\n",
-    ),
+    ".openspec.yaml": manifest("awaiting:\n  specs: the second pass is QA's\n"),
     "specs/demo/alpha/spec.md": "## ADDED Requirements\n",
     "specs/demo/beta/spec.md": OUTLINE,
   });

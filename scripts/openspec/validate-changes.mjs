@@ -71,9 +71,7 @@ function outlineOnly(specs) {
   };
   walk(specs);
   if (found.length === 0) return true;
-  return found.some(
-    (file) => !DELTA_HEADING.test(readFileSync(file, "utf8")),
-  );
+  return found.some((file) => !DELTA_HEADING.test(readFileSync(file, "utf8")));
 }
 
 /** The pinned CLI, and only the pinned one: a binary that happens to be on

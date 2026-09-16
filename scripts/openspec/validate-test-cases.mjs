@@ -581,7 +581,7 @@ function checkSuite(root, filePath, rulesRev) {
     else if (suite.raised === 0)
       warn(
         1,
-        "`## Raised` is empty — the input hash says what the reader saw, never how it read; several empty runs mean the second reading has stopped being a second reading",
+        "`## Raised` is empty — the Run line says what the reader saw, never how it read; several empty runs mean the second reading has stopped being a second reading",
       );
   }
 

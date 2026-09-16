@@ -86,7 +86,8 @@
      things — which the run never settles on its own — and **Uncovered anchors**
      with where each is verified instead. A finding is recorded here even when
      the rule it becomes lands in another capability's spec; say where it went.
-     Record the isolated input's hash on the Run line.
+     The Run line names the isolated input: what the pass read, and what it
+     was denied. Nothing verifies it, so it is a statement, not proof.
 
      Scenario ids may appear here only while the change is open; archive fold
      and tcs-review both strip them, leaving the dispositions and reasons. -->

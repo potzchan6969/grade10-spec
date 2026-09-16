@@ -59,7 +59,7 @@ over one document, and a change in another repository to fix the second.
 ## The run
 
 ```
-/planning-pm                    proposal, journeys, spec-outline
+/planning-pm                    proposal, journeys, specs pass one
 /planning-design                ui-design, where there is a surface
     ─────────────────────────────────────────────────────────────
     ↓
@@ -68,7 +68,7 @@ over one document, and a change in another repository to fix the second.
     ↓
 reconciliation                  join on anchors
     ↓
-spec-behaviour + ## Reconciliation
+specs pass two + ## Reconciliation
 ```
 
 Everything this run produces is `draft`. Nothing in it claims review;
@@ -92,9 +92,13 @@ Everything this run produces is `draft`. Nothing in it claims review;
    than working from memory; `specs` carries both of its passes, and the second
    is yours.
 
-3. **Run the two readings.** Dispatch both sub-agents. They get identical
-   inputs and never see each other's output. `spec-to-tcs` builds the isolated
-   input for the suite pass; the scenario pass does not read `feature-tcs.md`.
+3. **Run the two readings.** Dispatch both sub-agents. Neither sees the
+   other's output. They read the same anchors, not the same bundle: the suite
+   pass gets the isolated input `spec-to-tcs` builds, and the scenario pass
+   also reads the durable requirements, because a MODIFIED block is copied
+   whole from them. That asymmetry is the mechanism — one reading can see what
+   the store already states and the other cannot — so the suite pass never
+   reads `## Requirements` and the scenario pass never reads `feature-tcs.md`.
 
    **Both get `ui-design.md`** where the change has one. It lands before the
    requirements and its states tie to anchors, not scenario ids, so reading it
@@ -266,9 +270,11 @@ single case, because it is where this workflow is cheapest to cheat.
 - **Uncovered anchors** — each `**Out of suite:**` line names where the scenario
   is verified instead. One that names no such place is a hole wearing an
   exemption's clothes
-- **An empty reconciliation, run after run** — the signal that the blind pass
-  has stopped being blind, or stopped being a different reading. Check the input
-  hash on the Run line and say so rather than passing the suite
+- **An empty `## Raised`, run after run** — the signal that the blind pass has
+  stopped being blind, or stopped being a different reading, and the only one
+  this store can read. The Run line says what the pass read and was denied;
+  nothing verifies it, so read it as the run's word and say so rather than
+  passing the suite
 
 When you finish a review, strip the scenario ids from `## Reconciliation`,
 leaving the dispositions and the reasons. Beyond the change's life those ids are
@@ -337,8 +343,11 @@ them too, and CI runs it on every push.
 
 - **Every section is an anchor.** One `## <capability>-US<n>: <title>` per
   `### <capability>-US-<n>` in `user-journeys.md`, in that file's order, with
-  the same three-line statement carried over unchanged — or, where nobody walks the
-  capability, one section per `## Feature set` root group.
+  the same three-line statement carried over unchanged. Where nobody walks the
+  capability the file carries **one** section, `## <capability>-US1`, and the
+  feature set groups go on the cases' `**Trace:**` lines — a section per group
+  would number a case by that group's position, and an issued case id is
+  permanent. `tcs:validate` refuses the other shape.
 - **Every case traces the anchor it walks**, and never a scenario id: the suite
   was written before the scenarios existed.
 - **A scenario no case covers is a hole**, reported — never quietly closed by

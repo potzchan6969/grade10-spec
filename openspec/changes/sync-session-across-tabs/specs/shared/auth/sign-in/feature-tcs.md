@@ -460,7 +460,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** 2026-09-15 · two independent readings of the same anchors · isolated input `1bdd004470a0c9d4` · the suite pass read no `## Requirements`, no `openspec/specs/` beyond Purpose and Feature set, and nothing under `openspec/changes/archive/`.
+**Run:** 2026-09-15 · two independent readings of the same anchors · the suite pass read no `## Requirements`, no `openspec/specs/` beyond Purpose and Feature set, and nothing under `openspec/changes/archive/`.
 
 * **Raised, escalated → folded into spec** — *A refused action that can no longer be done*. Nobody had decided it. The author settled it: the action is attempted and refused the ordinary way, never passed over in silence. Folded as `shared-auth-sign-in-SC-56`; walked by `shared-auth-sign-in-US8-TC10-1`, added by this reconciliation.
 * **Raised, escalated → folded into spec** — *Completing more than once*. Nobody had decided it. Settled as at most once per refusal per surface, and folded as `shared-auth-sign-in-SC-57`. `US8-TC6-1` was rewritten: it had tested the person pressing add again themselves, which is an ordinary add and must increment the cart, so as written it would have failed a correct implementation.

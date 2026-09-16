@@ -58,7 +58,7 @@ PRD marks 🚧 / ❓                the source of the feature set's groups
     ↓
 user-journeys                   yours, written
     ↓
-spec-outline                    generated: Purpose + Feature set
+specs, pass one                 generated: Purpose + Feature set
     ─────────────────────────────────────────────────────────────
     ↓
 /planning-qa                    the two readings, and the reconciliation
