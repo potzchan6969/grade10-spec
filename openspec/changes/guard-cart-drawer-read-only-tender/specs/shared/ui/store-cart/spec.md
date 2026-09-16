@@ -50,7 +50,7 @@ eligibility details, and refusal reasons SHALL remain visible.
 When the matching callbacks are supplied, the drawer SHALL preserve the
 existing interactive behavior and state-specific disabled and loading rules.
 
-#### Scenario: shared-ui-store-cart-SC-26 - Promo context is display-only without callbacks
+#### Scenario: shared-ui-store-cart-SC-32 - Promo context is display-only without callbacks
 **Serves:** shared-ui-store-cart-US-09 - the promo context is display-only without callbacks
 
 - **GIVEN** an open cart drawer with one applicable and one inapplicable held promo code
@@ -61,7 +61,7 @@ existing interactive behavior and state-specific disabled and loading rules.
 - **AND** the typed-code input and Apply control are absent
 - **AND** the applicable held code has no Apply control
 
-#### Scenario: shared-ui-store-cart-SC-27 - Promo callbacks expose the matching actions
+#### Scenario: shared-ui-store-cart-SC-33 - Promo callbacks expose the matching actions
 **Serves:** shared-ui-store-cart-US-09 - promo callbacks expose the matching actions
 
 - **GIVEN** an open cart drawer with an applicable held promo code
@@ -84,7 +84,7 @@ reviewed cart summary unchanged when no points-apply callback is supplied.
 When the matching callbacks are supplied, the drawer SHALL preserve the
 existing interactive behavior and state-specific disabled and loading rules.
 
-#### Scenario: shared-ui-store-cart-SC-28 - Points context is display-only without callbacks
+#### Scenario: shared-ui-store-cart-SC-34 - Points context is display-only without callbacks
 **Serves:** shared-ui-store-cart-US-09 - the points context is display-only without callbacks
 
 - **GIVEN** an open cart drawer with supplied points balance, basket ceiling, and conversion-rate context
@@ -94,7 +94,7 @@ existing interactive behavior and state-specific disabled and loading rules.
 - **AND** the points amount input, Apply control, and Use max control are absent
 - **AND** no points amount is applied and the cart summary is unchanged
 
-#### Scenario: shared-ui-store-cart-SC-29 - Points callbacks expose the matching actions
+#### Scenario: shared-ui-store-cart-SC-35 - Points callbacks expose the matching actions
 **Serves:** shared-ui-store-cart-US-09 - points callbacks expose the matching actions
 
 - **GIVEN** an open cart drawer with supplied points balance, basket ceiling, and conversion-rate context
@@ -114,7 +114,7 @@ absent when that callback is missing. Promo and points disclosure controls
 SHALL likewise be absent when their matching state-change callbacks are
 missing.
 
-#### Scenario: shared-ui-store-cart-SC-30 - One missing callback removes only its action
+#### Scenario: shared-ui-store-cart-SC-36 - One missing callback removes only its action
 **Serves:** shared-ui-store-cart-US-09 - one missing callback removes only its action
 
 - **GIVEN** an open cart drawer with all tender context and callbacks supplied except one callback

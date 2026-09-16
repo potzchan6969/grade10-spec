@@ -159,9 +159,9 @@ that cannot change the cart.
 - **Run:** hand-assembled from the proposal, feature set, user journey, linked
   PRD section, durable capability context, and OpenSpec configuration; isolated
   input SHA-256 `dccd554eeefa6c667e46fccd1ff28c6924b921dc484e9c2e61e019fd04a2811c`.
-- **Folded into spec:** `shared-ui-store-cart-SC-26` and `SC-27` cover promo
-  display-only and interactive behavior; `SC-28` and `SC-29` cover points
-  display-only and interactive behavior; `SC-30` covers independent callback
+- **Folded into spec:** `shared-ui-store-cart-SC-32` and `SC-33` cover promo
+  display-only and interactive behavior; `SC-34` and `SC-35` cover points
+  display-only and interactive behavior; `SC-36` covers independent callback
   gating and the remaining optional tender controls.
 - **Uncovered anchors:** none — `shared-ui-store-cart-US-09` is traced by all
   four draft cases.

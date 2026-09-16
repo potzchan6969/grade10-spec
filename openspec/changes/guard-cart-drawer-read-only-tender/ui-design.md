@@ -28,8 +28,8 @@ required.
 
 | State | Spec scenarios | Storybook source |
 | --- | --- | --- |
-| Promo context with no typed-apply or held-code callback; supplied code details and refusal remain visible | `shared-ui-store-cart-SC-26` | `Store Cart/CartDrawerFooter` and `Store Cart/CartDrawer` read-only interaction coverage |
-| Promo context with typed-apply and held-code callbacks | `shared-ui-store-cart-SC-27` | `Store Cart/CartDrawerFooter` and `Store Cart/CartDrawer` interactive interaction coverage |
-| Points context with no points-apply or Use max callback; supplied balance, ceiling, and rate remain visible | `shared-ui-store-cart-SC-28` | `Store Cart/CartDrawerFooter` read-only interaction coverage |
-| Points context with points-apply and Use max callbacks | `shared-ui-store-cart-SC-29` | `Store Cart/CartDrawerFooter` interactive interaction coverage |
-| Partial callback matrix; only the action owned by a missing callback is absent | `shared-ui-store-cart-SC-30` | `Store Cart/CartDrawerFooter` and `Store Cart/CartDrawer` callback-matrix interaction coverage |
+| Promo context with no typed-apply or held-code callback; supplied code details and refusal remain visible | `shared-ui-store-cart-SC-32` | `Store Cart/CartDrawerFooter` and `Store Cart/CartDrawer` read-only interaction coverage |
+| Promo context with typed-apply and held-code callbacks | `shared-ui-store-cart-SC-33` | `Store Cart/CartDrawerFooter` and `Store Cart/CartDrawer` interactive interaction coverage |
+| Points context with no points-apply or Use max callback; supplied balance, ceiling, and rate remain visible | `shared-ui-store-cart-SC-34` | `Store Cart/CartDrawerFooter` read-only interaction coverage |
+| Points context with points-apply and Use max callbacks | `shared-ui-store-cart-SC-35` | `Store Cart/CartDrawerFooter` interactive interaction coverage |
+| Partial callback matrix; only the action owned by a missing callback is absent | `shared-ui-store-cart-SC-36` | `Store Cart/CartDrawerFooter` and `Store Cart/CartDrawer` callback-matrix interaction coverage |
