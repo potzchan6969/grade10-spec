@@ -559,6 +559,202 @@ Runs once per row of **Test data**.
 * The address window is still closed.
 * The winner is offered no address form.
 
+### post-sale-US9-TC17-1: Manual settlement pays an expired invoice and ends what is owed
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Resolving an unpaid order
+
+**Pre-conditions:**
+
+* `<expired-invoice order>` had its invoice sent at 2026-09-05T09:00:00Z, is unpaid, and its deadline 2026-09-12T09:00:00Z has passed.
+* admin(holds payment-processing) is on `<expired-invoice order>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Method | Bank transfer |
+| `<transfer reference>` | The bank's reference for the winner's transfer |
+| Proof | One file showing the transfer |
+
+**Steps:**
+
+1. Record a manual settlement with the method, `<transfer reference>` and proof.
+2. Read the order's outcome and invoice status.
+3. Open `<expired-invoice order>` on Winner Order as customer(winner of `<expired-invoice order>`).
+
+**Expected Results:**
+
+* The settlement is accepted; the order derives Processing.
+* The Expired invoice status is gone; the invoice reads paid.
+* Winner Order shows no amount owed and no card Pay.
+
+### post-sale-US9-TC18-1: A card payment just before the deadline is accepted
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Resolving an unpaid order
+
+**Pre-conditions:**
+
+* `<pending-invoice order>` had its invoice sent at 2026-09-05T09:00:00Z and is unpaid.
+* customer(winner of `<pending-invoice order>`) is on its Winner Order page at `<the attempt>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Payment deadline | 2026-09-12T09:00:00Z |
+| `<the attempt>` | 2026-09-12T08:59:00Z, one minute before the deadline |
+
+**Steps:**
+
+1. Click Pay.
+2. Pay the Order Total by card.
+3. Read the order on the post-sale queue as admin(holds payment-processing).
+
+**Expected Results:**
+
+* The card payment is accepted.
+* The order derives Processing and never showed Expired invoice.
+
+### post-sale-US9-TC19-1: The winner cannot pay by card after the deadline
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Resolving an unpaid order
+
+**Pre-conditions:**
+
+* `<expired-invoice order>` had its invoice sent at 2026-09-05T09:00:00Z and is unpaid.
+* customer(winner of `<expired-invoice order>`) opened its Winner Order page at 2026-09-12T08:55:00Z and kept it open.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Payment deadline | 2026-09-12T09:00:00Z |
+| `<the attempt>` | 2026-09-12T09:01:00Z, one minute after the deadline |
+
+**Steps:**
+
+1. At `<the attempt>`, submit card payment from the open page.
+2. Reload the Winner Order page.
+3. Read the order on the post-sale queue as admin(holds payment-processing).
+
+**Expected Results:**
+
+* The payment is refused and the card is not charged.
+* After reload, no card Pay is offered; Contact Us is.
+* The order still reads Pending Payment with Expired invoice.
+
+### post-sale-US9-TC20-1: Reissuing an expired invoice gives card payment a fresh seven days
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Resolving an unpaid order
+
+**Pre-conditions:**
+
+* `<expired-invoice order>` had its invoice sent at 2026-09-05T09:00:00Z and is unpaid past its deadline 2026-09-12T09:00:00Z.
+* admin(holds payment-processing) is on `<expired-invoice order>` at `<the reissue>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<the reissue>` | 2026-09-14T10:00:00Z |
+| New payment deadline | 2026-09-21T10:00:00Z, seven days from `<the reissue>` |
+
+**Steps:**
+
+1. Reissue the invoice.
+2. Read the payment deadline and the row on the queue.
+3. Pay the Order Total by card as customer(winner of `<expired-invoice order>`).
+
+**Expected Results:**
+
+* The deadline is 2026-09-21T10:00:00Z; Expired invoice and needs-action are gone.
+* Winner Order offers card Pay again.
+* The card payment is accepted; the order derives Processing.
+
+### post-sale-US9-TC21-1: Settling or reissuing an expired invoice needs payment-processing
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Resolving an unpaid order
+
+**Pre-conditions:**
+
+* `<expired-invoice order>` is unpaid past its deadline 2026-09-12T09:00:00Z.
+* admin(holds fulfilment, not payment-processing) is on `<expired-invoice order>`.
+
+**Test data:**
+
+| Action |
+| --- |
+| Record a manual settlement by bank transfer, with a reference and one proof file |
+| Reissue the invoice |
+
+**Steps:**
+
+1. Look for the row's control on `<expired-invoice order>`.
+2. Submit the row's action.
+
+**Expected Results:**
+
+* No control for the action is offered.
+* The action is refused.
+* The order still reads Pending Payment with Expired invoice, deadline unchanged.
+
 ## Raised
 
 - **Whether the Overdue mark clears on a reopen.** The mark is defined as a closed window and a reopen is said to change no status, but the input never says whether the mark is a live read of the entrance or a flag that a window once lapsed. TC4 asserts it clears.
@@ -568,6 +764,12 @@ Runs once per row of **Test data**.
 - **What the Overdue mark does after the invoice is sent.** The mark belongs to Awaiting Address and Preparing Invoice; nothing says whether an order that was marked keeps any trace of it once it reaches Pending Payment.
 - **Whether a closed window blocks the operator's own address correction.** The refusal is stated for the winner. An operator correcting an address on a pre-invoice order is neither permitted nor refused by the input.
 - **Traces on this delta.** The change's `user-journeys.md` for this capability carries only `post-sale-US-09`, so the queue, send and cancellation cases trace `## Feature set` root groups rather than the journeys that walk them, which live in the durable file.
+
+- **Whether the deadline instant itself is expired.** The seven days start at send, but nothing says whether a card payment at exactly send plus seven days is payable or refused. TC18 and TC19 test one minute either side and leave the instant alone.
+- **A card payment in flight across the deadline.** A winner who submits before the deadline and whose payment confirms after it is neither honoured nor refused by the input. TC19 covers only a submit after the deadline.
+- **What a reissue of an expired invoice prices.** The Payment Processing Fee is priced at send from live fees and the premium minimum applies to invoices "sent or reissued" after a change, so a reissue may re-price the Order Total. Nothing says whether it does, or whether a reason is required as it is for a re-quote. TC20 asserts only the fresh deadline.
+- **Bidding after a manual settlement of an expired invoice.** Winner Order says paying after an operator restores a payable invoice does not restore bidding by itself, but says nothing about a manual settlement of the expired invoice. TC17 asserts nothing about suspension.
+- **Whether the winner is told of a reissue.** A fresh seven days only helps a winner who knows it started; the input names no letter for a reissue, and reminders are said to end when the order stops being self-service payable.
 
 ## Reconciliation
 
