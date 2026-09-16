@@ -220,7 +220,7 @@ status vocabulary in `grade10-site/auction/order-status`.
 When the derived order status is **Cancelled** or **Refunded**, Winner Order
 SHALL show no progress stepper.
 
-#### Scenario: winner-order-SC-46 - Pending Payment highlights the Payment step
+#### Scenario: winner-order-SC-54 - Pending Payment highlights the Payment step
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose derived status is Pending Payment
@@ -228,7 +228,7 @@ SHALL show no progress stepper.
 - **THEN** the progress stepper marks Payment as the current step
 - **AND** Address and Invoice are complete
 
-#### Scenario: winner-order-SC-47 - Processing maps under Shipped
+#### Scenario: winner-order-SC-55 - Processing maps under Shipped
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order whose derived status is Processing
@@ -236,7 +236,7 @@ SHALL show no progress stepper.
 - **THEN** the progress stepper marks Shipped as the current step
 - **AND** does not invent a Processing step label
 
-#### Scenario: winner-order-SC-48 - Cancelled hides the stepper
+#### Scenario: winner-order-SC-56 - Cancelled hides the stepper
 **Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose derived status is Cancelled
@@ -250,7 +250,7 @@ offer the winner a control to view and download that invoice as a PDF. The
 control SHALL be hidden while the invoice status is `not_issued` and SHALL be
 hidden when the invoice status is `cancelled`.
 
-#### Scenario: winner-order-SC-49 - A sent invoice offers its PDF
+#### Scenario: winner-order-SC-57 - A sent invoice offers its PDF
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose invoice status is `pending`
@@ -427,7 +427,7 @@ until an operator reissues the invoice to `pending`.
 - **AND** creates the auction order as normal
 
 #### Scenario: winner-order-SC-14 - A losing bidder's hold is released at close
-**Serves:** winner-order-US-04 - Losing bidder gets their hold back when the lot closes
+**Serves:** winner-order-US-06 - Losing bidder gets their hold back when the lot closes
 
 - **GIVEN** a lot closing with one winner and three losing bidders holding
   open authorizations

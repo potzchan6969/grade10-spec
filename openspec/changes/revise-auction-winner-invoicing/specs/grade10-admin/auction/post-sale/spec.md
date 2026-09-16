@@ -137,7 +137,7 @@ and Grade10 SHALL refuse the same action on the server.
 - **WHEN** an operator enters Shipping & Handling of 0, adds no Insurance, and sends
 - **THEN** the invoice is `pending` with an order total of 300000 minor units in HKD
 
-#### Scenario: grade10-admin-auction-post-sale-SC-67 - Insurance added at zero is refused
+#### Scenario: grade10-admin-auction-post-sale-SC-68 - Insurance added at zero is refused
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an auction order in Preparing Invoice

@@ -65,11 +65,11 @@ released copy retained.
 
 | State | Spec scenarios |
 | --- | --- |
-| Address / Invoice / Payment / Shipped / Completed progress | `winner-order-SC-46`, `winner-order-SC-47` |
-| No stepper when Cancelled / Refunded | `winner-order-SC-48` |
+| Address / Invoice / Payment / Shipped / Completed progress | `winner-order-SC-54`, `winner-order-SC-55` |
+| No stepper when Cancelled / Refunded | `winner-order-SC-56` |
 | Card Pay while `pending`; absolute deadline datetime | `winner-order-SC-31`, `winner-order-SC-35` |
 | Expired: hide Pay; Contact Us in alert | `winner-order-SC-37` |
-| Invoice PDF after send; hidden before send and Cancelled | `winner-order-SC-49`, `winner-order-SC-44`, `winner-order-SC-45` |
+| Invoice PDF after send; hidden before send and Cancelled | `winner-order-SC-44`, `winner-order-SC-45`, `winner-order-SC-57` |
 | Refunded keeps PDF when invoice existed | Storybook Closed / Refunded; product decision on Winner Order PRD |
 
 ### My Auctions
