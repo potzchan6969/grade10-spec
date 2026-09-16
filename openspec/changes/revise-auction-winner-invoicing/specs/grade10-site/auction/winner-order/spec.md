@@ -333,7 +333,8 @@ an invoice amount before an operator has sent it.
 - **THEN** its total is the order total for that address
 - **AND** no component is marked as an estimate
 
-#### Scenario: winner-order-SC-44 - The fee grosses the subtotal up
+#### Scenario: winner-order-SC-62 - The fee grosses the subtotal up
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an operator sent an invoice whose subtotal is 312000 minor units in HKD
 - **AND** the payment provider's fees for HKD at that moment were 235 minor units and 3.4 per cent
@@ -341,7 +342,8 @@ an invoice amount before an operator has sent it.
 - **THEN** the payment processing fee is 11225 minor units in HKD
 - **AND** the order total is 323225 minor units in HKD
 
-#### Scenario: winner-order-SC-45 - A manually settled order carries no fee
+#### Scenario: winner-order-SC-63 - A manually settled order carries no fee
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order an operator settled by bank transfer
 - **WHEN** the winner reads the receipt

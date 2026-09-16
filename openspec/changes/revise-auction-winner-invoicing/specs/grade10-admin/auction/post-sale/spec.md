@@ -132,7 +132,8 @@ and Grade10 SHALL refuse the same action on the server.
 - **THEN** the send control is visible and disabled
 - **AND** Grade10 refuses a send from them on the server
 
-#### Scenario: grade10-admin-auction-post-sale-SC-65 - The operator sees the fee before sending
+#### Scenario: grade10-admin-auction-post-sale-SC-69 - The operator sees the fee before sending
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an auction order in Preparing Invoice whose lines total a subtotal
   of 312000 minor units in HKD
@@ -141,7 +142,8 @@ and Grade10 SHALL refuse the same action on the server.
 - **THEN** they read a payment processing fee of 11225 and an order total of
   323225 minor units in HKD
 
-#### Scenario: grade10-admin-auction-post-sale-SC-66 - Unreadable provider fees refuse the send
+#### Scenario: grade10-admin-auction-post-sale-SC-70 - Unreadable provider fees refuse the send
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an auction order in Preparing Invoice
 - **AND** the payment provider's current fees cannot be read
@@ -254,6 +256,7 @@ files.
 - **AND** the order derives as Processing
 
 #### Scenario: grade10-admin-auction-post-sale-SC-67 - Manual settlement drops the processing fee
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment whose invoice has a subtotal of 312000
   and a payment processing fee of 11225 minor units in HKD
