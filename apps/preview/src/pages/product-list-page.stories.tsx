@@ -25,7 +25,6 @@ import {
   STORE_FOOTER,
   STORE_SITE_HEADER,
   sortTriggerLabel,
-  UTILITY_LINKS,
 } from "./store-content";
 import { navigateToStory } from "./workbench-story-nav";
 
@@ -373,7 +372,6 @@ function ProductListPage() {
         selection={selection}
         sortOptions={SORT_OPTIONS}
         sortValue={sort}
-        utilityLinks={UTILITY_LINKS}
       />
       <Footer {...STORE_FOOTER} />
       <CartDrawer
