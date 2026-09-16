@@ -347,7 +347,7 @@ when it is first given and SHALL NOT be re-stamped when the collector returns
 to continue. A start carrying no agreement SHALL be refused, and SHALL change
 nothing.
 
-#### Scenario: grade10-site-e-kyc-hosted-verification-SC-27 - A check starts only once the collector agrees
+#### Scenario: grade10-site-e-kyc-hosted-verification-SC-28 - A check starts only once the collector agrees
 **Serves:** grade10-site-e-kyc-hosted-verification-US-01 - Collector verifies their identity before travelling to the store
 
 - **GIVEN** a check in Invited
