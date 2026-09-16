@@ -31,7 +31,7 @@ export const Cancelled: Story = {
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
     expect(
-      canvas.queryByRole("link", { name: "View invoice PDF" }),
+      canvas.queryByRole("link", { name: "Invoice PDF" }),
     ).not.toBeInTheDocument();
     const lot = canvasElement.querySelector('[data-slot="winner-order-lot"]');
     expect(lot).not.toBeNull();
@@ -63,9 +63,9 @@ export const Refunded: Story = {
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
     expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
-    expect(
-      canvas.getByRole("link", { name: "View invoice PDF" }),
-    ).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
+    expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     const lot = canvasElement.querySelector('[data-slot="winner-order-lot"]');
     expect(lot).not.toBeNull();
     const alert = canvas.getByText(

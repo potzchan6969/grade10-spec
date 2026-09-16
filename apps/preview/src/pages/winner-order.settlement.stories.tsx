@@ -15,7 +15,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Pre-invoice — confirm delivery address before quote. */
+/** Pre-invoice — confirm delivery address within 48 hours of lot close. */
 export const AwaitingAddress: Story = {
   name: "Awaiting Address",
   args: { status: "awaiting_address" },
@@ -46,6 +46,7 @@ export const AwaitingAddress: Story = {
     ).not.toBeInTheDocument();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Winning Bid")).toBeVisible();
+    expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     expect(canvas.getByText(/^Winning bid:/)).toBeVisible();
     expect(
       canvas.getByRole("link", {
@@ -54,14 +55,56 @@ export const AwaitingAddress: Story = {
     ).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
     expect(canvas.getByRole("complementary")).toBeVisible();
+    const sidebar = within(canvas.getByRole("complementary"));
     expect(
-      within(canvas.getByRole("complementary")).getByRole("button", {
+      sidebar.getByRole("button", {
         name: "Confirm delivery address",
       }),
     ).toBeVisible();
+    expect(
+      sidebar.getByText("Confirm by 19 Sep 2026, 21:30 HKT"),
+    ).toBeVisible();
     expect(canvas.queryByText(/pay with card/i)).not.toBeInTheDocument();
     expect(
-      canvas.queryByRole("link", { name: "View invoice PDF" }),
+      canvas.queryByRole("link", { name: "Invoice PDF" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("link", { name: "Receipt PDF" }),
+    ).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Address deadline passed (48 hours after lot close) — no Confirm CTA;
+ * contact from the overdue alert. Mirrors Expired Invoice.
+ */
+export const ExpiredAddress: Story = {
+  name: "Expired Address",
+  args: { status: "awaiting_address_expired" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="awaiting_address_expired"]',
+      ),
+    ).not.toBeNull();
+    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Address")).toBeVisible();
+    const sidebar = within(canvas.getByRole("complementary"));
+    const alert = sidebar.getByRole("alert");
+    expect(alert).toBeVisible();
+    expect(
+      within(alert).getByText("Missed address deadline: 19 Sep 2026"),
+    ).toBeVisible();
+    expect(
+      within(alert).getByRole("button", { name: "Contact Us" }),
+    ).toBeVisible();
+    expect(
+      sidebar.queryByRole("button", { name: "Confirm delivery address" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("link", { name: "Invoice PDF" }),
     ).not.toBeInTheDocument();
   },
 };
@@ -80,8 +123,10 @@ export const PreparingInvoice: Story = {
     ).not.toBeNull();
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Invoice")).toBeVisible();
+    expect(canvas.getByText("18 Sep 2026")).toBeVisible();
     expect(canvas.getByText(/Wan Chai/)).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
+    expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(
@@ -104,7 +149,7 @@ export const PreparingInvoice: Story = {
     ).not.toBeInTheDocument();
     expect(canvas.queryByText(/Address confirmed/i)).not.toBeInTheDocument();
     expect(
-      canvas.queryByRole("link", { name: "View invoice PDF" }),
+      canvas.queryByRole("link", { name: "Invoice PDF" }),
     ).not.toBeInTheDocument();
   },
 };
@@ -136,7 +181,7 @@ export const ConfirmAddressFlow: Story = {
       ).toBeVisible();
     });
     expect(
-      modal.getByText(/ship this lot here and use the address to calculate/i),
+      modal.getByText(/ship this lot here and use the address to prepare/i),
     ).toBeVisible();
     expect(modal.getAllByText("Alex Chan").length).toBeGreaterThan(0);
     expect(
