@@ -124,10 +124,16 @@ Everything this run produces is `draft`. Nothing in it claims review;
    ```
 
    `openspec status` calls `specs` done as soon as the outline exists, because a
-   file is there. **`pnpm check:manual` is the gate that means anything** - it
-   fails a capability whose suite sits beside a `spec.md` that carries no
-   requirements section, which is the only machine evidence that pass two
-   happened at all. It is never downgraded to a warning.
+   file is there. **Two gates read further.** While the change is open, a delta
+   naming no requirement is refused unless it declares the wait `/planning-pm`
+   wrote - which is why you delete that line with the scenarios rather than
+   after them. Once folded, `check:manual`'s `outline` rule fails a capability
+   whose suite sits beside a `spec.md` carrying no requirements; it is never
+   downgraded to a warning.
+
+   Both anchor rules read the delta too: a scenario of yours standing under no
+   `**Serves:**` line, or naming an anchor the capability offers nowhere, fails
+   here rather than a release later.
 
 ## Anchors
 

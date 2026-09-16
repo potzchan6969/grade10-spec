@@ -126,12 +126,14 @@ Everything this run produces is `draft`. Nothing in it claims review.
    is the one `/planning-qa` works from.
 
    `openspec status` calls `specs` done as soon as the outline exists, because a
-   file is there. **`pnpm check:manual` is the gate that means anything** - it
-   fails a capability whose suite sits beside a `spec.md` that carries no
-   requirements section, which is the only machine evidence that pass two
-   happened at all. It is never downgraded to a warning. (`pnpm plan:preflight`
-   is unrelated: it guards `tasks.md` against being overwritten while
-   engineering is implementing.)
+   file is there. **Two gates read further.** While the change is open, a delta
+   naming no requirement is refused unless the change declares the wait, and
+   the wait is asked back the moment the requirements land - so an outline
+   nobody returned to either says so in `.openspec.yaml` or fails. Once folded,
+   `check:manual`'s `outline` rule fails a capability whose suite sits beside a
+   `spec.md` carrying no requirements; it is never downgraded to a warning.
+   (`pnpm plan:preflight` is unrelated: it guards `tasks.md` against being
+   overwritten while engineering is implementing.)
 
 6. **Write the proposal and the journeys**, in that order - the two files
    that are yours. Under the proposal's `## References`, link every section you

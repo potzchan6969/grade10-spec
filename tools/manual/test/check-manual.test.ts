@@ -116,12 +116,20 @@ describe("a store that has drifted", () => {
     ]);
   });
 
+  /** Asked of the delta as well as of the store it folds into: the anchor a
+   * scenario meant is findable while its author is still here. */
+  it("names a delta scenario standing under no anchor", async () => {
+    expect(lines(await result, "anchorless")).toEqual([
+      "openspec/changes/add-gamma/specs/demo-product/gamma/spec.md — 1 scenario with no `**Serves:**` line (gamma-SC-01)",
+    ]);
+  });
+
   it("exits 1 with the counts in the summary", async () => {
     const root = fixture("broken");
     const report = formatReport(root, await result);
-    expect(report.failures).toBe(11);
+    expect(report.failures).toBe(12);
     expect(report.warnings).toBe(3);
-    expect(report.text).toContain("11 failures, 3 warnings");
+    expect(report.text).toContain("12 failures, 3 warnings");
   });
 });
 

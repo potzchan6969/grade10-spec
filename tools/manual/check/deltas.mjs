@@ -15,15 +15,20 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { findRequirement } from "../src/api/requirements.ts";
 import { readText, readTextIfExists, walkFiles } from "../src/store/disk.mts";
-import { outline } from "../src/store/markdown.mts";
+import { findSection, outline } from "../src/store/markdown.mts";
 import {
   deltaKindOf,
   deltaRequirementSections,
   deltaSections,
   renamedPairs,
 } from "../src/store/read-changes.mts";
-import { requirementBlocks } from "../src/store/read-specs.mts";
-import { everyBlock } from "./context.mjs";
+import {
+  featureGroups,
+  readJourneys,
+  readRequirement,
+  requirementBlocks,
+} from "../src/store/read-specs.mts";
+import { everyBlock, plural } from "./context.mjs";
 
 /** The only `## ` headings a delta may hold: the four the fold reads, plus
  * the two a spec's own head carries. `User journeys` is not among them — the
@@ -46,7 +51,92 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   checkIssued(ctx, files);
   checkFuse(ctx, files, pages);
   checkContext(ctx, files);
+  checkAnchors(ctx, files);
   checkBlind(ctx, files, shape);
+}
+
+/** RULES `anchorless` and `serves`, asked of a delta rather than only of the
+ * store it folds into.
+ *
+ * A scenario points up at an anchor and a case points up at one, and the join
+ * between the spec and its suite runs through that anchor alone. Asked of the
+ * durable store only, both rules first spoke a release after the change
+ * merged — by which time the anchor the author meant is as gone as the author,
+ * and the finding is a line somebody has to guess at. Five capabilities turned
+ * out to hold behaviour their own feature set never named, and this is the
+ * reading that found them.
+ *
+ * The anchors a delta may name are the capability's, not the delta's: a
+ * scenario serves a journey the durable file already holds, or a group of a
+ * feature set this change did not restate, as often as it serves one of its
+ * own. A journey the change retires is not among them — serving it is the
+ * error the tombstone cannot answer for. */
+function checkAnchors(ctx, files) {
+  for (const one of files) {
+    const anchors = anchorsFor(ctx, one);
+    const missing = [];
+    for (const requirement of one.requirements) {
+      // RENAMED carries no block, and a REMOVED block is the durable
+      // requirement on its way out: what it copied is not this change's to
+      // anchor.
+      if (requirement.kind !== "added" && requirement.kind !== "modified")
+        continue;
+      if (!requirement.block) continue;
+      let scenarios;
+      try {
+        scenarios = readRequirement(requirement.block).scenarios ?? [];
+      } catch {
+        // A block the reader refuses is the `store` rule's to name.
+        continue;
+      }
+      for (const scenario of scenarios) {
+        if (!scenario.id) continue;
+        const serves = scenario.serves ?? [];
+        if (serves.length === 0) {
+          missing.push(scenario.id);
+          continue;
+        }
+        for (const anchor of serves) {
+          if (anchors.has(anchor)) continue;
+          ctx.add(
+            "serves",
+            one.file,
+            `${scenario.id} → \`${anchor}\`, which is neither a journey nor a feature set group of \`${one.spec}\``,
+          );
+        }
+      }
+    }
+    if (missing.length > 0) {
+      ctx.add(
+        "anchorless",
+        one.file,
+        `${plural(missing.length, "scenario")} with no \`**Serves:**\` line (${missing.slice(0, 5).join(", ")}${missing.length > 5 ? ", …" : ""})`,
+      );
+    }
+  }
+}
+
+/** Every anchor this delta's scenarios may name: the durable capability's
+ * journeys and feature set groups, plus the ones the delta writes itself. */
+function anchorsFor(ctx, one) {
+  const durable = ctx.specs.get(one.spec);
+  const anchors = new Set([
+    ...(durable?.journeys ?? []).map((journey) => journey.id),
+    ...(durable?.featureGroups ?? []),
+  ]);
+  try {
+    for (const journey of readJourneys(
+      journeysBeside(ctx.roots.store, one.file),
+    )) {
+      anchors.add(journey.id);
+    }
+  } catch {
+    // A journeys file the reader refuses is `walked`'s to name; the durable
+    // anchors still stand.
+  }
+  const featureSet = findSection(one.sections, "Feature set");
+  for (const group of featureGroups(featureSet?.body ?? "")) anchors.add(group);
+  return anchors;
 }
 
 /** RULE `blind`: a delta that moves behaviour owes a second, independent
