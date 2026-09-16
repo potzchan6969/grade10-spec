@@ -55,3 +55,9 @@ is no cart to show someone signed out.
 ::story{id="components-nav-layout--language-nested" title="Nav — language nested (375px)"}
 
 ::story{id="site-chrome-siteheader-layout--narrow-signed-out" title="SiteHeader — narrow signed out"}
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Collector help | ❓ Open | Store and auction help ideally live on a documentation site such as GitBook or Mintlify. Which host, and how the chrome links to it, are TBC. | Product |
+:::

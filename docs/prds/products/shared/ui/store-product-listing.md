@@ -6,10 +6,10 @@ reviewed: 2026-09-11
 ---
 
 This is the page a shopper browses a category on. A sidebar carries a heading, a
-search box, the filter groups and utility links. A header above the grid states
-how many results there are, which filters are applied, and how the list is
-sorted. The grid shows product tiles that reflow their column count with the
-width available and load more as the shopper scrolls.
+search box and the filter groups. A header above the grid states how many
+results there are, which filters are applied, and how the list is sorted. The
+grid shows product tiles that reflow their column count with the width available
+and load more as the shopper scrolls.
 
 ## Product Tile
 

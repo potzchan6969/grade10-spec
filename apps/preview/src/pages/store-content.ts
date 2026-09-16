@@ -5,7 +5,6 @@ import type {
   FilterSelection,
   ProductSummary,
   SortOption,
-  UtilityLink,
 } from "@grade10/ui";
 import { createElement, type ReactNode } from "react";
 import { STORE_LOCATOR_HREF } from "./workbench-story-nav";
@@ -194,12 +193,6 @@ function sortTriggerLabel(sortValue: string): string {
   return option ? `Sort by ${String(option.label).toLowerCase()}` : "Sort by";
 }
 
-const UTILITY_LINKS: UtilityLink[] = [
-  { label: "Help", href: "#help" },
-  { label: "Shipping", href: "#shipping" },
-  { label: "Orders & Returns", href: "#orders" },
-];
-
 const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   id: String(index + 1),
   name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
@@ -333,5 +326,4 @@ export {
   STORE_HOME_SECTION_COPY,
   STORE_SITE_HEADER,
   sortTriggerLabel,
-  UTILITY_LINKS,
 };

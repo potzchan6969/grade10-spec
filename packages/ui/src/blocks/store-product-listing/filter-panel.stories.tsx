@@ -30,7 +30,6 @@ const meta = {
     onGroupExpand: fn(),
     onGroupCollapse: fn(),
     onSearchChange: fn(),
-    utilityLinks: UTILITY_LINKS,
   },
 } satisfies Meta<typeof FilterPanel>;
 
@@ -192,9 +191,8 @@ export const SearchClear: Story = {
   },
 };
 
-/** No utility-link region when none are supplied. */
+/** No utility-link region when none are supplied (the product-list default). */
 export const NoUtilityLinks: Story = {
-  args: { utilityLinks: [] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
@@ -203,5 +201,18 @@ export const NoUtilityLinks: Story = {
     expect(
       canvas.queryByRole("link", { name: "Help" }),
     ).not.toBeInTheDocument();
+  },
+};
+
+/** Optional consumer-supplied links under the filter. */
+export const WithUtilityLinks: Story = {
+  args: { utilityLinks: UTILITY_LINKS },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("link", { name: "Help" })).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: "Shipping" })).toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", { name: "Orders & Returns" }),
+    ).toBeInTheDocument();
   },
 };
