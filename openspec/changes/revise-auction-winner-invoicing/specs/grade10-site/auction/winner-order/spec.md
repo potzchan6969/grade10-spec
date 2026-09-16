@@ -75,7 +75,7 @@ At lot close Grade10 SHALL, for the winner:
 
 1. Create one auction order for the lot, with invoice status `not_issued` and
    fulfilment status `unfulfilled`, per `grade10-site/auction/order-status`.
-2. Release the winner's bid-time authorization.
+2. Release the winner's existing bid-time authorization, when one exists.
 3. Notify the winner that they have won and ask them to confirm a delivery
    address, per `grade10-site/auction/notifications-order`.
 
@@ -367,9 +367,9 @@ destination until the winner confirms or selects an address.
 
 ### Requirement: The bid-time hold is released, never captured
 
-Grade10 SHALL release the bid-time authorization on every bidder of a closing
-lot, winner and losing bidders alike, and SHALL NOT leave a losing bidder's
-authorization to expire on its own.
+When a bid-time authorization exists, Grade10 SHALL release it on every bidder
+of a closing lot, winner and losing bidders alike, and SHALL NOT leave a losing
+bidder's authorization to expire on its own.
 
 Grade10 SHALL NOT capture or increment a bid-time authorization as any part
 of settlement. The winner's payment SHALL be a single new card transaction for
@@ -488,5 +488,3 @@ SHALL NOT appear on the winner's receipt.
 - **GIVEN** an auction order the winner paid by a Visa card ending 4242
 - **WHEN** the winner opens the receipt
 - **THEN** the payment method reads as a Visa card ending 4242
-
-

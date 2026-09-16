@@ -110,8 +110,9 @@ Collectors SHALL NOT see a hidden lot anywhere on the auction site:
   address with no published lot, per `grade10-site/auction/listing-page`
 - **Watchlist** — the lot SHALL NOT be listed
 
-A collector who bid on a called-off lot SHALL still see it in My Auctions, with
-the note that their card hold was released, per
+A collector who bid on a called-off lot SHALL still see it in My Auctions. When
+that bid has a bid-time authorization, the row carries the note that its card
+hold was released, per
 `grade10-site/auction/account-record`. No other collector SHALL see it.
 
 #### Scenario: grade10-site-auction-lot-status-SC-06 - A draft lot is not in the catalogue, but an unsold lot is
@@ -139,7 +140,8 @@ the note that their card hold was released, per
 
 - **GIVEN** a collector who bid on a lot that an operator then called off
 - **WHEN** they open My Auctions
-- **THEN** the lot is listed, with the note that their card hold was released
+- **THEN** the lot is listed
+- **AND** when the bid has a bid-time authorization, the row says that its card hold was released
 - **AND** a collector who did not bid on the lot does not see it
 
 ### Requirement: Listing data includes the external lot status

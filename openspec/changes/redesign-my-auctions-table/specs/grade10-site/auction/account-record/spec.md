@@ -10,7 +10,7 @@
   - Open standing: Leading, Outbid, Bid submitted, Bid not accepted.
   - Closed standing: Won and Didn't win; Won carries the auction order's own
     status vocabulary, folded by `revise-auction-winner-invoicing`; Didn't
-    win carries hold release.
+    win carries release status only when a bid-time authorization exists.
   - Watch-only: `--`; no Scheduled, Live, Ending soon, or Active as standing.
 - **Row actions**
   - Unwatch only without a bid; Email alerts on every row.
@@ -208,8 +208,9 @@ Active/Completed filtering.
 
 A listing whose Your Standing is Didn't win on which the collector held a card
 authorization SHALL say whether that authorization is still being released or
-is released. Grade10 SHALL NOT describe an authorization as released while its
-release is still in flight.
+is released. When no bid-time authorization exists, Grade10 SHALL show no hold
+release status. Grade10 SHALL NOT describe an authorization as released while
+its release is still in flight.
 
 A listing the collector bid on that was called off SHALL appear with Didn't
 win standing carrying the same statement about their authorization, while the

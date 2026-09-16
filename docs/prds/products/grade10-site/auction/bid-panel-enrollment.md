@@ -6,9 +6,11 @@ order: 6
 
 Before a collector can choose a maximum, the bid panel settles sign-in and a
 linked card. With no card on file, amount controls stay visible but disabled and
-the primary action opens a link-card setup — age attestation included, with copy
-that a later maximum will authorize a hold. A card already on file carries to the
-next lot; Change stays until the first bid on that lot, then the card locks.
+the primary action opens a link-card setup — age attestation included. A card
+already on file carries to the next lot; Change stays until the first bid on
+that lot, then the card locks. Bid-time authorization holds are disabled by
+default, so setup and the first bid do not wait for a hold in the standard path.
+When holds are enabled, the panel discloses that a maximum authorizes one.
 
 Authorization and holds belong to [Payment method](/p/grade10-site/auction/bid-payment-method).
 Auto-bid mechanism copy on the bid panel belongs to [Auto bidding](/p/grade10-site/auction/auto-bidding).
@@ -52,7 +54,7 @@ manager. Changing the card after the first bid on that lot.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Link before amount | Decided | No linked card: presets and custom maximum stay visible but disabled; only Link a card to bid and the empty slot open setup. | Product |
-| Setup is link only | Decided | Title Link a card to bid; body discloses that setting a maximum authorizes a hold, and that charge happens only on win; continue Link Card. Setup itself does not take a hold. | Product |
+| Setup is link only | Decided | Title Link a card to bid; when holds are enabled, body discloses that setting a maximum authorizes a hold and that charge happens only on win; continue Link Card. Setup itself does not take a hold. | Product |
 | Card carries across lots | Decided | A linked card carries to a new lot; Grade10 does not force re-link. Change remains until the first bid on that lot. | Product |
-| Hold on commit | Decided | Authorize and hold run when the collector commits a maximum, under Payment method — not in setup. | Product |
+| Hold on commit | Decided | When holds are enabled, authorize and hold run when the collector commits a maximum, under Payment method — not in setup. | Product |
 :::

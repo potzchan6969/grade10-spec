@@ -14,13 +14,17 @@ never the leader's cap, so the price stays honest and a maximum is never burned
 by being seen. A bidder sees their own maximum, distinct from the current bid,
 and whether they lead; they can raise it at any time or leave it standing.
 
+Bid-time authorization holds are disabled by default. Maximum commitments and
+automatic bids do not wait for or create a hold in that standard path. When the
+optional hold is enabled, the hold covers the committed maximum.
+
 ## Bid Panel
 
 Under Set your private maximum, a short always-on line in secondary text
-states that Grade10 bids only as needed up to the maximum, that the card hold
-matches that amount, and that the maximum can be raised but not lowered or
-cancelled. Place Bid is the commitment; a moved floor uses stale-floor
-recovery on the panel.
+states that Grade10 bids only as needed up to the maximum, and that the
+maximum can be raised but not lowered or cancelled. When holds are enabled,
+the line also states that the card hold matches the maximum. Place Bid is the
+commitment; a moved floor uses stale-floor recovery on the panel.
 
 🚧 Quick bids are three chips at 1×, 2×, and 4× the listing increment: from
 the current bid when the collector does not lead, from their max when they
@@ -34,9 +38,9 @@ over-limit paste or keystroke leaves the previous draft.
 
 ::story{id="auction-listing-listingauctionbidcard--custom-maximum-ceiling" title="Custom maximum ceiling"}
 
-One card authorization covers the whole commitment. The hold is taken for the
-maximum when it is set, so a bid Grade10 places on the collector's behalf
-never needs a fresh card check mid-auction.
+When holds are enabled, one card authorization covers the whole commitment.
+The hold is taken for the maximum when it is set, so a bid Grade10 places on
+the collector's behalf never needs a fresh card check mid-auction.
 
 ## Past Maximums
 

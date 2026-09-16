@@ -9,6 +9,9 @@
 
 ## MODIFIED Requirements
 
+The following authorization and raise rules apply when bid-time authorization
+holds are enabled. The standard auction path leaves this optional feature off.
+
 ### Requirement: A listing authorization covers the committed maximum
 
 For a collector and listing, Grade10 SHALL maintain at most one active
