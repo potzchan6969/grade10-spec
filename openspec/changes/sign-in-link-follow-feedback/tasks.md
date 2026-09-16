@@ -7,6 +7,6 @@
 
 ## 2. Verify failure feedback (grade10) (owner: @sean)
 
-- [ ] 2.1 On magic-link verify failure, redirect to the brand home with `link_expired`, `link_invalid`, or `link_banned` (shared-auth-sign-in-SC-37 through SC-41)
-- [ ] 2.2 On the brand home, read that reason once, fire the matching `signIn` toast, and clear it from the URL (shared-auth-sign-in-SC-37 through SC-41)
-- [ ] 2.3 Verify: app typecheck and the feature cases for US-06
+- [x] 2.1 On magic-link verify failure, redirect to the brand home with `link_expired`, `link_invalid`, or `link_banned` (shared-auth-sign-in-SC-37 through SC-41)
+- [x] 2.2 On the brand home, read that reason once, fire the matching `signIn` toast, and clear it from the URL (shared-auth-sign-in-SC-37 through SC-41)
+- [x] 2.3 Verify: app typecheck and the feature cases for US-06
