@@ -8,7 +8,7 @@ catalogue, opens a lot at its own address, reads its gallery and its standing,
 and bids. The highest valid bid when the lot closes wins.
 
 Two people use it. An **operator** drafts a listing, fills in its catalogue
-copy, attaches a gallery, sets a starting price and a window, publishes it now
+copy, attaches a gallery, sets a starting price and an extension duration, publishes it now
 or at a set time, and calls it off if something is wrong. A **collector**
 browses, bids, and after the close follows one [Winner Order](/p/grade10-site/auction/winner-order) for each lot they win.
 
@@ -46,8 +46,9 @@ schedule](/p/grade10-site/auction/bid-increments).
 
 ## Grade10 holds the money
 
-The card is authorized for the bid amount — held, not charged. If the bid
-landed inside the snipe window, the closing time moves out.
+The card is authorized for the bid amount — held, not charged. If the lot has
+reached its scheduled close with a bid, the closing time moves out by the
+configured extension duration.
 
 ## The hold confirms, or it does not
 
@@ -138,7 +139,7 @@ watching an auction lot is its own capability.
 | Auction unit | Decided | A **listing** is one unit of auction lot and is the sole term used by this capability, including the operator queue. | Product |
 | Buy Now | Decided | Excluded, including browse-only Buy Now listings. | Product |
 | Hold model | Decided | One Stripe authorization hold exists per bidder per active listing; an outbid hold enters asynchronous release immediately and is later reconciled to completion. | Product |
-| Extended close | Decided | Each listing has an extension window and extension duration (default 30 minutes each). A valid bid inside the window moves the close to the extension duration after that bid; this repeats until the extension duration passes without a valid bid, subject to an optional listing extension cap. | Product |
+| Extended close | Decided | At the scheduled close, a listing with a bid enters extended bidding for the configured duration (default 30 minutes). Every accepted bid at or after that boundary restarts the full duration from the bid time, subject to an optional cap measured from the scheduled close. A listing with no bid closes at the scheduled close. | Product |
 | Buyer-premium rate | 🚧 In flight | The buyer's premium is 20% of the winning bid; the bid panel shows the rate and the invoice carries the calculated amount. | Product and finance |
 | Premium before bidding | 🚧 In flight | The bid panel shows the 20% rate only; the calculated amount first appears on the invoice. | Product and design |
 | Operator outcome labels | Decided | Queue labels are Draft, Scheduled, Live, Ending soon, Unsold, Canceled, Awaiting payment, Payment failed, Awaiting wire, Paid via Stripe, Paid via Manual, Shipped, Delivered. There is no single "Paid" label. "Ending soon" is the last 60 minutes of the recorded close. Payment failed, Awaiting wire, both paid outcomes, and Shipped are highlighted as waiting on an operator. | Product |
