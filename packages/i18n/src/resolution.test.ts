@@ -219,6 +219,7 @@ const AUCTION_BIDDING_HISTORY_KEYS = [
   "failure.payment",
   "failure.stale_price",
   "failure.unavailable",
+  "failure.ceiling",
 ].sort();
 
 describe("what a brand and a language answer between them", () => {
