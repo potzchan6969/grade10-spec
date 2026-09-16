@@ -8,7 +8,7 @@
     "legend": {
       "mode": "hidden"
     },
-    "viewBox": [980, 600]
+    "viewBox": [980, 680]
   },
   "lanes": [
     {
@@ -16,7 +16,11 @@
       "label": "The coupon"
     },
     {
-      "id": "ended",
+      "id": "given-back",
+      "label": "Given back"
+    },
+    {
+      "id": "terminal",
       "label": "Ended"
     }
   ],
@@ -43,7 +47,8 @@
       "label": "Claimed",
       "sublabel": "one sale at a time",
       "lane": "main",
-      "col": 2
+      "col": 2,
+      "tag": "still offered"
     },
     {
       "id": "used",
@@ -54,20 +59,30 @@
       "col": 3
     },
     {
+      "id": "returned",
+      "type": "active",
+      "label": "Back to available",
+      "sublabel": "the claim and its code come off",
+      "lane": "given-back",
+      "col": 0
+    },
+    {
       "id": "voided",
       "type": "failure",
       "label": "Voided",
       "sublabel": "points come back",
-      "lane": "ended",
-      "col": 0
+      "lane": "terminal",
+      "col": 0,
+      "tag": "an operator reversed it"
     },
     {
       "id": "lapsed",
       "type": "neutral",
       "label": "Lapsed",
       "sublabel": "read off the clock",
-      "lane": "ended",
-      "col": 1
+      "lane": "terminal",
+      "col": 1,
+      "tag": "its date passed"
     }
   ],
   "transitions": [
@@ -84,18 +99,29 @@
       "variant": "emphasis"
     },
     {
-      "id": "given-back",
-      "from": "claimed",
-      "to": "available",
-      "label": "the sale ends, or is superseded",
-      "variant": "dashed",
-      "route": "top-channel"
-    },
-    {
       "id": "paid",
       "from": "claimed",
       "to": "used",
       "variant": "emphasis"
+    },
+    {
+      "id": "ends",
+      "from": "claimed",
+      "to": "returned",
+      "label": "the sale ends, or the next sale takes it",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight",
+      "labelDy": 34
+    },
+    {
+      "id": "reversed",
+      "from": "available",
+      "to": "voided",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "via": [[248, 394], [402, 394]]
     },
     {
       "id": "lapses",
@@ -103,15 +129,8 @@
       "to": "lapsed",
       "variant": "dashed",
       "fromSide": "bottom",
-      "toSide": "top"
-    },
-    {
-      "id": "reversed",
-      "from": "available",
-      "to": "voided",
-      "variant": "security",
-      "fromSide": "bottom",
-      "toSide": "top"
+      "toSide": "top",
+      "via": [[248, 416], [556, 416]]
     }
   ]
 }
