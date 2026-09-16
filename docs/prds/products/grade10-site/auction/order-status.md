@@ -8,6 +8,7 @@ Auction Order Status is the single buyer-facing outcome derived from an auction 
 
 - **Awaiting Address** — the lot has closed, but the winner has not confirmed a delivery address
 - **Preparing Invoice** — the winner has confirmed a delivery address and an operator has not yet sent an invoice
+- 🚧 **Closed address window** — order status stays Awaiting Address or Preparing Invoice; the winner can no longer confirm or change an address until an operator reopens the entrance
 - **Pending Payment** — the current invoice is unpaid; an expired invoice keeps this order status
 - 🚧 **Expired invoice** — order status stays Pending Payment; self-service card pay stops; Contact Us lives on Winner Order; an operator may reissue, settle manually, or cancel
 - **Processing** — payment is complete and dispatch has not finished
@@ -24,6 +25,7 @@ One derived status keeps the buyer, operator, and account record aligned without
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Expired keeps Pending Payment | Decided | Invoice `expired` does not create an Expired order status. | Product |
+| A closed address window keeps its status | Decided | A lapsed address window creates no order status of its own. Awaiting Address and Preparing Invoice both keep reading as they do. | Product (@jeffffej0909) |
 | Expired ends winner card pay | Decided | Self-service card pay stops at expiry; operator paths remain. | Product (@tangconst) |
 | Cancelled vs Refunded | Decided | Unpaid fail-to-pay ends as Cancelled when an operator cancels; Refunded is paid→refund only. | Product |
 :::

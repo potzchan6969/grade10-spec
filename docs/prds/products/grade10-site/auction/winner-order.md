@@ -9,11 +9,14 @@ Winner Order is the authenticated route where a collector settles one lot after 
 ## Invoice and Settlement
 
 - **Address first** — a closed lot opens asking for a delivery address; the winner confirms the account's saved or newly entered address before an operator prepares an invoice
+- 🚧 **Address window** — 48 hours from lot close to confirm the delivery address; once it closes the winner can neither confirm an address nor change a confirmed one, and the alert carries Contact Us
+- 🚧 **Reopening the address entrance** — Grade10 reopens it on request, which starts a fresh 48 hours from the moment it reopens
+- 🚧 **Account addresses** — the account address book stays open while the entrance is closed; only putting an address on this order is refused
 - **Invoice** — one operator-quoted invoice per lot; shipping and insurance are priced for the confirmed address, the address locks when the invoice is sent, and the seven-day payment window starts at send
 - 🚧 **Invoice lines** — Winning Bid, Buyer's Premium, Shipping & Handling, Insurance, Tax, Subtotal, Payment Processing Fee and Order Total; Shipping & Handling of zero reads Free, and Insurance appears only when the operator added it
 - 🚧 **Buyer's premium** — 20% of the winning bid, or the currency's minimum charge when that is higher; a minimum of 0 means none
 - 🚧 **Payment Processing Fee** — the card fee added on top of the Subtotal so Grade10 keeps the Subtotal in full; priced when the invoice is sent and fixed from then on, and dropped when an operator settles the order manually
-- **Address** — changeable by the winner until the invoice is sent; a later change is handled by Grade10 through an operator re-quote and reissue
+- 🚧 **Address** — changeable by the winner while the address window is open and the invoice is not yet sent; a later change is handled by Grade10, by reopening the entrance before send or by an operator re-quote and reissue after it
 - **Payment** — a fresh card payment, the only self-service method offered while the invoice is `pending`; a declined attempt leaves the invoice payable until the deadline
 - 🚧 **After the deadline** — card Pay is hidden; the overdue alert carries Contact Us; an operator reissues, settles manually, or cancels
 - 🚧 **Progress** — five presentation steps in order: Address → Invoice → Payment → Shipped → Completed; Cancelled and Refunded show no stepper. Order status keeps its eight names
@@ -31,6 +34,7 @@ The winner needs one place to understand what is owed and what happens next. The
 | User | Situation | Desired outcome |
 | --- | --- | --- |
 | Winner | A lot has just closed | Confirms where to ship, waits for Grade10 to quote the delivery cost, and then sees the invoice and its payment deadline. |
+| Winner | 48 hours passed with no address confirmed | Sees that the address entrance has closed, and Contact Us — not an address form. |
 | Winner | The first payment attempt fails before the deadline | Understands the refusal and can retry while the invoice remains `pending`. |
 | Winner | The card has been dispatched | Finds the receipt, tracker, fulfilment trail, and delivery proof later. |
 | Suspended winner | The payment deadline passed | Sees what remains owed, why bidding stopped, and Contact Us — not a card Pay control. |
@@ -45,6 +49,13 @@ The winner needs one place to understand what is owed and what happens next. The
 | Fee on a manual settlement | Decided | Dropped: bank transfer, cash and other methods settle the Subtotal. | Product |
 | A fee that costs more than quoted | Decided | Grade10 absorbs the difference; the sent invoice never re-prices. | Product |
 | Free shipping | Decided | Shipping & Handling of zero reads Free rather than hiding the line. | Product |
+| Address window | ❓ Tentative | 48 hours from lot close. Set tentatively and open to change once Grade10 sees how long winners actually take. | Product (@jeffffej0909) |
+| A closed window stops changes too | Decided | The window governs the whole address entrance. A winner who confirmed inside it cannot correct the address after it closes; Grade10 reopens the entrance instead. | Product (@jeffffej0909) |
+| Reopening the entrance | Decided | An operator reopens it, which starts a fresh 48 hours. A reopen is deliberate, so there is no way for a winner to extend the window themselves. | Product (@jeffffej0909) |
+| Telling the winner the entrance reopened | ❓ Open | Grade10 sends no letter when an operator reopens the entrance. The assumption is that the winner asked for it and the operator answers them directly. Confirm before build: a winner who is not watching never learns the form is back. | Product (@jeffffej0909) |
+| Operator records the address | Decided | Grade10 can type in an address the winner gives by telephone, without reopening the entrance, so the quote follows in one step. The window governs the winner's own form, not Grade10's record. | Product (@jeffffej0909) |
+| The account address book | Decided | Unaffected by a closed entrance. It is account-wide and shared across storefronts; only confirming an address onto this order is refused. | Product (@jeffffej0909) |
+| No suspension before an invoice | Decided | A closed address window suspends nobody. Only an unpaid invoice past its deadline restricts bidding. | Product (@jeffffej0909) |
 | Deadline ends self-service Pay | Decided | When the invoice is `expired`, Winner Order hides card Pay and shows Contact Us in the overdue alert. A deadline that still allowed card pay would not be a deadline. Operator reissue, manual settlement, or cancel remain. | Product (@tangconst) |
 | Progress stepper | Decided | Five presentation steps: Address → Invoice → Payment → Shipped → Completed. Status vocabulary stays eight values; Processing maps under Shipped; Delivered maps to Completed. | Product and design (@tangconst) |
 | Invoice PDF | Decided | After send, the winner may view and download the invoice PDF on Winner Order until Cancelled. | Product (@tangconst) |
