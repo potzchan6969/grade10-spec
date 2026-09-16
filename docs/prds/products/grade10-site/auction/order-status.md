@@ -9,7 +9,7 @@ Auction Order Status is the single buyer-facing outcome derived from an auction 
 - **Awaiting Address** — the lot has closed, but the winner has not confirmed a delivery address
 - **Preparing Invoice** — the winner has confirmed a delivery address and an operator has not yet sent an invoice
 - **Pending Payment** — the current invoice is unpaid; an expired invoice keeps this order status
-- 🚧 **Expired invoice** — order status stays Pending Payment; self-service card pay stops; Contact Us lives on Winner Order; an operator may reissue, settle manually, or cancel
+- **Expired invoice** — order status stays Pending Payment; self-service card pay stops; Contact Us lives on Winner Order; an operator may reissue, settle manually, or cancel
 - **Processing** — payment is complete and dispatch has not finished
 - **Shipped** — fulfilment has a carrier hand-off and tracking facts
 - **Delivered** — delivery confirmation includes the carrier's proof

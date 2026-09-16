@@ -1,5 +1,13 @@
 ## User journeys
 
+### grade10-site-auction-account-record-US-08: Winner opens settlement from My Auctions
+
+**As a** winner,
+**I want** every Won row to open Winner Order without helper clutter,
+**so that** I can continue settlement without reading contact copy on the table.
+
+**Walked by note:** the durable account-record journeys still own open-lot standing; this change journey covers the Storybook Won-entry and calm-row slice.
+
 ### grade10-site-auction-account-record-US-01: Mark a listing now and find it again later
 
 As a collector, I want to watch listings I am interested in before bidding

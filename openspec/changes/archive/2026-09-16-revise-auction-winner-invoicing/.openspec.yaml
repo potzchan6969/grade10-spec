@@ -2,3 +2,4 @@ schema: grade10-planning
 promoted_by: "@htonyl"
 created: 2026-09-10
 page_waived: "predates the page rule"
+deploy_waived: "@htonyl explicitly waived deployment evidence: archive and push to main without evidence"
