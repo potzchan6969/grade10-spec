@@ -1,4 +1,4 @@
-## 1. Lot status product record (grade10-spec)
+## 1. Lot status product record (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 State the hidden-lot rule where each page owns it: the watched list drops a called-off lot rather than labelling it in place (`docs/prds/products/grade10-site/auction/watchlist.md`), and a hidden lot's address is one of the addresses that answer not found (`docs/prds/products/grade10-site/auction/listing-page.md`), leaving the mapping itself on the lot-status page (`grade10-site-auction-lot-status-SC-08`, `grade10-site-auction-lot-status-SC-09`, `grade10-site-auction-listing-page-SC-19`)
 - [ ] 1.2 Verify the manual and the change artifacts with `pnpm check:manual` and `pnpm run validate:changes add-collector-lot-status`, both from the grade10-spec clone
