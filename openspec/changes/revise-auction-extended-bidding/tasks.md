@@ -26,7 +26,7 @@
 - [ ] 5.2 Update the site auction fixtures, helpers, and domain flow for a bid during extended bidding, including automatic bidding restarting the timer (`grade10-site-auction-e2e-US07-TC01-2`)
 - [ ] 5.3 Verify the site packages with `pnpm --dir packages/grade10-auction/frontend run typecheck && pnpm --dir packages/grade10-auction/frontend run test && pnpm --dir apps/frontend/grade10 run typecheck && pnpm --dir apps/frontend/grade10 run test`
 
-## 6. Grade10 admin auction surfaces (grade10)
+## 6. Grade10 admin auction surfaces (grade10) (owner: @htonyl)
 
 - [ ] 6.1 Replace the listing editor's window-and-duration controls with the duration-and-cap payload, preserving draft, create, publish, and validation behavior (`grade10-admin-auction-listing-SC-24`, `grade10-admin-auction-listing-SC-25`, `grade10-admin-auction-listing-SC-26`, `grade10-admin-auction-listing-SC-27a`, `grade10-admin-auction-listing-SC-28`, `grade10-admin-auction-listing-SC-70`)
 - [ ] 6.2 Render literal `Extended bidding: ON` beside the existing outcome badge only when the queue contract's derived boolean is true, with no new outcome filter (`grade10-admin-auction-post-sale-SC-64`, `grade10-admin-auction-post-sale-SC-65`, `grade10-admin-auction-post-sale-SC-66`)
