@@ -2,9 +2,10 @@ import { join } from "node:path";
 import type {
   Archive,
   ChangeDocument,
+  ChangeEntry,
   CheckWarning,
-  MainState,
   ReferenceDocument,
+  SchemaArtifact,
   Snapshot,
   SpecEntry,
 } from "../api/types.ts";
@@ -12,9 +13,11 @@ import { DESIGN_SYNC_REPORT, readDesignSync } from "./design-sync.mts";
 import { newestMtime } from "./disk.mts";
 import {
   type GitIndex,
-  readMainStates,
+  readMain,
   readRootsGitIndex,
+  resolveMain,
   git as runGit,
+  type StoreMain,
 } from "./git.mts";
 import { readChangeDocuments } from "./read-change-documents.mts";
 import {
@@ -29,6 +32,7 @@ import {
   readManualPages,
 } from "./read-manual.mts";
 import { readReferences, readReferencesReadme } from "./read-references.mts";
+import { schemaArtifacts } from "./read-schema.mts";
 import { discoverSpecs, readSpecs } from "./read-specs.mts";
 import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
@@ -37,6 +41,22 @@ import { checkWarnings } from "./warnings.mts";
 /** The artifacts share one history walk — the only expensive part of a read.
  * `documents` is one artifact per in-flight change and `references` one per
  * reference document, each served on its own. */
+/** The artifacts of every schema the changes in flight name, for the ones
+ * this store defines. A change on a CLI built-in is left out: its artifacts
+ * live inside the CLI, and nothing here can say what it owes. */
+function schemasInUse(
+  root: string,
+  changes: ChangeEntry[],
+): Record<string, SchemaArtifact[]> {
+  const schemas: Record<string, SchemaArtifact[]> = {};
+  for (const { schema } of changes) {
+    if (schema === "" || schema in schemas) continue;
+    const artifacts = schemaArtifacts(root, schema);
+    if (artifacts) schemas[schema] = artifacts;
+  }
+  return schemas;
+}
+
 export type Store = {
   snapshot: Snapshot;
   archive: Archive;
@@ -45,31 +65,26 @@ export type Store = {
 };
 
 export async function readStore(roots: Roots): Promise<Store> {
-  const index = await readRootsGitIndex(roots);
-  const store = composeStore(roots, index, await checkWarnings(roots, index));
+  const [index, main] = await Promise.all([
+    readRootsGitIndex(roots),
+    readMain(roots.store),
+  ]);
+  const store = composeStore(
+    roots,
+    index,
+    main,
+    await checkWarnings(roots, index),
+  );
   await signWarningCallouts(roots, store.snapshot.pages);
-  await markMainStates(roots.store, store);
   return store;
 }
 
-/** Where each change stands against the store's main — async because it asks
- * git, so the sync compose stays usable and a caller without a clone (tests,
- * the preview server) simply carries no state. */
-async function markMainStates(root: string, store: Store): Promise<void> {
-  const changes = store.snapshot.changes;
-  const states: Map<string, MainState> = await readMainStates(
-    root,
-    changes.map((change) => change.id),
-  );
-  for (const change of changes) {
-    const state = states.get(change.id);
-    if (state) change.mainState = state;
-  }
-}
-
+/** `main` is where every in-flight change on it has its task list read;
+ * `null` only for a store with no git, whose files are all there is. */
 export function composeStore(
   roots: Roots,
   git: GitIndex,
+  main: StoreMain | null,
   warnings: CheckWarning[] = [],
 ): Store {
   const generatedAt = new Date().toISOString();
@@ -77,6 +92,7 @@ export function composeStore(
   const shape = discoverSpecs(roots.store);
   const designSync = readDesignSync(roots.store);
   const specs = readSpecs(roots.store, git);
+  const changes = readChanges(roots.store, git, main);
   markIssuedIds(roots.store, specs);
   const references = readReferences(roots.store, git);
   const referencesReadme = readReferencesReadme(roots.store);
@@ -90,7 +106,8 @@ export function composeStore(
       manualDir: roots.manual,
       pages: readManualPages(roots, git),
       specs,
-      changes: readChanges(roots.store, git),
+      changes,
+      schemas: schemasInUse(roots.store, changes),
       assets: readManualAssets(roots),
       references: references.map(({ text: _text, ...entry }) => entry),
       ...(referencesReadme === undefined ? {} : { referencesReadme }),
@@ -103,7 +120,7 @@ export function composeStore(
       storeHead: git.head,
       changes: readArchivedChanges(roots.store, git),
     },
-    documents: readChangeDocuments(roots.store, git),
+    documents: readChangeDocuments(roots.store, git, main),
     references,
   };
 }
@@ -151,13 +168,18 @@ function* durableIds(specs: SpecEntry[]): Generator<string> {
   }
 }
 
-/** Every head a poll must notice moving: the store's, and the content
- * repository's when the manual lives in its own. */
+/** Every head a poll must notice moving: the store's, its main — where a
+ * claim lands without touching this checkout — and the content repository's
+ * when the manual lives in its own. */
 export async function readHeads(roots: Roots): Promise<string> {
-  const head = (await runGit(roots.store, ["rev-parse", "HEAD"])).trim();
-  if (roots.own) return head;
+  const [head, main] = await Promise.all([
+    runGit(roots.store, ["rev-parse", "HEAD"]),
+    resolveMain(roots.store),
+  ]);
+  const store = `${head.trim()}@${main.commit}`;
+  if (roots.own) return store;
   const content = (await runGit(roots.content, ["rev-parse", "HEAD"])).trim();
-  return `${head}+${content}`;
+  return `${store}+${content}`;
 }
 
 /** Every directory an artifact is read from. The stamp measures these and the

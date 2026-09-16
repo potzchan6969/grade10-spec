@@ -60,14 +60,15 @@ function Step({
       <VStack className="px-2 text-center" gap="none" hAlign="center">
         <p
           className={cn(
-            "text-sm leading-5 font-medium whitespace-nowrap",
+            "text-sm leading-5 font-medium whitespace-nowrap transition-colors duration-200 ease-out motion-reduce:transition-none",
+            /* Completed and progress share full-strength labels; only upcoming is dimmed. */
             isUpcoming ? "text-secondary-foreground" : "text-foreground",
           )}
         >
           {label}
         </p>
         {description != null ? (
-          <p className="text-xs leading-4 whitespace-nowrap text-secondary-foreground">
+          <p className="text-xs leading-4 whitespace-nowrap text-secondary-foreground transition-opacity duration-200 ease-out motion-reduce:transition-none">
             {description}
           </p>
         ) : null}

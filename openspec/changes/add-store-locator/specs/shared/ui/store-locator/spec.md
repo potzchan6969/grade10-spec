@@ -5,6 +5,16 @@ chrome: map, store name, street address, and week hours. Every store
 application that shows this surface renders it from one component source,
 supplying its own copy, shop facts, map embed, and Maps destination.
 
+## Feature set
+
+- Surface exports
+  - Named component: `StoreLocator` and its types from the package entry
+  - Props-only content: copy, shop facts, map embed and Maps destination arrive as props
+- Location & Hours
+  - Supplied facts: name, address lines and hours rows are displayed as given
+  - One way to the map: the map is the only control that opens the Maps destination
+  - Empty hours: the section is absent rather than titled and empty
+
 ## ADDED Requirements
 
 ### Requirement: The store locator surface exports
@@ -19,6 +29,7 @@ and Maps destination SHALL reach it through props. It SHALL NOT fetch, route,
 or read application stores.
 
 #### Scenario: shared-ui-store-locator-SC-01 - An application imports the surface
+**Serves:** Surface exports - an application imports the surface
 
 - **WHEN** an application imports `StoreLocator`, `StoreLocatorProps`,
   `StoreLocatorCopy`, and `StoreLocatorHoursRow` from the shared UI package's
@@ -38,6 +49,7 @@ When hours rows are empty, the hours section SHALL be absent rather than
 titled and empty.
 
 #### Scenario: shared-ui-store-locator-SC-02 - Supplied shop facts render
+**Serves:** Location & Hours - supplied shop facts render
 
 - **GIVEN** a StoreLocator with name, address lines, hours rows, map embed,
   and Maps destination
@@ -46,12 +58,14 @@ titled and empty.
 - **AND** the map link uses the supplied Maps destination
 
 #### Scenario: shared-ui-store-locator-SC-03 - No separate directions control
+**Serves:** Location & Hours - no separate directions control
 
 - **WHEN** StoreLocator renders
 - **THEN** the map is the only control that opens the Maps destination
 - **AND** no separate Get directions control appears
 
 #### Scenario: shared-ui-store-locator-SC-04 - Empty hours omit the section
+**Serves:** Location & Hours - empty hours omit the section
 
 - **GIVEN** a StoreLocator with no hours rows
 - **WHEN** it renders

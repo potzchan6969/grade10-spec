@@ -10,11 +10,17 @@ change in this repository.
 ## The icon set
 
 `favicon.ico`, `icon.svg`, `icon-192.png`, `icon-512.png`,
-`icon-maskable-512.png` and `apple-touch-icon.png` are a copy of what
-grade10-site currently serves — a placeholder here until a designer swaps
-one for real, updated artwork.
+`icon-maskable-512.png` and `apple-touch-icon.png` are the brand marks a
+site may serve from its document head or web app manifest.
 
-Today grade10 draws these same files itself, at
+**`icon.svg`** is the adaptive favicon: the Grade10 “10” monogram (blocky
+**1** + solid circle **0**) on a transparent background. Inside the SVG,
+`@media (prefers-color-scheme: light)` fills the glyph `#0B0A0A`;
+`@media (prefers-color-scheme: dark)` fills it `#FFFFFF`. Prefer it for
+`<link rel="icon" type="image/svg+xml" href="…/icon.svg">`. The raster
+icons remain non-adaptive placeholders until a designer regenerates them.
+
+Today grade10 draws raster copies itself, at
 `apps/frontend/grade10/scripts/make-icons.mjs`, from the `g10-logo-mono`
 component — nothing runs that script automatically, so it will not overwrite
 an edit made here. Making this folder the actual source grade10 serves from

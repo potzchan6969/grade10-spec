@@ -24,11 +24,32 @@ Sign-in stays on the brand. A session covers every site of that brand and no
 other, and a redirect target the brand does not trust is ignored rather than
 followed.
 
+## After the Send
+
+- **Confirmation** — once the sign-in email goes out, the dialog is titled
+  **Check Your Email**, the lead line sits above the address on its own line,
+  and Resend is offered. There is no Back control — leave by dismissing the
+  dialog.
+- **Resend wait** — Resend stays off for sixty seconds after each
+  successful send, and the button counts down as **Resend (45)** (seconds
+  left in parentheses). It turns on again at zero.
+- **Link lifetime** — a sign-in link lasts sixty seconds; after that it
+  is expired.
+- **Email-step wording** — the send action reads **Sign In with Email**;
+  collectors never see the term magic link on the dialog.
+- **Leaving the confirmation** — dismissing the dialog is the way out.
+  Opening sign-in again starts at the email step, so a mistyped address can be
+  corrected.
+
 ## Following the Link
 
 A working unused link signs the person in. A link that cannot creates no
-session, and the person lands on the brand home with a toast:
+session, and the person lands on the brand home with a toast.
 
+- 🚧 **Signed in** — the tab where the link was asked for shows the collector
+  signed in without being reloaded, and whatever they were stopped from doing
+  carries on. It is tried once, and a card that sold out while they were in
+  their inbox refuses the ordinary way — [Session](/p/shared/auth/session).
 - 🚧 **Expired** — the toast says the link has expired.
 - 🚧 **No longer works** — a used, replaced, or otherwise invalid link shares
   one toast that the link no longer works.

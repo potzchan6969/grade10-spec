@@ -3,12 +3,12 @@ export const LISTING_BID_ENROLLMENT_DEMO_COPY = {
   linkACardToBid: "Link a card to bid",
   paymentMethod: "Linked Card",
   paymentMethodTooltip:
-    "We authorize a hold for your maximum each time you bid. You're only charged if you win.",
+    "We authorize your card for bidding. You're only charged if you win.",
   linkCardEmptyState: "Link a card to place a bid.",
   changeCard: "Change",
   getReadyToBid: "Link a card to bid",
   linkCardDescription:
-    "Link a card for bidding. When you set a maximum, we authorize a hold for that amount. You are only charged if you win.",
+    "Link a card for bidding. You're only charged if you win.",
   ageAttestation: "I confirm I am 18 years of age or older.",
   continue: "Link Card",
   linking: "Linking",

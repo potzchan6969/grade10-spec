@@ -2,7 +2,6 @@ const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
 type ProductDetailVariant = {
   id: string;
-  title: string;
   price: string;
   compareAtPrice?: string;
   availableForSale: boolean;
@@ -35,21 +34,12 @@ const PRODUCT_DETAIL_PRODUCT: ProductDetailProduct = {
   badges: ["Booster Box", "Pokémon", "Japanese"],
   variants: [
     {
-      id: "standard",
-      title: "Standard",
+      id: "sale-item",
       price: "HK$105.00",
       compareAtPrice: "HK$123.00",
       availableForSale: true,
       quantityAvailable: 3,
       sku: "G10-M5-ABYSS-STD",
-    },
-    {
-      id: "collector",
-      title: "Collector grade",
-      price: "HK$180.00",
-      availableForSale: false,
-      quantityAvailable: 0,
-      sku: "G10-M5-ABYSS-COL",
     },
   ],
 };
@@ -63,11 +53,5 @@ const SOLD_OUT_PRODUCT: ProductDetailProduct = {
   })),
 };
 
-const SINGLE_VARIANT_PRODUCT: ProductDetailProduct = {
-  ...PRODUCT_DETAIL_PRODUCT,
-  title: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5) — Standard",
-  variants: PRODUCT_DETAIL_PRODUCT.variants.slice(0, 1),
-};
-
 export type { ProductDetailProduct, ProductDetailVariant };
-export { PRODUCT_DETAIL_PRODUCT, SINGLE_VARIANT_PRODUCT, SOLD_OUT_PRODUCT };
+export { PRODUCT_DETAIL_PRODUCT, SOLD_OUT_PRODUCT };

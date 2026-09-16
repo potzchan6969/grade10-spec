@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-09-14
+promoted_by: '@brianchacha6969'
+deployed_at: "eb501e28ff107e381420cb78b3cb60ae125bd2f7"
+deployed_env: "staging"
+tasks_waived: "@brianchacha6969 — the platform runs staging alone, on play data: 6.3 has no cost to measure, 6.4 no data to protect, and 6.5's drain holds up play data only"

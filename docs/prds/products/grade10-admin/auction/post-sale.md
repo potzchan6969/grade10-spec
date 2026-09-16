@@ -19,14 +19,17 @@ The queue works every winner order from lot close through delivery in one place.
 | Delivered | Delivery is confirmed |
 | Cancelled · Refunded | The order has a recorded terminal outcome |
 
-- **Needs action** — Preparing Invoice, expired Pending Payment, and Processing
-- **Overdue** — a separate mark for an order idle for 72 hours or more in Awaiting Address or Preparing Invoice; it changes no status and never expires the order
+- **Needs action** - Preparing Invoice, expired Pending Payment, and Processing
+- **Overdue** - a separate mark for an order idle for 72 hours or more in Awaiting Address or Preparing Invoice; it changes no status and never expires the order
+- **Extended bidding: ON** - a lot past its scheduled close and still taking bids carries this label on its row; its outcome does not change
 
 ## Payment
 
 The winning bid-time hold is released rather than captured, and every failed payment attempt remains in the invoice log.
 
 The winner confirms a delivery address before an operator quotes the invoice. The operator enters shipping and insurance for that address, sends the invoice, locks the address, and starts the seven-day payment window. A later address change is handled by an operator re-quote with a mandatory reason and a choice to keep or reset the deadline.
+
+🚧 Shipping & Handling is always entered and may be zero. Insurance is optional; once added it cannot be sent at zero.
 
 A winner order reaches paid through one fresh card payment or one operator-recorded manual settlement. An expired invoice stays payable, and a reissue returns it to pending with a new deadline.
 

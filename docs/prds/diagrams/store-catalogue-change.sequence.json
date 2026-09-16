@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "A change reaches the listing",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "column_fit": "spread",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [980, 780]
+  },
+  "participants": [
+    {
+      "id": "shop-reports-a-change",
+      "type": "external",
+      "label": "Shop",
+      "sublabel": "the shopkeeper saves"
+    },
+    {
+      "id": "shopify",
+      "type": "external",
+      "label": "Shopify",
+      "sublabel": "events and reads"
+    },
+    {
+      "id": "mirror-answers-every-location",
+      "type": "backend",
+      "label": "Mirror",
+      "sublabel": "one per shop"
+    },
+    {
+      "id": "store-takes-the-report",
+      "type": "backend",
+      "label": "Store",
+      "sublabel": "at every location"
+    },
+    {
+      "id": "store-answers-from-the-location",
+      "type": "database",
+      "label": "Memory",
+      "sublabel": "the copy a location holds"
+    },
+    {
+      "id": "collector-opens-the-listing",
+      "type": "external",
+      "label": "Collector",
+      "sublabel": "anywhere"
+    }
+  ],
+  "segments": [
+    {
+      "from": 170,
+      "to": 400,
+      "label": "Seconds after the shop saves"
+    },
+    {
+      "from": 432,
+      "to": 672,
+      "label": "The next listing view, at any location"
+    }
+  ],
+  "messages": [
+    {
+      "id": "shop-reports-a-change_saves",
+      "from": "shop-reports-a-change",
+      "to": "shopify",
+      "y": 200,
+      "label": "saves a product, or stock moves",
+      "variant": "default"
+    },
+    {
+      "id": "shop-reports-a-change",
+      "from": "shopify",
+      "to": "store-takes-the-report",
+      "y": 236,
+      "label": "the product's event, signed",
+      "variant": "emphasis"
+    },
+    {
+      "id": "store-takes-the-report",
+      "from": "store-takes-the-report",
+      "to": "mirror-answers-every-location",
+      "y": 272,
+      "label": "the report",
+      "variant": "emphasis"
+    },
+    {
+      "id": "store-takes-the-report_accepted",
+      "from": "store-takes-the-report",
+      "to": "shopify",
+      "y": 306,
+      "label": "accepted",
+      "variant": "return"
+    },
+    {
+      "id": "mirror-reads-the-product-back",
+      "from": "mirror-answers-every-location",
+      "to": "shopify",
+      "y": 342,
+      "label": "reads it back, again every 2 s while the shop answers older",
+      "variant": "dashed"
+    },
+    {
+      "id": "mirror-publishes-a-new-copy",
+      "from": "shopify",
+      "to": "mirror-answers-every-location",
+      "y": 378,
+      "label": "the product as the shop shows it · a new copy, numbered",
+      "variant": "return"
+    },
+    {
+      "id": "collector-opens-the-listing",
+      "from": "collector-opens-the-listing",
+      "to": "store-takes-the-report",
+      "y": 462,
+      "label": "opens the listing",
+      "variant": "default"
+    },
+    {
+      "id": "store-answers-from-the-location",
+      "from": "store-takes-the-report",
+      "to": "store-answers-from-the-location",
+      "y": 498,
+      "label": "the copy this location holds",
+      "variant": "default"
+    },
+    {
+      "id": "store-answers-from-the-location_held",
+      "from": "store-answers-from-the-location",
+      "to": "store-takes-the-report",
+      "y": 534,
+      "label": "cards, counts and sidebar · no hop under 3 s",
+      "variant": "return"
+    },
+    {
+      "id": "mirror-answers-every-location",
+      "from": "store-takes-the-report",
+      "to": "mirror-answers-every-location",
+      "y": 570,
+      "label": "the copy's number · once the check is 3 s old",
+      "variant": "dashed"
+    },
+    {
+      "id": "mirror-answers-every-location_body",
+      "from": "mirror-answers-every-location",
+      "to": "store-takes-the-report",
+      "y": 606,
+      "label": "the number, and the copy only when it moved",
+      "variant": "return"
+    },
+    {
+      "id": "store-answers-from-the-location_answer",
+      "from": "store-takes-the-report",
+      "to": "collector-opens-the-listing",
+      "y": 642,
+      "label": "the listing, as the shop is now",
+      "variant": "emphasis"
+    }
+  ],
+  "activations": [
+    {
+      "participant": "shopify",
+      "from": 195,
+      "to": 383,
+      "type": "external"
+    },
+    {
+      "participant": "store-takes-the-report",
+      "from": 231,
+      "to": 311,
+      "type": "backend"
+    },
+    {
+      "participant": "mirror-answers-every-location",
+      "from": 267,
+      "to": 388,
+      "type": "backend"
+    },
+    {
+      "participant": "store-takes-the-report",
+      "from": 457,
+      "to": 648,
+      "type": "backend"
+    },
+    {
+      "participant": "store-answers-from-the-location",
+      "from": 493,
+      "to": 540,
+      "type": "database"
+    },
+    {
+      "participant": "mirror-answers-every-location",
+      "from": 565,
+      "to": 612,
+      "type": "backend"
+    }
+  ]
+}

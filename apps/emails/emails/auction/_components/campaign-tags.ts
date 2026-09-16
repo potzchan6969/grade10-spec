@@ -5,7 +5,12 @@ export type AuctionEmailCampaign =
   | "bidding_closes_in_24h"
   | "extended_bidding"
   | "new_bid"
-  | "outbid";
+  | "outbid"
+  | "lot_closed_didnt_win"
+  | "lot_ended_watched"
+  | "lot_ended"
+  | "auction_won"
+  | "address_reminder";
 
 /** Control that produced the click — `utm_content`. */
 export type AuctionEmailLinkContent =

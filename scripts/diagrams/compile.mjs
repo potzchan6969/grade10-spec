@@ -25,7 +25,7 @@ export const TOKENS = {
 const ROOT_ATTRS = ["viewBox", "role", "data-preset"];
 const DROPPED_ATTRS = ["tabindex", "aria-pressed", "data-animate", "lang"];
 
-export function compile(html, name) {
+export function compile(html, name, type = "") {
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(name)) {
     throw new Error(`diagram name must be a slug: ${name}`);
   }
@@ -39,7 +39,7 @@ export function compile(html, name) {
   const kept = keptRules(rules, classesOf(svg), preset);
   const variables = resolveVariables(rules, kept, preset);
 
-  svg = stampSteps(svg);
+  svg = stampSteps(svg, type);
   svg = stripInteractivity(svg);
   svg = prefixIds(svg, name);
   svg = tightenLanes(svg);
@@ -207,15 +207,21 @@ function attribute(tag, name) {
 }
 
 /** The step an element claims: its id up to the first underscore, so several nodes
- * can share one, and an edge lights with the node it points at. */
+ * can share one, and an edge lights with the node it points at. A sequence
+ * draws its participants as lifelines rather than as steps, so there the
+ * message carries the step and an edge claims its own id. */
 function stepOf(id) {
   return id.split("_")[0];
 }
 
-function stampSteps(svg) {
+function stampSteps(svg, type) {
+  const edge = type === "sequence" ? ["data-edge-id"] : [];
   return svg.replace(/<[a-zA-Z]+\b[^>]*>/g, (tag) => {
-    const claimed =
-      attribute(tag, "data-node-id") ?? attribute(tag, "data-edge-to");
+    let claimed;
+    for (const name of ["data-node-id", ...edge, "data-edge-to"]) {
+      claimed = attribute(tag, name);
+      if (claimed !== undefined) break;
+    }
     if (claimed === undefined) return tag;
     return tag.replace(/^<([a-zA-Z]+)/, `<$1 data-step="${stepOf(claimed)}"`);
   });

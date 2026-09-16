@@ -61,6 +61,7 @@ at any time that listing accepts a bid. Grade10 SHALL refuse to lower or
 withdraw a committed maximum.
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-01 - A first maximum opens the bidding
+**Serves:** grade10-site-auction-auto-bidding-US-01 - Collector commits a maximum on an open listing
 
 - **GIVEN** an open listing with a starting price of 20000 minor units and no bids
 - **WHEN** a bidder commits a maximum of 50000 minor units
@@ -69,6 +70,7 @@ withdraw a committed maximum.
 - **AND** that bidder leads
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-02 - A maximum below the minimum next bid is refused
+**Serves:** grade10-site-auction-auto-bidding-US-01 - Collector commits a maximum on an open listing
 
 - **GIVEN** an open listing whose current bid is 22500 minor units and whose minimum increment is 2500 minor units
 - **WHEN** a bidder commits a maximum of 24000 minor units
@@ -76,6 +78,7 @@ withdraw a committed maximum.
 - **AND** the current bid and the leader are unchanged
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-03 - A leader raises their own maximum
+**Serves:** grade10-site-auction-auto-bidding-US-01 - Collector commits a maximum on an open listing
 
 - **GIVEN** bidder A leads with a committed maximum of 50000 minor units
 - **WHEN** bidder A raises their maximum to 80000 minor units
@@ -84,6 +87,7 @@ withdraw a committed maximum.
 - **AND** the current bid is unchanged
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-04 - Lowering a maximum is refused
+**Serves:** grade10-site-auction-auto-bidding-US-01 - Collector commits a maximum on an open listing
 
 - **GIVEN** a bidder with a committed maximum of 50000 minor units on an open listing
 - **WHEN** they commit a maximum of 30000 minor units on that listing
@@ -114,6 +118,7 @@ operator SHALL see every committed maximum and its Accepted At.
 | Not leading | A higher commitment exists, or an equal earlier one does |
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-05 - A bidder reads their own commitment
+**Serves:** grade10-site-auction-auto-bidding-US-02 - Collector reads their own maximum and standing
 
 - **GIVEN** bidder A has committed a maximum of 50000 minor units while the current bid is 25000 minor units
 - **WHEN** bidder A opens the listing
@@ -122,6 +127,7 @@ operator SHALL see every committed maximum and its Accepted At.
 - **AND** they see that they lead
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-06 - An overtaken bidder sees that they no longer lead
+**Serves:** grade10-site-auction-auto-bidding-US-02 - Collector reads their own maximum and standing
 
 - **GIVEN** bidder A has been overtaken on a listing
 - **WHEN** bidder A opens it
@@ -129,6 +135,7 @@ operator SHALL see every committed maximum and its Accepted At.
 - **AND** they see their own committed maximum unchanged
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-07 - A leader's maximum is not public
+**Serves:** grade10-site-auction-auto-bidding-US-02 - Collector reads their own maximum and standing
 
 - **GIVEN** bidder A leads with a committed maximum of 50000 minor units while the current bid is 25000
 - **WHEN** any other bidder reads the listing's public facts
@@ -136,6 +143,7 @@ operator SHALL see every committed maximum and its Accepted At.
 - **AND** they do not carry, and do not allow deriving, A's maximum of 50000
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-08 - An operator can answer a dispute
+**Serves:** grade10-site-auction-auto-bidding-US-04 - Operator traces every committed maximum
 
 - **GIVEN** a listing with several committed maximums
 - **WHEN** an authorized operator reads its bid history
@@ -178,6 +186,7 @@ maximum row SHALL share the resolution's timestamp group and SHALL NOT represent
 intermediate increments.
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-09 - A challenger below the leader's maximum raises the price only
+**Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
 - **GIVEN** an HKD listing where A leads with a maximum of 50000 minor units
 - **WHEN** B commits a maximum of 22500 minor units
@@ -185,6 +194,7 @@ intermediate increments.
 - **AND** the current bid is 23500 minor units
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-11 - A challenger above the leader's maximum takes the lead
+**Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
 - **GIVEN** an HKD listing where A leads with a maximum of 800000 minor units
 - **WHEN** B commits a maximum of 900000 minor units
@@ -192,6 +202,7 @@ intermediate increments.
 - **AND** the current bid is 820000 minor units
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-15 - The step to lead cannot exceed the new leader's maximum
+**Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
 - **GIVEN** an HKD listing where A leads with a maximum of 800000 minor units
 - **WHEN** B commits a maximum of 810000 minor units
@@ -199,6 +210,7 @@ intermediate increments.
 - **AND** the current bid is 810000 minor units
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-16 - A challenge lands at the two-maximum price, not a ladder
+**Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
 - **GIVEN** an HKD listing with a starting price of 20000 minor units and A's maximum of 50000 minor units
 - **WHEN** B commits a maximum of 80000 minor units
@@ -206,30 +218,35 @@ intermediate increments.
 - **AND** Grade10 has not accepted intermediate bids between 20000 and 54000
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-10 - A challenger raises again, still below
+**Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
 - **GIVEN** A leads an HKD listing at a current bid of 23500 minor units
 - **WHEN** B raises their maximum from 22500 to 30000 minor units
 - **THEN** A still leads at 31000 minor units
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-12 - The first bidder is overtaken by a higher maximum
+**Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
 - **GIVEN** an HKD listing with starting price 20000 minor units and A's maximum of 22500 minor units
 - **WHEN** B commits a maximum of 50000 minor units
 - **THEN** B leads at 23500 minor units
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-13 - The overtaken bidder raises but stays below
+**Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
 - **GIVEN** B leads an HKD listing with a maximum of 50000 minor units
 - **WHEN** A raises their maximum to 30000 minor units
 - **THEN** B still leads at 31000 minor units
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-14 - The overtaken bidder raises past the leader
+**Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
 - **GIVEN** B leads an HKD listing with a maximum of 50000 minor units
 - **WHEN** A raises their maximum to 60000 minor units
 - **THEN** A leads at 51000 minor units
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-17 - A tie goes to the earlier commitment
+**Serves:** grade10-site-auction-auto-bidding-US-03 - Collector competes through two maxima
 
 - **GIVEN** B leads with a maximum of 60000 minor units
 - **WHEN** C commits the same maximum
@@ -239,6 +256,7 @@ intermediate increments.
 - **AND** both records belong to the same resolution timestamp group
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-18 - A tie is not a refusal
+**Serves:** grade10-site-auction-auto-bidding-US-02 - Collector reads their own maximum and standing
 
 - **GIVEN** B leads an HKD listing with a maximum of 60000 minor units
 - **WHEN** C commits the same maximum
@@ -264,6 +282,7 @@ further card check.
 | Grade10 places a bid on their behalf | No further card check |
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-19 - The hold is the maximum, not the price
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** a listing whose current bid is 22500 minor units
 - **WHEN** a bidder commits a maximum of 50000 minor units and it is accepted
@@ -271,6 +290,7 @@ further card check.
 - **AND** it holds exactly one active authorization for that bidder and listing
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-20 - A raise that cannot be authorized changes nothing
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** bidder A leads with a committed maximum of 50000 minor units
 - **WHEN** A raises to 80000 minor units and the card authorization for 80000 fails
@@ -279,6 +299,7 @@ further card check.
 - **AND** the leader and the current bid are unchanged
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-21 - An auto-bid step needs no new card check
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** bidder A leads with an authorized maximum of 50000 minor units and the current bid is 25000
 - **WHEN** a challenger commits a maximum of 30000 minor units
@@ -321,6 +342,7 @@ manual bid placed at the same moment would. Two standing maxima SHALL
 NOT keep extending the close on their own.
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-22 - An auto bid in the extension window extends once
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** a listing inside its extension window, and a leader whose committed maximum has room left
 - **WHEN** a challenger's commitment causes Grade10 to raise the leader's bid on their behalf
@@ -329,6 +351,7 @@ NOT keep extending the close on their own.
 - **AND** Grade10 places no further bid until another commitment is accepted
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-23 - An auto bid is counted and recorded
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** Grade10 raises a bidder's bid on their behalf
 - **WHEN** a collector reads the listing's bid count and history
@@ -336,6 +359,7 @@ NOT keep extending the close on their own.
 - **AND** the history shows it as placed on that bidder's behalf, not as a manual bid
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-24 - Standing maxima do not keep bidding
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** two bidders have committed maxima and the listing has been resolved to the two-maximum price
 - **WHEN** no further commitment is accepted

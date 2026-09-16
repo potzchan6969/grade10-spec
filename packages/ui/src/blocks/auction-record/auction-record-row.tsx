@@ -2,7 +2,10 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { TableCell } from "@grade10/design-system/components/display/table-cell";
 import { TableRow } from "@grade10/design-system/components/display/table-row";
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
+import {
+  Button,
+  buttonVariants,
+} from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { Switch } from "@grade10/design-system/components/forms/switch";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
@@ -23,31 +26,38 @@ import type {
   EmailAlertsCopy,
 } from "./types";
 
-/** Badge tone per sale / bid state. The label itself stays consumer-supplied. */
+/** Badge tone per sale / bid state. The label itself stays consumer-supplied.
+ *
+ * Keep the table calm: most standings use muted `default` / `outline`. Reserve
+ * colour for attention (`warning`), failure (`error`), and a single positive
+ * live signal (`success` on Leading) — same restraint as Order History status.
+ */
 const STATE_VARIANT: Record<
   AuctionRecordRowState,
   "default" | "success" | "error" | "warning" | "info" | "outline"
 > = {
   scheduled: "outline",
-  live: "success",
+  live: "default",
   ending_soon: "warning",
-  ended: "default",
+  ended: "outline",
   leading: "success",
-  outbid: "error",
-  bid_submitted: "info",
+  outbid: "warning",
+  bid_submitted: "default",
   bid_not_accepted: "error",
   awaiting_payment: "warning",
+  awaiting_address: "warning",
+  preparing_invoice: "default",
   payment_problem: "error",
-  paid: "success",
-  shipped: "info",
-  delivered: "success",
-  hold_releasing: "info",
-  hold_released: "default",
+  paid: "outline",
+  shipped: "outline",
+  delivered: "outline",
+  hold_releasing: "outline",
+  hold_released: "outline",
   pending_payment: "warning",
   expired: "error",
-  processing: "info",
-  cancelled: "default",
-  refunded: "default",
+  processing: "default",
+  cancelled: "outline",
+  refunded: "outline",
 };
 
 type AuctionRecordRowViewProps = AuctionRecordRowProps & {
@@ -123,6 +133,7 @@ function AuctionRecordRow({
   title,
   state,
   stateLabel,
+  detail,
   currentBid,
   closesAt,
   imageSrc,
@@ -149,11 +160,16 @@ function AuctionRecordRow({
   const showEmailAlerts = Boolean(onEmailAlertsChange && emailAlertsCopy);
   // Unwatch only when the application supplies it — bid rows omit these props.
   const showUnwatch = Boolean(onWatchToggle && watchCopy) && !bidPlaced;
+  // Winner Order entry — consumer supplies viewOrder + href only on won rows.
+  const showViewOrder = Boolean(copy?.viewOrder && href) && !showUnwatch;
   const noStanding = copy?.noStanding ?? "--";
   const unwatchLabel = watchCopy?.unwatch ?? watchCopy?.watching ?? "Unwatch";
   const listingLabel = copy?.openListing
     ? `${copy.openListing}: ${title}`
     : title;
+  const viewOrderLabel = copy?.viewOrder
+    ? `${copy.viewOrder}: ${title}`
+    : undefined;
 
   const rowRef = useRef<HTMLDivElement>(null);
   const [collapseHeight, setCollapseHeight] = useState<number | null>(null);
@@ -177,13 +193,18 @@ function AuctionRecordRow({
   useEmailAlertsToast(alertsEnabled, emailAlertsCopy, showEmailAlerts);
 
   const titleNode = href ? (
-    <Link aria-label={listingLabel} className="truncate" href={href} size="sm">
+    <Link
+      aria-label={listingLabel}
+      className="truncate font-medium"
+      href={href}
+      size="sm"
+    >
       {title}
     </Link>
   ) : onOpen ? (
     <Link
       aria-label={listingLabel}
-      className="truncate"
+      className="truncate font-medium"
       render={<button onClick={onOpen} type="button" />}
       size="sm"
     >
@@ -233,6 +254,11 @@ function AuctionRecordRow({
             {closesAt != null ? (
               <Text className="truncate text-secondary-foreground" size="xs">
                 {closesAt}
+              </Text>
+            ) : null}
+            {detail != null ? (
+              <Text className="truncate text-secondary-foreground" size="xs">
+                {detail}
               </Text>
             ) : null}
           </VStack>
@@ -286,6 +312,15 @@ function AuctionRecordRow({
       </TableCell>
 
       <TableCell className={AUCTION_RECORD_COLUMNS.actions}>
+        {showViewOrder && href && copy?.viewOrder ? (
+          <a
+            aria-label={viewOrderLabel}
+            className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
+            href={href}
+          >
+            {copy.viewOrder}
+          </a>
+        ) : null}
         {showUnwatch && watchCopy && onWatchToggle ? (
           <Button
             aria-busy={watchPending || undefined}

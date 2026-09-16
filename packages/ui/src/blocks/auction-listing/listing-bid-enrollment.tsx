@@ -253,17 +253,15 @@ function SetupSheetBody({
       ) : (
         paymentFieldSlot
       )}
-      <VStack className="w-full" gap="sm">
-        {errorMessage && !linking ? (
-          <p
-            className="text-left text-xs text-destructive"
-            data-slot="input-message"
-            role="alert"
-          >
-            {errorMessage}
-          </p>
-        ) : null}
-      </VStack>
+      {errorMessage && !linking ? (
+        <p
+          className="text-left text-xs text-destructive"
+          data-slot="input-message"
+          role="alert"
+        >
+          {errorMessage}
+        </p>
+      ) : null}
       <CheckboxListInput
         checked={ageAttested}
         disabled={linking}

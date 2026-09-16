@@ -41,12 +41,14 @@ SHALL require that grant. A person whose roles do not include that grant —
 including every non-admin operator and a plain `user` — SHALL NOT open it.
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-01 - Sidebar lists the page under Users for admin
+**Serves:** grade10-admin-console-roles-and-permissions-US-01 - Admin compares what roles can do
 
 - **WHEN** an `admin` who can open the console signs in
 - **THEN** the sidebar lists Roles & Permissions directly under Users
 - **AND** opening it shows the surface
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-02 - Non-admin sessions cannot open the page
+**Serves:** grade10-admin-console-roles-and-permissions-US-03 - Non-admin is refused the page
 
 - **GIVEN** a person whose roles do not include `user:set-role` (for example
   `staff`, `support`, `auditor`, or only `user`)
@@ -61,6 +63,7 @@ what a role grants. Who holds a role remains the Users directory; what a role
 grants remains the shipped mapping.
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-03 - No create or edit role controls
+**Serves:** grade10-admin-console-roles-and-permissions-US-01 - Admin compares what roles can do
 
 - **WHEN** an operator opens Roles & Permissions
 - **THEN** the page offers no control that creates a role or edits a role's grants
@@ -77,12 +80,14 @@ Delete / Manage columns. Every closed role except `user` SHALL be marked
 elevated on its column; `user` SHALL NOT be marked elevated.
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-04 - Every closed role is a column
+**Serves:** grade10-admin-console-roles-and-permissions-US-01 - Admin compares what roles can do
 
 - **WHEN** an operator opens the Roles tab
 - **THEN** the table names every role in the closed set as a column, including
   `user`
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-05 - Staff grants read on the matrix
+**Serves:** grade10-admin-console-roles-and-permissions-US-01 - Admin compares what roles can do
 
 - **GIVEN** the Roles tab
 - **WHEN** the operator reads the `store:read` row
@@ -91,17 +96,20 @@ elevated on its column; `user` SHALL NOT be marked elevated.
   cell
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-06 - Support cannot set roles on the matrix
+**Serves:** grade10-admin-console-roles-and-permissions-US-01 - Admin compares what roles can do
 
 - **GIVEN** the Roles tab
 - **WHEN** the operator reads the `user:set-role` row
 - **THEN** the `support` cell reads Not allowed
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-07 - The page states that roles stack
+**Serves:** grade10-admin-console-roles-and-permissions-US-01 - Admin compares what roles can do
 
 - **WHEN** an operator opens the Roles tab
 - **THEN** the page states that a person with several roles receives the union of those roles' grants
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-13 - Elevated roles are marked
+**Serves:** grade10-admin-console-roles-and-permissions-US-01 - Admin compares what roles can do
 
 - **WHEN** an operator opens the Roles tab
 - **THEN** the `staff` column is marked elevated
@@ -117,6 +125,7 @@ named from the committed API documents. The row SHALL NOT show separate
 Resource and Action columns.
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-08 - Every permission appears with roles and APIs
+**Serves:** grade10-admin-console-roles-and-permissions-US-02 - Admin reads the permission catalog
 
 - **WHEN** an operator opens the Permissions tab
 - **THEN** every permission in the vocabulary appears once
@@ -125,6 +134,7 @@ Resource and Action columns.
   do)
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-09 - Auditor's only grant is named in the catalog
+**Serves:** grade10-admin-console-roles-and-permissions-US-02 - Admin reads the permission catalog
 
 - **WHEN** an operator opens the Permissions tab
 - **THEN** `audit:read` appears with its description
@@ -140,6 +150,7 @@ prefix. Clearing either filter SHALL restore the full catalog for that
 dimension.
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-14 - Resource and API filters narrow the catalog
+**Serves:** grade10-admin-console-roles-and-permissions-US-02 - Admin reads the permission catalog
 
 - **WHEN** an operator opens the Permissions tab and filters to one resource
 - **THEN** only permissions of that resource remain listed
@@ -153,6 +164,7 @@ tab SHALL open with that role's column highlighted. An unknown role name SHALL
 fall back to the Roles tab without inventing a role.
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-10 - A staff link highlights staff
+**Serves:** grade10-admin-console-roles-and-permissions-US-01 - Admin compares what roles can do
 
 - **WHEN** an operator opens Roles & Permissions identifying the `staff` role
 - **THEN** the Roles tab is shown with the `staff` column highlighted
@@ -169,6 +181,7 @@ repository check until regenerated. Producing the view SHALL be deterministic:
 the same source gives byte-identical output.
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-11 - A changed mapping fails the check until regenerated
+**Serves:** grade10-admin-console-roles-and-permissions-US-02 - Admin reads the permission catalog
 
 - **GIVEN** a committed Roles & Permissions view
 - **WHEN** the shipped role-to-permission mapping changes and the view is not regenerated
@@ -176,6 +189,7 @@ the same source gives byte-identical output.
 - **AND** regenerating the view makes the check pass
 
 #### Scenario: grade10-admin-console-roles-and-permissions-SC-12 - Reading the same source twice gives one view
+**Serves:** grade10-admin-console-roles-and-permissions-US-02 - Admin reads the permission catalog
 
 - **WHEN** the view is produced twice from an unchanged mapping and vocabulary
 - **THEN** the two views are identical byte for byte

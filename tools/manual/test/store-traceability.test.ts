@@ -49,6 +49,7 @@ function changeWith(manifest: string, extra: Record<string, string> = {}) {
       ...extra,
     }),
     NO_GIT,
+    null,
   );
   return entry;
 }
@@ -102,6 +103,7 @@ describe("the manifest a board reads", () => {
     const [entry] = readChanges(
       writeStore({ "openspec/changes/gift-cards/proposal.md": PROPOSAL }),
       NO_GIT,
+      null,
     );
     expect(entry.error).toBeUndefined();
     expect(entry.owners).toEqual([]);
@@ -125,6 +127,7 @@ describe("what a proposal cites", () => {
           "# Quiet\n\n## Why\n\nNothing to point at.\n",
       }),
       NO_GIT,
+      null,
     );
     expect(entry.cites).toBeUndefined();
   });
@@ -164,7 +167,7 @@ describe("what the archive is spared", () => {
   });
 
   it("keeps carrying them for a change still in flight", () => {
-    const [inFlight] = readChanges(FIXTURE, NO_GIT);
+    const [inFlight] = readChanges(FIXTURE, NO_GIT, null);
     expect(inFlight.taskGroups[0].tasks).toBeDefined();
     expect(inFlight.deltas[0].requirements[0].text).toBeDefined();
   });
@@ -233,7 +236,7 @@ describe("when a change last moved", () => {
     );
 
     const git = await readGitIndex(root, ["openspec"]);
-    const [entry] = readChanges(root, git);
+    const [entry] = readChanges(root, git, null);
 
     expect(git.newestUnder("openspec/changes/gift-cards")?.sha).toBe(git.head);
     expect(entry.lastMoved).toMatch(/^\d{4}-\d{2}-\d{2}T/);

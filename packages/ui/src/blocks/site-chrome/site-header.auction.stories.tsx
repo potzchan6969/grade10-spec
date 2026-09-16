@@ -35,6 +35,15 @@ export const SignedOut: Story = {
       "aria-current",
       "page",
     );
+    const storeLocator = canvas.getByRole("link", { name: "Store Locator" });
+    const help = canvas.getByRole("link", { name: "Help" });
+    expect(
+      storeLocator.compareDocumentPosition(help) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(help).toHaveAttribute("href", "https://grade10.mintlify.io/");
+    expect(help).toHaveAttribute("target", "_blank");
+    expect(help).toHaveAttribute("rel", "noopener noreferrer");
     await userEvent.click(canvas.getByRole("button", { name: "Sign In" }));
     expect(args.onSignIn).toHaveBeenCalled();
   },
@@ -56,11 +65,10 @@ export const SignedIn: Story = {
 /** Opens the account menu and asserts auction-first items. */
 export const AccountMenu: Story = {
   name: "Account menu open",
-  args: { session: "signed-in" },
+  args: { session: "signed-in", accountMenuDefaultOpen: true },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     const body = within(canvasElement.ownerDocument.body);
-    await userEvent.click(canvas.getByRole("button", { name: "Account" }));
     expect(
       await body.findByRole("menuitem", { name: "Profile" }),
     ).toBeInTheDocument();
@@ -73,5 +81,10 @@ export const AccountMenu: Story = {
     expect(body.queryByRole("menuitem", { name: "Orders" })).toBeNull();
     await userEvent.click(body.getByRole("menuitem", { name: "My Auctions" }));
     expect(args.onMyAuctions).toHaveBeenCalled();
+    // Leave the menu open — this story is the layout SoT for the open menu.
+    await userEvent.click(canvas.getByRole("button", { name: "Account" }));
+    expect(
+      await body.findByRole("menuitem", { name: "Profile" }),
+    ).toBeInTheDocument();
   },
 };

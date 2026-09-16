@@ -13,6 +13,9 @@ contract for leaving a session.
   - One request: activating a sign-in command again while it runs starts no second request
 - Emailed link
   - Only email method: the email step sends a link and nothing else
+  - Sent confirmation: after a send that went out, title the dialog Check Your Email, name the address on its own line, and offer Resend
+  - Resend wait: Resend stays off for sixty seconds after each successful send, counting down on the button
+  - Link lifetime: a sign-in link lasts sixty seconds
   - One-time session: an unused unexpired link signs in once
 - Google
   - Brand-offered: a brand that enables Google shows it; an unverified email does not sign in
@@ -21,7 +24,8 @@ contract for leaving a session.
 - Rate limits and redirects
   - One email a minute: a second send in a minute is told to wait
   - Trusted return: an untrusted redirect is ignored
-
+- Surface wording
+  - Sign in with email: the email-step action and dialog copy never say magic link to the collector
 ## Requirements
 ### Requirement: A sign-in command in flight cannot be duplicated
 
@@ -32,6 +36,7 @@ request's outcome. Input edited during the flight SHALL NOT be sent — the
 running request's input stands until it settles.
 
 #### Scenario: shared-auth-sign-in-SC-01 - Activating again during flight does nothing
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
 - **GIVEN** a sign-in command whose request is in flight
 - **WHEN** the person activates the same command again
@@ -46,30 +51,35 @@ valid unused, unexpired link. A link SHALL sign in at most once. An expired
 or already-used link SHALL NOT create a session.
 
 #### Scenario: shared-auth-sign-in-SC-05 - A valid link creates a session
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
 - **GIVEN** a person who asked for a sign-in link at an email address
 - **WHEN** they follow the unused, unexpired link from that email
 - **THEN** they are signed in as the account for that address
 
 #### Scenario: shared-auth-sign-in-SC-06 - A used link does not sign in again
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
 - **GIVEN** a sign-in link that has already created a session
 - **WHEN** anyone follows that link again
 - **THEN** no new session is created
 
 #### Scenario: shared-auth-sign-in-SC-07 - An expired link does not sign in
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
 - **GIVEN** a sign-in link whose time to live has ended
 - **WHEN** anyone follows that link
 - **THEN** no session is created
 
 #### Scenario: shared-auth-sign-in-SC-08 - A failed send is reported
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
 - **WHEN** a sign-in link cannot be sent
 - **THEN** the surface states that the link was not sent
 - **AND** the person is not signed in
 
 #### Scenario: shared-auth-sign-in-SC-09 - A first send does not disclose whether the address is new
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
 - **GIVEN** an email that has never signed in
 - **WHEN** they ask for a sign-in link and the send goes out
@@ -86,6 +96,7 @@ brand does not have Google sign-in, the surface SHALL NOT show that
 control.
 
 #### Scenario: shared-auth-sign-in-SC-14 - A brand with Google sign-in offers it
+**Serves:** shared-auth-sign-in-US-03 - Collector signs in with Google when the brand offers it
 
 - **GIVEN** a brand that has Google sign-in
 - **WHEN** a person opens sign-in
@@ -94,6 +105,7 @@ control.
   the account for that address
 
 #### Scenario: shared-auth-sign-in-SC-15 - An unverified Google email does not sign in
+**Serves:** shared-auth-sign-in-US-03 - Collector signs in with Google when the brand offers it
 
 - **GIVEN** a brand that has Google sign-in
 - **WHEN** a person completes Google sign-in with an email Google has not
@@ -102,6 +114,7 @@ control.
 - **AND** they are not signed in
 
 #### Scenario: shared-auth-sign-in-SC-16 - A brand without Google sign-in hides it
+**Serves:** shared-auth-sign-in-US-03 - Collector signs in with Google when the brand offers it
 
 - **GIVEN** a brand that does not have Google sign-in
 - **WHEN** a person opens sign-in
@@ -117,6 +130,7 @@ SHALL be the same address. A plus-tag or a provider-specific alias SHALL NOT
 be folded into another address.
 
 #### Scenario: shared-auth-sign-in-SC-17 - A first visit creates the account
+**Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
 - **GIVEN** an email address that has never signed in
 - **WHEN** that address completes any offered sign-in method
@@ -124,6 +138,7 @@ be folded into another address.
 - **AND** the person is signed in as it
 
 #### Scenario: shared-auth-sign-in-SC-18 - A later visit is the same account
+**Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
 - **GIVEN** an account that signed in with an emailed link
 - **WHEN** that same address later signs in with another emailed link, or
@@ -131,12 +146,14 @@ be folded into another address.
 - **THEN** they enter the same account, not a second one
 
 #### Scenario: shared-auth-sign-in-SC-19 - Letter case does not create a second account
+**Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
 - **GIVEN** an account that signed in at `Collector@example.com`
 - **WHEN** that person later signs in at `collector@example.com`
 - **THEN** they enter the same account, not a second one
 
 #### Scenario: shared-auth-sign-in-SC-20 - A plus-tag is a different address
+**Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
 - **GIVEN** an account at `collector@example.com`
 - **WHEN** `collector+shop@example.com` completes sign-in
@@ -151,6 +168,7 @@ NOT need to complete a link or Google sign-in for that to happen. The
 client SHALL NOT create an account or a session by naming an email.
 
 #### Scenario: shared-auth-sign-in-SC-21 - A new verified email creates the account
+**Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
 - **GIVEN** an email that has never signed in
 - **WHEN** a product of this brand that has verified that email asks to
@@ -159,6 +177,7 @@ client SHALL NOT create an account or a session by naming an email.
 - **AND** the product receives that account's user id
 
 #### Scenario: shared-auth-sign-in-SC-22 - A known verified email is the same account
+**Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
 - **GIVEN** an account that signed in with an emailed link
 - **WHEN** a product of this brand that has verified that same email asks
@@ -166,12 +185,14 @@ client SHALL NOT create an account or a session by naming an email.
 - **THEN** they receive that same account, not a second one
 
 #### Scenario: shared-auth-sign-in-SC-23 - A trusted product can sign the person in
+**Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
 - **WHEN** a product of this brand that has verified an email asks to sign
   that account in
 - **THEN** the person is signed in as that account on this brand
 
 #### Scenario: shared-auth-sign-in-SC-24 - A client cannot claim an email
+**Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
 - **WHEN** a client names an email and asks to create an account or a
   session
@@ -179,6 +200,7 @@ client SHALL NOT create an account or a session by naming an email.
 - **AND** the person is not signed in
 
 #### Scenario: shared-auth-sign-in-SC-25 - Sign-in after a product-created account is the same person
+**Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
 - **GIVEN** an account created when a product verified an email
 - **WHEN** that address later signs in with an emailed link, or Google when
@@ -192,6 +214,7 @@ is not this brand, the system SHALL ignore that location and SHALL leave
 them on this brand.
 
 #### Scenario: shared-auth-sign-in-SC-31 - An untrusted redirect is ignored
+**Serves:** shared-auth-sign-in-US-05 - Collector is not spammed or sent off-brand
 
 - **GIVEN** a sign-in that names a location off this brand
 - **WHEN** the person completes sign-in
@@ -199,6 +222,7 @@ them on this brand.
 - **AND** they are not sent to that location
 
 #### Scenario: shared-auth-sign-in-SC-32 - A missing redirect stays on the brand
+**Serves:** shared-auth-sign-in-US-05 - Collector is not spammed or sent off-brand
 
 - **GIVEN** a sign-in that names no location
 - **WHEN** the person completes sign-in
@@ -212,12 +236,14 @@ send a sign-in code, and a code from any earlier sign-in email SHALL NOT
 create a session.
 
 #### Scenario: shared-auth-sign-in-SC-33 - The email step has no code control
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
 - **WHEN** a person opens sign-in and reaches the email step
 - **THEN** the step offers sending a sign-in link
 - **AND** no control asks for or sends a sign-in code
 
 #### Scenario: shared-auth-sign-in-SC-34 - A code from an earlier email does not sign in
+**Serves:** Google - a code from an earlier email does not sign in
 
 - **GIVEN** a sign-in code that an earlier sign-in email carried
 - **WHEN** anyone submits that code
@@ -232,6 +258,7 @@ of a failed send. After a send that went out, the resend control SHALL wait
 out the same window.
 
 #### Scenario: shared-auth-sign-in-SC-35 - A second link send in a minute is told to wait
+**Serves:** shared-auth-sign-in-US-05 - Collector is not spammed or sent off-brand
 
 - **GIVEN** a sign-in-link email already sent to one address in the last
   sixty seconds
@@ -246,8 +273,104 @@ WHEN a sign-in-link email is sent to an address, any earlier unused link for
 that address SHALL NOT create a session.
 
 #### Scenario: shared-auth-sign-in-SC-36 - A new link kills the earlier link
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
 - **GIVEN** an unused unexpired sign-in link for an address
 - **WHEN** a later sign-in-link email is sent to that address
 - **THEN** following the earlier link creates no session
+
+### Requirement: After a successful send the surface confirms and offers Resend
+
+WHEN a sign-in-link email has been sent for the address the person submitted,
+the sign-in surface SHALL title the dialog **Check Your Email**, SHALL show
+confirmation copy whose lead line does not include the address and whose next
+line is that address, and SHALL offer a Resend control. The confirmation
+SHALL NOT state whether the address was new. The surface SHALL NOT offer a
+control that returns to the entry step — leaving is dialog dismissal.
+
+#### Scenario: shared-auth-sign-in-SC-42 - A successful send shows Check Your Email and the address on its own line
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
+
+- **GIVEN** a person who asked for a sign-in link at an email address
+- **WHEN** the send goes out
+- **THEN** the dialog title is **Check Your Email**
+- **AND** the surface shows a confirmation lead line
+- **AND** the address appears on the line below that lead
+- **AND** it does not state whether an account already exists
+
+#### Scenario: shared-auth-sign-in-SC-43 - Resend is offered after a successful send
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
+
+- **GIVEN** a sign-in surface showing confirmation after a successful send
+- **AND** sixty seconds have passed since that send
+- **WHEN** the person activates Resend
+- **THEN** the system treats it as another ask for a sign-in link at the same
+  address
+- **AND** the one-email-a-minute cap still applies
+
+#### Scenario: shared-auth-sign-in-SC-44 - The link-sent surface has no Back control
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
+
+- **GIVEN** a sign-in surface showing confirmation after a successful send
+- **WHEN** the dialog renders
+- **THEN** no control returns to the Google or email entry step
+- **AND** dismissal of the dialog is the way out
+
+### Requirement: Resend waits sixty seconds with a countdown on the button
+
+AFTER a successful sign-in-link send — the first send or a successful resend —
+the Resend control SHALL be disabled for sixty seconds. WHILE it is disabled,
+its label SHALL show the whole seconds left in the form **Resend (n)** (for
+example **Resend (45)**). WHEN the count reaches zero, Resend SHALL be enabled
+again and labelled **Resend**. The countdown is a change of the label, not an
+animation — `prefers-reduced-motion` does not remove it.
+
+#### Scenario: shared-auth-sign-in-SC-46 - Resend is disabled with a countdown after a send
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
+
+- **GIVEN** a sign-in-link email has just been sent
+- **WHEN** the link-sent surface is showing
+- **THEN** Resend is disabled
+- **AND** its label is **Resend (n)** with the whole seconds left in the
+  sixty-second wait
+
+#### Scenario: shared-auth-sign-in-SC-47 - Resend re-enables when the countdown reaches zero
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
+
+- **GIVEN** Resend is disabled with a countdown after a successful send
+- **WHEN** sixty seconds have passed since that send
+- **THEN** Resend is enabled
+- **AND** its label is **Resend**
+
+#### Scenario: shared-auth-sign-in-SC-48 - A successful resend restarts the countdown
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
+
+- **GIVEN** Resend is enabled on the link-sent surface
+- **WHEN** the person activates Resend and the send goes out
+- **THEN** Resend is disabled again for sixty seconds
+- **AND** its label is **Resend (n)** with the whole seconds left
+
+### Requirement: A sign-in link lasts sixty seconds
+
+A sign-in link's time to live SHALL be sixty seconds from when it was sent. A
+link whose time to live has ended SHALL NOT create a session.
+
+#### Scenario: shared-auth-sign-in-SC-49 - A link older than sixty seconds does not sign in
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
+
+- **GIVEN** a sign-in link sent more than sixty seconds ago
+- **WHEN** anyone follows that link
+- **THEN** no session is created
+
+### Requirement: The email-step action is worded as sign-in with email
+
+The email step's send action SHALL be labelled as signing in with email. The
+sign-in surface's user-facing copy SHALL NOT use the term magic link.
+
+#### Scenario: shared-auth-sign-in-SC-45 - The email-step CTA says Sign In with Email
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
+
+- **WHEN** a person opens sign-in and reaches the email step
+- **THEN** the send action is labelled **Sign In with Email**
+- **AND** no control on the surface uses the words magic link
 

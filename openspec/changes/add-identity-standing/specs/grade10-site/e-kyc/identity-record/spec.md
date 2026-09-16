@@ -33,6 +33,7 @@ verified identity does.
 | `expired` | The person's most recent verified identity rests on a document that expired before the day of the read |
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-29 - A gating product reads a standing the vault made
+**Serves:** Standing - a gating product reads a standing the vault made
 
 - **GIVEN** a verified identity the vault recorded for a person
 - **WHEN** another consumer asks for that person's standing
@@ -42,6 +43,7 @@ verified identity does.
   or case is answered
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-30 - A lapsed document reads expired
+**Serves:** Standing - a lapsed document reads expired
 
 - **GIVEN** a verified identity whose document expiry is before the day of the
   read
@@ -49,6 +51,7 @@ verified identity does.
 - **THEN** it is answered `expired`, and the verified identity stays on file
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-31 - A person nobody verified reads unverified
+**Serves:** Standing - a person nobody verified reads unverified
 
 - **WHEN** a consumer asks for the standing of a person with no verified
   identity on file
@@ -65,6 +68,7 @@ through it. Each surface SHALL be issued per consumer, so what a consumer holds
 says which consumer it is.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-32 - A gate cannot be walked onto the record
+**Serves:** Consumers - a gate cannot be walked onto the record
 
 - **GIVEN** a consumer holding a gate
 - **WHEN** it asks for anything but a standing — a record, a document image,
@@ -81,12 +85,14 @@ another brand's product. A brand that verifies nobody SHALL deploy no identity
 store, and its products SHALL hold neither a service nor a gate.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-33 - A brand's consumer reaches its own brand's store or none
+**Serves:** Brand - a brand's consumer reaches its own brand's store or none
 
 - **WHEN** a brand's product is deployed
 - **THEN** every identity binding it holds names that brand's own identity
   store, and a brand with no identity store deploys products holding none
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-34 - A person verified on one brand is unknown to another
+**Serves:** Brand - a person verified on one brand is unknown to another
 
 - **GIVEN** a person verified by a Grade10 product
 - **WHEN** a product of another brand asks for that person's standing

@@ -10,6 +10,7 @@ summary row whose only job is to name that site-sale cut (for example
 lines (times quantity).
 
 #### Scenario: shared-ui-store-cart-SC-26 - Site sale lines use compare-at and no Store sale footer row
+**Serves:** shared-ui-store-cart-US-13 - Shopper reads a storewide sale on the cart lines
 
 - **GIVEN** a cart whose quote applies a site sale on every line
 - **WHEN** the drawer renders those lines and the summary
@@ -26,6 +27,7 @@ SHALL remain the sum of those line prices, and `PromoState` SHALL be
 name the site sale as its own summary row.
 
 #### Scenario: shared-ui-store-cart-SC-27 - Stacked code appears only as footer Discount on post-sale lines
+**Serves:** shared-ui-store-cart-US-14 - Shopper stacks a promo on the store sale
 
 - **GIVEN** a cart with a site sale on its lines and a promo code that stacks
 - **WHEN** the drawer shows the applied code
@@ -42,6 +44,7 @@ show the refusal message. A held promo marked not applicable SHALL render
 muted without an Apply control.
 
 #### Scenario: shared-ui-store-cart-SC-28 - Refused code leaves sale lines and shows an error
+**Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the store sale
 
 - **GIVEN** a cart with a site sale on its lines
 - **WHEN** the shopper applies a promo code the quote refuses
@@ -49,6 +52,7 @@ muted without an Apply control.
   (<code>)` row appears, and the promo sheet shows the refusal
 
 #### Scenario: shared-ui-store-cart-SC-29 - An inapplicable held promo has no Apply control
+**Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the store sale
 
 - **GIVEN** a held promo the quote marks not applicable for this cart
 - **WHEN** the promo sheet lists that code
@@ -63,6 +67,7 @@ formerly site-sale line SHALL show the list unit price as `price` with no
 and `PromoState` SHALL be `applied` with that code and its discount amount.
 
 #### Scenario: shared-ui-store-cart-SC-30 - Replacing code uses list line prices and footer Discount only
+**Serves:** shared-ui-store-cart-US-16 - Shopper's promo replaces the store sale
 
 - **GIVEN** a cart whose quote replaced a site sale with a promo code
 - **WHEN** the drawer renders
@@ -77,6 +82,7 @@ the site sale, every eligible line SHALL return to sale `price` with
 `PromoState` SHALL leave `applied`.
 
 #### Scenario: shared-ui-store-cart-SC-31 - Removing a replacing or stacked code restores site-sale lines
+**Serves:** shared-ui-store-cart-US-17 - Shopper removes a promo and the store sale returns
 
 - **GIVEN** a cart showing an applied promo that stacked on or replaced a
   site sale, and the site sale is still active

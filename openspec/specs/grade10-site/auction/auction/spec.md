@@ -37,6 +37,7 @@ terms SHALL be an immutable snapshot of the operational policy effective when
 the listing becomes available for bidding.
 
 #### Scenario: grade10-site-auction-auction-SC-01 - A collector browses Auction listings
+**Serves:** grade10-site-auction-auction-US-01 - Collector browses Auction listings
 
 - **GIVEN** published Auction listings in Pokémon, MTG, and basketball-card categories
 - **WHEN** a collector opens the Auction catalogue
@@ -44,6 +45,7 @@ the listing becomes available for bidding.
 - **AND** it returns no Buy Now listing or purchasable stock count
 
 #### Scenario: grade10-site-auction-auction-SC-02 - A closed listing is absolute
+**Serves:** grade10-site-auction-auction-US-01 - Collector browses Auction listings
 
 - **GIVEN** a listing closes with an accepted highest bid
 - **WHEN** Grade10 determines its outcome
@@ -51,6 +53,7 @@ the listing becomes available for bidding.
 - **AND** no reserve condition changes the outcome
 
 #### Scenario: grade10-site-auction-auction-SC-03 - Money facts use minor units and currency
+**Serves:** grade10-site-auction-auction-US-01 - Collector browses Auction listings
 
 - **GIVEN** an Auction listing with a starting price and buyer fee
 - **WHEN** Grade10 returns its listing or checkout facts
@@ -81,6 +84,7 @@ Grade10 SHALL display the current recorded close and, to an authenticated
 bidder, their committed maximum on that listing.
 
 #### Scenario: grade10-site-auction-auction-SC-04 - A bid must meet the next increment
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing with a current bid and configured increment
 - **WHEN** a bidder submits less than the next valid bid amount
@@ -88,6 +92,7 @@ bidder, their committed maximum on that listing.
 - **AND** it creates no accepted bid or card authorization for that attempt
 
 #### Scenario: grade10-site-auction-auction-SC-05 - A bid outside the window is refused
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** a listing whose scheduled start has not arrived or whose recorded close has passed
 - **WHEN** a bidder submits a bid
@@ -95,6 +100,7 @@ bidder, their committed maximum on that listing.
 - **AND** it does not create an accepted bid or change the recorded close
 
 #### Scenario: grade10-site-auction-auction-SC-06 - A late valid bid extends the close
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing whose extension window is 1800 seconds and extension duration is 1800 seconds
 - **AND** 1800 seconds or less remain until its recorded close
@@ -103,6 +109,7 @@ bidder, their committed maximum on that listing.
 - **AND** another valid bid within the resulting extension window applies the same rule again
 
 #### Scenario: grade10-site-auction-auction-SC-07 - An extension cap limits an otherwise eligible extension
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing with an extension cap and a recorded close at that cap
 - **WHEN** Grade10 accepts a valid bid inside its extension window
@@ -110,6 +117,7 @@ bidder, their committed maximum on that listing.
 - **AND** it does not extend the listing beyond its configured cap
 
 #### Scenario: grade10-site-auction-auction-SC-07a - Window and duration may differ
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing whose extension window is 300 seconds and extension duration is 1800 seconds
 - **AND** 300 seconds or less remain until its recorded close
@@ -118,12 +126,14 @@ bidder, their committed maximum on that listing.
 - **AND** a bid accepted with more than 300 seconds remaining does not extend the close
 
 #### Scenario: grade10-site-auction-auction-SC-07b - Extension off does not move the close
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing whose extension window and extension duration are both zero
 - **WHEN** Grade10 accepts a valid bid with one second remaining
 - **THEN** it accepts the bid without changing the recorded close
 
 #### Scenario: grade10-site-auction-auction-SC-08 - A bidder sees live bid facts
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an authenticated bidder with an accepted bid on an open listing
 - **WHEN** the bidder reads that listing
@@ -148,6 +158,7 @@ idempotent. A delayed authorization for a bid that is no longer high enough
 SHALL be marked for release and SHALL NOT become an accepted bid.
 
 #### Scenario: grade10-site-auction-auction-SC-09 - An outbid authorization is released
+**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
 - **GIVEN** a bidder has the active authorization for an open listing
 - **WHEN** Grade10 accepts a higher valid bid from another bidder
@@ -156,6 +167,7 @@ SHALL be marked for release and SHALL NOT become an accepted bid.
 - **AND** Grade10 records the Stripe release outcome when it arrives
 
 #### Scenario: grade10-site-auction-auction-SC-10 - Concurrent bids keep the highest valid outcome
+**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
 - **GIVEN** two bidders submit different valid bid amounts against the same current listing state
 - **WHEN** Grade10 evaluates the requests concurrently
@@ -164,6 +176,7 @@ SHALL be marked for release and SHALL NOT become an accepted bid.
 - **AND** no lower bid can overwrite that current bid
 
 #### Scenario: grade10-site-auction-auction-SC-11 - A delayed lower authorization cannot land
+**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
 - **GIVEN** a bidder's card authorization is pending for a listing
 - **AND** Grade10 has accepted a higher valid bid before Stripe confirms that pending authorization
@@ -172,6 +185,7 @@ SHALL be marked for release and SHALL NOT become an accepted bid.
 - **AND** it does not record that lower bid as accepted or change the current bid
 
 #### Scenario: grade10-site-auction-auction-SC-12 - An invalid or duplicate Stripe event changes nothing twice
+**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
 - **GIVEN** Grade10 receives a Stripe authorization, release, or capture webhook
 - **WHEN** the webhook signature is invalid or its provider event was already processed
@@ -190,6 +204,7 @@ A public listing read SHALL expose the listing's extension window, extension
 duration, and optional extension cap in seconds, using `extension` terminology.
 
 #### Scenario: grade10-site-auction-auction-SC-13 - A consumer reads a listing contract
+**Serves:** grade10-site-auction-auction-US-01 - Collector browses Auction listings
 
 - **WHEN** a customer application reads a public Auction listing or its extension facts
 - **THEN** its contract uses listing and extension terms
@@ -207,6 +222,7 @@ Stripe by the recorded provider reference to repair a delayed or missed valid
 webhook.
 
 #### Scenario: grade10-site-auction-auction-SC-14 - Stripe configuration is incomplete
+**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
 - **GIVEN** an Auction operation requiring Stripe
 - **WHEN** required Stripe configuration is absent or does not support the required authorization/capture action
@@ -214,6 +230,7 @@ webhook.
 - **AND** it does not silently create a bid or fixture-backed outcome
 
 #### Scenario: grade10-site-auction-auction-SC-15 - A missed authorization webhook is repaired
+**Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
 - **GIVEN** Stripe has confirmed a bid authorization but Grade10 has not processed its webhook
 - **WHEN** scheduled reconciliation reaches its recorded provider reference

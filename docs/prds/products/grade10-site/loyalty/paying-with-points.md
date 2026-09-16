@@ -2,6 +2,7 @@
 title: Paying with Points
 spec: grade10-site/loyalty/programme
 order: 4
+reviewed: 2026-09-15
 ---
 
 ## Rules
@@ -80,6 +81,9 @@ The debit follows what the shop applied, not what was promised.
   amount off the sale, and shows the points spent, the money still due and
   the balance after; no code is minted for the points, and a repeated tap
   spends once
+- **Beside the shop's offer** — points go on beside an automatic offer,
+  capped at what the offers leave of the goods; a staff order discount on
+  the sale refuses the spend until staff take it off
 - **Paid** — the shopkeeper takes payment
 - **Debited** — when the paid sale lands, the same way as online; clearing
   the discounts before payment undoes the promise, and nothing was debited
@@ -100,7 +104,7 @@ The session, the switches and the cart are on
   qualifying good but keeps a gift card or a fee the same payment covered
   gets nothing back automatically; an operator returns it by hand from the
   loyalty admin, and a spend can be returned only once
-- 🚧 **No extra life** — returned points lapse with the rest of the balance,
+- **No extra life** — returned points lapse with the rest of the balance,
   so a return never lengthens the life of points
 - **Points earned** — clawed back separately, line by line —
   [Points](/p/grade10-site/loyalty/points)

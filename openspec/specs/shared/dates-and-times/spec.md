@@ -65,18 +65,21 @@ produce a date by its own local formatting.
   is in — where the reader will act before the time arrives.
 
 #### Scenario: shared-dates-and-times-SC-01 - Two operator tables show one moment the same way
+**Serves:** Reading shapes - two surfaces show one instant the same way
 
 - **GIVEN** an order table and a member ledger table each showing the same instant
 - **WHEN** each row is rendered for the same reader
 - **THEN** both show identical text
 
 #### Scenario: shared-dates-and-times-SC-02 - The same shape across both brands
+**Serves:** Reading shapes - one shape across both brands
 
 - **GIVEN** the same instant shown in the grade10 admin panel and the zzz admin panel
 - **WHEN** each is rendered for the same reader
 - **THEN** both show identical text
 
 #### Scenario: shared-dates-and-times-SC-03 - A day carries no time
+**Serves:** Reading shapes - a day carries no time
 
 - **GIVEN** a surface showing when a member joined
 - **WHEN** it is rendered
@@ -84,12 +87,14 @@ produce a date by its own local formatting.
 - **AND** it shows no time of day
 
 #### Scenario: shared-dates-and-times-SC-04 - An audit entry is ordered to the second
+**Serves:** Reading shapes - an audit entry ordered to the second
 
 - **GIVEN** two audit entries recorded eleven seconds apart in the same minute
 - **WHEN** the log is rendered
 - **THEN** the two entries show different times
 
 #### Scenario: shared-dates-and-times-SC-05 - One reader, two browsers
+**Serves:** Reading shapes - the platform's shape, not the browser's
 
 - **GIVEN** the same date rendered for one reader on two browsers configured for different locales
 - **WHEN** each renders it
@@ -109,6 +114,7 @@ shipped platform locale only; unsupported browser languages SHALL be resolved
 to the brand default before formatting.
 
 #### Scenario: shared-dates-and-times-SC-06 - A month name in another language
+**Serves:** Format and language - a month name in a named language
 
 - **GIVEN** a date rendered with a language named by the caller
 - **WHEN** it is rendered
@@ -116,12 +122,14 @@ to the brand default before formatting.
 - **AND** the ordering and punctuation are unchanged from the platform's format
 
 #### Scenario: shared-dates-and-times-SC-07 - No language named
+**Serves:** Format and language - English where no language is named
 
 - **GIVEN** a date rendered with no language named by the caller
 - **WHEN** it is rendered
 - **THEN** its words are English
 
 #### Scenario: shared-dates-and-times-SC-08 - A language the platform does not ship
+**Serves:** Refusals - an unshipped language fails rather than degrading
 
 - **WHEN** a low-level operator or message formatter is called with a language the platform has no words for
 - **THEN** the rendering fails with an error naming that language
@@ -132,6 +140,7 @@ An attempt to render an instant that is not a valid point in time SHALL fail
 with an error. No surface SHALL render placeholder text in place of a date.
 
 #### Scenario: shared-dates-and-times-SC-09 - An invalid instant
+**Serves:** Refusals - an invalid instant fails rather than rendering placeholder text
 
 - **WHEN** a surface renders an instant that is not a valid point in time
 - **THEN** the rendering fails with an error
@@ -149,12 +158,14 @@ A surface that states a calendar day SHALL name the brand's zone, so the day
 it shows is the day the brand's own counter, paper and records are on.
 
 #### Scenario: shared-dates-and-times-SC-10 - Operator readers in different zones
+**Serves:** Stated zones - operator surfaces state UTC
 
 - **GIVEN** the same instant rendered for a reader whose machine is set east of UTC and one set west of it
 - **WHEN** each renders it in an operator table
 - **THEN** both show identical text
 
 #### Scenario: shared-dates-and-times-SC-11 - An instant near midnight
+**Serves:** Stated zones - a stated zone near midnight
 
 - **GIVEN** an instant that falls on one calendar date in UTC and the next in the brand's zone
 - **WHEN** it is rendered as a day on that brand's surface
@@ -176,24 +187,28 @@ and SHALL NOT be stored on a record: a record holds an instant, and which day
 it falls on is a question asked when it is read.
 
 #### Scenario: shared-dates-and-times-SC-25 - A term ends at the borrower's midnight
+**Serves:** Stated zones - the brand's day ends at its own midnight
 
 - **GIVEN** a loan advanced on a day at a brand's shop
 - **WHEN** its term ends
 - **THEN** the due instant is the last moment of that calendar day in the brand's zone
 
 #### Scenario: shared-dates-and-times-SC-26 - A queue cut in the morning
+**Serves:** Stated zones - a queue cut on the brand's day
 
 - **GIVEN** a visit booked for later today at the shop, read at seven in the morning there
 - **WHEN** the day's queue is cut
 - **THEN** the visit is in it, though UTC's date is still yesterday's
 
 #### Scenario: shared-dates-and-times-SC-27 - A birthday at the counter
+**Serves:** Stated zones - an age judged on the brand's day
 
 - **GIVEN** a person whose eighteenth birthday is today at the shop and yesterday's date in UTC
 - **WHEN** their identity is judged
 - **THEN** they are an adult
 
 #### Scenario: shared-dates-and-times-SC-28 - A document expiring today
+**Serves:** Stated zones - an expiry judged on the brand's day
 
 - **GIVEN** a document whose expiry day has ended at the shop but not in UTC
 - **WHEN** it is judged
@@ -209,6 +224,7 @@ The name SHALL be the one the language gives that zone, which for a zone
 English has no abbreviation for is its offset (`GMT+8` for Hong Kong).
 
 #### Scenario: shared-dates-and-times-SC-12 - The auction page shows a close
+**Serves:** Stated zones - a deadline names its zone
 
 - **GIVEN** a listing open for bids
 - **WHEN** its close time is rendered on the auction page
@@ -216,6 +232,7 @@ English has no abbreviation for is its offset (`GMT+8` for Hong Kong).
 - **AND** a reader whose machine is set to another zone sees that same name
 
 #### Scenario: shared-dates-and-times-SC-13 - A page and a message agree
+**Serves:** Stated zones - a page and a message name one zone
 
 - **GIVEN** the same listing's close shown on the auction page and in an auction email
 - **WHEN** both are rendered
@@ -223,6 +240,7 @@ English has no abbreviation for is its offset (`GMT+8` for Hong Kong).
 - **AND** both use the deadline shape
 
 #### Scenario: shared-dates-and-times-SC-14 - A closed listing
+**Serves:** Stated zones - a closed listing names its zone
 
 - **GIVEN** a listing that has already closed
 - **WHEN** its close time is rendered
@@ -239,6 +257,7 @@ language could be used, and the zone it states is the brand's, so the date a
 borrower reads in a message is the date their shop's paper names.
 
 #### Scenario: shared-dates-and-times-SC-15 - An auction email states its zone
+**Serves:** Sent messages - a message states its zone
 
 - **GIVEN** an auction email carrying a close time
 - **WHEN** the message is rendered
@@ -246,6 +265,7 @@ borrower reads in a message is the date their shop's paper names.
 - **AND** the rendering names that zone
 
 #### Scenario: shared-dates-and-times-SC-16 - Two recipients read one time
+**Serves:** Sent messages - two recipients read one time
 
 - **GIVEN** two recipients of the same auction email in different countries and different zones
 - **WHEN** each opens the message
@@ -263,24 +283,28 @@ falls on in the zone the surface states, so a day typed in and read back is the
 same day, from any machine.
 
 #### Scenario: shared-dates-and-times-SC-17 - A window includes the last moment of its final day
+**Serves:** Typed calendar days - a window includes both days entirely
 
 - **GIVEN** a window typed as beginning and ending on stated calendar days
 - **WHEN** it is stored
 - **THEN** an event in the final second of the final day falls inside the window
 
 #### Scenario: shared-dates-and-times-SC-18 - A day reads back as it was typed
+**Serves:** Typed calendar days - read-back symmetry
 
 - **GIVEN** a calendar day typed into a date field and stored
 - **WHEN** the stored instant is shown in that field again
 - **THEN** the field shows the day that was typed
 
 #### Scenario: shared-dates-and-times-SC-19 - A day typed from a machine set to another zone
+**Serves:** Typed calendar days - read-back from another machine
 
 - **GIVEN** the same calendar day typed by one person whose machine is set east of UTC and one set west of it
 - **WHEN** each is stored
 - **THEN** both produce the same pair of instants
 
 #### Scenario: shared-dates-and-times-SC-20 - An empty date field
+**Serves:** Typed calendar days - an empty field produces no instant
 
 - **GIVEN** a date field left empty
 - **WHEN** the form is read
@@ -302,12 +326,14 @@ surfaces MUST resolve unsupported browser languages to the brand default before
 invoking.
 
 #### Scenario: shared-dates-and-times-SC-21 - Just now does not show zero seconds
+**Serves:** Reading shapes - relative activity time tiers
 
 - **GIVEN** an instant 30 seconds in the past
 - **WHEN** it is rendered as relative activity time in English
 - **THEN** the label is `Just now`
 
 #### Scenario: shared-dates-and-times-SC-22 - An unsupported browser language reads English
+**Serves:** Format and language - English where the browser names no shipped language
 
 - **GIVEN** a collector whose browser prefers Thai and whose site locale resolved to English
 - **WHEN** a relative activity time renders
@@ -323,6 +349,7 @@ Operator tables, admin surfaces, and sent messages SHALL continue to use the UTC
 moment and deadline shapes that name the zone.
 
 #### Scenario: shared-dates-and-times-SC-23 - Two zones read different clocks
+**Serves:** Stated zones - a collector reads their stated zone
 
 - **GIVEN** the same instant rendered for readers in `Asia/Hong_Kong` and `America/New_York`
 - **WHEN** each reads it as a local moment in English
@@ -335,6 +362,7 @@ moment and deadline shapes that name the zone.
 days and SHALL fall back to local moment otherwise.
 
 #### Scenario: shared-dates-and-times-SC-24 - Older activity uses a local moment
+**Serves:** Reading shapes - activity time falls back to a local moment
 
 - **GIVEN** one instant two minutes in the past and another instant eight days in the past
 - **WHEN** both are rendered as activity time in English for `Asia/Hong_Kong`

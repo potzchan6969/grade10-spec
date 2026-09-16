@@ -76,6 +76,19 @@ test("nodes claim their step by id, edges the step they point at", () => {
   assert.match(svg, /<path data-step="chat"[^>]*data-edge-to="chat"/);
 });
 
+test("a sequence's edge claims its own id, not the lifeline it points at", () => {
+  const sequence = compile(
+    deliver("sequence", join(EXAMPLES, "cache-miss-request.sequence.json")),
+    "cache-miss",
+    "sequence",
+  );
+  assert.match(
+    sequence,
+    /<g data-step="cache-read"[^>]*data-edge-to="redis"[^>]*data-edge-id="cache-read"/,
+  );
+  assert.match(sequence, /<g data-step="redis"[^>]*data-node-id="redis"/);
+});
+
 test("the viewBox closes in on the drawing, not archify's canvas", () => {
   const [, canvas] = /<svg[^>]*viewBox="([^"]+)"/.exec(html);
   const [, drawn] = /<svg[^>]*viewBox="([^"]+)"/.exec(svg);

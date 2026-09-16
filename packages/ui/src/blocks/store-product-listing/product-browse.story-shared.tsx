@@ -6,7 +6,6 @@ import {
   PRODUCTS,
   SEARCH_SUGGESTIONS,
   SORT_OPTIONS,
-  UTILITY_LINKS,
 } from "./fixtures";
 import { ProductBrowse, type ProductBrowseProps } from "./product-browse";
 import type { AppliedFilter, FilterGroup } from "./types";
@@ -363,7 +362,6 @@ export const productBrowseArgs = {
   },
   groups: { status: "ready" as const, data: FILTER_GROUPS },
   selection: {},
-  utilityLinks: UTILITY_LINKS,
   results: { status: "ready" as const, data: PRODUCTS },
   resultCount: "100 Products",
   sortOptions: SORT_OPTIONS,

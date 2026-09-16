@@ -3,12 +3,15 @@
   "googleFailed": "无法连接 Google。",
   "emailLabel": "邮箱地址",
   "emailPlaceholder": "请输入邮箱地址",
-  "sendLinkLabel": "发送登录链接",
+  "sendLinkLabel": "使用邮箱登录",
   "sendLinkFailed": "无法发送登录链接。",
   "sendWait": "请稍候一分钟再请求另一封邮件。",
-  "linkSentMessage": "请查看收件箱中的登录链接。",
+  "linkSentMessage": "我们已将登录链接发送至",
+  "resendLabel": "重新发送",
+  "resendCountdown": "重新发送 ({seconds})",
   "linkExpired": "此登录链接已过期。",
   "linkInvalid": "此登录链接已失效。",
   "linkBanned": "此账户无法登录。",
-  "legal": "继续即表示你同意我们的<terms>服务条款</terms>与<privacy>隐私政策</privacy>。"
+  "legal": "继续即表示你同意我们的<terms>服务条款</terms>与<privacy>隐私政策</privacy>。",
+  "linkSentTitle": "请查收邮件"
 }

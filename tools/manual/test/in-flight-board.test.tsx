@@ -250,13 +250,15 @@ describe("where the change stands against the store's main", () => {
     expect(html).toContain("cannot be archived");
   });
 
-  it("counts the artifacts a diverged change is ahead by", () => {
+  it("counts the artifacts that differ from main", () => {
     const html = render([
       changeEntry("written-up", [delta()], {
         mainState: { state: "diverged", ref: "origin/main", files: 2 },
       }),
     ]);
-    expect(html).toContain("2 artifact(s) ahead of origin/main");
+    expect(html).toContain(
+      "2 artifact(s) in this checkout differ from origin/main",
+    );
   });
 });
 

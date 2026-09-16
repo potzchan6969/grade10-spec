@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-09, tcs-rules r3.0
 
-## post-sale-US1: Operator resolves an unpaid order
+## post-sale-US7: Operator resolves an unpaid order
 
 **As an** operator,
 **I want** to reissue, settle, or cancel an unpaid order from the order itself,
 **so that** a lot whose winner did not pay stops being an open-ended obligation.
 
-### post-sale-US1-TC1-1: Reissue returns an expired order to Pending Payment
+### post-sale-US7-TC1-1: Reissue returns an expired order to Pending Payment
 
 **Classification:**
 
@@ -22,7 +22,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-01
+* **Trace:** post-sale-US-07
 
 **Pre-conditions:**
 
@@ -46,7 +46,7 @@
 * The invoice status is still `pending`, with a new 7-day deadline.
 * The derived order status is Pending Payment.
 
-### post-sale-US1-TC2-1: Manual settlement is available before expiry
+### post-sale-US7-TC2-1: Manual settlement is available before expiry
 
 **Classification:**
 
@@ -59,7 +59,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-01
+* **Trace:** post-sale-US-07
 
 **Pre-conditions:**
 
@@ -77,7 +77,7 @@
 * Grade10 accepts the settlement.
 * `<order_2>` derives as Processing, without having expired first.
 
-### post-sale-US1-TC3-1: Settlement is refused until the address is confirmed
+### post-sale-US7-TC3-1: Settlement is refused until the address is confirmed
 
 **Classification:**
 
@@ -90,7 +90,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-01
+* **Trace:** post-sale-US-07
 
 **Pre-conditions:**
 
@@ -108,7 +108,7 @@
 * Grade10 refuses the settlement.
 * The invoice status is still `pending`.
 
-### post-sale-US1-TC4-1: Cancelling returns the lot to available and offers no runner-up
+### post-sale-US7-TC4-1: Cancelling returns the lot to available and offers no runner-up
 
 **Classification:**
 
@@ -121,7 +121,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-01
+* **Trace:** post-sale-US-07
 
 **Pre-conditions:**
 
@@ -149,14 +149,14 @@
 
 ---
 
-## post-sale-US2: Operator reconstructs an order's history
+## post-sale-US8: Operator reconstructs an order's history
 
 **As an** operator deciding whether to reinstate a buyer,
 **I want** every invoice and fulfilment log entry on the order, including the
 payments that failed,
 **so that** I can tell a buyer who tried and could not from one who never engaged.
 
-### post-sale-US2-TC1-1: Failed payment attempts distinguish a buyer who tried
+### post-sale-US8-TC1-1: Failed payment attempts distinguish a buyer who tried
 
 **Classification:**
 
@@ -169,7 +169,7 @@ payments that failed,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-02
+* **Trace:** post-sale-US-08
 
 **Pre-conditions:**
 
@@ -187,7 +187,7 @@ payments that failed,
 * `<order_5>` shows three failed payment attempts with their timestamps.
 * `<order_6>` is distinguishable from it, holding only the issued log entry.
 
-### post-sale-US2-TC2-1: The address at dispatch survives a later correction
+### post-sale-US8-TC2-1: The address at dispatch survives a later correction
 
 **Classification:**
 
@@ -200,7 +200,7 @@ payments that failed,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-02
+* **Trace:** post-sale-US-08
 
 **Pre-conditions:**
 
@@ -217,7 +217,7 @@ payments that failed,
 * The dispatch event still shows `<address at dispatch>` in full, as it stood at dispatch.
 * The correction is a separate later event carrying its own snapshot.
 
-### post-sale-US2-TC3-1: The detail names the rule behind a derived status
+### post-sale-US8-TC3-1: The detail names the rule behind a derived status
 
 **Classification:**
 
@@ -230,7 +230,7 @@ payments that failed,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-02
+* **Trace:** post-sale-US-08
 
 **Pre-conditions:**
 
@@ -247,7 +247,7 @@ payments that failed,
 * The order status shows as Expired.
 * The detail names the rule that produced it — a pending invoice with an elapsed deadline — rather than the label alone.
 
-### post-sale-US2-TC4-1: A buyer's reissue history spans all their orders
+### post-sale-US8-TC4-1: A buyer's reissue history spans all their orders
 
 **Classification:**
 
@@ -260,7 +260,7 @@ payments that failed,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-02
+* **Trace:** post-sale-US-08
 
 **Pre-conditions:**
 

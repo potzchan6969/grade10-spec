@@ -27,6 +27,7 @@ is not first in the cascade, and SHALL NOT substitute a different Adobe Fonts
 kit for the brand sans.
 
 #### Scenario: grade10-site-site-typography-SC-01 - Every surface loads the kit
+**Serves:** Site-wide - every surface loads the kit
 
 - **WHEN** a collector opens any address the grade10 site answers
 - **THEN** the document head includes a stylesheet link to
@@ -41,6 +42,7 @@ the CSS family `canada-type-gibson`, whose Typography token label is
 heading type.
 
 #### Scenario: grade10-site-site-typography-SC-02 - Body and headings use Gibson
+**Serves:** One brand sans - body and headings use Gibson
 
 - **GIVEN** the Adobe Fonts kit has loaded
 - **WHEN** a collector reads body copy or a heading on any grade10-site
@@ -49,6 +51,7 @@ heading type.
   `canada-type-gibson`
 
 #### Scenario: grade10-site-site-typography-SC-03 - No second brand sans
+**Serves:** One brand sans - no second brand sans
 
 - **WHEN** a collector opens any grade10-site surface
 - **THEN** the page does not load a second brand-sans stylesheet or declare

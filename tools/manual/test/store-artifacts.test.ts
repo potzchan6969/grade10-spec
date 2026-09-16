@@ -24,10 +24,6 @@ const ALPHA_JOURNEYS = [
   "",
   "They open alpha and do the thing.",
   "",
-  "**Accepted by:**",
-  "",
-  "- alpha-SC-01",
-  "",
 ].join("\n");
 
 const ALPHA_SPEC = [
@@ -105,6 +101,7 @@ const snapshotOfStore = async (root: string) =>
   composeStore(
     rootsOf(root),
     NO_GIT,
+    null,
     await checkWarnings(rootsOf(root), NO_GIT),
   ).snapshot;
 

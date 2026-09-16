@@ -29,8 +29,9 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
 
 ### Display and pricing are different reads
 
-- Display goes through public GET routes (`/api/public/catalog/…`) behind `edgeCache()` + `cacheTag()` — `product:<id>` on detail, `catalog:list` on lists, `catalog:any` on every catalog response, `maxAge` 300 s
-- Shopify product webhooks purge the changed product's tags; an inventory level webhook names an inventory item and no product, so it purges `catalog:any` — a register selling the last unit drops the whole catalog cache rather than showing it in stock for minutes. The TTL is the backstop for a webhook that never arrives
+- **Display** — the listing, its filter panel, the collections and a product's page answer over tRPC (`catalog.*`); a listing opens no database connection
+- **The store's mirror** — how fresh the listing's product data is, and what it answers from, is [Product Listing · Product Data](/p/grade10-site/store/product-listing#product-data)'s; the mechanism is [the design note](/references/store-catalogue-index)'s
+- **What reads the shop live** — a product's own page and a listing narrowed to a collection, behind a minute's cache; the cart's review, with no cache at all
 - Checkout pricing always fetches live from the Storefront API — a cache can never set a charge amount
 - Availability is checked when the cart is priced: a variant that does not
   sell rejects, and a cart asking past a count the catalog exposes
@@ -41,9 +42,10 @@ How the storefronts sell: Shopify is each brand's product catalog, a payment pro
   accepted is compared against the quantity asked for, and a cart Shopify
   shortened is refused rather than sold
 
-### No product mirror in Postgres
+### A copy the shop can always rebuild
 
-- Shopify down means checkout down; display keeps serving from cache
+- **Shopify down** — checkout down; the listing keeps answering from the store's mirror — [Product Listing · Product Data](/p/grade10-site/store/product-listing#product-data)
+- **Derived, never authored** — every copy is what a Storefront read answered, and the next read overwrites it, so it is dropped and rebuilt rather than repaired; the shop stays the catalogue's owner, and no price or stock anyone pays on comes from it
 - The catalog client's error outcomes carry the query name, so the tail worker's metrics show exactly which reads are failing
 
 ### Money arrives as decimal strings
@@ -266,7 +268,7 @@ muted, and a muted alert is worse than none.
 
 ### Two client ports, one schema
 
-- The storefront webs own vertical slices (catalog, cart, checkout, profile) over an `ApiClient` (`get`/`post`) for the public GET routes and a `ProcedureClient` for tRPC checkout/orders
+- The storefront webs own vertical slices (catalog, cart, checkout, profile) over a `ProcedureClient` for tRPC — the catalogue, cart, checkout and orders alike
 - Each datasource decodes with the Effect Schema codecs the backend's `contract` module also enforces server-side, so a stale bundle against a newer router surfaces as a typed decode error naming the call
 - The cart is client-owned (localStorage) until pricing rules demand a server cart; checkout re-prices everything server-side regardless
 
@@ -286,8 +288,8 @@ muted, and a muted alert is worse than none.
 
 ## Q & A
 
-- Why no product mirror in Postgres?
-  - We don't own catalog data, and a mirror is a second store with sync obligations. The accepted price: Shopify down means checkout down, while display keeps serving from cache.
+- Why a copy of the catalogue in the worker rather than a record in Postgres?
+  - We do not own catalog data, and a record is a second store with sync obligations. A copy is a cache with a shape: one keeper per shop rebuilds it from the shop, every location reads it, and it answers every listing shape in one pass, so the public catalogue opens no database connection. A queryable store is the step after it, when a catalogue outgrows one memory pass.
 - Why Checkout Sessions instead of raw PaymentIntents?
   - One server surface serves hosted, embedded, and Payment Element frontends; the UX can change without a backend change.
 - Why does a refund's event carry the goods rather than the money that moved?

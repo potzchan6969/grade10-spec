@@ -51,7 +51,7 @@ describe("the references over the wire", () => {
     "docs/references/README.md": "# References\n\nEvidence.\n",
     "docs/references/a-draft.md": "# A draft\n\n## One\n\nText.\n",
   });
-  const artifacts = async () => composeStore(rootsOf(root), NO_GIT);
+  const artifacts = async () => composeStore(rootsOf(root), NO_GIT, null);
   const endpoints = storeEndpoints(rootsOf(root), artifacts);
 
   it("lists them in the snapshot without their text, README beside", async () => {

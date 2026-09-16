@@ -22,7 +22,7 @@ product.
 - **Filter** — the sidebar narrows by the world a card comes from and the kind
   of collectible it is, each choice with the catalogue's count beside it;
   worlds show five and an invitation to the rest, types show whole
-- 🚧 **Zero behind a choice** — a facet choice or group the catalogue counts
+- **Zero behind a choice** — a facet choice or group the catalogue counts
   nothing behind, over the whole unnarrowed catalogue, never shows in the
   filter panel; narrowing by something else does not resurrect it. A choice
   or group the catalogue does carry something for elsewhere stays shown at
@@ -39,14 +39,14 @@ product.
   visible without hover on a narrow viewport and on touch
 - **Search and sort** — both describe the whole catalogue, never the cards
   already on screen; the menu offers latest, lowest price and highest price
-- 🚧 **Latest at rest** — the listing opens ordered by latest product and the
+- **Latest at rest** — the listing opens ordered by latest product and the
   sort control names that order; a link made at rest carries no order and
   opens on latest product just the same
 - **A collection is a way in, not a filter** — the front door's tiles open the
   listing already inside one, named above the grid and dismissible; filtering
   or searching leaves it behind, because the catalogue narrows by a collection
   or by a query and never by both
-- 🚧 **Ordering a collection** — a collection opens on latest product too, and
+- **Ordering a collection** — a collection opens on latest product too, and
   choosing another order lists that collection in it rather than leaving it
 - **URL** — the narrowing is in it, so a listing can be linked and shared, and
   Back undoes it; how far a collector has read is not, so an address opens at
@@ -57,11 +57,24 @@ product.
      — the catalogue narrowed
   4. `grade10.com/store/products/<handle>` — a product's details page
 
+:::detail{title="Code map" for="engineer"}
+- **Reads** — `catalog.products`, `catalog.filters`, `catalog.collections`, `catalog.collection` and `catalog.product` in `packages/grade10-store/backend/src/trpc/routers/catalog.ts`, mounted ahead of the session tier by `trpc/publicCatalog.ts`
+- **The mirror** — one Durable Object a shop, `durables/CatalogKeeper/`; the entries it publishes — `services/catalog/projection.ts`; narrowing, ordering and the counts — `services/catalog/browse.ts`; the query's bounds — `services/catalog/query.ts`
+- **Shopify client** — `packages/shopify/backend/src/catalog/`
+- **Frontend** — `packages/grade10-store/frontend/src/features/products/catalog/`
+- **Design note** — [the catalogue index](/references/store-catalogue-index)
+- **Commerce architecture** — [docs/architecture/commerce.md](https://github.com/9gag/grade10/blob/main/docs/architecture/commerce.md)
+:::
+
 ## Product Tile
 
 🚧 **Name opens the product** — the product name on a listing card opens
 Product Details the same way the photo does; a sold-out card’s name stays
 inert.
+
+**Signed-out Add to cart** — opens the sign-in dialog titled
+**Sign In to Add to Cart**; no guest cart; after a successful sign-in the
+add completes when practical.
 
 ## Adaptive Filter
 
@@ -89,6 +102,53 @@ Enter or a suggestion selection is what acts.
   chip with the other applied filters and clears the field; picking a product
   opens that product and clears the field; picking a filter applies that
   facet, clears the field, and does not put free text in force
+
+## Product Data
+
+The listing answers from the store's mirror of the shop's catalogue.
+
+| Rule | Value |
+| --- | --- |
+| A change the shop reports | On the listing within 10 s of the shop's own read answering it |
+| A change the shop never reports | Within 5 minutes |
+| A location's check on the mirror | Every 3 s while the listing is in use |
+
+- 🚧 **Within seconds** — a product the shop publishes, takes down or
+  reprices, and stock that moves, reach the cards, the counts and the sidebar
+  within seconds, the same at every location; the store reads the product back
+  from the shop rather than trusting the report
+- 🚧 **The re-read as the net** — the store reads the whole catalogue again
+  every 5 minutes, so a change the shop never reported shows within 5 minutes
+- 🚧 **No collector waits on the mirror** — a listing view answers from the
+  copy its own location holds, and the location asks the mirror for a newer one
+  at most every 3 seconds, however many collectors it is serving
+- 🚧 **A quiet location answers too** — the first collector at a location that
+  has not served the listing waits on no read of the catalogue, and gets the
+  cards, counts and sidebar everyone else gets
+- 🚧 **While the shop is unreachable** — the cards, the counts and the sidebar
+  keep answering from the mirror until the shop answers again; opening a
+  product and the cart's review wait on the shop
+- **What still lags** — a product's own page and a listing narrowed to a
+  collection, by up to a minute; the cart's review reads the shop live and is
+  the authority — [Commerce](/p/grade10-site/commerce/commerce)
+
+:::flow{title="A change reaches the listing" diagram="assets/diagrams/store-catalogue-change.svg"}
+# Seconds after the shop saves
+## *Shop* — **Reports a change**
+The shopkeeper saves a product, or stock moves, and Shopify sends the store that product's event, signed.
+## *Store* — **Takes the report**
+The store checks the signature and the shop, records the report against the mirror, and answers Shopify at once.
+## *Mirror* — **Reads the product back**
+The mirror reads the product from the shop, so it carries what the shop shows and never only what the event said; a read that still answers the old value is tried again every 2 seconds, for up to a minute.
+## *Mirror* — **Publishes a new copy**
+Changes that arrive together are folded into one copy, numbered once.
+# The next listing view, at any location
+## *Collector* — **Opens the listing**
+## *Store* — **Answers from the location**
+The cards, the counts and the sidebar come from the copy the location already holds in its own memory, so a view whose location checked less than 3 seconds ago leaves the location for nothing.
+## *Mirror* — **Answers every location**
+A location past 3 seconds asks the mirror for the copy's number, and takes the copy itself only when the number moved. The mirror is one thread for the whole shop, and thousands of collectors are not thousands of asks: a location asks 20 times a minute at most however many it is serving, an ask already holding the current number is answered with that number, and the copy crosses only after an edit — 0.5 ms of the thread at today's 286 products. What bounds the mirror is locations times catalogue, never collectors — [the design note](/references/store-catalogue-index).
+:::
 
 ## Designs
 
@@ -123,6 +183,8 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | Narrowed sessions | Share of listing visits that apply any narrowing. Unmeasured; the first delivery sets the baseline. | Product |
 | Time to first narrowed result | From listing open to the first narrowed grid. Unmeasured. | Product |
 | Search commit or suggestion | Share of listing sessions that commit free text or take a suggestion, and time from first keystroke to a product open or narrowed grid. Unmeasured; first delivery sets the baseline. | Product |
+| Listing answer time | From a narrowing to its first grid, p95, measured at the edge. ❓ Unmeasured — nothing emits it; the staging figures are in [the design note](/references/store-catalogue-index). | Engineering |
+| Change to listing | From the shop's read answering a change to the mirror every location reads, p95; and from the shop's report to its read answering, p95. ❓ Unmeasured until the release carries it. | Engineering |
 
 **Decisions.**
 
@@ -130,6 +192,11 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | --- | --- | --- | --- |
 | Facets, not collections | Decided | The sidebar filters by world and collectible type. A collection is a merchandiser's grouping and stays a way in. | Design |
 | One narrowing at a time | Decided | The catalogue narrows by a collection or by a query, never both, so applying either leaves the other behind. The alternative — a collection dimension on the query — cannot be served natively and would walk the whole catalogue for every scoped narrowing. An order is not a narrowing: it orders whatever set is in force, so choosing one inside a collection keeps the collection. | Engineering |
+| The mirror, not a read of the shop | Decided | The listing answers from one mirror of the catalogue the store keeps per shop: the store applies each change the shop reports and reads the whole catalogue again every 5 minutes, so every location answers from one copy of it. A location that has its own copy asks the mirror rather than the shop, so the shop's reads do not grow with the traffic. The public catalogue opens no database connection, a listing view never reads the shop, and checkout still prices live — [Commerce](/p/grade10-site/commerce/commerce); the mechanism is [the design note](/references/store-catalogue-index)'s. | Engineering |
+| Seconds after save | Decided | A change reaches the listing in seconds, not minutes. The shop's report and its own reads are the floor, so nothing here can be faster than Shopify: the store reads a change back rather than trusting the report, and a report that never arrives is caught by the 5-minute re-read. A listing narrowed to a collection stays on the shop's own read, which the mirror does not reproduce in the collection's own order. | Product |
+| Collection with facets | ❓ Open | Whether a collection and a facet can be applied together; nothing in the catalogue's own reads prevents it. | Product |
+| Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
+| Price order | Decided | Sorts on the product's lowest price. The card and the order come from one copy of the mirror, so the price a card shows is the price it sorts on while a product has one variant; a product with several sorts on its cheapest, sold out or not, as Shopify's own price sort does, while the card shows the one for sale. | Product |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
 | Counts are the catalogue's | Decided | Counted over the whole narrowed set with the facet's own selection excluded, so ticking one world leaves the others showing what picking them instead would find. | Engineering |
 | The count above the grid is the same count | Decided | The number over the listing is the catalogue's own over the whole narrowed set, the rule the facet counts already follow, so a choice's count is the size of the listing choosing it opens. Counting the cards on screen instead read the page size back as the shop's size and grew as the collector read on, leaving the one question a count answers — whether it is worth going on — the one it could not. A narrowing whose first page has not arrived says nothing, because `0 products` is a claim the catalogue never made. | Engineering |
@@ -138,11 +205,13 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | No popularity order | Decided | Nothing ranks products by popularity, so the menu does not claim to. At rest the listing is ordered by latest product instead — an order the catalogue can answer, so a collector arrives on one the control can name. | Product |
 | A starved facet is still offered | Decided | Once a query is in force, nothing behind a choice is the query's doing rather than the shop's. Hiding the group would strand the collector, and a selection nobody can undo is a trap. | Design |
 | No facets, no panel | Decided | A shop that has configured none gets no facet group and no message in its place; search and sort stay. It is not a fault the collector is told about. | Product |
-| Utility row | Decided | Help, Shipping and Orders & Returns are drawn now, each against the placeholder the site already gives a link it owes, and become real addresses as the pages land. | Product |
+| Utility row | Decided | Help, Shipping and Orders & Returns do not sit under the filter. Where Help and store or auction documentation live is still open on [Page Shell](/p/grade10-site/site/page-shell). | Product |
 | Cap is advisory | Decided | The shop's count is stale the moment it is read, so a control bounded by it is honest rather than correct. The cart's review stays the only authority, and goes on putting a line back down to what the shop can honour. | Engineering |
+| Sign-in to add | Decided | A signed-out Add to cart opens the sign-in dialog. There is no guest cart and no guest checkout. After sign-in the add completes when practical. | Product |
+| Sign-in title from add | Decided | The dialog title is **Sign In to Add to Cart** (Title Case, as Modal titles are) — why, not the bare **Sign In to Grade10**. Header Sign In and other entry points keep **Sign In to Grade10**. Cart, not bag. | Product |
 | One threshold everywhere | Decided | Nearly out is the same count on the listing, the product page and the cart. A second definition would leave the shop unable to say which of them is right. | Product |
 | A count is news, not pressure | Decided | A card says how many are left where the collector learns something — the shop is nearly out, or they have just asked for the last one. A count on every card is a shop hurrying everybody. | Product |
-| Links the site owes | ❓ Open | Drawing a placeholder departs from `grade10-site/site/page-shell`, which says a link appears only where the site answers it. The footer already departs the same way. Settling it belongs to page-shell. | Product |
+| Links the site owes | ❓ Open | The footer still draws destinations the site does not yet answer. Settling that departure belongs to page-shell; the listing no longer adds a second one. | Product |
 | Search stays on the listing | Decided | The field lives with the listing filters, not in the site header. Auction has no search surface yet, and a nav search would read as site-wide find. | Design |
 | Small screen: search outside the drawer | Decided | On a narrow viewport, Filter opens a left drawer for facets only. Catalogue search stays on the listing so typing does not require opening Filter. | Design |
 | Worlds and Types as tabs on small screens | Decided | Inside the filter drawer the two facet groups are tabs so expanding worlds does not push types down the scroll. The wide sidebar still stacks them. Nested drill-down was ruled out for a closed pair of groups. | Design |

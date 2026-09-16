@@ -4,19 +4,20 @@ spec: grade10-site/auction/bid-payment-method
 order: 5
 ---
 
-A bid is honest only when funds sit behind it. Linking a card lives on
-[Bid panel enrollment](/p/grade10-site/auction/bid-panel-enrollment); when the
-collector commits a maximum, Grade10 authorizes a hold on that linked card in
-the background — no confirmation modal — and binds the method to them and the
-listing so a raise does not ask again.
+Bid-time authorization is optional and disabled by default. Linking a card
+lives on [Bid panel enrollment](/p/grade10-site/auction/bid-panel-enrollment).
+When holds are enabled and the collector commits a maximum, Grade10 authorizes
+a hold on that linked card in the background — no confirmation modal — and
+binds the method to them and the listing so a raise does not ask again.
 
-Exactly one manual-capture authorization covers the submitted maximum. Raising
-the maximum updates that same authorization rather than stacking a second hold,
-so a bidder's bank statement carries one pending amount per listing. A decline,
-unusable method, or provider failure surfaces on or near the bid action before
-the bid stands; a failed raise leaves the prior maximum in place. The linked
-card's Change action stays enabled until the first bid on that lot is accepted;
-afterward the listing locks that method for later raises.
+When holds are enabled, exactly one manual-capture authorization covers the
+submitted maximum. Raising the maximum updates that same authorization rather
+than stacking a second hold, so a bidder's bank statement carries one pending
+amount per listing. A decline, unusable method, or provider failure surfaces on
+or near the bid action before the bid stands; a failed raise leaves the prior
+maximum in place. The linked card's Change action stays enabled until the first
+bid on that lot is accepted; afterward the listing locks that method for later
+raises.
 
 ::story{id="auction-listing-bid-panel--payment-authorization" title="Payment authorization"}
 
@@ -42,7 +43,7 @@ the method for that lot.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Hold on commit | Decided | Authorize the linked card when the collector commits a maximum; do not reopen payment setup or ask for a separate confirmation. | Product |
+| Hold on commit | Decided | When holds are enabled, authorize the linked card when the collector commits a maximum; do not reopen payment setup or ask for a separate confirmation. | Product |
 | Change timing | Decided | Keep Change enabled until the first bid on the lot is accepted, then lock the method for later raises. | Product |
-| One active hold | Decided | Maintain one manual-capture authorization per bidder and listing and update it when the maximum rises. | Product |
+| One active hold | Decided | When holds are enabled, maintain one manual-capture authorization per bidder and listing and update it when the maximum rises. | Product |
 :::

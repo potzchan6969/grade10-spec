@@ -38,7 +38,7 @@ export const Countdown: Story = {
     ).not.toBeInTheDocument();
 
     await userEvent.click(next);
-    expect(canvas.getByText("30 minutes · extension evaluation")).toBeVisible();
+    expect(canvas.getByText("30 minutes")).toBeVisible();
 
     await userEvent.click(next);
     expect(canvas.getByText("1 day 5 seconds · zero day")).toBeVisible();
@@ -47,8 +47,8 @@ export const Countdown: Story = {
     await userEvent.click(next);
     await userEvent.click(next);
     await userEvent.click(next);
-    expect(canvas.getByText("15 minutes · extension started")).toBeVisible();
-    expect(canvas.getByText("Time left (auto-extended)")).toBeVisible();
+    expect(canvas.getByText("15 minutes · extended bidding")).toBeVisible();
+    expect(canvas.getByText("Time left (extended)")).toBeVisible();
     expect(
       canvas.getByRole("button", { name: "Sign In to Bid" }),
     ).toBeVisible();
@@ -71,7 +71,7 @@ export const Bidding: Story = {
     expect(canvas.getByText("Min. bid")).toBeVisible();
     expect(
       canvas.getByText(
-        "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
+        "We bid only as needed up to your maximum. You can raise, not lower or cancel.",
       ),
     ).toBeVisible();
     expect(canvas.queryByText("Leading")).not.toBeInTheDocument();

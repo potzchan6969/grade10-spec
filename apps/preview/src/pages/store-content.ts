@@ -5,10 +5,9 @@ import type {
   FilterSelection,
   ProductSummary,
   SortOption,
-  UtilityLink,
 } from "@grade10/ui";
 import { createElement, type ReactNode } from "react";
-import { STORE_LOCATOR_HREF } from "./workbench-story-nav";
+import { HELP_NAV_ITEM, STORE_LOCATOR_HREF } from "./workbench-story-nav";
 
 /* Content this workbench owns, exactly as a store application owns its own.
  * None of it lives in `@grade10/ui` or `@grade10/design-system`: both packages
@@ -20,7 +19,7 @@ const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 const noop = () => {};
 
 const NAV_LOGO: ReactNode = createElement(G10LogoMono, {
-  className: "h-5 w-auto @3xl:h-7",
+  className: "h-5 w-auto @4xl:h-7",
 });
 const FOOTER_LOGO: ReactNode = createElement(G10LogoMono, {
   className: "h-5 w-auto",
@@ -56,6 +55,7 @@ const STORE_SITE_HEADER = {
     { label: "Store", href: "#shop", current: true },
     { label: "Auction", href: "#auction" },
     { label: "Store Locator", href: STORE_LOCATOR_HREF },
+    { ...HELP_NAV_ITEM },
   ],
   onLocaleChange: noop,
   onSignIn: noop,
@@ -194,12 +194,6 @@ function sortTriggerLabel(sortValue: string): string {
   return option ? `Sort by ${String(option.label).toLowerCase()}` : "Sort by";
 }
 
-const UTILITY_LINKS: UtilityLink[] = [
-  { label: "Help", href: "#help" },
-  { label: "Shipping", href: "#shipping" },
-  { label: "Orders & Returns", href: "#orders" },
-];
-
 const PRODUCTS: ProductSummary[] = Array.from({ length: 8 }, (_, index) => ({
   id: String(index + 1),
   name: "Pokémon TCG Sealed Booster Box – Abyss Eye (M5)",
@@ -333,5 +327,4 @@ export {
   STORE_HOME_SECTION_COPY,
   STORE_SITE_HEADER,
   sortTriggerLabel,
-  UTILITY_LINKS,
 };

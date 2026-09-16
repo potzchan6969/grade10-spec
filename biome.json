@@ -13,7 +13,8 @@
       "!packages/design-system/src/themes/grade10.css",
       "!tools/openspec-viewer",
       "!tools/manual/public/fixture-snapshot.json",
-      "!scripts/diagrams/vendor/archify"
+      "!scripts/diagrams/vendor/archify",
+      "!openspec/changes/**/mock.html"
     ]
   },
   "formatter": {

@@ -8,6 +8,7 @@ const packageRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(ts|tsx)"],
+  staticDirs: [{ from: "../src/assets", to: "/assets" }],
   addons: [
     "@storybook/addon-a11y",
     "@storybook/addon-docs",

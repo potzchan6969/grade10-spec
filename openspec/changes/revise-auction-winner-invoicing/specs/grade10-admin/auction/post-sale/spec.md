@@ -5,7 +5,7 @@
   - Overdue mark: an order idle 72 hours or more in either stage is marked, so a stalled order is chased rather than forgotten
   - Expired invoices: an order whose invoice has expired reads Pending Payment and is highlighted as needing action
 - Quote and send
-  - Operator quote: shipping and insurance are priced by a person for the winner's confirmed address
+  - Operator quote: Shipping & Handling, and Insurance when added, are priced by a person for the winner's confirmed address
   - Send opens the window: sending issues the invoice, locks the address, and starts the 7-day deadline
   - Re-quote on request: an address change after send is re-priced and reissued by an operator, who decides what happens to the deadline
 - Resolving an unpaid order
@@ -51,6 +51,7 @@ or suspend on it; the operator decides whether to contact the winner, prepare
 the invoice, or cancel the order.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-45 - An order waiting on an address shows time since close
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an auction order in Awaiting Address whose lot closed 30 hours ago
 - **WHEN** an operator opens it
@@ -58,6 +59,7 @@ the invoice, or cancel the order.
 - **AND** it carries no Overdue mark
 
 #### Scenario: grade10-admin-auction-post-sale-SC-46 - An order idle 72 hours is marked Overdue
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** one auction order in Awaiting Address whose lot closed 72 hours ago
 - **AND** one in Preparing Invoice whose winner confirmed an address 80 hours ago
@@ -66,6 +68,7 @@ the invoice, or cancel the order.
 - **AND** filtering to overdue orders shows both
 
 #### Scenario: grade10-admin-auction-post-sale-SC-47 - Overdue changes no status
+**Serves:** Queue - overdue changes no status
 
 - **GIVEN** an auction order in Awaiting Address carrying the Overdue mark
 - **WHEN** another 30 days pass with no operator action
@@ -78,11 +81,13 @@ An operator holding payment-processing SHALL prepare and send the invoice for
 an auction order in Preparing Invoice:
 
 1. Open the order and read the winner's confirmed delivery address, the
-   hammer price, and the buyer's premium.
-2. Enter shipping and insurance for that address, each an integer count of
-   minor units of zero or more in the lot's currency.
-3. Read the final amount Grade10 computes from every component.
-4. Send the invoice.
+   winning bid, and the buyer's premium.
+2. Enter Shipping & Handling for that address, an integer count of minor
+   units of zero or more in the lot's currency.
+3. Optionally add Insurance for that address, an integer count of minor units
+   greater than zero in the lot's currency.
+4. Read the order total Grade10 computes from every component.
+5. Send the invoice.
 
 On send Grade10 SHALL issue the invoice with invoice status `pending`, record
 Sent at, set the payment deadline to 7 calendar days from Sent at, lock the
@@ -90,23 +95,26 @@ delivery address, write a sent entry to the invoice log, and send the winner
 the invoice-sent letter, per `grade10-site/auction/notifications-order`.
 
 Grade10 SHALL refuse to send an invoice when the winner has confirmed no
-delivery address, or when shipping or insurance is missing. An operator
+delivery address, when Shipping & Handling is missing, or when Insurance is
+added at zero. An operator
 without payment-processing SHALL see the send control visible and disabled,
 and Grade10 SHALL refuse the same action on the server.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-48 - Sending the invoice opens the payment window
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
-- **GIVEN** an auction order in Preparing Invoice with a hammer price of
+- **GIVEN** an auction order in Preparing Invoice with a winning bid of
   250000 and a buyer's premium of 50000 minor units in HKD
 - **AND** an operator holding payment-processing
-- **WHEN** they enter shipping of 8000 and insurance of 4000 minor units in
+- **WHEN** they enter Shipping & Handling of 8000 and Insurance of 4000 minor units in
   HKD and send the invoice at 2026-09-12T09:00:00Z
-- **THEN** the invoice is `pending` with a final amount of 312000 minor units
+- **THEN** the invoice is `pending` with an order total of 312000 minor units
   in HKD and a payment deadline of 2026-09-19T09:00:00Z
 - **AND** the delivery address is locked
 - **AND** the order derives as Pending Payment
 
 #### Scenario: grade10-admin-auction-post-sale-SC-49 - No invoice is sent without a confirmed address
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an auction order in Awaiting Address
 - **WHEN** an operator attempts to send its invoice
@@ -114,11 +122,28 @@ and Grade10 SHALL refuse the same action on the server.
 - **AND** the order is still Awaiting Address
 
 #### Scenario: grade10-admin-auction-post-sale-SC-50 - Staff cannot send an invoice
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an operator whose roles are exactly `staff`
 - **WHEN** they open an auction order in Preparing Invoice
 - **THEN** the send control is visible and disabled
 - **AND** Grade10 refuses a send from them on the server
+
+#### Scenario: grade10-admin-auction-post-sale-SC-63 - An invoice sends without insurance
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in Preparing Invoice with a winning bid of
+  250000 and a buyer's premium of 50000 minor units in HKD
+- **WHEN** an operator enters Shipping & Handling of 0, adds no Insurance, and sends
+- **THEN** the invoice is `pending` with an order total of 300000 minor units in HKD
+
+#### Scenario: grade10-admin-auction-post-sale-SC-67 - Insurance added at zero is refused
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in Preparing Invoice
+- **WHEN** an operator adds Insurance of 0 minor units and sends
+- **THEN** Grade10 refuses the send
+- **AND** no invoice is issued
 
 ### Requirement: An operator re-quotes a sent invoice
 
@@ -127,30 +152,33 @@ an operator holding payment-processing SHALL be able to re-quote an order in
 Pending Payment:
 
 1. Record the delivery address the winner asked for.
-2. Enter shipping and insurance for that address.
-3. Read the previous and the new final amount.
+2. Enter Shipping & Handling for that address, and optionally add Insurance,
+   under the same rules as a first quote.
+3. Read the previous and the new order total.
 4. Choose to keep the current payment deadline, or to start a fresh 7 days
    from the moment the new invoice is sent.
 5. Give a reason. The reason is mandatory.
 6. Send the new invoice.
 
 On send Grade10 SHALL supersede the current invoice, issue the new one as
-`pending` at the new final amount with the deadline the operator chose, lock
+`pending` at the new order total with the deadline the operator chose, lock
 the new address, write a re-quoted entry to the invoice log with the deadline
 choice, and send the winner the invoice-reissued letter. An order whose
 invoice is `expired` is not re-quoted; it is reissued, per "An operator resolves an unpaid order".
 
 #### Scenario: grade10-admin-auction-post-sale-SC-51 - A re-quote keeps the deadline when the operator says so
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an order in Pending Payment at 312000 minor units in HKD with a
   payment deadline of 2026-09-19T09:00:00Z
-- **WHEN** an operator re-quotes it to a new address with shipping 12000 and
-  insurance 4000 minor units in HKD, keeps the deadline, and sends with a reason
-- **THEN** the new invoice's final amount is 316000 minor units in HKD
+- **WHEN** an operator re-quotes it to a new address with Shipping & Handling 12000 and
+  Insurance 4000 minor units in HKD, keeps the deadline, and sends with a reason
+- **THEN** the new invoice's order total is 316000 minor units in HKD
 - **AND** the payment deadline is still 2026-09-19T09:00:00Z
 - **AND** the operator saw 312000 and 316000 minor units in HKD before sending
 
 #### Scenario: grade10-admin-auction-post-sale-SC-52 - A re-quote resets the deadline when the operator says so
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an order in Pending Payment with a payment deadline of
   2026-09-19T09:00:00Z
@@ -159,6 +187,7 @@ invoice is `expired` is not re-quoted; it is reissued, per "An operator resolves
 - **THEN** the payment deadline is 2026-09-22T10:00:00Z
 
 #### Scenario: grade10-admin-auction-post-sale-SC-53 - A re-quote without a reason is refused
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an order in Pending Payment
 - **WHEN** an operator attempts to send a re-quote without a reason
@@ -171,7 +200,7 @@ Manual settlement is the operator's backup for money that did not arrive by
 the winner's card. An operator holding payment-processing SHALL record it on
 an order whose invoice is `pending` or `expired`:
 
-1. Open the order and read the current invoice's final amount and the locked
+1. Open the order and read the current invoice's order total and the locked
    delivery address.
 2. Choose the method: bank transfer, cash, or other. Card SHALL NOT be offered.
 3. For other, describe the method, in 1 to 200 characters.
@@ -181,7 +210,7 @@ an order whose invoice is `pending` or `expired`:
 6. Commit.
 
 On commit the invoice status SHALL become `paid` at the current invoice's
-final amount, and Grade10 SHALL write a payment record carrying the method,
+order total, and Grade10 SHALL write a payment record carrying the method,
 any description, the external reference, and the proof files. An amount
 different from the current invoice SHALL be reached through a re-quote first,
 never at settlement.
@@ -193,6 +222,7 @@ timestamp, the amount, the method, the external reference, and the proof
 files.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-55 - A bank transfer with a slip settles the order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment at 312000 minor units in HKD
 - **AND** an operator holding payment-processing
@@ -203,6 +233,7 @@ files.
 - **AND** the order derives as Processing
 
 #### Scenario: grade10-admin-auction-post-sale-SC-56 - Settlement without proof is refused
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment
 - **WHEN** an operator records a cash payment with no proof file and commits
@@ -210,6 +241,7 @@ files.
 - **AND** the invoice is still `pending`
 
 #### Scenario: grade10-admin-auction-post-sale-SC-57 - Another method needs a description
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment
 - **WHEN** an operator chooses other, attaches proof, leaves the description
@@ -218,6 +250,7 @@ files.
 - **AND** the invoice is still `pending`
 
 #### Scenario: grade10-admin-auction-post-sale-SC-58 - No settlement before an invoice is sent
+**Serves:** `post-sale-US-07`, `post-sale-US-05` - settlement waits for the invoice the quote sends
 
 - **GIVEN** an auction order in Preparing Invoice
 - **WHEN** an operator attempts to record a manual settlement
@@ -225,6 +258,7 @@ files.
 - **AND** the order is still Preparing Invoice
 
 #### Scenario: grade10-admin-auction-post-sale-SC-59 - A settled order refuses a second settlement
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** an operator attempts to record a second settlement against it
@@ -232,15 +266,17 @@ files.
 - **AND** the existing payment record is unchanged
 
 #### Scenario: grade10-admin-auction-post-sale-SC-60 - Manual settlement is available before expiry
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment, three days from its deadline, whose
-  winner has paid by bank transfer
+  winner has arranged payment by bank transfer
 - **AND** an operator holding payment-processing
 - **WHEN** they record the settlement with its reference and proof
 - **THEN** Grade10 accepts it
 - **AND** the order derives as Processing without having expired first
 
 #### Scenario: grade10-admin-auction-post-sale-SC-62 - A proof file of the wrong kind is refused
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment
 - **WHEN** an operator attaches a 12 MB JPEG, or a file that is not a PDF,
@@ -288,6 +324,7 @@ lot's close. Scenario `grade10-admin-auction-post-sale-SC-19` keeps its title
 with its id. The title is historical: a lot inside its last hour is Live.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-19 - A lot inside its last hour is Ending soon
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** a published lot whose close is 60 minutes or less away and has not
   passed
@@ -295,6 +332,7 @@ with its id. The title is historical: a lot inside its last hour is Live.
 - **THEN** that lot's outcome is Live
 
 #### Scenario: grade10-admin-auction-post-sale-SC-20 - A won lot's outcome is its derived order status
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** a closed lot whose auction order derives as Processing
 - **WHEN** an operator reads the queue
@@ -302,6 +340,7 @@ with its id. The title is historical: a lot inside its last hour is Live.
 - **AND** it is the same value the winner reads on their own order
 
 #### Scenario: grade10-admin-auction-post-sale-SC-21 - Expired and Processing are highlighted as needing action
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** a queue holding a Pending Payment order whose invoice is `expired`,
   a Pending Payment order whose invoice is `pending`, a Processing order, and
@@ -314,6 +353,7 @@ with its id. The title is historical: a lot inside its last hour is Live.
 - **AND** the other two rows carry no highlight
 
 #### Scenario: grade10-admin-auction-post-sale-SC-44 - An order ready for a quote needs action
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** a queue holding one order in Preparing Invoice and one in Awaiting
   Address, both confirmed or closed less than 72 hours ago
@@ -344,6 +384,7 @@ Reissuing an invoice SHALL NOT lift the winner's account suspension, per
 explicit action.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-23 - Reissue returns an expired order to Pending Payment
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an auction order whose invoice is `expired`
 - **AND** an operator holding payment-processing
@@ -352,6 +393,7 @@ explicit action.
 - **AND** the derived order status is Pending Payment
 
 #### Scenario: grade10-admin-auction-post-sale-SC-24 - Reissue leaves the suspension standing
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** a suspended winner whose expired order an operator reissues
 - **WHEN** the reissue is committed
@@ -359,6 +401,7 @@ explicit action.
 - **AND** the operator is not offered reinstatement as part of the reissue
 
 #### Scenario: grade10-admin-auction-post-sale-SC-25 - An operator without the grant is refused
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an operator who does not hold payment-processing
 - **WHEN** they open an order whose invoice is `expired`
@@ -366,6 +409,7 @@ explicit action.
 - **AND** Grade10 refuses those actions on the server if they are attempted
 
 #### Scenario: grade10-admin-auction-post-sale-SC-54 - An overdue order waiting on an address can be cancelled
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an auction order in Awaiting Address carrying the Overdue mark
 - **AND** an operator holding payment-processing
@@ -384,7 +428,7 @@ these log entries in chronological order.
 | Log type | Sent, expired, re-quoted, reissued, paid, manually settled, cancelled, refunded, payment attempt failed |
 | Timestamp | Stored in UTC, displayed in the operator's own timezone |
 | Invoice status after the log entry | |
-| Final amount at the log entry | Captures amount changes across re-quotes and reissues |
+| Order total at the log entry | Captures amount changes across re-quotes and reissues |
 | Amount delta | Where the amount changed from the prior log entry |
 | Payment deadline at the log entry | The deadline trail across re-quotes and reissues |
 | Deadline choice | Re-quotes only: kept or reset |
@@ -401,6 +445,7 @@ engaged, and the difference SHALL be visible to whoever decides on
 reinstatement.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-34 - Failed payment attempts appear in the invoice log
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
 - **GIVEN** a winner whose card was declined three times before the deadline
   elapsed
@@ -410,14 +455,16 @@ reinstatement.
   issued log entry
 
 #### Scenario: grade10-admin-auction-post-sale-SC-35 - An amendment's amount change is on the record
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
-- **GIVEN** an auction order an operator re-quoted, changing the final amount
+- **GIVEN** an auction order an operator re-quoted, changing the order total
   from 312000 to 316000 minor units in HKD
 - **WHEN** an operator reads the invoice log
 - **THEN** it shows the re-quoted entry at 316000 minor units in HKD
 - **AND** the delta from the prior entry and the deadline choice
 
 #### Scenario: grade10-admin-auction-post-sale-SC-61 - A paid entry names how it was paid
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
 - **GIVEN** one order the winner paid by a Visa card ending 4242 and one an
   operator settled by cash

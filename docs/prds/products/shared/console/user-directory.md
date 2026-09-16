@@ -3,43 +3,75 @@ title: User Directory
 spec: shared/console/user-directory
 audience: operator
 order: 2
-reviewed: 2026-09-11
+reviewed: 2026-09-15
 ---
 
-This is the operator's view of the identity directory: a table of accounts, and
-three dialogs — roles, moderation, and where the account is signed in. Both
-brands' consoles render it from the same source.
+This is the operator's view of the identity directory: a table of accounts,
+filters the console offers, an account panel beside the list, and the dialogs
+that confirm irreversible moves. Both brands' consoles render it from the same
+source; Grade10 wires the access desk on
+[Users](/p/grade10-admin/console/user-directory).
 
 It carries no identity vocabulary of its own. The role list, each account's
-roles and every displayed date arrive as props the console already resolved; the
-components never name a role, parse a stored role value, or format a date. A
-saved role selection comes back in the order the options were offered rather
-than the order they were clicked, and selecting none submits an empty list,
-leaving what an empty list means to the console.
+roles, filter options, grant rows, and every displayed date arrive as props the
+console already resolved; the components never name a role, parse a stored role
+value, or format a date. A saved role selection comes back in the order the
+options were offered rather than the order they were clicked, and selecting none
+submits an empty list, leaving what an empty list means to the console.
 
-The table offers only the moves the console permits. Sessions are on every row;
-roles and delete appear only when the console supplies a handler, so a console
-can withhold a move the operator's grants do not allow. A row offers ban or
-unban according to the account's standing, and never both.
+## Moves
 
-One confirmation serves every moderation move. The console supplies the words,
-the tone, and whether a reason is collected; the dialog reports back one
-signature either way, so a console reads the same result whichever move it
-asked for.
+- **Handler-gated** — sessions, ban, and unban join roles and delete in
+  appearing only when the console supplies a handler
+- **Ban or unban** — a row offers one according to standing, never both; an
+  erasing row withholds unban
+- **Open** — a row can report opening the account; the table decides nothing
+  about what shows next
+- **Order** — sortable headings report the column and direction; the table
+  does not reorder the rows it was given
 
-What an operator is *allowed* to do here — who may list, ban, set roles, or end
-a session — is [the identity directory](/p/shared/auth/users) and
-[where a person is signed in](/p/shared/auth/sessions). This capability governs
-only what the components render.
+## Account Panel
 
-When the console supplies a per-role address, each role name in the Roles cell
-is a link to that role's grants page; the row's sessions, roles, ban or unban,
-and delete actions stay as they are. Grade10 wires those chips to
-[Roles & Permissions](/p/grade10-admin/console/roles-and-permissions); a console
-that supplies no addresses keeps plain chips.
+Four sections, in order, when the console supplies them: who the account is,
+the grants it holds (elevated marked), standing with reason, and sessions
+(origin and expiry when supplied). Roles save in the panel under the
+roles-dialog contract, or stay blocked when the console marks them so. Ban,
+unban, and delete report out for the moderation dialog — the panel never
+confirms them. Status on the table stays one line; the ban reason lives on the
+panel.
+
+## Auction Suspension
+
+🚧 The account panel offers suspending the account from auctions, or reinstating
+it, only when the console supplies a handler, and never both at once. Both are
+confirmed in the moderation dialog, suspension with a reason.
+
+## Filters
+
+Type, Roles, Status, and Email — labels and option words from the console.
+Type is Elevated or Users; Roles is choosable only for Elevated. Any on Status
+or Email clears that narrowing and leaves the others alone.
+
+## Moderation Dialog
+
+One confirmation serves every irreversible move. The console supplies the words,
+the tone, and whether a reason is collected; the dialog reports one signature.
+
+## Allowance
+
+What an operator may do here is [the identity directory](/p/shared/auth/users)
+and [where a person is signed in](/p/shared/auth/sessions). This capability
+governs only what the components render.
+
+## Role Links
+
+- **On the account** — a role name may open the address the console supplied
+- **In the table** — Roles stays plain text
+- **Grade10** — wires those chips to
+  [Roles & Permissions](/p/grade10-admin/console/roles-and-permissions)
 
 :::callout{kind="note"}
 This surface used to live in the shared-UI package as `auth-user-directory`. It
-carries those requirements forward unchanged in behaviour; only its home moved,
-to where admin UI belongs.
+carries those requirements forward; only its home moved, to where admin UI
+belongs.
 :::

@@ -42,8 +42,7 @@ On Shopify's confirmation page, back to the store.
 In Your Orders.
 :::
 
-- **Members only** — checkout is signed in; guest checkout is in the code,
-  launching with it `TBC`
+- **Members only** — checkout is signed in; there is no guest checkout
 - **The bar** — goods worth **HKD 120,000** or more need a verified buyer;
   an unverified one is sent to [verify from their account](/p/grade10-site/account/kyc)
   before any order is made

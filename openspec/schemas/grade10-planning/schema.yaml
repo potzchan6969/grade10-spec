@@ -2,9 +2,14 @@ name: grade10-planning
 version: 1
 description: >-
   Grade10 planning workflow - proposal → specs → user journeys → test cases → ui
-  design → tech design → tasks. One lane for every hand a change passes through.
+  design → tech design → tasks. `specs` is written in two passes over one file
+  with the blind suite between them: the suite and the scenarios are independent
+  readings of the same anchors, reconciled after both land. One lane for every
+  hand a change passes through.
 artifacts:
   - id: proposal
+    required: true
+    teammate: product-manager
     generates: proposal.md
     description: Why this change is needed, what changes, and what it will not do
     template: proposal.md
@@ -56,6 +61,16 @@ artifacts:
 
       behavior, so if behavior does not change, no spec should change either.
 
+      A requirement nobody can decide yet is a wait, not a guess: write
+
+      `awaiting:` with `specs: <the line saying what is missing>` in the
+
+      change's `.openspec.yaml` and stop there. `pnpm run validate:changes`
+
+      excuses a change that says so, and only that one error; plain
+
+      `openspec validate` does not. Delete the line when the delta lands.
+
       Do not invent a requirement just to satisfy validation.
 
 
@@ -67,342 +82,333 @@ artifacts:
       This is the foundation - everything after it builds on this.
     requires: []
   - id: specs
+    required: true
+    teammate: product-manager
     generates: specs/**/spec.md
-    description: The requirement deltas each capability's spec will fold in
+    description: The capability's purpose, the feature set, and the requirement deltas
     template: spec.md
-    instruction: >
-      Written by the product manager, with the `planning-pm` skill.
-      Defines WHAT the system should do.
-
-
-      A spec is a behavior contract, not an implementation plan.
-
-
-      Good spec content:
-
-      - Observable behavior users or downstream systems rely on
-
-      - Inputs, outputs, and error conditions
-
-      - External constraints (security, privacy, reliability, compatibility)
-
-      - Scenarios that can be tested or explicitly validated
-
-
-      Avoid in specs:
-
-      - Internal class/function names
-
-      - Library or framework choices
-
-      - Step-by-step implementation details
-
-      - Detailed execution plans (those belong in tech-design.md)
-
-
-      Quick test: if the implementation can change without changing externally
-
-      visible behavior, it likely does not belong in the spec.
-
-
-      Create one spec file per capability listed in the proposal's Capabilities
-      section.
-
-      `<capability-path>` is the spec directory relative to `specs/` (for
-      example,
-
-      `user-auth` or `identity/user-auth`). Preserve the full path:
-
-      - New capabilities: use the exact path from the proposal at
-      `specs/<capability-path>/spec.md`. Any path segment newly introduced in
-      the proposal must be kebab-case. Follow the project's existing
-      organization; do not add a new domain level when the project uses a flat
-      layout.
-
-      - Modified capabilities: use the exact existing path from
-      `openspec/specs/<capability-path>/` when creating the delta at
-      `specs/<capability-path>/spec.md`. Do not move or rename the capability.
-
-
-      There must be at least one spec file unless the change's `.openspec.yaml`
-
-      sets `skip_specs: true` (no spec-level behavior change) - `openspec
-      validate`
-
-      rejects a zero-delta change without that marker. If the proposal lists no
-
-      capabilities and `skip_specs` is not set, revisit the proposal first.
-
-
-      The user journeys live beside this file in `user-journeys.md`, never in
-
-      it. A `## User journeys` section written here is dropped by every reader
-
-      in this store.
-
-
-      Delta operations (use ## headers):
-
-      - **ADDED Requirements**: New capabilities
-
-      - **MODIFIED Requirements**: Changed behavior - MUST include full updated
-      content
-
-      - **REMOVED Requirements**: Deprecated features - MUST include **Reason**
-      and **Migration**
-
-      - **RENAMED Requirements**: Name changes only - use FROM:/TO: format
-
-
-      Format requirements:
-
-      - Each requirement: `### Requirement: <name>` followed by description
-
-      - Use SHALL/MUST for normative requirements (avoid should/may)
-
-      - Each scenario: `#### Scenario: <name>` with WHEN/THEN format
-
-      - **CRITICAL**: Scenarios MUST use exactly 4 hashtags (`####`). Using 3
-      hashtags or bullets will fail silently.
-
-      - Every requirement MUST have at least one scenario.
-
-
-      New capabilities only: start the delta spec with a `## Purpose` section -
-
-      one or two sentences (50+ characters, or `openspec validate --strict`
-
-      reports it as too brief) describing what the capability is for. Archive
-
-      copies it into the main spec it creates; without it the new main spec is
-
-      left with a `TBD ... Update Purpose after archive` placeholder to fill in
-
-      by hand. Do NOT add `## Purpose` to a delta for an existing capability -
-
-      that spec already has one and the delta's is ignored. To change an
-
-      existing capability's Purpose - including a leftover `TBD` placeholder -
-
-      edit `openspec/specs/<capability-path>/spec.md` directly.
-
-
-      MODIFIED requirements workflow:
-
-      1. Locate the existing requirement in
-      openspec/specs/<capability-path>/spec.md
-
-      2. Copy the ENTIRE requirement block (from `### Requirement:` through all
-      scenarios)
-
-      3. Paste under `## MODIFIED Requirements` and edit to reflect new behavior
-
-      4. Ensure header text matches exactly (whitespace-insensitive)
-
-
-      Common pitfall: Using MODIFIED with partial content loses detail at
-      archive time.
-
-      If adding new concerns without changing existing behavior, use ADDED
-      instead.
-
-
-      Specs should be testable - each scenario is a potential test case.
+    instruction: |
+      Written by the product manager, with the `planning-pm` skill, in **two
+      passes over this one file**, with the blind test suite between them.
+
+      **Pass one - the outline.** `## Purpose`, then `## Feature set`, then
+      stop. `user-journeys` comes next, then `test-cases`, and only then does
+      pass two return here.
+
+      **Pass two - the behaviour.** `## ADDED Requirements` and its siblings,
+      sequenced to follow the feature set's groups, written after the blind
+      suite and reconciled against it.
+
+      Nothing in this schema can express that order - `requires` is advisory and
+      never stopped anyone writing the scenarios first. **The only machine
+      evidence of it is `pnpm check:manual`'s `outline` rule**, which fails a
+      capability whose suite sits beside a `spec.md` carrying no requirements.
+      That check is load-bearing; it is never downgraded to a warning.
+
+      ## Purpose
+
+      One or two sentences (50+ characters) on what the capability is for.
+
+      Compose it every run from the durable capability's Purpose plus the PRD
+      under `docs/prds/`, then write the section **only when the composed text
+      differs from the durable one**. A change that does not move what the
+      capability is for omits it.
+
+      When written it replaces the durable Purpose whole, and archive overwrites
+      rather than merges - the treatment `## Feature set` already gets. This
+      holds for an existing capability as much as a new one; there is no
+      prohibition on a delta carrying Purpose.
+
+      Purpose is not decoration. With `## Feature set` it is the only context the
+      blind suite pass gets beyond the journeys, so a Purpose that has drifted
+      degrades the cross-check silently, and the drift is the kind that reads as
+      correct.
+
+      ## Feature set
+
+      Two-layer bullets. Root groups of at most five words; children as
+      `Name: purpose`. Keep groups coarse - nest work under the job it serves,
+      and put grants in the groups they belong to rather than a group of their
+      own.
+
+      **The root group names are machine-read.** A scenario's `**Serves:**` and,
+      for a capability nobody walks, a case's `**Trace:**` may name one, matched
+      verbatim, so a root group is renamed deliberately and its anchors are
+      updated in the same change. Leaves carry no ids and are free to be
+      reworded.
+
+      A scenario that matches no group is worth a second look before it is
+      forced into the nearest one: five capabilities turned out to have
+      behaviour their own feature set never named, and `anchorless` is what
+      found them. Adding to the map is a product decision, so it is recorded as
+      an Open row in the capability's PRD decisions block.
+
+      ## Delta sections
+
+      `## ADDED Requirements`; `## MODIFIED Requirements`, carrying the
+      **entire** requirement block copied from the durable spec and then edited
+      - partial content loses detail at archive; `## REMOVED Requirements`, with
+      **Reason** and **Migration**; `## RENAMED Requirements`, FROM:/TO:.
+      Adding a concern without changing existing behaviour is ADDED, never
+      MODIFIED.
+
+      One file per capability the proposal names, at the exact existing path for
+      a capability that already exists. At least one delta unless the change's
+      `.openspec.yaml` sets `skip_specs: <why>`; never invent a requirement to
+      satisfy validation.
+
+      ## Requirements and scenarios
+
+      - `### Requirement: <name>` with SHALL or MUST, never should or may. Every
+        `###` under a requirements section is a `### Requirement:` and never a
+        group heading.
+      - `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`.
+        **Exactly four hashes** - three, or a bullet, fails silently.
+      - Every requirement carries at least one scenario, and every scenario is
+        decidable by a test or a manual pass.
+      - One requirement for a flow, as numbered steps for whoever uses the
+        surface - not a scenario per step. One requirement per entity with
+        fields, and one per entity with states, both as tables. Never restate an
+        unchanged fact.
+      - The scenario body is `**WHEN**` / `**THEN**`, both required; add
+        `**GIVEN**` only when state must be in place before the trigger.
+      - Ids are permanent. Number from 01 within a capability, never renumber one
+        that exists, and read the ids already issued before adding one. A renamed
+        or moved capability goes on issuing the prefix it always issued.
+      - Money is an integer count of minor units plus an ISO 4217 code, never a
+        float. Convert it yourself.
+      - No class, function, hook, table or library names. Public component
+        exports are the one exception, kept in one requirement.
+
+      ## The Serves anchor
+
+      Every scenario carries one line, directly under the heading and **above**
+      `**GIVEN**` / `**WHEN**`:
+
+      ```
+      #### Scenario: grade10-site-store-product-listing-SC-14 - Filter yields nothing
+      **Serves:** product-listing-US-02 - narrowing the catalogue by set
+
+      **WHEN** a collector applies a filter that matches no product
+      **THEN** the catalogue SHALL show the empty state and keep the filter applied
+      ```
+
+      The anchor is a user journey id or a `## Feature set` root group name matched
+      verbatim; before the dash is machine-read, after it is prose. An anchor
+      resolving to neither fails `pnpm check:manual` loudly rather than dangling
+      in silence.
+
+      It sits above the GIVEN/WHEN/THEN lines deliberately: those lines are what
+      decides `blind_pass_skipped`, so editing an anchor's prose must never read
+      as a behaviour change.
+
+      **A scenario may serve several anchors**, written as code spans -
+      ``**Serves:** `…-US-03`, `…-US-07` - the refusal both journeys meet``. A
+      scenario is a rule and a rule can sit on several journeys; a feature test
+      case is one walk and still traces one anchor. Commas alone do not separate
+      them, because a feature set group may hold a comma of its own.
+
+      ## A scenario no case reaches
+
+      Listed under the suite's `**Out of suite:**`, **naming where it is
+      verified instead** - a consuming repository's build and type check, a
+      database constraint, a design review, a higher-level suite - not merely
+      why it is excluded. A scenario that can name no such place is a hole, not
+      an exemption.
     requires:
       - proposal
   - id: user-journeys
+    required: true
+    teammate: product-manager
     generates: specs/**/user-journeys.md
-    description: The user stories each capability's scenarios accept, one file per capability
+    description: The journeys this change adds, changes or retires, with the ones it leans on restated
     template: user-journeys.md
-    instruction: >
+    instruction: |
       Written by the product manager, with the `planning-pm` skill, one file
-      beside each `spec.md` the change
-      touches: `specs/<capability-path>/user-journeys.md`.
+      beside each `spec.md` the change touches.
 
-
-      A journey is one actor pursuing one goal from start to finish - an
-
-      operator publishes a listing; a collector bids and wins. A name that
-
-      needs an `and` is two journeys. At most five journeys across every
-
-      capability the change touches; a change that wants a sixth is two
-
-      changes.
-
-
-      Title a journey the way a test analyst titles a case: lead with the
-
-      actor, then the action, in the third person - `Collector enters the
-
-      catalogue through a collection`, `Operator traces who committed what`.
-
-      Not a bare verb phrase, not the first person, and never so vague that two
-
-      journeys could share the title.
-
-
-      Write each journey as one user story from the actor's side, never the
-
-      system's, broken onto three labeled lines:
-
+      Sections, in this order:
 
       ```
+      ## Context user journeys     restated verbatim, read-only, never folded
+      ## ADDED User journeys
+      ## MODIFIED User journeys    the whole journey block copied, then edited
+      ## REMOVED User journeys     each with **Reason:**
+      ```
 
-      ### <capability>-US-01: Operator saves an unfinished listing and comes
-      back to it
+      **All three delta sections may be empty.** Most changes move no journey. A
+      `**Serves:**` or `**Trace:**` anchor may name a journey that already exists
+      under `openspec/specs/`, not only one this change introduces, so a change
+      is never pushed into inventing a journey to hang itself on.
 
+      ## Context user journeys
+
+      Every journey this change's scenarios or cases anchor on, copied from the
+      durable file **byte for byte**. It makes the change self-contained: the
+      blind suite pass reads it here instead of reaching into
+      `openspec/specs/`, and a reviewer reads the journey without leaving the
+      diff. `pnpm check:manual` fails a copy that has drifted, so drift is
+      caught rather than silently reverting the durable file at archive.
+
+      ## Writing a journey
+
+      `### <capability>-US-<n>: <title>`, then three labeled lines:
+
+      ```
+      ### listing-US-01: Operator saves an unfinished listing and comes back to it
 
       **As an** auction operator,
-
       **I want** to save a listing before I know every fact about the card,
-
-      **so that** I can start from the item in front of me and finish once the
-      rest arrives.
-
-
-      **Accepted by:**
-
-
-      - `<capability>-SC-01` — Operator saves an empty draft
-
-      - `<capability>-SC-02` — Operator saves a partial draft
-
+      **so that** I can start from the item in front of me and finish later.
       ```
 
+      **There is no `**Accepted by:**` line.** Nothing in this file names a
+      scenario. Scenarios point up at journeys through their own `**Serves:**`
+      and tooling joins on that. A hand-maintained link in both directions is
+      how the two files came to inherit each other's blind spots.
 
-      The role is an end user the spec already names, and the benefit is one
+      Title actor first, then the action, in the third person - `Collector
+      enters the catalogue through a collection`. Not a bare verb phrase, not
+      the first person, never so vague that two journeys could share it. A name
+      that needs an `and` is two journeys.
 
-      the requirements or the proposal already justify - a story never
-
-      introduces either. Every `**Accepted by:**` line names a scenario that
-
-      exists in the `spec.md` beside this file.
-
-
-      Two kinds are never the role. Software this repository ships is the
-
-      system's side of the story - a consuming application, a service, a
-
-      caller, a package - and the journey belongs to whoever operates it. The
-
-      people who build the product are its makers, not its users: an engineer
-
-      wiring a call, a developer seeding fixtures, a reviewer reading a
-
-      contract, each walking a test or a working step rather than a journey.
-
-      An outside agent that acts on its own is a role - a crawler, a preview
-
-      fetcher, a provider calling back.
-
-
-      Hold every story to the four criteria its author owns: Independent,
-
-      Negotiable, Valuable, Testable. A story that fails one of the four is
-
+      **There is no cap on the number of journeys.** Write as few as cover the
+      change and no fewer. Hold each to the four criteria its author owns:
+      Independent, Negotiable, Valuable, Testable. A journey that fails one is
       split or reworded, never widened to fit. Estimable and Small are sizing
-
       judgements and belong to the engineer who plans delivery.
 
+      The role is an end user the spec already names, and the benefit is one
+      the requirements or the proposal already justify. Software this
+      repository ships is never the role - a consuming application, a service,
+      a caller, a package is the system's side of it, and the journey
+      belongs to whoever operates it. Neither are the people who build the
+      product: an engineer wiring a call, a developer seeding fixtures, a
+      reviewer reading a contract each walk a test or a working step. An
+      outside agent that acts on its own is a role - a crawler, a preview
+      fetcher, a provider calling back.
 
-      A capability no end user reaches on its own still writes the file, and
+      ## A capability nobody walks
 
-      says so in place of the stories: a cross-cutting policy every other spec
+      Still writes the file, and says so in place of the journeys:
+      `**Walked by:** nobody on their own - <who inherits it, and which
+      capability's journeys reach it instead>`.
 
-      inherits (money amounts, dates and times, localization), a package or
+      This is a **routing declaration, not an exemption**: the capability's
+      anchors are its `## Feature set` root groups rather than its journeys, and
+      it still gets a suite. `Walked by: nobody` is not `Tested by: nobody` - a
+      cross-cutting policy is exactly where a boundary, precision or timezone
+      miss costs most, and exempting one from test design is how those ship.
 
-      composition contract, a backend convention. Its `## User journeys`
+      Never invent an actor to fill the file. `pnpm check:manual` fails a
+      capability with neither journeys nor the declaration.
 
-      section holds one line and no story - `**Walked by:** nobody on their
+      ## Retiring a journey
 
-      own - <who inherits it, and which capability's journeys reach it
+      A removed journey keeps its id forever. Archive leaves a one-line tombstone
+      under a `## Retired` section at the bottom of the durable file:
 
-      instead>`. Never invent an actor to satisfy the artifact - the journeys
+      ```
+      - `product-listing-US-04` - Collector searches the catalogue by keyword ·
+        removed in `remove-listing-search` · 2026-09-14
+      ```
 
-      live in the capability the reader actually reaches, which inherits the
-
-      policy. `pnpm check:manual` fails a capability with no journeys file, and
-
-      one whose file neither holds a story nor says nobody walks it. A surface
-
-      only its makers reach says the same thing - an internal reference, a
-
-      dev-build-only page, a fixture panel.
-
-
-      The exemption is capability-wide, and a single scenario needs no journey
-
-      of its own. A walked capability still issues some no story reaches - a
-
-      package's export list, a copy shape, a defaulting rule no surface shows.
-
-      Leave those out of every `**Accepted by:**`, for QA to name under
-
-      `**Out of suite:**`. Widening a story to cover one is how an actor gets
-
-      invented inside a capability that has real ones.
+      One line, not the journey. Archived suites still carry
+      `**Trace:** product-listing-US-04`; delete the journey outright and that
+      join breaks with nothing left to recover it from.
     requires:
       - specs
   - id: test-cases
+    required: true
+    teammate: product-manager
     generates: specs/**/feature-tcs.md
-    description: The QA suite derived from each capability's journeys, one file per capability
+    description: An independent blind reading of the anchors, written without sight of the scenarios
     template: feature-tcs.md
-    instruction: >
-      Written by the product manager, with the `planning-pm` skill, one file
-      beside each `spec.md` whose journeys are worth walking:
+    instruction: |
+      Written by the product manager, with the `planning-pm` skill, through
+      `spec-to-tcs`. QA reviews it later with `tcs-review`, which is not part
+      of the planning run.
 
-      `specs/<capability-path>/feature-tcs.md`. QA reviews and extends it with
+      **This suite is not derived from the scenarios.** It is a second,
+      independent reading of the same upstream, written by a sub-agent that
+      cannot see `## Requirements` at all. A suite derived from the scenarios
+      can only find inconsistency inside them, never the behaviour they left
+      out - and that is the one thing this artifact exists to find.
 
-      the `planning-qa` skill, but the first draft ships with the journeys.
+      ## The isolated input
 
+      The orchestrator builds it, and the sub-agent sees nothing else.
 
-      Every `user-journeys.md` the change writes pairs with a `feature-tcs.md`
+      Included: `## Purpose`, `## Feature set`, this capability's
+      `user-journeys.md` (context and deltas), the linked PRD sections, and the
+      existing `feature-tcs.md` for id continuity - with `## Reconciliation`
+      stripped.
 
-      beside it. The one exemption is a capability whose journeys file says
+      Excluded: `openspec/specs/` entirely, `openspec/changes/archive/`
+      entirely, and any `## Requirements` section anywhere. The archive
+      exclusion is not housekeeping: an archived change keeps an un-stripped
+      `## Reconciliation` naming scenario ids, so missing that path reopens the
+      leak on the next change to the same capability, invisibly.
 
-      `**Walked by:** nobody` in place of its stories - nobody walks it, so
+      Record a hash of the input manifest in `## Reconciliation`. When someone
+      later suspects the pass stopped being blind, that hash is the only thing
+      that can be checked.
 
-      there is nothing to derive. Any other capability missing its suite is an
+      ## Method
 
-      unfinished change.
+      Work an explicit test-design checklist rather than paraphrasing the
+      journeys: boundary values, equivalence partitions, state transitions, CRUD
+      completeness, empty / one / many, null and missing, permission matrix,
+      error taxonomy, SEO and indexability. Two readings that use the same
+      method produce synonyms, and the reconciliation then finds nothing.
 
+      ## Anchors
 
-      A suite's file name carries its level, and `test-cases.md` is not one of
+      Every case's `**Trace:**` names an anchor: a user journey id, as it always
+      has, or - for a capability nobody walks - a `## Feature set` root group
+      name matched verbatim. A case still never names a scenario id; the suite
+      is written before the scenarios exist, and `tcs:validate` has always
+      warned on a scenario in a trace.
 
-      them: a capability writes `feature-tcs.md`, and a path across the
+      ## Reconciliation
 
-      capabilities of one domain writes `specs/<product>/<domain>/domain-tcs.md`
+      Once both readings land, the run joins them on anchors and records the
+      outcome in a `## Reconciliation` section at the bottom of this file: what
+      was raised and folded into the spec, what was raised and rejected and
+      why, what was escalated to the author, what was deferred because nobody
+      could settle it, and which anchors no case reaches.
 
-      beside them. The wider levels - a product's `product-tcs.md`, the store's
+      That section is the evidence the blind pass ran and what it bought.
+      Without it, a pass that finds nothing and a pass that never happened look
+      identical in git.
 
-      `platform-tcs.md` - are smoke passes over the durable specs, and a change
+      Scenario ids may appear there **only while the change is open**. Archive
+      fold and `tcs-review` both strip them, leaving the dispositions and the
+      reasons.
 
-      derives them there rather than under its own deltas.
+      ## Shape
 
+      `docs/governance/specs-to-test-cases.md` governs the journey sections,
+      the case ids, the classification block, the `**Trace:**` line and the
+      file header. Follow it; do not restate its rules here or invent a
+      variant.
 
-      A suite is a derived reading of the `spec.md` and `user-journeys.md`
+      `test-cases.md` is not a suite name. A capability writes
+      `feature-tcs.md`; a path across the capabilities of one domain writes
+      `domain-tcs.md` beside the durable specs; `product-tcs.md` and
+      `platform-tcs.md` are smoke passes written there too, never under a
+      change's deltas.
 
-      beside it, never a second source of truth. Its shape - the journey
+      A capability whose journeys file says `**Walked by:** nobody` still gets
+      a suite, anchored on its feature set.
 
-      headings, the case ids, the classification block, and the `**Trace:**`
-
-      line - is governed by `docs/governance/specs-to-test-cases.md`. Follow
-
-      that document; do not restate its rules here or invent a variant.
-
-
-      Generate the first draft with the `spec-to-tcs` skill rather than by
-
-      hand, then review it with `tcs-review`.
-
-
-      `pnpm run tcs:validate` checks every suite in the store against that
-
-      governance document, and CI runs it on every push.
+      `pnpm run tcs:validate` checks every suite in the store, and CI runs it
+      on every push.
     requires:
       - user-journeys
   - id: ui-design
+    required: false
+    teammate: designer
     generates: ui-design.md
     description: The visual plan - screens, component exports, and states
     template: ui-design.md
@@ -438,6 +444,8 @@ artifacts:
     requires:
       - specs
   - id: tech-design
+    required: false
+    teammate: engineer
     generates: tech-design.md
     description: The technical implementation's high-level design
     template: tech-design.md
@@ -507,6 +515,8 @@ artifacts:
     requires:
       - specs
   - id: tasks
+    required: true
+    teammate: engineer
     generates: tasks.md
     description: The implementation plan, claimed group by group
     template: tasks.md

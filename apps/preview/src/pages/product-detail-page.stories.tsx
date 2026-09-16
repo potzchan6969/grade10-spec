@@ -47,6 +47,7 @@ export const Default: Story = {
     ).toBeVisible();
     expect(canvas.getByRole("img", { name: /front view/ })).toBeVisible();
     expect(canvas.getByText("Only 3 left")).toBeVisible();
+    expect(canvas.queryByRole("radiogroup", { name: "Grade" })).toBeNull();
     expect(canvas.getByRole("button", { name: "Add to cart" })).toBeVisible();
     expect(canvas.getByRole("contentinfo")).toBeInTheDocument();
 

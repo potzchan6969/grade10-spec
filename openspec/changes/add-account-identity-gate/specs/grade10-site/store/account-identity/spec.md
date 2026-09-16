@@ -54,6 +54,7 @@ nothing about identity.
 | Expired, Withdrawn | Verify again |
 
 #### Scenario: grade10-site-store-account-identity-SC-01 - A verified collector sees they are verified and until when
+**Serves:** grade10-site-store-account-identity-US-02 - Collector verified at a vault visit is recognised on the site
 
 - **GIVEN** a collector whose standing is `verified` on a document that expires
 - **WHEN** they open their account page
@@ -61,6 +62,7 @@ nothing about identity.
   valid, and offers no check to start
 
 #### Scenario: grade10-site-store-account-identity-SC-02 - A collector nobody verified sees the bar and how to verify
+**Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
 - **GIVEN** a collector whose standing is `unverified`
 - **WHEN** they open their account page
@@ -68,6 +70,7 @@ nothing about identity.
   value at which a verified identity is asked for, and offers to verify
 
 #### Scenario: grade10-site-store-account-identity-SC-03 - The account page carries no identity field
+**Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
 - **GIVEN** a collector in any standing, with or without a check in progress
 - **WHEN** their account page is read
@@ -75,6 +78,7 @@ nothing about identity.
   document image or provider finding is shown or answered to the page
 
 #### Scenario: grade10-site-store-account-identity-SC-04 - A brand with no identity store shows nothing
+**Serves:** Where the collector stands - a brand with no identity store shows nothing
 
 - **GIVEN** a brand whose store is wired to no identity store
 - **WHEN** a collector opens their account page
@@ -106,6 +110,7 @@ approved check SHALL displace the lapsed record. A declined collector SHALL be
 able to try again and SHALL be told the counter is another way.
 
 #### Scenario: grade10-site-store-account-identity-SC-05 - Nothing reaches the provider before the collector agrees
+**Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
 - **GIVEN** a collector on their account page who has not ticked their agreement
 - **WHEN** they try to verify
@@ -113,6 +118,7 @@ able to try again and SHALL be told the counter is another way.
   provider
 
 #### Scenario: grade10-site-store-account-identity-SC-06 - A collector verifies from their account and is recognised
+**Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
 - **GIVEN** a collector whose standing is `unverified`
 - **WHEN** they tick their agreement, press verify, complete the provider's
@@ -121,6 +127,7 @@ able to try again and SHALL be told the counter is another way.
   `verified`, and a checkout or a bid above the bar proceeds for them
 
 #### Scenario: grade10-site-store-account-identity-SC-07 - A collector verified at a vault visit is recognised without a ceremony
+**Serves:** grade10-site-store-account-identity-US-02 - Collector verified at a vault visit is recognised on the site
 
 - **GIVEN** a collector the vault verified, whose document is still valid
 - **WHEN** they press verify on their account page
@@ -128,6 +135,7 @@ able to try again and SHALL be told the counter is another way.
   provider
 
 #### Scenario: grade10-site-store-account-identity-SC-08 - A collector whose document lapsed verifies again
+**Serves:** grade10-site-store-account-identity-US-02 - Collector verified at a vault visit is recognised on the site
 
 - **GIVEN** a collector whose standing is `expired`
 - **WHEN** they tick their agreement, press verify, and pass the provider's
@@ -135,6 +143,7 @@ able to try again and SHALL be told the counter is another way.
 - **THEN** their standing reads `verified` on the new document
 
 #### Scenario: grade10-site-store-account-identity-SC-09 - A check the provider is deciding is not started twice
+**Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
 - **GIVEN** a collector whose latest check is Submitted or Stalled
 - **WHEN** they open their account page
@@ -142,6 +151,7 @@ able to try again and SHALL be told the counter is another way.
   pressing verify starts no second check
 
 #### Scenario: grade10-site-store-account-identity-SC-10 - A declined collector may try again
+**Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
 - **GIVEN** a collector whose latest check is Declined
 - **WHEN** they open their account page
@@ -158,6 +168,7 @@ else binds, and command the provider to erase its copies — the same steps
 `grade10-site/e-kyc/identity-record` names for a case.
 
 #### Scenario: grade10-site-store-account-identity-SC-11 - Erasing the account takes its check with it
+**Serves:** Erasure - erasing the account takes its check with it
 
 - **GIVEN** an account with a check in Started
 - **WHEN** the account is erased

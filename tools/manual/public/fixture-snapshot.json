@@ -63,13 +63,19 @@
           "scenarios": [
             {
               "name": "The thing happens",
-              "text": "- **WHEN** a reader asks for the thing\n- **THEN** the thing happens",
-              "id": "alpha-SC-01"
+              "text": "**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** a reader asks for the thing\n- **THEN** the thing happens",
+              "id": "alpha-SC-01",
+              "serves": [
+                "alpha-US-01"
+              ]
             },
             {
               "name": "The thing is refused a second time",
-              "text": "- **GIVEN** the thing already happened\n- **WHEN** a reader asks again\n- **THEN** nothing happens and the record is unchanged",
-              "id": "alpha-SC-02"
+              "text": "**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **GIVEN** the thing already happened\n- **WHEN** a reader asks again\n- **THEN** nothing happens and the record is unchanged",
+              "id": "alpha-SC-02",
+              "serves": [
+                "alpha-US-01"
+              ]
             }
           ]
         },
@@ -85,15 +91,14 @@
         }
       ],
       "featureSet": "- Doing the thing\n  - Once only: the thing happens exactly once\n  - Written down: the thing leaves a record",
+      "featureGroups": [
+        "Doing the thing"
+      ],
       "journeys": [
         {
           "id": "alpha-US-01",
           "title": "Reader follows the thing end to end",
-          "text": "**As a** reader,\n**I want** the thing to happen once and leave a record,\n**so that** I can tell whether it already happened.",
-          "acceptedBy": [
-            "alpha-SC-01",
-            "alpha-SC-02"
-          ]
+          "text": "**As a** reader,\n**I want** the thing to happen once and leave a record,\n**so that** I can tell whether it already happened."
         }
       ],
       "testCases": [
@@ -239,6 +244,11 @@
           ]
         }
       ],
+      "written": [
+        "proposal",
+        "specs",
+        "tasks"
+      ],
       "author": "tester",
       "followOns": [
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
@@ -246,6 +256,71 @@
       ]
     }
   ],
+  "schemas": {
+    "grade10-planning": [
+      {
+        "id": "proposal",
+        "generates": "proposal.md",
+        "teammate": "product-manager",
+        "requires": [],
+        "required": true
+      },
+      {
+        "id": "specs",
+        "generates": "specs/**/spec.md",
+        "teammate": "product-manager",
+        "requires": [
+          "proposal"
+        ],
+        "required": true
+      },
+      {
+        "id": "user-journeys",
+        "generates": "specs/**/user-journeys.md",
+        "teammate": "product-manager",
+        "requires": [
+          "specs"
+        ],
+        "required": true
+      },
+      {
+        "id": "test-cases",
+        "generates": "specs/**/feature-tcs.md",
+        "teammate": "product-manager",
+        "requires": [
+          "user-journeys"
+        ],
+        "required": true
+      },
+      {
+        "id": "ui-design",
+        "generates": "ui-design.md",
+        "teammate": "designer",
+        "requires": [
+          "specs"
+        ],
+        "required": false
+      },
+      {
+        "id": "tech-design",
+        "generates": "tech-design.md",
+        "teammate": "engineer",
+        "requires": [
+          "specs"
+        ],
+        "required": false
+      },
+      {
+        "id": "tasks",
+        "generates": "tasks.md",
+        "teammate": "engineer",
+        "requires": [
+          "specs"
+        ],
+        "required": true
+      }
+    ]
+  },
   "assets": [],
   "references": [
     {

@@ -1,0 +1,5 @@
+schema: grade10-planning
+promoted_by: "@seankcw"
+created: 2026-09-09
+page_waived: "predates the page rule"
+deploy_waived: "@sean: shipped to staging (grade10 commit ab905b21, staging deploy eb501e28, 2026-09-14); production hasn't deployed anything since 2026-09-03 for unrelated reasons, and staging is the accepted bar for this change"

@@ -1,9 +1,18 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Link } from "@grade10/design-system/components/forms/link";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { PRODUCT_CARD_CART_COPY } from "../store-product-listing/fixtures";
+import { ProductCard } from "../store-product-listing/product-card";
 import { SignInCard } from "./sign-in-card";
 import { SignInEmailForm } from "./sign-in-email-form";
+import { SignInLinkSent } from "./sign-in-link-sent";
+
+const LISTING_IMAGE = new URL(
+  "../store-product-listing/product-card.fixture.png",
+  import.meta.url,
+).href;
 
 /**
  * Sign-in is a dialog over the page the collector was already on, matching
@@ -11,9 +20,10 @@ import { SignInEmailForm } from "./sign-in-email-form";
  * `open` is the consumer's state: the component has no uncontrolled fallback,
  * so the meta holds it at true and every story below is the open dialog.
  *
- * Figma draws a Google OAuth control above the divider. Storybook cannot host
- * Google's real widget, so gallery stories omit it rather than faking one —
- * the empty `providerSlot` contract stays on `ProviderThatHasNotDrawnYet`.
+ * Figma draws Google Continue above an or-divider, then email. Storybook cannot
+ * host Google's real widget, so gallery stories mount a stand-in Continue with
+ * Google control in `providerSlot`. The empty async-slot contract stays on
+ * `ProviderThatHasNotDrawnYet`.
  *
  * The dialog portals to `document.body`, so play functions query
  * `within(document.body)` rather than the canvas.
@@ -31,6 +41,13 @@ const figmaLegal = (
   </>
 );
 
+/** Stand-in for Google's OAuth control — Storybook cannot host the real widget. */
+const googleContinue = (
+  <Button size="md" type="button" variant="outline">
+    Continue with Google
+  </Button>
+);
+
 const meta = {
   title: "Auth Sign In/SignInCard",
   component: SignInCard,
@@ -41,14 +58,16 @@ const meta = {
     onOpenChange: fn(),
     copy: {
       title: "Sign In to Grade10",
+      providerDivider: "or",
       legal: figmaLegal,
     },
+    providerSlot: googleContinue,
     children: (
       <SignInEmailForm
         copy={{
           email: "Email",
           emailPlaceholder: "Enter your email",
-          submit: "Send Magic Link",
+          submit: "Sign In with Email",
         }}
         email=""
         onEmailChange={fn()}
@@ -62,24 +81,31 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * Figma's Login Dialog without the Google control: title, email step,
- * legal line. Empty email keeps Send Magic Link disabled, which is what the
+ * Primary gallery entry: Google Continue, or-divider, email / Sign In with
+ * Email, legal line. Empty email keeps the CTA disabled, which is what the
  * frame draws at rest.
  */
 export const Default: Story = {
   play: async () => {
     const body = within(document.body);
     const dialog = body.getByRole("dialog");
+    const google = body.getByRole("button", { name: "Continue with Google" });
+    const email = body.getByLabelText("Email");
 
     expect(
       body.getByRole("heading", { name: "Sign In to Grade10" }),
     ).toBeInTheDocument();
+    expect(body.getByText("or")).toBeInTheDocument();
+    expect(dialog.querySelector('[data-slot="divider"]')).not.toBeNull();
+    expect(
+      google.compareDocumentPosition(email) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
     expect(body.getByRole("textbox", { name: "Email" })).toHaveAttribute(
       "placeholder",
       "Enter your email",
     );
     expect(
-      body.getByRole("button", { name: "Send Magic Link" }),
+      body.getByRole("button", { name: "Sign In with Email" }),
     ).toBeDisabled();
     expect(
       dialog.querySelector('[data-slot="sign-in-legal"]'),
@@ -90,22 +116,24 @@ export const Default: Story = {
     expect(
       body.getByRole("link", { name: "Privacy Policy" }),
     ).toBeInTheDocument();
-    expect(dialog.querySelector('[data-slot="divider"]')).toBeNull();
   },
 };
 
-/** After Send Magic Link: progress copy sits under the button, centred at
- * xs / secondary-foreground with the same gap-2 an input uses for its
- * message. Field errors stay on the step's `error` prop. */
+/**
+ * Progress / wait copy under the email step — field errors stay on the
+ * step's `error` prop. Post-send confirmation is `LinkSent`, not this line.
+ * Also proves legal stays the body's last node when a status line is present.
+ */
 export const WithMessage: Story = {
+  name: "Status message",
   args: {
-    message: "Check your inbox for a sign-in link.",
+    message: "Please wait a minute before requesting another email.",
     children: (
       <SignInEmailForm
         copy={{
           email: "Email",
           emailPlaceholder: "Enter your email",
-          submit: "Send Magic Link",
+          submit: "Sign In with Email",
         }}
         email="collector@example.com"
         onEmailChange={fn()}
@@ -115,12 +143,16 @@ export const WithMessage: Story = {
   },
   play: async () => {
     const body = within(document.body);
-    const submit = body.getByRole("button", { name: "Send Magic Link" });
-    const message = body
-      .getByRole("dialog")
-      .querySelector('[data-slot="sign-in-message"]') as HTMLElement;
+    const dialog = body.getByRole("dialog");
+    const submit = body.getByRole("button", { name: "Sign In with Email" });
+    const message = dialog.querySelector(
+      '[data-slot="sign-in-message"]',
+    ) as HTMLElement;
+    const legal = dialog.querySelector('[data-slot="sign-in-legal"]');
 
-    expect(message).toHaveTextContent("Check your inbox for a sign-in link.");
+    expect(message).toHaveTextContent(
+      "Please wait a minute before requesting another email.",
+    );
     expect(
       submit.compareDocumentPosition(message) &
         Node.DOCUMENT_POSITION_FOLLOWING,
@@ -129,6 +161,9 @@ export const WithMessage: Story = {
     expect(message.className).toMatch(/text-secondary-foreground/);
     expect(message.className).toMatch(/text-xs/);
     expect(message.parentElement?.className).toMatch(/gap-2/);
+    expect(legal).toBe(
+      dialog.querySelector('[data-slot="dialog-body"]')?.lastElementChild,
+    );
   },
 };
 
@@ -137,6 +172,7 @@ export const WithMessage: Story = {
  * its own, so a consumer that supplies no wording gets none.
  */
 export const WithoutLegal: Story = {
+  name: "Without legal",
   args: {
     copy: { title: "Sign In to Grade10" },
   },
@@ -156,6 +192,7 @@ export const WithoutLegal: Story = {
  * proves order and the divider label for a consumer-owned control.
  */
 export const WithProviderSlot: Story = {
+  name: "Provider slot",
   args: {
     copy: {
       title: "Sign In to Grade10",
@@ -189,35 +226,13 @@ export const WithProviderSlot: Story = {
 };
 
 /**
- * The legal line is the body's last node, and stays last with a status line
- * above it — the order is the contract, not the arrangement of this one
- * example. The block supplies no wording: every word here is the
- * consumer's.
- */
-export const WithLegal: Story = {
-  args: {
-    message: "Check your inbox for a sign-in link.",
-  },
-  play: async () => {
-    const body = within(document.body);
-    const legal = body
-      .getByRole("dialog")
-      .querySelector('[data-slot="sign-in-legal"]');
-
-    expect(legal).toBe(
-      body.getByRole("dialog").querySelector('[data-slot="dialog-body"]')
-        ?.lastElementChild,
-    );
-  },
-};
-
-/**
  * A widget a script fills in later — Google's own button — marks its own
  * container, and the divider waits for it. An "or" over blank space is what
  * a collector sees when that script never answers, so the pair hides until
  * something is actually there to divide. Gallery omits a fake Google control.
  */
 export const ProviderThatHasNotDrawnYet: Story = {
+  name: "Provider empty",
   args: {
     copy: {
       title: "Sign In to Grade10",
@@ -307,6 +322,7 @@ export const ScrimReportsDismissal: Story = {
  * show is that dismissing never unmounts or navigates.
  */
 export const DismissalLeavesThePageBeneath: Story = {
+  name: "Dismissal leaves page",
   decorators: [
     (Story) => (
       <>
@@ -342,5 +358,151 @@ export const DismissalLeavesThePageBeneath: Story = {
       expect(page).toBeInTheDocument();
       expect(canvas.getByText("1999 Charizard, PSA 10")).toBeInTheDocument();
     }
+  },
+};
+
+/**
+ * After a successful send: dialog title **Check Your Email**; confirmation
+ * lead line then the address on the next line; Resend secondary and hugging
+ * with **Resend (n)** for the sixty-second wait. No Back control — leave via
+ * dialog dismiss. Consumer omits `providerSlot` on this step.
+ *
+ * Spec: shared-auth-sign-in-SC-42 / SC-46; shared-ui-auth-sign-in-SC-13–14.
+ */
+export const LinkSent: Story = {
+  name: "Link sent",
+  args: {
+    providerSlot: undefined,
+    copy: {
+      title: "Check Your Email",
+      legal: figmaLegal,
+    },
+    children: (
+      <SignInLinkSent
+        copy={{
+          message: "We've just sent a sign-in link to",
+          resend: "Resend",
+          resendCountdown: "Resend (60)",
+        }}
+        email="collector@example.com"
+        onResend={fn()}
+        resendCooldownRemaining={60}
+      />
+    ),
+  },
+  play: async () => {
+    const body = within(document.body);
+    const dialog = body.getByRole("dialog");
+
+    expect(
+      body.getByRole("heading", { name: "Check Your Email" }),
+    ).toBeInTheDocument();
+    expect(
+      body.getByText("We've just sent a sign-in link to"),
+    ).toBeInTheDocument();
+    expect(body.getByText("collector@example.com")).toBeInTheDocument();
+    expect(body.getByRole("button", { name: "Resend (60)" })).toBeDisabled();
+    expect(body.queryByRole("button", { name: "Back" })).toBeNull();
+    expect(body.queryByRole("textbox", { name: "Email" })).toBeNull();
+    expect(dialog.querySelector('[data-slot="divider"]')).toBeNull();
+    expect(
+      dialog.querySelector('[data-slot="sign-in-link-sent"]'),
+    ).toBeInTheDocument();
+  },
+};
+
+/**
+ * Signed-out Add to cart on a listing tile opens the Login Dialog — same
+ * entry composition as a normal sign-in (Google Continue, or-divider, email
+ * / Sign In with Email), with why-title **Sign In to Add to Cart**. The
+ * consumer owns session and `open`, so the cart control reports quantity and
+ * this demo opens sign-in instead of adding a guest line. Narrow viewport
+ * keeps the cart control visible without hover (same as listing on touch).
+ *
+ * Spec: `grade10-site-store-product-listing-SC-47` (product-page twin SC-29);
+ * open-from-add gate remains SC-44 / SC-26.
+ */
+export const FromAddToCart: Story = {
+  name: "From add to cart",
+  args: {
+    open: false,
+    copy: {
+      title: "Sign In to Add to Cart",
+      providerDivider: "or",
+      legal: figmaLegal,
+    },
+    providerSlot: googleContinue,
+  },
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+  },
+  render: function FromAddToCartDemo(args) {
+    const [open, setOpen] = useState(false);
+    const [email, setEmail] = useState("");
+
+    return (
+      <>
+        <main className="bg-background p-6">
+          <div className="w-[260px]">
+            <ProductCard
+              copy={PRODUCT_CARD_CART_COPY}
+              imageAlt="Pokémon TCG Sealed Booster Box – Abyss Eye (M5)"
+              imageSrc={LISTING_IMAGE}
+              name="Pokémon TCG Sealed Booster Box – Abyss Eye (M5)"
+              onCartQuantityChange={() => {
+                setOpen(true);
+              }}
+              onClick={() => {}}
+              price="HK$105"
+            />
+          </div>
+        </main>
+        <SignInCard {...args} onOpenChange={setOpen} open={open}>
+          <SignInEmailForm
+            copy={{
+              email: "Email",
+              emailPlaceholder: "Enter your email",
+              submit: "Sign In with Email",
+            }}
+            email={email}
+            onEmailChange={setEmail}
+            onSubmit={fn()}
+          />
+        </SignInCard>
+      </>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const cart = canvas.getByRole("button", { name: "Add to cart" });
+
+    expect(within(document.body).queryByRole("dialog")).toBeNull();
+
+    await userEvent.click(cart);
+
+    const body = within(document.body);
+    await waitFor(() => {
+      expect(body.getByRole("dialog")).toBeInTheDocument();
+    });
+    const dialog = body.getByRole("dialog");
+    expect(
+      body.getByRole("heading", { name: "Sign In to Add to Cart" }),
+    ).toBeInTheDocument();
+    const google = body.getByRole("button", { name: "Continue with Google" });
+    const email = body.getByLabelText("Email");
+    expect(body.getByText("or")).toBeInTheDocument();
+    expect(dialog.querySelector('[data-slot="divider"]')).not.toBeNull();
+    expect(
+      google.compareDocumentPosition(email) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      body.getByRole("button", { name: "Sign In with Email" }),
+    ).toBeDisabled();
+    // Consumer never marked the tile in-cart — no guest line.
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="product-card-image"][data-in-cart]',
+      ),
+    ).toBeNull();
   },
 };

@@ -28,12 +28,14 @@ SHALL remain at the requested address while the existing sign-in surface decides
 the session.
 
 #### Scenario: grade10-site-store-order-detail-SC-01 - An owner opens one order
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** a signed-in collector who owns an order
 - **WHEN** they open `/profile/orders/<order-id>` for it
 - **THEN** that order's detail appears
 
 #### Scenario: grade10-site-store-order-detail-SC-02 - Missing and unowned orders look the same
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** a signed-in collector
 - **WHEN** they open an unknown order id or an order id owned by another account
@@ -41,6 +43,7 @@ the session.
 - **AND** the page does not say whether an order exists
 
 #### Scenario: grade10-site-store-order-detail-SC-03 - A signed-out collector keeps the requested order address
+**Serves:** grade10-site-store-order-detail-US-02 - Collector signs in to the requested order
 
 - **GIVEN** a collector without a signed-in session
 - **WHEN** they open `/profile/orders/<order-id>`
@@ -92,6 +95,7 @@ shipping charge, tax, image, loyalty amount, or other missing value from
 another fact.
 
 #### Scenario: grade10-site-store-order-detail-SC-04 - A web order keeps quoted and paid totals distinct
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** a web order quoted at 10000 minor units `HKD` and paid at 11200 minor units `HKD`
 - **WHEN** its detail renders
@@ -99,6 +103,7 @@ another fact.
 - **AND** the paid total shows 11200 minor units `HKD`
 
 #### Scenario: grade10-site-store-order-detail-SC-05 - A partial refund stays distinct from the charge
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** an order paid at 11200 minor units `HKD` and refunded by 2000 minor units `HKD`
 - **WHEN** its detail renders
@@ -106,6 +111,7 @@ another fact.
 - **AND** the refund shows 2000 minor units `HKD` separately
 
 #### Scenario: grade10-site-store-order-detail-SC-06 - A point-of-sale order does not invent web fields
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** a point-of-sale order with a paid total but no quoted subtotal or line items
 - **WHEN** its detail renders
@@ -113,6 +119,7 @@ another fact.
 - **AND** no zero subtotal, empty product row, payment method, or shipping address is invented
 
 #### Scenario: grade10-site-store-order-detail-SC-07 - Unavailable optional facts are omitted
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** an order with no payment method, address, discount, points credit, shipping charge, tax, image, or loyalty amount
 - **WHEN** its detail renders
@@ -120,6 +127,7 @@ another fact.
 - **AND** no placeholder is presented as a known order fact
 
 #### Scenario: grade10-site-store-order-detail-SC-17 - Points credit stays distinct from Discount
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** an owned order with an order promo discount of 17700 minor units `HKD` and a points credit of 10000 minor units `HKD`
 - **WHEN** its money summary renders
@@ -129,6 +137,7 @@ another fact.
 - **AND** neither amount is folded into the other
 
 #### Scenario: grade10-site-store-order-detail-SC-13 - Customer-facing identity does not replace the route id
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** an owned order with or without a non-empty Store-supplied shop order number
 - **WHEN** its detail renders at `/profile/orders/<order-id>`
@@ -137,6 +146,7 @@ another fact.
 - **AND** the address continues to use the immutable Store order id
 
 #### Scenario: grade10-site-store-order-detail-SC-14 - Supplied settlement rows preserve zero and absence
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** two equivalent orders where one supplies zero discount, shipping, and tax and the other supplies null for all three
 - **WHEN** their money summaries render
@@ -145,6 +155,7 @@ another fact.
 - **AND** each paid total remains the charge
 
 #### Scenario: grade10-site-store-order-detail-SC-15 - A partial shipping address remains truthful
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** an owned order with a shipping address whose recipient and optional address parts are absent
 - **WHEN** its detail renders
@@ -152,6 +163,7 @@ another fact.
 - **AND** no blank recipient, placeholder line, or pickup address appears
 
 #### Scenario: grade10-site-store-order-detail-SC-16 - Payment identity remains truthful
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** an owned order with a supplied card, wallet, or unrecognized payment provider
 - **WHEN** its payment method renders
@@ -168,6 +180,7 @@ It SHALL open that URL in a new browser context isolated from the Grade10 page.
 A carrier or tracking number alone SHALL NOT create a tracking action.
 
 #### Scenario: grade10-site-store-order-detail-SC-08 - An estimate is not a completed milestone
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** an order with an estimated delivery date and no completed delivery event
 - **WHEN** its fulfilment detail renders
@@ -175,6 +188,7 @@ A carrier or tracking number alone SHALL NOT create a tracking action.
 - **AND** delivery is not presented as completed
 
 #### Scenario: grade10-site-store-order-detail-SC-09 - A safe carrier URL enables the detail action
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** a fulfilment with an absolute `https` carrier URL carrying no credentials
 - **WHEN** the order detail renders
@@ -182,6 +196,7 @@ A carrier or tracking number alone SHALL NOT create a tracking action.
 - **AND** activating it opens the carrier URL in a new browser context isolated from the Grade10 page
 
 #### Scenario: grade10-site-store-order-detail-SC-10 - Unsafe tracking data creates no action
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** a fulfilment with a carrier and tracking number but no safe carrier URL
 - **WHEN** the order detail renders
@@ -195,11 +210,13 @@ successful null answer SHALL show the not-found treatment rather than a loading
 or transport-error state.
 
 #### Scenario: grade10-site-store-order-detail-SC-11 - The first read is still loading
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **WHEN** the first order read has not settled
 - **THEN** the page shows a loading state and no not-found claim
 
 #### Scenario: grade10-site-store-order-detail-SC-12 - A failed read can be retried
+**Serves:** grade10-site-store-order-detail-US-01 - Collector inspects one owned order
 
 - **GIVEN** the order read failed
 - **WHEN** the collector activates Retry

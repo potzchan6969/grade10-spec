@@ -47,6 +47,7 @@
     "account": "This account is not eligible to bid.",
     "payment": "Payment authorization did not succeed.",
     "stale_price": "Another bid made this amount out of date.",
-    "unavailable": "Bidding could not be evaluated right now."
+    "unavailable": "Bidding could not be evaluated right now.",
+    "ceiling": "The bid exceeded the currency ceiling."
   }
 }

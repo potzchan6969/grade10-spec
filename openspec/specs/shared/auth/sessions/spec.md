@@ -24,6 +24,7 @@ grant SHALL be refused and SHALL receive no sessions. A caller who does not
 hold `admin` SHALL NOT list sessions of an account that holds `admin`.
 
 #### Scenario: shared-auth-sessions-SC-01 - An operator with the grant lists one person's sessions
+**Serves:** shared-auth-sessions-US-01 - Operator lists a person's sessions
 
 - **GIVEN** a signed-in operator who holds `session:list`
 - **WHEN** they list sessions for an account by user id
@@ -31,6 +32,7 @@ hold `admin` SHALL NOT list sessions of an account that holds `admin`.
 - **AND** no session secret is in the result
 
 #### Scenario: shared-auth-sessions-SC-02 - A caller without the grant is refused
+**Serves:** shared-auth-sessions-US-01 - Operator lists a person's sessions
 
 - **GIVEN** a signed-in person who does not hold `session:list`
 - **WHEN** they try to list another person's sessions
@@ -38,6 +40,7 @@ hold `admin` SHALL NOT list sessions of an account that holds `admin`.
 - **AND** returns no sessions
 
 #### Scenario: shared-auth-sessions-SC-03 - Support cannot list an admin's sessions
+**Serves:** shared-auth-sessions-US-01 - Operator lists a person's sessions
 
 - **GIVEN** a person whose operator role is `support`
 - **WHEN** they try to list sessions of an account that holds `admin`
@@ -55,6 +58,7 @@ caller without the grant SHALL be refused, and the session SHALL remain.
 WHEN the caller revokes the session they are using, they are signed out.
 
 #### Scenario: shared-auth-sessions-SC-04 - A revoked session is not signed in
+**Serves:** shared-auth-sessions-US-02 - Operator ends a session
 
 - **GIVEN** an operator who holds `session:revoke`
 - **WHEN** they revoke one session of an account
@@ -62,12 +66,14 @@ WHEN the caller revokes the session they are using, they are signed out.
   person
 
 #### Scenario: shared-auth-sessions-SC-05 - Every session of an account can be revoked
+**Serves:** shared-auth-sessions-US-02 - Operator ends a session
 
 - **GIVEN** an operator who holds `session:revoke`
 - **WHEN** they revoke every session of an account
 - **THEN** none of that account's sessions is signed in
 
 #### Scenario: shared-auth-sessions-SC-06 - A caller who cannot revoke is refused
+**Serves:** shared-auth-sessions-US-02 - Operator ends a session
 
 - **GIVEN** a signed-in operator who does not hold `session:revoke`
 - **WHEN** they try to revoke a session
@@ -75,6 +81,7 @@ WHEN the caller revokes the session they are using, they are signed out.
 - **AND** the session remains signed in
 
 #### Scenario: shared-auth-sessions-SC-07 - Support cannot revoke an admin's session
+**Serves:** shared-auth-sessions-US-02 - Operator ends a session
 
 - **GIVEN** a person whose operator role is `support`
 - **WHEN** they try to revoke a session of an account that holds `admin`
@@ -82,6 +89,7 @@ WHEN the caller revokes the session they are using, they are signed out.
 - **AND** the session remains signed in
 
 #### Scenario: shared-auth-sessions-SC-08 - Revoking the current session signs the operator out
+**Serves:** shared-auth-sessions-US-02 - Operator ends a session
 
 - **GIVEN** an operator who holds `session:revoke`
 - **WHEN** they revoke the session they are using

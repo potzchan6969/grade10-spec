@@ -1,5 +1,0 @@
-schema: grade10-planning
-promoted_by: "@sean"
-created: 2026-09-14
-page_waived: "predates the page rule - the Filter bullet it marks sits in product-listing.md's unheaded lead section, same as default-listing-sort-to-latest and show-listing-cart-on-touch"
-design_waived: "one function's filter logic and its test, already written and reviewed inline - nothing cross-cutting, no data-model or dependency change"

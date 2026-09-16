@@ -4,15 +4,19 @@ import type {
   SignInCardProps,
   SignInEmailFormCopy,
   SignInEmailFormProps,
+  SignInLinkSentCopy,
+  SignInLinkSentProps,
 } from "../../index";
 import * as publicEntry from "../../index";
-import { SignInCard, SignInEmailForm } from "../../index";
+import { SignInCard, SignInEmailForm, SignInLinkSent } from "../../index";
 
 type PublicSignInTypes = [
   SignInCardCopy,
   SignInCardProps,
   SignInEmailFormProps,
   SignInEmailFormCopy,
+  SignInLinkSentCopy,
+  SignInLinkSentProps,
 ];
 
 const publicSignInTypes: PublicSignInTypes | undefined = undefined;
@@ -28,7 +32,8 @@ void copyNamesNoCode;
 
 describe("sign-in public entry", () => {
   it("exports every named sign-in component", () => {
-    expect([SignInCard, SignInEmailForm]).toEqual([
+    expect([SignInCard, SignInEmailForm, SignInLinkSent]).toEqual([
+      expect.any(Function),
       expect.any(Function),
       expect.any(Function),
     ]);

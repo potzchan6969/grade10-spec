@@ -3,6 +3,7 @@ title: Operator Console
 spec: grade10-site/loyalty/programme
 audience: operator
 order: 9
+reviewed: 2026-09-16
 ---
 
 ## Moving Points
@@ -15,9 +16,9 @@ part on one question: do the points count toward the tier?
   it can promote a member
 - **Correction** — putting a mistake right; adds to or takes from the
   redeemable balance alone, so it never promotes anyone
-- 🚧 **Neither moves the date** — the points take the date the balance
+- **Neither moves the date** — the points take the date the balance
   already has — [Points](/p/grade10-site/loyalty/points#expiry)
-- 🚧 **The form states the date** — before the operator writes, it names the
+- **The form states the date** — before the operator writes, it names the
   day the points will lapse
 - **Both carry a reason** — what the operator types goes to the audit trail;
   the ledger carries only its digest
@@ -29,14 +30,14 @@ granted until the size is set. The owner's call.
 
 An operator gives a balance more time without the member buying or redeeming.
 
-- 🚧 **From today** — the window runs again from the day the operator restarts
+- **From today** — the window runs again from the day the operator restarts
   it, never a day they pick
-- 🚧 **Never shortens it** — a member whose date is already further out keeps it
-- 🚧 **Never a revival** — whatever has already lapsed is written off first and
+- **Never shortens it** — a member whose date is already further out keeps it
+- **Never a revival** — whatever has already lapsed is written off first and
   stays lapsed
-- 🚧 **Moves no points** — the balance is untouched, so nothing reaches the
+- **Moves no points** — the balance is untouched, so nothing reaches the
   member's activity list; the reason goes to the audit trail
-- 🚧 **Same permission as moving points** — an operator who can grant can
+- **Same permission as moving points** — an operator who can grant can
   restart
 
 :::detail{title="Code map" for="engineer"}

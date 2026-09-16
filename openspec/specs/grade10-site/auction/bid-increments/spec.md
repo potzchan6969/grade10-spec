@@ -48,30 +48,35 @@ the amount being raised from. It SHALL NOT retain a per-listing increment or
 apply a USD, HKD, or JPY schedule to another currency.
 
 #### Scenario: grade10-site-auction-bid-increments-SC-01 - A first bid clears the starting-price tier
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** an open HKD listing with a starting price of 20000 minor units and no accepted bid
 - **WHEN** a collector reads its minimum bid
 - **THEN** Grade10 reports 21000 minor units
 
 #### Scenario: grade10-site-auction-bid-increments-SC-02 - A boundary selects the higher tier
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** an open USD listing whose current bid is 10000 minor units
 - **WHEN** Grade10 calculates its minimum bid
 - **THEN** the minimum bid is 10500 minor units
 
 #### Scenario: grade10-site-auction-bid-increments-SC-03 - A bid may exceed the minimum
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** an open USD listing whose minimum bid is 10500 minor units
 - **WHEN** a collector bids 12000 minor units
 - **THEN** Grade10 accepts the bid
 
 #### Scenario: grade10-site-auction-bid-increments-SC-04 - A bid below the minimum is refused
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **GIVEN** an open USD listing whose minimum bid is 10500 minor units
 - **WHEN** a collector bids 10499 minor units
 - **THEN** Grade10 refuses the bid and names 10500 minor units as the minimum
 
 #### Scenario: grade10-site-auction-bid-increments-SC-05 - An open listing publishes its next minimum
+**Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
 - **WHEN** a collector reads an open listing
 - **THEN** its facts include the minimum next amount as integer minor units in the listing currency
@@ -88,6 +93,7 @@ Grade10 SHALL accept any whole amount at or above the minimum next amount and
 refuse an amount below it. It SHALL not create intermediate bids.
 
 #### Scenario: grade10-site-auction-bid-increments-SC-07 - A manual floor uses the current public price
+**Serves:** Minimum bid - a manual floor uses the current public price
 
 - **GIVEN** an open HKD listing whose current public price is 800000 minor units
 - **WHEN** Grade10 calculates the next minimum
@@ -100,6 +106,7 @@ listing in a currency other than USD, HKD, or JPY. The refusal SHALL leave the
 listing and its schedule-derived pricing facts unchanged.
 
 #### Scenario: grade10-site-auction-bid-increments-SC-06 - An unsupported currency cannot be scheduled
+**Serves:** Currency schedules - an unsupported currency cannot be scheduled
 
 - **GIVEN** a complete draft listing
 - **WHEN** an operator sets its currency to EUR and schedules it

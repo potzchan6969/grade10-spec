@@ -1,7 +1,7 @@
 # shared/auth/sign-in Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-11, tcs-rules r1
+**Drafts styled:** 2026-09-15, tcs-rules r3.0
 **Out of suite:** shared-auth-sign-in-SC-34
 
 ## shared-auth-sign-in-US1: Collector asks for and follows a sign-in link
@@ -10,260 +10,57 @@
 **I want** a link emailed to the address I submit to sign me in once,
 **so that** I reach my account without a password, and a used or expired link cannot.
 
-### shared-auth-sign-in-US1-TC1-1: Activating again during flight starts no second request
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-in-US-01
-
-**Pre-conditions:**
-A sign-in command whose request is in flight. Network manipulation holds that request.
-
-**Steps:**
-
-1. Navigate to <grade10 sign-in url>.
-2. Activate the running command again.
-
-**Expected Results:**
-
-* No second request reaches the auth service.
-* Both activations settle with the one request's outcome.
-
-### shared-auth-sign-in-US1-TC2-1: Email step runs one command and only that one looks busy
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-in-US-01
-
-**Pre-conditions:**
-A collector on the email step whose send-link request is in flight.
-
-**Steps:**
-
-1. Navigate to <grade10 sign-in url> and start send-link.
-2. Activate the send-code control while send-link is in flight.
-3. Check busy states.
-
-**Expected Results:**
-
-* No code request starts and no second email is sent.
-* Only the running command shows its busy state.
-
-### shared-auth-sign-in-US1-TC3-1: Settled request frees the email step
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** deprecated
-* **Behaviour:** positive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-01
-
-**Pre-conditions:**
-An email step whose in-flight request has settled.
-
-**Steps:**
-
-1. Navigate to <grade10 sign-in url>.
-2. Activate either control after the previous request settled.
-
-**Expected Results:**
-
-* That command starts normally.
-
-### shared-auth-sign-in-US1-TC4-1: Valid unused link creates a session
+### shared-auth-sign-in-US1-TC1-1: Valid unused link signs the collector in
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
-A person who asked for a sign-in link at an email address.
+customer is on <grade10 sign-in url>, signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
 
 **Steps:**
 
-1. Follow the unused, unexpired link from that email.
+1. Submit <collector email> at the email step.
+2. Open the sign-in email and follow its unused, unexpired link.
 
 **Expected Results:**
 
-* They are signed in as the account for that address.
+* The link lands the collector on this brand, signed in.
+* The signed-in account is the one for <collector email>.
 
-### shared-auth-sign-in-US1-TC5-1: Used link does not sign in again
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-01
-
-**Pre-conditions:**
-A sign-in link that has already created a session.
-
-**Steps:**
-
-1. Follow that link again.
-
-**Expected Results:**
-
-* No new session is created.
-
-### shared-auth-sign-in-US1-TC6-1: Expired link does not sign in
+### shared-auth-sign-in-US1-TC2-1: Email step offers the link and no code control
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-01
-
-**Pre-conditions:**
-A sign-in link whose time to live has ended.
-
-**Steps:**
-
-1. Follow that link.
-
-**Expected Results:**
-
-* No session is created.
-
-### shared-auth-sign-in-US1-TC7-1: Failed send is reported and does not sign in
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-in-US-01
-
-**Pre-conditions:**
-<The sign-in link send endpoint> is mocked to fail.
-
-**Steps:**
-
-1. Navigate to <grade10 sign-in url>.
-2. Ask for a sign-in link.
-
-**Expected Results:**
-
-* The surface states that the link was not sent.
-* The person is not signed in.
-
-### shared-auth-sign-in-US1-TC8-1: First send does not disclose whether the address is new
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
-* **Type:** security
+* **Type:** usability
+* **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
-An email that has never signed in.
-
-**Steps:**
-
-1. Navigate to <grade10 sign-in url>.
-2. Ask for a sign-in link and wait for the send to go out.
-
-**Expected Results:**
-
-* The surface treats it as a sent link.
-* It does not state that no account exists.
-
-### shared-auth-sign-in-US1-TC9-1: New link kills the earlier unused link
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** security
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-01
-
-**Pre-conditions:**
-An unused unexpired sign-in link for an address.
-
-**Steps:**
-
-1. Ask for a later sign-in-link email to that address.
-2. Follow the earlier link.
-
-**Expected Results:**
-
-* Following the earlier link creates no session.
-
-### shared-auth-sign-in-US1-TC10-1: Email step offers the link and no code control
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-in-US-01
-
-**Pre-conditions:**
-None.
+customer is signed out.
 
 **Steps:**
 
@@ -275,31 +72,220 @@ None.
 * The step offers sending a sign-in link.
 * No control asks for or sends a sign-in code.
 
-### shared-auth-sign-in-US1-TC11-1: New link kills the earlier unused link
+### shared-auth-sign-in-US1-TC3-1: Activating again during flight starts no second request
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is on <grade10 sign-in url>, signed out.
+* The send-link request is held open by manipulated network conditions, so it stays in flight.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Submit <collector email> at the email step.
+2. Activate the same send-link command again while its request is held.
+3. Release the held request.
+
+**Expected Results:**
+
+* Only one send-link request reaches the auth service.
+* Both activations settle with that one request's outcome.
+
+### shared-auth-sign-in-US1-TC4-1: First send does not disclose that the address is new
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+customer is on <grade10 sign-in url>, signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<new email>` | newcomer@example.com, an address that has never signed in |
+
+**Steps:**
+
+1. Submit <new email> at the email step.
+
+**Expected Results:**
+
+* The surface treats it as a sent link.
+* Nothing on the surface states that no account exists.
+
+### shared-auth-sign-in-US1-TC5-1: Used link does not sign in again
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* A sign-in link for <collector email> has already created a session.
+* customer is signed out in a fresh browser session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<used link>` | The sign-in link that already created a session |
+
+**Steps:**
+
+1. Follow <used link>.
+
+**Expected Results:**
+
+* No session is created.
+* The surface still shows the person as signed out.
+
+### shared-auth-sign-in-US1-TC6-1: Expired link does not sign in
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is signed out.
+* A sign-in link for <collector email> is past its time to live.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<expired link>` | A sign-in link whose time to live has ended |
+
+**Steps:**
+
+1. Follow <expired link>.
+
+**Expected Results:**
+
+* No session is created.
+* The surface still shows the person as signed out.
+
+### shared-auth-sign-in-US1-TC7-1: New link kills the earlier unused link
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is signed out.
+* <earlier link> is unused and unexpired for <collector email>.
+* The sixty-second window since <earlier link> was sent has passed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<earlier link>` | The unused unexpired link from the first sign-in email |
+
+**Steps:**
+
+1. Submit <collector email> at the email step to send a later sign-in email.
+2. Follow <earlier link>.
+
+**Expected Results:**
+
+* No session is created from <earlier link>.
+* The surface still shows the person as signed out.
+
+### shared-auth-sign-in-US1-TC8-1: Failed send is reported and does not sign in
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
-* **Type:** security
+* **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-01
 
 **Pre-conditions:**
-An unused unexpired sign-in link for an address.
+
+* customer is on <grade10 sign-in url>, signed out.
+* The sign-in-link send is mocked to fail.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
 
 **Steps:**
 
-1. Ask for a later sign-in-link email to that address.
-2. Follow the earlier link.
+1. Submit <collector email> at the email step.
 
 **Expected Results:**
 
-* Following the earlier link creates no session.
+* The surface states that the link was not sent.
+* The person is not signed in.
 
 ---
 
@@ -315,78 +301,96 @@ An unused unexpired sign-in link for an address.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-03
 
 **Pre-conditions:**
-A brand that has Google sign-in.
+customer is signed out on a brand that has Google sign-in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<verified google email>` | collector@example.com, verified by Google |
 
 **Steps:**
 
-1. Navigate to <grade10 sign-in url>.
-2. Complete Google sign-in with a verified email.
+1. Navigate to <sign-in url of a brand with google sign-in>.
+2. Activate the Google control.
+3. Complete Google sign-in with <verified google email>.
 
 **Expected Results:**
 
-* The Google control is present.
-* Completing Google sign-in with a verified email signs them in as the account for that address.
+* Step 1 shows the Google control on the sign-in surface.
+* The collector is signed in as the account for <verified google email>.
 
-### shared-auth-sign-in-US3-TC2-1: Unverified Google email does not sign in
+### shared-auth-sign-in-US3-TC2-1: Brand without Google hides the control
 
 **Classification:**
 
 * **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-03
+
+**Pre-conditions:**
+customer is signed out on a brand that does not have Google sign-in.
+
+**Steps:**
+
+1. Navigate to <sign-in url of a brand without google sign-in>.
+
+**Expected Results:**
+
+* No Google sign-in control is shown.
+
+### shared-auth-sign-in-US3-TC3-1: Unverified Google email does not sign in
+
+**Classification:**
+
+* **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-03
 
 **Pre-conditions:**
-A brand that has Google sign-in.
+
+* customer is signed out on a brand that has Google sign-in.
+* The Google sign-in response is stubbed to return <unverified google email> with its verified flag false.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<unverified google email>` | collector@workspace-example.com, returned by Google as not verified |
 
 **Steps:**
 
-1. Navigate to <grade10 sign-in url>.
-2. Complete Google sign-in with an email Google has not verified.
+1. Navigate to <sign-in url of a brand with google sign-in>.
+2. Complete Google sign-in with <unverified google email>.
 
 **Expected Results:**
 
-* No account is created from that request.
-* They are not signed in.
-
-### shared-auth-sign-in-US3-TC3-1: Brand without Google hides the control
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-auth-sign-in-US-03
-
-**Pre-conditions:**
-A brand that does not have Google sign-in.
-
-**Steps:**
-
-1. Navigate to that brand's sign-in surface.
-
-**Expected Results:**
-
-* No Google sign-in control is shown.
+* No account is created for <unverified google email>.
+* The person is not signed in.
 
 ---
 
@@ -396,82 +400,119 @@ A brand that does not have Google sign-in.
 **I want** every successful sign-in at an address to be the same person,
 **so that** a later visit, a product-created account, or letter case does not split me.
 
-### shared-auth-sign-in-US4-TC1-1: First visit creates the account
+### shared-auth-sign-in-US4-TC1-1: First sign-in at a new address creates the account
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
-* **Suites:** smoke
+* **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
-An email address that has never signed in.
+customer is on <grade10 sign-in url>, signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<new email>` | newcomer@example.com, an address that has never signed in |
 
 **Steps:**
 
-1. Complete any offered sign-in method at that address.
+1. Submit <new email> at the email step.
+2. Follow the unused, unexpired link from that email.
 
 **Expected Results:**
 
-* An account exists for that address.
-* The person is signed in as it.
+* An account exists for <new email>.
+* The person is signed in as that account.
 
-### shared-auth-sign-in-US4-TC2-1: Later visit by another method is the same account
+### shared-auth-sign-in-US4-TC2-1: Later sign-in at the same address enters one account
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-04
 
+Runs once per row of **Test data**.
+
 **Pre-conditions:**
-An account that signed in with an emailed link.
+
+* <link-created email> has an account created by an emailed link.
+* customer is signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<link-created email>` | collector-link@example.com, an account created by an emailed link |
+
+| `<method>` | `<outcome>` |
+| --- | --- |
+| A later emailed link at <link-created email> | the same account, not a second one |
+| Google sign-in at <link-created email> on a brand that has Google | the same account, not a second one |
 
 **Steps:**
 
-1. Sign in later at the same address with an emailed code, or with Google when the brand has it.
+1. Complete sign-in by <method>.
+2. Read the signed-in account.
 
 **Expected Results:**
 
-* They enter the same account, not a second one.
+* The person enters <outcome>.
+* No second account exists for <link-created email>.
 
 ### shared-auth-sign-in-US4-TC3-1: Letter case does not create a second account
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
-An account that signed in at `Collector@example.com`.
+
+* An account exists for Collector@example.com.
+* customer is signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<lower case address>` | collector@example.com |
 
 **Steps:**
 
-1. Sign in later at `collector@example.com`.
+1. Submit <lower case address> at the email step.
+2. Follow the unused, unexpired link from that email.
+3. Read the signed-in account.
 
 **Expected Results:**
 
-* They enter the same account, not a second one.
+* The person enters the account for Collector@example.com.
+* No second account exists for that address.
 
 ### shared-auth-sign-in-US4-TC4-1: Plus-tag is a different address
 
@@ -479,24 +520,36 @@ An account that signed in at `Collector@example.com`.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
-An account at `collector@example.com`.
+
+* An account exists for collector@example.com.
+* customer is signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<plus-tag address>` | collector+shop@example.com |
 
 **Steps:**
 
-1. Complete sign-in at `collector+shop@example.com`.
+1. Submit <plus-tag address> at the email step.
+2. Follow the unused, unexpired link from that email.
+3. Read the signed-in account.
 
 **Expected Results:**
 
-* A second account exists for that plus-tag address.
+* A second account exists for <plus-tag address>.
+* It is not the account for collector@example.com.
 
 ### shared-auth-sign-in-US4-TC5-1: Trusted product creates or enters by verified email
 
@@ -504,79 +557,155 @@ An account at `collector@example.com`.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** integration
+* **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-04
 
+Runs once per row of **Test data**.
+
 **Pre-conditions:**
-A product of this brand that has verified an email.
+A product of this brand has verified <address>.
+
+**Test data:**
+
+| `<address>` | `<outcome>` |
+| --- | --- |
+| newcomer@example.com, never signed in | an account exists for it and its user id is returned |
+| collector@example.com, with an account from an emailed link | that same account's user id is returned |
 
 **Steps:**
 
-1. Ask that product to create or enter the account for a never-signed-in email.
-2. Ask again for an email that already signed in with a link.
-3. Ask that product to sign that account in.
+1. Ask the auth service to create or enter the account for <address>.
 
 **Expected Results:**
 
-* A new verified email creates an account and returns that user id.
-* A known verified email returns the same account, not a second one.
-* The person is signed in as that account on this brand.
+* The product receives <outcome>.
+* No second account exists for <address>.
 
-### shared-auth-sign-in-US4-TC6-1: Client cannot claim an email
+### shared-auth-sign-in-US4-TC6-1: Trusted product signs the person in on this brand
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-04
 
 **Pre-conditions:**
-None.
+
+* customer is signed out on this brand.
+* <trusted product> has verified <product-verified email> in its own flow.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<trusted product>` | The Grade10 hosted identity verification (e-KYC), a product of this brand |
+| `<product-verified email>` | collector-verified@example.com, verified by <trusted product> (e-KYC) |
 
 **Steps:**
 
-1. From a client, name an email and ask to create an account or a session.
+1. Complete <trusted product>'s identity verification for <product-verified email>.
+2. Ask the auth service, as <trusted product>, to sign that account in.
+3. Read who the caller is on this brand.
 
 **Expected Results:**
 
-* No account is created from that request.
-* The person is not signed in.
+* The person is signed in as the account for <product-verified email>.
+* No sign-in link or Google sign-in was completed for it.
 
 ### shared-auth-sign-in-US4-TC7-1: Sign-in after a product-created account is the same person
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-04
+
+**Pre-conditions:**
+
+* <product-verified email> has an account created when a product verified it.
+* customer is on <grade10 sign-in url>, signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<product-verified email>` | collector-verified@example.com, verified by the hosted identity verification (e-KYC) |
+
+**Steps:**
+
+1. Submit <product-verified email> at the email step.
+2. Follow the unused, unexpired link from that email.
+3. Read the signed-in account.
+
+**Expected Results:**
+
+* The person enters the product-created account.
+* No second account exists for <product-verified email>.
+
+### shared-auth-sign-in-US4-TC8-1: Client cannot claim an email
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-04
 
+Runs once per row of **Test data**.
+
 **Pre-conditions:**
-An account created when a product verified an email.
+
+* <untrusted client> holds no trusted-product credential for this brand.
+* customer is signed out on this brand.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<untrusted client>` | A caller outside this brand's products, such as a script posting to the auth service directly |
+
+| `<claimed email>` | `<directory after>` |
+| --- | --- |
+| victim@example.com, an address with an account on this brand | the existing account is unchanged |
+| stranger@example.com, an address with no account | no account exists for it |
 
 **Steps:**
 
-1. Sign in later at that address with an emailed link, an emailed code, or Google when the brand has it.
+1. Send the auth service a create-or-sign-in request naming <claimed email>, as <untrusted client>.
+2. Read who the caller is on this brand.
+3. Look <claimed email> up in the identity directory.
 
 **Expected Results:**
 
-* They enter the same account.
+* No account is created from that request.
+* The caller is not signed in as <claimed email>.
+* The directory shows <directory after>.
 
 ---
 
@@ -586,113 +715,196 @@ An account created when a product verified an email.
 **I want** a second email within a minute to wait, and a return only to this brand,
 **so that** I am not flooded and not delivered to an untrusted address.
 
-### shared-auth-sign-in-US5-TC1-1: Second link send in a minute is told to wait
+### shared-auth-sign-in-US5-TC1-1: Sign-in naming no location stays on the brand
 
 **Classification:**
 
-* **Severity:** critical
+* **Severity:** major
 * **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
+* **Status:** actual
+* **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-05
 
 **Pre-conditions:**
-A sign-in-link email already sent to one address in the last sixty seconds.
+customer opened <grade10 sign-in url> directly, so the sign-in names no return location, and is signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
 
 **Steps:**
 
-1. Ask that address for another sign-in link.
+1. Submit <collector email> at the email step.
+2. Follow the unused, unexpired link from that email.
 
 **Expected Results:**
 
-* No second email is sent.
-* The surface tells them to wait.
-* It does not state that the link was not sent.
+* The collector lands on this brand.
 
-### shared-auth-sign-in-US5-TC2-1: Second code send in a minute is told to wait
+### shared-auth-sign-in-US5-TC2-1: Second link send in a minute is told to wait
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** deprecated
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
+* **Automation status:** automated
+* **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-05
 
 **Pre-conditions:**
-A sign-in-code email already sent to one address in the last sixty seconds.
+
+* A sign-in-link email went out to <collector email> less than sixty seconds ago.
+* customer is on <grade10 sign-in url>, signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
 
 **Steps:**
 
-1. Ask that address for another sign-in code.
+1. Ask for another sign-in link at <collector email>.
 
 **Expected Results:**
 
 * No second email is sent.
-* The surface tells them to wait.
-* It does not state that the code was not sent.
+* The surface tells the collector to wait.
+* The surface does not state that the link was not sent.
 
-### shared-auth-sign-in-US5-TC3-1: Code send after a link in a minute is told to wait
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** deprecated
-* **Behaviour:** negative
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-05
-
-**Pre-conditions:**
-A sign-in-link email already sent to one address in the last sixty seconds.
-
-**Steps:**
-
-1. Ask that address for a sign-in code.
-
-**Expected Results:**
-
-* No code email is sent.
-* The surface tells them to wait.
-
-### shared-auth-sign-in-US5-TC4-1: Untrusted redirect is ignored
+### shared-auth-sign-in-US5-TC3-1: Untrusted location is ignored
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-05
 
+Runs once per row of **Test data**.
+
 **Pre-conditions:**
-A sign-in that names a location off this brand.
+customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+| `<off-brand location>` | `<why it is off brand>` |
+| --- | --- |
+| https://collector-rewards.example.com/claim | an address outside this store |
+| <zzz sign-in url> | another brand of this store |
 
 **Steps:**
 
-1. Complete sign-in.
+1. Submit <collector email> at the email step.
+2. Follow the unused, unexpired link from that email.
 
 **Expected Results:**
 
-* They are on this brand.
-* They are not sent to that location.
+* The collector lands on this brand.
+* The collector is not sent to <off-brand location>.
 
-### shared-auth-sign-in-US5-TC5-1: Missing redirect stays on the brand
+---
+
+## shared-auth-sign-in-US7: Collector confirms the send and can resend
+
+**As a** collector,
+**I want** the dialog titled Check Your Email, my address on its own line, and
+Resend after a short wait,
+**so that** I know where to look and can ask again without a Back control.
+
+### shared-auth-sign-in-US7-TC1-1: Successful send shows Check Your Email and the address on its own line
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-07
+
+**Pre-conditions:**
+
+* customer is signed out and is on <grade10 sign-in url>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com |
+
+**Steps:**
+
+1. Enter <collector email> at the email step.
+2. Activate **Sign In with Email**.
+3. Wait until the send settles successfully.
+
+**Expected Results:**
+
+* The dialog title is **Check Your Email**.
+* A confirmation lead line is shown.
+* <collector email> appears on the line below that lead.
+* The surface does not state whether an account already exists.
+
+---
+
+### shared-auth-sign-in-US7-TC2-1: Link-sent surface has no Back control
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-07
+
+**Pre-conditions:**
+
+* customer is on the link-sent confirmation after a successful send.
+
+**Steps:**
+
+1. Inspect the controls on the dialog body.
+
+**Expected Results:**
+
+* No Back control is present.
+* Leaving the dialog is by dismissing it.
+
+---
+
+### shared-auth-sign-in-US7-TC3-1: Email-step CTA is Sign In with Email
 
 **Classification:**
 
@@ -700,46 +912,155 @@ A sign-in that names a location off this brand.
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** usability
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
-* **Trace:** shared-auth-sign-in-US-05
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-07
 
 **Pre-conditions:**
-A sign-in that names no location.
+
+* customer is signed out and is on <grade10 sign-in url>.
 
 **Steps:**
 
-1. Complete sign-in.
+1. Reach the email step.
+2. Read the send action label and the other controls on the surface.
 
 **Expected Results:**
 
-* They are on this brand.
+* The send action is labelled **Sign In with Email**.
+* No control on the surface uses the words magic link.
 
-### shared-auth-sign-in-US5-TC6-1: Second link send in a minute is told to wait
+---
+
+### shared-auth-sign-in-US7-TC4-1: Resend is disabled with a countdown after a send
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
 * **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** shared-auth-sign-in-US-05
+* **Trace:** shared-auth-sign-in-US-07
 
 **Pre-conditions:**
-A sign-in-link email already sent to one address in the last sixty seconds.
+
+* customer just completed a successful Sign In with Email send to
+  <collector email>.
 
 **Steps:**
 
-1. Ask that address for another sign-in link.
+1. Read the Resend control on the link-sent surface.
 
 **Expected Results:**
 
-* No second email is sent.
-* The surface tells them to wait.
-* It does not state that the link was not sent.
+* Resend is disabled.
+* Its label is **Resend (n)** with the whole seconds left in the sixty-second
+  wait.
+
+---
+
+### shared-auth-sign-in-US7-TC5-1: Resend re-enables when the countdown reaches zero
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-07
+
+**Pre-conditions:**
+
+* customer is on the link-sent confirmation with Resend disabled and counting
+  down.
+
+**Steps:**
+
+1. Wait until sixty seconds have passed since the last successful send.
+2. Read the Resend control.
+
+**Expected Results:**
+
+* Resend is enabled.
+* Its label is **Resend**.
+
+---
+
+### shared-auth-sign-in-US7-TC6-1: A successful resend restarts the countdown
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-07
+
+**Pre-conditions:**
+
+* customer is on the link-sent confirmation with Resend enabled.
+* more than sixty seconds have passed since the previous send.
+
+**Steps:**
+
+1. Activate **Resend**.
+2. Wait until the send settles successfully.
+3. Read the Resend control.
+
+**Expected Results:**
+
+* Resend is disabled again for sixty seconds.
+* Its label is **Resend (n)** with the whole seconds left.
+
+---
+
+### shared-auth-sign-in-US7-TC7-1: A link older than sixty seconds does not sign in
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-07
+
+**Pre-conditions:**
+
+* a sign-in link for <collector email> was sent more than sixty seconds ago.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<expired link>` | The sign-in link whose time to live has ended |
+
+**Steps:**
+
+1. Follow <expired link>.
+
+**Expected Results:**
+
+* No session is created.

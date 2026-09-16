@@ -1,10 +1,8 @@
 {
   "title": "내 프로필",
   "loadFailed": "프로필을 불러오지 못했습니다.",
-  "emptyHint": "아직 프로필이 없습니다. 처음 저장할 때 스토어가 만들어 드립니다.",
   "displayNameLabel": "표시 이름",
   "bioLabel": "소개",
-  "createLabel": "프로필 만들기",
   "editLabel": "프로필 수정",
   "emptyBio": "아직 소개가 없습니다.",
   "memberSince": "{date}부터 함께하고 있습니다"

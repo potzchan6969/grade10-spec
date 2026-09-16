@@ -9,16 +9,27 @@ import {
 const COPY = {
   paymentMethod: "Linked Card",
   paymentMethodTooltip:
-    "We authorize a hold for your maximum each time you bid. You're only charged if you win.",
+    "We authorize your card for bidding. You're only charged if you win.",
   changeCard: "Change",
   linkCardEmptyState: "Link a card to place a bid.",
   getReadyToBid: "Link a card to bid",
   linkCardDescription:
-    "Link a card for bidding. When you set a maximum, we authorize a hold for that amount. You are only charged if you win.",
+    "Link a card for bidding. You're only charged if you win.",
   ageAttestation: "I confirm I am 18 years of age or older.",
   continue: "Link Card",
   linking: "Linking",
+  iframePlaceholder: "Stripe card link (iframe)",
+  iframeLinkedCardPlaceholder:
+    "Stripe card form (iframe) — linked card on file",
 } as const;
+
+function MockStripePaymentField({ label }: { label: string }) {
+  return (
+    <div className="flex h-12 w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground">
+      {label}
+    </div>
+  );
+}
 
 const meta = {
   title: "Auction Listing/Bid enrollment",
@@ -109,19 +120,24 @@ export const EmptyLinkedCard: Story = {
 };
 
 export const SetupSheet: Story = {
-  render: () => <EnrollmentSetupSheet copy={COPY} open requiresIframeLink />,
+  render: () => (
+    <EnrollmentSetupSheet
+      copy={COPY}
+      open
+      paymentField={<MockStripePaymentField label={COPY.iframePlaceholder} />}
+      requiresIframeLink
+    />
+  ),
   play: async () => {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
-    expect(
-      within(dialog).queryByText("Stripe card link (iframe)"),
-    ).not.toBeInTheDocument();
+    expect(within(dialog).getByText("Stripe card link (iframe)")).toBeVisible();
     const field = dialog.querySelector<HTMLElement>(
       '[data-slot="payment-field"]',
     );
     expect(field).not.toBeNull();
-    expect(field).toHaveAttribute("data-state", "empty");
+    expect(field).toHaveAttribute("data-state", "ready");
     /* The sheet nests a scrolling body inside the dialog's own body, so name
        the one that holds the payment field rather than the first in the DOM. */
     const scrollBody = dialog
@@ -147,11 +163,7 @@ export const SetupSheetLoadedMockStripe: Story = {
       copy={COPY}
       defaultAgeAttested
       open
-      paymentField={
-        <div className="flex h-[28rem] w-full items-center justify-center rounded-md border border-dashed border-border bg-muted/40 text-sm text-secondary-foreground">
-          Stripe card link (iframe)
-        </div>
-      }
+      paymentField={<MockStripePaymentField label={COPY.iframePlaceholder} />}
     />
   ),
   play: async () => {
@@ -174,10 +186,13 @@ export const SetupSheetLoadedMockStripe: Story = {
 export const SetupSheetFromChange: Story = {
   render: () => (
     <EnrollmentSetupSheet
+      cardReady
       copy={COPY}
       defaultAgeAttested
-      iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
       open
+      paymentField={
+        <MockStripePaymentField label={COPY.iframeLinkedCardPlaceholder} />
+      }
       requiresIframeLink
     />
   ),
@@ -189,7 +204,12 @@ export const SetupSheetFromChange: Story = {
       '[data-slot="payment-field"]',
     );
     expect(field).not.toBeNull();
-    expect(field).toHaveAttribute("data-state", "empty");
+    expect(field).toHaveAttribute("data-state", "ready");
+    expect(
+      within(dialog).getByText(
+        "Stripe card form (iframe) — linked card on file",
+      ),
+    ).toBeVisible();
     expect(
       within(dialog).getByRole("checkbox", {
         name: "I confirm I am 18 years of age or older.",
@@ -204,11 +224,14 @@ export const SetupSheetFromChange: Story = {
 export const SetupSheetError: Story = {
   render: () => (
     <EnrollmentSetupSheet
+      cardReady
       copy={COPY}
       defaultAgeAttested
       errorMessage="Could not link that card. Check the details and try again."
-      iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
       open
+      paymentField={
+        <MockStripePaymentField label={COPY.iframeLinkedCardPlaceholder} />
+      }
       requiresIframeLink
     />
   ),
@@ -224,6 +247,11 @@ export const SetupSheetError: Story = {
       ).toBeVisible(),
     );
     expect(
+      within(dialog).getByText(
+        "Stripe card form (iframe) — linked card on file",
+      ),
+    ).toBeVisible();
+    expect(
       within(dialog).getByRole("button", { name: "Link Card" }),
     ).toBeEnabled();
   },
@@ -234,12 +262,15 @@ const onLinkingOpenChange = fn();
 export const SetupSheetLinking: Story = {
   render: () => (
     <EnrollmentSetupSheet
+      cardReady
       copy={COPY}
       defaultAgeAttested
-      iframeLinkedPayment={{ brand: "visa", maskedNumber: "•••• 4242" }}
       linking
       open
       onOpenChange={onLinkingOpenChange}
+      paymentField={
+        <MockStripePaymentField label={COPY.iframeLinkedCardPlaceholder} />
+      }
       requiresIframeLink
     />
   ),
@@ -247,6 +278,11 @@ export const SetupSheetLinking: Story = {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
+    expect(
+      within(dialog).getByText(
+        "Stripe card form (iframe) — linked card on file",
+      ),
+    ).toBeVisible();
     const continueButton = within(dialog).getByRole("button", {
       name: "Linking",
     });

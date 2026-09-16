@@ -1,6 +1,6 @@
 ---
 title: Working a change
-summary: One change id, seven files, four hands — who writes what, and how you know it is your turn.
+summary: One change id, seven files, four teammates — who writes what, and how you know it is your turn.
 order: 4
 ---
 

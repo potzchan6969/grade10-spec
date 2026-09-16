@@ -46,7 +46,6 @@ type ListingAuctionBidFieldsCopy = ListingQuickMaximumBidActionsCopy & {
   /** CTA into order / delivery status for a paid win. */
   viewOrderDetails: string;
   didNotWin: string;
-  cardRelease: string;
   outbid: string;
   highestBid: string;
   yourMaximum: string;
@@ -56,7 +55,7 @@ type ListingAuctionBidFieldsCopy = ListingQuickMaximumBidActionsCopy & {
   closed: string;
   timeLeft: string;
   timeLeftAutoExtended: string;
-  /** Resolved copy naming this listing's extension window and duration. */
+  /** Resolved copy naming this listing's extended-bidding duration (and cap). */
   autoExtendedTooltip: string;
   placeBidSection: string;
   placeBid: string;
@@ -73,7 +72,6 @@ type ListingAuctionBidFieldsCopy = ListingQuickMaximumBidActionsCopy & {
   minimumMaximumLeadingIncrement: string;
   maximumBelowMinimum: string;
   buyerFeeHint: string;
-  buyerFeeTooltip: string;
   noBidsYet: string;
   endsLabel: string;
   opensLabel: string;
@@ -164,16 +162,7 @@ function StandingBanner({
   }
 
   if (view.standing === "lost") {
-    return (
-      <VStack
-        className="w-full border-b border-border bg-muted/50 px-4 py-4"
-        gap="xs"
-      >
-        <Text size="sm" tone="secondary" className="text-secondary-foreground">
-          {copy.cardRelease}
-        </Text>
-      </VStack>
-    );
+    return null;
   }
 
   if (view.standing === "outbid") {
@@ -474,24 +463,12 @@ function BidActions({
 function BuyerFeeHint({
   copy,
 }: {
-  copy: Pick<ListingAuctionBidFieldsCopy, "buyerFeeHint" | "buyerFeeTooltip">;
+  copy: Pick<ListingAuctionBidFieldsCopy, "buyerFeeHint">;
 }) {
   return (
-    <HStack gap="xs" vAlign="center">
-      <Text size="xs" tone="secondary">
-        {copy.buyerFeeHint}
-      </Text>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger
-            aria-label={copy.buyerFeeTooltip}
-            className="inline-flex shrink-0 cursor-pointer text-muted-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-            render={<Info aria-hidden size={12} />}
-          />
-          <TooltipContent>{copy.buyerFeeTooltip}</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </HStack>
+    <Text className="text-secondary-foreground" size="xs" tone="secondary">
+      {copy.buyerFeeHint}
+    </Text>
   );
 }
 

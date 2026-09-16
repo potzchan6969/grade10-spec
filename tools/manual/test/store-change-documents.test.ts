@@ -1,10 +1,8 @@
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { NO_GIT } from "../src/store/git.mts";
-import {
-  readChangeDocuments,
-  schemaArtifacts,
-} from "../src/store/read-change-documents.mts";
+import { readChangeDocuments } from "../src/store/read-change-documents.mts";
+import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { rootsOf } from "../src/store/roots.mts";
 import { composeStore } from "../src/store/snapshot.mts";
 import { storeEndpoints } from "../src/store/vite-plugin.mts";
@@ -16,18 +14,32 @@ import { writeStore } from "./tmp-store";
 
 const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
 
-const [document] = readChangeDocuments(FIXTURE, NO_GIT);
+const [document] = readChangeDocuments(FIXTURE, NO_GIT, null);
 
 describe("the artifacts a change has", () => {
   it("reads the schema's artifacts in the order it declares them", () => {
+    const artifact = (
+      id: string,
+      generates: string,
+      teammate: string,
+      requires: string[],
+      required = true,
+    ) => ({ id, generates, teammate, requires, required });
     expect(schemaArtifacts(FIXTURE, "grade10-planning")).toEqual([
-      { id: "proposal", generates: "proposal.md" },
-      { id: "specs", generates: "specs/**/spec.md" },
-      { id: "user-journeys", generates: "specs/**/user-journeys.md" },
-      { id: "test-cases", generates: "specs/**/feature-tcs.md" },
-      { id: "ui-design", generates: "ui-design.md" },
-      { id: "tech-design", generates: "tech-design.md" },
-      { id: "tasks", generates: "tasks.md" },
+      artifact("proposal", "proposal.md", "product-manager", []),
+      artifact("specs", "specs/**/spec.md", "product-manager", ["proposal"]),
+      artifact(
+        "user-journeys",
+        "specs/**/user-journeys.md",
+        "product-manager",
+        ["specs"],
+      ),
+      artifact("test-cases", "specs/**/feature-tcs.md", "product-manager", [
+        "user-journeys",
+      ]),
+      artifact("ui-design", "ui-design.md", "designer", ["specs"], false),
+      artifact("tech-design", "tech-design.md", "engineer", ["specs"], false),
+      artifact("tasks", "tasks.md", "engineer", ["specs"]),
     ]);
     expect(schemaArtifacts(FIXTURE, "spec-driven")).toBeUndefined();
   });
@@ -122,7 +134,7 @@ describe("a change the schema cannot account for", () => {
     "openspec/changes/loose/tech-design.md": "# Design\n\nA sketch.\n",
     "openspec/changes/bare/proposal.md": "# Bare\n\n## Why\n\nBecause.\n",
   });
-  const documents = readChangeDocuments(root, NO_GIT);
+  const documents = readChangeDocuments(root, NO_GIT, null);
   const loose = documents.find((one) => one.id === "loose");
   const bare = documents.find((one) => one.id === "bare");
 
@@ -200,10 +212,6 @@ describe("a delta with a title, journeys, and a suite beside it", () => {
       "",
       "**As a** reader, **I want** to watch.",
       "",
-      "**Accepted by:**",
-      "",
-      "- `beta-SC-01` — It is watched",
-      "",
     ].join("\n"),
     "openspec/changes/rich/specs/demo-product/beta/feature-tcs.md": [
       "# Beta test cases",
@@ -219,16 +227,14 @@ describe("a delta with a title, journeys, and a suite beside it", () => {
       "",
     ].join("\n"),
   });
-  const [rich] = readChangeDocuments(root, NO_GIT);
+  const [rich] = readChangeDocuments(root, NO_GIT, null);
   const [delta] = rich.deltas;
 
   it("reads title, purpose, feature set and journeys", () => {
     expect(delta.title).toBe("Beta — delta");
     expect(delta.purpose).toBe("Beta exists.");
     expect(delta.featureSet).toBe("- Watching");
-    expect(delta.journeys?.map((one) => [one.id, one.acceptedBy])).toEqual([
-      ["beta-US-01", ["beta-SC-01"]],
-    ]);
+    expect(delta.journeys?.map((one) => one.id)).toEqual(["beta-US-01"]);
   });
 
   it("reads rows under a group heading, and a rename as its pair", () => {
@@ -270,7 +276,7 @@ describe("a delta the reader cannot parse", () => {
     "openspec/changes/broken/specs/demo-product/gamma/feature-tcs.md":
       "# Gamma cases\n\nNo status line.\n",
   });
-  const [broken] = readChangeDocuments(root, NO_GIT);
+  const [broken] = readChangeDocuments(root, NO_GIT, null);
   const [delta] = broken.deltas;
 
   it("keeps the text and says what broke, without taking the suite with it", () => {
@@ -290,7 +296,7 @@ describe("the document over the wire", () => {
     "docs/prds/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
     "openspec/changes/one/proposal.md": "# One\n\n## Why\n\nBecause.\n",
   });
-  const artifacts = async () => composeStore(rootsOf(root), NO_GIT);
+  const artifacts = async () => composeStore(rootsOf(root), NO_GIT, null);
   const endpoints = storeEndpoints(rootsOf(root), artifacts);
 
   it("rides the store beside the snapshot and the archive", async () => {

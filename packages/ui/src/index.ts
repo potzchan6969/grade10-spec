@@ -194,6 +194,11 @@ export {
   type SignInEmailFormProps,
 } from "./blocks/auth-sign-in/sign-in-email-form";
 export {
+  SignInLinkSent,
+  type SignInLinkSentCopy,
+  type SignInLinkSentProps,
+} from "./blocks/auth-sign-in/sign-in-link-sent";
+export {
   parseTotpUri,
   type TotpEnrollment,
 } from "./blocks/auth-two-factor/totp-uri";
@@ -384,6 +389,36 @@ export type {
   OrderHistoryLineSummary,
   OrderHistoryOrderSummary,
 } from "./blocks/store-order-history/types";
+// shared/ui/store-product
+export {
+  StoreProductDescription,
+  type StoreProductDescriptionCopy,
+  type StoreProductDescriptionProps,
+} from "./blocks/store-product/store-product-description";
+export {
+  StoreProductGallery,
+  type StoreProductGalleryProps,
+} from "./blocks/store-product/store-product-gallery";
+export {
+  StoreProductHeader,
+  type StoreProductHeaderCopy,
+  type StoreProductHeaderProps,
+} from "./blocks/store-product/store-product-header";
+export {
+  StoreProductMetadata,
+  type StoreProductMetadataCopy,
+  type StoreProductMetadataProps,
+} from "./blocks/store-product/store-product-metadata";
+export {
+  StoreProductPurchasePanel,
+  type StoreProductPurchasePanelCopy,
+  type StoreProductPurchasePanelProps,
+} from "./blocks/store-product/store-product-purchase-panel";
+export type {
+  StoreProductImage,
+  StoreProductPurchaseItem,
+  StoreProductSaleItem,
+} from "./blocks/store-product/types";
 // shared/ui/store-product-listing
 export {
   FilterPanel,

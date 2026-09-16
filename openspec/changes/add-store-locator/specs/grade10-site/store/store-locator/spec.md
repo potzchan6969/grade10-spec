@@ -31,12 +31,14 @@ The page SHALL NOT offer store search, a store list, distance, filters, or a
 store picker.
 
 #### Scenario: grade10-site-store-store-locator-SC-01 - The page answers whole
+**Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **WHEN** the Store Locator address is fetched and no script executes
 - **THEN** the response HTML contains the Location & Hours headline, the
   store name, the street address, and the week's hours
 
 #### Scenario: grade10-site-store-store-locator-SC-02 - One shop, not a finder
+**Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **WHEN** a collector opens Store Locator
 - **THEN** the page shows the one Hong Kong shop
@@ -44,6 +46,7 @@ store picker.
   picker
 
 #### Scenario: grade10-site-store-store-locator-SC-03 - Store Locator names itself
+**Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **WHEN** the Store Locator address and any other public surface are compared
 - **THEN** their titles differ and their meta descriptions differ
@@ -55,12 +58,14 @@ SHALL open Google Maps for that shop's address. The page SHALL NOT offer a
 second Get directions control beside the map.
 
 #### Scenario: grade10-site-store-store-locator-SC-04 - Activating the map opens Maps
+**Serves:** grade10-site-store-store-locator-US-02 - Collector opens Google Maps from the page
 
 - **WHEN** a collector activates the map on Store Locator
 - **THEN** Google Maps opens for Hong Kong Grade10 Store at 13 Pak Sha Road,
   Causeway Bay, Hong Kong
 
 #### Scenario: grade10-site-store-store-locator-SC-05 - No second directions control
+**Serves:** grade10-site-store-store-locator-US-02 - Collector opens Google Maps from the page
 
 - **WHEN** a collector reads Store Locator
 - **THEN** the map is the way into Google Maps
@@ -74,16 +79,19 @@ a collector is on Store Locator, the chrome SHALL mark Store Locator as the
 current surface.
 
 #### Scenario: grade10-site-store-store-locator-SC-06 - Header reaches Store Locator
+**Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **WHEN** a collector follows Store Locator in the header
 - **THEN** Store Locator renders
 
 #### Scenario: grade10-site-store-store-locator-SC-07 - Footer reaches Store Locator
+**Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **WHEN** a collector follows Store Locator in the footer
 - **THEN** Store Locator renders
 
 #### Scenario: grade10-site-store-store-locator-SC-08 - Chrome marks Store Locator
+**Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **GIVEN** a collector on Store Locator
 - **WHEN** the header renders
@@ -96,6 +104,7 @@ The site SHALL render Store Locator without horizontal overflow at a viewport
 be clipped.
 
 #### Scenario: grade10-site-store-store-locator-SC-09 - A narrow viewport
+**Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
 
 - **GIVEN** a viewport 375 CSS pixels wide
 - **WHEN** Store Locator renders

@@ -10,6 +10,11 @@ const STORE_NAV_ITEMS = [
   { label: "Store", href: "#store", current: true },
   { label: "Auction", href: "#auction" },
   { label: "Store Locator", href: STORE_LOCATOR_HREF },
+  {
+    label: "Help",
+    href: "https://grade10.mintlify.io/",
+    external: true,
+  },
 ];
 
 const meta = {
@@ -43,23 +48,33 @@ function cartBadge(canvasElement: HTMLElement) {
   );
 }
 
-/** Empty cart — cart control present, count badge hidden. */
+/**
+ * Empty cart — cart control present, count badge hidden.
+ * Signed-out is valid here: Grade10 has no guest checkout, so a signed-out
+ * shopper never has lines; an empty cart control may still show.
+ */
 export const EmptyCart: Story = {
   name: "Empty cart — no badge",
   args: { cartItemCount: 0 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "Sign In" })).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Cart" })).toBeInTheDocument();
     expect(cartBadge(canvasElement)).toBeNull();
   },
 };
 
-/** One active line — brand count indicator shows `1`. */
+/**
+ * One active line — brand count indicator shows `1`.
+ * Signed in: cart lines require a session (no guest checkout).
+ */
 export const OneItem: Story = {
   name: "One item",
-  args: { cartItemCount: 1 },
+  args: { session: "signed-in", cartItemCount: 1 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "Account" })).toBeInTheDocument();
+    expect(canvas.queryByRole("button", { name: "Sign In" })).toBeNull();
     expect(
       canvas.getByRole("button", { name: "Cart (1)" }),
     ).toBeInTheDocument();
@@ -69,12 +84,16 @@ export const OneItem: Story = {
   },
 };
 
-/** Several active lines — same full count the drawer title badge would show. */
+/**
+ * Several active lines — same full count the drawer title badge would show.
+ * Signed in: cart lines require a session (no guest checkout).
+ */
 export const MultiItem: Story = {
   name: "Multi-item",
-  args: { cartItemCount: 3 },
+  args: { session: "signed-in", cartItemCount: 3 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "Account" })).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: "Cart (3)" }),
     ).toBeInTheDocument();
@@ -85,12 +104,14 @@ export const MultiItem: Story = {
 /**
  * Large count — StatusIndicator grows with the digits; SiteHeader does not
  * truncate (matches the cart drawer title badge).
+ * Signed in: cart lines require a session (no guest checkout).
  */
 export const LargeCount: Story = {
   name: "Large count",
-  args: { cartItemCount: 12 },
+  args: { session: "signed-in", cartItemCount: 12 },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "Account" })).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: "Cart (12)" }),
     ).toBeInTheDocument();
@@ -98,11 +119,16 @@ export const LargeCount: Story = {
   },
 };
 
-/** Count omitted — same as empty: no badge. */
+/**
+ * Count omitted — same as empty: no badge.
+ * Signed-out is valid: no lines, so no badge.
+ */
 export const CountOmitted: Story = {
   name: "Count omitted — no badge",
   args: { cartItemCount: undefined },
   play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("button", { name: "Sign In" })).toBeInTheDocument();
     expect(cartBadge(canvasElement)).toBeNull();
   },
 };

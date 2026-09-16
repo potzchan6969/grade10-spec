@@ -18,6 +18,7 @@ sidebar is not inline. A tile SHALL remain fully readable and its controls
 fully operable at every column count.
 
 #### Scenario: shared-ui-store-product-listing-SC-10 - Narrow viewport
+**Serves:** Responsive layout - narrow viewport
 
 - **WHEN** the surface is rendered at mobile width
 - **THEN** the list displays one column
@@ -25,6 +26,7 @@ fully operable at every column count.
 - **AND** facets and sort are reached through pills above the grid, not an inline full-width filter column
 
 #### Scenario: shared-ui-store-product-listing-SC-11 - Wide viewport
+**Serves:** Responsive layout - wide viewport
 
 - **WHEN** the surface is rendered with enough width for four 240px tiles beside the sidebar
 - **THEN** the list displays four columns
@@ -41,6 +43,7 @@ inline sidebar on a wide viewport, and the narrow pills (and their drawers)
 on a narrow viewport.
 
 #### Scenario: shared-ui-store-product-listing-SC-12 - Filters match nothing
+**Serves:** Browse states - filters match nothing
 
 - **GIVEN** a resolved result set with no products and a supplied no-match message
 - **THEN** that message is displayed in place of the list
@@ -48,6 +51,7 @@ on a narrow viewport.
 - **AND** a clear-filters action is offered when the consumer supplied one on a wide viewport, reporting activation through a callback
 
 #### Scenario: shared-ui-store-product-listing-SC-13 - An empty catalog
+**Serves:** Browse states - an empty catalog
 
 - **GIVEN** a resolved result set with no products, no filter selected, and a supplied empty message
 - **THEN** that message is displayed and no clear-filters action is offered
@@ -60,6 +64,7 @@ error, and resolved condition. A condition on one SHALL NOT change what the
 other displays.
 
 #### Scenario: shared-ui-store-product-listing-SC-27 - Results fail while filter groups stand
+**Serves:** Browse states - results fail while filter groups stand
 
 - **GIVEN** filter groups that have resolved and results that are in an error condition
 - **THEN** filter chrome still offers its controls, still usable
@@ -67,12 +72,14 @@ other displays.
 - **AND** a retry affordance is offered when the consumer supplied one, reporting activation through a callback
 
 #### Scenario: shared-ui-store-product-listing-SC-28 - Filter groups load while results are ready
+**Serves:** Browse states - filter groups load while results are ready
 
 - **GIVEN** filter groups that are still loading and results that have resolved
 - **THEN** the results and their count are displayed
 - **AND** the filter chrome displays a loading treatment rather than an empty filter list
 
 #### Scenario: shared-ui-store-product-listing-SC-29 - One boundary is not inferred from the other
+**Serves:** Browse states - one boundary is not inferred from the other
 
 - **WHEN** either boundary is in a loading condition
 - **THEN** the surface displays no global blocking treatment over the region that has resolved
@@ -117,6 +124,7 @@ each with the supplied label and destination. When no utility links are
 supplied, that region SHALL occupy no space.
 
 #### Scenario: shared-ui-store-product-listing-SC-30 - Search is displayed and reported as supplied
+**Serves:** Filters and sort - search is displayed and reported as supplied
 
 - **GIVEN** a wide viewport and a supplied search query of `pika`
 - **THEN** the search field displays `pika`
@@ -125,6 +133,7 @@ supplied, that region SHALL occupy no space.
 - **AND** the change was reported once through the callback
 
 #### Scenario: shared-ui-store-product-listing-SC-31 - Search clear is offered only when appropriate
+**Serves:** Filters and sort - search clear is offered only when appropriate
 
 - **GIVEN** a wide viewport, a non-empty supplied search query, and a supplied clear handler
 - **THEN** a clear affordance is displayed
@@ -133,17 +142,20 @@ supplied, that region SHALL occupy no space.
 - **AND** the field still displays the supplied query until the consumer supplies a new one
 
 #### Scenario: shared-ui-store-product-listing-SC-32 - No clear affordance without a handler
+**Serves:** No defaulted content - no clear affordance without a handler
 
 - **GIVEN** a wide viewport, a non-empty supplied search query, and no clear handler
 - **THEN** no clear affordance is displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-33 - No filter selected is unrestricted
+**Serves:** Filters and sort - no filter selected is unrestricted
 
 - **GIVEN** a filter group whose supplied selection contains no option
 - **THEN** every option is displayed as unselected
 - **AND** the supplied results are still displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-34 - A sidebar filter is reported
+**Serves:** Filters and sort - a sidebar filter is reported
 
 - **GIVEN** a filter group with no option selected
 - **WHEN** a shopper activates one option and the consumer supplies no new selection
@@ -152,28 +164,33 @@ supplied, that region SHALL occupy no space.
 - **AND** the change was reported once, naming the group and the option
 
 #### Scenario: shared-ui-store-product-listing-SC-35 - Two filter options selected
+**Serves:** Filters and sort - two filter options selected
 
 - **GIVEN** a filter group whose supplied selection contains two options
 - **THEN** both options are displayed as selected together
 
 #### Scenario: shared-ui-store-product-listing-SC-36 - An empty filter group
+**Serves:** Filters and sort - an empty filter group
 
 - **GIVEN** a resolved filter list that includes a group with no options
 - **THEN** that group is not displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-37 - A group expand is reported
+**Serves:** Filters and sort - a group expand is reported
 
 - **GIVEN** a filter group with a supplied expand label on a wide viewport
 - **WHEN** a shopper activates the expand affordance
 - **THEN** the expand callback is reported once, naming the group
 
 #### Scenario: shared-ui-store-product-listing-SC-86 - A group collapse is reported
+**Serves:** Adaptive filter chrome - a group collapse is reported
 
 - **GIVEN** a filter group with a supplied collapse label on a wide viewport
 - **WHEN** a shopper activates the collapse affordance
 - **THEN** the collapse callback is reported once, naming the group
 
 #### Scenario: shared-ui-store-product-listing-SC-38 - No utility links
+**Serves:** No defaulted content - no utility links
 
 - **GIVEN** no utility links supplied
 - **THEN** no utility-link region is displayed
@@ -206,11 +223,13 @@ On a narrow viewport the header region SHALL follow the narrow pill chrome in
 chips and a dropdown sort trigger.
 
 #### Scenario: shared-ui-store-product-listing-SC-39 - The count is not derived
+**Serves:** Filters and sort - the count is not derived
 
 - **GIVEN** a supplied result count of `38` and a page carrying 8 products
 - **THEN** the header displays the supplied `38`
 
 #### Scenario: shared-ui-store-product-listing-SC-40 - Sorting is reported
+**Serves:** Filters and sort - sorting is reported
 
 - **WHEN** a shopper chooses a sort option other than the active one
 - **THEN** that option is reported once through the callback
@@ -218,23 +237,27 @@ chips and a dropdown sort trigger.
 - **AND** the previously active option stays marked as selected until the consumer supplies a new one
 
 #### Scenario: shared-ui-store-product-listing-SC-41 - No sort options supplied
+**Serves:** Filters and sort - no sort options supplied
 
 - **GIVEN** an empty list of sort options
 - **THEN** the sort control is not displayed and the result count is still displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-42 - No applied filters
+**Serves:** Filters and sort - no applied filters
 
 - **GIVEN** a wide viewport and no applied filters supplied
 - **THEN** the applied-filter region is not displayed
 - **AND** the result count is still displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-43 - An applied filter is removed
+**Serves:** Filters and sort - an applied filter is removed
 
 - **GIVEN** a wide viewport and a supplied applied filter
 - **WHEN** a shopper dismisses that chip
 - **THEN** a change is reported naming the group and the option as unselected
 
 #### Scenario: shared-ui-store-product-listing-SC-44 - Applied filters are cleared
+**Serves:** Filters and sort - applied filters are cleared
 
 - **GIVEN** a wide viewport, at least one supplied applied filter, and a supplied clear handler
 - **WHEN** a shopper activates the clear affordance
@@ -242,6 +265,7 @@ chips and a dropdown sort trigger.
 - **AND** the chips are still displayed until the consumer supplies a new list
 
 #### Scenario: shared-ui-store-product-listing-SC-45 - Sort and applied filters combine
+**Serves:** Filters and sort - sort and applied filters combine
 
 - **GIVEN** a wide viewport
 - **WHEN** a sort option is selected and at least one applied filter is supplied
@@ -283,6 +307,7 @@ outside press SHALL close without applying the draft.
 On a narrow viewport the applied-filter chip row SHALL NOT be displayed.
 
 #### Scenario: shared-ui-store-product-listing-SC-80 - Narrow chrome shows count and pills
+**Serves:** Adaptive filter chrome - narrow chrome shows count and pills
 
 - **GIVEN** the surface at a narrow viewport with sort options and two filter groups with options
 - **THEN** the result count is displayed
@@ -291,6 +316,7 @@ On a narrow viewport the applied-filter chip row SHALL NOT be displayed.
 - **AND** no left Filter control is displayed
 
 #### Scenario: shared-ui-store-product-listing-SC-81 - Sort applies on choose
+**Serves:** Adaptive filter chrome - sort applies on choose
 
 - **GIVEN** an open sort bottom drawer and an inactive sort option
 - **WHEN** a shopper activates that option
@@ -298,6 +324,7 @@ On a narrow viewport the applied-filter chip row SHALL NOT be displayed.
 - **AND** the drawer closes
 
 #### Scenario: shared-ui-store-product-listing-SC-82 - Facet pill labels follow selection
+**Serves:** Adaptive filter chrome - facet pill labels follow selection
 
 - **GIVEN** a narrow viewport and a Types group with no selection
 - **THEN** the Types pill shows the group label
@@ -307,6 +334,7 @@ On a narrow viewport the applied-filter chip row SHALL NOT be displayed.
 - **THEN** the Worlds pill shows the compact label with count `2`
 
 #### Scenario: shared-ui-store-product-listing-SC-83 - Facet draft applies on Show Results
+**Serves:** Adaptive filter chrome - facet draft applies on Show Results
 
 - **GIVEN** an open Worlds bottom drawer seeded from an empty selection
 - **WHEN** a shopper selects two options in the draft, then activates Show Results
@@ -315,6 +343,7 @@ On a narrow viewport the applied-filter chip row SHALL NOT be displayed.
 - **AND** options not in the draft that were previously selected are reported as unselected
 
 #### Scenario: shared-ui-store-product-listing-SC-84 - Facet Clear empties the draft only
+**Serves:** Adaptive filter chrome - facet Clear empties the draft only
 
 - **GIVEN** an open Types bottom drawer whose draft contains one option
 - **WHEN** a shopper activates Clear
@@ -322,6 +351,7 @@ On a narrow viewport the applied-filter chip row SHALL NOT be displayed.
 - **AND** no filter-change is reported until Show Results
 
 #### Scenario: shared-ui-store-product-listing-SC-85 - Wide viewport stacks facet groups
+**Serves:** Adaptive filter chrome - wide viewport stacks facet groups
 
 - **GIVEN** the surface at a wide viewport with two filter groups with options
 - **THEN** both groups' labels and options are offered in a stack in the sidebar

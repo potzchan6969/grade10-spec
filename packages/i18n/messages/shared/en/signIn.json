@@ -3,12 +3,15 @@
   "googleFailed": "Could not reach Google.",
   "emailLabel": "Email",
   "emailPlaceholder": "Enter your email",
-  "sendLinkLabel": "Send Magic Link",
-  "sendLinkFailed": "Could not send the magic link.",
+  "sendLinkLabel": "Sign In with Email",
+  "sendLinkFailed": "Could not send the sign-in link.",
   "sendWait": "Please wait a minute before requesting another email.",
-  "linkSentMessage": "Check your inbox for a sign-in link.",
+  "linkSentMessage": "We've just sent a sign-in link to",
+  "resendLabel": "Resend",
+  "resendCountdown": "Resend ({seconds})",
   "linkExpired": "This sign-in link has expired.",
   "linkInvalid": "This sign-in link no longer works.",
   "linkBanned": "You can’t sign in with this account.",
-  "legal": "By continuing, you agree to our <terms>Terms of Service</terms> & <privacy>Privacy Policy</privacy>."
+  "legal": "By continuing, you agree to our <terms>Terms of Service</terms> & <privacy>Privacy Policy</privacy>.",
+  "linkSentTitle": "Check Your Email"
 }

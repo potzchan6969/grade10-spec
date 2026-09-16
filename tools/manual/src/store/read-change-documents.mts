@@ -16,15 +16,17 @@ import {
   subdirectories,
   toItemError,
 } from "./disk.mts";
-import type { GitIndex } from "./git.mts";
+import type { GitIndex, StoreMain } from "./git.mts";
 import { findSection, leadingTitle, outline } from "./markdown.mts";
 import {
   deltaFiles,
   deltaKindOf,
   deltaRequirementSections,
   deltaSections,
+  planOf,
   renamedPairs,
 } from "./read-changes.mts";
+import { schemaArtifacts } from "./read-schema.mts";
 import { readJourneys, readRequirement, readTestCases } from "./read-specs.mts";
 
 /**
@@ -50,14 +52,17 @@ const FALLBACK: { id: string; generates: string }[] = [
   { id: "tasks", generates: "tasks.md" },
 ];
 
+/** `main` is where a change on it has its task list read, as the board reads
+ * it; `null` reads every change from disk. */
 export function readChangeDocuments(
   root: string,
   git: GitIndex,
+  main: StoreMain | null,
 ): ChangeDocument[] {
   const dir = join(root, "openspec", "changes");
   return subdirectories(dir)
     .filter((name) => name !== "archive")
-    .map((name) => readChangeDocument(root, join(dir, name), name, git));
+    .map((name) => readChangeDocument(root, join(dir, name), name, git, main));
 }
 
 export function readChangeDocument(
@@ -65,6 +70,7 @@ export function readChangeDocument(
   dir: string,
   id: string,
   git: GitIndex,
+  main: StoreMain | null,
 ): ChangeDocument {
   const rel = storePath(root, dir);
   const schema = schemaOf(dir);
@@ -78,7 +84,15 @@ export function readChangeDocument(
     dir: rel,
     schema,
     schemaKnown: declared !== undefined,
-    artifacts: readArtifacts(dir, rel, declared ?? FALLBACK, deltas, git, root),
+    artifacts: readArtifacts(
+      dir,
+      rel,
+      declared ?? FALLBACK,
+      deltas,
+      git,
+      root,
+      planOf(dir, id, main).text !== undefined,
+    ),
     deltas,
   };
 }
@@ -97,31 +111,6 @@ function schemaOf(dir: string): string {
     // nothing to add and reads the change as if it named no schema.
     return "";
   }
-}
-
-/** The artifacts a schema declares, in the order it declares them — the
- * order they are written in, each built on the one before. Undefined for a
- * schema this store does not define: the built-ins live inside the CLI, and
- * guessing their shape would let the strip claim a file is missing that the
- * schema never asked for. */
-export function schemaArtifacts(
-  root: string,
-  schema: string,
-): { id: string; generates: string }[] | undefined {
-  const text = readTextIfExists(
-    join(root, "openspec", "schemas", schema, "schema.yaml"),
-  );
-  if (text === undefined) return undefined;
-  const parsed = YAML.parse(text) as { artifacts?: unknown } | null;
-  const listed = Array.isArray(parsed?.artifacts) ? parsed.artifacts : [];
-  const artifacts: { id: string; generates: string }[] = [];
-  for (const entry of listed) {
-    const fields = (entry ?? {}) as Record<string, unknown>;
-    if (typeof fields.id !== "string" || typeof fields.generates !== "string")
-      continue;
-    artifacts.push({ id: fields.id, generates: fields.generates });
-  }
-  return artifacts;
 }
 
 /** How an artifact renders, from what the schema says it generates: the
@@ -172,6 +161,7 @@ function readArtifacts(
   deltas: ChangeDeltaDocument[],
   git: GitIndex,
   root: string,
+  planned: boolean,
 ): ChangeArtifact[] {
   const unclaimed = new Set(
     readdirSync(dir, { withFileTypes: true })
@@ -191,7 +181,8 @@ function readArtifacts(
       artifacts.push({ name: id, kind, present: inDeltas(kind, deltas) });
       continue;
     }
-    const present = unclaimed.delete(generates);
+    const onDisk = unclaimed.delete(generates);
+    const present = kind === "tasks" ? planned : onDisk;
     artifacts.push(
       fileArtifact(root, id, kind, `${rel}/${generates}`, present, git),
     );

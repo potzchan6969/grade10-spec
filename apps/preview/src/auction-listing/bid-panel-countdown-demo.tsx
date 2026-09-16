@@ -43,9 +43,10 @@ function BidPanelCountdownDemo() {
       cases={COUNTDOWN_FLOW_SCENARIOS}
       description={
         <p>
-          These cases guard the extension window, time-unit rollovers, auction
-          close, and an already-extended auction on the signed-out bid panel.
-          The countdown must stay valid through each boundary and restart the
+          These cases guard countdown boundaries, time-unit rollovers, auction
+          close, and an already-extended-bidding auction on the signed-out bid
+          panel. The Time left tooltip explains post-close timer restarts. The
+          countdown must stay valid through each boundary and restart the
           demonstration only after the terminal value has been visible. Sign-in
           remains the only bid action.
         </p>

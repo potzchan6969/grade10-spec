@@ -25,45 +25,53 @@ The list SHALL NOT format a price, compute a discount, decide whether a
 product is sold out, or hold a cart quantity.
 
 #### Scenario: shared-ui-store-product-listing-SC-04 - Prices are displayed as supplied
+**Serves:** Tile contract - prices are displayed as supplied
 
 - **GIVEN** a product supplied with a current price of `HKD 105` and an original price of `HKD 123`
 - **THEN** the tile displays both exactly as supplied
 - **AND** the original price is shown with strikethrough treatment
 
 #### Scenario: shared-ui-store-product-listing-SC-05 - No original price
+**Serves:** Tile contract - no original price
 
 - **GIVEN** a product supplied with a current price and no original price
 - **THEN** only the current price is displayed
 - **AND** no strikethrough price is shown
 
 #### Scenario: shared-ui-store-product-listing-SC-06 - A cart quantity change is reported, not performed
+**Serves:** Tile contract - a cart quantity change is reported, not performed
 
 - **WHEN** a shopper changes the cart quantity on a tile through its cart control
 - **THEN** the requested quantity is reported once, identifying that product
 - **AND** the tile's cart condition is unchanged until the consumer supplies a new one
 
 #### Scenario: shared-ui-store-product-listing-SC-07 - A sold-out product
+**Serves:** Tile contract - a sold-out product
 
 - **GIVEN** a product supplied as sold out
 - **THEN** its tile displays the sold-out treatment and its cart action cannot be activated
 
 #### Scenario: shared-ui-store-product-listing-SC-08 - No wishlist control on a tile
+**Serves:** Tile contract - no wishlist control on a tile
 
 - **WHEN** a product tile renders, whether available or sold out
 - **THEN** no wishlist control appears on it
 
 #### Scenario: shared-ui-store-product-listing-SC-09 - No metadata badges on a tile
+**Serves:** Tile contract - no metadata badges on a tile
 
 - **WHEN** a product tile renders
 - **THEN** no collection, series, or region badge appears on it
 
 #### Scenario: shared-ui-store-product-listing-SC-87 - The product name activates the tile
+**Serves:** Tile contract - the product name activates the tile
 
 - **GIVEN** a product that is not sold out and a tile-activation callback
 - **WHEN** a shopper activates the product name
 - **THEN** tile activation is reported once, identifying that product
 
 #### Scenario: shared-ui-store-product-listing-SC-88 - A sold-out name stays inert
+**Serves:** Tile contract - a sold-out name stays inert
 
 - **GIVEN** a product supplied as sold out and a tile-activation callback
 - **WHEN** the tile renders
@@ -71,6 +79,7 @@ product is sold out, or hold a cart quantity.
 - **AND** activating the name does not report tile activation
 
 #### Scenario: shared-ui-store-product-listing-SC-89 - No activation without a callback
+**Serves:** Tile contract - no activation without a callback
 
 - **GIVEN** a product that is not sold out and no tile-activation callback
 - **WHEN** the tile renders

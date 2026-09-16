@@ -54,18 +54,21 @@ renders. An address under no surface SHALL resolve to a not-found surface
 that names the address, never to home.
 
 #### Scenario: zzz-site-site-navigation-SC-01 - Each view has an address
+**Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
 - **WHEN** the sign-in or profile address is opened directly, by link or by
   refresh
 - **THEN** that surface renders at that address
 
 #### Scenario: zzz-site-site-navigation-SC-02 - A refresh keeps the collector's place
+**Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
 - **GIVEN** a collector who moved from home to sign-in
 - **WHEN** they refresh
 - **THEN** sign-in renders, not home
 
 #### Scenario: zzz-site-site-navigation-SC-03 - An unknown address resolves to not-found
+**Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
 - **WHEN** a collector opens an address under no surface the site answers
 - **THEN** the not-found surface renders, naming the address that failed
@@ -80,24 +83,28 @@ corrects. Only these session-decided addresses SHALL wait for the session
 to resolve.
 
 #### Scenario: zzz-site-site-navigation-SC-04 - A signed-in collector lands on home
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
 
 - **GIVEN** a signed-in collector
 - **WHEN** they open the home address
 - **THEN** their profile renders and the address reads as the profile
 
 #### Scenario: zzz-site-site-navigation-SC-05 - A signed-in collector asks for sign-in
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
 
 - **GIVEN** a signed-in collector
 - **WHEN** they open the sign-in address
 - **THEN** their profile renders and the address reads as the profile
 
 #### Scenario: zzz-site-site-navigation-SC-06 - A signed-out collector asks for the profile
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
 
 - **GIVEN** a collector who is not signed in
 - **WHEN** they open the profile address
 - **THEN** the sign-in surface renders and the address reads as sign-in
 
 #### Scenario: zzz-site-site-navigation-SC-07 - Back never returns to a corrected address
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
 
 - **GIVEN** a collector whose navigation was just corrected
 - **WHEN** they go back
@@ -105,6 +112,7 @@ to resolve.
   that corrected them forward
 
 #### Scenario: zzz-site-site-navigation-SC-08 - Not-found does not wait
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
 
 - **GIVEN** the session has not yet resolved
 - **WHEN** a collector opens an address under no surface the site answers
@@ -118,6 +126,7 @@ collector modifies, a link that opens elsewhere by its own declaration, and
 a destination on another origin SHALL be left to the browser untouched.
 
 #### Scenario: zzz-site-site-navigation-SC-09 - Sign-in opens in place
+**Serves:** zzz-site-site-navigation-US-03 - Collector moves between surfaces without a page load
 
 - **GIVEN** a collector on home
 - **WHEN** they choose to sign in
@@ -125,18 +134,21 @@ a destination on another origin SHALL be left to the browser untouched.
   document load
 
 #### Scenario: zzz-site-site-navigation-SC-10 - Back steps back into the site
+**Serves:** zzz-site-site-navigation-US-03 - Collector moves between surfaces without a page load
 
 - **GIVEN** a collector who moved from home to sign-in
 - **WHEN** they go back
 - **THEN** home renders, still without a full document load
 
 #### Scenario: zzz-site-site-navigation-SC-11 - A modified click is the browser's
+**Serves:** zzz-site-site-navigation-US-03 - Collector moves between surfaces without a page load
 
 - **WHEN** a collector clicks an in-app link with a modifier held, such as
   the one that opens a new tab
 - **THEN** the browser's own behavior happens, unaltered
 
 #### Scenario: zzz-site-site-navigation-SC-12 - Another origin is the browser's
+**Serves:** zzz-site-site-navigation-US-03 - Collector moves between surfaces without a page load
 
 - **WHEN** a collector clicks a link to another origin
 - **THEN** the browser follows it as a normal page load
@@ -148,6 +160,7 @@ they left that entry at. A navigation to a new entry SHALL start at the
 top.
 
 #### Scenario: zzz-site-site-navigation-SC-13 - Back returns to where they were
+**Serves:** zzz-site-site-navigation-US-04 - Collector resumes a surface where they left it
 
 - **GIVEN** a collector who scrolled partway down a surface and navigated
   from there
@@ -155,6 +168,7 @@ top.
 - **THEN** the surface is scrolled to where they left it
 
 #### Scenario: zzz-site-site-navigation-SC-14 - A new surface starts at the top
+**Serves:** zzz-site-site-navigation-US-04 - Collector resumes a surface where they left it
 
 - **GIVEN** a collector scrolled partway down a surface
 - **WHEN** they navigate to another surface
@@ -166,12 +180,14 @@ Opening a surface SHALL NOT download another surface's page code.
 Navigating to a surface SHALL load that surface's code then.
 
 #### Scenario: zzz-site-site-navigation-SC-15 - The first visit pays for one surface
+**Serves:** zzz-site-site-navigation-US-05 - Collector downloads only the surface they open
 
 - **WHEN** a collector opens home cold
 - **THEN** no script containing the profile's or sign-in's page code is
   downloaded
 
 #### Scenario: zzz-site-site-navigation-SC-16 - The destination loads on arrival
+**Serves:** zzz-site-site-navigation-US-05 - Collector downloads only the surface they open
 
 - **GIVEN** a collector on home
 - **WHEN** they move to sign-in

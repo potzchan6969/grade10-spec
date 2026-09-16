@@ -56,7 +56,7 @@ the preview. The full lot page is
 | Linked card, editable | [Linked Card Editable](?path=/story/auction-listing-bid-panel--linked-card-editable) | Masked card with Change, before the first bid on this lot. |
 | Linked card, locked | [Linked Card](?path=/story/auction-listing-bid-panel--linked-card) | Masked card without Change, after the first bid. |
 | Ready | [Ready](?path=/story/auction-listing-bid-panel--ready) | Enrollment complete. Quick-maximum presets, Set Maximum, and always-on maximum mechanism subtext. |
-| Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Committing a maximum authorizes in the background; a declined hold shows an error on the bid CTA. |
+| Payment authorization | [Payment Authorization](?path=/story/auction-listing-bid-panel--payment-authorization) | Optional holds-enabled path only. First launch does not take a bid-time hold; when holds are on, a declined authorization shows an error on the bid CTA. |
 
 ## Dialogs
 
@@ -66,8 +66,8 @@ the preview. The full lot page is
 | Setup from Change | [Setup Modal From Change](?path=/story/auction-listing-bid-panel-dialogs--setup-modal-from-change) | Same sheet after Change. Age attestation stays checked when already given. |
 | Setup linking | [Setup Modal Linking](?path=/story/auction-listing-bid-panel-dialogs--setup-modal-linking) | Provider link in flight — Linking CTA, locked iframe and attestation, dismiss blocked. |
 | Setup error | [Setup Modal Error](?path=/story/auction-listing-bid-panel-dialogs--setup-modal-error) | Tiny destructive message under the card field after Link Card fails. |
-| Payment authorization pending | [Payment Authorization Pending](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-pending) | Bid CTA busy while Stripe authorizes — no setup modal. |
-| Payment authorization refused | [Payment Authorization Refused](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-refused) | Decline error on the bid CTA; collector can Change card before retrying. |
+| Payment authorization pending | [Payment Authorization Pending](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-pending) | Holds-enabled only. Bid CTA busy while Stripe authorizes — no setup modal. |
+| Payment authorization refused | [Payment Authorization Refused](?path=/story/auction-listing-bid-panel-dialogs--payment-authorization-refused) | Holds-enabled only. Decline error on the bid CTA; collector can Change card before retrying. |
 
 ## Bidding and standing
 
@@ -82,15 +82,16 @@ maximum; there is no manual vs auto mode toggle.
 | Outbid | [Outbid](?path=/story/auction-listing-listingauctionbidcard--outbid) | \`standing="outbid"\`. Current bid is above the viewer's maximum. |
 | Live sequence + auto cases | [Flows / Bidding](?path=/story/auction-listing-bid-panel-flows--bidding) | Bids through leading and outbid, then first maximum, leading maximum, overtaken, and accepted without leading. |
 | Interactive enrollment | [Flows / Interactive](?path=/story/auction-listing-bid-panel-flows--interactive) | Walks sign-in → card link → ready on one card. |
-| Closed / won / lost | [Auction Lot Details](?path=/story/pages-auction-lot-details--closed-won-payment-due) | Payment due, settled, lost, sold, and unsold on the lot page. |
+| Closed / won / lost | [Auction Lot Details](?path=/story/pages-auction-lot-details--closed-won-payment-due) | Awaiting address, settled, lost, sold, and unsold on the lot page. |
 
 ## Countdown
 
 [Flows / Countdown](?path=/story/auction-listing-bid-panel-flows--countdown)
-runs the signed-out card through extension evaluation, unit rollovers, close,
-and already-extended.
+runs the signed-out card through countdown boundaries, unit rollovers, close,
+and already in extended bidding.
 
-\`view.extended\` switches the time label to Time left (auto-extended).
+\`view.extended\` switches the time label to Time left (extended).
+The Time left info tooltip explains post-close extended bidding (timer restart per bid).
 \`view.countdownSeconds\` (and optional \`closesAtMs\`) drives the rolling
 countdown. Closed lots pass \`countdownSeconds: null\`, \`opensAtMs\`, and
 \`deadlineAtMs\` so the primary value is the close date and the subtext is one
@@ -104,7 +105,7 @@ Use Controls on this page; calls appear in the Actions panel.
 | Callback | Fires when | Consumer owns |
 | --- | --- | --- |
 | \`onPlaceBid\` | Sign In to Bid when signed out; Link a card to bid when \`needs-card\` | Opening sign-in or link-card setup. |
-| \`onCommitMaximum\` | A quick-maximum preset or Review maximum when \`ready\` | Validating the entered maximum, taking the hold, and writing the new cap. |
+| \`onCommitMaximum\` | A quick-maximum preset or Review maximum when \`ready\` | Validating the entered maximum and writing the new cap. First launch does not take a bid-time hold. |
 
 ## Enrollment callbacks
 
@@ -155,7 +156,7 @@ around it.
     onCommitMaximum: {
       control: false,
       description:
-        "Fires when a preset or Review maximum commits an amount. The consumer validates the amount, takes the hold, and writes the cap.",
+        "Fires when a preset or Review maximum commits an amount. The consumer validates the amount and writes the cap. First launch does not take a bid-time hold.",
     },
   },
   decorators: [
@@ -337,7 +338,7 @@ Ready.play = async ({ canvasElement }) => {
   ).not.toBeInTheDocument();
   expect(
     canvas.getByText(
-      "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
+      "We bid only as needed up to your maximum. You can raise, not lower or cancel.",
     ),
   ).toBeVisible();
 };

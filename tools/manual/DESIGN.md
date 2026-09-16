@@ -192,11 +192,11 @@ pretending.
 Spec entry shape:
 
 ```
-{ id, title, purpose, featureSet?, lastCommit,
+{ id, title, purpose, featureSet?, featureGroups?, lastCommit,
   requirements: [{ name, text,
-    scenarios: [{ id?, name, text }] }],
-  journeys?:  [{ id, title, text, acceptedBy: [scenarioId] }],
-  testCases?: [{ id, title, traces: [scenarioId], status }],
+    scenarios: [{ id?, name, text, serves? }] }],   serves: the anchor
+  journeys?:  [{ id, title, text }],                names no scenario
+  testCases?: [{ id, title, traces: [anchor], status }],
   testCasesStatus?,
   testCaseCitations?: [{ id, title }],   the suite's **Covers:** quotes
   outOfSuite?: [scenarioId],             deliberately uncovered, named
@@ -258,11 +258,19 @@ Change entry shape:
     requirements: [{ name, kind, to?, text? }] }] }
 ```
 
+A change on the store's main has its `tasks.md` read there — `origin/HEAD`,
+else `origin/main`, as the clone last fetched — because `pnpm plan` records
+every claim and checkmark on main and never writes a checkout. A change
+only this checkout holds reads its own copy and says it is not on main; one
+whose other files differ from main says so too. A clone with no main
+refuses to build rather than show one branch's claims. The checker alone
+reads the checkout, because it judges the files a pull request changes.
+
 A group's `idle` is the one thing on a change that no file states: the
 later of when the current owner's unbroken hold began and the newest
-commit that raised its checked count, read from the git history of that
-one `tasks.md`. The store can say @dana owns group 5; it cannot say the
-claim landed nine days ago and nothing has been checked off since, which
+commit that raised its checked count, read from that `tasks.md`'s history
+on main, or on HEAD for a change only the checkout has. The store can say
+@dana owns group 5; it cannot say the claim landed nine days ago and nothing has been checked off since, which
 is the failure claim-at-pickup exists to prevent — a name on idle work
 reads as covered. The inference is not ours: `openspec-viewer` derives it
 for its own board and publishes it as `lib/store`, and `store/idle.mts`

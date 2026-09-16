@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { readGitIndex, readMainStates } from "../src/store/git.mts";
+import { mainStateOf, readGitIndex, readMain } from "../src/store/git.mts";
 
 /** The git reader against real repositories, because both things it gets
  * wrong are things only git can show: how it prints a path, and how long a
@@ -63,11 +63,12 @@ describe.each(["sha1", "sha256"] as const)("a %s repository", (format) => {
   });
 });
 
-/** The plan is read at the store's main; a change not settled there cannot be
- * claimed or archived, and the board has to say so. The states are read off
- * the refs the clone has — `origin/main` here is a plain remote-tracking ref,
- * which is all the reader asks for. */
-describe("where a change stands against origin/main", () => {
+/** The plan is read at the store's main; a change missing there cannot be
+ * claimed, a checkout copy that differs from it is not the settled brief, and
+ * the board has to say both. Main is read off the refs the clone has —
+ * `origin/main` here is a plain remote-tracking ref, which is all the reader
+ * asks for. */
+describe("the store's main", () => {
   function storeWith(): { root: string; run: Git } {
     const root = mkdtempSync(join(tmpdir(), "manual-main-"));
     const run = gitIn(root);
@@ -93,36 +94,78 @@ describe("where a change stands against origin/main", () => {
     return { root, run };
   }
 
-  it("flags unmerged and diverged, and lets a checkmark churn tasks.md", async () => {
-    const { root } = storeWith();
-    const states = await readMainStates(root, ["settled", "branch-only"]);
+  it("reads each task list as main holds it, not as the checkout does", async () => {
+    const main = await readMain(storeWith().root);
 
-    expect(states.get("branch-only")).toEqual({
+    expect(main.ref).toBe("origin/main");
+    expect([...main.changes]).toEqual(["settled"]);
+    expect(main.tasks.get("settled")).toBe("## 1. G\n\n- [ ] 1.1 T\n");
+  });
+
+  it("flags unmerged and diverged, and lets a checkmark churn tasks.md", async () => {
+    const main = await readMain(storeWith().root);
+
+    expect(mainStateOf(main, "branch-only")).toEqual({
       state: "unmerged",
       ref: "origin/main",
     });
-    // tech-design.md counts; the flipped checkbox in tasks.md deliberately not.
-    expect(states.get("settled")).toEqual({
+    // design.md counts; the flipped checkbox in tasks.md deliberately not.
+    expect(mainStateOf(main, "settled")).toEqual({
       state: "diverged",
       ref: "origin/main",
       files: 1,
     });
   });
 
-  it("answers nothing at all for a clone with no shared branch", async () => {
+  it("counts a file moved out of a change against the change it left", async () => {
+    const { root, run } = storeWith();
+    run(
+      "mv",
+      "openspec/changes/settled/proposal.md",
+      "openspec/changes/branch-only/moved.md",
+    );
+    const main = await readMain(root);
+
+    expect(mainStateOf(main, "settled")).toEqual({
+      state: "diverged",
+      ref: "origin/main",
+      files: 2,
+    });
+  });
+
+  it("reads the branch origin/HEAD names, and refuses one origin lacks", async () => {
+    const { root, run } = storeWith();
+    run("update-ref", "refs/remotes/origin/trunk", "HEAD");
+    run(
+      "symbolic-ref",
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/trunk",
+    );
+    const main = await readMain(root);
+
+    expect(main.ref).toBe("origin/trunk");
+    expect([...main.changes].sort()).toEqual(["branch-only", "settled"]);
+
+    run("symbolic-ref", "refs/remotes/origin/HEAD", "refs/remotes/origin/gone");
+    await expect(readMain(root)).rejects.toThrow(
+      "has no origin/gone: claims and checkmarks are read on the store's main — run `git remote set-head origin --auto`",
+    );
+  });
+
+  it("refuses a clone with no main to read claims at", async () => {
     const { root, run } = storeWith();
     run("update-ref", "-d", "refs/remotes/origin/main");
-    const states = await readMainStates(root, ["settled", "branch-only"]);
 
-    expect(states.size).toBe(0);
+    await expect(readMain(root)).rejects.toThrow("has no origin/main");
   });
 
   it("says nothing once main has caught up", async () => {
     const { root, run } = storeWith();
     run("update-ref", "refs/remotes/origin/main", "HEAD");
-    const states = await readMainStates(root, ["settled", "branch-only"]);
+    const main = await readMain(root);
 
-    expect(states.size).toBe(0);
+    expect(mainStateOf(main, "settled")).toBeUndefined();
+    expect(mainStateOf(main, "branch-only")).toBeUndefined();
   });
 });
 

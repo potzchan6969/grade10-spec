@@ -8,10 +8,12 @@
      platform-e2e-US<n>), and product and platform carry no coverage
      obligation - they are smoke passes.
 
-     A derived reading of the spec.md and user-journeys.md beside this file,
-     never a second source of truth. The shape below is fixed by
+     An INDEPENDENT reading of the user-journeys.md and feature set beside this
+     file, written without sight of the spec's ## Requirements — never derived
+     from the scenarios, because a suite derived from them cannot find what
+     they left out. The shape below is fixed by
      docs/governance/specs-to-test-cases.md - follow that document rather than
-     this sketch where the two ever part. Generate the first draft with the
+     this sketch where the two ever part. Generate the draft with the
      spec-to-tcs skill, review it with tcs-review, and check it with
      `pnpm run tcs:validate`. -->
 
@@ -44,6 +46,8 @@
 * **Automation status:** manual
 * **Testability:** automation | manual | automation, manual
 * **Trace:** <capability>-US-<n>
+<!-- or, for a capability whose journeys file says **Walked by:** nobody, a
+     ## Feature set root group name matched verbatim. Never a scenario id. -->
 
 **Pre-conditions:**
 
@@ -58,3 +62,31 @@
 **Expected Results:**
 
 * <!-- from THEN -->
+
+## Raised
+<!-- Written by the blind reading: every point the isolated input did not
+     settle, as a question for the author. Not cases, not defects — the things
+     that had to be decided in order to write anything at all. Required, and
+     may be empty; empty is a claim on the record that the input settled
+     everything. It stays in the file after reconciliation, because QA's review
+     is largely a check on what was done with it. -->
+
+## Settled
+<!-- Questions earlier runs raised and had answered, one line each, no scenario
+     ids. Carried into the durable suite at archive, and read by the next blind
+     pass on purpose: it says what has already been asked, which is not what
+     the scenarios say. Without it the same misreading is raised every run. -->
+
+## Reconciliation
+<!-- Written by the run after both readings land, and the evidence that the
+     blind pass happened at all. One line per disposition:
+     **Raised, folded into spec**, **Raised, rejected** with the reason,
+     **Raised, escalated** with the PRD ❓ it became, **Raised, deferred** with
+     who must settle it, **Contradicted** where the two readings state opposite
+     things — which the run never settles on its own — and **Uncovered anchors**
+     with where each is verified instead. A finding is recorded here even when
+     the rule it becomes lands in another capability's spec; say where it went.
+     Record the isolated input's hash on the Run line.
+
+     Scenario ids may appear here only while the change is open; archive fold
+     and tcs-review both strip them, leaving the dispositions and reasons. -->

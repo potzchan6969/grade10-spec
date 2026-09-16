@@ -3,12 +3,15 @@
   "googleFailed": "Google에 연결하지 못했습니다.",
   "emailLabel": "이메일",
   "emailPlaceholder": "이메일을 입력하세요",
-  "sendLinkLabel": "로그인 링크 보내기",
+  "sendLinkLabel": "이메일로 로그인",
   "sendLinkFailed": "로그인 링크를 보내지 못했습니다.",
   "sendWait": "1분 후에 다시 이메일을 요청해 주세요.",
-  "linkSentMessage": "받은편지함에서 로그인 링크를 확인해 주세요.",
+  "linkSentMessage": "로그인 링크를 다음 주소로 보냈습니다",
+  "resendLabel": "다시 보내기",
+  "resendCountdown": "다시 보내기 ({seconds})",
   "linkExpired": "이 로그인 링크가 만료되었습니다.",
   "linkInvalid": "이 로그인 링크는 더 이상 사용할 수 없습니다.",
   "linkBanned": "이 계정으로는 로그인할 수 없습니다.",
-  "legal": "계속하면 <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하는 것으로 봅니다."
+  "legal": "계속하면 <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하는 것으로 봅니다.",
+  "linkSentTitle": "이메일을 확인하세요"
 }

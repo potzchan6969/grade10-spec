@@ -41,6 +41,7 @@ Runs once per row of **Test data**.
 | Has a winner, order awaiting payment | Ended |
 | Has a winner, order shipped | Ended |
 | Has a winner, order cancelled | Ended |
+| Bidding ended with no winner | Ended |
 
 **Steps:**
 
@@ -88,11 +89,11 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-lot-status-US2: Collector sees only lots that can be bought
+## grade10-site-auction-lot-status-US2: Collector does not see draft or called-off lots
 
 **As a** collector,
-**I want** lots that were never published, did not sell, or were called off to be hidden from me,
-**so that** I do not spend time on a lot nobody can buy.
+**I want** lots that were never published or were called off to be hidden from me,
+**so that** I do not spend time on a lot that never went to auction.
 
 ### grade10-site-auction-lot-status-US2-TC1-1: Hidden lots are not in the catalogue
 
@@ -120,7 +121,6 @@ Runs once per row of **Test data**.
 | `<lot>` |
 | --- |
 | A draft lot |
-| A published lot whose bidding ended with no winner |
 | A published lot that an operator then called off |
 
 **Steps:**
@@ -133,7 +133,7 @@ Runs once per row of **Test data**.
 * `<lot>` is not listed.
 * The search does not find it.
 
-### grade10-site-auction-lot-status-US2-TC2-1: Hidden lots are removed from the watchlist
+### grade10-site-auction-lot-status-US2-TC2-1: Called-off lot is removed from the watchlist, unsold lot stays
 
 **Classification:**
 
@@ -167,9 +167,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Neither `<lot_2>` nor `<lot_3>` is listed.
+* `<lot_3>` is not listed.
+* `<lot_2>` is listed as Ended.
 
-### grade10-site-auction-lot-status-US2-TC3-1: Listing data leaves out hidden lots
+### grade10-site-auction-lot-status-US2-TC3-1: Listing data leaves out called-off lots
 
 **Classification:**
 
@@ -201,7 +202,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Neither `<lot_2>` nor `<lot_3>` is included.
+* `<lot_3>` is not included.
+* `<lot_2>` is included with the external lot status Ended.
 
 ---
 

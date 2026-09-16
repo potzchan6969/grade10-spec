@@ -40,6 +40,7 @@ includes its lower bound, and amounts are integer minor units.
 - **Manual bid:** current public price plus the increment selected for that price.
 - **Proxy bid:** second-highest maximum plus its selected increment, capped at the leader's maximum.
 - **Offer amount:** any whole amount at or above the resulting minimum; intermediate bids are not created.
+- 🚧 **Bid ceiling:** no bid or auto-bid maximum may go above USD 10,000,000, HKD 80,000,000 or JPY 150,000,000,000, on every lot.
 
 ## Currency and ownership
 
@@ -60,7 +61,7 @@ resolution, and collector quick bids.
 | Product | Comparing lots across currencies | Applies one stable policy per supported currency. |
 
 **Not in scope.** Operator editing of schedules, currencies beyond USD, HKD,
-and JPY, exact multiples of an increment, historical bid rewrites, and a
+and JPY, exact multiples of an increment, a per-lot ceiling, historical bid rewrites, and a
 collector-facing policy ladder.
 
 **Measurement.**
@@ -79,5 +80,6 @@ collector-facing policy ladder.
 | Flexible amounts | Decided | A bid may exceed the calculated minimum and need not be an exact multiple. | Product |
 | Operator override | Decided | No listing-level minimum-increment field or policy editor. | Product |
 | Collector display | Decided | Show the next minimum, not the full schedule. | Product |
+| Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 150,000,000,000. | Product |
 | Proxy resolution | Decided | Use one resulting price from the second-highest maximum; never create intermediate bids. | Product |
 :::

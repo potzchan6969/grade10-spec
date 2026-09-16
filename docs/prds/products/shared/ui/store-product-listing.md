@@ -6,10 +6,10 @@ reviewed: 2026-09-11
 ---
 
 This is the page a shopper browses a category on. A sidebar carries a heading, a
-search box, the filter groups and utility links. A header above the grid states
-how many results there are, which filters are applied, and how the list is
-sorted. The grid shows product tiles that reflow their column count with the
-width available and load more as the shopper scrolls.
+search box and the filter groups. A header above the grid states how many
+results there are, which filters are applied, and how the list is sorted. The
+grid shows product tiles that reflow their column count with the width available
+and load more as the shopper scrolls.
 
 ## Product Tile
 
@@ -87,3 +87,14 @@ The tile reports the quantity change and the application updates the cart.
 ::story{id="store-product-listing-productbrowse-states--empty-catalog" title="An empty catalogue, which is a different state"}
 
 ::story{id="store-product-listing-productcardimage--sold-out" title="A sold-out product tile"}
+
+:::detail{title="Product decisions" for="pm"}
+The surface displays what a consuming application supplies and decides none of
+it. Two things it has always done were missing from the map above it, and are
+recorded here rather than quietly folded into a group that does not mean them.
+
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Responsive layout | Open | The list answers the width it is given, and has since it was written, but no part of the feature set said so. Named as its own part of the map. Confirm that is where it belongs, or fold it somewhere that already means it. | Product |
+| Load more | Open | Reaching the end of the catalogue and waiting for the next products are reported like every other change, and were likewise unmapped. Named as its own part. Same question. | Product |
+:::

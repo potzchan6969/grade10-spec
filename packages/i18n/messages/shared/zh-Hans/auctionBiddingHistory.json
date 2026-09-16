@@ -47,6 +47,7 @@
     "account": "此账户不符合出价资格。",
     "payment": "付款授权未成功。",
     "stale_price": "其他出价使此金额已过时。",
-    "unavailable": "目前无法评估出价。"
+    "unavailable": "目前无法评估出价。",
+    "ceiling": "出价超过了该货币的上限。"
   }
 }

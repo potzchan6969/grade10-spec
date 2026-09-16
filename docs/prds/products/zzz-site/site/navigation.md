@@ -10,11 +10,23 @@ owns the addresses beneath it unless a nested surface names one, and an address
 under no surface renders a not-found surface naming it. Falling back to home is
 the specific mistake this rules out.
 
-All three surfaces are session-decided, which is where ZZZ differs from
-grade10. On grade10 only the profile and sign-in wait for the session and every
-public surface answers without it; ZZZ has no public surface yet, so each of its
-three answers with what the session allows. A correction replaces the history
-entry it corrects, so going back never returns to the address that bounced.
+Home and sign-in are session-decided: a signed-in collector who opens either is
+sent on to the profile, replacing the history entry so going back never returns
+to the address that bounced.
+
+## The Profile Without a Session
+
+The profile answers differently. It has nothing to show without a session, but
+it is not corrected — the collector keeps the address they asked for while
+they sign in.
+
+- 🚧 **The address stays put** — a collector without a session who opens the
+  profile, by a typed address, a bookmark, or the back button, lands there. The
+  sign-in dialog opens over it, and signing in renders the profile at that same
+  address with no navigation in between
+- 🚧 **Leaving goes home** — dismissing the dialog without a session takes the
+  collector to home instead, replacing the entry the profile holds, so going
+  back leads where they came from rather than to the profile asking again
 
 Everything else matches grade10's navigation contract: moving between surfaces
 stays in the page, the browser's own clicks are left untouched, back and forward

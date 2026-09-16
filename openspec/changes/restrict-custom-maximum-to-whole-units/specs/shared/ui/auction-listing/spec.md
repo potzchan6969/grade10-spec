@@ -13,6 +13,7 @@ Committed amounts remain an integer count of minor units: each whole major
 unit maps by the currency's ISO 4217 exponent.
 
 #### Scenario: shared-ui-auction-listing-SC-24 - A typed decimal mark is refused
+**Serves:** Bid enrollment - a typed decimal mark is refused
 
 - **GIVEN** an HKD listing bid panel whose custom maximum draft is `100`
 - **WHEN** a collector types `.` into the custom maximum field
@@ -20,6 +21,7 @@ unit maps by the currency's ISO 4217 exponent.
 - **AND** the decimal mark does not appear in the field
 
 #### Scenario: shared-ui-auction-listing-SC-25 - A pasted fractional amount falls back to the integer major units
+**Serves:** Bid enrollment - a pasted fractional amount falls back to the integer major units
 
 - **GIVEN** an HKD listing bid panel with the custom maximum field empty
 - **WHEN** a collector pastes `208000.99` into the custom maximum field

@@ -36,6 +36,7 @@ export * from "./components/forms/link";
 export * from "./components/forms/number-input";
 export * from "./components/forms/otp-input";
 export * from "./components/forms/radio-button";
+export * from "./components/forms/radio-card";
 export * from "./components/forms/radio-list";
 export * from "./components/forms/radio-list-item";
 export * from "./components/forms/search-input";

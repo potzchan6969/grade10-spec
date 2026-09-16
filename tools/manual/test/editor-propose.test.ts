@@ -89,7 +89,7 @@ describe("the draft a proposal writes", () => {
 });
 
 describe("the draft read back through the store reader", () => {
-  const changes = readChanges(writeStore(filesOf()), NO_GIT);
+  const changes = readChanges(writeStore(filesOf()), NO_GIT, null);
   const change = changes[0];
 
   it("reads as one change, with nothing malformed in it", () => {
@@ -312,7 +312,6 @@ describe("what a proposal can cite", () => {
         id: "alpha-US-01",
         title: "Collector does it",
         text: "",
-        acceptedBy: [],
       },
     ],
     testCases: [

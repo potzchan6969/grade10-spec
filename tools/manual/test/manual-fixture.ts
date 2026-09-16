@@ -36,6 +36,7 @@ export function changeEntry(
     why: "",
     taskGroups: [],
     deltas,
+    written: deltas.length > 0 ? ["proposal", "specs"] : ["proposal"],
     ...extra,
   };
 }
@@ -60,6 +61,7 @@ export function snapshotOf(parts: Partial<Snapshot> = {}): Snapshot {
     pages: [],
     specs: [],
     changes: [],
+    schemas: {},
     assets: [],
     references: [],
     history: [],

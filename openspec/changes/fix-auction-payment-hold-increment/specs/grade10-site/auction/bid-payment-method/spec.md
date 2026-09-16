@@ -9,6 +9,9 @@
 
 ## MODIFIED Requirements
 
+The following authorization and raise rules apply when bid-time authorization
+holds are enabled. The standard auction path leaves this optional feature off.
+
 ### Requirement: A listing authorization covers the committed maximum
 
 For a collector and listing, Grade10 SHALL maintain at most one active
@@ -33,6 +36,7 @@ already-recorded outcome and SHALL not create another active authorization,
 accepted bid, or provider charge.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-06 - Raising a maximum raises the authorization
+**Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
 
 - **GIVEN** a collector has an active authorization for a listing at one maximum
 - **WHEN** they submit a higher valid maximum for that listing
@@ -41,6 +45,7 @@ accepted bid, or provider charge.
 - **AND** it accepts the raised bid only after the raised authorization is confirmed
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-11 - Raise authorization failure keeps the prior maximum
+**Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
 
 - **GIVEN** a collector has an active authorization for a listing at one maximum
 - **WHEN** they submit a higher valid maximum and the raise authorization fails
@@ -51,6 +56,7 @@ accepted bid, or provider charge.
 - **AND** the attempted raise is no longer pending
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-08 - Provider outcomes remain idempotent
+**Serves:** grade10-site-auction-bid-payment-method-US-03 - Collector is released when outbid
 
 - **GIVEN** Grade10 has begun an authorization for a collector and listing
 - **WHEN** the bid request or its provider outcome is delivered again
@@ -71,6 +77,7 @@ reauthorization; Grade10 SHALL NOT represent a shorter or unavailable window
 as a fourteen-day guarantee.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-14 - An eligible hold requests an extended window
+**Serves:** Raised authorization - an eligible hold requests an extended window
 
 - **GIVEN** a collector with a linked method submits a valid maximum
 - **WHEN** the provider creates the manual-capture authorization
@@ -89,6 +96,7 @@ authorization unchanged, and expose the existing refusal copy on the bid
 surface. A later bid attempt SHALL not be blocked by the completed refusal.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-15 - An unsupported increment does not leave a pending bid
+**Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
 
 - **GIVEN** a collector has an active authorization and submits a higher maximum
 - **WHEN** the provider refuses the increment because the existing authorization is in an unexpected state
