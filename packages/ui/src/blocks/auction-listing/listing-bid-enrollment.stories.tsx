@@ -124,9 +124,7 @@ export const SetupSheet: Story = {
     <EnrollmentSetupSheet
       copy={COPY}
       open
-      paymentField={
-        <MockStripePaymentField label={COPY.iframePlaceholder} />
-      }
+      paymentField={<MockStripePaymentField label={COPY.iframePlaceholder} />}
       requiresIframeLink
     />
   ),
@@ -134,9 +132,7 @@ export const SetupSheet: Story = {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
-    expect(
-      within(dialog).getByText("Stripe card link (iframe)"),
-    ).toBeVisible();
+    expect(within(dialog).getByText("Stripe card link (iframe)")).toBeVisible();
     const field = dialog.querySelector<HTMLElement>(
       '[data-slot="payment-field"]',
     );
@@ -167,9 +163,7 @@ export const SetupSheetLoadedMockStripe: Story = {
       copy={COPY}
       defaultAgeAttested
       open
-      paymentField={
-        <MockStripePaymentField label={COPY.iframePlaceholder} />
-      }
+      paymentField={<MockStripePaymentField label={COPY.iframePlaceholder} />}
     />
   ),
   play: async () => {
@@ -212,7 +206,9 @@ export const SetupSheetFromChange: Story = {
     expect(field).not.toBeNull();
     expect(field).toHaveAttribute("data-state", "ready");
     expect(
-      within(dialog).getByText("Stripe card form (iframe) — linked card on file"),
+      within(dialog).getByText(
+        "Stripe card form (iframe) — linked card on file",
+      ),
     ).toBeVisible();
     expect(
       within(dialog).getByRole("checkbox", {
@@ -251,7 +247,9 @@ export const SetupSheetError: Story = {
       ).toBeVisible(),
     );
     expect(
-      within(dialog).getByText("Stripe card form (iframe) — linked card on file"),
+      within(dialog).getByText(
+        "Stripe card form (iframe) — linked card on file",
+      ),
     ).toBeVisible();
     expect(
       within(dialog).getByRole("button", { name: "Link Card" }),
@@ -281,7 +279,9 @@ export const SetupSheetLinking: Story = {
       name: "Link a card to bid",
     });
     expect(
-      within(dialog).getByText("Stripe card form (iframe) — linked card on file"),
+      within(dialog).getByText(
+        "Stripe card form (iframe) — linked card on file",
+      ),
     ).toBeVisible();
     const continueButton = within(dialog).getByRole("button", {
       name: "Linking",
