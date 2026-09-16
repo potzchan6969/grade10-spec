@@ -17,3 +17,10 @@
 **As a** winner whose invoice deadline has passed unpaid,
 **I want** clear Contact Us and no card Pay,
 **so that** I know self-service payment has stopped and how to reach Grade10.
+
+### winner-order-US-04: Losing bidder gets their hold back when the lot closes
+
+**As a** bidder who did not win,
+**I want** the card hold my bids put there lifted as soon as the lot closes,
+**so that** losing an auction does not leave my money reserved until the
+authorization expires on its own.

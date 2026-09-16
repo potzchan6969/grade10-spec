@@ -122,7 +122,7 @@ and Grade10 SHALL refuse the same action on the server.
 - **AND** the order is still Awaiting Address
 
 #### Scenario: grade10-admin-auction-post-sale-SC-50 - Staff cannot send an invoice
-**Serves:** Grants - staff cannot send an invoice
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an operator whose roles are exactly `staff`
 - **WHEN** they open an auction order in Preparing Invoice
@@ -187,7 +187,7 @@ invoice is `expired` is not re-quoted; it is reissued, per "An operator resolves
 - **THEN** the payment deadline is 2026-09-22T10:00:00Z
 
 #### Scenario: grade10-admin-auction-post-sale-SC-53 - A re-quote without a reason is refused
-**Serves:** Quote and send - a re-quote without a reason is refused
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
 
 - **GIVEN** an order in Pending Payment
 - **WHEN** an operator attempts to send a re-quote without a reason
@@ -241,7 +241,7 @@ files.
 - **AND** the invoice is still `pending`
 
 #### Scenario: grade10-admin-auction-post-sale-SC-57 - Another method needs a description
-**Serves:** Resolving an unpaid order - another method needs a description
+**Serves:** post-sale-US-01 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment
 - **WHEN** an operator chooses other, attaches proof, leaves the description
@@ -250,7 +250,7 @@ files.
 - **AND** the invoice is still `pending`
 
 #### Scenario: grade10-admin-auction-post-sale-SC-58 - No settlement before an invoice is sent
-**Serves:** Resolving an unpaid order - no settlement before an invoice is sent
+**Serves:** `post-sale-US-01`, `post-sale-US-05` - settlement waits for the invoice the quote sends
 
 - **GIVEN** an auction order in Preparing Invoice
 - **WHEN** an operator attempts to record a manual settlement
@@ -258,7 +258,7 @@ files.
 - **AND** the order is still Preparing Invoice
 
 #### Scenario: grade10-admin-auction-post-sale-SC-59 - A settled order refuses a second settlement
-**Serves:** Resolving an unpaid order - a settled order refuses a second settlement
+**Serves:** post-sale-US-01 - Operator resolves an unpaid order
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** an operator attempts to record a second settlement against it
@@ -276,7 +276,7 @@ files.
 - **AND** the order derives as Processing without having expired first
 
 #### Scenario: grade10-admin-auction-post-sale-SC-62 - A proof file of the wrong kind is refused
-**Serves:** Resolving an unpaid order - a proof file of the wrong kind is refused
+**Serves:** post-sale-US-01 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment
 - **WHEN** an operator attaches a 12 MB JPEG, or a file that is not a PDF,
@@ -393,7 +393,7 @@ explicit action.
 - **AND** the derived order status is Pending Payment
 
 #### Scenario: grade10-admin-auction-post-sale-SC-24 - Reissue leaves the suspension standing
-**Serves:** Resolving an unpaid order - reissue leaves the suspension standing
+**Serves:** post-sale-US-01 - Operator resolves an unpaid order
 
 - **GIVEN** a suspended winner whose expired order an operator reissues
 - **WHEN** the reissue is committed
@@ -401,7 +401,7 @@ explicit action.
 - **AND** the operator is not offered reinstatement as part of the reissue
 
 #### Scenario: grade10-admin-auction-post-sale-SC-25 - An operator without the grant is refused
-**Serves:** Grants - an operator without the grant is refused
+**Serves:** post-sale-US-01 - Operator resolves an unpaid order
 
 - **GIVEN** an operator who does not hold payment-processing
 - **WHEN** they open an order whose invoice is `expired`

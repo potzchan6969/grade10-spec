@@ -137,7 +137,7 @@ shipping difference discovered after payment.
 - **AND** the order shows the locked address and how to reach Grade10
 
 #### Scenario: winner-order-SC-30 - A paid order refuses a self-service address change
-**Serves:** Delivery address - a paid order refuses a self-service address change
+**Serves:** `winner-order-US-01`, `winner-order-US-02` - the address stops moving, whether the winner is still settling or already settled
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** the winner attempts to change the delivery address
@@ -177,7 +177,7 @@ An operator SHALL restore self-service pay only by reissuing the invoice to
 - **AND** no countdown is shown
 
 #### Scenario: winner-order-SC-32 - An order waiting on an address never expires
-**Serves:** Payment deadline - an order waiting on an address never expires
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose winner has confirmed no delivery address
   30 days after its lot closed
@@ -186,7 +186,7 @@ An operator SHALL restore self-service pay only by reissuing the invoice to
 - **AND** its invoice status is `not_issued`, never `expired`
 
 #### Scenario: winner-order-SC-33 - A declined payment does not move the deadline
-**Serves:** Payment deadline - a declined payment does not move the deadline
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose sent invoice has a payment deadline of
   2026-09-19T09:00:00Z
@@ -311,7 +311,7 @@ an invoice amount before an operator has sent it.
 - **AND** no component is marked as an estimate
 
 #### Scenario: winner-order-SC-05 - A confirmed address makes the total firm
-**Serves:** Invoice - a confirmed address makes the total firm
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose winner confirmed a delivery address
 - **AND** an operator sent an invoice with Shipping & Handling quoted for that
@@ -344,7 +344,7 @@ address, its own quote, its own payment deadline, and its own fulfilment
 lifecycle.
 
 #### Scenario: winner-order-SC-06 - Two lots won together stay two orders
-**Serves:** Order at lot close - two lots won together stay two orders
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** one winner who wins two lots in the same auction, closing at
   different times
@@ -379,7 +379,7 @@ destination until the winner confirms or selects an address.
 - **AND** an operator cannot send its invoice
 
 #### Scenario: winner-order-SC-08 - An amendment does not touch the address book by default
-**Serves:** Delivery address - an amendment does not touch the address book by default
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a winner amending the delivery address on one auction order
 - **AND** they leave the offer to save the amendment to the account address book untaken
@@ -427,7 +427,7 @@ until an operator reissues the invoice to `pending`.
 - **AND** creates the auction order as normal
 
 #### Scenario: winner-order-SC-14 - A losing bidder's hold is released at close
-**Serves:** Settlement - a losing bidder's hold is released at close
+**Serves:** winner-order-US-04 - Losing bidder gets their hold back when the lot closes
 
 - **GIVEN** a lot closing with one winner and three losing bidders holding
   open authorizations
