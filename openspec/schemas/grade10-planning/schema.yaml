@@ -162,7 +162,11 @@ artifacts:
       - `### Requirement: <name>` with SHALL or MUST, never should or may. Every
         `###` under a requirements section is a `### Requirement:` and never a
         group heading.
-      - `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`.
+      - `#### Scenario: <capability>-SC-<n> - <title>`, where `<capability>` is
+        the capability's path with slashes as hyphens:
+        `grade10-site/store/product-listing` issues
+        `grade10-site-store-product-listing-SC-01`. The journey and case ids
+        beside it are spelled from the same token.
         **Exactly four hashes** - three, or a bullet, fails silently.
       - Every requirement carries at least one scenario, and every scenario is
         decidable by a test or a manual pass.
@@ -175,6 +179,13 @@ artifacts:
       - Ids are permanent. Number from 01 within a capability, never renumber one
         that exists, and read the ids already issued before adding one. A renamed
         or moved capability goes on issuing the prefix it always issued.
+      - **Cite an id exactly as the heading spells it, inside backticks.** Only a
+        capability's first id takes its prefix from the path, so a prefix is read
+        and never reconstructed: `grade10-site/auction/winner-order` issues
+        `winner-order-SC-04` while its neighbour issues
+        `grade10-site-auction-account-record-SC-20`. Shortening the second one
+        names nothing. Outside backticks nothing reads a citation at all - a bare
+        id in a `## Reconciliation` row or a design table goes stale unseen.
       - Money is an integer count of minor units plus an ISO 4217 code, never a
         float. Convert it yourself.
       - No class, function, hook, table or library names. Public component
@@ -187,7 +198,7 @@ artifacts:
 
       ```
       #### Scenario: grade10-site-store-product-listing-SC-14 - Filter yields nothing
-      **Serves:** product-listing-US-02 - narrowing the catalogue by set
+      **Serves:** grade10-site-store-product-listing-US-02 - narrowing the catalogue by set
 
       **WHEN** a collector applies a filter that matches no product
       **THEN** the catalogue SHALL show the empty state and keep the filter applied
@@ -255,7 +266,7 @@ artifacts:
       `### <capability>-US-<n>: <title>`, then three labeled lines:
 
       ```
-      ### listing-US-01: Operator saves an unfinished listing and comes back to it
+      ### grade10-admin-auction-listing-US-01: Operator saves an unfinished listing and comes back to it
 
       **As an** auction operator,
       **I want** to save a listing before I know every fact about the card,
@@ -309,13 +320,13 @@ artifacts:
       under a `## Retired` section at the bottom of the durable file:
 
       ```
-      - `product-listing-US-04` - Collector searches the catalogue by keyword ·
+      - `grade10-site-store-product-listing-US-04` - Collector searches the catalogue by keyword ·
         removed in `remove-listing-search` · 2026-09-14
       ```
 
       One line, not the journey. Archived suites still carry
-      `**Trace:** product-listing-US-04`; delete the journey outright and that
-      join breaks with nothing left to recover it from.
+      `**Trace:** grade10-site-store-product-listing-US-04`; delete the journey
+      outright and that join breaks with nothing left to recover it from.
     requires:
       - specs
   - id: test-cases
@@ -384,7 +395,10 @@ artifacts:
 
       Scenario ids may appear there **only while the change is open**. Archive
       fold and `tcs-review` both strip them, leaving the dispositions and the
-      reasons.
+      reasons. Write each one in backticks and in full - `Folded as
+      grade10-site-auction-account-record-SC-56`, never a bare `SC-56`. A bare
+      id is read by nothing, so a later renumber leaves the row naming a
+      scenario the change has stopped issuing and no check says so.
 
       ## Shape
 
@@ -433,7 +447,9 @@ artifacts:
       yet is work in this repo; flag it so tasks can carry it.
 
       - **States**: Loading, empty, error, and edge states per screen, each
-      tied to the spec scenario that defines it.
+      tied to the spec scenario that defines it. Copy each id from the heading
+      that defines it, in backticks - a prefix is never inferable from the
+      capability's path, and outside backticks nothing reads the citation.
 
 
       Link, never restate: the capability spec owns behavior, tech-design.md

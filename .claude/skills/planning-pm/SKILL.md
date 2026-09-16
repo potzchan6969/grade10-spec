@@ -251,7 +251,9 @@ and a suite that disagrees with it is regenerated.
 
 `## Reconciliation` is the evidence the pass happened and what it bought.
 Without it, a pass that found nothing and a pass that never ran look identical
-in git. Scenario ids belong there only while the change is open.
+in git. Scenario ids belong there only while the change is open, written in
+backticks and in full: a bare `Folded as SC-49` is read by no check, so the
+next renumber leaves it naming a scenario nobody issues any more.
 
 **Write it when you pause, not when you finish.** A run stopped at an
 escalation and a run nobody has started look the same on the board otherwise:
