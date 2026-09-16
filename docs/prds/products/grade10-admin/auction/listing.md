@@ -45,6 +45,9 @@ its own live listing, and one Cert ID can belong to only one live listing.
 
 ## Operator actions
 
+🚧 **Watchers** — the Listings table shows how many collectors watch each
+lot, across both brands. It is interest, not a count of expected bidders.
+
 :::detail{title="Grants and the trail" for="operator"}
 Catalogue work — drafting, editing, publishing, calling off — sits behind
 `auction:write` and `auction:operate`, which `staff` hold. `auction:reserve`
@@ -74,4 +77,5 @@ competition proportionate without asking an operator to predict the close.
 | Supported currencies | Decided | Listing currency is USD, HKD, or JPY only. | Product |
 | Minimum increment | Decided | No listing-level override; the selected currency's shared schedule supplies the floor. | Product |
 | Operator schedule editing | Decided | Not available; changing the policy is separate work. | Product |
+| Watch count placement | Decided | A Watchers column on the Listings table, not the listing's own page. | Design |
 :::

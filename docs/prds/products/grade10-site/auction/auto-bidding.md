@@ -88,7 +88,7 @@ stands.
 | Custom maximum entry | Decided | Whole major units only on the bid panel custom field; typed `.` is refused, pasted fractions are discarded. | Product |
 | Custom maximum ceiling | Decided | Cap at 9,999,999,999 whole major units; over-limit paste or keystroke restores the previous valid draft (no clamp, no “too large” copy in v1). | Product |
 | Mechanism disclosure | Decided | Always-on secondary subtext under Set your private maximum: bid as needed, hold matches maximum, raise only (no lower or cancel). | Product |
-| Admin history filter | ❓ Open | Whether history can hide platform-placed bids. An operator can already see both. | Product |
+| Admin history filter | Decided | No filter. An operator reads platform-placed and hand-placed bids together. | Product |
 | Preset amounts | Decided | Three chips at 1×, 2×, and 4× the listing increment. Leader chips add those to the committed max; others add them to the current bid. A leader's typed minimum stays max + $1 and is not chip 1. | Product |
 
 **Risks.** Holding the maximum may discourage high maximums, so the bid
