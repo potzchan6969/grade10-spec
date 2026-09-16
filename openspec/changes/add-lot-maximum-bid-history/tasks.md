@@ -1,4 +1,4 @@
-## 1. Shared listing contract, copy, and stories (grade10-spec)
+## 1. Shared listing contract, copy, and stories (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Make `ListingUserBidHistory` and `ListingUserMaximumHistoryRow` satisfy the two peer-tab, amount-and-time-only contract, including an unconditional **Bid placed** default and the frameless empty-bids state (shared-ui-auction-listing-SC-31, shared-ui-auction-listing-SC-32, shared-ui-auction-listing-SC-33, shared-ui-auction-listing-SC-34)
 - [ ] 1.2 Refresh the Grade10 listing and bidding-history catalogs and Storybook fixtures so the entry reads **Your bidding**, the tabs and columns are supplied by copy, and maximum set, raised, and refused events use the settled labels (grade10-site-auction-bidding-history-SC-42, grade10-site-auction-bidding-history-SC-43, grade10-site-auction-bidding-history-SC-44, grade10-site-auction-bidding-history-SC-46)
