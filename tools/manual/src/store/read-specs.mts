@@ -301,27 +301,57 @@ function anchorsIn(line: string): string[] {
   return [...new Set(found.filter(Boolean))];
 }
 
+/** The headings that hold journeys, in the order a file writes them. A durable
+ * file carries `## User journeys`; a change's file carries the delta sections
+ * instead, and `scripts/openspec/journey-vocabulary.test.mjs` pins the whole
+ * set. Both shapes are read here: the delta sections are what the schema's
+ * template hands every author, and a reader that knew only the durable heading
+ * refused every change's file — which left `walked` with nothing to measure and
+ * said so nowhere. */
+const JOURNEY_SECTIONS = [
+  "User journeys",
+  "Context user journeys",
+  "ADDED User journeys",
+  "MODIFIED User journeys",
+];
+/** Read for the id check and never returned: a retired journey is not one the
+ * capability still holds, and rendering it beside the live ones would say it
+ * is. The tombstone it leaves is `archive:preflight`'s to check. */
+const REMOVED_JOURNEYS = "REMOVED User journeys";
+
 /**
- * A `user-journeys.md`, whole: one `## User journeys` section holding a `###`
- * journey apiece. The heading is required rather than assumed, so a file that
- * grew a second section says so instead of silently dropping it.
+ * A `user-journeys.md`, whole: the journey-bearing sections, each holding a
+ * `###` journey apiece. A heading is required rather than assumed, so a file
+ * that grew a section no reader knows says so instead of silently dropping it.
  */
 export function readJourneys(text: string): Journey[] {
   const roots = outline(text);
-  const section = findSection(roots, "User journeys");
-  if (!section) {
+  const held = JOURNEY_SECTIONS.map((heading) =>
+    findSection(roots, heading),
+  ).filter((section): section is Section => section !== undefined);
+  const removed = findSection(roots, REMOVED_JOURNEYS);
+  if (held.length === 0 && removed === undefined) {
     throw new StoreFileError(
       1,
-      "a journeys file needs a `## User journeys` heading",
+      "a journeys file needs a `## User journeys` heading, or the `## ADDED User journeys` sections a change writes",
     );
   }
-  refuseRepeats("story", issuedIn(section.children, JOURNEY_HEADING));
-  return section.children.map(readJourney);
+  // Across the sections, not within one: an id under both `## Context user
+  // journeys` and `## MODIFIED User journeys` is a journey restated read-only
+  // and edited at once, and the copy check would compare it against itself.
+  const issued = [...held, ...(removed ? [removed] : [])].flatMap((section) =>
+    issuedIn(section.children, JOURNEY_HEADING),
+  );
+  refuseRepeats(
+    "story",
+    issued.sort((a, b) => a.line - b.line),
+  );
+  return held.flatMap((section) => section.children.map(readJourney));
 }
 
 /** Whether a journeys file declares, in place of journeys, that no end user
- * reaches the capability on its own. The declaration is the file's only
- * line under `## User journeys`; a file holding both is a check finding. */
+ * reaches the capability on its own. The declaration stands where the journeys
+ * would; a file holding both is a check finding. */
 export function walkedByNobody(text: string): boolean {
   return WALKED_BY_NOBODY.test(text);
 }

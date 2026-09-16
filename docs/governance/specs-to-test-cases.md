@@ -20,11 +20,11 @@ A **feature** suite is written **blind**: by a reader who cannot see the spec's 
 
 A feature run reads a bundle the caller assembles, and nothing outside it.
 
-- **Included** — `## Purpose` and `## Feature set` from the capability's `spec.md`, its `user-journeys.md`, the change's `proposal.md`, the linked pages under `docs/prds/`, `openspec/config.yaml`'s `context`, the existing `feature-tcs.md` for id continuity with its `## Reconciliation` stripped, and that suite's `## Settled` — the questions earlier runs asked and had answered, which is what keeps a refused reading from being raised again every time
+- **Included** — `## Purpose` and `## Feature set` from the capability's `spec.md`, its `user-journeys.md`, the change's `proposal.md`, its `decisions.md` — the goals and the non-goals, so no case is written against something the interview ruled out — its `ui-design.md` where one exists — written before the requirements, with its states tied to anchors rather than scenario ids, so it carries no leak — the linked pages under `docs/prds/`, `openspec/config.yaml`'s `context`, the existing `feature-tcs.md` for id continuity with its `## Reconciliation` stripped, and that suite's `## Settled` — the questions earlier runs asked and had answered, which is what keeps a refused reading from being raised again every time
 - **Excluded** — every `## Requirements` section, `openspec/specs/` beyond the two included sections, and `openspec/changes/archive/` entirely. An archived change keeps an un-stripped `## Reconciliation` naming scenario ids, so reading archive reopens the leak invisibly on the next change to that capability
-- **Recorded** — a hash of the bundle goes on the `## Reconciliation` Run line. When someone later suspects the pass stopped being blind, that hash is the only thing that can be checked
+- **Recorded** — the `## Reconciliation` Run line names the bundle: what the pass read, and what it was denied. Nothing in this store computes or verifies a digest of it, so the line is the run's own statement, not proof; a hash written there says only that somebody wrote a hash
 - **Assembled by hand where no caller built one** — a person running the skill directly assembles it and says so in the report. Reading the requirements "just to check" is how the property is lost, and nothing downstream can detect that it was
-- **An empty `## Raised`, run after run, is the failure signal** — the input hash proves what the reader saw, never how it read. A second reading that asks nothing, several runs running, has either stopped being blind or stopped being a different method, and the suite is not passed on that basis until someone has checked why
+- **An empty `## Raised`, run after run, is the failure signal** — and the only one this store can actually read. The Run line says what the reader saw, never how it read. A second reading that asks nothing, several runs running, has either stopped being blind or stopped being a different method, and the suite is not passed on that basis until someone has checked why
 - **Different methods, not the same one twice** — the blind reader works a test-design checklist: boundary values, equivalence partitions, state transitions, CRUD completeness, empty / one / many, null and missing, permission matrix, error taxonomy, SEO and indexability. Two readings that use the same method produce synonyms, and the reconciliation then finds nothing
 
 ## Raised
@@ -128,7 +128,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 - **Every role is a class holding a state or a grant** — collector, bidder, shop staff, treasurer: the state is a pre-condition, not the actor
 - **Class, qualifier, place** — `customer(gold member) is on the shopping cart page.`, `admin(holds auction:operate) is on <grade10 auction admin listings url>.` The qualifier carries what the rule under test needs and nothing more; a bare `customer` is right where state does not matter; two of a class are `customer A` and `customer B`
 - **A product serves both classes** — `openspec/config.yaml` places a capability by who is held to it, not whose screen shows it
-- **Any other actor is not a journey** — engineers, QA, crawlers, preview fetchers and consuming applications are not end users; a crawler is a condition on a customer's journey. A capability nobody reaches writes `**Walked by:** nobody on their own — <who inherits it>`; `pnpm run tcs:validate` fails a journey whose actor resolves to neither class
+- **Any other actor is not a journey** — engineers, QA, reviewers and consuming applications are not end users: software this store ships is the system's side of a journey, and the people who build the product walk a test. An outside agent that acts on its own is a role — a crawler, a preview fetcher, a provider calling back — and its cases still name the class whose surface the rule is checked on. A capability nobody reaches writes `**Walked by:** nobody on their own — <who inherits it>`; `pnpm run tcs:validate` fails a journey whose actor resolves to none of the three
 
 ## Where It Lives
 
@@ -146,7 +146,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 
 ## When Suites Are Generated
 
-- **Automatic** — when `/planning-pm` has the proposal, deltas and journeys through `pnpm run validate:changes <change>`, it runs `/spec-to-tcs <change>` at once: every case `draft`, on the same branch, as its own `test(<domain>): derive test cases for <capability>` commit. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
+- **Automatic** — once `/planning-pm` has the proposal, the journeys and the outline through `pnpm run validate:changes <change>`, `/planning-qa` runs `/spec-to-tcs <change>` on that same branch: every case `draft`, as its own `test(<domain>): derive test cases for <capability>` commit, ahead of the scenarios. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
 - **`/spec-push` refuses** — a change whose capability has `user-journeys.md` and no `feature-tcs.md`; it runs `pnpm run tcs:validate` with the other checks
 - **`skip_specs`** — nothing to generate
 - **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
@@ -205,7 +205,7 @@ Thirty capabilities carry a suite and thirty-nine do not; seventeen of those thi
 **None of it is being filled in one pass, and that is a decision rather than a backlog nobody got to.**
 
 - **A blind reading of a finished spec is not a blind reading.** These scenarios are written, reviewed and shipped. The second reading's whole value is that it happens beside the first without seeing it; run against a spec that already exists, it can only be a derived reading wearing the new shape, and its `## Raised` would come back empty — which is the signal this document names as the mechanism having failed
-- **The suites are written when a change touches the capability.** `/planning-pm` runs the blind pass as part of its own work, on the anchors as they stand at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
+- **The suites are written when a change touches the capability.** `/planning-qa` runs the blind pass on the anchor set `/planning-pm` just fixed, as it stands at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
 - **`pnpm check:manual`'s `derived` finding is the register.** It names every capability with anchors and no suite, recomputed on every run, so it cannot go stale the way a checklist in a document would. There is no second list to keep
 - **No rules revision was bumped for this.** The cases these files hold did not change; what changed is what a *new* run must record about itself. A major revision would have required sweeping thirty suites to say so, which is the work this section exists to decline
 
@@ -235,7 +235,7 @@ Thirty capabilities carry a suite and thirty-nine do not; seventeen of those thi
 
 ## Step 1: Digest the Capability
 
-- **Read the isolated input** — on a feature run this is the whole of what a reader may see: `## Purpose` and `## Feature set` from `spec.md` but **never its requirements**, `user-journeys.md`, and the change's `proposal.md`, whose acceptance signal makes a case's type `acceptance`. Domain, product and platform runs already read journeys rather than scenarios and are unchanged
+- **Read the isolated input** — on a feature run this is the whole of what a reader may see: `## Purpose` and `## Feature set` from `spec.md` but **never its requirements**, `user-journeys.md`, `ui-design.md` where the change has one, and the change's `proposal.md`, whose acceptance signal makes a case's type `acceptance`. Domain, product and platform runs already read journeys rather than scenarios and are unchanged
 - **Read the PRD** — `docs/prds/products/<product>/<domain>/index.md` and the capability's PRD: a control, state or amount the manual names is written in the manual's words
 - **Read the store's context** — `openspec/config.yaml`'s `context` for the brands, products and conventions (money is minor units plus an ISO 4217 code): `<grade10 store url>`, never `<store front door URL>`
 - **Read the cross-cutting specs the Purpose names** — `crawlable-pages`, `localization`, `money-amounts`, `dates-and-times`. Their facts are checked on the way past (`URL contains <lang>`), never set up as a pre-condition

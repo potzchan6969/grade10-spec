@@ -214,7 +214,13 @@ function readSpecIds(specPath) {
     // not exempt from a suite: it carries one section, and its cases trace
     // groups rather than journeys.
     unwalked: /^\*\*Walked by:\*\*\s+nobody\b/m.test(stories),
-    hasJourneySection: /^##\s+User journeys\s*$/m.test(stories),
+    // A durable file writes `## User journeys` and a change's file writes the
+    // delta sections; `journey-vocabulary.test.mjs` pins the set. Matching only
+    // the durable heading read every change's journeys as no journeys at all.
+    hasJourneySection:
+      /^##\s+(?:User journeys|Context user journeys|(?:ADDED|MODIFIED) User journeys)\s*$/m.test(
+        stories,
+      ),
   };
 }
 
@@ -575,7 +581,7 @@ function checkSuite(root, filePath, rulesRev) {
     else if (suite.raised === 0)
       warn(
         1,
-        "`## Raised` is empty — the input hash says what the reader saw, never how it read; several empty runs mean the second reading has stopped being a second reading",
+        "`## Raised` is empty — the Run line says what the reader saw, never how it read; several empty runs mean the second reading has stopped being a second reading",
       );
   }
 

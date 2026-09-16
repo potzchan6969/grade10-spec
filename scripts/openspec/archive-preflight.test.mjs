@@ -168,6 +168,49 @@ test("a change whose sections all landed is clear", () => {
   assert.equal(result.status, 0);
 });
 
+/** `decisions.md` is folded nowhere and the blind pass may not read archive,
+ * so a rejected option recorded only there is lost to the one pass most likely
+ * to raise it again. The owner says where it went. */
+test("refuses decisions the fold carries nowhere until the owner says where they went", () => {
+  const decided = {
+    ...CARRIED,
+    "decisions.md":
+      "## Goals\n\n- Collectors find a card.\n\n## Non-Goals\n\n- Stock per shop.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Where does search live? | The header | A dedicated page - one field is not a surface |\n",
+  };
+  const refused = run(sandbox(decided, DURABLE).script, ...SHIPPED);
+  assert.equal(refused.status, 1);
+  assert.match(
+    refused.stderr,
+    /records 1 decision\(s\) that the fold carries nowhere/,
+  );
+
+  const carried = run(
+    sandbox(decided, DURABLE).script,
+    ...SHIPPED,
+    "--decisions-carried",
+    "Q1 onto the listing page's Product decisions block",
+  );
+  assert.equal(carried.status, 0, carried.stderr);
+
+  const none = run(
+    sandbox(decided, DURABLE).script,
+    ...SHIPPED,
+    "--decisions-carried",
+    "none",
+  );
+  assert.equal(none.status, 0, none.stderr);
+});
+
+test("asks nothing of a change whose decisions table is empty", () => {
+  const empty = {
+    ...CARRIED,
+    "decisions.md":
+      "## Goals\n\n- Collectors find a card.\n\n## Non-Goals\n\n- Stock per shop.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n",
+  };
+  const result = run(sandbox(empty, DURABLE).script, ...SHIPPED);
+  assert.equal(result.status, 0, result.stderr);
+});
+
 test("refuses a scenario the fold would land with no anchor", () => {
   const files = {
     ...CARRIED,

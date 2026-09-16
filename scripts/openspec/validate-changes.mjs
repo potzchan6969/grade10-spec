@@ -6,12 +6,19 @@
  *
  * The CLI refuses a change with no delta, which is the right answer for a
  * change somebody stopped writing and the wrong one for a change that has
- * said what it is waiting for. That one error is dropped for a change whose
- * `.openspec.yaml` declares `awaiting: specs:` and has written no delta yet.
- * Every other error it reports still counts, on that change and on the rest.
+ * said what it is waiting for. Those errors are dropped for a change whose
+ * `.openspec.yaml` declares `awaiting: specs:` and whose deltas name no
+ * requirement yet. Every other error it reports still counts, on that change
+ * and on the rest.
+ *
+ * `spec.md` is written in two passes — the outline, then the requirements —
+ * so the wait is read against the delta headings rather than against the
+ * directory. Keying on the directory meant the outline ended the wait the
+ * moment it was written, and the one state the workflow passes through on
+ * every change failed the run its own author was told to make.
  */
 import { spawnSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import YAML from "yaml";
@@ -22,11 +29,16 @@ const ROOT = fileURLToPath(new URL("../..", import.meta.url));
  * no rule name, so its opening sentence is the only handle; a test holds the
  * pinned CLI to it. */
 const NO_DELTA = "Change must have at least one delta.";
+/** The same wait, reported per file: the outline is a `spec.md` the CLI reads
+ * and finds no delta section in. */
+const NO_SECTIONS = "No delta sections found.";
+const DELTA_HEADING =
+  /^##\s+(?:ADDED|MODIFIED|REMOVED|RENAMED)\s+Requirements\s*$/m;
 
 /**
  * What the change says it is waiting on before it can write a requirement, or
- * nothing when it owes one now. A change that has started its deltas is past
- * the wait whatever the line still says — the `awaiting` rule in
+ * nothing when it owes one now. A change whose deltas all name requirements is
+ * past the wait whatever the line still says — the `awaiting` rule in
  * `check:manual` is what asks the author to delete it.
  */
 export function waitingOnSpecs(dir) {
@@ -42,7 +54,24 @@ export function waitingOnSpecs(dir) {
   }
   const why = fields?.awaiting?.specs;
   if (typeof why !== "string" || why.trim() === "") return undefined;
-  return existsSync(join(dir, "specs")) ? undefined : why.trim();
+  return outlineOnly(join(dir, "specs")) ? why.trim() : undefined;
+}
+
+/** Whether any delta under `specs/` still names no requirement — an absent
+ * directory included. One capability's requirements do not answer for
+ * another's, which is how `written` reads the same pass. */
+function outlineOnly(specs) {
+  if (!existsSync(specs)) return true;
+  const found = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.isDirectory()) walk(join(dir, entry.name));
+      else if (entry.name === "spec.md") found.push(join(dir, entry.name));
+    }
+  };
+  walk(specs);
+  if (found.length === 0) return true;
+  return found.some((file) => !DELTA_HEADING.test(readFileSync(file, "utf8")));
 }
 
 /** The pinned CLI, and only the pinned one: a binary that happens to be on
@@ -95,7 +124,11 @@ export function main(root, strict, only) {
     const left = (item.issues ?? []).filter(
       (issue) =>
         issue.level !== "INFO" &&
-        !(why !== undefined && issue.message.startsWith(NO_DELTA)),
+        !(
+          why !== undefined &&
+          (issue.message.startsWith(NO_DELTA) ||
+            issue.message.startsWith(NO_SECTIONS))
+        ),
     );
     if (why !== undefined) waiting.push(`${item.id} — ${why}`);
     if (left.length > 0) {

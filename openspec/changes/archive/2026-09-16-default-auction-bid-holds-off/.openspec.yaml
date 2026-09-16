@@ -2,3 +2,4 @@ schema: grade10-planning
 promoted_by: '@htonyl'
 created: 2026-09-15
 design_waived: "authorize-only copy and standing treatment; no new visual layout or Figma set"
+deploy_waived: "record-only — the proposal ships no code behaviour or API change; the standard deployment already disables bid-time holds"

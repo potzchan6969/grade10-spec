@@ -1,6 +1,6 @@
 ---
 title: Working a change
-summary: One change id, seven files, four teammates — who writes what, and how you know it is your turn.
+summary: One change id, eight files, four teammates — who writes what, and how you know it is your turn.
 order: 4
 ---
 
@@ -18,21 +18,30 @@ One id names the directory, and every command you run names that id.
 - **Not the capability** — `grade10-site/store/gift-receipt` is what the
   change writes *about*; the ids inside the files carry that path instead
 
-## The Seven Files, Four Hands
+## The Eight Files, Four Hands
 
 | # | File | Written by | Skill | Required |
 | --- | --- | --- | --- | --- |
 | 1 | `proposal.md` | Product manager | `/planning-pm` | Always |
-| 2 | `specs/<capability>/spec.md` | Product manager | `/planning-pm` | Always |
+| 2 | `decisions.md` | Product manager | `/planning-pm` | Always — goals, non-goals, and what the interview settled |
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `/planning-pm` | Always — one nobody walks says so in it |
-| 4 | `specs/<capability>/feature-tcs.md` | Product manager | `/planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
-| 5 | `ui-design.md` | Designer | `/planning-design` | Optional |
-| 6 | `tech-design.md` | Engineer | `/planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
-| 7 | `tasks.md` | Engineer | `/planning-dev` | Before anyone can build it |
+| 4 | `ui-design.md` | Designer, or the PM who already has the design | `/planning-design` | Optional — from the journeys, before the requirements |
+| 5 | `specs/<capability>/spec.md` | Generated, the PM reads | `/planning-qa` | Always — the outline, then the requirements, with 6 between them |
+| 6 | `specs/<capability>/feature-tcs.md` | Generated, QA reviews | `/planning-qa` | Always — blind, before the scenarios |
+| 7 | `tech-design.md` | Engineer | `/planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
+| 8 | `tasks.md` | Engineer | `/planning-dev` | Before anyone can build it |
 
 Write your part and stop: an artifact invented ahead of its owner is worse than a
-missing one. The PRD under `docs/prds/` is the one file every hand writes on — a
-detail you learn goes there first, marked 🚧 or ❓, before your own artifact cites it. The PM keeps it whole — [PRDs and OpenSpec](https://github.com/9gag/grade10-spec/blob/main/docs/governance/prd-and-openspec.md).
+missing one. **Neither the PM nor the designer opens `spec.md`** — both of its
+passes belong to the run that takes the two readings from the journeys, and the
+PM is its reader of record rather than its author.
+
+Two files every hand writes on. The PRD under `docs/prds/` is what the product
+should be: a detail you learn goes there first, marked 🚧 or ❓, before your own
+artifact cites it. `decisions.md` is what this change chose: a scope fact you
+learn — a non-goal that turns out to be load-bearing, a goal no screen can
+deliver — is a row revised there first, by whoever learned it. The PM keeps both
+whole — [PRDs and OpenSpec](https://github.com/9gag/grade10-spec/blob/main/docs/governance/prd-and-openspec.md).
 
 ## What to Say to the Agent
 
@@ -51,7 +60,7 @@ A gift receipt on a store order — a printable slip with no prices on it.
 Write into the store clone, never into external/grade10-spec.
 ```
 
-**QA** — the journeys are the input, and they are already in the change
+**QA** — the journeys and the decisions are the input, and both are already in the change
 
 ```text
 /planning-qa add-store-gift-receipt
@@ -59,7 +68,9 @@ Write into the store clone, never into external/grade10-spec.
 Write into the store clone, never into external/grade10-spec.
 ```
 
-**Designer** — the Figma URL, the one thing no skill can read off the repository
+**Designer** — the Figma URL, the one thing no skill can read off the repository.
+Specifying a new change is the PM's job, so run `/planning-pm` for that one and
+`/planning-design` to supplement a change somebody else specified
 
 ```text
 /planning-design add-store-gift-receipt
@@ -96,31 +107,21 @@ Four things the skill cannot know, so say them when they are true:
 
 ## The Example, End to End
 
-:::flow{title="add-store-gift-receipt"}
+:::flow{title="add-store-gift-receipt" diagram="assets/diagrams/working-a-change.svg"}
 # Product manager
 
 *PM* — **Open the change** — `/planning-pm add-store-gift-receipt` and a sentence
 saying what the feature is; the interview follows, and a question you are not the
 right person for goes into the proposal's open questions, naming who settles it
 
-## Leave Four Files, Then Hand Over
+## Leave Three Files, Then Hand Over
 
-`proposal.md`, `spec.md` with each scenario id'd `grade10-site-store-gift-receipt-SC-01`,
-`user-journeys.md` with each story accepted by scenarios that exist, and
-`feature-tcs.md` derived from them with `/spec-to-tcs`, every case `draft`. The
-skill validates strictly before it stops; fix what that names, then say the
-change needs picking up — the board already shows it as still being planned.
-
-# QA
-
-*QA* — **Review the suite** — `/planning-qa add-store-gift-receipt`
-
-## Review in Its Own Pull Request
-
-`/tcs-review add-store-gift-receipt` walks the drafts one journey at a time and
-records `actual`, `deprecated`, or still `draft`. A case built from no scenario
-is a new requirement in disguise — send it back to the spec. `domain-tcs.md`,
-`product-tcs.md` and `platform-tcs.md` are QA's, beside the durable specs.
+`proposal.md`, `decisions.md`, and `user-journeys.md`. What you commit has
+journeys and no `spec.md`, which both gates refuse without a line saying why, so
+write `awaiting: specs: <what is still to come>` in the change's
+`.openspec.yaml` before you validate. The skill validates strictly before it
+stops; fix what that names, then say the change is ready — for a designer where
+it has a surface, and for `/planning-qa` either way.
 
 # Designer
 
@@ -130,8 +131,24 @@ a change with no user-facing surface writes no `ui-design.md` at all
 ## Link, Never Describe
 
 One subsection per screen linking its Figma frame, exports named exactly,
-states tied to the scenario that defines each. A variant, a token, or a block
-that has to be built is work in **grade10-spec** — flag it so `tasks.md` carries it.
+states tied to the anchor each dresses — the requirements are not written yet.
+A variant, a token, or a block that has to be built is work in
+**grade10-spec** — flag it so `tasks.md` carries it.
+
+# QA
+
+*QA* — **Write the outline, then run the two readings** —
+`/planning-qa add-store-gift-receipt` draws `## Purpose` and `## Feature set`
+from the journeys and the 🚧 lines, commits that on its own, then drafts the
+blind suite and the scenarios independently and reconciles them; a contradiction
+it cannot settle goes back to the PM
+
+## Review in Its Own Pull Request
+
+`/tcs-review add-store-gift-receipt` walks the drafts one journey at a time and
+records `actual`, `deprecated`, or still `draft`. A case built from no scenario
+is a new requirement in disguise — send it back to the spec. `domain-tcs.md`,
+`product-tcs.md` and `platform-tcs.md` are QA's, beside the durable specs.
 
 # Engineer
 
@@ -151,8 +168,11 @@ branch merges.
 ## Leave the Archive Copy Out of the Tasks
 
 The fold keeps `## Requirements` and nothing else, and `pnpm run archive:preflight`
-refuses the archive while the feature set and `user-journeys.md` are uncarried.
-A task for it could never be ticked before the deploy, so the plan does not carry one.
+holds four gates: proof of deploy, every task ticked, the feature set and
+`user-journeys.md` carried across, and `--decisions-carried` saying which
+decision rows outlived the change and went onto the capability's
+`Product decisions` block. None of them could be ticked before the deploy, so
+the plan carries no task for them.
 :::
 
 ## How You Know It Is Your Turn
@@ -162,9 +182,11 @@ Nobody sends a message. The files themselves are the signal.
 | What you see | What it means | Whose turn |
 | --- | --- | --- |
 | `proposal.md` alone | A reason, no requirements yet | PM |
+| `proposal.md`, no `decisions.md` | The interview is unrecorded — write it, or `decisions_waived: <why>` on a change older than the file | PM |
 | Deltas, no `user-journeys.md` | The stories are owed — a capability nobody walks says `**Walked by:** nobody` in the file, so a missing one is never the exemption | PM |
 | Deltas, and no 🚧 line under a section the proposal links | The PRD is unmarked — mark it, or record `page_waived: <why>` in `.openspec.yaml` | PM |
-| Journeys, no `feature-tcs.md` | The suite is derived beside the journeys with `/spec-to-tcs` | PM |
+| Journeys, no `spec.md`, and `awaiting: specs:` | The PM has handed over; the outline and both readings are owed | QA |
+| An outline, no `feature-tcs.md` | The blind pass is owed, and it comes before the scenarios | QA |
 | A suite of `draft` cases | Review, in its own pull request | QA |
 | A user-facing change, no `ui-design.md` | Screens unmapped | Designer |
 | No `tasks.md` | Still being planned — the only handover signal there is | Engineer |

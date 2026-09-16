@@ -1,3 +1,4 @@
 schema: grade10-planning
 created: 2026-09-16
 promoted_by: "@kinisworking"
+decisions_waived: "opened before decisions.md existed; the scope is in the proposal, and the requirements and suites are written"

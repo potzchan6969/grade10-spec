@@ -14,7 +14,11 @@
 
 ## Non-Goals
 
-<!-- What this change deliberately does not do, so engineering knows the edges. -->
+<!-- One line pointing at decisions.md, which holds them: they are decided in
+     the interview, and two homes for one boundary is two answers the day
+     somebody edits one. -->
+
+See [Non-Goals](decisions.md#non-goals).
 
 ## Capabilities
 

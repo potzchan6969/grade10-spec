@@ -282,6 +282,11 @@ export type ChangeEntry = {
    * `page_waived:` — the line that stands in for the 🚧 a change with deltas
    * owes a page. */
   pageWaived?: string;
+  /** Why this change records no decisions, from `.openspec.yaml`
+   * `decisions_waived:` — the line that stands in for `decisions.md`, either
+   * where there was genuinely nothing to settle or on a change opened before
+   * the file existed, whose scope is in its proposal. */
+  decisionsWaived?: string;
   /** Why this change writes no `tech-design.md`, from `.openspec.yaml`
    * `design_waived:`. */
   designWaived?: string;

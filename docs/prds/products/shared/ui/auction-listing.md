@@ -55,7 +55,7 @@ behind a tooltip.
 
 ## Lost Standing
 
-🚧 **No release banner on the lot card** — when the viewer lost, the bid card
+**No release banner on the lot card** — when the viewer lost, the bid card
 shows Did not win without card-authorization-release banner copy. Hold release
 copy on My Auctions stays with that capability when a hold exists.
 

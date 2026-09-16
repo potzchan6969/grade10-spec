@@ -116,12 +116,20 @@ describe("a store that has drifted", () => {
     ]);
   });
 
+  /** Asked of the delta as well as of the store it folds into: the anchor a
+   * scenario meant is findable while its author is still here. */
+  it("names a delta scenario standing under no anchor", async () => {
+    expect(lines(await result, "anchorless")).toEqual([
+      "openspec/changes/add-gamma/specs/demo-product/gamma/spec.md — 1 scenario with no `**Serves:**` line (gamma-SC-01)",
+    ]);
+  });
+
   it("exits 1 with the counts in the summary", async () => {
     const root = fixture("broken");
     const report = formatReport(root, await result);
-    expect(report.failures).toBe(11);
+    expect(report.failures).toBe(12);
     expect(report.warnings).toBe(3);
-    expect(report.text).toContain("11 failures, 3 warnings");
+    expect(report.text).toContain("12 failures, 3 warnings");
   });
 });
 
@@ -254,6 +262,49 @@ describe("who walks a capability", () => {
       "openspec/changes/bare/specs/demo-product/delta/user-journeys.md — missing, and `demo-product/delta` has no durable journeys: name who walks it, or say `**Walked by:** nobody` and why",
       "openspec/changes/bare/specs/demo-product/epsilon/user-journeys.md — holds no story and does not say `**Walked by:** nobody`: one or the other",
     ]);
+  });
+
+  /** The shape the schema's template hands every author. The reader used to
+   * refuse it for its headings and the refusal was dropped, so a file that
+   * named nobody and held nothing satisfied the rule by parsing as nothing. */
+  it("asks the same of a delta written in the delta sections", async () => {
+    const root = writeStore({
+      "openspec/changes/bare/proposal.md": proposal("Bare"),
+      "openspec/changes/bare/specs/demo-product/delta/spec.md":
+        "## ADDED Requirements\n\n### Requirement: Delta exists\n\nDelta SHALL exist.\n",
+      "openspec/changes/bare/specs/demo-product/delta/user-journeys.md":
+        "## Context user journeys\n\n## ADDED User journeys\n\n## MODIFIED User journeys\n\n## REMOVED User journeys\n",
+      "openspec/changes/full/proposal.md": proposal("Full"),
+      "openspec/changes/full/specs/demo-product/zeta/spec.md":
+        "## ADDED Requirements\n\n### Requirement: Zeta exists\n\nZeta SHALL exist.\n",
+      "openspec/changes/full/specs/demo-product/zeta/user-journeys.md": `## ADDED User journeys\n\n${story("zeta-US-01")}\n`,
+    });
+    expect(lines(await runChecks(root, NO_GIT), "walked")).toEqual([
+      "openspec/changes/bare/specs/demo-product/delta/user-journeys.md — holds no story and does not say `**Walked by:** nobody`: one or the other",
+    ]);
+  });
+
+  /** A journeys file nobody can parse is named, wherever it sits. It used to be
+   * skipped on both sides: the durable channel carried the refusal and no rule
+   * read it, and the delta's was caught and thrown away. */
+  it("names a journeys file the reader refuses, durable or delta", async () => {
+    const root = writeStore({
+      "openspec/specs/demo-product/alpha/spec.md": alpha,
+      "openspec/specs/demo-product/alpha/user-journeys.md":
+        "## Journeys\n\nSomeone renamed the heading.\n",
+      "openspec/changes/bare/proposal.md": proposal("Bare"),
+      "openspec/changes/bare/specs/demo-product/delta/spec.md":
+        "## ADDED Requirements\n\n### Requirement: Delta exists\n\nDelta SHALL exist.\n",
+      "openspec/changes/bare/specs/demo-product/delta/user-journeys.md":
+        "## Stories\n\nAnd again here.\n",
+    });
+    const result = await runChecks(root, NO_GIT);
+    expect(lines(result, "store")).toEqual([
+      "openspec/changes/bare/specs/demo-product/delta/user-journeys.md — demo-product/delta line 1: a journeys file needs a `## User journeys` heading, or the `## ADDED User journeys` sections a change writes",
+      "openspec/specs/demo-product/alpha/user-journeys.md — demo-product/alpha line 1: a journeys file needs a `## User journeys` heading, or the `## ADDED User journeys` sections a change writes",
+    ]);
+    // One cause, one finding: the file is refused, not measured.
+    expect(lines(result, "walked")).toEqual([]);
   });
 });
 
@@ -1275,5 +1326,93 @@ describe("a manifest naming its blockers", () => {
     });
     const result: Result = await runChecks(root, NO_GIT);
     expect(lines(result, "depends")).toEqual([]);
+  });
+});
+
+/** `decisions.md` is required by the schema, and a required artifact the
+ * boards ask for and no check reads is one a change merges without. Dated,
+ * because seventy changes were specified before the file existed. */
+describe("a change with no record of what it settled", () => {
+  const change = (created: string, extra: Record<string, string> = {}) =>
+    writeStore({
+      "openspec/changes/probe/.openspec.yaml": `schema: grade10-planning\ncreated: ${created}\nskip_specs: true\nskip_specs_why: a probe\n`,
+      "openspec/changes/probe/proposal.md": proposal("Probe"),
+      ...extra,
+    });
+
+  it("names one opened since the rule", async () => {
+    expect(
+      lines(await runChecks(change("2026-09-20"), NO_GIT), "decided"),
+    ).toEqual([
+      "openspec/changes/probe/decisions.md — missing: state this change's goals, its non-goals and what the interview settled - or say why there was nothing to settle in `decisions_waived`",
+    ]);
+  });
+
+  it("asks nothing of one opened before it", async () => {
+    expect(
+      lines(await runChecks(change("2026-09-10"), NO_GIT), "decided"),
+    ).toEqual([]);
+  });
+
+  it("takes the file, and takes the waiver", async () => {
+    const written = change("2026-09-20", {
+      "openspec/changes/probe/decisions.md":
+        "## Goals\n\n- A probe.\n\n## Non-Goals\n\n- Nothing.\n\n## Decisions\n",
+    });
+    expect(lines(await runChecks(written, NO_GIT), "decided")).toEqual([]);
+
+    const waived = writeStore({
+      "openspec/changes/probe/.openspec.yaml":
+        "schema: grade10-planning\ncreated: 2026-09-20\nskip_specs: true\nskip_specs_why: a probe\ndecisions_waived: a lint sweep settled nothing\n",
+      "openspec/changes/probe/proposal.md": proposal("Probe"),
+    });
+    expect(lines(await runChecks(waived, NO_GIT), "decided")).toEqual([]);
+  });
+});
+
+/** The product manager hands a change over with journeys and no `spec.md`.
+ * Rules keyed on the deltas asked nothing of the one file that hand writes. */
+describe("a change carrying journeys and no delta", () => {
+  const pm = (journeys: string) =>
+    writeStore({
+      "openspec/specs/demo-product/alpha/spec.md": spec(
+        "Alpha",
+        requirement("Alpha does things", "alpha-SC-01", "the thing"),
+      ),
+      "openspec/specs/demo-product/alpha/user-journeys.md": `## User journeys\n\n${story("alpha-US-01")}\n`,
+      "openspec/changes/handoff/proposal.md": proposal("Handoff"),
+      "openspec/changes/handoff/specs/demo-product/beta/user-journeys.md":
+        journeys,
+    });
+
+  it("asks who walks it, with no delta beside it", async () => {
+    expect(
+      lines(await runChecks(pm("## ADDED User journeys\n"), NO_GIT), "walked"),
+    ).toEqual([
+      "openspec/changes/handoff/specs/demo-product/beta/user-journeys.md — holds no story and does not say `**Walked by:** nobody`: one or the other",
+    ]);
+  });
+
+  it("names one the reader refuses, with no delta beside it", async () => {
+    expect(
+      lines(await runChecks(pm("## Journeys\n\nrenamed.\n"), NO_GIT), "store"),
+    ).toEqual([
+      "openspec/changes/handoff/specs/demo-product/beta/user-journeys.md — demo-product/beta line 1: a journeys file needs a `## User journeys` heading, or the `## ADDED User journeys` sections a change writes",
+    ]);
+  });
+
+  it("checks a restated copy against the durable text, with no delta beside it", async () => {
+    const drifted = writeStore({
+      "openspec/specs/demo-product/alpha/spec.md": spec(
+        "Alpha",
+        requirement("Alpha does things", "alpha-SC-01", "the thing"),
+      ),
+      "openspec/specs/demo-product/alpha/user-journeys.md": `## User journeys\n\n${story("alpha-US-01")}\n`,
+      "openspec/changes/handoff/proposal.md": proposal("Handoff"),
+      "openspec/changes/handoff/specs/demo-product/alpha/user-journeys.md": `## Context user journeys\n\n### alpha-US-01: Collector does something else\n\n**As a** collector,\n**I want** a copy that drifted,\n**so that** the check has something to find.\n`,
+    });
+    expect(lines(await runChecks(drifted, NO_GIT), "context")).toEqual([
+      "openspec/changes/handoff/specs/demo-product/alpha/user-journeys.md — the restated `alpha-US-01` is not what `demo-product/alpha` holds — bring the copy back to the durable text, or move the journey under `## MODIFIED User journeys` where it is meant to differ",
+    ]);
   });
 });

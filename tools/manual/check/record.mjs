@@ -14,6 +14,11 @@ import { productPages } from "./context.mjs";
  * without one. */
 export const DEPLOY_RECORD_SINCE = "2026-09-12";
 
+/** The day after `decisions.md` became required. The four changes opened on
+ * the day itself were opened before the flag moved, and a register of changes
+ * that could not have complied is a check people learn to read past. */
+export const DECISIONS_SINCE = "2026-09-17";
+
 const STORE_GROUP = "grade10-spec";
 
 const fileOf = (change, name) => `${change.dir}/${name}`;
@@ -124,6 +129,37 @@ export function checkDesign(ctx, changes) {
       "design",
       fileOf(change, "tasks.md"),
       `group ${group.num} names ${where}, so the work lands outside this store and has no \`tech-design.md\` — write it, or say why in \`design_waived\``,
+    );
+  }
+}
+
+/**
+ * RULE `decided`: a change says what its interview settled. `decisions.md`
+ * holds the goals, the edges and the questions the rounds closed, and every
+ * artifact after it is written from that scope - so a change without one hands
+ * the journeys and the outline a scope nobody wrote down.
+ *
+ * Asked of changes opened since the requirement shipped. An older change owes
+ * nothing: it was specified when the file did not exist, and asking seventy of
+ * them at once would be a register rather than a gate.
+ *
+ * `decisions_waived: <why>` stands in two ways: where there was genuinely
+ * nothing to settle, and on a change opened before the file existed, whose
+ * scope its proposal already carries. An empty `## Decisions` table is
+ * neither - it is a claim on the record that nothing had to be chosen, which
+ * is a claim worth being able to make and the wrong one to make on behalf of
+ * an interview somebody else held.
+ */
+export function checkDecided(ctx, changes) {
+  for (const change of changes) {
+    if (change.status !== "in-flight" || change.decisionsWaived) continue;
+    if (!change.created || change.created < DECISIONS_SINCE) continue;
+    const file = fileOf(change, "decisions.md");
+    if (existsSync(join(ctx.roots.store, file))) continue;
+    ctx.add(
+      "decided",
+      file,
+      "missing: state this change's goals, its non-goals and what the interview settled - or say why there was nothing to settle in `decisions_waived`",
     );
   }
 }

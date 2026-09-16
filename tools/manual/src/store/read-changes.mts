@@ -227,7 +227,7 @@ function readChange(
     }
   }
 
-  entry.deltas = readDeltas(root, dir, detailed, fail);
+  entry.deltas = readDeltas(root, dir, detailed, fail, waitsOnSpecs(entry));
   if (detailed) {
     const suites = readSuites(root, dir);
     if (suites.length > 0) entry.suites = suites;
@@ -296,6 +296,17 @@ function writtenArtifacts(
     if (!generates.startsWith("specs/"))
       return existsSync(join(dir, generates));
     const name = generates.slice(generates.lastIndexOf("/") + 1);
+    // `spec.md` is two passes over one file — the outline, then the
+    // requirements — and the file is there from the first. Read by presence,
+    // the second pass looked done the moment the first wrote anything, which
+    // told an author their declared wait was over while the requirements were
+    // still unwritten, and offered an engineer a delivery plan to write
+    // against an outline. The delta headings are what say the second landed.
+    if (name === "spec.md")
+      return (
+        entry.deltas.length > 0 &&
+        entry.deltas.every((one) => one.kinds.length > 0)
+      );
     return (
       capabilities.length > 0 &&
       capabilities.every((one) => existsSync(join(one, name)))
@@ -365,6 +376,7 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
  * `pnpm plan shipped` wrote, read back verbatim. */
 const RECORDED = [
   ["page_waived", "pageWaived"],
+  ["decisions_waived", "decisionsWaived"],
   ["design_waived", "designWaived"],
   ["deployed_at", "deployedAt"],
   ["deployed_env", "deployedEnv"],
@@ -601,11 +613,19 @@ export function archivedDeltaFiles(
   });
 }
 
+/** Whether the change has said, in `awaiting:`, that it cannot write a
+ * requirement yet. The outline is written first and the requirements come back
+ * in a second pass, so between the two there is a delta file that names no
+ * requirement on purpose; the wait is the line that says which it is. */
+const waitsOnSpecs = (entry: ChangeEntry) =>
+  (entry.awaiting ?? []).some((one) => one.artifact === "specs");
+
 function readDeltas(
   root: string,
   dir: string,
   detailed: boolean,
   fail: (file: string, cause: unknown) => void,
+  awaitingSpecs: boolean,
 ): Delta[] {
   const deltas: Delta[] = [];
   for (const { spec, file } of deltaFiles(root, dir)) {
@@ -619,7 +639,10 @@ function readDeltas(
       kinds.push(kind.toUpperCase());
       requirements.push(...deltaRequirements(section, kind, detailed));
     }
-    if (kinds.length === 0) {
+    // A delta that will never name a requirement is broken. One that has not
+    // named one yet is the outline, and the change says so in `awaiting:` —
+    // where the `awaiting` rule keeps reading it until the requirements land.
+    if (kinds.length === 0 && !awaitingSpecs) {
       fail(
         file,
         new StoreFileError(

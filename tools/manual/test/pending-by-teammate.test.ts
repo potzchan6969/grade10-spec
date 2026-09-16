@@ -161,14 +161,30 @@ describe("what each teammate still owes", () => {
 describe("against the store as it stands", () => {
   const artifacts = realStore.snapshot.schemas["grade10-planning"];
 
-  it("names a role for every artifact the planning schema declares", () => {
+  it("names a role for every artifact a teammate owes by hand", () => {
     expect(artifacts?.length).toBeGreaterThan(0);
-    expect(artifacts?.filter((one) => one.teammate === undefined)).toEqual([]);
+    // `specs` and `test-cases` are generated inside the run that takes the two
+    // readings and name no teammate on purpose: a worklist that asked a person
+    // for a file the run produces would be asking for work nobody does.
+    expect(
+      artifacts
+        ?.filter((one) => one.teammate === undefined)
+        .map((one) => one.id),
+    ).toEqual(["specs", "test-cases"]);
   });
 
   it("reads the chain and the optional artifacts off the schema file", () => {
     const byId = new Map(artifacts?.map((one) => [one.id, one]));
-    expect(byId.get("test-cases")?.requires).toEqual(["user-journeys"]);
+    // Everything written from the interview's record depends on it, now that
+    // every change carries one.
+    expect(byId.get("decisions")?.requires).toEqual(["proposal"]);
+    expect(byId.get("user-journeys")?.requires).toEqual([
+      "decisions",
+      "proposal",
+    ]);
+    expect(byId.get("specs")?.requires).toEqual(["decisions", "user-journeys"]);
+    expect(byId.get("test-cases")?.requires).toEqual(["specs"]);
+    expect(byId.get("decisions")?.required).toBe(true);
     expect(byId.get("ui-design")?.required).toBe(false);
     expect(byId.get("tasks")?.required).toBe(true);
   });
@@ -182,5 +198,52 @@ describe("against the store as it stands", () => {
         expect(item.change.written).not.toContain(item.artifact);
       }
     }
+  });
+});
+
+/** `decisions_waived` is the second waiver a worklist reads, and it is read
+ * for a reason `design_waived` and `tasks_waived` are not: those answer for a
+ * file's absence at archive, this one answers for whose turn it is now. */
+describe("a change whose record waives its decisions", () => {
+  const DECIDING: Record<string, SchemaArtifact[]> = {
+    deciding: [
+      artifact("proposal", "proposal.md", "product-manager", []),
+      artifact("decisions", "decisions.md", "product-manager", ["proposal"]),
+      artifact(
+        "user-journeys",
+        "specs/**/user-journeys.md",
+        "product-manager",
+        ["decisions"],
+      ),
+    ],
+  };
+
+  const rows = (fields: Partial<ChangeEntry>) =>
+    pendingByTeammate(
+      [changeEntry("probe", [delta], { schema: "deciding", ...fields })],
+      DECIDING,
+    ).flatMap((one) => one.items.map((item) => item.artifact));
+
+  it("asks for it, and holds back what stands on it", () => {
+    expect(rows({ written: ["proposal"] })).toEqual(["decisions"]);
+  });
+
+  it("stops asking once the record waives it, and releases the chain", () => {
+    // The waiver settles the artifact rather than suppressing it: the journeys
+    // stood on the decisions and are owed the moment the record says none are
+    // coming. A waived record says nothing was written down, not that nobody
+    // walks the capability.
+    expect(
+      rows({
+        written: ["proposal"],
+        decisionsWaived: "opened before the file existed",
+      }),
+    ).toEqual(["user-journeys"]);
+  });
+
+  it("takes the file as readily as the waiver", () => {
+    expect(rows({ written: ["proposal", "decisions"] })).toEqual([
+      "user-journeys",
+    ]);
   });
 });

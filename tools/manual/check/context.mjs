@@ -7,7 +7,7 @@
  */
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { readText } from "../src/store/disk.mts";
+import { readText, walkFiles } from "../src/store/disk.mts";
 
 /** Report order, and which findings end the build. */
 export const RULES = [
@@ -163,6 +163,15 @@ export const RULES = [
     title: "Application work with no tech design",
   },
   {
+    // `decisions.md` is required by the schema, and a required artifact that
+    // the boards ask for and no check reads is one a change merges without.
+    // Every other required artifact in this workflow has a rule that refuses
+    // its absence; this is that rule.
+    key: "decided",
+    level: "fail",
+    title: "Changes with no record of what they settled",
+  },
+  {
     key: "archived",
     level: "fail",
     title: "Archives recording no deploy",
@@ -303,6 +312,32 @@ export function* everyBlock(blocks) {
 
 export const message = (cause) =>
   cause instanceof Error ? cause.message : String(cause);
+
+/**
+ * Every `user-journeys.md` a change carries, as `{ change, spec, file }`.
+ *
+ * Read off the tree rather than off the change's deltas. The product manager
+ * hands a change over with journeys and no `spec.md` at all — which is the
+ * whole of their part now — and a rule keyed on the deltas has nothing to walk
+ * in exactly that state: the file that says who walks a capability went
+ * unchecked until somebody else added a delta beside it.
+ */
+export function journeysOf(root, changes) {
+  const found = [];
+  for (const change of changes) {
+    const dir = `openspec/changes/${change.id}/specs`;
+    if (!existsSync(join(root, dir))) continue;
+    for (const file of walkFiles(root, join(root, dir), ".md")) {
+      if (!file.endsWith("/user-journeys.md")) continue;
+      found.push({
+        change: change.id,
+        spec: file.slice(`${dir}/`.length, -"/user-journeys.md".length),
+        file,
+      });
+    }
+  }
+  return found;
+}
 
 export const plural = (count, word) =>
   `${count} ${word}${count === 1 ? "" : "s"}`;

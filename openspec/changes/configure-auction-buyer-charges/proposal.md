@@ -69,7 +69,7 @@ below the configured currency minimum, expected 0%.
 
 - [Auction](../../../docs/prds/products/grade10-site/auction/index.md)
 - [Payment Method](../../../docs/prds/products/grade10-site/auction/bid-payment-method.md)
-- [Winner Order](../../../docs/prds/products/grade10-site/auction/winner-order.md)
+- [Winner Order · Invoice and Settlement](../../../docs/prds/products/grade10-site/auction/winner-order.md#invoice-and-settlement)
 - [Auction operations](../../../docs/prds/products/grade10-admin/auction/index.md)
 - [Payment settings](../../../docs/prds/products/grade10-admin/auction/payment-settings.md)
 - [Stripe supported currencies](https://docs.stripe.com/currencies)
