@@ -176,6 +176,8 @@ the store's instrument, not the programme's.
   store's to mint — [Discounts](/p/grade10-site/store/discounts)
 
 :::detail{title="Code map" for="engineer"}
+::image{src="assets/diagrams/coupon-claim-mechanism.svg" alt="One claim from the store's ask through payment to its settlement, and the give-back leg taken where the sale ends instead"}
+
 - **Reward coupons** — `packages/loyalty/backend/src/services/rewards/coupons.ts`,
   rows of `coupon_instances` and `coupon_usages` in
   `packages/loyalty/backend/src/db/schema/rewards.ts`
