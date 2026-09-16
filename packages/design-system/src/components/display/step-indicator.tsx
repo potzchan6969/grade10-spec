@@ -74,8 +74,9 @@ function StepIndicator({
       >
         {/*
           Decorative only — do not use `disabled` here. CheckboxButton's
-          disabled styles apply Opacity/opacity-50, which would wash out a
-          completed check. Upcoming keeps disabled for the dimmed empty ring.
+          disabled styles apply Opacity/opacity-50, which would wash out the
+          check and the empty ring. Upcoming and completed both keep full-
+          strength `border-border`, matching the Step connector line.
         */}
         <CheckboxButton checked className="pointer-events-none" tabIndex={-1} />
       </span>
@@ -91,11 +92,7 @@ function StepIndicator({
         data-state={state}
         {...props}
       >
-        <CheckboxButton
-          className="pointer-events-none"
-          disabled
-          tabIndex={-1}
-        />
+        <CheckboxButton className="pointer-events-none" tabIndex={-1} />
       </span>
     );
   }
