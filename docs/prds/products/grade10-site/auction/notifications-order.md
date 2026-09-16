@@ -10,7 +10,9 @@ Order Notifications are the transactional letters that begin when an auction lot
 - ❓ **Address reminder** — whether Grade10 re-asks for a delivery address while the order stays Awaiting Address, and at which hours after close; draft letters also name the address deadline
 - 🚧 **Invoice sent** — after the address is confirmed and an operator sends the invoice: invoice total, payment deadline (`Pay by …`), CTA to Winner Order to check the invoice and pay; no PDF attachment
 - **Payment reminders** — day 3, day 6, and a final notice on day 7, measured from the current invoice
+- 🚧 **Reminders on hold** — no payment reminder or final notice goes out while payment proof is being checked; the sequence resumes if the proof is not accepted
 - **Invoice expired** — says what remains owed and how to resolve it
+- 🚧 **Proof not accepted** — the reason the operator gave, and the time left to pay; no letter goes out when proof is uploaded
 - **Invoice reissued** — confirms the new invoice and deadline
 - **Payment** — the address, payment, decline, receipt, and deadline events that change what the winner should do
 - 🚧 **Payment received** — confirms payment with amount, payment date, and method (card brand and masked number, or bank transfer with bank and masked account); CTA to Winner Order for the receipt; no PDF attachment

@@ -13,10 +13,19 @@ Winner Order is the authenticated route where a collector settles one lot after 
 - **Invoice** — one operator-quoted invoice per lot; shipping and insurance are priced for the confirmed address, the address locks when the invoice is sent, and the seven-day payment window starts at send
 - 🚧 **Invoice lines** — Winning Bid, Buyer's Premium, Shipping & Handling, Insurance when added, Tax, Subtotal, Payment Processing Fee and Order Total; Shipping & Handling of zero reads Free. Insurance is optional and separate from Payment Processing Fee. The on-page summary may omit Subtotal and show fee lines plus Order Total; invoice and receipt itemisation keep Subtotal
 - 🚧 **Buyer's premium** — 20% of the winning bid, or the currency's minimum charge when that is higher; a minimum of 0 means none
-- 🚧 **Payment Processing Fee** — the card fee added on top of the Subtotal so Grade10 keeps the Subtotal in full; priced when the invoice is sent and fixed from then on, and dropped when an operator settles the order manually
+- 🚧 **Payment method** — the winner chooses card or bank transfer when confirming the delivery address; each choice shows the fee range Grade10 sets. Bank transfer is offered only in a currency with bank details set up — HKD at launch
+- ❓ **Fee range wording** — what the choice says for each method; the bank transfer wording names no amount, because the operator sets that fee — Product confirms
+- 🚧 **Payment Processing Fee** — priced for the invoice's payment method and fixed once the invoice is sent: for card, the fee added on top of the Subtotal so Grade10 keeps the Subtotal in full; for bank transfer, the amount the operator enters, which may be zero and then reads Free
 - 🚧 **Fee transparency** — Buyer’s Premium, Shipping & Handling, and Payment Processing Fee carry brief info tooltips on the order summary
-- **Address** — changeable by the winner until the invoice is sent; a later change is handled by Grade10 through an operator re-quote and reissue
+- **Address** — changeable by the winner until the invoice is sent
+- 🚧 **Changes after send** — a new address or payment method is made by an operator, who reissues the invoice; the replaced invoice reads as replaced by the new one
+- ❓ **Asking for a change** — how the winner asks for a new address or payment method after send — Design confirms
 - **Payment** — a fresh card payment, the only self-service method offered while the invoice is `pending`; a declined attempt leaves the invoice payable until the deadline
+- 🚧 **Bank transfer** — an invoice sent for bank transfer shows SWIFT, FPS and Hong Kong local bank transfer details instead of card Pay, and asks the winner to quote the invoice reference
+- ❓ **Bank details** — the account details for each of the three ways — Finance confirms
+- ❓ **Invoice reference and receipt number** — the format of each; every invoice has a reference that still finds the order after a reissue, and every receipt has a number — Product confirms
+- 🚧 **Payment proof** — after paying, the winner uploads 1 to 5 PDF, JPEG or PNG files of up to 10 MB each, once; the order then reads Payment Verifying, the payment deadline stops, and card Pay and further uploads are hidden
+- 🚧 **Proof not accepted** — an operator returns the invoice to `pending` with a reason the winner reads on the order; the deadline runs again with the time that was left
 - **Payment deadline** — 7 calendar days from when Grade10 sends the invoice to the winner, not from lot close
 - 🚧 **After the deadline** — card Pay is hidden; the overdue alert carries Contact Us; an operator reissues, settles manually, or cancels
 - 🚧 **Progress** — five presentation steps in order: Address → Invoice → Payment → Shipped → Completed; Cancelled and Refunded show no stepper. Step subtext uses day-only dates (Payment while due reads Pay by …; Address while awaiting reads Confirm by …); long copy wraps. Order status keeps its eight names
@@ -60,7 +69,12 @@ The winner needs one place to understand what is owed and what happens next. The
 | Buyer’s Premium rate | 🚧 In flight | The invoice carries a buyer's premium calculated as 20% of the winning bid; the rate is disclosed on the bid panel only. | Product / finance |
 | Buyer's premium | Decided | 20% of the winning bid alone, rounded half up, or the lot currency's minimum charge when higher. Grade10 computes it; no operator enters, waives or changes it. | Product and finance |
 | Premium minimum | 🚧 In flight | One Grade10-owned amount per currency is editable by a settlement-authorized operator under `/auction`. 0 means no minimum. A new value applies to invoices sent or reissued after it takes effect. | Product and finance |
+| Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule. Card fees on high-value lots make a transfer worth offering. | Product (@jeffffej0909) |
+| One fee line | 🚧 In flight | Payment Processing Fee stays on every invoice and is priced by method, so a bank transfer can carry an administrative fee. The operator enters that fee each time, with no cap. | Product (@jeffffej0909) |
+| Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount is first shown on the sent invoice, and an operator reissues if the winner then wants the other method. | Product (@jeffffej0909) |
+| Payment deadline while proof is checked | 🚧 In flight | The deadline stops on upload and resumes with the time left if the proof is not accepted, so a winner never loses time to the check. | Product (@jeffffej0909) |
+| Partial payment | ❓ Open | A separate change: several payments against one invoice, a shortfall tolerance, overpayment, and refunds. | Product and finance |
 | Minimum values | 🚧 In flight | The initial values are 0 in USD, HKD, and JPY; the mapping is editable under `/auction`. | Product and finance |
 
-**Not in scope.** Combined invoices, payment plans, partial settlement, buyer-initiated returns, or changes to the bid-time auction rules.
+**Not in scope.** Combined invoices, payment plans, buyer-initiated returns, or changes to the bid-time auction rules.
 :::
