@@ -256,12 +256,11 @@ artifacts:
     instruction: >
       Written by the designer, with the `planning-design` skill - or by the
       product manager, in the same file, when they already have the design and
-      do not need one drawn. Maps every
-      user-facing surface the change
-
-      touches to its sources of truth, from the journeys and the PRD - the
-
-      requirements are not written yet. Optional: a change with no user-facing
+      do not need one drawn. Maps every user-facing surface the change touches
+      to its sources of truth, from the decisions, the journeys and the PRD -
+      `spec.md` is not written yet, in either pass. The designer brings the
+      design reference its groups will be written against: Storybook,
+      `packages/design-system`, `packages/ui`, `packages/i18n`. Optional: a change with no user-facing
 
       surface does not create the file, and nothing downstream waits on it. A
       design drawn later still lands on this same change.
@@ -275,8 +274,10 @@ artifacts:
 
       - **Components**: The design-system primitives and `packages/ui` exports
       each screen composes. Name exports exactly - the export name is the
-      cross-repo contract. A component, variant, or token that does not exist
-      yet is work in this repo; flag it so tasks can carry it.
+      cross-repo contract. A component, variant, token or message key that does
+      not exist yet is work in this repo; flag it so tasks can carry it. A word
+      is work like the rest: `packages/i18n` answers it in every language of
+      its layer, and `pnpm run test` refuses one left unanswered.
 
       - **States**: Loading, empty, error, and edge states per screen, each
       tied to the anchor it dresses - a journey id from `user-journeys.md`, or
@@ -328,10 +329,13 @@ artifacts:
       suite and reconciled against it.
 
       Nothing in this schema can express that order - `requires` is advisory and
-      never stopped anyone writing the scenarios first. **The only machine
-      evidence of it is `pnpm check:manual`'s `outline` rule**, which fails a
-      capability whose suite sits beside a `spec.md` carrying no requirements.
-      That check is load-bearing; it is never downgraded to a warning.
+      never stopped anyone writing the scenarios first. **Two checks stand in
+      for it.** While the change is open, a delta that names no requirement is
+      refused unless the change declares the wait in `awaiting:`, so an outline
+      nobody returned to either says so or fails. Once folded,
+      `pnpm check:manual`'s `outline` rule fails a capability whose suite sits
+      beside a `spec.md` carrying no requirements; that rule is durable-only
+      and load-bearing, and it is never downgraded to a warning.
 
       ## Purpose
 

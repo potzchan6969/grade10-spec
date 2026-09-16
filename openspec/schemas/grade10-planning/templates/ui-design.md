@@ -4,7 +4,10 @@
 
 ## Components
 
-<!-- Design-system primitives and packages/ui exports each screen composes, named exactly. Flag components, variants, or tokens that do not exist yet as work in this repo -->
+<!-- Design-system primitives and packages/ui exports each screen composes,
+     named exactly. Flag what does not exist yet as work in this repo: a
+     component, a variant, a token, or a word packages/i18n has to answer in
+     every language of its layer. -->
 
 ## States
 
