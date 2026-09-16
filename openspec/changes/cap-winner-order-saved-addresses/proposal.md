@@ -44,6 +44,14 @@ See `decisions.md`.
   (`apps/preview` until the shared block exists)
 - `docs/prds/products/grade10-site/auction/winner-order.md`
 
+## Open questions
+
+- **One-time address persistence** — whether the unsaved one-time address a
+  winner enters at the cap is visually distinguished from the five saved
+  addresses in the picker, and whether it survives navigating away and back
+  or a page reload. The blind test-case reading raised this; nothing in
+  `decisions.md` or `ui-design.md` settles it. @tangconst confirms.
+
 ## References
 
 - [Winner Order · Invoice and Settlement](../../../docs/prds/products/grade10-site/auction/winner-order.md#invoice-and-settlement)
