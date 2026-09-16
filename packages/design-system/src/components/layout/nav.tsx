@@ -435,7 +435,9 @@ function Nav({
                           href={link.href}
                           key={String(link.label)}
                           onClick={() => setMenuOpen(false)}
-                          rel={link.external ? "noopener noreferrer" : undefined}
+                          rel={
+                            link.external ? "noopener noreferrer" : undefined
+                          }
                           target={link.external ? "_blank" : undefined}
                         >
                           {link.label}
