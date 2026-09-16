@@ -99,7 +99,7 @@ Pin the submodule SHA in the application repository; updates are normal pull req
 Run the appropriate checks before handoff:
 
 - `pnpm run agent:check-parity` after agent instructions, rules, or skills change.
-- `pnpm check:manual` after a page, a change, or a suite changes; CI runs it on every push and refuses a change with an unmarked page, application work with no tech design, a capability with no journeys file, and a 🚧 line no change delivers. It warns (`dense`) on a page past the style's budget, tabled under Enforcement in `docs/governance/writing.md`.
+- `pnpm check:manual` after a page, a change, or a suite changes; CI runs it on every push and refuses a change with an unmarked page, application work with no tech design, a capability with no journeys file, a 🚧 line no change delivers, and an id cited in backticks that the store issues nowhere. It warns (`dense`) on a page past the style's budget, tabled under Enforcement in `docs/governance/writing.md`.
 - `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
 - `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
 - `pnpm run test:openspec` after anything under `scripts/openspec/` changes.

@@ -35,6 +35,7 @@ export const defaultTheme = {
   colorText: "#111827",
   colorTextMuted: "#6b7280",
   colorTextSubtle: "#9ca3af",
+  colorSecondaryForeground: "#6b7280",
   colorWarning: "#f59e0b",
   containerWidth: "600px",
   fontFamily:

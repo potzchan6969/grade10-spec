@@ -29,9 +29,10 @@ Highest bid highlight.
     (campaign `lot_closed_didnt_win`)
   - **Watcher, sold** — watch-only; Sold for when a winning bid is supplied
     (campaign `lot_ended_watched`)
-  - **No bids at close** — Ended only: watched letter without a winning amount
-    and/or public campaign `lot_ended`; never Highest bid or non-sale wording.
-    No-bids means nobody bid — not winner default. No bidder letter
+  - **No bids at close** — watchers only, Ended only: `lot_ended_watched`
+    without a winning amount; never Highest bid or non-sale wording.
+    No-bids means nobody bid — not winner default. No bidder letter.
+    Campaign `lot_ended` is retired
 - **Dedup** — a watcher who also bid gets the bidder close letter only. The
   winner gets only the auction-won order letter from
   `notifications-order`
@@ -78,7 +79,6 @@ Highest bid highlight.
 | --- | --- |
 | Hold line on the non-winner letter | Product |
 | Address reminder count / hours (24h / 72h draft) | Product — follow-on on `notifications-order` |
-| Whether no-bids sends watched Ended-only, public `lot_ended`, or both | Product |
 
 ## Follow-on changes
 

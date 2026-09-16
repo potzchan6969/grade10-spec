@@ -27,6 +27,7 @@ current bid is the second-highest maximum plus the listing increment.
   - One resolution per commitment: Grade10 does not step through intermediate
     increments
 - Card authorization
+  - Optional authorization: disabled by default; maximum commitments and automatic bids do not wait for or create a bid-time authorization
   - Hold for the maximum: the authorization covers the committed cap, not the
     current bid, and stays one active hold per bidder per listing
   - Failed raise: a raise the card cannot cover leaves the maximum, leader, and
@@ -36,7 +37,9 @@ current bid is the second-highest maximum plus the listing increment.
     history as placed on that bidder's behalf
   - Extension once: an auto-bid inside the extension window moves the close as a
     manual bid would, and standing maxima do not keep bidding
+
 ## Requirements
+
 ### Requirement: A bidder commits a maximum
 
 A bidder SHALL:
@@ -365,3 +368,16 @@ NOT keep extending the close on their own.
 - **WHEN** no further commitment is accepted
 - **THEN** Grade10 places no further bid on either bidder's behalf
 - **AND** the current bid is unchanged
+
+### Requirement: Maximum commitments and automatic bids work without a bid-time authorization
+
+When bid-time authorization holds are disabled, Grade10 SHALL accept a valid
+maximum under the auction rules without waiting for or creating a bid-time
+authorization. The enabled hold path and maximum rules remain unchanged.
+
+#### Scenario: grade10-site-auction-auto-bidding-SC-25 - A maximum works without a bid-time authorization
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
+
+- **GIVEN** bid-time authorization holds are disabled and a listing has an accepted maximum
+- **WHEN** a challenger commits a higher maximum
+- **THEN** Grade10 resolves the two maxima and records the resulting bid without creating or waiting for an authorization

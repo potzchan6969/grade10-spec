@@ -88,6 +88,13 @@ scenario that defines it**. A state with no scenario behind it means the spec
 is missing one — fix the spec, not this file. That is the whole point of the
 tie: it is how a designer's edge case becomes something a test can decide.
 
+**Copy each id from the heading that defines it, and write it in backticks.**
+A prefix is read, never reconstructed: most capabilities issue
+`grade10-site-auction-account-record-SC-20`, a few issue `winner-order-SC-04`
+and keep it, so shortening one to match its neighbour names nothing. Outside
+backticks nothing reads the citation, so a renumber leaves the row pointing at
+a scenario nobody issues any more and no check says so.
+
 ## Finish
 
 ```bash

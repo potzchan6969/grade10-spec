@@ -14,9 +14,15 @@ import { Footer } from "@grade10/design-system/components/layout/footer";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
-import { ArrowUpRight } from "@phosphor-icons/react";
+import { ArrowUpRight, FilePdf, Info } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import {
   REVEAL_HIDDEN_CLASS,
@@ -30,6 +36,7 @@ import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
 import { WinnerOrderAddressDialog } from "./winner-order-address-dialog";
 import {
+  LINE_TOOLTIPS,
   WINNER_ORDER_CONTENTS,
   type WinnerOrderContent,
   type WinnerOrderInvoiceLine,
@@ -76,7 +83,7 @@ function RevealGroup({
 }
 
 /**
- * Minimal placeholder PDF for Storybook — not a real invoice pipeline.
+ * Minimal placeholder PDF for Storybook — not a real invoice / receipt pipeline.
  * Opens in a new tab so the winner can view or save from the browser.
  */
 const PLACEHOLDER_INVOICE_PDF = `%PDF-1.4
@@ -91,14 +98,26 @@ trailer<< /Root 1 0 R >>
 %%EOF
 `;
 
-function openPlaceholderInvoicePdf() {
-  const blob = new Blob([PLACEHOLDER_INVOICE_PDF], { type: "application/pdf" });
+const PLACEHOLDER_RECEIPT_PDF = `%PDF-1.4
+1 0 obj<< /Type /Catalog /Pages 2 0 R >>endobj
+2 0 obj<< /Type /Pages /Kids [3 0 R] /Count 1 >>endobj
+3 0 obj<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources<< /Font<< /F1 5 0 R >> >> >>endobj
+4 0 obj<< /Length 64 >>stream
+BT /F1 18 Tf 72 720 Td (Grade10 Winner Receipt Placeholder) Tj ET
+endstream endobj
+5 0 obj<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>endobj
+trailer<< /Root 1 0 R >>
+%%EOF
+`;
+
+function openPlaceholderPdf(bytes: string, downloadName: string) {
+  const blob = new Blob([bytes], { type: "application/pdf" });
   const url = URL.createObjectURL(blob);
   const opened = window.open(url, "_blank", "noopener,noreferrer");
   if (!opened) {
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = "grade10-winner-invoice.pdf";
+    anchor.download = downloadName;
     anchor.rel = "noopener";
     document.body.append(anchor);
     anchor.click();
@@ -107,9 +126,27 @@ function openPlaceholderInvoicePdf() {
   window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
 }
 
+function openPlaceholderInvoicePdf() {
+  openPlaceholderPdf(PLACEHOLDER_INVOICE_PDF, "grade10-winner-invoice.pdf");
+}
+
+function openPlaceholderReceiptPdf() {
+  openPlaceholderPdf(PLACEHOLDER_RECEIPT_PDF, "grade10-winner-receipt.pdf");
+}
+
 /** Invoice exists from Pending Payment onward (incl. paid / delivery / refunded). */
 function hasIssuedInvoice(content: WinnerOrderContent): boolean {
   return Boolean(content.invoiceLines?.length);
+}
+
+/** Receipt PDF after payment — Processing onward, plus Refunded. */
+function hasPaymentReceipt(content: WinnerOrderContent): boolean {
+  return (
+    content.status === "processing" ||
+    content.status === "shipped" ||
+    content.status === "delivered" ||
+    content.status === "refunded"
+  );
 }
 
 const PRODUCT_IMAGE = new URL("./product.fixture.png", import.meta.url).href;
@@ -133,6 +170,7 @@ type WinnerProgressStep = {
 function showWinnerProgress(status: WinnerOrderStatus): boolean {
   return (
     status === "awaiting_address" ||
+    status === "awaiting_address_expired" ||
     status === "preparing_invoice" ||
     status === "pending_payment" ||
     status === "pending_payment_expired" ||
@@ -146,22 +184,45 @@ function showWinnerProgress(status: WinnerOrderStatus): boolean {
  * Post-auction winner progress — designer-required five steps.
  * Address → Invoice → Payment → Shipped → Completed.
  * Cancelled / Refunded omit the stepper.
+ *
+ * Subtext: Address / Invoice / Payment use absolute datetimes (Payment while
+ * due reads “Pay by …”). Shipped and Completed use day-only dates like store
+ * Order Details.
  */
 function winnerProgressStepsFor(
   status: WinnerOrderStatus,
   content: WinnerOrderContent,
 ): WinnerProgressStep[] {
-  const address: WinnerProgressStep = { label: "Address", state: "upcoming" };
-  const invoice: WinnerProgressStep = { label: "Invoice", state: "upcoming" };
-  const payment: WinnerProgressStep = { label: "Payment", state: "upcoming" };
-  const shipped: WinnerProgressStep = { label: "Shipped", state: "upcoming" };
+  const dates = content.progressDates;
+  const address: WinnerProgressStep = {
+    label: "Address",
+    description: dates?.address,
+    state: "upcoming",
+  };
+  const invoice: WinnerProgressStep = {
+    label: "Invoice",
+    description: dates?.invoice,
+    state: "upcoming",
+  };
+  const payment: WinnerProgressStep = {
+    label: "Payment",
+    description: dates?.payment,
+    state: "upcoming",
+  };
+  const shipped: WinnerProgressStep = {
+    label: "Shipped",
+    description: dates?.shipped,
+    state: "upcoming",
+  };
   const completed: WinnerProgressStep = {
     label: "Completed",
+    description: dates?.completed,
     state: "upcoming",
   };
 
   switch (status) {
     case "awaiting_address":
+    case "awaiting_address_expired":
       return [
         { ...address, state: "current" },
         invoice,
@@ -178,13 +239,6 @@ function winnerProgressStepsFor(
         completed,
       ];
     case "pending_payment":
-      return [
-        { ...address, state: "completed" },
-        { ...invoice, state: "completed" },
-        { ...payment, state: "current" },
-        shipped,
-        completed,
-      ];
     case "pending_payment_expired":
       return [
         { ...address, state: "completed" },
@@ -194,19 +248,19 @@ function winnerProgressStepsFor(
         completed,
       ];
     case "processing":
+      return [
+        { ...address, state: "completed" },
+        { ...invoice, state: "completed" },
+        { ...payment, state: "completed" },
+        { ...shipped, state: "current" },
+        completed,
+      ];
     case "shipped":
       return [
         { ...address, state: "completed" },
         { ...invoice, state: "completed" },
         { ...payment, state: "completed" },
-        {
-          ...shipped,
-          description:
-            status === "shipped"
-              ? (content.secondaryNote ?? "In transit")
-              : undefined,
-          state: "current",
-        },
+        { ...shipped, state: "current" },
         completed,
       ];
     case "delivered":
@@ -215,11 +269,7 @@ function winnerProgressStepsFor(
         { ...invoice, state: "completed" },
         { ...payment, state: "completed" },
         { ...shipped, state: "completed" },
-        {
-          ...completed,
-          description: content.secondaryNote ?? "Delivered",
-          state: "completed",
-        },
+        { ...completed, state: "completed" },
       ];
     default:
       return [address, invoice, payment, shipped, completed];
@@ -241,9 +291,24 @@ function summaryLinesFor(
   }
   return [
     { label: "Winning Bid", value: content.winningBid },
-    { label: "Buyer’s Premium", value: "TBD", muted: true },
-    { label: "Shipping & Handling", value: "TBD", muted: true },
-    { label: "Insurance", value: "TBD", muted: true },
+    {
+      label: "Buyer’s Premium",
+      value: "TBD",
+      muted: true,
+      tooltip: LINE_TOOLTIPS.buyersPremium,
+    },
+    {
+      label: "Shipping & Handling",
+      value: "TBD",
+      muted: true,
+      tooltip: LINE_TOOLTIPS.shippingHandling,
+    },
+    {
+      label: "Payment Processing Fee",
+      value: "TBD",
+      muted: true,
+      tooltip: LINE_TOOLTIPS.processingFee,
+    },
     { label: "Order Total", value: "TBD", muted: true },
   ];
 }
@@ -269,12 +334,33 @@ function SummaryRow({
   value,
   emphasize = false,
   muted = false,
+  tooltip,
 }: {
   label: ReactNode;
   value: ReactNode;
   emphasize?: boolean;
   muted?: boolean;
+  tooltip?: string;
 }) {
+  const labelNode = tooltip ? (
+    <HStack className="min-w-0" gap="xs" vAlign="center">
+      <span>{label}</span>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger
+            aria-label={tooltip}
+            className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+            onPointerDown={(event) => event.preventDefault()}
+            render={<Info aria-hidden size={12} />}
+          />
+          <TooltipContent>{tooltip}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    </HStack>
+  ) : (
+    label
+  );
+
   return (
     <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
       <span
@@ -284,7 +370,7 @@ function SummaryRow({
           muted && !emphasize && "text-secondary-foreground",
         )}
       >
-        {label}
+        {labelNode}
       </span>
       <span
         className={cn(
@@ -375,6 +461,11 @@ function AddressBlock({
   confirmCta?: string | null;
   onConfirmAddress?: () => void;
 }) {
+  const addressOverdue =
+    content.overdue &&
+    (content.status === "awaiting_address" ||
+      content.status === "awaiting_address_expired");
+
   return (
     <VStack className="w-full" gap="sm" hAlign="start">
       <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
@@ -385,10 +476,38 @@ function AddressBlock({
           {content.addressValue}
         </Text>
       ) : null}
-      {confirmCta && onConfirmAddress ? (
-        <Button className="w-full" onClick={onConfirmAddress} size="md">
-          {confirmCta}
-        </Button>
+      {addressOverdue ? (
+        <Alert
+          actions={
+            <Button
+              onClick={() => {
+                toast.info("Contact Grade10", {
+                  description: "support@grade10.com",
+                });
+              }}
+              size="sm"
+              variant="outline"
+            >
+              Contact Us
+            </Button>
+          }
+          dismissible={false}
+          layout="inline"
+          status="warning"
+          title={content.deadline ?? "Missed address deadline"}
+        />
+      ) : null}
+      {confirmCta && onConfirmAddress && !addressOverdue ? (
+        <VStack className="w-full" gap="sm" hAlign="stretch">
+          <Button className="w-full" onClick={onConfirmAddress} size="md">
+            {confirmCta}
+          </Button>
+          {content.deadline ? (
+            <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
+              {content.deadline}
+            </p>
+          ) : null}
+        </VStack>
       ) : null}
     </VStack>
   );
@@ -401,6 +520,7 @@ function OrderSummary({
   overdue = false,
   onPay,
   onViewInvoicePdf,
+  onViewReceiptPdf,
 }: {
   lines: WinnerOrderInvoiceLine[];
   payCta?: string | null;
@@ -408,9 +528,50 @@ function OrderSummary({
   overdue?: boolean;
   onPay?: () => void;
   onViewInvoicePdf?: () => void;
+  onViewReceiptPdf?: () => void;
 }) {
   const total = lines.find((line) => line.label === "Order Total");
   const rest = lines.filter((line) => line.label !== "Order Total");
+  const documentLinks =
+    onViewInvoicePdf || onViewReceiptPdf ? (
+      <HStack
+        className="w-full flex-wrap"
+        gap="md"
+        hAlign="start"
+        vAlign="center"
+      >
+        {onViewInvoicePdf ? (
+          <Link
+            aria-label="Invoice PDF"
+            href="#view-invoice-pdf"
+            onClick={(event) => {
+              event.preventDefault();
+              onViewInvoicePdf();
+            }}
+            size="sm"
+            variant="secondary"
+          >
+            <FilePdf aria-hidden size={14} weight="regular" />
+            Invoice
+          </Link>
+        ) : null}
+        {onViewReceiptPdf ? (
+          <Link
+            aria-label="Receipt PDF"
+            href="#view-receipt-pdf"
+            onClick={(event) => {
+              event.preventDefault();
+              onViewReceiptPdf();
+            }}
+            size="sm"
+            variant="secondary"
+          >
+            <FilePdf aria-hidden size={14} weight="regular" />
+            Receipt
+          </Link>
+        ) : null}
+      </HStack>
+    ) : null;
 
   return (
     <VStack className="w-full" gap="md" hAlign="stretch">
@@ -423,6 +584,7 @@ function OrderSummary({
             key={line.label}
             label={line.label}
             muted={line.muted || line.value === "TBD"}
+            tooltip={line.tooltip}
             value={line.value}
           />
         ))}
@@ -437,36 +599,12 @@ function OrderSummary({
               muted={total.muted || total.value === "TBD"}
               value={total.value}
             />
-            {onViewInvoicePdf ? (
-              <Link
-                className="self-start"
-                href="#view-invoice-pdf"
-                onClick={(event) => {
-                  event.preventDefault();
-                  onViewInvoicePdf();
-                }}
-                size="sm"
-                variant="secondary"
-              >
-                View invoice PDF
-              </Link>
-            ) : null}
+            {documentLinks}
           </VStack>
         </>
-      ) : onViewInvoicePdf ? (
-        <Link
-          className="self-start"
-          href="#view-invoice-pdf"
-          onClick={(event) => {
-            event.preventDefault();
-            onViewInvoicePdf();
-          }}
-          size="sm"
-          variant="secondary"
-        >
-          View invoice PDF
-        </Link>
-      ) : null}
+      ) : (
+        documentLinks
+      )}
 
       {overdue ? (
         <Alert
@@ -573,6 +711,7 @@ function OrderSidebar({
   payCta,
   onPay,
   onViewInvoicePdf,
+  onViewReceiptPdf,
 }: {
   content: WinnerOrderContent;
   confirmAddressCta?: string | null;
@@ -580,10 +719,13 @@ function OrderSidebar({
   payCta?: string | null;
   onPay?: () => void;
   onViewInvoicePdf?: () => void;
+  onViewReceiptPdf?: () => void;
 }) {
   const lines = summaryLinesFor(content);
   const showPayment = Boolean(content.paymentMethod);
   const showAddress = content.status !== "cancelled";
+  const paymentOverdue =
+    Boolean(content.overdue) && content.status === "pending_payment_expired";
 
   return (
     <aside
@@ -600,11 +742,12 @@ function OrderSidebar({
           hAlign="stretch"
         >
           <OrderSummary
-            deadline={content.deadline}
+            deadline={paymentOverdue || payCta ? content.deadline : null}
             lines={lines}
             onPay={onPay}
             onViewInvoicePdf={onViewInvoicePdf}
-            overdue={Boolean(content.overdue)}
+            onViewReceiptPdf={onViewReceiptPdf}
+            overdue={paymentOverdue}
             payCta={payCta}
           />
         </VStack>
@@ -779,9 +922,7 @@ function WinnerOrderPage({
                     status="default"
                     title={content.secondaryNote}
                   />
-                ) : content.secondaryNote &&
-                  content.status !== "shipped" &&
-                  content.status !== "delivered" ? (
+                ) : content.secondaryNote && content.status === "shipped" ? (
                   <Text size="sm" tone="secondary">
                     {content.secondaryNote}
                   </Text>
@@ -803,6 +944,11 @@ function WinnerOrderPage({
               onViewInvoicePdf={
                 hasIssuedInvoice(content)
                   ? openPlaceholderInvoicePdf
+                  : undefined
+              }
+              onViewReceiptPdf={
+                hasPaymentReceipt(content)
+                  ? openPlaceholderReceiptPdf
                   : undefined
               }
               payCta={payCta}

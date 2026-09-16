@@ -78,7 +78,7 @@ soon, or Active values in Your Standing.
 - **AND** Your Standing is `--`
 
 #### Scenario: grade10-site-auction-account-record-SC-09 - Ending soon begins at 60 minutes
-**Serves:** grade10-site-auction-account-record-US-01 - Mark a listing now and find it again later
+**Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
 - **GIVEN** a watched listing whose recorded close is 60 minutes or less away
   and has not passed
@@ -87,7 +87,7 @@ soon, or Active values in Your Standing.
 - **AND** Your Standing is `--` when they have not bid
 
 #### Scenario: grade10-site-auction-account-record-SC-10 - Every way of ending reads as Ended
-**Serves:** grade10-site-auction-account-record-US-01 - Mark a listing now and find it again later
+**Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
 - **GIVEN** three watched listings the collector has not bid on — one sold,
   one that closed with no winner, and one called off — each still published
@@ -181,7 +181,7 @@ code.
   minor units with its ISO 4217 currency code
 
 #### Scenario: grade10-site-auction-account-record-SC-16 - A refused bid says why it was refused
-**Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a collector whose last bid on an open listing was refused for being
   below the minimum next bid
@@ -190,7 +190,7 @@ code.
 - **AND** the row says the bid was below the minimum next bid
 
 #### Scenario: grade10-site-auction-account-record-SC-17 - A bid awaiting acceptance is not a standing
-**Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a collector who has placed a bid Grade10 has not yet accepted
 - **WHEN** they open My Auctions
@@ -283,7 +283,7 @@ the table.
 - **AND** they are not sent to a separate Bidding section
 
 #### Scenario: grade10-site-auction-account-record-SC-31 - A collector who has never bid lands on Watching
-**Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a collector who has never placed a bid and watches at least one
   listing
@@ -300,7 +300,7 @@ the table.
 - **AND** it does not report an error
 
 #### Scenario: grade10-site-auction-account-record-SC-33 - A failed read is not an empty record
-**Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a collector whose record Grade10 cannot read
 - **WHEN** they open it
@@ -308,7 +308,7 @@ the table.
 - **AND** it does not show an empty record
 
 #### Scenario: grade10-site-auction-account-record-SC-34 - A value that could not be refreshed says so
-**Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a record whose rows are shown but whose current bid could not be
   refreshed

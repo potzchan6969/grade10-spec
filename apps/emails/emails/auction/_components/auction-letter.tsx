@@ -21,26 +21,53 @@ export type AuctionLetterProps = {
   heading: string;
   body: string;
   lotTitle: string;
+  /**
+   * Destination for the lot image and lot title.
+   * Order letters pass the Winner Order URL; progress / activity / close
+   * letters pass the public listing URL.
+   */
   listingUrl: string;
   primaryImageUrl?: string | null;
+  /** Quieter line under the lot title (e.g. Closes … / Ended …). */
+  lotSubtext?: string;
   /** Leading / current bid — stronger hierarchy than secondary facts. */
   highlight?: {
     label: string;
     value: string;
+    /** Quieter line under the value (e.g. ended date under winning bid). */
+    subtext?: string;
   };
   /** Companion amount (outbid standing bid). Same size, to the right of highlight. */
   secondary?: {
     label: string;
     value: string;
   };
-  facts: string[];
+  /**
+   * Extra label/value rows in the same weight as the highlight
+   * (deadlines, payment method, etc.).
+   */
+  details?: Array<{
+    label: string;
+    value: string;
+    /** Quieter line under the value (e.g. paid-at under payment method). */
+    subtext?: string;
+  }>;
+  facts?: string[];
   whyYouGotThis: string;
   canUnsubscribe?: boolean;
   /** Signed-in mute surface for this lot's email alerts. */
   muteUrl?: string;
   /** @deprecated Prefer `muteUrl`. */
   unwatchUrl?: string;
+  /**
+   * Primary CTA destination. Defaults to `listingUrl` (lot or Winner Order).
+   * Use a carrier track-and-trace URL when the letter's main job is tracking.
+   */
+  ctaHref?: string;
   ctaLabel?: string;
+  /** Optional secondary CTA (e.g. Winner Order beside a tracking primary). */
+  secondaryCtaHref?: string;
+  secondaryCtaLabel?: string;
 };
 
 export function AuctionLetter({
@@ -53,18 +80,27 @@ export function AuctionLetter({
   lotTitle,
   listingUrl,
   primaryImageUrl,
+  lotSubtext,
   highlight,
   secondary,
-  facts,
+  details,
+  facts = [],
   whyYouGotThis,
   canUnsubscribe = false,
   muteUrl,
   unwatchUrl,
+  ctaHref,
   ctaLabel,
+  secondaryCtaHref,
+  secondaryCtaLabel,
 }: AuctionLetterProps) {
   const alertsBase = muteUrl ?? unwatchUrl;
+  const primaryHref = ctaHref ?? listingUrl;
   const taggedHome = withAuctionEmailCampaignTags(homeUrl, campaign, "logo");
-  const taggedCta = withAuctionEmailCampaignTags(listingUrl, campaign, "cta");
+  const taggedCta = withAuctionEmailCampaignTags(primaryHref, campaign, "cta");
+  const taggedSecondaryCta = secondaryCtaHref
+    ? withAuctionEmailCampaignTags(secondaryCtaHref, campaign, "secondary_cta")
+    : undefined;
   const taggedLotImage = withAuctionEmailCampaignTags(
     listingUrl,
     campaign,
@@ -86,15 +122,22 @@ export function AuctionLetter({
       </Heading>
       <Text className="mb-2 mt-0 text-lg leading-base text-fg-2">{body}</Text>
       <LotBlock
+        details={details}
         facts={facts}
         highlight={highlight}
         imageListingUrl={taggedLotImage}
         listingUrl={taggedLotTitle}
+        lotSubtext={lotSubtext}
         lotTitle={lotTitle}
         primaryImageUrl={primaryImageUrl}
         secondary={secondary}
       />
-      <PrimaryCta href={taggedCta} label={ctaLabel} />
+      <PrimaryCta
+        href={taggedCta}
+        label={ctaLabel}
+        secondaryHref={taggedSecondaryCta}
+        secondaryLabel={secondaryCtaLabel}
+      />
       <EmailFooter
         brandName={brandName}
         canUnsubscribe={canUnsubscribe}

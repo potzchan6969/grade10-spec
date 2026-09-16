@@ -2,6 +2,10 @@
 
 **Extended by:** @tangconst - 2026-09-15 — Storybook #436 reconciliation (expired ends self-service Pay; progress steps; invoice PDF; My Auctions View order; calm Won rows).
 
+**Extended by:** @tangconst - 2026-09-16 — Storybook Winner Order reconciliation (48-hour address deadline + Expired Address; day-only progress dates; fee tooltips; receipt PDF; Payment Processing Fee on the winner summary alongside optional Insurance).
+
+**Extended by:** @tangconst - 2026-09-16 — Order letter drafts: auction-won and address reminders name the address deadline; invoice-sent and payment-received CTAs open Winner Order with no PDF attachments.
+
 Product context: [Winner Order](../../../docs/prds/products/grade10-site/auction/winner-order.md),
 [Post-Sale Queue](../../../docs/prds/products/grade10-admin/auction/post-sale.md),
 [Auction Order Status](../../../docs/prds/products/grade10-site/auction/order-status.md),
@@ -40,27 +44,41 @@ release.
   entered by an operator for the confirmed address and may be zero. Insurance
   is optional; once added it must be more than zero. Sending issues the
   invoice, sends the new **invoice-sent** letter, and locks the address.
-- **BREAKING — The 7-day deadline starts at send**, not at lot close. An order
-  with no invoice has no deadline and never expires.
+- **BREAKING — The 7-day payment deadline starts at send**, not at lot close.
+  An order with no invoice has no payment deadline and its invoice status never
+  becomes `expired`.
+- **BREAKING — Address confirm window.** The winner has **48 hours from lot
+  close** to confirm a delivery address. While due, Winner Order shows
+  `Confirm by …` (absolute datetime) under Confirm. When the window passes,
+  Confirm is hidden and the overdue alert reads `Missed address deadline:
+  {date}` with Contact Us. Derived status stays **Awaiting Address**; invoice
+  status stays `not_issued`. No automatic cancel or suspension.
 - **BREAKING — Expiry becomes an invoice status.** Grade10 writes `expired` on
-  the invoice when the deadline passes unpaid. The order status **Expired** is
-  removed, so the order keeps reading **Pending Payment**.
+  the invoice when the payment deadline passes unpaid. The order status
+  **Expired** is removed, so the order keeps reading **Pending Payment**.
 - **BREAKING — An expired invoice ends self-service card pay.** Winner Order
   hides Pay with card and shows Contact Us in the overdue alert. An operator
   reissues (returns the invoice to `pending` with a new deadline), settles
   manually, or cancels. A deadline that still allowed card pay would not be a
   deadline (Storybook #436; Product decisions on Winner Order).
-- **Idle orders are shown, not expired.** The order detail shows how long it
+- **Idle orders stay visible to operators.** The order detail shows how long it
   has waited in its stage; after **72 hours** in either pre-invoice stage the
-  order carries an **Overdue** mark for operators. Nothing is automatic — the
-  operator chases, prepares the invoice, or cancels. There is no winner-facing
-  address-only deadline.
+  order carries an **Overdue** mark for operators. The mark does not cancel or
+  suspend; the operator chases, prepares the invoice, or cancels.
 - **Progress presentation.** Winner Order shows five steps — Address → Invoice
-  → Payment → Shipped → Completed — as presentation only. Order status keeps
-  its eight names; Processing maps under Shipped; Delivered maps to Completed;
-  Cancelled and Refunded show no stepper.
+  → Payment → Shipped → Completed — as presentation only. Step subtext uses
+  day-only dates (Payment while due reads `Pay by …`; Address while awaiting
+  reads `Confirm by …`); long copy wraps. Order status keeps its eight names;
+  Processing maps under Shipped; Delivered maps to Completed; Cancelled and
+  Refunded show no stepper.
 - **Invoice PDF.** Once an invoice has been sent, the winner can view and
-  download it on Winner Order; hidden before send and when Cancelled.
+  download it on Winner Order (PDF icon + Invoice); hidden before send and when
+  Cancelled.
+- **Receipt PDF.** After payment, the winner can view and download an itemised
+  receipt on the same row (PDF icon + Receipt); shown Processing onward and on
+  Refunded when a payment existed.
+- **Fee tooltips.** Buyer’s Premium, Shipping & Handling, and Payment
+  Processing Fee carry brief info tooltips on the order summary.
 - **My Auctions entry.** Every Won standing offers View order into that lot’s
   Winner Order; Didn’t win and watch-only do not. Won rows stay calm — status
   badge and View order only; no secondary Won helpers. Didn’t win keeps hold
@@ -88,7 +106,12 @@ release.
   reads **Shipping & Handling**, and Final amount reads **Order Total**, for the
   winner and the operator.
 - **Zero and absent lines.** Shipping & Handling of zero reads **Free**; an
-  invoice without Insurance shows no Insurance line.
+  invoice without Insurance shows no Insurance line. Insurance stays optional
+  and separate from Payment Processing Fee — a fixture without Insurance is
+  the common case, not a replacement of Insurance by the fee.
+- **Winner summary vs itemised record.** The on-page Winner Order summary shows
+  the fee lines that apply plus Order Total; Subtotal stays on the invoice and
+  receipt itemisation used for fee gross-up.
 - **The shipping-rate calculator is retired** from the invoice flow.
 - **BREAKING — Ending soon is no longer an outcome.** A lot with bidding open
   is Live until it closes; how long it has left is read from its close.
@@ -97,8 +120,9 @@ release.
 
 - **The catalogue's Ending soon filter and the one-hour reminder.** Neither is
   an outcome, and both stay.
-- **Automatic expiry or suspension before an invoice exists.** A winner who
-  never confirms an address is never suspended; the operator decides.
+- **Automatic cancel or suspension before an invoice exists.** Missing the
+  48-hour address window ends self-service Confirm only; it does not cancel
+  the order or suspend bidding. The operator decides cancel or chase.
 - **Notifying operators by email or in-app notice.** The queue is how an
   operator learns an order is ready for a quote.
 - **Non-card payment by the winner**, and any winner-side upload.
@@ -115,17 +139,20 @@ None.
 
 ### Modified Capabilities
 
-- `grade10-site/auction/winner-order`: the order opens awaiting an address;
-  the invoice carries an operator quote; the address locks and the deadline
-  starts at send; the winner pays by card only while `pending`; expired hides
-  card Pay and shows Contact Us; five-step progress presentation; invoice PDF
-  after send; the receipt names the method.
+- `grade10-site/auction/winner-order`: the order opens awaiting an address
+  with a 48-hour confirm window; the invoice carries an operator quote; the
+  address locks and the payment deadline starts at send; the winner pays by
+  card only while `pending`; expired invoice hides card Pay and shows Contact
+  Us; five-step progress with day-only dates; invoice and receipt PDFs; fee
+  tooltips; the receipt names the method.
 - `grade10-site/auction/order-status`: invoice status gains `not_issued` and
   `expired`; the condition `address_confirmed` replaces `deadline_elapsed`;
   Awaiting Address and Preparing Invoice are added and Expired is removed;
   expired ends winner card pay while order status stays Pending Payment.
 - `grade10-site/auction/notifications-order`: the auction-won letter asks for
-  an address; a new invoice-sent letter.
+  an address and names the address deadline; a new invoice-sent letter names
+  total and payment deadline; payment-received confirms settlement; CTAs open
+  Winner Order (sign-in first when signed out); no PDF attachments.
 - `grade10-site/auction/account-record`: the winner's projection gains the two
   pre-invoice states and loses Expired; View order on Won; calm Won rows;
   expired contact only on Winner Order; Didn’t win hold copy kept.
@@ -137,11 +164,11 @@ None.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/grade10` | The winner order opens on address confirmation, shows no amount before send, locks the address after send, offers card only while `pending`, hides Pay and shows Contact Us when `expired`, shows five-step progress and invoice PDF after send. My Auctions Won rows offer View order without secondary helpers. |
+| `apps/frontend/grade10` | The winner order opens on address confirmation with a 48-hour confirm window, shows no amount before send, locks the address after send, offers card only while `pending`, hides Confirm / Pay and shows Contact Us when the address or payment window has passed, shows five-step progress with day-only dates, invoice and receipt PDFs, and fee tooltips. My Auctions Won rows offer View order without secondary helpers. |
 | `apps/admin/grade10` | Quote and send, re-quote with a deadline choice, idle time and the Overdue mark and filter, cancel before an invoice, manual settlement with proof upload. |
 | Auction service | Order creation without an invoice, the `not_issued` status and its transitions, send-anchored deadlines, proof-file storage, card brand and last four on the paid record. |
 | Shipping-rate integration | Retired from the invoice flow. |
-| Notification service | A new invoice-sent letter; the auction-won letter changes. |
+| Notification service | Invoice-sent and payment-received letters; auction-won names the address deadline; CTAs open Winner Order; no PDF attachments. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. New letter and label copy is catalog work for the engineer. |
 
 **Card brand and last four are new data.** Nothing stores them today; the

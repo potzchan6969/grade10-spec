@@ -17,5 +17,6 @@ AddressReminderSecondEmail.PreviewProps = {
   primaryImageUrl: previewLot.primaryImageUrl,
   winningBid: previewLot.winningBid,
   closedAt: previewLot.closedAt,
+  addressDeadline: previewLot.addressDeadline,
   urgency: "second",
 } satisfies AddressReminderProps;

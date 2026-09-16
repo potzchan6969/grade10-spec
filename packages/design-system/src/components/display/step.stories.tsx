@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect } from "storybook/test";
 import { Step } from "./step";
 
 const meta = {
@@ -36,8 +37,23 @@ export const Completed: Story = {
   args: { state: "completed" },
 };
 
+/**
+ * Connectors stay visible so the upcoming ring can be checked against the
+ * horizontal `border-border` lines — same token, full strength (no
+ * CheckboxButton `disabled` washout).
+ */
 export const Upcoming: Story = {
-  args: { state: "upcoming" },
+  args: {
+    state: "upcoming",
+    showLeadingConnector: true,
+    showTrailingConnector: true,
+  },
+  play: async ({ canvasElement }) => {
+    const ring = canvasElement.querySelector('[data-slot="checkbox-button"]');
+    await expect(ring).toBeInstanceOf(HTMLElement);
+    await expect(ring).not.toBeDisabled();
+    await expect(ring).not.toHaveAttribute("data-checked");
+  },
 };
 
 export const WithoutDescription: Story = {

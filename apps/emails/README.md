@@ -52,8 +52,9 @@ emails/
     activity/              new-bid / outbid (while bidding is open)
     close/                 lot ended for watchers & non-winners
                            (watcher previews: lot-watched-sold /
-                           lot-watched-ended; public lot-ended = Ended-only)
-    order/                 winner success, address reminder (post-sale)
+                           lot-watched-ended = no-bids Ended-only)
+    order/                 winner success, address reminder, invoice sent,
+                           payment received, shipped (post-sale)
 ```
 
 Production send still goes through the application’s `@grade10/email` lane;

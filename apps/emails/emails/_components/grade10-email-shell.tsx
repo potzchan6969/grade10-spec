@@ -54,7 +54,7 @@ export function Grade10EmailShell({
           <Container className="mx-auto max-w-email overflow-hidden rounded-lg border border-solid border-stroke bg-bg-2 p-0">
             <Section
               className="border-0 border-b border-solid border-stroke px-8"
-              style={{ paddingBottom: "22px", paddingTop: "18px" }}
+              style={{ paddingBottom: "20px", paddingTop: "20px" }}
             >
               <Link href={homeUrl}>
                 <Img
@@ -68,9 +68,9 @@ export function Grade10EmailShell({
                     lineHeight: 0,
                     margin: 0,
                     padding: 0,
-                    width: "140px",
+                    width: "136px",
                   }}
-                  width={140}
+                  width={136}
                 />
               </Link>
             </Section>

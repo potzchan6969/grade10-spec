@@ -2,10 +2,12 @@
 
 - Order at lot close
   - Address first: a closed lot opens an order that waits for the winner's delivery address, with no invoice and nothing yet to pay
+  - Address confirm window: 48 hours from lot close; when it passes, Confirm is hidden and Contact Us appears — status stays Awaiting Address
   - One order per lot: a winner of three lots confirms three addresses and receives three invoices
 - Invoice
   - Operator quote: Shipping & Handling, and Insurance when added, are quoted by an operator for the confirmed address, never estimated
   - Order total: names every component a winner is asked to pay, so a total is explicable line by line
+  - Fee tooltips: Buyer’s Premium, Shipping & Handling, and Payment Processing Fee carry brief info tooltips on the order summary
   - Invoice PDF: once sent, the winner can view and download the invoice; hidden before send and when Cancelled
 - Delivery address
   - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it, which is what lets an invoice be prepared
@@ -19,8 +21,10 @@
   - Absolute datetime display: the deadline is shown as a datetime in the winner's zone; no countdown
 - Progress presentation
   - Five steps: Address → Invoice → Payment → Shipped → Completed; Cancelled and Refunded show no stepper
+  - Day-only step dates: Address while awaiting reads Confirm by …; Payment while due reads Pay by …; long copy wraps
 - Records the winner keeps
   - Payment receipt: what was paid, itemised, with the method that paid it
+  - Receipt PDF: after payment, view and download beside the invoice PDF
   - Shipping tracker and delivery proof: unchanged
 
 ## REMOVED Requirements
@@ -62,10 +66,10 @@ change" carries the same refusal under the new requirement.
 winner has nothing to pay before then.
 
 **Migration**: Replaced by "The payment deadline is fixed when the invoice is
-sent". Its two scenarios retire. A
-winner who never confirms an address no longer expires; an operator follows
-the order up, per "The order detail shows how long an order has waited" in
-`grade10-admin/auction/post-sale`.
+sent". Its two scenarios retire. An order with no sent invoice still has no
+payment deadline and its invoice status never becomes `expired`. The winner
+facing address confirm window is separate — see "The address confirm window is
+48 hours from lot close".
 
 ## ADDED Requirements
 
@@ -157,7 +161,8 @@ by reissuing an expired invoice, or by choosing to reset it on a re-quote, per
 `grade10-admin/auction/post-sale`.
 
 An auction order with no sent invoice SHALL have no payment deadline, and its
-invoice status SHALL never become `expired`.
+invoice status SHALL never become `expired`. The winner-facing address confirm
+window is separate and does not write `expired` on the invoice.
 
 When the deadline passes unpaid, Grade10 SHALL set the invoice status to
 `expired`, per `grade10-site/auction/order-status`. The order still reads
@@ -176,15 +181,6 @@ An operator SHALL restore self-service pay only by reissuing the invoice to
 - **AND** it is displayed in the winner's own timezone as an absolute datetime
 - **AND** no countdown is shown
 
-#### Scenario: winner-order-SC-32 - An order waiting on an address never expires
-**Serves:** winner-order-US-01 - Winner settles a won lot
-
-- **GIVEN** an auction order whose winner has confirmed no delivery address
-  30 days after its lot closed
-- **WHEN** its derived status is read
-- **THEN** it is Awaiting Address
-- **AND** its invoice status is `not_issued`, never `expired`
-
 #### Scenario: winner-order-SC-33 - A declined payment does not move the deadline
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
@@ -201,6 +197,54 @@ An operator SHALL restore self-service pay only by reissuing the invoice to
 - **THEN** Grade10 offers no card Pay control
 - **AND** the overdue alert carries Contact Us
 - **AND** a card payment attempt for that invoice is refused
+
+### Requirement: The address confirm window is 48 hours from lot close
+
+The winner SHALL have 48 hours from lot close to confirm a delivery address on
+the auction order. Grade10 SHALL show the absolute datetime under Confirm
+delivery address while the window is open (`Confirm by …` in the winner's
+zone). Progress Address subtext SHALL use the day-only form (`Confirm by …`
+without time).
+
+When the window passes without a confirmed address, Winner Order SHALL hide
+Confirm delivery address and SHALL show Contact Us in an overdue alert that
+reads `Missed address deadline: {date}` (day-only, no middle-dot separator).
+Derived order status SHALL remain **Awaiting Address**. Invoice status SHALL
+remain `not_issued` and SHALL NOT become `expired`. Grade10 SHALL NOT cancel
+the order or suspend bidding solely because the address window passed; an
+operator follows up per `grade10-admin/auction/post-sale`.
+
+#### Scenario: winner-order-SC-32 - An unpaid address wait never expires the invoice
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order whose winner has confirmed no delivery address
+  30 days after its lot closed
+- **WHEN** its derived status is read
+- **THEN** it is Awaiting Address
+- **AND** its invoice status is `not_issued`, never `expired`
+
+#### Scenario: winner-order-SC-70 - Address confirm is due 48 hours after lot close
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** a lot that closed at 2026-09-17T13:30:00Z
+- **AND** its auction order is Awaiting Address inside the confirm window
+- **WHEN** the winner opens Winner Order
+- **THEN** Confirm delivery address is offered
+- **AND** the confirm deadline shown under the control is 2026-09-19T13:30:00Z
+  displayed in the winner's zone as an absolute datetime
+- **AND** no countdown is shown
+
+#### Scenario: winner-order-SC-71 - A missed address deadline hides Confirm
+**Serves:** winner-order-US-07 - Winner misses the address deadline
+
+- **GIVEN** an auction order still Awaiting Address whose address confirm
+  window has passed
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers no Confirm delivery address control
+- **AND** the overdue alert reads Missed address deadline with the day-only
+  date and carries Contact Us
+- **AND** derived status remains Awaiting Address
+- **AND** invoice status remains `not_issued`
 
 ### Requirement: Winner Order shows five progress steps
 
@@ -219,6 +263,11 @@ status vocabulary in `grade10-site/auction/order-status`.
 
 When the derived order status is **Cancelled** or **Refunded**, Winner Order
 SHALL show no progress stepper.
+
+Step subtext SHALL use day-only dates in the winner's zone. While Address is
+current and awaiting confirm, subtext SHALL read `Confirm by {date}`. While
+Payment is current and the invoice is `pending`, subtext SHALL read
+`Pay by {date}`. Description copy SHALL wrap so five columns do not overflow.
 
 #### Scenario: winner-order-SC-54 - Pending Payment highlights the Payment step
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -243,12 +292,22 @@ SHALL show no progress stepper.
 - **WHEN** the winner opens Winner Order
 - **THEN** no progress stepper is shown
 
+#### Scenario: winner-order-SC-66 - Progress dates are day-only
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order whose invoice is `pending` with a payment deadline
+  of 2026-09-26T03:00:00Z
+- **WHEN** the winner opens Winner Order
+- **THEN** Payment step subtext reads Pay by with the day-only date
+- **AND** the Pay control still shows the absolute datetime with time
+
 ### Requirement: The winner can view the sent invoice as a PDF
 
 Once an operator has sent an invoice on an auction order, Winner Order SHALL
 offer the winner a control to view and download that invoice as a PDF. The
-control SHALL be hidden while the invoice status is `not_issued` and SHALL be
-hidden when the invoice status is `cancelled`.
+control SHALL use a PDF icon with the label **Invoice** (accessible name
+Invoice PDF). The control SHALL be hidden while the invoice status is
+`not_issued` and SHALL be hidden when the invoice status is `cancelled`.
 
 #### Scenario: winner-order-SC-57 - A sent invoice offers its PDF
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -270,6 +329,30 @@ hidden when the invoice status is `cancelled`.
 - **GIVEN** an auction order whose invoice status is `cancelled`
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers no invoice PDF control
+
+### Requirement: The winner can view the payment receipt as a PDF
+
+After payment is confirmed on an auction order — by card or by operator manual
+settlement — Winner Order SHALL offer the winner a control to view and download
+the itemised payment receipt as a PDF. The control SHALL use a PDF icon with
+the label **Receipt** (accessible name Receipt PDF) and SHALL sit on the same
+row as the invoice PDF when both exist. The control SHALL be hidden before
+payment and when Cancelled.
+
+#### Scenario: winner-order-SC-67 - A paid order offers its receipt PDF
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order whose invoice status is `paid`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers view and download of the receipt PDF
+- **AND** the Invoice PDF control remains available on the same row
+
+#### Scenario: winner-order-SC-68 - No receipt PDF before payment
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order whose invoice status is `pending`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers no receipt PDF control
 
 ## MODIFIED Requirements
 
@@ -309,6 +392,17 @@ provider's fees SHALL NOT move it; only a re-quote SHALL price it again.
 Wherever the winner reads the invoice's lines — the order, the receipt, and
 any letter that lists them — Grade10 SHALL show Shipping & Handling of zero as
 **Free**, and SHALL leave the Insurance line out when the operator added none.
+Insurance and Payment Processing Fee are separate lines: omitting Insurance
+does not replace it with the fee.
+
+On Winner Order's order summary, Grade10 SHALL offer brief info tooltips beside
+**Buyer’s Premium**, **Shipping & Handling**, and **Payment Processing Fee**
+when those lines are shown. The Payment Processing Fee tooltip SHALL name the
+card fee briefly and SHALL NOT restate the gross-up formula.
+
+The on-page Winner Order summary MAY omit a separate Subtotal row and show the
+fee lines that apply plus Order Total; the invoice and receipt itemisation
+SHALL still carry Subtotal for the fee gross-up.
 
 No component SHALL be marked as an estimate. Grade10 SHALL NOT show the winner
 an invoice amount before an operator has sent it.
@@ -363,7 +457,18 @@ an invoice amount before an operator has sent it.
 - **GIVEN** an operator sent an invoice without adding insurance
 - **WHEN** the winner opens the order
 - **THEN** no Insurance line is shown
+- **AND** the Payment Processing Fee line is still shown when the winner pays by card
 - **AND** the order total is the sum of the lines that are shown
+
+#### Scenario: winner-order-SC-69 - Fee lines carry info tooltips
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an operator sent an invoice with Buyer’s Premium, Shipping &
+  Handling, and Payment Processing Fee
+- **WHEN** the winner opens Winner Order
+- **THEN** each of those three lines offers a brief info tooltip
+- **AND** the Payment Processing Fee tooltip does not describe the gross-up
+  formula
 
 ### Requirement: One invoice and one auction order per lot
 

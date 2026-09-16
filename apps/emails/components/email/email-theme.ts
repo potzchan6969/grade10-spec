@@ -39,6 +39,8 @@ export interface EmailTheme {
   colorText: string;
   colorTextMuted: string;
   colorTextSubtle: string;
+  /** Design-system secondary-foreground — amount labels, descriptions. */
+  colorSecondaryForeground: string;
   colorWarning: string;
   containerWidth: string;
   fontFamily: string;
@@ -129,6 +131,7 @@ export const createEmailTailwindConfig = (
         fg: theme.colorText,
         "fg-2": theme.colorTextMuted,
         "fg-3": theme.colorTextSubtle,
+        "secondary-fg": theme.colorSecondaryForeground,
         stroke: theme.colorBorder,
         "stroke-strong": theme.colorBorderSubtle,
         success: theme.colorSuccess,

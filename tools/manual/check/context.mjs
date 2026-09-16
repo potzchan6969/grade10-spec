@@ -56,6 +56,11 @@ export const RULES = [
     title: "Scenarios serving an anchor the spec does not offer",
   },
   {
+    key: "cited",
+    level: "fail",
+    title: "Ids cited in backticks that the store issues nowhere",
+  },
+  {
     // Raised from `warn` by the commit that finished the migration: every
     // scenario in the store names an anchor, so one that does not is new work
     // and not a backlog. Finding a scenario no part of the feature set covers

@@ -21,7 +21,7 @@ The queue works every winner order from lot close through delivery in one place.
 
 - **Needs action** - Preparing Invoice, expired Pending Payment, and Processing
 - **Overdue** - a separate mark for an order idle for 72 hours or more in Awaiting Address or Preparing Invoice; it changes no status and never expires the order
-- ❓ **Overdue against the address window** - the mark should follow the 48-hour address window rather than 72 hours idle, or a winner is blocked for a day before any operator is told. The requirement lives in the winner-invoicing change, so the edit belongs there
+- ❓ **Overdue against the address deadline** - the mark should appear when the 48-hour address deadline passes rather than after 72 hours idle, or a winner is blocked for a day before any operator is told. To be updated once the winner-invoicing change is archived
 - **Extended bidding: ON** - a lot past its scheduled close and still taking bids carries this label on its row; its outcome does not change
 
 ## Payment
@@ -30,10 +30,10 @@ The winning bid-time hold is released rather than captured, and every failed pay
 
 The winner confirms a delivery address before an operator quotes the invoice. The operator enters shipping and insurance for that address, sends the invoice, locks the address, and starts the seven-day payment window. A later address change is handled by an operator re-quote with a mandatory reason and a choice to keep or reset the deadline.
 
-- 🚧 **Reopening the address entrance** — the winner has 48 hours from lot close to confirm an address; once that window closes an operator reopens it on request, with a mandatory reason, which gives the winner a fresh 48 hours
+- 🚧 **Reopening the address form** — once the 48-hour address deadline has passed, an operator reopens the form on request, with a mandatory reason, which gives the winner a fresh 48 hours
 - 🚧 **Who may reopen** — payment processing, the grant that already covers reissue and manual settlement; a reopen changes no status and may be repeated
-- 🚧 **Not on a cancelled order** — cancellation has already returned the lot to stock, so the entrance never reopens after it
-- 🚧 **Address by telephone** — an operator records the address themselves without reopening the entrance, and the winner's form stays closed
+- 🚧 **Not on a cancelled order** — cancellation has already returned the lot to stock, so the address form never reopens after it
+- 🚧 **Address by telephone** — an operator records the address themselves without reopening the form, and the winner's form stays closed
 
 What the operator enters and reads on a quote:
 
@@ -62,7 +62,7 @@ delivery state, and operational trail together.
 | Payment source | Decided | The queue distinguishes a fresh Stripe charge from manual settlement, and both release the bid-time hold rather than capturing it. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones, and delivery proof. | Operations |
-| Who reopens the address entrance | Decided | The operator, with payment processing and a mandatory reason. A reopen gives a fresh 48 hours and changes no status. | Product and Operations |
+| Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason. A reopen gives a fresh 48 hours and changes no status. | Product and Operations |
 | Reopening a cancelled order | Decided | Refused. The lot is back in stock and may already be attracting bids, so an address on it would promise a lot Grade10 no longer holds for that winner. | Product and Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 :::

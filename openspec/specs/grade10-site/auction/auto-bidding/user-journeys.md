@@ -28,7 +28,10 @@ with whoever committed first.
 ### grade10-site-auction-auto-bidding-US-05: Collector's auto-bid counts as a bid
 
 **As a** collector,
-**I want** the hold to cover my maximum and every bid Grade10 places for me to
-count as a bid,
-**so that** I am authorized once and still extend the close when I auto-bid in
-the window.
+**I want** Grade10 to resolve automatic bids without requiring a bid-time
+authorization by default,
+**so that** my commitment can compete without a provider hold.
+
+**Accepted by:**
+
+- `grade10-site-auction-auto-bidding-SC-25` — A maximum works without a bid-time authorization

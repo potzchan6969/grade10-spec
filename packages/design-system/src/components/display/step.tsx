@@ -68,7 +68,7 @@ function Step({
           {label}
         </p>
         {description != null ? (
-          <p className="text-xs leading-4 whitespace-nowrap text-secondary-foreground transition-opacity duration-200 ease-out motion-reduce:transition-none">
+          <p className="max-w-full text-xs leading-4 text-balance text-secondary-foreground transition-opacity duration-200 ease-out motion-reduce:transition-none">
             {description}
           </p>
         ) : null}

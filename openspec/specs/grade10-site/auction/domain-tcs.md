@@ -1,6 +1,6 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
-**Status:** approved
+**Status:** pending-review
 **Reviewed:** 2026-09-04, tcs-rules r2
 
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
@@ -979,3 +979,36 @@ finds it.
 * A delayed lower authorization is released rather than becoming the current bid.
 * Each user reads only their own maximum, and every standing change is explained by an event in their own history.
 * Every surprise is written up with the amounts, the order, and the timing that produced it.
+
+### grade10-site-auction-e2e-US08-TC1-1: A linked collector places and resolves a no-hold bid
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** smoke, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-bid-panel-enrollment-US-02
+
+**Pre-conditions:**
+
+* A signed-in collector has linked a card on an open listing.
+* Bid-time authorization holds are disabled.
+* A challenger can commit a higher valid maximum on the same listing.
+
+**Steps:**
+
+1. Submit the collector's valid first bid.
+2. Submit the challenger's higher maximum.
+3. Read the accepted bids, panel state, and bid-time authorizations.
+
+**Expected Results:**
+
+* The first bid is accepted and the panel moves to enrolled with Change unavailable.
+* The two maxima resolve according to the listing's rules.
+* No bid-time authorization is created or awaited for either bid.

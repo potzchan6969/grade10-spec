@@ -15,6 +15,7 @@ states — it does not restate requirements.
 | Surface | Storybook (SoT) |
 | --- | --- |
 | Awaiting Address | `My Auctions/Winner Order/Settlement` → Awaiting Address |
+| Expired Address | `My Auctions/Winner Order/Settlement` → Expired Address |
 | Preparing Invoice | `My Auctions/Winner Order/Settlement` → Preparing Invoice |
 | Pending Payment | `My Auctions/Winner Order/Payment` → Pending Payment |
 | Expired invoice (Pending Payment) | `My Auctions/Winner Order/Payment` → Expired Invoice |
@@ -25,8 +26,11 @@ states — it does not restate requirements.
 | Refunded | `My Auctions/Winner Order/Closed` → Refunded |
 
 Progress presentation (Address → Invoice → Payment → Shipped → Completed) is
-composed on every non-Cancelled / non-Refunded story. Invoice PDF control sits
-with the order summary once lines exist.
+composed on every non-Cancelled / non-Refunded story. Step subtext carries
+day-only dates (Payment while due reads “Pay by …”; Address while awaiting
+reads “Confirm by …”); descriptions wrap so five columns do not overflow.
+Invoice and Receipt PDF controls sit on one row under the order total (PDF
+icon + label), once each document exists.
 
 ### My Auctions
 
@@ -38,6 +42,25 @@ with the order summary once lines exist.
 Won rows: standing badge + View order only. Didn’t win: hold being-released /
 released copy retained.
 
+### Order notification letters
+
+React Email under `apps/emails` is the layout source of truth for post-close
+order mail (no Figma frames). Preview: `pnpm email:dev` →
+`/preview/auction/order/…`.
+
+| Surface | Preview path |
+| --- | --- |
+| Auction won | `/preview/auction/order/auction-won` |
+| Address reminder (first / second) | `/preview/auction/order/address-reminder`, `…/address-reminder-second` |
+| Invoice sent | `/preview/auction/order/invoice-sent` |
+| Payment received | `/preview/auction/order/payment-received` |
+| Shipped | `/preview/auction/order/order-shipped` |
+
+Shared composition: `AuctionLetter` → `LotBlock` + `PrimaryCta` (optional
+secondary on one row) + `Grade10EmailShell`. Order letters pass Winner Order
+as the lot image/title destination; shipped uses track-and-trace as primary
+CTA and Winner Order as secondary.
+
 ## Components
 
 ### Winner Order
@@ -45,11 +68,18 @@ released copy retained.
 - Winner Order page compound under `@grade10/ui` (Storybook assemblies on #436;
   confirm export names when delivery plans the shared block — none new are
   required beyond reshaping the existing winner-order surface).
-- Progress stepper — presentation only; not a second status enum.
-- Invoice PDF control — outline button with document icon; gated on sent
-  invoice lines.
-- Overdue / expired alert — carries Contact Us; hides Pay when expired
-  (`winner-order-SC-37`).
+- Progress stepper — presentation only; not a second status enum; step
+  descriptions hold day-only milestone dates. `Step` description wraps
+  (`text-balance`, no nowrap).
+- Invoice PDF control — secondary link with PDF icon + “Invoice”; gated on
+  sent invoice lines.
+- Receipt PDF control — secondary link with PDF icon + “Receipt” on the same
+  row; gated on payment received (Processing onward, plus Refunded).
+- Fee line tooltips — design-system `Tooltip` + info icon on Buyer’s Premium,
+  Shipping & Handling, and Payment Processing Fee.
+- Overdue / expired alert — carries Contact Us; address overdue reads
+  “Missed address deadline: {date}”; hides Confirm when address deadline
+  passed; hides Pay when invoice expired.
 - Design-system `Button`, `Alert`, `Breadcrumbs` as composed today.
 
 ### My Auctions
@@ -63,27 +93,33 @@ released copy retained.
 
 ### Winner Order
 
-| State | Spec scenarios |
+| State | Spec scenarios / Storybook |
 | --- | --- |
-| Address / Invoice / Payment / Shipped / Completed progress | `winner-order-SC-54`, `winner-order-SC-55` |
+| Address / Invoice / Payment / Shipped / Completed progress with day-only dates | `winner-order-SC-54`, `winner-order-SC-55`, `winner-order-SC-66`; Settlement / Payment / Delivery stories |
+| Address deadline under Confirm (48h from lot close) | `winner-order-SC-70`; Settlement → Awaiting Address |
+| Expired Address: hide Confirm; Contact Us in alert | `winner-order-SC-71`; Settlement → Expired Address |
+| Invoice never `expired` while address still open | `winner-order-SC-32` |
 | No stepper when Cancelled / Refunded | `winner-order-SC-56` |
-| Card Pay while `pending`; absolute deadline datetime | `winner-order-SC-31`, `winner-order-SC-35` |
-| Expired: hide Pay; Contact Us in alert | `winner-order-SC-37` |
+| Card Pay while `pending`; absolute deadline datetime from send + 7 days | `winner-order-SC-31`, `winner-order-SC-35` |
+| Expired invoice: hide Pay; Contact Us in alert | `winner-order-SC-37` |
 | Invoice PDF after send; hidden before send and Cancelled | `winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65` |
-| Refunded keeps PDF when invoice existed | Storybook Closed / Refunded; product decision on Winner Order PRD |
+| Receipt PDF after payment | `winner-order-SC-67`, `winner-order-SC-68`; Delivery + Closed / Refunded |
+| Optional Insurance omitted; Payment Processing Fee + fee tooltips | `winner-order-SC-39`, `winner-order-SC-69` |
+| Refunded keeps invoice + receipt PDF when invoice existed | Storybook Closed / Refunded |
 
 ### My Auctions
 
 | State | Spec scenarios |
 | --- | --- |
-| View order on every Won standing | `account-record-SC-49` |
-| No View order on Didn’t win | `account-record-SC-50` |
-| Expired Won: Pending Payment, View order, no row contact | `account-record-SC-22` |
-| Calm Won: no secondary helpers | `account-record-SC-51` |
+| View order on every Won standing | `grade10-site-auction-account-record-SC-56` |
+| No View order on Didn’t win | `grade10-site-auction-account-record-SC-57` |
+| Expired Won: Pending Payment, View order, no row contact | `grade10-site-auction-account-record-SC-22` |
+| Calm Won: no secondary helpers | `grade10-site-auction-account-record-SC-58` |
 | Didn’t win hold being-released / released | Durable / redesign hold scenarios |
 
 ## Gaps for grade10-spec
 
 | Missing | Kind | Notes |
 | --- | --- | --- |
-| None required for this extension | — | Progress, PDF control, Contact Us, and View order compose from existing primitives. Shared Winner Order export naming is confirmed at delivery planning. |
+| Shared Winner Order export naming | Delivery planning | Confirm when the page leaves preview-only Storybook. |
+| Litmus / client pass on dual CTA nowrap | Email QA | Shipped dual buttons use `nowrap` on one row — verify narrow clients. |

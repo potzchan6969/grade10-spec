@@ -336,9 +336,8 @@ function WinnerOrderAddressDialog({
           </DialogHeader>
           <DialogBody>
             <DialogDescription>
-              We ship this lot here and use the address to calculate the
-              shipping fee on your invoice. Nothing is due until Grade10 sends
-              the invoice.
+              We ship this lot here and use the address to prepare your invoice.
+              Nothing is due until Grade10 sends the invoice.
             </DialogDescription>
 
             {showEmptyPicker ? (

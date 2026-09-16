@@ -22,9 +22,8 @@
   - Lot closed, did not win: enrolled bidder when someone else won
   - Lot ended, watched: enrolled watch-only collector when the lot closes —
     Sold for when a winning bid is supplied; Ended-only when the lot closed
-    with no bids
-  - Lot ended (no bids): public Ended-only letter when the lot closed with no
-    bids — never a non-sale or Highest bid disclosure; not a bidder letter
+    with no bids (never a non-sale or Highest bid disclosure; not a bidder
+    letter)
 - Delivery
   - Registered email: every message goes to the account email
   - Shared letter: subject, preheader, heading, body, lot block (one primary image when available), listing action, footer; brand mark opens the storefront home; outbound links carry campaign tags
@@ -46,7 +45,6 @@ control is on.
 | --- | --- | --- | --- |
 | This lot closed — you did not win | The lot closes with a winner who is not this collector | Enrolled bidders other than the winner | `lot_closed_didnt_win` |
 | This lot has ended (watched) | The lot closes | Enrolled watchers who did not bid on it and are not the winner | `lot_ended_watched` |
-| This lot has ended (no bids) | The lot closes with no bids | Enrolled watchers on that lot | `lot_ended` |
 
 A collector who both watches and bids SHALL receive the bidder close-outcome
 letter for that close and SHALL NOT also receive the watched letter. The
@@ -58,15 +56,15 @@ winning bid and the recipient's own bid amount when those amounts are
 supplied. The watched letter SHALL name the winning bid as **Sold for** when
 that amount is supplied.
 
-When the lot closes with **no bids**, every close-outcome letter for that
-close SHALL state that the lot has **ended** (or that bidding has ended or
-closed). At close-email time, no bids means nobody won — not a later winner
-default after a win. Grade10 SHALL NOT send a bidder close-outcome
-letter for a no-bids close: nobody bid. Enrolled watchers SHALL receive
-Ended-only mail for that close: campaign `lot_ended_watched` with no winning
-amount, and/or campaign `lot_ended` for the public no-bids kind. A collector
-SHALL receive at most one close-outcome letter for that close. Neither letter
-SHALL carry a **Sold for**, **Winning bid**, or **Highest bid** highlight.
+When the lot closes with **no bids**, enrolled watchers with alerts on SHALL
+receive the watched ended letter (campaign `lot_ended_watched`) with no
+winning amount. That letter SHALL state that the lot has **ended** (or that
+bidding has ended or closed). At close-email time, no bids means nobody won —
+not a later winner default after a win. Grade10 SHALL NOT send a bidder
+close-outcome letter for a no-bids close: nobody bid. Grade10 SHALL NOT send
+campaign `lot_ended`. A collector SHALL receive at most one close-outcome
+letter for that close. The watched letter SHALL NOT carry a **Sold for**,
+**Winning bid**, or **Highest bid** highlight.
 
 Subject, preheader and body of a no-bids close-outcome letter SHALL NOT use
 the words or phrases **unsold**, **did not sell**, **didn't sell**, **no
@@ -115,15 +113,16 @@ capability already defines.
 - **AND** the letter carries no Sold for, Winning bid, or Highest bid
   highlight
 
-#### Scenario: grade10-site-auction-notifications-SC-40 - No-bids close keeps lot_ended Ended-only and skips bidder mail
+#### Scenario: grade10-site-auction-notifications-SC-40 - No-bids close skips bidder mail and retires lot_ended
 **Serves:** grade10-site-auction-notifications-US-08 - Collector hears a no-bids close as ended only
 
 - **GIVEN** a lot that closes with no bids
 - **AND** at least one enrolled watcher with email alerts on
 - **WHEN** Grade10 sends close-outcome mail for that lot
 - **THEN** it sends no bidder close-outcome letter
-- **AND** any letter with campaign `lot_ended` states the lot has ended or
-  bidding has closed
+- **AND** it sends no letter with campaign `lot_ended`
+- **AND** each enrolled watcher receives the watched ended letter (campaign
+  `lot_ended_watched`) with no winning amount
 - **AND** that letter carries no Sold for, Winning bid, or Highest bid
   highlight
 - **AND** its subject, preheader and body do not contain unsold, did not
@@ -265,8 +264,7 @@ campaign tags as query parameters:
 - `utm_medium` = `auction_notification`
 - `utm_campaign` = the letter kind (`bidding_opens_in_24h`,
   `bidding_has_opened`, `bidding_closes_in_24h`, `extended_bidding`,
-  `new_bid`, `outbid`, `lot_closed_didnt_win`, `lot_ended_watched`, or
-  `lot_ended`)
+  `new_bid`, `outbid`, `lot_closed_didnt_win`, or `lot_ended_watched`)
 - `utm_content` = the control (`logo`, `cta`, `lot_image`, `lot_title`, or
   `manage_alerts`)
 
