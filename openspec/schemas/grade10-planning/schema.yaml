@@ -85,7 +85,7 @@ artifacts:
       This is the foundation - everything after it builds on this.
     requires: []
   - id: decisions
-    required: false
+    required: true
     teammate: product-manager
     generates: decisions.md
     description: The change's decided frontier - its goals, its edges, and what the interview settled
@@ -134,11 +134,12 @@ artifacts:
       `## Decisions`. What stays here is what the interview closed about scope.
 
 
-      Optional in the schema and expected in practice: a change nobody
-      interviewed has nothing to record, and one whose scope turned on a
-      judgement has everything. `planning-pm` writes it on every change it
-      runs. It is never a reason to hold a draft - an empty frontier is a short
-      file, not a missing one.
+      Required, and short where there was little to settle: a change nobody had
+      to interview still states its goals and its edges, and one whose scope
+      turned on a judgement records the rounds that closed it. **It is never a
+      reason to hold a draft** - an empty `## Decisions` table is a claim on the
+      record that nothing had to be chosen, which is a claim worth being able to
+      make. Every change carries the file; `planning-pm` writes it.
     requires:
       - proposal
   - id: user-journeys
@@ -296,6 +297,7 @@ artifacts:
 
       repeat one of them, point to it instead.
     requires:
+      - decisions
       - user-journeys
   - id: specs
     required: true
@@ -463,6 +465,7 @@ artifacts:
       why it is excluded. A scenario that can name no such place is a hole, not
       an exemption.
     requires:
+      - decisions
       - user-journeys
   - id: test-cases
     required: true

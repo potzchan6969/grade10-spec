@@ -15,7 +15,7 @@ This skill covers what to settle before drafting and routes to the right one.
 | # | Artifact | Skill | Required |
 | --- | --- | --- | --- |
 | 1 | `proposal.md` | `planning-pm` | Always |
-| 2 | `decisions.md` | `planning-pm` | The interview's record — goals, non-goals, what it settled |
+| 2 | `decisions.md` | `planning-pm` | Always — goals, non-goals, and what the interview settled |
 | 3 | `specs/<capability>/user-journeys.md` | `planning-pm` | Always — a capability nobody walks says so in it |
 | 4 | `ui-design.md` | `planning-design` | Optional — the designer's, or the PM's when they have the design |
 | 5 | `specs/<capability>/spec.md` | `planning-qa`, or `planning-dev` on a change they authored | Always — generated, two passes with 6 between them |

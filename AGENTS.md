@@ -39,7 +39,7 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 | # | Artifact | Written by | Skill | Required |
 | --- | --- | --- | --- | --- |
 | 1 | `proposal.md` | Product manager | `planning-pm` | Always |
-| 2 | `decisions.md` | Product manager | `planning-pm` | The interview's record — goals, non-goals, what it settled |
+| 2 | `decisions.md` | Product manager | `planning-pm` | Always — goals, non-goals, what the interview settled |
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Always — a capability nobody walks says so in it |
 | 4 | `ui-design.md` | Designer, or the PM with the design | `planning-design` | Optional — from the journeys |
 | 5 | `specs/<capability>/spec.md` | Generated, the PM reviews | `planning-qa`, or `planning-dev` on their own change | Always — two passes, with 6 between them |

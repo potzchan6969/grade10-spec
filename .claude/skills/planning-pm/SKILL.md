@@ -15,9 +15,10 @@ they are the first three:
 | `user-journeys` | `specs/<capability>/user-journeys.md` | The journeys added, changed or retired, and the ones this change leans on |
 
 `decisions.md` is the interview's record, and everything after it is drawn from
-that scope: the journeys, the design, the feature set. It is optional in the
-schema so an in-flight backlog does not read as work you owe — write it on
-every change you run.
+that scope: the journeys, the design, the feature set. Every change carries it,
+and a change that had little to settle carries a short one — an empty
+`## Decisions` table says nothing had to be chosen, which is a claim worth
+being able to make.
 
 A fourth is yours **when you already have the design**: `ui-design.md` is the
 designer's file, and a PM who has the screens in hand writes it in the same
