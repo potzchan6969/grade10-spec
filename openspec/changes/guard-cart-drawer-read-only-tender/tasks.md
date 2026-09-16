@@ -1,4 +1,4 @@
-## 1. Shared UI contract and tests (grade10-spec)
+## 1. Shared UI contract and tests (grade10-spec) (owner: @kinisworking)
 
 - [ ] 1.1 Make `shared-ui-store-cart-SC-32` and `shared-ui-store-cart-SC-34` pass by omitting typed promo entry, held-code Apply, points entry, points Apply, and Use max when their matching callbacks are absent while preserving the supplied display-only context.
 - [ ] 1.2 Make `shared-ui-store-cart-SC-33` and `shared-ui-store-cart-SC-35` pass by preserving the complete interactive callback path, payloads, state transitions, and loading behavior when callbacks are supplied.
