@@ -261,7 +261,7 @@ function ListingAuctionBidCard({
 
       {hasFooter ? (
         <div className="px-4 py-4">
-          <VStack className="w-full" gap="md">
+          <VStack className="w-full" gap="sm">
             <BidActions
               authorizationMessage={authorizationMessage}
               authorizationStatus={authorizationStatus}
