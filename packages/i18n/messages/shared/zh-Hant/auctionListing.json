@@ -21,7 +21,7 @@
   "bidNowWithAmount": "立即以 {amount} 出價",
   "bidRowDescription": "{state} · {when}",
   "bindingBid": "出價具約束力。一旦得標，你須以 {amount} 完成購買。",
-  "buyerFeeHint": "中標金額需另加 20% 買家手續費",
+  "buyerFeeHint": "買家手續費：成交價的 20%",
   "buyerFeeTooltip": "買家手續費為成交價的 20%，計算後的金額會顯示在發票上。",
   "clickToZoom": "點擊放大",
   "closedAt": "已於{when}結束",
