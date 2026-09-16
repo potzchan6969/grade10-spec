@@ -2,6 +2,7 @@
 title: Bidding History
 spec: grade10-site/auction/bidding-history
 order: 9
+reviewed: 2026-09-17
 ---
 
 The account keeps one retained record of everything bidding did, so an
@@ -31,17 +32,17 @@ On the lot, a signed-in owner who has personal bidding activity opens
 to re-read this lot's private maximum history and the bids Grade10 placed,
 without leaving the page.
 
-- 🚧 **Bid placed** — the auto-bid sequence Grade10 accepted for them on
+- **Bid placed** — the auto-bid sequence Grade10 accepted for them on
   this lot, amount and time only; first tab and the default when the dialog
   opens (empty state when none yet)
-- 🚧 **Your maximums** — every accepted configure or raise of that private
+- **Your maximums** — every accepted configure or raise of that private
   cap, newest first, with amount and time only — no **Set** / **Raised**
   status on the row; second tab
-- 🚧 **No dialog maximum summary** — the live private maximum stays on the
+- **No dialog maximum summary** — the live private maximum stays on the
   bid panel only; the dialog is tabs and lists
-- 🚧 **Owner only** — neither list shows another bidder's maximum, identity,
+- **Owner only** — neither list shows another bidder's maximum, identity,
   or payment facts; the public recent-bids list stays public-only
-- 🚧 **Refused attempts stay on the account** — a refused maximum is not on
+- **Refused attempts stay on the account** — a refused maximum is not on
   the lot dialog; it remains in the account chronology at `/bids`
 
 ## One listing's story
@@ -53,7 +54,7 @@ set or raised — interleaved with the public movements that changed their
 standing. Private facts stay private: another bidder's maximum never
 appears, only the public consequence that displaced them.
 
-- 🚧 **Maximum labels** — configure and raise events read as a maximum set or
+- **Maximum labels** — configure and raise events read as a maximum set or
   raised (and refused as a refused maximum), matching the lot wording; there
   is no new account tab or maximums-only route
 
