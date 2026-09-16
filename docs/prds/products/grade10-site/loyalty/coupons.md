@@ -52,6 +52,9 @@ so redefining the reward never rewrites a coupon a member already holds —
   a counter, or at a second counter takes it off every earlier sale first:
   their online orders are cancelled, a counter sale keeps its cart and
   collects without the cut, and the code minted for it is voided
+- 🚧 **A sale that ends gives it back** — a counter sale the member walked
+  away from releases its coupon when it runs out of time, so the coupon is
+  spendable again within the hour rather than the next day
 - 🚧 **A sale that took the money keeps it** — a coupon on an order that has
   been paid is spent, and one on a checkout the shop will not close is
   refused rather than taken, because the same cut cannot stand on two bills
