@@ -81,7 +81,7 @@
       "label": "Lapsed",
       "sublabel": "read off the clock",
       "lane": "terminal",
-      "col": 1,
+      "col": 2,
       "tag": "its date passed"
     }
   ],
@@ -128,9 +128,9 @@
       "from": "available",
       "to": "lapsed",
       "variant": "dashed",
-      "fromSide": "bottom",
+      "fromSide": "top",
       "toSide": "top",
-      "via": [[248, 416], [556, 416]]
+      "via": [[248, 104], [710, 104]]
     }
   ]
 }
