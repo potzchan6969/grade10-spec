@@ -43,7 +43,7 @@ A winner order reaches paid through one fresh card payment or one operator-recor
 
 - 🚧 **Reissue** — one action for any change after send: address, payment method, bank transfer fee, shipping, insurance, and the deadline kept or restarted, always with a reason; the bank transfer fee starts from the previous invoice's
 - 🚧 **Checking proof** — on a Payment Verifying order the operator confirms the payment, with the winner's files as proof and their own added if they wish, or returns the invoice to pending with a reason the winner reads and a reason kept internal; the prompt shows the time left, and returning is not offered once the invoice has expired
-- 🚧 **Card invoice paid by transfer** — reissued as bank transfer first, then settled; where the money arrived at the Subtotal, the bank transfer fee is 0
+- 🚧 **Card invoice paid another way** — by transfer, cash or another method: reissued as bank transfer first, then settled at the new invoice's total; where the money arrived at the Subtotal, the bank transfer fee is 0
 
 Manual settlement is a finance fallback: the operator records bank transfer, cash, or another described method, a reference where required, and one to five private proof files. The winner sees the payment method and reference on the receipt, never the proof files.
 

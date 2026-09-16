@@ -179,10 +179,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The confirmation is refused and asks for a method.
+* Neither method was selected when the choice opened.
+* The confirmation is refused.
 * The order still reads Awaiting Address.
 
-**Blocked:** Product - is a method required at confirm, or is one preselected by default?
 
 ### winner-order-US1-TC17-1: Card invoice prices the fee as the provider gross-up
 
@@ -419,16 +419,14 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Change the delivery address details.
-2. Choose bank transfer.
-3. Confirm again.
+1. Choose bank transfer.
+2. Confirm.
 
 **Expected Results:**
 
 * The order records bank transfer.
 * The order still reads Preparing Invoice.
 
-**Blocked:** Product - may the winner change the method before send, and only together with the address?
 
 ### winner-order-US1-TC24-1: A replaced invoice reads as replaced and names its replacement
 
@@ -503,9 +501,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
+* <invoice_1> and <invoice_2> carry different references.
 * Both lookups return the order for <lot_1>.
 
-**Blocked:** Product - does a reissue keep the same reference or issue a new one, and who looks it up (operator search only)?
 
 ---
 
@@ -581,6 +579,8 @@ Runs once per row of **Test data**.
 
 * The two receipt numbers differ.
 
+**Blocked:** Product - only the receipt number's existence is decided; its format and uniqueness are open.
+
 ### winner-order-US2-TC6-1: A bank transfer receipt keeps the Payment Processing Fee line
 
 Runs once per row of **Test data**.
@@ -638,7 +638,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(winner of <lot_1>) is signed in on <grade10 winner order url>.
-* An operator reissued the card invoice as bank transfer with fee 0, then settled it at the Subtotal.
+* An operator reissued the card invoice as bank transfer with fee 0, then settled it at the new Order Total.
 
 **Steps:**
 
@@ -647,10 +647,11 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Payment Processing Fee reads Free.
-* The paid amount equals the Subtotal.
-* The receipt names bank transfer, not card.
+* The paid amount equals the new Order Total, which equals the Subtotal.
+* The receipt names bank transfer, not card, and is marked manually settled.
+* The receipt names the invoice it supersedes.
 
-### winner-order-US2-TC8-1: The receipt never shows proof files
+### winner-order-US2-TC8-1: The winner never sees proof files after payment
 
 **Classification:**
 
@@ -668,18 +669,26 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(winner of <lot_1>) is signed in on <grade10 winner order url>.
-* <lot_1> was settled with operator-added proof files.
+* <lot_1> was paid by bank transfer: the winner uploaded <file_1>, and an operator confirmed it after adding <file_2>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <file_1> | transfer-slip.pdf |
+| <file_2> | bank-statement.pdf |
 
 **Steps:**
 
-1. Open the receipt area and receipt PDF.
+1. Open the order.
+2. Open the receipt PDF.
 
 **Expected Results:**
 
-* No operator proof file is shown or linked.
-* The method and reference are shown.
+* Neither <file_1> nor <file_2>, nor their names, is shown or linked.
+* The receipt reads Bank transfer and names the invoice reference.
+* The receipt is not marked manually settled.
 
-**Blocked:** Product - does the winner still see the proof files they uploaded themselves after payment?
 
 ---
 
@@ -720,7 +729,7 @@ Runs once per row of **Test data**.
 * The invoice reference is shown, with a request to quote it.
 * No card Pay is offered.
 
-**Blocked:** Finance - the bank details for each way are still open; also confirm whether the invoice PDF carries them.
+**Blocked:** Finance - the account details for each way are still open (TBC in the spec); Product - does the invoice PDF carry them?
 
 ### winner-order-US9-TC2-1: Uploading proof moves the order to Payment Verifying
 
@@ -759,6 +768,7 @@ Runs once per row of **Test data**.
 * The order reads Payment Verifying.
 * The deadline stops with <time left> kept.
 * Card Pay and further upload are hidden.
+* The chosen file and its name are not shown on the order.
 
 ### winner-order-US9-TC3-1: One to five files of each allowed type are accepted
 
@@ -839,7 +849,7 @@ Runs once per row of **Test data**.
 * The upload is refused and says why.
 * The order still reads Pending Payment; the deadline runs.
 
-### winner-order-US9-TC5-1: A file at the 10 MB limit is accepted
+### winner-order-US9-TC5-1: A file of exactly 10,485,760 bytes is accepted
 
 **Classification:**
 
@@ -861,7 +871,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Choose one PDF of exactly 10 MB.
+1. Choose one PDF of exactly 10,485,760 bytes.
 2. Submit and accept the confirm step.
 
 **Expected Results:**
@@ -869,7 +879,6 @@ Runs once per row of **Test data**.
 * The upload is accepted.
 * The order reads Payment Verifying.
 
-**Blocked:** Product - is 10 MB 10,000,000 bytes or 10,485,760 bytes?
 
 ### winner-order-US9-TC16-1: A file over the 10 MB limit is refused
 
@@ -893,15 +902,15 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Choose one PDF of 10 MB plus 1 byte, with two small PNGs.
+1. Choose one PDF of 10,485,761 bytes, with two small PNGs.
 2. Submit the upload.
 
 **Expected Results:**
 
-* The upload is refused, naming the 10 MB limit.
+* The whole upload is refused, naming the 10 MB limit.
+* None of the three files is stored.
 * The order still reads Pending Payment.
 
-**Blocked:** Product - is 10 MB 10,000,000 bytes or 10,485,760 bytes, and is the whole set refused?
 
 ### winner-order-US9-TC6-1: A file of another type is refused
 
@@ -931,7 +940,6 @@ Runs once per row of **Test data**.
 | --- |
 | A GIF image |
 | A Word document |
-| An executable renamed to .pdf |
 | Four PDFs and one HEIC image |
 
 **Steps:**
@@ -941,10 +949,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The upload is refused, naming PDF, JPEG and PNG.
+* The whole upload is refused, naming PDF, JPEG and PNG.
 * Nothing is stored; the order still reads Pending Payment.
 
-**Blocked:** Engineering - is the type checked by content or by extension, and does one bad file refuse the whole set?
 
 ### winner-order-US9-TC7-1: Backing out of the confirm step uploads nothing
 
@@ -1004,10 +1011,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The page says the deadline is on hold.
-* No Pay by date is shown as running.
+* Payment is the current step, and its subtext names no date.
+* No payment deadline is shown as running.
 
-**Blocked:** Design - what Winner Order shows for the deadline and time left while Payment Verifying.
 
 ### winner-order-US9-TC9-1: No further upload is accepted while Payment Verifying
 
@@ -1125,13 +1131,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open the payment area.
+2. Send a proof upload for <lot_1> from outside the page.
 
 **Expected Results:**
 
 * No proof upload is offered.
 * The overdue alert shows Contact Us.
+* Step 2 is refused; the invoice stays `expired`.
 
-**Blocked:** Product - may a winner upload proof after the deadline, and if so what status follows?
 
 ### winner-order-US9-TC13-1: Another collector cannot upload proof to the order
 
@@ -1192,9 +1199,9 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The order still reads Pending Payment; the deadline runs.
-* Upload is offered again.
+* No file is stored.
+* Upload is offered again, and a new upload is accepted.
 
-**Blocked:** Product - what the winner is told, and whether any files already received are kept.
 
 ### winner-order-US9-TC15-1: The invoice reference fits the SWIFT reference limit
 
@@ -1222,6 +1229,97 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * It fits in 4 lines of 35 characters.
+
+**Blocked:** Product - the invoice reference format is open; only its existence is decided.
+
+### winner-order-US9-TC17-1: A file whose content is not its extension
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1>) is signed in.
+* <lot_1> has a bank transfer invoice, status `pending`.
+
+**Steps:**
+
+1. Send an upload holding one executable renamed to .pdf.
+
+**Expected Results:**
+
+* The whole upload is refused.
+* Nothing is stored; the invoice stays `pending`.
+
+**Blocked:** Engineering - is the file type checked by content or by extension?
+
+### winner-order-US9-TC18-1: A card payment on a bank transfer invoice is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1>) is signed in.
+* <lot_1> has a bank transfer invoice, status `pending`.
+
+**Steps:**
+
+1. Send a card payment for <lot_1> from outside the page.
+
+**Expected Results:**
+
+* The payment is refused; no charge is made.
+* The invoice stays `pending`.
+
+### winner-order-US9-TC19-1: The old deadline passing while proof is checked expires nothing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* <lot_1> became Payment Verifying before its payment deadline.
+
+**Steps:**
+
+1. Let the original payment deadline pass with no operator action.
+2. Open <grade10 winner order url> for <lot_1> as its winner.
+
+**Expected Results:**
+
+* The invoice is still `payment_verifying`.
+* The order reads Payment Verifying.
 
 ---
 
@@ -1375,7 +1473,7 @@ Runs once per row of **Test data**.
 
 * The deadline is <return time> plus <time left>.
 
-### winner-order-US10-TC5-1: A returned invoice with no time left expires at once
+### winner-order-US10-TC5-1: A return adds no grace
 
 **Classification:**
 
@@ -1401,10 +1499,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The invoice reads Expired under Pending Payment.
+* The order reads Pending Payment; the invoice is `expired`.
 * Upload is hidden; the overdue alert shows Contact Us.
 
-**Blocked:** Product - does the winner get any grace after a return, however little time was left?
 
 ### winner-order-US10-TC6-1: A second return keeps the time left at the second upload
 
@@ -1438,7 +1535,45 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The deadline is <return time> plus <time left 2>.
-* Both returns and their reasons stay on the order.
+
+### winner-order-US10-TC7-1: Earlier return reasons after a second return
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-10
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1>) is signed in.
+* <lot_1> was returned twice, with <reason 1> and then <reason 2>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <reason 1> | Amount received does not match |
+| <reason 2> | Reference missing |
+
+**Steps:**
+
+1. Open <grade10 winner order url> for <lot_1>.
+2. Read the return reasons shown.
+
+**Expected Results:**
+
+* <reason 2> is shown.
+* <reason 1> is shown as an earlier return.
+
+**Blocked:** Product - does Winner Order show every past return reason, or only the latest?
 
 ## Raised
 
@@ -1458,11 +1593,83 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Status:** paused — waiting on the author (@jeffffej0909) for a grilling round on
-decisions neither reading could settle: proof on an expired invoice, operator
-actions while Payment Verifying, the deadline on an expired reissue, the method
-choice before send, reminders and the letter after a return, grace after a
-return, what the winner sees of their proof, non-card settlement of a card
-invoice, operator files on confirm, file rules, and who reads proof files.
+**Status:** complete — reconciled on 2026-09-16 after the author's grilling round. Seven cases stay blocked; see Still blocked.
 
 **Blind input manifest hash:** `2c7380f5cdff72fd`
+
+| Finding | Disposition |
+| --- | --- |
+| `winner-order-US1-TC12-1`, `winner-order-US1-TC13-1`: the method is recorded with the address | Match `winner-order-SC-90` |
+| `winner-order-US1-TC14-1`: no bank transfer without bank details | Matches `winner-order-SC-92` |
+| `winner-order-US1-TC15-1`: fixed fee range text per method | Matches `winner-order-SC-91`; the wording stays TBC, so the case stays blocked |
+| `winner-order-US1-TC16-1`: confirming with no method | Settled by decision 4; matches `winner-order-SC-94`; "nothing preselected" added to `winner-order-SC-91` and to the case |
+| `winner-order-US1-TC17-1`: the card fee is the gross-up | Matches `winner-order-SC-62` |
+| `winner-order-US1-TC18-1`: the bank transfer fee, zero as Free | Matches `winner-order-SC-110` and `winner-order-SC-111` |
+| `winner-order-US1-TC19-1`: every invoice shows its reference on the order and PDF | Folded as `winner-order-SC-114` |
+| `winner-order-US1-TC20-1`: a card invoice shows card Pay only | Matches `winner-order-SC-35` |
+| `winner-order-US1-TC21-1`: two lots keep their own methods | Reached by `winner-order-SC-35` and `winner-order-SC-95`, which hold per order; no new scenario |
+| `winner-order-US1-TC22-1`: no method change after send | Matches `winner-order-SC-106` |
+| `winner-order-US1-TC23-1`: method change before send | Settled by decision 4; matches `winner-order-SC-93`; the case no longer changes the address as well |
+| `winner-order-US1-TC24-1`: a replaced invoice names its replacement | Matches `winner-order-SC-98` and `winner-order-SC-109`; where the winner reaches the replaced PDF stays open |
+| `winner-order-US1-TC25-1`: the first reference still finds the order | Matches `winner-order-SC-97`; the scenarios give each invoice its own reference, so the case now expects two references; blocked line removed |
+| `winner-order-US2-TC4-1`: every receipt has a number | Matches `winner-order-SC-112` |
+| `winner-order-US2-TC5-1`: two receipts never share a number | Not decided: only the number's existence is. Kept draft and blocked |
+| `winner-order-US2-TC6-1`: a bank transfer receipt keeps the fee line | Matches `winner-order-SC-63` and `winner-order-SC-113` |
+| `winner-order-US2-TC7-1`: a card invoice settled by transfer reads as bank transfer | Settled by decision 8; matches `winner-order-SC-19` and `grade10-admin-auction-post-sale-SC-114`; the case now settles at the new order total |
+| `winner-order-US2-TC8-1`: the receipt never shows proof files | Settled by decision 7; the case now covers the winner's own file and the order page; matches `winner-order-SC-113` and `winner-order-SC-115` |
+| `winner-order-US9-TC1-1`: three ways to pay and the reference | Matches `winner-order-SC-95`; the account details are TBC and whether the PDF carries them is open, so the case stays blocked |
+| `winner-order-US9-TC2-1`: upload moves the order to Payment Verifying | Matches `winner-order-SC-99`; "no file name shown" added per decision 7 |
+| `winner-order-US9-TC3-1`, `winner-order-US9-TC4-1`: one to five files | Match `winner-order-SC-99` and `winner-order-SC-100` |
+| `winner-order-US9-TC5-1`: a file at the 10 MB limit | Settled by decision 10; folded as `winner-order-SC-116` |
+| `winner-order-US9-TC16-1`: a file over 10 MB | Settled by decision 10; matches `winner-order-SC-100`, which now refuses the whole upload |
+| `winner-order-US9-TC6-1`: a file of another type | Settled by decision 10 for the whole set; matches `winner-order-SC-100`. The renamed-executable row moved to `winner-order-US9-TC17-1`, which stays blocked |
+| `winner-order-US9-TC7-1`: backing out stores nothing | Matches `winner-order-SC-102` |
+| `winner-order-US9-TC8-1`: the deadline while proof is checked | Answered by `winner-order-SC-108` and the upload requirement: no date, no running deadline. The case now expects that; the blocked line is removed |
+| `winner-order-US9-TC9-1`: no second upload | Matches `winner-order-SC-101` |
+| `winner-order-US9-TC10-1`: card payment refused while Payment Verifying | Folded as `winner-order-SC-117` |
+| `winner-order-US9-TC11-1`: upload not offered where it does not apply | Folded as `winner-order-SC-118`; the card row matches `winner-order-SC-103` |
+| `winner-order-US9-TC12-1`: upload on an expired invoice | Settled by decision 1; matches `winner-order-SC-103` and `winner-order-SC-37` |
+| `winner-order-US9-TC13-1`: another collector cannot upload or read proof | Folded as `winner-order-SC-121`; reading proof matches `winner-order-SC-115` and decision 11 |
+| `winner-order-US9-TC14-1`: an upload that fails part-way | Settled by decision 10; folded as `winner-order-SC-119`. What the winner is told is design |
+| `winner-order-US9-TC15-1`: the reference fits the SWIFT limit | Not decided: the reference format is open. Kept draft and blocked |
+| `winner-order-US10-TC1-1`, `winner-order-US10-TC2-1`: reason and restarted deadline, internal reason hidden | Match `winner-order-SC-104` and `winner-order-SC-105` |
+| `winner-order-US10-TC3-1`: upload again after a return | Matches `winner-order-SC-105` |
+| `winner-order-US10-TC4-1`: time left at the edges | Reached by the rule in `winner-order-SC-104`; no new scenario |
+| `winner-order-US10-TC5-1`: no time left after a return | Settled by decision 6; folded as `winner-order-SC-120`. The case said the invoice "reads Expired"; it now reads Pending Payment with the overdue alert, per `auction-status-SC-06` |
+| `winner-order-US10-TC6-1`: a second return keeps the second time left | Matches `winner-order-SC-105`. Its line "both returns and their reasons stay on the order" was not decided for the winner; it moved to `winner-order-US10-TC7-1`, which stays blocked |
+| `winner-order-SC-96`: a card payment on a bank transfer invoice is refused | No case reached it; added `winner-order-US9-TC18-1` |
+| `winner-order-SC-107`: a deadline passing while proof is checked | No case reached it; added `winner-order-US9-TC19-1` |
+
+**Folded:** `winner-order-SC-114`, `winner-order-SC-115`, `winner-order-SC-116`, `winner-order-SC-117`, `winner-order-SC-118`, `winner-order-SC-119`, `winner-order-SC-120`, `winner-order-SC-121`.
+
+**Rejected:** none.
+
+**Settled by the author** (grilling round, 2026-09-16):
+
+1. **Proof on an expired invoice**: refused. Return stays refused on an expired invoice as a guard; it cannot be reached, because the deadline stops while proof is checked.
+2. **Operator actions while Payment Verifying**: Confirm or Return only. Cancel, Reissue and manual settlement are refused.
+3. **Deadline on an expired reissue**: always a fresh 7 days from send. Keeping the current deadline is offered only on a `pending` invoice.
+4. **Method choice**: nothing preselected. A confirmation without a method is refused. The winner changes the method freely until the invoice is sent; after that only an operator does.
+5. **After a return**: reminders resume on the paused clock. A reminder whose time passed during the check is not sent late, and one already sent is not repeated. The proof-not-accepted letter gives the new deadline as a date and time in the winner's zone ("Pay by …") and the external reason.
+6. **Grace after a return**: none. The return prompt shows the time left, so the operator can reissue with a fresh 7 days instead.
+7. **What the winner sees of proof**: a confirmed-proof receipt reads Bank transfer and is not marked manually settled. No proof file or file name reaches the winner anywhere; only the Payment Verifying state shows that proof was sent.
+8. **Non-card settlement of a card invoice**: reissue as bank transfer first (fee usually 0), then record the settlement. Settlement is always at the current invoice's full order total.
+9. **Operator files on Confirm**: 0 to 5, PDF, JPEG or PNG, 10 MB each.
+10. **File rules**: 10 MB is 10,485,760 bytes. One wrong or oversize file refuses the whole upload and stores nothing. An upload that fails part-way stores nothing and may be retried; the one-upload rule applies once an upload succeeds.
+11. **Who reads proof files**: any operator who can open the order; never the winner.
+
+Decisions 1, 4, 6, 7, 8 and 10 changed the cases named above.
+
+**Still blocked:**
+
+- `winner-order-US1-TC15-1` — Product: the fee range wording for each method.
+- `winner-order-US1-TC24-1` — Design: where the winner reaches a replaced invoice's PDF.
+- `winner-order-US2-TC5-1` — Product: whether receipt numbers are unique, and their format.
+- `winner-order-US9-TC1-1` — Finance: the account details; Product: whether the invoice PDF carries them.
+- `winner-order-US9-TC15-1` — Product: the invoice reference format, including the SWIFT limit.
+- `winner-order-US9-TC17-1` — Engineering: whether file type is checked by content or by extension.
+- `winner-order-US10-TC7-1` — Product: whether Winner Order shows every past return reason or only the latest.
+
+**Out of suite:** none. The scenarios this change carries unchanged from `revise-auction-winner-invoicing` and `fix-buyer-premium` stay with their suites.
+
+**Notes:** `winner-order-SC-14` serves `winner-order-US-01`, as in the draft. The raised question "can a card invoice ever be Payment Verifying?" is answered by `winner-order-SC-103`: no.

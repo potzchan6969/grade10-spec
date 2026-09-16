@@ -45,7 +45,7 @@
 
 **Expected Results:**
 
-* One letter names <lot_1>, <external reason> and the time left.
+* One letter names <lot_1>, <external reason> and the new payment deadline.
 * <internal reason> is not in the letter.
 * Step 3 opens <grade10 winner order url> for <lot_1>.
 
@@ -135,7 +135,7 @@
 * Two proof-not-accepted letters exist, one per return.
 * The second names the second reason.
 
-### order-mail-US1-TC5-1: How the time left reads in the letter
+### order-mail-US1-TC5-1: The letter gives the new deadline as Pay by a date and time
 
 Runs once per row of **Test data**.
 
@@ -154,7 +154,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <lot_1> was returned with <time left>.
+* customer(winner of <lot_1>) has a registered email and a timezone set on the account.
+* <lot_1> was returned at <return time> with <time left>.
 
 **Test data:**
 
@@ -169,9 +170,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The letter states <time left> in the winner's zone.
-
-**Blocked:** Product - does the letter give a new Pay by datetime or a duration left? Deadlines elsewhere are absolute, no countdown.
+* The letter reads Pay by <return time> plus <time left>, as a date and time in the winner's zone.
+* The letter states no duration left.
 
 ### order-mail-US1-TC6-1: No reminder goes out while proof is checked
 
@@ -228,10 +228,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Day-3, day-6 and final-notice letters are sent.
-* Each is timed against the resumed deadline.
-
-**Blocked:** Product - after a return, are reminders re-timed by the pause, and is one whose original time passed during the check sent late or skipped?
+* No reminder is sent at the moment of the return.
+* Day-3, day-6 and final-notice letters are sent once each.
+* Each is timed on the running deadline, later by the length of the check.
 
 ### order-mail-US1-TC8-1: Confirmed proof ends the reminder sequence
 
@@ -291,6 +290,36 @@ Runs once per row of **Test data**.
 
 * The day-3 reminder is sent.
 
+### order-mail-US1-TC10-1: A reminder sent before the check is not sent again
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reminder cadence
+
+**Pre-conditions:**
+
+* <lot_1>'s day-3 reminder was sent.
+* <lot_1> then became Payment Verifying and was returned.
+
+**Steps:**
+
+1. Let the resumed deadline run to its end, unpaid.
+2. Read the send log.
+
+**Expected Results:**
+
+* One day-3 reminder exists for the invoice.
+* The day-6 reminder and the final notice are sent once each.
+
 ## Raised
 
 - Does the proof-not-accepted letter state a new absolute deadline or a duration?
@@ -299,11 +328,48 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Status:** paused — waiting on the author (@jeffffej0909) for a grilling round on
-decisions neither reading could settle: proof on an expired invoice, operator
-actions while Payment Verifying, the deadline on an expired reissue, the method
-choice before send, reminders and the letter after a return, grace after a
-return, what the winner sees of their proof, non-card settlement of a card
-invoice, operator files on confirm, file rules, and who reads proof files.
+**Status:** complete — reconciled on 2026-09-16 after the author's grilling round.
 
 **Blind input manifest hash:** `2c7380f5cdff72fd`
+
+| Finding | Disposition |
+| --- | --- |
+| `order-mail-US1-TC1-1`: returned proof sends the letter | Matches `order-mail-SC-20`; the case now expects the new payment deadline, per decision 5 |
+| `order-mail-US1-TC2-1`: uploading proof sends no letter | Matches `order-mail-SC-21` |
+| `order-mail-US1-TC3-1`: a replayed return sends the letter once | Reached by the durable requirement "Letters are idempotent and per order"; no new scenario |
+| `order-mail-US1-TC4-1`: each separate return sends its own letter | Folded as `order-mail-SC-26` |
+| `order-mail-US1-TC5-1`: how the time left reads | Settled by decision 5; the case now expects Pay by a date and time, with no duration; matches `order-mail-SC-20` |
+| `order-mail-US1-TC6-1`: no reminder while proof is checked | Matches `order-mail-SC-23`; no expiry letter follows from `auction-status-SC-40` |
+| `order-mail-US1-TC7-1`: reminders resume after a return | Settled by decision 5; matches `order-mail-SC-24`; "not sent at the return" folded as `order-mail-SC-27` |
+| `order-mail-US1-TC8-1`: confirmed proof ends the sequence | Matches `order-mail-SC-22` and "cancel every outstanding reminder the moment payment is received" |
+| `order-mail-US1-TC9-1`: card invoice reminders are unaffected | Reached by `order-mail-SC-04` and the reminder rule; no new scenario |
+| `order-mail-SC-25`: a reminder already sent is not repeated | No case reached it; added `order-mail-US1-TC10-1` |
+| Raised: absolute deadline or a duration? | Absolute; decision 5 |
+| Raised: are reminder times shifted by the pause, and is a missed one sent late? | Shifted; not sent late; decision 5 |
+| Raised: does a reissue while Payment Verifying reset the held sequence? | Moot; a reissue is refused while Payment Verifying (decision 2) |
+
+**Folded:** `order-mail-SC-26`, `order-mail-SC-27`.
+
+**Rejected:** none.
+
+**Settled by the author** (grilling round, 2026-09-16):
+
+1. **Proof on an expired invoice**: refused. Return stays refused on an expired invoice as a guard; it cannot be reached, because the deadline stops while proof is checked.
+2. **Operator actions while Payment Verifying**: Confirm or Return only. Cancel, Reissue and manual settlement are refused.
+3. **Deadline on an expired reissue**: always a fresh 7 days from send. Keeping the current deadline is offered only on a `pending` invoice.
+4. **Method choice**: nothing preselected. A confirmation without a method is refused. The winner changes the method freely until the invoice is sent; after that only an operator does.
+5. **After a return**: reminders resume on the paused clock. A reminder whose time passed during the check is not sent late, and one already sent is not repeated. The proof-not-accepted letter gives the new deadline as a date and time in the winner's zone ("Pay by …") and the external reason.
+6. **Grace after a return**: none. The return prompt shows the time left, so the operator can reissue with a fresh 7 days instead.
+7. **What the winner sees of proof**: a confirmed-proof receipt reads Bank transfer and is not marked manually settled. No proof file or file name reaches the winner anywhere; only the Payment Verifying state shows that proof was sent.
+8. **Non-card settlement of a card invoice**: reissue as bank transfer first (fee usually 0), then record the settlement. Settlement is always at the current invoice's full order total.
+9. **Operator files on Confirm**: 0 to 5, PDF, JPEG or PNG, 10 MB each.
+10. **File rules**: 10 MB is 10,485,760 bytes. One wrong or oversize file refuses the whole upload and stores nothing. An upload that fails part-way stores nothing and may be retried; the one-upload rule applies once an upload succeeds.
+11. **Who reads proof files**: any operator who can open the order; never the winner.
+
+Decision 5 changed `order-mail-US1-TC1-1`, `order-mail-US1-TC5-1` and `order-mail-US1-TC7-1`.
+
+**Still blocked:** none.
+
+**Out of suite:** none. `order-mail-SC-01` to `order-mail-SC-11` are unchanged by this change and stay with the durable suite.
+
+**Notes:** the capability is walked by nobody on its own; cases trace the Feature set groups.

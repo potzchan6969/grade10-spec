@@ -26,9 +26,10 @@ Winner Order is the authenticated route where a collector settles one lot after 
 - ❓ **Invoice reference and receipt number** — the format of each; every invoice has a reference that still finds the order after a reissue, and every receipt has a number — Product confirms
 - 🚧 **Payment proof** — after paying, the winner uploads 1 to 5 PDF, JPEG or PNG files of up to 10 MB each, once; the order then reads Payment Verifying, the payment deadline stops, and card Pay and further uploads are hidden
 - 🚧 **Proof not accepted** — an operator returns the invoice to `pending` with a reason the winner reads on the order; the deadline runs again with the time that was left
+- 🚧 **Proof stays private** — the winner never sees a proof file or its name, their own or an operator's; the order shows only that proof was sent
 - **Payment deadline** — 7 calendar days from when Grade10 sends the invoice to the winner, not from lot close
 - 🚧 **After the deadline** — card Pay is hidden; the overdue alert carries Contact Us; an operator reissues, settles manually, or cancels
-- 🚧 **Progress** — five presentation steps in order: Address → Invoice → Payment → Shipped → Completed; Cancelled and Refunded show no stepper. Step subtext uses day-only dates (Payment while due reads Pay by …; Address while awaiting reads Confirm by …); long copy wraps. Order status keeps its eight names
+- 🚧 **Progress** — five presentation steps in order: Address → Invoice → Payment → Shipped → Completed; Cancelled and Refunded show no stepper. Step subtext uses day-only dates (Payment while due reads Pay by …; Address while awaiting reads Confirm by …); long copy wraps. Order status keeps its nine names
 - 🚧 **Invoice PDF** — once an invoice has been sent, the winner can view and download it (PDF icon + Invoice); hidden before send and when Cancelled
 - 🚧 **Receipt PDF** — after payment, the winner can view and download an itemised receipt (PDF icon + Receipt), on the same row as Invoice
 - **Receipt** — the itemised amount and how it was paid: card brand and last four, or the method Grade10 recorded
@@ -54,8 +55,8 @@ The winner needs one place to understand what is owed and what happens next. The
 | --- | --- | --- | --- |
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, and Final amount reads Order Total, for the winner and the operator. | Product |
 | Insurance | Decided | Optional per invoice; when added it is more than zero. An invoice without it shows no Insurance line. Separate from Payment Processing Fee. | Product |
-| Payment processing fee | Decided | Charged to the winner, grossed up from the Subtotal so Grade10 nets it in full. Priced at send from the payment provider's live fees, never from a rate set in the admin portal. | Product |
-| Fee on a manual settlement | Decided | Dropped: bank transfer, cash and other methods settle the Subtotal. | Product |
+| Payment processing fee | 🚧 In flight | Charged to the winner on every invoice. For card, grossed up from the Subtotal at send from the payment provider's live fees, never from a rate set in the admin portal. For bank transfer, the amount the operator enters. | Product (@jeffffej0909) |
+| Fee on a manual settlement | 🚧 In flight | Kept: every settlement is at the invoice's Order Total. A card invoice paid another way is first reissued as bank transfer, with the fee the operator sets. | Product (@jeffffej0909) |
 | A fee that costs more than quoted | Decided | Grade10 absorbs the difference; the sent invoice never re-prices. | Product |
 | Fee tooltips | Decided | Buyer’s Premium (20% rule), Shipping & Handling (operator quote for the address), and Payment Processing Fee (brief card-fee copy) carry info tooltips. | Product and design (@tangconst) |
 | Summary Subtotal row | Decided | On-page Winner Order summary may omit Subtotal and show fee lines plus Order Total; invoice and receipt itemisation keep Subtotal for the fee gross-up. | Product and design (@tangconst) |
@@ -63,7 +64,7 @@ The winner needs one place to understand what is owed and what happens next. The
 | Address deadline | Decided | 48 hours from lot close to confirm a delivery address. Missed deadline hides Confirm and shows Contact Us; status stays Awaiting Address; invoice stays `not_issued`. No automatic cancel or suspension. | Product (@tangconst) |
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close. Absolute datetime in the winner’s zone; no countdown. | Product |
 | Deadline ends self-service Pay | Decided | When the invoice is `expired`, Winner Order hides card Pay and shows Contact Us in the overdue alert. A deadline that still allowed card pay would not be a deadline. Operator reissue, manual settlement, or cancel remain. | Product (@tangconst) |
-| Progress stepper | Decided | Five presentation steps: Address → Invoice → Payment → Shipped → Completed. Status vocabulary stays eight values; Processing maps under Shipped; Delivered maps to Completed. Step subtext carries day-only milestone dates. | Product and design (@tangconst) |
+| Progress stepper | Decided | Five presentation steps: Address → Invoice → Payment → Shipped → Completed. Status vocabulary stays nine values, with Payment Verifying under Payment; Processing maps under Shipped; Delivered maps to Completed. Step subtext carries day-only milestone dates. | Product and design (@tangconst) |
 | Invoice PDF | Decided | After send, the winner may view and download the invoice PDF on Winner Order until Cancelled. | Product (@tangconst) |
 | Receipt PDF | Decided | After payment, the winner may view and download a receipt PDF on Winner Order on the same row as Invoice. | Product and design (@tangconst) |
 | Buyer’s Premium rate | 🚧 In flight | The invoice carries a buyer's premium calculated as 20% of the winning bid; the rate is disclosed on the bid panel only. | Product / finance |
