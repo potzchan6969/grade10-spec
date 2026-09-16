@@ -22,8 +22,16 @@ describe("site chrome exports", () => {
   });
 
   it("exports the types an application annotates its content with", () => {
-    const navItem: NavItem = { label: "Store", href: "/store", current: true };
-    const navLink: NavLink = { label: "Help", href: "/help" };
+    const navItem: NavItem = {
+      label: "Help",
+      href: "https://grade10.mintlify.io/",
+      external: true,
+      current: false,
+    };
+    const navLink: NavLink = {
+      label: "Shipping & Delivery",
+      href: "/shipping",
+    };
     const footerLink: FooterLink = { label: "Privacy", href: "/privacy" };
     const column: FooterColumn = { heading: "SHOP", links: [footerLink] };
 
