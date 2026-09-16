@@ -1,2 +1,5 @@
 schema: grade10-planning
 created: 2026-09-10
+promoted_by: "@htonyl"
+decisions_waived: "Opened before decisions.md existed; the proposal already records the settled scope, and the requirements and suites are complete. Engineering alternatives and cutover choices are recorded in tech-design.md."
+design_waived: "The change reuses existing listing-form controls, queue-row layout, outcome badges, design tokens, and public listing presentation; no new component or Figma frame is needed."
