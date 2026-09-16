@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-15, tcs-rules r3.0
 
-## grade10-site-auction-account-record-US1: Winner opens settlement from My Auctions
+## grade10-site-auction-account-record-US8: Winner opens settlement from My Auctions
 
 **As a** winner,
 **I want** every Won row to open Winner Order without helper clutter,
 **so that** I can continue settlement without reading contact copy on the table.
 
-### grade10-site-auction-account-record-US1-TC1-1: Won row offers View order
+### grade10-site-auction-account-record-US8-TC1-1: Won row offers View order
 
 **Classification:**
 
@@ -22,7 +22,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-01
+* **Trace:** grade10-site-auction-account-record-US-08
 
 **Pre-conditions:**
 
@@ -37,7 +37,7 @@
 
 * Each Won row offers View order into that lot's Winner Order.
 
-### grade10-site-auction-account-record-US1-TC2-1: Didn’t win has no View order
+### grade10-site-auction-account-record-US8-TC2-1: Didn’t win has no View order
 
 **Classification:**
 
@@ -50,7 +50,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-01
+* **Trace:** grade10-site-auction-account-record-US-08
 
 **Pre-conditions:**
 
@@ -66,7 +66,7 @@
 * No View order entry to Winner Order.
 * Hold being-released copy remains.
 
-### grade10-site-auction-account-record-US1-TC3-1: Expired Won row is calm
+### grade10-site-auction-account-record-US8-TC3-1: Expired Won row is calm
 
 **Classification:**
 
@@ -79,7 +79,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-01
+* **Trace:** grade10-site-auction-account-record-US-08
 
 **Pre-conditions:**
 
@@ -96,7 +96,7 @@
 * View order is present.
 * No secondary helper under the standing, including no how-to-reach-Grade10 on the row.
 
-### grade10-site-auction-account-record-US1-TC4-1: Awaiting Address Won row has no confirm-address helper line
+### grade10-site-auction-account-record-US8-TC4-1: Awaiting Address Won row has no confirm-address helper line
 
 **Classification:**
 
@@ -109,7 +109,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-auction-account-record-US-01
+* **Trace:** grade10-site-auction-account-record-US-08
 
 **Pre-conditions:**
 

@@ -61,7 +61,7 @@ remove them.
 - **THEN** that listing's state is Processing
 
 #### Scenario: grade10-site-auction-account-record-SC-22 - A payment problem says how to reach Grade10
-**Serves:** grade10-site-auction-account-record-US-01 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
 
 - **GIVEN** a won listing whose invoice status is `expired`
 - **WHEN** the winner opens their Bidding page
@@ -99,35 +99,35 @@ remove them.
 - **THEN** that listing's state is Refunded
 
 #### Scenario: grade10-site-auction-account-record-SC-47 - A won lot with no address reads Awaiting Address
-**Serves:** grade10-site-auction-account-record-US-01 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
 
 - **GIVEN** a won listing whose auction order has no sent invoice and no confirmed delivery address
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Awaiting Address
 
 #### Scenario: grade10-site-auction-account-record-SC-48 - A confirmed address with no invoice reads Preparing Invoice
-**Serves:** grade10-site-auction-account-record-US-01 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
 
 - **GIVEN** a won listing whose winner has confirmed a delivery address and whose invoice has not been sent
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Preparing Invoice
 
 #### Scenario: grade10-site-auction-account-record-SC-56 - Every Won standing offers View order
-**Serves:** grade10-site-auction-account-record-US-01 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
 
 - **GIVEN** won listings in Awaiting Address, Pending Payment, Shipped, and Refunded
 - **WHEN** the winner opens My Auctions
 - **THEN** each of those rows offers View order into that lot's Winner Order
 
 #### Scenario: grade10-site-auction-account-record-SC-57 - Didn’t win offers no View order
-**Serves:** grade10-site-auction-account-record-US-01 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
 
 - **GIVEN** a listing whose standing is Didn’t win
 - **WHEN** the winner opens My Auctions
 - **THEN** that row offers no View order entry to Winner Order
 
 #### Scenario: grade10-site-auction-account-record-SC-58 - A Won row carries no secondary helper lines
-**Serves:** grade10-site-auction-account-record-US-01 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
 
 - **GIVEN** a won listing in Awaiting Address and a won listing whose invoice is `expired`
 - **WHEN** the winner opens My Auctions

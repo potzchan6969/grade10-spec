@@ -1,6 +1,6 @@
 ## User journeys
 
-### grade10-site-auction-account-record-US-01: Winner opens settlement from My Auctions
+### grade10-site-auction-account-record-US-08: Winner opens settlement from My Auctions
 
 **As a** winner,
 **I want** every Won row to open Winner Order without helper clutter,
