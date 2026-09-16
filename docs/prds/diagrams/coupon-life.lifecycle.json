@@ -64,7 +64,8 @@
       "label": "Back to available",
       "sublabel": "the claim and its code come off",
       "lane": "given-back",
-      "col": 0
+      "col": 0,
+      "yOffset": 51
     },
     {
       "id": "voided",
@@ -81,7 +82,7 @@
       "label": "Lapsed",
       "sublabel": "read off the clock",
       "lane": "terminal",
-      "col": 2,
+      "col": 1,
       "tag": "its date passed"
     }
   ],
@@ -120,17 +121,15 @@
       "to": "voided",
       "variant": "dashed",
       "fromSide": "bottom",
-      "toSide": "top",
-      "via": [[248, 394], [402, 394]]
+      "toSide": "left"
     },
     {
       "id": "lapses",
       "from": "available",
       "to": "lapsed",
       "variant": "dashed",
-      "fromSide": "top",
-      "toSide": "top",
-      "via": [[248, 104], [710, 104]]
+      "fromSide": "bottom",
+      "toSide": "top"
     }
   ]
 }
