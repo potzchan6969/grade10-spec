@@ -14,7 +14,7 @@
 
 - [x] 3.1 Keep the existing Grade10 bid-panel states and authorized handling; verify that the backend response leaves a successfully linked collector ready to bid and moves an accepted first bid directly to `enrolled`, without adding a client-side hold flag or panel state.
 
-## 4. Cross-feature verification (grade10)
+## 4. Cross-feature verification (grade10) (owner: @htonyl)
 
-- [ ] 4.1 Run the auction database and frontend lanes covering first bids, maximum raises, automatic bids, enrollment, outbid release, close and winner payment; confirm no-hold bids do not require Stripe while existing enabled holds still release, capture or reconcile through their current paths.
+- [x] 4.1 Run the auction database and frontend lanes covering first bids, maximum raises, automatic bids, enrollment, outbid release, close and winner payment; confirm no-hold bids do not require Stripe while existing enabled holds still release, capture or reconcile through their current paths.
 - [ ] 4.2 Run the repository typecheck, lint and `git diff --check`, then review the application diff against every scenario named by this change before the change is handed off for implementation and later archive.
