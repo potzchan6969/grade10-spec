@@ -3,7 +3,7 @@
 - [ ] 1.1 Update the auction, auction index, auto-bidding, and post-sale PRD pages to state the scheduled-close trigger, duration-only policy, and queue label without duplicating the capability requirements (`grade10-site-auction-auction-SC-19`, `grade10-site-auction-auto-bidding-SC-25`, `grade10-admin-auction-post-sale-SC-64`)
 - [ ] 1.2 Verify the manual and change artifacts with `pnpm check:manual` and `openspec validate revise-auction-extended-bidding --strict`
 
-## 2. Shared auction contracts (grade10)
+## 2. Shared auction contracts (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Update REST and procedure public listing schemas and admin queue/listing payload types to remove `extensionWindowSeconds`, add `scheduledEndsAt`, and add `extendedBidding` to queue rows (`grade10-site-auction-auction-SC-13`, `grade10-admin-auction-post-sale-SC-64`, `grade10-admin-auction-post-sale-SC-65`, `grade10-admin-auction-post-sale-SC-66`)
 - [ ] 2.2 Update contract fixtures and compile-time contract tests for the breaking public and admin shapes (`grade10-site-auction-auction-SC-13`, `grade10-admin-auction-listing-SC-27a`)
