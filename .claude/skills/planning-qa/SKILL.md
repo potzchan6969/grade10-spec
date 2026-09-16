@@ -1,16 +1,22 @@
 ---
 name: planning-qa
-description: Run the two independent readings of a change's anchor set - the scenario draft and the blind feature-tcs.md - reconcile them, and write the domain, product and platform test-case passes above it. Use when a change's journeys and outline are written, when reviewing or repairing its suites, or when deriving the suites above feature level.
+description: Write a change's spec.md - the outline that fixes its anchors, then the requirements - run the two independent readings between them, reconcile them, and write the domain, product and platform test-case passes above it. Use when a change's proposal, decisions and journeys are written, when reviewing or repairing its suites, or when deriving the suites above feature level.
 ---
 
 # QA's part
 
-`/planning-pm` stops at the anchor set: the proposal, the journeys, and the spec
-outline's `## Purpose` and `## Feature set`. **The two readings taken from that
-set are yours**, and so is the reconciliation between them.
+`/planning-pm` stops before `spec.md`: it hands over the proposal, the
+decisions the interview settled, the journeys, and the 🚧 lines it marked on the
+PRD. **`spec.md` is yours** - the outline that fixes the anchors, then the
+requirements - and so are the two readings between them and the reconciliation
+that joins them.
+
+An engineer who authored the change runs the same passes in their own lane;
+`planning-dev` routes them here. Nobody else opens the file.
 
 | Artifact | Where it lives | What it holds |
 | --- | --- | --- |
+| `specs/<capability>/spec.md` — pass one | In the change, beside the journeys | `## Purpose` and `## Feature set`: the outline, written from the journeys and the marked PRD |
 | `specs/<capability>/feature-tcs.md` | In the change, beside the journeys | The blind suite and its `## Reconciliation`; you generate both, and review them with `/tcs-review` |
 | `specs/<capability>/spec.md` — pass two | In the change, beside the journeys | The requirement deltas and their scenarios, reconciled against that suite |
 | `openspec/specs/<product>/<domain>/domain-tcs.md` | Beside the durable specs | The paths a person walks across that domain's capabilities |
@@ -59,12 +65,14 @@ over one document, and a change in another repository to fix the second.
 ## The run
 
 ```
-/planning-pm                    proposal, journeys, specs pass one
+/planning-pm                    proposal, decisions, journeys, PRD marks
 /planning-design                ui-design, where there is a surface
     ─────────────────────────────────────────────────────────────
     ↓
-    ├── sub-agent A → scenario draft      identical inputs,
-    └── sub-agent B → feature-tcs.md      neither sees the other
+specs pass one                  the outline: Purpose + Feature set
+    ↓                           the PM reads it before you build on it
+    ├── sub-agent A → scenario draft      neither sees
+    └── sub-agent B → feature-tcs.md      the other's work
     ↓
 reconciliation                  join on anchors
     ↓
@@ -77,9 +85,15 @@ Everything this run produces is `draft`. Nothing in it claims review;
 ## Steps
 
 1. **Read from an up-to-date main**, then read the change: its `proposal.md`,
-   every capability's `user-journeys.md`, and the outline's `## Purpose` and
-   `## Feature set`. A change whose outline carries no feature set has no anchor
-   set, and there is nothing here to run: it goes back to `/planning-pm`.
+   its `decisions.md`, every capability's `user-journeys.md`, and the PRD
+   sections the proposal links. Those four are the whole of what the outline has
+   to go on. A change with no journeys file has nothing to anchor on and there
+   is nothing here to run: it goes back to `/planning-pm`.
+
+   A change whose scope reads as unsettled - a `decisions.md` with an empty
+   frontier and open questions on the proposal - is one to raise before you
+   write, not one to interpret. Writing groups over an unsettled scope is how a
+   feature set comes to name something nobody chose.
 
 2. **Read the enriched instructions.**
 
@@ -92,7 +106,16 @@ Everything this run produces is `draft`. Nothing in it claims review;
    than working from memory; `specs` carries both of its passes, and the second
    is yours.
 
-3. **Run the two readings.** Dispatch both sub-agents. Neither sees the
+3. **Write the outline, then have it read.** `## Purpose` and `## Feature set`,
+   from the journeys and the marked PRD - the rules are the `specs`
+   instruction's. Root group names are the anchors everything downstream
+   resolves against, so they are fixed once and deliberately: **the PM is the
+   reader of record**, and a group that is wrong is cheapest to fix here and
+   dearest after both readings have been taken from it. Say the outline is
+   ready and wait for that read; do not run the readings over groups nobody has
+   looked at.
+
+4. **Run the two readings.** Dispatch both sub-agents. Neither sees the
    other's output. They read the same anchors, not the same bundle: the suite
    pass gets the isolated input `spec-to-tcs` builds, and the scenario pass
    also reads the durable requirements, because a MODIFIED block is copied
@@ -106,7 +129,7 @@ Everything this run produces is `draft`. Nothing in it claims review;
    design. An error or empty treatment the designer drew and no requirement
    states is exactly what the reconciliation exists to surface.
 
-4. **Reconcile, then take the second pass.** Join on anchors, apply the
+5. **Reconcile, then take the second pass.** Join on anchors, apply the
    dispositions below, and the scenarios that survive are written with the
    `## Reconciliation` block.
 
@@ -115,7 +138,7 @@ Everything this run produces is `draft`. Nothing in it claims review;
    artifact has answered, so one left behind is a finding rather than a note.
    A wait on a requirement nobody can decide yet is a different line and stays.
 
-5. **Validate.**
+6. **Validate.**
 
    ```bash
    pnpm run validate:changes <change-name>
@@ -123,11 +146,11 @@ Everything this run produces is `draft`. Nothing in it claims review;
    pnpm run tcs:validate
    ```
 
-   `openspec status` calls `specs` done as soon as the outline exists, because a
-   file is there. **Two gates read further.** While the change is open, a delta
-   naming no requirement is refused unless it declares the wait `/planning-pm`
-   wrote - which is why you delete that line with the scenarios rather than
-   after them. Once folded, `check:manual`'s `outline` rule fails a capability
+   `openspec status` calls `specs` done as soon as your outline exists, because
+   a file is there. **Two gates read further.** While the change is open, a
+   delta naming no requirement is refused unless it declares the wait
+   `/planning-pm` wrote - so the line stands through commit 3 and 4 and comes
+   off with the scenarios, never after them. Once folded, `check:manual`'s `outline` rule fails a capability
    whose suite sits beside a `spec.md` carrying no requirements; it is never
    downgraded to a warning.
 
@@ -140,7 +163,8 @@ Everything this run produces is `draft`. Nothing in it claims review;
 Neither file points at the other. Both point up.
 
 > **Anchor set** = the capability's full journey set once this change folds,
-> **union** the root groups of its `## Feature set`. `/planning-pm` fixes it.
+> **union** the root groups of its `## Feature set`. `/planning-pm` fixes the
+> journeys; you fix the groups, and the PM reads them before you build on them.
 
 - A scenario carries `**Serves:** <anchor> - <prose>`, under its heading and
   above `**GIVEN**` / `**WHEN**`.
@@ -249,12 +273,15 @@ with noise until someone starts waving it through.
 
 | # | Commit | Proves |
 | --- | --- | --- |
-| 3 | `test(<domain>): blind pass suites` | The blind reading, uncontaminated |
-| 4 | `spec(<domain>): scenarios and reconciliation` | What the second reading caught |
+| 3 | `spec(<domain>): the outline` | The anchors, fixed and read before anything was taken from them |
+| 4 | `test(<domain>): blind pass suites` | The blind reading, uncontaminated |
+| 5 | `spec(<domain>): scenarios and reconciliation` | What the second reading caught |
 
-Commits 1 and 2 are `/planning-pm`'s - the PRD marks, then the journeys and the
-outline - and yours land on the same branch, in the same pull request. Commit 3
-precedes commit 4 not because the suite produced the scenarios, but because the
+Commits 1 and 2 are `/planning-pm`'s - the PRD marks, then the decisions and
+the journeys - and yours land on the same branch, in the same pull request.
+Commit 3 stands alone so the anchors are a diff somebody can read and accept
+rather than a section buried in the suite that was taken from them. Commit 4
+precedes commit 5 not because the suite produced the scenarios, but because the
 committed scenarios are the reconciled ones. **The scenario draft is never
 committed** - its only trace is the `## Reconciliation` block, which is why that
 block is not optional.
@@ -406,7 +433,10 @@ the next reader cannot catch.
 ## Related
 
 - `spec-to-tcs`, `tcs-review` — the two skills that do this work.
-- `planning-pm` — the anchor set you read from, and the author your escalations go to.
+- `planning-pm` — the journeys and the marks your outline is written from, and
+  the author your escalations and your outline go back to.
+- `planning-dev` — the same passes in an engineer's lane, on a change they
+  authored.
 - `grilling` — the round a paused reconciliation opens.
 - `planning-dev` — the engineer downstream, who routes a change back here
   rather than planning delivery against an outline.

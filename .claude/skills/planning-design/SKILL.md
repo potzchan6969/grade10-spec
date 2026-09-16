@@ -15,14 +15,16 @@ One of the eight artifacts in `grade10-planning` is yours on every change:
 
 | You are | Then | Yours to write |
 | --- | --- | --- |
-| Specifying a new change | The PM's lane is yours — run `/planning-pm` | The proposal, `decisions.md`, the journeys, the outline it generates, **and** the design reference |
+| Specifying a new change | The PM's lane is yours — run `/planning-pm` | The proposal, `decisions.md`, the journeys, **and** the design reference you hand over with them |
 | Picking up a change somebody specified | Supplement it | `ui-design.md`, and the design reference it stands on |
 
 **A new change is the same job the PM does**, and `/planning-pm` is the skill
 for it — the interview, the PRD marks, the proposal, the decisions, the
-journeys, then the outline that fixes the anchor set. Its description says
-"a PM or designer" for this reason. Run it rather than working from memory, and
-stop where it stops.
+journeys. Its description says "a PM or designer" for this reason. Run it
+rather than working from memory, and stop where it stops: `spec.md` is not that
+lane's to write, in your hands any more than the PM's. `/planning-qa` writes
+its outline from your journeys and your marks, and the design reference is what
+makes those groups name what exists.
 
 What a designer brings that a PM does not is **the design reference**: what
 already exists in Storybook, in `packages/design-system`, in `packages/ui` and
@@ -32,8 +34,8 @@ against an imagined one, so the reference is not decoration on `ui-design.md` �
 it is what a designer specifies from.
 
 **Supplementing an existing change** is the other entry, and the commoner one:
-the proposal, the decisions and the journeys are already written, the outline is
-fixed, and what is missing is the surface. Add `ui-design.md` to that change,
+the proposal, the decisions and the journeys are already written, `spec.md` is
+usually not — you come before it — and what is missing is the surface. Add `ui-design.md` to that change,
 never a second one, and flag what does not exist yet so `tasks.md` carries it.
 A product detail you learn while drawing goes on the PRD first, marked 🚧 or ❓,
 before this file cites it.
@@ -57,12 +59,14 @@ A section that would only repeat one of them points at it instead.
 
 ## Steps
 
-1. **Read what already exists.** The change's `user-journeys.md`, and
-   `specs/<capability>/spec.md` for its `## Purpose` and `## Feature set` —
-   together they are the anchor set, and the states you document dress the
-   outcomes those anchors name. **Do not wait for requirements**: your file is
-   written before them, and `## Requirements` is empty or absent while you
-   work. Then the capability's PRD under `docs/prds/` when one exists. A state or a variant you decide goes on the PRD first, before
+1. **Read what already exists.** The change's `decisions.md` for its goals and
+   edges, its `user-journeys.md` for who walks it, and the durable
+   `specs/<capability>/spec.md` for the capability's current `## Purpose` and
+   `## Feature set`. **Do not wait for the change's own `spec.md`**: your file
+   lands before it, so the change's groups are usually not written yet and
+   `## Requirements` does not exist at all. The journeys are the anchors to
+   reach for; a feature set group only where the durable capability already
+   issues one. Then the capability's PRD under `docs/prds/` when one exists. A state or a variant you decide goes on the PRD first, before
    `ui-design.md` cites it, only when it changes an outcome the reader
    meets — what they can do, see counted, or are refused — and then as one
    🚧 line that replaces the line it supersedes, never beside it. Everything
@@ -87,8 +91,9 @@ A section that would only repeat one of them points at it instead.
 ## The design reference
 
 Four legs, and each answers a different question. Cite them in `ui-design.md`
-where a reader would otherwise have to guess, and bring them to the outline when
-the change is yours to specify.
+where a reader would otherwise have to guess, and hand them over with the change
+when it is yours to specify — the run that writes the outline has your journeys,
+your marks and this reference, and nothing else.
 
 | Leg | Answers | Where |
 | --- | --- | --- |
@@ -144,10 +149,11 @@ not something absorbed into a Code Connect template — read
 
 Loading, empty, error and edge states per screen, **each tied to the anchor it
 dresses** — a journey id from `user-journeys.md`, or a `## Feature set` root
-group. A state with no anchor behind it means the anchor set is missing one —
-say so to the PM, and do not invent the journey yourself.
+group the durable capability already issues. A state with no anchor behind it
+means the journeys are missing one — say so to whoever wrote them, and do not
+invent the journey yourself.
 
-**Never a scenario id.** The scenarios are written after this file, by
+**Never a scenario id.** The whole of `spec.md` is written after this file, by
 `/planning-qa`, and `pnpm check:manual` refuses an id the store issues nowhere.
 The tie still does its work: a scenario serves the anchor your state named, so
 your edge case reaches the requirements rather than restating them.
@@ -175,7 +181,7 @@ move it off the planning board. Only `tasks.md` does.
 
 ## Related
 
-- `planning-pm` — your own lane on a new change, and the anchor set your states
+- `planning-pm` — your own lane on a new change, and the journeys your states
   hang off on somebody else's.
 - `planning-qa` — the scenarios written after yours, serving the same anchors.
 - `planning-dev` — the plan that carries the component and copy work you flagged.

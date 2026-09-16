@@ -1,6 +1,6 @@
 ---
 name: planning-pm
-description: Write the product manager's half of an OpenSpec change - the proposal, the user journeys, and the spec outline that fixes the anchor set - then hand that set to planning-qa and answer what its two readings escalate. Use when a PM or designer is specifying a change, and stop where the anchor set stops.
+description: Write the product manager's half of an OpenSpec change - the proposal, the decisions the interview settled, and the user journeys - then hand the change to planning-qa, which writes spec.md, and answer what its two readings escalate. Use when a PM or designer is specifying a change, and stop before spec.md.
 ---
 
 # The product manager's artifacts
@@ -25,28 +25,30 @@ change rather than waiting for one to be drawn. A change with no user-facing
 surface skips it entirely - `planning-design` holds its shape.
 
 **This lane is a designer's too.** A designer specifying a new change writes
-the same three files, through this skill, and brings the design reference -
-Storybook, `packages/design-system`, `packages/ui`, `packages/i18n` - to the
-outline with them. `planning-design` routes here for that, and holds what the
-reference is.
+the same three files, through this skill, and hands the design reference -
+Storybook, `packages/design-system`, `packages/ui`, `packages/i18n` - over with
+them, so the outline is written against the inventory rather than an imagined
+one. `planning-design` routes here for that, and holds what the reference is.
 
-`spec.md` is **generated in two passes over one file**, and only the first of
-them is yours. Neither it nor `feature-tcs.md` names a teammate in the schema:
-they sit on nobody's worklist, and you review them rather than author them.
+**You do not open `spec.md`.** Both of its passes belong to the run that takes
+the two readings - `/planning-qa`, or `/planning-dev` on a change an engineer
+authored. Neither `spec.md` nor `feature-tcs.md` names a teammate in the schema:
+they sit on nobody's worklist, and you read them rather than write them.
 
 | Generated | File | Whose run |
 | --- | --- | --- |
-| `specs` — pass one | `specs/<capability>/spec.md` | **Yours**: `## Purpose` and `## Feature set`, then stop |
+| `specs` — pass one | `specs/<capability>/spec.md` | `/planning-qa`: `## Purpose` and `## Feature set`, from your journeys and your 🚧 lines |
 | `test-cases` | `specs/<capability>/feature-tcs.md` | `/planning-qa`: a blind suite, drafted without sight of the scenarios |
 | `specs` — pass two | `specs/<capability>/spec.md` | `/planning-qa`: the requirement deltas and their scenarios, reconciled against that suite |
 
-Generated is not unreviewed. **You are the reader of record** for the outline
-before you hand it on, and for the scenarios when they come back: `/planning-qa`
-stops at every contradiction it cannot settle, and those stops are yours to
-answer.
+Generated is not unreviewed. **You are the reader of record** for all three:
+the outline when it comes back, because its root groups trace to your own 🚧
+lines and every anchor downstream hangs off them, and the scenarios when they
+land. `/planning-qa` stops at every contradiction it cannot settle, and those
+stops are yours to answer.
 
-**Stop at the outline.** `/planning-qa` takes the anchor set and runs the two
-readings on the same branch. A designer writes `ui-design.md` unless you already
+**Stop at the journeys.** `/planning-qa` writes the outline, then runs the two
+readings from it, on the same branch. A designer writes `ui-design.md` unless you already
 had the design, and the engineer who picks the change up writes `tech-design.md`
 and `tasks.md` - on this same change, never a second one. A change with no
 `tasks.md` reads as still being planned on both boards; that is the handoff
@@ -71,12 +73,11 @@ decisions                       yours: the frontier as settled, and its edges
 PRD marks 🚧 / ❓                the source of the feature set's groups
     ↓
 user-journeys                   yours, written
-    ↓
-specs, pass one                 generated: Purpose + Feature set
     ─────────────────────────────────────────────────────────────
     ↓
-/planning-qa                    the two readings, and the reconciliation
-                                that escalates back to you
+/planning-qa                    spec.md's outline, then the two readings
+                                from it, and the reconciliation that
+                                escalates back to you
 ```
 
 Everything this run produces is `draft`. Nothing in it claims review.
@@ -133,21 +134,21 @@ Everything this run produces is `draft`. Nothing in it claims review.
 
    ```bash
    openspec instructions proposal --change <change-name>
+   openspec instructions decisions --change <change-name>
    openspec instructions user-journeys --change <change-name>
-   openspec instructions specs --change <change-name>
    ```
 
    These carry this store's own rules on top of the schema's. Read them rather
-   than working from memory; `specs` carries both of its passes, and the second
-   is the one `/planning-qa` works from.
+   than working from memory. `openspec instructions specs` is not yours to work
+   from - read it only to know what you are reviewing when it comes back.
 
-   `openspec status` calls `specs` done as soon as the outline exists, because a
-   file is there. **Two gates read further.** While the change is open, a delta
-   naming no requirement is refused unless the change declares the wait, and
-   the wait is asked back the moment the requirements land - so an outline
-   nobody returned to either says so in `.openspec.yaml` or fails. Once folded,
-   `check:manual`'s `outline` rule fails a capability whose suite sits beside a
-   `spec.md` carrying no requirements; it is never downgraded to a warning.
+   What the gates make of the branch while it is half written: a change with no
+   `spec.md` yet, or one whose delta names no requirement, is refused unless it
+   declares the wait - which is why step 8 writes that line - and the wait is
+   asked back the moment the requirements land. `openspec status` calls `specs`
+   done as soon as a file is there, so it cannot tell an outline from the
+   requirements; `check:manual`'s `outline` rule is what fails a folded
+   capability whose suite sits beside a `spec.md` carrying none.
    (`pnpm plan:preflight` is unrelated: it guards `tasks.md` against being
    overwritten while engineering is implementing.)
 
@@ -164,12 +165,14 @@ Everything this run produces is `draft`. Nothing in it claims review.
    what the manual's reader needs in the PRD, and an implementation choice in
    `tech-design.md`.
 
-7. **Generate the outline**, then read it. `## Purpose` and `## Feature set`
-   come from the proposal, the marks and the journeys, and together with the
-   journeys they are the **anchor set** - the capability's full journey set once
-   this change folds, union the root groups of its `## Feature set`. Every
-   anchor downstream hangs off those root groups; a group that is wrong is
-   cheapest to fix here, and dearest after both readings have been taken from
+7. **Leave `spec.md` alone.** Its outline is written by the run that takes the
+   readings, out of the journeys you just wrote and the 🚧 lines you marked,
+   and those two are the whole of what it has to go on - which is the reason
+   step 3 comes before step 6 rather than after it. Half the **anchor set** is
+   already fixed by the time you stop: the capability's full journey set once
+   this change folds, which `/planning-qa` unions with the root groups it
+   derives. Read those groups when they come back. A group that is wrong is
+   cheapest to fix then, and dearest after both readings have been taken from
    it.
 
 8. **Validate what you wrote, then hand it on.**
@@ -179,18 +182,18 @@ Everything this run produces is `draft`. Nothing in it claims review.
    pnpm check:manual
    ```
 
-   **The outline owes a wait line.** What you commit is a `spec.md` that names
-   no requirement, and both gates refuse one without a line saying why: write
-   `awaiting:` with `specs: <what is still to come>` in the change's
-   `.openspec.yaml` before you validate. `validate:changes` then reports the
-   change as waiting rather than failing it, and the wait is not read as over
-   until the requirements land. `/planning-qa` deletes the line with the
-   scenarios.
+   **Your handoff owes a wait line.** What you commit has journeys and no
+   `spec.md` at all, and a change with no delta is one both gates refuse
+   without a line saying why: write `awaiting:` with
+   `specs: <what is still to come>` in the change's `.openspec.yaml` before you
+   validate. `validate:changes` then reports the change as waiting rather than
+   failing it, and the wait is not read as over until the requirements land.
+   `/planning-qa` deletes the line with the scenarios.
 
-   Commit the journeys and the outline, and say the change is ready for
-   `/planning-qa`. It runs on this same branch: the blind suite and the
-   scenarios land in this pull request, so `main` never carries a journey with
-   no suite beside it.
+   Commit the marks, the proposal, the decisions and the journeys, and say the
+   change is ready for `/planning-qa`. It runs on this same branch: the outline,
+   the blind suite and the scenarios land in this pull request, so `main` never
+   carries a journey with no suite beside it.
 
    A requirement nobody can decide yet is the same line for a different
    reason - a wait, not a guess - and it stays after `/planning-qa` has run.
@@ -231,7 +234,7 @@ grilling round, not a self-service waiver.
 | # | Commit | Proves |
 | --- | --- | --- |
 | 1 | `docs(prd): …` | The product judgement is in the reader's words |
-| 2 | `spec(<domain>): decisions, journeys and outline` | The scope is settled and the anchor set is fixed |
+| 2 | `spec(<domain>): decisions and journeys` | The scope is settled and the journeys are fixed |
 
 Commits 3 and 4 are `/planning-qa`'s, on this same branch: the blind suites, then
 the scenarios and the reconciliation. The diff between them is what the second
@@ -245,7 +248,7 @@ reading bought.
 | This change's goals and edges | `decisions.md`, and the proposal points there |
 | A question the interview settled, and what it dropped | `decisions.md`'s table |
 | A question nobody present could settle | The proposal's open questions, and a ❓ on the PRD |
-| Anything testable | The delta spec, and nowhere else - generated, and yours to check |
+| Anything testable | The delta spec, and nowhere else - `/planning-qa` writes it, you check it |
 | Who walks it | `user-journeys.md` beside that spec |
 | Why this problem, for whom, what was ruled out, what will be measured | The PRD's `Product decisions` block |
 | How it will be built | `tech-design.md` - not yours |
@@ -253,7 +256,8 @@ reading bought.
 ## Related
 
 - `grilling` - the interview that precedes the proposal, and the escalation.
-- `planning-qa` - the two readings taken from your anchor set, and the wider suites.
+- `planning-qa` - `spec.md`, both passes, and the two readings taken from your
+  journeys and marks.
 - `spec-to-tcs` - the blind pass and the isolated input it builds.
 - `openspec-propose` - who writes what across the whole change.
 - `prd-authoring` - for the product judgment a requirement will not preserve.

@@ -49,7 +49,7 @@ rules:
     - "Include a metric that would move if this change works."
     - "Mark the PRDs the change touches before the deltas. A change carrying a 🚧 line cannot also claim `skip_specs`, and `skip_specs: true` owes a `skip_specs_why` beside it."
   specs:
-    - "Two passes over one `spec.md`, with the blind suite between them: `## Purpose` and `## Feature set` first, then journeys and suite, then the requirements. `check:manual`'s `outline` rule is the only machine evidence of that order."
+    - "Two passes over one `spec.md`, with the blind suite between them: `## Purpose` and `## Feature set` first, then the suite, then the requirements. Both are `planning-qa`'s, or `planning-dev`'s on a change the engineer authored; the PM and the designer hand over and review. `check:manual`'s `outline` rule is the machine evidence of that order."
     - "Write `## Purpose` only when the text composed from the durable Purpose and the PRD differs from the durable one. When written it replaces that Purpose whole, for an existing capability as much as a new one."
     - "Feature set root group names are machine-read anchors. Rename one deliberately and update every `**Serves:**` and `**Trace:**` naming it in the same change. Leaves carry no ids."
     - "The fold carries `## Requirements` only. Archive copies Purpose, the feature set and `user-journeys.md` into the durable capability by hand."

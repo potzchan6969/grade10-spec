@@ -54,9 +54,12 @@ change whose scenarios never landed is the exception above, and what goes back
 is the anchor set, not the proposal.
 
 Authoring a change from scratch is the same lane: run `openspec new change
-<name>`, take artifacts 1 to 3 through `/planning-pm` - you write the proposal
-and the journeys, the run generates the spec outline - then `/planning-qa` for
-the suite and the scenarios, then continue here.
+<name>`, take artifacts 1 to 3 through `/planning-pm` - the proposal, the
+decisions, the journeys - then the spec passes. **`spec.md` is yours on a
+change you authored**: its outline, the blind suite, then the requirements,
+exactly as `/planning-qa` runs them. Read that skill and follow it rather than
+writing the file directly; the PM and the designer never open it, and neither
+do you on somebody else's change.
 
 ## Read the enriched instructions as you reach each artifact
 

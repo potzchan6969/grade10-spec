@@ -280,7 +280,9 @@ artifacts:
 
       - **States**: Loading, empty, error, and edge states per screen, each
       tied to the anchor it dresses - a journey id from `user-journeys.md`, or
-      a `## Feature set` root group. Copy the id in backticks, from the heading
+      a `## Feature set` root group the durable capability already issues. This
+      file lands before `spec.md` does, so the change's own groups are usually
+      not written yet: a journey id is the anchor to reach for. Copy the id in backticks, from the heading
       that issues it - a prefix is never inferable from the capability's path,
       and outside backticks nothing reads the citation. Never a scenario id:
       the scenarios are written after this file, and `pnpm check:manual`
@@ -300,21 +302,30 @@ artifacts:
     description: The capability's purpose, the feature set, and the requirement deltas
     template: spec.md
     instruction: |
-      Generated from the proposal and the journeys, in **two passes over this
-      one file**, with the blind test suite between them. Nobody owes this file
-      by hand: the product manager reviews what comes back and settles what it
-      cannot decide, which is why this artifact names no teammate and appears
-      on no worklist.
+      Generated from the proposal, the decisions and the journeys, in **two
+      passes over this one file**, with the blind test suite between them.
+      Nobody owes it by hand, and it is nobody's to write outside the run that
+      takes both readings: `/planning-qa` owns it, or `/planning-dev` on a
+      change the engineer authored. Neither the product manager nor the
+      designer opens it - they hand over the proposal, the decisions and the
+      journeys, and the PM reviews what comes back. That is why this artifact
+      names no teammate and appears on no worklist.
 
-      **Pass one - the outline**, inside the `/planning-pm` run. `## Purpose`,
-      then `## Feature set`, then stop. `user-journeys` already landed, and
-      together with these groups they are the anchor set `/planning-qa` reads;
-      `ui-design` hangs off the same set where the change has a surface.
-      `test-cases` comes next, and only then does pass two return here.
+      **Pass one - the outline.** `## Purpose`, then `## Feature set`, then
+      stop, written from the journeys and the PRD the PM marked. The journeys
+      already landed, and together with these groups they are the anchor set
+      both readings are taken from. `test-cases` comes next, and only then does
+      pass two return here.
 
-      **Pass two - the behaviour**, inside the `/planning-qa` run.
-      `## ADDED Requirements` and its siblings, sequenced to follow the feature
-      set's groups, written after the blind suite and reconciled against it.
+      Pass one fixes the anchors, so it is read before it is built on: a root
+      group that is wrong is cheapest to fix here and dearest after both
+      readings have been taken from it. The PM is the reader of record for it,
+      as they are for the scenarios - generated is not unreviewed, and the
+      groups trace back to their own 🚧 lines.
+
+      **Pass two - the behaviour.** `## ADDED Requirements` and its siblings,
+      sequenced to follow the feature set's groups, written after the blind
+      suite and reconciled against it.
 
       Nothing in this schema can express that order - `requires` is advisory and
       never stopped anyone writing the scenarios first. **The only machine
