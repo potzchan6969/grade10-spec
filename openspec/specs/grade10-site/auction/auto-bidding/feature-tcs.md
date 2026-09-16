@@ -782,3 +782,33 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 
 * Grade10 places no further bid on either bidder's behalf.
 * The current bid is unchanged.
+
+### grade10-site-auction-auto-bidding-US5-TC7-1: A maximum works without a bid-time authorization
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, release
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auto-bidding-US-05
+
+**Pre-conditions:**
+
+* Bid-time authorization holds are disabled.
+* A listing has an accepted maximum for one bidder.
+
+**Steps:**
+
+1. Commit a higher valid maximum for a challenger.
+2. Read the resolved bids and the listing's bid-time authorizations.
+
+**Expected Results:**
+
+* Grade10 resolves the two maxima and records the resulting bid.
+* No bid-time authorization is created or awaited.

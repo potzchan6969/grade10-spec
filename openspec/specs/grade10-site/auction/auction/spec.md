@@ -14,6 +14,7 @@ customer-facing term for one auctioned card.
 - Bidding window
   - Scheduled and extendable: a bid must meet the increment inside the window; a late valid bid can extend up to a cap
 - Card authorization
+  - Optional authorization: disabled by default; a valid bid does not wait for or create a bid-time authorization hold
   - One hold per bidder: an outbid authorization is released; a delayed lower hold cannot land
 - Public contract
   - Listing and extension terms: a consumer can read the listing contract
@@ -236,3 +237,18 @@ webhook.
 - **WHEN** scheduled reconciliation reaches its recorded provider reference
 - **THEN** Grade10 reads that authorization outcome
 - **AND** it applies the authorization outcome exactly once
+
+### Requirement: A standard bid does not require a bid-time authorization
+
+When bid-time authorization holds are disabled, Grade10 SHALL accept a valid
+bid without waiting for or creating a bid-time authorization. The existing
+hold-backed behavior remains governed by
+`grade10-site/auction/bid-payment-method` when enabled.
+
+#### Scenario: grade10-site-auction-auction-SC-23 - The default bid path creates no authorization hold
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
+
+- **GIVEN** bid-time authorization holds are disabled
+- **WHEN** a collector submits a valid bid on an open listing
+- **THEN** Grade10 accepts the bid according to the listing's bid rules without waiting for Stripe
+- **AND** it creates no bid-time authorization
