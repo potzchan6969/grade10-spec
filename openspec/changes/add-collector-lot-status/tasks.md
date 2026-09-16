@@ -20,7 +20,7 @@ its derivation.
 - [ ] 3.4 Pin that a called-off lot still reaches the collector who bid on it, with the released-hold note, and reaches nobody else — `readAccountStatusRows` takes no hidden-lot filter (`grade10-site-auction-lot-status-SC-09`)
 - [ ] 3.5 Verify the worker and the service with `pnpm run typecheck`, `pnpm run lint` and `pnpm run test:backend`
 
-## 4. Grade10 site auction surfaces (grade10)
+## 4. Grade10 site auction surfaces (grade10) (owner: @htonyl)
 
 Needs group 2 landed, and nothing from group 3: the site is verified against
 the contracts and its own fixtures.
