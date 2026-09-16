@@ -86,7 +86,8 @@ an auction order in Preparing Invoice:
    units of zero or more in the lot's currency.
 3. Optionally add Insurance for that address, an integer count of minor units
    greater than zero in the lot's currency.
-4. Read the order total Grade10 computes from every component.
+4. Read the subtotal, the payment processing fee Grade10 computes from the
+   payment provider's current fees, and the order total.
 5. Send the invoice.
 
 On send Grade10 SHALL issue the invoice with invoice status `pending`, record
@@ -95,8 +96,10 @@ delivery address, write a sent entry to the invoice log, and send the winner
 the invoice-sent letter, per `grade10-site/auction/notifications-order`.
 
 Grade10 SHALL refuse to send an invoice when the winner has confirmed no
-delivery address, when Shipping & Handling is missing, or when Insurance is
-added at zero. An operator
+delivery address, when Shipping & Handling is missing, when Insurance is
+added at zero, or when the payment provider's current fees cannot be read. The
+refusal for unreadable fees SHALL say so, and SHALL name no stored fee in its
+place. An operator
 without payment-processing SHALL see the send control visible and disabled,
 and Grade10 SHALL refuse the same action on the server.
 
@@ -128,6 +131,25 @@ and Grade10 SHALL refuse the same action on the server.
 - **WHEN** they open an auction order in Preparing Invoice
 - **THEN** the send control is visible and disabled
 - **AND** Grade10 refuses a send from them on the server
+
+#### Scenario: grade10-admin-auction-post-sale-SC-69 - The operator sees the fee before sending
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in Preparing Invoice whose lines total a subtotal
+  of 312000 minor units in HKD
+- **AND** the payment provider reports fees for HKD of 235 minor units and 3.4 per cent
+- **WHEN** an operator holding payment-processing opens the send step
+- **THEN** they read a payment processing fee of 11225 and an order total of
+  323225 minor units in HKD
+
+#### Scenario: grade10-admin-auction-post-sale-SC-70 - Unreadable provider fees refuse the send
+**Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
+
+- **GIVEN** an auction order in Preparing Invoice
+- **AND** the payment provider's current fees cannot be read
+- **WHEN** an operator attempts to send its invoice
+- **THEN** Grade10 refuses the send and says the fees could not be read
+- **AND** no invoice is issued
 
 #### Scenario: grade10-admin-auction-post-sale-SC-63 - An invoice sends without insurance
 **Serves:** post-sale-US-05 - Operator quotes and sends a winner's invoice
@@ -200,8 +222,8 @@ Manual settlement is the operator's backup for money that did not arrive by
 the winner's card. An operator holding payment-processing SHALL record it on
 an order whose invoice is `pending` or `expired`:
 
-1. Open the order and read the current invoice's order total and the locked
-   delivery address.
+1. Open the order and read the current invoice's subtotal, which is the amount
+   to settle, and the locked delivery address.
 2. Choose the method: bank transfer, cash, or other. Card SHALL NOT be offered.
 3. For other, describe the method, in 1 to 200 characters.
 4. Enter the external reference. It is required for a bank transfer and
@@ -210,7 +232,8 @@ an order whose invoice is `pending` or `expired`:
 6. Commit.
 
 On commit the invoice status SHALL become `paid` at the current invoice's
-order total, and Grade10 SHALL write a payment record carrying the method,
+subtotal, since no card fee is paid on money that did not arrive by card. The
+invoice SHALL drop its payment processing fee line, and Grade10 SHALL write a payment record carrying the method,
 any description, the external reference, and the proof files. An amount
 different from the current invoice SHALL be reached through a re-quote first,
 never at settlement.
@@ -231,6 +254,15 @@ files.
 - **THEN** the invoice is `paid` at 312000 minor units in HKD
 - **AND** the payment record carries bank transfer, the reference, and the slip
 - **AND** the order derives as Processing
+
+#### Scenario: grade10-admin-auction-post-sale-SC-67 - Manual settlement drops the processing fee
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose invoice has a subtotal of 312000
+  and a payment processing fee of 11225 minor units in HKD
+- **WHEN** an operator settles it by bank transfer with a reference and a proof file
+- **THEN** the invoice is `paid` at 312000 minor units in HKD
+- **AND** the invoice carries no payment processing fee
 
 #### Scenario: grade10-admin-auction-post-sale-SC-56 - Settlement without proof is refused
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
