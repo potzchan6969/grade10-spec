@@ -28,5 +28,30 @@
 
 - [ ] 5.1 Persist and validate the selected inventory Cert ID or explicit No Cert ID choice through listing save and create (grade10-admin-auction-listing-SC-70 through SC-78)
 - [ ] 5.2 Add the product-scoped Cert ID picker, reset-on-product-change behavior, own-hold retention, and create refusal feedback (grade10-admin-auction-listing-SC-70 through SC-78)
+- [ ] 5.2a Allow separate live listings for distinct Cert IDs of one product while keeping one active listing per Cert ID and one aggregate `No Cert ID` listing (grade10-admin-auction-listing-SC-81)
 - [ ] 5.3 Resolve selected Cert ID through the configured public product display and remove product metadata fallback (grade10-admin-auction-listing-SC-79, grade10-admin-auction-listing-SC-80)
 - [ ] 5.4 Verify with `pnpm run test:backend -- packages/grade10-auction/backend/test/services/inventory.test.ts packages/grade10-auction/backend/test/services/listings/standalone.test.ts && pnpm run test -- packages/grade10-auction/admin-frontend/src/features/catalog/listings/presentation/views/ListingsPanel.test.tsx && pnpm run build`
+
+## 6. Catalog import contracts and persistence (grade10)
+
+- [ ] 6.1 Define schema-manifest, product-entry, and inventory preview/commit contracts with source coordinates, normalized values, row findings, mapping decisions, and atomic result payloads (grade10-admin-inventory-catalog-SC-108 through SC-122)
+- [ ] 6.2 Add catalog import sessions and staged rows with actor, kind, payload hash, expiry, selected mappings, row decisions, and idempotent commit results (grade10-admin-inventory-catalog-SC-110 through SC-120)
+- [ ] 6.3 Verify the migration and contract packages with `pnpm run db:drizzle:generate && pnpm run check:migrations` and the inventory contract tests
+
+## 7. Catalog import services (grade10)
+
+- [ ] 7.1 Implement schema-manifest preview and atomic draft-revision commit using existing schema validation and explicit mappings to existing tag tuples (grade10-admin-inventory-catalog-SC-108 through SC-111)
+- [ ] 7.2 Implement product-entry preview and commit using normalized product identity and schema values, deduplicating repeated rows while keeping distinct same-name identities separate (grade10-admin-inventory-catalog-SC-112 through SC-115)
+- [ ] 7.3 Implement inventory preview and commit against exactly one existing created product, with per-row decisions, copy facts, Cert ID rules, duplicate checks, stock updates, and history in one transaction (grade10-admin-inventory-catalog-SC-116 through SC-122)
+- [ ] 7.4 Verify Inventory and Auction services with their focused typecheck and test suites
+
+## 8. Catalog import admin surfaces (grade10)
+
+- [ ] 8.1 Add shared CSV/XLSX decoding, source mapping review, row previews, and explicit confirmation without modifying the uploaded workbook (grade10-admin-inventory-catalog-SC-109 through SC-122)
+- [ ] 8.2 Add schema-manifest and product-entry actions to Product Schemas and Products, preserving draft review and the existing product status flow (grade10-admin-inventory-catalog-SC-108 through SC-115)
+- [ ] 8.3 Add inventory-unit review with exact product matches, copy facts, blank-status decisions, and Cert ID validation (grade10-admin-inventory-catalog-SC-116 through SC-122)
+- [ ] 8.4 Verify the touched admin frontends, app typecheck, tests, and deployment bundles
+
+## 9. Integrated verification (grade10)
+
+- [ ] 9.1 Verify migrations, backend behavior, admin integration, and deployment bundles with `pnpm run test:backend && pnpm run typecheck && pnpm run test && pnpm run build && pnpm run check:admin-bundle && pnpm run check:submodules`

@@ -125,3 +125,16 @@ be returned as an alternative product display source.
 - **WHEN** a collector opens the listing
 - **THEN** no Cert ID row is displayed
 - **AND** no product metadata fallback is returned
+
+### Requirement: Distinct certified units can have separate live listings
+
+A created product with multiple available Cert IDs SHALL allow a separate live
+listing for each distinct Cert ID. One Cert ID SHALL belong to no more than one
+live listing at a time.
+
+#### Scenario: grade10-admin-auction-listing-SC-81 - Distinct copies of one product can be listed separately
+
+- **GIVEN** a created product has available Cert IDs `PSA-123` and `BGS-456`
+- **WHEN** an authorized operator saves one live listing for each Cert ID
+- **THEN** both listings hold their selected unit for that same product
+- **AND** another listing cannot hold either already selected Cert ID

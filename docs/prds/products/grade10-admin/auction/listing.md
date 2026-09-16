@@ -40,6 +40,9 @@ is no minimum-increment field for an operator to set.
 of one Cert ID belonging to the selected product, or `No Cert ID` when the lot
 uses an unnumbered unit.
 
+🚧 **Separate graded lots** — each available Cert ID for one product can have
+its own live listing, and one Cert ID can belong to only one live listing.
+
 ## Operator actions
 
 :::detail{title="Grants and the trail" for="operator"}
