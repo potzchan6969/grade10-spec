@@ -60,6 +60,7 @@ beside them and SHALL NOT be returned to any consumer.
 | Provider findings | Each check the provider ran, under the provider's own name, and whether it passed or failed; absent for a check Grade10 staff performed |
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-01 - A staff check names the staff member who made it
+**Serves:** What a record holds - a staff check names the staff member who made it
 
 - **WHEN** a member of staff records an identity check with the document in
   front of them
@@ -67,6 +68,7 @@ beside them and SHALL NOT be returned to any consumer.
   staff member as who performed it, and carries no provider reference
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-02 - A provider check names the provider, its reference, and who asked
+**Serves:** What a record holds - a provider check names the provider, its reference, and who asked
 
 - **WHEN** a verification provider's approved verdict becomes a verified
   identity
@@ -98,6 +100,7 @@ it — a member of staff, a collector, or a verification provider — and a verd
 carrying one SHALL NOT be retained in the form it arrived in.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-03 - A recorded check answers with a mask
+**Serves:** What never lands - a recorded check answers with a mask
 
 - **WHEN** an identity check is recorded from a document number
 - **THEN** what is stored and returned is a mask keeping only that document
@@ -108,6 +111,7 @@ carrying one SHALL NOT be retained in the form it arrived in.
   the check holds any other character of the number
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-04 - The same document is recognisable across two records
+**Serves:** What never lands - the same document is recognisable across two records
 
 - **GIVEN** two verified identities recorded from the same document type and
   number
@@ -128,12 +132,14 @@ SHALL be scoped to the asking consumer's own cases, and a consumer SHALL NOT
 bind, read or release a binding belonging to another consumer.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-05 - A second consumer reads a check the first recorded
+**Serves:** Reuse across consumers - a second consumer reads a check the first recorded
 
 - **GIVEN** a verified identity recorded on a vault case
 - **WHEN** another consumer asks for that person's most recent verified identity
 - **THEN** it is answered with that record, without a second document check
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-06 - A consumer cannot reach another consumer's case binding
+**Serves:** Reuse across consumers - a consumer cannot reach another consumer's case binding
 
 - **GIVEN** a case belonging to one consumer
 - **WHEN** another consumer asks to read, bind or release the identity on that
@@ -152,6 +158,7 @@ be applied once; a repeat of that key SHALL answer with the first attempt's
 result rather than binding again.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-07 - Re-recording a case replaces its identity
+**Serves:** Reuse across consumers - re-recording a case replaces its identity
 
 - **GIVEN** a case bound to a verified identity
 - **WHEN** a second identity is bound to that case
@@ -160,6 +167,7 @@ result rather than binding again.
   it
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-08 - A repeated bind converges on one binding
+**Serves:** Reuse across consumers - a repeated bind converges on one binding
 
 - **GIVEN** a case with no identity, and a bind carrying a request key
 - **WHEN** the same request key is submitted twice, the first attempt having
@@ -180,6 +188,7 @@ they are to a check Grade10 staff performed, on Grade10's own reading of the dat
 of birth and expiry rather than on the provider's verdict.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-09 - A person under 18 is refused
+**Serves:** Refusals - a person under 18 is refused
 
 - **WHEN** an identity check is recorded for a person who had not reached 18 on
   the day the check is applied
@@ -187,6 +196,7 @@ of birth and expiry rather than on the provider's verdict.
   are stored
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-10 - A document that expired before today is refused
+**Serves:** Refusals - a document that expired before today is refused
 
 - **WHEN** an identity check is recorded from a document whose expiry is before
   the day the check is applied
@@ -194,12 +204,14 @@ of birth and expiry rather than on the provider's verdict.
   stored
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-11 - A document valid on its last day is accepted
+**Serves:** Refusals - a document valid on its last day is accepted
 
 - **WHEN** an identity check is applied on the day the document expires
 - **THEN** it is accepted, because a document is honoured on the date it reads
   valid until
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-12 - An aged record is refused on reuse
+**Serves:** Refusals - an aged record is refused on reuse
 
 - **GIVEN** a verified identity whose document has expired since it was recorded
 - **WHEN** a consumer asks to bind it to a new case
@@ -207,6 +219,7 @@ of birth and expiry rather than on the provider's verdict.
   than the day of the check
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-13 - A provider's approval of a minor is still refused
+**Serves:** Refusals - a provider's approval of a minor is still refused
 
 - **GIVEN** a verification provider that approves a check for a person under 18
 - **WHEN** the verdict is read
@@ -227,6 +240,7 @@ image the evidence store may not hold — the wrong kind of file, or one larger
 than the store accepts — SHALL leave the check declined rather than retried.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-14 - A read never answers before the evidence is stored
+**Serves:** Evidence - a read never answers before the evidence is stored
 
 - **GIVEN** a verified identity a provider performed, whose document image
   Grade10 has not yet fetched
@@ -235,6 +249,7 @@ than the store accepts — SHALL leave the check declined rather than retried.
   evidence store
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-15 - A provider verdict whose image cannot be fetched creates nothing
+**Serves:** Evidence - a provider verdict whose image cannot be fetched creates nothing
 
 - **GIVEN** an approved verdict from a verification provider
 - **WHEN** its document image cannot be fetched
@@ -243,6 +258,7 @@ than the store accepts — SHALL leave the check declined rather than retried.
   the attempts allowed for it are spent
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-16 - The evidence is reachable only through the case that holds it
+**Serves:** Evidence - the evidence is reachable only through the case that holds it
 
 - **GIVEN** a verified identity bound to one consumer's case
 - **WHEN** a consumer asks for the document image naming a case it has not bound
@@ -251,6 +267,7 @@ than the store accepts — SHALL leave the check declined rather than retried.
   and the refusal says nothing about whether that identity exists
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-21 - An image the evidence store may not hold declines rather than retries
+**Serves:** Evidence - an image the evidence store may not hold declines rather than retries
 
 - **GIVEN** an approved verdict whose document image is not one of the kinds the
   evidence store accepts, or is larger than it accepts
@@ -259,6 +276,7 @@ than the store accepts — SHALL leave the check declined rather than retried.
   exists, and the fetch is not retried
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-22 - No face capture is stored
+**Serves:** What never lands - no face capture is stored
 
 - **GIVEN** a verification provider that captured the person's face
 - **WHEN** its approved verdict becomes a verified identity
@@ -275,6 +293,7 @@ them readable to an operator reading the case, without asking the provider. A
 declined check that produced no record SHALL keep its findings on the check.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-23 - The provider's findings survive the provider
+**Serves:** What a record holds - the provider's findings survive the provider
 
 - **GIVEN** a verified identity a verification provider performed
 - **WHEN** an operator reads it, with the provider unreachable
@@ -303,6 +322,7 @@ invitation outlives the erasure and no identifier of an erased person is left
 on a check nobody will finish.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-17 - The last release purges the record and commands the provider
+**Serves:** Erasure - the last release purges the record and commands the provider
 
 - **GIVEN** a verified identity bound to one case
 - **WHEN** that consumer releases its binding
@@ -310,6 +330,7 @@ on a check nobody will finish.
   commanded to erase its copy
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-18 - A record another case still binds survives a release
+**Serves:** Erasure - a record another case still binds survives a release
 
 - **GIVEN** a verified identity bound to two consumers' cases
 - **WHEN** one consumer releases its binding
@@ -317,6 +338,7 @@ on a check nobody will finish.
   still names them
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-19 - A provider that cannot be reached does not hold up the erasure
+**Serves:** Erasure - a provider that cannot be reached does not hold up the erasure
 
 - **GIVEN** a released verified identity a verification provider performed
 - **WHEN** the provider cannot be reached
@@ -324,6 +346,7 @@ on a check nobody will finish.
 - **AND** the command stays outstanding and is asked again until acknowledged
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-20 - A release repeats without error
+**Serves:** Erasure - a release repeats without error
 
 - **GIVEN** a case whose binding is already released
 - **WHEN** the release is asked for again
@@ -331,6 +354,7 @@ on a check nobody will finish.
   when it is retried
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-24 - A provider that refuses is reported rather than dropped
+**Serves:** Erasure - a provider that refuses is reported rather than dropped
 
 - **GIVEN** a provider that refuses to erase its copy, under a retention duty of
   its own
@@ -339,6 +363,7 @@ on a check nobody will finish.
   command, and a completion report names it as outstanding at the provider
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-27 - An erased person's live check stops being live
+**Serves:** Erasure - an erased person's live check stops being live
 
 - **GIVEN** a case holding a check that has been invited or started, and no
   verified identity
@@ -347,6 +372,7 @@ on a check nobody will finish.
   no identifier of the person it was about
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-25 - A check that never became an identity is left to the provider's window
+**Serves:** Erasure - a check that never became an identity is left to the provider's window
 
 - **GIVEN** a check the provider declined, whose findings an operator may still
   need to review
@@ -355,6 +381,7 @@ on a check nobody will finish.
   what erases its copy
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-28 - Erasing a person commands their whole account away
+**Serves:** Erasure - erasing a person commands their whole account away
 
 - **GIVEN** a person with checks at the provider, on one or more cases
 - **WHEN** their personal data is erased
@@ -374,6 +401,7 @@ The window is 30 days: long enough for an operator to review a disputed
 check, short enough to be a control on a copy Grade10 does not hold.
 
 #### Scenario: grade10-site-e-kyc-identity-record-SC-26 - A provider's window is set before a deployment is enabled
+**Serves:** Erasure - a provider's window is set before a deployment is enabled
 
 - **WHEN** a deployment is enabled against a verification provider
 - **THEN** the deployment checklist records the provider's erasure window as set

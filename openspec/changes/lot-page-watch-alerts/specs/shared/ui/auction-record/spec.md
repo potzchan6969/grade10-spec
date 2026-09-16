@@ -30,6 +30,7 @@ on watch; Undo on unwatch). Absent confirmation copy, the control announces
 nothing.
 
 #### Scenario: shared-ui-auction-record-SC-04 - The watch control reports and waits
+**Serves:** The record surface exports - the watch control reports and waits
 
 - **GIVEN** a `WatchButton` told it is not watched and not locked
 - **WHEN** the collector activates it
@@ -37,12 +38,14 @@ nothing.
 - **AND** it still shows not watched until the application tells it otherwise
 
 #### Scenario: shared-ui-auction-record-SC-05 - A change in progress is shown when told
+**Serves:** The record surface exports - a change in progress is shown when told
 
 - **GIVEN** a `WatchButton` told a change is in progress
 - **WHEN** it renders
 - **THEN** it shows the change as in progress
 
 #### Scenario: shared-ui-auction-record-SC-07 - Email alerts report without unwatching
+**Serves:** The record surface exports - email alerts report without unwatching
 
 - **GIVEN** an `AuctionRecordRow` supplied with email-alerts copy and
   `onEmailAlertsChange`
@@ -51,6 +54,7 @@ nothing.
 - **AND** it does not remove the row or invent an unwatch
 
 #### Scenario: shared-ui-auction-record-SC-09 - One row's alerts stand alone
+**Serves:** The record surface exports - one row's alerts stand alone
 
 - **GIVEN** an `AuctionRecord` whose rows each carry an email-alerts control
   told alerts are on
@@ -60,6 +64,7 @@ nothing.
 - **AND** every other row still shows alerts on
 
 #### Scenario: shared-ui-auction-record-SC-10 - A confirmed change is announced
+**Serves:** The record surface exports - a confirmed change is announced
 
 - **GIVEN** an `AuctionRecordRow` supplied with email-alerts confirmation copy
 - **WHEN** the application changes the value it gives the control
@@ -67,6 +72,7 @@ nothing.
 - **AND** a row supplied without that copy announces nothing
 
 #### Scenario: shared-ui-auction-record-SC-14 - A locked watch control does not report
+**Serves:** Content ownership - a locked watch control does not report
 
 - **GIVEN** a `WatchButton` told it is watched and locked
 - **WHEN** it renders
@@ -74,6 +80,7 @@ nothing.
 - **AND** it does not report a press
 
 #### Scenario: shared-ui-auction-record-SC-15 - Watch confirmation announces after the application confirms
+**Serves:** Content ownership - watch confirmation announces after the application confirms
 
 - **GIVEN** a `WatchButton` supplied with watch confirmation copy including an
   action label

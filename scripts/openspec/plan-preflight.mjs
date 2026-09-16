@@ -4,18 +4,17 @@
  *
  *   pnpm run plan:preflight reinstate-shared-ui-package
  *
- * This repo is the OpenSpec store for grade10, and that repo's apply
- * guidance tells engineers to check off tasks in this store's `tasks.md` and commit
- * that separately from their code. So the same file is written from different clones,
- * and neither side has a guard: whoever edits `tasks.md` here — the engineer who
- * planned the delivery, restructuring a group — can do it on top of a stale copy, hit
- * a conflict, resolve it toward their own side, and delete another engineer's
- * checkmarks. Nothing catches that — OpenSpec parses only the `- [ ] X.Y` lines and has
+ * This repo is the OpenSpec store for grade10. Engineers there claim groups and check
+ * off tasks with `pnpm plan`, which commits to this store's `main`, while whoever edits
+ * `tasks.md` here — the engineer who planned the delivery, restructuring a group — does
+ * it in a clone. That edit has no guard: it can land on a stale copy, hit a conflict,
+ * resolve toward its own side, and delete another engineer's claims and checkmarks.
+ * Nothing catches that — OpenSpec parses only the `- [ ] X.Y` lines and has
  * no idea what the count should have been, so `validate --strict` still passes and the
  * board just quietly under-reports.
  *
- * This runs three checks — is this a repo, is `tasks.md` already dirty, is the clone
- * behind its upstream — then prints the state you are about to edit on top of, owners
+ * This runs three checks — is this a repo, is `tasks.md` already dirty, is it behind
+ * the store's main — then prints the state you are about to edit on top of, owners
  * and per-group counts, so a later diff is readable. Run it with no change id, or
  * with `--help`, for those checks and the changes in flight.
  *
@@ -29,10 +28,10 @@
  * layout — because the two are read as one tool from opposite ends.
  */
 
-import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { git as gitIn, storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
@@ -52,17 +51,7 @@ const padVisible = (s, width) =>
 // no registry lookup and no dependence on the cwd you happen to run this from.
 const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 
-function git(args) {
-  try {
-    return execFileSync("git", args, {
-      cwd: ROOT,
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
-  } catch {
-    return null;
-  }
-}
+const git = (args) => gitIn(ROOT, args);
 
 /** Task groups for one change, with owner and per-group progress. */
 function readGroups(text) {
@@ -100,19 +89,37 @@ function changeIds() {
     .sort();
 }
 
-/** Every change in flight with its task counts — the list `help` prints. */
-function changeSummaries() {
-  return changeIds().map((id) => {
-    const path = join(ROOT, "openspec", "changes", id, "tasks.md");
-    if (!existsSync(path)) return { id, planned: false };
-    const tasks = readGroups(readFileSync(path, "utf8")).flatMap(
-      (g) => g.tasks,
+/**
+ * Every change in flight with its task counts as `main` records them — the list
+ * `help` prints. Read from this checkout only where the clone has no main.
+ */
+function changeSummaries(main) {
+  const onMain =
+    main &&
+    new Set(
+      (
+        git([
+          "ls-tree",
+          "-d",
+          "--name-only",
+          `${main.commit}:openspec/changes`,
+        ]) ?? ""
+      ).split("\n"),
     );
+  return changeIds().map((id) => {
+    const dir = `openspec/changes/${id}`;
+    if (onMain && !onMain.has(id)) return { id, state: `not on ${main.ref}` };
+    const abs = join(ROOT, dir, "tasks.md");
+    const text = main
+      ? textAt(ROOT, main.commit, `${dir}/tasks.md`)
+      : existsSync(abs)
+        ? readFileSync(abs, "utf8")
+        : null;
+    if (text === null) return { id, state: "no tasks.md yet" };
+    const tasks = readGroups(text).flatMap((g) => g.tasks);
     return {
       id,
-      planned: true,
-      done: tasks.filter((t) => t.done).length,
-      total: tasks.length,
+      state: `${tasks.filter((t) => t.done).length}/${tasks.length} tasks`,
     };
   });
 }
@@ -126,9 +133,9 @@ function changeSummaries() {
  * verbs you can pick between; the argument is always a change id.
  */
 const CHECKS = [
-  ["is a repo", "the store is a git repository, so it has an upstream at all"],
+  ["is a repo", "the store is a git repository, so it has a main at all"],
   ["clean", "tasks.md has no uncommitted edits of your own"],
-  ["current", "the clone is not behind its upstream"],
+  ["current", "tasks.md is not behind the store's main, where claims land"],
 ];
 
 function help() {
@@ -151,18 +158,17 @@ function help() {
   for (const [name, blurb] of CHECKS)
     console.log(`  ${padVisible(cyan(name), width + 2)}${dim(blurb)}`);
 
-  console.log("\nChanges in flight");
-  const changes = changeSummaries();
+  const main = storeMain(ROOT, { fetch: false });
+  console.log(
+    `\nChanges in flight${main ? `, counted on ${main.ref}` : " — no origin main, counted in this checkout"}`,
+  );
+  const changes = changeSummaries(main);
   if (!changes.length) {
     console.log(dim("  none — openspec/changes is empty"));
   } else {
     const idWidth = Math.max(...changes.map((ch) => ch.id.length));
-    for (const ch of changes) {
-      const state = ch.planned
-        ? `${ch.done}/${ch.total} tasks`
-        : "no tasks.md yet";
-      console.log(`  ${ch.id.padEnd(idWidth + 2)}${dim(state)}`);
-    }
+    for (const ch of changes)
+      console.log(`  ${ch.id.padEnd(idWidth + 2)}${dim(ch.state)}`);
   }
 
   console.log(`\n${dim("Store")}  ${ROOT}`);
@@ -193,12 +199,12 @@ if (!changeIds().includes(changeId)) {
   process.exit();
 }
 
-// Checked first: without a repo there is no upstream and no diff, so every check below
+// Checked first: without a repo there is no main and no diff, so every check below
 // would pass vacuously and report "safe to edit" on a store that cannot be shared.
 if (git(["rev-parse", "--git-dir"]) === null) {
   fail(
     yellow(`The store at ${ROOT} is not a git repository.`),
-    "Engineering reads plans by pulling this repo — there is nothing to be stale against yet.",
+    "Engineering reads plans at this repo's main — there is nothing to be stale against yet.",
   );
   process.exit();
 }
@@ -207,57 +213,49 @@ const rel = join("openspec", "changes", changeId, "tasks.md");
 const abs = join(ROOT, rel);
 
 // A `tasks.md` you have already edited makes this check meaningless: the baseline below
-// would describe your own work in progress, not what engineering pushed.
+// would describe your own work in progress, not what engineering recorded.
 if (git(["status", "--porcelain", "--", rel])) {
   fail(
     yellow(`${rel} already has uncommitted edits.`),
     "This is a before-you-edit check — the state it prints would be your own edits, not",
-    "what engineering pushed. Commit or stash them, then re-run.",
+    "what engineering recorded. Commit or stash them, then re-run.",
   );
   process.exit();
 }
 
-// `@{u}` otherwise reports whatever your last fetch saw, so checkmarks pushed a minute
-// ago are invisible and this passes when it should not. Best-effort — offline is not an
-// error. PLAN_NO_FETCH=1 skips it.
-if (process.env.PLAN_NO_FETCH !== "1") git(["fetch", "--quiet"]);
+// Claims and checkmarks are commits on the store's main, whatever branch this clone is
+// on, so that is what tasks.md has to be current with. Without main every check below
+// would pass vacuously, as it would without a repo.
+const main = storeMain(ROOT)?.ref;
+if (!main) {
+  fail(
+    yellow(`The store at ${ROOT} has no origin main to check claims against.`),
+    "Run `git remote set-head origin --auto`, then re-run.",
+  );
+  process.exit();
+}
 
-const upstream = git([
-  "rev-parse",
-  "--abbrev-ref",
-  "--symbolic-full-name",
-  "@{u}",
-]);
-let unpushed = 0;
-if (upstream) {
-  const counts = git([
-    "rev-list",
-    "--left-right",
-    "--count",
-    `${upstream}...HEAD`,
-  ]);
-  const [behind, ahead] = (counts || "0\t0").split(/\s+/).map(Number);
-  if (behind) {
-    fail(
-      yellow(`The store is behind ${upstream} by ${behind} commit(s).`),
-      "",
-      "  git pull --rebase",
-      "",
-      "Editing tasks.md from here is what causes conflicts, and resolving one toward",
-      "your own side silently drops the checkmarks and claims engineering pushed.",
-    );
-    process.exit();
-  }
-  unpushed = ahead;
-  if (ahead) {
-    console.log(
-      yellow(
-        `${ahead} local commit(s) not yet pushed — engineering cannot see them.`,
-      ),
-    );
-  }
-} else {
-  console.log(dim("No upstream configured — nothing to be stale against."));
+const commitsTouching = (range) =>
+  Number(git(["rev-list", "--count", range, "--", rel]) || 0);
+const behind = commitsTouching(`HEAD..${main}`);
+if (behind) {
+  fail(
+    yellow(`${main} has ${behind} commit(s) to ${rel} this clone does not.`),
+    "",
+    `  git rebase ${main}`,
+    "",
+    "Editing tasks.md from here is what causes conflicts, and resolving one toward",
+    `your own side silently drops the claims and checkmarks engineering recorded on ${main}.`,
+  );
+  process.exit();
+}
+const unmerged = commitsTouching(`${main}..HEAD`);
+if (unmerged) {
+  console.log(
+    yellow(
+      `${unmerged} commit(s) to ${rel} not yet on ${main} — engineering cannot see them.`,
+    ),
+  );
 }
 
 if (!existsSync(abs)) {
@@ -276,7 +274,7 @@ const doneTotal = groups.reduce(
 );
 
 console.log(
-  `${green("✓")} Safe to edit ${bold(changeId)}${upstream && !unpushed ? ` — up to date with ${upstream}` : ""}.`,
+  `${green("✓")} Safe to edit ${bold(changeId)}${unmerged ? "" : ` — up to date with ${main}`}.`,
 );
 console.log(`\n${bold(changeId)}  ${dim(`${doneTotal}/${total} tasks`)}\n`);
 

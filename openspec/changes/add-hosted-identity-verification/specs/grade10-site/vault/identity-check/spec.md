@@ -40,6 +40,7 @@ verified identity and bind it when it exists and passes the refusals
 SHALL invite.
 
 #### Scenario: grade10-site-vault-identity-check-SC-02 - A collector already verified is not asked again
+**Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a collector holding a verified identity that is still valid
 - **WHEN** an intake visit is booked on a case of theirs with no identity
@@ -56,6 +57,7 @@ person at all, SHALL be left with no check, and SHALL be reported to an operator
 rather than passing as a check nobody answered.
 
 #### Scenario: grade10-site-vault-identity-check-SC-01 - Booking an intake visit invites the collector
+**Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a pre-custody case with no verified identity and nothing to reuse
 - **WHEN** an intake visit is booked for it
@@ -63,12 +65,14 @@ rather than passing as a check nobody answered.
   holds
 
 #### Scenario: grade10-site-vault-identity-check-SC-03 - An operator asks for a check on a case that needs one
+**Serves:** grade10-site-vault-identity-check-US-02 - Operator records a check at the counter
 
 - **GIVEN** a pre-custody case with no verified identity and no live check
 - **WHEN** an operator holding `vault:operate` asks for one
 - **THEN** the collector is invited
 
 #### Scenario: grade10-site-vault-identity-check-SC-19 - A case nobody can be invited on is reported, not left silently unchecked
+**Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a pre-custody case that names no person, or holds no email address
 - **WHEN** an intake visit is booked for it
@@ -93,6 +97,7 @@ would otherwise allow.
 | None | Nothing has been asked for |
 
 #### Scenario: grade10-site-vault-identity-check-SC-04 - A case with a check out is not shown as unverified, and nothing waits on it
+**Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a case whose hosted check has been invited and not decided
 - **WHEN** an operator opens it
@@ -101,6 +106,7 @@ would otherwise allow.
   check out
 
 #### Scenario: grade10-site-vault-identity-check-SC-05 - A verified case names who performed the check
+**Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a case bound to a verified identity
 - **WHEN** an operator opens it
@@ -118,6 +124,7 @@ without being shown the person. The reason a check was refused, and what a
 provider checked and found, SHALL take `kyc:read`.
 
 #### Scenario: grade10-site-vault-identity-check-SC-16 - A case's identity state is readable, its details are not
+**Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** an operator holding `vault:read` and not `kyc:read`
 - **WHEN** they open a case bound to a verified identity
@@ -135,6 +142,7 @@ case displaces SHALL be settled rather than left: discarded when the bind stands
 restored when it does not.
 
 #### Scenario: grade10-site-vault-identity-check-SC-06 - Binding a verdict voids an outstanding packet
+**Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a case with a signing packet still out, rendered from an earlier
   identity
@@ -142,6 +150,7 @@ restored when it does not.
 - **THEN** the outstanding packet is void, and nothing can be signed from it
 
 #### Scenario: grade10-site-vault-identity-check-SC-07 - The displaced identity is settled
+**Serves:** grade10-site-vault-identity-check-US-03 - Operator settles a verdict that lands after the case has moved
 
 - **GIVEN** a case bound to one identity
 - **WHEN** a verdict binds another
@@ -159,6 +168,7 @@ be discarded with its evidence and the case SHALL keep the identity it already
 held. An operator SHALL be told the check landed and was refused, and why.
 
 #### Scenario: grade10-site-vault-identity-check-SC-08 - A verdict landing after custody begins is refused
+**Serves:** grade10-site-vault-identity-check-US-03 - Operator settles a verdict that lands after the case has moved
 
 - **GIVEN** a case past recording — `vaulted`, `active`, `repaid`, `released`,
   `declined`, `cancelled`, `expired` or `forfeited`
@@ -167,6 +177,7 @@ held. An operator SHALL be told the check landed and was refused, and why.
   discarded, and the operator is told
 
 #### Scenario: grade10-site-vault-identity-check-SC-09 - A verdict landing on sealed evidence is refused
+**Serves:** grade10-site-vault-identity-check-US-03 - Operator settles a verdict that lands after the case has moved
 
 - **GIVEN** a case holding a sealed signing packet
 - **WHEN** an approved verdict lands for it
@@ -174,6 +185,7 @@ held. An operator SHALL be told the check landed and was refused, and why.
   new identity is discarded
 
 #### Scenario: grade10-site-vault-identity-check-SC-10 - A verdict landing on an erased case is refused
+**Serves:** grade10-site-vault-identity-check-US-03 - Operator settles a verdict that lands after the case has moved
 
 - **GIVEN** a case whose personal data has been erased
 - **WHEN** an approved verdict lands for it
@@ -182,6 +194,7 @@ held. An operator SHALL be told the check landed and was refused, and why.
   flight
 
 #### Scenario: grade10-site-vault-identity-check-SC-18 - A verdict landing on a case verified elsewhere is refused
+**Serves:** grade10-site-vault-identity-check-US-03 - Operator settles a verdict that lands after the case has moved
 
 - **GIVEN** a case that bound an identity at the counter after its hosted check
   was raised
@@ -190,6 +203,7 @@ held. An operator SHALL be told the check landed and was refused, and why.
   discarded, and no packet is voided
 
 #### Scenario: grade10-site-vault-identity-check-SC-11 - A refused landing leaves no half-finished state
+**Serves:** grade10-site-vault-identity-check-US-03 - Operator settles a verdict that lands after the case has moved
 
 - **GIVEN** an approved verdict refused on landing
 - **WHEN** the verdict is read
@@ -206,12 +220,14 @@ SHALL come from the bound verified identity and from nothing an operator or a
 collector types.
 
 #### Scenario: grade10-site-vault-identity-check-SC-12 - Preparing documents without an identity is refused
+**Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a case with no verified identity
 - **WHEN** its signing documents are prepared
 - **THEN** the request is refused, naming the missing identity check
 
 #### Scenario: grade10-site-vault-identity-check-SC-13 - A packet whose identity moved cannot be sealed
+**Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a rendered packet
 - **WHEN** the case's identity is replaced before the packet is sealed
@@ -219,6 +235,7 @@ collector types.
   longer says it is about
 
 #### Scenario: grade10-site-vault-identity-check-SC-20 - A prepared document carries the bound identity's name
+**Serves:** grade10-site-vault-identity-check-US-01 - Operator opens a case for a collector who verified before arriving
 
 - **GIVEN** a case bound to a verified identity whose legal name differs from
   the name an operator typed on the case
@@ -244,12 +261,14 @@ nobody; the day the role set separates them is a `shared/auth/roles` change,
 and this requirement stands until then.
 
 #### Scenario: grade10-site-vault-identity-check-SC-14 - Staff verify a collector who arrives unverified
+**Serves:** grade10-site-vault-identity-check-US-02 - Operator records a check at the counter
 
 - **GIVEN** a pre-custody case whose collector arrives with no verified identity
 - **WHEN** staff record the check with the document in front of them
 - **THEN** the case holds a verified identity and can proceed to signing
 
 #### Scenario: grade10-site-vault-identity-check-SC-15 - A counter check is refused once the item is in custody
+**Serves:** grade10-site-vault-identity-check-US-02 - Operator records a check at the counter
 
 - **GIVEN** a case past recording — `vaulted`, `active`, `repaid`, `released`,
   `declined`, `cancelled`, `expired` or `forfeited`
@@ -258,6 +277,7 @@ and this requirement stands until then.
   agreement already holds
 
 #### Scenario: grade10-site-vault-identity-check-SC-17 - An override of a refused check carries a reason
+**Serves:** grade10-site-vault-identity-check-US-02 - Operator records a check at the counter
 
 - **GIVEN** a pre-custody case whose last hosted check was Declined
 - **WHEN** staff record a counter check giving no reason

@@ -240,15 +240,29 @@ describe("a suite that states no status", () => {
     );
   });
 
-  it("refuses a case whose trace names no id", () => {
+  /** A trace may name a `## Feature set` group rather than an id, so the
+   * reader takes a name it cannot resolve - resolving it is the `trace` rule's
+   * job, which reads the spec beside the suite. What no reader can make sense
+   * of is a line naming nothing. */
+  it("refuses a case whose trace names nothing", () => {
     expect(() =>
       readTestCases(
         suite(
           "pending-review",
-          testCase("alpha-US1-TC1-1", "It happens", "draft", "the journey"),
+          testCase("alpha-US1-TC1-1", "It happens", "draft", "  "),
         ),
       ),
-    ).toThrow(/traces no journey or scenario id/);
+    ).toThrow(/traces nothing/);
+  });
+
+  it("takes a trace that names a feature set group verbatim", () => {
+    const read = readTestCases(
+      suite(
+        "pending-review",
+        testCase("alpha-US1-TC1-1", "It happens", "draft", "Doing the thing"),
+      ),
+    );
+    expect(read.cases[0].traces).toEqual(["Doing the thing"]);
   });
 
   /** A `TC` id is permanent, and a task, a review and a downstream test all

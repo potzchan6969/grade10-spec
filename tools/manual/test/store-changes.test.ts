@@ -9,7 +9,7 @@ import { writeStore } from "./tmp-store";
 
 const FIXTURE = fileURLToPath(new URL("../demo-store", import.meta.url));
 
-const changes = readChanges(FIXTURE, NO_GIT);
+const changes = readChanges(FIXTURE, NO_GIT, null);
 const change = changes[0];
 
 describe("in-flight changes", () => {
@@ -55,7 +55,7 @@ describe("in-flight changes", () => {
         "",
       ].join("\n"),
     });
-    const [entry] = readChanges(root, NO_GIT);
+    const [entry] = readChanges(root, NO_GIT, null);
     expect(entry.owners).toEqual(["alice.b"]);
     expect(
       entry.taskGroups.map(({ title, repo, owner }) => ({
@@ -199,6 +199,7 @@ describe("follow-on changes", () => {
           "# Quiet thing\n\n## Why\n\nIt says nothing about what comes after.\n",
       }),
       NO_GIT,
+      null,
     );
     expect(entry.followOns).toBeUndefined();
   });
@@ -223,6 +224,7 @@ describe("follow-on changes", () => {
         ].join("\n"),
       }),
       NO_GIT,
+      null,
     );
     expect(entry.followOns).toEqual([
       "The one thing that follows, written across two lines.",
@@ -264,6 +266,7 @@ describe("a delta that groups, renames, and spaces its headings", () => {
       ].join("\n"),
     }),
     NO_GIT,
+    null,
   );
   const [delta] = entry.deltas;
 
@@ -319,6 +322,7 @@ describe("a promoted change carrying its suites", () => {
         ].join("\n"),
     }),
     NO_GIT,
+    null,
   );
 
   it("names the promoter from .openspec.yaml", () => {
@@ -348,6 +352,7 @@ describe("a promoted change carrying its suites", () => {
           "# No status here\n",
       }),
       NO_GIT,
+      null,
     );
 
     expect(broken.error).toBeUndefined();
@@ -362,6 +367,7 @@ describe("an author line without a date", () => {
         "# Solo thing\n\n**Author:** @solo\n\n## Why\n\nSomebody had to.\n",
     }),
     NO_GIT,
+    null,
   );
 
   it("still names the author, and leaves created unknown", () => {
@@ -377,6 +383,7 @@ describe("a proposal with no author line", () => {
         "# Anon thing\n\n## Why\n\nNobody signed it.\n",
     }),
     NO_GIT,
+    null,
   );
 
   it("names nobody rather than inventing one", () => {

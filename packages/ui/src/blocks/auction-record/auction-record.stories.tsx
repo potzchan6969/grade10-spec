@@ -11,12 +11,23 @@ import { AuctionRecord } from "./auction-record";
 import {
   AUCTION_RECORD_COPY,
   BIDDING_CHARIZARD,
+  BIDDING_DIDNT_WIN_HOLD_RELEASING,
   BIDDING_ENDED,
   BIDDING_POSTER,
+  BIDDING_WON_AWAITING_ADDRESS,
+  BIDDING_WON_CANCELLED,
+  BIDDING_WON_DELIVERED,
+  BIDDING_WON_EXPIRED,
+  BIDDING_WON_PENDING_PAYMENT,
+  BIDDING_WON_PREPARING_INVOICE,
+  BIDDING_WON_PROCESSING,
+  BIDDING_WON_REFUNDED,
+  BIDDING_WON_SHIPPED,
   biddingItem,
   WATCHING_CAMERA,
   WATCHING_ENDED,
   WATCHING_POSTER,
+  WINNER_ORDER_HREF,
 } from "./fixtures";
 import type { AuctionRecordRowProps } from "./types";
 
@@ -110,7 +121,7 @@ function MyAuctions({
 }
 
 const meta = {
-  title: "My Auctions/Page",
+  title: "My Auctions/My Auctions",
   component: AuctionRecord,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
@@ -222,7 +233,7 @@ export const Empty: Story = {
 
 /**
  * Closed lots stay on My Auctions while published. Unsold maps to Ended on
- * the watched row; a bid that did not win stays with Didn't win standing.
+ * the watched row; a bid that did not win stays with Didn’t win standing.
  */
 export const Ended: Story = {
   name: "Ended",
@@ -230,7 +241,6 @@ export const Ended: Story = {
     <MyAuctions bidding={[BIDDING_ENDED]} watching={[WATCHING_ENDED]} />
   ),
   play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     await auctionRecordSettled(canvasElement);
 
     const rows = canvasElement.querySelectorAll(
@@ -240,7 +250,7 @@ export const Ended: Story = {
 
     const bidRow = within(rows[0] as HTMLElement);
     expect(bidRow.getByText("1977 Star Wars Topps Wax Pack")).toBeVisible();
-    expect(bidRow.getByText("Didn't win")).toBeVisible();
+    expect(bidRow.getByText("Didn’t win")).toBeVisible();
     expect(
       bidRow.getByRole("link", {
         name: "Open listing: 1977 Star Wars Topps Wax Pack",
@@ -263,6 +273,166 @@ export const Ended: Story = {
     expect(
       watchRow.getByRole("button", { name: "Unwatch this lot" }),
     ).toBeVisible();
+  },
+};
+
+/**
+ * Address-first post-auction standing on Won rows, plus Didn’t win and
+ * watch-only Ended. Read-only — Won title / View order open Winner Order; no
+ * pay control and no row detail helper copy on this surface.
+ */
+export const PostAuctionStanding: Story = {
+  name: "Post-auction standing",
+  render: () => (
+    <MyAuctions
+      bidding={[
+        BIDDING_WON_AWAITING_ADDRESS,
+        BIDDING_WON_PREPARING_INVOICE,
+        BIDDING_WON_PENDING_PAYMENT,
+        BIDDING_WON_EXPIRED,
+        BIDDING_WON_PROCESSING,
+        BIDDING_WON_SHIPPED,
+        BIDDING_WON_DELIVERED,
+        BIDDING_WON_CANCELLED,
+        BIDDING_WON_REFUNDED,
+        BIDDING_DIDNT_WIN_HOLD_RELEASING,
+        BIDDING_ENDED,
+      ]}
+      watching={[WATCHING_ENDED]}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await auctionRecordSettled(canvasElement);
+
+    expect(canvas.getByText("12")).toBeVisible();
+    expect(canvas.getByText("Awaiting Address")).toBeVisible();
+    expect(canvas.getByText("Preparing Invoice")).toBeVisible();
+    expect(canvas.getAllByText("Pending Payment")).toHaveLength(2);
+    expect(canvas.getByText("Processing")).toBeVisible();
+    expect(canvas.getByText("Shipped")).toBeVisible();
+    expect(canvas.getByText("Delivered")).toBeVisible();
+    expect(canvas.getByText("Cancelled")).toBeVisible();
+    expect(canvas.getByText("Refunded")).toBeVisible();
+    expect(
+      canvas.queryByText("Confirm delivery address"),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByText("Address confirmed — invoice coming"),
+    ).not.toBeInTheDocument();
+    expect(canvas.queryByText(/Order total/i)).not.toBeInTheDocument();
+    expect(
+      canvas.queryByText("Contact Grade10 about payment"),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByText("Card hold being released"),
+    ).not.toBeInTheDocument();
+    expect(canvas.getAllByText("Didn’t win")).toHaveLength(2);
+    expect(canvas.getByText("Ended")).toBeVisible();
+    expect(
+      canvas.queryByRole("button", { name: /pay/i }),
+    ).not.toBeInTheDocument();
+
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Base Set Charizard PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.awaitingAddress);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1998 Neo Genesis Lugia PSA 10",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.preparingInvoice);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 2000 Skyridge Crystal Charizard PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.pendingPayment);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Fossil Dragonite Holo PSA 8",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.expiredInvoice);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Fossil Dragonite Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.processing);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 2000 Skyridge Crobat Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.shipped);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Base Set Blastoise PSA 8",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.delivered);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Jungle Scyther Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.cancelled);
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Fossil Kabutops Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.refunded);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Base Set Charizard PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.awaitingAddress);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1998 Neo Genesis Lugia PSA 10",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.preparingInvoice);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 2000 Skyridge Crystal Charizard PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.pendingPayment);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Fossil Dragonite Holo PSA 8",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.expiredInvoice);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Fossil Dragonite Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.processing);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 2000 Skyridge Crobat Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.shipped);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Base Set Blastoise PSA 8",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.delivered);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Jungle Scyther Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.cancelled);
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Fossil Kabutops Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", WINNER_ORDER_HREF.refunded);
+    expect(
+      canvas.queryByRole("link", {
+        name: "View order: 1999 Jungle Flareon Holo PSA 8",
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.getByRole("link", {
+        name: "Open listing: 1999 Jungle Flareon Holo PSA 8",
+      }),
+    ).toHaveAttribute("href", "#lot-flareon");
   },
 };
 

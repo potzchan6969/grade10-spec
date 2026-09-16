@@ -1,10 +1,12 @@
 import { G10LogoMono } from "../display/g10-logo-mono";
 import type { NavProps } from "./nav";
 
+/** TBC — provisional docs host for collector Help. */
+export const HELP_HREF = "https://grade10.mintlify.io/";
+
 /** Shared Grade10 chrome fixtures for Nav stories. Content lives in examples,
  * never as component defaults. */
 export const UTILITY_LINKS = [
-  { label: "Help", href: "#help" },
   { label: "Shipping & Delivery", href: "#shipping" },
   { label: "Orders & Returns", href: "#orders" },
 ];
@@ -16,6 +18,7 @@ export const NAV_ITEMS = [
   { label: "Store", href: "#store", current: true },
   { label: "Auction", href: "#auction" },
   { label: "Store Locator", href: STORE_LOCATOR_HREF },
+  { label: "Help", href: HELP_HREF, external: true },
 ];
 
 export const LOCALES = [
@@ -24,7 +27,7 @@ export const LOCALES = [
   { value: "zh-Hans", label: "简体中文" },
 ];
 
-export const GRADE10_LOGO = <G10LogoMono className="h-5 w-auto @3xl:h-7" />;
+export const GRADE10_LOGO = <G10LogoMono className="h-5 w-auto @4xl:h-7" />;
 
 export const NAV_BASE_ARGS = {
   promo: "PROMO UTILITY BAR",

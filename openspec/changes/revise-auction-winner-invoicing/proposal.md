@@ -1,5 +1,7 @@
 **Author:** @jeffffej0909 - 2026-09-10
 
+**Extended by:** @tangconst - 2026-09-15 — Storybook #436 reconciliation (expired ends self-service Pay; progress steps; invoice PDF; My Auctions View order; calm Won rows).
+
 Product context: [Winner Order](../../../docs/prds/products/grade10-site/auction/winner-order.md),
 [Post-Sale Queue](../../../docs/prds/products/grade10-admin/auction/post-sale.md),
 [Auction Order Status](../../../docs/prds/products/grade10-site/auction/order-status.md),
@@ -42,13 +44,28 @@ release.
   with no invoice has no deadline and never expires.
 - **BREAKING — Expiry becomes an invoice status.** Grade10 writes `expired` on
   the invoice when the deadline passes unpaid. The order status **Expired** is
-  removed, so the order keeps reading **Pending Payment**. An expired invoice
-  stays payable by card or manual settlement, and an operator's reissue returns
-  it to `pending`.
+  removed, so the order keeps reading **Pending Payment**.
+- **BREAKING — An expired invoice ends self-service card pay.** Winner Order
+  hides Pay with card and shows Contact Us in the overdue alert. An operator
+  reissues (returns the invoice to `pending` with a new deadline), settles
+  manually, or cancels. A deadline that still allowed card pay would not be a
+  deadline (Storybook #436; Product decisions on Winner Order).
 - **Idle orders are shown, not expired.** The order detail shows how long it
-  has waited in its stage; after **72 hours** in either stage the order carries
-  an **Overdue** mark. Nothing is automatic — the operator chases, prepares
-  the invoice, or cancels.
+  has waited in its stage; after **72 hours** in either pre-invoice stage the
+  order carries an **Overdue** mark for operators. Nothing is automatic — the
+  operator chases, prepares the invoice, or cancels. There is no winner-facing
+  address-only deadline.
+- **Progress presentation.** Winner Order shows five steps — Address → Invoice
+  → Payment → Shipped → Completed — as presentation only. Order status keeps
+  its eight names; Processing maps under Shipped; Delivered maps to Completed;
+  Cancelled and Refunded show no stepper.
+- **Invoice PDF.** Once an invoice has been sent, the winner can view and
+  download it on Winner Order; hidden before send and when Cancelled.
+- **My Auctions entry.** Every Won standing offers View order into that lot’s
+  Winner Order; Didn’t win and watch-only do not. Won rows stay calm — status
+  badge and View order only; no secondary Won helpers. Didn’t win keeps hold
+  being-released / released copy. How to reach Grade10 for an expired invoice
+  is on Winner Order only, not on the My Auctions row.
 - **BREAKING — Address changes after send go through an operator.** The
   operator re-quotes and reissues, and chooses each time whether to keep the
   current deadline or start a fresh 7 days, with a mandatory reason.
@@ -100,23 +117,27 @@ None.
 
 - `grade10-site/auction/winner-order`: the order opens awaiting an address;
   the invoice carries an operator quote; the address locks and the deadline
-  starts at send; the winner pays by card only; the receipt names the method.
+  starts at send; the winner pays by card only while `pending`; expired hides
+  card Pay and shows Contact Us; five-step progress presentation; invoice PDF
+  after send; the receipt names the method.
 - `grade10-site/auction/order-status`: invoice status gains `not_issued` and
   `expired`; the condition `address_confirmed` replaces `deadline_elapsed`;
-  Awaiting Address and Preparing Invoice are added and Expired is removed.
+  Awaiting Address and Preparing Invoice are added and Expired is removed;
+  expired ends winner card pay while order status stays Pending Payment.
 - `grade10-site/auction/notifications-order`: the auction-won letter asks for
   an address; a new invoice-sent letter.
 - `grade10-site/auction/account-record`: the winner's projection gains the two
-  pre-invoice states and loses Expired.
+  pre-invoice states and loses Expired; View order on Won; calm Won rows;
+  expired contact only on Winner Order; Didn’t win hold copy kept.
 - `grade10-admin/auction/post-sale`: quote and send, re-quote, idle time and
   the Overdue mark, cancellation before an invoice, and manual settlement with
-  method and proof.
+  method and proof (including on `expired`).
 
 ## Impact
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/grade10` | The winner order opens on address confirmation, shows no amount before send, locks the address after send, and offers card only. The receipt names the method. |
+| `apps/frontend/grade10` | The winner order opens on address confirmation, shows no amount before send, locks the address after send, offers card only while `pending`, hides Pay and shows Contact Us when `expired`, shows five-step progress and invoice PDF after send. My Auctions Won rows offer View order without secondary helpers. |
 | `apps/admin/grade10` | Quote and send, re-quote with a deadline choice, idle time and the Overdue mark and filter, cancel before an invoice, manual settlement with proof upload. |
 | Auction service | Order creation without an invoice, the `not_issued` status and its transitions, send-anchored deadlines, proof-file storage, card brand and last four on the paid record. |
 | Shipping-rate integration | Retired from the invoice flow. |
@@ -155,9 +176,12 @@ engineer confirms the payment provider supplies them.
 - **3 days is 72 hours** in the current stage.
 - **An expired invoice still needs action in the queue.** The row reads
   Pending Payment, shows the invoice's Expired status beside it, and carries
-  the needs-action highlight.
+  the needs-action highlight. The winner cannot pay by card until an operator
+  reissues.
 - **Suspension is unchanged.** `grade10-site/auction/bidder-suspension` fires
   when the deadline passes unpaid — the same moment Grade10 writes `expired`.
+- **Buyer’s Premium rate** stays ❓ deferred on the Auction index; this change
+  does not fix a rate.
 
 ## Follow-on changes
 

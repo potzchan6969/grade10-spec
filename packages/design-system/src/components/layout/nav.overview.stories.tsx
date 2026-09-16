@@ -37,6 +37,14 @@ export const AllControls: Story = {
     expect(
       canvas.getByRole("link", { name: "Store Locator" }),
     ).not.toHaveAttribute("aria-current");
+    const storeLocator = canvas.getByRole("link", { name: "Store Locator" });
+    const help = canvas.getByRole("link", { name: "Help" });
+    expect(
+      storeLocator.compareDocumentPosition(help) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(help).toHaveAttribute("target", "_blank");
+    expect(help).toHaveAttribute("rel", "noopener noreferrer");
     expect(
       canvasElement.querySelector('[data-slot="nav-logo"]'),
     ).toHaveAttribute("href", "/");

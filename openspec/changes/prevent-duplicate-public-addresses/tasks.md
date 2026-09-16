@@ -9,7 +9,7 @@
       lot record, so no two lots swap places between renders
 - [x] 1.4 Verify: Active lots lead the catalogue, each status holds its own order, a
       tie reads the same way twice, and paging to the end lists every lot once
-      (`grade10-site-auction-auction-SC-19` to `SC-22`)
+      (`grade10-site-auction-auction-SC-25` to `SC-28`)
 
 ## 2. Addressing rules (grade10)
 

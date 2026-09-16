@@ -45,6 +45,7 @@ The mapping SHALL NOT read carrier tracking, delivery estimates, line-item
 quantities, monetary amounts, or elapsed time.
 
 #### Scenario: grade10-site-commerce-order-status-SC-01 - An unrecognised Shopify value is indeterminate
+**Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
 - **GIVEN** an order whose payment state is a value outside the accepted set
 - **WHEN** its order status is resolved
@@ -76,6 +77,7 @@ reported ahead of fulfilment progress. Rule 3's exclusion of `on_hold` and
 `processing`, even when part of it has been refunded.
 
 #### Scenario: grade10-site-commerce-order-status-SC-02 - A cancelled order reports Canceled
+**Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
 - **GIVEN** an order whose order state is `cancelled`
 - **WHEN** its order status is resolved
@@ -83,6 +85,7 @@ reported ahead of fulfilment progress. Rule 3's exclusion of `on_hold` and
 - **AND** the badge is `canceled` for every payment and fulfilment state
 
 #### Scenario: grade10-site-commerce-order-status-SC-03 - A voided payment reports Canceled
+**Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
 - **GIVEN** an order whose order state is `open` and whose payment state is `voided`
 - **WHEN** its order status is resolved
@@ -90,6 +93,7 @@ reported ahead of fulfilment progress. Rule 3's exclusion of `on_hold` and
 - **AND** the badge is not `processing`
 
 #### Scenario: grade10-site-commerce-order-status-SC-04 - A refund outranks fulfilment progress
+**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
 - **GIVEN** an order whose payment state is `partially_refunded` and whose fulfilment state is `fulfilled`
 - **WHEN** its order status is resolved
@@ -97,6 +101,7 @@ reported ahead of fulfilment progress. Rule 3's exclusion of `on_hold` and
 - **AND** the badge is neither `shipped` nor `completed`
 
 #### Scenario: grade10-site-commerce-order-status-SC-05 - A held order carrying a partial refund stays Processing
+**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
 - **GIVEN** an order whose order state is `open`, whose fulfilment state is `on_hold`, and whose payment state is `partially_refunded`
 - **WHEN** its order status is resolved
@@ -104,18 +109,21 @@ reported ahead of fulfilment progress. Rule 3's exclusion of `on_hold` and
 - **AND** the badge is not `refunded`
 
 #### Scenario: grade10-site-commerce-order-status-SC-06 - A fulfilled and archived order reports Completed
+**Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
 - **GIVEN** an order whose order state is `closed`, fulfilment state is `fulfilled`, and payment state is `paid`
 - **WHEN** its order status is resolved
 - **THEN** the badge is `completed`
 
 #### Scenario: grade10-site-commerce-order-status-SC-07 - A partially fulfilled order reports Shipped
+**Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `partially_fulfilled`, and payment state is `paid`
 - **WHEN** its order status is resolved
 - **THEN** the badge is `shipped`
 
 #### Scenario: grade10-site-commerce-order-status-SC-08 - Every remaining combination reports Processing
+**Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
 
 - **GIVEN** an order matching none of rules 1 through 5
 - **WHEN** its order status is resolved
@@ -160,6 +168,7 @@ copy for each identifier SHALL be answered by the message catalogs, so that a
 note is not pinned to one language or one brand.
 
 #### Scenario: grade10-site-commerce-order-status-SC-09 - A confirmed combination carries its note
+**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `unfulfilled`, and payment state is `partially_refunded`
 - **WHEN** its order status is resolved
@@ -167,6 +176,7 @@ note is not pinned to one language or one brand.
 - **AND** the note identifier is `partial-refund-unshipped`
 
 #### Scenario: grade10-site-commerce-order-status-SC-10 - An unconfirmed combination carries no note
+**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
 - **GIVEN** an order whose order state is `open`, fulfilment state is `in_progress`, and payment state is `paid`
 - **WHEN** its order status is resolved
@@ -174,6 +184,7 @@ note is not pinned to one language or one brand.
 - **AND** no note identifier is emitted
 
 #### Scenario: grade10-site-commerce-order-status-SC-11 - The mapping emits no display copy
+**Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
 
 - **GIVEN** any order that resolves to a note
 - **WHEN** its order status is resolved
@@ -189,6 +200,7 @@ resolving it SHALL NOT require a delivery fact.
 No badge SHALL assert that a shipment reached the collector.
 
 #### Scenario: grade10-site-commerce-order-status-SC-12 - Completed does not assert delivery
+**Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
 
 - **GIVEN** an order that resolves to the `completed` badge
 - **WHEN** the order has no carrier delivery confirmation
@@ -207,6 +219,7 @@ design-system contract; withholding the value is a mapping decision, not a
 component change.
 
 #### Scenario: grade10-site-commerce-order-status-SC-13 - Pickup is never emitted in this phase
+**Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
 
 - **GIVEN** any combination of the accepted vocabulary
 - **WHEN** its order status is resolved
@@ -224,6 +237,7 @@ A surface MAY choose not to display the secondary note. A surface SHALL NOT
 display a note the mapping did not emit for that order.
 
 #### Scenario: grade10-site-commerce-order-status-SC-14 - Two surfaces report one order identically
+**Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
 
 - **GIVEN** one order read by two surfaces that both show its status
 - **WHEN** both resolve its order status from the same four facts

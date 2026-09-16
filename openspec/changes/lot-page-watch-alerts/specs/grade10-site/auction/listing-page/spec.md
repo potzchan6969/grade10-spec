@@ -28,6 +28,7 @@ required, and `grade10-site-auction-listing-page-SC-01` through `grade10-site-au
 for them.
 
 #### Scenario: grade10-site-auction-listing-page-SC-10 - A collector watches the lot they are reading
+**Serves:** grade10-site-auction-listing-page-US-06 - Watch a lot and open My Auctions from the toast
 
 - **GIVEN** a signed-in collector on a published lot's own page who does not
   watch it and has not bid on it
@@ -36,18 +37,21 @@ for them.
 - **AND** they are still on that lot's page
 
 #### Scenario: grade10-site-auction-listing-page-SC-11 - The control acts on the addressed lot
+**Serves:** Watching a lot - the control acts on the addressed lot
 
 - **GIVEN** two published lots with their own addresses
 - **WHEN** a collector watches the lot from one of those addresses
 - **THEN** only the lot that address names is watched
 
 #### Scenario: grade10-site-auction-listing-page-SC-12 - Watching changes nothing else on the page
+**Serves:** Watching a lot - watching changes nothing else on the page
 
 - **GIVEN** a signed-in collector on a live lot's page who has not bid on it
 - **WHEN** they watch it
 - **THEN** the lot's bidding standing and its close are unchanged
 
 #### Scenario: grade10-site-auction-listing-page-SC-13 - A bid locks Watching on the lot page
+**Serves:** grade10-site-auction-listing-page-US-08 - After bidding, Watching stays locked
 
 - **GIVEN** a signed-in collector on a published lot's own page who has bid
   on that lot
@@ -56,6 +60,7 @@ for them.
 - **AND** activating it does not unwatch the lot
 
 #### Scenario: grade10-site-auction-listing-page-SC-18 - A closed lot has no watch control
+**Serves:** grade10-site-auction-listing-page-US-09 - Closed lot has no watch control
 
 - **GIVEN** a signed-in collector on a closed lot's page (sold or unsold)
 - **WHEN** the page renders
@@ -75,6 +80,7 @@ aligned with My Auctions Unwatch, and SHALL offer **Undo** that restores the
 watch without finding the lot again.
 
 #### Scenario: grade10-site-auction-listing-page-SC-14 - Watch announces alerts and My Auctions
+**Serves:** grade10-site-auction-listing-page-US-06 - Watch a lot and open My Auctions from the toast
 
 - **GIVEN** a signed-in collector on a lot's page who does not watch it and
   has not bid on it
@@ -83,6 +89,7 @@ watch without finding the lot again.
 - **AND** the toast offers **View My Auctions**, which opens My Auctions
 
 #### Scenario: grade10-site-auction-listing-page-SC-15 - Unwatch announces and can be undone
+**Serves:** grade10-site-auction-listing-page-US-07 - Unwatch from the lot and undo
 
 - **GIVEN** a signed-in collector on a lot's page who watches it and has not
   bid on it
@@ -100,6 +107,7 @@ that bid bookmarks the lot. Later visits to the lot page SHALL NOT show that
 toast again for the same collector and listing.
 
 #### Scenario: grade10-site-auction-listing-page-SC-16 - The first bid toast fires once
+**Serves:** grade10-site-auction-listing-page-US-08 - After bidding, Watching stays locked
 
 - **GIVEN** a signed-in collector who has never been shown the bid-alerts
   toast for listing L
@@ -108,6 +116,7 @@ toast again for the same collector and listing.
 - **AND** Grade10 records that the toast was shown for that collector and L
 
 #### Scenario: grade10-site-auction-listing-page-SC-17 - A later visit stays quiet
+**Serves:** grade10-site-auction-listing-page-US-08 - After bidding, Watching stays locked
 
 - **GIVEN** a signed-in collector for whom Grade10 already recorded the
   bid-alerts toast for listing L

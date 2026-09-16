@@ -20,12 +20,14 @@ A signed-in person SHALL hold one or more of: `user`, `staff`, `support`,
 `user` only. Unknown role names SHALL be ignored.
 
 #### Scenario: shared-auth-roles-SC-01 - A collector is a user
+**Serves:** shared-auth-roles-US-01 - Collector holds the user role only
 
 - **GIVEN** a person who has never been granted an operator role
 - **WHEN** a product reads who is calling
 - **THEN** their roles are `user` only
 
 #### Scenario: shared-auth-roles-SC-02 - An unknown role is dropped
+**Serves:** shared-auth-roles-US-01 - Collector holds the user role only
 
 - **GIVEN** a person whose roles include a name that is not in the closed set
 - **WHEN** a product reads who is calling
@@ -55,18 +57,21 @@ Operators SHALL change who holds a role, and SHALL NOT change what a role
 grants.
 
 #### Scenario: shared-auth-roles-SC-07 - Staff can operate the store and auction catalog
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
 - **GIVEN** a person with the `staff` role
 - **WHEN** they take a store write or an auction operate action
 - **THEN** the system allows it
 
 #### Scenario: shared-auth-roles-SC-07a - Staff can write the auction catalogue
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
 - **GIVEN** a person with the `staff` role
 - **WHEN** they take an auction write action
 - **THEN** the system allows it
 
 #### Scenario: shared-auth-roles-SC-08 - Auditor reads the trail and nothing else
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
 - **GIVEN** a person whose only operator role is `auditor`
 - **WHEN** they read the audit trail
@@ -74,12 +79,14 @@ grants.
 - **AND** a ban, a store write, or a role change is refused
 
 #### Scenario: shared-auth-roles-SC-09 - Combined roles stack
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
 - **GIVEN** a person holding `support` and `staff`
 - **WHEN** they list users and write to the store
 - **THEN** both actions are allowed
 
 #### Scenario: shared-auth-roles-SC-10 - An operator cannot widen a role's grants
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
 - **GIVEN** an operator who holds `user:set-role`
 - **WHEN** they use the users directory
@@ -87,6 +94,7 @@ grants.
 - **AND** they cannot change what that role grants
 
 #### Scenario: shared-auth-roles-SC-12 - Staff run a case and cannot pay against it
+**Serves:** shared-auth-roles-US-03 - Case work and money sit in different hands
 
 - **GIVEN** a person whose only operator role is `staff`
 - **WHEN** they run a vault or lending case and then try to record a payout, a
@@ -94,6 +102,7 @@ grants.
 - **THEN** the case actions are allowed and every money action is refused
 
 #### Scenario: shared-auth-roles-SC-13 - A treasurer moves money and sees no identity document
+**Serves:** shared-auth-roles-US-03 - Case work and money sit in different hands
 
 - **GIVEN** a person whose only operator role is `treasurer`
 - **WHEN** they read a vault case and record its payout
@@ -132,6 +141,7 @@ SHALL be no `kyc:write` — recording a verification stays with the flow that ne
 it.
 
 #### Scenario: shared-auth-roles-SC-11 - Reading a case is not reading its identity document
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
 - **GIVEN** a person holding `vault:read` and not `kyc:read`
 - **WHEN** they open a vault case and ask for the identity document behind it

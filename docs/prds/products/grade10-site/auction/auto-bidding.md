@@ -14,13 +14,21 @@ never the leader's cap, so the price stays honest and a maximum is never burned
 by being seen. A bidder sees their own maximum, distinct from the current bid,
 and whether they lead; they can raise it at any time or leave it standing.
 
+Bid-time authorization holds are disabled by default. Maximum commitments and
+automatic bids do not wait for or create a hold in that standard path. When the
+optional hold is enabled, the hold covers the committed maximum.
+
 ## Bid Panel
 
 Under Set your private maximum, a short always-on line in secondary text
-states that Grade10 bids only as needed up to the maximum, that the card hold
-matches that amount, and that the maximum can be raised but not lowered or
-cancelled. Place Bid is the commitment; a moved floor uses stale-floor
-recovery on the panel.
+states that Grade10 bids only as needed up to the maximum, and that the
+maximum can be raised but not lowered or cancelled. When holds are enabled,
+the line also states that the card hold matches the maximum. Place Bid is the
+commitment; a moved floor uses stale-floor recovery on the panel.
+
+🚧 **Buyer fee on the panel** — under the bid action, always-on secondary copy
+states that a 20% buyer fee is added on top of the winning bid. The rate is not
+behind a tooltip.
 
 🚧 Quick bids are three chips at 1×, 2×, and 4× the listing increment: from
 the current bid when the collector does not lead, from their max when they
@@ -34,9 +42,9 @@ over-limit paste or keystroke leaves the previous draft.
 
 ::story{id="auction-listing-listingauctionbidcard--custom-maximum-ceiling" title="Custom maximum ceiling"}
 
-One card authorization covers the whole commitment. The hold is taken for the
-maximum when it is set, so a bid Grade10 places on the collector's behalf
-never needs a fresh card check mid-auction.
+When holds are enabled, one card authorization covers the whole commitment.
+The hold is taken for the maximum when it is set, so a bid Grade10 places on
+the collector's behalf never needs a fresh card check mid-auction.
 
 ## Past Maximums
 
@@ -83,8 +91,8 @@ stands.
 | Bid action carries a maximum | Decided | A consumer sending a bare bid amount is broken by this contract. Money stays integer minor units plus ISO 4217. | Product |
 | Custom maximum entry | Decided | Whole major units only on the bid panel custom field; typed `.` is refused, pasted fractions are discarded. | Product |
 | Custom maximum ceiling | Decided | Cap at 9,999,999,999 whole major units; over-limit paste or keystroke restores the previous valid draft (no clamp, no “too large” copy in v1). | Product |
-| Mechanism disclosure | Decided | Always-on secondary subtext under Set your private maximum: bid as needed, hold matches maximum, raise only (no lower or cancel). | Product |
-| Admin history filter | ❓ Open | Whether history can hide platform-placed bids. An operator can already see both. | Product |
+| Mechanism disclosure | Decided | Always-on secondary subtext under Set your private maximum: bid as needed, raise only (no lower or cancel). When holds are enabled, the line also states that the hold matches the maximum. | Product |
+| Admin history filter | Decided | No filter. An operator reads platform-placed and hand-placed bids together. | Product |
 | Preset amounts | Decided | Three chips at 1×, 2×, and 4× the listing increment. Leader chips add those to the committed max; others add them to the current bid. A leader's typed minimum stays max + $1 and is not chip 1. | Product |
 
 **Risks.** Holding the maximum may discourage high maximums, so the bid

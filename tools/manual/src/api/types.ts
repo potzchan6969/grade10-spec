@@ -53,6 +53,14 @@ export type Scenario = {
   id?: string;
   name: string;
   text: string;
+  /** The anchors this scenario serves, from its `**Serves:**` line: story ids,
+   * or `## Feature set` root group names where no story reaches it. This is the
+   * only link between a scenario and a story — the two files never name each
+   * other, which is how each stopped inheriting the other's blind spots.
+   *
+   * More than one is allowed: a scenario is a rule, and one rule can sit on
+   * several journeys. A case is a walk and still traces one. */
+  serves?: string[];
 };
 
 export type Requirement = {
@@ -66,8 +74,6 @@ export type Journey = {
   id: string;
   title: string;
   text: string;
-  /** Scenario ids this story is accepted by. */
-  acceptedBy: string[];
 };
 
 /** Review state of one case (`docs/governance/specs-to-test-cases.md`):
@@ -79,9 +85,10 @@ export type TestCase = {
    * `grade10-site-loyalty-programme-TC-03` an older suite issued. */
   id: string;
   title: string;
-  /** Ids this case traces to, as written: the journey it walks
-   * (`grade10-site-loyalty-programme-US-01`), or a scenario id where an older suite named those. A
-   * journey trace reaches the scenarios its `Accepted by` lists. */
+  /** Anchors this case walks, as written: the story
+   * (`grade10-site-loyalty-programme-US-01`), a `## Feature set` root group
+   * where nobody walks the capability, or a scenario id where an older suite
+   * named those. A trace reaches the scenarios that serve the same anchor. */
   traces: string[];
   status: TestCaseStatus;
 };
@@ -97,6 +104,9 @@ export type SpecEntry = {
   title: string;
   purpose: string;
   featureSet?: string;
+  /** The root groups of the feature set — the anchors a scenario may serve
+   * when it stands under the map rather than under a journey. */
+  featureGroups?: string[];
   requirements: Requirement[];
   journeys?: Journey[];
   /** The journeys file says `**Walked by:** nobody`: no end user reaches
@@ -138,12 +148,13 @@ export type TaskLine = {
  * when the current owner's unbroken hold began and the newest commit that
  * raised its checked count.
  *
- * Derived from the git history of one `tasks.md` by `openspec-viewer`'s
- * published `lib/store`, at build time. Absent wherever there is no honest
- * number: an unclaimed group, a finished one, a history that cannot account for
- * the current owner, a store that is not a git checkout, or a checkout with no
- * viewer submodule. An age invented from missing history would aim the nudge at
- * the wrong person.
+ * Derived from the history of one `tasks.md` on the store's main — HEAD for a
+ * change only the checkout has — by `openspec-viewer`'s published `lib/store`,
+ * at build time. Absent wherever there is no honest number: an unclaimed
+ * group, a finished one, a history that cannot account for the current owner,
+ * a store that is not a git checkout, or a checkout with no viewer submodule.
+ * An age invented from missing history would aim the nudge at the wrong
+ * person.
  */
 export type IdleClaim = {
   /** ISO date the clock started from. */
@@ -211,17 +222,18 @@ export type ChangeSuite = {
 };
 
 /**
- * Where a change stands against the store's shared branch. The plan is read at
- * `origin/main`, so a change that is not settled there cannot be claimed or
- * archived — carried only when that is the case, read from the refs the clone
- * already has (the build never fetches).
+ * Where a change stands against the store's shared branch, where the plan is
+ * read: a change missing there cannot be claimed, and a checkout copy that
+ * differs from it is not the settled brief. Carried only when one of those
+ * holds, read from the refs the clone already has (the build never fetches).
  */
 export type MainState = {
   state: "unmerged" | "diverged";
   /** The remote-tracking ref compared against, e.g. `origin/main`. */
   ref: string;
-  /** Diverged only: files of this change ahead of the ref, `tasks.md`
-   * excluded — claim and done churn it by design. */
+  /** Diverged only: files of this change that differ from the ref. `tasks.md`
+   * counts only where the ref has none — every claim and checkmark moves it
+   * on main. */
   files?: number;
 };
 
@@ -259,6 +271,13 @@ export type ChangeEntry = {
   /** Change ids from `.openspec.yaml` `depends_on:`; resolution against
    * the in-flight and archived sets happens in derivation. */
   dependsOn?: string[];
+  /** Why this change carries no spec delta at all, from `.openspec.yaml`
+   * `skip_specs_why:`. `skip_specs: true` is the one switch that turns the
+   * whole cross-check off — no journeys, no blind suite, no scenarios, no
+   * reconciliation — and it is author-declared, so it owes a reason beside it.
+   * An empty string is a switch thrown with no `skip_specs_why`: declared,
+   * with no reason given. */
+  skipSpecs?: string;
   /** Why this change marks no capability page, from `.openspec.yaml`
    * `page_waived:` — the line that stands in for the 🚧 a change with deltas
    * owes a page. */
@@ -291,6 +310,8 @@ export type ChangeEntry = {
    * proposal was written, never a commitment, and only ever readable as the
    * change that carries it. */
   followOns?: string[];
+  /** From `tasks.md` on the store's main for an in-flight change there, where
+   * every claim and checkmark is recorded; from the checkout otherwise. */
   taskGroups: TaskGroup[];
   /** ISO date of the last commit touching any file of the change — a
    * change with no tasks.md still moves. */
@@ -304,8 +325,27 @@ export type ChangeEntry = {
   suites?: ChangeSuite[];
   /** Carried only when the change is not settled on the store's main. */
   mainState?: MainState;
+  /** The schema artifact ids this change has written. */
+  written: string[];
+  /** What the change says it is waiting for, from `.openspec.yaml`
+   * `awaiting:` — an artifact id against the line its author wrote. */
+  awaiting?: { artifact: string; why: string }[];
   /** Set when a file was malformed; content fields may be incomplete. */
   error?: ItemError;
+};
+
+/** One artifact a workflow schema declares. */
+export type SchemaArtifact = {
+  id: string;
+  generates: string;
+  /** The teammate that writes it. A schema naming none leaves the artifact off
+   * every worklist rather than guessing whose turn it is. */
+  teammate?: string;
+  requires: string[];
+  /** Whether a change owes this artifact by default. An artifact that is not
+   * required is owed only when the change says so in `awaiting:`: what makes
+   * it owed is a condition no worklist can see. */
+  required: boolean;
 };
 
 /** How a change's artifact renders: a prose document, the directory of
@@ -460,6 +500,10 @@ export type Snapshot = {
   specs: SpecEntry[];
   /** In-flight only; archived changes live in `/api/archive`. */
   changes: ChangeEntry[];
+  /** Each workflow schema the changes in flight name, against the artifacts
+   * it declares, in schema order. A schema this store does not define is
+   * absent, so a change on one is left off every worklist. */
+  schemas: Record<string, SchemaArtifact[]>;
   /** Every file under the manual's `assets/`, as `assets/<name>` paths. */
   assets: string[];
   /** The store's `docs/references/`, in path order, without their text. The

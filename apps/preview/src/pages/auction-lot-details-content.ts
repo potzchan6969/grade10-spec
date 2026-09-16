@@ -17,7 +17,7 @@ import {
   type LiveListingFacts,
   stateMeta,
 } from "../auction-listing/listing-auction-bid-fixtures";
-import { STORE_LOCATOR_HREF } from "./workbench-story-nav";
+import { HELP_NAV_ITEM, STORE_LOCATOR_HREF } from "./workbench-story-nav";
 
 export {
   type AuctionTiming,
@@ -127,7 +127,7 @@ const VIEWER_INITIALS = "john@example.com";
 const noop = () => {};
 
 const NAV_LOGO = createElement(G10LogoMono, {
-  className: "h-5 w-auto @3xl:h-7",
+  className: "h-5 w-auto @4xl:h-7",
 });
 
 /** Auction-first header fixtures for `SiteHeader`. No Store entrance, no cart. */
@@ -158,6 +158,7 @@ export const AUCTION_SITE_HEADER = {
   navItems: [
     { label: "Auction", href: "#auction", current: true },
     { label: "Store Locator", href: STORE_LOCATOR_HREF },
+    { ...HELP_NAV_ITEM },
   ],
   onLocaleChange: noop,
   onSignIn: noop,

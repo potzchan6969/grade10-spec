@@ -2,6 +2,7 @@
 title: Profile
 spec: grade10-site/loyalty/programme
 order: 6
+reviewed: 2026-09-16
 ---
 
 An account is a member. The membership is run from `/membership`; the
@@ -63,7 +64,7 @@ A sale made as a guest is not lost: it earns once it has an owner.
 | Spend on your basket | That points come off at checkout, and a link to checkout — no code is offered — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Activity | The member's own ledger. Every line says where it came from — the counter, the online store, or the programme itself |
 
-- 🚧 **One expiry line** — the Membership section names how many points
+- **One expiry line** — the Membership section names how many points
   expire and the day they go, on one line, and warns inside the last 30 days
 - **Hong Kong time** — every date on the page reads in the programme's own
   time zone

@@ -174,7 +174,7 @@ Each artifact is the sole authority over exactly one thing and no artifact owns 
 
 On the specification side the split is a handoff, not a hierarchy. **A PM writes the proposal, the specs and the journeys and stops there** — `openspec new change <name>`, skill `.cursor/skills/planning-pm/SKILL.md`. `ui-design.md` belongs to the designer (`.cursor/skills/planning-design/SKILL.md`), and `tech-design.md` and `tasks.md` to whoever plans the delivery (`.cursor/skills/planning-dev/SKILL.md`, after `pnpm run plan:preflight <change-id>`). Each adds their artifacts to that same change, because engineering never opens a change in the application repository.
 
-Owners are claimed at pickup, never assigned at planning time: `pnpm plan claim` / `unclaim` / `done` / `undone` run from the application repository and write through to this store. A checkmark goes in after the code is pushed, not when it is written. Format, the who-writes-what table, and the silent parser failures: [`task-ownership.md`](task-ownership.md).
+Owners are claimed at pickup, never assigned at planning time: `pnpm plan claim` / `unclaim` / `done` / `undone` run from the application repository and each push one commit to this store's `main`. A checkmark goes in after the code is pushed, not when it is written. Format, the who-writes-what table, and the silent parser failures: [`task-ownership.md`](task-ownership.md).
 
 ## Following up on a finding
 

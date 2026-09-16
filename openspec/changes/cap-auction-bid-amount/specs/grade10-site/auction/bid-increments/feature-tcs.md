@@ -263,7 +263,7 @@ The collector is enrolled on an open JPY listing whose minimum bid is 150000 min
 
 **Expected Results:**
 
-* The maximum is refused and the refusal names 1500000000 JPY minor units as the ceiling.
+* The maximum is refused and the refusal names 150000000000 JPY minor units as the ceiling.
 * No maximum is recorded for the collector.
 
 ### grade10-site-auction-bid-increments-US2-TC4-1: Listing at the ceiling takes no further bid

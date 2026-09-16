@@ -37,4 +37,4 @@ Needs groups 3 and 4.
 
 - [x] 5.1 `rewards.spec.ts` creates a free item and reopens it, and opens and duplicates a free item stored through the admin API; at 1280px, with the basket verdict shown, the rail and the save button stay in view while the form scrolls, and at 400px the rail sits under the form, a wrapped strip fills its rows and the rewards list's title keeps its width; each width's last frame attaches to the report
 - [ ] 5.2 One before and after capture pass at 1280px and 400px, through `e2e-snapshot-verification`, of the reward editor (new and edit), the rewards list, the users directory with an account panel open, the diary services panel, the booking dialog with an error, product schemas, the auction listing editor, the checkout test coupon bench, and one shared console page in the ZZZ admin
-- [ ] 5.3 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/loyalty/rewards.spec.ts` passes, and the pull request's `e2e` labelled run is green
+- [x] 5.3 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/loyalty/rewards.spec.ts` passes, and the pull request's `e2e` labelled run is green

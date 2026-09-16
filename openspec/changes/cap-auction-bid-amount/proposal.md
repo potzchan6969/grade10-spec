@@ -15,7 +15,7 @@ sits too low for the lots on sale.
 ## What Changes
 
 - **A bid ceiling per currency.** USD 10,000,000, HKD 80,000,000 and
-  JPY 1,500,000,000, the same on every lot.
+  JPY 150,000,000,000, the same on every lot.
 - **Above the ceiling is refused.** A manual bid or an auto-bid maximum above
   it is refused and the refusal names the ceiling. An amount equal to it is
   accepted.

@@ -74,6 +74,7 @@ statuses. A visit is a fact the diary owns and the case caches; overdue is the
 loan's arithmetic against a clock.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-01 - A terminal case takes no move
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
 - **GIVEN** a case that has been released
 - **WHEN** any move is asked of it
@@ -92,18 +93,21 @@ A financed case whose terms are agreed as custody alone SHALL walk the storage
 case's path from `under_valuation`, and SHALL hold no offer, advance or balance.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-02 - A storage case agrees terms without an offer
+**Serves:** The statuses - a storage case agrees terms without an offer
 
 - **GIVEN** a storage case being valued
 - **WHEN** its custody terms are agreed at the counter
 - **THEN** the case is `accepted` with no offer against it
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-15 - A loan request stored on custody terms walks the storage path
+**Serves:** The statuses - a loan request stored on custody terms walks the storage path
 
 - **GIVEN** a financed case being valued, with no offer on the table
 - **WHEN** its custody terms are agreed at the counter
 - **THEN** the case is `accepted` with no offer, signs the custody agreement alone, and is released from `vaulted` owing nothing
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-03 - A storage case owes nothing
+**Serves:** The statuses - a storage case owes nothing
 
 - **GIVEN** a storage case in the vault
 - **WHEN** a repayment is offered against it
@@ -121,12 +125,14 @@ entry SHALL name what happened, who did it — the collector, a member of staff,
 or a sweep — and the statuses it moved between.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-04 - A case that moved under the caller is refused
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
 - **GIVEN** two operators reading one case being valued
 - **WHEN** both send the same move
 - **THEN** one is applied and the other is refused by name
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-05 - The history has no gaps
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
 - **WHEN** any move or record is made on a case
 - **THEN** the case's history carries an entry for it naming the actor
@@ -159,18 +165,21 @@ clock; a case whose ceremony is still open or whose signed set already covers
 its lane SHALL NOT be ended either.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-06 - An abandoned agreement ends after a month
+**Serves:** grade10-site-vault-case-lifecycle-US-02 - Collector who stops answering is not left with an open case
 
 - **GIVEN** a case that agreed terms 31 days ago, with no visit ahead of it
 - **WHEN** the clocks are read
 - **THEN** the case is `cancelled` and the collector is told
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-07 - A collector who rebooked keeps their case
+**Serves:** grade10-site-vault-case-lifecycle-US-02 - Collector who stops answering is not left with an open case
 
 - **GIVEN** a case that agreed terms 31 days ago and holds a visit next week
 - **WHEN** the clocks are read
 - **THEN** the case is left exactly where it is
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-08 - A settled loan waits for its owner
+**Serves:** grade10-site-vault-case-lifecycle-US-02 - Collector who stops answering is not left with an open case
 
 - **GIVEN** a case that repaid its loan six months ago and still holds the item
 - **WHEN** the clocks are read
@@ -193,12 +202,14 @@ and only while no advance stands against it; that unwind SHALL run the release
 machinery and sign no release document.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-09 - A collector cancels an offer they were made
+**Serves:** grade10-site-vault-case-lifecycle-US-01 - Collector calls off a request before the item is in the vault
 
 - **GIVEN** a case holding a live offer and a booked visit
 - **WHEN** its owner cancels the case
 - **THEN** the case is `cancelled`, the offer is closed, the visit is cancelled and the collector is told
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-10 - A case in the vault is not the collector's to cancel
+**Serves:** grade10-site-vault-case-lifecycle-US-01 - Collector calls off a request before the item is in the vault
 
 - **GIVEN** a case whose item is in the vault
 - **WHEN** its owner asks to cancel it
@@ -215,18 +226,21 @@ advanced against again. A corrected repayment on a settled loan SHALL reopen
 it to `active`. The machine SHALL hold no other move back.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-11 - An unwind is refused past the advance
+**Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
 - **GIVEN** a case with an advance recorded against it
 - **WHEN** staff try to unwind it from the vault
 - **THEN** it is refused by name
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-12 - A corrected advance returns the case to the vault
+**Serves:** The exits - a corrected advance returns the case to the vault
 
 - **GIVEN** an active case whose advance is taken back in full
 - **WHEN** the correction is recorded
 - **THEN** the case is `vaulted` and may be advanced against again
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-13 - A corrected repayment reopens the loan
+**Serves:** The exits - a corrected repayment reopens the loan
 
 - **GIVEN** a repaid case whose last repayment is taken back
 - **WHEN** the correction is recorded
@@ -239,6 +253,7 @@ item went SHALL NOT be cleared by the ending, and clearing it SHALL NOT be
 read as a cancellation nobody made.
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-14 - The visit outlives the case
+**Serves:** Moving a case - the visit outlives the case
 
 - **GIVEN** a case that was released after a pickup visit
 - **WHEN** the case is read afterwards

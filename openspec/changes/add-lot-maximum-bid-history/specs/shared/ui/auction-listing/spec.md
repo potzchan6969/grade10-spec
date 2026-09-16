@@ -53,6 +53,7 @@ This requirement supersedes the single-table personal bid-history dialog shape
 previously proposed under `add-lot-user-bid-history`.
 
 #### Scenario: shared-ui-auction-listing-SC-31 - Collector opens Your bidding with both lists
+**Serves:** Personal bidding dialog - collector opens Your bidding with both lists
 
 - **GIVEN** `ListingUserBidHistory` rendered with at least one maximum row and
   at least one bid-sequence row
@@ -66,6 +67,7 @@ previously proposed under `add-lot-user-bid-history`.
 - **AND** the dialog closes via the close control or Escape
 
 #### Scenario: shared-ui-auction-listing-SC-32 - Bid placed stays the default when no bids were placed
+**Serves:** Personal bidding dialog - bid placed stays the default when no bids were placed
 
 - **GIVEN** `ListingUserBidHistory` rendered with at least one maximum row and
   an empty `bidRows` array
@@ -75,6 +77,7 @@ previously proposed under `add-lot-user-bid-history`.
 - **AND** activating the maximums tab shows the supplied maximum rows
 
 #### Scenario: shared-ui-auction-listing-SC-33 - No personal rows means no link
+**Serves:** Personal bidding dialog - no personal rows means no link
 
 - **GIVEN** `ListingUserBidHistory` rendered with empty `maximumRows` and empty
   `bidRows`
@@ -82,6 +85,7 @@ previously proposed under `add-lot-user-bid-history`.
 - **THEN** no link or dialog is shown
 
 #### Scenario: shared-ui-auction-listing-SC-34 - Active tab scrolls under a fixed chrome
+**Serves:** Personal bidding dialog - active tab scrolls under a fixed chrome
 
 - **GIVEN** `ListingUserBidHistory` rendered with more rows on the active tab
   than fit the dialog viewport and the dialog open

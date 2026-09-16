@@ -71,7 +71,7 @@ export const Bidding: Story = {
     expect(canvas.getByText("Min. bid")).toBeVisible();
     expect(
       canvas.getByText(
-        "We bid only as needed up to your maximum. Hold matches it; you can raise, not lower or cancel.",
+        "We bid only as needed up to your maximum. You can raise, not lower or cancel.",
       ),
     ).toBeVisible();
     expect(canvas.queryByText("Leading")).not.toBeInTheDocument();

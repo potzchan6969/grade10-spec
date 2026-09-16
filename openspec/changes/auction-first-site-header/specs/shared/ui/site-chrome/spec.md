@@ -23,6 +23,7 @@ Cart and search SHALL remain absent unless the application supplies their
 handlers.
 
 #### Scenario: shared-ui-site-chrome-SC-15 - An application imports SiteHeader
+**Serves:** Chrome exports - an application imports SiteHeader
 
 - **WHEN** an application imports `SiteHeader`, `SiteHeaderProps`,
   `SiteHeaderCopy`, and `SiteHeaderSession` from the shared UI package's public
@@ -30,6 +31,7 @@ handlers.
 - **THEN** every import resolves
 
 #### Scenario: shared-ui-site-chrome-SC-16 - Signed out shows Sign In
+**Serves:** Chrome exports - signed out shows Sign In
 
 - **GIVEN** `session` is `"signed-out"` and Sign In copy is supplied
 - **WHEN** `SiteHeader` renders
@@ -37,6 +39,7 @@ handlers.
 - **AND** no account icon control appears
 
 #### Scenario: shared-ui-site-chrome-SC-17 - Signed in shows the account menu
+**Serves:** Chrome exports - signed in shows the account menu
 
 - **GIVEN** `session` is `"signed-in"`
 - **WHEN** the collector activates the account control
@@ -44,6 +47,7 @@ handlers.
 - **AND** the menu does not offer Orders or KYC
 
 #### Scenario: shared-ui-site-chrome-SC-18 - Auction-first chrome omits cart
+**Serves:** Chrome exports - auction-first chrome omits cart
 
 - **GIVEN** `SiteHeader` with no cart handler
 - **WHEN** it renders
@@ -67,6 +71,7 @@ spanning the full viewport width.
 `copy.language` names the language nested drawer title.
 
 #### Scenario: shared-ui-site-chrome-SC-20 - Compact menu holds nav and language
+**Serves:** Header controls - compact menu holds nav and language
 
 - **GIVEN** a viewport below the wide breakpoint, with primary items, utility
   links, and a locale handler supplied
@@ -78,6 +83,7 @@ spanning the full viewport width.
 - **AND** the menu panel leaves a visible gutter beside the viewport edge
 
 #### Scenario: shared-ui-site-chrome-SC-21 - Wide viewport keeps the bar layout
+**Serves:** Header controls - wide viewport keeps the bar layout
 
 - **GIVEN** a viewport at the wide breakpoint
 - **WHEN** the header renders
@@ -102,17 +108,20 @@ presentation, and an optional account slot — SHALL remain its own prop.
 neither SHALL require the other.
 
 #### Scenario: shared-ui-site-chrome-SC-01 - An application imports the chrome
+**Serves:** Chrome exports - an application imports the chrome
 
 - **WHEN** an application imports each name above from the design system's public entry
 - **THEN** every import resolves
 
 #### Scenario: shared-ui-site-chrome-SC-02 - A page renders one without the other
+**Serves:** Chrome exports - a page renders one without the other
 
 - **WHEN** an application renders the header without the footer, or the footer
   without the header
 - **THEN** it renders as specified, with no missing-context error
 
 #### Scenario: shared-ui-site-chrome-SC-03 - The chrome's words arrive as one group
+**Serves:** Chrome exports - the chrome's words arrive as one group
 
 - **WHEN** an application supplies the chrome's words
 - **THEN** it passes one object per component, typed by that component's copy type
@@ -140,12 +149,14 @@ SHALL render the account control as an icon by default, or as a primary Sign In
 button when `accountPresentation` is `"sign-in"`.
 
 #### Scenario: shared-ui-site-chrome-SC-04 - A storefront with no cart
+**Serves:** Header controls - a storefront with no cart
 
 - **GIVEN** an application that supplies no cart handler
 - **WHEN** the header renders
 - **THEN** no cart control appears in it, and no space is reserved for one
 
 #### Scenario: shared-ui-site-chrome-SC-05 - Only the supplied controls appear
+**Serves:** Header controls - only the supplied controls appear
 
 - **GIVEN** an application that supplies a handler for the account control alone
 - **WHEN** the header renders
@@ -153,11 +164,13 @@ button when `accountPresentation` is `"sign-in"`.
 - **AND** the search and cart controls do not
 
 #### Scenario: shared-ui-site-chrome-SC-06 - Wishlist is not a header control
+**Serves:** Header controls - wishlist is not a header control
 
 - **WHEN** the header renders
 - **THEN** no wishlist control appears, and no space is reserved for one
 
 #### Scenario: shared-ui-site-chrome-SC-07 - The locale label without a handler
+**Serves:** Header controls - the locale label without a handler
 
 - **GIVEN** an application that supplies a locale label and no locale handler
 - **WHEN** the header renders at the wide breakpoint
@@ -165,6 +178,7 @@ button when `accountPresentation` is `"sign-in"`.
 - **AND** nothing about it invites a click
 
 #### Scenario: shared-ui-site-chrome-SC-19 - Sign In presentation
+**Serves:** Header controls - Sign In presentation
 
 - **GIVEN** an application that supplies `onAccountClick`,
   `accountPresentation` `"sign-in"`, and Sign In copy

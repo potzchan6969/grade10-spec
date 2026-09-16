@@ -49,6 +49,7 @@ outside `AuctionRecord`, so a surface may use the row or the watch control
 alone.
 
 #### Scenario: shared-ui-auction-record-SC-01 - An application imports the surface
+**Serves:** The record surface exports - an application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's
   public entry
@@ -56,6 +57,7 @@ alone.
 - **AND** no other component or type is exported for this surface
 
 #### Scenario: shared-ui-auction-record-SC-02 - A part is reused alone
+**Serves:** The record surface exports - a part is reused alone
 
 - **WHEN** an application renders `AuctionRecordRow` or `WatchButton` without
   `AuctionRecord`
@@ -63,6 +65,7 @@ alone.
   and no requirement to supply page props
 
 #### Scenario: shared-ui-auction-record-SC-08 - Bidding is read before Watching
+**Serves:** The record surface exports - bidding is read before Watching
 
 - **GIVEN** an `AuctionRecord` supplied with both bidding rows and watching
   rows
@@ -78,6 +81,7 @@ confirmation, and no default for any of them. A string not supplied SHALL be
 absent rather than replaced by a built-in value.
 
 #### Scenario: shared-ui-auction-record-SC-03 - No label is invented
+**Serves:** Content ownership - no label is invented
 
 - **WHEN** an application renders the surface without supplying a state label
 - **THEN** no built-in label appears in its place
@@ -100,6 +104,7 @@ changed the value it gives the control — never on the collector's click
 alone.
 
 #### Scenario: shared-ui-auction-record-SC-04 - The watch control reports and waits
+**Serves:** The record surface exports - the watch control reports and waits
 
 - **GIVEN** a `WatchButton` told it is not watched
 - **WHEN** the collector activates it
@@ -107,12 +112,14 @@ alone.
 - **AND** it still shows not watched until the application tells it otherwise
 
 #### Scenario: shared-ui-auction-record-SC-05 - A change in progress is shown when told
+**Serves:** The record surface exports - a change in progress is shown when told
 
 - **GIVEN** a `WatchButton` told a change is in progress
 - **WHEN** it renders
 - **THEN** it shows the change as in progress
 
 #### Scenario: shared-ui-auction-record-SC-07 - Email alerts report without unwatching
+**Serves:** The record surface exports - email alerts report without unwatching
 
 - **GIVEN** an `AuctionRecordRow` supplied with email-alerts copy and
   `onEmailAlertsChange`
@@ -121,6 +128,7 @@ alone.
 - **AND** it does not remove the row or invent an unwatch
 
 #### Scenario: shared-ui-auction-record-SC-09 - One row's alerts stand alone
+**Serves:** The record surface exports - one row's alerts stand alone
 
 - **GIVEN** an `AuctionRecord` whose rows each carry an email-alerts control
   told alerts are on
@@ -130,6 +138,7 @@ alone.
 - **AND** every other row still shows alerts on
 
 #### Scenario: shared-ui-auction-record-SC-10 - A confirmed change is announced
+**Serves:** The record surface exports - a confirmed change is announced
 
 - **GIVEN** an `AuctionRecordRow` supplied with email-alerts confirmation copy
 - **WHEN** the application changes the value it gives the control
@@ -143,6 +152,7 @@ supplied, the row SHALL show that image beside the listing identity. When not
 supplied, the image well SHALL remain without inventing a product photograph.
 
 #### Scenario: shared-ui-auction-record-SC-06 - A row shows the key image when given
+**Serves:** Content ownership - a row shows the key image when given
 
 - **GIVEN** an `AuctionRecordRow` supplied with a key image
 - **WHEN** it renders

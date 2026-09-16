@@ -21,7 +21,11 @@ const words = (text) => text.split(/\s+/).filter(Boolean).length;
 const AGENTS_BUDGET = 2500;
 const RULES_BUDGET = {
   proposal: 110,
-  specs: 500,
+  // Back to one block after the artifact split was undone: two passes over one
+  // file, so one set of rules. 500 was the budget before the anchors; the
+  // anchor and Purpose rules cost a little more than the journey cap and the
+  // `Accepted by` rule they replaced.
+  specs: 520,
   "user-journeys": 90,
   "test-cases": 40,
   "ui-design": 40,

@@ -88,10 +88,10 @@ By what conflicted:
 - **`openspec/specs/**/spec.md`** — a durable spec, usually because `main`
   archived a change that folded its deltas in. The durable spec is the source
   of truth: your side survives only where it says something that one does not.
-- **`openspec/changes/<id>/tasks.md`** — checkmarks written from the other
-  clone. **Never resolve toward your side.** A checked box is a fact about work
-  that landed, and dropping one under-reports the board with nothing to catch
-  it. `pnpm run plan:preflight <change-id>` prints the state you are resolving
+- **`openspec/changes/<id>/tasks.md`** — claims and checkmarks `pnpm plan`
+  recorded on `main`. **Never resolve toward your side.** A checked box is a
+  fact about work that landed, and dropping one under-reports the board with
+  nothing to catch it. `pnpm run plan:preflight <change-id>` prints the state you are resolving
   against.
 - **`proposal.md`, `tech-design.md`, `ui-design.md`** — prose. Both sides usually belong;
   say the merged thing once rather than stacking two paragraphs.
@@ -114,7 +114,8 @@ git add <paths> && git rebase --continue
 
 On the rebased commits, not the ones you started with:
 
-- `openspec validate <change-id> --strict` — every change on the branch.
+- `pnpm run validate:changes <change-id>` — every change on the branch. It
+  honours a declared wait; the bare CLI refuses one.
 - `openspec validate --specs` — a durable spec was touched or conflicted.
 - `pnpm run lint` and `pnpm run typecheck` — always.
 - `pnpm run design-sync:check` — a primitive under
@@ -125,11 +126,17 @@ On the rebased commits, not the ones you started with:
   catches a suite whose header contradicts its cases or whose trace points at
   an id the spec no longer issues.
 
-**A delta with journeys and no suite does not push.** If a `spec.md` on this
-branch has a `user-journeys.md` and no `feature-tcs.md` beside it, stop and run
-`/spec-to-tcs <change-id>`, then commit the suites before pushing —
-`pnpm run tcs:validate --require-suites` names them. Generation belongs in the
-spec's own pull request; see `docs/governance/specs-to-test-cases.md`.
+**A delta with journeys and no suite does not push**, and that now includes a
+capability whose journeys say `**Walked by:** nobody` — it is anchored on its
+feature set, not exempt. If a `spec.md` on this branch has a `user-journeys.md`
+and no `feature-tcs.md` beside it, stop and run `/spec-to-tcs <change-id>`, then
+commit the suites before pushing — `pnpm run tcs:validate --require-suites`
+names them. The blind pass belongs in the spec's own pull request, and lands
+before the scenarios commit; see `docs/governance/specs-to-test-cases.md`.
+
+**A suite with no `## Reconciliation` does not push either.** The section is the
+only evidence the blind pass ran: without it a pass that found nothing and a
+pass that never happened are the same diff.
 
 **A change that moves a cross-feature path settles its domain suite.** Do not
 ask; compute it. For each domain the branch touches that holds an
@@ -219,7 +226,7 @@ conflict and how each was settled, what validation ran, and anything left for a
 human.
 
 Then say the handoff out loud: the change is on `main`, so an engineer can
-`pnpm plan sync` in the application repository and claim it.
+claim it with `pnpm plan claim` in the application repository.
 
 ## Related
 

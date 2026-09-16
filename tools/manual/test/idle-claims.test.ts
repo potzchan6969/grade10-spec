@@ -1,5 +1,11 @@
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -90,6 +96,16 @@ function storeWithHistory(
   return root;
 }
 
+/** The claims of the task list the checkout holds, dated from HEAD — how a
+ * change only this checkout has is read. */
+const claimsOf = (root: string) =>
+  readIdleClaims(
+    root,
+    CHANGE,
+    readFileSync(join(root, "openspec", "changes", CHANGE, "tasks.md"), "utf8"),
+    null,
+  );
+
 withViewer("dating a claim", () => {
   it("dates it from the newest checkmark, and says so", () => {
     // Claimed nine days ago, last checkmark four days ago.
@@ -97,7 +113,7 @@ withViewer("dating a claim", () => {
       ["dana", 0, 9],
       ["dana", 1, 4],
     ]);
-    const claim = readIdleClaims(root, CHANGE).get("1");
+    const claim = claimsOf(root).get("1");
 
     expect(claim?.source).toBe("progress");
     expect(claim?.days).toBe(4);
@@ -109,7 +125,7 @@ withViewer("dating a claim", () => {
       ["dana", 0, 11],
       ["dana", 0, 5],
     ]);
-    const claim = readIdleClaims(root, CHANGE).get("1");
+    const claim = claimsOf(root).get("1");
 
     expect(claim?.source).toBe("claim");
     // The stretch began at the older commit: rewording a task is not progress.
@@ -118,9 +134,9 @@ withViewer("dating a claim", () => {
 
   it("says nothing about a group nobody has claimed", () => {
     const root = storeWithHistory([["", 0, 6]]);
-    expect(readIdleClaims(root, CHANGE).has("1")).toBe(false);
+    expect(claimsOf(root).has("1")).toBe(false);
     // Group 2 is unclaimed in every fixture here, so it never gets an age.
-    expect(readIdleClaims(root, CHANGE).has("2")).toBe(false);
+    expect(claimsOf(root).has("2")).toBe(false);
   });
 
   it("says nothing about a group whose work is done", () => {
@@ -128,7 +144,7 @@ withViewer("dating a claim", () => {
       ["dana", 0, 9],
       ["dana", 3, 8],
     ]);
-    expect(readIdleClaims(root, CHANGE).has("1")).toBe(false);
+    expect(claimsOf(root).has("1")).toBe(false);
   });
 
   it("says nothing when the history cannot account for the owner", () => {
@@ -139,7 +155,7 @@ withViewer("dating a claim", () => {
       join(root, "openspec", "changes", CHANGE, "tasks.md"),
       tasksMd("dana", 0),
     );
-    expect(readIdleClaims(root, CHANGE).has("1")).toBe(false);
+    expect(claimsOf(root).has("1")).toBe(false);
   });
 });
 
@@ -150,15 +166,7 @@ describe("when the reading is unavailable", () => {
       [`openspec/changes/${CHANGE}/proposal.md`]: PROPOSAL,
       [`openspec/changes/${CHANGE}/tasks.md`]: tasksMd("dana", 0),
     });
-    expect(readIdleClaims(root, CHANGE).size).toBe(0);
-  });
-
-  it("leaves a change with no task list alone", () => {
-    const root = writeStore({
-      [`openspec/changes/${CHANGE}/.openspec.yaml`]: MANIFEST,
-      [`openspec/changes/${CHANGE}/proposal.md`]: PROPOSAL,
-    });
-    expect(readIdleClaims(root, CHANGE).size).toBe(0);
+    expect(claimsOf(root).size).toBe(0);
   });
 });
 
@@ -168,7 +176,7 @@ withViewer("what the change carries", () => {
       ["dana", 0, 9],
       ["dana", 1, 4],
     ]);
-    const [change] = readChanges(root, NO_GIT);
+    const [change] = readChanges(root, NO_GIT, null);
     const [contracts, adoption] = change.taskGroups;
 
     expect(contracts.num).toBe("1");

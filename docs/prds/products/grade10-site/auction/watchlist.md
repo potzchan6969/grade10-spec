@@ -95,7 +95,7 @@ most-recent first.
 | Store heart | Decided | Not restored. This control exists because a list answers it. | Product |
 | List placement | Decided | My Auctions in the account area — Bidding then Watching as sections on one page (Order History shell). Per-row Email alerts + Unwatch. Entrance copy names lots / auction. No header-only destination. | Design |
 | Bidding above Watching | Decided | A lot holding the collector's money outranks one they are only following, so Bidding leads the page. | Design |
-| Operator count placement | ❓ Open | Listings table vs listing admin page. | Design |
+| Operator count placement | Decided | A Watchers column on the admin Listings table, so an operator compares lots at a glance. | Design |
 
 **Risks.** Stopping auto-watch on bid would drop bidders from watcher-only
 lanes; bidder mail stays on bids with its own alerts preference. Watching is

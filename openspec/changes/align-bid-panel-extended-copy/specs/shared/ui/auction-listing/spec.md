@@ -16,6 +16,7 @@ When the listing is in extended bidding, consumer copy for the Time left label
 SHALL be **Time left (extended)** (or the locale equivalent).
 
 #### Scenario: shared-ui-auction-listing-SC-14 - Extension copy comes from the consumer
+**Serves:** Consumer labels - extension copy comes from the consumer
 
 - **GIVEN** a live listing whose extension duration is 1800 seconds
 - **WHEN** an application renders the bid card with copy naming a 30-minute
@@ -25,6 +26,7 @@ SHALL be **Time left (extended)** (or the locale equivalent).
   appear in that slot
 
 #### Scenario: shared-ui-auction-listing-SC-14a - Extended label while in extended bidding
+**Serves:** Consumer labels - extended label while in extended bidding
 
 - **GIVEN** a live listing in extended bidding
 - **WHEN** an application renders the bid card with `extended` on and the

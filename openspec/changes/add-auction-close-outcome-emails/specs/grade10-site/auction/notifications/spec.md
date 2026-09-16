@@ -78,6 +78,7 @@ Close-outcome letters SHALL use the shared letter shape and mute control this
 capability already defines.
 
 #### Scenario: grade10-site-auction-notifications-SC-37 - A losing bidder is told the lot closed
+**Serves:** grade10-site-auction-notifications-US-06 - Collector who lost hears the lot closed
 
 - **GIVEN** a collector who bid on a lot with email alerts on
 - **AND** another collector is the winner
@@ -88,6 +89,7 @@ capability already defines.
   names both
 
 #### Scenario: grade10-site-auction-notifications-SC-38 - A watch-only collector is told a sold lot ended
+**Serves:** grade10-site-auction-notifications-US-07 - Watcher hears a sold lot ended
 
 - **GIVEN** a collector who watches a lot with email alerts on and has never
   bid on it
@@ -98,6 +100,7 @@ capability already defines.
 - **AND** when the winning bid is supplied, the letter names it as Sold for
 
 #### Scenario: grade10-site-auction-notifications-SC-39 - A watcher on a no-bids close hears ended only
+**Serves:** grade10-site-auction-notifications-US-08 - Collector hears a no-bids close as ended only
 
 - **GIVEN** a collector who watches a lot with email alerts on and has never
   bid on it
@@ -113,6 +116,7 @@ capability already defines.
   highlight
 
 #### Scenario: grade10-site-auction-notifications-SC-40 - No-bids close keeps lot_ended Ended-only and skips bidder mail
+**Serves:** grade10-site-auction-notifications-US-08 - Collector hears a no-bids close as ended only
 
 - **GIVEN** a lot that closes with no bids
 - **AND** at least one enrolled watcher with email alerts on
@@ -126,6 +130,7 @@ capability already defines.
   sell, didn't sell, no sale, or no bids
 
 #### Scenario: grade10-site-auction-notifications-SC-41 - A watcher who also bid gets one close letter
+**Serves:** grade10-site-auction-notifications-US-06 - Collector who lost hears the lot closed
 
 - **GIVEN** a collector who both watches a lot and has bid on it, with email
   alerts on
@@ -136,6 +141,7 @@ capability already defines.
 - **AND** they do not also receive the watched ended letter
 
 #### Scenario: grade10-site-auction-notifications-SC-42 - The winner does not get a close-outcome letter
+**Serves:** grade10-site-auction-notifications-US-06 - Collector who lost hears the lot closed
 
 - **GIVEN** a collector who is the winner of a lot
 - **AND** they also watch it with email alerts on
@@ -144,6 +150,7 @@ capability already defines.
   capability
 
 #### Scenario: grade10-site-auction-notifications-SC-43 - Muted alerts stop close-outcome mail
+**Serves:** grade10-site-auction-notifications-US-07 - Watcher hears a sold lot ended
 
 - **GIVEN** a collector who watches a lot with email alerts off
 - **WHEN** the lot closes with a winner
@@ -177,6 +184,7 @@ already opened, while they are still enrolled for that message, SHALL
 still receive it when alerts are on.
 
 #### Scenario: grade10-site-auction-notifications-SC-01 - Bidding enrols without watching
+**Serves:** grade10-site-auction-notifications-US-04 - Collector hears a new bid on a lot they bid on
 
 - **GIVEN** a collector who has bid on a lot and does not watch it
 - **AND** email alerts are on for that lot
@@ -184,6 +192,7 @@ still receive it when alerts are on.
 - **THEN** Grade10 sends them the new-bid message
 
 #### Scenario: grade10-site-auction-notifications-SC-02 - A watcher who also bids receives one copy
+**Serves:** `grade10-site-auction-notifications-US-01`, `grade10-site-auction-notifications-US-02` - a watcher who also bids receives one copy
 
 - **GIVEN** a collector who both watches a lot and has bid on it
 - **AND** email alerts are on for that lot
@@ -191,6 +200,7 @@ still receive it when alerts are on.
 - **THEN** they receive exactly one copy of it
 
 #### Scenario: grade10-site-auction-notifications-SC-03 - Unwatching does not end bidder enrolment
+**Serves:** `grade10-site-auction-notifications-US-02`, `grade10-site-auction-notifications-US-04` - unwatching does not end bidder enrolment
 
 - **GIVEN** a collector who watched a lot and has bid on it
 - **AND** email alerts remain on for that lot after they unwatch
@@ -199,6 +209,7 @@ still receive it when alerts are on.
 - **THEN** Grade10 still sends them the new-bid message
 
 #### Scenario: grade10-site-auction-notifications-SC-04 - Unwatching ends watcher mail
+**Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
 - **GIVEN** a collector who watches a lot and has never bid on it
 - **WHEN** they unwatch it
@@ -206,6 +217,7 @@ still receive it when alerts are on.
 - **THEN** Grade10 does not send them the bidding-has-opened message
 
 #### Scenario: grade10-site-auction-notifications-SC-32 - Muting stops mail while watching continues
+**Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
 - **GIVEN** a collector who watches a lot with email alerts on
 - **WHEN** they turn email alerts off for that lot
@@ -214,6 +226,7 @@ still receive it when alerts are on.
 - **AND** Grade10 does not send them the bidding-has-opened message
 
 #### Scenario: grade10-site-auction-notifications-SC-33 - Muting stops bidder mail without ending the bid
+**Serves:** grade10-site-auction-notifications-US-03 - Collector raises after being outbid
 
 - **GIVEN** a collector who has bid on a lot with email alerts on
 - **WHEN** they turn email alerts off for that lot
@@ -261,6 +274,7 @@ Grade10 SHALL NOT require `utm_term`. The destination path SHALL stay the
 same; only these query parameters are added.
 
 #### Scenario: grade10-site-auction-notifications-SC-18 - Two kinds share the layout
+**Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
 - **GIVEN** an outbid letter and an open-bidding-has-started letter about the same listing
 - **WHEN** both are rendered
@@ -268,12 +282,14 @@ same; only these query parameters are added.
 - **AND** they differ in their words, not in a second structure
 
 #### Scenario: grade10-site-auction-notifications-SC-35 - The brand mark opens the storefront home
+**Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
 - **GIVEN** any auction letter in this capability for the Grade10 storefront
 - **WHEN** the collector activates the Grade10 brand mark
 - **THEN** the Grade10 website home opens
 
 #### Scenario: grade10-site-auction-notifications-SC-36 - Outbound links carry campaign tags
+**Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
 - **GIVEN** an outbid letter with email alerts on
 - **WHEN** the letter is rendered
@@ -286,6 +302,7 @@ same; only these query parameters are added.
   `utm_campaign=outbid` and `utm_content=manage_alerts`
 
 #### Scenario: grade10-site-auction-notifications-SC-29 - The lot block shows one primary image
+**Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
 - **GIVEN** a listing with a primary image
 - **WHEN** Grade10 renders any message in this capability about that listing
@@ -293,6 +310,7 @@ same; only these query parameters are added.
 - **AND** it does not show a second image or a gallery
 
 #### Scenario: grade10-site-auction-notifications-SC-30 - A listing without an image still mails
+**Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
 - **GIVEN** a listing with no primary image
 - **WHEN** Grade10 renders a message about that listing
@@ -318,6 +336,7 @@ letters (outbid and new-bid), and on close-outcome letters whenever the
 recipient has email alerts on for that listing.
 
 #### Scenario: grade10-site-auction-notifications-SC-19 - A start letter can be stopped
+**Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
 - **GIVEN** a collector who watched a listing with email alerts on
 - **WHEN** they receive the start-soon or has-started letter
@@ -326,6 +345,7 @@ recipient has email alerts on for that listing.
 - **AND** that way is not an unauthenticated one-click stop
 
 #### Scenario: grade10-site-auction-notifications-SC-20 - An outbid letter can be stopped by muting
+**Serves:** grade10-site-auction-notifications-US-03 - Collector raises after being outbid
 
 - **GIVEN** a collector who was just overtaken
 - **AND** email alerts are on for that listing
@@ -334,6 +354,7 @@ recipient has email alerts on for that listing.
 - **AND** activating it opens My Auctions when the collector is signed in
 
 #### Scenario: grade10-site-auction-notifications-SC-34 - Manage alerts from a letter when signed out
+**Serves:** `grade10-site-auction-notifications-US-01`, `grade10-site-auction-notifications-US-03` - manage alerts from a letter when signed out
 
 - **GIVEN** a collector who receives a letter with email alerts on for that listing
 - **AND** they are signed out of Grade10
@@ -360,12 +381,14 @@ collector's email. The filter SHALL match the address the message was
 sent to.
 
 #### Scenario: grade10-site-auction-notifications-SC-24 - An operator can see what was sent
+**Serves:** grade10-site-auction-notifications-US-05 - Operator looks up what a collector was sent
 
 - **GIVEN** a collector who says they were never told about a lot
 - **WHEN** an authorized operator filters the send log by that collector's email
 - **THEN** they see each message sent to that address: its type, the lot, and its Sent At
 
 #### Scenario: grade10-site-auction-notifications-SC-25 - The send log shows type, not content
+**Serves:** grade10-site-auction-notifications-US-05 - Operator looks up what a collector was sent
 
 - **GIVEN** a message Grade10 has sent
 - **WHEN** an authorized operator reads its log row
@@ -373,6 +396,7 @@ sent to.
 - **AND** it does not show the body or any rendered content
 
 #### Scenario: grade10-site-auction-notifications-SC-26 - The send log is filterable by email
+**Serves:** grade10-site-auction-notifications-US-05 - Operator looks up what a collector was sent
 
 - **GIVEN** messages sent to two collectors on one or more lots
 - **WHEN** an authorized operator filters the log by one collector's email

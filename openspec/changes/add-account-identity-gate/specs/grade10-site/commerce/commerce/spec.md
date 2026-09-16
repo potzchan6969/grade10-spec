@@ -20,6 +20,7 @@ nothing about identity. On a brand that deploys no identity store the bar
 SHALL not exist.
 
 #### Scenario: grade10-site-commerce-commerce-SC-26 - An unverified buyer above the bar is sent to verify
+**Serves:** grade10-site-commerce-commerce-US-06 - Shopper meets the identity bar at checkout
 
 - **GIVEN** a signed-in buyer whose standing is `unverified` or `expired`, and a
   basket whose goods are worth the bar or more
@@ -28,6 +29,7 @@ SHALL not exist.
   order is made, and they are sent to their account to verify
 
 #### Scenario: grade10-site-commerce-commerce-SC-27 - A verified buyer above the bar checks out
+**Serves:** grade10-site-commerce-commerce-US-06 - Shopper meets the identity bar at checkout
 
 - **GIVEN** a signed-in buyer whose standing is `verified`, and a basket whose
   goods are worth the bar or more
@@ -35,12 +37,14 @@ SHALL not exist.
 - **THEN** the checkout proceeds as any other
 
 #### Scenario: grade10-site-commerce-commerce-SC-28 - A basket below the bar asks nothing
+**Serves:** grade10-site-commerce-commerce-US-06 - Shopper meets the identity bar at checkout
 
 - **GIVEN** a basket whose goods are worth less than the bar
 - **WHEN** any buyer checks out
 - **THEN** no standing is read and the checkout proceeds as any other
 
 #### Scenario: grade10-site-commerce-commerce-SC-29 - A guest above the bar is asked to sign in
+**Serves:** grade10-site-commerce-commerce-US-06 - Shopper meets the identity bar at checkout
 
 - **GIVEN** a buyer with no session, and a basket whose goods are worth the bar
   or more

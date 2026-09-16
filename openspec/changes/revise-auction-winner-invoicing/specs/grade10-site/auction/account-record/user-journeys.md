@@ -1,6 +1,9 @@
 ## User journeys
 
-**Walked by:** nobody on their own - the durable account-record journey owns
-this modified winner projection; the winner-order journey reaches the auction
-order and the account record reflects its derived status, including the two
-states before an invoice is sent.
+### grade10-site-auction-account-record-US-01: Winner opens settlement from My Auctions
+
+**As a** winner,
+**I want** every Won row to open Winner Order without helper clutter,
+**so that** I can continue settlement without reading contact copy on the table.
+
+**Walked by note:** the durable account-record journeys still own open-lot standing; this change journey covers the Storybook Won-entry and calm-row slice.

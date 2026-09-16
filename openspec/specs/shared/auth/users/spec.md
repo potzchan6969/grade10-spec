@@ -41,6 +41,7 @@ account joined or by email, in either direction. Asked for no order, the
 system SHALL return the newest account first.
 
 #### Scenario: shared-auth-users-SC-01 - An operator with the grant lists accounts
+**Serves:** shared-auth-users-US-01 - Operator lists people in the identity directory
 
 - **GIVEN** a signed-in operator who holds `user:list`
 - **WHEN** they open the users directory
@@ -48,6 +49,7 @@ system SHALL return the newest account first.
 - **AND** each account is named by user id
 
 #### Scenario: shared-auth-users-SC-02 - A caller without the grant is refused
+**Serves:** shared-auth-users-US-01 - Operator lists people in the identity directory
 
 - **GIVEN** a signed-in person who does not hold `user:list`
 - **WHEN** they try to list accounts
@@ -55,6 +57,7 @@ system SHALL return the newest account first.
 - **AND** returns no account records
 
 #### Scenario: shared-auth-users-SC-03 - Search matches email without letter case
+**Serves:** shared-auth-users-US-01 - Operator lists people in the identity directory
 
 - **GIVEN** an operator who can list users
 - **WHEN** they search the directory by an email fragment in a different
@@ -62,6 +65,7 @@ system SHALL return the newest account first.
 - **THEN** the results are accounts whose email contains that fragment
 
 #### Scenario: shared-auth-users-SC-04 - An account opens by user id
+**Serves:** shared-auth-users-US-01 - Operator lists people in the identity directory
 
 - **GIVEN** an operator who can list users
 - **WHEN** they open an account by its user id
@@ -70,12 +74,14 @@ system SHALL return the newest account first.
   attribute
 
 #### Scenario: shared-auth-users-SC-05 - A banned account stays in the directory
+**Serves:** shared-auth-users-US-01 - Operator lists people in the identity directory
 
 - **GIVEN** a banned account
 - **WHEN** an operator who can list users opens the directory
 - **THEN** that account is still listed
 
 #### Scenario: shared-auth-users-SC-19 - Search matches a name without letter case
+**Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
 - **GIVEN** an operator who can list users, and an account whose name is not
   part of its email
@@ -84,6 +90,7 @@ system SHALL return the newest account first.
 - **THEN** that account is among the results
 
 #### Scenario: shared-auth-users-SC-20 - The directory narrows to a role
+**Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
 - **GIVEN** an operator who can list users
 - **WHEN** they narrow the directory to accounts that hold `admin`
@@ -91,6 +98,7 @@ system SHALL return the newest account first.
 - **AND** an account that holds no elevated role is not returned
 
 #### Scenario: shared-auth-users-SC-21 - Two narrowings apply together
+**Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
 - **GIVEN** an operator who can list users
 - **WHEN** they narrow the directory to banned accounts that hold `support`
@@ -98,6 +106,7 @@ system SHALL return the newest account first.
 - **AND** a banned account that does not hold `support` is not returned
 
 #### Scenario: shared-auth-users-SC-22 - The caller asks for an order
+**Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
 - **GIVEN** an operator who can list users
 - **WHEN** they ask for the directory ordered by when the account joined,
@@ -106,6 +115,7 @@ system SHALL return the newest account first.
 - **AND** asking for no order returns the newest account first
 
 #### Scenario: shared-auth-users-SC-23 - The directory narrows to elevated accounts
+**Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
 - **GIVEN** an operator who can list users
 - **WHEN** they narrow the directory to elevated accounts
@@ -113,6 +123,7 @@ system SHALL return the newest account first.
 - **AND** an account that holds none is not returned
 
 #### Scenario: shared-auth-users-SC-24 - The directory narrows to users without elevated roles
+**Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
 - **GIVEN** an operator who can list users
 - **WHEN** they narrow the directory to users
@@ -133,30 +144,35 @@ refused, and the account SHALL be unchanged. Banning an already-banned
 account SHALL leave it banned.
 
 #### Scenario: shared-auth-users-SC-06 - A ban stops money-moving
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
 - **GIVEN** an operator who holds `user:ban`
 - **WHEN** they ban an account
 - **THEN** that person cannot complete a money-moving action
 
 #### Scenario: shared-auth-users-SC-07 - A banned person cannot sign in
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
 - **GIVEN** a banned account
 - **WHEN** that person completes a sign-in method
 - **THEN** they are not signed in
 
 #### Scenario: shared-auth-users-SC-08 - A banned person is not signed in
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
 - **GIVEN** a person who signed in and is then banned
 - **WHEN** a product reads who is calling
 - **THEN** it reports no person
 
 #### Scenario: shared-auth-users-SC-09 - An unban lets them sign in again
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
 - **GIVEN** a banned account
 - **WHEN** an operator who can ban unbans it
 - **THEN** that person can sign in again
 
 #### Scenario: shared-auth-users-SC-10 - A caller who cannot ban is refused
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
 - **GIVEN** a signed-in operator who does not hold `user:ban`
 - **WHEN** they try to ban an account
@@ -164,6 +180,7 @@ account SHALL leave it banned.
 - **AND** the account remains unbanned
 
 #### Scenario: shared-auth-users-SC-11 - An operator cannot ban themselves
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
 - **GIVEN** an operator who holds `user:ban`
 - **WHEN** they try to ban their own account
@@ -171,6 +188,7 @@ account SHALL leave it banned.
 - **AND** their account remains unbanned
 
 #### Scenario: shared-auth-users-SC-12 - Support cannot ban an admin
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
 - **GIVEN** a person whose operator role is `support`
 - **WHEN** they try to ban an account that holds `admin`
@@ -178,6 +196,7 @@ account SHALL leave it banned.
 - **AND** the account remains unbanned
 
 #### Scenario: shared-auth-users-SC-13 - The last admin cannot be banned
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
 - **GIVEN** the only account that holds `admin`
 - **WHEN** an operator who can ban tries to ban it
@@ -185,6 +204,7 @@ account SHALL leave it banned.
 - **AND** the account remains unbanned
 
 #### Scenario: shared-auth-users-SC-25 - An admin cannot ban another admin
+**Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
 - **GIVEN** an operator who holds `admin` and `user:ban`
 - **AND** another account that holds `admin`
@@ -205,18 +225,21 @@ removed, by self or by another caller. A caller without the grant SHALL be
 refused, and the roles SHALL be unchanged.
 
 #### Scenario: shared-auth-users-SC-14 - Admin changes another person's roles
+**Serves:** shared-auth-users-US-03 - Operator changes roles
 
 - **GIVEN** an operator who holds `user:set-role`
 - **WHEN** they set another account to `staff`
 - **THEN** that account's roles include `staff`
 
 #### Scenario: shared-auth-users-SC-15 - Clearing operator roles leaves a user
+**Serves:** shared-auth-users-US-03 - Operator changes roles
 
 - **GIVEN** an operator who can set roles
 - **WHEN** they save another account with no operator role selected
 - **THEN** that account's roles are `user` only
 
 #### Scenario: shared-auth-users-SC-16 - Support cannot set roles
+**Serves:** shared-auth-users-US-03 - Operator changes roles
 
 - **GIVEN** an operator who holds `user:ban` but not `user:set-role`
 - **WHEN** they try to change another account's roles
@@ -224,18 +247,21 @@ refused, and the roles SHALL be unchanged.
 - **AND** the roles are unchanged
 
 #### Scenario: shared-auth-users-SC-17 - An operator may change their own roles
+**Serves:** shared-auth-users-US-03 - Operator changes roles
 
 - **GIVEN** an operator who holds `user:set-role` and `admin`
 - **WHEN** they save their own account with `staff` and still with `admin`
 - **THEN** their account's roles include `staff` and `admin`
 
 #### Scenario: shared-auth-users-SC-18 - The last admin keeps admin
+**Serves:** shared-auth-users-US-03 - Operator changes roles
 
 - **GIVEN** the only account that holds `admin`
 - **WHEN** that admin or another operator who can set roles saves it without `admin`
 - **THEN** that account still holds `admin`
 
 #### Scenario: shared-auth-users-SC-26 - An admin cannot remove admin from another admin
+**Serves:** shared-auth-users-US-03 - Operator changes roles
 
 - **GIVEN** two or more accounts that hold `admin`
 - **AND** an operator who holds `user:set-role`
@@ -244,6 +270,7 @@ refused, and the roles SHALL be unchanged.
 - **AND** that account still holds `admin`
 
 #### Scenario: shared-auth-users-SC-27 - An admin may strip their own admin
+**Serves:** shared-auth-users-US-03 - Operator changes roles
 
 - **GIVEN** two or more accounts that hold `admin`
 - **AND** an operator who holds `admin` and `user:set-role`

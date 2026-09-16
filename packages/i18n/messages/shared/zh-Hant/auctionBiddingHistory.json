@@ -47,6 +47,7 @@
     "account": "此帳戶不符合出價資格。",
     "payment": "付款授權未成功。",
     "stale_price": "其他出價令此金額已過時。",
-    "unavailable": "目前無法評估出價。"
+    "unavailable": "目前無法評估出價。",
+    "ceiling": "出價超過了該貨幣的上限。"
   }
 }

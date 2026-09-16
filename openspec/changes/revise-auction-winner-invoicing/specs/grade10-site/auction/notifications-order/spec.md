@@ -36,6 +36,7 @@ superseded invoice and starts the three-reminder sequence for the new current
 invoice.
 
 #### Scenario: order-mail-SC-01 - Winning a lot is announced by email
+**Serves:** Post-close letters - winning a lot is announced by email
 
 - **WHEN** a lot closes and a winner is determined
 - **THEN** Grade10 sends that winner the auction-won letter by email
@@ -44,6 +45,7 @@ invoice.
 - **AND** it names no amount owed
 
 #### Scenario: order-mail-SC-02 - Expiry is announced with what is owed
+**Serves:** Post-close letters - expiry is announced with what is owed
 
 - **GIVEN** an auction order whose invoice is `pending`
 - **WHEN** its payment deadline passes and Grade10 sets the invoice to
@@ -52,6 +54,7 @@ invoice.
 - **AND** it names the outstanding amount and how to resolve it
 
 #### Scenario: order-mail-SC-03 - A manual settlement produces the payment-received letter
+**Serves:** Post-close letters - a manual settlement produces the payment-received letter
 
 - **GIVEN** an auction order an operator settles manually
 - **WHEN** the settlement is committed
@@ -59,6 +62,7 @@ invoice.
 - **AND** it is the same letter a card payment produces
 
 #### Scenario: order-mail-SC-09 - Sending the invoice tells the winner what to pay and by when
+**Serves:** Post-close letters - sending the invoice tells the winner what to pay and by when
 
 - **GIVEN** an auction order in Preparing Invoice
 - **WHEN** an operator sends its invoice with an order total of 312000 minor

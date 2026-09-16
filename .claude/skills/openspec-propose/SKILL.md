@@ -15,12 +15,17 @@ This skill covers what to settle before drafting and routes to the right one.
 | # | Artifact | Skill | Required |
 | --- | --- | --- | --- |
 | 1 | `proposal.md` | `planning-pm` | Always |
-| 2 | `specs/<capability>/spec.md` | `planning-pm` | Always |
+| 2 | `specs/<capability>/spec.md` | `planning-pm` | Always — two passes, with 4 between them |
 | 3 | `specs/<capability>/user-journeys.md` | `planning-pm` | Always — a capability nobody walks says so in it |
-| 4 | `specs/<capability>/feature-tcs.md` | `planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
+| 4 | `specs/<capability>/feature-tcs.md` | `planning-pm` | Always — a blind pass, written before the scenarios |
 | 5 | `ui-design.md` | `planning-design` | Optional |
 | 6 | `tech-design.md` | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
 | 7 | `tasks.md` | `planning-dev` | Before the change can be applied |
+
+Artifacts 2 to 4 are one `/planning-pm` run. `spec.md` is written twice: its
+purpose and feature set before the journeys, its requirements after the blind
+suite. A capability nobody walks still carries 4, anchored on its feature set
+rather than its journeys.
 
 **Write your part and stop.** Each role adds its artifacts to the one change;
 nobody opens a second one, and an implementation plan invented ahead of the
@@ -48,8 +53,8 @@ Then settle two things:
 - **Where your work ends** — the table above.
 
 A change that changes no behavior at all — a pure refactor, tooling, docs —
-sets `skip_specs: true` in its `.openspec.yaml` rather than inventing a
-requirement to satisfy validation.
+sets `skip_specs: true` with `skip_specs_why: <why>` in its `.openspec.yaml`
+rather than inventing a requirement to satisfy validation.
 
 ## Then hand over
 

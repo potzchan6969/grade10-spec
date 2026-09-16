@@ -31,10 +31,10 @@ A bid only counts once its hold confirms, so an accepted amount always beats
 every amount already standing, and no two bids ever tie. A lot with a reserve
 that nobody clears closes unsold and nobody is charged at all.
 
-The clock moves. A bid landing close to the end pushes the close out again, and
-every late bid pushes it again, so a lot scheduled to end at six can still be
-running at eight. That tail is capped: past the cap the extension truncates
-rather than refuses the bid.
+🚧 The clock moves after the close. A lot that has a bid when its scheduled
+close arrives keeps running, and every new bid restarts its timer, so a lot
+scheduled to end at six can still be running at eight. That tail is capped:
+past the cap the extension truncates rather than refuses the bid.
 
 :::flow{title="From bid to delivery"}
 ## A collector bids
@@ -139,7 +139,8 @@ watching an auction lot is its own capability.
 | Buy Now | Decided | Excluded, including browse-only Buy Now listings. | Product |
 | Hold model | Decided | One Stripe authorization hold exists per bidder per active listing; an outbid hold enters asynchronous release immediately and is later reconciled to completion. | Product |
 | Extended close | Decided | Each listing has an extension window and extension duration (default 30 minutes each). A valid bid inside the window moves the close to the extension duration after that bid; this repeats until the extension duration passes without a valid bid, subject to an optional listing extension cap. | Product |
-| Buyer-premium rate | ❓ Deferred | The applicable policy-derived buyer fee is displayed; a fixed rate is not defined. | Product and finance |
+| Buyer-premium rate | Decided | 20% of the winning bid, with a per-currency minimum charge. See [Winner Order](/p/grade10-site/auction/winner-order). | Product and finance |
+| Premium before bidding | Decided | The bid panel states a 20% buyer fee is added on top of the winning bid. | Product and design |
 | Operator outcome labels | Decided | Queue labels are Draft, Scheduled, Live, Ending soon, Unsold, Canceled, Awaiting payment, Payment failed, Awaiting wire, Paid via Stripe, Paid via Manual, Shipped, Delivered. There is no single "Paid" label. "Ending soon" is the last 60 minutes of the recorded close. Payment failed, Awaiting wire, both paid outcomes, and Shipped are highlighted as waiting on an operator. | Product |
 | Payment source | Decided | Card capture becomes Paid via Stripe. Operator-recorded collection (including a completed wire) becomes Paid via Manual. The first successful paid wins; neither path changes who won. Manual paid and Awaiting wire release an open authorization rather than capturing it. | Product and finance |
 | Wire transfer | Decided | A winner paying by wire sits in Awaiting wire so the operator contacts them. An operator records that request; a winner-initiated request on the storefront is follow-on. Collection of the wire is Paid via Manual. | Product and finance |

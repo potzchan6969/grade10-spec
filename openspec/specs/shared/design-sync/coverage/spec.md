@@ -48,6 +48,7 @@ SHALL NOT apply to a property a node is permitted to leave unstated, where
 absence carries no meaning.
 
 #### Scenario: shared-design-sync-coverage-SC-01 - The design fills a frame the code does not
+**Serves:** Omission as a finding - the design fills a frame the code does not
 
 - **GIVEN** a Figma node that draws a visible solid fill
 - **WHEN** the audit runs and no element audited against that node names a background
@@ -55,6 +56,7 @@ absence carries no meaning.
 - **AND** the run fails
 
 #### Scenario: shared-design-sync-coverage-SC-02 - One node rendered as two elements
+**Serves:** Omission as a finding - one node rendered as two elements
 
 - **GIVEN** a Figma node that draws a visible stroke
 - **AND** two elements audited against it, of which one names a border and the
@@ -63,6 +65,7 @@ absence carries no meaning.
 - **THEN** it reports no unclaimed-stroke finding for that node
 
 #### Scenario: shared-design-sync-coverage-SC-03 - The code paints a fill the design does not
+**Serves:** Omission as a finding - the code paints a fill the design does not
 
 - **GIVEN** a Figma node that draws no visible fill
 - **WHEN** the audit runs against an element whose classes name a background
@@ -70,6 +73,7 @@ absence carries no meaning.
 - **AND** the run fails
 
 #### Scenario: shared-design-sync-coverage-SC-04 - A stroke on one side only
+**Serves:** Omission as a finding - a stroke on one side only
 
 - **GIVEN** a Figma node that draws a visible stroke
 - **WHEN** the audit runs against an element whose classes name no border
@@ -77,12 +81,14 @@ absence carries no meaning.
 - **AND** the run fails
 
 #### Scenario: shared-design-sync-coverage-SC-05 - Neither draws the value
+**Serves:** Omission as a finding - neither draws the value
 
 - **GIVEN** a Figma node that draws no visible fill
 - **WHEN** the audit runs against an element whose classes name no background
 - **THEN** it reports no finding for the fill
 
 #### Scenario: shared-design-sync-coverage-SC-06 - A property the node may leave unstated
+**Serves:** Omission as a finding - a property the node may leave unstated
 
 - **WHEN** the audit meets a property the node is silent about and is permitted
   to be silent about
@@ -99,6 +105,7 @@ A directory that carries no audit table SHALL be reported as uncovered rather
 than as passing, so an unaudited component reads as a gap.
 
 #### Scenario: shared-design-sync-coverage-SC-07 - A design-system component carries an audit table
+**Serves:** Sweep coverage - a design-system component carries an audit table
 
 - **GIVEN** a component directory in the design system with an audit table
 - **WHEN** the unattended sweep runs
@@ -106,12 +113,14 @@ than as passing, so an unaudited component reads as a gap.
 - **AND** a drifted or omitted value fails the run
 
 #### Scenario: shared-design-sync-coverage-SC-08 - A component with no audit table
+**Serves:** Sweep coverage - a component with no audit table
 
 - **WHEN** the sweep meets a component directory carrying no audit table
 - **THEN** it names that directory as uncovered
 - **AND** the run does not report it as passing
 
 #### Scenario: shared-design-sync-coverage-SC-09 - The site chrome is covered
+**Serves:** Sweep coverage - the site chrome is covered
 
 - **WHEN** the unattended sweep runs
 - **THEN** the site header and site footer are among the components it audits
@@ -124,12 +133,14 @@ A run in which nothing was checked SHALL NOT be reported the same way as a run
 in which every checked value matched.
 
 #### Scenario: shared-design-sync-coverage-SC-10 - A run with unchecked classes
+**Serves:** Honest reporting - a run with unchecked classes
 
 - **WHEN** the audit checks some classes and cannot check others
 - **THEN** the unchecked ones are named individually in the output
 - **AND** the summary distinguishes what was verified from what was not
 
 #### Scenario: shared-design-sync-coverage-SC-11 - Nothing could be checked
+**Serves:** Honest reporting - nothing could be checked
 
 - **WHEN** no class in an audited element could be checked against its node
 - **THEN** the output says so rather than reporting the element as matching
@@ -146,6 +157,7 @@ be covered by both, so that one component never has two disagreeing sources of
 truth.
 
 #### Scenario: shared-design-sync-coverage-SC-12 - A standalone component drifts
+**Serves:** One rail per component - a standalone component drifts
 
 - **GIVEN** a design-system component whose Figma counterpart defines no
   variant axes
@@ -154,6 +166,7 @@ truth.
 - **AND** the run fails
 
 #### Scenario: shared-design-sync-coverage-SC-13 - A component with variant axes
+**Serves:** One rail per component - a component with variant axes
 
 - **GIVEN** a design-system component whose Figma counterpart defines variant
   axes
@@ -162,6 +175,7 @@ truth.
 - **AND** no audit table is required for it
 
 #### Scenario: shared-design-sync-coverage-SC-14 - Coverage is reported by component
+**Serves:** One rail per component - coverage is reported by component
 
 - **WHEN** the run names what it did not audit
 - **THEN** it names the components lacking coverage
@@ -179,6 +193,7 @@ description, an unmapped axis option, a Figma component with no code
 counterpart — SHALL remain advisory and SHALL NOT fail the run.
 
 #### Scenario: shared-design-sync-coverage-SC-15 - A variant's fill stops matching
+**Serves:** Run outcomes - a variant's fill stops matching
 
 - **GIVEN** a component whose Figma variant specifies one fill and whose code
   draws another
@@ -187,6 +202,7 @@ counterpart — SHALL remain advisory and SHALL NOT fail the run.
 - **AND** the run fails
 
 #### Scenario: shared-design-sync-coverage-SC-16 - A hygiene finding
+**Serves:** Run outcomes - a hygiene finding
 
 - **WHEN** the run finds a component with no description, an axis option with
   no mapping, or a Figma component with no code counterpart
@@ -201,6 +217,7 @@ as the audit tables: a property the design draws and the code omits is a
 finding, not silence.
 
 #### Scenario: shared-design-sync-coverage-SC-17 - A variant fills what the code never names
+**Serves:** Omission as a finding - a variant fills what the code never names
 
 - **GIVEN** a Figma variant that draws a visible fill
 - **AND** a component configuration whose classes for that variant name no

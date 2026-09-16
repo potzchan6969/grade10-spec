@@ -19,6 +19,8 @@ the first hour is different depending on what you came to do, so pick a path.
   and signing all meet.
 - [In Flight](/in-flight) — every change moving across the platform, with tasks
   done over total, straight out of git.
+- [Pending](/pending) — the changes waiting on a product manager: requirements
+  nobody has written, journeys and suites nobody has derived.
 - [How we plan](/guides/how-we-plan) — where a proposal stops and a spec
   starts.
 - [Working a change](/guides/working-a-change) — `/planning-pm`, and what to
@@ -49,6 +51,10 @@ over, or hand the change id to a PM or engineer.
   survive.
 - [Dates and times](/platform/shared/dates-and-times) — the four shapes a date takes
   on screen, before you invent a fifth.
+- [Pending](/pending) — the changes waiting on a designer, each with the line
+  its author wrote saying what is missing. A change asks by writing
+  `awaiting:` with `ui-design: <what nobody has drawn>` in its
+  `.openspec.yaml`; nothing else puts it on your section.
 - [Working a change](/guides/working-a-change) — `/planning-design`, and when a
   change needs no `ui-design.md` at all.
 
@@ -88,6 +94,8 @@ classified cases, is
   checks against.
 - [Document signing](/p/grade10-site/doc-sign) and [KYC](/p/grade10-site/account/kyc) — the two
   services with the most decisions per line of code.
+- [Pending](/pending) — the specified changes with no plan yet, oldest first.
+  Taking one is writing its `tasks.md`.
 - [Working a change](/guides/working-a-change) — `/planning-dev`, taking a
   change in hand, and the archive debt `tasks.md` has to carry.
 - [Writing the manual](/guides/writing-the-manual) — the page grammar, for when

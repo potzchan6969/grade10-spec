@@ -72,7 +72,7 @@ product.
 Product Details the same way the photo does; a sold-out card’s name stays
 inert.
 
-🚧 **Signed-out Add to cart** — opens the sign-in dialog titled
+**Signed-out Add to cart** — opens the sign-in dialog titled
 **Sign In to Add to Cart**; no guest cart; after a successful sign-in the
 add completes when practical.
 
@@ -205,13 +205,13 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | No popularity order | Decided | Nothing ranks products by popularity, so the menu does not claim to. At rest the listing is ordered by latest product instead — an order the catalogue can answer, so a collector arrives on one the control can name. | Product |
 | A starved facet is still offered | Decided | Once a query is in force, nothing behind a choice is the query's doing rather than the shop's. Hiding the group would strand the collector, and a selection nobody can undo is a trap. | Design |
 | No facets, no panel | Decided | A shop that has configured none gets no facet group and no message in its place; search and sort stay. It is not a fault the collector is told about. | Product |
-| Utility row | Decided | Help, Shipping and Orders & Returns are drawn now, each against the placeholder the site already gives a link it owes, and become real addresses as the pages land. | Product |
+| Utility row | Decided | Help, Shipping and Orders & Returns do not sit under the filter. Where Help and store or auction documentation live is still open on [Page Shell](/p/grade10-site/site/page-shell). | Product |
 | Cap is advisory | Decided | The shop's count is stale the moment it is read, so a control bounded by it is honest rather than correct. The cart's review stays the only authority, and goes on putting a line back down to what the shop can honour. | Engineering |
 | Sign-in to add | Decided | A signed-out Add to cart opens the sign-in dialog. There is no guest cart and no guest checkout. After sign-in the add completes when practical. | Product |
 | Sign-in title from add | Decided | The dialog title is **Sign In to Add to Cart** (Title Case, as Modal titles are) — why, not the bare **Sign In to Grade10**. Header Sign In and other entry points keep **Sign In to Grade10**. Cart, not bag. | Product |
 | One threshold everywhere | Decided | Nearly out is the same count on the listing, the product page and the cart. A second definition would leave the shop unable to say which of them is right. | Product |
 | A count is news, not pressure | Decided | A card says how many are left where the collector learns something — the shop is nearly out, or they have just asked for the last one. A count on every card is a shop hurrying everybody. | Product |
-| Links the site owes | ❓ Open | Drawing a placeholder departs from `grade10-site/site/page-shell`, which says a link appears only where the site answers it. The footer already departs the same way. Settling it belongs to page-shell. | Product |
+| Links the site owes | ❓ Open | The footer still draws destinations the site does not yet answer. Settling that departure belongs to page-shell; the listing no longer adds a second one. | Product |
 | Search stays on the listing | Decided | The field lives with the listing filters, not in the site header. Auction has no search surface yet, and a nav search would read as site-wide find. | Design |
 | Small screen: search outside the drawer | Decided | On a narrow viewport, Filter opens a left drawer for facets only. Catalogue search stays on the listing so typing does not require opening Filter. | Design |
 | Worlds and Types as tabs on small screens | Decided | Inside the filter drawer the two facet groups are tabs so expanding worlds does not push types down the scroll. The wide sidebar still stacks them. Nested drill-down was ruled out for a closed pair of groups. | Design |

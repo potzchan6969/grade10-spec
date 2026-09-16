@@ -25,6 +25,7 @@ sign-out request runs and SHALL NOT accept another activation until the
 request settles.
 
 #### Scenario: shared-auth-sign-out-SC-01 - The control is busy while sign-out runs
+**Serves:** shared-auth-sign-out-US-01 - Collector or operator signs out and lands signed out
 
 - **GIVEN** a signed-in surface with a sign-out control
 - **WHEN** the person activates it
@@ -40,12 +41,14 @@ grade10 site's profile returns to the marketing page. Surface-owned cleanup
 confirmed sign-out.
 
 #### Scenario: shared-auth-sign-out-SC-02 - An operator signs out of an admin panel
+**Serves:** shared-auth-sign-out-US-01 - Collector or operator signs out and lands signed out
 
 - **GIVEN** an operator signed in to an admin panel
 - **WHEN** they sign out and the auth service confirms
 - **THEN** the panel shows its sign-in page
 
 #### Scenario: shared-auth-sign-out-SC-03 - A collector signs out of the grade10 site
+**Serves:** shared-auth-sign-out-US-01 - Collector or operator signs out and lands signed out
 
 - **GIVEN** a collector on the grade10 site's profile
 - **WHEN** they sign out and the auth service confirms
@@ -59,6 +62,7 @@ beside the sign-out control. The control SHALL remain usable, and a retry
 SHALL clear the feedback while the new request runs.
 
 #### Scenario: shared-auth-sign-out-SC-04 - A refused sign-out is reported
+**Serves:** shared-auth-sign-out-US-02 - Collector or operator retries a refused sign-out
 
 - **GIVEN** a signed-in surface whose sign-out request the auth service
   refuses
@@ -67,6 +71,7 @@ SHALL clear the feedback while the new request runs.
 - **AND** failure feedback appears beside the control
 
 #### Scenario: shared-auth-sign-out-SC-05 - A retry clears the failure
+**Serves:** shared-auth-sign-out-US-02 - Collector or operator retries a refused sign-out
 
 - **GIVEN** a surface showing sign-out failure feedback
 - **WHEN** the person activates sign-out again

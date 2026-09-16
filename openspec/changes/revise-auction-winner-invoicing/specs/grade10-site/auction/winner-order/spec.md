@@ -6,14 +6,19 @@
 - Invoice
   - Operator quote: Shipping & Handling, and Insurance when added, are quoted by an operator for the confirmed address, never estimated
   - Order total: names every component a winner is asked to pay, so a total is explicable line by line
+  - Invoice PDF: once sent, the winner can view and download the invoice; hidden before send and when Cancelled
 - Delivery address
   - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it, which is what lets an invoice be prepared
   - Locking at send: the address stops moving once the invoice is sent; a change after that goes through Grade10
 - Settlement
-  - Card only for the winner: the order offers one payment method; every other method is an operator's backup
+  - Card only for the winner while `pending`: the order offers one payment method; every other method is an operator's backup
+  - Expired ends self-service Pay: when the invoice is `expired`, card Pay is hidden and Contact Us appears in the overdue alert
   - Hold release: the bid-time authorization verified a bidder and is not the instrument that settles
 - Payment deadline
   - Seven days from send: the window opens when the winner has an amount to pay, not before
+  - Absolute datetime display: the deadline is shown as a datetime in the winner's zone; no countdown
+- Progress presentation
+  - Five steps: Address → Invoice → Payment → Shipped → Completed; Cancelled and Refunded show no stepper
 - Records the winner keeps
   - Payment receipt: what was paid, itemised, with the method that paid it
   - Shipping tracker and delivery proof: unchanged
@@ -70,7 +75,7 @@ At lot close Grade10 SHALL, for the winner:
 
 1. Create one auction order for the lot, with invoice status `not_issued` and
    fulfilment status `unfulfilled`, per `grade10-site/auction/order-status`.
-2. Release the winner's bid-time authorization.
+2. Release the winner's existing bid-time authorization, when one exists.
 3. Notify the winner that they have won and ask them to confirm a delivery
    address, per `grade10-site/auction/notifications-order`.
 
@@ -86,6 +91,7 @@ Order creation, hold release and the winner notice SHALL be idempotent. A lot
 close delivered more than once SHALL produce one auction order.
 
 #### Scenario: winner-order-SC-26 - A lot close asks for an address, not payment
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a lot closing with a winner
 - **WHEN** the lot closes
@@ -95,6 +101,7 @@ close delivered more than once SHALL produce one auction order.
 - **AND** asks the winner to confirm a delivery address
 
 #### Scenario: winner-order-SC-27 - A repeated lot close creates nothing twice
+**Serves:** Order at lot close - a repeated lot close creates nothing twice
 
 - **GIVEN** a lot whose close has already created an auction order
 - **WHEN** that same lot close is delivered again
@@ -103,6 +110,7 @@ close delivered more than once SHALL produce one auction order.
 - **AND** does not notify the winner a second time
 
 #### Scenario: winner-order-SC-28 - Confirming an address readies the order for a quote
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order waiting for its winner's address
 - **WHEN** the winner confirms a delivery address
@@ -121,6 +129,7 @@ Grade10 SHALL NOT offer a partial refund or a supplementary charge for a
 shipping difference discovered after payment.
 
 #### Scenario: winner-order-SC-29 - A sent invoice refuses a self-service address change
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose invoice has been sent and is `pending`
 - **WHEN** the winner attempts to change the delivery address
@@ -128,6 +137,7 @@ shipping difference discovered after payment.
 - **AND** the order shows the locked address and how to reach Grade10
 
 #### Scenario: winner-order-SC-30 - A paid order refuses a self-service address change
+**Serves:** `winner-order-US-01`, `winner-order-US-02` - the address stops moving, whether the winner is still settling or already settled
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** the winner attempts to change the delivery address
@@ -151,17 +161,23 @@ invoice status SHALL never become `expired`.
 
 When the deadline passes unpaid, Grade10 SHALL set the invoice status to
 `expired`, per `grade10-site/auction/order-status`. The order still reads
-Pending Payment, and the winner can still pay the invoice by card.
+Pending Payment. The winner SHALL NOT be offered card payment while the
+invoice is `expired`; the order SHALL show Contact Us in its overdue alert.
+An operator SHALL restore self-service pay only by reissuing the invoice to
+`pending`, or SHALL settle manually or cancel, per `grade10-admin/auction/post-sale`.
 
 #### Scenario: winner-order-SC-31 - The deadline is seven days from send
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose invoice an operator sent at
   2026-09-12T09:00:00Z
 - **WHEN** the winner reads the invoice
 - **THEN** the payment deadline is 2026-09-19T09:00:00Z
-- **AND** it is displayed in the winner's own timezone
+- **AND** it is displayed in the winner's own timezone as an absolute datetime
+- **AND** no countdown is shown
 
 #### Scenario: winner-order-SC-32 - An order waiting on an address never expires
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose winner has confirmed no delivery address
   30 days after its lot closed
@@ -170,18 +186,90 @@ Pending Payment, and the winner can still pay the invoice by card.
 - **AND** its invoice status is `not_issued`, never `expired`
 
 #### Scenario: winner-order-SC-33 - A declined payment does not move the deadline
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose sent invoice has a payment deadline of
   2026-09-19T09:00:00Z
 - **WHEN** the winner's card is declined twice
 - **THEN** the payment deadline is still 2026-09-19T09:00:00Z
 
-#### Scenario: winner-order-SC-37 - An expired invoice can still be paid by card
+#### Scenario: winner-order-SC-37 - An expired invoice refuses card payment
+**Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose invoice status is `expired`
-- **WHEN** the winner opens the order and pays by card
-- **THEN** Grade10 accepts the payment
-- **AND** the invoice status is `paid`
+- **WHEN** the winner opens the order
+- **THEN** Grade10 offers no card Pay control
+- **AND** the overdue alert carries Contact Us
+- **AND** a card payment attempt for that invoice is refused
+
+### Requirement: Winner Order shows five progress steps
+
+Winner Order SHALL present settlement progress as five steps in this order:
+**Address**, **Invoice**, **Payment**, **Shipped**, **Completed**. The steps
+SHALL be presentation only and SHALL NOT replace the eight-value derived order
+status vocabulary in `grade10-site/auction/order-status`.
+
+| Current step | Derived order status |
+| --- | --- |
+| Address | Awaiting Address |
+| Invoice | Preparing Invoice |
+| Payment | Pending Payment (invoice `pending` or `expired`) |
+| Shipped | Processing or Shipped |
+| Completed | Delivered |
+
+When the derived order status is **Cancelled** or **Refunded**, Winner Order
+SHALL show no progress stepper.
+
+#### Scenario: winner-order-SC-54 - Pending Payment highlights the Payment step
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order whose derived status is Pending Payment
+- **WHEN** the winner opens Winner Order
+- **THEN** the progress stepper marks Payment as the current step
+- **AND** Address and Invoice are complete
+
+#### Scenario: winner-order-SC-55 - Processing maps under Shipped
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an auction order whose derived status is Processing
+- **WHEN** the winner opens Winner Order
+- **THEN** the progress stepper marks Shipped as the current step
+- **AND** does not invent a Processing step label
+
+#### Scenario: winner-order-SC-56 - Cancelled hides the stepper
+**Serves:** winner-order-US-05 - Winner misses the payment deadline
+
+- **GIVEN** an auction order whose derived status is Cancelled
+- **WHEN** the winner opens Winner Order
+- **THEN** no progress stepper is shown
+
+### Requirement: The winner can view the sent invoice as a PDF
+
+Once an operator has sent an invoice on an auction order, Winner Order SHALL
+offer the winner a control to view and download that invoice as a PDF. The
+control SHALL be hidden while the invoice status is `not_issued` and SHALL be
+hidden when the invoice status is `cancelled`.
+
+#### Scenario: winner-order-SC-57 - A sent invoice offers its PDF
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order whose invoice status is `pending`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers view and download of the invoice PDF
+
+#### Scenario: winner-order-SC-44 - No invoice PDF before send
+**Serves:** winner-order-US-05 - Winner misses the payment deadline
+
+- **GIVEN** an auction order whose invoice status is `not_issued`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers no invoice PDF control
+
+#### Scenario: winner-order-SC-45 - A cancelled order hides the invoice PDF
+**Serves:** winner-order-US-05 - Winner misses the payment deadline
+
+- **GIVEN** an auction order whose invoice status is `cancelled`
+- **WHEN** the winner opens Winner Order
+- **THEN** Grade10 offers no invoice PDF control
 
 ## MODIFIED Requirements
 
@@ -226,6 +314,7 @@ No component SHALL be marked as an estimate. Grade10 SHALL NOT show the winner
 an invoice amount before an operator has sent it.
 
 #### Scenario: winner-order-SC-04 - An estimated total is marked as one
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an operator sent an invoice with a winning bid of 250000, a
   buyer's premium of 50000, shipping of 8000 and insurance of 4000 minor
@@ -235,6 +324,7 @@ an invoice amount before an operator has sent it.
 - **AND** no component is marked as an estimate
 
 #### Scenario: winner-order-SC-05 - A confirmed address makes the total firm
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose winner confirmed a delivery address
 - **AND** an operator sent an invoice with Shipping & Handling quoted for that
@@ -259,12 +349,14 @@ an invoice amount before an operator has sent it.
 - **AND** the amount settled is the invoice's subtotal
 
 #### Scenario: winner-order-SC-38 - Shipping & Handling of zero reads Free
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an operator sent an invoice with Shipping & Handling of 0 minor units in HKD
 - **WHEN** the winner opens the order
 - **THEN** the Shipping & Handling line reads Free
 
 #### Scenario: winner-order-SC-39 - An invoice with no insurance shows no Insurance line
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an operator sent an invoice without adding insurance
 - **WHEN** the winner opens the order
@@ -280,6 +372,7 @@ address, its own quote, its own payment deadline, and its own fulfilment
 lifecycle.
 
 #### Scenario: winner-order-SC-06 - Two lots won together stay two orders
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** one winner who wins two lots in the same auction, closing at
   different times
@@ -306,6 +399,7 @@ destination until the winner confirms or selects an address.
 | Winner adds or edits an address | Grade10 offers to save it to the account address book. The order keeps a snapshot |
 
 #### Scenario: winner-order-SC-07 - A pre-filled default still needs confirming
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order pre-filled from the account's default shipping address
 - **WHEN** the winner leaves the order without confirming that address
@@ -313,6 +407,7 @@ destination until the winner confirms or selects an address.
 - **AND** an operator cannot send its invoice
 
 #### Scenario: winner-order-SC-08 - An amendment does not touch the address book by default
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a winner amending the delivery address on one auction order
 - **AND** they leave the offer to save the amendment to the account address book untaken
@@ -322,9 +417,9 @@ destination until the winner confirms or selects an address.
 
 ### Requirement: The bid-time hold is released, never captured
 
-Grade10 SHALL release the bid-time authorization on every bidder of a closing
-lot, winner and losing bidders alike, and SHALL NOT leave a losing bidder's
-authorization to expire on its own.
+When a bid-time authorization exists, Grade10 SHALL release it on every bidder
+of a closing lot, winner and losing bidders alike, and SHALL NOT leave a losing
+bidder's authorization to expire on its own.
 
 Grade10 SHALL NOT capture or increment a bid-time authorization as any part
 of settlement. The winner's payment SHALL be a single new card transaction for
@@ -336,11 +431,14 @@ other method are recorded by an operator alone, per
 Releasing an authorization that has already expired SHALL succeed as a
 no-op. Grade10 SHALL NOT treat an expired authorization as a failure.
 
-A refused or failed payment SHALL NOT void the invoice. The invoice SHALL
-remain payable, before its deadline and after it has expired, and the winner
-SHALL be able to retry with the same or a different card.
+A refused or failed payment SHALL NOT void the invoice. While the invoice
+status is `pending`, the invoice SHALL remain payable by card and the winner
+SHALL be able to retry with the same or a different card. When the invoice
+status is `expired`, Grade10 SHALL NOT offer or accept winner card payment
+until an operator reissues the invoice to `pending`.
 
 #### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a winner holding an open bid-time authorization on the closing lot
 - **WHEN** the lot closes
@@ -349,6 +447,7 @@ SHALL be able to retry with the same or a different card.
   single new transaction for the order total
 
 #### Scenario: winner-order-SC-13 - An expired hold releases as a no-op
+**Serves:** Settlement - an expired hold releases as a no-op
 
 - **GIVEN** a winner whose bid-time authorization expired before the lot closed
 - **WHEN** the lot closes
@@ -356,6 +455,7 @@ SHALL be able to retry with the same or a different card.
 - **AND** creates the auction order as normal
 
 #### Scenario: winner-order-SC-14 - A losing bidder's hold is released at close
+**Serves:** winner-order-US-06 - Losing bidder gets their hold back when the lot closes
 
 - **GIVEN** a lot closing with one winner and three losing bidders holding
   open authorizations
@@ -364,6 +464,7 @@ SHALL be able to retry with the same or a different card.
 - **AND** does not wait for them to expire
 
 #### Scenario: winner-order-SC-15 - A declined payment leaves the invoice payable
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an unpaid invoice inside its payment deadline
 - **WHEN** the winner's payment is declined
@@ -371,6 +472,7 @@ SHALL be able to retry with the same or a different card.
 - **AND** the winner can retry with the same or a different card
 
 #### Scenario: winner-order-SC-35 - The winner is offered card payment only
+**Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose invoice has been sent and is `pending`
 - **WHEN** the winner opens the order to pay
@@ -402,6 +504,7 @@ pointer to any invoice it supersedes. The proof files an operator attached
 SHALL NOT appear on the winner's receipt.
 
 #### Scenario: winner-order-SC-18 - A receipt is itemised and stays retrievable
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order paid at an order total of 316000 minor units in HKD
 - **WHEN** the winner opens the order a year later
@@ -410,6 +513,7 @@ SHALL NOT appear on the winner's receipt.
   the subtotal, the payment processing fee, and the order total
 
 #### Scenario: winner-order-SC-19 - A manually settled receipt says so
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order an operator settled by bank transfer with an
   external reference, after re-quoting and superseding an earlier invoice
@@ -421,6 +525,7 @@ SHALL NOT appear on the winner's receipt.
 - **AND** it shows no proof file
 
 #### Scenario: winner-order-SC-20 - The tracker appears once the lot is dispatched
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order whose fulfilment status has just become
   `fulfilled` with a tracking number attached
@@ -429,6 +534,7 @@ SHALL NOT appear on the winner's receipt.
   carrier
 
 #### Scenario: winner-order-SC-21 - Delivery proof records what the carrier provided
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** a dispatched auction order for which the carrier reports delivery
   with a handover timestamp and a signature
@@ -437,6 +543,7 @@ SHALL NOT appear on the winner's receipt.
 - **AND** does not reduce them to a bare confirmation flag
 
 #### Scenario: winner-order-SC-36 - A card receipt names the card
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order the winner paid by a Visa card ending 4242
 - **WHEN** the winner opens the receipt

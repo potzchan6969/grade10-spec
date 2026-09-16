@@ -3,31 +3,58 @@ version: 1
 description: Grade10 planning workflow - proposal → specs → user journeys → test cases → ui design → tech design → tasks
 artifacts:
   - id: proposal
+    teammate: product-manager
+    required: true
     generates: proposal.md
+    requires: []
     instruction: |
       Why, what changes, and what does not.
   - id: specs
+    teammate: product-manager
+    required: true
     generates: specs/**/spec.md
+    requires:
+      - proposal
     instruction: |
       One delta per capability.
   - id: user-journeys
+    teammate: product-manager
+    required: true
     generates: specs/**/user-journeys.md
+    requires:
+      - specs
     instruction: |
       Who walks the requirements.
   - id: test-cases
+    teammate: product-manager
+    required: true
     generates: specs/**/feature-tcs.md
+    requires:
+      - user-journeys
     instruction: |
       QA's suite, derived from the journeys.
   - id: ui-design
+    teammate: designer
+    required: false
     generates: ui-design.md
+    requires:
+      - specs
     instruction: |
       The visual plan.
   - id: tech-design
+    teammate: engineer
+    required: false
     generates: tech-design.md
+    requires:
+      - specs
     instruction: |
       The technical design.
   - id: tasks
+    teammate: engineer
+    required: true
     generates: tasks.md
+    requires:
+      - specs
     instruction: |
       The plan, group by group.
 apply:

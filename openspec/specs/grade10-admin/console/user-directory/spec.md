@@ -51,6 +51,7 @@ offered on the signed-in operator's own account when they hold `user:set-role`,
 subject to the same refusals as `shared/auth/users`.
 
 #### Scenario: grade10-admin-console-user-directory-SC-01 - An operator opens an account beside the list
+**Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
 - **GIVEN** a signed-in operator who holds `user:list`
 - **WHEN** they open Users and pick an account
@@ -58,6 +59,7 @@ subject to the same refusals as `shared/auth/users`.
 - **AND** the list they picked it from is still there
 
 #### Scenario: grade10-admin-console-user-directory-SC-02 - A move the operator cannot make is not offered
+**Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
 - **GIVEN** a signed-in operator whose roles hold `user:list` and `user:ban` but not `user:set-role` or `user:delete`
 - **WHEN** they open Users and an account
@@ -65,6 +67,7 @@ subject to the same refusals as `shared/auth/users`.
 - **AND** both still offer ban or unban
 
 #### Scenario: grade10-admin-console-user-directory-SC-15 - An operator may change their own roles
+**Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
 - **GIVEN** a signed-in operator who holds `user:set-role` and opens their own account
 - **WHEN** they read the panel
@@ -79,6 +82,7 @@ so opening that address again shows the same view. When the address names no
 roles narrowing, the page SHALL open on elevated accounts.
 
 #### Scenario: grade10-admin-console-user-directory-SC-03 - An address opens one account
+**Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
 - **GIVEN** an operator who holds `user:list`
 - **WHEN** they open the Users page at an address naming an account
@@ -86,12 +90,14 @@ roles narrowing, the page SHALL open on elevated accounts.
 - **AND** they did not have to search for it
 
 #### Scenario: grade10-admin-console-user-directory-SC-04 - A view is handed to a colleague
+**Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
 - **GIVEN** an operator who has searched, narrowed the directory, and moved past the first page
 - **WHEN** another operator who holds the same grants opens that address
 - **THEN** they see the same search, the same narrowing, and the same page
 
 #### Scenario: grade10-admin-console-user-directory-SC-12 - Users opens on elevated accounts
+**Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
 - **GIVEN** an operator who holds `user:list`
 - **WHEN** they open Users at an address that names no roles narrowing
@@ -113,6 +119,7 @@ not choosable when Type is Users.
 | Email | Verified, or not verified |
 
 #### Scenario: grade10-admin-console-user-directory-SC-05 - An admin asks who holds a role
+**Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
 - **GIVEN** an operator who holds `user:list`
 - **WHEN** they narrow the directory to the accounts that hold `admin`
@@ -120,12 +127,14 @@ not choosable when Type is Users.
 - **AND** how many there are is stated
 
 #### Scenario: grade10-admin-console-user-directory-SC-06 - An operator narrows by status and population
+**Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
 - **GIVEN** an operator who holds `user:list`
 - **WHEN** they narrow the directory to banned accounts under Users
 - **THEN** every account shown is banned and holds no elevated role
 
 #### Scenario: grade10-admin-console-user-directory-SC-13 - A search miss offers the other Type
+**Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
 - **GIVEN** an operator who holds `user:list` and a search that matches accounts only in the other Type
 - **WHEN** the directory under the current Type is empty
@@ -133,6 +142,7 @@ not choosable when Type is Users.
 - **AND** following it keeps the query and lists the matching accounts
 
 #### Scenario: grade10-admin-console-user-directory-SC-14 - An open erasure withholds ban and unban
+**Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
 - **GIVEN** an account with an erasure filed, and an operator who holds `user:ban`
 - **WHEN** they open that account
@@ -150,6 +160,7 @@ SHALL open that role on Roles & Permissions when the console supplies an
 address for it and the operator may open that page.
 
 #### Scenario: grade10-admin-console-user-directory-SC-07 - An account's grants are the mapping's
+**Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
 - **GIVEN** an account whose roles are `support`
 - **WHEN** an operator opens its panel
@@ -157,6 +168,7 @@ address for it and the operator may open that page.
 - **AND** each grant the mapping marks elevated is marked elevated once for the account
 
 #### Scenario: grade10-admin-console-user-directory-SC-08 - A role opens on the grants page
+**Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
 - **GIVEN** an operator who holds `user:set-role` and an account that holds `support`
 - **WHEN** they open `support` from the account's identity
@@ -172,6 +184,7 @@ those standing moves. Neither hand-off SHALL be restated as its own record in
 the panel.
 
 #### Scenario: grade10-admin-console-user-directory-SC-09 - A customer's loyalty record is one move away
+**Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
 - **GIVEN** an account that holds no elevated role
 - **WHEN** an operator opens its panel
@@ -179,6 +192,7 @@ the panel.
 - **AND** an account that holds an elevated role is not offered one
 
 #### Scenario: grade10-admin-console-user-directory-SC-10 - What an account has done is one move away
+**Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
 - **GIVEN** any account in the directory
 - **WHEN** an operator who may read the trail opens its panel
@@ -191,6 +205,7 @@ SHALL show that it is banned and the reason when one was supplied. It SHALL
 NOT invent a ban time the directory did not return.
 
 #### Scenario: grade10-admin-console-user-directory-SC-11 - An operator reads when the account joined
+**Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
 - **GIVEN** an account in the directory
 - **WHEN** an operator opens its activity

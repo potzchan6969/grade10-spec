@@ -50,6 +50,7 @@ label, the row SHALL show the application-supplied no-standing placeholder
 rather than inventing a state badge.
 
 #### Scenario: shared-ui-auction-record-SC-01 - An application imports the surface
+**Serves:** The record surface exports - an application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's
   public entry
@@ -57,6 +58,7 @@ rather than inventing a state badge.
 - **AND** no other component or type is exported for this surface
 
 #### Scenario: shared-ui-auction-record-SC-02 - A part is reused alone
+**Serves:** The record surface exports - a part is reused alone
 
 - **WHEN** an application renders `AuctionRecordRow` or `WatchButton` without
   `AuctionRecord`
@@ -64,6 +66,7 @@ rather than inventing a state badge.
   and no requirement to supply page props
 
 #### Scenario: shared-ui-auction-record-SC-08 - Bidding is read before Watching
+**Serves:** The record surface exports - bidding is read before Watching
 
 - **GIVEN** an `AuctionRecord` supplied with both bidding rows and watching
   rows
@@ -72,12 +75,14 @@ rather than inventing a state badge.
 - **AND** no Bidding or Watching section heading appears
 
 #### Scenario: shared-ui-auction-record-SC-11 - The title badge shows the row count
+**Serves:** Table page body - the title badge shows the row count
 
 - **GIVEN** an `AuctionRecord` supplied with four rows
 - **WHEN** it renders
 - **THEN** the badge beside the page title shows 4
 
 #### Scenario: shared-ui-auction-record-SC-12 - Watch-only standing shows the placeholder
+**Serves:** Table page body - watch-only standing shows the placeholder
 
 - **GIVEN** an `AuctionRecordRow` supplied without a standing label and with
   the no-standing placeholder in copy
@@ -86,6 +91,7 @@ rather than inventing a state badge.
 - **AND** it does not invent a badge label
 
 #### Scenario: shared-ui-auction-record-SC-13 - A bid row omits Unwatch when not supplied
+**Serves:** Table page body - a bid row omits Unwatch when not supplied
 
 - **GIVEN** an `AuctionRecordRow` supplied with email-alerts controls and no
   Unwatch props

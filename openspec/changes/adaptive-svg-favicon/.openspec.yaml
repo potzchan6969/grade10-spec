@@ -1,3 +1,4 @@
 schema: grade10-planning
 created: 2026-09-15
 skip_specs: true
+skip_specs_why: "the favicon is an asset swap the platform page already describes; no capability requirement moves"

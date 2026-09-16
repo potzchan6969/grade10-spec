@@ -10,6 +10,8 @@ export type AuctionRecordRowState =
   | "bid_submitted"
   | "bid_not_accepted"
   | "awaiting_payment"
+  | "awaiting_address"
+  | "preparing_invoice"
   | "payment_problem"
   | "paid"
   | "shipped"
@@ -99,6 +101,12 @@ export type AuctionRecordCopy = {
   browseCatalogue: string;
   openListing?: string;
   openBidding?: string;
+  /**
+   * Actions-column label that opens the Winner Order for a won lot.
+   * Omit on non-winner rows — My Auctions stays read-only and does not invent
+   * a Winner Order entry for losers or open bids.
+   */
+  viewOrder?: string;
   /** @deprecated Close sits under the title in the table row. */
   currentBidLabel?: string;
   /** @deprecated Close sits under the title in the table row. */
@@ -108,7 +116,7 @@ export type AuctionRecordCopy = {
 
 export type AuctionRecordRowCopy = Pick<
   AuctionRecordCopy,
-  "openListing" | "openBidding" | "noStanding"
+  "openListing" | "openBidding" | "noStanding" | "viewOrder"
 >;
 
 /** @deprecated Prefer AuctionRecord one-table page; kept for transitional imports. */

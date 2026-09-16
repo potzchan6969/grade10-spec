@@ -64,6 +64,7 @@ or update an `annotation-current.json` or another current-state file in either
 repository.
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-01 - One category catalog resolves many annotations
+**Serves:** Live observation - one category catalog resolves many annotations
 
 - **GIVEN** a registered Figma file contains 127 annotation occurrences
 - **WHEN** the workflow observes the file
@@ -72,6 +73,7 @@ repository.
 - **AND** it does not make 127 additional category requests
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-02 - Content and Interaction labels are reported
+**Serves:** Live observation - content and Interaction labels are reported
 
 - **GIVEN** two current annotations refer to category IDs whose catalog labels
   are `Content` and `Interaction`
@@ -80,6 +82,7 @@ repository.
 - **AND** each occurrence reports the corresponding human-readable label
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-03 - Annotation has no category
+**Serves:** Live observation - annotation has no category
 
 - **GIVEN** a current annotation has no category ID
 - **WHEN** the live observation is normalized
@@ -87,6 +90,7 @@ repository.
 - **AND** the observation is not blocked for that reason
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-04 - Category evidence is incomplete
+**Serves:** Live observation - category evidence is incomplete
 
 - **GIVEN** a current annotation has a non-null category ID
 - **AND** the category ID is absent from the retrieved file catalog
@@ -95,6 +99,7 @@ repository.
 - **AND** it performs no repository write
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-05 - Annotation is outside registered surfaces
+**Serves:** Live observation - annotation is outside registered surfaces
 
 - **GIVEN** an annotation exists only in an exploratory area outside every
   registered engineering surface
@@ -125,6 +130,7 @@ fingerprint and multiplicity ordinal after canonical sorting, not its raw Figma
 array position.
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-06 - Annotation array order changes
+**Serves:** Live observation - annotation array order changes
 
 - **GIVEN** a node has the same annotation occurrences as its baseline in a
   different array order
@@ -132,6 +138,7 @@ array position.
 - **THEN** it reports no drift
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-07 - One of several annotations changes text
+**Serves:** Live observation - one of several annotations changes text
 
 - **GIVEN** exact matching cancels every unchanged occurrence on a node
 - **AND** one baseline occurrence and one current occurrence remain with the
@@ -141,6 +148,7 @@ array position.
 - **AND** the finding retains the accepted annotation key and associations
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-08 - Duplicate multiplicity decreases
+**Serves:** Live observation - duplicate multiplicity decreases
 
 - **GIVEN** the baseline has two identical occurrences on one node
 - **AND** the live observation has one identical occurrence
@@ -149,6 +157,7 @@ array position.
 - **AND** it does not collapse the accepted duplicates
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-09 - Several unmatched siblings are ambiguous
+**Serves:** Live observation - several unmatched siblings are ambiguous
 
 - **GIVEN** several unmatched baseline and current occurrences share the same
   category ID and pinned-property set
@@ -159,6 +168,7 @@ array position.
 - **AND** it does not transfer keys or associations by guess
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-10 - Annotation structure changes
+**Serves:** Live observation - annotation structure changes
 
 - **GIVEN** an annotation keeps similar text but changes category ID or pinned
   properties
@@ -167,6 +177,7 @@ array position.
 - **AND** it does not infer that the two occurrences are identical
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-11 - Only line-ending representation differs
+**Serves:** Live observation - only line-ending representation differs
 
 - **GIVEN** live and accepted annotation text differ only by line-ending style
 - **WHEN** the workflow compares them
@@ -188,6 +199,7 @@ it SHALL remain selectable only with an explicit removal or replacement
 decision. Blocked/no-write is reserved for incomplete or malformed evidence.
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-12 - Figma Plugin API access is unavailable
+**Serves:** Honest evidence - figma Plugin API access is unavailable
 
 - **WHEN** the invoking harness cannot provide the required Figma Plugin API or
   equivalent MCP evidence
@@ -196,6 +208,7 @@ decision. Blocked/no-write is reserved for incomplete or malformed evidence.
 - **AND** it performs no repository write
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-13 - Unresolved registered root is skipped
+**Serves:** Honest evidence - unresolved registered root is skipped
 
 - **GIVEN** a registered Figma file has more than one registered root
 - **AND** one registered root cannot be resolved
@@ -207,6 +220,7 @@ decision. Blocked/no-write is reserved for incomplete or malformed evidence.
 - **AND** it does not block the run for that skipped root
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-14 - Every registered root is unresolved
+**Serves:** Honest evidence - every registered root is unresolved
 
 - **GIVEN** no registered root in the file can be resolved
 - **WHEN** the workflow observes the file
@@ -214,6 +228,7 @@ decision. Blocked/no-write is reserved for incomplete or malformed evidence.
 - **AND** it performs no repository write
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-15 - Accepted node no longer resolves
+**Serves:** Honest evidence - accepted node no longer resolves
 
 - **GIVEN** a baseline entry names a node that cannot be resolved under its
   registered surface
@@ -236,6 +251,7 @@ primary ownership signal. Findings SHALL be grouped as `My assigned work`,
 precedence. Multiple exact candidates SHALL remain ambiguous.
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-16 - Exact active change reference is found
+**Serves:** Tracing and ownership - exact active change reference is found
 
 - **GIVEN** an active OpenSpec artifact references the finding's exact node or
   registered ancestor
@@ -243,6 +259,7 @@ precedence. Multiple exact candidates SHALL remain ambiguous.
 - **THEN** it names the matching change and artifact as association evidence
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-17 - Similar prose is the only lead
+**Serves:** Tracing and ownership - similar prose is the only lead
 
 - **GIVEN** annotation text resembles an OpenSpec artifact
 - **AND** no exact association exists
@@ -251,6 +268,7 @@ precedence. Multiple exact candidates SHALL remain ambiguous.
 - **AND** it does not claim the prose match as evidence
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-18 - Matching task group belongs to the current user
+**Serves:** Tracing and ownership - matching task group belongs to the current user
 
 - **GIVEN** a finding has one exact matching task group
 - **AND** that group is claimed by the current user's normalized handle
@@ -258,6 +276,7 @@ precedence. Multiple exact candidates SHALL remain ambiguous.
 - **THEN** the finding appears under `My assigned work`
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-19 - Proposal authorship does not override another owner
+**Serves:** Tracing and ownership - proposal authorship does not override another owner
 
 - **GIVEN** the current user authored the associated proposal
 - **AND** its exact task group is claimed by another handle
@@ -265,6 +284,7 @@ precedence. Multiple exact candidates SHALL remain ambiguous.
 - **THEN** the finding appears under `Owned by others`
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-20 - Current identity is unavailable
+**Serves:** Tracing and ownership - current identity is unavailable
 
 - **WHEN** the planning workflow cannot resolve a current-user handle
 - **THEN** the report still includes every finding
@@ -294,6 +314,7 @@ summary SHALL be explicit opt-in only. The developer SHALL be able to
 select individual finding IDs; unselected findings SHALL remain drift.
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-21 - Actionable findings are reported
+**Serves:** Reporting and selection - actionable findings are reported
 
 - **WHEN** one or more annotation changes are found
 - **THEN** the skill reports them in ownership groups
@@ -302,6 +323,7 @@ select individual finding IDs; unselected findings SHALL remain drift.
 - **AND** no repository file has changed
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-22 - Human report includes complete annotation bodies
+**Serves:** Reporting and selection - human report includes complete annotation bodies
 
 - **WHEN** a finding is reported
 - **THEN** it shows the node name
@@ -314,6 +336,7 @@ select individual finding IDs; unselected findings SHALL remain drift.
   single line
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-23 - Human report is structured for reading
+**Serves:** Reporting and selection - human report is structured for reading
 
 - **WHEN** findings are reported
 - **THEN** each finding has its own heading with the node name
@@ -322,6 +345,7 @@ select individual finding IDs; unselected findings SHALL remain drift.
 - **AND** the report is chat markdown rather than one wrapping code fence
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-24 - No tracked annotations changed
+**Serves:** Reporting and selection - no tracked annotations changed
 
 - **GIVEN** all registered evidence is complete
 - **AND** the comparison finds no drift
@@ -330,6 +354,7 @@ select individual finding IDs; unselected findings SHALL remain drift.
 - **AND** it does not offer an empty acceptance step
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-25 - Developer selects only some findings
+**Serves:** Reporting and selection - developer selects only some findings
 
 - **GIVEN** the report contains several findings
 - **WHEN** the developer selects a subset of stable finding IDs
@@ -359,6 +384,7 @@ ambiguous findings SHALL not modify the baseline. Removals, replacement nodes,
 and orphaned baseline entries SHALL always require explicit review.
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-26 - Existing text edit is accepted
+**Serves:** Deliberate reconciliation - existing text edit is accepted
 
 - **GIVEN** a uniquely matched changed finding is selected
 - **AND** its exact association or no-impact reason is confirmed
@@ -367,6 +393,7 @@ and orphaned baseline entries SHALL always require explicit review.
 - **AND** the existing annotation key and retained metadata survive
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-27 - Addition is confirmed
+**Serves:** Deliberate reconciliation - addition is confirmed
 
 - **GIVEN** an unambiguous added finding is selected
 - **AND** its exact association or no-impact reason is confirmed
@@ -375,6 +402,7 @@ and orphaned baseline entries SHALL always require explicit review.
 - **AND** no key was assigned before confirmation
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-28 - Only selected findings are accepted
+**Serves:** Deliberate reconciliation - only selected findings are accepted
 
 - **GIVEN** selected and unselected findings share one node
 - **WHEN** reconciliation is applied
@@ -382,6 +410,7 @@ and orphaned baseline entries SHALL always require explicit review.
 - **AND** unselected occurrences remain drift in the next comparison
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-29 - Ambiguous duplicate is selected
+**Serves:** Deliberate reconciliation - ambiguous duplicate is selected
 
 - **GIVEN** a selected finding belongs to an ambiguous duplicate set
 - **WHEN** the workflow validates the acceptance set
@@ -390,6 +419,7 @@ and orphaned baseline entries SHALL always require explicit review.
 - **AND** it performs no partial write from the invalid acceptance set
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-30 - Association decision is missing
+**Serves:** Deliberate reconciliation - association decision is missing
 
 - **GIVEN** a selected occurrence has neither an exact association nor an
   explicit no-impact reason
@@ -398,6 +428,7 @@ and orphaned baseline entries SHALL always require explicit review.
 - **AND** it performs no repository write
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-31 - Observation changed before acceptance
+**Serves:** Deliberate reconciliation - observation changed before acceptance
 
 - **GIVEN** the selected findings were produced from one observation digest
 - **AND** the evidence supplied for acceptance has a different digest
@@ -419,6 +450,7 @@ block the commit. The skill SHALL NOT push, modify the application repository's
 submodule pointer, open a pull request, or modify Figma.
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-32 - Reconciliation verifies cleanly
+**Serves:** Reporting and selection - reconciliation verifies cleanly
 
 - **GIVEN** selected findings were applied successfully
 - **WHEN** the skill reruns the comparison against the pinned observation
@@ -427,6 +459,7 @@ submodule pointer, open a pull request, or modify Figma.
 - **AND** the skill shows the exact Git diff
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-33 - Developer confirms the commit
+**Serves:** Reporting and selection - developer confirms the commit
 
 - **GIVEN** verification has completed
 - **AND** the relevant diff has no unrelated or overlapping changes
@@ -435,6 +468,7 @@ submodule pointer, open a pull request, or modify Figma.
 - **AND** it does not push the commit
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-34 - Developer declines the commit
+**Serves:** Reporting and selection - developer declines the commit
 
 - **GIVEN** reconciliation has produced a verified working-tree diff
 - **WHEN** the developer declines commit confirmation
@@ -450,6 +484,7 @@ component, rendered-value, token, audit, and Code Connect checks SHALL remain
 unchanged in purpose and trigger coverage.
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-35 - Design-sync workflow still checks registered components
+**Serves:** Retired automation - design-sync workflow still checks registered components
 
 - **GIVEN** the deprecated annotation CI steps have been removed
 - **WHEN** the design-sync workflow runs on its existing triggers
@@ -457,6 +492,7 @@ unchanged in purpose and trigger coverage.
 - **AND** it does not fetch or persist annotation drift
 
 #### Scenario: shared-design-sync-annotation-monitoring-SC-36 - A supported harness opens the annotation workflow
+**Serves:** Retired automation - a supported harness opens the annotation workflow
 
 - **GIVEN** project skill parity has been restored
 - **WHEN** a supported harness requests annotation follow-up

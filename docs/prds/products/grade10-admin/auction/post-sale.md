@@ -19,8 +19,9 @@ The queue works every winner order from lot close through delivery in one place.
 | Delivered | Delivery is confirmed |
 | Cancelled · Refunded | The order has a recorded terminal outcome |
 
-- **Needs action** — Preparing Invoice, expired Pending Payment, and Processing
-- **Overdue** — a separate mark for an order idle for 72 hours or more in Awaiting Address or Preparing Invoice; it changes no status and never expires the order
+- **Needs action** - Preparing Invoice, expired Pending Payment, and Processing
+- **Overdue** - a separate mark for an order idle for 72 hours or more in Awaiting Address or Preparing Invoice; it changes no status and never expires the order
+- **Extended bidding: ON** - a lot past its scheduled close and still taking bids carries this label on its row; its outcome does not change
 
 ## Payment
 

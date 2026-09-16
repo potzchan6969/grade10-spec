@@ -31,6 +31,7 @@ the wide shape where the response carries a picture, and the small shape where
 it carries none.
 
 #### Scenario: product-page-SC-19 - A preview fetcher reads the card's picture
+**Serves:** product-page-US-05 - Collector shares a card and the preview shows it
 
 - **GIVEN** a card the catalogue pictures
 - **WHEN** its product address is fetched and no script executes
@@ -41,6 +42,7 @@ it carries none.
 - **AND** `twitter:card` is `summary_large_image`
 
 #### Scenario: product-page-SC-20 - A card with no picture unfurls without one
+**Serves:** product-page-US-05 - Collector shares a card and the preview shows it
 
 - **GIVEN** a card the catalogue lists no image for
 - **WHEN** its product address is fetched and no script executes

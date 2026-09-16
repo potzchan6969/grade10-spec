@@ -40,12 +40,14 @@ Shopify customer SHALL be refused rather than issued an unscoped code, since a
 code that is not scoped to its member is a bearer string anyone may spend.
 
 #### Scenario: grade10-site-store-discounts-SC-01 - A product coupon settles by its own Shopify Discount code
+**Serves:** grade10-site-store-discounts-US-01 - Collector redeems a coupon at checkout
 
 - **GIVEN** a member holding a product coupon whose basket qualifies
 - **WHEN** the checkout is submitted
 - **THEN** the draft order carries the coupon's own single-use Shopify Discount code, not a welded line discount
 
 #### Scenario: grade10-site-store-discounts-SC-02 - A gift settles by its own Shopify Discount code
+**Serves:** grade10-site-store-discounts-US-01 - Collector redeems a coupon at checkout
 
 - **GIVEN** a member holding a gift whose basket clears its threshold
 - **WHEN** the checkout is submitted
@@ -53,6 +55,7 @@ code that is not scoped to its member is a bearer string anyone may spend.
 - **AND** the gift's line carries no discount of its own, so the benefit is taken exactly once
 
 #### Scenario: grade10-site-store-discounts-SC-08 - A reward coupon settles by its own Shopify Discount code
+**Serves:** grade10-site-store-discounts-US-01 - Collector redeems a coupon at checkout
 
 - **GIVEN** a member redeeming a reward coupon against an order
 - **WHEN** the order claims the reward coupon
@@ -60,6 +63,7 @@ code that is not scoped to its member is a bearer string anyone may spend.
 - **AND** the order later settles reporting that code, not a welded line discount
 
 #### Scenario: grade10-site-store-discounts-SC-12 - A member with no paired Shopify customer is refused
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
 - **GIVEN** a member whose Shopify customer pairing has not converged
 - **WHEN** they apply a coupon to a checkout
@@ -79,6 +83,7 @@ Where the catalogue cannot supply a line's facets, the coupon SHALL be
 refused rather than minted against a target that may be wrong.
 
 #### Scenario: grade10-site-store-discounts-SC-09 - A facet-scoped coupon cuts only the lines its facet reaches
+**Serves:** grade10-site-store-discounts-US-01 - Collector redeems a coupon at checkout
 
 - **GIVEN** a coupon scoped to one catalogue facet choice, and a basket holding lines both inside and outside it
 - **WHEN** the order claims the coupon
@@ -86,6 +91,7 @@ refused rather than minted against a target that may be wrong.
 - **AND** the shop takes the same amount the platform computed for those lines
 
 #### Scenario: grade10-site-store-discounts-SC-10 - An unavailable catalogue refuses the coupon rather than guessing
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
 - **GIVEN** a basket holding a line whose facets the catalogue cannot supply
 - **WHEN** a facet-scoped coupon is claimed against it
@@ -103,12 +109,14 @@ with another. The order's one discount-code slot is this capability's own
 requirement; a reward coupon is one case of it.
 
 #### Scenario: grade10-site-store-discounts-SC-03 - A checkout eligible for two coupons asks the collector to choose
+**Serves:** grade10-site-store-discounts-US-02 - Collector holding more than one eligible coupon picks which one to spend
 
 - **GIVEN** a basket that qualifies for both a product coupon and an order coupon at once
 - **WHEN** the collector checks out
 - **THEN** they are asked to choose exactly one, and only that one reaches the draft order
 
 #### Scenario: grade10-site-store-discounts-SC-04 - A second discount code is refused, not stacked
+**Serves:** grade10-site-store-discounts-US-02 - Collector holding more than one eligible coupon picks which one to spend
 
 - **GIVEN** a draft order already carrying a discount code
 - **WHEN** the collector attempts to add a second discount code, order coupon, product coupon, gift, or reward coupon
@@ -127,18 +135,21 @@ coupon returned to the member; an order that merely expires SHALL keep its
 code, since such an order can still be paid.
 
 #### Scenario: grade10-site-store-discounts-SC-05 - Editing the cart does not mint a coupon's code
+**Serves:** grade10-site-store-discounts-US-01 - Collector redeems a coupon at checkout
 
 - **GIVEN** a basket that qualifies for a product coupon
 - **WHEN** the collector adds or removes a line and the cart price re-previews
 - **THEN** no Shopify Discount code is minted for that coupon
 
 #### Scenario: grade10-site-store-discounts-SC-06 - An order claiming the coupon mints its code
+**Serves:** grade10-site-store-discounts-US-01 - Collector redeems a coupon at checkout
 
 - **GIVEN** a basket that qualifies for a product coupon
 - **WHEN** the collector submits the checkout
 - **THEN** the coupon's Shopify Discount code is minted and carried on the draft order
 
 #### Scenario: grade10-site-store-discounts-SC-11 - A refused mint refuses the checkout and keeps the coupon
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
 - **GIVEN** a basket that qualifies for a coupon
 - **WHEN** the shop refuses the mint
@@ -146,6 +157,7 @@ code, since such an order can still be paid.
 - **AND** no order is left behind, and the coupon is still spendable
 
 #### Scenario: grade10-site-store-discounts-SC-13 - A dead order's unspent code is deactivated
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
 - **GIVEN** an order carrying a minted, unspent discount code
 - **WHEN** that order is canceled or fails
@@ -161,6 +173,7 @@ sale gave more than the coupon and that the coupon is kept. Only a code the
 shop refuses outright SHALL refuse the checkout.
 
 #### Scenario: grade10-site-store-discounts-SC-15 - A site discount that beats the coupon keeps the sale
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
 - **GIVEN** a basket carrying a coupon and a site discount the shop's rules do not combine with it
 - **WHEN** the shop applies the site discount in place of the coupon's code
@@ -177,6 +190,7 @@ store's default. Grade10 SHALL NOT evaluate the combination itself: the
 shop's own rules decide it from that setting and the site discount's own.
 
 #### Scenario: grade10-site-store-discounts-SC-16 - A coupon's combine setting is what its code carries
+**Serves:** grade10-site-store-discounts-US-03 - Collector keeps the coupon when a checkout cannot take it
 
 - **GIVEN** a coupon whose definition allows combining with the shop's product discounts and not its order discounts
 - **WHEN** an order claims the coupon and its code is minted
@@ -193,18 +207,21 @@ Where the coupon's code has already left the sale, the refusal SHALL name a
 new sale rather than repeat the remedy that took the code off.
 
 #### Scenario: grade10-site-store-discounts-SC-07 - A product coupon at the till settles by its own code
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
 
 - **GIVEN** a member's product coupon taken at the POS till
 - **WHEN** the till sale is tendered
 - **THEN** the sale settles by the coupon's own Shopify Discount code, the same as online
 
 #### Scenario: grade10-site-store-discounts-SC-14 - A re-planned sale never carries two codes for one coupon
+**Serves:** grade10-site-store-discounts-US-04 - Shop staff spends a member's product coupon at the till
 
 - **GIVEN** a till sale carrying a coupon's minted discount code
 - **WHEN** staff re-plan the sale with the same coupon still on it
 - **THEN** the sale carries exactly one code for that coupon
 
 #### Scenario: grade10-site-store-discounts-SC-17 - A coupon cleared off a sale cannot go back on it
+**Serves:** Two channels - a coupon cleared off a sale cannot go back on it
 
 - **GIVEN** a till sale whose coupon was cleared by "Remove every discount"
 - **WHEN** staff apply that coupon to the same sale again
@@ -212,6 +229,7 @@ new sale rather than repeat the remedy that took the code off.
   a new one, and the coupon stands live in the member's wallet
 
 #### Scenario: grade10-site-store-discounts-SC-18 - A code the sale never honoured stops standing
+**Serves:** Two channels - a code the sale never honoured stops standing
 
 - **GIVEN** a paid sale carrying a minted code the landed order does not name
 - **WHEN** the sale settles

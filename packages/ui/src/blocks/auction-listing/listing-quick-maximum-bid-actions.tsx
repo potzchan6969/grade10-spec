@@ -52,7 +52,8 @@ type ListingQuickMaximumBidActionsCopy = {
   privateMaximumTooltip: string;
   /**
    * Always-on mechanism line under the primary action — e.g. we bid as needed,
-   * hold matches the maximum, raise only.
+   * raise only. When holds are enabled, copy may also say the hold matches the
+   * maximum.
    */
   maximumMechanismSubtext: string;
   /** Placeholder when the custom field is empty, e.g. "Custom amount (min. {amount})". */

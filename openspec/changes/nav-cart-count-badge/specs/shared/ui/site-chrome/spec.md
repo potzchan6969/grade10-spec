@@ -16,6 +16,7 @@ use `onCartClick`. When `cartSlot` is omitted, the built-in cart control
 SHALL continue to follow the handler-gated cart rule.
 
 #### Scenario: shared-ui-site-chrome-SC-22 - Cart slot replaces the built-in cart
+**Serves:** Header controls - cart slot replaces the built-in cart
 
 - **GIVEN** `Nav` with a `cartSlot`
 - **WHEN** the header renders
@@ -38,6 +39,7 @@ supply the same active-line count the cart drawer title badge uses (sold-out
 and unavailable lines excluded per `shared/ui/store-cart`).
 
 #### Scenario: shared-ui-site-chrome-SC-23 - Empty cart hides the count
+**Serves:** Header controls - empty cart hides the count
 
 - **GIVEN** `SiteHeader` with a cart handler and `cartItemCount` of `0` (or omitted)
 - **WHEN** the header renders
@@ -45,12 +47,14 @@ and unavailable lines excluded per `shared/ui/store-cart`).
 - **AND** no count indicator appears on it
 
 #### Scenario: shared-ui-site-chrome-SC-24 - One active line shows `1`
+**Serves:** Header controls - one active line shows `1`
 
 - **GIVEN** `SiteHeader` with a cart handler and `cartItemCount` of `1`
 - **WHEN** the header renders
 - **THEN** a brand count indicator on the cart control displays `1`
 
 #### Scenario: shared-ui-site-chrome-SC-25 - Multi-item count matches the drawer title
+**Serves:** Header controls - multi-item count matches the drawer title
 
 - **GIVEN** `SiteHeader` with a cart handler and `cartItemCount` of `3`
 - **WHEN** the header renders
@@ -59,6 +63,7 @@ and unavailable lines excluded per `shared/ui/store-cart`).
   show for the same cart
 
 #### Scenario: shared-ui-site-chrome-SC-26 - Large count is not truncated
+**Serves:** Header controls - large count is not truncated
 
 - **GIVEN** `SiteHeader` with a cart handler and `cartItemCount` of `12`
 - **WHEN** the header renders

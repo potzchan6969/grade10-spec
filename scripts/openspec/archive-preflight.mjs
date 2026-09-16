@@ -23,25 +23,38 @@
  *          nobody wrote. Either way the record says so: check them off, or
  *          name the decision with `--tasks-waived`.
  *
- * JOURNEYS `openspec archive` folds `## Requirements` and nothing else, so a
- *          delta's `## Feature set` and its `user-journeys.md` — and every `-US-`
- *          id in them — die with the change unless someone copies them into
- *          the durable spec. This checks whether they were carried, and
- *          refuses while they are not. `--journeys-copied` acknowledges a
- *          delta whose capability has no durable spec yet: the fold creates
- *          it, so the copy can only happen right after — the flag is a
- *          promise, and the sections stay on `pnpm check:manual`'s list.
+ * CARRY    `openspec archive` folds `## Requirements` and nothing else, so a
+ *          delta's `## Purpose`, its `## Feature set`, its `user-journeys.md`
+ *          and its suites — and every `-US-` id in them — die with the change
+ *          unless someone copies them into the durable capability. This checks
+ *          whether they were carried, and refuses while they are not.
+ *          `--journeys-copied` acknowledges a delta whose capability has no
+ *          durable spec yet: the fold creates it, so the copy can only happen
+ *          right after — the flag is a promise, and the sections stay on
+ *          `pnpm check:manual`'s list.
+ *
+ *          A copy that did land is read for the four things only archive can
+ *          get wrong: a written `## Purpose` replaces the durable one whole, a
+ *          removed journey leaves a `## Retired` tombstone instead of vanishing
+ *          (archived suites still trace its id), a carried `## Reconciliation`
+ *          has its scenario ids stripped, and `## Settled` travels with the
+ *          suite — drop it and every later blind pass raises the same refused
+ *          reading again, with nobody left who remembers refusing it. None of
+ *          those is a promise `--journeys-copied` can defer: the files are all
+ *          here, so they are fixed now.
  *
  * A clear run writes what it was told into the change's `.openspec.yaml`, so
  * the record archives with the change and `pnpm check:manual` can read it back.
  *
  * Zero dependencies, no `openspec` call — the checks read the change's own
- * files, the same way `plan-preflight.mjs` does.
+ * files, and its checkmarks on the store's main, where `plan-preflight.mjs`
+ * reads claims too.
  */
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
@@ -56,6 +69,11 @@ const CHANGES = join(ROOT, "openspec", "changes");
 
 const DOOMED = ["Feature set"];
 const US_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
+const SC_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
+// The anchor line as `read-specs.mts` reads it: anywhere in the scenario's
+// body, bulleted or not, so this gate and the checker agree on what counts.
+const SERVES = /^\s*(?:[-*]\s+)?\*\*Serves:\*\*\s*\S/m;
+const SCENARIO_HEADING = /^####\s+Scenario:\s+([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
 const OPEN_TASK = /^\s*-\s*\[ \]\s*(.*)$/;
 const MANIFEST_KEY = /^([A-Za-z0-9_]+):/;
 /** Every key a record owns. A write drops all of them and appends only what it
@@ -117,12 +135,73 @@ function doomedSections(text) {
   return found;
 }
 
-/** The unchecked tasks of the change, in file order. A change with no
- * `tasks.md` owes nothing here. */
-function openTasks(changeId) {
-  const file = join(CHANGES, changeId, "tasks.md");
-  if (!existsSync(file)) return [];
-  return readFileSync(file, "utf8")
+/** The scenarios one delta issues that name no anchor. `anchorless` is a
+ * failure on the durable store and the fold is what moves a scenario there, so
+ * a delta nothing refuses here breaks `pnpm check:manual` the moment it lands.
+ * The anchor belongs in the delta, where the journeys that resolve it are
+ * still sitting beside it. A scenario carrying no permanent id is not one the
+ * rule counts, so it is not one this counts either. */
+function anchorlessScenarios(text) {
+  const lines = text.split("\n");
+  const found = [];
+  let current = null;
+  const close = () => {
+    if (current && !SERVES.test(current.body.join("\n")))
+      found.push(current.id);
+  };
+  for (const line of lines) {
+    const heading = line.match(SCENARIO_HEADING);
+    if (heading) {
+      close();
+      current = { id: heading[1], body: [] };
+      continue;
+    }
+    if (/^#{2,4}\s/.test(line)) {
+      close();
+      current = null;
+      continue;
+    }
+    if (current) current.body.push(line);
+  }
+  close();
+  return found;
+}
+
+/** The body of one `## <name>` section, trimmed, or null when the file has no
+ * such heading. Sections end at the next `## ` heading, so an empty string
+ * means the heading is there and says nothing — which is not the same answer. */
+function sectionBody(text, name) {
+  const out = [];
+  let inside = false;
+  for (const line of text.split("\n")) {
+    const heading = line.match(/^##\s+(.+?)\s*$/);
+    if (heading) {
+      if (inside) break;
+      inside = heading[1] === name;
+      continue;
+    }
+    if (inside) out.push(line);
+  }
+  return inside ? out.join("\n").trim() : null;
+}
+
+/** The bullet lines of a section body, continuations folded in and whitespace
+ * collapsed, so a line that was rewrapped on the way across still counts as
+ * the same line. */
+function bullets(body) {
+  const found = [];
+  for (const line of (body ?? "").split("\n")) {
+    if (/^\s*[-*]\s+/.test(line)) found.push(line.replace(/^\s*[-*]\s+/, ""));
+    else if (found.length > 0 && line.trim() !== "" && !line.startsWith("#")) {
+      found[found.length - 1] += ` ${line.trim()}`;
+    }
+  }
+  return found.map((line) => line.replace(/\s+/g, " ").trim()).filter(Boolean);
+}
+
+/** The unchecked tasks of a task list, in file order. */
+function openTasks(text) {
+  return text
     .split("\n")
     .map((line) => OPEN_TASK.exec(line)?.[1])
     .filter((task) => task !== undefined);
@@ -164,14 +243,23 @@ function help() {
     dim("  The archive's three gates, mechanical: proof of deploy, every task"),
   );
   console.log(
-    dim("  checked off, and the Feature set / user-journeys.md hand-copy the"),
+    dim(
+      "  checked off, and the purpose / feature set / journeys / suites copy",
+    ),
   );
   console.log(
     dim(
-      "  fold would discard. A clear run writes the record into the change's",
+      "  the fold would discard, done and done right. A clear run writes the",
     ),
   );
-  console.log(dim("  .openspec.yaml and prints the commit to make."));
+  console.log(
+    dim("  record into the change's .openspec.yaml and prints the commit."),
+  );
+  console.log(
+    dim(
+      "  Checkmarks are read on the store's main, fetched first; PLAN_NO_FETCH=1 skips the fetch.",
+    ),
+  );
   const ids = changeIds();
   console.log("\nChanges in flight");
   if (ids.length === 0) console.log(dim("  none — openspec/changes is empty"));
@@ -276,7 +364,26 @@ if (tasksWaived !== null && tasksWaived.trim() === "") {
 
 // ── Tasks gate ──────────────────────────────────────────────────────────────
 // An open checkbox at archive is work nobody did or a checkmark nobody wrote.
-const open = openTasks(changeId);
+// `pnpm plan` records checkmarks on the store's main, so they are read there:
+// this checkout can be behind main, or ticked by hand where main is not.
+const main = storeMain(ROOT);
+if (!main) {
+  fail(
+    yellow(`The store at ${ROOT} has no origin main to read checkmarks on.`),
+    "Run `git remote set-head origin --auto`, then re-run.",
+  );
+  process.exit();
+}
+const tasksFile = `openspec/changes/${changeId}/tasks.md`;
+const tasks = textAt(ROOT, main.commit, tasksFile);
+if (tasks === null && existsSync(join(ROOT, tasksFile))) {
+  fail(
+    yellow(`${tasksFile} is not on ${main.ref}.`),
+    "Nobody can claim or check off a plan main does not hold — merge it first.",
+  );
+  process.exit();
+}
+const open = openTasks(tasks ?? "");
 if (open.length > 0 && tasksWaived === null) {
   fail(yellow(`${changeId} archives with ${open.length} task(s) unchecked:`));
   for (const task of open.slice(0, SHOWN)) console.error(`  - [ ] ${task}`);
@@ -293,15 +400,28 @@ if (open.length > 0 && tasksWaived === null) {
   process.exit();
 }
 
-// ── Journeys gate ───────────────────────────────────────────────────────────
+// ── Carry gate ──────────────────────────────────────────────────────────────
+// Two lists, because they are two different failures. `uncarried` is a copy
+// that has not happened, and against a capability the fold has yet to create
+// it cannot happen until after — `--journeys-copied` defers those. `wrong` is
+// a copy that landed and landed wrong: every file involved is already here, so
+// no flag defers it.
 const uncarried = [];
+const wrong = [];
+const anchorless = [];
+const suitesSeen = new Set();
+
 for (const { file, capability } of deltaFiles(changeId)) {
+  const delta = readFileSync(file, "utf8");
+
+  const unanchored = anchorlessScenarios(delta);
+  if (unanchored.length > 0) anchorless.push({ capability, ids: unanchored });
   const durableFile = join(ROOT, "openspec", "specs", capability, "spec.md");
   const durable = existsSync(durableFile)
     ? readFileSync(durableFile, "utf8")
     : null;
 
-  for (const section of doomedSections(readFileSync(file, "utf8"))) {
+  for (const section of doomedSections(delta)) {
     const carried =
       durable !== null &&
       durable.match(new RegExp(`^##\\s+${section.name}\\s*$`, "m")) !== null &&
@@ -309,12 +429,25 @@ for (const { file, capability } of deltaFiles(changeId)) {
     if (!carried) uncarried.push({ capability, section, durable });
   }
 
-  // The stories are their own file on both sides, so the fold never touches
+  // A written `## Purpose` replaces the durable one whole. The durable file
+  // still holding a different one means the fold took the requirements and
+  // left behind the sentence that says what the capability is for.
+  const purpose = sectionBody(delta, "Purpose");
+  if (
+    purpose !== null &&
+    purpose !== "" &&
+    durable !== null &&
+    sectionBody(durable, "Purpose") !== purpose
+  ) {
+    wrong.push({
+      capability,
+      what: "`## Purpose` — the change wrote one and the durable spec still holds a different one",
+    });
+  }
+
+  // The journeys are their own file on both sides, so the fold never touches
   // them: the change's user-journeys.md has to be copied across whole.
   const journeysFile = file.replace(/spec\.md$/, "user-journeys.md");
-  if (!existsSync(journeysFile)) continue;
-  const stories = readFileSync(journeysFile, "utf8");
-  const ids = new Set(stories.match(US_ID) ?? []);
   const durableJourneys = join(
     ROOT,
     "openspec",
@@ -325,15 +458,132 @@ for (const { file, capability } of deltaFiles(changeId)) {
   const landed = existsSync(durableJourneys)
     ? readFileSync(durableJourneys, "utf8")
     : null;
-  const carried =
-    landed !== null && [...ids].every((id) => landed.includes(id));
-  if (!carried) {
-    uncarried.push({
-      capability,
-      section: { name: "User journeys", ids },
-      durable: landed,
-    });
+
+  if (existsSync(journeysFile)) {
+    const journeys = readFileSync(journeysFile, "utf8");
+    const ids = new Set(journeys.match(US_ID) ?? []);
+    const carried =
+      landed !== null && [...ids].every((id) => landed.includes(id));
+    if (!carried) {
+      uncarried.push({
+        capability,
+        section: { name: "User journeys", ids },
+        durable: landed,
+      });
+    }
+
+    // A removed journey keeps its id forever — archived suites still carry
+    // `**Trace:** <id>`, and nothing recovers that join once the journey is
+    // gone. Archive leaves a one-line tombstone instead of deleting it.
+    const removed = new Set(
+      sectionBody(journeys, "REMOVED User journeys")?.match(US_ID) ?? [],
+    );
+    const retired = landed === null ? null : sectionBody(landed, "Retired");
+    for (const id of removed) {
+      if (landed === null) continue;
+      if (retired === null || !retired.includes(id)) {
+        wrong.push({
+          capability,
+          what: `\`${id}\` is removed and leaves no \`## Retired\` tombstone — archived suites still trace that id`,
+        });
+      } else if (new RegExp(`^###\\s+${id}\\b`, "m").test(landed)) {
+        wrong.push({
+          capability,
+          what: `\`${id}\` is tombstoned under \`## Retired\` and its journey is still written above it`,
+        });
+      }
+    }
   }
+
+  // The suites travel beside the spec — `feature-tcs.md` into the capability,
+  // `domain-tcs.md` into the domain above it. Every capability under a domain
+  // reaches the same domain suite, so it is read once.
+  for (const [name, dir] of [
+    ["feature-tcs.md", capability],
+    ["domain-tcs.md", dirname(capability)],
+  ]) {
+    const source = join(CHANGES, changeId, "specs", dir, name);
+    if (!existsSync(source) || suitesSeen.has(source)) continue;
+    suitesSeen.add(source);
+
+    const target = join(ROOT, "openspec", "specs", dir, name);
+    if (!existsSync(target)) {
+      uncarried.push({
+        capability: dir,
+        section: { name, ids: new Set() },
+        durable: null,
+      });
+      continue;
+    }
+    const arrived = readFileSync(target, "utf8");
+
+    // Scenario ids belong to the change. A `## Reconciliation` that keeps
+    // them past the fold points at a change that is about to stop existing.
+    const ids = [
+      ...new Set(sectionBody(arrived, "Reconciliation")?.match(SC_ID) ?? []),
+    ];
+    if (ids.length > 0) {
+      wrong.push({
+        capability: dir,
+        what: `${name} carries \`## Reconciliation\` with ${ids.length} scenario id(s) not stripped (${ids.slice(0, 3).join(", ")})`,
+      });
+    }
+
+    // `## Settled` is a legal part of the next blind pass's isolated input:
+    // what earlier readings asked and had answered. Left behind, the same
+    // refused reading is raised by every future run.
+    const kept = new Set(bullets(sectionBody(arrived, "Settled")));
+    const owed = bullets(
+      sectionBody(readFileSync(source, "utf8"), "Settled"),
+    ).filter((line) => !kept.has(line));
+    if (owed.length > 0) {
+      wrong.push({
+        capability: dir,
+        what: `${name} drops ${owed.length} \`## Settled\` line(s) — the next blind pass raises them again: "${owed[0].slice(0, 60)}"`,
+      });
+    }
+  }
+}
+
+if (wrong.length > 0) {
+  fail(
+    yellow(
+      `${changeId} carries ${wrong.length} section(s) across incorrectly:`,
+    ),
+  );
+  for (const { capability, what } of wrong) {
+    console.error(`  ${capability} — ${what}`);
+  }
+  fail(
+    "",
+    "The copy landed; what archive owes it did not. Every file involved is",
+    "still here, so none of this is waivable — the fold is what makes it",
+    "unrecoverable. Fix them, then re-run this.",
+  );
+  process.exit();
+}
+
+if (anchorless.length > 0) {
+  const total = anchorless.reduce((sum, one) => sum + one.ids.length, 0);
+  fail(
+    yellow(
+      `The fold would add ${total} scenario(s) carrying no \`**Serves:**\` line:`,
+    ),
+  );
+  for (const { capability, ids } of anchorless) {
+    const shown = ids.slice(0, SHOWN).join(", ");
+    const more = ids.length > SHOWN ? `, … and ${ids.length - SHOWN} more` : "";
+    console.error(`  ${capability} — ${shown}${more}`);
+  }
+  fail(
+    "",
+    "A scenario names the journey or feature set group it serves, and",
+    "`anchorless` fails on the durable store. Nothing refuses it inside a",
+    "change, so the break lands on whoever folds it. Anchor them here, where",
+    "the journeys that resolve them are still beside the delta, then re-run",
+    "this.",
+  );
+  process.exit();
 }
 
 if (uncarried.length > 0 && !journeysCopied) {
@@ -350,9 +600,10 @@ if (uncarried.length > 0 && !journeysCopied) {
   }
   fail(
     "",
-    "`openspec archive` folds `## Requirements` and nothing else — the feature",
-    "set, the journeys file, and every `-US-` id in it die with the change unless",
-    "they are copied across to the durable capability. Copy them, then re-run this.",
+    "`openspec archive` folds `## Requirements` and nothing else — the purpose,",
+    "the feature set, the journeys file, the suites, and every `-US-` id in them",
+    "die with the change unless they are copied across to the durable",
+    "capability. Copy them, then re-run this.",
     "",
     "A capability with no durable spec yet can only receive the copy after the",
     `fold creates it. Acknowledge that with ${cyan("--journeys-copied")} — the sections`,

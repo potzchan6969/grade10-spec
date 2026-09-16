@@ -10,6 +10,7 @@ import type {
   DeltaRequirement,
   IdleClaim,
   PageSectionRef,
+  SchemaArtifact,
   TaskGroup,
   TaskLine,
 } from "../api/types.ts";
@@ -23,9 +24,10 @@ import {
   toItemError,
   walkFiles,
 } from "./disk.mts";
-import type { GitIndex } from "./git.mts";
+import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
 import { leadingTitle, outline, type Section } from "./markdown.mts";
+import { schemaArtifacts } from "./read-schema.mts";
 import { readTestCases } from "./read-specs.mts";
 
 // The owner tag as `docs/governance/task-ownership.md` defines it: the `@` is
@@ -55,11 +57,24 @@ const AUTHOR =
   /^\*\*Author:\*\*\s*@([A-Za-z0-9][A-Za-z0-9_-]*)(?:\s+-\s+(\d{4}-\d{2}-\d{2}))?\s*$/m;
 const ARCHIVE_PREFIX = /^(\d{4}-\d{2}-\d{2})-(.+)$/;
 
-export function readChanges(root: string, git: GitIndex): ChangeEntry[] {
+/**
+ * The changes in flight in this checkout. A change on `main` has its task
+ * list read there, where every claim and checkmark is recorded, and carries
+ * where it stands against main. `null` reads every task list from disk: the
+ * checker, which judges the branch's own files, and a store with no git.
+ */
+export function readChanges(
+  root: string,
+  git: GitIndex,
+  main: StoreMain | null,
+): ChangeEntry[] {
   const dir = join(root, "openspec", "changes");
+  const schemas: SchemaCache = new Map();
   return subdirectories(dir)
     .filter((name) => name !== "archive")
-    .map((name) => readChange(root, join(dir, name), name, "in-flight", git));
+    .map((name) =>
+      readChange(root, join(dir, name), name, "in-flight", git, schemas, main),
+    );
 }
 
 /**
@@ -76,6 +91,7 @@ export function readArchivedChanges(
   git: GitIndex,
 ): ChangeEntry[] {
   const dir = join(root, "openspec", "changes", "archive");
+  const schemas: SchemaCache = new Map();
   return subdirectories(dir).map((name) => {
     const dated = ARCHIVE_PREFIX.exec(name);
     const entry = readChange(
@@ -84,6 +100,8 @@ export function readArchivedChanges(
       dated ? dated[2] : name,
       "archived",
       git,
+      schemas,
+      null,
     );
     if (dated) entry.shippedOn = dated[1];
     if (entry.created === "" && dated) entry.created = dated[1];
@@ -97,6 +115,8 @@ function readChange(
   id: string,
   status: ChangeStatus,
   git: GitIndex,
+  schemas: SchemaCache,
+  main: StoreMain | null,
 ): ChangeEntry {
   const rel = storePath(root, dir);
   const entry: ChangeEntry = {
@@ -110,6 +130,7 @@ function readChange(
     why: "",
     taskGroups: [],
     deltas: [],
+    written: [],
   };
 
   // Any file of the change, not only tasks.md — a plan that writes specs and
@@ -144,6 +165,10 @@ function readChange(
         const written = line(key, fields[key]);
         if (written) entry[field] = written;
       }
+      const skipped = skipSpecsOf(fields.skip_specs, fields.skip_specs_why);
+      if (skipped !== undefined) entry.skipSpecs = skipped;
+      const awaiting = readAwaiting(fields.awaiting);
+      if (awaiting.length > 0) entry.awaiting = awaiting;
     } catch (cause) {
       fail(`${rel}/.openspec.yaml`, cause);
     }
@@ -178,7 +203,11 @@ function readChange(
   }
 
   const detailed = status === "in-flight";
-  const tasks = readTextIfExists(join(dir, "tasks.md"));
+  if (main) {
+    const state = mainStateOf(main, id);
+    if (state) entry.mainState = state;
+  }
+  const { text: tasks, commit } = planOf(dir, id, main);
   if (tasks !== undefined) {
     const tagged = matchAll(tasks, OWNER)
       .map((one) => one.toLowerCase())
@@ -191,7 +220,7 @@ function readChange(
         // Only for work still in flight: an archived change is finished, and
         // its groups are the record of who did it rather than a claim anyone
         // could still be sitting on.
-        detailed ? readIdleClaims(root, id) : new Map(),
+        detailed ? readIdleClaims(root, id, tasks, commit) : new Map(),
       );
     } catch (cause) {
       fail(`${rel}/tasks.md`, cause);
@@ -203,7 +232,98 @@ function readChange(
     const suites = readSuites(root, dir);
     if (suites.length > 0) entry.suites = suites;
   }
+  entry.written = writtenArtifacts(
+    dir,
+    entry,
+    artifactsOf(root, entry.schema, schemas),
+    tasks !== undefined,
+  );
   return entry;
+}
+
+/**
+ * A change's task list and the commit its history is read back from. A change
+ * on `main` is read there, where every claim and checkmark is recorded; one
+ * only this checkout has, or any change when `main` is null, from disk and
+ * HEAD.
+ */
+export function planOf(
+  dir: string,
+  id: string,
+  main: StoreMain | null,
+): { text: string | undefined; commit: string | null } {
+  if (main?.changes.has(id)) {
+    return { text: main.tasks.get(id), commit: main.commit };
+  }
+  return { text: readTextIfExists(join(dir, "tasks.md")), commit: null };
+}
+
+/** Nearly every change names the same schema, so one read parses it once
+ * rather than once a change. The cache lives for that read alone: a schema
+ * edited between two of them is read again. A schema this store does not
+ * define declares no artifacts, and a change on one owes nothing here. */
+type SchemaCache = Map<string, SchemaArtifact[]>;
+
+function artifactsOf(
+  root: string,
+  schema: string,
+  cache: SchemaCache,
+): SchemaArtifact[] {
+  const known = cache.get(schema);
+  if (known) return known;
+  const read =
+    (schema === "" ? undefined : schemaArtifacts(root, schema)) ?? [];
+  cache.set(schema, read);
+  return read;
+}
+
+/**
+ * The schema artifact ids this change has written, read against the schema's
+ * own `generates` rather than a second list of ids here. An artifact that
+ * generates a file inside a capability directory is written only when every
+ * delta capability carries it — one capability's suite does not answer for
+ * the others, which is how `blind` and `walked` already read them.
+ */
+function writtenArtifacts(
+  dir: string,
+  entry: ChangeEntry,
+  artifacts: SchemaArtifact[],
+  planned: boolean,
+): string[] {
+  const capabilities = entry.deltas.map(({ spec }) => join(dir, "specs", spec));
+  const present = ({ generates }: SchemaArtifact) => {
+    if (generates === "tasks.md") return planned;
+    if (!generates.startsWith("specs/"))
+      return existsSync(join(dir, generates));
+    const name = generates.slice(generates.lastIndexOf("/") + 1);
+    return (
+      capabilities.length > 0 &&
+      capabilities.every((one) => existsSync(join(one, name)))
+    );
+  };
+  return artifacts.filter(present).map(({ id }) => id);
+}
+
+/**
+ * `awaiting:` as a mapping of artifact id to the line its author wrote. A
+ * wait with nothing written against it is refused: a key read as absent
+ * would waive the artifact it names without saying why.
+ */
+function readAwaiting(value: unknown): { artifact: string; why: string }[] {
+  if (value === undefined || value === null) return [];
+  if (typeof value !== "object" || Array.isArray(value)) {
+    throw new StoreFileError(1, "`awaiting` must be a mapping");
+  }
+  const waits: { artifact: string; why: string }[] = [];
+  for (const [artifact, why] of Object.entries(value)) {
+    const key = `awaiting.${artifact}`;
+    const written = line(key, why);
+    if (written === undefined) {
+      throw new StoreFileError(1, `\`${key}\` must say what is missing`);
+    }
+    waits.push({ artifact, why: written });
+  }
+  return waits;
 }
 
 /** The feature suite beside each delta — the suite QA reviews while the
@@ -251,6 +371,25 @@ const RECORDED = [
   ["deploy_waived", "deployWaived"],
   ["tasks_waived", "tasksWaived"],
 ] as const;
+
+/** `skip_specs` turns the whole cross-check off, so it is read on its own. The
+ * switch and its reason are two keys because the OpenSpec CLI owns
+ * `skip_specs` and reads it as a boolean: a reason written there invalidates
+ * the manifest and the marker stops being honoured at all. So `skip_specs:
+ * true` is the switch and `skip_specs_why` is the line the author owes. A
+ * switch with no reason reads as the empty string — declared, unexplained —
+ * which is what rule `hatch` refuses. */
+export function skipSpecsOf(value: unknown, why: unknown): string | undefined {
+  if (value === undefined || value === null || value === false)
+    return undefined;
+  if (value !== true) {
+    throw new StoreFileError(
+      1,
+      "`skip_specs` must be `true`; the reason goes on `skip_specs_why`",
+    );
+  }
+  return line("skip_specs_why", why) ?? "";
+}
 
 /** A written line, or nothing where the key is absent or blank. Anything but
  * text is a malformed manifest: a record read as absent would waive the rule
