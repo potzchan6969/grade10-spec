@@ -1,0 +1,187 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "add-store-gift-receipt",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "pm",
+      "label": "Product manager"
+    },
+    {
+      "id": "design",
+      "label": "Designer"
+    },
+    {
+      "id": "qa",
+      "label": "QA"
+    },
+    {
+      "id": "eng",
+      "label": "Engineer"
+    },
+    {
+      "id": "store",
+      "label": "The store"
+    }
+  ],
+  "mainPath": [
+    "leave-three-files-then-hand-over",
+    "leave-three-files-then-hand-over_decisions",
+    "leave-three-files-then-hand-over_journeys",
+    "review-in-its-own-pull-request",
+    "review-in-its-own-pull-request_suite",
+    "review-in-its-own-pull-request_requirements",
+    "write-the-plan-then-build",
+    "leave-the-archive-copy-out-of-the-tasks"
+  ],
+  "nodes": [
+    {
+      "id": "leave-three-files-then-hand-over",
+      "lane": "pm",
+      "col": 0,
+      "type": "backend",
+      "label": "proposal.md",
+      "sublabel": "why, and for whom",
+      "width": 132
+    },
+    {
+      "id": "leave-three-files-then-hand-over_decisions",
+      "lane": "pm",
+      "col": 1,
+      "type": "backend",
+      "label": "decisions.md",
+      "sublabel": "goals, non-goals, rounds",
+      "width": 132
+    },
+    {
+      "id": "leave-three-files-then-hand-over_journeys",
+      "lane": "pm",
+      "col": 2,
+      "type": "backend",
+      "label": "user-journeys.md",
+      "sublabel": "who walks it",
+      "width": 132
+    },
+    {
+      "id": "link-never-describe",
+      "lane": "design",
+      "col": 2,
+      "type": "frontend",
+      "label": "ui-design.md",
+      "sublabel": "screens and their states",
+      "width": 132
+    },
+    {
+      "id": "review-in-its-own-pull-request",
+      "lane": "qa",
+      "col": 3,
+      "type": "security",
+      "label": "spec.md",
+      "sublabel": "pass one · the outline",
+      "width": 132
+    },
+    {
+      "id": "review-in-its-own-pull-request_suite",
+      "lane": "qa",
+      "col": 4,
+      "type": "security",
+      "label": "feature-tcs.md",
+      "sublabel": "blind of the scenarios",
+      "width": 132
+    },
+    {
+      "id": "review-in-its-own-pull-request_requirements",
+      "lane": "qa",
+      "col": 5,
+      "type": "security",
+      "label": "spec.md",
+      "sublabel": "pass two · requirements",
+      "width": 132
+    },
+    {
+      "id": "write-the-plan-then-build",
+      "lane": "eng",
+      "col": 5,
+      "type": "cloud",
+      "label": "tasks.md",
+      "sublabel": "a tech design where owed",
+      "width": 132
+    },
+    {
+      "id": "leave-the-archive-copy-out-of-the-tasks",
+      "lane": "store",
+      "col": 5,
+      "type": "database",
+      "label": "The archive",
+      "sublabel": "gates, then the fold",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "from": "leave-three-files-then-hand-over",
+      "to": "leave-three-files-then-hand-over_decisions",
+      "variant": "emphasis"
+    },
+    {
+      "from": "leave-three-files-then-hand-over_decisions",
+      "to": "leave-three-files-then-hand-over_journeys",
+      "variant": "emphasis"
+    },
+    {
+      "from": "leave-three-files-then-hand-over_journeys",
+      "to": "link-never-describe",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight"
+    },
+    {
+      "from": "leave-three-files-then-hand-over_journeys",
+      "to": "review-in-its-own-pull-request",
+      "label": "awaiting: specs",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "from": "link-never-describe",
+      "to": "review-in-its-own-pull-request",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "review-in-its-own-pull-request",
+      "to": "review-in-its-own-pull-request_suite",
+      "variant": "emphasis"
+    },
+    {
+      "from": "review-in-its-own-pull-request_suite",
+      "to": "review-in-its-own-pull-request_requirements",
+      "variant": "emphasis"
+    },
+    {
+      "from": "review-in-its-own-pull-request_requirements",
+      "to": "write-the-plan-then-build",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "write-the-plan-then-build",
+      "to": "leave-the-archive-copy-out-of-the-tasks",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight"
+    }
+  ]
+}

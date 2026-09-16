@@ -107,7 +107,7 @@ Four things the skill cannot know, so say them when they are true:
 
 ## The Example, End to End
 
-:::flow{title="add-store-gift-receipt"}
+:::flow{title="add-store-gift-receipt" diagram="assets/diagrams/working-a-change.svg"}
 # Product manager
 
 *PM* — **Open the change** — `/planning-pm add-store-gift-receipt` and a sentence
