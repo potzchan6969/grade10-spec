@@ -26,15 +26,21 @@ The blind pass reads the bundle **The Isolated Input** describes in the
 rulebook, assembled by the caller, and nothing outside it:
 
 - **Included** - `## Purpose` and `## Feature set` from the capability's
-  `spec.md`, its `user-journeys.md`, the change's `proposal.md` and
-  `ui-design.md` where they exist - the design lands before the requirements
-  and ties its states to anchors, so it carries no leak - the linked pages
-  under `docs/prds/`, `openspec/config.yaml`'s
-  `context`, the existing `feature-tcs.md` for id continuity with its
-  `## Reconciliation` stripped, and that suite's `## Settled` - the questions
-  earlier runs asked and had answered. Reading those is what stops you raising
-  a refused reading again, and it tells you nothing about what the scenarios
-  say.
+  `spec.md`, its `user-journeys.md`, the change's `proposal.md`,
+  `decisions.md` and `ui-design.md` where they exist - the decisions say what
+  the change is for and what it rules out, the design lands before the
+  requirements and ties its states to anchors, and neither holds a requirement,
+  so neither carries a leak - the linked pages under `docs/prds/`,
+  `openspec/config.yaml`'s `context`, the existing `feature-tcs.md` for id
+  continuity with its `## Reconciliation` stripped, and that suite's
+  `## Settled` - the questions earlier runs asked and had answered. Reading
+  those is what stops you raising a refused reading again, and it tells you
+  nothing about what the scenarios say.
+
+  **Write no case for a non-goal.** `decisions.md` names what this change
+  deliberately does not do; a case against one of those is not a gap the
+  scenarios left, and filing it as one spends the reconciliation's credibility
+  on a question already closed.
 - **Excluded** - every `## Requirements` section, `openspec/specs/` beyond the
   two included sections, and `openspec/changes/archive/` entirely. An archived
   change keeps an un-stripped `## Reconciliation` naming scenario ids, so

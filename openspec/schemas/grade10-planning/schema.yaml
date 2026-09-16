@@ -138,6 +138,13 @@ artifacts:
       manager keeps the file whole, as they keep the PRD whole; the row is
       written by whoever learned the fact.
 
+      **At archive, what outlives the change moves to the PRD.** This file is
+      folded nowhere - it archives with the change - and the blind suite pass
+      may not read `openspec/changes/archive/`, so a rejected option left here
+      alone is unreadable by the one pass most likely to re-raise it. The
+      capability's `Product decisions` block is durable and the blind pass
+      already reads it. `archive:preflight` asks the owner to say what moved.
+
       `Instead of` is the column that earns the file. A decision without its
       rejected option is re-opened next quarter and answered the other way, with
       nothing in the record to say which reading is newer. It is the same
@@ -508,9 +515,18 @@ artifacts:
       The orchestrator builds it, and the sub-agent sees nothing else.
 
       Included: `## Purpose`, `## Feature set`, this capability's
-      `user-journeys.md` (context and deltas), `ui-design.md` where the change
-      has one, the linked PRD sections, and the existing `feature-tcs.md` for
-      id continuity - with `## Reconciliation` stripped.
+      `user-journeys.md` (context and deltas), `decisions.md`, `ui-design.md`
+      where the change has one, the linked PRD sections, and the existing
+      `feature-tcs.md` for id continuity - with `## Reconciliation` stripped.
+
+      `decisions.md` carries no requirement, so reading it costs no blindness -
+      the property protected here is blindness to the requirements, and that
+      file holds none, exactly as `ui-design.md` holds none. What it buys is
+      the reader knowing what was ruled out: a pass that cannot see the
+      non-goals writes cases for behaviour the interview excluded, and the
+      reconciliation then reads them as behaviour the scenarios forgot. A false
+      finding in the one mechanism built to produce true ones is dearer than
+      the blindness it pretends to protect.
 
       Excluded: `openspec/specs/` entirely, `openspec/changes/archive/`
       entirely, and any `## Requirements` section anywhere. The archive

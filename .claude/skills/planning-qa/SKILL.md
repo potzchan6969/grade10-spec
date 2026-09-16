@@ -189,9 +189,14 @@ orchestrator builds an isolated input in scratch space, and the suite sub-agent
 sees nothing else.
 
 **Included:** `## Purpose`, `## Feature set`, this capability's
-`user-journeys.md`, `ui-design.md` where the change has one, the linked PRD
-sections, and the existing `feature-tcs.md` for id continuity, with
-`## Reconciliation` stripped.
+`user-journeys.md`, `decisions.md`, `ui-design.md` where the change has one,
+the linked PRD sections, and the existing `feature-tcs.md` for id continuity,
+with `## Reconciliation` stripped.
+
+`decisions.md` and `ui-design.md` both go in for the same reason: neither holds
+a requirement, so neither costs blindness, and a reader who cannot see the
+non-goals writes cases for what the interview ruled out — which comes back as a
+finding against scenarios that were right.
 
 **Excluded:** `openspec/specs/` entirely, `openspec/changes/archive/` entirely,
 and any `## Requirements` section anywhere.
