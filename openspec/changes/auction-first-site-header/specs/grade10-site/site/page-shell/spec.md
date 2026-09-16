@@ -105,11 +105,11 @@ Signing out SHALL be offered from the account menu and on the profile.
 ### Requirement: The header shows only controls this site has surfaces for
 
 The site SHALL supply the header a handler only for a control whose surface it
-answers, so a control with nothing behind it does not render. Cart SHALL appear
-on a Store surface and checkout, where the site answers the Store cart drawer,
-and SHALL remain absent on every other surface. Search SHALL NOT appear until
-the site answers it. Until Store answers as a navigable surface, the primary
-navigation SHALL omit Store.
+answers, so a control with nothing behind it does not render. Once the site
+answers the Store cart drawer, Cart SHALL appear on every surface, including
+Auction and other non-Store pages. Until then, Cart SHALL remain absent.
+Search SHALL NOT appear until the site answers it. Until Store answers as a
+navigable surface, the primary navigation SHALL omit Store.
 
 The locale control SHALL switch language among the brand's locales; it SHALL
 NOT switch currency. On a wide viewport the language control SHALL appear in
@@ -120,8 +120,7 @@ bar at both widths once the session has resolved.
 #### Scenario: grade10-site-site-page-shell-SC-09 - Absent surfaces are absent controls
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
-- **GIVEN** a collector on a surface other than a Store surface or checkout,
-  or while the site does not yet answer Store
+- **GIVEN** the site does not yet answer the Store cart drawer
 - **WHEN** the header renders
 - **THEN** the account entry is in the bar
 - **AND** language is reachable (in the bar on a wide viewport; from the
@@ -129,10 +128,11 @@ bar at both widths once the session has resolved.
 - **AND** no Store navigation item appears when Store does not answer
 - **AND** no search or cart control appears
 
-#### Scenario: grade10-site-site-page-shell-SC-16 - Store surfaces offer Cart
+#### Scenario: grade10-site-site-page-shell-SC-16 - Cart is global once Store answers
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
-- **GIVEN** a collector on a Store surface or checkout
+- **GIVEN** the site answers the Store cart drawer, and a collector on any
+  surface including Auction
 - **WHEN** the header renders
 - **THEN** the Cart control appears
 - **AND** no search control appears

@@ -31,15 +31,12 @@ export const SignedOut: Story = {
     expect(canvas.queryByRole("button", { name: "Account" })).toBeNull();
     expect(canvas.queryByRole("button", { name: "Cart" })).toBeNull();
     expect(canvas.queryByRole("link", { name: "Store" })).toBeNull();
-    expect(canvas.getByRole("link", { name: "Auction" })).toHaveAttribute(
-      "aria-current",
-      "page",
-    );
-    const storeLocator = canvas.getByRole("link", { name: "Store Locator" });
+    expect(canvas.queryByRole("link", { name: "Store Locator" })).toBeNull();
+    const auction = canvas.getByRole("link", { name: "Auction" });
+    expect(auction).toHaveAttribute("aria-current", "page");
     const help = canvas.getByRole("link", { name: "Help" });
     expect(
-      storeLocator.compareDocumentPosition(help) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
+      auction.compareDocumentPosition(help) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
     expect(help).toHaveAttribute("href", "https://grade10.mintlify.io/");
     expect(help).toHaveAttribute("target", "_blank");
@@ -59,6 +56,7 @@ export const SignedIn: Story = {
     expect(canvas.queryByRole("button", { name: "Sign In" })).toBeNull();
     expect(canvas.queryByRole("button", { name: "Cart" })).toBeNull();
     expect(canvas.queryByRole("link", { name: "Store" })).toBeNull();
+    expect(canvas.queryByRole("link", { name: "Store Locator" })).toBeNull();
   },
 };
 

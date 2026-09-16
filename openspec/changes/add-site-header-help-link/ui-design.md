@@ -3,7 +3,7 @@
 ### Auction-first site header with Help
 
 Layout SoT: Storybook `site-chrome-siteheader-auction-first--signed-out`
-(asserts Help after Store Locator with href, `target="_blank"`,
+(asserts Help after Auction, no Store Locator, with href, `target="_blank"`,
 `rel="noopener noreferrer"`).
 
 Figma `Nav` (`4171:9937`) remains an early chrome reference only — Storybook
@@ -11,13 +11,15 @@ is the layout source of truth for Help as a primary nav item.
 
 ### Compact menu with Help
 
-Layout SoT: Storybook `site-chrome-siteheader-layout--narrow-signed-out`,
-`components-nav-layout--menu-open` (Help among primary items after Store
-Locator with external attributes), and `components-nav-layout--narrow`.
+Layout SoT: Storybook `site-chrome-siteheader-layout--narrow-signed-out`
+(auction-first: Help after Auction), `components-nav-layout--menu-open`
+(full nav: Help after Store Locator with external attributes), and
+`components-nav-layout--narrow`.
 
-Wide vs compact switches at container `@4xl` (896px) so four primary items
+Wide vs compact switches at container `@4xl` (896px) so a full primary nav
 (Store, Auction, Store Locator, Help) plus language and trailing controls do
 not overlap. Below that width the hamburger menu carries primary nav.
+Auction-first has fewer primary items and still uses the same breakpoint.
 
 ### Full primary nav with Help
 

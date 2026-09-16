@@ -45,11 +45,11 @@ export const NarrowSignedOut: Story = {
     expect(canvas.queryByRole("button", { name: "English" })).toBeNull();
     await userEvent.click(canvas.getByRole("button", { name: "Menu" }));
     const menu = within(await body.findByRole("dialog"));
-    const storeLocator = menu.getByRole("link", { name: "Store Locator" });
+    expect(menu.queryByRole("link", { name: "Store Locator" })).toBeNull();
+    const auction = menu.getByRole("link", { name: "Auction" });
     const help = menu.getByRole("link", { name: "Help" });
     expect(
-      storeLocator.compareDocumentPosition(help) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
+      auction.compareDocumentPosition(help) & Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
     expect(help).toHaveAttribute("href", "https://grade10.mintlify.io/");
     expect(help).toHaveAttribute("target", "_blank");
