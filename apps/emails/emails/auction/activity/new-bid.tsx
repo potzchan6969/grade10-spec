@@ -26,10 +26,10 @@ export default function NewBidEmail({
       brandName={brandName}
       campaign="new_bid"
       canUnsubscribe
-      facts={[`Closes ${effectiveClosesAt}`]}
       heading="A lot you bid on received a new bid"
       highlight={{ label: "Leading bid", value: currentBid }}
       listingUrl={listingUrl}
+      lotSubtext={`Closes ${effectiveClosesAt}`}
       lotTitle={lotTitle}
       muteUrl={muteUrl}
       preheader={`Leading bid is now ${currentBid}.`}

@@ -38,7 +38,6 @@ export function LotWatchedEmail({
       campaign="lot_ended_watched"
       canUnsubscribe
       ctaLabel="View lot"
-      facts={[`Ended ${closedAt}`]}
       heading="This lot has ended"
       highlight={
         sold && winningBid
@@ -46,6 +45,7 @@ export function LotWatchedEmail({
           : undefined
       }
       listingUrl={listingUrl}
+      lotSubtext={`Ended ${closedAt}`}
       lotTitle={lotTitle}
       muteUrl={muteUrl}
       preheader={sold ? `Sold for ${winningBid}.` : "This lot has ended."}

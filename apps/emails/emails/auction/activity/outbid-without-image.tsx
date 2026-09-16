@@ -10,13 +10,13 @@ export default function OutbidWithoutImageEmail() {
       campaign="outbid"
       canUnsubscribe
       ctaLabel="Bid again"
-      facts={[`Closes ${previewLot.effectiveClosesAt}`]}
       heading="You have been outbid"
       highlight={{
         label: "Leading bid",
         value: previewLot.currentBid,
       }}
       listingUrl={previewLot.listingUrl}
+      lotSubtext={`Closes ${previewLot.effectiveClosesAt}`}
       lotTitle={previewLot.lotTitle}
       muteUrl={previewLot.muteUrl}
       preheader={`Leading bid is now ${previewLot.currentBid}. Closes ${previewLot.effectiveClosesAt}.`}

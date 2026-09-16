@@ -4,6 +4,8 @@
 
 **Extended by:** @tangconst - 2026-09-16 — Storybook Winner Order reconciliation (48-hour address deadline + Expired Address; day-only progress dates; fee tooltips; receipt PDF; Payment Processing Fee on the winner summary alongside optional Insurance).
 
+**Extended by:** @tangconst - 2026-09-16 — Order letter drafts: auction-won and address reminders name the address deadline; invoice-sent and payment-received CTAs open Winner Order with no PDF attachments.
+
 Product context: [Winner Order](../../../docs/prds/products/grade10-site/auction/winner-order.md),
 [Post-Sale Queue](../../../docs/prds/products/grade10-admin/auction/post-sale.md),
 [Auction Order Status](../../../docs/prds/products/grade10-site/auction/order-status.md),
@@ -148,7 +150,9 @@ None.
   Awaiting Address and Preparing Invoice are added and Expired is removed;
   expired ends winner card pay while order status stays Pending Payment.
 - `grade10-site/auction/notifications-order`: the auction-won letter asks for
-  an address; a new invoice-sent letter.
+  an address and names the address deadline; a new invoice-sent letter names
+  total and payment deadline; payment-received confirms settlement; CTAs open
+  Winner Order (sign-in first when signed out); no PDF attachments.
 - `grade10-site/auction/account-record`: the winner's projection gains the two
   pre-invoice states and loses Expired; View order on Won; calm Won rows;
   expired contact only on Winner Order; Didn’t win hold copy kept.
@@ -164,7 +168,7 @@ None.
 | `apps/admin/grade10` | Quote and send, re-quote with a deadline choice, idle time and the Overdue mark and filter, cancel before an invoice, manual settlement with proof upload. |
 | Auction service | Order creation without an invoice, the `not_issued` status and its transitions, send-anchored deadlines, proof-file storage, card brand and last four on the paid record. |
 | Shipping-rate integration | Retired from the invoice flow. |
-| Notification service | A new invoice-sent letter; the auction-won letter changes. |
+| Notification service | Invoice-sent and payment-received letters; auction-won names the address deadline; CTAs open Winner Order; no PDF attachments. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. New letter and label copy is catalog work for the engineer. |
 
 **Card brand and last four are new data.** Nothing stores them today; the

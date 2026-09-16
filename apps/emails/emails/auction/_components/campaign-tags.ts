@@ -9,12 +9,16 @@ export type AuctionEmailCampaign =
   | "lot_closed_didnt_win"
   | "lot_ended_watched"
   | "auction_won"
-  | "address_reminder";
+  | "address_reminder"
+  | "invoice_sent"
+  | "payment_received"
+  | "shipped";
 
 /** Control that produced the click — `utm_content`. */
 export type AuctionEmailLinkContent =
   | "logo"
   | "cta"
+  | "secondary_cta"
   | "lot_image"
   | "lot_title"
   | "manage_alerts";
