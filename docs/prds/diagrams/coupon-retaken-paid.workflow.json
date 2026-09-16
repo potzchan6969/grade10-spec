@@ -1,0 +1,191 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Retaken, then paid",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    { "id": "shopify", "label": "Shopify" },
+    { "id": "store", "label": "Store" },
+    { "id": "earlier", "label": "Earlier cart" },
+    { "id": "newer", "label": "Newer cart" }
+  ],
+  "mainPath": [
+    "earlier-picks",
+    "earlier-checkout",
+    "newer-picks",
+    "newer-checkout",
+    "newer-pays"
+  ],
+  "nodes": [
+    {
+      "id": "earlier-picks",
+      "lane": "earlier",
+      "col": 0,
+      "type": "external",
+      "label": "Picks a coupon",
+      "sublabel": "from the drawer",
+      "width": 156
+    },
+    {
+      "id": "earlier-checkout",
+      "lane": "earlier",
+      "col": 1,
+      "type": "external",
+      "label": "Checkout",
+      "sublabel": "submits the order",
+      "width": 156
+    },
+    {
+      "id": "earlier-checkout_claim",
+      "lane": "store",
+      "col": 1,
+      "type": "database",
+      "label": "Coupon claimed",
+      "sublabel": "the cut lands here",
+      "width": 156
+    },
+    {
+      "id": "earlier-checkout_code",
+      "lane": "shopify",
+      "col": 1,
+      "type": "external",
+      "label": "Code minted",
+      "sublabel": "ephemeral, 24 hours",
+      "width": 156
+    },
+    {
+      "id": "newer-picks",
+      "lane": "newer",
+      "col": 2,
+      "type": "external",
+      "label": "Picks it too",
+      "sublabel": "a second cart, same coupon",
+      "width": 156
+    },
+    {
+      "id": "newer-checkout",
+      "lane": "newer",
+      "col": 3,
+      "type": "external",
+      "label": "Checkout",
+      "sublabel": "submits the order",
+      "width": 156
+    },
+    {
+      "id": "newer-checkout_claim",
+      "lane": "store",
+      "col": 3,
+      "type": "database",
+      "label": "Claimed again",
+      "sublabel": "the earlier claim is freed first",
+      "width": 156
+    },
+    {
+      "id": "newer-checkout_code",
+      "lane": "shopify",
+      "col": 3,
+      "type": "external",
+      "label": "Code re-minted",
+      "sublabel": "the earlier one is discarded",
+      "width": 156
+    },
+    {
+      "id": "newer-pays",
+      "lane": "newer",
+      "col": 4,
+      "type": "external",
+      "label": "Pays",
+      "sublabel": "the invoice",
+      "width": 156
+    },
+    {
+      "id": "newer-pays_order",
+      "lane": "shopify",
+      "col": 4,
+      "type": "external",
+      "label": "Order paid",
+      "sublabel": "Shopify marks it paid",
+      "width": 156
+    },
+    {
+      "id": "newer-pays_used",
+      "lane": "store",
+      "col": 4,
+      "type": "backend",
+      "label": "Coupon used",
+      "sublabel": "the claim is spent",
+      "width": 156
+    }
+  ],
+  "edges": [
+    {
+      "from": "earlier-picks",
+      "to": "earlier-checkout",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "earlier-checkout",
+      "to": "earlier-checkout_claim",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "earlier-checkout_claim",
+      "to": "earlier-checkout_code",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "earlier-checkout",
+      "to": "newer-picks",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "newer-picks",
+      "to": "newer-checkout",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "newer-checkout",
+      "to": "newer-checkout_claim",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "newer-checkout_claim",
+      "to": "newer-checkout_code",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "newer-checkout",
+      "to": "newer-pays",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "newer-pays_order",
+      "to": "newer-pays_used",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

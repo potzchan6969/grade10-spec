@@ -42,6 +42,17 @@ and one that carries a coupon the sale no longer claims SHALL be counted and
 reported with the order on it. A coupon SHALL be spent by whichever sale
 settles first, and never twice.
 
+A claim SHALL be released when the sale holding it ends, whether it is
+cancelled, superseded, or left to run out its own clock. No sale SHALL end
+holding a claim and leave the coupon to a later sweep.
+
+Asking the programme twice for a claim that still stands SHALL answer with
+that same claim. Once a claim has been released, it SHALL NOT answer for the
+sale that made it: the same sale asking again SHALL be given a new claim,
+because the coupon is back in the member's wallet and refusing there would
+refuse a coupon they can see. A claim the shop has already collected SHALL go
+on refusing a second.
+
 The member SHALL NOT be told anything when an earlier claim is released, and
 SHALL NOT be shown which sale claims a coupon.
 
@@ -113,6 +124,24 @@ SHALL NOT be shown which sale claims a coupon.
 - **WHEN** both settle
 - **THEN** the coupon is spent by whichever settles first
 - **AND** the other is reported with the order on it, and is not spent again
+
+#### Scenario: grade10-site-loyalty-programme-SC-203 - A sale that gave a coupon back can claim it again
+
+- **GIVEN** a counter sale that claimed a coupon and gave it back, leaving the coupon spendable
+- **WHEN** the same sale claims that coupon again
+- **THEN** the claim is made and the sale carries the cut
+
+#### Scenario: grade10-site-loyalty-programme-SC-204 - Asking twice for a claim that stands answers the same claim
+
+- **GIVEN** a sale holding a claim on a coupon
+- **WHEN** the same sale asks for that claim again
+- **THEN** it is answered with the claim it already holds, and the coupon is claimed once
+
+#### Scenario: grade10-site-loyalty-programme-SC-205 - A counter sale that runs out of time gives the coupon back
+
+- **GIVEN** a counter sale holding a coupon that the member walked away from
+- **WHEN** the sale runs out its own clock
+- **THEN** the coupon is spendable again at once, and the sale keeps its cart
 
 #### Scenario: grade10-site-loyalty-programme-SC-196 - No surface names the sale claiming a coupon
 **Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
