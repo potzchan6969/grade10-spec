@@ -61,6 +61,23 @@ so redefining the reward never rewrites a coupon a member already holds —
   paid against the bill, free shipping and the site's own discounts sit
   outside it — [Discounts](/p/grade10-site/store/discounts)
 
+:::detail{title="One coupon, two sales" for="engineer"}
+- **One conditional write decides it** — the claim lands only where the coupon
+  is still available, and one live claim per coupon is a database rule
+- **The sale that loses asks again** — it cancels the earlier sale first, and
+  is refused by name where that checkout is still live
+
+::image{src="assets/diagrams/coupon-contested-claim.svg" alt="Two sales claiming one coupon: the reservation write settles it, and the sale that loses cancels the earlier one and asks again"}
+:::
+
+:::detail{title="Giving a claim back" for="engineer"}
+- **Before the commit** — the request's own guard, on every exit
+- **After it** — a release attempt as the write lands, then the outbox
+- **Under both** — the programme releases anything still pending after 25 hours
+
+::image{src="assets/diagrams/coupon-claim-safety-net.svg" alt="The three routes a held claim takes back to the wallet, with the programme's sweep under all of them"}
+:::
+
 ## Cases
 
 :::flow{title="Online" case="Paid" diagram="assets/diagrams/coupon-online-paid.svg"}

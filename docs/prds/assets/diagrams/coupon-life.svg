@@ -92,15 +92,15 @@ svg[data-diagram="coupon-life"] .c-grid{stroke-dasharray: 1 4; opacity: 0.48;}
           <text data-node-label="" data-detail-anchor="" x="248" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Available</text>
           <text data-detail="context" x="248" y="163" class="t-muted" font-size="7" text-anchor="middle">offered everywhere</text>
         </g>
-        <g data-step="claimed" id="coupon-life-node-claimed" data-node-id="claimed" data-node-label="Claimed" aria-label="Focus Claimed, a sale names it, The coupon" data-node-kind="waiting" data-node-sublabel="a sale names it" data-node-context="The coupon">
-          <title>Claimed · a sale names it · The coupon</title>
+        <g data-step="claimed" id="coupon-life-node-claimed" data-node-id="claimed" data-node-label="Claimed" aria-label="Focus Claimed, one sale at a time, The coupon" data-node-kind="waiting" data-node-sublabel="one sale at a time" data-node-context="The coupon">
+          <title>Claimed · one sale at a time · The coupon</title>
           <rect x="343" y="126" width="118" height="62" rx="7" class="c-mask"/>
           <rect x="343" y="126" width="118" height="62" rx="7" class="c-cloud" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="waiting" class="semantic-sigil s-cloud" transform="translate(444 132) scale(0.6875)">
             <path d="M4 2.5h8M4 13.5h8M5 3c0 2.8 2 3.2 3 5-1 1.8-3 2.2-3 5M11 3c0 2.8-2 3.2-3 5 1 1.8 3 2.2 3 5"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="402" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Claimed</text>
-          <text data-detail="context" x="402" y="163" class="t-muted" font-size="7" text-anchor="middle">a sale names it</text>
+          <text data-detail="context" x="402" y="163" class="t-muted" font-size="7" text-anchor="middle">one sale at a time</text>
         </g>
         <g data-step="used" id="coupon-life-node-used" data-node-id="used" data-node-label="Used" aria-label="Focus Used, a paid order spent it, The coupon" data-node-kind="success" data-node-sublabel="a paid order spent it" data-node-context="The coupon">
           <title>Used · a paid order spent it · The coupon</title>

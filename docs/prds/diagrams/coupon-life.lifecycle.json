@@ -41,7 +41,7 @@
       "id": "claimed",
       "type": "waiting",
       "label": "Claimed",
-      "sublabel": "a sale names it",
+      "sublabel": "one sale at a time",
       "lane": "main",
       "col": 2
     },
