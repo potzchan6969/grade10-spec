@@ -30,10 +30,10 @@ export default function OutbidEmail({
       campaign="outbid"
       canUnsubscribe
       ctaLabel="Bid again"
-      facts={[`Closes ${effectiveClosesAt}`]}
       heading="You have been outbid"
       highlight={{ label: "Leading bid", value: currentBid }}
       listingUrl={listingUrl}
+      lotSubtext={`Closes ${effectiveClosesAt}`}
       lotTitle={lotTitle}
       muteUrl={muteUrl}
       preheader={`Leading bid is now ${currentBid}. Closes ${effectiveClosesAt}.`}

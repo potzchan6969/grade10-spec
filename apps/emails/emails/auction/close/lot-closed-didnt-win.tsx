@@ -29,10 +29,10 @@ export default function LotClosedDidntWinEmail({
       campaign="lot_closed_didnt_win"
       canUnsubscribe
       ctaLabel="View lot"
-      facts={[`Ended ${closedAt}`]}
       heading="This lot closed"
       highlight={{ label: "Winning bid", value: winningBid }}
       listingUrl={listingUrl}
+      lotSubtext={`Ended ${closedAt}`}
       lotTitle={lotTitle}
       muteUrl={muteUrl}
       preheader={`Winning bid ${winningBid}. Your bid was ${yourBid}.`}

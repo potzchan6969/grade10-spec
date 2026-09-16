@@ -41,6 +41,8 @@ export const grade10Theme: EmailTheme = {
   colorText: "#1B1918",
   colorTextMuted: "#555350",
   colorTextSubtle: "#9D9A97",
+  /** Grade10 `--secondary-foreground` (`gray-500`). */
+  colorSecondaryForeground: "#75726F",
   colorWarning: "#C4903D",
   containerWidth: "600px",
   fontFamily:
