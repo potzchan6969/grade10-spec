@@ -54,7 +54,7 @@ manager. Changing the card after the first bid on that lot.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Link before amount | Decided | No linked card: presets and custom maximum stay visible but disabled; only Link a card to bid and the empty slot open setup. | Product |
-| Setup is link only | Decided | Title Link a card to bid; when holds are enabled, body discloses that setting a maximum authorizes a hold and that charge happens only on win; continue Link Card. Setup itself does not take a hold. | Product |
+| Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. You're only charged if you win.; continue Link Card. When holds are enabled, body also discloses that setting a maximum authorizes a hold. Setup itself does not take a hold. | Product |
 | Card carries across lots | Decided | A linked card carries to a new lot; Grade10 does not force re-link. Change remains until the first bid on that lot. | Product |
 | Hold on commit | Decided | When holds are enabled, authorize and hold run when the collector commits a maximum, under Payment method — not in setup. | Product |
 :::
