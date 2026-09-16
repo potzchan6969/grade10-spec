@@ -48,21 +48,24 @@ derived Pending Payment order status, per `revise-auction-winner-invoicing`,
 with its full invoice and **Pay Now**. The page SHALL not derive a second
 Expired order status.
 
-#### Scenario: winner-order-SC-41 - The page shows its four sections
+#### Scenario: winner-order-SC-66 - The page shows its four sections
+**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order in any status
 - **WHEN** the winner opens it
 - **THEN** the page shows Order Information, Collection Method, Order Status
   and Lots, in that order
 
-#### Scenario: winner-order-SC-42 - Invoice Status replaces Paid Status
+#### Scenario: winner-order-SC-67 - Invoice Status replaces Paid Status
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** the winner reads Order Information
 - **THEN** it shows Invoice Status as Paid
 - **AND** no Paid Status label appears
 
-#### Scenario: winner-order-SC-43 - Each status step carries its time
+#### Scenario: winner-order-SC-68 - Each status step carries its time
+**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order that reached Awaiting Address, Preparing Invoice,
   Pending Payment and Processing
@@ -77,6 +80,7 @@ timestamps in the browser from the current invoice, fulfilment or payment
 session state.
 
 #### Scenario: winner-order-SC-53 - The timeline uses authoritative status times
+**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** the auction-order read model returns the order statuses reached
   and a recorded timestamp for each
@@ -85,6 +89,7 @@ session state.
 - **AND** it does not replace a returned timestamp with the page-load time
 
 #### Scenario: winner-order-SC-44 - An unpaid order shows the invoice and Pay Now
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
 
 - **GIVEN** an auction order whose status is Pending Payment
 - **WHEN** the winner opens it
@@ -92,6 +97,7 @@ session state.
 - **AND** the confirmed delivery address and the lot
 
 #### Scenario: winner-order-SC-45 - An order preparing its invoice offers no payment
+**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order whose status is Preparing Invoice
 - **WHEN** the winner opens it
@@ -124,6 +130,7 @@ billing address. Cancel SHALL leave the order in Awaiting Address with no
 address confirmed.
 
 #### Scenario: winner-order-SC-46 - An empty required field is refused
+**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** a winner on the address form with Town/City and Postal Code empty
 - **WHEN** they confirm the address
@@ -132,6 +139,7 @@ address confirmed.
 - **AND** the order's status is still Awaiting Address
 
 #### Scenario: winner-order-SC-47 - Optional fields may stay empty
+**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** a winner who fills every required field and leaves Company Name,
   Address Line 2 and Apt./Suite/Building empty
@@ -140,6 +148,7 @@ address confirmed.
 - **AND** the order's status is Preparing Invoice
 
 #### Scenario: winner-order-SC-48 - Any phone number is accepted
+**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** a winner who enters a phone number of any length or format
 - **WHEN** they confirm an otherwise complete address
@@ -162,6 +171,7 @@ session SHALL NOT change the invoice, its amount or its deadline. Grade10 SHALL
 NOT show the order as paid before it records the invoice `paid`.
 
 #### Scenario: winner-order-SC-49 - A timed-out payment session stays payable
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
 
 - **GIVEN** a winner whose payment session for a Pending Payment order timed out
 - **WHEN** they return to the order
@@ -169,12 +179,14 @@ NOT show the order as paid before it records the invoice `paid`.
 - **AND** the order is still Pending Payment with Pay Now available
 
 #### Scenario: winner-order-SC-50 - Pay Now after an unfinished session starts fresh
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
 
 - **GIVEN** a Pending Payment order whose last payment session was abandoned
 - **WHEN** the winner selects Pay Now
 - **THEN** a new payment session starts for the same invoice amount
 
 #### Scenario: winner-order-SC-51 - A completed session confirms before reading Processing
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
 
 - **GIVEN** a winner whose hosted card session completed but whose
   authenticated auction-order read model has not yet recorded invoice status
@@ -184,6 +196,7 @@ NOT show the order as paid before it records the invoice `paid`.
 - **AND** the order does not yet read Processing
 
 #### Scenario: winner-order-SC-52 - A recorded payment reads Processing
+**Serves:** winner-order-US-04 - Winner pays an invoice by card
 
 - **GIVEN** an order whose authenticated auction-order read model returns
   invoice status `paid` and fulfilment status `unfulfilled`

@@ -38,6 +38,7 @@ recently closed lot SHALL come first.
 The account menu SHALL link to My Auction Orders beside My Auctions.
 
 #### Scenario: grade10-site-auction-auction-orders-SC-01 - Every won order is listed once
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** a collector who has won three lots
 - **WHEN** they open My Auction Orders
@@ -45,12 +46,14 @@ The account menu SHALL link to My Auction Orders beside My Auctions.
 - **AND** each row carries the lot, the auction, the winning bid and the order status
 
 #### Scenario: grade10-site-auction-auction-orders-SC-02 - Another collector's orders are never listed
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** two collectors who have each won a lot
 - **WHEN** the first opens My Auction Orders
 - **THEN** only their own order is listed
 
 #### Scenario: grade10-site-auction-auction-orders-SC-03 - Orders waiting on the winner come first
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** a Delivered order whose lot closed yesterday and a Pending Payment
   order whose lot closed last week
@@ -58,6 +61,7 @@ The account menu SHALL link to My Auction Orders beside My Auctions.
 - **THEN** the Pending Payment order is listed before the Delivered order
 
 #### Scenario: grade10-site-auction-auction-orders-SC-04 - Newest close first within a band
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** two Processing orders, one whose lot closed yesterday and one last week
 - **WHEN** the collector opens My Auction Orders
@@ -87,12 +91,14 @@ No row SHALL record payment, change an address, or change an order status from
 the list itself.
 
 #### Scenario: grade10-site-auction-auction-orders-SC-05 - An order awaiting an address offers Confirm address
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** an order whose status is Awaiting Address
 - **WHEN** the winner selects Confirm address on its row
 - **THEN** that order opens
 
 #### Scenario: grade10-site-auction-auction-orders-SC-06 - An unpaid order offers Pay Invoice
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** an order whose status is Pending Payment
 - **WHEN** the winner reads its row
@@ -100,6 +106,7 @@ the list itself.
 - **AND** selecting it opens that order
 
 #### Scenario: grade10-site-auction-auction-orders-SC-07 - An expired invoice still offers Pay Invoice
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** an order whose invoice status is `expired`
 - **WHEN** the winner reads its row
@@ -107,6 +114,7 @@ the list itself.
 - **AND** the row's action is Pay Invoice
 
 #### Scenario: grade10-site-auction-auction-orders-SC-08 - Other statuses offer View detail
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** orders whose statuses are Preparing Invoice, Processing, Shipped,
   Delivered, Cancelled and Refunded
@@ -114,6 +122,7 @@ the list itself.
 - **THEN** each row's action is View detail
 
 #### Scenario: grade10-site-auction-auction-orders-SC-09 - View lot opens the listing
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** an order on My Auction Orders
 - **WHEN** the winner selects View lot
@@ -128,6 +137,7 @@ A read Grade10 could not complete SHALL be shown as a failure that can be
 retried, and SHALL NOT be shown as an empty list.
 
 #### Scenario: grade10-site-auction-auction-orders-SC-10 - An empty list points to My Auctions
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** a collector who has won no lots
 - **WHEN** they open My Auction Orders
@@ -135,6 +145,7 @@ retried, and SHALL NOT be shown as an empty list.
 - **AND** it does not report an error
 
 #### Scenario: grade10-site-auction-auction-orders-SC-11 - A failed read is not an empty list
+**Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** a collector whose orders Grade10 cannot read
 - **WHEN** they open My Auction Orders

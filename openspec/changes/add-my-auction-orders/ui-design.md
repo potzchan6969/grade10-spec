@@ -89,7 +89,7 @@ scenario is added here.
 
 | State | Source scenario |
 | --- | --- |
-| Four sections are ordered and the timeline shows each returned reached time | `winner-order-SC-41`, `SC-43`, `SC-53` |
+| Four sections are ordered and the timeline shows each returned reached time | `winner-order-SC-53`, `SC-66`, `SC-68` |
 | Preparing Invoice shows the confirmed address with no invoice or payment action | `winner-order-SC-45` |
 | Empty required fields show field errors; optional fields and any phone format are accepted as specified | `winner-order-SC-46`–`SC-48` |
 | Pending Payment shows the full invoice, confirmed address and Pay Now; an expired invoice remains payable | `winner-order-SC-44`, `SC-49` |

@@ -49,6 +49,7 @@ Each of `AuctionOrderRow` and `AuctionAddressForm` SHALL be renderable on its
 own.
 
 #### Scenario: shared-ui-auction-order-SC-01 - An application imports the surface
+**Serves:** `Order list`, `Order detail` - every name the surface exports resolves
 
 - **WHEN** an application imports each name above from the shared UI package's
   public entry
@@ -56,6 +57,7 @@ own.
 - **AND** no other component or type is exported for this surface
 
 #### Scenario: shared-ui-auction-order-SC-02 - A row reports its action without choosing it
+**Serves:** Order list - a row reports its action without choosing it
 
 - **GIVEN** an `AuctionOrderRow` supplied with the action label Pay Invoice
 - **WHEN** the winner selects it
@@ -63,6 +65,7 @@ own.
 - **AND** the label shown is the one supplied
 
 #### Scenario: shared-ui-auction-order-SC-03 - The form shows supplied errors and reports values
+**Serves:** Order detail - the form shows supplied errors and reports values
 
 - **GIVEN** an `AuctionAddressForm` supplied with an error for Town/City
 - **WHEN** the winner selects Confirm
@@ -70,6 +73,7 @@ own.
 - **AND** the form reports Confirm with the entered values
 
 #### Scenario: shared-ui-auction-order-SC-04 - The detail omits an invoice it was not given
+**Serves:** Order detail - the detail omits an invoice it was not given
 
 - **GIVEN** an `AuctionOrderDetail` supplied with no invoice
 - **WHEN** it renders

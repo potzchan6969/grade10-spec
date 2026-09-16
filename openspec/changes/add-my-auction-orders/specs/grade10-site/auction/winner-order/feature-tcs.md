@@ -3,171 +3,6 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-15, tcs-rules r3.0
 
-## winner-order-US3: Winner confirms where a won lot ships
-
-**As a** winner
-**I want** to fill in and confirm a delivery address on the order
-**so that** Grade10 can quote shipping to the right place.
-
-### winner-order-US3-TC1-1: Order page shows four sections and timed status steps
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-03
-
-**Pre-conditions:**
-
-* customer(winner) holds an order that reached Awaiting Address, Preparing Invoice, Pending Payment and Processing.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-2. Scroll to the Order Status section.
-
-**Expected Results:**
-
-* Order Information, Collection Method, Order Status, Lots appear in order.
-* Step 2 lists the four statuses in the order reached.
-* Each status shows the date and time reached.
-
-### winner-order-US3-TC5-1: Timeline uses the auction-order read model timestamps
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-03
-
-**Pre-conditions:**
-
-* customer(winner) holds an order whose auction-order read model returns a
-  recorded timestamp for each reached status.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-2. Read the Order Status section.
-
-**Expected Results:**
-
-* Each status shows the timestamp returned for that status.
-* No timestamp is replaced with the page-load time.
-
-### winner-order-US3-TC2-1: Preparing Invoice shows the address and no payment
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-03
-
-**Pre-conditions:**
-
-* customer(winner) holds an order in Preparing Invoice.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-
-**Expected Results:**
-
-* The confirmed address is shown.
-* No invoice and no Pay Now are shown.
-
-### winner-order-US3-TC3-1: A complete address with optional fields empty is accepted
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-03
-
-**Pre-conditions:**
-
-* customer(winner) holds an order in Awaiting Address.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| First Name, Last Name, Country/Region, Town/City, Address Line 1, State/Province/Region, Postal Code | Filled |
-| Phone | <a phone number of unusual length and format> |
-| Company Name, Address Line 2, Apt./Suite/Building | Empty |
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-2. Fill the address form with **Test data**.
-3. Click Confirm.
-
-**Expected Results:**
-
-* The address is accepted.
-* The order status reads Preparing Invoice.
-
-### winner-order-US3-TC4-1: Empty required fields are refused with field errors
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** winner-order-US-03
-
-**Pre-conditions:**
-
-* customer(winner) holds an order in Awaiting Address.
-
-**Steps:**
-
-1. Navigate to <grade10 auction order url>.
-2. Fill every required field except Town/City and Postal Code.
-3. Click Confirm.
-
-**Expected Results:**
-
-* The address is refused.
-* An error shows on Town/City and on Postal Code.
-* The order status still reads Awaiting Address.
-
----
-
 ## winner-order-US4: Winner pays an invoice by card
 
 **As a** winner
@@ -351,3 +186,168 @@
 **Expected Results:**
 
 * The order status reads Processing.
+
+---
+
+## winner-order-US7: Winner confirms where a won lot ships
+
+**As a** winner
+**I want** to fill in and confirm a delivery address on the order
+**so that** Grade10 can quote shipping to the right place.
+
+### winner-order-US7-TC1-1: Order page shows four sections and timed status steps
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-07
+
+**Pre-conditions:**
+
+* customer(winner) holds an order that reached Awaiting Address, Preparing Invoice, Pending Payment and Processing.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+2. Scroll to the Order Status section.
+
+**Expected Results:**
+
+* Order Information, Collection Method, Order Status, Lots appear in order.
+* Step 2 lists the four statuses in the order reached.
+* Each status shows the date and time reached.
+
+### winner-order-US7-TC5-1: Timeline uses the auction-order read model timestamps
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-07
+
+**Pre-conditions:**
+
+* customer(winner) holds an order whose auction-order read model returns a
+  recorded timestamp for each reached status.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+2. Read the Order Status section.
+
+**Expected Results:**
+
+* Each status shows the timestamp returned for that status.
+* No timestamp is replaced with the page-load time.
+
+### winner-order-US7-TC2-1: Preparing Invoice shows the address and no payment
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-07
+
+**Pre-conditions:**
+
+* customer(winner) holds an order in Preparing Invoice.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+
+**Expected Results:**
+
+* The confirmed address is shown.
+* No invoice and no Pay Now are shown.
+
+### winner-order-US7-TC3-1: A complete address with optional fields empty is accepted
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-07
+
+**Pre-conditions:**
+
+* customer(winner) holds an order in Awaiting Address.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First Name, Last Name, Country/Region, Town/City, Address Line 1, State/Province/Region, Postal Code | Filled |
+| Phone | <a phone number of unusual length and format> |
+| Company Name, Address Line 2, Apt./Suite/Building | Empty |
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+2. Fill the address form with **Test data**.
+3. Click Confirm.
+
+**Expected Results:**
+
+* The address is accepted.
+* The order status reads Preparing Invoice.
+
+### winner-order-US7-TC4-1: Empty required fields are refused with field errors
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-07
+
+**Pre-conditions:**
+
+* customer(winner) holds an order in Awaiting Address.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+2. Fill every required field except Town/City and Postal Code.
+3. Click Confirm.
+
+**Expected Results:**
+
+* The address is refused.
+* An error shows on Town/City and on Postal Code.
+* The order status still reads Awaiting Address.

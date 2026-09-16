@@ -29,6 +29,7 @@ A tab with no rows while another tab has rows SHALL say that tab has no lots,
 and SHALL NOT be presented as a failure.
 
 #### Scenario: grade10-site-auction-account-record-SC-49 - Each listing sits in the tab its window names
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
 - **GIVEN** a collector watching one listing whose bidding has not opened, one
   whose bidding is open, and one that has closed
@@ -37,6 +38,7 @@ and SHALL NOT be presented as a failure.
   only the third
 
 #### Scenario: grade10-site-auction-account-record-SC-50 - A listing moves tab when its window opens
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
 - **GIVEN** a watched listing in the Upcoming tab
 - **WHEN** its bidding window opens and the collector reopens My Auctions
@@ -44,6 +46,7 @@ and SHALL NOT be presented as a failure.
 - **AND** it is not in the Upcoming tab
 
 #### Scenario: grade10-site-auction-account-record-SC-51 - An empty tab is not a failure
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
 - **GIVEN** a collector with Active listings and no Upcoming listings
 - **WHEN** they open the Upcoming tab
@@ -51,12 +54,14 @@ and SHALL NOT be presented as a failure.
 - **AND** it does not report an error
 
 #### Scenario: grade10-site-auction-account-record-SC-53 - My Auctions opens on Active
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
 - **GIVEN** a collector with listings in all three tabs
 - **WHEN** they open My Auctions
 - **THEN** the Active tab is shown
 
 #### Scenario: grade10-site-auction-account-record-SC-54 - The title count covers every tab
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
 - **GIVEN** a collector with one Upcoming, one Active and one Ended listing
 - **WHEN** they open My Auctions
@@ -68,6 +73,7 @@ A row in the Ended tab SHALL show Email alerts disabled, SHALL NOT let the
 collector change them, and SHALL leave the listing's alert setting unchanged.
 
 #### Scenario: grade10-site-auction-account-record-SC-52 - Ended rows lock Email alerts
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
 - **GIVEN** a listing in the Ended tab of My Auctions
 - **WHEN** the collector tries to change its Email alerts
@@ -82,6 +88,7 @@ auction order. Selecting it SHALL open the matching order, per
 SHALL NOT record payment, confirm or change an address, or change order status.
 
 #### Scenario: grade10-site-auction-account-record-SC-55 - A Won row opens its order
+**Serves:** grade10-site-auction-account-record-US-07 - Collector reads My Auctions by bidding window
 
 - **GIVEN** a closed listing whose winner is the collector and whose auction
   order is identified by the row
