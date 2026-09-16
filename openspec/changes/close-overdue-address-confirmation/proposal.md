@@ -40,14 +40,27 @@ is too short, which is why the window is tentative.
   state: the order still reads Awaiting Address or Preparing Invoice.
 - **Every delta here is ADDED.** No requirement another in-flight change folds
   is touched, so `check:manual`'s two-changes-one-requirement rule stays quiet.
+- **An expired invoice is paid only in the admin portal.** An operator settles
+  it manually; a reissue is the only way back to the winner's card. The rule is
+  stated as its own requirement and proved here, since until now it sat only in
+  an action table.
+- **A payment started in time counts.** A card payment Grade10 received before
+  the deadline completes even if it confirms after, and the invoice stays
+  `pending` until then. One received at or after the deadline is refused and not
+  charged.
+- **The Post-Sale Queue page stops saying an expired invoice "stays payable"**,
+  which read as if the winner could still pay it.
 - **48 hours is tentative.** It is one Grade10-owned figure, and the reopen count
   is the signal for changing it.
 
 ## Non-Goals
 
-- **The expired invoice.** `revise-auction-winner-invoicing` already hides card
-  Pay, shows Contact Us, and leaves reissue, manual settlement in the admin
-  portal, and cancellation to an operator. This change restates none of it.
+- **Restating the expired invoice's own rules.** `revise-auction-winner-invoicing`
+  writes `expired`, hides card Pay, shows Contact Us, and defines reissue and
+  cancellation. This change adds only the settlement rule and the payment in
+  flight, in a requirement of its own.
+- **What a reissue re-prices.** The fee and the premium minimum on a reissue are
+  that change's.
 - **Suspension.** A closed address window restricts nobody from bidding. Only an
   unpaid invoice past its deadline does, and that rule is unchanged.
 - **A letter about the closing window.** No reminder before it closes and no
@@ -76,6 +89,9 @@ None.
   status is unchanged by it.
 - `grade10-admin/auction/post-sale`: a new requirement letting an operator
   reopen the address entrance with a reason, or record the address themselves.
+- `grade10-admin/auction/post-sale`: a second new requirement making the admin
+  portal the only place an expired invoice is paid, and honouring a card payment
+  started before the deadline.
 
 ## Impact
 
@@ -111,6 +127,11 @@ one may not touch them:
   shows one outcome per lot"**. With a 48-hour window and a 72-hour mark, a
   winner is locked out for a full day before any operator is told. ❓ on the
   Post-Sale Queue page until that change makes the edit.
+- **Expiry should wait for a payment already on its way.** That change writes
+  `expired` the moment the deadline passes and lets only an operator move
+  `expired` to `paid`. This change holds the invoice `pending` while a payment
+  received before the deadline is confirming, so that change's expiry rule and
+  its transition table should say the same.
 - **"Invoice log history"** should name *address entrance reopened* and *address
   recorded by an operator* among its log types. This change's own requirement
   already obliges Grade10 to write the reopened entry; the type list is theirs.
@@ -133,6 +154,8 @@ one may not touch them:
   step.
 - **The account address book is unaffected.** It is account-wide; only putting
   an address on this order is refused.
+- **"Started" means Grade10 received the winner's payment** before the
+  deadline — not that the winner opened the page.
 - **A cancelled order never reopens.** Cancellation has already returned the lot
   to stock.
 

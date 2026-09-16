@@ -11,6 +11,7 @@
   - Re-quote on request: an address change after send is re-priced and reissued by an operator, who decides what happens to the deadline
 - Resolving an unpaid order
   - Manual settlement: a non-card payment is recorded with its method, its reference, and proof of it
+  - Settling an expired invoice: the admin portal is the only place an expired invoice is paid; a reissue is the only way back to the winner's card
   - Cancellation: now also available before an invoice is sent, for an order the operator decides not to pursue
 - Audit trail
   - Payment method on the record: every paid entry says how it was paid
@@ -133,3 +134,79 @@ write again.
 - **THEN** Grade10 accepts it
 - **AND** the order derives as Preparing Invoice
 - **AND** the address window is still closed, so the winner cannot change it
+
+### Requirement: Only an operator settles an expired invoice
+
+Once an invoice is `expired`, the admin portal SHALL be the only place it is
+paid. An operator holding payment-processing SHALL settle it manually, per
+`grade10-admin/auction/post-sale`'s manual settlement, which makes the invoice
+`paid` and the order derive as Processing. After that the winner's order SHALL
+show nothing owed and no card Pay control.
+
+Grade10 SHALL offer the winner no way to pay an expired invoice. A card payment
+Grade10 receives from the winner at or after the payment deadline SHALL be
+refused, and the winner's card SHALL NOT be charged. A reissue SHALL be the only
+way back to the winner's card: it returns the invoice to `pending` with a fresh
+seven days, per "An operator resolves an unpaid order".
+
+A payment started in time SHALL count. When Grade10 received the winner's card
+payment before the deadline and its outcome arrives after it:
+
+| Outcome after the deadline | Behaviour |
+| --- | --- |
+| Succeeds | The invoice becomes `paid`. It is never written `expired` |
+| Fails | Grade10 writes `expired` when the failure arrives, and everything that follows expiry follows from then |
+
+While that outcome is awaited, Grade10 SHALL keep the invoice `pending` and
+SHALL NOT write `expired`.
+
+An operator without payment-processing SHALL be offered no settle or reissue
+control on an expired invoice, and Grade10 SHALL refuse both actions from them.
+
+#### Scenario: grade10-admin-auction-post-sale-SC-85 - An operator settles an expired invoice
+**Serves:** Resolving an unpaid order - the admin portal is the only place an expired invoice is paid
+
+- **GIVEN** an auction order whose invoice is `expired`
+- **AND** an operator holding payment-processing
+- **WHEN** they record a bank transfer settlement with its reference and proof
+- **THEN** Grade10 accepts it
+- **AND** the invoice is `paid` and the order derives as Processing
+- **AND** the winner's order shows nothing owed and no card Pay control
+
+#### Scenario: grade10-admin-auction-post-sale-SC-86 - A winner payment received at the deadline is refused
+**Serves:** Resolving an unpaid order - the winner cannot pay an expired invoice
+
+- **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
+  and whose invoice has no card payment in progress
+- **WHEN** Grade10 receives the winner's card payment at 2026-09-19T09:00:00Z
+- **THEN** Grade10 refuses it
+- **AND** the winner's card is not charged
+- **AND** the invoice is `expired`
+
+#### Scenario: grade10-admin-auction-post-sale-SC-87 - A payment started in time completes after the deadline
+**Serves:** Resolving an unpaid order - a payment started in time counts
+
+- **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
+- **AND** Grade10 received the winner's card payment at 2026-09-19T08:59:30Z
+- **WHEN** the payment succeeds at 2026-09-19T09:00:20Z
+- **THEN** the invoice is `paid` and the order derives as Processing
+- **AND** the invoice was never `expired`
+
+#### Scenario: grade10-admin-auction-post-sale-SC-88 - A payment started in time that fails expires the invoice then
+**Serves:** Resolving an unpaid order - a payment started in time counts
+
+- **GIVEN** an auction order whose payment deadline is 2026-09-19T09:00:00Z
+- **AND** Grade10 received the winner's card payment at 2026-09-19T08:59:30Z
+- **WHEN** the payment is declined at 2026-09-19T09:00:20Z
+- **THEN** the invoice is `pending` until 2026-09-19T09:00:20Z
+- **AND** Grade10 writes `expired` at 2026-09-19T09:00:20Z
+
+#### Scenario: grade10-admin-auction-post-sale-SC-89 - An operator without the grant cannot settle an expired invoice
+**Serves:** Resolving an unpaid order - settling needs payment-processing
+
+- **GIVEN** an auction order whose invoice is `expired`
+- **AND** an operator who does not hold payment-processing
+- **WHEN** they open the order
+- **THEN** no settle or reissue control is offered
+- **AND** Grade10 refuses either action if it is attempted
+- **AND** the invoice is still `expired`

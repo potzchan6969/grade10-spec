@@ -755,6 +755,70 @@ Runs once per row of **Test data**.
 * The action is refused.
 * The order still reads Pending Payment with Expired invoice, deadline unchanged.
 
+### post-sale-US9-TC22-1: A card payment started in time completes after the deadline
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Resolving an unpaid order
+
+**Pre-conditions:**
+
+* `<pending order>` has a payment deadline of 2026-09-19T09:00:00Z.
+* The payment provider is set to confirm the winner's card payment 50 seconds after it is received.
+
+**Steps:**
+
+1. At 2026-09-19T08:59:30Z, submit the winner's card payment.
+2. Read the invoice status at 2026-09-19T09:00:05Z.
+3. Read it again after the payment confirms at 2026-09-19T09:00:20Z.
+
+**Expected Results:**
+
+* At 09:00:05 the invoice is still `pending`, not `expired`.
+* After confirmation the invoice is `paid` and the order is Processing.
+* The invoice log holds no expired entry.
+
+### post-sale-US9-TC23-1: A card payment started in time that fails expires the invoice when it fails
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Resolving an unpaid order
+
+**Pre-conditions:**
+
+* `<pending order>` has a payment deadline of 2026-09-19T09:00:00Z.
+* The payment provider is set to decline the winner's card payment 50 seconds after it is received.
+
+**Steps:**
+
+1. At 2026-09-19T08:59:30Z, submit the winner's card payment.
+2. Read the invoice status at 2026-09-19T09:00:05Z.
+3. Read it again after the decline at 2026-09-19T09:00:20Z.
+
+**Expected Results:**
+
+* At 09:00:05 the invoice is still `pending`.
+* After the decline the invoice is `expired`, with the expired entry timestamped at the decline.
+* The winner's order shows Contact Us and no card Pay.
+
 ## Raised
 
 - **Whether the Overdue mark clears on a reopen.** The mark is defined as a closed window and a reopen is said to change no status, but the input never says whether the mark is a live read of the entrance or a flag that a window once lapsed. TC4 asserts it clears.
@@ -782,3 +846,9 @@ of any requirement, and a scenario draft written without sight of this suite.
 | Whether an operator may record the address without reopening | **Folded in** from the same round — `grade10-admin-auction-post-sale-SC-84` and `post-sale-US9-TC16-1` |
 | Whether the Overdue mark clears on a reopen | **Agreed** by both readings, then **handed on.** `check:manual` refuses two in-flight changes folding one requirement, and the Overdue mark is `revise-auction-winner-invoicing`'s. `post-sale-US9-TC4-1` and `post-sale-US9-TC10-1` stay in the suite and become runnable when that change realigns the mark to the address window |
 | Whether a closed window stops an operator sending a quoted invoice | **Agreed.** It does not — the requirement gates the winner's write alone, and `post-sale-US9-TC13-1` reads it that way |
+| An expired invoice can only be paid in the admin portal | **Folded in** — `grade10-admin-auction-post-sale-SC-85`, `SC-86` and `SC-89`, walked by `post-sale-US9-TC17-1`, `TC19-1` and `TC21-1` |
+| A card payment at exactly the deadline | **Folded in.** Judged on receipt: at or after the deadline is refused — `grade10-admin-auction-post-sale-SC-86` |
+| A card payment started before the deadline that confirms after | **Folded in** after a grilling round: a payment started in time counts, and the invoice is held `pending` until its outcome — `SC-87` and `SC-88`, with `post-sale-US9-TC22-1` and `TC23-1` added |
+| Whether a reissue re-prices the fee or the premium minimum, or needs a reason | **Out of scope.** Reissue is `revise-auction-winner-invoicing`'s; `post-sale-US9-TC20-1` checks only the new deadline and walks that change's requirement |
+| Whether settling an expired invoice restores bidding | **Already decided** on the Winner Order page: paying does not restore bidding by itself. Suspension belongs to `grade10-site/auction/bidder-suspension` |
+| Whether the winner is told about a reissue | **Out of scope**, with the other letters, in a follow-on change |
