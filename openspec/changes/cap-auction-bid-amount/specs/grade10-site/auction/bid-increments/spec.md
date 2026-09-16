@@ -15,7 +15,7 @@ currency, the same on every lot. Operators SHALL NOT change it.
 | --- | --- | --- |
 | USD | 1000000000 | USD 10,000,000 |
 | HKD | 8000000000 | HKD 80,000,000 |
-| JPY | 1500000000 | JPY 1,500,000,000 |
+| JPY | 150000000000 | JPY 150,000,000,000 |
 
 Grade10 SHALL accept an amount equal to the ceiling. It SHALL refuse a manual
 bid or an auto-bid maximum above the ceiling, name the ceiling in the refusal,
@@ -39,8 +39,8 @@ further bid on that listing.
 #### Scenario: grade10-site-auction-bid-increments-SC-10 - An auto-bid maximum above the ceiling is refused
 
 - **GIVEN** an open JPY listing whose minimum bid is 150000 minor units
-- **WHEN** a collector commits an auto-bid maximum of 1500000001 minor units
-- **THEN** Grade10 refuses the maximum and names 1500000000 minor units as the ceiling
+- **WHEN** a collector commits an auto-bid maximum of 150000000001 minor units
+- **THEN** Grade10 refuses the maximum and names 150000000000 minor units as the ceiling
 - **AND** no maximum is recorded for that collector
 
 #### Scenario: grade10-site-auction-bid-increments-SC-11 - A listing at the ceiling takes no further bid
