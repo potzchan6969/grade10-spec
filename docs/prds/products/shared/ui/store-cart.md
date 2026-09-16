@@ -24,6 +24,12 @@ locks the page behind it while it is open. Pressing checkout puts the button
 into a redirecting state and hands the intent to the application, which is what
 actually creates the checkout session.
 
+## Tender Actions
+
+🚧 **Tender actions need an answer** — a promo or points action appears only
+when the application supplies the callback that can perform it. The drawer can
+show current tender context without offering an action that cannot change it.
+
 ## Site Sale And Promo Codes
 
 🚧 An automatic storewide sale on a line shows as the sale unit price with the
