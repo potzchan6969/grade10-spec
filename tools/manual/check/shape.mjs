@@ -158,6 +158,16 @@ export function checkStoreErrors(specs, changes, folded, add) {
         refusal(entry.id, entry.testCasesError),
       );
     }
+    // The journeys have their own channel so a broken file cannot blank the
+    // requirements — and nothing read that channel, so every rule that reads
+    // journeys skipped the file and no rule said why it was skipped.
+    if (entry.journeysError) {
+      add(
+        "store",
+        entry.journeysError.file,
+        refusal(entry.id, entry.journeysError),
+      );
+    }
   }
 }
 

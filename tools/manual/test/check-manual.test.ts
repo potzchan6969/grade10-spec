@@ -255,6 +255,49 @@ describe("who walks a capability", () => {
       "openspec/changes/bare/specs/demo-product/epsilon/user-journeys.md — holds no story and does not say `**Walked by:** nobody`: one or the other",
     ]);
   });
+
+  /** The shape the schema's template hands every author. The reader used to
+   * refuse it for its headings and the refusal was dropped, so a file that
+   * named nobody and held nothing satisfied the rule by parsing as nothing. */
+  it("asks the same of a delta written in the delta sections", async () => {
+    const root = writeStore({
+      "openspec/changes/bare/proposal.md": proposal("Bare"),
+      "openspec/changes/bare/specs/demo-product/delta/spec.md":
+        "## ADDED Requirements\n\n### Requirement: Delta exists\n\nDelta SHALL exist.\n",
+      "openspec/changes/bare/specs/demo-product/delta/user-journeys.md":
+        "## Context user journeys\n\n## ADDED User journeys\n\n## MODIFIED User journeys\n\n## REMOVED User journeys\n",
+      "openspec/changes/full/proposal.md": proposal("Full"),
+      "openspec/changes/full/specs/demo-product/zeta/spec.md":
+        "## ADDED Requirements\n\n### Requirement: Zeta exists\n\nZeta SHALL exist.\n",
+      "openspec/changes/full/specs/demo-product/zeta/user-journeys.md": `## ADDED User journeys\n\n${story("zeta-US-01")}\n`,
+    });
+    expect(lines(await runChecks(root, NO_GIT), "walked")).toEqual([
+      "openspec/changes/bare/specs/demo-product/delta/user-journeys.md — holds no story and does not say `**Walked by:** nobody`: one or the other",
+    ]);
+  });
+
+  /** A journeys file nobody can parse is named, wherever it sits. It used to be
+   * skipped on both sides: the durable channel carried the refusal and no rule
+   * read it, and the delta's was caught and thrown away. */
+  it("names a journeys file the reader refuses, durable or delta", async () => {
+    const root = writeStore({
+      "openspec/specs/demo-product/alpha/spec.md": alpha,
+      "openspec/specs/demo-product/alpha/user-journeys.md":
+        "## Journeys\n\nSomeone renamed the heading.\n",
+      "openspec/changes/bare/proposal.md": proposal("Bare"),
+      "openspec/changes/bare/specs/demo-product/delta/spec.md":
+        "## ADDED Requirements\n\n### Requirement: Delta exists\n\nDelta SHALL exist.\n",
+      "openspec/changes/bare/specs/demo-product/delta/user-journeys.md":
+        "## Stories\n\nAnd again here.\n",
+    });
+    const result = await runChecks(root, NO_GIT);
+    expect(lines(result, "store")).toEqual([
+      "openspec/changes/bare/specs/demo-product/delta/user-journeys.md — demo-product/delta line 1: a journeys file needs a `## User journeys` heading, or the `## ADDED User journeys` sections a change writes",
+      "openspec/specs/demo-product/alpha/user-journeys.md — demo-product/alpha line 1: a journeys file needs a `## User journeys` heading, or the `## ADDED User journeys` sections a change writes",
+    ]);
+    // One cause, one finding: the file is refused, not measured.
+    expect(lines(result, "walked")).toEqual([]);
+  });
 });
 
 /** The fold carries `## Requirements` alone. A durable spec with requirements
