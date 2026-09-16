@@ -1,19 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="23 76 608 448" role="img" data-preset="editorial" aria-labelledby="coupon-life-archify-diagram-title" aria-describedby="coupon-life-archify-diagram-description" data-diagram="coupon-life">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="28 40 940 256" role="img" data-preset="editorial" aria-labelledby="coupon-life-archify-diagram-title" aria-describedby="coupon-life-archify-diagram-description" data-diagram="coupon-life">
 <style>
-svg[data-diagram="coupon-life"]{--arrow:var(--muted-foreground, light-dark(#8a806f, #948978));--arrow-emphasis:var(--primary, light-dark(#bb4c23, #dd6b3d));--backend-fill:light-dark(rgba(42, 119, 75, 0.09), rgba(63, 132, 92, 0.16));--backend-stroke:light-dark(#397b53, #8fc29e);--cloud-fill:light-dark(rgba(157, 103, 31, 0.1), rgba(170, 119, 49, 0.16));--cloud-stroke:light-dark(#9a671f, #d8ad68);--database-fill:light-dark(rgba(105, 75, 130, 0.09), rgba(117, 91, 141, 0.17));--database-stroke:light-dark(#765d86, #c0a4d0);--external-fill:light-dark(rgba(101, 91, 75, 0.09), rgba(126, 115, 96, 0.18));--external-stroke:light-dark(#746b5e, #b8ad99);--frontend-fill:light-dark(rgba(31, 117, 126, 0.09), rgba(43, 133, 142, 0.16));--frontend-stroke:light-dark(#287e84, #7fc6c7);--grid:var(--border-subtle, light-dark(#d8d0c2, #39342a));--mask:var(--background, light-dark(#fbf8f1, #231f18));--security-fill:light-dark(rgba(153, 58, 52, 0.09), rgba(157, 69, 65, 0.17));--security-stroke:light-dark(#9e463f, #df9085);--text:var(--foreground, light-dark(#242018, #f4eddf));--text-dim:var(--muted-foreground, light-dark(#a09788, #776e60));--text-muted:var(--muted-foreground, light-dark(#6f6658, #b9ae9b))}
+svg[data-diagram="coupon-life"]{--arrow:var(--muted-foreground, light-dark(#8a806f, #948978));--arrow-emphasis:var(--primary, light-dark(#bb4c23, #dd6b3d));--backend-fill:light-dark(rgba(42, 119, 75, 0.09), rgba(63, 132, 92, 0.16));--backend-stroke:light-dark(#397b53, #8fc29e);--cloud-fill:light-dark(rgba(157, 103, 31, 0.1), rgba(170, 119, 49, 0.16));--cloud-stroke:light-dark(#9a671f, #d8ad68);--database-fill:light-dark(rgba(105, 75, 130, 0.09), rgba(117, 91, 141, 0.17));--database-stroke:light-dark(#765d86, #c0a4d0);--external-fill:light-dark(rgba(101, 91, 75, 0.09), rgba(126, 115, 96, 0.18));--external-stroke:light-dark(#746b5e, #b8ad99);--frontend-fill:light-dark(rgba(31, 117, 126, 0.09), rgba(43, 133, 142, 0.16));--frontend-stroke:light-dark(#287e84, #7fc6c7);--grid:var(--border-subtle, light-dark(#d8d0c2, #39342a));--lane-fill:var(--background, light-dark(rgba(229, 221, 207, 0.42), rgba(52, 46, 35, 0.46)));--lane-stroke:var(--border, light-dark(#b8aa94, #726957));--mask:var(--background, light-dark(#fbf8f1, #231f18));--security-stroke:light-dark(#9e463f, #df9085);--text:var(--foreground, light-dark(#242018, #f4eddf));--text-dim:var(--muted-foreground, light-dark(#a09788, #776e60));--text-muted:var(--muted-foreground, light-dark(#6f6658, #b9ae9b))}
 svg[data-diagram="coupon-life"] .c-grid{stroke: var(--grid); fill: none;}
 svg[data-diagram="coupon-life"] .c-mask{fill: var(--mask); stroke: none;}
 svg[data-diagram="coupon-life"] .c-frontend{fill: var(--frontend-fill); stroke: var(--frontend-stroke);}
 svg[data-diagram="coupon-life"] .c-backend{fill: var(--backend-fill); stroke: var(--backend-stroke);}
 svg[data-diagram="coupon-life"] .c-database{fill: var(--database-fill); stroke: var(--database-stroke);}
 svg[data-diagram="coupon-life"] .c-cloud{fill: var(--cloud-fill); stroke: var(--cloud-stroke);}
-svg[data-diagram="coupon-life"] .c-security{fill: var(--security-fill); stroke: var(--security-stroke);}
 svg[data-diagram="coupon-life"] .c-external{fill: var(--external-fill); stroke: var(--external-stroke);}
 svg[data-diagram="coupon-life"] .t-primary{fill: var(--text);}
 svg[data-diagram="coupon-life"] .t-muted{fill: var(--text-muted);}
 svg[data-diagram="coupon-life"] .t-dim{fill: var(--text-dim);}
+svg[data-diagram="coupon-life"] .t-backend{fill: var(--backend-stroke);}
 svg[data-diagram="coupon-life"] .t-cloud{fill: var(--cloud-stroke);}
-svg[data-diagram="coupon-life"] .t-security{fill: var(--security-stroke);}
 svg[data-diagram="coupon-life"] .semantic-sigil{fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; opacity: 0.76; pointer-events: none;}
 svg[data-diagram="coupon-life"] .semantic-sigil > *{vector-effect: non-scaling-stroke;}
 svg[data-diagram="coupon-life"] .semantic-sigil .sigil-fill{fill: currentColor; stroke: none;}
@@ -21,19 +20,18 @@ svg[data-diagram="coupon-life"] .s-frontend{color: var(--frontend-stroke);}
 svg[data-diagram="coupon-life"] .s-backend{color: var(--backend-stroke);}
 svg[data-diagram="coupon-life"] .s-database{color: var(--database-stroke);}
 svg[data-diagram="coupon-life"] .s-cloud{color: var(--cloud-stroke);}
-svg[data-diagram="coupon-life"] .s-security{color: var(--security-stroke);}
 svg[data-diagram="coupon-life"] .s-external{color: var(--external-stroke);}
 svg[data-diagram="coupon-life"] .a-default{stroke: var(--arrow); fill: none;}
 svg[data-diagram="coupon-life"] .a-emphasis{stroke: var(--arrow-emphasis); fill: none;}
-svg[data-diagram="coupon-life"] .a-dashed{stroke: var(--database-stroke); fill: none; stroke-dasharray: 4,4;}
 svg[data-diagram="coupon-life"] .m-default{fill: var(--arrow);}
 svg[data-diagram="coupon-life"] .m-emphasis{fill: var(--arrow-emphasis);}
 svg[data-diagram="coupon-life"] .m-security{fill: var(--security-stroke);}
 svg[data-diagram="coupon-life"] .m-dashed{fill: var(--database-stroke);}
 svg[data-diagram="coupon-life"] .c-grid{stroke-dasharray: 1 4; opacity: 0.48;}
+svg[data-diagram="coupon-life"] .c-lane{fill: var(--lane-fill); stroke: var(--lane-stroke); stroke-dasharray: 6,6;}
 </style>
         <title id="coupon-life-archify-diagram-title">A coupon&#39;s life</title>
-        <desc id="coupon-life-archify-diagram-description">A lifecycle diagram generated by Archify.</desc>
+        <desc id="coupon-life-archify-diagram-description">A workflow diagram generated by Archify.</desc>
         
         <defs>
           <marker id="coupon-life-arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
@@ -55,105 +53,78 @@ svg[data-diagram="coupon-life"] .c-grid{stroke-dasharray: 1 4; opacity: 0.48;}
         
         <rect width="100%" height="100%" fill="url(#coupon-life-grid)" />
         
-        <path d="M 72 112 L 908 112" class="a-default" stroke-width="0.8" stroke-dasharray="3,8"/>
-        <text x="72" y="100" class="t-dim" font-size="10" font-weight="600">01 / The coupon</text>
-        <path d="M 72 264 L 908 264" class="a-default" stroke-width="0.8" stroke-dasharray="3,8"/>
-        <text x="72" y="252" class="t-dim" font-size="10" font-weight="600">02 / Given back</text>
-        <path d="M 72 436 L 908 436" class="a-default" stroke-width="0.8" stroke-dasharray="3,8"/>
-        <text x="72" y="424" class="t-dim" font-size="10" font-weight="600">03 / Ended</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="916" height="106" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Shopify</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="178" width="916" height="106" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="200" class="t-dim" font-size="10" font-weight="600">02 / The coupon</text>
         
-        <path d="M 154 157 L 594 157" class="a-emphasis" stroke-width="2.2" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
         
-        <path data-step="available" data-edge-from="redeemed" data-edge-to="available" data-edge-key="0" data-edge-id="issued" data-composition-points="153,157;189,157" d="M 153 157 L 189 157" class="a-emphasis" stroke-width="2" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
-        <path data-step="claimed" data-edge-from="available" data-edge-to="claimed" data-edge-key="1" data-edge-id="claim" data-composition-points="307,157;343,157" d="M 307 157 L 343 157" class="a-emphasis" stroke-width="2" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
-        <path data-step="used" data-edge-from="claimed" data-edge-to="used" data-edge-key="2" data-edge-id="paid" data-composition-points="461,157;497,157" d="M 461 157 L 497 157" class="a-emphasis" stroke-width="2" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
-        <path data-step="returned" data-edge-from="claimed" data-edge-to="returned" data-edge-label="the sale ends, or the next sale takes it" data-edge-key="3" data-edge-id="ends" data-composition-points="402,188;402,233;556,233;556,278" d="M 402 188 L 402 223 Q 402 233 412 233 L 546 233 Q 556 233 556 243 L 556 278" class="a-default" stroke-width="1.1" marker-end="url(#coupon-life-arrowhead)"/>
-        <path data-step="voided" data-edge-from="available" data-edge-to="voided" data-edge-key="4" data-edge-id="reversed" data-composition-points="248,188;248,319;402,319;402,450" d="M 248 188 L 248 309 Q 248 319 258 319 L 392 319 Q 402 319 402 329 L 402 450" class="a-dashed" stroke-width="1.1" marker-end="url(#coupon-life-arrowhead-dashed)"/>
-        <path data-step="lapsed" data-edge-from="available" data-edge-to="lapsed" data-edge-key="5" data-edge-id="lapses" data-composition-points="234,188;234,481;153,481" d="M 234 188 L 234 471 Q 234 481 224 481 L 153 481" class="a-dashed" stroke-width="1.1" marker-end="url(#coupon-life-arrowhead-dashed)"/>
-        <path data-step="available" data-edge-from="returned" data-edge-to="available" data-edge-key="6" data-edge-id="free" data-composition-points="493,307;262,307;262,188" d="M 493 307 L 272 307 Q 262 307 262 297 L 262 188" class="a-default" stroke-width="1.1" marker-end="url(#coupon-life-arrowhead)"/>
         
-        <g data-step="redeemed" id="coupon-life-node-redeemed" data-node-id="redeemed" data-node-label="Redeemed" aria-label="Focus Redeemed, points bought it, The coupon" data-node-kind="start" data-node-sublabel="points bought it" data-node-context="The coupon">
-          <title>Redeemed · points bought it · The coupon</title>
-          <rect x="35" y="126" width="118" height="62" rx="7" class="c-mask"/>
-          <rect x="35" y="126" width="118" height="62" rx="7" class="c-frontend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="start" class="semantic-sigil s-frontend" transform="translate(136 132) scale(0.6875)">
-            <circle cx="8" cy="8" r="5"/>
-            <path d="m7 5.4 3.6 2.6L7 10.6Z" class="sigil-fill"/>
+        <path data-step="claimed" data-edge-from="available" data-edge-to="claimed" data-edge-key="0" data-composition-points="448,246;476,246" d="M 448 246 L 476 246" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
+        <path data-step="discount" data-edge-from="claimed" data-edge-to="discount" data-edge-key="1" data-composition-points="569,212;569,146" d="M 569 212 L 569 146" class="a-default" stroke-width="1.4" marker-end="url(#coupon-life-arrowhead)"/>
+        <path data-step="used" data-edge-from="claimed" data-edge-to="used" data-edge-label="the order is paid" data-edge-key="2" data-composition-points="662,246;761.6,246" d="M 662 246 L 761.6 246" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
+        <path data-step="available" data-edge-from="redeemed" data-edge-to="available" data-edge-key="3" data-composition-points="234,246;262,246" d="M 234 246 L 262 246" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
+        
+        <g data-step="discount" id="coupon-life-node-discount" data-node-id="discount" data-node-label="Discount code" aria-label="Focus Discount code, ephemeral — a new claim discards the last, Shopify" data-node-kind="external" data-node-sublabel="ephemeral — a new claim discards the last" data-node-context="Shopify">
+          <title>Discount code · ephemeral — a new claim discards the last · Shopify</title>
+          <rect x="476" y="94" width="186" height="52" rx="6" class="c-mask"/>
+          <rect x="476" y="94" width="186" height="52" rx="6" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="external" class="semantic-sigil s-external" transform="translate(482 100) scale(0.6875)">
+            <rect x="2.5" y="5" width="8.5" height="8" rx="1.5"/>
+            <path d="M8 2.5h5.5V8M13.5 2.5 7.5 8.5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="94" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Redeemed</text>
-          <text data-detail="context" x="94" y="163" class="t-muted" font-size="7" text-anchor="middle">points bought it</text>
+          <text data-node-label="" data-detail-anchor="" x="569" y="115" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Discount code</text>
+          <text data-detail="context" x="569" y="132" class="t-muted" font-size="7.2" text-anchor="middle">ephemeral — a new claim discards the last</text>
         </g>
-        <g data-step="available" id="coupon-life-node-available" data-node-id="available" data-node-label="Available" aria-label="Focus Available, offered everywhere, The coupon" data-node-kind="active" data-node-sublabel="offered everywhere" data-node-context="The coupon">
+        <g data-step="redeemed" id="coupon-life-node-redeemed" data-node-id="redeemed" data-node-label="Redeemed or granted" aria-label="Focus Redeemed or granted, points bought it, or an operator gave it, The coupon" data-node-kind="frontend" data-node-sublabel="points bought it, or an operator gave it" data-node-context="The coupon">
+          <title>Redeemed or granted · points bought it, or an operator gave it · The coupon</title>
+          <rect x="48" y="220" width="186" height="52" rx="6" class="c-mask"/>
+          <rect x="48" y="220" width="186" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(54 226) scale(0.6875)">
+            <rect x="2" y="3" width="12" height="10" rx="2"/>
+            <path d="M2 6.5h12"/>
+            <circle cx="4.1" cy="4.8" r=".7" class="sigil-fill"/>
+            <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="141" y="241" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Redeemed or granted</text>
+          <text data-detail="context" x="141" y="258" class="t-muted" font-size="7.4" text-anchor="middle">points bought it, or an operator gave it</text>
+        </g>
+        <g data-step="available" id="coupon-life-node-available" data-node-id="available" data-node-label="Available" aria-label="Focus Available, offered everywhere, The coupon" data-node-kind="backend" data-node-sublabel="offered everywhere" data-node-context="The coupon">
           <title>Available · offered everywhere · The coupon</title>
-          <rect x="189" y="126" width="118" height="62" rx="7" class="c-mask"/>
-          <rect x="189" y="126" width="118" height="62" rx="7" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="active" class="semantic-sigil s-backend" transform="translate(290 132) scale(0.6875)">
-            <path d="M2 8h3l1.5-3.5L9 12l1.6-4H14"/>
+          <rect x="262" y="220" width="186" height="52" rx="6" class="c-mask"/>
+          <rect x="262" y="220" width="186" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(268 226) scale(0.6875)">
+            <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="248" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Available</text>
-          <text data-detail="context" x="248" y="163" class="t-muted" font-size="7" text-anchor="middle">offered everywhere</text>
+          <text data-node-label="" data-detail-anchor="" x="355" y="241" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Available</text>
+          <text data-detail="context" x="355" y="258" class="t-muted" font-size="8" text-anchor="middle">offered everywhere</text>
         </g>
-        <g data-step="claimed" id="coupon-life-node-claimed" data-node-id="claimed" data-node-label="Claimed" aria-label="Focus Claimed, one sale at a time, The coupon" data-node-kind="waiting" data-node-sublabel="one sale at a time" data-node-tag="still offered" data-node-context="The coupon">
-          <title>Claimed · one sale at a time · The coupon · still offered</title>
-          <rect x="343" y="126" width="118" height="62" rx="7" class="c-mask"/>
-          <rect x="343" y="126" width="118" height="62" rx="7" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="waiting" class="semantic-sigil s-cloud" transform="translate(444 132) scale(0.6875)">
-            <path d="M4 2.5h8M4 13.5h8M5 3c0 2.8 2 3.2 3 5-1 1.8-3 2.2-3 5M11 3c0 2.8-2 3.2-3 5 1 1.8 3 2.2 3 5"/>
+        <g data-step="claimed" id="coupon-life-node-claimed" data-node-id="claimed" data-node-label="Claimed" aria-label="Focus Claimed, a sale intends to use it, The coupon" data-node-kind="cloud" data-node-sublabel="a sale intends to use it" data-node-tag="still offered" data-node-context="The coupon">
+          <title>Claimed · a sale intends to use it · The coupon · still offered</title>
+          <rect x="476" y="212" width="186" height="68" rx="6" class="c-mask"/>
+          <rect x="476" y="212" width="186" height="68" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(482 218) scale(0.6875)">
+            <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="402" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Claimed</text>
-          <text data-detail="context" x="402" y="163" class="t-muted" font-size="7" text-anchor="middle">one sale at a time</text>
-        <text data-detail="fine" x="402" y="177" class="t-cloud" font-size="7" text-anchor="middle">still offered</text>
+          <text data-node-label="" data-detail-anchor="" x="569" y="233" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Claimed</text>
+          <text data-detail="context" x="569" y="250" class="t-muted" font-size="8" text-anchor="middle">a sale intends to use it</text>
+        <text data-detail="fine" x="569" y="268" class="t-cloud" font-size="7" text-anchor="middle">still offered</text>
         </g>
-        <g data-step="used" id="coupon-life-node-used" data-node-id="used" data-node-label="Used" aria-label="Focus Used, a paid order spent it, The coupon" data-node-kind="success" data-node-sublabel="a paid order spent it" data-node-context="The coupon">
+        <g data-step="used" id="coupon-life-node-used" data-node-id="used" data-node-label="Used" aria-label="Focus Used, a paid order spent it, The coupon" data-node-kind="database" data-node-sublabel="a paid order spent it" data-node-context="The coupon">
           <title>Used · a paid order spent it · The coupon</title>
-          <rect x="497" y="126" width="118" height="62" rx="7" class="c-mask"/>
-          <rect x="497" y="126" width="118" height="62" rx="7" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="success" class="semantic-sigil s-database" transform="translate(598 132) scale(0.6875)">
-            <circle cx="8" cy="8" r="5.3"/>
-            <path d="m5.2 8 1.8 1.8 3.8-4"/>
+          <rect x="761.6" y="220" width="186" height="52" rx="6" class="c-mask"/>
+          <rect x="761.6" y="220" width="186" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(767.6 226) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="556" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Used</text>
-          <text data-detail="context" x="556" y="163" class="t-muted" font-size="7" text-anchor="middle">a paid order spent it</text>
-        </g>
-        <g data-step="returned" id="coupon-life-node-returned" data-node-id="returned" data-node-label="The claim comes off" aria-label="Focus The claim comes off, and the code with it, Given back" data-node-kind="neutral" data-node-sublabel="and the code with it" data-node-context="Given back">
-          <title>The claim comes off · and the code with it · Given back</title>
-          <rect x="493" y="278" width="126" height="58" rx="7" class="c-mask"/>
-          <rect x="493" y="278" width="126" height="58" rx="7" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="neutral" class="semantic-sigil s-external" transform="translate(602 284) scale(0.6875)">
-            <rect x="3" y="3" width="10" height="10" rx="2"/>
-            <circle cx="8" cy="8" r="1.2" class="sigil-fill"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="556" y="299" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">The claim comes off</text>
-          <text data-detail="context" x="556" y="315" class="t-muted" font-size="7" text-anchor="middle">and the code with it</text>
-        </g>
-        <g data-step="voided" id="coupon-life-node-voided" data-node-id="voided" data-node-label="Voided" aria-label="Focus Voided, points come back, The coupon" data-node-kind="failure" data-node-sublabel="points come back" data-node-tag="an operator reversed it" data-node-context="The coupon">
-          <title>Voided · points come back · The coupon · an operator reversed it</title>
-          <rect x="343" y="450" width="118" height="62" rx="7" class="c-mask"/>
-          <rect x="343" y="450" width="118" height="62" rx="7" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="failure" class="semantic-sigil s-security" transform="translate(444 456) scale(0.6875)">
-            <circle cx="8" cy="8" r="5.3"/>
-            <path d="m5.7 5.7 4.6 4.6m0-4.6-4.6 4.6"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="402" y="471" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Voided</text>
-          <text data-detail="context" x="402" y="487" class="t-muted" font-size="7" text-anchor="middle">points come back</text>
-        <text data-detail="fine" x="402" y="501" class="t-security" font-size="7" text-anchor="middle">an operator reversed it</text>
-        </g>
-        <g data-step="lapsed" id="coupon-life-node-lapsed" data-node-id="lapsed" data-node-label="Lapsed" aria-label="Focus Lapsed, read off the clock, The coupon" data-node-kind="neutral" data-node-sublabel="read off the clock" data-node-tag="its date passed" data-node-context="The coupon">
-          <title>Lapsed · read off the clock · The coupon · its date passed</title>
-          <rect x="35" y="450" width="118" height="62" rx="7" class="c-mask"/>
-          <rect x="35" y="450" width="118" height="62" rx="7" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="neutral" class="semantic-sigil s-external" transform="translate(136 456) scale(0.6875)">
-            <rect x="3" y="3" width="10" height="10" rx="2"/>
-            <circle cx="8" cy="8" r="1.2" class="sigil-fill"/>
-          </g>
-          <text data-node-label="" data-detail-anchor="" x="94" y="471" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Lapsed</text>
-          <text data-detail="context" x="94" y="487" class="t-muted" font-size="7" text-anchor="middle">read off the clock</text>
-        <text data-detail="fine" x="94" y="501" class="t-muted" font-size="7" text-anchor="middle">its date passed</text>
+          <text data-node-label="" data-detail-anchor="" x="854.6" y="241" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Used</text>
+          <text data-detail="context" x="854.6" y="258" class="t-muted" font-size="8" text-anchor="middle">a paid order spent it</text>
         </g>
         
-        <g data-step="returned" data-detail="context" data-edge-from="claimed" data-edge-to="returned" data-edge-label="the sale ends, or the next sale takes it" data-edge-key="3" data-edge-id="ends">
-          <rect x="375" y="212" width="208" height="16" rx="4" class="c-mask"/>
-          <text x="479" y="223" class="t-muted" font-size="8" text-anchor="middle">the sale ends, or the next sale takes it</text>
+        <g data-step="used" data-detail="context" data-edge-from="claimed" data-edge-to="used" data-edge-label="the order is paid" data-edge-key="2">
+          <rect x="666" y="226" width="91.6" height="14" rx="3" class="c-mask"/>
+          <text x="711.8" y="236" class="t-backend" font-size="8" text-anchor="middle">the order is paid</text>
         </g>
         
       </svg>

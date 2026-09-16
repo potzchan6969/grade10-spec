@@ -11,7 +11,7 @@ the order's lines; a Shopify discount — a custom discount on the draft order,
 a line discount, or a code — is only how that price reaches the order and
 how the checkout shows it, never what decides it.
 
-::image{src="assets/diagrams/coupon-life.svg" alt="The states a coupon moves between: redeemed, available, claimed by a sale, then used, lapsed or voided"}
+::image{src="assets/diagrams/coupon-life.svg" alt="A coupon from redeemed or granted, to available, to claimed by a sale, to used when that order is paid, with the Shopify discount code a claim mints above it"}
 
 ## Validity
 
