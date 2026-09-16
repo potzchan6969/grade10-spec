@@ -13,3 +13,4 @@
 - `grade10-site-auction-account-record-SC-52` — Ended rows lock Email alerts
 - `grade10-site-auction-account-record-SC-53` — My Auctions opens on Active
 - `grade10-site-auction-account-record-SC-54` — The title count covers every tab
+- `grade10-site-auction-account-record-SC-55` — A Won row opens its order

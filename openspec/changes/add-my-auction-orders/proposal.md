@@ -27,7 +27,7 @@ time from lot close to address confirmed.
 - **New page: My Auction Orders.** One row per won order: key image, title,
   auction, winning bid, order status, **View lot**, and one action by status —
   Confirm address, Pay Invoice, or View detail. Orders needing the winner
-  come first. Reached from the account menu.
+  come first. Reached from the account menu and from a Won row on My Auctions.
 - **Winner Order page sections.** Order Information (Order No., Auction,
   Currency, Date, Order Status, **Invoice Status** — formerly Paid Status),
   Collection Method, Order Status timeline with a timestamp per step, and
@@ -35,10 +35,13 @@ time from lot close to address confirmed.
 - **Address form.** Fields follow the existing account address form, without
   the billing checkbox. Required fields refuse an empty value with an error
   on the field. Phone format is not checked.
-- **Unfinished card payment.** A timed-out or abandoned payment session says
-  payment was not completed and keeps Pay Now available. A completed session
-  reads Confirming payment until Grade10 records the invoice paid; then the
-  order reads Processing.
+- **Invoice expiry and unfinished card payment.** The foundational
+  `revise-auction-winner-invoicing` change records expiry as invoice status
+  `expired`. The order still reads Pending Payment and Pay Now remains
+  available. A timed-out or abandoned payment session says payment was not
+  completed and keeps Pay Now available. A completed session reads Confirming
+  payment until Grade10 records the invoice paid; then the order reads
+  Processing.
 
 ## Non-Goals
 
@@ -63,13 +66,11 @@ time from lot close to address confirmed.
 
 ### Modified Capabilities
 
-- `grade10-site/auction/account-record`: tabs by bidding window; Ended rows
-  lock Email alerts. Added requirements only.
+- `grade10-site/auction/account-record`: tabs by bidding window, Ended rows
+  lock Email alerts, and the supported Won-row order entry point. Added
+  requirements only.
 - `grade10-site/auction/winner-order`: page sections, the address form,
   unfinished and confirming payment. Added requirements only.
-- `shared/ui/auction-record`: `AuctionRecordTabs` groups the table; a row can
-  show Email alerts disabled. Added requirement only; the export list is
-  unchanged.
 
 ## Impact
 
@@ -77,30 +78,30 @@ time from lot close to address confirmed.
 | --- | --- |
 | `apps/frontend/grade10` | My Auctions tabs and locked Ended alerts; a new My Auction Orders route and account-menu entry; Winner Order sections, address form, payment-session handling. |
 | Auction service | The order list read for one account; a timestamp for every order-status step. |
-| `@grade10/ui` | New exports `AuctionOrderList`, `AuctionOrderRow`, `AuctionOrderEmpty`, `AuctionOrderDetail`, `AuctionAddressForm` and their props and copy types — none exist yet. `AuctionRecordTabs` groups My Auctions; `AuctionRecordRow` gains a disabled Email alerts state. The engineer confirms the set when delivery is planned. |
+| `@grade10/ui` | New exports `AuctionOrderList`, `AuctionOrderRow`, `AuctionOrderEmpty`, `AuctionOrderDetail`, `AuctionAddressForm` and their props and copy types — none exist yet. Existing `AuctionRecord` remains the one-table body; the application composes the three tabs with design-system `Tabs`, `TabsList`, `TabsTrigger` and `TabsContent`. Existing `AuctionRecordRow` props cover disabled Email alerts and the Won-row order link. |
 | `@grade10/i18n` | Tab labels, action labels, section labels, Invoice Status labels, form labels and errors, payment-session messages, in English, Traditional Chinese and Simplified Chinese. |
-| `grade10-admin` | None proposed. See the open question on changing a confirmed address. |
+| `grade10-admin` | None proposed. Address changes after invoice send remain the foundational operator re-quote flow. |
 
 ## Ordering and dependencies
 
 - **No rule another in-flight change rewrites is touched.** Every delta here
   is ADDED.
-- **Two wording tensions with `redesign-my-auctions-table`**, for @tangconst:
-  it calls `AuctionRecordTabs` not required for My Auctions, and its SC-11
-  lists a closed lot after open ones in one list. With tabs, closed lots sit
-  in Ended. Neither reverts the other at archive; the redesign's wording can
-  be aligned when it archives.
-- **Waits for `revise-auction-winner-invoicing` to archive:** the plain Won
-  row and the address lock at confirm. Both contradict rules that change
-  writes. They are follow-on changes below.
+- **Composition with `redesign-my-auctions-table`:** its one-table
+  `AuctionRecord` contract and its ordering remain the row source. This change
+  adds the page-level Active, Upcoming and Ended presentation; it does not
+  repurpose the deprecated `AuctionRecordTabs` export.
+- **Explicit dependency on `revise-auction-winner-invoicing`:** that change is
+  the foundational owner of auction-order lifecycle, invoice status,
+  address-confirmation ownership, payment confirmation and the derived status
+  vocabulary. This change consumes those contracts and adds list, navigation
+  and presentation behavior; it does not rewrite their writes or add a second
+  status model. The application applies this change after the revise contract
+  is durable in the spec submodule.
 
 No domain impact: `grade10-site/auction/domain-tcs.md` traces no `account-record` or `winner-order` journey this change adds, and `auction-orders` joins no path it composes yet.
 
 ## Open Questions
 
-- ❓ **Changing a confirmed address.** Once the address locks at confirm (a
-  follow-on), how does an operator change it before quoting when a winner
-  asks? Operations to settle; likely a `grade10-admin/auction/post-sale` change.
 - ❓ **Postal Code in Hong Kong.** The form requires Postal Code, but Hong Kong
   addresses have none. Product to confirm.
 
@@ -122,9 +123,4 @@ No domain impact: `grade10-site/auction/domain-tcs.md` traces no `account-record
 
 ## Follow-on changes
 
-- A won lot on My Auctions reads Won and links to its order; the order status
-  leaves My Auctions. Waits for `revise-auction-winner-invoicing` to archive.
-- The delivery address locks when the winner confirms it. Waits for
-  `revise-auction-winner-invoicing` to archive.
-- An operator path to change a confirmed address before quoting.
 - A preview-app page for My Auction Orders and Winner Order.

@@ -49,7 +49,7 @@ The winner needs one place to understand what is owed and what happens next. The
 | --- | --- | --- | --- |
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, and Final amount reads Order Total, for the winner and the operator. | Product |
 | Insurance | Decided | Optional per invoice; when added it is more than zero. An invoice without it shows no Insurance line. Separate from Payment Processing Fee. | Product |
-| Changing a confirmed address | ❓ Open | How an operator changes an address before quoting, when a winner asks. Operations to settle. | Operations |
+| Address lock at send | Decided | The address locks when the operator sends the invoice because the quote is priced against it. Before send, the winner can amend it; after send, Grade10 handles a change through operator re-quote and reissue, per `revise-auction-winner-invoicing`. | Product and operations |
 | Postal Code in Hong Kong | ❓ Open | Postal Code is required, but Hong Kong addresses have none. Product to confirm whether it stays required everywhere. | Product |
 | Payment processing fee | Decided | Charged to the winner, grossed up from the Subtotal so Grade10 nets it in full. Priced at send from the payment provider's live fees, never from a rate set in the admin portal. | Product |
 | Fee on a manual settlement | Decided | Dropped: bank transfer, cash and other methods settle the Subtotal. | Product |

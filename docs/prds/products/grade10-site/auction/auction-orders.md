@@ -44,7 +44,7 @@ from the list itself.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| A separate page | Decided | Won lots are followed on My Auction Orders. A link from each Won row on My Auctions follows once `revise-auction-winner-invoicing` archives. | Product |
+| A separate page | Decided | Won lots are followed on My Auction Orders. The account menu and each Won row open the order. | Product |
 | Order | Decided | Needs action first, then newest close. | Product |
 | Tracking link | Decided | Already specified: a fulfilled order shows the carrier, the tracking number and a link to the carrier. | Product |
 :::

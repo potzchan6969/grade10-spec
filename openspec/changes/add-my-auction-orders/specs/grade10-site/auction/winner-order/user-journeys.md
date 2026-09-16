@@ -9,6 +9,7 @@
 **Accepted by:**
 - `winner-order-SC-41` — The page shows its four sections
 - `winner-order-SC-43` — Each status step carries its time
+- `winner-order-SC-53` — The timeline uses authoritative status times
 - `winner-order-SC-45` — An order preparing its invoice offers no payment
 - `winner-order-SC-46` — An empty required field is refused
 - `winner-order-SC-47` — Optional fields may stay empty

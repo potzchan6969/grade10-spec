@@ -39,6 +39,36 @@
 * Step 2 lists the four statuses in the order reached.
 * Each status shows the date and time reached.
 
+### winner-order-US3-TC5-1: Timeline uses the auction-order read model timestamps
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-03
+
+**Pre-conditions:**
+
+* customer(winner) holds an order whose auction-order read model returns a
+  recorded timestamp for each reached status.
+
+**Steps:**
+
+1. Navigate to <grade10 auction order url>.
+2. Read the Order Status section.
+
+**Expected Results:**
+
+* Each status shows the timestamp returned for that status.
+* No timestamp is replaced with the page-load time.
+
 ### winner-order-US3-TC2-1: Preparing Invoice shows the address and no payment
 
 **Classification:**
@@ -161,7 +191,8 @@
 
 **Pre-conditions:**
 
-* customer(winner) holds an order in Pending Payment.
+* customer(winner) holds an order in Pending Payment, with invoice status
+  `pending` or `expired`.
 
 **Steps:**
 
@@ -171,6 +202,8 @@
 
 * Every invoice line and Pay Now are shown.
 * The confirmed delivery address and the lot are shown.
+* An expired invoice still has Pay Now available and the order still reads
+  Pending Payment.
 
 ### winner-order-US4-TC2-1: Order Information reads Invoice Status, not Paid Status
 
@@ -279,7 +312,8 @@
 
 **Pre-conditions:**
 
-* customer(winner) completed a payment session Grade10 has not yet recorded as paid.
+* customer(winner) completed a hosted card session, but the authenticated
+  auction-order read model has not yet recorded the invoice as paid.
 
 **Steps:**
 
@@ -307,7 +341,8 @@
 
 **Pre-conditions:**
 
-* customer(winner) holds an order whose invoice is recorded paid and not yet fulfilled.
+* customer(winner) holds an order whose authenticated auction-order read model
+  returns invoice status `paid` and fulfilment status `unfulfilled`.
 
 **Steps:**
 

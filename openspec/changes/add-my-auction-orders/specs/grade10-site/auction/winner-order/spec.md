@@ -43,6 +43,11 @@ What the page offers SHALL follow the order status.
 | Pending Payment | The full invoice with every line, per "Invoice fields", and **Pay Now**; the confirmed address |
 | Processing, Shipped, Delivered, Cancelled, Refunded | Read-only detail, with the records per "Records the winner keeps" |
 
+An invoice whose status is `expired` SHALL still be presented under the
+derived Pending Payment order status, per `revise-auction-winner-invoicing`,
+with its full invoice and **Pay Now**. The page SHALL not derive a second
+Expired order status.
+
 #### Scenario: winner-order-SC-41 - The page shows its four sections
 
 - **GIVEN** an auction order in any status
@@ -64,6 +69,20 @@ What the page offers SHALL follow the order status.
 - **WHEN** the winner reads Order Status
 - **THEN** it lists those four statuses in the order reached
 - **AND** each carries the date and time it was reached
+
+The Order Status timeline SHALL be supplied by the authenticated auction-order
+read model. Each item SHALL contain the derived order status and the
+authoritative time that status was reached; the page SHALL NOT reconstruct
+timestamps in the browser from the current invoice, fulfilment or payment
+session state.
+
+#### Scenario: winner-order-SC-53 - The timeline uses authoritative status times
+
+- **GIVEN** the auction-order read model returns the order statuses reached
+  and a recorded timestamp for each
+- **WHEN** the winner reads Order Status
+- **THEN** the page shows each returned timestamp for its matching status
+- **AND** it does not replace a returned timestamp with the page-load time
 
 #### Scenario: winner-order-SC-44 - An unpaid order shows the invoice and Pay Now
 
@@ -157,15 +176,16 @@ NOT show the order as paid before it records the invoice `paid`.
 
 #### Scenario: winner-order-SC-51 - A completed session confirms before reading Processing
 
-- **GIVEN** a winner who completed a payment session that Grade10 has not yet
-  recorded as `paid`
+- **GIVEN** a winner whose hosted card session completed but whose
+  authenticated auction-order read model has not yet recorded invoice status
+  `paid`
 - **WHEN** they return to the order
 - **THEN** the page shows Confirming payment
 - **AND** the order does not yet read Processing
 
 #### Scenario: winner-order-SC-52 - A recorded payment reads Processing
 
-- **GIVEN** an order whose invoice Grade10 has recorded as `paid` and whose
-  fulfilment status is `unfulfilled`
+- **GIVEN** an order whose authenticated auction-order read model returns
+  invoice status `paid` and fulfilment status `unfulfilled`
 - **WHEN** the winner opens it
 - **THEN** its status is Processing

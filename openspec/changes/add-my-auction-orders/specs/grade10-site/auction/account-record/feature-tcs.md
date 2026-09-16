@@ -136,3 +136,32 @@
 
 * The Email alerts control is disabled.
 * The alert setting for <listing_3> is unchanged.
+
+### grade10-site-auction-account-record-US7-TC5-1: A Won row opens its auction order
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-07
+
+**Pre-conditions:**
+
+* customer(winner) has a Won row whose auction order is available.
+
+**Steps:**
+
+1. Navigate to <grade10 my auctions url>.
+2. Select the order entry point on the Won row.
+
+**Expected Results:**
+
+* The matching auction order opens.
+* My Auctions performs no payment, address, or order-status write.

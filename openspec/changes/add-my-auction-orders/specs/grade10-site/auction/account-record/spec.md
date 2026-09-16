@@ -5,6 +5,7 @@
   - Landing: My Auctions opens on Active; the title count stays the total.
 - **Row actions**
   - Ended alerts: Email alerts show disabled on a closed lot.
+  - Won entry: a Won row opens its auction order.
 
 ## ADDED Requirements
 
@@ -72,3 +73,18 @@ collector change them, and SHALL leave the listing's alert setting unchanged.
 - **WHEN** the collector tries to change its Email alerts
 - **THEN** the control is disabled
 - **AND** the listing's alert setting is unchanged
+
+### Requirement: A Won row opens its auction order
+
+A Won row SHALL offer the application-supplied entry point to that lot's
+auction order. Selecting it SHALL open the matching order, per
+`grade10-site/auction/auction-orders`. The row SHALL remain read-only: it
+SHALL NOT record payment, confirm or change an address, or change order status.
+
+#### Scenario: grade10-site-auction-account-record-SC-55 - A Won row opens its order
+
+- **GIVEN** a closed listing whose winner is the collector and whose auction
+  order is identified by the row
+- **WHEN** the collector selects the row's order entry point
+- **THEN** the matching auction order opens
+- **AND** no payment, address, or order-status write occurs on My Auctions
