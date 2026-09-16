@@ -17,4 +17,4 @@
 ## 4. Cross-feature verification (grade10) (owner: @htonyl)
 
 - [x] 4.1 Run the auction database and frontend lanes covering first bids, maximum raises, automatic bids, enrollment, outbid release, close and winner payment; confirm no-hold bids do not require Stripe while existing enabled holds still release, capture or reconcile through their current paths.
-- [ ] 4.2 Run the repository typecheck, lint and `git diff --check`, then review the application diff against every scenario named by this change before the change is handed off for implementation and later archive.
+- [x] 4.2 Run the repository typecheck, lint and `git diff --check`, then review the application diff against every scenario named by this change before the change is handed off for implementation and later archive.
