@@ -3,10 +3,10 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-16, tcs-rules r3.0
 
-## post-sale-US9: Operator reopens a closed address entrance
+## post-sale-US9: Operator reopens the address form
 
 **As an** operator,
-**I want** to give a winner whose address window has closed a fresh 48 hours, with my reason on the record,
+**I want** to give a winner who missed the 48-hour address deadline a fresh 48 hours, with my reason on the record,
 **so that** a winner who got in touch can finish the order without me cancelling the lot.
 
 ### post-sale-US9-TC1-1: Reopen gives a fresh 48 hours from the moment it reopens
@@ -26,7 +26,7 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Address, its lot closed at 2026-09-03T12:00:00Z and its entrance closed at 2026-09-05T12:00:00Z.
+* `<closed-window order>` derives as Awaiting Address, its lot closed at 2026-09-03T12:00:00Z and its address deadline passed at 2026-09-05T12:00:00Z.
 * admin(holds payment-processing) is on `<closed-window order>` at `<the reopen>`.
 
 **Test data:**
@@ -35,17 +35,17 @@
 | --- | --- |
 | `<the reopen>` | 2026-09-07T09:00:00Z |
 | `<reason>` | The operator's stated reason for the reopen |
-| New entrance close | 2026-09-09T09:00:00Z |
+| New address deadline | 2026-09-09T09:00:00Z |
 
 **Steps:**
 
-1. Reopen the address entrance on `<closed-window order>` with `<reason>`.
-2. Read the entrance close.
+1. Reopen the address form on `<closed-window order>` with `<reason>`.
+2. Read the address deadline.
 
 **Expected Results:**
 
 * The reopen is accepted.
-* The entrance close is 2026-09-09T09:00:00Z, 48 hours from `<the reopen>`.
+* The address deadline is 2026-09-09T09:00:00Z, 48 hours from `<the reopen>`.
 * It is not measured from the lot close.
 
 ### post-sale-US9-TC2-1: Reopen without a reason is refused
@@ -65,19 +65,19 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Address and its entrance closed two days ago.
+* `<closed-window order>` derives as Awaiting Address and its address deadline passed two days ago.
 * admin(holds payment-processing) is on `<closed-window order>`.
 
 **Steps:**
 
 1. Open the reopen form.
 2. Commit the reopen with the reason left empty.
-3. Read the entrance close.
+3. Read the address deadline.
 
 **Expected Results:**
 
 * The reopen is refused.
-* The entrance close is unchanged.
+* The address deadline is unchanged.
 * The winner still cannot confirm an address.
 
 ### post-sale-US9-TC3-1: Reopen is refused without the payment-processing grant
@@ -97,7 +97,7 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Address and its entrance closed two days ago.
+* `<closed-window order>` derives as Awaiting Address and its address deadline passed two days ago.
 * admin(holds fulfilment, not payment-processing) is on `<closed-window order>`.
 
 **Steps:**
@@ -109,7 +109,7 @@
 
 * No reopen control is offered.
 * The reopen is refused.
-* The entrance close is unchanged.
+* The address deadline is unchanged.
 
 ### post-sale-US9-TC4-1: Reopen changes no outcome and clears the Overdue mark
 
@@ -128,18 +128,18 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Address, carries the Overdue mark, and its entrance closed two days ago.
+* `<closed-window order>` derives as Awaiting Address, carries the Overdue mark, and its address deadline passed two days ago.
 * admin(holds payment-processing) is on `<closed-window order>`.
 
 **Steps:**
 
-1. Reopen the address entrance with a reason.
+1. Reopen the address form with a reason.
 2. Read the order's outcome and its marks on the queue.
 
 **Expected Results:**
 
 * The outcome is still Awaiting Address.
-* The Overdue mark is gone while the entrance is open again.
+* The Overdue mark is gone while the address form is open again.
 * The row's needs-action treatment is unchanged.
 
 ### post-sale-US9-TC5-1: A second reopen starts the 48 hours again
@@ -159,7 +159,7 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` was reopened once at 2026-09-07T09:00:00Z and its fresh entrance closed unused at 2026-09-09T09:00:00Z.
+* `<closed-window order>` was reopened once at 2026-09-07T09:00:00Z and its fresh address deadline passed unused at 2026-09-09T09:00:00Z.
 * admin(holds payment-processing) is on `<closed-window order>` at `<the second reopen>`.
 
 **Test data:**
@@ -171,13 +171,13 @@
 
 **Steps:**
 
-1. Reopen the address entrance a second time with a reason.
-2. Read the entrance close.
+1. Reopen the address form a second time with a reason.
+2. Read the address deadline.
 
 **Expected Results:**
 
 * The second reopen is accepted.
-* The entrance close is 2026-09-12T15:00:00Z.
+* The address deadline is 2026-09-12T15:00:00Z.
 * No cap on the number of reopens is applied.
 
 ### post-sale-US9-TC6-1: No reopen is offered once the invoice has been sent
@@ -244,7 +244,7 @@
 **Expected Results:**
 
 * The log holds a reopen entry timestamped 2026-09-07T09:00:00Z.
-* It names the operator, `<reason>`, and the new entrance close.
+* It names the operator, `<reason>`, and the new address deadline.
 * Earlier entries are unchanged beside it.
 
 ### post-sale-US9-TC8-1: The two pre-invoice outcomes filter apart
@@ -337,7 +337,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The order's invoice has not been sent and its lot closed at 2026-09-03T12:00:00Z, so its entrance closed at 2026-09-05T12:00:00Z.
+* The order's invoice has not been sent and its lot closed at 2026-09-03T12:00:00Z, so its address deadline passed at 2026-09-05T12:00:00Z.
 * admin(holds payment-processing) is on the post-sale queue at the read time the row names.
 
 **Test data:**
@@ -415,7 +415,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<awaiting-address order>` has no confirmed delivery address and its entrance is open.
+* `<awaiting-address order>` has no confirmed delivery address and its address form is open.
 * admin(holds payment-processing) is on `<awaiting-address order>`.
 
 **Steps:**
@@ -446,7 +446,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<closed-window order>` carries an address confirmed inside the 48 hours, its entrance closed two hours ago, and it carries the Overdue mark.
+* `<closed-window order>` carries an address confirmed inside the 48 hours, its address deadline passed two hours ago, and it carries the Overdue mark.
 * admin(holds payment-processing) is on `<closed-window order>`.
 
 **Steps:**
@@ -477,7 +477,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<closed-window order>` has no confirmed address, its entrance closed four days ago, and no invoice has been sent.
+* `<closed-window order>` has no confirmed address, its address deadline passed four days ago, and no invoice has been sent.
 * admin(holds payment-processing) is on `<closed-window order>`.
 
 **Test data:**
@@ -520,7 +520,7 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open `<cancelled order>`.
-2. Attempt to reopen its address entrance with a reason.
+2. Attempt to reopen its address form with a reason.
 
 **Expected Results:**
 
@@ -545,12 +545,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<closed-entrance order>` is in Awaiting Address with its address window closed.
+* `<closed-address form order>` is in Awaiting Address with its address window closed.
 * An operator holds payment-processing.
 
 **Steps:**
 
-1. Open `<closed-entrance order>`.
+1. Open `<closed-address form order>`.
 2. Record the delivery address the winner gave by telephone.
 
 **Expected Results:**
@@ -821,9 +821,9 @@ Runs once per row of **Test data**.
 
 ## Raised
 
-- **Whether the Overdue mark clears on a reopen.** The mark is defined as a closed window and a reopen is said to change no status, but the input never says whether the mark is a live read of the entrance or a flag that a window once lapsed. TC4 asserts it clears.
+- **Whether the Overdue mark clears on a reopen.** The mark is defined as a closed window and a reopen is said to change no status, but the input never says whether the mark is a live read of the address form or a flag that a window once lapsed. TC4 asserts it clears.
 - **Whether a reopen is offered after the invoice is sent.** The address locks at send and a later change is described as a re-quote and reissue, so TC6 reads the reopen as unavailable. Nothing states the refusal outright, and an operator who reopens instead of re-quoting is not accounted for.
-- **Reopening a cancelled order.** Cancellation is now available before an invoice exists, and nothing says whether a cancelled order's entrance can be reopened to revive it, or whether the cancellation is terminal. No case was written for it.
+- **Reopening a cancelled order.** Cancellation is now available before an invoice exists, and nothing says whether a cancelled order's address form can be reopened to revive it, or whether the cancellation is terminal. No case was written for it.
 - **Whether the reopen notifies the winner.** A fresh 48 hours is useless to a winner who does not know it started, and the input names no letter for the reopen among the post-close letters.
 - **What the Overdue mark does after the invoice is sent.** The mark belongs to Awaiting Address and Preparing Invoice; nothing says whether an order that was marked keeps any trace of it once it reaches Pending Payment.
 - **Whether a closed window blocks the operator's own address correction.** The refusal is stated for the winner. An operator correcting an address on a pre-invoice order is neither permitted nor refused by the input.
@@ -842,7 +842,7 @@ of any requirement, and a scenario draft written without sight of this suite.
 
 | Raised | Disposition |
 | --- | --- |
-| Whether a cancelled order's entrance can be reopened | **Folded in** after a grilling round. It cannot: cancellation has already returned the lot to stock — `grade10-admin-auction-post-sale-SC-83` and `post-sale-US9-TC15-1`. The suite deliberately wrote no case rather than invent a refusal, which is why the question survived to be asked |
+| Whether a cancelled order's address form can be reopened | **Folded in** after a grilling round. It cannot: cancellation has already returned the lot to stock — `grade10-admin-auction-post-sale-SC-83` and `post-sale-US9-TC15-1`. The suite deliberately wrote no case rather than invent a refusal, which is why the question survived to be asked |
 | Whether an operator may record the address without reopening | **Folded in** from the same round — `grade10-admin-auction-post-sale-SC-84` and `post-sale-US9-TC16-1` |
 | Whether the Overdue mark clears on a reopen | **Agreed** by both readings, then **handed on.** `check:manual` refuses two in-flight changes folding one requirement, and the Overdue mark is `revise-auction-winner-invoicing`'s. `post-sale-US9-TC4-1` and `post-sale-US9-TC10-1` stay in the suite and become runnable when that change realigns the mark to the address window |
 | Whether a closed window stops an operator sending a quoted invoice | **Agreed.** It does not — the requirement gates the winner's write alone, and `post-sale-US9-TC13-1` reads it that way |

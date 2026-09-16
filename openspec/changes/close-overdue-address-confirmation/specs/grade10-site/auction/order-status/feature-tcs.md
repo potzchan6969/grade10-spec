@@ -217,7 +217,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * `<awaiting-address order>`'s address window closed two hours ago and no address is confirmed.
-* An operator holding payment-processing has reopened the entrance with a reason.
+* An operator holding payment-processing has reopened the address form with a reason.
 
 **Steps:**
 
@@ -302,7 +302,7 @@ Runs once per row of **Test data**.
 
 ## Raised
 
-- **Which fact says the address window is open.** The window is a third condition read from the order's own facts, and the input never names the fact — a stored entrance close, the lot close plus 48 hours, or a reopen count. TC6 and TC10 assume a stored entrance close that a reopen rewrites.
+- **Which fact says the address window is open.** The window is a third condition read from the order's own facts, and the input never names the fact — a stored address deadline, the lot close plus 48 hours, or a reopen count. TC6 and TC10 assume a stored address deadline that a reopen rewrites.
 - **Whether `not_issued` survives a cancellation before send.** Cancellation is now available before an invoice exists, and the input gives `not_issued` no exit other than a send. Nothing says whether such an order's invoice status becomes `cancelled` or stays `not_issued` while the order derives Cancelled.
 - **What a reissue does to an `expired` invoice's stored status.** Expiry is a written fact; a reissue is said to return the order to Pending Payment with a new deadline, and nothing says whether the same invoice is rewritten to `pending` or a second invoice is issued.
 - **Whether the Overdue mark is a derived read or a stored one.** The mark is said to change no status, but the input places it on the operator's queue only, and does not say whether the derivation produces it for the winner's surfaces too.

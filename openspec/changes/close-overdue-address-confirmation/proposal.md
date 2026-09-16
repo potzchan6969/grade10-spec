@@ -6,71 +6,64 @@ Product context: [Winner Order](../../../docs/prds/products/grade10-site/auction
 
 ## Why
 
-A winner who never comes back holds a lot forever. `revise-auction-winner-invoicing`
-moves the invoice behind an address the winner confirms, and deliberately gives
-that step no end: an order 30 days past its close still reads Awaiting Address
-and its invoice status is never `expired` (`winner-order-SC-32`). The only thing
-that happens is an Overdue mark on an operator's queue row, which changes nothing
-and which the winner never sees. So the card cannot be re-listed, the consignor
-cannot be told when it will settle, and no moment ever tells the winner to get in
-touch.
+`revise-auction-winner-invoicing` gives the winner 48 hours from lot close to
+confirm a delivery address. When the deadline passes it hides Confirm and shows
+Contact Us, and says only that an operator follows up. Four things are left
+open:
 
-The payment side already has that moment. An expired invoice hides card Pay and
-carries Contact Us, and an operator reissues, settles manually, or cancels
-(`winner-order-SC-37`). The address side is the same shape of obligation with
-none of the same end. This change gives it one.
+- **Changing a confirmed address.** Nothing stops a winner who confirmed in time
+  from changing the address after the deadline.
+- **Getting the form back.** A winner who gets in touch has no way back to the
+  form. Nothing lets an operator reopen it.
+- **An expired invoice.** It can be settled manually, but that sits only in an
+  action table. No requirement says the admin portal is the only place it is
+  paid.
+- **A payment already on its way.** A card payment sent just before the payment
+  deadline has no stated outcome if it confirms after.
+
+This change closes those four gaps.
 
 **Metric:** the share of won lots whose address is confirmed inside 48 hours.
-**Second signal:** reopens per 100 won lots — a number that climbs says 48 hours
-is too short, which is why the window is tentative.
+**Second signal:** reopens per 100 won lots — a rising count says 48 hours is
+too short.
 
 ## What Changes
 
-- **BREAKING — The address entrance closes 48 hours after lot close.** Until
-  then the winner confirms an address as they do today. After that Grade10
-  refuses the confirmation.
-- **A closed window stops changes too.** A winner who confirmed inside the
-  window cannot correct the address after it closes, so the rule is one entrance
-  rather than two.
-- **Contact Us takes the form's place.** Winner Order shows the closed window and
-  how to reach Grade10, matching what an expired invoice already shows.
-- **An operator reopens the entrance**, with a mandatory reason, which gives the
-  winner a fresh 48 hours from the reopen. There is no limit on how often.
-- **The order status does not move.** A closed window is a condition, not a
-  state: the order still reads Awaiting Address or Preparing Invoice.
-- **Every delta here is ADDED.** No requirement another in-flight change folds
-  is touched, so `check:manual`'s two-changes-one-requirement rule stays quiet.
+- **A missed address deadline closes the whole address form.** The winner can
+  neither confirm an address nor change one already confirmed, until the invoice
+  is sent.
+- **The deadline counts from the actual close**, after any extended bidding. A
+  write is judged by when Grade10 receives it.
+- **An operator reopens the address form**, with a mandatory reason, which gives
+  the winner a fresh 48 hours. There is no limit on reopens, and a cancelled
+  order never reopens.
+- **An operator can record an address the winner gives by phone**, without
+  reopening the form.
+- **The account address book stays open.** Only putting an address on this
+  order is refused.
+- **The order status does not move.** A new condition gates the winner's write;
+  the order still reads Awaiting Address or Preparing Invoice.
 - **An expired invoice is paid only in the admin portal.** An operator settles
-  it manually; a reissue is the only way back to the winner's card. The rule is
-  stated as its own requirement and proved here, since until now it sat only in
-  an action table.
-- **A payment started in time counts.** A card payment Grade10 received before
-  the deadline completes even if it confirms after, and the invoice stays
+  it manually; a reissue is the only way back to the winner's card.
+- **A card payment started in time counts.** One Grade10 received before the
+  payment deadline completes even if it confirms after, and the invoice stays
   `pending` until then. One received at or after the deadline is refused and not
   charged.
-- **The Post-Sale Queue page stops saying an expired invoice "stays payable"**,
-  which read as if the winner could still pay it.
-- **48 hours is tentative.** It is one Grade10-owned figure, and the reopen count
-  is the signal for changing it.
+- **The Post-Sale Queue page no longer says an expired invoice "stays
+  payable"**, which read as if the winner could still pay it.
 
 ## Non-Goals
 
-- **Restating the expired invoice's own rules.** `revise-auction-winner-invoicing`
-  writes `expired`, hides card Pay, shows Contact Us, and defines reissue and
-  cancellation. This change adds only the settlement rule and the payment in
-  flight, in a requirement of its own.
-- **What a reissue re-prices.** The fee and the premium minimum on a reissue are
-  that change's.
-- **Suspension.** A closed address window restricts nobody from bidding. Only an
-  unpaid invoice past its deadline does, and that rule is unchanged.
-- **A letter about the closing window.** No reminder before it closes and no
-  notice when it does; the winner finds out on Winner Order. Named as a
-  follow-on.
-- **Automatic cancellation.** A closed window never returns the lot to stock on
-  its own.
+- **The address deadline itself.** Its 48 hours, `Confirm by …`, the
+  `Missed address deadline` alert and Contact Us belong to
+  `revise-auction-winner-invoicing`, and are not restated here.
+- **The expired invoice's own rules.** Writing `expired`, hiding card Pay, and
+  reissue and cancellation belong to that change.
+- **Letters.** Address reminders are that change's. No letter is added for a
+  reopen.
+- **Suspension and automatic cancellation.** A missed address deadline does
+  neither, as that change already says.
 - **Changes after the invoice is sent.** Those stay an operator re-quote.
-- **A winner-facing countdown.** The window is shown as the datetime it closes,
-  per `shared/dates-and-times`.
 
 ## Capabilities
 
@@ -80,99 +73,68 @@ None.
 
 ### Modified Capabilities
 
-- `grade10-site/auction/winner-order`: the address entrance closes 48 hours
-  after lot close; a closed window refuses both a confirmation and a change; the
-  order shows the closing datetime, then Contact Us; an operator reopening it
-  starts a fresh 48 hours.
+- `grade10-site/auction/winner-order`: a new requirement — a missed address
+  deadline closes the whole address form, and only an operator reopens it.
 - `grade10-site/auction/order-status`: a new requirement adding the condition
-  `address_window_open`, read from the order's own facts; the derived order
-  status is unchanged by it.
-- `grade10-admin/auction/post-sale`: a new requirement letting an operator
-  reopen the address entrance with a reason, or record the address themselves.
-- `grade10-admin/auction/post-sale`: a second new requirement making the admin
-  portal the only place an expired invoice is paid, and honouring a card payment
-  started before the deadline.
+  `address_window_open`, which gates the winner's address write and changes no
+  status.
+- `grade10-admin/auction/post-sale`: two new requirements — an operator reopens
+  the address form or records the address, and only an operator settles an
+  expired invoice.
 
 ## Impact
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/grade10` | Winner Order shows when the address window closes, refuses the address form once it has, and shows Contact Us in its place. |
-| `apps/admin/grade10` | A Reopen address entrance action with a mandatory reason, and an Overdue mark computed from the window rather than from idle time. |
-| Auction service | The window's closing time on the order, a reopen that resets it, and the refusal of an address write once it has passed. |
-| `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. The closed-window copy is catalog work for the engineer. |
+| `apps/frontend/grade10` | After the address deadline, Winner Order hides the address change control as it hides Confirm, and refuses an address write. |
+| `apps/admin/grade10` | Reopen address form, with a mandatory reason; record an address by phone; settle an expired invoice. |
+| Auction service | A deadline a reopen resets, refusal of late address writes, and an invoice held `pending` while a payment started in time confirms. |
+| `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. |
 
 ## Ordering and dependencies
 
-- **This change follows `revise-auction-winner-invoicing` and cannot archive
-  before it.** Every requirement here is written against that change's folded
-  shape — `not_issued`, Awaiting Address, Preparing Invoice, and an address that
-  locks at send. Its `depends_on` records that.
-- **This change folds no requirement that change folds.** An earlier draft
-  modified six of them and `pnpm check:manual` refused it outright, under
-  *Requirements two in-flight changes both fold* — whichever archived second
-  would revert the first. Every delta here is ADDED instead, and each new
-  requirement carries its own rule rather than editing one of theirs.
-- **The feature sets are cumulative.** The delta files here carry that change's
-  feature set plus this one's groups, because archive copies the feature set
-  across by hand.
+- **Follows `revise-auction-winner-invoicing`.** Every requirement here builds on
+  that change's address deadline, `not_issued`, and address lock at send. This
+  change cannot be archived before it; `depends_on` records that.
+- **Edits none of that change's requirements.** Every delta here is ADDED.
+  `pnpm check:manual` refuses two unfinished changes editing one requirement.
+- **Cumulative feature sets.** The delta files copy that change's feature set and
+  add this change's leaves, because archive copies the feature set by hand.
 
-### Handed to `revise-auction-winner-invoicing`
+### To Update Once `revise-auction-winner-invoicing` Is Archived
 
-Two edits belong in that change, because the requirements are its own and this
-one may not touch them:
+Those requirements then become published specs, and this change edits them
+itself:
 
-- **The Overdue mark should follow the address window**, not 72 hours idle, in
-  **"The order detail shows how long an order has waited"** and **"The queue
-  shows one outcome per lot"**. With a 48-hour window and a 72-hour mark, a
-  winner is locked out for a full day before any operator is told. ❓ on the
-  Post-Sale Queue page until that change makes the edit.
-- **Expiry should wait for a payment already on its way.** That change writes
-  `expired` the moment the deadline passes and lets only an operator move
-  `expired` to `paid`. This change holds the invoice `pending` while a payment
-  received before the deadline is confirming, so that change's expiry rule and
-  its transition table should say the same.
-- **"Invoice log history"** should name *address entrance reopened* and *address
-  recorded by an operator* among its log types. This change's own requirement
-  already obliges Grade10 to write the reopened entry; the type list is theirs.
+- **Overdue mark** — should appear when the address deadline passes, not after
+  72 hours idle, in "The order detail shows how long an order has waited" and
+  "The queue shows one outcome per lot". Until then a winner can be locked out
+  for a day before an operator is told. ❓ on the Post-Sale Queue page.
+- **Expiry timing** — `expired` should wait for a card payment started in time,
+  in the payment-deadline rule and the order-status transition table.
+- **Invoice log** — the log types should name *address form reopened* and
+  *address recorded by an operator*.
 
 ## Assumptions
 
-- **48 hours is measured from lot close**, including every extended-bidding
-  extension, and is stored in UTC.
-- **A reopen needs payment processing** — the grant that already covers reissue
-  and manual settlement — and is recorded on the invoice log like any other
-  operator act.
-- **An operator may still cancel a pre-invoice order**, closed window or not,
-  which is unchanged.
-- **Sending the invoice retires the window.** The address locks at send, so the
-  window has nothing left to govern.
-- **A write is judged on receipt.** An address Grade10 receives at or after the
-  closing time is refused, however long the winner spent composing it.
-- **An operator may record the address themselves** on a closed-window order,
-  without reopening the entrance, so a winner who telephones is quoted in one
-  step.
-- **The account address book is unaffected.** It is account-wide; only putting
-  an address on this order is refused.
-- **"Started" means Grade10 received the winner's payment** before the
-  deadline — not that the winner opened the page.
-- **A cancelled order never reopens.** Cancellation has already returned the lot
-  to stock.
+- **A reopen needs payment-processing**, the grant that already covers reissue
+  and manual settlement, and is written to the invoice log.
+- **"Started" means Grade10 received the winner's payment** before the deadline,
+  not that the winner opened the page.
+- **The 48 hours stay one Grade10-owned figure.** A new figure applies to lots
+  closing after it is set.
 
 ## Open questions
 
-- **Does a reopen tell the winner?** No letter is specified, on the assumption
-  that the winner asked for the reopen and the operator answers them directly.
-  A winner who is not watching never learns the form is back. ❓ on the Winner
-  Order page; `winner-order-US7-TC15-1` is held `draft` and `**Blocked:**` on
-  Product until it is settled.
+- ❓ **Does a reopen tell the winner?** No letter is specified, on the
+  assumption that the operator answers the winner directly. A winner who is not
+  watching never learns the form is back. `winner-order-US8-TC10-1` stays
+  `draft` and `**Blocked:**` on Product until it is settled.
 
 ## Follow-on changes
 
-- A reminder to a winner whose address window is about to close, and a notice
-  when it has.
-- A rule for a lot nobody ever claims, so a permanently abandoned order leaves
-  the queue without an operator deciding each one.
+- A rule for a lot nobody ever claims, so an abandoned order leaves the queue
+  without an operator deciding each one.
 
 ## References
 
