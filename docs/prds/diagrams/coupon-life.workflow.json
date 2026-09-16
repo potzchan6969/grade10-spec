@@ -5,11 +5,19 @@
     "title": "A coupon's life",
     "animation": "none",
     "visual_preset": "editorial",
-    "legend": { "mode": "hidden" }
+    "legend": {
+      "mode": "hidden"
+    }
   },
   "lanes": [
-    { "id": "shopify", "label": "Shopify" },
-    { "id": "coupon", "label": "The coupon" }
+    {
+      "id": "shopify",
+      "label": "Shopify"
+    },
+    {
+      "id": "coupon",
+      "label": "The coupon"
+    }
   ],
   "mainPath": ["redeemed", "available", "claimed", "used"],
   "nodes": [
@@ -19,8 +27,9 @@
       "col": 2,
       "type": "external",
       "label": "Discount code",
-      "sublabel": "ephemeral — a new claim discards the last",
-      "width": 186
+      "sublabel": "a new claim discards the last",
+      "tag": "ephemeral",
+      "width": 150
     },
     {
       "id": "redeemed",
@@ -28,8 +37,8 @@
       "col": 0,
       "type": "frontend",
       "label": "Redeemed or granted",
-      "sublabel": "points bought it, or an operator gave it",
-      "width": 186
+      "sublabel": "points, or an operator",
+      "width": 150
     },
     {
       "id": "available",
@@ -38,7 +47,7 @@
       "type": "backend",
       "label": "Available",
       "sublabel": "offered everywhere",
-      "width": 186
+      "width": 150
     },
     {
       "id": "claimed",
@@ -48,7 +57,7 @@
       "label": "Claimed",
       "sublabel": "a sale intends to use it",
       "tag": "still offered",
-      "width": 186
+      "width": 150
     },
     {
       "id": "used",
@@ -57,12 +66,20 @@
       "type": "database",
       "label": "Used",
       "sublabel": "a paid order spent it",
-      "width": 186
+      "width": 150
     }
   ],
   "edges": [
-    { "from": "redeemed", "to": "available", "variant": "emphasis" },
-    { "from": "available", "to": "claimed", "variant": "emphasis" },
+    {
+      "from": "redeemed",
+      "to": "available",
+      "variant": "emphasis"
+    },
+    {
+      "from": "available",
+      "to": "claimed",
+      "variant": "emphasis"
+    },
     {
       "from": "claimed",
       "to": "used",
