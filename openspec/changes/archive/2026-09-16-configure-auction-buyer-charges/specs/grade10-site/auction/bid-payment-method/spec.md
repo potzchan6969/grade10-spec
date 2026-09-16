@@ -1,8 +1,10 @@
 # grade10-site/auction/bid-payment-method Specification
 
 ## Purpose
-Lets a collector understand the buyer-premium rate that applies to a bid
-without turning the bidding surface into an invoice preview.
+Lets a collector authorize a card-backed hold when they commit or raise a
+maximum on a listing, reusing a linked method across lots, while understanding
+the buyer-premium rate without turning the bidding surface into an invoice
+preview.
 
 ## Feature set
 

@@ -36,3 +36,10 @@
 **I want** the card hold my bids put there lifted as soon as the lot closes,
 **so that** losing an auction does not leave my money reserved until the
 authorization expires on its own.
+
+### winner-order-US-08: Winner pays an invoice with a policy premium
+
+**As a** winner of an auction lot,
+**I want** my invoice to calculate the stated buyer premium correctly using the
+current currency minimum,
+**so that** the amount I pay is explainable and collectible.

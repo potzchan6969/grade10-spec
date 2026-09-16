@@ -2,7 +2,9 @@
 
 ## Purpose
 Keeps the invoice premium calculated from the winning bid while disclosing its
-rate earlier on the bid panel.
+rate earlier on the bid panel. The winner order also carries one invoice per
+lot, its confirmed delivery address, settlement, deadline, receipt, tracker
+and delivery proof.
 
 ## Feature set
 

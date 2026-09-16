@@ -4,7 +4,8 @@
 What a winner is issued when a lot closes and what they do with it: one
 invoice per lot, a delivery address they confirm, a single fresh charge, a
 deadline that does not move, and the receipt, tracker and delivery proof the
-order keeps afterwards.
+order keeps afterwards. The invoice premium follows the winning bid and its
+rate is disclosed earlier on the bid panel.
 
 ## Feature set
 
@@ -13,6 +14,11 @@ order keeps afterwards.
   - Estimate-first pricing: the invoice is payable from the moment of close rather than waiting on an address
   - Final amount: names every component a winner is asked to pay, so a total is explicable line by line
   - Buyer's premium: 20% of the winning bid or the currency's minimum charge, whichever is higher, computed by Grade10
+  - Invoice premium: 20% of the winning bid
+  - Integer amount: rounded to the nearest minor unit
+  - Bid-panel boundary: only the rate appears before invoicing
+- Premium minimum
+  - Currency minimum: the current Auction Payment settings mapping sets the lower bound for the calculated premium
 - Delivery address
   - Account-wide address book: the platform keeps multiple named shipping addresses and one optional default for the account
   - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it before payment
@@ -713,3 +719,29 @@ payment and when Cancelled.
 - **GIVEN** an auction order whose invoice status is `pending`
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers no receipt PDF control
+
+### Requirement: An invoice calculates the buyer's premium
+
+When Grade10 creates or reissues an auction invoice, the buyer's premium SHALL
+be the larger of 20% of the winning bid and the current minimum for the invoice
+currency. The percentage amount is rounded to the nearest minor unit with half
+values rounded up. A minimum of 0 means no minimum. The
+premium SHALL be included in the invoice final amount and in every invoice
+receipt. A bid panel SHALL disclose only the 20% rate; it SHALL not display this
+calculated amount before an invoice exists.
+
+#### Scenario: grade10-site-auction-winner-order-SC-46 - Invoice carries 20% of the winning bid
+**Serves:** winner-order-US-08 - Winner pays an invoice with a policy premium
+
+- **GIVEN** a winning bid of 250000 HKD minor units
+- **WHEN** Grade10 creates the winner's invoice
+- **THEN** the invoice buyer's premium is 50000 HKD minor units
+- **AND** the final amount includes that 50000 HKD premium
+
+#### Scenario: grade10-site-auction-winner-order-SC-47 - Fractional minor-unit premium rounds deterministically
+**Serves:** winner-order-US-08 - Winner pays an invoice with a policy premium
+
+- **GIVEN** a winning bid of 101 USD minor units
+- **WHEN** Grade10 creates the winner's invoice
+- **THEN** the buyer's premium is 20 USD minor units
+- **AND** the amount is an integer minor-unit value
