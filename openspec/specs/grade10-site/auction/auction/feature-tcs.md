@@ -304,7 +304,7 @@ An open listing whose extension window and extension duration are both zero, wit
 * The listing is closed at its scheduled close.
 * It never entered extended bidding.
 
-### grade10-site-auction-auction-US2-TC5-1: Bids by the close decide whether extended bidding starts
+### grade10-site-auction-auction-US2-TC5-2: Bids by the close decide whether extended bidding starts
 
 Runs once per row of **Test data**.
 
