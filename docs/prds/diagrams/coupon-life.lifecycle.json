@@ -71,18 +71,20 @@
       "type": "failure",
       "label": "Voided",
       "sublabel": "points come back",
-      "lane": "terminal",
-      "col": 0,
-      "tag": "an operator reversed it"
+      "lane": "main",
+      "col": 1,
+      "tag": "an operator reversed it",
+      "yOffset": 324
     },
     {
       "id": "lapsed",
       "type": "neutral",
       "label": "Lapsed",
       "sublabel": "read off the clock",
-      "lane": "terminal",
-      "col": 1,
-      "tag": "its date passed"
+      "lane": "main",
+      "col": 2,
+      "tag": "its date passed",
+      "yOffset": 324
     }
   ],
   "transitions": [
@@ -119,7 +121,7 @@
       "to": "voided",
       "variant": "dashed",
       "fromSide": "bottom",
-      "toSide": "left"
+      "toSide": "top"
     },
     {
       "id": "lapses",

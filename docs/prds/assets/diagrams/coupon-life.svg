@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="23 76 762 444" role="img" data-preset="editorial" aria-labelledby="coupon-life-archify-diagram-title" aria-describedby="coupon-life-archify-diagram-description" data-diagram="coupon-life">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="23 76 762 448" role="img" data-preset="editorial" aria-labelledby="coupon-life-archify-diagram-title" aria-describedby="coupon-life-archify-diagram-description" data-diagram="coupon-life">
 <style>
 svg[data-diagram="coupon-life"]{--arrow:var(--muted-foreground, light-dark(#8a806f, #948978));--arrow-emphasis:var(--primary, light-dark(#bb4c23, #dd6b3d));--backend-fill:light-dark(rgba(42, 119, 75, 0.09), rgba(63, 132, 92, 0.16));--backend-stroke:light-dark(#397b53, #8fc29e);--cloud-fill:light-dark(rgba(157, 103, 31, 0.1), rgba(170, 119, 49, 0.16));--cloud-stroke:light-dark(#9a671f, #d8ad68);--database-fill:light-dark(rgba(105, 75, 130, 0.09), rgba(117, 91, 141, 0.17));--database-stroke:light-dark(#765d86, #c0a4d0);--external-fill:light-dark(rgba(101, 91, 75, 0.09), rgba(126, 115, 96, 0.18));--external-stroke:light-dark(#746b5e, #b8ad99);--frontend-fill:light-dark(rgba(31, 117, 126, 0.09), rgba(43, 133, 142, 0.16));--frontend-stroke:light-dark(#287e84, #7fc6c7);--grid:var(--border-subtle, light-dark(#d8d0c2, #39342a));--mask:var(--background, light-dark(#fbf8f1, #231f18));--security-fill:light-dark(rgba(153, 58, 52, 0.09), rgba(157, 69, 65, 0.17));--security-stroke:light-dark(#9e463f, #df9085);--text:var(--foreground, light-dark(#242018, #f4eddf));--text-dim:var(--muted-foreground, light-dark(#a09788, #776e60));--text-muted:var(--muted-foreground, light-dark(#6f6658, #b9ae9b))}
 svg[data-diagram="coupon-life"] .c-grid{stroke: var(--grid); fill: none;}
@@ -68,8 +68,8 @@ svg[data-diagram="coupon-life"] .c-grid{stroke-dasharray: 1 4; opacity: 0.48;}
         <path data-step="claimed" data-edge-from="available" data-edge-to="claimed" data-edge-key="1" data-edge-id="claim" data-composition-points="307,157;343,157" d="M 307 157 L 343 157" class="a-emphasis" stroke-width="2" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
         <path data-step="used" data-edge-from="claimed" data-edge-to="used" data-edge-key="2" data-edge-id="paid" data-composition-points="461,157;497,157" d="M 461 157 L 497 157" class="a-emphasis" stroke-width="2" marker-end="url(#coupon-life-arrowhead-emphasis)"/>
         <path data-step="returned" data-edge-from="claimed" data-edge-to="returned" data-edge-label="the sale ends, or the next sale takes it" data-edge-key="3" data-edge-id="ends" data-composition-points="402,188;402,233;710,233;710,278" d="M 402 188 L 402 223 Q 402 233 412 233 L 700 233 Q 710 233 710 243 L 710 278" class="a-default" stroke-width="1.1" marker-end="url(#coupon-life-arrowhead)"/>
-        <path data-step="voided" data-edge-from="available" data-edge-to="voided" data-edge-key="4" data-edge-id="reversed" data-composition-points="241,188;241,479;343,479" d="M 241 188 L 241 469 Q 241 479 251 479 L 343 479" class="a-dashed" stroke-width="1.1" marker-end="url(#coupon-life-arrowhead-dashed)"/>
-        <path data-step="lapsed" data-edge-from="available" data-edge-to="lapsed" data-edge-key="5" data-edge-id="lapses" data-composition-points="255,188;255,319;556,319;556,450" d="M 255 188 L 255 309 Q 255 319 265 319 L 546 319 Q 556 319 556 329 L 556 450" class="a-dashed" stroke-width="1.1" marker-end="url(#coupon-life-arrowhead-dashed)"/>
+        <path data-step="voided" data-edge-from="available" data-edge-to="voided" data-edge-key="4" data-edge-id="reversed" data-composition-points="241,188;241,319;248,319;248,450" d="M 241 188 L 241 315.5 Q 241 319 244.5 319 L 244.5 319 Q 248 319 248 322.5 L 248 450" class="a-dashed" stroke-width="1.1" marker-end="url(#coupon-life-arrowhead-dashed)"/>
+        <path data-step="lapsed" data-edge-from="available" data-edge-to="lapsed" data-edge-key="5" data-edge-id="lapses" data-composition-points="255,188;255,319;402,319;402,450" d="M 255 188 L 255 309 Q 255 319 265 319 L 392 319 Q 402 319 402 329 L 402 450" class="a-dashed" stroke-width="1.1" marker-end="url(#coupon-life-arrowhead-dashed)"/>
         
         <g data-step="redeemed" id="coupon-life-node-redeemed" data-node-id="redeemed" data-node-label="Redeemed" aria-label="Focus Redeemed, points bought it, The coupon" data-node-kind="start" data-node-sublabel="points bought it" data-node-context="The coupon">
           <title>Redeemed · points bought it · The coupon</title>
@@ -124,29 +124,29 @@ svg[data-diagram="coupon-life"] .c-grid{stroke-dasharray: 1 4; opacity: 0.48;}
           <text data-node-label="" data-detail-anchor="" x="710" y="299" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Back to available</text>
           <text data-detail="context" x="710" y="315" class="t-muted" font-size="6.3" text-anchor="middle">the claim and its code come off</text>
         </g>
-        <g data-step="voided" id="coupon-life-node-voided" data-node-id="voided" data-node-label="Voided" aria-label="Focus Voided, points come back, Ended" data-node-kind="failure" data-node-sublabel="points come back" data-node-tag="an operator reversed it" data-node-context="Ended">
-          <title>Voided · points come back · Ended · an operator reversed it</title>
-          <rect x="343" y="450" width="118" height="58" rx="7" class="c-mask"/>
-          <rect x="343" y="450" width="118" height="58" rx="7" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="failure" class="semantic-sigil s-security" transform="translate(444 456) scale(0.6875)">
+        <g data-step="voided" id="coupon-life-node-voided" data-node-id="voided" data-node-label="Voided" aria-label="Focus Voided, points come back, The coupon" data-node-kind="failure" data-node-sublabel="points come back" data-node-tag="an operator reversed it" data-node-context="The coupon">
+          <title>Voided · points come back · The coupon · an operator reversed it</title>
+          <rect x="189" y="450" width="118" height="62" rx="7" class="c-mask"/>
+          <rect x="189" y="450" width="118" height="62" rx="7" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="failure" class="semantic-sigil s-security" transform="translate(290 456) scale(0.6875)">
             <circle cx="8" cy="8" r="5.3"/>
             <path d="m5.7 5.7 4.6 4.6m0-4.6-4.6 4.6"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="402" y="471" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Voided</text>
-          <text data-detail="context" x="402" y="487" class="t-muted" font-size="7" text-anchor="middle">points come back</text>
-        <text data-detail="fine" x="402" y="497" class="t-security" font-size="7" text-anchor="middle">an operator reversed it</text>
+          <text data-node-label="" data-detail-anchor="" x="248" y="471" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Voided</text>
+          <text data-detail="context" x="248" y="487" class="t-muted" font-size="7" text-anchor="middle">points come back</text>
+        <text data-detail="fine" x="248" y="501" class="t-security" font-size="7" text-anchor="middle">an operator reversed it</text>
         </g>
-        <g data-step="lapsed" id="coupon-life-node-lapsed" data-node-id="lapsed" data-node-label="Lapsed" aria-label="Focus Lapsed, read off the clock, Ended" data-node-kind="neutral" data-node-sublabel="read off the clock" data-node-tag="its date passed" data-node-context="Ended">
-          <title>Lapsed · read off the clock · Ended · its date passed</title>
-          <rect x="497" y="450" width="118" height="58" rx="7" class="c-mask"/>
-          <rect x="497" y="450" width="118" height="58" rx="7" class="c-external" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="neutral" class="semantic-sigil s-external" transform="translate(598 456) scale(0.6875)">
+        <g data-step="lapsed" id="coupon-life-node-lapsed" data-node-id="lapsed" data-node-label="Lapsed" aria-label="Focus Lapsed, read off the clock, The coupon" data-node-kind="neutral" data-node-sublabel="read off the clock" data-node-tag="its date passed" data-node-context="The coupon">
+          <title>Lapsed · read off the clock · The coupon · its date passed</title>
+          <rect x="343" y="450" width="118" height="62" rx="7" class="c-mask"/>
+          <rect x="343" y="450" width="118" height="62" rx="7" class="c-external" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="neutral" class="semantic-sigil s-external" transform="translate(444 456) scale(0.6875)">
             <rect x="3" y="3" width="10" height="10" rx="2"/>
             <circle cx="8" cy="8" r="1.2" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="556" y="471" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Lapsed</text>
-          <text data-detail="context" x="556" y="487" class="t-muted" font-size="7" text-anchor="middle">read off the clock</text>
-        <text data-detail="fine" x="556" y="497" class="t-muted" font-size="7" text-anchor="middle">its date passed</text>
+          <text data-node-label="" data-detail-anchor="" x="402" y="471" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Lapsed</text>
+          <text data-detail="context" x="402" y="487" class="t-muted" font-size="7" text-anchor="middle">read off the clock</text>
+        <text data-detail="fine" x="402" y="501" class="t-muted" font-size="7" text-anchor="middle">its date passed</text>
         </g>
         
         <g data-step="returned" data-detail="context" data-edge-from="claimed" data-edge-to="returned" data-edge-label="the sale ends, or the next sale takes it" data-edge-key="3" data-edge-id="ends">
