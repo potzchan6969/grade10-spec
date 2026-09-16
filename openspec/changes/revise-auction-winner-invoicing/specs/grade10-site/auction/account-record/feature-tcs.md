@@ -136,7 +136,7 @@
 
 | Finding | Disposition |
 | --- | --- |
-| Suite required View order on every Won | Folded as SC-49 |
-| Suite required no View order on Didn’t win | Folded as SC-50 |
-| Suite required no row contact / no Won helpers | Folded as SC-22 amend + SC-51 |
+| Suite required View order on every Won | Folded as SC-56 |
+| Suite required no View order on Didn’t win | Folded as SC-57 |
+| Suite required no row contact / no Won helpers | Folded as SC-22 amend + SC-58 |
 | Hold copy retained for Didn’t win | Covered by redesign/durable hold scenarios; not removed here |
