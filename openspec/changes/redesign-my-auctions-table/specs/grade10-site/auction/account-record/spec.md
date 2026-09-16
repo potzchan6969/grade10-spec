@@ -37,6 +37,7 @@ design decision and is not fixed by this requirement. A bid that enrolls the
 list SHALL count toward the same maximum.
 
 #### Scenario: grade10-site-auction-account-record-SC-06 - The watch maximum refuses a further watch
+**Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
 - **GIVEN** a collector holding the maximum number of watches
 - **WHEN** they watch another listing
@@ -44,6 +45,7 @@ list SHALL count toward the same maximum.
 - **AND** the collector is told the maximum has been reached
 
 #### Scenario: grade10-site-auction-account-record-SC-07 - An unpublished listing stays on the page
+**Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
 - **GIVEN** a collector with a listing on My Auctions that Grade10 then
   unpublishes or removes
@@ -51,6 +53,7 @@ list SHALL count toward the same maximum.
 - **THEN** that listing is not listed
 
 #### Scenario: grade10-site-auction-account-record-SC-40 - A closed published listing stays on My Auctions
+**Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
 - **GIVEN** a collector watching a listing that then closes while Grade10
   still publishes it
@@ -66,6 +69,7 @@ timing SHALL appear with the listing identity, not as Scheduled, Live, Ending
 soon, or Active values in Your Standing.
 
 #### Scenario: grade10-site-auction-account-record-SC-08 - A scheduled listing says when it opens
+**Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
 - **GIVEN** a watched listing that is published and whose start has not arrived
 - **WHEN** the collector opens My Auctions
@@ -74,6 +78,7 @@ soon, or Active values in Your Standing.
 - **AND** Your Standing is `--`
 
 #### Scenario: grade10-site-auction-account-record-SC-09 - Ending soon begins at 60 minutes
+**Serves:** grade10-site-auction-account-record-US-01 - Mark a listing now and find it again later
 
 - **GIVEN** a watched listing whose recorded close is 60 minutes or less away
   and has not passed
@@ -82,6 +87,7 @@ soon, or Active values in Your Standing.
 - **AND** Your Standing is `--` when they have not bid
 
 #### Scenario: grade10-site-auction-account-record-SC-10 - Every way of ending reads as Ended
+**Serves:** grade10-site-auction-account-record-US-01 - Mark a listing now and find it again later
 
 - **GIVEN** three watched listings the collector has not bid on — one sold,
   one that closed with no winner, and one called off — each still published
@@ -108,6 +114,7 @@ collector no longer has a bid record that enrolls it — and SHALL NOT offer
 Unwatch while a bid stands.
 
 #### Scenario: grade10-site-auction-account-record-SC-11 - The next close is first
+**Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
 - **GIVEN** watched-only listings closing in two hours, in ten minutes, and
   one that closed yesterday
@@ -117,6 +124,7 @@ Unwatch while a bid stands.
 - **AND** the listing that closed yesterday is after both
 
 #### Scenario: grade10-site-auction-account-record-SC-12 - A watched listing they bid on is marked
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a collector with one listing they only watch and one listing they
   have bid on
@@ -125,6 +133,7 @@ Unwatch while a bid stands.
 - **AND** each listing appears once
 
 #### Scenario: grade10-site-auction-account-record-SC-13 - Unwatching leaves the bid alone
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a collector who has bid on a listing on My Auctions
 - **WHEN** they read that row
@@ -155,12 +164,14 @@ Every amount SHALL be an integer count of minor units with an ISO 4217 currency
 code.
 
 #### Scenario: grade10-site-auction-account-record-SC-14 - The highest bidder is Leading
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** an open listing on which the collector holds the highest valid bid
 - **WHEN** they open My Auctions
 - **THEN** that listing's Your Standing is Leading
 
 #### Scenario: grade10-site-auction-account-record-SC-15 - Outbid carries the minimum next bid
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** an open listing on which a higher valid bid than the collector's
   stands
@@ -170,6 +181,7 @@ code.
   minor units with its ISO 4217 currency code
 
 #### Scenario: grade10-site-auction-account-record-SC-16 - A refused bid says why it was refused
+**Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
 
 - **GIVEN** a collector whose last bid on an open listing was refused for being
   below the minimum next bid
@@ -178,6 +190,7 @@ code.
 - **AND** the row says the bid was below the minimum next bid
 
 #### Scenario: grade10-site-auction-account-record-SC-17 - A bid awaiting acceptance is not a standing
+**Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
 
 - **GIVEN** a collector who has placed a bid Grade10 has not yet accepted
 - **WHEN** they open My Auctions
@@ -193,12 +206,14 @@ Bidding History index remains the source for listing-level history and its
 Active/Completed filtering.
 
 #### Scenario: grade10-site-auction-account-record-SC-18 - A won listing sits under Won
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a closed listing whose winner is the collector
 - **WHEN** they open My Auctions
 - **THEN** that listing's Your Standing is Won
 
 #### Scenario: grade10-site-auction-account-record-SC-19 - A listing lost at close sits under Didn't win
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a closed listing the collector bid on whose winner is someone else
 - **WHEN** they open My Auctions
@@ -217,6 +232,7 @@ win standing carrying the same statement about their authorization, while the
 listing remains published.
 
 #### Scenario: grade10-site-auction-account-record-SC-25 - A release in flight says so
+**Serves:** grade10-site-auction-account-record-US-04 - Losing bidder sees the card hold released
 
 - **GIVEN** a closed listing the collector did not win, whose authorization
   Grade10 has marked for release and whose release is not complete
@@ -225,12 +241,14 @@ listing remains published.
 - **AND** it does not say the hold is released
 
 #### Scenario: grade10-site-auction-account-record-SC-26 - A completed release says so
+**Serves:** grade10-site-auction-account-record-US-04 - Losing bidder sees the card hold released
 
 - **GIVEN** the same listing once its release is complete
 - **WHEN** the collector opens My Auctions
 - **THEN** the row says the hold is released
 
 #### Scenario: grade10-site-auction-account-record-SC-27 - A called-off listing tells the bidder about the hold
+**Serves:** grade10-site-auction-account-record-US-04 - Losing bidder sees the card hold released
 
 - **GIVEN** a listing the collector bid on that Grade10 called off and still
   publishes
@@ -257,6 +275,7 @@ The page title SHALL carry a badge whose count equals the number of rows on
 the table.
 
 #### Scenario: grade10-site-auction-account-record-SC-30 - A bidder lands on Bidding
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a collector who has bid on at least one listing
 - **WHEN** they open their auction record
@@ -264,6 +283,7 @@ the table.
 - **AND** they are not sent to a separate Bidding section
 
 #### Scenario: grade10-site-auction-account-record-SC-31 - A collector who has never bid lands on Watching
+**Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
 
 - **GIVEN** a collector who has never placed a bid and watches at least one
   listing
@@ -272,6 +292,7 @@ the table.
 - **AND** each row's Your Standing is `--`
 
 #### Scenario: grade10-site-auction-account-record-SC-32 - An empty Watching page offers the catalogue
+**Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
 - **GIVEN** a collector with no listings on My Auctions
 - **WHEN** they open it
@@ -279,6 +300,7 @@ the table.
 - **AND** it does not report an error
 
 #### Scenario: grade10-site-auction-account-record-SC-33 - A failed read is not an empty record
+**Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
 
 - **GIVEN** a collector whose record Grade10 cannot read
 - **WHEN** they open it
@@ -286,6 +308,7 @@ the table.
 - **AND** it does not show an empty record
 
 #### Scenario: grade10-site-auction-account-record-SC-34 - A value that could not be refreshed says so
+**Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
 
 - **GIVEN** a record whose rows are shown but whose current bid could not be
   refreshed
@@ -293,6 +316,7 @@ the table.
 - **THEN** that value is shown as not current
 
 #### Scenario: grade10-site-auction-account-record-SC-41 - The title badge matches the row count
+**Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
 - **GIVEN** a collector with three listings on My Auctions
 - **WHEN** they open it
@@ -307,6 +331,7 @@ that listing on My Auctions as a bookmark if it is not already there. The
 collector SHALL NOT need a separate Watch for that listing to appear.
 
 #### Scenario: grade10-site-auction-account-record-SC-42 - A first bid enrolls My Auctions
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a signed-in collector who does not watch a listing
 - **WHEN** they place a bid on it
@@ -320,6 +345,7 @@ that control. A row for a listing the collector has not bid on SHALL offer
 Unwatch. A row for a listing they have bid on SHALL NOT offer Unwatch.
 
 #### Scenario: grade10-site-auction-account-record-SC-43 - Watch-only can be unwatched
+**Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
 - **GIVEN** a collector watching a listing they have not bid on
 - **WHEN** they unwatch it from My Auctions
@@ -327,6 +353,7 @@ Unwatch. A row for a listing they have bid on SHALL NOT offer Unwatch.
 - **AND** Email alerts for that listing turn off with the watch
 
 #### Scenario: grade10-site-auction-account-record-SC-44 - A bid row keeps Email alerts without Unwatch
+**Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
 - **GIVEN** a collector with a bid on a listing on My Auctions
 - **WHEN** they read that row

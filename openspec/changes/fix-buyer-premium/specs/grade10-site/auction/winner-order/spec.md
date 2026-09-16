@@ -30,6 +30,7 @@ to invoices sent or reissued after it takes effect; an invoice already sent
 SHALL keep its amounts.
 
 #### Scenario: winner-order-SC-40 - The premium is 20% of the winning bid
+**Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
 
 - **GIVEN** the HKD minimum charge is 20000 minor units
 - **AND** an auction order with a hammer price of 250000 minor units in HKD
@@ -38,6 +39,7 @@ SHALL keep its amounts.
 - **AND** the operator was not asked to enter it
 
 #### Scenario: winner-order-SC-41 - The minimum charge applies when it is higher
+**Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
 
 - **GIVEN** the HKD minimum charge is 20000 minor units
 - **AND** an auction order with a hammer price of 50000 minor units in HKD
@@ -45,6 +47,7 @@ SHALL keep its amounts.
 - **THEN** the buyer's premium is 20000 minor units in HKD
 
 #### Scenario: winner-order-SC-42 - A zero minimum leaves the rounded 20%
+**Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
 
 - **GIVEN** the JPY minimum charge is 0
 - **AND** an auction order with a hammer price of 1003 minor units in JPY
@@ -52,6 +55,7 @@ SHALL keep its amounts.
 - **THEN** the buyer's premium is 201 minor units in JPY
 
 #### Scenario: winner-order-SC-43 - A sent invoice keeps its premium when the minimum changes
+**Serves:** winner-order-US-03 - Winner checks the buyer's premium on an invoice
 
 - **GIVEN** an invoice sent with a hammer price of 50000 and a buyer's premium of 10000 minor units in HKD while the HKD minimum was 0
 - **WHEN** the HKD minimum changes to 20000 minor units

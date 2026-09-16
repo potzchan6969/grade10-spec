@@ -17,6 +17,7 @@ viewer standing is lost, the card SHALL show the Did not win status treatment
 and SHALL NOT render authorization-release banner copy under that standing.
 
 #### Scenario: shared-ui-auction-listing-SC-46 - Lost standing omits release banner
+**Serves:** Lost standing - lost standing omits the release banner
 
 - **GIVEN** a closed listing where the viewer lost
 - **WHEN** the bid card renders

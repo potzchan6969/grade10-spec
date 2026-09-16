@@ -23,3 +23,16 @@
 **As a** shipment operator,
 **I want** shipment to follow paid, then started, then completed,
 **so that** finance cannot ship, publishing does not need the shipment grant, and recording an address does not ship.
+
+### post-sale-US-07: Operator resolves an unpaid order
+
+**As an** operator,
+**I want** to reissue, settle, or cancel an unpaid order from the order itself,
+**so that** a lot whose winner did not pay stops being an open-ended obligation.
+
+### post-sale-US-08: Operator reconstructs an order's history
+
+**As an** operator deciding whether to reinstate a buyer,
+**I want** every invoice and fulfilment log entry on the order, including the
+payments that failed,
+**so that** I can tell a buyer who tried and could not from one who never engaged.

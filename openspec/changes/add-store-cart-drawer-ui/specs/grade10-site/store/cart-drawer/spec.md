@@ -36,6 +36,7 @@ cart drawer over the current surface without changing the current address. When
 the drawer closes, the collector SHALL remain at that address.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-01 - Cart opens without leaving its surface
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
 
 - **GIVEN** a collector on a Store surface or checkout
 - **WHEN** they activate Cart
@@ -43,6 +44,7 @@ the drawer closes, the collector SHALL remain at that address.
 - **AND** the current address does not change
 
 #### Scenario: grade10-site-store-cart-drawer-SC-02 - Closing preserves the current address
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
 
 - **GIVEN** an open cart drawer over a Store surface or checkout
 - **WHEN** the drawer closes
@@ -62,12 +64,14 @@ Checkout unavailable, and SHALL tell the collector once during that open. A
 later open SHALL start another read.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-03 - A signed-out collector sees the guest cart
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
 
 - **GIVEN** a signed-out collector whose browser cart holds a line
 - **WHEN** they open the cart drawer
 - **THEN** the drawer reviews that browser cart
 
 #### Scenario: grade10-site-store-cart-drawer-SC-04 - A signed-in collector sees the member cart
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
 
 - **GIVEN** a signed-in collector whose member cart holds a line
 - **WHEN** they open the cart drawer
@@ -75,12 +79,14 @@ later open SHALL start another read.
 - **AND** it does not substitute a guest browser cart
 
 #### Scenario: grade10-site-store-cart-drawer-SC-05 - Every open starts a current read
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
 
 - **GIVEN** a cart drawer whose previous open completed
 - **WHEN** the collector opens it again
 - **THEN** the drawer starts a new status-and-price read for the current scoped cart
 
 #### Scenario: grade10-site-store-cart-drawer-SC-06 - A read in flight remains unresolved
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
 
 - **GIVEN** an opening cart drawer whose status-and-price read has not answered
 - **WHEN** the drawer renders
@@ -88,6 +94,7 @@ later open SHALL start another read.
 - **AND** Checkout is unavailable
 
 #### Scenario: grade10-site-store-cart-drawer-SC-07 - A failed read tells the collector once
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
 
 - **GIVEN** an open cart drawer whose status-and-price read fails
 - **WHEN** the unresolved drawer renders more than once during that open
@@ -96,6 +103,7 @@ later open SHALL start another read.
 - **AND** Checkout remains unavailable
 
 #### Scenario: grade10-site-store-cart-drawer-SC-08 - Reopening retries a failed read
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
 
 - **GIVEN** a collector who closed the drawer after its read failed
 - **WHEN** they open the drawer again
@@ -121,6 +129,7 @@ The drawer SHALL NOT claim a promotion, points credit, shipping amount, tax, or
 other discount unless a later capability supplies an applied quote.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-09 - A successful read fills the reviewed summary
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
 
 - **GIVEN** a cart with one available line and one sold-out line
 - **WHEN** the drawer's status-and-price read succeeds
@@ -128,6 +137,7 @@ other discount unless a later capability supplies an applied quote.
 - **AND** the subtotal includes the available line and excludes the sold-out line
 
 #### Scenario: grade10-site-store-cart-drawer-SC-10 - Unsupported adjustments remain neutral
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
 
 - **GIVEN** a successful cart read with no image or applied quote
 - **WHEN** the drawer shows its summary
@@ -143,12 +153,14 @@ the drawer opened. After loading finishes, unavailable-line cleanup SHALL use
 the removal and single-notice behavior defined by `shared/ui/store-cart`.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-11 - A collector edits the opened cart
+**Serves:** grade10-site-store-cart-drawer-US-02 - Collector edits the reviewed cart
 
 - **GIVEN** an available line in an open reviewed cart
 - **WHEN** the collector changes its quantity or removes it
 - **THEN** the current guest or member cart records that change
 
 #### Scenario: grade10-site-store-cart-drawer-SC-12 - Delisted lines leave once
+**Serves:** grade10-site-store-cart-drawer-US-02 - Collector edits the reviewed cart
 
 - **GIVEN** a completed cart read with more than one unavailable line
 - **WHEN** the drawer applies its post-loading cleanup
@@ -163,6 +175,7 @@ SHALL open that product's existing address. Checkout SHALL open the existing
 checkout creation.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-13 - A line opens its product
+**Serves:** grade10-site-store-cart-drawer-US-03 - Collector continues from the cart drawer
 
 - **GIVEN** an open reviewed cart with a retained line
 - **WHEN** the collector activates that line
@@ -170,6 +183,7 @@ checkout creation.
 - **AND** the line's existing Store product address opens
 
 #### Scenario: grade10-site-store-cart-drawer-SC-15 - Checkout uses the existing surface
+**Serves:** grade10-site-store-cart-drawer-US-03 - Collector continues from the cart drawer
 
 - **GIVEN** an open cart drawer whose status-and-price read is not pending or failed
 - **WHEN** the collector activates Checkout
@@ -187,6 +201,7 @@ from these reads, and its subtotal and estimated total SHALL remain the
 reviewed subtotal.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-16 - Held promo codes answer the reviewed basket
+**Serves:** grade10-site-store-cart-drawer-US-04 - Collector reads tender choices for the reviewed basket
 
 - **GIVEN** a signed-in collector whose cart review succeeds
 - **AND** the member holds one applicable promo code and one inapplicable code
@@ -197,6 +212,7 @@ reviewed subtotal.
 - **AND** no promo discount is shown in the drawer summary
 
 #### Scenario: grade10-site-store-cart-drawer-SC-17 - Points show the basket ceiling without changing the total
+**Serves:** grade10-site-store-cart-drawer-US-04 - Collector reads tender choices for the reviewed basket
 
 - **GIVEN** a signed-in collector whose cart review succeeds
 - **AND** the points read quotes a balance and a maximum for the reviewed goods
@@ -206,6 +222,7 @@ reviewed subtotal.
 - **AND** the subtotal and estimated total remain the reviewed subtotal
 
 #### Scenario: grade10-site-store-cart-drawer-SC-18 - Guests and unresolved reviews receive no stale tender facts
+**Serves:** grade10-site-store-cart-drawer-US-04 - Collector reads tender choices for the reviewed basket
 
 - **GIVEN** a guest collector, or a collector whose cart review is pending or failed
 - **WHEN** the cart drawer renders
@@ -213,6 +230,7 @@ reviewed subtotal.
 - **AND** no member-only tender read is required to render the cart review state
 
 #### Scenario: grade10-site-store-cart-drawer-SC-19 - Tender facts follow the latest reviewed basket
+**Serves:** grade10-site-store-cart-drawer-US-04 - Collector reads tender choices for the reviewed basket
 
 - **GIVEN** a signed-in collector whose drawer has shown promo and points facts for a reviewed basket
 - **WHEN** the cart changes or the drawer closes and opens again

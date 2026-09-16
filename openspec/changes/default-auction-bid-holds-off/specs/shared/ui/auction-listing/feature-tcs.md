@@ -3,9 +3,14 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-16, tcs-rules r3.0
 
-## Feature set coverage
+## shared-ui-auction-listing-US1: The bid panel's rendering contract
 
-### shared-ui-auction-listing-FS-TC3-1: Lost standing omits release banner
+**As an** application composing the shared bid panel,
+**I want** every standing and every disclosure to render exactly as the
+contract states,
+**so that** each storefront embedding the panel shows collectors the same thing.
+
+### shared-ui-auction-listing-US1-TC3-1: Lost standing omits release banner
 
 **Classification:**
 
@@ -15,10 +20,10 @@
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
-* **Layer:** component
+* **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** Lost standing — Badge only
+* **Trace:** Lost standing
 
 **Pre-conditions:**
 
@@ -42,4 +47,4 @@
 
 | Finding | Disposition |
 | --- | --- |
-| Lost standing must not show release-banner copy at authorize-only launch | Covered as `shared-ui-auction-listing-FS-TC3-1` / `shared-ui-auction-listing-SC-46` |
+| Lost standing must not show release-banner copy at authorize-only launch | Covered as `shared-ui-auction-listing-US1-TC3-1` / `shared-ui-auction-listing-SC-46` |

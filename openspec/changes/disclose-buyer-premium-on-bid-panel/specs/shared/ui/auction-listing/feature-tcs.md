@@ -3,12 +3,14 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-16, tcs-rules r3.0
 
-## Feature set coverage
+## shared-ui-auction-listing-US1: The bid panel's rendering contract
 
-This capability is walked by nobody on their own. Cases read the buyer-fee
-disclosure anchors on the bid card export.
+**As an** application composing the shared bid panel,
+**I want** every standing and every disclosure to render exactly as the
+contract states,
+**so that** each storefront embedding the panel shows collectors the same thing.
 
-### shared-ui-auction-listing-FS-TC1-1: Buyer fee shows inline at 20%
+### shared-ui-auction-listing-US1-TC1-1: Buyer fee shows inline at 20%
 
 **Classification:**
 
@@ -18,10 +20,10 @@ disclosure anchors on the bid card export.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
-* **Layer:** component
+* **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** Buyer-fee disclosure — Inline rate
+* **Trace:** Buyer-fee disclosure
 
 **Pre-conditions:**
 
@@ -39,7 +41,7 @@ disclosure anchors on the bid card export.
   bid.
 * No buyer-fee info tooltip is present.
 
-### shared-ui-auction-listing-FS-TC2-1: Signed-out panel omits the fee line
+### shared-ui-auction-listing-US1-TC2-1: Signed-out panel omits the fee line
 
 **Classification:**
 
@@ -49,10 +51,10 @@ disclosure anchors on the bid card export.
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** release
-* **Layer:** component
+* **Layer:** unit
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** Buyer-fee disclosure — Inline rate
+* **Trace:** Buyer-fee disclosure
 
 **Pre-conditions:**
 
@@ -75,5 +77,5 @@ disclosure anchors on the bid card export.
 
 | Finding | Disposition |
 | --- | --- |
-| Signed-in collectors must see the 20% rate without a tooltip | Covered as `shared-ui-auction-listing-FS-TC1-1` / `shared-ui-auction-listing-SC-44` |
-| Signed-out panels omit the fee line with the bid action | Covered as `shared-ui-auction-listing-FS-TC2-1` / `shared-ui-auction-listing-SC-45` |
+| Signed-in collectors must see the 20% rate without a tooltip | Covered as `shared-ui-auction-listing-US1-TC1-1` / `shared-ui-auction-listing-SC-44` |
+| Signed-out panels omit the fee line with the bid action | Covered as `shared-ui-auction-listing-US1-TC2-1` / `shared-ui-auction-listing-SC-45` |

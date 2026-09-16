@@ -22,6 +22,7 @@ an info tooltip. When `bidEnrollment` is `signed-out`, the fee line SHALL be
 omitted with the bid action.
 
 #### Scenario: shared-ui-auction-listing-SC-44 - Buyer fee shows inline at 20%
+**Serves:** Buyer-fee disclosure - the buyer fee shows inline at 20%
 
 - **GIVEN** a signed-in collector on an open listing bid card
 - **WHEN** the bid panel footer renders
@@ -30,6 +31,7 @@ omitted with the bid action.
 - **AND** no buyer-fee info tooltip is present
 
 #### Scenario: shared-ui-auction-listing-SC-45 - Signed-out panel omits the fee line
+**Serves:** Buyer-fee disclosure - a signed-out panel omits the fee line
 
 - **GIVEN** a bid card with `bidEnrollment` `signed-out`
 - **WHEN** it renders

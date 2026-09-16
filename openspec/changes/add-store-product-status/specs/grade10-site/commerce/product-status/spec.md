@@ -49,24 +49,28 @@ purchasing, whatever count remains. An out-of-stock variant SHALL NOT be
 purchasable on any surface.
 
 #### Scenario: grade10-site-commerce-product-status-SC-01 - The shop offers the variant
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a variant the shop offers for sale with a count of 12
 - **THEN** it is available
 - **AND** it can be added to the cart
 
 #### Scenario: grade10-site-commerce-product-status-SC-02 - The shop no longer offers the variant
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a variant the shop stopped offering when its count reached 0
 - **THEN** it is out of stock
 - **AND** it cannot be added to the cart
 
 #### Scenario: grade10-site-commerce-product-status-SC-03 - The shop sells past zero
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a variant the shop still offers for sale at a count of 0
 - **THEN** it is available
 - **AND** it can be added to the cart, exactly as a variant with 12 can
 
 #### Scenario: grade10-site-commerce-product-status-SC-04 - The shop exposes no count
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a variant the shop offers for sale and exposes no count for
 - **THEN** it is available
@@ -93,27 +97,32 @@ Requesting a quantity SHALL NOT change a variant's availability. A variant that
 is fillable in part for a request of 50 SHALL remain available.
 
 #### Scenario: grade10-site-commerce-product-status-SC-05 - The request can be filled
+**Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
 
 - **WHEN** 3 are requested of an available variant with a count of 12
 - **THEN** the request is fillable
 
 #### Scenario: grade10-site-commerce-product-status-SC-06 - The request can be filled exactly
+**Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
 
 - **WHEN** 12 are requested of an available variant with a count of 12
 - **THEN** the request is fillable
 
 #### Scenario: grade10-site-commerce-product-status-SC-07 - More is asked for than the count
+**Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
 
 - **WHEN** 5 are requested of an available variant with a count of 2
 - **THEN** the request is fillable in part, naming 2
 - **AND** the variant is still available
 
 #### Scenario: grade10-site-commerce-product-status-SC-08 - Nothing remains to fill the request
+**Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
 
 - **WHEN** 5 are requested of an out-of-stock variant
 - **THEN** the request is not fillable
 
 #### Scenario: grade10-site-commerce-product-status-SC-09 - An unbounded variant fills any request
+**Serves:** grade10-site-commerce-product-status-US-02 - Collector asks for more than the shop can fill
 
 - **GIVEN** an available variant the shop exposes no count for, and another the
   shop still offers at a count of 0
@@ -135,6 +144,7 @@ acts on the quantity rather than as a cue
 to buy sooner.
 
 #### Scenario: grade10-site-commerce-product-status-SC-10 - A scarce variant is offered as any other
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** one available variant with a count of 1 and another with a count of
   400
@@ -143,6 +153,7 @@ to buy sooner.
 - **AND** neither shows a remaining count or a scarcity label
 
 #### Scenario: grade10-site-commerce-product-status-SC-11 - No count reaches the collector while browsing
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **WHEN** the listing or a card's page communicates a variant's availability
 - **THEN** it names no remaining quantity
@@ -158,6 +169,7 @@ tile. A card's own page SHALL communicate availability per variant, for every
 variant it lists, rather than for the card as a whole.
 
 #### Scenario: grade10-site-commerce-product-status-SC-12 - One grade left, another sold out
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a card listing one available variant and one out-of-stock variant
 - **THEN** the card's tile reads available
@@ -165,6 +177,7 @@ variant it lists, rather than for the card as a whole.
   stock
 
 #### Scenario: grade10-site-commerce-product-status-SC-13 - Nothing left on the card
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a card whose every listed variant is out of stock
 - **THEN** the card's tile reads out of stock
@@ -179,6 +192,7 @@ A surface SHALL NOT hide a price because a variant is out of stock, and SHALL
 NOT offer a purchase control that cannot be used.
 
 #### Scenario: grade10-site-commerce-product-status-SC-14 - Three surfaces, one answer
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a variant the shop stopped offering
 - **WHEN** a collector sees it on the listing, on its card's page, and as a
@@ -186,6 +200,7 @@ NOT offer a purchase control that cannot be used.
 - **THEN** all three read it as out of stock
 
 #### Scenario: grade10-site-commerce-product-status-SC-15 - An out-of-stock variant keeps its price
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** an out-of-stock variant
 - **WHEN** a collector opens the card's page
@@ -206,6 +221,7 @@ product ceased to be published after it was added — is
 `grade10-site/store/cart-validation`'s.
 
 #### Scenario: grade10-site-commerce-product-status-SC-16 - An unpublished product is not listed
+**Serves:** grade10-site-commerce-product-status-US-01 - Collector sees whether a card can be bought
 
 - **GIVEN** a product not published to the store's sales channel
 - **WHEN** a collector opens the listing

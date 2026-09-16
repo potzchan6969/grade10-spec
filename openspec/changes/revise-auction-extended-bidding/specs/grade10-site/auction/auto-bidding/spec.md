@@ -49,6 +49,7 @@ Scenario `grade10-site-auction-auto-bidding-SC-22` keeps its title with its id.
 The title is historical: its extension window is now extended bidding.
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-22 - An auto bid in the extension window extends once
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** a listing in extended bidding, and a leader whose committed maximum has room left
 - **WHEN** a challenger's commitment causes Grade10 to raise the leader's bid on their behalf
@@ -57,6 +58,7 @@ The title is historical: its extension window is now extended bidding.
 - **AND** Grade10 places no further bid until another commitment is accepted
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-23 - An auto bid is counted and recorded
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** Grade10 raises a bidder's bid on their behalf
 - **WHEN** a collector reads the listing's bid count and history
@@ -64,6 +66,7 @@ The title is historical: its extension window is now extended bidding.
 - **AND** the history shows it as placed on that bidder's behalf, not as a manual bid
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-24 - Standing maxima do not keep bidding
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** two bidders have committed maxima and the listing has been resolved to the two-maximum price
 - **WHEN** no further commitment is accepted
@@ -71,6 +74,7 @@ The title is historical: its extension window is now extended bidding.
 - **AND** the current bid is unchanged
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-25 - A maximum committed before the close counts toward extended bidding
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** an open listing whose only bidder committed a maximum before its
   scheduled close and leads at the starting price

@@ -2,13 +2,13 @@
 
 - [x] 1.1 Update the Auction, Auto-Bidding, Bid Panel Enrollment and Payment Method manual pages so the standard path states that bid-time authorization is disabled by default and hold outcomes apply only when the feature is enabled.
 - [x] 1.2 Reconcile the related in-flight deltas for increment, winner close, My Auctions and called-off lots with the actual-hold condition, then verify `openspec validate default-auction-bid-holds-off --strict` and `pnpm check:manual`.
-- [x] 1.3 Add or update the feature and auction-domain cases for `grade10-site-auction-auction-SC-23`, `grade10-site-auction-auto-bidding-SC-25`, `grade10-site-auction-bid-panel-enrollment-SC-15` and `SC-16`; retain the enabled hold cases as separate coverage and run `pnpm run tcs:validate`.
+- [x] 1.3 Add or update the feature and auction-domain cases for `grade10-site-auction-auction-SC-29`, `grade10-site-auction-auto-bidding-SC-26`, `grade10-site-auction-bid-panel-enrollment-SC-15` and `SC-16`; retain the enabled hold cases as separate coverage and run `pnpm run tcs:validate`.
 
 ## 2. Flag resolution and bid service mode (grade10) (owner: @htonyl)
 
 - [x] 2.1 Make the auction environment resolver treat only `AUCTION_AUTHORIZATION_HOLD_ENABLED="1"` as enabled, covering missing, `"0"` and unknown values in unit tests; keep the worker deployments explicit and type-safe.
 - [x] 2.2 Make the bid service default `authorizationHoldEnabled` to false and audit every storefront and RPC caller so the effective mode is passed once without changing public bid inputs or results.
-- [x] 2.3 Make `grade10-site-auction-auction-SC-23` and `grade10-site-auction-auto-bidding-SC-25` pass by accepting bids and maximum resolutions without a PaymentIntent, while keeping `SC-09`, `SC-11`, `SC-14`, `SC-15`, `SC-19`, `SC-20` and `SC-21` on the explicit enabled path; verify the focused auction backend tests and package typechecks.
+- [x] 2.3 Make `grade10-site-auction-auction-SC-29` and `grade10-site-auction-auto-bidding-SC-26` pass by accepting bids and maximum resolutions without a PaymentIntent, while keeping `SC-09`, `SC-11`, `SC-14`, `SC-15`, `SC-19`, `SC-20` and `SC-21` on the explicit enabled path; verify the focused auction backend tests and package typechecks.
 
 ## 3. Bid-panel state integration (grade10) (owner: @htonyl)
 

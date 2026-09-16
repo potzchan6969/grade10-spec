@@ -12,7 +12,8 @@ bid without waiting for or creating a bid-time authorization. The existing
 hold-backed behavior remains governed by
 `grade10-site/auction/bid-payment-method` when enabled.
 
-#### Scenario: grade10-site-auction-auction-SC-23 - The default bid path creates no authorization hold
+#### Scenario: grade10-site-auction-auction-SC-29 - The default bid path creates no authorization hold
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
 - **GIVEN** bid-time authorization holds are disabled
 - **WHEN** a collector submits a valid bid on an open listing

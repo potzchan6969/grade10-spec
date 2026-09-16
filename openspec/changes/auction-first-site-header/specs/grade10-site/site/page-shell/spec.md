@@ -11,6 +11,7 @@ KYC until those surfaces are in scope for the header.
 The profile SHALL continue to offer sign-out as well.
 
 #### Scenario: grade10-site-site-page-shell-SC-17 - Account menu lists auction-first destinations
+**Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
 - **GIVEN** a signed-in collector
 - **WHEN** they activate the account control
@@ -18,6 +19,7 @@ The profile SHALL continue to offer sign-out as well.
 - **AND** the menu does not offer Orders or KYC
 
 #### Scenario: grade10-site-site-page-shell-SC-18 - Sign out from the menu
+**Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
 - **GIVEN** a signed-in collector with the account menu open
 - **WHEN** they activate Sign out
@@ -34,6 +36,7 @@ menu panel SHALL leave a visible gutter rather than spanning the full viewport.
 The shell SHALL NOT rely on a currency switch.
 
 #### Scenario: grade10-site-site-page-shell-SC-20 - Compact menu reaches nav and language
+**Serves:** grade10-site-site-page-shell-US-01 - Collector opens any surface inside the site shell
 
 - **GIVEN** a viewport 375 CSS pixels wide
 - **WHEN** the collector opens the header menu
@@ -54,12 +57,14 @@ it too, and nothing else in the chrome SHALL. No chrome control SHALL appear,
 disappear, or move when the session arrives.
 
 #### Scenario: grade10-site-site-page-shell-SC-04 - A first paint while the session resolves
+**Serves:** grade10-site-site-page-shell-US-02 - Collector sees the chrome before the session resolves
 
 - **WHEN** a collector opens the site and the session has not yet resolved
 - **THEN** the header and the footer are already rendered
 - **AND** the content region shows that the surface is loading
 
 #### Scenario: grade10-site-site-page-shell-SC-05 - No layout shift when the session arrives
+**Serves:** grade10-site-site-page-shell-US-02 - Collector sees the chrome before the session resolves
 
 - **GIVEN** a page rendered while the session was resolving
 - **WHEN** the session resolves
@@ -77,18 +82,21 @@ be the account icon that opens the account menu.
 Signing out SHALL be offered from the account menu and on the profile.
 
 #### Scenario: grade10-site-site-page-shell-SC-06 - Signed in
+**Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
 - **GIVEN** a signed-in collector
 - **WHEN** they activate the account control
 - **THEN** the account menu opens
 
 #### Scenario: grade10-site-site-page-shell-SC-07 - Signed out
+**Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
 - **GIVEN** a collector who is not signed in
 - **WHEN** they activate Sign In
 - **THEN** they arrive at sign-in
 
 #### Scenario: grade10-site-site-page-shell-SC-08 - Sign-out has one home
+**Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
 - **WHEN** any surface renders for a signed-in collector
 - **THEN** the account menu offers Sign out
@@ -110,6 +118,7 @@ compact menu's nested language drawer. The account entry SHALL remain in the
 bar at both widths once the session has resolved.
 
 #### Scenario: grade10-site-site-page-shell-SC-09 - Absent surfaces are absent controls
+**Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
 - **GIVEN** a collector on a surface other than a Store surface or checkout,
   or while the site does not yet answer Store
@@ -121,6 +130,7 @@ bar at both widths once the session has resolved.
 - **AND** no search or cart control appears
 
 #### Scenario: grade10-site-site-page-shell-SC-16 - Store surfaces offer Cart
+**Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
 - **GIVEN** a collector on a Store surface or checkout
 - **WHEN** the header renders
@@ -128,6 +138,7 @@ bar at both widths once the session has resolved.
 - **AND** no search control appears
 
 #### Scenario: grade10-site-site-page-shell-SC-19 - Language switch, not currency
+**Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
 - **WHEN** the header's locale control is interactive
 - **THEN** its options are the brand's languages

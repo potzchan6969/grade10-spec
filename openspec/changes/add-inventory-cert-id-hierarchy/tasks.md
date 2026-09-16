@@ -1,6 +1,6 @@
 ## 1. Shared contracts and planning record (grade10-spec)
 
-- [ ] 1.1 Update the inventory and Auction capability deltas, journeys, feature suites, and PRD marks for the IP + Category + Item hierarchy, optional Cert IDs, explicit `No Cert ID`, reservation unit selection, and displayed Cert ID scenarios (grade10-admin-inventory-catalog-SC-93 through SC-83; grade10-admin-auction-listing-SC-70 through SC-80)
+- [ ] 1.1 Update the inventory and Auction capability deltas, journeys, feature suites, and PRD marks for the IP + Category + Item hierarchy, optional Cert IDs, explicit `No Cert ID`, reservation unit selection, and displayed Cert ID scenarios (grade10-admin-inventory-catalog-SC-93 through SC-83; grade10-admin-auction-listing-SC-71 through SC-80 and SC-84)
 - [ ] 1.2 Publish the tagged displayed-field contract and the inventory/Auction certificate boundary without adding a fake product attribute key (grade10-admin-inventory-catalog-SC-101, grade10-admin-inventory-catalog-SC-102)
 - [ ] 1.3 Verify the planning artifacts with `openspec validate add-inventory-cert-id-hierarchy --strict` and `pnpm run tcs:validate`
 
@@ -26,9 +26,9 @@
 
 ## 5. Auction listing backend and admin surface (grade10)
 
-- [ ] 5.1 Persist and validate the selected inventory Cert ID or explicit No Cert ID choice through listing save and create (grade10-admin-auction-listing-SC-70 through SC-78)
-- [ ] 5.2 Add the product-scoped Cert ID picker, reset-on-product-change behavior, own-hold retention, and create refusal feedback (grade10-admin-auction-listing-SC-70 through SC-78)
-- [ ] 5.2a Allow separate live listings for distinct Cert IDs of one product while keeping one active listing per Cert ID and one aggregate `No Cert ID` listing (grade10-admin-auction-listing-SC-81)
+- [ ] 5.1 Persist and validate the selected inventory Cert ID or explicit No Cert ID choice through listing save and create (grade10-admin-auction-listing-SC-71 through SC-78 and SC-84)
+- [ ] 5.2 Add the product-scoped Cert ID picker, reset-on-product-change behavior, own-hold retention, and create refusal feedback (grade10-admin-auction-listing-SC-71 through SC-78 and SC-84)
+- [ ] 5.2a Allow separate live listings for distinct Cert IDs of one product while keeping one active listing per Cert ID and one aggregate `No Cert ID` listing (grade10-admin-auction-listing-SC-85)
 - [ ] 5.3 Resolve selected Cert ID through the configured public product display and remove product metadata fallback (grade10-admin-auction-listing-SC-79, grade10-admin-auction-listing-SC-80)
 - [ ] 5.4 Verify with `pnpm run test:backend -- packages/grade10-auction/backend/test/services/inventory.test.ts packages/grade10-auction/backend/test/services/listings/standalone.test.ts && pnpm run test -- packages/grade10-auction/admin-frontend/src/features/catalog/listings/presentation/views/ListingsPanel.test.tsx && pnpm run build`
 

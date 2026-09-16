@@ -46,6 +46,7 @@ The member SHALL NOT be told anything when an earlier claim is released, and
 SHALL NOT be shown which sale claims a coupon.
 
 #### Scenario: grade10-site-loyalty-programme-SC-190 - A coupon on an unfinished checkout is still spendable
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a member who chose a coupon at checkout and did not pay
 - **WHEN** they start another checkout and choose the same coupon
@@ -53,6 +54,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **AND** the earlier order is cancelled and its code deactivated
 
 #### Scenario: grade10-site-loyalty-programme-SC-191 - A counter sale keeps its cart and loses the cut
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a member whose coupon was applied to a counter sale nobody tendered
 - **WHEN** they claim that coupon at an online checkout
@@ -60,6 +62,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **AND** the counter sale is not cancelled, its code is deactivated, and the sale collects without the cut
 
 #### Scenario: grade10-site-loyalty-programme-SC-192 - The counter claims a coupon an open checkout holds
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a member with an open online checkout carrying a coupon
 - **WHEN** they present that coupon at a till, or staff apply it from the panel
@@ -67,12 +70,14 @@ SHALL NOT be shown which sale claims a coupon.
 - **AND** the online order is cancelled
 
 #### Scenario: grade10-site-loyalty-programme-SC-193 - A second counter takes the coupon from the first
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a member whose coupon is on a sale at one till
 - **WHEN** they present the same coupon at another till
 - **THEN** the second sale carries the cut and the first sale's code is deactivated
 
 #### Scenario: grade10-site-loyalty-programme-SC-194 - A claim is refused where the earlier checkout will not die
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a member claiming a coupon carried by an online checkout the provider will not kill
 - **WHEN** the claim is made
@@ -80,6 +85,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **AND** the earlier checkout keeps the cut
 
 #### Scenario: grade10-site-loyalty-programme-SC-201 - A counter sale never refuses a claim
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a member claiming a coupon carried by a counter sale, and a shop that will not deactivate its code
 - **WHEN** the claim is made
@@ -87,18 +93,21 @@ SHALL NOT be shown which sale claims a coupon.
 - **AND** the deactivation is retried until the shop agrees the code is gone
 
 #### Scenario: grade10-site-loyalty-programme-SC-202 - A sale that did not carry the coupon gives it back
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a counter sale that promised a coupon and collected without its cut
 - **WHEN** the sale settles
 - **THEN** the coupon is unused and spendable, and nothing is recorded as having come off that sale
 
 #### Scenario: grade10-site-loyalty-programme-SC-200 - A coupon on a sale that took money is not moved
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a member whose coupon is carried by a sale that has been paid
 - **WHEN** they claim that coupon on another sale
 - **THEN** the claim is refused and the paid sale keeps the cut
 
 #### Scenario: grade10-site-loyalty-programme-SC-195 - A coupon two sales collected is spent once and reported
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a coupon whose earlier sale collected a deactivated code and whose later sale also collected
 - **WHEN** both settle
@@ -106,6 +115,7 @@ SHALL NOT be shown which sale claims a coupon.
 - **AND** the other is reported with the order on it, and is not spent again
 
 #### Scenario: grade10-site-loyalty-programme-SC-196 - No surface names the sale claiming a coupon
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a member whose coupon is claimed by a sale
 - **WHEN** they read their coupons, the cart prices them, or staff open the member's panel
@@ -148,6 +158,7 @@ offered for the member to keep: it is minted for one sale, and what the
 member presents is the code for that sale alone.
 
 #### Scenario: grade10-site-loyalty-programme-SC-159 - A physical reward's coupon takes 100% off its own variant
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - a physical reward's coupon takes 100% off its own variant
 
 - **WHEN** a member redeems a reward that is a physical item
 - **THEN** the redemption issues a coupon that takes 100% off the reward's
@@ -155,6 +166,7 @@ member presents is the code for that sale alone.
 - **AND** no separate collection record is created
 
 #### Scenario: grade10-site-loyalty-programme-SC-166 - A coupon reaches the counter by the member presenting it
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **GIVEN** a member holding a coupon, identified at a till and attached to
   the sale
@@ -164,6 +176,7 @@ member presents is the code for that sale alone.
 - **AND** the code was minted when the member chose the coupon, not before
 
 #### Scenario: grade10-site-loyalty-programme-SC-172 - Staff apply a member's coupon from the till session
+**Serves:** grade10-site-loyalty-programme-US-07 - Member redeems any reward as one coupon
 
 - **GIVEN** a member holding a coupon, identified at a till and attached to
   the sale
@@ -174,23 +187,27 @@ member presents is the code for that sale alone.
   second code
 
 #### Scenario: grade10-site-loyalty-programme-SC-197 - An unpaid sale never spent the coupon
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a coupon carried by a sale that expired, was cancelled, or was abandoned
 - **WHEN** the member reads their coupons
 - **THEN** the coupon is unused and spendable
 
 #### Scenario: grade10-site-loyalty-programme-SC-160 - A member cannot undo a redemption
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - a member cannot undo a redemption
 
 - **WHEN** a member holding an unused coupon asks for their points back
 - **THEN** no member surface offers it, and the points are not returned
 
 #### Scenario: grade10-site-loyalty-programme-SC-161 - A coupon expires on its own terms
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - a coupon expires on its own terms
 
 - **WHEN** a coupon's validity period ends
 - **THEN** it can no longer be used
 - **AND** the member's redeemable balance is unaffected
 
 #### Scenario: grade10-site-loyalty-programme-SC-162 - Points buy nothing at an auction
+**Serves:** `grade10-site-loyalty-programme-US-03`, `grade10-site-loyalty-programme-US-07` - points buy nothing at an auction
 
 - **WHEN** a member attempts to pay for an auction purchase with points or
   with a coupon
@@ -229,30 +246,35 @@ redemption did not reduce it. Stock SHALL be returned only when the
 redemption actually consumed a unit.
 
 #### Scenario: grade10-site-loyalty-programme-SC-168 - A reversal voids the coupon
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - a reversal voids the coupon
 
 - **WHEN** an operator reverses a redemption
 - **THEN** the coupon it issued can no longer be used
 - **AND** the points it consumed return to the member's redeemable balance
 
 #### Scenario: grade10-site-loyalty-programme-SC-169 - A used coupon cannot be reversed
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - a used coupon cannot be reversed
 
 - **WHEN** an operator reverses a redemption whose coupon has already been used
 - **THEN** the reversal is refused and the points stay spent
 - **AND** the operator is told why
 
 #### Scenario: grade10-site-loyalty-programme-SC-198 - A reversal is refused while a sale claims the coupon
+**Serves:** grade10-site-loyalty-programme-US-06 - Operator reverses a redemption a member cannot be given
 
 - **GIVEN** a coupon claimed by a sale that can still collect its code
 - **WHEN** an operator reverses the redemption that issued it
 - **THEN** the reversal is refused, naming that sale
 
 #### Scenario: grade10-site-loyalty-programme-SC-199 - A claim nothing moves is released on the programme's clock
+**Serves:** grade10-site-loyalty-programme-US-06 - Operator reverses a redemption a member cannot be given
 
 - **GIVEN** a counter sale claiming a coupon that nobody tendered and nobody claimed elsewhere
 - **WHEN** the claim has stood longer than any code minted for it can be collected
 - **THEN** the coupon is spendable again and an operator can reverse the redemption that issued it
 
 #### Scenario: grade10-site-loyalty-programme-SC-167 - A refunded sale does not return the coupon
+**Serves:** grade10-site-loyalty-programme-US-06 - Operator reverses a redemption a member cannot be given
 
 - **GIVEN** a sale that spent a member's coupon and is then refunded
 - **WHEN** the refund settles
@@ -260,26 +282,31 @@ redemption actually consumed a unit.
 - **AND** any points the member spent as a discount on that sale are returned
 
 #### Scenario: grade10-site-loyalty-programme-SC-170 - A member cannot reverse their own redemption
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - a member cannot reverse their own redemption
 
 - **WHEN** a member asks to reverse a redemption
 - **THEN** no member surface offers it
 
 #### Scenario: grade10-site-loyalty-programme-SC-171 - Restored points keep their original expiry
+**Serves:** `grade10-site-loyalty-programme-US-04`, `grade10-site-loyalty-programme-US-06` - restored points keep their original expiry
 
 - **WHEN** a redemption is reversed
 - **THEN** the restored points rejoin the credits they were taken from, keeping those credits' own dates
 
 #### Scenario: grade10-site-loyalty-programme-SC-173 - A reversal after the balance expired returns nothing
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** an operator reverses a redemption for a member whose inactivity window has already passed
 - **THEN** no points are returned, and the operator is told why
 
 #### Scenario: grade10-site-loyalty-programme-SC-174 - Tier progress is untouched by a reversal
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a redemption is reversed
 - **THEN** the member's tier progress is unchanged
 
 #### Scenario: grade10-site-loyalty-programme-SC-175 - An unlimited reward returns no stock
+**Serves:** grade10-site-loyalty-programme-US-04 - Member reads two counts and redeems from one surface
 
 - **WHEN** a redemption of a reward that had unlimited stock is reversed
 - **THEN** no stock is returned

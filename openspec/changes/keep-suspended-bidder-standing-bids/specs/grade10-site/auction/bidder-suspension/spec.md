@@ -34,6 +34,7 @@ A suspension SHALL NOT be a platform ban. It SHALL NOT prevent the account
 signing in, and it SHALL NOT change anything `shared/auth/users` governs.
 
 #### Scenario: suspension-SC-03 - A suspended account can still pay what it owes
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a suspended account with an outstanding invoice
 - **WHEN** the collector opens that invoice and pays it
@@ -41,6 +42,7 @@ signing in, and it SHALL NOT change anything `shared/auth/users` governs.
 - **AND** the invoice status becomes `paid`
 
 #### Scenario: suspension-SC-04 - A suspended account still signs in and shops
+**Serves:** Scope of the suspension - a suspended account still signs in and shops
 
 - **GIVEN** a suspended account
 - **WHEN** the collector signs in
@@ -67,6 +69,7 @@ explicit operator action following review, taken by an operator holding
 Grade10 SHALL show the suspension state and its reason on the account record.
 
 #### Scenario: suspension-SC-09 - Paying does not lift the suspension
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a suspended account with one outstanding invoice
 - **WHEN** the collector pays that invoice in full
@@ -75,6 +78,7 @@ Grade10 SHALL show the suspension state and its reason on the account record.
 - **AND** the account record still shows the suspension and its reason
 
 #### Scenario: suspension-SC-10 - A reissue does not lift the suspension
+**Serves:** Reinstatement - a reissue does not lift the suspension
 
 - **GIVEN** a suspended account with an expired auction order
 - **WHEN** an operator reissues that invoice with a new payment deadline
@@ -82,6 +86,7 @@ Grade10 SHALL show the suspension state and its reason on the account record.
 - **AND** the collector can pay the reissued invoice and still cannot bid
 
 #### Scenario: suspension-SC-11 - An operator reinstates the account
+**Serves:** Reinstatement - an operator reinstates the account
 
 - **GIVEN** a suspended account an operator has reviewed
 - **WHEN** the operator reinstates it
@@ -127,6 +132,7 @@ way. Only its cause differs.
   SHALL stay suspended once.
 
 #### Scenario: suspension-SC-17 - An operator suspends an account with a reason
+**Serves:** Trigger and notice - an operator suspends an account with a reason
 
 - **GIVEN** an operator holding `auction:moderate` and an account that is not suspended
 - **WHEN** the operator suspends the account with a reason
@@ -134,6 +140,7 @@ way. Only its cause differs.
 - **AND** the account record shows the operator's reason, who suspended, and when
 
 #### Scenario: suspension-SC-18 - A suspension without a reason is refused
+**Serves:** Trigger and notice - a suspension without a reason is refused
 
 - **GIVEN** an operator holding `auction:moderate`
 - **WHEN** the operator tries to suspend an account without a reason
@@ -141,6 +148,7 @@ way. Only its cause differs.
 - **AND** the account is not suspended
 
 #### Scenario: suspension-SC-19 - An operator without the grant cannot suspend
+**Serves:** Trigger and notice - an operator without the grant cannot suspend
 
 - **GIVEN** an operator who does not hold `auction:moderate`
 - **WHEN** they try to suspend an account
@@ -148,6 +156,7 @@ way. Only its cause differs.
 - **AND** the account is not suspended
 
 #### Scenario: suspension-SC-20 - The collector is told without the operator's reason
+**Serves:** suspension-US-03 - Collector suspended by an operator learns they can no longer bid
 
 - **GIVEN** an account an operator has just suspended with a reason
 - **WHEN** the collector reads the suspension notice and their account record
@@ -155,6 +164,7 @@ way. Only its cause differs.
 - **AND** neither shows the operator's reason
 
 #### Scenario: suspension-SC-21 - A missed deadline on a suspended account adds a cause
+**Serves:** suspension-US-03 - Collector suspended by an operator learns they can no longer bid
 
 - **GIVEN** an account an operator suspended, with an auction order whose invoice is `pending`
 - **WHEN** that order's payment deadline passes
@@ -162,6 +172,7 @@ way. Only its cause differs.
 - **AND** the account record shows both causes
 
 #### Scenario: suspension-SC-22 - Reinstating lifts an operator's suspension
+**Serves:** Reinstatement - reinstating lifts an operator's suspension
 
 - **GIVEN** an account an operator suspended
 - **WHEN** an operator holding `auction:moderate` reinstates it
@@ -187,6 +198,7 @@ A suspension SHALL NOT change any bid the account placed before it:
   and SHALL NOT change any lot's current price or leader.
 
 #### Scenario: suspension-SC-16 - A lot already won stays won
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a suspended account that won a lot before the suspension
 - **WHEN** the suspension takes effect
@@ -194,6 +206,7 @@ A suspension SHALL NOT change any bid the account placed before it:
 - **AND** its invoice is still payable
 
 #### Scenario: suspension-SC-12 - A suspended account cannot bid or raise its maximum
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
 
 - **GIVEN** a suspended account holding a maximum of 50000 HKD minor units on
   an open lot
@@ -203,6 +216,7 @@ A suspension SHALL NOT change any bid the account placed before it:
 - **AND** the maximum on the first lot is still 50000 HKD minor units
 
 #### Scenario: suspension-SC-13 - Suspension leaves open lots and their history unchanged
+**Serves:** suspension-US-02 - Bidder competes on a lot whose leader is suspended
 
 - **GIVEN** an open lot led by an account at a current price of 30000 HKD
   minor units, with a second bidder holding a lower maximum
@@ -211,6 +225,7 @@ A suspension SHALL NOT change any bid the account placed before it:
 - **AND** the lot's bid history has the same entries as before the suspension
 
 #### Scenario: suspension-SC-14 - A standing maximum keeps bidding after suspension
+**Serves:** suspension-US-02 - Bidder competes on a lot whose leader is suspended
 
 - **GIVEN** a suspended account holding a maximum of 50000 HKD minor units on
   an open lot it leads at 30000 HKD minor units
@@ -221,6 +236,7 @@ A suspension SHALL NOT change any bid the account placed before it:
   resolves
 
 #### Scenario: suspension-SC-15 - A suspended account wins through a standing maximum
+**Serves:** suspension-US-02 - Bidder competes on a lot whose leader is suspended
 
 - **GIVEN** a suspended account holding the highest maximum on an open lot
 - **WHEN** the lot closes

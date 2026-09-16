@@ -27,6 +27,7 @@ SHALL NOT change while it is published. An address of any other channel naming
 that item SHALL answer with status 404, as an address the site does not hold.
 
 #### Scenario: grade10-site-site-crawlable-pages-SC-16 - One item, one address
+**Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
 - **GIVEN** an item published to one sales channel
 - **WHEN** every public address the site answers with that item is collected
@@ -34,6 +35,7 @@ that item SHALL answer with status 404, as an address the site does not hold.
 - **AND** it is an address of the channel the item was published to
 
 #### Scenario: grade10-site-site-crawlable-pages-SC-17 - Another channel does not hold it
+**Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
 - **GIVEN** an item published to one sales channel
 - **WHEN** an address of another sales channel naming that item is fetched
@@ -41,6 +43,7 @@ that item SHALL answer with status 404, as an address the site does not hold.
 - **AND** a collector opening it sees the site's not-found surface
 
 #### Scenario: grade10-site-site-crawlable-pages-SC-18 - The sitemap names it once
+**Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
 - **GIVEN** an item published to one sales channel
 - **WHEN** the sitemap is fetched
@@ -60,6 +63,7 @@ canonical address and as its `og:url`. The sitemap SHALL name no narrowed
 reading.
 
 #### Scenario: grade10-site-site-crawlable-pages-SC-19 - A narrowing has no path of its own
+**Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
 - **WHEN** an address nesting a subcategory, a brand, a grade, a year, a seller
   or an order under a sales channel is fetched
@@ -67,6 +71,7 @@ reading.
 - **AND** it answers as the deepest surface naming that address
 
 #### Scenario: grade10-site-site-crawlable-pages-SC-20 - Two narrowings name one address to keep
+**Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
 - **GIVEN** two narrowings of one channel, each fetched at the channel's
   address with its own query
@@ -75,6 +80,7 @@ reading.
 - **AND** that address is the channel's own, without a query
 
 #### Scenario: grade10-site-site-crawlable-pages-SC-21 - The sitemap names no narrowing
+**Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
 - **WHEN** the sitemap is fetched
 - **THEN** no entry carries a query
@@ -86,6 +92,7 @@ exactly one public address, and every sales channel SHALL link to that address.
 A channel SHALL NOT answer an identity address of its own.
 
 #### Scenario: grade10-site-site-crawlable-pages-SC-22 - A channel holds no identity surface of its own
+**Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
 - **GIVEN** a seller the site names at its shared address
 - **WHEN** an identity address nested under a sales channel is fetched
@@ -100,6 +107,7 @@ that replaced it, in one hop. The site SHALL NOT name a replaced address in a
 link it renders, in a canonical or `og:url` tag, or in a sitemap entry.
 
 #### Scenario: grade10-site-site-crawlable-pages-SC-23 - A replaced address sends the reader on
+**Serves:** grade10-site-site-crawlable-pages-US-07 - Collector opens a link the site has replaced
 
 - **WHEN** an address the site has replaced is fetched
 - **THEN** the response has status 301
@@ -107,6 +115,7 @@ link it renders, in a canonical or `og:url` tag, or in a sitemap entry.
 - **AND** fetching that address answers with status 200
 
 #### Scenario: grade10-site-site-crawlable-pages-SC-24 - Nothing names a replaced address
+**Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
 - **WHEN** the sitemap, every rendered link, and every canonical and `og:url`
   tag the site serves are collected

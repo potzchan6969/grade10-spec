@@ -25,12 +25,14 @@ without a decided session SHALL remain at that address while the existing
 sign-in surface decides the session.
 
 #### Scenario: grade10-site-store-order-history-SC-01 - A signed-in collector opens Your Orders
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** a signed-in collector with Store orders
 - **WHEN** they open `/profile/orders`
 - **THEN** the page lists only that collector's orders
 
 #### Scenario: grade10-site-store-order-history-SC-02 - A signed-out collector keeps the intended address
+**Serves:** grade10-site-store-order-history-US-02 - Collector signs in to the intended order page
 
 - **GIVEN** a collector without a signed-in session
 - **WHEN** they open `/profile/orders`
@@ -53,6 +55,7 @@ remain integer minor units paired with their ISO 4217 currency code until
 formatted for the collector.
 
 #### Scenario: grade10-site-store-order-history-SC-03 - Active and past orders are grouped newest first
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** a collector with active and past orders created at different times
 - **WHEN** Your Orders loads
@@ -60,6 +63,7 @@ formatted for the collector.
 - **AND** each group is ordered newest first
 
 #### Scenario: grade10-site-store-order-history-SC-04 - The paid total takes precedence
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** an order with a quoted subtotal and a different paid amount
 - **WHEN** the order summary renders
@@ -67,6 +71,7 @@ formatted for the collector.
 - **AND** the quoted subtotal is not presented as the charge
 
 #### Scenario: grade10-site-store-order-history-SC-05 - A pending total is not invented
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** an order with neither a paid amount nor a quoted subtotal
 - **WHEN** the order summary renders
@@ -74,6 +79,7 @@ formatted for the collector.
 - **AND** it does not show a zero amount
 
 #### Scenario: grade10-site-store-order-history-SC-12 - A shop order number identifies a summary
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** an order with a Store-supplied shop order number
 - **WHEN** its summary renders
@@ -81,6 +87,7 @@ formatted for the collector.
 - **AND** View Details still targets the order's immutable Store order id
 
 #### Scenario: grade10-site-store-order-history-SC-13 - An older order falls back to its Store id
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** an order with no non-empty shop order number
 - **WHEN** its summary renders
@@ -98,11 +105,13 @@ the Grade10 page. A tracking number or carrier name alone SHALL NOT create a
 tracking action.
 
 #### Scenario: grade10-site-store-order-history-SC-06 - View Details opens one order
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **WHEN** a collector activates View Details for an order
 - **THEN** `/profile/orders/<order-id>` opens for that order
 
 #### Scenario: grade10-site-store-order-history-SC-07 - A safe carrier URL enables tracking
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** an order with an absolute `https` carrier URL carrying no credentials
 - **WHEN** its summary renders
@@ -110,6 +119,7 @@ tracking action.
 - **AND** activating it opens the carrier URL in a new browser context isolated from the Grade10 page
 
 #### Scenario: grade10-site-store-order-history-SC-08 - A tracking number alone stays text-only
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** an order with a carrier and tracking number but no safe carrier URL
 - **WHEN** its summary renders
@@ -123,17 +133,20 @@ page address. When the read succeeds with no orders, the page SHALL show the
 designed empty state and a Shop Now action to `/store`.
 
 #### Scenario: grade10-site-store-order-history-SC-09 - The first read is still loading
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **WHEN** the first order read has not settled
 - **THEN** the page shows a loading state and no empty-state claim
 
 #### Scenario: grade10-site-store-order-history-SC-10 - A failed read can be retried
+**Serves:** grade10-site-store-order-history-US-01 - Collector reviews active and past orders
 
 - **GIVEN** the order read failed
 - **WHEN** the collector activates Retry
 - **THEN** the page reads the orders again at `/profile/orders`
 
 #### Scenario: grade10-site-store-order-history-SC-11 - A collector with no orders returns to the Store
+**Serves:** grade10-site-store-order-history-US-03 - Collector starts shopping from an empty account
 
 - **GIVEN** the order read succeeded with no orders
 - **WHEN** Your Orders renders

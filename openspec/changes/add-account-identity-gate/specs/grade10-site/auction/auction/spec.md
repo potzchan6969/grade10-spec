@@ -17,6 +17,7 @@ Below the bar a bid SHALL ask nothing about identity. On a brand that deploys
 no identity store the bar SHALL not exist.
 
 #### Scenario: grade10-site-auction-auction-SC-16 - An unverified bidder above the bar is held at the storefront
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
 - **GIVEN** a signed-in bidder whose standing is `unverified` or `expired`
 - **WHEN** they place a bid of the bar or more
@@ -25,12 +26,14 @@ no identity store the bar SHALL not exist.
   their account
 
 #### Scenario: grade10-site-auction-auction-SC-17 - A verified bidder above the bar bids
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
 - **GIVEN** a signed-in bidder whose standing is `verified`
 - **WHEN** they place a bid of the bar or more
 - **THEN** the bid is forwarded to the auction as any other
 
 #### Scenario: grade10-site-auction-auction-SC-18 - A bid below the bar asks nothing
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
 
 - **GIVEN** any signed-in bidder
 - **WHEN** they place a bid below the bar

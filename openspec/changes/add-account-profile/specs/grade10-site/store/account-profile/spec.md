@@ -27,12 +27,14 @@ input. A profile SHALL be readable and editable by its owner alone, and a
 request without a session SHALL be refused.
 
 #### Scenario: grade10-site-store-account-profile-SC-01 - Signed-out request is refused
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
 - **GIVEN** a request carrying no session
 - **WHEN** it reads or edits a profile
 - **THEN** the system refuses it as unauthenticated and returns no profile data
 
 #### Scenario: grade10-site-store-account-profile-SC-02 - A collector cannot address another collector's profile
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
 - **GIVEN** a signed-in collector
 - **WHEN** they read or edit a profile
@@ -50,6 +52,7 @@ modify stored data; the collector's profile record is created when they first
 save.
 
 #### Scenario: grade10-site-store-account-profile-SC-03 - A collector who has never saved sees a profile
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
 - **GIVEN** a collector who has never saved their profile
 - **WHEN** they open their account page
@@ -59,6 +62,7 @@ save.
   profile first
 
 #### Scenario: grade10-site-store-account-profile-SC-04 - A collector whose session carries no name
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
 - **GIVEN** a collector who signed in by emailed link or code, whose session
   carries no name
@@ -68,12 +72,14 @@ save.
 - **AND** nothing shows a generated identifier in place of a name
 
 #### Scenario: grade10-site-store-account-profile-SC-05 - A read stores nothing
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
 - **GIVEN** a collector who has never saved their profile
 - **WHEN** they open their account page any number of times
 - **THEN** no profile record is created for them
 
 #### Scenario: grade10-site-store-account-profile-SC-06 - A display name the collector never chose is not shown as theirs
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
 - **GIVEN** a collector whose profile record exists because some other part of
   the store wrote it, carrying a display name they never set
@@ -82,6 +88,7 @@ save.
   unset placeholder
 
 #### Scenario: grade10-site-store-account-profile-SC-07 - Saved values win over session defaults
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
 - **GIVEN** a collector who has saved a display name and a bio
 - **WHEN** they open their account page
@@ -97,6 +104,7 @@ the date some other part of the store created their record. Display name, bio,
 and avatar SHALL be editable by the collector; email SHALL NOT.
 
 #### Scenario: grade10-site-store-account-profile-SC-08 - Every field is present
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
 - **GIVEN** a signed-in collector with a saved profile
 - **WHEN** they open their account page
@@ -104,6 +112,7 @@ and avatar SHALL be editable by the collector; email SHALL NOT.
   address, and the date they first saved their profile
 
 #### Scenario: grade10-site-store-account-profile-SC-09 - Member-since is absent before the first save
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
 - **GIVEN** a collector who has never saved their profile
 - **WHEN** they open their account page
@@ -111,6 +120,7 @@ and avatar SHALL be editable by the collector; email SHALL NOT.
   an error
 
 #### Scenario: grade10-site-store-account-profile-SC-10 - A record another part of the store created dates nothing
+**Serves:** grade10-site-store-account-profile-US-01 - Collector opens their own profile
 
 - **GIVEN** a collector whose profile record exists because some other part of
   the store wrote it, and who has never saved it themselves
@@ -125,12 +135,14 @@ offer any way to change it from the account page. An edit that carries an email
 address SHALL be refused.
 
 #### Scenario: grade10-site-store-account-profile-SC-11 - The address shown is the one signed in with
+**Serves:** grade10-site-store-account-profile-US-04 - Collector's email stays the signed-in address
 
 - **GIVEN** a collector signed in as a given address
 - **WHEN** they open their account page
 - **THEN** that address is shown, and no control edits it
 
 #### Scenario: grade10-site-store-account-profile-SC-12 - An edit carrying an email is refused
+**Serves:** grade10-site-store-account-profile-US-04 - Collector's email stays the signed-in address
 
 - **WHEN** an edit request carries an email address
 - **THEN** the system refuses the request and changes nothing
@@ -142,17 +154,20 @@ name and SHALL require the result to be between 1 and 80 characters. A display
 name SHALL NOT be required to be unique.
 
 #### Scenario: grade10-site-store-account-profile-SC-13 - Whitespace is trimmed before saving
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **WHEN** a collector saves a display name with leading or trailing whitespace
 - **THEN** the saved and returned display name has that whitespace removed
 
 #### Scenario: grade10-site-store-account-profile-SC-14 - An empty display name is refused
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **WHEN** a collector saves a display name that is empty or only whitespace
 - **THEN** the system refuses the edit, states that a display name is required,
   and changes nothing
 
 #### Scenario: grade10-site-store-account-profile-SC-15 - An over-length display name is refused
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **WHEN** a collector saves a display name longer than 80 characters after
   trimming
@@ -160,6 +175,7 @@ name SHALL NOT be required to be unique.
   changes nothing
 
 #### Scenario: grade10-site-store-account-profile-SC-16 - Two collectors may hold the same display name
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **GIVEN** a display name already saved by another collector
 - **WHEN** a collector saves that same display name
@@ -171,17 +187,20 @@ The system SHALL trim a submitted bio, SHALL accept up to 500 characters, and
 SHALL let a collector clear it.
 
 #### Scenario: grade10-site-store-account-profile-SC-17 - A bio within the limit is saved
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **WHEN** a collector saves a bio of 500 characters or fewer after trimming
 - **THEN** the system stores it and the page shows it
 
 #### Scenario: grade10-site-store-account-profile-SC-18 - An over-length bio is refused
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **WHEN** a collector saves a bio longer than 500 characters after trimming
 - **THEN** the system refuses the edit, states the 500-character limit, and
   changes nothing
 
 #### Scenario: grade10-site-store-account-profile-SC-19 - A bio is cleared
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **GIVEN** a collector with a saved bio
 - **WHEN** they clear it and save
@@ -199,24 +218,28 @@ until that cache expires. A rejected upload SHALL leave the previous avatar in
 place and SHALL state why it was rejected.
 
 #### Scenario: grade10-site-store-account-profile-SC-20 - An accepted upload becomes the avatar
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **WHEN** a collector uploads a JPEG, PNG, or WebP image of at most 5 MB
 - **THEN** the system stores it, and their account page shows that image as
   their avatar on this and every later visit
 
 #### Scenario: grade10-site-store-account-profile-SC-21 - An unsupported image type is refused
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **WHEN** a collector uploads a file that is not a JPEG, PNG, or WebP image
 - **THEN** the system refuses it, states the accepted types, and the previous
   avatar is unchanged
 
 #### Scenario: grade10-site-store-account-profile-SC-22 - An oversized image is refused
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **WHEN** a collector uploads an image larger than 5 MB
 - **THEN** the system refuses it, states the 5 MB limit, and the previous
   avatar is unchanged
 
 #### Scenario: grade10-site-store-account-profile-SC-23 - A new upload replaces the previous avatar
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **GIVEN** a collector with an avatar
 - **WHEN** they upload another accepted image
@@ -230,6 +253,7 @@ removed image from storage, and SHALL show initials derived from the display
 name whenever no avatar is set.
 
 #### Scenario: grade10-site-store-account-profile-SC-24 - Removing an avatar restores the initials
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **GIVEN** a collector with an avatar
 - **WHEN** they remove it
@@ -237,12 +261,14 @@ name whenever no avatar is set.
   removed image is deleted from storage
 
 #### Scenario: grade10-site-store-account-profile-SC-25 - A collector who never uploaded sees initials
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **GIVEN** a collector with no avatar
 - **WHEN** they open their account page
 - **THEN** the page shows initials derived from their display name
 
 #### Scenario: grade10-site-store-account-profile-SC-26 - Initials follow the display name
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **GIVEN** a collector with no avatar
 - **WHEN** they change their display name
@@ -262,24 +288,28 @@ and the text fields SHALL report each outcome and SHALL NOT present a refused
 text save as having undone an accepted avatar change.
 
 #### Scenario: grade10-site-store-account-profile-SC-27 - A save persists and is reflected immediately
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **WHEN** a collector saves changed profile fields
 - **THEN** the system stores them and the page shows the updated profile
   without needing a reload
 
 #### Scenario: grade10-site-store-account-profile-SC-28 - Cancelling discards edits
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **GIVEN** a collector who has edited fields without saving
 - **WHEN** they cancel
 - **THEN** the page shows the stored profile again and nothing was stored
 
 #### Scenario: grade10-site-store-account-profile-SC-29 - A save with no field is refused
+**Serves:** grade10-site-store-account-profile-US-02 - Collector edits display name and bio
 
 - **WHEN** a save request carries no editable field
 - **THEN** the system refuses it, stating that it carried nothing to save, and
   stores nothing
 
 #### Scenario: grade10-site-store-account-profile-SC-30 - An accepted avatar stands when the text save is refused
+**Serves:** grade10-site-store-account-profile-US-03 - Collector uploads or removes an avatar
 
 - **GIVEN** a collector who changes their avatar and their display name in one
   edit
@@ -294,12 +324,14 @@ The system SHALL tell the collector when their profile could not be loaded or
 saved, and SHALL NOT present a partially loaded profile as if it were complete.
 
 #### Scenario: grade10-site-store-account-profile-SC-31 - A failed read is reported
+**Serves:** grade10-site-store-account-profile-US-05 - Collector is told when a read or save fails
 
 - **WHEN** the profile cannot be loaded
 - **THEN** the page states that the profile could not be loaded and shows no
   profile fields
 
 #### Scenario: grade10-site-store-account-profile-SC-32 - A failed save keeps the collector's input
+**Serves:** grade10-site-store-account-profile-US-05 - Collector is told when a read or save fails
 
 - **WHEN** a save fails
 - **THEN** the page states that the save failed, keeps the collector's entered

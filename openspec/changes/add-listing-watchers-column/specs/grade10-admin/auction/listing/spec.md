@@ -16,18 +16,21 @@ SHALL name no watcher and SHALL NOT present the count as expected bidders.
 Every operator who may read the Listings table SHALL see it; it needs no further grant.
 
 #### Scenario: grade10-admin-auction-listing-SC-81 - The table shows a listing's watchers
+**Serves:** grade10-admin-auction-listing-US-08 - Operator compares interest across listings
 
 - **GIVEN** a listing watched by two collectors on one brand and one collector on the other
 - **WHEN** an authorized operator opens the Listings table
 - **THEN** that listing's row shows 3 under Watchers
 
 #### Scenario: grade10-admin-auction-listing-SC-82 - An unwatched listing shows zero
+**Serves:** grade10-admin-auction-listing-US-08 - Operator compares interest across listings
 
 - **GIVEN** a draft listing nobody watches
 - **WHEN** an authorized operator opens the Listings table
 - **THEN** that listing's row shows 0 under Watchers
 
 #### Scenario: grade10-admin-auction-listing-SC-83 - A closed listing keeps its watchers
+**Serves:** grade10-admin-auction-listing-US-08 - Operator compares interest across listings
 
 - **GIVEN** a closed listing still watched by two collectors
 - **WHEN** an authorized operator opens the Listings table

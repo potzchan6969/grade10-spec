@@ -18,6 +18,7 @@ SHALL use the cannot-sign-in announcement — not the expired or no-longer-works
 announcement.
 
 #### Scenario: shared-auth-sign-in-SC-37 - An expired link toasts on the brand home
+**Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
 
 - **GIVEN** a sign-in link whose time to live has ended
 - **WHEN** anyone follows that link
@@ -26,6 +27,7 @@ announcement.
 - **AND** a toast states that the link has expired
 
 #### Scenario: shared-auth-sign-in-SC-38 - A used link toasts that it no longer works
+**Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
 
 - **GIVEN** a sign-in link that has already created a session
 - **WHEN** anyone follows that link again
@@ -34,6 +36,7 @@ announcement.
 - **AND** a toast states that the link no longer works
 
 #### Scenario: shared-auth-sign-in-SC-39 - A superseded link toasts that it no longer works
+**Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
 
 - **GIVEN** an unused unexpired sign-in link that a later sign-in-link email
   for the same address replaced
@@ -43,6 +46,7 @@ announcement.
 - **AND** a toast states that the link no longer works
 
 #### Scenario: shared-auth-sign-in-SC-40 - An invalid link toasts that it no longer works
+**Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
 
 - **GIVEN** a sign-in link token that is malformed or unknown
 - **WHEN** anyone follows that link
@@ -51,6 +55,7 @@ announcement.
 - **AND** a toast states that the link no longer works
 
 #### Scenario: shared-auth-sign-in-SC-41 - A banned account's link follow toasts cannot sign in
+**Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
 
 - **GIVEN** a banned account and a sign-in link for that account's address
 - **WHEN** anyone follows that link

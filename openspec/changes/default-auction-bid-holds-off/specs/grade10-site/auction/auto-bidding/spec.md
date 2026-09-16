@@ -14,7 +14,8 @@ When bid-time authorization holds are disabled, Grade10 SHALL accept a valid
 maximum under the auction rules without waiting for or creating a bid-time
 authorization. The enabled hold path and maximum rules remain unchanged.
 
-#### Scenario: grade10-site-auction-auto-bidding-SC-25 - A maximum works without a bid-time authorization
+#### Scenario: grade10-site-auction-auto-bidding-SC-26 - A maximum works without a bid-time authorization
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's automatic bids work with or without a hold
 
 - **GIVEN** bid-time authorization holds are disabled and a listing has an accepted maximum
 - **WHEN** a challenger commits a higher maximum
@@ -30,6 +31,7 @@ matches the maximum. When holds are enabled, that mechanism copy SHALL also
 state that the hold matches the maximum.
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-28 - Default mechanism copy omits hold language
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's automatic bids work with or without a hold
 
 - **GIVEN** bid-time authorization holds are disabled
 - **WHEN** a collector reads the mechanism subtext under Set your private maximum
@@ -37,6 +39,7 @@ state that the hold matches the maximum.
 - **AND** the copy does not promise a card hold
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-29 - Enabled-hold mechanism copy names the hold
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's automatic bids work with or without a hold
 
 - **GIVEN** bid-time authorization holds are enabled
 - **WHEN** a collector reads the mechanism subtext under Set your private maximum

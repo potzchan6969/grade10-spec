@@ -51,6 +51,7 @@ supplied. `/book?service=<slug>` SHALL open the flow with that service picked.
 A product-bound service SHALL never be listed.
 
 #### Scenario: grade10-site-appointment-booking-SC-01 - Collector books a grading visit
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **GIVEN** a customer-bookable grading service offered at one shop
 - **WHEN** a collector with no account picks the service, the shop, a day, a time, and enters a name and an email address
@@ -58,6 +59,7 @@ A product-bound service SHALL never be listed.
 - **AND** a confirmation is sent to that address
 
 #### Scenario: grade10-site-appointment-booking-SC-02 - Missing details are refused before anything is sent
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **GIVEN** a collector on the details step of a service with one required question
 - **WHEN** they submit without an email address and without answering the question
@@ -65,6 +67,7 @@ A product-bound service SHALL never be listed.
 - **AND** no booking is requested
 
 #### Scenario: grade10-site-appointment-booking-SC-03 - A time taken meanwhile is refused and the times refresh
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **GIVEN** a collector on the details step for the last free time of a day
 - **WHEN** that time is taken by somebody else before they submit
@@ -72,12 +75,14 @@ A product-bound service SHALL never be listed.
 - **AND** returns them to that day's times, refreshed, with their details kept
 
 #### Scenario: grade10-site-appointment-booking-SC-04 - The service's questions are asked in order
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **GIVEN** a service asking a `choice` question and then a `text` question
 - **WHEN** a collector reaches the details step
 - **THEN** the two questions are shown after the contact fields, in that order, the required one marked
 
 #### Scenario: grade10-site-appointment-booking-SC-05 - Only what the diary offers is shown
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **GIVEN** a shop open 10:00 to 14:00 in `Asia/Hong_Kong` with one desk and a live booking at 11:00
 - **WHEN** a collector opens that day for a 60-minute service
@@ -85,29 +90,34 @@ A product-bound service SHALL never be listed.
 - **AND** no time between 10:05 and 11:55 is shown
 
 #### Scenario: grade10-site-appointment-booking-SC-06 - A day with nothing free cannot be picked
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **GIVEN** a shop closed on the coming Sunday
 - **WHEN** a collector views that month
 - **THEN** that Sunday is shown as unavailable and cannot be picked
 
 #### Scenario: grade10-site-appointment-booking-SC-07 - Days beyond the horizon cannot be picked
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **GIVEN** a service with a booking horizon of 30 days
 - **WHEN** a collector views the month holding the 31st day from today
 - **THEN** every day from the 31st on is shown as unavailable
 
 #### Scenario: grade10-site-appointment-booking-SC-08 - Only customer-bookable services are listed
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **GIVEN** a customer-bookable grading service and a product-bound vault visit service
 - **WHEN** a collector opens `/book`
 - **THEN** the grading service is listed and the vault visit is not
 
 #### Scenario: grade10-site-appointment-booking-SC-09 - A service address opens the flow at that service
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **WHEN** a collector opens `/book?service=grading`
 - **THEN** the flow opens with the grading service picked, at the shop step
 
 #### Scenario: grade10-site-appointment-booking-SC-10 - A second live visit for the same service is told so
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **GIVEN** a live booking of the grading service under an address
 - **WHEN** a collector books the grading service again under that address at another time
@@ -127,12 +137,14 @@ to cancel it after a confirmation. A closed booking SHALL show its state and
 offer nothing. A link naming no booking SHALL answer not found.
 
 #### Scenario: grade10-site-appointment-booking-SC-11 - The link opens the booking
+**Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
 - **GIVEN** a live direct booking
 - **WHEN** the collector opens the link from their confirmation
 - **THEN** the page shows the service, the shop and its address, the start in the shop's zone, and offers to move or cancel
 
 #### Scenario: grade10-site-appointment-booking-SC-12 - The collector moves the visit from the link
+**Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
 - **GIVEN** a live direct booking at 10:00
 - **WHEN** the collector opens the link, picks another day and time, and confirms
@@ -140,6 +152,7 @@ offer nothing. A link naming no booking SHALL answer not found.
 - **AND** an update is sent to their address
 
 #### Scenario: grade10-site-appointment-booking-SC-13 - The collector cancels from the link
+**Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
 - **GIVEN** a live direct booking
 - **WHEN** the collector opens the link, chooses to cancel, and confirms
@@ -147,17 +160,20 @@ offer nothing. A link naming no booking SHALL answer not found.
 - **AND** a cancellation is sent to their address
 
 #### Scenario: grade10-site-appointment-booking-SC-14 - A closed booking's link offers nothing
+**Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
 - **GIVEN** a direct booking in `completed`
 - **WHEN** the collector opens its link
 - **THEN** the page shows the visit as completed and offers neither a move nor a cancellation
 
 #### Scenario: grade10-site-appointment-booking-SC-15 - A link naming nothing answers not found
+**Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
 - **WHEN** a collector opens `/book/manage` with a secret the diary does not hold
 - **THEN** the page answers not found and shows no booking
 
 #### Scenario: grade10-site-appointment-booking-SC-16 - The secret never leaves the browser
+**Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
 - **WHEN** the collector opens a manage link
 - **THEN** the request for the page carries no secret in its path or query
@@ -171,6 +187,7 @@ ones after, each opening its manage link. Signed out, the address SHALL
 invite the collector to sign in.
 
 #### Scenario: grade10-site-appointment-booking-SC-17 - The list holds the visits under the collector's address
+**Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
 - **GIVEN** a signed-in collector whose address holds one live booking tomorrow and one completed last week
 - **WHEN** they open `/book/mine`
@@ -178,6 +195,7 @@ invite the collector to sign in.
 - **AND** each opens the page that manages it
 
 #### Scenario: grade10-site-appointment-booking-SC-18 - Signed out, the list invites sign-in
+**Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
 - **WHEN** a collector with no session opens `/book/mine`
 - **THEN** the page invites them to sign in and lists nothing
@@ -191,12 +209,14 @@ locale, SHALL NOT be listed in the sitemap, and SHALL tell crawlers not to
 index them.
 
 #### Scenario: grade10-site-appointment-booking-SC-19 - The booking surface is served and listed
+**Serves:** grade10-site-appointment-booking-US-01 - Collector books a grading visit without an account
 
 - **WHEN** a crawler fetches `/book`, `/tc/book` and `/sc/book`
 - **THEN** each answers 200 with the booking surface's title and description in its own language before any script runs
 - **AND** the sitemap lists all three
 
 #### Scenario: grade10-site-appointment-booking-SC-20 - The private addresses are never indexed
+**Serves:** grade10-site-appointment-booking-US-02 - Collector manages a visit after booking it
 
 - **WHEN** a crawler reads the sitemap and fetches `/book/manage` and `/book/mine`
 - **THEN** neither address is in the sitemap
@@ -227,18 +247,21 @@ app-env, the per-address budget holding meanwhile. A spent budget SHALL answer `
 challenge SHALL answer `FORBIDDEN`.
 
 #### Scenario: grade10-site-appointment-booking-SC-21 - An address that has spent its budget is refused
+**Serves:** grade10-site-appointment-booking-US-03 - A script tries to book the shop out
 
 - **GIVEN** an address that has made 10 booking attempts in the last 24 hours
 - **WHEN** it attempts an 11th
 - **THEN** the attempt is refused `TOO_MANY_REQUESTS`, and the refusal carries the reason `budget` so the site can word the wait itself
 
 #### Scenario: grade10-site-appointment-booking-SC-22 - A request with no challenge token is refused where the secret is set
+**Serves:** grade10-site-appointment-booking-US-03 - A script tries to book the shop out
 
 - **GIVEN** a deployment with the challenge secret set
 - **WHEN** a booking request carries no challenge token
 - **THEN** it is refused `FORBIDDEN`
 
 #### Scenario: grade10-site-appointment-booking-SC-23 - A refused request holds no seat
+**Serves:** grade10-site-appointment-booking-US-03 - A script tries to book the shop out
 
 - **GIVEN** a booking request that fails the gate
 - **WHEN** it is refused

@@ -21,6 +21,7 @@ one. A pass whose account name changes SHALL show the new name from its next
 due refresh.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-39 - An unreachable account service leaves a pass as it was
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **GIVEN** a member with a live pass and no name chosen for the shop
 - **WHEN** a refresh of their pass cannot reach the account service
@@ -47,6 +48,7 @@ card on the site, and removing a pass SHALL change nothing about the
 membership.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-13 - A member adds their card to their wallet
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** a member opens their card on the membership surface
 - **THEN** they are offered the pass, and adding it carries the name the
@@ -54,22 +56,26 @@ membership.
   scannable code
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-14 - A pass identifies as the card does
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** staff scan a member's pass
 - **THEN** a session opens for that member on the same terms a scanned card opens
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-15 - A photographed code is worth nothing
+**Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
 - **WHEN** a code copied from a member's pass is presented after its period
 - **THEN** it identifies nobody
 - **AND** a code presented twice inside its own period is refused the second time
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-16 - A pass identifies with no signal
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** a member with no network on their phone presents their pass
 - **THEN** the code it shows is current and opens a session
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-17 - Removing a pass leaves the membership intact
+**Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
 - **WHEN** a member deletes the pass from their wallet
 - **THEN** their membership, balance, tier and member card are unchanged
@@ -94,6 +100,7 @@ SHALL be served by the card on the site, as they are today.
 Removing a pass SHALL change nothing about the membership.
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-18 - A member adds their card to Apple Wallet
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** a member opens their card on the membership surface
 - **THEN** they are offered the pass, and adding it carries the name the
@@ -101,12 +108,14 @@ Removing a pass SHALL change nothing about the membership.
   scannable code
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-19 - An Apple pass identifies every time
+**Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **GIVEN** a member whose phone has no network
 - **WHEN** they present the same pass on two visits
 - **THEN** a session opens both times
 
 #### Scenario: grade10-site-store-wallet-member-card-SC-20 - An Apple pass cannot move value
+**Serves:** grade10-site-store-wallet-member-card-US-08 - Member spends points when the pass they carry cannot
 
 - **WHEN** a session is opened from an Apple pass
 - **THEN** the member's panel is read
