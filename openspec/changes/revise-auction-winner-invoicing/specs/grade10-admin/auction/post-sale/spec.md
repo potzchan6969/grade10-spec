@@ -324,7 +324,7 @@ lot's close. Scenario `grade10-admin-auction-post-sale-SC-19` keeps its title
 with its id. The title is historical: a lot inside its last hour is Live.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-19 - A lot inside its last hour is Ending soon
-**Serves:** Queue - a lot inside its last hour is Ending soon
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** a published lot whose close is 60 minutes or less away and has not
   passed
@@ -332,7 +332,7 @@ with its id. The title is historical: a lot inside its last hour is Live.
 - **THEN** that lot's outcome is Live
 
 #### Scenario: grade10-admin-auction-post-sale-SC-20 - A won lot's outcome is its derived order status
-**Serves:** Queue - a won lot's outcome is its derived order status
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** a closed lot whose auction order derives as Processing
 - **WHEN** an operator reads the queue
@@ -340,7 +340,7 @@ with its id. The title is historical: a lot inside its last hour is Live.
 - **AND** it is the same value the winner reads on their own order
 
 #### Scenario: grade10-admin-auction-post-sale-SC-21 - Expired and Processing are highlighted as needing action
-**Serves:** Queue - expired and Processing are highlighted as needing action
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
 
 - **GIVEN** a queue holding a Pending Payment order whose invoice is `expired`,
   a Pending Payment order whose invoice is `pending`, a Processing order, and
@@ -445,7 +445,7 @@ engaged, and the difference SHALL be visible to whoever decides on
 reinstatement.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-34 - Failed payment attempts appear in the invoice log
-**Serves:** Audit trail - failed payment attempts appear in the invoice log
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
 - **GIVEN** a winner whose card was declined three times before the deadline
   elapsed
@@ -455,7 +455,7 @@ reinstatement.
   issued log entry
 
 #### Scenario: grade10-admin-auction-post-sale-SC-35 - An amendment's amount change is on the record
-**Serves:** Audit trail - an amendment's amount change is on the record
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
 - **GIVEN** an auction order an operator re-quoted, changing the order total
   from 312000 to 316000 minor units in HKD
@@ -464,7 +464,7 @@ reinstatement.
 - **AND** the delta from the prior entry and the deadline choice
 
 #### Scenario: grade10-admin-auction-post-sale-SC-61 - A paid entry names how it was paid
-**Serves:** Audit trail - a paid entry names how it was paid
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
 
 - **GIVEN** one order the winner paid by a Visa card ending 4242 and one an
   operator settled by cash
