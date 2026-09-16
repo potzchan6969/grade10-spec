@@ -116,7 +116,7 @@
     {
       "id": "newer-pays_used",
       "lane": "store",
-      "col": 5,
+      "col": 4,
       "type": "backend",
       "label": "Coupon used",
       "sublabel": "the claim is spent",
@@ -183,10 +183,9 @@
     {
       "from": "newer-pays_order",
       "to": "newer-pays_used",
-      "label": "order event",
       "variant": "dashed",
-      "fromSide": "right",
-      "toSide": "left"
+      "fromSide": "bottom",
+      "toSide": "top"
     }
   ]
 }

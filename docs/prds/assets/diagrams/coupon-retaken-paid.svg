@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="28 40 988 500" role="img" data-preset="editorial" aria-labelledby="coupon-retaken-paid-archify-diagram-title" aria-describedby="coupon-retaken-paid-archify-diagram-description" data-diagram="coupon-retaken-paid">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="28 40 868 500" role="img" data-preset="editorial" aria-labelledby="coupon-retaken-paid-archify-diagram-title" aria-describedby="coupon-retaken-paid-archify-diagram-description" data-diagram="coupon-retaken-paid">
 <style>
 svg[data-diagram="coupon-retaken-paid"]{--arrow:var(--muted-foreground, light-dark(#8a806f, #948978));--arrow-emphasis:var(--primary, light-dark(#bb4c23, #dd6b3d));--backend-fill:light-dark(rgba(42, 119, 75, 0.09), rgba(63, 132, 92, 0.16));--backend-stroke:light-dark(#397b53, #8fc29e);--database-fill:light-dark(rgba(105, 75, 130, 0.09), rgba(117, 91, 141, 0.17));--database-stroke:light-dark(#765d86, #c0a4d0);--external-fill:light-dark(rgba(101, 91, 75, 0.09), rgba(126, 115, 96, 0.18));--external-stroke:light-dark(#746b5e, #b8ad99);--grid:var(--border-subtle, light-dark(#d8d0c2, #39342a));--lane-fill:var(--background, light-dark(rgba(229, 221, 207, 0.42), rgba(52, 46, 35, 0.46)));--lane-stroke:var(--border, light-dark(#b8aa94, #726957));--mask:var(--background, light-dark(#fbf8f1, #231f18));--security-stroke:light-dark(#9e463f, #df9085);--text:var(--foreground, light-dark(#242018, #f4eddf));--text-dim:var(--muted-foreground, light-dark(#a09788, #776e60));--text-muted:var(--muted-foreground, light-dark(#6f6658, #b9ae9b))}
 svg[data-diagram="coupon-retaken-paid"] .c-grid{stroke: var(--grid); fill: none;}
@@ -9,7 +9,6 @@ svg[data-diagram="coupon-retaken-paid"] .c-external{fill: var(--external-fill); 
 svg[data-diagram="coupon-retaken-paid"] .t-primary{fill: var(--text);}
 svg[data-diagram="coupon-retaken-paid"] .t-muted{fill: var(--text-muted);}
 svg[data-diagram="coupon-retaken-paid"] .t-dim{fill: var(--text-dim);}
-svg[data-diagram="coupon-retaken-paid"] .t-database{fill: var(--database-stroke);}
 svg[data-diagram="coupon-retaken-paid"] .semantic-sigil{fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; opacity: 0.76; pointer-events: none;}
 svg[data-diagram="coupon-retaken-paid"] .semantic-sigil > *{vector-effect: non-scaling-stroke;}
 svg[data-diagram="coupon-retaken-paid"] .s-backend{color: var(--backend-stroke);}
@@ -47,13 +46,13 @@ svg[data-diagram="coupon-retaken-paid"] .c-lane{fill: var(--lane-fill); stroke: 
         
         <rect width="100%" height="100%" fill="url(#coupon-retaken-paid-grid)" />
         
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="964" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="844" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Shopify</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="964" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="844" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Store</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="964" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="844" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Earlier cart</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="964" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="844" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Newer cart</text>
         
         
@@ -65,7 +64,7 @@ svg[data-diagram="coupon-retaken-paid"] .c-lane{fill: var(--lane-fill); stroke: 
         <path data-step="newer-checkout" data-edge-from="newer-checkout" data-edge-to="newer-checkout_claim" data-edge-key="4" data-composition-points="614,465;614,269" d="M 614 465 L 614 269" class="a-dashed" stroke-width="1.4" marker-end="url(#coupon-retaken-paid-arrowhead-dashed)"/>
         <path data-step="newer-pays" data-edge-from="newer-checkout" data-edge-to="newer-pays" data-edge-key="5" data-composition-points="692,491;720,491" d="M 692 491 L 720 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-retaken-paid-arrowhead-emphasis)"/>
         <path data-step="newer-checkout" data-edge-from="newer-checkout_claim" data-edge-to="newer-checkout_code" data-edge-key="6" data-composition-points="614,217;614,145" d="M 614 217 L 614 145" class="a-dashed" stroke-width="1.4" marker-end="url(#coupon-retaken-paid-arrowhead-dashed)"/>
-        <path data-step="newer-pays" data-edge-from="newer-pays_order" data-edge-to="newer-pays_used" data-edge-label="order event" data-edge-key="7" data-composition-points="876,119;892,119;892,166;824,166;824,243;840,243" d="M 876 119 L 892 119 L 892 166 L 824 166 L 824 243 L 840 243" class="a-dashed" stroke-width="1.4" marker-end="url(#coupon-retaken-paid-arrowhead-dashed)"/>
+        <path data-step="newer-pays" data-edge-from="newer-pays_order" data-edge-to="newer-pays_used" data-edge-key="7" data-composition-points="798,145;798,217" d="M 798 145 L 798 217" class="a-dashed" stroke-width="1.4" marker-end="url(#coupon-retaken-paid-arrowhead-dashed)"/>
         <path data-step="newer-checkout" data-edge-from="newer-picks" data-edge-to="newer-checkout" data-edge-key="8" data-composition-points="508,491;536,491" d="M 508 491 L 536 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-retaken-paid-arrowhead-emphasis)"/>
         
         <g data-step="earlier-checkout" id="coupon-retaken-paid-node-earlier-checkout_code" data-node-id="earlier-checkout_code" data-node-label="Code minted" aria-label="Focus Code minted, ephemeral, 24 hours, Shopify" data-node-kind="external" data-node-sublabel="ephemeral, 24 hours" data-node-context="Shopify">
@@ -125,13 +124,13 @@ svg[data-diagram="coupon-retaken-paid"] .c-lane{fill: var(--lane-fill); stroke: 
         </g>
         <g data-step="newer-pays" id="coupon-retaken-paid-node-newer-pays_used" data-node-id="newer-pays_used" data-node-label="Coupon used" aria-label="Focus Coupon used, the claim is spent, Store" data-node-kind="backend" data-node-sublabel="the claim is spent" data-node-context="Store">
           <title>Coupon used · the claim is spent · Store</title>
-          <rect x="840" y="217" width="156" height="52" rx="6" class="c-mask"/>
-          <rect x="840" y="217" width="156" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(846 223) scale(0.6875)">
+          <rect x="720" y="217" width="156" height="52" rx="6" class="c-mask"/>
+          <rect x="720" y="217" width="156" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(726 223) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="918" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Coupon used</text>
-          <text data-detail="context" x="918" y="255" class="t-muted" font-size="8" text-anchor="middle">the claim is spent</text>
+          <text data-node-label="" data-detail-anchor="" x="798" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Coupon used</text>
+          <text data-detail="context" x="798" y="255" class="t-muted" font-size="8" text-anchor="middle">the claim is spent</text>
         </g>
         <g data-step="earlier-picks" id="coupon-retaken-paid-node-earlier-picks" data-node-id="earlier-picks" data-node-label="Picks a coupon" aria-label="Focus Picks a coupon, from the drawer, Earlier cart" data-node-kind="external" data-node-sublabel="from the drawer" data-node-context="Earlier cart">
           <title>Picks a coupon · from the drawer · Earlier cart</title>
@@ -189,9 +188,5 @@ svg[data-diagram="coupon-retaken-paid"] .c-lane{fill: var(--lane-fill); stroke: 
           <text data-detail="context" x="798" y="503" class="t-muted" font-size="8" text-anchor="middle">the invoice</text>
         </g>
         
-        <g data-step="newer-pays" data-detail="context" data-edge-from="newer-pays_order" data-edge-to="newer-pays_used" data-edge-label="order event" data-edge-key="7">
-          <rect x="826.6" y="146" width="62.8" height="14" rx="3" class="c-mask"/>
-          <text x="858" y="156" class="t-database" font-size="8" text-anchor="middle">order event</text>
-        </g>
         
       </svg>
