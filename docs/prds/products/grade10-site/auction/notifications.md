@@ -69,19 +69,15 @@ that it closed — same alerts-on enrolment as progress mail.
 - 🚧 **Watcher, sold** — a watch-only collector with alerts on gets a letter
   that the lot has ended, with Sold for when a winning bid is supplied
   (`lot_ended_watched`)
-- 🚧 **No bids at close** — watchers get **Ended** only (`lot_ended_watched`
-  without a winning amount, and/or public `lot_ended`). Subject, preheader and
-  body never say unsold, did not sell, no sale, or no bids, and never show
-  Highest bid. At close this means nobody bid — not a later winner default.
-  There is no bidder close letter when nobody bid
+- 🚧 **No bids at close** — watchers with alerts on get **Ended** only
+  (`lot_ended_watched` without a winning amount). Subject, preheader and body
+  never say unsold, did not sell, no sale, or no bids, and never show Highest
+  bid. At close this means nobody bid — not a later winner default. There is
+  no bidder close letter when nobody bid; campaign `lot_ended` is retired
 - 🚧 **One letter** — a watcher who also bid gets the non-winner letter, not
   also the watcher letter. The winner gets only the auction-won order letter
 - ❓ **Hold line on the non-winner letter** — whether the body also says the
   card hold is being released; My Auctions already carries hold state
-- ❓ **One or both no-bids campaigns** — whether watchers get only the
-  watched Ended-only letter (`lot_ended_watched` without a winning amount),
-  only the public `lot_ended` letter, or both under one-copy dedup. Template
-  preview filenames stay out of this page.
 
 ## Delivery
 
@@ -154,8 +150,8 @@ a close-outcome letter.
 | Language | Decided | English, matching every auction email. Locale waits on recording one. | Engineering |
 | Close-outcome audiences | Decided | Watchers and non-winners with alerts on; winner gets only Order Notifications. Dedup: bid beats watch; win beats both. | Product |
 | No-bids close copy | Decided | Ended only — never unsold, did not sell, no sale, no bids, or Highest bid. No bidder letter when nobody bid. No-bids ≠ winner default. | Product |
+| No-bids campaign | Decided | Watchers only, campaign `lot_ended_watched` without a winning amount. `lot_ended` retired. | Product |
 | Hold line on non-winner letter | ❓ Open | Draft omits it; My Auctions keeps hold state. | Product |
-| No-bids campaign split | ❓ Open | `lot_ended_watched` Ended-only vs public `lot_ended` — one send or both. | Product |
 | Send-log retention | ❓ Open | How long rows are kept. | Engineering |
 
 **Risks.** A popular listing's watcher fanout stays batched; per-recipient

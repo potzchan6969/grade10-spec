@@ -200,7 +200,7 @@
 * Copy does not contain unsold, did not sell, didn't sell, no sale, or no bids.
 * Letter has no Sold for, Winning bid, or Highest bid highlight.
 
-### grade10-site-auction-notifications-US8-TC2-1: No-bids close skips bidder letter and keeps lot_ended Ended-only
+### grade10-site-auction-notifications-US8-TC2-1: No-bids close skips bidder letter and does not send lot_ended
 
 **Classification:**
 
@@ -228,4 +228,5 @@
 **Expected Results:**
 
 * No bidder close-outcome letter is sent.
-* Any public no-bids ended letter (campaign `lot_ended`) is Ended-only: no Sold for, Winning bid, or Highest bid highlight; no unsold / did not sell / didn't sell / no sale / no bids wording.
+* No letter with campaign `lot_ended` is sent.
+* Each enrolled watcher receives the watched ended letter (campaign `lot_ended_watched`) with no winning amount: no Sold for, Winning bid, or Highest bid highlight; no unsold / did not sell / didn't sell / no sale / no bids wording.
