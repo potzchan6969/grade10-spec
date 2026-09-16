@@ -143,9 +143,12 @@ export function checkDesign(ctx, changes) {
  * nothing: it was specified when the file did not exist, and asking seventy of
  * them at once would be a register rather than a gate.
  *
- * `decisions_waived: <why>` stands in where there was genuinely nothing to
- * settle. An empty `## Decisions` table is not that - it is a claim on the
- * record that nothing had to be chosen, and it needs no waiver.
+ * `decisions_waived: <why>` stands in two ways: where there was genuinely
+ * nothing to settle, and on a change opened before the file existed, whose
+ * scope its proposal already carries. An empty `## Decisions` table is
+ * neither - it is a claim on the record that nothing had to be chosen, which
+ * is a claim worth being able to make and the wrong one to make on behalf of
+ * an interview somebody else held.
  */
 export function checkDecided(ctx, changes) {
   for (const change of changes) {

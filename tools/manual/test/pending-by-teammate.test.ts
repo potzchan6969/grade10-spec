@@ -200,3 +200,50 @@ describe("against the store as it stands", () => {
     }
   });
 });
+
+/** `decisions_waived` is the second waiver a worklist reads, and it is read
+ * for a reason `design_waived` and `tasks_waived` are not: those answer for a
+ * file's absence at archive, this one answers for whose turn it is now. */
+describe("a change whose record waives its decisions", () => {
+  const DECIDING: Record<string, SchemaArtifact[]> = {
+    deciding: [
+      artifact("proposal", "proposal.md", "product-manager", []),
+      artifact("decisions", "decisions.md", "product-manager", ["proposal"]),
+      artifact(
+        "user-journeys",
+        "specs/**/user-journeys.md",
+        "product-manager",
+        ["decisions"],
+      ),
+    ],
+  };
+
+  const rows = (fields: Partial<ChangeEntry>) =>
+    pendingByTeammate(
+      [changeEntry("probe", [delta], { schema: "deciding", ...fields })],
+      DECIDING,
+    ).flatMap((one) => one.items.map((item) => item.artifact));
+
+  it("asks for it, and holds back what stands on it", () => {
+    expect(rows({ written: ["proposal"] })).toEqual(["decisions"]);
+  });
+
+  it("stops asking once the record waives it, and releases the chain", () => {
+    // The waiver settles the artifact rather than suppressing it: the journeys
+    // stood on the decisions and are owed the moment the record says none are
+    // coming. A waived record says nothing was written down, not that nobody
+    // walks the capability.
+    expect(
+      rows({
+        written: ["proposal"],
+        decisionsWaived: "opened before the file existed",
+      }),
+    ).toEqual(["user-journeys"]);
+  });
+
+  it("takes the file as readily as the waiver", () => {
+    expect(rows({ written: ["proposal", "decisions"] })).toEqual([
+      "user-journeys",
+    ]);
+  });
+});

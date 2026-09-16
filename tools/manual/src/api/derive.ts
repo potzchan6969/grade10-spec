@@ -621,25 +621,36 @@ export type PendingItem = {
 export type PendingTeammate = { teammate: string; items: PendingItem[] };
 
 /**
+ * The artifacts a change's own record says it does not owe.
+ *
  * `skip_specs` says a change alters no behaviour, so it owes no requirements —
  * and nothing that lives inside a capability directory either. There is no
  * capability, so there is nowhere for a journeys file or a suite to be
  * written, and asking for one put an impossible row on the product manager's
  * list for every tooling change in the store.
  *
- * It is the only waiver a worklist reads: `design_waived` and `tasks_waived`
- * answer for a file's absence at archive, not for whose turn it is now.
+ * `decisions_waived` says this change records no decisions: the interview
+ * settled nothing it had to keep, or it was opened before `decisions.md`
+ * existed and its scope is in the proposal. That is read here and not only by
+ * `check:manual`, because unlike `design_waived` and `tasks_waived` — which
+ * answer for a file's absence at archive — this one answers for whose turn it
+ * is now. The row it would otherwise leave is the product manager's, and an
+ * artifact their own record waives is not their turn. Without this, the only
+ * thing that clears the row is the file, which pushes an author towards
+ * writing a record of an interview nobody held.
  */
-const waivedBySkip = (artifacts: SchemaArtifact[], change: ChangeEntry) =>
-  change.skipSpecs === undefined
-    ? new Set<string>()
-    : new Set(
-        artifacts
-          .filter(
-            (one) => one.id === "specs" || one.generates.startsWith("specs/"),
-          )
-          .map((one) => one.id),
-      );
+const waivedOf = (artifacts: SchemaArtifact[], change: ChangeEntry) => {
+  const ids = new Set<string>();
+  if (change.skipSpecs !== undefined) {
+    for (const one of artifacts) {
+      if (one.id === "specs" || one.generates.startsWith("specs/")) {
+        ids.add(one.id);
+      }
+    }
+  }
+  if (change.decisionsWaived) ids.add("decisions");
+  return ids;
+};
 
 /**
  * Every teammate's worklist, derived from the artifacts each change has written
@@ -671,7 +682,7 @@ export function pendingByTeammate(
     // saying nothing — the `store` rule is what reports it.
     const artifacts = change.error ? undefined : schemas[change.schema];
     if (!artifacts) continue;
-    const waived = waivedBySkip(artifacts, change);
+    const waived = waivedOf(artifacts, change);
     const written = new Set(change.written);
     const declared = new Map(
       (change.awaiting ?? []).map((wait) => [wait.artifact, wait.why]),

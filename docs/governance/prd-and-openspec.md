@@ -120,7 +120,7 @@ That is how the work reaches an engineer. The application repository has no plan
 | `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The boards |
 | `awaiting:` with `<artifact>: "<what is missing>"` | Whoever is held up | A change that cannot write its next artifact until somebody answers; deleted when it writes it | The Pending page; `pnpm run validate:changes`; `pnpm check:manual`, rule `awaiting` |
 | `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
-| `decisions_waived: "<why>"` | The author | A change opened since the requirement with genuinely nothing to settle | `pnpm check:manual`, rule `decided` |
+| `decisions_waived: "<why>"` | The author | A change with genuinely nothing to settle, or one opened before `decisions.md` existed whose scope is in its proposal | `pnpm check:manual`, rule `decided`; the Pending page |
 | `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
 | `deployed_at`, `deployed_env` | `pnpm plan shipped` in the application repository | At archive | `pnpm check:manual`, rule `archived` |
 | `deploy_waived: "<who, why>"` | The owner, through `archive:preflight --deploy-waived` | At archive, in place of the deploy record | `pnpm check:manual`, rule `archived` |

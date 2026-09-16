@@ -22,6 +22,14 @@ being able to make. `check:manual`'s `decided` rule asks for the file on every
 change opened since it shipped; `decisions_waived: <why>` stands in where there
 was truly nothing, and a lint sweep is the shape of that.
 
+**On a change older than the file, write the waiver rather than the file.** Its
+goals and non-goals can be lifted from the proposal, but the rounds cannot: the
+`Instead of` column is exactly what nobody wrote down, and a table of guessed
+rejections reads as a record and is not one. Where the change is still being
+specified the interview can be finished and the file written for real; where
+the requirements and suites are already written, the file would inform nothing
+and `decisions_waived` says so in one line.
+
 A fourth is yours **when you already have the design**: `ui-design.md` is the
 designer's file, and a PM who has the screens in hand writes it in the same
 change rather than waiting for one to be drawn. A change with no user-facing
