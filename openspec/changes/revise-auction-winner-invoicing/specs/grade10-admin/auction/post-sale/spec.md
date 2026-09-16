@@ -51,7 +51,7 @@ or suspend on it; the operator decides whether to contact the winner, prepare
 the invoice, or cancel the order.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-45 - An order waiting on an address shows time since close
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an auction order in Awaiting Address whose lot closed 30 hours ago
 - **WHEN** an operator opens it
@@ -59,7 +59,7 @@ the invoice, or cancel the order.
 - **AND** it carries no Overdue mark
 
 #### Scenario: grade10-admin-auction-post-sale-SC-46 - An order idle 72 hours is marked Overdue
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** one auction order in Awaiting Address whose lot closed 72 hours ago
 - **AND** one in Preparing Invoice whose winner confirmed an address 80 hours ago
@@ -222,7 +222,7 @@ timestamp, the amount, the method, the external reference, and the proof
 files.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-55 - A bank transfer with a slip settles the order
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment at 312000 minor units in HKD
 - **AND** an operator holding payment-processing
@@ -233,7 +233,7 @@ files.
 - **AND** the order derives as Processing
 
 #### Scenario: grade10-admin-auction-post-sale-SC-56 - Settlement without proof is refused
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment
 - **WHEN** an operator records a cash payment with no proof file and commits
@@ -241,7 +241,7 @@ files.
 - **AND** the invoice is still `pending`
 
 #### Scenario: grade10-admin-auction-post-sale-SC-57 - Another method needs a description
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment
 - **WHEN** an operator chooses other, attaches proof, leaves the description
@@ -250,7 +250,7 @@ files.
 - **AND** the invoice is still `pending`
 
 #### Scenario: grade10-admin-auction-post-sale-SC-58 - No settlement before an invoice is sent
-**Serves:** `post-sale-US-01`, `post-sale-US-05` - settlement waits for the invoice the quote sends
+**Serves:** `post-sale-US-07`, `post-sale-US-05` - settlement waits for the invoice the quote sends
 
 - **GIVEN** an auction order in Preparing Invoice
 - **WHEN** an operator attempts to record a manual settlement
@@ -258,7 +258,7 @@ files.
 - **AND** the order is still Preparing Invoice
 
 #### Scenario: grade10-admin-auction-post-sale-SC-59 - A settled order refuses a second settlement
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** an operator attempts to record a second settlement against it
@@ -266,7 +266,7 @@ files.
 - **AND** the existing payment record is unchanged
 
 #### Scenario: grade10-admin-auction-post-sale-SC-60 - Manual settlement is available before expiry
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment, three days from its deadline, whose
   winner has arranged payment by bank transfer
@@ -276,7 +276,7 @@ files.
 - **AND** the order derives as Processing without having expired first
 
 #### Scenario: grade10-admin-auction-post-sale-SC-62 - A proof file of the wrong kind is refused
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment
 - **WHEN** an operator attaches a 12 MB JPEG, or a file that is not a PDF,
@@ -384,7 +384,7 @@ Reissuing an invoice SHALL NOT lift the winner's account suspension, per
 explicit action.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-23 - Reissue returns an expired order to Pending Payment
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an auction order whose invoice is `expired`
 - **AND** an operator holding payment-processing
@@ -393,7 +393,7 @@ explicit action.
 - **AND** the derived order status is Pending Payment
 
 #### Scenario: grade10-admin-auction-post-sale-SC-24 - Reissue leaves the suspension standing
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** a suspended winner whose expired order an operator reissues
 - **WHEN** the reissue is committed
@@ -401,7 +401,7 @@ explicit action.
 - **AND** the operator is not offered reinstatement as part of the reissue
 
 #### Scenario: grade10-admin-auction-post-sale-SC-25 - An operator without the grant is refused
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an operator who does not hold payment-processing
 - **WHEN** they open an order whose invoice is `expired`
@@ -409,7 +409,7 @@ explicit action.
 - **AND** Grade10 refuses those actions on the server if they are attempted
 
 #### Scenario: grade10-admin-auction-post-sale-SC-54 - An overdue order waiting on an address can be cancelled
-**Serves:** post-sale-US-01 - Operator resolves an unpaid order
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an auction order in Awaiting Address carrying the Overdue mark
 - **AND** an operator holding payment-processing

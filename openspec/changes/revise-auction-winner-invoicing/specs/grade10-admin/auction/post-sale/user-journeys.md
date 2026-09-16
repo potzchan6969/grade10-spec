@@ -1,6 +1,6 @@
 ## User journeys
 
-### post-sale-US-01: Operator resolves an unpaid order
+### post-sale-US-07: Operator resolves an unpaid order
 
 **As an** operator,
 **I want** to see how long an unpaid order has waited, and settle, reissue, or cancel it from the order itself,
