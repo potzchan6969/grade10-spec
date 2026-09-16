@@ -8,7 +8,7 @@
 
 - [x] 2.1 Make the auction environment resolver treat only `AUCTION_AUTHORIZATION_HOLD_ENABLED="1"` as enabled, covering missing, `"0"` and unknown values in unit tests; keep the worker deployments explicit and type-safe.
 - [x] 2.2 Make the bid service default `authorizationHoldEnabled` to false and audit every storefront and RPC caller so the effective mode is passed once without changing public bid inputs or results.
-- [ ] 2.3 Make `grade10-site-auction-auction-SC-23` and `grade10-site-auction-auto-bidding-SC-25` pass by accepting bids and maximum resolutions without a PaymentIntent, while keeping `SC-09`, `SC-11`, `SC-14`, `SC-15`, `SC-19`, `SC-20` and `SC-21` on the explicit enabled path; verify the focused auction backend tests and package typechecks.
+- [x] 2.3 Make `grade10-site-auction-auction-SC-23` and `grade10-site-auction-auto-bidding-SC-25` pass by accepting bids and maximum resolutions without a PaymentIntent, while keeping `SC-09`, `SC-11`, `SC-14`, `SC-15`, `SC-19`, `SC-20` and `SC-21` on the explicit enabled path; verify the focused auction backend tests and package typechecks.
 
 ## 3. Bid-panel state integration (grade10) (owner: @htonyl)
 
