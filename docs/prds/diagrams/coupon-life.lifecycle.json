@@ -64,8 +64,7 @@
       "label": "Back to available",
       "sublabel": "the claim and its code come off",
       "lane": "given-back",
-      "col": 0,
-      "yOffset": 51
+      "col": 2
     },
     {
       "id": "voided",
@@ -112,7 +111,6 @@
       "label": "the sale ends, or the next sale takes it",
       "fromSide": "bottom",
       "toSide": "top",
-      "route": "straight",
       "labelDy": 34
     },
     {
