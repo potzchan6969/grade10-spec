@@ -111,6 +111,17 @@ The cut lands there instead.
 One coupon, spendable, as before. Only the sale it left has changed.
 :::
 
+:::flow{title="Online" case="Retaken, then paid" diagram="assets/diagrams/coupon-retaken-paid.svg"}
+## *Member* — **Reaches checkout with a coupon**
+A code is minted for the cart, ephemeral.
+
+## *Member* — **A second cart claims it first**
+Frees the earlier cart's claim and code, and claims it there instead.
+
+## *Loyalty* — **Whichever cart pays is the one that used it**
+The paid order stamps it used. Nothing else does.
+:::
+
 :::flow{title="At the till" case="Walked away" diagram="assets/diagrams/coupon-walked-away.svg"}
 ## *Shopkeeper* — **Applies it at the till**
 From the member's panel, or the member opens it on their phone and the till scans it.
