@@ -3,7 +3,7 @@
 - [x] 1.1 Make `shared-ui-store-cart-SC-32` and `shared-ui-store-cart-SC-34` pass by omitting typed promo entry, held-code Apply, points entry, points Apply, and Use max when their matching callbacks are absent while preserving the supplied display-only context.
 - [x] 1.2 Make `shared-ui-store-cart-SC-33` and `shared-ui-store-cart-SC-35` pass by preserving the complete interactive callback path, payloads, state transitions, and loading behavior when callbacks are supplied.
 - [x] 1.3 Make `shared-ui-store-cart-SC-36` pass by gating disclosure and applied-tender removal controls independently, then add Storybook interaction coverage for the read-only, interactive, and partial-callback matrices.
-- [ ] 1.4 Verify the affected shared UI with `pnpm run test:stories:ui`, `pnpm run typecheck`, and `pnpm run lint`; do not run `pnpm run test:backend` because this change adds no backend files.
+- [x] 1.4 Verify the affected shared UI with `pnpm run test:stories:ui`, `pnpm run typecheck`, and `pnpm run lint`; do not run `pnpm run test:backend` because this change adds no backend files.
 
 ## 2. Capability record (grade10-spec) (owner: @kinisworking)
 
