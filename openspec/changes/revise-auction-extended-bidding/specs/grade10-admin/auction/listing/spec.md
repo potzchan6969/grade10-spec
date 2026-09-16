@@ -53,6 +53,7 @@ rehearse a sale. A write of sandbox on a `created` or later listing SHALL
 be refused.
 
 #### Scenario: grade10-admin-auction-listing-SC-24 - Operator corrects a created listing's starting price
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a created listing with starting price 100000 minor units `HKD`
 - **WHEN** an authorized operator sets starting price to 150000 minor units
@@ -60,6 +61,7 @@ be refused.
 - **AND** the listing remains created
 
 #### Scenario: grade10-admin-auction-listing-SC-25 - Published listing refuses a price change
+**Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
 - **GIVEN** a published listing with starting price 100000 minor units
 - **WHEN** an operator sets starting price to 150000 minor units
@@ -67,6 +69,7 @@ be refused.
 - **AND** the starting price remains 100000 minor units
 
 #### Scenario: grade10-admin-auction-listing-SC-26 - Scheduled close at in the past is refused at create
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft listing whose scheduled close at is not after now
 - **WHEN** the operator creates the listing
@@ -74,6 +77,7 @@ be refused.
 - **AND** the listing remains a draft
 
 #### Scenario: grade10-admin-auction-listing-SC-27 - Extension window without a duration is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a created listing
 - **WHEN** an operator submits an extension window of 1800 seconds
@@ -81,6 +85,7 @@ be refused.
 - **AND** the listing's extension settings are unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-27a - Omitted extension fields default to 30 minutes
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a draft listing with every required field set and no extension
   duration supplied
@@ -88,6 +93,7 @@ be refused.
 - **THEN** Grade10 stores an extension duration of 1800 seconds
 
 #### Scenario: grade10-admin-auction-listing-SC-28 - Sandbox cannot change after create
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a created listing that was drafted as sandbox
 - **WHEN** an operator clears sandbox
@@ -95,6 +101,7 @@ be refused.
 - **AND** the listing remains sandbox
 
 #### Scenario: grade10-admin-auction-listing-SC-70 - A negative extension duration is refused
+**Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
 - **GIVEN** a created listing
 - **WHEN** an operator sets an extension duration of -60 seconds

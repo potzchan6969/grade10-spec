@@ -17,6 +17,7 @@ SHALL NOT be offered as an outcome filter, and SHALL NOT mark the row as
 needing action.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-64 - A lot in extended bidding carries the label
+**Serves:** post-sale-US-06 - Operator sees which lots are still in extended bidding
 
 - **GIVEN** a lot past its scheduled close and in extended bidding
 - **WHEN** an operator reads the queue
@@ -24,6 +25,7 @@ needing action.
 - **AND** its outcome is the one it carries without the label
 
 #### Scenario: grade10-admin-auction-post-sale-SC-65 - A lot not in extended bidding carries no label
+**Serves:** post-sale-US-06 - Operator sees which lots are still in extended bidding
 
 - **GIVEN** one lot whose scheduled close has not arrived, and one that closed
   after its extended bidding ended
@@ -31,6 +33,7 @@ needing action.
 - **THEN** neither row carries the label Extended bidding: ON
 
 #### Scenario: grade10-admin-auction-post-sale-SC-66 - Extended bidding is not an outcome filter
+**Serves:** post-sale-US-06 - Operator sees which lots are still in extended bidding
 
 - **GIVEN** a queue holding a lot in extended bidding
 - **WHEN** an operator opens the outcome filter

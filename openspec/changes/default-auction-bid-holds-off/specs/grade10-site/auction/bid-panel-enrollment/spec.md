@@ -15,6 +15,7 @@ authorization-failed handling when the backend reports an enabled provider
 authorization outcome; no new no-hold panel state is introduced.
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-15 - Card linking leaves the collector ready to bid
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** a signed-in collector completes card-link setup on an open listing
 - **WHEN** setup closes
@@ -22,6 +23,7 @@ authorization outcome; no new no-hold panel state is introduced.
 - **AND** the panel does not wait for a bid-time authorization
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-16 - An accepted bid moves directly to enrolled
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** a collector has linked a card and submits a valid first bid
 - **WHEN** the backend accepts the bid without requiring a bid-time authorization

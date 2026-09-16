@@ -15,6 +15,7 @@ maximum under the auction rules without waiting for or creating a bid-time
 authorization. The enabled hold path and maximum rules remain unchanged.
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-25 - A maximum works without a bid-time authorization
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's automatic bids work with or without a hold
 
 - **GIVEN** bid-time authorization holds are disabled and a listing has an accepted maximum
 - **WHEN** a challenger commits a higher maximum

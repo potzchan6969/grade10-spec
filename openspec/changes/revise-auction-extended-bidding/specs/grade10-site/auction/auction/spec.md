@@ -62,6 +62,7 @@ Scenario `grade10-site-auction-auction-SC-07a` keeps its title with its id. The
 title is historical: a listing no longer carries an extension window.
 
 #### Scenario: grade10-site-auction-auction-SC-04 - A bid must meet the next increment
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing with a current bid and configured increment
 - **WHEN** a bidder submits less than the next valid bid amount
@@ -69,6 +70,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** it creates no accepted bid or card authorization for that attempt
 
 #### Scenario: grade10-site-auction-auction-SC-05 - A bid outside the window is refused
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** a listing whose scheduled start has not arrived or whose recorded close has passed
 - **WHEN** a bidder submits a bid
@@ -76,6 +78,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** it does not create an accepted bid or change the recorded close
 
 #### Scenario: grade10-site-auction-auction-SC-06 - A late valid bid extends the close
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** a listing in extended bidding with an extension duration of 1800
   seconds and recorded close 20:30 UTC
@@ -84,6 +87,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** a further valid bid accepted at 20:35 UTC moves it to 21:05 UTC
 
 #### Scenario: grade10-site-auction-auction-SC-07 - An extension cap limits an otherwise eligible extension
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** a listing in extended bidding with an extension cap, whose recorded
   close is its scheduled close plus that cap
@@ -92,6 +96,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** the listing closes at its scheduled close plus that cap
 
 #### Scenario: grade10-site-auction-auction-SC-07a - Window and duration may differ
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing with scheduled close 20:00 UTC, an extension
   duration of 300 seconds, and one accepted bid before 20:00 UTC
@@ -99,6 +104,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the listing is in extended bidding with recorded close 20:05 UTC
 
 #### Scenario: grade10-site-auction-auction-SC-07b - Extension off does not move the close
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing whose extension duration is zero and which has an
   accepted bid
@@ -107,6 +113,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** it does not enter extended bidding
 
 #### Scenario: grade10-site-auction-auction-SC-08 - A bidder sees live bid facts
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an authenticated bidder with an accepted bid on an open listing
 - **WHEN** the bidder reads that listing
@@ -114,6 +121,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** it does not disclose another bidder's identity or card authorization facts
 
 #### Scenario: grade10-site-auction-auction-SC-19 - A listing with no bid closes at its scheduled close
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing with no accepted bid and an extension duration of
   1800 seconds
@@ -122,6 +130,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** it does not enter extended bidding
 
 #### Scenario: grade10-site-auction-auction-SC-20 - One bid is enough to enter extended bidding
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing with scheduled close 20:00 UTC, an extension
   duration of 1800 seconds, and exactly one accepted bid before 20:00 UTC
@@ -130,6 +139,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** with no further bid it closes at 20:30 UTC
 
 #### Scenario: grade10-site-auction-auction-SC-21 - A bid before the scheduled close does not move the close
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing with scheduled close 20:00 UTC and an extension
   duration of 1800 seconds
@@ -137,6 +147,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the recorded close is still 20:00 UTC
 
 #### Scenario: grade10-site-auction-auction-SC-22 - A bid at the scheduled close counts toward entry
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** an open listing with no accepted bid, scheduled close 20:00:00 UTC,
   and an extension duration of 1800 seconds
@@ -144,6 +155,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the listing is in extended bidding with recorded close 20:30:00 UTC
 
 #### Scenario: grade10-site-auction-auction-SC-23 - Each listing runs its own extended bidding
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** two listings with scheduled close 20:00 UTC, both in extended
   bidding with recorded close 20:30 UTC
@@ -152,6 +164,7 @@ title is historical: a listing no longer carries an extension window.
 - **AND** the second listing's recorded close is still 20:30 UTC
 
 #### Scenario: grade10-site-auction-auction-SC-24 - A new bidder may bid during extended bidding
+**Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** a listing in extended bidding, and a collector who placed no bid on
   it before its scheduled close
@@ -172,6 +185,7 @@ close, its extension duration, and its optional extension cap in seconds,
 using `extension` terminology. It SHALL NOT expose an extension window.
 
 #### Scenario: grade10-site-auction-auction-SC-13 - A consumer reads a listing contract
+**Serves:** grade10-site-auction-auction-US-01 - Collector browses Auction listings
 
 - **WHEN** a customer application reads a public Auction listing or its extension facts
 - **THEN** its contract uses listing and extension terms
