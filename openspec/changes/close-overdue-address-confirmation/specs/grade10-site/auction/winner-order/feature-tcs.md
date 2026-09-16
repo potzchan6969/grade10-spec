@@ -455,6 +455,69 @@
 * The change is refused.
 * The overdue alert carries Contact Us and no card Pay control is shown.
 
+### winner-order-US7-TC14-1: A closed entrance leaves the account address book alone
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Delivery address
+
+**Pre-conditions:**
+
+* `<closed-entrance order>`'s address entrance has closed with no address confirmed.
+* customer(winner of `<closed-entrance order>`) is signed in.
+
+**Steps:**
+
+1. Open the account address book.
+2. Edit the saved home address and save a new work address.
+3. Return to <the winner's auction order url>.
+
+**Expected Results:**
+
+* Both address-book writes are accepted.
+* Neither reaches the auction order.
+* The order still has no confirmed delivery address and still offers no address form.
+
+### winner-order-US7-TC15-1: A reopen tells the winner nothing on its own
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Delivery address
+* **Blocked:** Product — whether a reopen sends the winner a letter is ❓ Open on the Winner Order page. No requirement states it, so this case records the question rather than an outcome.
+
+**Pre-conditions:**
+
+* `<closed-entrance order>`'s address entrance has closed.
+* An operator holds payment-processing.
+
+**Steps:**
+
+1. The operator reopens the entrance with a reason.
+2. Read the winner's post-close letters for that lot.
+
+**Expected Results:**
+
+* The order offers the address form again.
+* Whether any letter reaches the winner is undecided and this case is not runnable until Product settles it.
+
 ## Raised
 
 - **A confirmation sent before the mark and arriving after it.** The window is stated as a datetime, and nothing says which clock decides a confirmation submitted at 47:59 that reaches Grade10 at 48:01. TC2 asserts the refusal at the mark and says nothing about the race.
@@ -464,3 +527,23 @@
 - **Whether a winner may add a new address to the account while the entrance is closed.** The refusal is stated on the order's confirmation, not on the account address book, and the two are different writes.
 - **Traces on this delta.** The change's `user-journeys.md` for this capability carries only `winner-order-US-07`, so the cases covering behaviour this change moves — nothing to pay at close, the lock at send, seven days from send — trace `## Feature set` root groups rather than the journeys that walk them, which live in the durable file.
 
+## Reconciliation
+
+Two independent readings of the same anchors: this suite, written without sight
+of any requirement, and a scenario draft written without sight of this suite.
+What they disagreed about is below.
+
+| Raised | Disposition |
+| --- | --- |
+| Which clock decides a confirmation sent at 47:59 and arriving at 48:01 | **Folded in.** Nobody had decided it. The requirement now judges a write by the moment Grade10 receives it, and `winner-order-SC-71` and `winner-order-SC-72` are phrased on receipt rather than on submission |
+| What the entrance close is measured from on an extended lot | **Folded in.** The scenario pass had already fixed it on the actual close; `winner-order-SC-70` proves it against a lot whose scheduled and actual closes differ |
+| Whether a winner may add an address to the account book while the entrance is closed | **Folded in** after a grilling round. The account address book is unaffected — `winner-order-SC-78` and `winner-order-US7-TC14-1` |
+| Whether a reopen after send does anything | **Already decided**, in `grade10-admin/auction/post-sale`: a reopen is refused once the invoice is sent. The suite could not see it |
+| Whether a reopen notifies the winner | **Blocked.** Nobody present could settle it. `winner-order-US7-TC15-1` stays `draft` carrying `**Blocked:**`, the Winner Order page carries a ❓ row, and no scenario is written |
+| What a closed entrance does to the reminder letters | **Dropped.** The proposal's non-goals put every letter about this window in a follow-on change. Recorded here so the next blind pass does not raise it again |
+| Traces on this delta pointing at feature set groups | **Kept.** The delta's journeys file holds only `winner-order-US-07`; the journeys those cases walk are durable and reach the suite at archive |
+| Cases covering behaviour this change no longer carries | **Kept as written.** Every delta here became ADDED after `check:manual` refused a draft that folded requirements `revise-auction-winner-invoicing` also folds. Cases reading the lock at send, the seven days from send and the hold release stay in the suite; the requirements they walk are that change's |
+
+An operator may record a delivery address on a closed-window order without
+reopening it. Neither reading proposed it; it came out of the same grilling
+round and is proved in `grade10-admin/auction/post-sale`.

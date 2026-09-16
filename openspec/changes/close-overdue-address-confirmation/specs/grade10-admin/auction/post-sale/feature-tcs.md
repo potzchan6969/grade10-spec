@@ -497,6 +497,68 @@ Runs once per row of **Test data**.
 * The order derives Cancelled and leaves the pre-invoice queue.
 * The lot's inventory status is available and it can be listed again.
 
+### post-sale-US9-TC15-1: A cancelled order refuses a reopen
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-09
+
+**Pre-conditions:**
+
+* `<cancelled order>` was cancelled before any invoice was sent and its lot returned to available stock.
+* An operator holds payment-processing.
+
+**Steps:**
+
+1. Open `<cancelled order>`.
+2. Attempt to reopen its address entrance with a reason.
+
+**Expected Results:**
+
+* The reopen is refused.
+* The order still derives as Cancelled.
+* The lot stays in available stock.
+
+### post-sale-US9-TC16-1: An operator records the address without reopening
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-09
+
+**Pre-conditions:**
+
+* `<closed-entrance order>` is in Awaiting Address with its address window closed.
+* An operator holds payment-processing.
+
+**Steps:**
+
+1. Open `<closed-entrance order>`.
+2. Record the delivery address the winner gave by telephone.
+
+**Expected Results:**
+
+* The address is accepted and the order derives as Preparing Invoice.
+* The address window is still closed.
+* The winner is offered no address form.
+
 ## Raised
 
 - **Whether the Overdue mark clears on a reopen.** The mark is defined as a closed window and a reopen is said to change no status, but the input never says whether the mark is a live read of the entrance or a flag that a window once lapsed. TC4 asserts it clears.
@@ -507,3 +569,14 @@ Runs once per row of **Test data**.
 - **Whether a closed window blocks the operator's own address correction.** The refusal is stated for the winner. An operator correcting an address on a pre-invoice order is neither permitted nor refused by the input.
 - **Traces on this delta.** The change's `user-journeys.md` for this capability carries only `post-sale-US-09`, so the queue, send and cancellation cases trace `## Feature set` root groups rather than the journeys that walk them, which live in the durable file.
 
+## Reconciliation
+
+Two independent readings of the same anchors: this suite, written without sight
+of any requirement, and a scenario draft written without sight of this suite.
+
+| Raised | Disposition |
+| --- | --- |
+| Whether a cancelled order's entrance can be reopened | **Folded in** after a grilling round. It cannot: cancellation has already returned the lot to stock — `grade10-admin-auction-post-sale-SC-83` and `post-sale-US9-TC15-1`. The suite deliberately wrote no case rather than invent a refusal, which is why the question survived to be asked |
+| Whether an operator may record the address without reopening | **Folded in** from the same round — `grade10-admin-auction-post-sale-SC-84` and `post-sale-US9-TC16-1` |
+| Whether the Overdue mark clears on a reopen | **Agreed** by both readings, then **handed on.** `check:manual` refuses two in-flight changes folding one requirement, and the Overdue mark is `revise-auction-winner-invoicing`'s. `post-sale-US9-TC4-1` and `post-sale-US9-TC10-1` stay in the suite and become runnable when that change realigns the mark to the address window |
+| Whether a closed window stops an operator sending a quoted invoice | **Agreed.** It does not — the requirement gates the winner's write alone, and `post-sale-US9-TC13-1` reads it that way |

@@ -270,6 +270,36 @@ Runs once per row of **Test data**.
 * Step 2 reads `expired` as a stored fact on the invoice.
 * Step 3 reads Pending Payment, before and after alike.
 
+### auction-status-US1-TC12-1: An operator's address write is accepted on a closed window
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Guards
+
+**Pre-conditions:**
+
+* `<closed-window order>` has invoice status `not_issued` and `address_window_open` false.
+
+**Steps:**
+
+1. As an operator holding payment-processing, record a delivery address on the order.
+2. Read the order's conditions and derived status.
+
+**Expected Results:**
+
+* The write is accepted.
+* `address_confirmed` is true and `address_window_open` is still false.
+* The order derives as Preparing Invoice.
+
 ## Raised
 
 - **Which fact says the address window is open.** The window is a third condition read from the order's own facts, and the input never names the fact — a stored entrance close, the lot close plus 48 hours, or a reopen count. TC6 and TC10 assume a stored entrance close that a reopen rewrites.
@@ -278,3 +308,16 @@ Runs once per row of **Test data**.
 - **Whether the Overdue mark is a derived read or a stored one.** The mark is said to change no status, but the input places it on the operator's queue only, and does not say whether the derivation produces it for the winner's surfaces too.
 - **A missing journeys file.** This change's `order-status` delta had no `user-journeys.md` beside its `spec.md`, so the capability's anchors could not be read from the delta at all. The journey in this suite's heading was taken from the input bundle.
 
+## Reconciliation
+
+Two independent readings of the same anchors: this suite, written without sight
+of any requirement, and a scenario draft written without sight of this suite.
+
+| Raised | Disposition |
+| --- | --- |
+| What fact says the window is open — a stored closing time, close plus 48 hours, or a reopen count | **Left to the engineer.** The requirement says the condition is read from the order's own facts and stored as no enum, which `auction-status-SC-30` proves. Which fact carries it is `tech-design.md` |
+| Whether an operator may correct the address on a closed-window order | **Folded in** after a grilling round. They may, without reopening — `auction-status-SC-35` and `auction-status-US1-TC12-1` |
+| Whether the Overdue mark is a live read or a historical flag | **Agreed** by both readings, then **handed on.** The mark's requirement belongs to `revise-auction-winner-invoicing`, which this change may not fold, so the rule is an open item on the Post-Sale Queue page rather than a scenario here |
+| What `not_issued` becomes on a pre-invoice cancellation | **Dropped.** `revise-auction-winner-invoicing` already permits `not_issued` to `cancelled`. The suite was blind to it |
+| What a reissue does to a stored `expired` | **Dropped.** Already settled by `revise-auction-winner-invoicing`, and out of scope here |
+| This capability's section heading | **Retitled.** Nobody walks this capability on its own, so its cases trace feature set groups and the heading names the reading rather than a journey |
