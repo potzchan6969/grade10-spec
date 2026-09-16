@@ -11,6 +11,8 @@ the order's lines; a Shopify discount — a custom discount on the draft order,
 a line discount, or a code — is only how that price reaches the order and
 how the checkout shows it, never what decides it.
 
+::image{src="assets/diagrams/coupon-life.svg" alt="The states a coupon moves between: redeemed, available, claimed by a sale, then used, lapsed or voided"}
+
 ## Validity
 
 A coupon carries the reward's definition as it stood on the day it was bought,
@@ -26,8 +28,8 @@ so redefining the reward never rewrites a coupon a member already holds —
 | Runs from | The redemption, for the whole days the reward states |
 | Expiry | Read off the clock, never written down |
 
-- **Expired is spent** — an unused coupon past its end returns nothing by
-  itself; what members forfeit is counted as breakage where Finance can read it
+- **Expired is spent** — an unused coupon past its end returns nothing, and is
+  counted as breakage
 - **Birthday month** `TBC` — a definition can hold a coupon to the month of
   the member's birthday; loyalty holds no birthday, so every coupon asking
   for one is refused
@@ -41,30 +43,84 @@ so redefining the reward never rewrites a coupon a member already holds —
 | Online | Chosen in the cart drawer or at `/checkout` from the coupons the member holds; its Shopify Discount is minted when the checkout is submitted and the draft order carries it |
 | At the till | Chosen inside the till session — a shopkeeper applies it from the member's panel, or the member opens it on their own phone and the till scans it; its Shopify Discount is minted the moment it is chosen and reused for that sale |
 
-- **Answered before chosen** — the cart drawer reads every coupon the
-  member holds against the cart, and one that cannot ride says which refusal
-  answered; nothing is held by reading —
-  [Cart Drawer](/p/grade10-site/store/cart)
+- **Answered before chosen** — the drawer answers every coupon against the
+  cart, and holds none by reading — [Cart Drawer](/p/grade10-site/store/cart)
 - 🚧 **Nothing is held** — a coupon stays available until a paid order spends
   it, so a checkout the member walks away from costs them nothing —
   [Discounts](/p/grade10-site/store/discounts)
-- 🚧 **The newest claim is the only live one** — choosing a coupon online, at
-  a counter, or at a second counter takes it off every earlier sale first:
-  their online orders are cancelled, a counter sale keeps its cart and
-  collects without the cut, and the code minted for it is voided
-- 🚧 **A sale that ends gives it back** — a counter sale the member walked
-  away from releases its coupon when it runs out of time, so the coupon is
-  spendable again within the hour rather than the next day
-- 🚧 **A sale that took the money keeps it** — a coupon on an order that has
-  been paid is spent, and one on a checkout the shop will not close is
-  refused rather than taken, because the same cut cannot stand on two bills
-- **A sale that beats it** — where the shop's own sale and the coupon
-  cannot stack, the shop keeps the larger cut; the coupon goes back to the
-  wallet, the order goes through, and the member is told —
+- 🚧 **The newest claim is the only live one** — choosing a coupon again takes
+  it off every earlier sale first
+- 🚧 **A sale that ends gives it back** — a counter sale nobody paid releases
+  its coupon within the hour, not the next day
+- 🚧 **A sale that took the money keeps it** — and a coupon on a checkout the
+  shop will not close is refused rather than taken
+- **A sale that beats it** — where the two cannot stack the shop keeps the
+  larger cut and the coupon goes back to the wallet —
   [Discounts](/p/grade10-site/store/discounts)
 - **The order's one discount** — a reward coupon is in that count; points
   paid against the bill, free shipping and the site's own discounts sit
   outside it — [Discounts](/p/grade10-site/store/discounts)
+
+## Cases
+
+:::flow{title="Online" case="Paid" diagram="assets/diagrams/coupon-online-paid.svg"}
+## *Member* — **Picks a coupon**
+From the cart drawer or `/checkout`. Reading the list holds nothing.
+
+## *Store* — **Asks the programme**
+Every earlier sale of theirs naming this coupon gives it back first.
+
+## *Store* — **Promises the order**
+The cut lands on the lines, and a code is minted for this member, for a day.
+
+## *Member* — **Pays the invoice**
+Until this moment the coupon is spent on nothing.
+
+## *Loyalty* — **The coupon is spent**
+The paid order stamps it used. Nothing else does.
+:::
+
+:::flow{title="Online" case="Taken by the next sale" diagram="assets/diagrams/coupon-taken-next.svg"}
+## *Member* — **Picks it on a second sale**
+The same coupon, on a sale opened after the first.
+
+## *Store* — **Frees the earlier sale**
+Its cut comes off and its code is deactivated; an online order is cancelled, a counter sale keeps its cart.
+
+## *Store* — **The new sale claims it**
+The cut lands there instead.
+
+## *Member* — **One live coupon**
+One coupon, spendable, as before. Only the sale it left has changed.
+:::
+
+:::flow{title="At the till" case="Walked away" diagram="assets/diagrams/coupon-walked-away.svg"}
+## *Shopkeeper* — **Applies it at the till**
+From the member's panel, or the member opens it on their phone and the till scans it.
+
+## *Member* — **Leaves without paying**
+The shop owns that cart, so the sale is never cancelled.
+
+## *Store* — **The sale runs out of time**
+An hour after the sale was planned, not a day.
+
+## *Store* — **The coupon comes off**
+The cut and the code go; a sale that pays anyway is settled against what it carried.
+:::
+
+:::flow{title="Refused" case="An earlier sale stands" diagram="assets/diagrams/coupon-earlier-sale-stands.svg"}
+## *Member* — **Picks a coupon**
+An earlier sale of theirs is carrying it.
+
+## *Store* — **Tries to free it**
+The shop will not close that checkout, and its bill can still collect.
+
+## *Store* — **Refuses by name**
+Taking the coupon would put the same money on two bills.
+
+## *Member* — **Told which sale**
+They read that an earlier sale holds the cut, never that the coupon is unavailable.
+:::
 
 ## Refusals
 
@@ -99,13 +155,11 @@ quietly lost a coupon.
 nobody paid was never spent.
 
 - 🚧 **A sale that did not carry it did not spend it** — a counter sale whose
-  cut the shop never gave hands the coupon back, and a sale that gave a cut
-  the order had already taken back is reported rather than counted twice
+  cut the shop never gave hands the coupon back
 - **Used has no way back** — cancelling or refunding that order leaves the
   coupon used and the points spent
-- **An unused one an operator can reverse** — the coupon is voided and the
-  points that bought it come back with it —
-  [Rewards](/p/grade10-site/loyalty/rewards)
+- **An unused one an operator can reverse** — voided, with the points that
+  bought it — [Rewards](/p/grade10-site/loyalty/rewards)
 - **A lapsed coupon stays spent** — what lapsed is counted as coupons and as
   the points they cost, never as money
 
@@ -114,9 +168,8 @@ nobody paid was never spent.
 The store mints its own coupons — order, product and gift alike — and they are
 the store's instrument, not the programme's.
 
-- **Minted by an operator alone** — a code prefix, a validity in days, and
-  the one member it belongs to; a public code is a Shopify discount, not the
-  store's — [Discounts](/p/grade10-site/store/discounts)
+- **Minted by an operator alone** — a code prefix, a validity in days and the
+  one member it belongs to — [Discounts](/p/grade10-site/store/discounts)
 - **Listed for its member** — with their reward coupons in the cart drawer
   and at `/checkout`, answered against the cart before it is picked
 - **Never a reward** — no reward defines an order coupon; those are the

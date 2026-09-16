@@ -1,0 +1,113 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "An earlier sale stands",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "member",
+      "label": "Member"
+    },
+    {
+      "id": "store",
+      "label": "Store"
+    },
+    {
+      "id": "shopify",
+      "label": "Shopify"
+    },
+    {
+      "id": "loyalty",
+      "label": "Loyalty"
+    }
+  ],
+  "mainPath": [
+    "member-picks-a-coupon",
+    "store-tries-to-free-it",
+    "store-refuses-by-name",
+    "member-told-which-sale"
+  ],
+  "nodes": [
+    {
+      "id": "member-picks-a-coupon",
+      "lane": "member",
+      "col": 0,
+      "type": "external",
+      "label": "Picks a coupon",
+      "sublabel": "held by an earlier sale",
+      "width": 156
+    },
+    {
+      "id": "store-tries-to-free-it",
+      "lane": "store",
+      "col": 1,
+      "type": "backend",
+      "label": "Tries to free it",
+      "sublabel": "the earlier sale first",
+      "width": 156
+    },
+    {
+      "id": "store-tries-to-free-it_shop",
+      "lane": "shopify",
+      "col": 1,
+      "type": "external",
+      "label": "Will not close",
+      "sublabel": "its bill can still collect",
+      "width": 156
+    },
+    {
+      "id": "store-refuses-by-name",
+      "lane": "store",
+      "col": 2,
+      "type": "security",
+      "label": "Refuses by name",
+      "sublabel": "not the coupon's own fault",
+      "width": 156
+    },
+    {
+      "id": "member-told-which-sale",
+      "lane": "member",
+      "col": 3,
+      "type": "external",
+      "label": "Told which sale",
+      "sublabel": "never just unavailable",
+      "width": 156
+    }
+  ],
+  "edges": [
+    {
+      "from": "member-picks-a-coupon",
+      "to": "store-tries-to-free-it",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "store-tries-to-free-it",
+      "to": "store-tries-to-free-it_shop",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "store-tries-to-free-it",
+      "to": "store-refuses-by-name",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "store-refuses-by-name",
+      "to": "member-told-which-sale",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    }
+  ]
+}

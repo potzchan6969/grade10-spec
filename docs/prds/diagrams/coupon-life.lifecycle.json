@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "A coupon's life",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [980, 600]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "The coupon"
+    },
+    {
+      "id": "ended",
+      "label": "Ended"
+    }
+  ],
+  "states": [
+    {
+      "id": "redeemed",
+      "type": "start",
+      "label": "Redeemed",
+      "sublabel": "points bought it",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "available",
+      "type": "active",
+      "label": "Available",
+      "sublabel": "offered everywhere",
+      "lane": "main",
+      "col": 1
+    },
+    {
+      "id": "claimed",
+      "type": "waiting",
+      "label": "Claimed",
+      "sublabel": "a sale names it",
+      "lane": "main",
+      "col": 2
+    },
+    {
+      "id": "used",
+      "type": "success",
+      "label": "Used",
+      "sublabel": "a paid order spent it",
+      "lane": "main",
+      "col": 3
+    },
+    {
+      "id": "voided",
+      "type": "failure",
+      "label": "Voided",
+      "sublabel": "points come back",
+      "lane": "ended",
+      "col": 0
+    },
+    {
+      "id": "lapsed",
+      "type": "neutral",
+      "label": "Lapsed",
+      "sublabel": "read off the clock",
+      "lane": "ended",
+      "col": 1
+    }
+  ],
+  "transitions": [
+    {
+      "id": "issued",
+      "from": "redeemed",
+      "to": "available",
+      "variant": "emphasis"
+    },
+    {
+      "id": "claim",
+      "from": "available",
+      "to": "claimed",
+      "variant": "emphasis"
+    },
+    {
+      "id": "given-back",
+      "from": "claimed",
+      "to": "available",
+      "label": "the sale ends, or is superseded",
+      "variant": "dashed",
+      "route": "top-channel"
+    },
+    {
+      "id": "paid",
+      "from": "claimed",
+      "to": "used",
+      "variant": "emphasis"
+    },
+    {
+      "id": "lapses",
+      "from": "available",
+      "to": "lapsed",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "reversed",
+      "from": "available",
+      "to": "voided",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}
