@@ -1,0 +1,26 @@
+## Feature set
+
+- Invoice at lot close
+  - One invoice per lot: a winner of three lots owes three amounts on three deadlines, never one consolidated bill
+  - Estimate-first pricing: the invoice is payable from the moment of close rather than waiting on an address
+  - Final amount: names every component a winner is asked to pay, so a total is explicable line by line
+  - Buyer's premium: 20% of the winning bid or the currency's minimum charge, whichever is higher, computed by Grade10
+  - Invoice premium: 20% of the winning bid
+  - Integer amount: rounded to the nearest minor unit
+  - Bid-panel boundary: only the rate appears before invoicing
+- Premium minimum
+  - Currency minimum: the current Auction Payment settings mapping sets the lower bound for the calculated premium
+- Delivery address
+  - Account-wide address book: the platform keeps at most five named shipping addresses and one optional default for the account
+  - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it before payment
+  - Amendment and recalculation: a winner corrects the destination and sees what it costs before paying
+  - Locking at payment: the order snapshot stops moving once money has changed hands
+- Settlement
+  - Hold release: the bid-time authorization verified a bidder and is not the instrument that settles
+  - Single fresh charge: one transaction for the final amount, retryable on failure
+- Payment deadline
+  - Seven days from close: a fixed end to the winner's obligation, unmoved by anything they do to the invoice
+- Records the winner keeps
+  - Payment receipt: proof of what was paid, itemised, retrievable for the life of the account
+  - Shipping tracker: where the lot is once it has left
+  - Delivery proof: what the carrier recorded on handover, given what these lots are worth
