@@ -20,9 +20,7 @@
     "earlier-checkout",
     "newer-picks",
     "newer-checkout",
-    "newer-pays",
-    "newer-pays_order",
-    "newer-pays_used"
+    "newer-pays"
   ],
   "nodes": [
     {
@@ -183,16 +181,9 @@
       "toSide": "left"
     },
     {
-      "from": "newer-pays",
-      "to": "newer-pays_order",
-      "label": "order event",
-      "variant": "dashed",
-      "fromSide": "top",
-      "toSide": "bottom"
-    },
-    {
       "from": "newer-pays_order",
       "to": "newer-pays_used",
+      "label": "order event",
       "variant": "dashed",
       "fromSide": "right",
       "toSide": "left"

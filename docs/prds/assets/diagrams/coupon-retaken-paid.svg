@@ -65,9 +65,8 @@ svg[data-diagram="coupon-retaken-paid"] .c-lane{fill: var(--lane-fill); stroke: 
         <path data-step="newer-checkout" data-edge-from="newer-checkout" data-edge-to="newer-checkout_claim" data-edge-key="4" data-composition-points="614,465;614,269" d="M 614 465 L 614 269" class="a-dashed" stroke-width="1.4" marker-end="url(#coupon-retaken-paid-arrowhead-dashed)"/>
         <path data-step="newer-pays" data-edge-from="newer-checkout" data-edge-to="newer-pays" data-edge-key="5" data-composition-points="692,491;720,491" d="M 692 491 L 720 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-retaken-paid-arrowhead-emphasis)"/>
         <path data-step="newer-checkout" data-edge-from="newer-checkout_claim" data-edge-to="newer-checkout_code" data-edge-key="6" data-composition-points="614,217;614,145" d="M 614 217 L 614 145" class="a-dashed" stroke-width="1.4" marker-end="url(#coupon-retaken-paid-arrowhead-dashed)"/>
-        <path data-step="newer-pays" data-edge-from="newer-pays" data-edge-to="newer-pays_order" data-edge-label="order event" data-edge-key="7" data-composition-points="798,465;798,145" d="M 798 465 L 798 145" class="a-dashed" stroke-width="1.4" marker-end="url(#coupon-retaken-paid-arrowhead-dashed)"/>
-        <path data-step="newer-pays" data-edge-from="newer-pays_order" data-edge-to="newer-pays_used" data-edge-key="8" data-composition-points="876,119;892,119;892,166;824,166;824,243;840,243" d="M 876 119 L 892 119 L 892 166 L 824 166 L 824 243 L 840 243" class="a-dashed" stroke-width="1.4" marker-end="url(#coupon-retaken-paid-arrowhead-dashed)"/>
-        <path data-step="newer-checkout" data-edge-from="newer-picks" data-edge-to="newer-checkout" data-edge-key="9" data-composition-points="508,491;536,491" d="M 508 491 L 536 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-retaken-paid-arrowhead-emphasis)"/>
+        <path data-step="newer-pays" data-edge-from="newer-pays_order" data-edge-to="newer-pays_used" data-edge-label="order event" data-edge-key="7" data-composition-points="876,119;892,119;892,166;824,166;824,243;840,243" d="M 876 119 L 892 119 L 892 166 L 824 166 L 824 243 L 840 243" class="a-dashed" stroke-width="1.4" marker-end="url(#coupon-retaken-paid-arrowhead-dashed)"/>
+        <path data-step="newer-checkout" data-edge-from="newer-picks" data-edge-to="newer-checkout" data-edge-key="8" data-composition-points="508,491;536,491" d="M 508 491 L 536 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#coupon-retaken-paid-arrowhead-emphasis)"/>
         
         <g data-step="earlier-checkout" id="coupon-retaken-paid-node-earlier-checkout_code" data-node-id="earlier-checkout_code" data-node-label="Code minted" aria-label="Focus Code minted, ephemeral, 24 hours, Shopify" data-node-kind="external" data-node-sublabel="ephemeral, 24 hours" data-node-context="Shopify">
           <title>Code minted · ephemeral, 24 hours · Shopify</title>
@@ -190,9 +189,9 @@ svg[data-diagram="coupon-retaken-paid"] .c-lane{fill: var(--lane-fill); stroke: 
           <text data-detail="context" x="798" y="503" class="t-muted" font-size="8" text-anchor="middle">the invoice</text>
         </g>
         
-        <g data-step="newer-pays" data-detail="context" data-edge-from="newer-pays" data-edge-to="newer-pays_order" data-edge-label="order event" data-edge-key="7">
-          <rect x="766.6" y="445" width="62.8" height="14" rx="3" class="c-mask"/>
-          <text x="798" y="455" class="t-database" font-size="8" text-anchor="middle">order event</text>
+        <g data-step="newer-pays" data-detail="context" data-edge-from="newer-pays_order" data-edge-to="newer-pays_used" data-edge-label="order event" data-edge-key="7">
+          <rect x="826.6" y="146" width="62.8" height="14" rx="3" class="c-mask"/>
+          <text x="858" y="156" class="t-database" font-size="8" text-anchor="middle">order event</text>
         </g>
         
       </svg>
