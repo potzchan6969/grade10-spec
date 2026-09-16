@@ -25,11 +25,17 @@ session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu of Profile, My Auctions, and Sign out when signed in.
 Orders and KYC are not in that menu for auction-first launch.
 
-🚧 **Compact menu** — below the wide breakpoint, a leading menu control opens a
+🚧 **Compact menu** — below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
 style, then language through a nested drawer (the language label is not in the
 compact bar). Account / Sign In and Cart stay in the bar; search moves into the
 drawer when it is answered.
+
+## External Links
+
+🚧 **External links** — a `NavLink` marked `external` opens in a new tab with
+`rel="noopener noreferrer"`, in primary nav (wide and compact) and in the
+utility strip / compact utility list.
 
 ## Cart Count
 

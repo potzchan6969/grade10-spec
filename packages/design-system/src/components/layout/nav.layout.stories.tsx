@@ -80,7 +80,15 @@ export const MenuOpen: Story = {
       "aria-current",
       "page",
     );
-    expect(menu.getByRole("link", { name: "Help" })).toBeInTheDocument();
+    const storeLocator = menu.getByRole("link", { name: "Store Locator" });
+    const help = menu.getByRole("link", { name: "Help" });
+    expect(
+      storeLocator.compareDocumentPosition(help) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(help).toHaveAttribute("href", "https://grade10.mintlify.io/");
+    expect(help).toHaveAttribute("target", "_blank");
+    expect(help).toHaveAttribute("rel", "noopener noreferrer");
     expect(menu.queryByRole("link", { name: "Store Finder" })).toBeNull();
     expect(menu.queryByRole("link", { name: "Grade" })).toBeNull();
     expect(menu.getByRole("button", { name: "English" })).toBeInTheDocument();
@@ -88,6 +96,35 @@ export const MenuOpen: Story = {
     const viewportWidth =
       canvasElement.ownerDocument.defaultView?.innerWidth ?? 0;
     expect(panel.getBoundingClientRect().width).toBeLessThan(viewportWidth);
+  },
+};
+
+/**
+ * Below `@4xl` (896px) the full primary nav stays in the hamburger so four
+ * items plus trailing controls do not overlap.
+ */
+export const CompactAt800: Story = {
+  name: "Compact (800px)",
+  decorators: [
+    (Story) => (
+      <div style={{ width: 800 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const header =
+      canvasElement.querySelector<HTMLElement>('[data-slot="nav"]');
+    expect(header).not.toBeNull();
+    if (header === null) return;
+    expect(header.scrollWidth).toBeLessThanOrEqual(header.clientWidth);
+    expect(canvas.getByRole("button", { name: "Menu" })).toBeInTheDocument();
+    expect(canvas.queryByRole("button", { name: "English" })).toBeNull();
+    const barHelp = header.querySelector<HTMLElement>(
+      '[data-slot="nav-bar"] [data-slot="navigation-list"]',
+    );
+    expect(barHelp).toHaveClass("hidden");
   },
 };
 

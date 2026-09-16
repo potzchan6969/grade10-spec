@@ -42,6 +42,16 @@ function storyHref(storyId: string): string {
 /** Chrome destination for Store Locator once the page story exists. */
 const STORE_LOCATOR_HREF = storyHref(STORE_LOCATOR_STORY_ID);
 
+/** TBC — provisional docs host for collector Help in the primary nav. */
+const HELP_HREF = "https://grade10.mintlify.io/";
+
+/** Primary-nav Help after Store Locator; opens the docs host in a new tab. */
+const HELP_NAV_ITEM = {
+  label: "Help",
+  href: HELP_HREF,
+  external: true,
+} as const;
+
 /** Preview href for Winner Order → lot details. */
 const AUCTION_LOT_DETAILS_HREF = storyHref(
   AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID,
@@ -86,6 +96,8 @@ function interceptWorkbenchStoryLinks(event: MouseEvent) {
 export {
   AUCTION_LOT_DETAILS_CLOSED_WON_STORY_ID,
   AUCTION_LOT_DETAILS_HREF,
+  HELP_HREF,
+  HELP_NAV_ITEM,
   interceptWorkbenchStoryLinks,
   MY_AUCTIONS_PAGE_HREF,
   MY_AUCTIONS_PAGE_STORY_ID,

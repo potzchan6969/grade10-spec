@@ -36,6 +36,8 @@ type NavLink = {
   /** What the link is called — text, so the header can name it to a reader. */
   label: string;
   href: string;
+  /** Opens in a new tab with `rel="noopener noreferrer"`. */
+  external?: boolean;
 };
 
 type NavItem = NavLink & {
@@ -266,7 +268,7 @@ function AccountControl({
   if (presentation === "sign-in") {
     return (
       <Button
-        className="shrink-0 @max-3xl:h-8 @max-3xl:gap-1 @max-3xl:px-3 @max-3xl:text-xs"
+        className="shrink-0 @max-4xl:h-8 @max-4xl:gap-1 @max-4xl:px-3 @max-4xl:text-xs"
         onClick={onAccountClick}
         size="md"
         variant="default"
@@ -290,11 +292,13 @@ function AccountControl({
 /**
  * Store chrome. Storybook is the layout source of truth.
  *
- * Wide (`@3xl+`): utility strip, centered primary nav, language + trailing
- * controls in the bar. Compact: a single row with a leading hamburger that
- * opens a left drawer (primary nav, then utility links as the same link
- * style, then language via a nested drawer), and Account / Sign In plus Cart
- * on the trailing edge.
+ * Wide (`@4xl+` / 896px container): utility strip, centered primary nav,
+ * language + trailing controls in the bar. Compact below that: a single row
+ * with a leading hamburger that opens a left drawer (primary nav, then
+ * utility links as the same link style, then language via a nested drawer),
+ * and Account / Sign In plus Cart on the trailing edge. `@4xl` leaves room
+ * for four primary items (including Help) without overlapping trailing
+ * controls.
  *
  * Brand, navigation, and locale content is required rather than defaulted. A
  * control renders only where a handler backs it (or an `accountSlot` is
@@ -349,14 +353,16 @@ function Nav({
         {utilityLinks.length > 0 ? (
           <div
             data-slot="nav-utility"
-            className="hidden min-h-8 items-center px-8 py-1 @3xl:flex"
+            className="hidden min-h-8 items-center px-8 py-1 @4xl:flex"
           >
             <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
               {utilityLinks.map((link) => (
                 <Link
                   href={link.href}
                   key={String(link.label)}
+                  rel={link.external ? "noopener noreferrer" : undefined}
                   size="xs"
+                  target={link.external ? "_blank" : undefined}
                   variant="secondary"
                 >
                   {link.label}
@@ -367,7 +373,7 @@ function Nav({
         ) : null}
         <div
           data-slot="nav-bar"
-          className="relative flex min-w-0 items-center justify-between gap-1 px-2 py-3 @3xl:h-[72px] @3xl:gap-y-2 @3xl:px-8 @3xl:py-0"
+          className="relative flex min-w-0 items-center justify-between gap-1 px-2 py-3 @4xl:h-[72px] @4xl:gap-y-2 @4xl:px-8 @4xl:py-0"
         >
           <div
             data-slot="nav-leading"
@@ -379,7 +385,7 @@ function Nav({
               swipeDirection="left"
             >
               <DrawerTrigger
-                className="@3xl:hidden"
+                className="@4xl:hidden"
                 render={
                   <IconButton
                     aria-label={menuLabel}
@@ -410,6 +416,8 @@ function Nav({
                         href={item.href}
                         key={String(item.label)}
                         onClick={() => setMenuOpen(false)}
+                        rel={item.external ? "noopener noreferrer" : undefined}
+                        target={item.external ? "_blank" : undefined}
                       >
                         {item.label}
                       </NavigationLink>
@@ -427,6 +435,8 @@ function Nav({
                           href={link.href}
                           key={String(link.label)}
                           onClick={() => setMenuOpen(false)}
+                          rel={link.external ? "noopener noreferrer" : undefined}
+                          target={link.external ? "_blank" : undefined}
                         >
                           {link.label}
                         </NavigationLink>
@@ -462,20 +472,22 @@ function Nav({
               </DrawerContent>
             </Drawer>
             <a
-              className="min-w-0 max-w-[9rem] shrink overflow-hidden text-xl font-bold text-foreground @3xl:max-w-none @3xl:text-2xl [&_svg]:h-5 [&_svg]:w-auto @3xl:[&_svg]:h-7"
+              className="min-w-0 max-w-[9rem] shrink overflow-hidden text-xl font-bold text-foreground @4xl:max-w-none @4xl:text-2xl [&_svg]:h-5 [&_svg]:w-auto @4xl:[&_svg]:h-7"
               data-slot="nav-logo"
               href={logoHref}
             >
               {logo}
             </a>
           </div>
-          <NavigationList className="absolute top-1/2 left-1/2 hidden w-auto -translate-x-1/2 -translate-y-1/2 flex-nowrap @3xl:flex">
+          <NavigationList className="absolute top-1/2 left-1/2 hidden w-auto -translate-x-1/2 -translate-y-1/2 flex-nowrap @4xl:flex">
             {navItems.map((item) => (
               <NavigationLink
                 active={item.current}
                 disabled={item.disabled}
                 href={item.href}
                 key={String(item.label)}
+                rel={item.external ? "noopener noreferrer" : undefined}
+                target={item.external ? "_blank" : undefined}
               >
                 {item.label}
               </NavigationLink>
@@ -485,7 +497,7 @@ function Nav({
             data-slot="nav-controls"
             className="flex shrink-0 items-center justify-end gap-1"
           >
-            <div className="hidden @3xl:contents">
+            <div className="hidden @4xl:contents">
               <LocaleControl
                 locale={locale}
                 localeLabel={copy.locale}
