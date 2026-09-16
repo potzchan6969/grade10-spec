@@ -89,6 +89,7 @@ hold authorization on commit.
 - **AND** continue is enabled once provider card entry is satisfied
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-17 - Default setup copy does not promise a bid-time hold
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** bid-time authorization holds are disabled
 - **WHEN** a collector opens the setup modal
@@ -96,6 +97,7 @@ hold authorization on commit.
 - **AND** the description does not promise a bid-time hold
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-18 - Enabled hold setup copy discloses the authorization
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** bid-time authorization holds are enabled
 - **WHEN** a collector opens the setup modal
@@ -103,6 +105,7 @@ hold authorization on commit.
 - **AND** continue remains labeled Link Card
 
 #### Scenario: grade10-site-auction-bid-panel-enrollment-SC-19 - Default payment-method tooltip does not promise a hold
+**Serves:** grade10-site-auction-bid-panel-enrollment-US-02 - Collector links a card when none is on file
 
 - **GIVEN** bid-time authorization holds are disabled and a collector has a linked card
 - **WHEN** they read the linked-card payment-method tooltip
