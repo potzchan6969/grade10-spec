@@ -220,7 +220,7 @@ status vocabulary in `grade10-site/auction/order-status`.
 When the derived order status is **Cancelled** or **Refunded**, Winner Order
 SHALL show no progress stepper.
 
-#### Scenario: winner-order-SC-46 - Pending Payment highlights the Payment step
+#### Scenario: winner-order-SC-54 - Pending Payment highlights the Payment step
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose derived status is Pending Payment
@@ -228,7 +228,7 @@ SHALL show no progress stepper.
 - **THEN** the progress stepper marks Payment as the current step
 - **AND** Address and Invoice are complete
 
-#### Scenario: winner-order-SC-47 - Processing maps under Shipped
+#### Scenario: winner-order-SC-55 - Processing maps under Shipped
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order whose derived status is Processing
@@ -236,7 +236,7 @@ SHALL show no progress stepper.
 - **THEN** the progress stepper marks Shipped as the current step
 - **AND** does not invent a Processing step label
 
-#### Scenario: winner-order-SC-48 - Cancelled hides the stepper
+#### Scenario: winner-order-SC-56 - Cancelled hides the stepper
 **Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose derived status is Cancelled
@@ -250,21 +250,21 @@ offer the winner a control to view and download that invoice as a PDF. The
 control SHALL be hidden while the invoice status is `not_issued` and SHALL be
 hidden when the invoice status is `cancelled`.
 
-#### Scenario: winner-order-SC-49 - A sent invoice offers its PDF
+#### Scenario: winner-order-SC-57 - A sent invoice offers its PDF
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose invoice status is `pending`
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers view and download of the invoice PDF
 
-#### Scenario: winner-order-SC-44 - No invoice PDF before send
+#### Scenario: winner-order-SC-64 - No invoice PDF before send
 **Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose invoice status is `not_issued`
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers no invoice PDF control
 
-#### Scenario: winner-order-SC-45 - A cancelled order hides the invoice PDF
+#### Scenario: winner-order-SC-65 - A cancelled order hides the invoice PDF
 **Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose invoice status is `cancelled`
@@ -288,10 +288,23 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Shipping & Handling | Quoted by an operator for the order's confirmed delivery address. Zero or more |
 | Insurance | Optional. Added by an operator for the order's confirmed delivery address, and greater than zero when added |
 | Tax | An optional line reserved for the separate tax change; no rate or regime is defined here |
-| Order total | The total payable — the sum of the components above |
+| Subtotal | The sum of the components above — what Grade10 keeps once the card fee is paid |
+| Payment processing fee | The card fee, grossed up from the subtotal so the subtotal survives it. Absent when the order is settled manually |
+| Order total | The total payable — the subtotal plus the payment processing fee |
 | Sent at | When the operator sent the invoice. Stored in UTC |
 | Payment deadline | 7 calendar days from Sent at. Stored in UTC, displayed in the winner's own zone |
 | Invoice status | Per `grade10-site/auction/order-status` |
+
+The payment processing fee SHALL be the amount that leaves the subtotal whole
+after the payment provider takes a fixed fee and a percentage of the whole
+charge. Grade10 SHALL read both from the payment provider for the invoice's
+currency at the moment the invoice is sent, SHALL compute the order total as
+the subtotal plus the fixed fee divided by one less the percentage, SHALL round
+that total up to the next minor unit, and SHALL take the fee as the difference
+between the order total and the subtotal.
+
+The fee SHALL be fixed on the invoice once sent. A later change in the
+provider's fees SHALL NOT move it; only a re-quote SHALL price it again.
 
 Wherever the winner reads the invoice's lines — the order, the receipt, and
 any letter that lists them — Grade10 SHALL show Shipping & Handling of zero as
@@ -319,6 +332,23 @@ an invoice amount before an operator has sent it.
 - **WHEN** the winner reads the invoice
 - **THEN** its total is the order total for that address
 - **AND** no component is marked as an estimate
+
+#### Scenario: winner-order-SC-62 - The fee grosses the subtotal up
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an operator sent an invoice whose subtotal is 312000 minor units in HKD
+- **AND** the payment provider's fees for HKD at that moment were 235 minor units and 3.4 per cent
+- **WHEN** the winner reads the invoice
+- **THEN** the payment processing fee is 11225 minor units in HKD
+- **AND** the order total is 323225 minor units in HKD
+
+#### Scenario: winner-order-SC-63 - A manually settled order carries no fee
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order an operator settled by bank transfer
+- **WHEN** the winner reads the receipt
+- **THEN** no payment processing fee is shown
+- **AND** the amount settled is the invoice's subtotal
 
 #### Scenario: winner-order-SC-38 - Shipping & Handling of zero reads Free
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -427,7 +457,7 @@ until an operator reissues the invoice to `pending`.
 - **AND** creates the auction order as normal
 
 #### Scenario: winner-order-SC-14 - A losing bidder's hold is released at close
-**Serves:** winner-order-US-04 - Losing bidder gets their hold back when the lot closes
+**Serves:** winner-order-US-06 - Losing bidder gets their hold back when the lot closes
 
 - **GIVEN** a lot closing with one winner and three losing bidders holding
   open authorizations
@@ -458,7 +488,7 @@ the life of their account.
 
 | Record | When | Contents |
 | --- | --- | --- |
-| Payment receipt | Payment confirmed, by either route | Itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, any tax amount, order total, and the payment method |
+| Payment receipt | Payment confirmed, by either route | Itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, any tax amount, the subtotal, the payment processing fee when the winner paid by card, the order total, and the payment method |
 | Shipping tracker | Fulfilment status is `fulfilled` | Carrier name, tracking number, and a link to the carrier |
 | Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided — handover timestamp, signature, proof-of-delivery image |
 
@@ -482,7 +512,7 @@ SHALL NOT appear on the winner's receipt.
 - **WHEN** the winner opens the order a year later
 - **THEN** the receipt shows the winning bid, buyer's premium, Shipping &
   Handling, insurance, any tax amount supplied by the separate tax capability,
-  and the order total
+  the subtotal, the payment processing fee, and the order total
 
 #### Scenario: winner-order-SC-19 - A manually settled receipt says so
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery

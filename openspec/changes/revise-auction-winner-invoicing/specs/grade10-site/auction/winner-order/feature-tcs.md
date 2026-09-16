@@ -213,6 +213,6 @@
 | Finding | Disposition |
 | --- | --- |
 | Suite required expired refuse card + Contact Us | Folded as `winner-order-SC-37` |
-| Suite required five-step mapping including Processing→Shipped | Folded as `winner-order-SC-46`–`SC-48` |
-| Suite required invoice PDF after send / hidden before and Cancelled | Folded as `winner-order-SC-44`, `SC-45`, `SC-49` |
+| Suite required five-step mapping including Processing→Shipped | Folded as `winner-order-SC-54`–`SC-56` |
+| Suite required invoice PDF after send / hidden before and Cancelled | Folded as `winner-order-SC-57`, `SC-64`, `SC-65` |
 | Refunded PDF keep | Left to ui-design / Storybook; no opposing scenario |
