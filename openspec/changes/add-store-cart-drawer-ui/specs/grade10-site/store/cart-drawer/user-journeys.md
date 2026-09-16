@@ -1,9 +1,9 @@
 ## User journeys
 
-### grade10-site-store-cart-drawer-US-01: Collector opens the current cart over the Store
+### grade10-site-store-cart-drawer-US-01: Collector opens the current cart over the page
 
 **As a** collector,
-**I want** my current cart to open over the Store with current facts,
+**I want** my current cart to open over the page I am on with current facts,
 **so that** I can review what the shop can sell without losing my place.
 
 ### grade10-site-store-cart-drawer-US-02: Collector edits the reviewed cart
