@@ -9,6 +9,7 @@ Winner Order is the authenticated route where a collector settles one lot after 
 ## Invoice and Settlement
 
 - **Address first** — a closed lot opens asking for a delivery address; the winner confirms the account's saved or newly entered address before an operator prepares an invoice
+- 🚧 **Saved addresses** — an account keeps up to **5** named shipping addresses; at the cap, Add new address still works for this order only, and Save this address for future orders is refused until one is removed
 - 🚧 **Address deadline** — 48 hours from lot close to confirm a delivery address; `Confirm by …` under the CTA (with time); overdue alert reads `Missed address deadline: {date}` with Contact Us; Confirm is hidden when the window passes; status stays Awaiting Address
 - **Invoice** — one operator-quoted invoice per lot; shipping and insurance are priced for the confirmed address, the address locks when the invoice is sent, and the seven-day payment window starts at send
 - 🚧 **Invoice lines** — Winning Bid, Buyer's Premium, Shipping & Handling, Insurance when added, Tax, Subtotal, Payment Processing Fee and Order Total; Shipping & Handling of zero reads Free. Insurance is optional and separate from Payment Processing Fee. The on-page summary may omit Subtotal and show fee lines plus Order Total; invoice and receipt itemisation keep Subtotal
@@ -52,6 +53,7 @@ The winner needs one place to understand what is owed and what happens next. The
 | Summary Subtotal row | Decided | On-page Winner Order summary may omit Subtotal and show fee lines plus Order Total; invoice and receipt itemisation keep Subtotal for the fee gross-up. | Product and design (@tangconst) |
 | Free shipping | Decided | Shipping & Handling of zero reads Free rather than hiding the line. | Product |
 | Address deadline | Decided | 48 hours from lot close to confirm a delivery address. Missed deadline hides Confirm and shows Contact Us; status stays Awaiting Address; invoice stays `not_issued`. No automatic cancel or suspension. | Product (@tangconst) |
+| Saved address cap | Decided | Five named shipping addresses per account. At the cap, Add new address still confirms a one-time address for the order; Save this address for future orders is refused until the winner removes one. | Product (@tangconst) |
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close. Absolute datetime in the winner’s zone; no countdown. | Product |
 | Deadline ends self-service Pay | Decided | When the invoice is `expired`, Winner Order hides card Pay and shows Contact Us in the overdue alert. A deadline that still allowed card pay would not be a deadline. Operator reissue, manual settlement, or cancel remain. | Product (@tangconst) |
 | Progress stepper | Decided | Five presentation steps: Address → Invoice → Payment → Shipped → Completed. Status vocabulary stays eight values; Processing maps under Shipped; Delivered maps to Completed. Step subtext carries day-only milestone dates. | Product and design (@tangconst) |
