@@ -9,7 +9,7 @@
 - [ ] 2.2 Carry the external lot status on `MyWatch` and the account record's watching item, deleting the `draft`, `canceled` and `unavailable` variants the hidden-lot filter makes unreachable (`grade10-site-auction-lot-status-SC-08`)
 - [ ] 2.3 Verify the contracts with `pnpm run typecheck`, `pnpm run lint` and `pnpm run test:backend`
 
-## 3. Auction service reads (grade10)
+## 3. Auction service reads (grade10) (owner: @htonyl)
 
 Needs group 2 landed: every read here publishes the contracts' field and calls
 its derivation.
