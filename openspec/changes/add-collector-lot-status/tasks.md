@@ -3,7 +3,7 @@
 - [ ] 1.1 State the hidden-lot rule where each page owns it: the watched list drops a called-off lot rather than labelling it in place (`docs/prds/products/grade10-site/auction/watchlist.md`), and a hidden lot's address is one of the addresses that answer not found (`docs/prds/products/grade10-site/auction/listing-page.md`), leaving the mapping itself on the lot-status page (`grade10-site-auction-lot-status-SC-08`, `grade10-site-auction-lot-status-SC-09`, `grade10-site-auction-listing-page-SC-19`)
 - [ ] 1.2 Verify the manual and the change artifacts with `pnpm check:manual` and `pnpm run validate:changes add-collector-lot-status`, both from the grade10-spec clone
 
-## 2. Auction contracts (grade10)
+## 2. Auction contracts (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Add `deriveExternalLotStatus` and the `externalStatus` field to the public listing summary, the listing state and their procedure twins in `packages/grade10-auction/contracts`, exhaustive over the listing status vocabulary and returning Hidden as `null` (`grade10-site-auction-lot-status-SC-01`, `grade10-site-auction-lot-status-SC-02`, `grade10-site-auction-lot-status-SC-03`, `grade10-site-auction-lot-status-SC-04`, `grade10-site-auction-lot-status-SC-12`, `grade10-site-auction-lot-status-SC-10`)
 - [ ] 2.2 Carry the external lot status on `MyWatch` and the account record's watching item, deleting the `draft`, `canceled` and `unavailable` variants the hidden-lot filter makes unreachable (`grade10-site-auction-lot-status-SC-08`)
