@@ -72,7 +72,7 @@ product.
 Product Details the same way the photo does; a sold-out card’s name stays
 inert.
 
-🚧 **Signed-out Add to cart** — opens the sign-in dialog titled
+**Signed-out Add to cart** — opens the sign-in dialog titled
 **Sign In to Add to Cart**; no guest cart; after a successful sign-in the
 add completes when practical.
 

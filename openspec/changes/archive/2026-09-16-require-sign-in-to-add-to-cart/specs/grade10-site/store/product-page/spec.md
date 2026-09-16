@@ -16,6 +16,7 @@ the intended variant or quantity is no longer available, the page SHALL NOT
 invent a later add.
 
 #### Scenario: grade10-site-store-product-page-SC-26 - Signed-out Add to cart opens sign-in
+**Serves:** grade10-site-store-product-page-US-11 - Collector signs in to add from the product page
 
 - **GIVEN** a signed-out collector on a product page that offers Add to cart
 - **WHEN** they activate Add to cart
@@ -23,6 +24,7 @@ invent a later add.
 - **AND** no cart gains a line for that product
 
 #### Scenario: grade10-site-store-product-page-SC-27 - Dismissing sign-in adds nothing
+**Serves:** grade10-site-store-product-page-US-11 - Collector signs in to add from the product page
 
 - **GIVEN** a signed-out collector who opened sign-in from Add to cart on a
   product page
@@ -31,6 +33,7 @@ invent a later add.
 - **AND** the cart is unchanged
 
 #### Scenario: grade10-site-store-product-page-SC-28 - Sign-in on the product page completes the add
+**Serves:** grade10-site-store-product-page-US-11 - Collector signs in to add from the product page
 
 - **GIVEN** a signed-out collector who opened sign-in from Add to cart for a
   given variant and quantity on a product page

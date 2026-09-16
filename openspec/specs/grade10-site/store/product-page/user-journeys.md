@@ -35,3 +35,15 @@ still carrying its prices,
 **I want** the page to stop me at what the shop has of the grade I chose, and
 to say how many that is,
 **so that** the quantity I take to the cart is one the shop can fill.
+
+### grade10-site-store-product-page-US-11: Collector signs in to add from the product page
+
+**As a** signed-out collector on a product page,
+**I want** Add to cart to open sign-in instead of building a guest cart,
+**so that** I only hold lines I can take to members-only checkout.
+
+### grade10-site-store-product-page-US-12: Collector sees why sign-in is asked when adding from the product page
+
+**As a** signed-out collector on a product page,
+**I want** the sign-in dialog to say I am signing in to add to cart,
+**so that** I know why the shop stopped the add.

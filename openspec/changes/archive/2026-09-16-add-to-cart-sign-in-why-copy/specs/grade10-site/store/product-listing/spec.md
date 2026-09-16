@@ -8,6 +8,7 @@ listing card that offers a cart control, the dialog title SHALL be
 sign-in surface's consumer-owned title copy.
 
 #### Scenario: grade10-site-store-product-listing-SC-47 - Add to cart sign-in title names why
+**Serves:** grade10-site-store-product-listing-US-13 - Collector sees why sign-in is asked when adding from the listing
 
 - **GIVEN** a signed-out collector on the browse listing, on a card that offers
   a cart control

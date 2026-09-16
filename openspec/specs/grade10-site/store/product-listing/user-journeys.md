@@ -74,3 +74,14 @@ end.
 **so that** I can read it newest or cheapest first and still be in the
 collection I came for.
 
+### grade10-site-store-product-listing-US-12: Collector signs in to add from the listing
+
+**As a** signed-out collector on the browse listing,
+**I want** Add to cart to open sign-in instead of building a guest cart,
+**so that** I only hold lines I can take to members-only checkout.
+
+### grade10-site-store-product-listing-US-13: Collector sees why sign-in is asked when adding from the listing
+
+**As a** signed-out collector on the browse listing,
+**I want** the sign-in dialog to say I am signing in to add to cart,
+**so that** I know why the shop stopped the add.

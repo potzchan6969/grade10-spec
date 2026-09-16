@@ -16,6 +16,7 @@ or the intended product or quantity is no longer available, the listing SHALL
 NOT invent a later add.
 
 #### Scenario: grade10-site-store-product-listing-SC-44 - Signed-out Add to cart opens sign-in
+**Serves:** grade10-site-store-product-listing-US-12 - Collector signs in to add from the listing
 
 - **GIVEN** a signed-out collector on the browse listing, on a card that offers
   a cart control
@@ -24,6 +25,7 @@ NOT invent a later add.
 - **AND** no cart gains a line for that card
 
 #### Scenario: grade10-site-store-product-listing-SC-45 - Dismissing sign-in adds nothing
+**Serves:** grade10-site-store-product-listing-US-12 - Collector signs in to add from the listing
 
 - **GIVEN** a signed-out collector who opened sign-in from Add to cart on the
   listing
@@ -32,6 +34,7 @@ NOT invent a later add.
 - **AND** the cart is unchanged
 
 #### Scenario: grade10-site-store-product-listing-SC-46 - Sign-in on the listing completes the add
+**Serves:** grade10-site-store-product-listing-US-12 - Collector signs in to add from the listing
 
 - **GIVEN** a signed-out collector who opened sign-in from Add to cart for a
   given card and quantity on the listing
