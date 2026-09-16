@@ -12,7 +12,7 @@
 
 ## 3. Bid-panel state integration (grade10) (owner: @htonyl)
 
-- [ ] 3.1 Keep the existing Grade10 bid-panel states and authorized handling; verify that the backend response leaves a successfully linked collector ready to bid and moves an accepted first bid directly to `enrolled`, without adding a client-side hold flag or panel state.
+- [x] 3.1 Keep the existing Grade10 bid-panel states and authorized handling; verify that the backend response leaves a successfully linked collector ready to bid and moves an accepted first bid directly to `enrolled`, without adding a client-side hold flag or panel state.
 
 ## 4. Cross-feature verification (grade10)
 
