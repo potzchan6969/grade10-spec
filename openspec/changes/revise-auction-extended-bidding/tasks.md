@@ -20,7 +20,7 @@
 - [ ] 4.2 Update create/draft timing validation, listing repositories, public state projections, admin listing procedures, post-sale queue derivation, and fixture clients for duration-only settings, scheduled close, and the derived queue label (`grade10-site-auction-auction-SC-13`, `grade10-admin-auction-listing-SC-24`, `grade10-admin-auction-listing-SC-25`, `grade10-admin-auction-listing-SC-26`, `grade10-admin-auction-listing-SC-27a`, `grade10-admin-auction-listing-SC-28`, `grade10-admin-auction-listing-SC-70`, `grade10-admin-auction-post-sale-SC-64`, `grade10-admin-auction-post-sale-SC-65`, `grade10-admin-auction-post-sale-SC-66`)
 - [ ] 4.3 Verify the backend with `pnpm --dir packages/grade10-auction/backend run typecheck && pnpm --dir packages/grade10-auction/backend run test && pnpm run test:backend`
 
-## 5. Grade10 site auction surfaces (grade10)
+## 5. Grade10 site auction surfaces (grade10) (owner: @htonyl)
 
 - [ ] 5.1 Consume the duration-only public extension policy and scheduled close in listing types, mappers, timing hooks, listing views, and catalogue-facing copy without adding an unapproved label surface (`grade10-site-auction-auction-SC-08`, `grade10-site-auction-auction-SC-13`)
 - [ ] 5.2 Update the site auction fixtures, helpers, and domain flow for a bid during extended bidding, including automatic bidding restarting the timer (`grade10-site-auction-e2e-US07-TC01-2`)
