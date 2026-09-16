@@ -182,6 +182,53 @@ artifacts:
       outright and that join breaks with nothing left to recover it from.
     requires:
       - proposal
+  - id: ui-design
+    required: false
+    teammate: designer
+    generates: ui-design.md
+    description: The visual plan - screens, component exports, and states
+    template: ui-design.md
+    instruction: >
+      Written by the designer, with the `planning-design` skill - or by the
+      product manager, in the same file, when they already have the design and
+      do not need one drawn. Maps every
+      user-facing surface the change
+
+      touches to its sources of truth, from the journeys and the PRD - the
+
+      requirements are not written yet. Optional: a change with no user-facing
+
+      surface does not create the file, and nothing downstream waits on it. A
+      design drawn later still lands on this same change.
+
+
+      Sections:
+
+      - **Screens**: One subsection per surface. Link the Figma frame - the
+      frame is the layout's source of truth, so never describe a screen in
+      prose.
+
+      - **Components**: The design-system primitives and `packages/ui` exports
+      each screen composes. Name exports exactly - the export name is the
+      cross-repo contract. A component, variant, or token that does not exist
+      yet is work in this repo; flag it so tasks can carry it.
+
+      - **States**: Loading, empty, error, and edge states per screen, each
+      tied to the anchor it dresses - a journey id from `user-journeys.md`, or
+      a `## Feature set` root group. Copy the id in backticks, from the heading
+      that issues it - a prefix is never inferable from the capability's path,
+      and outside backticks nothing reads the citation. Never a scenario id:
+      the scenarios are written after this file, and `pnpm check:manual`
+      refuses an id the store issues nowhere.
+
+
+      Link, never restate: the capability spec owns behavior, tech-design.md
+
+      owns technical decisions, Figma owns layout. If a section would only
+
+      repeat one of them, point to it instead.
+    requires:
+      - user-journeys
   - id: specs
     required: true
     generates: specs/**/spec.md
@@ -197,6 +244,7 @@ artifacts:
       **Pass one - the outline**, inside the `/planning-pm` run. `## Purpose`,
       then `## Feature set`, then stop. `user-journeys` already landed, and
       together with these groups they are the anchor set `/planning-qa` reads;
+      `ui-design` hangs off the same set where the change has a surface.
       `test-cases` comes next, and only then does pass two return here.
 
       **Pass two - the behaviour**, inside the `/planning-qa` run.
@@ -353,9 +401,9 @@ artifacts:
       The orchestrator builds it, and the sub-agent sees nothing else.
 
       Included: `## Purpose`, `## Feature set`, this capability's
-      `user-journeys.md` (context and deltas), the linked PRD sections, and the
-      existing `feature-tcs.md` for id continuity - with `## Reconciliation`
-      stripped.
+      `user-journeys.md` (context and deltas), `ui-design.md` where the change
+      has one, the linked PRD sections, and the existing `feature-tcs.md` for
+      id continuity - with `## Reconciliation` stripped.
 
       Excluded: `openspec/specs/` entirely, `openspec/changes/archive/`
       entirely, and any `## Requirements` section anywhere. The archive
@@ -420,47 +468,6 @@ artifacts:
 
       `pnpm run tcs:validate` checks every suite in the store, and CI runs it
       on every push.
-    requires:
-      - specs
-  - id: ui-design
-    required: false
-    teammate: designer
-    generates: ui-design.md
-    description: The visual plan - screens, component exports, and states
-    template: ui-design.md
-    instruction: >
-      Written by the designer, with the `planning-design` skill - or by the
-      product manager, in the same file, when they already have the design and
-      do not need one drawn. Maps every
-      user-facing surface the change
-
-      touches to its sources of truth. Optional: a change with no user-facing
-
-      surface does not create the file, and nothing downstream waits on it.
-
-
-      Sections:
-
-      - **Screens**: One subsection per surface. Link the Figma frame - the
-      frame is the layout's source of truth, so never describe a screen in
-      prose.
-
-      - **Components**: The design-system primitives and `packages/ui` exports
-      each screen composes. Name exports exactly - the export name is the
-      cross-repo contract. A component, variant, or token that does not exist
-      yet is work in this repo; flag it so tasks can carry it.
-
-      - **States**: Loading, empty, error, and edge states per screen, each
-      tied to the spec scenario that defines it. Copy each id from the heading
-      that defines it, in backticks - a prefix is never inferable from the
-      capability's path, and outside backticks nothing reads the citation.
-
-
-      Link, never restate: the capability spec owns behavior, tech-design.md
-
-      owns technical decisions, Figma owns layout. If a section would only
-
-      repeat one of them, point to it instead.
     requires:
       - specs
   - id: tech-design

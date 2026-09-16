@@ -60,6 +60,7 @@ over one document, and a change in another repository to fix the second.
 
 ```
 /planning-pm                    proposal, journeys, spec-outline
+/planning-design                ui-design, where there is a surface
     ─────────────────────────────────────────────────────────────
     ↓
     ├── sub-agent A → scenario draft      identical inputs,
@@ -94,6 +95,12 @@ Everything this run produces is `draft`. Nothing in it claims review;
 3. **Run the two readings.** Dispatch both sub-agents. They get identical
    inputs and never see each other's output. `spec-to-tcs` builds the isolated
    input for the suite pass; the scenario pass does not read `feature-tcs.md`.
+
+   **Both get `ui-design.md`** where the change has one. It lands before the
+   requirements and its states tie to anchors, not scenario ids, so reading it
+   costs no independence - blindness is from the scenarios, never from the
+   design. An error or empty treatment the designer drew and no requirement
+   states is exactly what the reconciliation exists to surface.
 
 4. **Reconcile, then take the second pass.** Join on anchors, apply the
    dispositions below, and the scenarios that survive are written with the
@@ -143,8 +150,9 @@ orchestrator builds an isolated input in scratch space, and the suite sub-agent
 sees nothing else.
 
 **Included:** `## Purpose`, `## Feature set`, this capability's
-`user-journeys.md`, the linked PRD sections, and the existing `feature-tcs.md`
-for id continuity, with `## Reconciliation` stripped.
+`user-journeys.md`, `ui-design.md` where the change has one, the linked PRD
+sections, and the existing `feature-tcs.md` for id continuity, with
+`## Reconciliation` stripped.
 
 **Excluded:** `openspec/specs/` entirely, `openspec/changes/archive/` entirely,
 and any `## Requirements` section anywhere.

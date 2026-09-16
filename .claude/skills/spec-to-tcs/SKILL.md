@@ -26,8 +26,10 @@ The blind pass reads the bundle **The Isolated Input** describes in the
 rulebook, assembled by the caller, and nothing outside it:
 
 - **Included** - `## Purpose` and `## Feature set` from the capability's
-  `spec.md`, its `user-journeys.md`, the change's `proposal.md` where one
-  exists, the linked pages under `docs/prds/`, `openspec/config.yaml`'s
+  `spec.md`, its `user-journeys.md`, the change's `proposal.md` and
+  `ui-design.md` where they exist - the design lands before the requirements
+  and ties its states to anchors, so it carries no leak - the linked pages
+  under `docs/prds/`, `openspec/config.yaml`'s
   `context`, the existing `feature-tcs.md` for id continuity with its
   `## Reconciliation` stripped, and that suite's `## Settled` - the questions
   earlier runs asked and had answered. Reading those is what stops you raising
@@ -81,8 +83,8 @@ and are unchanged.
 
 - **Feature** — the isolated input above, and nothing else: `## Purpose` and
   `## Feature set` from `spec.md` but never its requirements,
-  `user-journeys.md`, the change's `proposal.md` when one exists, the pages
-  under `docs/prds/`, and `openspec/config.yaml`'s `context`. A platform fact
+  `user-journeys.md`, the change's `proposal.md` and `ui-design.md` when they
+  exist, the pages under `docs/prds/`, and `openspec/config.yaml`'s `context`. A platform fact
   is checked where it matters (`URL contains <lang>`), never written as a
   pre-condition
 - **Domain** — **Compose from evidence** under **One purpose, one case**:

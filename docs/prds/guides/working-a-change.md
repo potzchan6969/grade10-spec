@@ -24,9 +24,9 @@ One id names the directory, and every command you run names that id.
 | --- | --- | --- | --- | --- |
 | 1 | `proposal.md` | Product manager | `/planning-pm` | Always |
 | 2 | `specs/<capability>/user-journeys.md` | Product manager | `/planning-pm` | Always — one nobody walks says so in it |
-| 3 | `specs/<capability>/spec.md` | Generated | `/planning-pm`, then `/planning-qa` | Always — the outline, then the requirements |
-| 4 | `specs/<capability>/feature-tcs.md` | Generated | `/planning-qa` | Always — blind, before the scenarios |
-| 5 | `ui-design.md` | Designer | `/planning-design` | Optional |
+| 3 | `ui-design.md` | Designer | `/planning-design` | Optional — from the journeys, before the requirements |
+| 4 | `specs/<capability>/spec.md` | Generated | `/planning-pm`, then `/planning-qa` | Always — the outline, then the requirements |
+| 5 | `specs/<capability>/feature-tcs.md` | Generated | `/planning-qa` | Always — blind, before the scenarios |
 | 6 | `tech-design.md` | Engineer | `/planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
 | 7 | `tasks.md` | Engineer | `/planning-dev` | Before anyone can build it |
 
@@ -107,8 +107,20 @@ right person for goes into the proposal's open questions, naming who settles it
 
 `proposal.md`, `user-journeys.md`, and `spec.md` carrying its `## Purpose` and
 `## Feature set` — the anchor set, and nothing below it. The skill validates
-strictly before it stops; fix what that names, then say the change is ready for
-`/planning-qa`.
+strictly before it stops; fix what that names, then say the change is ready —
+for a designer where it has a surface, and for `/planning-qa` either way.
+
+# Designer
+
+*Designer* — **Map the surface** — `/planning-design add-store-gift-receipt`;
+a change with no user-facing surface writes no `ui-design.md` at all
+
+## Link, Never Describe
+
+One subsection per screen linking its Figma frame, exports named exactly,
+states tied to the anchor each dresses — the requirements are not written yet.
+A variant, a token, or a block that has to be built is work in
+**grade10-spec** — flag it so `tasks.md` carries it.
 
 # QA
 
@@ -122,17 +134,6 @@ reconciles them; a contradiction it cannot settle goes back to the PM
 records `actual`, `deprecated`, or still `draft`. A case built from no scenario
 is a new requirement in disguise — send it back to the spec. `domain-tcs.md`,
 `product-tcs.md` and `platform-tcs.md` are QA's, beside the durable specs.
-
-# Designer
-
-*Designer* — **Map the surface** — `/planning-design add-store-gift-receipt`;
-a change with no user-facing surface writes no `ui-design.md` at all
-
-## Link, Never Describe
-
-One subsection per screen linking its Figma frame, exports named exactly,
-states tied to the scenario that defines each. A variant, a token, or a block
-that has to be built is work in **grade10-spec** — flag it so `tasks.md` carries it.
 
 # Engineer
 

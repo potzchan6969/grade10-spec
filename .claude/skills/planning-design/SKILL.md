@@ -33,10 +33,12 @@ A section that would only repeat one of them points at it instead.
 
 ## Steps
 
-1. **Read what already exists.** The change's `specs/<capability>/spec.md` and
-   `user-journeys.md` — the states you document are the scenarios those
-   already define. Then the capability's PRD under `docs/prds/` when one
-   exists. A state or a variant you decide goes on the PRD first, before
+1. **Read what already exists.** The change's `user-journeys.md`, and
+   `specs/<capability>/spec.md` for its `## Purpose` and `## Feature set` —
+   together they are the anchor set, and the states you document dress the
+   outcomes those anchors name. **Do not wait for requirements**: your file is
+   written before them, and `## Requirements` is empty or absent while you
+   work. Then the capability's PRD under `docs/prds/` when one exists. A state or a variant you decide goes on the PRD first, before
    `ui-design.md` cites it, only when it changes an outcome the reader
    meets — what they can do, see counted, or are refused — and then as one
    🚧 line that replaces the line it supersedes, never beside it. Everything
@@ -88,17 +90,22 @@ not something absorbed into a Code Connect template — read
 
 ## States
 
-Loading, empty, error and edge states per screen, **each tied to the spec
-scenario that defines it**. A state with no scenario behind it means the spec
-is missing one — fix the spec, not this file. That is the whole point of the
-tie: it is how a designer's edge case becomes something a test can decide.
+Loading, empty, error and edge states per screen, **each tied to the anchor it
+dresses** — a journey id from `user-journeys.md`, or a `## Feature set` root
+group. A state with no anchor behind it means the anchor set is missing one —
+say so to the PM, and do not invent the journey yourself.
 
-**Copy each id from the heading that defines it, and write it in backticks.**
+**Never a scenario id.** The scenarios are written after this file, by
+`/planning-qa`, and `pnpm check:manual` refuses an id the store issues nowhere.
+The tie still does its work: a scenario serves the anchor your state named, so
+your edge case reaches the requirements rather than restating them.
+
+**Copy each id from the heading that issues it, and write it in backticks.**
 A prefix is read, never reconstructed: most capabilities issue
-`grade10-site-auction-account-record-SC-20`, a few issue `winner-order-SC-04`
+`grade10-site-auction-account-record-US-02`, a few issue `winner-order-US-04`
 and keep it, so shortening one to match its neighbour names nothing. Outside
 backticks nothing reads the citation, so a renumber leaves the row pointing at
-a scenario nobody issues any more and no check says so.
+a journey nobody issues any more and no check says so.
 
 ## Finish
 
@@ -117,7 +124,7 @@ move it off the planning board. Only `tasks.md` does.
 ## Related
 
 - `planning-pm` — the journeys and the anchor set your states hang off.
-- `planning-qa` — the scenarios your states tie to.
+- `planning-qa` — the scenarios written after yours, serving the same anchors.
 - `planning-dev` — the plan that carries the component work you flagged.
 - `page-from-figma` — converting a drafted screen into composed code.
 - `design-system-primitives`, `design-tokens`, `design-sync-check` — the rails
