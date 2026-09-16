@@ -1,6 +1,6 @@
 ---
 name: planning-design
-description: Write the designer's artifact on an OpenSpec change - ui-design.md, mapping each screen to its Figma frame, its component exports, and its states. Use when a change alters something a user sees.
+description: Write the ui-design.md artifact on an OpenSpec change - the designer's by default, and the product manager's when they already have the design - mapping each screen to its Figma frame, its component exports, and its states. Use when a change alters something a user sees.
 ---
 
 # The designer's artifact
@@ -10,6 +10,11 @@ One of the seven artifacts in `grade10-planning` is yours:
 | Artifact | What it holds |
 | --- | --- |
 | `ui-design.md` | Screens, the exports each composes, and the states each carries |
+
+It is yours by default, and not exclusively: **a product manager who already
+has the design writes it themselves**, in the same change, rather than holding
+the change open for one to be drawn. What the file must hold does not change
+with who types it - everything below applies either way.
 
 Optional: **a change with no user-facing surface skips the file entirely.**
 Nothing downstream waits on it, and `openspec status` simply lists it as not

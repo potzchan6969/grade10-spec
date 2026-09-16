@@ -20,8 +20,8 @@ a change's deltas, and carry no coverage obligation: `product` and `platform`
 are smoke passes.
 
 The feature suite is a **blind** reading, not a derived one: `/planning-pm`
-writes it through `/spec-to-tcs` from the anchors, by a sub-agent that never saw
-the scenarios, in parallel with the scenarios themselves. The run then
+generates it through `/spec-to-tcs` from the anchors, by a sub-agent that never
+saw the scenarios, in parallel with the scenarios themselves. The run then
 reconciles the two and records what it found. Your work starts after that.
 
 A capability whose journeys file says `**Walked by:** nobody` is not exempt any

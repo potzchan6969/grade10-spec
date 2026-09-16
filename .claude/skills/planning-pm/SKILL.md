@@ -1,21 +1,37 @@
 ---
 name: planning-pm
-description: Write the product manager's half of an OpenSpec change - proposal, purpose and feature set, user journeys, a blind test suite and the scenarios reconciled against it. Use when a PM or designer is specifying a change, and stop where the requirements stop.
+description: Write the product manager's half of an OpenSpec change - the proposal and the user journeys - then run the generation that drafts the spec and the blind suite from them and review what comes back. Use when a PM or designer is specifying a change, and stop where the requirements stop.
 ---
 
 # The product manager's artifacts
 
-Four of the seven artifacts in `grade10-planning` are yours, and they are the
-first four. `specs` is written in **two passes over one file**, with the blind
-suite between them:
+**Two of the seven artifacts in `grade10-planning` are yours to write**, and
+they are the first two:
 
 | Artifact | File | What it holds |
 | --- | --- | --- |
 | `proposal` | `proposal.md` | Why this problem, for whom, what it will not do |
-| `specs` — pass one | `specs/<capability>/spec.md` | `## Purpose` and `## Feature set`, then stop |
 | `user-journeys` | `specs/<capability>/user-journeys.md` | The journeys added, changed or retired, and the ones this change leans on |
-| `test-cases` | `specs/<capability>/feature-tcs.md` | A blind suite, written without sight of the scenarios |
+
+A third is yours **when you already have the design**: `ui-design.md` is the
+designer's file, and a PM who has the screens in hand writes it in the same
+change rather than waiting for one to be drawn. A change with no user-facing
+surface skips it entirely - `planning-design` holds its shape.
+
+`spec.md` and `feature-tcs.md` are **generated from those two files inside this
+same run**, and neither names a teammate in the schema: they sit on nobody's
+worklist, and you review them rather than author them. `specs` is generated in
+**two passes over one file**, with the blind suite between them:
+
+| Generated | File | What it holds |
+| --- | --- | --- |
+| `specs` — pass one | `specs/<capability>/spec.md` | `## Purpose` and `## Feature set`, then stop |
+| `test-cases` | `specs/<capability>/feature-tcs.md` | A blind suite, drafted without sight of the scenarios |
 | `specs` — pass two | `specs/<capability>/spec.md` | The requirement deltas and their scenarios, reconciled against that suite |
+
+Generated is not unreviewed. **You are the reader of record** for both files
+before the change leaves your hands: the run stops at every contradiction it
+cannot settle (see Reconciliation), and those stops are yours to answer.
 
 The schema cannot express that order — `requires` is advisory and has never
 stopped anyone writing the scenarios first. The split that used to try was
@@ -23,11 +39,12 @@ undone because it bought nothing and cost three things: a status line that
 called the second pass done as soon as the first wrote the file, two viewer tabs
 over one document, and a change in another repository to fix the second.
 
-**Stop there.** A designer writes `ui-design.md`, and the engineer who picks the
-change up writes `tech-design.md` and `tasks.md` - on this same change, never a
-second one. A change with no `tasks.md` reads as still being planned on both
-boards; that is the handoff signal, and it is the only one, so say the change
-needs picking up rather than assuming someone will find it.
+**Stop there.** A designer writes `ui-design.md` unless you already had the
+design, and the engineer who picks the change up writes `tech-design.md` and
+`tasks.md` - on this same change, never a second one. A change with no
+`tasks.md` reads as still being planned on both boards; that is the handoff
+signal, and it is the only one, so say the change needs picking up rather than
+assuming someone will find it.
 
 The PRD under `docs/prds/` is yours to keep whole. Everyone writes on it - a
 designer's state, an engineer's constraint, a QA case that exposes a rule nobody
@@ -60,9 +77,9 @@ grilling                        author answers rounds until the frontier is empt
     ↓
 PRD marks 🚧 / ❓                the source of the feature set's groups
     ↓
-spec-outline                    Purpose + Feature set
+user-journeys                   yours, written
     ↓
-user-journeys
+spec-outline                    generated: Purpose + Feature set
     ↓
     ├── sub-agent A → scenario draft      identical inputs,
     └── sub-agent B → feature-tcs.md      neither sees the other
@@ -124,8 +141,8 @@ Everything this run produces is `draft`. Nothing in it claims review.
 
    ```bash
    openspec instructions proposal --change <change-name>
-   openspec instructions specs --change <change-name>
    openspec instructions user-journeys --change <change-name>
+   openspec instructions specs --change <change-name>
    openspec instructions test-cases --change <change-name>
    ```
 
@@ -140,29 +157,35 @@ Everything this run produces is `draft`. Nothing in it claims review.
    is unrelated: it guards `tasks.md` against being overwritten while
    engineering is implementing.)
 
-6. **Write the proposal, the outline and the journeys**, in that order.
-   Under the proposal's `## References`, link every section you marked, so the
-   manual shows the change under that heading.
+6. **Write the proposal and the journeys**, in that order - the two files
+   that are yours. Under the proposal's `## References`, link every section you
+   marked, so the manual shows the change under that heading.
 
-7. **Run the two readings.** Dispatch both sub-agents. They get identical
+7. **Generate the outline**, then read it. `## Purpose` and `## Feature set`
+   come from the proposal, the marks and the journeys, and every anchor
+   downstream hangs off those root groups - a group that is wrong is cheapest
+   to fix here, and dearest after both readings have been taken from it.
+
+8. **Run the two readings.** Dispatch both sub-agents. They get identical
    inputs and never see each other's output. `spec-to-tcs` builds the isolated
    input for the suite pass; the scenario pass does not read `feature-tcs.md`.
 
-8. **Reconcile, then write the second pass.** Join on anchors, take the
-   dispositions below, and write the scenarios that survive together with the
-   `## Reconciliation` block.
+9. **Reconcile, then take the second pass.** Join on anchors, apply the
+   dispositions below, and the scenarios that survive are written with the
+   `## Reconciliation` block. Read them against your journeys before you
+   validate: generated is not unreviewed, and you are the reader of record.
 
-9. **Validate.**
+10. **Validate.**
 
-   ```bash
-   pnpm run validate:changes <change-name>
-   pnpm check:manual
-   pnpm run tcs:validate
-   ```
+    ```bash
+    pnpm run validate:changes <change-name>
+    pnpm check:manual
+    pnpm run tcs:validate
+    ```
 
-   A requirement nobody can decide yet is a wait, not a guess: `awaiting:`
-   with `specs: <what is missing>` in the change's `.openspec.yaml` says so,
-   and `validate:changes` is the run that honours it.
+    A requirement nobody can decide yet is a wait, not a guess: `awaiting:`
+    with `specs: <what is missing>` in the change's `.openspec.yaml` says so,
+    and `validate:changes` is the run that honours it.
 
 ## Anchors
 
@@ -297,7 +320,7 @@ grilling round, not a self-service waiver.
 | # | Commit | Proves |
 | --- | --- | --- |
 | 1 | `docs(prd): …` | The product judgement is in the reader's words |
-| 2 | `spec(<domain>): outline and journeys` | The anchor set is fixed |
+| 2 | `spec(<domain>): journeys and outline` | The anchor set is fixed |
 | 3 | `test(<domain>): blind pass suites` | The blind reading, uncontaminated |
 | 4 | `spec(<domain>): scenarios and reconciliation` | What the second reading caught |
 
@@ -311,7 +334,7 @@ why that block is not optional.
 | Statement | Home |
 | --- | --- |
 | What the product should be, in the reader's words | The PRD, marked 🚧 or ❓ |
-| Anything testable | The delta spec, and nowhere else |
+| Anything testable | The delta spec, and nowhere else - generated, and yours to check |
 | Who walks it | `user-journeys.md` beside that spec |
 | Why this problem, for whom, what was ruled out, what will be measured | The PRD's `Product decisions` block |
 | How it will be built | `tech-design.md` - not yours |

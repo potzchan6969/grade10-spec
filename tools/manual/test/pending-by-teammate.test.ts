@@ -161,14 +161,23 @@ describe("what each teammate still owes", () => {
 describe("against the store as it stands", () => {
   const artifacts = realStore.snapshot.schemas["grade10-planning"];
 
-  it("names a role for every artifact the planning schema declares", () => {
+  it("names a role for every artifact a teammate owes by hand", () => {
     expect(artifacts?.length).toBeGreaterThan(0);
-    expect(artifacts?.filter((one) => one.teammate === undefined)).toEqual([]);
+    // `specs` and `test-cases` are generated inside the `/planning-pm` run and
+    // name no teammate on purpose: a worklist that asked a person for a file
+    // the run produces would be asking for work nobody does.
+    expect(
+      artifacts
+        ?.filter((one) => one.teammate === undefined)
+        .map((one) => one.id),
+    ).toEqual(["specs", "test-cases"]);
   });
 
   it("reads the chain and the optional artifacts off the schema file", () => {
     const byId = new Map(artifacts?.map((one) => [one.id, one]));
-    expect(byId.get("test-cases")?.requires).toEqual(["user-journeys"]);
+    expect(byId.get("user-journeys")?.requires).toEqual(["proposal"]);
+    expect(byId.get("specs")?.requires).toEqual(["user-journeys"]);
+    expect(byId.get("test-cases")?.requires).toEqual(["specs"]);
     expect(byId.get("ui-design")?.required).toBe(false);
     expect(byId.get("tasks")?.required).toBe(true);
   });

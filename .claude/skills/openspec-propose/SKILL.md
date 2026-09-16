@@ -16,16 +16,18 @@ This skill covers what to settle before drafting and routes to the right one.
 | --- | --- | --- | --- |
 | 1 | `proposal.md` | `planning-pm` | Always |
 | 2 | `specs/<capability>/user-journeys.md` | `planning-pm` | Always — a capability nobody walks says so in it |
-| 3 | `specs/<capability>/spec.md` | `planning-pm` | Always — two passes, with 4 between them |
-| 4 | `specs/<capability>/feature-tcs.md` | `planning-pm` | Always — a blind pass, written before the scenarios |
-| 5 | `ui-design.md` | `planning-design` | Optional |
+| 3 | `specs/<capability>/spec.md` | `planning-pm` | Always — generated, two passes with 4 between them |
+| 4 | `specs/<capability>/feature-tcs.md` | `planning-pm` | Always — generated blind, before the scenarios |
+| 5 | `ui-design.md` | `planning-design` | Optional — the designer's, or the PM's when they have the design |
 | 6 | `tech-design.md` | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
 | 7 | `tasks.md` | `planning-dev` | Before the change can be applied |
 
-Artifacts 2 to 4 are one `/planning-pm` run. `spec.md` is written twice: its
-purpose and feature set after the journeys, its requirements after the blind
-suite. A capability nobody walks still carries 4, anchored on its feature set
-rather than its journeys.
+Artifacts 2 to 4 are one `/planning-pm` run. **The product manager writes 1 and
+2**; 3 and 4 are generated from them inside that run, name no teammate, and sit
+on no worklist - the PM reviews 3, QA reviews 4 later with `/tcs-review`.
+`spec.md` is generated twice: its purpose and feature set after the journeys,
+its requirements after the blind suite. A capability nobody walks still carries
+4, anchored on its feature set rather than its journeys.
 
 **Write your part and stop.** Each role adds its artifacts to the one change;
 nobody opens a second one, and an implementation plan invented ahead of the

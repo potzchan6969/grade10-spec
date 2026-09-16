@@ -37,7 +37,8 @@ The proposal, the deltas and the journeys carry over untouched. **Do not send
 the proposal back to its author for a task list** — their part is finished.
 
 Authoring a change from scratch is the same lane: run `openspec new change
-<name>`, write the first three artifacts with `/planning-pm`, then continue
+<name>`, take artifacts 1 to 4 through `/planning-pm` - you write the proposal
+and the journeys, the run generates the spec and the suite - then continue
 here.
 
 ## Read the enriched instructions as you reach each artifact
