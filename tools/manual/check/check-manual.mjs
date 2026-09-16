@@ -22,7 +22,8 @@
  *        breaks the fold — a heading it cannot carry, a heading no durable
  *        requirement answers to, one requirement two changes both fold, an
  *        id issued twice, a page selector a fold is about to move out from
- *        under. Exits 1.
+ *        under. One is about the join the store writes in prose: an id cited
+ *        in backticks that nothing issues. Exits 1.
  * WARN = hygiene with no broken pointer behind it: a page committed before
  *        the specs it embeds, named requirement by requirement, a `[[ref]]`
  *        in prose that names nothing, a `::figma` link off figma.com, a spec
@@ -59,6 +60,7 @@ import {
 import { readManualConfig } from "../src/store/read-manual.mts";
 import { discoverSpecs, readSpecs } from "../src/store/read-specs.mts";
 import { resolveRoots, rootsOf } from "../src/store/roots.mts";
+import { checkCited } from "./cited.mjs";
 import {
   createContext,
   createReport,
@@ -186,6 +188,7 @@ export async function runChecks(
     checkCoverage(ctx, shape);
     checkUnwritten(ctx, changes, shape);
     checkAcceptance(ctx, shape);
+    checkCited(roots.store, add);
     checkWalked(ctx, shape, changes);
     checkRole(ctx, shape);
     const folded = checkSpecShape(roots.store, shape, add);

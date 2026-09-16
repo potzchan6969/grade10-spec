@@ -76,10 +76,10 @@ released copy retained.
 
 | State | Spec scenarios |
 | --- | --- |
-| View order on every Won standing | `account-record-SC-49` |
-| No View order on Didn’t win | `account-record-SC-50` |
-| Expired Won: Pending Payment, View order, no row contact | `account-record-SC-22` |
-| Calm Won: no secondary helpers | `account-record-SC-51` |
+| View order on every Won standing | `grade10-site-auction-account-record-SC-56` |
+| No View order on Didn’t win | `grade10-site-auction-account-record-SC-57` |
+| Expired Won: Pending Payment, View order, no row contact | `grade10-site-auction-account-record-SC-22` |
+| Calm Won: no secondary helpers | `grade10-site-auction-account-record-SC-58` |
 | Didn’t win hold being-released / released | Durable / redesign hold scenarios |
 
 ## Gaps for grade10-spec
