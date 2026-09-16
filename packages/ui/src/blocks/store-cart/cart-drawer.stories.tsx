@@ -262,6 +262,12 @@ export const WithoutPoints: Story = {
   args: {
     pointsState: null,
   },
+  render: (args) => {
+    const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
+    return (
+      <CartDrawer {...args} promoState={promo} onPromoStateChange={setPromo} />
+    );
+  },
   play: async () => {
     const canvas = drawer();
     expect(
@@ -269,6 +275,12 @@ export const WithoutPoints: Story = {
     ).not.toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: /Select or enter code/i }),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      canvas.getByRole("button", { name: /Select or enter code/i }),
+    );
+    expect(
+      canvas.getByRole("dialog", { name: "Promo code" }),
     ).toBeInTheDocument();
   },
 };
