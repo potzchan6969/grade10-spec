@@ -347,11 +347,11 @@ artifacts:
       both readings are taken from. `test-cases` comes next, and only then does
       pass two return here.
 
-      Pass one fixes the anchors, so it is read before it is built on: a root
-      group that is wrong is cheapest to fix here and dearest after both
-      readings have been taken from it. The PM is the reader of record for it,
-      as they are for the scenarios - generated is not unreviewed, and the
-      groups trace back to their own 🚧 lines.
+      Pass one fixes the anchors, and the run goes straight on to the two
+      readings rather than stopping to have the outline read on its own. The PM
+      is the reader of record for it, as they are for the scenarios, and reads
+      the two together at the reconciliation - generated is not unreviewed, and
+      the groups trace back to their own 🚧 lines.
 
       **Pass two - the behaviour.** `## ADDED Requirements` and its siblings,
       sequenced to follow the feature set's groups, written after the blind

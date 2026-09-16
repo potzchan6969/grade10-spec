@@ -44,11 +44,12 @@ they sit on nobody's worklist, and you read them rather than write them.
 | `test-cases` | `specs/<capability>/feature-tcs.md` | `/planning-qa`: a blind suite, drafted without sight of the scenarios |
 | `specs` — pass two | `specs/<capability>/spec.md` | `/planning-qa`: the requirement deltas and their scenarios, reconciled against that suite |
 
-Generated is not unreviewed. **You are the reader of record** for all three:
-the outline when it comes back, because its root groups trace to your own 🚧
-lines and every anchor downstream hangs off them, and the scenarios when they
-land. `/planning-qa` stops at every contradiction it cannot settle, and those
-stops are yours to answer.
+Generated is not unreviewed. **You are the reader of record** for all three,
+and all three come back together. The root groups trace to your own 🚧 lines
+and every anchor downstream hangs off them, so you read them beside the
+scenarios and the suite built on them rather than on their own - the run does
+not stop to have the outline read. `/planning-qa` stops at every contradiction
+it cannot settle, and those stops are yours to answer.
 
 **Stop at the journeys.** `/planning-qa` writes the outline, then runs the two
 readings from it, on the same branch. A designer writes `ui-design.md` unless you already
@@ -185,9 +186,9 @@ Everything this run produces is `draft`. Nothing in it claims review.
    step 3 comes before step 6 rather than after it. Half the **anchor set** is
    already fixed by the time you stop: the capability's full journey set once
    this change folds, which `/planning-qa` unions with the root groups it
-   derives. Read those groups when they come back. A group that is wrong is
-   cheapest to fix then, and dearest after both readings have been taken from
-   it.
+   derives. Those groups come back with the scenarios, not ahead of them: the
+   run goes straight from the outline to the readings. Read them there, against
+   your own 🚧 lines.
 
 8. **Validate what you wrote, then hand it on.**
 

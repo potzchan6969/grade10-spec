@@ -70,13 +70,15 @@ over one document, and a change in another repository to fix the second.
     ─────────────────────────────────────────────────────────────
     ↓
 specs pass one                  the outline: Purpose + Feature set
-    ↓                           the PM reads it before you build on it
+    ↓
     ├── sub-agent A → scenario draft      neither sees
     └── sub-agent B → feature-tcs.md      the other's work
     ↓
 reconciliation                  join on anchors
     ↓
 specs pass two + ## Reconciliation
+                                the PM reads the groups and the
+                                scenarios together, here
 ```
 
 Everything this run produces is `draft`. Nothing in it claims review;
@@ -106,14 +108,21 @@ Everything this run produces is `draft`. Nothing in it claims review;
    than working from memory; `specs` carries both of its passes, and the second
    is yours.
 
-3. **Write the outline, then have it read.** `## Purpose` and `## Feature set`,
+3. **Write the outline, then run on it.** `## Purpose` and `## Feature set`,
    from the journeys and the marked PRD - the rules are the `specs`
    instruction's. Root group names are the anchors everything downstream
-   resolves against, so they are fixed once and deliberately: **the PM is the
-   reader of record**, and a group that is wrong is cheapest to fix here and
-   dearest after both readings have been taken from it. Say the outline is
-   ready and wait for that read; do not run the readings over groups nobody has
-   looked at.
+   resolves against, so they are fixed once and deliberately.
+
+   **The run does not stop here.** The PM is the reader of record for the
+   groups, and reads them at the reconciliation, beside the scenarios and the
+   suite that were built on them - one read over the outline and what it
+   bought, rather than a stop in the middle of a run with nothing yet to show
+   against. Go straight to the readings.
+
+   That puts the cost of a wrong group on you rather than on the author: a
+   rename after both readings means every `**Serves:**` and `**Trace:**`
+   naming it moves in the same change. So read the groups once more yourself
+   before you dispatch, and fix one you can already see is wrong.
 
 4. **Run the two readings.** Dispatch both sub-agents. Neither sees the
    other's output. They read the same anchors, not the same bundle: the suite
@@ -164,7 +173,7 @@ Neither file points at the other. Both point up.
 
 > **Anchor set** = the capability's full journey set once this change folds,
 > **union** the root groups of its `## Feature set`. `/planning-pm` fixes the
-> journeys; you fix the groups, and the PM reads them before you build on them.
+> journeys; you fix the groups, and the PM reads both at the reconciliation.
 
 - A scenario carries `**Serves:** <anchor> - <prose>`, under its heading and
   above `**GIVEN**` / `**WHEN**`.
