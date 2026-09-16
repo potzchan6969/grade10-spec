@@ -146,7 +146,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 
 ## When Suites Are Generated
 
-- **Automatic** — when `/planning-pm` has the proposal, deltas and journeys through `pnpm run validate:changes <change>`, it runs `/spec-to-tcs <change>` at once: every case `draft`, on the same branch, as its own `test(<domain>): derive test cases for <capability>` commit. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
+- **Automatic** — once `/planning-pm` has the proposal, the journeys and the outline through `pnpm run validate:changes <change>`, `/planning-qa` runs `/spec-to-tcs <change>` on that same branch: every case `draft`, as its own `test(<domain>): derive test cases for <capability>` commit, ahead of the scenarios. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
 - **`/spec-push` refuses** — a change whose capability has `user-journeys.md` and no `feature-tcs.md`; it runs `pnpm run tcs:validate` with the other checks
 - **`skip_specs`** — nothing to generate
 - **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
@@ -205,7 +205,7 @@ Thirty capabilities carry a suite and thirty-nine do not; seventeen of those thi
 **None of it is being filled in one pass, and that is a decision rather than a backlog nobody got to.**
 
 - **A blind reading of a finished spec is not a blind reading.** These scenarios are written, reviewed and shipped. The second reading's whole value is that it happens beside the first without seeing it; run against a spec that already exists, it can only be a derived reading wearing the new shape, and its `## Raised` would come back empty — which is the signal this document names as the mechanism having failed
-- **The suites are written when a change touches the capability.** `/planning-pm` runs the blind pass as part of its own work, on the anchors as they stand at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
+- **The suites are written when a change touches the capability.** `/planning-qa` runs the blind pass on the anchor set `/planning-pm` just fixed, as it stands at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
 - **`pnpm check:manual`'s `derived` finding is the register.** It names every capability with anchors and no suite, recomputed on every run, so it cannot go stale the way a checklist in a document would. There is no second list to keep
 - **No rules revision was bumped for this.** The cases these files hold did not change; what changed is what a *new* run must record about itself. A major revision would have required sweeping thirty suites to say so, which is the work this section exists to decline
 

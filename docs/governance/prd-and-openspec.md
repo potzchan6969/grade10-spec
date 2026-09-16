@@ -96,7 +96,7 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 - `proposal.md` — scope, why now, consumer impact, non-goals, and under `## References` a link to every page section the change marked;
 - `specs/<capability>/spec.md` — only the requirement deltas against `openspec/specs/`;
 - `specs/<capability>/user-journeys.md` — the journeys those requirements accept, or the one line `**Walked by:** nobody on their own - <why>` when no end user reaches the capability;
-- `specs/<capability>/feature-tcs.md` — the suite derived from those journeys, beside every capability whose journeys file holds a journey;
+- `specs/<capability>/feature-tcs.md` — a blind reading of those journeys and the feature set, written without sight of the scenarios, beside every capability;
 - `ui-design.md` — screens, exports and states, when the change alters something a user sees;
 - `tech-design.md` — implementation choices, interfaces, compatibility, and validation approach; and
 - `tasks.md` — small, checkable delivery steps.
@@ -139,7 +139,7 @@ That is how the work reaches an engineer. The application repository has no plan
 
 `blind_pass_skipped` is granted by the checker, never declared, and granting it is `pnpm check:manual`'s `blind` rule staying quiet: the spec diff adds no scenario id and modifies no `**GIVEN**` / `**WHEN**` / `**THEN**` line. It is nothing the manifest records - a key would go stale the moment behaviour moved under it, and the verdict is cheap to recompute. Behaviour lives entirely in those lines, so the only way to take the shortcut is to genuinely not change behaviour. Where the checker refuses and the author disagrees, that is a question for the interview, not a self-service waiver.
 
-The strongest control is not a check. People take an escape hatch to avoid work, not responsibility, so once `/planning-pm` is one command the cost of not skipping falls from writing four documents to waiting for a run. The corollary holds too: if a run is slow or noisy, `skip_specs` use will rise, which makes the orchestrator's ergonomics part of this control rather than a separate concern.
+The strongest control is not a check. People take an escape hatch to avoid work, not responsibility, so once `/planning-pm` and `/planning-qa` are two commands the cost of not skipping falls from writing four documents to waiting for two runs. The corollary holds too: if a run is slow or noisy, `skip_specs` use will rise, which makes the orchestrator's ergonomics part of this control rather than a separate concern.
 
 
 A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so `pnpm check:manual` refuses a record key holding anything but text. `skip_specs` is the one exception, and not a waiver of the rule but the switch beneath it: the OpenSpec CLI owns that key and reads it as a boolean, so a reason written there invalidates the manifest and the marker stops being honoured at all. The switch stays `true`, and `skip_specs_why` carries the line.

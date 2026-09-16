@@ -23,9 +23,9 @@ One id names the directory, and every command you run names that id.
 | # | File | Written by | Skill | Required |
 | --- | --- | --- | --- | --- |
 | 1 | `proposal.md` | Product manager | `/planning-pm` | Always |
-| 2 | `specs/<capability>/spec.md` | Product manager | `/planning-pm` | Always |
-| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/planning-pm` | Always — one nobody walks says so in it |
-| 4 | `specs/<capability>/feature-tcs.md` | Product manager | `/planning-pm` | Always — unless the journeys file says `**Walked by:** nobody` |
+| 2 | `specs/<capability>/user-journeys.md` | Product manager | `/planning-pm` | Always — one nobody walks says so in it |
+| 3 | `specs/<capability>/spec.md` | Generated | `/planning-pm`, then `/planning-qa` | Always — the outline, then the requirements |
+| 4 | `specs/<capability>/feature-tcs.md` | Generated | `/planning-qa` | Always — blind, before the scenarios |
 | 5 | `ui-design.md` | Designer | `/planning-design` | Optional |
 | 6 | `tech-design.md` | Engineer | `/planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
 | 7 | `tasks.md` | Engineer | `/planning-dev` | Before anyone can build it |
@@ -103,17 +103,18 @@ Four things the skill cannot know, so say them when they are true:
 saying what the feature is; the interview follows, and a question you are not the
 right person for goes into the proposal's open questions, naming who settles it
 
-## Leave Four Files, Then Hand Over
+## Leave Three Files, Then Hand Over
 
-`proposal.md`, `spec.md` with each scenario id'd `grade10-site-store-gift-receipt-SC-01`,
-`user-journeys.md` with each story accepted by scenarios that exist, and
-`feature-tcs.md` derived from them with `/spec-to-tcs`, every case `draft`. The
-skill validates strictly before it stops; fix what that names, then say the
-change needs picking up — the board already shows it as still being planned.
+`proposal.md`, `user-journeys.md`, and `spec.md` carrying its `## Purpose` and
+`## Feature set` — the anchor set, and nothing below it. The skill validates
+strictly before it stops; fix what that names, then say the change is ready for
+`/planning-qa`.
 
 # QA
 
-*QA* — **Review the suite** — `/planning-qa add-store-gift-receipt`
+*QA* — **Run the two readings** — `/planning-qa add-store-gift-receipt` takes the
+anchor set and drafts the blind suite and the scenarios independently, then
+reconciles them; a contradiction it cannot settle goes back to the PM
 
 ## Review in Its Own Pull Request
 

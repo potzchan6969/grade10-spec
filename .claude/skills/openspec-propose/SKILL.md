@@ -16,18 +16,19 @@ This skill covers what to settle before drafting and routes to the right one.
 | --- | --- | --- | --- |
 | 1 | `proposal.md` | `planning-pm` | Always |
 | 2 | `specs/<capability>/user-journeys.md` | `planning-pm` | Always — a capability nobody walks says so in it |
-| 3 | `specs/<capability>/spec.md` | `planning-pm` | Always — generated, two passes with 4 between them |
-| 4 | `specs/<capability>/feature-tcs.md` | `planning-pm` | Always — generated blind, before the scenarios |
+| 3 | `specs/<capability>/spec.md` | `planning-pm`, then `planning-qa` | Always — generated, two passes with 4 between them |
+| 4 | `specs/<capability>/feature-tcs.md` | `planning-qa` | Always — generated blind, before the scenarios |
 | 5 | `ui-design.md` | `planning-design` | Optional — the designer's, or the PM's when they have the design |
 | 6 | `tech-design.md` | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
 | 7 | `tasks.md` | `planning-dev` | Before the change can be applied |
 
-Artifacts 2 to 4 are one `/planning-pm` run. **The product manager writes 1 and
-2**; 3 and 4 are generated from them inside that run, name no teammate, and sit
-on no worklist - the PM reviews 3, QA reviews 4 later with `/tcs-review`.
-`spec.md` is generated twice: its purpose and feature set after the journeys,
-its requirements after the blind suite. A capability nobody walks still carries
-4, anchored on its feature set rather than its journeys.
+**The product manager writes 1 and 2**, and `/planning-pm` generates the first
+pass of 3 from them - its purpose and feature set, the anchor set, then stops.
+`/planning-qa` takes that set and runs two independent readings of it: 4, blind
+to the scenarios, then 3's requirements, reconciled against it. Neither 3 nor 4
+names a teammate or sits on a worklist - the PM reviews 3, QA reviews 4 later
+with `/tcs-review`. A capability nobody walks still carries 4, anchored on its
+feature set rather than its journeys.
 
 **Write your part and stop.** Each role adds its artifacts to the one change;
 nobody opens a second one, and an implementation plan invented ahead of the
@@ -35,8 +36,8 @@ person who will execute it is worse than none. A change with no `tasks.md`
 reads as still being planned on both boards — that is the handoff signal, and
 it is the only one.
 
-Take `planning-pm` when the change does not exist yet: the first three
-artifacts are where every change starts.
+Take `planning-pm` when the change does not exist yet: the proposal, the
+journeys and the anchor set are where every change starts.
 
 ## Before you draft
 

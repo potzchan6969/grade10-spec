@@ -116,7 +116,8 @@ move it off the planning board. Only `tasks.md` does.
 
 ## Related
 
-- `planning-pm` — the scenarios your states tie to.
+- `planning-pm` — the journeys and the anchor set your states hang off.
+- `planning-qa` — the scenarios your states tie to.
 - `planning-dev` — the plan that carries the component work you flagged.
 - `page-from-figma` — converting a drafted screen into composed code.
 - `design-system-primitives`, `design-tokens`, `design-sync-check` — the rails

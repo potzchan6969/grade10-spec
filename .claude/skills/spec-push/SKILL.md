@@ -231,5 +231,5 @@ claim it with `pnpm plan claim` in the application repository.
 ## Related
 
 - `/pr-push` — opens the PR this one lands.
-- `/planning-pm`, `/planning-dev`, `/openspec-propose` — where the change was
-  written.
+- `/planning-pm`, `/planning-qa`, `/planning-dev`, `/openspec-propose` — where
+  the change was written.

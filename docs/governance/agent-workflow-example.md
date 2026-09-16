@@ -79,10 +79,12 @@ the lane instructions. What the agent reads first is `/planning-pm`'s — facts 
 lives in the store clone at `.claude/skills/grilling/SKILL.md`; the rule names
 that path, so point your agent at it if it cannot find the skill by name.
 
-**4. The agent writes four files.** `proposal.md`, then
-`specs/grade10-site/store-account-settings/spec.md`, `user-journeys.md` and
-`feature-tcs.md` beside it — after the PRD carries a 🚧 line per outcome
-and the proposal links that section; `pnpm check:manual` refuses a change with neither the mark nor `page_waived`.
+**4. The agent writes three files.** `proposal.md`,
+`specs/grade10-site/store-account-settings/user-journeys.md`, and `spec.md`
+beside it carrying its `## Purpose` and `## Feature set` — after the PRD carries
+a 🚧 line per outcome and the proposal links that section; `pnpm check:manual`
+refuses a change with neither the mark nor `page_waived`. The requirements and
+`feature-tcs.md` come from `/planning-qa`, which reads that outline twice over.
 
 **5. Check and push.**
 
