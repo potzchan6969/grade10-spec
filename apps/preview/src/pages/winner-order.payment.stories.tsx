@@ -89,9 +89,7 @@ export const ExpiredInvoice: Story = {
     ).not.toBeInTheDocument();
     expect(canvas.queryByText(/how to reach Grade10/i)).not.toBeInTheDocument();
     expect(canvas.queryByText(/support@grade10.com/)).not.toBeInTheDocument();
-    expect(
-      sidebar.getByRole("link", { name: "Invoice PDF" }),
-    ).toBeVisible();
+    expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(
       canvas.queryByText("Pending Payment (expired invoice)"),
     ).not.toBeInTheDocument();

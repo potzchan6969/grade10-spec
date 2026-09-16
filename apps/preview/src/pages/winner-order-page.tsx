@@ -534,7 +534,12 @@ function OrderSummary({
   const rest = lines.filter((line) => line.label !== "Order Total");
   const documentLinks =
     onViewInvoicePdf || onViewReceiptPdf ? (
-      <HStack className="w-full flex-wrap" gap="md" hAlign="start" vAlign="center">
+      <HStack
+        className="w-full flex-wrap"
+        gap="md"
+        hAlign="start"
+        vAlign="center"
+      >
         {onViewInvoicePdf ? (
           <Link
             aria-label="Invoice PDF"
