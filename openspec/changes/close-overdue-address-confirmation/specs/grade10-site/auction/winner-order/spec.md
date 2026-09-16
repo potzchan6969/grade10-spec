@@ -71,7 +71,9 @@ an address on this order SHALL be refused.
 Grade10 SHALL offer the winner no way to reopen the address form. Only an
 operator SHALL reopen it, per `grade10-admin/auction/post-sale`; a reopen SHALL
 set the address deadline to 48 hours from the moment of the reopen, and the
-winner SHALL then confirm or change the address as before. An operator SHALL
+winner SHALL then confirm or change the address as before. Grade10 SHALL send
+the winner no letter when the form is reopened; the operator tells them
+directly. An operator SHALL
 also be able to record a delivery address on the order themselves after the
 deadline, without reopening the form.
 
@@ -128,6 +130,14 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
   2026-09-18T14:00:00Z
 - **AND** the winner can confirm a delivery address again
 - **AND** Grade10 offers the winner no way to reopen it themselves
+
+#### Scenario: winner-order-SC-81 - A reopen sends the winner no letter
+**Serves:** winner-order-US-08 - Winner gets the address form back
+
+- **GIVEN** an auction order whose address deadline has passed
+- **WHEN** an operator reopens the address form
+- **THEN** the order offers Confirm delivery address again
+- **AND** Grade10 sends the winner no letter about the reopen
 
 #### Scenario: winner-order-SC-77 - Sending the invoice retires the address deadline
 **Serves:** Delivery address - sending the invoice retires the address deadline

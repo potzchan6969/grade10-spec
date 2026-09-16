@@ -59,8 +59,8 @@ too short.
   `revise-auction-winner-invoicing`, and are not restated here.
 - **The expired invoice's own rules.** Writing `expired`, hiding card Pay, and
   reissue and cancellation belong to that change.
-- **Letters.** Address reminders are that change's. No letter is added for a
-  reopen.
+- **Letters.** Address reminders are that change's. A reopen sends no letter;
+  the operator tells the winner directly.
 - **Suspension and automatic cancellation.** A missed address deadline does
   neither, as that change already says.
 - **Changes after the invoice is sent.** Those stay an operator re-quote.
@@ -123,13 +123,6 @@ itself:
   not that the winner opened the page.
 - **The 48 hours stay one Grade10-owned figure.** A new figure applies to lots
   closing after it is set.
-
-## Open questions
-
-- ❓ **Does a reopen tell the winner?** No letter is specified, on the
-  assumption that the operator answers the winner directly. A winner who is not
-  watching never learns the form is back. `winner-order-US8-TC10-1` stays
-  `draft` and `**Blocked:**` on Product until it is settled.
 
 ## Follow-on changes
 

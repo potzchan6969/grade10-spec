@@ -545,12 +545,12 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<closed-address form order>` is in Awaiting Address with its address window closed.
+* `<missed-deadline order>` is in Awaiting Address with its address deadline passed.
 * An operator holds payment-processing.
 
 **Steps:**
 
-1. Open `<closed-address form order>`.
+1. Open `<missed-deadline order>`.
 2. Record the delivery address the winner gave by telephone.
 
 **Expected Results:**

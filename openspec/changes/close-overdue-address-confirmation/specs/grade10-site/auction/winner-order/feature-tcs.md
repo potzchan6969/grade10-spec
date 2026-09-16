@@ -306,8 +306,8 @@
 
 **Pre-conditions:**
 
-* `<closed-address form order>`'s address form has closed with no address confirmed.
-* customer(winner of `<closed-address form order>`) is signed in.
+* `<missed-deadline order>`'s address deadline has passed with no address confirmed.
+* customer(winner of `<missed-deadline order>`) is signed in.
 
 **Steps:**
 
@@ -321,7 +321,7 @@
 * Neither reaches the auction order.
 * The order still has no confirmed delivery address and still offers no address form.
 
-### winner-order-US8-TC10-1: A reopen tells the winner nothing on its own
+### winner-order-US8-TC10-1: A reopen sends the winner no letter
 
 **Classification:**
 
@@ -334,12 +334,11 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** manual
-* **Trace:** Delivery address
-* **Blocked:** Product — whether a reopen sends the winner a letter is ❓ Open on the Winner Order page. No requirement states it, so this case records the question rather than an outcome.
+* **Trace:** winner-order-US-08
 
 **Pre-conditions:**
 
-* `<closed-address form order>`'s address form has closed.
+* `<missed-deadline order>`'s address deadline has passed.
 * An operator holds payment-processing.
 
 **Steps:**
@@ -350,7 +349,7 @@
 **Expected Results:**
 
 * The order offers the address form again.
-* Whether any letter reaches the winner is undecided and this case is not runnable until Product settles it.
+* No letter about the reopen reaches the winner.
 
 ## Raised
 
@@ -373,12 +372,12 @@ What they disagreed about is below.
 | What the address deadline is measured from on an extended lot | **Folded in.** The scenario pass had already fixed it on the actual close; `winner-order-SC-79` proves it against a lot whose scheduled and actual closes differ |
 | Whether a winner may add an address to the account book while the address form is closed | **Folded in** after a grilling round. The account address book is unaffected — `winner-order-SC-78` and `winner-order-US8-TC9-1` |
 | Whether a reopen after send does anything | **Already decided**, in `grade10-admin/auction/post-sale`: a reopen is refused once the invoice is sent. The suite could not see it |
-| Whether a reopen notifies the winner | **Blocked.** Nobody present could settle it. `winner-order-US8-TC10-1` stays `draft` carrying `**Blocked:**`, the Winner Order page carries a ❓ row, and no scenario is written |
-| What a missed address deadline does to the reminder letters | **Dropped.** The proposal's non-goals put every letter about this window in a follow-on change. Recorded here so the next blind pass does not raise it again |
+| Whether a reopen notifies the winner | **Folded in** once Product settled it: no letter, the operator tells the winner directly — `winner-order-SC-81` and `winner-order-US8-TC10-1` |
+| What a missed address deadline does to the reminder letters | **Dropped.** Address reminders belong to `revise-auction-winner-invoicing`. Recorded here so the next blind pass does not raise it again |
 | Traces on this delta pointing at feature set groups | **Kept.** The delta's journeys file holds only `winner-order-US-08`; the journeys those cases walk are durable and reach the suite at archive |
 | Cases covering behaviour this change no longer carries | **Kept as written.** Every delta here became ADDED after `check:manual` refused a draft that folded requirements `revise-auction-winner-invoicing` also folds. Cases reading the lock at send, the seven days from send and the hold release stay in the suite; the requirements they walk are that change's |
+| Cases the address deadline on `main` now covers | **Dropped** after `revise-auction-winner-invoicing` took on the 48-hour address deadline: Contact Us in place of the form, no suspension or cancellation, the displayed deadline, nothing to pay at close, and seven days from send. Its own suite walks them. The rest were renumbered under `winner-order-US8` |
 
-An operator may record a delivery address on a closed-window order without
+An operator may record a delivery address after the address deadline without
 reopening it. Neither reading proposed it; it came out of the same grilling
 round and is proved in `grade10-admin/auction/post-sale`.
-| Cases the address deadline on `main` now covers | **Dropped** after `revise-auction-winner-invoicing` took on the 48-hour address deadline: Contact Us in place of the form, no suspension or cancellation, the displayed deadline, nothing to pay at close, and seven days from send. Its own suite walks them. The rest were renumbered under `winner-order-US8` |
