@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { SiteHeader } from "./site-header";
 import { SITE_HEADER_BASE_ARGS } from "./site-header.story-shared";
 
@@ -34,6 +34,7 @@ export const NarrowSignedOut: Story = {
   ],
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    const body = within(canvasElement.ownerDocument.body);
     const header =
       canvasElement.querySelector<HTMLElement>('[data-slot="nav"]');
     expect(header).not.toBeNull();
@@ -42,5 +43,16 @@ export const NarrowSignedOut: Story = {
     expect(canvas.getByRole("button", { name: "Menu" })).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Sign In" })).toBeInTheDocument();
     expect(canvas.queryByRole("button", { name: "English" })).toBeNull();
+    await userEvent.click(canvas.getByRole("button", { name: "Menu" }));
+    const menu = within(await body.findByRole("dialog"));
+    const storeLocator = menu.getByRole("link", { name: "Store Locator" });
+    const help = menu.getByRole("link", { name: "Help" });
+    expect(
+      storeLocator.compareDocumentPosition(help) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(help).toHaveAttribute("href", "https://grade10.mintlify.io/");
+    expect(help).toHaveAttribute("target", "_blank");
+    expect(help).toHaveAttribute("rel", "noopener noreferrer");
   },
 };

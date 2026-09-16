@@ -7,7 +7,7 @@ import type {
   SortOption,
 } from "@grade10/ui";
 import { createElement, type ReactNode } from "react";
-import { STORE_LOCATOR_HREF } from "./workbench-story-nav";
+import { HELP_NAV_ITEM, STORE_LOCATOR_HREF } from "./workbench-story-nav";
 
 /* Content this workbench owns, exactly as a store application owns its own.
  * None of it lives in `@grade10/ui` or `@grade10/design-system`: both packages
@@ -19,7 +19,7 @@ const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 const noop = () => {};
 
 const NAV_LOGO: ReactNode = createElement(G10LogoMono, {
-  className: "h-5 w-auto @3xl:h-7",
+  className: "h-5 w-auto @4xl:h-7",
 });
 const FOOTER_LOGO: ReactNode = createElement(G10LogoMono, {
   className: "h-5 w-auto",
@@ -55,6 +55,7 @@ const STORE_SITE_HEADER = {
     { label: "Store", href: "#shop", current: true },
     { label: "Auction", href: "#auction" },
     { label: "Store Locator", href: STORE_LOCATOR_HREF },
+    { ...HELP_NAV_ITEM },
   ],
   onLocaleChange: noop,
   onSignIn: noop,
