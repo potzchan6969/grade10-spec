@@ -42,7 +42,9 @@ What the operator enters and reads on a quote:
 - 🚧 **Payment Processing Fee** — priced by Grade10 from the payment provider's live fees, not entered; the send is refused when those fees cannot be read
 - 🚧 **Subtotal and Order Total** — both read before sending
 
-A winner order reaches paid through one fresh card payment or one operator-recorded manual settlement. An expired invoice stays payable, and a reissue returns it to pending with a new deadline.
+A winner order reaches paid through one fresh card payment or one operator-recorded manual settlement.
+
+- 🚧 **Expired invoice** — the winner can no longer pay it; only an operator settles it here, manually, or reissues it so the winner can pay by card again with a fresh seven days
 
 Manual settlement is a finance fallback: the operator records bank transfer, cash, or another described method, a reference where required, and one to five private proof files. The winner sees the payment method and reference on the receipt, never the proof files.
 

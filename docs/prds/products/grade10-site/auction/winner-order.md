@@ -19,6 +19,7 @@ Winner Order is the authenticated route where a collector settles one lot after 
 - 🚧 **Address** — changeable by the winner while the address window is open and the invoice is not yet sent; a later change is handled by Grade10, by reopening the entrance before send or by an operator re-quote and reissue after it
 - **Payment** — a fresh card payment, the only self-service method offered while the invoice is `pending`; a declined attempt leaves the invoice payable until the deadline
 - 🚧 **After the deadline** — card Pay is hidden; the overdue alert carries Contact Us; an operator reissues, settles manually, or cancels
+- 🚧 **A payment already on its way** — a card payment Grade10 received before the deadline still completes if it confirms after; one received at or after the deadline is refused and the card is not charged
 - 🚧 **Progress** — five presentation steps in order: Address → Invoice → Payment → Shipped → Completed; Cancelled and Refunded show no stepper. Order status keeps its eight names
 - 🚧 **Invoice PDF** — once an invoice has been sent, the winner can view and download it; hidden before send and when Cancelled
 - **Receipt** — the itemised amount and how it was paid: card brand and last four, or the method Grade10 recorded
@@ -55,6 +56,7 @@ The winner needs one place to understand what is owed and what happens next. The
 | Telling the winner the entrance reopened | ❓ Open | Grade10 sends no letter when an operator reopens the entrance. The assumption is that the winner asked for it and the operator answers them directly. Confirm before build: a winner who is not watching never learns the form is back. | Product (@jeffffej0909) |
 | Operator records the address | Decided | Grade10 can type in an address the winner gives by telephone, without reopening the entrance, so the quote follows in one step. The window governs the winner's own form, not Grade10's record. | Product (@jeffffej0909) |
 | The account address book | Decided | Unaffected by a closed entrance. It is account-wide and shared across storefronts; only confirming an address onto this order is refused. | Product (@jeffffej0909) |
+| A payment started in time | Decided | A card payment Grade10 received before the deadline counts even if it confirms after. The invoice stays pending until the outcome, and only a failure then marks it expired. | Product (@jeffffej0909) |
 | No suspension before an invoice | Decided | A closed address window suspends nobody. Only an unpaid invoice past its deadline restricts bidding. | Product (@jeffffej0909) |
 | Deadline ends self-service Pay | Decided | When the invoice is `expired`, Winner Order hides card Pay and shows Contact Us in the overdue alert. A deadline that still allowed card pay would not be a deadline. Operator reissue, manual settlement, or cancel remain. | Product (@tangconst) |
 | Progress stepper | Decided | Five presentation steps: Address → Invoice → Payment → Shipped → Completed. Status vocabulary stays eight values; Processing maps under Shipped; Delivered maps to Completed. | Product and design (@tangconst) |
