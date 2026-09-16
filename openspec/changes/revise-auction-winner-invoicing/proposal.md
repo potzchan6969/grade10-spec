@@ -60,6 +60,13 @@ release.
   amount needs a re-quote first.
 - **Every paid record names its method.** A card receipt shows the brand and
   last four digits; a manual receipt shows the method and reference.
+- **A Subtotal and a Payment Processing Fee line.** The Subtotal is everything
+  the winner owes before the card fee. The fee grosses that subtotal up, using
+  the fixed fee and percentage read from the payment provider at the moment the
+  invoice is sent, so Grade10 nets the subtotal in full. It is fixed once sent.
+- **Manual settlement pays no fee.** Settling by bank transfer, cash or another
+  method settles the subtotal, and the fee line is dropped.
+- **Unreadable provider fees refuse the send.** No stored rate stands in.
 - **Invoice lines are renamed.** Hammer price reads **Winning Bid**, Shipping
   reads **Shipping & Handling**, and Final amount reads **Order Total**, for the
   winner and the operator.
@@ -133,6 +140,11 @@ engineer confirms the payment provider supplies them.
 
 ## Assumptions
 
+- **The payment provider is Stripe**, and its current fixed and percentage
+  fees for the invoice's currency can be read at send. The spec says "the
+  payment provider"; the engineer confirms the call in the tech design.
+- **Grade10 absorbs a fee difference** when the winner's card costs the
+  provider more than the quoted rate.
 - **The quote covers Shipping & Handling and any Insurance**, and quoting, sending,
   re-quoting, and manual settlement need payment-processing — finance and
   admin — not shipment-processing.

@@ -11,6 +11,7 @@
 - `grade10-admin-auction-post-sale-SC-45` — An order waiting on an address shows time since close
 - `grade10-admin-auction-post-sale-SC-46` — An order idle 72 hours is marked Overdue
 - `grade10-admin-auction-post-sale-SC-54` — An overdue order waiting on an address can be cancelled
+- `grade10-admin-auction-post-sale-SC-67` — Manual settlement drops the processing fee
 - `grade10-admin-auction-post-sale-SC-55` — A bank transfer with a slip settles the order
 - `grade10-admin-auction-post-sale-SC-56` — Settlement without proof is refused
 - `grade10-admin-auction-post-sale-SC-60` — Manual settlement is available before expiry
@@ -26,6 +27,8 @@
 
 - `grade10-admin-auction-post-sale-SC-44` — An order ready for a quote needs action
 - `grade10-admin-auction-post-sale-SC-48` — Sending the invoice opens the payment window
+- `grade10-admin-auction-post-sale-SC-65` — The operator sees the fee before sending
+- `grade10-admin-auction-post-sale-SC-66` — Unreadable provider fees refuse the send
 - `grade10-admin-auction-post-sale-SC-63` — An invoice sends without insurance
 - `grade10-admin-auction-post-sale-SC-64` — Insurance added at zero is refused
 - `grade10-admin-auction-post-sale-SC-49` — No invoice is sent without a confirmed address

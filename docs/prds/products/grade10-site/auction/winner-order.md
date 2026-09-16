@@ -8,7 +8,8 @@ Winner Order is the authenticated route where a collector settles one lot after 
 
 - **Address first** — a closed lot opens asking for a delivery address; the winner confirms the account's saved or newly entered address before an operator prepares an invoice
 - **Invoice** — one operator-quoted invoice per lot; shipping and insurance are priced for the confirmed address, the address locks when the invoice is sent, and the seven-day payment window starts at send
-- 🚧 **Invoice lines** — Winning Bid, Buyer's Premium, Shipping & Handling, Insurance, Tax and Order Total; Shipping & Handling of zero reads Free, and Insurance appears only when the operator added it
+- 🚧 **Invoice lines** — Winning Bid, Buyer's Premium, Shipping & Handling, Insurance, Tax, Subtotal, Payment Processing Fee and Order Total; Shipping & Handling of zero reads Free, and Insurance appears only when the operator added it
+- 🚧 **Payment Processing Fee** — the card fee added on top of the Subtotal so Grade10 keeps the Subtotal in full; priced when the invoice is sent and fixed from then on, and dropped when an operator settles the order manually
 - **Address** — changeable by the winner until the invoice is sent; a later change is handled by Grade10 through an operator re-quote and reissue
 - **Payment** — a fresh card payment, the only self-service method offered; a declined attempt leaves the invoice payable, before or after its deadline
 - **Receipt** — the itemised amount and how it was paid: card brand and last four, or the method Grade10 recorded
@@ -34,6 +35,9 @@ The winner needs one place to understand what is owed and what happens next. The
 | --- | --- | --- | --- |
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, and Final amount reads Order Total, for the winner and the operator. | Product |
 | Insurance | Decided | Optional per invoice; when added it is more than zero. An invoice without it shows no Insurance line. | Product |
+| Payment processing fee | Decided | Charged to the winner, grossed up from the Subtotal so Grade10 nets it in full. Priced at send from the payment provider's live fees, never from a rate set in the admin portal. | Product |
+| Fee on a manual settlement | Decided | Dropped: bank transfer, cash and other methods settle the Subtotal. | Product |
+| A fee that costs more than quoted | Decided | Grade10 absorbs the difference; the sent invoice never re-prices. | Product |
 | Free shipping | Decided | Shipping & Handling of zero reads Free rather than hiding the line. | Product |
 
 **Not in scope.** Combined invoices, payment plans, partial settlement, buyer-initiated returns, or changes to the bid-time auction rules.
