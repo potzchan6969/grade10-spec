@@ -19,7 +19,7 @@ body renders in the order design draws it — the provider slot above the
 divider, the email step below it — and closes on a legal line the
 application supplies as the last node.
 
-- 🚧 **After a successful send** — the dialog title is **Check Your Email**;
+- **After a successful send** — the dialog title is **Check Your Email**;
   the body shows a confirmation lead line, the address on the next line, and a
   hugging secondary Resend with a sixty-second countdown (**Resend (45)**). No
   Back control. The email-step action reads **Sign In with Email**.

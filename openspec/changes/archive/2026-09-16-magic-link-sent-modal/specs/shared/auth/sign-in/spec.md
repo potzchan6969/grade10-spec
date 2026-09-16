@@ -21,6 +21,7 @@ SHALL NOT state whether the address was new. The surface SHALL NOT offer a
 control that returns to the entry step — leaving is dialog dismissal.
 
 #### Scenario: shared-auth-sign-in-SC-42 - A successful send shows Check Your Email and the address on its own line
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
 - **GIVEN** a person who asked for a sign-in link at an email address
 - **WHEN** the send goes out
@@ -30,6 +31,7 @@ control that returns to the entry step — leaving is dialog dismissal.
 - **AND** it does not state whether an account already exists
 
 #### Scenario: shared-auth-sign-in-SC-43 - Resend is offered after a successful send
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
 - **GIVEN** a sign-in surface showing confirmation after a successful send
 - **AND** sixty seconds have passed since that send
@@ -39,6 +41,7 @@ control that returns to the entry step — leaving is dialog dismissal.
 - **AND** the one-email-a-minute cap still applies
 
 #### Scenario: shared-auth-sign-in-SC-44 - The link-sent surface has no Back control
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
 - **GIVEN** a sign-in surface showing confirmation after a successful send
 - **WHEN** the dialog renders
@@ -55,6 +58,7 @@ again and labelled **Resend**. The countdown is a change of the label, not an
 animation — `prefers-reduced-motion` does not remove it.
 
 #### Scenario: shared-auth-sign-in-SC-46 - Resend is disabled with a countdown after a send
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
 - **GIVEN** a sign-in-link email has just been sent
 - **WHEN** the link-sent surface is showing
@@ -63,6 +67,7 @@ animation — `prefers-reduced-motion` does not remove it.
   sixty-second wait
 
 #### Scenario: shared-auth-sign-in-SC-47 - Resend re-enables when the countdown reaches zero
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
 - **GIVEN** Resend is disabled with a countdown after a successful send
 - **WHEN** sixty seconds have passed since that send
@@ -70,6 +75,7 @@ animation — `prefers-reduced-motion` does not remove it.
 - **AND** its label is **Resend**
 
 #### Scenario: shared-auth-sign-in-SC-48 - A successful resend restarts the countdown
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
 - **GIVEN** Resend is enabled on the link-sent surface
 - **WHEN** the person activates Resend and the send goes out
@@ -82,6 +88,7 @@ A sign-in link's time to live SHALL be sixty seconds from when it was sent. A
 link whose time to live has ended SHALL NOT create a session.
 
 #### Scenario: shared-auth-sign-in-SC-49 - A link older than sixty seconds does not sign in
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
 - **GIVEN** a sign-in link sent more than sixty seconds ago
 - **WHEN** anyone follows that link
@@ -93,6 +100,7 @@ The email step's send action SHALL be labelled as signing in with email. The
 sign-in surface's user-facing copy SHALL NOT use the term magic link.
 
 #### Scenario: shared-auth-sign-in-SC-45 - The email-step CTA says Sign In with Email
+**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
 - **WHEN** a person opens sign-in and reaches the email step
 - **THEN** the send action is labelled **Sign In with Email**

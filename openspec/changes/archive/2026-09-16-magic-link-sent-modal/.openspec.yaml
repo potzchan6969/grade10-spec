@@ -1,3 +1,5 @@
 schema: grade10-planning
 promoted_by: "@seankcw"
 created: 2026-09-15
+deployed_at: "c2b9a2b29"
+deployed_env: "staging"

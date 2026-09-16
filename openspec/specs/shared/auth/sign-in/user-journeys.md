@@ -23,3 +23,11 @@
 **As a** collector,
 **I want** a second email within a minute to wait, and a return only to this brand,
 **so that** I am not flooded and not delivered to an untrusted address.
+
+### shared-auth-sign-in-US-07: Collector confirms the send and can resend
+
+**As a** collector,
+**I want** the dialog to say Check Your Email, put the address I used on its
+own line, and let me resend after a short wait,
+**so that** I know where to look and can ask again without a Back control into
+the entry step.
