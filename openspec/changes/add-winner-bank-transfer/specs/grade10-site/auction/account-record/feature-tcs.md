@@ -137,3 +137,14 @@ Runs once per row of **Test data**.
 ## Raised
 
 - Does a Payment Verifying row carry anything beyond the badge and View order? Calm Won rows suggest not; assumed so.
+
+## Reconciliation
+
+**Status:** paused — waiting on the author (@jeffffej0909) for a grilling round on
+decisions neither reading could settle: proof on an expired invoice, operator
+actions while Payment Verifying, the deadline on an expired reissue, the method
+choice before send, reminders and the letter after a return, grace after a
+return, what the winner sees of their proof, non-card settlement of a card
+invoice, operator files on confirm, file rules, and who reads proof files.
+
+**Blind input manifest hash:** `2c7380f5cdff72fd`

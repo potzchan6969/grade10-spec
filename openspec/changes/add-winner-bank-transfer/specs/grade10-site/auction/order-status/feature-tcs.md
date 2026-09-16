@@ -405,3 +405,14 @@ Runs once per row of **Test data**.
 - How can a Payment Verifying invoice be expired, given its deadline is stopped?
 - May an operator cancel or reissue a Payment Verifying order?
 - Is the stopped deadline kept as a duration, and to what precision?
+
+## Reconciliation
+
+**Status:** paused — waiting on the author (@jeffffej0909) for a grilling round on
+decisions neither reading could settle: proof on an expired invoice, operator
+actions while Payment Verifying, the deadline on an expired reissue, the method
+choice before send, reminders and the letter after a return, grace after a
+return, what the winner sees of their proof, non-card settlement of a card
+invoice, operator files on confirm, file rules, and who reads proof files.
+
+**Blind input manifest hash:** `2c7380f5cdff72fd`

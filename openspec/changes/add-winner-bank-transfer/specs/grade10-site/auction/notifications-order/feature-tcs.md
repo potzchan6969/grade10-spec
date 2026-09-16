@@ -296,3 +296,14 @@ Runs once per row of **Test data**.
 - Does the proof-not-accepted letter state a new absolute deadline or a duration?
 - After a return, are the day-3/day-6/final-notice times shifted by the pause, and is a reminder whose time passed during the check sent late or skipped?
 - Does a reissue while Payment Verifying reset the held sequence?
+
+## Reconciliation
+
+**Status:** paused — waiting on the author (@jeffffej0909) for a grilling round on
+decisions neither reading could settle: proof on an expired invoice, operator
+actions while Payment Verifying, the deadline on an expired reissue, the method
+choice before send, reminders and the letter after a return, grace after a
+return, what the winner sees of their proof, non-card settlement of a card
+invoice, operator files on confirm, file rules, and who reads proof files.
+
+**Blind input manifest hash:** `2c7380f5cdff72fd`
