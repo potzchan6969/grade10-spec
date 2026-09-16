@@ -21,7 +21,7 @@ no Cert ID records SHALL remain listable through `No Cert ID`. The choice SHALL
 be stored with the listing and SHALL be required at create even when the
 selected product has no Cert ID.
 
-#### Scenario: grade10-admin-auction-listing-SC-70 - Product with Cert IDs offers an explicit choice
+#### Scenario: grade10-admin-auction-listing-SC-84 - Product with Cert IDs offers an explicit choice
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
 
 - **GIVEN** a created inventory product with available units and Cert IDs `PSA-123` and `BGS-456`
@@ -143,7 +143,7 @@ A created product with multiple available Cert IDs SHALL allow a separate live
 listing for each distinct Cert ID. One Cert ID SHALL belong to no more than one
 live listing at a time.
 
-#### Scenario: grade10-admin-auction-listing-SC-81 - Distinct copies of one product can be listed separately
+#### Scenario: grade10-admin-auction-listing-SC-85 - Distinct copies of one product can be listed separately
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
 
 - **GIVEN** a created product has available Cert IDs `PSA-123` and `BGS-456`

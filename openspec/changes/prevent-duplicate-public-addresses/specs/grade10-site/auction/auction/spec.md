@@ -29,7 +29,7 @@ list no lot twice and skip none.
 A collector MAY ask for another order the catalogue can answer; it replaces the
 resting order and is settled on the lot record the same way.
 
-#### Scenario: grade10-site-auction-auction-SC-19 - Open lots lead the catalogue
+#### Scenario: grade10-site-auction-auction-SC-25 - Open lots lead the catalogue
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
 - **GIVEN** lots of all three statuses, among them an Ended lot that closed
@@ -38,7 +38,7 @@ resting order and is settled on the lot record the same way.
 - **THEN** every Active lot is listed before every Upcoming lot
 - **AND** every Upcoming lot is listed before every Ended lot
 
-#### Scenario: grade10-site-auction-auction-SC-20 - Each status has its own order
+#### Scenario: grade10-site-auction-auction-SC-26 - Each status has its own order
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
 - **GIVEN** two Active lots closing an hour apart, two Upcoming lots starting a
@@ -48,14 +48,14 @@ resting order and is settled on the lot record the same way.
 - **AND** the Upcoming lots are listed soonest start first
 - **AND** the Ended lots are listed most recent close first
 
-#### Scenario: grade10-site-auction-auction-SC-21 - A tie is settled the same way every read
+#### Scenario: grade10-site-auction-auction-SC-27 - A tie is settled the same way every read
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
 - **GIVEN** two lots of one status that its order cannot tell apart
 - **WHEN** the catalogue is read twice
 - **THEN** the two lots are in the same order both times
 
-#### Scenario: grade10-site-auction-auction-SC-22 - Paging does not change the order
+#### Scenario: grade10-site-auction-auction-SC-28 - Paging does not change the order
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
 - **GIVEN** a catalogue holding more lots than one page lists

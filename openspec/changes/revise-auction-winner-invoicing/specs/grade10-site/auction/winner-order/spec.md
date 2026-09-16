@@ -194,7 +194,7 @@ An operator SHALL restore self-service pay only by reissuing the invoice to
 - **THEN** the payment deadline is still 2026-09-19T09:00:00Z
 
 #### Scenario: winner-order-SC-37 - An expired invoice refuses card payment
-**Serves:** winner-order-US-03 - Winner misses the payment deadline
+**Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose invoice status is `expired`
 - **WHEN** the winner opens the order
@@ -220,7 +220,7 @@ status vocabulary in `grade10-site/auction/order-status`.
 When the derived order status is **Cancelled** or **Refunded**, Winner Order
 SHALL show no progress stepper.
 
-#### Scenario: winner-order-SC-40 - Pending Payment highlights the Payment step
+#### Scenario: winner-order-SC-46 - Pending Payment highlights the Payment step
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose derived status is Pending Payment
@@ -228,7 +228,7 @@ SHALL show no progress stepper.
 - **THEN** the progress stepper marks Payment as the current step
 - **AND** Address and Invoice are complete
 
-#### Scenario: winner-order-SC-41 - Processing maps under Shipped
+#### Scenario: winner-order-SC-47 - Processing maps under Shipped
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order whose derived status is Processing
@@ -236,8 +236,8 @@ SHALL show no progress stepper.
 - **THEN** the progress stepper marks Shipped as the current step
 - **AND** does not invent a Processing step label
 
-#### Scenario: winner-order-SC-42 - Cancelled hides the stepper
-**Serves:** winner-order-US-03 - Winner misses the payment deadline
+#### Scenario: winner-order-SC-48 - Cancelled hides the stepper
+**Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose derived status is Cancelled
 - **WHEN** the winner opens Winner Order
@@ -250,7 +250,7 @@ offer the winner a control to view and download that invoice as a PDF. The
 control SHALL be hidden while the invoice status is `not_issued` and SHALL be
 hidden when the invoice status is `cancelled`.
 
-#### Scenario: winner-order-SC-43 - A sent invoice offers its PDF
+#### Scenario: winner-order-SC-49 - A sent invoice offers its PDF
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an auction order whose invoice status is `pending`
@@ -258,14 +258,14 @@ hidden when the invoice status is `cancelled`.
 - **THEN** Grade10 offers view and download of the invoice PDF
 
 #### Scenario: winner-order-SC-44 - No invoice PDF before send
-**Serves:** winner-order-US-03 - Winner misses the payment deadline
+**Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose invoice status is `not_issued`
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers no invoice PDF control
 
 #### Scenario: winner-order-SC-45 - A cancelled order hides the invoice PDF
-**Serves:** winner-order-US-03 - Winner misses the payment deadline
+**Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an auction order whose invoice status is `cancelled`
 - **WHEN** the winner opens Winner Order

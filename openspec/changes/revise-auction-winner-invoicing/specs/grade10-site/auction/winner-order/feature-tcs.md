@@ -97,13 +97,13 @@
 * No card Pay control.
 * Progress current step is Address or Invoice accordingly.
 
-## winner-order-US3: Winner misses the payment deadline
+## winner-order-US5: Winner misses the payment deadline
 
 **As a** winner whose invoice is expired,
 **I want** Contact Us without card Pay,
 **so that** I know self-service payment has stopped and how to reach Grade10.
 
-### winner-order-US3-TC1-1: Expired hides Pay and shows Contact Us
+### winner-order-US5-TC1-1: Expired hides Pay and shows Contact Us
 
 **Classification:**
 
@@ -116,7 +116,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-03
+* **Trace:** winner-order-US-05
 
 **Pre-conditions:**
 
@@ -135,7 +135,7 @@
 * The card charge is refused.
 * Progress still shows Payment as current.
 
-### winner-order-US3-TC2-1: Cancelled hides stepper and PDF
+### winner-order-US5-TC2-1: Cancelled hides stepper and PDF
 
 **Classification:**
 
@@ -148,7 +148,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-03
+* **Trace:** winner-order-US-05
 
 **Pre-conditions:**
 
@@ -213,6 +213,6 @@
 | Finding | Disposition |
 | --- | --- |
 | Suite required expired refuse card + Contact Us | Folded as `winner-order-SC-37` |
-| Suite required five-step mapping including Processing→Shipped | Folded as `winner-order-SC-40`–`SC-42` |
-| Suite required invoice PDF after send / hidden before and Cancelled | Folded as `winner-order-SC-43`–`SC-45` |
+| Suite required five-step mapping including Processing→Shipped | Folded as `winner-order-SC-46`–`SC-48` |
+| Suite required invoice PDF after send / hidden before and Cancelled | Folded as `winner-order-SC-44`, `SC-45`, `SC-49` |
 | Refunded PDF keep | Left to ui-design / Storybook; no opposing scenario |

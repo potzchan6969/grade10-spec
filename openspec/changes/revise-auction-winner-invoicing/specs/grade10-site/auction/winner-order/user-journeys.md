@@ -12,15 +12,15 @@
 **I want** a receipt that says how I paid, a tracker, and proof of what was handed over,
 **so that** I can account for a high-value purchase without asking Grade10 for records.
 
-### winner-order-US-03: Winner misses the payment deadline
-
-**As a** winner whose invoice deadline has passed unpaid,
-**I want** clear Contact Us and no card Pay,
-**so that** I know self-service payment has stopped and how to reach Grade10.
-
 ### winner-order-US-04: Losing bidder gets their hold back when the lot closes
 
 **As a** bidder who did not win,
 **I want** the card hold my bids put there lifted as soon as the lot closes,
 **so that** losing an auction does not leave my money reserved until the
 authorization expires on its own.
+
+### winner-order-US-05: Winner misses the payment deadline
+
+**As a** winner whose invoice deadline has passed unpaid,
+**I want** clear Contact Us and no card Pay,
+**so that** I know self-service payment has stopped and how to reach Grade10.
