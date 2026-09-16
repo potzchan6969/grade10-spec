@@ -106,6 +106,11 @@ Everything this run produces is `draft`. Nothing in it claims review;
    dispositions below, and the scenarios that survive are written with the
    `## Reconciliation` block.
 
+   Delete the change's `awaiting: specs:` line as the requirements land: it
+   named the pass you have just taken. `check:manual` reports a wait its own
+   artifact has answered, so one left behind is a finding rather than a note.
+   A wait on a requirement nobody can decide yet is a different line and stays.
+
 5. **Validate.**
 
    ```bash

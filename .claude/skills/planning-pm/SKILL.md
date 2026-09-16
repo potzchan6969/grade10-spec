@@ -152,14 +152,21 @@ Everything this run produces is `draft`. Nothing in it claims review.
    pnpm check:manual
    ```
 
+   **The outline owes a wait line.** What you commit is a `spec.md` that names
+   no requirement, and both gates refuse one without a line saying why: write
+   `awaiting:` with `specs: <what is still to come>` in the change's
+   `.openspec.yaml` before you validate. `validate:changes` then reports the
+   change as waiting rather than failing it, and the wait is not read as over
+   until the requirements land. `/planning-qa` deletes the line with the
+   scenarios.
+
    Commit the journeys and the outline, and say the change is ready for
    `/planning-qa`. It runs on this same branch: the blind suite and the
    scenarios land in this pull request, so `main` never carries a journey with
    no suite beside it.
 
-   A requirement nobody can decide yet is a wait, not a guess: `awaiting:`
-   with `specs: <what is missing>` in the change's `.openspec.yaml` says so,
-   and `validate:changes` is the run that honours it.
+   A requirement nobody can decide yet is the same line for a different
+   reason - a wait, not a guess - and it stays after `/planning-qa` has run.
 
 9. **Answer what the readings escalate.** `/planning-qa` pauses on a case
    nobody ever decided, and on two readings that state opposite things. Those

@@ -44,6 +44,47 @@ test("a change that has started its deltas is past the wait", () => {
   assert.equal(waitingOnSpecs(dir), undefined);
 });
 
+const OUTLINE = [
+  "## Purpose",
+  "",
+  "The catalogue a collector browses.",
+  "",
+  "## Feature set",
+  "",
+  "- Catalogue browsing",
+  "  - Grid: the products a collector can buy",
+  "",
+].join("\n");
+
+/** `spec.md` is two passes over one file, and the outline is the first. Read
+ * against the directory, the wait ended the moment the outline was written —
+ * the one state every change passes through, failing the run its own author
+ * was told to make. */
+test("the outline is not the requirements, so the wait stands", () => {
+  const dir = change({
+    ".openspec.yaml": manifest(
+      "awaiting:\n  specs: the second pass is QA's\n",
+    ),
+    "specs/demo/alpha/spec.md": OUTLINE,
+    "specs/demo/alpha/user-journeys.md":
+      "## ADDED User journeys\n\n### alpha-US-01: Someone does the thing\n",
+  });
+  assert.equal(waitingOnSpecs(dir), "the second pass is QA's");
+});
+
+/** One capability's requirements do not answer for another's, which is how
+ * `written` reads the same pass. */
+test("a change half through its capabilities is still waiting", () => {
+  const dir = change({
+    ".openspec.yaml": manifest(
+      "awaiting:\n  specs: the second pass is QA's\n",
+    ),
+    "specs/demo/alpha/spec.md": "## ADDED Requirements\n",
+    "specs/demo/beta/spec.md": OUTLINE,
+  });
+  assert.equal(waitingOnSpecs(dir), "the second pass is QA's");
+});
+
 test("a wait on another artifact does not excuse the requirements", () => {
   const dir = change({
     ".openspec.yaml": manifest("awaiting:\n  ui-design: nothing draws it\n"),
@@ -149,6 +190,38 @@ test("a declared wait excuses the missing delta and nothing else", () => {
   const run = validate(store({ waiting: alsoBroken }));
   assert.equal(run.status, 1, run.said);
   assert.match(run.said, /skip_specs is set but/);
+});
+
+/** The state every change passes through between the outline and the
+ * requirements: the CLI reports the missing sections per file as well as the
+ * missing delta, so both are excused, and neither is excused for a change that
+ * declared nothing. */
+test("an outline that said what it waits for passes, and one that did not fails", () => {
+  const outline = {
+    "proposal.md": PROPOSAL,
+    "specs/demo/alpha/spec.md": OUTLINE,
+    "specs/demo/alpha/user-journeys.md":
+      "## ADDED User journeys\n\n### alpha-US-01: Someone does the thing\n",
+  };
+  const waiting = validate(
+    store({
+      outline: {
+        ...outline,
+        ".openspec.yaml":
+          "schema: grade10-planning\nawaiting:\n  specs: the second pass is QA's\n",
+      },
+    }),
+  );
+  assert.equal(waiting.status, 0, waiting.said);
+  assert.match(waiting.said, /waiting on an input: outline/);
+
+  const silent = validate(
+    store({
+      outline: { ...outline, ".openspec.yaml": "schema: grade10-planning\n" },
+    }),
+  );
+  assert.equal(silent.status, 1);
+  assert.match(silent.said, /No delta sections found/);
 });
 
 test("a change that said nothing is still refused its missing delta", () => {
