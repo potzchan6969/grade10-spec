@@ -1,4 +1,4 @@
-## 1. Product record and acceptance suites (grade10-spec)
+## 1. Product record and acceptance suites (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Update the Auction, Auto-Bidding, Bid Panel Enrollment and Payment Method manual pages so the standard path states that bid-time authorization is disabled by default and hold outcomes apply only when the feature is enabled.
 - [ ] 1.2 Reconcile the related in-flight deltas for increment, winner close, My Auctions and called-off lots with the actual-hold condition, then verify `openspec validate default-auction-bid-holds-off --strict` and `pnpm check:manual`.
