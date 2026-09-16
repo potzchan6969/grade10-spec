@@ -19,10 +19,16 @@ that scope: the journeys, the design, the feature set. It is optional in the
 schema so an in-flight backlog does not read as work you owe — write it on
 every change you run.
 
-A third is yours **when you already have the design**: `ui-design.md` is the
+A fourth is yours **when you already have the design**: `ui-design.md` is the
 designer's file, and a PM who has the screens in hand writes it in the same
 change rather than waiting for one to be drawn. A change with no user-facing
 surface skips it entirely - `planning-design` holds its shape.
+
+**This lane is a designer's too.** A designer specifying a new change writes
+the same three files, through this skill, and brings the design reference -
+Storybook, `packages/design-system`, `packages/ui`, `packages/i18n` - to the
+outline with them. `planning-design` routes here for that, and holds what the
+reference is.
 
 `spec.md` is **generated in two passes over one file**, and only the first of
 them is yours. Neither it nor `feature-tcs.md` names a teammate in the schema:
