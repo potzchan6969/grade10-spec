@@ -32,7 +32,7 @@
 - [ ] 6.2 Render literal `Extended bidding: ON` beside the existing outcome badge only when the queue contract's derived boolean is true, with no new outcome filter (`grade10-admin-auction-post-sale-SC-64`, `grade10-admin-auction-post-sale-SC-65`, `grade10-admin-auction-post-sale-SC-66`)
 - [ ] 6.3 Verify the admin packages with `pnpm --dir apps/admin/grade10 run typecheck && pnpm --dir apps/admin/grade10 run test && pnpm --dir apps/admin/grade10 run build && pnpm run check:admin-bundle`
 
-## 7. Integrated auction verification (grade10)
+## 7. Integrated auction verification (grade10) (owner: @htonyl)
 
 - [ ] 7.1 Run the changed auction domain and API flows against the migrated schema, then reconcile any fixture or contract drift before marking the change complete (`grade10-site-auction-e2e-US07-TC01-2`)
 - [ ] 7.2 Verify the repository gates with `pnpm run typecheck && pnpm run lint && pnpm run test && pnpm run test:backend && pnpm run build && pnpm run check:libs`
