@@ -15,7 +15,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Paid — preparing to ship (Shipped step current). */
+/** Paid — preparing to ship (Shipped step current); receipt PDF available. */
 export const Processing: Story = {
   name: "Processing",
   args: { status: "processing" },
@@ -31,15 +31,16 @@ export const Processing: Story = {
     expect(canvas.getByText("Address")).toBeVisible();
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
+    expect(canvas.getByText("20 Sep 2026")).toBeVisible();
     expect(canvas.getByText("Visa")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
-    expect(
-      canvas.getByRole("link", { name: "View invoice PDF" }),
-    ).toBeVisible();
+    expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },
 };
 
-/** Dispatched — track shipment (Shipped step current). */
+/** Dispatched — track shipment; Shipped step shows day-only date. */
 export const Shipped: Story = {
   name: "Shipped",
   args: { status: "shipped" },
@@ -51,14 +52,14 @@ export const Shipped: Story = {
       canvas.getByRole("button", { name: "Track shipment" }),
     ).toBeVisible();
     expect(canvas.getAllByText("Shipped").length).toBeGreaterThan(0);
+    expect(canvas.getByText("26 Sep 2026")).toBeVisible();
     expect(canvas.getByText(/SF Express/)).toBeVisible();
-    expect(
-      canvas.getByRole("link", { name: "View invoice PDF" }),
-    ).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },
 };
 
-/** Carrier delivery confirmed — Completed. */
+/** Carrier delivery confirmed — Completed shows day-only date. */
 export const Delivered: Story = {
   name: "Delivered",
   args: { status: "delivered" },
@@ -67,9 +68,8 @@ export const Delivered: Story = {
     await winnerOrderSettled(canvasElement);
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
-    expect(canvas.getByText(/Delivered 28 Sep 2026/)).toBeVisible();
-    expect(
-      canvas.getByRole("link", { name: "View invoice PDF" }),
-    ).toBeVisible();
+    expect(canvas.getByText("28 Sep 2026")).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
+    expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },
 };
