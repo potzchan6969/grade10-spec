@@ -30,22 +30,22 @@ the work.
 
 ## 2. Address book cap (grade10) (owner: @htonyl)
 
-- [ ] 2.1 Add `address_book_full` to `shippingAddressRefusalCodes` in
+- [x] 2.1 Add `address_book_full` to `shippingAddressRefusalCodes` in
   `packages/grade10-auth/contracts/src/shippingAddresses.ts`
   (`winner-order-SC-73`)
-- [ ] 2.2 In `saveShippingAddress`
+- [x] 2.2 In `saveShippingAddress`
   (`packages/grade10-auth/backend/src/services/shippingAddresses.ts`), count
   the account's non-archived addresses inside the existing `mutate()`
   transaction and refuse with `address_book_full` at five, before the
   insert (`winner-order-SC-72`, `winner-order-SC-73`)
-- [ ] 2.3 Extend
+- [x] 2.3 Extend
   `packages/grade10-auth/backend/test/services/shippingAddresses.repo.test.ts`
   to prove: a fifth save succeeds, a sixth is refused, an account already
   holding six keeps them and is still refused, `updateShippingAddress` on
   one of five never consults the count, and archiving one of five frees a
   slot for the next save (`winner-order-SC-72`, `SC-73`, `SC-76`, `SC-77`,
   `SC-78`)
-- [ ] 2.4 Verify: `pnpm run typecheck && pnpm run test:backend`
+- [x] 2.4 Verify: `pnpm run typecheck && pnpm run test:backend`
 
 ## 3. Winner Order address confirmation (grade10)
 
