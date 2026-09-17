@@ -37,7 +37,7 @@ announce flag.
       backend package, `pnpm run test:backend` for the auction worker lane
       that owns these specs.
 
-## 3. Lot-page watch alerts wiring (grade10)
+## 3. Lot-page watch alerts wiring (grade10) (owner: @mason5991)
 
 Needs group 1 for catalogue strings (via submodule bump) and group 2 for
 `announceBidAlerts`.
