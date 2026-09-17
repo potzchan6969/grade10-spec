@@ -15,8 +15,8 @@ import { test } from "node:test";
 
 import {
   CASE_COLUMNS,
-  colLetter,
   COLUMNS,
+  colLetter,
   MARKING_COLUMNS,
   quoteTab,
   RESULT_COL,

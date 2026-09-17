@@ -30,8 +30,8 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import {
-  caseIndex,
   CASE_STATUSES,
+  caseIndex,
   currentRulesRev,
   decisionsBeside,
   deriveStatus,
@@ -42,13 +42,13 @@ import {
   issuedPrefix,
   LEGACY_TYPES,
   levelOf,
-  parseSuite,
   PROPERTIES,
+  parseSuite,
+  ROOT,
   readDomainIds,
   readSpecIds,
   revCmp,
   revText,
-  ROOT,
   statusCounts,
 } from "./lib/suites.mjs";
 

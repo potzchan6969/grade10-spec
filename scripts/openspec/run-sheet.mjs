@@ -31,12 +31,6 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import {
-  caseRow,
-  inReadingOrder,
-  readCandidates,
-  selectCases,
-} from "./lib/select-cases.mjs";
-import {
   CASE_COLUMNS,
   COLUMNS,
   colLetter,
@@ -47,6 +41,12 @@ import {
   SUMMARY_COLUMNS,
   SUMMARY_TAB,
 } from "./lib/run-sheet-layout.mjs";
+import {
+  caseRow,
+  inReadingOrder,
+  readCandidates,
+  selectCases,
+} from "./lib/select-cases.mjs";
 import { prop, ROOT } from "./lib/suites.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -118,7 +118,10 @@ function parseArgs(argv) {
     else if (a === "--cases-file") args.cases = readIdFile(argv[++i]);
     else if (a in takes) args[takes[a]] = argv[++i] ?? null;
     else if (a.startsWith("--") && a.includes("=")) {
-      const [flag, value] = [a.slice(0, a.indexOf("=")), a.slice(a.indexOf("=") + 1)];
+      const [flag, value] = [
+        a.slice(0, a.indexOf("=")),
+        a.slice(a.indexOf("=") + 1),
+      ];
       if (flag === "--cases") args.cases = value.split(",");
       else if (flag === "--cases-file") args.cases = readIdFile(value);
       else if (flag in takes) args[takes[flag]] = value;
@@ -227,12 +230,7 @@ async function ensureSummary(token, id, sheets) {
     { addSheet: { properties: { title: SUMMARY_TAB, index: 0 } } },
   ]);
   const sheetId = made.replies[0].addSheet.properties.sheetId;
-  await putValues(
-    token,
-    id,
-    `${quoteTab(SUMMARY_TAB)}!A1`,
-    [SUMMARY_COLUMNS],
-  );
+  await putValues(token, id, `${quoteTab(SUMMARY_TAB)}!A1`, [SUMMARY_COLUMNS]);
   await batchUpdate(token, id, [
     {
       repeatCell: {
@@ -336,7 +334,10 @@ function dressing(sheetId, picked) {
 
   // A draft case, grey-banded. Contiguous runs only, so a tab of drafts costs
   // one request rather than one per row.
-  for (const run of runsOf(picked, (one) => prop(one.tc, "Status") === "draft")) {
+  for (const run of runsOf(
+    picked,
+    (one) => prop(one.tc, "Status") === "draft",
+  )) {
     if (run.key !== true) continue;
     requests.push({
       repeatCell: {
@@ -445,7 +446,11 @@ if (!args.cases && !hasFilter)
   );
 
 const candidates = readCandidates(ROOT, args.scope);
-const { picked: unordered, refused, missing } = selectCases(candidates, {
+const {
+  picked: unordered,
+  refused,
+  missing,
+} = selectCases(candidates, {
   ids: args.cases,
   suites: args.suites,
   priority: args.priority,
@@ -463,7 +468,9 @@ if (missing.length > 0)
       "\n\nA run tab may only hold cases the store states. Fix the list, or widen --scope.",
   );
 
-const drafts = picked.filter((one) => prop(one.tc, "Status") === "draft").length;
+const drafts = picked.filter(
+  (one) => prop(one.tc, "Status") === "draft",
+).length;
 
 console.log(
   `${bold("Run sheet")}  ${dim(`${picked.length} case${picked.length === 1 ? "" : "s"}${drafts ? `, ${drafts} draft` : ""}`)}\n`,
@@ -525,7 +532,8 @@ await ensureSummary(token, args.sheet, sheets);
 const runId = await nextRunId(token, args.sheet);
 const taken = new Set(sheets.map((s) => s.properties.title));
 let tab = `${runId}-${slug(args.name)}`;
-for (let n = 2; taken.has(tab); n += 1) tab = `${runId}-${slug(args.name)}-${n}`;
+for (let n = 2; taken.has(tab); n += 1)
+  tab = `${runId}-${slug(args.name)}-${n}`;
 
 const made = await batchUpdate(token, args.sheet, [
   {

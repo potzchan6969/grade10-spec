@@ -57,10 +57,12 @@ export function selectCases(candidates, options = {}) {
   } = options;
 
   const allowed = new Set(includeDraft ? ["actual", "draft"] : ["actual"]);
-  const wanted = ids === null ? null : ids.map((one) => one.trim()).filter(Boolean);
+  const wanted =
+    ids === null ? null : ids.map((one) => one.trim()).filter(Boolean);
 
   const byId = new Map();
-  for (const one of candidates) if (!byId.has(one.tc.id)) byId.set(one.tc.id, one);
+  for (const one of candidates)
+    if (!byId.has(one.tc.id)) byId.set(one.tc.id, one);
 
   const picked = [];
   const refused = [];
@@ -69,7 +71,10 @@ export function selectCases(candidates, options = {}) {
   const gate = (one) => {
     const status = prop(one.tc, "Status").toLowerCase();
     if (!allowed.has(status)) {
-      refused.push({ id: one.tc.id, why: `status is \`${status || "unset"}\`` });
+      refused.push({
+        id: one.tc.id,
+        why: `status is \`${status || "unset"}\``,
+      });
       return false;
     }
     return true;
@@ -93,7 +98,10 @@ export function selectCases(candidates, options = {}) {
 
   for (const one of candidates) {
     if (wantLevel && !wantLevel.includes(one.read.level)) continue;
-    if (wantPriority && !wantPriority.includes(prop(one.tc, "Priority").toLowerCase()))
+    if (
+      wantPriority &&
+      !wantPriority.includes(prop(one.tc, "Priority").toLowerCase())
+    )
       continue;
     if (wantSuites) {
       const has = list(prop(one.tc, "Suites"));

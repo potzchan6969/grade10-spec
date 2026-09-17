@@ -19,7 +19,9 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const ROOT = dirname(dirname(dirname(dirname(fileURLToPath(import.meta.url)))));
+export const ROOT = dirname(
+  dirname(dirname(dirname(fileURLToPath(import.meta.url)))),
+);
 export const GOVERNANCE = join(
   ROOT,
   "docs",
@@ -492,7 +494,10 @@ export function parseSuite(text) {
           if (cells.length < 2) continue;
           if (/^-+$/.test(cells[0].replace(/:/g, ""))) continue;
           if (cells[0].toLowerCase() === "field") continue;
-          tc.testData.push({ field: cells[0], value: cells.slice(1).join(" | ") });
+          tc.testData.push({
+            field: cells[0],
+            value: cells.slice(1).join(" | "),
+          });
         }
         continue;
       }
@@ -572,7 +577,9 @@ export function statusCounts(cases) {
 export function deriveStatus(counts, caseCount) {
   if (caseCount === 0) return "pending-review";
   if (counts.draft === 0) return "approved";
-  return counts.actual + counts.deprecated === 0 ? "pending-review" : "in-review";
+  return counts.actual + counts.deprecated === 0
+    ? "pending-review"
+    : "in-review";
 }
 
 /** A case's property, trimmed, or the empty string. */
@@ -586,7 +593,9 @@ export function readSuite(root, filePath) {
   const level = levelOf(filePath);
   const suite = parseSuite(text);
   const composed = level !== "feature";
-  const spec = composed ? readDomainIds(dir) : readSpecIds(join(dir, "spec.md"));
+  const spec = composed
+    ? readDomainIds(dir)
+    : readSpecIds(join(dir, "spec.md"));
   const capability = composed
     ? domainPrefix(root, dir)
     : (issuedPrefix(spec) ?? basename(dir));
