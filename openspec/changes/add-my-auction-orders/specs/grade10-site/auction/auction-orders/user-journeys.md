@@ -4,4 +4,4 @@
 
 **As a** winner
 **I want** one list of my auction orders, each with the action it needs
-**so that** I confirm addresses and pay invoices without guessing which order is waiting on me.
+**so that** I complete order setupes and pay invoices without guessing which order is waiting on me.

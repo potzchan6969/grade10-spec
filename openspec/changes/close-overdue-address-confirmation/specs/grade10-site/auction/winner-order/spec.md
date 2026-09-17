@@ -10,7 +10,7 @@ winner.
 
 - Order at lot close
   - Address first: a closed lot opens an order that waits for the winner's delivery address, with no invoice and nothing yet to pay
-  - Address confirm window: 48 hours from lot close; when it passes, Confirm is hidden and Contact Us appears — status stays Awaiting Address
+  - Address confirm window: 48 hours from lot close; when it passes, Confirm is hidden and Contact Us appears — status stays Awaiting Setup
   - One order per lot: a winner of three lots confirms three addresses and receives three invoices
 - Invoice
   - Operator quote: Shipping & Handling, and Insurance when added, are quoted by an operator for the confirmed address, never estimated
@@ -100,12 +100,12 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 #### Scenario: winner-order-SC-72 - An address received after the deadline is refused
 **Serves:** winner-order-US-08 - Winner gets the address form back
 
-- **GIVEN** an auction order in Awaiting Address whose address deadline was
+- **GIVEN** an auction order in Awaiting Setup whose address deadline was
   2026-09-14T09:00:00Z
 - **WHEN** Grade10 receives the winner's delivery address at 2026-09-14T09:01:00Z
 - **THEN** Grade10 refuses the confirmation
 - **AND** the order has no confirmed delivery address
-- **AND** its derived status is still Awaiting Address
+- **AND** its derived status is still Awaiting Setup
 
 #### Scenario: winner-order-SC-73 - A confirmed address cannot be changed after the deadline
 **Serves:** winner-order-US-08 - Winner gets the address form back

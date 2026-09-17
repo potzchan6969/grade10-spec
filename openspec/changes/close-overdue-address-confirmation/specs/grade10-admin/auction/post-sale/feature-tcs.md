@@ -26,7 +26,7 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Address, its lot closed at 2026-09-03T12:00:00Z and its address deadline passed at 2026-09-05T12:00:00Z.
+* `<closed-window order>` derives as Awaiting Setup, its lot closed at 2026-09-03T12:00:00Z and its address deadline passed at 2026-09-05T12:00:00Z.
 * admin(holds payment-processing) is on `<closed-window order>` at `<the reopen>`.
 
 **Test data:**
@@ -65,7 +65,7 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Address and its address deadline passed two days ago.
+* `<closed-window order>` derives as Awaiting Setup and its address deadline passed two days ago.
 * admin(holds payment-processing) is on `<closed-window order>`.
 
 **Steps:**
@@ -97,7 +97,7 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Address and its address deadline passed two days ago.
+* `<closed-window order>` derives as Awaiting Setup and its address deadline passed two days ago.
 * admin(holds fulfilment, not payment-processing) is on `<closed-window order>`.
 
 **Steps:**
@@ -128,7 +128,7 @@
 
 **Pre-conditions:**
 
-* `<closed-window order>` derives as Awaiting Address, carries the Overdue mark, and its address deadline passed two days ago.
+* `<closed-window order>` derives as Awaiting Setup, carries the Overdue mark, and its address deadline passed two days ago.
 * admin(holds payment-processing) is on `<closed-window order>`.
 
 **Steps:**
@@ -138,7 +138,7 @@
 
 **Expected Results:**
 
-* The outcome is still Awaiting Address.
+* The outcome is still Awaiting Setup.
 * The Overdue mark is gone while the address form is open again.
 * The row's needs-action treatment is unchanged.
 
@@ -269,7 +269,7 @@
 
 **Steps:**
 
-1. Filter the queue to Awaiting Address.
+1. Filter the queue to Awaiting Setup.
 2. Filter the queue to Preparing Invoice.
 
 **Expected Results:**
@@ -303,7 +303,7 @@ Runs once per row of **Test data**.
 
 | Order | Outcome | Needs action |
 | --- | --- | --- |
-| `<awaiting-address order>` | Awaiting Address | no |
+| `<awaiting-address order>` | Awaiting Setup | no |
 | `<preparing-invoice order>` | Preparing Invoice | yes |
 | `<expired-invoice order>` | Pending Payment | yes |
 
@@ -344,8 +344,8 @@ Runs once per row of **Test data**.
 
 | Order | Read at | Outcome | Overdue mark |
 | --- | --- | --- | --- |
-| `<awaiting-address order>` | 2026-09-05T11:59:00Z | Awaiting Address | absent |
-| `<awaiting-address order>` | 2026-09-05T12:00:00Z | Awaiting Address | present |
+| `<awaiting-address order>` | 2026-09-05T11:59:00Z | Awaiting Setup | absent |
+| `<awaiting-address order>` | 2026-09-05T12:00:00Z | Awaiting Setup | present |
 | `<preparing-invoice order>` | 2026-09-05T12:00:00Z | Preparing Invoice | present |
 
 **Steps:**
@@ -427,7 +427,7 @@ Runs once per row of **Test data**.
 
 * The send is refused.
 * No invoice is issued and no payment deadline starts.
-* The order still derives Awaiting Address.
+* The order still derives Awaiting Setup.
 
 ### post-sale-US9-TC13-1: A closed window does not stop an operator sending
 
@@ -545,7 +545,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<missed-deadline order>` is in Awaiting Address with its address deadline passed.
+* `<missed-deadline order>` is in Awaiting Setup with its address deadline passed.
 * An operator holds payment-processing.
 
 **Steps:**
@@ -825,7 +825,7 @@ Runs once per row of **Test data**.
 - **Whether a reopen is offered after the invoice is sent.** The address locks at send and a later change is described as a re-quote and reissue, so TC6 reads the reopen as unavailable. Nothing states the refusal outright, and an operator who reopens instead of re-quoting is not accounted for.
 - **Reopening a cancelled order.** Cancellation is now available before an invoice exists, and nothing says whether a cancelled order's address form can be reopened to revive it, or whether the cancellation is terminal. No case was written for it.
 - **Whether the reopen notifies the winner.** A fresh 48 hours is useless to a winner who does not know it started, and the input names no letter for the reopen among the post-close letters.
-- **What the Overdue mark does after the invoice is sent.** The mark belongs to Awaiting Address and Preparing Invoice; nothing says whether an order that was marked keeps any trace of it once it reaches Pending Payment.
+- **What the Overdue mark does after the invoice is sent.** The mark belongs to Awaiting Setup and Preparing Invoice; nothing says whether an order that was marked keeps any trace of it once it reaches Pending Payment.
 - **Whether a closed window blocks the operator's own address correction.** The refusal is stated for the winner. An operator correcting an address on a pre-invoice order is neither permitted nor refused by the input.
 - **Traces on this delta.** The change's `user-journeys.md` for this capability carries only `post-sale-US-09`, so the queue, send and cancellation cases trace `## Feature set` root groups rather than the journeys that walk them, which live in the durable file.
 

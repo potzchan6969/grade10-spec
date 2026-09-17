@@ -9,7 +9,7 @@ Product context: [My Auctions](../../../docs/prds/products/grade10-site/auction/
 A winner has no list of what they owe. My Auctions mixes won lots with watches
 and live bids, and a won row shows an order status but no way into the order.
 Nothing in the spec requires a link from a Won row to Winner Order, so a
-winner can see "Awaiting Address" and still have no place to confirm one.
+winner can see "Awaiting Setup" and still have no place to confirm one.
 
 My Auctions is also one long table. Lots not yet open, lots closing tonight
 and lots closed last month share it, sorted only by close.
@@ -26,7 +26,7 @@ time from lot close to address confirmed.
 - **Ended rows lock Email alerts.** The toggle is shown disabled.
 - **New page: My Auction Orders.** One row per won order: key image, title,
   auction, winning bid, order status, **View lot**, and one action by status —
-  Confirm address, Pay Invoice, or View detail. Orders needing the winner
+  Complete Order Setup, Pay Invoice, or View detail. Orders needing the winner
   come first. Reached from the account menu and from a Won row on My Auctions.
 - **Winner Order page sections.** Order Information (Order No., Auction,
   Currency, Date, Order Status, **Invoice Status** — formerly Paid Status),

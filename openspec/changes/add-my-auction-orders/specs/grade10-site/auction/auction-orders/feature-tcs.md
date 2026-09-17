@@ -7,7 +7,7 @@
 
 **As a** winner
 **I want** one list of my auction orders, each with the action it needs
-**so that** I confirm addresses and pay invoices without guessing which order is waiting on me.
+**so that** I complete order setupes and pay invoices without guessing which order is waiting on me.
 
 ### grade10-site-auction-auction-orders-US1-TC1-1: Every won order is listed once with its details
 
@@ -99,7 +99,7 @@ Runs once per row of **Test data**.
 
 | Order status | Invoice status | Action |
 | --- | --- | --- |
-| Awaiting Address | not_issued | Confirm address |
+| Awaiting Setup | not_issued | Complete Order Setup |
 | Pending Payment | pending | Pay Invoice |
 | Pending Payment | expired | Pay Invoice |
 | Preparing Invoice | not_issued | View detail |
