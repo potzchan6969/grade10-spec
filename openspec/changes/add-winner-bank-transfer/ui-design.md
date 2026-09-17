@@ -20,7 +20,7 @@ destination.
 | Surface | Preview path |
 | --- | --- |
 | Payment reminder (first — invoice sent) | `/preview/auction/order/payment-reminder` |
-| Payment reminder (day 3 after send) | `/preview/auction/order/payment-reminder-second` |
+| Payment reminder (day 3 after send) | `/preview/auction/order/payment-reminder-day-three` |
 | Payment reminder (day 6 after send) | `/preview/auction/order/payment-reminder-day-six` |
 | Final notice (24 hours before deadline) | `/preview/auction/order/payment-reminder-final` |
 | Payment received | `/preview/auction/order/payment-received` |

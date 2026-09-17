@@ -4,13 +4,13 @@ import PaymentReminderEmail, {
 } from "@/emails/auction/order/payment-reminder";
 
 /** Preview variant — day 3 after invoice send. */
-export default function PaymentReminderSecondEmail(
+export default function PaymentReminderDayThreeEmail(
   props: PaymentReminderProps,
 ) {
   return <PaymentReminderEmail {...props} urgency="day3" />;
 }
 
-PaymentReminderSecondEmail.PreviewProps = {
+PaymentReminderDayThreeEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   orderUrl: previewLot.orderUrl,

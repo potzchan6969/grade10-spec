@@ -61,7 +61,7 @@ emails/
                            (watcher previews: lot-watched-sold /
                            lot-watched-ended = no-bids Ended-only)
     order/                 winner success, address reminder, payment reminder
-                           (send / day3 / day6 / T-24h final), payment
+                           (send / day-three / day-six / final), payment
                            received, shipped (post-sale)
 ```
 
