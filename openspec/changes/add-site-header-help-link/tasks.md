@@ -13,7 +13,7 @@ can reference the label through `NavKey`.
 - [ ] 1.2 Verify: `pnpm run typecheck`, `pnpm run test` (i18n
       `resolution.test.ts` coverage), `pnpm check:manual`.
 
-## 2. Help in the grade10-site header (grade10)
+## 2. Help in the grade10-site header (grade10) (owner: @sean)
 
 - [ ] 2.1 Add the provisional `HELP_NAV_LINK` constant to
       `apps/frontend/grade10/src/chrome/siteContent.ts` (❓ Mintlify host,
