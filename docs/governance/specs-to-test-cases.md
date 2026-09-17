@@ -4,7 +4,7 @@ tcs_rules_rev: 3.0
 
 # Specs to Test Cases
 
-A suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — is written from the anchors a capability declares, never from the scenarios beside it and never as a second source of truth. Case shape follows [Virtuoso QA's guide](https://www.virtuosoqa.com/post/test-cases); property vocabularies are Qase's, so a suite exports without translation.
+A suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — is written from the anchors a capability declares, never from the scenarios beside it and never as a second source of truth. Case shape follows [Virtuoso QA's guide](https://www.virtuosoqa.com/post/test-cases); the property vocabularies are the standard ones, so a suite reads the same to any tool that takes it.
 
 A **feature** suite is written **blind**: by a reader who cannot see the spec's `## Requirements` at all. A suite derived from the scenarios can only find inconsistency inside them, never the behaviour they left out — and finding that is what the second reading is for. The scenarios are drafted from the same anchors in parallel, and the two are reconciled once both land.
 
@@ -461,7 +461,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 ````
 
 - **Fixed points** — header lines computed; journey heading and its three-line statement copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
-- **No execution record** — no actual result, no pass/fail column; a run lives in Qase against the exported case
+- **No execution record** — no actual result, no pass/fail column; a run lives in the run sheet against a snapshot of the case
 - **Copy** — `openspec/specs/grade10-site/auction/auction/feature-tcs.md`, the one suite approved under the current revision; its `US2-TC1-1` is a case at the right size. A case pasted here would drift; the corpus is validator-held
 - **Deltas use the same format** — under `openspec/changes/<change>/specs/<product>/<domain>/<capability>/feature-tcs.md`
 
@@ -476,6 +476,26 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 | `planning-qa` skill | QA's entry point: routes to the two commands and states what a suite owes |
 | `pnpm run tcs:validate` | header against cases, unique journey-scoped ids, traces resolving against `spec.md` and `user-journeys.md`, property vocabularies and order, no empty Expected Results, actors of a class, composed levels tracing what they compose; reports duplicate-purpose candidates; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
 | `pnpm run tcs:stale` | suites whose drafts sit below the current minor; a report, never a sweep |
+| `/tcs-run-sheet <what to walk>` (`tcs-run-sheet` skill) | resolves a request to an explicit case-id list, dry-runs it, and dispatches the run tab once a person confirms |
+| `pnpm run tcs:run-sheet` | writes the selection to a new tab; `--dry-run` prints it and touches no network |
+
+## The Run Sheet
+
+A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
+
+- **A tab is a snapshot** — written once, pinned to the commit it was written from, never resynced. A case that later changes, or is deprecated, leaves the tab alone: the tab says what was tested and the markdown says what the case is now
+- **`actual` only** — `--include-draft` takes drafts and grey-bands them; a `deprecated` case never crosses
+- **The selection is a list** — a filter over the properties resolves to case ids, and so does a reading of the specs; the ids are what reach the sheet, so a run can be restated
+- **The case columns are locked** — a protected range refuses an edit at the cell. `Result`, `Notes`, `Tester` and `Date` are the tester's. A wrong case is fixed in `openspec/`
+- **The Summary tab is the register** — one row per run carrying its id, date, name, selection and commit, and counting results with live formulas
+- **Nothing returns** — no result reaches the store, and no suite carries one
+- **CI holds the credentials** — the `Run sheet` workflow mints a short-lived token from the repository's own OIDC identity; no service-account key exists
+- **The layout is code** — `scripts/openspec/lib/run-sheet-layout.mjs`, not a template tab inside the spreadsheet
+- **Renaming or deleting a tab cannot be prevented** — Sheets protects cells, not tabs. The Summary row then reads `tab deleted`, and its provenance survives
+
+`Tester` and `Date` are filled in by whoever marks the row.
+
+❓ Open: stamping the date and the tester automatically, which needs every marker inside one Google Workspace domain; recording a tab somebody deleted.
 
 ## See Also
 
