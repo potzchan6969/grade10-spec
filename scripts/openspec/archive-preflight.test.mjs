@@ -350,3 +350,45 @@ test("a suite with no durable file yet is a promise --journeys-copied can make",
   );
   assert.equal(acknowledged.status, 0);
 });
+
+/** A change whose every task group lands in the store deploys nothing, so
+ * there is no run to name and no waiver owed. `check:manual`'s `archived` rule
+ * and the archive skill both already said so; this script did not, so the only
+ * way to archive one was to waive a deploy it never had — and a waiver written
+ * where none is owed is how the waiver becomes the default. */
+const STORE_ONLY = "## 1. Store checks (grade10-spec)\n\n- [x] 1.1 Ship it\n";
+
+test("a store-only plan needs no deploy evidence and records none", () => {
+  const { script, manifest } = sandbox({
+    ...PROPOSAL,
+    ".openspec.yaml": "schema: grade10-planning\n",
+    "tasks.md": STORE_ONLY,
+  });
+  const result = run(script);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /No deploy record is owed/);
+  assert.equal(readFileSync(manifest, "utf8"), "schema: grade10-planning\n");
+});
+
+test("a plan landing anywhere else still owes its deploy", () => {
+  const { script } = sandbox({
+    ...PROPOSAL,
+    "tasks.md": `${STORE_ONLY}\n## 2. The app (grade10)\n\n- [x] 2.1 Wire it\n`,
+  });
+  const result = run(script);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /No deploy evidence/);
+});
+
+test("an untagged group is not a store-only plan", () => {
+  const { script } = sandbox({
+    ...PROPOSAL,
+    "tasks.md": "## 1. Build it\n\n- [x] 1.1 Ship it\n",
+  });
+  const result = run(script);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /No deploy evidence/);
+});
