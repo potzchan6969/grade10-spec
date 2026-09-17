@@ -9,7 +9,7 @@ Winner Order is the authenticated route where a collector settles one lot after 
 ## Invoice and Settlement
 
 - **Address first** — a closed lot opens asking for a delivery address; the winner confirms the account's saved or newly entered address before an operator prepares an invoice
-- 🚧 **Saved addresses** — an account keeps up to **5** named shipping addresses; at the cap, Add new address still works for this order only, and Save this address for future orders is refused until one is removed
+- **Saved addresses** — an account keeps up to **5** named shipping addresses; at the cap, Add new address still works for this order only, and Save this address for future orders is refused until one is removed
 - ❓ **One-time address persistence** — whether the unsaved one-time address the winner enters at the cap is visually distinguished from saved addresses in the picker, and whether it survives navigating away and back or a page reload
 - 🚧 **Address deadline** — 48 hours from lot close to confirm a delivery address; `Confirm by …` under the CTA (with time); overdue alert reads `Missed address deadline: {date}` with Contact Us; Confirm is hidden when the window passes; status stays Awaiting Address
 - 🚧 **After the address deadline** — a winner who has not confirmed an address by the deadline gets no further chance to on their own; only Grade10 reopens the address form, which gives a fresh 48 hours, or records an address the winner gives by phone
