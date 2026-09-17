@@ -49,6 +49,14 @@ for (const entry of htmlFiles) {
   const destPath = join(outDir, dirname(relativePath), destName);
   mkdirSync(dirname(destPath), { recursive: true });
   cpSync(sourcePath, destPath);
+
+  // The Flight payload Next's client router fetches for a soft (no
+  // full-reload) navigation — worker.js serves this instead of the .html
+  // when it sees a client-side navigation request.
+  const rscSourcePath = sourcePath.replace(/\.html$/, ".rsc");
+  if (entry.name !== "_not-found.html" && existsSync(rscSourcePath)) {
+    cpSync(rscSourcePath, destPath.replace(/\.html$/, ".rsc"));
+  }
 }
 
 const nextStaticDir = join(reactEmailApp, ".next", "static");

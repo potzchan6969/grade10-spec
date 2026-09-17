@@ -7,9 +7,15 @@
   "name": "grade10-email",
   "compatibility_date": "2026-08-01",
   "account_id": "de021143aac704ccbda9c3cd00be261d",
+  "main": "worker.js",
   "assets": {
     "directory": "./out",
-    "not_found_handling": "404-page"
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    // worker.js must see every request first: it serves a route's `.rsc`
+    // file for Next's client-side navigation fetch, falling back to the
+    // asset the request's path names for everything else.
+    "run_worker_first": true
   },
   "routes": [{ "pattern": "email.grade10-stg.com", "custom_domain": true }],
   "workers_dev": false
