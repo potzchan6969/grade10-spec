@@ -104,9 +104,13 @@ Status](/p/grade10-site/auction/order-status).
   method and reference on the receipt, never the files
 - 🚧 **Recording a partial payment** — the same form as manual settlement, for
   an amount smaller than the balance owed; the order reads Partially Paid and
-  the operator may record another payment the same way. A payment within 10%
-  of the balance, either way, prompts the operator to close the invoice as
-  Paid or keep it Partially Paid at the real balance; further off is refused
+  the operator may record another payment the same way. Once payments total
+  90% or more of the original invoice, every further payment prompts the
+  operator to close the invoice as Paid or keep it Partially Paid at the real
+  balance; an exact match to the full amount closes on its own
+- ❓ **Overpaying a partial balance** — whether a payment pushing the total
+  past the original invoice is refused outright or offered the same close
+  prompt — Product and Finance confirm
 - 🚧 **Partially Paid is final on its numbers** — no reissue and no cancel
   once a payment is recorded; the operator resolves the rest by hand outside
   the system
