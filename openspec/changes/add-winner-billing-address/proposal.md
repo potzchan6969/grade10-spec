@@ -70,7 +70,5 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## References
 
-- [Winner Order · Order Setup](../../../docs/prds/products/grade10-site/auction/winner-order.md#order-setup)
-- [Winner Order · Invoicing](../../../docs/prds/products/grade10-site/auction/winner-order.md#invoicing)
-- [Winner Order · Receipts](../../../docs/prds/products/grade10-site/auction/winner-order.md#receipts)
-- [Post-Sale Queue · Payment](../../../docs/prds/products/grade10-admin/auction/post-sale.md#payment)
+- [Post-Bidding · Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order)
+- [Auction Management · Payment](../../../docs/prds/products/grade10-admin/auction/management.md#payment)

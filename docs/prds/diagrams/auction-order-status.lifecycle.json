@@ -17,7 +17,7 @@
     },
     {
       "id": "waiting",
-      "label": "Waiting on an operator"
+      "label": "In an operator's hands"
     },
     {
       "id": "terminal",
@@ -74,6 +74,15 @@
       "col": 0
     },
     {
+      "id": "partially-paid",
+      "type": "waiting",
+      "label": "Partially Paid",
+      "sublabel": "collected in parts",
+      "col": 0,
+      "lane": "waiting",
+      "yOffset": 76
+    },
+    {
       "id": "cancelled",
       "type": "failure",
       "label": "Cancelled",
@@ -128,25 +137,25 @@
       "from": "pending-payment",
       "to": "payment-verifying",
       "label": "proof uploaded",
-      "labelAt": [478, 222]
+      "labelAt": [448, 222]
     },
     {
       "id": "confirmed-proof",
       "from": "payment-verifying",
       "to": "processing",
-      "label": "proof confirmed",
+      "label": "confirmed",
       "variant": "emphasis",
       "fromSide": "right",
       "toSide": "bottom",
-      "labelAt": [520, 296]
+      "labelAt": [520, 294]
     },
     {
       "id": "returned",
       "from": "payment-verifying",
       "to": "pending-payment",
-      "label": "proof not accepted",
+      "label": "not accepted",
       "variant": "dashed",
-      "labelAt": [478, 242]
+      "labelAt": [448, 244]
     },
     {
       "id": "cancel",
@@ -157,8 +166,8 @@
       "route": "left-channel",
       "fromSide": "left",
       "toSide": "left",
-      "channelX": 323,
-      "labelAt": [323, 400]
+      "channelX": 315,
+      "labelAt": [315, 432]
     },
     {
       "id": "refund",
@@ -175,6 +184,26 @@
       "from": "shipped",
       "to": "delivered",
       "variant": "emphasis"
+    },
+    {
+      "id": "part",
+      "from": "pending-payment",
+      "to": "partially-paid",
+      "label": "part paid",
+      "route": "left-channel",
+      "fromSide": "left",
+      "toSide": "left",
+      "channelX": 329,
+      "labelAt": [366, 233]
+    },
+    {
+      "id": "closed",
+      "from": "partially-paid",
+      "to": "processing",
+      "label": "paid in full",
+      "fromSide": "right",
+      "toSide": "bottom",
+      "labelAt": [520, 370]
     }
   ]
 }

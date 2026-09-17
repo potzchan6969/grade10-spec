@@ -102,6 +102,13 @@ in prose; the check warns on a suite no page shows.
 ::cases{id="grade10-site/loyalty/programme"}
 ```
 
+A chapter — one page whose `##` sections are the capabilities a reader meets
+in order, the way the auction's pages are cut — names the first capability in
+its frontmatter and shows every other one's suite with its own `cases` block,
+or its `changes` block while the capability is still being introduced. The
+check counts each as the page naming that capability, so none of them needs a
+page of its own; a proposal links the `##` section that holds the capability.
+
 User journeys are derivative of the page's own content and stay in the
 capability's `user-journeys.md` — a page never embeds them.
 

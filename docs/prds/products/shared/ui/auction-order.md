@@ -7,8 +7,8 @@ order: 10
 🚧 Blocks make a winner's auction orders, composed by every application that
 shows them: the My Auction Orders list, its row and empty state, the order
 detail, and the delivery address form. What an order means is [My Auction
-Orders](/p/grade10-site/auction/auction-orders) and [Winner
-Order](/p/grade10-site/auction/winner-order); this capability is the
+Orders](/p/grade10-site/auction/post-bidding#winner-order) and [Winner
+Order](/p/grade10-site/auction/post-bidding#winner-order); this capability is the
 component contract underneath them.
 
 ## The Blocks
@@ -23,10 +23,13 @@ component contract underneath them.
   form, a read-only address, or nothing the application supplies, and an
   invoice with Pay Now only when one is supplied
 - 🚧 **Address form** — the fields [Winner
-  Order](/p/grade10-site/auction/winner-order) names, the required ones
+  Order](/p/grade10-site/auction/post-bidding#winner-order) names, the required ones
   marked, an application-supplied error beside each field it names, and
   Confirm with the entered values or Cancel; it checks no phone number's
-  format and offers no billing address
+  format
+- 🚧 **Billing address** — a Use same details for billing address box,
+  ticked by default; unticked, a second address with the same fields. It
+  follows the form, which first ships without one
 - 🚧 **On their own** — the row and the address form each render alone
 
 ## Ownership

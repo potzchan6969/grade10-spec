@@ -60,7 +60,7 @@ svg[data-diagram="auction-order-status"] .c-grid{stroke-dasharray: 1 4; opacity:
         <path d="M 72 112 L 858 112" class="a-default" stroke-width="0.8" stroke-dasharray="3,8"/>
         <text x="72" y="100" class="t-dim" font-size="10" font-weight="600">01 / Order</text>
         <path d="M 72 264 L 858 264" class="a-default" stroke-width="0.8" stroke-dasharray="3,8"/>
-        <text x="72" y="252" class="t-dim" font-size="10" font-weight="600">02 / Waiting on an operator</text>
+        <text x="72" y="252" class="t-dim" font-size="10" font-weight="600">02 / In an operator&#39;s hands</text>
         <path d="M 72 436 L 858 436" class="a-default" stroke-width="0.8" stroke-dasharray="3,8"/>
         <text x="72" y="424" class="t-dim" font-size="10" font-weight="600">03 / Ended</text>
         
@@ -71,11 +71,13 @@ svg[data-diagram="auction-order-status"] .c-grid{stroke-dasharray: 1 4; opacity:
         <path data-step="processing" data-edge-from="pending-payment" data-edge-to="processing" data-edge-key="2" data-edge-id="paid" data-composition-points="461,157;497,157" d="M 461 157 L 497 157" class="a-emphasis" stroke-width="2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
         <path data-step="shipped" data-edge-from="processing" data-edge-to="shipped" data-edge-key="3" data-edge-id="dispatched" data-composition-points="615,157;651,157" d="M 615 157 L 651 157" class="a-emphasis" stroke-width="2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
         <path data-step="payment-verifying" data-edge-from="pending-payment" data-edge-to="payment-verifying" data-edge-label="proof uploaded" data-edge-key="4" data-edge-id="proof" data-composition-points="402,188;402,278" d="M 402 188 L 402 278" class="a-default" stroke-width="1.1" marker-end="url(#auction-order-status-arrowhead)"/>
-        <path data-step="processing" data-edge-from="payment-verifying" data-edge-to="processing" data-edge-label="proof confirmed" data-edge-key="5" data-edge-id="confirmed-proof" data-composition-points="465,307;556,307;556,188" d="M 465 307 L 546 307 Q 556 307 556 297 L 556 188" class="a-emphasis" stroke-width="2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
-        <path data-step="pending-payment" data-edge-from="payment-verifying" data-edge-to="pending-payment" data-edge-label="proof not accepted" data-edge-key="6" data-edge-id="returned" data-composition-points="402,278;402,188" d="M 402 278 L 402 188" class="a-dashed" stroke-width="1.1" marker-end="url(#auction-order-status-arrowhead-dashed)"/>
-        <path data-step="cancelled" data-edge-from="pending-payment" data-edge-to="cancelled" data-edge-label="an operator cancels" data-edge-key="7" data-edge-id="cancel" data-composition-points="343,157;323,157;323,479;343,479" d="M 343 157 L 333 157 Q 323 157 323 167 L 323 469 Q 323 479 333 479 L 343 479" class="a-security" stroke-width="1.1" marker-end="url(#auction-order-status-arrowhead-security)"/>
+        <path data-step="processing" data-edge-from="payment-verifying" data-edge-to="processing" data-edge-label="confirmed" data-edge-key="5" data-edge-id="confirmed-proof" data-composition-points="465,307;556,307;556,188" d="M 465 307 L 546 307 Q 556 307 556 297 L 556 188" class="a-emphasis" stroke-width="2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
+        <path data-step="pending-payment" data-edge-from="payment-verifying" data-edge-to="pending-payment" data-edge-label="not accepted" data-edge-key="6" data-edge-id="returned" data-composition-points="402,278;402,188" d="M 402 278 L 402 188" class="a-dashed" stroke-width="1.1" marker-end="url(#auction-order-status-arrowhead-dashed)"/>
+        <path data-step="cancelled" data-edge-from="pending-payment" data-edge-to="cancelled" data-edge-label="an operator cancels" data-edge-key="7" data-edge-id="cancel" data-composition-points="343,157;315,157;315,479;343,479" d="M 343 157 L 325 157 Q 315 157 315 167 L 315 469 Q 315 479 325 479 L 343 479" class="a-security" stroke-width="1.1" marker-end="url(#auction-order-status-arrowhead-security)"/>
         <path data-step="refunded" data-edge-from="processing" data-edge-to="refunded" data-edge-key="8" data-edge-id="refund" data-composition-points="615,157;633,157;633,479;615,479" d="M 615 157 L 624 157 Q 633 157 633 166 L 633 470 Q 633 479 624 479 L 615 479" class="a-dashed" stroke-width="1.1" marker-end="url(#auction-order-status-arrowhead-dashed)"/>
         <path data-step="delivered" data-edge-from="shipped" data-edge-to="delivered" data-edge-key="9" data-edge-id="delivery" data-composition-points="710,188;710,450" d="M 710 188 L 710 450" class="a-emphasis" stroke-width="2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
+        <path data-step="partially-paid" data-edge-from="pending-payment" data-edge-to="partially-paid" data-edge-label="part paid" data-edge-key="10" data-edge-id="part" data-composition-points="343,157;329,157;329,383;339,383" d="M 343 157 L 336 157 Q 329 157 329 164 L 329 378 Q 329 383 334 383 L 339 383" class="a-default" stroke-width="1.1" marker-end="url(#auction-order-status-arrowhead)"/>
+        <path data-step="processing" data-edge-from="partially-paid" data-edge-to="processing" data-edge-label="paid in full" data-edge-key="11" data-edge-id="closed" data-composition-points="465,383;556,383;556,188" d="M 465 383 L 546 383 Q 556 383 556 373 L 556 188" class="a-default" stroke-width="1.1" marker-end="url(#auction-order-status-arrowhead)"/>
         
         <g data-step="awaiting-address" id="auction-order-status-node-awaiting-address" data-node-id="awaiting-address" data-node-label="Awaiting Address" aria-label="Focus Awaiting Address, the lot closed, Order" data-node-kind="start" data-node-sublabel="the lot closed" data-node-context="Order">
           <title>Awaiting Address · the lot closed · Order</title>
@@ -128,8 +130,8 @@ svg[data-diagram="auction-order-status"] .c-grid{stroke-dasharray: 1 4; opacity:
           <text data-node-label="" data-detail-anchor="" x="710" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Shipped</text>
           <text data-detail="context" x="710" y="163" class="t-muted" font-size="7" text-anchor="middle">carrier and tracking</text>
         </g>
-        <g data-step="payment-verifying" id="auction-order-status-node-payment-verifying" data-node-id="payment-verifying" data-node-label="Payment Verifying" aria-label="Focus Payment Verifying, proof uploaded, deadline stopped, Waiting on an operator" data-node-kind="waiting" data-node-sublabel="proof uploaded, deadline stopped" data-node-context="Waiting on an operator">
-          <title>Payment Verifying · proof uploaded, deadline stopped · Waiting on an operator</title>
+        <g data-step="payment-verifying" id="auction-order-status-node-payment-verifying" data-node-id="payment-verifying" data-node-label="Payment Verifying" aria-label="Focus Payment Verifying, proof uploaded, deadline stopped, In an operator&#39;s hands" data-node-kind="waiting" data-node-sublabel="proof uploaded, deadline stopped" data-node-context="In an operator&#39;s hands">
+          <title>Payment Verifying · proof uploaded, deadline stopped · In an operator&#39;s hands</title>
           <rect x="339" y="278" width="126" height="58" rx="7" class="c-mask"/>
           <rect x="339" y="278" width="126" height="58" rx="7" class="c-cloud" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="waiting" class="semantic-sigil s-cloud" transform="translate(448 284) scale(0.6875)">
@@ -137,6 +139,16 @@ svg[data-diagram="auction-order-status"] .c-grid{stroke-dasharray: 1 4; opacity:
           </g>
           <text data-node-label="" data-detail-anchor="" x="402" y="299" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Payment Verifying</text>
           <text data-detail="context" x="402" y="315" class="t-muted" font-size="6.1" text-anchor="middle">proof uploaded, deadline stopped</text>
+        </g>
+        <g data-step="partially-paid" id="auction-order-status-node-partially-paid" data-node-id="partially-paid" data-node-label="Partially Paid" aria-label="Focus Partially Paid, collected in parts, In an operator&#39;s hands" data-node-kind="waiting" data-node-sublabel="collected in parts" data-node-context="In an operator&#39;s hands">
+          <title>Partially Paid · collected in parts · In an operator&#39;s hands</title>
+          <rect x="339" y="354" width="126" height="58" rx="7" class="c-mask"/>
+          <rect x="339" y="354" width="126" height="58" rx="7" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="waiting" class="semantic-sigil s-cloud" transform="translate(448 360) scale(0.6875)">
+            <path d="M4 2.5h8M4 13.5h8M5 3c0 2.8 2 3.2 3 5-1 1.8-3 2.2-3 5M11 3c0 2.8-2 3.2-3 5 1 1.8 3 2.2 3 5"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="402" y="375" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Partially Paid</text>
+          <text data-detail="context" x="402" y="391" class="t-muted" font-size="7" text-anchor="middle">collected in parts</text>
         </g>
         <g data-step="cancelled" id="auction-order-status-node-cancelled" data-node-id="cancelled" data-node-label="Cancelled" aria-label="Focus Cancelled, unpaid; the lot reopens, Ended" data-node-kind="failure" data-node-sublabel="unpaid; the lot reopens" data-node-context="Ended">
           <title>Cancelled · unpaid; the lot reopens · Ended</title>
@@ -173,20 +185,28 @@ svg[data-diagram="auction-order-status"] .c-grid{stroke-dasharray: 1 4; opacity:
         </g>
         
         <g data-step="payment-verifying" data-detail="context" data-edge-from="pending-payment" data-edge-to="payment-verifying" data-edge-label="proof uploaded" data-edge-key="4" data-edge-id="proof">
-          <rect x="437.7" y="211" width="80.60000000000001" height="16" rx="4" class="c-mask"/>
-          <text x="478" y="222" class="t-muted" font-size="8" text-anchor="middle">proof uploaded</text>
+          <rect x="407.7" y="211" width="80.60000000000001" height="16" rx="4" class="c-mask"/>
+          <text x="448" y="222" class="t-muted" font-size="8" text-anchor="middle">proof uploaded</text>
         </g>
-        <g data-step="processing" data-detail="context" data-edge-from="payment-verifying" data-edge-to="processing" data-edge-label="proof confirmed" data-edge-key="5" data-edge-id="confirmed-proof">
-          <rect x="477.25" y="285" width="85.5" height="16" rx="4" class="c-mask"/>
-          <text x="520" y="296" class="t-backend" font-size="8" text-anchor="middle">proof confirmed</text>
+        <g data-step="processing" data-detail="context" data-edge-from="payment-verifying" data-edge-to="processing" data-edge-label="confirmed" data-edge-key="5" data-edge-id="confirmed-proof">
+          <rect x="491.95" y="283" width="56.1" height="16" rx="4" class="c-mask"/>
+          <text x="520" y="294" class="t-backend" font-size="8" text-anchor="middle">confirmed</text>
         </g>
-        <g data-step="pending-payment" data-detail="context" data-edge-from="payment-verifying" data-edge-to="pending-payment" data-edge-label="proof not accepted" data-edge-key="6" data-edge-id="returned">
-          <rect x="427.9" y="231" width="100.2" height="16" rx="4" class="c-mask"/>
-          <text x="478" y="242" class="t-messagebus" font-size="8" text-anchor="middle">proof not accepted</text>
+        <g data-step="pending-payment" data-detail="context" data-edge-from="payment-verifying" data-edge-to="pending-payment" data-edge-label="not accepted" data-edge-key="6" data-edge-id="returned">
+          <rect x="412.6" y="233" width="70.80000000000001" height="16" rx="4" class="c-mask"/>
+          <text x="448" y="244" class="t-messagebus" font-size="8" text-anchor="middle">not accepted</text>
         </g>
         <g data-step="cancelled" data-detail="context" data-edge-from="pending-payment" data-edge-to="cancelled" data-edge-label="an operator cancels" data-edge-key="7" data-edge-id="cancel">
-          <rect x="270.45" y="389" width="105.10000000000001" height="16" rx="4" class="c-mask"/>
-          <text x="323" y="400" class="t-security" font-size="8" text-anchor="middle">an operator cancels</text>
+          <rect x="262.45" y="421" width="105.10000000000001" height="16" rx="4" class="c-mask"/>
+          <text x="315" y="432" class="t-security" font-size="8" text-anchor="middle">an operator cancels</text>
+        </g>
+        <g data-step="partially-paid" data-detail="context" data-edge-from="pending-payment" data-edge-to="partially-paid" data-edge-label="part paid" data-edge-key="10" data-edge-id="part">
+          <rect x="337.95" y="222" width="56.1" height="16" rx="4" class="c-mask"/>
+          <text x="366" y="233" class="t-muted" font-size="8" text-anchor="middle">part paid</text>
+        </g>
+        <g data-step="processing" data-detail="context" data-edge-from="partially-paid" data-edge-to="processing" data-edge-label="paid in full" data-edge-key="11" data-edge-id="closed">
+          <rect x="484.6" y="359" width="70.80000000000001" height="16" rx="4" class="c-mask"/>
+          <text x="520" y="370" class="t-muted" font-size="8" text-anchor="middle">paid in full</text>
         </g>
         
       </svg>

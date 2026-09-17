@@ -4,7 +4,7 @@
 
 Depends on [`add-auction-watchlist`](../add-auction-watchlist/proposal.md) for
 the shared watch record, contracts, and Grade10 surfaces. Behaviour matches
-[Grade10 Watchlist](../../../docs/prds/products/grade10-site/auction/watchlist.md);
+[Grade10 Watchlist](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications);
 this change only carries that behaviour onto ZZZ. ZZZ's own auction PRD is
 not drafted yet.
 
@@ -73,4 +73,4 @@ Grade10 surfaces. Independent of ZZZ vault, appointment, and store launch.
 
 ## References
 
-- [Grade10 Watchlist](../../../docs/prds/products/grade10-site/auction/watchlist.md) — behaviour this change mirrors on ZZZ
+- [Bidding · My Auctions, Watchlist and Notifications](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications) — behaviour this change mirrors on ZZZ

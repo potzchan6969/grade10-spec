@@ -1,6 +1,6 @@
 **Author:** @tangconst - 2026-09-10
 
-Product context: [My Auctions](../../../docs/prds/products/grade10-site/auction/account-record.md).
+Product context: [My Auctions](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications).
 UI source: Figma `Auction Watchlist` (`6507:5463`) in Grade10-DS-2026 — the
 table block only; page title stays on the existing `AuctionRecord` shell.
 
@@ -13,7 +13,7 @@ so "what am I following?" and "where do I stand?" are two scans rather than
 one. The approved table presents every bookmarked lot once.
 
 **Metric:** record-page reach and outbid recovery rate on
-[My Auctions](../../../docs/prds/products/grade10-site/auction/account-record.md)
+[My Auctions](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)
 (existing signals). **Acceptance signal:** a collector with watch-only and
 bid lots sees one table, bid lots first, `--` where they have not bid, and a
 count beside **My Auctions** that matches the rows.
@@ -90,7 +90,7 @@ None.
   shipment requirement states; `revise-auction-winner-invoicing` folds that
   requirement, so this change does not restate it and the two account-record
   deltas do not fight at archive.
-- Manual pages: [My Auctions](../../../docs/prds/products/grade10-site/auction/account-record.md)
+- Manual pages: [My Auctions](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)
   and [Auction Record Blocks](../../../docs/prds/products/shared/ui/auction-record.md).
 
 ## Follow-on changes

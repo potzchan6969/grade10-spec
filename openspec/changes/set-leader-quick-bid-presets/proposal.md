@@ -39,7 +39,7 @@ their max, while a typed raise can still start at max + $1.
 ## Impact
 
 - `@grade10/ui` bid-card quick-bid amounts and raise floor.
-- `docs/prds/products/grade10-site/auction/auto-bidding.md` Bid Panel and the
+- `docs/prds/products/grade10-site/auction/bidding.md#auction-logic` Bid Panel and the
   preset-amounts decision.
 
 ## References

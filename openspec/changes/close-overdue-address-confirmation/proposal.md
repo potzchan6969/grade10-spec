@@ -1,8 +1,8 @@
 **Author:** @jeffffej0909 - 2026-09-16
 
-Product context: [Winner Order](../../../docs/prds/products/grade10-site/auction/winner-order.md),
-[Auction Order Status](../../../docs/prds/products/grade10-site/auction/order-status.md),
-[Post-Sale Queue](../../../docs/prds/products/grade10-admin/auction/post-sale.md).
+Product context: [Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order),
+[Auction Order Status](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order),
+[Post-Sale Queue](../../../docs/prds/products/grade10-admin/auction/management.md#post-sale-queue).
 
 ## Why
 
@@ -131,6 +131,6 @@ itself:
 
 ## References
 
-- [Winner Order · Order Setup](../../../docs/prds/products/grade10-site/auction/winner-order.md#order-setup)
-- [Post-Sale Queue · Payment](../../../docs/prds/products/grade10-admin/auction/post-sale.md#payment)
-- [Auction Order Status](../../../docs/prds/products/grade10-site/auction/order-status.md)
+- [Post-Bidding · Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order)
+- [Post-Bidding · Edge Cases](../../../docs/prds/products/grade10-site/auction/post-bidding.md#edge-cases)
+- [Auction Management · Payment](../../../docs/prds/products/grade10-admin/auction/management.md#payment)

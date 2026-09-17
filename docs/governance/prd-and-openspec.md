@@ -4,7 +4,7 @@ A capability's PRD under `docs/prds/` is written first, and it moves first: whoe
 
 ## The rule
 
-A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. Its prose states the shape of the product in the reader's words and pictures, and never restates a requirement. Three kinds of line sit on it:
+A PRD is `docs/prds/products/<product>/<capability>.md` — the page the manual renders for that capability, and the same file for a product's landing at `docs/prds/products/<product>/index.md`. A domain may instead fold its capabilities into chapter pages, each capability a `##` section of the chapter the reader meets it in; the section is then what a proposal links, and the chapter shows the capability's suite under it with `::cases`. Its prose states the shape of the product in the reader's words and pictures, and never restates a requirement. Three kinds of line sit on it:
 
 - **Unmarked** — what runs. The spec holds the checkable form of the same fact.
 - **🚧** — confirmed and being built. An active change on the page's spec is delivering it, and the mark comes off when that change archives.

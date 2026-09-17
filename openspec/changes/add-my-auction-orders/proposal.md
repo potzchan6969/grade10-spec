@@ -1,8 +1,8 @@
 **Author:** @jeffffej0909 - 2026-09-15
 
-Product context: [My Auctions](../../../docs/prds/products/grade10-site/auction/account-record.md),
-[My Auction Orders](../../../docs/prds/products/grade10-site/auction/auction-orders.md),
-[Winner Order](../../../docs/prds/products/grade10-site/auction/winner-order.md).
+Product context: [My Auctions](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications),
+[My Auction Orders](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order),
+[Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order).
 
 ## Why
 
@@ -117,9 +117,8 @@ No domain impact: `grade10-site/auction/domain-tcs.md` traces no `account-record
 
 ## References
 
-- [My Auctions · The table](../../../docs/prds/products/grade10-site/auction/account-record.md#the-table)
-- [My Auction Orders · The List](../../../docs/prds/products/grade10-site/auction/auction-orders.md#the-list)
-- [Winner Order](../../../docs/prds/products/grade10-site/auction/winner-order.md)
+- [Bidding · My Auctions, Watchlist and Notifications](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)
+- [Post-Bidding · Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order)
 
 ## Follow-on changes
 

@@ -2,7 +2,7 @@
 
 ## Why
 
-When an account is suspended today, Grade10 withdraws every maximum it has on open lots and works each lot out again. Other bidders see the price and the leader change on lots the missed payment has nothing to do with, and a new line appears in bid history they already relied on. A placed bid is binding everywhere else on the auction ([Account Record](../../../docs/prds/products/grade10-site/auction/account-record.md)). Suspension should stop what the account does next, not undo what it already did.
+When an account is suspended today, Grade10 withdraws every maximum it has on open lots and works each lot out again. Other bidders see the price and the leader change on lots the missed payment has nothing to do with, and a new line appears in bid history they already relied on. A placed bid is binding everywhere else on the auction ([Account Record](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)). Suspension should stop what the account does next, not undo what it already did.
 
 An operator also has no way to stop a bidder for a reason other than an unpaid invoice — fraud, abuse, a dispute. The only tool on the Users page is the platform ban, which also stops the person shopping and signing in. The auction service already keeps its own bidder flag behind `auction:moderate`, but no product surface or spec describes it.
 
@@ -57,7 +57,6 @@ None.
 
 ## References
 
-- [Bidder Suspension · Operator Suspension](../../../docs/prds/products/grade10-site/auction/bidder-suspension.md#operator-suspension)
+- [Post-Bidding · Edge Cases](../../../docs/prds/products/grade10-site/auction/post-bidding.md#edge-cases)
 - [User Directory · Auction Suspension](../../../docs/prds/products/shared/console/user-directory.md#auction-suspension)
 
-- [Bidder Suspension · Standing Bids](../../../docs/prds/products/grade10-site/auction/bidder-suspension.md#standing-bids)

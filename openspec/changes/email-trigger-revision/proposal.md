@@ -36,5 +36,5 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## References
 
-- [Bidding Notifications — Messages](../../../docs/prds/products/grade10-site/auction/notifications.md#messages)
-- [Order Notifications — Letters](../../../docs/prds/products/grade10-site/auction/notifications-order.md#letters)
+- [Bidding · My Auctions, Watchlist and Notifications](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)
+- [Post-Bidding · Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order)
