@@ -22,6 +22,10 @@ Drawn from [Change Stages · Surfaces](../../docs/prds/products/shared/planning/
 
 [Blueprint · 3.6 Slack](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#slack). Your turn, Landed on main, Staging deployed and the weekly digest; each carries the command as text and a link to the change page. No interactive buttons until the identity map is settled.
 
+## Flows
+
+[Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk), a canvas beside the blueprint page: the loop every hand runs (told, open, run, review, land, next), the hands against the nine stages, one QA hand's day as a four-screen walkthrough (the message, the change page, the terminal run with its summary, the landed messages), My turn, the board, the page, the Storybook walk, the release page, the remaining Slack messages, each hand's six steps, what one push does, and an example week. The states below are the ones those screens show. A flow the canvas draws that the page does not name is a design choice: My turn takes the arrow keys, Enter to open and C to copy the command; every message and card carries the command as text; the terminal shows the summary before anything lands.
+
 ## Components
 
 Design-system primitives, from `@grade10/design-system/components/`:

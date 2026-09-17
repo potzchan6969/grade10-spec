@@ -153,6 +153,11 @@ Overlays sit on a stage:
 | Release | `/release` | The production tag and what it carried; what is on staging and ready to cut; pending migrations; hotfixes; flags per environment | Cut a release |
 | Slack | — | The messages above, each with the command and the link | Open the change; Not me; I am waiting on… |
 
+The screens are drawn on two canvases. The blueprint page holds the mock-ups
+of each surface; the [Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk)
+canvas holds the flow between them: the loop every hand runs, one hand's day as
+a walkthrough, each hand's six steps, what one push does, and an example week.
+
 ## Rails
 
 ### Land Without a Pull Request
