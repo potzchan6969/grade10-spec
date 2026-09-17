@@ -1,0 +1,4 @@
+schema: grade10-planning
+created: 2026-09-17
+awaiting:
+  specs: "spec.md outline, blind suites and requirement deltas for post-sale and winner-order are /planning-qa's; the post-sale delta applies after add-winner-bank-transfer, add-winner-partial-payment and add-winner-refund archive - /planning-qa"
