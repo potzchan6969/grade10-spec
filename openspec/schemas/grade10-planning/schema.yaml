@@ -361,25 +361,26 @@ artifacts:
       is work like the rest: `packages/i18n` answers it in every language of
       its layer, and `pnpm run test` refuses one left unanswered.
 
-      - **States**: Loading, empty, error, and edge states per screen, **one
-      state per bullet**, each tied to the anchor it dresses - a journey id from
-      `user-journeys.md`, or a `## Feature set` root group the durable
-      capability already issues. This
+      - **States**: Loading, empty, error, and edge states per screen, as a
+      markdown table under one `###` per screen — columns **State**, **Shows**,
+      **Anchor**, **one state per row**. State is the short name; Shows is what
+      is on screen; Anchor is the journey id from `user-journeys.md`, or a
+      `## Feature set` root group the durable capability already issues. This
       file lands before `spec.md` does, so the change's own groups are usually
-      not written yet: a journey id is the anchor to reach for. Copy the id in backticks, from the heading
-      that issues it - a prefix is never inferable from the capability's path,
-      and outside backticks nothing reads the citation. Never a scenario id:
-      the scenarios are written after this file, and `pnpm check:manual`
-      refuses an id the store issues nowhere.
+      not written yet: a journey id is the anchor to reach for. Copy the id in
+      backticks, from the heading that issues it - a prefix is never inferable
+      from the capability's path, and outside backticks nothing reads the
+      citation. Never a scenario id: the scenarios are written after this file,
+      and `pnpm check:manual` refuses an id the store issues nowhere.
 
 
-      **One state per bullet is what makes the list countable.** The
-      requirements' second pass walks it and accounts for every bullet - the
-      scenario it became, or an `**Out of suite:**` naming where the state is
-      verified instead - and a bullet holding three states can be answered by
-      one scenario and look complete. The dispositions are written onto these
-      bullets, by the pass that writes the requirements, and they are the one
-      thing in this file the blind suite pass never reads.
+      **One state per row is what makes the table countable.** The
+      requirements' second pass walks it and accounts for every row - replacing
+      Anchor with the scenario it became, or an `**Out of suite:**` naming where
+      the state is verified instead - and a cell holding three states can be
+      answered by one scenario and look complete. The dispositions are written
+      onto these rows, by the pass that writes the requirements, and they are
+      the one thing in this file the blind suite pass never reads.
 
 
       Link, never restate: the capability spec owns behavior, tech-design.md
@@ -604,20 +605,19 @@ artifacts:
       ## A design state no requirement states
 
       Where the change carries a `ui-design.md`, pass two walks its `## States`
-      bullets and answers every one, on the bullet itself:
+      table and answers every row, on the row itself — replace the Anchor cell:
 
       ```
-      - Empty catalogue - `grade10-site-store-product-listing-US-02` -
-        `grade10-site-store-product-listing-SC-14`
-      - Offline retry - `grade10-site-store-product-listing-US-02` -
-        **Out of suite:** the shell's connectivity banner, stated in
-        `shared/ui/site-chrome`
+      | State | Shows | Anchor |
+      | --- | --- | --- |
+      | Empty catalogue | No tiles; retry control | `grade10-site-store-product-listing-SC-14` |
+      | Offline retry | Connectivity banner with retry | **Out of suite:** the shell's connectivity banner, stated in `shared/ui/site-chrome` |
       ```
 
       A scenario id in backticks, or `**Out of suite:**` - the same words the
       suite uses for a scenario no case reaches, and the same obligation: name
       where the state is stated instead, never merely why it is not here.
-      Nothing else closes a bullet, and `pnpm check:manual` names one that does
+      Nothing else closes a row, and `pnpm check:manual` names one that does
       neither.
 
       **This is pass two's work, not the reconciliation's.** Both readings

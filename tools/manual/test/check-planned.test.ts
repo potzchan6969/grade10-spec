@@ -292,7 +292,7 @@ describe("the design states a change draws", () => {
       store({ design: designText(["- **Empty** — `alpha-US-01`"]) }),
     );
     expect(lines(result, "dressed")).toEqual([
-      `${DESIGN} — \`**Empty** — \`alpha-US-01\`\` names no scenario and no \`**Out of suite:**\` — the requirements pass closes every state bullet`,
+      `${DESIGN} — \`**Empty** — \`alpha-US-01\`\` names no scenario and no \`**Out of suite:**\` — the requirements pass closes every state`,
     ]);
   });
 
@@ -301,7 +301,7 @@ describe("the design states a change draws", () => {
       store({ design: designText(["- **Empty** — `alpha-US-01`"], true) }),
     );
     expect(lines(result, "dressed")).toEqual([
-      `${DESIGN} — \`**Empty** — \`alpha-US-01\`\` names no scenario and no \`**Out of suite:**\` — the requirements pass closes every state bullet`,
+      `${DESIGN} — \`**Empty** — \`alpha-US-01\`\` names no scenario and no \`**Out of suite:**\` — the requirements pass closes every state`,
     ]);
   });
 
@@ -312,6 +312,78 @@ describe("the design states a change draws", () => {
           "- **Empty** — `alpha-US-01` —",
           "  `alpha-SC-02`",
         ]),
+      }),
+    );
+    expect(lines(result, "dressed")).toEqual([]);
+  });
+
+  it("passes a table row closed by the scenario it became", async () => {
+    const result = await check(
+      store({
+        design: designText([
+          "| State | Shows | Anchor |",
+          "| --- | --- | --- |",
+          "| Empty | No tiles; retry | `alpha-SC-02` |",
+          "| Error | Recoverable banner | `alpha-SC-02` |",
+        ]),
+      }),
+    );
+    expect(lines(result, "dressed")).toEqual([]);
+  });
+
+  it("passes a table row closed by an out-of-suite line", async () => {
+    const result = await check(
+      store({
+        design: designText([
+          "| State | Shows | Anchor |",
+          "| --- | --- | --- |",
+          "| Offline | Connectivity banner | **Out of suite:** the shell's banner |",
+        ]),
+      }),
+    );
+    expect(lines(result, "dressed")).toEqual([]);
+  });
+
+  it("fails a table row the requirements left open", async () => {
+    const result = await check(
+      store({
+        design: designText([
+          "| State | Shows | Anchor |",
+          "| --- | --- | --- |",
+          "| Empty | No tiles; retry | `alpha-US-01` |",
+        ]),
+      }),
+    );
+    expect(lines(result, "dressed")).toEqual([
+      `${DESIGN} — \`Empty | No tiles; retry | \`alpha-US-01\`\` names no scenario and no \`**Out of suite:**\` — the requirements pass closes every state`,
+    ]);
+  });
+
+  it("reads each screen's table on its own — a second header is not a state", async () => {
+    const result = await check(
+      store({
+        design: [
+          "# UI: the thing",
+          "",
+          "## Screens",
+          "",
+          "- The thing's page: https://figma.example/file/abc",
+          "",
+          "## States",
+          "",
+          "### The thing's page",
+          "",
+          "| State | Shows | Anchor |",
+          "| --- | --- | --- |",
+          "| Empty | No tiles | `alpha-SC-02` |",
+          "",
+          "### Another screen",
+          "",
+          "| State | Shows | Anchor |",
+          "| --- | --- | --- |",
+          "| Offline | Banner | **Out of suite:** the shell |",
+          "",
+        ].join("\n"),
       }),
     );
     expect(lines(result, "dressed")).toEqual([]);
