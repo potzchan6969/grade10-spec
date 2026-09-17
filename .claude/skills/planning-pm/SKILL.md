@@ -116,8 +116,13 @@ Everything this run produces is `draft`. Nothing in it claims review.
    then every active change in `openspec/changes/` on its spec, then the
    capability under `openspec/specs/<product>/<domain>/<capability>/`. An active
    change already folding a requirement this one touches is extended or
-   superseded, never doubled: whichever archives second reverts the first. Find
-   facts yourself - bring only decisions to the author.
+   superseded, never doubled: whichever archives second reverts the first.
+   Then read the capabilities the touched ones link to or share a state, a
+   clock or a letter with - a decision collides there as often as at home,
+   and a neighbour nobody opened is one nobody checked. Find facts yourself -
+   bring only decisions to the author, and put every decision that reverses a
+   rule already running to them as a challenge naming the rule and where it
+   is written; one the author holds is **BREAKING** in the proposal.
 
 2. **Interview the author.** Run the `grilling` skill's round-based frontier
    interview before drafting. Do not write until the frontier is empty and the
