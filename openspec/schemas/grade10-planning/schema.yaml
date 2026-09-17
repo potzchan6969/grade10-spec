@@ -547,14 +547,22 @@ artifacts:
       written, a write that is idempotent, a guard the system raises against its
       own callers.
 
+      Nothing checks that judgement, and that is deliberate. No reading of a
+      scenario body tells a derivation from an actor reliably, and a heuristic
+      that is wrong is worse here than a rule stated once: it would refuse the
+      derivations this store is full of, and authors would learn to write past
+      it.
+
       **The prose after the dash names the walk**, never the group and never the
       heading it already sits under. `**Serves:** Derived order status - the
       derived order status` says nothing the anchor did not; `**Serves:**
       Derived order status - every surface that shows a status reads this chain`
       says how the rule is reached. `check:manual` refuses prose repeating the
       group name. Prose repeating the heading it sits under is the store's habit
-      today and nothing reads it yet - write the walk anyway; it is the whole
-      value of the line.
+      today - 492 durable lines and 222 in flight - and nothing reads it yet:
+      warning on that many would bury every other finding the check makes, so
+      the sweep is a pull request per capability rather than a register. Write
+      the walk anyway; it is the whole value of the line.
 
       It sits above the GIVEN/WHEN/THEN lines deliberately: those lines are what
       decides `blind_pass_skipped`, so editing an anchor's prose must never read
