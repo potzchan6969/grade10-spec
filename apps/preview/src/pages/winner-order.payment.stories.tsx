@@ -19,7 +19,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order payment stages (Pending Payment → Payment Verifying / Processing). Dialog form coverage lives under My Auctions / Winner Order / Payment / Submit Payment Proof; these stories cover the page shell and CTA outcomes.",
+          "Winner Order payment stages (Pending Payment → Payment Verifying / Partially Paid / Processing). Dialog form coverage lives under My Auctions / Winner Order / Payment / Submit Payment Proof; these stories cover the page shell and CTA outcomes.",
       },
     },
   },
@@ -277,6 +277,61 @@ export const PaymentVerifying: Story = {
     expect(
       sidebar.queryByRole("link", { name: "Receipt PDF" }),
     ).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Operator recorded one or more underpayments — locked page, Contact Us, no
+ * running balance, Receipt PDF row lists every payment (P1, P2, …).
+ */
+export const PartiallyPaid: Story = {
+  name: "Partially Paid",
+  args: { status: "partially_paid" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="partially_paid"]',
+      ),
+    ).not.toBeNull();
+    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Payment")).toBeVisible();
+    expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
+    expect(
+      canvas.getAllByText(/Only part of this invoice is settled/i).length,
+    ).toBeGreaterThanOrEqual(1);
+    const sidebar = within(canvas.getByRole("complementary"));
+    const alert = sidebar.getByRole("alert");
+    expect(alert).toBeVisible();
+    expect(alert).toHaveAttribute("data-status", "warning");
+    expect(
+      within(alert).getByText(/Only part of this invoice is settled/i),
+    ).toBeVisible();
+    expect(within(alert).getByText(/about what remains/i)).toBeVisible();
+    expect(
+      within(alert).queryByText(/HK\$|balance|owed|remaining/i),
+    ).not.toBeInTheDocument();
+    expect(
+      within(alert).getByRole("button", { name: "Contact Us" }),
+    ).toBeVisible();
+    expect(
+      sidebar.queryByRole("button", { name: "Pay with Card" }),
+    ).not.toBeInTheDocument();
+    expect(
+      sidebar.queryByRole("button", { name: "Submit Payment Proof" }),
+    ).not.toBeInTheDocument();
+    expect(sidebar.getByText("Payment method")).toBeVisible();
+    expect(sidebar.getByText("Bank transfer")).toBeVisible();
+    expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
+    expect(
+      sidebar.getByRole("link", { name: "Receipt · P1 PDF" }),
+    ).toBeVisible();
+    expect(
+      sidebar.getByRole("link", { name: "Receipt · P2 PDF" }),
+    ).toBeVisible();
+    expect(sidebar.getByText("Delivery address")).toBeVisible();
+    expect(sidebar.getByText("Billing address")).toBeVisible();
   },
 };
 

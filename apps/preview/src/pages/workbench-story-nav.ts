@@ -17,12 +17,18 @@ const MY_AUCTIONS_PAGE_STORY_ID = "pages-my-auctions-page--post-auction";
 /** Winner Order story ids — one per derived standing a Won row may open. */
 const WINNER_ORDER_AWAITING_ADDRESS_STORY_ID =
   "my-auctions-winner-order-settlement--awaiting-address";
+const WINNER_ORDER_EXPIRED_SETUP_STORY_ID =
+  "my-auctions-winner-order-settlement--expired-setup";
 const WINNER_ORDER_PREPARING_INVOICE_STORY_ID =
   "my-auctions-winner-order-settlement--preparing-invoice";
 const WINNER_ORDER_PENDING_PAYMENT_STORY_ID =
   "my-auctions-winner-order-payment--pending-payment";
+const WINNER_ORDER_PAYMENT_VERIFYING_STORY_ID =
+  "my-auctions-winner-order-payment--payment-verifying";
 const WINNER_ORDER_EXPIRED_INVOICE_STORY_ID =
   "my-auctions-winner-order-payment--expired-invoice";
+const WINNER_ORDER_PARTIALLY_PAID_STORY_ID =
+  "my-auctions-winner-order-payment--partially-paid";
 const WINNER_ORDER_PROCESSING_STORY_ID =
   "my-auctions-winner-order-delivery--processing";
 const WINNER_ORDER_SHIPPED_STORY_ID =
@@ -111,6 +117,9 @@ export {
   WINNER_ORDER_CANCELLED_STORY_ID,
   WINNER_ORDER_DELIVERED_STORY_ID,
   WINNER_ORDER_EXPIRED_INVOICE_STORY_ID,
+  WINNER_ORDER_EXPIRED_SETUP_STORY_ID,
+  WINNER_ORDER_PARTIALLY_PAID_STORY_ID,
+  WINNER_ORDER_PAYMENT_VERIFYING_STORY_ID,
   WINNER_ORDER_PENDING_PAYMENT_STORY_ID,
   WINNER_ORDER_PREPARING_INVOICE_STORY_ID,
   WINNER_ORDER_PROCESSING_STORY_ID,
