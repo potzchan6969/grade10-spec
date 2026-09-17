@@ -5,7 +5,7 @@
   "account": "계정",
   "auctionColumn": "경매",
   "currentBidColumn": "현재 입찰가",
-  "standingColumn": "내 상태",
+  "standingColumn": "상태",
   "emailAlertsColumn": "이메일 알림",
   "noStanding": "--",
   "active": "진행 중",

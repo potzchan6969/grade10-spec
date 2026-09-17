@@ -5,7 +5,7 @@
   "account": "账户",
   "auctionColumn": "拍卖",
   "currentBidColumn": "目前出价",
-  "standingColumn": "你的状态",
+  "standingColumn": "状态",
   "emailAlertsColumn": "电邮通知",
   "noStanding": "--",
   "active": "进行中",

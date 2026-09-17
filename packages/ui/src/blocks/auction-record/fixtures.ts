@@ -14,7 +14,7 @@ const AUCTION_RECORD_COPY: AuctionRecordCopy = {
   title: "My Auctions",
   auctionColumn: "Auction",
   currentBidColumn: "Current Bid",
-  standingColumn: "Your Standing",
+  standingColumn: "Status",
   emailAlertsColumn: "Email Alerts",
   noStanding: "--",
   watchingHeading: "Watching",
@@ -86,12 +86,18 @@ const ORDER_ROW_COPY = {
 const WINNER_ORDER_HREF = {
   awaitingAddress:
     "?path=/story/my-auctions-winner-order-settlement--awaiting-address",
+  expiredSetup:
+    "?path=/story/my-auctions-winner-order-settlement--expired-setup",
   preparingInvoice:
     "?path=/story/my-auctions-winner-order-settlement--preparing-invoice",
   pendingPayment:
     "?path=/story/my-auctions-winner-order-payment--pending-payment",
   expiredInvoice:
     "?path=/story/my-auctions-winner-order-payment--expired-invoice",
+  partiallyPaid:
+    "?path=/story/my-auctions-winner-order-payment--partially-paid",
+  paymentVerifying:
+    "?path=/story/my-auctions-winner-order-payment--payment-verifying",
   processing: "?path=/story/my-auctions-winner-order-delivery--processing",
   shipped: "?path=/story/my-auctions-winner-order-delivery--shipped",
   delivered: "?path=/story/my-auctions-winner-order-delivery--delivered",
@@ -189,15 +195,27 @@ const BIDDING_ENDED = biddingItem({
   href: "#lot-wax-pack",
 });
 
-/** Won — address-first standing vocabulary (revise-auction-winner-invoicing). */
+/** Won — setup-first standing vocabulary. */
 const BIDDING_WON_AWAITING_ADDRESS = biddingItem({
   id: "won-awaiting-address",
   title: "1999 Base Set Charizard PSA 9",
   state: "awaiting_address",
-  stateLabel: "Awaiting Address",
+  stateLabel: "Awaiting Setup",
   currentBid: "HK$12,800",
-  closesAt: "Ended 17 Sep 2026, 21:30 HKT",
+  closesAt: "Confirm by 19 Sep 2026, 21:30 HKT",
   href: WINNER_ORDER_HREF.awaitingAddress,
+  copy: ORDER_ROW_COPY,
+});
+
+/** Setup deadline passed — Contact Us on Winner Order; status stays setup. */
+const BIDDING_WON_SETUP_OVERDUE = biddingItem({
+  id: "won-setup-overdue",
+  title: "1999 Base Set Venusaur PSA 8",
+  state: "awaiting_address_expired",
+  stateLabel: "Setup Overdue",
+  currentBid: "HK$4,800",
+  closesAt: "Setup overdue",
+  href: WINNER_ORDER_HREF.expiredSetup,
   copy: ORDER_ROW_COPY,
 });
 
@@ -223,14 +241,38 @@ const BIDDING_WON_PENDING_PAYMENT = biddingItem({
   copy: ORDER_ROW_COPY,
 });
 
+/** Bank-transfer proof under check — deadline paused on Winner Order. */
+const BIDDING_WON_PAYMENT_VERIFYING = biddingItem({
+  id: "won-payment-verifying",
+  title: "1999 Neo Destiny Dark Tyranitar PSA 9",
+  state: "payment_verifying",
+  stateLabel: "Payment Verifying",
+  currentBid: "HK$7,200",
+  closesAt: "Proof under review",
+  href: WINNER_ORDER_HREF.paymentVerifying,
+  copy: ORDER_ROW_COPY,
+});
+
+/** Payment deadline passed — Contact Us on Winner Order; invoice stays pending. */
 const BIDDING_WON_EXPIRED = biddingItem({
   id: "won-expired",
   title: "1999 Fossil Dragonite Holo PSA 8",
   state: "expired",
-  stateLabel: "Pending Payment",
+  stateLabel: "Payment Overdue",
   currentBid: "HK$3,600",
   closesAt: "Payment overdue",
   href: WINNER_ORDER_HREF.expiredInvoice,
+  copy: ORDER_ROW_COPY,
+});
+
+const BIDDING_WON_PARTIALLY_PAID = biddingItem({
+  id: "won-partially-paid",
+  title: "1999 Jungle Vaporeon Holo PSA 9",
+  state: "partially_paid",
+  stateLabel: "Partially Paid",
+  currentBid: "HK$5,100",
+  closesAt: "Payment in progress",
+  href: WINNER_ORDER_HREF.partiallyPaid,
   copy: ORDER_ROW_COPY,
 });
 
@@ -310,10 +352,13 @@ export {
   BIDDING_WON_CANCELLED,
   BIDDING_WON_DELIVERED,
   BIDDING_WON_EXPIRED,
+  BIDDING_WON_PARTIALLY_PAID,
+  BIDDING_WON_PAYMENT_VERIFYING,
   BIDDING_WON_PENDING_PAYMENT,
   BIDDING_WON_PREPARING_INVOICE,
   BIDDING_WON_PROCESSING,
   BIDDING_WON_REFUNDED,
+  BIDDING_WON_SETUP_OVERDUE,
   BIDDING_WON_SHIPPED,
   biddingItem,
   EMAIL_ALERTS_COPY,

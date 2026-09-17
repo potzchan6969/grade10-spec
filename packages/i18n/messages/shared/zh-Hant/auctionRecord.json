@@ -5,7 +5,7 @@
   "account": "帳戶",
   "auctionColumn": "拍賣",
   "currentBidColumn": "目前出價",
-  "standingColumn": "你的狀態",
+  "standingColumn": "狀態",
   "emailAlertsColumn": "電郵通知",
   "noStanding": "--",
   "active": "進行中",
