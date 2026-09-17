@@ -1,0 +1,157 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Claimed again, then paid",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    { "id": "shopify", "label": "Shopify" },
+    { "id": "store", "label": "Store" },
+    { "id": "earlier", "label": "Earlier sale" },
+    { "id": "newer", "label": "Newer sale" }
+  ],
+  "mainPath": [
+    "earlier-applies",
+    "newer-applies",
+    "newer-pays"
+  ],
+  "nodes": [
+    {
+      "id": "earlier-applies",
+      "lane": "earlier",
+      "col": 0,
+      "type": "external",
+      "label": "Applies it",
+      "sublabel": "from the member's panel",
+      "width": 156
+    },
+    {
+      "id": "earlier-applies_claim",
+      "lane": "store",
+      "col": 0,
+      "type": "database",
+      "label": "Coupon claimed",
+      "sublabel": "the cut lands here",
+      "width": 156
+    },
+    {
+      "id": "earlier-applies_code",
+      "lane": "shopify",
+      "col": 0,
+      "type": "external",
+      "label": "Code minted",
+      "sublabel": "the moment it's chosen",
+      "width": 156
+    },
+    {
+      "id": "newer-applies",
+      "lane": "newer",
+      "col": 2,
+      "type": "external",
+      "label": "Applies it too",
+      "sublabel": "a second sale, same coupon",
+      "width": 156
+    },
+    {
+      "id": "newer-applies_claim",
+      "lane": "store",
+      "col": 2,
+      "type": "database",
+      "label": "Claimed again",
+      "sublabel": "the earlier claim is freed first",
+      "width": 156
+    },
+    {
+      "id": "newer-applies_code",
+      "lane": "shopify",
+      "col": 2,
+      "type": "external",
+      "label": "Code re-minted",
+      "sublabel": "the earlier one is discarded",
+      "width": 156
+    },
+    {
+      "id": "newer-pays",
+      "lane": "newer",
+      "col": 4,
+      "type": "external",
+      "label": "Takes payment",
+      "sublabel": "at the counter",
+      "width": 156
+    },
+    {
+      "id": "newer-pays_order",
+      "lane": "shopify",
+      "col": 4,
+      "type": "external",
+      "label": "Order paid",
+      "sublabel": "the POS channel",
+      "width": 156
+    },
+    {
+      "id": "newer-pays_used",
+      "lane": "store",
+      "col": 4,
+      "type": "backend",
+      "label": "Coupon used",
+      "sublabel": "the claim is spent",
+      "width": 156
+    }
+  ],
+  "edges": [
+    {
+      "from": "earlier-applies",
+      "to": "earlier-applies_claim",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "earlier-applies_claim",
+      "to": "earlier-applies_code",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "earlier-applies",
+      "to": "newer-applies",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "newer-applies",
+      "to": "newer-applies_claim",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "newer-applies_claim",
+      "to": "newer-applies_code",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "newer-applies",
+      "to": "newer-pays",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "newer-pays_order",
+      "to": "newer-pays_used",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

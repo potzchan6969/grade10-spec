@@ -105,6 +105,17 @@ An hour after the sale was planned, not a day.
 The cut and the code go; a sale that pays anyway is settled against what it carried.
 :::
 
+:::flow{title="At the till" case="Claimed again, then paid" diagram="assets/diagrams/coupon-till-retaken-paid.svg"}
+## *Shopkeeper* — **Applies it on a sale**
+A code is minted the moment it is chosen.
+
+## *Shopkeeper* — **A second sale claims it first**
+Frees the earlier sale's claim and code, and claims it there instead.
+
+## *Loyalty* — **Whichever sale pays is the one that used it**
+The paid order stamps it used. Nothing else does.
+:::
+
 :::flow{title="Refused" case="An earlier sale stands" diagram="assets/diagrams/coupon-earlier-sale-stands.svg"}
 ## *Member* — **Picks a coupon**
 An earlier sale of theirs is carrying it.
