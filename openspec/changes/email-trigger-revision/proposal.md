@@ -28,11 +28,17 @@ See [Non-Goals](decisions.md#non-goals).
 
 - **grade10 (application):** stop the one-hour watcher reminder job; send the payment reminder on reissue; render the delivered and cancelled letters.
 - **apps/emails:** `order/order-delivered.tsx` and `order/order-cancelled.tsx` added; `payment-reminder.tsx` serves reissue. No one-hour template exists to remove.
-- **Overlap:** `add-winner-setup-overdue-mail` already folds invoice-sent into the first payment reminder; this change agrees and does not repeat that delta.
+- **Overlap:** `add-winner-setup-overdue-mail` already folds invoice-sent into the first payment reminder; this change agrees and does not repeat that delta. `add-winner-bank-transfer` still MODIFIES Post-close letters, so this change adds the reissue, delivered and cancelled rules beside that table rather than rewriting it.
+
+No domain impact: retiring the one-hour watcher reminder and settling reissue, delivered and cancelled letter content do not add a cross-capability path the auction domain suite walks.
 
 ## Open Questions
 
 - **Cancelling a paid order** — whether an operator can cancel a paid order, and whether the letter then names a refund. Product (@jeffffej0909) settles it; until then the letter says nothing about payment.
+
+## Archive
+
+@mason5991 archives after deploy, once `add-winner-bank-transfer` has folded Post-close letters so this change's ADDED rules can land beside the durable table without a silent revert.
 
 ## References
 
