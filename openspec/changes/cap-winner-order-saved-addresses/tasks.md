@@ -28,7 +28,7 @@ the work.
   slot (`winner-order-SC-72` through `SC-79`)
 - [ ] 1.5 Verify: `pnpm run test`
 
-## 2. Address book cap (grade10)
+## 2. Address book cap (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Add `address_book_full` to `shippingAddressRefusalCodes` in
   `packages/grade10-auth/contracts/src/shippingAddresses.ts`
