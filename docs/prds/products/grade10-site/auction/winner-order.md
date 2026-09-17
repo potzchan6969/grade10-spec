@@ -12,6 +12,8 @@ Winner Order is the authenticated route where a collector settles one lot after 
 - 🚧 **Saved addresses** — an account keeps up to **5** named shipping addresses; at the cap, Add new address still works for this order only, and Save this address for future orders is refused until one is removed
 - ❓ **One-time address persistence** — whether the unsaved one-time address the winner enters at the cap is visually distinguished from saved addresses in the picker, and whether it survives navigating away and back or a page reload
 - 🚧 **Address deadline** — 48 hours from lot close to confirm a delivery address; `Confirm by …` under the CTA (with time); overdue alert reads `Missed address deadline: {date}` with Contact Us; Confirm is hidden when the window passes; status stays Awaiting Address
+- 🚧 **After the address deadline** — a winner who has not confirmed an address by the deadline gets no further chance to on their own; only Grade10 reopens the address form, which gives a fresh 48 hours, or records an address the winner gives by phone
+- 🚧 **Account addresses** — the account address book stays open after the address deadline; only putting an address on this order is refused
 - **Invoice** — one operator-quoted invoice per lot; shipping and insurance are priced for the confirmed address, and the seven-day payment window starts at send
 - 🚧 **Invoice lines** — Winning Bid, Buyer's Premium, Shipping & Handling, Insurance when added, Tax, Subtotal, Payment Processing Fee and Order Total; Shipping & Handling of zero reads Free. Insurance is optional and separate from Payment Processing Fee. The on-page summary may omit Subtotal and show fee lines plus Order Total; invoice and receipt itemisation keep Subtotal
 - **Buyer's premium** — 20% of the winning bid, or the currency's minimum charge when that is higher; a minimum of 0 means none
@@ -39,6 +41,7 @@ Winner Order is the authenticated route where a collector settles one lot after 
 - 🚧 **Proof stays private** — the winner never sees a proof file or its name, their own or an operator's; the order shows only that proof was sent
 - **Payment deadline** — 7 calendar days from when Grade10 sends the invoice to the winner, not from lot close
 - 🚧 **After the deadline** — card Pay is hidden; the overdue alert carries Contact Us; an operator reissues, settles manually, or cancels
+- 🚧 **A payment already on its way** — a card payment Grade10 received before the deadline still completes if it confirms after; one received at or after the deadline is refused and the card is not charged
 - 🚧 **Progress** — five presentation steps in order: Address → Invoice → Payment → Shipped → Completed; Cancelled and Refunded show no stepper. Step subtext uses day-only dates (Payment while due reads Pay by …; Address while awaiting reads Confirm by …); long copy wraps. Order status keeps its nine names
 - 🚧 **Invoice PDF** — once an invoice has been sent, the winner can view and download it (PDF icon + Invoice); hidden before send and when Cancelled
 - 🚧 **Receipt PDF** — after payment, the winner can view and download an itemised receipt (PDF icon + Receipt), on the same row as Invoice
@@ -55,6 +58,7 @@ The winner needs one place to understand what is owed and what happens next. The
 | User | Situation | Desired outcome |
 | --- | --- | --- |
 | Winner | A lot has just closed | Confirms where to ship within 48 hours, waits for Grade10 to quote the delivery cost, and then sees the invoice and its payment deadline. |
+| Winner | The address deadline passed | Sees Contact Us, and gets the address form back only when Grade10 reopens it. |
 | Winner | The first payment attempt fails before the deadline | Understands the refusal and can retry while the invoice remains `pending`. |
 | Winner | The card has been dispatched | Finds the receipt PDF, tracker, fulfilment trail, and delivery proof later. |
 | Suspended winner | The payment deadline passed | Sees what remains owed, why bidding stopped, and Contact Us — not a card Pay control. |
@@ -73,6 +77,11 @@ The winner needs one place to understand what is owed and what happens next. The
 | Summary Subtotal row | Decided | On-page Winner Order summary may omit Subtotal and show fee lines plus Order Total; invoice and receipt itemisation keep Subtotal for the fee gross-up. | Product and design (@tangconst) |
 | Free shipping | Decided | Shipping & Handling of zero reads Free rather than hiding the line. | Product |
 | Address deadline | Decided | 48 hours from lot close to confirm a delivery address. Missed deadline hides Confirm and shows Contact Us; status stays Awaiting Address; invoice stays `not_issued`. No automatic cancel or suspension. | Product (@tangconst) |
+| Reopening the address form | Decided | An operator reopens the winner's address form, with a reason, once the 48-hour deadline passes before the winner ever confirms an address. It gives a fresh 48 hours. Only Grade10 reopens it, and never on a cancelled order. | Product (@jeffffej0909) |
+| Telling the winner the form reopened | Decided | No letter. The winner asked for the reopen, so the operator tells them directly. | Product (@jeffffej0909) |
+| Operator records the address | Decided | Grade10 can type in an address the winner gives by phone, without reopening the form, so the quote follows in one step. The deadline governs the winner's own form, not Grade10's record. | Product (@jeffffej0909) |
+| The account address book | Decided | Unaffected by a missed address deadline. It is account-wide and shared across storefronts; only confirming an address onto this order is refused. | Product (@jeffffej0909) |
+| A payment started in time | Decided | A card payment Grade10 received before the payment deadline counts even if it confirms after. The invoice stays pending until the outcome, and only a failure then marks it expired. | Product (@jeffffej0909) |
 | Saved address cap | Decided | Five named shipping addresses per account. At the cap, Add new address still confirms a one-time address for the order; Save this address for future orders is refused until the winner removes one. | Product (@tangconst) |
 | One-time address persistence | ❓ Open | Whether the picker visually distinguishes the unsaved one-time address from saved ones, and whether it survives leaving and returning to the order or a page reload. | Product (@tangconst) |
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close. Absolute datetime in the winner’s zone; no countdown. | Product |
