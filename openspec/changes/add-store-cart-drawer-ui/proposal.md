@@ -2,26 +2,26 @@
 
 ## Why
 
-The Grade10 storefront already has scoped guest and member carts, live cart
-review, and a working checkout page, but its navigation does not expose the
-designed Cart Drawer. Collectors must leave the page they are browsing before
-they can see whether held lines changed.
+The Grade10 storefront already has a scoped member cart, live cart review, and
+a working checkout page, but its navigation does not expose the designed Cart
+Drawer. Collectors must leave the page they are browsing before they can see
+whether held lines changed.
 
 **Metric:** share of sessions that open the cart and proceed to checkout
 without first navigating to checkout. The first delivery establishes the
 baseline.
 
-**Acceptance signal:** a collector opens Cart from any surface once Store
-answers the cart drawer, reviews and edits the current cart, and reaches the
-existing checkout without first leaving that surface.
+**Acceptance signal:** a signed-in collector opens Cart from any surface once
+Store answers the cart drawer, reviews and edits the member cart, and reaches
+the existing checkout without first leaving that surface.
 
 ## What Changes
 
 - Expose Cart in the site header on every surface once the Store cart drawer
   answers (including Auction and other non-Store pages), and open one drawer
   over the current surface.
-- Connect the drawer to the current guest or member cart through the existing
-  typed Store integration.
+- Connect the drawer to the signed-in member cart through the existing typed
+  Store integration.
 - Run the existing live cart review on every open; keep unconfirmed values and
   Checkout unavailable while the read is pending or failed.
 - Map only reviewed line and subtotal facts into the shared drawer, and keep
@@ -53,6 +53,8 @@ existing checkout without first leaving that surface.
 - Adding a dedicated `/cart` route or changing the existing checkout page.
 - A Browse More or catalogue handoff from the drawer (removed with
   `CartItemSlot` in `cart-drawer-empty-state`).
+- Deciding when Cart appears or what a signed-out Cart press does; those rules
+  belong to `auction-first-site-header` and `require-sign-in-from-nav-cart`.
 
 ## Capabilities
 

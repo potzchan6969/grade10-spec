@@ -2,7 +2,7 @@
 
 The proposal's motivation is in `proposal.md`. The
 [Cart Drawer](specs/grade10-site/store/cart-drawer/spec.md) and
-[page-shell delta](specs/grade10-site/site/page-shell/spec.md) own the Grade10
+the active page-shell deltas own the Grade10
 behavior. The durable `shared/ui/store-cart` capability and `@grade10/ui`
 already own the drawer's visual states, dismissal, empty state, item
 statuses, and interaction contract. The Grade10 application mounts one
@@ -11,8 +11,8 @@ drawer answers. That host currently
 stops at the reviewed lines and subtotal.
 
 The existing frontend integration already reaches the Store backend boundary:
-`useCart` selects the guest browser cart or the signed-in member cart, and its
-typed `ReviewCart` port performs the live review. `/checkout` already owns its
+`useCart` supplies the current cart scope and the signed-in member cart, and
+its typed `ReviewCart` port performs the live review. `/checkout` already owns its
 own review and checkout handoff. This change consumes those paths; it adds no
 Worker, API, provider, database, persistence, or checkout service work.
 
@@ -85,10 +85,12 @@ global after Store launch to cut checkout friction.
 ### Reuse the existing scoped cart and backend integration
 
 The host calls `useCart` and uses its scope, lines, item count, currency, and
-serialized writes. It never reads browser storage directly, decides guest vs
-member, or introduces a new backend call. Quantity and removal callbacks use
-the existing optimistic scope-keyed writes. Product activation uses the
-existing product-address helper. Checkout uses the current checkout route.
+serialized writes. It never reads browser storage directly or reimplements the
+signed-out access gate; `require-sign-in-from-nav-cart` owns that activation
+behavior. The host introduces no new backend call. Quantity and removal
+callbacks use the existing optimistic scope-keyed writes. Product activation
+uses the existing product-address helper. Checkout uses the current checkout
+route.
 
 **Alternative rejected:** retain a browser-only adapter. It would diverge from
 the member cart after sign-in and bypass the existing backend-backed cart
@@ -171,15 +173,15 @@ Call `useSpendableCoupons(review.items)` and `usePointsTender(review.items)`
 only when the drawer is open, the scoped cart is a member cart, the review is
 successful and ready, and it has at least one reviewed item. Add an `enabled`
 option to both hooks with the current `true` default so Checkout keeps its
-existing behavior while the drawer can avoid guest, empty, pending, and failed
-reads. The query keys remain the reviewed item list, so a quantity or review
-change asks again for the basket in front of the member.
+existing behavior while the drawer can avoid empty, pending, failed, and
+non-member reads. The query keys remain the reviewed item list, so a quantity
+or review change asks again for the basket in front of the member.
 
 Map a successful coupon read to `HeldPromoCode`: the coupon code is both the
 stable id and label, the definition title remains the ticket title, the cut
 and expiry use the existing checkout promo vocabulary, and a refusal is shown
-as the inapplicable reason. A pending, failed, guest, or unavailable read maps
-to `null`, not to an empty successful list, so the drawer never turns an
+as the inapplicable reason. A pending, failed, or unavailable read maps to
+`null`, not to an empty successful list, so the drawer never turns an
 unanswered wallet into “no promo codes”.
 
 Map a successful quoted points read to `pointsState={{ status: "collapsed" }}`
@@ -194,9 +196,9 @@ total. Applying a code, choosing a held code, applying points, recalculating a
 total, or creating checkout remains outside this decision.
 
 A later combined-quote contract must define invalidation after cart edits,
-guest and member behavior, refusal copy, applied line and footer amounts, and
-the exact handoff to checkout before interactive promo or points callbacks are
-supplied.
+signed-out access and member behavior, refusal copy, applied line and footer
+amounts, and the exact handoff to checkout before interactive promo or points
+callbacks are supplied.
 
 **Alternative rejected:** wire the merged endpoints one control at a time.
 That would expose selectable tender without an authoritative combined total or
@@ -233,19 +235,20 @@ beyond the supplied design.
 Tests use typed cart/review fixtures and existing DI harnesses. They do not
 require a running backend because no backend code changes. Coverage must prove:
 
-- `grade10-site-store-cart-drawer-SC-03` through `SC-08`: review defaults
+- `grade10-site-store-cart-drawer-SC-04` through `SC-08`: review defaults
   preserve checkout behavior while the drawer follows `open`, keeps the right
   scope, preserves unavailable rows for its cleanup owner, and withholds stale
   facts.
-- `grade10-site-site-page-shell-SC-09` and `SC-16`: one root host withholds Cart
-  until the Store cart drawer answers, then exposes Cart on every surface.
+- Cart availability scenarios `grade10-site-site-page-shell-SC-09` and `SC-16`
+  remain owned by `auction-first-site-header`; this change consumes the global
+  handler once the Store cart drawer answers.
 - `grade10-site-store-cart-drawer-SC-09` through `SC-12`: reviewed facts,
   neutral totals, scoped writes, and one unavailable cleanup remain honest.
 - `grade10-site-store-cart-drawer-SC-13` and `SC-15`: product and Checkout use
   existing addresses and close the drawer first.
 - `grade10-site-store-cart-drawer-SC-16` through `SC-19`: member-only tender
   reads follow the latest reviewed basket, show current eligibility and the
-  points ceiling, and never become applied tender or stale guest data.
+  points ceiling, and never become applied tender or stale prior data.
 - The shared empty, loading, dismissal, overflow, cleanup, and redirecting
   behaviors remain covered by `shared/ui/store-cart`.
 
@@ -254,7 +257,7 @@ require a running backend because no backend code changes. Coverage must prove:
 - **[Risk] A cart write lands while review is in flight.** → Keep both queries
   scope-keyed, use serialized cart writes, and invalidate review after each
   settled write.
-- **[Risk] Guest-to-member scope changes while the drawer is open.** → Derive
+- **[Risk] A member session scope changes while the drawer is open.** → Derive
   review from the same `useCart` scope and let the query key move with it.
 - **[Risk] Review failure leaves old values visible.** → Keep controlled loading
   true, emit one failure toast per open, and recheck on reopen.

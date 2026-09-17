@@ -434,6 +434,35 @@ shop's current price.
 * The amount is 12300 minor units HKD, the store's own re-read price.
 * The request's price is not used.
 
+### grade10-site-store-cart-validation-US2-TC6-1: Resolving the moved line permits the handoff
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-cart-validation-US-02
+
+**Pre-conditions:**
+
+* The checkout read has identified one moved line, and the collector has resolved it in the cart.
+
+**Steps:**
+
+1. Offer the resolved cart for checkout.
+2. Check the checkout surface and the store's order list.
+
+**Expected Results:**
+
+* The checkout surface opens.
+* One checkout order is created from the resolved cart.
+
 ---
 
 ## grade10-site-store-cart-validation-US3: Collector meets the shop's own refusal
@@ -537,3 +566,29 @@ The cart holds two lines; <the shop read endpoint> is mocked to return a
 * No checkout order is created.
 * The message says the check could not be completed.
 * No line shows an availability or price as current.
+
+## Reconciliation
+
+**Run:** 2026-09-18 · the blind suite and the change's scenario reading were reconciled after the two read moments were settled.
+
+| Spec scenario | Suite coverage |
+| --- | --- |
+| grade10-site-store-cart-validation-SC-01, SC-03 | US1-TC1-1 |
+| grade10-site-store-cart-validation-SC-04 | US1-TC2-1 |
+| grade10-site-store-cart-validation-SC-05 | US1-TC3-1 |
+| grade10-site-store-cart-validation-SC-06 | US1-TC4-1 |
+| grade10-site-store-cart-validation-SC-07, SC-08 | US1-TC5-1 |
+| grade10-site-store-cart-validation-SC-09, SC-10 | US1-TC6-1 |
+| grade10-site-store-cart-validation-SC-11, SC-12 | US1-TC7-1 |
+| grade10-site-store-cart-validation-SC-13 | US1-TC8-1 |
+| grade10-site-store-cart-validation-SC-02 | US2-TC1-1 |
+| grade10-site-store-cart-validation-SC-14 | US2-TC5-1 |
+| grade10-site-store-cart-validation-SC-15 | US2-TC2-1 |
+| grade10-site-store-cart-validation-SC-16 | US2-TC3-1 |
+| grade10-site-store-cart-validation-SC-17 | US2-TC6-1 |
+| grade10-site-store-cart-validation-SC-18 | US2-TC4-1 |
+| grade10-site-store-cart-validation-SC-19 | US3-TC1-1 |
+| grade10-site-store-cart-validation-SC-20 | US3-TC2-1 |
+| grade10-site-store-cart-validation-SC-21 | US3-TC3-1 |
+| Uncovered anchors | none |
+| Contradicted readings | none |

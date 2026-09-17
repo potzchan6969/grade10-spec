@@ -28,7 +28,7 @@ empty room, from any surface once Store answers the cart drawer.
 
 **Pre-conditions:**
 
-* customer is signed out and is on <grade10 store url>, whose header offers Cart.
+* customer is signed out and is on a supported site surface whose header offers Cart.
 
 **Steps:**
 
@@ -57,7 +57,7 @@ empty room, from any surface once Store answers the cart drawer.
 
 **Pre-conditions:**
 
-* customer is signed out and is on <grade10 store url>.
+* customer is signed out and is on a supported site surface whose header offers Cart.
 * Sign-in was opened from the Cart control in the header.
 * Sign-in can complete without leaving the surface.
 
@@ -88,7 +88,7 @@ empty room, from any surface once Store answers the cart drawer.
 
 **Pre-conditions:**
 
-* customer is signed out and is on <grade10 store url>.
+* customer is signed out and is on a supported site surface whose header offers Cart.
 * Sign-in was opened from the Cart control in the header.
 
 **Steps:**
@@ -125,7 +125,7 @@ empty room, from any surface once Store answers the cart drawer.
 
 **Pre-conditions:**
 
-* customer is signed in and is on <grade10 store url>, whose header offers Cart.
+* customer is signed in and is on a supported site surface whose header offers Cart.
 
 **Steps:**
 
@@ -139,6 +139,15 @@ empty room, from any surface once Store answers the cart drawer.
 
 ---
 
-**Out of suite:** none for this change's page-shell journey — SC-16, SC-17,
-SC-23, and SC-24 are covered. Every other page-shell scenario keeps its cases
-on the durable capability and on `auction-first-site-header`.
+## Reconciliation
+
+**Run:** 2026-09-18 · the blind suite and the change's scenario reading were reconciled after the Cart ownership decisions.
+
+| Spec scenario | Suite coverage |
+| --- | --- |
+| grade10-site-site-page-shell-SC-21 | US06-TC1-1 |
+| grade10-site-site-page-shell-SC-22 | US06-TC2-1 |
+| grade10-site-site-page-shell-SC-23 | US06-TC3-1 |
+| grade10-site-site-page-shell-SC-24 | US06-TC4-1 |
+| Uncovered anchors | none |
+| Contradicted readings | none |

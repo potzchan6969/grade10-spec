@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 
-## grade10-site-store-cart-drawer-US01: Collector opens the current cart over the page
+## grade10-site-store-cart-drawer-US01: Signed-in collector opens the current cart over the page
 
-**As a** collector,
+**As a** signed-in collector,
 **I want** my current cart to open over the page I am on with current facts,
 **so that** I can review what the shop can sell without losing my place.
 
-### grade10-site-store-cart-drawer-US01-TC01-1: Drawer reviews the cart belonging to the current session
+### grade10-site-store-cart-drawer-US01-TC01-1: Drawer reviews the signed-in member cart
 
 Runs once per row of **Test data**.
 
@@ -28,15 +28,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The guest browser cart and <member cart> hold different available lines.
-* A user is on a Store surface in <session state>.
+* The current member cart and <other member cart> hold different available lines.
+* A signed-in collector is on a Store surface.
 
 **Test data:**
 
-| `<session state>` | `<expected cart>` | `<other cart>` |
-| --- | --- | --- |
-| Signed out | Guest browser cart | <member cart> |
-| Signed in as <member> | <member cart> | Guest browser cart |
+| `<expected cart>` | `<other cart>` |
+| --- | --- |
+| Current member cart | Another member cart |
 
 **Steps:**
 
@@ -68,7 +67,7 @@ Runs once per row of **Test data**.
 
 * The current cart holds <line> at a recorded price different from <current price>.
 * The first status-and-price read can be held in flight.
-* A user is on a Store surface.
+* A signed-in collector is on a Store surface.
 
 **Test data:**
 
@@ -109,7 +108,7 @@ Runs once per row of **Test data**.
 
 * The current cart holds a line with a recorded price.
 * The first status-and-price read fails.
-* A user is on a Store surface.
+* A signed-in collector is on a Store surface.
 
 **Steps:**
 
@@ -143,7 +142,7 @@ Runs once per row of **Test data**.
 
 * The current cart holds one available line and one sold-out line.
 * The cart read supplies current line facts but no image or applied quote.
-* A user is on a Store surface.
+* A signed-in collector is on a Store surface.
 
 **Test data:**
 
@@ -166,11 +165,48 @@ Runs once per row of **Test data**.
 * Shipping reads `Calculated at checkout`, no product image or points control appears, and no promotion or discount is applied.
 * Step 3 accepts no code and leaves the summary unchanged.
 
+### grade10-site-store-cart-drawer-US01-TC05-1: Opening and closing preserve the current surface
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-cart-drawer-US-01
+
+**Pre-conditions:**
+
+* A signed-in collector is on a Store surface at <surface address>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<surface address>` | The address of the Store surface beneath the drawer |
+
+**Steps:**
+
+1. Record <surface address>.
+2. Activate **Cart** in the header.
+3. Close the cart drawer.
+4. Check the current address.
+
+**Expected Results:**
+
+* The cart drawer opens over <surface address> without navigation.
+* After step 3, the collector remains at <surface address>.
+
 ---
 
-## grade10-site-store-cart-drawer-US02: Collector edits the reviewed cart
+## grade10-site-store-cart-drawer-US02: Signed-in collector edits the reviewed cart
 
-**As a** collector,
+**As a** signed-in collector,
 **I want** to change or remove lines after the shop checks them,
 **so that** the cart I continue with contains what I intend to buy.
 
@@ -193,27 +229,27 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The current scoped cart holds <line> at quantity 1.
+* The current member cart holds <line> at quantity 1.
 * The cart read confirms <line> as available.
-* A user is on a Store surface.
+* A signed-in collector is on a Store surface.
 
 **Test data:**
 
 | `<action>` | `<expected result>` |
 | --- | --- |
-| Increase quantity to 2 | The current scoped cart holds <line> at quantity 2 |
-| Remove the line | The current scoped cart no longer holds <line> |
+| Increase quantity to 2 | The current member cart holds <line> at quantity 2 |
+| Remove the line | The current member cart no longer holds <line> |
 
 **Steps:**
 
 1. Open the cart drawer and wait for the read to finish.
 2. Perform <action> on <line>.
-3. Read the current scoped cart again.
+3. Read the current member cart again.
 
 **Expected Results:**
 
 * <expected result>.
-* No other guest or member cart is changed.
+* No other member cart is changed.
 
 ### grade10-site-store-cart-drawer-US02-TC02-1: Delisted lines are removed once with one notice
 
@@ -232,14 +268,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The current scoped cart holds two unavailable lines and one available line.
-* A user is on a Store surface.
+* The current member cart holds two unavailable lines and one available line.
+* A signed-in collector is on a Store surface.
 
 **Steps:**
 
 1. Open the cart drawer and finish the status-and-price read.
 2. Let the open drawer render again without closing it.
-3. Read the current scoped cart and the notices shown during that open.
+3. Read the current member cart and the notices shown during that open.
 
 **Expected Results:**
 
@@ -249,9 +285,9 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-store-cart-drawer-US03: Collector continues from the cart drawer
+## grade10-site-store-cart-drawer-US03: Signed-in collector continues from the cart drawer
 
-**As a** collector,
+**As a** signed-in collector,
 **I want** the cart to take me to a product or checkout,
 **so that** I can continue the shopping path I chose.
 
@@ -316,7 +352,7 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-store-cart-drawer-US04: Collector reads tender choices for the reviewed basket
+## grade10-site-store-cart-drawer-US04: Signed-in collector reads tender choices for the reviewed basket
 
 **As a** signed-in collector,
 **I want** to see which promo codes and how many points the reviewed basket can take,
@@ -385,7 +421,7 @@ Runs once per row of **Test data**.
 * No points amount is applied.
 * The subtotal and estimated total remain the reviewed subtotal.
 
-### grade10-site-store-cart-drawer-US04-TC03-1: Guests and unresolved reviews receive no tender facts
+### grade10-site-store-cart-drawer-US04-TC03-1: Unresolved reviews receive no tender facts
 
 **Classification:**
 
@@ -402,20 +438,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The collector is on a Store surface in <collector and review state>.
+* The signed-in collector is on a Store surface in <review state>.
 
 **Test data:**
 
-| `<collector and review state>` |
+| `<review state>` |
 | --- |
-| Signed-out collector with a successful cart review |
 | Signed-in collector with a pending cart review |
 | Signed-in collector with a failed cart review |
 
 **Steps:**
 
 1. Open the cart drawer.
-2. Wait for the drawer to render <collector and review state>.
+2. Wait for the drawer to render <review state>.
 
 **Expected Results:**
 
@@ -457,3 +492,25 @@ Runs once per row of **Test data**.
 
 * The previous tender facts are not presented as current.
 * The drawer shows only the successful reads for the latest reviewed basket.
+
+## Reconciliation
+
+**Run:** 2026-09-18 · the blind suite and the change's scenario reading were reconciled after the member-cart decision.
+
+| Spec scenario | Suite coverage |
+| --- | --- |
+| grade10-site-store-cart-drawer-SC-01, SC-02 | US01-TC05-1 |
+| grade10-site-store-cart-drawer-SC-04 | US01-TC01-1 |
+| grade10-site-store-cart-drawer-SC-05, SC-06 | US01-TC02-1 |
+| grade10-site-store-cart-drawer-SC-07, SC-08 | US01-TC03-1 |
+| grade10-site-store-cart-drawer-SC-09, SC-10 | US01-TC04-1 |
+| grade10-site-store-cart-drawer-SC-11 | US02-TC01-1 |
+| grade10-site-store-cart-drawer-SC-12 | US02-TC02-1 |
+| grade10-site-store-cart-drawer-SC-13 | US03-TC01-1 |
+| grade10-site-store-cart-drawer-SC-15 | US03-TC03-1 |
+| grade10-site-store-cart-drawer-SC-16 | US04-TC01-1 |
+| grade10-site-store-cart-drawer-SC-17 | US04-TC02-1 |
+| grade10-site-store-cart-drawer-SC-18 | US04-TC03-1 |
+| grade10-site-store-cart-drawer-SC-19 | US04-TC04-1 |
+| Uncovered anchors | none |
+| Contradicted readings | none |

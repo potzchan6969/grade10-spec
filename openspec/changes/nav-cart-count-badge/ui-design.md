@@ -44,4 +44,4 @@ inline label beside the title. The header overlay uses `StatusIndicator`
 | Cart present, count `3` (matches drawer title count) | `shared-ui-site-chrome-SC-25` | `site-chrome-siteheader-cart--multi-item` |
 | Cart present, count `12` — full digits, no truncation | `shared-ui-site-chrome-SC-26` | `site-chrome-siteheader-cart--large-count` |
 | `cartSlot` replaces built-in cart | `shared-ui-site-chrome-SC-22` | Covered by every `SiteHeader` cart story (slot composition) |
-| Cart handler absent — no cart control | Existing handler-gated cart rule (`shared-ui-site-chrome-SC-04` / auction-first omit) | Auction-first SiteHeader stories |
+| Cart handler absent — no cart control | Existing handler-gated cart rule (`shared-ui-site-chrome-SC-04` / auction-first pre-Store omission) | Auction-first SiteHeader stories |

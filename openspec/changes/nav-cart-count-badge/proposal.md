@@ -36,7 +36,8 @@ count equal to the drawer title badge; with none, the badge is absent.
   is on).
 - Truncating large counts to `99+` or similar — the indicator shows the full
   number, as the drawer title badge does.
-- Auction-first surfaces that omit the cart control.
+- Auction-first surfaces before Store answers the cart drawer, which correctly
+  omit the cart control.
 - Teaching design-system `Nav` about cart counts.
 
 ## Capabilities

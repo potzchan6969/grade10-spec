@@ -62,8 +62,9 @@ own — a state no design covers.
 - [A returning member presses Cart before the session settles and gets a dialog
   they did not need] → The window is one auth round-trip, and the proposal's
   metric counts dismissals: a dismissal rate that does not fall as the site
-  gets faster is the signal to revisit. No implementation control is worth
-  adding before that data exists.
+  gets faster is a signal to revisit the activation experience. Cart
+  availability remains the separate global decision owned by
+  `auction-first-site-header`.
 - [The site gains a second place that decides what a session may do with a
   cart, after the cart's own write gate] → Both are the same one-line question
   against the same session snapshot; neither owns state. If a third appears,
@@ -73,11 +74,3 @@ own — a state no design covers.
 
 None. No data, no wire, no stored state — one handler changes behaviour, and a
 deploy is the whole rollout. Reverting is reverting the commit.
-
-## Open Questions
-
-- Whether the control should disappear for a signed-out collector instead of
-  asking. It is the proposal's open question, it needs the metric to answer,
-  and it changes neither these decisions nor the task breakdown: hiding the
-  control is a change to what the site supplies a handler for, one line from
-  where the gate now sits.

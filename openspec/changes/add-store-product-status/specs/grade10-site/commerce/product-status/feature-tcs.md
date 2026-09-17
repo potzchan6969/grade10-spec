@@ -425,3 +425,25 @@ count, and <a continue-selling variant> is offered for sale with inventory 0.
 
 * Both lines keep 50.
 * No adjustment and no out-of-stock marking on either line.
+
+## Reconciliation
+
+**Run:** 2026-09-18 · the blind suite and the change's scenario reading were reconciled against the availability and quantity anchors.
+
+| Spec scenario | Suite coverage |
+| --- | --- |
+| grade10-site-commerce-product-status-SC-01 | US1-TC1-1 |
+| grade10-site-commerce-product-status-SC-02 | US1-TC2-1 |
+| grade10-site-commerce-product-status-SC-03 | US1-TC3-1 |
+| grade10-site-commerce-product-status-SC-04 | US1-TC4-1 |
+| grade10-site-commerce-product-status-SC-05, SC-06 | US2-TC1-1 |
+| grade10-site-commerce-product-status-SC-07 | US2-TC2-1 |
+| grade10-site-commerce-product-status-SC-08 | US2-TC3-1 |
+| grade10-site-commerce-product-status-SC-09 | US2-TC4-1 |
+| grade10-site-commerce-product-status-SC-10, SC-11 | US1-TC5-1 |
+| grade10-site-commerce-product-status-SC-12 | US1-TC6-1 |
+| grade10-site-commerce-product-status-SC-13, SC-15 | US1-TC7-1 |
+| grade10-site-commerce-product-status-SC-14 | US1-TC8-1 |
+| grade10-site-commerce-product-status-SC-16 | US1-TC9-1 |
+| Uncovered anchors | none |
+| Contradicted readings | none |

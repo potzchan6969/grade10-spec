@@ -1,3 +1,14 @@
+## Feature set
+
+- Chrome exports
+  - `SiteHeader`: shared header composition with application-supplied content and session
+  - Public types: `SiteHeaderProps`, `SiteHeaderCopy`, and `SiteHeaderSession`
+- Header controls
+  - Auction-first account: Sign In when signed out; Profile, My Auctions, and Sign out when signed in
+  - Handler-gated Cart and search: absent when the application supplies no handler
+  - Compact menu: left drawer for navigation and utilities, with language in a nested drawer
+  - Wide layout: primary navigation and language stay in the bar
+
 ## ADDED Requirements
 
 ### Requirement: SiteHeader composes Nav with session-aware account entry

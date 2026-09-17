@@ -14,10 +14,10 @@ it to see what they had picked; the honest answer is that the cart is theirs
 once they sign in.
 
 **Metric** — sign-ins started from the header cart, as a share of presses of it
-by collectors with no session. A press that ends in a sign-in is the control
-doing its job; a press that ends in a dismissal is the ask arriving at the
-wrong moment, and a rate that stays near zero says the control should be hidden
-from them instead.
+by collectors with no session. A press that ends in a successful sign-in and
+drawer open shows the access gate completed; a dismissal measures friction in
+that access flow. This metric evaluates activation, not Cart availability:
+`auction-first-site-header` keeps Cart global once the Store drawer answers.
 
 ## What changes
 
@@ -46,18 +46,13 @@ two fold in either order.
 
 - **The drawer's own contents.** What a member sees once it opens is
   `shared/ui/store-cart`'s and does not change.
-- **Hiding the control.** The cart stays in the header for a signed-out
-  collector; whether it should disappear instead is what the metric is for.
+- **Hiding the control.** Cart stays in the header for a signed-out collector
+  once Store answers; `auction-first-site-header` owns that availability decision.
 - **Checkout.** Who may pay, and with what, is `grade10-site/store/checkout`'s.
 - **The cart count badge.** `nav-cart-count-badge` is in flight on
   `shared/ui/site-chrome`; what a signed-out collector's badge reads is that
   change's.
 
-## Open questions
-
-- Should the control disappear for a signed-out collector rather than ask?
-  Settled by whoever owns the header's shape once the metric above has a
-  month of data.
 
 ## Follow-on changes
 
