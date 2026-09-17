@@ -92,6 +92,9 @@ meaning.
 - **Read, never written** — one ordered rule chain derives it, so it cannot
   contradict the facts; dispatch before payment, cancelling a dispatched
   order and delivery before dispatch are refused
+- 🚧 **Refunded** — an operator records one refund on a paid or Partially
+  Paid order, for any amount up to what was paid, and the order reads
+  Refunded for good; no letter is sent
 - 🚧 **Missed address deadline** — the status stays where it is; the winner
   can no longer confirm an address until an operator reopens the form
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of

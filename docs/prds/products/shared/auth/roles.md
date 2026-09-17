@@ -14,6 +14,10 @@ Roles stack when a person holds several, and no operator can widen what a role
 grants, because who holds a role is data in the database while what a role
 grants lives in reviewed code.
 
+- 🚧 **Refund processing** — `auction:refund`, held by `staff` and `admin`;
+  recording an auction refund, apart from `auction:settle`, which collects
+  money — [Auction Management](/p/grade10-admin/auction/management#grants)
+
 That split is what makes a compromised operator account a limited problem: it
 can hold roles it should not, but it cannot invent a permission for one.
 
