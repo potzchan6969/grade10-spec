@@ -47,7 +47,7 @@ export const Default: Story = {
   ),
 };
 
-/** Keep titles short and action-oriented; a long title truncates. */
+/** Keep titles short and action-oriented; a long Title Case title truncates. */
 export const LongTitle: Story = {
   render: () => (
     <Dialog>
@@ -57,7 +57,7 @@ export const LongTitle: Story = {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            Delete this prediction and every wager tied to it?
+            Delete This Prediction and Every Wager Tied to It
           </DialogTitle>
         </DialogHeader>
         <DialogBody>
@@ -85,7 +85,7 @@ export const WithFooterClose: Story = {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Round settled</DialogTitle>
+          <DialogTitle>Round Settled</DialogTitle>
         </DialogHeader>
         <DialogBody>
           <DialogDescription>
@@ -106,7 +106,7 @@ export const WithForm: Story = {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Edit Profile</DialogTitle>
         </DialogHeader>
         <DialogBody>
           <DialogDescription>
@@ -143,7 +143,7 @@ export const WithoutCloseButton: Story = {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader showCloseButton={false}>
-          <DialogTitle>Delete prediction</DialogTitle>
+          <DialogTitle>Delete Prediction</DialogTitle>
         </DialogHeader>
         <DialogBody>
           <DialogDescription>This action cannot be undone.</DialogDescription>
