@@ -87,14 +87,11 @@ meaning.
 | **Shipped** | Paid | The warehouse dispatches, with a tracking number |
 | **Delivered** | Paid | The carrier confirms delivery |
 | **Cancelled** | Cancelled | An operator cancels an unpaid order; the lot goes back to stock |
-| **Refunded** | Refunded | A paid invoice is refunded; failing to pay is never Refunded |
+| **Refunded** | Refunded | 🚧 An operator records one refund on a paid or Partially Paid order, for any amount up to what was paid; failing to pay is never Refunded |
 
 - **Read, never written** — one ordered rule chain derives it, so it cannot
   contradict the facts; dispatch before payment, cancelling a dispatched
   order and delivery before dispatch are refused
-- 🚧 **Refunded** — an operator records one refund on a paid or Partially
-  Paid order, for any amount up to what was paid, and the order reads
-  Refunded for good; no letter is sent
 - 🚧 **Missed address deadline** — the status stays where it is; the winner
   can no longer confirm an address until an operator reopens the form
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
@@ -259,10 +256,10 @@ by card, reads:
   Fulfilment](/p/grade10-admin/auction/management#fulfilment)
 - **Progress** — five steps, Address → Invoice → Payment → Shipped →
   Completed, with day-only dates; Cancelled and Refunded show no stepper
-- 🚧 **A refunded order** — Winner Order reads Refunded, in the order status
-  and the invoice status, whether the winner paid in full or in part and
-  wherever the card is; no stepper, no Pay and no address form, and the
-  invoice and every receipt already issued stay downloadable
+- 🚧 **A refunded order** — reads Refunded as both the order status and the
+  invoice status, however much was paid and wherever the card is; no Pay, no
+  address form and no letter, and the invoice and every receipt already
+  issued stay downloadable
 - 🚧 **Sections** — Order Information with Invoice Status, Collection Method,
   Order Status with a time per step, and Lots; Payment Verifying and
   Partially Paid sit under Payment
@@ -381,7 +378,8 @@ a second payment provider, and changes to the bid-time rules.
 | Address deadline | Decided | 48 hours from lot close. A miss hides Confirm and shows Contact Us; the status stays, no invoice is issued, nothing cancels or suspends automatically. The account address book is unaffected. | Product (@tangconst) |
 | Reopening the address form | Decided | An operator, with payment processing and a reason, reopens it once the deadline passes before an address was confirmed, for a fresh 48 hours; never on a cancelled order; no letter, the operator tells the winner. Or the operator records an address given by phone without reopening. | Product (@jeffffej0909) |
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice does not create an Expired order status; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
-| Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is paid→refund only. A missed address deadline creates no status of its own. | Product |
+| Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is a recorded refund only. A missed address deadline creates no status of its own. | Product |
+| A refunded order | 🚧 In flight | Refunded as both the order and the invoice status, paid in full or in part and wherever the card is; no stepper, Pay or address form, and the invoice and every receipt already issued stay downloadable. Chosen over hiding them the way Cancelled does, which leaves the winner no record of what they paid. | Product (@jeffffej0909) |
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; the status keeps its nine names, Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |

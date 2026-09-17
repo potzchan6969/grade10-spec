@@ -198,20 +198,20 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   operator sends the money by hand, in the Stripe dashboard or by bank
   transfer, then records it on the order. One refund per order, never
   reversed, and the order reads Refunded for good
-  1. **Amount** — above zero and no more than the winner has paid, partial
-     payments included; the operator decides it, never fixed to the Order
-     Total
-  2. **Recorded with it** — a reason (Damaged, Not as described, Not
-     received, Duplicate or overpayment, Other) and a note, the method, the
-     Stripe or bank reference, and 1 to 5 private proof files
-  3. **The lot** — the operator chooses at refund: back to stock, when the
-     card came back or never left, or kept by the winner, when it stays sold
-  4. **Its number** — the next one in the internal audit series
-  5. **The winner** — sees Refunded on their order and gets no letter; their
-     bidder standing does not change
-- 🚧 **Finding refunds** — the queue filters to Refunded; the order detail
-  shows the amount, method, reference, reason, audit number, who recorded it
-  and when
+
+| The refund records | Value |
+| --- | --- |
+| 🚧 Amount | Above zero and no more than the winner has paid — the Order Total where they paid in full, what was collected where they paid in parts; the operator decides it, never fixed |
+| 🚧 Reason and note | Damaged, Not as described, Not received, Duplicate or overpayment, or Other, with a note carrying what the winner asked |
+| 🚧 Method and reference | How the money went back, with its Stripe or bank reference |
+| 🚧 Proof | 1 to 5 files, operators only |
+| 🚧 The lot | Back to stock, when the card came back or never left, or kept by the winner, when it stays sold |
+| 🚧 Its number | The next one in the internal audit series |
+
+- 🚧 **Finding refunds** — the queue filters to Refunded; the order detail and
+  the invoice log carry the whole record, with who recorded it and when
+- 🚧 **The winner** — reads Refunded on their order, gets no letter, and
+  their bidder standing does not change
 - 🚧 **Internal audit number** — every invoice and receipt carries one
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
