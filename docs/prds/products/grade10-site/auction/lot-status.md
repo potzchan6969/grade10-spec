@@ -6,61 +6,47 @@ order: 14
 
 ## External Lot Status
 
-🚧 Every lot on the auction site shows one external lot status. It describes
-the lot only, not the collector's bid or order.
+🚧 Every lot a collector can see shows one external lot status. It describes
+the lot only, never the collector's bid or order, and every page reads the
+same value because it travels with the listing data.
 
 | External lot status | Meaning |
 | --- | --- |
-| 🚧 **Upcoming** | Published. Bidding has not started |
-| 🚧 **Active** | Bidding is open, including extended bidding |
-| 🚧 **Ended** | Bidding is over, with or without a winner |
-
-- 🚧 **Worked out, not saved** — the external lot status comes from the lot's
-  internal status and times, so the two always agree
-- 🚧 **Winner's order** — shown separately; Ended describes the lot, not the
-  order
-- 🚧 **Display** — the designer decides which pages show the status, and how
+| **Upcoming** | Published; bidding has not started |
+| **Active** | Bidding is open, extended bidding included |
+| **Ended** | Bidding is over, with or without a winner, whatever the state of the winner's order |
 
 ## Status Mapping
 
-🚧 Each internal lot status maps to one external lot status, or is hidden from
-collectors.
+🚧 Each internal lot status reads as one external lot status, or the lot is
+hidden. The external status is worked out from the internal status and the
+lot's times, so the two always agree.
 
-| Internal lot status | External lot status |
+| Internal lot status | Collectors see |
 | --- | --- |
-| Draft | **Hidden** |
+| Draft | Hidden |
 | Scheduled | **Upcoming** |
 | Live | **Active** |
 | Unsold | **Ended** |
-| Called off | **Hidden** |
-| Awaiting Address | **Ended** |
-| Preparing Invoice | **Ended** |
-| Pending Payment | **Ended** |
-| Processing | **Ended** |
-| Shipped | **Ended** |
-| Delivered | **Ended** |
-| Cancelled | **Ended** |
-| Refunded | **Ended** |
+| Called off | Hidden |
+| Awaiting Address · Preparing Invoice · Pending Payment · Processing · Shipped · Delivered · Cancelled · Refunded | **Ended** |
 
 ## Hidden Lots
 
-🚧 Collectors never see a lot with one of these internal lot statuses:
+🚧 A Draft lot was never published and a Called off lot was withdrawn before a
+sale. Collectors never see either:
 
-- 🚧 **Draft** — never published
-- 🚧 **Called off** — withdrawn before a sale
-
-A hidden lot is left out of every collector page:
-
-- 🚧 **Catalogue** — not listed, and search does not find it
-- 🚧 **Lot page** — its address shows the Page not found screen
-- 🚧 **Watchlist** — removed from the list
-- 🚧 **My Auctions** — not shown, except to a collector who bid on a called-off
-  lot, who still sees it with the note that their card hold was released
+| Surface | What a collector sees |
+| --- | --- |
+| Catalogue | The lot is not listed; search and filters never return it |
+| Lot page | Page not found, even at an address the lot once answered from |
+| Watchlist | The lot leaves the list |
+| My Auctions | Not shown — except to a collector who bid on a called-off lot, who still sees it; when that bid held a card authorization, the row says the hold was released |
 
 :::detail{title="Product decisions" for="pm"}
-Collector pages use seven different labels for three lot statuses, and the
-internal lot status changes often for operator needs. The external lot status
-gives collectors three stable statuses, and hides draft and called-off lots.
+Collectors read three lot statuses wherever a lot is shown, and never see a
+draft or called-off lot. The internal lot status changes for operator needs;
+the external one does not.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
@@ -75,7 +61,7 @@ history.
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
-| Status labels | Number of different lot status labels on collector pages. 7 before, 3 after | Design |
+| Status labels | Distinct lot status labels on collector pages: three, one per external status | Design |
 
 **Decisions.**
 
@@ -86,7 +72,7 @@ history.
 | Draft | Decided | Has no external lot status. Never shown | Product |
 | Unsold | Decided | Shown as Ended | Product |
 | Called off | Decided | Hidden on every collector page. The lot's address shows Page not found | Product |
-| Bidder exception | Decided | A collector who bid on a called-off lot still sees it in My Auctions, with the card hold note | Product |
+| Bidder exception | Decided | A collector who bid on a called-off lot still sees it in My Auctions, with the card hold note when the bid held one | Product |
 | Winner's order | Decided | Shown separately. Ended describes the lot, not the order | Product |
 | Display | Decided | The designer decides where and how pages show the status | Design |
 :::

@@ -14,8 +14,7 @@ lot before any script runs.
   crawler sees what a collector sees
 - **One lot per address** — two addresses answer with their own lot, title,
   description and canonical address
-- **Opened from the catalogue** — a card reaches the lot's address without a
-  page load
+- **From the catalogue** — a card opens the lot's address without a page load
 - **Not in the sitemap** — which lots are published is unknown when the site
   is built, so no sitemap entry is a lot address; everything else about the
   page as a public surface is [the site's crawlable-pages
@@ -24,9 +23,7 @@ lot before any script runs.
 ## Sharing a Link
 
 A shared link unfurls as that lot — its own title, description and canonical
-address, never the catalogue's. It carries no picture: a lot's images are the
-auction's own, and the sizing a store card's preview rests on is the shop
-CDN's.
+address, never the catalogue's.
 
 ## Unknown and Hidden Lots
 
@@ -38,14 +35,27 @@ CDN's.
   Draft or Called off, even at the address it once answered from — [Lot
   Status](/p/grade10-site/auction/lot-status)
 
+## Watching
+
+- **The control** — a signed-in collector watches or unwatches the lot from
+  its page and sees whether they watch it; nothing else on the page moves —
+  [Watchlist](/p/grade10-site/auction/watchlist)
+- 🚧 **With a bid** — while their bid stands on an open lot the control reads
+  Watching, disabled: a bid bookmarks the lot
+- 🚧 **After the close** — a closed lot shows no watch control
+- 🚧 **Watching announced** — watching says email alerts are on for the lot,
+  with View My Auctions
+- 🚧 **Unwatching announced** — unwatching says the lot left My Auctions, with
+  Undo, which restores the watch without finding the lot again
+- 🚧 **A first bid** — a bid on the lot announces that email alerts are on,
+  once per lot per collector; later visits stay quiet
+
 ## After Scripts Load
 
 - **Nothing blanks** — scripts take over the page already served; nothing on
   screen is replaced by a loading placeholder
 - **The clock carries on** — a value that follows the clock, the countdown or
   the standing, continues from what was served rather than contradicting it
-- **Watch from the page** — a collector marks the lot they are reading and
-  nothing else on the page moves — [Watchlist](/p/grade10-site/auction/watchlist)
 
 ::story{id="auction-listing-listing-product--default" title="A live lot page, gallery and bid panel assembled"}
 
@@ -55,4 +65,5 @@ CDN's.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and [Watchlist](/p/grade10-site/auction/watchlist) owns what a watch means. | Product |
+| Watching while a bid stands | 🚧 In flight | A bid keeps the lot watched: the control reads Watching and is disabled until the lot closes, and a closed lot shows no control. | Product |
 :::
