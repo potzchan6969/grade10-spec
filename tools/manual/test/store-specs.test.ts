@@ -50,6 +50,7 @@ describe("spec entries", () => {
       id: "alpha-SC-01",
       name: "The thing happens",
       serves: ["alpha-US-01"],
+      servesProse: "Reader follows the thing end to end",
       text: "**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** a reader asks for the thing\n- **THEN** the thing happens",
     });
   });

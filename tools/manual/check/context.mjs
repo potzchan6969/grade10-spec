@@ -56,6 +56,34 @@ export const RULES = [
     title: "Scenarios serving an anchor the spec does not offer",
   },
   {
+    // The anchor says where the rule sits; the prose after it says what the
+    // walk was. A line repeating the group name back carries neither, and a
+    // group anchor is already the weakest of the three — it names a part of
+    // the map and nobody who meets the rule. Nothing in the store writes one
+    // today, so this is a guard on new work rather than a register.
+    key: "restates",
+    level: "fail",
+    title: "`**Serves:**` prose repeating the anchor it stands on",
+  },
+  {
+    // Every state the designer drew is either a scenario or an exemption that
+    // names where it is stated instead. Gated on the change carrying a
+    // `decisions.md`, the same marker `decided` uses: a change planned before
+    // that artifact existed was planned before this rule did too.
+    key: "dressed",
+    level: "fail",
+    title: "Design states no requirement answers",
+  },
+  {
+    // The blind pass's raised questions land in `decisions.md`, and each owes
+    // a landing before the change merges — a `Decisions` row, or a ❓ on the
+    // PRD. Without the deadline the list sat at the bottom of a suite until
+    // somebody reviewed it, which could be after the change shipped.
+    key: "raised",
+    level: "fail",
+    title: "Raised questions that landed nowhere",
+  },
+  {
     key: "cited",
     level: "fail",
     title: "Ids cited in backticks that the store issues nowhere",
@@ -180,6 +208,14 @@ export const RULES = [
     key: "story",
     level: "fail",
     title: "Story ids in the workbench Storybook index",
+  },
+  {
+    // The one signal this store can read that a blind pass stopped being
+    // blind, or stopped being a different reading. The Run line says what the
+    // pass read, never how it read, and nothing verifies it.
+    key: "asking",
+    level: "warn",
+    title: "Blind passes that raised nothing",
   },
   {
     key: "stale",
@@ -341,3 +377,53 @@ export function journeysOf(root, changes) {
 
 export const plural = (count, word) =>
   `${count} ${word}${count === 1 ? "" : "s"}`;
+
+/** An anchor naming another capability's journey:
+ * `<product>/<domain>/<capability>#<journey-id>`. A rule sits on the journey
+ * somebody walks, and the walk is often somebody else's — the operator's
+ * post-sale queue reaches a status the collector's capability derives. Before
+ * this, such a rule took a feature set group, which names a part of the map
+ * and nobody who meets it, or a hand-written note in a journeys file that
+ * named no scenario and so was read by nothing. */
+const QUALIFIED = /^([a-z0-9][a-z0-9/-]*)#([a-z0-9][a-z0-9-]*-US-\d+)$/;
+
+/** The journey ids a capability issues, or undefined where the store holds no
+ * such capability. A qualified anchor resolves through this. */
+export const journeysIn = (ctx) => (id) => {
+  const spec = ctx.specs.get(id);
+  if (!spec || spec.journeys === undefined) return undefined;
+  return new Set(spec.journeys.map((one) => one.id));
+};
+
+export const qualifiedAnchor = (anchor) => {
+  const match = QUALIFIED.exec(anchor);
+  return match ? { spec: match[1], journey: match[2] } : null;
+};
+
+/** Why an anchor resolves to nothing, as the clause that follows it in a
+ * finding, or null when it resolves. `local` is the anchor set the capability
+ * offers itself; `far` answers a qualified anchor's capability, and returns
+ * undefined where the store holds no such capability. */
+export function anchorRefusal(local, anchor, specId, far) {
+  if (local.has(anchor)) return null;
+  const qualified = qualifiedAnchor(anchor);
+  if (!qualified) {
+    return `which is neither a journey nor a feature set group of \`${specId}\``;
+  }
+  const journeys = far(qualified.spec);
+  if (journeys === undefined) {
+    return `whose capability \`${qualified.spec}\` is not one this store holds`;
+  }
+  if (!journeys.has(qualified.journey)) {
+    return `which \`${qualified.spec}\` issues nowhere`;
+  }
+  return null;
+}
+
+/** Whether a `**Serves:**` line's prose says only what its anchor already
+ * said. Compared on letters and digits alone, so casing and punctuation do not
+ * hide a repetition. */
+export const restatesAnchor = (anchor, prose) =>
+  prose !== undefined && bare(prose) === bare(anchor) && bare(anchor) !== "";
+
+const bare = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, "");

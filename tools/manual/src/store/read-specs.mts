@@ -287,6 +287,19 @@ export function servedAnchors(body: string): string[] {
   return anchorsIn(match[1]);
 }
 
+/** The prose after the anchor's dash — what the walk was. The anchors before it
+ * are machine-read; this half is written for a reader, and is read back only so
+ * a check can refuse a line that repeats the anchor instead of saying anything
+ * the anchor did not. */
+export function servedProse(body: string): string | undefined {
+  const match = SERVES.exec(body);
+  if (!match) return undefined;
+  const parts = match[1].split(/\s+[-\u2013\u2014]\s+/);
+  if (parts.length < 2) return undefined;
+  const prose = parts.slice(1).join(" - ").trim();
+  return prose || undefined;
+}
+
 /** The anchors one `**Serves:**` or `**Trace:**` line names: everything before
  * the prose dash, read as code spans when it holds any and as one bare name
  * when it does not.
@@ -413,6 +426,8 @@ function readScenario(section: Section): Scenario {
   if (match[1]) scenario.id = match[1];
   const serves = servedAnchors(section.body);
   if (serves.length > 0) scenario.serves = serves;
+  const prose = servedProse(section.body);
+  if (prose) scenario.servesProse = prose;
   return scenario;
 }
 
