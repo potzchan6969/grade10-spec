@@ -41,8 +41,6 @@ included.
 - 🚧 **No crawler hears of it** — robots.txt and the sitemap name only what
   the build answers —
   [Crawlable Pages](/p/grade10-site/site/crawlable-pages)
-- 🚧 **A collector pays nothing for it** — a build ships none of the page code
-  of a surface it does not carry
 
 ## Opening the Store
 

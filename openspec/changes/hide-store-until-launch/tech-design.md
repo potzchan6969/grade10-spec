@@ -135,6 +135,13 @@ its own beyond the gate:
 - **[Risk] The test suites read the module-scope lists and silently test one
   lane only** → the lists become functions, so every existing call site has to
   name a gate setting, and the suites cover both.
+- **[Trade-off] An uncarried surface's page code stays in the bundle** →
+  accepted, and the requirement no longer asks otherwise. `storeModules`
+  binds the shop's four features and the account's five in one side-effectful
+  list, and the account five serve surfaces every lane carries, so the
+  composition root cannot drop the list. Telling them apart is a change to
+  `@grade10/store-frontend`'s published surface that the shop's launch
+  retires.
 - **[Risk] Search engines hold store addresses for `grade10.com` that start
   answering 404** → that is the intent. `robots.txt` already answers
   `Disallow: /` on the preview lane, so nothing new is being offered; the

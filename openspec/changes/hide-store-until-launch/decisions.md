@@ -18,6 +18,7 @@
 - Hiding anything in the operator console, which already decides its own Dev
   surfaces per lane
 - Changing the store's own behaviour anywhere it is still carried
+- Dropping the store's page code from a build that does not carry the store
 
 ## Decisions
 
@@ -34,6 +35,7 @@
 | Q9 | How far does "nothing names an absent surface" reach? | Everything the build renders: a page's own head, a link in a carried surface's body, the chrome, the front door and the crawler files alike. The four places named in the feature set are where the rule is met, not its limit. | Reading the list as the whole rule. A membership page linking to the shop would then be allowed to point at a 404, which is the same dead link the rule exists to stop. |
 | Q10 | Which host issues the two addresses the shop hands out for a product and a collection, and does a public build answer them? | This site answers them — it is what sends a link the shop wrote on to the card it names — so they belong to the store set and a build without the store refuses them. | Treating them as the shop's own host and outside this site's reach. The site already holds both addresses, so leaving them out would keep two live entry points into a shop that is shut. |
 | Q11 | What happens to a store address already sent to a collector in mail, such as an order confirmation's link to order detail? | Nothing is owed. A lane that carries no store takes no order, so no mail sent from it names a store address; mail from a lane that does carry the store points at that lane. | Writing a rule for mail. It would cover a case no lane can produce, and mail is not the site's to answer for. |
+| Q12 | Must a build that does not carry the store also drop the store's page code? | No. The build holds no address and no page for an uncarried surface, and what else rides in the bundle is not stated. The shop's four features and the account's five — profile, notifications, card, coupons, identity — are published as one list, and the account five serve the profile, membership and join pages, which every lane carries. | Requiring it, which the first attempt did. Splitting the list is a change to the storefront package's surface with a second brand consuming it, and the shop's launch retires the question; leaving the requirement in would fold a guarantee into the durable spec that nothing has ever met. |
 
 ## Raised
 

@@ -22,7 +22,6 @@ from is absent rather than hidden.
   - Not found: it answers with the not-found surface and a 404
   - Every address beneath it: the addresses under an uncarried surface answer
     the same way
-  - No page code: a build ships none of an uncarried surface's page code
 - Nothing names an absent surface
   - Header: no navigation item and no cart control for a surface the build
     does not carry
@@ -45,8 +44,11 @@ when that build is made, and SHALL NOT read the set again while the build is
 running.
 
 **What a carried surface holds** - For a surface in the set the build SHALL
-hold the address, the page and the page code; for a surface outside it the
-build SHALL hold none of the three.
+hold the address and the page; for a surface outside it the build SHALL hold
+neither. Whether the build also ships the code behind an uncarried surface is
+not stated: the storefront's features are published as one list, and telling
+the shop's apart from the account's is work the shop's launch retires -
+[decisions](../../../../decisions.md).
 
 **No setting, no request** - No setting a running build reads, and no request
 it receives, SHALL add a surface to the set or take one out of it.
@@ -57,12 +59,6 @@ it receives, SHALL add a surface to the set or take one out of it.
 - **GIVEN** a build made without the store surfaces
 - **WHEN** it runs under any configuration its lane can supply
 - **THEN** no store surface answers
-
-#### Scenario: grade10-site-site-carried-surfaces-SC-02 - An uncarried surface costs no page code
-**Serves:** What a build carries - a collector downloads nothing of a shop the build in front of them holds no page for
-
-- **WHEN** every script a build without the store surfaces serves is read
-- **THEN** none of them holds a store surface's page code
 
 ### Requirement: The store surfaces wait for the shop to open
 
