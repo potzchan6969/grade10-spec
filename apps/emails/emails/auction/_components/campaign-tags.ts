@@ -9,8 +9,10 @@ export type AuctionEmailCampaign =
   | "lot_closed_didnt_win"
   | "lot_ended_watched"
   | "auction_won"
-  | "address_reminder"
+  | "setup_reminder"
+  | "setup_overdue"
   | "payment_reminder"
+  | "payment_overdue"
   | "payment_received"
   | "shipped";
 

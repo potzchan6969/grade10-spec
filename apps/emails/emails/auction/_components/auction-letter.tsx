@@ -1,4 +1,4 @@
-import { Heading, Text } from "react-email";
+import { Heading, Section, Text } from "react-email";
 import { EmailFooter } from "@/emails/_components/email-footer";
 import {
   GRADE10_HOME_URL,
@@ -19,7 +19,14 @@ export type AuctionLetterProps = {
   campaign: AuctionEmailCampaign;
   preheader: string;
   heading: string;
-  body: string;
+  /** One paragraph, or several short paragraphs rendered in order. */
+  body: string | string[];
+  /** Scannable bullets under the lead (setup fields, consequences, etc.). */
+  points?: string[];
+  /** Paragraphs between the first and second bullet lists. */
+  afterPoints?: string | string[];
+  /** Second bullet list, after `afterPoints`. */
+  morePoints?: string[];
   lotTitle: string;
   /**
    * Destination for the lot image and lot title.
@@ -77,6 +84,9 @@ export function AuctionLetter({
   preheader,
   heading,
   body,
+  points = [],
+  afterPoints,
+  morePoints = [],
   lotTitle,
   listingUrl,
   primaryImageUrl,
@@ -96,6 +106,12 @@ export function AuctionLetter({
 }: AuctionLetterProps) {
   const alertsBase = muteUrl ?? unwatchUrl;
   const primaryHref = ctaHref ?? listingUrl;
+  const bodyParagraphs = Array.isArray(body) ? body : [body];
+  const afterPointParagraphs = afterPoints
+    ? Array.isArray(afterPoints)
+      ? afterPoints
+      : [afterPoints]
+    : [];
   const taggedHome = withAuctionEmailCampaignTags(homeUrl, campaign, "logo");
   const taggedCta = withAuctionEmailCampaignTags(primaryHref, campaign, "cta");
   const taggedSecondaryCta = secondaryCtaHref
@@ -115,12 +131,43 @@ export function AuctionLetter({
     ? withAuctionEmailCampaignTags(alertsBase, campaign, "manage_alerts")
     : undefined;
 
+  const bulletList = (items: string[]) =>
+    items.length > 0 ? (
+      <Section className="mb-2 mt-1">
+        {items.map((point) => (
+          <Text
+            className="mb-1 mt-0 text-lg leading-base text-fg-2"
+            key={point}
+          >
+            • {point}
+          </Text>
+        ))}
+      </Section>
+    ) : null;
+
   return (
     <Grade10EmailShell homeUrl={taggedHome} preheader={preheader}>
       <Heading as="h1" className="mb-4 mt-0 text-heading font-bold text-fg">
         {heading}
       </Heading>
-      <Text className="mb-2 mt-0 text-lg leading-base text-fg-2">{body}</Text>
+      {bodyParagraphs.map((paragraph) => (
+        <Text
+          className="mb-2 mt-0 text-lg leading-base text-fg-2"
+          key={paragraph}
+        >
+          {paragraph}
+        </Text>
+      ))}
+      {bulletList(points)}
+      {afterPointParagraphs.map((paragraph) => (
+        <Text
+          className="mb-2 mt-0 text-lg leading-base text-fg-2"
+          key={paragraph}
+        >
+          {paragraph}
+        </Text>
+      ))}
+      {bulletList(morePoints)}
       <LotBlock
         details={details}
         facts={facts}

@@ -12,8 +12,8 @@ export type AuctionWonProps = {
   primaryImageUrl?: string | null;
   winningBid?: string;
   closedAt?: string;
-  /** Absolute datetime — Confirm by … (winner's zone). */
-  addressDeadline?: string;
+  /** Absolute datetime — Confirm by … (winner's zone). Setup window. */
+  setupDeadline?: string;
 };
 
 export default function AuctionWonEmail({
@@ -23,16 +23,17 @@ export default function AuctionWonEmail({
   primaryImageUrl = previewLot.primaryImageUrl,
   winningBid = previewLot.winningBid,
   closedAt = previewLot.closedAt,
-  addressDeadline = previewLot.addressDeadline,
+  setupDeadline = previewLot.setupDeadline,
 }: AuctionWonProps) {
   return (
     <AuctionLetter
-      body="Bidding has ended and you won. Confirm where to ship this lot by the deadline below. Grade10 prepares the invoice after your address is confirmed — nothing is due yet."
+      afterPoints="Nothing is due yet."
+      body="Bidding has ended and you won. Confirm these by the deadline below so Grade10 can prepare your invoice."
       brandName={brandName}
       campaign="auction_won"
       canUnsubscribe={false}
-      ctaLabel="Confirm delivery address"
-      details={[{ label: "Confirm by", value: addressDeadline }]}
+      ctaLabel="Complete order setup"
+      details={[{ label: "Confirm by", value: setupDeadline }]}
       heading="You won this lot"
       highlight={{
         label: "Winning bid",
@@ -41,7 +42,8 @@ export default function AuctionWonEmail({
       }}
       listingUrl={orderUrl}
       lotTitle={lotTitle}
-      preheader={`Confirm a delivery address by ${addressDeadline}.`}
+      points={[...previewLot.setupFields]}
+      preheader={`Complete order setup by ${setupDeadline}.`}
       primaryImageUrl={primaryImageUrl}
       whyYouGotThis="You won this auction lot on Grade10."
     />
@@ -55,5 +57,5 @@ AuctionWonEmail.PreviewProps = {
   primaryImageUrl: previewLot.primaryImageUrl,
   winningBid: previewLot.winningBid,
   closedAt: previewLot.closedAt,
-  addressDeadline: previewLot.addressDeadline,
+  setupDeadline: previewLot.setupDeadline,
 } satisfies AuctionWonProps;

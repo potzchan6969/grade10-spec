@@ -7,6 +7,8 @@ export const previewLot = {
   listingUrl: "https://grade10.com/auction/listings/demo-charizard",
   /** Signed-in Winner Order for this lot. */
   orderUrl: "https://grade10.com/account/auction-orders/demo-charizard",
+  /** Customer support — overdue letters' primary CTA (matches Winner Order Contact Us). */
+  contactUrl: "mailto:support@grade10.com",
   /** Signed-in My Auctions — per-lot Email alerts mute. */
   muteUrl: "https://grade10.com/account/auctions",
   /** @deprecated Prefer `muteUrl`. */
@@ -17,7 +19,15 @@ export const previewLot = {
   scheduledClosesAt: "17 Sep 2026, 21:00 GMT+8",
   effectiveClosesAt: "17 Sep 2026, 21:30 GMT+8",
   closedAt: "17 Sep 2026, 21:30 GMT+8",
-  /** 48 hours from lot close — address confirm window. */
+  /** 48 hours from lot close — order setup window (address, payment method, billing). */
+  setupDeadline: "19 Sep 2026, 21:30 GMT+8",
+  /** Order setup fields named as bullets in won / reminder / setup-overdue letters. */
+  setupFields: [
+    "Delivery address",
+    "Payment method",
+    "Billing address",
+  ] as const,
+  /** @deprecated Prefer `setupDeadline`. */
   addressDeadline: "19 Sep 2026, 21:30 GMT+8",
   /** 7 calendar days from invoice send — payment window. */
   paymentDeadline: "24 Sep 2026, 21:30 GMT+8",

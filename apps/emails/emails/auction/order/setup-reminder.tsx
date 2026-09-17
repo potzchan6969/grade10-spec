@@ -1,7 +1,7 @@
 import { AuctionLetter } from "@/emails/auction/_components/auction-letter";
 import { previewLot } from "@/emails/auction/_components/preview-lot";
 
-export type AddressReminderProps = {
+export type SetupReminderProps = {
   brandName?: string;
   lotTitle?: string;
   /**
@@ -12,40 +12,47 @@ export type AddressReminderProps = {
   primaryImageUrl?: string | null;
   winningBid?: string;
   closedAt?: string;
-  /** Absolute datetime — Confirm by … (winner's zone). */
-  addressDeadline?: string;
+  /** Absolute datetime — Confirm by … (winner's zone). Setup window. */
+  setupDeadline?: string;
   /** Second reminder uses stronger subject-facing copy. */
   urgency?: "first" | "second";
 };
 
-export default function AddressReminderEmail({
+/**
+ * Reminder while order setup is incomplete (delivery address, payment
+ * method, and billing address).
+ */
+export default function SetupReminderEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   orderUrl = previewLot.orderUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   winningBid = previewLot.winningBid,
   closedAt = previewLot.closedAt,
-  addressDeadline = previewLot.addressDeadline,
+  setupDeadline = previewLot.setupDeadline,
   urgency = "first",
-}: AddressReminderProps) {
+}: SetupReminderProps) {
   const isSecond = urgency === "second";
 
   return (
     <AuctionLetter
+      afterPoints={
+        isSecond ? undefined : "Nothing is due until the invoice is sent."
+      }
       body={
         isSecond
-          ? "Your won lot is still waiting on a delivery address. Confirm where to ship by the deadline below so Grade10 can prepare the invoice."
-          : "You won this lot. Grade10 still needs a delivery address before it can prepare your invoice. Confirm by the deadline below — nothing is due until the invoice is sent."
+          ? "Your won lot is still waiting on order setup. Confirm these by the deadline below so Grade10 can prepare the invoice."
+          : "You won this lot. Grade10 still needs your order setup before it can prepare your invoice. Complete these by the deadline below."
       }
       brandName={brandName}
-      campaign="address_reminder"
+      campaign="setup_reminder"
       canUnsubscribe={false}
-      ctaLabel="Confirm delivery address"
-      details={[{ label: "Confirm by", value: addressDeadline }]}
+      ctaLabel="Complete order setup"
+      details={[{ label: "Confirm by", value: setupDeadline }]}
       heading={
         isSecond
-          ? "Still waiting on your delivery address"
-          : "Confirm your delivery address"
+          ? "Still waiting on your order setup"
+          : "Complete your order setup"
       }
       highlight={{
         label: "Winning bid",
@@ -54,24 +61,21 @@ export default function AddressReminderEmail({
       }}
       listingUrl={orderUrl}
       lotTitle={lotTitle}
-      preheader={
-        isSecond
-          ? `Confirm an address by ${addressDeadline}.`
-          : `Confirm a delivery address by ${addressDeadline}.`
-      }
+      points={[...previewLot.setupFields]}
+      preheader={`Complete order setup by ${setupDeadline}.`}
       primaryImageUrl={primaryImageUrl}
-      whyYouGotThis="You won this auction lot and have not confirmed a delivery address yet."
+      whyYouGotThis="You won this auction lot and have not finished order setup yet."
     />
   );
 }
 
-AddressReminderEmail.PreviewProps = {
+SetupReminderEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   orderUrl: previewLot.orderUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   winningBid: previewLot.winningBid,
   closedAt: previewLot.closedAt,
-  addressDeadline: previewLot.addressDeadline,
+  setupDeadline: previewLot.setupDeadline,
   urgency: "first",
-} satisfies AddressReminderProps;
+} satisfies SetupReminderProps;
