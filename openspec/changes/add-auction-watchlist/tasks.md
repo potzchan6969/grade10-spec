@@ -31,22 +31,14 @@ Claimable against the contracts and fixtures from group 1.
 - [x] 3.5 Make `grade10-site-auction-watchlist-SC-18` pass: unwatch from the watched list without opening the listing.
 - [ ] 3.6 Verify the watched-listings feature lane, including the empty, closed, called-off, and list-unwatch states.
 
-## 4. ZZZ auction surface (grade10)
+## 4. Operator watch count (grade10) (owner: @mason5991)
 
-Claimable against the contracts from group 1, independently of groups 2 and 3.
+- [x] 4.1 Make `grade10-site-auction-watchlist-SC-10` pass, counting watches from both brands on one listing via `countListingWatches`, presented as watchers rather than expected bidders.
+- [x] 4.2 Verify the admin auction feature lane.
 
-- [ ] 4.1 Fill the watch control on the ZZZ listing page and catalogue tile, making `grade10-site-auction-watchlist-SC-06` pass with a ZZZ collector.
-- [ ] 4.2 Add the watched-listings surface to ZZZ, with its copy in the locales that site answers.
-- [ ] 4.3 Verify the ZZZ auction feature lane.
+## 5. Review (grade10) (owner: @mason5991)
 
-## 5. Operator watch count (grade10) (owner: @mason5991)
-
-- [x] 5.1 Make `grade10-site-auction-watchlist-SC-10` pass, counting watches from both brands on one listing via `countListingWatches`, presented as watchers rather than expected bidders.
-- [x] 5.2 Verify the admin auction feature lane.
-
-## 6. Review (grade10) (owner: @mason5991)
-
-- [ ] 6.1 Run the application repository's full check suite once every group above is green.
-- [ ] 6.2 Verify every scenario in this change, then run `openspec validate add-auction-watchlist --strict` and `openspec validate --specs`.
-- [x] 6.3 Review that no public listing fact carries a watch, a watcher, or a count, per `grade10-site-auction-watchlist-SC-07`.
-- [ ] 6.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/` and archive this change.
+- [ ] 5.1 Run the application repository's full check suite once every group above is green.
+- [ ] 5.2 Verify every scenario in this change, then run `openspec validate add-auction-watchlist --strict` and `openspec validate --specs`.
+- [x] 5.3 Review that no public listing fact carries a watch, a watcher, or a count, per `grade10-site-auction-watchlist-SC-07`.
+- [ ] 5.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/` and archive this change.

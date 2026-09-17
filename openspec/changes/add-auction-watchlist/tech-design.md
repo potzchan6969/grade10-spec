@@ -11,7 +11,9 @@
   processor.
 - Auction listings are shared across Grade10 and ZZZ. Bidder identity is
   `(storefront, user_id)`. Each storefront backend is the identity oracle;
-  the named Auction entrypoint pins storefront.
+  the named Auction entrypoint pins storefront. ZZZ's collector surfaces for
+  watching are out of this change —
+  [`add-zzz-auction-watchlist`](../add-zzz-auction-watchlist/proposal.md).
 - `watches` already exists in schema `auction`, keyed
   `(storefront, user_id, listing_id)`. `watchListing`, `unwatchListing`,
   `readWatch`, and `listMyWatches` already hang off those rows.
