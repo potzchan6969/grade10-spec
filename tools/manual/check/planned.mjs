@@ -133,7 +133,23 @@ function checkDressed(ctx, change) {
   }
 }
 
-const sectionsOf = (text) => outline(text).filter((one) => one.level === 2);
+/** Every `##` section of a file, wherever it sits in the outline. `outline`
+ * returns roots and nests by level, so a file opening on a `# Title` — which
+ * `ui-design.md` usually does and `decisions.md` usually does not — hangs all
+ * of its `##` sections under that one. Filtering the roots for level 2 found
+ * nothing there and said nothing about it, which is the shape of a check that
+ * passes because it never looked. */
+function sectionsOf(text) {
+  const found = [];
+  const visit = (sections) => {
+    for (const one of sections) {
+      if (one.level === 2) found.push(one);
+      else visit(one.children);
+    }
+  };
+  visit(outline(text));
+  return found;
+}
 
 /** The rows of the first markdown table in a section's body, each as its
  * cells, with the header row, the separator and the template's own commented

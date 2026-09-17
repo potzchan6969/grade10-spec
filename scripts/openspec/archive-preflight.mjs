@@ -88,6 +88,12 @@ const SC_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
 const SERVES = /^\s*(?:[-*]\s+)?\*\*Serves:\*\*\s*\S/m;
 const SCENARIO_HEADING = /^####\s+Scenario:\s+([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
 const OPEN_TASK = /^\s*-\s*\[ \]\s*(.*)$/;
+/** A task group heading, and the repository tag `task-ownership.md` puts at the
+ * end of it: `## 3. Store prose (grade10-spec)`. An owner tag is `(owner: …)`
+ * and is not a repository. */
+const GROUP_HEADING = /^##\s+\d+\.\s*(.+?)\s*$/;
+const REPO_TAG = /\(([^()@]+)\)\s*$/;
+const STORE_GROUP = "grade10-spec";
 const MANIFEST_KEY = /^([A-Za-z0-9_]+):/;
 /** Every key a record owns. A write drops all of them and appends only what it
  * was told, so a waiver never outlives the record that replaces it. */
@@ -212,6 +218,21 @@ function bullets(body) {
   return found.map((line) => line.replace(/\s+/g, " ").trim()).filter(Boolean);
 }
 
+/** Whether every task group of a task list lands in this store. Such a change
+ * deploys nothing, so there is no run to point at and no waiver owed — the same
+ * exemption `check:manual`'s `archived` rule already grants, which this script
+ * did not, so a store-only change could only be archived by waiving a deploy it
+ * never had. A list with no tagged group is not store-only: an untagged group
+ * is a group nobody said where it lands. */
+function storeOnly(text) {
+  const groups = text
+    .split("\n")
+    .map((line) => GROUP_HEADING.exec(line)?.[1])
+    .filter((title) => title !== undefined)
+    .map((title) => REPO_TAG.exec(title)?.[1].trim() ?? "");
+  return groups.length > 0 && groups.every((repo) => repo === STORE_GROUP);
+}
+
 /** The unchecked tasks of a task list, in file order. */
 function openTasks(text) {
   return text
@@ -319,6 +340,29 @@ if (!changeIds().includes(changeId)) {
   process.exit();
 }
 
+// ── The plan, as main holds it ──────────────────────────────────────────────
+// `pnpm plan` records checkmarks and repository tags on the store's main, so
+// both are read there: this checkout can be behind main, or ticked by hand
+// where main is not. Read before the deploy gate, because the tags say whether
+// a deploy is owed at all.
+const main = storeMain(ROOT);
+if (!main) {
+  fail(
+    yellow(`The store at ${ROOT} has no origin main to read checkmarks on.`),
+    "Run `git remote set-head origin --auto`, then re-run.",
+  );
+  process.exit();
+}
+const tasksFile = `openspec/changes/${changeId}/tasks.md`;
+const tasks = textAt(ROOT, main.commit, tasksFile);
+if (tasks === null && existsSync(join(ROOT, tasksFile))) {
+  fail(
+    yellow(`${tasksFile} is not on ${main.ref}.`),
+    "Nobody can claim or check off a plan main does not hold — merge it first.",
+  );
+  process.exit();
+}
+
 // ── Deploy gate ─────────────────────────────────────────────────────────────
 // The application repo holds the answer (`gh run list --workflow=deploy.yml`
 // and `git merge-base --is-ancestor`, per its archive-change skill); this
@@ -330,7 +374,7 @@ if (deployedAt !== null && deployWaived !== null) {
   );
   process.exit();
 }
-if (deployedAt === null && deployWaived === null) {
+if (deployedAt === null && deployWaived === null && !storeOnly(tasks ?? "")) {
   fail(
     yellow(`No deploy evidence for ${changeId}.`),
     "A change merged is not a change shipped — merging deploys nothing. The",
@@ -386,25 +430,6 @@ if (decisionsCarried !== null && decisionsCarried.trim() === "") {
 
 // ── Tasks gate ──────────────────────────────────────────────────────────────
 // An open checkbox at archive is work nobody did or a checkmark nobody wrote.
-// `pnpm plan` records checkmarks on the store's main, so they are read there:
-// this checkout can be behind main, or ticked by hand where main is not.
-const main = storeMain(ROOT);
-if (!main) {
-  fail(
-    yellow(`The store at ${ROOT} has no origin main to read checkmarks on.`),
-    "Run `git remote set-head origin --auto`, then re-run.",
-  );
-  process.exit();
-}
-const tasksFile = `openspec/changes/${changeId}/tasks.md`;
-const tasks = textAt(ROOT, main.commit, tasksFile);
-if (tasks === null && existsSync(join(ROOT, tasksFile))) {
-  fail(
-    yellow(`${tasksFile} is not on ${main.ref}.`),
-    "Nobody can claim or check off a plan main does not hold — merge it first.",
-  );
-  process.exit();
-}
 const open = openTasks(tasks ?? "");
 if (open.length > 0 && tasksWaived === null) {
   fail(yellow(`${changeId} archives with ${open.length} task(s) unchecked:`));
@@ -685,17 +710,38 @@ if (uncarried.length > 0) {
   );
 }
 
-const rel = writeRecord(changeId, {
+// A store-only change records no deploy key at all: there is no run to name
+// and no waiver owed, and its `tasks.md` repository tags are the record of
+// where every group landed. Writing `deploy_waived` there would put a waiver
+// in the manifest for a rule the change never answered to, and a waiver
+// written where none is owed is how the waiver becomes the default.
+const record = {
   ...(deployedAt !== null
     ? { deployed_at: deployedAt, deployed_env: deployedEnv }
-    : { deploy_waived: deployWaived }),
+    : deployWaived !== null
+      ? { deploy_waived: deployWaived }
+      : {}),
   ...(tasksWaived !== null ? { tasks_waived: tasksWaived } : {}),
-});
+};
 const subject =
   deployedAt !== null
     ? `Record ${changeId} deployed at ${deployedAt} (${deployedEnv})`
-    : `Record ${changeId} archived with the deploy waived`;
+    : deployWaived !== null
+      ? `Record ${changeId} archived with the deploy waived`
+      : `Archive ${changeId}, which deploys nothing`;
 
-console.log(`\nThe record is written into ${bold(rel)}. Commit it:\n`);
-console.log(`  ${cyan(`git -C "${ROOT}" commit ${rel} -m "${subject}"`)}`);
+if (Object.keys(record).length === 0) {
+  console.log(
+    `\nNo deploy record is owed — every task group lands in ${bold(STORE_GROUP)}.`,
+  );
+  console.log(`\nArchive it:\n`);
+  console.log(
+    `  ${cyan(`git -C "${ROOT}" mv openspec/changes/${changeId} openspec/changes/archive/<YYYY-MM-DD>-${changeId}`)}`,
+  );
+  console.log(`  ${cyan(`git -C "${ROOT}" commit -m "${subject}"`)}`);
+} else {
+  const rel = writeRecord(changeId, record);
+  console.log(`\nThe record is written into ${bold(rel)}. Commit it:\n`);
+  console.log(`  ${cyan(`git -C "${ROOT}" commit ${rel} -m "${subject}"`)}`);
+}
 console.log(`\nThen:  ${cyan(`openspec archive ${changeId}`)}`);

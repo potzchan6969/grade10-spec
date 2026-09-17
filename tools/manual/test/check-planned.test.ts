@@ -20,8 +20,10 @@ const decisionsText = ({
   raised = ["| demo-product/alpha | Is a scheduled thing open? | Q1 |"],
   section = true,
   decisions = ["| Q1 | Whether to scope it | Scoped | Leaving it open |"],
+  title = false,
 } = {}) =>
   [
+    ...(title ? ["# Decisions: add the thing", ""] : []),
     "## Goals",
     "",
     "- The thing exists.",
@@ -48,8 +50,13 @@ const decisionsText = ({
       : []),
   ].join("\n");
 
-const designText = (states: string[]) =>
+/** `title` puts a `# ` heading above the sections, which is how most
+ * `ui-design.md` files in the store open. `outline` nests every `##` under it,
+ * so a reader that filtered the roots for level 2 found no states at all and
+ * said nothing about it. */
+const designText = (states: string[], title = true) =>
   [
+    ...(title ? ["# UI: the thing", ""] : []),
     "## Screens",
     "",
     "- The thing's page: https://figma.example/file/abc",
@@ -231,6 +238,14 @@ describe("the raised table in decisions.md", () => {
     ]);
   });
 
+  it("reads the tables under a `# ` title", async () => {
+    const result = await check(
+      store({ decisions: decisionsText({ title: true }) }),
+    );
+    expect(lines(result, "raised")).toEqual([]);
+    expect(lines(result, "asking")).toEqual([]);
+  });
+
   it("asks nothing of a change written before decisions.md existed", async () => {
     const result = await check(store({ decisions: null }));
     expect(lines(result, "raised")).toEqual([]);
@@ -261,9 +276,12 @@ describe("the design states a change draws", () => {
   it("passes a state closed by an out-of-suite line", async () => {
     const result = await check(
       store({
-        design: designText([
-          "- **Offline** — `alpha-US-01` — **Out of suite:** the shell's banner",
-        ]),
+        design: designText(
+          [
+            "- **Offline** — `alpha-US-01` — **Out of suite:** the shell's banner",
+          ],
+          false,
+        ),
       }),
     );
     expect(lines(result, "dressed")).toEqual([]);
@@ -272,6 +290,15 @@ describe("the design states a change draws", () => {
   it("fails a state the requirements left open", async () => {
     const result = await check(
       store({ design: designText(["- **Empty** — `alpha-US-01`"]) }),
+    );
+    expect(lines(result, "dressed")).toEqual([
+      `${DESIGN} — \`**Empty** — \`alpha-US-01\`\` names no scenario and no \`**Out of suite:**\` — the requirements pass closes every state bullet`,
+    ]);
+  });
+
+  it("finds the states under a `# ` title, which is how the store writes them", async () => {
+    const result = await check(
+      store({ design: designText(["- **Empty** — `alpha-US-01`"], true) }),
     );
     expect(lines(result, "dressed")).toEqual([
       `${DESIGN} — \`**Empty** — \`alpha-US-01\`\` names no scenario and no \`**Out of suite:**\` — the requirements pass closes every state bullet`,
