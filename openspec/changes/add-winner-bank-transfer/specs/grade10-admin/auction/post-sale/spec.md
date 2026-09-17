@@ -6,6 +6,7 @@
 - Quote and send
   - Payment method on the quote: the winner's choice decides how the fee is priced
   - Bank transfer fee: entered on every bank transfer invoice, zero or more, with no cap
+  - Edit before send: an operator changes the address or method in Preparing Invoice, on the winner's request, with a reason; the waiting time does not reset
 - Checking proof
   - Confirm: settles the invoice with the winner's files, and the operator's own if added
   - Return to pending: an external and an internal reason, the time left shown, and not offered once expired
@@ -297,6 +298,78 @@ subtotal, the operator enters a bank transfer fee of 0.
 - **WHEN** an operator reissues it changing only the deadline to a fresh 7 days, and sends at 2026-09-15T10:00:00Z with a reason
 - **THEN** the new invoice is `pending` with a payment deadline of 2026-09-22T10:00:00Z
 - **AND** the reissued entry names the deadline as the only changed part
+
+### Requirement: An operator edits the address or method before send
+
+Once the winner confirms, only an operator changes the order's delivery
+address or payment method before the invoice is sent, per
+`grade10-site/auction/winner-order`. An operator holding payment-processing
+SHALL be able to do so on an auction order in Preparing Invoice, on the
+winner's request:
+
+1. Open the order and read the address and method the winner confirmed.
+2. Enter a new delivery address, choose the other payment method, or both.
+3. Enter a reason. It is required.
+4. Commit.
+
+| Rule | Value |
+| --- | --- |
+| Order status after the edit | Preparing Invoice |
+| Changes allowed | Delivery address, payment method, or both. At least one SHALL differ from what the order holds |
+| Bank transfer | Refused on an order whose currency has no bank details set up. Card only for USD and JPY |
+| Invoice log entry | Order edited before send: the named operator, the reason, each part that changed, and its value before and after |
+| Preparing Invoice waiting time | Unchanged. It counts from the winner's confirmation, per "The order detail shows how long an order has waited" |
+
+The order SHALL hold the new address as its snapshot and the new method, and
+Winner Order SHALL show them. Grade10 SHALL refuse an edit with no reason,
+and an edit that changes nothing. The edit SHALL NOT be offered once the
+invoice is sent; a change after send is a reissue, per "An operator reissues
+a sent invoice". An operator without payment-processing SHALL see the edit
+control visible and disabled, and Grade10 SHALL refuse the same action on the
+server.
+
+#### Scenario: grade10-admin-auction-post-sale-SC-135 - An edit before send is recorded with its reason
+**Serves:** Quote and send - edit before send
+
+- **GIVEN** an auction order in HKD in Preparing Invoice whose winner confirmed the home address and card
+- **AND** an operator holding payment-processing
+- **WHEN** they change the address to the work address and the method to bank transfer, with the reason "Winner asked by email"
+- **THEN** the order holds the work address and bank transfer
+- **AND** the order is still Preparing Invoice
+- **AND** the invoice log shows an order edited before send entry naming the operator, the reason, and the address and method before and after
+
+#### Scenario: grade10-admin-auction-post-sale-SC-136 - An edit without a reason is refused
+**Serves:** Quote and send - edit before send
+
+- **GIVEN** an auction order in Preparing Invoice
+- **WHEN** an operator holding payment-processing commits a new address with the reason empty
+- **THEN** Grade10 refuses it
+- **AND** the order keeps the address the winner confirmed
+
+#### Scenario: grade10-admin-auction-post-sale-SC-137 - Staff cannot edit before send
+**Serves:** Quote and send - edit before send
+
+- **GIVEN** an operator whose roles are exactly `staff`
+- **WHEN** they open an auction order in Preparing Invoice
+- **THEN** the edit control is visible and disabled
+- **AND** Grade10 refuses an edit from them on the server
+
+#### Scenario: grade10-admin-auction-post-sale-SC-138 - A USD order cannot be edited to bank transfer
+**Serves:** Quote and send - edit before send
+
+- **GIVEN** an auction order in USD in Preparing Invoice whose winner confirmed card
+- **WHEN** an operator holding payment-processing changes the method to bank transfer with a reason
+- **THEN** Grade10 refuses it
+- **AND** the order still holds card
+
+#### Scenario: grade10-admin-auction-post-sale-SC-139 - An edit does not reset the waiting time
+**Serves:** Quote and send - edit before send
+
+- **GIVEN** an auction order whose winner confirmed an address at 2026-09-12T09:00:00Z
+- **WHEN** an operator edits its address with a reason at 2026-09-14T09:00:00Z
+- **AND** an operator opens the order at 2026-09-15T09:00:00Z
+- **THEN** the detail shows it has waited 72 hours since the winner's confirmation
+- **AND** it carries the Overdue mark
 
 ## MODIFIED Requirements
 
@@ -747,7 +820,7 @@ receipt's receipt ID and internal audit number, per
 
 | Field | Notes |
 | --- | --- |
-| Log type | Sent, expired, reissued, proof uploaded, proof confirmed, proof returned, paid, manually settled, cancelled, refunded, payment attempt failed |
+| Log type | Order edited before send, sent, expired, reissued, proof uploaded, proof confirmed, proof returned, paid, manually settled, cancelled, refunded, payment attempt failed |
 | Timestamp | Stored in UTC, displayed in the operator's own timezone |
 | Invoice ID | The invoice the entry concerns |
 | Internal audit number | Sent, reissued, paid and manually settled entries: the number of the invoice or receipt the entry issued |
@@ -757,7 +830,7 @@ receipt's receipt ID and internal audit number, per
 | Payment deadline at the log entry | The deadline trail across reissues and returned proof |
 | Time left | Proof uploaded and proof returned entries |
 | Deadline choice | Reissues only: kept or restarted |
-| Changed parts | Reissues only: each of delivery address, payment method, bank transfer fee, Shipping & Handling, Insurance and deadline that changed |
+| Changed parts | Order edited before send: delivery address, payment method or both, with each value before and after. Reissues: each of delivery address, payment method, bank transfer fee, Shipping & Handling, Insurance and deadline that changed |
 | Reissue sequence number | Where the log entry is a reissue |
 | Actor | The buyer, the system, or a named operator |
 | Payment method | Paid entries: a card with its brand and last four digits, or bank transfer, cash, or other with its description |

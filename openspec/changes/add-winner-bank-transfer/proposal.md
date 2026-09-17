@@ -22,10 +22,16 @@ is watched from the first release.
   only method a winner is offered. The card-only rule from
   `revise-auction-winner-invoicing` is reversed.
 - **The winner chooses a payment method with the address.** Confirming a
-  delivery address also records card or bank transfer. The choice shows a fee
-  range Grade10 sets as fixed text; the bank transfer text names no amount.
-  Bank transfer is offered only in a currency with bank details set up — HKD
-  at launch.
+  delivery address also records card or bank transfer. Nothing is
+  preselected and a choice is required. The choice shows a fee range Grade10
+  sets as fixed text; the bank transfer text names no amount. Bank transfer
+  is offered only in a currency with bank details set up — HKD at launch.
+- **BREAKING — The winner's choice locks on confirming.** Once the winner
+  confirms the address and method, the order reads Preparing Invoice and the
+  winner changes neither, before or after send. This reverses main's rule
+  that the winner may change the address until the invoice is sent. Editing
+  or archiving a saved address never changes an order; archiving is refused
+  only for an address selected on an order not yet confirmed.
 - **BREAKING — Payment Processing Fee is priced by method and never dropped.**
   For card it stays the provider gross-up read at send. For bank transfer the
   operator enters it on every invoice: required, zero or more, no cap, and
@@ -66,8 +72,12 @@ is watched from the first release.
   Shipping & Handling, Insurance, and the deadline (kept or restarted), always
   with a reason. The invoice log names what changed. The bank transfer fee
   starts from the previous invoice's, or empty after a switch from card.
-- **Only an operator changes the payment method after send.** The fee may
-  change, so a person prices it.
+- **An operator changes the address or method after the winner confirms.**
+  Before send, an operator holding payment-processing edits the order on the
+  winner's request, with a required reason written to the invoice log; the
+  order stays Preparing Invoice and its waiting time does not restart. Bank
+  transfer is refused in a currency with no bank details. After send, the
+  change is a Reissue. The fee may change, so a person prices it.
 - **A replaced invoice reads as replaced.** It takes no status of its own and
   is never `cancelled`; Grade10 reads "replaced" from the invoice chain, and
   its PDF says which invoice replaced it.
@@ -106,8 +116,8 @@ is watched from the first release.
   SWIFT's 35-character line.
 - **Formal tax receipt** — whether a receipt must carry Grade10's company
   details and tax ID — Finance.
-- **How the winner asks** for a new address or payment method after send —
-  Design, in `ui-design.md`.
+- **How the winner asks** for a new address or payment method after
+  confirming — Design, in `ui-design.md`.
 
 ## Capabilities
 
@@ -118,6 +128,8 @@ None.
 ### Modified Capabilities
 
 - `grade10-site/auction/winner-order`: method choice at address confirmation;
+  the address and method locked for the winner once confirmed, and the
+  address book rule that follows;
   the fee priced by method and never dropped; bank transfer details and the
   invoice ID, bank reference, listing code and internal audit number; the
   one-time proof upload; Payment Verifying and its return, showing the latest
@@ -131,7 +143,8 @@ None.
 - `grade10-site/auction/account-record`: the winner's row shows Payment
   Verifying.
 - `grade10-admin/auction/post-sale`: the Payment Verifying outcome; the bank
-  transfer fee on the quote; confirming and returning proof; one Reissue
+  transfer fee on the quote; an operator's edit of the address or method
+  before send; confirming and returning proof; one Reissue
   action that must change something; proof on every operator settlement;
   search by listing code, invoice ID or bank reference; the internal audit
   number on the order and the log.
@@ -140,9 +153,9 @@ None.
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/grade10` | Method choice with the address; bank transfer details, bank reference and Copy Reference Code; invoice and receipt IDs; the receipt breakdown; proof upload and its confirm step; the Payment Verifying state; the returned-proof reason. My Auctions shows Payment Verifying. |
-| `apps/admin/grade10` | Bank transfer fee on the quote; the Payment Verifying outcome and filter; confirm and return with two reasons and the time left; one Reissue form; search by listing code, invoice ID or bank reference; internal audit numbers on the order and log. |
-| Auction service | The `payment_verifying` status and stopped deadline; method and fee on the order and invoice; winner proof storage; one reissue command; replaced invoices read from the chain; listing codes assigned by publish; invoice IDs, bank references, receipt IDs and the gapless internal audit number; lookup by any identifier; PDF archive kept at least 7 years. |
+| `apps/frontend/grade10` | Method choice with the address, locked once confirmed; bank transfer details, bank reference and Copy Reference Code; invoice and receipt IDs; the receipt breakdown; proof upload and its confirm step; the Payment Verifying state; the returned-proof reason. My Auctions shows Payment Verifying. |
+| `apps/admin/grade10` | Bank transfer fee on the quote; the edit before send with its reason; the Payment Verifying outcome and filter; confirm and return with two reasons and the time left; one Reissue form; search by listing code, invoice ID or bank reference; internal audit numbers on the order and log. |
+| Auction service | The winner's address and method locked on confirmation, and the operator edit before send with its log entry; the `payment_verifying` status and stopped deadline; method and fee on the order and invoice; winner proof storage; one reissue command; replaced invoices read from the chain; listing codes assigned by publish; invoice IDs, bank references, receipt IDs and the gapless internal audit number; lookup by any identifier; PDF archive kept at least 7 years. |
 | Notification service | The proof-not-accepted letter; reminders held while proof is checked. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. New copy is catalog work for the engineer. |
 

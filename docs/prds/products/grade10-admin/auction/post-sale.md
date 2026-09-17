@@ -30,7 +30,7 @@ The queue works every winner order from lot close through delivery in one place.
 
 The winning bid-time hold is released rather than captured, and every failed payment attempt remains in the invoice log.
 
-The winner confirms a delivery address before an operator quotes the invoice. The operator enters shipping and insurance for that address, sends the invoice, locks the address, and starts the seven-day payment window. A later address change is handled by an operator re-quote with a mandatory reason and a choice to keep or reset the deadline.
+The winner confirms a delivery address and a payment method before an operator quotes the invoice. The operator enters shipping and insurance for that address, sends the invoice, and starts the seven-day payment window. A later change is made by an operator, as the lines below say.
 
 What the operator enters and reads on a quote:
 
@@ -42,6 +42,7 @@ What the operator enters and reads on a quote:
 
 A winner order reaches paid through one fresh card payment or one operator-recorded manual settlement. An expired invoice stays payable, and a reissue returns it to pending with a new deadline.
 
+- 🚧 **Edit before send** — on a Preparing Invoice order, at the winner's request, the operator changes the address, the payment method or both, with a reason the invoice log keeps beside the old and new values; the order stays Preparing Invoice and its waiting time does not restart. Bank transfer only in a currency with bank details — HKD at launch
 - 🚧 **Reissue** — one action for any change after send: address, payment method, bank transfer fee, shipping, insurance, and the deadline kept or restarted, always with a reason and at least one change; the bank transfer fee starts from the previous invoice's
 - 🚧 **Checking proof** — on a Payment Verifying order the operator confirms the payment, with the winner's files as proof and their own added if they wish, or returns the invoice to pending with a reason the winner reads and a reason kept internal; the prompt shows the time left, and returning is not offered once the invoice has expired
 - 🚧 **Internal audit number** — every invoice and receipt carries one gapless number, such as `#00010482`, shown on the order and in the invoice log and never to the winner; a replaced invoice keeps its number

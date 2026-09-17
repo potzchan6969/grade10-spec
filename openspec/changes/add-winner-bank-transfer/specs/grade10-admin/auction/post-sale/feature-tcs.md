@@ -936,6 +936,159 @@ Runs once per row of **Test data**.
 * It carries a new invoice ID and bank reference.
 * The entry names the deadline as the only changed part.
 
+### post-sale-US7-TC27-1: An edit before send changes the address and method and is logged
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Quote and send
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* <order_1> is an HKD order that reads Preparing Invoice, with the home address and card confirmed by the winner.
+
+**Steps:**
+
+1. Open the edit on <order_1>.
+2. Change the address to the work address and the method to bank transfer.
+3. Enter the reason "Winner asked by email" and commit.
+4. Read the invoice log.
+
+**Expected Results:**
+
+* <order_1> holds the work address and bank transfer, and still reads Preparing Invoice.
+* The log shows an order edited before send entry with the operator, the reason, and the address and method before and after.
+* The winner's Winner Order shows the work address and bank transfer.
+
+### post-sale-US7-TC28-1: An edit before send without a reason is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Quote and send
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* <order_1> reads Preparing Invoice with the home address confirmed.
+
+**Steps:**
+
+1. Open the edit on <order_1>.
+2. Change the address to the work address, leave the reason empty, and commit.
+
+**Expected Results:**
+
+* The commit is refused.
+* <order_1> still holds the home address, and the log has no new entry.
+
+### post-sale-US7-TC29-1: Staff without payment processing cannot edit before send
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Quote and send
+
+**Pre-conditions:**
+
+* admin(roles exactly `staff`) is on <order_1> in <grade10 auction admin post-sale url>.
+* <order_1> reads Preparing Invoice.
+
+**Steps:**
+
+1. Look at the edit control.
+2. Send an address edit with a reason for <order_1> from outside the page.
+
+**Expected Results:**
+
+* Step 1 shows the control visible and disabled.
+* Step 2 is refused; <order_1> is unchanged.
+
+### post-sale-US7-TC30-1: A USD order cannot be edited to bank transfer
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Quote and send
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* <order_1> is a USD order that reads Preparing Invoice with card confirmed.
+
+**Steps:**
+
+1. Open the edit on <order_1>.
+2. Choose bank transfer, enter a reason, and commit.
+
+**Expected Results:**
+
+* The commit is refused.
+* <order_1> still holds card.
+
+### post-sale-US7-TC31-1: An edit before send does not reset the waiting time
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Quote and send
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* The winner confirmed <order_1>'s address at 2026-09-12T09:00:00Z.
+
+**Steps:**
+
+1. Edit the address with a reason at 2026-09-14T09:00:00Z.
+2. Open <order_1> at 2026-09-15T09:00:00Z.
+
+**Expected Results:**
+
+* The detail shows 72 hours waited since the winner's confirmation.
+* <order_1> carries the Overdue mark.
+
 ---
 
 ## post-sale-US8: Operator reconstructs an order's history
@@ -1456,7 +1609,9 @@ Runs once per row of **Test data**.
 | `grade10-admin-auction-post-sale-SC-132`: operators read the internal audit numbers | From decision 19, not from a case; added `post-sale-US8-TC8-1` |
 | `grade10-admin-auction-post-sale-SC-104`: only the external reason reaches the winner | Reached from the winner side by `winner-order-US10-TC2-1` and `order-mail-US1-TC1-1` |
 
-**Folded:** `grade10-admin-auction-post-sale-SC-125`, `grade10-admin-auction-post-sale-SC-126`, `grade10-admin-auction-post-sale-SC-127`, `grade10-admin-auction-post-sale-SC-128`, `grade10-admin-auction-post-sale-SC-129`, `grade10-admin-auction-post-sale-SC-130`. From the author's identifier answers, not from a case: `grade10-admin-auction-post-sale-SC-131`, `grade10-admin-auction-post-sale-SC-132`, `grade10-admin-auction-post-sale-SC-133`, `grade10-admin-auction-post-sale-SC-134`.
+| `grade10-admin-auction-post-sale-SC-135` to `grade10-admin-auction-post-sale-SC-139`: an operator edits the address or method before send | From the author's decisions 24 to 27, not from a case; added `post-sale-US7-TC27-1` to `post-sale-US7-TC31-1` |
+
+**Folded:** `grade10-admin-auction-post-sale-SC-125`, `grade10-admin-auction-post-sale-SC-126`, `grade10-admin-auction-post-sale-SC-127`, `grade10-admin-auction-post-sale-SC-128`, `grade10-admin-auction-post-sale-SC-129`, `grade10-admin-auction-post-sale-SC-130`. From the author's identifier answers, not from a case: `grade10-admin-auction-post-sale-SC-131`, `grade10-admin-auction-post-sale-SC-132`, `grade10-admin-auction-post-sale-SC-133`, `grade10-admin-auction-post-sale-SC-134`. From the author's lock decisions, not from a case: `grade10-admin-auction-post-sale-SC-135`, `grade10-admin-auction-post-sale-SC-136`, `grade10-admin-auction-post-sale-SC-137`, `grade10-admin-auction-post-sale-SC-138`, `grade10-admin-auction-post-sale-SC-139`.
 
 **Rejected:** none.
 
@@ -1465,7 +1620,7 @@ Runs once per row of **Test data**.
 1. **Proof on an expired invoice**: refused. Return stays refused on an expired invoice as a guard; it cannot be reached, because the deadline stops while proof is checked.
 2. **Operator actions while Payment Verifying**: Confirm or Return only. Cancel, Reissue and manual settlement are refused.
 3. **Deadline on an expired reissue**: always a fresh 7 days from send. Keeping the current deadline is offered only on a `pending` invoice.
-4. **Method choice**: nothing preselected. A confirmation without a method is refused. The winner changes the method freely until the invoice is sent; after that only an operator does.
+4. **Method choice**: nothing preselected. A confirmation without a method is refused. The winner changes the method freely until they confirm; decision 24 reversed the earlier "until the invoice is sent".
 5. **After a return**: reminders resume on the paused clock. A reminder whose time passed during the check is not sent late, and one already sent is not repeated. The proof-not-accepted letter gives the new deadline as a date and time in the winner's zone ("Pay by …") and the external reason.
 6. **Grace after a return**: none. The return prompt shows the time left, so the operator can reissue with a fresh 7 days instead.
 7. **What the winner sees of proof**: a confirmed-proof receipt reads Bank transfer and is not marked manually settled. No proof file or file name reaches the winner anywhere; only the Payment Verifying state shows that proof was sent.
@@ -1486,7 +1641,14 @@ Runs once per row of **Test data**.
 22. **Reissue with no change**: refused; a new reason alone is not a change.
 23. **Operator search**: by listing code, invoice ID or bank reference. Where the search sits is design.
 
-Decisions 1, 2, 3, 8, 9, 10 and 11 changed the cases named above in the grilling round; decisions 22 and 23 changed them in the identifier patch.
+Decisions 24 to 27 are from the lock patch, 2026-09-17. They reverse decision 4's "until the invoice is sent" and main's rule that the winner changes the address before send:
+
+24. **The winner's choice locks on confirmation**: once the winner confirms the address and method, the order reads Preparing Invoice and the winner changes neither, before or after send.
+25. **An operator edits before send**: in Preparing Invoice, an operator holding payment-processing changes the address, the method or both, on the winner's request, with a required reason, written to the invoice log with each value before and after. The order stays Preparing Invoice and the waiting time does not reset. Staff without the grant see the control disabled and are refused on the server. Bank transfer is refused where the currency has no bank details. How the winner asks is Design's.
+26. **After send**: unchanged; only an operator changes them, through a reissue.
+27. **Address book**: editing or archiving a saved address never changes an order's snapshot.
+
+Decisions 1, 2, 3, 8, 9, 10 and 11 changed the cases named above in the grilling round; decisions 22 and 23 changed them in the identifier patch. Decisions 24 to 27 changed no existing case; they added the five named above.
 
 **Still blocked:**
 

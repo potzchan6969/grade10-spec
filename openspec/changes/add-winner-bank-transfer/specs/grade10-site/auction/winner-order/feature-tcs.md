@@ -397,35 +397,37 @@ Runs once per row of **Test data**.
 * Step 2 is refused; the invoice method stays card.
 * The fee and Order Total are unchanged.
 
-### winner-order-US1-TC23-1: The winner changes the method before the invoice is sent
+### winner-order-US1-TC23-1: The winner cannot change the address or method after confirming
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
+* **Behaviour:** negative
+* **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** winner-order-US-01
 
 **Pre-conditions:**
 
 * customer(winner of <lot_1>) is signed in on <grade10 winner order url>.
-* <lot_1> reads Preparing Invoice with card recorded.
+* <lot_1> is an HKD lot that reads Preparing Invoice, with the home address and card confirmed.
 
 **Steps:**
 
-1. Choose bank transfer.
-2. Confirm.
+1. Look for a control to change the address or the payment method.
+2. Send an address change to the work address for <lot_1> from outside the page.
+3. Send a method change to bank transfer for <lot_1> from outside the page.
 
 **Expected Results:**
 
-* The order records bank transfer.
-* The order still reads Preparing Invoice.
+* Step 1 finds neither control; the order says a change goes through Grade10.
+* Steps 2 and 3 are refused.
+* The order still holds the home address and card, and still reads Preparing Invoice.
 
 
 ### winner-order-US1-TC24-1: A replaced invoice reads as replaced and names its replacement
@@ -726,6 +728,98 @@ Runs once per row of **Test data**.
 * <invoice_2> holds `#00010483`.
 * The receipt holds `#00010484`.
 * <invoice_1> still holds `#00010482` after it is replaced.
+
+### winner-order-US1-TC33-1: The winner changes the method before confirming
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1>) is signed in on <grade10 winner order url>.
+* <lot_1> is an HKD lot that reads Awaiting Address.
+
+**Steps:**
+
+1. Choose a saved delivery address and card.
+2. Change the choice to bank transfer.
+3. Confirm the address.
+
+**Expected Results:**
+
+* The order records bank transfer.
+* The order reads Preparing Invoice.
+
+### winner-order-US1-TC34-1: The winner sees an operator's edit before send
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1>) is signed in on <grade10 winner order url>.
+* <lot_1> is an HKD lot that reads Preparing Invoice, with the home address and card confirmed.
+* An operator has edited <lot_1> to the work address and bank transfer.
+
+**Steps:**
+
+1. Open <grade10 winner order url> for <lot_1>.
+
+**Expected Results:**
+
+* The order shows the work address and bank transfer.
+* The order offers no control to change either.
+* The order still reads Preparing Invoice.
+
+### winner-order-US1-TC35-1: Archiving a confirmed order's address leaves the order unchanged
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1>) is signed in.
+* <lot_1> reads Preparing Invoice with the saved work address confirmed.
+
+**Steps:**
+
+1. Archive the work address in the account address book.
+2. Open <grade10 winner order url> for <lot_1>.
+
+**Expected Results:**
+
+* Step 1 archives the work address.
+* Step 2 shows the work address on the order.
 
 ---
 
@@ -1955,7 +2049,7 @@ Runs once per row of **Test data**.
 | `winner-order-US1-TC20-1`: a card invoice shows card Pay only | Matches `winner-order-SC-35` |
 | `winner-order-US1-TC21-1`: two lots keep their own methods | Reached by `winner-order-SC-35` and `winner-order-SC-95`, which hold per order; no new scenario |
 | `winner-order-US1-TC22-1`: no method change after send | Matches `winner-order-SC-106` |
-| `winner-order-US1-TC23-1`: method change before send | Settled by decision 4; matches `winner-order-SC-93`; the case no longer changes the address as well |
+| `winner-order-US1-TC23-1`: method change before send | Settled by decision 4, then reversed by decision 24: the case now expects the winner's address and method change to be refused in Preparing Invoice; matches `winner-order-SC-136` |
 | `winner-order-US1-TC24-1`: a replaced invoice names its replacement | Matches `winner-order-SC-98` and `winner-order-SC-109`; where the winner reaches the replaced PDF stays open |
 | `winner-order-US1-TC25-1`: the first reference still finds the order | Matches `winner-order-SC-97`; the scenarios give each invoice its own reference, so the case now expects two references; blocked line removed. Decision 15 adds the invoice ID and bank reference lookups |
 | `winner-order-US2-TC4-1`: every receipt has a number | Matches `winner-order-SC-112` |
@@ -1992,9 +2086,10 @@ Runs once per row of **Test data**.
 | `winner-order-SC-129`, `winner-order-SC-130`: the internal audit number | From decision 19, not from a case; added `winner-order-US1-TC31-1` and `winner-order-US1-TC32-1` |
 | `winner-order-SC-131`: the receipt ID and breakdown | From decisions 16 and 17, not from a case; added `winner-order-US2-TC9-1`; `winner-order-US2-TC4-1` now reads the receipt ID |
 | `winner-order-SC-133`: documents outlive a deleted account | From decision 20, not from a case; added `winner-order-US2-TC10-1` |
+| `winner-order-SC-93`, `winner-order-SC-136`, `winner-order-SC-137`, `winner-order-SC-138`: the choice locks on confirmation | From the author's decisions 24 to 27, not from a case; `winner-order-SC-93` rewritten in place; added `winner-order-US1-TC33-1`, `winner-order-US1-TC34-1` and `winner-order-US1-TC35-1`, and `winner-order-US1-TC23-1` changed |
 | Folded from #466 (`add-auction-winner-receipt`) | Its repeated-confirmation rule, with the `REC-` receipt ID; folded as `winner-order-SC-135` and walked by `winner-order-US2-TC11-1` |
 
-**Folded:** `winner-order-SC-114`, `winner-order-SC-115`, `winner-order-SC-116`, `winner-order-SC-117`, `winner-order-SC-118`, `winner-order-SC-119`, `winner-order-SC-120`, `winner-order-SC-121`. From the author's identifier answers, not from a case: `winner-order-SC-122`, `winner-order-SC-123`, `winner-order-SC-124`, `winner-order-SC-125`, `winner-order-SC-126`, `winner-order-SC-127`, `winner-order-SC-128`, `winner-order-SC-129`, `winner-order-SC-130`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-133`, `winner-order-SC-134`.
+**Folded:** `winner-order-SC-114`, `winner-order-SC-115`, `winner-order-SC-116`, `winner-order-SC-117`, `winner-order-SC-118`, `winner-order-SC-119`, `winner-order-SC-120`, `winner-order-SC-121`. From the author's identifier answers, not from a case: `winner-order-SC-122`, `winner-order-SC-123`, `winner-order-SC-124`, `winner-order-SC-125`, `winner-order-SC-126`, `winner-order-SC-127`, `winner-order-SC-128`, `winner-order-SC-129`, `winner-order-SC-130`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-133`, `winner-order-SC-134`. From the author's lock decisions, not from a case: `winner-order-SC-136`, `winner-order-SC-137`, `winner-order-SC-138`.
 
 **Rejected:** none.
 
@@ -2003,7 +2098,7 @@ Runs once per row of **Test data**.
 1. **Proof on an expired invoice**: refused. Return stays refused on an expired invoice as a guard; it cannot be reached, because the deadline stops while proof is checked.
 2. **Operator actions while Payment Verifying**: Confirm or Return only. Cancel, Reissue and manual settlement are refused.
 3. **Deadline on an expired reissue**: always a fresh 7 days from send. Keeping the current deadline is offered only on a `pending` invoice.
-4. **Method choice**: nothing preselected. A confirmation without a method is refused. The winner changes the method freely until the invoice is sent; after that only an operator does.
+4. **Method choice**: nothing preselected. A confirmation without a method is refused. The winner changes the method freely until they confirm; decision 24 reversed the earlier "until the invoice is sent".
 5. **After a return**: reminders resume on the paused clock. A reminder whose time passed during the check is not sent late, and one already sent is not repeated. The proof-not-accepted letter gives the new deadline as a date and time in the winner's zone ("Pay by …") and the external reason.
 6. **Grace after a return**: none. The return prompt shows the time left, so the operator can reissue with a fresh 7 days instead.
 7. **What the winner sees of proof**: a confirmed-proof receipt reads Bank transfer and is not marked manually settled. No proof file or file name reaches the winner anywhere; only the Payment Verifying state shows that proof was sent.
@@ -2024,7 +2119,14 @@ Runs once per row of **Test data**.
 22. **Reissue with no change**: refused; a new reason alone is not a change.
 23. **Operator search**: by listing code, invoice ID or bank reference.
 
-Decisions 1, 4, 6, 7, 8 and 10 changed the cases named above in the grilling round; decisions 12, 15, 17 and 21 changed them in the identifier patch.
+Decisions 24 to 27 are from the lock patch, 2026-09-17. They reverse decision 4's "until the invoice is sent" and main's rule that the winner changes the address before send:
+
+24. **The winner's choice locks on confirmation**: once the winner confirms the address and method, the order reads Preparing Invoice and the winner changes neither, before or after send. Before confirming, the winner chooses freely.
+25. **An operator edits before send**: in Preparing Invoice, an operator holding payment-processing changes the address, the method or both, on the winner's request, with a required reason, written to the invoice log. The order stays Preparing Invoice, the winner sees the new values, and the waiting time does not reset. Bank transfer is refused where the currency has no bank details. How the winner asks is Design's.
+26. **After send**: unchanged; only an operator changes them, through a reissue.
+27. **Address book**: editing or archiving a saved address never changes an order's snapshot. Archiving is refused only for an address selected on an order still in Awaiting Address and not yet confirmed.
+
+Decisions 1, 4, 6, 7, 8 and 10 changed the cases named above in the grilling round; decisions 12, 15, 17 and 21 changed them in the identifier patch; decision 24 changed `winner-order-US1-TC23-1` in the lock patch.
 
 **Still blocked:**
 

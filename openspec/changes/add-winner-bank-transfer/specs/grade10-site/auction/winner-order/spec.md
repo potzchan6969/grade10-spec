@@ -10,6 +10,7 @@ and the receipt, tracker and delivery proof the order keeps afterwards.
   - Chosen with the address: card or bank transfer, recorded when the winner confirms where to ship
   - Fee range at the choice: fixed text Grade10 sets, with no amount for bank transfer
   - Offered by currency: bank transfer only where bank details are set up
+  - Locked on confirmation: once the winner confirms, they change neither the address nor the method; an operator edits them before send and reissues after
 - Invoice
   - Fee priced by method: Payment Processing Fee is the card gross-up or the operator's bank transfer fee, never dropped
   - Identifier formats: an invoice ID and a bank reference built from the listing code, the month and the invoice count; a reissue takes new ones, and an old one still finds the order
@@ -50,10 +51,10 @@ Grade10 SHALL offer bank transfer only in a currency with bank details set up.
 | JPY | Card |
 
 Grade10 SHALL refuse a confirmation with no method chosen, and SHALL refuse
-bank transfer on an order whose currency does not offer it. Until the invoice
-is sent, the winner SHALL be able to change the method the same way they
-change the address; nothing is reissued. After send, only an operator changes
-it, per "The delivery address locks when the invoice is sent".
+bank transfer on an order whose currency does not offer it. Until the winner
+confirms, they SHALL be able to change the method freely. Once they confirm,
+the method locks for the winner, per "The delivery address locks when the
+invoice is sent".
 
 #### Scenario: winner-order-SC-90 - The method is recorded with the address
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
@@ -80,13 +81,13 @@ it, per "The delivery address locks when the invoice is sent".
 - **THEN** only card is offered
 - **AND** a confirmation carrying bank transfer for that order is refused
 
-#### Scenario: winner-order-SC-93 - The method can change before the invoice is sent
+#### Scenario: winner-order-SC-93 - The method can change until the winner confirms
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
-- **GIVEN** an auction order in HKD in Preparing Invoice whose recorded method is card
-- **WHEN** the winner changes the method to bank transfer and confirms
+- **GIVEN** an auction order in HKD Awaiting Address on which the winner has chosen card and not yet confirmed
+- **WHEN** the winner changes the choice to bank transfer and confirms the address
 - **THEN** the order records bank transfer
-- **AND** the order is still Preparing Invoice
+- **AND** the order derives as Preparing Invoice
 
 #### Scenario: winner-order-SC-94 - A confirmation with no method is refused
 **Serves:** Payment method - card or bank transfer recorded with the address
@@ -451,12 +452,23 @@ external reason; the invoice log keeps every reason, per
 
 ### Requirement: The delivery address locks when the invoice is sent
 
+The name is historical: the address and the payment method now lock for the
+winner when the winner confirms them, before the invoice is sent.
+
 Grade10 SHALL lock the delivery address and the payment method on an auction
-order when an operator sends its invoice, and SHALL offer the winner no
-self-service change to either afterwards. The order SHALL show the locked
-address and method and that a change goes through Grade10. A change of
-address or method after send SHALL happen only through an operator reissue,
-per `grade10-admin/auction/post-sale`.
+order for the winner when the winner confirms them, and SHALL offer the
+winner no self-service change to either afterwards, before or after the
+invoice is sent. The order SHALL show the locked address and method and that
+a change goes through Grade10.
+
+| Order stage | Who changes the address or method |
+| --- | --- |
+| Awaiting Address | The winner, freely, until they confirm |
+| Preparing Invoice | Only an operator, per "An operator edits the address or method before send" in `grade10-admin/auction/post-sale`. The order stays Preparing Invoice |
+| After the invoice is sent | Only an operator, through a reissue, per `grade10-admin/auction/post-sale` |
+
+Winner Order SHALL show the address and method the order currently holds,
+including an operator's edit.
 
 Grade10 SHALL NOT offer a partial refund or a supplementary charge for a
 shipping difference discovered after payment.
@@ -484,6 +496,130 @@ shipping difference discovered after payment.
 - **WHEN** the winner attempts to change the payment method to bank transfer
 - **THEN** Grade10 refuses the change
 - **AND** the invoice's method is still card
+
+#### Scenario: winner-order-SC-136 - A confirmed order refuses the winner's address or method change
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order in HKD in Preparing Invoice whose winner confirmed the home address and card
+- **WHEN** the winner attempts to change the delivery address to the work address, or the payment method to bank transfer
+- **THEN** Grade10 refuses each change
+- **AND** the order still holds the home address and card
+- **AND** the order shows that a change goes through Grade10
+- **AND** the order is still Preparing Invoice
+
+#### Scenario: winner-order-SC-137 - The winner sees an operator's edit before send
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order in HKD in Preparing Invoice whose winner confirmed the home address and card
+- **WHEN** an operator edits the order to the work address and bank transfer
+- **AND** the winner opens Winner Order
+- **THEN** the order shows the work address and bank transfer
+- **AND** the winner is offered no control to change either
+
+### Requirement: The account owns a reusable shipping address book
+
+The platform auth service SHALL own the account's shipping address book. One
+account SHALL be able to keep multiple named shipping addresses and SHALL have
+at most one default. The address book SHALL be available across storefronts
+that the account can use.
+
+The winner order SHALL allow the winner to choose any saved address, add a new
+address, edit an unused address, archive an address, and change the default.
+An address selected for an order SHALL be copied into the order as a snapshot;
+editing or archiving the saved address later SHALL NOT change that order.
+The platform SHALL refuse to archive an address selected on an order in
+Awaiting Address that the winner has not yet confirmed, unless the winner
+first selects another address for that order. Once the winner confirms, the
+order holds its own snapshot: archiving the saved address is allowed and
+leaves the order unchanged.
+
+#### Scenario: winner-order-SC-22 - An account keeps multiple shipping addresses
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an account with no saved shipping addresses
+- **WHEN** the winner saves a home address and a work address
+- **THEN** both named addresses are available in the account address book
+- **AND** the winner can choose either address for an auction order
+
+#### Scenario: winner-order-SC-23 - The account has one optional default
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an account with a home address set as its default
+- **WHEN** the winner makes the work address the default
+- **THEN** the work address is the only default
+- **AND** a later order is pre-filled from the work address
+
+#### Scenario: winner-order-SC-24 - Editing a saved address does not rewrite an order
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an unpaid order whose delivery snapshot uses the home address
+- **WHEN** the winner edits the saved home address in the account address book
+- **THEN** the saved home address has the new value
+- **AND** the order keeps the address snapshot it already showed
+
+#### Scenario: winner-order-SC-25 - A selected address cannot be archived silently
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an order in Awaiting Address on which the winner has selected the work address and not yet confirmed it
+- **WHEN** the winner tries to archive the work address
+- **THEN** Grade10 asks the winner to select another address for that order
+- **AND** does not remove the address while it remains selected
+
+#### Scenario: winner-order-SC-138 - Archiving a confirmed order's address leaves the order unchanged
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an order in Preparing Invoice whose winner confirmed the work address
+- **WHEN** the winner archives the work address in the account address book
+- **THEN** Grade10 archives it
+- **AND** the order still holds the work address snapshot
+
+### Requirement: A lot close opens an order that waits for the winner's address
+
+At lot close Grade10 SHALL, for the winner:
+
+1. Create one auction order for the lot, with invoice status `not_issued` and
+   fulfilment status `unfulfilled`, per `grade10-site/auction/order-status`.
+2. Release the winner's existing bid-time authorization, when one exists.
+3. Notify the winner that they have won and ask them to confirm a delivery
+   address, per `grade10-site/auction/notifications-order`.
+
+Grade10 SHALL NOT issue an invoice at lot close, and SHALL offer the winner no
+way to pay until an operator has sent one.
+
+When the winner confirms a delivery address, the order SHALL become ready for
+an operator to quote, per `grade10-admin/auction/post-sale`. From then on the
+winner SHALL NOT change the address, per "The delivery address locks when the
+invoice is sent".
+
+Order creation, hold release and the winner notice SHALL be idempotent. A lot
+close delivered more than once SHALL produce one auction order.
+
+#### Scenario: winner-order-SC-26 - A lot close asks for an address, not payment
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** a lot closing with a winner
+- **WHEN** the lot closes
+- **THEN** Grade10 creates one auction order with invoice status `not_issued`
+  and fulfilment status `unfulfilled`
+- **AND** issues no invoice
+- **AND** asks the winner to confirm a delivery address
+
+#### Scenario: winner-order-SC-27 - A repeated lot close creates nothing twice
+**Serves:** Invoice at lot close - a repeated lot close creates nothing twice
+
+- **GIVEN** a lot whose close has already created an auction order
+- **WHEN** that same lot close is delivered again
+- **THEN** Grade10 leaves one auction order
+- **AND** does not release the authorization a second time
+- **AND** does not notify the winner a second time
+
+#### Scenario: winner-order-SC-28 - Confirming an address readies the order for a quote
+**Serves:** winner-order-US-01 - Winner settles a won lot
+
+- **GIVEN** an auction order waiting for its winner's address
+- **WHEN** the winner confirms a delivery address
+- **THEN** the order's derived status is Preparing Invoice
+- **AND** the winner is offered no way to pay yet
 
 ### Requirement: The payment deadline is fixed when the invoice is sent
 
@@ -836,7 +972,8 @@ selects an address. Grade10 SHALL pre-select no payment method.
 | Account has a default shipping address | Grade10 pre-fills it. The winner still confirms explicitly |
 | Account has no default shipping address | The address is empty. The winner adds one and confirms it |
 | Account has multiple saved addresses | Grade10 lets the winner choose one, then confirms the selected address for this order |
-| Winner changes the address or method before the invoice is sent | The order takes the new snapshot and stays ready for a quote. Nothing is reissued |
+| Winner changes the address or method before confirming | The order takes the new choice. The order stays Awaiting Address until the winner confirms |
+| Winner asks to change the address or method after confirming, before the invoice is sent | Refused on the order. An operator edits the order on request. The order stays Preparing Invoice |
 | Winner asks to change the address or method after the invoice is sent | Refused on the order. An operator reissues on request |
 | Winner adds or edits an address | Grade10 offers to save it to the account address book. The order keeps a snapshot |
 
@@ -851,7 +988,7 @@ selects an address. Grade10 SHALL pre-select no payment method.
 #### Scenario: winner-order-SC-08 - An amendment does not touch the address book by default
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
-- **GIVEN** a winner amending the delivery address on one auction order
+- **GIVEN** a winner amending the delivery address on one auction order in Awaiting Address
 - **AND** they leave the offer to save the amendment to the account address book untaken
 - **WHEN** they confirm the amendment
 - **THEN** that auction order carries the amended address
