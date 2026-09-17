@@ -1,5 +1,18 @@
 ## 1. Design system and preview (grade10-spec)
 
+Already shipped: @tangconst merged PR #495 (`feat/cap-winner-order-saved-addresses`)
+into `main` on 2026-09-16, before this change had its `spec.md` to check
+the work against. `CheckboxButton`'s disabled-unchecked/disabled-checked
+drawing, `CheckboxListInput`'s disabled-dims-label-only fix, `Tooltip`'s
+`z-[100]` positioner, and both
+`apps/preview/src/pages/confirm-delivery-address.stories.tsx` and
+`winner-order-address-dialog.tsx` already carry the cap states this
+change's `ui-design.md` names. Leaving this group's tasks unchecked since
+no `pnpm plan claim`/`done` has recorded them; whoever picks this change
+up should confirm the shipped diff against `winner-order-SC-72` through
+`SC-79` and check them off through the usual tooling rather than redoing
+the work.
+
 - [ ] 1.1 CheckboxButton disabled-unchecked draws `background-subtle` with a
   dashed border (Figma `2176:4095`); disabled-checked keeps primary at
   opacity-50 (`winner-order-SC-75`)
