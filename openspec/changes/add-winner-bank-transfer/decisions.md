@@ -32,7 +32,7 @@ cadence and final-notice timing).
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
 | Q1 | Which change owns the letter updates? | Extend `add-winner-bank-transfer` (#501) | A separate notifications-only change that would fight #501 on `notifications-order` |
-| Q2 | How is unpaid-invoice reminder cadence measured? | From **invoice send**: first letter at send (retires invoice-sent), then **day 3** and **day 6** while `pending` | “5 / 3 days before due”; or keeping invoice-sent as a separate letter kind |
+| Q2 | How is unpaid-invoice reminder cadence measured? | From **invoice send**: first letter at send (retires invoice-sent), then **day 3** and **day 6** while `pending`; final notice is separate (Q5) | “5 / 3 days before due”; or keeping invoice-sent as a separate letter kind |
 | Q3 | What does payment-received show for bank transfer? | Label **Payment method**, value **Bank Transfer** only, subtext `Received {date}`, body says the order is being processed; receipt PDF attached | Bank + masked account + account name in the letter; or no PDF attach |
 | Q4 | Where does Receipt ID appear? | Quiet `Receipt ID: …` line on the letter body **and** on the attached PDF (file name and content) | PDF only, or a prominent detail row |
 | Q5 | When is the final notice, given email lag at day-7 expiry? | **24 hours before** the payment deadline, while `pending` and Pay is still offered; invoice-expired covers after | Day 7 immediately before expiry as a pay-now letter; dropping the final notice entirely; or a day-7 letter that only says Contact Us |

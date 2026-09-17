@@ -161,8 +161,8 @@ None.
 | `apps/frontend/grade10` | Method choice with the address, locked once confirmed; bank transfer details, bank reference and Copy Reference Code; invoice and receipt IDs; the receipt breakdown; proof upload and its confirm step; the Payment Verifying state; the returned-proof reason. My Auctions shows Payment Verifying. |
 | `apps/admin/grade10` | Bank transfer fee on the quote; the edit before send with its reason; the Payment Verifying outcome and filter; confirm and return with two reasons and the time left; one Reissue form; search by listing code, invoice ID or bank reference; internal audit numbers on the order and log. |
 | Auction service | The winner's address and method locked on confirmation, and the operator edit before send with its log entry; the `payment_verifying` status and stopped deadline; method and fee on the order and invoice; winner proof storage; one reissue command; replaced invoices read from the chain; listing codes assigned by publish; invoice IDs, bank references, receipt IDs and the gapless internal audit number; lookup by any identifier; PDF archive kept at least 7 years. |
-| Notification service | Payment-reminder series (send / 5d / 3d before due); payment-received with receipt PDF; proof-not-accepted letter; reminders held while proof is checked. |
-| `apps/emails` | React Email drafts under `emails/auction/order/` — payment-reminder (first / second / final) and payment-received. |
+| Notification service | Payment-reminder series (send / day 3 / day 6 from send); final notice 24 hours before the deadline; payment-received with receipt PDF; proof-not-accepted letter; reminders held while proof is checked. |
+| `apps/emails` | React Email drafts under `emails/auction/order/` — payment-reminder (first / day3 / day6 / final) and payment-received. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. New copy is catalog work for the engineer. |
 
 **Winner uploads are new.** Today only operators attach files; the engineer

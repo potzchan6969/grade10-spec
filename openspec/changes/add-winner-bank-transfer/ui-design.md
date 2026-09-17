@@ -35,8 +35,8 @@ payment-reminder urgency.
 
 - `AuctionLetter`, `LotBlock`, `PrimaryCta`, `Grade10EmailShell` under
   `apps/emails` — no new design-system primitive or `@grade10/ui` export
-- Campaign tag `payment_reminder` for send / day 3 / day 6; final notice may
-  share it or use a dedicated tag at delivery — engineer confirms
+- Campaign tag `payment_reminder` for send / day 3 / day 6 / final notice
+  drafts today; a dedicated final-notice tag is optional at delivery
 - Copy for new letter strings is `@grade10/i18n` catalog work at delivery —
   templates hold English draft props today
 
