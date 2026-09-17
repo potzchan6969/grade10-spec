@@ -1,6 +1,6 @@
 # shared/auth Cross-Feature E2E Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 
 ## shared-auth-e2e-US1: Collector signs in by link and every surface names them until they sign out
@@ -15,7 +15,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -39,22 +39,22 @@
 **Steps:**
 
 1. Follow the sign-in link emailed to <collector email>.
-2. Read who is calling on <grade10 store url>.
+2. Read the signed-in state on <grade10 store url>.
 3. Activate the sign-out control and wait for the auth service to answer.
 
 **Expected Results:**
 
 * Step 1 signs them in as <collector account>.
-* The read reports that person's user id, email, name, and roles.
-* The surface leaves its signed-in presentation, and a read reports no person.
+* Step 2 shows <collector account>'s name and email in the signed-in state.
+* The page leaves the signed-in state and no longer shows their name.
 
-### shared-auth-e2e-US1-TC2-1: Expired link leaves every surface reporting nobody
+### shared-auth-e2e-US1-TC2-1: Expired link leaves the page showing nobody signed in
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -71,12 +71,12 @@
 **Steps:**
 
 1. Follow the expired sign-in link.
-2. Read who is calling on <grade10 store url>.
+2. Read the signed-in state on <grade10 store url>.
 
 **Expected Results:**
 
 * Step 1 does not sign them in.
-* The read reports no person.
+* The page shows nobody signed in.
 
 ---
 
