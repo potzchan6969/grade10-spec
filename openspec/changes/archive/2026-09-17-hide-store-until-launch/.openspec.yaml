@@ -1,0 +1,5 @@
+schema: grade10-planning
+created: 2026-09-17
+promoted_by: "@seankcw"
+deploy_waived: "@seankcw waived deploy evidence: merged as 06bb91f, and the Deploy run at that sha (35202606301) was rejected by production environment protection, so the change is unshipped"
+tasks_waived: "@seankcw waived 4.1 and 4.2, both recorded deferred in tasks.md: the page-code half of 4.1 was withdrawn with decisions Q12, and SC-16 in 4.2 is met and unasserted against a staging build"
