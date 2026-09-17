@@ -1,16 +1,14 @@
 ---
 title: Watchlist
 spec: grade10-site/auction/watchlist
-order: 27
+order: 28
 ---
 
-A watch is one action on a lot that says "come back to this" and costs
+A watch is one action on a lot that says come back to this, and it costs
 nothing: no money is held, no standing in the sale is gained, and the sale
-never changes because somebody watches. Bidding is the other way to register
-interest, and that one holds money on a card — watching is the saved list for
-everyone still deciding. Email alerts for a lot are a separate preference;
-[notifications](/p/grade10-site/auction/notifications) owns when mail
-fires.
+never changes because somebody watches. Email alerts for a lot are a separate
+preference — [Bidding Notifications](/p/grade10-site/auction/notifications)
+owns when mail fires.
 
 ## Vocabulary
 
@@ -22,36 +20,40 @@ fires.
 
 ## Watching
 
-Watching takes a signed-in collector; a signed-out viewer is offered sign-in
-rather than a watch the browser would forget. A watch follows the collector
-across devices, and watching the same lot twice leaves one watch with its
-original date. Watching turns email alerts on for that lot by default;
-unwatching turns them off. Both brands sell the same lots, so a lot accepts
-watches from collectors of either brand — each collector sees only their own.
+- **Signed in** — watching takes a signed-in collector; a signed-out viewer
+  is offered sign-in rather than a watch the browser would forget
+- **Follows the collector** — a watch follows them across devices, and
+  watching the same lot twice leaves one watch with its original date
+- **Alerts on by default** — watching turns email alerts on for that lot;
+  unwatching turns them off
+- **Both brands** — a lot accepts watches from collectors of either brand,
+  and each sees only their own
+- **From anywhere** — watch and unwatch on the lot page, the catalogue and
+  the watched list; the email mute in a letter opens signed-in My Auctions
+  and is not the only way out
 
-## Watched list
+## The Watched List
 
-The lots a collector watches read most recently watched first, and each entry
-carries enough to act on: the lot, its current bid, its close, whether the
-sale is open or closed, and an **Email alerts** control beside **Unwatch**.
-Lots the collector is bidding on read above the ones they are only watching.
-Turning a lot's alerts off is confirmed on screen and says what it left
-alone — the watch, or the bid. A close never removes a watch — the entry
-stays, honestly labelled, until its owner unwatches it.
-🚧 A called-off lot is different: it leaves the watched list rather than
-staying on it, per [Lot Status](/p/grade10-site/auction/lot-status).
-Mute leaves the lot on Watching. A collector watching nothing is told so
-rather than shown an error or an empty page. Unwatch is available on the
-listing page, the catalogue, and this list — email mute links to signed-in My
-Auctions; it is not the only way out.
+- **Order** — most recently watched first; lots the collector is bidding on
+  read above the ones they are only watching
+- **A row** — the lot, its current bid, its close, whether the sale is open
+  or closed, and an **Email alerts** control beside **Unwatch**
+- **Mute** — turning a lot's alerts off is confirmed on screen and says what
+  it left alone, the watch or the bid; the lot stays on Watching
+- **After the close** — the entry stays, honestly labelled, until its owner
+  unwatches it
+- 🚧 **Called off** — a called-off lot leaves the watched list rather than
+  staying on it — [Lot Status](/p/grade10-site/auction/lot-status)
+- **Nothing watched** — the collector is told so, rather than shown an error
+  or an empty page
 
 ## Visibility
 
-Only its owner. No public fact carries a watch count or a watcher's identity,
-and one collector never learns what another watches. The one other reader is
-an operator judging interest: they see how many collectors watch a lot,
-counted across both brands, and never a name — a watch is not a commitment to
-buy.
+- **Owner only** — no public fact carries a watch count or a watcher's
+  identity, and one collector never learns what another watches
+- **Operators** — see how many collectors watch a lot, counted across both
+  brands and never a name; a watch is not a commitment to buy — [Listing
+  Management](/p/grade10-admin/auction/listing)
 
 :::detail{title="Product decisions" for="pm"}
 Bidding is the only other way to register interest in a lot, and a bid holds

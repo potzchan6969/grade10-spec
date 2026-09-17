@@ -4,24 +4,57 @@ spec: grade10-site/auction/order-status
 order: 33
 ---
 
-Auction Order Status is the single buyer-facing outcome derived from an auction order's invoice, address, fulfilment, and delivery facts. It is separate from the store's order status, even when a label is shared.
+An auction order has one status, derived from its invoice, address,
+fulfilment and delivery facts, that the winner, the operator and the account
+record all read. It is separate from the store's order status, even where a
+label is shared.
 
-- **Awaiting Address** — the lot has closed, but the winner has not confirmed a delivery address
-- **Preparing Invoice** — the winner has confirmed a delivery address and an operator has not yet sent an invoice
-- 🚧 **Missed address deadline** — order status stays Awaiting Address or Preparing Invoice; the winner can no longer confirm or change an address until an operator reopens the address form
-- **Pending Payment** — the current invoice is unpaid; an expired invoice keeps this order status
-- **Expired invoice** — order status stays Pending Payment; self-service card pay stops; Contact Us lives on Winner Order; an operator may reissue, settle manually, or cancel
-- 🚧 **Payment Verifying** — the winner uploaded payment proof and an operator has not yet checked it; the payment deadline is on hold
-- **Processing** — payment is complete and dispatch has not finished
-- **Shipped** — fulfilment has a carrier hand-off and tracking facts
-- **Delivered** — delivery confirmation includes the carrier's proof
-- **Cancelled** — an operator cancelled the order and returned the lot to available stock
-- **Refunded** — the payment has a recorded refund outcome — only after a paid invoice is refunded; failing to pay is never Refunded
+## Statuses
 
-The status is read from its source facts at request time. The buyer sees it in [Winner Order](/p/grade10-site/auction/winner-order) and [My Auctions](/p/grade10-site/auction/account-record); operators see the same derived outcome in the [Post-Sale Queue](/p/grade10-admin/auction/post-sale). An order may carry an Overdue mark while it waits in either pre-invoice state; that mark does not change its status.
+| Status | Meaning |
+| --- | --- |
+| **Awaiting Address** | The lot has closed, and the winner has not confirmed a delivery address |
+| **Preparing Invoice** | The winner has confirmed a delivery address, and an operator has not yet sent an invoice |
+| **Pending Payment** | The current invoice is unpaid; an expired invoice keeps this status |
+| 🚧 **Payment Verifying** | The winner uploaded payment proof and an operator has not yet checked it; the payment deadline is on hold |
+| **Processing** | Payment is complete and dispatch has not finished |
+| **Shipped** | Fulfilment has a carrier hand-off and tracking facts |
+| **Delivered** | Delivery confirmation includes the carrier's proof |
+| **Cancelled** | An operator cancelled the order and returned the lot to available stock |
+| **Refunded** | The payment has a recorded refund outcome, only after a paid invoice is refunded; failing to pay is never Refunded |
+
+- 🚧 **Missed address deadline** — the status stays Awaiting Address or
+  Preparing Invoice; the winner can no longer confirm or change an address
+  until an operator reopens the address form
+- **Expired invoice** — the status stays Pending Payment; self-service card
+  pay stops, Contact Us lives on Winner Order, and an operator may reissue,
+  settle manually or cancel
+- **Overdue** — an order may carry an Overdue mark while it waits in either
+  pre-invoice state; the mark changes no status
+
+## How It Is Derived
+
+- **Two facts** — the invoice status, written by payment and by an operator,
+  and the fulfilment status, written by dispatch alone
+- **Read, never written** — the status is derived from those facts at request
+  time by one ordered rule chain, so it cannot contradict them
+- **Refused combinations** — a lot that must never dispatch before payment is
+  stopped at write time, and every move outside the permitted transitions is
+  refused
+- **Not the store's** — an auction order and a store order share label names
+  and share no meaning
+- **Who reads it** — the winner on [Winner
+  Order](/p/grade10-site/auction/winner-order) and [My
+  Auctions](/p/grade10-site/auction/account-record); operators in the
+  [Post-Sale Queue](/p/grade10-admin/auction/post-sale)
+
+::cases{id="grade10-site/auction/order-status"}
 
 :::detail{title="Product decisions" for="pm"}
-One derived status keeps the buyer, operator, and account record aligned without creating a second mutable order-state ledger. The source facts remain available where the reader needs the reason: invoice history, fulfilment history, delivery proof, and suspension explanation.
+One derived status keeps the buyer, operator, and account record aligned
+without creating a second mutable order-state ledger. The source facts remain
+available where the reader needs the reason: invoice history, fulfilment
+history, delivery proof, and suspension explanation.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

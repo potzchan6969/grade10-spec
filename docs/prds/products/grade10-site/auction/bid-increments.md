@@ -34,19 +34,28 @@ includes its lower bound, and amounts are integer minor units.
 | JPY | 750000 | 8000 |
 | JPY | 1500000 | 15000 |
 
-## Bid pricing
+## Bid Pricing
 
-- **Opening bid:** starting price plus the increment selected for that price.
-- **Manual bid:** current public price plus the increment selected for that price.
-- **Proxy bid:** second-highest maximum plus its selected increment, capped at the leader's maximum.
-- **Offer amount:** any whole amount at or above the resulting minimum; intermediate bids are not created.
-- **Bid ceiling:** no bid or auto-bid maximum may go above USD 1,000,000,000, HKD 8,000,000,000 or JPY 150,000,000,000, on every lot. A bid at the ceiling is accepted; once the next minimum would exceed it, further bids are refused.
+- **Opening bid** — the starting price plus the increment selected for that
+  price
+- **Manual bid** — the current public price plus the increment selected for
+  that price
+- **Proxy bid** — the second-highest maximum plus its selected increment,
+  capped at the leader's maximum
+- **Offer amount** — any whole amount at or above the resulting minimum;
+  intermediate bids are not created
+- **Bid ceiling** — no bid or auto-bid maximum may go above USD
+  1,000,000,000, HKD 8,000,000,000 or JPY 150,000,000,000, on every lot. A
+  bid at the ceiling is accepted; once the next minimum would exceed it,
+  further bids are refused
 
-## Currency and ownership
+## Currency and Ownership
 
 Only USD, HKD, and JPY can price an auction. Operators select the currency but
 do not edit the schedule, and unsupported currencies are refused before a
 listing is scheduled.
+
+::cases{id="grade10-site/auction/bid-increments"}
 
 :::detail{title="Product decisions" for="pm"}
 The auction starts with a price that invites participation and increases in

@@ -4,28 +4,78 @@ spec: grade10-site/auction/notifications-order
 order: 34
 ---
 
-Order Notifications are the transactional letters that begin when an auction lot closes with a winner. They identify the lot, use the winner's registered email address, and stop or retry according to the order's current facts. Unless a letter names another primary action (for example track-and-trace), every CTA opens that lot's [Winner Order](/p/grade10-site/auction/winner-order); signed out, Grade10's sign-in runs first. On every order letter, the lot image and lot title also open Winner Order. Only the payment-received letter attaches a PDF, the receipt; the invoice PDF lives on Winner Order.
+Order Notifications are the transactional letters that begin when a lot closes
+with a winner. Each identifies the lot, goes to the winner's registered email
+address, and stops or retries according to the order's current facts; a
+winner of three lots is told about three orders separately.
 
-- 🚧 **Winning** — the auction-won letter identifies the lot, asks the winner to complete order setup as bullets (delivery address, payment method, billing address), and names the setup deadline (`Confirm by …`); it names no amount because no invoice exists yet
-- 🚧 **Setup reminder** — at **24 hours** and **72 hours** after lot close while order setup is incomplete; same setup bullets and `Confirm by …`; CTA Complete order setup
-- 🚧 **Setup overdue** — when the setup deadline passes: self-service setup is closed; Contact Us for manual review; may face penalties or extra charges (what those are is ❓); order may be cancelled and the lot re-listed after review — no automatic cancel. Copy speaks of order setup generically, not the three fields
-- 🚧 **Payment reminder** — one letter kind for the unpaid invoice: first when an operator sends the invoice (invoice total, `Pay by …`, payment window starts; no PDF), then on **day 3** and **day 6** after that send while the invoice stays `pending`, measured from invoice send (the same clock as the 7-day payment window). CTA to Winner Order to pay. There is no separate invoice-sent letter
-- 🚧 **Final notice** — last payable reminder **24 hours before** the payment deadline, while the invoice is still `pending` and self-service Pay is still offered — not at the expiry instant
-- 🚧 **Reminders on hold** — no payment reminder or final notice goes out while payment proof is being checked; the sequence resumes if the proof is not accepted
-- 🚧 **Payment overdue** — when the payment deadline passes and the invoice is `expired`: replaces the invoice-expired letter; names what remains owed; self-service Pay is closed; Contact Us for manual review; may face penalties or extra charges; order may be cancelled and the lot re-listed after review
-- 🚧 **Proof not accepted** — the reason the operator gave, and the new payment deadline (`Pay by …`); no letter goes out when proof is uploaded
+## Winning and Order Setup
+
+- 🚧 **Winning** — the auction-won letter identifies the lot, asks the winner
+  to complete order setup as bullets (delivery address, payment method,
+  billing address), and names the setup deadline (`Confirm by …`); it names
+  no amount because no invoice exists yet
+- 🚧 **Setup reminder** — at **24 hours** and **72 hours** after lot close
+  while order setup is incomplete; same setup bullets and `Confirm by …`; CTA
+  Complete order setup
+- 🚧 **Setup overdue** — when the setup deadline passes: self-service setup is
+  closed; Contact Us for manual review; may face penalties or extra charges
+  (what those are is ❓); order may be cancelled and the lot re-listed after
+  review — no automatic cancel. Copy speaks of order setup generically, not
+  the three fields
+
+## Paying
+
+- 🚧 **Payment reminder** — one letter kind for the unpaid invoice: first when
+  an operator sends the invoice (invoice total, `Pay by …`, payment window
+  starts; no PDF), then on **day 3** and **day 6** after that send while the
+  invoice stays `pending`, measured from invoice send (the same clock as the
+  7-day payment window). CTA to Winner Order to pay. There is no separate
+  invoice-sent letter
+- 🚧 **Final notice** — last payable reminder **24 hours before** the payment
+  deadline, while the invoice is still `pending` and self-service Pay is still
+  offered — not at the expiry instant
+- 🚧 **Reminders on hold** — no payment reminder or final notice goes out
+  while payment proof is being checked; the sequence resumes if the proof is
+  not accepted
+- 🚧 **Payment overdue** — when the payment deadline passes and the invoice is
+  `expired`: replaces the invoice-expired letter; names what remains owed;
+  self-service Pay is closed; Contact Us for manual review; may face penalties
+  or extra charges; order may be cancelled and the lot re-listed after review
+- 🚧 **Proof not accepted** — the reason the operator gave, and the new
+  payment deadline (`Pay by …`); no letter goes out when proof is uploaded
 - **Invoice reissued** — confirms the new invoice and deadline
-- **Payment** — the address, payment, decline, receipt, and deadline events that change what the winner should do
-- 🚧 **Payment received** — confirms payment with amount paid, `Received {date}`, and payment method (card: brand and masked number; bank transfer: `Bank Transfer` only — no bank, account number, or account name); says the order is being processed; quiet `Receipt ID: …` line; attaches the receipt PDF (same ID in the file name); CTA to Winner Order for the receipt. Proof files and the internal audit number never appear
-- **Shipped** — carrier, tracking number, shipped time, and delivery address; primary CTA is the carrier track-and-trace link; secondary CTA opens Winner Order (CTAs sit on one row)
+- **Payment** — the address, payment, decline, receipt, and deadline events
+  that change what the winner should do
+- 🚧 **Payment received** — confirms payment with amount paid, `Received
+  {date}`, and payment method (card: brand and masked number; bank transfer:
+  `Bank Transfer` only — no bank, account number, or account name); says the
+  order is being processed; quiet `Receipt ID: …` line; attaches the receipt
+  PDF (same ID in the file name); CTA to Winner Order for the receipt. Proof
+  files and the internal audit number never appear
+
+## After Payment
+
+- **Shipped** — carrier, tracking number, shipped time, and delivery address;
+  primary CTA is the carrier track-and-trace link; secondary CTA opens Winner
+  Order (CTAs sit on one row)
 - **Delivered** — delivery confirmation that identifies the lot
 - **Cancellation** — explains that an operator cancelled the order
-- **Send log** — one idempotent record per order, message kind, and event key, with retry state but no message body exposed to operators
 
-Before-and-during auction mail, and close-outcome letters for watchers and
-non-winners, remain on [Notifications](/p/grade10-site/auction/notifications).
-A winner follows the order and its letters from
-[Winner Order](/p/grade10-site/auction/winner-order).
+## Delivery
+
+- **CTA** — unless a letter names another primary action, every CTA opens
+  that lot's [Winner Order](/p/grade10-site/auction/winner-order); signed
+  out, Grade10's sign-in runs first. On every order letter, the lot image and
+  the lot title also open Winner Order
+- **PDF** — only the payment-received letter attaches a PDF, the receipt; the
+  invoice PDF lives on Winner Order
+- **Send log** — one idempotent record per order, message kind, and event key,
+  with retry state but no message body exposed to operators
+- **Never the record** — every fact a letter carries is visible on the order
+- **Before the close** — mail before and during bidding, and the
+  close-outcome letters for watchers and non-winners, are [Bidding
+  Notifications](/p/grade10-site/auction/notifications)'s
 
 :::detail{title="Product decisions" for="pm"}
 Post-close mail has a different job from bidding mail: it tells one winner what to pay, what changed on their order, and what happened to delivery. It stays a separate capability so a reminder cannot be mistaken for a bidding alert and so each order can own its own idempotency key.

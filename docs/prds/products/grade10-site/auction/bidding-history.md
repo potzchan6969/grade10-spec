@@ -2,63 +2,63 @@
 title: Bidding History
 spec: grade10-site/auction/bidding-history
 order: 26
-reviewed: 2026-09-17
 ---
 
 The account keeps one retained record of everything bidding did, so an
-auditable money decision stays explainable without a support ticket. It lives
-at the account's bids address and belongs to the storefront account alone —
-no input a collector supplies reads anyone else's record, and there is no
-control to delete or hide an entry, because the record is the audit.
+auditable money decision stays explainable without a support ticket.
 
-In My Auctions, this is the Bidding tab. The [auction
-record](/p/grade10-site/auction/account-record) owns the surrounding account
-navigation, the Watching tab, and its account-level presentation; this
-capability owns the Bidding index and the detailed story behind each listing.
+## The Index
 
-## Index
+In My Auctions this is the Bidding tab; [My
+Auctions](/p/grade10-site/auction/account-record) owns the surrounding
+navigation and the Watching tab.
 
-Every listing the account submitted an automatic maximum on appears exactly
-once, ordered by its latest activity, carrying the listing's identity, its
-current or final price, and the collector's standing: pending, leading,
-outbid, won, lost, canceled, or failed-only, which means every maximum
-attempt was refused and nothing was accepted. An Active filter keeps what is
-still running; Completed keeps what is done.
+- **One row per listing** — every listing the account submitted a maximum
+  on, ordered by its latest activity
+- **What a row carries** — the listing, its current or final price, and the
+  collector's standing
+- **Standing** — pending, leading, outbid, won, lost, canceled, or
+  failed-only, which means every maximum attempt was refused and nothing was
+  accepted
+- **Filters** — Active keeps what is still running; Completed keeps what is
+  done
+- **Owner only** — the record belongs to the storefront account alone; no
+  input reads anyone else's, and nothing deletes or hides an entry, because
+  the record is the audit
 
-## Lot Personal Bidding
+## One Listing's Story
 
-On the lot, a signed-in owner who has personal bidding activity opens
-**Your bidding** beside the public recent-bids label. That dialog is the place
-to re-read this lot's private maximum history and the bids Grade10 placed,
-without leaving the page.
+An entry opens into one chronological explanation of that listing.
 
-- **Bid placed** — the auto-bid sequence Grade10 accepted for them on
-  this lot, amount and time only; first tab and the default when the dialog
-  opens (empty state when none yet)
-- **Your maximums** — every accepted configure or raise of that private
-  cap, newest first, with amount and time only — no **Set** / **Raised**
-  status on the row; second tab
-- **No dialog maximum summary** — the live private maximum stays on the
-  bid panel only; the dialog is tabs and lists
-- **Owner only** — neither list shows another bidder's maximum, identity,
-  or payment facts; the public recent-bids list stays public-only
-- **Refused attempts stay on the account** — a refused maximum is not on
-  the lot dialog; it remains in the account chronology at `/bids`
+- **Private events** — every server-evaluated maximum action leaves one: a
+  maximum accepted, a maximum refused and why, or a maximum set or raised
+- **Public movements** — interleaved with the private events, the movements
+  that changed the collector's standing
+- **Private stays private** — another bidder's maximum never appears, only
+  the public consequence that displaced them
+- **Labels** — a configure or raise reads as a maximum set or raised, and a
+  refusal as a refused maximum, matching the lot's wording; there is no new
+  account tab and no maximums-only route
 
-## One listing's story
+## On the Lot
 
-An entry opens into a single chronological explanation of that listing.
-Every server-evaluated maximum action the collector took leaves a private
-event — a maximum accepted, a maximum refused and why, or a private maximum
-set or raised — interleaved with the public movements that changed their
-standing. Private facts stay private: another bidder's maximum never
-appears, only the public consequence that displaced them.
+A signed-in owner with personal bidding activity opens **Your bidding**
+beside the public recent-bids label, and re-reads this lot without leaving
+the page.
 
-- **Maximum labels** — configure and raise events read as a maximum set or
-  raised (and refused as a refused maximum), matching the lot wording; there
-  is no new account tab or maximums-only route
+- **Bid placed** — the auto-bid sequence Grade10 accepted for them on this
+  lot, amount and time only; the first tab and the default, with an empty
+  state when there is none yet
+- **Your maximums** — every accepted configure or raise of the private cap,
+  newest first, amount and time only, with no Set or Raised status on the row
+- **No summary** — the live private maximum stays on the bid panel only; the
+  dialog is tabs and lists
+- **Owner only** — neither list shows another bidder's maximum, identity or
+  payment facts; the public recent-bids list stays public-only
+- **Refusals stay on the account** — a refused maximum is not on the lot
+  dialog; it remains in the account chronology at `/bids`
 
-## Boundary outcomes
+## Boundary Outcomes
 
 The auction engine keeps the challenger's accepted action before an automatic
 response, caps a response at one increment above the next maximum, and keeps
@@ -75,6 +75,8 @@ these boundary outcomes as follows:
 | 1001 | Challenger leads at 1001 |
 | 1100 | Challenger leads at 1100 |
 | 1120 | Challenger leads at 1100, one increment above the earlier maximum |
+
+::cases{id="grade10-site/auction/bidding-history"}
 
 :::detail{title="Product decisions" for="pm"}
 A collector can see what Grade10 bid for them and what their cap is now, but

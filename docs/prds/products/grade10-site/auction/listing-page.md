@@ -1,39 +1,58 @@
 ---
-title: Listing Details Page
+title: Auction Details
 spec: grade10-site/auction/listing-page
 order: 12
 ---
 
-Every lot has an address of its own, and that address does the work before any
-script runs: the lot's name, description, sale and bidding standing are all in
-the first response. A collector on a slow phone can read the lot immediately,
-and a crawler sees the same thing they do.
+Every lot has an address of its own, and that address answers with the whole
+lot before any script runs.
 
-Sharing the link unfurls as that lot — its own title, description and canonical
+## The Address
+
+- **Served whole** — the lot's name, description, sale and bidding standing
+  are in the first response, so a slow phone reads the lot at once and a
+  crawler sees what a collector sees
+- **One lot per address** — two addresses answer with their own lot, title,
+  description and canonical address
+- **Opened from the catalogue** — a card reaches the lot's address without a
+  page load
+- **Not in the sitemap** — which lots are published is unknown when the site
+  is built, so no sitemap entry is a lot address; everything else about the
+  page as a public surface is [the site's crawlable-pages
+  contract](/p/grade10-site/site/crawlable-pages), applied per lot
+
+## Sharing a Link
+
+A shared link unfurls as that lot — its own title, description and canonical
 address, never the catalogue's. It carries no picture: a lot's images are the
-auction's own, and the sizing a store card's preview picture rests on is the
-shop CDN's. Whether an id names a published lot is asked of the catalogue at
-the moment the address is requested, so an address naming no lot answers an
-honest 404 with the site's not-found surface rather than an empty lot page.
-🚧 The same 404 meets a lot that was published but is now hidden — Draft or
-Called off, per [Lot Status](/p/grade10-site/auction/lot-status) — even at the
-address it once answered from.
+auction's own, and the sizing a store card's preview rests on is the shop
+CDN's.
 
-When scripts do load, they take over the page that was already served. Nothing
-on screen is replaced by a loading placeholder, and a value that follows the
-clock — the countdown, the standing — carries on from what was served instead
-of contradicting it.
+## Unknown and Hidden Lots
 
-Lot addresses are absent from the sitemap on purpose: which lots the auction
-publishes is unknown when the site is built. Everything else about this page
-as a public surface — its title, description, share metadata and status codes —
-is [the site's crawlable-pages contract](/p/grade10-site/site/crawlable-pages),
-applied per lot.
+- **Asked of the catalogue** — whether an id names a published lot is asked at
+  the moment the address is requested
+- **Not found** — an address naming no lot answers an honest 404 with the
+  site's not-found surface, never an empty lot page
+- 🚧 **Hidden lots** — the same 404 meets a lot that was published but is now
+  Draft or Called off, even at the address it once answered from — [Lot
+  Status](/p/grade10-site/auction/lot-status)
+
+## After Scripts Load
+
+- **Nothing blanks** — scripts take over the page already served; nothing on
+  screen is replaced by a loading placeholder
+- **The clock carries on** — a value that follows the clock, the countdown or
+  the standing, continues from what was served rather than contradicting it
+- **Watch from the page** — a collector marks the lot they are reading and
+  nothing else on the page moves — [Watchlist](/p/grade10-site/auction/watchlist)
 
 ::story{id="auction-listing-listing-product--default" title="A live lot page, gallery and bid panel assembled"}
+
+::cases{id="grade10-site/auction/listing-page"}
 
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Watching a lot | Open | The page has offered a watch control for some time and the feature set never said so, while two changes in flight build on it. Named as its own part of the map. Confirm, or fold it where it belongs. | Product |
+| Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and [Watchlist](/p/grade10-site/auction/watchlist) owns what a watch means. | Product |
 :::

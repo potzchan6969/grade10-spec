@@ -184,7 +184,8 @@ confirms storage, scanning and access for a winner's upload.
 
 ## References
 
-- [Winner Order · Invoice and Settlement](../../../docs/prds/products/grade10-site/auction/winner-order.md#invoice-and-settlement)
+- [Winner Order · Invoicing](../../../docs/prds/products/grade10-site/auction/winner-order.md#invoicing)
+- [Winner Order · Paying by Bank Transfer](../../../docs/prds/products/grade10-site/auction/winner-order.md#paying-by-bank-transfer)
 - [Post-Sale Queue · Payment](../../../docs/prds/products/grade10-admin/auction/post-sale.md#payment)
 - [Auction Order Status](../../../docs/prds/products/grade10-site/auction/order-status.md)
 - [Order Notifications](../../../docs/prds/products/grade10-site/auction/notifications-order.md)
