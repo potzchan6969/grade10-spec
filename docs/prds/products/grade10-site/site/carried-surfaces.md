@@ -52,9 +52,10 @@ preview start carrying the store surfaces, and every address above answers at
 this rule has to be edited to let them through.
 
 :::detail{title="Code map" for="engineer"}
-- **Surface table** — `apps/frontend/grade10/src/surfaces.ts`
-- **The build's answer** — `apps/frontend/grade10/src/config.ts`, injected by
-  `packages/app-env/src/vite.ts`
+- **Surface table, and which lanes carry what** —
+  `apps/frontend/grade10/src/surfaces.ts`
+- **The build's own answer** — `apps/frontend/grade10/src/config.ts` for the
+  application, `resolveDeployEnv()` for the build configs and the build check
 - **Serving** —
   [docs/architecture/serving.md](https://github.com/9gag/grade10/blob/main/docs/architecture/serving.md)
 :::
