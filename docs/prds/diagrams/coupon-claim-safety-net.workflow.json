@@ -1,0 +1,131 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Giving a claim back",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "gone",
+      "label": "The order never happened"
+    },
+    {
+      "id": "ended",
+      "label": "The order ended"
+    },
+    {
+      "id": "floor",
+      "label": "Under both"
+    }
+  ],
+  "mainPath": ["held", "attempt", "outbox", "back"],
+  "nodes": [
+    {
+      "id": "held",
+      "lane": "ended",
+      "col": 0,
+      "type": "security",
+      "label": "A claim is held",
+      "sublabel": "one sale, one coupon",
+      "width": 156
+    },
+    {
+      "id": "guard",
+      "lane": "gone",
+      "col": 1,
+      "type": "backend",
+      "label": "The request's guard",
+      "sublabel": "every exit before the commit",
+      "width": 172
+    },
+    {
+      "id": "attempt",
+      "lane": "ended",
+      "col": 1,
+      "type": "backend",
+      "label": "The first attempt",
+      "sublabel": "as the write lands",
+      "width": 172
+    },
+    {
+      "id": "outbox",
+      "lane": "ended",
+      "col": 2,
+      "type": "database",
+      "label": "The outbox",
+      "sublabel": "retried until it lands",
+      "width": 172
+    },
+    {
+      "id": "sweep",
+      "lane": "floor",
+      "col": 1,
+      "type": "security",
+      "label": "The sweep",
+      "sublabel": "any claim past 25 hours, whatever the store did",
+      "width": 560
+    },
+    {
+      "id": "back",
+      "lane": "ended",
+      "col": 3,
+      "type": "external",
+      "label": "Back in the wallet",
+      "sublabel": "available again",
+      "width": 156
+    }
+  ],
+  "edges": [
+    {
+      "from": "held",
+      "to": "guard",
+      "label": "nothing committed",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "from": "held",
+      "to": "attempt",
+      "label": "paid, cancelled or superseded",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "attempt",
+      "to": "outbox",
+      "label": "where the shop would not answer",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "outbox",
+      "to": "back",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "guard",
+      "to": "back",
+      "variant": "dashed",
+      "fromSide": "right",
+      "toSide": "top"
+    },
+    {
+      "from": "sweep",
+      "to": "back",
+      "label": "and where none of them did",
+      "variant": "security",
+      "fromSide": "right",
+      "toSide": "bottom"
+    }
+  ]
+}

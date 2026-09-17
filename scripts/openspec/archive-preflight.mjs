@@ -9,7 +9,7 @@
  * which finds the deployed sha and commits the record. Run it by hand only to
  * write a waiver.
  *
- * The archive has three gates, and they used to be prose in a skill file —
+ * The archive has four gates, and they used to be prose in a skill file —
  * which made the honest path and the fast path differ by forty minutes with
  * only one leaving a record. This makes them mechanical:
  *
@@ -32,6 +32,19 @@
  *          durable spec yet: the fold creates it, so the copy can only happen
  *          right after — the flag is a promise, and the sections stay on
  *          `pnpm check:manual`'s list.
+ *
+ * DECIDE   `decisions.md` is change-local: it archives with the change and is
+ *          folded nowhere. So a rejected option recorded there is readable
+ *          afterwards only under `openspec/changes/archive/`, which the blind
+ *          suite pass is forbidden to read — the same shape as dropping a
+ *          suite's `## Settled`, and the same cost: the question is asked
+ *          again next quarter, answered the other way, and the record that
+ *          would have caught it sits in the one tree nothing may open.
+ *          Whatever still matters goes onto the capability's PRD, in its
+ *          `Product decisions` block, which is durable and which the blind
+ *          pass already reads. This gate asks the owner to say that happened:
+ *          `--decisions-carried "<what went where>"`, or the same flag with
+ *          `none` where nothing outlived the change.
  *
  *          A copy that did land is read for the four things only archive can
  *          get wrong: a written `## Purpose` replaces the durable one whole, a
@@ -75,6 +88,12 @@ const SC_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
 const SERVES = /^\s*(?:[-*]\s+)?\*\*Serves:\*\*\s*\S/m;
 const SCENARIO_HEADING = /^####\s+Scenario:\s+([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
 const OPEN_TASK = /^\s*-\s*\[ \]\s*(.*)$/;
+/** A task group heading, and the repository tag `task-ownership.md` puts at the
+ * end of it: `## 3. Store prose (grade10-spec)`. An owner tag is `(owner: …)`
+ * and is not a repository. */
+const GROUP_HEADING = /^##\s+\d+\.\s*(.+?)\s*$/;
+const REPO_TAG = /\(([^()@]+)\)\s*$/;
+const STORE_GROUP = "grade10-spec";
 const MANIFEST_KEY = /^([A-Za-z0-9_]+):/;
 /** Every key a record owns. A write drops all of them and appends only what it
  * was told, so a waiver never outlives the record that replaces it. */
@@ -199,6 +218,21 @@ function bullets(body) {
   return found.map((line) => line.replace(/\s+/g, " ").trim()).filter(Boolean);
 }
 
+/** Whether every task group of a task list lands in this store. Such a change
+ * deploys nothing, so there is no run to point at and no waiver owed — the same
+ * exemption `check:manual`'s `archived` rule already grants, which this script
+ * did not, so a store-only change could only be archived by waiving a deploy it
+ * never had. A list with no tagged group is not store-only: an untagged group
+ * is a group nobody said where it lands. */
+function storeOnly(text) {
+  const groups = text
+    .split("\n")
+    .map((line) => GROUP_HEADING.exec(line)?.[1])
+    .filter((title) => title !== undefined)
+    .map((title) => REPO_TAG.exec(title)?.[1].trim() ?? "");
+  return groups.length > 0 && groups.every((repo) => repo === STORE_GROUP);
+}
+
 /** The unchecked tasks of a task list, in file order. */
 function openTasks(text) {
   return text
@@ -237,16 +271,16 @@ function help() {
   console.log(
     dim(
       '                             [--tasks-waived "<who, why>"] [--journeys-copied]',
+      '                             [--decisions-carried "<what went where, or none>"]',
     ),
   );
   console.log(
-    dim("  The archive's three gates, mechanical: proof of deploy, every task"),
+    dim("  The archive's four gates, mechanical: proof of deploy, every task"),
   );
   console.log(
-    dim(
-      "  checked off, and the purpose / feature set / journeys / suites copy",
-    ),
+    dim("  checked off, the decisions that outlive the change put on the PRD,"),
   );
+  console.log(dim("  and the purpose / feature set / journeys / suites copy"));
   console.log(
     dim(
       "  the fold would discard, done and done right. A clear run writes the",
@@ -283,12 +317,15 @@ let deployedEnv = null;
 let deployWaived = null;
 let tasksWaived = null;
 let journeysCopied = false;
+let decisionsCarried = null;
 for (let i = 1; i < argv.length; i += 1) {
   if (argv[i] === "--deployed-at") deployedAt = argv[++i] ?? null;
   else if (argv[i] === "--deployed-env") deployedEnv = argv[++i] ?? null;
   else if (argv[i] === "--deploy-waived") deployWaived = argv[++i] ?? null;
   else if (argv[i] === "--tasks-waived") tasksWaived = argv[++i] ?? null;
   else if (argv[i] === "--journeys-copied") journeysCopied = true;
+  else if (argv[i] === "--decisions-carried")
+    decisionsCarried = argv[++i] ?? null;
   else {
     fail(`Unknown argument: ${argv[i]}`, `Run with ${cyan("--help")}.`);
     process.exit();
@@ -299,6 +336,29 @@ if (!changeIds().includes(changeId)) {
   fail(
     `No change in flight named '${changeId}'.`,
     `Run ${cyan("pnpm run archive:preflight")} for the list.`,
+  );
+  process.exit();
+}
+
+// ── The plan, as main holds it ──────────────────────────────────────────────
+// `pnpm plan` records checkmarks and repository tags on the store's main, so
+// both are read there: this checkout can be behind main, or ticked by hand
+// where main is not. Read before the deploy gate, because the tags say whether
+// a deploy is owed at all.
+const main = storeMain(ROOT);
+if (!main) {
+  fail(
+    yellow(`The store at ${ROOT} has no origin main to read checkmarks on.`),
+    "Run `git remote set-head origin --auto`, then re-run.",
+  );
+  process.exit();
+}
+const tasksFile = `openspec/changes/${changeId}/tasks.md`;
+const tasks = textAt(ROOT, main.commit, tasksFile);
+if (tasks === null && existsSync(join(ROOT, tasksFile))) {
+  fail(
+    yellow(`${tasksFile} is not on ${main.ref}.`),
+    "Nobody can claim or check off a plan main does not hold — merge it first.",
   );
   process.exit();
 }
@@ -314,7 +374,7 @@ if (deployedAt !== null && deployWaived !== null) {
   );
   process.exit();
 }
-if (deployedAt === null && deployWaived === null) {
+if (deployedAt === null && deployWaived === null && !storeOnly(tasks ?? "")) {
   fail(
     yellow(`No deploy evidence for ${changeId}.`),
     "A change merged is not a change shipped — merging deploys nothing. The",
@@ -361,28 +421,15 @@ if (tasksWaived !== null && tasksWaived.trim() === "") {
   fail(yellow("--tasks-waived needs the who and the why, in quotes."));
   process.exit();
 }
+if (decisionsCarried !== null && decisionsCarried.trim() === "") {
+  fail(
+    yellow("--decisions-carried needs what went where, in quotes, or `none`."),
+  );
+  process.exit();
+}
 
 // ── Tasks gate ──────────────────────────────────────────────────────────────
 // An open checkbox at archive is work nobody did or a checkmark nobody wrote.
-// `pnpm plan` records checkmarks on the store's main, so they are read there:
-// this checkout can be behind main, or ticked by hand where main is not.
-const main = storeMain(ROOT);
-if (!main) {
-  fail(
-    yellow(`The store at ${ROOT} has no origin main to read checkmarks on.`),
-    "Run `git remote set-head origin --auto`, then re-run.",
-  );
-  process.exit();
-}
-const tasksFile = `openspec/changes/${changeId}/tasks.md`;
-const tasks = textAt(ROOT, main.commit, tasksFile);
-if (tasks === null && existsSync(join(ROOT, tasksFile))) {
-  fail(
-    yellow(`${tasksFile} is not on ${main.ref}.`),
-    "Nobody can claim or check off a plan main does not hold — merge it first.",
-  );
-  process.exit();
-}
 const open = openTasks(tasks ?? "");
 if (open.length > 0 && tasksWaived === null) {
   fail(yellow(`${changeId} archives with ${open.length} task(s) unchecked:`));
@@ -396,6 +443,47 @@ if (open.length > 0 && tasksWaived === null) {
     "out loud, on the same command:",
     "",
     `  ${cyan('--tasks-waived "<who waived it, why>"')}`,
+  );
+  process.exit();
+}
+
+// ── Decide gate ─────────────────────────────────────────────────────────────
+// `decisions.md` is folded nowhere, so a rejected option recorded only there
+// survives archive in a tree the blind suite pass may not read. Whatever still
+// matters belongs on the capability's PRD, in `Product decisions`. The store
+// cannot judge which rows those are — the owner can, and this asks them to say
+// so rather than to remember.
+const decisionsFile = `openspec/changes/${changeId}/decisions.md`;
+const decisions = existsSync(join(ROOT, decisionsFile))
+  ? readFileSync(join(ROOT, decisionsFile), "utf8")
+  : null;
+const rows =
+  decisions === null
+    ? []
+    : (sectionBody(decisions, "Decisions") ?? "")
+        .split("\n")
+        .filter((line) => /^\s*\|/.test(line) && !/^\s*\|\s*-{2,}/.test(line))
+        .slice(1);
+if (rows.length > 0 && decisionsCarried === null) {
+  fail(
+    yellow(
+      `${changeId} records ${rows.length} decision(s) that the fold carries nowhere:`,
+    ),
+  );
+  for (const row of rows.slice(0, SHOWN)) {
+    console.error(`  ${row.trim().slice(0, 100)}`);
+  }
+  if (rows.length > SHOWN) {
+    console.error(dim(`  … and ${rows.length - SHOWN} more`));
+  }
+  fail(
+    "",
+    "A rejected option readable only under archive/ is one the blind pass may",
+    "not read, so the question comes back answered the other way. Put what",
+    "still matters in the capability's `Product decisions` block, then say so:",
+    "",
+    `  ${cyan('--decisions-carried "<what went where>"')}`,
+    `  ${cyan("--decisions-carried none")}   nothing outlived the change`,
   );
   process.exit();
 }
@@ -622,17 +710,38 @@ if (uncarried.length > 0) {
   );
 }
 
-const rel = writeRecord(changeId, {
+// A store-only change records no deploy key at all: there is no run to name
+// and no waiver owed, and its `tasks.md` repository tags are the record of
+// where every group landed. Writing `deploy_waived` there would put a waiver
+// in the manifest for a rule the change never answered to, and a waiver
+// written where none is owed is how the waiver becomes the default.
+const record = {
   ...(deployedAt !== null
     ? { deployed_at: deployedAt, deployed_env: deployedEnv }
-    : { deploy_waived: deployWaived }),
+    : deployWaived !== null
+      ? { deploy_waived: deployWaived }
+      : {}),
   ...(tasksWaived !== null ? { tasks_waived: tasksWaived } : {}),
-});
+};
 const subject =
   deployedAt !== null
     ? `Record ${changeId} deployed at ${deployedAt} (${deployedEnv})`
-    : `Record ${changeId} archived with the deploy waived`;
+    : deployWaived !== null
+      ? `Record ${changeId} archived with the deploy waived`
+      : `Archive ${changeId}, which deploys nothing`;
 
-console.log(`\nThe record is written into ${bold(rel)}. Commit it:\n`);
-console.log(`  ${cyan(`git -C "${ROOT}" commit ${rel} -m "${subject}"`)}`);
+if (Object.keys(record).length === 0) {
+  console.log(
+    `\nNo deploy record is owed — every task group lands in ${bold(STORE_GROUP)}.`,
+  );
+  console.log(`\nArchive it:\n`);
+  console.log(
+    `  ${cyan(`git -C "${ROOT}" mv openspec/changes/${changeId} openspec/changes/archive/<YYYY-MM-DD>-${changeId}`)}`,
+  );
+  console.log(`  ${cyan(`git -C "${ROOT}" commit -m "${subject}"`)}`);
+} else {
+  const rel = writeRecord(changeId, record);
+  console.log(`\nThe record is written into ${bold(rel)}. Commit it:\n`);
+  console.log(`  ${cyan(`git -C "${ROOT}" commit ${rel} -m "${subject}"`)}`);
+}
 console.log(`\nThen:  ${cyan(`openspec archive ${changeId}`)}`);

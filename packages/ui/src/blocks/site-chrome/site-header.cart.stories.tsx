@@ -132,3 +132,45 @@ export const CountOmitted: Story = {
     expect(cartBadge(canvasElement)).toBeNull();
   },
 };
+
+/**
+ * Post-store: Cart stays on Auction (and every other surface) so checkout
+ * stays one tap away. Same primary-nav order as Store surfaces (Store,
+ * Auction, Store Locator, Help); Auction is current. Auction-first stories
+ * omit the cart handler until Store answers the cart drawer.
+ */
+export const OnAuctionSurface: Story = {
+  name: "On auction surface (post-store)",
+  args: {
+    session: "signed-in",
+    cartItemCount: 2,
+    navItems: [
+      { label: "Store", href: "#store" },
+      { label: "Auction", href: "#auction", current: true },
+      { label: "Store Locator", href: STORE_LOCATOR_HREF },
+      {
+        label: "Help",
+        href: "https://grade10.mintlify.io/",
+        external: true,
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByRole("link", { name: "Store" })).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: "Auction" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    const storeLocator = canvas.getByRole("link", { name: "Store Locator" });
+    const help = canvas.getByRole("link", { name: "Help" });
+    expect(
+      storeLocator.compareDocumentPosition(help) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      canvas.getByRole("button", { name: "Cart (2)" }),
+    ).toBeInTheDocument();
+    expect(cartBadge(canvasElement)).toHaveTextContent("2");
+  },
+};

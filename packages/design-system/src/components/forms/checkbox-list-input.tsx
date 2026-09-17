@@ -41,9 +41,10 @@ type CheckboxListInputProps = CheckboxPrimitive.Root.Props &
  * is what makes the text clickable — Figma draws the row but cannot express
  * the association.
  *
- * Disabled is `Opacity/opacity-50` over the row; the label stays
- * `Base/foreground` and the count stays `Base/secondary-foreground`. `size`
- * is the only cva axis; checked is owned by the control.
+ * Disabled dims the label and count at `Opacity/opacity-50`; the
+ * `CheckboxButton` keeps its own disabled drawing (unchecked dashed /
+ * background-subtle, checked primary at 50%). `size` is the only cva axis;
+ * checked is owned by the control.
  */
 function CheckboxListInput({
   className,
@@ -60,7 +61,7 @@ function CheckboxListInput({
       data-disabled={disabled || undefined}
       className={cn(
         checkboxListInputVariants({ size }),
-        disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer",
+        disabled ? "cursor-not-allowed" : "cursor-pointer",
         className,
       )}
     >
@@ -68,21 +69,18 @@ function CheckboxListInput({
         data-slot="checkbox-button-hit"
         className="flex shrink-0 items-center justify-center"
       >
-        <CheckboxButton
-          {...props}
-          disabled={disabled}
-          className={
-            disabled
-              ? "disabled:opacity-100 data-disabled:opacity-100"
-              : undefined
-          }
-        />
+        <CheckboxButton {...props} disabled={disabled} />
       </span>
-      <span className="min-w-0 flex-1">{children}</span>
+      <span className={cn("min-w-0 flex-1", disabled && "opacity-50")}>
+        {children}
+      </span>
       {count != null ? (
         <span
           data-slot="checkbox-list-input-count"
-          className="shrink-0 text-secondary-foreground"
+          className={cn(
+            "shrink-0 text-secondary-foreground",
+            disabled && "opacity-50",
+          )}
         >
           {count}
         </span>

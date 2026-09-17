@@ -59,8 +59,14 @@ export type Scenario = {
    * other, which is how each stopped inheriting the other's blind spots.
    *
    * More than one is allowed: a scenario is a rule, and one rule can sit on
-   * several journeys. A case is a walk and still traces one. */
+   * several journeys. A case is a walk and still traces one.
+   *
+   * An anchor may also be qualified — `<product>/<domain>/<capability>#<id>` —
+   * where the rule sits on a journey another capability issues. */
   serves?: string[];
+  /** The prose after the anchor's dash: what the walk was, for a human. Read
+   * so a check can refuse a line that only repeats the anchor it stands on. */
+  servesProse?: string;
 };
 
 export type Requirement = {
@@ -109,6 +115,12 @@ export type SpecEntry = {
   featureGroups?: string[];
   requirements: Requirement[];
   journeys?: Journey[];
+  /** The journey ids this capability has retired - the `## Retired`
+   * tombstones its journeys file keeps. Not journeys: nothing renders them
+   * and no anchor of this capability's own resolves to one. They are held
+   * because an id is permanent - archived suites still trace it, and a rule
+   * on another capability may still name the walk it stood for. */
+  retiredJourneys?: string[];
   /** The journeys file says `**Walked by:** nobody`: no end user reaches
    * this capability on its own, so it has no stories by decision rather
    * than by omission. */
@@ -282,6 +294,11 @@ export type ChangeEntry = {
    * `page_waived:` — the line that stands in for the 🚧 a change with deltas
    * owes a page. */
   pageWaived?: string;
+  /** Why this change records no decisions, from `.openspec.yaml`
+   * `decisions_waived:` — the line that stands in for `decisions.md`, either
+   * where there was genuinely nothing to settle or on a change opened before
+   * the file existed, whose scope is in its proposal. */
+  decisionsWaived?: string;
   /** Why this change writes no `tech-design.md`, from `.openspec.yaml`
    * `design_waived:`. */
   designWaived?: string;

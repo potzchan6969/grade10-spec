@@ -18,8 +18,10 @@ icon with no menu. Auction launches first; Store is not yet an entrance.
   session-aware account entry
 - **Signed out** — a primary Sign In button, not the account icon
 - **Signed in** — account icon opens Profile, My Auctions, and Sign out
-- **Auction-first nav** — primary nav lists surfaces that answer; Store and
-  cart stay absent until those surfaces exist
+- **Auction-first nav** — primary nav lists surfaces that answer; Store, Store
+  Locator, and cart stay absent until those surfaces exist (physical shop is
+  not open at auction launch). Once the Store cart drawer answers, Cart is
+  global on every surface
 - **Compact menu** — below the wide breakpoint, a leading hamburger opens a
   left inset drawer (primary nav, then utilities in the same link style,
   language via a nested drawer); Account / Sign In and Cart stay on the
@@ -48,7 +50,8 @@ icon with no menu. Auction launches first; Store is not yet an entrance.
 - `shared/ui/site-chrome`: language locale control; `SiteHeader` export and
   account presentations; compact left menu drawer with nested language drawer
 - `grade10-site/site/page-shell`: session-aware Sign In vs account menu; cart
-  and Store only when those surfaces answer; sign-out from the account menu;
+  absent until the Store cart drawer answers, then global on every surface;
+  Store only when that surface answers; sign-out from the account menu;
   compact menu reaches nav and language
 
 ## Impact
@@ -58,10 +61,11 @@ icon with no menu. Auction launches first; Store is not yet an entrance.
   menu drawer
 - **`@grade10/ui`** — new `SiteHeader` under `site-chrome`
 - **`apps/preview`** — auction page shell uses `SiteHeader`
-- **Consumers** — grade10-site wires `SiteHeader`; Store cart handler only on
-  Store / checkout
+- **Consumers** — grade10-site wires `SiteHeader`; cart handler on every
+  surface once the Store cart drawer answers (not Store-only)
 - **Absorbs** — `add-store-cart-drawer-ui`'s page-shell Cart gating
-  (`SC-09` / `SC-16`) so two changes do not fold the same requirement
+  (`SC-09` / `SC-16`) so two changes do not fold the same requirement; Cart is
+  global once Store answers, not Store-surface-only
 
 ## Follow-on changes
 

@@ -436,3 +436,144 @@ A dispatched auction order for which <the carrier delivery feed> is mocked to re
 
 * The order records the handover timestamp and the signature.
 * Neither is reduced to a bare confirmation flag.
+
+## winner-order-US8: Winner pays an invoice with a policy premium
+
+**As a** winner of an auction lot,
+**I want** my invoice to calculate the stated buyer premium correctly and meet
+the current currency minimum,
+**so that** the amount I pay is explainable and collectible.
+
+### winner-order-US8-TC1-1: Invoice applies the fixed premium
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-08
+
+**Pre-conditions:**
+
+* The winning bid is 250000 HKD minor units and an invoice is being created.
+
+**Steps:**
+
+1. Read the invoice lines and total.
+
+**Expected Results:**
+
+* Buyer premium is 50000 HKD minor units.
+* The total includes the premium.
+
+### winner-order-US8-TC2-1: A configured minimum replaces a lower percentage premium
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-08
+
+**Pre-conditions:**
+
+* The HKD minimum buyer premium is 20000 minor units.
+* The winning bid is 500 HKD minor units.
+
+**Steps:**
+
+1. Create the winner invoice.
+
+**Expected Results:**
+
+* The premium is 20000 HKD minor units, not 1000 HKD minor units.
+
+### winner-order-US8-TC3-1: A zero minimum rounds the percentage premium
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-08
+
+**Pre-conditions:**
+
+* The JPY minimum buyer premium is 0 minor units.
+* The winning bid is 1003 JPY minor units.
+
+**Steps:**
+
+1. Create the winner invoice.
+
+**Expected Results:**
+
+* The premium is 201 JPY minor units.
+
+### winner-order-US8-TC4-1: A sent invoice keeps its premium after the minimum changes
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-08
+
+**Pre-conditions:**
+
+* An invoice was sent with a 0 HKD minimum and a 500 HKD winning bid.
+
+**Steps:**
+
+1. Change the HKD minimum buyer premium to 20000 minor units.
+2. Read the sent invoice.
+3. Reissue the invoice.
+
+**Expected Results:**
+
+* The sent invoice still shows a 100 HKD premium.
+* The reissued invoice shows a 20000 HKD premium.
+
+## Raised
+
+- The latest product reading confirms that invoice creation remains the point at which the 20% premium amount is calculated; no unresolved product question remains.
+
+## Settled
+
+- Expired ends self-service card pay (author @tangconst, 2026-09-15).
+- Progress is presentation only; eight status names stay.
+- Absolute deadline datetime; no countdown.
+- 48-hour address confirm window; missed window hides Confirm and shows Contact Us (Storybook 2026-09-16).
+- Insurance remains optional and separate from Payment Processing Fee.
+- Receipt PDF after payment on the same row as Invoice.
+- Fee tooltips on Buyer’s Premium, Shipping & Handling, and Payment Processing Fee (brief fee copy).
+
+## Reconciliation
+
+**Run:** 2026-09-16; scenario and suite readings were reconciled by the author.
+
+- **Uncovered anchors:** none.

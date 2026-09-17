@@ -3,10 +3,10 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 
-## grade10-site-store-cart-drawer-US01: Collector opens the current cart over the Store
+## grade10-site-store-cart-drawer-US01: Collector opens the current cart over the page
 
 **As a** collector,
-**I want** my current cart to open over the Store with current facts,
+**I want** my current cart to open over the page I am on with current facts,
 **so that** I can review what the shop can sell without losing my place.
 
 ### grade10-site-store-cart-drawer-US01-TC01-1: Drawer reviews the cart belonging to the current session

@@ -20,12 +20,18 @@
 
 ### Requirement: Product identity uses IP, Category, and Item
 
-Every product SHALL be identified by exactly one IP, one Category, and one
-Item classification. The product contract and admin product form SHALL NOT
-carry a Collectible type or free-form product metadata. Product facts beyond
-the classification SHALL be stored as typed attributes governed by the
-product's schema, except for facts that describe an individual inventory
-unit.
+A product is named by its IP, Category and Item, and everything else about it
+is a typed attribute.
+
+**Hierarchy** - Every product SHALL be identified by exactly one IP, one
+Category, and one Item classification.
+
+**No free-form metadata** - The product contract and admin product form SHALL
+NOT carry a Collectible type or free-form product metadata.
+
+**Product facts** - Product facts beyond the classification SHALL be stored as
+typed attributes governed by the product's schema, except for facts that
+describe an individual inventory unit.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-93 - Product form shows the complete hierarchy
 **Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
@@ -45,15 +51,23 @@ unit.
 
 ### Requirement: Inventory may own optional Cert ID records and copy facts
 
-An inventory SHALL own zero or more records for individually tracked units.
-Each record SHALL identify one physical unit and SHALL contain a system-minted
-immutable record id, its owning product inventory, and its copy-level facts.
-Grade Issuer SHALL identify the unit as `RAW` or name its grading issuer. A
-`RAW` unit MUST NOT have a Cert ID; every graded unit MUST have a non-empty
-Cert ID after trimming surrounding whitespace. Grade10 SHALL trim a supplied
-Cert ID before checking its per-inventory uniqueness. Serial, Grade Issuer,
-Grade, and Autograph Grade SHALL remain inventory facts rather than product
-attributes. Grade SHALL be stored as text.
+An inventory can track its units one by one, each with the facts that belong
+to that copy.
+
+**Unit records** - An inventory SHALL own zero or more records for
+individually tracked units. Each record SHALL identify one physical unit and
+SHALL contain a system-minted immutable record id, its owning product
+inventory, and its copy-level facts.
+
+**Grade Issuer** - Grade Issuer SHALL identify the unit as `RAW` or name its
+grading issuer.
+
+**Cert ID** - A `RAW` unit MUST NOT have a Cert ID; every graded unit MUST
+have a non-empty Cert ID after trimming surrounding whitespace. Grade10 SHALL
+trim a supplied Cert ID before checking its per-inventory uniqueness.
+
+**Copy facts** - Serial, Grade Issuer, Grade, and Autograph Grade SHALL remain
+inventory facts rather than product attributes. Grade SHALL be stored as text.
 
 | Field | Rules |
 | --- | --- |
@@ -93,13 +107,20 @@ attributes. Grade SHALL be stored as text.
 
 ### Requirement: Card product schemas use one shared typed template
 
-The admin SHALL be able to create or revise a product schema for one exact
-existing IP + Item + Category tuple through the schema editor or a schema
-manifest upload. The common card template SHALL use the product name and the
-attributes below. Each tuple SHALL have its own schema configuration, and the
-same template MAY be reused for every workbook Category label after an admin
-maps that label to existing IP, Item, and Category tags. The workbook's Item
-column SHALL map to product name, not to the Grade10 Item tag.
+Every card tuple gets its own schema, built from one shared set of product
+fields.
+
+**Card template** - The admin SHALL be able to create or revise a product
+schema for one exact existing IP + Item + Category tuple through the schema
+editor or a schema manifest upload. The common card template SHALL use the
+product name and the attributes below.
+
+**One schema per tuple** - Each tuple SHALL have its own schema configuration,
+and the same template MAY be reused for every workbook Category label after an
+admin maps that label to existing IP, Item, and Category tags.
+
+**Workbook Item column** - The workbook's Item column SHALL map to product
+name, not to the Grade10 Item tag.
 
 | Product field | Stable key | Type | Requirement |
 | --- | --- | --- | --- |
@@ -110,9 +131,9 @@ column SHALL map to product name, not to the Grade10 Item tag.
 | Card Number | `card_number` | Text | Optional |
 | Variety | `variety` | Text | Optional |
 
-Serial, Cert ID, Grade Issuer, Grade, and Autograph Grade SHALL be copy-level
-inventory facts and SHALL NOT be assigned as product attributes by this card
-template.
+**Copy facts** - Serial, Cert ID, Grade Issuer, Grade, and Autograph Grade
+SHALL be copy-level inventory facts and SHALL NOT be assigned as product
+attributes by this card template.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-108 - Shared card template defines product facts
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
@@ -137,17 +158,28 @@ template.
 
 ### Requirement: Schema manifests create drafts for review
 
-An authorized inventory admin SHALL be able to upload a CSV or XLSX schema
-manifest that defines reusable attribute keys and assigns them to exact
-existing IP + Item + Category tuples. The preview SHALL validate stable keys,
-supported types, requiredness, validation rules, displayed labels, and select
-options against the existing product-schema rules. Each distinct source
-classification key SHALL be explicitly mapped to one existing tag tuple.
-Category alone SHALL NOT map to multiple tuples. A valid manifest SHALL create
-draft schema revisions only; it SHALL NOT publish them.
-An invalid manifest SHALL create no partial revisions. The admin SHALL review
-and publish each schema through the existing publish flow, including its
-validation of affected products.
+An admin uploads a schema manifest, and a valid one lands as drafts to review
+and publish.
+
+**Schema manifest** - An authorized inventory admin SHALL be able to upload a
+CSV or XLSX schema manifest that defines reusable attribute keys and assigns
+them to exact existing IP + Item + Category tuples.
+
+**Preview** - The preview SHALL validate stable keys, supported types,
+requiredness, validation rules, displayed labels, and select options against
+the existing product-schema rules.
+
+**Mapping** - Each distinct source classification key SHALL be explicitly
+mapped to one existing tag tuple. Category alone SHALL NOT map to multiple
+tuples.
+
+**Drafts only** - A valid manifest SHALL create draft schema revisions only;
+it SHALL NOT publish them. An invalid manifest SHALL create no partial
+revisions.
+
+**Review and publish** - The admin SHALL review and publish each schema
+through the existing publish flow, including its validation of affected
+products.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-110 - Schema manifest imports as drafts
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
@@ -167,11 +199,18 @@ validation of affected products.
 
 ### Requirement: Mapped workbook values use consistent normalization
 
-Schema-manifest, product-entry, and inventory imports SHALL trim surrounding
-whitespace from every mapped workbook value. After trimming, an empty cell or
-a standalone `-` SHALL mean absent; a hyphen inside a value SHALL remain part
-of that value. An absent required value SHALL fail row validation. An absent
-optional value SHALL remain absent. Import SHALL NOT modify the uploaded file.
+Every imported cell is trimmed, and an empty or `-` cell means nothing was
+supplied.
+
+**Trimming** - Schema-manifest, product-entry, and inventory imports SHALL
+trim surrounding whitespace from every mapped workbook value.
+
+**Absent values** - After trimming, an empty cell or a standalone `-` SHALL
+mean absent; a hyphen inside a value SHALL remain part of that value. An
+absent required value SHALL fail row validation. An absent optional value
+SHALL remain absent.
+
+**Uploaded file** - Import SHALL NOT modify the uploaded file.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-115 - Mapped values trim and omit blank placeholders
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
@@ -185,24 +224,37 @@ optional value SHALL remain absent. Import SHALL NOT modify the uploaded file.
 
 ### Requirement: Product uploads create products without inventory
 
-An authorized inventory admin SHALL be able to upload a product-entry file
-separately from an inventory file. Product upload SHALL accept CSV and XLSX
-workbooks with one or more sheets. Each included row SHALL provide a product
-name, a mapping from a sufficiently specific source classification key to
-one existing IP + Item + Category tuple, and values for the published schema
-assigned to that tuple. A Category-only key SHALL NOT be used when a broad
-Category contains rows for different product families or tuple targets.
-Before commit, Grade10 SHALL preview row validation and product matches. The
-source fields SHALL remain visible beside their mapping in the preview.
-Identical rows for the same product name, exact tuple, and schema values SHALL
-resolve to one product. A successful commit SHALL create or reuse products
-without creating inventory units, Cert IDs, or stock. New products SHALL use
-the existing draft lifecycle, and the admin SHALL mark each valid draft
-`created` through the existing product status flow before inventory upload.
-Product name SHALL NOT be a global uniqueness constraint: rows with the same
-product name and tuple but different schema values SHALL remain distinct.
-Missing mappings, missing required values, or invalid values SHALL block the
-entire commit.
+A product upload enters product names and schema values, and creates no
+stock.
+
+**Product upload** - An authorized inventory admin SHALL be able to upload a
+product-entry file separately from an inventory file. Product upload SHALL
+accept CSV and XLSX workbooks with one or more sheets.
+
+**Each row** - Each included row SHALL provide a product name, a mapping from
+a sufficiently specific source classification key to one existing IP + Item +
+Category tuple, and values for the published schema assigned to that tuple. A
+Category-only key SHALL NOT be used when a broad Category contains rows for
+different product families or tuple targets.
+
+**Preview** - Before commit, Grade10 SHALL preview row validation and product
+matches. The source fields SHALL remain visible beside their mapping in the
+preview.
+
+**Identical rows** - Identical rows for the same product name, exact tuple,
+and schema values SHALL resolve to one product.
+
+**On commit** - A successful commit SHALL create or reuse products without
+creating inventory units, Cert IDs, or stock. New products SHALL use the
+existing draft lifecycle, and the admin SHALL mark each valid draft `created`
+through the existing product status flow before inventory upload.
+
+**Product name** - Product name SHALL NOT be a global uniqueness constraint:
+rows with the same product name and tuple but different schema values SHALL
+remain distinct.
+
+**Blocked** - Missing mappings, missing required values, or invalid values
+SHALL block the entire commit.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-112 - Product upload creates one draft per identity
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
@@ -233,26 +285,41 @@ entire commit.
 
 ### Requirement: Inventory uploads create matched physical units atomically
 
-An authorized inventory admin SHALL be able to upload inventory rows separately
-from product entries. Inventory upload SHALL accept CSV and XLSX workbooks
-with one or more sheets, where each included row represents one physical unit.
-The source Category label SHALL remain visible beside its mapping in the
-preview.
-Grade10 SHALL match each row to exactly one existing `created` product using
-the exact mapped IP + Item + Category tuple, product name, and supplied schema
-values. A Category-only mapping SHALL NOT be used when source rows in that
-Category require different tuple targets. The import preview SHALL show the
-resolved product and each copy-level fact before commit. It SHALL preserve
-Cert ID, Grade Issuer, Grade, Autograph Grade, and Serial as copy-level facts.
-Every included row SHALL identify its Grade Issuer as `RAW` or a grading
-issuer. A `RAW` row MUST NOT have a Cert ID; every graded row MUST have one.
-Grade10 SHALL trim surrounding whitespace from a supplied Cert ID before
+An inventory upload adds one physical unit per row against products that
+already exist, all at once or not at all.
+
+**Inventory upload** - An authorized inventory admin SHALL be able to upload
+inventory rows separately from product entries. Inventory upload SHALL accept
+CSV and XLSX workbooks with one or more sheets, where each included row
+represents one physical unit.
+
+**Source label** - The source Category label SHALL remain visible beside its
+mapping in the preview.
+
+**Product match** - Grade10 SHALL match each row to exactly one existing
+`created` product using the exact mapped IP + Item + Category tuple, product
+name, and supplied schema values. A Category-only mapping SHALL NOT be used
+when source rows in that Category require different tuple targets.
+
+**Preview** - The import preview SHALL show the resolved product and each
+copy-level fact before commit. It SHALL preserve Cert ID, Grade Issuer, Grade,
+Autograph Grade, and Serial as copy-level facts.
+
+**Grade Issuer** - Every included row SHALL identify its Grade Issuer as `RAW`
+or a grading issuer.
+
+**Cert ID** - A `RAW` row MUST NOT have a Cert ID; every graded row MUST have
+one. Grade10 SHALL trim surrounding whitespace from a supplied Cert ID before
 checking duplicates; duplicates within the upload or within the matched
-product inventory SHALL block the whole commit. Each blank Item Status row
-SHALL have its own explicit include or exclude decision before commit, with no
-default applied to other rows. Successful commit SHALL add one unit per
-included row, update inventory counts, store copy facts, and append the
-corresponding inventory history in one atomic operation.
+product inventory SHALL block the whole commit.
+
+**Blank Item Status** - Each blank Item Status row SHALL have its own explicit
+include or exclude decision before commit, with no default applied to other
+rows.
+
+**On commit** - Successful commit SHALL add one unit per included row, update
+inventory counts, store copy facts, and append the corresponding inventory
+history in one atomic operation.
 
 | Import field | Rules |
 | --- | --- |
@@ -326,15 +393,24 @@ corresponding inventory history in one atomic operation.
 
 ### Requirement: Intake accepts optional Cert ID entries atomically
 
-An authorized inventory admin SHALL be able to intake a positive integer
-quantity with zero or more individually tracked unit records. Each tracked
-unit SHALL identify its Grade Issuer and SHALL follow the Cert ID rules for
-`RAW` or graded units. The number of tracked unit records SHALL be no more
-than the intake quantity. Intake with no unit records SHALL remain valid and
-SHALL change only the aggregate inventory counters. Invalid, duplicate, or
-overlapping identifiers SHALL refuse the whole operation. A successful intake
-SHALL append one history entry whose after state carries the received unit
-records when any were supplied.
+Intake receives a quantity and, when the admin has them, the records of the
+units inside it.
+
+**Intake** - An authorized inventory admin SHALL be able to intake a positive
+integer quantity with zero or more individually tracked unit records.
+
+**Each tracked unit** - Each tracked unit SHALL identify its Grade Issuer and
+SHALL follow the Cert ID rules for `RAW` or graded units. The number of
+tracked unit records SHALL be no more than the intake quantity.
+
+**No unit records** - Intake with no unit records SHALL remain valid and SHALL
+change only the aggregate inventory counters.
+
+**Refused** - Invalid, duplicate, or overlapping identifiers SHALL refuse the
+whole operation.
+
+**History** - A successful intake SHALL append one history entry whose after
+state carries the received unit records when any were supplied.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-98 - Unnumbered intake increases stock
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
@@ -366,12 +442,18 @@ records when any were supplied.
 
 ### Requirement: Displayed Attributes always offer Cert ID as a special field
 
-For every product schema, the Displayed Attributes panel SHALL offer Cert ID
-as a special field alongside the schema's typed product attributes. Cert ID
-SHALL NOT require an ordinary attribute key. An admin SHALL be able to include
-or exclude the field and place it at any position in the displayed order.
-Existing typed attribute display choices SHALL remain unchanged when Cert ID
-is added, moved, or removed.
+Cert ID is always on offer in Displayed Attributes, with no product attribute
+behind it.
+
+**Displayed fields** - For every product schema, the Displayed Attributes
+panel SHALL offer Cert ID as a special field alongside the schema's typed
+product attributes. Cert ID SHALL NOT require an ordinary attribute key.
+
+**Include and order** - An admin SHALL be able to include or exclude the field
+and place it at any position in the displayed order.
+
+**Other attributes unchanged** - Existing typed attribute display choices
+SHALL remain unchanged when Cert ID is added, moved, or removed.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-101 - Admin adds Cert ID to displayed attributes
 **Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
@@ -406,12 +488,17 @@ is added, moved, or removed.
 
 ### Requirement: Every reservation requires an explicit inventory unit choice
 
-Any reservation created against inventory SHALL carry an explicit unit choice.
-The choice SHALL be either one available Cert ID owned by the selected product
-inventory or the literal choice `No Cert ID`. A Cert ID reservation SHALL have
-quantity one and SHALL be exclusive to one active reservation. `No Cert ID`
-SHALL use the existing product-level quantity reservation path without
-allocating a certificate record.
+A reservation names the unit it takes: one Cert ID, or none.
+
+**Explicit choice** - Any reservation created against inventory SHALL carry an
+explicit unit choice. The choice SHALL be either one available Cert ID owned
+by the selected product inventory or the literal choice `No Cert ID`.
+
+**Cert ID reservation** - A Cert ID reservation SHALL have quantity one and
+SHALL be exclusive to one active reservation.
+
+**No Cert ID** - `No Cert ID` SHALL use the existing product-level quantity
+reservation path without allocating a certificate record.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-105 - Reservation selects a Cert ID
 **Serves:** grade10-admin-inventory-catalog-US-71 - Holder reserves a specific inventory unit

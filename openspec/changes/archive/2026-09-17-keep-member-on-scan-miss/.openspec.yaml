@@ -1,0 +1,5 @@
+schema: grade10-planning
+created: 2026-09-15
+deployed_at: "100d1d2748022c0d080a99f1e6349d5a76f34cc9"
+deployed_env: "production"
+tasks_waived: "ecchochan, no scanner-equipped device on hand; will rely on real-floor feedback instead of a device walk"

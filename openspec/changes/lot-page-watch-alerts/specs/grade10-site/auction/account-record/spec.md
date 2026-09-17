@@ -70,14 +70,20 @@ SHALL offer Undo.
 
 ### Requirement: A bid bookmarks the lot and announces alerts once
 
-Placing a bid on a listing SHALL bookmark that listing on My Auctions without
-a separate Watch. Grade10 SHALL turn email alerts on for that listing by
-default (same enrolment as watching).
+A bid puts the lot on My Auctions with email alerts on, and the collector is
+told once.
 
-When that bid first bookmarks the listing for the collector, Grade10 SHALL
-announce that email alerts are on for the lot **at most once per listing per
-collector**. That fact SHALL be stored on the account. A later bid, page
-view, or device SHALL NOT show the same announcement again for that pair.
+**Bid bookmarks** - Placing a bid on a listing SHALL bookmark that listing on
+My Auctions without a separate Watch.
+
+**Alerts on** - Grade10 SHALL turn email alerts on for that listing by default
+(same enrolment as watching).
+
+**Announced once** - When that bid first bookmarks the listing for the
+collector, Grade10 SHALL announce that email alerts are on for the lot **at
+most once per listing per collector**. That fact SHALL be stored on the
+account. A later bid, page view, or device SHALL NOT show the same announcement
+again for that pair.
 
 #### Scenario: grade10-site-auction-account-record-SC-45 - A bid bookmarks without a separate Watch
 **Serves:** grade10-site-auction-account-record-US-06 - A bid bookmarks and toasts alerts once

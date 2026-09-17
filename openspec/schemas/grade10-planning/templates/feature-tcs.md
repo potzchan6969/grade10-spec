@@ -63,19 +63,22 @@
 
 * <!-- from THEN -->
 
-## Raised
-<!-- Written by the blind reading: every point the isolated input did not
-     settle, as a question for the author. Not cases, not defects — the things
-     that had to be decided in order to write anything at all. Required, and
-     may be empty; empty is a claim on the record that the input settled
-     everything. It stays in the file after reconciliation, because QA's review
-     is largely a check on what was done with it. -->
+<!-- The blind reading's raised questions are not a section here. They go to
+     the change's decisions.md, under its ## Raised table, one row per point the
+     isolated input did not settle, with the capability that raised it — the
+     file the author is already reading, where every row owes a landing before
+     the change merges. A ## Raised in this file is a list in the wrong place
+     and `pnpm run tcs:validate` says so. -->
 
 ## Settled
 <!-- Questions earlier runs raised and had answered, one line each, no scenario
      ids. Carried into the durable suite at archive, and read by the next blind
      pass on purpose: it says what has already been asked, which is not what
-     the scenarios say. Without it the same misreading is raised every run. -->
+     the scenarios say. Without it the same misreading is raised every run.
+
+     Every raised row that was escalated or deferred lands here or in
+     ## Reconciliation as well as in decisions.md, which archives with the
+     change and is folded nowhere. -->
 
 ## Reconciliation
 <!-- Written by the run after both readings land, and the evidence that the
@@ -86,7 +89,8 @@
      things — which the run never settles on its own — and **Uncovered anchors**
      with where each is verified instead. A finding is recorded here even when
      the rule it becomes lands in another capability's spec; say where it went.
-     Record the isolated input's hash on the Run line.
+     The Run line names the isolated input: what the pass read, and what it
+     was denied. Nothing verifies it, so it is a statement, not proof.
 
      Scenario ids may appear here only while the change is open; archive fold
      and tcs-review both strip them, leaving the dispositions and reasons. -->

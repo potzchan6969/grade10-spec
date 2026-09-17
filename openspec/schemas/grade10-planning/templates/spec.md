@@ -21,8 +21,8 @@
      grade10-site-store-product-listing-SC-01, -US-01, -US1-TC1-1. -->
 
 <!-- Everything below is the second pass, written after the blind suite and
-     the reconciliation. `openspec instructions spec-behaviour` carries the
-     rules. -->
+     the reconciliation. `openspec instructions specs` carries the rules for
+     both passes. -->
 
 ## ADDED Requirements
 
@@ -30,7 +30,7 @@
 <!-- requirement text -->
 
 #### Scenario: <capability>-SC-01 - <!-- scenario name -->
-**Serves:** <!-- <capability>-US-<n>, or a Feature set root group --> - <!-- short description, prose -->
+**Serves:** <!-- <capability>-US-<n>; or <product>/<domain>/<capability>#<journey-id> for another capability's journey; or a Feature set root group, for a rule with no actor --> - <!-- the walk this rule sits on, prose -->
 
 - **WHEN** <!-- condition -->
 - **THEN** <!-- expected outcome -->

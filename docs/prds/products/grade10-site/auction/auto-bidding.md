@@ -4,7 +4,8 @@ spec: grade10-site/auction/auto-bidding
 order: 6
 ---
 
-The extension rule means the one thing a collector cannot do is plan to be
+At the scheduled close, a bid keeps the lot open and every later accepted bid
+restarts its timer. The one thing a collector cannot do is plan to be
 there at the end. Auto-bidding is the answer: they name the most they will
 pay, and Grade10 bids for them only as far as needed to lead.
 

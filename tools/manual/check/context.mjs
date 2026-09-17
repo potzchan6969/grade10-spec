@@ -7,7 +7,7 @@
  */
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { readText } from "../src/store/disk.mts";
+import { readText, walkFiles } from "../src/store/disk.mts";
 
 /** Report order, and which findings end the build. */
 export const RULES = [
@@ -54,6 +54,36 @@ export const RULES = [
     key: "serves",
     level: "fail",
     title: "Scenarios serving an anchor the spec does not offer",
+  },
+  {
+    // The anchor says where the rule sits; the prose after it says what the
+    // walk was. A line repeating the group name back carries neither, and a
+    // group anchor is already the weakest of the three — it names a part of
+    // the map and nobody who meets the rule. A group anchor with no prose at
+    // all is the same line with the repetition left out, so both fail here.
+    // Nothing in the store writes either today, so this is a guard on new work
+    // rather than a register.
+    key: "restates",
+    level: "fail",
+    title: "`**Serves:**` prose that never names the walk",
+  },
+  {
+    // Every state the designer drew is either a scenario or an exemption that
+    // names where it is stated instead. Gated on the change carrying a
+    // `decisions.md`, the same marker `decided` uses: a change planned before
+    // that artifact existed was planned before this rule did too.
+    key: "dressed",
+    level: "fail",
+    title: "Design states no requirement answers",
+  },
+  {
+    // The blind pass's raised questions land in `decisions.md`, and each owes
+    // a landing before the change merges — a `Decisions` row, or a ❓ on the
+    // PRD. Without the deadline the list sat at the bottom of a suite until
+    // somebody reviewed it, which could be after the change shipped.
+    key: "raised",
+    level: "fail",
+    title: "Raised questions that landed nowhere",
   },
   {
     key: "cited",
@@ -163,6 +193,15 @@ export const RULES = [
     title: "Application work with no tech design",
   },
   {
+    // `decisions.md` is required by the schema, and a required artifact that
+    // the boards ask for and no check reads is one a change merges without.
+    // Every other required artifact in this workflow has a rule that refuses
+    // its absence; this is that rule.
+    key: "decided",
+    level: "fail",
+    title: "Changes with no record of what they settled",
+  },
+  {
     key: "archived",
     level: "fail",
     title: "Archives recording no deploy",
@@ -171,6 +210,14 @@ export const RULES = [
     key: "story",
     level: "fail",
     title: "Story ids in the workbench Storybook index",
+  },
+  {
+    // The one signal this store can read that a blind pass stopped being
+    // blind, or stopped being a different reading. The Run line says what the
+    // pass read, never how it read, and nothing verifies it.
+    key: "asking",
+    level: "warn",
+    title: "Blind passes that raised nothing",
   },
   {
     key: "stale",
@@ -304,5 +351,116 @@ export function* everyBlock(blocks) {
 export const message = (cause) =>
   cause instanceof Error ? cause.message : String(cause);
 
+/**
+ * Every `user-journeys.md` a change carries, as `{ change, spec, file }`.
+ *
+ * Read off the tree rather than off the change's deltas. The product manager
+ * hands a change over with journeys and no `spec.md` at all — which is the
+ * whole of their part now — and a rule keyed on the deltas has nothing to walk
+ * in exactly that state: the file that says who walks a capability went
+ * unchecked until somebody else added a delta beside it.
+ */
+export function journeysOf(root, changes) {
+  const found = [];
+  for (const change of changes) {
+    const dir = `openspec/changes/${change.id}/specs`;
+    if (!existsSync(join(root, dir))) continue;
+    for (const file of walkFiles(root, join(root, dir), ".md")) {
+      if (!file.endsWith("/user-journeys.md")) continue;
+      found.push({
+        change: change.id,
+        spec: file.slice(`${dir}/`.length, -"/user-journeys.md".length),
+        file,
+      });
+    }
+  }
+  return found;
+}
+
 export const plural = (count, word) =>
   `${count} ${word}${count === 1 ? "" : "s"}`;
+
+/** An anchor naming another capability's journey:
+ * `<product>/<domain>/<capability>#<journey-id>`. A rule sits on the journey
+ * somebody walks, and the walk is often somebody else's — the operator's
+ * post-sale queue reaches a status the collector's capability derives. Before
+ * this, such a rule took a feature set group, which names a part of the map
+ * and nobody who meets it, or a hand-written note in a journeys file that
+ * named no scenario and so was read by nothing. */
+const QUALIFIED = /^([a-z0-9][a-z0-9/-]*)#([a-z0-9][a-z0-9-]*-US-\d+)$/;
+
+/** The journey ids a capability has ever issued - the ones it still holds and
+ * the ones it has retired - or undefined where the store holds no such
+ * capability. A qualified anchor resolves through this.
+ *
+ * The retired ids are in the set because the far capability is not the one the
+ * anchor is written on. Answering live journeys alone made retiring a journey
+ * fail `serves` on every capability that named it, which lands the red in the
+ * retirer's pull request and points it at somebody else's file - work they
+ * cannot do and would not know to. It also cut against the store's own rule
+ * that an issued id is permanent: `archive:preflight` refuses a removed
+ * journey that leaves no `## Retired` tombstone precisely because archived
+ * suites still trace it. A tombstone the checker then treats as absent is the
+ * same id answered two ways.
+ *
+ * What the anchor stands on going stale is a real question, and it is the
+ * retiring change's to answer in its deltas - not a red line on a capability
+ * that has not changed. */
+export const journeysIn = (ctx) => (id) => {
+  const spec = ctx.specs.get(id);
+  if (!spec || spec.journeys === undefined) return undefined;
+  return new Set([
+    ...spec.journeys.map((one) => one.id),
+    ...(spec.retiredJourneys ?? []),
+  ]);
+};
+
+export const qualifiedAnchor = (anchor) => {
+  const match = QUALIFIED.exec(anchor);
+  return match ? { spec: match[1], journey: match[2] } : null;
+};
+
+/** Why an anchor resolves to nothing, as the clause that follows it in a
+ * finding, or null when it resolves. `local` is the anchor set the capability
+ * offers itself; `far` answers a qualified anchor's capability, and returns
+ * undefined where the store holds no such capability. */
+export function anchorRefusal(local, anchor, specId, far) {
+  if (local.has(anchor)) return null;
+  const qualified = qualifiedAnchor(anchor);
+  if (!qualified) {
+    return `which is neither a journey nor a feature set group of \`${specId}\``;
+  }
+  const journeys = far(qualified.spec);
+  if (journeys === undefined) {
+    return `whose capability \`${qualified.spec}\` is not one this store holds`;
+  }
+  if (!journeys.has(qualified.journey)) {
+    return `which \`${qualified.spec}\` issues nowhere`;
+  }
+  return null;
+}
+
+/** Why a group anchor's `**Serves:**` prose says nothing its anchor did not,
+ * as the clause that follows the anchor in a finding, or null where the prose
+ * names the walk.
+ *
+ * Two shapes fail, and the emptier one is the stricter case: a group name
+ * carries which part of the map the rule sits in and nobody who meets it, so
+ * the prose is the only place the walk is ever written. Repeating the group
+ * name back says nothing; writing no prose at all says the same thing in fewer
+ * words, and a rule that caught only the first would pass the line it was
+ * written to catch.
+ *
+ * Compared on letters and digits alone, so casing and punctuation do not hide
+ * a repetition. */
+export function groupProseRefusal(anchor, prose) {
+  if (prose === undefined || bare(prose) === "") {
+    return "names the group and stops — say what the walk is after a dash";
+  }
+  if (bare(anchor) !== "" && bare(prose) === bare(anchor)) {
+    return "repeats the group name after the dash — say what the walk is instead";
+  }
+  return null;
+}
+
+const bare = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, "");

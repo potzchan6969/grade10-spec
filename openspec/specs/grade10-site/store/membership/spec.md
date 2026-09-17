@@ -134,6 +134,14 @@ identified, and every read and act inside it SHALL be recorded with the
 claimed staff and location labels; identifier-typed lookups SHALL be
 rate-limited.
 
+A lookup that identifies nobody while a member is on the sale — no match, a
+used or expired code, paused or throttled entry, or no answer — SHALL leave
+that member on the till: their panel, their session, and the points and
+coupons staff had chosen. The panel SHALL show the answer the same lookup
+gives with nobody on the sale. A lookup that finds a member SHALL replace the
+one on the sale. An outdated till or membership switched off SHALL still take
+membership off the till, and the sale goes on as an ordinary sale.
+
 #### Scenario: grade10-site-store-membership-SC-09 - A replayed code is refused with its history
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -154,6 +162,27 @@ rate-limited.
 - **WHEN** staff identify a member by typed email
 - **THEN** the lookup is recorded with the staff and location labels and
   how the member was identified
+
+#### Scenario: grade10-site-store-membership-SC-79 - A lookup that finds nobody keeps the member on the sale
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
+
+- **GIVEN** a member is identified at the till and staff have chosen points
+  to spend
+- **WHEN** a scan or lookup identifies nobody
+- **THEN** the member, their session and the chosen points stay on the till
+- **AND** the panel shows the answer that lookup gives with nobody on the sale
+- **AND** a spend confirmed afterwards spends for that member
+
+#### Scenario: grade10-site-store-membership-SC-80 - A lookup that finds another member replaces the first
+**Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
+
+- **GIVEN** a member is identified at the till
+- **WHEN** a scan identifies a different member
+- **THEN** the till shows the new member
+- **AND** every read and spend started after the switch acts for the new
+  member only
+- **AND** a read or spend started before the switch does not move the till
+  off the new member
 
 ### Requirement: Points come off as one order-level discount either channel accepts
 

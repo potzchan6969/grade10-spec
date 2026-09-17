@@ -1,0 +1,5 @@
+schema: grade10-planning
+created: 2026-09-17
+promoted_by: "@constancetang"
+awaiting:
+  specs: outline and requirements after /planning-qa; Storybook and ui-design land first

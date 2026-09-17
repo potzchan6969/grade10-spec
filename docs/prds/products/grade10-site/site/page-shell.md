@@ -19,21 +19,28 @@ controls do not appear, disappear, or move.
 and Sign out. Sign-out is offered there as well as on the profile. Orders and
 KYC are not in the menu for auction-first launch.
 
-Controls exist only when there is something behind them. The Cart Drawer gives
-Store surfaces and checkout a Cart control; unrelated surfaces have none.
-Search still waits for a search surface, and no link points to a page the site
-does not hold. 🚧 Until Store launches, the primary nav lists Auction (and the
-other surfaces that answer) without a Store entrance, and the cart stays
-absent. The header marks the item that owns the current address, and marks
-nothing when no item owns it.
+Controls exist only when there is something behind them. Search still waits for
+a search surface, and no link points to a page the site does not hold. The
+header marks the item that owns the current address, and marks nothing when no
+item owns it.
 
-🚧 **Store Locator** — once that page answers, header and footer Store Locator
-lead there; until then the destination stays out of the chrome.
+🚧 **Auction-first chrome** — until Store launches, the primary nav lists
+Auction (and the other surfaces that answer) without a Store entrance, and the
+cart stays absent
+
+🚧 **Global cart** — once Store answers the cart drawer, the Cart control stays
+in the header on every surface — including Auction and other non-Store pages —
+so a collector can reach checkout without returning to Store
+
+🚧 **Store Locator** — once that page answers and the shop is open, header and
+footer Store Locator lead there; until then the destination stays out of the
+chrome, including on auction-first launch.
 
 ## Help
 
-🚧 **Help** — primary nav lists Help after Store Locator for auction-only and
-full nav (wide bar and compact menu). It opens the documentation site in a new
+🚧 **Help** — primary nav lists Help for auction-only and full nav (wide bar
+and compact menu). When Store Locator is in the chrome, Help follows it; on
+auction-first, Help follows Auction. It opens the documentation site in a new
 tab.
 
 🚧 **Compact menu** — below a 896px-wide container, the leading menu opens a left
@@ -62,8 +69,11 @@ is no cart to show someone signed out.
 
 ::story{id="site-chrome-siteheader-layout--narrow-signed-out" title="SiteHeader — narrow signed out"}
 
+::story{id="site-chrome-siteheader-cart--on-auction-surface" title="Cart on auction surface (post-store)"}
+
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Collector help | ❓ Open | Help sits in the primary nav after Store Locator (wide and compact), opens in a new tab. Provisional host is Mintlify at `https://grade10.mintlify.io/`; confirm the host. | Product |
+| Collector help | ❓ Open | Help sits in the primary nav (wide and compact), after Store Locator when that item is present and after Auction on auction-first. Opens in a new tab. Provisional host is Mintlify at `https://grade10.mintlify.io/`; confirm the host. | Product |
+| Global cart | Decided | Once Store launches, Cart stays in the header on every surface (including Auction) to cut checkout friction. Absent only while the Store cart drawer does not answer (auction-first). | Product |
 :::

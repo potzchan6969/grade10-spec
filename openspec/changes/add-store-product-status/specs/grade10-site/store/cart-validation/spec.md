@@ -40,23 +40,27 @@ cart is offered for checkout, where the shop becomes the authority.
 
 ### Requirement: The store re-reads availability and price for cart lines at two moments
 
-The store SHALL re-read availability and price for every line the cart holds
-when the cart is opened, and again when the cart is offered for checkout. It
-SHALL NOT rely on what a line recorded when it was added, however recently.
+Every cart line is re-read when the cart opens and again when it is offered
+for checkout, and each read comes from the shop at that moment.
 
-Each read SHALL be answered by the shop at that moment. A cached read that
-serves the listing or a card's page SHALL NOT answer for a cart line: a browse
-surface may use its normal catalogue cache, and the cart may not.
+**Two read moments** - The store SHALL re-read availability and price for
+every line the cart holds when the cart is opened, and again when the cart is
+offered for checkout. It SHALL NOT rely on what a line recorded when it was
+added, however recently.
 
-Availability SHALL be answered for the line's variant and its requested
-quantity together, as `grade10-site/commerce/product-status` defines it. Price
-SHALL be read as an integer count of minor units and an ISO 4217 currency code,
-as
-`money-amounts` requires.
+**Live answer** - Each read SHALL be answered by the shop at that moment. A
+cached read that serves the listing or a card's page SHALL NOT answer for a
+cart line: a browse surface may use its normal catalogue cache, and the cart
+may not.
 
-While a read is in flight the store SHALL NOT present the lines it is checking
-as confirmed, and SHALL NOT let the cart be offered for checkout on the strength
-of the previous read.
+**What is read** - Availability SHALL be answered for the line's variant and
+its requested quantity together, as `grade10-site/commerce/product-status`
+defines it. Price SHALL be read as an integer count of minor units and an ISO
+4217 currency code, as `money-amounts` requires.
+
+**In flight** - While a read is in flight the store SHALL NOT present the
+lines it is checking as confirmed, and SHALL NOT let the cart be offered for
+checkout on the strength of the previous read.
 
 #### Scenario: grade10-site-store-cart-validation-SC-01 - The cart is opened
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
@@ -90,16 +94,21 @@ of the previous read.
 
 ### Requirement: A line the store cannot fill in full is reduced to what remains
 
-When a re-read answers fillable in part for a line, the store SHALL reduce that
-line to the quantity that can be filled, SHALL report the line as adjusted, and
-SHALL tell the collector the quantity changed and was not their doing.
+A line the shop can fill only in part drops to what it can fill, a line it
+cannot fill stays marked, and no line grows.
 
-When a re-read answers not fillable, the store SHALL report the line as out of
-stock and SHALL NOT reduce it to zero silently or remove it. The collector
-SHALL be able to remove it themselves.
+**Reduced** - When a re-read answers fillable in part for a line, the store
+SHALL reduce that line to the quantity that can be filled, SHALL report the
+line as adjusted, and SHALL tell the collector the quantity changed and was
+not their doing.
 
-The store SHALL NOT increase a line's quantity on a re-read, whatever count has
-since become available. A collector asked for what they asked for.
+**Out of stock** - When a re-read answers not fillable, the store SHALL report
+the line as out of stock and SHALL NOT reduce it to zero silently or remove
+it. The collector SHALL be able to remove it themselves.
+
+**Never grown** - The store SHALL NOT increase a line's quantity on a re-read,
+whatever count has since become available. A collector asked for what they
+asked for.
 
 #### Scenario: grade10-site-store-cart-validation-SC-05 - More was in the cart than remains
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
@@ -155,17 +164,22 @@ something different from one whose card was withdrawn from sale.
 
 ### Requirement: A line whose price changed is shown at the current price before checkout
 
-When a re-read returns a price differing from the one the line was showing, the
-store SHALL show the current price, SHALL tell the collector the price changed
-before the cart is offered for checkout, and SHALL use only the re-read price in
-any total it shows. A price that rose SHALL be disclosed as plainly as one that
-fell.
+A line whose price moved shows the current price and says so once, and no
+other price reaches checkout.
 
-A disclosed price SHALL be the line's price from then on: a later read that
-returns the same price confirms the line rather than reporting it again.
+**Repriced** - When a re-read returns a price differing from the one the line
+was showing, the store SHALL show the current price, SHALL tell the collector
+the price changed before the cart is offered for checkout, and SHALL use only
+the re-read price in any total it shows. A price that rose SHALL be disclosed
+as plainly as one that fell.
 
-The store SHALL NOT create a checkout order from a price a browser supplied, a
-price a line recorded when it was added, or a price whose read did not return.
+**Disclosed once** - A disclosed price SHALL be the line's price from then on:
+a later read that returns the same price confirms the line rather than
+reporting it again.
+
+**No other price** - The store SHALL NOT create a checkout order from a price
+a browser supplied, a price a line recorded when it was added, or a price
+whose read did not return.
 
 #### Scenario: grade10-site-store-cart-validation-SC-11 - A price rose while the line sat in the cart
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
@@ -204,18 +218,22 @@ price a line recorded when it was added, or a price whose read did not return.
 
 ### Requirement: A cart the checkout read contradicts is not offered for checkout unresolved
 
-The read taken when the cart is offered for checkout SHALL be the read the
-checkout order is priced from. The store SHALL NOT create the order from an
-earlier read, however recent, and SHALL NOT take two reads where one answers
-both.
+The checkout read prices the order, and a cart with any moved line goes back
+to the collector before an order is created.
 
-When that read finds any line out of stock, unavailable, adjusted, or repriced,
-the store SHALL NOT create the checkout order. It SHALL return the collector to
-their cart with every such line identified and what happened to each of them
-said — every contradicted line at once, not the first one found.
+**On checkout** - The read taken when the cart is offered for checkout SHALL
+be the read the checkout order is priced from. The store SHALL NOT create the
+order from an earlier read, however recent, and SHALL NOT take two reads where
+one answers both.
 
-The collector SHALL be able to proceed once the cart holds only lines the read
-confirmed, without rebuilding it from nothing.
+**Nothing contradicted goes** - When that read finds any line out of stock,
+unavailable, adjusted, or repriced, the store SHALL NOT create the checkout
+order. It SHALL return the collector to their cart with every such line
+identified and what happened to each of them said — every contradicted line at
+once, not the first one found.
+
+**Proceed after resolving** - The collector SHALL be able to proceed once the
+cart holds only lines the read confirmed, without rebuilding it from nothing.
 
 #### Scenario: grade10-site-store-cart-validation-SC-15 - One line blocks the handoff
 **Serves:** grade10-site-store-cart-validation-US-02 - Collector offers the cart for checkout
@@ -250,18 +268,22 @@ confirmed, without rebuilding it from nothing.
 
 ### Requirement: The store's read is advisory and the shop remains the authority
 
-The store's re-read SHALL be treated as the best available answer at the moment
-it was taken, not as a guarantee. A checkout the shop subsequently refuses SHALL
-be reported to the collector with the refused lines identified, and SHALL NOT be
-presented as a fault of the collector's or hidden behind a generic failure.
+The store's read is its best answer at the time; the shop's refusal is
+reported, a short fill is refused, and a read that fails blocks the handoff.
 
-A cart the shop would fill short — accepting fewer of a line than were asked
-for — SHALL be refused with that line identified and the quantity the shop
-would fill, and SHALL NOT be sold short.
+**Shop's last word** - The store's re-read SHALL be treated as the best
+available answer at the moment it was taken, not as a guarantee. A checkout
+the shop subsequently refuses SHALL be reported to the collector with the
+refused lines identified, and SHALL NOT be presented as a fault of the
+collector's or hidden behind a generic failure.
 
-When the read itself cannot be completed, the store SHALL NOT invent
-availability or price, SHALL NOT fall back to what a line recorded, and SHALL
-NOT create a checkout order.
+**Filled short** - A cart the shop would fill short — accepting fewer of a
+line than were asked for — SHALL be refused with that line identified and the
+quantity the shop would fill, and SHALL NOT be sold short.
+
+**Read cannot complete** - When the read itself cannot be completed, the store
+SHALL NOT invent availability or price, SHALL NOT fall back to what a line
+recorded, and SHALL NOT create a checkout order.
 
 #### Scenario: grade10-site-store-cart-validation-SC-19 - The shop refuses what the store had confirmed
 **Serves:** grade10-site-store-cart-validation-US-03 - Collector meets the shop's own refusal

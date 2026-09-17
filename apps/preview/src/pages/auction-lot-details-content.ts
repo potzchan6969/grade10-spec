@@ -17,7 +17,7 @@ import {
   type LiveListingFacts,
   stateMeta,
 } from "../auction-listing/listing-auction-bid-fixtures";
-import { HELP_NAV_ITEM, STORE_LOCATOR_HREF } from "./workbench-story-nav";
+import { HELP_NAV_ITEM } from "./workbench-story-nav";
 
 export {
   type AuctionTiming,
@@ -130,7 +130,7 @@ const NAV_LOGO = createElement(G10LogoMono, {
   className: "h-5 w-auto @4xl:h-7",
 });
 
-/** Auction-first header fixtures for `SiteHeader`. No Store entrance, no cart. */
+/** Auction-first header fixtures for `SiteHeader`. No Store, no Store Locator, no cart. */
 export const AUCTION_SITE_HEADER = {
   copy: {
     locale: "English",
@@ -157,7 +157,6 @@ export const AUCTION_SITE_HEADER = {
   utilityLinks: [],
   navItems: [
     { label: "Auction", href: "#auction", current: true },
-    { label: "Store Locator", href: STORE_LOCATOR_HREF },
     { ...HELP_NAV_ITEM },
   ],
   onLocaleChange: noop,
@@ -221,8 +220,8 @@ export const AUCTION_LOT_DETAILS_COPY = {
       "We bid only as needed up to your maximum. If two people set the same maximum, the earlier one leads.",
     maximumsTab: "Your maximums",
     bidsTab: "Bid placed",
-    maximumColumn: "Maximum",
-    bidColumn: "Bid",
+    maximumAmount: "Maximum",
+    bidAmount: "Bid",
     time: "Time",
     emptyBidsTitle: "No bids placed yet",
     emptyBidsDescription: "We only bid as needed up to your maximum.",

@@ -35,8 +35,9 @@ current bid is the second-highest maximum plus the listing increment.
 - Auto-bid as a bid
   - Counted and recorded: a bid Grade10 places counts in the bid count and
     history as placed on that bidder's behalf
-  - Extension once: an auto-bid inside the extension window moves the close as a
-    manual bid would, and standing maxima do not keep bidding
+  - Extended bidding: a maximum committed before the close counts toward entry,
+    an auto bid during extended bidding restarts the timer as a manual bid
+    would, and standing maxima do not keep bidding
 
 ## Requirements
 
@@ -335,19 +336,24 @@ Worked example. Starting price 20000, increment 2500.
 
 A bid Grade10 places on a bidder's behalf SHALL be treated as an accepted
 bid in every respect: it SHALL count toward the listing's bid count,
-appear in bid history identified as placed on that bidder's behalf, and
-extend the listing's close under the same extension rule and cap that
-`grade10-site/auction/auction` already governs a manual bid with.
+appear in bid history identified as placed on that bidder's behalf, count
+toward whether the listing enters extended bidding at its scheduled close,
+and move the listing's close under the same extended-bidding rule and cap
+that `grade10-site/auction/auction` already governs a manual bid with.
 
-Auto bidding SHALL remain active during the extension window. A bid
-Grade10 places inside that window SHALL move the close exactly as a
-manual bid placed at the same moment would. Two standing maxima SHALL
-NOT keep extending the close on their own.
+Auto bidding SHALL remain active during extended bidding. A bid Grade10
+places during extended bidding SHALL move the close exactly as a manual bid
+placed at the same moment would. A bid Grade10 places before the scheduled
+close SHALL NOT move the close, as a manual bid would not. Two standing
+maxima SHALL NOT keep extending the close on their own.
+
+Scenario `grade10-site-auction-auto-bidding-SC-22` keeps its title with its id.
+The title is historical: its extension window is now extended bidding.
 
 #### Scenario: grade10-site-auction-auto-bidding-SC-22 - An auto bid in the extension window extends once
 **Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
-- **GIVEN** a listing inside its extension window, and a leader whose committed maximum has room left
+- **GIVEN** a listing in extended bidding, and a leader whose committed maximum has room left
 - **WHEN** a challenger's commitment causes Grade10 to raise the leader's bid on their behalf
 - **THEN** that bid moves the listing's close exactly as a manual bid at that moment would
 - **AND** the listing does not close while that extension stands
@@ -368,6 +374,14 @@ NOT keep extending the close on their own.
 - **WHEN** no further commitment is accepted
 - **THEN** Grade10 places no further bid on either bidder's behalf
 - **AND** the current bid is unchanged
+
+#### Scenario: grade10-site-auction-auto-bidding-SC-25a - A maximum committed before the close counts toward extended bidding
+**Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
+
+- **GIVEN** an open listing whose only bidder committed a maximum before its
+  scheduled close and leads at the starting price
+- **WHEN** the scheduled close arrives
+- **THEN** the listing enters extended bidding
 
 ### Requirement: Maximum commitments and automatic bids work without a bid-time authorization
 

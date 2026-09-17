@@ -1060,7 +1060,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Run:** 2026-09-15 · two independent readings of the same anchors · isolated input `1bdd004470a0c9d4` · the suite pass read no `## Requirements`, no `openspec/specs/` beyond Purpose and Feature set, and nothing under `openspec/changes/archive/`.
+**Run:** 2026-09-15 · two independent readings of the same anchors · the suite pass read no `## Requirements`, no `openspec/specs/` beyond Purpose and Feature set, and nothing under `openspec/changes/archive/`.
 
 * **Raised, escalated → folded into spec** — *A session read that fails*. The largest hole the blind pass found, and nobody had decided it: a wrong answer here signs people out on a flaky network. The author settled it — a surface that cannot reach the service goes on showing what it last knew, and only an answer that nobody is signed in signs it out. Folded as a new requirement with `shared-auth-session-SC-25` and `SC-26`. `US4-TC10-1` was recast onto the direction that bites: a signed-in tab whose read fails must stay signed in, which the original case did not exercise.
 * **Raised, escalated → folded into spec** — *A tab nobody returns to*. The freshness bound was keyed on returning, so it said nothing about a tab kept visible — the two-monitor case the change's own story lives in. Settled as keeping up promptly for a surface of the same site whether the person left it or not, with the return bound standing everywhere else. Folded into the keeping-up requirement and `shared-auth-session-SC-22`; `US4-TC6-1` unblocked.

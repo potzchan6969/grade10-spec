@@ -168,6 +168,49 @@ test("a change whose sections all landed is clear", () => {
   assert.equal(result.status, 0);
 });
 
+/** `decisions.md` is folded nowhere and the blind pass may not read archive,
+ * so a rejected option recorded only there is lost to the one pass most likely
+ * to raise it again. The owner says where it went. */
+test("refuses decisions the fold carries nowhere until the owner says where they went", () => {
+  const decided = {
+    ...CARRIED,
+    "decisions.md":
+      "## Goals\n\n- Collectors find a card.\n\n## Non-Goals\n\n- Stock per shop.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Where does search live? | The header | A dedicated page - one field is not a surface |\n",
+  };
+  const refused = run(sandbox(decided, DURABLE).script, ...SHIPPED);
+  assert.equal(refused.status, 1);
+  assert.match(
+    refused.stderr,
+    /records 1 decision\(s\) that the fold carries nowhere/,
+  );
+
+  const carried = run(
+    sandbox(decided, DURABLE).script,
+    ...SHIPPED,
+    "--decisions-carried",
+    "Q1 onto the listing page's Product decisions block",
+  );
+  assert.equal(carried.status, 0, carried.stderr);
+
+  const none = run(
+    sandbox(decided, DURABLE).script,
+    ...SHIPPED,
+    "--decisions-carried",
+    "none",
+  );
+  assert.equal(none.status, 0, none.stderr);
+});
+
+test("asks nothing of a change whose decisions table is empty", () => {
+  const empty = {
+    ...CARRIED,
+    "decisions.md":
+      "## Goals\n\n- Collectors find a card.\n\n## Non-Goals\n\n- Stock per shop.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n",
+  };
+  const result = run(sandbox(empty, DURABLE).script, ...SHIPPED);
+  assert.equal(result.status, 0, result.stderr);
+});
+
 test("refuses a scenario the fold would land with no anchor", () => {
   const files = {
     ...CARRIED,
@@ -306,4 +349,46 @@ test("a suite with no durable file yet is a promise --journeys-copied can make",
     "--journeys-copied",
   );
   assert.equal(acknowledged.status, 0);
+});
+
+/** A change whose every task group lands in the store deploys nothing, so
+ * there is no run to name and no waiver owed. `check:manual`'s `archived` rule
+ * and the archive skill both already said so; this script did not, so the only
+ * way to archive one was to waive a deploy it never had — and a waiver written
+ * where none is owed is how the waiver becomes the default. */
+const STORE_ONLY = "## 1. Store checks (grade10-spec)\n\n- [x] 1.1 Ship it\n";
+
+test("a store-only plan needs no deploy evidence and records none", () => {
+  const { script, manifest } = sandbox({
+    ...PROPOSAL,
+    ".openspec.yaml": "schema: grade10-planning\n",
+    "tasks.md": STORE_ONLY,
+  });
+  const result = run(script);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /No deploy record is owed/);
+  assert.equal(readFileSync(manifest, "utf8"), "schema: grade10-planning\n");
+});
+
+test("a plan landing anywhere else still owes its deploy", () => {
+  const { script } = sandbox({
+    ...PROPOSAL,
+    "tasks.md": `${STORE_ONLY}\n## 2. The app (grade10)\n\n- [x] 2.1 Wire it\n`,
+  });
+  const result = run(script);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /No deploy evidence/);
+});
+
+test("an untagged group is not a store-only plan", () => {
+  const { script } = sandbox({
+    ...PROPOSAL,
+    "tasks.md": "## 1. Build it\n\n- [x] 1.1 Ship it\n",
+  });
+  const result = run(script);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /No deploy evidence/);
 });

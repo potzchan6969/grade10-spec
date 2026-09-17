@@ -18,6 +18,9 @@ import {
 } from "./fixtures";
 import type { HeldPromoCode, PointsState, PromoState } from "./types";
 
+const heldPromoSelectionSpy = fn();
+const interactiveTypedPromoSpy = fn();
+
 function promoDiscountAmount(promo: PromoState): string | null {
   return promo.status === "applied" ? String(promo.discountAmount) : null;
 }
@@ -221,7 +224,7 @@ export const HeldPromoSheet: Story = {
             onClose={() => {}}
             onPromoStateChange={() => {}}
             onApplyPromo={() => false}
-            onSelectHeldPromo={() => {}}
+            onSelectHeldPromo={heldPromoSelectionSpy}
           />
         }
       >
@@ -238,6 +241,271 @@ export const HeldPromoSheet: Story = {
       canvas.getByText("Add ~HK$7,300 more to use this promo code"),
     ).toBeInTheDocument();
     expect(canvas.queryByText(/coupon/i)).not.toBeInTheDocument();
+    await userEvent.click(
+      within(canvas.getByRole("group", { name: "WELCOME100" })).getByRole(
+        "button",
+        { name: "Apply" },
+      ),
+    );
+    expect(heldPromoSelectionSpy).toHaveBeenCalledTimes(1);
+    expect(heldPromoSelectionSpy).toHaveBeenCalledWith("held-welcome");
+  },
+};
+
+/** Partial callback matrix: each action follows only its own callback. */
+export const PartialCallbackMatrix: Story = {
+  render: (args) => {
+    const promo: PromoState = { status: "expanded" };
+    const [heldSheetOpen, setHeldSheetOpen] = useState(true);
+    const [withoutApplyPoints, setWithoutApplyPoints] = useState<PointsState>({
+      status: "expanded",
+    });
+    const [withoutMaxPoints, setWithoutMaxPoints] = useState<PointsState>({
+      status: "expanded",
+    });
+    const [disclosurePromo, setDisclosurePromo] = useState<PromoState>({
+      status: "collapsed",
+    });
+    const disclosurePromoOpen = disclosurePromo.status === "expanded";
+
+    return (
+      <div className="flex flex-col gap-8">
+        <section aria-label="Held promo without selection callback">
+          <FooterWithPromoNest
+            promoOpen={heldSheetOpen}
+            sheet={
+              <CartPromoSheet
+                open={heldSheetOpen}
+                copy={DEFAULT_CART_COPY.footer}
+                promoState={promo}
+                heldPromoCodes={SAMPLE_HELD_PROMO_CODES}
+                onClose={() => setHeldSheetOpen(false)}
+                onApplyPromo={() => false}
+              />
+            }
+          >
+            <div />
+          </FooterWithPromoNest>
+        </section>
+
+        <section aria-label="Points without apply callback">
+          <CartDrawerFooter
+            subtotal="HK$42,700.00"
+            estimatedTotal="HK$42,700.00"
+            pointsBalanceLabel="You’ve 1,200 pts."
+            copy={DEFAULT_CART_COPY.footer}
+            pointsState={withoutApplyPoints}
+            onPointsStateChange={setWithoutApplyPoints}
+            onUseMaxPoints={() => {
+              args.onUseMaxPoints?.();
+              setWithoutApplyPoints({
+                status: "applied",
+                amountLabel: formatStoryCreditHkd(STORY_POINTS_MAX_HKD),
+              });
+            }}
+          />
+        </section>
+
+        <section aria-label="Points without max callback">
+          <CartDrawerFooter
+            subtotal="HK$42,700.00"
+            estimatedTotal="HK$42,700.00"
+            pointsState={withoutMaxPoints}
+            pointsBalanceLabel="You’ve 1,200 pts."
+            copy={DEFAULT_CART_COPY.footer}
+            onPointsStateChange={setWithoutMaxPoints}
+            onApplyPoints={(amount) => {
+              args.onApplyPoints?.(amount);
+              const n = Number(amount.replace(/[^0-9.]/g, ""));
+              if (!Number.isFinite(n) || n <= 0) return false;
+              setWithoutMaxPoints({
+                status: "applied",
+                amountLabel: formatStoryCreditHkd(n),
+              });
+              return true;
+            }}
+          />
+        </section>
+
+        <section aria-label="Applied promo without removal callback">
+          <CartDrawerFooter
+            subtotal="HK$42,700.00"
+            estimatedTotal="HK$38,430.00"
+            promoState={{
+              status: "applied",
+              code: "WELCOME100",
+              discountAmount: "−HK$4,270.00",
+            }}
+            pointsState={null}
+            copy={DEFAULT_CART_COPY.footer}
+          />
+        </section>
+
+        <section aria-label="Applied points without removal callback">
+          <CartDrawerFooter
+            subtotal="HK$42,700.00"
+            estimatedTotal="HK$42,200.00"
+            pointsState={{
+              status: "applied",
+              amountLabel: "−HK$500.00",
+            }}
+            copy={DEFAULT_CART_COPY.footer}
+          />
+        </section>
+
+        <section aria-label="Disclosure callback matrix">
+          <FooterWithPromoNest
+            promoOpen={disclosurePromoOpen}
+            sheet={
+              <CartPromoSheet
+                open={disclosurePromoOpen}
+                copy={DEFAULT_CART_COPY.footer}
+                promoState={disclosurePromo}
+                onClose={() => setDisclosurePromo({ status: "collapsed" })}
+                onPromoStateChange={setDisclosurePromo}
+              />
+            }
+          >
+            <CartDrawerFooter
+              subtotal="HK$42,700.00"
+              estimatedTotal="HK$42,700.00"
+              promoState={disclosurePromo}
+              pointsState={{ status: "expanded" }}
+              pointsBalanceLabel="You’ve 1,200 pts."
+              copy={DEFAULT_CART_COPY.footer}
+              onPromoStateChange={(next) => {
+                args.onPromoStateChange?.(next);
+                setDisclosurePromo(next);
+              }}
+            />
+          </FooterWithPromoNest>
+        </section>
+
+        <section aria-label="Promo disclosure without callback">
+          <CartDrawerFooter
+            subtotal="HK$42,700.00"
+            estimatedTotal="HK$42,700.00"
+            promoState={{ status: "collapsed" }}
+            pointsState={{ status: "expanded" }}
+            pointsBalanceLabel="You’ve 1,200 pts."
+            copy={DEFAULT_CART_COPY.footer}
+            onPointsStateChange={() => {}}
+          />
+        </section>
+      </div>
+    );
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+
+    const held = within(
+      canvas.getByRole("region", {
+        name: "Held promo without selection callback",
+      }),
+    );
+    expect(held.getByPlaceholderText("Enter promo code")).toBeInTheDocument();
+    expect(held.getByRole("button", { name: "Apply" })).toBeInTheDocument();
+    expect(
+      within(held.getByRole("group", { name: "WELCOME100" })).queryByRole(
+        "button",
+        { name: "Apply" },
+      ),
+    ).not.toBeInTheDocument();
+
+    const withoutApply = within(
+      canvas.getByRole("region", { name: "Points without apply callback" }),
+    );
+    expect(withoutApply.getByText(/1 pt = HK\$1\./)).toBeInTheDocument();
+    expect(withoutApply.getByText(/You’ve 1,200 pts\./)).toBeInTheDocument();
+    expect(withoutApply.queryByPlaceholderText("0")).not.toBeInTheDocument();
+    expect(
+      withoutApply.queryByRole("button", { name: "Apply" }),
+    ).not.toBeInTheDocument();
+    expect(
+      withoutApply.getByRole("button", { name: "Use max" }),
+    ).toBeInTheDocument();
+    await userEvent.click(
+      withoutApply.getByRole("button", { name: "Use max" }),
+    );
+    expect(args.onUseMaxPoints).toHaveBeenCalledTimes(1);
+    expect(args.onApplyPoints).not.toHaveBeenCalled();
+
+    const withoutMax = within(
+      canvas.getByRole("region", { name: "Points without max callback" }),
+    );
+    expect(withoutMax.getByPlaceholderText("0")).toBeInTheDocument();
+    expect(
+      withoutMax.getByRole("button", { name: "Apply" }),
+    ).toBeInTheDocument();
+    expect(
+      withoutMax.queryByRole("button", { name: "Use max" }),
+    ).not.toBeInTheDocument();
+    await userEvent.type(withoutMax.getByPlaceholderText("0"), "500");
+    await userEvent.click(withoutMax.getByRole("button", { name: "Apply" }));
+    expect(args.onApplyPoints).toHaveBeenCalledTimes(1);
+    expect(args.onApplyPoints).toHaveBeenCalledWith("500");
+    expect(args.onUseMaxPoints).toHaveBeenCalledTimes(1);
+
+    const withoutPromoRemoval = within(
+      canvas.getByRole("region", {
+        name: "Applied promo without removal callback",
+      }),
+    );
+    expect(
+      withoutPromoRemoval.getByText("Discount (WELCOME100)"),
+    ).toBeInTheDocument();
+    expect(
+      withoutPromoRemoval.queryByRole("button", { name: "Remove" }),
+    ).not.toBeInTheDocument();
+
+    const withoutPointsRemoval = within(
+      canvas.getByRole("region", {
+        name: "Applied points without removal callback",
+      }),
+    );
+    expect(withoutPointsRemoval.getByText("−HK$500.00")).toBeInTheDocument();
+    expect(
+      withoutPointsRemoval.queryByRole("button", { name: "Remove" }),
+    ).not.toBeInTheDocument();
+
+    const disclosure = within(
+      canvas.getByRole("region", { name: "Disclosure callback matrix" }),
+    );
+    expect(
+      disclosure.getByRole("button", { name: /Select or enter code/i }),
+    ).toBeInTheDocument();
+    expect(
+      disclosure.queryByRole("button", { name: /Use points/i }),
+    ).not.toBeInTheDocument();
+    expect(disclosure.getByText(/1 pt = HK\$1\./)).toBeInTheDocument();
+    expect(disclosure.getByText(/You’ve 1,200 pts\./)).toBeInTheDocument();
+    await userEvent.click(
+      disclosure.getByRole("button", { name: /Select or enter code/i }),
+    );
+    expect(args.onPromoStateChange).toHaveBeenCalledTimes(1);
+    expect(args.onPromoStateChange).toHaveBeenCalledWith({
+      status: "expanded",
+    });
+
+    const withoutPromoDisclosure = within(
+      canvas.getByRole("region", {
+        name: "Promo disclosure without callback",
+      }),
+    );
+    expect(
+      withoutPromoDisclosure.queryByRole("button", {
+        name: /Select or enter code/i,
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      withoutPromoDisclosure.getByRole("button", { name: /Use points/i }),
+    ).toBeInTheDocument();
+    expect(
+      withoutPromoDisclosure.getByText(/1 pt = HK\$1\./),
+    ).toBeInTheDocument();
+    expect(
+      withoutPromoDisclosure.getByText(/You’ve 1,200 pts\./),
+    ).toBeInTheDocument();
   },
 };
 
@@ -305,6 +573,68 @@ export const HeldPromoAllInapplicable: Story = {
     expect(canvas.getByText("Not valid for this order")).toBeInTheDocument();
     expect(canvas.queryByText("Your promo codes")).not.toBeInTheDocument();
     expect(canvas.getByText("SAVE200")).toBeInTheDocument();
+  },
+};
+
+/** Read-only tender context keeps eligibility facts while omitting mutations. */
+export const ReadOnlyTenderContext: Story = {
+  render: () => {
+    const promo: PromoState = { status: "expanded" };
+    const [promoOpen, setPromoOpen] = useState(true);
+
+    return (
+      <FooterWithPromoNest
+        promoOpen={promoOpen}
+        sheet={
+          <CartPromoSheet
+            open={promoOpen}
+            copy={DEFAULT_CART_COPY.footer}
+            promoState={promo}
+            heldPromoCodes={SAMPLE_HELD_PROMO_CODES}
+            onClose={() => setPromoOpen(false)}
+          />
+        }
+      >
+        <CartDrawerFooter
+          subtotal="HK$42,700.00"
+          estimatedTotal="HK$42,700.00"
+          pointsState={{ status: "expanded" }}
+          pointsBalanceLabel="You’ve 1,200 pts."
+          copy={DEFAULT_CART_COPY.footer}
+        />
+      </FooterWithPromoNest>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    expect(canvas.getByText("WELCOME100")).toBeInTheDocument();
+    expect(
+      canvas.getByText("Add ~HK$7,300 more to use this promo code"),
+    ).toBeInTheDocument();
+    expect(
+      canvas.queryByPlaceholderText("Enter promo code"),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "Apply" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "Use max" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: /Use points/i }),
+    ).not.toBeInTheDocument();
+
+    expect(canvas.getByText(/1 pt = HK\$1\./)).toBeInTheDocument();
+    expect(canvas.getByText(/You’ve 1,200 pts\./)).toBeInTheDocument();
+    expect(canvas.queryByPlaceholderText("0")).not.toBeInTheDocument();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Back" }));
+    await waitFor(() => {
+      expect(
+        canvas.queryByRole("dialog", { name: "Promo code" }),
+      ).not.toBeInTheDocument();
+    });
   },
 };
 
@@ -462,6 +792,7 @@ export const InteractiveMember: Story = {
             onPromoStateChange={setPromo}
             onSelectHeldPromo={applyHeld}
             onApplyPromo={(code) => {
+              interactiveTypedPromoSpy(code);
               const result = applyTypedPromoInStories(code, held);
               if (result.ok) {
                 setSelectedHeldId(result.heldId);
@@ -515,6 +846,7 @@ export const InteractiveMember: Story = {
               });
               return false;
             }
+            args.onApplyPoints?.(amount);
             setPoints({
               status: "applied",
               amountLabel: formatStoryCreditHkd(n),
@@ -523,6 +855,7 @@ export const InteractiveMember: Story = {
             return true;
           }}
           onUseMaxPoints={() => {
+            args.onUseMaxPoints?.();
             setPoints({
               status: "applied",
               amountLabel: formatStoryCreditHkd(STORY_POINTS_MAX_HKD),
@@ -537,6 +870,55 @@ export const InteractiveMember: Story = {
         />
       </FooterWithPromoNest>
     );
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: /Select or enter code/i }),
+    );
+    const promoSheet = within(
+      canvas.getByRole("dialog", { name: "Promo code" }),
+    );
+    await userEvent.type(
+      promoSheet.getByPlaceholderText("Enter promo code"),
+      " WELCOME100 ",
+    );
+    await userEvent.click(
+      promoSheet.getAllByRole("button", { name: "Apply" })[0],
+    );
+    expect(interactiveTypedPromoSpy).toHaveBeenCalledTimes(1);
+    expect(interactiveTypedPromoSpy).toHaveBeenCalledWith("WELCOME100");
+    await waitFor(() => {
+      expect(canvas.getByText("Discount (WELCOME100)")).toBeInTheDocument();
+    });
+
+    await userEvent.click(canvas.getByRole("button", { name: /Use points/i }));
+    await userEvent.click(canvas.getByRole("button", { name: "Use max" }));
+    expect(args.onUseMaxPoints).toHaveBeenCalledTimes(1);
+    expect(args.onApplyPoints).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(canvas.getByText("Points")).toBeInTheDocument();
+      expect(
+        canvas.getByText(formatStoryCreditHkd(STORY_POINTS_MAX_HKD)),
+      ).toBeInTheDocument();
+      expect(canvas.getByText(/1 pt = HK\$1\./)).toBeInTheDocument();
+      expect(canvas.getByText(/You’ve 1,200 pts\./)).toBeInTheDocument();
+    });
+    const removeButtons = canvas.getAllByRole("button", { name: "Remove" });
+    await userEvent.click(removeButtons[removeButtons.length - 1]);
+    await userEvent.click(canvas.getByRole("button", { name: /Use points/i }));
+    await userEvent.type(canvas.getByPlaceholderText("0"), "500");
+    await userEvent.click(canvas.getByRole("button", { name: "Apply" }));
+    expect(args.onApplyPoints).toHaveBeenCalledTimes(1);
+    expect(args.onApplyPoints).toHaveBeenCalledWith("500");
+    expect(args.onUseMaxPoints).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(canvas.getByText("Points")).toBeInTheDocument();
+      expect(canvas.getByText("−HK$500.00")).toBeInTheDocument();
+      expect(canvas.getByText(/1 pt = HK\$1\./)).toBeInTheDocument();
+      expect(canvas.getByText(/You’ve 1,200 pts\./)).toBeInTheDocument();
+    });
   },
 };
 

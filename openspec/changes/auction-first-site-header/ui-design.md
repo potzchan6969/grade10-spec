@@ -53,4 +53,5 @@ remains delivery work.
 | Narrow viewport | `grade10-site-site-page-shell-SC-15`; Storybook `site-chrome-siteheader-layout--narrow-signed-out` |
 | Compact menu open | `shared-ui-site-chrome-SC-20`, `grade10-site-site-page-shell-SC-20`; Storybook `components-nav-layout--menu-open`, `components-nav-layout--language-nested` |
 | Wide bar layout | `shared-ui-site-chrome-SC-21` |
-| No cart / no Store (language reachable) | `shared-ui-site-chrome-SC-18`, `grade10-site-site-page-shell-SC-09` |
+| No cart / no Store / no Store Locator (language reachable) | `shared-ui-site-chrome-SC-18`, `grade10-site-site-page-shell-SC-09`; Storybook `site-chrome-siteheader-auction-first--signed-out` |
+| Cart global on Auction once Store answers | `grade10-site-site-page-shell-SC-16`; Storybook `site-chrome-siteheader-cart--on-auction-surface` |

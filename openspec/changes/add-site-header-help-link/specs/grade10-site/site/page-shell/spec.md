@@ -9,22 +9,33 @@
   - Current-surface marking: the navigation item owning the current address is
     marked, and none is when no item owns it
 - Collector help
-  - Header Help: primary nav lists Help after Store Locator and opens the
-    documentation site in a new tab, for auction-only and full primary nav
+  - Header Help: primary nav lists Help after Store Locator when that item is
+    present, and after Auction on auction-only nav; Help opens the
+    documentation site in a new tab
 
 ## ADDED Requirements
 
 ### Requirement: Help opens the documentation site from the header
 
-The site SHALL list Help in the primary navigation after Store Locator on a
-wide viewport, and in the compact menu drawer on a narrow viewport, whenever
-the primary navigation is auction-only or includes Store and other answered
-surfaces. Help SHALL use the same primary-nav link presentation as Auction and
-Store Locator. Activating Help SHALL open the documentation site Product names
+Help sits in the primary navigation and opens the documentation site in a new
+tab.
+
+**Header Help** - The site SHALL list Help in the primary navigation on a wide
+viewport, and in the compact menu drawer on a narrow viewport, whenever the
+primary navigation is auction-only or includes Store and other answered
+surfaces.
+
+**Its place** - When Store Locator is present in the primary navigation, Help
+SHALL follow it; on auction-only primary navigation, Help SHALL follow Auction.
+
+**Presentation** - Help SHALL use the same primary-nav link presentation as
+other primary items.
+
+**New tab** - Activating Help SHALL open the documentation site Product names
 in a new browsing context. The current site surface SHALL remain open.
 
-Help SHALL use the shared chrome's external link behaviour so the new tab is
-isolated from the opener.
+**Isolated from the opener** - Help SHALL use the shared chrome's external link
+behaviour so the new tab is isolated from the opener.
 
 #### Scenario: grade10-site-site-page-shell-SC-25 - Help on auction-only and full nav
 **Serves:** grade10-site-site-page-shell-US-07 - Collector opens Help from the header
@@ -32,7 +43,8 @@ isolated from the opener.
 - **GIVEN** a wide viewport and a header whose primary nav is auction-only, or
   one that also lists Store and other answered surfaces
 - **WHEN** the header renders
-- **THEN** Help appears in the primary navigation after Store Locator
+- **THEN** Help appears in the primary navigation after Auction on auction-only
+  nav, or after Store Locator when that item is present
 - **AND** activating it opens the documentation site in a new browsing context
 
 #### Scenario: grade10-site-site-page-shell-SC-26 - Help in the compact menu
@@ -40,8 +52,8 @@ isolated from the opener.
 
 - **GIVEN** a viewport 375 CSS pixels wide with Help supplied in primary nav
 - **WHEN** the collector opens the header menu
-- **THEN** Help is reachable in the drawer among the primary items after Store
-  Locator
+- **THEN** Help is reachable in the drawer among the primary items after Auction
+  on auction-only nav, or after Store Locator when that item is present
 - **AND** activating it opens the documentation site in a new browsing context
 
 ## MODIFIED Requirements

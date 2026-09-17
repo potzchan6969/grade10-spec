@@ -5,8 +5,9 @@ The proposal's motivation is in `proposal.md`. The
 [page-shell delta](specs/grade10-site/site/page-shell/spec.md) own the Grade10
 behavior. The durable `shared/ui/store-cart` capability and `@grade10/ui`
 already own the drawer's visual states, dismissal, empty state, item
-statuses, and interaction contract. The Grade10 application now has one
-route-gated drawer host and `Nav.onCartClick` handler. That host currently
+statuses, and interaction contract. The Grade10 application mounts one
+global cart drawer host and `Nav.onCartClick` handler once the Store cart
+drawer answers. That host currently
 stops at the reviewed lines and subtotal.
 
 The existing frontend integration already reaches the Store backend boundary:
@@ -38,7 +39,8 @@ provided it treats them as optional context rather than as a tender selection.
 
 **Goals:**
 
-- Compose one route-gated drawer host at the application root.
+- Compose one global cart drawer host at the application root (Cart on every
+  surface once the Store cart drawer answers).
 - Integrate the drawer with the existing scoped cart and typed live review.
 - Preserve checkout's current review and unavailable-line behavior.
 - Match the supplied populated, loading, failure, unavailable, and empty UI
@@ -67,15 +69,18 @@ provided it treats them as optional context rather than as a tender selection.
 
 ## Decisions
 
-### Compose one route-gated host at the application root
+### Compose one global cart host at the application root
 
-The root derives a Cart-enabled condition for the existing Store surface
-relation plus checkout. It passes `Nav.onCartClick` only there and mounts one
-`CartDrawer` host beside `SiteShell`, so navigation does not duplicate or reset
-cart state. Leaving the enabled surface closes the drawer.
+Once the Store cart drawer answers, the root passes `Nav.onCartClick` on every
+surface and mounts one `CartDrawer` host beside `SiteShell`, so navigation does
+not duplicate or reset cart state. Leaving a surface does not remove Cart from
+the header; closing the drawer preserves the current address.
 
 **Alternative rejected:** mount one drawer per page. That would duplicate cart
 wiring and unmount the current drawer during navigation.
+
+**Alternative rejected:** Store-and-checkout-only Cart. Product keeps Cart
+global after Store launch to cut checkout friction.
 
 ### Reuse the existing scoped cart and backend integration
 
@@ -232,8 +237,8 @@ require a running backend because no backend code changes. Coverage must prove:
   preserve checkout behavior while the drawer follows `open`, keeps the right
   scope, preserves unavailable rows for its cleanup owner, and withholds stale
   facts.
-- `grade10-site-site-page-shell-SC-09` and `SC-16`: one root host exposes Cart
-  only on Store surfaces and checkout.
+- `grade10-site-site-page-shell-SC-09` and `SC-16`: one root host withholds Cart
+  until the Store cart drawer answers, then exposes Cart on every surface.
 - `grade10-site-store-cart-drawer-SC-09` through `SC-12`: reviewed facts,
   neutral totals, scoped writes, and one unavailable cleanup remain honest.
 - `grade10-site-store-cart-drawer-SC-13` and `SC-15`: product and Checkout use

@@ -23,8 +23,11 @@ the same answer from the same facts.
 
 ### Requirement: Order status reads a named vocabulary of Shopify facts
 
-Order status SHALL be derived from exactly four facts about an order, and from
-no other input:
+Four facts about an order decide its status, and a value outside the set still
+resolves to a badge.
+
+**Named vocabulary** - Order status SHALL be derived from exactly four facts
+about an order, and from no other input:
 
 | Fact | Accepted values |
 | --- | --- |
@@ -33,16 +36,17 @@ no other input:
 | Fulfilment state | `unfulfilled`, `partially_fulfilled`, `fulfilled`, `in_progress`, `on_hold`, `scheduled`, `open`, `pending_fulfillment`, `restocked`, `request_declined` |
 | Return state | `returned`, or absent |
 
-An absent fulfilment state SHALL be treated as `unfulfilled`; the two SHALL
-resolve to the same badge and the same note in every case.
+**Absent fulfilment** - An absent fulfilment state SHALL be treated as
+`unfulfilled`; the two SHALL resolve to the same badge and the same note in
+every case.
 
-A payment state the Store cannot determine SHALL be reported as `unknown`. Any
-value outside the accepted set for its fact SHALL be treated as `unknown` for
-payment, or as `unfulfilled` for fulfilment, and SHALL NOT prevent a badge from
-resolving.
+**Unknown values** - A payment state the Store cannot determine SHALL be
+reported as `unknown`. Any value outside the accepted set for its fact SHALL
+be treated as `unknown` for payment, or as `unfulfilled` for fulfilment, and
+SHALL NOT prevent a badge from resolving.
 
-The mapping SHALL NOT read carrier tracking, delivery estimates, line-item
-quantities, monetary amounts, or elapsed time.
+**Not read** - The mapping SHALL NOT read carrier tracking, delivery
+estimates, line-item quantities, monetary amounts, or elapsed time.
 
 #### Scenario: grade10-site-commerce-order-status-SC-01 - An unrecognised Shopify value is indeterminate
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
@@ -55,9 +59,11 @@ quantities, monetary amounts, or elapsed time.
 
 ### Requirement: One badge resolves by ordered precedence
 
-Order status SHALL resolve to exactly one of five badges — `processing`,
-`shipped`, `completed`, `canceled`, `refunded` — by evaluating these rules in
-order and taking the first that matches:
+Every order gets one of five badges, taken from the first rule that matches.
+
+**Ordered precedence** - Order status SHALL resolve to exactly one of five
+badges — `processing`, `shipped`, `completed`, `canceled`, `refunded` — by
+evaluating these rules in order and taking the first that matches:
 
 | # | Condition | Badge |
 | --- | --- | --- |
@@ -68,13 +74,14 @@ order and taking the first that matches:
 | 5 | Fulfilment state is `fulfilled` or `partially_fulfilled` | `shipped` |
 | 6 | Otherwise | `processing` |
 
-Every combination of the accepted vocabulary SHALL resolve to a badge. The
-mapping SHALL NOT return an empty, absent, or error status for any combination.
+**Never blank** - Every combination of the accepted vocabulary SHALL resolve
+to a badge. The mapping SHALL NOT return an empty, absent, or error status for
+any combination.
 
-Rule 3 SHALL outrank rules 4 and 5, so that money returning to a collector is
-reported ahead of fulfilment progress. Rule 3's exclusion of `on_hold` and
-`scheduled` SHALL keep an order that is still in progress reported as
-`processing`, even when part of it has been refunded.
+**Refund first** - Rule 3 SHALL outrank rules 4 and 5, so that money returning
+to a collector is reported ahead of fulfilment progress. Rule 3's exclusion of
+`on_hold` and `scheduled` SHALL keep an order that is still in progress
+reported as `processing`, even when part of it has been refunded.
 
 #### Scenario: grade10-site-commerce-order-status-SC-02 - A cancelled order reports Canceled
 **Serves:** grade10-site-commerce-order-status-US-01 - Collector reads where an order stands
@@ -132,9 +139,12 @@ reported ahead of fulfilment progress. Rule 3's exclusion of `on_hold` and
 
 ### Requirement: A secondary note clarifies a confirmed combination
 
-Order status MAY carry one secondary note identifier alongside its badge. The
-note SHALL be resolved by evaluating these rules in order, after the badge is
-known, and taking the first that matches:
+A badge can carry one note identifier, chosen by the first rule that matches,
+and the message catalogs hold its words.
+
+**Confirmed combinations only** - Order status MAY carry one secondary note
+identifier alongside its badge. The note SHALL be resolved by evaluating these
+rules in order, after the badge is known, and taking the first that matches:
 
 | # | Condition | Note identifier |
 | --- | --- | --- |
@@ -158,14 +168,14 @@ known, and taking the first that matches:
 | 18 | Badge `processing`, payment `pending` | `awaiting-payment` |
 | — | Matching no rule above | No note |
 
-A combination matching no rule SHALL carry its badge and no note. The mapping
-SHALL NOT substitute a generic note for an unmatched combination, because a
-badge resolved by rule alone is a correct answer and invented reassurance is
-not.
+**No note** - A combination matching no rule SHALL carry its badge and no
+note. The mapping SHALL NOT substitute a generic note for an unmatched
+combination, because a badge resolved by rule alone is a correct answer and
+invented reassurance is not.
 
-The mapping SHALL emit a note **identifier**, never display text. Translated
-copy for each identifier SHALL be answered by the message catalogs, so that a
-note is not pinned to one language or one brand.
+**Identifier, not copy** - The mapping SHALL emit a note **identifier**, never
+display text. Translated copy for each identifier SHALL be answered by the
+message catalogs, so that a note is not pinned to one language or one brand.
 
 #### Scenario: grade10-site-commerce-order-status-SC-09 - A confirmed combination carries its note
 **Serves:** grade10-site-commerce-order-status-US-02 - Collector understands a refund or a hold
@@ -193,11 +203,15 @@ note is not pinned to one language or one brand.
 
 ### Requirement: Completed reports a concluded order, not a delivery
 
-The `completed` badge SHALL mean that an order is fulfilled, paid, and archived.
-It SHALL NOT be presented as, or derived from, carrier-confirmed delivery, and
-resolving it SHALL NOT require a delivery fact.
+Completed says the order is concluded; no badge says a parcel arrived.
 
-No badge SHALL assert that a shipment reached the collector.
+**Conclusion, not delivery** - The `completed` badge SHALL mean that an order
+is fulfilled, paid, and archived. It SHALL NOT be presented as, or derived
+from, carrier-confirmed delivery, and resolving it SHALL NOT require a
+delivery fact.
+
+**No delivery claim** - No badge SHALL assert that a shipment reached the
+collector.
 
 #### Scenario: grade10-site-commerce-order-status-SC-12 - Completed does not assert delivery
 **Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
@@ -209,14 +223,17 @@ No badge SHALL assert that a shipment reached the collector.
 
 ### Requirement: Pickup is not emitted in this phase
 
-The mapping SHALL NOT emit a pickup badge, because Grade10 does not yet
-distinguish a pickup order from a shipped order in the underlying data. An order
-awaiting collection in a physical store SHALL resolve through the ordered rules
-like any other order.
+No order gets a pickup badge yet, and the shared components keep their pickup
+rung.
 
-This requirement SHALL NOT remove a pickup rung from any shared component or
-design-system contract; withholding the value is a mapping decision, not a
-component change.
+**Pickup withheld** - The mapping SHALL NOT emit a pickup badge, because
+Grade10 does not yet distinguish a pickup order from a shipped order in the
+underlying data. An order awaiting collection in a physical store SHALL
+resolve through the ordered rules like any other order.
+
+**Components unchanged** - This requirement SHALL NOT remove a pickup rung
+from any shared component or design-system contract; withholding the value is
+a mapping decision, not a component change.
 
 #### Scenario: grade10-site-commerce-order-status-SC-13 - Pickup is never emitted in this phase
 **Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere
@@ -228,13 +245,16 @@ component change.
 
 ### Requirement: Every surface showing order status derives it from this mapping
 
-Every Grade10 Store surface that shows a collector the state of an order SHALL
-derive its badge, and any note it displays, from this mapping. A surface SHALL
-NOT define its own combination-to-badge rules, and SHALL NOT display a badge
-that contradicts the one this mapping resolves for the same order.
+Every surface that shows an order's status takes it from this mapping.
 
-A surface MAY choose not to display the secondary note. A surface SHALL NOT
-display a note the mapping did not emit for that order.
+**One mapping** - Every Grade10 Store surface that shows a collector the state
+of an order SHALL derive its badge, and any note it displays, from this
+mapping. A surface SHALL NOT define its own combination-to-badge rules, and
+SHALL NOT display a badge that contradicts the one this mapping resolves for
+the same order.
+
+**The note** - A surface MAY choose not to display the secondary note. A
+surface SHALL NOT display a note the mapping did not emit for that order.
 
 #### Scenario: grade10-site-commerce-order-status-SC-14 - Two surfaces report one order identically
 **Serves:** grade10-site-commerce-order-status-US-03 - Collector sees one answer everywhere

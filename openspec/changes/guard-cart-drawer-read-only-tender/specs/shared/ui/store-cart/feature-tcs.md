@@ -28,13 +28,13 @@ that cannot change the cart.
 
 **Pre-conditions:**
 
-* An open cart has one applicable held promo code and one inapplicable held promo code.
+* An open cart's promo-code view has one applicable held promo code and one
+  inapplicable held promo code.
 * The application supplies no callback that applies a typed code or selects a held code.
 
 **Steps:**
 
-1. Open the cart's promo-code view.
-2. Inspect the held-code details and available controls.
+1. Inspect the held-code details and available controls.
 
 **Expected Results:**
 
@@ -59,13 +59,13 @@ that cannot change the cart.
 
 **Pre-conditions:**
 
-* An open cart has supplied points balance, basket ceiling, and conversion-rate context.
+* An open cart's points view is expanded with supplied points balance, basket
+  ceiling, and conversion-rate context.
 * The application supplies no points-apply or Use max callback.
 
 **Steps:**
 
-1. Open the points disclosure.
-2. Inspect the supplied points context and available controls.
+1. Inspect the supplied points context and available controls.
 
 **Expected Results:**
 
@@ -91,7 +91,8 @@ that cannot change the cart.
 **Pre-conditions:**
 
 * An open cart has typed promo, applicable held-code, and points context.
-* The application supplies the matching apply, selection, points, Use max, and removal callbacks.
+* The application supplies the matching disclosure, apply, selection, points,
+  Use max, and removal callbacks.
 
 **Steps:**
 
@@ -128,8 +129,10 @@ that cannot change the cart.
 
 | `<missing callback>` | `<action that is absent>` |
 | --- | --- |
+| Promo disclosure | Promo-code disclosure control |
 | Typed promo apply | Typed-code input and Apply |
 | Held-code selection | Applicable held-code Apply |
+| Points disclosure | Use points disclosure control |
 | Points apply | Points amount input and Apply |
 | Use max points | Use max |
 | Applied-tender removal | Matching Remove action |
@@ -144,6 +147,8 @@ that cannot change the cart.
 * The action named in `<action that is absent>` is absent.
 * The other supplied actions remain available.
 * No missing callback is invoked by rendering or by activating another supplied action.
+* A missing disclosure callback hides only its disclosure control; display-only
+  context remains available when the corresponding view is already open.
 
 ## Raised
 
@@ -162,6 +167,6 @@ that cannot change the cart.
 - **Folded into spec:** `shared-ui-store-cart-SC-32` and `SC-33` cover promo
   display-only and interactive behavior; `SC-34` and `SC-35` cover points
   display-only and interactive behavior; `SC-36` covers independent callback
-  gating and the remaining optional tender controls.
+  gating for disclosure, mutation, and removal controls.
 - **Uncovered anchors:** none — `shared-ui-store-cart-US-09` is traced by all
   four draft cases.

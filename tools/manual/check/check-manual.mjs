@@ -74,10 +74,12 @@ import { checkDeltas } from "./deltas.mjs";
 import { checkDense } from "./dense.mjs";
 import { checkMarks } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
+import { checkPlanned } from "./planned.mjs";
 import { checkAcceptance } from "./qa.mjs";
 import {
   checkArchived,
   checkAwaiting,
+  checkDecided,
   checkDesign,
   checkUnmarked,
 } from "./record.mjs";
@@ -198,6 +200,8 @@ export async function runChecks(
     checkDependencies(roots.store, changes, add);
     checkUnmarked(ctx, changes, pages);
     checkDesign(ctx, changes);
+    checkDecided(ctx, changes);
+    checkPlanned(ctx, changes);
     checkAwaiting(ctx, changes);
     checkArchived(ctx, readArchivedChanges(roots.store, index));
   } else {

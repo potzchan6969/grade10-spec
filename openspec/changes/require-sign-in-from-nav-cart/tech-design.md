@@ -1,8 +1,8 @@
 ## Context
 
 The site renders one sign-in overlay above its routes and one cart drawer
-beside them; both are held open by state the site root owns, and the header
-receives a cart handler only on the surfaces that answer the drawer. The
+beside them; both are held open by state the site root owns, and once the
+Store cart drawer answers every surface's header receives a cart handler. The
 overlay already takes a `resume` an ask carries, which it runs once a session
 arrives — the mechanism `require-sign-in-to-add-to-cart` uses for an add
 pressed without a session.

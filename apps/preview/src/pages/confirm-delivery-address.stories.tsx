@@ -5,6 +5,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
+  WINNER_ORDER_FULL_SAVED_ADDRESSES,
   WINNER_ORDER_SAVED_ADDRESSES,
   WinnerOrderAddressDialog,
   type WinnerOrderSavedAddress,
@@ -32,7 +33,9 @@ function ConfirmDeliveryAddressDemo({
         </Text>
         <Text size="sm" tone="secondary">
           Preview-only modal under My Auctions. Winner Order still opens the
-          same dialog from Awaiting Address.
+          same dialog from Awaiting Address. An account keeps up to five saved
+          addresses; at the cap, Add new address still works for this order and
+          Save for future is refused until one is removed.
         </Text>
         {!open ? (
           <Button onClick={() => setOpen(true)} size="md">
@@ -70,7 +73,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Standalone Storybook preview of the Winner Order Confirm Delivery Address picker and its nested Add Delivery Address form. Same dialog Winner Order opens from Awaiting Address. Address options use design-system `RadioCard`; an empty book uses `EmptyState`.",
+          "Standalone Storybook preview of the Winner Order Confirm Delivery Address picker and its nested Add Delivery Address form. Same dialog Winner Order opens from Awaiting Address. Address options use design-system `RadioCard`; an empty book uses `EmptyState`. The account book caps at five saved addresses; at the cap Add new address still confirms a one-time address and Save this address for future orders is refused.",
       },
     },
   },
@@ -133,6 +136,11 @@ export const AddDeliveryAddress: Story = {
     expect(form.getByText("Hong Kong")).toBeVisible();
     expect(form.getByText("Save this address for future orders")).toBeVisible();
     expect(
+      form.getByRole("checkbox", {
+        name: "Save this address for future orders",
+      }),
+    ).toBeChecked();
+    expect(
       form.getByRole("button", { name: "Use this address" }),
     ).toBeVisible();
     expect(
@@ -188,5 +196,79 @@ export const RemoveSavedAddress: Story = {
       expect(modal.queryByText(/Harbour Road/)).not.toBeInTheDocument();
     });
     expect(modal.getByText(/Canton Road/)).toBeVisible();
+  },
+};
+
+/**
+ * Five saved addresses — Add new address still opens; Save for future is
+ * refused so Use this address keeps a one-time draft at the top of the picker.
+ */
+export const AddressBookFull: Story = {
+  name: "Address book full",
+  args: {
+    savedAddresses: [...WINNER_ORDER_FULL_SAVED_ADDRESSES],
+  },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const outer = await findVisibleDialog(page, "Confirm Delivery Address");
+    const picker = within(outer);
+    await waitFor(() => {
+      expect(picker.getByText(/Chater House/)).toBeVisible();
+    });
+    expect(picker.getByText(/Festival Walk/)).toBeVisible();
+    expect(
+      picker.getByRole("button", { name: "Add new address" }),
+    ).toBeVisible();
+
+    await userEvent.click(
+      picker.getByRole("button", { name: "Add new address" }),
+    );
+
+    const nested = await findVisibleDialog(page, "Add Delivery Address");
+    const form = within(nested);
+    const saveCheckbox = form.getByRole("checkbox", {
+      name: /Save this address for future orders/,
+    });
+    expect(saveCheckbox).toHaveAttribute("aria-disabled", "true");
+    expect(saveCheckbox).not.toBeChecked();
+    expect(
+      form.getByRole("button", {
+        name: "You already have 5 saved addresses. Remove one to save another.",
+      }),
+    ).toBeVisible();
+
+    await userEvent.type(form.getByLabelText("First name"), "Pat");
+    await userEvent.type(form.getByLabelText("Last name"), "Ng");
+    await userEvent.type(
+      form.getByLabelText("Street address"),
+      "9 Queen's Road Central",
+    );
+    await userEvent.type(form.getByLabelText("City"), "Central");
+    await userEvent.type(form.getByLabelText("Postal code"), "000000");
+    await userEvent.click(
+      form.getByRole("button", { name: "Use this address" }),
+    );
+
+    await waitFor(() => {
+      expect(
+        page.queryByRole("dialog", { name: "Add Delivery Address" }),
+      ).toBeNull();
+    });
+    const confirmedOuter = await findVisibleDialog(
+      page,
+      "Confirm Delivery Address",
+    );
+    const confirmedPicker = within(confirmedOuter);
+    expect(confirmedPicker.getByText("Pat Ng")).toBeVisible();
+    expect(confirmedPicker.getByText(/Queen's Road Central/)).toBeVisible();
+    // Draft leads the list; five removable saved cards remain below.
+    const cards = confirmedPicker.getByLabelText("Delivery address");
+    const firstCardTitle = within(cards).getAllByText(
+      /Pat Ng|Alex Chan|Jordan Lee|Sam Wong/,
+    )[0];
+    expect(firstCardTitle).toHaveTextContent("Pat Ng");
+    expect(
+      confirmedPicker.getAllByRole("button", { name: /^Remove / }).length,
+    ).toBe(5);
   },
 };

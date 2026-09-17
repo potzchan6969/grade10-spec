@@ -16,7 +16,22 @@ this compiles before and after that group lands.
 
 ## 3. Submodule bump (grade10) (owner: @sean)
 
-Lands after group 1 merges to the store's `main`.
+Blocked, and not by this change. Group 1 is on the store's `main`, and a bump
+onto it reports no error against `SignInCardAction` or `exitAction` — the
+sign-in half is clear. What it carries is two store changes that are
+themselves unfinished:
+
+- **`fabf1873`** replaced `ListingUserBidHistoryCopy.emptyBids` with
+  `emptyBidsTitle` and `emptyBidsDescription`, and added neither key to the
+  four `auctionListing` catalogs. `ListingPage.tsx` and
+  `ListingView.test.tsx` have nothing to pass.
+- **`512c93cf`** deleted `gradeLabel` and `soldOutSuffix` from the four
+  `product` catalogs. `ProductBuyBox.tsx` still reads both.
+
+Neither is adaptable from this change. The first wants two catalog keys in
+four languages; the second wants a decision on what the variant list is
+labelled and how a sold-out variant is marked. Passing English literals
+instead would regress three languages that answer the key today.
 
 - [x] 3.1 Move the `external/grade10-spec` pin onto the merged store SHA, so the application builds against an export set without `SignInCardAction`
 - [x] 3.2 Verify: `pnpm run typecheck` and `pnpm run lint`

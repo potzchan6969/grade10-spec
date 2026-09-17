@@ -28,8 +28,11 @@ export const previewLot = {
   orderTotal: "HK$16,896",
   /** When payment was confirmed (winner's zone). */
   paidAt: "20 Sep 2026, 14:22 GMT+8",
-  /** Card: brand + masked number; bank: bank + masked account. */
+  /** Card: brand + masked number. Bank transfer letters use `Bank Transfer` only. */
   paymentMethod: "Visa •••• 4242",
+  /** Receipt ID — quiet body line + attached PDF file name. */
+  receiptId: "REC-202609-LK7P2Q-01-P1",
+
   /** Carrier name once the lot is dispatched. */
   carrierName: "SF Express",
   /** Tracking number shown on Winner Order and in the shipped letter. */

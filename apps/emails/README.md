@@ -35,6 +35,16 @@ Restart the preview server after pulling so discovery refreshes.
 | Auction close | `/preview/auction/close/lot-closed-didnt-win` |
 | Auction order | `/preview/auction/order/auction-won` |
 
+This same preview app — sidebar, linter, spam/compatibility checks — is
+published as a static site on every push to `main` (and on demand) to
+**https://email.grade10-stg.com** (`scripts/build-preview.mjs` lifts
+`email build`'s prerendered pages out instead of running it as a live
+server — no "Send" support there, since that needs a Resend key). Locally:
+
+```bash
+pnpm run email:deploy:staging   # needs CLOUDFLARE_API_TOKEN
+```
+
 ## Structure
 
 ```
@@ -53,8 +63,9 @@ emails/
     close/                 lot ended for watchers & non-winners
                            (watcher previews: lot-watched-sold /
                            lot-watched-ended = no-bids Ended-only)
-    order/                 winner success, address reminder, invoice sent,
-                           payment received, shipped (post-sale)
+    order/                 winner success, address reminder, payment reminder
+                           (send / day-three / day-six / final), payment
+                           received, shipped (post-sale)
 ```
 
 Production send still goes through the application’s `@grade10/email` lane;

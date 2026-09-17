@@ -23,8 +23,14 @@ capability also sets which lots collectors never see.
 
 ### Requirement: Every visible lot has one external lot status
 
-Every lot a collector can see SHALL have exactly one external lot status.
-Grade10 SHALL work it out from the lot and SHALL NOT save it.
+Every lot a collector sees carries one of three statuses, worked out from the
+lot alone.
+
+**Three values** - Every lot a collector can see SHALL have exactly one
+external lot status.
+
+**Worked out, not saved** - Grade10 SHALL work it out from the lot and SHALL
+NOT save it.
 
 | External lot status | The lot |
 | --- | --- |
@@ -32,8 +38,9 @@ Grade10 SHALL work it out from the lot and SHALL NOT save it.
 | Active | Bidding is open, until the lot closes. Includes extended bidding |
 | Ended | Bidding is over, with or without a winner. For a lot with a winner, whatever the state of the winner's order |
 
-Each internal lot status in `grade10-admin/auction/post-sale` SHALL map to one
-external lot status, or to Hidden:
+**From the internal status** - Each internal lot status in
+`grade10-admin/auction/post-sale` SHALL map to one external lot status, or to
+Hidden:
 
 | Internal lot status | External lot status |
 | --- | --- |
@@ -51,14 +58,16 @@ external lot status, or to Hidden:
 | Cancelled | Ended |
 | Refunded | Ended |
 
-A Hidden lot SHALL have no external lot status. Collectors SHALL NOT see it, as
-"Collectors never see hidden lots" sets out.
+**Hidden** - A Hidden lot SHALL have no external lot status. Collectors SHALL
+NOT see it, as "Collectors never see hidden lots" sets out.
 
-The external lot status SHALL describe the lot only. It SHALL NOT describe a
-collector's bid or the winner's order. The winner's order status, set by
-`grade10-site/auction/order-status`, SHALL be shown separately in the winner's
-My Auctions. The designer decides where and how pages show the external lot
-status.
+**Lot, not order** - The external lot status SHALL describe the lot only. It
+SHALL NOT describe a collector's bid or the winner's order. The winner's order
+status, set by `grade10-site/auction/order-status`, SHALL be shown separately
+in the winner's My Auctions.
+
+**Where it shows** - The designer decides where and how pages show the external
+lot status.
 
 #### Scenario: grade10-site-auction-lot-status-SC-01 - A lot whose bidding has not started is Upcoming
 **Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
@@ -107,8 +116,14 @@ status.
 
 ### Requirement: Collectors never see hidden lots
 
-A hidden lot is a lot whose internal lot status is Draft or Called off.
-Collectors SHALL NOT see a hidden lot anywhere on the auction site:
+A draft or called-off lot is absent from every collector page, except for a
+collector who bid on it.
+
+**Hidden lots** - A hidden lot is a lot whose internal lot status is Draft or
+Called off.
+
+**Never shown** - Collectors SHALL NOT see a hidden lot anywhere on the auction
+site:
 
 - **Catalogue** — the lot SHALL NOT be listed, and catalogue search and filters
   SHALL NOT return it
@@ -116,9 +131,9 @@ Collectors SHALL NOT see a hidden lot anywhere on the auction site:
   address with no published lot, per `grade10-site/auction/listing-page`
 - **Watchlist** — the lot SHALL NOT be listed
 
-A collector who bid on a called-off lot SHALL still see it in My Auctions. When
-that bid has a bid-time authorization, the row carries the note that its card
-hold was released, per
+**Bidder exception** - A collector who bid on a called-off lot SHALL still see
+it in My Auctions. When that bid has a bid-time authorization, the row carries
+the note that its card hold was released, per
 `grade10-site/auction/account-record`. No other collector SHALL see it.
 
 #### Scenario: grade10-site-auction-lot-status-SC-06 - A draft lot is not in the catalogue, but an unsold lot is

@@ -19,14 +19,18 @@ supplying its own copy, shop facts, map embed, and Maps destination.
 
 ### Requirement: The store locator surface exports
 
-The shared UI package SHALL export, from its public entry, exactly these
-names for the store locator surface — `StoreLocator` — and exactly these
-types: `StoreLocatorProps`, `StoreLocatorCopy`, and `StoreLocatorHoursRow`.
+The package exports one component and three types, and everything the
+component renders arrives as props.
 
-`StoreLocator` SHALL take the words it renders in a single `copy` prop of
-`StoreLocatorCopy`. Shop name, address lines, hours rows, map embed source,
-and Maps destination SHALL reach it through props. It SHALL NOT fetch, route,
-or read application stores.
+**Named component** - The shared UI package SHALL export, from its public
+entry, exactly these names for the store locator surface — `StoreLocator` —
+and exactly these types: `StoreLocatorProps`, `StoreLocatorCopy`, and
+`StoreLocatorHoursRow`.
+
+**Props-only content** - `StoreLocator` SHALL take the words it renders in a
+single `copy` prop of `StoreLocatorCopy`. Shop name, address lines, hours
+rows, map embed source, and Maps destination SHALL reach it through props. It
+SHALL NOT fetch, route, or read application stores.
 
 #### Scenario: shared-ui-store-locator-SC-01 - An application imports the surface
 **Serves:** Surface exports - an application imports the surface
@@ -39,14 +43,19 @@ or read application stores.
 
 ### Requirement: StoreLocator shows supplied Location & Hours
 
-`StoreLocator` SHALL display a supplied map embed, the supplied store name,
-each supplied address line, and each supplied hours row (day label and hours
-text). Activating the map SHALL report through a link to the supplied Maps
-destination (opens in a new browsing context). The block SHALL NOT render a
-separate Get directions control.
+The block shows the facts it is given, opens the Maps destination from the
+map alone, and drops an empty hours section.
 
-When hours rows are empty, the hours section SHALL be absent rather than
-titled and empty.
+**Supplied facts** - `StoreLocator` SHALL display a supplied map embed, the
+supplied store name, each supplied address line, and each supplied hours row
+(day label and hours text).
+
+**One way to the map** - Activating the map SHALL report through a link to
+the supplied Maps destination (opens in a new browsing context). The block
+SHALL NOT render a separate Get directions control.
+
+**Empty hours** - When hours rows are empty, the hours section SHALL be absent
+rather than titled and empty.
 
 #### Scenario: shared-ui-store-locator-SC-02 - Supplied shop facts render
 **Serves:** Location & Hours - supplied shop facts render

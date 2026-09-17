@@ -24,8 +24,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
-import { MapPin, Trash } from "@phosphor-icons/react";
+import { Info, MapPin, Trash } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
 
 export type WinnerOrderSavedAddress = {
@@ -35,6 +41,12 @@ export type WinnerOrderSavedAddress = {
   /** Street + locality + country — no name; one street line. */
   lines: string;
 };
+
+/** Account shipping address book ceiling — shared across storefronts. */
+export const WINNER_ORDER_SAVED_ADDRESS_CAP = 5;
+
+const SAVE_FOR_FUTURE_REFUSED_TOOLTIP =
+  "You already have 5 saved addresses. Remove one to save another.";
 
 export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
   [
@@ -48,6 +60,39 @@ export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
       label: "Alex Chan",
       lines:
         "Flat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong\nHong Kong",
+    },
+  ] as const;
+
+/** Five named addresses — the book is full; save for future is refused. */
+export const WINNER_ORDER_FULL_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
+  [
+    {
+      id: "wan-chai",
+      label: "Alex Chan",
+      lines: "12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong\nHong Kong",
+    },
+    {
+      id: "tst",
+      label: "Alex Chan",
+      lines:
+        "Flat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong\nHong Kong",
+    },
+    {
+      id: "central",
+      label: "Alex Chan",
+      lines:
+        "Unit 3, Chater House, 8 Connaught Road\nCentral, Hong Kong\nHong Kong",
+    },
+    {
+      id: "causeway",
+      label: "Jordan Lee",
+      lines: "15/F, 88 Percival Street\nCauseway Bay, Hong Kong\nHong Kong",
+    },
+    {
+      id: "kowloon-tong",
+      label: "Sam Wong",
+      lines:
+        "Block A, Festival Walk Residences\nKowloon Tong, Hong Kong\nHong Kong",
     },
   ] as const;
 
@@ -222,6 +267,8 @@ function WinnerOrderAddressDialog({
     selection === DRAFT_VALUE && draftOption ? draftOption : null;
   const canConfirm = Boolean(selectedSaved || selectedDraft);
   const showEmptyPicker = addresses.length === 0 && !draftOption;
+  const addressBookFull = addresses.length >= WINNER_ORDER_SAVED_ADDRESS_CAP;
+  const canSaveForFuture = !addressBookFull;
 
   function confirm() {
     if (selectedSaved) {
@@ -292,7 +339,10 @@ function WinnerOrderAddressDialog({
   }
 
   function openNewAddress() {
-    setDraft(EMPTY_DRAFT);
+    setDraft({
+      ...EMPTY_DRAFT,
+      saveForFuture: addresses.length < WINNER_ORDER_SAVED_ADDRESS_CAP,
+    });
     setAttempted(false);
     setNewAddressOpen(true);
   }
@@ -303,11 +353,13 @@ function WinnerOrderAddressDialog({
 
     const lines = formatAddressLines(draft);
     const label = addressLabelFromDraft(draft);
+    const saveToBook =
+      draft.saveForFuture && addresses.length < WINNER_ORDER_SAVED_ADDRESS_CAP;
 
-    if (draft.saveForFuture) {
+    if (saveToBook) {
       const id = `saved-${Date.now()}`;
       const saved: WinnerOrderSavedAddress = { id, label, lines };
-      setAddresses((held) => [...held, saved]);
+      setAddresses((held) => [saved, ...held]);
       setSelection(id);
       setDraftOption(null);
       markEntering(id);
@@ -369,6 +421,23 @@ function WinnerOrderAddressDialog({
                     className="flex w-full flex-col gap-2"
                     data-slot="address-option-cards"
                   >
+                    {draftOption ? (
+                      <div
+                        className={cn(
+                          enteringIds.has(DRAFT_VALUE)
+                            ? "animate-in fade-in-0 slide-in-from-top-1 duration-200 ease-out motion-reduce:animate-none"
+                            : undefined,
+                        )}
+                        key={draftOption.id}
+                      >
+                        <RadioCard
+                          description={draftOption.lines}
+                          title={draftOption.label}
+                          value={DRAFT_VALUE}
+                        />
+                      </div>
+                    ) : null}
+
                     {addresses.map((address) => {
                       const exiting = exitingIds.has(address.id);
                       const entering = enteringIds.has(address.id);
@@ -411,23 +480,6 @@ function WinnerOrderAddressDialog({
                         </div>
                       );
                     })}
-
-                    {draftOption ? (
-                      <div
-                        className={cn(
-                          enteringIds.has(DRAFT_VALUE)
-                            ? "animate-in fade-in-0 slide-in-from-top-1 duration-200 ease-out motion-reduce:animate-none"
-                            : undefined,
-                        )}
-                        key={draftOption.id}
-                      >
-                        <RadioCard
-                          description={draftOption.lines}
-                          title={draftOption.label}
-                          value={DRAFT_VALUE}
-                        />
-                      </div>
-                    ) : null}
                   </div>
                 </RadioList>
 
@@ -604,16 +656,43 @@ function WinnerOrderAddressDialog({
                 </div>
               </div>
 
-              <CheckboxListInput
-                checked={draft.saveForFuture}
-                className="mt-4"
-                onCheckedChange={(checked) =>
-                  patchDraft("saveForFuture", checked === true)
-                }
-                size="sm"
-              >
-                Save this address for future orders
-              </CheckboxListInput>
+              {/*
+                Info sits beside the row, not inside the label: a control inside
+                a label is invalid, and the refuse reason must stay full opacity
+                while CheckboxListInput only dims its label/count.
+              */}
+              <div className="mt-4 flex w-full items-start gap-1">
+                <CheckboxListInput
+                  checked={canSaveForFuture && draft.saveForFuture}
+                  className="min-w-0 flex-1"
+                  disabled={!canSaveForFuture}
+                  onCheckedChange={(checked) => {
+                    if (!canSaveForFuture) return;
+                    patchDraft("saveForFuture", checked === true);
+                  }}
+                  size="sm"
+                >
+                  Save this address for future orders
+                </CheckboxListInput>
+                {!canSaveForFuture ? (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger
+                        aria-label={SAVE_FOR_FUTURE_REFUSED_TOOLTIP}
+                        className="mt-0.5 inline-flex size-5 shrink-0 items-center justify-center text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+                        onClick={(event) => event.preventDefault()}
+                        onPointerDown={(event) => event.preventDefault()}
+                        render={<button type="button" />}
+                      >
+                        <Info aria-hidden size={12} />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        {SAVE_FOR_FUTURE_REFUSED_TOOLTIP}
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                ) : null}
+              </div>
             </VStack>
           </DialogBody>
           <DialogFooter>

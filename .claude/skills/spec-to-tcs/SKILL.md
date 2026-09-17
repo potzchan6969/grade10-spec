@@ -26,13 +26,24 @@ The blind pass reads the bundle **The Isolated Input** describes in the
 rulebook, assembled by the caller, and nothing outside it:
 
 - **Included** - `## Purpose` and `## Feature set` from the capability's
-  `spec.md`, its `user-journeys.md`, the change's `proposal.md` where one
-  exists, the linked pages under `docs/prds/`, `openspec/config.yaml`'s
-  `context`, the existing `feature-tcs.md` for id continuity with its
-  `## Reconciliation` stripped, and that suite's `## Settled` - the questions
-  earlier runs asked and had answered. Reading those is what stops you raising
-  a refused reading again, and it tells you nothing about what the scenarios
-  say.
+  `spec.md`, its `user-journeys.md`, the change's `proposal.md`,
+  `decisions.md` - its `## Raised` table included, which says what earlier runs
+  asked and what came of it - and `ui-design.md` where they exist, with the
+  dispositions the requirements pass wrote onto its state bullets stripped. The
+  decisions say what
+  the change is for and what it rules out, the design lands before the
+  requirements and ties its states to anchors, and neither holds a requirement,
+  so neither carries a leak - the linked pages under `docs/prds/`,
+  `openspec/config.yaml`'s `context`, the existing `feature-tcs.md` for id
+  continuity with its `## Reconciliation` stripped, and that suite's
+  `## Settled` - the questions earlier runs asked and had answered. Reading
+  those is what stops you raising a refused reading again, and it tells you
+  nothing about what the scenarios say.
+
+  **Write no case for a non-goal.** `decisions.md` names what this change
+  deliberately does not do; a case against one of those is not a gap the
+  scenarios left, and filing it as one spends the reconciliation's credibility
+  on a question already closed.
 - **Excluded** - every `## Requirements` section, `openspec/specs/` beyond the
   two included sections, and `openspec/changes/archive/` entirely. An archived
   change keeps an un-stripped `## Reconciliation` naming scenario ids, so
@@ -81,8 +92,8 @@ and are unchanged.
 
 - **Feature** — the isolated input above, and nothing else: `## Purpose` and
   `## Feature set` from `spec.md` but never its requirements,
-  `user-journeys.md`, the change's `proposal.md` when one exists, the pages
-  under `docs/prds/`, and `openspec/config.yaml`'s `context`. A platform fact
+  `user-journeys.md`, the change's `proposal.md` and `ui-design.md` when they
+  exist, the pages under `docs/prds/`, and `openspec/config.yaml`'s `context`. A platform fact
   is checked where it matters (`URL contains <lang>`), never written as a
   pre-condition
 - **Domain** — **Compose from evidence** under **One purpose, one case**:
@@ -125,7 +136,7 @@ and are unchanged.
 3. **Digest the capability, and upgrade the journeys if missing.** Read as
    **What a Run Reads** says. When `user-journeys.md` is missing or empty, do
    not stop: write it as **Step 1** in the document and `openspec/config.yaml`
-   (`rules.spec-outline`, `rules.user-journeys`) direct — from the feature set
+   (`rules.specs`, `rules.user-journeys`) direct — from the feature set
    and the PRD rather than the requirements you cannot see, adding no
    behaviour, ids numbered from `01` and never reusing a retired number. There
    is no cap on the number of journeys. A capability nobody walks says
@@ -255,10 +266,17 @@ and are unchanged.
 
 ## End with what you had to decide
 
-The suite closes with a `## Raised` section: every point the isolated input did
-not settle, written as a question for the author. It is the most valuable
-thing the run produces: the cases are the part a derived reading could also
-have written, and this is the part it could not.
+Every point the isolated input did not settle, written as a question for the
+author. It is the most valuable thing the run produces: the cases are the part
+a derived reading could also have written, and this is the part it could not.
+
+**It does not close this file.** It goes to the change's `decisions.md`, under
+`## Raised` — `Capability | Raised | Landed` — one row per question, naming the
+capability whose pass asked. Leave `Landed` empty; the author fills it, and
+`pnpm check:manual` refuses a row that is still empty when the change merges.
+That is the file the author already reads, and the deadline the list never had
+at the bottom of a suite. Write the suite no `## Raised` of its own:
+`pnpm run tcs:validate` refuses one there.
 
 A question belongs there when the input is *silent*, not when you missed
 something it says and not when you would simply like to know more. "Is a
@@ -266,12 +284,19 @@ scheduled lot open to bid on? The rule names not-yet-published, ended and called
 off as failures and never places scheduled on either side" is the shape: a state
 the material walked past, which you cannot write a case without choosing.
 
-The section is required and may be empty. Empty is a claim on the record that
+Write no scenario id in a row: `decisions.md` goes into the next blind pass's
+isolated input whole.
+
+The table is required and may be empty. Empty is a claim on the record that
 the input settled everything; make it only when it is true.
+
+Where the change carries no `decisions.md` — it predates the artifact — say so
+in the report and hand the questions to the caller, who takes them to the
+author. Never write them into the suite instead.
 
 ## What happens to this suite next
 
-On a feature run inside `/planning-pm`, the scenarios are being drafted in
+On a feature run inside `/planning-qa`, the scenarios are being drafted in
 parallel by a sub-agent that cannot see this file. When both land, the caller
 joins them on anchors and writes a `## Reconciliation` section at the bottom of
 this suite: what was raised and folded into the spec, what was raised and

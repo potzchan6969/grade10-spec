@@ -1,3 +1,4 @@
 out/
 .react-email/
+.wrangler/
 node_modules/

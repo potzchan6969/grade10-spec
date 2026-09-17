@@ -1,13 +1,13 @@
 ## Purpose
 
 The Grade10 Store cart drawer lets a collector review and edit the current cart
-without leaving the Store surface, then continue through an existing site
+without leaving the page they are on, then continue through an existing site
 address.
 
 ## Feature set
 
 - Drawer entry
-  - Store overlay: opens one cart over the Store surface the collector is using
+  - Current-surface overlay: opens one cart over the page the collector is on
   - Preserved place: closing returns the collector to the same site address
 - Current cart review
   - Scoped cart: shows the guest or member cart belonging to the current session
@@ -31,22 +31,22 @@ address.
 
 ### Requirement: The cart opens over the current site surface
 
-When the collector activates the Store's Cart control, the site SHALL open one
-cart drawer over the current surface without changing the current address. When
-the drawer closes, the collector SHALL remain at that address.
+When the collector activates the Cart control, the site SHALL open one cart
+drawer over the current surface without changing the current address. When the
+drawer closes, the collector SHALL remain at that address.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-01 - Cart opens without leaving its surface
-**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the page
 
-- **GIVEN** a collector on a Store surface or checkout
+- **GIVEN** a collector on any surface whose header offers Cart
 - **WHEN** they activate Cart
 - **THEN** one cart drawer opens over that surface
 - **AND** the current address does not change
 
 #### Scenario: grade10-site-store-cart-drawer-SC-02 - Closing preserves the current address
-**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the page
 
-- **GIVEN** an open cart drawer over a Store surface or checkout
+- **GIVEN** an open cart drawer over any surface
 - **WHEN** the drawer closes
 - **THEN** the collector remains at the address beneath it
 
@@ -64,14 +64,14 @@ Checkout unavailable, and SHALL tell the collector once during that open. A
 later open SHALL start another read.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-03 - A signed-out collector sees the guest cart
-**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the page
 
 - **GIVEN** a signed-out collector whose browser cart holds a line
 - **WHEN** they open the cart drawer
 - **THEN** the drawer reviews that browser cart
 
 #### Scenario: grade10-site-store-cart-drawer-SC-04 - A signed-in collector sees the member cart
-**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the page
 
 - **GIVEN** a signed-in collector whose member cart holds a line
 - **WHEN** they open the cart drawer
@@ -79,14 +79,14 @@ later open SHALL start another read.
 - **AND** it does not substitute a guest browser cart
 
 #### Scenario: grade10-site-store-cart-drawer-SC-05 - Every open starts a current read
-**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the page
 
 - **GIVEN** a cart drawer whose previous open completed
 - **WHEN** the collector opens it again
 - **THEN** the drawer starts a new status-and-price read for the current scoped cart
 
 #### Scenario: grade10-site-store-cart-drawer-SC-06 - A read in flight remains unresolved
-**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the page
 
 - **GIVEN** an opening cart drawer whose status-and-price read has not answered
 - **WHEN** the drawer renders
@@ -94,7 +94,7 @@ later open SHALL start another read.
 - **AND** Checkout is unavailable
 
 #### Scenario: grade10-site-store-cart-drawer-SC-07 - A failed read tells the collector once
-**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the page
 
 - **GIVEN** an open cart drawer whose status-and-price read fails
 - **WHEN** the unresolved drawer renders more than once during that open
@@ -103,7 +103,7 @@ later open SHALL start another read.
 - **AND** Checkout remains unavailable
 
 #### Scenario: grade10-site-store-cart-drawer-SC-08 - Reopening retries a failed read
-**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the page
 
 - **GIVEN** a collector who closed the drawer after its read failed
 - **WHEN** they open the drawer again
@@ -129,7 +129,7 @@ The drawer SHALL NOT claim a promotion, points credit, shipping amount, tax, or
 other discount unless a later capability supplies an applied quote.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-09 - A successful read fills the reviewed summary
-**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the page
 
 - **GIVEN** a cart with one available line and one sold-out line
 - **WHEN** the drawer's status-and-price read succeeds
@@ -137,7 +137,7 @@ other discount unless a later capability supplies an applied quote.
 - **AND** the subtotal includes the available line and excludes the sold-out line
 
 #### Scenario: grade10-site-store-cart-drawer-SC-10 - Unsupported adjustments remain neutral
-**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the Store
+**Serves:** grade10-site-store-cart-drawer-US-01 - Collector opens the current cart over the page
 
 - **GIVEN** a successful cart read with no image or applied quote
 - **WHEN** the drawer shows its summary

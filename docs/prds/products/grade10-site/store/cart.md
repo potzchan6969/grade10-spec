@@ -4,9 +4,9 @@ spec: grade10-site/store/cart-drawer
 order: 4
 ---
 
-The Cart Drawer opens over the Store: the collector checks what is in the
-cart, puts a promo code and points against it, and goes on to checkout or
-back to the page they were on.
+The Cart Drawer opens over the page the collector is on: they check what is in
+the cart, put a promo code and points against it, and go on to checkout or
+back to that page.
 
 ## Rules
 
@@ -104,7 +104,7 @@ considering. Its value is a total they can trust before they go to pay.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
-| Signed-in collector | Opens Cart from a Store page | Sees what a code and points take off, and carries the choice to checkout. |
+| Signed-in collector | Opens Cart from the header on any surface | Sees what a code and points take off, and carries the choice to checkout. |
 | Signed-out collector | Presses Add to cart on the listing or product page | Meets the sign-in dialog; no guest cart is built. |
 | Collector whose cart moved | Opens Cart before checkout | Sees current facts or a clear unresolved state, never a stale claim. |
 
@@ -116,7 +116,7 @@ second code on one cart.
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
-| Drawer-to-checkout sessions | Share of Store sessions that open Cart and proceed to checkout without first navigating there. | Product |
+| Drawer-to-checkout sessions | Share of sessions that open Cart and proceed to checkout without first navigating there. | Product |
 | Failed open reviews | Share of drawer opens whose current-cart read cannot complete. | Engineering |
 | Refused tender | Share of quotes whose code or points were refused, by reason. | Engineering |
 
@@ -125,7 +125,7 @@ second code on one cart.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Overlay, not page | Decided | Cart stays attached to the browsing moment; a new route would make the collector leave before the drawer solves anything. | Product |
-| Store boundary | Decided | Cart belongs on Store surfaces and checkout, not in unrelated site chrome. | Product |
+| Global cart | Decided | Once Store answers the cart drawer, Cart stays in the header on every surface (including Auction), not only Store and checkout — so checkout stays one tap away. Absent only on auction-first while that drawer does not answer. Page-shell owns the control; this page owns the drawer. | Product |
 | Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
 | One session scope | Decided | The cart is the signed-in member's. A signed-out session holds no lines; there is no guest checkout and no guest cart to merge. | Product |
 | One quote | Decided | The drawer and `/checkout` read one store quote — the lines, the one code or reward, points after it — on the same arithmetic the checkout then writes, so no total is shown that the order records differently. | Product |

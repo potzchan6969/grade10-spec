@@ -50,6 +50,7 @@ describe("spec entries", () => {
       id: "alpha-SC-01",
       name: "The thing happens",
       serves: ["alpha-US-01"],
+      servesProse: "Reader follows the thing end to end",
       text: "**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** a reader asks for the thing\n- **THEN** the thing happens",
     });
   });
@@ -220,5 +221,140 @@ describe("a suite the reader refuses beside a spec that parsed", () => {
     expect(entry.requirements[0].scenarios[0].id).toBe("alpha-SC-01");
     expect(entry.testCases).toBeUndefined();
     expect(entry.testCasesStatus).toBeUndefined();
+  });
+});
+
+/** A durable file writes `## User journeys`; a change's file writes the delta
+ * sections instead, and both are one reader's to read. Knowing only the durable
+ * heading refused every change's journeys file, and the refusal was dropped —
+ * so the schema's own template passed the `walked` gate by parsing as nothing. */
+describe("the shape a change's journeys file is written in", () => {
+  const story = (id: string, title: string) =>
+    [
+      `### ${id}: ${title}`,
+      "",
+      "**As a** collector,",
+      "**I want** the thing,",
+      "**so that** it is done.",
+      "",
+    ].join("\n");
+
+  const journeys = (body: string) =>
+    written({ [SPEC]: specText("alpha-SC-01 - it happens"), [JOURNEYS]: body });
+
+  it("reads the delta sections, restated and added alike", () => {
+    const entry = journeys(
+      [
+        "## Context user journeys",
+        "",
+        story("alpha-US-01", "Someone does the thing"),
+        "## ADDED User journeys",
+        "",
+        story("alpha-US-02", "Someone does another thing"),
+        "## MODIFIED User journeys",
+        "",
+        story("alpha-US-03", "Someone does the third thing"),
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeUndefined();
+    expect(entry.journeys?.map((one) => one.id)).toEqual([
+      "alpha-US-01",
+      "alpha-US-02",
+      "alpha-US-03",
+    ]);
+  });
+
+  it("holds a file whose delta sections are all empty", () => {
+    const entry = journeys(
+      [
+        "## Context user journeys",
+        "",
+        "## ADDED User journeys",
+        "",
+        "## MODIFIED User journeys",
+        "",
+        "## REMOVED User journeys",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeUndefined();
+    expect(entry.journeys).toEqual([]);
+  });
+
+  it("leaves a removed journey out of the ones the capability holds", () => {
+    const entry = journeys(
+      [
+        "## ADDED User journeys",
+        "",
+        story("alpha-US-02", "Someone does another thing"),
+        "## REMOVED User journeys",
+        "",
+        story("alpha-US-01", "Someone did the thing"),
+        "**Reason:** the thing went away.",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeys?.map((one) => one.id)).toEqual(["alpha-US-02"]);
+    expect(entry.retiredJourneys).toEqual(["alpha-US-01"]);
+  });
+
+  /** A durable file keeps the same id under `## Retired`, as one line. It is
+   * not a journey — nothing renders it — but a qualified anchor on another
+   * capability still resolves through it, and archived suites still trace it. */
+  it("reads the durable tombstone a retired journey leaves", () => {
+    const entry = journeys(
+      [
+        "# User journeys",
+        "",
+        "## User journeys",
+        "",
+        story("alpha-US-02", "Someone does another thing"),
+        "## Retired",
+        "",
+        "- `alpha-US-01` - Someone did the thing · removed in `drop-it` · 2026-09-17",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeys?.map((one) => one.id)).toEqual(["alpha-US-02"]);
+    expect(entry.retiredJourneys).toEqual(["alpha-US-01"]);
+  });
+
+  it("holds the tombstones of a file the journey reader refuses", () => {
+    const entry = journeys(
+      [
+        "## Retired",
+        "",
+        "- `alpha-US-01` - Someone did the thing · removed in `drop-it` · 2026-09-17",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeDefined();
+    expect(entry.retiredJourneys).toEqual(["alpha-US-01"]);
+  });
+
+  it("refuses one id issued under two of the sections", () => {
+    const entry = journeys(
+      [
+        "## Context user journeys",
+        "",
+        story("alpha-US-01", "Someone does the thing"),
+        "## MODIFIED User journeys",
+        "",
+        story("alpha-US-01", "Someone does the thing differently"),
+      ].join("\n"),
+    );
+    expect(entry.journeysError?.message).toMatch(
+      /story `alpha-US-01` is issued twice, at line 3 and line 11/,
+    );
+  });
+
+  it("refuses a file whose headings no reader knows", () => {
+    const entry = journeys(`## Journeys\n\n${story("alpha-US-01", "A thing")}`);
+    expect(entry.journeysError).toEqual({
+      file: JOURNEYS,
+      line: 1,
+      message:
+        "a journeys file needs a `## User journeys` heading, or the `## ADDED User journeys` sections a change writes",
+    });
   });
 });

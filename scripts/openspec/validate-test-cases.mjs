@@ -214,7 +214,13 @@ function readSpecIds(specPath) {
     // not exempt from a suite: it carries one section, and its cases trace
     // groups rather than journeys.
     unwalked: /^\*\*Walked by:\*\*\s+nobody\b/m.test(stories),
-    hasJourneySection: /^##\s+User journeys\s*$/m.test(stories),
+    // A durable file writes `## User journeys` and a change's file writes the
+    // delta sections; `journey-vocabulary.test.mjs` pins the set. Matching only
+    // the durable heading read every change's journeys as no journeys at all.
+    hasJourneySection:
+      /^##\s+(?:User journeys|Context user journeys|(?:ADDED|MODIFIED) User journeys)\s*$/m.test(
+        stories,
+      ),
   };
 }
 
@@ -494,6 +500,21 @@ function domainPrefix(root, dir) {
   return `${rel.split("/").join("-")}-e2e`;
 }
 
+/** The `decisions.md` of the change this suite sits in, if it sits in one at
+ * all. Walks up to the directory holding `.openspec.yaml` — a durable suite
+ * finds none, and so does a change written before the artifact existed. */
+function decisionsBeside(filePath) {
+  let dir = dirname(filePath);
+  for (let up = 0; up < 8; up += 1) {
+    if (existsSync(join(dir, ".openspec.yaml")))
+      return existsSync(join(dir, "decisions.md"));
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return false;
+}
+
 function checkSuite(root, filePath, rulesRev) {
   const rel = relative(root, filePath);
   const text = readFileSync(filePath, "utf8");
@@ -553,29 +574,27 @@ function checkSuite(root, filePath, rulesRev) {
     );
 
   // --- the blind reading's own output ------------------------------------
-  // A feature suite is an independent reading, and `## Raised` is the half a
-  // derived reading could not have produced. Absent means the step was skipped;
-  // empty means the reader claims the input settled everything, which is a
-  // claim worth being able to make and worth being read as one.
+  // A feature suite is an independent reading, and its raised questions are the
+  // half a derived reading could not have produced. They no longer close the
+  // file: they go to the change's `decisions.md`, under `## Raised`, where the
+  // author is already reading and where every row owes a landing before the
+  // change merges. `pnpm check:manual` reads that table; what is left here is
+  // refusing the list in the wrong place.
   //
-  // `## Reconciliation` is what says a blind reading happened, so it is what
-  // decides whether `## Raised` is owed. A suite with both is one this workflow
-  // wrote; a suite with neither predates it and is left alone, which is why no
-  // rules revision was bumped — the cases these files hold did not change, and
-  // a major would have demanded thirty rewrites to say so.
-  //
-  // A reconciliation with no raised list is the shape that must fail: the blind
-  // reading ran and its findings were dropped.
-  if (!domain && suite.reconciliation !== null) {
-    if (suite.raised === null)
+  // Gated on the change carrying a `decisions.md`. A suite written before that
+  // artifact existed keeps its own section and its own signal — the empty-list
+  // warning below — because there is nowhere else for its questions to go, and
+  // a register of files that could not have complied is one people read past.
+  if (!domain && suite.raised !== null) {
+    if (decisionsBeside(filePath))
       err(
         1,
-        "has `## Reconciliation` and no `## Raised` — the blind reading ran and what it could not settle was thrown away; an empty section is how a reader says nothing was left open",
+        "carries `## Raised` — the blind reading's questions go to the change's `decisions.md`, where every row owes a landing before the change merges",
       );
-    else if (suite.raised === 0)
+    else if (suite.raised === 0 && suite.reconciliation !== null)
       warn(
         1,
-        "`## Raised` is empty — the input hash says what the reader saw, never how it read; several empty runs mean the second reading has stopped being a second reading",
+        "`## Raised` is empty — the Run line says what the reader saw, never how it read; several empty runs mean the second reading has stopped being a second reading",
       );
   }
 
