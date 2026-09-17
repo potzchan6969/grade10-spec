@@ -5,7 +5,12 @@ audience: operator
 order: 13
 ---
 
-The queue works every winner order from lot close through delivery in one place. Each row wears exactly one derived outcome, the queue filters to one outcome at a time, and rows waiting on an operator carry an extra needs-action treatment. An order opens into its winner, invoice revisions, payment attempts, address snapshots, fulfilment facts, and immutable histories. Awaiting Address waits on the winner; Preparing Invoice waits on an operator's quote.
+The queue works every winner order from lot close through delivery in one
+place. Each row wears exactly one derived outcome, the queue filters to one
+outcome at a time, and an order opens into its winner, invoice revisions,
+payment attempts, address snapshots, fulfilment facts and immutable histories.
+
+## Outcomes
 
 | Outcome | When |
 | --- | --- |
@@ -20,49 +25,91 @@ The queue works every winner order from lot close through delivery in one place.
 | Delivered | Delivery is confirmed |
 | Cancelled · Refunded | The order has a recorded terminal outcome |
 
-- **Needs action** - Preparing Invoice, expired Pending Payment, and Processing
-- 🚧 **Payment Verifying needs action** - it carries the needs-action treatment until an operator checks the proof
-- **Overdue** - a separate mark for an order idle for 72 hours or more in Awaiting Address or Preparing Invoice; it changes no status and never expires the order
-- ❓ **Overdue against the address deadline** - the mark should appear when the 48-hour address deadline passes rather than after 72 hours idle, or a winner is blocked for a day before any operator is told. To be updated once the winner-invoicing change is archived
-- 🚧 **Search** — by listing code, invoice ID or bank reference; a replaced invoice's ID or reference still finds the order
-- **Extended bidding: ON** - a lot past its scheduled close and still taking bids carries this label on its row; its outcome does not change
+- **Needs action** — Preparing Invoice, expired Pending Payment, and
+  Processing carry an extra needs-action treatment
+- 🚧 **Payment Verifying needs action** — it carries the needs-action
+  treatment until an operator checks the proof
+- **Overdue** — a separate mark for an order idle for 72 hours or more in
+  Awaiting Address or Preparing Invoice; it changes no status and never
+  expires the order
+- ❓ **Overdue against the address deadline** — the mark should appear when
+  the 48-hour address deadline passes rather than after 72 hours idle, or a
+  winner is blocked for a day before any operator is told; to be updated once
+  the winner-invoicing change is archived
+- 🚧 **Search** — by listing code, invoice ID or bank reference; a replaced
+  invoice's ID or reference still finds the order
+- **Extended bidding: ON** — a lot past its scheduled close and still taking
+  bids carries this label on its row; its outcome does not change
 
 ## Payment
 
-The winning bid-time hold is released rather than captured, and every failed payment attempt remains in the invoice log.
+The winning bid-time hold is released rather than captured, and every failed
+payment attempt remains in the invoice log. The winner confirms a delivery
+address and a payment method before an operator quotes the invoice; the
+operator enters shipping and insurance for that address, sends the invoice,
+and starts the seven-day payment window.
 
-The winner confirms a delivery address and a payment method before an operator quotes the invoice. The operator enters shipping and insurance for that address, sends the invoice, and starts the seven-day payment window. A later change is made by an operator, as the lines below say.
-
-- 🚧 **Reopening the address form** — once the 48-hour address deadline has passed, an operator reopens the form on request, with a mandatory reason, which gives the winner a fresh 48 hours
-- 🚧 **Who may reopen** — payment processing, the grant that already covers reissue and manual settlement; a reopen changes no status and may be repeated
-- 🚧 **Not on a cancelled order** — cancellation has already returned the lot to stock, so the address form never reopens after it
-- 🚧 **Address by telephone** — an operator records the address themselves without reopening the form, and the winner's form stays closed
-
-What the operator enters and reads on a quote:
-
-- 🚧 **Shipping & Handling** — always entered, and may be zero
+- 🚧 **Reopening the address form** — once the 48-hour address deadline has
+  passed, an operator reopens the form on request, with a mandatory reason,
+  which gives the winner a fresh 48 hours
+- 🚧 **Who may reopen** — payment processing, the grant that already covers
+  reissue and manual settlement; a reopen changes no status and may be
+  repeated
+- 🚧 **Not on a cancelled order** — cancellation has already returned the lot
+  to stock, so the address form never reopens after it
+- 🚧 **Address by telephone** — an operator records the address themselves
+  without reopening the form, and the winner's form stays closed
+- 🚧 **Shipping & Handling** — always entered on the quote, and may be zero
 - 🚧 **Insurance** — optional, and never zero once added
 - 🚧 **Payment method** — the one the winner chose, read on the quote
-- 🚧 **Payment Processing Fee** — for card, priced by Grade10 from the payment provider's live fees, not entered, and the send is refused when those fees cannot be read; for bank transfer, entered by the operator on every invoice, zero or more, and the send is refused while it is blank
+- 🚧 **Payment Processing Fee** — for card, priced by Grade10 from the payment
+  provider's live fees, not entered, and the send is refused when those fees
+  cannot be read; for bank transfer, entered by the operator on every invoice,
+  zero or more, and the send is refused while it is blank
 - 🚧 **Subtotal and Order Total** — both read before sending
-
-A winner order reaches paid through one fresh card payment or one operator-recorded manual settlement.
-
-- 🚧 **Expired invoice** — the winner can no longer pay it; only an operator settles it here, manually, or reissues it so the winner can pay by card again with a fresh seven days
-
-- 🚧 **Edit before send** — on a Preparing Invoice order, at the winner's request, the operator changes the address, the payment method or both, with a reason the invoice log keeps beside the old and new values; the order stays Preparing Invoice and its waiting time does not restart. Bank transfer only in a currency with bank details — HKD at launch
-- 🚧 **Reissue** — one action for any change after send: address, payment method, bank transfer fee, shipping, insurance, and the deadline kept or restarted, always with a reason and at least one change; the bank transfer fee starts from the previous invoice's
-- 🚧 **Checking proof** — on a Payment Verifying order the operator confirms the payment, with the winner's files as proof and their own added if they wish, or returns the invoice to pending with a reason the winner reads and a reason kept internal; the prompt shows the time left, and returning is not offered once the invoice has expired
-- 🚧 **Internal audit number** — every invoice and receipt carries one gapless number, such as `#00010482`, shown on the order and in the invoice log and never to the winner; a replaced invoice keeps its number
-- 🚧 **Card invoice paid another way** — by transfer, cash or another method: reissued as bank transfer first, then settled at the new invoice's total; where the money arrived at the Subtotal, the bank transfer fee is 0
-
-Manual settlement is a finance fallback: the operator records bank transfer, cash, or another described method, a reference where required, and one to five private proof files. The winner sees the payment method and reference on the receipt, never the proof files.
-
-- ❓ **Contact channel** — how an operator reaches a winner about a wire or a proof; WhatsApp is the working assumption, and the number comes from the address form — Operations confirms
+- 🚧 **Edit before send** — on a Preparing Invoice order, at the winner's
+  request, the operator changes the address, the payment method or both, with
+  a reason the invoice log keeps beside the old and new values; the order
+  stays Preparing Invoice and its waiting time does not restart. Bank
+  transfer only in a currency with bank details — HKD at launch
+- 🚧 **Reissue** — one action for any change after send: address, payment
+  method, bank transfer fee, shipping, insurance, and the deadline kept or
+  restarted, always with a reason and at least one change; the bank transfer
+  fee starts from the previous invoice's
+- 🚧 **Expired invoice** — the winner can no longer pay it; only an operator
+  settles it here, manually, or reissues it so the winner can pay by card
+  again with a fresh seven days
+- 🚧 **Checking proof** — on a Payment Verifying order the operator confirms
+  the payment, with the winner's files as proof and their own added if they
+  wish, or returns the invoice to pending with a reason the winner reads and a
+  reason kept internal; the prompt shows the time left, and returning is not
+  offered once the invoice has expired
+- **Manual settlement** — a finance fallback: the operator records bank
+  transfer, cash, or another described method, a reference where required,
+  and one to five private proof files; the winner sees the payment method and
+  reference on the receipt, never the proof files
+- 🚧 **Card invoice paid another way** — by transfer, cash or another method:
+  reissued as bank transfer first, then settled at the new invoice's total;
+  where the money arrived at the Subtotal, the bank transfer fee is 0
+- 🚧 **Internal audit number** — every invoice and receipt carries one gapless
+  number, such as `#00010482`, shown on the order and in the invoice log and
+  never to the winner; a replaced invoice keeps its number
+- ❓ **Contact channel** — how an operator reaches a winner about a wire or a
+  proof; WhatsApp is the working assumption, and the number comes from the
+  address form — Operations confirms
 
 ## Fulfilment
 
-Shipment is its own grant, deliberately apart from payment: the person who may settle money is not necessarily the person who dispatches cards. Dispatch requires a paid invoice and records the immutable address snapshot; delivery records carrier proof. The winner reads the same facts from [Winner Order](/p/grade10-site/auction/winner-order).
+Shipment is its own grant, deliberately apart from payment: the person who
+may settle money is not necessarily the person who dispatches cards.
+
+- **Dispatch** — requires a paid invoice and records the immutable address
+  snapshot, the carrier and the tracking number
+- **Delivery** — records the carrier's proof
+- **The winner's view** — the same facts, read from [Winner
+  Order](/p/grade10-site/auction/winner-order)
+
+::cases{id="grade10-admin/auction/post-sale"}
 
 :::detail{title="Product decisions" for="pm"}
 The queue is the operator's close-out surface: payment and shipment are

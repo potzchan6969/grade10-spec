@@ -1,23 +1,36 @@
 ---
-title: Payment settings
+title: Payment Settings
 spec: grade10-admin/auction/payment-settings
 order: 14
 ---
 
-Payment Settings keeps the auction's buyer-premium minimums in one operator-owned
-place. It is reached as the Payment settings tab under `/auction` and is
-available to operators who can settle auction money.
+Payment Settings keeps the auction's buyer-premium minimums in one
+operator-owned place, as the Payment settings tab under `/auction`.
 
-- **Minimum charge** — one non-negative integer amount per supported currency, in minor units
-- **Supported currencies** — USD, HKD, and JPY
-- **Initial floors** — USD 0 minor units, HKD 0 minor units, and JPY 0 minor units
-- **Audit** — each saved mapping is recorded with its operator and timestamp
+## Values
+
+| Rule | Value |
+| --- | --- |
+| Minimum charge | One non-negative integer amount per supported currency, in minor units |
+| Currencies | **USD**, **HKD**, **JPY** |
+| Initial floors | **0** minor units in each |
+| Who | Operators who can settle auction money |
+
+- **Saved whole** — a save replaces the complete mapping at once and records
+  the operator and the time
+- **Refused** — a missing or unsupported currency, a negative amount or a
+  non-integer amount is refused without changing any stored value
+- **Where it is used** — the invoice's buyer's premium is 20% of the winning
+  bid or this minimum, whichever is higher — [Winner
+  Order](/p/grade10-site/auction/winner-order)
 
 ::story{id="auction-admin-payment-settings--loaded" title="Payment settings loaded"}
 
 ::story{id="auction-admin-payment-settings--saved" title="Payment settings saved"}
 
 ::story{id="auction-admin-payment-settings--refused" title="Payment settings refused"}
+
+::cases{id="grade10-admin/auction/payment-settings"}
 
 :::detail{title="Product decisions" for="pm"}
 The settings belong under Auction because the minimums are used by auction
