@@ -51,3 +51,27 @@
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
 | Q1 | <!-- what the round asked --> | <!-- what was settled --> | <!-- the option dropped, and why --> |
+
+## Raised
+
+<!-- The blind suite pass's own output, written here by the run that takes the
+     two readings: every point the isolated input did not settle, as a question
+     for the author, with the capability whose pass raised it.
+
+     Every row lands before the change merges - as a `Decisions` row above, or
+     as a ❓ on the capability's PRD naming who owes the answer. There is no
+     third resting place, and `pnpm check:manual` refuses a row that names
+     neither.
+
+     A row escalated or deferred is also written into the suite's
+     `## Reconciliation`, and its answer into `## Settled`: this file archives
+     with the change and is folded nowhere, so a row landing only here is
+     unreadable by the next blind pass.
+
+     May be empty - empty is a claim on the record that the input settled
+     everything. Never a scenario id: this file goes into the next blind pass's
+     isolated input whole. -->
+
+| Capability | Raised | Landed |
+| --- | --- | --- |
+| <!-- the capability whose pass asked --> | <!-- the question --> | <!-- Q<n> above, or ❓ on <page> --> |

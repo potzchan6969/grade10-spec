@@ -684,7 +684,7 @@ hold is being let go.
 
 ---
 
-### grade10-site-auction-e2e-US07-TC01-2: Auto-bid during extended bidding restarts the timer on the live page
+### grade10-site-auction-e2e-US07-TC03-1: Auto-bid during extended bidding restarts the timer on the live page
 
 **Classification:**
 

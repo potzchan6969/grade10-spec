@@ -1,9 +1,9 @@
 name: Email templates
 
-# Publishes the exported email templates (apps/emails) — auth and auction
-# letters, built with emailcn on the shadcn registry — to the staging
-# Cloudflare account.
-# Local equivalent: pnpm run email:export
+# Publishes the real react-email preview app for apps/emails — auth and
+# auction letters, built with emailcn on the shadcn registry — as a static
+# site, to the staging Cloudflare account.
+# Local equivalent: pnpm run email:build
 #
 # URL:
 #   https://email.grade10-stg.com
@@ -64,8 +64,8 @@ jobs:
             exit 1
           fi
 
-      - name: Export email templates
-        run: pnpm run email:export
+      - name: Build email preview app
+        run: pnpm run email:build
 
       - name: Deploy email templates
         working-directory: apps/emails
@@ -78,7 +78,7 @@ jobs:
             echo
             echo "https://email.grade10-stg.com"
             echo
-            echo "Auth and auction letters exported from \`apps/emails\`; nothing is sent."
+            echo "The real \`apps/emails\` preview app — browse, lint, and check spam/compatibility; nothing is sent."
             echo
             echo "Ref: \`${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"

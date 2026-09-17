@@ -973,7 +973,7 @@ A created listing that was drafted as sandbox.
 
 ---
 
-### grade10-admin-auction-listing-US3-TC17-2: Extension values the listing refuses
+### grade10-admin-auction-listing-US3-TC20-1: Extension values the listing refuses
 
 Runs once per row of **Test data**.
 

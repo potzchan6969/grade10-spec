@@ -35,8 +35,11 @@ Restart the preview server after pulling so discovery refreshes.
 | Auction close | `/preview/auction/close/lot-closed-didnt-win` |
 | Auction order | `/preview/auction/order/auction-won` |
 
-The exported templates are published on every push to `main` (and on demand)
-to **https://email.grade10-stg.com**. Locally:
+This same preview app — sidebar, linter, spam/compatibility checks — is
+published as a static site on every push to `main` (and on demand) to
+**https://email.grade10-stg.com** (`scripts/build-preview.mjs` lifts
+`email build`'s prerendered pages out instead of running it as a live
+server — no "Send" support there, since that needs a Resend key). Locally:
 
 ```bash
 pnpm run email:deploy:staging   # needs CLOUDFLARE_API_TOKEN

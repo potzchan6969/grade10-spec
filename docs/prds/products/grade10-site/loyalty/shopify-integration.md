@@ -258,7 +258,7 @@ The loyalty terminal is a Shopify POS UI extension.
 
 - **A miss says nothing** — a staff-typed email matching no member answers
   only that none was found, and repeated lookups are throttled
-- 🚧 **A lookup that finds nobody** — the member stays on the sale with the
+- **A lookup that finds nobody** — the member stays on the sale with the
   points and coupons staff chose, and the panel says what the lookup answered
 - **Attach** — the terminal sets the customer on the cart and checks it;
   spending stays off until the cart's customer is the paired one, no staff

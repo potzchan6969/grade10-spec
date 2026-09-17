@@ -1,0 +1,4 @@
+schema: grade10-planning
+created: 2026-09-17
+skip_specs: true
+skip_specs_why: "rules, checks and skills only - it moves where a question lands and what an anchor may name, and no product behaviour"
