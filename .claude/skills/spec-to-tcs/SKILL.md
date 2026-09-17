@@ -26,13 +26,21 @@ The blind pass reads the bundle **The Isolated Input** describes in the
 rulebook, assembled by the caller, and nothing outside it:
 
 - **Included** - `## Purpose` and `## Feature set` from the capability's
-  `spec.md`, its `user-journeys.md`, the change's `proposal.md` where one
-  exists, the linked pages under `docs/prds/`, `openspec/config.yaml`'s
-  `context`, the existing `feature-tcs.md` for id continuity with its
-  `## Reconciliation` stripped, and that suite's `## Settled` - the questions
-  earlier runs asked and had answered. Reading those is what stops you raising
-  a refused reading again, and it tells you nothing about what the scenarios
-  say.
+  `spec.md`, its `user-journeys.md`, the change's `proposal.md`,
+  `decisions.md` and `ui-design.md` where they exist - the decisions say what
+  the change is for and what it rules out, the design lands before the
+  requirements and ties its states to anchors, and neither holds a requirement,
+  so neither carries a leak - the linked pages under `docs/prds/`,
+  `openspec/config.yaml`'s `context`, the existing `feature-tcs.md` for id
+  continuity with its `## Reconciliation` stripped, and that suite's
+  `## Settled` - the questions earlier runs asked and had answered. Reading
+  those is what stops you raising a refused reading again, and it tells you
+  nothing about what the scenarios say.
+
+  **Write no case for a non-goal.** `decisions.md` names what this change
+  deliberately does not do; a case against one of those is not a gap the
+  scenarios left, and filing it as one spends the reconciliation's credibility
+  on a question already closed.
 - **Excluded** - every `## Requirements` section, `openspec/specs/` beyond the
   two included sections, and `openspec/changes/archive/` entirely. An archived
   change keeps an un-stripped `## Reconciliation` naming scenario ids, so
@@ -81,8 +89,8 @@ and are unchanged.
 
 - **Feature** — the isolated input above, and nothing else: `## Purpose` and
   `## Feature set` from `spec.md` but never its requirements,
-  `user-journeys.md`, the change's `proposal.md` when one exists, the pages
-  under `docs/prds/`, and `openspec/config.yaml`'s `context`. A platform fact
+  `user-journeys.md`, the change's `proposal.md` and `ui-design.md` when they
+  exist, the pages under `docs/prds/`, and `openspec/config.yaml`'s `context`. A platform fact
   is checked where it matters (`URL contains <lang>`), never written as a
   pre-condition
 - **Domain** — **Compose from evidence** under **One purpose, one case**:
@@ -125,7 +133,7 @@ and are unchanged.
 3. **Digest the capability, and upgrade the journeys if missing.** Read as
    **What a Run Reads** says. When `user-journeys.md` is missing or empty, do
    not stop: write it as **Step 1** in the document and `openspec/config.yaml`
-   (`rules.spec-outline`, `rules.user-journeys`) direct — from the feature set
+   (`rules.specs`, `rules.user-journeys`) direct — from the feature set
    and the PRD rather than the requirements you cannot see, adding no
    behaviour, ids numbered from `01` and never reusing a retired number. There
    is no cap on the number of journeys. A capability nobody walks says
@@ -271,7 +279,7 @@ the input settled everything; make it only when it is true.
 
 ## What happens to this suite next
 
-On a feature run inside `/planning-pm`, the scenarios are being drafted in
+On a feature run inside `/planning-qa`, the scenarios are being drafted in
 parallel by a sub-agent that cannot see this file. When both land, the caller
 joins them on anchors and writes a `## Reconciliation` section at the bottom of
 this suite: what was raised and folded into the spec, what was raised and

@@ -1,0 +1,129 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Walked away from the counter",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "shopkeeper",
+      "label": "Shopkeeper"
+    },
+    {
+      "id": "member",
+      "label": "Member"
+    },
+    {
+      "id": "store",
+      "label": "Store"
+    },
+    {
+      "id": "loyalty",
+      "label": "Loyalty"
+    }
+  ],
+  "mainPath": [
+    "shopkeeper-applies-it-at-the-till",
+    "member-leaves-without-paying",
+    "store-the-sale-runs-out-of-time",
+    "store-the-coupon-comes-off"
+  ],
+  "nodes": [
+    {
+      "id": "shopkeeper-applies-it-at-the-till",
+      "lane": "shopkeeper",
+      "col": 0,
+      "type": "external",
+      "label": "Applies it",
+      "sublabel": "from the member's panel",
+      "width": 156
+    },
+    {
+      "id": "shopkeeper-applies-it-at-the-till_claim",
+      "lane": "loyalty",
+      "col": 0,
+      "type": "database",
+      "label": "Claim pending",
+      "sublabel": "nothing is spent yet",
+      "width": 156
+    },
+    {
+      "id": "member-leaves-without-paying",
+      "lane": "member",
+      "col": 1,
+      "type": "external",
+      "label": "Leaves",
+      "sublabel": "without paying",
+      "width": 156
+    },
+    {
+      "id": "store-the-sale-runs-out-of-time",
+      "lane": "store",
+      "col": 2,
+      "type": "backend",
+      "label": "Runs out of time",
+      "sublabel": "an hour, not a day",
+      "width": 156
+    },
+    {
+      "id": "store-the-coupon-comes-off",
+      "lane": "store",
+      "col": 3,
+      "type": "security",
+      "label": "The coupon comes off",
+      "sublabel": "the cart stays, the cut goes",
+      "width": 156
+    },
+    {
+      "id": "store-the-coupon-comes-off_claim",
+      "lane": "loyalty",
+      "col": 3,
+      "type": "database",
+      "label": "Back in the wallet",
+      "sublabel": "spendable again",
+      "width": 156
+    }
+  ],
+  "edges": [
+    {
+      "from": "shopkeeper-applies-it-at-the-till",
+      "to": "shopkeeper-applies-it-at-the-till_claim",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "shopkeeper-applies-it-at-the-till",
+      "to": "member-leaves-without-paying",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "member-leaves-without-paying",
+      "to": "store-the-sale-runs-out-of-time",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "store-the-sale-runs-out-of-time",
+      "to": "store-the-coupon-comes-off",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "left"
+    },
+    {
+      "from": "store-the-coupon-comes-off",
+      "to": "store-the-coupon-comes-off_claim",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "top"
+    }
+  ]
+}

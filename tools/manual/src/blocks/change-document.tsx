@@ -9,6 +9,7 @@ import {
   CaretRight,
   CheckSquare,
   FileText,
+  Gavel,
   type Icon,
   Layout,
   Lightbulb,
@@ -65,6 +66,7 @@ import { JourneyCard } from "./spec-block";
 
 const ICONS: Record<string, Icon> = {
   proposal: Lightbulb,
+  decisions: Gavel,
   specs: ListChecks,
   "user-journeys": Path,
   "test-cases": TestTube,

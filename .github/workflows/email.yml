@@ -1,0 +1,84 @@
+name: Email templates
+
+# Publishes the exported email templates (apps/emails) — auth and auction
+# letters, built with emailcn on the shadcn registry — to the staging
+# Cloudflare account.
+# Local equivalent: pnpm run email:export
+#
+# URL:
+#   https://email.grade10-stg.com
+#
+# One-time ops:
+# - Repo secret CLOUDFLARE_API_TOKEN_QA must be available here (same staging
+#   token grade10 uses). Org secrets may need this repo added to their allowlist.
+# - Confirm Cloudflare Access covers this custom domain if you gate it.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/emails/**"
+      - ".github/workflows/email.yml"
+      - "package.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: email-staging
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 24.14.1
+  # Pin so CI does not need a lockfile entry for wrangler.
+  WRANGLER_VERSION: 4.120.0
+
+jobs:
+  deploy:
+    name: Deploy email templates → staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN_QA }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Require Cloudflare token
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN_QA is empty. Grant this repository the staging Cloudflare token (same secret grade10 uses)."
+            exit 1
+          fi
+
+      - name: Export email templates
+        run: pnpm run email:export
+
+      - name: Deploy email templates
+        working-directory: apps/emails
+        run: pnpm dlx wrangler@${{ env.WRANGLER_VERSION }} deploy -c wrangler.jsonc
+
+      - name: Summary
+        run: |
+          {
+            echo "## Email templates → staging"
+            echo
+            echo "https://email.grade10-stg.com"
+            echo
+            echo "Auth and auction letters exported from \`apps/emails\`; nothing is sent."
+            echo
+            echo "Ref: \`${{ github.sha }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "One claim, from ask to settled",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "column_fit": "spread",
+    "legend": { "mode": "hidden" },
+    "viewBox": [600, 700]
+  },
+  "participants": [
+    {
+      "id": "member",
+      "type": "external",
+      "label": "Member",
+      "sublabel": "or the shopkeeper"
+    },
+    {
+      "id": "shopify",
+      "type": "external",
+      "label": "Shopify",
+      "sublabel": "checkout and till"
+    },
+    {
+      "id": "store",
+      "type": "backend",
+      "label": "Store",
+      "sublabel": "orders and claims"
+    },
+    {
+      "id": "loyalty",
+      "type": "backend",
+      "label": "Loyalty",
+      "sublabel": "coupons and usages"
+    }
+  ],
+  "messages": [
+    {
+      "id": "ask",
+      "from": "store",
+      "to": "loyalty",
+      "y": 180,
+      "label": "claim this coupon, keyed on the order",
+      "variant": "emphasis"
+    },
+    {
+      "id": "pending",
+      "from": "loyalty",
+      "to": "store",
+      "y": 220,
+      "label": "pending, and what it cuts",
+      "variant": "return"
+    },
+    {
+      "id": "mint",
+      "from": "store",
+      "to": "shopify",
+      "y": 270,
+      "label": "mint a code for this member",
+      "variant": "emphasis",
+      "note": "bearer value at a third party, live for a day"
+    },
+    {
+      "id": "paid",
+      "from": "member",
+      "to": "shopify",
+      "y": 330,
+      "label": "pays the bill",
+      "variant": "emphasis"
+    },
+    {
+      "id": "webhook",
+      "from": "shopify",
+      "to": "store",
+      "y": 370,
+      "label": "order paid"
+    },
+    {
+      "id": "applied",
+      "from": "store",
+      "to": "loyalty",
+      "y": 410,
+      "label": "applied",
+      "variant": "emphasis",
+      "note": "the only thing that spends a coupon"
+    },
+    {
+      "id": "kill",
+      "from": "store",
+      "to": "shopify",
+      "y": 490,
+      "label": "deactivate the code",
+      "variant": "dashed",
+      "note": "instead, where the sale ended"
+    },
+    {
+      "id": "released",
+      "from": "store",
+      "to": "loyalty",
+      "y": 540,
+      "label": "released",
+      "variant": "dashed",
+      "note": "through the outbox, retried until it lands"
+    }
+  ]
+}

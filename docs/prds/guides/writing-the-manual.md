@@ -158,6 +158,22 @@ Lit while the reader is here, with the node `the-check-is-raised`.
 ::image{src="assets/diagrams/vault-identity-states.svg" alt="How a case moves between its identity states"}
 ```
 
+What goes inside that JSON is archify's to say, not this guide's.
+`scripts/diagrams/vendor/archify/SKILL.md` holds the authoring invariants and
+`references/authoring-contract.md` beside it holds the field enums, the
+spacing maths, each type's own rules and the order to repair geometry in.
+Read them before placing a node or a route by hand — they already answer the
+questions a first draft runs into, among them that a state which only says a
+failure recovers is not a transition back, and that the renderer spreads
+several edges across one node side unless that edge pins its own route.
+
+Two things there only the renderer's errors tell you. A lifecycle's lane ids
+`main` and `terminal` are reserved for the top and bottom bands and every
+other lane shares the middle one, so a lane named anything else puts its
+states in the middle band and leaves the bottom one titled and empty. And a
+band's title sits at the left of its own row, so a state in the first column
+has any edge reaching it from above drawn through that title.
+
 An example is one worked case. It opens with the cart, a list of priced
 lines, and `tier` badges the member while `shipping` names the fee on the
 order. Then comes a ledger, a table whose columns are

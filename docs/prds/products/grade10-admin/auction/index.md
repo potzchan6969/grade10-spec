@@ -14,6 +14,6 @@ The collector's half — browsing, bidding, watching — is
 [Auction](/p/grade10-site/auction), and the two are held to separate specs
 because they are held by separate people.
 
-🚧 **Payment settings** — Under `/auction`, an authorized payment operator can
+**Payment settings** — Under `/auction`, an authorized payment operator can
 read and update the minimum buyer premium for each supported auction currency.
 Values are stored in minor units and start at zero for USD, HKD, and JPY.

@@ -35,6 +35,13 @@ Restart the preview server after pulling so discovery refreshes.
 | Auction close | `/preview/auction/close/lot-closed-didnt-win` |
 | Auction order | `/preview/auction/order/auction-won` |
 
+The exported templates are published on every push to `main` (and on demand)
+to **https://email.grade10-stg.com**. Locally:
+
+```bash
+pnpm run email:deploy:staging   # needs CLOUDFLARE_API_TOKEN
+```
+
 ## Structure
 
 ```

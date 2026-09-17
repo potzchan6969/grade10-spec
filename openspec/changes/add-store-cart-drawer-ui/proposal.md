@@ -7,18 +7,19 @@ review, and a working checkout page, but its navigation does not expose the
 designed Cart Drawer. Collectors must leave the page they are browsing before
 they can see whether held lines changed.
 
-**Metric:** share of Store sessions that open the cart and proceed to checkout
+**Metric:** share of sessions that open the cart and proceed to checkout
 without first navigating to checkout. The first delivery establishes the
 baseline.
 
-**Acceptance signal:** a collector opens Cart from a Store surface, reviews
-and edits the current cart, and reaches the existing checkout without first
-leaving that surface.
+**Acceptance signal:** a collector opens Cart from any surface once Store
+answers the cart drawer, reviews and edits the current cart, and reaches the
+existing checkout without first leaving that surface.
 
 ## What Changes
 
-- Expose Cart in the site header on Store surfaces and checkout, and open one
-  drawer over the current surface.
+- Expose Cart in the site header on every surface once the Store cart drawer
+  answers (including Auction and other non-Store pages), and open one drawer
+  over the current surface.
 - Connect the drawer to the current guest or member cart through the existing
   typed Store integration.
 - Run the existing live cart review on every open; keep unconfirmed values and
@@ -48,8 +49,6 @@ leaving that surface.
   discounts in the drawer. Checkout now accepts coupon and points inputs and
   exposes member-only reads, but the drawer has no single applied-quote
   contract for these choices and its total.
-- Exposing Cart on auction, profile, membership, marketing, or other non-Store
-  routes.
 - Changing Figma annotations, components, or tokens.
 - Adding a dedicated `/cart` route or changing the existing checkout page.
 - A Browse More or catalogue handoff from the drawer (removed with
@@ -59,22 +58,23 @@ leaving that surface.
 
 ### New Capabilities
 
-- `grade10-site/store/cart-drawer` — the Grade10 Store's route-gated drawer,
+- `grade10-site/store/cart-drawer` — the Grade10 Store's cart drawer,
   current-cart review, honest summary, cart edits, and existing-address
   handoffs.
 
 ### Modified Capabilities
 
 - `grade10-site/site/page-shell` — absorbed by `auction-first-site-header`,
-  which carries Store-gated Cart in the header alongside auction-first chrome.
-  Scenarios `grade10-site-site-page-shell-SC-09` and
+  which carries Cart in the header: absent until the Store cart drawer
+  answers, then global on every surface. Scenarios
+  `grade10-site-site-page-shell-SC-09` and
   `grade10-site-site-page-shell-SC-16` live on that change.
 
 ## Impact
 
-- `apps/frontend/grade10`: route-gated navigation trigger, one drawer host,
-  reviewed-line mapping, read-only member tender context, existing cart
-  actions, and focused tests.
+- `apps/frontend/grade10`: global Cart trigger once the drawer answers, one
+  drawer host, reviewed-line mapping, read-only member tender context,
+  existing cart actions, and focused tests.
 - `packages/grade10-store/frontend`: backwards-compatible review controls that
   let the drawer own unavailable-line cleanup while checkout keeps its current
   behavior.

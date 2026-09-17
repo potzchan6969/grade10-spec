@@ -5,19 +5,15 @@ import type { SiteHeaderProps } from "./site-header";
  * `HELP_HREF` and preview chrome. */
 const HELP_HREF = "https://grade10.mintlify.io/";
 
-/** Workbench Store Locator page — keep in sync with preview `STORE_LOCATOR_HREF`. */
-const STORE_LOCATOR_HREF = "?path=/story/pages-store-locator-page--default";
-
 export const LOCALES = [
   { value: "en", label: "English" },
   { value: "zh-Hant", label: "繁體中文" },
   { value: "zh-Hans", label: "简体中文" },
 ];
 
-/** Auction-first primary nav: no Store entrance, no Grade. Help after Store Locator. */
+/** Auction-first primary nav: no Store, no Store Locator (shop not open yet), no Grade. Help after Auction. */
 export const AUCTION_NAV_ITEMS = [
   { label: "Auction", href: "#auction", current: true },
-  { label: "Store Locator", href: STORE_LOCATOR_HREF },
   { label: "Help", href: HELP_HREF, external: true },
 ];
 

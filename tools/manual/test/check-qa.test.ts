@@ -427,7 +427,7 @@ describe("a scenario carrying no Serves line", () => {
       }),
     });
     expect(lines(await check(root), "anchorless")).toEqual([
-      `${SPEC_FILE} — 2 scenarios carry no \`**Serves:**\` line (alpha-SC-01, alpha-SC-02)`,
+      `${SPEC_FILE} — 2 scenarios with no \`**Serves:**\` line (alpha-SC-01, alpha-SC-02)`,
     ]);
   });
 });
@@ -508,5 +508,75 @@ describe("a Storybook index that is not JSON", () => {
       ),
     ]);
     expect(lines(result, "canonical")).toEqual([]);
+  });
+});
+
+/** Both anchor rules are asked of a delta as well as of the store it folds
+ * into. Asked of the durable store alone, they first spoke a release after the
+ * change had merged — and the anchor a scenario meant is gone with its author.
+ */
+describe("a delta's scenarios and the anchors they name", () => {
+  const CHANGE = "openspec/changes/probe";
+  const DELTA = `${CHANGE}/specs/demo-product/alpha/spec.md`;
+
+  const delta = (scenarios: ScenarioLine[], head: string[] = []) =>
+    store({
+      journeys: journeysText([journey("alpha-US-01")]),
+      extra: {
+        [`${CHANGE}/.openspec.yaml`]:
+          'schema: demo-planning\ncreated: 2026-09-15\npage_waived: "a probe"\n',
+        [`${CHANGE}/proposal.md`]: "# Probe\n\n## Why\n\nTo be read.\n",
+        [DELTA]: [
+          ...head,
+          "## ADDED Requirements",
+          "",
+          "### Requirement: Alpha does another thing",
+          "",
+          "Alpha SHALL do the other thing.",
+          "",
+          ...scenarios.flatMap(([id, name, serves]) =>
+            scenario(id, name, serves),
+          ),
+        ].join("\n"),
+      },
+    });
+
+  it("resolves an anchor the durable capability holds and the delta does not restate", async () => {
+    const root = delta([["alpha-SC-02", "it does the other thing"]]);
+    expect(lines(await check(root), "serves")).toEqual([]);
+    expect(lines(await check(root), "anchorless")).toEqual([]);
+  });
+
+  it("resolves a group of a feature set the delta writes itself", async () => {
+    const root = delta(
+      [["alpha-SC-02", "it does the other thing", "Doing other things"]],
+      [
+        "## Feature set",
+        "",
+        "- Doing other things",
+        "  - Something: why it is here",
+        "",
+      ],
+    );
+    expect(lines(await check(root), "serves")).toEqual([]);
+  });
+
+  it("names an anchor the capability offers nowhere", async () => {
+    const root = delta([
+      ["alpha-SC-02", "it does the other thing", "alpha-US-99"],
+    ]);
+    expect(lines(await check(root), "serves")).toEqual([
+      `${DELTA} — alpha-SC-02 → \`alpha-US-99\`, which is neither a journey nor a feature set group of \`demo-product/alpha\``,
+    ]);
+  });
+
+  it("names a delta scenario standing under nothing, once for the file", async () => {
+    const root = delta([
+      ["alpha-SC-02", "it does the other thing", ""],
+      ["alpha-SC-03", "it says so", ""],
+    ]);
+    expect(lines(await check(root), "anchorless")).toEqual([
+      `${DELTA} — 2 scenarios with no \`**Serves:**\` line (alpha-SC-02, alpha-SC-03)`,
+    ]);
   });
 });

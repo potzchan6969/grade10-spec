@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "One coupon, two sales",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "column_fit": "spread",
+    "legend": { "mode": "hidden" },
+    "viewBox": [800, 780]
+  },
+  "participants": [
+    {
+      "id": "earlier",
+      "type": "backend",
+      "label": "Earlier sale",
+      "sublabel": "already open"
+    },
+    {
+      "id": "loyalty",
+      "type": "backend",
+      "label": "Loyalty",
+      "sublabel": "coupons and usages"
+    },
+    {
+      "id": "rows",
+      "type": "database",
+      "label": "Postgres",
+      "sublabel": "one live claim"
+    },
+    {
+      "id": "newer",
+      "type": "backend",
+      "label": "Newer sale",
+      "sublabel": "the next basket"
+    }
+  ],
+  "segments": [
+    { "from": 160, "to": 255, "label": "Both ask at once" },
+    { "from": 255, "to": 540, "label": "One write decides it" },
+    { "from": 540, "to": 730, "label": "The loser frees it and asks again" }
+  ],
+  "messages": [
+    {
+      "id": "ask-earlier",
+      "from": "earlier",
+      "to": "loyalty",
+      "y": 190,
+      "label": "claim it, keyed on that order",
+      "variant": "emphasis"
+    },
+    {
+      "id": "ask-newer",
+      "from": "newer",
+      "to": "loyalty",
+      "y": 230,
+      "label": "claim it, keyed on this one",
+      "variant": "emphasis"
+    },
+    {
+      "id": "take",
+      "from": "loyalty",
+      "to": "rows",
+      "y": 290,
+      "label": "reserve it, only where still available",
+      "variant": "security"
+    },
+    {
+      "id": "took",
+      "from": "rows",
+      "to": "loyalty",
+      "y": 340,
+      "label": "one row",
+      "variant": "return",
+      "note": "one statement, inside one transaction"
+    },
+    {
+      "id": "won",
+      "from": "loyalty",
+      "to": "earlier",
+      "y": 390,
+      "label": "pending, and what it cuts",
+      "variant": "return"
+    },
+    {
+      "id": "retake",
+      "from": "loyalty",
+      "to": "rows",
+      "y": 435,
+      "label": "the same write, for the newer sale",
+      "variant": "security"
+    },
+    {
+      "id": "retook",
+      "from": "rows",
+      "to": "loyalty",
+      "y": 480,
+      "label": "no row",
+      "variant": "return",
+      "note": "a second live claim has no index to sit in"
+    },
+    {
+      "id": "lost",
+      "from": "loyalty",
+      "to": "newer",
+      "y": 520,
+      "label": "not available",
+      "variant": "dashed"
+    },
+    {
+      "id": "supersede",
+      "from": "newer",
+      "to": "earlier",
+      "y": 580,
+      "label": "cancel that sale, give its claim back",
+      "variant": "security",
+      "note": "or refuse by name, where that checkout is still live"
+    },
+    {
+      "id": "again",
+      "from": "newer",
+      "to": "loyalty",
+      "y": 650,
+      "label": "ask again",
+      "variant": "emphasis"
+    },
+    {
+      "id": "granted",
+      "from": "loyalty",
+      "to": "newer",
+      "y": 695,
+      "label": "pending",
+      "variant": "return",
+      "note": "one more ask is all the race needs"
+    }
+  ]
+}

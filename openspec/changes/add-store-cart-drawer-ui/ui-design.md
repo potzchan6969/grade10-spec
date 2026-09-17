@@ -15,7 +15,9 @@ Storybook composition under test once the host lands: Store page assemblies in
 
 ## Components
 
-- `Nav` from `@grade10/design-system` — Store-route Cart entry.
+- `Nav` / `SiteHeader` — Cart in the header on every surface once the Store
+  cart drawer answers (page-shell on `auction-first-site-header`; layout SoT
+  `site-chrome-siteheader-cart--on-auction-surface`).
 - `Toast` from `@grade10/design-system` — one application toast host (review
   failure; unavailable cleanup via the shared drawer).
 - `CartDrawer` from `@grade10/ui` — as specified by `shared/ui/store-cart`
@@ -42,7 +44,7 @@ States combine this change's Grade10 scenarios with durable
 
 | State | Spec scenarios |
 | --- | --- |
-| Route-gated Cart control | `grade10-site-site-page-shell-SC-09`, `grade10-site-site-page-shell-SC-16` |
+| Cart absent until drawer answers; then global (incl. Auction) | `grade10-site-site-page-shell-SC-09`, `grade10-site-site-page-shell-SC-16`; Storybook `site-chrome-siteheader-cart--on-auction-surface` |
 | Opens over surface; close keeps address | `grade10-site-store-cart-drawer-SC-01`, `SC-02` |
 | Guest vs member scoped cart | `SC-03`, `SC-04` |
 | Every open starts a fresh read | `SC-05` |

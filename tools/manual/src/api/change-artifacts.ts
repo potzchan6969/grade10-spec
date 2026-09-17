@@ -13,6 +13,11 @@ const KNOWN: Record<string, { label: string; meaning: string }> = {
     label: "Product",
     meaning: "The PM-driven proposal: why, what changes, and what does not.",
   },
+  decisions: {
+    label: "Decisions",
+    meaning:
+      "The interview's record: this change's goals, its edges, and what was settled.",
+  },
   specs: {
     label: "Requirements",
     meaning:

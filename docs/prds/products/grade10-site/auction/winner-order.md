@@ -9,10 +9,11 @@ Winner Order is the authenticated route where a collector settles one lot after 
 ## Invoice and Settlement
 
 - **Address first** — a closed lot opens asking for a delivery address; the winner confirms the account's saved or newly entered address before an operator prepares an invoice
+- 🚧 **Saved addresses** — an account keeps up to **5** named shipping addresses; at the cap, Add new address still works for this order only, and Save this address for future orders is refused until one is removed
 - 🚧 **Address deadline** — 48 hours from lot close to confirm a delivery address; `Confirm by …` under the CTA (with time); overdue alert reads `Missed address deadline: {date}` with Contact Us; Confirm is hidden when the window passes; status stays Awaiting Address
 - **Invoice** — one operator-quoted invoice per lot; shipping and insurance are priced for the confirmed address, the address locks when the invoice is sent, and the seven-day payment window starts at send
 - 🚧 **Invoice lines** — Winning Bid, Buyer's Premium, Shipping & Handling, Insurance when added, Tax, Subtotal, Payment Processing Fee and Order Total; Shipping & Handling of zero reads Free. Insurance is optional and separate from Payment Processing Fee. The on-page summary may omit Subtotal and show fee lines plus Order Total; invoice and receipt itemisation keep Subtotal
-- 🚧 **Buyer's premium** — 20% of the winning bid, or the currency's minimum charge when that is higher; a minimum of 0 means none
+- **Buyer's premium** — 20% of the winning bid, or the currency's minimum charge when that is higher; a minimum of 0 means none
 - 🚧 **Payment method** — the winner chooses card or bank transfer when confirming the delivery address; each choice shows the fee range Grade10 sets. Bank transfer is offered only in a currency with bank details set up — HKD at launch
 - ❓ **Fee range wording** — what the choice says for each method; the bank transfer wording names no amount, because the operator sets that fee — Product confirms
 - 🚧 **Payment Processing Fee** — priced for the invoice's payment method and fixed once the invoice is sent: for card, the fee added on top of the Subtotal so Grade10 keeps the Subtotal in full; for bank transfer, the amount the operator enters, which may be zero and then reads Free
@@ -66,21 +67,22 @@ The winner needs one place to understand what is owed and what happens next. The
 | Summary Subtotal row | Decided | On-page Winner Order summary may omit Subtotal and show fee lines plus Order Total; invoice and receipt itemisation keep Subtotal for the fee gross-up. | Product and design (@tangconst) |
 | Free shipping | Decided | Shipping & Handling of zero reads Free rather than hiding the line. | Product |
 | Address deadline | Decided | 48 hours from lot close to confirm a delivery address. Missed deadline hides Confirm and shows Contact Us; status stays Awaiting Address; invoice stays `not_issued`. No automatic cancel or suspension. | Product (@tangconst) |
+| Saved address cap | Decided | Five named shipping addresses per account. At the cap, Add new address still confirms a one-time address for the order; Save this address for future orders is refused until the winner removes one. | Product (@tangconst) |
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close. Absolute datetime in the winner’s zone; no countdown. | Product |
 | Deadline ends self-service Pay | Decided | When the invoice is `expired`, Winner Order hides card Pay and shows Contact Us in the overdue alert. A deadline that still allowed card pay would not be a deadline. Operator reissue, manual settlement, or cancel remain. | Product (@tangconst) |
 | Progress stepper | Decided | Five presentation steps: Address → Invoice → Payment → Shipped → Completed. Status vocabulary stays nine values, with Payment Verifying under Payment; Processing maps under Shipped; Delivered maps to Completed. Step subtext carries day-only milestone dates. | Product and design (@tangconst) |
 | Invoice PDF | Decided | After send, the winner may view and download the invoice PDF on Winner Order until Cancelled. | Product (@tangconst) |
 | Receipt PDF | Decided | After payment, the winner may view and download a receipt PDF on Winner Order on the same row as Invoice. | Product and design (@tangconst) |
-| Buyer’s Premium rate | 🚧 In flight | The invoice carries a buyer's premium calculated as 20% of the winning bid; the rate is disclosed on the bid panel only. | Product / finance |
+| Buyer’s Premium rate | Decided | The invoice carries a buyer's premium calculated as 20% of the winning bid; the rate is disclosed on the bid panel only. | Product / finance |
 | Buyer's premium | Decided | 20% of the winning bid alone, rounded half up, or the lot currency's minimum charge when higher. Grade10 computes it; no operator enters, waives or changes it. | Product and finance |
-| Premium minimum | 🚧 In flight | One Grade10-owned amount per currency is editable by a settlement-authorized operator under `/auction`. 0 means no minimum. A new value applies to invoices sent or reissued after it takes effect. | Product and finance |
+| Premium minimum | Decided | One Grade10-owned amount per currency is editable by a settlement-authorized operator under `/auction`. 0 means no minimum. A new value applies to invoices sent or reissued after it takes effect. | Product and finance |
 | Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule. Card fees on high-value lots make a transfer worth offering. | Product (@jeffffej0909) |
 | One fee line | 🚧 In flight | Payment Processing Fee stays on every invoice and is priced by method, so a bank transfer can carry an administrative fee. The operator enters that fee each time, with no cap. | Product (@jeffffej0909) |
 | Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount is first shown on the sent invoice, and an operator reissues if the winner then wants the other method. | Product (@jeffffej0909) |
 | Payment deadline while proof is checked | 🚧 In flight | The deadline stops on upload and resumes with the time left if the proof is not accepted, so a winner never loses time to the check. | Product (@jeffffej0909) |
 | Invoice and receipt identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not by a running count, so the IDs do not reveal how much Grade10 sells. Operators keep a separate gapless audit number the winner never sees. Source: [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
 | Partial payment | ❓ Open | A separate change: several payments against one invoice, a shortfall tolerance, overpayment, and refunds. | Product and finance |
-| Minimum values | 🚧 In flight | The initial values are 0 in USD, HKD, and JPY; the mapping is editable under `/auction`. | Product and finance |
+| Minimum values | Decided | The initial values are 0 in USD, HKD, and JPY; the mapping is editable under `/auction`. | Product and finance |
 
 **Not in scope.** Combined invoices, payment plans, buyer-initiated returns, or changes to the bid-time auction rules.
 :::

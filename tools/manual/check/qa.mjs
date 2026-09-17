@@ -63,7 +63,7 @@ function checkServes(ctx, spec, dir) {
     ctx.add(
       "anchorless",
       `${dir}/spec.md`,
-      `${plural(missing.length, "scenario")} carry no \`**Serves:**\` line (${missing.slice(0, 5).join(", ")}${missing.length > 5 ? ", …" : ""})`,
+      `${plural(missing.length, "scenario")} with no \`**Serves:**\` line (${missing.slice(0, 5).join(", ")}${missing.length > 5 ? ", …" : ""})`,
     );
   }
   for (const one of unresolved) {
@@ -107,12 +107,18 @@ function checkDerived(ctx, spec, dir, present) {
   );
 }
 
-/** RULE `outline`: `spec-outline` and `spec-behaviour` are two passes over one
+/** RULE `outline`: the outline and the requirements are two passes over one
  * `spec.md`, and `openspec status` cannot tell them apart — both glob the file,
  * so it calls the second done the moment the first writes anything. A suite
  * sitting beside a spec that carries no requirements is the state that gap
  * hides: the outline was written, the blind pass ran, and the scenarios never
- * came back. */
+ * came back.
+ *
+ * Asked of the durable store, where it is the archive that landed half a
+ * change. In flight the same state is a legitimate stop — the PM commits the
+ * outline and QA takes the second pass — and what holds it honest is the
+ * change reader, which refuses a delta naming no requirement unless the
+ * change declared the wait in `awaiting:`. */
 function checkOutlineOnly(ctx, spec, dir, present) {
   if (!present) return;
   if ((spec.requirements ?? []).length > 0) return;

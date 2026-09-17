@@ -285,6 +285,72 @@ export const WithoutPoints: Story = {
   },
 };
 
+/** Composed read-only tender context keeps facts while omitting mutations. */
+export const ReadOnlyTenderContext: Story = {
+  render: (args) => {
+    const [promo, setPromo] = useState<PromoState>({ status: "collapsed" });
+    const [points, setPoints] = useState<PointsState>({ status: "collapsed" });
+
+    return (
+      <CartDrawer
+        {...args}
+        promoState={promo}
+        heldPromoCodes={SAMPLE_HELD_PROMO_CODES}
+        selectedHeldPromoId={null}
+        pointsState={points}
+        pointsBalanceLabel="You’ve 1,200 pts."
+        onPromoStateChange={setPromo}
+        onPointsStateChange={setPoints}
+      />
+    );
+  },
+  play: async () => {
+    const canvas = drawer();
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: /Select or enter code/i }),
+    );
+    const promo = canvas.getByRole("dialog", { name: "Promo code" });
+    const promoView = within(promo);
+    expect(promoView.getByText("WELCOME100")).toBeInTheDocument();
+    expect(promoView.getByText("SAVE200")).toBeInTheDocument();
+    expect(promoView.getByText("Not valid for this order")).toBeInTheDocument();
+    expect(
+      promoView.queryByPlaceholderText("Enter promo code"),
+    ).not.toBeInTheDocument();
+    expect(
+      promoView.queryByRole("button", { name: "Apply" }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(promoView.getByRole("group", { name: "WELCOME100" })).queryByRole(
+        "button",
+        { name: "Apply" },
+      ),
+    ).not.toBeInTheDocument();
+
+    await userEvent.click(promoView.getByRole("button", { name: "Back" }));
+    await waitFor(() => {
+      expect(
+        canvas.queryByRole("dialog", { name: "Promo code" }),
+      ).not.toBeInTheDocument();
+    });
+
+    await userEvent.click(canvas.getByRole("button", { name: /Use points/i }));
+    expect(canvas.getByText(/1 pt = HK\$1\./)).toBeInTheDocument();
+    expect(canvas.getByText(/You’ve 1,200 pts\./)).toBeInTheDocument();
+    expect(canvas.queryByPlaceholderText("0")).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "Apply" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "Use max" }),
+    ).not.toBeInTheDocument();
+    expect(canvas.getAllByText("HK$42,700.00", { exact: true })).toHaveLength(
+      2,
+    );
+  },
+};
+
 /**
  * Esc / backdrop close the nested promo sheet first, then the cart.
  */

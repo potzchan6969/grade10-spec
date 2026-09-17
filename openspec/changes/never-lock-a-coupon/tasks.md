@@ -47,3 +47,12 @@
 
 - [x] 7.1 The commerce and loyalty architecture docs stop describing the claim as a lock and the sweep as the floor under it
 - [x] 7.2 The PRD pages carry what a member and a shopkeeper each read
+
+## 8. Let the programme free the key with the claim (grade10, grade10-spec)
+
+- [x] 8.1 A key answers only while its claim is live, so a sale that gave a claim back and asks again is answered rather than refused with a coupon sitting in the member's wallet
+- [x] 8.2 A retry of a claim that still stands replays it, and a claim the shop already collected still refuses a second
+- [x] 8.3 A counter sale that runs out its own clock gives its coupon back, the move the supersede pass already makes on one it ends
+- [x] 8.4 A Coupon claim is written onto an order only by a guarded write that refuses to write over a live one; nothing carries it in on an insert's conflict arm
+- [x] 8.5 The gift a claim promised is written where the claim ends, so a paid sale that carried a gift line the order had given up can still be read
+- [x] 8.6 The release outbox stops claiming a job that has spent its attempts, and reports what is owed, what has stopped, and how old the oldest is

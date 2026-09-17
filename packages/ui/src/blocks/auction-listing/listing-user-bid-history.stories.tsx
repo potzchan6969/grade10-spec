@@ -19,8 +19,8 @@ const COPY = {
     "We bid only as needed up to your maximum. If two people set the same maximum, the earlier one leads.",
   maximumsTab: "Your maximums",
   bidsTab: "Bid placed",
-  maximumColumn: "Maximum",
-  bidColumn: "Bid",
+  maximumAmount: "Maximum",
+  bidAmount: "Bid",
   time: "Time",
   emptyBidsTitle: "No bids placed yet",
   emptyBidsDescription: "We only bid as needed up to your maximum.",
@@ -33,7 +33,6 @@ const SINGLE_MAXIMUM: ListingUserMaximumHistoryRow[] = [
     id: "max-1",
     amountLabel: "HK$5,200",
     acceptedAtMs: STORY_NOW_MS - 5 * 60_000,
-    status: "set",
   },
 ];
 
@@ -42,19 +41,16 @@ const RAISED_MAXIMUMS: ListingUserMaximumHistoryRow[] = [
     id: "max-3",
     amountLabel: "HK$6,000",
     acceptedAtMs: STORY_NOW_MS - 8 * 60_000,
-    status: "raised",
   },
   {
     id: "max-2",
     amountLabel: "HK$5,500",
     acceptedAtMs: STORY_NOW_MS - 45 * 60_000,
-    status: "raised",
   },
   {
     id: "max-1",
     amountLabel: "HK$5,200",
     acceptedAtMs: STORY_NOW_MS - 3 * 60 * 60_000,
-    status: "set",
   },
 ];
 
@@ -167,8 +163,8 @@ export const MaxRaisedOverTime: Story = {
 };
 
 /**
- * Single maximum, no bid steps — defaults to Your maximums; Bid placed shows
- * the frameless empty state.
+ * Single maximum, no bid steps — defaults to Bid placed with the frameless
+ * empty state; Your maximums still shows the maximum.
  */
 export const EmptyBidsFrameless: Story = {
   name: "Empty bids, frameless state",
@@ -184,18 +180,18 @@ export const EmptyBidsFrameless: Story = {
     });
     expect(
       within(dialog).getByRole("tab", {
-        name: "Your maximums",
+        name: "Bid placed",
         selected: true,
       }),
     ).toBeVisible();
-    expect(within(dialog).getByText("HK$5,200")).toBeVisible();
-    await userEvent.click(
-      within(dialog).getByRole("tab", { name: "Bid placed" }),
-    );
     expect(within(dialog).getByText("No bids placed yet")).toBeVisible();
     expect(
       within(dialog).getByText("We only bid as needed up to your maximum."),
     ).toBeVisible();
+    await userEvent.click(
+      within(dialog).getByRole("tab", { name: "Your maximums" }),
+    );
+    expect(within(dialog).getByText("HK$5,200")).toBeVisible();
     const shell = dialog.querySelector(
       '[data-slot="listing-user-bid-history-empty-bids"]',
     );

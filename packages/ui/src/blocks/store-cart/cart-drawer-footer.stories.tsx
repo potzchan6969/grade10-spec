@@ -380,6 +380,18 @@ export const PartialCallbackMatrix: Story = {
             />
           </FooterWithPromoNest>
         </section>
+
+        <section aria-label="Promo disclosure without callback">
+          <CartDrawerFooter
+            subtotal="HK$42,700.00"
+            estimatedTotal="HK$42,700.00"
+            promoState={{ status: "collapsed" }}
+            pointsState={{ status: "expanded" }}
+            pointsBalanceLabel="You’ve 1,200 pts."
+            copy={DEFAULT_CART_COPY.footer}
+            onPointsStateChange={() => {}}
+          />
+        </section>
       </div>
     );
   },
@@ -474,6 +486,26 @@ export const PartialCallbackMatrix: Story = {
     expect(args.onPromoStateChange).toHaveBeenCalledWith({
       status: "expanded",
     });
+
+    const withoutPromoDisclosure = within(
+      canvas.getByRole("region", {
+        name: "Promo disclosure without callback",
+      }),
+    );
+    expect(
+      withoutPromoDisclosure.queryByRole("button", {
+        name: /Select or enter code/i,
+      }),
+    ).not.toBeInTheDocument();
+    expect(
+      withoutPromoDisclosure.getByRole("button", { name: /Use points/i }),
+    ).toBeInTheDocument();
+    expect(
+      withoutPromoDisclosure.getByText(/1 pt = HK\$1\./),
+    ).toBeInTheDocument();
+    expect(
+      withoutPromoDisclosure.getByText(/You’ve 1,200 pts\./),
+    ).toBeInTheDocument();
   },
 };
 

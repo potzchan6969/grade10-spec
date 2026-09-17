@@ -31,19 +31,19 @@ consumer supplies accepted-bid rows, a link opens a dialog of amount and
 time with a same-price priority note and no bid-type column; empty rows
 hide the link. Every label arrives through props.
 
-- 🚧 **Your bidding** — the link and dialog title cover both maximum history
+- **Your bidding** — the link and dialog title cover both maximum history
   and bids Grade10 placed
-- 🚧 **Two tabs** — **Bid placed**, then **Your maximums**, each with its
+- **Two tabs** — **Bid placed**, then **Your maximums**, each with its
   own scrollable table; not one merged table and not two stacked full tables
-- 🚧 **Default tab** — **Bid placed** whenever the dialog opens (empty bids
+- **Default tab** — **Bid placed** whenever the dialog opens (empty bids
   state when that list has no rows)
-- 🚧 **Maximum rows** — amount and time only; no **Set** / **Raised** status
+- **Maximum rows** — amount and time only; no **Set** / **Raised** status
   on the row
-- 🚧 **No dialog maximum summary** — the live private maximum stays on the
+- **No dialog maximum summary** — the live private maximum stays on the
   bid panel; this block is tabs and lists only
-- 🚧 **Copy from the application** — every label, description, empty state,
+- **Copy from the application** — every label, description, empty state,
   and column header arrives through props; the block supplies none of its own
-- 🚧 **Hidden when idle** — with no maximum rows and no bid-sequence rows,
+- **Hidden when idle** — with no maximum rows and no bid-sequence rows,
   the link and dialog are absent
 
 
@@ -55,7 +55,7 @@ behind a tooltip.
 
 ## Lost Standing
 
-🚧 **No release banner on the lot card** — when the viewer lost, the bid card
+**No release banner on the lot card** — when the viewer lost, the bid card
 shows Did not win without card-authorization-release banner copy. Hold release
 copy on My Auctions stays with that capability when a hold exists.
 

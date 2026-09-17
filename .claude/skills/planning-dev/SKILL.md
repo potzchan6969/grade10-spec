@@ -5,7 +5,7 @@ description: Write the engineer's artifacts on an OpenSpec change - tech-design.
 
 # The engineer's artifacts
 
-Two of the seven artifacts in `grade10-planning` are yours, and they are the
+Two of the eight artifacts in `grade10-planning` are yours, and they are the
 last two:
 
 | Artifact | What it holds |
@@ -32,13 +32,34 @@ and resolves to this store — so delivery is planned here, by you.
    was picked up.
 3. `pnpm run plan:preflight <change-id>`, then write the artifacts below.
 4. `openspec status --change <change-name>` lists what is still missing.
+5. **Read what the deltas carry, not whether the file is there.**
+   `openspec status` calls `specs` done as soon as a `spec.md` exists, so it
+   cannot tell an outline from the requirements. Look for the `## ADDED` and
+   `## MODIFIED Requirements` headings, and for `awaiting: specs:` in
+   `.openspec.yaml` — the line the PM leaves with the outline. A delta that
+   names no requirement and declares no wait fails `pnpm check:manual`, so the
+   state you cannot plan against is usually red before you reach it.
+
+   **No requirements means the change is not yours to plan yet.** A task names
+   the scenarios it makes pass, and an outline issues none. Where you own the
+   change, take it through `/planning-qa` — the suite and the scenarios — and
+   continue here. Where somebody else authored it, say it needs QA's two
+   readings and stop: that run stops on *its* author for a case nobody ever
+   decided, and answering one of those yourself is the agent deciding the
+   product.
 
 The proposal, the deltas and the journeys carry over untouched. **Do not send
-the proposal back to its author for a task list** — their part is finished.
+the proposal back to its author for a task list** — their part is finished. A
+change whose scenarios never landed is the exception above, and what goes back
+is the anchor set, not the proposal.
 
 Authoring a change from scratch is the same lane: run `openspec new change
-<name>`, write the first three artifacts with `/planning-pm`, then continue
-here.
+<name>`, take artifacts 1 to 3 through `/planning-pm` - the proposal, the
+decisions, the journeys - then the spec passes. **`spec.md` is yours on a
+change you authored**: its outline, the blind suite, then the requirements,
+exactly as `/planning-qa` runs them. Read that skill and follow it rather than
+writing the file directly; the PM and the designer never open it, and neither
+do you on somebody else's change.
 
 ## Read the enriched instructions as you reach each artifact
 
@@ -113,6 +134,8 @@ owns the change, **after it is deployed** — not when the code merges.
 
 - `planning-pm` — the requirements and journeys your tasks name.
 - `planning-design` — the screens and the component work your plan carries.
-- `planning-qa` — the suites that must exist before the change pushes.
+- `planning-qa` — the scenarios your tasks name and the suites that must
+  exist before the change pushes; where a change arrives without them, the run
+  that fills them.
 - `openspec-apply-change`, `openspec-archive-change` — the far end of the
   lifecycle.

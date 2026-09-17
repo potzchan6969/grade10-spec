@@ -9,7 +9,7 @@
  * which finds the deployed sha and commits the record. Run it by hand only to
  * write a waiver.
  *
- * The archive has three gates, and they used to be prose in a skill file —
+ * The archive has four gates, and they used to be prose in a skill file —
  * which made the honest path and the fast path differ by forty minutes with
  * only one leaving a record. This makes them mechanical:
  *
@@ -32,6 +32,19 @@
  *          durable spec yet: the fold creates it, so the copy can only happen
  *          right after — the flag is a promise, and the sections stay on
  *          `pnpm check:manual`'s list.
+ *
+ * DECIDE   `decisions.md` is change-local: it archives with the change and is
+ *          folded nowhere. So a rejected option recorded there is readable
+ *          afterwards only under `openspec/changes/archive/`, which the blind
+ *          suite pass is forbidden to read — the same shape as dropping a
+ *          suite's `## Settled`, and the same cost: the question is asked
+ *          again next quarter, answered the other way, and the record that
+ *          would have caught it sits in the one tree nothing may open.
+ *          Whatever still matters goes onto the capability's PRD, in its
+ *          `Product decisions` block, which is durable and which the blind
+ *          pass already reads. This gate asks the owner to say that happened:
+ *          `--decisions-carried "<what went where>"`, or the same flag with
+ *          `none` where nothing outlived the change.
  *
  *          A copy that did land is read for the four things only archive can
  *          get wrong: a written `## Purpose` replaces the durable one whole, a
@@ -237,16 +250,16 @@ function help() {
   console.log(
     dim(
       '                             [--tasks-waived "<who, why>"] [--journeys-copied]',
+      '                             [--decisions-carried "<what went where, or none>"]',
     ),
   );
   console.log(
-    dim("  The archive's three gates, mechanical: proof of deploy, every task"),
+    dim("  The archive's four gates, mechanical: proof of deploy, every task"),
   );
   console.log(
-    dim(
-      "  checked off, and the purpose / feature set / journeys / suites copy",
-    ),
+    dim("  checked off, the decisions that outlive the change put on the PRD,"),
   );
+  console.log(dim("  and the purpose / feature set / journeys / suites copy"));
   console.log(
     dim(
       "  the fold would discard, done and done right. A clear run writes the",
@@ -283,12 +296,15 @@ let deployedEnv = null;
 let deployWaived = null;
 let tasksWaived = null;
 let journeysCopied = false;
+let decisionsCarried = null;
 for (let i = 1; i < argv.length; i += 1) {
   if (argv[i] === "--deployed-at") deployedAt = argv[++i] ?? null;
   else if (argv[i] === "--deployed-env") deployedEnv = argv[++i] ?? null;
   else if (argv[i] === "--deploy-waived") deployWaived = argv[++i] ?? null;
   else if (argv[i] === "--tasks-waived") tasksWaived = argv[++i] ?? null;
   else if (argv[i] === "--journeys-copied") journeysCopied = true;
+  else if (argv[i] === "--decisions-carried")
+    decisionsCarried = argv[++i] ?? null;
   else {
     fail(`Unknown argument: ${argv[i]}`, `Run with ${cyan("--help")}.`);
     process.exit();
@@ -361,6 +377,12 @@ if (tasksWaived !== null && tasksWaived.trim() === "") {
   fail(yellow("--tasks-waived needs the who and the why, in quotes."));
   process.exit();
 }
+if (decisionsCarried !== null && decisionsCarried.trim() === "") {
+  fail(
+    yellow("--decisions-carried needs what went where, in quotes, or `none`."),
+  );
+  process.exit();
+}
 
 // ── Tasks gate ──────────────────────────────────────────────────────────────
 // An open checkbox at archive is work nobody did or a checkmark nobody wrote.
@@ -396,6 +418,47 @@ if (open.length > 0 && tasksWaived === null) {
     "out loud, on the same command:",
     "",
     `  ${cyan('--tasks-waived "<who waived it, why>"')}`,
+  );
+  process.exit();
+}
+
+// ── Decide gate ─────────────────────────────────────────────────────────────
+// `decisions.md` is folded nowhere, so a rejected option recorded only there
+// survives archive in a tree the blind suite pass may not read. Whatever still
+// matters belongs on the capability's PRD, in `Product decisions`. The store
+// cannot judge which rows those are — the owner can, and this asks them to say
+// so rather than to remember.
+const decisionsFile = `openspec/changes/${changeId}/decisions.md`;
+const decisions = existsSync(join(ROOT, decisionsFile))
+  ? readFileSync(join(ROOT, decisionsFile), "utf8")
+  : null;
+const rows =
+  decisions === null
+    ? []
+    : (sectionBody(decisions, "Decisions") ?? "")
+        .split("\n")
+        .filter((line) => /^\s*\|/.test(line) && !/^\s*\|\s*-{2,}/.test(line))
+        .slice(1);
+if (rows.length > 0 && decisionsCarried === null) {
+  fail(
+    yellow(
+      `${changeId} records ${rows.length} decision(s) that the fold carries nowhere:`,
+    ),
+  );
+  for (const row of rows.slice(0, SHOWN)) {
+    console.error(`  ${row.trim().slice(0, 100)}`);
+  }
+  if (rows.length > SHOWN) {
+    console.error(dim(`  … and ${rows.length - SHOWN} more`));
+  }
+  fail(
+    "",
+    "A rejected option readable only under archive/ is one the blind pass may",
+    "not read, so the question comes back answered the other way. Put what",
+    "still matters in the capability's `Product decisions` block, then say so:",
+    "",
+    `  ${cyan('--decisions-carried "<what went where>"')}`,
+    `  ${cyan("--decisions-carried none")}   nothing outlived the change`,
   );
   process.exit();
 }

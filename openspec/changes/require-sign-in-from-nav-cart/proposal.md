@@ -8,7 +8,7 @@ no cart holds their lines. The Cart control in the header was not part of that
 change, so it still opens the drawer for them — onto a cart that can no longer
 have anything in it.
 
-So the one control on every Store page that says "your cart" is the one place
+So the one control on every page that says "your cart" is the one place
 the site still answers a signed-out collector with an empty room. They pressed
 it to see what they had picked; the honest answer is that the cart is theirs
 once they sign in.

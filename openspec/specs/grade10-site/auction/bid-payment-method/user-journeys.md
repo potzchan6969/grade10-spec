@@ -17,3 +17,10 @@
 **As a** collector who has been outbid,
 **I want** the hold on my card cancelled,
 **so that** money is not held for a listing I cannot win.
+
+### grade10-site-auction-bid-payment-method-US-04: Collector understands the buyer-premium rate before bidding
+
+**As a** collector considering a live lot,
+**I want** to know the buyer's premium rate before I bid,
+**so that** I understand the policy without being shown an invoice amount that
+does not exist yet.

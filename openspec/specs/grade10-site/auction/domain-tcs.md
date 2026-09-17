@@ -1,7 +1,7 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
-**Status:** pending-review
-**Reviewed:** 2026-09-04, tcs-rules r2
+**Status:** in-review
+**Drafts styled:** 2026-09-16, tcs-rules r3.0
 
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
 
@@ -590,8 +590,7 @@ hold is being let go.
 ## grade10-site-auction-e2e-US07: Collector watches a late bid push the close out
 
 **As a** collector,
-**I want** a bid accepted in the last minutes to move the close on the page and
-in my history,
+**I want** a bid accepted during extended bidding to move the close on the page,
 **so that** the time I read and the time I am judged by are the same.
 
 ### grade10-site-auction-e2e-US07-TC01-1: Late auto-bid extends the close on the live page
@@ -685,6 +684,50 @@ in my history,
 
 ---
 
+### grade10-site-auction-e2e-US07-TC01-2: Auto-bid during extended bidding restarts the timer on the live page
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auto-bidding-US-05
+
+**Pre-conditions:**
+
+* `<listing_8>` is past its scheduled close, in extended bidding, and its recorded close is `<time left before bid>` away.
+* customer A leads `<listing_8>` with a committed maximum of `<user A maximum>` and is on it.
+* customer B is signed in with a card saved and is on `<listing_8>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<listing_8>` | A listing in extended bidding led by customer A, current bid `<leader price>` |
+| `<extension duration>` | 1800 seconds |
+| `<time left before bid>` | 5 minutes |
+| `<leader price>` | 530000 HKD minor units |
+| `<user A maximum>` | 800000 HKD minor units |
+| `<user B maximum>` | 555000 HKD minor units, below `<user A maximum>` |
+
+**Steps:**
+
+1. As customer A, read Time left.
+2. As customer B, commit a maximum of `<user B maximum>`.
+3. As customer A, read Time left again on the open page.
+4. Wait one full `<extension duration>` with no further commitment.
+
+**Expected Results:**
+
+* Grade10 raises customer A's bid on their behalf, and Time left reads one `<extension duration>` from that bid.
+* Step 4 closes the lot, and no further bid is placed on either maximum before it.
+
 ## grade10-site-auction-e2e-US08: Collector's private bidding facts stay private
 
 **As a** collector,
@@ -768,6 +811,39 @@ them.
 
 * No private history is shown before sign-in.
 * Step 2 lands back on the bids index, showing that account's Active list with <listing_11> in it.
+
+### grade10-site-auction-e2e-US08-TC03-1: A linked collector places and resolves a no-hold bid
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** smoke, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-bid-panel-enrollment-US-02
+
+**Pre-conditions:**
+
+* A signed-in collector has linked a card on an open listing.
+* Bid-time authorization holds are disabled.
+* A challenger can commit a higher valid maximum on the same listing.
+
+**Steps:**
+
+1. Submit the collector's valid first bid.
+2. Submit the challenger's higher maximum.
+3. Read the accepted bids, panel state, and bid-time authorizations.
+
+**Expected Results:**
+
+* The first bid is accepted and the panel moves to enrolled with Change unavailable.
+* The two maxima resolve according to the listing's rules.
+* No bid-time authorization is created or awaited for either bid.
 
 ---
 
@@ -979,36 +1055,3 @@ finds it.
 * A delayed lower authorization is released rather than becoming the current bid.
 * Each user reads only their own maximum, and every standing change is explained by an event in their own history.
 * Every surprise is written up with the amounts, the order, and the timing that produced it.
-
-### grade10-site-auction-e2e-US08-TC1-1: A linked collector places and resolves a no-hold bid
-
-**Classification:**
-
-* **Severity:** blocker
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** smoke, release
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-bid-panel-enrollment-US-02
-
-**Pre-conditions:**
-
-* A signed-in collector has linked a card on an open listing.
-* Bid-time authorization holds are disabled.
-* A challenger can commit a higher valid maximum on the same listing.
-
-**Steps:**
-
-1. Submit the collector's valid first bid.
-2. Submit the challenger's higher maximum.
-3. Read the accepted bids, panel state, and bid-time authorizations.
-
-**Expected Results:**
-
-* The first bid is accepted and the panel moves to enrolled with Change unavailable.
-* The two maxima resolve according to the listing's rules.
-* No bid-time authorization is created or awaited for either bid.

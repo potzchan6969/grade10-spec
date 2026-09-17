@@ -18,7 +18,7 @@ lower bid can never displace a higher one, however the network reorders them —
 the contract is written against races, because the last minutes of an auction
 are nothing but races.
 
-🚧 The scheduled close is where extended bidding starts. At that moment a
+The scheduled close is where extended bidding starts. At that moment a
 listing with no bid closes. A listing with at least one bid — a bid at the
 close counts — enters extended bidding for its extension duration (default 30
 minutes). Every new bid, from anyone, restarts that listing's timer at the full

@@ -1,6 +1,6 @@
 import { writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import type { Snapshot } from "../api/types.ts";
+import type { ChangeEntry, Snapshot } from "../api/types.ts";
 import { NO_GIT } from "./git.mts";
 import { rootsOf } from "./roots.mts";
 import { composeStore } from "./snapshot.mts";
@@ -17,13 +17,40 @@ export const FIXTURE_FILE = fileURLToPath(
 
 const DEMO_STORE = fileURLToPath(new URL("../../demo-store", import.meta.url));
 
-/** The demo store is not a checkout, so it has no head and no history; a fixed
- * date keeps the file the same bytes on every reading. */
+/** Pinned: a fixed date keeps the file the same bytes on every reading. */
 const GENERATED_AT = "2026-01-01T00:00:00.000Z";
 
 export function fixtureSnapshot(): Snapshot {
   const { snapshot } = composeStore(rootsOf(DEMO_STORE), NO_GIT, null);
-  return { ...snapshot, generatedAt: GENERATED_AT };
+  return {
+    ...snapshot,
+    changes: snapshot.changes.map(undated),
+    generatedAt: GENERATED_AT,
+  };
+}
+
+/**
+ * The same change with no age against its claimed groups.
+ *
+ * `demo-store/` sits inside this repository's checkout, so the readers find a
+ * history for it and date every claimed group against today. That age is a
+ * true reading and an impossible fixture: it moves every day, and it is absent
+ * altogether in a clone whose `openspec-viewer` submodule is not initialised,
+ * so the committed file could only ever match the machine that wrote it. A
+ * fallback payload's ages would be stale on arrival in any case — the shell
+ * falls back to this file precisely where nothing is serving the store — so it
+ * carries none, for the reason `generatedAt` is pinned above it.
+ */
+function undated(change: ChangeEntry): ChangeEntry {
+  if (!change.taskGroups.some((group) => group.idle)) return change;
+  return {
+    ...change,
+    taskGroups: change.taskGroups.map((group) => {
+      const undatedGroup = { ...group };
+      delete undatedGroup.idle;
+      return undatedGroup;
+    }),
+  };
 }
 
 if (import.meta.main) {

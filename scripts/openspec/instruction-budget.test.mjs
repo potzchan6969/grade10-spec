@@ -18,7 +18,11 @@ const words = (text) => text.split(/\s+/).filter(Boolean).length;
 // Words. AGENTS.md loads on every path; each `rules.<artifact>` block loads on
 // that artifact's path through the CLI. The schema instruction and template are
 // the rules' home on the artifact path, so a block holds what only it says.
-const AGENTS_BUDGET = 2500;
+// 2500 until the lifecycle grew its eighth artifact. The table of artifacts is
+// the one thing AGENTS.md cannot link away — an agent that reads nothing else
+// reads it — so a row costs what a row costs, and the raise buys a little
+// headroom rather than a blank cheque.
+const AGENTS_BUDGET = 2570;
 const RULES_BUDGET = {
   proposal: 110,
   // Back to one block after the artifact split was undone: two passes over one

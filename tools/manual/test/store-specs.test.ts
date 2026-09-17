@@ -222,3 +222,103 @@ describe("a suite the reader refuses beside a spec that parsed", () => {
     expect(entry.testCasesStatus).toBeUndefined();
   });
 });
+
+/** A durable file writes `## User journeys`; a change's file writes the delta
+ * sections instead, and both are one reader's to read. Knowing only the durable
+ * heading refused every change's journeys file, and the refusal was dropped —
+ * so the schema's own template passed the `walked` gate by parsing as nothing. */
+describe("the shape a change's journeys file is written in", () => {
+  const story = (id: string, title: string) =>
+    [
+      `### ${id}: ${title}`,
+      "",
+      "**As a** collector,",
+      "**I want** the thing,",
+      "**so that** it is done.",
+      "",
+    ].join("\n");
+
+  const journeys = (body: string) =>
+    written({ [SPEC]: specText("alpha-SC-01 - it happens"), [JOURNEYS]: body });
+
+  it("reads the delta sections, restated and added alike", () => {
+    const entry = journeys(
+      [
+        "## Context user journeys",
+        "",
+        story("alpha-US-01", "Someone does the thing"),
+        "## ADDED User journeys",
+        "",
+        story("alpha-US-02", "Someone does another thing"),
+        "## MODIFIED User journeys",
+        "",
+        story("alpha-US-03", "Someone does the third thing"),
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeUndefined();
+    expect(entry.journeys?.map((one) => one.id)).toEqual([
+      "alpha-US-01",
+      "alpha-US-02",
+      "alpha-US-03",
+    ]);
+  });
+
+  it("holds a file whose delta sections are all empty", () => {
+    const entry = journeys(
+      [
+        "## Context user journeys",
+        "",
+        "## ADDED User journeys",
+        "",
+        "## MODIFIED User journeys",
+        "",
+        "## REMOVED User journeys",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeUndefined();
+    expect(entry.journeys).toEqual([]);
+  });
+
+  it("leaves a removed journey out of the ones the capability holds", () => {
+    const entry = journeys(
+      [
+        "## ADDED User journeys",
+        "",
+        story("alpha-US-02", "Someone does another thing"),
+        "## REMOVED User journeys",
+        "",
+        story("alpha-US-01", "Someone did the thing"),
+        "**Reason:** the thing went away.",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeys?.map((one) => one.id)).toEqual(["alpha-US-02"]);
+  });
+
+  it("refuses one id issued under two of the sections", () => {
+    const entry = journeys(
+      [
+        "## Context user journeys",
+        "",
+        story("alpha-US-01", "Someone does the thing"),
+        "## MODIFIED User journeys",
+        "",
+        story("alpha-US-01", "Someone does the thing differently"),
+      ].join("\n"),
+    );
+    expect(entry.journeysError?.message).toMatch(
+      /story `alpha-US-01` is issued twice, at line 3 and line 11/,
+    );
+  });
+
+  it("refuses a file whose headings no reader knows", () => {
+    const entry = journeys(`## Journeys\n\n${story("alpha-US-01", "A thing")}`);
+    expect(entry.journeysError).toEqual({
+      file: JOURNEYS,
+      line: 1,
+      message:
+        "a journeys file needs a `## User journeys` heading, or the `## ADDED User journeys` sections a change writes",
+    });
+  });
+});

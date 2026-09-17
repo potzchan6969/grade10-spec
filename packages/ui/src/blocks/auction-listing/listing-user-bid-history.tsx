@@ -44,8 +44,8 @@ type ListingUserBidHistoryCopy = {
   description: string;
   maximumsTab: string;
   bidsTab: string;
-  maximumColumn: string;
-  bidColumn: string;
+  maximumAmount: string;
+  bidAmount: string;
   time: string;
   /** Frameless empty-state title when Bid placed has no rows. */
   emptyBidsTitle: string;
@@ -100,7 +100,7 @@ function ListingUserBidHistory({
     showFullTime ? "w-48" : "w-28",
   );
 
-  const defaultTab: HistoryTab = bidRows.length > 0 ? "bids" : "maximums";
+  const defaultTab: HistoryTab = "bids";
 
   if (maximumRows.length === 0 && bidRows.length === 0) {
     return null;
@@ -172,7 +172,7 @@ function ListingUserBidHistory({
                     <Table className="flex min-h-0 flex-1 flex-col overflow-hidden">
                       <TableHeader className="shrink-0">
                         <TableHead className="min-w-0 flex-1">
-                          {copy.bidColumn}
+                          {copy.bidAmount}
                         </TableHead>
                         <TableHead align="end" className={timeColumnClass}>
                           {copy.time}
@@ -203,7 +203,7 @@ function ListingUserBidHistory({
                   <Table className="flex min-h-0 flex-1 flex-col overflow-hidden">
                     <TableHeader className="shrink-0">
                       <TableHead className="min-w-0 flex-1">
-                        {copy.maximumColumn}
+                        {copy.maximumAmount}
                       </TableHead>
                       <TableHead align="end" className={timeColumnClass}>
                         {copy.time}
