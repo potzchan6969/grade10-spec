@@ -14,4 +14,4 @@
 - [x] 3.2 Gateway client tests: a miss keeps the held token, a call already on its way speaks and fails for its own member, a call held at the host presents the token as rotated meanwhile
 - [x] 3.3 The modal keeps the typed points through a miss; the demo lane identifies a member, looks up a stranger, and a spend still lands for the member; the replay demo page reads a refused rescan with the member kept, driven in the demo lane
 - [ ] 3.4 The staging tablet: a scan that finds nobody over a member with points typed
-  - Open: an emulator cannot send it. The till offers its camera only with nobody on screen, and the emulator has no hardware scanner. Walk it on a tablet with a scanner; 3.1 and 3.3 cover it until then
+  - Dropped: no device on hand carries a hardware scanner, and the till only opens its own camera with nobody on screen, so neither an emulator nor the tablet at hand can drive this by hand. 3.1 and 3.3 cover it at the unit and demo-lane level; feedback from the floor once it ships stands in for the device walk
