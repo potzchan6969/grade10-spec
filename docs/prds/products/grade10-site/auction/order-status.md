@@ -17,6 +17,7 @@ label is shared.
 | **Preparing Invoice** | The winner has confirmed a delivery address, and an operator has not yet sent an invoice |
 | **Pending Payment** | The current invoice is unpaid; an expired invoice keeps this status |
 | 🚧 **Payment Verifying** | The winner uploaded payment proof and an operator has not yet checked it; the payment deadline is stopped |
+| 🚧 **Partially Paid** | An operator has recorded at least one payment against the invoice and money is still owed; the payment deadline no longer applies, and self-service Pay is not offered |
 | **Processing** | Payment is complete and dispatch has not happened |
 | **Shipped** | The lot has been dispatched, with a carrier and a tracking number |
 | **Delivered** | The carrier has confirmed delivery, with its proof |
@@ -32,12 +33,14 @@ label is shared.
 | The lot closes | Awaiting Address | Grade10 opens the order |
 | Awaiting Address | Preparing Invoice | The winner confirms a delivery address; or an operator records one after the deadline |
 | Preparing Invoice | Pending Payment | An operator sends the invoice |
-| Pending Payment | Processing | The winner's card payment is confirmed, or an operator settles the invoice manually |
+| Pending Payment | Processing | The winner's card payment is confirmed, or an operator settles the invoice manually in full |
 | 🚧 Pending Payment | Payment Verifying | The winner uploads bank transfer proof; the deadline stops |
 | 🚧 Payment Verifying | Processing, or Pending Payment | An operator confirms the proof, or returns it and the deadline runs again with the time that was left |
+| 🚧 Pending Payment, or Expired invoice | Partially Paid | An operator records a payment smaller than the balance owed; the deadline stops for good |
+| 🚧 Partially Paid | Partially Paid, or Processing | An operator records another payment; the order reaches Processing once a payment closes the balance |
 | Processing | Shipped | The warehouse dispatches, with a tracking number |
 | Shipped | Delivered | The carrier confirms delivery |
-| Any unpaid status | Cancelled | An operator cancels; the lot reopens |
+| Any unpaid status but Partially Paid | Cancelled | An operator cancels; the lot reopens |
 | Any paid status | Refunded | The payment is refunded |
 
 - **Expired invoice** — the status stays Pending Payment; self-service card
@@ -48,6 +51,10 @@ label is shared.
   until an operator reopens the form
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
   its own; a proof under check never expires
+- 🚧 **Partially Paid is final on its numbers** — no reissue and no cancel
+  once an operator has recorded a payment against the invoice; the invoice's
+  address, method and total stay fixed, and an operator settles the rest by
+  hand outside the system if it will not be paid off
 - **Refused** — dispatch before payment, cancelling a dispatched order (it is
   refunded instead), a delivery before dispatch, and any direct write of the
   status
@@ -63,6 +70,7 @@ queue.
 | **Pending** | Sent and unpaid, a reissued invoice included |
 | 🚧 **Payment Verifying** | Proof uploaded and not yet checked; the deadline is stopped |
 | **Expired** | The deadline passed unpaid; winner card pay ends |
+| 🚧 **Partially Paid** | An operator has recorded a payment smaller than the balance owed; the deadline no longer applies |
 | **Paid** | Received in full, by card or recorded by an operator |
 | **Cancelled** | Cancelled unpaid; final |
 | **Refunded** | Refunded after payment; final |
@@ -99,4 +107,6 @@ history, delivery proof, and suspension explanation.
 | Expired ends winner card pay | Decided | Self-service card pay stops at expiry; operator paths remain. | Product (@tangconst) |
 | Cancelled vs Refunded | Decided | Unpaid fail-to-pay ends as Cancelled when an operator cancels; Refunded is paid→refund only. | Product |
 | Payment Verifying | 🚧 In flight | Proof waiting for an operator has its own name, read by the winner and the operator alike, and stops the payment deadline. | Product (@jeffffej0909) |
+| Partially Paid | 🚧 In flight | Its own status, entered the moment an operator records a payment smaller than the balance owed; ends the payment deadline for good rather than pausing it, since self-service Pay is never offered again on that invoice. | Product (@jeffffej0909) |
+| Reissue and Cancel after a partial payment | 🚧 In flight | Both refused once any payment has been recorded; the invoice's numbers stay fixed and an operator resolves the rest by hand outside the system. | Product (@jeffffej0909) |
 :::

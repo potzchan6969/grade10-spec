@@ -64,6 +64,8 @@ watch-only, soonest close first in each band, closed lots after open ones.
   about an expired invoice lives on the order
 - 🚧 **Payment Verifying** — a won lot whose payment proof is waiting for an
   operator reads Payment Verifying on its row
+- 🚧 **Partially Paid** — a won lot with at least one operator-recorded
+  payment and a balance still owed reads Partially Paid on its row
 - **Didn't win** — the row says what happened to the card authorization,
   being released or released, because a pending hold on a bank statement
   reads as a charge; a hold is never called released while its release is
