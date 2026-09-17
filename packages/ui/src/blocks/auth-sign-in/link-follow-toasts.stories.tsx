@@ -5,12 +5,13 @@ import { useEffect } from "react";
 import { expect, waitFor, within } from "storybook/test";
 
 /**
- * Failure toasts after a magic-link verify that creates no session. The
- * application fires these on the brand home; they are not part of
- * `SignInEmailForm` (send-path errors stay inline on the field).
+ * Toasts after a magic-link follow on the brand home. Failure toasts cover a
+ * verify that creates no session. The different-account toast covers a
+ * signed-in mismatch with Switch / Stay (no automatic session swap).
  *
- * Copy matches shared `signIn` catalog keys `linkExpired`, `linkInvalid`,
- * and `linkBanned`.
+ * Failure copy matches shared `signIn` catalog keys `linkExpired`,
+ * `linkInvalid`, and `linkBanned`. Mismatch copy is story-local until the
+ * catalog keys land with engineering.
  */
 const meta = {
   title: "Auth Sign In/Link Follow Toasts",
@@ -33,6 +34,10 @@ const COPY = {
   linkExpired: "This sign-in link has expired.",
   linkInvalid: "This sign-in link no longer works.",
   linkBanned: "You can’t sign in with this account.",
+  differentAccount: "You’re signed in with a different account.",
+  differentAccountDescription: "Switch to alex@example.com.",
+  switch: "Switch",
+  stay: "Stay",
 } as const;
 
 function FireErrorToast({ message }: { message: string }) {
@@ -42,6 +47,27 @@ function FireErrorToast({ message }: { message: string }) {
 
   return (
     <Button type="button" onClick={() => toast.error(message)}>
+      Show toast again
+    </Button>
+  );
+}
+
+function FireDifferentAccountToast() {
+  const show = () => {
+    toast.warning(COPY.differentAccount, {
+      description: COPY.differentAccountDescription,
+      duration: Infinity,
+      action: { label: COPY.switch, onClick: () => undefined },
+      cancel: { label: COPY.stay, onClick: () => undefined },
+    });
+  };
+
+  useEffect(() => {
+    show();
+  }, []);
+
+  return (
+    <Button type="button" onClick={show}>
       Show toast again
     </Button>
   );
@@ -79,5 +105,20 @@ export const Banned: Story = {
   render: () => <FireErrorToast message={COPY.linkBanned} />,
   play: async () => {
     await expectToastText(COPY.linkBanned);
+  },
+};
+
+/**
+ * Signed in as Account B; link is for Account A — choose Switch or Stay
+ * (`shared-auth-sign-in-US-08`).
+ */
+export const DifferentAccount: Story = {
+  name: "Different account",
+  render: () => <FireDifferentAccountToast />,
+  play: async () => {
+    await expectToastText(COPY.differentAccount);
+    await expectToastText(COPY.differentAccountDescription);
+    await expectToastText(COPY.switch);
+    await expectToastText(COPY.stay);
   },
 };
