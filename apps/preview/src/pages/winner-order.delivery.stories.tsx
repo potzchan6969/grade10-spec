@@ -1,6 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import {
+  BANK_TRANSFER_INVOICE_LINES,
+  WINNER_ORDER_CONTENTS,
+} from "./winner-order-content";
+import {
   winnerOrderMeta,
   winnerOrderSettled,
 } from "./winner-order.story-shared";
@@ -10,12 +14,21 @@ const meta = {
   ...winnerOrderMeta(),
   title: "My Auctions/Winner Order/Delivery",
   args: { status: "processing" },
+  parameters: {
+    ...winnerOrderMeta().parameters,
+    docs: {
+      description: {
+        component:
+          "Winner Order after payment (Processing → Shipped → Delivered). Default Processing uses card (Visa + masked number); Processing Bank Transfer shows the bank-transfer method strip with no card mask.",
+      },
+    },
+  },
 } satisfies Meta<typeof WinnerOrderPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Paid — preparing to ship (Shipped step current); receipt PDF available. */
+/** Paid by card — preparing to ship (Shipped step current); receipt PDF available. */
 export const Processing: Story = {
   name: "Processing",
   args: { status: "processing" },
@@ -33,10 +46,49 @@ export const Processing: Story = {
     expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getByText("20 Sep 2026")).toBeVisible();
     expect(canvas.getByText("Visa")).toBeVisible();
+    expect(canvas.getByText("···· 4242")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
+  },
+};
+
+/**
+ * Paid by bank transfer after operator confirmation — same Processing shell,
+ * payment method strip shows Bank transfer with no masked card number.
+ * Processing fee may be Free when the operator set none.
+ */
+export const ProcessingBankTransfer: Story = {
+  name: "Processing Bank Transfer",
+  args: {
+    status: "processing",
+    content: {
+      ...WINNER_ORDER_CONTENTS.processing,
+      paymentMethod: "Bank transfer",
+      paymentMasked: undefined,
+      invoiceLines: BANK_TRANSFER_INVOICE_LINES,
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="processing"]',
+      ),
+    ).not.toBeNull();
+    const sidebar = within(canvas.getByRole("complementary"));
+    expect(sidebar.getByText("Payment method")).toBeVisible();
+    expect(sidebar.getByText("Bank transfer")).toBeVisible();
+    expect(sidebar.queryByText("Visa")).not.toBeInTheDocument();
+    expect(sidebar.queryByText("···· 4242")).not.toBeInTheDocument();
+    expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
+    expect(sidebar.getByText("Free")).toBeVisible();
+    expect(sidebar.getByText("HK$15,540")).toBeVisible();
+    expect(sidebar.queryByText("HK$120")).not.toBeInTheDocument();
+    expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
+    expect(sidebar.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
   },
 };
 

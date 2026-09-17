@@ -7,35 +7,42 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
   WINNER_ORDER_FULL_SAVED_ADDRESSES,
   WINNER_ORDER_SAVED_ADDRESSES,
-  WinnerOrderAddressDialog,
+  WinnerOrderSetupDialog,
   type WinnerOrderSavedAddress,
-} from "./winner-order-address-dialog";
+  type WinnerOrderSetupResult,
+} from "./winner-order-setup-dialog";
 
-type ConfirmDeliveryAddressDemoProps = {
+type CompleteOrderSetupDemoProps = {
   savedAddresses?: readonly WinnerOrderSavedAddress[];
   initialNewAddressOpen?: boolean;
-  onConfirm?: (addressLines: string) => void;
+  initialStep?: 1 | 2 | 3;
+  currency?: "HKD" | "USD" | "JPY";
+  onConfirm?: (result: WinnerOrderSetupResult) => void;
 };
 
-function ConfirmDeliveryAddressDemo({
+function CompleteOrderSetupDemo({
   savedAddresses = WINNER_ORDER_SAVED_ADDRESSES,
   initialNewAddressOpen = false,
+  initialStep = 1,
+  currency = "HKD",
   onConfirm = fn(),
-}: ConfirmDeliveryAddressDemoProps) {
+}: CompleteOrderSetupDemoProps) {
   const [open, setOpen] = useState(true);
-  const [confirmed, setConfirmed] = useState<string | null>(null);
+  const [confirmed, setConfirmed] = useState<WinnerOrderSetupResult | null>(
+    null,
+  );
 
   return (
     <div className="flex min-h-svh w-full flex-col bg-background p-8">
       <VStack className="mx-auto w-full max-w-lg" gap="md" hAlign="start">
         <Text as="h2" className="text-xl font-semibold tracking-tight">
-          Delivery address preview
+          Complete Order Setup
         </Text>
         <Text size="sm" tone="secondary">
-          Preview-only modal under My Auctions. Winner Order still opens the
-          same dialog from Awaiting Address. An account keeps up to five saved
-          addresses; at the cap, Add new address still works for this order and
-          Save for future is refused until one is removed.
+          Standalone preview of the stepped setup dialog Winner Order opens
+          from Awaiting Setup. Page wiring lives under My Auctions / Winner
+          Order / Setup. Delivery → Payment → Billing; the address book
+          caps at five saved addresses.
         </Text>
         {!open ? (
           <Button onClick={() => setOpen(true)} size="md">
@@ -44,17 +51,22 @@ function ConfirmDeliveryAddressDemo({
         ) : null}
         {confirmed ? (
           <Text className="whitespace-pre-line" size="sm">
-            Confirmed:{"\n"}
-            {confirmed}
+            Confirmed delivery:{"\n"}
+            {confirmed.delivery}
+            {"\n\n"}Payment: {confirmed.paymentMethod}
+            {"\n"}Billing:{"\n"}
+            {confirmed.billing}
           </Text>
         ) : null}
       </VStack>
 
-      <WinnerOrderAddressDialog
+      <WinnerOrderSetupDialog
+        currency={currency}
         initialNewAddressOpen={initialNewAddressOpen}
-        onConfirm={(lines) => {
-          setConfirmed(lines);
-          onConfirm(lines);
+        initialStep={initialStep}
+        onConfirm={(result) => {
+          setConfirmed(result);
+          onConfirm(result);
         }}
         onOpenChange={setOpen}
         open={open}
@@ -65,23 +77,25 @@ function ConfirmDeliveryAddressDemo({
 }
 
 const meta = {
-  title: "My Auctions/Confirm Delivery Address",
-  component: ConfirmDeliveryAddressDemo,
+  title: "My Auctions/Winner Order/Setup/Complete Order Setup",
+  component: CompleteOrderSetupDemo,
   tags: ["autodocs"],
   parameters: {
     layout: "fullscreen",
     docs: {
       description: {
         component:
-          "Standalone Storybook preview of the Winner Order Confirm Delivery Address picker and its nested Add Delivery Address form. Same dialog Winner Order opens from Awaiting Address. Address options use design-system `RadioCard`; an empty book uses `EmptyState`. The account book caps at five saved addresses; at the cap Add new address still confirms a one-time address and Save this address for future orders is refused.",
+          "Standalone Storybook preview of Winner Order Complete Order Setup (delivery, payment method, billing). Same dialog the Awaiting Setup page opens. Replaces the retired Confirm Delivery Address stories. Address options use `RadioCard`; an empty book uses `EmptyState`. At five saved addresses, Add New Address still confirms a one-time draft and Save for future is refused.",
       },
     },
   },
   args: {
     savedAddresses: [...WINNER_ORDER_SAVED_ADDRESSES],
     initialNewAddressOpen: false,
+    initialStep: 1,
+    currency: "HKD",
   },
-} satisfies Meta<typeof ConfirmDeliveryAddressDemo>;
+} satisfies Meta<typeof CompleteOrderSetupDemo>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -97,13 +111,14 @@ async function findVisibleDialog(
   });
 }
 
-/** Outer picker: saved-address cards, remove controls, Add new address. */
-export const Picker: Story = {
-  name: "Picker",
+/** Step 1 — saved-address cards, remove controls, Add New Address. */
+export const DeliveryPicker: Story = {
+  name: "Delivery picker",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Confirm Delivery Address");
+    const dialog = await findVisibleDialog(page, "Complete Order Setup");
     const modal = within(dialog);
+    expect(modal.getByText("Step 1 of 3: Delivery")).toBeVisible();
     await waitFor(() => {
       expect(modal.getAllByText("Alex Chan").length).toBeGreaterThan(0);
     });
@@ -112,19 +127,20 @@ export const Picker: Story = {
     ).toBe(2);
     expect(modal.getByText(/Harbour Road/)).toBeVisible();
     expect(
-      modal.getByRole("button", { name: "Add new address" }),
+      modal.getByRole("button", { name: "Add New Address" }),
     ).toBeVisible();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
   },
 };
 
-/** Nested Add Delivery Address form — open via CTA; Country stays closed. */
+/** Nested Add Delivery Address form — Country stays closed. */
 export const AddDeliveryAddress: Story = {
   name: "Add delivery address",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const outer = await findVisibleDialog(page, "Confirm Delivery Address");
+    const outer = await findVisibleDialog(page, "Complete Order Setup");
     await userEvent.click(
-      within(outer).getByRole("button", { name: "Add new address" }),
+      within(outer).getByRole("button", { name: "Add New Address" }),
     );
 
     const nested = await findVisibleDialog(page, "Add Delivery Address");
@@ -141,23 +157,19 @@ export const AddDeliveryAddress: Story = {
       }),
     ).toBeChecked();
     expect(
-      form.getByRole("button", { name: "Use this address" }),
+      form.getByRole("button", { name: "Use This Address" }),
     ).toBeVisible();
-    expect(
-      form.queryByText(/shipping fee on the invoice/i),
-    ).not.toBeInTheDocument();
-    // Leave Country closed until the viewer opens it.
     expect(page.queryByRole("option", { name: "Australia" })).toBeNull();
   },
 };
 
-/** Empty account address book — EmptyState only; viewer opens nested form via CTA. */
+/** Empty account address book — EmptyState; Continue disabled. */
 export const NoSavedAddresses: Story = {
   name: "No saved addresses",
   args: { savedAddresses: [] },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Confirm Delivery Address");
+    const dialog = await findVisibleDialog(page, "Complete Order Setup");
     const modal = within(dialog);
     await waitFor(() => {
       expect(modal.getByText("No saved addresses")).toBeVisible();
@@ -166,23 +178,21 @@ export const NoSavedAddresses: Story = {
       modal.getByText("Add a delivery address to continue."),
     ).toBeVisible();
     expect(
-      modal.getByRole("button", { name: "Add new address" }),
+      modal.getByRole("button", { name: "Add New Address" }),
     ).toBeVisible();
-    expect(
-      modal.getByRole("button", { name: "Confirm address" }),
-    ).toBeDisabled();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
     expect(
       page.queryByRole("dialog", { name: "Add Delivery Address" }),
     ).toBeNull();
   },
 };
 
-/** Remove a saved card from the picker. */
+/** Remove a saved card from the delivery picker. */
 export const RemoveSavedAddress: Story = {
   name: "Remove saved address",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Confirm Delivery Address");
+    const dialog = await findVisibleDialog(page, "Complete Order Setup");
     const modal = within(dialog);
     await waitFor(() => {
       expect(modal.getByText(/Harbour Road/)).toBeVisible();
@@ -200,8 +210,8 @@ export const RemoveSavedAddress: Story = {
 };
 
 /**
- * Five saved addresses — Add new address still opens; Save for future is
- * refused so Use this address keeps a one-time draft at the top of the picker.
+ * Five saved addresses — Add New Address still opens; Save for future is
+ * refused so Use This Address keeps a one-time draft on step 1.
  */
 export const AddressBookFull: Story = {
   name: "Address book full",
@@ -210,18 +220,18 @@ export const AddressBookFull: Story = {
   },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const outer = await findVisibleDialog(page, "Confirm Delivery Address");
+    const outer = await findVisibleDialog(page, "Complete Order Setup");
     const picker = within(outer);
     await waitFor(() => {
       expect(picker.getByText(/Chater House/)).toBeVisible();
     });
     expect(picker.getByText(/Festival Walk/)).toBeVisible();
     expect(
-      picker.getByRole("button", { name: "Add new address" }),
+      picker.getByRole("button", { name: "Add New Address" }),
     ).toBeVisible();
 
     await userEvent.click(
-      picker.getByRole("button", { name: "Add new address" }),
+      picker.getByRole("button", { name: "Add New Address" }),
     );
 
     const nested = await findVisibleDialog(page, "Add Delivery Address");
@@ -246,7 +256,7 @@ export const AddressBookFull: Story = {
     await userEvent.type(form.getByLabelText("City"), "Central");
     await userEvent.type(form.getByLabelText("Postal code"), "000000");
     await userEvent.click(
-      form.getByRole("button", { name: "Use this address" }),
+      form.getByRole("button", { name: "Use This Address" }),
     );
 
     await waitFor(() => {
@@ -256,12 +266,11 @@ export const AddressBookFull: Story = {
     });
     const confirmedOuter = await findVisibleDialog(
       page,
-      "Confirm Delivery Address",
+      "Complete Order Setup",
     );
     const confirmedPicker = within(confirmedOuter);
     expect(confirmedPicker.getByText("Pat Ng")).toBeVisible();
     expect(confirmedPicker.getByText(/Queen's Road Central/)).toBeVisible();
-    // Draft leads the list; five removable saved cards remain below.
     const cards = confirmedPicker.getByLabelText("Delivery address");
     const firstCardTitle = within(cards).getAllByText(
       /Pat Ng|Alex Chan|Jordan Lee|Sam Wong/,
@@ -270,5 +279,69 @@ export const AddressBookFull: Story = {
     expect(
       confirmedPicker.getAllByRole("button", { name: /^Remove / }).length,
     ).toBe(5);
+  },
+};
+
+/** Step 2 — card and bank transfer (HKD). */
+export const PaymentMethod: Story = {
+  name: "Payment method",
+  args: { initialStep: 2 },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Complete Order Setup");
+    const modal = within(dialog);
+    expect(modal.getByText("Step 2 of 3: Payment")).toBeVisible();
+    expect(modal.getByRole("radio", { name: /Card/i })).toBeVisible();
+    expect(modal.getByRole("radio", { name: /Bank transfer/i })).toBeVisible();
+    expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
+    await userEvent.click(modal.getByRole("radio", { name: /Card/i }));
+    expect(modal.getByRole("button", { name: "Continue" })).toBeEnabled();
+  },
+};
+
+/** Step 3 — same-as-delivery default. */
+export const BillingAddress: Story = {
+  name: "Billing address",
+  args: { initialStep: 3 },
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const dialog = await findVisibleDialog(page, "Complete Order Setup");
+    const modal = within(dialog);
+    expect(modal.getByText("Step 3 of 3: Billing")).toBeVisible();
+    expect(modal.getByText("Use same details for billing address")).toBeVisible();
+    expect(
+      modal.getByRole("button", { name: "Complete Order Setup" }),
+    ).toBeEnabled();
+  },
+};
+
+/** Full three steps → confirmed payload on the demo surface. */
+export const FinishSetup: Story = {
+  name: "Finish setup",
+  args: { onConfirm: fn() },
+  play: async ({ canvasElement, args }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    const canvas = within(canvasElement);
+    const dialog = await findVisibleDialog(page, "Complete Order Setup");
+    const modal = within(dialog);
+
+    await userEvent.click(modal.getByRole("button", { name: "Continue" }));
+    await waitFor(() => {
+      expect(modal.getByText("Step 2 of 3: Payment")).toBeVisible();
+    });
+    await userEvent.click(modal.getByRole("radio", { name: /Card/i }));
+    await userEvent.click(modal.getByRole("button", { name: "Continue" }));
+    await waitFor(() => {
+      expect(modal.getByText("Step 3 of 3: Billing")).toBeVisible();
+    });
+    await userEvent.click(
+      modal.getByRole("button", { name: "Complete Order Setup" }),
+    );
+
+    await waitFor(() => {
+      expect(page.queryByRole("dialog")).not.toBeInTheDocument();
+    });
+    expect(canvas.getByText(/Confirmed delivery/i)).toBeVisible();
+    expect(args.onConfirm).toHaveBeenCalled();
   },
 };
