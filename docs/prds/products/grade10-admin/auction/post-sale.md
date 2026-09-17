@@ -23,6 +23,7 @@ The queue works every winner order from lot close through delivery in one place.
 - **Needs action** - Preparing Invoice, expired Pending Payment, and Processing
 - 🚧 **Payment Verifying needs action** - it carries the needs-action treatment until an operator checks the proof
 - **Overdue** - a separate mark for an order idle for 72 hours or more in Awaiting Address or Preparing Invoice; it changes no status and never expires the order
+- 🚧 **Search** — by listing code, invoice ID or bank reference; a replaced invoice's ID or reference still finds the order
 - **Extended bidding: ON** - a lot past its scheduled close and still taking bids carries this label on its row; its outcome does not change
 
 ## Payment
@@ -41,8 +42,9 @@ What the operator enters and reads on a quote:
 
 A winner order reaches paid through one fresh card payment or one operator-recorded manual settlement. An expired invoice stays payable, and a reissue returns it to pending with a new deadline.
 
-- 🚧 **Reissue** — one action for any change after send: address, payment method, bank transfer fee, shipping, insurance, and the deadline kept or restarted, always with a reason; the bank transfer fee starts from the previous invoice's
+- 🚧 **Reissue** — one action for any change after send: address, payment method, bank transfer fee, shipping, insurance, and the deadline kept or restarted, always with a reason and at least one change; the bank transfer fee starts from the previous invoice's
 - 🚧 **Checking proof** — on a Payment Verifying order the operator confirms the payment, with the winner's files as proof and their own added if they wish, or returns the invoice to pending with a reason the winner reads and a reason kept internal; the prompt shows the time left, and returning is not offered once the invoice has expired
+- 🚧 **Internal audit number** — every invoice and receipt carries one gapless number, such as `#00010482`, shown on the order and in the invoice log and never to the winner; a replaced invoice keeps its number
 - 🚧 **Card invoice paid another way** — by transfer, cash or another method: reissued as bank transfer first, then settled at the new invoice's total; where the money arrived at the Subtotal, the bank transfer fee is 0
 
 Manual settlement is a finance fallback: the operator records bank transfer, cash, or another described method, a reference where required, and one to five private proof files. The winner sees the payment method and reference on the receipt, never the proof files.

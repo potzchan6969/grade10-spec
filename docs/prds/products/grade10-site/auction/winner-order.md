@@ -21,11 +21,15 @@ Winner Order is the authenticated route where a collector settles one lot after 
 - 🚧 **Changes after send** — a new address or payment method is made by an operator, who reissues the invoice; the replaced invoice reads as replaced by the new one
 - ❓ **Asking for a change** — how the winner asks for a new address or payment method after send — Design confirms
 - **Payment** — a fresh card payment, the only self-service method offered while the invoice is `pending`; a declined attempt leaves the invoice payable until the deadline
-- 🚧 **Bank transfer** — an invoice sent for bank transfer shows SWIFT, FPS and Hong Kong local bank transfer details instead of card Pay, and asks the winner to quote the invoice reference
+- 🚧 **Bank transfer** — an invoice sent for bank transfer shows SWIFT, FPS and Hong Kong local bank transfer details instead of card Pay, and asks the winner to quote the bank reference, with a **Copy Reference Code** button
 - ❓ **Bank details** — the account details for each of the three ways — Finance confirms
-- ❓ **Invoice reference and receipt number** — the format of each; every invoice has a reference that still finds the order after a reissue, and every receipt has a number — Product confirms
+- 🚧 **Invoice ID** — `INV-202609-LK7P2Q-01`: the month sent (Hong Kong time), the listing code, and the invoice count, `01` for the first and the next on each reissue. The listing code is `L` and 5 letters or digits, fixed for the listing, and not shown on the public listing page
+- 🚧 **Bank reference** — `LK7P2Q01`: 8 capital letters and digits, 9 after the 99th invoice, with no spaces or symbols. Only a bank transfer invoice shows it
+- 🚧 **Reissued invoice** — gets a new invoice ID and bank reference; a payment quoting the old ones still finds the order
+- 🚧 **Receipt ID** — `REC-202609-LK7P2Q-01-P1`: the month paid and the paid invoice's code and count. The receipt shows Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due
+- 🚧 **Record keeping** — every invoice and receipt PDF is kept at least 7 years, or for the life of the account if longer, even after the account is deleted
 - 🚧 **Payment proof** — after paying, the winner uploads 1 to 5 PDF, JPEG or PNG files of up to 10 MB each, once; the order then reads Payment Verifying, the payment deadline stops, and card Pay and further uploads are hidden
-- 🚧 **Proof not accepted** — an operator returns the invoice to `pending` with a reason the winner reads on the order; the deadline runs again with the time that was left
+- 🚧 **Proof not accepted** — an operator returns the invoice to `pending` with a reason the winner reads on the order, the latest one only; the deadline runs again with the time that was left
 - 🚧 **Proof stays private** — the winner never sees a proof file or its name, their own or an operator's; the order shows only that proof was sent
 - **Payment deadline** — 7 calendar days from when Grade10 sends the invoice to the winner, not from lot close
 - 🚧 **After the deadline** — card Pay is hidden; the overdue alert carries Contact Us; an operator reissues, settles manually, or cancels
@@ -74,6 +78,7 @@ The winner needs one place to understand what is owed and what happens next. The
 | One fee line | 🚧 In flight | Payment Processing Fee stays on every invoice and is priced by method, so a bank transfer can carry an administrative fee. The operator enters that fee each time, with no cap. | Product (@jeffffej0909) |
 | Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount is first shown on the sent invoice, and an operator reissues if the winner then wants the other method. | Product (@jeffffej0909) |
 | Payment deadline while proof is checked | 🚧 In flight | The deadline stops on upload and resumes with the time left if the proof is not accepted, so a winner never loses time to the check. | Product (@jeffffej0909) |
+| Invoice and receipt identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not by a running count, so the IDs do not reveal how much Grade10 sells. Operators keep a separate gapless audit number the winner never sees. Source: [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
 | Partial payment | ❓ Open | A separate change: several payments against one invoice, a shortfall tolerance, overpayment, and refunds. | Product and finance |
 | Minimum values | 🚧 In flight | The initial values are 0 in USD, HKD, and JPY; the mapping is editable under `/auction`. | Product and finance |
 

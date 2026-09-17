@@ -12,15 +12,18 @@ and the receipt, tracker and delivery proof the order keeps afterwards.
   - Offered by currency: bank transfer only where bank details are set up
 - Invoice
   - Fee priced by method: Payment Processing Fee is the card gross-up or the operator's bank transfer fee, never dropped
-  - Invoice reference: every invoice carries one, and it still finds the order after a reissue
+  - Identifier formats: an invoice ID and a bank reference built from the listing code, the month and the invoice count; a reissue takes new ones, and an old one still finds the order
+  - Listing code: `L` and five characters, fixed for the listing's life, never on the public listing page
+  - Internal audit number: one gapless count across invoices and receipts, never shown to the winner
   - Replaced invoice: an invoice a reissue replaced says so and names its replacement
 - Bank transfer
-  - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the invoice reference to quote
+  - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the bank reference to quote and a Copy Reference Code control
   - Payment proof: one upload of 1 to 5 files, behind a confirm step
   - Payment Verifying: the deadline stops, card Pay and further uploads are hidden
-  - Proof not accepted: the reason the winner reads, and the deadline running again with the time that was left
+  - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
 - Records the winner keeps
-  - Receipt number: every receipt has one
+  - Receipt ID and breakdown: every receipt has a unique receipt ID and shows what was billed, paid and left to pay
+  - Retention: every invoice and receipt PDF kept at least 7 years, or for the life of the account if longer
 
 ## ADDED Requirements
 
@@ -97,7 +100,8 @@ it, per "The delivery address locks when the invoice is sent".
 
 While an invoice sent for bank transfer is `pending`, Winner Order SHALL show
 these three ways to pay in place of card Pay. Each SHALL ask the winner to
-quote the invoice reference. The account details are TBC.
+quote the invoice's bank reference, shown beside a **Copy Reference Code**
+control that copies it. The account details are TBC.
 
 | Way to pay | Details shown |
 | --- | --- |
@@ -115,7 +119,7 @@ asks Grade10, and an operator reissues the invoice.
 - **GIVEN** an auction order whose invoice was sent for bank transfer and is `pending`
 - **WHEN** the winner opens Winner Order
 - **THEN** SWIFT, FPS and Hong Kong local bank transfer details are shown with the fields above
-- **AND** each asks the winner to quote the invoice reference
+- **AND** each asks the winner to quote the bank reference
 - **AND** no card Pay control is offered
 
 #### Scenario: winner-order-SC-96 - A card payment on a bank transfer invoice is refused
@@ -126,43 +130,153 @@ asks Grade10, and an operator reissues the invoice.
 - **THEN** Grade10 refuses it
 - **AND** the invoice is still `pending`
 
-### Requirement: Every invoice carries a reference
+### Requirement: Every invoice carries an invoice ID and a bank reference
 
-Grade10 SHALL give every invoice an invoice reference when it is sent. The
-reference SHALL be shown on the invoice, on Winner Order and on the invoice
-PDF. Looking up any invoice's reference, including a replaced invoice's, SHALL
-find its auction order. The reference format is TBC.
+Grade10 SHALL give every invoice, card or bank transfer, an invoice ID and a
+bank reference when it is sent. Each SHALL be unique across all invoices.
+
+| Identifier | Format | Example |
+| --- | --- | --- |
+| Invoice ID | `INV-[YYYYMM]-[LISTING_ID]-[SEQ]` | `INV-202609-LK7P2Q-01` |
+| Bank reference | `[LISTING_ID][SEQ]` | `LK7P2Q01` |
+
+| Part | Rule |
+| --- | --- |
+| `[YYYYMM]` | The year and month the invoice is sent, in Hong Kong time. A reissue sent in a later month carries that month |
+| `[LISTING_ID]` | The listing code of the lot's listing, below |
+| `[SEQ]` | The count of the listing's invoices: `01` for the first invoice sent, the next number on each reissue. Two digits, then three after `99` |
+
+The bank reference SHALL hold only capital letters and digits, with no hyphen,
+space or other symbol. It is 8 characters, or 9 once `[SEQ]` passes `99`, so
+it fits SWIFT's 35-character remittance line.
+
+Winner Order and the invoice PDF SHALL show the invoice ID. Grade10 SHALL show
+the winner the bank reference only on a bank transfer invoice, per "A bank
+transfer invoice shows how to pay"; a card invoice's bank reference is shown to
+operators only.
+
+Each listing SHALL hold a listing code, assigned no later than when the listing
+is published: `L` followed by 5 characters drawn from capital letters and
+digits other than `0`, `O`, `1` and `I`. Grade10 SHALL derive the code from a
+hash of the listing's internal id. When the result is already held by another
+listing, Grade10 SHALL hash again with a counter until the code is unique. The
+code SHALL be stored, unique across all listings, and never changed or reused.
+A later change of hash method SHALL NOT move a stored code. The winner SHALL
+see the listing code only as part of the invoice ID; the public listing page
+SHALL NOT show it.
 
 A reissue replaces the current invoice with a new one, per
-`grade10-admin/auction/post-sale`. A replaced invoice SHALL hold no invoice
-status of its own and SHALL never read `cancelled`; the order's invoice status
-is its current invoice's, per `grade10-site/auction/order-status`. The PDF of a
-replaced invoice SHALL say it was replaced and SHALL name the reference of the
-invoice that replaced it.
+`grade10-admin/auction/post-sale`, and the new invoice SHALL take a new invoice
+ID and a new bank reference. Looking up the invoice ID or bank reference of any
+invoice, including a replaced invoice's, SHALL find its auction order. A
+replaced invoice SHALL hold no invoice status of its own and SHALL never read
+`cancelled`; the order's invoice status is its current invoice's, per
+`grade10-site/auction/order-status`. The PDF of a replaced invoice SHALL say it
+was replaced and SHALL name the invoice ID of the invoice that replaced it.
 
-#### Scenario: winner-order-SC-97 - A replaced invoice's reference still finds the order
-**Serves:** Invoice - the reference still finds the order after a reissue
+#### Scenario: winner-order-SC-97 - A replaced invoice's identifiers still find the order
+**Serves:** Invoice - an old identifier still finds the order after a reissue
 
 - **GIVEN** an auction order whose first invoice an operator replaced with a reissue
-- **WHEN** a payment quoting the first invoice's reference is looked up
+- **WHEN** a payment quoting the first invoice's bank reference, or its invoice ID, is looked up
 - **THEN** it finds that auction order
-- **AND** the order's current invoice carries its own reference
+- **AND** the order's current invoice carries its own invoice ID and bank reference
 
 #### Scenario: winner-order-SC-98 - A replaced invoice names its replacement
 **Serves:** Invoice - a replaced invoice says so and names its replacement
 
 - **GIVEN** an auction order whose first invoice an operator replaced with a reissue
 - **WHEN** the first invoice's PDF is opened
-- **THEN** it says the invoice was replaced and names the new invoice's reference
+- **THEN** it says the invoice was replaced and names the new invoice's invoice ID
 - **AND** the first invoice holds no invoice status and does not read `cancelled`
 
-#### Scenario: winner-order-SC-114 - The reference is shown on the order and the PDF
+#### Scenario: winner-order-SC-114 - The invoice ID is shown on the order and the PDF
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** one auction order whose invoice was sent for card and one sent for bank transfer
 - **WHEN** the winner opens each order and its invoice PDF
-- **THEN** each order shows its invoice reference
-- **AND** its PDF shows the same reference
+- **THEN** each order shows its invoice ID
+- **AND** its PDF shows the same invoice ID
+
+#### Scenario: winner-order-SC-122 - The invoice ID and bank reference take the Hong Kong month
+**Serves:** Invoice - identifier formats
+
+- **GIVEN** a lot on the listing whose listing code is `LK7P2Q`, with no invoice sent yet
+- **WHEN** an operator sends its first invoice at 2026-09-30T17:00:00Z, which is 1 October in Hong Kong
+- **THEN** the invoice ID is `INV-202610-LK7P2Q-01`
+- **AND** the bank reference is `LK7P2Q01`
+
+#### Scenario: winner-order-SC-123 - A reissue takes the next number and its own month
+**Serves:** Invoice - a reissue takes new identifiers
+
+- **GIVEN** an order on listing `LK7P2Q` whose first invoice `INV-202609-LK7P2Q-01` was sent in September 2026
+- **WHEN** an operator reissues it at 2026-10-02T02:00:00Z
+- **THEN** the new invoice ID is `INV-202610-LK7P2Q-02` and its bank reference is `LK7P2Q02`
+- **AND** looking up `LK7P2Q01` or `INV-202609-LK7P2Q-01` finds the same order
+- **AND** the first invoice's PDF names `INV-202610-LK7P2Q-02`
+
+#### Scenario: winner-order-SC-124 - The invoice count grows to three digits after 99
+**Serves:** Invoice - identifier formats
+
+- **GIVEN** an order on listing `LK7P2Q` whose current invoice is `INV-202609-LK7P2Q-99`
+- **WHEN** an operator reissues it in September 2026
+- **THEN** the new invoice ID is `INV-202609-LK7P2Q-100`
+- **AND** the bank reference is `LK7P2Q100`, 9 characters of capital letters and digits
+
+#### Scenario: winner-order-SC-125 - A listing code that is already held is hashed again
+**Serves:** Invoice - listing code
+
+- **GIVEN** a listing about to be published whose internal id hashes to a code another listing already holds
+- **WHEN** the listing is published
+- **THEN** it holds a code Grade10 derived by hashing again with a counter
+- **AND** the code is `L` and 5 characters with no `0`, `O`, `1` or `I`, held by no other listing
+
+#### Scenario: winner-order-SC-126 - A stored listing code never moves
+**Serves:** Invoice - listing code
+
+- **GIVEN** a published listing whose stored listing code is `LK7P2Q`
+- **WHEN** Grade10 changes the hash method it derives codes with
+- **THEN** the listing still holds `LK7P2Q`
+- **AND** no other listing is given `LK7P2Q`
+
+#### Scenario: winner-order-SC-127 - The public listing page does not show the listing code
+**Serves:** Invoice - listing code
+
+- **GIVEN** a published listing whose listing code is `LK7P2Q`
+- **WHEN** anyone opens its public listing page
+- **THEN** `LK7P2Q` appears nowhere on the page
+
+#### Scenario: winner-order-SC-128 - Only a bank transfer invoice shows the bank reference
+**Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
+
+- **GIVEN** one order whose `pending` invoice was sent for bank transfer with bank reference `LK7P2Q01`, and one whose `pending` invoice was sent for card
+- **WHEN** the winner opens each on Winner Order and chooses Copy Reference Code on the first
+- **THEN** the first shows `LK7P2Q01` and the copied text is exactly `LK7P2Q01`
+- **AND** the card order shows no bank reference and no Copy Reference Code control
+
+### Requirement: Invoices and receipts carry an internal audit number
+
+Grade10 SHALL give every invoice and every receipt an internal audit number
+when it is issued: one gapless sequence shared by invoices and receipts, in
+the order they are issued, for example `#00010482`. A replaced invoice SHALL
+keep its number, and a reissue SHALL take the next one. The number SHALL NOT
+reach the winner: not on any PDF, letter, or Winner Order. Operators read it
+per `grade10-admin/auction/post-sale`.
+
+#### Scenario: winner-order-SC-129 - The winner never sees the internal audit number
+**Serves:** Invoice - internal audit number
+
+- **GIVEN** a paid order whose invoice holds internal audit number `#00010482` and whose receipt holds `#00010483`
+- **WHEN** the winner opens Winner Order, the invoice PDF, the receipt PDF and every letter sent about the order
+- **THEN** neither `#00010482` nor `#00010483` appears in any of them
+
+#### Scenario: winner-order-SC-130 - Invoices and receipts share one gapless count
+**Serves:** Invoice - internal audit number
+
+- **GIVEN** the last internal audit number issued is `#00010481`
+- **WHEN** an operator sends an invoice, then reissues it, then the winner pays the new invoice by card, with nothing else issued meanwhile
+- **THEN** the first invoice holds `#00010482`, the new invoice `#00010483` and the receipt `#00010484`
+- **AND** the replaced invoice still holds `#00010482`
 
 ### Requirement: The winner uploads payment proof once
 
@@ -291,11 +405,13 @@ was sent.
 
 When an operator returns a `payment_verifying` invoice to `pending`, per
 `grade10-admin/auction/post-sale`, Winner Order SHALL show the operator's
-external reason and the new payment deadline, which is the moment of return
+latest external reason and the new payment deadline, which is the moment of return
 plus the time left at upload. No grace is added, however little time was
 left. The winner SHALL then be able to upload proof again, under the same
 rules as the first upload. The operator's internal reason SHALL NOT be shown
-to the winner.
+to the winner. After a second return Winner Order SHALL show only the latest
+external reason; the invoice log keeps every reason, per
+`grade10-admin/auction/post-sale`.
 
 #### Scenario: winner-order-SC-104 - A returned invoice shows the reason and the time that was left
 **Serves:** winner-order-US-10 - Winner's payment proof is not accepted
@@ -321,6 +437,15 @@ to the winner.
 - **WHEN** an operator returns it at 2026-09-16T09:00:00Z and 2026-09-16T09:01:00Z passes unpaid
 - **THEN** the invoice is `expired` and the order reads Pending Payment
 - **AND** Winner Order offers no upload and shows Contact Us in its overdue alert
+
+#### Scenario: winner-order-SC-134 - Only the latest return reason is shown
+**Serves:** winner-order-US-10 - Winner's payment proof is not accepted
+
+- **GIVEN** a bank transfer invoice an operator returned with the external reason "Amount does not match", then returned again with "Reference missing" after a second upload
+- **WHEN** the winner opens Winner Order
+- **THEN** it shows "Reference missing"
+- **AND** it does not show "Amount does not match"
+- **AND** the invoice log holds both reasons
 
 ## MODIFIED Requirements
 
@@ -494,7 +619,7 @@ offer the winner a control to view and download the current invoice as a PDF.
 The control SHALL use a PDF icon with the label **Invoice** (accessible name
 Invoice PDF). The control SHALL be hidden while the invoice status is
 `not_issued` and SHALL be hidden when the invoice status is `cancelled`. The
-PDF SHALL carry the invoice reference and the payment method it was sent for.
+PDF SHALL carry the invoice ID and the payment method it was sent for.
 
 #### Scenario: winner-order-SC-57 - A sent invoice offers its PDF
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -522,7 +647,7 @@ PDF SHALL carry the invoice reference and the payment method it was sent for.
 
 - **GIVEN** an auction order whose first invoice an operator replaced with a reissue
 - **WHEN** the winner opens the invoice PDF from Winner Order
-- **THEN** it is the new invoice, carrying the new reference
+- **THEN** it is the new invoice, carrying the new invoice ID
 
 ### Requirement: The winner can view the payment receipt as a PDF
 
@@ -558,7 +683,9 @@ of minor units paired with the lot's ISO 4217 currency code, rendered per
 | Field | Notes |
 | --- | --- |
 | Auction order | The order this invoice is the payable record for. An order holds one current invoice, and any invoices a reissue replaced |
-| Invoice reference | Given at send. Finds the order, including after a reissue. Format TBC |
+| Invoice ID | Given at send, per "Every invoice carries an invoice ID and a bank reference". Finds the order, including after a reissue |
+| Bank reference | Given at send, on every invoice. Shown to the winner only on a bank transfer invoice. Finds the order, including after a reissue |
+| Internal audit number | Given at send, per "Invoices and receipts carry an internal audit number". Never shown to the winner |
 | Lot | The single lot invoiced. Named unambiguously, since a winner may hold several |
 | Payment method | Card or bank transfer. The winner's choice at send, or the operator's at a reissue |
 | Winning bid | The accepted bid that won the lot, excluding every other component |
@@ -798,15 +925,32 @@ winner card payment.
 ### Requirement: Records the winner keeps
 
 Each auction order SHALL carry these records, retrievable by the winner for
-the life of their account.
+the life of their account. Grade10 SHALL archive every invoice PDF, replaced
+invoices included, and every receipt PDF, and SHALL keep each retrievable for
+at least 7 years, or for the life of the account if longer. Deleting the
+account SHALL NOT shorten the 7 years.
 
 | Record | When | Contents |
 | --- | --- | --- |
-| Payment receipt | Payment confirmed, by any route | A receipt number, then itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, any tax amount, the subtotal, the payment processing fee, the order total, the invoice reference, and the payment method |
+| Payment receipt | Payment confirmed, by any route | A receipt ID, then itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, any tax amount, the subtotal, the payment processing fee, the order total, the invoice ID, the payment method, and the breakdown below |
 | Shipping tracker | Fulfilment status is `fulfilled` | Carrier name, tracking number, and a link to the carrier |
 | Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided — handover timestamp, signature, proof-of-delivery image |
 
-Every receipt SHALL carry a receipt number. Its format is TBC.
+Every receipt SHALL carry a receipt ID, unique across all receipts:
+`REC-[YYYYMM]-[LISTING_ID]-[SEQ]-P[INDEX]`, for example
+`REC-202609-LK7P2Q-01-P1`. `[LISTING_ID]` and `[SEQ]` are the paid invoice's.
+`[YYYYMM]` is the year and month the payment was confirmed, in Hong Kong time.
+`[INDEX]` counts the payments on the invoice; an invoice takes one payment, so
+every receipt ends `-P1`.
+
+Every receipt SHALL show this breakdown:
+
+| Line | Value |
+| --- | --- |
+| Original Invoice Total | The paid invoice's order total |
+| Previous Payments | 0 |
+| Current Payment Received | The amount this payment settled |
+| Remaining Balance Due | 0 |
 
 The receipt SHALL name the payment method:
 
@@ -870,13 +1014,13 @@ operator's, SHALL appear on the receipt.
 - **WHEN** the winner opens the receipt
 - **THEN** the payment method reads as a Visa card ending 4242
 
-#### Scenario: winner-order-SC-112 - Every receipt carries a number
-**Serves:** Records the winner keeps - every receipt has a receipt number
+#### Scenario: winner-order-SC-112 - Every receipt carries a receipt ID
+**Serves:** Records the winner keeps - receipt ID and breakdown
 
 - **GIVEN** one order paid by card, one confirmed from bank transfer proof, and one settled manually
 - **WHEN** the winner opens each receipt
-- **THEN** each carries a receipt number
-- **AND** each names its invoice reference
+- **THEN** each carries a receipt ID ending `-P1`
+- **AND** each names its invoice ID
 
 #### Scenario: winner-order-SC-113 - A confirmed bank transfer receipt names bank transfer
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
@@ -886,3 +1030,25 @@ operator's, SHALL appear on the receipt.
 - **THEN** the payment method reads Bank transfer and the amount paid is 317000 minor units in HKD
 - **AND** it is not marked as manually settled
 - **AND** it shows no proof file and no file name
+
+#### Scenario: winner-order-SC-131 - A receipt ID takes the paid invoice and the payment month
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an order whose bank transfer invoice `INV-202609-LK7P2Q-02` has an order total of 317000 minor units in HKD
+- **WHEN** an operator confirms its proof at 2026-09-30T16:30:00Z, which is 1 October in Hong Kong, and the winner opens the receipt
+- **THEN** the receipt ID is `REC-202610-LK7P2Q-02-P1`
+- **AND** it shows Original Invoice Total 317000, Previous Payments 0, Current Payment Received 317000 and Remaining Balance Due 0, in minor units of HKD
+
+#### Scenario: winner-order-SC-132 - Two receipts never share an ID
+**Serves:** Records the winner keeps - receipt ID and breakdown
+
+- **GIVEN** two paid orders on different listings
+- **WHEN** the winner opens both receipts
+- **THEN** the two receipt IDs differ
+
+#### Scenario: winner-order-SC-133 - Invoice and receipt PDFs outlive a deleted account
+**Serves:** Records the winner keeps - retention
+
+- **GIVEN** a paid order with a replaced invoice, its current invoice and a receipt, whose winner deleted their account a year after payment
+- **WHEN** Grade10 retrieves the order's documents 6 years after payment
+- **THEN** the replaced invoice PDF, the current invoice PDF and the receipt PDF are all returned

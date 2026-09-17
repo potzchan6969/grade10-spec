@@ -32,9 +32,20 @@ is watched from the first release.
   zero reads Free. Manual settlement no longer drops the line.
 - **Bank transfer details on the invoice.** An invoice sent for bank transfer
   shows SWIFT, FPS and Hong Kong local bank transfer details instead of card
-  Pay, and asks the winner to quote the invoice reference.
-- **Every invoice has a reference and every receipt a number.** The reference
-  still finds the order after a reissue. Their formats are open.
+  Pay, and asks the winner to quote the bank reference, with a Copy Reference
+  Code button.
+- **Invoice, receipt and payment identifiers.** Invoice ID
+  `INV-[YYYYMM]-[LISTING_ID]-[SEQ]`, receipt ID
+  `REC-[YYYYMM]-[LISTING_ID]-[SEQ]-P1`, and bank reference
+  `[LISTING_ID][SEQ]` (8 or 9 capital letters and digits) on every invoice,
+  shown to the winner only on bank transfer. The listing code is `L` and 5
+  characters hashed from the listing's id, fixed and unique. The month is Hong
+  Kong time; the count starts at `01` and moves on each reissue, and an old
+  identifier still finds the order. Receipts show a payment breakdown.
+  Operators search the queue by any identifier and read a gapless internal
+  audit number the winner never sees. Invoice and receipt PDFs are kept at
+  least 7 years.
+- **A reissue must change something.** A new reason alone is refused.
 - **The winner uploads payment proof, once.** 1 to 5 PDF, JPEG or PNG files of
   up to 10 MB each, behind a confirm step. No further upload is accepted until
   an operator returns the invoice.
@@ -72,7 +83,6 @@ is watched from the first release.
 - **Partial payment.** Several payments against one invoice, a shortfall
   tolerance, overpayment, and refunds are a separate change. Until it lands an
   invoice is settled only at its full amount.
-- **The format of the invoice reference and the receipt number.**
 - **Automatic matching of a bank statement to an invoice.**
 - **Cash or another method offered to the winner.** These stay operator
   settlement only.
@@ -86,9 +96,9 @@ is watched from the first release.
 
 - **Fee range wording** at the method choice — Product.
 - **Bank details** for each of the three ways to pay — Finance.
-- **Invoice reference and receipt number formats** — Product. Only SWIFT's
-  reference limit is confirmed (4 lines of 35 characters); the FPS and local
-  transfer limits come from Grade10's bank — Finance.
+- **FPS and local transfer reference limits** — Finance, from Grade10's
+  bank. The bank reference is 8 or 9 capital letters and digits and fits
+  SWIFT's 35-character line.
 - **How the winner asks** for a new address or payment method after send —
   Design, in `ui-design.md`.
 
@@ -102,8 +112,9 @@ None.
 
 - `grade10-site/auction/winner-order`: method choice at address confirmation;
   the fee priced by method and never dropped; bank transfer details and the
-  invoice reference; the one-time proof upload; Payment Verifying and its
-  return; the receipt number; a replaced invoice.
+  invoice ID, bank reference, listing code and internal audit number; the
+  one-time proof upload; Payment Verifying and its return, showing the latest
+  reason; the receipt ID and breakdown; record keeping; a replaced invoice.
 - `grade10-site/auction/order-status`: invoice status gains
   `payment_verifying`; order status gains Payment Verifying; the stopped
   deadline.
@@ -113,15 +124,17 @@ None.
   Verifying.
 - `grade10-admin/auction/post-sale`: the Payment Verifying outcome; the bank
   transfer fee on the quote; confirming and returning proof; one Reissue
-  action; proof on every operator settlement.
+  action that must change something; proof on every operator settlement;
+  search by listing code, invoice ID or bank reference; the internal audit
+  number on the order and the log.
 
 ## Impact
 
 | Consumer | Change |
 | --- | --- |
-| `apps/frontend/grade10` | Method choice with the address; bank transfer details and reference; proof upload and its confirm step; the Payment Verifying state; the returned-proof reason. My Auctions shows Payment Verifying. |
-| `apps/admin/grade10` | Bank transfer fee on the quote; the Payment Verifying outcome and filter; confirm and return with two reasons and the time left; one Reissue form. |
-| Auction service | The `payment_verifying` status and stopped deadline; method and fee on the order and invoice; winner proof storage; one reissue command; replaced invoices read from the chain; invoice references and receipt numbers. |
+| `apps/frontend/grade10` | Method choice with the address; bank transfer details, bank reference and Copy Reference Code; invoice and receipt IDs; the receipt breakdown; proof upload and its confirm step; the Payment Verifying state; the returned-proof reason. My Auctions shows Payment Verifying. |
+| `apps/admin/grade10` | Bank transfer fee on the quote; the Payment Verifying outcome and filter; confirm and return with two reasons and the time left; one Reissue form; search by listing code, invoice ID or bank reference; internal audit numbers on the order and log. |
+| Auction service | The `payment_verifying` status and stopped deadline; method and fee on the order and invoice; winner proof storage; one reissue command; replaced invoices read from the chain; listing codes assigned by publish; invoice IDs, bank references, receipt IDs and the gapless internal audit number; lookup by any identifier; PDF archive kept at least 7 years. |
 | Notification service | The proof-not-accepted letter; reminders held while proof is checked. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. New copy is catalog work for the engineer. |
 
@@ -149,3 +162,4 @@ confirms storage, scanning and access for a winner's upload.
 - [Auction Order Status](../../../docs/prds/products/grade10-site/auction/order-status.md)
 - [Order Notifications](../../../docs/prds/products/grade10-site/auction/notifications-order.md)
 - [My Auctions · The Table](../../../docs/prds/products/grade10-site/auction/account-record.md#the-table)
+- [Grade10 Invoicing Identifiers](../../../docs/references/grade10-invoicing-identifiers.md)

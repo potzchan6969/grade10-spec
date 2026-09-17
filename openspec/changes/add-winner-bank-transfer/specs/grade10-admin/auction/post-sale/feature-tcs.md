@@ -114,6 +114,47 @@ Runs once per row of **Test data**.
 * The outcome reads <outcome>.
 * Needs action is <flag>.
 
+### post-sale-US1-TC5-1: The queue search finds an order by any of its identifiers
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-01
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <grade10 auction admin post-sale url>.
+* <order_1> is on listing `LK7P2Q`; its invoice `INV-202609-LK7P2Q-01` was replaced by `INV-202609-LK7P2Q-02`.
+
+**Test data:**
+
+| <term> |
+| --- |
+| `LK7P2Q` |
+| `INV-202609-LK7P2Q-01` |
+| `LK7P2Q01` |
+| `INV-202609-LK7P2Q-02` |
+| `LK7P2Q02` |
+
+**Steps:**
+
+1. Search the queue by <term>.
+
+**Expected Results:**
+
+* <order_1> is found.
+* It shows `INV-202609-LK7P2Q-02` as its current invoice.
+
 ---
 
 ## post-sale-US7: Operator resolves an unpaid order
@@ -825,15 +866,14 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open Reissue.
-2. Add only a reason and reissue.
+2. Keep the current deadline, change nothing else, add a reason and reissue.
 
 **Expected Results:**
 
 * The reissue is refused as changing nothing.
+* The current invoice keeps its invoice ID, amount and deadline.
 
-**Blocked:** Product - is a reason-only reissue allowed, for example to restart the deadline alone?
-
-### post-sale-US7-TC22-1: An old invoice reference still finds the order
+### post-sale-US7-TC22-1: An old invoice ID or bank reference still finds the order
 
 **Classification:**
 
@@ -855,14 +895,46 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Search the queue by <invoice_1>'s reference.
+1. Search the queue by <invoice_1>'s invoice ID.
+2. Search the queue by <invoice_1>'s bank reference.
 
 **Expected Results:**
 
-* <order_1> is found.
+* Both searches find <order_1>.
 * It shows <invoice_2> as current.
 
-**Blocked:** Design - where the operator searches by invoice reference.
+### post-sale-US7-TC26-1: A fresh deadline alone is enough to reissue
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on <order_1> in <grade10 auction admin post-sale url>.
+* <order_1> has a `pending` invoice with a payment deadline of 2026-09-19T09:00:00Z.
+
+**Steps:**
+
+1. Open Reissue.
+2. Change nothing but the deadline, to a fresh 7 days.
+3. Add a reason and send at 2026-09-15T10:00:00Z.
+4. Read the reissued log entry.
+
+**Expected Results:**
+
+* The new invoice is `pending` with a deadline of 2026-09-22T10:00:00Z.
+* It carries a new invoice ID and bank reference.
+* The entry names the deadline as the only changed part.
 
 ---
 
@@ -972,6 +1044,38 @@ Runs once per row of **Test data**.
 
 * <invoice_1> shows no status of its own, never Cancelled.
 * Its PDF names <invoice_2>.
+
+### post-sale-US8-TC8-1: Operators read the internal audit numbers
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-08
+
+**Pre-conditions:**
+
+* admin(auction operator) is on <order_1> in <grade10 auction admin post-sale url>.
+* <order_1>'s first invoice holds `#00010482`, its reissued invoice `#00010490`, and its receipt `#00010495`.
+
+**Steps:**
+
+1. Open the order.
+2. Read the invoice log.
+
+**Expected Results:**
+
+* The order shows each number against its invoice or receipt.
+* The sent entry shows `#00010482`.
+* The reissued entry shows `#00010490`.
+* The paid entry shows `#00010495`.
 
 ---
 
@@ -1310,7 +1414,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Status:** complete — reconciled on 2026-09-16 after the author's grilling round. Two cases stay blocked; see Still blocked.
+**Status:** complete — reconciled on 2026-09-16 after the author's grilling round, and patched the same day with the author's identifier decisions. No case stays blocked.
 
 **Blind input manifest hash:** `2c7380f5cdff72fd`
 
@@ -1332,8 +1436,8 @@ Runs once per row of **Test data**.
 | `post-sale-US7-TC18-1`: an operator without the grant | Matches `grade10-admin-auction-post-sale-SC-25` and `grade10-admin-auction-post-sale-SC-106`. The case said "not offered"; the durable rule, carried unchanged, is "visible and disabled", so the case now says that |
 | `post-sale-US7-TC19-1`: reissue while proof is checked | Settled by decision 2; the case now covers reissue, settlement and cancel; matches `grade10-admin-auction-post-sale-SC-113`, `grade10-admin-auction-post-sale-SC-120` and `grade10-admin-auction-post-sale-SC-127` |
 | `post-sale-US7-TC20-1`: keeping the deadline on an expired invoice | Settled by decision 3; matches `grade10-admin-auction-post-sale-SC-112` |
-| `post-sale-US7-TC21-1`: a reissue that changes nothing | Not decided. Kept draft and blocked |
-| `post-sale-US7-TC22-1`: an old reference still finds the order | Matches `winner-order-SC-97`: each invoice has its own reference. Where the operator searches stays open |
+| `post-sale-US7-TC21-1`: a reissue that changes nothing | Settled by decision 22; folded as `grade10-admin-auction-post-sale-SC-133`; blocked line removed. A fresh deadline alone counts as a change: `grade10-admin-auction-post-sale-SC-134`, reached by the new `post-sale-US7-TC26-1` |
+| `post-sale-US7-TC22-1`: an old reference still finds the order | Settled by decision 23; matches `winner-order-SC-97` and `grade10-admin-auction-post-sale-SC-131`. The case asks what a search finds, not where the box sits, so the blocked line is removed; the layout is left to design |
 | `post-sale-US8-TC5-1`: the log names what a reissue changed | Matches `grade10-admin-auction-post-sale-SC-123` |
 | `post-sale-US8-TC6-1`: the log keeps the proof check | Matches `grade10-admin-auction-post-sale-SC-124`: the upload is a log entry. The blocked line is removed |
 | `post-sale-US8-TC7-1`: a replaced invoice stays readable | Matches `grade10-admin-auction-post-sale-SC-115` and `winner-order-SC-98` |
@@ -1348,13 +1452,15 @@ Runs once per row of **Test data**.
 | `grade10-admin-auction-post-sale-SC-62`: one bad proof file refuses the settlement | Changed by decision 10; no case reached it; added `post-sale-US7-TC24-1` |
 | `grade10-admin-auction-post-sale-SC-117`, `grade10-admin-auction-post-sale-SC-118`, `grade10-admin-auction-post-sale-SC-119`: the first bank transfer quote | No case reached them directly; added `post-sale-US7-TC25-1`, which traces the Quote and send group |
 | `grade10-admin-auction-post-sale-SC-128`: a bad operator file refuses the confirm | New for decisions 9 and 10; added `post-sale-US10-TC9-1` |
+| `grade10-admin-auction-post-sale-SC-131`: queue search by listing code, invoice ID or bank reference | From decision 23, not from a case; added `post-sale-US1-TC5-1` |
+| `grade10-admin-auction-post-sale-SC-132`: operators read the internal audit numbers | From decision 19, not from a case; added `post-sale-US8-TC8-1` |
 | `grade10-admin-auction-post-sale-SC-104`: only the external reason reaches the winner | Reached from the winner side by `winner-order-US10-TC2-1` and `order-mail-US1-TC1-1` |
 
-**Folded:** `grade10-admin-auction-post-sale-SC-125`, `grade10-admin-auction-post-sale-SC-126`, `grade10-admin-auction-post-sale-SC-127`, `grade10-admin-auction-post-sale-SC-128`, `grade10-admin-auction-post-sale-SC-129`, `grade10-admin-auction-post-sale-SC-130`.
+**Folded:** `grade10-admin-auction-post-sale-SC-125`, `grade10-admin-auction-post-sale-SC-126`, `grade10-admin-auction-post-sale-SC-127`, `grade10-admin-auction-post-sale-SC-128`, `grade10-admin-auction-post-sale-SC-129`, `grade10-admin-auction-post-sale-SC-130`. From the author's identifier answers, not from a case: `grade10-admin-auction-post-sale-SC-131`, `grade10-admin-auction-post-sale-SC-132`, `grade10-admin-auction-post-sale-SC-133`, `grade10-admin-auction-post-sale-SC-134`.
 
 **Rejected:** none.
 
-**Settled by the author** (grilling round, 2026-09-16):
+**Settled by the author** (grilling round, 2026-09-16; decisions 12 to 23 from the identifier patch, 2026-09-16, source `docs/references/grade10-invoicing-identifiers.md`):
 
 1. **Proof on an expired invoice**: refused. Return stays refused on an expired invoice as a guard; it cannot be reached, because the deadline stops while proof is checked.
 2. **Operator actions while Payment Verifying**: Confirm or Return only. Cancel, Reissue and manual settlement are refused.
@@ -1367,13 +1473,24 @@ Runs once per row of **Test data**.
 9. **Operator files on Confirm**: 0 to 5, PDF, JPEG or PNG, 10 MB each.
 10. **File rules**: 10 MB is 10,485,760 bytes. One wrong or oversize file refuses the whole upload and stores nothing. An upload that fails part-way stores nothing and may be retried; the one-upload rule applies once an upload succeeds.
 11. **Who reads proof files**: any operator who can open the order; never the winner.
+12. **Identifier formats**: invoice ID `INV-[YYYYMM]-[LISTING_ID]-[SEQ]`, receipt ID `REC-[YYYYMM]-[LISTING_ID]-[SEQ]-P[INDEX]`, bank reference `[LISTING_ID][SEQ]` of 8 or 9 capital letters and digits.
+13. **Listing code**: `L` and 5 characters with no `0`, `O`, `1` or `I`, hashed from the listing's internal id, stored, unique, never changed or reused.
+14. **Invoice count**: `01` for the first invoice, the next number on each reissue; three digits after `99`.
+15. **Reissue**: a new invoice ID and bank reference; an old one still finds the order.
+16. **Month**: the invoice's send month and the receipt's payment month, in Hong Kong time.
+17. **Receipt**: always `-P1` here, with a breakdown; receipt IDs are unique.
+18. **Where the code shows**: to the winner only inside the invoice ID; never on the public listing page.
+19. **Internal audit number**: one gapless count across invoices and receipts, shown to operators on the order and in the log, never to the winner; a replaced invoice keeps its number.
+20. **Retention and bank reference**: PDFs kept at least 7 years, or the life of the account if longer. Every invoice has a bank reference.
+21. **Return reasons**: Winner Order shows only the latest; the invoice log keeps all.
+22. **Reissue with no change**: refused; a new reason alone is not a change.
+23. **Operator search**: by listing code, invoice ID or bank reference. Where the search sits is design.
 
-Decisions 1, 2, 3, 8, 9, 10 and 11 changed the cases named above.
+Decisions 1, 2, 3, 8, 9, 10 and 11 changed the cases named above in the grilling round; decisions 22 and 23 changed them in the identifier patch.
 
 **Still blocked:**
 
-- `post-sale-US7-TC21-1` — Product: may an operator send a reissue that changes nothing but the reason, for example to restart the deadline?
-- `post-sale-US7-TC22-1` — Design: where an operator searches by invoice reference.
+- None.
 
 **Out of suite:** none.
 

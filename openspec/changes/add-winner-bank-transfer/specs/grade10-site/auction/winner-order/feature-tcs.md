@@ -261,7 +261,7 @@ Runs once per row of **Test data**.
 * Payment Processing Fee reads <fee reads>.
 * Order Total reads <subtotal> plus <bank fee>.
 
-### winner-order-US1-TC19-1: Every sent invoice carries an invoice reference
+### winner-order-US1-TC19-1: Every sent invoice carries an invoice ID
 
 Runs once per row of **Test data**.
 
@@ -297,8 +297,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The order shows the invoice reference.
-* The PDF shows the same reference.
+* The order shows an invoice ID of the form `INV-[YYYYMM]-[listing code]-[SEQ]`.
+* The PDF shows the same invoice ID.
 
 ### winner-order-US1-TC20-1: Card invoice shows card Pay and no bank details
 
@@ -463,12 +463,12 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The order shows <invoice_2> as the current invoice.
-* The <invoice_1> PDF says <invoice_2> replaced it.
+* The <invoice_1> PDF says it was replaced and names the invoice ID of <invoice_2>.
 * <invoice_1> reads neither Cancelled nor any status of its own.
 
 **Blocked:** Design - is the replaced invoice PDF still reachable by the winner on the order, and where?
 
-### winner-order-US1-TC25-1: The first invoice reference still finds the order after a reissue
+### winner-order-US1-TC25-1: The first invoice's identifiers still find the order after a reissue
 
 **Classification:**
 
@@ -496,14 +496,236 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Look up an order by the reference of <invoice_1>.
-2. Look up an order by the reference of <invoice_2>.
+1. Look up an order by the invoice ID, then the bank reference, of <invoice_1>.
+2. Look up an order by the invoice ID, then the bank reference, of <invoice_2>.
 
 **Expected Results:**
 
-* <invoice_1> and <invoice_2> carry different references.
-* Both lookups return the order for <lot_1>.
+* <invoice_1> and <invoice_2> carry different invoice IDs and different bank references.
+* All four lookups return the order for <lot_1>.
 
+
+### winner-order-US1-TC26-1: The invoice month is the Hong Kong month it is sent
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* <lot_1> is on <listing_1>, which holds listing code `LK7P2Q`; its address is confirmed and no invoice is sent.
+* admin(holds payment-processing) sends the first invoice for <lot_1> at <sent_at>.
+
+**Test data:**
+
+| <sent_at> | <invoice_id> |
+| --- | --- |
+| 2026-09-30T15:59:59Z | `INV-202609-LK7P2Q-01` |
+| 2026-09-30T16:00:00Z | `INV-202610-LK7P2Q-01` |
+
+**Steps:**
+
+1. Read the invoice ID and the bank reference on the order.
+
+**Expected Results:**
+
+* The invoice ID is <invoice_id>.
+* The bank reference is `LK7P2Q01`.
+
+### winner-order-US1-TC27-1: A reissue takes the next count and the month it is sent
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* <lot_1> on <listing_1> has <invoice_1> `INV-202609-LK7P2Q-01`, sent in September 2026, `pending`.
+* admin(holds payment-processing) reissues <invoice_1> as <invoice_2> at 2026-10-02T02:00:00Z.
+
+**Steps:**
+
+1. Read the invoice ID and bank reference of <invoice_2>.
+2. Look up an order by `LK7P2Q01`.
+3. Open the PDF of <invoice_1>.
+
+**Expected Results:**
+
+* <invoice_2> is `INV-202610-LK7P2Q-02` with bank reference `LK7P2Q02`.
+* The lookup returns the order for <lot_1>.
+* The <invoice_1> PDF names `INV-202610-LK7P2Q-02`.
+
+### winner-order-US1-TC28-1: The invoice count grows to three digits after 99
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Invoice
+
+**Pre-conditions:**
+
+* <lot_1> on <listing_1> (code `LK7P2Q`) has a current invoice `INV-202609-LK7P2Q-99`, `pending`.
+
+**Steps:**
+
+1. admin(holds payment-processing) reissues it in September 2026.
+2. Read the new invoice ID and bank reference.
+
+**Expected Results:**
+
+* The invoice ID is `INV-202609-LK7P2Q-100`.
+* The bank reference is `LK7P2Q100`, 9 characters of capital letters and digits.
+
+### winner-order-US1-TC29-1: A listing code that is already held is replaced before publish
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Invoice
+
+**Pre-conditions:**
+
+* <listing_2> holds listing code <code_1>.
+* <listing_3> is a draft whose internal id hashes to <code_1>.
+
+**Steps:**
+
+1. Publish <listing_3>.
+2. Read the listing code of <listing_3>.
+3. Change the hash method, then read both listing codes again.
+
+**Expected Results:**
+
+* <listing_3> holds a code other than <code_1>, derived by hashing again with a counter.
+* The code is `L` followed by 5 characters, none of them `0`, `O`, `1` or `I`, and no lower-case letter.
+* After the hash method changes, both listings keep the codes they had.
+
+### winner-order-US1-TC30-1: The public listing page hides the listing code
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Invoice
+
+**Pre-conditions:**
+
+* guest is on <grade10 browse listing url> for <listing_1>, which holds listing code `LK7P2Q`.
+
+**Steps:**
+
+1. Read the page, including its title, URL and page source.
+
+**Expected Results:**
+
+* `LK7P2Q` appears nowhere on the page.
+
+### winner-order-US1-TC31-1: The winner never sees the internal audit number
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1>) is signed in on <grade10 winner order url>.
+* <lot_1> is paid; its invoice holds `#00010482` and its receipt `#00010483`.
+
+**Steps:**
+
+1. Open the order.
+2. Open the invoice PDF and the receipt PDF.
+3. Read every letter sent about <lot_1>.
+
+**Expected Results:**
+
+* Neither `#00010482` nor `#00010483` appears anywhere.
+* No other internal audit number appears.
+
+### winner-order-US1-TC32-1: Invoices and receipts share one gapless count
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Invoice
+
+**Pre-conditions:**
+
+* The last internal audit number issued is `#00010481`.
+* Nothing else is issued during the test.
+
+**Steps:**
+
+1. Send <invoice_1> on <lot_1>.
+2. Reissue it as <invoice_2>.
+3. Pay <invoice_2> by card.
+
+**Expected Results:**
+
+* <invoice_1> holds `#00010482`.
+* <invoice_2> holds `#00010483`.
+* The receipt holds `#00010484`.
+* <invoice_1> still holds `#00010482` after it is replaced.
 
 ---
 
@@ -513,7 +735,7 @@ Runs once per row of **Test data**.
 **I want** a receipt, a tracker, and proof of what was handed over,
 **so that** I can account for a high-value purchase without asking Grade10 for records.
 
-### winner-order-US2-TC4-1: Every receipt carries a receipt number
+### winner-order-US2-TC4-1: Every receipt carries a receipt ID
 
 Runs once per row of **Test data**.
 
@@ -549,10 +771,11 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The receipt shows a receipt number.
+* The receipt shows a receipt ID ending `-P1`.
+* The receipt names the invoice ID it paid.
 * The receipt names <method>.
 
-### winner-order-US2-TC5-1: Two receipts never share a number
+### winner-order-US2-TC5-1: Two receipts never share an ID
 
 **Classification:**
 
@@ -573,13 +796,11 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the receipt number of each order.
+1. Read the receipt ID of each order.
 
 **Expected Results:**
 
-* The two receipt numbers differ.
-
-**Blocked:** Product - only the receipt number's existence is decided; its format and uniqueness are open.
+* The two receipt IDs differ.
 
 ### winner-order-US2-TC6-1: A bank transfer receipt keeps the Payment Processing Fee line
 
@@ -690,6 +911,70 @@ Runs once per row of **Test data**.
 * The receipt is not marked manually settled.
 
 
+### winner-order-US2-TC9-1: A receipt ID takes the payment month and shows the breakdown
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1>) is signed in on <grade10 winner order url>.
+* <lot_1> has bank transfer invoice `INV-202609-LK7P2Q-02`, order total 317000 minor units in HKD, `payment_verifying`.
+* admin(holds payment-processing) confirms its proof at 2026-09-30T16:30:00Z.
+
+**Steps:**
+
+1. Open the receipt PDF.
+
+**Expected Results:**
+
+* The receipt ID is `REC-202610-LK7P2Q-02-P1`.
+* Original Invoice Total is 317000 minor units in HKD.
+* Previous Payments is 0.
+* Current Payment Received is 317000 minor units in HKD.
+* Remaining Balance Due is 0.
+
+### winner-order-US2-TC10-1: Invoice and receipt PDFs outlive a deleted account
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* <lot_1> is paid, with a replaced invoice, a current invoice and a receipt.
+* The winner deleted their account a year after payment.
+* The clock is 6 years after payment.
+
+**Steps:**
+
+1. Retrieve the documents of <lot_1> from the archive.
+
+**Expected Results:**
+
+* The replaced invoice PDF is returned.
+* The current invoice PDF is returned.
+* The receipt PDF is returned.
+
 ---
 
 ## winner-order-US9: Winner pays an invoice by bank transfer
@@ -698,7 +983,7 @@ Runs once per row of **Test data**.
 **I want** to choose bank transfer, see where to send the money and what reference to quote, and send Grade10 proof,
 **so that** Grade10 can match my payment and my deadline stops while it is checked.
 
-### winner-order-US9-TC1-1: Bank transfer invoice shows three ways to pay and the reference
+### winner-order-US9-TC1-1: Bank transfer invoice shows three ways to pay and the bank reference
 
 **Classification:**
 
@@ -726,7 +1011,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * SWIFT, FPS and Hong Kong local transfer details are shown.
-* The invoice reference is shown, with a request to quote it.
+* The bank reference is shown with a Copy Reference Code control, and a request to quote it.
 * No card Pay is offered.
 
 **Blocked:** Finance - the account details for each way are still open (TBC in the spec); Product - does the invoice PDF carry them?
@@ -1203,7 +1488,7 @@ Runs once per row of **Test data**.
 * Upload is offered again, and a new upload is accepted.
 
 
-### winner-order-US9-TC15-1: The invoice reference fits the SWIFT reference limit
+### winner-order-US9-TC15-1: The bank reference fits every way to pay
 
 **Classification:**
 
@@ -1224,13 +1509,13 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the invoice reference.
+1. Read the bank reference.
 
 **Expected Results:**
 
-* It fits in 4 lines of 35 characters.
-
-**Blocked:** Product - the invoice reference format is open; only its existence is decided.
+* It is the listing code followed by the two-digit invoice count, for example `LK7P2Q01`.
+* It is 8 characters, capital letters and digits only, with no hyphen, space or other symbol.
+* It fits on one 35-character SWIFT remittance line.
 
 ### winner-order-US9-TC17-1: A file whose content is not its extension
 
@@ -1320,6 +1605,38 @@ Runs once per row of **Test data**.
 
 * The invoice is still `payment_verifying`.
 * The order reads Payment Verifying.
+
+### winner-order-US9-TC20-1: Copy Reference Code copies the bank reference, on bank transfer only
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-09
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1> and <lot_3>) is signed in.
+* <lot_1> has a `pending` bank transfer invoice with bank reference `LK7P2Q01`.
+* <lot_3> has a `pending` card invoice.
+
+**Steps:**
+
+1. Open <grade10 winner order url> for <lot_1> and choose Copy Reference Code.
+2. Paste the clipboard.
+3. Open <grade10 winner order url> for <lot_3>.
+
+**Expected Results:**
+
+* The pasted text is exactly `LK7P2Q01`, with no space.
+* <lot_3> shows no bank reference and no Copy Reference Code control.
 
 ---
 
@@ -1536,7 +1853,7 @@ Runs once per row of **Test data**.
 
 * The deadline is <return time> plus <time left 2>.
 
-### winner-order-US10-TC7-1: Earlier return reasons after a second return
+### winner-order-US10-TC7-1: Only the latest return reason is shown after a second return
 
 **Classification:**
 
@@ -1571,9 +1888,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * <reason 2> is shown.
-* <reason 1> is shown as an earlier return.
-
-**Blocked:** Product - does Winner Order show every past return reason, or only the latest?
+* <reason 1> is not shown.
 
 ## Raised
 
@@ -1593,7 +1908,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Status:** complete — reconciled on 2026-09-16 after the author's grilling round. Seven cases stay blocked; see Still blocked.
+**Status:** complete — reconciled on 2026-09-16 after the author's grilling round, and patched the same day with the author's identifier decisions. Four cases stay blocked; see Still blocked.
 
 **Blind input manifest hash:** `2c7380f5cdff72fd`
 
@@ -1605,15 +1920,15 @@ Runs once per row of **Test data**.
 | `winner-order-US1-TC16-1`: confirming with no method | Settled by decision 4; matches `winner-order-SC-94`; "nothing preselected" added to `winner-order-SC-91` and to the case |
 | `winner-order-US1-TC17-1`: the card fee is the gross-up | Matches `winner-order-SC-62` |
 | `winner-order-US1-TC18-1`: the bank transfer fee, zero as Free | Matches `winner-order-SC-110` and `winner-order-SC-111` |
-| `winner-order-US1-TC19-1`: every invoice shows its reference on the order and PDF | Folded as `winner-order-SC-114` |
+| `winner-order-US1-TC19-1`: every invoice shows its reference on the order and PDF | Folded as `winner-order-SC-114`; now reads invoice ID, per decision 12 |
 | `winner-order-US1-TC20-1`: a card invoice shows card Pay only | Matches `winner-order-SC-35` |
 | `winner-order-US1-TC21-1`: two lots keep their own methods | Reached by `winner-order-SC-35` and `winner-order-SC-95`, which hold per order; no new scenario |
 | `winner-order-US1-TC22-1`: no method change after send | Matches `winner-order-SC-106` |
 | `winner-order-US1-TC23-1`: method change before send | Settled by decision 4; matches `winner-order-SC-93`; the case no longer changes the address as well |
 | `winner-order-US1-TC24-1`: a replaced invoice names its replacement | Matches `winner-order-SC-98` and `winner-order-SC-109`; where the winner reaches the replaced PDF stays open |
-| `winner-order-US1-TC25-1`: the first reference still finds the order | Matches `winner-order-SC-97`; the scenarios give each invoice its own reference, so the case now expects two references; blocked line removed |
+| `winner-order-US1-TC25-1`: the first reference still finds the order | Matches `winner-order-SC-97`; the scenarios give each invoice its own reference, so the case now expects two references; blocked line removed. Decision 15 adds the invoice ID and bank reference lookups |
 | `winner-order-US2-TC4-1`: every receipt has a number | Matches `winner-order-SC-112` |
-| `winner-order-US2-TC5-1`: two receipts never share a number | Not decided: only the number's existence is. Kept draft and blocked |
+| `winner-order-US2-TC5-1`: two receipts never share a number | Settled by decision 17; folded as `winner-order-SC-132`; blocked line removed |
 | `winner-order-US2-TC6-1`: a bank transfer receipt keeps the fee line | Matches `winner-order-SC-63` and `winner-order-SC-113` |
 | `winner-order-US2-TC7-1`: a card invoice settled by transfer reads as bank transfer | Settled by decision 8; matches `winner-order-SC-19` and `grade10-admin-auction-post-sale-SC-114`; the case now settles at the new order total |
 | `winner-order-US2-TC8-1`: the receipt never shows proof files | Settled by decision 7; the case now covers the winner's own file and the order page; matches `winner-order-SC-113` and `winner-order-SC-115` |
@@ -1631,20 +1946,27 @@ Runs once per row of **Test data**.
 | `winner-order-US9-TC12-1`: upload on an expired invoice | Settled by decision 1; matches `winner-order-SC-103` and `winner-order-SC-37` |
 | `winner-order-US9-TC13-1`: another collector cannot upload or read proof | Folded as `winner-order-SC-121`; reading proof matches `winner-order-SC-115` and decision 11 |
 | `winner-order-US9-TC14-1`: an upload that fails part-way | Settled by decision 10; folded as `winner-order-SC-119`. What the winner is told is design |
-| `winner-order-US9-TC15-1`: the reference fits the SWIFT limit | Not decided: the reference format is open. Kept draft and blocked |
+| `winner-order-US9-TC15-1`: the reference fits the SWIFT limit | Settled by decision 12; reached by the bank reference rule beside `winner-order-SC-122`; the case now checks length and characters; blocked line removed |
 | `winner-order-US10-TC1-1`, `winner-order-US10-TC2-1`: reason and restarted deadline, internal reason hidden | Match `winner-order-SC-104` and `winner-order-SC-105` |
 | `winner-order-US10-TC3-1`: upload again after a return | Matches `winner-order-SC-105` |
 | `winner-order-US10-TC4-1`: time left at the edges | Reached by the rule in `winner-order-SC-104`; no new scenario |
 | `winner-order-US10-TC5-1`: no time left after a return | Settled by decision 6; folded as `winner-order-SC-120`. The case said the invoice "reads Expired"; it now reads Pending Payment with the overdue alert, per `auction-status-SC-06` |
-| `winner-order-US10-TC6-1`: a second return keeps the second time left | Matches `winner-order-SC-105`. Its line "both returns and their reasons stay on the order" was not decided for the winner; it moved to `winner-order-US10-TC7-1`, which stays blocked |
+| `winner-order-US10-TC6-1`: a second return keeps the second time left | Matches `winner-order-SC-105`. Its line "both returns and their reasons stay on the order" was not decided for the winner; it moved to `winner-order-US10-TC7-1` |
+| `winner-order-US10-TC7-1`: earlier return reasons after a second return | Settled by decision 21; folded as `winner-order-SC-134`; the case now expects only the latest reason; blocked line removed |
 | `winner-order-SC-96`: a card payment on a bank transfer invoice is refused | No case reached it; added `winner-order-US9-TC18-1` |
 | `winner-order-SC-107`: a deadline passing while proof is checked | No case reached it; added `winner-order-US9-TC19-1` |
+| `winner-order-SC-122`, `winner-order-SC-123`, `winner-order-SC-124`: identifier formats and a reissue's new identifiers | From the author's decisions 12 to 15, not from a case; added `winner-order-US1-TC26-1`, `winner-order-US1-TC27-1` and `winner-order-US1-TC28-1` |
+| `winner-order-SC-125`, `winner-order-SC-126`, `winner-order-SC-127`: the listing code | From decisions 13 and 18, not from a case; added `winner-order-US1-TC29-1` and `winner-order-US1-TC30-1` |
+| `winner-order-SC-128`: the bank reference and Copy Reference Code on bank transfer only | From decisions 12 and 20, not from a case; added `winner-order-US9-TC20-1`; `winner-order-US9-TC1-1` now reads the bank reference |
+| `winner-order-SC-129`, `winner-order-SC-130`: the internal audit number | From decision 19, not from a case; added `winner-order-US1-TC31-1` and `winner-order-US1-TC32-1` |
+| `winner-order-SC-131`: the receipt ID and breakdown | From decisions 16 and 17, not from a case; added `winner-order-US2-TC9-1`; `winner-order-US2-TC4-1` now reads the receipt ID |
+| `winner-order-SC-133`: documents outlive a deleted account | From decision 20, not from a case; added `winner-order-US2-TC10-1` |
 
-**Folded:** `winner-order-SC-114`, `winner-order-SC-115`, `winner-order-SC-116`, `winner-order-SC-117`, `winner-order-SC-118`, `winner-order-SC-119`, `winner-order-SC-120`, `winner-order-SC-121`.
+**Folded:** `winner-order-SC-114`, `winner-order-SC-115`, `winner-order-SC-116`, `winner-order-SC-117`, `winner-order-SC-118`, `winner-order-SC-119`, `winner-order-SC-120`, `winner-order-SC-121`. From the author's identifier answers, not from a case: `winner-order-SC-122`, `winner-order-SC-123`, `winner-order-SC-124`, `winner-order-SC-125`, `winner-order-SC-126`, `winner-order-SC-127`, `winner-order-SC-128`, `winner-order-SC-129`, `winner-order-SC-130`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-133`, `winner-order-SC-134`.
 
 **Rejected:** none.
 
-**Settled by the author** (grilling round, 2026-09-16):
+**Settled by the author** (grilling round, 2026-09-16; decisions 12 to 23 from the identifier patch, 2026-09-16, source `docs/references/grade10-invoicing-identifiers.md`):
 
 1. **Proof on an expired invoice**: refused. Return stays refused on an expired invoice as a guard; it cannot be reached, because the deadline stops while proof is checked.
 2. **Operator actions while Payment Verifying**: Confirm or Return only. Cancel, Reissue and manual settlement are refused.
@@ -1657,18 +1979,27 @@ Runs once per row of **Test data**.
 9. **Operator files on Confirm**: 0 to 5, PDF, JPEG or PNG, 10 MB each.
 10. **File rules**: 10 MB is 10,485,760 bytes. One wrong or oversize file refuses the whole upload and stores nothing. An upload that fails part-way stores nothing and may be retried; the one-upload rule applies once an upload succeeds.
 11. **Who reads proof files**: any operator who can open the order; never the winner.
+12. **Identifier formats**: invoice ID `INV-[YYYYMM]-[LISTING_ID]-[SEQ]`, receipt ID `REC-[YYYYMM]-[LISTING_ID]-[SEQ]-P[INDEX]`, bank reference `[LISTING_ID][SEQ]` of 8 or 9 capital letters and digits, with a Copy Reference Code control. It fits SWIFT's 35-character line.
+13. **Listing code**: `L` and 5 characters with no `0`, `O`, `1` or `I`, hashed from the listing's internal id, hashed again with a counter on a clash, stored, unique, never changed or reused, and assigned by publish.
+14. **Invoice count**: `01` for the first invoice, the next number on each reissue; three digits after `99`.
+15. **Reissue**: a new invoice ID and bank reference; an old one still finds the order; the replaced PDF names the new invoice ID.
+16. **Month**: the invoice's send month and the receipt's payment month, in Hong Kong time.
+17. **Receipt**: always `-P1` here; the paid invoice's code and count; a breakdown of Original Invoice Total, Previous Payments 0, Current Payment Received, Remaining Balance Due 0. Receipt IDs are unique.
+18. **Where the code shows**: to the winner only inside the invoice ID; operators search by it; never on the public listing page.
+19. **Internal audit number**: one gapless count across invoices and receipts, never shown to the winner, shown to operators; a replaced invoice keeps its number.
+20. **Retention and bank reference**: every invoice and receipt PDF kept at least 7 years, or the life of the account if longer, and 7 years after deletion. Every invoice has a bank reference; the winner sees it only on bank transfer.
+21. **Return reasons**: Winner Order shows only the latest; the invoice log keeps all.
+22. **Reissue with no change**: refused; a new reason alone is not a change.
+23. **Operator search**: by listing code, invoice ID or bank reference.
 
-Decisions 1, 4, 6, 7, 8 and 10 changed the cases named above.
+Decisions 1, 4, 6, 7, 8 and 10 changed the cases named above in the grilling round; decisions 12, 15, 17 and 21 changed them in the identifier patch.
 
 **Still blocked:**
 
 - `winner-order-US1-TC15-1` — Product: the fee range wording for each method.
 - `winner-order-US1-TC24-1` — Design: where the winner reaches a replaced invoice's PDF.
-- `winner-order-US2-TC5-1` — Product: whether receipt numbers are unique, and their format.
 - `winner-order-US9-TC1-1` — Finance: the account details; Product: whether the invoice PDF carries them.
-- `winner-order-US9-TC15-1` — Product: the invoice reference format, including the SWIFT limit.
 - `winner-order-US9-TC17-1` — Engineering: whether file type is checked by content or by extension.
-- `winner-order-US10-TC7-1` — Product: whether Winner Order shows every past return reason or only the latest.
 
 **Out of suite:** none. The scenarios this change carries unchanged from `revise-auction-winner-invoicing` and `fix-buyer-premium` stay with their suites.
 

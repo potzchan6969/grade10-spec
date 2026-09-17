@@ -2,6 +2,7 @@
 
 - Queue
   - Payment Verifying: a row waiting on proof shows the outcome and needs action
+  - Search: by listing code, invoice ID or bank reference, a replaced invoice's included
 - Quote and send
   - Payment method on the quote: the winner's choice decides how the fee is priced
   - Bank transfer fee: entered on every bank transfer invoice, zero or more, with no cap
@@ -9,11 +10,12 @@
   - Confirm: settles the invoice with the winner's files, and the operator's own if added
   - Return to pending: an external and an internal reason, the time left shown, and not offered once expired
 - Resolving an unpaid order
-  - One Reissue action: address, payment method, bank transfer fee, shipping, insurance and deadline, always with a reason
+  - One Reissue action: address, payment method, bank transfer fee, shipping, insurance and deadline, always with a reason and at least one change
   - Card invoice paid by transfer: reissued as bank transfer, then settled
   - Operator settlement: proof required, and straight to paid
 - Audit trail
   - What a reissue changed: the log names each changed part
+  - Internal audit number: on the order and in the log, for operators only
 
 ## REMOVED Requirements
 
@@ -36,8 +38,8 @@ requirement.
 An operator holding payment-processing SHALL check the proof on an order
 whose invoice is `payment_verifying`:
 
-1. Open the order and read the winner's uploaded files, the invoice reference,
-   the payment method, and the order total.
+1. Open the order and read the winner's uploaded files, the invoice ID and
+   bank reference, the payment method, and the order total.
 2. Choose Confirm or Return.
 3. For Confirm, optionally attach 0 to 5 files of their own, each a PDF,
    JPEG or PNG of at most 10 MB (10,485,760 bytes). Commit.
@@ -167,8 +169,13 @@ or `expired`:
 6. Give a reason. The reason is mandatory.
 7. Send the new invoice.
 
-On send Grade10 SHALL replace the current invoice with a new one carrying its
-own invoice reference, issue it as `pending` with the chosen deadline, lock the
+Grade10 SHALL refuse a reissue that changes none of the delivery address,
+payment method, bank transfer fee, Shipping & Handling, Insurance or deadline.
+A new reason alone is not a change; a fresh 7 days is.
+
+On send Grade10 SHALL replace the current invoice with a new one carrying a new
+invoice ID, bank reference and internal audit number, per
+`grade10-site/auction/winner-order`, issue it as `pending` with the chosen deadline, lock the
 address and method it carries, write a reissued entry to the invoice log
 naming each part that changed, and send the winner the invoice-reissued letter.
 The replaced invoice SHALL hold no status of its own and SHALL NOT be written
@@ -275,6 +282,22 @@ subtotal, the operator enters a bank transfer fee of 0.
 - **THEN** Grade10 refuses the reissue and says the fees could not be read
 - **AND** the current invoice is unchanged
 
+#### Scenario: grade10-admin-auction-post-sale-SC-133 - A reissue that changes only the reason is refused
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose invoice `INV-202609-LK7P2Q-01` has a payment deadline of 2026-09-19T09:00:00Z
+- **WHEN** an operator opens Reissue, keeps the deadline, changes nothing else, and sends with a reason
+- **THEN** Grade10 refuses it as changing nothing
+- **AND** the current invoice is still `INV-202609-LK7P2Q-01`, at the same amount and deadline
+
+#### Scenario: grade10-admin-auction-post-sale-SC-134 - A fresh deadline alone is a change
+**Serves:** post-sale-US-07 - Operator resolves an unpaid order
+
+- **GIVEN** an order in Pending Payment whose invoice has a payment deadline of 2026-09-19T09:00:00Z
+- **WHEN** an operator reissues it changing only the deadline to a fresh 7 days, and sends at 2026-09-15T10:00:00Z with a reason
+- **THEN** the new invoice is `pending` with a payment deadline of 2026-09-22T10:00:00Z
+- **AND** the reissued entry names the deadline as the only changed part
+
 ## MODIFIED Requirements
 
 ### Requirement: The queue shows one outcome per lot
@@ -309,6 +332,11 @@ SHALL also show the invoice status Expired beside its outcome. A row in
 Awaiting Address or Preparing Invoice that
 has waited 72 hours or more in that stage SHALL also carry the Overdue mark,
 per "The order detail shows how long an order has waited".
+
+The queue SHALL let an operator search by listing code, invoice ID or bank
+reference, per `grade10-site/auction/winner-order`. A replaced invoice's
+invoice ID or bank reference SHALL find its order, which shows its current
+invoice.
 
 There is no Ending soon outcome: how long bidding has left is read from the
 lot's close. Scenario `grade10-admin-auction-post-sale-SC-19` keeps its title
@@ -359,6 +387,14 @@ with its id. The title is historical: a lot inside its last hour is Live.
 - **WHEN** an operator filters to Payment Verifying
 - **THEN** only the first row is shown, reading Payment Verifying
 - **AND** it carries the needs-action highlight
+
+#### Scenario: grade10-admin-auction-post-sale-SC-131 - A search finds the order by any of its identifiers
+**Serves:** post-sale-US-01 - Operator works the listing queue by outcome
+
+- **GIVEN** an order on listing `LK7P2Q` whose first invoice `INV-202609-LK7P2Q-01` was replaced by `INV-202609-LK7P2Q-02`
+- **WHEN** an operator searches the queue in turn by `LK7P2Q`, `INV-202609-LK7P2Q-01`, `LK7P2Q01`, `INV-202609-LK7P2Q-02` and `LK7P2Q02`
+- **THEN** each search finds that order
+- **AND** the order shows `INV-202609-LK7P2Q-02` as its current invoice
 
 ### Requirement: An operator quotes and sends the invoice
 
@@ -701,13 +737,17 @@ explicit action.
 
 Every change to an auction order's money SHALL be written as an append-only
 invoice log entry, never as a field overwrite. The order's detail SHALL show
-these log entries in chronological order.
+these log entries in chronological order. It SHALL also show operators each
+invoice's invoice ID, bank reference and internal audit number, and each
+receipt's receipt ID and internal audit number, per
+`grade10-site/auction/winner-order`.
 
 | Field | Notes |
 | --- | --- |
 | Log type | Sent, expired, reissued, proof uploaded, proof confirmed, proof returned, paid, manually settled, cancelled, refunded, payment attempt failed |
 | Timestamp | Stored in UTC, displayed in the operator's own timezone |
-| Invoice reference | The invoice the entry concerns |
+| Invoice ID | The invoice the entry concerns |
+| Internal audit number | Sent, reissued, paid and manually settled entries: the number of the invoice or receipt the entry issued |
 | Invoice status after the log entry | |
 | Order total at the log entry | Captures amount changes across reissues |
 | Amount delta | Where the amount changed from the prior log entry |
@@ -771,3 +811,11 @@ reinstatement.
 - **WHEN** an operator reads the invoice log
 - **THEN** it shows proof uploaded, proof returned with both reasons and the time left, proof uploaded, and proof confirmed, in that order
 - **AND** each names its actor and timestamp
+
+#### Scenario: grade10-admin-auction-post-sale-SC-132 - Operators read the internal audit numbers
+**Serves:** post-sale-US-08 - Operator reconstructs an order's history
+
+- **GIVEN** an order whose first invoice holds internal audit number `#00010482`, whose reissued invoice holds `#00010490`, and whose receipt holds `#00010495`
+- **WHEN** an operator opens the order and reads its invoice log
+- **THEN** the order shows all three numbers against their invoice or receipt
+- **AND** the sent entry shows `#00010482`, the reissued entry `#00010490` and the paid entry `#00010495`
