@@ -332,6 +332,8 @@
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03, shared-auth-roles-US-02, shared-auth-audit-US-01
 
+**Blocked:** 2026-09-17 tcs-review skipped this journey. Expected results say only that an auction operate action is allowed and a ban is refused, with no screen to check; the title says catalogue and step 3 says operate. A later pass names an observable (for example Create listing on the Listings section) before a verdict.
+
 **Pre-conditions:**
 
 * admin(holds user:set-role) is on <admin users directory url>.
