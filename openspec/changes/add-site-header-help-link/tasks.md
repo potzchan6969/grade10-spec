@@ -3,7 +3,7 @@ marks already ship in this store — see `tech-design.md`. Group 2 needs group
 1's `nav.help` key landed in the `external/grade10-spec` submodule before it
 can reference the label through `NavKey`.
 
-## 1. The `help` nav word (grade10-spec)
+## 1. The `help` nav word (grade10-spec) (owner: @sean)
 
 - [ ] 1.1 Add `nav.help` to the shared `chrome` catalog for `en`, `ko`,
       `zh-Hans`, and `zh-Hant`, matching the word each language already uses
