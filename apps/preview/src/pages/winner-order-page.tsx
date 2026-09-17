@@ -42,6 +42,7 @@ import {
   WINNER_ORDER_CONTENTS,
   type WinnerOrderContent,
   type WinnerOrderInvoiceLine,
+  type WinnerOrderReceipt,
   type WinnerOrderStatus,
 } from "./winner-order-content";
 import {
@@ -145,8 +146,8 @@ function openPlaceholderInvoicePdf() {
   openPlaceholderPdf(PLACEHOLDER_INVOICE_PDF, "grade10-winner-invoice.pdf");
 }
 
-function openPlaceholderReceiptPdf() {
-  openPlaceholderPdf(PLACEHOLDER_RECEIPT_PDF, "grade10-winner-receipt.pdf");
+function openPlaceholderReceiptPdf(fileName = "grade10-winner-receipt.pdf") {
+  openPlaceholderPdf(PLACEHOLDER_RECEIPT_PDF, fileName);
 }
 
 /** Invoice exists from Pending Payment onward (incl. paid / delivery / refunded). */
@@ -154,14 +155,20 @@ function hasIssuedInvoice(content: WinnerOrderContent): boolean {
   return Boolean(content.invoiceLines?.length);
 }
 
-/** Receipt PDF after payment — Processing onward, plus Refunded. */
-function hasPaymentReceipt(content: WinnerOrderContent): boolean {
-  return (
+/** Receipt PDF row — explicit list, or one default after full payment. */
+function receiptLinksFor(content: WinnerOrderContent): WinnerOrderReceipt[] {
+  if (content.receipts?.length) {
+    return content.receipts;
+  }
+  if (
     content.status === "processing" ||
     content.status === "shipped" ||
     content.status === "delivered" ||
     content.status === "refunded"
-  );
+  ) {
+    return [{ label: "Receipt" }];
+  }
+  return [];
 }
 
 const PRODUCT_IMAGE = new URL("./product.fixture.png", import.meta.url).href;
@@ -190,6 +197,7 @@ function showWinnerProgress(status: WinnerOrderStatus): boolean {
     status === "pending_payment" ||
     status === "pending_payment_expired" ||
     status === "payment_verifying" ||
+    status === "partially_paid" ||
     status === "processing" ||
     status === "shipped" ||
     status === "delivered"
@@ -257,6 +265,7 @@ function winnerProgressStepsFor(
     case "pending_payment":
     case "pending_payment_expired":
     case "payment_verifying":
+    case "partially_paid":
       return [
         { ...address, state: "completed" },
         { ...invoice, state: "completed" },
@@ -546,6 +555,7 @@ function OrderSummary({
   payCta,
   deadline,
   overdue = false,
+  settlementContact = null,
   onPay,
   onViewInvoicePdf,
 }: {
@@ -553,6 +563,8 @@ function OrderSummary({
   payCta?: string | null;
   deadline?: string | null;
   overdue?: boolean;
+  /** Partially Paid — Contact Us, no balance figure. */
+  settlementContact?: string | null;
   onPay?: () => void;
   onViewInvoicePdf?: () => void;
 }) {
@@ -631,7 +643,29 @@ function OrderSummary({
         />
       ) : null}
 
-      {payCta && onPay && !overdue ? (
+      {settlementContact && !overdue ? (
+        <Alert
+          actions={
+            <Button
+              onClick={() => {
+                toast.info("Contact Grade10", {
+                  description: "support@grade10.com",
+                });
+              }}
+              size="sm"
+              variant="outline"
+            >
+              Contact Us
+            </Button>
+          }
+          dismissible={false}
+          layout="inline"
+          status="warning"
+          title={settlementContact}
+        />
+      ) : null}
+
+      {payCta && onPay && !overdue && !settlementContact ? (
         <VStack className="w-full" gap="sm" hAlign="stretch">
           <Button className="w-full" onClick={onPay} size="md">
             {payCta}
@@ -720,7 +754,7 @@ function OrderSidebar({
   payCta,
   onPay,
   onViewInvoicePdf,
-  onViewReceiptPdf,
+  receipts,
 }: {
   content: WinnerOrderContent;
   confirmAddressCta?: string | null;
@@ -728,7 +762,7 @@ function OrderSidebar({
   payCta?: string | null;
   onPay?: () => void;
   onViewInvoicePdf?: () => void;
-  onViewReceiptPdf?: () => void;
+  receipts?: WinnerOrderReceipt[];
 }) {
   const lines = summaryLinesFor(content);
   const showPayment = Boolean(content.paymentMethod);
@@ -738,11 +772,21 @@ function OrderSidebar({
   const showAddress = content.status !== "cancelled";
   const paymentOverdue =
     Boolean(content.overdue) && content.status === "pending_payment_expired";
+  const settlementContact =
+    content.status === "partially_paid"
+      ? (content.secondaryNote ??
+        "Only part of this invoice is settled. Contact Grade10 about what remains.")
+      : null;
   const showSetupPaymentMethod =
     !showPayment && !isPendingPayment && Boolean(content.setupPaymentMethod);
   const showBilling = Boolean(content.billingValue);
+  const receiptList = receipts ?? [];
   const hasLowerSection =
-    showPayment || showAddress || showSetupPaymentMethod || showBilling;
+    showPayment ||
+    showAddress ||
+    showSetupPaymentMethod ||
+    showBilling ||
+    receiptList.length > 0;
 
   return (
     <aside
@@ -765,6 +809,7 @@ function OrderSidebar({
             onViewInvoicePdf={onViewInvoicePdf}
             overdue={paymentOverdue}
             payCta={payCta}
+            settlementContact={settlementContact}
           />
         </VStack>
         {hasLowerSection ? (
@@ -792,22 +837,59 @@ function OrderSidebar({
                     ) : null}
                   </HStack>
                 </Card>
-                {onViewReceiptPdf ? (
+                {receiptList.length > 0 ? (
+                  <HStack className="w-full flex-wrap" gap="sm" vAlign="center">
+                    {receiptList.map((receipt) => (
+                      <Link
+                        aria-label={
+                          receipt.label === "Receipt"
+                            ? "Receipt PDF"
+                            : `${receipt.label} PDF`
+                        }
+                        href="#view-receipt-pdf"
+                        key={receipt.label}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          openPlaceholderReceiptPdf(
+                            receipt.fileName ?? "grade10-winner-receipt.pdf",
+                          );
+                        }}
+                        size="sm"
+                        variant="secondary"
+                      >
+                        <FilePdf aria-hidden size={14} weight="regular" />
+                        {receipt.label}
+                      </Link>
+                    ))}
+                  </HStack>
+                ) : null}
+              </VStack>
+            ) : null}
+            {!showPayment && receiptList.length > 0 ? (
+              <HStack className="w-full flex-wrap" gap="sm" vAlign="center">
+                {receiptList.map((receipt) => (
                   <Link
-                    aria-label="Receipt PDF"
+                    aria-label={
+                      receipt.label === "Receipt"
+                        ? "Receipt PDF"
+                        : `${receipt.label} PDF`
+                    }
                     href="#view-receipt-pdf"
+                    key={receipt.label}
                     onClick={(event) => {
                       event.preventDefault();
-                      onViewReceiptPdf();
+                      openPlaceholderReceiptPdf(
+                        receipt.fileName ?? "grade10-winner-receipt.pdf",
+                      );
                     }}
                     size="sm"
                     variant="secondary"
                   >
                     <FilePdf aria-hidden size={14} weight="regular" />
-                    Receipt
+                    {receipt.label}
                   </Link>
-                ) : null}
-              </VStack>
+                ))}
+              </HStack>
             ) : null}
             {showSetupPaymentMethod ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
@@ -1064,16 +1146,12 @@ function WinnerOrderPage({
                   ? openPlaceholderInvoicePdf
                   : undefined
               }
-              onViewReceiptPdf={
-                hasPaymentReceipt(content)
-                  ? openPlaceholderReceiptPdf
-                  : undefined
-              }
               payCta={
                 cardCheckoutPending && payCta === "Pay with Card"
                   ? "Redirecting…"
                   : payCta
               }
+              receipts={receiptLinksFor(content)}
             />
           </RevealGroup>
         </div>

@@ -22,6 +22,9 @@ import {
   WINNER_ORDER_CANCELLED_STORY_ID,
   WINNER_ORDER_DELIVERED_STORY_ID,
   WINNER_ORDER_EXPIRED_INVOICE_STORY_ID,
+  WINNER_ORDER_EXPIRED_SETUP_STORY_ID,
+  WINNER_ORDER_PARTIALLY_PAID_STORY_ID,
+  WINNER_ORDER_PAYMENT_VERIFYING_STORY_ID,
   WINNER_ORDER_PENDING_PAYMENT_STORY_ID,
   WINNER_ORDER_PREPARING_INVOICE_STORY_ID,
   WINNER_ORDER_PROCESSING_STORY_ID,
@@ -128,8 +131,12 @@ export const PostAuction: Story = {
       canvas.getByRole("heading", { level: 1, name: "My Auctions" }),
     ).toBeVisible();
     expect(canvas.getByText("Awaiting Setup")).toBeVisible();
+    expect(canvas.getByText("Setup Overdue")).toBeVisible();
     expect(canvas.getByText("Preparing Invoice")).toBeVisible();
-    expect(canvas.getAllByText("Pending Payment")).toHaveLength(2);
+    expect(canvas.getByText("Pending Payment")).toBeVisible();
+    expect(canvas.getByText("Payment Verifying")).toBeVisible();
+    expect(canvas.getByText("Payment Overdue")).toBeVisible();
+    expect(canvas.getByText("Partially Paid")).toBeVisible();
     expect(canvas.getByText("Processing")).toBeVisible();
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Delivered")).toBeVisible();
@@ -149,6 +156,11 @@ export const PostAuction: Story = {
     );
     expect(
       canvas.getByRole("link", {
+        name: "Open order: 1999 Base Set Venusaur PSA 8",
+      }),
+    ).toHaveAttribute("href", storyHref(WINNER_ORDER_EXPIRED_SETUP_STORY_ID));
+    expect(
+      canvas.getByRole("link", {
         name: "Open order: 1998 Neo Genesis Lugia PSA 10",
       }),
     ).toHaveAttribute(
@@ -162,9 +174,22 @@ export const PostAuction: Story = {
     ).toHaveAttribute("href", storyHref(WINNER_ORDER_PENDING_PAYMENT_STORY_ID));
     expect(
       canvas.getByRole("link", {
+        name: "Open order: 1999 Neo Destiny Dark Tyranitar PSA 9",
+      }),
+    ).toHaveAttribute(
+      "href",
+      storyHref(WINNER_ORDER_PAYMENT_VERIFYING_STORY_ID),
+    );
+    expect(
+      canvas.getByRole("link", {
         name: "Open order: 1999 Fossil Dragonite Holo PSA 8",
       }),
     ).toHaveAttribute("href", storyHref(WINNER_ORDER_EXPIRED_INVOICE_STORY_ID));
+    expect(
+      canvas.getByRole("link", {
+        name: "Open order: 1999 Jungle Vaporeon Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", storyHref(WINNER_ORDER_PARTIALLY_PAID_STORY_ID));
     expect(
       canvas.getByRole("link", {
         name: "Open order: 1999 Fossil Dragonite Holo PSA 9",
@@ -200,6 +225,11 @@ export const PostAuction: Story = {
     );
     expect(
       canvas.getByRole("link", {
+        name: "View order: 1999 Base Set Venusaur PSA 8",
+      }),
+    ).toHaveAttribute("href", storyHref(WINNER_ORDER_EXPIRED_SETUP_STORY_ID));
+    expect(
+      canvas.getByRole("link", {
         name: "View order: 1998 Neo Genesis Lugia PSA 10",
       }),
     ).toHaveAttribute(
@@ -213,9 +243,22 @@ export const PostAuction: Story = {
     ).toHaveAttribute("href", storyHref(WINNER_ORDER_PENDING_PAYMENT_STORY_ID));
     expect(
       canvas.getByRole("link", {
+        name: "View order: 1999 Neo Destiny Dark Tyranitar PSA 9",
+      }),
+    ).toHaveAttribute(
+      "href",
+      storyHref(WINNER_ORDER_PAYMENT_VERIFYING_STORY_ID),
+    );
+    expect(
+      canvas.getByRole("link", {
         name: "View order: 1999 Fossil Dragonite Holo PSA 8",
       }),
     ).toHaveAttribute("href", storyHref(WINNER_ORDER_EXPIRED_INVOICE_STORY_ID));
+    expect(
+      canvas.getByRole("link", {
+        name: "View order: 1999 Jungle Vaporeon Holo PSA 9",
+      }),
+    ).toHaveAttribute("href", storyHref(WINNER_ORDER_PARTIALLY_PAID_STORY_ID));
     expect(
       canvas.getByRole("link", {
         name: "View order: 1999 Fossil Dragonite Holo PSA 9",

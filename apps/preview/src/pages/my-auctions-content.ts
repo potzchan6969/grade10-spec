@@ -5,6 +5,9 @@ import {
   WINNER_ORDER_CANCELLED_STORY_ID,
   WINNER_ORDER_DELIVERED_STORY_ID,
   WINNER_ORDER_EXPIRED_INVOICE_STORY_ID,
+  WINNER_ORDER_EXPIRED_SETUP_STORY_ID,
+  WINNER_ORDER_PARTIALLY_PAID_STORY_ID,
+  WINNER_ORDER_PAYMENT_VERIFYING_STORY_ID,
   WINNER_ORDER_PENDING_PAYMENT_STORY_ID,
   WINNER_ORDER_PREPARING_INVOICE_STORY_ID,
   WINNER_ORDER_PROCESSING_STORY_ID,
@@ -18,7 +21,7 @@ const AUCTION_RECORD_COPY = {
   title: "My Auctions",
   auctionColumn: "Auction",
   currentBidColumn: "Current Bid",
-  standingColumn: "Your Standing",
+  standingColumn: "Status",
   emailAlertsColumn: "Email Alerts",
   noStanding: "--",
   emptyTitle: "No lots yet",
@@ -103,12 +106,24 @@ const WON_AWAITING_ADDRESS = biddingItem({
   state: "awaiting_address",
   stateLabel: "Awaiting Setup",
   currentBid: "HK$12,800",
-  closesAt: "Ended 17 Sep 2026, 21:30 HKT",
+  closesAt: "Confirm by 19 Sep 2026, 21:30 HKT",
   href: storyHref(WINNER_ORDER_AWAITING_ADDRESS_STORY_ID),
   copy: {
     ...ORDER_ROW_COPY,
     viewOrder: "Complete Order Setup",
   },
+});
+
+/** Setup deadline passed — Contact Us on Winner Order. */
+const WON_SETUP_OVERDUE = biddingItem({
+  id: "won-setup-overdue",
+  title: "1999 Base Set Venusaur PSA 8",
+  state: "awaiting_address_expired",
+  stateLabel: "Setup Overdue",
+  currentBid: "HK$4,800",
+  closesAt: "Setup overdue",
+  href: storyHref(WINNER_ORDER_EXPIRED_SETUP_STORY_ID),
+  copy: ORDER_ROW_COPY,
 });
 
 const WON_PREPARING_INVOICE = biddingItem({
@@ -133,14 +148,38 @@ const WON_PENDING_PAYMENT = biddingItem({
   copy: ORDER_ROW_COPY,
 });
 
+/** Bank-transfer proof under check — deadline paused on Winner Order. */
+const WON_PAYMENT_VERIFYING = biddingItem({
+  id: "won-payment-verifying",
+  title: "1999 Neo Destiny Dark Tyranitar PSA 9",
+  state: "payment_verifying",
+  stateLabel: "Payment Verifying",
+  currentBid: "HK$7,200",
+  closesAt: "Proof under review",
+  href: storyHref(WINNER_ORDER_PAYMENT_VERIFYING_STORY_ID),
+  copy: ORDER_ROW_COPY,
+});
+
+/** Payment deadline passed — Contact Us on Winner Order. */
 const WON_EXPIRED = biddingItem({
   id: "won-expired",
   title: "1999 Fossil Dragonite Holo PSA 8",
   state: "expired",
-  stateLabel: "Pending Payment",
+  stateLabel: "Payment Overdue",
   currentBid: "HK$3,600",
   closesAt: "Payment overdue",
   href: storyHref(WINNER_ORDER_EXPIRED_INVOICE_STORY_ID),
+  copy: ORDER_ROW_COPY,
+});
+
+const WON_PARTIALLY_PAID = biddingItem({
+  id: "won-partially-paid",
+  title: "1999 Jungle Vaporeon Holo PSA 9",
+  state: "partially_paid",
+  stateLabel: "Partially Paid",
+  currentBid: "HK$5,100",
+  closesAt: "Payment in progress",
+  href: storyHref(WINNER_ORDER_PARTIALLY_PAID_STORY_ID),
   copy: ORDER_ROW_COPY,
 });
 
@@ -231,9 +270,12 @@ const WATCHING_ENDED = watchingItem({
 
 const POST_AUCTION_BIDDING: readonly AuctionRecordRowProps[] = [
   WON_AWAITING_ADDRESS,
+  WON_SETUP_OVERDUE,
   WON_PREPARING_INVOICE,
   WON_PENDING_PAYMENT,
+  WON_PAYMENT_VERIFYING,
   WON_EXPIRED,
+  WON_PARTIALLY_PAID,
   WON_PROCESSING,
   WON_SHIPPED,
   WON_DELIVERED,
@@ -255,9 +297,12 @@ export {
   WON_CANCELLED,
   WON_DELIVERED,
   WON_EXPIRED,
+  WON_PARTIALLY_PAID,
+  WON_PAYMENT_VERIFYING,
   WON_PENDING_PAYMENT,
   WON_PREPARING_INVOICE,
   WON_PROCESSING,
   WON_REFUNDED,
+  WON_SETUP_OVERDUE,
   WON_SHIPPED,
 };

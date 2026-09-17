@@ -5,6 +5,7 @@ export type WinnerOrderStatus =
   | "pending_payment"
   | "pending_payment_expired"
   | "payment_verifying"
+  | "partially_paid"
   | "processing"
   | "shipped"
   | "delivered"
@@ -18,11 +19,20 @@ export const WINNER_ORDER_STATUS_LABELS: Record<WinnerOrderStatus, string> = {
   pending_payment: "Pending Payment",
   pending_payment_expired: "Pending Payment (expired invoice)",
   payment_verifying: "Payment Verifying",
+  partially_paid: "Partially Paid",
   processing: "Processing",
   shipped: "Shipped",
   delivered: "Delivered",
   cancelled: "Cancelled",
   refunded: "Refunded",
+};
+
+/** One download on the Receipt PDF row (oldest first when several). */
+export type WinnerOrderReceipt = {
+  /** Link label — e.g. `Receipt` or `Receipt · P1`. */
+  label: string;
+  /** Placeholder download file name. */
+  fileName?: string;
 };
 
 export type WinnerOrderInvoiceLine = {
@@ -71,9 +81,14 @@ export type WinnerOrderContent = {
     title: string;
     status: "default" | "warning" | "success" | "error";
   };
-  /** Paid receipt strip — method + masked number. */
+  /** Paid / recorded payment strip — method + optional masked number. */
   paymentMethod?: string;
   paymentMasked?: string;
+  /**
+   * Receipt PDF row — one entry per payment (`-P1`, `-P2`, …), oldest first.
+   * Omit when no payment has been recorded yet.
+   */
+  receipts?: WinnerOrderReceipt[];
 };
 
 const LOT = {
@@ -307,6 +322,37 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
           "We’re verifying your transfer. We’ll email you when payment is confirmed.",
         overdue: false,
       };
+    case "partially_paid":
+      return {
+        ...base,
+        body: "Only part of this invoice is settled. Grade10 is collecting the rest — contact customer support if you have questions. Your receipts stay on this order.",
+        addressLabel: "Delivery address",
+        addressValue: ADDRESS,
+        billingLabel: "Billing address",
+        billingValue: ADDRESS,
+        paymentMethod: "Bank transfer",
+        invoiceLines: BANK_TRANSFER_INVOICE_LINES,
+        primaryCta: null,
+        progressDates: {
+          address: PROGRESS_AFTER_ADDRESS.address,
+          invoice: PROGRESS_AFTER_INVOICE.invoice,
+          // Deadline stopped for good — no pay-by date.
+        },
+        // No remaining-balance figure — Contact Us covers questions.
+        secondaryNote:
+          "Only part of this invoice is settled. Contact Grade10 about what remains.",
+        overdue: false,
+        receipts: [
+          {
+            label: "Receipt · P1",
+            fileName: "REC-202609-LK7P2Q-01-P1.pdf",
+          },
+          {
+            label: "Receipt · P2",
+            fileName: "REC-202609-LK7P2Q-01-P2.pdf",
+          },
+        ],
+      };
     case "processing":
       return {
         ...base,
@@ -320,6 +366,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         },
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
+        receipts: [{ label: "Receipt" }],
       };
     case "shipped":
       return {
@@ -335,6 +382,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         secondaryNote: "SF Express · SF1234567890",
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
+        receipts: [{ label: "Receipt" }],
       };
     case "delivered":
       return {
@@ -349,6 +397,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         },
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
+        receipts: [{ label: "Receipt" }],
       };
     case "cancelled":
       return {
@@ -374,6 +423,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         primaryCta: null,
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
+        receipts: [{ label: "Receipt" }],
         outcomeAlert: {
           // Paid then refunded — success CheckCircle (not Bell/default).
           title: "Order refunded. Payment on this order was returned.",
@@ -393,6 +443,7 @@ export const WINNER_ORDER_CONTENTS: Record<
   pending_payment: contentFor("pending_payment"),
   pending_payment_expired: contentFor("pending_payment_expired"),
   payment_verifying: contentFor("payment_verifying"),
+  partially_paid: contentFor("partially_paid"),
   processing: contentFor("processing"),
   shipped: contentFor("shipped"),
   delivered: contentFor("delivered"),
