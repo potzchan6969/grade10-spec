@@ -7,7 +7,7 @@ order: 6
 Three blocks make an auction lot page: the media gallery, the bid panel, and
 the details section. Every label and accessible name comes from the
 application; what a bid does, and what it must clear, belongs to [Bidding
-Rules](/p/grade10-site/auction/auction).
+Rules](/p/grade10-site/auction/bidding#auction-logic).
 
 ## Values
 
@@ -61,7 +61,7 @@ recent-bids label, for the signed-in owner only.
 
 The bid card reads one enrollment signal and shows standing, or disables what
 a collector cannot yet do — [Bid Panel
-Enrollment](/p/grade10-site/auction/bid-panel-enrollment).
+Enrollment](/p/grade10-site/auction/bidding#auction-panel).
 
 | Signal | The card |
 | --- | --- |

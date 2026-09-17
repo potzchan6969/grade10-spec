@@ -6,7 +6,7 @@ order: 9
 
 Blocks make the account's auction record, written once and composed by every
 application that shows it. What the record means — the states, the ordering,
-the privacy — is [My Auctions](/p/grade10-site/auction/account-record); this
+the privacy — is [My Auctions](/p/grade10-site/auction/bidding#my-auctions-watchlist-and-notifications); this
 capability is the component contract underneath it.
 
 ## The Blocks

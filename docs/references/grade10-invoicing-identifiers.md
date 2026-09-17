@@ -3,7 +3,7 @@
 The owner's requirements for auction invoice, receipt and payment reference
 identifiers, as of 2026-09. The identifier rules and retention are carried by
 the `add-winner-bank-transfer` change on
-[Winner Order](../prds/products/grade10-site/auction/winner-order.md). Partial
+[Post-Bidding · Winner Order](../prds/products/grade10-site/auction/post-bidding.md#winner-order). Partial
 payment is the source for a later change and is not yet specified. Read this
 as the shape the product starts from, not as its requirements.
 
