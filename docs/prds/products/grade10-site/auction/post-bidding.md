@@ -74,7 +74,7 @@ fulfilment and delivery facts, that the winner, the operator and My Auctions
 all read. It shares label names with the store's order status, and no
 meaning.
 
-::image{src="assets/diagrams/auction-order-status.svg" alt="An auction order from Awaiting Address through Preparing Invoice, Pending Payment and Processing to Shipped and Delivered, with Payment Verifying and Partially Paid in an operator's hands beneath Pending Payment, and Cancelled and Refunded as its endings"}
+::image{src="assets/diagrams/auction-order-status.svg" alt="An auction order from Awaiting Address through Preparing Invoice, Pending Payment and Processing to Shipped and Delivered, with Payment Verifying and Partially Paid in an operator's hands beneath Pending Payment, Cancelled for an unpaid order, and Refunded reached by a recorded refund from Processing, Partially Paid or Delivered"}
 
 | Status | Invoice reads | Reached when |
 | --- | --- | --- |
