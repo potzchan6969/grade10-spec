@@ -4,6 +4,7 @@ export type WinnerOrderStatus =
   | "preparing_invoice"
   | "pending_payment"
   | "pending_payment_expired"
+  | "payment_verifying"
   | "processing"
   | "shipped"
   | "delivered"
@@ -11,11 +12,12 @@ export type WinnerOrderStatus =
   | "refunded";
 
 export const WINNER_ORDER_STATUS_LABELS: Record<WinnerOrderStatus, string> = {
-  awaiting_address: "Awaiting Address",
-  awaiting_address_expired: "Awaiting Address (deadline passed)",
+  awaiting_address: "Awaiting Setup",
+  awaiting_address_expired: "Awaiting Setup (deadline passed)",
   preparing_invoice: "Preparing Invoice",
   pending_payment: "Pending Payment",
   pending_payment_expired: "Pending Payment (expired invoice)",
+  payment_verifying: "Payment Verifying",
   processing: "Processing",
   shipped: "Shipped",
   delivered: "Delivered",
@@ -50,6 +52,10 @@ export type WinnerOrderContent = {
   body: string;
   addressLabel: string;
   addressValue: string | null;
+  /** Chosen during setup — card or bank transfer label. */
+  setupPaymentMethod?: string | null;
+  billingLabel?: string;
+  billingValue?: string | null;
   invoiceLines: WinnerOrderInvoiceLine[] | null;
   /** Under Pay / Confirm CTAs, or the overdue alert title. */
   deadline?: string;
@@ -78,10 +84,10 @@ const LOT = {
 
 const ADDRESS = "12/F, Tower 1\nHarbour Road\nWan Chai, Hong Kong" as const;
 
-/** Lot closed 17 Sep 2026, 21:30 HKT → confirm address within 48 hours. */
+/** Lot closed 17 Sep 2026, 21:30 HKT → complete setup within 48 hours. */
 const ADDRESS_DEADLINE = "Confirm by 19 Sep 2026, 21:30 HKT" as const;
 /** Brief overdue alert — past tense so the winner knows the window closed. */
-const ADDRESS_DEADLINE_PASSED = "Missed address deadline: 19 Sep 2026" as const;
+const ADDRESS_DEADLINE_PASSED = "Missed setup deadline: 19 Sep 2026" as const;
 
 /**
  * Invoice sent 19 Sep 2026, 11:00 HKT → pay within 7 calendar days of send
@@ -106,10 +112,10 @@ const PROGRESS_DAY = {
 
 const LINE_TOOLTIPS = {
   buyersPremium:
-    "20% of the winning bid, or the currency’s minimum charge when that is higher.",
+    "20% of your winning bid, or the currency minimum if that is higher.",
   shippingHandling:
-    "Quoted by Grade10 for your confirmed delivery address — packing, carrier, and handling.",
-  processingFee: "Card and payment-processing costs on this order.",
+    "Packing, carrier, and handling for your confirmed delivery address.",
+  processingFee: "Set by your payment method when this invoice was sent.",
 } as const;
 
 const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
@@ -130,6 +136,30 @@ const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.processingFee,
   },
   { label: "Order Total", value: "HK$15,660" },
+];
+
+/**
+ * Bank transfer invoice — operator fee may be zero; zero reads Free
+ * (`winner-order-SC-111`). Order total is the card fixture less the card fee.
+ */
+export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
+  { label: "Winning Bid", value: "HK$12,800" },
+  {
+    label: "Buyer’s Premium",
+    value: "HK$2,560",
+    tooltip: LINE_TOOLTIPS.buyersPremium,
+  },
+  {
+    label: "Shipping & Handling",
+    value: "HK$180",
+    tooltip: LINE_TOOLTIPS.shippingHandling,
+  },
+  {
+    label: "Payment Processing Fee",
+    value: "Free",
+    tooltip: LINE_TOOLTIPS.processingFee,
+  },
+  { label: "Order Total", value: "HK$15,540" },
 ];
 
 /** Shared progress dates once each milestone has happened. */
@@ -172,12 +202,15 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
     case "awaiting_address":
       return {
         ...base,
-        body: "Confirm where we ship this lot. Grade10 uses the address to prepare the invoice — nothing is due yet.",
+        body: "Complete Order Setup so Grade10 can prepare the invoice: delivery address, payment method, and billing. Nothing is due yet.",
         addressLabel: "Delivery address",
         addressValue: null,
+        setupPaymentMethod: null,
+        billingLabel: "Billing address",
+        billingValue: null,
         invoiceLines: null,
         deadline: ADDRESS_DEADLINE,
-        primaryCta: "Confirm delivery address",
+        primaryCta: "Complete Order Setup",
         progressDates: {
           address: PROGRESS_DAY.addressConfirmBy,
         },
@@ -186,9 +219,12 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
     case "awaiting_address_expired":
       return {
         ...base,
-        body: "The address deadline has passed. Contact Grade10 if you still want this lot.",
+        body: "The setup deadline has passed. Contact Grade10 if you still want this lot.",
         addressLabel: "Delivery address",
         addressValue: null,
+        setupPaymentMethod: null,
+        billingLabel: "Billing address",
+        billingValue: null,
         invoiceLines: null,
         deadline: ADDRESS_DEADLINE_PASSED,
         primaryCta: null,
@@ -200,16 +236,19 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
     case "preparing_invoice":
       return {
         ...base,
-        body: "Address confirmed. Grade10 is preparing your invoice for this destination.",
+        body: "Order setup complete. Grade10 is preparing your invoice for this destination.",
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
+        setupPaymentMethod: "Card",
+        billingLabel: "Billing address",
+        billingValue: ADDRESS,
         invoiceLines: null,
         primaryCta: null,
         progressDates: {
           ...PROGRESS_AFTER_ADDRESS,
         },
         secondaryNote:
-          "We generate your invoice from this shipping address. We email you when it is ready.",
+          "We generate your invoice from this setup. We email you when it is ready.",
         overdue: false,
       };
     case "pending_payment":
@@ -218,9 +257,12 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         body: "Your invoice is ready. Pay by card before the deadline.",
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
+        billingLabel: "Billing address",
+        billingValue: ADDRESS,
+        setupPaymentMethod: "Card",
         invoiceLines: INVOICE_LINES,
         deadline: PAYMENT_DEADLINE,
-        primaryCta: "Pay with card",
+        primaryCta: "Pay with Card",
         progressDates: {
           ...PROGRESS_AFTER_INVOICE,
         },
@@ -232,6 +274,9 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         body: "The payment deadline has passed. Contact Grade10 if you need a reissue.",
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
+        billingLabel: "Billing address",
+        billingValue: ADDRESS,
+        setupPaymentMethod: "Card",
         invoiceLines: INVOICE_LINES,
         deadline: PAYMENT_DEADLINE_PASSED,
         primaryCta: null,
@@ -241,6 +286,24 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
           payment: PROGRESS_DAY.paymentExpired,
         },
         overdue: true,
+      };
+    case "payment_verifying":
+      return {
+        ...base,
+        body: "Proof received. Grade10 is verifying your bank transfer. The payment deadline is paused while we check.",
+        addressLabel: "Delivery address",
+        addressValue: ADDRESS,
+        billingLabel: "Billing address",
+        billingValue: ADDRESS,
+        paymentMethod: "Bank transfer",
+        invoiceLines: BANK_TRANSFER_INVOICE_LINES,
+        primaryCta: null,
+        progressDates: {
+          address: PROGRESS_AFTER_ADDRESS.address,
+          invoice: PROGRESS_AFTER_INVOICE.invoice,
+          // No pay-by date while verification is in progress.
+        },
+        overdue: false,
       };
     case "processing":
       return {
@@ -307,6 +370,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
         primaryCta: null,
+        paymentMethod: "Visa",
+        paymentMasked: "···· 4242",
         outcomeAlert: {
           // Paid then refunded — success CheckCircle (not Bell/default).
           title: "Order refunded. Payment on this order was returned.",
@@ -325,6 +390,7 @@ export const WINNER_ORDER_CONTENTS: Record<
   preparing_invoice: contentFor("preparing_invoice"),
   pending_payment: contentFor("pending_payment"),
   pending_payment_expired: contentFor("pending_payment_expired"),
+  payment_verifying: contentFor("payment_verifying"),
   processing: contentFor("processing"),
   shipped: contentFor("shipped"),
   delivered: contentFor("delivered"),

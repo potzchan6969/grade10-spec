@@ -12,7 +12,6 @@ import {
   SelectValue,
 } from "@grade10/design-system/components/forms/select";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
@@ -22,6 +21,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import {
@@ -145,20 +145,60 @@ const EMPTY_DRAFT: NewAddressDraft = {
   saveForFuture: true,
 };
 
-/**
- * Legacy address-only picker — superseded by `WinnerOrderSetupDialog`
- * (Complete Order Setup). Prefer stories under My Auctions / Winner Order /
- * Setup / Complete Order Setup. Kept for reference until callers are removed.
- */
-type WinnerOrderAddressDialogProps = {
+type WinnerOrderSetupPaymentMethod = "card" | "bank_transfer";
+
+export type WinnerOrderSetupResult = {
+  delivery: string;
+  paymentMethod: WinnerOrderSetupPaymentMethod;
+  billing: string;
+  sameAsDelivery: boolean;
+};
+
+type WinnerOrderSetupDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   savedAddresses?: readonly WinnerOrderSavedAddress[];
-  /** Called with name + address lines the winner affirmed. */
-  onConfirm: (addressLines: string) => void;
+  /** Currency for method offer — bank transfer only when HKD. */
+  currency?: "HKD" | "USD" | "JPY";
+  /** Called when the winner finishes all setup steps. */
+  onConfirm: (result: WinnerOrderSetupResult) => void;
   /** Open the nested add-address form when the picker opens (Storybook). */
   initialNewAddressOpen?: boolean;
+  /** Start on a later step (Storybook). */
+  initialStep?: 1 | 2 | 3;
 };
+
+type SetupStep = 1 | 2 | 3;
+
+/** Frozen address chosen for this order — survives later book removes. */
+type AddressSnapshot = {
+  sourceId: string;
+  label: string;
+  lines: string;
+};
+
+const FEE_RANGE_CARD =
+  "Card fee applies. Exact amount on the invoice.";
+const FEE_RANGE_BANK =
+  "Fee set when Grade10 prepares your invoice. May be Free.";
+
+function stepLabel(step: SetupStep): string {
+  if (step === 1) return "Delivery";
+  if (step === 2) return "Payment";
+  return "Billing";
+}
+
+function snapshotFromAddress(address: WinnerOrderSavedAddress): AddressSnapshot {
+  return {
+    sourceId: address.id,
+    label: address.label,
+    lines: address.lines,
+  };
+}
+
+function snapshotPayload(snapshot: AddressSnapshot): string {
+  return [snapshot.label, snapshot.lines].filter(Boolean).join("\n");
+}
 
 function prefersReducedMotion() {
   return (
@@ -205,27 +245,37 @@ function newAddressReady(draft: NewAddressDraft): boolean {
 }
 
 /**
- * Preview-only: pick a saved account address (or a draft just entered), or open
- * a nested form to add one, then confirm for the Winner Order. Not a published
- * `@grade10/ui` export.
+ * Preview-only: stepped order setup — delivery, payment method, billing.
+ * One step visible at a time. Not a published `@grade10/ui` export.
  */
-function WinnerOrderAddressDialog({
+function WinnerOrderSetupDialog({
   open,
   onOpenChange,
   savedAddresses: savedAddressesProp = WINNER_ORDER_SAVED_ADDRESSES,
+  currency = "HKD",
   onConfirm,
   initialNewAddressOpen = false,
-}: WinnerOrderAddressDialogProps) {
+  initialStep = 1,
+}: WinnerOrderSetupDialogProps) {
   const formId = useId();
   const countryId = useId();
+  const [step, setStep] = useState<SetupStep>(initialStep);
   const [addresses, setAddresses] = useState<WinnerOrderSavedAddress[]>(() => [
     ...savedAddressesProp,
   ]);
   const [selection, setSelection] = useState(
     savedAddressesProp[0]?.id ?? DRAFT_VALUE,
   );
+  const [billingSelection, setBillingSelection] = useState(
+    savedAddressesProp[0]?.id ?? DRAFT_VALUE,
+  );
   const [draftOption, setDraftOption] =
     useState<WinnerOrderSavedAddress | null>(null);
+  const [deliverySnapshot, setDeliverySnapshot] =
+    useState<AddressSnapshot | null>(null);
+  const [paymentMethod, setPaymentMethod] =
+    useState<WinnerOrderSetupPaymentMethod | null>(null);
+  const [sameAsDelivery, setSameAsDelivery] = useState(true);
   const [newAddressOpen, setNewAddressOpen] = useState(initialNewAddressOpen);
   const [draft, setDraft] = useState<NewAddressDraft>(EMPTY_DRAFT);
   const [attempted, setAttempted] = useState(false);
@@ -233,6 +283,7 @@ function WinnerOrderAddressDialog({
   const [enteringIds, setEnteringIds] = useState(() => new Set<string>());
   const exitTimersRef = useRef<Map<string, number>>(new Map());
   const enterTimersRef = useRef<Map<string, number>>(new Map());
+  const offerBankTransfer = currency === "HKD";
 
   useEffect(() => {
     if (!open) return;
@@ -246,13 +297,22 @@ function WinnerOrderAddressDialog({
     enterTimersRef.current.clear();
     setAddresses([...savedAddressesProp]);
     setSelection(savedAddressesProp[0]?.id ?? DRAFT_VALUE);
+    setBillingSelection(savedAddressesProp[0]?.id ?? DRAFT_VALUE);
     setDraftOption(null);
+    const seeded =
+      initialStep > 1 && savedAddressesProp[0]
+        ? snapshotFromAddress(savedAddressesProp[0])
+        : null;
+    setDeliverySnapshot(seeded);
+    setPaymentMethod(null);
+    setSameAsDelivery(true);
+    setStep(initialStep);
     setNewAddressOpen(initialNewAddressOpen);
     setDraft(EMPTY_DRAFT);
     setAttempted(false);
     setExitingIds(new Set());
     setEnteringIds(new Set());
-  }, [open, savedAddressesProp, initialNewAddressOpen]);
+  }, [open, savedAddressesProp, initialNewAddressOpen, initialStep]);
 
   useEffect(() => {
     return () => {
@@ -270,21 +330,106 @@ function WinnerOrderAddressDialog({
   const selectedSaved = addresses.find((item) => item.id === selection);
   const selectedDraft =
     selection === DRAFT_VALUE && draftOption ? draftOption : null;
-  const canConfirm = Boolean(selectedSaved || selectedDraft);
+  const deliveryReady = Boolean(selectedSaved || selectedDraft);
+  const billingSaved = addresses.find((item) => item.id === billingSelection);
+  const billingDraft =
+    billingSelection === DRAFT_VALUE && draftOption ? draftOption : null;
+  const billingReady =
+    sameAsDelivery
+      ? Boolean(deliverySnapshot)
+      : Boolean(billingSaved || billingDraft);
   const showEmptyPicker = addresses.length === 0 && !draftOption;
   const addressBookFull = addresses.length >= WINNER_ORDER_SAVED_ADDRESS_CAP;
   const canSaveForFuture = !addressBookFull;
 
-  function confirm() {
-    if (selectedSaved) {
-      onConfirm(confirmPayload(selectedSaved));
+  function captureSelectionSnapshot(
+    saved: WinnerOrderSavedAddress | undefined,
+    draft: WinnerOrderSavedAddress | null,
+  ): AddressSnapshot | null {
+    const address = saved ?? draft;
+    return address ? snapshotFromAddress(address) : null;
+  }
+
+  function restorePickerFromSnapshot(snapshot: AddressSnapshot | null) {
+    if (!snapshot) return;
+    if (addresses.some((item) => item.id === snapshot.sourceId)) {
+      setSelection(snapshot.sourceId);
+      return;
+    }
+    setDraftOption({
+      id: DRAFT_VALUE,
+      label: snapshot.label,
+      lines: snapshot.lines,
+    });
+    setSelection(DRAFT_VALUE);
+  }
+
+  function alignBillingSelectionToDelivery(snapshot: AddressSnapshot | null) {
+    if (!snapshot) return;
+    if (addresses.some((item) => item.id === snapshot.sourceId)) {
+      setBillingSelection(snapshot.sourceId);
+      return;
+    }
+    setBillingSelection(addresses[0]?.id ?? DRAFT_VALUE);
+  }
+
+  function deliveryPayload(): string | null {
+    if (deliverySnapshot) return snapshotPayload(deliverySnapshot);
+    if (selectedSaved) return confirmPayload(selectedSaved);
+    if (selectedDraft) return confirmPayload(selectedDraft);
+    return null;
+  }
+
+  function finishSetup() {
+    const delivery = deliveryPayload();
+    if (!delivery || !paymentMethod) return;
+
+    if (sameAsDelivery) {
+      onConfirm({
+        delivery,
+        paymentMethod,
+        billing: delivery,
+        sameAsDelivery,
+      });
       onOpenChange(false);
       return;
     }
-    if (selectedDraft) {
-      onConfirm(confirmPayload(selectedDraft));
-      onOpenChange(false);
+
+    const billing = captureSelectionSnapshot(billingSaved, billingDraft);
+    if (!billing) return;
+    onConfirm({
+      delivery,
+      paymentMethod,
+      billing: snapshotPayload(billing),
+      sameAsDelivery,
+    });
+    onOpenChange(false);
+  }
+
+  function goNext() {
+    if (step === 1) {
+      const snapshot = captureSelectionSnapshot(selectedSaved, selectedDraft);
+      if (!snapshot) return;
+      setDeliverySnapshot(snapshot);
+      setStep(2);
+      return;
     }
+    if (step === 2) {
+      if (!paymentMethod) return;
+      alignBillingSelectionToDelivery(deliverySnapshot);
+      setStep(3);
+      return;
+    }
+    finishSetup();
+  }
+
+  function goBack() {
+    if (step === 2) {
+      restorePickerFromSnapshot(deliverySnapshot);
+      setStep(1);
+      return;
+    }
+    if (step === 3) setStep(2);
   }
 
   function patchDraft<K extends keyof NewAddressDraft>(
@@ -295,9 +440,16 @@ function WinnerOrderAddressDialog({
   }
 
   function commitRemove(id: string) {
+    // Book remove only. Delivery/billing order snapshots stay until the winner
+    // re-picks; picker selection is repaired for the live lists only.
     setAddresses((held) => {
       const next = held.filter((item) => item.id !== id);
       setSelection((current) => {
+        if (current !== id) return current;
+        if (draftOption) return DRAFT_VALUE;
+        return next[0]?.id ?? "";
+      });
+      setBillingSelection((current) => {
         if (current !== id) return current;
         if (draftOption) return DRAFT_VALUE;
         return next[0]?.id ?? "";
@@ -365,12 +517,20 @@ function WinnerOrderAddressDialog({
       const id = `saved-${Date.now()}`;
       const saved: WinnerOrderSavedAddress = { id, label, lines };
       setAddresses((held) => [saved, ...held]);
-      setSelection(id);
+      if (step === 3 && !sameAsDelivery) {
+        setBillingSelection(id);
+      } else {
+        setSelection(id);
+      }
       setDraftOption(null);
       markEntering(id);
     } else {
       setDraftOption({ id: DRAFT_VALUE, label, lines });
-      setSelection(DRAFT_VALUE);
+      if (step === 3 && !sameAsDelivery) {
+        setBillingSelection(DRAFT_VALUE);
+      } else {
+        setSelection(DRAFT_VALUE);
+      }
       markEntering(DRAFT_VALUE);
     }
 
@@ -381,131 +541,327 @@ function WinnerOrderAddressDialog({
 
   function handleOuterOpenChange(next: boolean) {
     if (!next && newAddressOpen) return;
+    if (
+      !next &&
+      open &&
+      (step > 1 || paymentMethod != null || deliveryReady)
+    ) {
+      const leave = window.confirm(
+        "Leave order setup? Your progress on this order will not be saved.",
+      );
+      if (!leave) return;
+    }
     onOpenChange(next);
+  }
+
+  const primaryDisabled =
+    (step === 1 && !deliveryReady) ||
+    (step === 2 && paymentMethod == null) ||
+    (step === 3 && !billingReady);
+
+  const primaryLabel =
+    step === 3 ? "Complete Order Setup" : "Continue";
+
+  function addressPicker(opts: {
+    ariaLabel: string;
+    value: string;
+    onValueChange: (value: string) => void;
+  }) {
+    if (showEmptyPicker) {
+      return (
+        <EmptyState
+          actions={
+            <Button
+              onClick={openNewAddress}
+              size="md"
+              type="button"
+              variant="secondary"
+            >
+              Add New Address
+            </Button>
+          }
+          compact
+          description="Add an address to continue."
+          icon={<MapPin aria-hidden weight="regular" />}
+          title="No saved addresses"
+        />
+      );
+    }
+
+    return (
+      <VStack className="w-full" gap="md" hAlign="stretch">
+        <RadioList
+          aria-label={opts.ariaLabel}
+          className="gap-3"
+          onValueChange={opts.onValueChange}
+          value={opts.value}
+        >
+          <div
+            className="flex w-full flex-col gap-2"
+            data-slot="address-option-cards"
+          >
+            {draftOption ? (
+              <div
+                className={cn(
+                  enteringIds.has(DRAFT_VALUE)
+                    ? "animate-in fade-in-0 slide-in-from-top-1 duration-200 ease-out motion-reduce:animate-none"
+                    : undefined,
+                )}
+                key={draftOption.id}
+              >
+                <RadioCard
+                  description={draftOption.lines}
+                  title={draftOption.label}
+                  value={DRAFT_VALUE}
+                />
+              </div>
+            ) : null}
+
+            {addresses.map((address) => {
+              const exiting = exitingIds.has(address.id);
+              const entering = enteringIds.has(address.id);
+              return (
+                <div
+                  aria-hidden={exiting || undefined}
+                  className={cn(
+                    "transition-[opacity,transform] duration-200 motion-reduce:transition-none",
+                    exiting
+                      ? "pointer-events-none -translate-y-1 opacity-0 motion-reduce:translate-y-0"
+                      : entering
+                        ? "animate-in fade-in-0 slide-in-from-top-1 duration-200 ease-out motion-reduce:animate-none"
+                        : "translate-y-0 opacity-100",
+                  )}
+                  key={address.id}
+                  style={{
+                    transitionTimingFunction: ADDRESS_LIST_EASE,
+                  }}
+                >
+                  <RadioCard
+                    action={
+                      <IconButton
+                        aria-label={`Remove ${address.label}`}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          removeAddress(address.id);
+                        }}
+                        size="sm"
+                        type="button"
+                        variant="ghost"
+                      >
+                        <Trash aria-hidden />
+                      </IconButton>
+                    }
+                    description={address.lines}
+                    title={address.label}
+                    value={address.id}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </RadioList>
+
+        <Button
+          className="w-full sm:w-auto"
+          onClick={openNewAddress}
+          size="md"
+          type="button"
+          variant="outline"
+        >
+          Add New Address
+        </Button>
+      </VStack>
+    );
   }
 
   return (
     <>
       <Dialog onOpenChange={handleOuterOpenChange} open={open}>
         <DialogContent className="max-w-lg" showCloseButton={false}>
-          <DialogHeader>
-            <DialogTitle>Confirm Delivery Address</DialogTitle>
+          <DialogHeader showCloseButton={false}>
+            <DialogTitle>Complete Order Setup</DialogTitle>
+            <DialogSubtext>
+              {`Step ${step} of 3: ${stepLabel(step)}`}
+            </DialogSubtext>
           </DialogHeader>
           <DialogBody>
-            <DialogDescription>
-              We ship this lot here and use the address to prepare your invoice.
-              Nothing is due until Grade10 sends the invoice.
-            </DialogDescription>
+            {step === 1 ? (
+              <VStack className="w-full" gap="md" hAlign="stretch">
+                <DialogDescription>
+                  We’ll ship this lot to this address and use it to prepare your
+                  invoice. Nothing is due until Grade10 sends the invoice.
+                </DialogDescription>
+                {addressPicker({
+                  ariaLabel: "Delivery address",
+                  value: selection,
+                  onValueChange: setSelection,
+                })}
+              </VStack>
+            ) : null}
 
-            {showEmptyPicker ? (
-              <EmptyState
-                actions={
-                  <Button
-                    onClick={openNewAddress}
-                    size="md"
-                    type="button"
-                    variant="secondary"
-                  >
-                    Add New Address
-                  </Button>
-                }
-                compact
-                description="Add a delivery address to continue."
-                icon={<MapPin aria-hidden weight="regular" />}
-                title="No saved addresses"
-              />
-            ) : (
-              <>
+            {step === 2 ? (
+              <VStack className="w-full" gap="md" hAlign="stretch">
+                <DialogDescription>
+                  Choose how you’ll pay. Each option shows a fee range; the
+                  exact amount is on the invoice.
+                </DialogDescription>
                 <RadioList
-                  aria-label="Delivery address"
+                  aria-label="Payment method"
                   className="gap-3"
-                  onValueChange={setSelection}
-                  value={selection}
+                  onValueChange={(value) => {
+                    if (value === "card" || value === "bank_transfer") {
+                      setPaymentMethod(value);
+                    }
+                  }}
+                  value={paymentMethod ?? ""}
                 >
-                  <div
-                    className="flex w-full flex-col gap-2"
-                    data-slot="address-option-cards"
-                  >
-                    {draftOption ? (
-                      <div
-                        className={cn(
-                          enteringIds.has(DRAFT_VALUE)
-                            ? "animate-in fade-in-0 slide-in-from-top-1 duration-200 ease-out motion-reduce:animate-none"
-                            : undefined,
-                        )}
-                        key={draftOption.id}
-                      >
-                        <RadioCard
-                          description={draftOption.lines}
-                          title={draftOption.label}
-                          value={DRAFT_VALUE}
-                        />
-                      </div>
+                  <div className="flex w-full flex-col gap-2">
+                    <RadioCard
+                      description={FEE_RANGE_CARD}
+                      title="Card"
+                      value="card"
+                    />
+                    {offerBankTransfer ? (
+                      <RadioCard
+                        description={FEE_RANGE_BANK}
+                        title="Bank transfer"
+                        value="bank_transfer"
+                      />
                     ) : null}
-
-                    {addresses.map((address) => {
-                      const exiting = exitingIds.has(address.id);
-                      const entering = enteringIds.has(address.id);
-                      return (
-                        <div
-                          aria-hidden={exiting || undefined}
-                          className={cn(
-                            "transition-[opacity,transform] duration-200 motion-reduce:transition-none",
-                            exiting
-                              ? "pointer-events-none -translate-y-1 opacity-0 motion-reduce:translate-y-0"
-                              : entering
-                                ? "animate-in fade-in-0 slide-in-from-top-1 duration-200 ease-out motion-reduce:animate-none"
-                                : "translate-y-0 opacity-100",
-                          )}
-                          key={address.id}
-                          style={{
-                            transitionTimingFunction: ADDRESS_LIST_EASE,
-                          }}
-                        >
-                          <RadioCard
-                            action={
-                              <IconButton
-                                aria-label={`Remove ${address.label}`}
-                                onClick={(event) => {
-                                  event.preventDefault();
-                                  event.stopPropagation();
-                                  removeAddress(address.id);
-                                }}
-                                size="sm"
-                                type="button"
-                                variant="ghost"
-                              >
-                                <Trash aria-hidden />
-                              </IconButton>
-                            }
-                            description={address.lines}
-                            title={address.label}
-                            value={address.id}
-                          />
-                        </div>
-                      );
-                    })}
                   </div>
                 </RadioList>
+              </VStack>
+            ) : null}
 
-                <Button
-                  className="w-full sm:w-auto"
-                  onClick={openNewAddress}
-                  size="md"
-                  type="button"
-                  variant="outline"
+            {step === 3 ? (
+              <VStack className="w-full" gap="md" hAlign="stretch">
+                <DialogDescription>
+                  Billing address shown on your invoice.
+                </DialogDescription>
+                <CheckboxListInput
+                  checked={sameAsDelivery}
+                  onCheckedChange={(checked) => {
+                    setSameAsDelivery(checked === true);
+                    if (checked === true) {
+                      alignBillingSelectionToDelivery(deliverySnapshot);
+                    }
+                  }}
+                  size="sm"
                 >
-                  Add New Address
-                </Button>
-              </>
-            )}
+                  Use same details for billing address
+                </CheckboxListInput>
+                <div className="flex w-full flex-col" data-slot="billing-address-swap">
+                  <div
+                    className="grid w-full transition-[grid-template-rows] duration-200 motion-reduce:transition-none"
+                    data-slot="billing-same-as-delivery"
+                    style={{
+                      gridTemplateRows:
+                        sameAsDelivery && deliverySnapshot ? "1fr" : "0fr",
+                      transitionTimingFunction: ADDRESS_LIST_EASE,
+                    }}
+                  >
+                    <div
+                      aria-hidden={
+                        !(sameAsDelivery && deliverySnapshot) || undefined
+                      }
+                      className="min-h-0 overflow-hidden"
+                      inert={
+                        !(sameAsDelivery && deliverySnapshot) ? true : undefined
+                      }
+                    >
+                      <div
+                        className={cn(
+                          "transition-[opacity,transform] duration-200 motion-reduce:transition-none",
+                          sameAsDelivery && deliverySnapshot
+                            ? "translate-y-0 opacity-100"
+                            : "pointer-events-none -translate-y-1 opacity-0",
+                        )}
+                        style={{ transitionTimingFunction: ADDRESS_LIST_EASE }}
+                      >
+                        <div
+                          aria-label="Billing address, same details as delivery"
+                          className="flex w-full items-start rounded-xl border border-border bg-card px-3 pt-3 pb-4 text-foreground"
+                          data-slot="address-summary"
+                        >
+                          <div className="flex min-w-0 flex-1 flex-col items-start gap-0.5 text-sm">
+                            <span className="text-sm leading-6 font-medium text-foreground">
+                              {deliverySnapshot?.label}
+                            </span>
+                            <span className="whitespace-pre-line text-sm text-secondary-foreground">
+                              {deliverySnapshot?.lines}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div
+                    className="grid w-full transition-[grid-template-rows] duration-200 motion-reduce:transition-none"
+                    data-slot="billing-address-picker"
+                    style={{
+                      gridTemplateRows: sameAsDelivery ? "0fr" : "1fr",
+                      transitionTimingFunction: ADDRESS_LIST_EASE,
+                    }}
+                  >
+                    <div
+                      aria-hidden={sameAsDelivery || undefined}
+                      className="min-h-0 overflow-hidden"
+                      inert={sameAsDelivery ? true : undefined}
+                    >
+                      <div
+                        className={cn(
+                          "transition-[opacity,transform] duration-200 motion-reduce:transition-none",
+                          sameAsDelivery
+                            ? "pointer-events-none -translate-y-1 opacity-0"
+                            : "translate-y-0 opacity-100",
+                        )}
+                        style={{ transitionTimingFunction: ADDRESS_LIST_EASE }}
+                      >
+                        {addressPicker({
+                          ariaLabel: "Billing address",
+                          value: billingSelection,
+                          onValueChange: setBillingSelection,
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </VStack>
+            ) : null}
           </DialogBody>
           <DialogFooter>
-            <DialogClose render={<Button size="md" variant="outline" />}>
-              Cancel
-            </DialogClose>
-            <Button disabled={!canConfirm} onClick={confirm} size="md">
-              Confirm address
+            {step > 1 ? (
+              <Button
+                className="w-full sm:w-auto"
+                onClick={goBack}
+                size="md"
+                type="button"
+                variant="outline"
+              >
+                Back
+              </Button>
+            ) : (
+              <DialogClose
+                render={
+                  <Button
+                    className="w-full sm:w-auto"
+                    size="md"
+                    variant="outline"
+                  />
+                }
+              >
+                Cancel
+              </DialogClose>
+            )}
+            <Button
+              className="w-full sm:w-auto"
+              disabled={primaryDisabled}
+              onClick={goNext}
+              size="md"
+              type="button"
+            >
+              {primaryLabel}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -513,8 +869,12 @@ function WinnerOrderAddressDialog({
 
       <Dialog onOpenChange={setNewAddressOpen} open={newAddressOpen}>
         <DialogContent className="z-[60] max-w-lg" showCloseButton={false}>
-          <DialogHeader>
-            <DialogTitle>Add Delivery Address</DialogTitle>
+          <DialogHeader showCloseButton={false}>
+            <DialogTitle>
+              {step === 3 && !sameAsDelivery
+                ? "Add Billing Address"
+                : "Add Delivery Address"}
+            </DialogTitle>
           </DialogHeader>
           <DialogBody>
             <VStack className="w-full" gap="sm" hAlign="stretch" id={formId}>
@@ -611,7 +971,6 @@ function WinnerOrderAddressDialog({
                   }
                   value={draft.postalCode}
                 />
-                {/* Label + message match InputShell; control is design-system Select. */}
                 <div className="flex w-full flex-col gap-2">
                   <label
                     className="text-sm font-medium text-secondary-foreground"
@@ -637,10 +996,6 @@ function WinnerOrderAddressDialog({
                     >
                       <SelectValue placeholder="Select a country" />
                     </SelectTrigger>
-                    {/*
-                      Menu-style popup (not align-with-trigger): typeahead /
-                      data-highlighted work like DropdownMenu in the nested dialog.
-                    */}
                     <SelectContent alignItemWithTrigger={false}>
                       {COUNTRY_OPTIONS.map((country) => (
                         <SelectItem
@@ -661,11 +1016,6 @@ function WinnerOrderAddressDialog({
                 </div>
               </div>
 
-              {/*
-                Info sits beside the row, not inside the label: a control inside
-                a label is invalid, and the refuse reason must stay full opacity
-                while CheckboxListInput only dims its label/count.
-              */}
               <div className="mt-4 flex w-full items-start gap-1">
                 <CheckboxListInput
                   checked={canSaveForFuture && draft.saveForFuture}
@@ -701,19 +1051,23 @@ function WinnerOrderAddressDialog({
             </VStack>
           </DialogBody>
           <DialogFooter>
-            <HStack className="w-full justify-end gap-2">
-              <Button
-                onClick={() => setNewAddressOpen(false)}
-                size="md"
-                type="button"
-                variant="outline"
-              >
-                Cancel
-              </Button>
-              <Button onClick={saveNewAddress} size="md" type="button">
-                Use This Address
-              </Button>
-            </HStack>
+            <Button
+              className="w-full sm:w-auto"
+              onClick={() => setNewAddressOpen(false)}
+              size="md"
+              type="button"
+              variant="outline"
+            >
+              Cancel
+            </Button>
+            <Button
+              className="w-full sm:w-auto"
+              onClick={saveNewAddress}
+              size="md"
+              type="button"
+            >
+              Use This Address
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -721,5 +1075,5 @@ function WinnerOrderAddressDialog({
   );
 }
 
-export type { WinnerOrderAddressDialogProps };
-export { WinnerOrderAddressDialog };
+export type { WinnerOrderSetupDialogProps, WinnerOrderSetupPaymentMethod };
+export { WinnerOrderSetupDialog };

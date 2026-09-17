@@ -34,7 +34,9 @@ import {
 } from "../../../../packages/ui/src/blocks/shared/use-first-paint-reveal";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
-import { WinnerOrderAddressDialog } from "./winner-order-address-dialog";
+import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
+import { WinnerOrderSetupDialog } from "./winner-order-setup-dialog";
+import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
 import {
   LINE_TOOLTIPS,
   WINNER_ORDER_CONTENTS,
@@ -47,8 +49,21 @@ import {
   MY_AUCTIONS_PAGE_HREF,
 } from "./workbench-story-nav";
 
-const ADDRESS_CONFIRMED_TOAST = {
-  title: "Address confirmed",
+const PROOF_SUBMITTED_TOAST = {
+  title: "Proof submitted",
+  description: "We’ll verify your payment shortly.",
+} as const;
+
+const PAYMENT_RECEIVED_TOAST = {
+  title: "Payment received",
+  description: "We’re preparing this lot to ship.",
+} as const;
+
+/** Preview-only beat while returning from a simulated card host. */
+const CARD_CHECKOUT_SIMULATE_MS = 700;
+
+const SETUP_CONFIRMED_TOAST = {
+  title: "Order setup complete",
   description: "Grade10 is preparing your invoice for this destination.",
 } as const;
 
@@ -174,6 +189,7 @@ function showWinnerProgress(status: WinnerOrderStatus): boolean {
     status === "preparing_invoice" ||
     status === "pending_payment" ||
     status === "pending_payment_expired" ||
+    status === "payment_verifying" ||
     status === "processing" ||
     status === "shipped" ||
     status === "delivered"
@@ -240,6 +256,7 @@ function winnerProgressStepsFor(
       ];
     case "pending_payment":
     case "pending_payment_expired":
+    case "payment_verifying":
       return [
         { ...address, state: "completed" },
         { ...invoice, state: "completed" },
@@ -315,15 +332,24 @@ function summaryLinesFor(
 
 function resolveContent(
   status: WinnerOrderStatus,
-  confirmedAddress: string | null,
+  setup: WinnerOrderSetupResult | null,
   content?: WinnerOrderContent,
+  statusProp?: WinnerOrderStatus,
 ): WinnerOrderContent {
-  if (content) return content;
+  // Story content overrides apply only while status still matches the arg —
+  // CTA-driven transitions (proof submit, card pay) must take the new status.
+  if (content && (statusProp === undefined || status === statusProp)) {
+    return content;
+  }
   const base = WINNER_ORDER_CONTENTS[status];
-  if (status === "preparing_invoice" && confirmedAddress) {
+  if (status === "preparing_invoice" && setup) {
     return {
       ...base,
-      addressValue: confirmedAddress,
+      addressValue: setup.delivery,
+      setupPaymentMethod:
+        setup.paymentMethod === "bank_transfer" ? "Bank transfer" : "Card",
+      billingLabel: "Billing address",
+      billingValue: setup.billing,
     };
   }
   return base;
@@ -362,10 +388,10 @@ function SummaryRow({
   );
 
   return (
-    <div className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-start gap-4">
+    <div className="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto] items-start gap-2 sm:gap-4">
       <span
         className={cn(
-          "text-sm leading-5 text-foreground",
+          "min-w-0 text-sm leading-5 text-foreground",
           emphasize && "text-base font-semibold",
           muted && !emphasize && "text-secondary-foreground",
         )}
@@ -374,7 +400,7 @@ function SummaryRow({
       </span>
       <span
         className={cn(
-          "text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
+          "shrink-0 text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
           emphasize && "text-base font-semibold",
           muted && "text-secondary-foreground",
         )}
@@ -395,7 +421,7 @@ function LotCard({
   onClick?: () => void;
 }) {
   const className = cn(
-    "flex w-full flex-col gap-4 rounded-xl border border-border bg-card p-4 sm:flex-row sm:items-center",
+    "flex w-full flex-row items-center gap-3 rounded-xl border border-border bg-card p-3 sm:gap-4 sm:p-4",
     "transition-[background-color,border-color] duration-200 ease-out",
     "hover:bg-muted/25 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none",
     "motion-reduce:transition-none",
@@ -414,7 +440,7 @@ function LotCard({
         />
       </div>
       <VStack className="min-w-0 flex-1" gap="xs" hAlign="start">
-        <Text className="truncate" size="sm" weight="medium">
+        <Text className="line-clamp-2 text-pretty sm:truncate sm:line-clamp-none" size="sm" weight="medium">
           {content.lotTitle}
         </Text>
         <Text className="tabular-nums" size="sm" weight="medium">
@@ -468,13 +494,15 @@ function AddressBlock({
 
   return (
     <VStack className="w-full" gap="sm" hAlign="start">
-      <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-        {content.addressLabel}
-      </h3>
       {content.addressValue ? (
-        <Text className="whitespace-pre-line text-foreground" size="sm">
-          {content.addressValue}
-        </Text>
+        <>
+          <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+            {content.addressLabel}
+          </h3>
+          <Text className="whitespace-pre-line text-foreground" size="sm">
+            {content.addressValue}
+          </Text>
+        </>
       ) : null}
       {addressOverdue ? (
         <Alert
@@ -494,7 +522,7 @@ function AddressBlock({
           dismissible={false}
           layout="inline"
           status="warning"
-          title={content.deadline ?? "Missed address deadline"}
+          title={content.deadline ?? "Missed setup deadline"}
         />
       ) : null}
       {confirmCta && onConfirmAddress && !addressOverdue ? (
@@ -520,7 +548,6 @@ function OrderSummary({
   overdue = false,
   onPay,
   onViewInvoicePdf,
-  onViewReceiptPdf,
 }: {
   lines: WinnerOrderInvoiceLine[];
   payCta?: string | null;
@@ -528,21 +555,24 @@ function OrderSummary({
   overdue?: boolean;
   onPay?: () => void;
   onViewInvoicePdf?: () => void;
-  onViewReceiptPdf?: () => void;
 }) {
   const total = lines.find((line) => line.label === "Order Total");
   const rest = lines.filter((line) => line.label !== "Order Total");
-  const documentLinks =
-    onViewInvoicePdf || onViewReceiptPdf ? (
+
+  return (
+    <VStack className="w-full" gap="md" hAlign="stretch">
       <HStack
-        className="w-full flex-wrap"
-        gap="md"
-        hAlign="start"
+        className="w-full justify-between gap-3"
+        gap="none"
         vAlign="center"
       >
+        <h3 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
+          Order summary
+        </h3>
         {onViewInvoicePdf ? (
           <Link
             aria-label="Invoice PDF"
+            className="shrink-0"
             href="#view-invoice-pdf"
             onClick={(event) => {
               event.preventDefault();
@@ -555,29 +585,7 @@ function OrderSummary({
             Invoice
           </Link>
         ) : null}
-        {onViewReceiptPdf ? (
-          <Link
-            aria-label="Receipt PDF"
-            href="#view-receipt-pdf"
-            onClick={(event) => {
-              event.preventDefault();
-              onViewReceiptPdf();
-            }}
-            size="sm"
-            variant="secondary"
-          >
-            <FilePdf aria-hidden size={14} weight="regular" />
-            Receipt
-          </Link>
-        ) : null}
       </HStack>
-    ) : null;
-
-  return (
-    <VStack className="w-full" gap="md" hAlign="stretch">
-      <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
-        Order summary
-      </h3>
       <VStack className="w-full" gap="sm" hAlign="stretch">
         {rest.map((line) => (
           <SummaryRow
@@ -592,19 +600,14 @@ function OrderSummary({
       {total ? (
         <>
           <hr className="w-full border-border" />
-          <VStack className="w-full" gap="sm" hAlign="stretch">
-            <SummaryRow
-              emphasize
-              label={total.label}
-              muted={total.muted || total.value === "TBD"}
-              value={total.value}
-            />
-            {documentLinks}
-          </VStack>
+          <SummaryRow
+            emphasize
+            label={total.label}
+            muted={total.muted || total.value === "TBD"}
+            value={total.value}
+          />
         </>
-      ) : (
-        documentLinks
-      )}
+      ) : null}
 
       {overdue ? (
         <Alert
@@ -657,15 +660,16 @@ function WinnerProgressCard({
     <div className="w-full" data-slot="winner-order-progress">
       <Card className="gap-0 overflow-hidden p-0" padding={false}>
         <HStack
-          className="w-full justify-between border-b border-border bg-muted px-6 py-4"
+          className="w-full justify-between gap-3 border-b border-border bg-muted px-4 py-3 sm:px-6 sm:py-4"
           gap="none"
           vAlign="center"
         >
-          <h3 className="text-base leading-6 font-medium text-foreground">
+          <h3 className="min-w-0 text-base leading-6 font-medium text-foreground">
             Order progress
           </h3>
           {trackLabel && onTrack ? (
             <Button
+              className="shrink-0"
               onClick={onTrack}
               size="md"
               trailing={<ArrowUpRight aria-hidden size={14} weight="bold" />}
@@ -675,10 +679,15 @@ function WinnerProgressCard({
             </Button>
           ) : null}
         </HStack>
-        <div className="w-full overflow-x-auto px-0 py-4">
-          <Stepper>
+        {/*
+          Five nowrap labels cannot share 320px without colliding. Keep a
+          horizontal scroll rail on small viewports; restore equal flex at sm+.
+        */}
+        <div className="w-full overflow-x-auto overscroll-x-contain px-2 py-3 sm:px-0 sm:py-4 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <Stepper className="min-w-max sm:min-w-0 sm:w-full">
             {steps.map((step, index) => (
               <Step
+                className="w-[4.75rem] flex-none basis-[4.75rem] sm:w-auto sm:min-w-0 sm:flex-1 sm:basis-0"
                 description={step.description}
                 key={step.label}
                 label={step.label}
@@ -723,9 +732,17 @@ function OrderSidebar({
 }) {
   const lines = summaryLinesFor(content);
   const showPayment = Boolean(content.paymentMethod);
+  const isPendingPayment =
+    content.status === "pending_payment" ||
+    content.status === "pending_payment_expired";
   const showAddress = content.status !== "cancelled";
   const paymentOverdue =
     Boolean(content.overdue) && content.status === "pending_payment_expired";
+  const showSetupPaymentMethod =
+    !showPayment && !isPendingPayment && Boolean(content.setupPaymentMethod);
+  const showBilling = Boolean(content.billingValue);
+  const hasLowerSection =
+    showPayment || showAddress || showSetupPaymentMethod || showBilling;
 
   return (
     <aside
@@ -735,8 +752,8 @@ function OrderSidebar({
       <Card className="gap-0 overflow-hidden p-0" padding={false}>
         <VStack
           className={cn(
-            "w-full bg-background-subtle p-6",
-            (showPayment || showAddress) && "border-b border-border",
+            "w-full bg-background-subtle p-4 sm:p-6",
+            hasLowerSection && "border-b border-border",
           )}
           gap="md"
           hAlign="stretch"
@@ -746,13 +763,12 @@ function OrderSidebar({
             lines={lines}
             onPay={onPay}
             onViewInvoicePdf={onViewInvoicePdf}
-            onViewReceiptPdf={onViewReceiptPdf}
             overdue={paymentOverdue}
             payCta={payCta}
           />
         </VStack>
-        {showPayment || showAddress ? (
-          <VStack className="w-full p-6" gap="lg" hAlign="stretch">
+        {hasLowerSection ? (
+          <VStack className="w-full p-4 sm:p-6" gap="lg" hAlign="stretch">
             {showPayment ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
                 <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
@@ -776,6 +792,31 @@ function OrderSidebar({
                     ) : null}
                   </HStack>
                 </Card>
+                {onViewReceiptPdf ? (
+                  <Link
+                    aria-label="Receipt PDF"
+                    href="#view-receipt-pdf"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      onViewReceiptPdf();
+                    }}
+                    size="sm"
+                    variant="secondary"
+                  >
+                    <FilePdf aria-hidden size={14} weight="regular" />
+                    Receipt
+                  </Link>
+                ) : null}
+              </VStack>
+            ) : null}
+            {showSetupPaymentMethod ? (
+              <VStack className="w-full" gap="sm" hAlign="stretch">
+                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+                  Payment method
+                </h3>
+                <Text className="text-foreground" size="sm">
+                  {content.setupPaymentMethod}
+                </Text>
               </VStack>
             ) : null}
             {showAddress ? (
@@ -784,6 +825,16 @@ function OrderSidebar({
                 content={content}
                 onConfirmAddress={onConfirmAddress}
               />
+            ) : null}
+            {showBilling ? (
+              <VStack className="w-full" gap="sm" hAlign="start">
+                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+                  {content.billingLabel ?? "Billing address"}
+                </h3>
+                <Text className="whitespace-pre-line text-foreground" size="sm">
+                  {content.billingValue}
+                </Text>
+              </VStack>
             ) : null}
           </VStack>
         ) : null}
@@ -809,25 +860,33 @@ function WinnerOrderPage({
   onLotClick,
 }: WinnerOrderPageProps) {
   const [status, setStatus] = useState(statusProp);
-  const [confirmedAddress, setConfirmedAddress] = useState<string | null>(null);
-  const [addressDialogOpen, setAddressDialogOpen] = useState(false);
+  const [setupResult, setSetupResult] = useState<WinnerOrderSetupResult | null>(
+    null,
+  );
+  const [setupDialogOpen, setSetupDialogOpen] = useState(false);
+  const [proofDialogOpen, setProofDialogOpen] = useState(false);
+  const [cardCheckoutPending, setCardCheckoutPending] = useState(false);
   const revealed = useFirstPaintReveal();
 
   useEffect(() => {
     setStatus(statusProp);
     if (statusProp !== "preparing_invoice") {
-      setConfirmedAddress(null);
+      setSetupResult(null);
     }
   }, [statusProp]);
 
-  const content = resolveContent(status, confirmedAddress, contentProp);
+  const content = resolveContent(status, setupResult, contentProp, statusProp);
   const confirmAddressCta =
     content.status === "awaiting_address" &&
-    content.primaryCta === "Confirm delivery address"
+    content.primaryCta === "Complete Order Setup"
       ? content.primaryCta
       : null;
   const payCta =
-    content.primaryCta === "Pay with card" ? content.primaryCta : null;
+    content.status === "pending_payment" && !content.overdue
+      ? content.setupPaymentMethod === "Bank transfer"
+        ? "Submit Payment Proof"
+        : "Pay with Card"
+      : null;
   const progress = showWinnerProgress(content.status)
     ? winnerProgressStepsFor(content.status, content)
     : null;
@@ -840,14 +899,39 @@ function WinnerOrderPage({
   }
 
   function handleConfirmAddressClick() {
-    setAddressDialogOpen(true);
+    setSetupDialogOpen(true);
   }
 
-  function handleAddressConfirm(addressLines: string) {
-    setConfirmedAddress(addressLines);
+  function handleSetupConfirm(result: WinnerOrderSetupResult) {
+    setSetupResult(result);
     setStatus("preparing_invoice");
-    toast.success(ADDRESS_CONFIRMED_TOAST.title, {
-      description: ADDRESS_CONFIRMED_TOAST.description,
+    toast.success(SETUP_CONFIRMED_TOAST.title, {
+      description: SETUP_CONFIRMED_TOAST.description,
+    });
+    onPrimaryAction?.();
+  }
+
+  function handlePayClick() {
+    if (content.setupPaymentMethod === "Bank transfer") {
+      setProofDialogOpen(true);
+      return;
+    }
+    if (cardCheckoutPending) return;
+    setCardCheckoutPending(true);
+    window.setTimeout(() => {
+      setCardCheckoutPending(false);
+      setStatus("processing");
+      toast.success(PAYMENT_RECEIVED_TOAST.title, {
+        description: PAYMENT_RECEIVED_TOAST.description,
+      });
+      onPrimaryAction?.();
+    }, CARD_CHECKOUT_SIMULATE_MS);
+  }
+
+  function handleProofSubmit() {
+    setStatus("payment_verifying");
+    toast.success(PROOF_SUBMITTED_TOAST.title, {
+      description: PROOF_SUBMITTED_TOAST.description,
     });
     onPrimaryAction?.();
   }
@@ -860,7 +944,7 @@ function WinnerOrderPage({
       data-status={content.status}
     >
       <SiteHeader {...AUCTION_SITE_HEADER} />
-      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-12 px-4 pt-8 pb-16 sm:px-8">
+      <main className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-8 px-4 pt-6 pb-16 sm:gap-12 sm:px-8 sm:pt-8">
         <Breadcrumbs>
           <BreadcrumbItem href="#account">Account</BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -872,12 +956,12 @@ function WinnerOrderPage({
         </Breadcrumbs>
 
         <RevealGroup revealed={revealed} staggerIndex={0}>
-          <h1 className="text-3xl leading-9 font-semibold text-foreground">
+          <h1 className="text-2xl leading-8 font-semibold text-balance text-foreground sm:text-3xl sm:leading-9">
             {content.title}
           </h1>
         </RevealGroup>
 
-        <div className="grid w-full items-start gap-8 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
+        <div className="grid w-full items-start gap-6 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
           <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
             {progress ? (
               <RevealGroup revealed={revealed} staggerIndex={mainStaggerIndex}>
@@ -940,7 +1024,7 @@ function WinnerOrderPage({
               confirmAddressCta={confirmAddressCta}
               content={content}
               onConfirmAddress={handleConfirmAddressClick}
-              onPay={payCta ? handlePrimaryAction : undefined}
+              onPay={payCta ? handlePayClick : undefined}
               onViewInvoicePdf={
                 hasIssuedInvoice(content)
                   ? openPlaceholderInvoicePdf
@@ -951,7 +1035,11 @@ function WinnerOrderPage({
                   ? openPlaceholderReceiptPdf
                   : undefined
               }
-              payCta={payCta}
+              payCta={
+                cardCheckoutPending && payCta === "Pay with Card"
+                  ? "Redirecting…"
+                  : payCta
+              }
             />
           </RevealGroup>
         </div>
@@ -959,10 +1047,15 @@ function WinnerOrderPage({
       <Footer {...STORE_FOOTER} />
       <Toast position="bottom-right" />
 
-      <WinnerOrderAddressDialog
-        onConfirm={handleAddressConfirm}
-        onOpenChange={setAddressDialogOpen}
-        open={addressDialogOpen}
+      <WinnerOrderSetupDialog
+        onConfirm={handleSetupConfirm}
+        onOpenChange={setSetupDialogOpen}
+        open={setupDialogOpen}
+      />
+      <WinnerOrderPaymentProofDialog
+        onOpenChange={setProofDialogOpen}
+        onSubmit={handleProofSubmit}
+        open={proofDialogOpen}
       />
     </div>
   );
