@@ -593,52 +593,6 @@ hold is being let go.
 **I want** a bid accepted during extended bidding to move the close on the page,
 **so that** the time I read and the time I am judged by are the same.
 
-### grade10-site-auction-e2e-US07-TC01-1: Late auto-bid extends the close on the live page
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** integration
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-auction-auction-US-02, grade10-site-auction-auto-bidding-US-05, grade10-site-auction-listing-page-US-04
-
-**Pre-conditions:**
-
-* <listing_8> is live, its current bid is <leader price>, and its recorded close is <bid time> away.
-* User A leads <listing_8> with a committed maximum of <user A maximum>, with room left under that maximum, and is on it.
-* User B is signed in with <card> saved.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| `<listing_8>` | A live listing led by user A, closing inside its extension window |
-| `<extension window>` / `<extension duration>` | 1800 seconds (30 minutes) each |
-| `<bid time>` | 5 minutes before the recorded close, inside <extension window> |
-| `<new time left>` | 30 minutes, one <extension duration> from the accepted bid |
-| `<leader price>` | 530000 minor units |
-| `<user A maximum>` | 800000 minor units |
-| `<user B maximum>` | 555000 minor units, below <user A maximum> |
-
-**Steps:**
-
-1. As user A, read Time left.
-2. As user B, set a maximum of <user B maximum> and confirm at <bid time>.
-3. As user A, read Time left again on the open page.
-4. Wait one full <extension duration> with no further bid.
-
-**Expected Results:**
-
-* Grade10 raises user A's bid on their behalf, and Time left reads <new time left>, marked auto-extended.
-* The time on screen continues from what was served rather than contradicting it.
-* Step 4 closes the lot; no further bid is placed on either standing maximum in the meantime.
-
 ### grade10-site-auction-e2e-US07-TC02-1: Extension cap holds while the bid is still accepted
 
 **Classification:**
@@ -681,8 +635,6 @@ hold is being let go.
 * The bid is accepted and Highest bid reads <bid amount>.
 * Time left reads <new time left> and the recorded close does not move past the cap.
 * The history shows the accepted bid beside an unchanged close.
-
----
 
 ### grade10-site-auction-e2e-US07-TC01-2: Auto-bid during extended bidding restarts the timer on the live page
 

@@ -31,10 +31,10 @@ The winner confirms a delivery address before an operator quotes the invoice. Th
 
 What the operator enters and reads on a quote:
 
-- 🚧 **Shipping & Handling** — always entered, and may be zero
-- 🚧 **Insurance** — optional, and never zero once added
-- 🚧 **Payment Processing Fee** — priced by Grade10 from the payment provider's live fees, not entered; the send is refused when those fees cannot be read
-- 🚧 **Subtotal and Order Total** — both read before sending
+- **Shipping & Handling** — always entered, and may be zero
+- **Insurance** — optional, and never zero once added
+- **Payment Processing Fee** — priced by Grade10 from the payment provider's live fees, not entered; the send is refused when those fees cannot be read
+- **Subtotal and Order Total** — both read before sending
 
 A winner order reaches paid through one fresh card payment or one operator-recorded manual settlement. An expired invoice stays payable, and a reissue returns it to pending with a new deadline.
 

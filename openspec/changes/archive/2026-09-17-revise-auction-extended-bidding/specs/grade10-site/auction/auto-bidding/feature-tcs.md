@@ -53,7 +53,7 @@ extended bidding as a manual bid would.
 * Grade10 raises customer A's bid on their behalf, and the close moves to `<bid time>` plus `<extension duration>`.
 * No further bid is placed on either maximum before the close.
 
-### grade10-site-auction-auto-bidding-US5-TC7-1: Maximum committed before the close starts extended bidding
+### grade10-site-auction-auto-bidding-US5-TC8-1: Maximum committed before the close starts extended bidding
 
 **Classification:**
 
