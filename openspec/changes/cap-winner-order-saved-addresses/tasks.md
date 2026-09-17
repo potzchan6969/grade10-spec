@@ -1,4 +1,4 @@
-## 1. Design system and preview (grade10-spec)
+## 1. Design system and preview (grade10-spec) (owner: @htonyl)
 
 Already shipped: @tangconst merged PR #495 (`feat/cap-winner-order-saved-addresses`)
 into `main` on 2026-09-16, before this change had its `spec.md` to check
