@@ -133,6 +133,11 @@ function rendersNativeButton(
  *
  * The opening line is the Figma set's own description; no rail carries it, so
  * this JSDoc is its only projection in code. Edit it in Figma first.
+ *
+ * English labels use Title Case — not a sentence — with short prepositions
+ * such as `to` and `for` lower when they are not the first word
+ * (`Add to Cart`, `Save for Later`). See English copy in
+ * `docs/governance/ui-component-contracts.md`.
  */
 function Button({
   className,
