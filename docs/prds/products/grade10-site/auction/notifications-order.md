@@ -28,12 +28,12 @@ winner of three lots is told about three orders separately.
 | Payment reminder | At send, then day 3 and day 6 while the invoice is pending | The invoice total and `Pay by …`; View invoice and pay; no PDF |
 | 🚧 Final notice | 24 hours before the deadline, while the invoice is pending | The last payable reminder |
 | 🚧 Payment overdue | The deadline passes and the invoice expires | What remains owed; self-service Pay is closed; Contact Us for manual review; penalties or extra charges may follow; the order may be cancelled and the lot re-listed after review |
-| Invoice reissued | An operator reissues the invoice | The new invoice and its deadline |
+| 🚧 Invoice reissued | An operator reissues the invoice | The payment reminder sent at invoice send, naming the new total and `Pay by …`; no letter of its own |
 | 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner, never the internal one, and `Pay by …` as a date and time; one letter per return, and none when proof is uploaded |
 | Payment received | Card payment confirmed, proof confirmed, or a manual settlement | Amount paid, `Received {date}`, the method (card brand and masked number, or Bank Transfer only), a quiet Receipt ID line, and the receipt PDF; never a proof file or the internal audit number |
 | Shipped | Dispatch with a tracking number | The delivery address, then the carrier and tracking number with the shipped time; primary CTA the carrier's tracking, secondary Winner Order, on one row |
-| Delivered | The carrier confirms delivery | Delivery confirmation naming the lot |
-| Order cancelled | An operator cancels the order | That the order was cancelled |
+| 🚧 Delivered | The carrier confirms delivery | The delivery address and the delivered time; primary CTA View order, secondary Contact Us |
+| 🚧 Order cancelled | An operator cancels the order | That the order was cancelled and when; no reason and no word on payment; primary CTA Contact Us, secondary View order |
 
 - 🚧 **Invoice sent** — the letter at send is the first payment reminder;
   there is no separate invoice-sent letter
@@ -90,5 +90,9 @@ Post-close mail has a different job from bidding mail: it tells one winner what 
 | Payment-reminder content | 🚧 In flight | Invoice total and `Pay by …`; CTA View invoice and pay; does not name a payment method. Copy escalates on later letters. | Product (@tangconst) |
 | Payment-received content | 🚧 In flight | Amount paid, `Received {date}`, payment method (card brand + masked digits, or `Bank Transfer` only), order being processed, quiet Receipt ID line, receipt PDF attached, CTA to Winner Order. | Product (@tangconst) |
 | Shipped content | Decided | Delivery address first; tracking as carrier + number with shipped time; primary CTA is track-and-trace; secondary CTA is Winner Order, on one row. | Product (@tangconst) |
+| Reissue letter | 🚧 In flight | A reissue sends the payment reminder sent at invoice send, for the new invoice. It fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
+| Delivered content | 🚧 In flight | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
+| Cancelled content | 🚧 In flight | Cancelled time only. The operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
+| Cancelling a paid order | ❓ Open | Whether an operator can cancel an order already paid, and whether the cancelled letter then names a refund. Until settled the letter says nothing about payment. | Product (@jeffffej0909) |
 | Reminder clock across changes | ❓ Open | `add-winner-bank-transfer` and `add-winner-setup-overdue-mail` disagree on the invoice-sent letter, the final notice's time and the letter at expiry; one delta supersedes the other before either lands. | Product (@tangconst, @jeffffej0909) |
 :::

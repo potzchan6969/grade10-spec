@@ -37,6 +37,9 @@ or the bid intact.
 - **Account master** — Account → Notifications carries a global **Auction
   email alerts** switch: off stops all per-lot auction mail without clearing
   lists or bids; on restores per-lot preferences
+- 🚧 **No one-hour reminder** — Grade10 stops the one-hour closing reminder to
+  watchers; the last warning before close is Bidding closes in 24 hours,
+  then Extended bidding has started if the lot extends
 
 ## Messages
 
@@ -45,7 +48,6 @@ or the bid intact.
 | Bidding opens in 24 hours | 24 hours before the scheduled start | Watchers with alerts on |
 | Bidding has opened | When bidding starts | Watchers with alerts on |
 | Bidding closes in 24 hours | 24 hours before the scheduled close | Watchers and bidders with alerts on |
-| Bidding closes in 1 hour | 1 hour before the close | Watchers, as before |
 | Extended bidding has started | The lot enters extended bidding | Watchers and bidders with alerts on |
 | New bid on a lot you bid on | A bid is accepted | Every other bidder with alerts on |
 | You have been outbid | The leader stops leading | The displaced leader with alerts on |
@@ -121,8 +123,7 @@ and never a snipe war filling an inbox.
 | Auction operator | A collector says they were never told | See which messages went to that address, without reading bodies. |
 
 **Not in scope.** Push, SMS, or in-app toasts. Marketing / non-auction email
-prefs as the mute surface. Replacing the existing bid-state receipts or the
-one-hour closing-soon reminder already sent to watchers. Auto-bidding, a
+prefs as the mute surface. Replacing the existing bid-state receipts. Auto-bidding, a
 digest across listings, or a bidder's language. One-click unsubscribe — the
 destination is a signed-in mute. Mail about winning, paying, invoicing,
 setup reminders, or shipping belongs to
@@ -148,7 +149,7 @@ a close-outcome letter.
 | Channel | Decided | Email first. Push kinds are named so a follow-on does not rename them, and are not delivered. | Product |
 | Lot image | Decided | Every letter's lot block shows one primary listing image when available; omit when none. Not a gallery. | Design |
 | Letter stack | Decided | emailcn on React Email; shared email shell components; preview with `email dev`. Map Grade10 tokens into an email theme — do not import site CSS. | Engineering |
-| 24h close vs 1h reminder | Decided | Additive. "Closes in 24 hours" is a new letter; the one-hour watcher reminder stays. | Product |
+| 24h close vs 1h reminder | 🚧 In flight | The one-hour watcher reminder is retired. "Closes in 24 hours" is the last warning before close; extended bidding still mails. Replaces "additive: the one-hour reminder stays." | Product (@jeffffej0909) |
 | Audiences | Decided | Start letters are watchers with alerts on. Close-in-24h and extended-bidding reach a participant who unwatched, by their bid, when alerts remain on. | Product |
 | New-bid volume | Decided | Coalesce: tell a previous bidder about the current leading bid they have not yet been told about, not about every increment. The previous leader gets the outbid letter, not both. | Product |
 | Unsubscribe | Decided | Stop means mute for this lot. Footer: Email alerts are on for this lot. **Manage alerts** → My Auctions (sign-in first when signed out). Not unwatch; not the account master. | Product |

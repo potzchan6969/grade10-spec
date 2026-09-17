@@ -52,6 +52,10 @@ export const previewLot = {
     "https://www.sf-express.com/us/en/dynamic_function/waybill/#search/bill-number/SF1234567890",
   /** When the lot was marked shipped (winner's zone). */
   shippedAt: "22 Sep 2026, 11:05 GMT+8",
+  /** When the carrier confirmed delivery (winner's zone). */
+  deliveredAt: "24 Sep 2026, 16:40 GMT+8",
+  /** When an operator cancelled the order (winner's zone). */
+  cancelledAt: "25 Sep 2026, 10:15 GMT+8",
   /** Confirmed delivery address on the Winner Order. */
   deliveryAddress: "Jane Collector\n12 Example Street\nCentral, Hong Kong",
   /** Standing amount when the reader lost the lead (outbid / non-winner). */
