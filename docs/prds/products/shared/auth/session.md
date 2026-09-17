@@ -32,17 +32,17 @@ is that product's business.
 A session belongs to the browser, not to one tab. Every tab of this brand is
 reading the same one.
 
-- 🚧 **Signed in somewhere else** — a tab left open shows the person signed in,
+- **Signed in somewhere else** — a tab left open shows the person signed in,
   so a collector who followed the emailed link in a new tab does not have to
   reload the old one.
-- 🚧 **Signed out somewhere else** — that tab shows them signed out. A session
+- **Signed out somewhere else** — that tab shows them signed out. A session
   that ran out on its own counts as one they ended, and a tab sitting on a
   signed-in page then asks for sign-in, exactly as it would had they opened
   that page signed out.
-- 🚧 **Somebody else signed in** — the tab shows whoever is signed in now, and
+- **Somebody else signed in** — the tab shows whoever is signed in now, and
   what it shows about them is theirs: their cart, their watchlist, their
   orders, never the last person's.
-- 🚧 **When it keeps up** — no later than when the person comes back to the tab,
+- **When it keeps up** — no later than when the person comes back to the tab,
   and promptly for a tab on the same site whether they left it or not.
-- 🚧 **When it cannot tell** — a tab that cannot reach us goes on showing what
+- **When it cannot tell** — a tab that cannot reach us goes on showing what
   it last knew and asks again later. Only a definite answer signs anyone out.
