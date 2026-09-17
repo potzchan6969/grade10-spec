@@ -10,6 +10,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogSubtext,
   DialogTitle,
   DialogTrigger,
 } from "./dialog";
@@ -34,7 +35,41 @@ export const Default: Story = {
           <DialogTitle>Title</DialogTitle>
         </DialogHeader>
         <DialogBody>
-          <DialogDescription>Dialog content here</DialogDescription>
+          <DialogDescription>
+            Short supporting copy for the action. Keep it to one or two
+            sentences.
+          </DialogDescription>
+        </DialogBody>
+        <DialogFooter>
+          <DialogClose render={<Button variant="outline" size="md" />}>
+            Cancel
+          </DialogClose>
+          <DialogClose render={<Button size="md" />}>Confirm</DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+};
+
+/** Optional muted line under the title; body prose stays in `DialogBody`. */
+export const WithSubtext: Story = {
+  render: () => (
+    <Dialog>
+      <DialogTrigger render={<Button variant="outline" />}>
+        Open dialog
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Title</DialogTitle>
+          <DialogSubtext>
+            Optional short line under the title. Use for a brief hint.
+          </DialogSubtext>
+        </DialogHeader>
+        <DialogBody>
+          <DialogDescription>
+            Body copy sits here at the base text size. Use it for the detail the
+            reader needs before they confirm.
+          </DialogDescription>
         </DialogBody>
         <DialogFooter>
           <DialogClose render={<Button variant="outline" size="md" />}>
