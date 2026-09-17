@@ -8,8 +8,8 @@
 **As a** collector,
 **I want** the public site to offer nothing that leads to a product it cannot
 serve me from,
-**so that** I am never shown a lot to bid on, a case to open or a visit to
-book that nobody is ready to honour.
+**so that** I am never shown a case to open or a visit to book that nobody is
+ready to honour.
 
 ### grade10-site-site-carried-surfaces-US5-TC1-1: Header names no withheld product and carries no cart control
 
@@ -28,8 +28,8 @@ book that nobody is ready to honour.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
@@ -38,7 +38,7 @@ book that nobody is ready to honour.
 
 **Expected Results:**
 
-* No header item names the store, the auction, the vault or booking a visit.
+* No header item names the store, the vault or booking a visit.
 * The header carries no cart control.
 
 ### grade10-site-site-carried-surfaces-US5-TC2-1: Footer carries no shop column and no withheld product link
@@ -58,8 +58,8 @@ book that nobody is ready to honour.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
@@ -69,7 +69,7 @@ book that nobody is ready to honour.
 **Expected Results:**
 
 * The footer carries no shop column.
-* No footer link names a store, auction, vault or booking address.
+* No footer link names a store, vault or booking address.
 
 ### grade10-site-site-carried-surfaces-US5-TC3-1: Front door offers no button and no card for any withheld product
 
@@ -88,8 +88,8 @@ book that nobody is ready to honour.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
@@ -98,8 +98,7 @@ book that nobody is ready to honour.
 
 **Expected Results:**
 
-* No button and no card names the store, the auction, the vault or booking a
-  visit.
+* No button and no card names the store, the vault or booking a visit.
 * The card row itself still renders, holding no card.
 * The front door's headline still renders.
 * Nothing on the front door opens a withheld address.
@@ -121,8 +120,8 @@ book that nobody is ready to honour.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
@@ -132,7 +131,7 @@ book that nobody is ready to honour.
 
 **Expected Results:**
 
-* No collected link names a store, auction, vault or booking address.
+* No collected link names a store, vault or booking address.
 * Every collected link opens a surface the build carries.
 
 ### grade10-site-site-carried-surfaces-US5-TC5-1: A carried page's head names no withheld address
@@ -152,8 +151,8 @@ book that nobody is ready to honour.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
@@ -164,7 +163,7 @@ book that nobody is ready to honour.
 **Expected Results:**
 
 * No canonical, alternate-language or sharing address in either head names a
-  store, auction, vault or booking surface.
+  store, vault or booking surface.
 * Every address the two heads name returns status 200.
 
 ### grade10-site-site-carried-surfaces-US5-TC6-1: Nothing names a withheld product before scripts run
@@ -184,8 +183,8 @@ book that nobody is ready to honour.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 * Scripts are turned off in the browser.
 
 **Steps:**
@@ -195,7 +194,7 @@ book that nobody is ready to honour.
 
 **Expected Results:**
 
-* No link in the response names a store, auction, vault or booking address.
+* No link in the response names a store, vault or booking address.
 * The response holds no cart control and no button for a withheld product.
 
 ### grade10-site-site-carried-surfaces-US5-TC7-1: Surfaces carried on every lane are still named and still open
@@ -215,8 +214,8 @@ book that nobody is ready to honour.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
@@ -225,7 +224,8 @@ book that nobody is ready to honour.
 
 **Expected Results:**
 
-* The chrome names membership, join, sign-in, the terms and the privacy page.
+* The chrome names the auction, membership, join, sign-in, the terms and the
+  privacy page.
 * Each opens its own surface, not the not-found surface.
 
 ### grade10-site-site-carried-surfaces-US5-TC8-1: Preview host names no withheld product either
@@ -254,8 +254,7 @@ book that nobody is ready to honour.
 
 **Expected Results:**
 
-* None of the three names the store, the auction, the vault or booking a
-  visit.
+* None of the three names the store, the vault or booking a visit.
 * The header carries no cart control, and the front door's headline still
   renders.
 
@@ -276,8 +275,8 @@ book that nobody is ready to honour.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
@@ -287,8 +286,8 @@ book that nobody is ready to honour.
 
 **Expected Results:**
 
-* No item, link, button or card under any <lang> names a store, auction,
-  vault or booking surface.
+* No item, link, button or card under any <lang> names a store, vault or
+  booking surface.
 * Every chrome item under each <lang> opens a surface the build carries.
 
 ---
@@ -296,8 +295,8 @@ book that nobody is ready to honour.
 ## grade10-site-site-carried-surfaces-US6: Collector opens a withheld product's address on the public site
 
 **As a** collector,
-**I want** an auction, vault or booking address I typed, bookmarked or
-followed on the public site to tell me the site does not hold it,
+**I want** a vault or booking address I typed, bookmarked or followed on the
+public site to tell me the site does not hold it,
 **so that** I learn the page is not there instead of waiting on one that will
 never render.
 
@@ -320,19 +319,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Test data:**
 
 | `<product>` | `<withheld address>` |
 | --- | --- |
-| Auction | The auction |
-| Auction | A lot's own page |
-| Auction | The watchlist |
-| Auction | A collector's bids |
-| Auction | The winner's order |
-| Auction | The winner's invoice |
 | Vault | The vault |
 | Vault | A case's own page |
 | Vault | The signing ceremony |
@@ -370,17 +363,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Test data:**
 
 | `<nested withheld address>` |
 | --- |
-| An address beneath the auction |
-| An address beneath a lot's page |
-| An address beneath the watchlist |
-| An address beneath a collector's bids |
 | An address beneath the vault |
 | An address beneath a case's page |
 | An address beneath booking a visit |
@@ -413,20 +402,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
-1. Fetch <grade10 auction url> on <grade10 public site url> without following
+1. Fetch <grade10 vault url> on <grade10 public site url> without following
    redirects.
-2. Fetch <grade10 vault url> on the same lane without following redirects.
-3. Fetch <grade10 booking url> on the same lane without following redirects.
+2. Fetch <grade10 booking url> on the same lane without following redirects.
 
 **Expected Results:**
 
-* All three responses return status 404.
-* None names an address to follow.
+* Both responses return status 404.
+* Neither names an address to follow.
 
 ### grade10-site-site-carried-surfaces-US6-TC4-1: A signed-in collector with records meets the same answer
 
@@ -445,21 +433,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
-* customer(signed in, holding a standing bid, an open vault case and a booked
-  visit) is on <grade10 public site url>.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
+* customer(signed in, holding an open vault case and a booked visit) is on
+  <grade10 public site url>.
 
 **Steps:**
 
-1. Open <grade10 auction url>.
-2. Open the collector's bids address on the same lane.
-3. Open the collector's own visits address on the same lane.
+1. Open the collector's vault case address.
+2. Open the collector's own visits address on the same lane.
 
 **Expected Results:**
 
-* All three render the not-found surface and answer with status 404.
-* None names the bid, the case or the visit.
+* Both render the not-found surface and answer with status 404.
+* Neither names the case or the visit.
 * The collector is still signed in.
 
 ### grade10-site-site-carried-surfaces-US6-TC5-1: A withheld address answers not-found under every language prefix
@@ -479,19 +466,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
-1. Fetch <grade10 auction url> under each <lang> prefix the site answers.
-2. Fetch <grade10 vault url> and <grade10 booking url> under each prefix.
-3. Open one of those addresses in the browser.
+1. Fetch <grade10 vault url> and <grade10 booking url> under each <lang>
+   prefix the site answers.
+2. Open one of those addresses in the browser.
 
 **Expected Results:**
 
 * Every fetch returns status 404.
-* Step 3 renders the not-found surface in that language.
+* Step 2 renders the not-found surface in that language.
 
 ### grade10-site-site-carried-surfaces-US6-TC6-1: A mailed private link is not honoured on the public site
 
@@ -510,8 +497,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 * <a booking's private link> and <the vault signing url> were minted on a lane
   that carries their products.
 
@@ -543,20 +530,20 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
-1. Fetch <grade10 auction url> on <grade10 public site url>.
+1. Fetch <grade10 vault url> on <grade10 public site url>.
 2. Fetch the same address with a query string asking the site to carry the
-   auction.
+   vault.
 3. Fetch the same address ten times in a row.
 
 **Expected Results:**
 
 * Every response returns status 404.
-* No response renders an auction surface.
+* No response renders a vault surface.
 * The answer never changes between requests.
 
 ### grade10-site-site-carried-surfaces-US6-TC8-1: An operator on the public site meets the same answer
@@ -576,8 +563,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 * admin(holds vault:operate) is signed in on <grade10 public site url>.
 
 **Steps:**
@@ -638,13 +625,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 * customer is on <grade10 public site url>.
 
 **Steps:**
 
-1. Type <grade10 auction url> into the address bar and open it.
+1. Type <grade10 vault url> into the address bar and open it.
 2. Use the browser's back button.
 3. Use the browser's forward button.
 
@@ -672,17 +659,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
-1. Open <grade10 auction url> on <grade10 public site url>.
+1. Open <grade10 vault url> on <grade10 public site url>.
 2. Read every word and every link the not-found surface holds.
 
 **Expected Results:**
 
-* Nothing on it names the auction, a lot, the vault, a case or a visit.
+* Nothing on it names the vault, a case or a visit.
 * Every link on it opens a surface the build carries.
 
 ---
@@ -710,8 +697,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 * customer(signed in) is on <grade10 public site url>.
 
 **Steps:**
@@ -721,9 +708,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No item names the auction, the watchlist, a collector's bids, an order, a
-  vault case or a visit.
-* The menu names the profile, the membership page and sign-out.
+* No item names an order, a vault case or a visit.
+* The menu names the profile, the membership page, the auctions item and
+  sign-out.
 
 ### grade10-site-site-carried-surfaces-US7-TC2-1: Every account menu item opens its own surface
 
@@ -742,8 +729,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 * customer(signed in) is on <grade10 public site url>.
 
 **Steps:**
@@ -773,10 +760,10 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
-* customer(signed in, holding a standing bid, a watched lot, an open vault
-  case and a booked visit) is on <grade10 public site url>.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
+* customer(signed in, holding an open vault case and a booked visit) is on
+  <grade10 public site url>.
 
 **Steps:**
 
@@ -785,10 +772,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No item names bids, the watchlist, a case or a visit.
+* No item names a case or a visit.
 * No count or badge in the header names one either.
 
-### grade10-site-site-carried-surfaces-US7-TC4-1: Account menu names the auctions item on a carrying lane
+### grade10-site-site-carried-surfaces-US7-TC4-1: Account menu names the case and visit items on a carrying lane
 
 **Classification:**
 
@@ -805,20 +792,21 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is <grade10 staging site url>, a build that carries all
-  four products' surfaces.
-* customer(signed in) is on <grade10 staging site url>.
+* The site under test is <grade10 staging site url>, a build that carries the
+  vault and booking surfaces.
+* customer(signed in, holding an open vault case and a booked visit) is on
+  <grade10 staging site url>.
 
 **Steps:**
 
 1. Open the account menu in the header.
-2. Open the auctions item.
+2. Open the item for the collector's vault case.
+3. Open the item for the collector's visits.
 
 **Expected Results:**
 
-* The menu names the auctions item.
-* Step 2 renders an auction surface, not the not-found surface.
-* The header carries a cart control.
+* The menu names both items.
+* Steps 2 and 3 each render their own surface, not the not-found surface.
 
 ### grade10-site-site-carried-surfaces-US7-TC5-1: Account menu on the preview host names no withheld product
 
@@ -846,8 +834,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* No item names the auction, the watchlist, a collector's bids, an order, a
-  vault case or a visit.
+* No item names an order, a vault case or a visit.
 * Every item opens a surface the build carries.
 
 ---
@@ -855,8 +842,8 @@ Runs once per row of **Test data**.
 ## grade10-site-site-carried-surfaces-US8: Collector uses a product on the lane it is open on
 
 **As a** collector,
-**I want** every auction, vault and booking surface to work unchanged where
-its product is open,
+**I want** every vault and booking surface to work unchanged where its
+product is open,
 **so that** hiding a product on the public site costs nothing to the lanes it
 is still used on.
 
@@ -880,20 +867,14 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The site under test is <grade10 staging site url>, a build that carries all
-  four products' surfaces.
-* customer(signed in, holding a standing bid, a won lot, an open vault case
-  and a booked visit) is on <grade10 staging site url>.
+  three waiting products' surfaces.
+* customer(signed in, holding an open vault case and a booked visit) is on
+  <grade10 staging site url>.
 
 **Test data:**
 
 | `<product>` | `<carried address>` |
 | --- | --- |
-| Auction | The auction |
-| Auction | A lot's own page |
-| Auction | The watchlist |
-| Auction | A collector's bids |
-| Auction | The winner's order |
-| Auction | The winner's invoice |
 | Vault | The vault |
 | Vault | A case's own page |
 | Vault | The signing ceremony |
@@ -911,42 +892,6 @@ Runs once per row of **Test data**.
 
 * Step 1 returns status 200.
 * Step 2 renders that `<product>` surface, not the not-found surface.
-
-### grade10-site-site-carried-surfaces-US8-TC2-1: Collector reaches a lot and bids unchanged
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-site-carried-surfaces-US-08
-
-**Pre-conditions:**
-
-* The site under test is <grade10 staging site url>, a build that carries the
-  auction surfaces.
-* customer(signed in, with a payment method saved) is on <grade10 staging site
-  url>.
-* At least one lot is open for bids.
-
-**Steps:**
-
-1. Open <grade10 auction url>.
-2. Open a lot from the catalogue.
-3. Add the lot to the watchlist.
-4. Place a bid above the standing top.
-
-**Expected Results:**
-
-* Each surface renders, and none is the not-found surface.
-* The watchlist holds the lot.
-* The lot reads the new bid as the standing top.
 
 ### grade10-site-site-carried-surfaces-US8-TC3-1: Collector opens a vault case and signs unchanged
 
@@ -1033,24 +978,24 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The site under test is <grade10 staging site url>, a build that carries all
-  four products' surfaces.
+  three waiting products' surfaces.
 * customer(signed in) is on <grade10 staging site url>.
 
 **Steps:**
 
 1. Read the header, the footer and the front door.
 2. Open the account menu in the header.
-3. Open the auction from the header's navigation item.
+3. Open the vault from the header's navigation item.
 
 **Expected Results:**
 
-* The header names the store, the auction, the vault and booking a visit, and
-  carries a cart control.
+* The header names the store, the vault and booking a visit, and carries a
+  cart control.
 * The footer carries a shop column, and the front door carries a button and a
-  card for each of the four.
-* Step 3 renders the auction.
+  card for each of the three.
+* Step 3 renders the vault.
 
-### grade10-site-site-carried-surfaces-US8-TC6-1: Opening one product leaves the other three shut
+### grade10-site-site-carried-surfaces-US8-TC6-1: Opening one product leaves the other two shut
 
 **Classification:**
 
@@ -1067,23 +1012,22 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is a build that carries none of the four products'
-  surfaces.
+* The site under test is a build that carries none of the three waiting
+  products' surfaces.
 
 **Steps:**
 
-1. Add that build's lane to the stated list of lanes that carry the auction.
+1. Add that build's lane to the stated list of lanes that carry the vault.
 2. Rebuild and deploy the site to that lane with no other edit.
-3. Open <grade10 auction url> on that lane.
-4. Fetch <grade10 store url>, <grade10 vault url> and <grade10 booking url> on
-   the same lane.
+3. Open <grade10 vault url> on that lane.
+4. Fetch <grade10 store url> and <grade10 booking url> on the same lane.
 
 **Expected Results:**
 
-* Step 3 renders the auction, and the header, the footer and the front door
+* Step 3 renders the vault, and the header, the footer and the front door
   name it.
-* Step 4 returns status 404 for all three.
-* No surface outside the auction's set changed.
+* Step 4 returns status 404 for both.
+* No surface outside the vault's set changed.
 
 ### grade10-site-site-carried-surfaces-US8-TC7-1: Development carries the labs and staging does not
 
@@ -1121,7 +1065,8 @@ Runs once per row of **Test data**.
 ## Reconciliation
 
 **Run:** blind feature pass, 2026-09-17, on the four new journeys
-(`US-05` to `US-08`) this change adds. Read: the isolated bundle the caller
+(`US-05` to `US-08`) this change adds, written when the auction was still
+proposed as one of the gated products. Read: the isolated bundle the caller
 assembled — `## Purpose` and `## Feature set` from the change's `spec.md`
 outline, `user-journeys.md` for both the new and the existing journeys,
 `proposal.md`, `decisions.md` with its `## Raised` table, the durable
@@ -1133,10 +1078,16 @@ every `## Requirements` section, `openspec/specs/` beyond the outline, and
 Written independently of the scenario pass on this same run: neither reader
 saw the other's file, and both were dispatched from the same anchors at once.
 
+**Landed after the run: Q26 removed the auction from the gate entirely** — it
+carries on every lane and is not one of the waiting products. Every finding
+below is restated against the three-product scope (the store, the vault and
+booking); where a finding turned on the auction specifically, its resolution
+is noted.
+
 * **Folded in** — the store's own withheld-address refusal already covers a
   session, a language prefix and a redirect; this pass's `US6-TC4-1`,
-  `US6-TC5-1` and `US6-TC3-1` extend the existing coverage to the auction, the
-  vault and booking rather than restating it, and no new rule was found.
+  `US6-TC5-1` and `US6-TC3-1` extend the existing coverage to the vault and
+  booking rather than restating it, and no new rule was found.
 * **Raised, answered** — a chrome region that would hold several products'
   items can end up holding none. Landed as Q21 in `decisions.md`: only the
   front door's card row can genuinely reach zero, since the header's
@@ -1146,16 +1097,18 @@ saw the other's file, and both were dispatched from the same anchors at once.
   read as "no item names …" rather than "the header is absent", so they stand
   as written.
 * **Raised, answered** — whether a booking already taken on a public lane
-  before this change ships needs its own wind-down, the way Q15 and Q16
-  settled for the auction and the vault. Landed as Q20 in `decisions.md`: a
-  follow-on change covers whoever already holds a booking; this change ships
-  as written, and booking's set — including its own private link — waits
-  whole like the vault's.
+  before this change ships needs its own wind-down, the way Q16 settled for
+  the vault. Landed as Q20 in `decisions.md`: a follow-on change covers
+  whoever already holds a booking; this change ships as written, and
+  booking's set — including its own private link — waits whole like the
+  vault's.
 * **Raised, answered** — whether the account menu's per-item gate belongs to
   this capability or to `shared/ui/site-chrome`, which specifies the account
-  control and not the items inside its menu. Landed as Q22 in
-  `decisions.md`: the site-level outcome alone, no component named. `US7-TC1-1`
-  and `US7-TC2-1` stand as written.
+  control and not the items inside its menu. This was originally raised about
+  the auctions item; Q26 removed that item from the gate entirely, and the
+  same question stands for the vault case and visit items the menu still
+  gates. Landed as Q22 in `decisions.md`: the site-level outcome alone, no
+  component named. `US7-TC1-1` and `US7-TC2-1` stand as written.
 * **Raised, answered** — whether the vault's vanity domain, which redirects to
   the vault's own address, should stop redirecting while the vault is
   withheld. Landed as Q23 in `decisions.md`: it keeps redirecting, and lands
@@ -1163,12 +1116,10 @@ saw the other's file, and both were dispatched from the same anchors at once.
   case covers the vanity domain itself; it is a redirect this capability does
   not carry.
 * **Raised, rejected** — whether a carried product's own surface can depend on
-  a withheld one, such as the auction's winner order needing the store's
-  checkout to settle payment. Landed as Q24 in `decisions.md`, checked against
-  `docs/prds/products/grade10-site/auction/index.md`: the auction's own
-  winner order and invoice use their own payment flow, not the store's
-  checkout, and neither Feature set names a dependency between the two sets.
-  No rule states one, and none is added.
+  a withheld one. Originally framed around the auction's winner order and the
+  store's checkout; with the auction out of scope, the live question is
+  whether the store, the vault or booking depend on each other. Landed as Q24
+  in `decisions.md`: no Feature set names such a dependency for any pair.
 * **Raised, answered** — a return address a sign-in flow lands a collector on
   after they authenticate could name a withheld surface. Landed as Q25 in
   `decisions.md`: no new rule, since sign-in is carried on every lane and once
@@ -1182,26 +1133,35 @@ saw the other's file, and both were dispatched from the same anchors at once.
   it.
 * **Uncovered anchors** — none. Both new `## Feature set` root groups this
   change adds are reached: "What a build carries" by `US5-TC7-1`, `US6-TC7-1`,
-  `US6-TC9-1`, `US8-TC1-1` and `US8-TC7-1`; "Where a product is open" by
-  `US8-TC6-1`. Every one of `US-05` to `US-08` carries cases.
+  `US6-TC9-1`, `US8-TC1-1` and `US8-TC6-1`; "Where a product is open" by
+  `US8-TC5-1`. Every one of `US-05` to `US-08` carries cases.
+* **Dropped after Q26** — `US8-TC2-1` originally proved the auction's own
+  surfaces (a lot, the watchlist, a bid) unchanged where carried. The auction
+  is no longer gated by this capability at all, so nothing here needs to
+  prove it unchanged; its journey `US-08` now covers only the vault and
+  booking, and its id is retired rather than reused. `US7-TC4-1` originally
+  proved the account menu's auctions item reappears on a carrying lane;
+  rewritten in place to prove the same for the case and visit items, the two
+  that remain gated.
 * **Existing cases this change moves** — flagged for whoever archives this
   change to apply to the durable `feature-tcs.md` alongside the spec fold,
   since the durable suite still describes today's shop-only behaviour and
   editing it now would describe a rule not yet true:
   - `US1-TC1-1` and `US1-TC5-1` are superseded by `US5-TC1-1` and
-    `US5-TC7-1`, which read the same chrome for all four products rather than
-    the store alone; deprecate them at fold.
-  - `US4-TC3-1` and `US4-TC4-1` are superseded by `US8-TC5-1` and
-    `US8-TC6-1` for the same reason on a carrying lane; deprecate them at
+    `US5-TC7-1`, which read the same chrome for the three waiting products
+    rather than the store alone; deprecate them at fold.
+  - `US4-TC3-1` and `US4-TC4-1` are superseded by `US8-TC4-1` and
+    `US8-TC5-1` for the same reason on a carrying lane; deprecate them at
     fold.
   - `US2-TC7-1`, `US3-TC1-1` and `US3-TC4-1` are the only cases verifying the
     preview host's refusal and the sitemap's negative and positive crawl
-    directory; none of `US5` to `US8` restates their claim for all four
-    products, since neither this change's journeys nor its requirements
+    directory; none of `US5` to `US8` restates their claim for the vault and
+    booking, since neither this change's journeys nor its requirements
     reissue a crawler or preview journey of their own. Rewrite them in place
     (`<v>` 2) at fold rather than deprecating: broaden `US2-TC7-1`'s test data
-    to all four products, and `US3-TC1-1` and `US3-TC4-1` to name the
-    auction, the vault and booking beside the store.
+    to the store, the vault and booking, and `US3-TC1-1` and `US3-TC4-1` to
+    name the vault and booking beside the store. None needs the auction,
+    which the crawler already lists unconditionally.
 
 ## Settled
 
@@ -1218,9 +1178,9 @@ saw the other's file, and both were dispatched from the same anchors at once.
   account's serve surfaces every lane carries. Asked and settled — do not
   raise it again as a gap in the requirement.
 * The front door's card row renders empty rather than being removed from the
-  page when none of the four products is carried; the header's navigation,
-  the footer and the account menu always keep a non-product item and never
-  reach that case.
+  page when none of the three waiting products is carried; the header's
+  navigation, the footer and the account menu always keep a non-product item
+  and never reach that case.
 * Booking's set, including the private link from its mail, waits whole; a
   booking already taken on a public lane is a follow-on change's problem, not
   this one's.
@@ -1229,9 +1189,8 @@ saw the other's file, and both were dispatched from the same anchors at once.
 * The vault's vanity domain keeps redirecting to the vault's address while the
   vault is withheld, landing on the not-found surface like any other route
   into it.
-* The auction's winner order and invoice use their own payment flow and do not
-  depend on the store's checkout; carrying one product's set implies nothing
-  about another's.
+* The auction is not gated by this capability: it carries on every lane, and
+  no store, vault or booking surface depends on it or on each other.
 * A return address a sign-in flow lands a collector on is refused the same way
   any other route into an uncarried surface is — the refusal does not depend
   on how the address was reached.

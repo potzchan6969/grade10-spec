@@ -2,16 +2,17 @@
 
 ## Why
 
-None of the site's four products is open, and `grade10.com` offers all four
-anyway. Every build carries the store with its cart and checkout, the auction
-with its lots and bids, the vault with its cases and signing, and booking a
-visit — so a collector who reaches the public site meets a price, a bid, a
-case and a booking that nobody is ready to honour, and a search engine indexes
-them as live products. Nothing in the site decides which lane a surface
-belongs on, so there is no line to move when a product does open, and no line
-to hold it shut until then. The store's own gate already runs — `hide-store-until-launch`
-shipped the rule and the store set — and this change widens it from one product
-to four.
+The store, the vault and booking a visit are not open, and `grade10.com`
+offers all three anyway. Every build carries the store with its cart and
+checkout, the vault with its cases and signing, and booking a visit — so a
+collector who reaches the public site meets a price, a case and a booking
+that nobody is ready to honour, and a search engine indexes them as live
+products. Nothing in the site decides which lane a surface belongs on, so
+there is no line to move when a product does open, and no line to hold it
+shut until then. The store's own gate already runs — `hide-store-until-launch`
+shipped the rule and the store set — and this change widens it from one
+product to three. The auction has already opened and carries on every lane;
+it is not part of this change.
 
 **Metric:** withheld addresses a search engine holds for `grade10.com`, and
 requests the public lanes answer with not-found at a withheld address. Both
@@ -23,15 +24,15 @@ are expected to fall to zero; the first delivery sets the baseline.
   says which builds carry each surface, decided when the build is made. A
   build that does not carry one holds no page, no address and no page code
   for it
-- **Each product waits for its own launch** — four sets, each carried in
-  development and staging and on no lane the public reaches. The **store** is
-  the store, the collections under it, a card's own page, the two addresses
-  the shop hands out for a product and a collection, the cart, the checkout,
-  and a collector's order history and order detail. The **auction** is the
-  auction, a lot's own page, the watchlist, the collector's bids, and the
-  winner's order and invoice. The **vault** is the vault, a case's own page,
-  the signing ceremony and the identity check. **Booking** is booking a visit,
-  the private link from a booking's mail, and a collector's own visits
+- **Each waiting product waits for its own launch** — three sets, each
+  carried in development and staging and on no lane the public reaches. The
+  **store** is the store, the collections under it, a card's own page, the
+  two addresses the shop hands out for a product and a collection, the cart,
+  the checkout, and a collector's order history and order detail. The
+  **vault** is the vault, a case's own page, the signing ceremony and the
+  identity check. **Booking** is booking a visit, the private link from a
+  booking's mail, and a collector's own visits. The auction is not one of
+  them — it already carries on every lane
 - **An uncarried address is not found** — a withheld address on a public lane
   answers with the not-found surface and a 404, the same as any address the
   site does not hold
@@ -44,10 +45,10 @@ are expected to fall to zero; the first delivery sets the baseline.
 - **The labs move under the same rule** — the demonstration surfaces and the
   unapproved refund and shipping drafts already answer only on a dev server.
   They become the second reader of one rule rather than a second rule
-- **BREAKING: the auction, the vault and booking wait too** — this reverses
-  the recorded decision that only the shop's own pages wait. None of the four
-  is ready for the public, and a collector meets the same unhonoured promise
-  whichever one they reach
+- **BREAKING: the vault and booking wait too** — this reverses the recorded
+  decision that only the shop's own pages wait. Neither is ready for the
+  public, and a collector meets the same unhonoured promise reaching either.
+  The auction is unaffected: it already answers everywhere
 
 ## Non-Goals
 
@@ -57,11 +58,10 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### Modified Capabilities
 
-- `grade10-site/site/carried-surfaces`: the one store set becomes four product
-  sets — the auction, the vault and booking wait for their own launches beside
-  the store, each opened by its own line — and the account menu joins what a
-  build may not name. The rule itself, and what an uncarried address, link and
-  crawl entry do, already run and are not restated here
+- `grade10-site/site/carried-surfaces`: the one store set becomes three
+  product sets — the vault and booking wait for their own launches beside the
+  store, each opened by its own line. The rule itself, and what an uncarried
+  address, link and crawl entry do, already run and are not restated here
 - none besides it. `grade10-site/site/navigation` already refuses an address
   under no surface, `grade10-site/site/page-shell` already refuses a link and
   a control the site has no surface for, and
@@ -79,9 +79,6 @@ See [Non-Goals](decisions.md#non-goals).
   and the marketing page follow the surface set rather than the whole table
 - **`@grade10/app-env`** — no new registry entry. The lane is the deploy
   environment the build already resolves
-- **`@grade10/ui`** — `SiteHeader`'s account menu draws its auctions item
-  only where the site supplies a handler, the way its cart control already
-  works, so no build names a surface it does not carry
 - **Staging and development** — unchanged. Every surface answers as it does
   today
 - **Search engines** — withheld addresses already indexed for `grade10.com`
@@ -89,16 +86,13 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## Follow-on changes
 
-- Open the auction, first of the four: production and preview start carrying
-  the auction surfaces
 - Open the store, the vault and booking, each on its own date
-- Say what the front door offers while all four are shut
+- Say what the front door offers while all three are shut
 
 ## References
 
 - [Carried Surfaces · What Each Lane Carries](../../../docs/prds/products/grade10-site/site/carried-surfaces.md#what-each-lane-carries)
 - [Carried Surfaces · An Address Nothing Carries](../../../docs/prds/products/grade10-site/site/carried-surfaces.md#an-address-nothing-carries)
 - [Store · Where It Is Open](../../../docs/prds/products/grade10-site/store/index.md#where-it-is-open)
-- [Auction · Where It Is Open](../../../docs/prds/products/grade10-site/auction/index.md#where-it-is-open)
 - [Vault · Where It Is Open](../../../docs/prds/products/grade10-site/vault/index.md#where-it-is-open)
 - [Appointments · Where It Is Open](../../../docs/prds/products/grade10-site/appointment/index.md#where-it-is-open)

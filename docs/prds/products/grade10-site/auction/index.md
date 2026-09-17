@@ -9,12 +9,6 @@ the invoice and receives the card. This page is the map, in the order a
 collector meets each part; each line names what holds the rules and the
 open questions.
 
-## Where It Is Open
-
-🚧 **Not open to the public yet** — the auction's pages are carried in
-development and staging, on no lane the public reaches. It is the first of the
-four products to open — [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
-
 ## Account
 
 - **Registration and login** — an emailed sign-in link, or Google where a
