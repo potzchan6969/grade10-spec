@@ -5,27 +5,36 @@ audience: operator
 order: 12
 ---
 
-A campaign is a catalogue cover — an event that many listings belong to, with
-a title and copy of its own and deliberately no clocks and no money. The
-console calls it a campaign everywhere and never a sale: that word is kept
-for store checkout and sold stock, which a cover is neither.
+A campaign is a catalogue cover: an event that many listings belong to, with a
+title and copy of its own and deliberately no clocks and no money. The console
+calls it a campaign everywhere and never a sale, a word kept for store checkout
+and sold stock.
+
+## Values
+
+| Rule | Value |
+| --- | --- |
+| Title | Required, trimmed, **1 to 200** characters |
+| Copy | Optional, up to **4,000** characters |
 
 ## Lifecycle
 
-A campaign walks draft → created → published, and any of the three can be
-called off to canceled. A draft is an operator's private start and appears on
-no public cover; creating it makes it publishable; publishing makes the cover
-public without publishing a single listing under it — each listing publishes
-on its own. Cancelling a campaign also cancels the listings still under it,
-under [the listing rules](/p/grade10-admin/auction/listing), and a canceled
-campaign opens read-only: title and copy visible, nothing writable, no second
-cancel.
+| Status | Reached when | Offered |
+| --- | --- | --- |
+| **Draft** | An operator opens the campaign with a title; on no public cover | Edit, Create, Cancel |
+| **Created** | The operator creates it; still on no public cover | Edit, Publish, Cancel |
+| **Published** | The operator publishes; the cover is public, and each listing under it still publishes on its own | Edit, Cancel |
+| **Canceled** | Called off from any of the three; each listing still under it is called off under [the listing rules](/p/grade10-admin/auction/listing) | Nothing: read-only, no edit, no second cancel |
+
+- **Grants** — authoring takes the catalogue grant and calling off the
+  call-off grant; a control the operator lacks the grant for is not offered
+- **A listing joins** — from the listing editor's Campaign picker, which
+  offers draft and created campaigns only — [Listing
+  Management](/p/grade10-admin/auction/listing)
 
 ## Editor
 
-One editor authors a campaign end to end. Title is required — trimmed, one to
-two hundred characters, and a write that clears it is refused; copy is
-optional, up to four thousand. Create, publish and cancel appear exactly when
-the campaign's status and the operator's grants allow them: authoring takes
-the catalogue grant, calling off takes the call-off grant. The listing editor
-offers a campaign picker, so a lot joins its event where the lot is authored.
+- **One editor** — authors a campaign end to end; a write that clears the
+  title is refused
+
+::cases{id="grade10-admin/auction/campaign"}

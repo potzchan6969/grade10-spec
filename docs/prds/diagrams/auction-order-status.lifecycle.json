@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "An auction order's status",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [930, 640]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Order"
+    },
+    {
+      "id": "waiting",
+      "label": "Waiting on an operator"
+    },
+    {
+      "id": "terminal",
+      "label": "Ended"
+    }
+  ],
+  "states": [
+    {
+      "id": "awaiting-address",
+      "type": "start",
+      "label": "Awaiting Address",
+      "sublabel": "the lot closed",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "preparing-invoice",
+      "type": "active",
+      "label": "Preparing Invoice",
+      "sublabel": "address and method confirmed",
+      "lane": "main",
+      "col": 1
+    },
+    {
+      "id": "pending-payment",
+      "type": "waiting",
+      "label": "Pending Payment",
+      "sublabel": "invoice sent, expired included",
+      "lane": "main",
+      "col": 2
+    },
+    {
+      "id": "processing",
+      "type": "active",
+      "label": "Processing",
+      "sublabel": "paid, not yet dispatched",
+      "lane": "main",
+      "col": 3
+    },
+    {
+      "id": "shipped",
+      "type": "active",
+      "label": "Shipped",
+      "sublabel": "carrier and tracking",
+      "lane": "main",
+      "col": 4
+    },
+    {
+      "id": "payment-verifying",
+      "type": "waiting",
+      "label": "Payment Verifying",
+      "sublabel": "proof uploaded, deadline stopped",
+      "lane": "waiting",
+      "col": 0
+    },
+    {
+      "id": "cancelled",
+      "type": "failure",
+      "label": "Cancelled",
+      "sublabel": "unpaid; the lot reopens",
+      "lane": "terminal",
+      "col": 0
+    },
+    {
+      "id": "refunded",
+      "type": "neutral",
+      "label": "Refunded",
+      "sublabel": "a paid invoice, refunded",
+      "lane": "terminal",
+      "col": 1
+    },
+    {
+      "id": "delivered",
+      "type": "success",
+      "label": "Delivered",
+      "sublabel": "the carrier's proof",
+      "lane": "terminal",
+      "col": 2
+    }
+  ],
+  "transitions": [
+    {
+      "id": "confirmed",
+      "from": "awaiting-address",
+      "to": "preparing-invoice",
+      "variant": "emphasis"
+    },
+    {
+      "id": "sent",
+      "from": "preparing-invoice",
+      "to": "pending-payment",
+      "variant": "emphasis"
+    },
+    {
+      "id": "paid",
+      "from": "pending-payment",
+      "to": "processing",
+      "variant": "emphasis"
+    },
+    {
+      "id": "dispatched",
+      "from": "processing",
+      "to": "shipped",
+      "variant": "emphasis"
+    },
+    {
+      "id": "proof",
+      "from": "pending-payment",
+      "to": "payment-verifying",
+      "label": "proof uploaded",
+      "labelAt": [478, 222]
+    },
+    {
+      "id": "confirmed-proof",
+      "from": "payment-verifying",
+      "to": "processing",
+      "label": "proof confirmed",
+      "variant": "emphasis",
+      "fromSide": "right",
+      "toSide": "bottom",
+      "labelAt": [520, 296]
+    },
+    {
+      "id": "returned",
+      "from": "payment-verifying",
+      "to": "pending-payment",
+      "label": "proof not accepted",
+      "variant": "dashed",
+      "labelAt": [478, 242]
+    },
+    {
+      "id": "cancel",
+      "from": "pending-payment",
+      "to": "cancelled",
+      "label": "an operator cancels",
+      "variant": "security",
+      "route": "left-channel",
+      "fromSide": "left",
+      "toSide": "left",
+      "channelX": 323,
+      "labelAt": [323, 400]
+    },
+    {
+      "id": "refund",
+      "from": "processing",
+      "to": "refunded",
+      "variant": "dashed",
+      "route": "right-channel",
+      "fromSide": "right",
+      "toSide": "right",
+      "channelX": 633
+    },
+    {
+      "id": "delivery",
+      "from": "shipped",
+      "to": "delivered",
+      "variant": "emphasis"
+    }
+  ]
+}

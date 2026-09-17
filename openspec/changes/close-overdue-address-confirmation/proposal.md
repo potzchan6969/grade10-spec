@@ -131,6 +131,6 @@ itself:
 
 ## References
 
-- [Winner Order · Invoice and Settlement](../../../docs/prds/products/grade10-site/auction/winner-order.md#invoice-and-settlement)
+- [Winner Order · Order Setup](../../../docs/prds/products/grade10-site/auction/winner-order.md#order-setup)
 - [Post-Sale Queue · Payment](../../../docs/prds/products/grade10-admin/auction/post-sale.md#payment)
 - [Auction Order Status](../../../docs/prds/products/grade10-site/auction/order-status.md)

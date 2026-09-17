@@ -5,66 +5,125 @@ audience: operator
 order: 11
 ---
 
-Every lot starts as an operator's draft. The first save mints the auctionable
-unit behind it and lets the operator walk away — nothing is required yet, so a
-listing can be half-written for a week. When they come back they add the
-catalogue copy and taxonomy, attach the gallery, and set a starting price,
-extension duration, and optional cap.
+Every lot starts as an operator's draft here, is filled with catalogue copy
+and a gallery, priced and scheduled, holds its stock, and is published, or
+called off.
 
-Creating the listing is the moment the rules bite: a title, a slug, a starting
-price, scheduled times, and at least one media item are all checked on the form and
-again at the API, so a script cannot slip past what the form refuses. After
-that the listing is ready to sell but not yet visible; publishing is a separate
-move, either immediately or at a future time the operator sets.
+## Values
 
-The slug is the key a collector opens the lot by, which is why its rules read
-oddly at first: two live listings can never share one, but a called-off
-listing gives its slug back, while a closed one keeps it forever.
+| Rule | Value |
+| --- | --- |
+| Currency | **USD**, **HKD** or **JPY**, one per listing; **HKD** when omitted |
+| Bid floor | The currency's [price schedule](/p/grade10-site/auction/bid-increments); no minimum-increment field |
+| Title | Required at create; **1 to 200** characters |
+| Copy | Optional; at most **4,000** characters |
+| Slug | **1 to 64** characters, lower-case words joined by hyphens, unique among every listing |
+| Quantity | **1 to 500** units of the chosen product; **1** when a product is picked |
+| Extension | **1,800 seconds** when omitted; **0** turns extended bidding off; an optional cap, and a cap below the duration is a hard final deadline |
+| Gallery | **1 to 8** images or videos of at most **100 MiB** each, stored as uploaded; a draft may hold none |
 
-A campaign is a cover a lot may sit under, never a thing it needs. An operator
-starts a listing from the Listings section itself and leaves the Campaign
-field empty; draft, create, publish and the collector's slug all work with no
-campaign attached, and the Listings table shows "-" for such a row.
-Campaigns remain the way to sell a set together — a make-good, a rehearsal, or
-a single lot arriving on its own asks for no cover to be invented for it.
+## Lifecycle
 
-An operator can withdraw a listing at any point before it closes — draft,
-created, or published with live bids on it. Once a lot has closed, this is no
-longer the place to change it; the sale is settled and fulfilled elsewhere.
+| Status | Reached when | What can change |
+| --- | --- | --- |
+| **Draft** | The first save; nothing is required yet | Everything, sandbox included |
+| **Created** | Create: a title, a slug, a starting price, a start, a close after both the start and now, at least one media item, and the stock hold the draft took | Catalogue fields, prices and window, slug, Publish at, media |
+| **Published** | An operator publishes, or Publish at arrives; a draft never publishes | Catalogue copy, taxonomy and media only |
+| **Closed** | The close passes — [Bidding Rules](/p/grade10-site/auction/auction) | Nothing; the sale is settled in the [Post-Sale Queue](/p/grade10-admin/auction/post-sale) |
+| **Settled** | The order is done | Nothing |
+| **Canceled** | Called off from draft, created or published, or its campaign is cancelled | Nothing; a second call-off is refused |
 
-The listing form offers USD, HKD, and JPY. The bid floor follows the selected
-currency's [price-tier schedule](/p/grade10-site/auction/bid-increments); there
-is no minimum-increment field for an operator to set.
+::image{src="assets/diagrams/auction-listing-status.svg" alt="A listing from Draft to Created, Published, Closed and Settled, with Canceled beneath, reached by calling off a created or published listing"}
 
-🚧 **Inventory unit choice** — creating a listing requires an explicit choice
-of one Cert ID belonging to the selected product, or `No Cert ID` when the lot
-uses an unnumbered unit.
+## Drafting and Creating
 
-🚧 **Separate graded lots** — each available Cert ID for one product can have
-its own live listing, and one Cert ID can belong to only one live listing.
+- **Draft first** — the first save mints the auctionable unit and lets the
+  operator walk away; a listing can be half-written for a week
+- **Explicit Save** — nothing is stored until Save; no field saves itself
+- **Checked twice** — create's requirements are checked on the form and again
+  at the API, so a script cannot slip past what the form refuses
+- **Prices read back** — each price shows as a formatted decimal amount
+  before saving, so its decimal placement can be checked
+- **Sandbox** — set only while draft: the listing runs on test-mode payment
+  credentials, so the house can rehearse a sale
+- 🚧 **Inventory unit choice** — creating a listing requires an explicit
+  choice of one Cert ID belonging to the selected product, or `No Cert ID`
+  when the lot uses an unnumbered unit
+- 🚧 **Separate graded lots** — each available Cert ID for one product can
+  have its own live listing, and one Cert ID can belong to only one live
+  listing
 
-## Operator actions
+## Stock
 
-🚧 **Watchers** — the Listings table shows how many collectors watch each
-lot, across both brands. It is interest, not a count of expected bidders.
+- **Product** — the picker lists created products with units available; the
+  listing's own product stays pickable while it holds the last units
+- **Hold on Save** — saving a draft with a product and a quantity holds that
+  stock; a changed quantity moves the hold, and clearing either releases it
+- **Changing the product** — a listing that already holds stock warns that
+  Save moves the hold to the new product and frees the old one; a refused
+  move leaves the old hold and the fields as they were
+- **Create needs the hold** — create is refused unless an active hold matches
+  the listing's product and quantity
+- **Released** — calling off the listing, or its campaign, releases the hold
 
-:::detail{title="Grants and the trail" for="operator"}
-Catalogue work — drafting, editing, publishing, calling off — sits behind
-`auction:write` and `auction:operate`, which `staff` hold. `auction:reserve`
-is the only grant that exposes a seller's secret floor and `auction:settle` is
-the only one that moves money; neither is needed to run the catalogue. Every
-elevated move appends to a hash-chained trail and refuses to run at all if that
-record cannot be written.
-:::
+## Publishing and Calling Off
 
-:::detail{title="Seeding lots locally" for="engineer"}
-The Test panel — local dev only — seeds fixtures from two tabs. **Campaign**
-opens a campaign and attaches the chosen fixtures to it. **Listings** seeds the
-same fixtures with no campaign at all: each still gets a reserved inventory
-product and a media item, so the campaign-free lifecycle can be exercised
-end to end. Its Drop listing control removes one standalone fixture and
-releases the hold it kept, and it reaches only listings the seed created —
-a lot an operator authored carries a slug the pattern does not match.
+- **Publish** — a created listing is ready to sell but not yet visible;
+  publishing is a separate move, now, or at a Publish at after now that can
+  be cleared
+- **Call off** — at any point before the close, bids or not; live holds and
+  the stock are released, and the slug is freed for another listing while the
+  called-off lot stops answering at it
+- **Closed is frozen** — once a lot has closed this is no longer the place to
+  change it — [Post-Sale Queue](/p/grade10-admin/auction/post-sale)
+- **The address** — a published, closed or settled listing answers at
+  `/auction/listings/<slug>`; a draft, created or canceled one does not
+
+## Campaign
+
+- **Optional** — a listing starts from the Listings section with no campaign
+  and works without one; the picker offers draft and created campaigns only,
+  and the Listings table shows `-` for a lot with none —
+  [Campaigns](/p/grade10-admin/auction/campaign)
+
+## Operator Actions
+
+- 🚧 **Watchers** — the Listings table shows how many collectors watch each
+  lot, across both brands; it is interest, not a count of expected bidders
+
+## Refusals
+
+- **Currency and price** — a currency outside the three, or a starting price
+  that is not a positive whole amount
+- **Slug** — the wrong shape, or a value another listing holds, closed and
+  settled ones included
+- **Taxonomy and campaign** — two categories from one taxonomy, or a
+  published or canceled campaign
+- **Times** — a close not after the start, or a close or Publish at not after
+  now at create
+- **Media** — a ninth item, an unsupported type, an empty file, one over 100
+  MiB, or removing the last item once created
+- **Frozen fields** — prices, window, slug or sandbox on a published listing,
+  and every write on a closed, settled or canceled one
+- **Grants** — a save, create, publish or call-off without its grant
+
+## Grants
+
+- **Catalogue work** — drafting, editing, publishing and calling off sit
+  behind `auction:write` and `auction:operate`, which `staff` hold
+- **Money** — `auction:settle` alone moves money; neither it nor
+  `auction:reserve` is needed to run the catalogue —
+  [Roles](/p/shared/auth/roles)
+- **The trail** — every elevated move appends to the hash-chained audit trail
+  and refuses to run if that record cannot be written — [Audit
+  trail](/p/grade10-admin/audit)
+
+::cases{id="grade10-admin/auction/listing"}
+
+:::detail{title="Code map" for="engineer"}
+- **Service** — [Auction Service](/platform/auction-service)
+- **Test panel** — `LOCAL_FIXTURES_ENABLED`: the Campaign and Listings tabs
+  seed and drop fixture listings, local dev only
 :::
 
 :::detail{title="Product decisions" for="pm"}

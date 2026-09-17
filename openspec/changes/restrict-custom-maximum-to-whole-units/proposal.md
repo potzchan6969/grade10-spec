@@ -47,3 +47,7 @@ that need correcting before Place Bid.
 - `docs/prds/products/grade10-site/auction/auto-bidding.md` decision row for
   custom maximum entry precision
 - Storybook / preview bid panel stories for set and raise
+
+## References
+
+- [Listing Page Blocks · Custom Maximum](../../../docs/prds/products/shared/ui/auction-listing.md#custom-maximum)

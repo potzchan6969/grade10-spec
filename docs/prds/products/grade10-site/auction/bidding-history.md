@@ -1,80 +1,78 @@
 ---
 title: Bidding History
 spec: grade10-site/auction/bidding-history
-order: 9
-reviewed: 2026-09-17
+order: 26
 ---
 
 The account keeps one retained record of everything bidding did, so an
-auditable money decision stays explainable without a support ticket. It lives
-at the account's bids address and belongs to the storefront account alone —
-no input a collector supplies reads anyone else's record, and there is no
-control to delete or hide an entry, because the record is the audit.
+auditable money decision stays explainable without a support ticket.
 
-In My Auctions, this is the Bidding tab. The [auction
-record](/p/grade10-site/auction/account-record) owns the surrounding account
-navigation, the Watching tab, and its account-level presentation; this
-capability owns the Bidding index and the detailed story behind each listing.
+## The Index
 
-## Index
+The index lives at the account's bids address inside the site chrome; signed
+out, sign-in runs first and returns there. It opens on Active.
 
-Every listing the account submitted an automatic maximum on appears exactly
-once, ordered by its latest activity, carrying the listing's identity, its
-current or final price, and the collector's standing: pending, leading,
-outbid, won, lost, canceled, or failed-only, which means every maximum
-attempt was refused and nothing was accepted. An Active filter keeps what is
-still running; Completed keeps what is done.
+- **One row per listing** — every listing the account submitted a maximum
+  on, ordered by its latest activity: the listing and its image, the latest
+  activity, its current or final price, and the collector's standing
+- **Standing** — pending, leading, outbid, won, lost, canceled, or
+  failed-only, which means every maximum attempt was refused and nothing was
+  accepted
+- **Filters** — Active keeps what is still running; Completed keeps what is
+  done
+- **In place** — a row expands its combined history without leaving the
+  page, and an open lot the collector can bid on again offers a route back
+  to it
+- **Owner only** — the record belongs to the storefront account alone; no
+  input reads anyone else's, and nothing deletes or hides an entry, because
+  the record is the audit
 
-## Lot Personal Bidding
+## One Listing's Story
 
-On the lot, a signed-in owner who has personal bidding activity opens
-**Your bidding** beside the public recent-bids label. That dialog is the place
-to re-read this lot's private maximum history and the bids Grade10 placed,
-without leaving the page.
+An entry opens into one chronological explanation of that listing, where the
+collector reads as **You** and every rival by that listing's pseudonym.
 
-- **Bid placed** — the auto-bid sequence Grade10 accepted for them on
-  this lot, amount and time only; first tab and the default when the dialog
-  opens (empty state when none yet)
-- **Your maximums** — every accepted configure or raise of that private
-  cap, newest first, with amount and time only — no **Set** / **Raised**
-  status on the row; second tab
-- **No dialog maximum summary** — the live private maximum stays on the
-  bid panel only; the dialog is tabs and lists
-- **Owner only** — neither list shows another bidder's maximum, identity,
-  or payment facts; the public recent-bids list stays public-only
-- **Refused attempts stay on the account** — a refused maximum is not on
-  the lot dialog; it remains in the account chronology at `/bids`
+- **Private events** — every maximum action the server evaluated leaves one:
+  a maximum set or raised, accepted, or refused with its reason
+- **Public movements** — interleaved with the private events, the movements
+  that changed the collector's standing; being outbid without a new maximum
+  leaves the standing change, never the rival's own bid record
+- **Private stays private** — another bidder's maximum never appears, only
+  the public consequence that displaced them; a reason never carries a
+  provider message or card data
+- **Not an event** — input the browser refused before it reached the auction
+- **Boundary reads** — how an equal maximum, or a raise one increment above
+  the leader, reads in the story — [Auto-Bidding · The
+  Price](/p/grade10-site/auction/auto-bidding#the-price)
 
-## One listing's story
-
-An entry opens into a single chronological explanation of that listing.
-Every server-evaluated maximum action the collector took leaves a private
-event — a maximum accepted, a maximum refused and why, or a private maximum
-set or raised — interleaved with the public movements that changed their
-standing. Private facts stay private: another bidder's maximum never
-appears, only the public consequence that displaced them.
-
-- **Maximum labels** — configure and raise events read as a maximum set or
-  raised (and refused as a refused maximum), matching the lot wording; there
-  is no new account tab or maximums-only route
-
-## Boundary outcomes
-
-The auction engine keeps the challenger's accepted action before an automatic
-response, caps a response at one increment above the next maximum, and keeps
-an equal maximum with the earlier leader. The account story therefore reads
-these boundary outcomes as follows:
-
-| Incoming maximum | Public story |
+| Refusal reason | Meaning |
 | --- | --- |
-| 450 | Refused below the next valid amount |
-| 500 | Challenger at 500, then automatic response at 600 |
-| 700 | Challenger at 700, then automatic response at 800 |
-| 950 | Challenger at 950, then automatic response at 1000 |
-| 1000 | One public response at 1000; the earlier leader remains ahead |
-| 1001 | Challenger leads at 1001 |
-| 1100 | Challenger leads at 1100 |
-| 1120 | Challenger leads at 1100, one increment above the earlier maximum |
+| Window | The listing was outside its bidding window |
+| Minimum | The maximum did not meet the next minimum |
+| Account | The account may not bid |
+| Payment | The card authorization did not succeed |
+| Stale price | A competing price arrived first |
+| Unavailable | Bidding could not be evaluated at that moment |
+
+## On the Lot
+
+A signed-in owner with personal bidding activity opens **Your bidding**
+beside the public recent-bids label, and re-reads this lot without leaving
+the page.
+
+- **Bid placed** — the auto-bid sequence Grade10 accepted for them on this
+  lot, amount and time only; the first tab and the default, with an empty
+  state when there is none yet
+- **Your maximums** — every accepted configure or raise of the private cap,
+  newest first, amount and time only, with no Set or Raised status on the row
+- **No summary** — the live private maximum stays on the bid panel only; the
+  dialog is tabs and lists
+- **Owner only** — neither list shows another bidder's maximum, identity or
+  payment facts; the public recent-bids list stays public-only
+- **Refusals stay on the account** — a refused maximum is not on the lot
+  dialog; it remains in the account chronology
+
+::cases{id="grade10-site/auction/bidding-history"}
 
 :::detail{title="Product decisions" for="pm"}
 A collector can see what Grade10 bid for them and what their cap is now, but
@@ -86,10 +84,10 @@ reading the full account chronology. Mixing maximums and bid steps under one
 | --- | --- | --- |
 | Bidder | On the lot, deciding whether to raise | Sees past accepted maximums and the bids Grade10 placed, without leaving the page. |
 | Bidder | Outbid or closed | Still reads their last accepted maximum and their own bid steps privately. |
-| Bidder | Auditing every refusal | Uses `/bids` chronology; the lot dialog does not duplicate refusals. |
+| Bidder | Auditing every refusal | Uses the account chronology; the lot dialog does not duplicate refusals. |
 
 **Not in scope.** A second bid-card link or maximum-only dialog. Stacked
-full-height tables in one scroll. A new `/bids` filter, tab, or
+full-height tables in one scroll. A new bids filter, tab, or
 maximums-only page. Refused maximums on the lot dialog. Maximum history on
 the public recent-bids list. Manual-vs-automatic type badges on bid-sequence
 rows. Lowering, cancelling, or editing a past maximum from history. Export,
@@ -113,7 +111,7 @@ share, or print. ZZZ storefront surfaces.
 | Maximum rows | Decided | Accepted configure and raise caps only; amount and time only — no **Set** / **Raised** status on the row | Product |
 | Bid-sequence rows | Decided | Auto-bid sequence Grade10 placed for the owner | Product |
 | Privacy | Decided | Owner only; public recent bids unchanged | Product |
-| Account `/bids` | Decided | Clearer maximum labels only; no new account tab | Product |
+| Account chronology | Decided | Clearer maximum labels only; no new account tab | Product |
 | Refused on lot | Decided | v1 keeps refusals on the account chronology only | Product |
 
 **Risks.** A collector who only opens **Bid placed** may still miss a

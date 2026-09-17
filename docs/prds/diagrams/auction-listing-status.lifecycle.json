@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "A listing's status",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [930, 640]
+  },
+  "lanes": [
+    {
+      "id": "main",
+      "label": "Listing"
+    },
+    {
+      "id": "waiting",
+      "label": "Waiting"
+    },
+    {
+      "id": "terminal",
+      "label": "Ended"
+    }
+  ],
+  "states": [
+    {
+      "id": "draft",
+      "type": "start",
+      "label": "Draft",
+      "sublabel": "the first save",
+      "lane": "main",
+      "col": 0
+    },
+    {
+      "id": "created",
+      "type": "active",
+      "label": "Created",
+      "sublabel": "ready to sell, not visible",
+      "lane": "main",
+      "col": 1
+    },
+    {
+      "id": "published",
+      "type": "active",
+      "label": "Published",
+      "sublabel": "on the catalogue",
+      "lane": "main",
+      "col": 2
+    },
+    {
+      "id": "closed",
+      "type": "active",
+      "label": "Closed",
+      "sublabel": "the close passed",
+      "lane": "main",
+      "col": 3
+    },
+    {
+      "id": "settled",
+      "type": "success",
+      "label": "Settled",
+      "sublabel": "the order is done",
+      "lane": "main",
+      "col": 4
+    },
+    {
+      "id": "canceled",
+      "type": "failure",
+      "label": "Canceled",
+      "sublabel": "stock and slug freed",
+      "lane": "terminal",
+      "col": 0
+    },
+    {
+      "id": "scheduled",
+      "type": "waiting",
+      "label": "Publish at set",
+      "sublabel": "publishes on its own",
+      "lane": "waiting",
+      "col": 0
+    }
+  ],
+  "transitions": [
+    {
+      "id": "create",
+      "from": "draft",
+      "to": "created",
+      "variant": "emphasis"
+    },
+    {
+      "id": "publish",
+      "from": "created",
+      "to": "published",
+      "label": "an operator publishes",
+      "variant": "emphasis",
+      "labelDy": -25
+    },
+    {
+      "id": "close",
+      "from": "published",
+      "to": "closed",
+      "variant": "emphasis"
+    },
+    {
+      "id": "settle",
+      "from": "closed",
+      "to": "settled",
+      "variant": "emphasis"
+    },
+    {
+      "id": "call-off",
+      "from": "published",
+      "to": "canceled",
+      "label": "called off",
+      "variant": "security",
+      "labelAt": [479, 400],
+      "route": "right-channel",
+      "fromSide": "right",
+      "toSide": "right",
+      "channelX": 479
+    },
+    {
+      "id": "call-off-early",
+      "from": "created",
+      "to": "canceled",
+      "label": "called off",
+      "variant": "security",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "labelAt": [248, 430]
+    },
+    {
+      "id": "schedule",
+      "from": "created",
+      "to": "scheduled",
+      "label": "Publish at set",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "labelAt": [300, 290]
+    },
+    {
+      "id": "auto-publish",
+      "from": "scheduled",
+      "to": "published",
+      "label": "it arrives",
+      "variant": "dashed",
+      "labelDx": -44
+    }
+  ]
+}

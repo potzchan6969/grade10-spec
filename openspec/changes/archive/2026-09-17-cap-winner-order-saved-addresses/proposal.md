@@ -54,4 +54,4 @@ See `decisions.md`.
 
 ## References
 
-- [Winner Order · Invoice and Settlement](../../../docs/prds/products/grade10-site/auction/winner-order.md#invoice-and-settlement)
+- [Winner Order · Order Setup](../../../docs/prds/products/grade10-site/auction/winner-order.md#order-setup)

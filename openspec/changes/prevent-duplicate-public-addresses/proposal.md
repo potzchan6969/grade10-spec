@@ -85,4 +85,4 @@ one thing.
 ## References
 
 - [Crawlable Pages · One Address Per Thing](../../../docs/prds/products/grade10-site/site/crawlable-pages.md#one-address-per-thing)
-- [Auction · Catalogue Order](../../../docs/prds/products/grade10-site/auction/index.md#catalogue-order)
+- [Auction Listing · Catalogue Order](../../../docs/prds/products/grade10-site/auction/auction-listing.md#catalogue-order)

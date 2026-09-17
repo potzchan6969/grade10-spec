@@ -1,57 +1,63 @@
 ---
 title: Watchlist
 spec: grade10-site/auction/watchlist
-order: 7
+order: 28
 ---
 
-A watch is one action on a lot that says "come back to this" and costs
+A watch is one action on a lot that says come back to this, and it costs
 nothing: no money is held, no standing in the sale is gained, and the sale
-never changes because somebody watches. Bidding is the other way to register
-interest, and that one holds money on a card — watching is the saved list for
-everyone still deciding. Email alerts for a lot are a separate preference;
-[notifications](/p/grade10-site/auction/notifications) owns when mail
-fires.
+never changes because somebody watches.
 
-## Vocabulary
+## Values
 
-| Concept | Preferred | Avoid |
-| --- | --- | --- |
-| List membership | **Watch** / **Watching** / **Unwatch** / on Watching | Wishlist, follow, subscribe (for the list) |
-| Email preference | **Email alerts** / mute email alerts / alerts on or off | Using **Unwatch** or **Stop watching** to mean mute |
-| Combined remove | **Unwatch** — removes from Watching and turns email alerts off | Implying unwatch is mail-only |
+| Rule | Value |
+| --- | --- |
+| Watch limit | ❓ A maximum number of watches per collector, bids counted; Design sets the value — [My Auctions](/p/grade10-site/auction/account-record) |
+| Email alerts | On for a lot when it is watched, off when it is unwatched — [Bidding Notifications](/p/grade10-site/auction/notifications) |
+
+## Words
+
+| Word | Meaning |
+| --- | --- |
+| **Watch**, **Watching** | The lot is on the collector's list |
+| **Email alerts** | The per-lot mail preference, apart from the watch; muting leaves the watch and any bid intact |
+| **Unwatch** | Leaves the list and turns email alerts off |
 
 ## Watching
 
-Watching takes a signed-in collector; a signed-out viewer is offered sign-in
-rather than a watch the browser would forget. A watch follows the collector
-across devices, and watching the same lot twice leaves one watch with its
-original date. Watching turns email alerts on for that lot by default;
-unwatching turns them off. Both brands sell the same lots, so a lot accepts
-watches from collectors of either brand — each collector sees only their own.
+- **Signed in** — watching takes a signed-in collector; a signed-out viewer
+  is offered sign-in rather than a watch the browser would forget
+- **Follows the collector** — a watch follows them across devices, and
+  watching the same lot twice leaves one watch with its original date
+- **Both brands** — a lot accepts watches from collectors of either brand,
+  and each sees only their own
+- **From where the lot is shown** — the lot page while the lot is open and
+  the collector has no bid on it, the catalogue, and the watched list; a bid
+  keeps the lot watched until it closes — [Auction Details ·
+  Watching](/p/grade10-site/auction/listing-page#watching)
+- **Undo** — unwatching can be undone at once, without finding the lot again
+- **After the close** — unwatching still works after a close or a call-off
 
-## Watched list
+## The Watched List
 
-The lots a collector watches read most recently watched first, and each entry
-carries enough to act on: the lot, its current bid, its close, whether the
-sale is open or closed, and an **Email alerts** control beside **Unwatch**.
-Lots the collector is bidding on read above the ones they are only watching.
-Turning a lot's alerts off is confirmed on screen and says what it left
-alone — the watch, or the bid. A close never removes a watch — the entry
-stays, honestly labelled, until its owner unwatches it.
-🚧 A called-off lot is different: it leaves the watched list rather than
-staying on it, per [Lot Status](/p/grade10-site/auction/lot-status).
-Mute leaves the lot on Watching. A collector watching nothing is told so
-rather than shown an error or an empty page. Unwatch is available on the
-listing page, the catalogue, and this list — email mute links to signed-in My
-Auctions; it is not the only way out.
+- **Where** — watched lots read on [My
+  Auctions](/p/grade10-site/auction/account-record), each entry leading to
+  its lot, most recently watched first among the watch-only rows
+- **An entry** — the lot, its current bid, its close, and whether its sale is
+  open or closed
+- **After the close** — the entry stays until its owner unwatches it
+- 🚧 **Called off** — a called-off lot leaves the watched list rather than
+  staying on it — [Lot Status](/p/grade10-site/auction/lot-status)
+- **Nothing watched** — the collector is told so, rather than shown an error
+  or an empty page
 
 ## Visibility
 
-Only its owner. No public fact carries a watch count or a watcher's identity,
-and one collector never learns what another watches. The one other reader is
-an operator judging interest: they see how many collectors watch a lot,
-counted across both brands, and never a name — a watch is not a commitment to
-buy.
+- **Owner only** — no public fact carries a watch count or a watcher's
+  identity, and one collector never learns what another watches
+- **Operators** — see how many collectors watch a lot, counted across both
+  brands and never a name; a watch is not a commitment to buy — [Listing
+  Management](/p/grade10-admin/auction/listing)
 
 :::detail{title="Product decisions" for="pm"}
 Bidding is the only other way to register interest in a lot, and a bid holds
@@ -92,14 +98,10 @@ most-recent first.
 | No standing | Decided | Watching does not bid, reserve, or change the sale. | Product |
 | Sign-in | Decided | Signed-out viewers are offered sign-in. Nothing is stored in the browser. | Product |
 | Survives close | Decided | A closed lot stays in the list until the collector unwatches. | Product |
-| Called-off leaves the list | 🚧 In flight | A called-off lot is hidden, so it leaves the watched list instead of surviving on it — [Lot Status](/p/grade10-site/auction/lot-status). Supersedes "Survives close" for called-off lots. | Product |
+| Called-off leaves the list | 🚧 In flight | A called-off lot is hidden, so it leaves the watched list instead of surviving on it — [Lot Status](/p/grade10-site/auction/lot-status). Supersedes "Survives close" for called-off lots, and the watchlist delta's own "shown as called off" row. | Product |
 | Unwatch surfaces | Decided | Listing page, catalogue tile, and watched list. Email mute → My Auctions for that lot's alerts; it does not unwatch. | Product |
 | Store heart | Decided | Not restored. This control exists because a list answers it. | Product |
-| List placement | Decided | My Auctions in the account area — Bidding then Watching as sections on one page (Order History shell). Per-row Email alerts + Unwatch. Entrance copy names lots / auction. No header-only destination. | Design |
-| Bidding above Watching | Decided | A lot holding the collector's money outranks one they are only following, so Bidding leads the page. | Design |
+| List placement | Decided | My Auctions in the account area, one table with bid rows first. Per-row Email alerts + Unwatch. Entrance copy names lots / auction. No header-only destination. | Design |
+| Bidding above Watching | Decided | A lot holding the collector's money outranks one they are only following, so bid rows lead the table. | Design |
 | Operator count placement | Decided | A Watchers column on the admin Listings table, so an operator compares lots at a glance. | Design |
-
-**Risks.** Stopping auto-watch on bid would drop bidders from watcher-only
-lanes; bidder mail stays on bids with its own alerts preference. Watching is
-independent of auto bidding.
 :::

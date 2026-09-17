@@ -1,41 +1,42 @@
 ---
-title: Notifications
+title: Bidding Notifications
 spec: grade10-site/auction/notifications
-order: 8
+order: 29
 reviewed: 2026-09-17
 ---
 
-Auction mail exists because the close is a deadline that moves: nobody can
-plan to be there at the end, so Grade10 tells enrolled collectors when a lot
-needs them. Before-and-during mail stays here; so do close-outcome letters for
-watchers and non-winners. Winner order letters belong to
-[Order Notifications](/p/grade10-site/auction/notifications-order). Every
-message is transactional mail to the account's registered email address, and amounts and times in it follow
-[money amounts](/platform/shared/money-amounts) and
-[dates and times](/platform/shared/dates-and-times).
+Grade10 tells enrolled collectors when a lot needs them, because the close is
+a deadline that moves. Every letter is transactional mail to the account's
+registered address, and its amounts and times follow [money
+amounts](/platform/shared/money-amounts) and [dates and
+times](/platform/shared/dates-and-times); the letters a winner gets about an
+order belong to [Order Notifications](/p/grade10-site/auction/notifications-order).
 
-## Vocabulary
+## Values
 
-| Concept | Preferred | Avoid |
-| --- | --- | --- |
-| List membership | **Watch** / **Watching** / **Unwatch** | Using unwatch to mean mute |
-| Email preference | **Email alerts** / mute / turn off email alerts | **Stop watching** for mute |
-| Enrolment | Watching or bidding **and** email alerts on for that lot | Equating watch alone with mail |
+| Rule | Value |
+| --- | --- |
+| Opening warning | **24 hours** before the scheduled start |
+| Closing warning | **24 hours** before the scheduled close, which extended bidding never moves |
+| Closing reminder | **1 hour** before the close, to watchers, as before this capability |
+| Copies | One per lot per collector per message |
+| Retries | A fixed number of attempts with backoff; then an operator re-queues |
 
 ## Enrolment
 
-Two relationships can enrol a collector in a lot's mail, and each needs
-**email alerts on** for that lot. **Watching** with alerts on brings the
-progress messages and, when they did not bid, the close-outcome letter.
-**Bidding** with alerts on brings bid-activity mail, closing and extension
-warnings, and the close-outcome letter when they did not win. Unwatch ends the watch relationship and turns
-alerts off with it; mute turns alerts off and leaves Watching (or the bid)
-intact. A collector who both watches and bids still receives exactly one copy
-of anything.
+Enrolment is watching or bidding **and** email alerts on for that lot; the
+words are [Watchlist](/p/grade10-site/auction/watchlist)'s. Unwatch ends the
+watch and turns alerts off with it; mute turns alerts off and leaves the watch
+or the bid intact.
 
-Account → Notifications also carries a global **Auction email alerts** master:
-off stops all per-lot auction progress and activity mail without clearing
-lists or bids; on restores per-lot preferences (default on for new watches).
+- **Watching** with alerts on brings the progress messages
+- **Bidding** with alerts on brings bid-activity mail plus the closing and
+  extension warnings, even after unwatching
+- **Late watchers** — a collector who watches after a window has opened
+  still gets that message while enrolled
+- **Account master** — Account → Notifications carries a global **Auction
+  email alerts** switch: off stops all per-lot auction mail without clearing
+  lists or bids; on restores per-lot preferences
 
 ## Messages
 
@@ -43,21 +44,22 @@ lists or bids; on restores per-lot preferences (default on for new watches).
 | --- | --- | --- |
 | Bidding opens in 24 hours | 24 hours before the scheduled start | Watchers with alerts on |
 | Bidding has opened | When bidding starts | Watchers with alerts on |
-| Bidding closes in 24 hours | 24 hours before the *scheduled* close | Watchers and bidders with alerts on |
-| Extended bidding has started | The lot enters its extension window | Watchers and bidders with alerts on |
+| Bidding closes in 24 hours | 24 hours before the scheduled close | Watchers and bidders with alerts on |
+| Bidding closes in 1 hour | 1 hour before the close | Watchers, as before |
+| Extended bidding has started | The lot enters extended bidding | Watchers and bidders with alerts on |
 | New bid on a lot you bid on | A bid is accepted | Every other bidder with alerts on |
 | You have been outbid | The leader stops leading | The displaced leader with alerts on |
+| You did not win | The lot stops taking bids | Bidders who lost, with alerts on |
+| The lot has ended | The lot stops taking bids | Watch-only collectors with alerts on |
 
-Outbid is losing the lead. A competing maximum that raises the current bid
-while their own maximum still holds is not outbid — Grade10 keeps bidding
-for them.
-
-Each progress message goes once per lot per collector, and the closing
-warning keys to the scheduled close on purpose — a close the extension rule
-keeps moving would otherwise never warn. Nobody hears about their own bid,
-an outbid collector gets the outbid message rather than that plus a new-bid
-one, and a snipe war collapses into one new-bid message naming the current
-leading bid rather than one per increment.
+- **Outbid is losing the lead** — a competing maximum that raises the current
+  bid while their own maximum still holds is not outbid; Grade10 keeps
+  bidding for them. The letter names the current bid and the close, and their
+  own standing bid when supplied, never their maximum
+- **Once per lot** — each progress message goes once per lot per collector
+- **No noise** — nobody hears about their own bid, an outbid collector gets
+  the outbid message rather than that plus a new-bid one, and a snipe war
+  collapses into one new-bid message naming the current leading bid
 
 ## Close Outcome
 
@@ -69,36 +71,40 @@ that it closed — same alerts-on enrolment as progress mail.
   amounts are supplied
 - **Watcher, sold** — a watch-only collector with alerts on gets a letter
   that the lot has ended, with Sold for when a winning bid is supplied
-  (`lot_ended_watched`)
-- **No bids at close** — watchers with alerts on get **Ended** only
-  (`lot_ended_watched` without a winning amount). Subject, preheader and body
-  never say unsold, did not sell, no sale, or no bids, and never show Highest
-  bid. At close this means nobody bid — not a later winner default. There is
-  no bidder close letter when nobody bid; campaign `lot_ended` is retired
+- **No bids at close** — watchers with alerts on get **Ended** only; the
+  letter never says unsold, did not sell, no sale or no bids, and never shows
+  Highest bid. At close this means nobody bid, not a later winner default.
+  There is no bidder letter when nobody bid
 - **One letter** — a watcher who also bid gets the non-winner letter, not
-  also the watcher letter. The winner gets only the auction-won order letter
+  also the watcher letter; the winner gets only the auction-won order letter
 - ❓ **Hold line on the non-winner letter** — whether the body also says the
   card hold is being released; My Auctions already carries hold state
 
 ## Delivery
 
-Every owed letter whose per-lot alerts are on carries a short footer:
-**Email alerts are on for this lot.** **Manage alerts** — opens
-**My Auctions**, where the collector mutes that lot's Email alerts control.
-Signed out, Grade10's existing sign-in flow runs first, then My Auctions.
-Never an unauthenticated one-click stop, never unwatch, and not the
-account-wide Auction email alerts master as the primary destination. The
-Grade10 brand mark opens the Grade10 website home. Outbound links carry
-campaign tags (`utm_source=email`, `utm_medium=auction_notification`,
-letter kind as `utm_campaign`, control as `utm_content`). Each
-letter's lot block shows **one** primary picture of the item when the listing
-has one. A temporary send failure retries with backoff under a bounded budget;
-a permanent refusal stops at once, and an operator can put a given-up letter
-back on the ladder. A called-off lot sends nothing further, and a letter that
-would state something no longer true is not sent late.
-
-Operators answer "I was never told" from a send log: message type, recipient
-address, lot, and when it was sent — never the body.
+- **One shape** — subject, preheader, heading, body, a lot block with one
+  primary picture when the listing has one, one action that opens the lot,
+  and a footer; kinds differ in their words, and a letter that would name the
+  reader's bid amount is not sent without it
+- **Footer** — every owed letter whose per-lot alerts are on says **Email
+  alerts are on for this lot**, and **Manage alerts** opens **My Auctions**,
+  where the collector mutes that lot; signed out, sign-in runs first. Never an
+  unauthenticated one-click stop, never unwatch, and not the account-wide
+  master as the primary destination
+- **Brand mark** — opens the home of the brand the collector bid or watched
+  on
+- **Campaign tags** — every outbound link carries `utm_source=email`,
+  `utm_medium=auction_notification`, the letter kind as `utm_campaign` and
+  the control as `utm_content`
+- **Failed send** — a temporary failure retries a fixed number of times with
+  backoff; a permanent refusal stops at once, and an operator puts a given-up
+  letter back on the ladder. A crash between send and stamp may send a
+  second copy, which beats a dropped one
+- **Never a false statement** — a called-off lot sends nothing further, and a
+  letter that would state something no longer true is not sent late
+- **Send log** — operators answer "I was never told" from message type,
+  recipient address, lot and when it was sent — never the body
+- ❓ **Log retention** — how long send-log rows are kept; Engineering confirms
 
 :::detail{title="Product decisions" for="pm"}
 Bid-state receipts go out on their own. The letters here are the moments that
@@ -158,7 +164,5 @@ a close-outcome letter.
 **Risks.** A popular listing's watcher fanout stays batched; per-recipient
 sends exhaust a worker before the last watcher. A snipe war never mails every
 previous bidder on every increment. A provider outage retries; a refused
-address never occupies the ladder while other rows wait. Duplicate mail on a
-crash between send and stamp is the accepted trade: a second letter beats a
-silently dropped one.
+address never occupies the ladder while other rows wait.
 :::
