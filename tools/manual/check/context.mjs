@@ -59,11 +59,13 @@ export const RULES = [
     // The anchor says where the rule sits; the prose after it says what the
     // walk was. A line repeating the group name back carries neither, and a
     // group anchor is already the weakest of the three — it names a part of
-    // the map and nobody who meets the rule. Nothing in the store writes one
-    // today, so this is a guard on new work rather than a register.
+    // the map and nobody who meets the rule. A group anchor with no prose at
+    // all is the same line with the repetition left out, so both fail here.
+    // Nothing in the store writes either today, so this is a guard on new work
+    // rather than a register.
     key: "restates",
     level: "fail",
-    title: "`**Serves:**` prose repeating the anchor it stands on",
+    title: "`**Serves:**` prose that never names the walk",
   },
   {
     // Every state the designer drew is either a scenario or an exemption that
@@ -387,12 +389,30 @@ export const plural = (count, word) =>
  * named no scenario and so was read by nothing. */
 const QUALIFIED = /^([a-z0-9][a-z0-9/-]*)#([a-z0-9][a-z0-9-]*-US-\d+)$/;
 
-/** The journey ids a capability issues, or undefined where the store holds no
- * such capability. A qualified anchor resolves through this. */
+/** The journey ids a capability has ever issued - the ones it still holds and
+ * the ones it has retired - or undefined where the store holds no such
+ * capability. A qualified anchor resolves through this.
+ *
+ * The retired ids are in the set because the far capability is not the one the
+ * anchor is written on. Answering live journeys alone made retiring a journey
+ * fail `serves` on every capability that named it, which lands the red in the
+ * retirer's pull request and points it at somebody else's file - work they
+ * cannot do and would not know to. It also cut against the store's own rule
+ * that an issued id is permanent: `archive:preflight` refuses a removed
+ * journey that leaves no `## Retired` tombstone precisely because archived
+ * suites still trace it. A tombstone the checker then treats as absent is the
+ * same id answered two ways.
+ *
+ * What the anchor stands on going stale is a real question, and it is the
+ * retiring change's to answer in its deltas - not a red line on a capability
+ * that has not changed. */
 export const journeysIn = (ctx) => (id) => {
   const spec = ctx.specs.get(id);
   if (!spec || spec.journeys === undefined) return undefined;
-  return new Set(spec.journeys.map((one) => one.id));
+  return new Set([
+    ...spec.journeys.map((one) => one.id),
+    ...(spec.retiredJourneys ?? []),
+  ]);
 };
 
 export const qualifiedAnchor = (anchor) => {
@@ -420,10 +440,27 @@ export function anchorRefusal(local, anchor, specId, far) {
   return null;
 }
 
-/** Whether a `**Serves:**` line's prose says only what its anchor already
- * said. Compared on letters and digits alone, so casing and punctuation do not
- * hide a repetition. */
-export const restatesAnchor = (anchor, prose) =>
-  prose !== undefined && bare(prose) === bare(anchor) && bare(anchor) !== "";
+/** Why a group anchor's `**Serves:**` prose says nothing its anchor did not,
+ * as the clause that follows the anchor in a finding, or null where the prose
+ * names the walk.
+ *
+ * Two shapes fail, and the emptier one is the stricter case: a group name
+ * carries which part of the map the rule sits in and nobody who meets it, so
+ * the prose is the only place the walk is ever written. Repeating the group
+ * name back says nothing; writing no prose at all says the same thing in fewer
+ * words, and a rule that caught only the first would pass the line it was
+ * written to catch.
+ *
+ * Compared on letters and digits alone, so casing and punctuation do not hide
+ * a repetition. */
+export function groupProseRefusal(anchor, prose) {
+  if (prose === undefined || bare(prose) === "") {
+    return "names the group and stops — say what the walk is after a dash";
+  }
+  if (bare(anchor) !== "" && bare(prose) === bare(anchor)) {
+    return "repeats the group name after the dash — say what the walk is instead";
+  }
+  return null;
+}
 
 const bare = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, "");

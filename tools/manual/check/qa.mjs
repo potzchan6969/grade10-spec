@@ -18,9 +18,9 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import {
   anchorRefusal,
+  groupProseRefusal,
   journeysIn,
   plural,
-  restatesAnchor,
   scenarioIds,
 } from "./context.mjs";
 
@@ -78,19 +78,17 @@ function checkServes(ctx, spec, dir) {
   }
 }
 
-/** RULE `restates`: a group anchor's prose names the walk. Repeating the group
- * name back says nothing the anchor did not, and a group anchor is the one
- * that most needs the line — it names a part of the map and nobody who meets
- * the rule. Asked only of a group anchor: a journey id and its title are two
- * different things, and a scenario serving a journey has already said who. */
+/** RULE `restates`: a group anchor's prose names the walk — it neither repeats
+ * the group name back nor stops at the anchor, because a group anchor is the
+ * one that most needs the line: it names a part of the map and nobody who
+ * meets the rule. Asked only of a group anchor: a journey id and its title are
+ * two different things, and a scenario serving a journey has already said
+ * who. */
 function restated(ctx, file, spec, scenario, anchor) {
   if (!(spec.featureGroups ?? []).includes(anchor)) return;
-  if (!restatesAnchor(anchor, scenario.servesProse)) return;
-  ctx.add(
-    "restates",
-    file,
-    `${scenario.id} → \`${anchor}\` repeats the group name after the dash — say what the walk is instead`,
-  );
+  const why = groupProseRefusal(anchor, scenario.servesProse);
+  if (!why) return;
+  ctx.add("restates", file, `${scenario.id} → \`${anchor}\` ${why}`);
 }
 
 /** The suite as the reader already read it. Re-opening the file here would put

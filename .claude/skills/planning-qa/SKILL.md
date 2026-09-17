@@ -223,15 +223,22 @@ the walk away. It is also what a hand-written `Also walked by:` note in a
 journeys file was reaching for: the note names no scenario, so nothing joins on
 it and nothing fails when it goes stale.
 
+A qualified anchor keeps resolving after that capability retires the journey:
+the id is permanent, the `## Retired` tombstone answers it, and archived suites
+still trace it. Whether the rule still stands is the retiring change's question
+to settle in its own deltas, not a red line on a capability nobody touched.
+
 A scenario whose only anchor is a foreign journey is reached by no case in this
 capability's suite. List it under `**Out of suite:**` naming the suite that
 walks it - the same treatment any other uncovered scenario gets.
 
 **The prose after the dash names the walk**, never the group and never the
-heading it already sits under. `check:manual` refuses prose repeating the group
-name. Repeating the heading is the store's habit today and nothing reads it yet
-— write the walk anyway: a line that restates what is already on screen is a
-line the next reader skips.
+heading it already sits under. `check:manual` refuses a group anchor whose
+prose repeats the group name, and refuses one written bare - a group name says
+which part of the map the rule sits in and nobody who meets it, so the prose is
+the only place the walk is ever written. Repeating the heading is the store's
+habit today and nothing reads it yet — write the walk anyway: a line that
+restates what is already on screen is a line the next reader skips.
 
 Coverage is checked at group level: every anchor served by at least one scenario
 and walked by at least one case. That is coarse on purpose - the real coverage

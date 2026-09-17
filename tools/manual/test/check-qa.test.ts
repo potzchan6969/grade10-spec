@@ -632,13 +632,52 @@ describe("a scenario serving another capability's journey", () => {
       `${SPEC_FILE} — alpha-SC-01 → \`demo-product/gamma#gamma-US-01\`, whose capability \`demo-product/gamma\` is not one this store holds`,
     ]);
   });
+
+  /** Retiring a journey is the far capability's own work, and the anchor is
+   * written on a file it does not own. Answering live journeys alone put the
+   * red in the retirer's pull request, pointing at somebody else's spec —
+   * while `archive:preflight` refuses that same retirement unless it leaves
+   * the tombstone, because an issued id is permanent and archived suites still
+   * trace it. */
+  describe("once that capability retires the journey", () => {
+    const tombstoned = (serves: string) =>
+      store({
+        journeys: journeysText([journey("alpha-US-01")]),
+        spec: specText({
+          scenarios: [["alpha-SC-01", "it does the thing", serves]],
+        }),
+        extra: {
+          ...beta,
+          [`${BETA}/user-journeys.md`]: [
+            journeysText([journey("beta-US-01")]),
+            "## Retired",
+            "",
+            "- `beta-US-02` - Someone does the other thing · removed in `drop-the-other-thing` · 2026-09-17",
+            "",
+          ].join("\n"),
+        },
+      });
+
+    it("resolves the anchor standing on it", async () => {
+      const root = tombstoned("demo-product/beta#beta-US-02");
+      expect(lines(await check(root), "serves")).toEqual([]);
+    });
+
+    it("still refuses an id no tombstone names", async () => {
+      const root = tombstoned("demo-product/beta#beta-US-03");
+      expect(lines(await check(root), "serves")).toEqual([
+        `${SPEC_FILE} — alpha-SC-01 → \`demo-product/beta#beta-US-03\`, which \`demo-product/beta\` issues nowhere`,
+      ]);
+    });
+  });
 });
 
 /** The anchor says where the rule sits; the prose after it says what the walk
  * was. A group anchor is the one that most needs the line — it names a part of
  * the map and nobody who meets the rule — so a line repeating the group name
- * back carries nothing at all. */
-describe("`**Serves:**` prose that only repeats its anchor", () => {
+ * back carries nothing at all, and a line that stops at the anchor carries the
+ * same nothing. */
+describe("`**Serves:**` prose that never names the walk", () => {
   const served = (serves: string) =>
     store({
       journeys: journeysText([journey("alpha-US-01")]),
@@ -683,6 +722,29 @@ describe("`**Serves:**` prose that only repeats its anchor", () => {
 
   it("asks nothing of a journey anchor, whose title is not its id", async () => {
     const root = served("alpha-US-01 - alpha-US-01");
+    expect(lines(await check(root), "restates")).toEqual([]);
+  });
+
+  /** The stricter case of the same line. A group name says which part of the
+   * map the rule sits in and nobody who meets it, so prose that repeats it
+   * says nothing — and prose that is not written at all says nothing in fewer
+   * words. A rule catching only the first passes the line it exists to catch. */
+  it("fails a group anchor that stops at the anchor", async () => {
+    const root = served("Doing things");
+    expect(lines(await check(root), "restates")).toEqual([
+      `${SPEC_FILE} — alpha-SC-01 → \`Doing things\` names the group and stops — say what the walk is after a dash`,
+    ]);
+  });
+
+  it("fails a group anchor whose prose is punctuation", async () => {
+    const root = served("Doing things - ...");
+    expect(lines(await check(root), "restates")).toEqual([
+      `${SPEC_FILE} — alpha-SC-01 → \`Doing things\` names the group and stops — say what the walk is after a dash`,
+    ]);
+  });
+
+  it("asks nothing of a bare journey anchor, which has named who already", async () => {
+    const root = served("alpha-US-01");
     expect(lines(await check(root), "restates")).toEqual([]);
   });
 });

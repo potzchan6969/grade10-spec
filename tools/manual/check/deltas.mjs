@@ -26,15 +26,16 @@ import {
   featureGroups,
   readJourneys,
   readRequirement,
+  readRetiredJourneys,
   requirementBlocks,
 } from "../src/store/read-specs.mts";
 import {
   anchorRefusal,
   everyBlock,
+  groupProseRefusal,
   journeysIn,
   journeysOf,
   plural,
-  restatesAnchor,
 } from "./context.mjs";
 
 /** The only `## ` headings a delta may hold: the four the fold reads, plus
@@ -123,11 +124,12 @@ function checkAnchors(ctx, files) {
             continue;
           }
           if (!groupsFor(ctx, one).has(anchor)) continue;
-          if (!restatesAnchor(anchor, scenario.servesProse)) continue;
+          const prose = groupProseRefusal(anchor, scenario.servesProse);
+          if (!prose) continue;
           ctx.add(
             "restates",
             one.file,
-            `${scenario.id} → \`${anchor}\` repeats the group name after the dash — say what the walk is instead`,
+            `${scenario.id} → \`${anchor}\` ${prose}`,
           );
         }
       }
@@ -176,10 +178,19 @@ function groupsFor(ctx, one) {
   return groups;
 }
 
-/** A qualified anchor's capability, answered from the durable store first and
- * then from this change's own journeys files — a change may introduce the
+/** A qualified anchor's capability, answered from the durable store and from
+ * this change's own journeys files together — a change may introduce the
  * capability whose journey another of its deltas stands on, and the durable
- * store has not heard of it yet. */
+ * store has not heard of it yet.
+ *
+ * Both, not the change's file in place of the durable one. A journeys file in
+ * a change is a delta: it carries the journeys that change is adding, moving
+ * or retiring, and says nothing about the rest. Reading it alone made a change
+ * that touches one journey of a far capability refuse every other anchor
+ * standing on it, which is the capability's own file being read as its whole
+ * history. The retired ids are in for the reason `journeysIn` holds them: an
+ * issued id is permanent, and the `## REMOVED User journeys` section is where
+ * a change writes that it is retiring one. */
 function journeysHere(ctx, one) {
   const durable = journeysIn(ctx);
   const change = one.file.split("/specs/")[0];
@@ -188,12 +199,17 @@ function journeysHere(ctx, one) {
       join(ctx.roots.store, change, "specs", id, "user-journeys.md"),
     );
     if (beside === undefined) return durable(id);
+    const held = durable(id);
     try {
-      return new Set(readJourneys(beside).map((journey) => journey.id));
+      return new Set([
+        ...(held ?? []),
+        ...readJourneys(beside).map((journey) => journey.id),
+        ...readRetiredJourneys(beside),
+      ]);
     } catch {
       // A file the reader refuses is `walked`'s to name; fall back to what the
       // durable store holds rather than reporting the anchor twice.
-      return durable(id);
+      return held;
     }
   };
 }

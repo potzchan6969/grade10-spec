@@ -115,6 +115,12 @@ export type SpecEntry = {
   featureGroups?: string[];
   requirements: Requirement[];
   journeys?: Journey[];
+  /** The journey ids this capability has retired - the `## Retired`
+   * tombstones its journeys file keeps. Not journeys: nothing renders them
+   * and no anchor of this capability's own resolves to one. They are held
+   * because an id is permanent - archived suites still trace it, and a rule
+   * on another capability may still name the walk it stood for. */
+  retiredJourneys?: string[];
   /** The journeys file says `**Walked by:** nobody`: no end user reaches
    * this capability on its own, so it has no stories by decision rather
    * than by omission. */

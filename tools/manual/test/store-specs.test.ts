@@ -295,6 +295,41 @@ describe("the shape a change's journeys file is written in", () => {
       ].join("\n"),
     );
     expect(entry.journeys?.map((one) => one.id)).toEqual(["alpha-US-02"]);
+    expect(entry.retiredJourneys).toEqual(["alpha-US-01"]);
+  });
+
+  /** A durable file keeps the same id under `## Retired`, as one line. It is
+   * not a journey — nothing renders it — but a qualified anchor on another
+   * capability still resolves through it, and archived suites still trace it. */
+  it("reads the durable tombstone a retired journey leaves", () => {
+    const entry = journeys(
+      [
+        "# User journeys",
+        "",
+        "## User journeys",
+        "",
+        story("alpha-US-02", "Someone does another thing"),
+        "## Retired",
+        "",
+        "- `alpha-US-01` - Someone did the thing · removed in `drop-it` · 2026-09-17",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeys?.map((one) => one.id)).toEqual(["alpha-US-02"]);
+    expect(entry.retiredJourneys).toEqual(["alpha-US-01"]);
+  });
+
+  it("holds the tombstones of a file the journey reader refuses", () => {
+    const entry = journeys(
+      [
+        "## Retired",
+        "",
+        "- `alpha-US-01` - Someone did the thing · removed in `drop-it` · 2026-09-17",
+        "",
+      ].join("\n"),
+    );
+    expect(entry.journeysError).toBeDefined();
+    expect(entry.retiredJourneys).toEqual(["alpha-US-01"]);
   });
 
   it("refuses one id issued under two of the sections", () => {
