@@ -2,7 +2,7 @@
 
 **Author:** @jeffffej0909 - 2026-08-24
 
-Product context: [Watchlist](../../../docs/prds/products/grade10-site/auction/watchlist.md).
+Product context: [Watchlist](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications).
 Prerequisite for [`add-auction-notifications`](../add-auction-notifications/proposal.md):
 progress mail enrols when a collector watches **and** email alerts are on
 for that listing.

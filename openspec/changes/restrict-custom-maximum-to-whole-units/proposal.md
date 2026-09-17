@@ -44,7 +44,7 @@ that need correcting before Place Bid.
 - `openspec/specs/shared/ui/auction-listing/spec.md`
 - `@grade10/ui` auction-listing bid money helpers and
   `ListingQuickMaximumBidActions` (composed by `ListingAuctionBidCard`)
-- `docs/prds/products/grade10-site/auction/auto-bidding.md` decision row for
+- `docs/prds/products/grade10-site/auction/bidding.md#auction-logic` decision row for
   custom maximum entry precision
 - Storybook / preview bid panel stories for set and raise
 

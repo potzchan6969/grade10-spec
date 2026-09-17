@@ -46,4 +46,4 @@ None.
 
 ## References
 
-- [Listing Management · Operator actions](../../../docs/prds/products/grade10-admin/auction/listing.md#operator-actions)
+- [Auction Management · Listings](../../../docs/prds/products/grade10-admin/auction/management.md#listings)

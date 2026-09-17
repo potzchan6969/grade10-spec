@@ -1,7 +1,7 @@
 **Author:** @tangconst - 2026-09-10
 
-Product context: [Listing Details](../../../docs/prds/products/grade10-site/auction/listing-page.md),
-[My Auctions](../../../docs/prds/products/grade10-site/auction/account-record.md).
+Product context: [Listing Details](../../../docs/prds/products/grade10-site/auction/display.md#auction-details),
+[My Auctions](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications).
 
 ## Why
 

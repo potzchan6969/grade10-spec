@@ -111,4 +111,4 @@ None.
 - [Product identity](../../../docs/prds/products/grade10-admin/inventory/catalog.md#product-identity)
 - [Auction presentation](../../../docs/prds/products/grade10-admin/inventory/catalog.md#auction-presentation)
 - [Intake](../../../docs/prds/products/grade10-admin/inventory/catalog.md#intake)
-- [Listing Management](../../../docs/prds/products/grade10-admin/auction/listing.md)
+- [Auction Management · Listings](../../../docs/prds/products/grade10-admin/auction/management.md#listings)

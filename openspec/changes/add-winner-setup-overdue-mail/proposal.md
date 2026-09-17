@@ -1,7 +1,7 @@
 **Author:** @tangconst - 2026-09-17
 
-Product context: [Order Notifications](../../../docs/prds/products/grade10-site/auction/notifications-order.md),
-[Winner Order](../../../docs/prds/products/grade10-site/auction/winner-order.md).
+Product context: [Order Notifications](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order),
+[Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order).
 
 ## Why
 
@@ -75,5 +75,4 @@ None.
 
 ## References
 
-- [Order Notifications](../../../docs/prds/products/grade10-site/auction/notifications-order.md)
-- [Winner Order · Order Setup](../../../docs/prds/products/grade10-site/auction/winner-order.md#order-setup)
+- [Post-Bidding · Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order)

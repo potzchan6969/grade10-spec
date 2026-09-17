@@ -1,6 +1,6 @@
 **Author:** @jeffffej0909 - 2026-09-11
 
-Product context: [Lot Status](../../../docs/prds/products/grade10-site/auction/lot-status.md).
+Product context: [Lot Status](../../../docs/prds/products/grade10-site/auction/display.md#auction-details).
 
 ## Why
 
@@ -109,6 +109,5 @@ This change overrides these rules for hidden lots:
 
 ## References
 
-- [Lot Status · External Lot Status](../../../docs/prds/products/grade10-site/auction/lot-status.md#external-lot-status)
-- [Lot Status · Status Mapping](../../../docs/prds/products/grade10-site/auction/lot-status.md#status-mapping)
-- [Lot Status · Hidden Lots](../../../docs/prds/products/grade10-site/auction/lot-status.md#hidden-lots)
+- [Auction Display · Auction Details](../../../docs/prds/products/grade10-site/auction/display.md#auction-details)
+- [Bidding · My Auctions, Watchlist and Notifications](../../../docs/prds/products/grade10-site/auction/bidding.md#my-auctions-watchlist-and-notifications)

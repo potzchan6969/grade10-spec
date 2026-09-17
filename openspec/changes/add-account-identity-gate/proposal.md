@@ -115,3 +115,8 @@ was recognised for a second time.
   and read as a standing by a second product, without asking again: the
   consent given covers every Grade10 service, and says so. *Owner:
   Compliance.*
+
+## References
+
+- [Account · Verified Identity](../../../docs/prds/products/grade10-site/auction/account.md#verified-identity)
+- [Bidding · Auction Logic](../../../docs/prds/products/grade10-site/auction/bidding.md#auction-logic)
