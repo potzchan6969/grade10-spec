@@ -112,11 +112,13 @@ function changedSince(before, after) {
   return parts.length === 0 ? null : `has since ${parts.join(", ")}`;
 }
 
+/** The frontmatter's spec, and every spec a block embeds — a requirement, or
+ * a suite, which a chapter shows for each capability it holds. */
 function embeddedSpecs(ast) {
   const ids = new Set();
   if (ast.frontmatter.spec !== undefined) ids.add(ast.frontmatter.spec);
   for (const block of everyBlock(ast.blocks)) {
-    if (block.type === "spec") ids.add(block.id);
+    if (block.type === "spec" || block.type === "cases") ids.add(block.id);
   }
   return [...ids];
 }

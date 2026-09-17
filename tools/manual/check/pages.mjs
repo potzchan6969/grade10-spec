@@ -259,9 +259,14 @@ function checkBlock(ctx, path, block) {
     }
     // What a page can get wrong about a suite is the id it names; whether the
     // suite itself holds together is asked of the store directory, so it is
-    // asked once and asked even where no page shows it.
+    // asked once and asked even where no page shows it. A page that shows a
+    // capability's suite names that capability: a chapter holding several
+    // capabilities names the first in its frontmatter and shows every other
+    // one under its own section, or its changes while it is still being
+    // introduced.
     case "cases": {
       ctx.cased.add(block.id);
+      ctx.referenced.add(block.id);
       if (!specs.has(block.id)) {
         add("reference", path, `${label(block, "id")} names no spec on disk`);
       }
@@ -278,6 +283,7 @@ function checkBlock(ctx, path, block) {
     case "next": {
       // Either may point at a capability that is still being introduced, so
       // an in-flight change's deltas resolve it as well as a durable spec.
+      if (block.type === "changes") ctx.referenced.add(block.spec);
       if (specs.has(block.spec) || ctx.changing.has(block.spec)) break;
       add(
         "reference",
