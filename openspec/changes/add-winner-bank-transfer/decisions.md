@@ -44,10 +44,21 @@ numbers.
 
 ## Raised
 
-The blind readings of 2026-09-16 asked eight questions the isolated input did
-not settle. Each lands on a `Decisions` row above; two of them land on the same
-one. The suites carry the same answers against the grilling round's own
+These are the eight questions the suites' reconciliation tables record as
+raised and answered. Each lands on a `Decisions` row above; two of them land on
+the same one. The suites carry the same answers against the grilling round's own
 numbering.
+
+The five suites still hold `## Raised` sections of their own, listing 32
+questions between them. The 24 not tabled here are answered by the grilling
+round but were never written back as landings, and eight have no recorded
+answer at all — the invoice log entry for a winner upload, two operators acting
+on one proof check, a replaced invoice PDF's home, the three sets of bank
+details on the transfer PDF, what Winner Order shows for a stopped deadline,
+whether file type is read from content or extension, the stopped deadline's
+precision, and whether this change carries `post-sale-US-05` as a context
+journey. They owe the change's author a landing each, and `pnpm run
+tcs:validate` refuses the five suites until every one of them has it.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
