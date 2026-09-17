@@ -6,12 +6,13 @@ order: 14
 
 Order Notifications are the transactional letters that begin when an auction lot closes with a winner. They identify the lot, use the winner's registered email address, and stop or retry according to the order's current facts. Unless a letter names another primary action (for example track-and-trace), every CTA opens that lot's [Winner Order](/p/grade10-site/auction/winner-order); signed out, Grade10's sign-in runs first. On every order letter, the lot image and lot title also open Winner Order. Only the payment-received letter attaches a PDF, the receipt; the invoice PDF lives on Winner Order.
 
-- **Winning** — the auction-won letter identifies the lot, asks the winner to confirm a delivery address, and names the address deadline (`Confirm by …`); it names no amount because no invoice exists yet
-- ❓ **Address reminder** — whether Grade10 re-asks for a delivery address while the order stays Awaiting Address, and at which hours after close; draft letters also name the address deadline
+- 🚧 **Winning** — the auction-won letter identifies the lot, asks the winner to complete order setup as bullets (delivery address, payment method, billing address), and names the setup deadline (`Confirm by …`); it names no amount because no invoice exists yet
+- 🚧 **Setup reminder** — at **24 hours** and **72 hours** after lot close while order setup is incomplete; same setup bullets and `Confirm by …`; CTA Complete order setup
+- 🚧 **Setup overdue** — when the setup deadline passes: self-service setup is closed; Contact Us for manual review; may face penalties or extra charges (what those are is ❓); order may be cancelled and the lot re-listed after review — no automatic cancel. Copy speaks of order setup generically, not the three fields
 - 🚧 **Payment reminder** — one letter kind for the unpaid invoice: first when an operator sends the invoice (invoice total, `Pay by …`, payment window starts; no PDF), then on **day 3** and **day 6** after that send while the invoice stays `pending`, measured from invoice send (the same clock as the 7-day payment window). CTA to Winner Order to pay. There is no separate invoice-sent letter
-- 🚧 **Final notice** — last payable reminder **24 hours before** the payment deadline, while the invoice is still `pending` and self-service Pay is still offered — not at the expiry instant. The invoice-expired letter covers what happens after the deadline
+- 🚧 **Final notice** — last payable reminder **24 hours before** the payment deadline, while the invoice is still `pending` and self-service Pay is still offered — not at the expiry instant
 - 🚧 **Reminders on hold** — no payment reminder or final notice goes out while payment proof is being checked; the sequence resumes if the proof is not accepted
-- **Invoice expired** — says what remains owed and how to resolve it
+- 🚧 **Payment overdue** — when the payment deadline passes and the invoice is `expired`: replaces the invoice-expired letter; names what remains owed; self-service Pay is closed; Contact Us for manual review; may face penalties or extra charges; order may be cancelled and the lot re-listed after review
 - 🚧 **Proof not accepted** — the reason the operator gave, and the new payment deadline (`Pay by …`); no letter goes out when proof is uploaded
 - **Invoice reissued** — confirms the new invoice and deadline
 - **Payment** — the address, payment, decline, receipt, and deadline events that change what the winner should do
@@ -31,13 +32,17 @@ Post-close mail has a different job from bidding mail: it tells one winner what 
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Address reminder cadence | ❓ Open | Draft: 24h and 72h after close while Awaiting Address; product confirms count and copy. | Product |
-| Letter CTA | Decided | Default CTA opens that lot's Winner Order; sign-in first when signed out. Lot image and lot title always open Winner Order. Shipped letter: primary = carrier track-and-trace; secondary = Winner Order. | Product (@tangconst) |
-| PDF attachments | 🚧 In flight | Only payment-received attaches a PDF — the receipt, named by its receipt ID. Payment-reminder and final-notice letters attach no PDF; the invoice opens from Winner Order. | Product (@jeffffej0909, @tangconst) |
+| Setup reminder cadence | 🚧 In flight | **24h** and **72h** after lot close while order setup is incomplete. Renames address reminder. | Product (@tangconst) |
+| Setup in mail | 🚧 In flight | Auction-won and setup-reminder name delivery address, payment method, and billing address as bullets. Setup-overdue stays generic (“order setup”). | Product (@tangconst) |
+| Setup overdue | 🚧 In flight | Self-service setup closed; Contact Us; manual review; may cancel and re-list after review; no automatic cancel. Penalties or extra charges named in copy while durable rules for a setup miss stay ❓. | Product (@tangconst) |
+| Payment overdue | 🚧 In flight | Replaces invoice-expired as the post-deadline letter: amount owed, Contact Us, manual review, penalties or extra charges, may cancel and re-list after review. | Product (@tangconst) |
+| Overdue penalties | ❓ Open | What “penalties or extra charges” means after setup miss vs payment miss (suspension already covers payment expiry). | Product (@tangconst) |
+| Letter CTA | Decided | Default CTA opens that lot's Winner Order; sign-in first when signed out. Lot image and lot title always open Winner Order. Overdue letters: primary = Contact Us; secondary = View order. Shipped letter: primary = carrier track-and-trace; secondary = Winner Order. | Product (@tangconst) |
+| PDF attachments | 🚧 In flight | Only payment-received attaches a PDF — the receipt, named by its receipt ID. Payment-reminder, final-notice, and overdue letters attach no PDF; the invoice opens from Winner Order. | Product (@jeffffej0909, @tangconst) |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
-| Address deadline in mail | Decided | Auction-won and address-reminder letters name `Confirm by …` (absolute datetime, winner's zone). | Product (@tangconst) |
+| Address deadline in mail | Decided | Auction-won and setup-reminder letters name `Confirm by …` (absolute datetime, winner's zone). | Product (@tangconst) |
 | Payment-reminder cadence | 🚧 In flight | Schedule from invoice send: first letter at send (retires invoice-sent as its own kind), then day 3 and day 6 while `pending`. Not “N days before due.” | Product (@tangconst) |
-| Final notice timing | 🚧 In flight | 24 hours before the payment deadline, while Pay is still offered. Replaces “day 7 immediately before expiry,” which can arrive after self-service Pay has ended. Invoice-expired covers the end. | Product (@tangconst) |
+| Final notice timing | 🚧 In flight | 24 hours before the payment deadline, while Pay is still offered. Replaces “day 7 immediately before expiry.” Payment overdue covers the end. | Product (@tangconst) |
 | Payment-reminder content | 🚧 In flight | Invoice total and `Pay by …`; CTA View invoice and pay; does not name a payment method. Copy escalates on later letters. | Product (@tangconst) |
 | Payment-received content | 🚧 In flight | Amount paid, `Received {date}`, payment method (card brand + masked digits, or `Bank Transfer` only), order being processed, quiet Receipt ID line, receipt PDF attached, CTA to Winner Order. | Product (@tangconst) |
 | Shipped content | Decided | Delivery address first; tracking as carrier + number with shipped time; primary CTA is track-and-trace; secondary CTA is Winner Order, on one row. | Product (@tangconst) |

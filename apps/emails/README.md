@@ -63,8 +63,9 @@ emails/
     close/                 lot ended for watchers & non-winners
                            (watcher previews: lot-watched-sold /
                            lot-watched-ended = no-bids Ended-only)
-    order/                 winner success, address reminder, payment reminder
-                           (send / day-three / day-six / final), payment
+    order/                 winner success, setup reminder (first / second),
+                           payment reminder (send / day-three / day-six /
+                           final), setup overdue, payment overdue, payment
                            received, shipped (post-sale)
 ```
 
