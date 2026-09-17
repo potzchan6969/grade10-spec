@@ -21,6 +21,12 @@ an anonymous one names the device, and signing in links that device to the
 person so a visit does not read as two strangers. Which events a product records
 is that product's business.
 
+## How Long It Lasts
+
+- ❓ **Session lifetime** — nobody has written how long a session lasts, or
+  what ends one besides signing out. The sign-in link's own five minutes do
+  not bound it: the link is spent the moment it creates the session.
+
 ## Open Tabs
 
 A session belongs to the browser, not to one tab. Every tab of this brand is

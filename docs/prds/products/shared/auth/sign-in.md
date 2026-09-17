@@ -33,8 +33,8 @@ followed.
 - **Resend wait** — Resend stays off for sixty seconds after each
   successful send, and the button counts down as **Resend (45)** (seconds
   left in parentheses). It turns on again at zero.
-- **Link lifetime** — a sign-in link lasts sixty seconds; after that it
-  is expired.
+- 🚧 **Link lifetime** — a sign-in link lasts five minutes, and the email
+  carrying it says five minutes; after that it is expired.
 - **Email-step wording** — the send action reads **Sign In with Email**;
   collectors never see the term magic link on the dialog.
 - **Leaving the confirmation** — dismissing the dialog is the way out.
@@ -88,6 +88,8 @@ path, the link, beside Google.
 | Figma `OTP Dialog` frame | ❓ Open | Retire, or keep as reference for the second-factor dialog. | Design |
 | Failed link follow copy | Decided | Expired is its own toast; used, replaced, and invalid share one; banned is its own and does not nudge a resend. | Product |
 | Link while signed in as someone else | Decided | No automatic switch. Warning toast: title names the mismatch; description names the link’s email. Switch enters that account; Stay or dismiss keeps the current session. | Product |
+| Link lifetime | Decided | Five minutes, and the email says five minutes. Sixty seconds was shorter than delivery, so a collector reading mail on another device met a dead link. | Product |
+| How a locale writes the number | ❓ Open | A digit in every language, or each language's own word for five. | Product |
 
 Measured on the share of email sign-ins that end in a session, from the send
 to the session.
