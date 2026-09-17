@@ -77,7 +77,7 @@ new visual state for them.
 | State | Source scenario |
 | --- | --- |
 | Filled rows show the supplied lot, auction, bid, derived status, View lot and one next action | `grade10-site-auction-auction-orders-SC-01`, `SC-05`–`SC-09` |
-| Awaiting Address and Pending Payment rows are ordered before settled rows; newest close wins within each band | `grade10-site-auction-auction-orders-SC-03`, `SC-04` |
+| Awaiting Setup and Pending Payment rows are ordered before settled rows; newest close wins within each band | `grade10-site-auction-auction-orders-SC-03`, `SC-04` |
 | An expired invoice still reads Pending Payment and keeps Pay Invoice | `grade10-site-auction-auction-orders-SC-07` |
 | Empty list offers My Auctions and is not an error | `grade10-site-auction-auction-orders-SC-10` |
 | Failed read offers retry and is not rendered as empty | `grade10-site-auction-auction-orders-SC-11` |

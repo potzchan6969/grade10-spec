@@ -416,7 +416,7 @@ Grade10 SHALL NOT compute a second status for the operator.
 | Live | Bidding open, until the lot closes | Before a sale | No |
 | Unsold | Bidding ended with no winner | Before a sale | No |
 | Called off | The lot was withdrawn before a sale | Before a sale | No |
-| Awaiting Address | Derived: no invoice sent, no confirmed address | Order | No |
+| Awaiting Setup | Derived: no invoice sent, no confirmed address | Order | No |
 | Preparing Invoice | Derived: no invoice sent, address confirmed | Order | **Yes** |
 | Payment Verifying | Derived: invoice `payment_verifying` | Order | **Yes** |
 | Pending Payment | Derived: invoice `pending` or `expired` | Order | **Yes** when the invoice is `expired` |
@@ -431,7 +431,7 @@ a visual mark showing this label rather than an internal code, and two
 families SHALL NOT share a mark. A row whose outcome needs action SHALL carry
 an additional highlight. A Pending Payment row whose invoice is `expired`
 SHALL also show the invoice status Expired beside its outcome. A row in
-Awaiting Address or Preparing Invoice that
+Awaiting Setup or Preparing Invoice that
 has waited 72 hours or more in that stage SHALL also carry the Overdue mark,
 per "The order detail shows how long an order has waited".
 
@@ -480,7 +480,7 @@ with its id. The title is historical: a lot inside its last hour is Live.
   Address, both confirmed or closed less than 72 hours ago
 - **WHEN** an operator reads it
 - **THEN** the Preparing Invoice row carries the needs-action highlight
-- **AND** the Awaiting Address row does not
+- **AND** the Awaiting Setup row does not
 
 #### Scenario: grade10-admin-auction-post-sale-SC-116 - Proof waiting for a check needs action
 **Serves:** post-sale-US-01 - Operator works the listing queue by outcome
@@ -549,10 +549,10 @@ disabled, and Grade10 SHALL refuse the same action on the server.
 #### Scenario: grade10-admin-auction-post-sale-SC-49 - No invoice is sent without a confirmed address
 **Serves:** Quote and send - no invoice without a confirmed address
 
-- **GIVEN** an auction order in Awaiting Address
+- **GIVEN** an auction order in Awaiting Setup
 - **WHEN** an operator attempts to send its invoice
 - **THEN** Grade10 refuses it
-- **AND** the order is still Awaiting Address
+- **AND** the order is still Awaiting Setup
 
 #### Scenario: grade10-admin-auction-post-sale-SC-50 - Staff cannot send an invoice
 **Serves:** Quote and send - the send needs payment-processing
@@ -770,7 +770,7 @@ an auction order that is unpaid.
 | Reissue | Replaces the current invoice with a new `pending` one, per "An operator reissues a sent invoice". The order reads Pending Payment | On an order whose invoice is `pending` or `expired` |
 | Confirm or return proof | Settles the invoice or returns it to `pending`, per "An operator checks payment proof" | On an order whose invoice is `payment_verifying` |
 | Settle manually | Records a payment with its method and proof, per "Manual settlement records the method and its proof". Invoice status becomes `paid`, so the order derives as Processing | On an order whose bank transfer invoice is `pending` or `expired` |
-| Cancel order | Invoice status becomes `cancelled`. The lot returns to available | On an Awaiting Address or Preparing Invoice order, or one whose invoice is `expired` |
+| Cancel order | Invoice status becomes `cancelled`. The lot returns to available | On an Awaiting Setup or Preparing Invoice order, or one whose invoice is `expired` |
 
 While an invoice is `payment_verifying`, Grade10 SHALL offer only Confirm and
 Return, and SHALL refuse Reissue, manual settlement and Cancel.
@@ -814,7 +814,7 @@ explicit action.
 #### Scenario: grade10-admin-auction-post-sale-SC-54 - An overdue order waiting on an address can be cancelled
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** an auction order in Awaiting Address carrying the Overdue mark
+- **GIVEN** an auction order in Awaiting Setup carrying the Overdue mark
 - **AND** an operator holding payment-processing
 - **WHEN** they cancel it with a reason
 - **THEN** the order derives as Cancelled and the lot returns to available

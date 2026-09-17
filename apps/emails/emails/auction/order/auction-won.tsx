@@ -32,7 +32,7 @@ export default function AuctionWonEmail({
       brandName={brandName}
       campaign="auction_won"
       canUnsubscribe={false}
-      ctaLabel="Complete order setup"
+      ctaLabel="Complete Order Setup"
       details={[{ label: "Confirm by", value: setupDeadline }]}
       heading="You won this lot"
       highlight={{
@@ -43,7 +43,7 @@ export default function AuctionWonEmail({
       listingUrl={orderUrl}
       lotTitle={lotTitle}
       points={[...previewLot.setupFields]}
-      preheader={`Complete order setup by ${setupDeadline}.`}
+      preheader={`Complete Order Setup by ${setupDeadline}.`}
       primaryImageUrl={primaryImageUrl}
       whyYouGotThis="You won this auction lot on Grade10."
     />

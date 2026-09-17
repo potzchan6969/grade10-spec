@@ -11,7 +11,7 @@ have won, one row per order, with the one action each order needs next.
   - Entry points: the account menu and each Won row on My Auctions.
 - **Row actions**
   - View lot: opens the lot's listing page.
-  - Next action: Confirm address, Pay Invoice or View detail by order status.
+  - Next action: Complete Order Setup, Pay Invoice or View detail by order status.
 - **Honest reads**
   - Owner only: the list is resolved from the session.
   - Empty and failed: an empty list points to My Auctions; a failed read retries.
@@ -31,7 +31,7 @@ any input that selects another collector's orders.
 | Winning bid | Integer count of minor units with an ISO 4217 currency code |
 | Order status | The derived status, per `grade10-site/auction/order-status` |
 
-Rows SHALL order in two bands: orders whose status is Awaiting Address or
+Rows SHALL order in two bands: orders whose status is Awaiting Setup or
 Pending Payment first, then every other order. Within each band, the most
 recently closed lot SHALL come first.
 
@@ -75,7 +75,7 @@ order, per `grade10-site/auction/winner-order`.
 
 | Order status | Action |
 | --- | --- |
-| Awaiting Address | Confirm address |
+| Awaiting Setup | Complete Order Setup |
 | Pending Payment | Pay Invoice |
 | Preparing Invoice | View detail |
 | Processing | View detail |
@@ -90,11 +90,11 @@ offer Pay Invoice.
 No row SHALL record payment, change an address, or change an order status from
 the list itself.
 
-#### Scenario: grade10-site-auction-auction-orders-SC-05 - An order awaiting an address offers Confirm address
+#### Scenario: grade10-site-auction-auction-orders-SC-05 - An order awaiting setup offers Complete Order Setup
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
-- **GIVEN** an order whose status is Awaiting Address
-- **WHEN** the winner selects Confirm address on its row
+- **GIVEN** an order whose status is Awaiting Setup
+- **WHEN** the winner selects Complete Order Setup on its row
 - **THEN** that order opens
 
 #### Scenario: grade10-site-auction-auction-orders-SC-06 - An unpaid order offers Pay Invoice

@@ -26,7 +26,7 @@
 
 **Pre-conditions:**
 
-* customer(winner of <lot_1>) is signed in on <grade10 winner order url> for <lot_1>, status Awaiting Address.
+* customer(winner of <lot_1>) is signed in on <grade10 winner order url> for <lot_1>, status Awaiting Setup.
 
 **Test data:**
 
@@ -63,7 +63,7 @@
 
 **Pre-conditions:**
 
-* customer(winner of <lot_1>) is signed in on <grade10 winner order url> for <lot_1>, status Awaiting Address.
+* customer(winner of <lot_1>) is signed in on <grade10 winner order url> for <lot_1>, status Awaiting Setup.
 
 **Test data:**
 
@@ -101,7 +101,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of <lot_2>) is signed in on <grade10 winner order url> for <lot_2>, status Awaiting Address.
+* customer(winner of <lot_2>) is signed in on <grade10 winner order url> for <lot_2>, status Awaiting Setup.
 
 **Test data:**
 
@@ -137,7 +137,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of <lot_1>) is signed in on <grade10 winner order url> for <lot_1>, status Awaiting Address.
+* customer(winner of <lot_1>) is signed in on <grade10 winner order url> for <lot_1>, status Awaiting Setup.
 
 **Steps:**
 
@@ -169,7 +169,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer(winner of <lot_1>) is signed in on <grade10 winner order url> for <lot_1>, status Awaiting Address.
+* customer(winner of <lot_1>) is signed in on <grade10 winner order url> for <lot_1>, status Awaiting Setup.
 
 **Steps:**
 
@@ -181,7 +181,7 @@ Runs once per row of **Test data**.
 
 * Neither method was selected when the choice opened.
 * The confirmation is refused.
-* The order still reads Awaiting Address.
+* The order still reads Awaiting Setup.
 
 
 ### winner-order-US1-TC17-1: Card invoice prices the fee as the provider gross-up
@@ -747,7 +747,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer(winner of <lot_1>) is signed in on <grade10 winner order url>.
-* <lot_1> is an HKD lot that reads Awaiting Address.
+* <lot_1> is an HKD lot that reads Awaiting Setup.
 
 **Steps:**
 
@@ -1169,7 +1169,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Choose one PDF file under 10 MB.
+1. Choose one PDF file under 5 MB.
 2. Submit the upload.
 3. Accept the confirm step.
 
@@ -1180,7 +1180,7 @@ Runs once per row of **Test data**.
 * Card Pay and further upload are hidden.
 * The chosen file and its name are not shown on the order.
 
-### winner-order-US9-TC3-1: One to five files of each allowed type are accepted
+### winner-order-US9-TC3-1: One to three files of each allowed type are accepted
 
 Runs once per row of **Test data**.
 
@@ -1208,7 +1208,8 @@ Runs once per row of **Test data**.
 | --- |
 | 1 JPEG (lower limit) |
 | 1 PNG |
-| 5 files mixing PDF, JPEG and PNG (upper limit) |
+| 1 HEIC (converted to JPEG on upload) |
+| 3 files mixing PDF, JPEG and PNG (upper limit) |
 
 **Steps:**
 
@@ -1217,7 +1218,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The upload is accepted, all <files> kept.
+* The upload is accepted, all <files> kept (HEIC stored as JPEG).
 * The order reads Payment Verifying.
 
 ### winner-order-US9-TC4-1: Too few or too many files are refused
@@ -1247,7 +1248,7 @@ Runs once per row of **Test data**.
 | <files> |
 | --- |
 | 0 files |
-| 6 files, each allowed and under 10 MB |
+| 4 files, each allowed and under 5 MB |
 
 **Steps:**
 
@@ -1259,7 +1260,7 @@ Runs once per row of **Test data**.
 * The upload is refused and says why.
 * The order still reads Pending Payment; the deadline runs.
 
-### winner-order-US9-TC5-1: A file of exactly 10,485,760 bytes is accepted
+### winner-order-US9-TC5-1: A file of exactly 5,242,880 bytes is accepted
 
 **Classification:**
 
@@ -1281,7 +1282,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Choose one PDF of exactly 10,485,760 bytes.
+1. Choose one PDF of exactly 5,242,880 bytes.
 2. Submit and accept the confirm step.
 
 **Expected Results:**
@@ -1290,7 +1291,7 @@ Runs once per row of **Test data**.
 * The order reads Payment Verifying.
 
 
-### winner-order-US9-TC16-1: A file over the 10 MB limit is refused
+### winner-order-US9-TC16-1: A file over the 5 MB limit is refused
 
 **Classification:**
 
@@ -1312,12 +1313,12 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Choose one PDF of 10,485,761 bytes, with two small PNGs.
+1. Choose one PDF of 5,242,881 bytes, with two small PNGs.
 2. Submit the upload.
 
 **Expected Results:**
 
-* The whole upload is refused, naming the 10 MB limit.
+* The whole upload is refused, naming the 5 MB limit.
 * None of the three files is stored.
 * The order still reads Pending Payment.
 
@@ -2060,8 +2061,8 @@ Runs once per row of **Test data**.
 | `winner-order-US9-TC1-1`: three ways to pay and the reference | Matches `winner-order-SC-95`; the account details are TBC and whether the PDF carries them is open, so the case stays blocked |
 | `winner-order-US9-TC2-1`: upload moves the order to Payment Verifying | Matches `winner-order-SC-99`; "no file name shown" added per decision 7 |
 | `winner-order-US9-TC3-1`, `winner-order-US9-TC4-1`: one to five files | Match `winner-order-SC-99` and `winner-order-SC-100` |
-| `winner-order-US9-TC5-1`: a file at the 10 MB limit | Settled by decision 10; folded as `winner-order-SC-116` |
-| `winner-order-US9-TC16-1`: a file over 10 MB | Settled by decision 10; matches `winner-order-SC-100`, which now refuses the whole upload |
+| `winner-order-US9-TC5-1`: a file at the 5 MB limit | Settled by decision 10 / Q13; folded as `winner-order-SC-116` |
+| `winner-order-US9-TC16-1`: a file over 5 MB | Settled by decision 10 / Q13; matches `winner-order-SC-100`, which now refuses the whole upload |
 | `winner-order-US9-TC6-1`: a file of another type | Settled by decision 10 for the whole set; matches `winner-order-SC-100`. The renamed-executable row moved to `winner-order-US9-TC17-1`, which stays blocked |
 | `winner-order-US9-TC7-1`: backing out stores nothing | Matches `winner-order-SC-102` |
 | `winner-order-US9-TC8-1`: the deadline while proof is checked | Answered by `winner-order-SC-108` and the upload requirement: no date, no running deadline. The case now expects that; the blocked line is removed |
@@ -2104,7 +2105,7 @@ Runs once per row of **Test data**.
 7. **What the winner sees of proof**: a confirmed-proof receipt reads Bank transfer and is not marked manually settled. No proof file or file name reaches the winner anywhere; only the Payment Verifying state shows that proof was sent.
 8. **Non-card settlement of a card invoice**: reissue as bank transfer first (fee usually 0), then record the settlement. Settlement is always at the current invoice's full order total.
 9. **Operator files on Confirm**: 0 to 5, PDF, JPEG or PNG, 10 MB each.
-10. **File rules**: 10 MB is 10,485,760 bytes. One wrong or oversize file refuses the whole upload and stores nothing. An upload that fails part-way stores nothing and may be retried; the one-upload rule applies once an upload succeeds.
+10. **File rules (winner)**: **1 to 3** files (**1** required); PDF, PNG, JPG or HEIC; **5 MB** (5,242,880 bytes) each; **15 MB** (15,728,640 bytes) total. HEIC is stored as JPEG. One wrong or oversize file refuses the whole upload and stores nothing. An upload that fails part-way stores nothing and may be retried; the one-upload rule applies once an upload succeeds.
 11. **Who reads proof files**: any operator who can open the order; never the winner.
 12. **Identifier formats**: invoice ID `INV-[YYYYMM]-[LISTING_ID]-[SEQ]`, receipt ID `REC-[YYYYMM]-[LISTING_ID]-[SEQ]-P[INDEX]`, bank reference `[LISTING_ID][SEQ]` of 8 or 9 capital letters and digits, with a Copy Reference Code control. It fits SWIFT's 35-character line.
 13. **Listing code**: `L` and 5 characters with no `0`, `O`, `1` or `I`, hashed from the listing's internal id, hashed again with a counter on a clash, stored, unique, never changed or reused, and assigned by publish.
@@ -2124,7 +2125,7 @@ Decisions 24 to 27 are from the lock patch, 2026-09-17. They reverse decision 4'
 24. **The winner's choice locks on confirmation**: once the winner confirms the address and method, the order reads Preparing Invoice and the winner changes neither, before or after send. Before confirming, the winner chooses freely.
 25. **An operator edits before send**: in Preparing Invoice, an operator holding payment-processing changes the address, the method or both, on the winner's request, with a required reason, written to the invoice log. The order stays Preparing Invoice, the winner sees the new values, and the waiting time does not reset. Bank transfer is refused where the currency has no bank details. How the winner asks is Design's.
 26. **After send**: unchanged; only an operator changes them, through a reissue.
-27. **Address book**: editing or archiving a saved address never changes an order's snapshot. Archiving is refused only for an address selected on an order still in Awaiting Address and not yet confirmed.
+27. **Address book**: editing or archiving a saved address never changes an order's snapshot. Archiving is refused only for an address selected on an order still in Awaiting Setup and not yet confirmed.
 
 Decisions 1, 4, 6, 7, 8 and 10 changed the cases named above in the grilling round; decisions 12, 15, 17 and 21 changed them in the identifier patch; decision 24 changed `winner-order-US1-TC23-1` in the lock patch.
 

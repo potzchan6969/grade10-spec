@@ -84,7 +84,7 @@
 
 * The confirmation is refused.
 * The order holds no confirmed delivery address.
-* The order still reads Awaiting Address.
+* The order still reads Awaiting Setup.
 
 ### winner-order-US8-TC3-1: A missed address deadline refuses a change to a confirmed address
 
@@ -356,7 +356,7 @@
 - **A confirmation sent before the mark and arriving after it.** The window is stated as a datetime, and nothing says which clock decides a confirmation submitted at 47:59 that reaches Grade10 at 48:01. TC2 asserts the refusal at the mark and says nothing about the race.
 - **What the address deadline is measured from when a lot is extended.** The 48 hours run from lot close; a lot whose close moved by extended bidding has two closes, and the input names neither as the one that starts the window.
 - **Whether a reopen after send does anything.** The address is locked at send and a later change goes through an operator re-quote, so TC11 reads the lock as absolute. Nothing says whether a reopen is refused, ignored, or unlocks the locked address.
-- **What a missed address deadline does to the reminder letters.** Reminders are said to end when the order is no longer self-service payable; an order stalled in Awaiting Address was never payable, and nothing says whether it is chased, and for how long.
+- **What a missed address deadline does to the reminder letters.** Reminders are said to end when the order is no longer self-service payable; an order stalled in Awaiting Setup was never payable, and nothing says whether it is chased, and for how long.
 - **Whether a winner may add a new address to the account while the address form is closed.** The refusal is stated on the order's confirmation, not on the account address book, and the two are different writes.
 - **Traces on this delta.** The change's `user-journeys.md` for this capability carries only `winner-order-US-08`, so the cases covering behaviour this change moves — nothing to pay at close, the lock at send, seven days from send — trace `## Feature set` root groups rather than the journeys that walk them, which live in the durable file.
 

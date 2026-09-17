@@ -45,6 +45,10 @@ answers carry the round's own numbers.
 | Q10 | Which invoice states may enter Payment Verifying? | `pending` only | Letting an expired invoice take proof |
 | Q11 | Can a Payment Verifying invoice be expired? | No — the deadline stops while proof is checked (grilling decision 1) | An expiry that runs under the check, needing a rule for proof returned after it |
 | Q12 | Is the stopped deadline kept as a duration, and to what precision? | As a duration — the time left at the pause. The precision is the tech design's | Writing a fresh absolute deadline at every pause |
+| Q13 | How many proof files, which types, and what size limits? | **1 to 3** files (**1** required); PDF, PNG, JPG, or HEIC; **5 MB** each; **15 MB** total; HEIC stored as JPEG for operators | 1 to 5 files of PDF/JPEG/PNG at 10 MB each |
+| Q14 | Where do Invoice and Receipt PDF controls sit on Winner Order? | **Invoice** is a text link beside the Order summary heading; **Receipt** is a text link under the payment-method card. They are not paired on one row | Both as outline buttons, or both on the same summary row |
+| Q15 | Which bank-detail fields get a copy control on Submit Payment Proof? | Account number / IBAN, total amount due, and the transfer reference each have an icon copy control with success toast | Copy Reference Code only |
+| Q16 | Is proof upload a shared design-system primitive? | Yes — `FileDropzone` / `FileDropzoneTarget` / `FileDropzoneFileList` under `packages/design-system` (`@grade10/design-system/components/forms/file-dropzone`) for HEIC convert, limits, and reject reasons | `@grade10/ui` block; page-local dropzone only |
 
 ## Raised
 

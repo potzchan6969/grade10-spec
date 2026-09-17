@@ -42,7 +42,7 @@ too short.
 - **The account address book stays open.** Only putting an address on this
   order is refused.
 - **The order status does not move.** A new condition gates the winner's write;
-  the order still reads Awaiting Address or Preparing Invoice.
+  the order still reads Awaiting Setup or Preparing Invoice.
 - **An expired invoice is paid only in the admin portal.** An operator settles
   it manually; a reissue is the only way back to the winner's card.
 - **A card payment started in time counts.** One Grade10 received before the

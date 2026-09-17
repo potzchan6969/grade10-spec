@@ -1,7 +1,7 @@
 ## Feature set
 
 - Queue
-  - Two states before an invoice: Awaiting Address waits on the winner, Preparing Invoice waits on an operator and needs action
+  - Two states before an invoice: Awaiting Setup waits on the winner, Preparing Invoice waits on an operator and needs action
   - Overdue mark: an order idle 72 hours or more in either stage is marked, so a stalled order is chased rather than forgotten
   - Expired invoices: an order whose invoice has expired reads Pending Payment and is highlighted as needing action
 - Quote and send
@@ -21,7 +21,7 @@
 ### Requirement: An operator reopens the address form
 
 An operator holding payment-processing SHALL be able to reopen the address
-form on an auction order in Awaiting Address or Preparing Invoice whose
+form on an auction order in Awaiting Setup or Preparing Invoice whose
 address deadline has passed:
 
 1. Open the order and read when its address deadline passed and how many times
@@ -34,7 +34,7 @@ hours from the moment of the reopen, per
 `grade10-site/auction/winner-order`, and SHALL write a reopened entry to the
 invoice log carrying the named operator, the timestamp and the reason.
 
-A reopen SHALL change no status: the order SHALL read Awaiting Address or
+A reopen SHALL change no status: the order SHALL read Awaiting Setup or
 Preparing Invoice exactly as it did before, its invoice status SHALL stay
 `not_issued`, and no order SHALL be suspended or cancelled by it. Grade10
 SHALL place no limit on how many times one order's address form is reopened.
@@ -55,12 +55,12 @@ write again.
 #### Scenario: grade10-admin-auction-post-sale-SC-75 - A reopen gives a fresh 48 hours
 **Serves:** post-sale-US-09 - Operator reopens the address form
 
-- **GIVEN** an auction order in Awaiting Address whose address deadline was
+- **GIVEN** an auction order in Awaiting Setup whose address deadline was
   at 2026-09-14T09:00:00Z
 - **AND** an operator holding payment-processing
 - **WHEN** they reopen the address form with a reason at 2026-09-16T14:00:00Z
 - **THEN** the order's address deadline is 2026-09-18T14:00:00Z
-- **AND** the order still derives as Awaiting Address
+- **AND** the order still derives as Awaiting Setup
 - **AND** the winner can confirm a delivery address again
 
 #### Scenario: grade10-admin-auction-post-sale-SC-76 - A reopen without a reason is refused
@@ -100,7 +100,7 @@ write again.
 #### Scenario: grade10-admin-auction-post-sale-SC-80 - Reopening before the deadline is refused
 **Serves:** post-sale-US-09 - Operator reopens the address form
 
-- **GIVEN** an auction order in Awaiting Address whose address deadline is
+- **GIVEN** an auction order in Awaiting Setup whose address deadline is
   at 2026-09-18T14:00:00Z
 - **WHEN** an operator attempts to reopen the address form at 2026-09-17T10:00:00Z
 - **THEN** Grade10 refuses it
@@ -127,7 +127,7 @@ write again.
 #### Scenario: grade10-admin-auction-post-sale-SC-84 - An operator records the address without reopening
 **Serves:** post-sale-US-09 - Operator reopens the address form
 
-- **GIVEN** an auction order in Awaiting Address whose address deadline was
+- **GIVEN** an auction order in Awaiting Setup whose address deadline was
   at 2026-09-14T09:00:00Z
 - **WHEN** an operator holding payment-processing records the delivery address
   the winner gave them by telephone

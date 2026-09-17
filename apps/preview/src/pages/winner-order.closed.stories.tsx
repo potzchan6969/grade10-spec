@@ -10,6 +10,15 @@ const meta = {
   ...winnerOrderMeta(),
   title: "My Auctions/Winner Order/Closed",
   args: { status: "cancelled" },
+  parameters: {
+    ...winnerOrderMeta().parameters,
+    docs: {
+      description: {
+        component:
+          "Winner Order closed outcomes (Cancelled, Refunded). No progress stepper; Invoice/Receipt links follow the same placement rules as Payment and Delivery.",
+      },
+    },
+  },
 } satisfies Meta<typeof WinnerOrderPage>;
 
 export default meta;

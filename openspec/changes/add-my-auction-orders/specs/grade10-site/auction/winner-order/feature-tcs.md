@@ -212,7 +212,7 @@
 
 **Pre-conditions:**
 
-* customer(winner) holds an order that reached Awaiting Address, Preparing Invoice, Pending Payment and Processing.
+* customer(winner) holds an order that reached Awaiting Setup, Preparing Invoice, Pending Payment and Processing.
 
 **Steps:**
 
@@ -300,7 +300,7 @@
 
 **Pre-conditions:**
 
-* customer(winner) holds an order in Awaiting Address.
+* customer(winner) holds an order in Awaiting Setup.
 
 **Test data:**
 
@@ -338,7 +338,7 @@
 
 **Pre-conditions:**
 
-* customer(winner) holds an order in Awaiting Address.
+* customer(winner) holds an order in Awaiting Setup.
 
 **Steps:**
 
@@ -350,4 +350,4 @@
 
 * The address is refused.
 * An error shows on Town/City and on Postal Code.
-* The order status still reads Awaiting Address.
+* The order status still reads Awaiting Setup.

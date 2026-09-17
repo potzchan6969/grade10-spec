@@ -173,6 +173,10 @@ one locale rule:
 - **Modal titles** — Title Case for English `DialogTitle` / Modal headings
   (`Sign In to Add to Cart`, `Sign In to Grade10`). Short prepositions such as
   `to` stay lower when they are not the first word. Not a sentence.
+- **Button labels** — Title Case for English `Button` labels
+  (`Complete Order Setup`, `Add New Address`, `Add to Cart`). Short
+  prepositions such as `to` and `for` stay lower when they are not the first
+  word. Not a sentence.
 - **Locale** — use American English spelling (for example `authorized`,
   `color`).
 - **Em dashes** — do not use the em dash (`—`, U+2014) in user-facing copy.

@@ -119,10 +119,10 @@ export const LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY = {
     empty: "No bids yet",
   },
   auctionWon: "Auction won",
-  completePurchase: "Confirm delivery address",
+  completePurchase: "Complete Order Setup",
   completePurchaseBody:
-    "Confirm where we ship this lot. Grade10 prepares the invoice next — nothing is due yet.",
-  completePurchaseAction: "Confirm address",
+    "Complete Order Setup so Grade10 can prepare the invoice. Nothing is due yet.",
+  completePurchaseAction: "Complete Order Setup",
   paid: "Paid",
   paidBody: "Track shipping and delivery for this lot.",
   viewOrderDetails: "View order details",

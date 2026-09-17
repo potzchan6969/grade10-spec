@@ -9,7 +9,7 @@
 **I want** an expired invoice to stay Pending Payment without winner card pay,
 **so that** the deadline ends self-service settlement while operators can still resolve the order.
 
-### auction-status-US1-TC4-1: No invoice and no address reads Awaiting Address
+### auction-status-US1-TC4-1: No invoice and no address reads Awaiting Setup
 
 **Classification:**
 
@@ -36,7 +36,7 @@
 
 **Expected Results:**
 
-* The order status is Awaiting Address.
+* The order status is Awaiting Setup.
 * The invoice status is `not_issued`.
 * Both the winner and the operator read the same status.
 
@@ -93,7 +93,7 @@ Runs once per row of **Test data**.
 
 | Order | Delivery address | Order status |
 | --- | --- | --- |
-| `<awaiting-address order>` | none confirmed | Awaiting Address |
+| `<awaiting-address order>` | none confirmed | Awaiting Setup |
 | `<preparing-invoice order>` | confirmed inside the window | Preparing Invoice |
 
 **Steps:**
@@ -135,7 +135,7 @@ Runs once per row of **Test data**.
 
 * The write is refused.
 * The order holds no confirmed delivery address.
-* The order status is still Awaiting Address.
+* The order status is still Awaiting Setup.
 
 ### auction-status-US1-TC8-1: An order with no invoice cannot be dispatched
 
@@ -227,7 +227,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Step 1 reads Awaiting Address, unchanged by the reopen.
+* Step 1 reads Awaiting Setup, unchanged by the reopen.
 * The write is accepted.
 * Step 3 reads Preparing Invoice.
 

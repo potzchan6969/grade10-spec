@@ -20,7 +20,7 @@ before cancelling or re-listing.
 ## What Changes
 
 - **Auction-won asks for order setup**, not address alone: delivery address,
-  payment method, and billing address as bullets; CTA Complete order setup;
+  payment method, and billing address as bullets; CTA Complete Order Setup;
   `Confirm by …`.
 - **Address reminder is renamed setup reminder**, sent at **24h** and **72h**
   after lot close while setup is incomplete, with the same setup bullets.

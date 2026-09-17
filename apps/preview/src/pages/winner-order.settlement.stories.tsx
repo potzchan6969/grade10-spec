@@ -8,16 +8,25 @@ import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
   ...winnerOrderMeta(),
-  title: "My Auctions/Winner Order/Settlement",
+  title: "My Auctions/Winner Order/Setup",
   args: { status: "awaiting_address" },
+  parameters: {
+    ...winnerOrderMeta().parameters,
+    docs: {
+      description: {
+        component:
+          "Winner Order setup stages (Awaiting Setup → Preparing Invoice). Dialog form coverage lives under My Auctions / Winner Order / Setup / Complete Order Setup; these stories cover the page shell and end-to-end setup flows.",
+      },
+    },
+  },
 } satisfies Meta<typeof WinnerOrderPage>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Pre-invoice — confirm delivery address within 48 hours of lot close. */
-export const AwaitingAddress: Story = {
-  name: "Awaiting Address",
+/** Pre-invoice — complete order setup within 48 hours of lot close. */
+export const AwaitingSetup: Story = {
+  name: "Awaiting Setup",
   args: { status: "awaiting_address" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -37,13 +46,8 @@ export const AwaitingAddress: Story = {
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
     expect(
-      canvas.getByRole("button", { name: "Confirm delivery address" }),
+      canvas.getByRole("button", { name: "Complete Order Setup" }),
     ).toBeVisible();
-    expect(canvas.getByText("Delivery address")).toBeVisible();
-    expect(canvas.queryByText(/No address confirmed/i)).not.toBeInTheDocument();
-    expect(
-      canvas.queryByText(/choose a saved address/i),
-    ).not.toBeInTheDocument();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
@@ -58,7 +62,7 @@ export const AwaitingAddress: Story = {
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
       sidebar.getByRole("button", {
-        name: "Confirm delivery address",
+        name: "Complete Order Setup",
       }),
     ).toBeVisible();
     expect(
@@ -75,11 +79,11 @@ export const AwaitingAddress: Story = {
 };
 
 /**
- * Address deadline passed (48 hours after lot close) — no Confirm CTA;
- * contact from the overdue alert. Mirrors Expired Invoice.
+ * Setup deadline passed (48 hours after lot close) — no Complete CTA;
+ * contact from the overdue alert.
  */
-export const ExpiredAddress: Story = {
-  name: "Expired Address",
+export const ExpiredSetup: Story = {
+  name: "Expired Setup",
   args: { status: "awaiting_address_expired" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -95,13 +99,13 @@ export const ExpiredAddress: Story = {
     const alert = sidebar.getByRole("alert");
     expect(alert).toBeVisible();
     expect(
-      within(alert).getByText("Missed address deadline: 19 Sep 2026"),
+      within(alert).getByText("Missed setup deadline: 19 Sep 2026"),
     ).toBeVisible();
     expect(
       within(alert).getByRole("button", { name: "Contact Us" }),
     ).toBeVisible();
     expect(
-      sidebar.queryByRole("button", { name: "Confirm delivery address" }),
+      sidebar.queryByRole("button", { name: "Complete Order Setup" }),
     ).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("link", { name: "Invoice PDF" }),
@@ -109,7 +113,7 @@ export const ExpiredAddress: Story = {
   },
 };
 
-/** Address confirmed — invoice from this destination, email when ready. */
+/** Setup complete — invoice from this destination, email when ready. */
 export const PreparingInvoice: Story = {
   name: "Preparing Invoice",
   args: { status: "preparing_invoice" },
@@ -129,34 +133,28 @@ export const PreparingInvoice: Story = {
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
     expect(canvas.getByRole("complementary")).toBeVisible();
+    expect(canvas.getByText("Card")).toBeVisible();
+    expect(canvas.getByText("Billing address")).toBeVisible();
     expect(
-      canvas.queryByRole("button", { name: /confirm|pay/i }),
+      canvas.queryByRole("button", { name: /complete|pay/i }),
     ).not.toBeInTheDocument();
     const infoAlert = canvas.getByRole("alert");
     expect(infoAlert).toBeVisible();
     expect(
-      within(infoAlert).getByText(
-        /We generate your invoice from this shipping address/,
-      ),
+      within(infoAlert).getByText(/We generate your invoice from this setup/),
     ).toBeVisible();
     expect(
       within(infoAlert).getByText(/We email you when it is ready/),
     ).toBeVisible();
-    expect(canvas.queryByText(/No payment yet/i)).not.toBeInTheDocument();
-    expect(canvas.queryByText(/operator quote/i)).not.toBeInTheDocument();
-    expect(
-      canvas.queryByText(/You can change this until the invoice is sent/i),
-    ).not.toBeInTheDocument();
-    expect(canvas.queryByText(/Address confirmed/i)).not.toBeInTheDocument();
     expect(
       canvas.queryByRole("link", { name: "Invoice PDF" }),
     ).not.toBeInTheDocument();
   },
 };
 
-/** Opens the address dialog, confirms a saved address, lands on Preparing Invoice. */
-export const ConfirmAddressFlow: Story = {
-  name: "Confirm Address Flow",
+/** Stepped setup: delivery → payment → billing (same as delivery) → Preparing Invoice. */
+export const CompleteSetupFlow: Story = {
+  name: "Complete Setup Flow",
   args: { status: "awaiting_address" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -164,35 +162,34 @@ export const ConfirmAddressFlow: Story = {
     await winnerOrderSettled(canvasElement);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm delivery address" }),
+      canvas.getByRole("button", { name: "Complete Order Setup" }),
     );
 
     const dialog = await waitFor(() => {
       const found = page.getByRole("dialog", {
-        name: "Confirm Delivery Address",
+        name: "Complete Order Setup",
       });
       expect(found).toBeVisible();
       return found;
     });
     const modal = within(dialog);
-    await waitFor(() => {
-      expect(
-        modal.getByRole("heading", { name: "Confirm Delivery Address" }),
-      ).toBeVisible();
-    });
-    expect(
-      modal.getByText(/ship this lot here and use the address to prepare/i),
-    ).toBeVisible();
+    expect(modal.getByText("Step 1 of 3: Delivery")).toBeVisible();
     expect(modal.getAllByText("Alex Chan").length).toBeGreaterThan(0);
-    expect(
-      modal.getAllByRole("button", { name: "Remove Alex Chan" }).length,
-    ).toBeGreaterThan(0);
-    expect(
-      modal.getByRole("button", { name: "Add new address" }),
-    ).toBeVisible();
 
+    await userEvent.click(modal.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => {
+      expect(modal.getByText("Step 2 of 3: Payment")).toBeVisible();
+    });
+    await userEvent.click(modal.getByRole("radio", { name: /Card/i }));
+    await userEvent.click(modal.getByRole("button", { name: "Continue" }));
+
+    await waitFor(() => {
+      expect(modal.getByText("Step 3 of 3: Billing")).toBeVisible();
+    });
+    expect(modal.getByText("Use same details for billing address")).toBeVisible();
     await userEvent.click(
-      modal.getByRole("button", { name: "Confirm address" }),
+      modal.getByRole("button", { name: "Complete Order Setup" }),
     );
 
     await waitFor(() => {
@@ -205,12 +202,12 @@ export const ConfirmAddressFlow: Story = {
     ).not.toBeNull();
     expect(canvas.getByText(/Harbour Road/)).toBeVisible();
     expect(
-      canvas.queryByRole("button", { name: "Confirm delivery address" }),
+      canvas.queryByRole("button", { name: "Complete Order Setup" }),
     ).not.toBeInTheDocument();
 
     await waitFor(
       () => {
-        expect(page.getByText("Address confirmed")).toBeVisible();
+        expect(page.getByText("Order setup complete")).toBeVisible();
       },
       { timeout: 3000 },
     );
@@ -218,9 +215,9 @@ export const ConfirmAddressFlow: Story = {
   },
 };
 
-/** Nested add-address form → Use this address → confirm → Preparing Invoice. */
-export const AddNewAddressFlow: Story = {
-  name: "Add New Address Flow",
+/** Nested add-address on step 1, then finish setup with card. */
+export const AddNewAddressSetupFlow: Story = {
+  name: "Add New Address Setup Flow",
   args: { status: "awaiting_address" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -228,18 +225,18 @@ export const AddNewAddressFlow: Story = {
     await winnerOrderSettled(canvasElement);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "Confirm delivery address" }),
+      canvas.getByRole("button", { name: "Complete Order Setup" }),
     );
 
     const outerDialog = await waitFor(() => {
       const found = page.getByRole("dialog", {
-        name: "Confirm Delivery Address",
+        name: "Complete Order Setup",
       });
       expect(found).toBeVisible();
       return found;
     });
     await userEvent.click(
-      within(outerDialog).getByRole("button", { name: "Add new address" }),
+      within(outerDialog).getByRole("button", { name: "Add New Address" }),
     );
 
     const nestedDialog = await waitFor(() => {
@@ -259,7 +256,7 @@ export const AddNewAddressFlow: Story = {
     await userEvent.type(nested.getByLabelText("Postal code"), "000000");
 
     await userEvent.click(
-      nested.getByRole("button", { name: "Use this address" }),
+      nested.getByRole("button", { name: "Use This Address" }),
     );
 
     await waitFor(() => {
@@ -271,7 +268,7 @@ export const AddNewAddressFlow: Story = {
     const picker = within(
       await waitFor(() => {
         const found = page.getByRole("dialog", {
-          name: "Confirm Delivery Address",
+          name: "Complete Order Setup",
         });
         expect(found).toBeVisible();
         return found;
@@ -280,8 +277,17 @@ export const AddNewAddressFlow: Story = {
     expect(picker.getByText("Jordan Lee")).toBeVisible();
     expect(picker.getByText(/Queen's Road Central/)).toBeVisible();
 
+    await userEvent.click(picker.getByRole("button", { name: "Continue" }));
+    await waitFor(() => {
+      expect(picker.getByText("Step 2 of 3: Payment")).toBeVisible();
+    });
+    await userEvent.click(picker.getByRole("radio", { name: /Card/i }));
+    await userEvent.click(picker.getByRole("button", { name: "Continue" }));
+    await waitFor(() => {
+      expect(picker.getByText("Step 3 of 3: Billing")).toBeVisible();
+    });
     await userEvent.click(
-      picker.getByRole("button", { name: "Confirm address" }),
+      picker.getByRole("button", { name: "Complete Order Setup" }),
     );
 
     await waitFor(() => {
@@ -296,7 +302,7 @@ export const AddNewAddressFlow: Story = {
 
     await waitFor(
       () => {
-        expect(page.getByText("Address confirmed")).toBeVisible();
+        expect(page.getByText("Order setup complete")).toBeVisible();
       },
       { timeout: 3000 },
     );

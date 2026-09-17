@@ -18,8 +18,8 @@ and the receipt, tracker and delivery proof the order keeps afterwards.
   - Internal audit number: one gapless count across invoices and receipts, never shown to the winner
   - Replaced invoice: an invoice a reissue replaced says so and names its replacement
 - Bank transfer
-  - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the bank reference to quote and a Copy Reference Code control
-  - Payment proof: one upload of 1 to 5 files, behind a confirm step
+  - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the bank reference to quote and copy controls for account number, amount due, and transfer reference
+  - Payment proof: one upload of 1 to 3 files (1 required), behind a confirm step
   - Payment Verifying: the deadline stops, card Pay and further uploads are hidden
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
 - Records the winner keeps
@@ -66,7 +66,7 @@ per "The delivery address locks when the invoice is sent".
 #### Scenario: winner-order-SC-90 - The method is recorded with the address
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an auction order in HKD Awaiting Address
+- **GIVEN** an auction order in HKD Awaiting Setup
 - **WHEN** the winner confirms a delivery address and chooses bank transfer
 - **THEN** the order records bank transfer as its payment method
 - **AND** the order derives as Preparing Invoice
@@ -74,7 +74,7 @@ per "The delivery address locks when the invoice is sent".
 #### Scenario: winner-order-SC-91 - The choice shows a fee range and no bank transfer amount
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
-- **GIVEN** an auction order in HKD Awaiting Address
+- **GIVEN** an auction order in HKD Awaiting Setup
 - **WHEN** the winner reaches the payment method choice
 - **THEN** card and bank transfer each show the fee range text Grade10 set
 - **AND** the bank transfer text names no amount
@@ -83,7 +83,7 @@ per "The delivery address locks when the invoice is sent".
 #### Scenario: winner-order-SC-92 - A currency with no bank details offers card only
 **Serves:** Payment method - bank transfer only where bank details are set up
 
-- **GIVEN** an auction order in USD Awaiting Address
+- **GIVEN** an auction order in USD Awaiting Setup
 - **WHEN** the winner reaches the payment method choice
 - **THEN** only card is offered
 - **AND** a confirmation carrying bank transfer for that order is refused
@@ -91,7 +91,7 @@ per "The delivery address locks when the invoice is sent".
 #### Scenario: winner-order-SC-93 - The method can change until the winner confirms
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
-- **GIVEN** an auction order in HKD Awaiting Address on which the winner has chosen card and not yet confirmed
+- **GIVEN** an auction order in HKD Awaiting Setup on which the winner has chosen card and not yet confirmed
 - **WHEN** the winner changes the choice to bank transfer and confirms the address
 - **THEN** the order records bank transfer
 - **AND** the order derives as Preparing Invoice
@@ -99,10 +99,10 @@ per "The delivery address locks when the invoice is sent".
 #### Scenario: winner-order-SC-94 - A confirmation with no method is refused
 **Serves:** Payment method - card or bank transfer recorded with the address
 
-- **GIVEN** an auction order in HKD Awaiting Address
+- **GIVEN** an auction order in HKD Awaiting Setup
 - **WHEN** the winner confirms a delivery address without choosing a method
 - **THEN** Grade10 refuses the confirmation
-- **AND** the order is still Awaiting Address
+- **AND** the order is still Awaiting Setup
 
 ### Requirement: A bank transfer invoice shows how to pay
 
@@ -111,8 +111,10 @@ what reference to quote.
 
 **Three ways to pay** - While an invoice sent for bank transfer is `pending`,
 Winner Order SHALL show these three ways to pay in place of card Pay. Each
-SHALL ask the winner to quote the invoice's bank reference, shown beside a
-**Copy Reference Code** control that copies it. The account details are TBC.
+SHALL ask the winner to quote the invoice's bank reference. Submit Payment
+Proof SHALL offer icon copy controls for the account number / IBAN, the total
+amount due, and the transfer reference (each with a success toast on copy).
+The account details are TBC.
 
 | Way to pay | Details shown |
 | --- | --- |
@@ -273,9 +275,9 @@ that replaced it.
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
 - **GIVEN** one order whose `pending` invoice was sent for bank transfer with bank reference `LK7P2Q01`, and one whose `pending` invoice was sent for card
-- **WHEN** the winner opens each on Winner Order and chooses Copy Reference Code on the first
+- **WHEN** the winner opens each on Winner Order and copies the transfer reference on the first
 - **THEN** the first shows `LK7P2Q01` and the copied text is exactly `LK7P2Q01`
-- **AND** the card order shows no bank reference and no Copy Reference Code control
+- **AND** the card order shows no bank reference and no transfer-reference copy control
 
 ### Requirement: Invoices and receipts carry an internal audit number
 
@@ -316,8 +318,10 @@ invoice while an operator checks it.
 **Payment proof** - On an invoice sent for bank transfer whose status is
 `pending`, the winner SHALL be able to send Grade10 proof of payment once:
 
-1. Choose 1 to 5 files, each a PDF, JPEG or PNG of at most 10 MB
-   (10,485,760 bytes).
+1. Choose 1 to 3 files (**1** required). Each file SHALL be a PDF, PNG, JPG
+   (JPEG), or HEIC/HEIF of at most **5 MB** (5,242,880 bytes). The set SHALL
+   total at most **15 MB** (15,728,640 bytes). HEIC/HEIF SHALL be converted to
+   JPEG before storage so an operator can open it without a special viewer.
 2. Read a confirm step saying nothing can be added after upload.
 3. Confirm.
 
@@ -357,10 +361,10 @@ status shows that proof was sent.
 - **AND** Winner Order offers no card Pay and no further upload
 
 #### Scenario: winner-order-SC-100 - Files outside the limits are refused
-**Serves:** Bank transfer - one upload of 1 to 5 files
+**Serves:** Bank transfer - one upload of 1 to 3 files
 
 - **GIVEN** a bank transfer invoice that is `pending`
-- **WHEN** the winner confirms six files, or a PNG with a JPEG of 10,485,761 bytes, or a PDF with a GIF
+- **WHEN** the winner confirms four files, or a PNG with a JPEG of 5,242,881 bytes, or a PDF with a GIF, or a set over 15 MB
 - **THEN** Grade10 refuses each whole upload
 - **AND** stores no file
 - **AND** the invoice is still `pending`
@@ -397,11 +401,11 @@ status shows that proof was sent.
 - **THEN** neither file nor its name is shown
 - **AND** Grade10 refuses both requests
 
-#### Scenario: winner-order-SC-116 - A file of exactly 10 MB is accepted
-**Serves:** Bank transfer - one upload of 1 to 5 files
+#### Scenario: winner-order-SC-116 - A file of exactly 5 MB is accepted
+**Serves:** Bank transfer - one upload of 1 to 3 files
 
 - **GIVEN** a bank transfer invoice that is `pending`
-- **WHEN** the winner uploads one PDF of 10,485,760 bytes and confirms
+- **WHEN** the winner uploads one PDF of 5,242,880 bytes and confirms
 - **THEN** the invoice is `payment_verifying`
 
 #### Scenario: winner-order-SC-117 - A card payment while proof is checked is refused
@@ -506,7 +510,7 @@ a change goes through Grade10.
 
 | Order stage | Who changes the address or method |
 | --- | --- |
-| Awaiting Address | The winner, freely, until they confirm |
+| Awaiting Setup | The winner, freely, until they confirm |
 | Preparing Invoice | Only an operator, per "An operator edits the address or method before send" in `grade10-admin/auction/post-sale`. The order stays Preparing Invoice |
 | After the invoice is sent | Only an operator, through a reissue, per `grade10-admin/auction/post-sale` |
 
@@ -571,7 +575,7 @@ address, edit an unused address, archive an address, and change the default.
 An address selected for an order SHALL be copied into the order as a snapshot;
 editing or archiving the saved address later SHALL NOT change that order.
 The platform SHALL refuse to archive an address selected on an order in
-Awaiting Address that the winner has not yet confirmed, unless the winner
+Awaiting Setup that the winner has not yet confirmed, unless the winner
 first selects another address for that order. Once the winner confirms, the
 order holds its own snapshot: archiving the saved address is allowed and
 leaves the order unchanged.
@@ -615,7 +619,7 @@ the account's saved addresses for the remainder of this order's confirmation.
 #### Scenario: winner-order-SC-25 - A selected address cannot be archived silently
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
-- **GIVEN** an order in Awaiting Address on which the winner has selected the work address and not yet confirmed it
+- **GIVEN** an order in Awaiting Setup on which the winner has selected the work address and not yet confirmed it
 - **WHEN** the winner tries to archive the work address
 - **THEN** Grade10 asks the winner to select another address for that order
 - **AND** does not remove the address while it remains selected
@@ -811,7 +815,7 @@ status vocabulary in `grade10-site/auction/order-status`.
 
 | Current step | Derived order status |
 | --- | --- |
-| Address | Awaiting Address |
+| Address | Awaiting Setup |
 | Invoice | Preparing Invoice |
 | Payment | Pending Payment (invoice `pending` or `expired`) or Payment Verifying |
 | Shipped | Processing or Shipped |
@@ -872,9 +876,11 @@ overflow.
 Once an operator has sent an invoice on an auction order, Winner Order SHALL
 offer the winner a control to view and download the current invoice as a PDF.
 The control SHALL use a PDF icon with the label **Invoice** (accessible name
-Invoice PDF). The control SHALL be hidden while the invoice status is
-`not_issued` and SHALL be hidden when the invoice status is `cancelled`. The
-PDF SHALL carry the invoice ID and the payment method it was sent for.
+Invoice PDF), SHALL render as a text link (not a button), and SHALL sit beside
+the Order summary heading. The control SHALL be hidden while the invoice
+status is `not_issued` and SHALL be hidden when the invoice status is
+`cancelled`. The PDF SHALL carry the invoice ID and the payment method it was
+sent for.
 
 #### Scenario: winner-order-SC-57 - A sent invoice offers its PDF
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -910,17 +916,18 @@ After payment is confirmed on an auction order — by the winner's card, by an
 operator confirming the winner's bank transfer proof, or by operator manual
 settlement — Winner Order SHALL offer the winner a control to view and
 download the itemised payment receipt as a PDF. The control SHALL use a PDF
-icon with the label **Receipt** (accessible name Receipt PDF) and SHALL sit on
-the same row as the invoice PDF when both exist. The control SHALL be hidden
-before payment, while the invoice is `payment_verifying`, and when Cancelled.
+icon with the label **Receipt** (accessible name Receipt PDF), SHALL render as
+a text link (not a button), and SHALL sit under the payment-method card —
+not on the same row as the invoice PDF. The control SHALL be hidden before
+payment, while the invoice is `payment_verifying`, and when Cancelled.
 
 #### Scenario: winner-order-SC-67 - A paid order offers its receipt PDF
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** an auction order whose invoice status is `paid`
 - **WHEN** the winner opens Winner Order
-- **THEN** Grade10 offers view and download of the receipt PDF
-- **AND** the Invoice PDF control remains available on the same row
+- **THEN** Grade10 offers view and download of the receipt PDF under the payment-method card
+- **AND** the Invoice PDF control remains available beside the Order summary heading
 
 #### Scenario: winner-order-SC-68 - No receipt PDF before payment
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -1091,7 +1098,7 @@ selects an address. Grade10 SHALL pre-select no payment method.
 | Account has a default shipping address | Grade10 pre-fills it. The winner still confirms explicitly |
 | Account has no default shipping address | The address is empty. The winner adds one and confirms it |
 | Account has multiple saved addresses | Grade10 lets the winner choose one, then confirms the selected address for this order |
-| Winner changes the address or method before confirming | The order takes the new choice. The order stays Awaiting Address until the winner confirms |
+| Winner changes the address or method before confirming | The order takes the new choice. The order stays Awaiting Setup until the winner confirms |
 | Winner asks to change the address or method after confirming, before the invoice is sent | Refused on the order. An operator edits the order on request. The order stays Preparing Invoice |
 | Winner asks to change the address or method after the invoice is sent | Refused on the order. An operator reissues on request |
 | Winner adds or edits an address | Grade10 offers to save it to the account address book. The order keeps a snapshot |
@@ -1101,13 +1108,13 @@ selects an address. Grade10 SHALL pre-select no payment method.
 
 - **GIVEN** an auction order pre-filled from the account's default shipping address
 - **WHEN** the winner leaves the order without confirming that address
-- **THEN** the order's derived status is still Awaiting Address
+- **THEN** the order's derived status is still Awaiting Setup
 - **AND** an operator cannot send its invoice
 
 #### Scenario: winner-order-SC-08 - An amendment does not touch the address book by default
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
-- **GIVEN** a winner amending the delivery address on one auction order in Awaiting Address
+- **GIVEN** a winner amending the delivery address on one auction order in Awaiting Setup
 - **AND** they leave the offer to save the amendment to the account address book untaken
 - **WHEN** they confirm the amendment
 - **THEN** that auction order carries the amended address

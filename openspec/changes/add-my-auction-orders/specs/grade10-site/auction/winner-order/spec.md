@@ -38,7 +38,7 @@ What the page offers SHALL follow the order status.
 
 | Order status | The page offers |
 | --- | --- |
-| Awaiting Address | The address form in Collection Method, per "The address form refuses empty required fields" |
+| Awaiting Setup | The address form in Collection Method, per "The address form refuses empty required fields" |
 | Preparing Invoice | The confirmed address, per "The delivery address is confirmed before payment"; no invoice and no way to pay |
 | Pending Payment | The full invoice with every line, per "Invoice fields", and **Pay Now**; the confirmed address |
 | Processing, Shipped, Delivered, Cancelled, Refunded | Read-only detail, with the records per "Records the winner keeps" |
@@ -67,7 +67,7 @@ Expired order status.
 #### Scenario: winner-order-SC-74 - Each status step carries its time
 **Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
-- **GIVEN** an auction order that reached Awaiting Address, Preparing Invoice,
+- **GIVEN** an auction order that reached Awaiting Setup, Preparing Invoice,
   Pending Payment and Processing
 - **WHEN** the winner reads Order Status
 - **THEN** it lists those four statuses in the order reached
@@ -106,7 +106,7 @@ session state.
 
 ### Requirement: The address form refuses empty required fields
 
-In Awaiting Address the winner SHALL confirm a delivery address with these
+In Awaiting Setup the winner SHALL confirm a delivery address with these
 fields.
 
 | Field | Required |
@@ -124,9 +124,9 @@ fields.
 | Postal Code | Yes |
 
 Confirming with any required field empty SHALL be refused, SHALL show an error
-on each empty required field, and SHALL keep the order in Awaiting Address.
+on each empty required field, and SHALL keep the order in Awaiting Setup.
 Grade10 SHALL NOT check the phone number's format. The form SHALL NOT offer a
-billing address. Cancel SHALL leave the order in Awaiting Address with no
+billing address. Cancel SHALL leave the order in Awaiting Setup with no
 address confirmed.
 
 #### Scenario: winner-order-SC-46 - An empty required field is refused
@@ -136,7 +136,7 @@ address confirmed.
 - **WHEN** they confirm the address
 - **THEN** Grade10 refuses it
 - **AND** an error shows on Town/City and on Postal Code
-- **AND** the order's status is still Awaiting Address
+- **AND** the order's status is still Awaiting Setup
 
 #### Scenario: winner-order-SC-47 - Optional fields may stay empty
 **Serves:** winner-order-US-07 - Winner confirms where a won lot ships

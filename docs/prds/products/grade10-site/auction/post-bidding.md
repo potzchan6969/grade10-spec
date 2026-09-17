@@ -185,8 +185,9 @@ by card, reads:
 - 🚧 **Bill To and Ship To** — both from the order's snapshot, each with
   name, company name, phone and address; they read the same unless the
   winner unticked Use same details for billing address
-- **PDFs** — the invoice once sent and the receipt once paid, on one row;
-  hidden when Cancelled
+- **PDFs** — the invoice once sent (text link beside the Order summary
+  heading) and the receipt once paid (text link under the payment-method
+  card); hidden when Cancelled
 - **Payment deadline** — an absolute date and time in the winner's zone, with
   no countdown
 
@@ -370,7 +371,7 @@ a second payment provider, and changes to the bid-time rules.
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice does not create an Expired order status; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
 | Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is paid→refund only. A missed address deadline creates no status of its own. | Product |
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; the status keeps its nine names, Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
-| Invoice and receipt PDFs | Decided | The winner views and downloads the invoice after send until Cancelled, and the receipt after payment, on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
+| Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not a running count, so the IDs do not reveal how much Grade10 sells; operators keep a separate gapless audit number the winner never sees — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
 | Setup mail | 🚧 In flight | Setup reminders at 24 and 72 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue is generic, names manual review, and never cancels automatically. | Product (@tangconst) |
 | Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. | Product (@tangconst) |

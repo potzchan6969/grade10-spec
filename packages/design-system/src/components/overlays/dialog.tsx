@@ -5,7 +5,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { cn } from "@grade10/design-system/lib/utils";
 import { X } from "@phosphor-icons/react";
-import { type ComponentProps, useRef } from "react";
+import { type ComponentProps, useEffect, useRef } from "react";
 
 /**
  * A modal window that overlays the page for focused tasks and content.
@@ -24,10 +24,14 @@ import { type ComponentProps, useRef } from "react";
  * in the header. Body prose uses `DialogDescription` inside `DialogBody`. Put
  * the primary action last in `DialogFooter` so it receives default focus on
  * open and Enter submits; a destructive confirm uses
- * `Button variant="destructive"`.
+ * `Button variant="destructive"`. On narrow viewports the footer stacks
+ * full-width with the primary action on top (`flex-col-reverse`).
  */
-function Dialog({ ...props }: DialogPrimitive.Root.Props) {
-  return <DialogPrimitive.Root data-slot="dialog" {...props} />;
+function Dialog({
+  modal = true,
+  ...props
+}: DialogPrimitive.Root.Props) {
+  return <DialogPrimitive.Root data-slot="dialog" modal={modal} {...props} />;
 }
 
 function DialogTrigger({ ...props }: DialogPrimitive.Trigger.Props) {
@@ -42,15 +46,48 @@ function DialogClose({ ...props }: DialogPrimitive.Close.Props) {
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
+/**
+ * Locks document scroll for the lifetime of the backdrop. Base UI's
+ * `useScrollLock` already runs when `modal`, but Storybook and nested
+ * overflow containers can still chain wheel events to the page behind —
+ * pin `html`/`body` overflow while the overlay is mounted.
+ */
+function useDocumentScrollLock() {
+  useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+    const previous = {
+      htmlOverflow: html.style.overflow,
+      bodyOverflow: body.style.overflow,
+      bodyPaddingRight: body.style.paddingRight,
+    };
+    const scrollbarGap = window.innerWidth - html.clientWidth;
+
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    if (scrollbarGap > 0) {
+      body.style.paddingRight = `${scrollbarGap}px`;
+    }
+
+    return () => {
+      html.style.overflow = previous.htmlOverflow;
+      body.style.overflow = previous.bodyOverflow;
+      body.style.paddingRight = previous.bodyPaddingRight;
+    };
+  }, []);
+}
+
 function DialogOverlay({
   className,
   ...props
 }: DialogPrimitive.Backdrop.Props) {
+  useDocumentScrollLock();
+
   return (
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        "fixed inset-0 isolate z-50 bg-overlay backdrop-blur-[calc(var(--blur-xl)/2)] duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:animate-none motion-reduce:duration-0",
+        "fixed inset-0 isolate z-50 overscroll-none bg-overlay backdrop-blur-[calc(var(--blur-xl)/2)] duration-100 data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0 motion-reduce:animate-none motion-reduce:duration-0",
         className,
       )}
       {...props}
@@ -86,8 +123,9 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          // max-h-[640px] is the Figma frame max, not a token.
-          "fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-h-[640px] max-w-(--container-lg) -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-hidden rounded-(--radius-4xl) border border-border-subtle bg-popover p-6 text-sm text-popover-foreground shadow-[0_24px_32px_-12px_var(--shadow-color,rgb(118_118_118_/_20%))] outline-none backdrop-blur-xl duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:animate-none motion-reduce:duration-0",
+          // Figma frame max is 640px; cap to the dynamic viewport so short
+          // phones and keyboards don't clip header/footer outside the screen.
+          "fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-h-[min(640px,calc(100dvh-2rem))] max-w-(--container-lg) -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-hidden rounded-(--radius-4xl) border border-border-subtle bg-popover p-4 text-sm text-popover-foreground shadow-[0_24px_32px_-12px_var(--shadow-color,rgb(118_118_118_/_20%))] outline-none backdrop-blur-xl duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:animate-none motion-reduce:duration-0 sm:gap-6 sm:p-6",
           className,
         )}
         initialFocus={
@@ -158,7 +196,7 @@ function DialogBody({ className, ...props }: ComponentProps<"div">) {
     <div
       data-slot="dialog-body"
       className={cn(
-        "scroll-fade flex min-h-0 w-full flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto text-base leading-6 font-normal text-foreground",
+        "scroll-fade flex min-h-0 w-full flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto overscroll-contain text-base leading-6 font-normal text-foreground",
         className,
       )}
       {...props}
@@ -178,7 +216,7 @@ function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        "flex w-full shrink-0 items-center justify-end gap-2",
+        "flex w-full shrink-0 flex-col-reverse items-stretch gap-2 sm:flex-row sm:items-center sm:justify-end",
         className,
       )}
       {...props}
@@ -204,7 +242,7 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn(
-        "col-start-1 row-start-1 min-w-0 truncate text-lg leading-7 font-semibold text-foreground",
+        "col-start-1 row-start-1 min-w-0 text-lg leading-7 font-semibold text-balance text-foreground sm:truncate",
         className,
       )}
       {...props}

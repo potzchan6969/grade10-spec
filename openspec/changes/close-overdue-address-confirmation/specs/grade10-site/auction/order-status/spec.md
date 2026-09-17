@@ -7,8 +7,8 @@
   - Address confirmed replaces deadline elapsed: the derivation reads whether the winner has confirmed an address; the deadline is carried by the invoice status
   - Address window open: a further condition, read from the order's own facts, which gates what the winner may write rather than what the order reads as
 - Derived order status
-  - Awaiting Address and Preparing Invoice: the two states before an invoice, shared by winner and operator alike
-  - A missed address deadline keeps its status: the order still reads Awaiting Address or Preparing Invoice
+  - Awaiting Setup and Preparing Invoice: the two states before an invoice, shared by winner and operator alike
+  - A missed address deadline keeps its status: the order still reads Awaiting Setup or Preparing Invoice
   - No Expired order status: an order whose invoice has expired still reads Pending Payment; winner card pay stops; operator reissue, manual settlement, or cancel remain
 - Guards
   - No dispatch and no send out of order: an order with no invoice cannot ship, and no invoice is sent without a confirmed address
@@ -29,7 +29,7 @@ already holds, and SHALL NOT store it as a status enum.
 gates what the winner may write rather than what the order reads as: while it
 is false Grade10 SHALL refuse a delivery-address write from the winner, per
 `grade10-site/auction/winner-order`, and the order SHALL still derive as
-Awaiting Address or Preparing Invoice according to `address_confirmed`. There
+Awaiting Setup or Preparing Invoice according to `address_confirmed`. There
 SHALL be no order status meaning a passed address deadline.
 
 An operator SHALL be able to record a delivery address on an auction order
@@ -53,14 +53,14 @@ afterwards.
 - **THEN** it is true at the first reading and false at the second
 - **AND** no status enum was written between the two readings
 
-#### Scenario: auction-status-SC-31 - A passed address deadline keeps Awaiting Address
+#### Scenario: auction-status-SC-31 - A passed address deadline keeps Awaiting Setup
 **Serves:** Derived order status - a passed address deadline keeps its status
 
 - **GIVEN** an auction order with invoice status `not_issued`, fulfilment
   status `unfulfilled`, `address_confirmed` false and `address_window_open`
   false
 - **WHEN** its order status is read
-- **THEN** it is Awaiting Address
+- **THEN** it is Awaiting Setup
 - **AND** no order status reads as a passed address deadline
 
 #### Scenario: auction-status-SC-32 - A passed address deadline keeps Preparing Invoice

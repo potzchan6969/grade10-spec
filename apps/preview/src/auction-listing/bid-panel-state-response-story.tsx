@@ -90,7 +90,7 @@ function responseStory(
 
       expect(
         response.expectedText === "Change" ||
-          response.expectedText === "Confirm address"
+          response.expectedText === "Complete Order Setup"
           ? canvas.getByRole("button", { name: response.expectedText })
           : canvas.getByText(labelled(response.expectedText)),
       ).toBeVisible();
