@@ -55,6 +55,10 @@ session, and the person lands on the brand home with a toast.
   one toast that the link no longer works.
 - 🚧 **Banned** — a banned account's link follow shows they cannot sign in,
   and does not invite them to ask for another link.
+- 🚧 **Different account** — when the person is already signed in as someone
+  else, the link does not switch them. A toast says they are signed in with a
+  different account, names the link’s email in the description, and offers
+  **Switch** or **Stay**; dismissing keeps the current session.
 
 ::story{id="auth-sign-in-signinemailform--default" title="The email step"}
 
@@ -65,6 +69,8 @@ session, and the person lands on the brand home with a toast.
 ::story{id="auth-sign-in-link-follow-toasts--no-longer-works" title="Link no longer works toast"}
 
 ::story{id="auth-sign-in-link-follow-toasts--banned" title="Banned account toast"}
+
+::story{id="auth-sign-in-link-follow-toasts--different-account" title="Different account toast"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488" title="Login Dialog"}
 
@@ -81,6 +87,7 @@ path, the link, beside Google.
 | Operator second factor | Decided | Untouched — a different code, proven after sign-in. | Product |
 | Figma `OTP Dialog` frame | ❓ Open | Retire, or keep as reference for the second-factor dialog. | Design |
 | Failed link follow copy | Decided | Expired is its own toast; used, replaced, and invalid share one; banned is its own and does not nudge a resend. | Product |
+| Link while signed in as someone else | Decided | No automatic switch. Warning toast: title names the mismatch; description names the link’s email. Switch enters that account; Stay or dismiss keeps the current session. | Product |
 
 Measured on the share of email sign-ins that end in a session, from the send
 to the session.
