@@ -89,6 +89,9 @@ meaning.
 | **Cancelled** | Cancelled | An operator cancels an unpaid order; the lot goes back to stock |
 | **Refunded** | Refunded | A paid invoice is refunded; failing to pay is never Refunded |
 
+- 🚧 **Cancelled** — Winner Order reads `Cancelled on {date}`, keeps the lot
+  and the winning bid, and offers Contact Us only; it gives no reason. Only an
+  operator cancels, and a cancel never lifts a suspension
 - **Read, never written** — one ordered rule chain derives it, so it cannot
   contradict the facts; dispatch before payment, cancelling a dispatched
   order and delivery before dispatch are refused
