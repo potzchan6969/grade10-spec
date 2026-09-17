@@ -78,9 +78,11 @@ meaning.
 
 | Status | Invoice reads | Reached when |
 | --- | --- | --- |
-| **Awaiting Address** | Not issued | The lot closes with a winner |
-| **Preparing Invoice** | Not issued | The winner confirms an address, or an operator records one after the deadline |
-| **Pending Payment** | Pending, or Expired past the deadline | An operator sends or reissues the invoice; an expired invoice keeps this status |
+| **Awaiting Setup** | Not issued | The lot closes with a winner, inside the setup deadline |
+| 🚧 **Setup Overdue** | Not issued | The setup deadline passes with setup incomplete; self-service Confirm is closed |
+| **Preparing Invoice** | Not issued | The winner confirms setup, or an operator records an address after the deadline |
+| **Pending Payment** | Pending | An operator sends or reissues the invoice, inside the payment deadline |
+| 🚧 **Payment Overdue** | Expired | The payment deadline passes with the invoice unpaid; self-service Pay is closed |
 | 🚧 **Payment Verifying** | Payment Verifying | The winner uploads bank transfer proof; the deadline stops until an operator confirms or returns it |
 | 🚧 **Partially Paid** | Partially Paid | An operator records a payment short of the balance; the deadline stops for good and Pay is not offered again, and the order stays here until a payment closes the balance |
 | **Processing** | Paid | A card payment is confirmed, the proof is confirmed, or an operator settles manually |
@@ -95,8 +97,10 @@ meaning.
 - **Read, never written** — one ordered rule chain derives it, so it cannot
   contradict the facts; dispatch before payment, cancelling a dispatched
   order and delivery before dispatch are refused
-- 🚧 **Missed address deadline** — the status stays where it is; the winner
-  can no longer confirm an address until an operator reopens the form
+- 🚧 **Missed setup deadline** — the order reads Setup Overdue; the winner
+  can no longer confirm until an operator reopens the form
+- 🚧 **Missed payment deadline** — the order reads Payment Overdue; the
+  invoice is `expired` and self-service Pay is closed
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
   its own; a proof under check never expires
 
@@ -154,8 +158,8 @@ hours of the close.
 - ❓ **Fee range wording** — what each choice says; the bank transfer wording
   names no amount, because the operator sets that fee; Product confirms
 - **Deadline** — `Confirm by …` under Confirm; when it passes, Confirm is
-  hidden, the alert reads Missed address deadline with Contact Us, the status
-  stays, and nothing cancels or suspends
+  hidden, the alert reads Missed setup deadline with Contact Us, and the
+  order reads Setup Overdue
 - 🚧 **After the deadline** — the whole form closes; only Grade10 reopens it
   for a fresh 48 hours, or records an address the winner gives by phone
 - 🚧 **Locked on confirming** — the winner changes none of the three
@@ -271,8 +275,8 @@ by card, reads:
 
 | Missed | What the winner sees | What an operator does |
 | --- | --- | --- |
-| The 48-hour address deadline | Confirm hidden, Missed address deadline with Contact Us; the status stays | Reopens the form for a fresh 48 hours, records an address given by phone, or cancels after review |
-| The 7-day payment deadline | Pay hidden, the overdue alert with Contact Us; the status stays Pending Payment | Reissues with a fresh 7 days, settles manually, or cancels; the lot returns to stock with no runner-up offer |
+| The 48-hour address deadline | Confirm hidden, Missed setup deadline with Contact Us; the order reads Setup Overdue | Reopens the form for a fresh 48 hours, records an address given by phone, or cancels after review |
+| The 7-day payment deadline | Pay hidden, the overdue alert with Contact Us; the order reads Payment Overdue | Reissues with a fresh 7 days, settles manually, or cancels; the lot returns to stock with no runner-up offer |
 
 - **Overdue penalties** — a missed payment deadline suspends the bidder,
   below; ❓ what "penalties or extra charges" in the overdue letters means
@@ -378,12 +382,12 @@ a second payment provider, and changes to the bid-time rules.
 | Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule; card fees on high-value lots make a transfer worth offering. Proof waiting for an operator reads Payment Verifying to both, and stops the deadline, which resumes with the time left if the proof is returned. A confirmed transfer's receipt reads Bank Transfer. | Product (@jeffffej0909) |
 | Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount first shows on the sent invoice, and an operator reissues if the winner then wants the other method. | Product (@jeffffej0909) |
 | Winner's choice locks on confirming | 🚧 In flight | Once the winner confirms the address and method, only an operator changes them: an edit with a reason before send, a reissue after. | Product (@jeffffej0909) |
-| Address deadline | Decided | 48 hours from lot close. A miss hides Confirm and shows Contact Us; the status stays, no invoice is issued, nothing cancels or suspends automatically. The account address book is unaffected. | Product (@tangconst) |
+| Address deadline | Decided | 48 hours from lot close. A miss hides Confirm, shows Contact Us, and the order reads Setup Overdue; no invoice is issued, nothing cancels or suspends automatically. The account address book is unaffected. | Product (@tangconst) |
 | Reopening the address form | Decided | An operator, with payment processing and a reason, reopens it once the deadline passes before an address was confirmed, for a fresh 48 hours; never on a cancelled order; no letter, the operator tells the winner. Or the operator records an address given by phone without reopening. | Product (@jeffffej0909) |
-| Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice does not create an Expired order status; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
-| Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is a recorded refund only. A missed address deadline creates no status of its own. | Product |
+| Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice is `expired` and the order reads Payment Overdue; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
+| Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is a recorded refund only. A missed setup deadline reads Setup Overdue; a missed payment deadline reads Payment Overdue — neither is Cancelled on its own. | Product |
 | A refunded order | 🚧 In flight | Refunded as both the order and the invoice status, paid in full or in part and wherever the card is; no stepper, Pay or address form, and the invoice and every receipt already issued stay downloadable. Chosen over hiding them the way Cancelled does, which leaves the winner no record of what they paid. | Product (@jeffffej0909) |
-| Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; the status keeps its nine names, Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
+| Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not a running count, so the IDs do not reveal how much Grade10 sells; operators keep a separate gapless audit number the winner never sees — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
@@ -400,6 +404,8 @@ a second payment provider, and changes to the bid-time rules.
 | Reminder clock across changes | ❓ Open | `add-winner-bank-transfer` and `add-winner-setup-overdue-mail` disagree on the invoice-sent letter, the final notice's time and the letter at expiry; one delta supersedes the other before either lands. | Product (@tangconst, @jeffffej0909) |
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
 | Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
+| Setup Overdue and Payment Overdue | 🚧 In flight | **BREAKING** vs keeping Awaiting Setup / Pending Payment after the deadline: inside the window the order reads Awaiting Setup or Pending Payment; once the deadline passes it reads Setup Overdue or Payment Overdue on Winner Order, My Auctions and the operator queue alike. | Product and design (@tangconst) |
+| My Auctions Status column | 🚧 In flight | The table column formerly Your Standing is Status — bid standing while open, the order's status once won. | Product and design (@tangconst) |
 | Partially Paid | 🚧 In flight | Its own status, entered the moment an operator records a payment smaller than the balance owed; ends the payment deadline for good rather than pausing it, since self-service Pay is never offered again on that invoice. | Product (@jeffffej0909) |
 | Closing a partial balance | 🚧 In flight | Measured against the original invoice total, cumulative across every payment, not the balance left at that moment: once payments reach 90% of the total, every further payment offers the operator a close, Paid with no separate write-off entry, or kept Partially Paid at the real balance. The prompt returns on each payment while still under 100%, so a `keep open` answer never quietly waives later checks. An exact match closes on its own. | Product and finance |
 | Overpaying a partial balance | ❓ Open | Whether a payment pushing the total past the original invoice is refused outright or offered the same close prompt above 100%. The proposal assumes refused outright pending confirmation; the author settled the underpayment side first. | Product and finance |
