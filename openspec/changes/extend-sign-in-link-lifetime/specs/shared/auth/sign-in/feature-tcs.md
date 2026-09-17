@@ -391,19 +391,6 @@ Runs once per row of **Test data**.
 * No session is created.
 * The surface still shows the person as signed out.
 
-## Raised
-
-* Is a link followed at exactly five minutes accepted or refused? The feature set says a link "lasts five minutes" and the acceptance signal jumps from four minutes to six, so the boundary itself is unstated; the suite asserts 4 minutes 59 seconds and 5 minutes 1 second and nothing at the mark.
-* Which instant starts the five minutes — the request, the send, or the provider's delivery? The goal is a collector whose mail arrives late, and a slow provider makes the three visibly different.
-* Whose clock measures the five minutes, the service's or the follower's device's? TC18 assumes the service's; nothing in the input says so.
-* Which locales does the sign-in email speak? The impact line says "every locale" without naming them; the suite runs the default, Traditional Chinese and Simplified Chinese.
-* Does every locale write the number the same way — a digit everywhere, or each language's own word for five? The case asserts only that each body promises five minutes.
-* May the email carry an absolute expiry time beside the duration, or is the duration the only form the promise takes? The interview chose a number over "it expires shortly" without ruling on a timestamp.
-* Does the link's lifetime bound the session it creates? The suite assumes a session made at four minutes survives past the five-minute mark, and nothing states the session's own life.
-* Does a used link stay refused for the rest of its five minutes, or does its record clear at first use? At sixty seconds the used and expired windows nearly coincided; at five minutes there is a four-minute stretch where a link is used and unexpired at once.
-* Is five minutes a fixed number or one an environment can set? The E2E impact line ends the lifetime "on the record" for the expired case, which is a test seam rather than an answer, and a configurable number would need the email's promise to follow it.
-* Does the confirmation dialog tell a collector how long they have, or does the promise live only in the email? "Check Your Email" names Resend and its countdown and no lifetime, so a collector who never opens the mail sees only the sixty-second number.
-
 ## Reconciliation
 
 **Run:** 2026-09-17, input `98c18f1aa3e6` — outline, journeys, decisions,
