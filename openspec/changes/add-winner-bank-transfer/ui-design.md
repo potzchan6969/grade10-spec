@@ -20,8 +20,9 @@ destination.
 | Surface | Preview path |
 | --- | --- |
 | Payment reminder (first — invoice sent) | `/preview/auction/order/payment-reminder` |
-| Payment reminder (second — 5 days before due) | `/preview/auction/order/payment-reminder-second` |
-| Payment reminder (final — 3 days before due) | `/preview/auction/order/payment-reminder-final` |
+| Payment reminder (day 3 after send) | `/preview/auction/order/payment-reminder-second` |
+| Payment reminder (day 6 after send) | `/preview/auction/order/payment-reminder-day-six` |
+| Final notice (24 hours before deadline) | `/preview/auction/order/payment-reminder-final` |
 | Payment received | `/preview/auction/order/payment-received` |
 | Auction won | `/preview/auction/order/auction-won` |
 | Address reminder (first / second) | `/preview/auction/order/address-reminder`, `…/address-reminder-second` |
@@ -34,8 +35,8 @@ payment-reminder urgency.
 
 - `AuctionLetter`, `LotBlock`, `PrimaryCta`, `Grade10EmailShell` under
   `apps/emails` — no new design-system primitive or `@grade10/ui` export
-- Campaign tag `payment_reminder` for all three reminder urgencies;
-  `payment_received` for the receipt letter
+- Campaign tag `payment_reminder` for send / day 3 / day 6; final notice may
+  share it or use a dedicated tag at delivery — engineer confirms
 - Copy for new letter strings is `@grade10/i18n` catalog work at delivery —
   templates hold English draft props today
 
@@ -43,9 +44,10 @@ payment-reminder urgency.
 
 | State | Anchor |
 | --- | --- |
-| Payment reminder at send: invoice total, Pay by, CTA View invoice and pay | Post-close letters / payment-reminder (first) — durable feature set once folded |
-| Payment reminder 5 days before due: escalated unpaid copy | same |
-| Payment reminder 3 days before due: last-chance copy | same |
+| Payment reminder at send: invoice total, Pay by, CTA View invoice and pay | Post-close letters / payment-reminder (first) |
+| Payment reminder day 3 after send: escalated unpaid copy | same |
+| Payment reminder day 6 after send: further escalated unpaid copy | same |
+| Final notice 24h before deadline: last-chance copy while Pay still offered | Final notice |
 | Payment received (card): Payment method → brand + masked digits; Received {date}; quiet Receipt ID; amount paid | `winner-order-US-01` / payment-received letter |
 | Payment received (bank transfer): Payment method → Bank Transfer; same Received / Receipt ID / processing body; no bank or account details in the letter | `winner-order-US-09` once folded — letter shape in notifications-order |
 | Receipt PDF attached on payment-received only (named by receipt ID) | Receipt in the letter |

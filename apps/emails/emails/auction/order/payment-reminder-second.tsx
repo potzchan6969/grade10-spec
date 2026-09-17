@@ -3,11 +3,11 @@ import PaymentReminderEmail, {
   type PaymentReminderProps,
 } from "@/emails/auction/order/payment-reminder";
 
-/** Preview variant — second payment reminder (5 days before due). */
+/** Preview variant — day 3 after invoice send. */
 export default function PaymentReminderSecondEmail(
   props: PaymentReminderProps,
 ) {
-  return <PaymentReminderEmail {...props} urgency="second" />;
+  return <PaymentReminderEmail {...props} urgency="day3" />;
 }
 
 PaymentReminderSecondEmail.PreviewProps = {
@@ -17,5 +17,5 @@ PaymentReminderSecondEmail.PreviewProps = {
   primaryImageUrl: previewLot.primaryImageUrl,
   invoiceTotal: previewLot.orderTotal,
   paymentDeadline: previewLot.paymentDeadline,
-  urgency: "second",
+  urgency: "day3",
 } satisfies PaymentReminderProps;

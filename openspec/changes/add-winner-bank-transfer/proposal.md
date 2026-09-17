@@ -1,6 +1,6 @@
 **Author:** @jeffffej0909 - 2026-09-16
 
-**Extended by:** @tangconst - 2026-09-17 — Payment-reminder letter series (retire invoice-sent as its own kind; cadence at send, then 5 and 3 days before due) and payment-received letter body (Bank Transfer only, Received date, processing copy, quiet Receipt ID with PDF attach).
+**Extended by:** @tangconst - 2026-09-17 — Payment-reminder letter series (retire invoice-sent as its own kind; cadence from invoice send at day 3 and day 6; final notice 24 hours before the deadline) and payment-received letter body (Bank Transfer only, Received date, processing copy, quiet Receipt ID with PDF attach).
 
 ## Why
 
@@ -96,12 +96,16 @@ is watched from the first release.
   `REC-` receipt ID replaces.
 - **BREAKING — Payment reminder is one letter kind.** The first payment
   reminder is sent when an operator sends the invoice (retiring invoice-sent as
-  its own letter). Later reminders fire at **5 days** and **3 days** before the
-  payment deadline while the invoice is `pending`. This replaces day 3 / day 6 /
-  day 7 measured from invoice send. Payment-reminder letters attach no PDF.
+  its own letter). Later reminders fire on **day 3** and **day 6** after that
+  send while the invoice is `pending`, measured from invoice send. Payment-
+  reminder letters attach no PDF.
+- **BREAKING — Final notice is 24 hours before the deadline.** Replaces “day 7
+  immediately before expiry” as a pay-now letter, so the winner still has
+  self-service Pay when the mail arrives. The invoice-expired letter covers
+  the end. Held with the other reminders while proof is checked.
 - **Letters.** A new proof-not-accepted letter carries the external reason and
-  the time left. No letter goes out on upload. Payment reminders are held while
-  proof is being checked and resume if it is returned.
+  the time left. No letter goes out on upload. Payment reminders and the final
+  notice are held while proof is being checked and resume if it is returned.
 
 ## Non-Goals
 
@@ -138,9 +142,9 @@ None.
   `payment_verifying`; order status gains Payment Verifying; the stopped
   deadline.
 - `grade10-site/auction/notifications-order`: the proof-not-accepted letter;
-  payment-reminder as one letter kind (at send, then 5 and 3 days before due);
-  payment-received body and receipt PDF attach; reminders held while proof is
-  checked.
+  payment-reminder as one letter kind (at send, then day 3 and day 6 from
+  send); final notice 24 hours before the deadline; payment-received body and
+  receipt PDF attach; reminders held while proof is checked.
 - `grade10-site/auction/account-record`: the winner's row shows Payment
   Verifying.
 - `grade10-admin/auction/post-sale`: the Payment Verifying outcome; the bank
