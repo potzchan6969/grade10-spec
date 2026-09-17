@@ -132,7 +132,11 @@ export const SetupSheet: Story = {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
-    expect(within(dialog).getByText("Stripe card link (iframe)")).toBeVisible();
+    await waitFor(() =>
+      expect(
+        within(dialog).getByText("Stripe card link (iframe)"),
+      ).toBeVisible(),
+    );
     const field = dialog.querySelector<HTMLElement>(
       '[data-slot="payment-field"]',
     );
@@ -200,16 +204,18 @@ export const SetupSheetFromChange: Story = {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
+    await waitFor(() =>
+      expect(
+        within(dialog).getByText(
+          "Stripe card form (iframe) — linked card on file",
+        ),
+      ).toBeVisible(),
+    );
     const field = dialog.querySelector<HTMLElement>(
       '[data-slot="payment-field"]',
     );
     expect(field).not.toBeNull();
     expect(field).toHaveAttribute("data-state", "ready");
-    expect(
-      within(dialog).getByText(
-        "Stripe card form (iframe) — linked card on file",
-      ),
-    ).toBeVisible();
     expect(
       within(dialog).getByRole("checkbox", {
         name: "I confirm I am 18 years of age or older.",
@@ -278,11 +284,13 @@ export const SetupSheetLinking: Story = {
     const dialog = within(document.body).getByRole("dialog", {
       name: "Link a card to bid",
     });
-    expect(
-      within(dialog).getByText(
-        "Stripe card form (iframe) — linked card on file",
-      ),
-    ).toBeVisible();
+    await waitFor(() =>
+      expect(
+        within(dialog).getByText(
+          "Stripe card form (iframe) — linked card on file",
+        ),
+      ).toBeVisible(),
+    );
     const continueButton = within(dialog).getByRole("button", {
       name: "Linking",
     });
