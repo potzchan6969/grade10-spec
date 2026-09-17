@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-09-17
+page_waived: "ZZZ auction PRD not drafted yet — surfaces still being planned"
+awaiting:
+  specs: outline and requirements for zzz-site/auction/watchlist — /planning-qa
+  user-journeys: ZZZ collector watch, unwatch, and watched-list journeys — /planning-pm
