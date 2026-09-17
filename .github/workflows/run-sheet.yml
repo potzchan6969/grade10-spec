@@ -1,0 +1,155 @@
+name: Run sheet
+
+# Dispatch only, and deliberately.
+#
+# The job writes a tab into a spreadsheet people mark by hand, so a person
+# decides when it moves. There is no push or schedule trigger: a run tab is
+# made for a pass somebody is about to walk, and a run nobody asked for is a
+# tab nobody marks.
+#
+# A fork cannot reach this: `workflow_dispatch` needs write access on the
+# repository itself, and the OIDC provider behind the token is bound to
+# `9gag/grade10-spec`.
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Run name — the tab becomes <id>-<slug of this>"
+        required: true
+        type: string
+      selection:
+        description: "What was asked for, recorded on the Summary row"
+        required: false
+        type: string
+      cases:
+        description: "Case ids, comma or newline separated (wins over the filters)"
+        required: false
+        type: string
+      suites:
+        description: "Suites filter — smoke, regression, release, exploratory"
+        required: false
+        type: string
+      priority:
+        description: "Priority filter — high, medium, low"
+        required: false
+        type: string
+      level:
+        description: "Level filter — feature, domain, product, platform"
+        required: false
+        type: string
+      scope:
+        description: "Only read suites whose path contains this"
+        required: false
+        type: string
+      include_draft:
+        description: "Also take draft cases (grey-banded in the tab)"
+        required: false
+        default: false
+        type: boolean
+      dry_run:
+        description: "Print the selection and write nothing"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  id-token: write
+
+# Run ids come from the Summary tab, so two runs may not interleave.
+concurrency:
+  group: tcs-run-sheet
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 24.14.1
+
+jobs:
+  run-sheet:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      # Say which piece of setup is missing, rather than failing later inside
+      # Google's auth with a message about an audience nobody configured.
+      - name: Check the repository is configured
+        if: ${{ !inputs.dry_run }}
+        env:
+          PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          SHEET: ${{ vars.TCS_SHEET_ID }}
+        run: |
+          missing=""
+          [ -n "$PROVIDER" ] || missing="$missing GCP_WORKLOAD_IDENTITY_PROVIDER"
+          [ -n "$ACCOUNT" ] || missing="$missing GCP_SERVICE_ACCOUNT"
+          [ -n "$SHEET" ] || missing="$missing TCS_SHEET_ID"
+          if [ -n "$missing" ]; then
+            echo "::error::Repository variables not set:$missing"
+            echo "Settings → Secrets and variables → Actions → Variables."
+            exit 1
+          fi
+
+      # The selection reaches the script through a file, so a long id list is
+      # not a shell argument and nothing in it is interpolated.
+      - name: Collect the selection
+        env:
+          CASES: ${{ inputs.cases }}
+        run: |
+          printf '%s' "$CASES" | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' \
+            | grep -v '^$' > /tmp/cases.txt || true
+          echo "picked $(wc -l < /tmp/cases.txt) explicit ids"
+
+      - name: Authenticate to Google
+        if: ${{ !inputs.dry_run }}
+        uses: google-github-actions/auth@v2
+        id: auth
+        with:
+          workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/spreadsheets
+
+      - name: Write the run tab
+        env:
+          GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
+          TCS_SHEET_ID: ${{ vars.TCS_SHEET_ID }}
+          RUN_NAME: ${{ inputs.name }}
+          SELECTION: ${{ inputs.selection }}
+          SUITES: ${{ inputs.suites }}
+          PRIORITY: ${{ inputs.priority }}
+          LEVEL: ${{ inputs.level }}
+          SCOPE: ${{ inputs.scope }}
+          INCLUDE_DRAFT: ${{ inputs.include_draft }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          # `if` rather than `&&`: the default shell is `bash -e`, and a false
+          # test on an empty input would end the step rather than skip a flag.
+          set -- --name "$RUN_NAME" --sha "$GITHUB_SHA"
+          if [ -n "$SELECTION" ]; then set -- "$@" --selection "$SELECTION"; fi
+          if [ -s /tmp/cases.txt ]; then set -- "$@" --cases-file /tmp/cases.txt; fi
+          if [ -n "$SUITES" ]; then set -- "$@" --suites "$SUITES"; fi
+          if [ -n "$PRIORITY" ]; then set -- "$@" --priority "$PRIORITY"; fi
+          if [ -n "$LEVEL" ]; then set -- "$@" --level "$LEVEL"; fi
+          if [ -n "$SCOPE" ]; then set -- "$@" --scope "$SCOPE"; fi
+          if [ "$INCLUDE_DRAFT" = "true" ]; then set -- "$@" --include-draft; fi
+          if [ "$DRY_RUN" = "true" ]; then set -- "$@" --dry-run; fi
+          node scripts/openspec/run-sheet.mjs "$@" | tee /tmp/run-sheet.out
+
+      - name: Summarise
+        if: always()
+        run: |
+          {
+            echo "### Run sheet"
+            echo
+            echo '```'
+            tail -n 40 /tmp/run-sheet.out 2>/dev/null || echo "no output"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
