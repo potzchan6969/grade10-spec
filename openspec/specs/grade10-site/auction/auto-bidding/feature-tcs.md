@@ -813,7 +813,7 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * Grade10 resolves the two maxima and records the resulting bid.
 * No bid-time authorization is created or awaited.
 
-### grade10-site-auction-auto-bidding-US5-TC4-2: Auto bid during extended bidding restarts the timer once
+### grade10-site-auction-auto-bidding-US5-TC8-1: Auto bid during extended bidding restarts the timer once
 
 **Classification:**
 
@@ -855,7 +855,7 @@ Two bidders have committed maxima and the listing has been resolved to the two-m
 * Grade10 raises customer A's bid on their behalf, and the close moves to `<bid time>` plus `<extension duration>`.
 * No further bid is placed on either maximum before the close.
 
-### grade10-site-auction-auto-bidding-US5-TC7-2: Maximum committed before the close starts extended bidding
+### grade10-site-auction-auto-bidding-US5-TC9-1: Maximum committed before the close starts extended bidding
 
 **Classification:**
 
