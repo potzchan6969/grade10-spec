@@ -69,15 +69,18 @@ for them.
 
 ### Requirement: The lot page announces watch and unwatch
 
-When a signed-in collector with **no bid** on the lot successfully watches
-it from that lot's page, Grade10 SHALL announce that email alerts are on for
-the lot, in wording aligned with My Auctions email-alerts-on copy, and SHALL
-offer a toast action labelled **View My Auctions** that opens My Auctions.
+Watching or unwatching from the lot page shows a toast with one action on it.
 
-When they successfully unwatch from that lot's page, Grade10 SHALL announce
-that the lot left My Auctions / email alerts are off for it, in wording
-aligned with My Auctions Unwatch, and SHALL offer **Undo** that restores the
-watch without finding the lot again.
+**Watch** - When a signed-in collector with **no bid** on the lot successfully
+watches it from that lot's page, Grade10 SHALL announce that email alerts are
+on for the lot, in wording aligned with My Auctions email-alerts-on copy, and
+SHALL offer a toast action labelled **View My Auctions** that opens My
+Auctions.
+
+**Unwatch** - When they successfully unwatch from that lot's page, Grade10
+SHALL announce that the lot left My Auctions / email alerts are off for it, in
+wording aligned with My Auctions Unwatch, and SHALL offer **Undo** that
+restores the watch without finding the lot again.
 
 #### Scenario: grade10-site-auction-listing-page-SC-14 - Watch announces alerts and My Auctions
 **Serves:** grade10-site-auction-listing-page-US-06 - Watch a lot and open My Auctions from the toast
@@ -100,11 +103,17 @@ watch without finding the lot again.
 
 ### Requirement: A first bid on the lot announces alerts once
 
-When a signed-in collector's bid bookmarks a lot (auto-watch), Grade10 SHALL
-announce that email alerts are on for that lot **at most once per listing
-per collector**, recorded on the account. The announcement SHALL happen when
-that bid bookmarks the lot. Later visits to the lot page SHALL NOT show that
-toast again for the same collector and listing.
+The bid that bookmarks a lot shows the alerts toast once, and later visits stay
+quiet.
+
+**Once per listing per collector** - When a signed-in collector's bid bookmarks
+a lot (auto-watch), Grade10 SHALL announce that email alerts are on for that
+lot **at most once per listing per collector**, recorded on the account.
+
+**When** - The announcement SHALL happen when that bid bookmarks the lot.
+
+**Later visits** - Later visits to the lot page SHALL NOT show that toast again
+for the same collector and listing.
 
 #### Scenario: grade10-site-auction-listing-page-SC-16 - The first bid toast fires once
 **Serves:** grade10-site-auction-listing-page-US-08 - After bidding, Watching stays locked

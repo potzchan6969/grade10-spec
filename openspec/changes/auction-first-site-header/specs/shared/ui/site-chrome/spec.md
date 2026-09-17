@@ -2,25 +2,31 @@
 
 ### Requirement: SiteHeader composes Nav with session-aware account entry
 
-The shared UI package SHALL export `SiteHeader` and the types `SiteHeaderProps`,
-`SiteHeaderCopy`, and `SiteHeaderSession` from its public entry.
+The shared header takes its content and session from the application and
+renders the matching account entry.
 
-`SiteHeader` SHALL compose the design-system `Nav` and SHALL take all brand,
-navigation, locale, and destination content through props. It SHALL NOT fetch,
-route, or read application session stores itself — the application supplies
-`session` as `"signed-out"` or `"signed-in"`.
+**Exports** - The shared UI package SHALL export `SiteHeader` and the types
+`SiteHeaderProps`, `SiteHeaderCopy`, and `SiteHeaderSession` from its public
+entry.
 
-When `session` is `"signed-out"`, `SiteHeader` SHALL render a primary Sign In
-button (not the account icon) and SHALL invoke the supplied sign-in handler
-when that button is activated.
+**Composition** - `SiteHeader` SHALL compose the design-system `Nav` and SHALL
+take all brand, navigation, locale, and destination content through props.
 
-When `session` is `"signed-in"`, `SiteHeader` SHALL render the account icon and
-SHALL open a menu of Profile, My Auctions, and Sign out. The menu SHALL NOT
-include Orders or KYC. Activating each item SHALL invoke the matching supplied
-handler.
+**No application state** - It SHALL NOT fetch, route, or read application
+session stores itself — the application supplies `session` as `"signed-out"` or
+`"signed-in"`.
 
-Cart and search SHALL remain absent unless the application supplies their
-handlers.
+**Signed out** - When `session` is `"signed-out"`, `SiteHeader` SHALL render a
+primary Sign In button (not the account icon) and SHALL invoke the supplied
+sign-in handler when that button is activated.
+
+**Signed in** - When `session` is `"signed-in"`, `SiteHeader` SHALL render the
+account icon and SHALL open a menu of Profile, My Auctions, and Sign out. The
+menu SHALL NOT include Orders or KYC. Activating each item SHALL invoke the
+matching supplied handler.
+
+**Cart and search** - Cart and search SHALL remain absent unless the
+application supplies their handlers.
 
 #### Scenario: shared-ui-site-chrome-SC-15 - An application imports SiteHeader
 **Serves:** Chrome exports - an application imports SiteHeader
@@ -55,20 +61,28 @@ handlers.
 
 ### Requirement: Compact viewports open navigation from a left menu drawer
 
-Below the wide breakpoint, `Nav` SHALL render a leading menu control that opens
-a left drawer. The drawer SHALL list primary navigation first, then utility
+Below the wide breakpoint a menu control opens a drawer holding what the bar no
+longer shows.
+
+**Menu control** - Below the wide breakpoint, `Nav` SHALL render a leading menu
+control that opens a left drawer.
+
+**Drawer order** - The drawer SHALL list primary navigation first, then utility
 links when supplied (styled like the primary links), then search when a search
 handler is supplied, and SHALL offer language switching through a nested drawer
-opened from a row that shows the active language. Account / Sign In and Cart
-SHALL remain in the bar when their handlers (or account slot) are supplied.
-The utility strip and the centered primary nav row SHALL appear only at the
-wide breakpoint.
+opened from a row that shows the active language.
 
-Compact drawers SHALL leave a visible gutter beside the panel rather than
-spanning the full viewport width.
+**In the bar** - Account / Sign In and Cart SHALL remain in the bar when their
+handlers (or account slot) are supplied.
 
-`copy.menu` names the menu trigger; `copy.menuTitle` names the drawer title;
-`copy.language` names the language nested drawer title.
+**Wide only** - The utility strip and the centered primary nav row SHALL appear
+only at the wide breakpoint.
+
+**Gutter** - Compact drawers SHALL leave a visible gutter beside the panel
+rather than spanning the full viewport width.
+
+**Copy** - `copy.menu` names the menu trigger; `copy.menuTitle` names the
+drawer title; `copy.language` names the language nested drawer title.
 
 #### Scenario: shared-ui-site-chrome-SC-20 - Compact menu holds nav and language
 **Serves:** Header controls - compact menu holds nav and language

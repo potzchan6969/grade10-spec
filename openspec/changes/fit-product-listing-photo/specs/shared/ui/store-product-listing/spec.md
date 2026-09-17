@@ -2,14 +2,21 @@
 
 ### Requirement: The product photo fits inside the well
 
-The product card image SHALL display the supplied photo fitted inside the
-clipped square well so the whole photo is visible. Where the photo's aspect
-ratio differs from the square, the well's background SHALL letterbox the
-remainder. The photo SHALL NOT be cropped to fill the well.
+The whole photo shows inside the well, in every tile status.
 
-This SHALL hold for every tile status: available, on sale, sold out, and in
-cart. A sold-out photo SHALL remain fully visible under the sold-out treatment
-(including reduced opacity) and SHALL NOT scale on hover.
+**Fitted** - The product card image SHALL display the supplied photo fitted
+inside the clipped square well so the whole photo is visible.
+
+**Letterbox** - Where the photo's aspect ratio differs from the square, the
+well's background SHALL letterbox the remainder.
+
+**No crop** - The photo SHALL NOT be cropped to fill the well.
+
+**Every status** - This SHALL hold for every tile status: available, on sale,
+sold out, and in cart.
+
+**Sold out** - A sold-out photo SHALL remain fully visible under the sold-out
+treatment (including reduced opacity) and SHALL NOT scale on hover.
 
 #### Scenario: shared-ui-store-product-listing-SC-63 - The whole photo is visible
 **Serves:** Tile contract - the whole photo is visible

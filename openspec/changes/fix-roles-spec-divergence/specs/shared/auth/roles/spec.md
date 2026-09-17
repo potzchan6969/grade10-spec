@@ -114,8 +114,11 @@ grants.
 
 ### Requirement: The permission vocabulary is a closed set of resources and actions
 
-A permission SHALL be a resource and an action, written `resource:action`, drawn
-from this list and no other.
+Every permission is one resource and one action from a list every product
+shares.
+
+**Resources and actions** - A permission SHALL be a resource and an action,
+written `resource:action`, drawn from this list and no other.
 
 | Resource | Actions |
 | --- | --- |
@@ -131,14 +134,18 @@ from this list and no other.
 | `inventory` | `read`, `write` |
 | `audit` | `read` |
 
-Where a product splits its actions by what one can cost, `operate` SHALL run the
-flow, `approve` SHALL set what something costs, and `payout` SHALL be the only
-action that moves money. `kyc:read` SHALL be a resource of its own rather than an
-action on the product that collected the document: an identity document and the
-agreement printed from it outlive the case, they are the same evidence whichever
-product holds them, and reading a case SHALL NOT be a reason to see them. There
-SHALL be no `kyc:write` — recording a verification stays with the flow that needs
-it.
+**Split by cost** - Where a product splits its actions by what one can cost,
+`operate` SHALL run the flow, `approve` SHALL set what something costs, and
+`payout` SHALL be the only action that moves money.
+
+**Identity documents** - `kyc:read` SHALL be a resource of its own rather than
+an action on the product that collected the document: an identity document and
+the agreement printed from it outlive the case, they are the same evidence
+whichever product holds them, and reading a case SHALL NOT be a reason to see
+them.
+
+**No `kyc:write`** - There SHALL be no `kyc:write` — recording a verification
+stays with the flow that needs it.
 
 #### Scenario: shared-auth-roles-SC-11 - Reading a case is not reading its identity document
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary

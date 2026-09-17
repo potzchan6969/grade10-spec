@@ -14,12 +14,19 @@
 
 ### Requirement: Listing creation requires an explicit inventory-unit choice
 
-An Auction listing that reserves a product SHALL carry an explicit inventory
-unit choice. The choice SHALL be either one available Cert ID owned by the
-selected product inventory or the literal choice `No Cert ID`. A product with
-no Cert ID records SHALL remain listable through `No Cert ID`. The choice SHALL
-be stored with the listing and SHALL be required at create even when the
-selected product has no Cert ID.
+A listing that reserves a product names the unit it takes: one Cert ID, or
+none.
+
+**Explicit choice** - An Auction listing that reserves a product SHALL carry
+an explicit inventory unit choice. The choice SHALL be either one available
+Cert ID owned by the selected product inventory or the literal choice
+`No Cert ID`.
+
+**Unnumbered stock** - A product with no Cert ID records SHALL remain listable
+through `No Cert ID`.
+
+**Stored and required** - The choice SHALL be stored with the listing and
+SHALL be required at create even when the selected product has no Cert ID.
 
 #### Scenario: grade10-admin-auction-listing-SC-84 - Product with Cert IDs offers an explicit choice
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
@@ -47,13 +54,21 @@ selected product has no Cert ID.
 
 ### Requirement: Inventory validates and holds a selected Cert ID
 
-When a listing selects a Cert ID, Auction SHALL ask Inventory to verify that
-the record belongs to the selected product and is not already held by another
-active Auction listing. A selected Cert ID SHALL represent exactly one listed
-unit, so its listing quantity SHALL be one. Inventory SHALL reserve that unit
-and the aggregate product inventory in the same logical save operation. The
-`No Cert ID` choice SHALL use the existing product-level quantity and
-reservation rules without allocating a certificate record.
+Inventory checks that a chosen Cert ID belongs to the product and is free,
+then holds it as one unit.
+
+**Verified by Inventory** - When a listing selects a Cert ID, Auction SHALL
+ask Inventory to verify that the record belongs to the selected product and
+is not already held by another active Auction listing.
+
+**Quantity one** - A selected Cert ID SHALL represent exactly one listed unit,
+so its listing quantity SHALL be one.
+
+**Unit hold** - Inventory SHALL reserve that unit and the aggregate product
+inventory in the same logical save operation.
+
+**No Cert ID** - The `No Cert ID` choice SHALL use the existing product-level
+quantity and reservation rules without allocating a certificate record.
 
 #### Scenario: grade10-admin-auction-listing-SC-73 - Wrong-product Cert ID is refused
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
@@ -81,11 +96,17 @@ reservation rules without allocating a certificate record.
 
 ### Requirement: Listing create verifies the saved inventory-unit choice
 
-Create SHALL refuse a listing whose saved product and quantity do not have a
-matching active inventory hold. When a Cert ID is selected, the hold SHALL
-also match that record and quantity one. Create SHALL not mint or infer a
-certificate choice. Editing a listing SHALL preserve its selected Cert ID when
-the listing's own active hold makes that unit unavailable to other listings.
+Create checks the saved choice against a live inventory hold and never
+guesses one.
+
+**Create** - Create SHALL refuse a listing whose saved product and quantity do
+not have a matching active inventory hold. When a Cert ID is selected, the
+hold SHALL also match that record and quantity one.
+
+**No inferred choice** - Create SHALL not mint or infer a certificate choice.
+
+**Editing** - Editing a listing SHALL preserve its selected Cert ID when the
+listing's own active hold makes that unit unavailable to other listings.
 
 #### Scenario: grade10-admin-auction-listing-SC-76 - Create succeeds with a saved Cert ID hold
 **Serves:** grade10-admin-auction-listing-US-71 - Operator creates and presents the selected unit
@@ -115,11 +136,18 @@ the listing's own active hold makes that unit unavailable to other listings.
 
 ### Requirement: Listing display resolves the selected inventory identity
 
-When a listing's selected product schema includes Cert ID in Displayed
-Attributes, the public listing response SHALL resolve and include the selected
-Cert ID through the Inventory display boundary. If the listing selected `No
-Cert ID`, the response SHALL omit the Cert ID row. Product metadata SHALL NOT
-be returned as an alternative product display source.
+The public listing shows the chosen unit's Cert ID from Inventory, and no
+certificate row when none was chosen.
+
+**Selected identity** - When a listing's selected product schema includes
+Cert ID in Displayed Attributes, the public listing response SHALL resolve and
+include the selected Cert ID through the Inventory display boundary.
+
+**Unnumbered stock** - If the listing selected `No Cert ID`, the response
+SHALL omit the Cert ID row.
+
+**Not from product metadata** - Product metadata SHALL NOT be returned as an
+alternative product display source.
 
 #### Scenario: grade10-admin-auction-listing-SC-79 - Public listing displays selected Cert ID
 **Serves:** grade10-admin-auction-listing-US-71 - Operator creates and presents the selected unit

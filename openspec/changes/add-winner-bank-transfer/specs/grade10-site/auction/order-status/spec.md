@@ -11,19 +11,27 @@
 
 ### Requirement: The deadline stops while proof is checked
 
-When an invoice becomes `payment_verifying`, Grade10 SHALL record the time
-left, which is the payment deadline minus the moment of upload, and SHALL stop
-the deadline. While the invoice is `payment_verifying`, the deadline SHALL NOT
-run and Grade10 SHALL NOT write `expired`, however much time passes.
+While an operator checks proof the payment deadline stands still, and it runs
+again from the time that was left.
 
-When an operator returns the invoice to `pending`, Grade10 SHALL set the
-payment deadline to the moment of return plus the recorded time left, with no
-grace added. When an operator confirms it to `paid`, the deadline no longer
-applies.
+**Stopped deadline** - When an invoice becomes `payment_verifying`, Grade10
+SHALL record the time left, which is the payment deadline minus the moment of
+upload, and SHALL stop the deadline.
 
-Because the deadline is stopped, a `payment_verifying` invoice can never
-become `expired`, and an `expired` invoice refuses proof upload, so the two
-states never meet.
+**Never expired while checked** - While the invoice is `payment_verifying`,
+the deadline SHALL NOT run and Grade10 SHALL NOT write `expired`, however much
+time passes.
+
+**Returned to pending** - When an operator returns the invoice to `pending`,
+Grade10 SHALL set the payment deadline to the moment of return plus the
+recorded time left, with no grace added.
+
+**Confirmed paid** - When an operator confirms it to `paid`, the deadline no
+longer applies.
+
+**The two states never meet** - Because the deadline is stopped, a
+`payment_verifying` invoice can never become `expired`, and an `expired`
+invoice refuses proof upload, so the two states never meet.
 
 #### Scenario: auction-status-SC-40 - A checked invoice never expires
 **Serves:** Writable primitives - the deadline does not run while proof is checked

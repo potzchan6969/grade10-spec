@@ -14,12 +14,15 @@ be distinct from every other public surface.
 
 ### Requirement: Store Locator answers with Location & Hours
 
-The site SHALL answer the Store Locator address with Location & Hours for the
-Hong Kong Grade10 Store: a map of the shop, the store name, the full street
-address, and the week's opening hours — in the response HTML with no script
-executing.
+The page shows one shop's map, name, address and hours, and nothing that
+finds a store.
 
-The shop facts SHALL be:
+**Location & Hours** - The site SHALL answer the Store Locator address with
+Location & Hours for the Hong Kong Grade10 Store: a map of the shop, the store
+name, the full street address, and the week's opening hours — in the response
+HTML with no script executing.
+
+**Shop facts** - The shop facts SHALL be:
 
 | Fact | Value |
 | --- | --- |
@@ -27,8 +30,8 @@ The shop facts SHALL be:
 | Address | 13 Pak Sha Road, Causeway Bay, Hong Kong |
 | Hours | 11am – 9pm each day of the week |
 
-The page SHALL NOT offer store search, a store list, distance, filters, or a
-store picker.
+**Not a finder** - The page SHALL NOT offer store search, a store list,
+distance, filters, or a store picker.
 
 #### Scenario: grade10-site-store-store-locator-SC-01 - The page answers whole
 **Serves:** grade10-site-store-store-locator-US-01 - Collector finds the Hong Kong shop from chrome
@@ -53,9 +56,13 @@ store picker.
 
 ### Requirement: The map opens Google Maps
 
-The page SHALL show a map of the Hong Kong Grade10 Store. Activating the map
-SHALL open Google Maps for that shop's address. The page SHALL NOT offer a
-second Get directions control beside the map.
+The map is the one way into Google Maps.
+
+**Map** - The page SHALL show a map of the Hong Kong Grade10 Store. Activating
+the map SHALL open Google Maps for that shop's address.
+
+**No second control** - The page SHALL NOT offer a second Get directions
+control beside the map.
 
 #### Scenario: grade10-site-store-store-locator-SC-04 - Activating the map opens Maps
 **Serves:** grade10-site-store-store-locator-US-02 - Collector opens Google Maps from the page

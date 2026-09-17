@@ -67,14 +67,21 @@ accepted bid, or provider charge.
 
 ### Requirement: A hold requests eligible authorization capabilities
 
-When Grade10 creates a manual-capture authorization for a committed maximum,
-it SHALL request incremental authorization and an extended authorization
-window when available from the provider and the payment method. The request
-SHALL be intended to support an authorization window of at least fourteen
-days after the scheduled close when the provider offers that eligibility. The
-provider's returned capture deadline SHALL remain authoritative for expiry and
-reauthorization; Grade10 SHALL NOT represent a shorter or unavailable window
-as a fourteen-day guarantee.
+A new hold asks the provider for the longest window it offers, and the
+provider's answer stands.
+
+**Provider eligibility** - When Grade10 creates a manual-capture authorization
+for a committed maximum, it SHALL request incremental authorization and an
+extended authorization window when available from the provider and the payment
+method.
+
+**Fourteen days** - The request SHALL be intended to support an authorization
+window of at least fourteen days after the scheduled close when the provider
+offers that eligibility.
+
+**Provider deadline** - The provider's returned capture deadline SHALL remain
+authoritative for expiry and reauthorization; Grade10 SHALL NOT represent a
+shorter or unavailable window as a fourteen-day guarantee.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-14 - An eligible hold requests an extended window
 **Serves:** Raised authorization - an eligible hold requests an extended window
@@ -87,13 +94,20 @@ as a fourteen-day guarantee.
 
 ### Requirement: A provider refusal resolves the attempted raise
 
-When a provider refuses to increment an existing authorization because its
-PaymentIntent is in an unexpected or otherwise unsupported state, Grade10
-SHALL treat the result as a card authorization refusal rather than an
-uncategorized provider fault. It SHALL mark the attempted raise and its
+A refused increment ends the raise and leaves the prior bid standing.
+
+**Refusal, not fault** - When a provider refuses to increment an existing
+authorization because its PaymentIntent is in an unexpected or otherwise
+unsupported state, Grade10 SHALL treat the result as a card authorization
+refusal rather than an uncategorized provider fault.
+
+**Terminal raise outcome** - It SHALL mark the attempted raise and its
 replacement hold as failed, leave the prior accepted bid and active
 authorization unchanged, and expose the existing refusal copy on the bid
-surface. A later bid attempt SHALL not be blocked by the completed refusal.
+surface.
+
+**Pending cleanup** - A later bid attempt SHALL not be blocked by the completed
+refusal.
 
 #### Scenario: grade10-site-auction-bid-payment-method-SC-15 - An unsupported increment does not leave a pending bid
 **Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card

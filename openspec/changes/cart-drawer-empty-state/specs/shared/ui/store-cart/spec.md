@@ -55,8 +55,13 @@ loading, and the checkout button SHALL be disabled.
 
 ### Requirement: The drawer lists items without placeholder slots
 
-`CartDrawer` SHALL render only the cart's line items. It SHALL NOT render
-placeholder item slots. When items overflow the body, the list SHALL scroll.
+The drawer lists what the cart holds and nothing standing in for an item.
+
+**Line items only** - `CartDrawer` SHALL render only the cart's line items.
+
+**No placeholder slots** - It SHALL NOT render placeholder item slots.
+
+**Overflow** - When items overflow the body, the list SHALL scroll.
 
 #### Scenario: shared-ui-store-cart-SC-23 - A cart with items lists only those items
 **Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
@@ -74,10 +79,16 @@ placeholder item slots. When items overflow the body, the list SHALL scroll.
 
 ### Requirement: An empty cart shows the design-system empty state
 
-When the cart holds 0 visible items and is not loading, `CartDrawer` SHALL
-render the design-system `EmptyState` with the consumer-supplied `emptyTitle`
-and optional `emptyDescription`. The empty state SHALL NOT include an action
-button. The header item-count badge and the footer SHALL be hidden.
+An empty cart shows the empty state and hides what has nothing to show.
+
+**Empty state** - When the cart holds 0 visible items and is not loading,
+`CartDrawer` SHALL render the design-system `EmptyState` with the
+consumer-supplied `emptyTitle` and optional `emptyDescription`.
+
+**No action button** - The empty state SHALL NOT include an action button.
+
+**Badge and footer hidden** - The header item-count badge and the footer SHALL
+be hidden.
 
 #### Scenario: shared-ui-store-cart-SC-25 - Empty cart
 **Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds

@@ -7,15 +7,23 @@
 
 ### Requirement: The panel offers auction suspension only with a handler
 
-`UserAccountPanel` SHALL offer suspending the account from auctions only when
-the consumer supplies a handler for it, and reinstating only when the consumer
-supplies a handler for that. It SHALL offer suspend or reinstate according to
-the auction standing the consumer supplies, and never both.
+The panel shows the moves and the standing the console supplies, and confirms
+nothing itself.
 
-The panel SHALL render auction standing, and the reason the consumer supplied
-with it, apart from the account's platform standing. It SHALL NOT confirm
-either move itself: it reports the move to the console, which confirms it in
-`UserModerationDialog`. No export is added or renamed.
+**Only with a handler** - `UserAccountPanel` SHALL offer suspending the account
+from auctions only when the consumer supplies a handler for it, and reinstating
+only when the consumer supplies a handler for that.
+
+**One move at a time** - It SHALL offer suspend or reinstate according to the
+auction standing the consumer supplies, and never both.
+
+**Auction standing** - The panel SHALL render auction standing, and the reason
+the consumer supplied with it, apart from the account's platform standing.
+
+**Confirmed outside** - It SHALL NOT confirm either move itself: it reports the
+move to the console, which confirms it in `UserModerationDialog`.
+
+**Exports** - No export is added or renamed.
 
 #### Scenario: shared-console-user-directory-SC-30 - Auction suspension appears only with a handler
 **Serves:** One account open - auction suspension appears only with a handler

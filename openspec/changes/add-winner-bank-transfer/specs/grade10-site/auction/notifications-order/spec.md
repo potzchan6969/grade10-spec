@@ -12,9 +12,14 @@
 
 ### Requirement: The payment-received letter carries the receipt
 
-The payment-received letter SHALL show the order's payment receipt, as
-`grade10-site/auction/winner-order` defines it, and SHALL attach that receipt
-as a PDF. No other order letter SHALL attach a PDF.
+The payment-received letter is the one order letter that attaches a PDF: the
+receipt.
+
+**Receipt in the letter** - The payment-received letter SHALL show the order's
+payment receipt, as `grade10-site/auction/winner-order` defines it, and SHALL
+attach that receipt as a PDF.
+
+**No other attachment** - No other order letter SHALL attach a PDF.
 
 | Part | Letter body | PDF attachment |
 | --- | --- | --- |
@@ -27,10 +32,12 @@ as a PDF. No other order letter SHALL attach a PDF.
 | Proof files and their names | Never | Never |
 | Internal audit number | Never | Never |
 
-The PDF SHALL be in the same language as the letter, and SHALL carry no fact
-the order's receipt does not show, so the letter is never the only record.
-A payment confirmation delivered more than once SHALL send one letter and one
-attachment.
+**Language and facts** - The PDF SHALL be in the same language as the letter,
+and SHALL carry no fact the order's receipt does not show, so the letter is
+never the only record.
+
+**Sent once** - A payment confirmation delivered more than once SHALL send one
+letter and one attachment.
 
 #### Scenario: order-mail-SC-28 - The letter shows the receipt and attaches it
 **Serves:** Post-close letters - receipt in the letter

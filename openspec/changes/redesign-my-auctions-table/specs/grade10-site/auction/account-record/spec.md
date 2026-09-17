@@ -340,8 +340,12 @@ collector SHALL NOT need a separate Watch for that listing to appear.
 
 ### Requirement: Watch-only rows offer Unwatch; bid rows offer Email alerts only
 
-Every My Auctions row SHALL offer Email alerts when the application supplies
-that control. A row for a listing the collector has not bid on SHALL offer
+Email alerts is on every row; Unwatch is only on a row with no bid.
+
+**Email alerts** - Every My Auctions row SHALL offer Email alerts when the
+application supplies that control.
+
+**Unwatch** - A row for a listing the collector has not bid on SHALL offer
 Unwatch. A row for a listing they have bid on SHALL NOT offer Unwatch.
 
 #### Scenario: grade10-site-auction-account-record-SC-43 - Watch-only can be unwatched

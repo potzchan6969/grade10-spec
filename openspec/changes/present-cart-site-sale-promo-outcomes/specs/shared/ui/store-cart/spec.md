@@ -2,11 +2,16 @@
 
 ### Requirement: A site sale on a cart line shows as sale price with compare-at, never as a Store sale footer row
 
-When the applied cart quote carries an automatic site sale on a line, that
-line SHALL present the discounted unit price as `price` and the pre-sale
-unit price as `originalPrice`. The drawer footer SHALL NOT render a separate
-summary row whose only job is to name that site-sale cut (for example
-“Store sale”). The Subtotal SHALL be the sum of the unit prices shown on the
+A site sale shows on the line it cuts, not as a row of its own in the footer.
+
+**Line prices** - When the applied cart quote carries an automatic site sale
+on a line, that line SHALL present the discounted unit price as `price` and
+the pre-sale unit price as `originalPrice`.
+
+**No footer row** - The drawer footer SHALL NOT render a separate summary row
+whose only job is to name that site-sale cut (for example “Store sale”).
+
+**Subtotal** - The Subtotal SHALL be the sum of the unit prices shown on the
 lines (times quantity).
 
 #### Scenario: shared-ui-store-cart-SC-26 - Site sale lines use compare-at and no Store sale footer row
@@ -37,11 +42,17 @@ name the site sale as its own summary row.
 
 ### Requirement: A refused promo leaves the site sale in place and names the refusal
 
-When the quote refuses a promo code against a site sale, every site-sale
-line SHALL keep its sale presentation, totals SHALL stay on the site sale,
-and `PromoState` SHALL NOT be `applied` for that code. The promo sheet SHALL
-show the refusal message. A held promo marked not applicable SHALL render
-muted without an Apply control.
+A refused code changes nothing on the lines, and the shopper reads why it was
+refused.
+
+**Lines and totals** - When the quote refuses a promo code against a site
+sale, every site-sale line SHALL keep its sale presentation, totals SHALL stay
+on the site sale, and `PromoState` SHALL NOT be `applied` for that code.
+
+**Refusal message** - The promo sheet SHALL show the refusal message.
+
+**Held promo** - A held promo marked not applicable SHALL render muted without
+an Apply control.
 
 #### Scenario: shared-ui-store-cart-SC-28 - Refused code leaves sale lines and shows an error
 **Serves:** shared-ui-store-cart-US-15 - Shopper is refused a promo against the store sale
