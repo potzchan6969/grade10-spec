@@ -2,6 +2,8 @@
 
 **Extended by:** @tangconst - 2026-09-17 — Payment-reminder letter series (retire invoice-sent as its own kind; cadence from invoice send at day 3 and day 6; final notice 24 hours before the deadline) and payment-received letter body (Bank Transfer only, Received date, processing copy, quiet Receipt ID with PDF attach).
 
+**Extended by:** @tangconst - 2026-09-17 — Winner Order payment surface from Storybook: Invoice/Receipt PDF placement, Submit Payment Proof copy controls and abort/HEIC gates, `FileDropzone` as a design-system form primitive, Free bank-transfer fee and Bank transfer payment-method card on Payment Verifying / Processing.
+
 ## Why
 
 A winner can pay an auction invoice only by card, and the card fee grows with
@@ -54,9 +56,10 @@ is watched from the first release.
   audit number the winner never sees. Invoice and receipt PDFs are kept at
   least 7 years.
 - **A reissue must change something.** A new reason alone is refused.
-- **The winner uploads payment proof, once.** 1 to 5 PDF, JPEG or PNG files of
-  up to 10 MB each, behind a confirm step. No further upload is accepted until
-  an operator returns the invoice.
+- **The winner uploads payment proof, once.** 1 to 3 PDF, PNG, JPG or HEIC
+  files (**1** required), up to **5 MB** each and **15 MB** total, behind a
+  confirm step. HEIC is converted to JPEG before storage so operators can open
+  it. No further upload is accepted until an operator returns the invoice.
 - **New invoice status `payment_verifying`, derived as Payment Verifying.**
   Entered on upload. The deadline stops, with the time left recorded; card Pay
   is blocked; the post-sale queue marks the order as needing action; the
@@ -163,7 +166,7 @@ None.
 | Auction service | The winner's address and method locked on confirmation, and the operator edit before send with its log entry; the `payment_verifying` status and stopped deadline; method and fee on the order and invoice; winner proof storage; one reissue command; replaced invoices read from the chain; listing codes assigned by publish; invoice IDs, bank references, receipt IDs and the gapless internal audit number; lookup by any identifier; PDF archive kept at least 7 years. |
 | Notification service | Payment-reminder series (send / day 3 / day 6 from send); final notice 24 hours before the deadline; payment-received with receipt PDF; proof-not-accepted letter; reminders held while proof is checked. |
 | `apps/emails` | React Email drafts under `emails/auction/order/` — payment-reminder (first / day-three / day-six / final) and payment-received. |
-| `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. New copy is catalog work for the engineer. |
+| `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | **`FileDropzone`** (and `FileDropzoneTarget` / `FileDropzoneFileList`) as a design-system form primitive (`packages/design-system/src/components/forms/file-dropzone.tsx`) for winner payment-proof upload — limits, HEIC→JPEG, reject reasons. Figma component set / Code Connect still TBC. New copy is catalog work for the engineer. |
 
 **Winner uploads are new.** Today only operators attach files; the engineer
 confirms storage, scanning and access for a winner's upload.
@@ -181,6 +184,36 @@ confirms storage, scanning and access for a winner's upload.
 - **`close-overdue-address-confirmation`** is in flight on its own branch and
   touches who settles an expired invoice; this change keeps its rule that
   returning proof is not offered once the invoice has expired.
+
+## Extended — setup framing (2026-09-17)
+
+Preview-first Winner Order setup landed CTA and status framing that this
+change already owns with method-at-confirm:
+
+- Derived status label **Awaiting Address** → **Awaiting Setup** on
+  `order-status`, account-record, post-sale, and winner-order wording in
+  this change's deltas (and coordinated on `add-my-auction-orders` /
+  `close-overdue-address-confirmation`).
+- Winner-facing CTA **Complete Order Setup** (Winner Order, My Auction
+  Orders next action, lot closed panel) instead of Confirm address /
+  Confirm delivery address.
+- Billing address on setup stays ❓; a separate change will own it when
+  Product closes the question. Preview prototypes Same as delivery.
+
+## Extended — Winner Order payment surface (2026-09-17)
+
+Preview Storybook locked Winner Order payment chrome that this change already
+owns (proof upload, Free fee, Payment Verifying, invoice/receipt PDFs):
+
+- **Invoice PDF** beside the Order summary heading as a text link; **Receipt
+  PDF** under the payment-method card (not the same row) — decisions Q14.
+- **Submit Payment Proof** copies account number, amount due, and transfer
+  reference; aborts an in-flight submit on leave; gates submit while HEIC
+  converts — decisions Q15.
+- Shared **`FileDropzone`** in `@grade10/design-system` — decisions Q16.
+- Bank-transfer invoices may show Payment Processing Fee as **Free** and
+  Payment Verifying / Processing show **Bank transfer** in the payment-method
+  card (no masked card).
 
 ## References
 

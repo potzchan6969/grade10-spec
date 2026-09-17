@@ -135,7 +135,7 @@ the first match.
 | 7 | `expired` | `unfulfilled` | — | **Pending Payment** |
 | 8 | `pending` | `unfulfilled` | — | **Pending Payment** |
 | 9 | `not_issued` | `unfulfilled` | `address_confirmed` is true | **Preparing Invoice** |
-| 10 | `not_issued` | `unfulfilled` | `address_confirmed` is false | **Awaiting Address** |
+| 10 | `not_issued` | `unfulfilled` | `address_confirmed` is false | **Awaiting Setup** |
 
 The derived order status vocabulary SHALL be these nine names, read the same
 by the winner and the operator.
@@ -199,13 +199,13 @@ Refunded.
 - **THEN** Grade10 refuses the write
 - **AND** the order status is still Pending Payment
 
-#### Scenario: auction-status-SC-19 - An order with no address is Awaiting Address
-**Serves:** Derived order status - an order with no address is Awaiting Address
+#### Scenario: auction-status-SC-19 - An order with no address is Awaiting Setup
+**Serves:** Derived order status - an order with no address is Awaiting Setup
 
 - **GIVEN** an auction order with invoice status `not_issued` whose winner has
   confirmed no delivery address
 - **WHEN** its order status is read
-- **THEN** it is Awaiting Address
+- **THEN** it is Awaiting Setup
 
 #### Scenario: auction-status-SC-20 - A confirmed address with no invoice is Preparing Invoice
 **Serves:** Derived order status - a confirmed address with no invoice is Preparing Invoice

@@ -16,7 +16,7 @@ or shipment state.
 
 | Collector state | Reached from |
 | --- | --- |
-| Awaiting Address | No invoice has been sent, and the winner has confirmed no delivery address |
+| Awaiting Setup | No invoice has been sent, and the winner has confirmed no delivery address |
 | Preparing Invoice | No invoice has been sent, and the winner has confirmed a delivery address |
 | Payment Verifying | Invoice status is `payment_verifying` |
 | Pending Payment | Invoice status is `pending` or `expired` |
@@ -95,12 +95,12 @@ remove them.
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Refunded
 
-#### Scenario: grade10-site-auction-account-record-SC-47 - A won lot with no address reads Awaiting Address
+#### Scenario: grade10-site-auction-account-record-SC-47 - A won lot with no address reads Awaiting Setup
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
 - **GIVEN** a won listing whose auction order has no sent invoice and no confirmed delivery address
 - **WHEN** the winner opens their Bidding page
-- **THEN** that listing's state is Awaiting Address
+- **THEN** that listing's state is Awaiting Setup
 
 #### Scenario: grade10-site-auction-account-record-SC-48 - A confirmed address with no invoice reads Preparing Invoice
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
@@ -112,7 +112,7 @@ remove them.
 #### Scenario: grade10-site-auction-account-record-SC-56 - Every Won standing offers View order
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
-- **GIVEN** won listings in Awaiting Address, Pending Payment, Payment Verifying, Shipped, and Refunded
+- **GIVEN** won listings in Awaiting Setup, Pending Payment, Payment Verifying, Shipped, and Refunded
 - **WHEN** the winner opens My Auctions
 - **THEN** each of those rows offers View order into that lot's Winner Order
 
@@ -126,7 +126,7 @@ remove them.
 #### Scenario: grade10-site-auction-account-record-SC-58 - A Won row carries no secondary helper lines
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
-- **GIVEN** a won listing in Awaiting Address and a won listing whose invoice is `expired`
+- **GIVEN** a won listing in Awaiting Setup and a won listing whose invoice is `expired`
 - **WHEN** the winner opens My Auctions
 - **THEN** neither row shows secondary helper detail under its standing
 - **AND** both rows still show their standing and View order
