@@ -126,18 +126,21 @@ SHALL NOT be shown which sale claims a coupon.
 - **AND** the other is reported with the order on it, and is not spent again
 
 #### Scenario: grade10-site-loyalty-programme-SC-203 - A sale that gave a coupon back can claim it again
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a counter sale that claimed a coupon and gave it back, leaving the coupon spendable
 - **WHEN** the same sale claims that coupon again
 - **THEN** the claim is made and the sale carries the cut
 
 #### Scenario: grade10-site-loyalty-programme-SC-204 - Asking twice for a claim that stands answers the same claim
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a sale holding a claim on a coupon
 - **WHEN** the same sale asks for that claim again
 - **THEN** it is answered with the claim it already holds, and the coupon is claimed once
 
 #### Scenario: grade10-site-loyalty-programme-SC-205 - A counter sale that runs out of time gives the coupon back
+**Serves:** grade10-site-loyalty-programme-US-11 - Member spends a coupon wherever they are, whatever they left open
 
 - **GIVEN** a counter sale holding a coupon that the member walked away from
 - **WHEN** the sale runs out its own clock
