@@ -63,8 +63,9 @@ emails/
     close/                 lot ended for watchers & non-winners
                            (watcher previews: lot-watched-sold /
                            lot-watched-ended = no-bids Ended-only)
-    order/                 winner success, address reminder, invoice sent,
-                           payment received, shipped (post-sale)
+    order/                 winner success, address reminder, payment reminder
+                           (send / 5d / 3d), payment received, shipped
+                           (post-sale)
 ```
 
 Production send still goes through the application’s `@grade10/email` lane;
