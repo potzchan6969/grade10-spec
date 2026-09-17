@@ -19,25 +19,22 @@ and sold stock.
 
 ## Lifecycle
 
-| Status | Meaning |
-| --- | --- |
-| **Draft** | An operator's private start; on no public cover |
-| **Created** | Publishable |
-| **Published** | The cover is public; each listing under it still publishes on its own |
-| **Canceled** | Called off from any of the three; read-only, with its listings cancelled under [the listing rules](/p/grade10-admin/auction/listing) |
+| Status | Reached when | Offered |
+| --- | --- | --- |
+| **Draft** | An operator opens the campaign with a title; on no public cover | Edit, Create, Cancel |
+| **Created** | The operator creates it; still on no public cover | Edit, Publish, Cancel |
+| **Published** | The operator publishes; the cover is public, and each listing under it still publishes on its own | Edit, Cancel |
+| **Canceled** | Called off from any of the three; each listing still under it is called off under [the listing rules](/p/grade10-admin/auction/listing) | Nothing: read-only, no edit, no second cancel |
 
-- **Cancelling** — also cancels the listings still under the campaign, and a
-  canceled campaign opens read-only: title and copy visible, nothing
-  writable, no second cancel
+- **Grants** — authoring takes the catalogue grant and calling off the
+  call-off grant; a control the operator lacks the grant for is not offered
+- **A listing joins** — from the listing editor's Campaign picker, which
+  offers draft and created campaigns only — [Listing
+  Management](/p/grade10-admin/auction/listing)
 
 ## Editor
 
 - **One editor** — authors a campaign end to end; a write that clears the
   title is refused
-- **Actions by state and grant** — Create, Publish and Cancel appear exactly
-  when the campaign's status and the operator's grants allow them: authoring
-  takes the catalogue grant, calling off takes the call-off grant
-- **From the listing** — the listing editor offers a campaign picker, so a lot
-  joins its event where the lot is authored
 
 ::cases{id="grade10-admin/auction/campaign"}

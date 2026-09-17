@@ -1,6 +1,7 @@
 ---
 title: Payment Settings
 spec: grade10-admin/auction/payment-settings
+audience: operator
 order: 14
 ---
 
@@ -11,18 +12,23 @@ operator-owned place, as the Payment settings tab under `/auction`.
 
 | Rule | Value |
 | --- | --- |
-| Minimum charge | One non-negative integer amount per supported currency, in minor units |
+| Minimum charge | One non-negative whole amount per supported currency, in minor units |
 | Currencies | **USD**, **HKD**, **JPY** |
-| Initial floors | **0** minor units in each |
-| Who | Operators who can settle auction money |
+| Initial floors | **0** in each |
+| Who | Operators who can settle auction money; others neither read nor change the mapping |
 
 - **Saved whole** — a save replaces the complete mapping at once and records
   the operator and the time
-- **Refused** — a missing or unsupported currency, a negative amount or a
-  non-integer amount is refused without changing any stored value
 - **Where it is used** — the invoice's buyer's premium is 20% of the winning
   bid or this minimum, whichever is higher — [Winner
   Order](/p/grade10-site/auction/winner-order)
+
+| Refused | What happens |
+| --- | --- |
+| A missing or unsupported currency | Nothing stored changes |
+| A negative amount | Nothing stored changes |
+| An amount that is not a whole number | Nothing stored changes |
+| A read or a save without the settlement permission | Refused |
 
 ::story{id="auction-admin-payment-settings--loaded" title="Payment settings loaded"}
 

@@ -11,14 +11,22 @@ capability is the component contract underneath it.
 
 ## The Blocks
 
-- **Page frame** — the title with its watching-count badge
-- **The table** — bid rows before watch-only; a row is Auction (image,
-  title, close), Current Bid, Your Standing (badge or `--`), Email alerts,
-  and Unwatch when the application supplies it for a watch-only lot
-- **Empty state** — for a collector who bookmarks nothing
+- **Page frame** — the title with its badge, whose number is the count of
+  rows the application supplies
+- 🚧 **One table** — bid rows before watch-only, replacing the Bidding and
+  Watching sections; a row is Auction (image, title, close), Current Bid,
+  Your Standing (a badge, or the application's no-standing placeholder),
+  Email alerts, and Unwatch only when the application supplies a watch toggle
+- **Tabs** — Active, Upcoming and Ended, filled by the application
+- **Empty state** — one, for a collector who bookmarks nothing
 - **Watch control** — marks a lot wherever it is shown; each block renders
   on its own, so a lot page takes the watch control without adopting the
   frame
+- 🚧 **Locked watch control** — with a bid standing on the lot it shows the
+  watching label, disabled, and reports no press
+- 🚧 **Watch confirmations** — the control announces only after the
+  application has changed the value, and exposes the action the copy names:
+  View My Auctions on watch, Undo on unwatch
 
 ## Ownership
 
@@ -31,3 +39,10 @@ capability is the component contract underneath it.
 - **Confirms after the write** — the row announces a mute only after the
   application has changed the value it was given, so the confirmation cannot
   outrun the write, and one row's switch never moves another's
+
+:::detail{title="Code map" for="engineer"}
+- **Blocks** — `AuctionRecord`, `AuctionRecordRow`, `AuctionRecordEmpty`,
+  `AuctionRecordTabs` and `WatchButton`, in `packages/ui`
+- **Retiring** — `WatchingList` and `BiddingList`, with the one-table
+  redesign
+:::
