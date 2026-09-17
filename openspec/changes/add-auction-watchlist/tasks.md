@@ -29,7 +29,7 @@ Claimable against the contracts and fixtures from group 1.
 - [x] 3.3 Make `grade10-site-auction-watchlist-SC-12` pass as an explained empty state, not an error.
 - [x] 3.4 Make `grade10-site-auction-watchlist-SC-16`, `grade10-site-auction-watchlist-SC-17`, and `grade10-site-auction-watchlist-SC-14` pass.
 - [x] 3.5 Make `grade10-site-auction-watchlist-SC-18` pass: unwatch from the watched list without opening the listing.
-- [ ] 3.6 Verify the watched-listings feature lane, including the empty, closed, called-off, and list-unwatch states.
+- [x] 3.6 Verify the watched-listings feature lane, including the empty, closed, called-off, and list-unwatch states.
 
 ## 4. Operator watch count (grade10) (owner: @mason5991)
 
