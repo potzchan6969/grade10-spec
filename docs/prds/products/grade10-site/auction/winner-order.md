@@ -162,8 +162,9 @@ The proof is recorded and the order reads Delivered.
   Reissue and Cancel are refused once any payment has been recorded — [Auction
   Order Status](/p/grade10-site/auction/order-status)
 - 🚧 **Closing a partial balance** — a payment within 10% of what remains
-  either way closes the invoice as Paid; further off is refused so the
-  operator re-enters the right amount
+  either way is offered to the operator as a close: Paid, or kept Partially
+  Paid at the real balance; further off is refused so the operator re-enters
+  the right amount
 
 ## The Page
 
@@ -233,7 +234,7 @@ or changes to the bid-time auction rules.
 | Payment deadline while proof is checked | 🚧 In flight | The deadline stops on upload and resumes with the time left if the proof is not accepted, so a winner never loses time to the check. | Product (@jeffffej0909) |
 | Invoice and receipt identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not by a running count, so the IDs do not reveal how much Grade10 sells. Operators keep a separate gapless audit number the winner never sees. Source: [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
 | Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
-| Closing a partial balance | 🚧 In flight | A payment within 10% of what remains, either way, closes the invoice as Paid with no separate write-off or refund entry; further off is refused. Chosen for simplicity over a running-total tolerance or a line-item adjustment. | Product and finance |
+| Closing a partial balance | 🚧 In flight | A payment within 10% of what remains, either way, is offered to the operator as a close: Paid with no separate write-off or refund entry, or kept Partially Paid at the real balance if more is still coming. Further off is refused. The operator decides rather than the system auto-closing, since only they know whether more payment is expected. | Product and finance |
 | Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
 | Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
 :::

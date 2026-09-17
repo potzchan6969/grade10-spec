@@ -23,9 +23,11 @@ zero — no invoice can record a partial payment at all.
   such payment while money is still owed. The 7-day payment deadline stops
   for good — not paused, as Payment Verifying does — because self-service Pay
   is never offered again on that invoice.
-- **A payment within 10% of what remains, either way, closes the invoice as
-  Paid.** No separate write-off or refund entry is recorded; further off is
-  refused, and the operator re-enters the right amount.
+- **A payment within 10% of what remains, either way, is offered to the
+  operator as a closing payment.** They choose to close the invoice as Paid —
+  no separate write-off or refund entry is recorded — or leave it Partially
+  Paid at the true remaining balance. Further off is refused outright, and
+  the operator re-enters the right amount.
 - **Reissue and Cancel are refused once any payment is recorded.** The
   invoice's address, method and total stay fixed once real money has moved
   against them; an operator resolves anything that will not be paid off by
