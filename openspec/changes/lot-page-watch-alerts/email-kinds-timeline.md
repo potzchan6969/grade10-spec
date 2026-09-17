@@ -33,9 +33,10 @@ Cron is every five minutes; a scheduled letter goes out on the next pass after
 
 | Kind | When it fires | Audience | Status | email:dev template | Notes |
 | --- | --- | --- | --- | --- | --- |
-| `auction_won` | At close (order issued) | Winner | Sends | `auction/order/auction-won` | |
-| `address_reminder` | Close + 24h | Winner (no address) | Sends | `auction/order/setup-reminder` | |
-| `address_reminder_second` | Close + 72h | Winner (no address) | Sends | `auction/order/setup-reminder-second` | |
+| `auction_won` | At close (order issued) | Winner | Sends | `auction/order/auction-won` | Asks for delivery address |
+| `setup_reminder` | Close + 24h | Winner (setup incomplete) | Sends | `auction/order/setup-reminder` | Parked once delivery address is confirmed |
+| `setup_reminder_second` | Close + 72h | Winner (setup incomplete) | Sends | `auction/order/setup-reminder-second` | Same gate as first reminder |
+| `setup_overdue` | Close + 48h (setup deadline) | Winner (setup incomplete) | Sends | `auction/order/setup-overdue` | Self-service setup closed; Contact Us primary |
 | `invoice_sent` | Invoice send or reissue | Winner | Sends | `auction/order/payment-reminder` | urgency `first`; reissue uses the new invoice id |
 | `payment_reminder_day_3` | Invoice sent + 3 days | Winner (unpaid) | Sends | `auction/order/payment-reminder-day-three` | |
 | `payment_reminder_day_6` | Invoice sent + 6 days | Winner (unpaid) | Sends | `auction/order/payment-reminder-day-six` | |
@@ -47,6 +48,17 @@ Cron is every five minutes; a scheduled letter goes out on the next pass after
 | `shipped` | When fulfillment dispatches | Winner | Sends | `auction/order/order-shipped` | |
 | `delivered` | When delivery is recorded | Winner | Sends | `auction/order/order-delivered` | Address + delivered time; View order → Contact Us |
 | `order_cancelled` | When order is cancelled | Winner | Sends | `auction/order/order-cancelled` | Cancelled-at only; Contact Us → View order |
+
+## Setup Window
+
+From lot close / order issued, while the delivery address is not confirmed:
+
+1. **`auction_won`** → `auction/order/auction-won`
+2. **`setup_reminder`** → `auction/order/setup-reminder` (+24h)
+3. **`setup_overdue`** → `auction/order/setup-overdue` (+48h deadline)
+4. **`setup_reminder_second`** → `auction/order/setup-reminder-second` (+72h)
+
+Setup mail parks once the delivery address is confirmed.
 
 ## Payment Window
 
