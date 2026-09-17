@@ -12,8 +12,8 @@ and how sign-in and sign-out work, the same way across every brand.
 - **KYC** — the verified standing that clears a high-value order, a
   high-value bid, or a vault visit, what the check keeps, and how it is run
   ([KYC](/p/grade10-site/account/kyc))
-- **Addresses** — the delivery addresses a collector keeps and confirms onto
-  an auction order ([Addresses](/p/grade10-site/account/addresses))
+- **Delivery addresses** — the ones a collector keeps and confirms onto
+  an auction order ([Delivery Addresses](/p/grade10-site/account/addresses))
 
 Profile and KYC sit on the one page: the profile is the page, and the KYC
 card is on it.

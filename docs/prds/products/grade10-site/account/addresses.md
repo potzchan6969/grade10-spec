@@ -1,5 +1,5 @@
 ---
-title: Addresses
+title: Delivery Addresses
 order: 3
 ---
 
