@@ -112,13 +112,17 @@ already written stay in history as they are.
 
 ### Requirement: An operator suspends an account from auctions
 
-An operator holding `auction:moderate` SHALL be able to suspend an account
-from auction activity, from the account's panel on the admin Users page
-(`grade10-admin/console/user-directory`), and SHALL give a reason to do so.
+An operator's suspension is the same suspension a missed deadline causes, with
+a reason only operators read.
 
-An operator's suspension SHALL be the same suspension a missed payment
-deadline causes: the same scope, the same effect on bids, and lifted the same
-way. Only its cause differs.
+**Operator suspension** - An operator holding `auction:moderate` SHALL be able
+to suspend an account from auction activity, from the account's panel on the
+admin Users page (`grade10-admin/console/user-directory`), and SHALL give a
+reason to do so.
+
+**One suspension, two causes** - An operator's suspension SHALL be the same
+suspension a missed payment deadline causes: the same scope, the same effect on
+bids, and lifted the same way. Only its cause differs.
 
 | Cause | Recorded reason | Collector is told |
 | --- | --- | --- |
@@ -181,10 +185,14 @@ way. Only its cause differs.
 
 ### Requirement: Suspension stops new bids and leaves standing bids as they are
 
-While an account is suspended, Grade10 SHALL refuse every new bid and every
-raise of a maximum from it, on every lot.
+A suspended account places no new bid, and every bid it already placed keeps
+competing.
 
-A suspension SHALL NOT change any bid the account placed before it:
+**No new bids** - While an account is suspended, Grade10 SHALL refuse every new
+bid and every raise of a maximum from it, on every lot.
+
+**Standing bids** - A suspension SHALL NOT change any bid the account placed
+before it:
 
 - Every maximum the account has on an open lot SHALL stay in force. Auto-bidding
   SHALL resolve the lot with that maximum exactly as it would for an account

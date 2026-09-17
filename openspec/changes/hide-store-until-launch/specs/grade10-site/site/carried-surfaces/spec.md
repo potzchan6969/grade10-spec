@@ -38,12 +38,18 @@ from is absent rather than hidden.
 
 ### Requirement: A build carries a surface or it does not
 
-The site SHALL fix the set of surfaces a build carries when that build is
-made, and SHALL NOT read the set again while the build is running. For a
-surface in the set the build SHALL hold the address, the page and the page
-code; for a surface outside it the build SHALL hold none of the three. No
-setting a running build reads, and no request it receives, SHALL add a
-surface to the set or take one out of it.
+The set of surfaces a build carries belongs to the build, not to the request.
+
+**Decided at build** - The site SHALL fix the set of surfaces a build carries
+when that build is made, and SHALL NOT read the set again while the build is
+running.
+
+**What a carried surface holds** - For a surface in the set the build SHALL
+hold the address, the page and the page code; for a surface outside it the
+build SHALL hold none of the three.
+
+**No setting, no request** - No setting a running build reads, and no request
+it receives, SHALL add a surface to the set or take one out of it.
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-01 - A running build cannot be told to carry more
 **Serves:** What a build carries - the set is settled before a build leaves the pipeline, so nothing in front of it can widen what the site answers
@@ -60,7 +66,10 @@ surface to the set or take one out of it.
 
 ### Requirement: The store surfaces wait for the shop to open
 
-The store surfaces are:
+The store surfaces move as one set, and the lane a build is made for decides
+whether it carries them.
+
+**The set** - The store surfaces are:
 
 | Surface | What it answers |
 | --- | --- |
@@ -73,9 +82,10 @@ The store surfaces are:
 | Order history | A collector's own orders |
 | Order detail | One of a collector's orders |
 
-A build SHALL carry every surface in that set or none of it. Which lanes
-carry it SHALL be decided by the deploy environment the build is made for,
-never by the stage the site is served at:
+**All or none** - A build SHALL carry every surface in that set or none of it.
+
+**Which lanes** - Which lanes carry it SHALL be decided by the deploy
+environment the build is made for, never by the stage the site is served at:
 
 | Lane | Store surfaces | Labs | Every other surface |
 | --- | --- | --- | --- |
@@ -84,9 +94,11 @@ never by the stage the site is served at:
 | Preview | not carried | not carried | carried |
 | Production | not carried | not carried | carried |
 
-The labs are the demonstration surfaces and the refund and shipping drafts
-nobody has approved. Every other surface — the auction with its own order and
-invoice, the vault, booking a visit, the membership and join pages, and the
+**Labs** - The labs are the demonstration surfaces and the refund and shipping
+drafts nobody has approved.
+
+**Every other surface** - Every other surface — the auction with its own order
+and invoice, the vault, booking a visit, the membership and join pages, and the
 profile — SHALL be carried on every lane.
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-03 - A production build carries no store surface
@@ -128,15 +140,19 @@ profile — SHALL be carried on every lane.
 
 ### Requirement: An address of an uncarried surface is not found
 
-An address of a surface a build does not carry, and every address beneath it,
-SHALL be an address that build does not hold: it answers with the not-found
-surface and status 404. The build SHALL NOT redirect such an address, and
-SHALL NOT answer it with another surface standing in for the one it does not
-carry.
+An uncarried address is refused the way an unknown address is, whoever asks.
 
-The answer SHALL NOT depend on who is asking or in which language: a collector
-holding a session reads the same refusal as one holding none and keeps their
-session, and the address under a language prefix is refused in that language.
+**Not found** - An address of a surface a build does not carry, and every
+address beneath it, SHALL be an address that build does not hold: it answers
+with the not-found surface and status 404.
+
+**No redirect** - The build SHALL NOT redirect such an address, and SHALL NOT
+answer it with another surface standing in for the one it does not carry.
+
+**Whoever asks** - The answer SHALL NOT depend on who is asking or in which
+language: a collector holding a session reads the same refusal as one holding
+none and keeps their session, and the address under a language prefix is
+refused in that language.
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-08 - A store address on the public site is not found
 **Serves:** grade10-site-site-carried-surfaces-US-02 - the collector following a bookmark or a link to a shop the build has no page for
@@ -181,10 +197,15 @@ session, and the address under a language prefix is refused in that language.
 
 ### Requirement: Nothing in a build names a surface it does not carry
 
-A surface a build does not carry SHALL NOT be a destination anything in that
-build names. In a build without the store surfaces the header SHALL show no
-store navigation item and no cart control, the footer SHALL show no shop
-column, and the front door SHALL show no store button and no store card.
+The chrome offers no way into a surface the build has no page for.
+
+**No destination** - A surface a build does not carry SHALL NOT be a
+destination anything in that build names.
+
+**Header, footer, front door** - In a build without the store surfaces the
+header SHALL show no store navigation item and no cart control, the footer
+SHALL show no shop column, and the front door SHALL show no store button and no
+store card.
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-11 - The header names no shop
 **Serves:** grade10-site-site-carried-surfaces-US-01 - the collector reading the header of a site with nothing to sell them
@@ -210,8 +231,12 @@ column, and the front door SHALL show no store button and no store card.
 
 ### Requirement: A crawler is offered only what the build carries
 
-The robots.txt and the sitemap a build serves SHALL name only addresses of
-surfaces that build carries. A sitemap read from the catalogue when it is
+A crawler is told only about addresses the build answers.
+
+**Crawl directory** - The robots.txt and the sitemap a build serves SHALL name
+only addresses of surfaces that build carries.
+
+**Catalogue-fed sitemap** - A sitemap read from the catalogue when it is
 fetched SHALL list a card or a collection only where the build carries the
 surface that answers it.
 
@@ -231,12 +256,16 @@ surface that answers it.
 
 ### Requirement: Where the store is carried it behaves as it is specified to
 
-A build that carries the store SHALL answer, link and sell at every store
-surface exactly as the store's own capabilities require; which lanes carry
-the set SHALL change no store behaviour on a lane that carries it. Opening
-the shop SHALL be a change to the lanes carrying the store set and to nothing
-else: every surface in the set SHALL start answering together, and no surface
-outside it SHALL change lanes with them.
+Carrying decides whether the store is there, never how it behaves.
+
+**Unchanged** - A build that carries the store SHALL answer, link and sell at
+every store surface exactly as the store's own capabilities require; which
+lanes carry the set SHALL change no store behaviour on a lane that carries it.
+
+**One line to open it** - Opening the shop SHALL be a change to the lanes
+carrying the store set and to nothing else: every surface in the set SHALL
+start answering together, and no surface outside it SHALL change lanes with
+them.
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-16 - Staging sells as it did before
 **Serves:** grade10-site-site-carried-surfaces-US-04 - the teammate who browses, fills a basket, pays and reads the order back

@@ -30,19 +30,25 @@ and the receipt, tracker and delivery proof the order keeps afterwards.
 
 ### Requirement: The winner chooses a payment method with the address
 
-When the winner confirms a delivery address on an auction order, Winner Order
-SHALL also ask how they will pay:
+The winner picks card or bank transfer at the same time as the delivery
+address, and the pick locks with it.
+
+**Chosen with the address** - When the winner confirms a delivery address on
+an auction order, Winner Order SHALL also ask how they will pay:
 
 1. Choose card or bank transfer.
 2. Read the fee range Grade10 sets for each method.
 3. Confirm the address and the method together.
 
-Grade10 SHALL preselect neither method and SHALL record the chosen method on
-the order. The fee range for each
-method SHALL be fixed text Grade10 sets; its wording is TBC. The bank transfer
-text SHALL name no amount, since an operator sets that fee on the invoice.
+**No preselection** - Grade10 SHALL preselect neither method and SHALL record
+the chosen method on the order.
 
-Grade10 SHALL offer bank transfer only in a currency with bank details set up.
+**Fee range at the choice** - The fee range for each method SHALL be fixed
+text Grade10 sets; its wording is TBC. The bank transfer text SHALL name no
+amount, since an operator sets that fee on the invoice.
+
+**Offered by currency** - Grade10 SHALL offer bank transfer only in a currency
+with bank details set up.
 
 | Currency | Methods offered |
 | --- | --- |
@@ -50,11 +56,12 @@ Grade10 SHALL offer bank transfer only in a currency with bank details set up.
 | USD | Card |
 | JPY | Card |
 
-Grade10 SHALL refuse a confirmation with no method chosen, and SHALL refuse
-bank transfer on an order whose currency does not offer it. Until the winner
-confirms, they SHALL be able to change the method freely. Once they confirm,
-the method locks for the winner, per "The delivery address locks when the
-invoice is sent".
+**Refused** - Grade10 SHALL refuse a confirmation with no method chosen, and
+SHALL refuse bank transfer on an order whose currency does not offer it.
+
+**Locked on confirmation** - Until the winner confirms, they SHALL be able to
+change the method freely. Once they confirm, the method locks for the winner,
+per "The delivery address locks when the invoice is sent".
 
 #### Scenario: winner-order-SC-90 - The method is recorded with the address
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
@@ -99,10 +106,13 @@ invoice is sent".
 
 ### Requirement: A bank transfer invoice shows how to pay
 
-While an invoice sent for bank transfer is `pending`, Winner Order SHALL show
-these three ways to pay in place of card Pay. Each SHALL ask the winner to
-quote the invoice's bank reference, shown beside a **Copy Reference Code**
-control that copies it. The account details are TBC.
+A pending bank transfer invoice tells the winner where to send the money and
+what reference to quote.
+
+**Three ways to pay** - While an invoice sent for bank transfer is `pending`,
+Winner Order SHALL show these three ways to pay in place of card Pay. Each
+SHALL ask the winner to quote the invoice's bank reference, shown beside a
+**Copy Reference Code** control that copies it. The account details are TBC.
 
 | Way to pay | Details shown |
 | --- | --- |
@@ -110,9 +120,9 @@ control that copies it. The account details are TBC.
 | FPS | FPS ID, beneficiary name |
 | Hong Kong local bank transfer | Bank name and bank code, beneficiary name, account number |
 
-Grade10 SHALL offer no card Pay control on a bank transfer invoice and SHALL
-refuse a card payment attempted against one. A winner who wants to pay by card
-asks Grade10, and an operator reissues the invoice.
+**No card Pay** - Grade10 SHALL offer no card Pay control on a bank transfer
+invoice and SHALL refuse a card payment attempted against one. A winner who
+wants to pay by card asks Grade10, and an operator reissues the invoice.
 
 #### Scenario: winner-order-SC-95 - A bank transfer invoice shows three ways and the reference
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
@@ -133,8 +143,12 @@ asks Grade10, and an operator reissues the invoice.
 
 ### Requirement: Every invoice carries an invoice ID and a bank reference
 
-Grade10 SHALL give every invoice, card or bank transfer, an invoice ID and a
-bank reference when it is sent. Each SHALL be unique across all invoices.
+Every sent invoice gets two identifiers built from the listing code, and a
+reissue takes fresh ones.
+
+**Identifier formats** - Grade10 SHALL give every invoice, card or bank
+transfer, an invoice ID and a bank reference when it is sent. Each SHALL be
+unique across all invoices.
 
 | Identifier | Format | Example |
 | --- | --- | --- |
@@ -147,33 +161,41 @@ bank reference when it is sent. Each SHALL be unique across all invoices.
 | `[LISTING_ID]` | The listing code of the lot's listing, below |
 | `[SEQ]` | The count of the listing's invoices: `01` for the first invoice sent, the next number on each reissue. Two digits, then three after `99` |
 
-The bank reference SHALL hold only capital letters and digits, with no hyphen,
-space or other symbol. It is 8 characters, or 9 once `[SEQ]` passes `99`, so
-it fits SWIFT's 35-character remittance line.
+**Bank reference** - The bank reference SHALL hold only capital letters and
+digits, with no hyphen, space or other symbol. It is 8 characters, or 9 once
+`[SEQ]` passes `99`, so it fits SWIFT's 35-character remittance line.
 
-Winner Order and the invoice PDF SHALL show the invoice ID. Grade10 SHALL show
-the winner the bank reference only on a bank transfer invoice, per "A bank
-transfer invoice shows how to pay"; a card invoice's bank reference is shown to
-operators only.
+**Where shown** - Winner Order and the invoice PDF SHALL show the invoice ID.
+Grade10 SHALL show the winner the bank reference only on a bank transfer
+invoice, per "A bank transfer invoice shows how to pay"; a card invoice's bank
+reference is shown to operators only.
 
-Each listing SHALL hold a listing code, assigned no later than when the listing
-is published: `L` followed by 5 characters drawn from capital letters and
-digits other than `0`, `O`, `1` and `I`. Grade10 SHALL derive the code from a
-hash of the listing's internal id. When the result is already held by another
-listing, Grade10 SHALL hash again with a counter until the code is unique. The
-code SHALL be stored, unique across all listings, and never changed or reused.
-A later change of hash method SHALL NOT move a stored code. The winner SHALL
-see the listing code only as part of the invoice ID; the public listing page
-SHALL NOT show it.
+**Listing code** - Each listing SHALL hold a listing code, assigned no later
+than when the listing is published: `L` followed by 5 characters drawn from
+capital letters and digits other than `0`, `O`, `1` and `I`.
 
-A reissue replaces the current invoice with a new one, per
-`grade10-admin/auction/post-sale`, and the new invoice SHALL take a new invoice
-ID and a new bank reference. Looking up the invoice ID or bank reference of any
-invoice, including a replaced invoice's, SHALL find its auction order. A
-replaced invoice SHALL hold no invoice status of its own and SHALL never read
-`cancelled`; the order's invoice status is its current invoice's, per
-`grade10-site/auction/order-status`. The PDF of a replaced invoice SHALL say it
-was replaced and SHALL name the invoice ID of the invoice that replaced it.
+**How the code is made** - Grade10 SHALL derive the code from a hash of the
+listing's internal id. When the result is already held by another listing,
+Grade10 SHALL hash again with a counter until the code is unique. The code
+SHALL be stored, unique across all listings, and never changed or reused. A
+later change of hash method SHALL NOT move a stored code.
+
+**Never on the listing page** - The winner SHALL see the listing code only as
+part of the invoice ID; the public listing page SHALL NOT show it.
+
+**After a reissue** - A reissue replaces the current invoice with a new one,
+per `grade10-admin/auction/post-sale`, and the new invoice SHALL take a new
+invoice ID and a new bank reference.
+
+**An old one still finds the order** - Looking up the invoice ID or bank
+reference of any invoice, including a replaced invoice's, SHALL find its
+auction order.
+
+**Replaced invoice** - A replaced invoice SHALL hold no invoice status of its
+own and SHALL never read `cancelled`; the order's invoice status is its current
+invoice's, per `grade10-site/auction/order-status`. The PDF of a replaced
+invoice SHALL say it was replaced and SHALL name the invoice ID of the invoice
+that replaced it.
 
 #### Scenario: winner-order-SC-97 - A replaced invoice's identifiers still find the order
 **Serves:** Invoice - an old identifier still finds the order after a reissue
@@ -257,12 +279,19 @@ was replaced and SHALL name the invoice ID of the invoice that replaced it.
 
 ### Requirement: Invoices and receipts carry an internal audit number
 
-Grade10 SHALL give every invoice and every receipt an internal audit number
-when it is issued: one gapless sequence shared by invoices and receipts, in
-the order they are issued, for example `#00010482`. A replaced invoice SHALL
-keep its number, and a reissue SHALL take the next one. The number SHALL NOT
-reach the winner: not on any PDF, letter, or Winner Order. Operators read it
-per `grade10-admin/auction/post-sale`.
+Every invoice and receipt takes the next number in one count that operators
+read and the winner never sees.
+
+**Internal audit number** - Grade10 SHALL give every invoice and every receipt
+an internal audit number when it is issued: one gapless sequence shared by
+invoices and receipts, in the order they are issued, for example `#00010482`.
+
+**On a reissue** - A replaced invoice SHALL keep its number, and a reissue
+SHALL take the next one.
+
+**Operators only** - The number SHALL NOT reach the winner: not on any PDF,
+letter, or Winner Order. Operators read it per
+`grade10-admin/auction/post-sale`.
 
 #### Scenario: winner-order-SC-129 - The winner never sees the internal audit number
 **Serves:** Invoice - internal audit number
@@ -281,37 +310,42 @@ per `grade10-admin/auction/post-sale`.
 
 ### Requirement: The winner uploads payment proof once
 
-On an invoice sent for bank transfer whose status is `pending`, the winner
-SHALL be able to send Grade10 proof of payment once:
+The winner sends proof of a bank transfer in one upload, and Grade10 holds the
+invoice while an operator checks it.
+
+**Payment proof** - On an invoice sent for bank transfer whose status is
+`pending`, the winner SHALL be able to send Grade10 proof of payment once:
 
 1. Choose 1 to 5 files, each a PDF, JPEG or PNG of at most 10 MB
    (10,485,760 bytes).
 2. Read a confirm step saying nothing can be added after upload.
 3. Confirm.
 
-On confirm Grade10 SHALL store the files against the invoice, set the invoice
-status to `payment_verifying`, stop the payment deadline and record the time
-left, per `grade10-site/auction/order-status`, and write a proof-uploaded
-entry to the invoice log. The order SHALL derive as Payment Verifying. No
-letter is sent.
+**On confirm** - On confirm Grade10 SHALL store the files against the
+invoice, set the invoice status to `payment_verifying`, stop the payment
+deadline and record the time left, per `grade10-site/auction/order-status`,
+and write a proof-uploaded entry to the invoice log. The order SHALL derive as
+Payment Verifying. No letter is sent.
 
-While the invoice is `payment_verifying`, Winner Order SHALL show no payment
-deadline running, SHALL offer no card Pay and no upload, and SHALL refuse a
-further upload.
+**Payment Verifying** - While the invoice is `payment_verifying`, Winner Order
+SHALL show no payment deadline running, SHALL offer no card Pay and no upload,
+and SHALL refuse a further upload.
 
-Grade10 SHALL refuse the whole upload and store nothing when any file breaks
-step 1, SHALL refuse a confirm with no file, and SHALL refuse an upload on a
-card invoice, on any invoice not `pending`, and from anyone but the order's
-winner. Leaving the confirm step without confirming SHALL store nothing. An
-upload that fails part-way SHALL store nothing and leave the invoice
-`pending`, and the winner may upload again; the one upload counts only once
-an upload succeeds.
+**Refused** - Grade10 SHALL refuse the whole upload and store nothing when any
+file breaks step 1, SHALL refuse a confirm with no file, and SHALL refuse an
+upload on a card invoice, on any invoice not `pending`, and from anyone but
+the order's winner.
 
-Proof files SHALL be readable by any operator who can open the order, per
-`grade10-admin/auction/post-sale`, and never by the winner. Winner Order, the
-receipt and every letter SHALL show no proof file and no file name, the
-winner's or an operator's. Only the Payment Verifying status shows that proof
-was sent.
+**Nothing stored until it succeeds** - Leaving the confirm step without
+confirming SHALL store nothing. An upload that fails part-way SHALL store
+nothing and leave the invoice `pending`, and the winner may upload again; the
+one upload counts only once an upload succeeds.
+
+**Who reads the files** - Proof files SHALL be readable by any operator who
+can open the order, per `grade10-admin/auction/post-sale`, and never by the
+winner. Winner Order, the receipt and every letter SHALL show no proof file
+and no file name, the winner's or an operator's. Only the Payment Verifying
+status shows that proof was sent.
 
 #### Scenario: winner-order-SC-99 - Uploading proof stops the deadline
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
@@ -404,14 +438,23 @@ was sent.
 
 ### Requirement: Returned proof reopens the invoice
 
-When an operator returns a `payment_verifying` invoice to `pending`, per
-`grade10-admin/auction/post-sale`, Winner Order SHALL show the operator's
-latest external reason and the new payment deadline, which is the moment of return
-plus the time left at upload. No grace is added, however little time was
-left. The winner SHALL then be able to upload proof again, under the same
-rules as the first upload. The operator's internal reason SHALL NOT be shown
-to the winner. After a second return Winner Order SHALL show only the latest
-external reason; the invoice log keeps every reason, per
+When an operator sends proof back, the winner reads why, the deadline runs
+again, and they upload again.
+
+**Proof not accepted** - When an operator returns a `payment_verifying`
+invoice to `pending`, per `grade10-admin/auction/post-sale`, Winner Order
+SHALL show the operator's latest external reason and the new payment deadline,
+which is the moment of return plus the time left at upload. No grace is added,
+however little time was left.
+
+**Upload again** - The winner SHALL then be able to upload proof again, under
+the same rules as the first upload.
+
+**Internal reason** - The operator's internal reason SHALL NOT be shown to the
+winner.
+
+**Latest reason only** - After a second return Winner Order SHALL show only
+the latest external reason; the invoice log keeps every reason, per
 `grade10-admin/auction/post-sale`.
 
 #### Scenario: winner-order-SC-104 - A returned invoice shows the reason and the time that was left

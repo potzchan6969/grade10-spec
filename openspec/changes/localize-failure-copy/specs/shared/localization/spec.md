@@ -11,8 +11,11 @@
 
 ### Requirement: The platform decides what kind a failure is, once
 
-A call to a backend that fails SHALL be classified as exactly one kind, from a
-closed set:
+A failed call gets one kind from a closed set, and every surface reads that
+kind.
+
+**Closed set of kinds** - A call to a backend that fails SHALL be classified
+as exactly one kind, from a closed set:
 
 | Kind | Assigned when |
 | --- | --- |
@@ -22,13 +25,14 @@ closed set:
 | Unreadable answer | the backend answered in a shape the running build cannot read |
 | Unclassified | the failure fits none of the above |
 
-The classification SHALL be made in one place and reused by every surface that
-shows a failure, on a collector-facing site and in an admin console alike. No
-surface SHALL decide the kind for itself, and a failure SHALL never be shown
-without one.
+**Classified once** - The classification SHALL be made in one place and reused
+by every surface that shows a failure, on a collector-facing site and in an
+admin console alike. No surface SHALL decide the kind for itself, and a
+failure SHALL never be shown without one.
 
-An admin console SHALL supply its own English words for each kind, and is
-outside the message catalogs as every other admin string is.
+**Operator's own English** - An admin console SHALL supply its own English
+words for each kind, and is outside the message catalogs as every other admin
+string is.
 
 #### Scenario: shared-localization-SC-33 - Two products meet the same failure
 **Serves:** Failure notices - two products meet the same failure
@@ -47,14 +51,20 @@ outside the message catalogs as every other admin string is.
 
 ### Requirement: A collector reads a failure in the page's language
 
-A collector-facing surface SHALL render, as a failure's notice, the message
-vocabulary's value for that failure's kind in the active locale. Every kind
-SHALL be a key of the shared vocabulary, answered in every locale of both
-brands on the same terms as every other key.
+A collector reads the catalog's words for the kind, never the backend's.
 
-A surface SHALL NOT render text a backend sent, nor any words it holds itself,
-as a failure notice. The failing call and whatever the backend said SHALL be
-kept as the technical account, reaching logs and never a screen.
+**Words from the catalogs** - A collector-facing surface SHALL render, as a
+failure's notice, the message vocabulary's value for that failure's kind in
+the active locale.
+
+**Every kind a key** - Every kind SHALL be a key of the shared vocabulary,
+answered in every locale of both brands on the same terms as every other key.
+
+**Nothing from the backend** - A surface SHALL NOT render text a backend sent,
+nor any words it holds itself, as a failure notice.
+
+**Technical account** - The failing call and whatever the backend said SHALL
+be kept as the technical account, reaching logs and never a screen.
 
 #### Scenario: shared-localization-SC-35 - A Korean page loses its connection
 **Serves:** Failure notices - a Korean page loses its connection

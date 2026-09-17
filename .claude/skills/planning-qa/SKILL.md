@@ -165,7 +165,34 @@ Everything this run produces is `draft`. Nothing in it claims review;
    artifact has answered, so one left behind is a finding rather than a note.
    A wait on a requirement nobody can decide yet is a different line and stays.
 
-6. **Validate.**
+6. **Lay the requirements out for one pass.** After the reconciliation and
+   before the PM reads the root groups, read each requirement as a new hire
+   would and rewrite its block so it reads in one pass. The sentences are
+   settled; only their layout moves. It lands in commit 5 with the scenarios.
+
+   - Keep every `### Requirement:` name byte-for-byte. Scenarios, the delta
+     diff and `check:manual`'s `stale` rule all key on it.
+   - Keep every SHALL, SHALL NOT, MUST and MAY sentence exactly as written.
+     A rewrapped sentence is not a change; a reworded one is a third pass
+     nobody reconciled.
+   - Open with one plain sentence, no SHALL, saying what the requirement is
+     about.
+   - One rule per line, led by its key term in bold - `**Drafts** -`,
+     `**Display** -` - and a list where several rules share one subject.
+   - Do not split a requirement. A block carrying three subjects wants
+     splitting, but splitting moves scenarios: raise it with the PM rather
+     than do it here.
+   - Lay out ADDED blocks only. A MODIFIED block is diffed line by line
+     against the durable requirement it replaces, and a relaid one shows
+     every line as changed; it takes the shape when the durable spec does.
+   - A block of one or two short sentences already reads in one pass.
+     Leave it.
+
+   Ten SHALL sentences in one paragraph is what this step exists for: an
+   engineer reading for one rule should find it without reading the nine
+   around it.
+
+7. **Validate.**
 
    ```bash
    pnpm run validate:changes <change-name>

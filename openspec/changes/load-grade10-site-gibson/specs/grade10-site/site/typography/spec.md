@@ -17,14 +17,16 @@ fallback family while the design system already names Gibson.
 
 ### Requirement: The site loads Gibson from the named Adobe Fonts kit
 
-The grade10 site SHALL include the Adobe Fonts (Typekit) stylesheet for kit
-`lnk7gwq` in the document head of every page it answers:
+Gibson comes from one Adobe Fonts kit, linked in the head of every page.
+
+**The kit** - The grade10 site SHALL include the Adobe Fonts (Typekit)
+stylesheet for kit `lnk7gwq` in the document head of every page it answers:
 
 `https://use.typekit.net/lnk7gwq.css`
 
-The site SHALL NOT load Gibson by nesting that kit inside a stylesheet that
-is not first in the cascade, and SHALL NOT substitute a different Adobe Fonts
-kit for the brand sans.
+**No other route** - The site SHALL NOT load Gibson by nesting that kit inside
+a stylesheet that is not first in the cascade, and SHALL NOT substitute a
+different Adobe Fonts kit for the brand sans.
 
 #### Scenario: grade10-site-site-typography-SC-01 - Every surface loads the kit
 **Serves:** Site-wide - every surface loads the kit

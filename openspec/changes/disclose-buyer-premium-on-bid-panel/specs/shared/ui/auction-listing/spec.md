@@ -14,11 +14,19 @@ before a collector commits a maximum.
 
 ### Requirement: Bid card discloses the buyer fee inline
 
-`ListingAuctionBidCard` SHALL render always-on secondary copy under the primary
-bid action that states a 20% buyer fee is added on top of the winning bid. The
-string SHALL come from consumer copy (`buyerFeeHint`). The copy type SHALL NOT
-include a `buyerFeeTooltip` field, and the card SHALL NOT gate that rate behind
-an info tooltip. When `bidEnrollment` is `signed-out`, the fee line SHALL be
+The bid card names the buyer fee under the bid action, in plain sight, to a
+signed-in collector.
+
+**Inline rate** - `ListingAuctionBidCard` SHALL render always-on secondary copy
+under the primary bid action that states a 20% buyer fee is added on top of
+the winning bid.
+
+**Consumer copy** - The string SHALL come from consumer copy (`buyerFeeHint`).
+
+**No tooltip** - The copy type SHALL NOT include a `buyerFeeTooltip` field, and
+the card SHALL NOT gate that rate behind an info tooltip.
+
+**Signed out** - When `bidEnrollment` is `signed-out`, the fee line SHALL be
 omitted with the bid action.
 
 #### Scenario: shared-ui-auction-listing-SC-44 - Buyer fee shows inline at 20%

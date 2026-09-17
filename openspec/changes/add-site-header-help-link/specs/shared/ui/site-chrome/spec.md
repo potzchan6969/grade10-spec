@@ -9,15 +9,21 @@
 
 ### Requirement: An external link opens in a new tab
 
-`NavLink` SHALL accept an optional `external` flag. When a link is marked
-`external`, `Nav` SHALL render it with `target="_blank"` and
-`rel="noopener noreferrer"` wherever that link appears — primary navigation on
-a wide viewport, primary items in the compact menu drawer, the wide utility
-strip, and utility items in the compact menu. When `external` is omitted or
-false, the link SHALL navigate in the same browsing context.
+A link the application marks external opens in a new tab wherever the chrome
+renders it.
 
-The chrome SHALL NOT invent which links are external — the application supplies
-the flag with the link.
+**The flag** - `NavLink` SHALL accept an optional `external` flag.
+
+**New-tab destinations** - When a link is marked `external`, `Nav` SHALL render
+it with `target="_blank"` and `rel="noopener noreferrer"` wherever that link
+appears — primary navigation on a wide viewport, primary items in the compact
+menu drawer, the wide utility strip, and utility items in the compact menu.
+
+**Same tab** - When `external` is omitted or false, the link SHALL navigate in
+the same browsing context.
+
+**Application decides** - The chrome SHALL NOT invent which links are external
+— the application supplies the flag with the link.
 
 #### Scenario: shared-ui-site-chrome-SC-27 - External link opens a new tab
 **Serves:** External links - new-tab destinations

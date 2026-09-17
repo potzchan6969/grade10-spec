@@ -36,8 +36,11 @@ requirement.
 
 ### Requirement: An operator checks payment proof
 
-An operator holding payment-processing SHALL check the proof on an order
-whose invoice is `payment_verifying`:
+An operator reads the winner's proof, then confirms the payment or returns
+the invoice to the winner.
+
+**Steps** - An operator holding payment-processing SHALL check the proof on
+an order whose invoice is `payment_verifying`:
 
 1. Open the order and read the winner's uploaded files, the invoice ID and
    bank reference, the payment method, and the order total.
@@ -53,24 +56,30 @@ whose invoice is `payment_verifying`:
 | Confirm | `paid`, at the current invoice's order total | No longer applies | A payment record: method bank transfer, the winner's files as proof, and any operator files |
 | Return | `pending` | The moment of return plus the time left at upload | The external and internal reasons, in the invoice log |
 
-On Confirm Grade10 SHALL send the payment-received letter; on Return it SHALL
-send the proof-not-accepted letter with the external reason, per
-`grade10-site/auction/notifications-order`. Neither outcome SHALL change the
-order total.
+**Letters** - On Confirm Grade10 SHALL send the payment-received letter; on
+Return it SHALL send the proof-not-accepted letter with the external reason,
+per `grade10-site/auction/notifications-order`.
 
-Grade10 SHALL refuse a Confirm, and store no file, when any operator file
-breaks step 3.
+**Order total** - Neither outcome SHALL change the order total.
 
-Confirm and Return SHALL be offered only on a `payment_verifying` invoice, and
-while it is `payment_verifying` they are the only actions offered. Return
-SHALL NOT be offered on an `expired` invoice. That is a guard: the deadline is
-stopped while proof is checked, so a checked invoice never expires. An
-operator without payment-processing SHALL see both controls visible and
-disabled, and Grade10 SHALL refuse both on the server.
+**Operator files** - Grade10 SHALL refuse a Confirm, and store no file, when
+any operator file breaks step 3.
 
-The winner's files SHALL be readable by any operator who can open the order,
-and never by the winner, per "Manual settlement records the method and its
-proof".
+**When offered** - Confirm and Return SHALL be offered only on a
+`payment_verifying` invoice, and while it is `payment_verifying` they are the
+only actions offered.
+
+**Not offered once expired** - Return SHALL NOT be offered on an `expired`
+invoice. That is a guard: the deadline is stopped while proof is checked, so a
+checked invoice never expires.
+
+**Without payment-processing** - An operator without payment-processing SHALL
+see both controls visible and disabled, and Grade10 SHALL refuse both on the
+server.
+
+**Who reads the files** - The winner's files SHALL be readable by any operator
+who can open the order, and never by the winner, per "Manual settlement
+records the method and its proof".
 
 #### Scenario: grade10-admin-auction-post-sale-SC-100 - Confirming proof settles the order
 **Serves:** post-sale-US-10 - Operator checks a winner's payment proof
@@ -151,9 +160,14 @@ proof".
 
 ### Requirement: An operator reissues a sent invoice
 
-Reissue is the one way to change an invoice after it is sent. An operator
-holding payment-processing SHALL reissue an order whose invoice is `pending`
-or `expired`:
+An operator changes a sent invoice by replacing it with a new one, with a
+reason and at least one change.
+
+**One Reissue action** - Reissue is the one way to change an invoice after it
+is sent.
+
+**Steps** - An operator holding payment-processing SHALL reissue an order
+whose invoice is `pending` or `expired`:
 
 1. Choose Reissue on the order.
 2. Change what the winner asked for or the operator decided: delivery address,
@@ -170,27 +184,34 @@ or `expired`:
 6. Give a reason. The reason is mandatory.
 7. Send the new invoice.
 
-Grade10 SHALL refuse a reissue that changes none of the delivery address,
-payment method, bank transfer fee, Shipping & Handling, Insurance or deadline.
-A new reason alone is not a change; a fresh 7 days is.
+**At least one change** - Grade10 SHALL refuse a reissue that changes none of
+the delivery address, payment method, bank transfer fee, Shipping & Handling,
+Insurance or deadline. A new reason alone is not a change; a fresh 7 days is.
 
-On send Grade10 SHALL replace the current invoice with a new one carrying a new
-invoice ID, bank reference and internal audit number, per
-`grade10-site/auction/winner-order`, issue it as `pending` with the chosen deadline, lock the
-address and method it carries, write a reissued entry to the invoice log
-naming each part that changed, and send the winner the invoice-reissued letter.
-The replaced invoice SHALL hold no status of its own and SHALL NOT be written
-`cancelled`.
+**On send** - On send Grade10 SHALL replace the current invoice with a new one
+carrying a new invoice ID, bank reference and internal audit number, per
+`grade10-site/auction/winner-order`, issue it as `pending` with the chosen
+deadline, lock the address and method it carries, write a reissued entry to
+the invoice log naming each part that changed, and send the winner the
+invoice-reissued letter.
 
-Only an operator SHALL change an invoice's payment method after send. Reissue
-SHALL NOT be offered, and SHALL be refused, on an invoice that is
-`payment_verifying` or `paid`. Grade10 SHALL refuse a reissue under the same
-conditions it refuses a first send.
+**Replaced invoice** - The replaced invoice SHALL hold no status of its own and
+SHALL NOT be written `cancelled`.
 
-A card invoice whose money arrived any other way — bank transfer, cash or
-another method — SHALL be reissued as bank transfer first, then settled
-manually at the new invoice's order total. Where the money arrived at the
-subtotal, the operator enters a bank transfer fee of 0.
+**Payment method** - Only an operator SHALL change an invoice's payment method
+after send.
+
+**Not while checked or paid** - Reissue SHALL NOT be offered, and SHALL be
+refused, on an invoice that is `payment_verifying` or `paid`.
+
+**Same refusals as a first send** - Grade10 SHALL refuse a reissue under the
+same conditions it refuses a first send.
+
+**Card invoice paid by transfer** - A card invoice whose money arrived any
+other way — bank transfer, cash or another method — SHALL be reissued as bank
+transfer first, then settled manually at the new invoice's order total. Where
+the money arrived at the subtotal, the operator enters a bank transfer fee of
+0.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-107 - A reissue keeps the deadline when the operator says so
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
@@ -301,8 +322,11 @@ subtotal, the operator enters a bank transfer fee of 0.
 
 ### Requirement: An operator edits the address or method before send
 
-Once the winner confirms, only an operator changes the order's delivery
-address or payment method before the invoice is sent, per
+Before the invoice is sent, an operator changes the delivery address or the
+payment method for the winner, with a reason.
+
+**Edit before send** - Once the winner confirms, only an operator changes the
+order's delivery address or payment method before the invoice is sent, per
 `grade10-site/auction/winner-order`. An operator holding payment-processing
 SHALL be able to do so on an auction order in Preparing Invoice, on the
 winner's request:
@@ -320,13 +344,18 @@ winner's request:
 | Invoice log entry | Order edited before send: the named operator, the reason, each part that changed, and its value before and after |
 | Preparing Invoice waiting time | Unchanged. It counts from the winner's confirmation, per "The order detail shows how long an order has waited" |
 
-The order SHALL hold the new address as its snapshot and the new method, and
-Winner Order SHALL show them. Grade10 SHALL refuse an edit with no reason,
-and an edit that changes nothing. The edit SHALL NOT be offered once the
-invoice is sent; a change after send is a reissue, per "An operator reissues
-a sent invoice". An operator without payment-processing SHALL see the edit
-control visible and disabled, and Grade10 SHALL refuse the same action on the
-server.
+**After the edit** - The order SHALL hold the new address as its snapshot and
+the new method, and Winner Order SHALL show them.
+
+**Refused** - Grade10 SHALL refuse an edit with no reason, and an edit that
+changes nothing.
+
+**After send** - The edit SHALL NOT be offered once the invoice is sent; a
+change after send is a reissue, per "An operator reissues a sent invoice".
+
+**Without payment-processing** - An operator without payment-processing SHALL
+see the edit control visible and disabled, and Grade10 SHALL refuse the same
+action on the server.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-135 - An edit before send is recorded with its reason
 **Serves:** Quote and send - edit before send

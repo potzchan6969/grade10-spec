@@ -2,13 +2,20 @@
 
 ### Requirement: Signed-in collectors open account destinations from the header menu
 
-When the collector is signed in, activating the account control SHALL open a
-menu of Profile, My Auctions, and Sign out. Activating Profile SHALL take them
-to the profile. Activating My Auctions SHALL take them to My Auctions.
-Activating Sign out SHALL start sign-out. The menu SHALL NOT offer Orders or
-KYC until those surfaces are in scope for the header.
+The account control of a signed-in collector opens a menu of three
+destinations.
 
-The profile SHALL continue to offer sign-out as well.
+**The menu** - When the collector is signed in, activating the account control
+SHALL open a menu of Profile, My Auctions, and Sign out.
+
+**Each item** - Activating Profile SHALL take them to the profile. Activating
+My Auctions SHALL take them to My Auctions. Activating Sign out SHALL start
+sign-out.
+
+**Not offered** - The menu SHALL NOT offer Orders or KYC until those surfaces
+are in scope for the header.
+
+**Profile sign-out** - The profile SHALL continue to offer sign-out as well.
 
 #### Scenario: grade10-site-site-page-shell-SC-17 - Account menu lists auction-first destinations
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
@@ -28,12 +35,22 @@ The profile SHALL continue to offer sign-out as well.
 
 ### Requirement: Compact viewports reach navigation through the menu drawer
 
-At a viewport 375 CSS pixels wide, the site SHALL keep Account / Sign In and
-Cart (when answered) reachable in the header bar. Primary navigation, utility
-links, and search (when answered) SHALL be reachable from the left menu drawer.
-Language SHALL be reachable through a nested drawer opened from that menu. The
-menu panel SHALL leave a visible gutter rather than spanning the full viewport.
-The shell SHALL NOT rely on a currency switch.
+On a narrow viewport the bar keeps the account and cart, and the menu drawer
+holds the rest.
+
+**In the bar** - At a viewport 375 CSS pixels wide, the site SHALL keep Account
+/ Sign In and Cart (when answered) reachable in the header bar.
+
+**In the drawer** - Primary navigation, utility links, and search (when
+answered) SHALL be reachable from the left menu drawer.
+
+**Language** - Language SHALL be reachable through a nested drawer opened from
+that menu.
+
+**Gutter** - The menu panel SHALL leave a visible gutter rather than spanning
+the full viewport.
+
+**No currency switch** - The shell SHALL NOT rely on a currency switch.
 
 #### Scenario: grade10-site-site-page-shell-SC-20 - Compact menu reaches nav and language
 **Serves:** grade10-site-site-page-shell-US-01 - Collector opens any surface inside the site shell

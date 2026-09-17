@@ -9,18 +9,32 @@
 
 ### Requirement: Custom maximum entry respects a major-unit ceiling
 
-`ListingAuctionBidCard` SHALL accept a custom private-maximum draft only when
-the whole major-unit integer is at most 9,999,999,999, regardless of listing
-currency. The ceiling applies after whole-major cleaning (non-digits stripped;
-a decimal mark and its fraction discarded). An edit — typed or pasted — whose
-cleaned major-unit value would exceed that ceiling SHALL leave the previous
-valid draft unchanged, including when that draft is empty. The field SHALL NOT
-clamp the draft to the ceiling. Exactly 9,999,999,999 SHALL be accepted. The
-refuse alone SHALL NOT show an invalid-amount or below-floor message. Set and
-raise private maximum share this field and this rule.
+A custom maximum has a ceiling, and an edit past it is refused without a
+message.
 
-Committed amounts remain an integer count of minor units at or above the
-existing floor rules.
+**Major-unit cap** - `ListingAuctionBidCard` SHALL accept a custom
+private-maximum draft only when the whole major-unit integer is at most
+9,999,999,999, regardless of listing currency.
+
+**After cleaning** - The ceiling applies after whole-major cleaning (non-digits
+stripped; a decimal mark and its fraction discarded).
+
+**Restore on overshoot** - An edit — typed or pasted — whose cleaned major-unit
+value would exceed that ceiling SHALL leave the previous valid draft unchanged,
+including when that draft is empty.
+
+**No clamp** - The field SHALL NOT clamp the draft to the ceiling.
+
+**At the ceiling** - Exactly 9,999,999,999 SHALL be accepted.
+
+**No ceiling error copy** - The refuse alone SHALL NOT show an invalid-amount
+or below-floor message.
+
+**Set and raise** - Set and raise private maximum share this field and this
+rule.
+
+**Committed amounts** - Committed amounts remain an integer count of minor
+units at or above the existing floor rules.
 
 #### Scenario: shared-ui-auction-listing-SC-38 - A draft at the ceiling is accepted
 **Serves:** Custom maximum ceiling - a draft at the ceiling is accepted

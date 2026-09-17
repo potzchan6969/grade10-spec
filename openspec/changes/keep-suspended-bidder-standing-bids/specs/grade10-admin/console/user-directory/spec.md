@@ -7,11 +7,19 @@
 
 ### Requirement: An operator suspends or reinstates an account's bidding from its panel
 
-The account panel on Users SHALL offer suspending the account from auctions,
-or reinstating it, only to a session holding `auction:moderate`. It SHALL
-offer suspend for an account that is not suspended and reinstate for one that
-is, and never both. A session without the grant SHALL NOT be offered either,
-and Grade10 SHALL refuse either move on the server if it is attempted.
+An operator holding the grant suspends or reinstates an account's bidding from
+its panel, apart from any ban.
+
+**Who** - The account panel on Users SHALL offer suspending the account from
+auctions, or reinstating it, only to a session holding `auction:moderate`.
+
+**One move at a time** - It SHALL offer suspend for an account that is not
+suspended and reinstate for one that is, and never both.
+
+**Without the grant** - A session without the grant SHALL NOT be offered
+either, and Grade10 SHALL refuse either move on the server if it is attempted.
+
+**The move** - From the panel:
 
 1. The operator opens the account's panel.
 2. They choose to suspend from auctions, or to reinstate.
@@ -20,11 +28,12 @@ and Grade10 SHALL refuse either move on the server if it is attempted.
 4. On confirming, the panel shows the account's new auction standing, and for
    a suspension the reason, who suspended, and when.
 
-What a suspension does, and what reinstating lifts, is
-`grade10-site/auction/bidder-suspension`.
+**What a suspension does** - What a suspension does, and what reinstating
+lifts, is `grade10-site/auction/bidder-suspension`.
 
-The panel SHALL show auction standing apart from the account's platform ban.
-Suspending SHALL NOT ban the account, and banning SHALL NOT suspend it.
+**Auction standing** - The panel SHALL show auction standing apart from the
+account's platform ban. Suspending SHALL NOT ban the account, and banning SHALL
+NOT suspend it.
 
 #### Scenario: grade10-admin-console-user-directory-SC-16 - An operator suspends an account from its panel
 **Serves:** grade10-admin-console-user-directory-US-03 - Operator suspends an account from auctions
