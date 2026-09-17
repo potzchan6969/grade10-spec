@@ -136,6 +136,7 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | 🚧 Record a partial payment | An invoice pending or expired, or already Partially Paid | Payment processing |
 | 🚧 Cancel order | Awaiting Address, Preparing Invoice, or an expired invoice, never Partially Paid | Payment processing |
 | 🚧 Reopen the address form, or record an address | Awaiting Address after the deadline, before send | Payment processing |
+| 🚧 Refund | Processing, Shipped, Delivered or Partially Paid, once | Refund processing |
 | Dispatch | A paid order | Shipment processing |
 | Confirm delivery | A dispatched order | Shipment processing |
 | Comment | Any order the operator can open | None |
@@ -193,6 +194,24 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   address the winner gives by phone, leaving the form closed
 - **Cancel** — the lot returns to stock with no runner-up offer; the hammer
   price and bid history stay for audit and are not carried into a new listing
+- 🚧 **Refund** — the winner asks Customer Service, outside Grade10; the
+  operator sends the money by hand, in the Stripe dashboard or by bank
+  transfer, then records it on the order. One refund per order, never
+  reversed, and the order reads Refunded for good
+  1. **Amount** — above zero and no more than the winner has paid, partial
+     payments included; the operator decides it, never fixed to the Order
+     Total
+  2. **Recorded with it** — a reason (Damaged, Not as described, Not
+     received, Duplicate or overpayment, Other) and a note, the method, the
+     Stripe or bank reference, and 1 to 5 private proof files
+  3. **The lot** — the operator chooses at refund: back to stock, when the
+     card came back or never left, or kept by the winner, when it stays sold
+  4. **Its number** — the next one in the internal audit series
+  5. **The winner** — sees Refunded on their order and gets no letter; their
+     bidder standing does not change
+- 🚧 **Finding refunds** — the queue filters to Refunded; the order detail
+  shows the amount, method, reference, reason, audit number, who recorded it
+  and when
 - 🚧 **Internal audit number** — every invoice and receipt carries one
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
@@ -233,6 +252,7 @@ The buyer-premium minimums, as the Payment settings tab under `/auction`.
 | Drafting, editing, publishing and calling off a listing or a campaign | `auction:write` and `auction:operate` | `staff` |
 | Sending, reissuing and settling an invoice, checking proof, cancelling, reopening the address form, the premium minimums | `auction:settle` — payment processing | `finance`, and `admin` |
 | Dispatch and delivery | Shipment processing | `staff`, and `admin` |
+| 🚧 Recording a refund | `auction:refund` — refund processing | `staff`, and `admin` |
 
 - **A control the operator lacks** — stays visible and disabled, and the
   server refuses it too; reissue, returning proof, manual settlement and
@@ -293,5 +313,9 @@ settings.
 | Premium minimum | Decided | Under Auction because auction invoices use it; behind the settlement permission because changing it changes the amount collected. | Product and finance |
 | Overdue and the address deadline | ❓ Open | Whether the Overdue mark should follow the 48-hour address deadline instead of 72 hours idle, so a winner is not blocked for a day before an operator is told. | Product |
 | Partial payment stays operator-only | 🚧 In flight | Recorded the same way as manual settlement, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
+| Who records a refund | 🚧 In flight | Operations, with a refund grant of its own held by `staff` and `admin`, apart from `auction:settle`. Chosen over finance approving each refund, to keep one step; finance reconciles from the order detail. | Product, Operations and finance |
+| Refund money path | 🚧 In flight | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
+| One refund, any amount | 🚧 In flight | One refund ends the order as Refunded, for any amount up to what was paid. Chosen over several partial refunds on one order. | Product and finance |
+| Refund letter | 🚧 In flight | None; Customer Service already speaks to the winner. | Product |
 | Partially Paid needs no action | 🚧 In flight | Unlike Payment Verifying, nothing is waiting on the operator by default; they open the order when a new payment arrives. | Product and finance |
 :::
