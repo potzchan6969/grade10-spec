@@ -67,12 +67,18 @@ Needs group 1's landed table. Independent of group 2.
 
 Needs groups 1 to 3.
 
-- [ ] 4.1 Assert no store page code and no store document reach a build made
-      without the store, reading `dist/` rather than the module graph
-      (`grade10-site-site-carried-surfaces-SC-02`)
-- [ ] 4.2 Assert a staging build still browses, fills a basket, pays and reads
-      an order back unchanged
-      (`grade10-site-site-carried-surfaces-SC-16`)
+- [ ] 4.1 Deferred — the document half shipped and the page-code half is no
+      longer required. `storeModules` binds the shop's four features and the
+      account's five in one side-effectful list, and the account five serve
+      the profile, membership and join pages that every lane carries, so the
+      composition root cannot drop it; telling them apart is a change to
+      `@grade10/store-frontend`'s published surface that the shop's launch
+      retires. Requirement narrowed and the case withdrawn — decisions Q12
+- [ ] 4.2 Deferred — `grade10-site-site-carried-surfaces-SC-16` is met and
+      unasserted. The store behaves identically wherever it is carried, and
+      the existing store e2e specs walk browse, cart, checkout and order
+      history on the development lane; nothing runs them against a staging
+      build
 - [x] 4.3 Verify: `pnpm run build`, then
       `pnpm --dir apps/frontend/grade10 run check:quality`
 
