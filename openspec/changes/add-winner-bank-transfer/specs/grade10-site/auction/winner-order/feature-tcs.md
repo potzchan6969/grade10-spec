@@ -977,6 +977,37 @@ Runs once per row of **Test data**.
 
 ---
 
+### winner-order-US2-TC11-1: A repeated payment confirmation keeps one receipt ID
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* <lot_1> was paid by card and its receipt ID is `REC-202609-LK7P2Q-01-P1`.
+
+**Steps:**
+
+1. Deliver the same payment confirmation for <lot_1> again.
+2. Open the receipt for <lot_1> on Winner Order.
+
+**Expected Results:**
+
+* The receipt ID is still `REC-202609-LK7P2Q-01-P1`.
+* No other receipt ID and no other internal audit number exists for <lot_1>.
+
+---
+
 ## winner-order-US9: Winner pays an invoice by bank transfer
 
 **As a** winner who would rather not pay a card fee,
@@ -1961,6 +1992,7 @@ Runs once per row of **Test data**.
 | `winner-order-SC-129`, `winner-order-SC-130`: the internal audit number | From decision 19, not from a case; added `winner-order-US1-TC31-1` and `winner-order-US1-TC32-1` |
 | `winner-order-SC-131`: the receipt ID and breakdown | From decisions 16 and 17, not from a case; added `winner-order-US2-TC9-1`; `winner-order-US2-TC4-1` now reads the receipt ID |
 | `winner-order-SC-133`: documents outlive a deleted account | From decision 20, not from a case; added `winner-order-US2-TC10-1` |
+| Folded from #466 (`add-auction-winner-receipt`) | Its repeated-confirmation rule, with the `REC-` receipt ID; folded as `winner-order-SC-135` and walked by `winner-order-US2-TC11-1` |
 
 **Folded:** `winner-order-SC-114`, `winner-order-SC-115`, `winner-order-SC-116`, `winner-order-SC-117`, `winner-order-SC-118`, `winner-order-SC-119`, `winner-order-SC-120`, `winner-order-SC-121`. From the author's identifier answers, not from a case: `winner-order-SC-122`, `winner-order-SC-123`, `winner-order-SC-124`, `winner-order-SC-125`, `winner-order-SC-126`, `winner-order-SC-127`, `winner-order-SC-128`, `winner-order-SC-129`, `winner-order-SC-130`, `winner-order-SC-131`, `winner-order-SC-132`, `winner-order-SC-133`, `winner-order-SC-134`.
 

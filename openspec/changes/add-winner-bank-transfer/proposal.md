@@ -74,6 +74,11 @@ is watched from the first release.
 - **A card invoice paid by transfer is reissued as bank transfer first**, then
   settled. Where the money arrived at the Subtotal, the operator enters a bank
   transfer fee of 0.
+- **The receipt goes with the payment-received letter.** The letter shows the
+  receipt and attaches it as a PDF in the letter's language, named by its
+  receipt ID; proof files never appear. The invoice-sent letter attaches no
+  PDF. Folded from `add-auction-winner-receipt` (#466), whose
+  `R-<year>-<six digits>` number the `REC-` receipt ID replaces.
 - **Letters.** A new proof-not-accepted letter carries the external reason and
   the time left. No letter goes out on upload. Payment reminders and the final
   notice are held while proof is being checked and resume if it is returned.
@@ -99,6 +104,8 @@ is watched from the first release.
 - **FPS and local transfer reference limits** — Finance, from Grade10's
   bank. The bank reference is 8 or 9 capital letters and digits and fits
   SWIFT's 35-character line.
+- **Formal tax receipt** — whether a receipt must carry Grade10's company
+  details and tax ID — Finance.
 - **How the winner asks** for a new address or payment method after send —
   Design, in `ui-design.md`.
 
@@ -119,6 +126,7 @@ None.
   `payment_verifying`; order status gains Payment Verifying; the stopped
   deadline.
 - `grade10-site/auction/notifications-order`: the proof-not-accepted letter;
+  the receipt shown in and attached to the payment-received letter;
   reminders held while proof is checked.
 - `grade10-site/auction/account-record`: the winner's row shows Payment
   Verifying.

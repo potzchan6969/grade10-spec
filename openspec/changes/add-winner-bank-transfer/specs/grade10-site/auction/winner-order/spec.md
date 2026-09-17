@@ -1046,6 +1046,14 @@ operator's, SHALL appear on the receipt.
 - **WHEN** the winner opens both receipts
 - **THEN** the two receipt IDs differ
 
+#### Scenario: winner-order-SC-135 - A repeated confirmation keeps one receipt ID
+**Serves:** Records the winner keeps - receipt ID and breakdown
+
+- **GIVEN** an auction order whose receipt ID is `REC-202609-LK7P2Q-01-P1`
+- **WHEN** the payment confirmation is delivered again
+- **THEN** the receipt ID is still `REC-202609-LK7P2Q-01-P1`
+- **AND** no other receipt ID and no other internal audit number is issued
+
 #### Scenario: winner-order-SC-133 - Invoice and receipt PDFs outlive a deleted account
 **Serves:** Records the winner keeps - retention
 

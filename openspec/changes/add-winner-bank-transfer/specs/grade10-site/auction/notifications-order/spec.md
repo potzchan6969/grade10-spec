@@ -3,8 +3,64 @@
 - Post-close letters
   - Proof not accepted: the operator's external reason and the time left to pay
   - No letter on upload: sending proof sends nothing
+  - Receipt in the letter: the payment-received letter shows the receipt and attaches it as a PDF, so the winner keeps proof of payment outside Grade10
+  - No invoice attachment: the invoice-sent letter attaches no PDF
 - Reminder cadence
   - Held while proof is checked: no reminder or final notice while the invoice is Payment Verifying; the sequence resumes if the proof is returned
+
+## ADDED Requirements
+
+### Requirement: The payment-received letter carries the receipt
+
+The payment-received letter SHALL show the order's payment receipt, as
+`grade10-site/auction/winner-order` defines it, and SHALL attach that receipt
+as a PDF. No other order letter SHALL attach a PDF.
+
+| Part | Letter body | PDF attachment |
+| --- | --- | --- |
+| Receipt ID | Shown | Shown, and in the file name |
+| Invoice ID and lot | Shown | Shown |
+| Itemised lines, order total and payment breakdown | Shown | Shown |
+| Payment method | Shown | Shown |
+| Manually settled mark, method and reference | Shown when an operator recorded the payment | Shown when an operator recorded the payment |
+| Date the payment was confirmed | Shown | Shown |
+| Proof files and their names | Never | Never |
+| Internal audit number | Never | Never |
+
+The PDF SHALL be in the same language as the letter, and SHALL carry no fact
+the order's receipt does not show, so the letter is never the only record.
+A payment confirmation delivered more than once SHALL send one letter and one
+attachment.
+
+#### Scenario: order-mail-SC-28 - The letter shows the receipt and attaches it
+**Serves:** Post-close letters - receipt in the letter
+
+- **GIVEN** an auction order paid by a Visa card ending 4242 at an order total of 323225 minor units in HKD, with receipt ID `REC-202609-LK7P2Q-01-P1`
+- **WHEN** Grade10 sends the payment-received letter
+- **THEN** the letter shows `REC-202609-LK7P2Q-01-P1`, the invoice ID, the lot, the itemised lines, the order total and the Visa ending 4242
+- **AND** a PDF is attached whose file name contains `REC-202609-LK7P2Q-01-P1` and which carries the same ID, lines, total and payment method
+
+#### Scenario: order-mail-SC-29 - A manually recorded payment's PDF says so
+**Serves:** Post-close letters - receipt in the letter
+
+- **GIVEN** an auction order an operator settled by cash with an external reference and a proof file
+- **WHEN** Grade10 sends the payment-received letter
+- **THEN** the attached PDF is marked as manually settled and shows cash and the reference
+- **AND** neither the letter nor the PDF shows the proof file, its name, or the internal audit number
+
+#### Scenario: order-mail-SC-30 - The receipt PDF is in the letter's language
+**Serves:** Post-close letters - receipt in the letter
+
+- **GIVEN** a payment-received letter sent in Traditional Chinese
+- **WHEN** the winner opens the attached PDF
+- **THEN** its labels are in Traditional Chinese
+
+#### Scenario: order-mail-SC-31 - A repeated confirmation sends one receipt
+**Serves:** Post-close letters - receipt in the letter
+
+- **GIVEN** an auction order whose card payment was confirmed and whose payment-received letter was sent
+- **WHEN** the same payment confirmation is delivered again
+- **THEN** Grade10 sends no second letter and no second receipt PDF
 
 ## MODIFIED Requirements
 
@@ -45,8 +101,9 @@ Unless a letter names another primary action, every letter's primary listing
 action SHALL open that lot's Winner Order. On every order letter, the lot
 image and lot title SHALL open that lot's Winner Order. When the collector is
 signed out, Grade10's existing sign-in flow SHALL run first, then Winner
-Order. The invoice-sent and payment-received letters SHALL
-NOT attach a PDF; the invoice and receipt PDFs remain on Winner Order. The
+Order. The invoice-sent letter SHALL NOT attach a PDF; the invoice PDF remains on
+Winner Order. The payment-received letter SHALL attach the receipt PDF, per
+"The payment-received letter carries the receipt". The
 shipped letter SHALL name the confirmed delivery address, the carrier, and
 the tracking number with the shipped time, SHALL use the carrier
 track-and-trace URL as its primary action, and SHALL offer Winner Order as a
@@ -83,7 +140,7 @@ secondary action on the same row.
 - **AND** it names the amount paid, the payment date, and the settlement
   method with a masked account or reference as recorded
 - **AND** its primary action opens that lot's Winner Order for the receipt
-- **AND** the letter carries no receipt PDF attachment
+- **AND** the letter attaches the receipt PDF
 
 #### Scenario: order-mail-SC-11 - Dispatch sends a shipped letter with track-and-trace
 **Serves:** Post-close letters - dispatch sends a shipped letter with track-and-trace
@@ -120,7 +177,7 @@ secondary action on the same row.
 - **AND** it names the amount paid, the payment date, and the card brand with
   a masked number
 - **AND** its primary action opens that lot's Winner Order for the receipt
-- **AND** the letter carries no receipt PDF attachment
+- **AND** the letter attaches the receipt PDF
 
 #### Scenario: order-mail-SC-20 - Returned proof sends the reason and the new deadline
 **Serves:** Post-close letters - proof not accepted
@@ -146,7 +203,7 @@ secondary action on the same row.
 - **GIVEN** an invoice that is `payment_verifying` with an order total of 317000 minor units in HKD
 - **WHEN** an operator confirms the proof
 - **THEN** Grade10 sends the winner the payment-received letter naming 317000 minor units in HKD and bank transfer
-- **AND** the letter carries no receipt PDF attachment
+- **AND** the letter attaches the receipt PDF
 
 #### Scenario: order-mail-SC-26 - Each return sends its own letter
 **Serves:** Post-close letters - proof not accepted

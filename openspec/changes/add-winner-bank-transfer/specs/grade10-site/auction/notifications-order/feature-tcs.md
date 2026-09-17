@@ -320,6 +320,73 @@ Runs once per row of **Test data**.
 * One day-3 reminder exists for the invoice.
 * The day-6 reminder and the final notice are sent once each.
 
+---
+
+### order-mail-US1-TC11-1: The payment-received letter shows the receipt and attaches its PDF
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Post-close letters
+
+**Pre-conditions:**
+
+* <lot_1> is paid by a Visa card ending 4242, with receipt ID `REC-202609-LK7P2Q-01-P1`.
+* The winner's letters are in Traditional Chinese.
+
+**Steps:**
+
+1. Open the payment-received letter for <lot_1>.
+2. Open the attached PDF.
+
+**Expected Results:**
+
+* The letter shows `REC-202609-LK7P2Q-01-P1`, the invoice ID, the lot, the itemised lines, the order total and the Visa ending 4242.
+* One PDF is attached, and its file name contains `REC-202609-LK7P2Q-01-P1`.
+* The PDF shows the same receipt ID, lines, total and payment method, with its labels in Traditional Chinese.
+* The invoice-sent letter for <lot_1> has no attachment.
+
+---
+
+### order-mail-US1-TC12-1: A manually recorded payment's receipt keeps proof private
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Post-close letters
+
+**Pre-conditions:**
+
+* An operator settled <lot_1> by cash with an external reference and one proof file.
+
+**Steps:**
+
+1. Open the payment-received letter for <lot_1> and its attached PDF.
+2. Deliver the settlement event again.
+3. Read the send log for <lot_1>.
+
+**Expected Results:**
+
+* The PDF is marked as manually settled and shows cash and the reference.
+* Neither the letter nor the PDF shows the proof file, its name, or the internal audit number.
+* The send log holds one payment-received letter with one attachment.
+
 ## Raised
 
 - Does the proof-not-accepted letter state a new absolute deadline or a duration?
@@ -347,8 +414,9 @@ Runs once per row of **Test data**.
 | Raised: absolute deadline or a duration? | Absolute; decision 5 |
 | Raised: are reminder times shifted by the pause, and is a missed one sent late? | Shifted; not sent late; decision 5 |
 | Raised: does a reissue while Payment Verifying reset the held sequence? | Moot; a reissue is refused while Payment Verifying (decision 2) |
+| Folded from #466 (`add-auction-winner-receipt`) | The receipt in the payment-received letter and its PDF attachment, with the `REC-` receipt ID in place of #466's `R-<year>-<six digits>`. The author decided the receipt email attaches the receipt PDF and the invoice email attaches none. Folded as `order-mail-SC-28` to `order-mail-SC-31`, walked by `order-mail-US1-TC11-1` and `order-mail-US1-TC12-1`; the earlier rule that no letter attaches a PDF is replaced |
 
-**Folded:** `order-mail-SC-26`, `order-mail-SC-27`.
+**Folded:** `order-mail-SC-26`, `order-mail-SC-27`, `order-mail-SC-28`, `order-mail-SC-29`, `order-mail-SC-30`, `order-mail-SC-31`.
 
 **Rejected:** none.
 
