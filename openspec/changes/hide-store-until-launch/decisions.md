@@ -31,8 +31,15 @@
 | Q6 | Do the auction's order and invoice pages and the loyalty pages wait too? | No. Only the shop's own pages wait; the auction's post-sale flow and the membership and join pages are carried everywhere. | Hiding the loyalty pages with the store. Points are earned and spent in the auction as well, and a member already holds a card. |
 | Q7 | Where does the build's answer live? | On the site's own `config`, beside the stage and the deploy environment it already reads; the route table reads the same answer from the shared deploy-target resolver, which is what a build config can read. | A new entry in the shared site registry. The registry answers where a site is served, not which pages a build of it holds, and no other brand or app needs the answer. |
 | Q8 | Is it decided when the build is made, or at each request? | When the build is made, so the pages are not in the bundle at all. | A runtime check. That leaves every store page shipped to the public and one mistake away from answering. |
+| Q9 | How far does "nothing names an absent surface" reach? | Everything the build renders: a page's own head, a link in a carried surface's body, the chrome, the front door and the crawler files alike. The four places named in the feature set are where the rule is met, not its limit. | Reading the list as the whole rule. A membership page linking to the shop would then be allowed to point at a 404, which is the same dead link the rule exists to stop. |
+| Q10 | Which host issues the two addresses the shop hands out for a product and a collection, and does a public build answer them? | This site answers them — it is what sends a link the shop wrote on to the card it names — so they belong to the store set and a build without the store refuses them. | Treating them as the shop's own host and outside this site's reach. The site already holds both addresses, so leaving them out would keep two live entry points into a shop that is shut. |
+| Q11 | What happens to a store address already sent to a collector in mail, such as an order confirmation's link to order detail? | Nothing is owed. A lane that carries no store takes no order, so no mail sent from it names a store address; mail from a lane that does carry the store points at that lane. | Writing a rule for mail. It would cover a case no lane can produce, and mail is not the site's to answer for. |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| grade10-site/site/carried-surfaces | Are a served page's canonical link and `og:url` tag held to "nothing names an absent surface"? | Q9 |
+| grade10-site/site/carried-surfaces | Is a link in a carried surface's own body held to the same rule as the chrome? | Q9 |
+| grade10-site/site/carried-surfaces | Which host issues the shop's two handed-out addresses, and does a public build answer them at all? | Q10 |
+| grade10-site/site/carried-surfaces | What happens to a store address already sent to a collector in mail? | Q11 |
