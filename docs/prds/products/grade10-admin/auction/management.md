@@ -146,10 +146,10 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   winning bid and the premium, enters Shipping & Handling (zero allowed) and
   optional Insurance (above zero), and sends; the send locks the address and
   starts the 7 days
-- 🚧 **Billing address** — the quote shows it beside the delivery address;
-  the send is refused while the order has none, and the operator adds it
-  with the edit before send. Recording an address by phone asks for billing
-  too, same as delivery by default
+- 🚧 **Billing address** — shown beside the delivery address on the quote;
+  send is refused while the order has none, and the edit before send adds
+  it; an address recorded by phone asks for billing too, same as delivery by
+  default
 - 🚧 **Payment Processing Fee** — for card, priced by Grade10 from the
   provider's live fees, and the send is refused when they cannot be read; for
   bank transfer, entered by the operator on every invoice, zero or more
@@ -174,18 +174,19 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   method, a reference where required, and 1 to 5 private proof files; settled
   at the invoice's full order total with its fee line kept, and never on a
   card invoice, which is reissued as bank transfer first
-- 🚧 **Recording a partial payment** — the same form as manual settlement, for
-  an amount smaller than the balance owed; the order reads Partially Paid and
-  the operator may record another payment the same way. Once payments total
-  90% or more of the original invoice, every further payment prompts the
-  operator to close the invoice as Paid or keep it Partially Paid at the real
-  balance; an exact match to the full amount closes on its own
-- ❓ **Overpaying a partial balance** — whether a payment pushing the total
-  past the original invoice is refused outright or offered the same close
-  prompt; Product and Finance confirm
-- 🚧 **Partially Paid is final on its numbers** — no reissue and no cancel
-  once a payment is recorded; the operator resolves the rest by hand outside
-  the system
+- 🚧 **Recording a partial payment** — the manual settlement form, for less
+  than the balance owed, on a pending, expired or Partially Paid invoice; the
+  order reads Partially Paid, its deadline stops for good, and its numbers
+  are fixed: no reissue and no cancel, and what will not be paid off is
+  settled by hand outside the system
+
+| Payments so far | The next payment | What happens |
+| --- | --- | --- |
+| 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid |
+| 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; asked again on every later payment |
+| 🚧 Any | Exactly the balance | Closes on its own; the order reads Processing |
+| ❓ Any | More than the balance | Refused outright, the working assumption; Product and Finance confirm |
+
 - 🚧 **Reopening the address form** — after the 48-hour deadline and before
   send, on request and with a reason, giving a fresh 48 hours; repeatable,
   changes no status, never on a cancelled order. Or the operator records an

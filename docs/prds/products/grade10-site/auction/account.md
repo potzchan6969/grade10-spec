@@ -67,6 +67,8 @@ Order](/p/grade10-site/auction/post-bidding#winner-order).
 - **Kept with the order** — the order keeps a snapshot, so editing the book
   later changes nothing on it, and an unpaid order's address cannot be
   archived
+- 🚧 **Billing too** — a winner who bills elsewhere picks from the same book
+  or types a one-time address; there is no second book and no second cap
 - ❓ **Managing the book** — where a collector adds, edits and removes a saved
   address outside an order, so a full book can be cleared before an address
   deadline; Product and Design confirm

@@ -264,10 +264,9 @@ Upcoming and Ended tabs, with the row count in the title.
 - **Won** — every Won row offers View order into the lot's order, Cancelled
   and Refunded included — [Post-Bidding · Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order)
-- 🚧 **Payment Verifying** — a won lot whose payment proof is waiting for an
-  operator reads so on its row
-- 🚧 **Partially Paid** — a won lot with at least one operator-recorded
-  payment and a balance still owed reads Partially Paid on its row
+- 🚧 **Payment Verifying and Partially Paid** — a won lot reads Payment
+  Verifying while its proof waits for an operator, and Partially Paid while
+  an operator collects it in parts
 - 🚧 **A bid bookmarks the lot** — with no separate Watch, and counts toward
   the watch limit
 - **At the limit** — a further watch is refused and says the limit is reached

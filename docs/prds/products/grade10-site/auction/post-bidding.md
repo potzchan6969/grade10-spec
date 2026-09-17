@@ -82,7 +82,7 @@ meaning.
 | **Preparing Invoice** | Not issued | The winner confirms an address, or an operator records one after the deadline |
 | **Pending Payment** | Pending, or Expired past the deadline | An operator sends or reissues the invoice; an expired invoice keeps this status |
 | 🚧 **Payment Verifying** | Payment Verifying | The winner uploads bank transfer proof; the deadline stops until an operator confirms or returns it |
-| 🚧 **Partially Paid** | Partially Paid | An operator records a payment smaller than the balance owed; the deadline stops for good, self-service Pay is not offered again, and further payments keep it here until one closes the balance |
+| 🚧 **Partially Paid** | Partially Paid | An operator records a payment short of the balance; the deadline stops for good and Pay is not offered again, and the order stays here until a payment closes the balance |
 | **Processing** | Paid | A card payment is confirmed, the proof is confirmed, or an operator settles manually |
 | **Shipped** | Paid | The warehouse dispatches, with a tracking number |
 | **Delivered** | Paid | The carrier confirms delivery |
@@ -96,10 +96,6 @@ meaning.
   can no longer confirm an address until an operator reopens the form
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
   its own; a proof under check never expires
-- 🚧 **Partially Paid is final on its numbers** — no reissue and no cancel
-  once an operator has recorded a payment against the invoice; the invoice's
-  address, method and total stay fixed, and an operator settles the rest by
-  hand outside the system if it will not be paid off
 
 ### Notification
 
@@ -130,6 +126,9 @@ open it too.
 - 🚧 **Reminders on hold** — none go out while proof is checked; if it is
   returned the sequence resumes on the moved clock, skipping and repeating
   nothing
+- 🚧 **Partial payments** — no letter kind of their own; reminders stop at
+  the first recorded payment, and each receipt is on the order's Receipt PDF
+  row
 - ❓ **Reminder clock across changes** — the bank-transfer change keeps a
   separate invoice-sent letter, a final notice immediately before expiry and
   an invoice-expired letter, while the setup-overdue-mail change folds, moves
@@ -137,57 +136,55 @@ open it too.
 
 ### Invoicing Confirmation
 
-Before any invoice, the winner confirms where to ship and how they will pay.
+Before any invoice, the winner confirms three things on one form, inside 48
+hours of the close.
 
-- **Address** — a saved address or a new one; the account default is
-  pre-filled but still confirmed, and the order keeps a snapshot — [Account ·
-  Delivery Address
-  Management](/p/grade10-site/auction/account#delivery-address-management)
+| The winner confirms | From | Default |
+| --- | --- | --- |
+| Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
+| 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Use same details for billing address, ticked |
+| 🚧 Payment method | Card in every currency; bank transfer where the currency has bank details, HKD at launch; each choice shows its fee range | Nothing preselected |
+
 - 🚧 **Form** — name, phone, country or region, town or city, address line 1,
   state or province and postal code are required; an empty one is refused
   beside the field, and the phone's format is not checked
-- 🚧 **Payment method** — chosen with the address, nothing preselected, each
-  choice showing the fee range Grade10 sets: card in every currency, bank
-  transfer in a currency with bank details — HKD at launch
 - ❓ **Fee range wording** — what each choice says; the bank transfer wording
   names no amount, because the operator sets that fee; Product confirms
-- 🚧 **Billing address** — confirmed with the delivery address and the
-  payment method. Use same details for billing address is ticked by default;
-  unticking it asks for a saved address or a one-time one, with the same
-  required fields. It locks on confirming like the delivery address
 - **Deadline** — `Confirm by …` under Confirm; when it passes, Confirm is
   hidden, the alert reads Missed address deadline with Contact Us, the status
   stays, and nothing cancels or suspends
 - 🚧 **After the deadline** — the whole form closes; only Grade10 reopens it
   for a fresh 48 hours, or records an address the winner gives by phone
-- 🚧 **Locked on confirming** — the winner changes neither the address nor
-  the method afterwards; an operator edits them on request before send and
-  reissues after, and the order shows what changed
+- 🚧 **Locked on confirming** — the winner changes none of the three
+  afterwards; an operator edits them on request before send and reissues
+  after, and the order shows what changed
 - ❓ **One-time address after a reload** — whether it survives leaving and
   returning to the order; Product and Design confirm
 
 ### Invoicing
 
 One operator-sent invoice per lot, never combined with another; no amount is
-shown before send, and the sent invoice never re-prices.
+shown before send, and the sent invoice never re-prices. One lot in HKD, paid
+by card, reads:
 
-| Line | What it is |
-| --- | --- |
-| Winning Bid | The accepted bid that won the lot |
-| Buyer's Premium | 20% of the winning bid or the currency minimum; Grade10 computes it, and no operator enters, waives or changes it |
-| Shipping & Handling | Quoted for the confirmed address; zero reads Free, and a difference found after payment is neither charged nor refunded |
-| Insurance | Optional and more than zero; the line is absent when none |
-| Subtotal | The lines above; the page summary may leave it out, the invoice and receipt keep it |
-| Payment Processing Fee | Priced by method and fixed at send; for card, grossed up from the Subtotal from the provider's live fees, so Grade10 keeps the Subtotal whole |
-| Order Total | Subtotal plus the fee — what the winner pays |
+| Line | Example | What it is |
+| --- | --- | --- |
+| Winning Bid | 100,000 | The accepted bid that won the lot |
+| Buyer's Premium | 20,000 | 20% of the winning bid, or the currency minimum; Grade10 computes it, and no operator enters, waives or changes it |
+| Shipping & Handling | 800 | Quoted for the confirmed address; zero reads Free, and a difference found after payment is neither charged nor refunded |
+| Insurance | 500 | Optional and above zero; absent when none |
+| Subtotal | 121,300 | The lines above; the page summary may leave it out, the invoice and receipt keep it |
+| Payment Processing Fee | 4,272 | Priced by method and fixed at send; for card, grossed up from the Subtotal at the provider's live fees, so Grade10 keeps the Subtotal whole |
+| Order Total | 125,572 | Subtotal plus the fee — what the winner pays |
 
 - 🚧 **Bank transfer fee** — the amount the operator enters on each invoice,
   Free when zero
 - 🚧 **Invoice ID** — `INV-202609-LK7P2Q-01`: the month sent, the listing's
   code and the count; a reissue gets a new ID and bank reference, and the old
   ones still find the order
-- 🚧 **Bill To and Ship To** — the invoice shows both addresses from the
-  order's snapshot, with name, company name, phone and address
+- 🚧 **Bill To and Ship To** — both from the order's snapshot, each with
+  name, company name, phone and address; they read the same unless the
+  winner unticked Use same details for billing address
 - **PDFs** — the invoice once sent and the receipt once paid, on one row;
   hidden when Cancelled
 - **Payment deadline** — an absolute date and time in the winner's zone, with
@@ -236,13 +233,12 @@ shown before send, and the sent invoice never re-prices.
   pays; a later edit or reissue never changes a receipt already issued
 - 🚧 **A confirmed transfer** — its receipt reads Bank Transfer, not manually
   settled
-- 🚧 **Receipt ID** — `REC-202609-LK7P2Q-01-P1`: the month paid and the paid
-  invoice's code and count, with the invoice total, earlier payments, this
-  payment and the balance due
-- 🚧 **A partial payment's receipt** — one receipt per payment an operator
-  records, `-P1`, `-P2` and on, each carrying the invoice total, payments
-  before it, this payment and the balance still due; every receipt for the
-  invoice lists on the same Receipt PDF row on Winner Order, oldest first
+- 🚧 **Receipt ID** — `REC-202609-LK7P2Q-01-P1`: the month paid, the paid
+  invoice's code and count, and the payment's number
+- 🚧 **One receipt per payment** — each carries the invoice total, the
+  payments before it, this payment and the balance still due, and every
+  receipt for the invoice lists on the same Receipt PDF row, oldest first;
+  the worked case is under Edge Cases
 - ❓ **Formal tax receipt** — whether a receipt must carry Grade10's company
   details and tax ID; Finance confirms
 
@@ -265,20 +261,33 @@ shown before send, and the sent invoice never re-prices.
 | The 48-hour address deadline | Confirm hidden, Missed address deadline with Contact Us; the status stays | Reopens the form for a fresh 48 hours, records an address given by phone, or cancels after review |
 | The 7-day payment deadline | Pay hidden, the overdue alert with Contact Us; the status stays Pending Payment | Reissues with a fresh 7 days, settles manually, or cancels; the lot returns to stock with no runner-up offer |
 
-- 🚧 **Partial payment** — an operator records a payment smaller than the
-  balance owed, as many times as it takes; the order reads Partially Paid,
-  the payment deadline stops for good, and card Pay is not offered again.
-  Reissue and Cancel are refused once any payment has been recorded
-- 🚧 **Closing a partial balance** — once payments total 90% or more of the
-  original invoice, every further payment the operator records offers a
-  close: Paid, or kept Partially Paid at the real balance; an exact match to
-  the full amount closes on its own
-- ❓ **Overpaying a partial balance** — whether a payment that would push the
-  total over the original invoice is refused outright, or offered the same
-  close-or-keep-open choice above 100%; Product and Finance confirm
 - **Overdue penalties** — a missed payment deadline suspends the bidder,
   below; ❓ what "penalties or extra charges" in the overdue letters means
   beyond that, Product confirms
+
+### Partial Payment
+
+🚧 A winner who cannot pay in one go pays in parts, off the page: an operator
+records each payment, the order reads Partially Paid, and the winner's page
+locks with Contact Us and a receipt for every payment, never a running
+balance. The invoice above, settled in three payments:
+
+| Payment | Amount | Its receipt shows | The operator |
+| --- | --- | --- | --- |
+| `-P1` | 50,000 | Invoice total 125,572 · previous payments 0 · this payment 50,000 · balance due 75,572 | Records it; the order reads Partially Paid, the deadline stops for good, and card Pay is gone |
+| `-P2` | 65,000 | Previous 50,000 · this payment 65,000 · balance due 10,572 | Payments now total 92%: asked to close as Paid or keep it Partially Paid, and keeps it |
+| `-P3` | 10,572 | Previous 115,000 · this payment 10,572 · balance due 0 | An exact match closes on its own; the order reads Processing |
+
+- 🚧 **The close prompt** — from the payment that brings the total to 90% of
+  the invoice, every payment asks the operator to close as Paid or keep it
+  Partially Paid at the real balance; had the third payment been 10,000, the
+  operator may close, and the balance reads 0 with no write-off line
+- ❓ **Overpaying** — a payment that would take the total past the invoice;
+  refused outright is the working assumption, Product and Finance confirm
+- 🚧 **Fixed once paid into** — no reissue and no cancel after the first
+  recorded payment; what will not be paid off is settled by hand outside the
+  system — [Auction Management ·
+  Payment](/p/grade10-admin/auction/management#payment)
 
 ### Bidder Suspension
 
@@ -296,8 +305,8 @@ other lots.
 
 - **Told at once** — the notice names what is owed and how to resolve it, and
   My Auctions explains the restriction beside the affected order
-- 🚧 **Suspension on a Partially Paid order shows no amount** — Contact Us
-  covers it instead, once any payment has been recorded against the invoice
+- 🚧 **No amount once partly paid** — a Partially Paid order's notice names
+  no balance; Contact Us covers it
 - 🚧 **By an operator** — an operator suspends or reinstates from the
   account's panel on the admin Users page, with a required reason the
   collector never sees; a new cause while suspended is recorded beside the

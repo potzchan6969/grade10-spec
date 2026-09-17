@@ -26,7 +26,10 @@ component contract underneath them.
   Order](/p/grade10-site/auction/post-bidding#winner-order) names, the required ones
   marked, an application-supplied error beside each field it names, and
   Confirm with the entered values or Cancel; it checks no phone number's
-  format and offers no billing address
+  format
+- 🚧 **Billing address** — a Use same details for billing address box,
+  ticked by default; unticked, a second address with the same fields. It
+  follows the form, which first ships without one
 - 🚧 **On their own** — the row and the address form each render alone
 
 ## Ownership
