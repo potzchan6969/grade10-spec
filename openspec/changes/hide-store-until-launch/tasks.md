@@ -56,7 +56,7 @@ Needs group 1's landed table. Independent of group 2.
 - [x] 3.2 Return no shop column from `src/chrome/useShopColumn.ts` where the
       store is not carried, so the collections read never runs
       (`grade10-site-site-carried-surfaces-SC-12`)
-- [ ] 3.3 Render neither the store button nor the store card in
+- [x] 3.3 Render neither the store button nor the store card in
       `src/pages/marketing/MarketingPage.tsx`
       (`grade10-site-site-carried-surfaces-SC-13`)
 - [x] 3.4 Stop passing `onViewOrders` to the profile page where the order
