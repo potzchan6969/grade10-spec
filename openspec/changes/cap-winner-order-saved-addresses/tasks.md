@@ -49,17 +49,17 @@ the work.
 
 ## 3. Winner Order address confirmation (grade10) (owner: @htonyl)
 
-- [ ] 3.1 Add an explicit "Save this address for future orders" checkbox to
+- [x] 3.1 Add an explicit "Save this address for future orders" checkbox to
   `AuctionWinnerOrderPage.tsx`'s `AddressFields`; `amend()` reads
   `saveToAddressBook` from it instead of inferring it from
   `selectedAddressId === null` (`winner-order-SC-74`, `winner-order-SC-75`)
-- [ ] 3.2 Disable the checkbox, leave it unchecked, and show a short refusal
+- [x] 3.2 Disable the checkbox, leave it unchecked, and show a short refusal
   reason via a Tooltip when the account's saved-address count (from the
   existing `shippingAddresses()` query) is five (`winner-order-SC-75`)
-- [ ] 3.3 Confirm a one-time address entered at the cap still sets the
+- [x] 3.3 Confirm a one-time address entered at the cap still sets the
   order's delivery snapshot without adding a sixth saved address
   (`winner-order-SC-74`)
-- [ ] 3.4 Handle the `address_book_full` refusal from a save attempt that
+- [x] 3.4 Handle the `address_book_full` refusal from a save attempt that
   raced past the disabled checkbox (two tabs), surfacing the same short
   reason rather than a generic error (`winner-order-SC-73`)
 - [ ] 3.5 Verify: `pnpm run typecheck && pnpm run test`
