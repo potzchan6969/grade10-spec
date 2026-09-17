@@ -2,6 +2,7 @@
 title: Watchlist
 spec: grade10-site/auction/watchlist
 order: 28
+reviewed: 2026-09-17
 ---
 
 A watch is one action on a lot that says come back to this, and it costs
