@@ -259,6 +259,10 @@ by card, reads:
   Fulfilment](/p/grade10-admin/auction/management#fulfilment)
 - **Progress** — five steps, Address → Invoice → Payment → Shipped →
   Completed, with day-only dates; Cancelled and Refunded show no stepper
+- 🚧 **A refunded order** — Winner Order reads Refunded, in the order status
+  and the invoice status, whether the winner paid in full or in part and
+  wherever the card is; no stepper, no Pay and no address form, and the
+  invoice and every receipt already issued stay downloadable
 - 🚧 **Sections** — Order Information with Invoice Status, Collection Method,
   Order Status with a time per step, and Lots; Payment Verifying and
   Partially Paid sit under Payment
