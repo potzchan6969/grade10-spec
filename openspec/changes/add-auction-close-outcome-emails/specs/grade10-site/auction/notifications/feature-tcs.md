@@ -227,6 +227,14 @@
 
 **Expected Results:**
 
+* No bidder close-outcome letter is sent.
+* No letter with campaign `lot_ended` is sent.
+* Each enrolled watcher receives the watched ended letter (campaign `lot_ended_watched`) with no winning amount.
+
+## Raised
+
+- None for this slice.
+
 ## Reconciliation
 
 **Run:** 2026-09-16; scenario and suite readings were reconciled by the author.
