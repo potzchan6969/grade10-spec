@@ -12,6 +12,13 @@ copy, attaches a gallery, sets a starting price and an extension duration, publi
 or at a set time, and calls it off if something is wrong. A **collector**
 browses, bids, and after the close follows one [Winner Order](/p/grade10-site/auction/winner-order) for each lot they win.
 
+## Where It Is Open
+
+🚧 **Not open to the public yet** — the auction's pages are carried in
+development and staging, and on no lane the public reaches. It is the first of
+the four products to open —
+[Carried Surfaces](/p/grade10-site/site/carried-surfaces)
+
 ## Catalogue Order
 
 🚧 **What the catalogue leads with** — [Active](/p/grade10-site/auction/lot-status) lots come first,
