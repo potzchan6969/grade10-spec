@@ -1,7 +1,7 @@
 ---
 title: My Auctions
 spec: grade10-site/auction/account-record
-order: 10
+order: 29
 ---
 
 My Auctions is the account's own record of every lot the collector bookmarks —

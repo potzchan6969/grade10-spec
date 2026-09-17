@@ -1,7 +1,7 @@
 ---
 title: Bid Increments
 spec: grade10-site/auction/bid-increments
-order: 6
+order: 22
 ---
 
 Every auction currency has one Grade10-owned price schedule. A collector sees

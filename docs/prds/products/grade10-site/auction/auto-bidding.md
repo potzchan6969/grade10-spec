@@ -1,7 +1,7 @@
 ---
 title: Auto-Bidding
 spec: grade10-site/auction/auto-bidding
-order: 6
+order: 23
 ---
 
 At the scheduled close, a bid keeps the lot open and every later accepted bid

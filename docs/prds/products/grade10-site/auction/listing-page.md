@@ -1,7 +1,7 @@
 ---
 title: Listing Details Page
 spec: grade10-site/auction/listing-page
-order: 2
+order: 12
 ---
 
 Every lot has an address of its own, and that address does the work before any

@@ -3,132 +3,121 @@ title: Auction
 icon: gavel
 ---
 
-Grade10 Auction sells graded cards one lot at a time. A collector browses the
-catalogue, opens a lot at its own address, reads its gallery and its standing,
-and bids. The highest valid bid when the lot closes wins.
+Grade10 Auction sells graded cards one lot at a time. A collector signs in,
+finds a lot in the catalogue, bids by naming the most they will pay, and after
+the close pays the invoice and receives the card. This page is the map, in the
+order a collector meets each part; the values, the rules and the open
+questions sit on the page that owns them.
 
-Two people use it. An **operator** drafts a listing, fills in its catalogue
-copy, attaches a gallery, sets a starting price and an extension duration, publishes it now
-or at a set time, and calls it off if something is wrong. A **collector**
-browses, bids, and after the close follows one [Winner Order](/p/grade10-site/auction/winner-order) for each lot they win.
+## Account
 
-## Catalogue Order
+A collector needs an account to watch or bid, and a verified identity above
+the bar. [Accounts](/p/shared/auth) and [Account](/p/grade10-site/account) own
+these; the auction adds no sign-in of its own.
 
-🚧 **What the catalogue leads with** — [Active](/p/grade10-site/auction/lot-status) lots come first,
-soonest to close first; then Upcoming lots, soonest to start first; then Ended
-lots, most recently ended first. Two lots that would sit together keep one
-fixed order, so reading on never shows a lot twice or skips one.
+| Page | What it holds |
+| --- | --- |
+| [Sign-In](/p/shared/auth/sign-in) | An emailed sign-in link, or Google where a brand enables it; no password |
+| [KYC](/p/grade10-site/account/kyc) | The one-time identity check a bid of HKD 120,000 or more asks for |
+| [Addresses](/p/grade10-site/account/addresses) | The delivery addresses a collector keeps and confirms onto an order |
 
-## Holds
+## Catalogue and Lot
 
-A bid is backed by an authorization on the bidder's card. The money is held,
-not taken. Every hold is released when the lot closes; the winner pays the
-invoice through a fresh charge and every other hold is released. Because a card hold expires after roughly a week, the auction keeps
-**at most one live hold per lot at any moment** — the current top bid's. When
-someone is outbid, their hold is released the same minute the new one confirms.
+The catalogue lists every published lot, and a lot opens at its own address
+with its gallery, its standing and the bid panel. Operators draft, publish and
+call off lots from the admin site.
 
-A bid only counts once its hold confirms, so an accepted amount always beats
-every amount already standing, and no two bids ever tie. A lot with a reserve
-that nobody clears closes unsold and nobody is charged at all.
+| Page | What it holds |
+| --- | --- |
+| [Auction Listing](/p/grade10-site/auction/auction-listing) | The catalogue: what a card shows, and the order lots read in |
+| [Listing Details Page](/p/grade10-site/auction/listing-page) | A lot's own address, what it answers before scripts run, and sharing it |
+| [Media Gallery](/p/grade10-site/auction/listing-media) | One to eight images and videos, the sizes they answer at, and alt text |
+| [Lot Status](/p/grade10-site/auction/lot-status) | Upcoming, Active and Ended, and the lots collectors never see |
+| [Listing Page Blocks](/p/shared/ui/auction-listing) | The gallery, bid panel and details blocks both brands render |
+| [Listing Management](/p/grade10-admin/auction/listing) | Drafting, pricing, scheduling, publishing and calling off a lot |
+| [Campaigns](/p/grade10-admin/auction/campaign) | The cover a set of lots sells under |
 
-The clock moves after the close. A lot that has a bid when its scheduled
-close arrives keeps running, and every new bid restarts its timer, so a lot
-scheduled to end at six can still be running at eight. That tail is capped:
-past the cap the extension truncates rather than refuses the bid.
+## Bidding
+
+Every lot is absolute: the highest valid bid at the close wins, and a bid at
+the scheduled close starts extended bidding. A collector bids by naming a
+private maximum on a bid panel that first settles sign-in and a linked card.
+
+| Page | What it holds |
+| --- | --- |
+| [Bidding](/p/grade10-site/auction/auction) | What a valid bid is, the close, and extended bidding |
+| [Bid Increments](/p/grade10-site/auction/bid-increments) | The price schedule per currency and the bid ceiling |
+| [Auto-Bidding](/p/grade10-site/auction/auto-bidding) | The private maximum, how Grade10 bids for a collector, and the panel's quick bids |
+| [Bid panel enrollment](/p/grade10-site/auction/bid-panel-enrollment) | Sign-in and a linked card before the first bid |
+| [Payment Method](/p/grade10-site/auction/bid-payment-method) | The card behind a bid, and the optional bid-time hold |
+| [Bidding History](/p/grade10-site/auction/bidding-history) | The account's record of every maximum, and the lot's Your bidding dialog |
+| [Watchlist](/p/grade10-site/auction/watchlist) | Watching a lot without bidding, and who sees a watch |
+| [Notifications](/p/grade10-site/auction/notifications) | Mail before and during bidding, and the letters at the close |
+| [My Auctions](/p/grade10-site/auction/account-record) | Every watched or bid lot on one table, with the collector's standing |
+
+## After the Close
+
+A winner has 48 hours to confirm a delivery address and a payment method, an
+operator quotes the invoice, and the winner pays within 7 days by card or by
+bank transfer; then the card ships. Operators work every order from one queue.
+
+| Page | What it holds |
+| --- | --- |
+| [My Auction Orders](/p/grade10-site/auction/auction-orders) | Every won lot, with what the order needs next |
+| [Winner Order](/p/grade10-site/auction/winner-order) | One lot's address, invoice, card or bank transfer payment, proof, receipt and shipment |
+| [Auction Order Status](/p/grade10-site/auction/order-status) | The one status the winner, the operator and the account record all read |
+| [Order Notifications](/p/grade10-site/auction/notifications-order) | The winning letter, the setup and payment reminders, the overdue letters and the receipt |
+| [Bidder Suspension](/p/grade10-site/auction/bidder-suspension) | What an unpaid invoice or an operator stops, and what it leaves alone |
+| [Post-Sale Queue](/p/grade10-admin/auction/post-sale) | Working an order from close to delivery: the quote, proof checks, manual settlement, dispatch |
+| [Payment settings](/p/grade10-admin/auction/payment-settings) | The buyer-premium minimum per currency |
 
 :::flow{title="From bid to delivery"}
-## A collector bids
-
-They register a payment method against the lot, then name an amount. In one
-step the auction checks the lot is open, the bidder is allowed to bid, and the
-amount clears the standing top plus the next minimum from the [bid increment
-schedule](/p/grade10-site/auction/bid-increments).
-
-## Grade10 holds the money
-
-The card is authorized for the bid amount — held, not charged. If the lot has
-reached its scheduled close with a bid, the closing time moves out by the
-configured extension duration.
-
-## The hold confirms, or it does not
-
-When the bank confirms, the previous top bid's hold is released and this bid
-becomes the one to beat. If the lot closed or was outbid while the bank was
-thinking, the hold is released instead and the bid is lost.
-
-## The lot closes
-
-Every bid still waiting is released. A top bid that clears the reserve wins;
-one that does not leaves the lot unsold, and nobody is charged.
-
-## The winner pays the invoice
-
-The winner's hold is released and the invoice becomes payable. A fresh charge
-settles the final amount after the delivery address is confirmed; a declined
-payment leaves the invoice open for another attempt until its deadline.
-
-## The card ships
-
-An operator works the order forward from paid to shipped to delivered, with
-the [Post-Sale Queue](/p/grade10-admin/auction/post-sale) carrying the
-operator-only controls and history.
+## *Collector* — **Bids**
+Names a private maximum on a live lot, and Grade10 bids for them only as far
+as needed to lead — [Auto-Bidding](/p/grade10-site/auction/auto-bidding).
+## *Auction* — **Closes**
+At the scheduled close a lot with a bid enters extended bidding, and it closes
+when its timer runs out with no new bid — [Bidding](/p/grade10-site/auction/auction).
+## *Winner* — **Sets up the order**
+Confirms a delivery address and chooses card or bank transfer within 48 hours
+— [Winner Order](/p/grade10-site/auction/winner-order).
+## *Operator* — **Sends the invoice**
+Prices shipping and insurance for that address and sends the invoice; the
+7-day payment window starts — [Post-Sale Queue](/p/grade10-admin/auction/post-sale).
+## *Winner* — **Pays**
+By card, which Grade10 confirms on its own, or by bank transfer quoting the
+reference and uploading proof an operator checks — [Winner Order](/p/grade10-site/auction/winner-order).
+## *Operator* — **Ships**
+Records dispatch with the carrier and tracking number, then delivery —
+[Post-Sale Queue](/p/grade10-admin/auction/post-sale).
 :::
 
-:::callout{kind="note"}
-No Figma frame exists for any auction surface — not the listing details page, not the bid
-panel, not the admin queue. Every in-flight auction change says so in its own
-`ui-design.md` and names the screens still to be produced. The frames are being made;
-until they land, the shipped Storybook stories are the reference.
-:::
-
-:::callout{kind="warning"}
-Two admin panels ship in the codebase but are reachable from nowhere:
-`SettlementsPanel.tsx` and `FulfillmentPanel.tsx`. The auction admin page
-renders only Queue, Listings, Sales and Bidders. The money ledgers, capture and
-release retries, and the manual fulfilment ladder those two files describe are
-therefore not operator-reachable today — the queue replaced them.
-:::
-
-:::detail{title="Design record" for="engineer"}
-The three capabilities here cover the operator's listing, its media, and the
-public lot page. What a bid must clear, how a hold moves, and when a close extends live in
-`grade10-site/auction/auction` and, in more detail, in
-[docs/architecture/auction.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction.md),
-which carries the full state tables, the money invariants and the sweeps.
-[docs/architecture/auction-gaps.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction-gaps.md)
-lists what is not built, verified against the code.
-
-The auction backend is the one service deliberately shared between brands: a
-card is auctioned once, and grade10 and ZZZ collectors bid against each other
-on the same lot. Identities, sessions and money never cross; only the lot, the
-amounts and per-auction pseudonyms do, so a display says Bidder 4 and never a
-name. See
-[docs/architecture/multi-product.md](https://github.com/9gag/grade10/blob/main/docs/architecture/multi-product.md).
+:::detail{title="Code map" for="engineer"}
+- **Service** — [Auction Service](/platform/auction-service): one backend for both brands, the money invariants and the sweeps
+- **Architecture** — [docs/architecture/auction.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction.md), with what is not built in [auction-gaps.md](https://github.com/9gag/grade10/blob/main/docs/architecture/auction-gaps.md)
+- **Brand boundary** — [docs/architecture/multi-product.md](https://github.com/9gag/grade10/blob/main/docs/architecture/multi-product.md)
+- **Blocks** — [Listing Page Blocks](/p/shared/ui/auction-listing) and [Auction Record Blocks](/p/shared/ui/auction-record), in `packages/ui`
+- **Mail** — `apps/emails/emails/auction/`
 :::
 
 :::detail{title="Product decisions" for="pm"}
-Grade10 owns the catalogue and the bid outcome; Stripe supplies card
-authorization. What the auction is for, who it serves, what it leaves out and
-what it is measured on are recorded here; the checkable rules are the
-capability specs. Auto-bidding, watching and mail are decided on their own
-pages: [Auto-Bidding](/p/grade10-site/auction/auto-bidding),
-[Watchlist](/p/grade10-site/auction/watchlist),
-[Notifications](/p/grade10-site/auction/notifications), and the collector's own
-record in [My Auctions](/p/grade10-site/auction/account-record).
+Grade10 owns the catalogue and the bid outcome; Stripe supplies card payment.
+The checkable rules are the capability specs each page names, and each page
+keeps the decisions it turns on; the rows here are the ones the whole auction
+turns on.
 
 | User | Situation | Desired outcome |
 | --- | --- | --- |
 | Collector | Considering or following a card auction | See reliable listing facts, bid safely, and know whether they won. |
-| Finance operator | A listing has a winner whose card capture stalled, who will pay by wire, or who paid outside Stripe | Contact the winner when a wire is coming, record the listing paid without being able to mark it shipped, and without rewriting who won. |
-| Shipment operator | A listing is paid and the card will leave in-house | Reach the winner, record shipment started then completed, without being able to record payment. |
+| Winner | A lot has closed | Confirm where to ship, read the invoice, pay in time and follow the card to the door. |
+| Finance operator | A winner pays by bank transfer, or outside the site | Check the proof or record the payment, without rewriting who won. |
+| Shipment operator | An order is paid | Record dispatch and delivery, without being able to record payment. |
 
 **Not in scope.** Auction Buy Now, carts, stock counts, fixed-price checkout,
 search, saved searches, filters, related lots and recent-sales data. Vault
-storage, global shipping rate shopping, carrier accounts, tracking numbers and
-a customer shipment-notification programme. Customer-facing checkout,
-invoices, refunds, disputes, or a second payment provider. Collecting a phone
-number Grade10 does not already hold. Store favourites — the term is retired;
-watching an auction lot is its own capability.
+storage. Combined invoices, payment plans, buyer-initiated returns and a
+second payment provider. Store favourites — the term is retired; watching a
+lot is its own capability.
 
 **Measurement.** On [Analytics](/p/grade10-site/analytics#auction).
 
@@ -136,29 +125,13 @@ watching an auction lot is its own capability.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Auction unit | Decided | A **listing** is one unit of auction lot and is the sole term used by this capability, including the operator queue. | Product |
+| Auction unit | Decided | A **listing** is one lot and the sole term in every spec and the operator queue; collectors read **lot**. | Product |
+| Absolute sale | Decided | No reserve and no buy-now price; the highest valid bid at the close wins. | Product |
 | Buy Now | Decided | Excluded, including browse-only Buy Now listings. | Product |
-| Hold model | Decided | One Stripe authorization hold exists per bidder per active listing; an outbid hold enters asynchronous release immediately and is later reconciled to completion. | Product |
-| Extended close | Decided | At the scheduled close, a listing with a bid enters extended bidding for the configured duration (default 30 minutes). Every accepted bid at or after that boundary restarts the full duration from the bid time, subject to an optional cap measured from the scheduled close. A listing with no bid closes at the scheduled close. | Product |
-| Buyer-premium rate | 🚧 In flight | The buyer's premium is 20% of the winning bid; the bid panel shows the rate and the invoice carries the calculated amount. | Product and finance |
-| Premium before bidding | 🚧 In flight | The bid panel shows the 20% rate only; the calculated amount first appears on the invoice. | Product and design |
-| Operator outcome labels | Decided | Queue labels are Draft, Scheduled, Live, Ending soon, Unsold, Canceled, Awaiting payment, Payment failed, Awaiting wire, Paid via Stripe, Paid via Manual, Shipped, Delivered. There is no single "Paid" label. "Ending soon" is the last 60 minutes of the recorded close. Payment failed, Awaiting wire, both paid outcomes, and Shipped are highlighted as waiting on an operator. | Product |
-| Payment source | Decided | Card capture becomes Paid via Stripe. Operator-recorded collection (including a completed wire) becomes Paid via Manual. The first successful paid wins; neither path changes who won. Manual paid and Awaiting wire release an open authorization rather than capturing it. | Product and finance |
-| Wire transfer | Decided | A winner paying by wire sits in Awaiting wire so the operator contacts them. An operator records that request; a winner-initiated request on the storefront is follow-on. Collection of the wire is Paid via Manual. | Product and finance |
-| Shipment | Decided | In-house and offline: operators record started then completed. No carrier, no tracking. | Operations |
-| Operator grants | Decided | Payment-processing and shipment-processing are different grants and different scoped roles (`finance` vs `staff`). `admin` holds both. Catalogue publishing is not shipment-processing. | Product |
-| Watching, formerly favourites | Decided | Watching a listing from the collector's own account is in scope, and the term **favourites** is retired across copy, specs, and analytics. | Product |
-| Winner phone | Decided | Not collected. Email is the primary contact; a delivery address is shown when held and can be recorded offline by shipment operators. | Product |
-
-**Risks.** Stripe authorization windows, increment behaviour and capture
-eligibility are proved in the chosen Stripe configuration before card-backed
-bidding is enabled in production. Auction acceptance is a concurrency
-boundary: durable, serialized bid evaluation and idempotent provider-event
-handling come before the customer surface. Shipping is manual, so
-customer-facing copy never claims carrier tracking or delivery confirmation
-Grade10 does not hold. Manual paid or Awaiting wire while a card
-authorization is still open is a double-charge risk if capture is not
-suppressed; release-not-capture is the decision that closes it. Winner email
-and delivery address on the operator detail are operational contact, not a
-reason to put those values on the platform-wide audit hashes.
+| One auction, two brands | Decided | A card is auctioned once, and Grade10 and ZZZ collectors bid on the same lot. Identities, sessions and money never cross; a display says Bidder 4, never a name. | Product |
+| Currencies | Decided | USD, HKD and JPY, one per lot, each with a Grade10-owned increment schedule. | Product |
+| Bid-time holds | Decided | Off by default: a valid bid is accepted without a card hold. When enabled, one hold per bidder per lot covers the maximum. | Product and finance |
+| Buyer's premium | Decided | 20% of the winning bid, or the currency's minimum charge when higher; the rate is disclosed on the bid panel and the amount first appears on the invoice. | Product and finance |
+| Operator grants | Decided | Payment processing and shipment processing are different grants and different roles (`finance` vs `staff`); `admin` holds both. Publishing a lot is neither. | Product |
+| Design frames | ❓ Open | No Figma frame exists for any auction surface; the shipped Storybook stories are the reference until Design names the screens drawn first. | Design |
 :::

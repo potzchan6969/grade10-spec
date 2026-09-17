@@ -1,7 +1,7 @@
 ---
 title: Bidding History
 spec: grade10-site/auction/bidding-history
-order: 9
+order: 26
 reviewed: 2026-09-17
 ---
 

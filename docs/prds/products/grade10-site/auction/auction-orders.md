@@ -1,7 +1,7 @@
 ---
 title: My Auction Orders
 spec: grade10-site/auction/auction-orders
-order: 10
+order: 31
 ---
 
 🚧 My Auction Orders lists every auction order the collector has won, one row

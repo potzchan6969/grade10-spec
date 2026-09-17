@@ -1,7 +1,7 @@
 ---
 title: Lot Status
 spec: grade10-site/auction/lot-status
-order: 15
+order: 14
 ---
 
 ## External Lot Status

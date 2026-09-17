@@ -1,7 +1,7 @@
 ---
 title: Notifications
 spec: grade10-site/auction/notifications
-order: 8
+order: 28
 reviewed: 2026-09-11
 ---
 

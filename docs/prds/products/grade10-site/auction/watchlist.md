@@ -1,7 +1,7 @@
 ---
 title: Watchlist
 spec: grade10-site/auction/watchlist
-order: 7
+order: 27
 ---
 
 A watch is one action on a lot that says "come back to this" and costs

@@ -1,7 +1,7 @@
 ---
 title: Payment Method
 spec: grade10-site/auction/bid-payment-method
-order: 5
+order: 25
 ---
 
 Bid-time authorization is optional and disabled by default. Linking a card

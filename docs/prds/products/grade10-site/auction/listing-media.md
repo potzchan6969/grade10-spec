@@ -1,7 +1,7 @@
 ---
 title: Media Gallery
 spec: grade10-site/auction/listing-media
-order: 3
+order: 13
 ---
 
 A lot has one gallery, not a front slot and a back slot. It holds one to eight

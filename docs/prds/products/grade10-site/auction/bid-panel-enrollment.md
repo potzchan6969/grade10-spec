@@ -1,7 +1,7 @@
 ---
 title: Bid panel enrollment
 spec: grade10-site/auction/bid-panel-enrollment
-order: 6
+order: 24
 ---
 
 Before a collector can choose a maximum, the bid panel settles sign-in and a

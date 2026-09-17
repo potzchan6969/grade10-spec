@@ -1,7 +1,7 @@
 ---
 title: Auction Order Status
 spec: grade10-site/auction/order-status
-order: 12
+order: 33
 ---
 
 Auction Order Status is the single buyer-facing outcome derived from an auction order's invoice, address, fulfilment, and delivery facts. It is separate from the store's order status, even when a label is shared.

@@ -1,7 +1,7 @@
 ---
 title: Winner Order
 spec: grade10-site/auction/winner-order
-order: 11
+order: 32
 ---
 
 Winner Order is the authenticated route where a collector settles one lot after it closes. It keeps the delivery choice, invoice, payment, receipt, shipment, and delivery evidence for that lot together.

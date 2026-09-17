@@ -1,7 +1,7 @@
 ---
 title: Order Notifications
 spec: grade10-site/auction/notifications-order
-order: 14
+order: 34
 ---
 
 Order Notifications are the transactional letters that begin when an auction lot closes with a winner. They identify the lot, use the winner's registered email address, and stop or retry according to the order's current facts. Unless a letter names another primary action (for example track-and-trace), every CTA opens that lot's [Winner Order](/p/grade10-site/auction/winner-order); signed out, Grade10's sign-in runs first. On every order letter, the lot image and lot title also open Winner Order. Only the payment-received letter attaches a PDF, the receipt; the invoice PDF lives on Winner Order.

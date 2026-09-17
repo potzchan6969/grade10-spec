@@ -1,7 +1,7 @@
 ---
 title: Bidder Suspension
 spec: grade10-site/auction/bidder-suspension
-order: 13
+order: 35
 ---
 
 Bidder Suspension is an auction-only restriction applied when a winner leaves an invoice unpaid past its deadline, or when an operator suspends the account. It stops new auction commitments while leaving payment, the store, loyalty, and platform sign-in available.

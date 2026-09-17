@@ -1,7 +1,7 @@
 ---
 title: Payment settings
 spec: grade10-admin/auction/payment-settings
-order: 4
+order: 14
 ---
 
 Payment Settings keeps the auction's buyer-premium minimums in one operator-owned

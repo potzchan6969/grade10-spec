@@ -1,7 +1,7 @@
 ---
 title: Bidding
 spec: grade10-site/auction/auction
-order: 4
+order: 21
 ---
 
 Every Grade10 listing is absolute. There is no reserve and no buy-now price;

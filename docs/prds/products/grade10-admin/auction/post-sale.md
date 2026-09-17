@@ -58,6 +58,8 @@ A winner order reaches paid through one fresh card payment or one operator-recor
 
 Manual settlement is a finance fallback: the operator records bank transfer, cash, or another described method, a reference where required, and one to five private proof files. The winner sees the payment method and reference on the receipt, never the proof files.
 
+- ❓ **Contact channel** — how an operator reaches a winner about a wire or a proof; WhatsApp is the working assumption, and the number comes from the address form — Operations confirms
+
 ## Fulfilment
 
 Shipment is its own grant, deliberately apart from payment: the person who may settle money is not necessarily the person who dispatches cards. Dispatch requires a paid invoice and records the immutable address snapshot; delivery records carrier proof. The winner reads the same facts from [Winner Order](/p/grade10-site/auction/winner-order).
