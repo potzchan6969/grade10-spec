@@ -22,7 +22,7 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
-import { ArrowUpRight, FilePdf, Info } from "@phosphor-icons/react";
+import { ArrowUpRight, FilePdf, Hourglass, Info } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import {
   REVEAL_HIDDEN_CLASS,
@@ -893,6 +893,23 @@ function WinnerOrderPage({
   const mainStaggerIndex = progress ? 1 : 0;
   const lotStaggerIndex = progress ? 2 : 1;
   const sidebarStaggerIndex = progress ? 3 : 2;
+  const statusInfoAlert =
+    content.status === "preparing_invoice" && content.secondaryNote ? (
+      <Alert
+        dismissible={false}
+        layout="inline"
+        status="default"
+        title={content.secondaryNote}
+      />
+    ) : content.status === "payment_verifying" && content.secondaryNote ? (
+      <Alert
+        dismissible={false}
+        icon={<Hourglass aria-hidden size={16} weight="bold" />}
+        layout="inline"
+        status="default"
+        title={content.secondaryNote}
+      />
+    ) : null;
 
   function handlePrimaryAction() {
     onPrimaryAction?.();
@@ -962,9 +979,17 @@ function WinnerOrderPage({
         </RevealGroup>
 
         <div className="grid w-full items-start gap-6 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
+          {/*
+            On small viewports the status inline alert sits under Order progress
+            (before the lot). From lg up it stays under the lot card.
+          */}
           <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
             {progress ? (
-              <RevealGroup revealed={revealed} staggerIndex={mainStaggerIndex}>
+              <RevealGroup
+                className="order-1"
+                revealed={revealed}
+                staggerIndex={mainStaggerIndex}
+              >
                 <WinnerProgressCard
                   onTrack={
                     content.primaryCta === "Track shipment"
@@ -981,7 +1006,24 @@ function WinnerOrderPage({
               </RevealGroup>
             ) : null}
 
-            <RevealGroup revealed={revealed} staggerIndex={lotStaggerIndex}>
+            {statusInfoAlert ? (
+              <RevealGroup
+                className="order-2 w-full lg:order-3"
+                revealed={revealed}
+                staggerIndex={progress ? mainStaggerIndex + 1 : lotStaggerIndex}
+              >
+                {statusInfoAlert}
+              </RevealGroup>
+            ) : null}
+
+            <RevealGroup
+              className={cn(
+                "w-full",
+                progress && statusInfoAlert ? "order-3 lg:order-2" : undefined,
+              )}
+              revealed={revealed}
+              staggerIndex={lotStaggerIndex}
+            >
               <VStack className="w-full" gap="lg" hAlign="stretch">
                 <LotCard
                   content={content}
@@ -998,15 +1040,7 @@ function WinnerOrderPage({
                   />
                 ) : null}
 
-                {content.status === "preparing_invoice" &&
-                content.secondaryNote ? (
-                  <Alert
-                    dismissible={false}
-                    layout="inline"
-                    status="default"
-                    title={content.secondaryNote}
-                  />
-                ) : content.secondaryNote && content.status === "shipped" ? (
+                {content.secondaryNote && content.status === "shipped" ? (
                   <Text size="sm" tone="secondary">
                     {content.secondaryNote}
                   </Text>

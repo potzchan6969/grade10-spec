@@ -303,6 +303,8 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
           invoice: PROGRESS_AFTER_INVOICE.invoice,
           // No pay-by date while verification is in progress.
         },
+        secondaryNote:
+          "We’re verifying your transfer. We’ll email you when payment is confirmed.",
         overdue: false,
       };
     case "processing":

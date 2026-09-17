@@ -265,6 +265,14 @@ export const PaymentVerifying: Story = {
     expect(sidebar.getByText("Bank transfer")).toBeVisible();
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
+    const infoAlert = canvas.getByRole("alert");
+    expect(infoAlert).toBeVisible();
+    expect(
+      within(infoAlert).getByText(/We’re verifying your transfer/),
+    ).toBeVisible();
+    expect(
+      within(infoAlert).getByText(/We’ll email you when payment is confirmed/),
+    ).toBeVisible();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(
       sidebar.queryByRole("link", { name: "Receipt PDF" }),
