@@ -1,0 +1,122 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Paying an auction invoice",
+    "animation": "none",
+    "visual_preset": "editorial",
+    "legend": {
+      "mode": "hidden"
+    }
+  },
+  "lanes": [
+    {
+      "id": "winner",
+      "label": "Winner"
+    },
+    {
+      "id": "grade10",
+      "label": "Grade10"
+    },
+    {
+      "id": "operator",
+      "label": "Operator"
+    }
+  ],
+  "mainPath": ["invoice-sent", "pays", "paid"],
+  "nodes": [
+    {
+      "id": "invoice-sent",
+      "lane": "grade10",
+      "col": 0,
+      "type": "backend",
+      "label": "Invoice sent",
+      "sublabel": "7-day window starts",
+      "width": 132
+    },
+    {
+      "id": "pays",
+      "lane": "winner",
+      "col": 1,
+      "type": "frontend",
+      "label": "Pays",
+      "sublabel": "card, or bank transfer",
+      "width": 132
+    },
+    {
+      "id": "paid",
+      "lane": "grade10",
+      "col": 2,
+      "type": "database",
+      "label": "Paid",
+      "sublabel": "receipt sent \u00b7 Processing",
+      "width": 132
+    },
+    {
+      "id": "uploads-proof",
+      "lane": "winner",
+      "col": 3,
+      "type": "frontend",
+      "label": "Uploads proof",
+      "sublabel": "once; the deadline stops",
+      "width": 132
+    },
+    {
+      "id": "checks-proof",
+      "lane": "operator",
+      "col": 3,
+      "type": "security",
+      "label": "Checks the proof",
+      "sublabel": "confirms, or returns it",
+      "width": 132
+    },
+    {
+      "id": "expired",
+      "lane": "operator",
+      "col": 1,
+      "type": "security",
+      "label": "Invoice expired",
+      "sublabel": "reissued, settled or cancelled",
+      "width": 132
+    }
+  ],
+  "edges": [
+    {
+      "from": "invoice-sent",
+      "to": "pays"
+    },
+    {
+      "from": "pays",
+      "to": "paid",
+      "label": "card, the provider confirms",
+      "variant": "emphasis"
+    },
+    {
+      "from": "pays",
+      "to": "uploads-proof",
+      "label": "bank transfer"
+    },
+    {
+      "from": "uploads-proof",
+      "to": "checks-proof"
+    },
+    {
+      "from": "checks-proof",
+      "to": "paid",
+      "label": "confirmed"
+    },
+    {
+      "from": "invoice-sent",
+      "to": "expired",
+      "label": "day 7, unpaid",
+      "variant": "dashed"
+    },
+    {
+      "from": "checks-proof",
+      "to": "uploads-proof",
+      "label": "returned, clock resumes",
+      "variant": "dashed",
+      "route": "outside-right"
+    }
+  ]
+}
