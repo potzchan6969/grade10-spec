@@ -54,6 +54,9 @@ None.
 - `grade10-site/auction/order-status`: `refunded` is reached from
   `partially_paid` as well as `paid`, and is recorded rather than left
   unspecified.
+- `grade10-site/auction/winner-order`: Winner Order reads Refunded for a
+  refunded order, paid in full or in part, and keeps its invoice and
+  receipts downloadable.
 - `shared/auth/roles`: a new `auction:refund` permission, granted to `staff`
   and `admin`.
 
@@ -68,7 +71,7 @@ None.
   already says.
 - **Auth** — the new permission in the closed vocabulary and the `staff` and
   `admin` grants.
-- **Site** — Winner Order already renders Refunded; no new letter.
+- **Site** — Winner Order shows Refunded, with no stepper, Pay or address form, and keeps the invoice and receipts; My Auctions already shows Refunded. No new letter.
 - **Depends on** `add-winner-partial-payment`, which brings Partially Paid.
   This change's deltas on `post-sale` and `order-status` apply after that
   change archives.

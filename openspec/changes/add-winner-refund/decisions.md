@@ -1,5 +1,6 @@
 ## Goals
 
+- A winner whose order was refunded sees it as Refunded on Winner Order
 - An operator records a refund, sent by hand, on the auction order it belongs to, and the order reads Refunded
 - Finance can reconcile every auction refund from Grade10: amount, reason, method, reference, proof, audit number, who recorded it and when
 - The lot's stock follows the refund: back to stock, or kept by the winner
@@ -35,6 +36,7 @@
 | Q15 | Can a Shipped order be refunded? | Yes; the shipment record stays as it is (recommended) | Refused until Delivered |
 | Q16 | Does a refund affect bidder standing? | No (recommended) | Some reasons count as a strike |
 | Q17 | Which roles hold `auction:refund`? | `staff` and `admin`; `finance` reads refunds but cannot record one (recommended) | `finance` as well; nobody by default |
+| Q18 | What does Winner Order show for a refunded order? | Refunded as the order and invoice status, however much was paid and wherever the card is; no stepper, Pay or address form; the invoice and receipts already issued stay downloadable (recommended) | Hiding the invoice and receipt as Cancelled does, which leaves the winner no record of what they paid |
 
 ## Raised
 
