@@ -1029,7 +1029,7 @@ Runs once per row of **Test data**.
 * Step 4 returns status 404 for both.
 * No surface outside the vault's set changed.
 
-### grade10-site-site-carried-surfaces-US8-TC7-1: Development carries the labs and staging does not
+### grade10-site-site-carried-surfaces-US8-TC7-1: Development and staging both carry the labs
 
 **Classification:**
 
@@ -1046,19 +1046,19 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The site under test is <grade10 development site url>, a build that carries
-  the labs surfaces.
+* The site under test is <grade10 development site url> and <grade10 staging
+  site url>, builds that carry the labs surfaces.
 
 **Steps:**
 
 1. Open <a labs demonstration surface url> on <grade10 development site url>.
 2. Open <the unapproved refund draft url> on the same lane.
-3. Fetch the same two addresses on <grade10 staging site url>.
+3. Open the same two addresses on <grade10 staging site url>.
 
 **Expected Results:**
 
 * Steps 1 and 2 render the demonstration surface and the draft.
-* Step 3 returns status 404 for both.
+* Step 3 renders the same two, not the not-found surface.
 
 ---
 
@@ -1162,6 +1162,10 @@ is noted.
     to the store, the vault and booking, and `US3-TC1-1` and `US3-TC4-1` to
     name the vault and booking beside the store. None needs the auction,
     which the crawler already lists unconditionally.
+  - `US2-TC8-1` asserts a labs address is not held on staging, which Q27
+    reverses: rewrite in place (`<v>` 2) to fetch on preview and production
+    instead, the two lanes that still refuse the labs; `US8-TC7-1` in this
+    change's own suite proves the positive case on development and staging.
 
 ## Settled
 
@@ -1191,6 +1195,8 @@ is noted.
   into it.
 * The auction is not gated by this capability: it carries on every lane, and
   no store, vault or booking surface depends on it or on each other.
+* The labs are carried on development and staging, not on preview or
+  production — widened from development alone (Q27).
 * A return address a sign-in flow lands a collector on is refused the same way
   any other route into an uncarried surface is — the refusal does not depend
   on how the address was reached.

@@ -42,9 +42,10 @@ are expected to fall to zero; the first delivery sets the baseline.
 - **No crawler hears of it** — robots.txt and the sitemap name only what the
   build answers, which the existing crawlable-pages requirements already
   demand of any address the site would refuse
-- **The labs move under the same rule** — the demonstration surfaces and the
-  unapproved refund and shipping drafts already answer only on a dev server.
-  They become the second reader of one rule rather than a second rule
+- **The labs move under the same rule, and gain staging** — the demonstration
+  surfaces and the unapproved refund and shipping drafts become the second
+  reader of one rule rather than a second rule, and widen from a dev server
+  alone to development and staging
 - **BREAKING: the vault and booking wait too** — this reverses the recorded
   decision that only the shop's own pages wait. Neither is ready for the
   public, and a collector meets the same unhonoured promise reaching either.

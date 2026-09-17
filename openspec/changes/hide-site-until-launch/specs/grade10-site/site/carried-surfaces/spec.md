@@ -19,7 +19,7 @@ rather than hidden.
   - Booking surfaces: booking a visit, the private link from a booking's
     mail, and a collector's own visits
   - Labs: the demonstration surfaces and the unapproved refund and shipping
-    drafts, carried in development alone
+    drafts, carried in development and staging
   - Everything else: the auction, the front door, the terms and the privacy
     page, membership, join, sign-in and the profile, carried on every lane
 - An address nothing carries
@@ -78,7 +78,7 @@ environment the build is made for, never by the stage the site is served at:
 | Lane | Store | Vault | Booking | Labs | Every other surface |
 | --- | --- | --- | --- | --- | --- |
 | Development | carried | carried | carried | carried | carried |
-| Staging | carried | carried | carried | not carried | carried |
+| Staging | carried | carried | carried | carried | carried |
 | Preview | not carried | not carried | not carried | not carried | carried |
 | Production | not carried | not carried | not carried | not carried | carried |
 
@@ -112,13 +112,13 @@ profile — SHALL be carried on every lane.
 - **WHEN** a collector opens each surface of the store, the vault and booking
 - **THEN** every one of them answers
 
-#### Scenario: grade10-site-site-carried-surfaces-SC-23 - The labs answer on a development lane alone
+#### Scenario: grade10-site-site-carried-surfaces-SC-23 - The labs answer on development and staging, and nowhere the public reaches
 **Serves:** What a build carries - the demonstration pages and the unapproved drafts reached only where they are worked on
 
-- **GIVEN** a build made for staging, preview or production
+- **GIVEN** a build made for preview or production
 - **WHEN** a collector opens a labs address
 - **THEN** no labs surface answers
-- **AND** a development build answers each of them
+- **AND** a development or a staging build answers each of them
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-24 - The holding site is carried on every lane
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who finds the rest of the site whole while the three products are shut

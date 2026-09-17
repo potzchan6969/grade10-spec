@@ -17,7 +17,7 @@ public can reach. The auction has already opened and is carried everywhere.
 | Lane | Store | Vault | Booking | Labs |
 | --- | --- | --- | --- | --- |
 | Development | carried | carried | carried | carried |
-| Staging | carried | carried | carried | not carried |
+| Staging | carried | carried | carried | carried |
 | Preview | not carried | not carried | not carried | not carried |
 | Production | not carried | not carried | not carried | not carried |
 
@@ -97,7 +97,8 @@ production.
 | The front door drops what is shut | Decided | The button and the card that lead to a withheld product are absent rather than shown without a link. A teaser promises a product with no date behind it and needs words nobody has written. | Product |
 | The store, the vault and booking wait; the auction does not | Decided | The auction has already opened and answers on every lane. The store, the vault and booking each wait for their own launch, and a collector meets the same unhonoured promise whichever of the three they reach. | Product |
 | Each waiting product opens on its own date | Decided | Three lines, opened one at a time by their own reviewed change, so a ready one is never held shut behind a slower one. | Product |
-| The loyalty pages and the profile stay | Decided | Membership, join, the profile and sign-in are carried everywhere. A member already holds a card, and the account pages are not one of the four products. | Product |
+| The loyalty pages and the profile stay | Decided | Membership, join, the profile and sign-in are carried everywhere. A member already holds a card, and the account pages are not one of the three waiting products. | Product |
+| The labs gain staging | Decided | The labs — the demonstration surfaces and the unapproved refund and shipping drafts — widen from development alone to development and staging. Preview and production still carry none of them. | Product |
 | The deploy environment turns it off | Decided | Production and preview carry no store; staging and development do. Keying on the site stage was dropped: the stage reads `preview` for production today by one registry row, so a site moved to a preview stage for an unrelated reason would lose its store. | Engineering |
 | Preview follows production | Decided | The preview host is the production build at another address, so it carries what production carries. A preview that sold would be a public shop under a quieter name. | Engineering |
 | A store address in old mail owes nothing | Decided | A lane that carries no store takes no order, so no mail sent from it names a store address. A rule for mail would cover a case no lane can produce. | Product |

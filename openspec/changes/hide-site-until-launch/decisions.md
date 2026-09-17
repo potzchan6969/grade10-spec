@@ -5,7 +5,8 @@
   — it already carries on every lane
 - A withheld address on a public lane answers with the not-found surface and a
   404, and no crawler is told the address exists
-- Staging and development keep every surface exactly as they are today
+- Staging and development keep every waiting product's surfaces exactly as
+  they are today; the labs gain staging, which Q27 decides
 - Opening one product later moves one reviewed line rather than a set of edits
   spread across the routes, the chrome and the crawler files
 - Each waiting product opens on its own date without waiting for the other two
@@ -41,6 +42,7 @@ round that asked it.
 | Q18 | What does the header's account menu do about its auctions item? | **No longer applicable.** The auction is carried everywhere, so the account menu names its item unconditionally — see Q26. | — |
 | Q19 | What is left on `grade10.com` while the store, the vault and booking are shut? | A holding site: the auction, the front door, the terms, the privacy page, the membership and join pages, the profile and sign-in. The front door keeps its headline and drops every card whose product is withheld. | Gating the loyalty pages as well, leaving almost nothing. A member already holds a card and can still read it. |
 | Q26 | Auction PMs report the auction has already opened. Should this change gate it too, as Q13 first decided? | No. The auction is carried on every lane and stays out of this change entirely — no gate, no lane table entry, no chrome or crawler rule keyed on it. Only the store, the vault and booking wait. This narrows Q13, which wrongly assumed the auction was unready. | Gating the auction as Q13 first decided. That reading was wrong: the auction has opened and a gate would take down a live product. |
+| Q27 | Should the labs be carried on staging as well as development? | Yes. The labs move to `carried` on staging, `not carried` stays on preview and production. This reverses the durable lane table, which the fold otherwise carried across unchanged. | Leaving the labs development-only, as the durable spec states today. That reading is what this change is correcting. |
 | Q20 | Has a public lane already taken a booking whose private link this change withholds? | No. Booking has taken nothing on a public lane; its set — including the private link from its mail — waits whole, the way the vault's two link-bearing surfaces wait with Q16. A follow-on change covers whoever already holds a booking, should one turn up before this ships. | Splitting the private link out to keep answering, which Q16 already refused for the vault on the same shape of surface. |
 | Q21 | Does a chrome region that loses every item it would hold go absent, or render empty? Only the front door's card row can genuinely reach zero — the header's navigation, the footer and the account menu always keep a non-product item such as membership, sign-in or profile. | Renders empty. The card row stays part of the page and holds no card, rather than being removed from the layout. | Removing the row itself, which would move the front door's shape lane to lane on top of what it offers. |
 | Q22 | The account menu's auctions item was to be gated by a handler `SiteHeader` is or isn't supplied — is that a `shared/ui/site-chrome` contract, or this capability's own rule? | **No longer applicable.** The auction is carried everywhere — see Q26 — so the item is drawn unconditionally and no gate exists to place. | — |
