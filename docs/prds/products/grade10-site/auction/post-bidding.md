@@ -203,6 +203,11 @@ by card, reads:
 - 🚧 **Payment proof** — uploaded once after paying, behind a confirm step
   saying nothing can be added later; the order reads Payment Verifying, the
   deadline stops, and Pay and further uploads are hidden
+- 🚧 **Payment Verifying alert** — Winner Order shows an inline Alert that
+  Grade10 is verifying the transfer and will email when payment is confirmed
+  (Hourglass on the default Alert). On small viewports it sits under Order
+  progress; from `lg` up it sits under the lot — same placement as the
+  Preparing Invoice alert
 - 🚧 **Manual confirmation** — an operator confirms the proof, or returns it
   with a reason the winner reads, the latest only; the deadline runs again
   with the time that was left, and the winner uploads again — [Auction
@@ -372,6 +377,7 @@ a second payment provider, and changes to the bid-time rules.
 | Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is paid→refund only. A missed address deadline creates no status of its own. | Product |
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; the status keeps its nine names, Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
+| Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not a running count, so the IDs do not reveal how much Grade10 sells; operators keep a separate gapless audit number the winner never sees — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
 | Setup mail | 🚧 In flight | Setup reminders at 24 and 72 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue is generic, names manual review, and never cancels automatically. | Product (@tangconst) |
 | Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. | Product (@tangconst) |
