@@ -3,7 +3,7 @@
 ### winner-order-US-02: Winner follows a settled lot to delivery
 
 **As a** winner who has paid,
-**I want** a receipt, a tracker, and proof of what was handed over,
+**I want** a receipt PDF that says how I paid, a tracker, and proof of what was handed over,
 **so that** I can account for a high-value purchase without asking Grade10 for records.
 
 ## ADDED User journeys

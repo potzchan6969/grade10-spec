@@ -9,8 +9,8 @@
 ### post-sale-US-07: Operator resolves an unpaid order
 
 **As an** operator,
-**I want** to reissue, settle, or cancel an unpaid order from the order itself,
-**so that** a lot whose winner did not pay stops being an open-ended obligation.
+**I want** to see how long an unpaid order has waited, and settle, reissue, or cancel it from the order itself,
+**so that** a lot whose winner has not paid stops being an open-ended obligation.
 
 ### post-sale-US-08: Operator reconstructs an order's history
 

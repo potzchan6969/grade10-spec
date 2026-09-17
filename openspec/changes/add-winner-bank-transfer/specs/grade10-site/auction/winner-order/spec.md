@@ -767,7 +767,10 @@ an invoice amount before an operator has sent it.
 - **THEN** the payment processing fee is 11225 minor units in HKD
 - **AND** the order total is 323225 minor units in HKD
 
-#### Scenario: winner-order-SC-63 - A manually settled order keeps its fee
+Scenario `winner-order-SC-63` keeps its title with its id. The title is
+historical: a manually settled order keeps its payment processing fee.
+
+#### Scenario: winner-order-SC-63 - A manually settled order carries no fee
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a bank transfer invoice with a subtotal of 312000 and a payment

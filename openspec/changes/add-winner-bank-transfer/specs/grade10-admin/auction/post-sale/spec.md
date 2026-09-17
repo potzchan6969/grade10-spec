@@ -569,7 +569,10 @@ files.
 - **AND** the payment record carries bank transfer, the reference, and the slip
 - **AND** the order derives as Processing
 
-#### Scenario: grade10-admin-auction-post-sale-SC-67 - Manual settlement keeps the processing fee
+Scenario `grade10-admin-auction-post-sale-SC-67` keeps its title with its id.
+The title is historical: manual settlement keeps the payment processing fee.
+
+#### Scenario: grade10-admin-auction-post-sale-SC-67 - Manual settlement drops the processing fee
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
 - **GIVEN** an order in Pending Payment whose bank transfer invoice has a
