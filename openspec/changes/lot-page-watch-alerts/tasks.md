@@ -18,7 +18,7 @@
 - [ ] 1.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm check:manual`.
 
-## 2. Bid-alerts stamp and placeBid contract (grade10)
+## 2. Bid-alerts stamp and placeBid contract (grade10) (owner: @mason5991)
 
 Needs nothing from group 1. Frontend group 3 needs this landed for the
 announce flag.
