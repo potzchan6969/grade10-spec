@@ -91,9 +91,9 @@ Slack tells one person, once per move.
 
 ## Surfaces
 
-- 🚧 **Board** — nine columns, one per stage; each card the hand, the age, the
-  overlays and the task bar; Mine, Waiting, Idle and Blocked filters; a stale
-  shelf for a change idle 30 days
+- 🚧 **Board** — nine lanes, one per stage, stacked as In Flight stacks four
+  today; each card the hand, the age, the overlays and the task bar; Mine,
+  Waiting, Idle and Blocked filters; a stale shelf for a change idle 30 days
 - 🚧 **Change page** — the stage as a stepper; a Your turn card with the
   command; the hands; each artifact with whether it is behind one upstream of
   it; tasks by group; where the code is: `main`, staging, a release
@@ -107,7 +107,7 @@ Slack tells one person, once per move.
 :::detail{title="Product decisions" for="pm"}
 A change passes through five hands and nobody is told when it reaches theirs;
 the board shows four lanes, so a change waiting on a designer sits in the same
-column as one waiting on a deploy. The owner's brief is
+lane as one waiting on a deploy. The owner's brief is
 [the blueprint](/references/delivery-workflow-blueprint).
 
 | Item | Status | Decision | Owner |

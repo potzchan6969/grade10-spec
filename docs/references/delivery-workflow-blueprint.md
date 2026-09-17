@@ -146,7 +146,7 @@ Overlays sit on a stage:
 
 | Surface | Route | Shows | Actions, local only |
 | --- | --- | --- | --- |
-| Board | `/board` | Nine columns, one per stage; each card the hand, the age, the overlays, the task bar; filters Mine, Waiting, Idle, Blocked; a stale shelf | — |
+| Board | `/board` | Nine lanes, one per stage, stacked as In Flight stacks four today; each card the hand, the age, the overlays, the task bar; filters Mine, Waiting, Idle, Blocked; a stale shelf | — |
 | Change page | `/change/<id>` | The stepper; the Your turn card with the command; the hands table; each artifact with its freshness; tasks by group; the delivery row: main, staging, release | Assign to me, reassign, say I am waiting, approve the summary |
 | My turn | `/mine` | The changes whose current stage names the reader; then theirs later | Pick a handle |
 | PRD page | `/p/…` | Unchanged prose; the in-flight ribbon names the stage and the hand; each 🚧 line wears the pip of its change's stage | Propose |

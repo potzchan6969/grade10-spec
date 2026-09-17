@@ -4,19 +4,19 @@ Drawn from [Change Stages · Surfaces](../../docs/prds/products/shared/planning/
 
 ### Board
 
-[Blueprint · 3.1 Board](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#board). Nine columns in stage order; Proposed and Archived collapsed to a count until opened; Mine, Waiting, Idle and Blocked filters; the stale shelf as a link above the columns. Replaces the four lanes of `/in-flight`.
+[Blueprint · 3.1 Board](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#board). Nine lanes in stage order, stacked as In Flight stacks four today, each collapsible to its heading with its count and its open hands; Proposed and Archived start collapsed; Mine, Waiting, Idle and Blocked as a filter row under the page heading; the stale shelf as a link. The open lanes sit side by side only above 1536px. Replaces the four lanes of `/in-flight`.
 
 ### Change page
 
-[Blueprint · 3.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the title; the Your turn card and the hands on the left; the artifacts with their freshness and the delivery row on the right; the existing tasks by group below.
+[Blueprint · 3.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading; the Your turn card; then the `ChangeStatus` rows gain Hands, Artifacts with their freshness, Delivery and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
 
 ### My turn
 
-[Blueprint · 3.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). A handle picker in the heading; the changes on the reader now, then the ones that are theirs later. Replaces `/pending` for a person; the per-role Pending page stays for a hand nobody has named.
+[Blueprint · 3.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). A handle picker in the page heading; the changes on the reader now, then the ones that are theirs later, in the Pending page's card grammar with the command on the card. Replaces `/pending` for a person; the per-role Pending page stays for a hand nobody has named.
 
 ### Page ribbon and pip
 
-[Blueprint · 3.4 PRD page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#prd-ribbon). The in-flight ribbon gains the stage and the hand; each 🚧 line gains the pip of its change's stage.
+[Blueprint · 3.4 PRD page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#prd-ribbon). The section's in-flight row gains the stage and the hand; each 🚧 line gains the pip of its change's stage, a small outline badge with the stage number, so no colour carries the meaning on its own.
 
 ### Slack messages
 
@@ -28,27 +28,29 @@ Drawn from [Change Stages · Surfaces](../../docs/prds/products/shared/planning/
 
 ## Components
 
+Every manual screen sits in the manual's shell as it is: the header, the rail, the 896px reading column, `PageHeading`, the card, and the `ChangeStatus` label-and-value rows. The new blocks stack in that column; none opens a second column.
+
 Design-system primitives, from `@grade10/design-system/components/`:
 
 | Export | Where |
 | --- | --- |
 | `Stepper`, `Step`, `StepIndicator` | The change page's stepper, one `Step` per stage |
-| `StatusIndicator` | The stage pip on a page's 🚧 line and in the ribbon |
+| `Badge` (`sm`, `outline`) with the stage number | The pip on a page's 🚧 line and in the section's in-flight row; the hover names the change and the hand |
 | `Badge` | Every overlay chip and the suite's verdict |
 | `Avatar`, `AvatarFallback` | The hand on a card and in the hands table |
 | `Card`, `CardHeader`, `CardContent` | The Your turn card and the board's cards |
-| `EmptyState` | A column, My turn or a hands table with nothing to show |
+| `EmptyState` | A lane, My turn or a hands table with nothing to show |
 | `Skeleton` | The board while the snapshot loads |
 | `Text`, `Button`, `IconButton` | As the manual composes them today |
 
 The manual's own blocks, in `tools/manual/src/blocks/`, kept: `ChangeCard`, `ChangeStatus`, `TaskProgress`, `CopyableCommand`, `Attribution`, `IdleBadge`, `DependencyPills`, `NextAction`, `ChangeRibbon`, `CapabilityPip`.
 
-New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageColumn`, `YourTurnCard`, `HandsTable`, `ArtifactList` with its freshness chip, `DeliveryRow`, `MyTurnPage`, `StagePip`. The manual carries its own English strings and imports no catalog, so no `packages/i18n` key is owed; the Slack message bodies live in `scripts/openspec/changed-changes.mjs`.
+New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourTurnCard`, `HandsTable`, `ArtifactList` with its freshness chip, `DeliveryRow`, `MyTurnPage`, `StagePip`. The manual carries its own English strings and imports no catalog, so no `packages/i18n` key is owed; the Slack message bodies live in `scripts/openspec/changed-changes.mjs`.
 
 ## States
 
 - Board with no change in flight - `shared-planning-change-stages-US-02`
-- A column with no change in it, collapsed to its heading - `shared-planning-change-stages-US-02`
+- A lane with no change in it, collapsed to its heading - `shared-planning-change-stages-US-02`
 - A card whose hand is unnamed, showing the hand as open - `shared-planning-change-stages-US-04`
 - A card waiting, with the line and its date - `shared-planning-change-stages-US-06`
 - A card blocked, naming the change it waits for - `shared-planning-change-stages-US-02`

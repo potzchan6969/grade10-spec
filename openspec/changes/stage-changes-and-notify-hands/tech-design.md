@@ -62,15 +62,15 @@ channels:
 - [A rebase replays a stage entry and a second message goes out] → the `<change>:<stage>` key in the workflow cache; a duplicate is dropped
 - [A stage flips back and forth on a half-written change] → the message says the stage and the file that proved it; a flip back sends nothing, only a rise does
 - [Idle reads wrong on a change planned by hand edits] → a hand edit to `tasks.md` still changes a line the reader counts as a landing
-- [The board grows to nine columns and stops fitting] → Proposed and Archived collapse to counts, and a column with nothing in it collapses to its heading
+- [Nine lanes make a long page] → a lane with nothing in it collapses to its heading, Proposed and Archived start collapsed, and the open lanes sit side by side only above 1536px
 
 ## Migration Plan
 
-1. `stageOf`, the nine columns, the stepper and the pip; no new keys read yet. Nothing changes for anybody who writes a change.
+1. `stageOf`, the nine lanes, the stepper and the pip; no new keys read yet. Nothing changes for anybody who writes a change.
 2. `hands:`, the team map, the `hands` rule, `pnpm plan hand`, Assign on the local manual, My turn. Changes without hands show open hands.
 3. `--stages` in the workflow, the direct messages, then the digest. Rollback for this step is the workflow's `if:` on a repository variable; steps 1 and 2 need none.
 
 ## Open Questions
 
-- Whether the stage should also be printed by `pnpm plan` in `grade10`, or only linked from it; either fits the board's current columns.
+- Whether the stage should also be printed by `pnpm plan` in `grade10`, or only linked from it; either fits the board's current lanes.
 - Whether a direct message to the pusher of a red `main` belongs here or to the land-without-a-pull-request change; the payload is the same either way.
