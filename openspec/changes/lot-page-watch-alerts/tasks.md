@@ -1,4 +1,4 @@
-## 1. Lot watch toast copy and product record (grade10-spec)
+## 1. Lot watch toast copy and product record (grade10-spec) (owner: @mason5991)
 
 - [ ] 1.1 Answer lot-page watch / unwatch / first-bid alerts toast strings in
       shared `auctionListing` for `en`, `zh-Hant`, `zh-Hans`, and `ko` —
