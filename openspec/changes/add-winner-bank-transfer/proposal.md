@@ -4,6 +4,8 @@
 
 **Extended by:** @tangconst - 2026-09-17 — Winner Order payment surface from Storybook: Invoice/Receipt PDF placement, Submit Payment Proof copy controls and abort/HEIC gates, `FileDropzone` as a design-system form primitive, Free bank-transfer fee and Bank transfer payment-method card on Payment Verifying / Processing.
 
+**Extended by:** @tangconst - 2026-09-17 — Payment Verifying inline Alert on Winner Order (verifying copy, Hourglass, under Order progress on small viewports).
+
 ## Why
 
 A winner can pay an auction invoice only by card, and the card fee grows with
@@ -214,6 +216,9 @@ owns (proof upload, Free fee, Payment Verifying, invoice/receipt PDFs):
 - Bank-transfer invoices may show Payment Processing Fee as **Free** and
   Payment Verifying / Processing show **Bank transfer** in the payment-method
   card (no masked card).
+- While proof is checked, Winner Order shows an inline **Payment Verifying
+  Alert** (Hourglass, default status; under Order progress on small viewports)
+  — decisions Q17–Q18.
 
 ## References
 

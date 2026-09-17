@@ -49,6 +49,8 @@ answers carry the round's own numbers.
 | Q14 | Where do Invoice and Receipt PDF controls sit on Winner Order? | **Invoice** is a text link beside the Order summary heading; **Receipt** is a text link under the payment-method card. They are not paired on one row | Both as outline buttons, or both on the same summary row |
 | Q15 | Which bank-detail fields get a copy control on Submit Payment Proof? | Account number / IBAN, total amount due, and the transfer reference each have an icon copy control with success toast | Copy Reference Code only |
 | Q16 | Is proof upload a shared design-system primitive? | Yes — `FileDropzone` / `FileDropzoneTarget` / `FileDropzoneFileList` under `packages/design-system` (`@grade10/design-system/components/forms/file-dropzone`) for HEIC convert, limits, and reject reasons | `@grade10/ui` block; page-local dropzone only |
+| Q17 | What does Winner Order show while proof is checked? | An inline Alert (`status=default`, Hourglass icon): **We’re verifying your transfer. We’ll email you when payment is confirmed.** No proof-received letter (already a non-goal) | Page body only; warning or success status; Bell icon; or a letter on upload |
+| Q18 | Where does that status Alert sit? | Under Order progress below `lg`; under the lot from `lg` up — same placement as Preparing Invoice’s invoice-ready Alert | Always under the lot; always under progress |
 
 ## Raised
 
