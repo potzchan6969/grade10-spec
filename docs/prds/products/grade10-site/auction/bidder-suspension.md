@@ -5,39 +5,46 @@ order: 35
 ---
 
 A suspension is an auction-only restriction: it stops new auction commitments
-and leaves payment, the store, loyalty and platform sign-in available. It
-starts when a winner leaves an invoice unpaid past its deadline, or when an
-operator suspends the account.
+and nothing else. It starts when any one of the winner's invoices goes unpaid
+past its deadline, whatever they have paid on other lots.
 
 ## What It Stops
 
-- **Reason** — the expired auction order and the amount still owed
+| While suspended | Allowed |
+| --- | --- |
+| Place a new bid | No |
+| Raise a standing maximum | 🚧 No |
+| Standing maxima on open lots | 🚧 Keep bidding to their cap, and can win |
+| Pay what is owed | Yes |
+| Store, loyalty and sign-in | Yes |
+| Read the account and its orders | Yes |
+
+- **Told at once** — the notice names what is owed and how to resolve it, so
+  a suspension is never discovered by being refused
 - **Won lots** — an already won lot stays won; its invoice remains payable
-  through the order route
-- **Payment** — the collector can pay what is owed, but payment and invoice
-  reissue do not lift the restriction
+  through the order
+- **Payment lifts nothing** — paying, and an invoice reissue, leave the
+  restriction in place; only an operator's reinstatement lifts it
 - **Account record** — My Auctions explains the restriction beside the
-  affected order and keeps the auction status distinct from a platform
-  account ban
-- **Reinstatement** — an operator confirms it; it is not automatic
+  affected order, apart from any platform account ban
 
 ## Operator Suspension
 
-- 🚧 **Where** — an operator holding `auction:moderate` suspends or
-  reinstates an account from its panel on the admin Users page
+- 🚧 **Where** — an operator suspends or reinstates an account from its panel
+  on the admin Users page
 - 🚧 **Reason** — required; operators read it on the account record, and the
   collector never sees it
 - 🚧 **Notice** — the collector is told they can no longer bid and how to
   contact Grade10
 - 🚧 **One suspension** — an operator suspension and a missed deadline are the
-  same restriction with different causes; reinstating lifts it whatever the
-  cause
+  same restriction with different causes; a new cause while suspended is
+  recorded beside the first, and reinstating lifts every cause
 
 ## Standing Bids
 
-- 🚧 **Standing bids** — a maximum set before the suspension stays in force:
-  it keeps bidding up to its cap and can still win the lot; the collector
-  cannot place a new bid or raise it
+- 🚧 **Standing bids** — a maximum set before the suspension keeps bidding up
+  to its cap and can still win the lot, which gets its own order, invoice
+  and deadline; no lot's price or leader changes because of the suspension
 - 🚧 **Bid history** — suspension adds, edits and removes nothing in any lot's
   bid history
 
@@ -47,6 +54,11 @@ control and reason trail live in the [Post-Sale
 Queue](/p/grade10-admin/auction/post-sale).
 
 ::cases{id="grade10-site/auction/bidder-suspension"}
+
+:::detail{title="Code map" for="engineer"}
+- **Grant** — `auction:moderate`, the one grant that suspends and reinstates,
+  in the auction service and on the admin Users panel
+:::
 
 :::detail{title="Product decisions" for="pm"}
 The restriction protects future auction commitments without turning a missed
@@ -60,10 +72,10 @@ suspended account can win more lots through bids it placed before the
 suspension. Each lot won that way gets its own invoice and deadline.
 
 An operator can suspend for reasons that have nothing to do with an unpaid
-order — fraud, abuse, a dispute. The same `auction:moderate` grant that stops
-a bidder in the auction service stops one here, so there is one grant and one
-switch. The collector's notice leaves out the operator's reason because the
-reason is written for colleagues, not for the person it concerns.
+order — fraud, abuse, a dispute. The same grant that stops a bidder in the
+auction service stops one here, so there is one grant and one switch. The
+collector's notice leaves out the operator's reason because the reason is
+written for colleagues, not for the person it concerns.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |

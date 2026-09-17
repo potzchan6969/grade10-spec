@@ -5,26 +5,33 @@ order: 31
 ---
 
 🚧 My Auction Orders lists every auction order the collector has won, one row
-per order. It opens from the account menu beside My Auctions.
+per order, resolved from the session and never another collector's. It opens
+from the account menu beside My Auctions.
 
 ## The List
 
-🚧 Each row carries the lot's key image and title, the auction, the winning
-bid, the [order status](/p/grade10-site/auction/order-status), **View lot**,
-and one action for what the order needs next:
+| Field | What it shows |
+| --- | --- |
+| Lot | The key image and the title; **View lot** opens the lot's page |
+| Auction | The auction the lot sold in |
+| Winning bid | The accepted bid that won |
+| Status | The order's status — [Auction Order Status](/p/grade10-site/auction/order-status) |
+| Next action | One action for what the order needs, opening the order on [Winner Order](/p/grade10-site/auction/winner-order) |
+
+🚧 The action follows the status:
 
 | Order status | Action |
 | --- | --- |
 | Awaiting Address | Confirm address |
-| Pending Payment | Pay Invoice |
-| Preparing Invoice, Processing, Shipped, Delivered, Cancelled, Refunded | View detail |
+| Pending Payment | Pay Invoice, an expired invoice included |
+| Preparing Invoice, Payment Verifying, Processing, Shipped, Delivered, Cancelled, Refunded | View detail |
 
 🚧 Orders waiting on the winner — Awaiting Address and Pending Payment — come
-first; the rest follow, newest close first. An expired invoice still reads
-Pending Payment and still offers Pay Invoice.
+first; the rest follow, newest close first. Nothing on the list records
+payment, changes an address or moves a status: the order does.
 
-🚧 Every action opens the order on [Winner Order](/p/grade10-site/auction/winner-order).
-An empty list points to My Auctions; a failed read says so and can be retried.
+🚧 An empty list points to My Auctions; a failed read says so and can be
+retried.
 
 :::detail{title="Product decisions" for="pm"}
 My Auctions answers "where do I stand?" while bidding. After a win the question
