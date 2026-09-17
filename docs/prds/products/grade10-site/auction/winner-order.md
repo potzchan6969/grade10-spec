@@ -135,6 +135,10 @@ The proof is recorded and the order reads Delivered.
 - 🚧 **Receipt ID** — `REC-202609-LK7P2Q-01-P1`: the month paid and the paid
   invoice's code and count, with the invoice total, earlier payments, this
   payment and the balance due
+- 🚧 **A partial payment's receipt** — one receipt per payment an operator
+  records, `-P1`, `-P2` and on, each carrying the invoice total, payments
+  before it, this payment and the balance still due; every receipt for the
+  invoice lists on the same Receipt PDF row on Winner Order, oldest first
 
 ## Logistics
 
@@ -150,19 +154,27 @@ The proof is recorded and the order reads Delivered.
 - **Suspension** — the auction-only restriction and the amount still owed;
   paying does not restore bidding by itself — [Bidder
   Suspension](/p/grade10-site/auction/bidder-suspension)
-- ❓ **Wrong amount received** — a bank transfer short of or over the invoice:
-  several payments against one invoice, a shortfall tolerance, overpayment
-  and refunds are a separate change — Product and Finance confirm
+- 🚧 **Suspension on a Partially Paid order shows no amount** — Contact Us
+  covers it instead, once any payment has been recorded against the invoice
+- 🚧 **Partial payment** — an operator records a payment smaller than the
+  balance owed, as many times as it takes; the order reads Partially Paid,
+  the payment deadline stops for good, and card Pay is not offered again.
+  Reissue and Cancel are refused once any payment has been recorded — [Auction
+  Order Status](/p/grade10-site/auction/order-status)
+- 🚧 **Closing a partial balance** — a payment within 10% of what remains
+  either way closes the invoice as Paid; further off is refused so the
+  operator re-enters the right amount
 
 ## The Page
 
 - **Progress** — five steps, Address → Invoice → Payment → Shipped →
   Completed, with day-only dates; Cancelled and Refunded show no stepper
-- 🚧 **Payment Verifying** — sits under Payment; the order status keeps its
-  nine names
+- 🚧 **Payment Verifying** — sits under Payment
+- 🚧 **Partially Paid** — sits under Payment, the same as Payment Verifying;
+  the order status vocabulary grows to ten names
 - 🚧 **Sections** — Order Information with Invoice Status (Not issued,
-  Pending, Payment Verifying, Paid, Expired, Cancelled, Refunded), Collection
-  Method, Order Status with a time per step, and Lots
+  Pending, Payment Verifying, Partially Paid, Paid, Expired, Cancelled,
+  Refunded), Collection Method, Order Status with a time per step, and Lots
 - **Notifications** — the post-close letters for this lot — [Order
   Notifications](/p/grade10-site/auction/notifications-order)
 
@@ -220,5 +232,8 @@ or changes to the bid-time auction rules.
 | Billing address on setup | ❓ Open | The order form offers no billing address, while the auction-won and setup-reminder letters name one among the setup steps. Product and Design reconcile the two changes. | Product and design (@tangconst) |
 | Payment deadline while proof is checked | 🚧 In flight | The deadline stops on upload and resumes with the time left if the proof is not accepted, so a winner never loses time to the check. | Product (@jeffffej0909) |
 | Invoice and receipt identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not by a running count, so the IDs do not reveal how much Grade10 sells. Operators keep a separate gapless audit number the winner never sees. Source: [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
-| Partial payment | ❓ Open | A separate change: several payments against one invoice, a shortfall tolerance, overpayment, and refunds. | Product and finance |
+| Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
+| Closing a partial balance | 🚧 In flight | A payment within 10% of what remains, either way, closes the invoice as Paid with no separate write-off or refund entry; further off is refused. Chosen for simplicity over a running-total tolerance or a line-item adjustment. | Product and finance |
+| Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
+| Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
 :::

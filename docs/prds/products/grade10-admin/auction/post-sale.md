@@ -34,6 +34,7 @@ Status](/p/grade10-site/auction/order-status).
 | Preparing Invoice | The winner confirmed an address; no invoice yet | Yes |
 | Pending Payment | The invoice is unpaid; an expired one shows Expired beside it | When expired |
 | 🚧 Payment Verifying | The winner uploaded payment proof | Yes, until the proof is checked |
+| 🚧 Partially Paid | An operator has recorded at least one payment and money is still owed | No |
 | Processing | Paid, not dispatched | Yes |
 | Shipped · Delivered | Dispatched; delivery confirmed | No |
 | Cancelled · Refunded | A recorded terminal outcome | No |
@@ -53,10 +54,11 @@ Status](/p/grade10-site/auction/order-status).
 | Action | On | Grant |
 | --- | --- | --- |
 | Send invoice | Preparing Invoice | Payment processing |
-| Reissue | A sent invoice, pending or expired | Payment processing |
+| 🚧 Reissue | A sent invoice, pending or expired, never Partially Paid | Payment processing |
 | 🚧 Confirm or return proof | Payment Verifying, where these are the only actions | Payment processing |
 | Settle manually | A bank transfer invoice, pending or expired | Payment processing |
-| Cancel order | Awaiting Address, Preparing Invoice, or an expired invoice | Payment processing |
+| 🚧 Record a partial payment | An invoice pending or expired, or already Partially Paid | Payment processing |
+| 🚧 Cancel order | Awaiting Address, Preparing Invoice, or an expired invoice, never Partially Paid | Payment processing |
 | 🚧 Reopen the address form, or record an address | Awaiting Address after the deadline, before send | Payment processing |
 | Dispatch | A paid order | Shipment processing |
 | Confirm delivery | A dispatched order | Shipment processing |
@@ -100,6 +102,14 @@ Status](/p/grade10-site/auction/order-status).
   at the invoice's full order total with its fee line kept, and never on a
   card invoice, which is reissued as bank transfer first. The winner sees the
   method and reference on the receipt, never the files
+- 🚧 **Recording a partial payment** — the same form as manual settlement, for
+  an amount smaller than the balance owed; the order reads Partially Paid and
+  the operator may record another payment the same way. A payment within 10%
+  of the balance, either way, settles the invoice as Paid instead; further off
+  is refused
+- 🚧 **Partially Paid is final on its numbers** — no reissue and no cancel
+  once a payment is recorded; the operator resolves the rest by hand outside
+  the system
 - 🚧 **Reopening the address form** — after the 48-hour deadline and before
   send, on request and with a reason, giving a fresh 48 hours; repeatable,
   changes no status, never on a cancelled order. Or the operator records an
@@ -157,6 +167,8 @@ delivery state, and operational trail together.
 | Reopening a cancelled order | Decided | Refused. The lot is back in stock and may already be attracting bids, so an address on it would promise a lot Grade10 no longer holds for that winner. | Product and Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 | Overdue and the address deadline | ❓ Open | Whether the Overdue mark should follow the 48-hour address deadline instead of 72 hours idle, so a winner is not blocked for a day before an operator is told. | Product |
+| Partial payment stays operator-only | 🚧 In flight | Recorded the same way as manual settlement, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
+| Partially Paid needs no action | 🚧 In flight | Unlike Payment Verifying, nothing is waiting on the operator by default; they open the order when a new payment arrives. | Product and finance |
 :::
 
 ## Pending Spec
