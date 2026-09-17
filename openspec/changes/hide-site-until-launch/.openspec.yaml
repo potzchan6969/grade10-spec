@@ -1,3 +1,4 @@
 schema: grade10-planning
 promoted_by: "@seankcw"
 created: 2026-09-17
+deploy_waived: "sean — merged 3687fc834, deploying imminently; archiving ahead of the deploy.yml run rather than blocking on its timing"
