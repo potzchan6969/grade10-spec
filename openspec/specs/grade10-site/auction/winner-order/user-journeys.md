@@ -43,6 +43,7 @@ authorization expires on its own.
 **I want** my invoice to calculate the stated buyer premium correctly using the
 current currency minimum,
 **so that** the amount I pay is explainable and collectible.
+
 ### winner-order-US-09: Winner confirms delivery when five addresses are already saved
 
 **As a** winner with five saved shipping addresses,
