@@ -59,8 +59,10 @@ The proof is recorded and the order reads Delivered.
   transfer in a currency with bank details — HKD at launch
 - ❓ **Fee range wording** — what each choice says; the bank transfer wording
   names no amount, because the operator sets that fee — Product confirms
-- ❓ **Billing address** — the form offers none, while the order letters
-  still name one among the setup steps; Product reconciles
+- 🚧 **Billing address** — confirmed with the delivery address and the
+  payment method. Use same details for billing address is ticked by default;
+  unticking it asks for a saved address or a one-time one, with the same
+  required fields. It locks on confirming like the delivery address
 - **Deadline** — `Confirm by …` under Confirm; when it passes, Confirm is
   hidden, the overdue alert reads `Missed address deadline` with Contact Us,
   the status stays Awaiting Address, and nothing cancels or suspends
@@ -93,6 +95,8 @@ The proof is recorded and the order reads Delivered.
 - 🚧 **Invoice ID** — `INV-202609-LK7P2Q-01`: the month sent, the listing's
   code and the count; a reissue gets a new ID and bank reference, and the old
   ones still find the order
+- 🚧 **Bill To and Ship To** — the invoice shows both addresses from the
+  order's snapshot, with name, company name, phone and address
 - **PDFs** — the invoice once sent and the receipt once paid, on one row;
   hidden when Cancelled
 
@@ -130,6 +134,8 @@ The proof is recorded and the order reads Delivered.
 - **Receipt** — the itemised amount and how it was paid: card brand and last
   four, or the method and reference an operator recorded, marked as manually
   settled
+- 🚧 **Bill To and Ship To** — the same two addresses as the invoice it
+  pays; a later edit or reissue never changes a receipt already issued
 - 🚧 **A confirmed transfer** — its receipt reads Bank Transfer, not manually
   settled
 - 🚧 **Receipt ID** — `REC-202609-LK7P2Q-01-P1`: the month paid and the paid
@@ -217,7 +223,7 @@ or changes to the bid-time auction rules.
 | One fee line | 🚧 In flight | Payment Processing Fee stays on every invoice and is priced by method, so a bank transfer can carry an administrative fee. The operator enters that fee each time, with no cap. | Product (@jeffffej0909) |
 | Fee disclosure | 🚧 In flight | The winner chooses a method on a fee range Grade10 sets; the amount is first shown on the sent invoice, and an operator reissues if the winner then wants the other method. | Product (@jeffffej0909) |
 | Winner's choice locks on confirming | 🚧 In flight | Once the winner confirms the address and payment method, only an operator changes them: an edit with a reason before send, a reissue after. This reverses the rule that let the winner change the address, and then the method, until the invoice was sent. | Product (@jeffffej0909) |
-| Billing address on setup | ❓ Open | The order form offers no billing address, while the auction-won and setup-reminder letters name one among the setup steps. Product and Design reconcile the two changes. | Product and design (@tangconst) |
+| Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
 | Payment deadline while proof is checked | 🚧 In flight | The deadline stops on upload and resumes with the time left if the proof is not accepted, so a winner never loses time to the check. | Product (@jeffffej0909) |
 | Invoice and receipt identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not by a running count, so the IDs do not reveal how much Grade10 sells. Operators keep a separate gapless audit number the winner never sees. Source: [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
 | Partial payment | ❓ Open | A separate change: several payments against one invoice, a shortfall tolerance, overpayment, and refunds. | Product and finance |

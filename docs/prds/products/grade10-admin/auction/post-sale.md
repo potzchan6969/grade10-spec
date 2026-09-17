@@ -74,6 +74,10 @@ Status](/p/grade10-site/auction/order-status).
   method, the winning bid and the premium, enters Shipping & Handling (zero
   allowed) and optional Insurance (above zero), reads Subtotal and Order
   Total, and sends; the send locks the address and starts the 7 days
+- 🚧 **Billing address** — the quote shows it beside the delivery address;
+  the send is refused while the order has none, and the operator adds it
+  with the edit before send. Recording an address by phone asks for billing
+  too, same as delivery by default
 - 🚧 **Payment Processing Fee** — for card, priced by Grade10 from the
   provider's live fees, and the send is refused when they cannot be read; for
   bank transfer, entered by the operator on every invoice, zero or more, and
