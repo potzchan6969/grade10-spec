@@ -13,15 +13,15 @@ up should confirm the shipped diff against `winner-order-SC-72` through
 `SC-79` and check them off through the usual tooling rather than redoing
 the work.
 
-- [ ] 1.1 CheckboxButton disabled-unchecked draws `background-subtle` with a
+- [x] 1.1 CheckboxButton disabled-unchecked draws `background-subtle` with a
   dashed border (Figma `2176:4095`); disabled-checked keeps primary at
   opacity-50 (`winner-order-SC-75`)
-- [ ] 1.2 CheckboxListInput's disabled state dims the label and count only,
+- [x] 1.2 CheckboxListInput's disabled state dims the label and count only,
   leaving the control's own disabled drawing to CheckboxButton
   (`winner-order-SC-75`)
-- [ ] 1.3 Raise Tooltip's content positioner to `z-[100]` so it clears a
+- [x] 1.3 Raise Tooltip's content positioner to `z-[100]` so it clears a
   nested dialog's stacking (`winner-order-SC-75`)
-- [ ] 1.4 Extend `apps/preview/src/pages/confirm-delivery-address.stories.tsx`
+- [x] 1.4 Extend `apps/preview/src/pages/confirm-delivery-address.stories.tsx`
   and `winner-order-address-dialog.tsx` with the cap states from
   `ui-design.md`'s States table: book at five (Save disabled, one-time
   draft leads the list), empty book, and removing a saved card freeing a
