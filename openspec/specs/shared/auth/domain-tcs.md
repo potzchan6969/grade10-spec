@@ -92,7 +92,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -109,13 +109,13 @@
 **Steps:**
 
 1. Follow the sign-in link from <grade10 store url>.
-2. Open <grade10 auction url> and read who is calling.
-3. Open <zzz store url> and read who is calling.
+2. Open <grade10 auction url> and read the signed-in state.
+3. Open <zzz store url> and read the signed-in state.
 
 **Expected Results:**
 
-* Step 2 reports the same person as step 1.
-* Step 3 reports no person.
+* Step 2 shows the signed-in person's name and email.
+* Step 3 shows nobody signed in.
 
 ### shared-auth-e2e-US2-TC2-1: Untrusted return location is ignored and sign-in stays on the brand
 
@@ -146,12 +146,12 @@
 **Steps:**
 
 1. Complete the sign-in that names <off-brand location>.
-2. Read who is calling on the surface it lands on.
+2. Read the signed-in state on the page it lands on.
 
 **Expected Results:**
 
 * Step 1 lands on this brand and not on <off-brand location>.
-* The read reports the signed-in person.
+* Step 2 shows the signed-in person's name and email.
 
 ---
 
@@ -239,7 +239,7 @@
 **I want** a revoked session to report nobody and the revoke to be on the trail,
 **so that** a stolen device is out, and a revoke that cannot be recorded does not happen at all.
 
-### shared-auth-e2e-US4-TC1-1: Revoked session reports no person and the revoke is on the trail
+### shared-auth-e2e-US4-TC1-1: Revoked session leaves the page showing nobody signed in and the revoke is on the trail
 
 **Classification:**
 
@@ -270,12 +270,12 @@
 
 1. List <collector account>'s sessions by user id.
 2. Revoke <collector session>.
-3. Read who is calling on <collector session>.
+3. Read the signed-in state on <collector session>.
 
 **Expected Results:**
 
 * Step 1 shows that account's sessions and no session secret, and writes no trail entry.
-* Step 3 reports no person.
+* Step 3 shows nobody signed in.
 * The trail records the actor, <collector account>, and the revoke.
 
 ### shared-auth-e2e-US4-TC2-1: Revoke that cannot be recorded leaves the session signed in
@@ -302,11 +302,11 @@
 **Steps:**
 
 1. Revoke <collector session>.
-2. Read who is calling on <collector session>.
+2. Read the signed-in state on <collector session>.
 
 **Expected Results:**
 
-* Step 2 reports that person.
+* Step 2 shows that person's name and email in the signed-in state.
 * <collector session> remains signed in.
 
 ---
