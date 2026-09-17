@@ -376,36 +376,6 @@ Runs once per row of **Test data**.
 * Every fetch returns status 404.
 * Step 2 renders the not-found surface in that language.
 
-### grade10-site-site-carried-surfaces-US2-TC6-1: No store page code reaches the browser
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** security
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-site-carried-surfaces-US-02
-
-**Pre-conditions:**
-
-* The site under test is a build that carries no store surfaces.
-
-**Steps:**
-
-1. Navigate to <grade10 public site url>.
-2. Collect every script the site serves.
-3. Search the collected scripts for the store surfaces and their addresses.
-
-**Expected Results:**
-
-* No collected script holds a store surface's page code.
-* No collected script names a store address.
-
 ### grade10-site-site-carried-surfaces-US2-TC7-1: The preview host answers as the public site does
 
 **Classification:**
@@ -794,6 +764,12 @@ starts from `## Settled` rather than from this file's claim.
   Answered as Q11 in `decisions.md`: a lane that carries no store takes no
   order, so no mail from it names a store address. No case covers it, and
   none is owed.
+* **Withdrawn after the readings** — `US2-TC6-1`, which asserted that no
+  script a public build serves holds a store surface's page code. The
+  requirement it read was narrowed to the address and the page once the
+  implementation showed the storefront publishes the shop's features and the
+  account's in one list, and the account's serve surfaces every lane carries.
+  Its id is retired rather than reused. Landed as Q12 in `decisions.md`.
 * **Uncovered anchors** — none. All four journeys carry cases, and every
   `## Feature set` root group is reached: "What a build carries" by
   `US2-TC7-1`, `US2-TC8-1` and `US4-TC1-1`, "An address nothing carries" by
@@ -809,3 +785,8 @@ starts from `## Settled` rather than from this file's claim.
   site's to answer, so a build that does not carry the store refuses them.
 * A lane that carries no store takes no order, so no mail sent from it names a
   store address.
+* What a build holds for an uncarried surface is its address and its page, and
+  those alone. The code behind it may still ride in the bundle: the storefront
+  publishes the shop's features and the account's as one list, and the
+  account's serve surfaces every lane carries. Asked and settled — do not
+  raise it again as a gap in the requirement.
