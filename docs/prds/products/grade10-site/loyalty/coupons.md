@@ -80,37 +80,6 @@ so redefining the reward never rewrites a coupon a member already holds —
 
 ## Cases
 
-:::flow{title="Online" case="Paid" diagram="assets/diagrams/coupon-online-paid.svg"}
-## *Member* — **Picks a coupon**
-From the cart drawer or `/checkout`. Reading the list holds nothing.
-
-## *Store* — **Asks the programme**
-Every earlier sale of theirs naming this coupon gives it back first.
-
-## *Store* — **Promises the order**
-The cut lands on the lines, and a code is minted for this member, for a day.
-
-## *Member* — **Pays the invoice**
-Until this moment the coupon is spent on nothing.
-
-## *Loyalty* — **The coupon is spent**
-The paid order stamps it used. Nothing else does.
-:::
-
-:::flow{title="Online" case="Taken by the next sale" diagram="assets/diagrams/coupon-taken-next.svg"}
-## *Member* — **Picks it on a second sale**
-The same coupon, on a sale opened after the first.
-
-## *Store* — **Frees the earlier sale**
-Its cut comes off and its code is deactivated; an online order is cancelled, a counter sale keeps its cart.
-
-## *Store* — **The new sale claims it**
-The cut lands there instead.
-
-## *Member* — **One live coupon**
-One coupon, spendable, as before. Only the sale it left has changed.
-:::
-
 :::flow{title="Online" case="Retaken, then paid" diagram="assets/diagrams/coupon-retaken-paid.svg"}
 ## *Member* — **Reaches checkout with a coupon**
 A code is minted for the cart, ephemeral.
