@@ -47,7 +47,7 @@ the work.
   `SC-78`)
 - [x] 2.4 Verify: `pnpm run typecheck && pnpm run test:backend`
 
-## 3. Winner Order address confirmation (grade10)
+## 3. Winner Order address confirmation (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Add an explicit "Save this address for future orders" checkbox to
   `AuctionWinnerOrderPage.tsx`'s `AddressFields`; `amend()` reads
