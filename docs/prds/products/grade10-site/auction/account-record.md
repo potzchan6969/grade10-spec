@@ -5,55 +5,71 @@ order: 27
 ---
 
 My Auctions is the account's own record of every lot the collector bookmarks,
-by watching or by bidding, on one table. The record is resolved from the
-session and nothing else, and an empty table offers the catalogue.
+by watching or by bidding. The record is resolved from the session and nothing
+else, and it never records payment, uploads proof, changes an address or
+records shipment: the order does.
+
+## Values
+
+| Rule | Value |
+| --- | --- |
+| Watch limit | ❓ A maximum number of watches per collector; Design sets the value |
+| Row count | The page title carries the number of rows |
 
 ## Bookmarking
 
-- **A watch** — made and removed wherever a lot is shown, private to its
-  owner, and outliving the close while the listing stays published —
+- **A watch** — made and removed wherever a lot is shown while it is open,
+  private to its owner, and outliving the close while the listing stays
+  published; unwatching can be undone at once —
   [Watchlist](/p/grade10-site/auction/watchlist)
-- **A bid** — bookmarks the lot with no separate Watch
-- **Watch limit** — a maximum number of watches keeps the list a considered
-  one; past it, a further watch is refused and says so
+- 🚧 **A bid bookmarks the lot** — with no separate Watch, and announces once
+  per lot that email alerts are on
+- **At the limit** — a further watch is refused, records nothing, and says
+  the limit is reached
+- 🚧 **Bids count** — a bid that enrolls the list counts toward the watch
+  limit
 - **Removed with the listing** — unpublishing or removing a listing, an
   unsold lot taken down included, takes it off My Auctions
 
 ## The Table
 
-The page title carries the count of rows. Bid rows sort before watch-only,
-soonest close first within each band.
+🚧 One table holds every bookmarked lot, each once: bid rows before
+watch-only, soonest close first in each band, closed lots after open ones.
 
 | Column | What it shows |
 | --- | --- |
 | Lot | The key image, the title and the close |
 | Current bid | The lot's current bid |
-| Your Standing | `--` for a watch-only lot; while open, Leading, Outbid, Bid submitted or Bid not accepted; after the close, Won or Didn't win |
+| Your Standing | The collector's standing, or `--` for a watch-only lot |
 | Email alerts | The per-lot alerts control; off or disabled when the account-wide **Auction email alerts** master is off |
 | Unwatch | Only when the collector has not bid |
 
-- 🚧 **Three tabs** — **Active** (bidding open, shown first), **Upcoming**
-  (bidding not yet open) and **Ended** (closed); the title count stays the
-  total across all three
+- 🚧 **Three tabs** — **Active** (bidding open, opened first), **Upcoming**
+  (bidding not yet open) and **Ended** (closed); a tab with no lots says so,
+  and the title count stays the total across all three
 - 🚧 **Ended rows** — Email alerts show disabled and cannot be changed
-- **Won** — a winner follows the lot through [Winner
-  Order](/p/grade10-site/auction/winner-order): Awaiting Address, Preparing
-  Invoice, Pending Payment, Processing, Shipped, Delivered, Cancelled or
-  Refunded; an expired invoice still reads Pending Payment
+
+| Standing | Meaning |
+| --- | --- |
+| Leading | The collector's bid is the highest valid bid |
+| Outbid | A higher bid stands; the row carries the next valid bid |
+| Bid submitted | A bid Grade10 has not yet accepted |
+| Bid not accepted | The last bid was refused, and the row says which: below the minimum, the window had closed, or the card authorization failed |
+| Won | The lot closed with the collector leading; the row reads the order's status — [Auction Order Status](/p/grade10-site/auction/order-status) |
+| Didn't win | The lot closed with someone else leading |
+
+- **Won** — every Won row offers View order, Cancelled and Refunded included,
+  which opens that lot's [Winner Order](/p/grade10-site/auction/winner-order);
+  the row carries the status badge and nothing else, so how to reach Grade10
+  about an expired invoice lives on the order
 - 🚧 **Payment Verifying** — a won lot whose payment proof is waiting for an
   operator reads Payment Verifying on its row
-- 🚧 **View order** — every Won standing offers a clear entry to that lot's
-  Winner Order, Cancelled and Refunded included; Didn't win and watch-only
-  rows do not
-- 🚧 **Calm Won rows** — the status badge and View order only; no helper lines
-  under the standing, and how to reach Grade10 for an expired invoice lives on
-  Winner Order
-- **Didn't win** — the row says what happened to the card authorization, being
-  released or released, because a pending hold on a bank statement reads as a
-  charge; a hold is never called released while its release is still in
-  flight
-- **Bidding History** — the one-per-listing index, its filters and the private
-  chronology stay their own surface — [Bidding
+- **Didn't win** — the row says what happened to the card authorization,
+  being released or released, because a pending hold on a bank statement
+  reads as a charge; a hold is never called released while its release is
+  still in flight
+- **Bidding History** — the one-per-listing index, its filters and the
+  private chronology stay their own surface — [Bidding
   History](/p/grade10-site/auction/bidding-history)
 
 ## Honest Reads
@@ -108,18 +124,18 @@ establishes it.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | The term "favourites" is retired | Decided | The feature is **watching**, the action is **watch** and **unwatch**, and the list is the Watching page. "Favourites", "saved", and "starred" are not used in product copy, specs, message catalogs, or analytics event names. | Product |
-| One table, not two sections | Decided | My Auctions is one bookmark table. Bid lots sort first; Your Standing separates commitment from watch-only (`--`). Replaces the earlier two-section / two-page decision. | Product and design |
-| A listing that is both watched and bid on | Decided | Appears once. A bid bookmarks the lot; Unwatch is offered only when there is no bid. | Product |
+| One table, not two sections | 🚧 In flight | My Auctions is one bookmark table. Bid lots sort first; Your Standing separates commitment from watch-only (`--`). Replaces the earlier two-section / two-page decision. | Product and design |
+| A listing that is both watched and bid on | 🚧 In flight | Appears once. A bid bookmarks the lot; Unwatch is offered only when there is no bid. | Product |
 | Closed standing, not Bidding groups | Decided | Won and Didn't win live in Your Standing. Won uses the auction order-status vocabulary (Pending Payment through Refunded). My Auctions does not show Active / Won / Didn't win section groups; Bidding History keeps its own index groups. | Product |
 | Derived auction status | Decided | The collector sees the auction order's derived status, while the order route owns payment, address confirmation, receipt, and delivery records. The store order-status capability remains separate. | Product and engineering |
 | Order owns post-sale writes | Decided | My Auctions opens the order for the winner's allowed actions; operator-only settlement, fulfilment, cancellation, and reinstatement stay in the [Post-Sale Queue](/p/grade10-admin/auction/post-sale). | Product and operations |
 | View order on Won | Decided | Every Won row offers View order / open order into Winner Order; non-won rows do not. | Product (@tangconst) |
 | Calm Won detail | Decided | No secondary helper lines under Won standing; contact for expired payment is on Winner Order only. | Product (@tangconst) |
 | Card holds are stated plainly | Decided | The release of a losing bidder's authorization is asynchronous, so the record names the in-between state rather than implying the money is already back. Silence here is the likeliest source of "you charged me" contacts. Hold being-released / released copy stays for Didn’t win. | Product and finance |
-| Ending soon threshold | Decided | 60 minutes or less to close, matching the operator queue, so the two surfaces cannot disagree about which listings are urgent. | Product |
+| Ending soon threshold | Decided | 60 minutes or less to close, matching the operator queue, so the two surfaces cannot disagree about which listings are urgent; the redesigned table shows close urgency with the lot, not as a standing. | Product |
 | Bids are binding | Decided | Nothing on this page retracts a bid. A collector who believes a bid was a mistake contacts Grade10. | Product |
-| Ordering | Decided | Soonest close first on both pages, with closed listings after open ones. | Product and design |
-| Tabs by bidding window | Decided | Active, Upcoming and Ended tabs group the one table by bidding window, not by outcome. Replaces "one table, no groups" for presentation; the row rules stay. | Product |
+| Ordering | Decided | Soonest close first, with closed listings after open ones. | Product and design |
+| Tabs by bidding window | 🚧 In flight | Active, Upcoming and Ended tabs group the one table by bidding window, not by outcome. Replaces "one table, no groups" for presentation; the row rules stay. | Product |
 | Won hands off to orders | Decided | A won lot reads Won and links to its order, with the order status read on [My Auction Orders](/p/grade10-site/auction/auction-orders). | Product |
 | Watch limit | ❓ Open | A limit exists, so a watch list stays a considered list and the read stays bounded. The designer sets the value and owns what the collector sees on reaching it; revisit against Watch depth after the first release. | Design |
 :::

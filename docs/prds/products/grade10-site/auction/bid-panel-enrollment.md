@@ -11,32 +11,41 @@ linked card.
 
 | State | What the collector sees |
 | --- | --- |
-| **Signed out** | The primary bid action offers sign-in before any bid |
-| **No linked card** | Amount controls visible but disabled; the primary action opens link-card setup |
+| **Signed out** | The primary bid action offers sign-in; recent public bids stay visible, with no standing badge |
+| **No linked card** | Amount controls visible but disabled; only the primary action and the empty card slot open setup |
 | **Card on file** | Amount controls enabled; a card linked on an earlier lot carries over |
 | **Linked, before the first bid** | The card row offers Change |
-| **Linked, after the first bid** | The card stays visible without Change, locked for later raises on this lot |
+| **Linked, after the first bid** | The card stays, without Change, for every later raise on this lot |
+| **Authorization running** | Setup and the bid action wait while the card check runs |
+| **Authorization failed** | The failure is shown and the controls stay usable |
 
 ## Setup
 
-- **Link only** — provider-hosted card entry and an age attestation; setup
-  takes no hold. When bid-time holds are enabled, the description says that
-  setting a maximum authorizes one
-- **Copy** — title Link a card to bid; body Link a card for bidding. You're
-  only charged if you win.; continue Link Card
-- **Change card** — the same modal and copy, with the prior card shown in the
-  provider field and the attestation pre-checked when already given
-- **Dismissed** — closing without continuing leaves no linked card on file
-  for this flow
-- **Age attestation** — once per account, inside setup
+:::flow{title="Linking a card"}
+## *Collector* — **Opens setup**
+From the primary bid action or the empty card slot.
+## *Provider* — **Takes the card**
+In a provider-hosted field; card details never pass through Grade10.
+## *Collector* — **Attests their age**
+Once per account. Continue enables only with a card entered and the
+attestation checked, and disables again if either is undone.
+## *Panel* — **Links**
+Continue reads Linking, the field and the attestation lock, and the modal
+cannot be dismissed until it is done; closing before that leaves no card on
+file.
+## *Panel* — **Enables the amounts**
+The linked card shows with a tooltip saying a hold is authorized for the
+maximum on each bid and the card is charged only on a win; Change stays until
+the first accepted bid.
+:::
 
-## After Linking
-
-- **Ready to bid** — after the link the collector is ready, and an accepted
-  first bid completes enrolment; whether a bid-time authorization is needed
-  is the backend's decision — [Bid Card and
+- **No hold in setup** — linking takes no hold; the hold, when holds are on,
+  waits for the maximum — [Bid Card and
   Holds](/p/grade10-site/auction/bid-payment-method)
-- **Mechanism copy** — what the panel says about auto-bidding belongs to
+- **Change card** — the same modal, with the prior card shown and the
+  attestation pre-checked
+- **Enrolled** — an accepted first bid completes enrolment; what the panel
+  says about auto-bidding belongs to
   [Auto-Bidding](/p/grade10-site/auction/auto-bidding)
 
 ::story{id="auction-listing-bid-panel--signed-out" title="Signed out"}
@@ -80,7 +89,7 @@ manager. Changing the card after the first bid on that lot.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Link before amount | Decided | No linked card: presets and custom maximum stay visible but disabled; only Link a card to bid and the empty slot open setup. | Product |
-| Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. You're only charged if you win.; continue Link Card. When holds are enabled, body also discloses that setting a maximum authorizes a hold. Setup itself does not take a hold. | Product |
+| Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. When you set a maximum, we authorize a hold for that amount. You are only charged if you win.; continue Link Card. Setup itself does not take a hold. | Product |
 | Card carries across lots | Decided | A linked card carries to a new lot; Grade10 does not force re-link. Change remains until the first bid on that lot. | Product |
 | Hold on commit | Decided | When holds are enabled, authorize and hold run when the collector commits a maximum, under Bid Card and Holds — not in setup. | Product |
 :::

@@ -4,56 +4,70 @@ spec: grade10-site/auction/bid-increments
 order: 22
 ---
 
-Every auction currency has one Grade10-owned price schedule. A collector sees
-the next minimum for the lot, not the policy table, and can enter any whole
-amount at or above that minimum.
+## Values
+
+| Rule | Value |
+| --- | --- |
+| Currencies | **USD**, **HKD** or **JPY**, one per lot; nothing else prices an auction |
+| Schedule | One Grade10-owned price schedule per currency; operators choose the currency and never edit the schedule |
+| Tiers | A tier includes its lower bound; the last tier has no upper bound |
+| Amounts | Any whole amount at or above the next minimum, never a required multiple |
+| Ceiling | **USD 10,000,000**, **HKD 80,000,000**, **JPY 150,000,000,000** — the same on every lot |
+| What a collector sees | The next minimum for the lot, not the schedule |
 
 ## Schedules
 
-The schedule selects the increment from the amount being beaten. Each threshold
-includes its lower bound, and amounts are integer minor units.
+The increment is selected by the amount being beaten.
 
 | Currency | Price from | Increment |
 | --- | ---: | ---: |
-| USD | 0 | 100 |
-| USD | 10000 | 500 |
-| USD | 50000 | 1000 |
-| USD | 100000 | 2500 |
-| USD | 500000 | 5000 |
-| USD | 1000000 | 10000 |
-| HKD | 0 | 1000 |
-| HKD | 80000 | 4000 |
-| HKD | 400000 | 8000 |
-| HKD | 800000 | 20000 |
-| HKD | 4000000 | 40000 |
-| HKD | 8000000 | 80000 |
-| JPY | 0 | 100 |
-| JPY | 15000 | 500 |
-| JPY | 75000 | 1000 |
-| JPY | 150000 | 4000 |
-| JPY | 750000 | 8000 |
-| JPY | 1500000 | 15000 |
+| USD | $0 | $1 |
+| USD | $100 | $5 |
+| USD | $500 | $10 |
+| USD | $1,000 | $25 |
+| USD | $5,000 | $50 |
+| USD | $10,000 | $100 |
+| HKD | HK$0 | HK$10 |
+| HKD | HK$800 | HK$40 |
+| HKD | HK$4,000 | HK$80 |
+| HKD | HK$8,000 | HK$200 |
+| HKD | HK$40,000 | HK$400 |
+| HKD | HK$80,000 | HK$800 |
+| JPY | ¥0 | ¥100 |
+| JPY | ¥15,000 | ¥500 |
+| JPY | ¥75,000 | ¥1,000 |
+| JPY | ¥150,000 | ¥4,000 |
+| JPY | ¥750,000 | ¥8,000 |
+| JPY | ¥1,500,000 | ¥15,000 |
 
-## Bid Pricing
+## The Next Minimum
 
-- **Opening bid** — the starting price plus the increment selected for that
-  price
-- **Manual bid** — the current public price plus the increment selected for
-  that price
-- **Proxy bid** — the second-highest maximum plus its selected increment,
-  capped at the leader's maximum
-- **Offer amount** — any whole amount at or above the resulting minimum;
-  intermediate bids are not created
-- **Bid ceiling** — no bid or auto-bid maximum may go above USD
-  1,000,000,000, HKD 8,000,000,000 or JPY 150,000,000,000, on every lot. A
-  bid at the ceiling is accepted; once the next minimum would exceed it,
-  further bids are refused
+- **First bid** — the starting price plus the increment its tier selects; the
+  price a first maximum creates is the starting price itself —
+  [Auto-Bidding](/p/grade10-site/auction/auto-bidding)
+- **After a bid** — the current price plus the increment its tier selects
+- **Between two maxima** — settled once from the second-highest maximum, never
+  through intermediate bids — [Auto-Bidding](/p/grade10-site/auction/auto-bidding)
+- **Any whole amount above** — accepted as offered; nothing rounds it to a
+  multiple
 
-## Currency and Ownership
+| Lot | Amount being beaten | Increment | Next minimum | Outcome |
+| --- | ---: | ---: | ---: | --- |
+| HKD lot opens | HK$200 starting price | HK$10 | HK$210 | The first bid must reach HK$210 |
+| USD lot on a tier boundary | $100 | $5 | $105 | The $100 tier is selected, not the $0 tier |
+| A bidder offers more | $100 | $5 | $105 | $120 is accepted as $120; no bid at $105 is created |
+| A bidder offers less | $100 | $5 | $105 | $104 is refused and $105 is named |
+| HKD lot climbs | HK$8,000 | HK$200 | HK$8,200 | The minimum is HK$8,200 |
+| USD lot at the ceiling | $10,000,000 | — | Above the ceiling | Every further bid is refused |
 
-Only USD, HKD, and JPY can price an auction. Operators select the currency but
-do not edit the schedule, and unsupported currencies are refused before a
-listing is scheduled.
+## Refusals
+
+| Refused when | What happens |
+| --- | --- |
+| Below the next minimum | Refused, naming the minimum |
+| A bid or a maximum above the ceiling | Refused, naming the ceiling; the price, the leader and every maximum stay as they were, and a refused maximum records nothing |
+| The lot is at the ceiling | A bid at the ceiling is accepted; once the next minimum would pass it, every further bid is refused |
+| A listing in another currency | Refused before the listing is scheduled; the draft stays as it was |
 
 ::cases{id="grade10-site/auction/bid-increments"}
 
@@ -89,6 +103,6 @@ collector-facing policy ladder.
 | Flexible amounts | Decided | A bid may exceed the calculated minimum and need not be an exact multiple. | Product |
 | Operator override | Decided | No listing-level minimum-increment field or policy editor. | Product |
 | Collector display | Decided | Show the next minimum, not the full schedule. | Product |
-| Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 1,000,000,000, HKD 8,000,000,000, JPY 150,000,000,000. | Product |
+| Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 150,000,000,000. | Product |
 | Proxy resolution | Decided | Use one resulting price from the second-highest maximum; never create intermediate bids. | Product |
 :::

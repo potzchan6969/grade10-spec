@@ -8,47 +8,58 @@ order: 25
 
 | Rule | Value |
 | --- | --- |
-| Bid-time hold | **Off** by default; optional |
+| Bid-time hold | **Off** by default — [Bidding Rules](/p/grade10-site/auction/auction) |
 | Holds per bidder per listing | **1**, covering the committed maximum |
-| Buyer's premium on the panel | **20%** of the winning bid, the rate only |
+| Hold window | 🚧 At least **14 days** after the scheduled close where the provider offers it; a shorter window is never shown as 14 days |
+| Buyer's premium on the panel | **20%** of the winning bid, the rate only, in every currency; the amount first appears on the invoice — [Winner Order](/p/grade10-site/auction/winner-order) |
 
 ## The Linked Card
 
-- **Linked once** — linking lives on [Bid Panel
-  Enrollment](/p/grade10-site/auction/bid-panel-enrollment); a linked card
-  carries over to new lots
-- **Change until the first bid** — Change stays enabled until the first bid on
-  that lot is accepted; afterwards the lot locks the card for later raises
-- **Same card on raises** — later bids on the listing keep the committed card
+- **Linked once** — on [Bid Panel
+  Enrollment](/p/grade10-site/auction/bid-panel-enrollment), and carried to
+  new lots; card number, expiry and code never reach Grade10
+- **Locked by the first bid** — Change stays until the first bid on the lot is
+  accepted; later raises keep that card
 
 ## Holds
 
-When holds are enabled, committing a maximum authorizes the linked card in the
+When holds are on, committing a maximum authorizes the linked card in the
 background, and the bid stands only once the authorization is confirmed.
 
-- **Silent on commit** — no confirmation and no payment-method modal
-- **One hold, the maximum** — exactly one manual-capture authorization covers
-  the submitted maximum; a raise updates that same authorization rather than
-  stacking a second, so a bank statement carries one pending amount per
-  listing
-- **Outbid releases** — being outbid cancels the authorization without capture
+:::flow{title="A hold on a maximum"}
+## *Collector* — **Commits a maximum**
+No confirmation and no payment modal.
+## *Grade10* — **Authorizes the card**
+One manual-capture authorization for the whole maximum; a raise updates that
+same authorization, so a bank statement carries one pending amount per
+listing.
+## *Provider* — **Confirms or refuses**
+A pending outcome or a bank challenge shows on the bid surface until it
+resolves.
+## *Grade10* — **Accepts the bid**
+Only once confirmed; a repeated request or a repeated provider outcome never
+makes a second hold, bid or charge.
+## *Grade10* — **Releases the hold**
+When the bidder is outbid, and at the close for everyone who did not win.
+:::
+
+- 🚧 **A raise keeps its reference** — a supported raise uses the existing
+  authorization and provider reference; nothing is cancelled and recreated
+- 🚧 **A refused raise** — a raise the provider declines or cannot make
+  settles at once with the card message; the prior maximum stands, and a
+  later bid is not blocked by it
 - **Provider record** — every authorization keeps its provider payment
   reference
 
 ## Refusals
 
-| Outcome | What the collector sees |
+| Cause | What the collector sees |
 | --- | --- |
-| Decline or unusable card | Refusal copy on or near the bid action, before the bid stands |
-| Provider failure | Distinct network or provider failure copy |
-| Failed raise | The same refusal copy; the prior maximum stays in place |
-| Pending or a bank challenge | Busy, or the provider's challenge, on the bid surface |
-
-## Premium Disclosure
-
-The bid panel shows the buyer's premium as **20%** of the winning bid, the
-rate only; the calculated amount first appears on the invoice — [Winner
-Order](/p/grade10-site/auction/winner-order).
+| No linked card | Refused before any authorization |
+| Decline, an unusable card, or an expired hold | **Your card could not be authorized. Try another card.** on or near the bid action |
+| Provider failure | **Your bid did not go through. The card was not authorized.** |
+| A failed raise | The same message; the prior maximum stays in place |
+| Pending, or a bank challenge | Busy, or the provider's challenge, on the bid surface |
 
 ::story{id="auction-listing-bid-panel--payment-authorization" title="Payment authorization"}
 
@@ -79,4 +90,5 @@ the method for that lot.
 | Hold on commit | Decided | When holds are enabled, authorize the linked card when the collector commits a maximum; do not reopen payment setup or ask for a separate confirmation. | Product |
 | Change timing | Decided | Keep Change enabled until the first bid on the lot is accepted, then lock the method for later raises. | Product |
 | One active hold | Decided | When holds are enabled, maintain one manual-capture authorization per bidder and listing and update it when the maximum rises. | Product |
+| Hold window | 🚧 In flight | A hold asks the provider for an authorization window of at least 14 days past the scheduled close, and a raise increments the same authorization rather than replacing it. | Product and finance |
 :::

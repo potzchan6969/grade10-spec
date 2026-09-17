@@ -55,5 +55,4 @@ None.
 ## References
 
 - [Listing Page Blocks · Bid Panel Fee](../../../docs/prds/products/shared/ui/auction-listing.md#bid-panel-fee)
-- [Auto-Bidding · Bid Panel](../../../docs/prds/products/grade10-site/auction/auto-bidding.md#bid-panel)
 - Active rate change: `fix-buyer-premium`

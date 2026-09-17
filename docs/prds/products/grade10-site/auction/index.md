@@ -52,8 +52,8 @@ the rules, the values and the open questions.
 - **Auction panel**
   - **Display** — what the panel shows and refuses: the linked card, the
     optional hold, the fee line and the quick bids — [Bid Card and
-    Holds](/p/grade10-site/auction/bid-payment-method) and [Auto-Bidding ·
-    Bid Panel](/p/grade10-site/auction/auto-bidding#bid-panel)
+    Holds](/p/grade10-site/auction/bid-payment-method) and [Listing Page
+    Blocks · Custom Maximum](/p/shared/ui/auction-listing#custom-maximum)
   - **Enrolment flow** — sign-in and a linked card before the first bid —
     [Bid Panel Enrollment](/p/grade10-site/auction/bid-panel-enrollment)
   - **Bidding history** — the account's record of every maximum, and the
