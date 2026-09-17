@@ -1,7 +1,7 @@
 import { Button } from "@grade10/design-system/components/forms/button";
 import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { expect, waitFor, within } from "storybook/test";
 
 /**
@@ -53,18 +53,18 @@ function FireErrorToast({ message }: { message: string }) {
 }
 
 function FireDifferentAccountToast() {
-  const show = () => {
+  const show = useCallback(() => {
     toast.warning(COPY.differentAccount, {
       description: COPY.differentAccountDescription,
       duration: Infinity,
       action: { label: COPY.switch, onClick: () => undefined },
       cancel: { label: COPY.stay, onClick: () => undefined },
     });
-  };
+  }, []);
 
   useEffect(() => {
     show();
-  }, []);
+  }, [show]);
 
   return (
     <Button type="button" onClick={show}>
