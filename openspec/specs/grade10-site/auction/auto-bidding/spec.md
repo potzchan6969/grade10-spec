@@ -375,7 +375,7 @@ The title is historical: its extension window is now extended bidding.
 - **THEN** Grade10 places no further bid on either bidder's behalf
 - **AND** the current bid is unchanged
 
-#### Scenario: grade10-site-auction-auto-bidding-SC-30 - A maximum committed before the close counts toward extended bidding
+#### Scenario: grade10-site-auction-auto-bidding-SC-25a - A maximum committed before the close counts toward extended bidding
 **Serves:** grade10-site-auction-auto-bidding-US-05 - Collector's auto-bid counts as a bid
 
 - **GIVEN** an open listing whose only bidder committed a maximum before its

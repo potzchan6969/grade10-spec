@@ -39,7 +39,7 @@
 * Grade10 accepts the bid according to the listing's bid rules without waiting for Stripe.
 * No bid-time authorization is created.
 
-### grade10-site-auction-auction-US2-TC1-2: Bid during extended bidding restarts the timer
+### grade10-site-auction-auction-US2-TC10-1: Bid during extended bidding restarts the timer
 
 **Classification:**
 
@@ -80,7 +80,7 @@
 * Step 2 reads `<first bid time>` plus `<extension duration>`.
 * Step 4 reads `<second bid time>` plus `<extension duration>`.
 
-### grade10-site-auction-auction-US2-TC2-2: Extension cap holds the timer at the cap
+### grade10-site-auction-auction-US2-TC11-1: Extension cap holds the timer at the cap
 
 **Classification:**
 
@@ -117,7 +117,7 @@
 * The bid is accepted and the recorded close is unchanged.
 * The listing closes at its scheduled close plus `<extension cap>`.
 
-### grade10-site-auction-auction-US2-TC3-2: Listing's own duration sets how long extended bidding runs
+### grade10-site-auction-auction-US2-TC12-1: Listing's own duration sets how long extended bidding runs
 
 **Classification:**
 
@@ -154,7 +154,7 @@
 * The listing is in extended bidding.
 * The recorded close reads `<scheduled close>` plus `<short duration>`.
 
-### grade10-site-auction-auction-US2-TC4-2: Extension off closes the listing at its scheduled close
+### grade10-site-auction-auction-US2-TC13-1: Extension off closes the listing at its scheduled close
 
 **Classification:**
 
@@ -189,7 +189,7 @@
 * The listing is closed at its scheduled close.
 * It never entered extended bidding.
 
-### grade10-site-auction-auction-US2-TC10-1: Bids by the close decide whether extended bidding starts
+### grade10-site-auction-auction-US2-TC14-1: Bids by the close decide whether extended bidding starts
 
 Runs once per row of **Test data**.
 
@@ -381,7 +381,7 @@ Runs once per row of **Test data**.
 **I want** the catalogue to show Auction listings with money in minor units,
 **so that** I am not offered Buy Now and a close with bids is absolute.
 
-### grade10-site-auction-auction-US1-TC1-2: Public listing read exposes the close and extension policy
+### grade10-site-auction-auction-US1-TC2-1: Public listing read exposes the close and extension policy
 
 **Classification:**
 
@@ -415,8 +415,6 @@ Runs once per row of **Test data**.
 * It carries the scheduled close, the recorded close, the extension duration and the extension cap.
 * It carries no extension window.
 * It carries no reserve state.
-
----
 
 ## grade10-site-auction-auction-US3: Collector's card hold is released when they are outbid
 

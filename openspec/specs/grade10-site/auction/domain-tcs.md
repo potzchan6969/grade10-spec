@@ -636,7 +636,7 @@ hold is being let go.
 * Time left reads <new time left> and the recorded close does not move past the cap.
 * The history shows the accepted bid beside an unchanged close.
 
-### grade10-site-auction-e2e-US07-TC01-2: Auto-bid during extended bidding restarts the timer on the live page
+### grade10-site-auction-e2e-US07-TC03-1: Auto-bid during extended bidding restarts the timer on the live page
 
 **Classification:**
 

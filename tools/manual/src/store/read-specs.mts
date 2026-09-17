@@ -19,7 +19,12 @@ import {
   toItemError,
 } from "./disk.mts";
 import type { GitIndex } from "./git.mts";
-import { findSection, outline, type Section } from "./markdown.mts";
+import {
+  findSection,
+  findSectionAnywhere,
+  outline,
+  type Section,
+} from "./markdown.mts";
 
 /** Disk shape is the taxonomy. A directory holding `spec.md` is a capability;
  * one holding only capability directories is the product they belong to. A
@@ -154,6 +159,10 @@ function readSpec(
   const journeysPath = `${dir}/user-journeys.md`;
   const journeys = readTextIfExists(join(root, journeysPath));
   if (journeys !== undefined) {
+    // Outside the try: a file the journey reader refuses has still buried its
+    // ids, and a qualified anchor on another capability is answered from them.
+    const retired = readRetiredJourneys(journeys);
+    if (retired.length > 0) entry.retiredJourneys = retired;
     try {
       entry.journeys = readJourneys(journeys);
       if (walkedByNobody(journeys)) entry.unwalked = true;
@@ -287,6 +296,19 @@ export function servedAnchors(body: string): string[] {
   return anchorsIn(match[1]);
 }
 
+/** The prose after the anchor's dash — what the walk was. The anchors before it
+ * are machine-read; this half is written for a reader, and is read back only so
+ * a check can refuse a line that repeats the anchor instead of saying anything
+ * the anchor did not. */
+export function servedProse(body: string): string | undefined {
+  const match = SERVES.exec(body);
+  if (!match) return undefined;
+  const parts = match[1].split(/\s+[-\u2013\u2014]\s+/);
+  if (parts.length < 2) return undefined;
+  const prose = parts.slice(1).join(" - ").trim();
+  return prose || undefined;
+}
+
 /** The anchors one `**Serves:**` or `**Trace:**` line names: everything before
  * the prose dash, read as code spans when it holds any and as one bare name
  * when it does not.
@@ -318,6 +340,10 @@ const JOURNEY_SECTIONS = [
  * capability still holds, and rendering it beside the live ones would say it
  * is. The tombstone it leaves is `archive:preflight`'s to check. */
 const REMOVED_JOURNEYS = "REMOVED User journeys";
+/** Where that tombstone lands. A change writes `## REMOVED User journeys`;
+ * archive turns it into a one-line `## Retired` entry in the durable file. */
+const RETIRED_JOURNEYS = "Retired";
+const JOURNEY_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
 
 /**
  * A `user-journeys.md`, whole: the journey-bearing sections, each holding a
@@ -327,9 +353,9 @@ const REMOVED_JOURNEYS = "REMOVED User journeys";
 export function readJourneys(text: string): Journey[] {
   const roots = outline(text);
   const held = JOURNEY_SECTIONS.map((heading) =>
-    findSection(roots, heading),
+    findSectionAnywhere(roots, heading),
   ).filter((section): section is Section => section !== undefined);
-  const removed = findSection(roots, REMOVED_JOURNEYS);
+  const removed = findSectionAnywhere(roots, REMOVED_JOURNEYS);
   if (held.length === 0 && removed === undefined) {
     throw new StoreFileError(
       1,
@@ -347,6 +373,29 @@ export function readJourneys(text: string): Journey[] {
     issued.sort((a, b) => a.line - b.line),
   );
   return held.flatMap((section) => section.children.map(readJourney));
+}
+
+/** The ids a journeys file has retired, from either shape of tombstone: the
+ * durable `## Retired` list, and the `## REMOVED User journeys` section a
+ * change writes before archive lays one.
+ *
+ * A retired journey is not a journey - `readJourneys` never returns it and no
+ * page draws it - but its id stays answerable forever. Archived suites still
+ * carry `**Trace:** <id>`, and a rule on another capability may still stand on
+ * the walk it named through a qualified anchor. Reading it back is what keeps
+ * retiring a journey from failing a check on somebody else's file.
+ *
+ * Found at any depth, so a file that opens on a `# ` title - which is how
+ * `archive:preflight` writes one - does not hide its own tombstones. */
+export function readRetiredJourneys(text: string): string[] {
+  const roots = outline(text);
+  const found = new Set<string>();
+  for (const heading of [RETIRED_JOURNEYS, REMOVED_JOURNEYS]) {
+    const section = findSectionAnywhere(roots, heading);
+    if (!section) continue;
+    for (const id of section.raw.match(JOURNEY_ID) ?? []) found.add(id);
+  }
+  return [...found];
 }
 
 /** Whether a journeys file declares, in place of journeys, that no end user
@@ -413,6 +462,8 @@ function readScenario(section: Section): Scenario {
   if (match[1]) scenario.id = match[1];
   const serves = servedAnchors(section.body);
   if (serves.length > 0) scenario.serves = serves;
+  const prose = servedProse(section.body);
+  if (prose) scenario.servesProse = prose;
   return scenario;
 }
 

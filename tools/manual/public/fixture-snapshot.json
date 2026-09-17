@@ -67,7 +67,8 @@
               "id": "alpha-SC-01",
               "serves": [
                 "alpha-US-01"
-              ]
+              ],
+              "servesProse": "Reader follows the thing end to end"
             },
             {
               "name": "The thing is refused a second time",
@@ -75,7 +76,8 @@
               "id": "alpha-SC-02",
               "serves": [
                 "alpha-US-01"
-              ]
+              ],
+              "servesProse": "Reader follows the thing end to end"
             }
           ]
         },

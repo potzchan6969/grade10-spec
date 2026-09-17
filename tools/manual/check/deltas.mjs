@@ -26,9 +26,17 @@ import {
   featureGroups,
   readJourneys,
   readRequirement,
+  readRetiredJourneys,
   requirementBlocks,
 } from "../src/store/read-specs.mts";
-import { everyBlock, journeysOf, plural } from "./context.mjs";
+import {
+  anchorRefusal,
+  everyBlock,
+  groupProseRefusal,
+  journeysIn,
+  journeysOf,
+  plural,
+} from "./context.mjs";
 
 /** The only `## ` headings a delta may hold: the four the fold reads, plus
  * the two a spec's own head carries. `User journeys` is not among them — the
@@ -101,11 +109,27 @@ function checkAnchors(ctx, files) {
           continue;
         }
         for (const anchor of serves) {
-          if (anchors.has(anchor)) continue;
+          const why = anchorRefusal(
+            anchors,
+            anchor,
+            one.spec,
+            journeysHere(ctx, one),
+          );
+          if (why) {
+            ctx.add(
+              "serves",
+              one.file,
+              `${scenario.id} → \`${anchor}\`, ${why}`,
+            );
+            continue;
+          }
+          if (!groupsFor(ctx, one).has(anchor)) continue;
+          const prose = groupProseRefusal(anchor, scenario.servesProse);
+          if (!prose) continue;
           ctx.add(
-            "serves",
+            "restates",
             one.file,
-            `${scenario.id} → \`${anchor}\`, which is neither a journey nor a feature set group of \`${one.spec}\``,
+            `${scenario.id} → \`${anchor}\` ${prose}`,
           );
         }
       }
@@ -141,6 +165,53 @@ function anchorsFor(ctx, one) {
   const featureSet = findSection(one.sections, "Feature set");
   for (const group of featureGroups(featureSet?.body ?? "")) anchors.add(group);
   return anchors;
+}
+
+/** The feature set groups this delta may name: the durable capability's, and
+ * the ones the delta restates. Read apart from the journeys so `restates` can
+ * ask its question of a group anchor alone. */
+function groupsFor(ctx, one) {
+  const durable = ctx.specs.get(one.spec);
+  const groups = new Set(durable?.featureGroups ?? []);
+  const featureSet = findSection(one.sections, "Feature set");
+  for (const group of featureGroups(featureSet?.body ?? "")) groups.add(group);
+  return groups;
+}
+
+/** A qualified anchor's capability, answered from the durable store and from
+ * this change's own journeys files together — a change may introduce the
+ * capability whose journey another of its deltas stands on, and the durable
+ * store has not heard of it yet.
+ *
+ * Both, not the change's file in place of the durable one. A journeys file in
+ * a change is a delta: it carries the journeys that change is adding, moving
+ * or retiring, and says nothing about the rest. Reading it alone made a change
+ * that touches one journey of a far capability refuse every other anchor
+ * standing on it, which is the capability's own file being read as its whole
+ * history. The retired ids are in for the reason `journeysIn` holds them: an
+ * issued id is permanent, and the `## REMOVED User journeys` section is where
+ * a change writes that it is retiring one. */
+function journeysHere(ctx, one) {
+  const durable = journeysIn(ctx);
+  const change = one.file.split("/specs/")[0];
+  return (id) => {
+    const beside = readTextIfExists(
+      join(ctx.roots.store, change, "specs", id, "user-journeys.md"),
+    );
+    if (beside === undefined) return durable(id);
+    const held = durable(id);
+    try {
+      return new Set([
+        ...(held ?? []),
+        ...readJourneys(beside).map((journey) => journey.id),
+        ...readRetiredJourneys(beside),
+      ]);
+    } catch {
+      // A file the reader refuses is `walked`'s to name; fall back to what the
+      // durable store holds rather than reporting the anchor twice.
+      return held;
+    }
+  };
 }
 
 /** RULE `blind`: a delta that moves behaviour owes a second, independent

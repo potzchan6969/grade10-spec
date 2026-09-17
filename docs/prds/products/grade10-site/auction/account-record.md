@@ -41,6 +41,8 @@ own surface for the one-per-listing index, filters, and private chronology.
 
 A winner follows their own lot to the door through [Winner Order](/p/grade10-site/auction/winner-order): Awaiting Address, Preparing Invoice, Pending Payment, Processing, Shipped, Delivered, Cancelled, or Refunded. A won lot whose invoice has expired still reads Pending Payment.
 
+🚧 **Payment Verifying** — a won lot whose payment proof is waiting for an operator reads Payment Verifying on its row
+
 🚧 **View order** — every Won standing offers a clear entry to that lot’s Winner Order (including Cancelled and Refunded); Didn’t win and watch-only rows do not.
 
 🚧 **Calm Won rows** — Won standing shows the status badge and View order only; no secondary helper lines under the standing (confirm address, invoice coming, order total, contact Grade10). How to reach Grade10 for an expired invoice lives on Winner Order.

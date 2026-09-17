@@ -16,7 +16,13 @@
  */
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { plural, scenarioIds } from "./context.mjs";
+import {
+  anchorRefusal,
+  groupProseRefusal,
+  journeysIn,
+  plural,
+  scenarioIds,
+} from "./context.mjs";
 
 export function checkAcceptance(ctx, shape) {
   for (const [id, dir] of shape.dirs) {
@@ -54,8 +60,9 @@ function checkServes(ctx, spec, dir) {
       const serves = scenario.serves ?? [];
       if (serves.length === 0) missing.push(scenario.id);
       for (const anchor of serves) {
-        if (anchors.has(anchor)) continue;
-        unresolved.push(`${scenario.id} → \`${anchor}\``);
+        const why = anchorRefusal(anchors, anchor, spec.id, journeysIn(ctx));
+        if (why) unresolved.push(`${scenario.id} → \`${anchor}\`, ${why}`);
+        else restated(ctx, `${dir}/spec.md`, spec, scenario, anchor);
       }
     }
   }
@@ -67,12 +74,21 @@ function checkServes(ctx, spec, dir) {
     );
   }
   for (const one of unresolved) {
-    ctx.add(
-      "serves",
-      `${dir}/spec.md`,
-      `${one}, which is neither a journey nor a feature set group of \`${spec.id}\``,
-    );
+    ctx.add("serves", `${dir}/spec.md`, one);
   }
+}
+
+/** RULE `restates`: a group anchor's prose names the walk — it neither repeats
+ * the group name back nor stops at the anchor, because a group anchor is the
+ * one that most needs the line: it names a part of the map and nobody who
+ * meets the rule. Asked only of a group anchor: a journey id and its title are
+ * two different things, and a scenario serving a journey has already said
+ * who. */
+function restated(ctx, file, spec, scenario, anchor) {
+  if (!(spec.featureGroups ?? []).includes(anchor)) return;
+  const why = groupProseRefusal(anchor, scenario.servesProse);
+  if (!why) return;
+  ctx.add("restates", file, `${scenario.id} → \`${anchor}\` ${why}`);
 }
 
 /** The suite as the reader already read it. Re-opening the file here would put

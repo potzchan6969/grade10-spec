@@ -84,6 +84,31 @@ export function findSection(
   return sections.find((section) => section.heading === heading);
 }
 
+/** A `##` section by heading, wherever it sits in the outline. `outline`
+ * returns roots and nests by level, so a file opening on a `# Title` hangs
+ * every `##` under that one: a reader that searches the roots alone finds
+ * nothing there and says nothing about it, which is the shape of a check that
+ * passes because it never looked.
+ *
+ * Level two only, and that is the point of the pair — a `# User journeys`
+ * title over a `## User journeys` section is a file naming itself, not two
+ * sections, and matching on the heading alone would return the title and read
+ * the section beneath it as its content. */
+export function findSectionAnywhere(
+  sections: Section[],
+  heading: string,
+): Section | undefined {
+  for (const one of sections) {
+    if (one.level === 2) {
+      if (one.heading === heading) return one;
+      continue;
+    }
+    const found = findSectionAnywhere(one.children, heading);
+    if (found) return found;
+  }
+  return undefined;
+}
+
 export function trimBlank(lines: string[]): string {
   let start = 0;
   let end = lines.length;

@@ -11,7 +11,7 @@ they are the first three:
 | Artifact | File | What it holds |
 | --- | --- | --- |
 | `proposal` | `proposal.md` | Why this problem, for whom, what changes |
-| `decisions` | `decisions.md` | The goals, the non-goals, and what the interview settled |
+| `decisions` | `decisions.md` | The goals, the non-goals, what the interview settled, and what the blind pass raised |
 | `user-journeys` | `specs/<capability>/user-journeys.md` | The journeys added, changed or retired, and the ones this change leans on |
 
 `decisions.md` is the interview's record, and everything after it is drawn from
@@ -228,6 +228,16 @@ Everything this run produces is `draft`. Nothing in it claims review.
    settle gets recorded. Read the scenarios against your journeys when they come
    back - generated is not unreviewed, and you are the reader of record.
 
+10. **Land every raised row.** The blind pass writes what the input did not
+    settle into your `decisions.md`, under `## Raised` - `Capability | Raised |
+    Landed` - with `Landed` empty. Each one closes as a `Decisions` row in that
+    same file, or as a ❓ on the capability's PRD naming who owes the answer.
+    There is no third resting place, and `pnpm check:manual` refuses a row that
+    names neither, so the change does not merge with the pass's findings
+    unread. A row you escalate or defer is also written into the suite's
+    `## Reconciliation`, with its answer in `## Settled`: `decisions.md`
+    archives with the change and is folded nowhere.
+
 ## Escape hatches
 
 | Hatch | Who decides | Test |
@@ -269,7 +279,8 @@ reading bought.
 | --- | --- |
 | What the product should be, in the reader's words | The PRD, marked 🚧 or ❓ |
 | This change's goals and edges | `decisions.md`, and the proposal points there |
-| A question the interview settled, and what it dropped | `decisions.md`'s table |
+| A question the interview settled, and what it dropped | `decisions.md`'s `Decisions` table |
+| A question the blind pass could not settle | `decisions.md`'s `## Raised` table, landed before merge |
 | A question nobody present could settle | The proposal's open questions, and a ❓ on the PRD |
 | Anything testable | The delta spec, and nowhere else - `/planning-qa` writes it, you check it |
 | Who walks it | `user-journeys.md` beside that spec |

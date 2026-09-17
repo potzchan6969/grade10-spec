@@ -58,7 +58,12 @@ function AmountColumn({
         {value}
       </Text>
       {subtext ? (
-        <Text className="mb-3 mt-0 text-sm text-secondary-fg">{subtext}</Text>
+        <Text
+          className="mb-3 mt-0 text-sm text-secondary-fg"
+          style={{ whiteSpace: "pre-line" }}
+        >
+          {subtext}
+        </Text>
       ) : null}
     </>
   );

@@ -205,7 +205,7 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** Grade10 accepts a valid bid at exactly 20:00:00 UTC
 - **THEN** the listing is in extended bidding with recorded close 20:30:00 UTC
 
-#### Scenario: grade10-site-auction-auction-SC-30 - Each listing runs its own extended bidding
+#### Scenario: grade10-site-auction-auction-SC-23a - Each listing runs its own extended bidding
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
 - **GIVEN** two listings with scheduled close 20:00 UTC, both in extended
