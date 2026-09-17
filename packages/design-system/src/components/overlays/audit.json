@@ -2,7 +2,7 @@
   {
     "label": "dialog-content/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=2159-3169",
-    "classes": "fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-h-[640px] max-w-(--container-lg) -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-hidden rounded-(--radius-4xl) border border-border-subtle bg-popover p-6 text-sm text-popover-foreground outline-none backdrop-blur-xl"
+    "classes": "fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-h-[min(640px,calc(100dvh-2rem))] max-w-(--container-lg) -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-hidden rounded-(--radius-4xl) border border-border-subtle bg-popover p-4 text-sm text-popover-foreground outline-none backdrop-blur-xl sm:gap-6 sm:p-6"
   },
   {
     "label": "dialog-header/root",
