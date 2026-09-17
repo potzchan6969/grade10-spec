@@ -295,6 +295,10 @@ watches.
   both brands' collectors may watch one lot, each seeing only their own
 - **From where the lot is shown** — the lot page, the catalogue card and the
   watched list; a bid keeps the lot watched until it closes
+- 🚧 **Each action says what it did** — watching from the lot page announces
+  that email alerts are on, with View My Auctions; unwatching announces the
+  same action with Undo —
+  [Auction Details](/p/grade10-site/auction/display#auction-details)
 - **After the close** — the entry stays until its owner unwatches it
 - 🚧 **Called off** — a called-off lot leaves the watched list —
   [Lot Status](/p/grade10-site/auction/display#auction-details)

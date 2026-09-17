@@ -10,7 +10,7 @@ A build of the site carries a surface or it does not, and there is no third
 answer. What a build carries is fixed when it is made, so a lane cannot be
 told to show a surface the build it runs has no page for.
 
-🚧 **Each waiting product waits for its own launch** — the store, the vault
+**Each waiting product waits for its own launch** — the store, the vault
 and booking a visit are carried in development and staging, and nowhere the
 public can reach. The auction has already opened and is carried everywhere.
 
@@ -42,7 +42,7 @@ join pages, the profile and sign-in are carried in every lane.
 - **Nothing names it** — no navigation item, no footer link, no control in
   the header and nothing on the front door points at a surface the build does
   not carry — [Page Shell](/p/grade10-site/site/page-shell)
-- 🚧 **No crawler hears of it** — robots.txt and the sitemap name only what the
+- **No crawler hears of it** — robots.txt and the sitemap name only what the
   build answers —
   [Crawlable Pages](/p/grade10-site/site/crawlable-pages)
 
@@ -103,4 +103,9 @@ production.
 | Preview follows production | Decided | The preview host is the production build at another address, so it carries what production carries. A preview that sold would be a public shop under a quieter name. | Engineering |
 | A store address in old mail owes nothing | Decided | A lane that carries no store takes no order, so no mail sent from it names a store address. A rule for mail would cover a case no lane can produce. | Product |
 | The page code may stay in the bundle | Decided | A build without the store holds no store address and no store page; whether the code behind them still rides in the bundle is not stated. The storefront publishes the shop's features and the account's as one list, and the account's serve the profile, membership and join pages every lane carries, so telling them apart is work the shop's launch retires. | Engineering |
+| The vault's link-bearing surfaces wait with it | Decided | The signing ceremony and the identity check wait behind the same gate as the rest of the vault. A shut vault mints no such link, so any link already sent was internal — nobody outside the team held it. | Product |
+| Booking's private link waits whole | Decided | The private link a booking's mail hands out waits with the rest of booking's set rather than answering on its own. Nobody had taken a booking on a public lane by the time this shipped; a follow-on change covers a collector who already holds one, should one turn up before booking opens. | Product |
+| The front door's card row renders empty | Decided | Where every product it would show a card for is withheld, the row stays part of the page and holds no card, rather than being removed and reshaping the front door lane to lane. | Product |
+| The vault's vanity domain keeps redirecting | Decided | It still redirects to the vault's own address while the vault is withheld, and lands on the not-found surface the same way any other route into it does — the redirect is a separate rule from what answers at its target. | Engineering |
+| No carried surface depends on a withheld one | Decided | Checked against each product's own PRD before this shipped: none of the store's, the vault's or booking's surfaces names a dependency on another product this change withholds. | Engineering |
 :::

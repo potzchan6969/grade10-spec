@@ -5,8 +5,8 @@ Which surfaces a build of the grade10 site carries, and what the site does
 about an address, a link and a crawl entry for one it does not. `navigation`
 owns which surface an address resolves to, `page-shell` what the chrome may
 link, and `crawlable-pages` what a crawler is offered; this capability
-decides the set all three read, so a surface the shop is not ready to sell
-from is absent rather than hidden.
+decides the set all three read, so a product that has not opened is absent
+rather than hidden.
 
 ## Feature set
 
@@ -16,24 +16,29 @@ from is absent rather than hidden.
   - Store surfaces: the store, its collections, a card's page, the shop's two
     handed-out addresses, the cart, the checkout, and a collector's order
     history and order detail
+  - Vault surfaces: the vault, a case's page, the signing ceremony and the
+    identity check
+  - Booking surfaces: booking a visit, the private link from a booking's
+    mail, and a collector's own visits
   - Labs: the demonstration surfaces and the unapproved refund and shipping
-    drafts, carried in development alone
-  - Everything else: the auction, the vault, booking, membership, join and
-    the profile, carried on every lane
+    drafts, carried in development and staging
+  - Everything else: the auction, the front door, the terms and the privacy
+    page, membership, join, sign-in and the profile, carried on every lane
 - An address nothing carries
   - Not found: it answers with the not-found surface and a 404
   - Every address beneath it: the addresses under an uncarried surface answer
     the same way
 - Nothing names an absent surface
-  - Header: no navigation item and no cart control for a surface the build
-    does not carry
+  - Header: no navigation item, no cart control and no account menu item for
+    a surface the build does not carry
   - Footer: no shop column and no link to a surface the build does not carry
-  - Front door: no store button and no store card
+  - Front door: no button and no card for a product the build does not carry
   - Crawler: robots.txt and the sitemap name only what the build answers
-- Where the shop is open
-  - Unchanged: every store surface answers, links and sells exactly as it
-    does where the shop is shut to nobody
-  - One line to open it: the lanes that carry the store are stated once
+- Where a product is open
+  - Unchanged: every surface answers, links and works exactly as its own
+    capability requires on a lane that carries it
+  - One line per product: the lanes carrying each product's set are stated
+    once, and each product opens on its own date
 
 ## Requirements
 
@@ -61,80 +66,6 @@ it receives, SHALL add a surface to the set or take one out of it.
 - **GIVEN** a build made without the store surfaces
 - **WHEN** it runs under any configuration its lane can supply
 - **THEN** no store surface answers
-
-### Requirement: The store surfaces wait for the shop to open
-
-The store surfaces move as one set, and the lane a build is made for decides
-whether it carries them.
-
-**The set** - The store surfaces are:
-
-| Surface | What it answers |
-| --- | --- |
-| Store | The store's own address, and the collections beneath it |
-| Card page | One card's own page |
-| Product address | The address the shop hands out for a card |
-| Collection address | The address the shop hands out for a collection |
-| Cart | The basket a collector fills |
-| Checkout | Where a collector pays |
-| Order history | A collector's own orders |
-| Order detail | One of a collector's orders |
-
-**All or none** - A build SHALL carry every surface in that set or none of it.
-
-**Which lanes** - Which lanes carry it SHALL be decided by the deploy
-environment the build is made for, never by the stage the site is served at:
-
-| Lane | Store surfaces | Labs | Every other surface |
-| --- | --- | --- | --- |
-| Development | carried | carried | carried |
-| Staging | carried | not carried | carried |
-| Preview | not carried | not carried | carried |
-| Production | not carried | not carried | carried |
-
-**Labs** - The labs are the demonstration surfaces and the refund and shipping
-drafts nobody has approved.
-
-**Every other surface** - Every other surface — the auction with its own order
-and invoice, the vault, booking a visit, the membership and join pages, and the
-profile — SHALL be carried on every lane.
-
-#### Scenario: grade10-site-site-carried-surfaces-SC-03 - A production build carries no store surface
-**Serves:** grade10-site-site-carried-surfaces-US-01 - the collector who arrives at grade10.com while the shop is shut
-
-- **GIVEN** a build made for production
-- **WHEN** a collector opens the site
-- **THEN** none of the store surfaces answers, at any of their addresses
-
-#### Scenario: grade10-site-site-carried-surfaces-SC-04 - The preview host carries what production carries
-**Serves:** grade10-site-site-carried-surfaces-US-01 - the same shut shop at the quieter address the preview host serves
-
-- **GIVEN** a build made for preview
-- **WHEN** a collector opens a store address on it
-- **THEN** it answers as the production build does, carrying no store surface
-
-#### Scenario: grade10-site-site-carried-surfaces-SC-05 - Staging carries every store surface
-**Serves:** grade10-site-site-carried-surfaces-US-04 - the teammate who buys through the whole shop on the lane it is open on
-
-- **GIVEN** a build made for staging
-- **WHEN** a collector opens each of the store surfaces
-- **THEN** every one of them answers
-
-#### Scenario: grade10-site-site-carried-surfaces-SC-06 - The labs answer on a development lane alone
-**Serves:** What a build carries - the demonstration pages and the unapproved drafts reached only where they are worked on
-
-- **GIVEN** a build made for staging, preview or production
-- **WHEN** a collector opens a labs address
-- **THEN** no labs surface answers
-- **AND** a development build answers each of them
-
-#### Scenario: grade10-site-site-carried-surfaces-SC-07 - Everything outside the store set stays
-**Serves:** grade10-site-site-carried-surfaces-US-01 - the collector who came for an auction and finds the rest of the site whole
-
-- **GIVEN** a build made for production
-- **WHEN** a collector opens the auction, an auction order or its invoice, the
-  vault, booking a visit, the membership or join pages, or their profile
-- **THEN** each answers as it does on every other lane
 
 ### Requirement: An address of an uncarried surface is not found
 
@@ -177,7 +108,7 @@ refused in that language.
   the address they are left on
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-18 - A session changes nothing about the refusal
-**Serves:** grade10-site-site-carried-surfaces-US-02 - the collector who signed in for the auction and still finds no shop
+**Serves:** grade10-site-site-carried-surfaces-US-02 - the collector who signed in on the site and still finds no shop
 
 - **GIVEN** a build made for production, and a collector holding a session
 - **WHEN** they open a store address
@@ -193,6 +124,24 @@ refused in that language.
 - **THEN** the response has status 404 and the not-found surface renders in
   that language
 
+#### Scenario: grade10-site-site-carried-surfaces-SC-28 - A withheld product's address on the public site is not found
+**Serves:** grade10-site-site-carried-surfaces-US-06 - the collector following a vault or booking link the public build has no page for
+
+- **GIVEN** a build made for production
+- **WHEN** a collector opens a vault case, the identity check, booking a
+  visit or their visits
+- **THEN** the response has status 404 and the not-found surface renders,
+  naming the address that failed
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-29 - A mailed link into a withheld product is refused like any other address
+**Serves:** grade10-site-site-carried-surfaces-US-06 - the collector opening a link a mail handed them rather than an address they typed
+
+- **GIVEN** a build made for production
+- **WHEN** a collector opens the signing ceremony's link or the private link
+  from a booking's mail
+- **THEN** the response has status 404 and the not-found surface renders
+- **AND** the token the link carries changes nothing about the answer
+
 ### Requirement: Nothing in a build names a surface it does not carry
 
 The chrome offers no way into a surface the build has no page for.
@@ -200,10 +149,16 @@ The chrome offers no way into a surface the build has no page for.
 **No destination** - A surface a build does not carry SHALL NOT be a
 destination anything in that build names.
 
-**Header, footer, front door** - In a build without the store surfaces the
-header SHALL show no store navigation item and no cart control, the footer
-SHALL show no shop column, and the front door SHALL show no store button and no
-store card.
+**Header, footer, front door** - For a product a build does not carry the
+header SHALL show no navigation item, no cart control and no account menu
+item, the footer SHALL show no shop column and no link into that product, and
+the front door SHALL show no button and no card for it.
+
+**Region stays** - The front door's card row SHALL remain part of the page
+and hold no card, rather than being removed, where every product it would
+show a card for is withheld. A region dedicated to a single product's own
+control, such as the footer's shop column, is unaffected and keeps behaving
+as already specified.
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-11 - The header names no shop
 **Serves:** grade10-site-site-carried-surfaces-US-01 - the collector reading the header of a site with nothing to sell them
@@ -226,6 +181,31 @@ store card.
 - **WHEN** a collector opens the front door
 - **THEN** neither the store button nor the store card is there, and nothing
   in its place promises a shop
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-30 - Nothing in the chrome leads to a withheld product
+**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector reading the header, the foot of the page and the front door for what the site offers
+
+- **GIVEN** a build made for production
+- **WHEN** any surface renders
+- **THEN** no navigation item, no header control, no footer link, no
+  front-door button and no front-door card leads to the store, the vault or
+  booking
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-31 - The account menu names only what the build answers
+**Serves:** grade10-site-site-carried-surfaces-US-07 - the signed-in collector opening the account menu on a public page
+
+- **GIVEN** a build made for production, and a collector holding a session
+- **WHEN** they open the account menu
+- **THEN** it names no page of a product the build does not carry
+- **AND** every item it does name opens an address the build answers
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-33 - The front door's card row renders empty rather than being removed
+**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector reading a front door built to hold a card for each of the three waiting products
+
+- **GIVEN** a build made for production
+- **WHEN** the front door renders
+- **THEN** the card row is present on the page and holds no card for the
+  store, the vault or booking
 
 ### Requirement: A crawler is offered only what the build carries
 
@@ -252,32 +232,138 @@ surface that answers it.
 - **WHEN** the sitemap is fetched afterwards
 - **THEN** that card's address is not listed, and no collection's is
 
-### Requirement: Where the store is carried it behaves as it is specified to
+#### Scenario: grade10-site-site-carried-surfaces-SC-32 - A public build's crawl directory names no withheld product
+**Serves:** grade10-site-site-carried-surfaces-US-03 - the crawler listing grade10.com while the three products are shut
 
-Carrying decides whether the store is there, never how it behaves.
+- **GIVEN** a build made for production
+- **WHEN** its sitemap and its robots.txt are fetched
+- **THEN** neither names a vault or a booking address
 
-**Unchanged** - A build that carries the store SHALL answer, link and sell at
-every store surface exactly as the store's own capabilities require; which
-lanes carry the set SHALL change no store behaviour on a lane that carries it.
+### Requirement: Each waiting product waits for its own launch
 
-**One line to open it** - Opening the shop SHALL be a change to the lanes
-carrying the store set and to nothing else: every surface in the set SHALL
-start answering together, and no surface outside it SHALL change lanes with
-them.
+Three products wait for the public — the store, the vault and booking a
+visit — and each moves as one set on the lanes stated for it. The auction is
+not one of them: it is carried on every lane already.
 
-#### Scenario: grade10-site-site-carried-surfaces-SC-16 - Staging sells as it did before
-**Serves:** grade10-site-site-carried-surfaces-US-04 - the teammate who browses, fills a basket, pays and reads the order back
+**The three sets** - The surfaces of each waiting product are:
+
+| Product | Surface | What it answers |
+| --- | --- | --- |
+| Store | Store | The store's own address, and the collections beneath it |
+| Store | Card page | One card's own page |
+| Store | Product address | The address the shop hands out for a card |
+| Store | Collection address | The address the shop hands out for a collection |
+| Store | Cart | The basket a collector fills |
+| Store | Checkout | Where a collector pays |
+| Store | Order history | A collector's own orders |
+| Store | Order detail | One of a collector's orders |
+| Vault | Vault | The vault's own address, and a collector's cases beneath it |
+| Vault | Case page | One case's own page |
+| Vault | Signing ceremony | Where a case is signed on the shop's iPad |
+| Vault | Identity check | The identity check a case asks for |
+| Booking | Booking | Booking a visit |
+| Booking | Booking link | The private link a booking's mail carries |
+| Booking | Visits | A collector's own visits |
+
+**All or none** - A build SHALL carry every surface of a product's set or none
+of it.
+
+**One set at a time** - Each product's set SHALL be decided on its own, and
+carrying one SHALL NOT carry another.
+
+**Which lanes** - Which lanes carry each set SHALL be decided by the deploy
+environment the build is made for, never by the stage the site is served at:
+
+| Lane | Store | Vault | Booking | Labs | Every other surface |
+| --- | --- | --- | --- | --- | --- |
+| Development | carried | carried | carried | carried | carried |
+| Staging | carried | carried | carried | carried | carried |
+| Preview | not carried | not carried | not carried | not carried | carried |
+| Production | not carried | not carried | not carried | not carried | carried |
+
+**Labs** - The labs are the demonstration surfaces and the refund and shipping
+drafts nobody has approved.
+
+**Every other surface** - Every other surface — the auction, the front door,
+the terms and the privacy page, the membership and join pages, sign-in and the
+profile — SHALL be carried on every lane.
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-20 - A public build carries none of the three waiting products
+**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who reaches grade10.com before any of the three has opened
+
+- **GIVEN** a build made for production
+- **WHEN** a collector opens the site
+- **THEN** no surface of the store, the vault or booking answers, at any of
+  their addresses
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-21 - The preview host withholds what production withholds
+**Serves:** grade10-site-site-carried-surfaces-US-05 - the same three shut products at the quieter address the preview host serves
+
+- **GIVEN** a build made for preview
+- **WHEN** a collector opens an address of any of the three
+- **THEN** it answers as the production build does, carrying none of the
+  three sets
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-22 - Staging carries all three waiting products
+**Serves:** grade10-site-site-carried-surfaces-US-08 - the collector working a product on the lane it is open on
 
 - **GIVEN** a build made for staging
-- **WHEN** a collector browses the store, adds a card to the cart, checks out
-  and opens their order history
+- **WHEN** a collector opens each surface of the store, the vault and booking
+- **THEN** every one of them answers
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-23 - The labs answer on development and staging, and nowhere the public reaches
+**Serves:** What a build carries - the demonstration pages and the unapproved drafts reached only where they are worked on
+
+- **GIVEN** a build made for preview or production
+- **WHEN** a collector opens a labs address
+- **THEN** no labs surface answers
+- **AND** a development or a staging build answers each of them
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-24 - The holding site is carried on every lane
+**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who finds the rest of the site whole while the three products are shut
+
+- **GIVEN** a build made for production
+- **WHEN** a collector opens the auction, the front door, the terms, the
+  privacy page, the membership or join pages, sign-in or their profile
+- **THEN** each answers as it does on every other lane
+
+### Requirement: Where a product is carried it behaves as it is specified to
+
+Carrying decides whether a product is there, never how it behaves.
+
+**Unchanged** - A build that carries a product SHALL answer, link and work at
+every surface in that product's set exactly as the product's own capabilities
+require; which lanes carry the set SHALL change no behaviour on a lane that
+carries it.
+
+**One line per product** - Opening a product SHALL be a change to the lanes
+carrying that product's set and to nothing else: every surface in the set
+SHALL start answering together, no surface outside it SHALL change the lanes
+it is carried on, and the other two waiting products SHALL stay on the lanes
+already stated for them.
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-25 - Staging works as it did before
+**Serves:** grade10-site-site-carried-surfaces-US-08 - the collector who buys a card, opens a case and books a visit in one sitting
+
+- **GIVEN** a build made for staging
+- **WHEN** a collector buys through the store, opens a vault case and books a
+  visit
 - **THEN** each surface behaves as its own capability requires, with nothing
   altered by the lanes that do not carry it
 
-#### Scenario: grade10-site-site-carried-surfaces-SC-17 - The shop opens for all of its surfaces at once
-**Serves:** Where the shop is open - the day the shop opens, one statement moves and the whole set follows it
+#### Scenario: grade10-site-site-carried-surfaces-SC-26 - A product opens for all of its surfaces at once
+**Serves:** Where a product is open - the day a product opens, one statement moves and its whole set follows it
 
-- **GIVEN** a lane that does not carry the store surfaces
-- **WHEN** that lane is stated to carry them
-- **THEN** every surface in the store set answers on it
+- **GIVEN** a lane that does not carry the vault's set
+- **WHEN** that lane is stated to carry it
+- **THEN** every surface in the vault's set answers on it
 - **AND** no surface outside the set changes the lanes it is carried on
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-27 - The other waiting products stay shut while one opens
+**Serves:** Where a product is open - the launches still to come, each waiting on its own line rather than on the first one
+
+- **GIVEN** a build made for production, carrying none of the three waiting
+  sets
+- **WHEN** production is stated to carry the vault's set alone
+- **THEN** every vault surface answers on it
+- **AND** no store or booking surface answers
