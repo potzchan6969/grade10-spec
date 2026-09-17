@@ -1,6 +1,6 @@
 # shared/auth Cross-Feature E2E Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-14, tcs-rules r3.0
 
 ## shared-auth-e2e-US1: Collector signs in by link and every surface names them until they sign out
@@ -15,7 +15,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -39,22 +39,22 @@
 **Steps:**
 
 1. Follow the sign-in link emailed to <collector email>.
-2. Read who is calling on <grade10 store url>.
+2. Read the signed-in state on <grade10 store url>.
 3. Activate the sign-out control and wait for the auth service to answer.
 
 **Expected Results:**
 
 * Step 1 signs them in as <collector account>.
-* The read reports that person's user id, email, name, and roles.
-* The surface leaves its signed-in presentation, and a read reports no person.
+* Step 2 shows <collector account>'s name and email in the signed-in state.
+* The page leaves the signed-in state and no longer shows their name.
 
-### shared-auth-e2e-US1-TC2-1: Expired link leaves every surface reporting nobody
+### shared-auth-e2e-US1-TC2-1: Expired link leaves the page showing nobody signed in
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -71,12 +71,12 @@
 **Steps:**
 
 1. Follow the expired sign-in link.
-2. Read who is calling on <grade10 store url>.
+2. Read the signed-in state on <grade10 store url>.
 
 **Expected Results:**
 
 * Step 1 does not sign them in.
-* The read reports no person.
+* The page shows nobody signed in.
 
 ---
 
@@ -92,7 +92,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -109,13 +109,13 @@
 **Steps:**
 
 1. Follow the sign-in link from <grade10 store url>.
-2. Open <grade10 auction url> and read who is calling.
-3. Open <zzz store url> and read who is calling.
+2. Open <grade10 auction url> and read the signed-in state.
+3. Open <zzz store url> and read the signed-in state.
 
 **Expected Results:**
 
-* Step 2 reports the same person as step 1.
-* Step 3 reports no person.
+* Step 2 shows the signed-in person's name and email.
+* Step 3 shows nobody signed in.
 
 ### shared-auth-e2e-US2-TC2-1: Untrusted return location is ignored and sign-in stays on the brand
 
@@ -146,12 +146,12 @@
 **Steps:**
 
 1. Complete the sign-in that names <off-brand location>.
-2. Read who is calling on the surface it lands on.
+2. Read the signed-in state on the page it lands on.
 
 **Expected Results:**
 
 * Step 1 lands on this brand and not on <off-brand location>.
-* The read reports the signed-in person.
+* Step 2 shows the signed-in person's name and email.
 
 ---
 
@@ -239,7 +239,7 @@
 **I want** a revoked session to report nobody and the revoke to be on the trail,
 **so that** a stolen device is out, and a revoke that cannot be recorded does not happen at all.
 
-### shared-auth-e2e-US4-TC1-1: Revoked session reports no person and the revoke is on the trail
+### shared-auth-e2e-US4-TC1-1: Revoked session leaves the page showing nobody signed in and the revoke is on the trail
 
 **Classification:**
 
@@ -270,12 +270,12 @@
 
 1. List <collector account>'s sessions by user id.
 2. Revoke <collector session>.
-3. Read who is calling on <collector session>.
+3. Read the signed-in state on <collector session>.
 
 **Expected Results:**
 
 * Step 1 shows that account's sessions and no session secret, and writes no trail entry.
-* Step 3 reports no person.
+* Step 3 shows nobody signed in.
 * The trail records the actor, <collector account>, and the revoke.
 
 ### shared-auth-e2e-US4-TC2-1: Revoke that cannot be recorded leaves the session signed in
@@ -302,11 +302,11 @@
 **Steps:**
 
 1. Revoke <collector session>.
-2. Read who is calling on <collector session>.
+2. Read the signed-in state on <collector session>.
 
 **Expected Results:**
 
-* Step 2 reports that person.
+* Step 2 shows that person's name and email in the signed-in state.
 * <collector session> remains signed in.
 
 ---
@@ -331,6 +331,8 @@
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-03, shared-auth-roles-US-02, shared-auth-audit-US-01
+
+**Blocked:** 2026-09-17 tcs-review skipped this journey. Expected results say only that an auction operate action is allowed and a ban is refused, with no screen to check; the title says catalogue and step 3 says operate. A later pass names an observable (for example Create listing on the Listings section) before a verdict.
 
 **Pre-conditions:**
 
