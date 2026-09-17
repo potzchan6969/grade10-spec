@@ -80,6 +80,18 @@ Two loops leave the line:
 - **A production defect** — is fixed on a branch from the release tag,
   tagged again, and merged back to `main`
 
+The page and the proposal are the source of truth for the two design files:
+
+- **`ui-design.md` is inferred** — from the surfaces and the states the page
+  says a reader meets, and the journeys; it links the frames and names the
+  exports, and never restates the page
+- **`tech-design.md` is inferred** — from the outcomes and the constraints
+  the page and the proposal state; it records how they land, and never
+  restates them
+- **A gap goes upstream first** — a state or a constraint either file needs
+  that the page lacks is written on the page, marked 🚧 or ❓, before the
+  file cites it; a scope fact goes to the proposal or `decisions.md` first
+
 ## Stages
 
 A change is in exactly one stage, read from its files on `main` and never
@@ -288,7 +300,7 @@ One meaning per word, as the line uses it.
 
 | Milestone | Change | Done when |
 | --- | --- | --- |
-| M1 Stages and hands | `stage-changes-and-notify-hands` - open | A change moving on `main` tells the next hand within a minute, and the board shows nine columns |
+| M1 Stages and hands | `stage-changes-and-notify-hands` - open, on the planned page [Change Stages](../prds/products/shared/planning/change-stages.md), with its journeys, `ui-design.md` and `tech-design.md`, waiting on `/planning-qa` for the requirements | A change moving on `main` tells the next hand within a minute, and the board shows nine columns |
 | M2 Land without a pull request | `land-on-main-through-the-gate` | A week of landings with no pull request and no red `main` older than an hour |
 | M3 Release line | `cut-releases-from-a-tag` | One release cut from the page and one hotfix walked end to end |
 | M4 Keep it small | `keep-the-store-small` | The archive holds one quarter; a newcomer reads three pages and lands a change |
