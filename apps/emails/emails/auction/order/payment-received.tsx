@@ -13,17 +13,30 @@ export type PaymentReceivedProps = {
   /** Amount paid (invoice / order total). */
   amountPaid?: string;
   /** When payment was confirmed (winner's zone). */
-  paidAt?: string;
+  receivedAt?: string;
   /**
-   * How they paid — e.g. `Visa •••• 4242`, `Mastercard •••• 4444`,
-   * or `Bank transfer · HSBC · ••••5678`.
+   * How they paid — always under the label **Payment method**:
+   * - Card: brand + masked number — e.g. `Visa •••• 4242`
+   * - Bank transfer: `Bank Transfer` only (no bank name, account number,
+   *   or account name)
+   * - Manual settlement: method + reference as recorded
    */
   paymentMethod?: string;
+  /**
+   * Receipt ID — quiet body line (`Receipt ID: …`) and attached PDF file name
+   * (e.g. `REC-202609-LK7P2Q-01-P1`).
+   */
+  receiptId?: string;
 };
 
 /**
- * After card payment or manual settlement is confirmed.
- * No receipt PDF attachment — the PDF lives on Winner Order.
+ * After card payment, confirmed bank-transfer proof, or manual settlement.
+ * The send path attaches the receipt PDF (same language as the letter,
+ * named by `receiptId`). Proof files and the internal audit number never
+ * appear in the letter or the attachment.
+ *
+ * Bank transfer: payment method value is `Bank Transfer`; subtext is
+ * `Received {date}` — no bank, account number, or account name in the letter.
  */
 export default function PaymentReceivedEmail({
   brandName = previewLot.brandName,
@@ -31,12 +44,13 @@ export default function PaymentReceivedEmail({
   orderUrl = previewLot.orderUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   amountPaid = previewLot.orderTotal,
-  paidAt = previewLot.paidAt,
+  receivedAt = previewLot.paidAt,
   paymentMethod = previewLot.paymentMethod,
+  receiptId = previewLot.receiptId,
 }: PaymentReceivedProps) {
   return (
     <AuctionLetter
-      body="We have received your payment for this lot. Open Winner Order to view your receipt."
+      body="We have received your payment for this lot. Your order is now being processed."
       brandName={brandName}
       campaign="payment_received"
       canUnsubscribe={false}
@@ -45,14 +59,15 @@ export default function PaymentReceivedEmail({
         {
           label: "Payment method",
           value: paymentMethod,
-          subtext: `Paid ${paidAt}`,
+          subtext: `Received ${receivedAt}`,
         },
       ]}
+      facts={[`Receipt ID: ${receiptId}`]}
       heading="Payment received"
       highlight={{ label: "Amount paid", value: amountPaid }}
       listingUrl={orderUrl}
       lotTitle={lotTitle}
-      preheader={`Payment of ${amountPaid} received.`}
+      preheader={`Payment of ${amountPaid} received. Your order is being processed.`}
       primaryImageUrl={primaryImageUrl}
       whyYouGotThis="You paid for this auction order on Grade10."
     />
@@ -65,6 +80,7 @@ PaymentReceivedEmail.PreviewProps = {
   orderUrl: previewLot.orderUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   amountPaid: previewLot.orderTotal,
-  paidAt: previewLot.paidAt,
+  receivedAt: previewLot.paidAt,
   paymentMethod: previewLot.paymentMethod,
+  receiptId: previewLot.receiptId,
 } satisfies PaymentReceivedProps;

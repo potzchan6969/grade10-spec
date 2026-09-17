@@ -10,7 +10,7 @@ export type AuctionEmailCampaign =
   | "lot_ended_watched"
   | "auction_won"
   | "address_reminder"
-  | "invoice_sent"
+  | "payment_reminder"
   | "payment_received"
   | "shipped";
 
