@@ -28,7 +28,14 @@ import {
   readRequirement,
   requirementBlocks,
 } from "../src/store/read-specs.mts";
-import { everyBlock, journeysOf, plural } from "./context.mjs";
+import {
+  anchorRefusal,
+  everyBlock,
+  journeysIn,
+  journeysOf,
+  plural,
+  restatesAnchor,
+} from "./context.mjs";
 
 /** The only `## ` headings a delta may hold: the four the fold reads, plus
  * the two a spec's own head carries. `User journeys` is not among them — the
@@ -101,11 +108,26 @@ function checkAnchors(ctx, files) {
           continue;
         }
         for (const anchor of serves) {
-          if (anchors.has(anchor)) continue;
+          const why = anchorRefusal(
+            anchors,
+            anchor,
+            one.spec,
+            journeysHere(ctx, one),
+          );
+          if (why) {
+            ctx.add(
+              "serves",
+              one.file,
+              `${scenario.id} → \`${anchor}\`, ${why}`,
+            );
+            continue;
+          }
+          if (!groupsFor(ctx, one).has(anchor)) continue;
+          if (!restatesAnchor(anchor, scenario.servesProse)) continue;
           ctx.add(
-            "serves",
+            "restates",
             one.file,
-            `${scenario.id} → \`${anchor}\`, which is neither a journey nor a feature set group of \`${one.spec}\``,
+            `${scenario.id} → \`${anchor}\` repeats the group name after the dash — say what the walk is instead`,
           );
         }
       }
@@ -141,6 +163,39 @@ function anchorsFor(ctx, one) {
   const featureSet = findSection(one.sections, "Feature set");
   for (const group of featureGroups(featureSet?.body ?? "")) anchors.add(group);
   return anchors;
+}
+
+/** The feature set groups this delta may name: the durable capability's, and
+ * the ones the delta restates. Read apart from the journeys so `restates` can
+ * ask its question of a group anchor alone. */
+function groupsFor(ctx, one) {
+  const durable = ctx.specs.get(one.spec);
+  const groups = new Set(durable?.featureGroups ?? []);
+  const featureSet = findSection(one.sections, "Feature set");
+  for (const group of featureGroups(featureSet?.body ?? "")) groups.add(group);
+  return groups;
+}
+
+/** A qualified anchor's capability, answered from the durable store first and
+ * then from this change's own journeys files — a change may introduce the
+ * capability whose journey another of its deltas stands on, and the durable
+ * store has not heard of it yet. */
+function journeysHere(ctx, one) {
+  const durable = journeysIn(ctx);
+  const change = one.file.split("/specs/")[0];
+  return (id) => {
+    const beside = readTextIfExists(
+      join(ctx.roots.store, change, "specs", id, "user-journeys.md"),
+    );
+    if (beside === undefined) return durable(id);
+    try {
+      return new Set(readJourneys(beside).map((journey) => journey.id));
+    } catch {
+      // A file the reader refuses is `walked`'s to name; fall back to what the
+      // durable store holds rather than reporting the anchor twice.
+      return durable(id);
+    }
+  };
 }
 
 /** RULE `blind`: a delta that moves behaviour owes a second, independent

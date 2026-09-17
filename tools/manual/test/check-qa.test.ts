@@ -580,3 +580,109 @@ describe("a delta's scenarios and the anchors they name", () => {
     ]);
   });
 });
+
+/** A rule sits on the journey somebody walks, and the walk is often somebody
+ * else's — the operator's queue reaches a status the collector's capability
+ * derives. Before the qualified form, such a rule took a feature set group,
+ * which names a part of the map and nobody who meets the rule, or a
+ * hand-written note in a journeys file that named no scenario. */
+describe("a scenario serving another capability's journey", () => {
+  const BETA = "openspec/specs/demo-product/beta";
+  const beta = {
+    [`${BETA}/spec.md`]: [
+      "# Beta",
+      "",
+      "## Purpose",
+      "",
+      "Beta exists so a scenario has somewhere else to point.",
+      "",
+      "## Feature set",
+      "",
+      "- Doing beta things",
+      "  - Something: why it is here",
+      "",
+    ].join("\n"),
+    [`${BETA}/user-journeys.md`]: journeysText([journey("beta-US-01")]),
+  };
+
+  const withBeta = (serves: string) =>
+    store({
+      journeys: journeysText([journey("alpha-US-01")]),
+      spec: specText({
+        scenarios: [["alpha-SC-01", "it does the thing", serves]],
+      }),
+      extra: beta,
+    });
+
+  it("resolves when that capability issues the journey", async () => {
+    const root = withBeta("demo-product/beta#beta-US-01");
+    expect(lines(await check(root), "serves")).toEqual([]);
+  });
+
+  it("names a journey the other capability issues nowhere", async () => {
+    const root = withBeta("demo-product/beta#beta-US-99");
+    expect(lines(await check(root), "serves")).toEqual([
+      `${SPEC_FILE} — alpha-SC-01 → \`demo-product/beta#beta-US-99\`, which \`demo-product/beta\` issues nowhere`,
+    ]);
+  });
+
+  it("names a capability the store does not hold", async () => {
+    const root = withBeta("demo-product/gamma#gamma-US-01");
+    expect(lines(await check(root), "serves")).toEqual([
+      `${SPEC_FILE} — alpha-SC-01 → \`demo-product/gamma#gamma-US-01\`, whose capability \`demo-product/gamma\` is not one this store holds`,
+    ]);
+  });
+});
+
+/** The anchor says where the rule sits; the prose after it says what the walk
+ * was. A group anchor is the one that most needs the line — it names a part of
+ * the map and nobody who meets the rule — so a line repeating the group name
+ * back carries nothing at all. */
+describe("`**Serves:**` prose that only repeats its anchor", () => {
+  const served = (serves: string) =>
+    store({
+      journeys: journeysText([journey("alpha-US-01")]),
+      spec: [
+        "# Alpha",
+        "",
+        "## Purpose",
+        "",
+        "Alpha exists so the checker has a spec to read.",
+        "",
+        "## Feature set",
+        "",
+        "- Doing things",
+        "  - Something: why it is here",
+        "",
+        "## Requirements",
+        "",
+        "### Requirement: Alpha does things",
+        "",
+        "Alpha SHALL do the thing when asked.",
+        "",
+        "#### Scenario: alpha-SC-01 - it does the thing",
+        `**Serves:** ${serves}`,
+        "",
+        "- **WHEN** asked",
+        "- **THEN** it happens",
+        "",
+      ].join("\n"),
+    });
+
+  it("fails a group anchor whose prose is the group name again", async () => {
+    const root = served("Doing things - doing things");
+    expect(lines(await check(root), "restates")).toEqual([
+      `${SPEC_FILE} — alpha-SC-01 → \`Doing things\` repeats the group name after the dash — say what the walk is instead`,
+    ]);
+  });
+
+  it("passes a group anchor whose prose names the walk", async () => {
+    const root = served("Doing things - anybody reaching alpha from the rail");
+    expect(lines(await check(root), "restates")).toEqual([]);
+  });
+
+  it("asks nothing of a journey anchor, whose title is not its id", async () => {
+    const root = served("alpha-US-01 - alpha-US-01");
+    expect(lines(await check(root), "restates")).toEqual([]);
+  });
+});

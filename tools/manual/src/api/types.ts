@@ -59,8 +59,14 @@ export type Scenario = {
    * other, which is how each stopped inheriting the other's blind spots.
    *
    * More than one is allowed: a scenario is a rule, and one rule can sit on
-   * several journeys. A case is a walk and still traces one. */
+   * several journeys. A case is a walk and still traces one.
+   *
+   * An anchor may also be qualified — `<product>/<domain>/<capability>#<id>` —
+   * where the rule sits on a journey another capability issues. */
   serves?: string[];
+  /** The prose after the anchor's dash: what the walk was, for a human. Read
+   * so a check can refuse a line that only repeats the anchor it stands on. */
+  servesProse?: string;
 };
 
 export type Requirement = {

@@ -30,7 +30,7 @@
 <!-- requirement text -->
 
 #### Scenario: <capability>-SC-01 - <!-- scenario name -->
-**Serves:** <!-- <capability>-US-<n>, or a Feature set root group --> - <!-- short description, prose -->
+**Serves:** <!-- <capability>-US-<n>; or <product>/<domain>/<capability>#<journey-id> for another capability's journey; or a Feature set root group, for a rule with no actor --> - <!-- the walk this rule sits on, prose -->
 
 - **WHEN** <!-- condition -->
 - **THEN** <!-- expected outcome -->

@@ -153,11 +153,23 @@ not something absorbed into a Code Connect template — read
 
 ## States
 
-Loading, empty, error and edge states per screen, **each tied to the anchor it
+Loading, empty, error and edge states per screen, **one state per bullet**, and
+**each tied to the anchor it
 dresses** — a journey id from `user-journeys.md`, or a `## Feature set` root
 group the durable capability already issues. A state with no anchor behind it
 means the journeys are missing one — say so to whoever wrote them, and do not
 invent the journey yourself.
+
+**One per bullet is what makes the list countable.** The requirements' second
+pass walks it and closes every bullet — the scenario it became, or an
+`**Out of suite:**` naming where the state is stated instead — and
+`pnpm check:manual` names one it left open. A bullet holding three states can
+be closed by one scenario and look complete, which is the shape that let empty
+and error treatments arrive as reconciliation findings run after run.
+
+The dispositions are written onto your bullets, by the hand that writes the
+requirements. Leave them alone; they are not yours to fill in ahead of the pass,
+and a state you argue with is a conversation with that hand rather than an edit.
 
 **Never a scenario id.** The whole of `spec.md` is written after this file, by
 `/planning-qa`, and `pnpm check:manual` refuses an id the store issues nowhere.

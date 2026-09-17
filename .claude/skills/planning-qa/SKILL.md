@@ -135,12 +135,30 @@ Everything this run produces is `draft`. Nothing in it claims review;
    **Both get `ui-design.md`** where the change has one. It lands before the
    requirements and its states tie to anchors, not scenario ids, so reading it
    costs no independence - blindness is from the scenarios, never from the
-   design. An error or empty treatment the designer drew and no requirement
-   states is exactly what the reconciliation exists to surface.
+   design. The suite pass gets it with the state dispositions stripped, the way
+   it gets `feature-tcs.md` with `## Reconciliation` stripped: those lines carry
+   scenario ids, and on a re-run they would be the leak.
 
 5. **Reconcile, then take the second pass.** Join on anchors, apply the
    dispositions below, and the scenarios that survive are written with the
    `## Reconciliation` block.
+
+   **Account for every `ui-design.md` state as you write.** Walk its `## States`
+   bullets and close each one on the bullet itself: the scenario id it became,
+   in backticks, or `**Out of suite:**` naming where the state is stated
+   instead. `check:manual` names a bullet you left open.
+
+   That is pass two's work, not the reconciliation's. Both readings see the
+   design, so the empty, error and edge states always reached the blind suite;
+   walking the list here is what stops them reaching the requirements as a
+   finding against scenarios nobody had asked about them. The readings stay
+   independent in method - the suite pass works its test-design checklist, you
+   work the journeys and the design - and the reconciliation keeps the findings
+   that are about behaviour.
+
+   **Put the blind pass's raised questions in `decisions.md`**, under its
+   `## Raised` table, one row per question with the capability that asked. Leave
+   `Landed` for the author. They go nowhere near the suite.
 
    Delete the change's `awaiting: specs:` line as the requirements land: it
    named the pass you have just taken. `check:manual` reports a wait its own
@@ -186,6 +204,35 @@ Neither file points at the other. Both point up.
 Before the dash is machine-read and must resolve; after it is prose for a human.
 An anchor that resolves to nothing fails loudly rather than dangling.
 
+Three anchors resolve on a `**Serves:**` line, and the first that fits is the
+one to write:
+
+| Anchor | Written as | For |
+| --- | --- | --- |
+| This capability's journey | `<capability>-US-<n>` | A rule somebody walks here |
+| Another capability's journey | `<product>/<domain>/<capability>#<journey-id>` | A rule somebody walks elsewhere and this capability enforces |
+| A feature set root group | the group name, verbatim | A rule with no actor: a derivation, an idempotency, a guard the system raises against its own callers |
+
+**Reach past the capability before you reach for a group.** `order-status`
+derives a status the operator walks in `grade10-admin/auction/post-sale`, and
+the qualified anchor says so - `**Serves:**
+grade10-admin/auction/post-sale#post-sale-US-01 - the operator works the queue
+by outcome`. A group name says which part of the map the rule sits in and
+nothing about who meets it, so a group anchor on a rule somebody walks throws
+the walk away. It is also what a hand-written `Also walked by:` note in a
+journeys file was reaching for: the note names no scenario, so nothing joins on
+it and nothing fails when it goes stale.
+
+A scenario whose only anchor is a foreign journey is reached by no case in this
+capability's suite. List it under `**Out of suite:**` naming the suite that
+walks it - the same treatment any other uncovered scenario gets.
+
+**The prose after the dash names the walk**, never the group and never the
+heading it already sits under. `check:manual` refuses prose repeating the group
+name. Repeating the heading is the store's habit today and nothing reads it yet
+— write the walk anyway: a line that restates what is already on screen is a
+line the next reader skips.
+
 Coverage is checked at group level: every anchor served by at least one scenario
 and walked by at least one case. That is coarse on purpose - the real coverage
 mechanism is the blind pass, and the rule only catches a whole group being
@@ -198,9 +245,10 @@ orchestrator builds an isolated input in scratch space, and the suite sub-agent
 sees nothing else.
 
 **Included:** `## Purpose`, `## Feature set`, this capability's
-`user-journeys.md`, `decisions.md`, `ui-design.md` where the change has one,
-the linked PRD sections, and the existing `feature-tcs.md` for id continuity,
-with `## Reconciliation` stripped.
+`user-journeys.md`, `decisions.md` - its `## Raised` table included, which says
+what earlier runs asked and what came of it - `ui-design.md` where the change
+has one, with its state dispositions stripped, the linked PRD sections, and the
+existing `feature-tcs.md` for id continuity, with `## Reconciliation` stripped.
 
 `decisions.md` and `ui-design.md` both go in for the same reason: neither holds
 a requirement, so neither costs blindness, and a reader who cannot see the
@@ -273,6 +321,18 @@ in git. Scenario ids belong there only while the change is open, written in
 backticks and in full: a bare `Folded as SC-49` is read by no check, so the
 next renumber leaves it naming a scenario nobody issues any more.
 
+**The raised questions are not in the suite.** They are rows in the change's
+`decisions.md`, under `## Raised` - `Capability | Raised | Landed` - and every
+one owes a landing before the change merges: a `Decisions` row in that same
+file, or a ❓ on the capability's PRD. `check:manual` refuses a row that names
+neither, which is the deadline the list never had while it sat at the bottom of
+a suite nobody opened until review.
+
+An escalated or deferred row is written down twice all the same. `decisions.md`
+archives with the change and is folded nowhere, so the disposition goes in
+`## Reconciliation` and the answer in `## Settled`, where the next blind pass
+reads it.
+
 **Write it when you pause, not when you finish.** A run stopped at an
 escalation and a run nobody has started look the same on the board otherwise:
 `openspec status` counts files, and the file is there either way. The section
@@ -320,11 +380,14 @@ single case, because it is where this workflow is cheapest to cheat.
 - **Uncovered anchors** — each `**Out of suite:**` line names where the scenario
   is verified instead. One that names no such place is a hole wearing an
   exemption's clothes
-- **An empty `## Raised`, run after run** — the signal that the blind pass has
+- **An empty `## Raised`, run after run** — in the change's `decisions.md`, the
+  signal that the blind pass has
   stopped being blind, or stopped being a different reading, and the only one
   this store can read. The Run line says what the pass read and was denied;
   nothing verifies it, so read it as the run's word and say so rather than
   passing the suite
+- **A raised row with an empty `Landed`** — the pass's finding about to be lost.
+  Chase it to a `Decisions` row or a PRD ❓ before the suite is signed off
 
 When you finish a review, strip the scenario ids from `## Reconciliation`,
 leaving the dispositions and the reasons. Beyond the change's life those ids are
