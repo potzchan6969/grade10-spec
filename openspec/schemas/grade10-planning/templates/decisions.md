@@ -37,7 +37,9 @@
      follow a decision back to the question that raised it.
 
      Mark `(recommended)` on a decision the author took as offered rather than
-     chose, so a later reader knows how firm it is.
+     chose, so a later reader knows how firm it is, and `(held)` on one the
+     author kept against the interview's challenge - `Instead of` then carries
+     the alternative the interview put up and why it lost.
 
      `Instead of` is what the row buys: the option dropped, and in a few words
      why. Without it the same question is asked again next quarter and answered

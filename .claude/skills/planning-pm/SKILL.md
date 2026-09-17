@@ -124,13 +124,47 @@ Everything this run produces is `draft`. Nothing in it claims review.
    author confirms shared understanding. The interview scales with the open
    questions, not the change's size.
 
-   A question settles three ways: answered, accepted as recommended, or
-   **deferred** - the author saying they are not the right person for it. The
-   first two are rows in `decisions.md`, the second marked `(recommended)` so a
-   later reader knows how firm it is. A deferred question is not a decision: it
-   goes under the proposal's open questions with a note on who should settle it,
-   and as a ❓ row on the PRD, and it does not hold the draft. Sizing, export
-   names, and what code a change touches are never the author's to answer.
+   A question settles four ways: answered, accepted as recommended, **held**
+   against your challenge, or **deferred** - the author saying they are not
+   the right person for it. The first three are rows in `decisions.md`: the
+   second marked `(recommended)` so a later reader knows how firm it is, the
+   third marked `(held)` with your alternative and its reason in `Instead of`,
+   so the next reader sees the row was contested rather than re-opening it. A
+   deferred question is not a decision: it goes under the proposal's open
+   questions with a note on who should settle it, and as a ❓ row on the PRD,
+   and it does not hold the draft. Sizing, export names, and what code a
+   change touches are never the author's to answer.
+
+   **Challenge an answer before you record it.** What the author arrives with
+   is a claim, not a row. An interview that only maps what the author already
+   holds writes down what they would have written alone - a reminder cadence
+   recorded one afternoon as `5 days before due`, on an invoice whose window
+   is fixed from send, and rewritten the same day once somebody asked what
+   that was on the clock the invoice already runs on. Every round, before the
+   frontier moves:
+
+   - **List every assumption you would otherwise make silently** - the clock
+     a value is measured on, the state a rule starts from, a default the spec
+     already sets, the meaning of a word the author uses loosely. Each is a
+     question with your reading as the recommendation, never a fact the draft
+     carries unasked. Translate the author's words onto what exists before
+     accepting them: `5 days before due` on a seven-day window from send is
+     `day 2 after send`, and the author may not have meant it.
+   - **Flag a solution disguised as a requirement** - a schedule, a screen, a
+     field, a mechanism, offered where an outcome belongs. Ask what it buys
+     the reader. The outcome is the goal and the 🚧 line; the mechanism is a
+     decision row, with the other mechanisms that buy the same outcome in
+     `Instead of`.
+   - **Point out what is missing** - the edge cases, the failure modes (a
+     letter that lands after the action it asks for has closed, a clock that
+     pauses, a reissue that restarts it), who else is affected (the other
+     capabilities, the operator, the service that sends it), and what this
+     change is not doing. Ask each as its own frontier question. A non-goal
+     the author never named is the one an artifact downstream crosses.
+
+   Disagree out loud. Where your reading and the author's differ, say so with
+   the reason and put your alternative to them. The author decides, and the
+   row records which way and why.
 
 3. **Mark the PRDs first.** One 🚧 line per outcome the reader can see, in the
    reader's words and in the section it belongs to; a ❓ line or decisions row

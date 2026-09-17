@@ -27,7 +27,10 @@ artifacts:
 
       - **What Changes**: Bullet list of changes. Be specific about new
       capabilities, modifications, or removals. Mark breaking changes with
-      **BREAKING**.
+      **BREAKING**. A bullet names the outcome the reader would notice; where
+      it carries a mechanism - a schedule, a field, a screen - it says what
+      that buys, and the interview has asked whether another mechanism buys
+      the same thing (`decisions.md`).
 
       - **Non-Goals**: One line pointing at `decisions.md`, which holds them.
       They are decided in the interview, and two homes for one boundary is two
@@ -111,12 +114,28 @@ artifacts:
       the order the rounds asked them - `Q | Asked | Decided | Instead of`. The
       `Q` number is the round's own, so a decision leads back to the question
       that raised it. `(recommended)` marks one the author took as offered
-      rather than chose.
+      rather than chose; `(held)` marks one the author kept against the
+      interview's challenge, and `Instead of` then carries the interview's
+      alternative and why it lost.
 
       - **Raised**: the blind suite pass's own output, written into this file by
       the run that takes the readings - `Capability | Raised | Landed`, one row
       per point the isolated input did not settle. The pass writes the question
       and the capability it read; the author writes what it became.
+
+
+      **The interview challenges an answer before it records one.** A row is
+      what survived a round, not what the author arrived with. Every round
+      lists each assumption the draft would otherwise make silently - the
+      clock a value runs on, the state a rule starts from, a default the spec
+      already sets - and asks it, with a recommendation; flags a solution
+      offered where a requirement belongs - a schedule, a screen, a field -
+      and asks what it buys, so the outcome is the goal and the mechanism is
+      the row; and asks what is missing - the edge cases, the failure modes,
+      who else is affected, and what this change is not doing, which is where
+      a non-goal comes from. Where the interview's reading differs from the
+      author's it says so with the reason, and the author decides: `(held)`
+      on the row, the alternative in `Instead of`.
 
 
       **Every raised row lands before the change merges.** It becomes a

@@ -75,9 +75,13 @@ openspec instructions proposal --change account-setting-page
 `/planning-pm` in `grade10` runs this for you and reads the store's own copy of
 the lane instructions. What the agent reads first is `/planning-pm`'s — facts are the agent's job, decisions are yours.
 
-**3. Expect to be interviewed.** The rules require the `grilling` skill, which
-lives in the store clone at `.claude/skills/grilling/SKILL.md`; the rule names
-that path, so point your agent at it if it cannot find the skill by name.
+**3. Expect to be interviewed, and challenged.** The rules require the
+`grilling` skill, which lives in the store clone at
+`.claude/skills/grilling/SKILL.md`; the rule names that path, so point your
+agent at it if it cannot find the skill by name. An answer you give is put back
+to you before it is recorded: the assumptions it rests on, what a mechanism you
+named buys, and what it leaves out. Holding your answer is fine - the row says
+`(held)` and what it was held against.
 
 **4. The agent writes three files.** `proposal.md`,
 `specs/grade10-site/store-account-settings/user-journeys.md`, and `spec.md`
