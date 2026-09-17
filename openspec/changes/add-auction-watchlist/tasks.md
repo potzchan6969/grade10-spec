@@ -38,7 +38,7 @@ Claimable against the contracts and fixtures from group 1.
 
 ## 5. Review (grade10) (owner: @mason5991)
 
-- [ ] 5.1 Run the application repository's full check suite once every group above is green.
-- [ ] 5.2 Verify every scenario in this change, then run `openspec validate add-auction-watchlist --strict` and `openspec validate --specs`.
+- [x] 5.1 Run the application repository's full check suite once every group above is green.
+- [x] 5.2 Verify every scenario in this change, then run `openspec validate add-auction-watchlist --strict` and `openspec validate --specs`.
 - [x] 5.3 Review that no public listing fact carries a watch, a watcher, or a count, per `grade10-site-auction-watchlist-SC-07`.
-- [ ] 5.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/` and archive this change.
+- [x] 5.4 After rollout is confirmed, fold the accepted delta into `openspec/specs/grade10-auction/` and archive this change.
