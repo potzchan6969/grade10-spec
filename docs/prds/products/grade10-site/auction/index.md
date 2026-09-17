@@ -3,17 +3,12 @@ title: Auction
 icon: gavel
 ---
 
-Grade10 Auction sells graded cards one lot at a time. A collector signs in,
+Grade10 Auction sells graded cards one lot at a time, and it is open to the
+public. A collector signs in,
 finds a lot, bids by naming the most they will pay, and after the close pays
 the invoice and receives the card. The four chapters follow that order: each
 states what runs, marks what is confirmed and being built and what is still
 open, and names the capability that holds the rules.
-
-## Where It Is Open
-
-🚧 **Not open to the public yet** — the auction's pages are carried in
-development and staging, on no lane the public reaches. It is the first of the
-four products to open — [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
 ## Chapters
 

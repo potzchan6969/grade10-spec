@@ -82,6 +82,7 @@ meaning.
 | **Preparing Invoice** | Not issued | The winner confirms an address, or an operator records one after the deadline |
 | **Pending Payment** | Pending, or Expired past the deadline | An operator sends or reissues the invoice; an expired invoice keeps this status |
 | 🚧 **Payment Verifying** | Payment Verifying | The winner uploads bank transfer proof; the deadline stops until an operator confirms or returns it |
+| 🚧 **Partially Paid** | Partially Paid | An operator records a payment smaller than the balance owed; the deadline stops for good, self-service Pay is not offered again, and further payments keep it here until one closes the balance |
 | **Processing** | Paid | A card payment is confirmed, the proof is confirmed, or an operator settles manually |
 | **Shipped** | Paid | The warehouse dispatches, with a tracking number |
 | **Delivered** | Paid | The carrier confirms delivery |
@@ -95,6 +96,10 @@ meaning.
   can no longer confirm an address until an operator reopens the form
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
   its own; a proof under check never expires
+- 🚧 **Partially Paid is final on its numbers** — no reissue and no cancel
+  once an operator has recorded a payment against the invoice; the invoice's
+  address, method and total stay fixed, and an operator settles the rest by
+  hand outside the system if it will not be paid off
 
 ### Notification
 
@@ -110,12 +115,12 @@ open it too.
 | Payment reminder | At send, then **day 3** and **day 6** while the invoice is pending | The total and `Pay by …`; View invoice and pay |
 | 🚧 Final notice | **24 hours** before the payment deadline, while Pay is still offered | The last payable reminder |
 | 🚧 Payment overdue | The invoice expires unpaid | What remains owed; Pay is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review |
-| Invoice reissued | An operator reissues | The new invoice and its deadline |
+| 🚧 Invoice reissued | An operator reissues | The payment reminder for the new invoice, its total and `Pay by …`; no letter of its own |
 | 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner and `Pay by …`; none when proof is uploaded |
 | Payment received | Card confirmed, proof confirmed, or a manual settlement | Amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
 | Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking |
-| Delivered | The carrier confirms delivery | Delivery confirmation naming the lot |
-| Order cancelled | An operator cancels | That the order was cancelled |
+| 🚧 Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
+| 🚧 Order cancelled | An operator cancels | That the order was cancelled and when; no reason and no word on payment; Contact Us first, View order second |
 
 - **Reminders stop at payment** — every outstanding reminder is cancelled the
   moment payment is received, and a reissue restarts the series for the new
@@ -129,9 +134,6 @@ open it too.
   separate invoice-sent letter, a final notice immediately before expiry and
   an invoice-expired letter, while the setup-overdue-mail change folds, moves
   and replaces them; Product reconciles before the deltas land
-- ❓ **Billing address** — the order form offers none, while the auction-won
-  and setup-reminder letters name one among the setup steps; Product and
-  Design reconcile
 
 ### Invoicing Confirmation
 
@@ -149,6 +151,10 @@ Before any invoice, the winner confirms where to ship and how they will pay.
   transfer in a currency with bank details — HKD at launch
 - ❓ **Fee range wording** — what each choice says; the bank transfer wording
   names no amount, because the operator sets that fee; Product confirms
+- 🚧 **Billing address** — confirmed with the delivery address and the
+  payment method. Use same details for billing address is ticked by default;
+  unticking it asks for a saved address or a one-time one, with the same
+  required fields. It locks on confirming like the delivery address
 - **Deadline** — `Confirm by …` under Confirm; when it passes, Confirm is
   hidden, the alert reads Missed address deadline with Contact Us, the status
   stays, and nothing cancels or suspends
@@ -180,6 +186,8 @@ shown before send, and the sent invoice never re-prices.
 - 🚧 **Invoice ID** — `INV-202609-LK7P2Q-01`: the month sent, the listing's
   code and the count; a reissue gets a new ID and bank reference, and the old
   ones still find the order
+- 🚧 **Bill To and Ship To** — the invoice shows both addresses from the
+  order's snapshot, with name, company name, phone and address
 - **PDFs** — the invoice once sent and the receipt once paid, on one row;
   hidden when Cancelled
 - **Payment deadline** — an absolute date and time in the winner's zone, with
@@ -224,11 +232,17 @@ shown before send, and the sent invoice never re-prices.
 - **Receipt** — the itemised amounts and how it was paid: card brand and last
   four, or the method and reference an operator recorded, marked as manually
   settled
+- 🚧 **Bill To and Ship To** — the same two addresses as the invoice it
+  pays; a later edit or reissue never changes a receipt already issued
 - 🚧 **A confirmed transfer** — its receipt reads Bank Transfer, not manually
   settled
 - 🚧 **Receipt ID** — `REC-202609-LK7P2Q-01-P1`: the month paid and the paid
   invoice's code and count, with the invoice total, earlier payments, this
   payment and the balance due
+- 🚧 **A partial payment's receipt** — one receipt per payment an operator
+  records, `-P1`, `-P2` and on, each carrying the invoice total, payments
+  before it, this payment and the balance still due; every receipt for the
+  invoice lists on the same Receipt PDF row on Winner Order, oldest first
 - ❓ **Formal tax receipt** — whether a receipt must carry Grade10's company
   details and tax ID; Finance confirms
 
@@ -241,8 +255,8 @@ shown before send, and the sent invoice never re-prices.
 - **Progress** — five steps, Address → Invoice → Payment → Shipped →
   Completed, with day-only dates; Cancelled and Refunded show no stepper
 - 🚧 **Sections** — Order Information with Invoice Status, Collection Method,
-  Order Status with a time per step, and Lots; Payment Verifying sits under
-  Payment
+  Order Status with a time per step, and Lots; Payment Verifying and
+  Partially Paid sit under Payment
 
 ## Edge Cases
 
@@ -251,10 +265,17 @@ shown before send, and the sent invoice never re-prices.
 | The 48-hour address deadline | Confirm hidden, Missed address deadline with Contact Us; the status stays | Reopens the form for a fresh 48 hours, records an address given by phone, or cancels after review |
 | The 7-day payment deadline | Pay hidden, the overdue alert with Contact Us; the status stays Pending Payment | Reissues with a fresh 7 days, settles manually, or cancels; the lot returns to stock with no runner-up offer |
 
-- ❓ **Wrong amount by wire** — a transfer short of or over the invoice:
-  several payments against one invoice, a shortfall tolerance, overpayment
-  and refunds are a separate change; until then an operator settles at the
-  invoice's full total or reissues; Product and Finance confirm
+- 🚧 **Partial payment** — an operator records a payment smaller than the
+  balance owed, as many times as it takes; the order reads Partially Paid,
+  the payment deadline stops for good, and card Pay is not offered again.
+  Reissue and Cancel are refused once any payment has been recorded
+- 🚧 **Closing a partial balance** — once payments total 90% or more of the
+  original invoice, every further payment the operator records offers a
+  close: Paid, or kept Partially Paid at the real balance; an exact match to
+  the full amount closes on its own
+- ❓ **Overpaying a partial balance** — whether a payment that would push the
+  total over the original invoice is refused outright, or offered the same
+  close-or-keep-open choice above 100%; Product and Finance confirm
 - **Overdue penalties** — a missed payment deadline suspends the bidder,
   below; ❓ what "penalties or extra charges" in the overdue letters means
   beyond that, Product confirms
@@ -275,6 +296,8 @@ other lots.
 
 - **Told at once** — the notice names what is owed and how to resolve it, and
   My Auctions explains the restriction beside the affected order
+- 🚧 **Suspension on a Partially Paid order shows no amount** — Contact Us
+  covers it instead, once any payment has been recorded against the invoice
 - 🚧 **By an operator** — an operator suspends or reinstates from the
   account's panel on the admin Users page, with a required reason the
   collector never sees; a new cause while suspended is recorded beside the
@@ -343,12 +366,21 @@ a second payment provider, and changes to the bid-time rules.
 | Setup mail | 🚧 In flight | Setup reminders at 24 and 72 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue is generic, names manual review, and never cancels automatically. | Product (@tangconst) |
 | Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. | Product (@tangconst) |
 | Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking. | Product (@tangconst) |
+| Reissue letter | 🚧 In flight | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
+| Delivered content | 🚧 In flight | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
+| Cancelled content | 🚧 In flight | Cancelled time only; the operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
+| Cancelling a paid order | ❓ Open | Whether an operator can cancel an order already paid, and whether the cancelled letter then names a refund; until settled the letter says nothing about payment. | Product (@jeffffej0909) |
 | A separate orders page | Decided | Won lots are followed on My Auction Orders — needs action first, then newest close — and each Won row opens the order. | Product |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
-| Billing address on setup | ❓ Open | The order form offers none, while the letters name one among the setup steps. | Product and design (@tangconst) |
+| Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
 | Reminder clock across changes | ❓ Open | `add-winner-bank-transfer` and `add-winner-setup-overdue-mail` disagree on the invoice-sent letter, the final notice's time and the letter at expiry; one delta supersedes the other before either lands. | Product (@tangconst, @jeffffej0909) |
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
-| Partial payment | ❓ Open | A separate change: several payments against one invoice, a shortfall tolerance, overpayment and refunds. | Product and finance |
+| Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
+| Partially Paid | 🚧 In flight | Its own status, entered the moment an operator records a payment smaller than the balance owed; ends the payment deadline for good rather than pausing it, since self-service Pay is never offered again on that invoice. | Product (@jeffffej0909) |
+| Closing a partial balance | 🚧 In flight | Measured against the original invoice total, cumulative across every payment, not the balance left at that moment: once payments reach 90% of the total, every further payment offers the operator a close, Paid with no separate write-off entry, or kept Partially Paid at the real balance. The prompt returns on each payment while still under 100%, so a `keep open` answer never quietly waives later checks. An exact match closes on its own. | Product and finance |
+| Overpaying a partial balance | ❓ Open | Whether a payment pushing the total past the original invoice is refused outright or offered the same close prompt above 100%. The proposal assumes refused outright pending confirmation; the author settled the underpayment side first. | Product and finance |
+| Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
+| Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
 | One-time address persistence | ❓ Open | Whether an unsaved one-time address survives leaving and returning to the order. | Product (@tangconst) |
 | Bidders ban and suspension | ❓ Open | Whether the auction admin's Bidders ban is this same suspension. | Engineering |

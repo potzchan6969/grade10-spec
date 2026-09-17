@@ -16,7 +16,7 @@ export type PaymentReminderProps = {
   paymentDeadline?: string;
   /**
    * Unpaid-invoice letters while `pending`, measured from invoice send:
-   * - `first` — when the invoice is sent (payment window starts)
+   * - `first` — when the invoice is sent or reissued (payment window starts)
    * - `day3` — day 3 after send
    * - `day6` — day 6 after send
    * - `final` — 24 hours before the payment deadline (not at expiry)

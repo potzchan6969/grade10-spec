@@ -244,7 +244,7 @@ the letters that follow those lots.
 | --- | --- |
 | Watch limit | ❓ A maximum number of watches per collector, bids counted; Design sets the value |
 | Opening warning | **24 hours** before the scheduled start |
-| Closing warnings | **24 hours** and **1 hour** before the scheduled close, which extended bidding never moves |
+| 🚧 Closing warning | **24 hours** before the scheduled close, which extended bidding never moves; the one-hour reminder is retired |
 | Copies | One per lot per collector per letter; a temporary failure retries, and an operator re-queues a given-up letter |
 
 ### My Auctions
@@ -266,6 +266,8 @@ Upcoming and Ended tabs, with the row count in the title.
   Order](/p/grade10-site/auction/post-bidding#winner-order)
 - 🚧 **Payment Verifying** — a won lot whose payment proof is waiting for an
   operator reads so on its row
+- 🚧 **Partially Paid** — a won lot with at least one operator-recorded
+  payment and a balance still owed reads Partially Paid on its row
 - 🚧 **A bid bookmarks the lot** — with no separate Watch, and counts toward
   the watch limit
 - **At the limit** — a further watch is refused and says the limit is reached
@@ -315,7 +317,6 @@ the account's registered address, and the letters about a won lot are
 | Bidding opens in 24 hours | 24 hours before the scheduled start | Watchers |
 | Bidding has opened | When bidding starts | Watchers |
 | Bidding closes in 24 hours | 24 hours before the scheduled close | Watchers and bidders, a bidder who unwatched included |
-| Bidding closes in 1 hour | 1 hour before the close | Watchers |
 | Extended bidding has started | The lot enters extended bidding | Watchers and bidders |
 | New bid on a lot you bid on | A bid is accepted | Every other bidder, once per leading bid they have not been told of |
 | You have been outbid | The leader stops leading | The displaced leader; a raise their own maximum absorbed is not outbid |
@@ -328,6 +329,9 @@ the account's registered address, and the letters about a won lot are
 - **Account master** — Account → Notifications carries an **Auction email
   alerts** switch; off stops all per-lot auction mail without clearing lists
   or bids
+- 🚧 **No one-hour reminder** — the one-hour closing reminder to watchers
+  stops; the last warnings before a close are Bidding closes in 24 hours,
+  then Extended bidding has started if the lot extends
 - **Footer** — every letter says email alerts are on for this lot, and
   **Manage alerts** opens My Auctions to mute that lot; never an
   unauthenticated one-click stop, never unwatch
@@ -431,4 +435,5 @@ surface.
 | Watch limit | ❓ Open | A limit exists so the list stays a considered list; Design sets the value and what the collector sees on reaching it, revisited against watch depth after the first release. | Design |
 | Hold line on the non-winner letter | ❓ Open | Draft omits it; My Auctions keeps hold state. | Product |
 | Send-log retention | ❓ Open | How long rows are kept. | Engineering |
+| One-hour reminder | 🚧 In flight | The one-hour watcher reminder is retired; Bidding closes in 24 hours is the last warning before close, and extended bidding still mails. Replaces the decision that it stays beside the 24-hour letter. | Product (@jeffffej0909) |
 :::

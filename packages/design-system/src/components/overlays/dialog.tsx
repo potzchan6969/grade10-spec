@@ -20,9 +20,11 @@ import { type ComponentProps, useRef } from "react";
  *
  * Base UI's popup already exposes `role="dialog"` and `aria-modal="true"`.
  * `DialogTitle` is the `<h2>` that `aria-labelledby` points at; English titles
- * use Title Case (see `DialogTitle`). Put the primary action last in
- * `DialogFooter` so it receives default focus on open and Enter submits; a
- * destructive confirm uses `Button variant="destructive"`.
+ * use Title Case (see `DialogTitle`). Optional `DialogSubtext` sits under it
+ * in the header. Body prose uses `DialogDescription` inside `DialogBody`. Put
+ * the primary action last in `DialogFooter` so it receives default focus on
+ * open and Enter submits; a destructive confirm uses
+ * `Button variant="destructive"`.
  */
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
@@ -85,7 +87,7 @@ function DialogContent({
         data-slot="dialog-content"
         className={cn(
           // max-h-[640px] is the Figma frame max, not a token.
-          "fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-h-[640px] max-w-(--container-md) -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-hidden rounded-(--radius-4xl) border border-border-subtle bg-popover p-6 text-sm text-popover-foreground shadow-[0_24px_32px_-12px_var(--shadow-color,rgb(118_118_118_/_20%))] outline-none backdrop-blur-xl duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:animate-none motion-reduce:duration-0",
+          "fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-h-[640px] max-w-(--container-lg) -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-hidden rounded-(--radius-4xl) border border-border-subtle bg-popover p-6 text-sm text-popover-foreground shadow-[0_24px_32px_-12px_var(--shadow-color,rgb(118_118_118_/_20%))] outline-none backdrop-blur-xl duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:animate-none motion-reduce:duration-0",
           className,
         )}
         initialFocus={
@@ -110,12 +112,13 @@ function DialogContent({
 }
 
 /**
- * The title row of a dialog, with a close control on the trailing edge.
+ * Title block. Place `DialogTitle` and optional `DialogSubtext` as children.
+ * Title and close share a row (`items-center`); subtext sits under the title
+ * with a 4px gap and does not run under the close control.
  *
- * Figma's Dialog Header (`2159:3156`) has no description — raise one with the
- * designer rather than leaving the set empty. Layout is `Gap/gap-2`, items
- * centered; the title is `text-lg/semibold` (`Base/foreground`) and the close
- * control is `IconButton` outline/sm (the set's defaults) with
+ * Figma's Dialog Header (`2159:3156`) publishes title + close only; subtext is
+ * a code composition slot. The title is `text-lg/semibold` (`Base/foreground`)
+ * and the close control is `IconButton` outline/sm (the set's defaults) with
  * `aria-label="Close dialog"`. It is last in the header tab order; default
  * focus on open still moves to the footer's last button so Enter confirms.
  */
@@ -130,11 +133,16 @@ function DialogHeader({
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex w-full shrink-0 items-center gap-2", className)}
+      className={cn(
+        "grid w-full shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-2 gap-y-1",
+        className,
+      )}
       {...props}
     >
       {children}
-      {showCloseButton ? <DialogCloseIcon /> : null}
+      {showCloseButton ? (
+        <DialogCloseIcon className="col-start-2 row-start-1" />
+      ) : null}
     </div>
   );
 }
@@ -142,14 +150,15 @@ function DialogHeader({
 /**
  * Scroll region between the pinned header and footer. For content taller than
  * the viewport, this owns the overflow — matching the Figma body slot.
- * Overflowing content gets shadcn's scroll-aware top/bottom fade.
+ * Body copy defaults to primary `text-base` (16px). Overflowing content gets
+ * shadcn's scroll-aware top/bottom fade.
  */
 function DialogBody({ className, ...props }: ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-body"
       className={cn(
-        "scroll-fade flex min-h-0 w-full flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto",
+        "scroll-fade flex min-h-0 w-full flex-1 flex-col gap-4 overflow-x-clip overflow-y-auto text-base leading-6 font-normal text-foreground",
         className,
       )}
       {...props}
@@ -195,7 +204,7 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
     <DialogPrimitive.Title
       data-slot="dialog-title"
       className={cn(
-        "min-w-0 flex-1 truncate text-lg leading-7 font-semibold text-foreground",
+        "col-start-1 row-start-1 min-w-0 truncate text-lg leading-7 font-semibold text-foreground",
         className,
       )}
       {...props}
@@ -203,6 +212,28 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   );
 }
 
+/**
+ * Optional supporting line under `DialogTitle` in the header. Muted
+ * `text-sm` (`Base/secondary-foreground`) — not body copy. Prefer this for a
+ * short hint; put longer prose in `DialogBody` via `DialogDescription`.
+ */
+function DialogSubtext({ className, ...props }: ComponentProps<"p">) {
+  return (
+    <p
+      data-slot="dialog-subtext"
+      className={cn(
+        "col-start-1 row-start-2 text-sm leading-5 font-normal text-secondary-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
+
+/**
+ * Body prose for a dialog. Lives in `DialogBody` at primary `text-base`.
+ * Wires `aria-describedby` through Base UI's Description primitive.
+ */
 function DialogDescription({
   className,
   ...props
@@ -211,7 +242,7 @@ function DialogDescription({
     <DialogPrimitive.Description
       data-slot="dialog-description"
       className={cn(
-        "text-sm leading-5 font-normal text-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
+        "text-base leading-6 font-normal text-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
         className,
       )}
       {...props}
@@ -229,6 +260,7 @@ export {
   DialogHeader,
   DialogOverlay,
   DialogPortal,
+  DialogSubtext,
   DialogTitle,
   DialogTrigger,
 };

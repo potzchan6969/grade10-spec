@@ -1,4 +1,4 @@
-## 1. Lot watch toast copy and product record (grade10-spec)
+## 1. Lot watch toast copy and product record (grade10-spec) (owner: @mason5991)
 
 - [ ] 1.1 Answer lot-page watch / unwatch / first-bid alerts toast strings in
       shared `auctionListing` for `en`, `zh-Hant`, `zh-Hans`, and `ko` —
@@ -18,7 +18,7 @@
 - [ ] 1.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `pnpm check:manual`.
 
-## 2. Bid-alerts stamp and placeBid contract (grade10)
+## 2. Bid-alerts stamp and placeBid contract (grade10) (owner: @mason5991)
 
 Needs nothing from group 1. Frontend group 3 needs this landed for the
 announce flag.
@@ -37,7 +37,7 @@ announce flag.
       backend package, `pnpm run test:backend` for the auction worker lane
       that owns these specs.
 
-## 3. Lot-page watch alerts wiring (grade10)
+## 3. Lot-page watch alerts wiring (grade10) (owner: @mason5991)
 
 Needs group 1 for catalogue strings (via submodule bump) and group 2 for
 `announceBidAlerts`.

@@ -14,7 +14,9 @@ export type AuctionEmailCampaign =
   | "payment_reminder"
   | "payment_overdue"
   | "payment_received"
-  | "shipped";
+  | "shipped"
+  | "delivered"
+  | "order_cancelled";
 
 /** Control that produced the click — `utm_content`. */
 export type AuctionEmailLinkContent =

@@ -106,6 +106,7 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | Preparing Invoice | The winner confirmed an address; no invoice yet | Yes |
 | Pending Payment | The invoice is unpaid; an expired one shows Expired beside it | When expired |
 | 🚧 Payment Verifying | The winner uploaded payment proof | Yes, until the proof is checked |
+| 🚧 Partially Paid | An operator has recorded at least one payment and money is still owed | No |
 | Processing | Paid, not dispatched | Yes |
 | Shipped · Delivered | Dispatched; delivery confirmed | No |
 | Cancelled · Refunded | A recorded terminal outcome | No |
@@ -129,10 +130,11 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | Action | On | Grant |
 | --- | --- | --- |
 | Send invoice | Preparing Invoice | Payment processing |
-| Reissue | A sent invoice, pending or expired | Payment processing |
+| 🚧 Reissue | A sent invoice, pending or expired, never Partially Paid | Payment processing |
 | 🚧 Confirm or return proof | Payment Verifying, where these are the only actions | Payment processing |
 | Settle manually | A bank transfer invoice, pending or expired | Payment processing |
-| Cancel order | Awaiting Address, Preparing Invoice, or an expired invoice | Payment processing |
+| 🚧 Record a partial payment | An invoice pending or expired, or already Partially Paid | Payment processing |
+| 🚧 Cancel order | Awaiting Address, Preparing Invoice, or an expired invoice, never Partially Paid | Payment processing |
 | 🚧 Reopen the address form, or record an address | Awaiting Address after the deadline, before send | Payment processing |
 | Dispatch | A paid order | Shipment processing |
 | Confirm delivery | A dispatched order | Shipment processing |
@@ -144,6 +146,10 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   winning bid and the premium, enters Shipping & Handling (zero allowed) and
   optional Insurance (above zero), and sends; the send locks the address and
   starts the 7 days
+- 🚧 **Billing address** — the quote shows it beside the delivery address;
+  the send is refused while the order has none, and the operator adds it
+  with the edit before send. Recording an address by phone asks for billing
+  too, same as delivery by default
 - 🚧 **Payment Processing Fee** — for card, priced by Grade10 from the
   provider's live fees, and the send is refused when they cannot be read; for
   bank transfer, entered by the operator on every invoice, zero or more
@@ -168,6 +174,18 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   method, a reference where required, and 1 to 5 private proof files; settled
   at the invoice's full order total with its fee line kept, and never on a
   card invoice, which is reissued as bank transfer first
+- 🚧 **Recording a partial payment** — the same form as manual settlement, for
+  an amount smaller than the balance owed; the order reads Partially Paid and
+  the operator may record another payment the same way. Once payments total
+  90% or more of the original invoice, every further payment prompts the
+  operator to close the invoice as Paid or keep it Partially Paid at the real
+  balance; an exact match to the full amount closes on its own
+- ❓ **Overpaying a partial balance** — whether a payment pushing the total
+  past the original invoice is refused outright or offered the same close
+  prompt; Product and Finance confirm
+- 🚧 **Partially Paid is final on its numbers** — no reissue and no cancel
+  once a payment is recorded; the operator resolves the rest by hand outside
+  the system
 - 🚧 **Reopening the address form** — after the 48-hour deadline and before
   send, on request and with a reason, giving a fresh 48 hours; repeatable,
   changes no status, never on a cancelled order. Or the operator records an
@@ -273,4 +291,6 @@ settings.
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 | Premium minimum | Decided | Under Auction because auction invoices use it; behind the settlement permission because changing it changes the amount collected. | Product and finance |
 | Overdue and the address deadline | ❓ Open | Whether the Overdue mark should follow the 48-hour address deadline instead of 72 hours idle, so a winner is not blocked for a day before an operator is told. | Product |
+| Partial payment stays operator-only | 🚧 In flight | Recorded the same way as manual settlement, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
+| Partially Paid needs no action | 🚧 In flight | Unlike Payment Verifying, nothing is waiting on the operator by default; they open the order when a new payment arrives. | Product and finance |
 :::
