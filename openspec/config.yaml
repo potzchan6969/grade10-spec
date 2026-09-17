@@ -54,7 +54,7 @@ rules:
     - "Feature set root group names are machine-read anchors. Rename one deliberately and update every `**Serves:**` and `**Trace:**` naming it in the same change. Leaves carry no ids."
     - "The fold carries `## Requirements` only. Archive copies Purpose, the feature set and `user-journeys.md` into the durable capability by hand."
     - "Scenario heading: `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`. The prefix is the capability path with slashes as hyphens, so two capabilities of one name stay apart. Number from 01; an issued id is permanent - a removal retires it, nothing renumbers it, and a renamed or moved capability keeps issuing its first prefix."
-    - "Every scenario carries `**Serves:** <anchor> - <prose>` under its heading and above GIVEN/WHEN/THEN. The anchor is a journey id or a Feature set root group, matched verbatim. Several anchors are written as code spans, because a group name may hold a comma."
+    - "Every scenario carries `**Serves:** <anchor> - <prose>` under its heading and above GIVEN/WHEN/THEN. Three anchors resolve: this capability's journey id, another capability's as `<path>#<journey-id>`, or a Feature set root group matched verbatim - the group only for a rule with no actor, and its prose names the walk rather than the group. Several anchors are written as code spans, because a group name may hold a comma."
     - "Every `###` under a requirements section is a `### Requirement:` - never a group heading: the fold absorbs it into the requirement above, and an ATX `## Group` ends the section and drops every requirement after it."
     - "One requirement for the flow, as numbered steps for whoever uses the surface - not a scenario per step. One requirement per entity with fields, only when this change adds or changes them, and one per entity with states; both as markdown tables. Never restate an unchanged fact."
     - "A scenario is `**WHEN**` / `**THEN**`, both required; add `**GIVEN**` only when state must be in place before the trigger. Keep scenarios to behaviour distinctive to this capability: one that restates a platform default belongs to the capability that sets it - find that yourself."
@@ -69,7 +69,7 @@ rules:
   test-cases:
     - "`docs/governance/specs-to-test-cases.md` governs the shape. Draft with `spec-to-tcs` as a blind pass against the anchors, never from the scenarios. `test-cases.md` is not a suite name."
   ui-design:
-    - "The schema text above and `.claude/skills/planning-design/SKILL.md` carry the rules: link the Figma frame, name exports exactly and flag what does not exist yet, and fix the spec when a state has no scenario."
+    - "The schema text above and `.claude/skills/planning-design/SKILL.md` carry the rules: link the Figma frame, name exports exactly, flag what does not exist yet, and write `## States` one state per bullet for the requirements' second pass to close."
   tech-design:
     - "The schema instruction above holds the section rules; `pnpm check:manual` refuses a change that owes this file and carries neither it nor `design_waived: <why>` in `.openspec.yaml`."
   tasks:

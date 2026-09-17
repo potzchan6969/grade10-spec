@@ -133,7 +133,17 @@ what they ask, and record their words untidied — generation copies what they a
 
 ## Closing a feature review
 
-Before the file goes `approved`, do two things to its `## Reconciliation`.
+Before the file goes `approved`, do three things.
+
+**Check the raised rows landed.** They are in the change's `decisions.md`,
+under `## Raised`, one row per question the blind pass could not settle, each
+owing a landing — a `Decisions` row in that file, or a ❓ on the capability's
+PRD. A row with an empty landing is the pass's finding about to be lost, and it
+is the reviewer's to chase before the suite is signed off. Where the change is
+already archived, read the table there and check the landings it names still
+stand.
+
+Then do two things to the file's `## Reconciliation`.
 
 **Walk the rejected rows with the reviewer.** Dropping a blind-pass finding as a
 misreading is the cheapest way to finish a planning run, and a wrong rejection

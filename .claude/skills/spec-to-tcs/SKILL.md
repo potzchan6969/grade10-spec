@@ -27,7 +27,10 @@ rulebook, assembled by the caller, and nothing outside it:
 
 - **Included** - `## Purpose` and `## Feature set` from the capability's
   `spec.md`, its `user-journeys.md`, the change's `proposal.md`,
-  `decisions.md` and `ui-design.md` where they exist - the decisions say what
+  `decisions.md` - its `## Raised` table included, which says what earlier runs
+  asked and what came of it - and `ui-design.md` where they exist, with the
+  dispositions the requirements pass wrote onto its state bullets stripped. The
+  decisions say what
   the change is for and what it rules out, the design lands before the
   requirements and ties its states to anchors, and neither holds a requirement,
   so neither carries a leak - the linked pages under `docs/prds/`,
@@ -263,10 +266,17 @@ and are unchanged.
 
 ## End with what you had to decide
 
-The suite closes with a `## Raised` section: every point the isolated input did
-not settle, written as a question for the author. It is the most valuable
-thing the run produces: the cases are the part a derived reading could also
-have written, and this is the part it could not.
+Every point the isolated input did not settle, written as a question for the
+author. It is the most valuable thing the run produces: the cases are the part
+a derived reading could also have written, and this is the part it could not.
+
+**It does not close this file.** It goes to the change's `decisions.md`, under
+`## Raised` — `Capability | Raised | Landed` — one row per question, naming the
+capability whose pass asked. Leave `Landed` empty; the author fills it, and
+`pnpm check:manual` refuses a row that is still empty when the change merges.
+That is the file the author already reads, and the deadline the list never had
+at the bottom of a suite. Write the suite no `## Raised` of its own:
+`pnpm run tcs:validate` refuses one there.
 
 A question belongs there when the input is *silent*, not when you missed
 something it says and not when you would simply like to know more. "Is a
@@ -274,8 +284,15 @@ scheduled lot open to bid on? The rule names not-yet-published, ended and called
 off as failures and never places scheduled on either side" is the shape: a state
 the material walked past, which you cannot write a case without choosing.
 
-The section is required and may be empty. Empty is a claim on the record that
+Write no scenario id in a row: `decisions.md` goes into the next blind pass's
+isolated input whole.
+
+The table is required and may be empty. Empty is a claim on the record that
 the input settled everything; make it only when it is true.
+
+Where the change carries no `decisions.md` — it predates the artifact — say so
+in the report and hand the questions to the caller, who takes them to the
+author. Never write them into the suite instead.
 
 ## What happens to this suite next
 
