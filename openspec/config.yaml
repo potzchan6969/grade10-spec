@@ -45,7 +45,7 @@ context: |
 rules:
   proposal:
     - "Start with `**Author:** @handle - YYYY-MM-DD` above `## Why`. Ask for the handle. It names the creator and never changes; task-group owners in tasks.md are separate."
-    - "Interview the author first with the `grilling` skill (`.claude/skills/grilling/SKILL.md`), as `.claude/skills/planning-pm/SKILL.md` says: find repository facts yourself, bring only decisions, and draft once the frontier is empty. A deferred question goes under the proposal's open questions with who settles it."
+    - "Interview the author first with the `grilling` skill (`.claude/skills/grilling/SKILL.md`), as `.claude/skills/planning-pm/SKILL.md` says: find repository facts yourself, bring only decisions, challenge each answer before recording it, and draft once the frontier is empty. A deferred question goes under the proposal's open questions with who settles it."
     - "Include a metric that would move if this change works."
     - "Mark the PRDs the change touches before the deltas. A change carrying a 🚧 line cannot also claim `skip_specs`, and `skip_specs: true` owes a `skip_specs_why` beside it."
   specs:
