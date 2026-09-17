@@ -182,6 +182,11 @@ Everything this run produces is `draft`. Nothing in it claims review;
    - Do not split a requirement. A block carrying three subjects wants
      splitting, but splitting moves scenarios: raise it with the PM rather
      than do it here.
+   - Lay out ADDED blocks only. A MODIFIED block is diffed line by line
+     against the durable requirement it replaces, and a relaid one shows
+     every line as changed; it takes the shape when the durable spec does.
+   - A block of one or two short sentences already reads in one pass.
+     Leave it.
 
    Ten SHALL sentences in one paragraph is what this step exists for: an
    engineer reading for one rule should find it without reading the nine
