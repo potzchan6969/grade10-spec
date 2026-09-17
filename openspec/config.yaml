@@ -69,7 +69,7 @@ rules:
   test-cases:
     - "`docs/governance/specs-to-test-cases.md` governs the shape. Draft with `spec-to-tcs` as a blind pass against the anchors, never from the scenarios. `test-cases.md` is not a suite name."
   ui-design:
-    - "The schema text above and `.claude/skills/planning-design/SKILL.md` carry the rules: link the Figma frame, name exports exactly, flag what does not exist yet, and write `## States` one state per bullet for the requirements' second pass to close."
+    - "Schema + `planning-design`: Figma link, exact exports, flag missing work, `## States` as one State / Shows / Anchor row per state for the requirements pass to close."
   tech-design:
     - "The schema instruction above holds the section rules; `pnpm check:manual` refuses a change that owes this file and carries neither it nor `design_waived: <why>` in `.openspec.yaml`."
   tasks:

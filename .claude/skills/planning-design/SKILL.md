@@ -153,21 +153,22 @@ not something absorbed into a Code Connect template — read
 
 ## States
 
-Loading, empty, error and edge states per screen, **one state per bullet**, and
-**each tied to the anchor it
-dresses** — a journey id from `user-journeys.md`, or a `## Feature set` root
-group the durable capability already issues. A state with no anchor behind it
-means the journeys are missing one — say so to whoever wrote them, and do not
-invent the journey yourself.
+Loading, empty, error and edge states per screen, as a **markdown table** under
+one `###` per screen — columns **State**, **Shows**, **Anchor**, **one state
+per row**. State is the short name; Shows is what is on screen (controls, copy,
+what is hidden); Anchor is the journey id from `user-journeys.md`, or a
+`## Feature set` root group the durable capability already issues. A state with
+no anchor behind it means the journeys are missing one — say so to whoever wrote
+them, and do not invent the journey yourself.
 
-**One per bullet is what makes the list countable.** The requirements' second
-pass walks it and closes every bullet — the scenario it became, or an
-`**Out of suite:**` naming where the state is stated instead — and
-`pnpm check:manual` names one it left open. A bullet holding three states can
+**One per row is what makes the table countable.** The requirements' second
+pass walks it and closes every row — replacing Anchor with the scenario it
+became, or an `**Out of suite:**` naming where the state is stated instead —
+and `pnpm check:manual` names one it left open. A cell holding three states can
 be closed by one scenario and look complete, which is the shape that let empty
 and error treatments arrive as reconciliation findings run after run.
 
-The dispositions are written onto your bullets, by the hand that writes the
+The dispositions are written onto your rows, by the hand that writes the
 requirements. Leave them alone; they are not yours to fill in ahead of the pass,
 and a state you argue with is a conversation with that hand rather than an edit.
 
@@ -182,6 +183,9 @@ A prefix is read, never reconstructed: most capabilities issue
 and keep it, so shortening one to match its neighbour names nothing. Outside
 backticks nothing reads the citation, so a renumber leaves the row pointing at
 a journey nobody issues any more and no check says so.
+
+Do not flatten a screen into a semicolon-joined bullet list. One named state,
+what shows, one anchor — dense prose in a single cell is the failure mode.
 
 ## Finish
 
