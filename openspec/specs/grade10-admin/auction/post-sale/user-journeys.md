@@ -1,4 +1,4 @@
-## Context user journeys
+## User journeys
 
 ### post-sale-US-01: Operator works the listing queue by outcome
 
@@ -12,8 +12,6 @@
 **I want** every invoice and fulfilment log entry on the order, including the
 payments that failed,
 **so that** I can tell a buyer who tried and could not from one who never engaged.
-
-## User journeys
 
 ### post-sale-US-07: Operator resolves an unpaid order
 
