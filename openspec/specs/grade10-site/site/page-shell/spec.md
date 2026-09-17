@@ -30,13 +30,17 @@ it.
   - Controls with surfaces behind them: search and cart stay absent until the
     site answers them
   - Reachable links only: a navigation, utility, footer, or legal link appears
-    only when its destination exists
+    only when its destination exists, except primary-nav Help may name the
+    documentation host Product names
   - Current-surface marking: the navigation item owning the current address is
     marked, and none is when no item owns it
+- Collector help
+  - Header Help: primary nav lists Help after Store Locator when that item is
+    present, and after Auction on auction-only nav; Help opens the
+    documentation site in a new tab
 - Small-width resilience
   - No horizontal overflow: the shell reflows at 375 CSS pixels with every
     control still reachable
-
 ## Requirements
 ### Requirement: Every surface renders inside the shell
 
@@ -131,15 +135,22 @@ SHALL NOT appear until the site answers them.
 
 ### Requirement: A link is present only when the site answers it
 
-The site SHALL show a navigation, utility, footer, or legal link only when its
-destination is an address the site answers. A destination that does not exist
+The site SHALL show a navigation, footer, or legal link only when its
+destination is an address the site answers, except primary-nav Help which MAY
+name the documentation host Product names. A destination that does not exist
 yet SHALL be omitted rather than linked to a not-found page.
+
+Utility links SHALL follow the same rule for destinations on this site. An
+unanswered site utility destination SHALL stay omitted. The promotional bar
+SHALL wait for a page the site answers.
 
 #### Scenario: grade10-site-site-page-shell-SC-10 - Navigation lists real surfaces
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
 - **WHEN** the header renders
-- **THEN** every navigation item leads to a surface the site answers
+- **THEN** every navigation item other than Help leads to a surface the site
+  answers
+- **AND** Help, when present, leads to the documentation host Product names
 
 #### Scenario: grade10-site-site-page-shell-SC-11 - The footer drops what it cannot reach
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
@@ -151,7 +162,7 @@ yet SHALL be omitted rather than linked to a not-found page.
 #### Scenario: grade10-site-site-page-shell-SC-12 - The promo bar and utility row wait for their pages
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
-- **WHEN** the header renders and the site answers none of the utility
+- **WHEN** the header renders and the site answers none of its on-site utility
   destinations
 - **THEN** neither the promotional bar nor the utility row appears
 
@@ -187,4 +198,45 @@ be clipped, and every control SHALL remain reachable.
 - **WHEN** any surface renders
 - **THEN** the page scrolls vertically only, with no content clipped and no
   control unreachable
+
+### Requirement: Help opens the documentation site from the header
+
+Help sits in the primary navigation and opens the documentation site in a new
+tab.
+
+**Header Help** - The site SHALL list Help in the primary navigation on a wide
+viewport, and in the compact menu drawer on a narrow viewport, whenever the
+primary navigation is auction-only or includes Store and other answered
+surfaces.
+
+**Its place** - When Store Locator is present in the primary navigation, Help
+SHALL follow it; on auction-only primary navigation, Help SHALL follow Auction.
+
+**Presentation** - Help SHALL use the same primary-nav link presentation as
+other primary items.
+
+**New tab** - Activating Help SHALL open the documentation site Product names
+in a new browsing context. The current site surface SHALL remain open.
+
+**Isolated from the opener** - Help SHALL use the shared chrome's external link
+behaviour so the new tab is isolated from the opener.
+
+#### Scenario: grade10-site-site-page-shell-SC-25 - Help on auction-only and full nav
+**Serves:** grade10-site-site-page-shell-US-07 - Collector opens Help from the header
+
+- **GIVEN** a wide viewport and a header whose primary nav is auction-only, or
+  one that also lists Store and other answered surfaces
+- **WHEN** the header renders
+- **THEN** Help appears in the primary navigation after Auction on auction-only
+  nav, or after Store Locator when that item is present
+- **AND** activating it opens the documentation site in a new browsing context
+
+#### Scenario: grade10-site-site-page-shell-SC-26 - Help in the compact menu
+**Serves:** grade10-site-site-page-shell-US-07 - Collector opens Help from the header
+
+- **GIVEN** a viewport 375 CSS pixels wide with Help supplied in primary nav
+- **WHEN** the collector opens the header menu
+- **THEN** Help is reachable in the drawer among the primary items after Auction
+  on auction-only nav, or after Store Locator when that item is present
+- **AND** activating it opens the documentation site in a new browsing context
 

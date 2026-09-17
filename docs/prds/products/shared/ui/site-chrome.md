@@ -33,7 +33,7 @@ drawer when it is answered.
 
 ## External Links
 
-🚧 **External links** — a `NavLink` marked `external` opens in a new tab with
+A `NavLink` marked `external` opens in a new tab with
 `rel="noopener noreferrer"`, in primary nav (wide and compact) and in the
 utility strip / compact utility list.
 

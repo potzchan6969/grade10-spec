@@ -38,10 +38,9 @@ chrome, including on auction-first launch.
 
 ## Help
 
-🚧 **Help** — primary nav lists Help for auction-only and full nav (wide bar
-and compact menu). When Store Locator is in the chrome, Help follows it; on
-auction-first, Help follows Auction. It opens the documentation site in a new
-tab.
+Primary nav lists Help for auction-only and full nav (wide bar and compact
+menu). When Store Locator is in the chrome, Help follows it; on auction-first,
+Help follows Auction. It opens the documentation site in a new tab.
 
 🚧 **Compact menu** — below a 896px-wide container, the leading menu opens a left
 inset drawer for primary navigation and utilities; language opens a nested
