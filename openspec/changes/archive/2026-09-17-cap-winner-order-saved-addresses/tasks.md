@@ -64,9 +64,9 @@ the work.
   reason rather than a generic error (`winner-order-SC-73`)
 - [ ] 3.5 Verify: `pnpm run typecheck && pnpm run test`
 
-## 4. Product manual (grade10-spec)
+## 4. Product manual (grade10-spec) (owner: @htonyl)
 
-- [ ] 4.1 Clear the 🚧 mark on **Saved addresses** in
+- [x] 4.1 Clear the 🚧 mark on **Saved addresses** in
   `docs/prds/products/grade10-site/auction/winner-order.md` once deployed;
   leave the ❓ **One-time address persistence** row open for whoever plans
   the shared Dialog assembly. Verify: `pnpm check:manual`

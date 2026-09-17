@@ -6,8 +6,14 @@ icon: gavel
 Grade10 Auction sells graded cards one lot at a time. A collector signs in,
 finds a lot, bids by naming the most they will pay, and after the close pays
 the invoice and receives the card. This page is the map, in the order a
-collector meets each part; each line names the page or the section that holds
-the rules, the values and the open questions.
+collector meets each part; each line names what holds the rules and the
+open questions.
+
+## Where It Is Open
+
+🚧 **Not open to the public yet** — the auction's pages are carried in
+development and staging, on no lane the public reaches. It is the first of the
+four products to open — [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 
 ## Account
 
@@ -25,8 +31,7 @@ the rules, the values and the open questions.
   read in — [Auction Listing](/p/grade10-site/auction/auction-listing)
   - **Listing schema** — which facts a listing carries, from the operator's
     catalogue fields to the card — [Auction Listing · The
-    Card](/p/grade10-site/auction/auction-listing#the-card) and [Listing
-    Management](/p/grade10-admin/auction/listing)
+    Card](/p/grade10-site/auction/auction-listing#the-card)
 - **Auction details** — a lot's own page and address, and what it answers
   before scripts run — [Auction Details](/p/grade10-site/auction/listing-page)
   - **Media gallery** — one to eight images and videos, their sizes and alt
@@ -36,9 +41,8 @@ the rules, the values and the open questions.
   - **Blocks** — the gallery, bid panel and details blocks both brands
     render — [Listing Page Blocks](/p/shared/ui/auction-listing)
 - **Admin panel** — drafting, pricing, scheduling, publishing and calling off
-  a lot, and the cover a set sells under — [Listing
-  Management](/p/grade10-admin/auction/listing) and
-  [Campaigns](/p/grade10-admin/auction/campaign)
+  a lot — [Listing Management](/p/grade10-admin/auction/listing) — and the
+  cover a set sells under — [Campaigns](/p/grade10-admin/auction/campaign)
 
 ## Bidding
 

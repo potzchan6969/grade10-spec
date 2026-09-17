@@ -19,9 +19,10 @@ import { type ComponentProps, useRef } from "react";
  * when the user prefers reduced motion.
  *
  * Base UI's popup already exposes `role="dialog"` and `aria-modal="true"`.
- * `DialogTitle` is the `<h2>` that `aria-labelledby` points at. Put the
- * primary action last in `DialogFooter` so it receives default focus on open
- * and Enter submits; a destructive confirm uses `Button variant="destructive"`.
+ * `DialogTitle` is the `<h2>` that `aria-labelledby` points at; English titles
+ * use Title Case (see `DialogTitle`). Put the primary action last in
+ * `DialogFooter` so it receives default focus on open and Enter submits; a
+ * destructive confirm uses `Button variant="destructive"`.
  */
 function Dialog({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
@@ -183,6 +184,12 @@ function DialogFooter({
   );
 }
 
+/**
+ * Dialog heading. English titles use Title Case — not a sentence — with short
+ * prepositions such as `to` lower when they are not the first word
+ * (`Sign In to Add to Cart`). See English copy in
+ * `docs/governance/ui-component-contracts.md`.
+ */
 function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   return (
     <DialogPrimitive.Title

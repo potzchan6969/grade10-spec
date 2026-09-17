@@ -15,7 +15,7 @@ shipment and the delivery evidence for that lot, together.
 | Order setup | **48 hours** from the lot's actual close, extended bidding included, to confirm a delivery address |
 | Payment | **7 calendar days** from when Grade10 sends the invoice, never from lot close; nothing the winner does moves it |
 | Buyer's premium | **20%** of the winning bid, rounded half up, or the currency's minimum charge when higher — **0** in USD, HKD and JPY |
-| Saved addresses | 🚧 **5** named addresses per account |
+| Saved addresses | **5** named addresses per account |
 | Payment proof | 🚧 **1 to 5** PDF, JPEG or PNG files of up to **10 MB** each, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
@@ -45,7 +45,7 @@ The proof is recorded and the order reads Delivered.
   pre-filled but still confirmed. The order keeps a snapshot, so editing the
   book later changes nothing here, and an unpaid order's address cannot be
   archived
-- 🚧 **Saved addresses** — at the cap, Add new address still confirms a
+- **Saved addresses** — at the cap, Add new address still confirms a
   one-time address for this order, offered ahead of the saved ones; Save this
   address for future orders waits until one is removed — [Delivery
   Addresses](/p/grade10-site/account/addresses)

@@ -40,6 +40,12 @@ made.
 | [Operator Console](/p/grade10-site/vault/operator-console) | The queue and its views, one case's tabs, grants, the physical vault |
 | [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness) | Identity, retention, evidence, the checklist before the first production case, what counsel supplies |
 
+## Where It Is Open
+
+🚧 **Not open to the public yet** — the vault's pages are carried in
+development and staging, and on no lane the public reaches —
+[Carried Surfaces](/p/grade10-site/site/carried-surfaces)
+
 ## Users
 
 - **Collectors** — open a request, photograph the item, book the visit,

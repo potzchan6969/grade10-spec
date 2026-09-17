@@ -44,8 +44,6 @@ from their watched list without searching.
   it.
 - **Watching defaults email alerts on.** Unwatching removes the listing from
   Watching and turns email alerts off for that listing.
-- **Watching is available on both brands.** It is a property of the shared
-  auction, so a ZZZ collector watching a listing watches the same listing.
 
 ## Non-Goals
 
@@ -63,6 +61,10 @@ from their watched list without searching.
   account on sign-in.
 - **Sorting, filtering, or searching the watched list** beyond most-recent
   first.
+- **ZZZ auction surfaces.** Watch and unwatch on ZZZ, and ZZZ's watched list,
+  are [`add-zzz-auction-watchlist`](../add-zzz-auction-watchlist/proposal.md).
+  This change ships Grade10 only. The shared auction still accepts a watch
+  from either brand's collector once that brand's surface exists.
 
 ## Capabilities
 
@@ -87,8 +89,7 @@ shared UI contract does not change; see Impact.
 | `@grade10/auction-contracts` | Gains watch and unwatch actions, the viewer's watching state on authenticated listing facts, and a watched-listings read. Additive; nothing breaks. |
 | `apps/frontend/grade10` | Fills `ListingLotHeader`'s existing watch control and `watched` / `onWatchToggle`; adds a watch control to the catalogue tile and a watched-listings surface. |
 | `@grade10/ui` | **No export change.** `ListingLotHeader` already has watch and unwatch. The catalogue tile's control is application-owned until a second consumer needs it. |
-| `apps/frontend/zzz` | Same, on the ZZZ auction surface. |
-| `@grade10/i18n` | Watch, unwatch, and watched-list copy for every locale the sites answer. |
+| `@grade10/i18n` | Watch, unwatch, and watched-list copy for every locale Grade10 answers. |
 
 **Ordering.** `add-auction-notifications` depends on this change; progress
 mail needs a watch with email alerts on (or a bid with alerts on). Independent
@@ -98,3 +99,8 @@ of `add-auction-auto-bidding`.
 store heart because no surface answered it. That reasoning is respected here:
 this control is built with its surface and its persistence in the same change,
 and the store heart stays removed.
+
+## Follow-on changes
+
+- A ZZZ collector watches and returns to a listing the same way a Grade10
+  collector does — [`add-zzz-auction-watchlist`](../add-zzz-auction-watchlist/proposal.md).

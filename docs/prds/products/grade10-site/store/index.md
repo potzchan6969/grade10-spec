@@ -8,7 +8,7 @@ The Grade10 store is the trading-card and collectibles shop at
 
 ## Where It Is Open
 
-🚧 **Not open to the public yet** — the store's pages are carried in
+**Not open to the public yet** — the store's pages are carried in
 development and staging, and on no lane the public reaches —
 [Carried Surfaces](/p/grade10-site/site/carried-surfaces)
 

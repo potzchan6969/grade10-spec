@@ -2,6 +2,7 @@
 title: Bidding Notifications
 spec: grade10-site/auction/notifications
 order: 29
+reviewed: 2026-09-17
 ---
 
 Grade10 tells enrolled collectors when a lot needs them, because the close is
@@ -24,7 +25,9 @@ order belong to [Order Notifications](/p/grade10-site/auction/notifications-orde
 ## Enrolment
 
 Enrolment is watching or bidding **and** email alerts on for that lot; the
-words are [Watchlist](/p/grade10-site/auction/watchlist)'s.
+words are [Watchlist](/p/grade10-site/auction/watchlist)'s. Unwatch ends the
+watch and turns alerts off with it; mute turns alerts off and leaves the watch
+or the bid intact.
 
 - **Watching** with alerts on brings the progress messages
 - **Bidding** with alerts on brings bid-activity mail plus the closing and
@@ -46,8 +49,8 @@ words are [Watchlist](/p/grade10-site/auction/watchlist)'s.
 | Extended bidding has started | The lot enters extended bidding | Watchers and bidders with alerts on |
 | New bid on a lot you bid on | A bid is accepted | Every other bidder with alerts on |
 | You have been outbid | The leader stops leading | The displaced leader with alerts on |
-| 🚧 You did not win | The lot stops taking bids | Bidders who lost, with alerts on |
-| 🚧 The lot has ended | The lot stops taking bids | Watch-only collectors with alerts on |
+| You did not win | The lot stops taking bids | Bidders who lost, with alerts on |
+| The lot has ended | The lot stops taking bids | Watch-only collectors with alerts on |
 
 - **Outbid is losing the lead** — a competing maximum that raises the current
   bid while their own maximum still holds is not outbid; Grade10 keeps
@@ -63,15 +66,16 @@ words are [Watchlist](/p/grade10-site/auction/watchlist)'s.
 When a lot stops taking bids, enrolled collectors who did not win hear once
 that it closed — same alerts-on enrolment as progress mail.
 
-- 🚧 **Non-winner** — a bidder who lost to someone else gets a letter that the
+- **Non-winner** — a bidder who lost to someone else gets a letter that the
   lot closed and they did not win, with Winning bid and Their bid when those
   amounts are supplied
-- 🚧 **Watcher, sold** — a watch-only collector with alerts on gets a letter
+- **Watcher, sold** — a watch-only collector with alerts on gets a letter
   that the lot has ended, with Sold for when a winning bid is supplied
-- 🚧 **No bids at close** — watchers with alerts on get **Ended** only; the
+- **No bids at close** — watchers with alerts on get **Ended** only; the
   letter never says unsold, did not sell, no sale or no bids, and never shows
-  Highest bid. There is no bidder letter when nobody bid
-- 🚧 **One letter** — a watcher who also bid gets the non-winner letter, not
+  Highest bid. At close this means nobody bid, not a later winner default.
+  There is no bidder letter when nobody bid
+- **One letter** — a watcher who also bid gets the non-winner letter, not
   also the watcher letter; the winner gets only the auction-won order letter
 - ❓ **Hold line on the non-winner letter** — whether the body also says the
   card hold is being released; My Auctions already carries hold state

@@ -156,6 +156,7 @@ function ListingUserBidHistory({
                 </TabsList>
                 <TabsContent
                   className="flex min-h-0 flex-1 flex-col overflow-hidden data-[hidden]:hidden"
+                  keepMounted
                   value="bids"
                 >
                   {bidRows.length === 0 ? (
@@ -198,6 +199,7 @@ function ListingUserBidHistory({
                 </TabsContent>
                 <TabsContent
                   className="flex min-h-0 flex-1 flex-col overflow-hidden data-[hidden]:hidden"
+                  keepMounted
                   value="maximums"
                 >
                   <Table className="flex min-h-0 flex-1 flex-col overflow-hidden">

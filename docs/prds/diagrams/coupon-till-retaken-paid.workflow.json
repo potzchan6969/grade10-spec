@@ -15,11 +15,7 @@
     { "id": "earlier", "label": "Earlier sale" },
     { "id": "newer", "label": "Newer sale" }
   ],
-  "mainPath": [
-    "earlier-applies",
-    "newer-applies",
-    "newer-pays"
-  ],
+  "mainPath": ["earlier-applies", "newer-applies", "newer-pays"],
   "nodes": [
     {
       "id": "earlier-applies",
