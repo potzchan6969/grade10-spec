@@ -20,7 +20,7 @@ rate is disclosed earlier on the bid panel.
 - Premium minimum
   - Currency minimum: the current Auction Payment settings mapping sets the lower bound for the calculated premium
 - Delivery address
-  - Account-wide address book: the platform keeps multiple named shipping addresses and one optional default for the account
+  - Account-wide address book: the platform keeps at most five named shipping addresses and one optional default for the account
   - Selection and confirmation: a winner chooses a saved address or adds one, then affirms it before payment
   - Amendment and recalculation: a winner corrects the destination and sees what it costs before paying
   - Locking at payment: the order snapshot stops moving once money has changed hands

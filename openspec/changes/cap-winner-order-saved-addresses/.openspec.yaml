@@ -1,3 +1,5 @@
 schema: grade10-planning
 created: 2026-09-16
 promoted_by: htonyl
+deploy_waived: "Tony Liang explicitly requested archiving without deployment evidence after PR #507 merged."
+tasks_waived: "Tony Liang explicitly requested archiving without verification evidence; tasks 1.5 and 3.5 were attempted but remain red on unrelated baseline failures."
