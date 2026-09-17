@@ -22,6 +22,9 @@ records shipment: the order does.
   private to its owner, and outliving the close while the listing stays
   published; unwatching can be undone at once —
   [Watchlist](/p/grade10-site/auction/watchlist)
+- 🚧 **From the lot page** — watching announces email alerts on with View My
+  Auctions; unwatching announces with Undo —
+  [Auction Details · Watching](/p/grade10-site/auction/listing-page#watching)
 - 🚧 **A bid bookmarks the lot** — with no separate Watch, and announces once
   per lot that email alerts are on
 - **At the limit** — a further watch is refused, records nothing, and says
