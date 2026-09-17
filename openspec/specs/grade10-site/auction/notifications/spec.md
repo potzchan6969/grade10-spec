@@ -12,6 +12,8 @@ separate preference — see `grade10-site/auction/watchlist`.
 - Enrolment
   - Watch or bid with alerts on: either relationship enrols mail when
     email alerts are on for that listing
+  - Close-outcome mail: enrolled watchers and non-winners hear when the lot
+    stops taking bids; the winner does not get these letters
   - One copy: a collector who both watches and bids still gets one message
   - Mute ends mail: turning email alerts off stops mail without unwatching
     or ending the bid; unwatch also turns alerts off
@@ -25,6 +27,12 @@ separate preference — see `grade10-site/auction/watchlist`.
 - Bid-activity messages
   - New bid: other enrolled bidders hear about an accepted bid
   - Outbid: the collector who just lost the lead hears that, not also the new-bid
+- Close-outcome messages
+  - Lot closed, did not win: enrolled bidder when someone else won
+  - Lot ended, watched: enrolled watch-only collector when the lot closes —
+    Sold for when a winning bid is supplied; Ended-only when the lot closed
+    with no bids (never a non-sale or Highest bid disclosure; not a bidder
+    letter)
 - Delivery
   - Registered email: every message goes to the account email
   - Shared letter: subject, preheader, heading, body, lot block (one primary image when available), listing action, footer; brand mark opens the storefront home; outbound links carry campaign tags
@@ -50,8 +58,8 @@ A collector SHALL:
 
 | Relationship | How it starts | Mail it can receive (alerts on) | How mail stops |
 | --- | --- | --- | --- |
-| Watcher | The collector watches the listing | The four progress messages | Mute email alerts, unwatch, or account master off |
-| Bidder | The collector has a committed bid on the listing | Closing warning, extended bidding, new-bid, outbid | Mute email alerts or account master off; not by unwatch alone |
+| Watcher | The collector watches the listing | The four progress messages; close-outcome when they did not bid and did not win | Mute email alerts, unwatch, or account master off |
+| Bidder | The collector has a committed bid on the listing | Closing warning, extended bidding, new-bid, outbid; close-outcome when they did not win | Mute email alerts or account master off; not by unwatch alone |
 
 Watching a listing SHALL default email alerts **on** for that listing.
 Bidding on a listing SHALL enrol the bidder in that listing's
@@ -308,7 +316,7 @@ campaign tags as query parameters:
 - `utm_medium` = `auction_notification`
 - `utm_campaign` = the letter kind (`bidding_opens_in_24h`,
   `bidding_has_opened`, `bidding_closes_in_24h`, `extended_bidding`,
-  `new_bid`, or `outbid`)
+  `new_bid`, `outbid`, `lot_closed_didnt_win`, or `lot_ended_watched`)
 - `utm_content` = the control (`logo`, `cta`, `lot_image`, `lot_title`, or
   `manage_alerts`)
 
@@ -373,9 +381,9 @@ the collector to the account-wide Auction email alerts master as the primary
 mute for this letter. Muting SHALL NOT remove a watch and SHALL NOT end a
 bid.
 
-The control SHALL be offered on progress letters and on bid-activity
-letters (outbid and new-bid) whenever the recipient has email alerts on
-for that listing.
+The control SHALL be offered on progress letters, on bid-activity
+letters (outbid and new-bid), and on close-outcome letters whenever the
+recipient has email alerts on for that listing.
 
 #### Scenario: grade10-site-auction-notifications-SC-19 - A start letter can be stopped
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
@@ -464,7 +472,7 @@ or any other rendered content.
 
 | Field | Meaning |
 | --- | --- |
-| Type | Which of the six messages |
+| Type | Which message kind was sent |
 | Sent to | The registered account email at send time |
 | Sent At | When Grade10 sent it |
 | Listing | Which lot |
@@ -515,3 +523,124 @@ be recalled; only messages not yet sent are suppressed.
 - **WHEN** an operator calls it off
 - **AND** the 24-hours-before point arrives
 - **THEN** Grade10 does not send the closing-in-24-hours message
+
+### Requirement: Grade10 sends close-outcome messages when a lot stops taking bids
+
+Grade10 SHALL send each close-outcome message once per listing per collector
+to everyone enrolled for it when the listing stops taking bids, while email
+alerts are on for that listing and the account-level auction email alerts
+control is on.
+
+| Message | When | Recipients | Campaign |
+| --- | --- | --- | --- |
+| This lot closed — you did not win | The lot closes with a winner who is not this collector | Enrolled bidders other than the winner | `lot_closed_didnt_win` |
+| This lot has ended (watched) | The lot closes | Enrolled watchers who did not bid on it and are not the winner | `lot_ended_watched` |
+
+A collector who both watches and bids SHALL receive the bidder close-outcome
+letter for that close and SHALL NOT also receive the watched letter. The
+winner of the lot SHALL NOT receive any close-outcome letter from this
+capability; winning mail is `grade10-site/auction/notifications-order`.
+
+When the lot closes with a winner, the non-winner letter SHALL name the
+winning bid and the recipient's own bid amount when those amounts are
+supplied. The watched letter SHALL name the winning bid as **Sold for** when
+that amount is supplied.
+
+When the lot closes with **no bids**, enrolled watchers with alerts on SHALL
+receive the watched ended letter (campaign `lot_ended_watched`) with no
+winning amount. That letter SHALL state that the lot has **ended** (or that
+bidding has ended or closed). At close-email time, no bids means nobody won —
+not a later winner default after a win. Grade10 SHALL NOT send a bidder
+close-outcome letter for a no-bids close: nobody bid. Grade10 SHALL NOT send
+campaign `lot_ended`. A collector SHALL receive at most one close-outcome
+letter for that close. The watched letter SHALL NOT carry a **Sold for**,
+**Winning bid**, or **Highest bid** highlight.
+
+Subject, preheader and body of a no-bids close-outcome letter SHALL NOT use
+the words or phrases **unsold**, **did not sell**, **didn't sell**, **no
+sale**, or **no bids**.
+
+Each message SHALL carry the listing's identity and the close time it
+concerns. Money and times SHALL follow `money-amounts` and `dates-and-times`.
+Close-outcome letters SHALL use the shared letter shape and mute control this
+capability already defines.
+
+#### Scenario: grade10-site-auction-notifications-SC-37 - A losing bidder is told the lot closed
+**Serves:** grade10-site-auction-notifications-US-06 - Collector who lost hears the lot closed
+
+- **GIVEN** a collector who bid on a lot with email alerts on
+- **AND** another collector is the winner
+- **WHEN** the lot closes
+- **THEN** Grade10 sends the losing bidder the did-not-win letter (campaign
+  `lot_closed_didnt_win`)
+- **AND** when the winning bid and their bid amounts are supplied, the letter
+  names both
+
+#### Scenario: grade10-site-auction-notifications-SC-38 - A watch-only collector is told a sold lot ended
+**Serves:** grade10-site-auction-notifications-US-07 - Watcher hears a sold lot ended
+
+- **GIVEN** a collector who watches a lot with email alerts on and has never
+  bid on it
+- **AND** the lot closes with a winner
+- **WHEN** Grade10 sends close-outcome mail for that lot
+- **THEN** it sends them the watched ended letter (campaign
+  `lot_ended_watched`)
+- **AND** when the winning bid is supplied, the letter names it as Sold for
+
+#### Scenario: grade10-site-auction-notifications-SC-39 - A watcher on a no-bids close hears ended only
+**Serves:** grade10-site-auction-notifications-US-08 - Collector hears a no-bids close as ended only
+
+- **GIVEN** a collector who watches a lot with email alerts on and has never
+  bid on it
+- **AND** the lot closes with no bids
+- **WHEN** Grade10 sends close-outcome mail for that lot
+- **THEN** it sends them the watched ended letter (campaign
+  `lot_ended_watched`) with no winning amount
+- **AND** the subject, preheader and body say the lot has ended or bidding
+  has closed
+- **AND** they do not contain unsold, did not sell, didn't sell, no sale, or
+  no bids
+- **AND** the letter carries no Sold for, Winning bid, or Highest bid
+  highlight
+
+#### Scenario: grade10-site-auction-notifications-SC-40 - No-bids close skips bidder mail and retires lot_ended
+**Serves:** grade10-site-auction-notifications-US-08 - Collector hears a no-bids close as ended only
+
+- **GIVEN** a lot that closes with no bids
+- **AND** at least one enrolled watcher with email alerts on
+- **WHEN** Grade10 sends close-outcome mail for that lot
+- **THEN** it sends no bidder close-outcome letter
+- **AND** it sends no letter with campaign `lot_ended`
+- **AND** each enrolled watcher receives the watched ended letter (campaign
+  `lot_ended_watched`) with no winning amount
+- **AND** that letter carries no Sold for, Winning bid, or Highest bid
+  highlight
+- **AND** its subject, preheader and body do not contain unsold, did not
+  sell, didn't sell, no sale, or no bids
+
+#### Scenario: grade10-site-auction-notifications-SC-41 - A watcher who also bid gets one close letter
+**Serves:** grade10-site-auction-notifications-US-06 - Collector who lost hears the lot closed
+
+- **GIVEN** a collector who both watches a lot and has bid on it, with email
+  alerts on
+- **AND** the lot closes with a winner who is not that collector
+- **WHEN** Grade10 sends close-outcome mail for that lot
+- **THEN** they receive exactly one close-outcome letter
+- **AND** it is the did-not-win letter (campaign `lot_closed_didnt_win`)
+- **AND** they do not also receive the watched ended letter
+
+#### Scenario: grade10-site-auction-notifications-SC-42 - The winner does not get a close-outcome letter
+**Serves:** grade10-site-auction-notifications-US-06 - Collector who lost hears the lot closed
+
+- **GIVEN** a collector who is the winner of a lot
+- **AND** they also watch it with email alerts on
+- **WHEN** the lot closes
+- **THEN** Grade10 does not send them a close-outcome letter from this
+  capability
+
+#### Scenario: grade10-site-auction-notifications-SC-43 - Muted alerts stop close-outcome mail
+**Serves:** grade10-site-auction-notifications-US-07 - Watcher hears a sold lot ended
+
+- **GIVEN** a collector who watches a lot with email alerts off
+- **WHEN** the lot closes with a winner
+- **THEN** Grade10 does not send them the watched ended letter

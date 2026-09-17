@@ -2,7 +2,7 @@
 title: Notifications
 spec: grade10-site/auction/notifications
 order: 8
-reviewed: 2026-09-11
+reviewed: 2026-09-17
 ---
 
 Auction mail exists because the close is a deadline that moves: nobody can
@@ -26,8 +26,9 @@ message is transactional mail to the account's registered email address, and amo
 
 Two relationships can enrol a collector in a lot's mail, and each needs
 **email alerts on** for that lot. **Watching** with alerts on brings the
-progress messages. **Bidding** with alerts on brings bid-activity mail plus
-closing and extension warnings. Unwatch ends the watch relationship and turns
+progress messages and, when they did not bid, the close-outcome letter.
+**Bidding** with alerts on brings bid-activity mail, closing and extension
+warnings, and the close-outcome letter when they did not win. Unwatch ends the watch relationship and turns
 alerts off with it; mute turns alerts off and leaves Watching (or the bid)
 intact. A collector who both watches and bids still receives exactly one copy
 of anything.
@@ -63,18 +64,18 @@ leading bid rather than one per increment.
 When a lot stops taking bids, enrolled collectors who did not win hear once
 that it closed — same alerts-on enrolment as progress mail.
 
-- 🚧 **Non-winner** — a bidder who lost to someone else gets a letter that the
+- **Non-winner** — a bidder who lost to someone else gets a letter that the
   lot closed and they did not win, with Winning bid and Their bid when those
   amounts are supplied
-- 🚧 **Watcher, sold** — a watch-only collector with alerts on gets a letter
+- **Watcher, sold** — a watch-only collector with alerts on gets a letter
   that the lot has ended, with Sold for when a winning bid is supplied
   (`lot_ended_watched`)
-- 🚧 **No bids at close** — watchers with alerts on get **Ended** only
+- **No bids at close** — watchers with alerts on get **Ended** only
   (`lot_ended_watched` without a winning amount). Subject, preheader and body
   never say unsold, did not sell, no sale, or no bids, and never show Highest
   bid. At close this means nobody bid — not a later winner default. There is
   no bidder close letter when nobody bid; campaign `lot_ended` is retired
-- 🚧 **One letter** — a watcher who also bid gets the non-winner letter, not
+- **One letter** — a watcher who also bid gets the non-winner letter, not
   also the watcher letter. The winner gets only the auction-won order letter
 - ❓ **Hold line on the non-winner letter** — whether the body also says the
   card hold is being released; My Auctions already carries hold state
