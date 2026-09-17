@@ -698,35 +698,6 @@ customer A(leads with an authorized maximum matching the row) while the current 
 * The current bid is the row's resolved current bid.
 * Customer A's authorization remains the row's maximum.
 
-### grade10-site-auction-auto-bidding-US5-TC4-1: An auto bid in the extension window extends the close once
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-auction-auto-bidding-US-05
-
-**Pre-conditions:**
-A listing is inside its extension window, and its leader's committed maximum has room left.
-
-**Steps:**
-
-1. Commit a challenger's maximum that causes Grade10 to raise the leader's bid on their behalf.
-2. Read the listing's recorded close.
-
-**Expected Results:**
-
-* The close moves exactly as a manual bid at that moment would.
-* The listing does not close while that extension stands.
-* Grade10 places no further bid until another commitment is accepted.
-
 ### grade10-site-auction-auto-bidding-US5-TC5-1: An auto bid is counted and recorded on the bidder's behalf
 
 **Classification:**

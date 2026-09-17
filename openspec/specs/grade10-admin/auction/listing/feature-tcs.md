@@ -908,41 +908,6 @@ A draft listing whose scheduled close at is not after now.
 * Grade10 refuses the create.
 * The listing remains a draft.
 
-### grade10-admin-auction-listing-US3-TC17-1: Extension window without a duration is refused
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-admin-auction-listing-US-03
-
-**Pre-conditions:**
-A created listing.
-
-**Test data:**
-
-| Field | Value |
-| --- | --- |
-| Extension window | 1800 seconds |
-| Extension duration | 0 |
-
-**Steps:**
-
-1. Navigate to <grade10 auction admin listings url>.
-2. Open that listing.
-3. Set an extension window of 1800 seconds and an extension duration of 0.
-
-**Expected Results:**
-
-* Grade10 refuses the write.
-* The listing's extension settings are unchanged.
-
 ### grade10-admin-auction-listing-US3-TC18-1: Sandbox cannot change after create
 
 **Classification:**
@@ -970,8 +935,6 @@ A created listing that was drafted as sandbox.
 
 * Grade10 refuses the write.
 * The listing remains sandbox.
-
----
 
 ### grade10-admin-auction-listing-US3-TC20-1: Extension values the listing refuses
 

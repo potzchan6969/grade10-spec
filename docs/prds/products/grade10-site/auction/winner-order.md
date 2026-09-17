@@ -22,6 +22,9 @@ Winner Order is the authenticated route where a collector settles one lot after 
 - 🚧 **Locked on confirming** — once the winner confirms the address and payment method, the order reads Preparing Invoice and the winner can no longer change either; before that, the winner changes them freely
 - 🚧 **Changes after confirming** — a new address or payment method is made by an operator, on the winner's request: before send, the operator edits the order and it stays Preparing Invoice; after send, the operator reissues the invoice, and the replaced invoice reads as replaced by the new one. The order shows what the operator changed
 - ❓ **Asking for a change** — how the winner asks for a new address or payment method after confirming — Design confirms
+- 🚧 **Address form** — First Name, Last Name, Phone, Country/Region, Town/City, Address Line 1, State/Province/Region and Postal Code are required; Company Name, Address Line 2 and Apt./Suite/Building are optional; the phone number's format is not checked
+- 🚧 **Page sections** — Order Information (with **Invoice Status**, formerly Paid Status), Collection Method, Order Status with a timestamp per step, and Lots
+- 🚧 **Unfinished payment** — a card payment that times out or is abandoned says it was not completed and leaves Pay Now ready. A completed one reads Confirming payment until Grade10 records it paid.
 - **Payment** — a fresh card payment, the only self-service method offered while the invoice is `pending`; a declined attempt leaves the invoice payable until the deadline
 - 🚧 **Bank transfer** — an invoice sent for bank transfer shows SWIFT, FPS and Hong Kong local bank transfer details instead of card Pay, and asks the winner to quote the bank reference, with a **Copy Reference Code** button
 - ❓ **Bank details** — the account details for each of the three ways — Finance confirms
@@ -61,6 +64,7 @@ The winner needs one place to understand what is owed and what happens next. The
 | --- | --- | --- | --- |
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, and Final amount reads Order Total, for the winner and the operator. | Product |
 | Insurance | Decided | Optional per invoice; when added it is more than zero. An invoice without it shows no Insurance line. Separate from Payment Processing Fee. | Product |
+| Postal Code in Hong Kong | ❓ Open | Postal Code is required, but Hong Kong addresses have none. Product to confirm whether it stays required everywhere. | Product |
 | Payment processing fee | 🚧 In flight | Charged to the winner on every invoice. For card, grossed up from the Subtotal at send from the payment provider's live fees, never from a rate set in the admin portal. For bank transfer, the amount the operator enters. | Product (@jeffffej0909) |
 | Fee on a manual settlement | 🚧 In flight | Kept: every settlement is at the invoice's Order Total. A card invoice paid another way is first reissued as bank transfer, with the fee the operator sets. | Product (@jeffffej0909) |
 | A fee that costs more than quoted | Decided | Grade10 absorbs the difference; the sent invoice never re-prices. | Product |
