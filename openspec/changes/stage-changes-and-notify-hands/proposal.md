@@ -2,7 +2,7 @@
 
 **Author:** @ecchochan - 2026-09-17
 
-Owner's brief: [Delivery workflow blueprint](../../../docs/references/delivery-workflow-blueprint.md).
+Product context: [Change Stages](../../../docs/prds/products/shared/planning/change-stages.md), a planned page under [Planning](../../../docs/prds/products/shared/planning/index.md). Owner's brief: [Delivery workflow blueprint](../../../docs/references/delivery-workflow-blueprint.md).
 
 ## Why
 
@@ -12,7 +12,7 @@ Success is a change that lands a stage on `main` and tells the next hand within 
 
 ## What Changes
 
-- **Nine stages, read from the files.** Proposed, Decided, Designed, Specified, Planned, Building, On staging, Released, Archived - each proven by a file on `main`, never set by hand. The four lanes become nine columns on the board, the change page wears a stepper, and a 🚧 line on a PRD wears the pip of its change's stage.
+- **Nine stages, read from the files.** Proposed, Decided, Designed, Specified, Planned, Building, On staging, Released, Archived - each proven by a file on `main`, never set by hand. The four lanes become nine columns on the board, the change page wears a stepper, and a 🚧 line on a page wears the pip of its change's stage. The ladder is on [Change Stages · Stages](../../../docs/prds/products/shared/planning/change-stages.md#stages).
 - **Hands, recorded in git.** `hands:` in `.openspec.yaml` names a handle per role. The PM writes it at the interview's end; the local manual's Assign action and `pnpm plan hand <change> <role> @handle` in `grade10` write it too. A team map names each handle's Slack member and roles.
 - **Your turn, once, in Slack.** The push to `main` that moves a change into a stage sends one direct message to that stage's hand - the change, the stage, the command - or to the role's channel when the hand is unnamed. The channel post per push stays and names the stage each change moved into. A weekly digest per person lists their idle and waiting changes.
 - **My turn.** A page listing the changes whose current stage names the reader, then the ones that are theirs later; the handle is chosen once per browser.
@@ -27,17 +27,18 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### New Capabilities
 
-None.
+- `shared/planning/change-stages`: where a change stands, who is on it, and how they are told - the stages, the overlays, the hands, the messages and the surfaces that show them. Held to by the store and the application repository alike, which is why it sits under `shared/`.
 
 ### Modified Capabilities
 
-None. `skip_specs: true`: this change alters the manual, the store's record, a workflow and the application repository's board, never a product behaviour.
+None.
 
 ## Impact
 
-- `grade10-spec`: `tools/manual/src/api/derive.ts` derives the stage; `tools/manual/src/store/read-changes.mts` and `tools/manual/check/record.mjs` read the new keys; the board, the change page, My turn and the PRD ribbon change under `tools/manual/src/pages/` and `tools/manual/src/blocks/`; `.github/workflows/proposal-notify.yml` and `scripts/openspec/changed-changes.mjs` compute the stage before and after each push and send the direct messages; a scheduled workflow sends the digest; the team map is new; `docs/prds/guides/working-a-change.md` gains the stage table in place of the turn table.
+- `grade10-spec`: `tools/manual/src/api/derive.ts` derives the stage; `tools/manual/src/store/read-changes.mts` and `tools/manual/check/record.mjs` read the new keys; the board, the change page, My turn and the page ribbon change under `tools/manual/src/pages/` and `tools/manual/src/blocks/`; `.github/workflows/proposal-notify.yml` and `scripts/openspec/changed-changes.mjs` compute the stage before and after each push and send the direct messages; a scheduled workflow sends the digest; the team map is new; `docs/prds/guides/working-a-change.md` gains the stage table in place of the turn table.
 - `grade10`: `scripts/openspec/plan.mjs` gains `hand` and `approve`, and the board prints the stage.
 - Every teammate: a Slack message per turn, and one line of YAML to name a hand.
+- This change's own artifacts: `ui-design.md` and `tech-design.md` are drawn from the page and this proposal, which carry every fact the two files need; a state or a constraint either file needs that the page lacks lands on the page first.
 
 ## Open Questions
 
@@ -54,6 +55,11 @@ None. `skip_specs: true`: this change alters the manual, the store's record, a w
 
 ## References
 
+- [Change Stages · Stages](../../../docs/prds/products/shared/planning/change-stages.md#stages)
+- [Change Stages · Overlays](../../../docs/prds/products/shared/planning/change-stages.md#overlays)
+- [Change Stages · Hands](../../../docs/prds/products/shared/planning/change-stages.md#hands)
+- [Change Stages · Messages](../../../docs/prds/products/shared/planning/change-stages.md#messages)
+- [Change Stages · Surfaces](../../../docs/prds/products/shared/planning/change-stages.md#surfaces)
 - [Delivery workflow blueprint](../../../docs/references/delivery-workflow-blueprint.md)
 - [PRDs and OpenSpec · The change's record](../../../docs/governance/prd-and-openspec.md#the-changes-record)
 - [Task ownership](../../../docs/governance/task-ownership.md)

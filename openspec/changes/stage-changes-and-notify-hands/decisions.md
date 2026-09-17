@@ -1,7 +1,7 @@
 ## Goals
 
 - A change's stage is one of nine, read from its files on `main`, and the
-  board, the change page, the PRD ribbon, My turn and Slack all show the
+  board, the change page, the page's ribbon, My turn and Slack all show the
   same one
 - Every change names its hands, and the hand whose turn it is is told once,
   in Slack, with the command to paste
@@ -32,11 +32,14 @@
 | Q6 | Does the Designed stage wait on a design a change does not need? | No: `ui_waived: "<why>"` says the change has no surface, the way `design_waived` already says it has no application work | Reading the journeys to guess, which puts a QA run behind a designer who was never owed anything |
 | Q7 | Does QA's review of the suite gate the ladder? | No: the verdict is an overlay, `draft` or `approved`, beside the stage, and planning goes on in parallel | A Reviewed stage between Specified and Planned, which would hold every engineer to QA's pace |
 | Q8 | What proves Released? | `released_in: <tag>` on the change, written when a cut carries it; this change reads the key and the release change writes it | Reading tags out of `grade10` from the manual, which the store cannot see |
+| Q9 | Where does the capability live? | `shared/planning/change-stages`, with a planned page under the manual's Platform group, because the store and the application repository are both held to it | `skip_specs`, which would leave the page unmarkable and the requirements unwritten; or a page under one product, which none of them owns |
+| Q10 | Is the tech design written before the requirements on this change? | Yes, from the page, the proposal and the journeys, as the brief orders the phases; the requirements pass reads it and the reconciliation re-reads it (held) | The schema's order, tech design after the requirements, which the proposal's open question puts to the PM and the tech PIC for every change |
+| Q11 | What is the design reference, with no Figma file for the manual? | The blueprint page's mock-ups, linked from `ui-design.md` as the layout's source of truth, and the design-system primitives the manual already composes | Prose descriptions of each screen, which drift; or a Figma file drawn for a tool only its makers use |
 
 ## Raised
 
-Empty - the interview settled the frontier, and a change with `skip_specs`
-runs no blind pass.
+Empty - the interview settled the frontier, and the blind pass has not run
+yet.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
