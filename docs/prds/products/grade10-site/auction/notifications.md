@@ -118,7 +118,7 @@ prefs as the mute surface. Replacing the existing bid-state receipts or the
 one-hour closing-soon reminder already sent to watchers. Auto-bidding, a
 digest across listings, or a bidder's language. One-click unsubscribe — the
 destination is a signed-in mute. Mail about winning, paying, invoicing,
-address reminders, or shipping belongs to
+setup reminders, or shipping belongs to
 [Order Notifications](/p/grade10-site/auction/notifications-order). Called-off
 lots still send nothing further. Winner default after a win is order mail, not
 a close-outcome letter.
