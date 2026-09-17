@@ -32,6 +32,7 @@
 | Q14 | Does reissue restart day-3 / day-6 under Reminder cadence in this change? | Already durable — parks superseded reminders and starts the sequence for the new invoice; this change does not restate that root | Add a Reminder cadence leaf here |
 | Q15 | Do winner order letters honour listing mute? | No — mute is listing alert mail in `notifications`; order letters stay on the winner's registered email | Honour mute on order letters |
 | Q16 | Contact Us URL on delivered and cancelled letters? | The storefront's existing Contact Us destination | A new URL invented here |
+| Q17 | Where do delivered / cancelled letter design states land? | `ui-design.md` on this change (recommended) | A second OpenSpec change for the letter surfaces alone |
 
 ## Raised
 

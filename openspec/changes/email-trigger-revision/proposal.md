@@ -1,5 +1,8 @@
 **Author:** @jeffffej0909 - 2026-09-17
 
+**Extended by:** @tangconst - 2026-09-18 — `ui-design.md` for delivered,
+order-cancelled, and reissue-as-payment-reminder letter previews.
+
 ## Why
 
 A watcher gets two closing warnings an hour apart from the end: Bidding closes in 24 hours, and a one-hour reminder that no spec owns and no template in `apps/emails` renders. Three order letters are also listed with no content: invoice reissued, delivered and order cancelled. This change retires the one-hour reminder and settles what those three letters carry. The metric is the auction unsubscribe-by-mute rate on watched lots, which should not rise, and the share of watchers who return in the last 24 hours, which should hold.

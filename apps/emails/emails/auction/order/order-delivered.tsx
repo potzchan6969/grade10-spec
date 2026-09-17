@@ -18,7 +18,13 @@ export type OrderDeliveredProps = {
   deliveryAddress?: string;
 };
 
-/** When the carrier confirms delivery. */
+/**
+ * When the carrier confirms delivery. Names the delivery address and
+ * delivered time; View order first, Contact Us second. No tracking CTA —
+ * the parcel is already with the winner.
+ *
+ * Settled in `email-trigger-revision` and Post-Bidding · Winner Order.
+ */
 export default function OrderDeliveredEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
@@ -30,14 +36,18 @@ export default function OrderDeliveredEmail({
 }: OrderDeliveredProps) {
   return (
     <AuctionLetter
-      body="The carrier says your lot has been delivered. If it has not reached you, or something is wrong, contact customer support."
+      body={[
+        "Your lot has been delivered.",
+        "If it has not reached you, or something is wrong, contact customer support.",
+      ]}
       brandName={brandName}
       campaign="delivered"
       canUnsubscribe={false}
+      ctaHref={orderUrl}
       ctaLabel="View order"
       heading="Your order has been delivered"
       highlight={{
-        label: "Delivered to",
+        label: "Delivery address",
         value: deliveryAddress,
         subtext: `Delivered ${deliveredAt}`,
       }}
