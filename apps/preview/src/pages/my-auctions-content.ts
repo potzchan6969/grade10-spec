@@ -101,11 +101,14 @@ const WON_AWAITING_ADDRESS = biddingItem({
   id: "won-awaiting-address",
   title: "1999 Base Set Charizard PSA 9",
   state: "awaiting_address",
-  stateLabel: "Awaiting Address",
+  stateLabel: "Awaiting Setup",
   currentBid: "HK$12,800",
   closesAt: "Ended 17 Sep 2026, 21:30 HKT",
   href: storyHref(WINNER_ORDER_AWAITING_ADDRESS_STORY_ID),
-  copy: ORDER_ROW_COPY,
+  copy: {
+    ...ORDER_ROW_COPY,
+    viewOrder: "Complete Order Setup",
+  },
 });
 
 const WON_PREPARING_INVOICE = biddingItem({

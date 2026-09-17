@@ -127,7 +127,7 @@ export const PostAuction: Story = {
     expect(
       canvas.getByRole("heading", { level: 1, name: "My Auctions" }),
     ).toBeVisible();
-    expect(canvas.getByText("Awaiting Address")).toBeVisible();
+    expect(canvas.getByText("Awaiting Setup")).toBeVisible();
     expect(canvas.getByText("Preparing Invoice")).toBeVisible();
     expect(canvas.getAllByText("Pending Payment")).toHaveLength(2);
     expect(canvas.getByText("Processing")).toBeVisible();

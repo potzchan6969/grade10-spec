@@ -47,7 +47,7 @@ export default function SetupReminderEmail({
       brandName={brandName}
       campaign="setup_reminder"
       canUnsubscribe={false}
-      ctaLabel="Complete order setup"
+      ctaLabel="Complete Order Setup"
       details={[{ label: "Confirm by", value: setupDeadline }]}
       heading={
         isSecond
@@ -62,7 +62,7 @@ export default function SetupReminderEmail({
       listingUrl={orderUrl}
       lotTitle={lotTitle}
       points={[...previewLot.setupFields]}
-      preheader={`Complete order setup by ${setupDeadline}.`}
+      preheader={`Complete Order Setup by ${setupDeadline}.`}
       primaryImageUrl={primaryImageUrl}
       whyYouGotThis="You won this auction lot and have not finished order setup yet."
     />
