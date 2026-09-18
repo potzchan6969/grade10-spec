@@ -14,13 +14,18 @@ reaches it.
 
 ## Decisions
 
-- **Required, not handler-gated.** `SiteHeaderProps` gains `onMyOrders: () => void`
-  as a required prop, and `SiteHeaderCopy` gains `myOrders: string`, matching
-  how Profile, My Auctions, and Sign out are already wired — never optional
-  like `onSearchClick`/`onCartClick`. Matches `decisions.md` Q4. Rejected:
-  making it optional like search/cart — that would let a consumer silently
-  ship the menu without it, which is wrong for an item every signed-in
-  collector should reach.
+- **Handler-gated, like Cart and search.** `SiteHeaderProps` gains an
+  optional `onMyOrders?: () => void`, and `SiteHeaderCopy` gains `myOrders: string`.
+  `SiteHeader` renders My Orders only when `onMyOrders` is supplied, the same
+  mechanism as `onCartClick`/`onSearchClick`. `SiteShell.tsx` supplies it as
+  `config.gates.store ? () => onNavigate(ROUTES.orderHistory) : undefined` —
+  the same `Gates["store"]` flag `navLinksFor` already reads to gate the
+  Store nav link in `apps/frontend/grade10/src/chrome/siteContent.ts`, and the
+  same gate `ROUTES.orderHistory` itself carries in `surfaces.ts`. Matches
+  `decisions.md` Q8, which supersedes Q4. Rejected: Q4's original "required,
+  always-present" answer — that ships a menu item pointing at
+  `/profile/orders` on a build where Store has not answered, which is a link
+  to nothing.
 - **Position.** My Orders renders between Profile and My Auctions, matching
   `decisions.md` Q3 and both modified scenarios' stated order.
 - **Copy catalog placement.** `myOrders` lands in this store's Grade10 brand
@@ -41,14 +46,15 @@ reaches it.
 
 ## Risks / Trade-offs
 
-- [Risk] `onMyOrders` becoming a required prop breaks any consumer of
-  `SiteHeaderProps` this change didn't find. → Mitigation: grep confirms
-  `SiteShell.tsx` is the only consumer; each group's `typecheck` verification
-  step catches any other one immediately.
+- [Risk] Gating My Orders on `config.gates.store` while wiring it independent
+  of `onCartClick`'s own `cartEnabled` (page-scoped) logic could drift the two
+  out of sync. → Mitigation: both read the same `Gates["store"]` flag off
+  `config.gates`, not a derived per-page value, so a gate flip moves both
+  together.
 - [Risk] The `external/grade10-spec` submodule pointer in `grade10` lags this
-  store's merge, leaving `SiteShell.tsx` unable to compile against the new
-  required prop. → Mitigation: group 2 opens with the submodule bump, before
-  the wiring task.
+  store's merge, leaving `SiteShell.tsx` unable to compile against the
+  widened `SiteHeaderCopy`. → Mitigation: group 2 opens with the submodule
+  bump, before the wiring task.
 
 ## Migration Plan
 

@@ -27,7 +27,7 @@ Orders, My Auctions, and Sign out when I am signed in,
 
 **Pre-conditions:**
 
-* A collector is signed in on an answered site surface.
+* A collector is signed in on an answered site surface, and Store answers.
 
 **Steps:**
 
@@ -56,7 +56,7 @@ Orders, My Auctions, and Sign out when I am signed in,
 
 **Pre-conditions:**
 
-* A collector is signed in on an answered site surface.
+* A collector is signed in on an answered site surface, and Store answers.
 
 **Steps:**
 
@@ -66,6 +66,35 @@ Orders, My Auctions, and Sign out when I am signed in,
 **Expected Results:**
 
 * The collector is taken to `/profile/orders`.
+
+### grade10-site-site-page-shell-US3-TC5-1: Account menu omits My Orders before Store answers
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* A collector is signed in, and Store does not yet answer.
+
+**Steps:**
+
+1. Activate the account control.
+2. Inspect the menu.
+
+**Expected Results:**
+
+* The menu offers Profile, My Auctions, and Sign out.
+* The menu does not offer My Orders.
 
 ## Reconciliation
 
@@ -93,7 +122,12 @@ change.
 * Two raised questions escalated to `decisions.md` `## Raised`: whether
   activating a menu item closes the menu (Q5), and whether a navigation
   failure or session lapse needs its own requirement (Q6).
+* `grade10-site-site-page-shell-US3-TC5-1` — added after `decisions.md` Q8
+  superseded Q4: My Orders is handler-gated by Store answering, the same
+  gate `/profile/orders` (`gate: "store"` in `surfaces.ts`) and Cart already
+  carry, so the journey needs a case proving the menu without it, tracing
+  `grade10-site-site-page-shell-SC-27`.
 * `grade10-site-site-page-shell-US3-TC1-1` and `-TC3-1` are unaffected by
   this change and are left as they stand in the durable suite.
 * No anchor goes uncovered: `US-03` is walked by `TC1-1`, `TC2-1`, `TC3-1`,
-  and now `TC4-1`.
+  `TC4-1`, and now `TC5-1`.
