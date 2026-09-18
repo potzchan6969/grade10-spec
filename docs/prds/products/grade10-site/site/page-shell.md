@@ -48,9 +48,11 @@ drawer (not in the compact bar); Account / Sign In and Cart stay in the bar.
 
 ## Cart
 
-🚧 **Members-only cart** — the Cart control opens sign-in for a collector
-with no session, and the cart drawer opens by itself once they sign in. There
-is no cart to show someone signed out.
+**Members-only cart** — for a collector with no session, the Cart control
+opens sign-in instead of the drawer; the drawer opens by itself on that
+surface once they sign in, and dismissing the dialog leaves them signed out
+with nothing waiting. A signed-in collector gets the drawer directly. There is
+no cart to show someone signed out.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9653" title="Footer — the site footer"}
 

@@ -22,10 +22,15 @@ it.
   - Stable layout: no chrome control appears, disappears, or moves when the
     session arrives
 - Account control
-  - Session-aware destination: leads to the profile when signed in, to
-    sign-in when not
-  - Sign-out on the profile: the header offers no way to sign out, so there is
-    one place to do it
+  - Session-aware entry: a primary Sign In button when signed out, the
+    account icon when signed in
+  - Account menu: signed in, the icon opens Profile, My Auctions, and Sign
+    out; the profile also offers Sign out
+- Members-only cart
+  - Sign-in before the cart: the Cart control opens sign-in while no session
+    is signed in, and the drawer stays closed
+  - The cart the ask was for: the drawer opens by itself once the session
+    arrives, and nothing is left waiting when the ask is dismissed
 - Links only to real surfaces
   - Controls with surfaces behind them: search and cart stay absent until the
     site answers them
