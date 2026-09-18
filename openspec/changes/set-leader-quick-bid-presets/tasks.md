@@ -13,7 +13,7 @@
 - [x] 2.2 Make `shared-ui-auction-listing-SC-37` pass: a leader's custom
       minimum is max + 100 minor units and is not chip 1.
 
-## 3. Validation (grade10-spec)
+## 3. Validation (grade10-spec) (owner: @htonyl)
 
-- [ ] 3.1 Run `openspec validate set-leader-quick-bid-presets --strict`.
-- [ ] 3.2 Run `listing-bid-money` unit tests and the leading bid-card story.
+- [x] 3.1 Run `openspec validate set-leader-quick-bid-presets --strict`.
+- [x] 3.2 Run `listing-bid-money` unit tests and the leading bid-card story.
