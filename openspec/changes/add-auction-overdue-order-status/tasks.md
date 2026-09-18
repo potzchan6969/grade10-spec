@@ -6,7 +6,7 @@
 
 - [ ] 2.1 Add the two overdue outcomes to the closed auction order-status contract and preserve the existing action-context fields.
 
-## 3. Backend
+## 3. Backend (owner: @htonyl)
 
 - [ ] 3.1 Derive Setup Overdue and Payment Overdue from the address deadline and expired invoice (`auction-status-SC-52`, `SC-53`).
 - [ ] 3.2 Add queue filters and preserve winner, lot, amount and contact/resolution context (`grade10-admin-auction-post-sale-SC-148`, `SC-149`).
