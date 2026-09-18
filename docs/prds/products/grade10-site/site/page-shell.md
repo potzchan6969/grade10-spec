@@ -15,10 +15,6 @@ paint. When the session arrives, the account entry changes between a Sign In
 primary button (signed out) and the account icon with its menu (signed in); other
 controls do not appear, disappear, or move.
 
-**Account menu** — signed in, the account icon opens Profile, My Auctions,
-and Sign out. Sign-out is offered there as well as on the profile. Orders and
-KYC are not in the menu for auction-first launch.
-
 Controls exist only when there is something behind them. Search still waits for
 a search surface, and no link points to a page the site does not hold. The
 header marks the item that owns the current address, and marks nothing when no
@@ -35,6 +31,15 @@ so a collector can reach checkout without returning to Store
 🚧 **Store Locator** — once that page answers and the shop is open, header and
 footer Store Locator lead there; until then the destination stays out of the
 chrome, including on auction-first launch.
+
+## Account Menu
+
+**Account menu** — signed in, the account icon opens Profile, My Auctions,
+and Sign out. Sign-out is offered there as well as on the profile. KYC stays
+out of the menu.
+
+🚧 **My Orders** joins the menu between Profile and My Auctions, opening
+`/profile/orders`.
 
 ## Help
 
