@@ -1,4 +1,4 @@
-## 1. Product record
+## 1. Product record (owner: @htonyl)
 
 - [ ] 1.1 Update post-sale and Winner Order PRD pages with categories, consequence preview, late-payment flag handling and the reason-free winner notice (`grade10-admin-auction-post-sale-SC-150`, `winner-order-SC-143`).
 
