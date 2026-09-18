@@ -12,7 +12,7 @@
 - [ ] 3.1 Implement idempotent operator payment recording, balance validation and the close-or-keep decision (`grade10-admin-auction-post-sale-SC-140`–`SC-142`).
 - [ ] 3.2 Derive Partially Paid and remove Pay, reissue, cancellation and the payment deadline after the first payment (`auction-status-SC-49`, `SC-50`).
 
-## 4. Frontend
+## 4. Frontend (owner: @htonyl)
 
 - [ ] 4.1 Render the operator payment history, remaining balance and tolerance prompt.
 - [ ] 4.2 Render the locked Partially Paid Winner Order and My Auctions row with every receipt (`winner-order-SC-156`, `grade10-site-auction-account-record-SC-62`).
