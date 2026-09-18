@@ -3,6 +3,7 @@ import { expect, within } from "storybook/test";
 import {
   BANK_TRANSFER_INVOICE_LINES,
   WINNER_ORDER_CONTENTS,
+  WINNER_ORDER_REFUND_OVERPAID,
 } from "./winner-order-content";
 import {
   winnerOrderMeta,
@@ -51,6 +52,34 @@ export const Processing: Story = {
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
+  },
+};
+
+/**
+ * Overpayment on a paid order. Status stays Processing. Order Summary stays
+ * the invoice. An inline alert below Order Total shows only the difference.
+ */
+export const ProcessingOverpaid: Story = {
+  name: "Processing — Overpaid",
+  args: {
+    status: "processing",
+    content: {
+      ...WINNER_ORDER_CONTENTS.processing,
+      refund: { ...WINNER_ORDER_REFUND_OVERPAID },
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
+    expect(canvas.getByText("Processing")).toBeVisible();
+    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Winning Bid")).toBeVisible();
+    expect(canvas.getByText("Shipping & Handling")).toBeVisible();
+    expect(canvas.getByText("Order Total")).toBeVisible();
+    expect(canvas.getByText("HK$15,660")).toBeVisible();
+    expect(canvas.getByText("Refund HK$500")).toBeVisible();
+    expect(canvas.getByRole("button", { name: "View" })).toBeVisible();
+    expect(canvas.queryByText("Refunded")).not.toBeInTheDocument();
   },
 };
 

@@ -204,7 +204,8 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 - 🚧 **Refund** — the winner asks Customer Service, outside Grade10; the
   operator sends the money by hand, in the Stripe dashboard or by bank
   transfer, then records it on the order. One refund per order, never
-  reversed, and the order reads Refunded for good
+  reversed. A closing refund reads Refunded for good. An overpayment returns
+  only the difference and the order keeps its status
 
 | The refund records | Value |
 | --- | --- |
@@ -215,10 +216,15 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | 🚧 The lot | Back to stock, when the card came back or never left, or kept by the winner, when it stays sold |
 | 🚧 Its number | The next one in the internal audit series |
 
-- 🚧 **Finding refunds** — the queue filters to Refunded; the order detail and
-  the invoice log carry the whole record, with who recorded it and when
-- 🚧 **The winner** — reads Refunded on their order, gets no letter, and
-  their bidder standing does not change
+- 🚧 **Finding refunds** — a closing refund filters as Refunded; an overpayment stays on the order's current status. Both are on the order detail and
+  the invoice log, with who recorded it and when
+- 🚧 **The winner** — a closing refund reads Refunded, an overpayment keeps
+  the order's status, neither gets a letter, and bidder standing does not
+  change
+- ❓ **Refund transaction clues for the winner** — enough for them to
+  recognise the refund on their statement; whether that is the channel only,
+  a masked card or bank clue, or something else; Product confirms. Full proof
+  and provider reference stay with the operator
 - 🚧 **Internal audit number** — every invoice and receipt carries one
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
@@ -322,8 +328,9 @@ settings.
 | Partial payment stays operator-only | 🚧 In flight | Recorded the same way as manual settlement, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
 | Who records a refund | 🚧 In flight | Operations, with a refund grant of its own held by `staff` and `admin`, apart from `auction:settle`. Chosen over finance approving each refund, to keep one step; finance reconciles from the order detail. | Product, Operations and finance |
 | Refund money path | 🚧 In flight | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
-| One refund, any amount | 🚧 In flight | One refund ends the order as Refunded, for any amount up to what was paid. Chosen over several partial refunds on one order. | Product and finance |
+| One refund, any amount | 🚧 In flight | One refund per order. A closing refund ends it as Refunded. An overpayment returns only the difference and the order keeps its status. Chosen over every refund, including an overpayment, ending as Refunded. | Product and finance |
 | Refund letter | 🚧 In flight | None; Customer Service already speaks to the winner. | Product |
+| Refund transaction clues | ❓ Open | What the winner sees so they can recognise the refund — channel only, a masked card or bank clue, or something else. Full proof and provider reference stay with the operator. | Product |
 | Who cancels | 🚧 In flight | Operators only; a winner who wants out asks Contact Us. Chosen over a winner cancelling before the invoice is sent, which would let a bid be walked away from. | Product and Operations |
 | Cancel is final | 🚧 In flight | No undo, and a late payment never revives the order: the lot may already be relisted and the winner already emailed. Chosen over a short undo window. | Product and Operations |
 | Paid after cancel | 🚧 In flight | Refunded by finance outside Grade10, then cleared on the order. Chosen over widening the Refund action to cancelled orders, for a rare case. | Product and finance |
