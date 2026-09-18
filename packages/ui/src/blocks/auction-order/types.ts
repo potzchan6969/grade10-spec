@@ -45,6 +45,7 @@ type AuctionOrderDetailCopy = {
   invoiceStatus: string;
   winningBid: string;
   payNow: string;
+  contactUs: string;
 };
 
 type AuctionOrderDetailProps = {
@@ -71,6 +72,7 @@ type AuctionOrderDetailProps = {
   invoice?: {
     lines: readonly { label: ReactNode; value: ReactNode }[];
     onPayNow?: () => void;
+    onContact?: () => void;
   };
   className?: string;
 };

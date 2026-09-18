@@ -123,6 +123,11 @@ function AuctionOrderDetail({
                 {copy.payNow}
               </Button>
             ) : null}
+            {invoice.onContact ? (
+              <Button onClick={invoice.onContact} size="md" variant="outline">
+                {copy.contactUs}
+              </Button>
+            ) : null}
           </VStack>
         ) : null}
       </Card>

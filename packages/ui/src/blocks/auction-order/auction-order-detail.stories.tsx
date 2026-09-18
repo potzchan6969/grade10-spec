@@ -14,6 +14,7 @@ const COPY = {
   invoiceStatus: "Invoice Status",
   winningBid: "Winning bid",
   payNow: "Pay Now",
+  contactUs: "Contact Us",
 };
 
 const meta = {
