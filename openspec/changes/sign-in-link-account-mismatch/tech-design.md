@@ -79,13 +79,19 @@ email plus the original `token` and `callbackURL`.
   toast state cannot survive to conflict with the new one. This closes
   `decisions.md` Q9.
 
-### Detect by account, not by raw email string
+### Detect by comparing already-normalized emails, no extra lookup
 
 `shared-auth-sign-in-SC-19` already requires letter-case addresses to be the
-same account. Resolve the link's target the same way
-`signInLinkFailure`'s banned check already resolves it (a `users` table
-lookup), and compare the resulting account against `session.user.id` —
-never a string compare of the two emails as submitted.
+same account. `bannedAddress`'s existing query (`eq(users.email, email)`,
+no `.toLowerCase()`) only works because every address this store stores or
+resolves a verification row against is already `.trim().toLowerCase()`'d at
+the edge (`unverifiedAccount.ts`, `verifiedAccount.ts`, `signInMail.ts`), so
+`session.user.email` and the link's resolved email are both already in that
+form. Comparing them directly (`session.user.email !== resolution.email`)
+is correct without a second `users` table lookup — a simplification found
+while implementing; the original plan here called for resolving an account
+id instead, which this store's existing normalization convention makes
+unnecessary.
 
 ### Contract shape mirrors `SignInLinkFailure`
 
@@ -97,16 +103,18 @@ encode/decode-at-the-edge shape that contract already uses.
 
 ## Service Interfaces
 
-- `signInLinkFollow.ts` gains one read shared by both checks instead of two
-  separate token reads: resolve the verification row once, answer the
-  existing `SignInLinkFailure | null`, and — only when that is `null` —
-  also hand back the row's resolved account, so the `before` hook has both
-  answers from one query.
+- `signInLinkFollow.ts`'s `signInLinkFailure` is replaced by
+  `resolveSignInLink(db, token): Promise<{ failure; email }>`, one read
+  shared by both checks instead of two separate token reads: it answers
+  the existing `SignInLinkFailure | null`, and — only when that is `null`
+  — the row's resolved email too, so the `before` hook has both answers
+  from one query. Only one real call site existed, so the rename carried
+  no wider blast radius.
 - The `before` hook's existing `SIGN_IN_LINK_FOLLOW_PATH` branch grows one
   more case: when the failure check passes and a session is present
   (`getSessionFromCtx(ctx)`, already used elsewhere in this hook) whose
-  account differs from the link's resolved account, redirect with the
-  mismatch params instead of falling through to better-auth.
+  `user.email` differs from `resolution.email`, redirect with the mismatch
+  params instead of falling through to better-auth.
 
 ## API Contracts
 
