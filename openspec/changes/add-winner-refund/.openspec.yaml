@@ -1,4 +1,5 @@
 schema: grade10-planning
 created: 2026-09-17
+promoted_by: "@htonyl"
 awaiting:
   specs: "spec.md outline, blind suites and requirement deltas for post-sale, order-status, winner-order and roles are /planning-qa's; order-status, winner-order and post-sale also apply after add-winner-partial-payment archives, since a refund on Partially Paid depends on that status - /planning-qa"
