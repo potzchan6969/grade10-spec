@@ -1027,7 +1027,7 @@ function WinnerOrderPage({
   const payCta =
     content.status === "pending_payment" && !content.overdue
       ? content.setupPaymentMethod === "Bank transfer"
-        ? "View Bank Details"
+        ? "Pay by Bank Transfer"
         : "Pay with Card"
       : null;
   const progress = showWinnerProgress(content.status)

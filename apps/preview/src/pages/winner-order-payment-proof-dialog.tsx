@@ -87,7 +87,7 @@ type WinnerOrderPaymentProofDialogProps = {
 };
 
 /**
- * Preview-only: bank details + proof form after View Bank Details.
+ * Preview-only: bank details + proof form after Pay by Bank Transfer.
  * Not a published `@grade10/ui` export. Field list explores product UX;
  * OpenSpec stores files after confirm only.
  */
