@@ -15,7 +15,7 @@
 - [ ] bank-payment-03 Implement idempotent upload, atomic Confirm/Return and
   content-signature validation with focused red-first service tests.
 
-## 3. Winner order
+## 3. Winner order (owner: @htonyl)
 
 - [ ] bank-winner-01 Implement payment-method selection, proof upload limits,
   HEIC conversion, copy controls and Payment Verifying UI.
