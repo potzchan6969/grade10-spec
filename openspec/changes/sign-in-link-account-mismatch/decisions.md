@@ -33,3 +33,6 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| shared/auth/sign-in | Which toast wins when a link is both invalid (expired, used, or banned) and for a different account than the current session — the mismatch toast or the failed-follow toast? | |
+| shared/auth/sign-in | Does choosing Stay or dismissing the mismatch toast consume the link, or does it stay usable until it expires? | |
+| shared/auth/sign-in | What happens when a second sign-in link for a different account is followed while a mismatch toast from an earlier link is still showing — does it replace, stack, or get ignored? | |

@@ -38,6 +38,6 @@ No new design-system primitive, variant, or token. No new Figma component set.
 
 ## States
 
-- Prompt — warning toast with link email in the description, Switch and Stay, no auto-dismiss — `shared-auth-sign-in-US-08`
-- Switch — ends current session and enters the link’s account — `shared-auth-sign-in-US-08`
-- Stay or dismiss — keeps current session; link does not enter — `shared-auth-sign-in-US-08`
+- Prompt — warning toast with link email in the description, Switch and Stay, no auto-dismiss — `shared-auth-sign-in-SC-64`, `shared-auth-sign-in-SC-68`
+- Switch — ends current session and enters the link’s account — `shared-auth-sign-in-SC-65`
+- Stay or dismiss — keeps current session; link does not enter — `shared-auth-sign-in-SC-66`, `shared-auth-sign-in-SC-67`
