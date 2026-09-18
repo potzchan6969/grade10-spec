@@ -786,7 +786,7 @@ function CartDrawerFooter({
 
   return (
     <VStack
-      gap="md"
+      gap="lg"
       className={cn("w-full shrink-0 border-t border-border p-6", className)}
       data-slot="cart-drawer-footer"
     >
