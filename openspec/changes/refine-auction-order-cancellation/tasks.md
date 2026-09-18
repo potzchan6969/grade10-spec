@@ -17,6 +17,6 @@
 - [ ] 4.1 Add category filtering and consequence preview to the operator flow.
 - [ ] 4.2 Render the cancelled Winner Order notice with date, lot, winning bid and Contact Us only (`winner-order-SC-143`).
 
-## 5. Verification
+## 5. Verification (owner: @htonyl)
 
 - [ ] 5.1 Run terminal-transition, role, late-payment and focused admin/site E2E checks.
