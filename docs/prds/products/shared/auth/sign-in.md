@@ -74,6 +74,12 @@ session, and the person lands on the brand home with a toast.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488" title="Login Dialog"}
 
+:::detail{title="Code map" for="engineer"}
+- **Link lifetime** — `SIGN_IN_LINK_TTL_SECONDS`, beside `SIGN_IN_SEND_WINDOW_SECONDS`, in [`packages/grade10-auth/contracts`](https://github.com/9gag/grade10/blob/main/packages/grade10-auth/contracts/src/signIn.ts)
+- **Email copy** — `email.login.body`, in `packages/i18n/messages/shared/<locale>/email.json`
+- **E2E seams** — [docs/architecture/e2e.md](https://github.com/9gag/grade10/blob/main/docs/architecture/e2e.md)
+:::
+
 :::detail{title="Product decisions" for="pm"}
 The email step offered two buttons on one field, and both ended in the same
 inbox. The link is one tap from there; the code was read, carried back and
