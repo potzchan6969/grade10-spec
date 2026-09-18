@@ -36,6 +36,13 @@ Storybook: `My Auctions/Winner Order/Payment` in
 `apps/preview/src/pages/winner-order.payment.stories.tsx`. Preview-only page
 assembly — not a published `@grade10/ui` export.
 
+### Winner Order — Payment method
+
+Storybook: `My Auctions/Winner Order/Setup/Complete Order Setup` → Payment method
+in `apps/preview/src/pages/complete-order-setup.stories.tsx`. No Figma frame.
+Fee-range wording stays TBC on the winner-order spec; the preview line names
+no amount.
+
 ### Winner Order — Submit Payment Proof
 
 Storybook: `My Auctions/Winner Order/Payment/Submit Payment Proof` in
@@ -101,18 +108,24 @@ Figma component set and Code Connect are TBC.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Pending Payment (card) | Pay with Card; Invoice text link beside Order summary | `winner-order-SC-57` |
-| Pending Payment (bank transfer) | Submit Payment Proof; bank-transfer fee may read Free | `winner-order-SC-111` |
+| Pending Payment (bank transfer) | View Bank Details; bank-transfer fee may read Free | `winner-order-SC-111` |
 | Payment Verifying | Payment step current with no pay-by date; Invoice link; Receipt hidden; Bank transfer payment-method card; Pay and further uploads hidden | `winner-order-SC-108` |
 | Payment Verifying alert | Inline Alert (`status=default`, Hourglass): “We’re verifying your transfer. We’ll email you when payment is confirmed.” Under Order progress below `lg`; under the lot from `lg` up | `winner-order-US-09` |
 | Expired Invoice | Overdue alert with Contact Us; no Pay CTA | **Out of suite:** Storybook `Expired Invoice` under Payment |
 | Paid Processing (card) | Visa + mask; Invoice beside summary; Receipt under payment-method card | `winner-order-SC-67` |
 | Processing Bank Transfer | Bank transfer card, no mask; fee may read Free; Invoice + Receipt | `winner-order-SC-67` |
 
+### Winner Order — Payment method
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Choice open | Title Payment Method. Step 2 of 3. Choose how you’ll pay. The exact amount is on the invoice. Card: Card fee applies. Exact amount on the invoice. Bank transfer: The transfer fee is on your invoice. Zero shows as Free. Neither selected | `winner-order-SC-91` |
+
 ### Winner Order — Submit Payment Proof
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Form open | Bank details; copy for account, amount, and reference | `winner-order-SC-128` |
+| Form open | Pay by Bank Transfer. Copy the bank details, pay the amount due, then upload your receipt. Copy for account, amount, and reference | `winner-order-SC-128` |
 | Copy amount / reference | Success toast and check icon on the copy control | **Out of suite:** Storybook `Copy amount due` / `Copy reference` |
 | Successful submit | Reaches Payment Verifying on Winner Order | `winner-order-SC-108` |
 | Leave with draft or while submitting | Confirm abandon; in-flight submit does not complete | **Out of suite:** Storybook Submit Payment Proof abandon gate |
