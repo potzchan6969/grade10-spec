@@ -39,14 +39,6 @@ enough to decide whether to act,
 * The called-off lot is not listed.
 * The unsold closed lot is listed as closed.
 
-## Reconciliation
-
-| Spec scenario | Suite coverage |
-| --- | --- |
-| grade10-site-auction-watchlist-SC-15 | covered by durable suite |
-| grade10-site-auction-watchlist-SC-16 | covered by durable suite |
-| grade10-site-auction-watchlist-SC-17 | US3-TC4-1 |
-
 ## Settled
 
 *None yet — suite pending review.*
