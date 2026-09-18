@@ -79,7 +79,9 @@ export const Refunded: Story = {
     expect(canvas.getByText("Refund HK$15,660")).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "View" }));
     const dialog = within(canvasElement.ownerDocument.body);
-    expect(dialog.getByRole("heading", { name: "Refund Details" })).toBeVisible();
+    expect(
+      dialog.getByRole("heading", { name: "Refund Details" }),
+    ).toBeVisible();
     expect(dialog.getByText("Not as described")).toBeVisible();
     expect(
       dialog.getByText(

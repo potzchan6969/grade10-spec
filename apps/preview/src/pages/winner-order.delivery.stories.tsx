@@ -1,14 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import {
+  winnerOrderMeta,
+  winnerOrderSettled,
+} from "./winner-order.story-shared";
+import {
   BANK_TRANSFER_INVOICE_LINES,
   WINNER_ORDER_CONTENTS,
   WINNER_ORDER_REFUND_OVERPAID,
 } from "./winner-order-content";
-import {
-  winnerOrderMeta,
-  winnerOrderSettled,
-} from "./winner-order.story-shared";
 import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
