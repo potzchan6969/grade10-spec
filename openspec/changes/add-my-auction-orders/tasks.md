@@ -4,7 +4,7 @@
 - [ ] 1.2 Update the My Auctions and Winner Order PRDs so the Won-row entry point, invoice-expiry outcome, address-lock ownership and Hong Kong Postal Code question agree with the change (grade10-site-auction-account-record-SC-55, winner-order-SC-45)
 - [ ] 1.3 Verify proposal, specs, journeys and feature suites for links, scenario ids and the removal of the deprecated `AuctionRecordTabs` delta with `openspec validate add-my-auction-orders --strict`, `openspec status --change add-my-auction-orders`, `pnpm check:manual` and `pnpm run tcs:validate`
 
-## 2. Shared auction-order UI (grade10-spec)
+## 2. Shared auction-order UI (grade10-spec) (owner: @htonyl)
 
 - [ ] 2.1 Export `AuctionOrderList`, `AuctionOrderRow`, `AuctionOrderEmpty`, `AuctionOrderDetail`, `AuctionAddressForm` and the exact copy/value/props types from the `@grade10/ui` public entry; keep all content, status and callbacks consumer-owned (shared-ui-auction-order-SC-01)
 - [ ] 2.2 Implement the independently renderable order row, list and empty blocks with View lot plus exactly one supplied next action, without choosing actions from status or performing writes (shared-ui-auction-order-SC-02, grade10-site-auction-auction-orders-SC-05–SC-10)
