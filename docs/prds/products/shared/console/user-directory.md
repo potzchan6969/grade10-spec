@@ -44,7 +44,9 @@ panel.
 
 🚧 The account panel offers suspending the account from auctions, or reinstating
 it, only when the console supplies a handler, and never both at once. Both are
-confirmed in the moderation dialog, suspension with a reason.
+confirmed in the moderation dialog, suspension with a reason. The handler uses
+the same auction-suspension standing as the auction Bidders control and a
+missed payment deadline; it does not use the platform ban.
 
 ## Filters
 
