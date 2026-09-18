@@ -1,3 +1,12 @@
+import {
+  cancelledMailto,
+  deliveredMailto,
+  PREVIEW_INVOICE_ID,
+  partialPaymentMailto,
+  paymentOverdueMailto,
+  setupOverdueMailto,
+} from "@/emails/auction/_components/contact-mailto";
+
 /** Shared PreviewProps fixture for auction letter kinds. */
 export const previewLot = {
   brandName: "Grade10",
@@ -7,8 +16,32 @@ export const previewLot = {
   listingUrl: "https://grade10.com/auction/listings/demo-charizard",
   /** Signed-in Winner Order for this lot. */
   orderUrl: "https://grade10.com/account/auction-orders/demo-charizard",
-  /** Customer support — overdue letters' primary CTA (matches Winner Order Contact Us). */
-  contactUrl: "mailto:support@grade10.com",
+  /** Sent invoice id — omitted from setup-overdue (no invoice yet). */
+  invoiceId: PREVIEW_INVOICE_ID,
+  /**
+   * Customer support — overdue letters' primary CTA (matches Winner Order
+   * Contact Us). Prefills subject and body; setup overdue uses the lot.
+   */
+  setupOverdueContactUrl: setupOverdueMailto(
+    "1999 Pokémon Base Set Charizard PSA 9",
+  ),
+  paymentOverdueContactUrl: paymentOverdueMailto(
+    "1999 Pokémon Base Set Charizard PSA 9",
+    PREVIEW_INVOICE_ID,
+  ),
+  cancelledContactUrl: cancelledMailto(
+    "1999 Pokémon Base Set Charizard PSA 9",
+    PREVIEW_INVOICE_ID,
+  ),
+  deliveredContactUrl: deliveredMailto(
+    "1999 Pokémon Base Set Charizard PSA 9",
+    PREVIEW_INVOICE_ID,
+  ),
+  partialPaymentContactUrl: partialPaymentMailto(
+    "1999 Pokémon Base Set Charizard PSA 9",
+    PREVIEW_INVOICE_ID,
+    ["REC-202609-LK7P2Q-01-P1"],
+  ),
   /** Signed-in My Auctions — per-lot Email alerts mute. */
   muteUrl: "https://grade10.com/account/auctions",
   /** @deprecated Prefer `muteUrl`. */

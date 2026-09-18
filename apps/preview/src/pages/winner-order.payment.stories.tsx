@@ -1,13 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
-  BANK_TRANSFER_INVOICE_LINES,
-  WINNER_ORDER_CONTENTS,
-} from "./winner-order-content";
-import {
+  winnerOrderContactSheet,
   winnerOrderMeta,
   winnerOrderSettled,
 } from "./winner-order.story-shared";
+import {
+  BANK_TRANSFER_INVOICE_LINES,
+  WINNER_ORDER_CONTENTS,
+} from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
@@ -140,7 +141,9 @@ export const SubmitBankPaymentProof: Story = {
       modal.getByRole("button", { name: "Copy transfer reference" }),
     ).toBeVisible();
     expect(
-      modal.getByText("Copy the bank details, pay the amount due, then upload your receipt."),
+      modal.getByText(
+        "Copy the bank details, pay the amount due, then upload your receipt.",
+      ),
     ).toBeVisible();
 
     await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
@@ -210,7 +213,9 @@ export const PayWithCardCheckout: Story = {
     const page = within(canvasElement.ownerDocument.body);
     await winnerOrderSettled(canvasElement);
 
-    await userEvent.click(canvas.getByRole("button", { name: "Pay with Card" }));
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Pay with Card" }),
+    );
 
     await waitFor(
       () => {
@@ -224,9 +229,7 @@ export const PayWithCardCheckout: Story = {
     );
     await waitFor(() => {
       expect(page.getByText("Payment received")).toBeVisible();
-      expect(
-        page.getByText("We’re preparing this lot to ship."),
-      ).toBeVisible();
+      expect(page.getByText("We’re preparing this lot to ship.")).toBeVisible();
     });
     expect(
       canvas.queryByRole("button", { name: "Pay with Card" }),
@@ -332,6 +335,10 @@ export const PartiallyPaid: Story = {
     ).toBeVisible();
     expect(sidebar.getByText("Delivery address")).toBeVisible();
     expect(sidebar.getByText("Billing address")).toBeVisible();
+    await winnerOrderContactSheet(
+      canvasElement,
+      "Auction order INV-202609-LK7P2Q-01: partial payment",
+    );
   },
 };
 
@@ -368,10 +375,13 @@ export const ExpiredInvoice: Story = {
     expect(sidebar.getByText("Delivery address")).toBeVisible();
     expect(sidebar.getByText("Billing address")).toBeVisible();
     expect(canvas.queryByText(/how to reach Grade10/i)).not.toBeInTheDocument();
-    expect(canvas.queryByText(/support@grade10.com/)).not.toBeInTheDocument();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(
       canvas.queryByText("Pending Payment (expired invoice)"),
     ).not.toBeInTheDocument();
+    await winnerOrderContactSheet(
+      canvasElement,
+      "Auction order INV-202609-LK7P2Q-01: payment overdue",
+    );
   },
 };

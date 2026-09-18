@@ -23,7 +23,13 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
-import { ArrowCounterClockwise, ArrowUpRight, FilePdf, Hourglass, Info } from "@phosphor-icons/react";
+import {
+  ArrowCounterClockwise,
+  ArrowUpRight,
+  FilePdf,
+  Hourglass,
+  Info,
+} from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import {
   REVEAL_HIDDEN_CLASS,
@@ -35,10 +41,11 @@ import {
 } from "../../../../packages/ui/src/blocks/shared/use-first-paint-reveal";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
-import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
-import { WinnerOrderRefundDialog } from "./winner-order-refund-dialog";
-import { WinnerOrderSetupDialog } from "./winner-order-setup-dialog";
-import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
+import { WinnerOrderContactDialog } from "./winner-order-contact-dialog";
+import {
+  contactReasonFor,
+  winnerOrderContactMail,
+} from "./winner-order-contact-mail";
 import {
   LINE_TOOLTIPS,
   WINNER_ORDER_CONTENTS,
@@ -47,6 +54,10 @@ import {
   type WinnerOrderReceipt,
   type WinnerOrderStatus,
 } from "./winner-order-content";
+import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
+import { WinnerOrderRefundDialog } from "./winner-order-refund-dialog";
+import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
+import { WinnerOrderSetupDialog } from "./winner-order-setup-dialog";
 import {
   AUCTION_LOT_DETAILS_HREF,
   MY_AUCTIONS_PAGE_HREF,
@@ -475,7 +486,11 @@ function LotCard({
         />
       </div>
       <VStack className="min-w-0 flex-1" gap="xs" hAlign="start">
-        <Text className="line-clamp-2 text-pretty sm:truncate sm:line-clamp-none" size="sm" weight="medium">
+        <Text
+          className="line-clamp-2 text-pretty sm:truncate sm:line-clamp-none"
+          size="sm"
+          weight="medium"
+        >
           {content.lotTitle}
         </Text>
         <Text className="tabular-nums" size="sm" weight="medium">
@@ -517,10 +532,12 @@ function AddressBlock({
   content,
   confirmCta,
   onConfirmAddress,
+  onContact,
 }: {
   content: WinnerOrderContent;
   confirmCta?: string | null;
   onConfirmAddress?: () => void;
+  onContact?: () => void;
 }) {
   const addressOverdue =
     content.overdue &&
@@ -542,15 +559,7 @@ function AddressBlock({
       {addressOverdue ? (
         <Alert
           actions={
-            <Button
-              onClick={() => {
-                toast.info("Contact Grade10", {
-                  description: "support@grade10.com",
-                });
-              }}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={onContact} size="sm" variant="outline">
               Contact Us
             </Button>
           }
@@ -586,6 +595,7 @@ function OrderSummary({
   onPay,
   onViewInvoicePdf,
   onViewRefundDetails,
+  onContact,
 }: {
   lines: WinnerOrderInvoiceLine[];
   refund?: WinnerOrderContent["refund"];
@@ -597,6 +607,7 @@ function OrderSummary({
   onPay?: () => void;
   onViewInvoicePdf?: () => void;
   onViewRefundDetails?: () => void;
+  onContact?: () => void;
 }) {
   const total = lines.find((line) => line.label === "Order Total");
   const rest = lines.filter((line) => line.label !== "Order Total");
@@ -654,11 +665,7 @@ function OrderSummary({
       {refund ? (
         <Alert
           actions={
-            <Button
-              onClick={onViewRefundDetails}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={onViewRefundDetails} size="sm" variant="outline">
               View
             </Button>
           }
@@ -673,15 +680,7 @@ function OrderSummary({
       {overdue ? (
         <Alert
           actions={
-            <Button
-              onClick={() => {
-                toast.info("Contact Grade10", {
-                  description: "support@grade10.com",
-                });
-              }}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={onContact} size="sm" variant="outline">
               Contact Us
             </Button>
           }
@@ -695,15 +694,7 @@ function OrderSummary({
       {settlementContact && !overdue ? (
         <Alert
           actions={
-            <Button
-              onClick={() => {
-                toast.info("Contact Grade10", {
-                  description: "support@grade10.com",
-                });
-              }}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={onContact} size="sm" variant="outline">
               Contact Us
             </Button>
           }
@@ -837,6 +828,18 @@ function OrderSidebar({
     showBilling ||
     receiptList.length > 0;
   const [refundDialogOpen, setRefundDialogOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
+  const contactReason = contactReasonFor(content.status);
+  const contactMail = contactReason
+    ? winnerOrderContactMail({
+        reason: contactReason,
+        lotTitle: content.lotTitle,
+        invoiceId: content.invoiceId,
+        receiptIds: (content.receipts ?? [])
+          .map((receipt) => receipt.fileName?.replace(/\.pdf$/i, ""))
+          .filter((id): id is string => Boolean(id)),
+      })
+    : null;
 
   return (
     <aside
@@ -860,6 +863,7 @@ function OrderSidebar({
             onViewRefundDetails={
               content.refund ? () => setRefundDialogOpen(true) : undefined
             }
+            onContact={contactMail ? () => setContactOpen(true) : undefined}
             overdue={paymentOverdue}
             payCta={payCta}
             refund={content.refund}
@@ -960,6 +964,7 @@ function OrderSidebar({
                 confirmCta={confirmAddressCta}
                 content={content}
                 onConfirmAddress={onConfirmAddress}
+                onContact={contactMail ? () => setContactOpen(true) : undefined}
               />
             ) : null}
             {showBilling ? (
@@ -980,6 +985,13 @@ function OrderSidebar({
           onOpenChange={setRefundDialogOpen}
           open={refundDialogOpen}
           refund={content.refund}
+        />
+      ) : null}
+      {contactMail ? (
+        <WinnerOrderContactDialog
+          mail={contactMail}
+          onOpenChange={setContactOpen}
+          open={contactOpen}
         />
       ) : null}
     </aside>
@@ -1120,10 +1132,7 @@ function WinnerOrderPage({
             <h1 className="text-2xl leading-8 font-semibold text-balance text-foreground sm:text-3xl sm:leading-9">
               {content.title}
             </h1>
-            <Badge
-              size="sm"
-              variant={winnerOrderBadgeVariant(content.status)}
-            >
+            <Badge size="sm" variant={winnerOrderBadgeVariant(content.status)}>
               {content.statusLabel}
             </Badge>
           </HStack>

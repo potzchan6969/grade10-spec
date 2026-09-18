@@ -45,6 +45,9 @@ winner of three lots has three orders, each with its own deadlines.
   Completed, with day-only dates; Cancelled and Refunded show no stepper
 - 🚧 **Under Payment** — Payment Verifying and Partially Paid both read
   against the Payment step
+- 🚧 **Contact Us** — `support@grade10.com`, subject the invoice or the lot;
+  Copy Message first on Winner Order, Open Mail App second; overdue,
+  cancelled and delivered letters use the same subject and body
 
 ### My Auction Orders
 
@@ -386,6 +389,7 @@ a second payment provider, and changes to the bid-time rules.
 | Setup mail | 🚧 In flight | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
 | Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. Durable `notifications-order` holds that schedule; `add-winner-bank-transfer` adds proof holds and the receipt PDF. | Product (@tangconst) |
 | Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking. | Product (@tangconst) |
+| Contact Us destination | 🚧 In flight | Copy-first sheet on Winner Order: To, Subject, Message, Copy Message first, Open Mail App second. Letters prefill the same mailto and name the address. Chosen over opening a mail client, a contact form, or a toast with the address only. A partial-payment template lists receipts and never the remaining balance. | Product (@tangconst) |
 | Reissue letter | Decided | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
 | Delivered content | Decided | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
 | Cancelled content | Decided | Cancelled time only; the operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
