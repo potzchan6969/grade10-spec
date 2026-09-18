@@ -1,10 +1,12 @@
 # shared/ui/auction-listing Specification
 
 ## Purpose
-The shared listing product-page blocks every auction storefront composes: the
-media gallery, the bid panel, the bid history, and the details section. The
-bid history carries accepted instants so collector activity can be localized
-without changing the listing's authoritative event data.
+Shared auction listing blocks disclose the buyer's premium on the bid panel
+before a collector commits a maximum. They are the shared listing product-page
+blocks every auction storefront composes: the media gallery, the bid panel,
+the bid history, and the details section. The bid history carries accepted
+instants so collector activity can be localized without changing the listing's
+authoritative event data.
 
 ## Feature set
 
