@@ -33,7 +33,7 @@ followed.
 - **Resend wait** — Resend stays off for sixty seconds after each
   successful send, and the button counts down as **Resend (45)** (seconds
   left in parentheses). It turns on again at zero.
-- 🚧 **Link lifetime** — a sign-in link lasts five minutes, and the email
+- **Link lifetime** — a sign-in link lasts five minutes, and the email
   carrying it says five minutes; after that it is expired.
 - **Email-step wording** — the send action reads **Sign In with Email**;
   collectors never see the term magic link on the dialog.

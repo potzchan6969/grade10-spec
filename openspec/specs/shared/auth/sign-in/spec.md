@@ -15,7 +15,7 @@ contract for leaving a session.
   - Only email method: the email step sends a link and nothing else
   - Sent confirmation: after a send that went out, title the dialog Check Your Email, name the address on its own line, and offer Resend
   - Resend wait: Resend stays off for sixty seconds after each successful send, counting down on the button
-  - Link lifetime: a sign-in link lasts sixty seconds
+  - Link lifetime: a sign-in link lasts five minutes, and the email carrying it says five minutes
   - One-time session: an unused unexpired link signs in once
   - Followed elsewhere: the surface that asked carries on once the session arrives
 - Google
