@@ -32,6 +32,8 @@ type SiteHeaderCopy = NavCopy & {
   accountMenuLabel: string;
   profile: string;
   myAuctions: string;
+  /** Optional authenticated orders destination label. */
+  orders?: string;
   signOut: string;
 };
 
@@ -59,6 +61,8 @@ type SiteHeaderProps = {
   onSignIn: () => void;
   onProfile: () => void;
   onMyAuctions: () => void;
+  /** Opens the consumer-owned authenticated orders destination. */
+  onOrders?: () => void;
   onSignOut: () => void;
   /**
    * Opens the account menu on first paint. Stories that are the layout SoT for
@@ -72,13 +76,14 @@ type SiteHeaderProps = {
  * Grade10 site header: design-system `Nav` plus session-aware account entry.
  *
  * Signed out shows a primary Sign In button. Signed in shows the account icon
- * and a menu of Profile, My Auctions, then Sign out (destructive, separated).
+ * and a menu of Profile, My Auctions, optional Orders, then Sign out
+ * (destructive, separated).
  * Cart and search stay optional via handlers — auction-first launches omit
  * them. When cart is present, `SiteHeader` owns the active-line count badge on
  * the cart icon (`cartItemCount`), matching the cart drawer title. On compact
  * viewports, `Nav` moves primary nav, utilities, search, and language into the
- * left menu drawer; Account / Sign In and Cart stay in the bar. Orders and KYC
- * are not in this menu.
+ * left menu drawer; Account / Sign In and Cart stay in the bar. KYC is not in
+ * this menu.
  *
  * All destinations and copy are application-owned. The component owns only the
  * open/close of the account menu and the cart count badge.
@@ -100,11 +105,13 @@ function SiteHeader({
   onSignIn,
   onProfile,
   onMyAuctions,
+  onOrders,
   onSignOut,
   accountMenuDefaultOpen,
   className,
 }: SiteHeaderProps) {
-  const { accountMenuLabel, profile, myAuctions, signOut, ...navCopy } = copy;
+  const { accountMenuLabel, profile, myAuctions, orders, signOut, ...navCopy } =
+    copy;
 
   const accountSlot =
     session === "signed-in" ? (
@@ -128,6 +135,9 @@ function SiteHeader({
             <DropdownMenuItem onClick={onMyAuctions}>
               {myAuctions}
             </DropdownMenuItem>
+            {orders && onOrders ? (
+              <DropdownMenuItem onClick={onOrders}>{orders}</DropdownMenuItem>
+            ) : null}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={onSignOut} variant="destructive">
