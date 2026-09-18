@@ -7,7 +7,7 @@
 - [ ] 2.1 Add the payment-history, balance, receipt and tolerance types to the auction contracts.
 - [ ] 2.2 Add the append-only payment table, indexes and receipt-number migration without changing the invoice quote.
 
-## 3. Backend
+## 3. Backend (owner: @htonyl)
 
 - [ ] 3.1 Implement idempotent operator payment recording, balance validation and the close-or-keep decision (`grade10-admin-auction-post-sale-SC-140`–`SC-142`).
 - [ ] 3.2 Derive Partially Paid and remove Pay, reissue, cancellation and the payment deadline after the first payment (`auction-status-SC-49`, `SC-50`).
