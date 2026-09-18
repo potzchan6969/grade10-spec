@@ -1,0 +1,30 @@
+{
+  "title": "My Auction Orders",
+  "menu": "My Auction Orders",
+  "intro": "Orders from lots you won.",
+  "loading": "Loading your auction orders…",
+  "loadFailed": "Could not load your auction orders.",
+  "retry": "Try again",
+  "emptyTitle": "No auction orders yet",
+  "emptyDescription": "Orders from lots you win will appear here.",
+  "myAuctions": "My Auctions",
+  "viewLot": "View lot",
+  "completeOrderSetup": "Complete order setup",
+  "payInvoice": "Pay invoice",
+  "viewDetail": "View detail",
+  "tabs": {
+    "active": "Active",
+    "upcoming": "Upcoming",
+    "ended": "Ended"
+  },
+  "status": {
+    "awaitingSetup": "Awaiting setup",
+    "preparingInvoice": "Preparing invoice",
+    "pendingPayment": "Pending payment",
+    "processing": "Processing",
+    "shipped": "Shipped",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled",
+    "refunded": "Refunded"
+  }
+}
