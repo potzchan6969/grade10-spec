@@ -3,7 +3,7 @@
 - [ ] 1.1 Update the Payment Method manual page to record that a maximum raise uses one existing authorization, requests eligible incremental and extended authorization, and follows the provider's returned deadline; preserve release-at-close and invoice settlement as the product boundary.
 - [ ] 1.2 Verify the capability page and change artifacts with pnpm check:manual and openspec validate fix-auction-payment-hold-increment --strict.
 
-## 2. Shared Stripe contracts and fakes (grade10)
+## 2. Shared Stripe contracts and fakes (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Make grade10-site-auction-bid-payment-method-SC-06 and SC-14 pass by adding the incremental-authorization outcome and client operation, accepting optional incremental and extended authorization requests when creating a manual hold, and pinning that the increment amount is the new total.
 - [ ] 2.2 Make grade10-site-auction-bid-payment-method-SC-11 and SC-15 pass by modeling provider unexpected-state refusal as a controlled declined outcome while keeping unknown provider faults distinct.
