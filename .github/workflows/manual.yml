@@ -152,13 +152,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RUN_ID: ${{ github.run_id }}
         run: |
-          set -o pipefail
-          previous_sha="$(
-            gh api \
-              "/repos/${{ github.repository }}/actions/workflows/manual.yml/runs?status=success&per_page=100" \
-              --jq ".workflow_runs[] | select(.id != ${RUN_ID} and .head_branch == \"${{ github.ref_name }}\") | .head_sha" \
-              | head -n 1
-          )"
+          previous_sha="$(gh api \
+            "/repos/${{ github.repository }}/actions/workflows/manual.yml/runs?status=success&per_page=100" \
+            --jq "first(.workflow_runs[] | select(.id != ${RUN_ID} and .head_branch == \"${{ github.ref_name }}\")) | .head_sha // empty")"
 
           if [ -z "$previous_sha" ]; then
             echo "available=false" >> "$GITHUB_OUTPUT"
