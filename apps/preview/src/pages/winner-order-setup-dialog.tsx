@@ -177,8 +177,7 @@ type AddressSnapshot = {
   lines: string;
 };
 
-const FEE_RANGE_CARD =
-  "Card fee applies. Exact amount on the invoice.";
+const FEE_RANGE_CARD = "Card fee applies. Exact amount on the invoice.";
 const FEE_RANGE_BANK =
   "The transfer fee is on your invoice. Zero shows as Free.";
 
@@ -188,7 +187,9 @@ function stepTitle(step: SetupStep): string {
   return "Billing Address";
 }
 
-function snapshotFromAddress(address: WinnerOrderSavedAddress): AddressSnapshot {
+function snapshotFromAddress(
+  address: WinnerOrderSavedAddress,
+): AddressSnapshot {
   return {
     sourceId: address.id,
     label: address.label,
@@ -334,10 +335,9 @@ function WinnerOrderSetupDialog({
   const billingSaved = addresses.find((item) => item.id === billingSelection);
   const billingDraft =
     billingSelection === DRAFT_VALUE && draftOption ? draftOption : null;
-  const billingReady =
-    sameAsDelivery
-      ? Boolean(deliverySnapshot)
-      : Boolean(billingSaved || billingDraft);
+  const billingReady = sameAsDelivery
+    ? Boolean(deliverySnapshot)
+    : Boolean(billingSaved || billingDraft);
   const showEmptyPicker = addresses.length === 0 && !draftOption;
   const addressBookFull = addresses.length >= WINNER_ORDER_SAVED_ADDRESS_CAP;
   const canSaveForFuture = !addressBookFull;
@@ -541,11 +541,7 @@ function WinnerOrderSetupDialog({
 
   function handleOuterOpenChange(next: boolean) {
     if (!next && newAddressOpen) return;
-    if (
-      !next &&
-      open &&
-      (step > 1 || paymentMethod != null || deliveryReady)
-    ) {
+    if (!next && open && (step > 1 || paymentMethod != null || deliveryReady)) {
       const leave = window.confirm(
         "Leave order setup? Your progress on this order will not be saved.",
       );
@@ -559,8 +555,7 @@ function WinnerOrderSetupDialog({
     (step === 2 && paymentMethod == null) ||
     (step === 3 && !billingReady);
 
-  const primaryLabel =
-    step === 3 ? "Complete Order Setup" : "Continue";
+  const primaryLabel = step === 3 ? "Complete Order Setup" : "Continue";
 
   function addressPicker(opts: {
     ariaLabel: string;
@@ -752,7 +747,10 @@ function WinnerOrderSetupDialog({
                 >
                   Same as delivery address
                 </CheckboxListInput>
-                <div className="flex w-full flex-col" data-slot="billing-address-swap">
+                <div
+                  className="flex w-full flex-col"
+                  data-slot="billing-address-swap"
+                >
                   <div
                     className="grid w-full transition-[grid-template-rows] duration-200 motion-reduce:transition-none"
                     data-slot="billing-same-as-delivery"
@@ -780,7 +778,7 @@ function WinnerOrderSetupDialog({
                         )}
                         style={{ transitionTimingFunction: ADDRESS_LIST_EASE }}
                       >
-                        <div
+                        <fieldset
                           aria-label="Billing address, same as delivery address"
                           className="flex w-full items-start rounded-xl border border-border bg-card px-3 pt-3 pb-4 text-foreground"
                           data-slot="address-summary"
@@ -793,7 +791,7 @@ function WinnerOrderSetupDialog({
                               {deliverySnapshot?.lines}
                             </span>
                           </div>
-                        </div>
+                        </fieldset>
                       </div>
                     </div>
                   </div>

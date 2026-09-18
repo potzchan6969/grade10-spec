@@ -27,10 +27,7 @@ import { type ComponentProps, useEffect, useRef } from "react";
  * `Button variant="destructive"`. On narrow viewports the footer stacks
  * full-width with the primary action on top (`flex-col-reverse`).
  */
-function Dialog({
-  modal = true,
-  ...props
-}: DialogPrimitive.Root.Props) {
+function Dialog({ modal = true, ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" modal={modal} {...props} />;
 }
 

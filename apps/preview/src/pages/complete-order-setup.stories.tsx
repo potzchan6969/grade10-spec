@@ -7,8 +7,8 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
   WINNER_ORDER_FULL_SAVED_ADDRESSES,
   WINNER_ORDER_SAVED_ADDRESSES,
-  WinnerOrderSetupDialog,
   type WinnerOrderSavedAddress,
+  WinnerOrderSetupDialog,
   type WinnerOrderSetupResult,
 } from "./winner-order-setup-dialog";
 
@@ -39,10 +39,10 @@ function CompleteOrderSetupDemo({
           Complete Order Setup
         </Text>
         <Text size="sm" tone="secondary">
-          Standalone preview of the stepped setup dialog Winner Order opens
-          from Awaiting Setup. Page wiring lives under My Auctions / Winner
-          Order / Setup. Delivery → Payment → Billing; the address book
-          caps at five saved addresses.
+          Standalone preview of the stepped setup dialog Winner Order opens from
+          Awaiting Setup. Page wiring lives under My Auctions / Winner Order /
+          Setup. Delivery → Payment → Billing; the address book caps at five
+          saved addresses.
         </Text>
         {!open ? (
           <Button onClick={() => setOpen(true)} size="md">
@@ -181,9 +181,7 @@ export const NoSavedAddresses: Story = {
       modal.getByRole("button", { name: "Add New Address" }),
     ).toBeVisible();
     expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
-    expect(
-      page.queryByRole("dialog", { name: "Add Address" }),
-    ).toBeNull();
+    expect(page.queryByRole("dialog", { name: "Add Address" })).toBeNull();
   },
 };
 
@@ -260,14 +258,9 @@ export const AddressBookFull: Story = {
     );
 
     await waitFor(() => {
-      expect(
-        page.queryByRole("dialog", { name: "Add Address" }),
-      ).toBeNull();
+      expect(page.queryByRole("dialog", { name: "Add Address" })).toBeNull();
     });
-    const confirmedOuter = await findVisibleDialog(
-      page,
-      "Delivery Address",
-    );
+    const confirmedOuter = await findVisibleDialog(page, "Delivery Address");
     const confirmedPicker = within(confirmedOuter);
     expect(confirmedPicker.getByText("Pat Ng")).toBeVisible();
     expect(confirmedPicker.getByText(/Queen's Road Central/)).toBeVisible();

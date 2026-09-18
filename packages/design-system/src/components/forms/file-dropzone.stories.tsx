@@ -4,16 +4,17 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
 import {
+  FILE_DROPZONE_MIB,
   FileDropzone,
   FileDropzoneFileList,
-  FileDropzoneTarget,
-  FILE_DROPZONE_MIB,
   type FileDropzoneItem,
+  FileDropzoneTarget,
 } from "./file-dropzone";
 
 const COPY = {
   idleTitle: "Drop files here or choose files",
-  idleDescription: "PDF, PNG, JPG, or HEIC. Up to 3 files, 5 MB each, 15 MB total.",
+  idleDescription:
+    "PDF, PNG, JPG, or HEIC. Up to 3 files, 5 MB each, 15 MB total.",
   chooseFiles: "Choose Files",
   converting: "Converting HEIC…",
   removeFile: "Remove file",

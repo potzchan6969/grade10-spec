@@ -37,9 +37,7 @@ function SubmitPaymentProofDemo({
             Open dialog
           </Button>
         ) : null}
-        {submitted ? (
-          <Text size="sm">Proof submitted (preview).</Text>
-        ) : null}
+        {submitted ? <Text size="sm">Proof submitted (preview).</Text> : null}
       </VStack>
 
       <WinnerOrderPaymentProofDialog
@@ -94,7 +92,9 @@ export const Form: Story = {
     const dialog = await findVisibleDialog(page, "Pay by Bank Transfer");
     const modal = within(dialog);
     expect(
-      modal.getByText("Copy the bank details, pay the amount due, then upload your receipt."),
+      modal.getByText(
+        "Copy the bank details, pay the amount due, then upload your receipt.",
+      ),
     ).toBeVisible();
     expect(modal.getByText("Bank Details")).toBeVisible();
     expect(modal.getByText("Required Transfer Reference")).toBeVisible();
