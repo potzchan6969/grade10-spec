@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, within } from "storybook/test";
 import {
   winnerOrderMeta,
   winnerOrderSettled,
@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order closed outcomes (Cancelled, Refunded). No progress stepper; Invoice/Receipt links follow the same placement rules as Payment and Delivery.",
+          "Winner Order closed outcomes (Cancelled, Refunded). No progress stepper. Refunded keeps Invoice and Receipt; an inline alert below Order Total shows the refund amount. Dialog coverage lives under My Auctions / Winner Order / Refund Details.",
       },
     },
   },
@@ -70,21 +70,25 @@ export const Refunded: Story = {
       ),
     ).not.toBeNull();
     expect(canvas.getByRole("complementary")).toBeVisible();
-    expect(canvas.getByText("Order Total")).toBeVisible();
+    expect(canvas.getByText("Refunded")).toBeVisible();
     expect(canvas.queryByText("Order progress")).not.toBeInTheDocument();
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
-    expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
-    const lot = canvasElement.querySelector('[data-slot="winner-order-lot"]');
-    expect(lot).not.toBeNull();
-    const alert = canvas.getByText(
-      "Order refunded. Payment on this order was returned.",
-    );
-    expect(alert).toBeVisible();
-    expect(lot!.compareDocumentPosition(alert)).toBe(
-      Node.DOCUMENT_POSITION_FOLLOWING,
-    );
-    const alertRoot = alert.closest('[data-slot="alert"]');
-    expect(alertRoot).toHaveAttribute("data-status", "success");
+    expect(canvas.getByText("Order Total")).toBeVisible();
+    expect(canvas.getByText("HK$15,660")).toBeVisible();
+    expect(canvas.getByText("Refund HK$15,660")).toBeVisible();
+    await userEvent.click(canvas.getByRole("button", { name: "View" }));
+    const dialog = within(canvasElement.ownerDocument.body);
+    expect(dialog.getByRole("heading", { name: "Refund Details" })).toBeVisible();
+    expect(dialog.getByText("Not as described")).toBeVisible();
+    expect(
+      dialog.getByText(
+        "Card condition did not match the listing photos. Full amount returned.",
+      ),
+    ).toBeVisible();
+    expect(dialog.getByText("Refund Method")).toBeVisible();
+    expect(
+      canvas.queryByText("Order refunded. Payment on this order was returned."),
+    ).not.toBeInTheDocument();
   },
 };

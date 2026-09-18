@@ -39,6 +39,8 @@ const WINNER_ORDER_CANCELLED_STORY_ID =
   "my-auctions-winner-order-closed--cancelled";
 const WINNER_ORDER_REFUNDED_STORY_ID =
   "my-auctions-winner-order-closed--refunded";
+const WINNER_ORDER_REFUND_DETAILS_STORY_ID =
+  "my-auctions-winner-order-refund-details--closing-refund";
 
 /** Manager href that opens a story in the workbench (`?path=/story/…`). */
 function storyHref(storyId: string): string {
@@ -124,5 +126,6 @@ export {
   WINNER_ORDER_PREPARING_INVOICE_STORY_ID,
   WINNER_ORDER_PROCESSING_STORY_ID,
   WINNER_ORDER_REFUNDED_STORY_ID,
+  WINNER_ORDER_REFUND_DETAILS_STORY_ID,
   WINNER_ORDER_SHIPPED_STORY_ID,
 };
