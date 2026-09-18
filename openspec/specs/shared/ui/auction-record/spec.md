@@ -94,6 +94,11 @@ it to, and SHALL NOT change what it shows on its own when the collector acts.
 Acting SHALL report the collector's intent to the application through a
 callback named for the event. `WatchButton` SHALL use the same design-system
 button and bell treatment as the auction lot details watch control.
+
+When the application tells `WatchButton` it is **locked** (a bid stands on the
+lot), the control SHALL show the watching label, SHALL be disabled, and SHALL
+NOT report a press.
+
 `AuctionRecordRow` SHALL accept an optional email-alerts control distinct from
 unwatch; when supplied with copy and `onEmailAlertsChange`, it SHALL report
 the intended on/off value and SHALL NOT invent mute or unwatch behaviour. The
@@ -103,10 +108,17 @@ confirmation copy, the row SHALL announce the change once the application has
 changed the value it gives the control — never on the collector's click
 alone.
 
+When the application supplies watch or unwatch confirmation copy on
+`WatchButton`, the control SHALL announce once the application has changed the
+watched value it gives the control — never on the press alone. When that copy
+includes an action label, the announcement SHALL expose it (View My Auctions
+on watch; Undo on unwatch). Absent confirmation copy, the control announces
+nothing.
+
 #### Scenario: shared-ui-auction-record-SC-04 - The watch control reports and waits
 **Serves:** The record surface exports - the watch control reports and waits
 
-- **GIVEN** a `WatchButton` told it is not watched
+- **GIVEN** a `WatchButton` told it is not watched and not locked
 - **WHEN** the collector activates it
 - **THEN** the component reports the collector's intent to the application
 - **AND** it still shows not watched until the application tells it otherwise
@@ -144,6 +156,23 @@ alone.
 - **WHEN** the application changes the value it gives the control
 - **THEN** the row announces the change once, in the supplied wording
 - **AND** a row supplied without that copy announces nothing
+
+#### Scenario: shared-ui-auction-record-SC-14 - A locked watch control does not report
+**Serves:** Content ownership - a locked watch control does not report
+
+- **GIVEN** a `WatchButton` told it is watched and locked
+- **WHEN** it renders
+- **THEN** it shows Watching and is not activatable
+- **AND** it does not report a press
+
+#### Scenario: shared-ui-auction-record-SC-15 - Watch confirmation announces after the application confirms
+**Serves:** Content ownership - watch confirmation announces after the application confirms
+
+- **GIVEN** a `WatchButton` supplied with watch confirmation copy including an
+  action label
+- **WHEN** the application changes it from not watched to watched
+- **THEN** the control announces once in the supplied wording
+- **AND** the announcement exposes the supplied action label
 
 ### Requirement: A watched-list row carries the lot's key image
 
