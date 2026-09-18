@@ -388,9 +388,9 @@ function CartDrawerHeader({
 }: CartDrawerHeaderProps) {
   return (
     <HStack
-      gap="lg"
+      gap="sm"
       vAlign="center"
-      className={cn("w-full shrink-0 px-6 pt-6", className)}
+      className={cn("w-full shrink-0 px-6 pt-4", className)}
       data-slot="cart-drawer-header"
     >
       <HStack gap="sm" vAlign="center" className="min-w-0 flex-1">
@@ -512,7 +512,7 @@ function CartDrawerBody({
     <VStack
       gap="none"
       className={cn(
-        "scroll-fade min-h-0 flex-1 overflow-y-auto px-6 py-6",
+        "scroll-fade min-h-0 flex-1 overflow-y-auto px-6 py-4",
         isEmpty && "justify-center",
         className,
       )}
@@ -786,7 +786,7 @@ function CartDrawerFooter({
 
   return (
     <VStack
-      gap="lg"
+      gap="md"
       className={cn("w-full shrink-0 border-t border-border p-6", className)}
       data-slot="cart-drawer-footer"
     >

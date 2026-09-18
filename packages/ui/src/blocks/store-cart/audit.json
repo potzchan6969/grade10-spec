@@ -2,12 +2,12 @@
   {
     "label": "cart-drawer/header",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6260",
-    "classes": "w-full shrink-0 px-6 pt-6"
+    "classes": "w-full shrink-0 px-6 pt-4"
   },
   {
     "label": "cart-drawer/body",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4735-6321",
-    "classes": "scroll-fade min-h-0 flex-1 overflow-y-auto px-6 py-6"
+    "classes": "scroll-fade min-h-0 flex-1 overflow-y-auto px-6 py-4"
   },
   {
     "label": "cart-drawer/item",

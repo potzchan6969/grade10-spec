@@ -122,7 +122,7 @@ function DialogContent({
         className={cn(
           // Figma frame max is 640px; cap to the dynamic viewport so short
           // phones and keyboards don't clip header/footer outside the screen.
-          "fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-h-[min(640px,calc(100dvh-2rem))] max-w-(--container-lg) -translate-x-1/2 -translate-y-1/2 flex-col gap-4 overflow-hidden rounded-(--radius-4xl) border border-border-subtle bg-popover p-4 text-sm text-popover-foreground shadow-[0_24px_32px_-12px_var(--shadow-color,rgb(118_118_118_/_20%))] outline-none backdrop-blur-xl duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:animate-none motion-reduce:duration-0 sm:gap-6 sm:p-6",
+          "fixed top-1/2 left-1/2 z-50 flex w-[calc(100%-2rem)] max-h-[min(640px,calc(100dvh-2rem))] max-w-(--container-lg) -translate-x-1/2 -translate-y-1/2 flex-col gap-6 overflow-hidden rounded-(--radius-4xl) border border-border-subtle bg-popover p-6 text-sm text-popover-foreground shadow-[0_24px_32px_-12px_var(--shadow-color,rgb(118_118_118_/_20%))] outline-none backdrop-blur-xl duration-100 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 motion-reduce:animate-none motion-reduce:duration-0",
           className,
         )}
         initialFocus={
