@@ -59,6 +59,9 @@ it does. Cancelled Contact Us on Winner Order stays with
 `refine-auction-order-cancellation`; this change supplies the destination
 those letters already use.
 
+No domain impact: Contact Us stays inside Winner Order and order letters; no
+new cross-capability path for `domain-tcs.md`.
+
 ## References
 
 - [Post-Bidding · Winner Order](../../../docs/prds/products/grade10-site/auction/post-bidding.md#winner-order)

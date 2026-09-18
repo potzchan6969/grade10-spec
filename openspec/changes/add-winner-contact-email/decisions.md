@@ -26,8 +26,11 @@
 | Q5 | Do letters share this destination? | Yes — the same subject and body, plus the address named in the letter, because a letter cannot offer the copy dialog | A bare `mailto:support@grade10.com` on letters; a different destination from Winner Order |
 | Q6 | Is this the operator's outbound channel? | No — operator → winner stays the ❓ Contact channel on the PRD | Replacing WhatsApp outreach with this email |
 | Q7 | How is Message entered? | Editable `Textarea` primitive (same label / status / message contract as TextInput); Copy Message stays footer-only | Icon copy beside a read-only body; a native textarea only in preview |
+| Q8 | Which invoice id after a reissue? | The order's current invoice id — the same id Winner Order shows | A replaced invoice id, or inventing an id before send |
+| Q9 | Is the partial-payment letter Contact Us in scope? | Yes — same ready mailto and address-in-letter rule as overdue, cancelled and delivered | Letters-only overdue / cancelled / delivered, leaving the partial-payment draft bare |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| winner-order | After Copy Message succeeds, what confirmation (if any) does the winner see? | ❓ Post-Bidding · Contact Us — Product (@tangconst) |
