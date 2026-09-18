@@ -3,7 +3,11 @@ name: Test
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "**/tasks.md"
   pull_request:
+    paths-ignore:
+      - "**/tasks.md"
 
 permissions:
   contents: read

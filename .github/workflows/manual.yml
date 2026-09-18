@@ -42,6 +42,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
 
 concurrency:
@@ -129,3 +130,90 @@ jobs:
             echo
             echo "Ref: \`${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  notify-openspec-changes:
+    name: Report deployed OpenSpec changes
+    needs: deploy
+    if: needs.deploy.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # This runs after the deploy, rather than on every push. Manual's
+      # concurrency cancels intermediate batch commits, so this one comparison
+      # reports the complete deployed change once.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find the previous successful manual deployment
+        id: previous-deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -o pipefail
+          previous_sha="$(
+            gh api \
+              "/repos/${{ github.repository }}/actions/workflows/manual.yml/runs?status=success&per_page=100" \
+              --jq ".workflow_runs[] | select(.id != ${RUN_ID} and .head_branch == \"${{ github.ref_name }}\") | .head_sha" \
+              | head -n 1
+          )"
+
+          if [ -z "$previous_sha" ]; then
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice title=OpenSpec report deferred::No earlier successful Manual deployment is available to compare with this first deployment."
+            exit 0
+          fi
+
+          echo "available=true" >> "$GITHUB_OUTPUT"
+          echo "sha=$previous_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Find OpenSpec changes since the previous manual deployment
+        id: changes
+        if: steps.previous-deployment.outputs.available == 'true'
+        env:
+          BASE: ${{ steps.previous-deployment.outputs.sha }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          node scripts/openspec/changed-changes.mjs \
+            --base "$BASE" \
+            --head "$HEAD_SHA" \
+            --manual-url "https://spec.grade10-stg.com/planning" \
+            --openspec-url "https://spec.grade10-stg.com/openspec/" \
+            --commit-url "${{ github.server_url }}/${{ github.repository }}/commit/${HEAD_SHA}" \
+            --github-output "$GITHUB_OUTPUT"
+
+      - name: Notify Slack about deployed OpenSpec changes
+        if: steps.changes.outputs.has-changes == 'true'
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ vars.SLACK_CHANNEL_ID }}
+          payload: ${{ steps.changes.outputs.payload }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+  notify-deploy-failure:
+    name: Report failed manual deployment
+    needs: deploy
+    if: always() && needs.deploy.result == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack about failed manual deployment
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ vars.SLACK_CHANNEL_ID }}
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#dc3545",
+                  "fallback": "Manual deployment failed.",
+                  "pretext": ":x: Manual deployment failed",
+                  "text": "Ref: *`${{ github.sha }}`*\\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>",
+                  "footer": "${{ github.repository }} | ${{ github.ref_name }}"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
