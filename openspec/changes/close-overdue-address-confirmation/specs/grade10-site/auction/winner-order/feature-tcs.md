@@ -351,15 +351,6 @@
 * The order offers the address form again.
 * No letter about the reopen reaches the winner.
 
-## Raised
-
-- **A confirmation sent before the mark and arriving after it.** The window is stated as a datetime, and nothing says which clock decides a confirmation submitted at 47:59 that reaches Grade10 at 48:01. TC2 asserts the refusal at the mark and says nothing about the race.
-- **What the address deadline is measured from when a lot is extended.** The 48 hours run from lot close; a lot whose close moved by extended bidding has two closes, and the input names neither as the one that starts the window.
-- **Whether a reopen after send does anything.** The address is locked at send and a later change goes through an operator re-quote, so TC11 reads the lock as absolute. Nothing says whether a reopen is refused, ignored, or unlocks the locked address.
-- **What a missed address deadline does to the reminder letters.** Reminders are said to end when the order is no longer self-service payable; an order stalled in Awaiting Setup was never payable, and nothing says whether it is chased, and for how long.
-- **Whether a winner may add a new address to the account while the address form is closed.** The refusal is stated on the order's confirmation, not on the account address book, and the two are different writes.
-- **Traces on this delta.** The change's `user-journeys.md` for this capability carries only `winner-order-US-08`, so the cases covering behaviour this change moves — nothing to pay at close, the lock at send, seven days from send — trace `## Feature set` root groups rather than the journeys that walk them, which live in the durable file.
-
 ## Reconciliation
 
 Two independent readings of the same anchors: this suite, written without sight
@@ -368,11 +359,11 @@ What they disagreed about is below.
 
 | Raised | Disposition |
 | --- | --- |
-| Which clock decides a confirmation sent at 47:59 and arriving at 48:01 | **Folded in.** Nobody had decided it. The requirement now judges a write by the moment Grade10 receives it, and `winner-order-SC-80` and `winner-order-SC-72` are phrased on receipt rather than on submission |
-| What the address deadline is measured from on an extended lot | **Folded in.** The scenario pass had already fixed it on the actual close; `winner-order-SC-79` proves it against a lot whose scheduled and actual closes differ |
-| Whether a winner may add an address to the account book while the address form is closed | **Folded in** after a grilling round. The account address book is unaffected — `winner-order-SC-78` and `winner-order-US8-TC9-1` |
+| Which clock decides a confirmation sent at 47:59 and arriving at 48:01 | **Folded in.** Nobody had decided it. The requirement now judges a write by the moment Grade10 receives it, and `winner-order-SC-145` and `winner-order-SC-146` are phrased on receipt rather than on submission |
+| What the address deadline is measured from on an extended lot | **Folded in.** The scenario pass had already fixed it on the actual close; `winner-order-SC-144` proves it against a lot whose scheduled and actual closes differ |
+| Whether a winner may add an address to the account book while the address form is closed | **Folded in** after a grilling round. The account address book is unaffected — `winner-order-SC-151` and `winner-order-US8-TC9-1` |
 | Whether a reopen after send does anything | **Already decided**, in `grade10-admin/auction/post-sale`: a reopen is refused once the invoice is sent. The suite could not see it |
-| Whether a reopen notifies the winner | **Folded in** once Product settled it: no letter, the operator tells the winner directly — `winner-order-SC-81` and `winner-order-US8-TC10-1` |
+| Whether a reopen notifies the winner | **Folded in** once Product settled it: no letter, the operator tells the winner directly — `winner-order-SC-149` and `winner-order-US8-TC10-1` |
 | What a missed address deadline does to the reminder letters | **Dropped.** Address reminders belong to `revise-auction-winner-invoicing`. Recorded here so the next blind pass does not raise it again |
 | Traces on this delta pointing at feature set groups | **Kept.** The delta's journeys file holds only `winner-order-US-08`; the journeys those cases walk are durable and reach the suite at archive |
 | Cases covering behaviour this change no longer carries | **Kept as written.** Every delta here became ADDED after `check:manual` refused a draft that folded requirements `revise-auction-winner-invoicing` also folds. Cases reading the lock at send, the seven days from send and the hold release stay in the suite; the requirements they walk are that change's |

@@ -1,5 +1,5 @@
 schema: grade10-planning
 created: 2026-09-17
 promoted_by: "@htonyl"
-awaiting:
-  specs: "outline and requirement deltas for order-status, winner-order, account-record, auction-record and post-sale — /planning-qa"
+depends_on:
+  - close-overdue-address-confirmation

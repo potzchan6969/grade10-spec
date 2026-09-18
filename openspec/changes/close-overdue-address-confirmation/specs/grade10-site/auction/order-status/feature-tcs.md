@@ -300,14 +300,6 @@ Runs once per row of **Test data**.
 * `address_confirmed` is true and `address_window_open` is still false.
 * The order derives as Preparing Invoice.
 
-## Raised
-
-- **Which fact says the address window is open.** The window is a third condition read from the order's own facts, and the input never names the fact — a stored address deadline, the lot close plus 48 hours, or a reopen count. TC6 and TC10 assume a stored address deadline that a reopen rewrites.
-- **Whether `not_issued` survives a cancellation before send.** Cancellation is now available before an invoice exists, and the input gives `not_issued` no exit other than a send. Nothing says whether such an order's invoice status becomes `cancelled` or stays `not_issued` while the order derives Cancelled.
-- **What a reissue does to an `expired` invoice's stored status.** Expiry is a written fact; a reissue is said to return the order to Pending Payment with a new deadline, and nothing says whether the same invoice is rewritten to `pending` or a second invoice is issued.
-- **Whether the Overdue mark is a derived read or a stored one.** The mark is said to change no status, but the input places it on the operator's queue only, and does not say whether the derivation produces it for the winner's surfaces too.
-- **A missing journeys file.** This change's `order-status` delta had no `user-journeys.md` beside its `spec.md`, so the capability's anchors could not be read from the delta at all. The journey in this suite's heading was taken from the input bundle.
-
 ## Reconciliation
 
 Two independent readings of the same anchors: this suite, written without sight

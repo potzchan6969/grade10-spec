@@ -1,11 +1,15 @@
 # grade10-site/auction/order-status Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## Derived order status
+## auction-status-US1: Refund is terminal after partial collection
 
-### grade10-site-auction-order-status-SC-01: A refund is terminal after partial collection
+**As a** winner or operator,
+**I want** a refunded order to remain terminal,
+**so that** later payment events cannot reopen it.
+
+### auction-status-US1-TC1-1: A refund is terminal after partial collection
 
 **Classification:**
 
@@ -37,5 +41,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| Refunded remains terminal after a partial collection | **Folded in:** `auction-status-SC-51` |

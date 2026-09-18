@@ -1,11 +1,15 @@
 # shared/ui/auction-record Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## Content ownership
+## shared-ui-auction-record-US1: Content ownership
 
-### shared-ui-auction-record-SC-01: The record surface calls the mixed column Status
+**As an** application,
+**I want** the shared record surface to render supplied status copy,
+**so that** order-state vocabulary stays owned by the application.
+
+### shared-ui-auction-record-US1-TC1-1: The record surface calls the mixed column Status
 
 **Classification:**
 
@@ -37,5 +41,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| The shared component renders application-owned status copy | **Folded in:** `shared-ui-auction-record-SC-16` |

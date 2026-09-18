@@ -1,15 +1,15 @@
 # grade10-admin/auction/post-sale Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## post-sale-US-09: Operator records a refund a winner asked Customer Service for
+## post-sale-US16: Operator records a refund a winner asked Customer Service for
 
 **As an** operator with refund processing,
 **I want** to record money sent back in Stripe or by bank transfer,
 **so that** the order and the lot agree with the refund.
 
-### post-sale-US-09-TC1-1: A refund records the financial facts and closes the order
+### post-sale-US16-TC1-1: A refund records the financial facts and closes the order
 
 **Classification:**
 
@@ -22,7 +22,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-09
+* **Trace:** post-sale-US-16
 
 **Pre-conditions:**
 
@@ -40,7 +40,7 @@
 * The lot returns to stock.
 * The refund record names the operator and time.
 
-### post-sale-US-09-TC2-1: A refund cannot return more than was paid
+### post-sale-US16-TC2-1: A refund cannot return more than was paid
 
 **Classification:**
 
@@ -53,7 +53,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** post-sale-US-09
+* **Trace:** post-sale-US-16
 
 **Pre-conditions:**
 
@@ -69,13 +69,13 @@
 * The refund is refused and no audit number is consumed.
 * The order stays Partially Paid.
 
-## post-sale-US-10: Finance reconciles auction refunds
+## post-sale-US17: Finance reconciles auction refunds
 
 **As a** finance operator,
 **I want** to filter the queue to Refunded and read the full refund record,
 **so that** each external refund matches one Grade10 record.
 
-### post-sale-US-10-TC1-1: The queue and order detail expose one refund record
+### post-sale-US17-TC1-1: The queue and order detail expose one refund record
 
 **Classification:**
 
@@ -88,7 +88,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-10
+* **Trace:** post-sale-US-17
 
 **Pre-conditions:**
 
@@ -109,5 +109,5 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Whether a partial payment is refunded in full or by an operator-entered amount | **Folded in:** `grade10-admin-auction-post-sale-SC-145` and `grade10-admin-auction-post-sale-SC-146` |
+| Amount, evidence, stock and audit fields | **Folded in:** `grade10-admin-auction-post-sale-SC-145`, `grade10-admin-auction-post-sale-SC-146` and `grade10-admin-auction-post-sale-SC-147` |

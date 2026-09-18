@@ -1,6 +1,6 @@
 ## ADDED User journeys
 
-### winner-order-US-10: Winner sees a refunded order as Refunded
+### winner-order-US-14: Winner sees a refunded order as Refunded
 
 **As a** winner whose order Grade10 refunded because they were not happy with the item,
 **I want** Winner Order to read Refunded, with the amount returned below the invoice total and a way to see the reason, note and enough refund transaction clues to recognise the return, whether I had paid in full or in part and wherever the card is, and my invoice and receipts still there,

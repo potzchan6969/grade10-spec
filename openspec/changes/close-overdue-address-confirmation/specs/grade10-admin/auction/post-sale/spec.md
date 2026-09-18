@@ -53,7 +53,7 @@ step. Recording it SHALL NOT reopen the window and SHALL NOT let the winner
 write again.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-75 - A reopen gives a fresh 48 hours
-**Serves:** post-sale-US-09 - Operator reopens the address form
+**Serves:** post-sale-US-18 - Operator reopens the address form
 
 - **GIVEN** an auction order in Awaiting Setup whose address deadline was
   at 2026-09-14T09:00:00Z
@@ -64,7 +64,7 @@ write again.
 - **AND** the winner can confirm a delivery address again
 
 #### Scenario: grade10-admin-auction-post-sale-SC-76 - A reopen without a reason is refused
-**Serves:** post-sale-US-09 - Operator reopens the address form
+**Serves:** post-sale-US-18 - Operator reopens the address form
 
 - **GIVEN** an auction order whose address deadline was 2026-09-14T09:00:00Z
 - **WHEN** an operator attempts to reopen the address form without a reason
@@ -72,7 +72,7 @@ write again.
 - **AND** the address deadline has still passed
 
 #### Scenario: grade10-admin-auction-post-sale-SC-77 - An operator without the grant cannot reopen
-**Serves:** post-sale-US-09 - Operator reopens the address form
+**Serves:** post-sale-US-18 - Operator reopens the address form
 
 - **GIVEN** an operator who does not hold payment-processing
 - **WHEN** they open an auction order whose address deadline has passed
@@ -80,7 +80,7 @@ write again.
 - **AND** Grade10 refuses the reopen on the server if it is attempted
 
 #### Scenario: grade10-admin-auction-post-sale-SC-78 - A third reopen is allowed
-**Serves:** post-sale-US-09 - Operator reopens the address form
+**Serves:** post-sale-US-18 - Operator reopens the address form
 
 - **GIVEN** an auction order whose address form has been reopened twice and whose
   address deadline has passed again
@@ -98,7 +98,7 @@ write again.
   and that reason
 
 #### Scenario: grade10-admin-auction-post-sale-SC-80 - Reopening before the deadline is refused
-**Serves:** post-sale-US-09 - Operator reopens the address form
+**Serves:** post-sale-US-18 - Operator reopens the address form
 
 - **GIVEN** an auction order in Awaiting Setup whose address deadline is
   at 2026-09-18T14:00:00Z
@@ -107,7 +107,7 @@ write again.
 - **AND** the address deadline is still 2026-09-18T14:00:00Z
 
 #### Scenario: grade10-admin-auction-post-sale-SC-81 - No reopen once the invoice is sent
-**Serves:** post-sale-US-09 - Operator reopens the address form
+**Serves:** post-sale-US-18 - Operator reopens the address form
 
 - **GIVEN** an auction order whose invoice an operator has sent
 - **WHEN** an operator attempts to reopen its address form
@@ -115,7 +115,7 @@ write again.
 - **AND** the delivery address stays locked, changeable only by a re-quote
 
 #### Scenario: grade10-admin-auction-post-sale-SC-83 - A cancelled order refuses a reopen
-**Serves:** post-sale-US-09 - Operator reopens the address form
+**Serves:** post-sale-US-18 - Operator reopens the address form
 
 - **GIVEN** an auction order an operator cancelled before any invoice was sent,
   whose lot has returned to available stock
@@ -125,7 +125,7 @@ write again.
 - **AND** the lot stays in available stock
 
 #### Scenario: grade10-admin-auction-post-sale-SC-84 - An operator records the address without reopening
-**Serves:** post-sale-US-09 - Operator reopens the address form
+**Serves:** post-sale-US-18 - Operator reopens the address form
 
 - **GIVEN** an auction order in Awaiting Setup whose address deadline was
   at 2026-09-14T09:00:00Z

@@ -1,15 +1,15 @@
 # grade10-admin/auction/post-sale Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## post-sale-US-15: Operator filters Setup Overdue and Payment Overdue
+## post-sale-US15: Operator filters Setup Overdue and Payment Overdue
 
 **As an** operator,
 **I want** Setup Overdue and Payment Overdue as queue outcomes,
 **so that** I find deadline-missed orders using the same names as the winner.
 
-### post-sale-US-15-TC1-1: The queue uses the two overdue outcomes
+### post-sale-US15-TC1-1: The queue uses the two overdue outcomes
 
 **Classification:**
 
@@ -39,7 +39,7 @@
 * The rows read Setup Overdue and Payment Overdue.
 * Each filter returns only its matching order.
 
-### post-sale-US-15-TC2-1: Overdue outcomes do not erase the action context
+### post-sale-US15-TC2-1: Overdue outcomes do not erase the action context
 
 **Classification:**
 
@@ -71,5 +71,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| Queue labels preserve the operator action context | **Folded in:** `grade10-admin-auction-post-sale-SC-148` and `SC-149` |

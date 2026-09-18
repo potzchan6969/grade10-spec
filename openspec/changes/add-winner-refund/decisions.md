@@ -45,3 +45,4 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| `grade10-admin/auction/post-sale` | Whether a refund on a partially paid order returns the whole paid amount or an operator-entered amount | Q9 |

@@ -1,11 +1,15 @@
 # shared/auth/roles Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## Permission checks
+## shared-auth-roles-US2: Operator's grants follow the closed vocabulary
 
-### shared-auth-roles-SC-01: Refund processing is granted to staff and admin
+**As an** operator,
+**I want** refund access to follow the role matrix,
+**so that** only the intended roles can record a refund.
+
+### shared-auth-roles-US2-TC1-1: Refund processing is granted to staff and admin
 
 **Classification:**
 
@@ -32,7 +36,7 @@
 
 * Both callers are allowed by `auction:refund`.
 
-### shared-auth-roles-SC-02: Settlement permission is not required for a refund
+### shared-auth-roles-US2-TC2-1: Settlement permission is not required for a refund
 
 **Classification:**
 
@@ -64,5 +68,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| Refund access is separate from settlement access | **Folded in:** `shared-auth-roles-SC-14` and `shared-auth-roles-SC-15` |

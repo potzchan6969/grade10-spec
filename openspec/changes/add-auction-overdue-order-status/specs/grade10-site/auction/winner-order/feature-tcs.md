@@ -1,15 +1,15 @@
 # grade10-site/auction/winner-order Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## winner-order-US-05: Winner misses the payment deadline
+## winner-order-US5: Winner misses the payment deadline
 
 **As a** winner whose invoice deadline has passed unpaid,
 **I want** Winner Order to read Payment Overdue with Contact Us,
 **so that** I know card Pay has stopped.
 
-### winner-order-US-05-TC1-1: Payment Overdue removes Pay
+### winner-order-US5-TC1-1: Payment Overdue removes Pay
 
 **Classification:**
 
@@ -38,13 +38,13 @@
 * The alert offers Contact Us.
 * Pay and the payment deadline are absent.
 
-## winner-order-US-07: Winner misses the address deadline
+## winner-order-US7: Winner misses the address deadline
 
 **As a** winner who did not confirm a delivery address in time,
 **I want** Winner Order to read Setup Overdue with Contact Us,
 **so that** I know self-service setup has stopped.
 
-### winner-order-US-07-TC1-1: Setup Overdue removes Confirm
+### winner-order-US7-TC1-1: Setup Overdue removes Confirm
 
 **Classification:**
 
@@ -77,5 +77,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| Overdue removes Confirm or Pay and keeps Contact Us | **Folded in:** `winner-order-SC-141` and `SC-142` |

@@ -45,20 +45,20 @@ Setup Overdue and Payment Overdue; column header **Status**.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Awaiting Setup | Complete Order Setup; Confirm by … | `winner-order-US-01` |
-| Setup Overdue | Missed setup deadline alert; Contact Us; no Confirm | `winner-order-US-07` |
+| Awaiting Setup | Complete Order Setup; Confirm by … | **Out of suite:** existing pre-deadline state |
+| Setup Overdue | Missed setup deadline alert; Contact Us; no Confirm | `winner-order-SC-142` |
 
 ### Winner Order — Payment
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Pending Payment | Pay CTA; Pay by … | `winner-order-US-01` |
-| Payment Overdue | Overdue alert; Contact Us; no Pay | `winner-order-US-05` |
+| Pending Payment | Pay CTA; Pay by … | **Out of suite:** existing pre-expiry state |
+| Payment Overdue | Overdue alert; Contact Us; no Pay | `winner-order-SC-141` |
 
 ### My Auctions
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Status column | Header reads Status | `grade10-site-auction-account-record-US-08` |
-| Won Setup Overdue | Status badge Setup Overdue (error); View order → Expired Setup | `grade10-site-auction-account-record-US-09` |
-| Won Payment Overdue | Status badge Payment Overdue (error); View order → Expired Invoice | `grade10-site-auction-account-record-US-09` |
+| Status column | Header reads Status | `shared-ui-auction-record-SC-16` |
+| Won Setup Overdue | Status badge Setup Overdue (error); View order → Expired Setup | `grade10-site-auction-account-record-SC-63` |
+| Won Payment Overdue | Status badge Payment Overdue (error); View order → Expired Invoice | `grade10-site-auction-account-record-SC-63` |

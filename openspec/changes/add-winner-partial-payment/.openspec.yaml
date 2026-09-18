@@ -1,5 +1,5 @@
 schema: grade10-planning
 created: 2026-09-17
 promoted_by: "@htonyl"
-awaiting:
-  specs: "held until add-winner-bank-transfer archives, so the spec.md outline and requirement deltas for winner-order, order-status and post-sale apply against the landed payment_verifying/reissue/identifier shape rather than a moving target - /planning-qa"
+depends_on:
+  - add-winner-bank-transfer

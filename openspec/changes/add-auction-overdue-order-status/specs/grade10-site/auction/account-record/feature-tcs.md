@@ -1,15 +1,15 @@
 # grade10-site/auction/account-record Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## grade10-site-auction-account-record-US-09: Won Status shows Setup Overdue and Payment Overdue
+## grade10-site-auction-account-record-US9: Won Status shows Setup Overdue and Payment Overdue
 
 **As a** winner scanning My Auctions,
 **I want** overdue won lots to read their overdue state in Status,
 **so that** I can tell closed self-service from an open window.
 
-### grade10-site-auction-account-record-US-09-TC1-1: My Auctions names both overdue states
+### grade10-site-auction-account-record-US9-TC1-1: My Auctions names both overdue states
 
 **Classification:**
 
@@ -41,5 +41,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| My Auctions uses Status for both overdue outcomes | **Folded in:** `grade10-site-auction-account-record-SC-63` |

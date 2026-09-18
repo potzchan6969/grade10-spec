@@ -1,11 +1,15 @@
 # grade10-site/auction/account-record Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## After a close
+## grade10-site-auction-account-record-US8: Winner revisits a partially paid order
 
-### grade10-site-auction-account-record-US-08-TC1-1: A partially paid Won row opens Winner Order
+**As a** winner with an order being collected in parts,
+**I want** My Auctions to keep the Won row linked to the order,
+**so that** I can return to the locked payment record.
+
+### grade10-site-auction-account-record-US8-TC1-1: A partially paid Won row opens Winner Order
 
 **Classification:**
 
@@ -18,7 +22,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** After a close
+* **Trace:** grade10-site-auction-account-record-US-08
 
 **Pre-conditions:**
 
@@ -38,5 +42,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| The Won row remains linked while collection is partial | **Folded in:** `grade10-site-auction-account-record-SC-62` |

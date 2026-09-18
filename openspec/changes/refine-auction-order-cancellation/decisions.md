@@ -40,3 +40,4 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| `grade10-admin/auction/post-sale` | Who clears a Paid-after-cancel flag, and whether that action can revive the order | Q6 |

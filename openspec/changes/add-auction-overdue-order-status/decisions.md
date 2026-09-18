@@ -29,3 +29,4 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| `grade10-site/auction/order-status` | Whether overdue is a stored state or a derived read, and whether the queue's Overdue mark belongs here | Q1 |

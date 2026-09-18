@@ -1,15 +1,15 @@
 # grade10-admin/auction/post-sale Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## post-sale-US-13: Operator cancels an order knowing what follows
+## post-sale-US13: Operator cancels an order knowing what follows
 
 **As an** operator with payment processing,
 **I want** to choose a reason and see the consequences before confirming,
 **so that** every cancellation is deliberate and countable.
 
-### post-sale-US-13-TC1-1: The cancellation dialog requires the reason and consequences
+### post-sale-US13-TC1-1: The cancellation dialog requires the reason and consequences
 
 **Classification:**
 
@@ -42,7 +42,7 @@
 * The cancel is accepted with the selected category and note.
 * The lot is back in stock and the order links to it for manual relisting.
 
-### post-sale-US-13-TC2-1: Cancellation categories filter the queue
+### post-sale-US13-TC2-1: Cancellation categories filter the queue
 
 **Classification:**
 
@@ -69,13 +69,13 @@
 
 * Only orders cancelled for Lot issue are returned.
 
-## post-sale-US-14: Operator returns money paid after a cancel
+## post-sale-US14: Operator returns money paid after a cancel
 
 **As an** operator,
 **I want** a late card payment to remain flagged until finance returns it,
 **so that** no winner pays for a cancelled lot without a follow-up.
 
-### post-sale-US-14-TC1-1: A late payment is flagged without reviving the order
+### post-sale-US14-TC1-1: A late payment is flagged without reviving the order
 
 **Classification:**
 
@@ -109,5 +109,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| Cancellation is reasoned, terminal and flags late payment without revival | **Folded in:** `grade10-admin-auction-post-sale-SC-150`–`SC-152` |

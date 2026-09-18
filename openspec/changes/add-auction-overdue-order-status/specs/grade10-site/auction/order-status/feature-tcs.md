@@ -1,15 +1,15 @@
 # grade10-site/auction/order-status Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## auction-status-US-03: Payment deadline past reads Payment Overdue
+## auction-status-US3: Payment deadline past reads Payment Overdue
 
 **As a** winner or operator,
 **I want** an unpaid invoice past its deadline to read Payment Overdue,
 **so that** the status shows self-service Pay has closed.
 
-### auction-status-US-03-TC1-1: An expired invoice derives Payment Overdue
+### auction-status-US3-TC1-1: An expired invoice derives Payment Overdue
 
 **Classification:**
 
@@ -22,7 +22,7 @@
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auction-status-US-03
+* **Trace:** Derived order status
 
 **Pre-conditions:**
 
@@ -37,13 +37,13 @@
 * The status is Payment Overdue.
 * Winner card Pay is unavailable.
 
-## auction-status-US-04: Setup deadline past reads Setup Overdue
+## auction-status-US4: Setup deadline past reads Setup Overdue
 
 **As a** winner or operator,
 **I want** incomplete setup past its deadline to read Setup Overdue,
 **so that** the status shows self-service Confirm has closed.
 
-### auction-status-US-04-TC1-1: An incomplete setup derives Setup Overdue
+### auction-status-US4-TC1-1: An incomplete setup derives Setup Overdue
 
 **Classification:**
 
@@ -56,7 +56,7 @@
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auction-status-US-04
+* **Trace:** Derived order status
 
 **Pre-conditions:**
 
@@ -75,5 +75,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| Overdue names are derived from deadline and invoice facts | **Folded in:** `auction-status-SC-52` and `SC-53` |

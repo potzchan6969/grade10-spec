@@ -1,15 +1,15 @@
 # grade10-site/auction/winner-order Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## winner-order-US-10: Winner sees a refunded order as Refunded
+## winner-order-US14: Winner sees a refunded order as Refunded
 
 **As a** winner whose order Grade10 refunded,
 **I want** Winner Order to read Refunded and retain my records,
 **so that** I know the order is closed and can still prove what I paid.
 
-### winner-order-US-10-TC1-1: Refunded keeps the invoice and receipts
+### winner-order-US14-TC1-1: Refunded keeps the invoice and receipts
 
 **Classification:**
 
@@ -22,7 +22,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-10
+* **Trace:** winner-order-US-14
 
 **Pre-conditions:**
 
@@ -43,5 +43,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| Refunded retains issued documents and removes self-service | **Folded in:** `winner-order-SC-140` |

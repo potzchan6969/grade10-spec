@@ -1,15 +1,15 @@
 # grade10-admin/auction/post-sale Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## post-sale-US-12: Operator collects a lot's price across more than one payment
+## post-sale-US12: Operator collects a lot's price across more than one payment
 
 **As an** operator,
 **I want** to record each payment as it arrives and see the order until it is settled,
 **so that** every partial payment is recorded without tracking the balance outside Grade10.
 
-### post-sale-US-12-TC1-1: A partial payment starts collection
+### post-sale-US12-TC1-1: A partial payment starts collection
 
 **Classification:**
 
@@ -39,7 +39,7 @@
 * The order outcome is Partially Paid.
 * The payment record has its own receipt number and the remaining balance is 60000 minor units.
 
-### post-sale-US-12-TC2-1: Repeated payments keep one order history
+### post-sale-US12-TC2-1: Repeated payments keep one order history
 
 **Classification:**
 
@@ -70,7 +70,7 @@
 * Both payments remain in oldest-first order.
 * The order remains Partially Paid until its invoice is closed.
 
-### post-sale-US-12-TC3-1: The closing prompt does not discard the payment
+### post-sale-US12-TC3-1: The closing prompt does not discard the payment
 
 **Classification:**
 
@@ -106,5 +106,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| Overpayment and close-or-keep boundary | **Folded in:** `grade10-admin-auction-post-sale-SC-140`–`SC-142` |

@@ -1,15 +1,15 @@
 # grade10-site/auction/order-status Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-r3
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## auction-status-US-02: Partially Paid status ends self-service Pay for good
+## auction-status-US2: Partially Paid status ends self-service Pay for good
 
 **As a** winner or operator,
 **I want** an invoice with a recorded payment to read Partially Paid,
 **so that** the status says who settles the remaining money.
 
-### auction-status-US-02-TC1-1: A recorded payment derives Partially Paid
+### auction-status-US2-TC1-1: A recorded payment derives Partially Paid
 
 **Classification:**
 
@@ -22,7 +22,7 @@
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** auction-status-US-02
+* **Trace:** Derived order status
 
 **Pre-conditions:**
 
@@ -37,7 +37,7 @@
 * The derived status is Partially Paid.
 * The remaining balance is not used to derive a different status.
 
-### auction-status-US-02-TC2-1: Partially Paid has no self-service deadline
+### auction-status-US2-TC2-1: Partially Paid has no self-service deadline
 
 **Classification:**
 
@@ -50,7 +50,7 @@
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** auction-status-US-02
+* **Trace:** Guards
 
 **Pre-conditions:**
 
@@ -69,5 +69,6 @@
 
 ## Reconciliation
 
-Pending the reconciled requirement pass.
-
+| Finding | Disposition |
+| --- | --- |
+| Partially Paid is derived and removes self-service | **Folded in:** `auction-status-SC-49` and `auction-status-SC-50` |

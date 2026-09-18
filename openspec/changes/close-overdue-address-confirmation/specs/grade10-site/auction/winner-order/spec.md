@@ -81,7 +81,7 @@ Sending the invoice SHALL retire the address deadline. The delivery address
 locks at send, per "The delivery address locks when the invoice is sent", so
 Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 
-#### Scenario: winner-order-SC-79 - The address deadline counts from the extended close
+#### Scenario: winner-order-SC-144 - The address deadline counts from the extended close
 **Serves:** winner-order-US-08 - Winner gets the address form back
 
 - **GIVEN** a lot whose scheduled close was 2026-09-12T08:45:00Z and whose
@@ -89,7 +89,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **WHEN** the winner opens the order
 - **THEN** the address deadline shown is 2026-09-14T09:00:00Z
 
-#### Scenario: winner-order-SC-80 - An address received just inside the deadline is accepted
+#### Scenario: winner-order-SC-145 - An address received just inside the deadline is accepted
 **Serves:** winner-order-US-08 - Winner gets the address form back
 
 - **GIVEN** an auction order whose address deadline is 2026-09-14T09:00:00Z
@@ -97,7 +97,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **THEN** Grade10 accepts the confirmation
 - **AND** the order's derived status is Preparing Invoice
 
-#### Scenario: winner-order-SC-72 - An address received after the deadline is refused
+#### Scenario: winner-order-SC-146 - An address received after the deadline is refused
 **Serves:** winner-order-US-08 - Winner gets the address form back
 
 - **GIVEN** an auction order in Awaiting Setup whose address deadline was
@@ -107,7 +107,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** the order has no confirmed delivery address
 - **AND** its derived status is still Awaiting Setup
 
-#### Scenario: winner-order-SC-73 - A confirmed address cannot be changed after the deadline
+#### Scenario: winner-order-SC-147 - A confirmed address cannot be changed after the deadline
 **Serves:** winner-order-US-08 - Winner gets the address form back
 
 - **GIVEN** an auction order in Preparing Invoice whose winner confirmed an
@@ -121,7 +121,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
   2026-09-13T10:00:00Z
 - **AND** the order carries Contact Us and no change control
 
-#### Scenario: winner-order-SC-75 - A reopen gives the winner a fresh 48 hours
+#### Scenario: winner-order-SC-148 - A reopen gives the winner a fresh 48 hours
 **Serves:** winner-order-US-08 - Winner gets the address form back
 
 - **GIVEN** an auction order whose address deadline was 2026-09-14T09:00:00Z
@@ -131,7 +131,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** the winner can confirm a delivery address again
 - **AND** Grade10 offers the winner no way to reopen it themselves
 
-#### Scenario: winner-order-SC-81 - A reopen sends the winner no letter
+#### Scenario: winner-order-SC-149 - A reopen sends the winner no letter
 **Serves:** winner-order-US-08 - Winner gets the address form back
 
 - **GIVEN** an auction order whose address deadline has passed
@@ -139,7 +139,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **THEN** the order offers Confirm delivery address again
 - **AND** Grade10 sends the winner no letter about the reopen
 
-#### Scenario: winner-order-SC-77 - Sending the invoice retires the address deadline
+#### Scenario: winner-order-SC-150 - Sending the invoice retires the address deadline
 **Serves:** Delivery address - sending the invoice retires the address deadline
 
 - **GIVEN** an auction order whose winner confirmed an address and whose
@@ -149,7 +149,7 @@ Grade10 SHALL neither show the address deadline nor refuse on it afterwards.
 - **AND** it shows the locked address and how to reach Grade10 to request a
   change
 
-#### Scenario: winner-order-SC-78 - A missed address deadline leaves the address book alone
+#### Scenario: winner-order-SC-151 - A missed address deadline leaves the address book alone
 **Serves:** Delivery address - a missed address deadline leaves the address book alone
 
 - **GIVEN** an auction order whose address deadline has passed
