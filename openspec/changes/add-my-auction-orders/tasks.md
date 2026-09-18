@@ -1,4 +1,4 @@
-## 1. Specification and product record (grade10-spec)
+## 1. Specification and product record (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Carry the explicit dependency on `revise-auction-winner-invoicing` through the proposal and deltas, preserving its `not_issued`, `pending`, `expired`, `paid`, fulfilment and derived-status ownership; keep expired orders as Pending Payment with Contact Us in the order detail (grade10-site-auction-auction-orders-SC-07, winner-order-SC-44, winner-order-SC-49)
 - [ ] 1.2 Update the My Auctions and Winner Order PRDs so the Won-row entry point, invoice-expiry outcome, address-lock ownership and Hong Kong Postal Code question agree with the change (grade10-site-auction-account-record-SC-55, winner-order-SC-45)
