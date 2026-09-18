@@ -17,7 +17,7 @@ open, and names the capability that holds the rules.
 | [Account](/p/grade10-site/auction/account) | Registration and login, the verified identity a high bid needs, and the delivery addresses a winner confirms |
 | [Auction Display](/p/grade10-site/auction/display) | The catalogue and what a listing carries, the lot page with its gallery and status, and the admin panel that makes the lot |
 | [Bidding](/p/grade10-site/auction/bidding) | The auction logic — extended bidding, auto-bidding, increments — the bid panel from sign-in to a standing bid, and My Auctions, the watchlist and the letters |
-| [Post-Bidding](/p/grade10-site/auction/post-bidding) | The result and its letters, then the winner's order from address to delivery: lifecycle, invoicing, paying by card or bank transfer, receipts, logistics and the edge cases |
+| [Post-Bidding](/p/grade10-site/auction/post-bidding) | The result, then the winner's order: its status, setup, the invoice, paying by card or bank transfer, receipts, the letters on their two clocks, and the edge cases |
 
 The operator's half is [Auction Management](/p/grade10-admin/auction/management).
 The blocks both brands render are [Listing Page

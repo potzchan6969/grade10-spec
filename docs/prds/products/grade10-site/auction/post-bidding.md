@@ -4,23 +4,25 @@ spec: grade10-site/auction/winner-order
 order: 4
 ---
 
-What happens when a lot closes: the result and its letters, then the winner's
-order from a confirmed address to a delivered card.
+What happens after a lot stops taking bids: the result, then the winner's
+order — set up, invoiced, paid, shipped — and the letters that carry it.
 
-## Result and Notification
+## The Close
 
-- **Ended** — the lot reads Ended on every page, with or without a winner,
-  whatever happens to the order — [Lot
+Bidding stops, the result is fixed at once, and only the winner gets an order.
+
+- **Every lot reads Ended** — with or without a winner, whatever happens to
+  the order afterwards — [Lot
   Status](/p/grade10-site/auction/display#auction-details)
-- **The hold is released** — at the close, for everyone; a winner's hold is
-  never captured, and a losing bidder's row on My Auctions says whether it is
+- **Every hold is released** — at the close, for everyone; a winner's hold is
+  never captured, and a losing bidder's My Auctions row says whether it is
   being released or released
-- **The winner** — gets the auction-won letter asking for a delivery address
-  by `Confirm by …`; their My Auctions row reads Won with View order, and the
-  lot joins My Auction Orders
-- **Everyone else** — a bidder who lost hears once that the lot closed and
-  they did not win; a watcher hears once that it ended, Ended only when
-  nobody bid — [Bidding ·
+- **The winner** — gets the auction-won letter asking for setup by `Confirm
+  by …`, naming no amount; their My Auctions row reads Won with View order,
+  and the lot joins My Auction Orders
+- **Everyone else hears once** — a bidder who lost, and a watch-only
+  collector, each get one letter about the close and nothing after it —
+  [Bidding ·
   Notifications](/p/grade10-site/auction/bidding#my-auctions-watchlist-and-notifications)
 
 ## Winner Order
@@ -37,37 +39,25 @@ winner of three lots has three orders, each with its own deadlines.
 | Payment proof | 🚧 **1 to 5** PDF, JPEG or PNG files of up to **10 MB** each, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
-:::flow{title="Settling a won lot"}
-## *Grade10* — **Opens the order**
-At the close: the auction-won letter asks for a delivery address.
-## *Winner* — **Confirms the address and the payment method**
-Within 48 hours; the order reads Preparing Invoice.
-## *Operator* — **Sends the invoice**
-Shipping and insurance priced for that address; the 7-day payment window
-starts — [Auction Management · Payment](/p/grade10-admin/auction/management#payment).
-## *Winner* — **Pays**
-By card, one charge for the order total, or by bank transfer quoting the
-reference and uploading proof an operator checks.
-## *Grade10* — **Records the payment**
-The order reads Processing, and the receipt and its letter go out.
-## *Operator* — **Ships**
-Carrier and tracking number; the order reads Shipped.
-## *Carrier* — **Delivers**
-The proof is recorded and the order reads Delivered.
-:::
+- **Sections** — Order Information with Invoice Status and Collection Method,
+  Order Status with a time per step, and Lots
+- **Progress** — five steps, Address → Invoice → Payment → Shipped →
+  Completed, with day-only dates; Cancelled and Refunded show no stepper
+- 🚧 **Under Payment** — Payment Verifying and Partially Paid both read
+  against the Payment step
 
 ### My Auction Orders
 
 🚧 Every won lot on one list, opened from the account menu beside My
 Auctions: the lot with View lot, the auction, the winning bid, the status and
-one next action — Confirm address while Awaiting Address, Pay Invoice while
-Pending Payment, an expired invoice included, and View detail otherwise.
-Orders waiting on the winner come first, then the rest by newest close, and
-an empty list points to My Auctions.
+one next action — Complete Order Setup while Awaiting Setup, Pay Invoice
+while Pending Payment, an expired invoice included, and View detail
+otherwise. Orders waiting on the winner come first, then the rest by newest
+close, and an empty list points to My Auctions.
 
 ::changes{spec="grade10-site/auction/auction-orders"}
 
-### Lifecycle
+## Order Status
 
 An auction order has one status, derived from its invoice, address,
 fulfilment and delivery facts, that the winner, the operator and My Auctions
@@ -78,10 +68,10 @@ meaning.
 
 | Status | Invoice reads | Reached when |
 | --- | --- | --- |
-| **Awaiting Setup** | Not issued | The lot closes with a winner, inside the setup deadline |
+| **Awaiting Address** | Not issued | The lot closes with a winner and no address is confirmed |
 | 🚧 **Setup Overdue** | Not issued | The setup deadline passes with setup incomplete; self-service Confirm is closed |
 | **Preparing Invoice** | Not issued | The winner confirms setup, or an operator records an address after the deadline |
-| **Pending Payment** | Pending | An operator sends or reissues the invoice, inside the payment deadline |
+| **Pending Payment** | Pending or expired | An operator sends or reissues the invoice |
 | 🚧 **Payment Overdue** | Expired | The payment deadline passes with the invoice unpaid; self-service Pay is closed |
 | 🚧 **Payment Verifying** | Payment Verifying | The winner uploads bank transfer proof; the deadline stops until an operator confirms or returns it |
 | 🚧 **Partially Paid** | Partially Paid | An operator records a payment short of the balance; the deadline stops for good and Pay is not offered again, and the order stays here until a payment closes the balance |
@@ -94,51 +84,23 @@ meaning.
 - **Read, never written** — one ordered rule chain derives it, so it cannot
   contradict the facts; dispatch before payment, cancelling a dispatched
   order and delivery before dispatch are refused
-- 🚧 **Missed setup deadline** — the order reads Setup Overdue; the winner
-  can no longer confirm until an operator reopens the form
-- 🚧 **Missed payment deadline** — the order reads Payment Overdue; the
-  invoice is `expired` and self-service Pay is closed
+- 🚧 **Awaiting Setup** — Awaiting Address is renamed, because setup confirms
+  a payment method and a billing address as well as an address
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
   its own; a proof under check never expires
+- **Shipment** — the carrier, the tracking number and a link to the carrier,
+  then the delivery proof when the carrier provides one; an operator records
+  both — [Auction Management ·
+  Fulfilment](/p/grade10-admin/auction/management#fulfilment)
+- 🚧 **A cancelled order** — reads `Cancelled on {date}`, keeps the lot and
+  the winning bid, and offers Contact Us alone; it gives no reason, and a
+  suspension stays until an operator reinstates
+- 🚧 **A refunded order** — reads Refunded as both the order status and the
+  invoice status, however much was paid and wherever the card is; no Pay, no
+  address form and no letter, and the invoice and every receipt already
+  issued stay downloadable
 
-### Notification
-
-Every letter identifies the lot, goes to the winner's registered address and
-opens that lot's order, sign-in first when signed out; the lot image and title
-open it too.
-
-| Letter | When | What it carries |
-| --- | --- | --- |
-| Auction won | The lot closes with a winner | The setup steps and `Confirm by …`; no amount yet |
-| 🚧 Setup reminder | **24 hours** after the close, while setup is incomplete | The steps and `Confirm by …` |
-| 🚧 Setup overdue | The setup deadline passes | Self-service setup is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review, never automatically |
-| Payment reminder | At send, then **day 3** and **day 6** while the invoice is pending | The total and `Pay by …`; View invoice and pay |
-| 🚧 Final notice | **24 hours** before the payment deadline, while Pay is still offered | The last payable reminder |
-| 🚧 Payment overdue | The invoice expires unpaid | What remains owed; Pay is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review |
-| 🚧 Invoice reissued | An operator reissues | The `payment-reminder` letter for the new invoice, its total and `Pay by …`; no letter of its own |
-| 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner and `Pay by …`; none when proof is uploaded |
-| Payment received | Card confirmed, proof confirmed, or a manual settlement | Amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
-| Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking |
-| 🚧 Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
-| 🚧 Order cancelled | An operator cancels | That the order was cancelled and when; no reason and no word on payment; Contact Us first, View order second |
-
-- **Reminders stop at payment** — every outstanding reminder is cancelled the
-  moment payment is received, and a reissue restarts the series for the new
-  invoice
-- 🚧 **Invoice sent** — the letter at send is the first `payment-reminder`;
-  there is no separate invoice-sent letter
-- 🚧 **Reminders on hold** — none go out while proof is checked; if it is
-  returned the sequence resumes on the moved clock, skipping and repeating
-  nothing
-- 🚧 **Partial payments** — no letter kind of their own; reminders stop at
-  the first recorded payment, and each receipt is on the order's Receipt PDF
-  row
-- ❓ **Reminder clock across changes** — the bank-transfer change keeps a
-  separate invoice-sent letter, a final notice immediately before expiry and
-  an invoice-expired letter, while the setup-overdue-mail change folds, moves
-  and replaces them; Product reconciles before the deltas land
-
-### Invoicing Confirmation
+## Order Setup
 
 Before any invoice, the winner confirms three things on one form, inside 48
 hours of the close.
@@ -152,20 +114,17 @@ hours of the close.
 - 🚧 **Form** — name, phone, country or region, town or city, address line 1,
   state or province and postal code are required; an empty one is refused
   beside the field, and the phone's format is not checked
-- ❓ **Fee range wording** — what each choice says; the bank transfer wording
-  names no amount, because the operator sets that fee; Product confirms
-- **Deadline** — `Confirm by …` under Confirm; when it passes, Confirm is
-  hidden, the alert reads Missed setup deadline with Contact Us, and the
-  order reads Setup Overdue
-- 🚧 **After the deadline** — the whole form closes; only Grade10 reopens it
-  for a fresh 48 hours, or records an address the winner gives by phone
+- **Deadline** — `Confirm by …` sits under Confirm; a miss closes the whole
+  form and only Grade10 reopens it, under Edge Cases
 - 🚧 **Locked on confirming** — the winner changes none of the three
   afterwards; an operator edits them on request before send and reissues
   after, and the order shows what changed
+- ❓ **Fee range wording** — what each choice says; the bank transfer wording
+  names no amount, because the operator sets that fee; Product confirms
 - ❓ **One-time address after a reload** — whether it survives leaving and
   returning to the order; Product and Design confirm
 
-### Invoicing
+## The Invoice
 
 One operator-sent invoice per lot, never combined with another; no amount is
 shown before send, and the sent invoice never re-prices. One lot in HKD, paid
@@ -195,34 +154,14 @@ by card, reads:
 - **Payment deadline** — an absolute date and time in the winner's zone, with
   no countdown
 
+## Paying
+
+The invoice is paid once and in full; paying it in parts is an operator's
+doing, under Edge Cases.
+
 ::image{src="assets/diagrams/auction-payment.svg" alt="Paying an auction invoice: the winner pays by card and the provider confirms it, or transfers and uploads proof an operator confirms or returns; an unpaid invoice expires on day 7 and is reissued, settled or cancelled"}
 
-### Payment Flow, Wire
-
-- 🚧 **Bank details** — the invoice shows SWIFT, FPS and Hong Kong local
-  transfer details instead of card Pay, and the reference to quote,
-  `LK7P2Q01`, with Copy Reference Code
-- ❓ **The accounts** — the details for each of the three ways; Finance
-  confirms
-- 🚧 **Payment proof** — uploaded once after paying, behind a confirm step
-  saying nothing can be added later; the order reads Payment Verifying, the
-  deadline stops, and Pay and further uploads are hidden
-- 🚧 **Payment Verifying alert** — Winner Order shows an inline Alert that
-  Grade10 is verifying the transfer and will email when payment is confirmed
-  (Hourglass on the default Alert). On small viewports it sits under Order
-  progress; from `lg` up it sits under the lot — same placement as the
-  Preparing Invoice alert
-- 🚧 **Manual confirmation** — an operator confirms the proof, or returns it
-  with a reason the winner reads, the latest only; the deadline runs again
-  with the time that was left, and the winner uploads again — [Auction
-  Management · Payment](/p/grade10-admin/auction/management#payment)
-- 🚧 **Proof stays private** — the winner never sees a proof file or its name;
-  the order shows only that proof was sent
-- ❓ **Contact channel** — how an operator reaches a winner about a transfer
-  or a proof; WhatsApp is the working assumption, on the number from the
-  address form; Operations confirms
-
-### Payment Flow, Online
+### By Card
 
 - **Card** — a fresh charge for the order total while the invoice is pending,
   on a stored card or another; Grade10 confirms it on its own, and a declined
@@ -233,6 +172,29 @@ by card, reads:
 - 🚧 **Started in time** — a payment received before the deadline completes
   even if it confirms after; one received at or after it is refused, and the
   card is not charged
+
+### By Bank Transfer
+
+- 🚧 **Bank details** — the invoice shows SWIFT, FPS and Hong Kong local
+  transfer details instead of card Pay, and the reference to quote,
+  `LK7P2Q01`, with Copy Reference Code
+- 🚧 **Payment proof** — uploaded once after paying, behind a confirm step
+  saying nothing can be added later; the order reads Payment Verifying, the
+  deadline stops, and Pay and further uploads are hidden
+- 🚧 **Payment Verifying alert** — an inline Alert says Grade10 is verifying
+  the transfer and will email when payment is confirmed, placed where the
+  Preparing Invoice alert sits
+- 🚧 **Manual confirmation** — an operator confirms the proof, or returns it
+  with a reason the winner reads, the latest only; the deadline runs again
+  with the time that was left, and the winner uploads again — [Auction
+  Management · Payment](/p/grade10-admin/auction/management#payment)
+- 🚧 **Proof stays private** — the winner never sees a proof file or its name;
+  the order shows only that proof was sent
+- ❓ **The accounts** — the details for each of the three ways; Finance
+  confirms
+- ❓ **Contact channel** — how an operator reaches a winner about a transfer
+  or a proof; WhatsApp is the working assumption, on the number from the
+  address form; Operations confirms
 
 ### Receipts
 
@@ -245,31 +207,44 @@ by card, reads:
   settled
 - 🚧 **Receipt ID** — `REC-202609-LK7P2Q-01-P1`: the month paid, the paid
   invoice's code and count, and the payment's number
-- 🚧 **One receipt per payment** — each carries the invoice total, the
-  payments before it, this payment and the balance still due, and every
-  receipt for the invoice lists on the same Receipt PDF row, oldest first;
-  the worked case is under Edge Cases
+- 🚧 **One receipt per payment** — every receipt for an invoice lists on the
+  same Receipt PDF row, oldest first; what each one shows is under Edge Cases
 - ❓ **Formal tax receipt** — whether a receipt must carry Grade10's company
   details and tax ID; Finance confirms
 
-### Logistics
+## Letters
 
-- **Shipment** — the carrier, the tracking number and a link to the carrier,
-  then the delivery proof when the carrier provides one; an operator records
-  both — [Auction Management ·
-  Fulfilment](/p/grade10-admin/auction/management#fulfilment)
-- **Progress** — five steps, Address → Invoice → Payment → Shipped →
-  Completed, with day-only dates; Cancelled and Refunded show no stepper
-- 🚧 **A cancelled order** — reads `Cancelled on {date}`, keeps the lot and
-  the winning bid, and offers Contact Us alone; it gives no reason, and a
-  suspension stays until an operator reinstates
-- 🚧 **A refunded order** — reads Refunded as both the order status and the
-  invoice status, however much was paid and wherever the card is; no Pay, no
-  address form and no letter, and the invoice and every receipt already
-  issued stay downloadable
-- 🚧 **Sections** — Order Information with Invoice Status, Collection Method,
-  Order Status with a time per step, and Lots; Payment Verifying and
-  Partially Paid sit under Payment
+Every letter identifies the lot, goes to the winner's registered address and
+opens that lot's order, sign-in first when signed out; the lot image and
+title open it too.
+
+::image{src="assets/diagrams/auction-order-mail.svg" alt="The letters a winner gets, on two clocks. In the 48-hour setup window: auction won at the close, a setup reminder at 24 hours, and setup overdue at 48 hours unless the winner confirms the address, billing and method, which parks them. In the 7-day payment window an operator's invoice opens: the payment reminder at send and again on days 3 and 6, a final notice 24 hours before the deadline, and payment overdue at the deadline unless the winner pays, which cancels every outstanding reminder. Once the money is in: payment received carrying the receipt PDF, then shipped and delivered. Order cancelled reaches the winner whenever an operator cancels an unpaid order, on neither clock"}
+
+| Letter | Sent | What it carries |
+| --- | --- | --- |
+| Auction won | At the close | The setup steps and `Confirm by …`; no amount yet |
+| 🚧 Setup reminder | Close **+ 24 hours**, while setup is incomplete | The steps and `Confirm by …` |
+| 🚧 Setup overdue | Close **+ 48 hours**, the setup deadline | Self-service setup is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review, never automatically |
+| Payment reminder | Invoice send, then send **+ 3** and **+ 6 days** while the invoice is pending | The total and `Pay by …`; View invoice and pay |
+| 🚧 Final notice | **24 hours** before the payment deadline, while Pay is still offered | The last payable reminder |
+| 🚧 Payment overdue | The payment deadline, unpaid | What remains owed; Pay is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review |
+| 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner, and `Pay by …` on the deadline that runs again |
+| Payment received | Card confirmed, proof confirmed, or a manual settlement | Amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
+| Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking |
+| 🚧 Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
+| 🚧 Order cancelled | An operator cancels | That the order was cancelled and when; no reason and no word on payment; Contact Us first, View order second |
+
+- **Reminders stop at payment** — every outstanding reminder is cancelled the
+  moment payment is received
+- 🚧 **A reissue restarts the series** — the replaced invoice's reminders
+  park and the `payment-reminder` goes again for the new invoice, with its
+  total and `Pay by …`; there is no reissued letter of its own
+- 🚧 **Reminders on hold** — none go out while proof is checked, and
+  uploading it sends no letter at all; if the proof is returned the sequence
+  resumes on the moved clock, skipping and repeating nothing
+- 🚧 **Partial payments** — no letter kind of their own; reminders stop at
+  the first recorded payment, and each receipt is on the order's Receipt PDF
+  row
 
 ## Edge Cases
 
@@ -306,7 +281,7 @@ balance. The invoice above, settled in three payments:
   system — [Auction Management ·
   Payment](/p/grade10-admin/auction/management#payment)
 
-### Bidder Suspension
+## Bidder Suspension
 
 A suspension is an auction-only restriction. It starts when any one of the
 winner's invoices goes unpaid past its deadline, whatever they have paid on
@@ -393,7 +368,7 @@ a second payment provider, and changes to the bid-time rules.
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not a running count, so the IDs do not reveal how much Grade10 sells; operators keep a separate gapless audit number the winner never sees — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
 | Setup mail | 🚧 In flight | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
-| Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. | Product (@tangconst) |
+| Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. `add-winner-bank-transfer` and `add-winner-setup-overdue-mail` carry this one schedule between them, so no separate invoice-sent or invoice-expired letter survives either delta. | Product (@tangconst) |
 | Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking. | Product (@tangconst) |
 | Reissue letter | 🚧 In flight | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
 | Delivered content | 🚧 In flight | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
@@ -402,9 +377,9 @@ a second payment provider, and changes to the bid-time rules.
 | A separate orders page | Decided | Won lots are followed on My Auction Orders — needs action first, then newest close — and each Won row opens the order. | Product |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
 | Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
-| Reminder clock across changes | ❓ Open | `add-winner-bank-transfer` and `add-winner-setup-overdue-mail` disagree on the invoice-sent letter, the final notice's time and the letter at expiry; one delta supersedes the other before either lands. | Product (@tangconst, @jeffffej0909) |
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
 | Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
+| Awaiting Setup | 🚧 In flight | Awaiting Address is renamed Awaiting Setup, because setup confirms a payment method and a billing address as well as an address; until it lands the winner and the operator both read Awaiting Address. | Product (@jeffffej0909) |
 | Setup Overdue and Payment Overdue | 🚧 In flight | **BREAKING** vs keeping Awaiting Setup / Pending Payment after the deadline: inside the window the order reads Awaiting Setup or Pending Payment; once the deadline passes it reads Setup Overdue or Payment Overdue on Winner Order, My Auctions and the operator queue alike. | Product and design (@tangconst) |
 | My Auctions Status column | 🚧 In flight | The table column formerly Your Standing is Status — bid standing while open, the order's status once won. | Product and design (@tangconst) |
 | Partially Paid | 🚧 In flight | Its own status, entered the moment an operator records a payment smaller than the balance owed; ends the payment deadline for good rather than pausing it, since self-service Pay is never offered again on that invoice. | Product (@jeffffej0909) |
