@@ -1,7 +1,7 @@
 # grade10-site/site/page-shell Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-02, tcs-rules r1
+**Drafts styled:** 2026-09-18, tcs-rules r3.0
 
 ## grade10-site-site-page-shell-US1: Collector opens any surface inside the site shell
 
@@ -50,6 +50,7 @@ None.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -69,17 +70,56 @@ A viewport 375 CSS pixels wide.
 * The page scrolls vertically only.
 * No content is clipped and no control is unreachable.
 
+### grade10-site-site-page-shell-US1-TC3-1: A compact surface keeps its shell and navigation reachable
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-01
+
+**Pre-conditions:**
+
+* The site answers <surface address> at a viewport 375 CSS pixels wide.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<surface address>` | An address the site answers |
+
+**Steps:**
+
+1. Set the viewport to 375 CSS pixels wide.
+2. Navigate to <surface address>.
+3. Open the header menu.
+4. Inspect the shell and the controls in the bar and drawer.
+
+**Expected Results:**
+
+* The surface renders between the header and footer.
+* Primary navigation and language are reachable from the drawer.
+* Account / Sign In remains in the bar, and the menu panel leaves a visible gutter.
+* No surface content or control is clipped.
+
 ---
 
 ## grade10-site-site-page-shell-US2: Collector sees the chrome before the session resolves
 
 **As a** collector,
 **I want** the header and the footer rendered before the session has resolved,
-and unchanged once it does,
-**so that** I can start navigating immediately without the chrome shifting
-under me.
+with only the account entry updating once it does,
+**so that** I can start navigating immediately without unrelated chrome
+shifting under me.
 
-### grade10-site-site-page-shell-US2-TC1-1: Header and footer paint while the session resolves
+### grade10-site-site-page-shell-US2-TC1-1: Header and footer render while the session resolves
 
 **Classification:**
 
@@ -88,115 +128,27 @@ under me.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-site-page-shell-US-02
-
-**Pre-conditions:**
-Network manipulation holds the session from resolving.
-
-**Steps:**
-
-1. Navigate to <grade10 marketing url>.
-2. Check the chrome and the content region before the session resolves.
-
-**Expected Results:**
-
-* The header and the footer are already rendered.
-* The content region shows that the surface is loading.
-
-### grade10-site-site-page-shell-US2-TC2-1: Chrome does not shift when the session arrives
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-02
 
 **Pre-conditions:**
-A page rendered while the session was resolving.
+
+* The session read is held before it resolves.
 
 **Steps:**
 
-1. Navigate to <grade10 marketing url> with the session still resolving.
-2. Wait until the session resolves.
-3. Check the chrome controls.
+1. Open an address the site answers.
+2. Inspect the page before the session resolves.
 
 **Expected Results:**
 
-* No chrome control appears, disappears, or moves.
+* The header and footer are rendered.
+* The surface remains in the content region while it loads.
 
----
-
-## grade10-site-site-page-shell-US3: Collector reaches their account from the header
-
-**As a** collector,
-**I want** an account control that leads to my profile when I am signed in and
-to sign-in when I am not,
-**so that** one control in the header always takes me where I can go, and
-signing out has a single home.
-
-### grade10-site-site-page-shell-US3-TC1-1: Signed-in account control opens the profile
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** smoke
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-site-page-shell-US-03
-
-**Pre-conditions:**
-Signed in as a collector.
-
-**Steps:**
-
-1. Navigate to <grade10 marketing url>.
-2. Activate the account control.
-
-**Expected Results:**
-
-* They arrive at their profile.
-
-### grade10-site-site-page-shell-US3-TC2-1: Signed-out account control opens sign-in
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-site-page-shell-US-03
-
-**Pre-conditions:**
-The collector is not signed in.
-
-**Steps:**
-
-1. Navigate to <grade10 marketing url>.
-2. Activate the account control.
-
-**Expected Results:**
-
-* They arrive at sign-in.
-
-### grade10-site-site-page-shell-US3-TC3-1: Header offers no sign-out
+### grade10-site-site-page-shell-US2-TC2-1: The session changes only the account entry
 
 **Classification:**
 
@@ -204,24 +156,131 @@ The collector is not signed in.
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
+* **Type:** compatibility
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** grade10-site-site-page-shell-US-03
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-02
 
 **Pre-conditions:**
-Signed in as a collector.
+
+* A page rendered while the session was resolving.
+
+**Test data:**
+
+| `<session>` |
+| --- |
+| Signed out |
+| Signed in |
 
 **Steps:**
 
-1. Navigate to <grade10 marketing url> and check the header.
-2. Navigate to <grade10 profile url>.
+1. Let the session resolve as <session>.
+2. Inspect the account entry and the rest of the chrome.
 
 **Expected Results:**
 
-* The header offers no way to sign out.
-* A signed-in collector can sign out from their profile.
+* The account entry matches <session>.
+* No other chrome control appears, disappears, or moves.
+
+---
+
+## grade10-site-site-page-shell-US3: Collector reaches account destinations from the header
+
+**As a** collector,
+**I want** Sign In when I am signed out, and an account menu of Profile, My
+Auctions, and Sign out when I am signed in,
+**so that** one place in the header takes me where I can go for this launch.
+
+### grade10-site-site-page-shell-US3-TC1-1: A signed-out collector gets Sign In
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* A collector is signed out on an answered site surface.
+
+**Steps:**
+
+1. Inspect the account entry in the header.
+2. Activate Sign In.
+
+**Expected Results:**
+
+* The account entry is a primary Sign In button, not an account icon.
+* Sign-in starts.
+
+### grade10-site-site-page-shell-US3-TC2-1: A signed-in collector reaches the account menu
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* A collector is signed in on an answered site surface.
+
+**Steps:**
+
+1. Activate the account control.
+2. Inspect the menu.
+
+**Expected Results:**
+
+* The menu offers Profile, My Auctions, and Sign out.
+* The menu does not offer Orders or KYC.
+
+### grade10-site-site-page-shell-US3-TC3-1: Sign out remains available from the account path
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* A signed-in collector has opened the account menu.
+
+**Steps:**
+
+1. Inspect the account menu.
+2. Activate Sign out.
+3. Inspect the signed-in profile surface.
+
+**Expected Results:**
+
+* The account menu offers Sign out.
+* Sign-out starts.
+* The profile also offers Sign out while the collector is signed in.
 
 ---
 
@@ -229,35 +288,40 @@ Signed in as a collector.
 
 **As a** collector,
 **I want** the chrome to show a control or a link only when the site answers
-its destination,
-**so that** nothing in the header or the footer leads me to a not-found page.
+its destination, with language options rather than currencies,
+**so that** nothing in the header or the footer leads me to a not-found page or
+implies a currency I cannot switch.
 
-### grade10-site-site-page-shell-US4-TC1-1: Header shows locale and account, not search or cart
+### grade10-site-site-page-shell-US4-TC1-1: Auction-first chrome omits unanswered destinations
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** functional
+* **Type:** acceptance
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** grade10-site-site-page-shell-US-04
 
 **Pre-conditions:**
-The site does not yet answer search or cart.
+
+* The Store cart drawer, Store, and Store Locator are not answered by the site.
 
 **Steps:**
 
-1. Navigate to <grade10 marketing url>.
-2. Check the header controls.
+1. Render the header at a wide viewport.
+2. Open the compact menu.
+3. Inspect the available controls and language options.
 
 **Expected Results:**
 
-* The header shows the locale label and the account control.
-* No search or cart control appears.
+* Store, Store Locator, search, and Cart are absent.
+* Language is reachable in the wide bar and from the compact menu.
+* The locale options are languages, not currencies.
 
 ### grade10-site-site-page-shell-US4-TC2-1: Navigation and footer link only to real surfaces
 
@@ -268,6 +332,7 @@ The site does not yet answer search or cart.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -296,6 +361,7 @@ None.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -312,6 +378,35 @@ The site answers none of the utility destinations.
 **Expected Results:**
 
 * Neither the promotional bar nor the utility row appears.
+
+### grade10-site-site-page-shell-US4-TC4-1: Cart becomes global when Store answers
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-04
+
+**Pre-conditions:**
+
+* The site answers the Store cart drawer and the collector is on an Auction surface.
+
+**Steps:**
+
+1. Render the header.
+2. Inspect the available controls.
+
+**Expected Results:**
+
+* Cart appears on the Auction surface.
+* Search remains absent when the site does not answer a search surface.
 
 ---
 
@@ -331,6 +426,7 @@ none marked when no item owns it,
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -357,6 +453,7 @@ A collector is on a surface the navigation lists, or on any address beneath it.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -495,3 +592,9 @@ auction-only or full primary nav.
 * Auction-first primary nav omits Store Locator until the shop is open.
 * Help opens the documentation site in a new tab.
 * The durable host address stays open until Product confirms it.
+* Signed-in account entry opens a menu (Profile, My Auctions, Sign out), not
+  the profile directly; the header offers Sign out from that menu as well as
+  the profile.
+* Cart is absent until the site answers the Store cart drawer, then appears on
+  every surface it answers, including Auction; visibility does not depend on
+  session state.

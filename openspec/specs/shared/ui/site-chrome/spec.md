@@ -10,9 +10,14 @@ destination, and every control that does something.
 
 - Chrome exports
   - Header and footer: `Nav` and `Footer` from the design-system entry, each usable alone
+  - `SiteHeader`: shared header composition with application-supplied content and session
+  - Public types: `SiteHeaderProps`, `SiteHeaderCopy`, and `SiteHeaderSession`
 - Header controls
   - Handler-gated: search, account, and cart render only when a handler is supplied
   - No wishlist: the header does not offer a wishlist control
+  - Auction-first account: Sign In when signed out; Profile, My Auctions, and Sign out when signed in
+  - Compact menu: left drawer for navigation and utilities, with language in a nested drawer
+  - Wide layout: primary navigation and language stay in the bar
 - External links
   - New-tab destinations: a `NavLink` marked `external` opens in a new tab with
     `rel="noopener noreferrer"` in primary nav (wide bar and compact drawer)
@@ -23,17 +28,20 @@ destination, and every control that does something.
   - Supplied sections: columns and links the application provides; empty sections stay empty
 - No defaulted content
   - Application-owned copy: nothing visible is invented by the chrome
+
 ## Requirements
+
 ### Requirement: The chrome exports
 
 The design system SHALL export, from its public entry, the `Nav` and `Footer`
 components and these types: `NavProps`, `NavItem`, `NavLink`, `NavCopy`,
-`FooterProps`, `FooterColumn`, `FooterLink`, and `FooterCopy`.
+`NavAccountPresentation`, `NavLocale`, `FooterProps`, `FooterColumn`,
+`FooterLink`, and `FooterCopy`.
 
 Each SHALL take the words it renders in a single `copy` prop of its own copy
 type; every other input — the destinations, the handlers, the promotional and
-utility regions, the locale set and the selected locale — SHALL remain its own
-prop.
+utility regions, the locale set and the selected locale, the account
+presentation, and an optional account slot — SHALL remain its own prop.
 
 `Nav` and `Footer` SHALL each be renderable on their own, in either order, and
 neither SHALL require the other.
@@ -61,14 +69,23 @@ neither SHALL require the other.
 ### Requirement: A control renders only when it can act
 
 `Nav` SHALL render its search, account, and cart controls only when the
-application supplies a handler for that control. A control with no handler
-SHALL be absent from the rendered header — not present and inert, and not
-visually disabled.
+application supplies a handler for that control, or — for account only —
+supplies an `accountSlot`. A control with no handler and no account slot SHALL
+be absent from the rendered header — not present and inert, and not visually
+disabled.
 
 `Nav` SHALL NOT render a wishlist control.
 
-The locale control SHALL always display the supplied locale label, and SHALL
-be interactive only when a handler is supplied.
+The locale control SHALL present language options the application supplies; it
+SHALL NOT present a currency switch. On the wide breakpoint the supplied locale
+label SHALL appear in the bar (interactive only when a locale handler is
+supplied). Below the wide breakpoint the locale label SHALL appear as the
+language row inside the compact menu, and language options SHALL open in a
+nested drawer when a locale handler is supplied.
+
+When the application supplies `onAccountClick` and no `accountSlot`, `Nav`
+SHALL render the account control as an icon by default, or as a primary Sign In
+button when `accountPresentation` is `"sign-in"`.
 
 #### Scenario: shared-ui-site-chrome-SC-04 - A storefront with no cart
 **Serves:** Header controls - a storefront with no cart
@@ -95,9 +112,18 @@ be interactive only when a handler is supplied.
 **Serves:** Header controls - the locale label without a handler
 
 - **GIVEN** an application that supplies a locale label and no locale handler
-- **WHEN** the header renders
-- **THEN** the label is displayed
+- **WHEN** the header renders at the wide breakpoint
+- **THEN** the label is displayed in the bar
 - **AND** nothing about it invites a click
+
+#### Scenario: shared-ui-site-chrome-SC-19 - Sign In presentation
+**Serves:** Header controls - Sign In presentation
+
+- **GIVEN** an application that supplies `onAccountClick`,
+  `accountPresentation` `"sign-in"`, and Sign In copy
+- **WHEN** the header renders
+- **THEN** a primary Sign In button appears
+- **AND** the account icon does not
 
 ### Requirement: An empty region of the header is absent
 
@@ -205,3 +231,106 @@ the same browsing context.
 - **WHEN** the header renders that link
 - **THEN** the link has no `target="_blank"`
 
+### Requirement: SiteHeader composes Nav with session-aware account entry
+
+The shared header takes its content and session from the application and
+renders the matching account entry.
+
+**Exports** - The shared UI package SHALL export `SiteHeader` and the types
+`SiteHeaderProps`, `SiteHeaderCopy`, and `SiteHeaderSession` from its public
+entry.
+
+**Composition** - `SiteHeader` SHALL compose the design-system `Nav` and SHALL
+take all brand, navigation, locale, and destination content through props.
+
+**No application state** - It SHALL NOT fetch, route, or read application
+session stores itself — the application supplies `session` as `"signed-out"` or
+`"signed-in"`.
+
+**Signed out** - When `session` is `"signed-out"`, `SiteHeader` SHALL render a
+primary Sign In button (not the account icon) and SHALL invoke the supplied
+sign-in handler when that button is activated.
+
+**Signed in** - When `session` is `"signed-in"`, `SiteHeader` SHALL render the
+account icon and SHALL open a menu of Profile, My Auctions, and Sign out. The
+menu SHALL NOT include Orders or KYC. Activating each item SHALL invoke the
+matching supplied handler.
+
+**Cart and search** - Cart and search SHALL remain absent unless the
+application supplies their handlers.
+
+#### Scenario: shared-ui-site-chrome-SC-15 - An application imports SiteHeader
+**Serves:** Chrome exports - an application imports SiteHeader
+
+- **WHEN** an application imports `SiteHeader`, `SiteHeaderProps`,
+  `SiteHeaderCopy`, and `SiteHeaderSession` from the shared UI package's public
+  entry
+- **THEN** every import resolves
+
+#### Scenario: shared-ui-site-chrome-SC-16 - Signed out shows Sign In
+**Serves:** Chrome exports - signed out shows Sign In
+
+- **GIVEN** `session` is `"signed-out"` and Sign In copy is supplied
+- **WHEN** `SiteHeader` renders
+- **THEN** a primary Sign In button appears
+- **AND** no account icon control appears
+
+#### Scenario: shared-ui-site-chrome-SC-17 - Signed in shows the account menu
+**Serves:** Chrome exports - signed in shows the account menu
+
+- **GIVEN** `session` is `"signed-in"`
+- **WHEN** the collector activates the account control
+- **THEN** a menu offers Profile, My Auctions, and Sign out
+- **AND** the menu does not offer Orders or KYC
+
+#### Scenario: shared-ui-site-chrome-SC-18 - Auction-first chrome omits cart
+**Serves:** Chrome exports - auction-first chrome omits cart
+
+- **GIVEN** `SiteHeader` with no cart handler
+- **WHEN** it renders
+- **THEN** no cart control appears, and no space is reserved for one
+
+### Requirement: Compact viewports open navigation from a left menu drawer
+
+Below the wide breakpoint a menu control opens a drawer holding what the bar no
+longer shows.
+
+**Menu control** - Below the wide breakpoint, `Nav` SHALL render a leading menu
+control that opens a left drawer.
+
+**Drawer order** - The drawer SHALL list primary navigation first, then utility
+links when supplied (styled like the primary links), then search when a search
+handler is supplied, and SHALL offer language switching through a nested drawer
+opened from a row that shows the active language.
+
+**In the bar** - Account / Sign In and Cart SHALL remain in the bar when their
+handlers (or account slot) are supplied.
+
+**Wide only** - The utility strip and the centered primary nav row SHALL appear
+only at the wide breakpoint.
+
+**Gutter** - Compact drawers SHALL leave a visible gutter beside the panel
+rather than spanning the full viewport width.
+
+**Copy** - `copy.menu` names the menu trigger; `copy.menuTitle` names the
+drawer title; `copy.language` names the language nested drawer title.
+
+#### Scenario: shared-ui-site-chrome-SC-20 - Compact menu holds nav and language
+**Serves:** Header controls - compact menu holds nav and language
+
+- **GIVEN** a viewport below the wide breakpoint, with primary items, utility
+  links, and a locale handler supplied
+- **WHEN** the collector opens the menu
+- **THEN** the drawer lists the primary items, then the utility links in the
+  same link style
+- **AND** a language row opens a nested drawer of the brand's languages
+- **AND** Account / Sign In and Cart remain in the bar when supplied
+- **AND** the menu panel leaves a visible gutter beside the viewport edge
+
+#### Scenario: shared-ui-site-chrome-SC-21 - Wide viewport keeps the bar layout
+**Serves:** Header controls - wide viewport keeps the bar layout
+
+- **GIVEN** a viewport at the wide breakpoint
+- **WHEN** the header renders
+- **THEN** primary navigation and language appear in the bar
+- **AND** the compact menu trigger is absent

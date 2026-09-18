@@ -54,7 +54,8 @@ the existing checkout without first leaving that surface.
 - A Browse More or catalogue handoff from the drawer (removed with
   `CartItemSlot` in `cart-drawer-empty-state`).
 - Deciding when Cart appears or what a signed-out Cart press does; those rules
-  belong to `auction-first-site-header` and `require-sign-in-from-nav-cart`.
+  belong to durable `grade10-site/site/page-shell` and
+  `require-sign-in-from-nav-cart`.
 
 ## Capabilities
 
@@ -66,11 +67,11 @@ the existing checkout without first leaving that surface.
 
 ### Modified Capabilities
 
-- `grade10-site/site/page-shell` — absorbed by `auction-first-site-header`,
-  which carries Cart in the header: absent until the Store cart drawer
-  answers, then global on every surface. Scenarios
+- `grade10-site/site/page-shell` — carries Cart in the header: absent until
+  the Store cart drawer answers, then global on every surface. Scenarios
   `grade10-site-site-page-shell-SC-09` and
-  `grade10-site-site-page-shell-SC-16` live on that change.
+  `grade10-site-site-page-shell-SC-16` live on the durable spec, folded there
+  from the archived `auction-first-site-header`.
 
 ## Impact
 

@@ -240,8 +240,8 @@ require a running backend because no backend code changes. Coverage must prove:
   scope, preserves unavailable rows for its cleanup owner, and withholds stale
   facts.
 - Cart availability scenarios `grade10-site-site-page-shell-SC-09` and `SC-16`
-  remain owned by `auction-first-site-header`; this change consumes the global
-  handler once the Store cart drawer answers.
+  are owned by the durable `grade10-site/site/page-shell` spec; this change
+  consumes the global handler once the Store cart drawer answers.
 - `grade10-site-store-cart-drawer-SC-09` through `SC-12`: reviewed facts,
   neutral totals, scoped writes, and one unavailable cleanup remain honest.
 - `grade10-site-store-cart-drawer-SC-13` and `SC-15`: product and Checkout use
