@@ -1,4 +1,4 @@
-## 1. Product record (grade10-spec)
+## 1. Product record (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Update the Payment Method manual page to record that a maximum raise uses one existing authorization, requests eligible incremental and extended authorization, and follows the provider's returned deadline; preserve release-at-close and invoice settlement as the product boundary.
 - [ ] 1.2 Verify the capability page and change artifacts with pnpm check:manual and openspec validate fix-auction-payment-hold-increment --strict.
