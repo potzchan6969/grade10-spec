@@ -7,7 +7,7 @@
 - [ ] billing-shared-02 Export the completed contract from the shared auction
   order surface and update component tests.
 
-## 2. Winner order
+## 2. Winner order (owner: @htonyl)
 
 - [ ] billing-winner-01 Add billing snapshot and payment-method fields to the
   order model, contracts, fixtures and persistence migrations.
