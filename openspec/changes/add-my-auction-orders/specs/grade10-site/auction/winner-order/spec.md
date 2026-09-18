@@ -48,7 +48,7 @@ derived Pending Payment order status, per `revise-auction-winner-invoicing`,
 with its full invoice and **Contact Us** instead of Pay Now. The page SHALL
 not derive a second Expired order status.
 
-#### Scenario: winner-order-SC-72 - The page shows its four sections
+#### Scenario: winner-order-SC-139 - The page shows its four sections
 **Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order in any status
@@ -56,7 +56,7 @@ not derive a second Expired order status.
 - **THEN** the page shows Order Information, Collection Method, Order Status
   and Lots, in that order
 
-#### Scenario: winner-order-SC-73 - Invoice Status replaces Paid Status
+#### Scenario: winner-order-SC-140 - Invoice Status replaces Paid Status
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
 - **GIVEN** an auction order whose invoice status is `paid`
@@ -64,7 +64,7 @@ not derive a second Expired order status.
 - **THEN** it shows Invoice Status as Paid
 - **AND** no Paid Status label appears
 
-#### Scenario: winner-order-SC-74 - Each status step carries its time
+#### Scenario: winner-order-SC-141 - Each status step carries its time
 **Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order that reached Awaiting Setup, Preparing Invoice,
