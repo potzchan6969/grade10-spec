@@ -22,7 +22,7 @@
 - [ ] bank-winner-02 Implement invoice/receipt identifiers, bank-detail PDF
   content, replaced-invoice history and winner visibility rules.
 
-## 4. Operator and notifications
+## 4. Operator and notifications (owner: @htonyl)
 
 - [ ] bank-admin-01 Implement operator Confirm/Return, concurrency guards,
   proof viewer authorization and reissue/settlement restrictions.
