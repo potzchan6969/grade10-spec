@@ -91,9 +91,6 @@ meaning.
 | **Cancelled** | Cancelled | An operator cancels an unpaid order; the lot goes back to stock |
 | **Refunded** | Refunded | 🚧 An operator records one refund on a paid or Partially Paid order, for any amount up to what was paid; failing to pay is never Refunded |
 
-- 🚧 **Cancelled** — Winner Order reads `Cancelled on {date}`, keeps the lot
-  and the winning bid, and offers Contact Us only; it gives no reason. Only an
-  operator cancels, and a cancel never lifts a suspension
 - **Read, never written** — one ordered rule chain derives it, so it cannot
   contradict the facts; dispatch before payment, cancelling a dispatched
   order and delivery before dispatch are refused
@@ -263,6 +260,9 @@ by card, reads:
   Fulfilment](/p/grade10-admin/auction/management#fulfilment)
 - **Progress** — five steps, Address → Invoice → Payment → Shipped →
   Completed, with day-only dates; Cancelled and Refunded show no stepper
+- 🚧 **A cancelled order** — reads `Cancelled on {date}`, keeps the lot and
+  the winning bid, and offers Contact Us alone; it gives no reason, and a
+  suspension stays until an operator reinstates
 - 🚧 **A refunded order** — reads Refunded as both the order status and the
   invoice status, however much was paid and wherever the card is; no Pay, no
   address form and no letter, and the invoice and every receipt already
@@ -386,6 +386,7 @@ a second payment provider, and changes to the bid-time rules.
 | Reopening the address form | Decided | An operator, with payment processing and a reason, reopens it once the deadline passes before an address was confirmed, for a fresh 48 hours; never on a cancelled order; no letter, the operator tells the winner. Or the operator records an address given by phone without reopening. | Product (@jeffffej0909) |
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice is `expired` and the order reads Payment Overdue; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
 | Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is a recorded refund only. A missed setup deadline reads Setup Overdue; a missed payment deadline reads Payment Overdue — neither is Cancelled on its own. | Product |
+| A cancelled order | 🚧 In flight | `Cancelled on {date}` with the lot and the winning bid, and Contact Us as the only action; no reason is shown, as the cancellation letter gives none, and a suspension stays. Chosen over showing the winner the operator's reason category. | Product and Operations (@jeffffej0909) |
 | A refunded order | 🚧 In flight | Refunded as both the order and the invoice status, paid in full or in part and wherever the card is; no stepper, Pay or address form, and the invoice and every receipt already issued stay downloadable. Chosen over hiding them the way Cancelled does, which leaves the winner no record of what they paid. | Product (@jeffffej0909) |
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |

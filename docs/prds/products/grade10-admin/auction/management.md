@@ -192,19 +192,15 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   send, on request and with a reason, giving a fresh 48 hours; repeatable,
   changes no status, never on a cancelled order. Or the operator records an
   address the winner gives by phone, leaving the form closed
-- **Cancel** — the lot returns to stock with no runner-up offer; the hammer
-  price and bid history stay for audit and are not carried into a new listing
-- 🚧 **Cancel reason** — a required category (Non-payment, Missed setup,
-  Winner asked, Lot issue, Other) and a note; the queue filters cancelled
-  orders by category
-- 🚧 **Confirming a cancel** — one dialog states what follows: the lot goes
-  back to stock, no runner-up is offered it, the winner is emailed, a
-  suspension stays, and the cancel cannot be undone
-- 🚧 **After a cancel** — the order links to its lot, which the operator
-  relists by hand; nothing is relisted on its own
-- 🚧 **Paid after cancel** — a card payment that lands after the cancel is
-  recorded and flags the order; the order stays Cancelled, finance sends the
-  money back outside Grade10, and the operator clears the flag once it has
+
+| Cancelling an order | Value |
+| --- | --- |
+| 🚧 Its reason | One category — Non-payment, Missed setup, Winner asked, Lot issue or Other — and a note, both required; the queue filters cancelled orders by category |
+| 🚧 What the dialog states | Before the operator confirms: the lot goes back to stock, no runner-up is offered it, the winner is emailed, a suspension stays, and the cancel cannot be undone |
+| The lot | Back to stock with no runner-up offer, its hammer price and bid history kept for audit and never carried into a new listing |
+| 🚧 Relisting it | The order links to its lot, which an operator relists by hand; nothing is relisted on its own |
+| 🚧 A payment that lands after | Recorded, and it flags the order: the order stays Cancelled, finance sends the money back outside Grade10, and the operator clears the flag once it has gone |
+
 - 🚧 **Refund** — the winner asks Customer Service, outside Grade10; the
   operator sends the money by hand, in the Stripe dashboard or by bank
   transfer, then records it on the order. One refund per order, never
@@ -331,6 +327,7 @@ settings.
 | Who cancels | 🚧 In flight | Operators only; a winner who wants out asks Contact Us. Chosen over a winner cancelling before the invoice is sent, which would let a bid be walked away from. | Product and Operations |
 | Cancel is final | 🚧 In flight | No undo, and a late payment never revives the order: the lot may already be relisted and the winner already emailed. Chosen over a short undo window. | Product and Operations |
 | Paid after cancel | 🚧 In flight | Refunded by finance outside Grade10, then cleared on the order. Chosen over widening the Refund action to cancelled orders, for a rare case. | Product and finance |
+| Finding a flagged cancel | ❓ Open | Whether a Paid after cancel order shows as needing action in the queue, or is found only by opening the order. | Product and Operations |
 | Measuring cancellation | 🚧 In flight | Cancellations each month by category, and winner contacts per 100 cancellations. | Product |
 | Partially Paid needs no action | 🚧 In flight | Unlike Payment Verifying, nothing is waiting on the operator by default; they open the order when a new payment arrives. | Product and finance |
 :::
