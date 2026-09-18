@@ -48,6 +48,21 @@ was recognised for a second time.
   recognised at the store and the auction without a ceremony; one verified
   from their account is recognised at their next visit.
 
+## Delivery status
+
+Account-based identity verification and high-value checkout and bid gating are
+deferred and disabled in production. Dormant implementation may remain behind
+optional runtime or feature-flag wiring, but no account check is started by
+this change and no checkout or bid is blocked by it while disabled.
+
+The threshold and accountable Compliance owner remain unresolved. HKD 120,000
+and the existing Product/Compliance owner labels are proposals, not shipped
+decisions.
+
+This change remains active. It is not eligible for archive or spec fold until
+the threshold and Compliance ownership are decided, the required compliance
+approval is complete, and the feature is enabled and deployed to production.
+
 ## Non-Goals
 
 - **Verifying a guest.** A person with no account has no standing; above the
@@ -100,21 +115,15 @@ was recognised for a second time.
 
 ## Decisions taken
 
-- **The bar** — HKD 120,000.00 on an order's goods and on a bid. The value at
-  which a Hong Kong dealer in high-value goods has to know its customer,
-  applied to the two ways a collector buys. *Owner: Product; the number is one
-  value in `packages/app-env`, changed there.*
-- **Lawful basis** — explicit consent, collected on the page that starts the
-  check and stamped on the check at that instant; the consent text names the
-  provider's check of the document and the face, what Grade10 keeps, reuse
-  across Grade10's services, and the right to erasure. A data protection
-  impact assessment is completed before production is enabled, and the
-  provider's data processing agreement is what governs the transfer.
-  *Owner: Compliance.*
-- **Reuse without re-consent** — an approved check is bound to a second case,
-  and read as a standing by a second product, without asking again: the
-  consent given covers every Grade10 service, and says so. *Owner:
-  Compliance.*
+- **Threshold** — ❓ Open. The order and bid amount that requires a verified
+  identity, its rationale, and its accountable owner are not confirmed. HKD
+  120,000 is a candidate only.
+- **Compliance ownership** — ❓ Open. The accountable Compliance owner and
+  approval path for consent, reuse, provider transfer, retention, and erasure
+  are not confirmed.
+- **Production enablement** — Deferred. The feature remains disabled until the
+  threshold, Compliance ownership, DPIA, DPA, and production rollout are
+  approved.
 
 ## References
 
