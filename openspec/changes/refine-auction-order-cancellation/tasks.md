@@ -2,7 +2,7 @@
 
 - [ ] 1.1 Update post-sale and Winner Order PRD pages with categories, consequence preview, late-payment flag handling and the reason-free winner notice (`grade10-admin-auction-post-sale-SC-150`, `winner-order-SC-143`).
 
-## 2. Contracts and data
+## 2. Contracts and data (owner: @htonyl)
 
 - [ ] 2.1 Add cancellation category/note, consequence snapshot, lot link and Paid-after-cancel facts.
 - [ ] 2.2 Add the terminal transition and late-payment audit events to the auction-order schema.
