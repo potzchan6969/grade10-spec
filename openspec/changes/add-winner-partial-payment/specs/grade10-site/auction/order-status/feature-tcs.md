@@ -65,6 +65,14 @@
 * Winner Pay, reissue and cancellation are refused.
 * The order remains Partially Paid.
 
+## auction-status-US01: Expired invoice keeps Pending Payment without winner card pay
+
+**As a** winner or operator,
+**I want** the existing expired-invoice behaviour to remain available,
+**so that** partial-payment status does not reopen self-service Pay.
+
+**Out of suite:** existing expired-invoice coverage in the durable order-status feature suite.
+
 ## Settled
 
 ## Reconciliation

@@ -47,24 +47,24 @@ No Figma frame. No Storybook story.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Delivery | Title Delivery Address. Step 1 of 3. We’ll ship this lot here. You set the billing address on the last step. Saved address cards. Add New Address. Continue | `winner-order-US-11` |
-| No saved addresses | EmptyState: No saved addresses. Add a delivery address to continue. Continue disabled | `winner-order-US-11` |
-| Add address | Title Add Address, from delivery or billing. Use This Address | `winner-order-US-11` |
-| Address book full | Save this address for future orders refused. A one-time address still confirms | `winner-order-US-11` |
-| Billing, same as delivery | Title Billing Address. Step 3 of 3. This address is printed on your invoice. Same as delivery address ticked. The delivery address shown. Complete Order Setup | `winner-order-US-11` |
-| Billing, different address | Same as delivery address unticked. Saved-address picker. Add New Address | `winner-order-US-11` |
-| Billing, no saved addresses | Same as delivery address unticked. EmptyState: No saved addresses. Add a billing address to continue | `winner-order-US-11` |
+| Delivery | Title Delivery Address. Step 1 of 3. We’ll ship this lot here. You set the billing address on the last step. Saved address cards. Add New Address. Continue | `winner-order-SC-152` |
+| No saved addresses | EmptyState: No saved addresses. Add a delivery address to continue. Continue disabled | `winner-order-SC-152` |
+| Add address | Title Add Address, from delivery or billing. Use This Address | `winner-order-SC-153` |
+| Address book full | Save this address for future orders refused. A one-time address still confirms | `winner-order-SC-153` |
+| Billing, same as delivery | Title Billing Address. Step 3 of 3. This address is printed on your invoice. Same as delivery address ticked. The delivery address shown. Complete Order Setup | `winner-order-SC-152` |
+| Billing, different address | Same as delivery address unticked. Saved-address picker. Add New Address | `winner-order-SC-153` |
+| Billing, no saved addresses | Same as delivery address unticked. EmptyState: No saved addresses. Add a billing address to continue | `winner-order-SC-153` |
 
 ### Invoice and receipt
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Bill To and Ship To | Both from the order snapshot. A receipt keeps the invoice’s addresses | `winner-order-US-11` |
+| Bill To and Ship To | Both from the order snapshot. A receipt keeps the invoice’s addresses | `winner-order-SC-154` |
 
 ### Post-sale — missing billing address
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Send refused | Send names the missing billing address | `post-sale-US-11` |
-| Added before send | The operator adds the billing address with the edit before send | `post-sale-US-11` |
-| Phone record | Asks for billing. Same as delivery address ticked | `post-sale-US-11` |
+| Send refused | Send names the missing billing address | `post-sale-SC-153` |
+| Added before send | The operator adds the billing address with the edit before send | `post-sale-SC-154` |
+| Phone record | Asks for billing. Same as delivery address ticked | `post-sale-SC-154` |

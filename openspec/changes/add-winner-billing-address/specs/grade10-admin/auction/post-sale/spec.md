@@ -33,7 +33,7 @@ existing reasoned edit before sending.
 **Phone record** — Recording an address by phone SHALL ask for billing too,
 with Same as delivery address selected by default.
 
-#### Scenario: post-sale-SC-11 - Send names a missing billing address
+#### Scenario: post-sale-SC-153 - Send names a missing billing address
 **Serves:** post-sale-US-11 - Operator adds a missing billing address before sending
 
 - **GIVEN** an order with a delivery address and no billing address
@@ -42,7 +42,7 @@ with Same as delivery address selected by default.
 - **AND** the refusal names the missing billing address
 - **AND** no invoice is sent
 
-#### Scenario: post-sale-SC-12 - The operator adds billing before send
+#### Scenario: post-sale-SC-154 - The operator adds billing before send
 **Serves:** post-sale-US-11 - Operator adds a missing billing address before sending
 
 - **GIVEN** an order with a delivery address and no billing address

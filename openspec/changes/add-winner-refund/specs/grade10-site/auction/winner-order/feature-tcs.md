@@ -39,6 +39,41 @@
 * The invoice and every existing receipt remain downloadable.
 * No refund letter is required by this surface.
 
+## winner-order-US15: Winner sees an overpayment returned
+
+**As a** winner who paid more than the order,
+**I want** only the difference returned while the order stays in its current status,
+**so that** I can see that the sale still stands.
+
+### winner-order-US15-TC1-1: Overpayment leaves the order status unchanged
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** winner-order-US-15
+
+**Pre-conditions:**
+
+* customer(winner of `<overpaid order>`) is on Winner Order.
+
+**Steps:**
+
+1. Read the order status, Order Summary, and refund alert.
+
+**Expected Results:**
+
+* The order keeps its pre-refund status.
+* Order Summary keeps the amount that was due.
+* The refund alert shows only the difference returned.
+
 ## Settled
 
 ## Reconciliation

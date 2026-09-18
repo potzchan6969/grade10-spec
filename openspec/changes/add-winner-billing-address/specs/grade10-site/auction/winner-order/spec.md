@@ -16,7 +16,7 @@ invoice is sent, then keeps both addresses on the invoice and receipt.
   - Invoice shows Bill To and Ship To from the order snapshot
   - Receipt keeps the addresses of the invoice it pays
 
-## MODIFIED Requirements
+## ADDED Requirements
 
 ### Requirement: The address form refuses empty required fields
 
@@ -31,7 +31,7 @@ Grade10 SHALL NOT check the phone number's format. The winner MAY untick Same
 as delivery address and choose a saved or one-time billing address. Cancel
 SHALL leave the order in Awaiting Setup with no address confirmed.
 
-#### Scenario: winner-order-SC-11 - Same delivery details bill the order by default
+#### Scenario: winner-order-SC-152 - Same delivery details bill the order by default
 **Serves:** winner-order-US-11 - Winner bills a won lot to a different address
 
 - **GIVEN** a winner on the order-setup form with a complete delivery address
@@ -40,7 +40,7 @@ SHALL leave the order in Awaiting Setup with no address confirmed.
 - **AND** the delivery address is shown as the billing address
 - **AND** the winner can confirm setup with the delivery address and payment method
 
-#### Scenario: winner-order-SC-12 - A different saved address is captured for billing
+#### Scenario: winner-order-SC-153 - A different saved address is captured for billing
 **Serves:** winner-order-US-11 - Winner bills a won lot to a different address
 
 - **GIVEN** a winner on the billing step with Same as delivery address selected
@@ -58,7 +58,7 @@ address where the lot is shipped.
 order's confirmed snapshots. A receipt SHALL show the addresses of the invoice
 it pays and SHALL NOT change when a saved address is edited or archived later.
 
-#### Scenario: winner-order-SC-13 - Bill To and Ship To stay on the paid receipt
+#### Scenario: winner-order-SC-154 - Bill To and Ship To stay on the paid receipt
 **Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
 
 - **GIVEN** a paid order whose billing and delivery snapshots are different

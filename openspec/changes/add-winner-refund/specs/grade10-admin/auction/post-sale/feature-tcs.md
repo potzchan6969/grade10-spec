@@ -105,6 +105,22 @@
 * The order appears in the filter.
 * The order detail and invoice log show the same complete refund record.
 
+## post-sale-US08: Operator reconstructs an order's history
+
+**As an** operator deciding whether to reinstate a buyer,
+**I want** the existing history to remain available beside refunds,
+**so that** the refund record adds to rather than replaces the order history.
+
+**Out of suite:** existing post-sale history coverage in the durable feature suite.
+
+## post-sale-US01: Operator works the listing queue by outcome
+
+**As an** auction operator,
+**I want** the existing outcome queue to remain available with Refunded added,
+**so that** the new filter does not change other outcomes.
+
+**Out of suite:** existing post-sale queue coverage in the durable feature suite.
+
 ## Settled
 
 ## Reconciliation

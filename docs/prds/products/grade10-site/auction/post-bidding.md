@@ -319,8 +319,8 @@ other lots.
   first, and reinstating lifts every cause
 - 🚧 **Bid history untouched** — a suspension adds, edits and removes nothing
   in any lot's history, and no lot's price or leader changes because of it
-- ❓ **Bidders ban** — whether the auction admin's Bidders ban is this same
-  suspension; Engineering confirms
+- 🚧 **One auction standing** — the auction admin's Bidders ban is the same auction
+  suspension; it does not create a separate standing or a platform ban
 
 :::detail{title="Code map" for="engineer"}
 - **Service** — [Auction Service](/platform/auction-service): the order, invoice and fulfilment records, and the derived status
@@ -405,5 +405,5 @@ a second payment provider, and changes to the bid-time rules.
 | Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
 | One-time address persistence | ❓ Open | Whether an unsaved one-time address survives leaving and returning to the order. | Product (@tangconst) |
-| Bidders ban and suspension | ❓ Open | Whether the auction admin's Bidders ban is this same suspension. | Engineering |
+| Bidders ban and suspension | Decided | The auction admin's Bidders ban is the same auction suspension; it records another cause on the one standing and never becomes a platform ban. | Engineering |
 :::

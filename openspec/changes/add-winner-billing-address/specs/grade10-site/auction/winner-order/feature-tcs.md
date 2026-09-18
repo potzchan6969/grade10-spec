@@ -156,7 +156,7 @@
 
 ## Reconciliation
 
-- The settled-lot receipt path was covered as `winner-order-SC-13`.
-- Same-as-delivery default was covered as `winner-order-SC-11`.
-- Different saved and one-time billing addresses were covered as `winner-order-SC-12` and a new boundary case.
-- The invoice and receipt snapshot rule was covered as `winner-order-SC-13`.
+- The settled-lot receipt path was covered as `winner-order-SC-154`.
+- Same-as-delivery default was covered as `winner-order-SC-152`.
+- Different saved and one-time billing addresses were covered as `winner-order-SC-153` and a new boundary case.
+- The invoice and receipt snapshot rule was covered as `winner-order-SC-154`.

@@ -39,6 +39,14 @@
 * The page offers Contact Us and no running balance.
 * Each recorded payment has a separate receipt link, oldest first.
 
+## winner-order-US01: Winner settles a won lot
+
+**As a** winner,
+**I want** the existing full-payment path to remain available before an operator records a partial payment,
+**so that** a normal auction order is unchanged.
+
+**Out of suite:** existing full-payment coverage in the durable Winner Order feature suite.
+
 ## Settled
 
 ## Reconciliation

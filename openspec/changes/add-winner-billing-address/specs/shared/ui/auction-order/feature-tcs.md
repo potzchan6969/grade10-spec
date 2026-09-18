@@ -69,4 +69,4 @@
 
 ## Reconciliation
 
-- The form default state and its alternate-address state were covered as `shared-ui-auction-order-SC-01` and `shared-ui-auction-order-SC-02`.
+- The billing form default and alternate-address states were covered as `shared-ui-auction-order-SC-05` and `shared-ui-auction-order-SC-06`.

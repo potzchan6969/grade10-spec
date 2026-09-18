@@ -42,13 +42,13 @@ there. An overpayment does not add a row.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Status beside the title | `Badge` `sm` beside the page title, in the My Auctions color for that status | `winner-order-US-01` |
-| Refunded | Outline Refunded badge. No stepper, Pay or address form. Order Summary is the invoice only. Inline alert below Order Total with positive refund amount, ArrowCounterClockwise icon, and View. Dialog story: Refund Details | `winner-order-US-10` |
-| Overpaid | Status badge and stepper stay. Order Summary unchanged. Inline alert below Order Total with only the difference and View | `winner-order-US-14` |
+| Status beside the title | `Badge` `sm` beside the page title, in the My Auctions color for that status | `winner-order-SC-140` |
+| Refunded | Outline Refunded badge. No stepper, Pay or address form. Order Summary is the invoice only. Inline alert below Order Total with positive refund amount, ArrowCounterClockwise icon, and View. Dialog story: Refund Details | `winner-order-SC-140` |
+| Overpaid | Status badge and stepper stay. Order Summary unchanged. Inline alert below Order Total with only the difference and View | **Out of suite:** Preview `My Auctions/Winner Order/Delivery/Processing — Overpaid` while refund-detail requirements await the product decision in Q20 |
 
 ### My Auctions
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Refunded | Status Refunded. View order. No amount | `grade10-site-auction-account-record-US-03` |
-| Overpaid | Status unchanged. No amount | `winner-order-US-14` |
+| Refunded | Status Refunded. View order. No amount | `winner-order-SC-140` |
+| Overpaid | Status unchanged. No amount | **Out of suite:** Preview `Pages/My Auctions Page/Post-auction` while the order keeps its status |

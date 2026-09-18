@@ -114,5 +114,5 @@
 
 ## Reconciliation
 
-- The quote address path was covered as `post-sale-SC-11`.
-- Missing-send refusal and operator completion were covered as `post-sale-SC-11` and `post-sale-SC-12`.
+- The quote address path was covered as `post-sale-SC-153`.
+- Missing-send refusal and operator completion were covered as `post-sale-SC-153` and `post-sale-SC-154`.

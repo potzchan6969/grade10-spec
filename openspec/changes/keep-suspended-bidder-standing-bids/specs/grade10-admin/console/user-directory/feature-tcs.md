@@ -134,3 +134,14 @@ Signed in as admin(holds `user:list`, not `auction:moderate`). <deadline-suspend
 **Expected Results:**
 
 * Neither panel offers suspend or reinstate.
+
+## Settled
+
+## Reconciliation
+
+| Finding | Disposition |
+| --- | --- |
+| Suspension without a reason leaves no usable operator record | **Raised, folded into spec:** `grade10-admin-console-user-directory-SC-17` |
+| Platform bans could be mistaken for auction standing | **Raised, folded into spec:** `grade10-admin-console-user-directory-SC-16` |
+| A client-only grant gate could be bypassed | **Raised, folded into spec:** `grade10-admin-console-user-directory-SC-19` |
+| Run | Read the Users-panel feature set, journey, decisions, and User Directory PRD; denied requirement deltas and archived changes |

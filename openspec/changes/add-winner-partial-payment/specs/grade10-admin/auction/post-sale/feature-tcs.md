@@ -102,6 +102,22 @@
 * Step 2 leaves the order Partially Paid with the real balance.
 * Step 3 closes the invoice as Paid without a second prompt.
 
+## post-sale-US03: Operator collects payment
+
+**As a** payment operator,
+**I want** the existing full-settlement flow to remain available,
+**so that** partial collection does not remove the established payment path.
+
+**Out of suite:** existing post-sale payment coverage in the durable feature suite.
+
+## post-sale-US07: Operator resolves an unpaid order
+
+**As an** operator,
+**I want** the existing unpaid-order actions to remain available before payment starts,
+**so that** partial collection changes only orders that have received a payment.
+
+**Out of suite:** existing post-sale resolution coverage in the durable feature suite.
+
 ## Settled
 
 ## Reconciliation

@@ -37,7 +37,7 @@ Rounds held on 2026-09-17 with @jeffffej0909.
 | Q12 | When an operator adds a previously missing billing address before send, what absent-value representation does the reasoned edit log show as the old value? | The old value is recorded as `none`, with the operator's reason and the new billing snapshot. | Omitting the old value, or serialising an absent value as an empty object |
 | Q13 | Is postal-code validation for billing addresses supplied by the consuming application, or does the shared address-form contract impose it? | The consuming application supplies the rule; the shared component carries the field without imposing a postal-code format. | A shared postal-code format that would constrain other storefronts |
 
-## Raised and reconciled
+## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
