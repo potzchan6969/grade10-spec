@@ -12,7 +12,7 @@
 - [ ] 3.1 Implement the permissioned, idempotent refund mutation and cumulative-paid bound (`grade10-admin-auction-post-sale-SC-145`, `SC-146`).
 - [ ] 3.2 Derive Refunded as terminal and expose the queue filter and reconciliation record (`SC-147`, `auction-status-SC-51`).
 
-## 4. Frontend
+## 4. Frontend (owner: @htonyl)
 
 - [ ] 4.1 Add the operator refund form, stock choice, queue filter and detail record.
 - [ ] 4.2 Render Refunded Winner Order with retained invoice and receipts and no self-service actions (`winner-order-SC-157`).
