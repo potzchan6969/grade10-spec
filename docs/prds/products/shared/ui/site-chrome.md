@@ -16,16 +16,16 @@ The chrome can mark which surface is being viewed, and it invents no copy: every
 word and every destination comes from the application. That is what lets the
 same header wear another brand's words without a fork.
 
-🚧 **Language, not currency** — the locale control switches language (English,
+**Language, not currency** — the locale control switches language (English,
 Traditional Chinese, Simplified Chinese for Grade10). It does not switch
 currency.
 
-🚧 **`SiteHeader`** — a compound header wraps the design-system `Nav` with
+**`SiteHeader`** — a compound header wraps the design-system `Nav` with
 session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu of Profile, My Auctions, and Sign out when signed in.
 Orders and KYC are not in that menu for auction-first launch.
 
-🚧 **Compact menu** — below a 896px-wide container, a leading menu control opens a
+**Compact menu** — below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
 style, then language through a nested drawer (the language label is not in the
 compact bar). Account / Sign In and Cart stay in the bar; search moves into the

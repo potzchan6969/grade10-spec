@@ -10,9 +10,14 @@ destination, and every control that does something.
 
 - Chrome exports
   - Header and footer: `Nav` and `Footer` from the design-system entry, each usable alone
+  - `SiteHeader`: shared header composition with application-supplied content and session
+  - Public types: `SiteHeaderProps`, `SiteHeaderCopy`, and `SiteHeaderSession`
 - Header controls
   - Handler-gated: search, account, and cart render only when a handler is supplied
   - No wishlist: the header does not offer a wishlist control
+  - Auction-first account: Sign In when signed out; Profile, My Auctions, and Sign out when signed in
+  - Compact menu: left drawer for navigation and utilities, with language in a nested drawer
+  - Wide layout: primary navigation and language stay in the bar
 - External links
   - New-tab destinations: a `NavLink` marked `external` opens in a new tab with
     `rel="noopener noreferrer"` in primary nav (wide bar and compact drawer)

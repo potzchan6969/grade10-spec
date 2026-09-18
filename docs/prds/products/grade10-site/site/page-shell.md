@@ -11,11 +11,11 @@ spacing of its own — everything a collector reads comes from the surface
 inside it.
 
 The chrome does not wait for the session. Header and footer render on the first
-paint. 🚧 When the session arrives, the account entry changes between a Sign In
+paint. When the session arrives, the account entry changes between a Sign In
 primary button (signed out) and the account icon with its menu (signed in); other
 controls do not appear, disappear, or move.
 
-🚧 **Account menu** — signed in, the account icon opens Profile, My Auctions,
+**Account menu** — signed in, the account icon opens Profile, My Auctions,
 and Sign out. Sign-out is offered there as well as on the profile. Orders and
 KYC are not in the menu for auction-first launch.
 
@@ -24,11 +24,11 @@ a search surface, and no link points to a page the site does not hold. The
 header marks the item that owns the current address, and marks nothing when no
 item owns it.
 
-🚧 **Auction-first chrome** — until Store launches, the primary nav lists
+**Auction-first chrome** — until Store launches, the primary nav lists
 Auction (and the other surfaces that answer) without a Store entrance, and the
 cart stays absent
 
-🚧 **Global cart** — once Store answers the cart drawer, the Cart control stays
+**Global cart** — once Store answers the cart drawer, the Cart control stays
 in the header on every surface — including Auction and other non-Store pages —
 so a collector can reach checkout without returning to Store
 
@@ -42,7 +42,7 @@ Primary nav lists Help for auction-only and full nav (wide bar and compact
 menu). When Store Locator is in the chrome, Help follows it; on auction-first,
 Help follows Auction. It opens the documentation site in a new tab.
 
-🚧 **Compact menu** — below a 896px-wide container, the leading menu opens a left
+**Compact menu** — below a 896px-wide container, the leading menu opens a left
 inset drawer for primary navigation and utilities; language opens a nested
 drawer (not in the compact bar); Account / Sign In and Cart stay in the bar.
 
@@ -74,5 +74,5 @@ is no cart to show someone signed out.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Collector help | ❓ Open | Help sits in the primary nav (wide and compact), after Store Locator when that item is present and after Auction on auction-first. Opens in a new tab. Provisional host is Mintlify at `https://grade10.mintlify.io/`; confirm the host. | Product |
-| Global cart | Decided | Once Store launches, Cart stays in the header on every surface (including Auction) to cut checkout friction. Absent only while the Store cart drawer does not answer (auction-first). | Product |
+| Global cart | Decided | Once Store launches, Cart stays in the header on every surface (including Auction) to cut checkout friction. Absent only while the Store cart drawer does not answer (auction-first). Cart visibility does not depend on session state — the control follows the answered Store capability, and its activation follows `require-sign-in-from-nav-cart`; rejected hiding Cart from signed-out collectors or making the shared header own the session rule. | Product |
 :::

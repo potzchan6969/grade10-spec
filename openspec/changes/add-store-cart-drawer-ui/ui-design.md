@@ -16,7 +16,7 @@ Storybook composition under test once the host lands: Store page assemblies in
 ## Components
 
 - `Nav` / `SiteHeader` — Cart in the header on every surface once the Store
-  cart drawer answers (page-shell on `auction-first-site-header`; layout SoT
+  cart drawer answers (durable `grade10-site/site/page-shell`; layout SoT
   `site-chrome-siteheader-cart--on-auction-surface`).
 - `Toast` from `@grade10/design-system` — one application toast host (review
   failure; unavailable cleanup via the shared drawer).
