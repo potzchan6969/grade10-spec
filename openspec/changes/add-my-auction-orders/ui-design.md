@@ -78,7 +78,7 @@ new visual state for them.
 | --- | --- |
 | Filled rows show the supplied lot, auction, bid, derived status, View lot and one next action | `grade10-site-auction-auction-orders-SC-01`, `SC-05`–`SC-09` |
 | Awaiting Setup and Pending Payment rows are ordered before settled rows; newest close wins within each band | `grade10-site-auction-auction-orders-SC-03`, `SC-04` |
-| An expired invoice still reads Pending Payment and keeps Pay Invoice | `grade10-site-auction-auction-orders-SC-07` |
+| An expired invoice still reads Pending Payment and the order detail offers Contact Us | `grade10-site-auction-auction-orders-SC-07` |
 | Empty list offers My Auctions and is not an error | `grade10-site-auction-auction-orders-SC-10` |
 | Failed read offers retry and is not rendered as empty | `grade10-site-auction-auction-orders-SC-11` |
 
@@ -92,7 +92,7 @@ scenario is added here.
 | Four sections are ordered and the timeline shows each returned reached time | `winner-order-SC-53`, `SC-66`, `SC-68` |
 | Preparing Invoice shows the confirmed address with no invoice or payment action | `winner-order-SC-45` |
 | Empty required fields show field errors; optional fields and any phone format are accepted as specified | `winner-order-SC-46`–`SC-48` |
-| Pending Payment shows the full invoice, confirmed address and Pay Now; an expired invoice remains payable | `winner-order-SC-44`, `SC-49` |
+| Pending Payment shows the full invoice and confirmed address; an expired invoice offers Contact Us instead of Pay Now | `winner-order-SC-44`, `SC-49` |
 | Timed-out, abandoned or cancelled sessions say payment was not completed and keep Pay Now; the next attempt starts fresh | `winner-order-SC-49`, `SC-50` |
 | A completed hosted session reads Confirming payment until the authenticated read model returns invoice `paid`; then the order reads Processing | `winner-order-SC-51`, `SC-52` |
 

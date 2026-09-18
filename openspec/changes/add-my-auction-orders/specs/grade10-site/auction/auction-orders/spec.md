@@ -85,7 +85,8 @@ order, per `grade10-site/auction/winner-order`.
 | Refunded | View detail |
 
 An order whose invoice status is `expired` reads Pending Payment and SHALL
-offer Pay Invoice.
+open its order detail, where the winner is offered Contact Us instead of Pay
+Invoice.
 
 No row SHALL record payment, change an address, or change an order status from
 the list itself.
@@ -105,13 +106,13 @@ the list itself.
 - **THEN** the row's action is Pay Invoice
 - **AND** selecting it opens that order
 
-#### Scenario: grade10-site-auction-auction-orders-SC-07 - An expired invoice still offers Pay Invoice
+#### Scenario: grade10-site-auction-auction-orders-SC-07 - An expired invoice offers Contact Us
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next
 
 - **GIVEN** an order whose invoice status is `expired`
 - **WHEN** the winner reads its row
 - **THEN** the order status is Pending Payment
-- **AND** the row's action is Pay Invoice
+- **AND** opening the order detail offers Contact Us instead of Pay Invoice
 
 #### Scenario: grade10-site-auction-auction-orders-SC-08 - Other statuses offer View detail
 **Serves:** grade10-site-auction-auction-orders-US-01 - Winner finds what each won order needs next

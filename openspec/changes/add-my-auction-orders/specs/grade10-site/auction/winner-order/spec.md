@@ -45,8 +45,8 @@ What the page offers SHALL follow the order status.
 
 An invoice whose status is `expired` SHALL still be presented under the
 derived Pending Payment order status, per `revise-auction-winner-invoicing`,
-with its full invoice and **Pay Now**. The page SHALL not derive a second
-Expired order status.
+with its full invoice and **Contact Us** instead of Pay Now. The page SHALL
+not derive a second Expired order status.
 
 #### Scenario: winner-order-SC-72 - The page shows its four sections
 **Serves:** winner-order-US-07 - Winner confirms where a won lot ships

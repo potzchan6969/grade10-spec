@@ -1,6 +1,6 @@
 ## 1. Specification and product record (grade10-spec)
 
-- [ ] 1.1 Carry the explicit dependency on `revise-auction-winner-invoicing` through the proposal and deltas, preserving its `not_issued`, `pending`, `expired`, `paid`, fulfilment and derived-status ownership; keep expired orders as Pending Payment with Pay Now (grade10-site-auction-auction-orders-SC-07, winner-order-SC-44, winner-order-SC-49)
+- [ ] 1.1 Carry the explicit dependency on `revise-auction-winner-invoicing` through the proposal and deltas, preserving its `not_issued`, `pending`, `expired`, `paid`, fulfilment and derived-status ownership; keep expired orders as Pending Payment with Contact Us in the order detail (grade10-site-auction-auction-orders-SC-07, winner-order-SC-44, winner-order-SC-49)
 - [ ] 1.2 Update the My Auctions and Winner Order PRDs so the Won-row entry point, invoice-expiry outcome, address-lock ownership and Hong Kong Postal Code question agree with the change (grade10-site-auction-account-record-SC-55, winner-order-SC-45)
 - [ ] 1.3 Verify proposal, specs, journeys and feature suites for links, scenario ids and the removal of the deprecated `AuctionRecordTabs` delta with `openspec validate add-my-auction-orders --strict`, `openspec status --change add-my-auction-orders`, `pnpm check:manual` and `pnpm run tcs:validate`
 
@@ -23,12 +23,12 @@
 
 - [ ] 4.1 Compose My Auctions from `AuctionRecord` plus design-system `Tabs`, `TabsList`, `TabsTrigger` and `TabsContent`; partition rows by bidding window, open on Active, keep the total title count, disable Ended alerts, and preserve the Won-row order link (grade10-site-auction-account-record-SC-49–SC-55)
 - [ ] 4.2 Add the authenticated My Auction Orders route, account-menu entry and list-to-order/list-to-lot navigation; render filled, empty and failed-read states through the shared blocks without exposing another collector's orders (grade10-site-auction-auction-orders-SC-01–SC-11)
-- [ ] 4.3 Add the authenticated Winner Order route using the shared detail/form blocks; render the four sections, status timeline timestamps, address states, full invoice, expired Pending Payment with Pay Now, unfinished-payment message, Confirming and Processing states (winner-order-SC-44–SC-53, SC-72–SC-74)
+- [ ] 4.3 Add the authenticated Winner Order route using the shared detail/form blocks; render the four sections, status timeline timestamps, address states, full invoice, expired Pending Payment with Contact Us instead of Pay Now, unfinished-payment message, Confirming and Processing states (winner-order-SC-44–SC-53, SC-72–SC-74)
 - [ ] 4.4 Add English, Traditional Chinese and Simplified Chinese copy for tabs, actions, sections, invoice labels, address fields/errors and payment-session messages without placing catalogs in `@grade10/ui` (winner-order-SC-46, SC-49, SC-73, shared-ui-auction-order-SC-01)
 - [ ] 4.5 Verify route guards, navigation, responsive rendering, accessibility semantics and reduced-motion behavior with focused frontend tests, `pnpm run lint`, `pnpm run typecheck` and `pnpm run test`
 
 ## 5. Cross-surface acceptance (grade10)
 
 - [ ] 5.1 Run the My Auctions → Won row → My Auction Orders → Winner Order journey and assert the same order id, lot, owner, derived status and invoice status at every entry point (grade10-site-auction-account-record-SC-55, grade10-site-auction-auction-orders-SC-05–SC-09, winner-order-SC-72)
-- [ ] 5.2 Run the expired-invoice, abandoned-payment, provider-confirming and recorded-paid cases against the list and detail reads so no surface invents Expired as an order status or hides Pay Now (grade10-site-auction-auction-orders-SC-07, winner-order-SC-44, SC-49–SC-52)
+- [ ] 5.2 Run the expired-invoice, abandoned-payment, provider-confirming and recorded-paid cases against the list and detail reads so no surface invents Expired as an order status and the expired detail offers Contact Us (grade10-site-auction-auction-orders-SC-07, winner-order-SC-44, SC-49–SC-52)
 - [ ] 5.3 Run the full relevant application validation shelf after the shared package and routes land: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test`, and the focused auction Storybook test suite
