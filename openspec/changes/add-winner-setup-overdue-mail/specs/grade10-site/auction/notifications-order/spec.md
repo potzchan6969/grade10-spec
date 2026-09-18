@@ -1,47 +1,37 @@
 ## Feature set
 
 - Post-close letters
-  - Setup series: auction-won asks for order setup; one setup reminder at 24h (formerly address reminder); setup overdue at the 48-hour setup deadline while setup is incomplete
-  - Payment overdue: the letter at invoice `expired` (replacing invoice-expired naming)
+  - Setup letter copy: auction-won and setup-reminder name delivery address, payment method and billing address as bullets; setup overdue stays generic and never cancels on its own
 
 ## ADDED Requirements
 
-### Requirement: Setup reminder and setup overdue follow the setup window
+### Requirement: Setup letters name what setup asks for
 
-Grade10 SHALL remind a winner whose setup is incomplete, and SHALL tell them
-when the setup deadline has passed.
+Auction-won and the setup-reminder letter SHALL name delivery address, payment
+method, and billing address as bullets, and SHALL use Complete Order Setup as
+the primary action with a Confirm-by deadline.
 
-**Setup reminder** — 24 hours after lot close, while setup is incomplete,
-Grade10 SHALL send the setup-reminder letter. This letter is the former
-address reminder. Grade10 SHALL NOT send a second setup reminder at 72 hours
-or at any other time after the first.
+The setup-overdue letter SHALL speak of order setup generically (no field
+list), SHALL say self-service setup is closed, SHALL use Contact Us as primary
+and View order as secondary, SHALL name manual review, and SHALL NOT cancel
+the order by itself.
 
-**Setup overdue** — When the setup deadline (48 hours after lot close) passes
-while setup is incomplete, Grade10 SHALL send the setup-overdue letter. Its
-primary action SHALL be Contact Us.
-
-**Park on confirm** — Setup reminder and setup overdue SHALL park once the
-winner confirms setup.
-
-#### Scenario: order-mail-SC-50 - Setup reminder fires while setup is incomplete
-**Serves:** Post-close letters - setup reminder fires while setup is incomplete
+#### Scenario: order-mail-SC-55 - Auction-won and setup-reminder name the setup bullets
+**Serves:** Post-close letters - setup letters name what setup asks for
 
 - **GIVEN** an auction order whose winner has not confirmed setup
-- **WHEN** 24 hours after lot close arrive
-- **THEN** Grade10 sends the winner the setup-reminder letter
+- **WHEN** Grade10 sends the auction-won letter or the setup-reminder letter
+- **THEN** the letter names delivery address, payment method, and billing
+  address as bullets
+- **AND** its primary action is Complete Order Setup
+- **AND** it names a Confirm-by deadline
 
-#### Scenario: order-mail-SC-54 - No second setup reminder at 72 hours
-**Serves:** Post-close letters - setup reminder fires while setup is incomplete
-
-- **GIVEN** an auction order whose winner has not confirmed setup
-- **AND** the setup-reminder letter at 24 hours has been sent
-- **WHEN** 72 hours after lot close arrive
-- **THEN** Grade10 sends no second setup-reminder letter
-
-#### Scenario: order-mail-SC-51 - Setup overdue fires at the setup deadline
-**Serves:** Post-close letters - setup overdue fires at the setup deadline
+#### Scenario: order-mail-SC-56 - Setup overdue stays generic and does not cancel
+**Serves:** Post-close letters - setup letters name what setup asks for
 
 - **GIVEN** an auction order whose winner has not confirmed setup
-- **WHEN** the setup deadline 48 hours after lot close passes
-- **THEN** Grade10 sends the winner the setup-overdue letter
-- **AND** the letter's primary action is Contact Us
+- **WHEN** Grade10 sends the setup-overdue letter
+- **THEN** the letter names order setup generically with no field list
+- **AND** its primary action is Contact Us
+- **AND** its secondary action is View order
+- **AND** it does not cancel the order

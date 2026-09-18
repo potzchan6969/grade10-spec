@@ -75,23 +75,25 @@ letter and one attachment.
 
 Grade10 SHALL send a winner these letters. Each SHALL be sent to the
 collector's registered account email and SHALL follow the letter shape
-`grade10-site/auction/notifications` defines.
+`grade10-site/auction/notifications` defines. Preview links open the staging
+template at `https://email.grade10-stg.com/preview/…` (same path as
+`apps/emails/emails/`).
 
-| Letter | Trigger | Channel |
-| --- | --- | --- |
-| Auction won | The lot closes and the winner is determined. Asks for order setup and names the setup deadline | Email |
-| Setup reminder | 24 hours after lot close while setup is incomplete | Email |
-| Setup overdue | The setup deadline (48 hours after lot close) passes while setup is incomplete. Self-service setup is closed; Contact Us is primary | Email |
-| Payment reminder | An operator sends or reissues the invoice. Names the invoice total and the payment deadline | Email |
-| Payment reminder | Day 3 of the current invoice's running deadline, while invoice status is `pending` | Email |
-| Payment reminder | Day 6 of the current invoice's running deadline, while invoice status is `pending` | Email |
-| Final notice | 24 hours before the payment deadline, while invoice status is `pending` | Email |
-| Payment overdue | Grade10 sets the invoice to `expired` at its payment deadline | Email |
-| Proof not accepted | An operator returns a `payment_verifying` invoice to `pending`. Names the operator's external reason and the new payment deadline as a date and time in the winner's own timezone | Email |
-| Payment received | The winner's card payment is confirmed, an operator confirms bank transfer proof, or an operator commits a manual settlement | Email |
-| Shipped | Fulfilment status becomes `fulfilled` and a tracking number is attached. Primary CTA is the carrier track-and-trace link; secondary CTA opens Winner Order | Email |
-| Delivered | The carrier confirms delivery | Email |
-| Order cancelled | An operator cancels the order | Email |
+| Letter | Trigger | Channel | Preview |
+| --- | --- | --- | --- |
+| Auction won | The lot closes and the winner is determined. Asks for order setup and names the setup deadline | Email | [auction-won.tsx](https://email.grade10-stg.com/preview/auction/order/auction-won) |
+| Setup reminder | 24 hours after lot close while setup is incomplete | Email | [setup-reminder.tsx](https://email.grade10-stg.com/preview/auction/order/setup-reminder) |
+| Setup overdue | The setup deadline (48 hours after lot close) passes while setup is incomplete. Self-service setup is closed; Contact Us is primary | Email | [setup-overdue.tsx](https://email.grade10-stg.com/preview/auction/order/setup-overdue) |
+| Payment reminder | An operator sends or reissues the invoice. Names the invoice total and the payment deadline | Email | [payment-reminder.tsx](https://email.grade10-stg.com/preview/auction/order/payment-reminder) |
+| Payment reminder | Day 3 of the current invoice's running deadline, while invoice status is `pending` | Email | [payment-reminder-day-three.tsx](https://email.grade10-stg.com/preview/auction/order/payment-reminder-day-three) |
+| Payment reminder | Day 6 of the current invoice's running deadline, while invoice status is `pending` | Email | [payment-reminder-day-six.tsx](https://email.grade10-stg.com/preview/auction/order/payment-reminder-day-six) |
+| Final notice | 24 hours before the payment deadline, while invoice status is `pending` | Email | [payment-reminder-final.tsx](https://email.grade10-stg.com/preview/auction/order/payment-reminder-final) |
+| Payment overdue | Grade10 sets the invoice to `expired` at its payment deadline | Email | [payment-overdue.tsx](https://email.grade10-stg.com/preview/auction/order/payment-overdue) |
+| Proof not accepted | An operator returns a `payment_verifying` invoice to `pending`. Names the operator's external reason and the new payment deadline as a date and time in the winner's own timezone | Email | — |
+| Payment received | The winner's card payment is confirmed, an operator confirms bank transfer proof, or an operator commits a manual settlement | Email | [payment-received.tsx](https://email.grade10-stg.com/preview/auction/order/payment-received) |
+| Shipped | Fulfilment status becomes `fulfilled` and a tracking number is attached. Primary CTA is the carrier track-and-trace link; secondary CTA opens Winner Order | Email | [order-shipped.tsx](https://email.grade10-stg.com/preview/auction/order/order-shipped) |
+| Delivered | The carrier confirms delivery | Email | [order-delivered.tsx](https://email.grade10-stg.com/preview/auction/order/order-delivered) |
+| Order cancelled | An operator cancels the order | Email | [order-cancelled.tsx](https://email.grade10-stg.com/preview/auction/order/order-cancelled) |
 
 Grade10 SHALL send no letter when the winner uploads payment proof. The proof
 not accepted letter SHALL state the new payment deadline as "Pay by" with a
@@ -304,7 +306,7 @@ replaced invoice.
 - **GIVEN** an invoice sent at 2026-09-12T09:00:00Z that became `payment_verifying` at 2026-09-13T09:00:00Z
 - **WHEN** an operator returns it to `pending` at 2026-09-16T09:00:00Z
 - **THEN** Grade10 sends the day 3 reminder at 2026-09-18T09:00:00Z and the day 6 reminder at 2026-09-21T09:00:00Z
-- **AND** queues the final notice immediately before the new deadline of 2026-09-22T09:00:00Z
+- **AND** queues the final notice 24 hours before the new deadline of 2026-09-22T09:00:00Z
 
 #### Scenario: order-mail-SC-25 - A reminder already sent is not repeated after a return
 **Serves:** Reminder cadence - held while proof is checked

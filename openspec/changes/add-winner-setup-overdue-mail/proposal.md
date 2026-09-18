@@ -48,9 +48,10 @@ None.
 
 ### Modified Capabilities
 
-- `grade10-site/auction/notifications-order`: setup wording on auction-won;
-  setup-reminder cadence and rename; setup-overdue letter; payment-overdue
-  letter replacing invoice-expired content and trigger naming.
+- `grade10-site/auction/notifications-order`: setup letter copy (bullets on
+  auction-won and setup-reminder; generic setup-overdue). Cadence, payment
+  overdue naming, and the letter table live on durable
+  `notifications-order`.
 
 ## Impact
 
