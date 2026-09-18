@@ -1,6 +1,6 @@
 # Tasks
 
-## 1. Design system
+## 1. Design system (owner: @htonyl)
 
 - [ ] bank-design-01 Export `FileDropzone` from the design-system barrel and
   cover wrong type, size, count, removal and conversion stories.
