@@ -9,7 +9,7 @@
 - [ ] 2.2 Make grade10-site-auction-bid-payment-method-SC-11 and SC-15 pass by modeling provider unexpected-state refusal as a controlled declined outcome while keeping unknown provider faults distinct.
 - [ ] 2.3 Make the shared Stripe client and fake-provider tests pass, then verify with pnpm --dir packages/stripe/backend test and pnpm --dir packages/stripe/backend typecheck.
 
-## 3. Auction provider adapter and hold state machine (grade10)
+## 3. Auction provider adapter and hold state machine (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Make grade10-site-auction-bid-payment-method-SC-06 and SC-14 pass by requesting eligible authorization capabilities at hold creation, calling incremental authorization for raises, and recording the provider's returned capture deadline.
 - [ ] 3.2 Make grade10-site-auction-bid-payment-method-SC-11 and SC-15 pass by translating the exact unexpected-state refusal, marking the replacement bid and hold terminally failed, and preserving the prior accepted bid and provider reference.
