@@ -190,6 +190,28 @@ extension window, Extended bidding has started.
 - **WHEN** Grade10 reaches one hour before that scheduled close
 - **THEN** it does not send them a one-hour closing reminder
 
+#### Scenario: grade10-site-auction-notifications-SC-45 - Bidding closes in 24 hours still sends after the one-hour reminder is retired
+**Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
+
+- **GIVEN** a collector watching a lot whose scheduled close is 24 hours away, with email alerts on
+- **WHEN** Grade10 reaches 24 hours before that scheduled close
+- **THEN** it sends them the closing-in-24-hours message
+
+#### Scenario: grade10-site-auction-notifications-SC-46 - Extended bidding still sends after the one-hour reminder is retired
+**Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
+
+- **GIVEN** a collector watching a lot with email alerts on
+- **WHEN** the lot enters extended bidding
+- **THEN** Grade10 sends them the extended-bidding-has-started message
+
+#### Scenario: grade10-site-auction-notifications-SC-47 - A bidder is told bidding closes in 24 hours
+**Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
+
+- **GIVEN** a collector who has bid on a lot with email alerts on and does not watch it
+- **AND** the lot's scheduled close is 24 hours away
+- **WHEN** Grade10 reaches 24 hours before that scheduled close
+- **THEN** it sends them the closing-in-24-hours message
+
 #### Scenario: grade10-site-auction-notifications-SC-48 - No one-hour closing reminder before a moved close
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
