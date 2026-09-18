@@ -25,7 +25,7 @@
 - [ ] overdue-email-03 Add email port/template/campaign tests for all four
   letter variants.
 
-## 4. Validation
+## 4. Validation (owner: @htonyl)
 
 - [ ] overdue-verify-01 Run focused sweeps, notification, email and contract
   tests, then the complete repository validation lane.
