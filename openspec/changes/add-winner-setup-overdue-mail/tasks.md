@@ -7,7 +7,7 @@
 - [ ] overdue-contract-02 Expand auction-won/setup-reminder payload contracts
   for delivery, payment method, billing and setup deadline.
 
-## 2. Scheduling
+## 2. Scheduling (owner: @htonyl)
 
 - [ ] overdue-sweep-01 Make setup completeness include the companion billing and
   payment confirmation fields and park setup letters after confirmation.
