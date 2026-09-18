@@ -70,7 +70,8 @@ export const PendingPayment: Story = {
     expect(sidebar.getByText("Delivery address")).toBeVisible();
     expect(sidebar.getByText("Billing address")).toBeVisible();
     expect(sidebar.queryByText("Payment method")).not.toBeInTheDocument();
-    expect(canvas.getByText(/Wan Chai/)).toBeVisible();
+    const deliveryAddress = sidebar.getByText("Delivery address").parentElement;
+    expect(deliveryAddress).toHaveTextContent(/Wan Chai/);
     expect(
       canvas.queryByText(/Locked after invoice send/i),
     ).not.toBeInTheDocument();
@@ -193,7 +194,11 @@ export const SubmitBankPaymentProof: Story = {
     expect(
       canvas.queryByRole("button", { name: "Pay by Bank Transfer" }),
     ).not.toBeInTheDocument();
-    expect(canvas.getByText(/verifying your bank transfer/i)).toBeVisible();
+    const verificationAlert = canvas.getByRole("alert");
+    expect(verificationAlert).toBeVisible();
+    expect(
+      within(verificationAlert).getByText(/We’re verifying your transfer/),
+    ).toBeVisible();
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(sidebar.getByText("Payment method")).toBeVisible();
