@@ -13,6 +13,22 @@
   "payInvoice": "Pay invoice",
   "viewDetail": "View detail",
   "contactUs": "Contact Us",
+  "contactDialog": {
+    "title": "Email Grade10",
+    "to": "To",
+    "subject": "Subject",
+    "message": "Message",
+    "copyAddress": "Copy address",
+    "addressCopied": "Address copied",
+    "copySubject": "Copy subject",
+    "subjectCopied": "Subject copied",
+    "copyMessage": "Copy Message",
+    "messageCopied": "Message copied",
+    "copyAddressManual": "Copy the address manually",
+    "copySubjectManual": "Copy the subject manually",
+    "copyMessageManual": "Copy the message manually",
+    "openMailApp": "Open Mail App"
+  },
   "tabs": {
     "active": "Active",
     "upcoming": "Upcoming",

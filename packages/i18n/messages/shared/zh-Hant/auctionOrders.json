@@ -13,6 +13,22 @@
   "payInvoice": "支付發票",
   "viewDetail": "查看詳情",
   "contactUs": "聯絡我們",
+  "contactDialog": {
+    "title": "寄信給 Grade10",
+    "to": "收件人",
+    "subject": "主旨",
+    "message": "訊息",
+    "copyAddress": "複製地址",
+    "addressCopied": "已複製地址",
+    "copySubject": "複製主旨",
+    "subjectCopied": "已複製主旨",
+    "copyMessage": "複製訊息",
+    "messageCopied": "已複製訊息",
+    "copyAddressManual": "請手動複製地址",
+    "copySubjectManual": "請手動複製主旨",
+    "copyMessageManual": "請手動複製訊息",
+    "openMailApp": "開啟郵件應用程式"
+  },
   "tabs": {
     "active": "進行中",
     "upcoming": "即將開始",
