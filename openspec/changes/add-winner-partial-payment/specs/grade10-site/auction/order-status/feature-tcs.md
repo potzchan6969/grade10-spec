@@ -71,7 +71,32 @@
 **I want** the existing expired-invoice behaviour to remain available,
 **so that** partial-payment status does not reopen self-service Pay.
 
-**Out of suite:** existing expired-invoice coverage in the durable order-status feature suite.
+### auction-status-US01-TC1-1: Expiry still removes winner card Pay
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** auction-status-US-01
+
+**Pre-conditions:**
+
+* An auction invoice is expired and unpaid.
+
+**Steps:**
+
+1. Read the winner and operator order surfaces.
+
+**Expected Results:**
+
+* Winner card Pay remains unavailable while operators can still resolve the order.
 
 ## Settled
 

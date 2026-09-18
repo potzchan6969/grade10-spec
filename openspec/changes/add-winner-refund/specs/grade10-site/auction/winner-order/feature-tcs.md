@@ -42,37 +42,38 @@
 ## winner-order-US15: Winner sees an overpayment returned
 
 **As a** winner who paid more than the order,
-**I want** only the difference returned while the order stays in its current status,
-**so that** I can see that the sale still stands.
+**I want** only the difference returned below the invoice total,
+**so that** I know the sale still stands.
 
-### winner-order-US15-TC1-1: Overpayment leaves the order status unchanged
+### winner-order-US15-TC1-1: An overpayment keeps the order open
 
 **Classification:**
 
-* **Severity:** major
-* **Priority:** medium
+* **Severity:** critical
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
+* **Type:** acceptance
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** winner-order-US-15
 
 **Pre-conditions:**
 
-* customer(winner of `<overpaid order>`) is on Winner Order.
+* customer(winner of `<overpaid order>`) is on Winner Order after the
+  overpayment difference was returned.
 
 **Steps:**
 
-1. Read the order status, Order Summary, and refund alert.
+1. Read the order status, invoice lines, returned amount and refund details.
 
 **Expected Results:**
 
-* The order keeps its pre-refund status.
-* Order Summary keeps the amount that was due.
-* The refund alert shows only the difference returned.
+* The order status and invoice lines are unchanged.
+* Only the returned difference appears below Order Total.
+* The refund details can be opened without exposing operator proof or the full provider reference.
 
 ## Settled
 
@@ -81,3 +82,4 @@
 | Finding | Disposition |
 | --- | --- |
 | Refunded retains issued documents and removes self-service | **Folded in:** `winner-order-SC-140` |
+| An overpayment returns only the difference and keeps the sale open | **Folded in:** `winner-order-SC-155` |

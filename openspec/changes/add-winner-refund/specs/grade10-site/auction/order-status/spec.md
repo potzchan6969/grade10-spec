@@ -18,3 +18,12 @@ SHALL not be replaced by a later payment or shipment event.
 - **WHEN** any order-status surface reads it
 - **THEN** the derived status is Refunded
 - **AND** a later payment event does not change that status
+
+#### Scenario: auction-status-SC-54 - An overpayment does not derive Refunded
+**Serves:** Derived order status - an overpayment keeps the order status
+
+- **GIVEN** an order with a payment above its invoice total and a returned
+  difference
+- **WHEN** any order-status surface reads it
+- **THEN** the derived status remains the status before the overpayment return
+- **AND** it is not Refunded

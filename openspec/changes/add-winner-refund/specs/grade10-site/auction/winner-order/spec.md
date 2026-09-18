@@ -20,3 +20,20 @@ operator's refund reason or expose a payment credential.
 - **THEN** the order and invoice read Refunded
 - **AND** the invoice and payment receipt remain downloadable
 - **AND** no Pay, address form or stepper appears
+
+### Requirement: Winner Order shows an overpayment without closing the order
+
+When an overpayment is returned, Winner Order SHALL show only the returned
+difference below Order Total. It SHALL keep the order's existing status and
+the invoice lines unchanged, and SHALL offer the refund details without
+showing the operator's proof or full provider reference.
+
+#### Scenario: winner-order-SC-155 - An overpayment keeps the order open
+**Serves:** winner-order-US-15 - seeing an overpayment returned without closing the sale
+
+- **GIVEN** an order whose recorded payment exceeds its invoice total and the
+  difference has been returned
+- **WHEN** the winner opens Winner Order
+- **THEN** the order status and invoice lines are unchanged
+- **AND** the returned difference appears below Order Total
+- **AND** the winner can open the refund details

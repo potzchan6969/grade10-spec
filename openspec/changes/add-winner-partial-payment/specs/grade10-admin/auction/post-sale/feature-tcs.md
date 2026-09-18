@@ -108,7 +108,32 @@
 **I want** the existing full-settlement flow to remain available,
 **so that** partial collection does not remove the established payment path.
 
-**Out of suite:** existing post-sale payment coverage in the durable feature suite.
+### post-sale-US03-TC1-1: Full settlement remains available
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-03
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on an unpaid order before any payment is recorded.
+
+**Steps:**
+
+1. Complete the established full-settlement flow.
+
+**Expected Results:**
+
+* The order can still be settled through the existing payment path.
 
 ## post-sale-US07: Operator resolves an unpaid order
 
@@ -116,7 +141,32 @@
 **I want** the existing unpaid-order actions to remain available before payment starts,
 **so that** partial collection changes only orders that have received a payment.
 
-**Out of suite:** existing post-sale resolution coverage in the durable feature suite.
+### post-sale-US07-TC1-1: Unpaid-order actions remain available
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-07
+
+**Pre-conditions:**
+
+* admin(holds payment-processing) is on an unpaid order with no recorded payment.
+
+**Steps:**
+
+1. Read the order actions before starting partial collection.
+
+**Expected Results:**
+
+* The existing settle, reissue, and cancel actions remain available.
 
 ## Settled
 

@@ -1,149 +1,168 @@
 ## Context
 
-The auction service already stores active and lifted auction suspensions in
-`packages/grade10-auction/backend/src/db/schema/bidderSuspensions.ts`. The
-deadline sweep in
-`packages/grade10-auction/backend/src/services/bidders/suspension.ts` currently
-retracts bids and re-resolves listings, while the older Bidders moderation
-route stores a separate `bidders.banned` flag. The shared Users-panel contract
-is in `packages/frontend-console/src/user-directory/`; the Grade10 admin
-directory composes it through
-`packages/grade10-auth/admin-frontend/src/features/directory/users/`.
+The auction service already persists active auction suspensions in
+`packages/grade10-auction/backend/src/db/schema/bidderSuspensions.ts` and
+records deadline suspensions from
+`packages/grade10-auction/backend/src/services/bidders/suspension.ts`. The
+current expiry path retracts open bids, while the Bidders moderation path keeps
+a separate `bidders.banned` flag. The shared account panel is already exported
+from `packages/frontend-console/src/user-directory/`; the Grade10 auth admin
+feature composes it from `packages/grade10-auth/admin-frontend/`.
 
-The change therefore has two seams to reconcile: one auction-standing source
-of truth, and a suspension transition that writes no listing or bid rows.
+The change keeps the existing auction row-lock and append-only audit patterns.
+It changes the suspension transition, unifies the active standing, and adds the
+Users-panel command without moving auction data into auth.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Make the active auction suspension the single standing restriction for deadline and operator causes
-- Preserve existing bid rows, maxima, prices, leaders, and close-time winner creation
-- Expose idempotent, grant-protected suspend and reinstate commands to the Users panel
-- Keep operator reason and cause history private to operators while the collector receives generic suspension copy
+- Make one active auction suspension the source of truth for deadline and operator causes
+- Preserve existing bid rows, maxima, leaders, prices, and close behavior when suspension starts
+- Keep the new-bid guard, operator authorization, reason privacy, and audit history explicit
+- Expose a compatibility projection so existing Bidders consumers can migrate without a wire break
 
 **Non-Goals:**
 
-- Removing historical `bid_retracted` records
-- Renaming the existing Bidders moderation route in the first migration
-- Changing platform bans, settlement, store access, or loyalty
+- Replacing the shared account-panel package or changing the platform-ban model
+- Rewriting already-recorded `bid_retracted_suspension` history
+- Adding a new auction-admin Bidders surface or bulk controls
 
 ## Decisions
 
-The change spec governs the user-visible standing and suspension outcomes. The
-implementation reuses the existing suspension aggregate and changes its
-transition and read paths rather than adding an account-level suspension table.
-
-- **One standing source** — treat an unlifted `bidderSuspensions` row with
-  `scope = 'auction'` as authoritative. Keep `bidders.banned` during the
-  expand/contract window only as a deprecated storage column; Bidders reads
-  derive its compatibility `banned` field from the active suspension, and its
-  writes call the suspension service.
-- **No listing mutation on suspension** — remove the
-  `retractOnOpenListing` path from the deadline transition. The transition
-  locks the order and active suspension row, writes the suspension/log event,
-  and commits. It does not lock listings, update bid state, add a bid-history
-  event, or re-resolve a price. The normal listing close transaction remains
-  the owner of winner creation.
-- **New-bid guard** — keep the active-suspension check at the shared bid and
-  maximum-raise command boundary. Existing accepted bids remain eligible to
-  auto-bid and are evaluated by the normal listing lock and close paths.
-- **Cause history** — make `causeOrderId` and `deadlineAt` nullable for an
-  operator-originated row. Keep the existing lifecycle log and record a
-  deadline cause with `type = 'expired'` and an operator cause with
-  `type = 'suspended'`, distinguished by whether an order or actor is present.
-  Existing `bid_retracted` rows remain readable but no new one is written.
-- **Command boundary** — add grant-protected suspend and reinstate procedures
-  beside the existing Bidders procedures. Each takes a stable
-  `(storefront, userId)` key, and the write includes a request/idempotency key.
-  The service owns the transaction and returns a tagged success or refusal;
-  the router owns authentication and wire decoding.
-- **Reason visibility** — the operator projection includes cause, actor,
-  timestamps, and operator reason. Collector-facing account and notification
-  projections expose only the active state and contact guidance. No operator
-  reason crosses the collector API boundary.
-- **Shared panel contract** — extend `UserAccountPanel` with optional auction
-  standing data and separate suspend/reinstate handlers. The panel renders one
-  move according to standing and never confirms it. `UserModerationDialog`
-  collects a required reason only for suspend; the Grade10 admin consumer
-  performs the authenticated mutation.
+- **One standing source** — `bidder_suspensions` remains authoritative for an
+  active auction suspension. The Bidders list's `banned` value is derived or
+  adapted from that active row during the migration window; the existing field
+  is not used by new bidding guards. A second independent boolean is rejected
+  because it can let the Bidders panel and Users panel disagree.
+- **Cause history** — keep one active suspension row and append entries to
+  `bidder_suspension_log`. A deadline cause carries the expired order; an
+  operator cause carries the actor and reason. Reinstatement locks the active
+  row, marks it lifted, and appends one event. Existing `bid_retracted` log
+  values remain readable but are never written by the new path.
+- **Suspension transition** — change
+  `packages/grade10-auction/backend/src/services/bidders/suspension.ts` so the
+  deadline sweep locks the order and suspension row, records a new cause when
+  needed, and does not call the bid repository or listing resolver. The existing
+  listing lock remains owned by bid placement and close, so accepted maxima
+  continue through the ordinary auto-bidding path.
+- **Bid guard** — the service that accepts a new bid or maximum raise reads the
+  active auction suspension under the bidder's standing check and refuses the
+  write. It does not filter or rewrite prior `top` or `outbid` rows. Closing a
+  listing continues to derive a winner from current maxima, including a
+  suspended account.
+- **Admin mutation** — add idempotent suspend and reinstate processors beside
+  the existing bidder moderation services and expose them through the auction
+  admin procedure client. Both procedures require `auction:moderate`; suspend
+  requires a non-empty reason, reinstate does not. The server is the authority
+  even when the panel hides a control.
+- **Public and operator projections** — widen the operator projection to carry
+  cause source, actor, timestamp, and reason. The collector projection carries
+  the standing and contact copy only; an operator's reason never crosses the
+  collector boundary. Keep these projections separate rather than reusing the
+  current winner-order suspension shape for both audiences.
+- **Shared panel contract** — extend
+  `packages/frontend-console/src/user-directory/UserAccountPanel.tsx` with
+  optional handler-gated auction-standing actions and state. The panel reports
+  the requested action; `UserModerationDialog` remains the confirmation owner.
+  `packages/grade10-auth/admin-frontend/` supplies the handlers and maps the
+  result into the Users-panel account record.
 
 ## Database Schema
 
-The existing `auction.bidder_suspensions` table remains authoritative.
+Reuse `auction.bidder_suspensions` and `auction.bidder_suspension_log`; do not
+create a second suspension table.
 
-| Table | Change | PostgreSQL shape |
+| Table | Change | Authority |
 | --- | --- | --- |
-| `auction.bidder_suspensions` | Allow operator causes without an order or deadline | `cause_order_id text NULL`; `deadline_at timestamp(3) with time zone NULL` |
-| `auction.bidder_suspension_log` | Keep all causes and reinstatements append-only | Reuse existing `type`, `cause_order_id`, `actor_id`, `reason`, and `idempotency_key`; preserve the legacy `bid_retracted` check value for old rows |
-| `auction.bidders` | Stop using the duplicate flag as authority | Retain `banned boolean NOT NULL DEFAULT false` during expand/contract; reads and writes no longer depend on it |
+| `auction.bidder_suspensions` | Make `cause_order_id` and `deadline_at` nullable for operator-only causes; keep the partial unique index on `(storefront, user_id, scope)` where `lifted_at IS NULL` | One active auction standing per bidder |
+| `auction.bidder_suspension_log` | Preserve historical event values, add the operator/deadline cause distinction through nullable `cause_order_id` and actor metadata, and keep the idempotency unique index | Append-only cause and reinstatement history |
+| `auction.bidders` | Backfill active `banned` rows into `bidder_suspensions`; retain `banned` as a compatibility projection until all callers use the suspension service | Legacy wire compatibility only |
 
-The existing partial unique index on `(storefront, user_id, scope)` where
-`lifted_at IS NULL` remains the active-row guard. The suspension row is the
-aggregate root; the log is its append-only history; bid and listing rows are
-not children of the suspension and are not rewritten.
+The migration is additive/expand-first: allow nullable cause fields, backfill
+legacy active bans with an operator-migration cause, then switch reads and
+writes to the suspension service. It does not delete old retraction logs.
+
+Relevant relationships:
 
 ```text
-bidder_suspensions 1 ─── many bidder_suspension_log
+auction.bidders (storefront, user_id)
         │
-        └── 0..1 auction_orders (deadline cause)
-
-bidders (compatibility read) ─── active bidder_suspensions (scope = auction)
+        └──< auction.bidder_suspensions (active auction standing)
+                    │
+                    └──< auction.bidder_suspension_log (causes and reinstatement)
+                                      │
+                                      └──> auction.auction_orders (deadline cause, nullable)
 ```
 
 ## Service Interfaces
 
-- **`suspendBidder`** — input `{ storefront, userId, actorId, reason,
-  requestId, at }`; success returns `{ outcome: "suspended" | "already_suspended",
-  suspensionId }`; refusal returns a typed missing-bidder, empty-reason, or
-  unauthorized error. It locks the active-row key, inserts the row when
-  absent, appends the operator cause, and commits once. Repeating `requestId`
-  is a no-op.
-- **`reinstateBidder`** — input `{ storefront, userId, actorId, requestId,
-  at }`; success returns `{ outcome: "reinstated", suspensionId }`; an absent
-  active row returns a typed not-suspended outcome. It locks the active row,
-  stamps `liftedAt` and `liftedBy`, and appends one reinstated log entry.
-- **`suspendExpiredOrder`** — input `{ orderId, at }`; the existing sweep
-  keeps the order lock and transaction, but no longer touches listings. If an
-  active row exists it appends the deadline cause idempotently; otherwise it
-  inserts the active row with the order and deadline and appends the cause.
-- **Bid admission** — the existing bid and maximum-raise commands read the
-  active suspension under their normal bidder/listing transaction and refuse
-  new commitments. Auto-bid and close commands do not call this admission
-  guard, so an existing maximum can continue and can win normally.
+- **Suspend from Users** — input `{ storefront, userId, actorId, reason,
+  idempotencyKey, at }`; success returns the active suspension projection;
+  refusal returns `BIDDER_NOT_FOUND`, `ALREADY_SUSPENDED` only for a repeated
+  command with no new cause, or `REASON_REQUIRED`. The transaction locks the
+  bidder and active suspension, inserts or appends the cause, writes the audit
+  event, and commits before notification.
+- **Suspend expired order** — input `{ orderId, at }`; success returns the
+  suspension id and cause outcome. The transaction locks the order, checks the
+  pending deadline, then inserts or appends the deadline cause. It never
+  updates bids, listings, or bid history.
+- **Reinstate** — input `{ storefront, userId, actorId, idempotencyKey, at }`;
+  success returns the lifted projection; refusal returns `NOT_SUSPENDED` or
+  `STALE_COMMAND`. The transaction locks the active row, marks it lifted,
+  appends the event, and commits once.
+- **Bid acceptance** — input remains the existing bid/raise command; the
+  suspension guard reads the active standing before inserting or updating a bid.
+  A refusal has the existing suspension error shape and does not mutate a
+  standing maximum.
 
-For an admin request, the browser sends the account's `storefront` and
-`userId` to the Grade10 admin procedure. The elevated router verifies
-`auction:moderate`, the service loads the suspension projection, and the
-response returns the operator-safe standing and history. Collector requests
-use a separate projection that strips operator reason and actor fields.
+For every multi-row mutation, the order is bidder/suspension lock, cause or
+lift write, append-only log write, then commit. Notification fanout runs after
+commit and is idempotent on the suspension-log sequence. Listing locks are not
+held by suspension transitions, avoiding a cross-listing lock loop.
+
+## API Contracts
+
+- Add authenticated admin procedures for auction suspend and reinstate under
+  the existing `auction:moderate` grant.
+- Keep the existing Bidders list `banned` field and ban/unban procedure during
+  migration, but implement them through the same suspension service and return
+  the compatibility projection.
+- Add auction standing and handler capability fields to the shared
+  `UserAccountPanel` props; do not add a new public component export.
+- Split the winner-facing suspension projection from the admin projection so
+  operator reason, actor, and audit metadata are not returned to a collector.
 
 ## Risks / Trade-offs
 
-- `[Risk]` Old code may still read `bidders.banned` → `[Mitigation]` deploy the
-  derived read and delegated write path before dropping the column, and test
-  both the Bidders route and the new Users-panel route against one active row.
-- `[Risk]` A deadline sweep can race an operator suspension → `[Mitigation]`
-  serialize both on the active-suspension key and make each cause log write
-  idempotent; the row remains active once and both causes survive.
-- `[Risk]` Existing retraction history could be mistaken for new behavior →
-  `[Mitigation]` preserve legacy log values for reads, assert no new
-  `bid_retracted` insert, and add a migration test over pre-change rows.
-- `[Risk]` A suspended leader may be skipped by a future bid query →
-  `[Mitigation]` keep suspension out of listing resolution and assert that
-  close-time resolution considers active maxima without the admission guard.
+- **Legacy bans could disappear during migration** → backfill them under a
+  locked transaction and keep the compatibility projection until reads and
+  writes are switched.
+- **A deadline sweep could race a new bid or close** → use the existing bidder
+  and listing transaction boundaries; the bid path remains the only writer of
+  new commitments and the close path remains the only resolver at close.
+- **A duplicate operator command could create duplicate causes** → require an
+  idempotency key on the command and enforce it in the append-only log.
+- **Reason privacy could leak through a shared contract** → use separate
+  collector and operator schemas and assert the omission in contract tests.
 
 ## Migration Plan
 
-1. Add the nullable suspension fields and derived operator projection while
-   retaining `bidders.banned`; regenerate Drizzle metadata and run migration
-   checks.
-2. Deploy the service and router changes. Backfill any active `banned` bidder
-   into one auction suspension with a migration actor and operator-only legacy
-   reason before enabling the derived Bidders read.
-3. Deploy the shared panel and Grade10 Users integration, then enable the
-   operator notice after the authenticated command is live.
-4. Observe the suspension transition and bid-resolution metrics. Once no
-   reader or writer uses `bidders.banned`, remove that column in a later
-   cleanup migration; rollback before that cleanup is a normal code rollback.
+1. Add nullable cause fields and the compatibility read path; backfill active
+   `banned` bidders into active auction suspensions.
+2. Deploy the service and router changes that use the suspension row for bid
+   guards and route Bidders actions through it.
+3. Deploy the deadline transition that records causes without touching bids,
+   then deploy the Users-panel handlers and collector/operator projections.
+4. Verify the backfill count, active-standing count, and cause-log count before
+   removing any legacy `banned` writes in a later cleanup.
 
+Rollback before step 3 is a normal application rollback. After the transition
+change is live, rollback is a forward compatibility release: it must not
+restore bid retraction, because doing so would make previously preserved bids
+change after the fact.
+
+## Open Questions
+
+None. The remaining choices are implementation details covered by the existing
+architecture and the decisions above.

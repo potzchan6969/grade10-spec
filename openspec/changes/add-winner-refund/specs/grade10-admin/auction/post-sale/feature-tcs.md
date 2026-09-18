@@ -111,7 +111,32 @@
 **I want** the existing history to remain available beside refunds,
 **so that** the refund record adds to rather than replaces the order history.
 
-**Out of suite:** existing post-sale history coverage in the durable feature suite.
+### post-sale-US08-TC1-1: Refunds add to the order history
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-08
+
+**Pre-conditions:**
+
+* admin(holds refund-processing) is viewing an order with existing invoice and fulfilment history.
+
+**Steps:**
+
+1. Open the order history after a refund is recorded.
+
+**Expected Results:**
+
+* Existing invoice and fulfilment entries remain available beside the refund record.
 
 ## post-sale-US01: Operator works the listing queue by outcome
 
@@ -119,7 +144,32 @@
 **I want** the existing outcome queue to remain available with Refunded added,
 **so that** the new filter does not change other outcomes.
 
-**Out of suite:** existing post-sale queue coverage in the durable feature suite.
+### post-sale-US01-TC1-1: Other queue outcomes remain available
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-01
+
+**Pre-conditions:**
+
+* admin(holds refund-processing) is on the post-sale queue with orders in existing outcomes and a Refunded order.
+
+**Steps:**
+
+1. Read the queue outcomes and filter options.
+
+**Expected Results:**
+
+* Existing outcomes remain available and Refunded is an additional outcome.
 
 ## Settled
 

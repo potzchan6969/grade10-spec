@@ -1,26 +1,27 @@
 ## Goals
 
-- Keep every standing maximum and bid-history entry when an auction suspension starts
-- Use one auction-standing restriction for deadline and operator causes
-- Let an authorized operator suspend and reinstate from the Users panel without changing platform access
+- One auction standing governs deadline suspensions and operator suspensions
+- A suspension blocks new bidding while leaving accepted bids and their history unchanged
+- Operators can act from Users without exposing their moderation reason to the collector
 
 ## Non-Goals
 
-- A second suspension state for the Bidders section
-- A new suspension expiry date or a manual withdrawal control
-- Any change to payment, store access, loyalty, or platform bans
+- A second platform-ban state or a separate Bidders-only suspension state
+- Bulk suspension, scheduled expiry, or a new suspension request workflow
+- Changes to payment, store access, loyalty, or sign-in
 
 ## Decisions
 
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
-| Q1 | Is the auction admin's Bidders ban the same suspension as the Users-panel suspension? | Yes. Both actions use one active auction-scoped suspension. The Bidders section's existing `banned` value becomes a compatibility projection of that standing, and no second restriction is created. | Keeping `banned` and `bidderSuspensions` as independent gates that could disagree |
-| Q2 | How does an existing Bidders action fit the required reason and cause history? | Existing ban and unban procedures delegate to the same suspension service. A Bidders action supplies its operator identity and a migration-safe moderation reason; the Users panel supplies the operator's entered reason. | Preserving a separate flag or letting the old action retract standing bids |
-| Q3 | How are deadline and operator causes recorded on one active suspension? | The active suspension remains one row. Its append-only log records each cause: deadline entries keep the causing order and deadline, while operator entries keep the actor and operator-only reason. A later cause does not create a second active row. | Replacing the first cause, or creating one active row per cause |
-| Q4 | What does reinstatement require? | An operator holding `auction:moderate` confirms reinstatement without entering a reason. The service closes the active row and retains every prior cause in the suspension log. | Requiring a second free-text reason for a move that already has an audit actor and timestamp |
+| Q1 | Is the Bidders-section ban the same auction suspension? | Yes. One active auction-scoped suspension is authoritative. The existing Bidders `banned` field and filter remain a compatibility projection while callers move to the suspension service. | Maintaining two flags that can disagree about whether a bidder may act |
+| Q2 | What happens when a second cause arrives while the account is already suspended? | Keep one active suspension row and append a cause log entry. A missed deadline records the expired order; an operator action records the actor and reason. No second suspension and no duplicate standing transition. | Replacing the first reason or creating one active row per cause |
+| Q3 | What does reinstatement lift? | One authorized reinstatement lifts the active auction suspension and all causes recorded on it. The append-only history remains available to operators. | Reinstating only the cause that an operator selected |
+| Q4 | What happens to bids already placed? | Suspension checks apply only to new bids and maximum raises. Existing maxima continue through the normal locked auto-bidding and close paths; suspension writes no bid-history event. | Retraction and re-resolution on every open listing |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-
+| `grade10-site/auction/bidder-suspension` | Whether the Bidders ban and auction suspension share one state | Q1 |
+| `grade10-site/auction/bidder-suspension` | Whether a second cause creates a second active suspension | Q2 |

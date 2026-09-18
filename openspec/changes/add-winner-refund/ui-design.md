@@ -44,7 +44,7 @@ there. An overpayment does not add a row.
 | --- | --- | --- |
 | Status beside the title | `Badge` `sm` beside the page title, in the My Auctions color for that status | `winner-order-SC-140` |
 | Refunded | Outline Refunded badge. No stepper, Pay or address form. Order Summary is the invoice only. Inline alert below Order Total with positive refund amount, ArrowCounterClockwise icon, and View. Dialog story: Refund Details | `winner-order-SC-140` |
-| Overpaid | Status badge and stepper stay. Order Summary unchanged. Inline alert below Order Total with only the difference and View | **Out of suite:** Preview `My Auctions/Winner Order/Delivery/Processing — Overpaid` while refund-detail requirements await the product decision in Q20 |
+| Overpaid | Status badge and stepper stay. Order Summary unchanged. Inline alert below Order Total with only the difference and View | `winner-order-SC-155` |
 
 ### My Auctions
 

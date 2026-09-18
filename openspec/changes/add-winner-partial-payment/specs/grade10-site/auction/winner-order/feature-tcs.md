@@ -45,7 +45,32 @@
 **I want** the existing full-payment path to remain available before an operator records a partial payment,
 **so that** a normal auction order is unchanged.
 
-**Out of suite:** existing full-payment coverage in the durable Winner Order feature suite.
+### winner-order-US01-TC1-1: The normal full-payment path remains available
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner of `<unpaid order>`) is on Winner Order before any partial payment is recorded.
+
+**Steps:**
+
+1. Read the payment controls.
+
+**Expected Results:**
+
+* The normal full-payment path remains available.
 
 ## Settled
 

@@ -37,6 +37,34 @@
 * The status is Refunded.
 * It does not return to Partially Paid or Processing.
 
+### auction-status-US1-TC2-1: An overpayment keeps the existing status
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Derived order status
+
+**Pre-conditions:**
+
+* An auction order has a payment above its invoice total and the difference has been returned.
+
+**Steps:**
+
+1. Read the derived order status.
+
+**Expected Results:**
+
+* The order keeps its status from before the overpayment return.
+* The status is not Refunded.
+
 ## Settled
 
 ## Reconciliation
@@ -44,3 +72,4 @@
 | Finding | Disposition |
 | --- | --- |
 | Refunded remains terminal after a partial collection | **Folded in:** `auction-status-SC-51` |
+| An overpayment does not derive Refunded | **Folded in:** `auction-status-SC-54` |
