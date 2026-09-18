@@ -20,7 +20,7 @@
 - [ ] 4.3 Deliver the operator-suspension notice with contact guidance while omitting the operator's reason from collector-facing data (`suspension-SC-20`)
 - [ ] 4.4 Verify: `pnpm run test:backend`
 
-## 5. Frontend (grade10)
+## 5. Frontend (grade10) (owner: @htonyl)
 
 - [ ] 5.1 Render auction standing apart from platform ban in the Users account panel, expose only the grant- and state-appropriate move, and delegate confirmation to `UserModerationDialog` (`grade10-admin-console-user-directory-SC-16`–`SC-19`, `shared-console-user-directory-SC-30`–`SC-32`)
 - [ ] 5.2 Render collector suspension status and contact guidance without the operator reason, and keep standing bids and normal winner order surfaces visible (`suspension-SC-13`–`SC-16`, `suspension-SC-20`)
