@@ -233,3 +233,11 @@
 - Setup reminder / setup overdue proof — **Out of suite:** `add-winner-setup-overdue-mail`
 - Delivered / cancelled CTA detail — **Out of suite:** `email-trigger-revision`
 - Proof-not-accepted — **Out of suite:** `add-winner-bank-transfer`
+
+## Settled
+
+- Delivered letter names the address and time recorded on the order at carrier confirmation
+- One payment reminder per reissue; a repeated confirmation of the same reissue sends nothing twice
+- Reissue parks superseded reminders and starts the day-3 / day-6 sequence for the new invoice — durable Reminder cadence; not restated as a new root here
+- Mute applies to listing alert mail in `notifications`, not to winner order letters
+- Contact Us uses the storefront's existing Contact Us destination

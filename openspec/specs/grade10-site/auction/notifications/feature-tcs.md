@@ -241,3 +241,9 @@
 **Run:** 2026-09-16; scenario and suite readings were reconciled by the author.
 
 - **Uncovered anchors:** none.
+
+## Settled
+
+- Late enrolment after the scheduled-close − 24h point still receives Bidding closes in 24 hours while enrolled — enrolment requirement, same pattern as opens-in-24h
+- Extended bidding has started sends once per listing per collector on first entry into the window
+- One-hour closing reminder stops for watchers and bidders alike
