@@ -28,7 +28,7 @@
 - [ ] billing-post-sale-03 Add focused tests for send guards, operator edits,
   audit logging and reissue snapshots.
 
-## 4. Validation
+## 4. Validation (owner: @htonyl)
 
 - [ ] billing-verify-01 Run design-system typecheck/story tests, focused auction
   backend/frontend tests and the required repository validation commands.
