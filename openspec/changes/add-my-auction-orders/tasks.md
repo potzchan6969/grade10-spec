@@ -11,7 +11,7 @@
 - [ ] 2.3 Implement the detail and address-form blocks with the four supplied sections, supplied invoice/payment slots, required-field markers/errors, Cancel, and no phone-format or billing-address validation (shared-ui-auction-order-SC-03, shared-ui-auction-order-SC-04, winner-order-SC-139, winner-order-SC-152–SC-154)
 - [ ] 2.4 Verify shared exports, isolated row/form rendering, copy ownership and supplied-error behavior with focused package tests, Storybook stories, `pnpm run lint` and `pnpm run typecheck`
 
-## 3. Auction reads and actions (grade10)
+## 3. Auction reads and actions (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Build the authenticated My Auction Orders read from the session owner, joining winning lots to auction orders, current invoices and the revise-owned derived status; apply waiting-first and newest-close ordering and return a distinct read failure (grade10-site-auction-auction-orders-SC-01–SC-04, SC-10, SC-11)
 - [ ] 3.2 Build the authenticated Winner Order read model with invoice status/lines, confirmed address, lot, retained records, and ordered `{ status, reachedAt }` timeline items sourced from authoritative lifecycle timestamps; do not synthesize timestamps or add a second status model (winner-order-SC-53, winner-order-SC-139, winner-order-SC-141)
