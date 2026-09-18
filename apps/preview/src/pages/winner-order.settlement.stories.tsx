@@ -167,27 +167,27 @@ export const CompleteSetupFlow: Story = {
 
     const dialog = await waitFor(() => {
       const found = page.getByRole("dialog", {
-        name: "Complete Order Setup",
+        name: "Delivery Address",
       });
       expect(found).toBeVisible();
       return found;
     });
     const modal = within(dialog);
-    expect(modal.getByText("Step 1 of 3: Delivery")).toBeVisible();
+    expect(modal.getByText("Step 1 of 3")).toBeVisible();
     expect(modal.getAllByText("Alex Chan").length).toBeGreaterThan(0);
 
     await userEvent.click(modal.getByRole("button", { name: "Continue" }));
 
     await waitFor(() => {
-      expect(modal.getByText("Step 2 of 3: Payment")).toBeVisible();
+      expect(modal.getByText("Step 2 of 3")).toBeVisible();
     });
     await userEvent.click(modal.getByRole("radio", { name: /Card/i }));
     await userEvent.click(modal.getByRole("button", { name: "Continue" }));
 
     await waitFor(() => {
-      expect(modal.getByText("Step 3 of 3: Billing")).toBeVisible();
+      expect(modal.getByText("Step 3 of 3")).toBeVisible();
     });
-    expect(modal.getByText("Use same details for billing address")).toBeVisible();
+    expect(modal.getByText("Same as delivery address")).toBeVisible();
     await userEvent.click(
       modal.getByRole("button", { name: "Complete Order Setup" }),
     );
@@ -230,7 +230,7 @@ export const AddNewAddressSetupFlow: Story = {
 
     const outerDialog = await waitFor(() => {
       const found = page.getByRole("dialog", {
-        name: "Complete Order Setup",
+        name: "Delivery Address",
       });
       expect(found).toBeVisible();
       return found;
@@ -240,7 +240,7 @@ export const AddNewAddressSetupFlow: Story = {
     );
 
     const nestedDialog = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "Add Delivery Address" });
+      const found = page.getByRole("dialog", { name: "Add Address" });
       expect(found).toBeVisible();
       return found;
     });
@@ -261,14 +261,14 @@ export const AddNewAddressSetupFlow: Story = {
 
     await waitFor(() => {
       expect(
-        page.queryByRole("dialog", { name: "Add Delivery Address" }),
+        page.queryByRole("dialog", { name: "Add Address" }),
       ).not.toBeInTheDocument();
     });
 
     const picker = within(
       await waitFor(() => {
         const found = page.getByRole("dialog", {
-          name: "Complete Order Setup",
+          name: "Delivery Address",
         });
         expect(found).toBeVisible();
         return found;
@@ -279,12 +279,12 @@ export const AddNewAddressSetupFlow: Story = {
 
     await userEvent.click(picker.getByRole("button", { name: "Continue" }));
     await waitFor(() => {
-      expect(picker.getByText("Step 2 of 3: Payment")).toBeVisible();
+      expect(picker.getByText("Step 2 of 3")).toBeVisible();
     });
     await userEvent.click(picker.getByRole("radio", { name: /Card/i }));
     await userEvent.click(picker.getByRole("button", { name: "Continue" }));
     await waitFor(() => {
-      expect(picker.getByText("Step 3 of 3: Billing")).toBeVisible();
+      expect(picker.getByText("Step 3 of 3")).toBeVisible();
     });
     await userEvent.click(
       picker.getByRole("button", { name: "Complete Order Setup" }),
