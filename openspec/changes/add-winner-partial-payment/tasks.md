@@ -2,7 +2,7 @@
 
 - [ ] 1.1 Update the auction payment, post-sale, order-status, account-record and Winner Order PRD pages with partial collection and the tolerance boundary (`grade10-admin-auction-post-sale-SC-140`, `auction-status-SC-49`, `winner-order-SC-156`).
 
-## 2. Contracts and data
+## 2. Contracts and data (owner: @htonyl)
 
 - [ ] 2.1 Add the payment-history, balance, receipt and tolerance types to the auction contracts.
 - [ ] 2.2 Add the append-only payment table, indexes and receipt-number migration without changing the invoice quote.
