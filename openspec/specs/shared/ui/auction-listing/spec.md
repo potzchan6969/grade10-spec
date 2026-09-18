@@ -40,6 +40,9 @@ authoritative event data.
   - Enrollment signal: the bid card shows standing, or disables what a collector cannot yet do
 - Bid card accessory
   - Optional recentBidsAccessory: trailing edge of the recent-bids header
+- Buyer-fee disclosure
+  - Inline rate: the bid panel names the 20% buyer fee under the bid action
+  - No tooltip: the fee copy does not carry a buyer-fee tooltip slot
 - Quick bids
   - Increment steps: three chips at 1×, 2×, and 4× the listing increment
   - Leader base: chips add those steps to the committed maximum
@@ -598,3 +601,36 @@ minor units. That floor SHALL NOT be used as the first quick-bid amount.
 - **WHEN** the bid card renders the custom maximum field
 - **THEN** the field's minimum is 200100 HKD minor units
 - **AND** the first quick-bid amount remains 204000 HKD minor units
+
+### Requirement: Bid card discloses the buyer fee inline
+
+The bid card names the buyer fee under the bid action, in plain sight, to a
+signed-in collector.
+
+**Inline rate** - `ListingAuctionBidCard` SHALL render always-on secondary copy
+under the primary bid action that states a 20% buyer fee is added on top of
+the winning bid.
+
+**Consumer copy** - The string SHALL come from consumer copy (`buyerFeeHint`).
+
+**No tooltip** - The copy type SHALL NOT include a `buyerFeeTooltip` field, and
+the card SHALL NOT gate that rate behind an info tooltip.
+
+**Signed out** - When `bidEnrollment` is `signed-out`, the fee line SHALL be
+omitted with the bid action.
+
+#### Scenario: shared-ui-auction-listing-SC-44 - Buyer fee shows inline at 20%
+**Serves:** Buyer-fee disclosure - the buyer fee shows inline at 20%
+
+- **GIVEN** a signed-in collector on an open listing bid card
+- **WHEN** the bid panel footer renders
+- **THEN** secondary copy under the bid action states that a 20% buyer fee is
+  added on top of the winning bid
+- **AND** no buyer-fee info tooltip is present
+
+#### Scenario: shared-ui-auction-listing-SC-45 - Signed-out panel omits the fee line
+**Serves:** Buyer-fee disclosure - a signed-out panel omits the fee line
+
+- **GIVEN** a bid card with `bidEnrollment` `signed-out`
+- **WHEN** it renders
+- **THEN** the buyer-fee line is absent
