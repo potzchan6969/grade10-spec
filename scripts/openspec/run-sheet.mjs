@@ -31,18 +31,26 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import {
-  CASE_COLUMNS,
+  COLUMN_WIDTHS,
   COLUMNS,
   colLetter,
   DRAFT_BACKGROUND,
+  FILTER_START,
+  FONT,
+  FONT_SIZE,
+  JOURNEY_BACKGROUND,
+  MARKING_START,
   quoteTab,
-  RESULT_COL,
+  RESULT_COLORS,
   RESULTS,
+  SUMMARY_BANDS,
   SUMMARY_COLUMNS,
   SUMMARY_TAB,
+  SURFACE_END,
+  SURFACES,
 } from "./lib/run-sheet-layout.mjs";
 import {
-  caseRow,
+  buildGrid,
   inReadingOrder,
   readCandidates,
   selectCases,
@@ -222,21 +230,68 @@ const appendValues = (token, id, range, rows) =>
     { method: "POST", body: { values: rows } },
   );
 
-/** The Summary tab, created with its header when the spreadsheet has none. */
+/**
+ * The Summary tab, with its header.
+ *
+ * The header is checked rather than written once at creation. A Summary tab
+ * created before this ran, or one whose first row somebody cleared, used to
+ * take appended rows under nothing: the counts were right and unreadable, and
+ * `Run ID` came back as a number in column A with no name on it.
+ */
 async function ensureSummary(token, id, sheets) {
   const found = sheets.find((s) => s.properties.title === SUMMARY_TAB);
-  if (found) return found.properties.sheetId;
-  const made = await batchUpdate(token, id, [
-    { addSheet: { properties: { title: SUMMARY_TAB, index: 0 } } },
-  ]);
-  const sheetId = made.replies[0].addSheet.properties.sheetId;
-  await putValues(token, id, `${quoteTab(SUMMARY_TAB)}!A1`, [SUMMARY_COLUMNS]);
+  const sheetId = found
+    ? found.properties.sheetId
+    : (
+        await batchUpdate(token, id, [
+          { addSheet: { properties: { title: SUMMARY_TAB, index: 0 } } },
+        ])
+      ).replies[0].addSheet.properties.sheetId;
+
+  const head = await values(token, id, `${quoteTab(SUMMARY_TAB)}!A1:A1`);
+  if ((head.values?.[0]?.[0] ?? "") !== SUMMARY_COLUMNS[0]) {
+    if (found)
+      await batchUpdate(token, id, [
+        {
+          insertDimension: {
+            range: { sheetId, dimension: "ROWS", startIndex: 0, endIndex: 1 },
+          },
+        },
+      ]);
+    await putValues(token, id, `${quoteTab(SUMMARY_TAB)}!A1`, [
+      SUMMARY_COLUMNS,
+    ]);
+  }
+
+  const rate = SUMMARY_COLUMNS.indexOf("Pass rate");
   await batchUpdate(token, id, [
+    {
+      repeatCell: {
+        range: { sheetId },
+        cell: {
+          userEnteredFormat: {
+            textFormat: { fontFamily: FONT, fontSize: FONT_SIZE },
+          },
+        },
+        fields: "userEnteredFormat.textFormat(fontFamily,fontSize)",
+      },
+    },
     {
       repeatCell: {
         range: { sheetId, startRowIndex: 0, endRowIndex: 1 },
         cell: { userEnteredFormat: { textFormat: { bold: true } } },
         fields: "userEnteredFormat.textFormat.bold",
+      },
+    },
+    {
+      repeatCell: {
+        range: { sheetId, startRowIndex: 1, startColumnIndex: rate },
+        cell: {
+          userEnteredFormat: {
+            numberFormat: { type: "PERCENT", pattern: "0.0%" },
+          },
+        },
+        fields: "userEnteredFormat.numberFormat",
       },
     },
     {
@@ -271,54 +326,143 @@ function runsOf(items, keyOf) {
   return out;
 }
 
-/** Everything that dresses a freshly written tab: the header, the dropdown, the
- *  grey draft bands, the journey grouping, and the lock over the case band. */
-function dressing(sheetId, picked) {
-  const rows = picked.length;
+/** Everything that dresses a freshly written tab: the frozen identity columns,
+ *  the font, the widths, the dropdowns and their colours, the journey banners,
+ *  the draft bands, the grouping, the filter view, and the two locks. */
+function dressing(sheetId, lines) {
+  const height = lines.length + 1;
+  const table = {
+    sheetId,
+    startRowIndex: 0,
+    endRowIndex: height,
+    startColumnIndex: 0,
+    endColumnIndex: COLUMNS.length,
+  };
+  const surfaces = {
+    sheetId,
+    startRowIndex: 1,
+    endRowIndex: height,
+    startColumnIndex: MARKING_START,
+    endColumnIndex: SURFACE_END,
+  };
+
   const requests = [
     {
       repeatCell: {
-        range: { sheetId, startRowIndex: 0, endRowIndex: 1 },
-        cell: { userEnteredFormat: { textFormat: { bold: true } } },
-        fields: "userEnteredFormat.textFormat.bold",
-      },
-    },
-    {
-      updateSheetProperties: {
-        properties: { sheetId, gridProperties: { frozenRowCount: 1 } },
-        fields: "gridProperties.frozenRowCount",
+        range: { sheetId },
+        cell: {
+          userEnteredFormat: {
+            textFormat: { fontFamily: FONT, fontSize: FONT_SIZE },
+          },
+        },
+        fields: "userEnteredFormat.textFormat(fontFamily,fontSize)",
       },
     },
     {
       repeatCell: {
-        range: { sheetId, startRowIndex: 1, endRowIndex: rows + 1 },
+        range: { sheetId, startRowIndex: 1, endRowIndex: height },
         cell: {
-          userEnteredFormat: { wrapStrategy: "CLIP", verticalAlignment: "TOP" },
+          userEnteredFormat: { wrapStrategy: "WRAP", verticalAlignment: "TOP" },
         },
         fields: "userEnteredFormat(wrapStrategy,verticalAlignment)",
       },
     },
     {
-      setBasicFilter: {
-        filter: {
-          range: {
-            sheetId,
-            startRowIndex: 0,
-            endRowIndex: rows + 1,
-            startColumnIndex: 0,
-            endColumnIndex: COLUMNS.length,
+      repeatCell: {
+        range: { sheetId, startRowIndex: 0, endRowIndex: 1 },
+        cell: {
+          userEnteredFormat: {
+            textFormat: { bold: true },
+            backgroundColor: { red: 0.2, green: 0.25, blue: 0.3 },
+            verticalAlignment: "MIDDLE",
+            wrapStrategy: "WRAP",
           },
         },
+        fields:
+          "userEnteredFormat(textFormat,backgroundColor,verticalAlignment,wrapStrategy)",
       },
     },
     {
+      repeatCell: {
+        range: { sheetId, startRowIndex: 0, endRowIndex: 1 },
+        cell: {
+          userEnteredFormat: {
+            textFormat: { foregroundColor: { red: 1, green: 1, blue: 1 } },
+          },
+        },
+        fields: "userEnteredFormat.textFormat.foregroundColor",
+      },
+    },
+    // Two frozen columns, so the case a tester is marking stays named however
+    // far right they have scrolled.
+    {
+      updateSheetProperties: {
+        properties: {
+          sheetId,
+          gridProperties: { frozenRowCount: 1, frozenColumnCount: 2 },
+        },
+        fields: "gridProperties(frozenRowCount,frozenColumnCount)",
+      },
+    },
+    // Centred, so a column of one-word results reads as a column.
+    {
+      repeatCell: {
+        range: surfaces,
+        cell: { userEnteredFormat: { horizontalAlignment: "CENTER" } },
+        fields: "userEnteredFormat.horizontalAlignment",
+      },
+    },
+  ];
+
+  for (const [i, name] of COLUMNS.entries()) {
+    const width = COLUMN_WIDTHS[name];
+    if (!width) continue;
+    requests.push({
+      updateDimensionProperties: {
+        range: {
+          sheetId,
+          dimension: "COLUMNS",
+          startIndex: i,
+          endIndex: i + 1,
+        },
+        properties: { pixelSize: width },
+        fields: "pixelSize",
+      },
+    });
+  }
+
+  // A colour per result, as a rule rather than a fill: the writer puts `to_do`
+  // in every cell, and the band has to follow what the tester types over it.
+  for (const [value, background] of Object.entries(RESULT_COLORS)) {
+    requests.push({
+      addConditionalFormatRule: {
+        rule: {
+          ranges: [surfaces],
+          booleanRule: {
+            condition: {
+              type: "TEXT_EQ",
+              values: [{ userEnteredValue: value }],
+            },
+            format: { backgroundColor: background },
+          },
+        },
+        index: 0,
+      },
+    });
+  }
+
+  // The dropdown goes on the case rows only. A journey banner has nothing to
+  // mark, and a dropdown arrow on it would invite somebody to try.
+  for (const run of runsOf(lines, (line) => line.kind)) {
+    if (run.key !== "case") continue;
+    requests.push({
       setDataValidation: {
         range: {
           sheetId,
-          startRowIndex: 1,
-          endRowIndex: rows + 1,
-          startColumnIndex: RESULT_COL,
-          endColumnIndex: RESULT_COL + 1,
+          startRowIndex: run.start + 1,
+          endRowIndex: run.end + 1,
+          startColumnIndex: MARKING_START,
+          endColumnIndex: SURFACE_END,
         },
         rule: {
           condition: {
@@ -329,16 +473,17 @@ function dressing(sheetId, picked) {
           strict: true,
         },
       },
-    },
-  ];
+    });
+  }
 
-  // A draft case, grey-banded. Contiguous runs only, so a tab of drafts costs
+  // A draft case, banded amber. Contiguous runs only, so a tab of drafts costs
   // one request rather than one per row.
-  for (const run of runsOf(
-    picked,
-    (one) => prop(one.tc, "Status") === "draft",
+  for (const run of runsOf(lines, (line) =>
+    line.kind === "case" && prop(line.one.tc, "Status") === "draft"
+      ? "draft"
+      : "",
   )) {
-    if (run.key !== true) continue;
+    if (run.key !== "draft") continue;
     requests.push({
       repeatCell: {
         range: {
@@ -354,80 +499,153 @@ function dressing(sheetId, picked) {
     });
   }
 
-  // One collapsible group per journey. A journey of one case gets none: the
-  // control would hide a single row behind a click.
-  for (const run of runsOf(picked, (one) => one.tc.journey?.raw ?? "")) {
-    if (run.end - run.start < 2) continue;
+  // Each journey banner, and a collapsible group over the cases beneath it.
+  // `OVERFLOW_CELL` lets the title run across the empty cells to its right
+  // rather than wrapping inside a 240-pixel `Case ID` column; merging it would
+  // read the same and refuse to sort inside a filter view.
+  for (const [i, line] of lines.entries()) {
+    if (line.kind !== "journey") continue;
+    const row = i + 1;
     requests.push({
-      addDimensionGroup: {
+      repeatCell: {
         range: {
           sheetId,
-          dimension: "ROWS",
-          startIndex: run.start + 1,
-          endIndex: run.end + 1,
+          startRowIndex: row,
+          endRowIndex: row + 1,
+          startColumnIndex: 0,
+          endColumnIndex: COLUMNS.length,
+        },
+        cell: {
+          userEnteredFormat: {
+            backgroundColor: JOURNEY_BACKGROUND,
+            textFormat: { bold: true },
+            wrapStrategy: "OVERFLOW_CELL",
+            verticalAlignment: "MIDDLE",
+          },
+        },
+        fields:
+          "userEnteredFormat(backgroundColor,textFormat,wrapStrategy,verticalAlignment)",
+      },
+    });
+    let end = i + 1;
+    while (end < lines.length && lines[end].kind === "case") end += 1;
+    if (end > i + 1)
+      requests.push({
+        addDimensionGroup: {
+          range: {
+            sheetId,
+            dimension: "ROWS",
+            startIndex: row + 1,
+            endIndex: end + 1,
+          },
+        },
+      });
+  }
+
+  // A filter view, not the basic filter. Sorting a basic filter rewrites the
+  // rows underneath it, which would lift every case out from under its journey
+  // banner and leave the tab unreadable with no undo the next tester can see.
+  // A filter view's sort is the view's alone.
+  requests.push({
+    addFilterView: { filter: { title: "Walk", range: table } },
+  });
+
+  // The case is a copy of the markdown, and the markdown is the source of
+  // truth. Two ranges, because the marking band sits between them. Creating a
+  // protection without an editor list leaves its creator - this token's
+  // identity - as the only editor, so a tester is refused at the cell rather
+  // than discovering later that their edit changed nothing.
+  for (const [start, end, what] of [
+    [0, MARKING_START, "The case as the markdown states it"],
+    [FILTER_START, COLUMNS.length, "The case's classification"],
+  ]) {
+    requests.push({
+      addProtectedRange: {
+        protectedRange: {
+          range: {
+            sheetId,
+            startRowIndex: 0,
+            startColumnIndex: start,
+            endColumnIndex: end,
+          },
+          description: `${what}. Change the case in openspec/, not here.`,
+          warningOnly: false,
         },
       },
     });
   }
 
-  // The case band is a copy of the markdown, and the markdown is the source of
-  // truth. Creating the protection without an editor list leaves its creator -
-  // this token's identity - as the only editor, so a tester is refused at the
-  // cell rather than discovering later that their edit changed nothing.
-  requests.push({
-    addProtectedRange: {
-      protectedRange: {
-        range: {
-          sheetId,
-          startRowIndex: 0,
-          startColumnIndex: 0,
-          endColumnIndex: CASE_COLUMNS.length,
-        },
-        description:
-          "The case as the markdown states it. Change the case in openspec/, not here.",
-        warningOnly: false,
-      },
-    },
-  });
-
-  requests.push({
-    autoResizeDimensions: {
-      dimensions: {
-        sheetId,
-        dimension: "COLUMNS",
-        startIndex: 0,
-        endIndex: COLUMNS.length,
-      },
-    },
-  });
-
   return requests;
 }
 
-/** The Summary row for a run. Counts are formulas, so a tester marking the tab
- *  moves them without a second sync, and `IFERROR` says so plainly when
- *  somebody renames or deletes the tab the row points at. */
-function summaryRow({ runId, tab, date, name, selection, sha, drafts }) {
+/**
+ * A run's four Summary rows, one per surface.
+ *
+ * Counts are formulas, so a tester marking the tab moves them without a second
+ * sync, and `IFERROR` says so plainly when somebody renames or deletes the tab
+ * the row points at.
+ *
+ * `Cases` counts the surface's own column rather than `Case ID`, because a
+ * journey banner has a `Case ID` cell and no result cell: counting the results
+ * counts cases and skips the banners for free.
+ *
+ * `Pass rate` divides by the applicable cells - everything but `n/a` - so a run
+ * over cases automation has not reached is not reported as half failing.
+ */
+function summaryRows({ runId, tab, date, name, selection, sha, drafts }) {
   const t = quoteTab(tab);
-  const idCol = `${t}!A2:A`;
-  const resultCol = `${t}!${colLetter(RESULT_COL)}2:${colLetter(RESULT_COL)}`;
-  const count = (what) =>
-    `=IFERROR(COUNTIF(${resultCol},"${what}"),"tab deleted")`;
-  return [
-    runId,
-    tab,
-    date,
-    name,
-    selection,
-    sha,
-    `=IFERROR(COUNTA(${idCol}),"tab deleted")`,
-    drafts,
-    count("pass"),
-    count("fail"),
-    count("blocked"),
-    count("skipped"),
-    `=IFERROR(COUNTIF(${resultCol},"pass")/COUNTA(${idCol}),"")`,
-  ];
+  return SURFACES.map((surface, i) => {
+    const col = colLetter(MARKING_START + i);
+    const range = `${t}!${col}2:${col}`;
+    const count = (what) =>
+      `=IFERROR(COUNTIF(${range},"${what}"),"tab deleted")`;
+    return [
+      runId,
+      tab,
+      date,
+      name,
+      selection,
+      sha,
+      surface,
+      `=IFERROR(COUNTA(${range}),"tab deleted")`,
+      drafts,
+      count("to_do"),
+      count("pass"),
+      count("fail"),
+      count("blocked"),
+      count("skipped"),
+      count("n/a"),
+      `=IFERROR(COUNTIF(${range},"pass")/(COUNTA(${range})-COUNTIF(${range},"n/a")),"")`,
+    ];
+  });
+}
+
+/** `'Summary'!A6:P9` → the 0-based row the block starts at. */
+function startRowOf(updatedRange) {
+  const match = /![A-Z]+(\d+)/.exec(String(updatedRange ?? ""));
+  return match ? Number(match[1]) - 1 : null;
+}
+
+/** A band over a run's four rows, alternating by run id, so the Summary reads
+ *  as a list of runs rather than a wall of near-identical rows. */
+function summaryBand(sheetId, startRow, rows, runId) {
+  return {
+    repeatCell: {
+      range: {
+        sheetId,
+        startRowIndex: startRow,
+        endRowIndex: startRow + rows,
+        startColumnIndex: 0,
+        endColumnIndex: SUMMARY_COLUMNS.length,
+      },
+      cell: {
+        userEnteredFormat: {
+          backgroundColor: SUMMARY_BANDS[runId % SUMMARY_BANDS.length],
+        },
+      },
+      fields: "userEnteredFormat.backgroundColor",
+    },
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -502,11 +720,12 @@ for (const run of byFile) {
 
 const sha = args.sha ?? headSha();
 const date = new Date().toISOString().slice(0, 10);
-const rows = picked.map(caseRow);
+const { rows, lines } = buildGrid(picked);
+const journeys = lines.filter((line) => line.kind === "journey").length;
 
 if (args.dryRun) {
   console.log(
-    `\n${green("✓")} dry run — nothing written.  ${dim(`would record commit ${sha.slice(0, 12)}`)}`,
+    `\n${green("✓")} dry run — nothing written.  ${dim(`${journeys} journey banner${journeys === 1 ? "" : "s"}, ${rows.length} rows, would record commit ${sha.slice(0, 12)}`)}`,
   );
   process.exit(0);
 }
@@ -528,7 +747,7 @@ if (!token)
 
 const meta = await call(token, `/${args.sheet}?fields=sheets.properties`);
 const sheets = meta.sheets ?? [];
-await ensureSummary(token, args.sheet, sheets);
+const summarySheetId = await ensureSummary(token, args.sheet, sheets);
 const runId = await nextRunId(token, args.sheet);
 const taken = new Set(sheets.map((s) => s.properties.title));
 let tab = `${runId}-${slug(args.name)}`;
@@ -551,9 +770,13 @@ const made = await batchUpdate(token, args.sheet, [
 const sheetId = made.replies[0].addSheet.properties.sheetId;
 
 await putValues(token, args.sheet, `${quoteTab(tab)}!A1`, [COLUMNS, ...rows]);
-await batchUpdate(token, args.sheet, dressing(sheetId, picked));
-await appendValues(token, args.sheet, `${quoteTab(SUMMARY_TAB)}!A1`, [
-  summaryRow({
+await batchUpdate(token, args.sheet, dressing(sheetId, lines));
+
+const appended = await appendValues(
+  token,
+  args.sheet,
+  `${quoteTab(SUMMARY_TAB)}!A1`,
+  summaryRows({
     runId,
     tab,
     date,
@@ -562,17 +785,26 @@ await appendValues(token, args.sheet, `${quoteTab(SUMMARY_TAB)}!A1`, [
     sha,
     drafts,
   }),
-]);
+);
+const blockStart = startRowOf(appended.updates?.updatedRange);
+if (blockStart !== null)
+  await batchUpdate(token, args.sheet, [
+    summaryBand(summarySheetId, blockStart, SURFACES.length, runId),
+  ]);
 
+const cases = lines.filter((line) => line.kind === "case").length;
 console.log(
-  `\n${green("✓")} wrote ${bold(tab)}  ${dim(`${rows.length} rows, commit ${sha.slice(0, 12)}`)}`,
+  `\n${green("✓")} wrote ${bold(tab)}  ${dim(`${cases} cases under ${journeys} journey banner${journeys === 1 ? "" : "s"}, commit ${sha.slice(0, 12)}`)}`,
 );
 console.log(
   `  ${dim(`https://docs.google.com/spreadsheets/d/${args.sheet}/edit#gid=${sheetId}`)}`,
 );
 console.log(
-  `\n${dim("The case columns are locked. Mark Result, Notes and Tester; the Summary tab counts them.")}`,
+  `\n${dim(`Mark ${SURFACES.join(", ")}, Notes and Tester. Every case starts at to_do; an automation column reading n/a is a case no automated test covers.`)}`,
 );
 console.log(
-  `${dim("Do not rename or delete the tab — the Summary row points at it by name.")}\n`,
+  `${dim("The case and its classification are locked. Sort inside the Walk filter view, not the sheet.")}`,
+);
+console.log(
+  `${dim("Do not rename or delete the tab — the Summary rows point at it by name.")}\n`,
 );
