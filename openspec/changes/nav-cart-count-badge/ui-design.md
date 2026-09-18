@@ -27,8 +27,9 @@ without a count. Compound headers that need a count replace that control via
 | `StatusIndicator` | `@grade10/design-system` | Round count overlay on the cart icon — `type="count"`, `variant="brand"` |
 | `SiteHeader` | `@grade10/ui` | Owns `cartItemCount` and composes the badged cart control into `Nav`'s `cartSlot` |
 
-Nothing new is missing in this repository: `StatusIndicator` (`count` / `brand`)
-and `SiteHeader` already exist. `Nav` gains `cartSlot` only (no count API).
+Nothing missing in this repository: `StatusIndicator` (`count` / `brand`),
+`Nav.cartSlot`, and `SiteHeader.cartItemCount` already exist. No new i18n keys
+for the badge digits.
 
 **Not `Badge`.** The cart drawer title uses `Badge` `variant="brand"` as an
 inline label beside the title. The header overlay uses `StatusIndicator`
@@ -37,11 +38,15 @@ inline label beside the title. The header overlay uses `StatusIndicator`
 
 ## States
 
-| State | Spec scenario | Story |
+### Site header with cart count
+
+| State | Shows | Anchor |
 | --- | --- | --- |
-| Cart present, count `0` or omitted — no indicator | `shared-ui-site-chrome-SC-23` | `site-chrome-siteheader-cart--empty-cart`, `site-chrome-siteheader-cart--count-omitted` |
-| Cart present, count `1` | `shared-ui-site-chrome-SC-24` | `site-chrome-siteheader-cart--one-item` |
-| Cart present, count `3` (matches drawer title count) | `shared-ui-site-chrome-SC-25` | `site-chrome-siteheader-cart--multi-item` |
-| Cart present, count `12` — full digits, no truncation | `shared-ui-site-chrome-SC-26` | `site-chrome-siteheader-cart--large-count` |
-| `cartSlot` replaces built-in cart | `shared-ui-site-chrome-SC-22` | Covered by every `SiteHeader` cart story (slot composition) |
-| Cart handler absent — no cart control | Existing handler-gated cart rule (`shared-ui-site-chrome-SC-04` / auction-first pre-Store omission) | Auction-first SiteHeader stories |
+| Empty or omitted count | Cart control present; no count indicator | `shared-ui-site-chrome-SC-23` |
+| Count `1` | `StatusIndicator` brand count `1` on the cart icon | `shared-ui-site-chrome-SC-24` |
+| Count `3` | `StatusIndicator` brand count `3` (same active-line count as the drawer title) | `shared-ui-site-chrome-SC-25` |
+| Count `12` | Full digits `12`; no `99+` truncation | `shared-ui-site-chrome-SC-26` |
+| Cart slot composition | Badged cart control rendered through `Nav`'s `cartSlot` | `shared-ui-site-chrome-SC-22` |
+| Cart handler absent | No cart control | **Out of suite:** existing handler-gated cart (`shared-ui-site-chrome-SC-04`) / auction-first pre-Store omission |
+| Signed-out (no guest cart) | Cart control may be present; no badge | **Out of suite:** same treatment as empty/omitted (`shared-ui-site-chrome-SC-23`); no guest count |
+| Count unknown (hydrating) | No badge until the host supplies `cartItemCount > 0` | **Out of suite:** host omits the prop or passes `0`; no loading API on `SiteHeader` |
