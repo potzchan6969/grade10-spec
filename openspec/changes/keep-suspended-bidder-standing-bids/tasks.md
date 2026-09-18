@@ -8,7 +8,7 @@
 - [ ] 2.1 Split collector and operator suspension projections, and add the handler-gated auction-standing props to `UserAccountPanel` without changing its public export set (`suspension-SC-20`, `grade10-admin-console-user-directory-SC-16`–`SC-19`, `shared-console-user-directory-SC-30`–`SC-32`)
 - [ ] 2.2 Verify: `pnpm run typecheck && pnpm run test`
 
-## 3. Data migration (grade10)
+## 3. Data migration (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Make operator-only suspension causes nullable, backfill active legacy Bidders bans into the authoritative auction suspension, and preserve historical retraction logs (`suspension-SC-17`–`SC-22`)
 - [ ] 3.2 Verify: `pnpm run db:drizzle:generate && pnpm run check:migrations`
