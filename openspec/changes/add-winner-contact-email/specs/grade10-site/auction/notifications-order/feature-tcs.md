@@ -278,7 +278,52 @@ Runs once per row of **Test data**.
 * The href includes a body query.
 * The href is not only `mailto:support@grade10.com`.
 
+### order-mail-US1-TC14-1: Partial-payment letter Contact Us carries the ready mailto without the balance
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Contact Us destination
+
+**Pre-conditions:**
+
+* customer(winner of <lot_1>) has a registered email.
+* An operator has recorded a partial payment on the order for <lot_1> and the partial-payment letter is due.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <lot_1> | A won lot whose partial-payment letter is due |
+| <invoice_id> | The current invoice id on that order |
+| <receipt_ids> | Receipt ids recorded so far |
+
+**Steps:**
+
+1. Wait for the partial-payment letter for <lot_1>.
+2. Open the letter.
+3. Read the letter body and the Contact Us link.
+
+**Expected Results:**
+
+* The letter body names `support@grade10.com`.
+* Contact Us is a `mailto:` to `support@grade10.com`.
+* The mailto subject is `Auction order <invoice_id>: partial payment`.
+* The mailto body may list <receipt_ids> and does not name the remaining balance.
+
 ## Settled
+
+- Subject uses the order's current invoice id after a reissue
+- Partial-payment letter Contact Us is in scope with the same ready mailto
+- Cancelled and delivered subject reason fragments are `cancelled` and `delivered`
 
 ## Reconciliation
 
@@ -286,4 +331,12 @@ Runs once per row of **Test data**.
 
 | Finding | Disposition |
 | --- | --- |
-| pending reconciliation | |
+| Setup overdue / payment overdue Contact Us mailto + address in letter | **Folded in:** `order-mail-SC-57`, `order-mail-SC-58` |
+| Cancelled / delivered Contact Us mailto + address in letter | **Folded in:** `order-mail-SC-59`, `order-mail-SC-60`; MODIFIED durable delivered/cancelled destination |
+| Letter mailto matches Winner Order subject and body | Covered by the same ready-email definition; cases `order-mail-US1-TC11-1` keep the cross-surface check |
+| Address still named when no mail client opens | **Folded in:** address-in-letter rule on `order-mail-SC-57`–`order-mail-SC-61` |
+| Overdue / cancelled / delivered Contact Us is not a bare mailto | **Folded in:** mailto rules above; case `order-mail-US1-TC13-1` |
+| Exact cancelled / delivered subject reason strings | **Folded in:** `cancelled`, `delivered` on `order-mail-SC-59`, `order-mail-SC-60` |
+| Partial-payment draft Contact Us in scope | **Folded in:** `order-mail-SC-61`; Feature set leaf updated |
+
+**Uncovered anchors:** none for `Contact Us destination`. Foreign-journey scenarios `order-mail-SC-57`–`order-mail-SC-61` are walked here under that group.

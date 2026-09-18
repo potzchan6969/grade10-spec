@@ -47,7 +47,10 @@ winner of three lots has three orders, each with its own deadlines.
   against the Payment step
 - 🚧 **Contact Us** — `support@grade10.com`, subject the invoice or the lot;
   Copy Message first on Winner Order, Open Mail App second; overdue,
-  cancelled and delivered letters use the same subject and body
+  cancelled, delivered and partial-payment letters use the same subject and
+  body
+- ❓ **Copy Message confirmation** — whether Copy Message shows any success
+  chrome beyond the control's own state; Product (@tangconst) confirms
 
 ### My Auction Orders
 

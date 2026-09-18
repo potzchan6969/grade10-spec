@@ -552,7 +552,48 @@
 * Step 4 pastes only the Subject text.
 * Copy Message remains available in the footer for the full ready email.
 
+### winner-order-US15-TC13-1: A reissued invoice uses the current invoice id in Subject
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-15
+
+**Pre-conditions:**
+
+* customer(winner) is signed in on <the winner's auction order url> for <order_payment_overdue_reissued>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_payment_overdue_reissued> | An auction order payment-overdue after a reissue |
+| <current_invoice_id> | The current invoice id on that order |
+| <replaced_invoice_id> | The replaced invoice id on that order |
+
+**Steps:**
+
+1. Open <the winner's auction order url> for <order_payment_overdue_reissued>.
+2. Click Contact Us.
+3. Read the Subject field.
+
+**Expected Results:**
+
+* Subject is `Auction order <current_invoice_id>: payment overdue`.
+* Subject does not name <replaced_invoice_id>.
+
 ## Settled
+
+- Subject uses the order's current invoice id after a reissue
+- Partial-payment letter Contact Us is in scope with the same ready mailto
 
 ## Reconciliation
 
@@ -560,4 +601,21 @@
 
 | Finding | Disposition |
 | --- | --- |
-| pending reconciliation | |
+| Contact Us opens copy-first dialog; To is `support@grade10.com`; footer order Copy Message then Open Mail App | **Folded in:** `winner-order-SC-160` |
+| Support address stays off the order until the dialog opens | **Folded in:** `winner-order-SC-161` |
+| Message is editable Textarea; full copy is footer-only; Copy Message includes current Message | **Folded in:** `winner-order-SC-162` |
+| Open Mail App carries current subject and body | **Folded in:** `winner-order-SC-163` |
+| Setup overdue subject names the lot; payment overdue and partial payment name the invoice; partial payment lists receipts and never the balance | **Folded in:** `winner-order-SC-164`, `winner-order-SC-165`, `winner-order-SC-166` |
+| To and Subject copy in place and are not editable | **Folded in:** `winner-order-SC-167` |
+| Several receipt ids on partial payment | **Folded in:** `winner-order-SC-166` (MAY list) |
+| Empty receipt list on partial payment | **Folded in:** `winner-order-SC-166` (list none) |
+| Reissued invoice uses the current invoice id | **Folded in:** `winner-order-SC-168` |
+| Whether To/Subject are editable | **Rejected:** ui-design and Q7 already lock copy-in-place; folded as `winner-order-SC-167` |
+| Prefill body facts beyond subject | **Folded in:** ready-email body rules under `The ready email names the invoice or the lot and the reason` |
+| Whether the winner may clear prefilled Message facts | **Rejected:** Message is editable end-to-end (`winner-order-SC-162`); no separate lock on the prefills |
+| Dialog title "Email Grade10" as a SHALL | **Rejected:** presentation in `ui-design.md`, not a product rule |
+| Copy Message success confirmation | **Escalated:** ❓ on Post-Bidding; Raised row for Product (@tangconst). No scenario. Case `winner-order-US15-TC10-1` stays without asserting confirmation chrome |
+| US-05 / US-07 still show Contact Us and hide Pay / Confirm | **Out of suite:** durable `winner-order-SC-37`, `winner-order-SC-71` — this change names the destination, not when Contact Us appears |
+| `Textarea` design-system export | **Out of suite:** `packages/design-system` typecheck and colocated stories |
+
+**Uncovered anchors:** none for `winner-order-US-15`. Context journeys `winner-order-US-05` and `winner-order-US-07` keep regression cases; appearance rules stay on the durable scenarios above.

@@ -51,14 +51,14 @@ support CTA. The href is the same ready `mailto:`; the letter body names
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Setup overdue | Dialog; subject `Auction lot {lot title}: setup overdue`; no invoice id | `winner-order-US-15` |
-| Payment overdue | Dialog; subject `Auction order {invoice id}: payment overdue` | `winner-order-US-15` |
-| Partially paid | Dialog; subject `Auction order {invoice id}: partial payment`; receipt ids listed; no remaining balance | `winner-order-US-15` |
-| Address hidden until open | `support@grade10.com` is not on the order page before Contact Us | `winner-order-US-15` |
-| Message field | Editable `Textarea`; no icon copy beside it — Copy Message is footer-only | `winner-order-US-15` |
+| Setup overdue | Dialog; subject `Auction lot {lot title}: setup overdue`; no invoice id | `winner-order-SC-164` |
+| Payment overdue | Dialog; subject `Auction order {invoice id}: payment overdue` | `winner-order-SC-165` |
+| Partially paid | Dialog; subject `Auction order {invoice id}: partial payment`; receipt ids listed; no remaining balance | `winner-order-SC-166` |
+| Address hidden until open | `support@grade10.com` is not on the order page before Contact Us | `winner-order-SC-161` |
+| Message field | Editable `Textarea`; no icon copy beside it — Copy Message is footer-only | `winner-order-SC-162` |
 
 ### Order letters
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Letter Contact Us | `mailto:` with the matching subject and body; address named in the letter | `winner-order-US-15` |
+| Letter Contact Us | `mailto:` with the matching subject and body; address named in the letter | `order-mail-SC-57` |
