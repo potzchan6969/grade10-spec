@@ -19,7 +19,7 @@
 - [ ] 3.4 Adapt hosted card-session creation and payment read reconciliation so expired, timed-out, abandoned, cancelled and declined attempts leave the invoice payable; show Confirming only after provider completion and show Processing only after the authoritative read returns invoice `paid` and fulfilment `unfulfilled` (winner-order-SC-44, SC-49–SC-52)
 - [ ] 3.5 Verify owner isolation, derived-status parity, timeline timestamps, address refusals and payment-session outcomes with backend/service tests and the application's focused typecheck and test commands
 
-## 4. Site routes and presentation (grade10)
+## 4. Site routes and presentation (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Compose My Auctions from `AuctionRecord` plus design-system `Tabs`, `TabsList`, `TabsTrigger` and `TabsContent`; partition rows by bidding window, open on Active, keep the total title count, disable Ended alerts, and preserve the Won-row order link (grade10-site-auction-account-record-SC-49–SC-55)
 - [ ] 4.2 Add the authenticated My Auction Orders route, account-menu entry and list-to-order/list-to-lot navigation; render filled, empty and failed-read states through the shared blocks without exposing another collector's orders (grade10-site-auction-auction-orders-SC-01–SC-11)
