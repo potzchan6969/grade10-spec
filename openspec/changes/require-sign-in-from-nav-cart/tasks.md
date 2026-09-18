@@ -1,8 +1,8 @@
-## 1. Manual (grade10-spec)
+## 1. Manual (grade10-spec) (owner: @sean)
 
-- [ ] 1.1 Take the 🚧 off the Cart section of the page-shell page once the gate is deployed, and say what the control does for a collector with no session
-- [ ] 1.2 Hand the fold over only after `auction-first-site-header` archives, so the widened session sentence it carries is in the durable spec before this change's requirement joins it
-- [ ] 1.3 Verify: `pnpm check:manual`
+- [x] 1.1 Take the 🚧 off the Cart section of the page-shell page once the gate is deployed, and say what the control does for a collector with no session
+- [x] 1.2 Hand the fold over only after `auction-first-site-header` archives, so the widened session sentence it carries is in the durable spec before this change's requirement joins it
+- [x] 1.3 Verify: `pnpm check:manual`
 
 ## 2. Header cart gate (grade10) (owner: @sean)
 
