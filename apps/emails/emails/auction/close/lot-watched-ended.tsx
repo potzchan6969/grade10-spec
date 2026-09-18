@@ -6,8 +6,8 @@ import { previewLot } from "@/emails/auction/_components/preview-lot";
 
 /**
  * Preview — watcher when the lot ends with no bids.
- * Same letter as `lot-watched-sold`; omits `winningBid` so copy stays
- * Ended-only. Campaign `lot_ended_watched` only — `lot_ended` is retired.
+ * Campaign `lot_watched_ended`. Omit `winningBid` so copy stays Ended-only.
+ * Former campaign `lot_ended_watched` is retired for this path.
  */
 export default function LotWatchedEndedEmail(props: LotWatchedProps) {
   return <LotWatchedEmail {...props} winningBid={undefined} />;

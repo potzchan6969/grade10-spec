@@ -95,7 +95,7 @@ remove them.
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Refunded
 
-#### Scenario: grade10-site-auction-account-record-SC-47 - A won lot with no address reads Awaiting Setup
+#### Scenario: grade10-site-auction-account-record-SC-47 - A won lot with no address reads Awaiting Address
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
 - **GIVEN** a won listing whose auction order has no sent invoice and no confirmed delivery address

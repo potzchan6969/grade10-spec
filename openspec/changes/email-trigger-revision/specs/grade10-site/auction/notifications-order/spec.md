@@ -7,37 +7,6 @@
 
 ## ADDED Requirements
 
-### Requirement: A reissued invoice is announced by the payment reminder
-
-Reissue uses the payment reminder, not a letter of its own.
-
-**Payment reminder at reissue** — When an operator reissues an invoice, Grade10
-SHALL send the payment reminder for the new invoice, naming its total and
-`Pay by …`, and SHALL NOT send a separate invoice-reissued letter.
-
-**Once per reissue** — A reissue confirmation delivered more than once SHALL
-send that payment reminder once.
-
-#### Scenario: order-mail-SC-40 - Reissuing an invoice sends the payment reminder
-**Serves:** Post-close letters - reissuing an invoice sends the payment reminder
-
-- **GIVEN** an auction order whose invoice an operator reissues with a new
-  total of 288000 minor units in HKD and a new payment deadline
-- **WHEN** the reissue is committed
-- **THEN** Grade10 sends the winner the payment reminder for that new invoice
-- **AND** it names 288000 minor units in HKD as the total and `Pay by …` for
-  the new deadline
-- **AND** Grade10 sends no separate invoice-reissued letter
-
-#### Scenario: order-mail-SC-43 - A repeated reissue confirmation sends one payment reminder
-**Serves:** Post-close letters - a repeated reissue confirmation sends one payment reminder
-
-- **GIVEN** an auction order whose invoice was reissued and whose payment
-  reminder for that reissue was sent
-- **WHEN** the same reissue confirmation is delivered again
-- **THEN** Grade10 sends no second payment reminder for that reissue
-- **AND** it sends no invoice-reissued letter
-
 ### Requirement: Delivered and cancelled letters name their facts and actions
 
 The delivered and cancelled letters carry settled facts and action order.
