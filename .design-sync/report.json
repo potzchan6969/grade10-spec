@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-14T14:11:36.614Z",
+  "generatedAt": "2026-09-18T10:08:11.307Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -931,7 +931,9 @@
       "Tab List: no code component (looked for src/components/**/tablist.tsx or tablist.tsx)"
     ],
     "Text Area": [
-      "Text Area: no code component (looked for src/components/**/textarea.tsx or textarea.tsx)"
+      "Text Area.status: no getEnum('status') in any template — this Figma axis reaches no code prop",
+      "Text Area.state: no getEnum('state') in any template — this Figma axis reaches no code prop",
+      "Text Area.isDisabled: no getEnum('isDisabled') in any template — this Figma axis reaches no code prop"
     ]
   }
 }
