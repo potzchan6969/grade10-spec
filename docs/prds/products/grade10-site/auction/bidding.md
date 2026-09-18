@@ -250,14 +250,14 @@ the letters that follow those lots.
 ### My Auctions
 
 🚧 One table holds every bookmarked lot once — bid rows before watch-only,
-soonest close first in each band, closed lots after open ones — under Active,
-Upcoming and Ended tabs, with the row count in the title.
+soonest close first in each band, closed lots after open ones — with the row
+count in the title. The former Bidding and Watching sections do not appear.
 
 | Column | What it shows |
 | --- | --- |
 | Lot | The key image, the title and the close |
 | Current bid | The lot's current bid |
-| 🚧 **Status** | Leading · Outbid, with the next valid bid · Bid submitted · Bid not accepted, and why · Won, reading the order's status (Awaiting Setup, Setup Overdue, Preparing Invoice, Pending Payment, Payment Overdue, Payment Verifying, Partially Paid, …) · Didn't win, with whether the card hold is being released or released · `--` for a watch-only lot |
+| 🚧 **Your Standing** | Leading · Outbid, with the next valid bid · Bid submitted · Bid not accepted, and why · Won, reading the order's status (Awaiting Setup, Setup Overdue, Preparing Invoice, Pending Payment, Payment Overdue, Payment Verifying, Partially Paid, …) · Didn't win, with whether the card hold is being released or released · `--` for a watch-only lot |
 | Email alerts | The per-lot switch; off and locked when the account's **Auction email alerts** master is off, or the lot has ended |
 | Unwatch | Only when the collector has not bid |
 
@@ -433,8 +433,8 @@ surface.
 | Your bidding | Decided | The lot's personal dialog: two tabs, Bid placed then Your maximums, amount and time only, owner only; the live maximum stays on the panel; refusals stay on the account chronology. | Product |
 | Watch ≠ email alerts | Decided | Watch is list membership; email alerts are a per-lot preference, on by default when watched, off on unwatch; mute is not unwatch. An account-wide Auction email alerts switch covers every lot without clearing lists. | Product |
 | Privacy of a watch | Decided | Visible only to its owner; no public count. Operators see a Watchers column on the admin Listings table. | Product and design |
-| One table | 🚧 In flight | My Auctions is one bookmark table with bid rows first, Status separating commitment from watch-only (`--`), and Active, Upcoming and Ended tabs by bidding window; a lot both watched and bid on appears once, and Unwatch is offered only without a bid. | Product and design |
-| Status column | 🚧 In flight | The column formerly Your Standing is Status. | Product and design (@tangconst) |
+| One table | 🚧 In flight | My Auctions is one bookmark table with bid rows first, Your Standing separating commitment from watch-only (`--`), close urgency beside the listing identity, and no Bidding or Watching sections; a lot both watched and bid on appears once, and Unwatch is offered only without a bid. | Product and design |
+| Your Standing column | 🚧 In flight | Leading, Outbid, Bid submitted, Bid not accepted, Won, or Didn't win for bid rows; `--` for watch-only. Close urgency is not a standing value. | Product and design (@tangconst) |
 | Called-off leaves the list | 🚧 In flight | A called-off lot is hidden, so it leaves the watched list; supersedes "survives close" for called-off lots and the watchlist delta's own "shown as called off". | Product |
 | Won hands off to orders | Decided | Every Won row offers View order into Winner Order and no helper lines; the order status vocabulary is the auction's. | Product (@tangconst) |
 | Card holds stated plainly | Decided | A losing bidder's row names being released or released, because a pending authorization on a bank statement reads as a charge. | Product and finance |

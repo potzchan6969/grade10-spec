@@ -50,7 +50,7 @@ label, the row SHALL show the application-supplied no-standing placeholder
 rather than inventing a state badge.
 
 #### Scenario: shared-ui-auction-record-SC-01 - An application imports the surface
-**Serves:** The record surface exports - an application imports the surface
+**Serves:** Export contract - an application imports the surface
 
 - **WHEN** an application imports each name above from the shared UI package's
   public entry
@@ -58,7 +58,7 @@ rather than inventing a state badge.
 - **AND** no other component or type is exported for this surface
 
 #### Scenario: shared-ui-auction-record-SC-02 - A part is reused alone
-**Serves:** The record surface exports - a part is reused alone
+**Serves:** Export contract - a part is reused alone
 
 - **WHEN** an application renders `AuctionRecordRow` or `WatchButton` without
   `AuctionRecord`
@@ -66,7 +66,7 @@ rather than inventing a state badge.
   and no requirement to supply page props
 
 #### Scenario: shared-ui-auction-record-SC-08 - Bidding is read before Watching
-**Serves:** The record surface exports - bidding is read before Watching
+**Serves:** Table page body - bidding is read before Watching
 
 - **GIVEN** an `AuctionRecord` supplied with both bidding rows and watching
   rows
