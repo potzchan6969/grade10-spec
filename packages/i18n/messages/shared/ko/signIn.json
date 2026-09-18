@@ -12,6 +12,10 @@
   "linkExpired": "이 로그인 링크가 만료되었습니다.",
   "linkInvalid": "이 로그인 링크는 더 이상 사용할 수 없습니다.",
   "linkBanned": "이 계정으로는 로그인할 수 없습니다.",
+  "differentAccount": "다른 계정으로 로그인되어 있습니다.",
+  "differentAccountDescription": "{email}(으)로 전환합니다.",
+  "switch": "전환",
+  "stay": "유지",
   "legal": "계속하면 <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하는 것으로 봅니다.",
   "linkSentTitle": "이메일을 확인하세요"
 }

@@ -1,6 +1,6 @@
 ## 1. Catalog (grade10-spec)
 
-- [ ] 1.1 Add `differentAccountTitle`, `differentAccountDescription`, `differentAccountSwitch`, and `differentAccountStay` to the shared `signIn` catalog in every shared locale (`shared-auth-sign-in-SC-64`)
+- [ ] 1.1 Add `differentAccount`, `differentAccountDescription`, `switch`, and `stay` to the shared `signIn` catalog in every shared locale, matching the wording the `Auth Sign In/Link Follow Toasts` Storybook story already carries (`shared-auth-sign-in-SC-64`)
 - [ ] 1.2 Confirm the Sign-In PRD's 🚧 Different account line still matches the landed requirement; update it if it has drifted
 - [ ] 1.3 Verify: `pnpm check:manual && pnpm run tcs:validate && pnpm run typecheck`
 

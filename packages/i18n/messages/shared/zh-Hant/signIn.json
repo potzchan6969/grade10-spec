@@ -12,6 +12,10 @@
   "linkExpired": "此登入連結已過期。",
   "linkInvalid": "此登入連結已失效。",
   "linkBanned": "此帳戶無法登入。",
+  "differentAccount": "你已使用其他帳戶登入。",
+  "differentAccountDescription": "切換到 {email}。",
+  "switch": "切換",
+  "stay": "保留",
   "legal": "繼續即表示你同意我們的<terms>服務條款</terms>與<privacy>隱私權政策</privacy>。",
   "linkSentTitle": "請查收電郵"
 }

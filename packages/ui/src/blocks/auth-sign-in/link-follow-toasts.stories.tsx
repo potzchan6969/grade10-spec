@@ -110,7 +110,7 @@ export const Banned: Story = {
 
 /**
  * Signed in as Account B; link is for Account A — choose Switch or Stay
- * (`shared-auth-sign-in-US-08`).
+ * (`shared-auth-sign-in-US-09`).
  */
 export const DifferentAccount: Story = {
   name: "Different account",
