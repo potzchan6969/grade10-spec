@@ -84,6 +84,15 @@ increment is 100:
   close on their own
 - **A raise the card cannot cover** — nothing moves: the maximum, the leader
   and the price stay as they were
+- 🚧 **One authorization** — when holds are on, a raise increases the existing
+  manual-capture authorization and keeps its provider reference; Grade10 does
+  not cancel and recreate it
+- 🚧 **Provider window** — a new hold requests incremental and extended
+  authorization when the payment method supports them, and the provider's
+  returned capture deadline controls expiry and reauthorization; a shorter
+  window is not a 14-day guarantee
+- 🚧 **Close and settlement** — bid-time holds release at close; the winner is
+  charged through the invoice flow, not by capturing the bid-time hold
 
 ### Bid Increments
 
