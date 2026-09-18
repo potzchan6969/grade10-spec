@@ -1,4 +1,4 @@
-## 1. Product record
+## 1. Product record (owner: @htonyl)
 
 - [ ] 1.1 Update post-sale, order-status, Winner Order, account-record and shared auction-record PRD pages with Setup Overdue, Payment Overdue and Status-column ownership (`auction-status-SC-52`, `winner-order-SC-158`, `shared-ui-auction-record-SC-16`).
 
