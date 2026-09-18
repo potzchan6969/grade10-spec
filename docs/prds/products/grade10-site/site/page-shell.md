@@ -28,7 +28,7 @@ cart stays absent
 in the header on every surface — including Auction and other non-Store pages —
 so a collector can reach checkout without returning to Store
 
-🚧 **Store Locator** — once that page answers and the shop is open, header and
+**Store Locator** — once that page answers and the shop is open, header and
 footer Store Locator lead there; until then the destination stays out of the
 chrome, including on auction-first launch.
 

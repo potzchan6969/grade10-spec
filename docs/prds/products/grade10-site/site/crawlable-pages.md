@@ -40,17 +40,17 @@ lot pages are in scope, and apply every requirement below per lot.
 The site answers for one thing at one address. A second address for the same
 thing splits what a search engine has learned about it between the two.
 
-- 🚧 **One item, one address** — an item for sale answers at one address only.
+- **One item, one address** — an item for sale answers at one address only.
   The channel it sells in is fixed when it is first published, so the same item
   is never offered under a second channel as well
-- 🚧 **A channel's paths stop at its top-level category** — a subcategory, a
+- **A channel's paths stop at its top-level category** — a subcategory, a
   publisher, a brand, a theme, a grade, a year, an order, or one seller's items
   is a way of reading a channel's own address, carried in the query. The
   address without the query is the one a search engine is told to keep
-- 🚧 **One identity address, shared** — a seller or a shop the site names has
+- **One identity address, shared** — a seller or a shop the site names has
   one address, the same one from every channel; no channel keeps a copy of its
   own
-- 🚧 **A replaced address redirects for good** — an address the site no longer
+- **A replaced address redirects for good** — an address the site no longer
   uses sends the reader on to the one that replaced it, permanently, and
   nothing on the site links it, names it or lists it again
 
