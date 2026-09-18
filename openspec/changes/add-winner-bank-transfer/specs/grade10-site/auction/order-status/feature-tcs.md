@@ -404,13 +404,6 @@ Runs once per row of **Test data**.
 
 * The write is refused; the status stays `expired`.
 
-## Historical questions (resolved below)
-
-- Which states may move into `payment_verifying`, and is `expired` one of them?
-- How can a Payment Verifying invoice be expired, given its deadline is stopped?
-- May an operator cancel or reissue a Payment Verifying order?
-- Is the stopped deadline kept as a duration, and to what precision?
-
 ## Reconciliation
 
 **Status:** complete — reconciled on 2026-09-16 after the author's grilling round.

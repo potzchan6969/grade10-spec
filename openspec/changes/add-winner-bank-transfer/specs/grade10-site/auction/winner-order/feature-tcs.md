@@ -2016,22 +2016,6 @@ Runs once per row of **Test data**.
 * <reason 2> is shown.
 * <reason 1> is not shown.
 
-## Historical questions (resolved below)
-
-- Is a payment method required at address confirmation, or is one preselected?
-- May the winner change the method before send, and only by re-confirming the address?
-- Does a reissue keep the invoice reference or issue a new one, and who uses the reference to find the order?
-- Where does the winner reach a replaced invoice PDF?
-- Is 10 MB decimal or binary?
-- Is file type checked by content or extension, and does one bad file refuse the whole set?
-- What does Winner Order show for the deadline while Payment Verifying?
-- May a winner upload proof on an expired invoice? If so, what status follows, and how can an operator later find it expired?
-- Can a card invoice ever be Payment Verifying? The input says card Pay is blocked there, but upload is only offered on bank transfer invoices.
-- What happens on a part-failed upload?
-- Does a return grant any grace when almost no time was left?
-- Does the winner still see their own proof files after payment or after a return?
-- Does the bank transfer invoice PDF carry the three sets of bank details?
-
 ## Reconciliation
 
 **Status:** complete — reconciled on 2026-09-16 after the author's grilling round, and patched the same day with the author's identifier decisions. All cases are settled by the decisions below.

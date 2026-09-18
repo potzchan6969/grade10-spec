@@ -134,10 +134,6 @@ Runs once per row of **Test data**.
 
 * No <lot_1> row is shown.
 
-## Historical questions (resolved below)
-
-- Does a Payment Verifying row carry anything beyond the badge and View order? Calm Won rows suggest not; resolved below as no helper lines and no upload control.
-
 ## Reconciliation
 
 **Status:** complete — reconciled on 2026-09-16 after the author's grilling round.
