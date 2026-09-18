@@ -1,4 +1,4 @@
-## 1. Product record
+## 1. Product record (owner: @htonyl)
 
 - [ ] 1.1 Update the refund, post-sale, Winner Order and roles PRD pages with one bounded external refund and the `auction:refund` grant (`grade10-admin-auction-post-sale-SC-145`, `winner-order-SC-157`, `shared-auth-roles-SC-14`).
 
