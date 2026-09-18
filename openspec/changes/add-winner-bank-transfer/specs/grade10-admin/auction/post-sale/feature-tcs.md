@@ -1551,20 +1551,6 @@ Runs once per row of **Test data**.
 * The confirm is refused.
 * No operator file is stored; the order stays Payment Verifying.
 
-## Historical questions (resolved below)
-
-- The Quote and send group (payment method on the quote, bank transfer fee at first send) has no journey in this change's journeys file; post-sale-US-05 lives only in revise-auction-winner-invoicing. Fee validation is covered here through Reissue only. Should this change carry US-05 as a context journey?
-- Is Reissue offered while Payment Verifying?
-- What does keep the deadline mean on an expired invoice?
-- Is a reason-only reissue allowed?
-- Is settling a card invoice as a transfer refused without a reissue?
-- Where does an operator search by invoice reference, and does a reissue change the reference?
-- How can a Payment Verifying invoice be expired, given its deadline is stopped?
-- Is the winner upload an invoice log entry?
-- Is there a cap on operator-added proof files on confirm?
-- What happens when two operators act on the same proof check?
-- Which grants may view winner proof files?
-
 ## Reconciliation
 
 **Status:** complete — reconciled on 2026-09-16 after the author's grilling round, and patched the same day with the author's identifier decisions. No case stays blocked.

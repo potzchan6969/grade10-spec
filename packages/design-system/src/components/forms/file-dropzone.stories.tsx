@@ -4,16 +4,17 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
 import {
+  FILE_DROPZONE_MIB,
   FileDropzone,
   FileDropzoneFileList,
-  FileDropzoneTarget,
-  FILE_DROPZONE_MIB,
   type FileDropzoneItem,
+  FileDropzoneTarget,
 } from "./file-dropzone";
 
 const COPY = {
   idleTitle: "Drop files here or choose files",
-  idleDescription: "PDF, PNG, JPG, or HEIC. Up to 3 files, 5 MB each, 15 MB total.",
+  idleDescription:
+    "PDF, PNG, JPG, or HEIC. Up to 3 files, 5 MB each, 15 MB total.",
   chooseFiles: "Choose Files",
   converting: "Converting HEIC…",
   removeFile: "Remove file",
@@ -28,7 +29,7 @@ const LIMITS = {
 
 const ACCEPT =
   ".pdf,.png,.jpg,.jpeg,.heic,.heif,application/pdf,image/png,image/jpeg,image/heic,image/heif";
-const unsupportedReject = fn();
+const rejectionSpy = fn();
 
 function sampleItem(
   name: string,
@@ -155,9 +156,9 @@ export const Combined: Story = {
   render: () => <CombinedDemo />,
 };
 
-/** Unsupported files are rejected without changing the controlled list. */
-export const RejectsUnsupportedFile: Story = {
-  name: "Rejects unsupported file",
+/** Oversized files are rejected without changing the controlled list. */
+export const RejectsOversizedFile: Story = {
+  name: "Rejects oversized file",
   render: () => {
     const [files, setFiles] = useState<FileDropzoneItem[]>([]);
     return (
@@ -167,7 +168,7 @@ export const RejectsUnsupportedFile: Story = {
         files={files}
         limits={LIMITS}
         onChange={setFiles}
-        onReject={unsupportedReject}
+        onReject={rejectionSpy}
       />
     );
   },
@@ -175,9 +176,14 @@ export const RejectsUnsupportedFile: Story = {
     const canvas = within(canvasElement);
     await userEvent.upload(
       targetInput(canvasElement),
-      new File(["not a proof"], "notes.txt", { type: "text/plain" }),
+      new File([new Uint8Array(LIMITS.maxBytesPerFile + 1)], "oversized.pdf", {
+        type: "application/pdf",
+      }),
     );
-    expect(canvas.queryByText("notes.txt")).not.toBeInTheDocument();
-    expect(unsupportedReject).toHaveBeenCalledWith("type", "notes.txt");
+    expect(canvas.queryByText("oversized.pdf")).not.toBeInTheDocument();
+    expect(rejectionSpy).toHaveBeenCalledWith(
+      "too_large_file",
+      "Each file must be 5 MB or less.",
+    );
   },
 };

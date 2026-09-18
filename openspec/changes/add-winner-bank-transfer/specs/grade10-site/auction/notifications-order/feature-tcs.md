@@ -387,12 +387,6 @@ Runs once per row of **Test data**.
 * Neither the letter nor the PDF shows the proof file, its name, or the internal audit number.
 * The send log holds one payment-received letter with one attachment.
 
-## Historical questions (resolved below)
-
-- Does the proof-not-accepted letter state a new absolute deadline or a duration?
-- After a return, are the day-3/day-6/final-notice times shifted by the pause, and is a reminder whose time passed during the check sent late or skipped?
-- Does a reissue while Payment Verifying reset the held sequence?
-
 ## Reconciliation
 
 **Status:** complete — reconciled on 2026-09-16 after the author's grilling round.

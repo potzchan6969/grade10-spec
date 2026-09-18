@@ -1,5 +1,12 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
+import {
+  FILE_DROPZONE_MIB,
+  FileDropzoneFileList,
+  type FileDropzoneItem,
+  type FileDropzoneRejectReason,
+  FileDropzoneTarget,
+} from "@grade10/design-system/components/forms/file-dropzone";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
@@ -15,13 +22,6 @@ import {
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { toast } from "@grade10/design-system/components/overlays/toast";
-import {
-  FileDropzoneFileList,
-  FileDropzoneTarget,
-  FILE_DROPZONE_MIB,
-  type FileDropzoneItem,
-  type FileDropzoneRejectReason,
-} from "@grade10/design-system/components/forms/file-dropzone";
 import { Check, Copy, Warning } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
 
@@ -111,7 +111,10 @@ function WinnerOrderPaymentProofDialog({
 
   useEffect(() => {
     if (!copiedField) return;
-    const timer = window.setTimeout(() => setCopiedField(null), COPY_FEEDBACK_MS);
+    const timer = window.setTimeout(
+      () => setCopiedField(null),
+      COPY_FEEDBACK_MS,
+    );
     return () => window.clearTimeout(timer);
   }, [copiedField]);
 
@@ -213,7 +216,8 @@ function WinnerOrderPaymentProofDialog({
         break;
       case "convert_failed":
         toast.error("Couldn’t convert HEIC", {
-          description: "Try exporting as JPG from your phone, then upload again.",
+          description:
+            "Try exporting as JPG from your phone, then upload again.",
         });
         break;
     }
@@ -424,12 +428,9 @@ function WinnerOrderPaymentProofDialog({
                 value={draft.notes}
               />
               <HStack className="w-full" gap="xs" vAlign="start">
-                <Warning
-                  aria-hidden
-                  className="mt-0.5 shrink-0 text-warning"
-                  size={16}
-                  weight="fill"
-                />
+                <span className="mt-0.5 shrink-0 text-warning">
+                  <Warning aria-hidden size={16} weight="fill" />
+                </span>
                 <Text className="text-secondary-foreground" size="sm">
                   {PROOF_CONFIRM_MICROCOPY}
                 </Text>
@@ -440,7 +441,11 @@ function WinnerOrderPaymentProofDialog({
         <DialogFooter>
           <DialogClose
             render={
-              <Button className="w-full sm:w-auto" size="md" variant="outline" />
+              <Button
+                className="w-full sm:w-auto"
+                size="md"
+                variant="outline"
+              />
             }
           >
             Cancel
@@ -464,7 +469,9 @@ function WinnerOrderPaymentProofDialog({
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex w-full min-w-0 flex-col gap-0.5">
-      <span className="text-sm leading-5 text-secondary-foreground">{label}</span>
+      <span className="text-sm leading-5 text-secondary-foreground">
+        {label}
+      </span>
       <span className="text-sm leading-5 font-medium break-all text-foreground">
         {value}
       </span>
@@ -489,7 +496,9 @@ function CopyableDetailRow({
 }) {
   return (
     <div className="flex w-full min-w-0 flex-col gap-0.5">
-      <span className="text-sm leading-5 text-secondary-foreground">{label}</span>
+      <span className="text-sm leading-5 text-secondary-foreground">
+        {label}
+      </span>
       <div className="flex min-w-0 items-center gap-1">
         <span className="min-w-0 text-sm leading-5 font-medium break-all text-foreground">
           {value}
@@ -503,22 +512,24 @@ function CopyableDetailRow({
           variant="ghost"
         >
           <span className="relative inline-flex size-3 items-center justify-center">
-            <Copy
-              aria-hidden
+            <span
               className={
                 copied
                   ? "absolute size-3 scale-75 opacity-0 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
                   : "absolute size-3 scale-100 opacity-100 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
               }
-            />
-            <Check
-              aria-hidden
+            >
+              <Copy aria-hidden size={12} />
+            </span>
+            <span
               className={
                 copied
                   ? "absolute size-3 scale-100 opacity-100 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
                   : "absolute size-3 scale-75 opacity-0 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
               }
-            />
+            >
+              <Check aria-hidden size={12} />
+            </span>
           </span>
         </IconButton>
       </div>

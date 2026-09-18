@@ -229,10 +229,11 @@ function storeOnly(text) {
     .split("\n")
     .map((line) => GROUP_HEADING.exec(line)?.[1])
     .filter((title) => title !== undefined)
-    .map((title) =>
-      REPO_TAG.exec(
-        title.replace(/\s*\(owner:\s*[^)]*\)\s*$/i, ""),
-      )?.[1].trim() ?? "",
+    .map(
+      (title) =>
+        REPO_TAG.exec(
+          title.replace(/\s*\(owner:\s*[^)]*\)\s*$/i, ""),
+        )?.[1].trim() ?? "",
     );
   return groups.length > 0 && groups.every((repo) => repo === STORE_GROUP);
 }

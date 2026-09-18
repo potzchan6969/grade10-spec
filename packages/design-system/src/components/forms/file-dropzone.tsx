@@ -5,8 +5,8 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import {
-  FilePdf,
   File as FileGlyph,
+  FilePdf,
   Trash,
   UploadSimple,
 } from "@phosphor-icons/react";
@@ -283,17 +283,18 @@ function FileDropzoneTarget({
     void ingest(event.currentTarget.files ?? []);
   }
 
-  function handleDrop(event: DragEvent<HTMLDivElement>) {
+  function handleDrop(event: DragEvent<HTMLFieldSetElement>) {
     event.preventDefault();
     setDragging(false);
     void ingest(event.dataTransfer.files);
   }
 
   return (
-    <div
+    <fieldset
+      aria-label={copy.idleTitle}
       aria-disabled={inactive || undefined}
       className={cn(
-        "flex w-full flex-col items-center gap-3 rounded-2xl border border-dashed px-4 py-6 transition-[border-color,background-color] duration-150",
+        "m-0 flex w-full flex-col items-center gap-3 rounded-2xl border border-dashed px-4 py-6 transition-[border-color,background-color] duration-150",
         dragging
           ? "border-border-strong bg-muted"
           : "border-border bg-background-subtle",
@@ -342,7 +343,7 @@ function FileDropzoneTarget({
       >
         {copy.chooseFiles}
       </Button>
-    </div>
+    </fieldset>
   );
 }
 

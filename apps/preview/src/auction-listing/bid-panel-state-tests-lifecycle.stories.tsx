@@ -23,9 +23,10 @@ export default meta;
 
 export const Opens = responseStory(BID_PANEL_STATE_RESPONSES.opens);
 export const ClosedSold = responseStory(BID_PANEL_STATE_RESPONSES.closedSold);
-export const ClosedWonPaymentDue = responseStory(
-  BID_PANEL_STATE_RESPONSES.closedWonPaymentDue,
-);
+export const ClosedWonPaymentDue = responseStory({
+  ...BID_PANEL_STATE_RESPONSES.closedWonPaymentDue,
+  expectedText: "Complete Order Setup",
+});
 export const ClosedWonSettled = responseStory(
   BID_PANEL_STATE_RESPONSES.closedWonSettled,
 );

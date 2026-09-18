@@ -217,7 +217,7 @@ export const PostAuction: Story = {
     ).toHaveAttribute("href", storyHref(WINNER_ORDER_REFUNDED_STORY_ID));
     expect(
       canvas.getByRole("link", {
-        name: "View order: 1999 Base Set Charizard PSA 9",
+        name: "Complete Order Setup: 1999 Base Set Charizard PSA 9",
       }),
     ).toHaveAttribute(
       "href",
