@@ -5,9 +5,9 @@
 
 ## order-mail-US1: Post-close letters
 
-**Walked by:** nobody on their own - the winner-order journey for emailing
-Grade10 from a locked order (`winner-order-US-15`) reaches these letters'
-Contact Us
+**As a** winner whose order letter offers Contact Us,
+**I want** that CTA to open the same ready email Winner Order would copy,
+**so that** support can find the order whether I write from the letter or the page.
 
 ### order-mail-US1-TC7-1: Setup overdue letter Contact Us carries the ready mailto and names the address
 

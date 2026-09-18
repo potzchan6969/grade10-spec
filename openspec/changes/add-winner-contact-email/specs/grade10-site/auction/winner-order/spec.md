@@ -40,7 +40,7 @@ page before Contact Us opens the dialog.
 multi-line field that shares TextInput's label, status and message contract.
 
 #### Scenario: winner-order-SC-160 - Contact Us opens the copy-first dialog
-**Serves:** winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** an auction order whose payment or setup self-service has closed
   and whose overdue or partially paid alert offers Contact Us
@@ -52,7 +52,7 @@ multi-line field that shares TextInput's label, status and message contract.
 - **AND** no mail client opens as the first action
 
 #### Scenario: winner-order-SC-161 - The support address stays off the order until Contact Us
-**Serves:** winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** an auction order whose overdue or partially paid alert offers
   Contact Us
@@ -61,7 +61,7 @@ multi-line field that shares TextInput's label, status and message contract.
 - **AND** after Contact Us opens the dialog, To shows `support@grade10.com`
 
 #### Scenario: winner-order-SC-162 - Message is an editable Textarea and Copy Message stays footer-only
-**Serves:** winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** the Contact Us dialog is open on a locked Winner Order
 - **WHEN** the winner edits Message and chooses Copy Message
@@ -70,7 +70,7 @@ multi-line field that shares TextInput's label, status and message contract.
 - **AND** Copy Message copies To, Subject and the current Message together
 
 #### Scenario: winner-order-SC-163 - Open Mail App carries the current subject and body
-**Serves:** winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** the Contact Us dialog is open with Subject and Message filled
 - **WHEN** the winner chooses Open Mail App
@@ -78,7 +78,7 @@ multi-line field that shares TextInput's label, status and message contract.
   Message
 
 #### Scenario: winner-order-SC-167 - To and Subject copy in place and stay fixed
-**Serves:** winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** the Contact Us dialog is open on a locked Winner Order
 - **WHEN** the winner uses the To and Subject copy controls
@@ -110,7 +110,7 @@ receipt ids and MUST NOT name the remaining balance. When no receipt id
 exists yet, the body SHALL list none.
 
 #### Scenario: winner-order-SC-164 - Setup overdue names the lot, not an invoice
-**Serves:** winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** an auction order whose setup deadline has passed with no invoice
   issued, for lot title "Charizard Base Set PSA 10"
@@ -120,7 +120,7 @@ exists yet, the body SHALL list none.
 - **AND** Message names no invoice id
 
 #### Scenario: winner-order-SC-165 - Payment overdue names the invoice
-**Serves:** winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** an auction order whose payment deadline has passed unpaid, with
   current invoice id `INV-202609-LK7P2Q-01` and lot title
@@ -132,7 +132,7 @@ exists yet, the body SHALL list none.
   overdue
 
 #### Scenario: winner-order-SC-166 - Partial payment may list receipts and never the balance
-**Serves:** winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** a partially paid auction order with current invoice id
   `INV-202609-LK7P2Q-01`, lot title "Charizard Base Set PSA 10", and receipt
@@ -144,7 +144,7 @@ exists yet, the body SHALL list none.
 - **AND** Message names no remaining balance
 
 #### Scenario: winner-order-SC-168 - A reissued invoice uses the current invoice id
-**Serves:** winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** an auction order whose payment deadline has passed unpaid after a
   reissue, with current invoice id `INV-202609-LK7P2Q-02` and a replaced

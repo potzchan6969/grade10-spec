@@ -27,7 +27,7 @@ letters respectively.
 address.
 
 #### Scenario: order-mail-SC-57 - Setup overdue Contact Us prefills the lot subject and body
-**Serves:** grade10-site/auction/winner-order#winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** grade10-site/auction/winner-order#winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** a setup-overdue letter for lot title "Charizard Base Set PSA 10"
   with no invoice issued
@@ -39,7 +39,7 @@ address.
 - **AND** the letter body names `support@grade10.com`
 
 #### Scenario: order-mail-SC-58 - Payment overdue Contact Us prefills the invoice subject and body
-**Serves:** grade10-site/auction/winner-order#winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** grade10-site/auction/winner-order#winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** a payment-overdue letter for invoice id `INV-202609-LK7P2Q-01`
   and lot title "Charizard Base Set PSA 10"
@@ -52,7 +52,7 @@ address.
 - **AND** the letter body names `support@grade10.com`
 
 #### Scenario: order-mail-SC-59 - Cancelled Contact Us prefills the ready email and the letter names the address
-**Serves:** grade10-site/auction/winner-order#winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** grade10-site/auction/winner-order#winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** an order-cancelled letter for invoice id `INV-202609-LK7P2Q-01`
   and lot title "Charizard Base Set PSA 10"
@@ -64,7 +64,7 @@ address.
 - **AND** the letter body names `support@grade10.com`
 
 #### Scenario: order-mail-SC-60 - Delivered Contact Us prefills the ready email and the letter names the address
-**Serves:** grade10-site/auction/winner-order#winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** grade10-site/auction/winner-order#winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** a delivered letter for invoice id `INV-202609-LK7P2Q-01` and lot
   title "Charizard Base Set PSA 10"
@@ -76,7 +76,7 @@ address.
 - **AND** the letter body names `support@grade10.com`
 
 #### Scenario: order-mail-SC-61 - Partial-payment Contact Us prefills the ready email without the balance
-**Serves:** grade10-site/auction/winner-order#winner-order-US-15 - Winner emails Grade10 from a locked order
+**Serves:** grade10-site/auction/winner-order#winner-order-US-16 - Winner emails Grade10 from a locked order
 
 - **GIVEN** a partial-payment letter for invoice id `INV-202609-LK7P2Q-01`,
   lot title "Charizard Base Set PSA 10", and receipt ids

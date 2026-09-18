@@ -89,13 +89,13 @@
 
 ---
 
-## winner-order-US15: Winner emails Grade10 from a locked order
+## winner-order-US16: Winner emails Grade10 from a locked order
 
 **As a** winner whose payment access has closed,
 **I want** a ready email with this order's details that I can copy into any mail app,
 **so that** I can reach Grade10 without a system mail client, and support can find the order.
 
-### winner-order-US15-TC1-1: Contact Us opens the copy-first Email Grade10 dialog
+### winner-order-US16-TC1-1: Contact Us opens the copy-first Email Grade10 dialog
 
 **Classification:**
 
@@ -108,7 +108,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -132,7 +132,7 @@
 * No toast that only names the support address replaces the dialog.
 * No mail client opens as the Contact Us action itself.
 
-### winner-order-US15-TC2-1: Dialog To is support at grade10.com
+### winner-order-US16-TC2-1: Dialog To is support at grade10.com
 
 **Classification:**
 
@@ -145,7 +145,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -167,7 +167,7 @@
 
 * To is `support@grade10.com`.
 
-### winner-order-US15-TC3-1: Setup overdue subject names the lot and omits an invoice id
+### winner-order-US16-TC3-1: Setup overdue subject names the lot and omits an invoice id
 
 **Classification:**
 
@@ -180,7 +180,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -204,7 +204,7 @@
 * Subject is `Auction lot <lot_title>: setup overdue`.
 * Subject contains no invoice id.
 
-### winner-order-US15-TC4-1: Payment overdue subject names the invoice id
+### winner-order-US16-TC4-1: Payment overdue subject names the invoice id
 
 **Classification:**
 
@@ -217,7 +217,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -240,7 +240,7 @@
 
 * Subject is `Auction order <invoice_id>: payment overdue`.
 
-### winner-order-US15-TC5-1: Partially paid subject names invoice and lists receipts without remaining balance
+### winner-order-US16-TC5-1: Partially paid subject names invoice and lists receipts without remaining balance
 
 **Classification:**
 
@@ -253,7 +253,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -279,7 +279,7 @@
 * Message lists <receipt_ids>.
 * Message does not show the remaining balance owed.
 
-### winner-order-US15-TC6-1: Partially paid with several receipts lists each receipt id
+### winner-order-US16-TC6-1: Partially paid with several receipts lists each receipt id
 
 **Classification:**
 
@@ -292,7 +292,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -316,7 +316,7 @@
 * Message lists every id in <receipt_ids>.
 * Message still omits the remaining balance.
 
-### winner-order-US15-TC7-1: Support address stays off the order until the dialog opens
+### winner-order-US16-TC7-1: Support address stays off the order until the dialog opens
 
 **Classification:**
 
@@ -329,7 +329,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -353,7 +353,7 @@
 * Before step 3, `support@grade10.com` is not shown on the order page.
 * After step 3, To shows `support@grade10.com`.
 
-### winner-order-US15-TC8-1: Copy Message is first and Open Mail App is second
+### winner-order-US16-TC8-1: Copy Message is first and Open Mail App is second
 
 **Classification:**
 
@@ -366,7 +366,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -389,7 +389,7 @@
 * Copy Message is the primary footer action.
 * Open Mail App is the secondary outline action.
 
-### winner-order-US15-TC9-1: Message is an editable textarea with footer-only full copy
+### winner-order-US16-TC9-1: Message is an editable textarea with footer-only full copy
 
 **Classification:**
 
@@ -402,7 +402,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -430,7 +430,7 @@
 * The only full-email copy control is Copy Message in the footer.
 * Step 4 keeps the typed <winner_question> in Message.
 
-### winner-order-US15-TC10-1: Copy Message copies the ready email including the current Message
+### winner-order-US16-TC10-1: Copy Message copies the ready email including the current Message
 
 **Classification:**
 
@@ -443,7 +443,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -472,7 +472,7 @@
 * The paste includes Subject `Auction order <invoice_id>: payment overdue`.
 * The paste includes the Message text with <winner_question>.
 
-### winner-order-US15-TC11-1: Open Mail App uses the current subject and body
+### winner-order-US16-TC11-1: Open Mail App uses the current subject and body
 
 **Classification:**
 
@@ -485,7 +485,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -513,7 +513,7 @@
 * The mailto subject is `Auction order <invoice_id>: payment overdue`.
 * The mailto body includes <winner_question>.
 
-### winner-order-US15-TC12-1: In-place To and Subject copy do not replace Copy Message
+### winner-order-US16-TC12-1: In-place To and Subject copy do not replace Copy Message
 
 **Classification:**
 
@@ -526,7 +526,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -552,7 +552,7 @@
 * Step 4 pastes only the Subject text.
 * Copy Message remains available in the footer for the full ready email.
 
-### winner-order-US15-TC13-1: A reissued invoice uses the current invoice id in Subject
+### winner-order-US16-TC13-1: A reissued invoice uses the current invoice id in Subject
 
 **Classification:**
 
@@ -565,7 +565,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-15
+* **Trace:** winner-order-US-16
 
 **Pre-conditions:**
 
@@ -614,8 +614,8 @@
 | Prefill body facts beyond subject | **Folded in:** ready-email body rules under `The ready email names the invoice or the lot and the reason` |
 | Whether the winner may clear prefilled Message facts | **Rejected:** Message is editable end-to-end (`winner-order-SC-162`); no separate lock on the prefills |
 | Dialog title "Email Grade10" as a SHALL | **Rejected:** presentation in `ui-design.md`, not a product rule |
-| Copy Message success confirmation | **Escalated:** ❓ on Post-Bidding; Raised row for Product (@tangconst). No scenario. Case `winner-order-US15-TC10-1` stays without asserting confirmation chrome |
+| Copy Message success confirmation | **Escalated:** ❓ on Post-Bidding; Raised row for Product (@tangconst). No scenario. Case `winner-order-US16-TC10-1` stays without asserting confirmation chrome |
 | US-05 / US-07 still show Contact Us and hide Pay / Confirm | **Out of suite:** durable `winner-order-SC-37`, `winner-order-SC-71` — this change names the destination, not when Contact Us appears |
 | `Textarea` design-system export | **Out of suite:** `packages/design-system` typecheck and colocated stories |
 
-**Uncovered anchors:** none for `winner-order-US-15`. Context journeys `winner-order-US-05` and `winner-order-US-07` keep regression cases; appearance rules stay on the durable scenarios above.
+**Uncovered anchors:** none for `winner-order-US-16`. Context journeys `winner-order-US-05` and `winner-order-US-07` keep regression cases; appearance rules stay on the durable scenarios above.
