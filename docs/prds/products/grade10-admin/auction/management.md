@@ -45,7 +45,7 @@ the card is in the winner's hands. The collector's half is
   a changed quantity moves the hold, changing the product warns that Save
   moves it, create is refused without a matching hold, and a call-off
   releases it
-- 🚧 **Cert ID** — creating a listing takes an explicit choice of one Cert ID
+- **Cert ID** — creating a listing takes an explicit choice of one Cert ID
   of the selected product, or `No Cert ID` for an unnumbered unit; each Cert
   ID can have its own live listing, and only one
 - **Publish** — a created listing is ready but not visible; publishing is a

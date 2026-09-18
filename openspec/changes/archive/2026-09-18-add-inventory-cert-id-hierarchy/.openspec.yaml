@@ -1,0 +1,6 @@
+schema: grade10-planning
+promoted_by: "@htonyl"
+created: 2026-09-14
+deployed_at: "f27951ef027002d1a208b950eeee00575248137a"
+deployed_env: "production"
+tasks_waived: "@htonyl, user-directed implementation-only validation; full integrated-suite verification is intentionally out of scope"

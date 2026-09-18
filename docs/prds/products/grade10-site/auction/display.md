@@ -43,7 +43,7 @@ What a listing carries, from the operator's form to the card.
 | Category | One per taxonomy | Cards grouped or found by category |
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |
 | Address | A slug, unique among every listing | `/auction/listings/<slug>` |
-| 🚧 Cert ID | One graded unit of the product, or none | Nothing yet |
+| **Cert ID** | One graded unit of the product, or none | The configured Cert ID when the product's displayed fields include it |
 
 - ❓ **Listing facts** — grade, certificate, set and language on the card,
   once the unit's attributes reach the listing; Product confirms against
