@@ -13,6 +13,22 @@
   "payInvoice": "청구서 결제",
   "viewDetail": "상세 보기",
   "contactUs": "문의하기",
+  "contactDialog": {
+    "title": "Grade10에 이메일 보내기",
+    "to": "받는 사람",
+    "subject": "제목",
+    "message": "메시지",
+    "copyAddress": "주소 복사",
+    "addressCopied": "주소를 복사했습니다",
+    "copySubject": "제목 복사",
+    "subjectCopied": "제목을 복사했습니다",
+    "copyMessage": "메시지 복사",
+    "messageCopied": "메시지를 복사했습니다",
+    "copyAddressManual": "주소를 직접 복사하세요",
+    "copySubjectManual": "제목을 직접 복사하세요",
+    "copyMessageManual": "메시지를 직접 복사하세요",
+    "openMailApp": "메일 앱 열기"
+  },
   "tabs": {
     "active": "진행 중",
     "upcoming": "예정",
