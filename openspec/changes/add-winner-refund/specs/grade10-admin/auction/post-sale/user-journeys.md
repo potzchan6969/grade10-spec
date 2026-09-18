@@ -19,12 +19,12 @@ payments that failed,
 
 **As an** operator with refund processing,
 **I want** to record the refund I sent in Stripe or by bank transfer on the order, with its amount, reason, reference and proof, and say whether the lot goes back to stock,
-**so that** the order reads Refunded and its stock matches where the card is.
+**so that** a closing refund reads Refunded, an overpayment keeps the order's status, and the lot's stock matches where the card is.
 
 ### post-sale-US-10: Finance reconciles auction refunds
 
 **As a** finance operator,
-**I want** to filter the queue to Refunded and read each refund's amount, method, reference, reason, audit number, and who recorded it and when,
+**I want** to read each refund's amount, method, reference, reason, audit number, and who recorded it and when, filtering a closing refund as Refunded,
 **so that** every refund in Stripe or the bank matches one record in Grade10.
 
 ## MODIFIED User journeys

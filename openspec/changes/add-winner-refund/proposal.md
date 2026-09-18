@@ -17,8 +17,9 @@ working day. Today the share is zero, because nothing can record one.
 
 - **An operator records a refund on the order.** One refund per order, on
   Processing, Shipped, Delivered or Partially Paid. The operator sends the
-  money by hand, as today, and then records it. The order reads Refunded for
-  good.
+  money by hand, as today, and then records it. A refund that closes the
+  sale reads Refunded for good. An overpayment returns only the difference
+  and the order keeps its status.
 - **The operator sets the amount.** It must be above zero and no more than
   the winner has paid, partial payments included. It is never fixed to the
   Order Total.
@@ -27,14 +28,16 @@ working day. Today the share is zero, because nothing can record one.
   private proof files, and the next gapless internal audit number.
 - **The operator decides what happens to the lot.** It goes back to stock,
   or the winner keeps it and it stays sold.
-- **Finance finds refunds from the queue and the order.** The queue filters
-  to Refunded, and the order detail and invoice log show the refund in full.
+- **Finance finds refunds from the queue and the order.** A closing refund
+  filters as Refunded. An overpayment stays on the order's current status.
+  The order detail and invoice log show the refund in full.
 - **A new permission, `auction:refund`, held by `staff` and `admin`.**
   **BREAKING** for the rule that every money move sits behind
   `auction:settle`: operations records refunds without the finance grant.
   This was held against that challenge (`decisions.md` Q5).
-- **The winner sees Refunded on their order and gets no letter.** Their
-  bidder standing does not change.
+- **A closing refund reads Refunded, with the amount returned, and gets no
+  letter.** An overpayment keeps the order's status and shows only the
+  difference. Bidder standing does not change.
 
 ## Non-Goals
 
@@ -55,8 +58,9 @@ None.
   `partially_paid` as well as `paid`, and is recorded rather than left
   unspecified.
 - `grade10-site/auction/winner-order`: Winner Order reads Refunded for a
-  refunded order, paid in full or in part, and keeps its invoice and
-  receipts downloadable.
+  refund that closes the sale, paid in full or in part, shows the amount
+  returned, and keeps its invoice and receipts downloadable. An overpayment
+  keeps the order's status and shows only the difference.
 - `shared/auth/roles`: a new `auction:refund` permission, granted to `staff`
   and `admin`.
 
@@ -71,14 +75,19 @@ None.
   already says.
 - **Auth** — the new permission in the closed vocabulary and the `staff` and
   `admin` grants.
-- **Site** — Winner Order shows Refunded, with no stepper, Pay or address form, and keeps the invoice and receipts; My Auctions already shows Refunded. No new letter.
+- **Site** — a closing refund shows Refunded and an inline alert below Order Total with the amount returned; a details control opens the reason, note and refund method (❓ what transaction clues that method line carries for the winner is open); no stepper, Pay or address form; Order Summary stays the invoice; keeps the invoice and receipts. An overpayment keeps the order's status and shows only the difference the same way. My Auctions shows Refunded only for a closing refund. No new letter.
 - **Depends on** `add-winner-partial-payment`, which brings Partially Paid.
   This change's deltas on `post-sale` and `order-status` apply after that
   change archives.
 
 ## Open Questions
 
-None. Every question the interview raised was settled.
+- **Q20 — Refund transaction clues for the winner.** What the Refund Method
+  line shows so the winner can recognise the refund on their statement —
+  channel only (Card / Bank transfer), a masked card or bank clue, or
+  something else. Full proof, provider reference and audit number stay with
+  the operator. Product (@tangconst) confirms. Preview fixtures use Card /
+  Bank transfer as a working stand-in.
 
 ## References
 
