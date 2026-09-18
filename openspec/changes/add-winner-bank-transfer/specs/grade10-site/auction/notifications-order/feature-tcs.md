@@ -387,7 +387,7 @@ Runs once per row of **Test data**.
 * Neither the letter nor the PDF shows the proof file, its name, or the internal audit number.
 * The send log holds one payment-received letter with one attachment.
 
-## Raised
+## Historical questions (resolved below)
 
 - Does the proof-not-accepted letter state a new absolute deadline or a duration?
 - After a return, are the day-3/day-6/final-notice times shifted by the pause, and is a reminder whose time passed during the check sent late or skipped?
