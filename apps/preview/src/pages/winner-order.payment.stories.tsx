@@ -381,9 +381,7 @@ export const ExpiredInvoice: Story = {
     expect(sidebar.getByText("Billing address")).toBeVisible();
     expect(canvas.queryByText(/how to reach Grade10/i)).not.toBeInTheDocument();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
-    expect(
-      canvas.queryByText("Pending Payment (expired invoice)"),
-    ).not.toBeInTheDocument();
+    expect(canvas.getByText("Pending Payment (expired invoice)")).toBeVisible();
     await winnerOrderContactSheet(
       canvasElement,
       "Auction order INV-202609-LK7P2Q-01: payment overdue",

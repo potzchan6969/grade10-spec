@@ -79,7 +79,7 @@ async function winnerOrderContactSheet(
   expect(
     modal.queryByRole("button", { name: "Copy message" }),
   ).not.toBeInTheDocument();
-  const mailLink = modal.getByRole("link", { name: "Open Mail App" });
+  const mailLink = modal.getByRole("button", { name: "Open Mail App" });
   expect(mailLink).toHaveAttribute(
     "href",
     expect.stringMatching(/^mailto:support@grade10\.com\?subject=/),
