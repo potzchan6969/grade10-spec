@@ -16,7 +16,7 @@
 - [ ] 3.3 Make the raise retry and concurrency cases pass without creating a second live hold, including the stable idempotency key and existing hold lock; verify with pnpm --dir packages/grade10-auction/backend typecheck and the focused auction DB tests.
 - [ ] 3.4 Run the full auction database lane and confirm the customer-facing refusal and pending states remain covered by the existing bid journey tests: pnpm --dir apps/backend/grade10/auction exec vitest run --project db.
 
-## 4. Integration handoff (grade10)
+## 4. Integration handoff (grade10) (owner: @htonyl)
 
 - [ ] 4.1 After the OpenSpec change lands on grade10-spec main, bump external/grade10-spec to the merged commit so the application worktree reads the approved delta, journeys, and draft feature suite.
 - [ ] 4.2 Review the final application diff against the change's scenarios and run git diff --check plus the touched package typechecks and test lanes before handoff.
