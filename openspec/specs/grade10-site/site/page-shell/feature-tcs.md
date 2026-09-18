@@ -50,6 +50,7 @@ None.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** usability
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -331,6 +332,7 @@ implies a currency I cannot switch.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -359,6 +361,7 @@ None.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -423,6 +426,7 @@ none marked when no item owns it,
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -449,6 +453,7 @@ A collector is on a surface the navigation lists, or on any address beneath it.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation

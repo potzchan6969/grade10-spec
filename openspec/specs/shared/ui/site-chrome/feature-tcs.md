@@ -3,13 +3,15 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-18, tcs-rules r3.0
 
-## shared-ui-site-chrome-US1: External links
+## shared-ui-site-chrome-US1: Shared chrome contract
 
+**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/site/page-shell`, which composes the header and footer
 **As an** application composing the shared chrome,
-**I want** a `NavLink` marked `external` to open in a new tab with
-`noopener noreferrer`,
-**so that** off-site destinations leave the storefront page open and do not
-inherit the opener.
+**I want** the chrome to expose only the controls I have answered, keep
+off-site destinations safely scoped, and present one truthful, session-aware
+header for any brand,
+**so that** every product surface can render a correct header without
+reimplementing its behavior.
 
 ### shared-ui-site-chrome-US1-TC1-1: External primary-nav link opens a new tab
 
@@ -69,16 +71,7 @@ inherit the opener.
 
 * The link has no `target="_blank"`.
 
----
-
-## shared-ui-site-chrome-US2: Shared auction-first chrome contract
-
-**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/site/page-shell`, which composes the header and footer
-**As an** application composing the shared chrome,
-**I want** the auction-first header contract to expose only answered controls,
-**so that** every product surface can render one truthful header.
-
-### shared-ui-site-chrome-US2-TC1-1: The shared chrome exports resolve
+### shared-ui-site-chrome-US1-TC3-1: The shared chrome exports resolve
 
 **Classification:**
 
@@ -106,7 +99,7 @@ inherit the opener.
 
 * Every import resolves.
 
-### shared-ui-site-chrome-US2-TC2-1: Header and footer render independently with supplied copy
+### shared-ui-site-chrome-US1-TC4-1: Header and footer render independently with supplied copy
 
 **Classification:**
 
@@ -136,7 +129,7 @@ inherit the opener.
 * Each component renders without missing context from the other.
 * The supplied copy appears in the component that receives it.
 
-### shared-ui-site-chrome-US2-TC3-1: No cart handler leaves no cart control
+### shared-ui-site-chrome-US1-TC5-1: No cart handler leaves no cart control
 
 **Classification:**
 
@@ -165,7 +158,7 @@ inherit the opener.
 * No Cart control appears.
 * No space is reserved for the missing control.
 
-### shared-ui-site-chrome-US2-TC4-1: Only supplied controls appear
+### shared-ui-site-chrome-US1-TC6-1: Only supplied controls appear
 
 **Classification:**
 
@@ -194,7 +187,7 @@ inherit the opener.
 * The account control appears.
 * Search and Cart do not appear.
 
-### shared-ui-site-chrome-US2-TC5-1: Language is not a wishlist or currency control
+### shared-ui-site-chrome-US1-TC7-1: Language is not a wishlist or currency control
 
 **Classification:**
 
@@ -223,7 +216,7 @@ inherit the opener.
 * No wishlist control appears.
 * The locale presents language options and no currency switch.
 
-### shared-ui-site-chrome-US2-TC6-1: Signed-out chrome presents Sign In
+### shared-ui-site-chrome-US1-TC8-1: Signed-out chrome presents Sign In
 
 **Classification:**
 
@@ -252,7 +245,7 @@ inherit the opener.
 * A primary Sign In button appears.
 * No account icon control appears.
 
-### shared-ui-site-chrome-US2-TC7-1: Signed-in chrome presents the auction account menu
+### shared-ui-site-chrome-US1-TC9-1: Signed-in chrome presents the auction account menu
 
 **Classification:**
 
@@ -283,7 +276,7 @@ inherit the opener.
 * The menu offers Profile, My Auctions, and Sign out.
 * The menu does not offer Orders or KYC.
 
-### shared-ui-site-chrome-US2-TC8-1: Compact chrome keeps account and reaches language
+### shared-ui-site-chrome-US1-TC10-1: Compact chrome keeps account and reaches language
 
 **Classification:**
 
@@ -315,7 +308,7 @@ inherit the opener.
 * Account / Sign In and Cart remain in the bar when supplied.
 * The menu panel leaves a visible gutter.
 
-### shared-ui-site-chrome-US2-TC9-1: Wide chrome keeps navigation in the bar
+### shared-ui-site-chrome-US1-TC11-1: Wide chrome keeps navigation in the bar
 
 **Classification:**
 
