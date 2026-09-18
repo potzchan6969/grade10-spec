@@ -20,10 +20,15 @@ same header wear another brand's words without a fork.
 Traditional Chinese, Simplified Chinese for Grade10). It does not switch
 currency.
 
+## Account Entry
+
 **`SiteHeader`** — a compound header wraps the design-system `Nav` with
 session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu of Profile, My Auctions, and Sign out when signed in.
-Orders and KYC are not in that menu for auction-first launch.
+KYC stays out of the menu.
+
+🚧 **My Orders** joins the menu between Profile and My Auctions, opening the
+Store order history surface.
 
 **Compact menu** — below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same

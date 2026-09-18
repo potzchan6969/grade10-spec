@@ -15,9 +15,14 @@ paint. When the session arrives, the account entry changes between a Sign In
 primary button (signed out) and the account icon with its menu (signed in); other
 controls do not appear, disappear, or move.
 
+## Account Menu
+
 **Account menu** — signed in, the account icon opens Profile, My Auctions,
-and Sign out. Sign-out is offered there as well as on the profile. Orders and
-KYC are not in the menu for auction-first launch.
+and Sign out. Sign-out is offered there as well as on the profile. KYC stays
+out of the menu.
+
+🚧 **My Orders** joins the menu between Profile and My Auctions, opening
+`/profile/orders`.
 
 Controls exist only when there is something behind them. Search still waits for
 a search surface, and no link points to a page the site does not hold. The
