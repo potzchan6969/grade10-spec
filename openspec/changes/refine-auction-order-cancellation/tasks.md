@@ -7,7 +7,7 @@
 - [ ] 2.1 Add cancellation category/note, consequence snapshot, lot link and Paid-after-cancel facts.
 - [ ] 2.2 Add the terminal transition and late-payment audit events to the auction-order schema.
 
-## 3. Backend
+## 3. Backend (owner: @htonyl)
 
 - [ ] 3.1 Require category and note, show consequences, return the lot to stock and keep cancellation terminal (`grade10-admin-auction-post-sale-SC-150`, `SC-151`).
 - [ ] 3.2 Record late payments, expose the queue flag and allow only the flag to be cleared after Finance returns the money (`SC-152`).
