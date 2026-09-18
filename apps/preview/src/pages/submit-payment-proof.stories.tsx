@@ -25,7 +25,7 @@ function SubmitPaymentProofDemo({
     <div className="flex min-h-svh w-full flex-col bg-background p-8">
       <VStack className="mx-auto w-full max-w-lg" gap="md" hAlign="start">
         <Text as="h2" className="text-xl font-semibold tracking-tight">
-          Submit Payment Proof
+          Pay by Bank Transfer
         </Text>
         <Text size="sm" tone="secondary">
           Standalone preview of the bank-transfer proof dialog Winner Order
@@ -91,10 +91,10 @@ export const Form: Story = {
   name: "Form",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const dialog = await findVisibleDialog(page, "Pay by Bank Transfer");
     const modal = within(dialog);
     expect(
-      modal.getByText("Pay the amount due, then upload your receipt."),
+      modal.getByText("Copy the bank details, pay the amount due, then upload your receipt."),
     ).toBeVisible();
     expect(modal.getByText("Bank Details")).toBeVisible();
     expect(modal.getByText("Required Transfer Reference")).toBeVisible();
@@ -136,7 +136,7 @@ export const CopyAmountDue: Story = {
       value: { writeText },
     });
 
-    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const dialog = await findVisibleDialog(page, "Pay by Bank Transfer");
     const modal = within(dialog);
     await userEvent.click(
       modal.getByRole("button", { name: "Copy amount due" }),
@@ -167,7 +167,7 @@ export const CopyReference: Story = {
       value: { writeText },
     });
 
-    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const dialog = await findVisibleDialog(page, "Pay by Bank Transfer");
     const modal = within(dialog);
     await userEvent.click(
       modal.getByRole("button", { name: "Copy transfer reference" }),
@@ -193,7 +193,7 @@ export const SubmitProof: Story = {
   play: async ({ canvasElement, args }) => {
     const page = within(canvasElement.ownerDocument.body);
     const canvas = within(canvasElement);
-    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
+    const dialog = await findVisibleDialog(page, "Pay by Bank Transfer");
     const modal = within(dialog);
 
     await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");

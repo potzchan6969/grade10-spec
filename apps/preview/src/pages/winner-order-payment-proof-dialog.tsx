@@ -87,7 +87,7 @@ type WinnerOrderPaymentProofDialogProps = {
 };
 
 /**
- * Preview-only: bank details + proof form after Submit Payment Proof.
+ * Preview-only: bank details + proof form after View Bank Details.
  * Not a published `@grade10/ui` export. Field list explores product UX;
  * OpenSpec stores files after confirm only.
  */
@@ -239,9 +239,9 @@ function WinnerOrderPaymentProofDialog({
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogContent className="max-w-lg" showCloseButton={false}>
         <DialogHeader showCloseButton={false}>
-          <DialogTitle>Submit Payment Proof</DialogTitle>
+          <DialogTitle>Pay by Bank Transfer</DialogTitle>
           <DialogSubtext>
-            Pay the amount due, then upload your receipt.
+            Copy the bank details, pay the amount due, then upload your receipt.
           </DialogSubtext>
         </DialogHeader>
         <DialogBody>

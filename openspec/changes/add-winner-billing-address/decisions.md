@@ -24,7 +24,7 @@ Rounds held on 2026-09-17 with @jeffffej0909.
 | Q | Asked | Decided | Instead of |
 | --- | --- | --- | --- |
 | Q1 | When does the winner give the billing address? | At order setup, with the delivery address and payment method, inside the same 48 hours (recommended) | At payment — the invoice PDF is already sent then, so it would need a reissue or print no billing address |
-| Q2 | How does the form ask for it? | Use same details for billing address, ticked by default; unticking opens a second address with the same required fields (recommended) | Unticked by default; or a separate billing step with no shortcut |
+| Q2 | How does the form ask for it? | Same as delivery address, ticked by default; unticking opens a second address with the same required fields (recommended) | Unticked by default; or a separate billing step with no shortcut |
 | Q3 | Where can a separate billing address come from? | The same address book — a saved address or a one-time one (recommended) | One-time only; or a separate billing book with its own cap |
 | Q4 | What do the invoice and receipt show? | Bill To and Ship To, from the order's snapshot; a receipt shows the invoice's addresses (recommended) | Bill To only |
 | Q5 | Can the winner change the billing address after confirming? | No. It follows the delivery address: an operator edits it with a reason before send, and reissues after; a receipt already issued never changes (recommended) | The winner editing it until send, which reverses the lock from `add-winner-bank-transfer` for one field |

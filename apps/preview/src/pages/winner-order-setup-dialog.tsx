@@ -180,12 +180,12 @@ type AddressSnapshot = {
 const FEE_RANGE_CARD =
   "Card fee applies. Exact amount on the invoice.";
 const FEE_RANGE_BANK =
-  "Fee set when Grade10 prepares your invoice. May be Free.";
+  "The transfer fee is on your invoice. Zero shows as Free.";
 
-function stepLabel(step: SetupStep): string {
-  if (step === 1) return "Delivery";
-  if (step === 2) return "Payment";
-  return "Billing";
+function stepTitle(step: SetupStep): string {
+  if (step === 1) return "Delivery Address";
+  if (step === 2) return "Payment Method";
+  return "Billing Address";
 }
 
 function snapshotFromAddress(address: WinnerOrderSavedAddress): AddressSnapshot {
@@ -581,7 +581,11 @@ function WinnerOrderSetupDialog({
             </Button>
           }
           compact
-          description="Add an address to continue."
+          description={
+            step === 3
+              ? "Add a billing address to continue."
+              : "Add a delivery address to continue."
+          }
           icon={<MapPin aria-hidden weight="regular" />}
           title="No saved addresses"
         />
@@ -680,17 +684,15 @@ function WinnerOrderSetupDialog({
       <Dialog onOpenChange={handleOuterOpenChange} open={open}>
         <DialogContent className="max-w-lg" showCloseButton={false}>
           <DialogHeader showCloseButton={false}>
-            <DialogTitle>Complete Order Setup</DialogTitle>
-            <DialogSubtext>
-              {`Step ${step} of 3: ${stepLabel(step)}`}
-            </DialogSubtext>
+            <DialogTitle>{stepTitle(step)}</DialogTitle>
+            <DialogSubtext>{`Step ${step} of 3`}</DialogSubtext>
           </DialogHeader>
           <DialogBody>
             {step === 1 ? (
               <VStack className="w-full" gap="md" hAlign="stretch">
                 <DialogDescription>
-                  We’ll ship this lot to this address and use it to prepare your
-                  invoice. Nothing is due until Grade10 sends the invoice.
+                  We’ll ship this lot here. You set the billing address on the
+                  last step.
                 </DialogDescription>
                 {addressPicker({
                   ariaLabel: "Delivery address",
@@ -703,8 +705,7 @@ function WinnerOrderSetupDialog({
             {step === 2 ? (
               <VStack className="w-full" gap="md" hAlign="stretch">
                 <DialogDescription>
-                  Choose how you’ll pay. Each option shows a fee range; the
-                  exact amount is on the invoice.
+                  Choose how you’ll pay. The exact amount is on the invoice.
                 </DialogDescription>
                 <RadioList
                   aria-label="Payment method"
@@ -737,7 +738,7 @@ function WinnerOrderSetupDialog({
             {step === 3 ? (
               <VStack className="w-full" gap="md" hAlign="stretch">
                 <DialogDescription>
-                  Billing address shown on your invoice.
+                  This address is printed on your invoice.
                 </DialogDescription>
                 <CheckboxListInput
                   checked={sameAsDelivery}
@@ -749,7 +750,7 @@ function WinnerOrderSetupDialog({
                   }}
                   size="sm"
                 >
-                  Use same details for billing address
+                  Same as delivery address
                 </CheckboxListInput>
                 <div className="flex w-full flex-col" data-slot="billing-address-swap">
                   <div
@@ -780,7 +781,7 @@ function WinnerOrderSetupDialog({
                         style={{ transitionTimingFunction: ADDRESS_LIST_EASE }}
                       >
                         <div
-                          aria-label="Billing address, same details as delivery"
+                          aria-label="Billing address, same as delivery address"
                           className="flex w-full items-start rounded-xl border border-border bg-card px-3 pt-3 pb-4 text-foreground"
                           data-slot="address-summary"
                         >
@@ -870,11 +871,7 @@ function WinnerOrderSetupDialog({
       <Dialog onOpenChange={setNewAddressOpen} open={newAddressOpen}>
         <DialogContent className="z-[60] max-w-lg" showCloseButton={false}>
           <DialogHeader showCloseButton={false}>
-            <DialogTitle>
-              {step === 3 && !sameAsDelivery
-                ? "Add Billing Address"
-                : "Add Delivery Address"}
-            </DialogTitle>
+            <DialogTitle>Add Address</DialogTitle>
           </DialogHeader>
           <DialogBody>
             <VStack className="w-full" gap="sm" hAlign="stretch" id={formId}>

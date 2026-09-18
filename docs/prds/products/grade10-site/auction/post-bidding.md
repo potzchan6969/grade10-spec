@@ -146,7 +146,7 @@ hours of the close.
 | The winner confirms | From | Default |
 | --- | --- | --- |
 | Delivery address | A saved address or a new one; the order keeps a snapshot — [Account · Delivery Address Management](/p/grade10-site/auction/account#delivery-address-management) | The account default, pre-filled and still confirmed |
-| 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Use same details for billing address, ticked |
+| 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 | 🚧 Payment method | Card in every currency; bank transfer where the currency has bank details, HKD at launch; each choice shows its fee range | Nothing preselected |
 
 - 🚧 **Form** — name, phone, country or region, town or city, address line 1,
@@ -188,7 +188,7 @@ by card, reads:
   ones still find the order
 - 🚧 **Bill To and Ship To** — both from the order's snapshot, each with
   name, company name, phone and address; they read the same unless the
-  winner unticked Use same details for billing address
+  winner unticked Same as delivery address
 - **PDFs** — the invoice once sent (text link beside the Order summary
   heading) and the receipt once paid (text link under the payment-method
   card); hidden when Cancelled

@@ -27,7 +27,7 @@ component contract underneath them.
   marked, an application-supplied error beside each field it names, and
   Confirm with the entered values or Cancel; it checks no phone number's
   format
-- 🚧 **Billing address** — a Use same details for billing address box,
+- 🚧 **Billing address** — a Same as delivery address box,
   ticked by default; unticked, a second address with the same fields. It
   follows the form, which first ships without one
 - 🚧 **On their own** — the row and the address form each render alone

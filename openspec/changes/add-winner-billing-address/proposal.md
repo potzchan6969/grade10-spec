@@ -17,7 +17,7 @@ change are cleared.
 
 - **BREAKING — Order setup asks for a billing address.** It is confirmed with
   the delivery address and the payment method, inside the same 48 hours.
-  Use same details for billing address is ticked by default; unticking it
+  Same as delivery address is ticked by default; unticking it
   asks for a saved address or a one-time one, with the same required fields.
   This reverses `add-my-auction-orders`' rule that the form offers no billing
   address.
