@@ -79,7 +79,7 @@ meaning.
 | **Shipped** | Paid | The warehouse dispatches, with a tracking number |
 | **Delivered** | Paid | The carrier confirms delivery |
 | **Cancelled** | Cancelled | An operator cancels an unpaid order; the lot goes back to stock |
-| **Refunded** | Refunded | 🚧 An operator records one refund on a paid or Partially Paid order, for any amount up to what was paid; failing to pay is never Refunded |
+| **Refunded** | Refunded | 🚧 A refund that closes the sale, on a paid or Partially Paid order, for any amount up to what was paid. An overpayment is not this status. Failing to pay is never Refunded |
 
 - **Read, never written** — one ordered rule chain derives it, so it cannot
   contradict the facts; dispatch before payment, cancelling a dispatched
@@ -97,8 +97,18 @@ meaning.
   suspension stays until an operator reinstates
 - 🚧 **A refunded order** — reads Refunded as both the order status and the
   invoice status, however much was paid and wherever the card is; no Pay, no
-  address form and no letter, and the invoice and every receipt already
-  issued stay downloadable
+  address form and no letter; the invoice and every receipt already issued
+  stay downloadable; Order Summary stays the invoice; an inline alert below
+  Order Total shows the amount returned, and opens the reason, note and ❓
+  refund transaction clues the winner can match to their statement
+- 🚧 **An overpaid difference** — the order keeps its status on Winner Order
+  and on My Auctions; Winning Bid, Shipping & Handling and Order Total stay
+  the amount that should have been paid; an inline alert below Order Total
+  shows only the difference, with the same detail dialog
+- ❓ **Refund transaction clues** — what the dialog shows so the winner
+  recognises the refund (channel only, masked card or bank clue, or
+  something else); full proof and provider reference stay with the operator;
+  Product confirms
 
 ## Order Setup
 
@@ -216,7 +226,11 @@ doing, under Edge Cases.
 
 Every letter identifies the lot, goes to the winner's registered address and
 opens that lot's order, sign-in first when signed out; the lot image and
-title open it too.
+title open it too. The schedule below matches
+`grade10-site/auction/notifications-order` and the archived email-kinds
+timeline: setup at close / +24h / +48h, payment reminder at send then day 3
+and day 6, final notice 24 hours before the payment deadline, payment overdue
+at expiry, then shipped, delivered, and order cancelled.
 
 ::image{src="assets/diagrams/auction-order-mail.svg" alt="The letters a winner gets, on two clocks. In the 48-hour setup window: auction won at the close, a setup reminder at 24 hours, and setup overdue at 48 hours unless the winner confirms the address, billing and method, which parks them. In the 7-day payment window an operator's invoice opens: the payment reminder at send and again on days 3 and 6, a final notice 24 hours before the deadline, and payment overdue at the deadline unless the winner pays, which cancels every outstanding reminder. Once the money is in: payment received carrying the receipt PDF, then shipped and delivered. Order cancelled reaches the winner whenever an operator cancels an unpaid order, on neither clock"}
 
@@ -231,8 +245,8 @@ title open it too.
 | 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner, and `Pay by …` on the deadline that runs again |
 | Payment received | Card confirmed, proof confirmed, or a manual settlement | Amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
 | Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking |
-| 🚧 Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
-| 🚧 Order cancelled | An operator cancels | That the order was cancelled and when; no reason and no word on payment; Contact Us first, View order second |
+| Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
+| Order cancelled | An operator cancels | That the order was cancelled and when; no reason and no word on payment; Contact Us first, View order second |
 
 - **Reminders stop at payment** — every outstanding reminder is cancelled the
   moment payment is received
@@ -362,17 +376,19 @@ a second payment provider, and changes to the bid-time rules.
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice is `expired` and the order reads Payment Overdue; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
 | Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is a recorded refund only. A missed setup deadline reads Setup Overdue; a missed payment deadline reads Payment Overdue — neither is Cancelled on its own. | Product |
 | A cancelled order | 🚧 In flight | `Cancelled on {date}` with the lot and the winning bid, and Contact Us as the only action; no reason is shown, as the cancellation letter gives none, and a suspension stays. Chosen over showing the winner the operator's reason category. | Product and Operations (@jeffffej0909) |
-| A refunded order | 🚧 In flight | Refunded as both the order and the invoice status, paid in full or in part and wherever the card is; no stepper, Pay or address form, and the invoice and every receipt already issued stay downloadable. Chosen over hiding them the way Cancelled does, which leaves the winner no record of what they paid. | Product (@jeffffej0909) |
+| A refunded order | 🚧 In flight | Refunded beside the title, paid in full or in part and wherever the card is; no stepper, Pay or address form; the invoice and receipts stay; Order Summary stays the invoice; an inline alert below Order Total shows the amount returned and opens the reason, note and ❓ refund transaction clues. Proof and provider reference stay with the operator. | Product (@jeffffej0909, @tangconst) |
+| An overpaid difference | 🚧 In flight | The order keeps its status. Winning Bid, Shipping & Handling and Order Total stay the amount that should have been paid. An inline alert below Order Total shows only the difference, with the same detail dialog. My Auctions does not change. Chosen over ending every refund, including an overpayment, as Refunded. | Product (@tangconst) |
+| Refund transaction clues | ❓ Open | What the winner sees so they can recognise the refund on their statement — channel only (Card / Bank transfer), a masked card or bank clue, or something else. Full proof, provider reference and audit number stay with the operator. | Product (@tangconst) |
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not a running count, so the IDs do not reveal how much Grade10 sells; operators keep a separate gapless audit number the winner never sees — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
 | Setup mail | 🚧 In flight | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
-| Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. `add-winner-bank-transfer` and `add-winner-setup-overdue-mail` carry this one schedule between them, so no separate invoice-sent or invoice-expired letter survives either delta. | Product (@tangconst) |
+| Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. Durable `notifications-order` holds that schedule; `add-winner-bank-transfer` adds proof holds and the receipt PDF. | Product (@tangconst) |
 | Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking. | Product (@tangconst) |
-| Reissue letter | 🚧 In flight | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
-| Delivered content | 🚧 In flight | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
-| Cancelled content | 🚧 In flight | Cancelled time only; the operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
+| Reissue letter | Decided | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
+| Delivered content | Decided | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
+| Cancelled content | Decided | Cancelled time only; the operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
 | Cancelling a paid order | ❓ Open | Whether an operator can cancel an order already paid, and whether the cancelled letter then names a refund; until settled the letter says nothing about payment. | Product (@jeffffej0909) |
 | A separate orders page | Decided | Won lots are followed on My Auction Orders — needs action first, then newest close — and each Won row opens the order. | Product |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
