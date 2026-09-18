@@ -77,7 +77,7 @@ export const AccountMenu: Story = {
     expect(
       body.getByRole("menuitem", { name: "Sign out" }),
     ).toBeInTheDocument();
-    expect(body.queryByRole("menuitem", { name: "Orders" })).toBeNull();
+    expect(body.queryByRole("menuitem", { name: "My Orders" })).toBeNull();
     await userEvent.click(body.getByRole("menuitem", { name: "My Auctions" }));
     expect(args.onMyAuctions).toHaveBeenCalled();
     // Leave the menu open — this story is the layout SoT for the open menu.

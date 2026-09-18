@@ -31,6 +31,7 @@ type SiteHeaderCopy = NavCopy & {
   /** Heading above the signed-in account menu items. */
   accountMenuLabel: string;
   profile: string;
+  myOrders: string;
   myAuctions: string;
   /** Optional authenticated orders destination label. */
   orders?: string;
@@ -60,6 +61,7 @@ type SiteHeaderProps = {
   cartItemCount?: number;
   onSignIn: () => void;
   onProfile: () => void;
+  onMyOrders?: () => void;
   onMyAuctions: () => void;
   /** Opens the consumer-owned authenticated orders destination. */
   onOrders?: () => void;
@@ -76,14 +78,16 @@ type SiteHeaderProps = {
  * Grade10 site header: design-system `Nav` plus session-aware account entry.
  *
  * Signed out shows a primary Sign In button. Signed in shows the account icon
- * and a menu of Profile, My Auctions, optional Orders, then Sign out
- * (destructive, separated).
- * Cart and search stay optional via handlers — auction-first launches omit
- * them. When cart is present, `SiteHeader` owns the active-line count badge on
- * the cart icon (`cartItemCount`), matching the cart drawer title. On compact
- * viewports, `Nav` moves primary nav, utilities, search, and language into the
- * left menu drawer; Account / Sign In and Cart stay in the bar. KYC is not in
- * this menu.
+ * and a menu of Profile, My Auctions, then Sign out (destructive, separated).
+ * Cart, search, My Orders, and Orders stay optional via handlers —
+ * auction-first launches omit them, My Orders joins between Profile and My
+ * Auctions once its handler is supplied, and Orders joins after My Auctions
+ * once both its copy and handler are supplied. When cart is present,
+ * `SiteHeader` owns the active-line count badge on the cart icon
+ * (`cartItemCount`), matching the cart drawer title. On compact viewports,
+ * `Nav` moves primary nav, utilities, search, and language into the left menu
+ * drawer; Account / Sign In and Cart stay in the bar. KYC is not in this
+ * menu.
  *
  * All destinations and copy are application-owned. The component owns only the
  * open/close of the account menu and the cart count badge.
@@ -104,14 +108,22 @@ function SiteHeader({
   cartItemCount,
   onSignIn,
   onProfile,
+  onMyOrders,
   onMyAuctions,
   onOrders,
   onSignOut,
   accountMenuDefaultOpen,
   className,
 }: SiteHeaderProps) {
-  const { accountMenuLabel, profile, myAuctions, orders, signOut, ...navCopy } =
-    copy;
+  const {
+    accountMenuLabel,
+    profile,
+    myOrders,
+    myAuctions,
+    orders,
+    signOut,
+    ...navCopy
+  } = copy;
 
   const accountSlot =
     session === "signed-in" ? (
@@ -132,6 +144,11 @@ function SiteHeader({
           <DropdownMenuGroup>
             <DropdownMenuLabel>{accountMenuLabel}</DropdownMenuLabel>
             <DropdownMenuItem onClick={onProfile}>{profile}</DropdownMenuItem>
+            {onMyOrders != null ? (
+              <DropdownMenuItem onClick={onMyOrders}>
+                {myOrders}
+              </DropdownMenuItem>
+            ) : null}
             <DropdownMenuItem onClick={onMyAuctions}>
               {myAuctions}
             </DropdownMenuItem>

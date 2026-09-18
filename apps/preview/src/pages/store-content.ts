@@ -37,6 +37,7 @@ const STORE_SITE_HEADER = {
     language: "Language",
     accountMenuLabel: "Account",
     profile: "Profile",
+    myOrders: "My Orders",
     myAuctions: "My Auctions",
     signOut: "Sign out",
   },
