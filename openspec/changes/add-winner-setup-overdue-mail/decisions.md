@@ -32,7 +32,7 @@
 | Q7 | Billing in mail before the page? | Keep all three fields on won and reminder; the companion billing change supplies the page before archive, and overdue stays generic (recommended) | Dropping billing from mail until Winner Order catches up |
 | Q8 | Penalties copy on setup-overdue? | Name penalties or extra charges on **both** overdue letters; durable meaning stays ❓ | Penalties only on payment-overdue |
 
-## Raised
+## Raised and reconciled
 
 | Capability | Raised | Landed |
 | --- | --- | --- |

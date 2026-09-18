@@ -32,12 +32,16 @@ Rounds held on 2026-09-17 with @jeffffej0909.
 | Q7 | Does the billing address touch card payment? | No — it exists for the invoice and receipt only (recommended) | Passing it to the card provider to pre-fill and check the card |
 | Q8 | How does this sit beside `add-my-auction-orders`, which says the form offers no billing address? | A new change that reverses that line, BREAKING against it, and archives after it and `add-winner-bank-transfer` (recommended) | Folding it into `add-my-auction-orders`, which is already being built |
 | Q9 | What does the Bill To block carry? | The address form's fields: name, company name, phone and address (recommended) | Adding a tax ID or VAT number |
+| Q10 | Does a one-time billing address survive leaving and returning to Winner Order before setup is confirmed? | Yes. The in-progress setup draft keeps it for the current session and reloads it when the winner returns; confirmation is the lock boundary. | Clearing it on navigation, or saving it as a confirmed address before setup submission |
+| Q11 | For a Hong Kong billing address, is postal code required, omitted, or handled with another validation rule? | The consuming app applies its existing Hong Kong address rule; this change does not invent a postal-code requirement. | Requiring a postal code in the shared address primitive, or accepting any value without the app's validation |
+| Q12 | When an operator adds a previously missing billing address before send, what absent-value representation does the reasoned edit log show as the old value? | The old value is recorded as `none`, with the operator's reason and the new billing snapshot. | Omitting the old value, or serialising an absent value as an empty object |
+| Q13 | Is postal-code validation for billing addresses supplied by the consuming application, or does the shared address-form contract impose it? | The consuming application supplies the rule; the shared component carries the field without imposing a postal-code format. | A shared postal-code format that would constrain other storefronts |
 
-## Raised
+## Raised and reconciled
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| grade10-site/auction/winner-order | Does a one-time billing address survive leaving and returning to Winner Order before setup is confirmed? | |
-| grade10-site/auction/winner-order | For a Hong Kong billing address, is postal code required, omitted, or handled with another validation rule? | |
-| grade10-admin/auction/post-sale | When an operator adds a previously missing billing address before send, what absent-value representation does the reasoned edit log show as the old value? | |
-| shared/ui/auction-order | Is postal-code validation for billing addresses supplied by the consuming application, or does the shared address-form contract impose it? | |
+| grade10-site/auction/winner-order | Does a one-time billing address survive leaving and returning to Winner Order before setup is confirmed? | Q10 |
+| grade10-site/auction/winner-order | For a Hong Kong billing address, is postal code required, omitted, or handled with another validation rule? | Q11 |
+| grade10-admin/auction/post-sale | When an operator adds a previously missing billing address before send, what absent-value representation does the reasoned edit log show as the old value? | Q12 |
+| shared/ui/auction-order | Is postal-code validation for billing addresses supplied by the consuming application, or does the shared address-form contract impose it? | Q13 |
