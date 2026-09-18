@@ -37,7 +37,7 @@ Cron is every five minutes; a scheduled letter goes out on the next pass after
 | Kind | When it fires | Audience | Status | email:dev template | Preview | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 | `auction_won` | At close (order issued) | Winner | Sends | `auction/order/auction-won` | [preview](https://email.grade10-stg.com/preview/auction/order/auction-won) | Asks for order setup; formerly also known as `listing_winner` |
-| `setup_reminder` | Close + 24h | Winner (setup incomplete) | Sends | `auction/order/setup-reminder` | [preview](https://email.grade10-stg.com/preview/auction/order/setup-reminder) | Formerly address reminder; parks once setup is confirmed. No second (72h) reminder |
+| `setup_reminder` | Close + 24h | Winner (setup incomplete) | Sends | `auction/order/setup-reminder` | [preview](https://email.grade10-stg.com/preview/auction/order/setup-reminder) | Formerly address reminder; parks once setup is confirmed |
 | `setup_overdue` | Close + 48h (setup deadline) | Winner (setup incomplete) | Sends | `auction/order/setup-overdue` | [preview](https://email.grade10-stg.com/preview/auction/order/setup-overdue) | Self-service setup closed; Contact Us primary |
 | `invoice_sent` | Invoice send or reissue | Winner | Sends | `auction/order/payment-reminder` | [preview](https://email.grade10-stg.com/preview/auction/order/payment-reminder) | Letter is `payment-reminder` (urgency `first`); reissue uses the new invoice id |
 | `payment_reminder_day_3` | Invoice sent + 3 days | Winner (unpaid) | Sends | `auction/order/payment-reminder-day-three` | [preview](https://email.grade10-stg.com/preview/auction/order/payment-reminder-day-three) | |
@@ -60,7 +60,7 @@ From lot close / order issued, while setup is incomplete:
 2. **`setup_reminder`** → `auction/order/setup-reminder` (+24h)
 3. **`setup_overdue`** → `auction/order/setup-overdue` (+48h deadline)
 
-Setup mail parks once setup is confirmed. There is no second setup reminder.
+Setup mail parks once setup is confirmed.
 
 ## Payment Window
 
