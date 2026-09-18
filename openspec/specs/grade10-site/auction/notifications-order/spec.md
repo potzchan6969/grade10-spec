@@ -8,10 +8,13 @@ lives.
 ## Feature set
 
 - Post-close letters
-  - Ten events: one letter per thing that happens to an auction order, from winning it to receiving it
+  - Setup series: auction-won asks for order setup; one setup reminder at 24h; setup overdue at the 48-hour setup deadline while setup is incomplete
+  - Payment path: payment reminder on invoice send or reissue; day 3 and day 6 while unpaid; final notice 24 hours before the payment deadline; payment overdue at invoice `expired`
+  - Reissue is the payment reminder: an operator reissue sends the payment reminder for the new invoice; there is no separate reissued letter
+  - Fulfilment and cancel: shipped, delivered, and order cancelled
   - Per order, never per winner: a winner of three lots is told about three orders separately
 - Reminder cadence
-  - Three reminders: day 3, day 6 and a final notice on day 7, measured from the current invoice issue
+  - Day 3, day 6, and final notice at payment deadline − 24h, measured from the current invoice
   - Cancellation on payment: a winner who has paid never hears about a deadline again
 - Delivery discipline
   - Idempotency: a retried webhook or a replayed event sends nothing twice
@@ -23,35 +26,39 @@ lives.
 
 Grade10 SHALL send a winner these letters. Each SHALL be sent to the
 collector's registered account email and SHALL follow the letter shape
-`grade10-site/auction/notifications` defines.
+`grade10-site/auction/notifications` defines. Preview links open the staging
+template at `https://email.grade10-stg.com/preview/…` (same path as
+`apps/emails/emails/`).
 
-| Letter | Trigger | Channel |
-| --- | --- | --- |
-| Auction won | The lot closes and the winner is determined. Asks for a delivery address and names the address deadline | Email |
-| Invoice sent | An operator sends the invoice. Names the invoice total and the payment deadline | Email |
-| Payment reminder | Day 3 after the current invoice is issued while invoice status is `pending` | Email |
-| Payment reminder | Day 6 after the current invoice is issued while invoice status is `pending` | Email |
-| Final notice | On day 7, immediately before the payment-deadline expiry transition, while invoice status is `pending` | Email |
-| Invoice expired | Grade10 sets the invoice to `expired` at its payment deadline | Email |
-| Invoice reissued | An operator reissues an invoice, on a re-quote or after expiry | Email |
-| Payment received | Payment is confirmed, or an operator commits a manual settlement | Email |
-| Shipped | Fulfilment status becomes `fulfilled` and a tracking number is attached. Primary CTA is the carrier track-and-trace link; secondary CTA opens Winner Order | Email |
-| Delivered | The carrier confirms delivery | Email |
-| Order cancelled | An operator cancels the order | Email |
+| Letter | Trigger | Channel | Preview |
+| --- | --- | --- | --- |
+| Auction won | The lot closes and the winner is determined. Asks for order setup and names the setup deadline | Email | [auction-won.tsx](https://email.grade10-stg.com/preview/auction/order/auction-won) |
+| Setup reminder | 24 hours after lot close while setup is incomplete | Email | [setup-reminder.tsx](https://email.grade10-stg.com/preview/auction/order/setup-reminder) |
+| Setup overdue | The setup deadline (48 hours after lot close) passes while setup is incomplete. Self-service setup is closed; Contact Us is primary | Email | [setup-overdue.tsx](https://email.grade10-stg.com/preview/auction/order/setup-overdue) |
+| Payment reminder | An operator sends or reissues the invoice. Names the invoice total and the payment deadline | Email | [payment-reminder.tsx](https://email.grade10-stg.com/preview/auction/order/payment-reminder) |
+| Payment reminder | Day 3 after the current invoice is issued while invoice status is `pending` | Email | [payment-reminder-day-three.tsx](https://email.grade10-stg.com/preview/auction/order/payment-reminder-day-three) |
+| Payment reminder | Day 6 after the current invoice is issued while invoice status is `pending` | Email | [payment-reminder-day-six.tsx](https://email.grade10-stg.com/preview/auction/order/payment-reminder-day-six) |
+| Final notice | 24 hours before the payment deadline, while invoice status is `pending` | Email | [payment-reminder-final.tsx](https://email.grade10-stg.com/preview/auction/order/payment-reminder-final) |
+| Payment overdue | Grade10 sets the invoice to `expired` at its payment deadline | Email | [payment-overdue.tsx](https://email.grade10-stg.com/preview/auction/order/payment-overdue) |
+| Payment received | Payment is confirmed, or an operator commits a manual settlement | Email | [payment-received.tsx](https://email.grade10-stg.com/preview/auction/order/payment-received) |
+| Shipped | Fulfilment status becomes `fulfilled` and a tracking number is attached. Primary CTA is the carrier track-and-trace link; secondary CTA opens Winner Order | Email | [order-shipped.tsx](https://email.grade10-stg.com/preview/auction/order/order-shipped) |
+| Delivered | The carrier confirms delivery | Email | [order-delivered.tsx](https://email.grade10-stg.com/preview/auction/order/order-delivered) |
+| Order cancelled | An operator cancels the order | Email | [order-cancelled.tsx](https://email.grade10-stg.com/preview/auction/order/order-cancelled) |
 
 An invoice is issued at the moment an operator sends it, so reminders
-measured from the current invoice's issue are measured from its send. The day 7
-final notice is due immediately before the deadline transition; Grade10 SHALL
+measured from the current invoice's issue are measured from its send. The
+final notice SHALL fire 24 hours before the payment deadline. Grade10 SHALL
 queue it before writing `expired`, so a final notice is never sent for an
-already-expired invoice. Re-quoting or reissuing parks reminders for the
-superseded invoice and starts the three-reminder sequence for the new current
-invoice.
+already-expired invoice. Reissuing parks reminders for the replaced invoice,
+sends the payment reminder for the new invoice, and starts the reminder
+sequence for that invoice. Grade10 SHALL NOT send a separate invoice-reissued
+letter.
 
 Unless a letter names another primary action, every letter's primary listing
 action SHALL open that lot's Winner Order. On every order letter, the lot
 image and lot title SHALL open that lot's Winner Order. When the collector is
 signed out, Grade10's existing sign-in flow SHALL run first, then Winner
-Order. The invoice-sent and payment-received letters SHALL
+Order. The payment-reminder and payment-received letters SHALL
 NOT attach a PDF; the invoice and receipt PDFs remain on Winner Order. The
 shipped letter SHALL name the confirmed delivery address, the carrier, and
 the tracking number with the shipped time, SHALL use the carrier
@@ -63,9 +70,9 @@ secondary action on the same row.
 
 - **WHEN** a lot closes and a winner is determined
 - **THEN** Grade10 sends that winner the auction-won letter by email
-- **AND** the email identifies the lot and asks the winner to confirm a
-  delivery address
-- **AND** it names the address confirm deadline
+- **AND** the email identifies the lot and asks the winner to complete
+  order setup (delivery address, payment method, and billing address)
+- **AND** it names the setup deadline
 - **AND** it names no amount owed
 - **AND** its primary action opens that lot's Winner Order
 - **AND** the lot image and lot title open that lot's Winner Order
@@ -76,8 +83,31 @@ secondary action on the same row.
 - **GIVEN** an auction order whose invoice is `pending`
 - **WHEN** its payment deadline passes and Grade10 sets the invoice to
   `expired`
-- **THEN** Grade10 sends the winner the invoice-expired letter
-- **AND** it names the outstanding amount and how to resolve it
+- **THEN** Grade10 sends the winner the payment-overdue letter
+- **AND** it names the outstanding amount
+- **AND** it says self-service payment is no longer available
+- **AND** it names any applicable penalties or extra charges
+- **AND** its primary action is Contact Us
+- **AND** its secondary action is View order
+- **AND** it promises no automatic cancellation
+
+#### Scenario: order-mail-SC-40 - Reissuing an invoice sends the payment reminder
+**Serves:** Post-close letters - reissuing an invoice sends the payment reminder
+
+- **GIVEN** an auction order whose invoice an operator reissues with a new
+  total and a new payment deadline
+- **WHEN** the reissue is committed
+- **THEN** Grade10 sends the winner the payment reminder for that new invoice
+- **AND** Grade10 sends no separate invoice-reissued letter
+
+#### Scenario: order-mail-SC-43 - A repeated reissue confirmation sends one payment reminder
+**Serves:** Post-close letters - a repeated reissue confirmation sends one payment reminder
+
+- **GIVEN** an auction order whose invoice was reissued and whose payment
+  reminder for that reissue was sent
+- **WHEN** the same reissue confirmation is delivered again
+- **THEN** Grade10 sends no second payment reminder for that reissue
+- **AND** it sends no invoice-reissued letter
 
 #### Scenario: order-mail-SC-03 - A manual settlement produces the payment-received letter
 **Serves:** Post-close letters - a manual settlement produces the payment-received letter
@@ -109,7 +139,7 @@ secondary action on the same row.
 - **GIVEN** an auction order in Preparing Invoice
 - **WHEN** an operator sends its invoice with an invoice total of 312000 minor
   units in HKD
-- **THEN** Grade10 sends the winner the invoice-sent letter by email
+- **THEN** Grade10 sends the winner the payment-reminder letter by email
 - **AND** it names 312000 minor units in HKD as the invoice total and the
   payment deadline in the winner's own timezone
 - **AND** its primary action opens that lot's Winner Order so the winner can
@@ -128,18 +158,65 @@ secondary action on the same row.
 - **AND** its primary action opens that lot's Winner Order for the receipt
 - **AND** the letter carries no receipt PDF attachment
 
+### Requirement: Setup reminder and setup overdue follow the setup window
+
+Grade10 SHALL remind a winner whose setup is incomplete, and SHALL tell them
+when the setup deadline has passed.
+
+**Setup reminder** — 24 hours after lot close, while setup is incomplete,
+Grade10 SHALL send the setup-reminder letter. This letter is the former
+address reminder. Grade10 SHALL NOT send a second setup reminder at 72 hours
+or at any other time after the first.
+
+**Setup overdue** — When the setup deadline (48 hours after lot close) passes
+while setup is incomplete, Grade10 SHALL send the setup-overdue letter. Its
+primary action SHALL be Contact Us and its secondary action SHALL be View
+order. It SHALL explain that self-service setup is closed and manual review is
+required, and SHALL NOT cancel the order by itself.
+
+**Park on confirm** — Setup reminder and setup overdue SHALL park once the
+winner confirms setup.
+
+#### Scenario: order-mail-SC-50 - Setup reminder fires while setup is incomplete
+**Serves:** Post-close letters - setup reminder fires while setup is incomplete
+
+- **GIVEN** an auction order whose winner has not confirmed setup
+- **WHEN** 24 hours after lot close arrive
+- **THEN** Grade10 sends the winner the setup-reminder letter
+
+#### Scenario: order-mail-SC-54 - No second setup reminder at 72 hours
+**Serves:** Post-close letters - setup reminder fires while setup is incomplete
+
+- **GIVEN** an auction order whose winner has not confirmed setup
+- **AND** the setup-reminder letter at 24 hours has been sent
+- **WHEN** 72 hours after lot close arrive
+- **THEN** Grade10 sends no second setup-reminder letter
+
+#### Scenario: order-mail-SC-51 - Setup overdue fires at the setup deadline
+**Serves:** Post-close letters - setup overdue fires at the setup deadline
+
+- **GIVEN** an auction order whose winner has not confirmed setup
+- **WHEN** the setup deadline 48 hours after lot close passes
+- **THEN** Grade10 sends the winner the setup-overdue letter
+- **AND** the letter's primary action is Contact Us
+- **AND** its secondary action is View order
+- **AND** it explains that self-service setup is closed and manual review is
+  required
+- **AND** it promises no automatic cancellation
+
 ### Requirement: Reminders follow the current invoice deadline
 
-Grade10 SHALL send the day 3, day 6 and day 7 reminders measured from the
-current invoice's issue time, and SHALL send each only while the invoice status
-is `pending`.
+Grade10 SHALL send the day 3 and day 6 reminders and the final notice measured
+from the current invoice's issue time, and SHALL send each only while the
+invoice status is `pending`. The final notice SHALL fire 24 hours before the
+payment deadline.
 
 Grade10 SHALL cancel every outstanding reminder the moment payment is
 received. A winner who pays on day 2 SHALL NOT receive the day 3 reminder.
 
 Where an operator reissues an invoice, Grade10 SHALL schedule reminders for
 the reissued invoice's issue time and SHALL not send reminders owed only by the
-superseded invoice.
+replaced invoice.
 
 #### Scenario: order-mail-SC-04 - Paying early cancels the reminders
 **Serves:** Reminder cadence - paying early cancels the reminders
@@ -148,7 +225,7 @@ superseded invoice.
   invoice was issued
 - **WHEN** day 3 arrives
 - **THEN** Grade10 sends no payment reminder for that invoice
-- **AND** sends none on day 6 or day 7 either
+- **AND** sends none on day 6 or the final notice either
 
 #### Scenario: order-mail-SC-05 - Reminders follow a reissued invoice
 **Serves:** Reminder cadence - reminders follow a reissued invoice
@@ -158,7 +235,15 @@ superseded invoice.
 - **WHEN** a reminder is due for the reissued invoice while it remains
   `pending`
 - **THEN** Grade10 sends the reminder for the reissued invoice
-- **AND** sends no reminder owed only by the superseded invoice
+- **AND** sends no reminder owed only by the replaced invoice
+
+#### Scenario: order-mail-SC-52 - Final notice fires 24 hours before the payment deadline
+**Serves:** Reminder cadence - final notice fires 24 hours before the payment deadline
+
+- **GIVEN** an auction order whose invoice is `pending` with a payment deadline
+- **WHEN** 24 hours before that deadline arrive
+- **THEN** Grade10 sends the winner the final-notice letter
+- **AND** it does not wait until the deadline transition itself
 
 ### Requirement: Letters are idempotent and per order
 

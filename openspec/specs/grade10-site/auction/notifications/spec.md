@@ -124,12 +124,12 @@ Grade10 SHALL send each progress message once per listing per collector
 to everyone enrolled for it. The closing warning SHALL use the listing's
 **scheduled** close, not its current effective close.
 
-| Message | When | Recipients |
-| --- | --- | --- |
-| Bidding opens in 24 hours | 24 hours before the listing's scheduled start | Watchers |
-| Bidding has opened | When the listing's bidding starts | Watchers |
-| Bidding closes in 24 hours | 24 hours before the listing's scheduled close | Watchers and bidders |
-| Extended bidding has started | When the listing enters its extension window | Watchers and bidders |
+| Message | When | Recipients | Preview |
+| --- | --- | --- | --- |
+| Bidding opens in 24 hours | 24 hours before the listing's scheduled start | Watchers | [bidding-opens-in-24h.tsx](https://email.grade10-stg.com/preview/auction/progress/bidding-opens-in-24h) |
+| Bidding has opened | When the listing's bidding starts | Watchers | [bidding-has-opened.tsx](https://email.grade10-stg.com/preview/auction/progress/bidding-has-opened) |
+| Bidding closes in 24 hours | 24 hours before the listing's scheduled close | Watchers and bidders | [bidding-closes-in-24h.tsx](https://email.grade10-stg.com/preview/auction/progress/bidding-closes-in-24h) |
+| Extended bidding has started | When the listing enters its extension window | Watchers and bidders | [extended-bidding.tsx](https://email.grade10-stg.com/preview/auction/progress/extended-bidding) |
 
 Each message SHALL carry the listing's identity and the time it concerns.
 Money and times SHALL follow `money-amounts` and `dates-and-times`.
@@ -229,10 +229,10 @@ messages would go to the same collector for the same accepted bid,
 Grade10 SHALL send the outbid message and SHALL NOT also send the new-bid
 message.
 
-| Message | When | Recipients |
-| --- | --- | --- |
-| A lot you bid on received a new bid | A bid is accepted on that listing | Every enrolled bidder other than the one whose bid it is |
-| You have been outbid | A collector who was leading stops leading | That collector |
+| Message | When | Recipients | Preview |
+| --- | --- | --- | --- |
+| A lot you bid on received a new bid | A bid is accepted on that listing | Every enrolled bidder other than the one whose bid it is | [new-bid.tsx](https://email.grade10-stg.com/preview/auction/activity/new-bid) |
+| You have been outbid | A collector who was leading stops leading | That collector | [outbid.tsx](https://email.grade10-stg.com/preview/auction/activity/outbid) |
 
 An outbid message SHALL carry the listing's current bid after the bid
 that displaced them, and its effective close. When their standing bid
@@ -570,11 +570,11 @@ to everyone enrolled for it when the listing stops taking bids, while email
 alerts are on for that listing and the account-level auction email alerts
 control is on.
 
-| Message | When | Recipients | Campaign |
-| --- | --- | --- | --- |
-| This lot closed — you did not win | The lot closes with a winner who is not this collector | Enrolled bidders other than the winner | `lot_closed_didnt_win` |
-| This lot has ended (watched, sold) | The lot closes with a winner | Enrolled watchers who did not bid on it and are not the winner | `lot_watched_sold` |
-| This lot has ended (watched, no bids) | The lot closes with no bids | Enrolled watchers who did not bid on it | `lot_watched_ended` |
+| Message | When | Recipients | Campaign | Preview |
+| --- | --- | --- | --- | --- |
+| This lot closed — you did not win | The lot closes with a winner who is not this collector | Enrolled bidders other than the winner | `lot_closed_didnt_win` | [lot-closed-didnt-win.tsx](https://email.grade10-stg.com/preview/auction/close/lot-closed-didnt-win) |
+| This lot has ended (watched, sold) | The lot closes with a winner | Enrolled watchers who did not bid on it and are not the winner | `lot_watched_sold` | [lot-watched-sold.tsx](https://email.grade10-stg.com/preview/auction/close/lot-watched-sold) |
+| This lot has ended (watched, no bids) | The lot closes with no bids | Enrolled watchers who did not bid on it | `lot_watched_ended` | [lot-watched-ended.tsx](https://email.grade10-stg.com/preview/auction/close/lot-watched-ended) |
 
 A collector who both watches and bids SHALL receive the bidder close-outcome
 letter for that close and SHALL NOT also receive either watched letter. The

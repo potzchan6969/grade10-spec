@@ -186,8 +186,9 @@ setup reminder and setup-overdue letters.
 
 ## Reconciliation
 
-- Setup reminder at 24h only — folded as `order-mail-SC-50`
-- No second setup reminder at 72h — folded as `order-mail-SC-54`
-- Setup overdue at the setup deadline — folded as `order-mail-SC-51`
-- Auction-won setup bullets — folded as `order-mail-SC-01`
-- Payment-overdue replacement and claim path — folded as `order-mail-SC-02`
+- Setup reminder at 24h, no second at 72h, setup overdue at 48h — durable
+  `order-mail-SC-50`, `order-mail-SC-54`, `order-mail-SC-51`
+- Auction-won setup fields and payment-overdue claim path — durable
+  `order-mail-SC-01`, `order-mail-SC-02` (enriched from this change)
+- Setup letter bullets and generic overdue copy — folded as `order-mail-SC-55`,
+  `order-mail-SC-56`
