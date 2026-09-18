@@ -11,6 +11,9 @@ Owner-only — nobody but the collector sees their record.
 
 ## Feature set
 
+- **After a close**
+  - Payment Verifying: a won lot whose payment proof waits for an operator reads Payment Verifying
+
 - **Watching a listing**
   - Watch and unwatch: lets a collector mark interest before they are ready to
     bid, from wherever the listing is shown.
@@ -320,8 +323,9 @@ or shipment state.
 
 | Collector state | Reached from |
 | --- | --- |
-| Awaiting Address | No invoice has been sent, and the winner has confirmed no delivery address |
+| Awaiting Setup | No invoice has been sent, and the winner has confirmed no delivery address |
 | Preparing Invoice | No invoice has been sent, and the winner has confirmed a delivery address |
+| Payment Verifying | Invoice status is `payment_verifying` |
 | Pending Payment | Invoice status is `pending` or `expired` |
 | Processing | Invoice status is `paid`, and fulfilment status is `unfulfilled` |
 | Shipped | Invoice status is `paid`, fulfilment status is `fulfilled`, and delivery is not confirmed |
@@ -330,8 +334,8 @@ or shipment state.
 | Refunded | Invoice status is `refunded` |
 
 This surface SHALL remain read-only. It SHALL offer no control that records
-payment, requests a wire, records shipment, changes an address, or changes an
-auction order's status.
+payment, uploads payment proof, requests a wire, records shipment, changes an
+address or payment method, or changes an auction order's status.
 
 Every Won listing SHALL offer a clear **View order** (or equivalent) entry that
 opens that lot's Winner Order, including when the derived status is Cancelled
@@ -361,7 +365,7 @@ remove them.
 - **THEN** that listing's state is Processing
 
 #### Scenario: grade10-site-auction-account-record-SC-22 - A payment problem says how to reach Grade10
-**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
 - **GIVEN** a won listing whose invoice status is `expired`
 - **WHEN** the winner opens their Bidding page
@@ -382,7 +386,7 @@ remove them.
 
 - **GIVEN** a won listing in any auction-order status
 - **WHEN** the winner opens their Bidding page
-- **THEN** no control on the surface records payment, requests a wire, records shipment, changes an address, or changes the order status
+- **THEN** no control on the surface records payment, uploads payment proof, requests a wire, records shipment, changes an address or payment method, or changes the order status
 
 #### Scenario: grade10-site-auction-account-record-SC-35 - A cancelled order remains Cancelled
 **Serves:** After a close - a cancelled order remains Cancelled
@@ -399,40 +403,56 @@ remove them.
 - **THEN** that listing's state is Refunded
 
 #### Scenario: grade10-site-auction-account-record-SC-47 - A won lot with no address reads Awaiting Address
-**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
 - **GIVEN** a won listing whose auction order has no sent invoice and no confirmed delivery address
 - **WHEN** the winner opens their Bidding page
-- **THEN** that listing's state is Awaiting Address
+- **THEN** that listing's state is Awaiting Setup
 
 #### Scenario: grade10-site-auction-account-record-SC-48 - A confirmed address with no invoice reads Preparing Invoice
-**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
 - **GIVEN** a won listing whose winner has confirmed a delivery address and whose invoice has not been sent
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Preparing Invoice
 
 #### Scenario: grade10-site-auction-account-record-SC-56 - Every Won standing offers View order
-**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
-- **GIVEN** won listings in Awaiting Address, Pending Payment, Shipped, and Refunded
+- **GIVEN** won listings in Awaiting Setup, Pending Payment, Payment Verifying, Shipped, and Refunded
 - **WHEN** the winner opens My Auctions
 - **THEN** each of those rows offers View order into that lot's Winner Order
 
 #### Scenario: grade10-site-auction-account-record-SC-57 - Didn’t win offers no View order
-**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
+**Serves:** After a close - a lost listing does not open a Winner Order
 
 - **GIVEN** a listing whose standing is Didn’t win
 - **WHEN** the winner opens My Auctions
 - **THEN** that row offers no View order entry to Winner Order
 
 #### Scenario: grade10-site-auction-account-record-SC-58 - A Won row carries no secondary helper lines
-**Serves:** grade10-site-auction-account-record-US-08 - Winner opens settlement from My Auctions
+**Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
-- **GIVEN** a won listing in Awaiting Address and a won listing whose invoice is `expired`
+- **GIVEN** a won listing in Awaiting Setup and a won listing whose invoice is `expired`
 - **WHEN** the winner opens My Auctions
 - **THEN** neither row shows secondary helper detail under its standing
 - **AND** both rows still show their standing and View order
+
+#### Scenario: grade10-site-auction-account-record-SC-60 - Proof waiting for an operator reads Payment Verifying
+**Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
+
+- **GIVEN** a won listing whose invoice status is `payment_verifying`
+- **WHEN** the winner opens their Bidding page
+- **THEN** that listing's state is Payment Verifying
+- **AND** the row offers View order and no upload control
+
+#### Scenario: grade10-site-auction-account-record-SC-61 - The row follows the proof check
+**Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
+
+- **GIVEN** one won listing whose proof an operator returned, and one whose proof an operator confirmed, neither shipped
+- **WHEN** the winner opens their Bidding page
+- **THEN** the first listing's state is Pending Payment
+- **AND** the second listing's state is Processing
 
 ### Requirement: A losing bidder is told what happened to their card hold
 

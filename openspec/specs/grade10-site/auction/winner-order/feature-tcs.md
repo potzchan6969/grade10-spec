@@ -577,7 +577,7 @@ the current currency minimum,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-09
+* **Trace:** winner-order-US-12
 
 **Pre-conditions:**
 An authenticated winner account with exactly five saved shipping addresses, viewing <the winner's auction order url> before the address deadline.
@@ -605,7 +605,7 @@ An authenticated winner account with exactly five saved shipping addresses, view
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-09
+* **Trace:** winner-order-US-12
 
 **Pre-conditions:**
 An authenticated winner account with exactly five saved shipping addresses, viewing <the winner's auction order url> before the address deadline.
@@ -642,7 +642,7 @@ An authenticated winner account with exactly five saved shipping addresses, view
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-09
+* **Trace:** winner-order-US-12
 
 **Pre-conditions:**
 An authenticated winner account with exactly five saved shipping addresses, viewing <the winner's auction order url> before the address deadline.
@@ -677,7 +677,7 @@ An authenticated winner account with exactly five saved shipping addresses, view
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-09
+* **Trace:** winner-order-US-12
 
 **Pre-conditions:**
 An authenticated winner account with exactly five saved shipping addresses, viewing <the winner's auction order url> before the address deadline.
@@ -712,7 +712,7 @@ An authenticated winner account with exactly five saved shipping addresses, view
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-09
+* **Trace:** winner-order-US-12
 
 **Pre-conditions:**
 An authenticated winner account with exactly four saved shipping addresses, viewing <the winner's auction order url> before the address deadline.
@@ -748,7 +748,7 @@ An authenticated winner account with exactly four saved shipping addresses, view
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-09
+* **Trace:** winner-order-US-12
 
 **Pre-conditions:**
 An authenticated winner account with exactly five saved shipping addresses, including <a saved address named "Home">.
@@ -778,7 +778,7 @@ An authenticated winner account with exactly five saved shipping addresses, incl
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-09
+* **Trace:** winner-order-US-12
 
 **Pre-conditions:**
 An authenticated winner account with exactly five saved shipping addresses, including <a saved address named "Home">.
@@ -813,7 +813,7 @@ An authenticated winner account with exactly five saved shipping addresses, incl
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-09
+* **Trace:** winner-order-US-12
 
 **Pre-conditions:**
 An authenticated winner account with six saved shipping addresses, held from before the cap took effect, viewing <the winner's auction order url> before the address deadline.
