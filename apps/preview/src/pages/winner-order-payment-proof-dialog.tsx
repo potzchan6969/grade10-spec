@@ -428,12 +428,9 @@ function WinnerOrderPaymentProofDialog({
                 value={draft.notes}
               />
               <HStack className="w-full" gap="xs" vAlign="start">
-                <Warning
-                  aria-hidden
-                  className="mt-0.5 shrink-0 text-warning"
-                  size={16}
-                  weight="fill"
-                />
+                <span className="mt-0.5 shrink-0 text-warning">
+                  <Warning aria-hidden size={16} weight="fill" />
+                </span>
                 <Text className="text-secondary-foreground" size="sm">
                   {PROOF_CONFIRM_MICROCOPY}
                 </Text>
@@ -515,22 +512,24 @@ function CopyableDetailRow({
           variant="ghost"
         >
           <span className="relative inline-flex size-3 items-center justify-center">
-            <Copy
-              aria-hidden
+            <span
               className={
                 copied
                   ? "absolute size-3 scale-75 opacity-0 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
                   : "absolute size-3 scale-100 opacity-100 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
               }
-            />
-            <Check
-              aria-hidden
+            >
+              <Copy aria-hidden size={12} />
+            </span>
+            <span
               className={
                 copied
                   ? "absolute size-3 scale-100 opacity-100 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
                   : "absolute size-3 scale-75 opacity-0 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
               }
-            />
+            >
+              <Check aria-hidden size={12} />
+            </span>
           </span>
         </IconButton>
       </div>
