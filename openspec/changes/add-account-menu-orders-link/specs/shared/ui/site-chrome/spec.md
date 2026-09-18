@@ -1,11 +1,12 @@
 ## Feature set
 
 - Header controls
-  - Handler-gated: search, account, and cart render only when a handler is
-    supplied
+  - Handler-gated: search, account, cart, and My Orders render only when a
+    handler is supplied
   - No wishlist: the header does not offer a wishlist control
-  - Account menu: Sign In when signed out; Profile, My Orders, My Auctions,
-    and Sign out when signed in
+  - Account menu: Sign In when signed out; signed in, Profile, My Auctions,
+    and Sign out, plus My Orders between Profile and My Auctions when its
+    handler is supplied
   - Compact menu: left drawer for navigation and utilities, with language in
     a nested drawer
   - Wide layout: primary navigation and language stay in the bar
@@ -33,12 +34,14 @@ primary Sign In button (not the account icon) and SHALL invoke the supplied
 sign-in handler when that button is activated.
 
 **Signed in** - When `session` is `"signed-in"`, `SiteHeader` SHALL render the
-account icon and SHALL open a menu of Profile, My Orders, My Auctions, and
-Sign out. The menu SHALL NOT include KYC. Activating each item SHALL invoke
-the matching supplied handler.
+account icon and SHALL open a menu of Profile, My Auctions, and Sign out. The
+menu SHALL NOT include KYC. Activating each item SHALL invoke the matching
+supplied handler.
 
-**Cart and search** - Cart and search SHALL remain absent unless the
-application supplies their handlers.
+**Cart, search, and My Orders** - Cart, search, and My Orders SHALL remain
+absent unless the application supplies their handlers. When the application
+supplies a My Orders handler, My Orders SHALL join the menu between Profile
+and My Auctions, and activating it SHALL invoke that handler.
 
 #### Scenario: shared-ui-site-chrome-SC-15 - An application imports SiteHeader
 **Serves:** Chrome exports - an application imports SiteHeader
@@ -59,7 +62,7 @@ application supplies their handlers.
 #### Scenario: shared-ui-site-chrome-SC-17 - Signed in shows the account menu
 **Serves:** Chrome exports - signed in shows the account menu
 
-- **GIVEN** `session` is `"signed-in"`
+- **GIVEN** `session` is `"signed-in"` and a My Orders handler is supplied
 - **WHEN** the collector activates the account control
 - **THEN** a menu offers Profile, My Orders, My Auctions, and Sign out
 - **AND** the menu does not offer KYC
@@ -70,3 +73,11 @@ application supplies their handlers.
 - **GIVEN** `SiteHeader` with no cart handler
 - **WHEN** it renders
 - **THEN** no cart control appears, and no space is reserved for one
+
+#### Scenario: shared-ui-site-chrome-SC-29 - Signed in with no My Orders handler
+**Serves:** Chrome exports - signed in shows the account menu
+
+- **GIVEN** `session` is `"signed-in"` and no My Orders handler is supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu offers Profile, My Auctions, and Sign out
+- **AND** the menu does not offer My Orders

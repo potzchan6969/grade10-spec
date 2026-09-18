@@ -27,8 +27,9 @@ session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu of Profile, My Auctions, and Sign out when signed in.
 KYC stays out of the menu.
 
-🚧 **My Orders** joins the menu between Profile and My Auctions, opening the
-Store order history surface.
+🚧 **My Orders** joins the menu between Profile and My Auctions once Store
+answers, opening the Store order history surface. Until Store answers, the
+menu omits it.
 
 **Compact menu** — below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
