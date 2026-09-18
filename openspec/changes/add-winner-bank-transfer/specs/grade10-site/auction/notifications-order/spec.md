@@ -140,7 +140,12 @@ secondary action on the same row.
 - **WHEN** its payment deadline passes and Grade10 sets the invoice to
   `expired`
 - **THEN** Grade10 sends the winner the payment-overdue letter
-- **AND** it names the outstanding amount and how to resolve it
+- **AND** it names the outstanding amount
+- **AND** it says self-service payment is no longer available
+- **AND** it names any applicable penalties or extra charges
+- **AND** its primary action is Contact Us
+- **AND** its secondary action is View order
+- **AND** it promises no automatic cancellation
 
 #### Scenario: order-mail-SC-40 - Reissuing an invoice sends the payment reminder
 **Serves:** Post-close letters - reissuing an invoice sends the payment reminder
