@@ -1,13 +1,13 @@
 # Tasks
 
-## Group: notification contract
+## 1. Notification contract
 
 - [ ] overdue-contract-01 Add payment-overdue kind and payload fields while
   preserving legacy invoice-expired compatibility.
 - [ ] overdue-contract-02 Expand auction-won/setup-reminder payload contracts
   for delivery, payment method, billing and setup deadline.
 
-## Group: scheduling
+## 2. Scheduling
 
 - [ ] overdue-sweep-01 Make setup completeness include the companion billing and
   payment confirmation fields and park setup letters after confirmation.
@@ -16,7 +16,7 @@
 - [ ] overdue-sweep-03 Replace invoice-expired activation with payment-overdue
   and safely process already queued legacy work.
 
-## Group: email
+## 3. Email
 
 - [ ] overdue-email-01 Update auction-won and setup-reminder copy with complete
   setup bullets and deadline.
@@ -25,7 +25,7 @@
 - [ ] overdue-email-03 Add email port/template/campaign tests for all four
   letter variants.
 
-## Group: validation
+## 4. Validation
 
 - [ ] overdue-verify-01 Run focused sweeps, notification, email and contract
   tests, then the complete repository validation lane.

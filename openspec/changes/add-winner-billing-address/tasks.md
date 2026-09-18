@@ -1,13 +1,13 @@
 # Tasks
 
-## Group: shared contract
+## 1. Shared contract
 
 - [ ] billing-shared-01 Extend `AuctionAddressForm` props, values and stories for
   same-as-delivery, separate billing and independent errors.
 - [ ] billing-shared-02 Export the completed contract from the shared auction
   order surface and update component tests.
 
-## Group: winner order
+## 2. Winner order
 
 - [ ] billing-winner-01 Add billing snapshot and payment-method fields to the
   order model, contracts, fixtures and persistence migrations.
@@ -19,7 +19,7 @@
 - [ ] billing-winner-04 Add focused red-first tests for same-address default,
   separate saved/one-time billing, missing-field refusal and immutable receipt.
 
-## Group: post-sale
+## 3. Post-sale
 
 - [ ] billing-post-sale-01 Add Bill To/Ship To quote rendering and refuse send
   when billing is missing.
@@ -28,7 +28,7 @@
 - [ ] billing-post-sale-03 Add focused tests for send guards, operator edits,
   audit logging and reissue snapshots.
 
-## Group: validation
+## 4. Validation
 
 - [ ] billing-verify-01 Run design-system typecheck/story tests, focused auction
   backend/frontend tests and the required repository validation commands.
