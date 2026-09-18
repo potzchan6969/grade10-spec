@@ -1,6 +1,6 @@
 ## 1. Product record
 
-- [ ] 1.1 Update post-sale, order-status, Winner Order, account-record and shared auction-record PRD pages with Setup Overdue, Payment Overdue and Status-column ownership (`auction-status-SC-52`, `winner-order-SC-141`, `shared-ui-auction-record-SC-16`).
+- [ ] 1.1 Update post-sale, order-status, Winner Order, account-record and shared auction-record PRD pages with Setup Overdue, Payment Overdue and Status-column ownership (`auction-status-SC-52`, `winner-order-SC-158`, `shared-ui-auction-record-SC-16`).
 
 ## 2. Contracts
 
@@ -13,7 +13,7 @@
 
 ## 4. Frontend
 
-- [ ] 4.1 Render overdue alerts with Contact Us and no Confirm or Pay (`winner-order-SC-141`, `SC-142`).
+- [ ] 4.1 Render overdue alerts with Contact Us and no Confirm or Pay (`winner-order-SC-158`, `SC-159`).
 - [ ] 4.2 Rename the My Auctions mixed column to Status and render both overdue rows (`grade10-site-auction-account-record-SC-63`, `shared-ui-auction-record-SC-16`).
 
 ## 5. Verification

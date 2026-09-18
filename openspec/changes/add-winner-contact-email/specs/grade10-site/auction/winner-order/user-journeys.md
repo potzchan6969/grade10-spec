@@ -16,7 +16,7 @@
 
 ### winner-order-US-15: Winner emails Grade10 from a locked order
 
-**As a** winner whose self-service has closed,
+**As a** winner whose payment access has closed,
 **I want** a ready email with this order's details that I can copy into any mail app,
 **so that** I can reach Grade10 without a system mail client, and support can find the order.
 

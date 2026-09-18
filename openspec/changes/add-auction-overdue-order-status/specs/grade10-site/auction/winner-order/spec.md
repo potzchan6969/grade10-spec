@@ -15,7 +15,7 @@ show Setup Overdue when address setup expires before invoice send and SHALL
 remove Confirm, while retaining Contact Us and the order's address facts. The
 winner SHALL not be offered a way to reopen either window.
 
-#### Scenario: winner-order-SC-141 - Payment Overdue removes Pay
+#### Scenario: winner-order-SC-158 - Payment Overdue removes Pay
 **Serves:** winner-order-US-05 - Winner misses the payment deadline
 
 - **GIVEN** an order with an expired invoice
@@ -23,7 +23,7 @@ winner SHALL not be offered a way to reopen either window.
 - **THEN** it reads Payment Overdue
 - **AND** Pay is absent while Contact Us remains
 
-#### Scenario: winner-order-SC-142 - Setup Overdue removes Confirm
+#### Scenario: winner-order-SC-159 - Setup Overdue removes Confirm
 **Serves:** winner-order-US-07 - Winner misses the address deadline
 
 - **GIVEN** an order without a sent invoice whose address deadline passed

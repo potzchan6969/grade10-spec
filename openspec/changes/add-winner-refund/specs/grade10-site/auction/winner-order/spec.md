@@ -12,7 +12,7 @@ invoice status, the invoice and receipts already issued, and no stepper, Pay,
 address form or other self-service action. The page SHALL not show the
 operator's refund reason or expose a payment credential.
 
-#### Scenario: winner-order-SC-140 - A refunded order keeps its documents
+#### Scenario: winner-order-SC-157 - A refunded order keeps its documents
 **Serves:** winner-order-US-14 - seeing a refunded order after full or partial payment
 
 - **GIVEN** a refunded order that had one partial payment and an invoice

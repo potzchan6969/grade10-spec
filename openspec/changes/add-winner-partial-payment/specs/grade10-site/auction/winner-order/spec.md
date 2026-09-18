@@ -16,7 +16,7 @@ Order SHALL show Partially Paid, the amount paid, the balance and each payment
 receipt in the existing receipt row. It SHALL hide Pay, address changes,
 invoice reissue and cancellation, and SHALL show no further payment deadline.
 
-#### Scenario: winner-order-SC-139 - The partially paid order is locked
+#### Scenario: winner-order-SC-156 - The partially paid order is locked
 **Serves:** winner-order-US-12 - Winner sees partial collection without a second order
 
 - **GIVEN** an order with one partial payment and money still due
