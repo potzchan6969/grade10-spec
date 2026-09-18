@@ -25,6 +25,18 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+function deliveryAddressBlock(canvasElement: HTMLElement) {
+  const sidebar = within(canvasElement).getByRole("complementary");
+  const heading = within(sidebar).getByRole("heading", {
+    name: "Delivery address",
+  });
+  const block = heading.parentElement;
+  if (!block) {
+    throw new Error("Delivery address heading has no containing block");
+  }
+  return within(block);
+}
+
 /** Pre-invoice — complete order setup within 48 hours of lot close. */
 export const AwaitingSetup: Story = {
   name: "Awaiting Setup",
@@ -133,7 +145,9 @@ export const PreparingInvoice: Story = {
     expect(canvas.getByText("Order progress")).toBeVisible();
     expect(canvas.getByText("Invoice")).toBeVisible();
     expect(canvas.getByText("18 Sep 2026")).toBeVisible();
-    expect(canvas.getByText(/Wan Chai/)).toBeVisible();
+    expect(
+      deliveryAddressBlock(canvasElement).getByText(/Wan Chai/),
+    ).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
@@ -205,7 +219,9 @@ export const CompleteSetupFlow: Story = {
         '[data-slot="winner-order-page"][data-status="preparing_invoice"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText(/Harbour Road/)).toBeVisible();
+    expect(
+      deliveryAddressBlock(canvasElement).getByText(/Harbour Road/),
+    ).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Complete Order Setup" }),
     ).not.toBeInTheDocument();
@@ -303,7 +319,9 @@ export const AddNewAddressSetupFlow: Story = {
         '[data-slot="winner-order-page"][data-status="preparing_invoice"]',
       ),
     ).not.toBeNull();
-    expect(canvas.getByText(/Queen's Road Central/)).toBeVisible();
+    expect(
+      deliveryAddressBlock(canvasElement).getByText(/Queen's Road Central/),
+    ).toBeVisible();
 
     await waitFor(
       () => {
