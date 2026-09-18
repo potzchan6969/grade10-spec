@@ -29,7 +29,7 @@
 - [ ] bank-mail-01 Implement reminder, final-notice and payment-received
   behavior with bank-transfer copy and no proof-received letter.
 
-## 5. Validation
+## 5. Validation (owner: @htonyl)
 
 - [ ] bank-verify-01 Run focused backend, contract, frontend and email tests,
   then the complete repository validation lane.
