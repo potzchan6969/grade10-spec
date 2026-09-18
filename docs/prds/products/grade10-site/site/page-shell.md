@@ -38,8 +38,9 @@ chrome, including on auction-first launch.
 and Sign out. Sign-out is offered there as well as on the profile. KYC stays
 out of the menu.
 
-🚧 **My Orders** joins the menu between Profile and My Auctions, opening
-`/profile/orders`.
+🚧 **My Orders** joins the menu between Profile and My Auctions once Store
+answers, opening `/profile/orders`; until Store answers, the menu omits it,
+the same gate `/profile/orders` and Cart already carry.
 
 ## Help
 

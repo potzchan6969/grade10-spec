@@ -29,7 +29,7 @@ export default function OrderDeliveredEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   orderUrl = previewLot.orderUrl,
-  contactUrl = previewLot.contactUrl,
+  contactUrl = previewLot.deliveredContactUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   deliveredAt = previewLot.deliveredAt,
   deliveryAddress = previewLot.deliveryAddress,
@@ -38,7 +38,7 @@ export default function OrderDeliveredEmail({
     <AuctionLetter
       body={[
         "Your lot has been delivered.",
-        "If it has not reached you, or something is wrong, contact customer support.",
+        "If it has not reached you, or something is wrong, email support@grade10.com.",
       ]}
       brandName={brandName}
       campaign="delivered"
@@ -66,7 +66,7 @@ OrderDeliveredEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   orderUrl: previewLot.orderUrl,
-  contactUrl: previewLot.contactUrl,
+  contactUrl: previewLot.deliveredContactUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   deliveredAt: previewLot.deliveredAt,
   deliveryAddress: previewLot.deliveryAddress,

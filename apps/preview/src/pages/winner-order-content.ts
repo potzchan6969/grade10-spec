@@ -104,6 +104,8 @@ export type WinnerOrderContent = {
    * Omit when no payment has been recorded yet.
    */
   receipts?: WinnerOrderReceipt[];
+  /** Sent invoice id — omitted before send (setup overdue has none). */
+  invoiceId?: string | null;
 };
 
 const LOT = {
@@ -111,6 +113,8 @@ const LOT = {
   winningBid: "HK$12,800",
   endedAt: "Ended 17 Sep 2026, 21:30 HKT",
 } as const;
+
+const INVOICE_ID = "INV-202609-LK7P2Q-01" as const;
 
 const ADDRESS = "12/F, Tower 1\nHarbour Road\nWan Chai, Hong Kong" as const;
 
@@ -305,6 +309,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         billingValue: ADDRESS,
         setupPaymentMethod: "Card",
         invoiceLines: INVOICE_LINES,
+        invoiceId: INVOICE_ID,
         deadline: PAYMENT_DEADLINE,
         primaryCta: "Pay with Card",
         progressDates: {
@@ -322,6 +327,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         billingValue: ADDRESS,
         setupPaymentMethod: "Card",
         invoiceLines: INVOICE_LINES,
+        invoiceId: INVOICE_ID,
         deadline: PAYMENT_DEADLINE_PASSED,
         primaryCta: null,
         progressDates: {
@@ -341,6 +347,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         billingValue: ADDRESS,
         paymentMethod: "Bank transfer",
         invoiceLines: BANK_TRANSFER_INVOICE_LINES,
+        invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
           address: PROGRESS_AFTER_ADDRESS.address,
@@ -361,6 +368,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         billingValue: ADDRESS,
         paymentMethod: "Bank transfer",
         invoiceLines: BANK_TRANSFER_INVOICE_LINES,
+        invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
           address: PROGRESS_AFTER_ADDRESS.address,
@@ -389,6 +397,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
+        invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
           ...PROGRESS_AFTER_PAYMENT,
@@ -404,6 +413,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
+        invoiceId: INVOICE_ID,
         primaryCta: "Track shipment",
         progressDates: {
           ...PROGRESS_SHIPPED,
@@ -420,6 +430,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
+        invoiceId: INVOICE_ID,
         primaryCta: null,
         progressDates: {
           ...PROGRESS_DELIVERED,
@@ -449,6 +460,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         addressLabel: "Delivery address",
         addressValue: ADDRESS,
         invoiceLines: INVOICE_LINES,
+        invoiceId: INVOICE_ID,
         primaryCta: null,
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",

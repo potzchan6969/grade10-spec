@@ -46,7 +46,7 @@ export default function PaymentReceivedPartialEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   orderUrl = previewLot.orderUrl,
-  contactUrl = previewLot.contactUrl,
+  contactUrl = previewLot.partialPaymentContactUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   amountReceived = "HK$8,000",
   receivedAt = previewLot.paidAt,
@@ -57,7 +57,7 @@ export default function PaymentReceivedPartialEmail({
     <AuctionLetter
       body={[
         "We have received this payment for this lot. Your order is not fully settled yet.",
-        "Contact customer support if you have questions about what remains.",
+        "Email support@grade10.com if you have questions about what remains.",
       ]}
       brandName={brandName}
       campaign="payment_received_partial"
@@ -88,7 +88,7 @@ PaymentReceivedPartialEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   orderUrl: previewLot.orderUrl,
-  contactUrl: previewLot.contactUrl,
+  contactUrl: previewLot.partialPaymentContactUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   amountReceived: "HK$8,000",
   receivedAt: previewLot.paidAt,

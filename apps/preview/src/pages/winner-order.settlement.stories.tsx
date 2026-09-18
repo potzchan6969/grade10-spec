@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
+  winnerOrderContactSheet,
   winnerOrderMeta,
   winnerOrderSettled,
 } from "./winner-order.story-shared";
@@ -110,6 +111,10 @@ export const ExpiredSetup: Story = {
     expect(
       canvas.queryByRole("link", { name: "Invoice PDF" }),
     ).not.toBeInTheDocument();
+    await winnerOrderContactSheet(
+      canvasElement,
+      "Auction lot 1999 Pokémon Base Set Charizard PSA 9: setup overdue",
+    );
   },
 };
 

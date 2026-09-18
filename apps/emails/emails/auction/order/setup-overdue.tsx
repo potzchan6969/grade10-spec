@@ -27,7 +27,7 @@ export default function SetupOverdueEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   orderUrl = previewLot.orderUrl,
-  contactUrl = previewLot.contactUrl,
+  contactUrl = previewLot.setupOverdueContactUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   winningBid = previewLot.winningBid,
   closedAt = previewLot.closedAt,
@@ -35,7 +35,7 @@ export default function SetupOverdueEmail({
 }: SetupOverdueProps) {
   return (
     <AuctionLetter
-      body="The deadline to complete order setup has passed. This order has expired. You can no longer finish setup on Grade10. Contact customer support promptly if you still want to claim this lot."
+      body="The deadline to complete order setup has passed. This order has expired. You can no longer finish setup on Grade10. Email support@grade10.com if you still want to claim this lot."
       brandName={brandName}
       campaign="setup_overdue"
       canUnsubscribe={false}
@@ -68,7 +68,7 @@ SetupOverdueEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   orderUrl: previewLot.orderUrl,
-  contactUrl: previewLot.contactUrl,
+  contactUrl: previewLot.setupOverdueContactUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   winningBid: previewLot.winningBid,
   closedAt: previewLot.closedAt,

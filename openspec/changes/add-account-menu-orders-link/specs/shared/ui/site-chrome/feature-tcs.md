@@ -30,7 +30,8 @@ reimplementing its behavior.
 
 **Pre-conditions:**
 
-* `SiteHeader` receives a signed-in session and account destinations.
+* `SiteHeader` receives a signed-in session, account destinations, and a My
+  Orders handler.
 
 **Steps:**
 
@@ -61,7 +62,8 @@ reimplementing its behavior.
 
 **Pre-conditions:**
 
-* `SiteHeader` receives a signed-in session and account destinations.
+* `SiteHeader` receives a signed-in session, account destinations, and a My
+  Orders handler.
 
 **Steps:**
 
@@ -73,6 +75,36 @@ reimplementing its behavior.
 
 * The supplied My Orders handler is invoked exactly once.
 * No other account-menu handler is invoked.
+
+### shared-ui-site-chrome-US1-TC13-1: Account menu omits My Orders when its handler is not supplied
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session and no My Orders handler.
+
+**Steps:**
+
+1. Render the header.
+2. Activate the account control.
+3. Inspect the menu.
+
+**Expected Results:**
+
+* The menu offers Profile, My Auctions, and Sign out.
+* The menu does not offer My Orders.
 
 ## Reconciliation
 
@@ -95,14 +127,15 @@ for this change.
   group rather than a new scenario, consistent with how Profile and My
   Auctions activation are already untested at scenario level.
 * `shared-ui-site-chrome-US1-TC13-1` ("Account menu omits My Orders when its
-  handler is not supplied") — **raised, rejected**: My Orders is a required,
-  always-present menu item like Profile, My Auctions, and Sign out (see
-  `decisions.md` Q4), not an independently handler-gated control like search
-  or cart. "Handler not supplied" is not a reachable state for this prop, so
-  the case was dropped rather than folded.
+  handler is not supplied") — originally **raised, rejected** against Q4's
+  "required, always-present" answer. `decisions.md` Q8 supersedes Q4: My
+  Orders is handler-gated like Cart and search, supplied only once Store
+  answers, so this case is now added, tracing `shared-ui-site-chrome-SC-29`
+  and the same "handler-gated" clause of `Header controls` that already
+  gates Cart and search.
 * Two raised questions escalated to `decisions.md` `## Raised`: whether My
-  Orders is handler-gated (Q4), and the exact `zh-Hant`/`zh-Hans` label text
-  (Q7).
+  Orders is handler-gated (Q4, superseded by Q8), and the exact
+  `zh-Hant`/`zh-Hans` label text (Q7).
 * No anchor goes uncovered: `Header controls` — the group every scenario in
   the modified requirement serves — is walked by `TC5-1`, `TC8-1`, `TC9-1`,
-  `TC10-1`, `TC11-1`, and now `TC12-1`.
+  `TC10-1`, `TC11-1`, `TC12-1`, and now `TC13-1`.

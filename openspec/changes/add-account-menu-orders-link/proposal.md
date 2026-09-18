@@ -15,13 +15,15 @@ account menu, against sessions arriving by a direct or support-supplied link.
 ## What Changes
 
 - Add a My Orders entry to the account menu, between Profile and My Auctions,
-  shown only to a signed-in collector. Activating it opens `/profile/orders`,
-  the Your Orders surface `add-grade10-customer-order-pages` already ships.
-- Widen `SiteHeader`'s account-menu contract with a My Orders handler and
-  copy slot, and drop the "SHALL NOT include Orders" wording `shared/ui/site-chrome`
-  carries from the auction-first launch scoping decision — that exclusion
-  predates Store's order history and no longer states what the product should
-  do.
+  shown only to a signed-in collector once Store answers — `/profile/orders`
+  is itself gated on Store, so the entry follows the same gate. Activating it
+  opens `/profile/orders`, the Your Orders surface
+  `add-grade10-customer-order-pages` already ships.
+- Widen `SiteHeader`'s account-menu contract with a My Orders handler, gated
+  the same way as Cart and search, and a copy slot; drop the "SHALL NOT
+  include Orders" wording `shared/ui/site-chrome` carries from the
+  auction-first launch scoping decision — that exclusion predates Store's
+  order history and no longer states what the product should do.
 - Update `grade10-site/site/page-shell`'s account-menu requirement the same
   way: activating My Orders SHALL take a signed-in collector to
   `/profile/orders`. KYC stays excluded from the menu; only the Orders part of
