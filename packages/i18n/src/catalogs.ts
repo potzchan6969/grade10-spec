@@ -88,6 +88,7 @@ import sharedKoAppointment from "../messages/shared/ko/appointment.json";
 import sharedKoAuction from "../messages/shared/ko/auction.json";
 import sharedKoAuctionBiddingHistory from "../messages/shared/ko/auctionBiddingHistory.json";
 import sharedKoAuctionListing from "../messages/shared/ko/auctionListing.json";
+import sharedKoAuctionOrders from "../messages/shared/ko/auctionOrders.json";
 import sharedKoAuctionRecord from "../messages/shared/ko/auctionRecord.json";
 import sharedKoAuctionWatchlist from "../messages/shared/ko/auctionWatchlist.json";
 import sharedKoCheckout from "../messages/shared/ko/checkout.json";
@@ -259,6 +260,7 @@ export const sharedCatalogs = {
     auctionBiddingHistory: sharedKoAuctionBiddingHistory,
     auctionRecord: sharedKoAuctionRecord,
     auctionListing: sharedKoAuctionListing,
+    auctionOrders: sharedKoAuctionOrders,
     auctionWatchlist: sharedKoAuctionWatchlist,
     checkout: sharedKoCheckout,
     chrome: sharedKoChrome,
