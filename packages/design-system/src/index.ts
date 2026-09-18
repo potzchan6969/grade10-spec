@@ -47,6 +47,7 @@ export * from "./components/forms/select";
 export * from "./components/forms/stepper-input";
 export * from "./components/forms/switch";
 export * from "./components/forms/text-input";
+export * from "./components/forms/textarea";
 export * from "./components/layout/center";
 export * from "./components/layout/footer";
 export * from "./components/layout/hstack";

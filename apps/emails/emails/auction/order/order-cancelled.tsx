@@ -27,13 +27,13 @@ export default function OrderCancelledEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   orderUrl = previewLot.orderUrl,
-  contactUrl = previewLot.contactUrl,
+  contactUrl = previewLot.cancelledContactUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   cancelledAt = previewLot.cancelledAt,
 }: OrderCancelledProps) {
   return (
     <AuctionLetter
-      body="Your order for this lot has been cancelled. If you have questions, contact customer support."
+      body="Your order for this lot has been cancelled. If you have questions, email support@grade10.com."
       brandName={brandName}
       campaign="order_cancelled"
       canUnsubscribe={false}
@@ -56,7 +56,7 @@ OrderCancelledEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   orderUrl: previewLot.orderUrl,
-  contactUrl: previewLot.contactUrl,
+  contactUrl: previewLot.cancelledContactUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   cancelledAt: previewLot.cancelledAt,
 } satisfies OrderCancelledProps;
