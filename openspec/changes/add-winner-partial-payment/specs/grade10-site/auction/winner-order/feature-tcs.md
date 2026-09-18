@@ -78,4 +78,4 @@
 
 | Finding | Disposition |
 | --- | --- |
-| The winner sees receipts without a second order or deadline | **Folded in:** `winner-order-SC-139` |
+| The winner sees receipts without a second order or deadline | **Folded in:** `winner-order-SC-156` |

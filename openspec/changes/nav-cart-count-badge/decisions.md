@@ -39,3 +39,4 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| shared/ui/site-chrome | What does the header count mean? | Q3 |

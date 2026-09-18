@@ -47,9 +47,9 @@ progress; View order opens the Partially Paid Winner Order story.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Partially Paid (locked) | Warning Alert: only part of invoice settled; Contact Us; no balance figure; no Pay | `winner-order-SC-139` |
-| Receipt PDF row | Wrapping row of Receipt · P1, P2, … oldest first | `winner-order-SC-139` |
-| Payment method | Bank transfer (or recorded method); Invoice PDF still offered | `winner-order-SC-139` |
+| Partially Paid (locked) | Warning Alert: only part of invoice settled; Contact Us; no balance figure; no Pay | `winner-order-SC-156` |
+| Receipt PDF row | Wrapping row of Receipt · P1, P2, … oldest first | `winner-order-SC-156` |
+| Payment method | Bank transfer (or recorded method); Invoice PDF still offered | `winner-order-SC-156` |
 
 ### My Auctions
 

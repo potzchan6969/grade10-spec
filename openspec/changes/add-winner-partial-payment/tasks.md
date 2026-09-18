@@ -1,6 +1,6 @@
 ## 1. Product record
 
-- [ ] 1.1 Update the auction payment, post-sale, order-status, account-record and Winner Order PRD pages with partial collection and the tolerance boundary (`grade10-admin-auction-post-sale-SC-140`, `auction-status-SC-49`, `winner-order-SC-139`).
+- [ ] 1.1 Update the auction payment, post-sale, order-status, account-record and Winner Order PRD pages with partial collection and the tolerance boundary (`grade10-admin-auction-post-sale-SC-140`, `auction-status-SC-49`, `winner-order-SC-156`).
 
 ## 2. Contracts and data
 
@@ -15,7 +15,7 @@
 ## 4. Frontend
 
 - [ ] 4.1 Render the operator payment history, remaining balance and tolerance prompt.
-- [ ] 4.2 Render the locked Partially Paid Winner Order and My Auctions row with every receipt (`winner-order-SC-139`, `grade10-site-auction-account-record-SC-62`).
+- [ ] 4.2 Render the locked Partially Paid Winner Order and My Auctions row with every receipt (`winner-order-SC-156`, `grade10-site-auction-account-record-SC-62`).
 
 ## 5. Verification
 

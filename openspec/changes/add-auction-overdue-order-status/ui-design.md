@@ -46,14 +46,14 @@ Setup Overdue and Payment Overdue; column header **Status**.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Awaiting Setup | Complete Order Setup; Confirm by … | **Out of suite:** existing pre-deadline state |
-| Setup Overdue | Missed setup deadline alert; Contact Us; no Confirm | `winner-order-SC-142` |
+| Setup Overdue | Missed setup deadline alert; Contact Us; no Confirm | `winner-order-SC-159` |
 
 ### Winner Order — Payment
 
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Pending Payment | Pay CTA; Pay by … | **Out of suite:** existing pre-expiry state |
-| Payment Overdue | Overdue alert; Contact Us; no Pay | `winner-order-SC-141` |
+| Payment Overdue | Overdue alert; Contact Us; no Pay | `winner-order-SC-158` |
 
 ### My Auctions
 

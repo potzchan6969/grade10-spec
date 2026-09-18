@@ -26,3 +26,4 @@ The canonical Store and page-shell records settle this reconciliation on
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| shared/ui/store-cart | Which cart does the drawer read? | Q1 |

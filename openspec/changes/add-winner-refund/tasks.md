@@ -1,6 +1,6 @@
 ## 1. Product record
 
-- [ ] 1.1 Update the refund, post-sale, Winner Order and roles PRD pages with one bounded external refund and the `auction:refund` grant (`grade10-admin-auction-post-sale-SC-145`, `winner-order-SC-140`, `shared-auth-roles-SC-14`).
+- [ ] 1.1 Update the refund, post-sale, Winner Order and roles PRD pages with one bounded external refund and the `auction:refund` grant (`grade10-admin-auction-post-sale-SC-145`, `winner-order-SC-157`, `shared-auth-roles-SC-14`).
 
 ## 2. Contracts and data
 
@@ -15,7 +15,7 @@
 ## 4. Frontend
 
 - [ ] 4.1 Add the operator refund form, stock choice, queue filter and detail record.
-- [ ] 4.2 Render Refunded Winner Order with retained invoice and receipts and no self-service actions (`winner-order-SC-140`).
+- [ ] 4.2 Render Refunded Winner Order with retained invoice and receipts and no self-service actions (`winner-order-SC-157`).
 
 ## 5. Verification
 
