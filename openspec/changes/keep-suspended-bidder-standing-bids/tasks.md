@@ -13,7 +13,7 @@
 - [ ] 3.1 Make operator-only suspension causes nullable, backfill active legacy Bidders bans into the authoritative auction suspension, and preserve historical retraction logs (`suspension-SC-17`–`SC-22`)
 - [ ] 3.2 Verify: `pnpm run db:drizzle:generate && pnpm run check:migrations`
 
-## 4. Backend and API (grade10)
+## 4. Backend and API (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Route Bidders moderation and Users-panel suspension through one idempotent, grant-protected suspension service, recording operator and deadline causes without duplicate active rows (`suspension-SC-17`–`SC-22`)
 - [ ] 4.2 Remove suspension-time bid retraction and re-resolution while keeping the new-bid and maximum-raise guard; prove standing maxima, unchanged history, normal close, and payable won lots (`suspension-SC-12`–`SC-16`)
