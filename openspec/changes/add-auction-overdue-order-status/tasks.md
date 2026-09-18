@@ -2,7 +2,7 @@
 
 - [ ] 1.1 Update post-sale, order-status, Winner Order, account-record and shared auction-record PRD pages with Setup Overdue, Payment Overdue and Status-column ownership (`auction-status-SC-52`, `winner-order-SC-158`, `shared-ui-auction-record-SC-16`).
 
-## 2. Contracts
+## 2. Contracts (owner: @htonyl)
 
 - [ ] 2.1 Add the two overdue outcomes to the closed auction order-status contract and preserve the existing action-context fields.
 
