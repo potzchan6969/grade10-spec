@@ -19,7 +19,7 @@
 - [ ] billing-winner-04 Add focused red-first tests for same-address default,
   separate saved/one-time billing, missing-field refusal and immutable receipt.
 
-## 3. Post-sale
+## 3. Post-sale (owner: @htonyl)
 
 - [ ] billing-post-sale-01 Add Bill To/Ship To quote rendering and refuse send
   when billing is missing.
