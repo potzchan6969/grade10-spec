@@ -11,22 +11,29 @@ read from the change's files on `main`, never set by hand —
 
 A change is in exactly one stage, proven by a file on `main`.
 
-| # | Stage | Proven by | Hand |
+| # | Stage | Proven by | Written by |
 | --- | --- | --- | --- |
-| 1 | Proposed | `proposal.md` alone | Product manager |
-| 2 | Decided | `decisions.md`, `user-journeys.md`, one marked line per outcome on the page, `hands:` | Product manager |
-| 3 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Designer, tech PIC |
-| 4 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | QA run |
-| 5 | Planned | `tasks.md`; `promoted_by`; `plan_approved` | Engineer |
-| 6 | Building | Boxes ticking | Engineers |
-| 7 | On staging | Every box ticked; `deployed_env: staging` | QA |
-| 8 | Released | `released_in: <tag>` | Release hand |
-| 9 | Archived | The directory under `archive/`; the fold; the marks off | — |
+| 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one marked line per outcome on the page and `hands:`, with ❓ on what is still open | Product manager, grilled by an agent |
+| 2 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Designer and tech PIC, with an agent |
+| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | An agent; QA reads the cases |
+| 4 | Planned | `tasks.md`; `promoted_by`; `plan_approved` | An agent; the engineer approves the summary |
+| 5 | Building | Boxes ticking | Agents, test first; the engineer reads each landing |
+| 6 | On staging | Every box ticked; `deployed_env: staging` | The deploy; QA walks the run sheet |
+| 7 | Released | `released_in: <tag>` | Release hand |
+| 8 | Archived | The directory under `archive/`; the fold; the marks off | Whoever archives |
 
 - 🚧 **One stage per change** — the board, the change page, a page's in-flight
   ribbon and My turn all show the same one
 - 🚧 **Read, never set** — a stage moves when a file lands on `main`, and
   nothing else moves it
+- 🚧 **One stage for what is wanted** — the proposal, the decisions and the
+  journeys sit in Proposed together, because the product manager writes the
+  three in one sitting; an item still open stays ❓ on the decisions or the
+  page and holds nothing
+- 🚧 **Agent-driven** — Specified, Planned and Building are written by an
+  agent from what is upstream and read by a person before they land: QA the
+  cases, the engineer the plan's summary and each landing; every surface
+  marks the three, so a reader tells a person's step from an agent's
 - **Four lanes today** — proposed, specified, in progress and complete, read
   the same way — [In Flight](/in-flight)
 
@@ -57,8 +64,8 @@ One handle per role on each change.
 | Role | Key | Takes the change at |
 | --- | --- | --- |
 | Product manager | `pm` | Proposed |
-| Designer | `design` | Decided |
-| Tech PIC | `tech` | Decided |
+| Designer | `design` | Proposed, once the decisions and the journeys are on `main` |
+| Tech PIC | `tech` | Proposed, once the decisions and the journeys are on `main` |
 | QA | `qa` | Designed, and On staging |
 | Engineer | `dev` | Specified |
 | Release hand | `release` | On staging |
@@ -78,25 +85,27 @@ Slack tells one person, once per move.
 
 | When | Who is told | Carries |
 | --- | --- | --- |
-| A change enters a stage | That stage's hand, by direct message | The change, the stage, the command to paste |
+| A change reaches a hand: a stage lands, or the decisions and the journeys complete Proposed | That hand, by direct message | The change, the stage, the command to paste |
 | A push lands on `main` | The channel | Each change the push moved, and its stage |
 | A wait is written | The hand that owes the artifact | The line, and its date |
 | A dependency releases | The blocked change's hand | The change that is now free |
 | Monday morning | Each person, by direct message | On you now; idle; waiting |
 
-- 🚧 **Once per move** — a move told twice, or a message per commit, never
-  happens
+- 🚧 **Once per move** — a move is the hand changing; a move told twice, or a
+  message per commit, never happens
 - **The channel post per push** — runs today, listing the changes a push
   touched
 
 ## Surfaces
 
-- 🚧 **Board** — nine lanes, one per stage, stacked as In Flight stacks four
-  today; each card the hand, the age, the overlays and the task bar; Mine,
+- 🚧 **Board** — eight lanes, one per stage, stacked as In Flight stacks four
+  today; the three agent-driven lanes say so in their heading, with who reads
+  them; each card the hand, the age, the overlays and the task bar; Mine,
   Waiting, Idle and Blocked filters; a stale shelf for a change idle 30 days
-- 🚧 **Change page** — the stage as a stepper; a Your turn card with the
-  command; the hands; each artifact with whether it is behind one upstream of
-  it; tasks by group; where the code is: `main`, staging, a release
+- 🚧 **Change page** — the stage as a stepper, the agent-driven three
+  bracketed under it; a Your turn card with the command; the hands; each
+  artifact with whether it is behind one upstream of it; tasks by group; where
+  the code is: `main`, staging, a release
 - 🚧 **My turn** — the changes whose current stage names the reader, then the
   ones that are theirs later; the handle is chosen once per browser
 - 🚧 **A page's marked line** — a line a page marks as being built wears the
@@ -112,7 +121,9 @@ lane as one waiting on a deploy. The owner's brief is
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| Stage | Decided | Derived from the files on `main`, one of nine; never a status key somebody sets. | Product |
+| Stage | Decided | Derived from the files on `main`, one of eight; never a status key somebody sets. | Product |
+| Proposed and Decided | Decided | One stage: the product manager writes the proposal, the decisions and the journeys in one sitting, and an open item stays ❓ instead of holding a gate. | Product |
+| Agent-driven stages | Decided | Specified, Planned and Building are an agent's to write and a person's to read: QA the cases, the engineer the summary and each landing. Every surface marks the three. | Product, Engineering |
 | Hands | Decided | Recorded in the change's manifest, one handle per role; the only stored fact. | Product |
 | Messages | Decided | One direct message per move to the hand it reaches, the channel post per push kept, a weekly digest; never one per commit. | Product |
 | Suite review | Decided | An overlay beside the stage, so planning never waits on QA's verdict. | Product, QA |

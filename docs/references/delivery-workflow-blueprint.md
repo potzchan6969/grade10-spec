@@ -2,7 +2,8 @@
 
 The owner's brief for the way a change moves from a product idea to a
 released feature, as of 2026-09-17, and the shape drawn from it: five
-phases, nine stages, the screens, the messages and the rails. The
+phases, eight stages, three of them an agent's to write, the screens, the
+messages and the rails. The
 illustrated version is the
 [blueprint page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC); this
 document is the text of record. The first change it led to is
@@ -70,7 +71,7 @@ and the gate is a file on `main`.
 | 1 | Requirements | PM, grilled by an agent | PRD lines 🚧 and ❓; `proposal.md`, `decisions.md`, `user-journeys.md`; `hands:` | Every open item names who answers it |
 | 2 | UI design | Designer | `ui-design.md`; a Storybook story per state, shown on the PRD | Every state has a story, or `ui_waived` says there is no surface |
 | 3 | Tech design | Tech PIC | `tech-design.md` with charts; the engineer block links it | A design, or `design_waived` |
-| 4 | Implementation | QA run, then engineers with agents | `spec.md`, `feature-tcs.md`, `tasks.md`, code and E2E on `main` | Every box ticked |
+| 4 | Implementation | An agent; QA reads the cases, the engineer the summary and each landing | `spec.md`, `feature-tcs.md`, `tasks.md`, code and E2E on `main` | Every box ticked |
 | 5 | Staging and release | QA, release hand | `deployed_env`, the run tab, `released_in`, the tag | Released, then archived |
 
 Two loops leave the line:
@@ -97,17 +98,23 @@ The page and the proposal are the source of truth for the two design files:
 A change is in exactly one stage, read from its files on `main` and never
 set by hand.
 
-| # | Stage | Evidence on `main` | Hand | Next |
+| # | Stage | Evidence on `main` | Written by | Then |
 | --- | --- | --- | --- | --- |
-| 1 | Proposed | `proposal.md` alone | PM | `/plan <change>` |
-| 2 | Decided | `decisions.md`, `user-journeys.md`, one 🚧 line per outcome on the PRD, `hands:` | Designer, tech PIC | `/design`, `/tech` |
-| 3 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | QA run | `/specify <change>` |
-| 4 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | Engineer | `/tasks <change>` |
-| 5 | Planned | `tasks.md`; `promoted_by`; `plan_approved` by a person | Engineers | `/build <change> <group>` |
-| 6 | Building | Boxes ticking through `pnpm plan done` | Engineers | `pnpm plan done` |
-| 7 | On staging | Every box ticked; `deployed_env: staging` | QA | `/run-sheet <change>` |
-| 8 | Released | `released_in: <tag>` | Whoever archives | `/archive <change>` |
-| 9 | Archived | The directory under `archive/`; the fold; the marks off | — | — |
+| 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one 🚧 line per outcome on the PRD and `hands:`, ❓ on what is open | PM, grilled by an agent | PM, `/plan <change>`, until the three are in; then designer and tech PIC, `/design`, `/tech` |
+| 2 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Designer and tech PIC, with an agent | QA, `/specify <change>` |
+| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | An agent; QA reads the cases | Engineer, `/tasks <change>` |
+| 4 | Planned | `tasks.md`; `promoted_by`; `plan_approved` by a person | An agent; the engineer approves the summary | Engineers, `/build <change> <group>` |
+| 5 | Building | Boxes ticking through `pnpm plan done` | Agents, test first; the engineer reads each landing | The deploy, on every green push |
+| 6 | On staging | Every box ticked; `deployed_env: staging` | The deploy; QA walks the run sheet | Release hand, `/release` |
+| 7 | Released | `released_in: <tag>` | Release hand | Whoever archives, `/archive <change>` |
+| 8 | Archived | The directory under `archive/`; the fold; the marks off | Whoever archives | — |
+
+Specified, Planned and Building are the agent's stretch: an agent writes each
+from what is upstream, a person reads it before it lands, and every surface
+marks the three so the flow says what is a person's and what is an agent's.
+Proposed is one stage for what is wanted: the proposal, the decisions and the
+journeys land together, an open item stays ❓, and the designer and the tech
+PIC are told once the three are in, because a move is the hand changing.
 
 Overlays sit on a stage:
 
@@ -146,8 +153,8 @@ Overlays sit on a stage:
 
 | Surface | Route | Shows | Actions, local only |
 | --- | --- | --- | --- |
-| Board | `/board` | Nine lanes, one per stage, stacked as In Flight stacks four today; each card the hand, the age, the overlays, the task bar; filters Mine, Waiting, Idle, Blocked; a stale shelf | — |
-| Change page | `/change/<id>` | The stepper; the Your turn card with the command; the hands table; each artifact with its freshness; tasks by group; the delivery row: main, staging, release | Assign to me, reassign, say I am waiting, approve the summary |
+| Board | `/board` | Eight lanes, one per stage, stacked as In Flight stacks four today, the agent-driven three marked in their heading; each card the hand, the age, the overlays, the task bar; filters Mine, Waiting, Idle, Blocked; a stale shelf | — |
+| Change page | `/change/<id>` | The stepper, its agent-driven steps bracketed; the Your turn card with the command; the hands table; each artifact with its freshness; tasks by group; the delivery row: main, staging, release | Assign to me, reassign, say I am waiting, approve the summary |
 | My turn | `/mine` | The changes whose current stage names the reader; then theirs later | Pick a handle |
 | PRD page | `/p/…` | Unchanged prose; the in-flight ribbon names the stage and the hand; each 🚧 line wears the pip of its change's stage | Propose |
 | Release | `/release` | The production tag and what it carried; what is on staging and ready to cut; pending migrations; hotfixes; flags per environment | Cut a release |
@@ -290,7 +297,7 @@ One meaning per word, as the line uses it.
 | Change | One directory under `openspec/changes/`, the work from proposal to archive | A commit, a pull request |
 | Delta | A change's requirements against a spec, folded at archive | The spec itself |
 | Fold | Writing a delta into the durable spec at archive | A merge |
-| Stage | Which of the nine a change is in, read from its files | A status somebody sets |
+| Stage | Which of the eight a change is in, read from its files | A status somebody sets |
 | Overlay | Waiting, blocked, idle, suite, flag, hotfix - a fact beside the stage | A stage |
 | Hand | The person a stage names, from `hands:` | An owner, who claimed a task group |
 | Wait | An `awaiting:` line: what the change cannot write until somebody answers | Idle |
@@ -305,7 +312,7 @@ One meaning per word, as the line uses it.
 
 | Milestone | Change | Done when |
 | --- | --- | --- |
-| M1 Stages and hands | `stage-changes-and-notify-hands` - open, on the planned page [Change Stages](../prds/products/shared/planning/change-stages.md), with its journeys, `ui-design.md` and `tech-design.md`, waiting on `/planning-qa` for the requirements | A change moving on `main` tells the next hand within a minute, and the board shows nine columns |
+| M1 Stages and hands | `stage-changes-and-notify-hands` - open, on the planned page [Change Stages](../prds/products/shared/planning/change-stages.md), with its journeys, `ui-design.md` and `tech-design.md`, waiting on `/planning-qa` for the requirements | A change moving on `main` tells the next hand within a minute, and the board shows eight lanes with the agent's three marked |
 | M2 Land without a pull request | `land-on-main-through-the-gate` | A week of landings with no pull request and no red `main` older than an hour |
 | M3 Release line | `cut-releases-from-a-tag` | One release cut from the page and one hotfix walked end to end |
 | M4 Keep it small | `keep-the-store-small` | The archive holds one quarter; a newcomer reads three pages and lands a change |
