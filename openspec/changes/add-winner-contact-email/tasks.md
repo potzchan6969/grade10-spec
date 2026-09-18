@@ -18,7 +18,7 @@ Depends on group 1 only for the submodule bump that carries Textarea and catalog
 
 Can proceed from contracts and fixtures; does not need a running mail backend.
 
-- [ ] 3.1 Bump `external/grade10-spec` for `Textarea` and dialog i18n keys
+- [x] 3.1 Bump `external/grade10-spec` for `Textarea` and dialog i18n keys
 - [x] 3.2 Replace the Contact Us toast with the copy-first dialog: To and Subject fixed with in-place copy, editable Message, Copy Message then Open Mail App (`winner-order-SC-160`–`SC-163`, `SC-167`)
 - [x] 3.3 Prefill Subject and Message from the order's current invoice id, lot title, reason and receipt ids; omit the remaining balance; keep `support@grade10.com` off the page until open (`winner-order-SC-161`, `SC-164`–`SC-166`, `SC-168`)
 - [x] 3.4 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test --filter grade10`
