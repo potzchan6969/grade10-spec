@@ -4,7 +4,7 @@
   - Proof not accepted: the operator's external reason and the time left to pay
   - No letter on upload: sending proof sends nothing
   - Receipt in the letter: the payment-received letter shows the receipt and attaches it as a PDF, so the winner keeps proof of payment outside Grade10
-  - No invoice attachment: the invoice-sent letter attaches no PDF
+  - No invoice attachment: the payment-reminder letter attaches no PDF
 - Reminder cadence
   - Held while proof is checked: no reminder or final notice while the invoice is Payment Verifying; the sequence resumes if the proof is returned
 
@@ -79,13 +79,14 @@ collector's registered account email and SHALL follow the letter shape
 
 | Letter | Trigger | Channel |
 | --- | --- | --- |
-| Auction won | The lot closes and the winner is determined. Asks for a delivery address and names the address deadline | Email |
-| Invoice sent | An operator sends the invoice. Names the invoice total and the payment deadline | Email |
+| Auction won | The lot closes and the winner is determined. Asks for order setup and names the setup deadline | Email |
+| Setup reminder | 24 hours after lot close while setup is incomplete | Email |
+| Setup overdue | The setup deadline (48 hours after lot close) passes while setup is incomplete. Self-service setup is closed; Contact Us is primary | Email |
+| Payment reminder | An operator sends or reissues the invoice. Names the invoice total and the payment deadline | Email |
 | Payment reminder | Day 3 of the current invoice's running deadline, while invoice status is `pending` | Email |
 | Payment reminder | Day 6 of the current invoice's running deadline, while invoice status is `pending` | Email |
-| Final notice | Immediately before the payment-deadline expiry transition, while invoice status is `pending` | Email |
-| Invoice expired | Grade10 sets the invoice to `expired` at its payment deadline | Email |
-| Invoice reissued | An operator reissues an invoice | Email |
+| Final notice | 24 hours before the payment deadline, while invoice status is `pending` | Email |
+| Payment overdue | Grade10 sets the invoice to `expired` at its payment deadline | Email |
 | Proof not accepted | An operator returns a `payment_verifying` invoice to `pending`. Names the operator's external reason and the new payment deadline as a date and time in the winner's own timezone | Email |
 | Payment received | The winner's card payment is confirmed, an operator confirms bank transfer proof, or an operator commits a manual settlement | Email |
 | Shipped | Fulfilment status becomes `fulfilled` and a tracking number is attached. Primary CTA is the carrier track-and-trace link; secondary CTA opens Winner Order | Email |
@@ -99,16 +100,18 @@ reason. Each return sends its own letter.
 
 An invoice is issued at the moment an operator sends it, so reminders
 measured from the current invoice's issue are measured from its send, per
-"Reminders follow the current invoice deadline". Grade10 SHALL queue the final
-notice before writing `expired`, so a final notice is never sent for an
-already-expired invoice. Reissuing parks reminders for the replaced invoice
-and starts the three-reminder sequence for the new current invoice.
+"Reminders follow the current invoice deadline". The final notice SHALL fire
+24 hours before the payment deadline. Grade10 SHALL queue it before writing
+`expired`, so a final notice is never sent for an already-expired invoice.
+Reissuing parks reminders for the replaced invoice, sends the payment
+reminder for the new invoice, and starts the reminder sequence for that
+invoice. Grade10 SHALL NOT send a separate invoice-reissued letter.
 
 Unless a letter names another primary action, every letter's primary listing
 action SHALL open that lot's Winner Order. On every order letter, the lot
 image and lot title SHALL open that lot's Winner Order. When the collector is
 signed out, Grade10's existing sign-in flow SHALL run first, then Winner
-Order. The invoice-sent letter SHALL NOT attach a PDF; the invoice PDF remains on
+Order. The payment-reminder letter SHALL NOT attach a PDF; the invoice PDF remains on
 Winner Order. The payment-received letter SHALL attach the receipt PDF, per
 "The payment-received letter carries the receipt". The
 shipped letter SHALL name the confirmed delivery address, the carrier, and
@@ -121,9 +124,9 @@ secondary action on the same row.
 
 - **WHEN** a lot closes and a winner is determined
 - **THEN** Grade10 sends that winner the auction-won letter by email
-- **AND** the email identifies the lot and asks the winner to confirm a
-  delivery address
-- **AND** it names the address confirm deadline
+- **AND** the email identifies the lot and asks the winner to complete
+  order setup
+- **AND** it names the setup deadline
 - **AND** it names no amount owed
 - **AND** its primary action opens that lot's Winner Order
 - **AND** the lot image and lot title open that lot's Winner Order
@@ -134,8 +137,26 @@ secondary action on the same row.
 - **GIVEN** an auction order whose invoice is `pending`
 - **WHEN** its payment deadline passes and Grade10 sets the invoice to
   `expired`
-- **THEN** Grade10 sends the winner the invoice-expired letter
+- **THEN** Grade10 sends the winner the payment-overdue letter
 - **AND** it names the outstanding amount and how to resolve it
+
+#### Scenario: order-mail-SC-40 - Reissuing an invoice sends the payment reminder
+**Serves:** Post-close letters - reissuing an invoice sends the payment reminder
+
+- **GIVEN** an auction order whose invoice an operator reissues with a new
+  total and a new payment deadline
+- **WHEN** the reissue is committed
+- **THEN** Grade10 sends the winner the payment reminder for that new invoice
+- **AND** Grade10 sends no separate invoice-reissued letter
+
+#### Scenario: order-mail-SC-43 - A repeated reissue confirmation sends one payment reminder
+**Serves:** Post-close letters - a repeated reissue confirmation sends one payment reminder
+
+- **GIVEN** an auction order whose invoice was reissued and whose payment
+  reminder for that reissue was sent
+- **WHEN** the same reissue confirmation is delivered again
+- **THEN** Grade10 sends no second payment reminder for that reissue
+- **AND** it sends no invoice-reissued letter
 
 #### Scenario: order-mail-SC-03 - A manual settlement produces the payment-received letter
 **Serves:** Post-close letters - a manual settlement produces the payment-received letter
@@ -167,7 +188,7 @@ secondary action on the same row.
 - **GIVEN** an auction order in Preparing Invoice
 - **WHEN** an operator sends its invoice with an invoice total of 312000 minor
   units in HKD
-- **THEN** Grade10 sends the winner the invoice-sent letter by email
+- **THEN** Grade10 sends the winner the payment-reminder letter by email
 - **AND** it names 312000 minor units in HKD as the invoice total and the
   payment deadline in the winner's own timezone
 - **AND** its primary action opens that lot's Winner Order so the winner can
@@ -224,7 +245,8 @@ secondary action on the same row.
 
 Grade10 SHALL send the day 3 and day 6 reminders and the final notice measured
 on the current invoice's running deadline, and SHALL send each only while the
-invoice status is `pending`. The running deadline counts time from the
+invoice status is `pending`. The final notice SHALL fire 24 hours before the
+payment deadline. The running deadline counts time from the
 invoice's issue and does not count time while the invoice is
 `payment_verifying`, so day 3 falls once 3 days of running time have passed.
 
@@ -249,7 +271,7 @@ replaced invoice.
   invoice was issued
 - **WHEN** day 3 arrives
 - **THEN** Grade10 sends no payment reminder for that invoice
-- **AND** sends none on day 6 or day 7 either
+- **AND** sends none on day 6 or the final notice either
 
 #### Scenario: order-mail-SC-05 - Reminders follow a reissued invoice
 **Serves:** Reminder cadence - reminders follow a reissued invoice
@@ -260,6 +282,14 @@ replaced invoice.
   `pending`
 - **THEN** Grade10 sends the reminder for the reissued invoice
 - **AND** sends no reminder owed only by the replaced invoice
+
+#### Scenario: order-mail-SC-52 - Final notice fires 24 hours before the payment deadline
+**Serves:** Reminder cadence - final notice fires 24 hours before the payment deadline
+
+- **GIVEN** an auction order whose invoice is `pending` with a payment deadline
+- **WHEN** 24 hours before that deadline arrive
+- **THEN** Grade10 sends the winner the final-notice letter
+- **AND** it does not wait until the deadline transition itself
 
 #### Scenario: order-mail-SC-23 - No reminder goes out while proof is checked
 **Serves:** Reminder cadence - held while proof is checked

@@ -110,12 +110,12 @@ open it too.
 | Letter | When | What it carries |
 | --- | --- | --- |
 | Auction won | The lot closes with a winner | The setup steps and `Confirm by …`; no amount yet |
-| 🚧 Setup reminder | **24** and **72 hours** after the close, while setup is incomplete | The steps and `Confirm by …` |
+| 🚧 Setup reminder | **24 hours** after the close, while setup is incomplete | The steps and `Confirm by …` |
 | 🚧 Setup overdue | The setup deadline passes | Self-service setup is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review, never automatically |
 | Payment reminder | At send, then **day 3** and **day 6** while the invoice is pending | The total and `Pay by …`; View invoice and pay |
 | 🚧 Final notice | **24 hours** before the payment deadline, while Pay is still offered | The last payable reminder |
 | 🚧 Payment overdue | The invoice expires unpaid | What remains owed; Pay is closed; Contact Us for manual review; the order may be cancelled and the lot re-listed after review |
-| 🚧 Invoice reissued | An operator reissues | The payment reminder for the new invoice, its total and `Pay by …`; no letter of its own |
+| 🚧 Invoice reissued | An operator reissues | The `payment-reminder` letter for the new invoice, its total and `Pay by …`; no letter of its own |
 | 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner and `Pay by …`; none when proof is uploaded |
 | Payment received | Card confirmed, proof confirmed, or a manual settlement | Amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
 | Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking |
@@ -125,7 +125,7 @@ open it too.
 - **Reminders stop at payment** — every outstanding reminder is cancelled the
   moment payment is received, and a reissue restarts the series for the new
   invoice
-- 🚧 **Invoice sent** — the letter at send is the first payment reminder;
+- 🚧 **Invoice sent** — the letter at send is the first `payment-reminder`;
   there is no separate invoice-sent letter
 - 🚧 **Reminders on hold** — none go out while proof is checked; if it is
   returned the sequence resumes on the moved clock, skipping and repeating
@@ -392,7 +392,7 @@ a second payment provider, and changes to the bid-time rules.
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not a running count, so the IDs do not reveal how much Grade10 sells; operators keep a separate gapless audit number the winner never sees — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
-| Setup mail | 🚧 In flight | Setup reminders at 24 and 72 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue is generic, names manual review, and never cancels automatically. | Product (@tangconst) |
+| Setup mail | 🚧 In flight | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
 | Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. | Product (@tangconst) |
 | Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking. | Product (@tangconst) |
 | Reissue letter | 🚧 In flight | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |

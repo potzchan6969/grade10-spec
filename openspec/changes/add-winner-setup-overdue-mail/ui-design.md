@@ -15,13 +15,9 @@ Email surfaces — no Figma frame. Preview is the layout source.
 
 - Preview: `/preview/auction/order/auction-won`
 
-### Setup reminder (first)
+### Setup reminder
 
 - Preview: `/preview/auction/order/setup-reminder`
-
-### Setup reminder (second)
-
-- Preview: `/preview/auction/order/setup-reminder-second`
 
 ### Setup overdue
 
@@ -44,8 +40,8 @@ Email surfaces — no Figma frame. Preview is the layout source.
 
 ## States
 
-- Auction-won with setup bullets and Confirm by — `winner-order-US-01`
-- Setup reminder first (24h) while setup incomplete — `winner-order-US-01`
-- Setup reminder second (72h) while setup incomplete — `winner-order-US-01`
-- Setup overdue: Contact Us primary, View order secondary, consequence bullets, no setup field list — `winner-order-US-07`
-- Payment overdue: amount owed, Contact Us primary, View order secondary, consequence bullets — `winner-order-US-05`
+- Auction-won with setup bullets and Confirm by — `order-mail-SC-01`
+- Setup reminder (24h) while setup incomplete — `order-mail-SC-50`
+- No second setup reminder at 72h — `order-mail-SC-54`
+- Setup overdue: Contact Us primary, View order secondary, consequence bullets, no setup field list — `order-mail-SC-51`
+- Payment overdue: amount owed, Contact Us primary, View order secondary, consequence bullets — `order-mail-SC-02`

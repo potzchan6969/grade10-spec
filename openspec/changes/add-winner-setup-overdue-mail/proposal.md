@@ -15,15 +15,16 @@ before cancelling or re-listing.
 
 **Metric:** share of overdue orders where the winner contacts Grade10 within
 48 hours of the overdue letter. **Second signal:** setup completed inside the
-48-hour window after the setup-reminder series.
+48-hour window after the setup reminder.
 
 ## What Changes
 
 - **Auction-won asks for order setup**, not address alone: delivery address,
   payment method, and billing address as bullets; CTA Complete Order Setup;
   `Confirm by …`.
-- **Address reminder is renamed setup reminder**, sent at **24h** and **72h**
+- **Address reminder is renamed setup reminder**, sent at **24h**
   after lot close while setup is incomplete, with the same setup bullets.
+  There is no second (72h) reminder.
 - **Setup overdue** is a new letter when the setup deadline passes: generic
   “order setup” copy (no field list); self-service setup closed; Contact Us
   primary; View order secondary; manual review; penalties or extra charges
@@ -55,8 +56,8 @@ None.
 
 | Consumer | Change |
 | --- | --- |
-| Notification service | Send setup reminders at 24h/72h; send setup-overdue at setup deadline; send payment-overdue at invoice `expired` (replacing invoice-expired). |
-| `apps/emails` | Drafts: auction-won, setup-reminder (± second), setup-overdue, payment-overdue. |
+| Notification service | Send setup reminder at 24h; send setup-overdue at setup deadline; send payment-overdue at invoice `expired` (replacing invoice-expired). |
+| `apps/emails` | Drafts: auction-won, setup-reminder, setup-overdue, payment-overdue. |
 | Winner Order / account | No page requirement in this change; billing address on the page stays open. |
 | `add-winner-bank-transfer` | Owns payment-reminder series and payment-received; this change does not rewrite those. |
 | `close-overdue-address-confirmation` | Owns form lock and operator reopen; this change does not add a reopen letter. |
