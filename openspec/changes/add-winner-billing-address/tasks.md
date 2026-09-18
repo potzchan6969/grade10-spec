@@ -1,6 +1,6 @@
 # Tasks
 
-## 1. Shared contract
+## 1. Shared contract (owner: @htonyl)
 
 - [ ] billing-shared-01 Extend `AuctionAddressForm` props, values and stories for
   same-as-delivery, separate billing and independent errors.
