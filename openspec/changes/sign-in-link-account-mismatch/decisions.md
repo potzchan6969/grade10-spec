@@ -28,11 +28,14 @@
 | Q4 | Does the toast show an email? | Yes — the link’s email in the description, so Switch is clear. Title still names the mismatch only. | Title only with no email, or naming the current session’s email. |
 | Q5 | Which toast type? | Warning, and it stays until Switch, Stay, or dismiss. | An error toast that auto-dismisses like the failed-follow toasts. |
 | Q6 | New change or extend `sign-in-link-follow-feedback`? | New change. That change owns follows that create no session; this one owns a signed-in mismatch with a choice. | Folding the choice into the failed-follow change. |
+| Q7 | Which toast wins when a link is both invalid (expired, used, or banned) and for a different account than the current session? | The failed-follow toast — the existing failure check runs first and unchanged, so the mismatch check never reaches an invalid link. Falls out of the standing non-goal that rules out changing expired/dead/banned toasts; see `tech-design.md`'s "Detection order". | Checking the mismatch first, or deciding case by case. |
+| Q8 | Does choosing Stay or dismissing the mismatch toast consume the link? | No — the redirect never lets better-auth touch the token, so it stays exactly as unused as before the follow and expires on its own five minutes after the send; see `tech-design.md`'s "No consuming, no new credential". | Explicitly invalidating the token on Stay/dismiss. |
+| Q9 | What happens when a second mismatched link is followed while an earlier mismatch toast is showing? | It replaces the first: every follow is a full-page redirect to the brand home, so the previous page's toast state cannot survive to conflict with the new one; see `tech-design.md`. | A dedicated stacking or ignore rule. |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| shared/auth/sign-in | Which toast wins when a link is both invalid (expired, used, or banned) and for a different account than the current session — the mismatch toast or the failed-follow toast? | |
-| shared/auth/sign-in | Does choosing Stay or dismissing the mismatch toast consume the link, or does it stay usable until it expires? | |
-| shared/auth/sign-in | What happens when a second sign-in link for a different account is followed while a mismatch toast from an earlier link is still showing — does it replace, stack, or get ignored? | |
+| shared/auth/sign-in | Which toast wins when a link is both invalid (expired, used, or banned) and for a different account than the current session — the mismatch toast or the failed-follow toast? | Q7 |
+| shared/auth/sign-in | Does choosing Stay or dismissing the mismatch toast consume the link, or does it stay usable until it expires? | Q8 |
+| shared/auth/sign-in | What happens when a second sign-in link for a different account is followed while a mismatch toast from an earlier link is still showing — does it replace, stack, or get ignored? | Q9 |
