@@ -6,7 +6,7 @@
   cover wrong type, size, count, removal and conversion stories.
 - [ ] bank-design-02 Run design-system typecheck and Storybook tests.
 
-## 2. Payment contract and persistence
+## 2. Payment contract and persistence (owner: @htonyl)
 
 - [ ] bank-contract-01 Add bank-transfer method, Payment Verifying status and
   winner-proof schemas without weakening operator proof limits.
