@@ -1,6 +1,6 @@
 # Tasks
 
-## 1. Notification contract
+## 1. Notification contract (owner: @htonyl)
 
 - [ ] overdue-contract-01 Add payment-overdue kind and payload fields while
   preserving legacy invoice-expired compatibility.
