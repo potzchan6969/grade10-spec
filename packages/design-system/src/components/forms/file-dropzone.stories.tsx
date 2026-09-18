@@ -29,7 +29,7 @@ const LIMITS = {
 
 const ACCEPT =
   ".pdf,.png,.jpg,.jpeg,.heic,.heif,application/pdf,image/png,image/jpeg,image/heic,image/heif";
-const unsupportedReject = fn();
+const rejectionSpy = fn();
 
 function sampleItem(
   name: string,
@@ -156,9 +156,9 @@ export const Combined: Story = {
   render: () => <CombinedDemo />,
 };
 
-/** Unsupported files are rejected without changing the controlled list. */
-export const RejectsUnsupportedFile: Story = {
-  name: "Rejects unsupported file",
+/** Oversized files are rejected without changing the controlled list. */
+export const RejectsOversizedFile: Story = {
+  name: "Rejects oversized file",
   render: () => {
     const [files, setFiles] = useState<FileDropzoneItem[]>([]);
     return (
@@ -168,7 +168,7 @@ export const RejectsUnsupportedFile: Story = {
         files={files}
         limits={LIMITS}
         onChange={setFiles}
-        onReject={unsupportedReject}
+        onReject={rejectionSpy}
       />
     );
   },
@@ -176,10 +176,14 @@ export const RejectsUnsupportedFile: Story = {
     const canvas = within(canvasElement);
     await userEvent.upload(
       targetInput(canvasElement),
-      new File(["not a proof"], "notes.txt", { type: "text/plain" }),
-      { applyAccept: false },
+      new File([new Uint8Array(LIMITS.maxBytesPerFile + 1)], "oversized.pdf", {
+        type: "application/pdf",
+      }),
     );
-    expect(canvas.queryByText("notes.txt")).not.toBeInTheDocument();
-    expect(unsupportedReject).toHaveBeenCalledWith("type", "notes.txt");
+    expect(canvas.queryByText("oversized.pdf")).not.toBeInTheDocument();
+    expect(rejectionSpy).toHaveBeenCalledWith(
+      "too_large_file",
+      "Each file must be 5 MB or less.",
+    );
   },
 };
