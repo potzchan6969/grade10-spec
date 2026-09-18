@@ -80,3 +80,24 @@ export const WithInvoice: Story = {
     expect(canvas.getByText("HK$15,660")).toBeVisible();
   },
 };
+
+export const ExpiredInvoice: Story = {
+  name: "Expired invoice with Contact Us",
+  args: {
+    invoice: {
+      lines: [
+        { label: "Invoice Status", value: "Expired" },
+        { label: "Order Total", value: "HK$15,660" },
+      ],
+      onContact: fn(),
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Contact Us" }));
+    expect(args.invoice?.onContact).toHaveBeenCalledTimes(1);
+    expect(
+      canvas.queryByRole("button", { name: "Pay Now" }),
+    ).not.toBeInTheDocument();
+  },
+};
