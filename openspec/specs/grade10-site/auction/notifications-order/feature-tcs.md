@@ -4,9 +4,9 @@
 **Drafts styled:** 2026-09-18, tcs-rules r3.0
 
 **Out of suite:** Proof-not-accepted and bank-transfer reminder holds —
-`add-winner-bank-transfer`. Delivered / cancelled letter CTA detail —
-`email-trigger-revision`. Setup-reminder and setup-overdue scenario proof —
-`add-winner-setup-overdue-mail` (`order-mail-SC-50`, `order-mail-SC-51`).
+`add-winner-bank-transfer`. Receipt PDF on payment-received —
+`add-winner-bank-transfer`. Setup letter bullets (address, method, billing) —
+`add-winner-setup-overdue-mail` (`order-mail-SC-55`, `order-mail-SC-56`).
 
 ## order-mail-US1: Post-close letters
 

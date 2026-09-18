@@ -216,7 +216,11 @@ doing, under Edge Cases.
 
 Every letter identifies the lot, goes to the winner's registered address and
 opens that lot's order, sign-in first when signed out; the lot image and
-title open it too.
+title open it too. The schedule below matches
+`grade10-site/auction/notifications-order` and the archived email-kinds
+timeline: setup at close / +24h / +48h, payment reminder at send then day 3
+and day 6, final notice 24 hours before the payment deadline, payment overdue
+at expiry, then shipped, delivered, and order cancelled.
 
 ::image{src="assets/diagrams/auction-order-mail.svg" alt="The letters a winner gets, on two clocks. In the 48-hour setup window: auction won at the close, a setup reminder at 24 hours, and setup overdue at 48 hours unless the winner confirms the address, billing and method, which parks them. In the 7-day payment window an operator's invoice opens: the payment reminder at send and again on days 3 and 6, a final notice 24 hours before the deadline, and payment overdue at the deadline unless the winner pays, which cancels every outstanding reminder. Once the money is in: payment received carrying the receipt PDF, then shipped and delivered. Order cancelled reaches the winner whenever an operator cancels an unpaid order, on neither clock"}
 
@@ -231,8 +235,8 @@ title open it too.
 | 🚧 Proof not accepted | An operator returns the proof | The operator's reason for the winner, and `Pay by …` on the deadline that runs again |
 | Payment received | Card confirmed, proof confirmed, or a manual settlement | Amount, date, the method — card brand and masked number, or Bank Transfer — the Receipt ID and the receipt PDF, the only attachment any letter carries |
 | Shipped | Dispatch | The delivery address, then the carrier and tracking number; the primary action is the carrier's tracking |
-| 🚧 Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
-| 🚧 Order cancelled | An operator cancels | That the order was cancelled and when; no reason and no word on payment; Contact Us first, View order second |
+| Delivered | The carrier confirms delivery | The delivery address and the delivered time; View order first, Contact Us second |
+| Order cancelled | An operator cancels | That the order was cancelled and when; no reason and no word on payment; Contact Us first, View order second |
 
 - **Reminders stop at payment** — every outstanding reminder is cancelled the
   moment payment is received
@@ -368,11 +372,11 @@ a second payment provider, and changes to the bid-time rules.
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
 | Identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not a running count, so the IDs do not reveal how much Grade10 sells; operators keep a separate gapless audit number the winner never sees — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
 | Setup mail | 🚧 In flight | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
-| Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. `add-winner-bank-transfer` and `add-winner-setup-overdue-mail` carry this one schedule between them, so no separate invoice-sent or invoice-expired letter survives either delta. | Product (@tangconst) |
+| Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. Durable `notifications-order` holds that schedule; `add-winner-bank-transfer` adds proof holds and the receipt PDF. | Product (@tangconst) |
 | Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking. | Product (@tangconst) |
-| Reissue letter | 🚧 In flight | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
-| Delivered content | 🚧 In flight | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
-| Cancelled content | 🚧 In flight | Cancelled time only; the operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
+| Reissue letter | Decided | A reissue sends the payment reminder sent at invoice send, for the new invoice; it fires on the same kind of event, so a separate reissued letter is dropped. | Product (@jeffffej0909) |
+| Delivered content | Decided | Delivery address and delivered time; View order first, Contact Us second. | Product (@jeffffej0909) |
+| Cancelled content | Decided | Cancelled time only; the operator's reason stays internal. Contact Us first, View order second. | Product (@jeffffej0909) |
 | Cancelling a paid order | ❓ Open | Whether an operator can cancel an order already paid, and whether the cancelled letter then names a refund; until settled the letter says nothing about payment. | Product (@jeffffej0909) |
 | A separate orders page | Decided | Won lots are followed on My Auction Orders — needs action first, then newest close — and each Won row opens the order. | Product |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
