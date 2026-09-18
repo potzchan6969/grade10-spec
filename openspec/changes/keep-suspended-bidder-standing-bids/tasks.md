@@ -3,7 +3,7 @@
 - [ ] 1.1 Update the bidder-suspension, Users-panel, and shared user-directory PRD pages to describe one auction standing, preserved standing maxima, operator causes, and reason privacy (`suspension-SC-12`–`SC-22`, `grade10-admin-console-user-directory-SC-16`–`SC-19`, `shared-console-user-directory-SC-30`–`SC-32`)
 - [ ] 1.2 Verify: `pnpm check:manual`
 
-## 2. Shared contracts (grade10)
+## 2. Shared contracts (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Split collector and operator suspension projections, and add the handler-gated auction-standing props to `UserAccountPanel` without changing its public export set (`suspension-SC-20`, `grade10-admin-console-user-directory-SC-16`–`SC-19`, `shared-console-user-directory-SC-30`–`SC-32`)
 - [ ] 2.2 Verify: `pnpm run typecheck && pnpm run test`
