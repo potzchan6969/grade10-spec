@@ -16,7 +16,7 @@
 - [ ] overdue-sweep-03 Replace invoice-expired activation with payment-overdue
   and safely process already queued legacy work.
 
-## 3. Email
+## 3. Email (owner: @htonyl)
 
 - [ ] overdue-email-01 Update auction-won and setup-reminder copy with complete
   setup bullets and deadline.
