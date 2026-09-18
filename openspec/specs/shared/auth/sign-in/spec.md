@@ -17,6 +17,7 @@ contract for leaving a session.
   - Resend wait: Resend stays off for sixty seconds after each successful send, counting down on the button
   - Link lifetime: a sign-in link lasts five minutes, and the email carrying it says five minutes
   - One-time session: an unused unexpired link signs in once
+  - Failed follow feedback: expired, dead, and banned links land on the brand home with a toast
   - Followed elsewhere: the surface that asked carries on once the session arrives
 - Google
   - Brand-offered: a brand that enables Google shows it; an unverified email does not sign in

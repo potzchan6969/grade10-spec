@@ -24,6 +24,12 @@
 **I want** a second email within a minute to wait, and a return only to this brand,
 **so that** I am not flooded and not delivered to an untrusted address.
 
+### shared-auth-sign-in-US-06: Collector follows a link that cannot sign them in
+
+**As a** collector who opened a sign-in link from email,
+**I want** a clear toast on the brand home when that link cannot create a session,
+**so that** I know whether to ask for a new link or that I cannot sign in at all.
+
 ### shared-auth-sign-in-US-07: Collector confirms the send and can resend
 
 **As a** collector,

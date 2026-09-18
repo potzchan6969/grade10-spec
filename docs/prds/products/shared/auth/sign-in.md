@@ -50,10 +50,10 @@ session, and the person lands on the brand home with a toast.
   signed in without being reloaded, and whatever they were stopped from doing
   carries on. It is tried once, and a card that sold out while they were in
   their inbox refuses the ordinary way — [Session](/p/shared/auth/session).
-- 🚧 **Expired** — the toast says the link has expired.
-- 🚧 **No longer works** — a used, replaced, or otherwise invalid link shares
+- **Expired** — the toast says the link has expired.
+- **No longer works** — a used, replaced, or otherwise invalid link shares
   one toast that the link no longer works.
-- 🚧 **Banned** — a banned account's link follow shows they cannot sign in,
+- **Banned** — a banned account's link follow shows they cannot sign in,
   and does not invite them to ask for another link.
 - 🚧 **Different account** — when the person is already signed in as someone
   else, the link does not switch them. A toast says they are signed in with a
