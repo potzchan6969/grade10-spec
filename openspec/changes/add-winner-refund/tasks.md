@@ -7,7 +7,7 @@
 - [ ] 2.1 Add refund method, amount, reason, note, reference, proof, audit and stock-choice contracts.
 - [ ] 2.2 Add the append-only refund table, one-refund constraint and invoice-log migration.
 
-## 3. Backend
+## 3. Backend (owner: @htonyl)
 
 - [ ] 3.1 Implement the permissioned, idempotent refund mutation and cumulative-paid bound (`grade10-admin-auction-post-sale-SC-145`, `SC-146`).
 - [ ] 3.2 Derive Refunded as terminal and expose the queue filter and reconciliation record (`SC-147`, `auction-status-SC-51`).
