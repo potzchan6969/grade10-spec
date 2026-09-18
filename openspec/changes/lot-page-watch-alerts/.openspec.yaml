@@ -4,3 +4,5 @@ promoted_by: "@mason5991"
 page_waived: "predates the page rule"
 awaiting:
   test-cases: "feature-tcs.md missing beside each capability's journeys — run /spec-to-tcs before push"
+deploy_waived: "User explicitly requested archival without deployment evidence after merged PR #518; CI failures are unrelated app-env and api-docs drift"
+tasks_waived: "Owner waived remaining verification checkboxes: the watch-alert behavior was already landed and covered by focused auction tests in merged PR #518; full backend failures are unrelated app-env and api-docs drift"
