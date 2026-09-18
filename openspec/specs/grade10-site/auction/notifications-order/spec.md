@@ -71,7 +71,7 @@ secondary action on the same row.
 - **WHEN** a lot closes and a winner is determined
 - **THEN** Grade10 sends that winner the auction-won letter by email
 - **AND** the email identifies the lot and asks the winner to complete
-  order setup
+  order setup (delivery address, payment method, and billing address)
 - **AND** it names the setup deadline
 - **AND** it names no amount owed
 - **AND** its primary action opens that lot's Winner Order
@@ -84,7 +84,12 @@ secondary action on the same row.
 - **WHEN** its payment deadline passes and Grade10 sets the invoice to
   `expired`
 - **THEN** Grade10 sends the winner the payment-overdue letter
-- **AND** it names the outstanding amount and how to resolve it
+- **AND** it names the outstanding amount
+- **AND** it says self-service payment is no longer available
+- **AND** it names any applicable penalties or extra charges
+- **AND** its primary action is Contact Us
+- **AND** its secondary action is View order
+- **AND** it promises no automatic cancellation
 
 #### Scenario: order-mail-SC-40 - Reissuing an invoice sends the payment reminder
 **Serves:** Post-close letters - reissuing an invoice sends the payment reminder
@@ -165,7 +170,9 @@ or at any other time after the first.
 
 **Setup overdue** — When the setup deadline (48 hours after lot close) passes
 while setup is incomplete, Grade10 SHALL send the setup-overdue letter. Its
-primary action SHALL be Contact Us.
+primary action SHALL be Contact Us and its secondary action SHALL be View
+order. It SHALL explain that self-service setup is closed and manual review is
+required, and SHALL NOT cancel the order by itself.
 
 **Park on confirm** — Setup reminder and setup overdue SHALL park once the
 winner confirms setup.
@@ -192,6 +199,10 @@ winner confirms setup.
 - **WHEN** the setup deadline 48 hours after lot close passes
 - **THEN** Grade10 sends the winner the setup-overdue letter
 - **AND** the letter's primary action is Contact Us
+- **AND** its secondary action is View order
+- **AND** it explains that self-service setup is closed and manual review is
+  required
+- **AND** it promises no automatic cancellation
 
 ### Requirement: Reminders follow the current invoice deadline
 

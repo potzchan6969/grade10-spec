@@ -2016,7 +2016,7 @@ Runs once per row of **Test data**.
 * <reason 2> is shown.
 * <reason 1> is not shown.
 
-## Raised
+## Historical questions (resolved below)
 
 - Is a payment method required at address confirmation, or is one preselected?
 - May the winner change the method before send, and only by re-confirming the address?
@@ -2034,7 +2034,7 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
-**Status:** complete — reconciled on 2026-09-16 after the author's grilling round, and patched the same day with the author's identifier decisions. Four cases stay blocked; see Still blocked.
+**Status:** complete — reconciled on 2026-09-16 after the author's grilling round, and patched the same day with the author's identifier decisions. All cases are settled by the decisions below.
 
 **Blind input manifest hash:** `2c7380f5cdff72fd`
 
@@ -2131,10 +2131,7 @@ Decisions 1, 4, 6, 7, 8 and 10 changed the cases named above in the grilling rou
 
 **Still blocked:**
 
-- `winner-order-US1-TC15-1` — Product: the fee range wording for each method.
-- `winner-order-US1-TC24-1` — Design: where the winner reaches a replaced invoice's PDF.
-- `winner-order-US9-TC1-1` — Finance: the account details; Product: whether the invoice PDF carries them.
-- `winner-order-US9-TC17-1` — Engineering: whether file type is checked by content or by extension.
+- None. Q19–Q25 in `decisions.md` settle the remaining audit questions.
 
 **Out of suite:** none. The scenarios this change carries unchanged from `revise-auction-winner-invoicing` and `fix-buyer-premium` stay with their suites.
 

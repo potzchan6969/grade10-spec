@@ -37,3 +37,7 @@ Rounds held on 2026-09-17 with @jeffffej0909.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| grade10-site/auction/winner-order | Does a one-time billing address survive leaving and returning to Winner Order before setup is confirmed? | |
+| grade10-site/auction/winner-order | For a Hong Kong billing address, is postal code required, omitted, or handled with another validation rule? | |
+| grade10-admin/auction/post-sale | When an operator adds a previously missing billing address before send, what absent-value representation does the reasoned edit log show as the old value? | |
+| shared/ui/auction-order | Is postal-code validation for billing addresses supplied by the consuming application, or does the shared address-form contract impose it? | |

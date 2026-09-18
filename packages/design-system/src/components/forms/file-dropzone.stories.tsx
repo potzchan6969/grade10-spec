@@ -28,6 +28,7 @@ const LIMITS = {
 
 const ACCEPT =
   ".pdf,.png,.jpg,.jpeg,.heic,.heif,application/pdf,image/png,image/jpeg,image/heic,image/heif";
+const unsupportedReject = fn();
 
 function sampleItem(
   name: string,
@@ -36,6 +37,15 @@ function sampleItem(
 ): FileDropzoneItem {
   const file = new File([new Uint8Array(size)], name, { type });
   return { id: name, file, name };
+}
+
+function targetInput(canvasElement: HTMLElement): HTMLInputElement {
+  const input = within(canvasElement)
+    .getByRole("button", { name: "Choose Files" })
+    .closest('[data-slot="file-dropzone-target"]')
+    ?.querySelector('input[type="file"]');
+  expect(input).toBeTruthy();
+  return input as HTMLInputElement;
 }
 
 function ComposedDemo() {
@@ -134,12 +144,7 @@ export const Composed: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const file = new File(["proof"], "slip.pdf", { type: "application/pdf" });
-    const input = canvas
-      .getByRole("button", { name: "Choose Files" })
-      .closest('[data-slot="file-dropzone-target"]')
-      ?.querySelector('input[type="file"]');
-    expect(input).toBeTruthy();
-    await userEvent.upload(input as HTMLInputElement, file);
+    await userEvent.upload(targetInput(canvasElement), file);
     expect(canvas.getByText("slip.pdf")).toBeVisible();
   },
 };
@@ -148,4 +153,31 @@ export const Composed: Story = {
 export const Combined: Story = {
   name: "Combined",
   render: () => <CombinedDemo />,
+};
+
+/** Unsupported files are rejected without changing the controlled list. */
+export const RejectsUnsupportedFile: Story = {
+  name: "Rejects unsupported file",
+  render: () => {
+    const [files, setFiles] = useState<FileDropzoneItem[]>([]);
+    return (
+      <FileDropzoneTarget
+        accept={ACCEPT}
+        copy={COPY}
+        files={files}
+        limits={LIMITS}
+        onChange={setFiles}
+        onReject={unsupportedReject}
+      />
+    );
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.upload(
+      targetInput(canvasElement),
+      new File(["not a proof"], "notes.txt", { type: "text/plain" }),
+    );
+    expect(canvas.queryByText("notes.txt")).not.toBeInTheDocument();
+    expect(unsupportedReject).toHaveBeenCalledWith("type", "notes.txt");
+  },
 };

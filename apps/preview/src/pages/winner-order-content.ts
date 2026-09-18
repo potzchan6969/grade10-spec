@@ -74,12 +74,27 @@ export type WinnerOrderContent = {
   secondaryNote?: string;
   progressDates?: WinnerOrderProgressDates;
   /**
-   * Inline Alert under the lot for terminal closed outcomes (Cancelled /
-   * Refunded). Status matches design-system Alert variants.
+   * Inline Alert under the lot for a cancelled order.
+   * Status matches design-system Alert variants.
    */
   outcomeAlert?: {
     title: string;
     status: "default" | "warning" | "success" | "error";
+  };
+  /**
+   * Refund below Order Total — inline alert amount, details in a dialog.
+   * Amount is positive; the word Refund carries the direction.
+   * Proof, provider reference and audit number stay with the operator.
+   * ❓ `method` is a working channel label until Product settles winner-facing
+   * transaction clues (add-winner-refund Q20).
+   */
+  refund?: {
+    /** Positive amount — e.g. `HK$15,660`. */
+    amount: string;
+    reason: string;
+    note: string;
+    /** ❓ Working: Card / Bank transfer — see Q20. */
+    method: string;
   };
   /** Paid / recorded payment strip — method + optional masked number. */
   paymentMethod?: string;
@@ -125,7 +140,7 @@ const PROGRESS_DAY = {
   completed: "28 Sep 2026",
 } as const;
 
-const LINE_TOOLTIPS = {
+export const LINE_TOOLTIPS = {
   buyersPremium:
     "20% of your winning bid, or the currency minimum if that is higher.",
   shippingHandling:
@@ -152,6 +167,20 @@ const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
   },
   { label: "Order Total", value: "HK$15,660" },
 ];
+
+export const WINNER_ORDER_REFUND_CLOSING = {
+  amount: "HK$15,660",
+  reason: "Not as described",
+  note: "Card condition did not match the listing photos. Full amount returned.",
+  method: "Card",
+} as const;
+
+export const WINNER_ORDER_REFUND_OVERPAID = {
+  amount: "HK$500",
+  reason: "Duplicate or overpayment",
+  note: "Bank transfer exceeded the invoice. Difference returned.",
+  method: "Bank transfer",
+} as const;
 
 /**
  * Bank transfer invoice — operator fee may be zero; zero reads Free
@@ -424,11 +453,7 @@ function contentFor(status: WinnerOrderStatus): WinnerOrderContent {
         paymentMethod: "Visa",
         paymentMasked: "···· 4242",
         receipts: [{ label: "Receipt" }],
-        outcomeAlert: {
-          // Paid then refunded — success CheckCircle (not Bell/default).
-          title: "Order refunded. Payment on this order was returned.",
-          status: "success",
-        },
+        refund: { ...WINNER_ORDER_REFUND_CLOSING },
       };
   }
 }
@@ -450,5 +475,3 @@ export const WINNER_ORDER_CONTENTS: Record<
   cancelled: contentFor("cancelled"),
   refunded: contentFor("refunded"),
 };
-
-export { LINE_TOOLTIPS };

@@ -1,4 +1,5 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
+import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
@@ -22,7 +23,7 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
-import { ArrowUpRight, FilePdf, Hourglass, Info } from "@phosphor-icons/react";
+import { ArrowCounterClockwise, ArrowUpRight, FilePdf, Hourglass, Info } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import {
   REVEAL_HIDDEN_CLASS,
@@ -35,6 +36,7 @@ import {
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
 import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
+import { WinnerOrderRefundDialog } from "./winner-order-refund-dialog";
 import { WinnerOrderSetupDialog } from "./winner-order-setup-dialog";
 import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
 import {
@@ -204,6 +206,27 @@ function showWinnerProgress(status: WinnerOrderStatus): boolean {
   );
 }
 
+/** Same `Badge` variants as My Auctions `AuctionRecordRow`, not the store order badge. */
+function winnerOrderBadgeVariant(
+  status: WinnerOrderStatus,
+): "default" | "error" | "warning" | "outline" {
+  switch (status) {
+    case "awaiting_address":
+    case "pending_payment":
+    case "partially_paid":
+      return "warning";
+    case "awaiting_address_expired":
+    case "pending_payment_expired":
+      return "error";
+    case "preparing_invoice":
+    case "payment_verifying":
+    case "processing":
+      return "default";
+    default:
+      return "outline";
+  }
+}
+
 /**
  * Post-auction winner progress — designer-required five steps.
  * Address → Invoice → Payment → Shipped → Completed.
@@ -370,12 +393,14 @@ function SummaryRow({
   emphasize = false,
   muted = false,
   tooltip,
+  valueClassName,
 }: {
   label: ReactNode;
   value: ReactNode;
   emphasize?: boolean;
   muted?: boolean;
   tooltip?: string;
+  valueClassName?: string;
 }) {
   const labelNode = tooltip ? (
     <HStack className="min-w-0" gap="xs" vAlign="center">
@@ -412,6 +437,7 @@ function SummaryRow({
           "shrink-0 text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
           emphasize && "text-base font-semibold",
           muted && "text-secondary-foreground",
+          valueClassName,
         )}
       >
         {value}
@@ -552,14 +578,17 @@ function AddressBlock({
 
 function OrderSummary({
   lines,
+  refund,
   payCta,
   deadline,
   overdue = false,
   settlementContact = null,
   onPay,
   onViewInvoicePdf,
+  onViewRefundDetails,
 }: {
   lines: WinnerOrderInvoiceLine[];
+  refund?: WinnerOrderContent["refund"];
   payCta?: string | null;
   deadline?: string | null;
   overdue?: boolean;
@@ -567,6 +596,7 @@ function OrderSummary({
   settlementContact?: string | null;
   onPay?: () => void;
   onViewInvoicePdf?: () => void;
+  onViewRefundDetails?: () => void;
 }) {
   const total = lines.find((line) => line.label === "Order Total");
   const rest = lines.filter((line) => line.label !== "Order Total");
@@ -619,6 +649,25 @@ function OrderSummary({
             value={total.value}
           />
         </>
+      ) : null}
+
+      {refund ? (
+        <Alert
+          actions={
+            <Button
+              onClick={onViewRefundDetails}
+              size="sm"
+              variant="outline"
+            >
+              View
+            </Button>
+          }
+          dismissible={false}
+          icon={<ArrowCounterClockwise aria-hidden size={16} weight="bold" />}
+          layout="inline"
+          status="default"
+          title={`Refund ${refund.amount}`}
+        />
       ) : null}
 
       {overdue ? (
@@ -787,6 +836,7 @@ function OrderSidebar({
     showSetupPaymentMethod ||
     showBilling ||
     receiptList.length > 0;
+  const [refundDialogOpen, setRefundDialogOpen] = useState(false);
 
   return (
     <aside
@@ -807,8 +857,12 @@ function OrderSidebar({
             lines={lines}
             onPay={onPay}
             onViewInvoicePdf={onViewInvoicePdf}
+            onViewRefundDetails={
+              content.refund ? () => setRefundDialogOpen(true) : undefined
+            }
             overdue={paymentOverdue}
             payCta={payCta}
+            refund={content.refund}
             settlementContact={settlementContact}
           />
         </VStack>
@@ -921,6 +975,13 @@ function OrderSidebar({
           </VStack>
         ) : null}
       </Card>
+      {content.refund ? (
+        <WinnerOrderRefundDialog
+          onOpenChange={setRefundDialogOpen}
+          open={refundDialogOpen}
+          refund={content.refund}
+        />
+      ) : null}
     </aside>
   );
 }
@@ -1055,9 +1116,17 @@ function WinnerOrderPage({
         </Breadcrumbs>
 
         <RevealGroup revealed={revealed} staggerIndex={0}>
-          <h1 className="text-2xl leading-8 font-semibold text-balance text-foreground sm:text-3xl sm:leading-9">
-            {content.title}
-          </h1>
+          <HStack className="w-full" gap="sm" vAlign="center">
+            <h1 className="text-2xl leading-8 font-semibold text-balance text-foreground sm:text-3xl sm:leading-9">
+              {content.title}
+            </h1>
+            <Badge
+              size="sm"
+              variant={winnerOrderBadgeVariant(content.status)}
+            >
+              {content.statusLabel}
+            </Badge>
+          </HStack>
         </RevealGroup>
 
         <div className="grid w-full items-start gap-6 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">

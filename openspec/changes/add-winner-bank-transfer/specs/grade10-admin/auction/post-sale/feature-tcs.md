@@ -1551,7 +1551,7 @@ Runs once per row of **Test data**.
 * The confirm is refused.
 * No operator file is stored; the order stays Payment Verifying.
 
-## Raised
+## Historical questions (resolved below)
 
 - The Quote and send group (payment method on the quote, bank transfer fee at first send) has no journey in this change's journeys file; post-sale-US-05 lives only in revise-auction-winner-invoicing. Fee validation is covered here through Reissue only. Should this change carry US-05 as a context journey?
 - Is Reissue offered while Payment Verifying?

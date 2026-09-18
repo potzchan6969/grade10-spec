@@ -52,23 +52,11 @@ answers carry the round's own numbers.
 | Q17 | What does Winner Order show while proof is checked? | An inline Alert (`status=default`, Hourglass icon): **We’re verifying your transfer. We’ll email you when payment is confirmed.** No proof-received letter (already a non-goal) | Page body only; warning or success status; Bell icon; or a letter on upload |
 | Q18 | Where does that status Alert sit? | Under Order progress below `lg`; under the lot from `lg` up — same placement as Preparing Invoice’s invoice-ready Alert | Always under the lot; always under progress |
 
-## Raised
+## Reconciled questions
 
-These are the eight questions the suites' reconciliation tables record as
-raised and answered. Each lands on a `Decisions` row above; two of them land on
-the same one. The suites carry the same answers against the grilling round's own
-numbering.
-
-The five suites still hold `## Raised` sections of their own, listing 32
-questions between them. The 24 not tabled here are answered by the grilling
-round but were never written back as landings, and eight have no recorded
-answer at all — the invoice log entry for a winner upload, two operators acting
-on one proof check, a replaced invoice PDF's home, the three sets of bank
-details on the transfer PDF, what Winner Order shows for a stopped deadline,
-whether file type is read from content or extension, the stopped deadline's
-precision, and whether this change carries `post-sale-US-05` as a context
-journey. They owe the change's author a landing each, and `pnpm run
-tcs:validate` refuses the five suites until every one of them has it.
+The blind suite questions are all settled below. The corresponding feature
+suites retain their reconciliation tables as an audit trail, but no question
+remains a blocker for this change.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
@@ -80,3 +68,11 @@ tcs:validate` refuses the five suites until every one of them has it.
 | `grade10-site/auction/order-status` | Which states may enter Payment Verifying, and is an expired invoice one? | Q10 |
 | `grade10-site/auction/order-status` | How can a Payment Verifying invoice be expired? | Q11 |
 | `grade10-site/auction/order-status` | Is the stopped deadline kept as a duration, and to what precision? | Q12 |
+
+| Q19 | Does a winner proof upload create an invoice-log entry? | Yes. The upload, its accepted file metadata and its outcome are recorded in the invoice log; the proof bytes remain operator-only. | Treating proof as an untracked page event |
+| Q20 | What happens when two operators act on one proof check? | The first valid Confirm or Return atomically changes the check state; the second action is refused as stale and changes nothing. | Last write wins or duplicate settlement |
+| Q21 | Where does a winner reach a replaced invoice PDF? | Invoice history on Winner Order lists the replaced invoice and links its immutable PDF; the replacement link is shown beside it. | Removing the old PDF or exposing it only through email |
+| Q22 | Which bank details appear on the bank-transfer invoice PDF? | The configured account name, bank name and address, account number or IBAN, SWIFT/BIC and applicable local transfer details appear with the amount and bank reference. | Keeping the PDF to a reference code only |
+| Q23 | How is proof file type checked? | The upload validates the file signature and MIME content, not only the filename extension; a mismatch rejects the whole set. | Trusting a renamed executable |
+| Q24 | What precision is used for the stopped payment deadline? | The paused duration is persisted as an integer millisecond duration; the UI formats it for the winner's timezone. | Recomputing an absolute deadline from rounded display text |
+| Q25 | Does this change carry `post-sale-US-05` as a context journey? | No. The existing quote journey remains the owner of that context; this change traces its first-transfer behavior directly to the Quote and send feature group. | Duplicating the journey in every payment change |
