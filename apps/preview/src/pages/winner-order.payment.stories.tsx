@@ -32,7 +32,7 @@ const BANK_PENDING_CONTENT = {
   ...WINNER_ORDER_CONTENTS.pending_payment,
   body: "Your invoice is ready. Pay by bank transfer before the deadline.",
   setupPaymentMethod: "Bank transfer",
-  primaryCta: "View Bank Details",
+  primaryCta: "Pay by Bank Transfer",
   invoiceLines: BANK_TRANSFER_INVOICE_LINES,
 } as const;
 
@@ -84,7 +84,7 @@ export const PendingPayment: Story = {
   },
 };
 
-/** Bank transfer invoice — CTA opens bank details, not card pay. */
+/** Bank transfer invoice — CTA is Pay by Bank Transfer, not card pay. */
 export const PendingPaymentBankTransfer: Story = {
   name: "Pending Payment Bank Transfer",
   args: {
@@ -96,7 +96,7 @@ export const PendingPaymentBankTransfer: Story = {
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
-      sidebar.getByRole("button", { name: "View Bank Details" }),
+      sidebar.getByRole("button", { name: "Pay by Bank Transfer" }),
     ).toBeVisible();
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
@@ -111,7 +111,7 @@ export const PendingPaymentBankTransfer: Story = {
 };
 
 /**
- * Opens View Bank Details, fills required fields, submits → Payment
+ * Opens Pay by Bank Transfer, fills required fields, submits → Payment
  * Verifying + toast.
  */
 export const SubmitBankPaymentProof: Story = {
@@ -126,7 +126,7 @@ export const SubmitBankPaymentProof: Story = {
     await winnerOrderSettled(canvasElement);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "View Bank Details" }),
+      canvas.getByRole("button", { name: "Pay by Bank Transfer" }),
     );
     const modal = await waitFor(() => {
       const found = page.getByRole("dialog", { name: "Pay by Bank Transfer" });
@@ -188,7 +188,7 @@ export const SubmitBankPaymentProof: Story = {
       ).toBeVisible();
     });
     expect(
-      canvas.queryByRole("button", { name: "View Bank Details" }),
+      canvas.queryByRole("button", { name: "Pay by Bank Transfer" }),
     ).not.toBeInTheDocument();
     expect(canvas.getByText(/verifying your bank transfer/i)).toBeVisible();
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
@@ -254,7 +254,7 @@ export const PaymentVerifying: Story = {
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
-      sidebar.queryByRole("button", { name: "View Bank Details" }),
+      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
     ).not.toBeInTheDocument();
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
@@ -319,7 +319,7 @@ export const PartiallyPaid: Story = {
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
     expect(
-      sidebar.queryByRole("button", { name: "View Bank Details" }),
+      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
     ).not.toBeInTheDocument();
     expect(sidebar.getByText("Payment method")).toBeVisible();
     expect(sidebar.getByText("Bank transfer")).toBeVisible();
@@ -363,7 +363,7 @@ export const ExpiredInvoice: Story = {
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
     expect(
-      sidebar.queryByRole("button", { name: "View Bank Details" }),
+      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
     ).not.toBeInTheDocument();
     expect(sidebar.getByText("Delivery address")).toBeVisible();
     expect(sidebar.getByText("Billing address")).toBeVisible();

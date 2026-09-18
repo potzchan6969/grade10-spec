@@ -108,7 +108,7 @@ Figma component set and Code Connect are TBC.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Pending Payment (card) | Pay with Card; Invoice text link beside Order summary | `winner-order-SC-57` |
-| Pending Payment (bank transfer) | View Bank Details; bank-transfer fee may read Free | `winner-order-SC-111` |
+| Pending Payment (bank transfer) | Pay by Bank Transfer; bank-transfer fee may read Free | `winner-order-SC-111` |
 | Payment Verifying | Payment step current with no pay-by date; Invoice link; Receipt hidden; Bank transfer payment-method card; Pay and further uploads hidden | `winner-order-SC-108` |
 | Payment Verifying alert | Inline Alert (`status=default`, Hourglass): “We’re verifying your transfer. We’ll email you when payment is confirmed.” Under Order progress below `lg`; under the lot from `lg` up | `winner-order-US-09` |
 | Expired Invoice | Overdue alert with Contact Us; no Pay CTA | **Out of suite:** Storybook `Expired Invoice` under Payment |
