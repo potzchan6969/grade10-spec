@@ -1,14 +1,22 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
+import { Link } from "react-router";
 import { artifactLabel } from "../api/change-artifacts";
 import type { Handoff } from "../api/handoff";
+import {
+  artifactOfAskedQuestions,
+  askedIdsOf,
+  roundlessGroupsOf,
+} from "../api/rounds";
 import { behindLabelOf, ROLE_LABEL, STAGE_LABEL } from "../api/stage-view";
 import { behindOf } from "../api/stages";
 import type {
   ChangeEntry,
   OpenQuestion,
   Role,
+  RoundRow,
   SchemaArtifact,
+  TaskGroup,
 } from "../api/types";
 import { waiverOf } from "../api/waivers";
 import { HandFace } from "./change-hand";
@@ -35,9 +43,18 @@ export function ArtifactList({
   const behind = new Map(
     behindOf(change, artifacts).map((one) => [one.artifact, one]),
   );
-  const asked = new Map<string, number>();
+  // A numbered question's own decisions row always names `artifact:
+  // "decisions"`, the file it lives in — never the draft the round was
+  // reading. `rounds.md`'s Asked column is the only place that says which
+  // artifact raised it, so a numbered question is grouped by that reading
+  // and falls back to its own `artifact` only where no round names it.
+  const raisedAgainst = artifactOfAskedQuestions(change.rounds ?? []);
+  const asked = new Map<string, OpenQuestion[]>();
   for (const question of questions) {
-    asked.set(question.artifact, (asked.get(question.artifact) ?? 0) + 1);
+    const artifact =
+      (question.id ? raisedAgainst.get(question.id) : undefined) ??
+      question.artifact;
+    asked.set(artifact, [...(asked.get(artifact) ?? []), question]);
   }
 
   return (
@@ -45,7 +62,8 @@ export function ArtifactList({
       {artifacts.map((artifact) => {
         const waiver = waiverOf(change, artifact);
         const late = behind.get(artifact.id);
-        const open = asked.get(artifact.id) ?? 0;
+        const open = asked.get(artifact.id) ?? [];
+        const openIds = open.flatMap((one) => (one.id ? [one.id] : []));
         const landed = change.landedBy?.[artifact.id];
 
         return (
@@ -91,10 +109,22 @@ export function ArtifactList({
               </Badge>
             )}
 
-            {open > 0 ? (
+            {open.length > 0 ? (
               <Text as="span" size="xs" tone="secondary">
-                {`${open} open question${open === 1 ? "" : "s"}`}
+                {`${open.length} open question${open.length === 1 ? "" : "s"}`}
               </Text>
+            ) : null}
+
+            {openIds.length > 0 ? (
+              <span className="flex flex-wrap items-center gap-1">
+                {openIds.map((id) => (
+                  <Link key={id} to={`/in-flight/${change.id}?tab=decisions`}>
+                    <Badge size="sm" variant="outline">
+                      {id}
+                    </Badge>
+                  </Link>
+                ))}
+              </span>
             ) : null}
 
             {landed ? (
@@ -116,9 +146,20 @@ export function ArtifactList({
  * Where the code is: `main`, staging, and the release that carried the
  * change. Each is said either way — "not deployed" is the fact a reader wants
  * from a change whose tasks are all ticked.
+ *
+ * The suite's own automated count rides here too, against its total: a run
+ * sheet leaves those cases out, so this is where a reader sees how many the
+ * store already proves on every push rather than on a tester's pass
+ * (`shared-planning-agent-rounds-SC-61`).
  */
 export function DeliveryRow({ change }: { change: ChangeEntry }) {
   const state = change.mainState;
+  const suites = change.suites ?? [];
+  const totalCases = suites.reduce((sum, suite) => sum + suite.cases.total, 0);
+  const automatedCases = suites.reduce(
+    (sum, suite) => sum + (suite.cases.automated ?? 0),
+    0,
+  );
 
   return (
     <ul className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
@@ -162,6 +203,16 @@ export function DeliveryRow({ change }: { change: ChangeEntry }) {
           </Badge>
         )}
       </li>
+      {totalCases > 0 ? (
+        <li className="flex items-center gap-1.5">
+          <Text as="span" size="xs" tone="secondary">
+            automated
+          </Text>
+          <Badge size="sm" variant="outline">
+            {`${automatedCases}/${totalCases}`}
+          </Badge>
+        </li>
+      ) : null}
     </ul>
   );
 }
@@ -262,6 +313,77 @@ export function QuestionList({ questions }: { questions: OpenQuestion[] }) {
               {`@${question.hand}`}
             </Text>
           )}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** A round row's own `Artifact` cell, read for a reader: a task group's bare
+ * number becomes "Group <n>", so a round on the plan and a round on the
+ * proposal are never confused at a glance. */
+function roundArtifactLabel(cell: string): string {
+  const trimmed = cell.trim();
+  return /^\d+$/.test(trimmed) ? `Group ${trimmed}` : artifactLabel(trimmed);
+}
+
+/**
+ * What each round of the change ran, one line per `rounds.md` row: the
+ * artifact or group it read, the perspectives dispatched, what stood and
+ * what was asked — and, beside them, a ticked task group no row names yet,
+ * shown as carrying none (`shared-planning-agent-rounds-SC-51`).
+ *
+ * Absent before the first round lands and where no ticked group is missing
+ * one, the same way the page's other rows go quiet rather than show an
+ * empty list (`shared-planning-agent-rounds-SC-53`).
+ */
+export function RoundsList({
+  rounds,
+  taskGroups,
+}: {
+  rounds: RoundRow[];
+  taskGroups: TaskGroup[];
+}) {
+  const missing = roundlessGroupsOf(rounds, taskGroups);
+  if (rounds.length === 0 && missing.length === 0) return null;
+
+  return (
+    <ul className="flex flex-col gap-1">
+      {rounds.map((round) => (
+        <li
+          className="flex flex-wrap items-baseline gap-x-2 gap-y-1"
+          key={round.round}
+        >
+          <Badge size="sm" variant="outline">
+            {`Round ${round.round}`}
+          </Badge>
+          <Text as="span" className="min-w-28" size="xs" weight="medium">
+            {roundArtifactLabel(round.artifact)}
+          </Text>
+          <Text as="span" size="xs" tone="secondary">
+            {round.perspectives}
+          </Text>
+          <Text as="span" size="xs">
+            {round.stood}
+          </Text>
+          {askedIdsOf(round.asked).map((id) => (
+            <Badge key={id} size="sm" variant="outline">
+              {id}
+            </Badge>
+          ))}
+        </li>
+      ))}
+      {missing.map((group) => (
+        <li
+          className="flex flex-wrap items-baseline gap-x-2 gap-y-1"
+          key={`group-${group.num}`}
+        >
+          <Text as="span" className="min-w-28" size="xs" weight="medium">
+            {`Group ${group.num}`}
+          </Text>
+          <Text as="span" size="xs" tone="secondary">
+            no round
+          </Text>
         </li>
       ))}
     </ul>

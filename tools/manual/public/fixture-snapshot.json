@@ -110,7 +110,8 @@
           "traces": [
             "alpha-SC-01"
           ],
-          "status": "draft"
+          "status": "draft",
+          "automationStatus": "manual"
         },
         {
           "id": "alpha-TC-02",
@@ -119,7 +120,8 @@
             "alpha-SC-01",
             "alpha-SC-02"
           ],
-          "status": "draft"
+          "status": "draft",
+          "automationStatus": "manual"
         }
       ],
       "testCasesStatus": "pending-review",
@@ -558,7 +560,8 @@
             "draft": 1,
             "actual": 0,
             "deprecated": 0,
-            "total": 1
+            "total": 1,
+            "automated": 0
           }
         }
       ],

@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import type {
+  AutomationStatus,
   Journey,
   Requirement,
   Scenario,
@@ -82,6 +83,12 @@ const CASE_STATUS = /^\s*(?:[-*]\s+)?\*\*Status:\*\*\s*(.+?)\s*$/m;
  * left makes it `approved`. */
 const SUITE_STATUSES = new Set(["pending-review", "in-review", "approved"]);
 const CASE_STATUSES = new Set(["draft", "actual", "deprecated"]);
+/** `manual` means no automated test runs a case yet, which is also true of a
+ * case naming no Automation status at all — unlike `**Status:**`, a missing
+ * line here is read rather than refused. */
+const AUTOMATION_STATUS =
+  /^\s*(?:[-*]\s+)?\*\*Automation status:\*\*\s*(.+?)\s*$/m;
+const AUTOMATION_STATUSES = new Set(["manual", "automated"]);
 /** The scenarios a suite deliberately leaves uncovered: a labelled list at
  * column 0, inline after the label or as bullets beneath it. */
 const OUT_OF_SUITE = /^\*\*Out of suite:\*\*(.*)$/;
@@ -502,6 +509,7 @@ export function readTestCases(text: string): TestSuite {
       title,
       traces: traces(section),
       status: caseStatus(section),
+      automationStatus: automationStatusOf(section),
     }),
   );
   refuseRepeats(
@@ -579,6 +587,23 @@ function caseStatus(section: Section): TestCaseStatus {
     );
   }
   return found as TestCaseStatus;
+}
+
+/** `manual` where the case states none — the property's own meaning for a
+ * case nothing automated covers yet, so a suite written before it existed
+ * reads as if every case said so, rather than being refused for silence
+ * `**Status:**` would never forgive. A stated value outside the vocabulary
+ * still refuses: silence is read, a typo is not. */
+function automationStatusOf(section: Section): AutomationStatus {
+  const found = AUTOMATION_STATUS.exec(section.raw)?.[1];
+  if (found === undefined) return "manual";
+  if (!AUTOMATION_STATUSES.has(found)) {
+    throw new StoreFileError(
+      section.line,
+      `test case \`${section.heading}\` is \`**Automation status:** ${found}\`, which is not manual or automated`,
+    );
+  }
+  return found as AutomationStatus;
 }
 
 function traces(section: Section): string[] {

@@ -421,12 +421,15 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
           deprecated: suite.cases.filter((one) => one.status === "deprecated")
             .length,
           total: suite.cases.length,
+          automated: suite.cases.filter(
+            (one) => one.automationStatus === "automated",
+          ).length,
         },
       });
     } catch (cause) {
       suites.push({
         spec,
-        cases: { draft: 0, actual: 0, deprecated: 0, total: 0 },
+        cases: { draft: 0, actual: 0, deprecated: 0, total: 0, automated: 0 },
         error: toItemError(casesFile, cause),
       });
     }

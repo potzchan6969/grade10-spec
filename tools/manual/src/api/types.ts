@@ -86,6 +86,13 @@ export type Journey = {
  * generation writes `draft`, only a human review writes `actual`. */
 export type TestCaseStatus = "draft" | "actual" | "deprecated";
 
+/** Whether an automated test already covers a case
+ * (`docs/governance/specs-to-test-cases.md`, Automation status): `manual`
+ * means no automated test runs it yet, which is also what a case that states
+ * no Automation status at all means — the property is silent on nothing
+ * else, so a missing line reads as `manual` rather than refusing the file. */
+export type AutomationStatus = "manual" | "automated";
+
 export type TestCase = {
   /** Permanent store id like `grade10-site-loyalty-programme-US1-TC3-1`, or the flat
    * `grade10-site-loyalty-programme-TC-03` an older suite issued. */
@@ -97,6 +104,7 @@ export type TestCase = {
    * named those. A trace reaches the scenarios that serve the same anchor. */
   traces: string[];
   status: TestCaseStatus;
+  automationStatus: AutomationStatus;
 };
 
 /** The suite file's own status — derived from its cases, never chosen:
@@ -229,7 +237,13 @@ export type ChangeSuite = {
   /** The spec id the suite belongs to. */
   spec: string;
   status?: TestSuiteStatus;
-  cases: { draft: number; actual: number; deprecated: number; total: number };
+  cases: {
+    draft: number;
+    actual: number;
+    deprecated: number;
+    total: number;
+    automated: number;
+  };
   error?: ItemError;
 };
 

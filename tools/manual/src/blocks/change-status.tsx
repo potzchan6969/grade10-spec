@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { dependenciesOf, type ManualIndex } from "../api/derive";
 import { handoffsOf, type LandingDates } from "../api/handoff";
 import { overlaysOf } from "../api/overlays";
+import { roundlessGroupsOf } from "../api/rounds";
 import { stageShown } from "../api/stage-view";
 import { taskTotals } from "../api/stages";
 import type { ChangeDocument, ChangeEntry } from "../api/types";
@@ -11,6 +12,7 @@ import {
   DeliveryRow,
   HandoffRow,
   QuestionList,
+  RoundsList,
 } from "./artifact-list";
 import { MainStateNote, SpecLines } from "./change-facts";
 import { OverlayChips } from "./change-overlays";
@@ -61,6 +63,10 @@ export function ChangeStatus({
   const handoffs = document
     ? handoffsOf(change, stage, artifacts, datesOf(document))
     : [];
+  const rounds = change.rounds ?? [];
+  const showRounds =
+    rounds.length > 0 ||
+    roundlessGroupsOf(rounds, change.taskGroups).length > 0;
 
   return (
     <dl className="my-5 grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-2">
@@ -127,6 +133,12 @@ export function ChangeStatus({
             label={`${groups} ${groups === 1 ? "group" : "groups"}`}
             total={total}
           />
+        </Row>
+      ) : null}
+
+      {showRounds ? (
+        <Row label="Rounds">
+          <RoundsList rounds={rounds} taskGroups={change.taskGroups} />
         </Row>
       ) : null}
     </dl>
