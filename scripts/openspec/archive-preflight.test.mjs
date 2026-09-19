@@ -316,7 +316,11 @@ test("reads the archive's own commit dates where no reviewed: line dates the rea
   assert.match(result.stderr, /specs — proposal changed/);
 });
 
-test("skips the freshness read on a shallow clone rather than refusing on its account", () => {
+// shared-planning-change-stages-SC-31: a `reviewed:` id is a hash of the text
+// before the artifact, so the comparison that reads it needs no commit dates
+// and no history at all. A shallow clone is where CI archives from, and the
+// gate is checked there too.
+test("shared-planning-change-stages-SC-31 - refuses a stale read on a shallow clone, which the content id needs no history to see", () => {
   const source = behindSandbox("reviewed:\n  specs: deadbeef\n").root;
   const shallow = mkdtempSync(join(tmpdir(), "archive-preflight-shallow-"));
   // `--depth` is silently ignored on a local-path clone; `file://` is what
@@ -328,9 +332,9 @@ test("skips the freshness read on a shallow clone rather than refusing on its ac
   );
   const result = run(shallow);
 
-  assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /Freshness not checked/);
-  assert.match(result.stdout, /shallow clone/);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /archives with 1 artifact\(s\) behind/);
+  assert.match(result.stderr, /specs — read again against proposal/);
 });
 
 // ── The carry gate ──────────────────────────────────────────────────────────
