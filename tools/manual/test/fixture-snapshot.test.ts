@@ -41,7 +41,11 @@ describe("the bundled fixture snapshot", () => {
 describe("the fixture's coverage of every stage and overlay", () => {
   const artifacts = committed.schemas["grade10-planning"] ?? [];
   const archived = readArchivedChanges(DEMO_STORE, NO_GIT);
-  const overlayContext = { now: Date.now(), released: new Set<string>(), artifacts };
+  const overlayContext = {
+    now: Date.now(),
+    released: new Set<string>(),
+    artifacts,
+  };
 
   const stagesShown = new Set([
     ...committed.changes.map((change: unknown) => stageOf(change, artifacts)),
@@ -72,7 +76,9 @@ describe("the fixture's coverage of every stage and overlay", () => {
 
   it("carries a record nothing could read", () => {
     expect(
-      committed.changes.some((change: { error?: unknown }) => change.error !== undefined),
+      committed.changes.some(
+        (change: { error?: unknown }) => change.error !== undefined,
+      ),
     ).toBe(true);
   });
 

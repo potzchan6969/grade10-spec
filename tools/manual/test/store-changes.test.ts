@@ -14,7 +14,17 @@ const change = changes[0];
 
 describe("in-flight changes", () => {
   it("reads one entry per change directory, archive aside", () => {
-    expect(changes.map((one) => one.id)).toEqual(["add-thing"]);
+    expect(changes.map((one) => one.id)).toEqual([
+      "add-thing",
+      "demo-building",
+      "demo-designed",
+      "demo-on-staging",
+      "demo-planned",
+      "demo-released",
+      "demo-specified",
+      "demo-unreadable",
+      "demo-waiting",
+    ]);
     expect(change.status).toBe("in-flight");
   });
 
