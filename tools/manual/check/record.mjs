@@ -312,8 +312,10 @@ export function checkHands(ctx, changes) {
  * schema issues nowhere is refused the same way in either, and this is the
  * one place that refusal is reported for both. `readIdMap` already refuses a
  * mapping that is not one and an entry that is not a line of text; what
- * survives that read is a handle the team map does not know and an id the
- * schema does not issue.
+ * survives that read is an id the schema does not issue, a value that is not
+ * one handle, and a handle the team map does not know — the same two steps
+ * over a handle that `checkHands` runs, so one mistyped handle reads the
+ * same way whichever key carries it.
  */
 export function checkLandedBy(ctx, changes) {
   // The team map failed to read: `store` already named it, and nothing here
@@ -336,6 +338,12 @@ export function checkLandedBy(ctx, changes) {
           "landed_by",
           file,
           `\`landed_by.${artifact}\` names an artifact the \`${change.schema}\` schema does not issue — name one of ${namedIds}`,
+        );
+      } else if (!isHandle(handle)) {
+        ctx.add(
+          "landed_by",
+          file,
+          `\`landed_by.${artifact}: ${handle}\` is not one handle`,
         );
       } else if (!memberOf(ctx.team, handle)) {
         ctx.add(
