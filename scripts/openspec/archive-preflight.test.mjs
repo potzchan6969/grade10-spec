@@ -12,6 +12,8 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { parsePage } from "../../tools/manual/src/content/grammar.ts";
+import { sectionTextOf } from "../../tools/manual/src/content/sections.ts";
 import { contentIdOf } from "../../tools/manual/src/store/content-id.mts";
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
@@ -37,8 +39,11 @@ const CHANGE = "build-alpha";
  * same tree beside it for that import to resolve. `schemas` writes
  * `openspec/schemas/<id>/schema.yaml`, keyed by id; a change naming a schema
  * this reads none for is read as owing nothing, the way a store that has not
- * landed the schema yet is. */
-function sandbox(files, durable = {}, schemas = {}) {
+ * landed the schema yet is. `pages` writes store-relative files at the root
+ * — `docs/prds/…` — for the one case where a proposal links a page section:
+ * the store's change reader reads pages too, so a `reviewed:` id can only be
+ * reproduced by hashing the same section text it hashed. */
+function sandbox(files, durable = {}, schemas = {}, pages = {}) {
   const root = mkdtempSync(join(tmpdir(), "archive-preflight-"));
   const scripts = join(root, "scripts", "openspec");
   mkdirSync(scripts, { recursive: true });
@@ -63,6 +68,7 @@ function sandbox(files, durable = {}, schemas = {}) {
   };
   write(dir, files);
   write(join(root, "openspec", "specs"), durable);
+  write(root, pages);
   for (const [id, yaml] of Object.entries(schemas)) {
     write(join(root, "openspec", "schemas"), { [`${id}/schema.yaml`]: yaml });
   }
@@ -229,6 +235,54 @@ test("refuses a delta behind what it was drawn from, naming it", () => {
 test("is clear where the read record matches the tree", () => {
   const result = run(
     behindSandbox(`reviewed:\n  specs: ${FRESH_SPECS_ID}\n`).script,
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
+// shared-planning-change-stages-SC-27: the gate reads pages the same way the
+// store's own reader does, so a `reviewed:` id hashed with a linked section's
+// text is reproduced here rather than read as a mismatch because the section
+// was never read at all.
+const PAGE = "docs/prds/products/demo/rules.md";
+const PAGE_TEXT = [
+  "---",
+  "title: Rules",
+  "---",
+  "",
+  "## Points",
+  "",
+  "A point is earned per dollar spent.",
+  "",
+].join("\n");
+const LINKED_PROPOSAL = [
+  "# Build alpha",
+  "",
+  "## Why",
+  "",
+  "To ship it.",
+  "",
+  "## References",
+  "",
+  `- [Rules · Points](../../../${PAGE}#points)`,
+  "",
+].join("\n");
+const POINTS_SECTION = sectionTextOf({ ast: parsePage(PAGE_TEXT) }, "points");
+
+test("is clear where a reviewed id was hashed with the page section it links", () => {
+  const reviewed = `reviewed:\n  specs: ${contentIdOf([POINTS_SECTION, LINKED_PROPOSAL])}\n`;
+  const result = run(
+    sandbox(
+      {
+        "proposal.md": LINKED_PROPOSAL,
+        ".openspec.yaml": `schema: demo-planning\n${reviewed}`,
+        "tasks.md": BEHIND_TASKS,
+        "specs/demo/alpha/spec.md": BEHIND_DELTA,
+      },
+      {},
+      { "demo-planning": BEHIND_SCHEMA },
+      { [PAGE]: PAGE_TEXT },
+    ).script,
   );
 
   assert.equal(result.status, 0, result.stderr);
