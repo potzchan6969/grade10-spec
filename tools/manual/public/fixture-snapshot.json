@@ -168,6 +168,7 @@
       "dir": "openspec/changes/add-thing",
       "schema": "grade10-planning",
       "status": "in-flight",
+      "stage": "proposed",
       "owners": [
         "tester",
         "other"
@@ -256,7 +257,7 @@
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
         "A record anyone can read back."
       ],
-      "stage": "proposed",
+      "heldBy": "ui-design",
       "upstream": {
         "specs": {
           "id": "47e63e84",

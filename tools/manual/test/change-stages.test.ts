@@ -3,6 +3,8 @@ import { laneOf } from "../src/api/derive";
 import { draftedOf, movedBy, moveShown } from "../src/api/stage-view.ts";
 import {
   handOf,
+  handOfArtifact,
+  ladderOf,
   laneOfStage,
   OVERLAYS,
   type Overlay,
@@ -128,10 +130,10 @@ describe("the stage a change's files prove", () => {
     });
 
     expect(stage(unreadable)).toBe("proposed");
-    expect(handOf(unreadable, "proposed")).toEqual(["pm"]);
-    expect(openHands(unreadable, handOf(unreadable, "proposed"))).toEqual([
-      "pm",
-    ]);
+    expect(handOf(unreadable, "proposed", artifacts())).toEqual(["pm"]);
+    expect(
+      openHands(unreadable, handOf(unreadable, "proposed", artifacts())),
+    ).toEqual(["pm"]);
   });
 
   it("holds Proposed while the decisions, the journeys and the hands land", () => {
@@ -211,7 +213,7 @@ describe("the four lanes the eight stages project to", () => {
 
 describe("whose turn it is", () => {
   const handsAt = (rung: Stage, extra: Partial<ChangeEntry> = {}) =>
-    handOf(at(rung, extra), rung);
+    handOf(at(rung, extra), rung, artifacts());
 
   it("is the product manager's in Proposed until the three are on main", () => {
     expect(
@@ -230,6 +232,23 @@ describe("whose turn it is", () => {
   it("is the designer's and the tech PIC's once the three are in", () => {
     expect(handsAt("proposed")).toEqual(["design", "tech"]);
     expect(stage(at("proposed"))).toBe("proposed");
+  });
+
+  it("waits on the hands the next stage needs, and stands a waived one down", () => {
+    // Both designs are owed and neither hand is named.
+    expect(handsAt("proposed", { hands: { pm: "robin" } })).toEqual(["pm"]);
+    // The designer is named and the tech design is owed too.
+    expect(
+      handsAt("proposed", { hands: { pm: "robin", design: "dana" } }),
+    ).toEqual(["pm"]);
+    // The UI design is waived, so nobody draws it: the tech PIC is the only
+    // hand the next stage needs, and the turn passes on that name alone.
+    expect(
+      handsAt("proposed", {
+        hands: { pm: "robin", tech: "kim" },
+        uiWaived: "nothing a reader sees moves",
+      }),
+    ).toEqual(["tech"]);
   });
 
   it("reads a waived decisions record as the decisions landing", () => {
@@ -257,13 +276,61 @@ describe("whose turn it is", () => {
   it("reads a role the change does not name as open", () => {
     const unnamed = at("planned", { hands: { pm: "robin" } });
 
-    expect(openHands(unnamed, handOf(unnamed, "planned"))).toEqual(["dev"]);
-    expect(openHands(at("planned"), handOf(at("planned"), "planned"))).toEqual(
-      [],
+    expect(openHands(unnamed, handOf(unnamed, "planned", artifacts()))).toEqual(
+      ["dev"],
     );
+    expect(
+      openHands(at("planned"), handOf(at("planned"), "planned", artifacts())),
+    ).toEqual([]);
     expect(
       openHands(at("on-staging", { hands: { qa: "ari" } }), ["qa", "release"]),
     ).toEqual(["release"]);
+  });
+});
+
+describe("what the ladder stopped at", () => {
+  const held = (rung: Stage, extra: Partial<ChangeEntry> = {}) =>
+    ladderOf(at(rung, extra), artifacts()).heldBy;
+
+  it("names the first artifact of the rung that is not proven", () => {
+    expect(held("proposed")).toBe("ui-design");
+    expect(held("designed")).toBe("specs");
+    expect(held("specified")).toBe("tasks");
+    expect(held("proposed", { written: [...PROPOSED, "ui-design"] })).toBe(
+      "tech-design",
+    );
+  });
+
+  it("names nothing where no artifact is what holds the rung", () => {
+    // Every box is ticked and the deploy has not happened: nothing a hand
+    // writes stands between the change and On staging.
+    expect(held("building", { taskGroups: [group(3, 3)] })).toBeUndefined();
+    // A raised row holds Specified while both its artifacts are in.
+    expect(held("specified", { raisedOpen: 1 })).toBeUndefined();
+    expect(held("archived")).toBeUndefined();
+  });
+});
+
+describe("which artifact is whose hand", () => {
+  it("is the role the schema names beside the artifact", () => {
+    const hands = Object.fromEntries(
+      artifacts().map((one) => [one.id, handOfArtifact(one.id, artifacts())]),
+    );
+
+    expect(hands).toEqual({
+      proposal: "pm",
+      decisions: "pm",
+      "user-journeys": "pm",
+      "ui-design": "design",
+      "tech-design": "tech",
+      specs: "pm",
+      "test-cases": "qa",
+      tasks: "dev",
+    });
+  });
+
+  it("names nobody for an artifact the schema does not issue", () => {
+    expect(handOfArtifact("release-notes", artifacts())).toBeUndefined();
   });
 });
 
@@ -377,6 +444,25 @@ describe("the five overlays beside the stage", () => {
       },
     ]);
     expect(stage(waiting)).toBe("specified");
+  });
+
+  it("names the role and no handle where the change names nobody for it", () => {
+    const waiting = at("specified", {
+      hands: { pm: "robin" },
+      awaiting: [{ artifact: "tech-design", why: "2026-09-12 the increment" }],
+    });
+
+    // The role, and no `hand`: a handle holding the role's own name would
+    // read as somebody who answers to it.
+    expect(overlays(waiting)).toEqual([
+      {
+        kind: "waiting",
+        artifact: "tech-design",
+        text: "2026-09-12 the increment",
+        since: "2026-09-12",
+        role: "tech",
+      },
+    ]);
   });
 
   it("shows a dependency no release has carried, and nothing for one that has", () => {
@@ -493,9 +579,10 @@ describe("the ladder's own surface", () => {
 
     for (const change of [...snapshot.changes, ...archive.changes]) {
       expect(STAGES).toContain(change.stage);
-      expect(laneOf(change)).toBe(laneOfStage(change.stage as Stage));
+      expect(laneOf(change)).toBe(laneOfStage(change.stage));
     }
     expect(archive.changes.every((one) => one.stage === "archived")).toBe(true);
-    expect(snapshot.changes.every((one) => one.stage !== undefined)).toBe(true);
+    // Nothing on an archived change is owed: the fold is the last rung.
+    expect(archive.changes.every((one) => one.heldBy === undefined)).toBe(true);
   });
 });

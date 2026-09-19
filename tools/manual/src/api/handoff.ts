@@ -1,6 +1,6 @@
 import { handOfArtifact, STAGES, TIME_ZONE } from "./stages";
 import { daysBetween } from "./time";
-import type { ChangeEntry, Role, Stage } from "./types";
+import type { ChangeEntry, Role, SchemaArtifact, Stage } from "./types";
 
 /**
  * Where the days went: for each stage a change has left, the days from that
@@ -51,6 +51,7 @@ export type LandingDates = Record<string, string | undefined>;
 export function handoffsOf(
   change: ChangeEntry,
   stage: Stage,
+  artifacts: SchemaArtifact[],
   dates: LandingDates,
   now: string | number | Date = Date.now(),
   timeZone: string = TIME_ZONE,
@@ -65,12 +66,14 @@ export function handoffsOf(
       continue;
     }
     const word = firstWordAfter(left, landed, dates);
-    const role = word ? handOfArtifact(word.artifact) : undefined;
+    const role = word ? handOfArtifact(word.artifact, artifacts) : undefined;
+    const hand = role ? change.hands?.[role] : undefined;
     handoffs.push({
       stage: left,
       landed,
       ...daysOf(landed, word?.date ?? now, timeZone),
-      ...(role ? { role, hand: change.hands?.[role] ?? role } : {}),
+      ...(role ? { role } : {}),
+      ...(hand ? { hand } : {}),
       open: word === undefined,
     });
   }

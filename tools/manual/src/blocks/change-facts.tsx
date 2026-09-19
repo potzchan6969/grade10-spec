@@ -5,7 +5,7 @@ import { Link } from "react-router";
 import { citeTarget, type Dependency, type ManualIndex } from "../api/derive";
 import { draftedOf, roleTitle, stageShown } from "../api/stage-view";
 import { handOf, type Overlay, taskTotals } from "../api/stages";
-import type { ChangeEntry, ChangeSuite } from "../api/types";
+import type { ChangeEntry, ChangeSuite, SchemaArtifact } from "../api/types";
 import { Hands } from "./change-hand";
 import { OverlayChips } from "./change-overlays";
 import {
@@ -32,10 +32,14 @@ import { CopyableCommand } from "./copyable-command";
  */
 export function ChangeFacts({
   change,
+  artifacts = [],
   overlays = [],
   progress = false,
 }: {
   change: ChangeEntry;
+  /** The change's schema artifacts, for whose turn it is and whose each
+   * artifact is. */
+  artifacts?: SchemaArtifact[];
   /** What sits beside the stage, as the board derived it. */
   overlays?: Overlay[];
   /** Show the task bar here — where the task groups are not laid out below. */
@@ -48,7 +52,10 @@ export function ChangeFacts({
       <MainStateNote change={change} />
 
       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
-        <Hands change={change} roles={handOf(change, stageShown(change))} />
+        <Hands
+          change={change}
+          roles={handOf(change, stageShown(change), artifacts)}
+        />
         <Attribution change={change} claim />
         <ul className="flex flex-wrap items-center gap-2">
           {change.deltas.map((delta) => (

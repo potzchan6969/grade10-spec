@@ -60,17 +60,31 @@ export function stageOf(
   change: ChangeEntry,
   artifacts: SchemaArtifact[],
 ): Stage {
-  if (change.error) return "proposed";
-  if (change.status === "archived") return "archived";
+  return ladderOf(change, artifacts).stage;
+}
+
+/**
+ * The same walk, with the artifact it stopped at where an artifact stopped it.
+ *
+ * `heldBy` is what the change owes next: the first artifact of the unproven
+ * rung that is neither written nor waived. Nothing where the rung above is
+ * proven by something no hand writes — a ticked box, a deploy, a cut — and
+ * nothing where the rung is held by a raised row rather than a file, because
+ * naming an artifact there would send a hand to a file that is already in.
+ */
+export function ladderOf(
+  change: ChangeEntry,
+  artifacts: SchemaArtifact[],
+): { stage: Stage; heldBy?: string } {
+  if (change.error) return { stage: "proposed" };
+  if (change.status === "archived") return { stage: "archived" };
   const settled = settledOf(change, artifacts);
   const { done, total } = taskTotals(change);
   const proven: Partial<Record<Stage, boolean>> = {
-    designed: settled("ui-design") && settled("tech-design"),
+    designed: OWED_AT.designed.every(settled),
     specified:
-      settled("specs") &&
-      settled("test-cases") &&
-      (change.raisedOpen ?? 0) === 0,
-    planned: settled("tasks") && change.promotedBy !== undefined,
+      OWED_AT.specified.every(settled) && (change.raisedOpen ?? 0) === 0,
+    planned: OWED_AT.planned.every(settled) && change.promotedBy !== undefined,
     building: done > 0,
     "on-staging":
       total > 0 && done === total && change.deployedEnv === "staging",
@@ -78,11 +92,27 @@ export function stageOf(
   };
   let reached: Stage = "proposed";
   for (const rung of STAGES.slice(1)) {
-    if (!proven[rung]) break;
+    if (!proven[rung]) {
+      const owed = (OWED_AT[rung] ?? []).find((id) => !settled(id));
+      return owed ? { stage: reached, heldBy: owed } : { stage: reached };
+    }
     reached = rung;
   }
-  return reached;
+  return { stage: reached };
 }
+
+/** The artifacts each rung of the ladder is proven by, in the order a change
+ * owes them. The rungs below carry none: a box, a deploy, a tag and the fold
+ * are proven by no artifact of the schema. */
+const OWED_AT: Partial<Record<Stage, string[]>> & {
+  designed: string[];
+  specified: string[];
+  planned: string[];
+} = {
+  designed: ["ui-design", "tech-design"],
+  specified: ["specs", "test-cases"],
+  planned: ["tasks"],
+};
 
 /** Whether an artifact is on `main` or stood for by a line of the record. */
 function settledOf(
@@ -129,30 +159,48 @@ const LANE_OF: Record<Stage, ChangeLane> = {
 /**
  * Whose turn it is, from the stage and `hands:`.
  *
- * Proposed splits: the product manager holds it until the decisions, the
- * journeys and the hands are all on `main`, and the designer and the tech PIC
- * take it after that — which is why a move is the pair `(stage, hands)`
- * changing and not the stage alone. Designed, Released and Archived name
- * nobody: the requirements are drafted next and read at Specified, and
- * whoever archives takes a released change.
+ * Proposed splits: the product manager holds it until the decisions and the
+ * journeys are on `main` and `hands:` names every role the next stage needs,
+ * and those hands take it after that — which is why a move is the pair
+ * `(stage, hands)` changing and not the stage alone. A waived design needs no
+ * hand: nobody draws it, so the turn passes to the hand of the design that is
+ * still owed rather than waiting on a handle for a file nobody will write.
+ * Designed, Released and Archived name nobody: the requirements are drafted
+ * next and read at Specified, and whoever archives takes a released change.
  *
- * The two artifacts read here are settled by the record's own lines where
- * they are settled by a line at all, so this needs no schema: `decisions` by
- * `decisions_waived:` and the journeys by `skip_specs:`, which says the
- * change alters no behaviour and so has no capability to walk.
+ * Settled is read through the same predicate as the ladder, so the stage and
+ * the turn cannot disagree about whether an artifact is in: `decisions` is
+ * settled by `decisions_waived:` and the journeys by `skip_specs:`, which says
+ * the change alters no behaviour and so has no capability to walk.
  */
-export function handOf(change: ChangeEntry, stage: Stage): Role[] {
+export function handOf(
+  change: ChangeEntry,
+  stage: Stage,
+  artifacts: SchemaArtifact[],
+): Role[] {
   // A record nothing could read is the product manager's to fix, and its
   // hands are open because nothing could read them either.
   if (change.error) return ["pm"];
   if (stage !== "proposed") return HANDS_AT[stage];
-  const written = new Set(change.written);
+  const settled = settledOf(change, artifacts);
+  const waived = waivedOf(artifacts, change);
+  const next = SECOND_HANDS.filter((one) => !waived.has(one.artifact)).map(
+    (one) => one.role,
+  );
   const whole =
-    (written.has("decisions") || change.decisionsWaived !== undefined) &&
-    (written.has("user-journeys") || change.skipSpecs !== undefined) &&
-    Object.keys(change.hands ?? {}).length > 0;
-  return whole ? ["design", "tech"] : ["pm"];
+    settled("decisions") &&
+    settled("user-journeys") &&
+    next.length > 0 &&
+    next.every((role) => change.hands?.[role] !== undefined);
+  return whole ? next : ["pm"];
 }
+
+/** The hands the second half of Proposed passes to, each with the design it
+ * draws: a waiver stands for the file, so it stands the hand down too. */
+const SECOND_HANDS: { role: Role; artifact: string }[] = [
+  { role: "design", artifact: "ui-design" },
+  { role: "tech", artifact: "tech-design" },
+];
 
 const HANDS_AT: Record<Stage, Role[]> = {
   proposed: ["pm"],
@@ -223,24 +271,20 @@ export const DRAFTED: Partial<Record<Stage, Drafted>> = {
 };
 
 /**
- * Which artifact is whose. The schema's `teammate` cannot answer it: the tech
- * design and the task list are both the engineer's there, and the hand of one
- * is the tech PIC while the hand of the other is the engineer building it.
+ * The role that answers for one artifact, as the schema names it — `hand:`
+ * beside `teammate`, which cannot answer it: the tech design and the task
+ * list are both the engineer's there, while the hand of one is the tech PIC
+ * and the hand of the other is whoever builds it.
+ *
+ * Nothing for an artifact the schema does not issue, or issues with no hand:
+ * a wait, an overlay and a landing on it are shown against no role rather
+ * than against a guess.
  */
-const HAND_OF_ARTIFACT: Record<string, Role> = {
-  proposal: "pm",
-  decisions: "pm",
-  "user-journeys": "pm",
-  "ui-design": "design",
-  "tech-design": "tech",
-  specs: "pm",
-  "test-cases": "qa",
-  tasks: "dev",
-};
-
-/** The role that owes one artifact, where the store issues it. */
-export function handOfArtifact(artifact: string): Role | undefined {
-  return HAND_OF_ARTIFACT[artifact];
+export function handOfArtifact(
+  artifact: string,
+  artifacts: SchemaArtifact[],
+): Role | undefined {
+  return artifacts.find((one) => one.id === artifact)?.hand;
 }
 
 /**
@@ -402,7 +446,7 @@ export function overlaysOf(
       artifact: wait.artifact,
       text: wait.why,
       ...(since ? { since } : {}),
-      ...whose(change, wait.artifact),
+      ...whose(change, wait.artifact, ctx.artifacts),
     });
   }
   for (const id of change.dependsOn ?? []) {
@@ -417,7 +461,7 @@ export function overlaysOf(
     overlays.push({
       kind: "behind",
       ...earliest,
-      ...whose(change, earliest.artifact),
+      ...whose(change, earliest.artifact, ctx.artifacts),
     });
   }
   const verdict = verdictOf(change.suites);
@@ -425,16 +469,19 @@ export function overlaysOf(
   return overlays;
 }
 
-/** The hand an artifact's overlay is shown against: the handle the change
- * names for that role, or the role itself where it names none — the way an
- * open question carries its hand. */
+/** The hand an artifact's overlay is shown against: the role the schema names
+ * for it, and the handle the change names for that role. No handle where the
+ * change names none — the overlay says the role is open, and a `hand` holding
+ * the role's own name would read as somebody answering to it. */
 function whose(
   change: ChangeEntry,
   artifact: string,
+  artifacts: SchemaArtifact[],
 ): { role?: Role; hand?: string } {
-  const role = handOfArtifact(artifact);
+  const role = handOfArtifact(artifact, artifacts);
   if (!role) return {};
-  return { role, hand: change.hands?.[role] ?? role };
+  const hand = change.hands?.[role];
+  return hand === undefined ? { role } : { role, hand };
 }
 
 /**

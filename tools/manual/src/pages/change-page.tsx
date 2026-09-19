@@ -152,11 +152,12 @@ function ChangeBody({ change }: { change: ChangeEntry }) {
   const archive = useArchive();
   const document = useChangeDocument(change.id);
   const stage = stageShown(change);
+  const artifacts = index.snapshot.schemas[change.schema] ?? [];
 
   return (
     <>
       <StageStepper stage={stage} />
-      <YourTurnCard change={change} stage={stage} />
+      <YourTurnCard artifacts={artifacts} change={change} stage={stage} />
 
       <ChangeStatus
         archived={

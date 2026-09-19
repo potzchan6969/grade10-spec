@@ -10,7 +10,7 @@ import { ArrowSquareOut } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { draftedOf, ROLE_LABEL, roleTitle } from "../api/stage-view";
 import { handOf } from "../api/stages";
-import type { ChangeEntry, Role, Stage } from "../api/types";
+import type { ChangeEntry, Role, SchemaArtifact, Stage } from "../api/types";
 import { useEditorSession } from "../editor/session";
 import { Hand } from "./change-hand";
 import { CopyableCommand } from "./copyable-command";
@@ -28,11 +28,15 @@ import { CopyableCommand } from "./copyable-command";
 export function YourTurnCard({
   change,
   stage,
+  artifacts,
 }: {
   change: ChangeEntry;
   stage: Stage;
+  /** The change's schema artifacts, for whose turn it is in Proposed — a
+   * waived design needs no hand. */
+  artifacts: SchemaArtifact[];
 }) {
-  const roles = handOf(change, stage);
+  const roles = handOf(change, stage, artifacts);
   const drafted = draftedOf(stage, change.id);
 
   return (

@@ -1,6 +1,6 @@
 import { join } from "node:path";
 import YAML from "yaml";
-import type { Perspective, SchemaArtifact } from "../api/types.ts";
+import { type Perspective, ROLES, type SchemaArtifact } from "../api/types.ts";
 import { readTextIfExists, StoreFileError } from "./disk.mts";
 
 /** The artifacts a schema declares, in the order it declares them — the
@@ -35,10 +35,12 @@ export function schemaArtifacts(
       continue;
     const teammate =
       typeof fields.teammate === "string" ? fields.teammate : undefined;
+    const hand = handOf(fields.id, fields.hand);
     artifacts.push({
       id: fields.id,
       generates: fields.generates,
       ...(teammate ? { teammate } : {}),
+      ...(hand ? { hand } : {}),
       requires: strings(fields.requires),
       upstream: strings(fields.upstream),
       perspectives: perspectives(fields.perspectives),
@@ -58,6 +60,23 @@ export function schemaArtifacts(
     }
   }
   return artifacts;
+}
+
+/** The role a schema names as an artifact's hand. A key it does not carry is
+ * read as absent — the artifact is shown against no role — but a role outside
+ * the six is refused: every surface that names a hand and every message that
+ * addresses one reads this, and a role nothing can route to is a silence
+ * where a typo was. */
+function handOf(id: string, value: unknown): SchemaArtifact["hand"] {
+  if (value === undefined || value === null) return undefined;
+  const named = ROLES.find((role) => role === value);
+  if (!named) {
+    throw new StoreFileError(
+      1,
+      `\`${id}\` names \`${String(value)}\` in \`hand:\`, which is no role — name one of ${ROLES.map((role) => `\`${role}\``).join(", ")}`,
+    );
+  }
+  return named;
 }
 
 /** The readers a round on a task group may dispatch. A task group is no

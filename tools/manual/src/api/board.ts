@@ -37,6 +37,9 @@ export type BoardRow = {
   change: ChangeEntry;
   stage: Stage;
   overlays: Overlay[];
+  /** Whose turn it is at that stage, read where the schema is — the lane
+   * heading collects the open ones and the card names them. */
+  turn: Role[];
   /** Idle long enough to come off the lanes and sit on the shelf. */
   shelved: boolean;
   /** Whole days since it last landed anything, where history dates it. */
@@ -61,18 +64,20 @@ export function boardRows(
 ): BoardRow[] {
   return [...changes].sort(byLastMoved).map((change) => {
     const stage = stageShown(change);
+    const artifacts = ctx.schemas[change.schema] ?? [];
     const overlays =
       change.status === "archived"
         ? []
         : overlaysOf(change, {
             now: ctx.now,
             released: ctx.released,
-            artifacts: ctx.schemas[change.schema] ?? [],
+            artifacts,
           });
     const idle = overlays.find((overlay) => overlay.kind === "idle");
     return {
       change,
       stage,
+      turn: handOf(change, stage, artifacts),
       overlays,
       shelved: idle?.kind === "idle" && idle.shelved,
       ...(idle?.kind === "idle" ? { idleDays: idle.days } : {}),
@@ -95,9 +100,7 @@ export function boardLanes(rows: BoardRow[]): BoardLane[] {
   return STAGES.map((stage) => {
     const held = rows.filter((row) => row.stage === stage && !row.shelved);
     const open = new Set(
-      held.flatMap((row) =>
-        openHands(row.change, handOf(row.change, row.stage)),
-      ),
+      held.flatMap((row) => openHands(row.change, row.turn)),
     );
     return {
       stage,

@@ -134,7 +134,8 @@ if (artifact === undefined && !isGroup(target)) {
     `\`${target}\` is neither an artifact of the \`${read.entry.schema}\` schema nor a task group`,
   );
 }
-const role = artifact === undefined ? "dev" : handOfArtifact(artifact);
+const role =
+  artifact === undefined ? "dev" : handOfArtifact(artifact, artifacts);
 if (role === undefined)
   fail(
     `the store issues no hand for \`${target}\` — nothing says whose word it is`,
@@ -168,9 +169,13 @@ const behind = behindOf(read.entry, artifacts).filter(
 );
 if (behind.length > 0) {
   const [first] = behind;
-  const whose = read.entry.hands?.[handOfArtifact(first.artifact) ?? ""];
+  const whose =
+    read.entry.hands?.[handOfArtifact(first.artifact, artifacts) ?? ""];
+  // One of the two: what commit dates single out, or what the recorded id
+  // says it is read again against without saying which part of it moved.
+  const what = first.changed ?? first.before ?? [];
   fail(
-    `${first.artifact} is behind ${first.changed.join(", ")}${whose ? ` and waits on @${whose}` : ""} — it is read again before ${target} lands`,
+    `${first.artifact} is behind ${what.join(", ")}${whose ? ` and waits on @${whose}` : ""} — it is read again before ${target} lands`,
   );
 }
 say("behind", `nothing before ${target} is behind`);

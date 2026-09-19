@@ -534,6 +534,11 @@ export type ChangeEntry = {
   /** How far the change has got, computed where the schema is — on every
    * entry, so no surface carries a second derivation for one that has none. */
   stage: Stage;
+  /** The artifact the ladder stopped at: what the change owes to reach the
+   * next stage. Absent where the next rung is proven by something no hand
+   * writes — a ticked box, a deploy, a cut, the fold — and where the rung is
+   * held by a raised row rather than by a file. */
+  heldBy?: string;
   /** What the change says it is waiting for, from `.openspec.yaml`
    * `awaiting:` — an artifact id against the line its author wrote. */
   awaiting?: { artifact: string; why: string }[];
@@ -548,6 +553,12 @@ export type SchemaArtifact = {
   /** The teammate that writes it. A schema naming none leaves the artifact off
    * every worklist rather than guessing whose turn it is. */
   teammate?: string;
+  /** The role that answers for it — the hand a wait, an overlay and a landing
+   * on this artifact are addressed to. Beside `teammate` rather than derived
+   * from it: the tech design and the task list are both the engineer's there,
+   * while the hand of one is the tech PIC and of the other whoever builds
+   * it. Absent where the schema names no hand. */
+  hand?: Role;
   requires: string[];
   /** The artifacts this one's text is drawn from, in reading order — the
    * graph, which the artifact list's order is not: the blind suite is written

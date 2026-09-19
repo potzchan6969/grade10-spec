@@ -62,11 +62,11 @@ export function stageNumber(stage: Stage): number {
 export const STAGE_COUNT = STAGES.length;
 
 /** The roles a stage names, with no change in hand: what an empty lane says
- * about who would take a change that arrived in it. A bare entry is the whole
- * input — `handOf` reads the record for the two halves of Proposed, and a
- * lane has no record to read. */
+ * about who would take a change that arrived in it. A bare entry and no
+ * schema are the whole input — `handOf` reads the record and the waivers for
+ * the two halves of Proposed, and a lane has neither to read. */
 export function rolesAtStage(stage: Stage): Role[] {
-  return handOf(BARE, stage);
+  return handOf(BARE, stage, []);
 }
 
 const BARE: ChangeEntry = {

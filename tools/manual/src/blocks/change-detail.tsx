@@ -116,7 +116,12 @@ export function ChangeCard({
       </h3>
       <ClampedText className="mt-1" lines={3} text={change.why} />
 
-      <ChangeFacts change={change} overlays={overlays} progress={!shown} />
+      <ChangeFacts
+        artifacts={index.snapshot.schemas[change.schema] ?? []}
+        change={change}
+        overlays={overlays}
+        progress={!shown}
+      />
 
       <div
         className={`grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none ${shown ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}

@@ -59,7 +59,9 @@ export function ChangeStatus({
     released: new Set(archived.map((one) => one.id)),
     artifacts,
   });
-  const handoffs = document ? handoffsOf(change, stage, datesOf(document)) : [];
+  const handoffs = document
+    ? handoffsOf(change, stage, artifacts, datesOf(document))
+    : [];
 
   return (
     <dl className="my-5 grid grid-cols-[auto_1fr] items-baseline gap-x-4 gap-y-2">

@@ -2,7 +2,7 @@ import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import YAML from "yaml";
 import { handleOf } from "../../../../scripts/openspec/lib/team.mjs";
-import { ASKED_OF, stageOf } from "../api/stages.ts";
+import { ASKED_OF, ladderOf } from "../api/stages.ts";
 import type {
   ChangeEntry,
   ChangeStatus,
@@ -29,12 +29,7 @@ import {
 } from "./disk.mts";
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
-import {
-  leadingTitle,
-  outline,
-  type Section,
-  tableRows,
-} from "./markdown.mts";
+import { leadingTitle, outline, type Section, tableRows } from "./markdown.mts";
 import { readLandings } from "./read-landings.mts";
 import { readRounds } from "./read-rounds.mts";
 import { schemaArtifacts } from "./read-schema.mts";
@@ -303,7 +298,9 @@ function readChange(
   // reader above it has just written, and this is where the schema is at hand.
   // Carried on the entry because six callers of `laneOf` would each otherwise
   // have to fetch the schema to ask.
-  entry.stage = stageOf(entry, artifacts);
+  const ladder = ladderOf(entry, artifacts);
+  entry.stage = ladder.stage;
+  if (ladder.heldBy) entry.heldBy = ladder.heldBy;
   return entry;
 }
 
