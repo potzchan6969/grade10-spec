@@ -29,8 +29,8 @@
  *          hashes what it always hashes — and compares it with `behindOf`,
  *          the same way `check:manual` and the manual do, refusing while
  *          anything is and naming what changed before it. Not waivable — the
- *          round's re-read is what clears it. Skipped, not refused, on a
- *          shallow clone: it cannot date a commit outside its history.
+ *          round's re-read is what clears it, and it runs on every clone:
+ *          a `reviewed:` id needs no history to compare.
  *
  * CARRY    `openspec archive` folds `## Requirements` and nothing else, so a
  *          delta's `## Purpose`, its `## Feature set`, its `user-journeys.md`
@@ -86,7 +86,7 @@ import { fileURLToPath } from "node:url";
 import { behindLabelOf } from "../../tools/manual/src/api/stage-view.ts";
 import { behindOf } from "../../tools/manual/src/api/stages.ts";
 import { readChangeEntry } from "./lib/store-read.mjs";
-import { git, storeMain, textAt } from "./store-main.mjs";
+import { storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
@@ -490,33 +490,28 @@ if (open.length > 0 && tasksWaived === null) {
 // change reader — pages included, so a linked section's `reviewed:` id
 // hashes the same text it always hashes — and `behindOf` is the same pure
 // comparison over its reading that `check:manual`, the manual and the round
-// all read. A shallow clone cannot date a commit outside its history, so the
-// read is skipped and said so rather than refused on the clone's account;
-// run this on a full checkout to have it checked.
-if (git(ROOT, ["rev-parse", "--is-shallow-repository"]) === "true") {
-  console.log(
-    yellow(
-      `Freshness not checked — ${ROOT} is a shallow clone. Run this on a full checkout to have it checked.`,
-    ),
+// all read. It runs on every clone: a `reviewed:` id is a hash of the text
+// before the artifact, so the comparison that reads it needs no history at
+// all, and the dated fallback beside it marks only what a commit dates
+// strictly later — which a clone holding one commit never does. A shallow
+// clone therefore reads every stale id and invents no behind artifact of its
+// own.
+const { entry, artifacts } = await readChangeEntry(ROOT, changeId);
+const behind = behindOf(entry, artifacts);
+if (behind.length > 0) {
+  fail(
+    yellow(`${changeId} archives with ${behind.length} artifact(s) behind:`),
   );
-} else {
-  const { entry, artifacts } = await readChangeEntry(ROOT, changeId);
-  const behind = behindOf(entry, artifacts);
-  if (behind.length > 0) {
-    fail(
-      yellow(`${changeId} archives with ${behind.length} artifact(s) behind:`),
-    );
-    for (const one of behind) {
-      console.error(`  ${one.artifact} — ${behindLabelOf(one)}`);
-    }
-    fail(
-      "",
-      "Nothing is built on a behind artifact, and the fold is no exception.",
-      "Read it again — the round's re-read writes the record line that clears",
-      "this — then re-run this.",
-    );
-    process.exit();
+  for (const one of behind) {
+    console.error(`  ${one.artifact} — ${behindLabelOf(one)}`);
   }
+  fail(
+    "",
+    "Nothing is built on a behind artifact, and the fold is no exception.",
+    "Read it again — the round's re-read writes the record line that clears",
+    "this — then re-run this.",
+  );
+  process.exit();
 }
 
 // ── Decide gate ─────────────────────────────────────────────────────────────
