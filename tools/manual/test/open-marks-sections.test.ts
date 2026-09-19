@@ -2,12 +2,9 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { ParsedPage } from "../src/api/derive";
-import {
-  marksUnder,
-  openMarksOfPage,
-  sectionTextOf,
-} from "../src/api/open-marks.ts";
+import { marksUnder, openMarksOfPage } from "../src/api/open-marks.ts";
 import { parsePage } from "../src/content/grammar";
+import { sectionTextOf } from "../src/content/sections";
 
 /**
  * A proposal links a page section, so the readers that answer for a change
