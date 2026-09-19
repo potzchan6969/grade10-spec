@@ -74,7 +74,11 @@ import {
 import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
 import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
-import { isGroup } from "./lib/perspectives.mjs";
+import {
+  isGroup,
+  perspectivesOf,
+  planningSchema,
+} from "./lib/perspectives.mjs";
 import { openRecord, saveRecord, setEntry } from "./lib/record.mjs";
 import { readAgainst } from "./lib/reviewed.mjs";
 import { appendRoundRow, listCell, roundsPath } from "./lib/rounds.mjs";
@@ -409,11 +413,54 @@ function rowOf() {
     // one reading of this cell, and the writer owes what every reader of it
     // expects rather than the spelling the target happened to use.
     artifact: artifact ?? roundArtifactOf(target),
-    perspectives: listCell(flags.perspectives),
+    perspectives: perspectivesCell(flags.perspectives),
     stood: flags.stood,
     asked: askedCell(flags.asked),
     tests: flags.tests ?? "",
   };
+}
+
+/**
+ * The readers the round says it dispatched, held to the target's own list in
+ * the schema: a name the list does not issue is a typo or a reader nobody
+ * dispatched, and an `always` one left out is a round that skipped the floor.
+ * A narrow re-run may name fewer readers than the last round did — a trigger
+ * the draft no longer raises summons nobody — but never fewer than the
+ * `always` set.
+ *
+ * `verifier` is no perspective of any artifact: it records that a verifier
+ * read the round's findings, so the cell is allowed to name it.
+ */
+function perspectivesCell(value) {
+  const cell = listCell(value);
+  const issued = perspectivesOf(
+    planningSchema(root, read.entry.schema),
+    target,
+  );
+  const named = new Set(
+    cell
+      .split(/[,;]/)
+      .map((one) =>
+        one
+          .replace(/\(.*\)/, "")
+          .trim()
+          .toLowerCase(),
+      )
+      .filter((one) => one !== ""),
+  );
+  for (const one of named) {
+    if (one === "verifier" || issued.some(({ name }) => name === one)) continue;
+    fail(
+      `\`${one}\` is no perspective of ${target} — the \`${read.entry.schema}\` schema issues ${issued.map(({ name }) => `\`${name}\``).join(", ")}, and \`verifier\` records that a verifier ran`,
+    );
+  }
+  for (const { name, when } of issued) {
+    if (!when.includes("always") || named.has(name)) continue;
+    fail(
+      `${target}'s \`${name}\` reads every round — a narrow re-run may name fewer readers, never an \`always\` one`,
+    );
+  }
+  return cell;
 }
 
 /** `Q1,Q2` as the row writes it so `cited` resolves each one: backticked, the
