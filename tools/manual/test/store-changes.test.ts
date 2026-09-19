@@ -344,7 +344,7 @@ describe("a promoted change carrying its suites", () => {
       {
         spec: "demo-product/alpha",
         status: "pending-review",
-        cases: { draft: 1, actual: 1, deprecated: 0, total: 2 },
+        cases: { draft: 1, actual: 1, deprecated: 0, total: 2, automated: 0 },
       },
     ]);
   });

@@ -77,7 +77,7 @@ function change(extra: Partial<ChangeEntry> = {}): ChangeEntry {
     written: WRITTEN,
     landedBy: { decisions: "robin", "ui-design": "dana" },
     taskGroups: [
-      { title: "Contracts", repo: "grade10-spec", done: 1, total: 3 },
+      { num: "1", title: "Contracts", repo: "grade10-spec", done: 1, total: 3 },
     ],
     promotedBy: "sam",
     ...extra,
@@ -373,6 +373,38 @@ describe("the artifacts", () => {
     expect(row(html, "tasks")).not.toContain("landed by");
   });
 
+  it("shows an open question's id on the artifact row it was raised against", () => {
+    const html = render(
+      change({
+        rounds: [
+          {
+            round: 1,
+            artifact: "ui-design",
+            perspectives: "design, simpler",
+            stood: "the empty state named no control",
+            asked: "Q9",
+            tests: "-",
+          },
+        ],
+        questions: [
+          {
+            id: "Q9",
+            // `readQuestions` always names the file a decisions row lives
+            // in, `decisions` — never the draft the round was reading. The
+            // row above is what says this one was ui-design's.
+            artifact: "decisions",
+            role: "design",
+            hand: "dana",
+            text: "What does the empty state say?",
+          },
+        ],
+      }),
+    );
+
+    expect(row(html, "ui-design")).toContain("Q9");
+    expect(row(html, "decisions")).not.toContain("Q9");
+  });
+
   it("counts a question the page still carries against the proposal", () => {
     const html = render(
       change({
@@ -469,6 +501,75 @@ describe("the overlay row carries the whole dependency and suite reading", () =>
   });
 });
 
+describe("the Rounds row", () => {
+  it("The change page's Rounds row with one line per round, and a group with no round row shown as such", () => {
+    const html = render(
+      change({
+        taskGroups: [
+          {
+            num: "1",
+            title: "Contracts",
+            repo: "grade10-spec",
+            done: 3,
+            total: 3,
+          },
+          {
+            num: "2",
+            title: "Surfaces",
+            repo: "grade10-spec",
+            done: 2,
+            total: 2,
+          },
+        ],
+        rounds: [
+          {
+            round: 1,
+            artifact: "proposal",
+            perspectives: "product, qa",
+            stood: "the goal named two goals",
+            asked: "-",
+            tests: "-",
+          },
+          {
+            round: 2,
+            artifact: "decisions",
+            perspectives: "simpler",
+            stood: "nothing stood",
+            asked: "-",
+            tests: "-",
+          },
+          {
+            round: 3,
+            artifact: "1",
+            perspectives: "qa, simpler",
+            stood: "the group missed a test",
+            asked: "Q3",
+            tests: "demo-SC-01: test/one.test.ts",
+          },
+        ],
+      }),
+    );
+    const rounds = html.slice(html.indexOf(">Rounds<"));
+
+    expect(rounds).toContain("Round 1");
+    expect(rounds).toContain("product, qa");
+    expect(rounds).toContain("the goal named two goals");
+    // A round whose readers found nothing still names its own perspectives.
+    expect(rounds).toContain("Round 2");
+    expect(rounds).toContain("nothing stood");
+    expect(rounds).toContain("Q3");
+    // Group 1 landed a round; Group 2 is ticked and carries none.
+    expect(rounds).toContain("Group 2");
+    expect(rounds).toContain("no round");
+    expect(rounds).not.toMatch(/Group 1[\s\S]{0,80}no round/);
+  });
+
+  it("carries no Rounds row before the first round lands", () => {
+    const html = render(change({ taskGroups: [] }));
+    expect(html).not.toContain(">Rounds<");
+  });
+});
+
 describe("delivery and the handoff", () => {
   it("names main, staging and the release that carried the change", () => {
     const html = render(
@@ -479,6 +580,29 @@ describe("delivery and the handoff", () => {
     expect(delivery).toContain("main");
     expect(delivery).toContain("staging");
     expect(delivery).toContain("v2026.09.1");
+  });
+
+  it("shows the suite's automated count against its total on the Delivery row", () => {
+    const html = render(
+      change({
+        suites: [
+          {
+            spec: SPEC,
+            status: "in-review",
+            cases: {
+              draft: 1,
+              actual: 2,
+              deprecated: 0,
+              total: 3,
+              automated: 2,
+            },
+          },
+        ],
+      }),
+    );
+    const delivery = html.slice(html.indexOf(">Delivery<"));
+
+    expect(delivery).toContain("2/3");
   });
 
   it("shows the days from a stage landing to the next hand's first word", () => {

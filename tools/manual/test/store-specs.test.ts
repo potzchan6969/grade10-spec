@@ -76,12 +76,14 @@ describe("spec entries", () => {
         title: "Reader asks for the thing and it happens",
         traces: ["alpha-SC-01"],
         status: "draft",
+        automationStatus: "manual",
       },
       {
         id: "alpha-TC-02",
         title: "Reader asks a second time and is refused",
         traces: ["alpha-SC-01", "alpha-SC-02"],
         status: "draft",
+        automationStatus: "manual",
       },
     ]);
   });

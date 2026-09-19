@@ -25,6 +25,7 @@ const testCase = (
   title: string,
   status: string,
   trace = "alpha-US-01",
+  automation = "manual",
 ) =>
   [
     `### ${id}: ${title}`,
@@ -37,7 +38,7 @@ const testCase = (
     "* **Behaviour:** positive",
     "* **Type:** smoke",
     "* **Layer:** e2e",
-    "* **Automation status:** manual",
+    ...(automation === "" ? [] : [`* **Automation status:** ${automation}`]),
     "* **Testability:** automation",
     `* **Trace:** ${trace}`,
     "",
@@ -193,6 +194,67 @@ describe("what a suite says about the spec beside it", () => {
       ),
     );
     expect(parsed.outOfSuite).toEqual([]);
+  });
+});
+
+/** `docs/governance/specs-to-test-cases.md`: `manual` means no automated
+ * test runs a case yet, which is also true of a case that names no
+ * Automation status at all — so a missing line reads as `manual` rather than
+ * refusing the file, unlike a missing `**Status:**`. */
+describe("the Automation status property", () => {
+  it("reads `automated` when the case states it", () => {
+    const parsed = readTestCases(
+      suite(
+        "pending-review",
+        testCase(
+          "alpha-US1-TC1-1",
+          "It happens",
+          "actual",
+          "alpha-US-01",
+          "automated",
+        ),
+      ),
+    );
+    expect(parsed.cases[0].automationStatus).toBe("automated");
+  });
+
+  it("reads `manual` when the case states it", () => {
+    const parsed = readTestCases(
+      suite(
+        "pending-review",
+        testCase("alpha-US1-TC1-1", "It happens", "draft"),
+      ),
+    );
+    expect(parsed.cases[0].automationStatus).toBe("manual");
+  });
+
+  it("defaults to `manual` where a case states no Automation status at all", () => {
+    const parsed = readTestCases(
+      suite(
+        "pending-review",
+        testCase("alpha-US1-TC1-1", "It happens", "draft", "alpha-US-01", ""),
+      ),
+    );
+    expect(parsed.cases[0].automationStatus).toBe("manual");
+  });
+
+  it("refuses a value outside the vocabulary", () => {
+    expect(() =>
+      readTestCases(
+        suite(
+          "pending-review",
+          testCase(
+            "alpha-US1-TC1-1",
+            "It happens",
+            "draft",
+            "alpha-US-01",
+            "flaky",
+          ),
+        ),
+      ),
+    ).toThrow(
+      /test case `alpha-US1-TC1-1: It happens` is `\*\*Automation status:\*\* flaky`, which is not manual or automated/,
+    );
   });
 });
 
