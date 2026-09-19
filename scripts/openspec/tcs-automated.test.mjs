@@ -79,7 +79,7 @@ const run = (root, ids) =>
     encoding: "utf8",
   });
 
-test("flips a case's Automation status to `automated`, in place", () => {
+test("shared-planning-agent-rounds-SC-59 - flips a case's Automation status to `automated`, in place", () => {
   const root = sandbox({
     [SUITE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
   });
@@ -105,6 +105,49 @@ test("leaves an already-automated case alone, and says so", () => {
   assert.equal(result.status, 0, result.stderr);
   assert.equal(readFileSync(join(root, SUITE_PATH), "utf8"), before);
   assert.match(result.stdout, /already automated/);
+});
+
+test("refuses a case with no `**Automation status:**` line, distinct from a name nobody issued", () => {
+  const root = sandbox({
+    [SUITE_PATH]: SUITE(
+      [
+        "### demo-thing-widget-US1-TC1-1: A case",
+        "",
+        "**Classification:**",
+        "",
+        "* **Severity:** major",
+        "* **Priority:** high",
+        "* **Status:** actual",
+        "* **Behaviour:** positive",
+        "* **Type:** functional",
+        "* **Suites:** regression",
+        "* **Layer:** e2e",
+        "* **Testability:** automation",
+        "* **Trace:** demo-thing-widget-US-01",
+        "",
+        "**Pre-conditions:** None.",
+        "",
+        "**Steps:**",
+        "",
+        "1. Do the thing.",
+        "",
+        "**Expected Results:**",
+        "",
+        "* It happens.",
+        "",
+      ].join("\n"),
+    ),
+  });
+  const before = readFileSync(join(root, SUITE_PATH), "utf8");
+
+  const result = run(root, ["demo-thing-widget-US1-TC1-1"]);
+
+  assert.notEqual(result.status, 0);
+  assert.match(
+    result.stderr,
+    /`demo-thing-widget-US1-TC1-1` has no `\*\*Automation status:\*\*` line/,
+  );
+  assert.equal(readFileSync(join(root, SUITE_PATH), "utf8"), before);
 });
 
 test("refuses an id no suite holds, and pushes nothing", () => {
