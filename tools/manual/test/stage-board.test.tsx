@@ -10,6 +10,7 @@ import type {
   Snapshot,
   Stage,
 } from "../src/api/types";
+import { STORAGE } from "../src/editor/config";
 import { findStoreRoot } from "../src/store/disk.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 import {
@@ -87,7 +88,10 @@ function at(stage: Stage, extra: Partial<ChangeEntry> = {}): ChangeEntry {
 const held = vi.hoisted(() => ({
   index: undefined as unknown,
   archive: { status: "loading" } as unknown,
-  handle: "" as string,
+  // A real `KeyStore`, the same one `useHandle` reads: setting a key here is
+  // what a browser remembering a handle looks like, rather than mocking the
+  // hook that reads it.
+  store: new Map<string, string>(),
 }));
 
 vi.mock("../src/api/use-manual-index", () => ({
@@ -95,15 +99,18 @@ vi.mock("../src/api/use-manual-index", () => ({
 }));
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => ({ status: "ready", store: null }),
+  browserKeyStore: {
+    get: (key: string) => held.store.get(key) ?? null,
+    set: (key: string, value: string) => {
+      held.store.set(key, value);
+    },
+    remove: (key: string) => {
+      held.store.delete(key);
+    },
+  },
 }));
 vi.mock("../src/api/use-archive", () => ({
   useArchive: () => held.archive,
-}));
-vi.mock("../src/api/handle", () => ({
-  useHandle: () => ({
-    handle: held.handle === "" ? undefined : held.handle,
-    remember: () => {},
-  }),
 }));
 
 const { InFlightPage } = await import("../src/pages/in-flight-page");
@@ -137,7 +144,9 @@ function render(
   options: { url?: string; archived?: ChangeEntry[]; handle?: string } = {},
 ): string {
   held.index = buildIndex(snapshot(changes));
-  held.handle = options.handle ?? "";
+  held.store.clear();
+  if (options.handle !== undefined)
+    held.store.set(STORAGE.handle, options.handle);
   held.archive =
     options.archived === undefined
       ? { status: "loading" }

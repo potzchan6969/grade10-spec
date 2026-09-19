@@ -22,6 +22,7 @@ import { useManualIndex } from "../api/use-manual-index";
 import { StageLane } from "../blocks/stage-lane";
 import { TextField } from "../editor/fields";
 import { ReadOnlyNotice } from "../editor/read-only-notice";
+import { browserKeyStore } from "../editor/session";
 import { ArchiveTimeline } from "./archive-timeline";
 import { MaintenancePanel } from "./maintenance-panel";
 import { PageHeading } from "./page-heading";
@@ -47,7 +48,7 @@ export function InFlightPage() {
   const [params] = useSearchParams();
   const filter = filterOf(params.get("filter"));
   const shelfOnly = params.get("shelf") === "1";
-  const { handle, remember } = useHandle();
+  const { handle, remember } = useHandle(browserKeyStore);
 
   const rows = boardRows([...index.snapshot.changes, ...(archived ?? [])], {
     now: Date.now(),

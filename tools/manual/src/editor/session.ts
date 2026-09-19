@@ -76,3 +76,9 @@ export function rememberedHandle(): string {
 export function rememberHandle(handle: string): void {
   if (handle !== "") browserKeyStore.set(STORAGE.handle, handle);
 }
+
+/** The `KeyStore` this session remembers a handle through — `useHandle`'s own
+ * seam, read from here rather than imported straight from `./config`, so a
+ * test that already mocks this module can set a key on it directly instead
+ * of mocking `api/handle` as well. */
+export { browserKeyStore };
