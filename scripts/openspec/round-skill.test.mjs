@@ -31,15 +31,10 @@ const LINES = {
   land: "plan:land",
 };
 
-// Paths this change's other groups deliver: group 1.4 writes the perspectives
-// reader and its CLI, and the team map lands with
-// `stage-changes-and-notify-hands`. Delete an entry as its file lands - an
-// unresolved path is the finding this test exists for.
-const PENDING = new Set([
-  "scripts/openspec/perspectives.mjs",
-  "scripts/openspec/lib/perspectives.mjs",
-  "docs/prds/team.yaml",
-]);
+// Paths this change's other groups deliver. Delete an entry as its file lands
+// - an unresolved path is the finding this test exists for. Empty: the
+// perspectives reader, its CLI and the team map are all on disk.
+const PENDING = new Set();
 
 const frontMatter = (text) => {
   const block = /^---\n([\s\S]*?)\n---\n/.exec(text);
