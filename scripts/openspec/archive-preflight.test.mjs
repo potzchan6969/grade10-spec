@@ -42,8 +42,12 @@ const CHANGE = "build-alpha";
  * landed the schema yet is. `pages` writes store-relative files at the root
  * — `docs/prds/…` — for the one case where a proposal links a page section:
  * the store's change reader reads pages too, so a `reviewed:` id can only be
- * reproduced by hashing the same section text it hashed. */
-function sandbox(files, durable = {}, schemas = {}, pages = {}) {
+ * reproduced by hashing the same section text it hashed. `daysAgo` backdates
+ * the one commit this writes, so a case that needs a second, later commit on
+ * top of it — the fallback that dates an artifact from git history rather
+ * than a `reviewed:` line — has room to date one after it with the returned
+ * `commit`. */
+function sandbox(files, durable = {}, schemas = {}, pages = {}, daysAgo = 0) {
   const root = mkdtempSync(join(tmpdir(), "archive-preflight-"));
   const scripts = join(root, "scripts", "openspec");
   mkdirSync(scripts, { recursive: true });
@@ -79,9 +83,21 @@ function sandbox(files, durable = {}, schemas = {}, pages = {}) {
       ["-c", "user.email=preflight@test", "-c", "user.name=preflight", ...args],
       { cwd: root, stdio: "ignore" },
     );
+  const dated = (args, ago) => {
+    const at = new Date(Date.now() - ago * 86_400_000).toISOString();
+    execFileSync(
+      "git",
+      ["-c", "user.email=preflight@test", "-c", "user.name=preflight", ...args],
+      {
+        cwd: root,
+        stdio: "ignore",
+        env: { ...process.env, GIT_AUTHOR_DATE: at, GIT_COMMITTER_DATE: at },
+      },
+    );
+  };
   git("init", "--quiet", ".");
-  git("add", "-A");
-  git("commit", "--quiet", "-m", "the store");
+  dated(["add", "-A"], daysAgo);
+  dated(["commit", "--quiet", "-m", "the store"], daysAgo);
   git("update-ref", "refs/remotes/origin/main", "HEAD");
 
   return {
@@ -90,6 +106,14 @@ function sandbox(files, durable = {}, schemas = {}, pages = {}) {
     manifest: join(dir, ".openspec.yaml"),
     tasks: join(dir, "tasks.md"),
     git,
+    /** Writes more of the change's own files and commits them `ago` days
+     * ago (0 = now) — a second, later commit against the one `sandbox`
+     * already made. */
+    commit(tree, message, ago = 0) {
+      write(dir, tree);
+      dated(["add", "-A"], ago);
+      dated(["commit", "--quiet", "-m", message], ago);
+    },
   };
 }
 
@@ -286,6 +310,36 @@ test("is clear where a reviewed id was hashed with the page section it links", (
   );
 
   assert.equal(result.status, 0, result.stderr);
+});
+
+// shared-planning-change-stages-SC-28: with no `reviewed:` line at all, an
+// artifact is behind where a commit dates what is before it later than the
+// artifact's own commit — real git history, not an injected date.
+test("reads the archive's own commit dates where no reviewed: line dates the read", () => {
+  const s = sandbox(
+    {
+      ...PROPOSAL,
+      ".openspec.yaml": "schema: demo-planning\n",
+      "tasks.md": BEHIND_TASKS,
+      "specs/demo/alpha/spec.md": BEHIND_DELTA,
+    },
+    {},
+    { "demo-planning": BEHIND_SCHEMA },
+    {},
+    2,
+  );
+  // The proposal is committed a second time, after the specs delta it is
+  // before — the schema's own commit is untouched, so only the proposal
+  // moves.
+  s.commit(
+    { "proposal.md": "# Build alpha\n\n## Why\n\nTo ship it, revised.\n" },
+    "touch the proposal",
+  );
+
+  const result = run(s.script);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /specs — proposal changed/);
 });
 
 test("skips the freshness read on a shallow clone rather than refusing on its account", () => {
