@@ -27,6 +27,7 @@ describe("in-flight changes", () => {
       "demo-specified",
       "demo-unreadable",
       "demo-waiting",
+      "demo-waived",
     ]);
     expect(change.status).toBe("in-flight");
   });

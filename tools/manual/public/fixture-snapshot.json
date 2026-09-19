@@ -1080,6 +1080,56 @@
       ],
       "author": "tester",
       "heldBy": "decisions"
+    },
+    {
+      "id": "demo-waived",
+      "dir": "openspec/changes/demo-waived",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "designed",
+      "owners": [],
+      "created": "2026-09-01",
+      "title": "The waived design",
+      "why": "The fixture walk needs a change that says in one line that it draws\nnothing, with the other design written, so a reader can be shown a waiver\nstanding for the file it names.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "tech-design"
+      ],
+      "uiWaived": "the change draws nothing - no screen moves",
+      "hands": {
+        "pm": "tester",
+        "design": "tester",
+        "tech": "tester"
+      },
+      "author": "tester",
+      "heldBy": "specs",
+      "upstream": {
+        "decisions": {
+          "id": "4c2b1947",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "102106db",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "tech-design": {
+          "id": "626464c4",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        }
+      }
     }
   ],
   "schemas": {

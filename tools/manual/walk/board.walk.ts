@@ -310,6 +310,23 @@ test("shared-planning-change-stages-SC-05 - one change, one stage everywhere", a
     .toBeVisible();
 });
 
+/** A waiver on the board: `demo-waived` says in one line that it draws
+ * nothing and writes the other design, and the lane it sits in is where the
+ * reader meets that — Designed, proven by one line and one file rather than
+ * by two files. `change-page-waived.walk.ts` reads the same fixture's rows,
+ * which is the other half `SC-07` asks for. */
+test("shared-planning-change-stages-SC-07 - a waiver reaches the Designed lane", async () => {
+  await openManual("/in-flight");
+  await expect
+    .element(page.getByRole("heading", { level: 3, name: "The waived design" }))
+    .toBeVisible();
+
+  const designed = laneSection("designed");
+  if (!designed.contains(document.getElementById("demo-waived"))) {
+    throw new Error("demo-waived is not in the Designed lane");
+  }
+});
+
 /** The shelf: what has stopped moving long enough to come off its lane.
  * `add-thing` is `fixture-dates.json`'s own 45-day fixture, the one change
  * this store can ever push past the shelf's 30-day bound against a frozen
