@@ -129,7 +129,7 @@ reply that is none of the other three is a remark.
 | Move | The hand says | What you write |
 | --- | --- | --- |
 | Answer | `Q<n>: <answer>`, or `Q<n>` alone | The answer, or the recommendation where the id stands alone, into that numbered decisions row; the question closes |
-| Remark | Any other words | The draft changed as the remark is written, a `rounds.md` row naming the remark, and a decisions row where it settles a choice one asked |
+| Remark | Any other words | The draft changed as the remark is written, the remark named in the landing's row as what stood, and a decisions row where it settles a choice one asked |
 | Land | `land` | `landed_by:` with the hand's handle, and the artifact on `main` |
 | Edit | A push to the change's branch, from a terminal or the code host | Nothing: the push is the hand's word for the lines it touched |
 
