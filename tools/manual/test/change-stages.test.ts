@@ -122,6 +122,27 @@ describe("the stage a change's files prove", () => {
     expect(stage(at("specified", { raisedOpen: 0 }))).toBe("specified");
   });
 
+  it("shared-planning-agent-rounds-SC-23 - an open `Q<n>` row moves no stage", () => {
+    // A numbered decisions row is answered in the thread while the change
+    // keeps moving: the one question that holds anything is a goal or a
+    // non-goal that moved. `## Raised` above is the blind reading's own
+    // table, which does hold Specified — the two are not one list.
+    const asked = [
+      {
+        id: "Q7",
+        artifact: "decisions",
+        role: "pm",
+        hand: "robin",
+        text: "Which mechanism is taken?",
+        recommended: "the smaller one",
+      },
+    ];
+
+    for (const rung of STAGES) {
+      expect(stage(at(rung, { questions: asked })), rung).toBe(stage(at(rung)));
+    }
+  });
+
   it("reads a record nothing could read as Proposed, with its hands open", () => {
     const unreadable = at("building", {
       hands: undefined,
