@@ -120,12 +120,6 @@ describe("the hands a change names", () => {
     expect(refusalOf("hands: dana\n")).toMatch(/`hands` must be a mapping/);
   });
 
-  it("refuses a role named with nobody", () => {
-    expect(refusalOf(["hands:", "  pm: ''", ""].join("\n"))).toMatch(
-      /`hands.pm` must name one handle/,
-    );
-  });
-
   it("refuses a role given a list", () => {
     expect(
       refusalOf(
@@ -133,6 +127,22 @@ describe("the hands a change names", () => {
       ),
     ).toMatch(/`hands.pm`/);
   });
+});
+
+describe("an id a record answers with nothing", () => {
+  // One sentence for all three keys: a blank entry claims the id is answered
+  // and answers it with nobody, which no rule downstream could tell from a
+  // typo. Which line was owed is the rule's to say, not the reader's.
+  it.each(["hands: pm", "landed_by: decisions", "reviewed: specs"])(
+    "refuses `%s` written blank",
+    (entry) => {
+      const [key, id] = entry.split(": ");
+
+      expect(refusalOf([`${key}:`, `  ${id}: ''`, ""].join("\n"))).toBe(
+        `\`${key}.${id}\` must be a line of text`,
+      );
+    },
+  );
 });
 
 describe("who landed each artifact", () => {
@@ -159,12 +169,6 @@ describe("who landed each artifact", () => {
       /`landed_by` must be a mapping/,
     );
   });
-
-  it("refuses an artifact landed by nobody", () => {
-    expect(refusalOf(["landed_by:", "  decisions: ''", ""].join("\n"))).toMatch(
-      /`landed_by.decisions` must name one handle/,
-    );
-  });
 });
 
 describe("what was read again", () => {
@@ -184,12 +188,6 @@ describe("what was read again", () => {
   it("refuses a record whose read marks are not a mapping", () => {
     expect(refusalOf("reviewed: 1a2b3c4d\n")).toMatch(
       /`reviewed` must be a mapping/,
-    );
-  });
-
-  it("refuses an artifact read against nothing", () => {
-    expect(refusalOf(["reviewed:", "  specs: ''", ""].join("\n"))).toMatch(
-      /`reviewed.specs` must carry the content id/,
     );
   });
 });

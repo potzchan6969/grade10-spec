@@ -248,6 +248,52 @@ export function handOfArtifact(artifact: string): Role | undefined {
 }
 
 /**
+ * How a ❓ names the hand it is addressed to: `❓ <role> - <what is
+ * recommended>`, the role lower-case as every role in this store is spelled.
+ *
+ * One grammar, because both kinds of open question are written by hand and
+ * read by the same eyes: a `## Decisions` row's `Decided` cell in a change,
+ * and a line on a page. The separator is what makes it a grammar — without it
+ * the text is a sentence, and reading its first word as a role addresses the
+ * question to whatever the author happened to begin with.
+ */
+export const ASKED_OF = /^❓\s+([a-z][a-z0-9._-]*)\s+-\s+(\S.*)$/;
+
+/**
+ * The hand a ❓ line on a page is addressed to.
+ *
+ * Q41 settles the default: the line counts against the proposal, which is the
+ * product manager's artifact, so the product manager answers for it. But the
+ * house style puts the confirmer on the line where somebody else owes the
+ * answer — "Operations confirms" — and the row grammar above may name a role
+ * outright, so a line that says whose answer it is waiting for is read rather
+ * than routed past them.
+ */
+export function handOfMark(text: string): string {
+  const named = ASKED_OF.exec(text)?.[1];
+  if (named) return named;
+  const confirmer = CONFIRMS.exec(text)?.[1].trim().toLowerCase();
+  return (confirmer && ROLE_OF_CONFIRMER[confirmer]) || "pm";
+}
+
+/** "… ; Operations confirms" — who the line says has yet to say. */
+const CONFIRMS =
+  /(?:^|[\s;,—-])((?:[A-Z][a-z]+|the [a-z]+(?: [a-z]+)?))\s+confirms\b/;
+
+/** What a page calls each role, as `shared/planning/change-stages` names them
+ * in its Hands table. A name outside it is nobody's role, so the line stays
+ * the product manager's. */
+const ROLE_OF_CONFIRMER: Record<string, string> = {
+  "the product manager": "pm",
+  "the designer": "design",
+  "the tech pic": "tech",
+  qa: "qa",
+  "the engineer": "dev",
+  "the release hand": "release",
+  operations: "ops",
+};
+
+/**
  * Which artifacts are behind what they were drawn from.
  *
  * A pure comparison over the store's reading — `entry.upstream`, which the

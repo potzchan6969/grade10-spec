@@ -122,3 +122,17 @@ export function leadingTitle(sections: Section[]): string | undefined {
   const first = sections[0];
   return first?.level === 1 ? first.heading : undefined;
 }
+
+/** A markdown table row's cells, trimmed; nothing for a line that is not a
+ * row. One reader, because a positional regex per table drifts from the
+ * columns the file actually writes the moment one is added. The rule under
+ * the header is a row too — a caller that wants the body drops it. */
+export function cellsOf(line: string): string[] | undefined {
+  const trimmed = line.trim();
+  if (!trimmed.startsWith("|")) return undefined;
+  return trimmed
+    .replace(/^\|/, "")
+    .replace(/\|$/, "")
+    .split("|")
+    .map((cell) => cell.trim());
+}

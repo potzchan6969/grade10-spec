@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import YAML from "yaml";
-import { stageOf } from "../api/stages.ts";
+import { ASKED_OF, stageOf } from "../api/stages.ts";
 import type {
   ChangeEntry,
   ChangeStatus,
@@ -28,7 +28,7 @@ import {
 } from "./disk.mts";
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
-import { leadingTitle, outline, type Section } from "./markdown.mts";
+import { cellsOf, leadingTitle, outline, type Section } from "./markdown.mts";
 import { readLandings } from "./read-landings.mts";
 import { schemaArtifacts } from "./read-schema.mts";
 import { readTestCases } from "./read-specs.mts";
@@ -182,20 +182,11 @@ function readChange(
         const written = line(key, fields[key]);
         if (written) entry[field] = written;
       }
-      const hands = mapping("hands", fields.hands, "name one handle", handleOf);
+      const hands = readIdMap("hands", fields.hands, handleOf);
       if (hands) entry.hands = hands;
-      const landedBy = mapping(
-        "landed_by",
-        fields.landed_by,
-        "name one handle",
-        handleOf,
-      );
+      const landedBy = readIdMap("landed_by", fields.landed_by, handleOf);
       if (landedBy) entry.landedBy = landedBy;
-      const reviewed = mapping(
-        "reviewed",
-        fields.reviewed,
-        "carry the content id it was read against",
-      );
+      const reviewed = readIdMap("reviewed", fields.reviewed);
       if (reviewed) entry.reviewed = reviewed;
       const skipped = skipSpecsOf(fields.skip_specs, fields.skip_specs_why);
       if (skipped !== undefined) entry.skipSpecs = skipped;
@@ -267,16 +258,17 @@ function readChange(
   const artifacts = artifactsOf(root, entry.schema, schemas);
   entry.written = writtenArtifacts(dir, entry, artifacts, tasks !== undefined);
 
-  const decisions = readTextIfExists(join(dir, "decisions.md"));
+  // In flight only: an archived change's interview is over, and both readers
+  // are pure over the text - a row nothing matches is a row nobody asked, so
+  // there is nothing here to catch and nothing to report.
+  const decisions = detailed
+    ? readTextIfExists(join(dir, "decisions.md"))
+    : undefined;
   if (decisions !== undefined) {
-    try {
-      const open = readQuestions(decisions, entry.hands);
-      if (open.length > 0) entry.questions = open;
-      const raised = openRaised(decisions);
-      if (raised > 0) entry.raisedOpen = raised;
-    } catch (cause) {
-      fail(`${rel}/decisions.md`, cause);
-    }
+    const open = readQuestions(decisions, entry.hands);
+    if (open.length > 0) entry.questions = open;
+    const raised = openRaised(decisions);
+    if (raised > 0) entry.raisedOpen = raised;
   }
 
   // Only the landings: the last commit touching the directory is not one —
@@ -459,19 +451,18 @@ export function skipSpecsOf(value: unknown, why: unknown): string | undefined {
  * A record key that maps an id to one line — `hands:` against a role,
  * `landed_by:` and `reviewed:` against a schema artifact id.
  *
- * The line is read as written, normalized only by `normalize`, and a key with
- * no line is refused rather than read as absent: a blank entry claims the id
- * is answered and answers it with nobody, which is the one reading no rule
- * downstream could tell from a typo. What the line says is not judged here —
- * an unknown role, an artifact id the schema does not issue and a value that
- * is not one handle all survive the read, because the rules in
+ * The line is read as written, normalized only by `normalize`, and an entry
+ * with no line is refused by `line` itself rather than read as absent: a blank
+ * entry claims the id is answered and answers it with nobody, which is the one
+ * reading no rule downstream could tell from a typo. What the line says is not
+ * judged here — an unknown role, an artifact id the schema does not issue and a
+ * value that is not one handle all survive the read, because the rules in
  * `check/record.mjs` are what name them, and a reader that dropped them would
  * leave those rules nothing to refuse.
  */
-function mapping(
+function readIdMap(
   key: string,
   value: unknown,
-  owed: string,
   normalize: (one: string) => string = (one) => one,
 ): Record<string, string> | undefined {
   if (value === undefined || value === null) return undefined;
@@ -481,31 +472,30 @@ function mapping(
   const read: Record<string, string> = {};
   for (const [id, written] of Object.entries(value)) {
     const only = line(`${key}.${id}`, written);
-    if (only === undefined) {
-      throw new StoreFileError(1, `\`${key}.${id}\` must ${owed}`);
-    }
+    if (only === undefined)
+      throw new StoreFileError(1, mustBeLine(`${key}.${id}`));
     read[id] = normalize(only);
   }
   return Object.keys(read).length > 0 ? read : undefined;
 }
 
-/** The `## Decisions` table of `decisions.md`: the number, the question, and
- * the cell that either settles it or leaves it open. */
-const DECISION_ROW = /^\|\s*(Q\d+)\s*\|([^|]*)\|\s*(❓[^|]*)\|/;
-/** An open cell names the role that settles it, first word, lower-case as
- * every role in this store is spelled. A cell that opens ❓ and names nobody
- * is a question the change has not addressed to anybody, and is left to its
- * author rather than routed at a guess. */
-const ASKED_OF = /^❓\s+([a-z][a-z0-9._-]*)\b/;
+/** The `Q` column of a `## Decisions` row: the number the round gave the
+ * question. */
+const DECISION_ROW = /^Q\d+$/;
 
 /**
  * The decisions rows nobody has settled, addressed to the hand each names.
  *
- * A row is open when its `Decided` cell opens with ❓ and names a role, which
- * is how the interview records what it could not close. Any role is read, the
- * six or not: a question naming one outside them is listed under that role and
- * routed to its channel, the way an unnamed hand is, and narrowing the set
- * here would drop the question instead.
+ * A row is open when its `Decided` cell is written `❓ <role> - <what is
+ * recommended>`, which is how the interview records what it could not close.
+ * The separator is the grammar: without it the cell is a sentence, and reading
+ * its first word as a role addresses the question to whatever the author began
+ * with. A cell that opens ❓ and names nobody by that grammar is left to its
+ * author rather than routed at a guess.
+ *
+ * Any role is read, the six or not: a question naming one outside them is
+ * listed under that role and routed to its channel, the way an unnamed hand
+ * is, and narrowing the set here would drop the question instead.
  */
 function readQuestions(
   text: string,
@@ -517,16 +507,18 @@ function readQuestions(
     .find((one) => /^Decisions\b/.test(one.heading));
   if (!decisions) return open;
   for (const row of decisions.raw.split("\n")) {
-    const cells = DECISION_ROW.exec(row);
-    if (!cells) continue;
-    const role = ASKED_OF.exec(cells[3].trim())?.[1];
-    if (role === undefined) continue;
+    const cells = cellsOf(row);
+    if (!cells || !DECISION_ROW.test(cells[0])) continue;
+    const asked = ASKED_OF.exec(cells[2] ?? "");
+    if (!asked) continue;
+    const [, role, recommended] = asked;
     open.push({
-      id: cells[1],
+      id: cells[0],
       artifact: "decisions",
       role,
       hand: hands?.[role] ?? role,
-      text: cells[2].trim(),
+      text: cells[1] ?? "",
+      recommended,
     });
   }
   return open;
@@ -555,12 +547,8 @@ function openRaised(text: string): number {
 function rowsOf(text: string): string[][] {
   const rows: string[][] = [];
   for (const line of text.split("\n")) {
-    const trimmed = line.trim();
-    if (!trimmed.startsWith("|")) continue;
-    const cells = trimmed
-      .slice(1, -1)
-      .split("|")
-      .map((cell) => cell.trim());
+    const cells = cellsOf(line);
+    if (!cells) continue;
     if (cells.every((cell) => /^:?-{2,}:?$/.test(cell))) continue;
     rows.push(cells);
   }
@@ -574,12 +562,14 @@ function rowsOf(text: string): string[][] {
  * the key answers to. */
 function line(key: string, value: unknown): string | undefined {
   if (value === undefined || value === null) return undefined;
-  if (typeof value !== "string") {
-    throw new StoreFileError(1, `\`${key}\` must be a line of text`);
-  }
+  if (typeof value !== "string") throw new StoreFileError(1, mustBeLine(key));
   const written = value.trim();
   return written === "" ? undefined : written;
 }
+
+/** One sentence for every key that owes a line, whether what was written is
+ * not text or is nothing at all. */
+const mustBeLine = (key: string) => `\`${key}\` must be a line of text`;
 
 /** `YYYY-MM-DD`, however the yaml spelled it — a bare date is a `Date` by the
  * time the parser is done with it. */

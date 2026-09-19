@@ -84,23 +84,6 @@ export function marksOfPage(page: ParsedPage, mark: RegExp): OpenMark[] {
   return marks;
 }
 
-/**
- * The open marks sitting under one `## ` section of the page — the questions
- * a change that links that section is answerable for.
- *
- * The boundary is `sectionTextOf`'s: a callout's and a flow's lines are the
- * section's, and a `detail` and an `example` are the page's own. Those two
- * carry what the page keeps against every change that ever touched it — a
- * `Product decisions` table's rows — so reading them as one change's would
- * hand each change every question anybody has left there. A mark is the
- * section's when the page's own prose, a callout or a flow is what it sits
- * in, which is what `where` says.
- */
-export const marksUnder = (page: ParsedPage, slug: string): OpenMark[] =>
-  openMarksOfPage(page).filter(
-    (one) => one.section === slug && one.where?.anchor === slug,
-  );
-
 const STARTS = [HEADING, FENCE, LIST_MARKER, TABLE_ROW, /^\s*:{2,}/];
 
 /** The lines as items: a wrapped bullet or paragraph folded back into one

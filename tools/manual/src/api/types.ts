@@ -289,8 +289,12 @@ export type OpenQuestion = {
   /** The handle `hands:` names for that role, or the role itself where the
    * change names none. */
   hand: string;
-  /** What was asked, as written. */
+  /** What was asked, as written: the `Asked` cell of a row, and the line the
+   * page still carries with its ❓ dropped. */
   text: string;
+  /** What the row's `Decided` cell says after `❓ <role> - ` — the
+   * recommendation its hand is answering, where a row carries one. */
+  recommended?: string;
 };
 
 /** One artifact whose upstream moved after it was drawn or last read again,

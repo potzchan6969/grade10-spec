@@ -8,7 +8,7 @@ import type {
 import { type PageAst, parsePage } from "../content/grammar";
 import type { PageIcon } from "../content/icons";
 import { resolveRef } from "../content/refs";
-import { marksUnder } from "./open-marks";
+import { type OpenMark, openMarksOfPage } from "./open-marks";
 import {
   dirOf,
   humanize,
@@ -19,7 +19,7 @@ import {
   specTitle,
 } from "./paths";
 import { findRequirement } from "./requirements";
-import { laneOfStage, taskTotals } from "./stages.ts";
+import { ASKED_OF, handOfMark, laneOfStage, taskTotals } from "./stages.ts";
 import type {
   ChangeEntry,
   ChangeLane,
@@ -638,36 +638,63 @@ export type PendingTeammate = { teammate: string; items: PendingItem[] };
  * rows are on the entry, because `decisions.md` is a file of the change. The
  * questions a page still carries are the page's, so they are read here, where
  * the parsed pages are: a ❓ line under a section the proposal links is the
- * change's to answer, counted against the proposal that linked it and
- * addressed to whoever holds the proposal. A row inside a titled block stays
- * the page's own — `marksUnder` is what draws that line.
+ * change's to answer, counted against the proposal that linked it.
+ *
+ * A mark is the section's when the page's own prose, a callout or a flow is
+ * what it sits in — the boundary `sectionTextOf` draws. A `detail` and an
+ * `example` stay the page's own: a `Product decisions` table carries what the
+ * page keeps against every change that ever touched it, so reading its rows as
+ * one change's would hand each change every question anybody has left there.
+ *
+ * One walk per page, however many sections of it the change links, because a
+ * page with twenty marks and six linked sections is one reading of the page
+ * and not six.
  */
 export function questionsOf(
   change: ChangeEntry,
   pages: ParsedPage[],
 ): OpenQuestion[] {
   const byPath = new Map(pages.map((page) => [page.path, page]));
+  /** The marks of one page that belong to a section, by that section. */
+  const asked = new Map<string, Map<string, OpenMark[]>>();
+  const under = (page: ParsedPage): Map<string, OpenMark[]> => {
+    const held = asked.get(page.path);
+    if (held) return held;
+    const bySection = new Map<string, OpenMark[]>();
+    for (const mark of openMarksOfPage(page)) {
+      const anchor = mark.where?.anchor;
+      if (anchor === undefined || anchor !== mark.section) continue;
+      bySection.set(anchor, [...(bySection.get(anchor) ?? []), mark]);
+    }
+    asked.set(page.path, bySection);
+    return bySection;
+  };
+
   const linked = (change.sections ?? []).flatMap(({ page, slug }) => {
     const parsed = byPath.get(page);
     if (!parsed) return [];
-    return marksUnder(parsed, slug).map(
-      (mark): OpenQuestion => ({
+    return (under(parsed).get(slug) ?? []).map((mark): OpenQuestion => {
+      const role = handOfMark(mark.text);
+      return {
         artifact: "proposal",
         page,
         section: slug,
-        role: PAGE_QUESTIONS_ROLE,
-        hand: change.hands?.[PAGE_QUESTIONS_ROLE] ?? PAGE_QUESTIONS_ROLE,
-        text: mark.text,
-      }),
-    );
+        role,
+        hand: change.hands?.[role] ?? role,
+        text: askedText(mark.text),
+      };
+    });
   });
   return [...(change.questions ?? []), ...linked];
 }
 
-/** A question the page carries is counted against the proposal, and the
- * proposal is the product manager's — so they are the hand it is addressed
- * to, whatever the line is about. A page line names no role of its own. */
-const PAGE_QUESTIONS_ROLE = "pm";
+/** The question a ❓ line asks, its mark dropped — the same shape a decisions
+ * row's question carries, so a surface that lists both reads one. */
+function askedText(text: string): string {
+  return ASKED_OF.exec(text)?.[2] ?? text.replace(LEADING_OPEN, "");
+}
+
+const LEADING_OPEN = /^❓\s*/;
 
 /**
  * Every teammate's worklist, derived from the artifacts each change has written
