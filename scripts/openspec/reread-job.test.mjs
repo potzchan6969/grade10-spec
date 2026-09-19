@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -515,6 +515,38 @@ test("the notify script skips an empty message file rather than posting nothing"
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /nothing to post/);
+});
+
+test("the notify script posts nothing twice in one run: the sent keys hold its key", () => {
+  const { root } = sandbox();
+  const summary = join(root, "thread.txt");
+  writeFileSync(summary, "read again: nothing changed\n");
+  const sent = join(root, "sent.txt");
+  writeFileSync(sent, `${CHANGE}:reread\n`);
+
+  // `--send` with the key already sent never reaches Slack: no token is set,
+  // and the delivery filters on the keys before it would call anything.
+  const result = spawnSync(
+    process.execPath,
+    [
+      join(SCRIPTS, "reread-notify.mjs"),
+      CHANGE,
+      "--root",
+      root,
+      "--channel",
+      "C0PLANNING",
+      "--message-file",
+      summary,
+      "--sent-keys",
+      sent,
+      "--send",
+    ],
+    { encoding: "utf8", env: { ...process.env, SLACK_BOT_TOKEN: "" } },
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /already posted this run, nothing sent/);
+  assert.equal(readFileSync(sent, "utf8"), `${CHANGE}:reread\n`);
 });
 
 test("the notify script posts a written thread summary as it stands", () => {

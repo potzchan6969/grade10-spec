@@ -10,7 +10,12 @@
  *
  *   node scripts/openspec/reread-notify.mjs <change> \
  *     [--message-file <path>] [--run-url <url>] \
- *     [--channel <id>] [--root <dir>] [--send]
+ *     [--channel <id>] [--root <dir>] [--sent-keys <path>] [--send]
+ *
+ * `--sent-keys` is the file the messages' own delivery keeps — restored and
+ * saved by the job under the run's key — so a re-run of the same run posts
+ * neither line twice: the summary is keyed `<change>:reread`, the failure
+ * line `<change>:reread:failed`.
  *
  * A `--message-file` that is missing or empty is not an error: a re-read
  * that found nothing to say about that step (the thread summary the round
@@ -21,12 +26,12 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "./lib/args.mjs";
-import { sendAll, threadPartsOf } from "./lib/notify.mjs";
+import { deliver, threadPartsOf } from "./lib/notify.mjs";
 import { openRecord, writtenValue } from "./lib/record.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const USAGE =
-  "usage: node reread-notify.mjs <change> [--message-file <path>] [--run-url <url>] [--channel <id>] [--root <dir>] [--send]";
+  "usage: node reread-notify.mjs <change> [--message-file <path>] [--run-url <url>] [--channel <id>] [--root <dir>] [--sent-keys <path>] [--send]";
 
 /** The one line a dead run leaves behind, naming the change and the run a
  * hand can open to see why. */
@@ -61,7 +66,7 @@ function fileMessage(path) {
 
 async function main() {
   const { positional, flags } = parseArgs(process.argv.slice(2), {
-    keys: ["message-file", "run-url", "channel", "root"],
+    keys: ["message-file", "run-url", "channel", "root", "sent-keys"],
     booleans: ["send"],
     usage: USAGE,
   });
@@ -80,9 +85,9 @@ async function main() {
     console.log(`${change}: nothing to post`);
     return;
   }
-  const message =
-    fileMessage(flags["message-file"]) ??
-    failureMessageOf(change, flags["run-url"]);
+  const written = fileMessage(flags["message-file"]);
+  const message = written ?? failureMessageOf(change, flags["run-url"]);
+  const key = written ? `${change}:reread` : `${change}:reread:failed`;
 
   const address = addressFor(root, change, flags.channel);
   if (!flags.send) {
@@ -91,19 +96,23 @@ async function main() {
     );
     return;
   }
-  await sendAll(
+  const posted = await deliver(
     [
       {
-        key: `${change}:reread`,
+        key,
         to: "channel",
         channel: address.channel,
         ...(address.threadTs ? { threadTs: address.threadTs } : {}),
         text: message,
       },
     ],
-    { token: process.env.SLACK_BOT_TOKEN },
+    { file: flags["sent-keys"], send: true, token: process.env.SLACK_BOT_TOKEN },
   );
-  console.log(`${change}: posted to ${address.channel}`);
+  console.log(
+    posted.length === 0
+      ? `${change}: already posted this run, nothing sent`
+      : `${change}: posted to ${address.channel}`,
+  );
 }
 
 function fail(message) {
