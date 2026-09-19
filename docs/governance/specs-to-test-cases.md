@@ -479,6 +479,7 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 | `pnpm run tcs:stale` | suites whose drafts sit below the current minor; a report, never a sweep |
 | `/tcs-run-sheet <what to walk>` (`tcs-run-sheet` skill) | resolves a request to an explicit case-id list, dry-runs it, and dispatches the run tab once a person confirms |
 | `pnpm run tcs:run-sheet` | writes the selection to a new tab; `--dry-run` prints it and touches no network |
+| `pnpm run tcs:automated <case-id…>` | flips one or more cases' Automation status to `automated`, in place, in whichever suite file holds them; pushes nothing — the walk's own commit carries the flip |
 
 ## The Run Sheet
 
@@ -486,6 +487,7 @@ A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
 
 - **A tab is a snapshot** — written once, pinned to the commit it was written from, never resynced. A case that later changes, or is deprecated, leaves the tab alone: the tab says what was tested and the markdown says what the case is now
 - **`actual` only** — `--include-draft` takes drafts and grey-bands them; a `deprecated` case never crosses
+- **Automated is left out too** — a case whose Automation status is `automated` never crosses either, unless `--include-automated` says otherwise; the count crosses regardless, said in the run's own printout and on the Summary row's `Automated left out` column
 - **The selection is a list** — a filter over the properties resolves to case ids, and so does a reading of the specs; the ids are what reach the sheet, so a run can be restated
 - **The case columns are locked** — a protected range refuses an edit at the cell. `Result`, `Notes`, `Tester` and `Date` are the tester's. A wrong case is fixed in `openspec/`
 - **The Summary tab is the register** — one row per run carrying its id, date, name, selection and commit, and counting results with live formulas
