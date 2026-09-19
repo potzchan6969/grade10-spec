@@ -538,7 +538,7 @@ describe("behind holds no tick, claim or wait", () => {
     "",
   ].join("\n");
 
-  it("shared-planning-agent-rounds-SC-38 - still ticks, claims and waits while the requirements are behind", () => {
+  it("shared-planning-agent-rounds-SC-38, shared-planning-change-stages-SC-30 - still ticks, claims and waits while the requirements are behind", () => {
     const files = filesOf("awaiting:\n  tech-design: waiting on the vendor\n");
     files[`${CHANGE}/tasks.md`] = TASKS;
     const root = writeStore(files);

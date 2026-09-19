@@ -485,7 +485,7 @@ describe("the filters and the shelf", () => {
     expect(html).toContain("The building change");
   });
 
-  it("narrows the board to what one overlay marks, and Mine to the reader's changes", () => {
+  it("shared-planning-change-stages-SC-63 - narrows the board to what one overlay marks, and Mine to the reader's changes", () => {
     const stuck = at("planned", {
       title: "Waiting on the tech design",
       awaiting: [{ artifact: "tech-design", why: "2026-09-01 not settled" }],

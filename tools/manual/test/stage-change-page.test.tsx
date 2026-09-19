@@ -354,7 +354,7 @@ describe("the Your turn card", () => {
     expect(hands).toContain(">open<");
   });
 
-  it("shared-planning-change-stages-SC-17, shared-planning-change-stages-SC-58 - every role is a row, open, on a change naming nobody", () => {
+  it("shared-planning-change-stages-SC-13, shared-planning-change-stages-SC-17 - every role is a row, open, on a change naming nobody", () => {
     const html = render(change({ hands: undefined }));
     const hands = html.slice(html.indexOf(">Hands<"));
 

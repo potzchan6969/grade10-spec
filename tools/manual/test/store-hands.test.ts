@@ -208,7 +208,7 @@ describe("what the hands endpoint refuses", () => {
     }
   });
 
-  it("shared-planning-change-stages-SC-68 - names the yaml package's own error for a record it cannot parse", async () => {
+  it("names the yaml package's own error for a record it cannot parse", async () => {
     const { api } = store("schema: grade10-planning\nhands: [\n");
 
     const answer = await api(
