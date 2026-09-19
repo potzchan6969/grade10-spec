@@ -124,7 +124,7 @@
       ],
       "testCasesStatus": "pending-review",
       "issuedThrough": {
-        "sc": 3,
+        "sc": 4,
         "us": 1,
         "tc": 2
       }
@@ -257,6 +257,7 @@
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
         "A record anyone can read back."
       ],
+      "lastLanded": "2026-09-16T23:48:36+08:00",
       "heldBy": "ui-design",
       "upstream": {
         "specs": {
@@ -273,6 +274,360 @@
           ]
         }
       }
+    },
+    {
+      "id": "demo-building",
+      "dir": "openspec/changes/demo-building",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "building",
+      "owners": [],
+      "created": "2026-09-04",
+      "title": "The Building stage",
+      "why": "The fixture walk needs a change with one task ticked and one still open, so a\nreader can tell the Building stage from Planned, and a dependency that has\nnot shipped yet, so the Blocked overlay has something to name.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 1,
+          "total": 2,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": true
+            },
+            {
+              "text": "1.2 Adopt it.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "dependsOn": [
+        "demo-planned"
+      ],
+      "designWaived": "the fixture is about the Building stage, not the designs",
+      "uiWaived": "the fixture is about the Building stage, not the designs",
+      "skipSpecs": "the fixture is about the Building stage and the Blocked overlay, not the requirements",
+      "author": "tester",
+      "lastLanded": "2026-09-19T13:24:30+00:00",
+      "upstream": {
+        "tasks": {
+          "id": "a4d72b8a",
+          "items": [
+            "proposal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-designed",
+      "dir": "openspec/changes/demo-designed",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "designed",
+      "owners": [],
+      "created": "2026-09-01",
+      "title": "The Designed stage",
+      "why": "The fixture walk needs a change that has drawn both designs and gone no\nfurther, so a reader can tell the Designed stage from the ones beside it.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "ui-design",
+        "tech-design"
+      ],
+      "author": "tester",
+      "followOns": [
+        "The requirements, once somebody takes the two readings."
+      ],
+      "lastLanded": "2026-09-19T13:24:30+00:00",
+      "heldBy": "specs",
+      "upstream": {
+        "ui-design": {
+          "id": "8776bc61",
+          "items": [
+            "proposal"
+          ]
+        },
+        "tech-design": {
+          "id": "8776bc61",
+          "items": [
+            "proposal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-on-staging",
+      "dir": "openspec/changes/demo-on-staging",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "on-staging",
+      "owners": [],
+      "created": "2026-08-20",
+      "title": "The On staging stage",
+      "why": "The fixture walk needs a change whose one task is fully checked off and\ndeployed to staging, and old enough that nobody has landed anything on it\nfor a while, so a reader can see the Idle overlay beside a stage other than\nBuilding.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 1,
+          "total": 1,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": true
+            }
+          ]
+        }
+      ],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "designWaived": "the fixture is about the On staging stage, not the designs",
+      "uiWaived": "the fixture is about the On staging stage, not the designs",
+      "deployedEnv": "staging",
+      "skipSpecs": "the fixture is about the On staging stage and the Idle overlay, not the requirements",
+      "author": "tester",
+      "lastLanded": "2026-09-07T13:24:40+00:00",
+      "upstream": {
+        "tasks": {
+          "id": "800c7b56",
+          "items": [
+            "proposal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-planned",
+      "dir": "openspec/changes/demo-planned",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "planned",
+      "owners": [],
+      "created": "2026-09-03",
+      "title": "The Planned stage",
+      "why": "The fixture walk needs a change with a plan and nothing ticked yet, so a\nreader can tell the Planned stage from Building.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 0,
+          "total": 2,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": false
+            },
+            {
+              "text": "1.2 Adopt it.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "decisions",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "designWaived": "the fixture is about the Planned stage, not the designs",
+      "uiWaived": "the fixture is about the Planned stage, not the designs",
+      "reviewed": {
+        "decisions": "1fe721a5"
+      },
+      "skipSpecs": "the fixture is about the Planned stage and the Behind overlay, not the requirements",
+      "author": "tester",
+      "followOns": [
+        "The proposal moved after `decisions.md` was reviewed, which is what the Behind overlay on this fixture shows."
+      ],
+      "lastLanded": "2026-09-19T13:24:30+00:00",
+      "upstream": {
+        "decisions": {
+          "id": "ff87fe34",
+          "items": [
+            "proposal"
+          ]
+        },
+        "tasks": {
+          "id": "28f20fd5",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-released",
+      "dir": "openspec/changes/demo-released",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "released",
+      "owners": [],
+      "created": "2026-08-01",
+      "title": "The Released stage",
+      "why": "The fixture walk needs a change that has shipped, so a reader can tell the\nReleased stage from On staging.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 1,
+          "total": 1,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": true
+            }
+          ]
+        }
+      ],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "designWaived": "the fixture is about the Released stage, not the designs",
+      "uiWaived": "the fixture is about the Released stage, not the designs",
+      "deployedEnv": "staging",
+      "releasedIn": "v2026.09.0",
+      "skipSpecs": "the fixture is about the Released stage, not the requirements",
+      "author": "tester",
+      "lastLanded": "2026-09-19T13:24:30+00:00",
+      "upstream": {
+        "tasks": {
+          "id": "790b71ed",
+          "items": [
+            "proposal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-specified",
+      "dir": "openspec/changes/demo-specified",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "specified",
+      "owners": [],
+      "created": "2026-09-02",
+      "title": "The Specified stage",
+      "why": "The fixture walk needs a change whose requirements are written and whose\nsuite is still a draft, so a reader can tell the Specified stage apart from\nPlanned.",
+      "taskGroups": [],
+      "deltas": [
+        {
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED"
+          ],
+          "requirements": [
+            {
+              "name": "The thing is counted",
+              "kind": "added",
+              "text": "### Requirement: The thing is counted\n\nThe system SHALL count how many times the thing happens.\n\n#### Scenario: alpha-SC-04 - The count goes up\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing happens\n- **THEN** the count goes up by one"
+            }
+          ]
+        }
+      ],
+      "written": [
+        "proposal",
+        "specs",
+        "test-cases"
+      ],
+      "designWaived": "the fixture is about the Specified stage, not the designs",
+      "uiWaived": "the fixture is about the Specified stage, not the designs",
+      "author": "tester",
+      "suites": [
+        {
+          "spec": "demo-product/alpha",
+          "status": "pending-review",
+          "cases": {
+            "draft": 1,
+            "actual": 0,
+            "deprecated": 0,
+            "total": 1
+          }
+        }
+      ],
+      "lastLanded": "2026-09-19T13:24:30+00:00",
+      "heldBy": "tasks",
+      "upstream": {
+        "specs": {
+          "id": "fdbf2cd6",
+          "items": [
+            "proposal"
+          ]
+        },
+        "test-cases": {
+          "id": "fdbf2cd6",
+          "items": [
+            "proposal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-unreadable",
+      "dir": "openspec/changes/demo-unreadable",
+      "schema": "",
+      "status": "in-flight",
+      "stage": "proposed",
+      "owners": [],
+      "created": "2026-09-06",
+      "title": "An unreadable record",
+      "why": "The fixture walk needs a change whose `.openspec.yaml` nobody could read, so\na reader can see how the board shows a record nothing could parse.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [],
+      "error": {
+        "file": "openspec/changes/demo-unreadable/.openspec.yaml",
+        "message": "Flow sequence in block collection must be sufficiently indented and end with a ] at line 3, column 1:\n\nhands: [\n\n^\n"
+      },
+      "author": "tester",
+      "lastLanded": "2026-09-19T13:24:30+00:00"
+    },
+    {
+      "id": "demo-waiting",
+      "dir": "openspec/changes/demo-waiting",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "proposed",
+      "owners": [],
+      "created": "2026-09-05",
+      "title": "The Waiting overlay",
+      "why": "The fixture walk needs a change that names what it is waiting on, so a\nreader can see the Waiting overlay beside a change still Proposed.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [
+        "proposal"
+      ],
+      "awaiting": [
+        {
+          "artifact": "ui-design",
+          "why": "2026-09-05 - waiting on the designer's Figma frame"
+        }
+      ],
+      "author": "tester",
+      "lastLanded": "2026-09-19T13:24:30+00:00",
+      "heldBy": "ui-design"
     }
   ],
   "schemas": {
