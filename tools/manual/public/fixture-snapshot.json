@@ -256,7 +256,22 @@
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
         "A record anyone can read back."
       ],
-      "stage": "proposed"
+      "stage": "proposed",
+      "upstream": {
+        "specs": {
+          "id": "47e63e84",
+          "items": [
+            "proposal"
+          ]
+        },
+        "tasks": {
+          "id": "5d89638b",
+          "items": [
+            "proposal",
+            "specs"
+          ]
+        }
+      }
     }
   ],
   "schemas": {
@@ -267,18 +282,144 @@
         "teammate": "product-manager",
         "requires": [],
         "upstream": [],
-        "perspectives": [],
+        "perspectives": [
+          {
+            "name": "product",
+            "when": [
+              "surface",
+              "copy"
+            ],
+            "agent": ".claude/agents/product.md"
+          },
+          {
+            "name": "reader",
+            "when": [
+              "copy"
+            ],
+            "agent": ".claude/agents/reader.md"
+          },
+          {
+            "name": "design",
+            "when": [
+              "surface"
+            ],
+            "agent": ".claude/agents/design.md"
+          },
+          {
+            "name": "backend",
+            "when": [
+              "schema",
+              "export"
+            ],
+            "agent": ".claude/agents/backend.md"
+          },
+          {
+            "name": "integration",
+            "when": [
+              "system"
+            ],
+            "agent": ".claude/agents/integration.md"
+          },
+          {
+            "name": "qa",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/qa.md"
+          },
+          {
+            "name": "operations",
+            "when": [
+              "migration",
+              "flag",
+              "money",
+              "deploy"
+            ],
+            "agent": ".claude/agents/operations.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
+        ],
         "required": true
       },
       {
-        "id": "specs",
-        "generates": "specs/**/spec.md",
+        "id": "decisions",
+        "generates": "decisions.md",
         "teammate": "product-manager",
         "requires": [
           "proposal"
         ],
-        "upstream": [],
-        "perspectives": [],
+        "upstream": [
+          "proposal"
+        ],
+        "perspectives": [
+          {
+            "name": "product",
+            "when": [
+              "surface",
+              "copy"
+            ],
+            "agent": ".claude/agents/product.md"
+          },
+          {
+            "name": "reader",
+            "when": [
+              "copy"
+            ],
+            "agent": ".claude/agents/reader.md"
+          },
+          {
+            "name": "design",
+            "when": [
+              "surface"
+            ],
+            "agent": ".claude/agents/design.md"
+          },
+          {
+            "name": "backend",
+            "when": [
+              "schema",
+              "export"
+            ],
+            "agent": ".claude/agents/backend.md"
+          },
+          {
+            "name": "integration",
+            "when": [
+              "system"
+            ],
+            "agent": ".claude/agents/integration.md"
+          },
+          {
+            "name": "qa",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/qa.md"
+          },
+          {
+            "name": "operations",
+            "when": [
+              "migration",
+              "flag",
+              "money",
+              "deploy"
+            ],
+            "agent": ".claude/agents/operations.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
+        ],
         "required": true
       },
       {
@@ -286,21 +427,76 @@
         "generates": "specs/**/user-journeys.md",
         "teammate": "product-manager",
         "requires": [
-          "specs"
+          "decisions",
+          "proposal"
         ],
-        "upstream": [],
-        "perspectives": [],
-        "required": true
-      },
-      {
-        "id": "test-cases",
-        "generates": "specs/**/feature-tcs.md",
-        "teammate": "product-manager",
-        "requires": [
-          "user-journeys"
+        "upstream": [
+          "proposal",
+          "decisions"
         ],
-        "upstream": [],
-        "perspectives": [],
+        "perspectives": [
+          {
+            "name": "product",
+            "when": [
+              "surface",
+              "copy"
+            ],
+            "agent": ".claude/agents/product.md"
+          },
+          {
+            "name": "reader",
+            "when": [
+              "copy"
+            ],
+            "agent": ".claude/agents/reader.md"
+          },
+          {
+            "name": "design",
+            "when": [
+              "surface"
+            ],
+            "agent": ".claude/agents/design.md"
+          },
+          {
+            "name": "backend",
+            "when": [
+              "schema",
+              "export"
+            ],
+            "agent": ".claude/agents/backend.md"
+          },
+          {
+            "name": "integration",
+            "when": [
+              "system"
+            ],
+            "agent": ".claude/agents/integration.md"
+          },
+          {
+            "name": "qa",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/qa.md"
+          },
+          {
+            "name": "operations",
+            "when": [
+              "migration",
+              "flag",
+              "money",
+              "deploy"
+            ],
+            "agent": ".claude/agents/operations.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
+        ],
         "required": true
       },
       {
@@ -308,10 +504,37 @@
         "generates": "ui-design.md",
         "teammate": "designer",
         "requires": [
-          "specs"
+          "decisions",
+          "user-journeys"
         ],
-        "upstream": [],
-        "perspectives": [],
+        "upstream": [
+          "proposal",
+          "decisions",
+          "user-journeys"
+        ],
+        "perspectives": [
+          {
+            "name": "design",
+            "when": [
+              "surface"
+            ],
+            "agent": ".claude/agents/design.md"
+          },
+          {
+            "name": "reader",
+            "when": [
+              "copy"
+            ],
+            "agent": ".claude/agents/reader.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
+        ],
         "required": false
       },
       {
@@ -319,11 +542,64 @@
         "generates": "tech-design.md",
         "teammate": "engineer",
         "requires": [
+          "decisions",
+          "user-journeys"
+        ],
+        "upstream": [
+          "proposal",
+          "decisions",
+          "user-journeys"
+        ],
+        "perspectives": [
+          {
+            "name": "tech",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/tech.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
+        ],
+        "required": false
+      },
+      {
+        "id": "specs",
+        "generates": "specs/**/spec.md",
+        "requires": [
+          "decisions",
+          "user-journeys"
+        ],
+        "upstream": [
+          "proposal",
+          "decisions",
+          "user-journeys",
+          "ui-design",
+          "tech-design"
+        ],
+        "perspectives": [],
+        "required": true
+      },
+      {
+        "id": "test-cases",
+        "generates": "specs/**/feature-tcs.md",
+        "requires": [
           "specs"
         ],
-        "upstream": [],
+        "upstream": [
+          "proposal",
+          "decisions",
+          "user-journeys",
+          "ui-design",
+          "tech-design"
+        ],
         "perspectives": [],
-        "required": false
+        "required": true
       },
       {
         "id": "tasks",
@@ -332,8 +608,40 @@
         "requires": [
           "specs"
         ],
-        "upstream": [],
-        "perspectives": [],
+        "upstream": [
+          "proposal",
+          "decisions",
+          "user-journeys",
+          "ui-design",
+          "tech-design",
+          "specs",
+          "test-cases"
+        ],
+        "perspectives": [
+          {
+            "name": "operations",
+            "when": [
+              "always",
+              "migration",
+              "flag"
+            ],
+            "agent": ".claude/agents/operations.md"
+          },
+          {
+            "name": "qa",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/qa.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
+        ],
         "required": true
       }
     ]

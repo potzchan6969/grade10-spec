@@ -1,61 +1,1086 @@
 name: grade10-planning
 version: 1
-description: Grade10 planning workflow - proposal → specs → user journeys → test cases → ui design → tech design → tasks
+description: >-
+  Grade10 planning workflow - proposal → decisions → user journeys → ui design →
+  tech design → specs → test cases → tasks. The interview settles the frontier
+  and `decisions` records it, so the journeys, both designs and the requirements
+  are all drawn from one settled scope. Both designs are drawn before anybody
+  writes a requirement. `specs` is written in two passes over one file with the
+  blind suite between them: the suite and the scenarios are independent
+  readings of the same anchors, reconciled after both land. `requires` is what
+  makes an artifact owed; `upstream` is what its text is drawn from, which is
+  not the same list - the blind suite is never drawn from the requirements it
+  is reconciled against, and the tech design is drawn beside the UI design
+  rather than from it. One lane for every hand a change passes through.
 artifacts:
   - id: proposal
-    teammate: product-manager
     required: true
+    teammate: product-manager
+    perspectives:
+      - name: product
+        when: [surface, copy]
+        agent: .claude/agents/product.md
+      - name: reader
+        when: [copy]
+        agent: .claude/agents/reader.md
+      - name: design
+        when: [surface]
+        agent: .claude/agents/design.md
+      - name: backend
+        when: [schema, export]
+        agent: .claude/agents/backend.md
+      - name: integration
+        when: [system]
+        agent: .claude/agents/integration.md
+      - name: qa
+        when: [always]
+        agent: .claude/agents/qa.md
+      - name: operations
+        when: [migration, flag, money, deploy]
+        agent: .claude/agents/operations.md
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
     generates: proposal.md
+    description: Why this change is needed, what changes, and what it will not do
+    template: proposal.md
+    instruction: >
+      Written by the product manager, with the `planning-pm` skill.
+      Establishes WHY this change is needed.
+
+
+      Sections:
+
+      - **Why**: 1-2 sentences on the problem or opportunity. Open with the
+      collector problem and the evidence for it, not the solution.
+
+      - **What Changes**: Bullet list of changes. Be specific about new
+      capabilities, modifications, or removals. Mark breaking changes with
+      **BREAKING**. A bullet names the outcome the reader would notice; where
+      it carries a mechanism - a schedule, a field, a screen - it says what
+      that buys, and the interview has asked whether another mechanism buys
+      the same thing (`decisions.md`).
+
+      - **Non-Goals**: One line pointing at `decisions.md`, which holds them.
+      They are decided in the interview, and two homes for one boundary is two
+      answers the day somebody edits one.
+
+      - **Capabilities**: Which specs will be created or modified:
+        - **New Capabilities**: Each becomes a new `specs/<capability-path>/spec.md`. Use kebab-case for path segments you introduce (e.g. `user-auth` or `identity/user-auth`) and follow the project's existing spec organization.
+        - **Modified Capabilities**: Existing capabilities whose REQUIREMENTS are changing. Only include if spec-level behavior changes, not implementation details. Each needs a delta spec file. Use the exact existing path under `openspec/specs/`. Leave empty if no requirement changes.
+      - **Impact**: Affected code, APIs, dependencies, or systems.
+
+      - **Follow-on changes** (optional): What this change makes possible next,
+      one bullet each. The manual's `::next` block reads them onto the capability
+      pages this change is about, so they are read by a collector-facing audience
+      and carry no dates, owners, or commitments. Omit the section when there is
+      nothing to name.
+
+
+      IMPORTANT: The Capabilities section is the contract between this artifact
+
+      and the specs. Research existing specs before filling it in. Each
+
+      capability listed here needs a corresponding spec file.
+
+
+      Every change must either declare at least one capability (new or
+
+      modified) or explicitly opt out of specs: `openspec validate` rejects a
+
+      change with zero deltas unless the change's `.openspec.yaml` sets
+
+      `skip_specs: true`. Use `skip_specs: true` only when no spec-level
+
+      behavior changes (pure refactor, tooling, docs) - specs describe
+
+      behavior, so if behavior does not change, no spec should change either.
+
+      A requirement nobody can decide yet is a wait, not a guess: write
+
+      `awaiting:` with `specs: <the line saying what is missing>` in the
+
+      change's `.openspec.yaml` and stop there. `pnpm run validate:changes`
+
+      excuses a change that says so, and only that one error; plain
+
+      `openspec validate` does not. Delete the line when the delta lands.
+
+      Do not invent a requirement just to satisfy validation.
+
+
+      Keep it concise (1-2 pages). Focus on the "why" not the "how" -
+
+      implementation details belong in tech-design.md.
+
+
+      This is the foundation - everything after it builds on this.
     requires: []
-    instruction: |
-      Why, what changes, and what does not.
-  - id: specs
-    teammate: product-manager
+    upstream: []
+  - id: decisions
     required: true
-    generates: specs/**/spec.md
+    teammate: product-manager
+    perspectives:
+      - name: product
+        when: [surface, copy]
+        agent: .claude/agents/product.md
+      - name: reader
+        when: [copy]
+        agent: .claude/agents/reader.md
+      - name: design
+        when: [surface]
+        agent: .claude/agents/design.md
+      - name: backend
+        when: [schema, export]
+        agent: .claude/agents/backend.md
+      - name: integration
+        when: [system]
+        agent: .claude/agents/integration.md
+      - name: qa
+        when: [always]
+        agent: .claude/agents/qa.md
+      - name: operations
+        when: [migration, flag, money, deploy]
+        agent: .claude/agents/operations.md
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
+    generates: decisions.md
+    description: The change's decided frontier - its goals, its edges, and what the interview settled
+    template: decisions.md
+    instruction: >
+      Written by the product manager, with the `planning-pm` skill, out of the
+      same `grilling` round that produced the proposal. It lands before the
+      journeys, the design and the requirements, because all three are drawn
+      from what it settles.
+
+
+      Sections:
+
+      - **Goals**: what this change is for, as outcomes a reader would notice,
+      one line each. The change's own boundary, never the capability's - the PRD
+      holds what the product should be.
+
+      - **Non-Goals**: what this change deliberately does not do. This is their
+      one home; the proposal points here. Every artifact drawn from this one
+      reads them as its edges.
+
+      - **Decisions**: a table, one row per question the interview settled, in
+      the order the rounds asked them - `Q | Asked | Decided | Instead of`. The
+      `Q` number is the round's own, so a decision leads back to the question
+      that raised it. `(recommended)` marks one the author took as offered
+      rather than chose; `(held)` marks one the author kept against the
+      interview's challenge, and `Instead of` then carries the interview's
+      alternative and why it lost.
+
+      - **Raised**: the blind suite pass's own output, written into this file by
+      the run that takes the readings - `Capability | Raised | Landed`, one row
+      per point the isolated input did not settle. The pass writes the question
+      and the capability it read; the author writes what it became.
+
+
+      **The interview challenges an answer before it records one.** A row is
+      what survived a round, not what the author arrived with. Every round
+      lists each assumption the draft would otherwise make silently - the
+      clock a value runs on, the state a rule starts from, a default the spec
+      already sets - and asks it, with a recommendation; flags a solution
+      offered where a requirement belongs - a schedule, a screen, a field -
+      and asks what it buys, so the outcome is the goal and the mechanism is
+      the row; and asks what is missing - the edge cases, the failure modes,
+      who else is affected, and what this change is not doing, which is where
+      a non-goal comes from. Where the interview's reading differs from the
+      author's it says so with the reason, and the author decides: `(held)`
+      on the row, the alternative in `Instead of`.
+
+
+      **Every raised row lands before the change merges.** It becomes a
+      `Decisions` row here, or a ❓ on the capability's PRD naming who owes the
+      answer. There is no third resting place, and `pnpm check:manual` refuses a
+      change whose `## Raised` holds a row that names neither. The questions now
+      arrive where the author is already reading, and they arrive with a
+      deadline: they used to sit at the bottom of a suite nobody opened until
+      review.
+
+
+      **An escalated or deferred row is written down twice.** The landing here
+      says what was decided; the suite's `## Reconciliation` says what the run
+      did with the case it came from, and its `## Settled` carries the answer
+      into the next blind pass. This file archives with the change and is folded
+      nowhere, so a row that lands only here is unreadable by the one pass most
+      likely to raise it again.
+
+
+      **The section is the blind reading's, and it may be empty** - empty is a
+      claim on the record that the input settled everything. The suite carries no
+      `## Raised` of its own: one there is a list in the wrong file, and
+      `pnpm run tcs:validate` says so.
+
+
+      **Confirmed decisions only.** A question nobody present could settle is a
+      deferral: it goes under the proposal's open questions naming who owes the
+      answer, and as a ❓ row on the capability's PRD. Recording a deferral here
+      as though it were decided is how an open question stops being read as one.
+
+
+      **A decision learned later lands here first.** Refining the journeys or
+      the design can show that the frontier closed on the wrong answer - a
+      non-goal that turns out to be load-bearing, a goal no screen can deliver,
+      an option the interview dropped for a reason that did not survive the
+      screens. That is a row revised or added here, by whoever learned it,
+      before the artifact that depends on it changes. **A conflict between this
+      file and an artifact drawn from it is not automatically the artifact's
+      error**: one of the two is newer, and which one is a question to settle
+      rather than assume. Without that path this file is a snapshot of one
+      afternoon, and every artifact after it drifts from the record quietly -
+      which is the rot it was added to stop.
+
+      Revise the row in place, and say in `Instead of` what it now drops. Git
+      carries what it used to say, this file lives only as long as the change,
+      and a section of superseded rows is something nobody prunes. The product
+      manager keeps the file whole, as they keep the PRD whole; the row is
+      written by whoever learned the fact.
+
+      **At archive, what outlives the change moves to the PRD.** This file is
+      folded nowhere - it archives with the change - and the blind suite pass
+      may not read `openspec/changes/archive/`, so a rejected option left here
+      alone is unreadable by the one pass most likely to re-raise it. The
+      capability's `Product decisions` block is durable and the blind pass
+      already reads it. `archive:preflight` asks the owner to say what moved.
+
+      `Instead of` is the column that earns the file. A decision without its
+      rejected option is re-opened next quarter and answered the other way, with
+      nothing in the record to say which reading is newer. It is the same
+      service `## Settled` does for the blind suite: what has already been
+      asked, which is not what the artifacts downstream say.
+
+
+      What belongs elsewhere: a decision a requirement can carry goes in the
+      delta spec and nowhere else; one the manual's reader needs goes in the
+      PRD's `Product decisions` block; an implementation choice - a lock, a
+      column, persist or recompute - goes in `tech-design.md` under its own
+      `## Decisions`. What stays here is what the interview closed about scope.
+
+
+      Required, and short where there was little to settle: a change nobody had
+      to interview still states its goals and its edges, and one whose scope
+      turned on a judgement records the rounds that closed it. **It is never a
+      reason to hold a draft** - an empty `## Decisions` table is a claim on the
+      record that nothing had to be chosen, which is a claim worth being able to
+      make. Every change carries the file; `planning-pm` writes it.
     requires:
       - proposal
-    instruction: |
-      One delta per capability.
+    upstream:
+      - proposal
   - id: user-journeys
-    teammate: product-manager
     required: true
-    generates: specs/**/user-journeys.md
-    requires:
-      - specs
-    instruction: |
-      Who walks the requirements.
-  - id: test-cases
     teammate: product-manager
+    perspectives:
+      - name: product
+        when: [surface, copy]
+        agent: .claude/agents/product.md
+      - name: reader
+        when: [copy]
+        agent: .claude/agents/reader.md
+      - name: design
+        when: [surface]
+        agent: .claude/agents/design.md
+      - name: backend
+        when: [schema, export]
+        agent: .claude/agents/backend.md
+      - name: integration
+        when: [system]
+        agent: .claude/agents/integration.md
+      - name: qa
+        when: [always]
+        agent: .claude/agents/qa.md
+      - name: operations
+        when: [migration, flag, money, deploy]
+        agent: .claude/agents/operations.md
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
+    generates: specs/**/user-journeys.md
+    description: The journeys this change adds, changes or retires, with the ones it leans on restated
+    template: user-journeys.md
+    instruction: |
+      Written by the product manager, with the `planning-pm` skill, one file
+      beside each `spec.md` the change touches. Its scope is `decisions.md`'s:
+      a journey outside those goals, or inside a non-goal, is a disagreement to
+      settle rather than a line to force - either the journey is wrong, or the
+      scope was, and `decisions.md` is where the second answer lands.
+
+      Sections, in this order:
+
+      ```
+      ## Context user journeys     restated verbatim, read-only, never folded
+      ## ADDED User journeys
+      ## MODIFIED User journeys    the whole journey block copied, then edited
+      ## REMOVED User journeys     each with **Reason:**
+      ```
+
+      **All three delta sections may be empty.** Most changes move no journey. A
+      `**Serves:**` or `**Trace:**` anchor may name a journey that already exists
+      under `openspec/specs/`, not only one this change introduces, so a change
+      is never pushed into inventing a journey to hang itself on.
+
+      ## Context user journeys
+
+      Every journey this change's scenarios or cases anchor on, copied from the
+      durable file **byte for byte**. It makes the change self-contained: the
+      blind suite pass reads it here instead of reaching into
+      `openspec/specs/`, and a reviewer reads the journey without leaving the
+      diff. `pnpm check:manual` fails a copy that has drifted, so drift is
+      caught rather than silently reverting the durable file at archive.
+
+      ## Writing a journey
+
+      `### <capability>-US-<n>: <title>`, then three labeled lines:
+
+      ```
+      ### grade10-admin-auction-listing-US-01: Operator saves an unfinished listing and comes back to it
+
+      **As an** auction operator,
+      **I want** to save a listing before I know every fact about the card,
+      **so that** I can start from the item in front of me and finish later.
+      ```
+
+      **There is no `**Accepted by:**` line.** Nothing in this file names a
+      scenario. Scenarios point up at journeys through their own `**Serves:**`
+      and tooling joins on that. A hand-maintained link in both directions is
+      how the two files came to inherit each other's blind spots.
+
+      **There is no `**Also walked by:**` line either.** A journey another
+      capability's rules stand on is named by those rules, in their own
+      `**Serves:**`, qualified -
+      `grade10-admin/auction/post-sale#post-sale-US-01`. A note here names no
+      scenario, so nothing reads it, nothing joins on it, and nothing fails the
+      day it stops being true.
+
+      Title actor first, then the action, in the third person - `Collector
+      enters the catalogue through a collection`. Not a bare verb phrase, not
+      the first person, never so vague that two journeys could share it. A name
+      that needs an `and` is two journeys.
+
+      **There is no cap on the number of journeys.** Write as few as cover the
+      change and no fewer. Hold each to the four criteria its author owns:
+      Independent, Negotiable, Valuable, Testable. A journey that fails one is
+      split or reworded, never widened to fit. Estimable and Small are sizing
+      judgements and belong to the engineer who plans delivery.
+
+      The role is an end user the spec already names, and the benefit is one
+      the requirements or the proposal already justify. Software this
+      repository ships is never the role - a consuming application, a service,
+      a caller, a package is the system's side of it, and the journey
+      belongs to whoever operates it. Neither are the people who build the
+      product: an engineer wiring a call, a developer seeding fixtures, a
+      reviewer reading a contract each walk a test or a working step. An
+      outside agent that acts on its own is a role - a crawler, a preview
+      fetcher, a provider calling back.
+
+      ## A capability nobody walks
+
+      Still writes the file, and says so in place of the journeys:
+      `**Walked by:** nobody on their own - <who inherits it, and which
+      capability's journeys reach it instead>`.
+
+      This is a **routing declaration, not an exemption**: the capability's
+      anchors are its `## Feature set` root groups rather than its journeys, and
+      it still gets a suite. `Walked by: nobody` is not `Tested by: nobody` - a
+      cross-cutting policy is exactly where a boundary, precision or timezone
+      miss costs most, and exempting one from test design is how those ship.
+
+      Never invent an actor to fill the file. `pnpm check:manual` fails a
+      capability with neither journeys nor the declaration, and a file holding
+      both. It reads the declaration's first words alone, so the reason after
+      them is owed to the next reader rather than to the checker - write it
+      anyway; it is the whole value of the line.
+
+      ## Retiring a journey
+
+      A removed journey keeps its id forever. Archive leaves a one-line tombstone
+      under a `## Retired` section at the bottom of the durable file:
+
+      ```
+      - `grade10-site-store-product-listing-US-04` - Collector searches the catalogue by keyword ·
+        removed in `remove-listing-search` · 2026-09-14
+      ```
+
+      One line, not the journey. Archived suites still carry
+      `**Trace:** grade10-site-store-product-listing-US-04`; delete the journey
+      outright and that join breaks with nothing left to recover it from.
+    requires:
+      - decisions
+      - proposal
+    upstream:
+      - proposal
+      - decisions
+  - id: ui-design
+    required: false
+    teammate: designer
+    perspectives:
+      - name: design
+        when: [surface]
+        agent: .claude/agents/design.md
+      - name: reader
+        when: [copy]
+        agent: .claude/agents/reader.md
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
+    generates: ui-design.md
+    description: The visual plan - screens, component exports, and states
+    template: ui-design.md
+    instruction: >
+      Written by the designer, with the `planning-design` skill - or by the
+      product manager, in the same file, when they already have the design and
+      do not need one drawn. Maps every user-facing surface the change touches
+      to its sources of truth, from the decisions, the journeys and the PRD -
+      `spec.md` is not written yet, in either pass. The designer brings the
+      design reference its groups will be written against: Storybook,
+      `packages/design-system`, `packages/ui`, `packages/i18n`. Optional: a change with no user-facing
+
+      surface does not create the file, and nothing downstream waits on it. A
+      design drawn later still lands on this same change.
+
+
+      Sections:
+
+      - **Screens**: One subsection per surface. Link the Figma frame - the
+      frame is the layout's source of truth, so never describe a screen in
+      prose.
+
+      - **Components**: The design-system primitives and `packages/ui` exports
+      each screen composes. Name exports exactly - the export name is the
+      cross-repo contract. A component, variant, token or message key that does
+      not exist yet is work in this repo; flag it so tasks can carry it. A word
+      is work like the rest: `packages/i18n` answers it in every language of
+      its layer, and `pnpm run test` refuses one left unanswered.
+
+      - **States**: Loading, empty, error, and edge states per screen, **one
+      state per bullet**, each tied to the anchor it dresses - a journey id from
+      `user-journeys.md`, or a `## Feature set` root group the durable
+      capability already issues. This
+      file lands before `spec.md` does, so the change's own groups are usually
+      not written yet: a journey id is the anchor to reach for. Copy the id in backticks, from the heading
+      that issues it - a prefix is never inferable from the capability's path,
+      and outside backticks nothing reads the citation. Never a scenario id:
+      the scenarios are written after this file, and `pnpm check:manual`
+      refuses an id the store issues nowhere.
+
+
+      **One state per bullet is what makes the list countable.** The
+      requirements' second pass walks it and accounts for every bullet - the
+      scenario it became, or an `**Out of suite:**` naming where the state is
+      verified instead - and a bullet holding three states can be answered by
+      one scenario and look complete. The dispositions are written onto these
+      bullets, by the pass that writes the requirements, and they are the one
+      thing in this file the blind suite pass never reads.
+
+
+      Link, never restate: the capability spec owns behavior, tech-design.md
+
+      owns technical decisions, Figma owns layout. If a section would only
+
+      repeat one of them, point to it instead.
+    requires:
+      - decisions
+      - user-journeys
+    upstream:
+      - proposal
+      - decisions
+      - user-journeys
+  - id: tech-design
+    required: false
+    teammate: engineer
+    perspectives:
+      - name: tech
+        when: [always]
+        agent: .claude/agents/tech.md
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
+    generates: tech-design.md
+    description: The technical implementation's high-level design
+    template: tech-design.md
+    instruction: >
+      Written by the engineer who picks the change up, with the
+      `planning-dev` skill. Explains HOW to implement it. Written for every
+      change carrying a task group outside this store - the repository tag on
+      the group heading says where the work lands, and an untagged group
+      counts. A change that skips it says why as `design_waived: <why>` in its
+      `.openspec.yaml`; `pnpm check:manual` refuses a change with neither.
+
+
+      Top-level sections, each omitted when it does not apply:
+
+      - **Context**: only the current state and constraints needed to explain
+      the approach. Point at the proposal for motivation; never restate it.
+
+      - **Goals / Non-Goals**: design-level boundaries only; the proposal
+      already holds the scope.
+
+      - **Decisions**: how the spec lands, not a restatement of it. Open by
+      naming what the spec already governs, then record the implementation
+      choice - which row, which service, persist or recompute, reuse or add -
+      and the alternatives rejected, which engineering inherits. A decision
+      that could be a spec scenario belongs in the spec.
+
+      - **Database Schema**, for a data-model change: owning and affected
+      tables; each added or changed column with its Postgres type, nullability
+      and default in the existing schema's conventions; keys, constraints and
+      indexes; an ER diagram of the relevant relationships; which data is
+      authoritative and which derived. Reuse a table or stamp that already
+      holds the fact, never a second column for the same message. A spec field
+      read from another row at query time is not stored.
+
+      - **Service Interfaces**, for a service change: each service function as
+      a processor with one fixed input shape and one fixed success or refusal
+      output shape. State transaction ownership, locks, reads, writes,
+      idempotency, faults, and the boundary between entrypoint, service,
+      repository and persistence. For every flow that mutates several tables,
+      name the mutation order and the atomic boundary, then give concrete
+      example input and output values showing the affected rows. Show
+      end-to-end identity and data enrichment where a request crosses browser,
+      authenticated backend, service entrypoint, service, repository or
+      persistence.
+
+      - **API Contracts**, only when the wire changes in a meaningful way - a
+      breaking rename, an additive authenticated field, a new admin read.
+      Never list unchanged endpoints.
+
+      - **Risks / Trade-offs**: `[Risk] → Mitigation`. A mitigation is an
+      implementation control - a lock, a stamp, a state column - never "the
+      spec says so".
+
+      - **Migration Plan**: steps to deploy, and rollback where one applies.
+
+      - **Open Questions**: unknowns that can be answered later without
+      changing the specs, the approach, or the task breakdown. One that would
+      change any of those is not an open question - resolve it now, asking
+      rather than guessing.
+
+
+      Database Schema and Service Interfaces are top-level sections, never
+      subsections of Decisions. Bullets and tables carry dense material;
+      paragraphs are short connective text. Link the capability spec rather
+      than restating it; screens and Figma sources are `ui-design.md`'s. Focus
+      on architecture and approach, not line-by-line implementation.
+    requires:
+      - decisions
+      - user-journeys
+    upstream:
+      - proposal
+      - decisions
+      - user-journeys
+  - id: specs
+    required: true
+    generates: specs/**/spec.md
+    description: The capability's purpose, the feature set, and the requirement deltas
+    template: spec.md
+    instruction: |
+      Generated from the proposal, the decisions and the journeys, in **two
+      passes over this one file**, with the blind test suite between them.
+      Nobody owes it by hand, and it is nobody's to write outside the run that
+      takes both readings: `/planning-qa` owns it, or `/planning-dev` on a
+      change the engineer authored. Neither the product manager nor the
+      designer opens it - they hand over the proposal, the decisions and the
+      journeys, and the PM reviews what comes back. That is why this artifact
+      names no teammate and appears on no worklist.
+
+      **Pass one - the outline.** `## Purpose`, then `## Feature set`, then
+      stop, written from the journeys and the PRD the PM marked. The journeys
+      already landed, and together with these groups they are the anchor set
+      both readings are taken from. `test-cases` comes next, and only then does
+      pass two return here.
+
+      Pass one fixes the anchors, and the run goes straight on to the two
+      readings rather than stopping to have the outline read on its own. The PM
+      is the reader of record for it, as they are for the scenarios, and reads
+      the two together at the reconciliation - generated is not unreviewed, and
+      the groups trace back to their own 🚧 lines.
+
+      **Pass two - the behaviour.** `## ADDED Requirements` and its siblings,
+      sequenced to follow the feature set's groups, written after the blind
+      suite and reconciled against it.
+
+      Nothing in this schema can express that order - `requires` is advisory and
+      never stopped anyone writing the scenarios first. **Two checks stand in
+      for it.** While the change is open, a delta that names no requirement is
+      refused unless the change declares the wait in `awaiting:`, so an outline
+      nobody returned to either says so or fails. Once folded,
+      `pnpm check:manual`'s `outline` rule fails a capability whose suite sits
+      beside a `spec.md` carrying no requirements; that rule is durable-only
+      and load-bearing, and it is never downgraded to a warning.
+
+      ## Purpose
+
+      One or two sentences (50+ characters) on what the capability is for.
+
+      Compose it every run from the durable capability's Purpose plus the PRD
+      under `docs/prds/`, then write the section **only when the composed text
+      differs from the durable one**. A change that does not move what the
+      capability is for omits it.
+
+      When written it replaces the durable Purpose whole, and archive overwrites
+      rather than merges - the treatment `## Feature set` already gets. This
+      holds for an existing capability as much as a new one; there is no
+      prohibition on a delta carrying Purpose.
+
+      Purpose is not decoration. With `## Feature set` it is the only context the
+      blind suite pass gets beyond the journeys, so a Purpose that has drifted
+      degrades the cross-check silently, and the drift is the kind that reads as
+      correct.
+
+      ## Feature set
+
+      Two-layer bullets. Root groups of at most five words; children as
+      `Name: purpose`. Keep groups coarse - nest work under the job it serves,
+      and put grants in the groups they belong to rather than a group of their
+      own.
+
+      **The root group names are machine-read.** A scenario's `**Serves:**` and,
+      for a capability nobody walks, a case's `**Trace:**` may name one, matched
+      verbatim, so a root group is renamed deliberately and its anchors are
+      updated in the same change. Leaves carry no ids and are free to be
+      reworded.
+
+      A scenario that matches no group is worth a second look before it is
+      forced into the nearest one: five capabilities turned out to have
+      behaviour their own feature set never named, and `anchorless` is what
+      found them. Adding to the map is a product decision, so it is recorded as
+      an Open row in the capability's PRD decisions block.
+
+      ## Delta sections
+
+      `## ADDED Requirements`; `## MODIFIED Requirements`, carrying the
+      **entire** requirement block copied from the durable spec and then edited
+      - partial content loses detail at archive; `## REMOVED Requirements`, with
+      **Reason** and **Migration**; `## RENAMED Requirements`, FROM:/TO:.
+      Adding a concern without changing existing behaviour is ADDED, never
+      MODIFIED.
+
+      One file per capability the proposal names, at the exact existing path for
+      a capability that already exists. At least one delta unless the change's
+      `.openspec.yaml` sets `skip_specs: true` with `skip_specs_why: <why>`
+      beside it - the CLI owns that key and reads it as a boolean, so a reason
+      written on it invalidates the manifest. Never invent a requirement to
+      satisfy validation. A change that has written its outline and owes its
+      requirements to a later pass says so in `awaiting:` with
+      `specs: <what is still to come>`, and deletes the line as they land.
+
+      ## Requirements and scenarios
+
+      - `### Requirement: <name>` with SHALL or MUST, never should or may. Every
+        `###` under a requirements section is a `### Requirement:` and never a
+        group heading.
+      - `#### Scenario: <capability>-SC-<n> - <title>`, where `<capability>` is
+        the capability's path with slashes as hyphens:
+        `grade10-site/store/product-listing` issues
+        `grade10-site-store-product-listing-SC-01`. The journey and case ids
+        beside it are spelled from the same token.
+        **Exactly four hashes** - three, or a bullet, fails silently.
+      - Every requirement carries at least one scenario, and every scenario is
+        decidable by a test or a manual pass.
+      - One requirement for a flow, as numbered steps for whoever uses the
+        surface - not a scenario per step. One requirement per entity with
+        fields, and one per entity with states, both as tables. Never restate an
+        unchanged fact.
+      - The scenario body is `**WHEN**` / `**THEN**`, both required; add
+        `**GIVEN**` only when state must be in place before the trigger.
+      - Ids are permanent. Number from 01 within a capability, never renumber one
+        that exists, and read the ids already issued before adding one. A renamed
+        or moved capability goes on issuing the prefix it always issued.
+      - **Cite an id exactly as the heading spells it, inside backticks.** Only a
+        capability's first id takes its prefix from the path, so a prefix is read
+        and never reconstructed: `grade10-site/auction/winner-order` issues
+        `winner-order-SC-04` while its neighbour issues
+        `grade10-site-auction-account-record-SC-20`. Shortening the second one
+        names nothing. Outside backticks nothing reads a citation at all - a bare
+        id in a `## Reconciliation` row or a design table goes stale unseen.
+      - Money is an integer count of minor units plus an ISO 4217 code, never a
+        float. Convert it yourself.
+      - No class, function, hook, table or library names. Public component
+        exports are the one exception, kept in one requirement.
+
+      ## The Serves anchor
+
+      Every scenario carries one line, directly under the heading and **above**
+      `**GIVEN**` / `**WHEN**`:
+
+      ```
+      #### Scenario: grade10-site-store-product-listing-SC-14 - Filter yields nothing
+      **Serves:** grade10-site-store-product-listing-US-02 - narrowing the catalogue by set
+
+      **WHEN** a collector applies a filter that matches no product
+      **THEN** the catalogue SHALL show the empty state and keep the filter applied
+      ```
+
+      Three anchors resolve. Write the first that fits:
+
+      | Anchor | Written as | For |
+      | --- | --- | --- |
+      | This capability's journey | `<capability>-US-<n>` | A rule somebody walks here |
+      | Another capability's journey | `<product>/<domain>/<capability>#<journey-id>` | A rule somebody walks elsewhere and this capability enforces |
+      | A `## Feature set` root group | the group name, verbatim | A rule with no actor: a derivation, an idempotency, a refusal the system raises against itself |
+
+      Before the dash is machine-read, after it is prose. An anchor resolving to
+      none of the three fails `pnpm check:manual` loudly rather than dangling in
+      silence.
+
+      **The qualified form reaches a journey this capability does not issue.**
+      `grade10-site/auction/order-status` derives a status the operator walks in
+      `grade10-admin/auction/post-sale`, and the scenario says so on its own
+      line - `**Serves:** grade10-admin/auction/post-sale#post-sale-US-01 - the
+      operator works the queue by outcome`. The path is the capability's path
+      under `openspec/specs/`, and the id is one that capability's
+      `user-journeys.md` issues. A journeys file never carries a hand-written
+      `Also walked by:` note in its place: the note names no scenario, so
+      nothing reads it and nothing fails when it goes stale.
+
+      A scenario whose only anchor is a foreign journey is reached by no case in
+      this capability's suite. List it under the suite's `**Out of suite:**`
+      naming the suite that walks it, the way any other uncovered scenario is.
+
+      **A group anchor is for a rule with no actor.** A rule somebody walks
+      names the journey - here or elsewhere - because a group name says which
+      part of the map a rule sits in and nothing about who meets it. Reach for a
+      group where there is genuinely no walk: a status derived and never
+      written, a write that is idempotent, a guard the system raises against its
+      own callers.
+
+      Nothing checks that judgement, and that is deliberate. No reading of a
+      scenario body tells a derivation from an actor reliably, and a heuristic
+      that is wrong is worse here than a rule stated once: it would refuse the
+      derivations this store is full of, and authors would learn to write past
+      it.
+
+      **The prose after the dash names the walk**, never the group and never the
+      heading it already sits under. `**Serves:** Derived order status - the
+      derived order status` says nothing the anchor did not; `**Serves:**
+      Derived order status - every surface that shows a status reads this chain`
+      says how the rule is reached. `check:manual` refuses prose repeating the
+      group name. Prose repeating the heading it sits under is the store's habit
+      today - 492 durable lines and 222 in flight - and nothing reads it yet:
+      warning on that many would bury every other finding the check makes, so
+      the sweep is a pull request per capability rather than a register. Write
+      the walk anyway; it is the whole value of the line.
+
+      It sits above the GIVEN/WHEN/THEN lines deliberately: those lines are what
+      decides `blind_pass_skipped`, so editing an anchor's prose must never read
+      as a behaviour change.
+
+      **A scenario may serve several anchors**, written as code spans -
+      ``**Serves:** `…-US-03`, `…-US-07` - the refusal both journeys meet``. A
+      scenario is a rule and a rule can sit on several journeys; a feature test
+      case is one walk and still traces one anchor. Commas alone do not separate
+      them, because a feature set group may hold a comma of its own.
+
+      ## A scenario no case reaches
+
+      Listed under the suite's `**Out of suite:**`, **naming where it is
+      verified instead** - a consuming repository's build and type check, a
+      database constraint, a design review, a higher-level suite - not merely
+      why it is excluded. A scenario that can name no such place is a hole, not
+      an exemption.
+
+      ## A design state no requirement states
+
+      Where the change carries a `ui-design.md`, pass two walks its `## States`
+      bullets and answers every one, on the bullet itself:
+
+      ```
+      - Empty catalogue - `grade10-site-store-product-listing-US-02` -
+        `grade10-site-store-product-listing-SC-14`
+      - Offline retry - `grade10-site-store-product-listing-US-02` -
+        **Out of suite:** the shell's connectivity banner, stated in
+        `shared/ui/site-chrome`
+      ```
+
+      A scenario id in backticks, or `**Out of suite:**` - the same words the
+      suite uses for a scenario no case reaches, and the same obligation: name
+      where the state is stated instead, never merely why it is not here.
+      Nothing else closes a bullet, and `pnpm check:manual` names one that does
+      neither.
+
+      **This is pass two's work, not the reconciliation's.** Both readings
+      already see `ui-design.md`, so an empty, error or edge state the designer
+      drew always reached the blind suite; what changes is that it now reaches
+      the requirements by the same route, instead of arriving as a finding
+      against scenarios nobody had asked about it. The two readings stay
+      independent in method - the suite pass works its test-design checklist,
+      pass two works the journeys and the design - and the reconciliation keeps
+      the findings that are about behaviour rather than about a list one side
+      never walked.
+
+      A disposition naming a scenario carries an id, so the isolated input
+      strips these lines the way it strips `## Reconciliation`. One reading
+      `**Out of suite:**` carries no id and stays.
+    requires:
+      - decisions
+      - user-journeys
+    upstream:
+      - proposal
+      - decisions
+      - user-journeys
+      - ui-design
+      - tech-design
+  - id: test-cases
     required: true
     generates: specs/**/feature-tcs.md
+    description: An independent blind reading of the anchors, written without sight of the scenarios
+    template: feature-tcs.md
+    instruction: |
+      Generated by the blind `spec-to-tcs` pass inside the `/planning-qa` run,
+      never written by hand. QA reviews it later with `tcs-review`, which is
+      not part of the planning run.
+
+      **This suite is not derived from the scenarios.** It is a second,
+      independent reading of the same upstream, written by a sub-agent that
+      cannot see `## Requirements` at all. A suite derived from the scenarios
+      can only find inconsistency inside them, never the behaviour they left
+      out - and that is the one thing this artifact exists to find.
+
+      ## The isolated input
+
+      The orchestrator builds it, and the sub-agent sees nothing else.
+
+      Included: `## Purpose`, `## Feature set`, this capability's
+      `user-journeys.md` (context and deltas), `decisions.md` - its `## Raised`
+      table included, which is what earlier runs asked and what came of it -
+      `ui-design.md` where the change has one, with the state dispositions pass
+      two wrote on its bullets stripped, the linked PRD sections, and the
+      existing `feature-tcs.md` for id continuity, with `## Reconciliation`
+      stripped.
+
+      `decisions.md` carries no requirement, so reading it costs no blindness -
+      the property protected here is blindness to the requirements, and that
+      file holds none, exactly as `ui-design.md` holds none. What it buys is
+      the reader knowing what was ruled out: a pass that cannot see the
+      non-goals writes cases for behaviour the interview excluded, and the
+      reconciliation then reads them as behaviour the scenarios forgot. A false
+      finding in the one mechanism built to produce true ones is dearer than
+      the blindness it pretends to protect.
+
+      Excluded: `openspec/specs/` entirely, `openspec/changes/archive/`
+      entirely, and any `## Requirements` section anywhere. The archive
+      exclusion is not housekeeping: an archived change keeps an un-stripped
+      `## Reconciliation` naming scenario ids, so missing that path reopens the
+      leak on the next change to the same capability, invisibly.
+
+      Name the bundle on `## Reconciliation`'s Run line: what the pass read,
+      and what it was denied. Nothing computes or verifies a digest of it, so
+      the line is the run's own statement rather than proof - write it as one.
+      What actually catches a pass that stopped being blind is an empty
+      `## Raised` in `decisions.md`, run after run, and `check:manual` warns on
+      it.
+
+      ## Method
+
+      Work an explicit test-design checklist rather than paraphrasing the
+      journeys: boundary values, equivalence partitions, state transitions, CRUD
+      completeness, empty / one / many, null and missing, permission matrix,
+      error taxonomy, SEO and indexability. Two readings that use the same
+      method produce synonyms, and the reconciliation then finds nothing.
+
+      ## Anchors
+
+      Every case's `**Trace:**` names an anchor: a user journey id, as it always
+      has, or - for a capability nobody walks - a `## Feature set` root group
+      name matched verbatim. A case still never names a scenario id; the suite
+      is written before the scenarios exist, and `tcs:validate` has always
+      warned on a scenario in a trace.
+
+      ## Settled and Reconciliation
+
+      Two sections at the bottom of the file, and `pnpm run tcs:validate` reads
+      them as a set.
+
+      **The blind reading's raised questions are not one of them.** They go to
+      the change's `decisions.md`, under its `## Raised` table, one row per
+      point the isolated input did not settle, with the capability that raised
+      it: that is the file the author is already reading, and every row there
+      owes a landing - a `Decisions` row or a ❓ on the PRD - before the change
+      merges. A suite carrying a `## Raised` of its own is a list in the wrong
+      file and `tcs:validate` says so. Write no scenario id in a row: this file
+      goes into the next blind pass's isolated input whole.
+
+      `## Settled` carries the questions earlier runs had answered, one line
+      each and no scenario ids. The next blind pass reads it on purpose - it
+      says what has already been asked, which is not what the scenarios say.
+      Every raised row that was escalated or deferred lands here or in
+      `## Reconciliation` as well as in `decisions.md`, because `decisions.md`
+      archives with the change and is folded nowhere.
+
+      `## Reconciliation` is written by the run once both readings land, joining
+      them on anchors: what was raised and folded into the spec, what was raised
+      and rejected and why, what was escalated to the author, what was deferred
+      because nobody could settle it, and which anchors no case reaches.
+
+      That section is the evidence the blind pass ran and what it bought.
+      Without it, a pass that finds nothing and a pass that never happened look
+      identical in git.
+
+      Scenario ids may appear there **only while the change is open**. Archive
+      fold and `tcs-review` both strip them, leaving the dispositions and the
+      reasons. Write each one in backticks and in full - `Folded as
+      grade10-site-auction-account-record-SC-56`, never a bare `SC-56`. A bare
+      id is read by nothing, so a later renumber leaves the row naming a
+      scenario the change has stopped issuing and no check says so.
+
+      ## Shape
+
+      `docs/governance/specs-to-test-cases.md` governs the journey sections,
+      the case ids, the classification block, the `**Trace:**` line and the
+      file header. Follow it; do not restate its rules here or invent a
+      variant.
+
+      `test-cases.md` is not a suite name. A capability writes
+      `feature-tcs.md`; a path across the capabilities of one domain writes
+      `domain-tcs.md` beside the durable specs; `product-tcs.md` and
+      `platform-tcs.md` are smoke passes written there too, never under a
+      change's deltas.
+
+      A capability whose journeys file says `**Walked by:** nobody` still gets
+      a suite, anchored on its feature set.
+
+      `pnpm run tcs:validate` checks every suite in the store, and CI runs it
+      on every push.
     requires:
+      - specs
+    upstream:
+      - proposal
+      - decisions
       - user-journeys
-    instruction: |
-      QA's suite, derived from the journeys.
-  - id: ui-design
-    teammate: designer
-    required: false
-    generates: ui-design.md
-    requires:
-      - specs
-    instruction: |
-      The visual plan.
-  - id: tech-design
-    teammate: engineer
-    required: false
-    generates: tech-design.md
-    requires:
-      - specs
-    instruction: |
-      The technical design.
+      - ui-design
+      - tech-design
   - id: tasks
-    teammate: engineer
     required: true
+    teammate: engineer
+    perspectives:
+      - name: operations
+        when: [always, migration, flag]
+        agent: .claude/agents/operations.md
+      - name: qa
+        when: [always]
+        agent: .claude/agents/qa.md
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
     generates: tasks.md
+    description: The implementation plan, claimed group by group
+    template: tasks.md
+    instruction: >
+      Written by the engineer who picks the change up, with the
+      `planning-dev` skill, and the artifact that moves the change off the
+      planning board: until it exists, the change reads as still being
+      planned. The implementing repository reads it, checks it off and claims
+      groups in it.
+
+
+      Before writing tasks, check tech-design.md for Open Questions. If any of
+      them would change what gets built, resolve them first - do not bake an
+      unstated assumption into the task list.
+
+
+      **IMPORTANT: Follow the template exactly.** The apply phase parses
+      checkbox format to track progress. Tasks not using `- [ ]` won't be
+      tracked. Group, task-id and owner format follow
+      `docs/governance/task-ownership.md`, which tooling in this repository and
+      in the application repository both parse.
+
+
+      Rules:
+
+      - Group by layer, in order: shared types and interfaces, data migration,
+      backend and API, frontend. Omit a layer the change does not touch rather
+      than writing an empty group. When a change spans grade10-spec and an
+      application repository, the grade10-spec groups land first - the
+      submodule bump is the boundary.
+
+      - A group title names its repository by clone name - `(grade10-spec)`,
+      `(grade10)` - never "this repo" or "here": tasks.md is written in this
+      store and read from the application repository, so a deictic reference
+      flips meaning between the two.
+
+      - Once the shared-interface group lands, backend and frontend groups
+      depend on it, not on each other: write each so it can be claimed in
+      parallel and verified on its own - frontend against the contracts and
+      fixtures, never a running backend. When a group truly needs another
+      group's landed code, say so in a prose line under its heading; otherwise
+      group order is convention, not a dependency.
+
+      - Phrase an implementation task as the spec scenario(s) it makes pass,
+      naming them, so the scenario's test is the evidence behind the
+      checkmark. Never split "write the tests" into its own task or group -
+      the engineer works test-first inside each task.
+
+      - End every group with its verification step - the checks that group
+      runs - so an engineer ships and verifies one group at a time. Keep each
+      task to something one engineer finishes in a session.
+
+      - A change whose deltas touch a capability carries a task to update that
+      capability's PRD under docs/prds/, in a grade10-spec group; `pnpm
+      check:manual` verifies it. Component work `ui-design.md` flagged - a
+      variant, a token, a compound component that does not exist yet - is a
+      grade10-spec group too.
+
+      - Write groups without owner tags - engineers claim them at pickup - and
+      never renumber a group or task that is claimed or has checkmarks.
+
+
+      Example:
+
+      ```
+
+      ## 1. Shared interfaces (grade10-spec)
+
+
+      - [ ] 1.1 Export `ListingTile` from packages/ui (`grade10-site-store-product-listing-SC-01`)
+
+      - [ ] 1.2 Verify: `pnpm run typecheck && pnpm run test`
+
+
+      ## 2. Frontend (grade10)
+
+
+      - [ ] 2.1 Render the tile from the catalogue row (`grade10-site-store-product-listing-SC-03`)
+
+      - [ ] 2.2 Verify: `pnpm run check`
+
+      ```
     requires:
       - specs
-    instruction: |
-      The plan, group by group.
+    upstream:
+      - proposal
+      - decisions
+      - user-journeys
+      - ui-design
+      - tech-design
+      - specs
+      - test-cases
 apply:
-  instruction: Work the tasks.
+  requires:
+    - tasks
+  tracks: tasks.md
+  perspectives:
+    - name: build
+      when: [always]
+      agent: .claude/agents/build.md
+    - name: qa
+      when: [always]
+      agent: .claude/agents/qa.md
+    - name: operations
+      when: [migration, flag]
+      agent: .claude/agents/operations.md
+    - name: simpler
+      when: [always]
+      agent: .claude/agents/simpler.md
+  instruction: |
+    Read context files, work through pending tasks, mark complete as you go.
+    Pause if you hit blockers or need clarification.
+
+    A change with no tasks.md is not ready to apply: planning stopped at the
+    requirements, and the engineer who picks it up writes the plan. Add
+    tech-design.md when the change earns one, ui-design.md when it alters
+    something a user sees, and tasks.md always.
+    `openspec status --change <change-name>` lists what is still missing.

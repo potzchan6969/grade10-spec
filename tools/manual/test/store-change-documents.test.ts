@@ -18,40 +18,20 @@ const [document] = readChangeDocuments(FIXTURE, NO_GIT, null);
 
 describe("the artifacts a change has", () => {
   it("reads the schema's artifacts in the order it declares them", () => {
-    const artifact = (
-      id: string,
-      generates: string,
-      teammate: string,
-      requires: string[],
-      required = true,
-      // The demo store's schema carries no `upstream:` and no
-      // `perspectives:`, which read as an artifact drawn from nothing and a
-      // round that reads it for itself — `test/read-schema.test.ts` holds
-      // both.
-    ) => ({
-      id,
-      generates,
-      teammate,
-      requires,
-      upstream: [],
-      perspectives: [],
-      required,
-    });
-    expect(schemaArtifacts(FIXTURE, "grade10-planning")).toEqual([
-      artifact("proposal", "proposal.md", "product-manager", []),
-      artifact("specs", "specs/**/spec.md", "product-manager", ["proposal"]),
-      artifact(
-        "user-journeys",
-        "specs/**/user-journeys.md",
-        "product-manager",
-        ["specs"],
-      ),
-      artifact("test-cases", "specs/**/feature-tcs.md", "product-manager", [
-        "user-journeys",
-      ]),
-      artifact("ui-design", "ui-design.md", "designer", ["specs"], false),
-      artifact("tech-design", "tech-design.md", "engineer", ["specs"], false),
-      artifact("tasks", "tasks.md", "engineer", ["specs"]),
+    // The demo store carries the store's own planning schema, so the fixture
+    // and the real thing cannot disagree about the order, the upstream sets or
+    // the readers - `test/read-schema.test.ts` holds the schema itself.
+    const artifacts = schemaArtifacts(FIXTURE, "grade10-planning") ?? [];
+
+    expect(artifacts.map((one) => one.id)).toEqual([
+      "proposal",
+      "decisions",
+      "user-journeys",
+      "ui-design",
+      "tech-design",
+      "specs",
+      "test-cases",
+      "tasks",
     ]);
     expect(schemaArtifacts(FIXTURE, "spec-driven")).toBeUndefined();
   });
@@ -69,11 +49,12 @@ describe("the artifacts a change has", () => {
       })),
     ).toEqual([
       { name: "proposal", kind: "doc", present: true },
-      { name: "specs", kind: "specs", present: true },
+      { name: "decisions", kind: "doc", present: false },
       { name: "user-journeys", kind: "journeys", present: false },
-      { name: "test-cases", kind: "cases", present: false },
       { name: "ui-design", kind: "doc", present: false },
       { name: "tech-design", kind: "doc", present: false },
+      { name: "specs", kind: "specs", present: true },
+      { name: "test-cases", kind: "cases", present: false },
       { name: "tasks", kind: "tasks", present: true },
     ]);
   });
