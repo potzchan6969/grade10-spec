@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { TRIGGERS } from "../src/api/types.ts";
 import { findStoreRoot } from "../src/store/disk.mts";
 import { NO_GIT } from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
@@ -85,25 +86,22 @@ describe("what each artifact is drawn from", () => {
 /**
  * The readers a round may dispatch are data beside each artifact's teammate,
  * and a task group's sit on the schema's `apply:` block. One reader answers
- * both, so no round carries a second copy of the table.
+ * both, so no round carries a second copy of the table. `TRIGGERS` itself
+ * lives once, in `../src/api/types.ts`.
  */
-const TRIGGERS = [
-  "always",
-  "surface",
-  "schema",
-  "export",
-  "system",
-  "migration",
-  "flag",
-  "money",
-  "deploy",
-  "copy",
-];
-
 describe("the readers each artifact may summon", () => {
   it("reads the perspectives beside every artifact that has them", () => {
     expect(byId.get("ui-design")?.perspectives).toEqual([
-      { name: "design", when: ["surface"], agent: ".claude/agents/design.md" },
+      {
+        name: "journeys",
+        when: ["surface"],
+        agent: ".claude/agents/design.md",
+      },
+      {
+        name: "inventory",
+        when: ["surface"],
+        agent: ".claude/agents/design.md",
+      },
       { name: "reader", when: ["copy"], agent: ".claude/agents/reader.md" },
       { name: "simpler", when: ["always"], agent: ".claude/agents/simpler.md" },
     ]);
@@ -117,7 +115,15 @@ describe("the readers each artifact may summon", () => {
   it("reads a task group's readers off the apply block", () => {
     expect(
       applyPerspectives(storeRoot, "grade10-planning").map(({ name }) => name),
-    ).toEqual(["build", "qa", "operations", "simpler"]);
+    ).toEqual([
+      "missing-pieces",
+      "simplicity",
+      "code-smell",
+      "conventions",
+      "qa",
+      "operations",
+      "simpler",
+    ]);
   });
 
   it("gives every artifact but those two the reader of the simpler thing", () => {

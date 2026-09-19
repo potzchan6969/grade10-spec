@@ -39,8 +39,11 @@ const SCHEMA = "openspec/schemas/grade10-planning/schema.yaml";
 const PAGE = "docs/prds/products/shared/planning/agent-rounds.md";
 
 const names = (readers) => readers.map(({ name }) => name).sort();
+// The real schema, for the tests that only need a valid `artifactOf` lookup
+// and are not exercising a change's own files.
+const REAL_SCHEMA = planningSchema(ROOT);
 const triggersOf = (diff, artifact = "") =>
-  [...classifyDiff(diff, artifact)].sort();
+  [...classifyDiff(diff, REAL_SCHEMA, artifact)].sort();
 
 /** A store with the real schema and one change whose files are all present,
  * so a bundle is read off a tree rather than off this file's idea of one. */
@@ -124,39 +127,94 @@ const EXPORT_AND_MIGRATION = [
   "",
 ].join("\n");
 
-test("SC-08: a words-only draft reaches the reader of the words and the floor", () => {
+test("SC-08: a proposal's words reach the reader of the words and the floor", () => {
   const root = fixture();
   const schema = planningSchema(root);
   const triggers = classifyDiff(
     readFileSync(diffOf(root, WORDS), "utf8"),
-    "ui-design",
+    schema,
+    "proposal",
   );
 
   assert.deepEqual([...triggers].sort(), ["copy"]);
-  const readers = readersFor(schema, "ui-design", triggers);
-  assert.deepEqual(names(readers), ["reader", "simpler"]);
-  // Two readers read this draft - the words reader the diff summoned and the
-  // `always` floor - so one verifier reconciles them.
+  const readers = readersFor(schema, "proposal", triggers);
+  // The whole reader set, not only its names: `product` and `reader` both
+  // read words, the always floor is `qa` and `simpler`, and nothing else -
+  // `design`, `backend`, `integration` and `operations` need a trigger this
+  // diff never raises.
+  assert.deepEqual(readers, [
+    {
+      name: "product",
+      when: ["surface", "copy"],
+      agent: ".claude/agents/product.md",
+      summonedBy: ["copy"],
+    },
+    {
+      name: "reader",
+      when: ["copy"],
+      agent: ".claude/agents/reader.md",
+      summonedBy: ["copy"],
+    },
+    {
+      name: "qa",
+      when: ["always"],
+      agent: ".claude/agents/qa.md",
+      summonedBy: [],
+    },
+    {
+      name: "simpler",
+      when: ["always"],
+      agent: ".claude/agents/simpler.md",
+      summonedBy: [],
+    },
+  ]);
   assert.equal(verifierNeeded(readers), true);
 });
 
-test("SC-09: an export and a migration group summon their readers and a verifier", () => {
+test("SC-09: a tech design with an export and a migration dispatches its four readings", () => {
   const root = fixture();
   const schema = planningSchema(root);
-  const triggers = classifyDiff(EXPORT_AND_MIGRATION, "decisions");
+  const triggers = classifyDiff(EXPORT_AND_MIGRATION, schema, "tech-design");
 
   assert.deepEqual([...triggers].sort(), ["export", "migration"]);
-  const readers = readersFor(schema, "decisions", triggers);
-  for (const name of ["backend", "operations", "simpler"])
-    assert.ok(
-      names(readers).includes(name),
-      `${name} reads a draft that names an export and a migration group`,
-    );
-  for (const name of ["product", "design", "integration"])
-    assert.ok(
-      !names(readers).includes(name),
-      `${name} is not summoned by this draft`,
-    );
+  const readers = readersFor(schema, "tech-design", triggers);
+  // `tech-design.md` is the tech reader's own subject, so all four of its
+  // readings run every round whatever the diff raises - `export` and
+  // `migration` change nothing here, which is the whole reader set saying so:
+  // each reading is its own dispatch, sharing `tech.md` with the other three
+  // rather than being merged into one because they share an agent.
+  assert.deepEqual(readers, [
+    {
+      name: "deterministic",
+      when: ["always"],
+      agent: ".claude/agents/tech.md",
+      summonedBy: [],
+    },
+    {
+      name: "simple",
+      when: ["always"],
+      agent: ".claude/agents/tech.md",
+      summonedBy: [],
+    },
+    {
+      name: "consistent",
+      when: ["always"],
+      agent: ".claude/agents/tech.md",
+      summonedBy: [],
+    },
+    {
+      name: "testable",
+      when: ["always"],
+      agent: ".claude/agents/tech.md",
+      summonedBy: [],
+    },
+    {
+      name: "simpler",
+      when: ["always"],
+      agent: ".claude/agents/simpler.md",
+      summonedBy: [],
+    },
+  ]);
   assert.equal(verifierNeeded(readers), true);
 });
 
@@ -218,7 +276,12 @@ test("SC-30: the round hands every reader one bundle and no other reader's outpu
   ]);
   assert.deepEqual(Object.keys(printed.bundle).sort(), ["draft", "upstream"]);
   for (const reader of printed.readers)
-    assert.deepEqual(Object.keys(reader).sort(), ["agent", "name", "when"]);
+    assert.deepEqual(Object.keys(reader).sort(), [
+      "agent",
+      "name",
+      "summonedBy",
+      "when",
+    ]);
   assert.equal(printed.bundle.draft, "openspec/changes/demo/decisions.md");
 });
 
@@ -231,11 +294,16 @@ test("a task group is read against the schema's apply block", () => {
     diffOf(root, EXPORT_AND_MIGRATION),
   ]);
 
+  // build's four readings and qa and simpler always run; operations joins
+  // because the diff names a migration group.
   assert.deepEqual(names(printed.readers), [
-    "build",
+    "code-smell",
+    "conventions",
+    "missing-pieces",
     "operations",
     "qa",
     "simpler",
+    "simplicity",
   ]);
   assert.equal(printed.bundle.draft, "openspec/changes/demo/tasks.md");
 });
@@ -315,7 +383,7 @@ test("every trigger the requirement names is classified off a diff", () => {
 
   for (const [trigger, diff] of cases) {
     assert.ok(
-      classifyDiff(diff, "proposal").has(trigger),
+      classifyDiff(diff, REAL_SCHEMA, "proposal").has(trigger),
       `${trigger} is summoned by:\n${diff}`,
     );
   }
@@ -348,12 +416,20 @@ test("an empty diff leaves the floor and nothing else", () => {
   const readers = readersFor(
     schema,
     "tech-design",
-    classifyDiff("", "tech-design"),
+    classifyDiff("", schema, "tech-design"),
   );
 
-  assert.deepEqual(names(readers), ["simpler", "tech"]);
-  // The floor here is two readers, so one verifier reconciles them: a round
-  // is sized by how many read the draft, not by how many the diff summoned.
+  // `tech-design.md` is the tech reader's own subject, so all four of its
+  // readings run every round, with the floor: five readers in all, so one
+  // verifier reconciles them - a round is sized by how many read the draft,
+  // not by how many the diff summoned.
+  assert.deepEqual(names(readers), [
+    "consistent",
+    "deterministic",
+    "simple",
+    "simpler",
+    "testable",
+  ]);
   assert.equal(verifierNeeded(readers), true);
 });
 
