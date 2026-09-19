@@ -158,7 +158,7 @@ propose, and that every step passes through layers of checks. The brief is
 | Challenge and verify | Decided | Every draft is read by named perspectives and each finding verified before a person sees it; the blind readings are their own challenge and reconciliation. | Product, QA, Engineering |
 | Questions | Decided | Numbered rows in the change's decisions, or ❓ lines on the page, with a recommendation; an open question never holds a stage. | Product |
 | Read again | Decided | A landing reads every artifact after it, in order; behind holds only a landing and the fold, never a tick. | Product, Engineering |
-| Round size | Decided | The simpler-thing reader always, the others when the draft touches what they read for; no waiver. | Engineering |
+| Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the tech PIC's readings on the tech design, QA and the build's readings on the plan and a task group - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |
 | The record | Decided | One row per round in the change, archived with it; a landing or a tick without its row is refused on a change opened after the rule. | Engineering |
 | The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards every deploy and cut. | QA, Engineering |
 | Runner | ❓ Open | Which agent holds the thread and which wakes on a landing, and what the workspace needs for them. | Operations |

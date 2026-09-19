@@ -188,7 +188,7 @@ touches, and no key SHALL declare or waive them.
 
 | `when` | What in the draft summons that reader |
 | --- | --- |
-| `always` | Every round, without exception: the reader who argues for the simpler shape |
+| `always` | Every round of the artifacts whose list names it, whatever the draft touched; the reader who argues for the simpler shape is on every list |
 | `surface` | A screen, a state, or a story |
 | `schema` | A data model |
 | `export` | A public export or an interface |
