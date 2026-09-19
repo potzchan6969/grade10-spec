@@ -102,9 +102,91 @@ describe("the pip a 🚧 line wears", () => {
   });
 
   it("wears no pip once every change delivering it has archived", () => {
-    const html = render([]);
+    const html = render([
+      linked("gone", {
+        title: "The refund window, already shipped",
+        status: "archived",
+        stage: "archived",
+      }),
+    ]);
 
     expect(html).toContain("Window");
-    expect(html).not.toContain('data-slot="badge"');
+    // Scoped past the section's own in-flight row, which is free to say the
+    // change has archived — the pip on the 🚧 line itself is what has to
+    // stay silent, and that line's own `<li>` is what this checks.
+    expect(html.slice(html.indexOf("Window"))).not.toContain(
+      'data-slot="badge"',
+    );
+  });
+});
+
+describe("the pip's coverage past the page's first block", () => {
+  const PATH2 = "docs/prds/products/demo-product/coverage.md";
+  const BODY2 = [
+    "## Coverage",
+    "",
+    "Some rule that stands on its own.",
+    "",
+    ':::callout{kind="note"}',
+    "A note in the middle of the section — never a section of its own.",
+    ":::",
+    "",
+    "- 🚧 **After** — still under Coverage, past the callout",
+    "",
+    "| Rule | Value |",
+    "| --- | --- |",
+    "| 🚧 **Deadline** | 30 days |",
+    "",
+  ].join("\n");
+
+  function render2(changes: ChangeEntry[]): string {
+    const index = buildIndex(
+      snapshotOf({
+        config: {
+          storybookBase: "",
+          groups: [{ title: "Products", products: ["demo-product"] }],
+          platform: [],
+          guides: [],
+        },
+        taxonomy: { products: ["demo-product"], topics: [] },
+        pages: [pageEntry(PATH2, { title: "Coverage" }, BODY2)],
+        changes,
+      }),
+    );
+    const page = index.pageByPath.get(PATH2);
+    const prose = (page?.ast?.blocks ?? []).filter(
+      (block) => block.type === "prose",
+    );
+    return renderToStaticMarkup(
+      <MemoryRouter>
+        <BlockScopeProvider value={{ index, pagePath: PATH2 }}>
+          {prose.map((block, position) =>
+            block.type === "prose" ? (
+              // biome-ignore lint/suspicious/noArrayIndexKey: a fixed positional sequence parsed from one immutable fixture.
+              <ProseBlockView block={block} key={position} />
+            ) : null,
+          )}
+        </BlockScopeProvider>
+      </MemoryRouter>,
+    );
+  }
+
+  it("keeps the section for the prose after a callout, and tags a table's marked row", () => {
+    const html = render2([
+      changeEntry("cover-it", [], {
+        title: "Cover it",
+        stage: "planned",
+        sections: [{ page: PATH2, slug: "coverage" }],
+      }),
+    ]);
+
+    expect(html).toContain("After");
+    expect(html).toContain("Deadline");
+    // Scoped past the section's own in-flight row, which wears its own
+    // badges for the stage and the open hand: both marks below sit under
+    // `## Coverage`, on either side of the callout and inside the table, and
+    // wear the same pip for it.
+    const body = html.slice(html.indexOf("Some rule that stands on its own"));
+    expect(body.match(/data-slot="badge"/g)?.length).toBe(2);
   });
 });

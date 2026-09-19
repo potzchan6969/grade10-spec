@@ -1,5 +1,13 @@
 import { ArrowSquareOut } from "@phosphor-icons/react";
-import { type ComponentProps, type ReactNode, useMemo } from "react";
+import {
+  Children,
+  type ComponentProps,
+  cloneElement,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+  useMemo,
+} from "react";
 import Markdown, { type Components } from "react-markdown";
 import { Link as RouterLink } from "react-router";
 import remarkGfm from "remark-gfm";
@@ -16,7 +24,11 @@ import {
   slugify,
   specTitle,
 } from "../api/paths";
-import { MARK_SECTION_PROPERTY, markSections } from "../content/mark-pips";
+import {
+  MARK_SECTION_PROPERTY,
+  markSections,
+  type SectionSeed,
+} from "../content/mark-pips";
 import { REF_PATTERN, resolveRef } from "../content/refs";
 import {
   columnCount,
@@ -274,6 +286,10 @@ type MarkdownViewProps = {
    * furthest in-flight change. Off elsewhere `anchors` is off — a spec's or a
    * delta's own text names no page section to read a pip from. */
   pips?: boolean;
+  /** The section this text's own 🚧 lines inherit, from `ProseBlockView`'s
+   * `sectionSeedOf` — the page's whole parse is what knows it, not this one
+   * block's own markdown. Ignored where `pips` is off. */
+  pipSeed?: SectionSeed;
   className?: string;
 };
 
@@ -290,6 +306,7 @@ export function MarkdownView({
   refs = false,
   pageSpec,
   pips = false,
+  pipSeed,
   className,
 }: MarkdownViewProps) {
   const components = useMemo<Components>(
@@ -402,18 +419,27 @@ export function MarkdownView({
                 <MarkPip node={node} />
               </li>
             ),
+            tr: ({
+              children,
+              node,
+              ...rest
+            }: ComponentProps<"tr"> & { node?: HastNode }) => (
+              <tr {...rest}>{withRowPip(children, node)}</tr>
+            ),
           }
         : {}),
     }),
     [anchors, anchorPrefix, baseDir, index, pageSpec, pips],
   );
 
-  const remarkPlugins = useMemo(
+  const remarkPlugins = useMemo<
+    ComponentProps<typeof Markdown>["remarkPlugins"]
+  >(
     () =>
       pips
-        ? [remarkGfm, equalWidthTables, markSections]
+        ? [remarkGfm, equalWidthTables, [markSections, pipSeed]]
         : [remarkGfm, equalWidthTables],
-    [pips],
+    [pips, pipSeed],
   );
 
   return (
@@ -434,6 +460,27 @@ export function MarkdownView({
 function MarkPip({ node }: { node?: HastNode }) {
   const slug = node?.properties?.[MARK_SECTION_PROPERTY];
   return typeof slug === "string" ? <StagePip slug={slug} /> : null;
+}
+
+/** A marked table row's own cells, the pip appended inside the last one — a
+ * row carries no node of its own react-markdown renders text into, the way a
+ * paragraph or a list item does, so the plugin tags the row and this is where
+ * that becomes visible. Nothing where the row carries no 🚧. */
+function withRowPip(children: ReactNode, node?: HastNode): ReactNode {
+  const slug = node?.properties?.[MARK_SECTION_PROPERTY];
+  if (typeof slug !== "string") return children;
+  const cells = Children.toArray(children);
+  const last = cells.at(-1);
+  if (!isValidElement(last)) return children;
+  const withPip = cloneElement(
+    last as ReactElement<{ children?: ReactNode }>,
+    {},
+    <>
+      {(last.props as { children?: ReactNode }).children}
+      <StagePip slug={slug} />
+    </>,
+  );
+  return [...cells.slice(0, -1), withPip];
 }
 
 function Heading({

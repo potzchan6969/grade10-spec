@@ -16,7 +16,13 @@ import { useBlockScopeMaybe } from "./block-scope";
 export function StagePip({ slug }: { slug: string }) {
   const scope = useBlockScopeMaybe();
   if (!scope) return null;
-  const changes = changesForSection(scope.index, scope.pagePath, slug);
+  // Archived is skipped explicitly rather than left to `snapshot.changes`
+  // never carrying one: `stageOf` answers `archived` for a `ChangeEntry`
+  // whose own `status` says so, so a fixture — or a reader added later — that
+  // does carry one still wears no pip for it.
+  const changes = changesForSection(scope.index, scope.pagePath, slug).filter(
+    (change) => change.status !== "archived",
+  );
   if (changes.length === 0) return null;
 
   const furthest = changes.reduce((held, change) =>
@@ -24,8 +30,16 @@ export function StagePip({ slug }: { slug: string }) {
   );
   const artifacts = scope.index.snapshot.schemas[furthest.schema] ?? [];
   const roles = handOf(furthest, furthest.stage, artifacts);
+  // `change-hand.tsx`'s own vocabulary: `@handle` where one is named, `<role>
+  // open` where it names nobody — the same words the card and the hands
+  // table use for the same fact.
   const hand = roles
-    .map((role) => furthest.hands?.[role] ?? ROLE_LABEL[role])
+    .map((role) => {
+      const handle = furthest.hands?.[role];
+      return handle
+        ? `@${handle.replace(/^@/, "")}`
+        : `${ROLE_LABEL[role]} open`;
+    })
     .join(", ");
   const title = `${furthest.title} — ${STAGE_LABEL[furthest.stage]}${hand ? ` · ${hand}` : ""}`;
 
