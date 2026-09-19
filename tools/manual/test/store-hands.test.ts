@@ -18,10 +18,27 @@ import { writeStore } from "./tmp-store";
 
 const DIR = "openspec/changes/expire-loyalty-points";
 
+/** Every handle a test below assigns: the endpoint refuses what the store's
+ * own `hands` rule refuses, so a handle it writes has to be one the team map
+ * carries. */
+const TEAM = [
+  "handles:",
+  "  robin:",
+  "    roles: [pm]",
+  "  kim:",
+  "    roles: [pm]",
+  "  dana:",
+  "    roles: [design]",
+  "  sam:",
+  "    roles: [dev]",
+  "",
+].join("\n");
+
 function store(manifest = "schema: grade10-planning\ncreated: 2026-08-30\n") {
   const root = writeStore({
     [`${DIR}/.openspec.yaml`]: manifest,
     [`${DIR}/proposal.md`]: "# Loyalty points should expire\n",
+    "docs/prds/team.yaml": TEAM,
   });
   const endpoints = storeEndpoints(rootsOf(root));
   const api = async (request: StoreRequest) => body(await endpoints(request));
@@ -143,6 +160,35 @@ describe("what the hands endpoint refuses", () => {
     }
   });
 
+  it("shared-planning-change-stages-SC-14 - refuses a handle the team map does not know, before the write", async () => {
+    const { root, api } = store();
+
+    const answer = await api(
+      assign({ change: "expire-loyalty-points", role: "pm", handle: "ghost" }),
+    );
+
+    expect(answer.status).toBe(400);
+    expect(String(answer.body.error)).toContain("ghost");
+    expect(String(answer.body.error)).toContain("team.yaml");
+    expect(manifestOf(root).hands).toBeUndefined();
+  });
+
+  it("shared-planning-change-stages-SC-14 - refuses a handle shaped like more than one, before the write", async () => {
+    const { root, api } = store();
+
+    const answer = await api(
+      assign({
+        change: "expire-loyalty-points",
+        role: "pm",
+        handle: "robin smith",
+      }),
+    );
+
+    expect(answer.status).toBe(400);
+    expect(String(answer.body.error)).toContain("one handle");
+    expect(manifestOf(root).hands).toBeUndefined();
+  });
+
   it("says so for a change nothing has proposed", async () => {
     const { api } = store();
 
@@ -160,6 +206,17 @@ describe("what the hands endpoint refuses", () => {
       const answer = await api(assign({ change, role: "pm", handle: "robin" }));
       expect(answer.status).toBe(400);
     }
+  });
+
+  it("shared-planning-change-stages-SC-68 - names the yaml package's own error for a record it cannot parse", async () => {
+    const { api } = store("schema: grade10-planning\nhands: [\n");
+
+    const answer = await api(
+      assign({ change: "expire-loyalty-points", role: "pm", handle: "robin" }),
+    );
+
+    expect(answer.status).toBe(400);
+    expect(String(answer.body.error)).toContain(".openspec.yaml");
   });
 
   it("refuses a request another origin made", async () => {
