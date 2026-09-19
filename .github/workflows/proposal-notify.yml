@@ -1,6 +1,14 @@
 name: OpenSpec changes
 
-# Reports changes to the OpenSpec store after they land on main.
+# What a push to main moved, and who it moved it to.
+#
+# One post to the planning channel naming each change and the stage it moved
+# into, and one direct message per hand a change has reached — the same
+# derivation the board reads, run over the push's base and its head.
+#
+# The job commits nothing: `contents: read` is the whole of it, and the only
+# token it holds is the Slack bot's. `thread:` and `reviewed:` are written by
+# the round, not here.
 
 on:
   push:
@@ -8,6 +16,9 @@ on:
     paths:
       - "openspec/changes/**"
       - "openspec/specs/**"
+      # A page landing can put an artifact behind, and the hand of that
+      # artifact is told about it.
+      - "docs/prds/**"
       - ".github/workflows/proposal-notify.yml"
 
 permissions:
@@ -17,8 +28,12 @@ concurrency:
   group: openspec-notify-${{ github.sha }}
 
 env:
+  NODE_VERSION: 24.14.1
   MANUAL_URL: https://spec.grade10-stg.com/planning
   OPENSPEC_VIEWER_URL: https://spec.grade10-stg.com/openspec/
+  # One file per run, restored and saved by exact key: it makes a re-run of
+  # this push send nothing twice, and says nothing about the push before it.
+  SENT_KEYS: notify-sent.txt
 
 jobs:
   notify:
@@ -32,29 +47,90 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Find OpenSpec changes in this push
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      # The script reads the store through the manual's own readers, which
+      # need the workspace's dependencies.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Say which piece of setup is missing, rather than failing later inside
+      # a Slack call about a token nobody set. A channel the bot is not a
+      # member of cannot be checked without a call, so the send reports it
+      # and names the channel it was refused.
+      - name: Check the repository is configured
+        env:
+          BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          CHANNEL: ${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}
+          WORKSPACE_URL: ${{ vars.SLACK_WORKSPACE_URL }}
+          NOTIFY_DMS: ${{ vars.NOTIFY_DMS }}
+        run: |
+          missing=""
+          [ -n "$BOT_TOKEN" ] || missing="$missing SLACK_BOT_TOKEN"
+          [ -n "$CHANNEL" ] || missing="$missing SLACK_PLANNING_CHANNEL_ID"
+          if [ "$NOTIFY_DMS" = "true" ] && [ -z "$WORKSPACE_URL" ]; then
+            missing="$missing SLACK_WORKSPACE_URL"
+          fi
+          if [ -n "$missing" ]; then
+            echo "::error::Not configured:$missing"
+            echo "Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      # No `restore-keys`: a prefix fallback would drag the previous push's
+      # keys in and silence a stage re-entered after a revert (decisions Q26).
+      - name: Restore the keys this run has sent
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.SENT_KEYS }}
+          key: notify-sent-${{ github.run_id }}
+
+      - name: Find what this push moved and post it
         id: changes
         env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_WORKSPACE_URL: ${{ vars.SLACK_WORKSPACE_URL }}
+          TCS_SHEET_URL: ${{ vars.TCS_SHEET_URL }}
+          CHANNEL: ${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}
           BEFORE: ${{ github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          base="$BEFORE"
-          if ! git cat-file -e "${base}^{commit}" 2>/dev/null; then
-            base="${HEAD_SHA}^"
-          fi
+          touch "$SENT_KEYS"
           node scripts/openspec/changed-changes.mjs \
-            --base "$base" \
+            --stages \
+            --send \
+            --only post \
+            --base "$BEFORE" \
             --head "$HEAD_SHA" \
+            --channel "$CHANNEL" \
+            --sent-keys "$SENT_KEYS" \
             --manual-url "$MANUAL_URL" \
             --openspec-url "$OPENSPEC_VIEWER_URL" \
             --commit-url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
             --github-output "$GITHUB_OUTPUT"
 
-      - name: Notify Slack about OpenSpec changes
-        if: steps.changes.outputs.has-changes == 'true'
-        uses: slackapi/slack-github-action@v1.26.0
-        with:
-          channel-id: ${{ vars.SLACK_CHANNEL_ID }}
-          payload: ${{ steps.changes.outputs.payload }}
+      - name: Tell the hands
+        if: vars.NOTIFY_DMS == 'true' && steps.changes.outputs.has-messages == 'true'
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_WORKSPACE_URL: ${{ vars.SLACK_WORKSPACE_URL }}
+          TCS_SHEET_URL: ${{ vars.TCS_SHEET_URL }}
+          BEFORE: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          node scripts/openspec/changed-changes.mjs \
+            --stages \
+            --send \
+            --only dms \
+            --base "$BEFORE" \
+            --head "$HEAD_SHA" \
+            --sent-keys "$SENT_KEYS" \
+            --manual-url "$MANUAL_URL" \
+            --openspec-url "$OPENSPEC_VIEWER_URL"

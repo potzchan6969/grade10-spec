@@ -1,0 +1,68 @@
+name: Weekly digest
+
+# Monday 09:00 on the Hong Kong clock: one direct message per person with a
+# line to say, and nothing to anybody with none.
+#
+# `vars.DIGEST_ENABLED` is the switch, so the schedule can be stopped without
+# a revert. The job commits nothing.
+
+on:
+  schedule:
+    # 01:00 UTC is 09:00 in Hong Kong, the zone every day count in this store
+    # is read on (decisions Q35).
+    - cron: "0 1 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openspec-digest
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 24.14.1
+  MANUAL_URL: https://spec.grade10-stg.com/planning
+
+jobs:
+  digest:
+    if: vars.DIGEST_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # A day count is read from the history: a shallow checkout would date
+      # nothing and the digest would say nothing is idle.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check the repository is configured
+        env:
+          BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          if [ -z "$BOT_TOKEN" ]; then
+            echo "::error::Not configured: SLACK_BOT_TOKEN"
+            echo "Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      - name: Send each person their week
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          node scripts/openspec/digest.mjs \
+            --send \
+            --manual-url "$MANUAL_URL"
