@@ -895,8 +895,9 @@ in the landing's own commit.
 `pnpm check:manual` SHALL refuse a change that lacks a row for work it has
 already done.
 
-- **A written artifact** — an artifact from `proposal.md` to `tasks.md` on
-  `main` with no `rounds.md` row naming it
+- **A written artifact** — an artifact from `proposal.md` to `tasks.md` whose
+  `landed_by:` line the change's record carries, with no `rounds.md` row
+  naming it; a file on disk that no `landed_by:` line names is a draft
 - **A ticked group** — a ticked task group with no row naming that group
 - **A missing column** — a row that leaves a column empty is refused as a
   missing row is, naming the column
@@ -908,7 +909,7 @@ already done.
 #### Scenario: shared-planning-agent-rounds-SC-54 - A landed artifact with no row is refused
 **Serves:** The record - a change opened under this rule reaches its next check without a row for what it landed
 
-- **GIVEN** a change created after the day the rule landed, whose `tasks.md` is on `main`
+- **GIVEN** a change created after the day the rule landed, whose record carries a `landed_by:` line for `tasks.md`
 - **WHEN** `pnpm check:manual` runs and `rounds.md` carries no row naming `tasks.md`
 - **THEN** the check refuses and names the artifact
 
