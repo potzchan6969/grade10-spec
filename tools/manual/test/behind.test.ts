@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { behindLabelOf } from "../src/api/stage-view.ts";
 import { behindOf } from "../src/api/stages.ts";
 import type {
   ChangeEntry,
@@ -344,5 +345,22 @@ describe("with no read record at all", () => {
     const root = store();
 
     expect(behindOf(read(root), artifacts(root))).toEqual([]);
+  });
+});
+
+describe("what the row names", () => {
+  it("names what changed where the commit dates single items out", () => {
+    expect(
+      behindLabelOf({ artifact: "specs", changed: [`${PAGE}#points`] }),
+    ).toBe(`${PAGE}#points changed`);
+  });
+
+  it("names what is before it where the recorded id dates no edit", () => {
+    expect(
+      behindLabelOf({
+        artifact: "specs",
+        before: [`${PAGE}#points`, "decisions"],
+      }),
+    ).toBe(`read again against ${PAGE}#points, decisions`);
   });
 });
