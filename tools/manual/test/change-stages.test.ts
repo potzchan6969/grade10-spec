@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { laneOf } from "../src/api/derive";
+import { draftedOf, movedBy, moveShown } from "../src/api/stage-view.ts";
 import {
-  DRAFTED,
   handOf,
   laneOfStage,
   OVERLAYS,
@@ -269,46 +269,64 @@ describe("whose turn it is", () => {
 
 describe("what the agent drafts and the hand moves", () => {
   it("carries a pair for the five drafted stages and none after them", () => {
-    expect(STAGES.filter((rung) => DRAFTED[rung] !== undefined)).toEqual([
+    expect(STAGES.filter((rung) => draftedOf(rung) !== undefined)).toEqual([
       "proposed",
       "designed",
       "specified",
       "planned",
       "building",
     ]);
-    expect(DRAFTED["on-staging"]).toBeUndefined();
-    expect(DRAFTED.released).toBeUndefined();
-    expect(DRAFTED.archived).toBeUndefined();
   });
 
-  it("names the hand's move as the page writes it", () => {
-    expect(DRAFTED.proposed?.move).toBe("answer");
-    expect(DRAFTED.designed?.move).toBe("tweak · challenge");
-    expect(DRAFTED.specified?.move).toBe("read");
-    expect(DRAFTED.planned?.move).toBe("read");
-    expect(DRAFTED.building?.move).toBe("read each landing");
+  it("names the hand's move as the stage table writes it", () => {
+    const shown = (rung: Stage) => moveShown(draftedOf(rung)?.moves ?? []);
+
+    expect(shown("proposed")).toBe("answer");
+    expect(shown("designed")).toBe("tweak · challenge");
+    expect(shown("specified")).toBe("read");
+    expect(shown("planned")).toBe("read");
+    expect(shown("building")).toBe("read each landing");
   });
 
-  it("names the command that stage's hand pastes", () => {
-    expect(DRAFTED.proposed?.command).toBe("/plan <id>");
-    expect(DRAFTED.designed?.command).toContain("/design <id>");
-    expect(DRAFTED.designed?.command).toContain("/tech <id>");
-    expect(DRAFTED.specified?.command).toBe("/specify <id>");
-    expect(DRAFTED.planned?.command).toBe("/tasks <id>");
-    expect(DRAFTED.building?.command).toBe("/build <id> <group>");
+  it("names the command each hand of the stage pastes", () => {
+    const commands = (rung: Stage) =>
+      (draftedOf(rung, "pos")?.moves ?? []).map((one) => one.command);
+
+    expect(commands("proposed")).toEqual(["/plan pos"]);
+    // Two hands take the change while it is still Proposed, and each drafts
+    // one design, so Designed offers one command per hand.
+    expect(commands("designed")).toEqual(["/design pos", "/tech pos"]);
+    expect(commands("specified")).toEqual(["/specify pos"]);
+    expect(commands("planned")).toEqual(["/tasks pos"]);
+    expect(commands("building")).toEqual(["/build pos <group>"]);
   });
 
-  /** Read from the stage, so two changes in one stage carry the same pair and
-   * no change's record can change it. */
-  it("says what the agent drafts and who moves it", () => {
-    expect(DRAFTED.proposed?.draft).toBe(
+  it("says what the agent drafts and names every hand that moves it", () => {
+    expect(draftedOf("proposed")?.mark).toBe(
       "the marks and the three files, from what the hand asks",
     );
-    expect(DRAFTED.building?.draft).toBe("each group, test first");
-    expect(DRAFTED.proposed?.note).toBe(
-      "Product manager: say what is wanted, answer",
+    expect(draftedOf("building")?.mark).toBe("each group, test first");
+    expect(movedBy(draftedOf("designed")?.moves ?? [])).toBe(
+      "Designer: tweak · Tech PIC: challenge",
     );
-    expect(DRAFTED.building?.note).toBe("Engineer: read each landing");
+    expect(movedBy(draftedOf("building")?.moves ?? [])).toBe(
+      "Engineer: read each landing",
+    );
+  });
+
+  /** Read from the stage: two changes the ladder puts on one rung carry the
+   * same pair, whatever else their records say. */
+  it("gives two changes at one rung the same pair", () => {
+    const thin = at("building", { hands: { dev: "sam" } });
+    const busy = at("building", {
+      awaiting: [{ artifact: "tasks", why: "2026-09-02 the plan is thin" }],
+      dependsOn: ["loyalty-rules"],
+      taskGroups: [group(2, 3)],
+    });
+
+    expect(stage(thin)).toBe("building");
+    expect(stage(busy)).toBe(stage(thin));
+    expect(draftedOf(stage(busy))).toEqual(draftedOf(stage(thin)));
   });
 });
 

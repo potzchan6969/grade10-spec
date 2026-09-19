@@ -217,7 +217,7 @@ describe("the loop's continuation on the card", () => {
       changeEntry("written-up", [delta()], { stage: "specified" }),
     ]);
     expect(html).toContain("/specify written-up");
-    expect(html).toContain("read the requirements and the cases together");
+    expect(html).toContain("Product manager: read");
   });
 
   it("hands a complete change to /archive-change", () => {
