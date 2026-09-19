@@ -3,6 +3,16 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-19, tcs-rules r3.0
 
+**Out of suite:**
+
+- `shared-planning-change-stages-SC-01` — the manual's derivation tests: every rung of the stage table, read from a tree no person walks.
+- `shared-planning-change-stages-SC-02` — the manual's derivation tests: a proof landing out of order.
+- `shared-planning-change-stages-SC-04` — the manual's derivation tests: the four lanes as a projection of the eight stages.
+- `shared-planning-change-stages-SC-06` — the manual's derivation tests: the three files completing Proposed without moving it.
+- `shared-planning-change-stages-SC-27` — the manual's derivation tests: a read record whose content id matches the tree.
+- `shared-planning-change-stages-SC-28` — the manual's derivation tests: an artifact with no read record.
+- `shared-planning-change-stages-SC-29` — the manual's derivation tests: what is upstream of nothing, unlinked or waived.
+
 ## shared-planning-change-stages-US1: Teammate learns a change has reached their hand
 
 **As a** teammate named as a change's hand,
@@ -70,7 +80,9 @@ admin(engineer) is named as the `dev` hand on <change A>, which sits at Specifie
 * The card names the designer and the tech PIC as the hands, not the product manager.
 * No message reaches <pm handle> for that move.
 
-### shared-planning-change-stages-US1-TC3-1: A stage reached twice is told once
+### shared-planning-change-stages-US1-TC3-1: A stage told once per entry
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -86,17 +98,25 @@ admin(engineer) is named as the `dev` hand on <change A>, which sits at Specifie
 * **Trace:** shared-planning-change-stages-US-01
 
 **Pre-conditions:**
-<change A> reached Planned, <dev handle> was told, and `tasks.md` was then reverted off `main`, dropping the change back to Specified.
+<change A> reached Planned on `tasks.md`, and <dev handle>, its `dev` hand, was told once.
+
+**Test data:**
+
+| What happens next | <dev handle>'s direct messages |
+| --- | --- |
+| A later push leaves <change A> in Planned with the same engineer | hold one Your turn message for Planned |
+| The push workflow is re-run by hand for the same push | hold one Your turn message for Planned |
+| `tasks.md` is reverted off `main`, dropping the change to Specified, and lands again | hold a second Your turn message for Planned |
 
 **Steps:**
 
-1. Land <change A>'s `tasks.md` on `main` again.
+1. Let <what happens next> happen on `main`.
 2. Read <dev handle>'s direct messages.
 3. Open <change A>'s card at <manual board url>.
 
 **Expected Results:**
 
-* <dev handle> holds one Your turn message for Planned, not two.
+* <dev handle>'s direct messages read as the row states.
 * The card sits in Planned.
 
 ### shared-planning-change-stages-US1-TC4-1: An unnamed hand is told in the role's channel
@@ -173,16 +193,16 @@ admin(engineer) is named as the `dev` hand on <change A>, which sits at Specifie
 * **Trace:** shared-planning-change-stages-US-01
 
 **Pre-conditions:**
-admin(product manager) <pm handle> holds <change B> at its current stage, owes two ❓ decisions rows on it, holds <change E> idle 9 days, owes the artifact <change M> waits on, and is the hand of one behind artifact.
+admin(product manager) <pm handle> holds <change B> at its current stage, owes two ❓ decisions rows on it, holds <change E> idle 9 days, owes the artifact <change M> waits on, is the hand of one behind artifact, and holds <change F>, which the release of its dependency has just freed.
 
 **Steps:**
 
-1. Let the weekly digest run on Monday morning.
+1. Let the weekly digest run on Monday 09:00 on the Hong Kong clock.
 2. Read <pm handle>'s direct messages.
 
 **Expected Results:**
 
-* One direct message lists what is on them now, their open questions, their idle, behind and waiting changes.
+* One direct message lists what is on them now, their open questions, their idle, behind and waiting changes, and <change F> as freed by a dependency.
 * Each change in it links its thread and its change page.
 
 ### shared-planning-change-stages-US1-TC7-1: A digest with nothing to say is not sent
@@ -213,6 +233,36 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 
 * No digest reaches <release handle>.
 * <pm handle>'s digest arrives as usual.
+
+### shared-planning-change-stages-US1-TC8-1: Staging tells the release hand its turn
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-01
+
+**Pre-conditions:**
+<change R> is at Building with every task box ticked. <qa handle> is its `qa` hand and <release handle> its `release` hand, both known to the team map. <change R> has a thread.
+
+**Steps:**
+
+1. Land `deployed_env: staging` for <change R> on `main`.
+2. Read <release handle>'s direct messages.
+3. Read <qa handle>'s direct messages.
+
+**Expected Results:**
+
+* <release handle> holds one Your turn message naming <change R>, the stage On staging and the thread.
+* <qa handle> holds one staging message naming <change R> and its run tab.
+* Each of the two holds one message for that move, not two.
 
 ---
 
@@ -481,6 +531,36 @@ No change is in flight and the archive holds none the board reads.
 * The stepper shows Specified as the current stage, and the Your turn card carries the thread link and the command.
 * Each artifact row reads fresh or behind, with its open question count and the handle that landed it.
 * The hands, the delivery and the handoff rows read one fact per label.
+
+### shared-planning-change-stages-US2-TC9-1: A change whose record cannot be read
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-02
+
+**Pre-conditions:**
+admin(product manager) has <change U> on `main` with a malformed record the store cannot read, and one readable change in each other lane.
+
+**Steps:**
+
+1. Navigate to <manual board url>.
+2. Read the Proposed lane.
+3. Open <change U> at <manual change page url>.
+
+**Expected Results:**
+
+* <change U> sits in the Proposed lane, named as unreadable.
+* Its hands show as open, one row per role.
+* No lane leaves <change U> out, and no lane reads as an error.
 
 ---
 
@@ -780,6 +860,37 @@ Runs once per row of **Test data**.
 * The check refuses and names what the row states.
 * The refusal names the change, not only the file.
 
+### shared-planning-change-stages-US4-TC6-1: A hand taken off a change tells the role's channel
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-04
+
+**Pre-conditions:**
+<change J> sits at Designed with <design handle> as its `design` hand. The team map names a channel for the designer role.
+
+**Steps:**
+
+1. Remove the `design` handle from <change J>'s `hands:` and push to `main`.
+2. Read the designer role's channel.
+3. Push a later commit to <change J> that leaves the hand open, and read the channel again.
+4. Read <change J>'s card at <manual board url>.
+
+**Expected Results:**
+
+* One post in the designer role's channel names <change J> and the stage it sits on.
+* The later push adds no second post.
+* The card shows the design hand as open.
+
 ---
 
 ## shared-planning-change-stages-US5: Designer says a change has no surface
@@ -905,7 +1016,7 @@ Runs once per row of **Test data**.
 **I want** to write what I wait on and have it shown against the hand that owes it,
 **so that** the wait is dated and nobody chases me for it.
 
-### shared-planning-change-stages-US6-TC1-1: A wait shows dated and tells the hand that owes it
+### shared-planning-change-stages-US6-TC1-1: A wait shows dated against the hand that owes it
 
 **Classification:**
 
@@ -933,7 +1044,8 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 **Expected Results:**
 
 * The card carries an amber waiting chip with the line and its date.
-* One direct message reaches <tech handle> with the line and its date.
+* The change page shows the line against <tech handle>, the hand that owes the artifact.
+* No direct message reaches <tech handle> for the wait; it is a line of Monday's digest.
 * The card stays in the Building lane.
 
 ### shared-planning-change-stages-US6-TC2-1: Many waits, one line per artifact
@@ -981,7 +1093,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-06
 
 **Pre-conditions:**
-<change M> carries one `awaiting:` line on `main`, and <tech handle> was told about it.
+<change M> carries one `awaiting:` line on `main`, naming the tech design <tech handle> owes.
 
 **Steps:**
 
@@ -994,7 +1106,37 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 
 * The waiting chip is gone and the Waiting filter drops <change M>.
 * The change stays in the Building lane.
-* No second message reaches <tech handle>.
+* No message reaches <tech handle> for the wait, written or removed.
+
+### shared-planning-change-stages-US6-TC4-1: A wait with no date shows as written
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-06
+
+**Pre-conditions:**
+<change M> sits at Building and carries one `awaiting:` line on `main` naming the tech design <tech handle> owes, written with no date.
+
+**Steps:**
+
+1. Navigate to <manual board url>.
+2. Read <change M>'s card.
+3. Open <change M> at <manual change page url>.
+
+**Expected Results:**
+
+* The waiting chip carries the line as written, with no date beside it.
+* The change page shows the line against <tech handle>.
+* <change M> stays under the Waiting filter and in the Building lane.
 
 ---
 
@@ -1411,4 +1553,64 @@ None yet - the first blind pass.
 
 Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Feature set), user-journeys.md, proposal.md, decisions.md with its Raised table, ui-design.md, the Change Stages and Agent Rounds pages and the Planning index, the store context; denied every `## Requirements` section, openspec/specs/ and openspec/changes/archive/.
 
-Pending - written by the reconciliation.
+### Folded
+
+- `shared-planning-change-stages-US1-TC2-1`, the product manager hearing nothing when the change leaves them → `shared-planning-change-stages-SC-40`
+- `shared-planning-change-stages-US1-TC5-1`, one push moving two changes telling each hand of its own → `shared-planning-change-stages-SC-47`
+- `shared-planning-change-stages-US2-TC3-1`, the day below the bound wearing no chip → `shared-planning-change-stages-SC-22`
+- `shared-planning-change-stages-US2-TC7-1`, a proof reverted off `main` dropping the change a lane → `shared-planning-change-stages-SC-01`
+- `shared-planning-change-stages-US3-TC2-1`, the board's Mine filter using the handle My turn remembered → `shared-planning-change-stages-SC-63`
+- `shared-planning-change-stages-US5-TC3-1`, a waiver removed returning the design to owed → `shared-planning-change-stages-SC-01`
+- `shared-planning-change-stages-US6-TC2-1`, each wait shown against the hand that owes it → `shared-planning-change-stages-SC-21`
+- `shared-planning-change-stages-US7-TC4-1`, the pip carrying the stage number so no colour carries the meaning alone → `shared-planning-change-stages-SC-65`
+- `shared-planning-change-stages-US4-TC3-1`, a hand taken off a change showing the hand as open → `shared-planning-change-stages-SC-42`
+
+Four cases went the other way: the rulings settled behaviour no case walked, so the suite gained one case each.
+
+- `shared-planning-change-stages-US1-TC8-1`, the release hand told its turn at staging, `Q18` → `shared-planning-change-stages-SC-45`
+- `shared-planning-change-stages-US2-TC9-1`, a record nothing can read shown in Proposed with its hands open, `Q23` → `shared-planning-change-stages-SC-03`
+- `shared-planning-change-stages-US4-TC6-1`, a hand taken off a change telling the role's channel once, `Q25` → `shared-planning-change-stages-SC-42`
+- `shared-planning-change-stages-US6-TC4-1`, a wait written with no date shown undated, `Q20` → `shared-planning-change-stages-SC-21`
+
+### Rejected
+
+- `shared-planning-change-stages-US6-TC1-1`'s direct message to the hand that owes a wait — `Q31` keeps five message kinds, and a written wait is a line of the digest rather than a message of its own; the case keeps the dated chip and the hand it is shown against, and the page loses the row it was read from.
+- No case was dropped whole: every reading of the input turned out to be behaviour the rulings kept or a question they answered.
+
+### Escalated
+
+- On staging names two hands: is one message sent to each, or only to QA? → `Q18`
+- What does a message link before the change has a thread? → `Q19`
+- An `awaiting:` line with no date or no artifact named: shown, or refused? → `Q20`
+- Are the idle bounds inclusive: the chip at 7 days, the shelf at 30? → `Q21`
+- Does idle count calendar days or working days, and on which clock? → `Q21`
+- Is a 🚧 line whose change has archived left marked, or refused? → `Q22`
+- Does a change whose record the check refuses show with its hands open, or stay off the board? → `Q23`
+- Is `deployed_env: staging` enough for On staging on its own? → `Q24`
+- Is the role's channel told when a hand is removed while the change sits on them? → `Q25`
+- Is "once per move" keyed for the life of the change, or per entry? → `Q26`
+- Does the weekly digest reach a handle the team map does not know? → `Q27`
+- Does `landed_by:` hold one handle per artifact, or both? → `Q28`
+
+`Q26` moved a case: `shared-planning-change-stages-US1-TC3-1` read the key as one per change and now runs a row per entry, the revert and re-landing telling the engineer again.
+
+### Out of suite
+
+- `shared-planning-change-stages-SC-01` → the manual's derivation tests
+- `shared-planning-change-stages-SC-02` → the manual's derivation tests
+- `shared-planning-change-stages-SC-04` → the manual's derivation tests
+- `shared-planning-change-stages-SC-06` → the manual's derivation tests
+- `shared-planning-change-stages-SC-27` → the manual's derivation tests
+- `shared-planning-change-stages-SC-28` → the manual's derivation tests
+- `shared-planning-change-stages-SC-29` → the manual's derivation tests
+
+### Anchors no case reaches
+
+Every journey is walked by at least one case. The six feature set root groups are reached by none, and each says why:
+
+- Stages read from files — holds the derivations listed out of suite above
+- Overlays, a closed set — holds the derivations listed out of suite above
+- Drafted, landed on a word — its rules sit on the journeys the hands walk
+- Hands and whose turn — its rules sit on the journeys the hands walk
+- Messages, once per move — its rules sit on the journeys the hands walk
+- Surfaces that show the stage — its rules sit on the journeys the hands walk

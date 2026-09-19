@@ -66,6 +66,8 @@ A fact beside the stage, never a stage of its own. The set is closed.
   what clears it is [Agent Rounds · Read Again](agent-rounds#read-again)
 - 🚧 **Suite, flag and hotfix** — shown beside the stage and never holding
   the ladder
+- ❓ **Day bounds** — whole calendar days on the UTC date, the chip from the
+  seventh and the shelf from the thirtieth; the product manager confirms
 
 ## Hands
 
@@ -101,9 +103,7 @@ Slack tells one person, once per move, in the change's thread.
 | A draft is ready for a hand | That hand, in the change's thread | The summary and the numbered questions |
 | An artifact is behind | The hand of the earliest behind artifact | The artifact, and what changed before it |
 | A push lands on `main` | The channel | Each change the push moved, and its stage |
-| A wait is written | The hand that owes the artifact | The line, and its date |
-| A dependency releases | The blocked change's hand | The change that is now free |
-| Monday morning | Each person, by direct message | On you now; open questions; idle; behind; waiting |
+| Monday morning | Each person, by direct message | On you now; open questions; idle; behind; waiting; freed by a dependency |
 
 - 🚧 **Once per move** — a move is the hand changing; a move told twice, or a
   message per commit, never happens
@@ -111,6 +111,8 @@ Slack tells one person, once per move, in the change's thread.
   its thread, and a reply there is how a hand answers
 - **The channel post per push** — runs today, listing the changes a push
   touched
+- ❓ **Two fewer messages** — a written wait and a freed dependency are digest
+  lines, not messages of their own; the product manager confirms
 
 ## Surfaces
 

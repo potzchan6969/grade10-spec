@@ -50,31 +50,31 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 
 ## States
 
-- Board with no change in flight - `shared-planning-change-stages-US-02`
-- A lane with no change in it, collapsed to its heading - `shared-planning-change-stages-US-02`
-- A lane heading and a stepper step with the agent mark and the hand's move - `shared-planning-change-stages-US-02`
-- A card in Proposed on the product manager, and one on the designer once the decisions and the journeys are in - `shared-planning-change-stages-US-02`
-- A card whose hand is unnamed, showing the hand as open - `shared-planning-change-stages-US-04`
-- A card waiting, with the line and its date - `shared-planning-change-stages-US-06`
-- A card blocked, naming the change it waits for - `shared-planning-change-stages-US-02`
-- A card idle 7 days, with the day count - `shared-planning-change-stages-US-02`
-- A card idle 30 days, on the shelf - `shared-planning-change-stages-US-02`
-- A card wearing Behind, naming the earliest behind artifact and its hand - `shared-planning-change-stages-US-09`
-- A card whose suite is a draft, and one whose suite is approved - `shared-planning-change-stages-US-02`
-- A card behind a flag, with the flag's name - `shared-planning-change-stages-US-02`
-- The Mine filter with no handle chosen - `shared-planning-change-stages-US-03`
-- The change page's Your turn card on the hosted manual, with Assign shown as read-only - `shared-planning-change-stages-US-01`
-- The change page for a change waiting on a stage whose hand is unnamed - `shared-planning-change-stages-US-04`
-- The change page for a change with `ui_waived`, showing the design as not owed and fresh - `shared-planning-change-stages-US-05`
-- An artifact behind, with the chip naming what changed before it - `shared-planning-change-stages-US-09`
-- An artifact with open questions, counted, and one landed, with the handle - `shared-planning-change-stages-US-02`
-- My turn with nothing on the reader - `shared-planning-change-stages-US-03`
-- My turn with open questions above the changes - `shared-planning-change-stages-US-03`
-- My turn before a handle is chosen - `shared-planning-change-stages-US-03`
-- My turn for a handle the team map does not know - `shared-planning-change-stages-US-03`
-- A 🚧 line whose change has archived, wearing no pip - `shared-planning-change-stages-US-07`
-- A 🚧 line delivered by two changes, wearing the further stage - `shared-planning-change-stages-US-07`
-- A Your turn message for a change reaching a stage twice, sent once - `shared-planning-change-stages-US-01`
-- A Behind message for an artifact behind twice before it is read, sent once - `shared-planning-change-stages-US-09`
-- A Staging deployed message with no run tab yet - `shared-planning-change-stages-US-08`
-- A weekly digest with nothing to say, not sent - `shared-planning-change-stages-US-01`
+- Board with no change in flight - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-53`
+- A lane with no change in it, collapsed to its heading - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-52`
+- A lane heading and a stepper step with the agent mark and the hand's move - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-10`
+- A card in Proposed on the product manager, and one on the designer once the decisions and the journeys are in - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-15`
+- A card whose hand is unnamed, showing the hand as open - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-17`
+- A card waiting, with the line and its date - `shared-planning-change-stages-US-06` - `shared-planning-change-stages-SC-21`
+- A card blocked, naming the change it waits for - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-19`
+- A card idle 7 days, with the day count - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-22`
+- A card idle 30 days, on the shelf - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-24`
+- A card wearing Behind, naming the earliest behind artifact and its hand - `shared-planning-change-stages-US-09` - `shared-planning-change-stages-SC-26`
+- A card whose suite is a draft, and one whose suite is approved - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-19`
+- A card behind a flag, with the flag's name - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-19`
+- The Mine filter with no handle chosen - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-55`
+- The change page's Your turn card on the hosted manual, with Assign shown as read-only - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-69`
+- The change page for a change waiting on a stage whose hand is unnamed - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-17`
+- The change page for a change with `ui_waived`, showing the design as not owed and fresh - `shared-planning-change-stages-US-05` - `shared-planning-change-stages-SC-07`
+- An artifact behind, with the chip naming what changed before it - `shared-planning-change-stages-US-09` - `shared-planning-change-stages-SC-25`
+- An artifact with open questions, counted, and one landed, with the handle - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-34`
+- My turn with nothing on the reader - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-61`
+- My turn with open questions above the changes - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-60`
+- My turn before a handle is chosen - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-62`
+- My turn for a handle the team map does not know - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-64`
+- A 🚧 line whose change has archived, wearing no pip - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-66`
+- A 🚧 line delivered by two changes, wearing the further stage - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-67`
+- A Your turn message for a change reaching a stage twice, sent once - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-36`
+- A Behind message for an artifact behind twice before it is read, sent once - `shared-planning-change-stages-US-09` - `shared-planning-change-stages-SC-39`
+- A Staging deployed message with no run tab yet - `shared-planning-change-stages-US-08` - `shared-planning-change-stages-SC-46`
+- A weekly digest with nothing to say, not sent - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-50`
