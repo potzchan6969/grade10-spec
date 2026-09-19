@@ -452,11 +452,10 @@ const ROLE_OF_CONFIRMER: Record<string, string> = {
  * are never read, because the store never reads an upstream for them.
  *
  * In the schema's order, so the first answer is the earliest behind artifact:
- * the one the card names and the one the message goes to. The dated answer
- * carries `since` — the newest commit date among what changed — for the
- * digest's own day count; the recorded id answers with no date at all, which
- * is the tech design's rule that an undated artifact is not behind, so the
- * digest never lists it.
+ * the one the card names and the one the message goes to. Both answers carry
+ * `since` — the newest commit date among what is before the artifact — for
+ * the digest's own day count: a behind read always has the date its upstream
+ * moved, whichever comparison is what says it moved.
  */
 export function behindOf(
   change: ChangeEntry,
@@ -469,9 +468,15 @@ export function behindOf(
     const reviewed = change.reviewed?.[id];
     if (reviewed !== undefined) {
       // The id says something before it moved and cannot say which, so what
-      // is reported is what is before it.
-      if (reviewed !== read.id)
-        behind.push({ artifact: id, before: read.items });
+      // is reported is what is before it — but `since` is still the newest
+      // commit among it, the same field the dated branch below reads.
+      if (reviewed !== read.id) {
+        behind.push({
+          artifact: id,
+          before: read.items,
+          ...(read.newerOn ? { since: read.newerOn } : {}),
+        });
+      }
       continue;
     }
     if (read.newer?.length) {

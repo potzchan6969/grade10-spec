@@ -340,11 +340,13 @@ export type BehindArtifact = {
   /** Everything before it, where the recorded content id is what says it
    * moved. */
   before?: string[];
-  /** The newest commit date among `changed`, carried from `UpstreamRead`'s
-   * `newerOn` — what the digest counts its seven days from. Absent where the
-   * recorded content id is what says it moved: an id carries no date, and the
-   * tech design rules an undated artifact is not behind, so a caller that
-   * needs a day count reads nothing here rather than guessing one. */
+  /** The newest commit date among what is before it, carried from
+   * `UpstreamRead`'s `newerOn` — what the digest counts its seven days from.
+   * Present whichever comparison says the artifact moved: a `reviewed:` id
+   * carries no date of its own, but what is before the artifact always does
+   * when a commit dates it, so the digest reads the same field either way.
+   * Absent only where no commit dates anything before the artifact, which is
+   * what a depth-1 checkout gives. */
   since?: string;
 };
 
@@ -369,9 +371,13 @@ export type UpstreamRead = {
    * section is never here: a commit on a page dates every section of it, so
    * only a record line can say the linked one moved. */
   newer?: string[];
-  /** The newest of `newer`'s own commit dates — carried onto `BehindArtifact`
-   * as `since`, which is what the digest counts its seven days from. Absent
-   * wherever `newer` is. */
+  /** The newest commit date among everything before the artifact, carried
+   * onto `BehindArtifact` as `since` — what the digest counts its seven days
+   * from. Read the same way whether `newer` is what says the artifact moved
+   * or a `reviewed:` id is: an id cannot single out which item changed, so
+   * this is the newest date among all of `items` rather than only `newer`'s
+   * subset. Absent only where no commit dates anything before the
+   * artifact. */
   newerOn?: string;
 };
 

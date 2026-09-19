@@ -122,10 +122,14 @@ export function upstreamOf(
         : before.filter(
             (one) => one.date !== undefined && Date.parse(one.date) > drawnAt,
           );
-    if (newerItems.length > 0) {
-      read.newer = newerItems.map((one) => one.item);
-      read.newerOn = newest(newerItems.map((one) => one.date));
-    }
+    if (newerItems.length > 0) read.newer = newerItems.map((one) => one.item);
+    // The newest commit among what is before it, read the same way whether a
+    // `reviewed:` id or the dated fallback is what says the artifact moved: a
+    // content id says something before it moved without saying which, so the
+    // digest's day count is read off the newest of everything before it
+    // rather than only the subset the dated comparison could single out.
+    const newerOn = newest(before.map((one) => one.date));
+    if (newerOn !== undefined) read.newerOn = newerOn;
     reading[artifact.id] = read;
   }
   return Object.keys(reading).length > 0 ? reading : undefined;
