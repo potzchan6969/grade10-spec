@@ -63,11 +63,12 @@ export function changeEntry(
 export function pageEntry(
   path: string,
   frontmatter: Record<string, string | number>,
+  body = "Prose.\n",
 ): PageEntry {
   const head = Object.entries(frontmatter)
     .map(([key, value]) => `${key}: ${value}`)
     .join("\n");
-  return { path, source: `---\n${head}\n---\n\nProse.\n` };
+  return { path, source: `---\n${head}\n---\n\n${body}` };
 }
 
 export function snapshotOf(parts: Partial<Snapshot> = {}): Snapshot {

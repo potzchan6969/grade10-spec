@@ -7,6 +7,7 @@ import {
   handOfArtifact,
   ladderOf,
   laneOfStage,
+  laterRolesOf,
   openHands,
   STAGES,
   stageOf,
@@ -283,6 +284,52 @@ describe("whose turn it is", () => {
     expect(
       openHands(at("on-staging", { hands: { qa: "ari" } }), ["qa", "release"]),
     ).toEqual(["release"]);
+  });
+});
+
+describe("a role whose turn has not yet come, for My turn's later list", () => {
+  const later = (rung: Stage, extra: Partial<ChangeEntry>, handle: string) =>
+    laterRolesOf(at(rung, extra), rung, artifacts(), handle);
+
+  it("says the engineer is later while the change is still the product manager's", () => {
+    expect(later("specified", {}, "sam")).toEqual(["dev"]);
+  });
+
+  it("says nothing once that hand's own turn has come", () => {
+    // Building is the engineer's turn: sam is on the reader now, not later.
+    expect(later("building", {}, "sam")).toEqual([]);
+  });
+
+  it("says QA and the release hand are later while the change is still building", () => {
+    expect(later("planned", {}, "ari")).toEqual(["qa"]);
+    expect(later("planned", {}, "lee")).toEqual(["release"]);
+  });
+
+  it("says the designer is later while proposed is still the product manager's half", () => {
+    // Tech is unnamed, so the turn has not passed to the design half yet —
+    // but the designer is already named, and has not been read yet.
+    const proposed = at("proposed", { hands: { pm: "robin", design: "dana" } });
+    expect(laterRolesOf(proposed, "proposed", artifacts(), "dana")).toEqual([
+      "design",
+    ]);
+    // The product manager holds Proposed here, not later on it.
+    expect(laterRolesOf(proposed, "proposed", artifacts(), "robin")).toEqual(
+      [],
+    );
+  });
+
+  it("says nothing once the design half has already had its turn", () => {
+    // Once the change has reached Designed, the designer's part is done.
+    expect(later("designed", {}, "dana")).toEqual([]);
+  });
+
+  it("says nothing once the product manager's own second turn has passed", () => {
+    // Robin's second turn was at Specified, which Building has left behind.
+    expect(later("building", {}, "robin")).toEqual([]);
+  });
+
+  it("says nothing for a handle the change does not name at all", () => {
+    expect(later("planned", {}, "nobody")).toEqual([]);
   });
 });
 

@@ -11,6 +11,7 @@ import type {
   SchemaArtifact,
   Snapshot,
 } from "../src/api/types";
+import type { ContentStore } from "../src/editor/store";
 import { findStoreRoot } from "../src/store/disk.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 import {
@@ -115,13 +116,16 @@ function documentOf(entry: ChangeEntry): ChangeDocument {
 const held = vi.hoisted(() => ({
   index: undefined as unknown,
   document: { status: "loading" } as unknown,
+  // Read-only by default — a Your turn card asks for it only on the one
+  // group of cases about the locally run manual.
+  editor: { status: "ready", store: null } as unknown,
 }));
 
 vi.mock("../src/api/use-manual-index", () => ({
   useManualIndex: () => held.index,
 }));
 vi.mock("../src/editor/session", () => ({
-  useEditorSession: () => ({ status: "ready", store: null }),
+  useEditorSession: () => held.editor,
 }));
 vi.mock("../src/api/use-archive", () => ({
   useArchive: () => ({ status: "loading" }),
@@ -156,9 +160,13 @@ function snapshot(entry: ChangeEntry): Snapshot {
   });
 }
 
-function render(entry: ChangeEntry = change()): string {
+function render(
+  entry: ChangeEntry = change(),
+  store: ContentStore | null = null,
+): string {
   held.index = buildIndex(snapshot(entry));
   held.document = { status: "ready", document: documentOf(entry) };
+  held.editor = { status: "ready", store };
   return renderToStaticMarkup(
     <MemoryRouter initialEntries={["/in-flight/pos"]}>
       <Routes>
@@ -287,6 +295,29 @@ describe("the Your turn card", () => {
     expect(button).toContain('disabled=""');
     expect(card).toContain("read-only on the hosted manual");
     expect(html).toContain("Hands");
+  });
+
+  it("Assign on the locally run manual offers a role and a handle to write", () => {
+    const store = {} as unknown as ContentStore;
+    const html = render(change(), store);
+    const card = html.slice(html.indexOf("Your turn"));
+
+    const label = card.indexOf(">Assign<");
+    const button = card.slice(card.lastIndexOf("<", label), label);
+    expect(button).not.toContain('disabled=""');
+    expect(card).not.toContain("read-only");
+    // The six roles are offered, and a handle can be typed.
+    for (const role of [
+      "Product manager",
+      "Designer",
+      "Tech PIC",
+      "Engineer",
+      "QA",
+      "Release hand",
+    ]) {
+      expect(card).toContain(role);
+    }
+    expect(card).toContain("Handle");
   });
 
   it("The change page for a change waiting on a stage whose hand is unnamed", () => {
