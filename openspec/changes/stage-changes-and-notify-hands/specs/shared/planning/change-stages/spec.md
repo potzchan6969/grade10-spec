@@ -900,7 +900,7 @@ Naming a hand from the change page is a local action until the hosted manual
 has a sign-in.
 
 - **Local** — the locally run manual SHALL write a role's handle into the
-  change's record as one commit
+  change's record as one atomic write to the working tree
 - **Hosted** — the hosted manual SHALL show the hands and Assign as
   read-only, and SHALL write nothing
 
@@ -908,7 +908,7 @@ has a sign-in.
 **Serves:** shared-planning-change-stages-US-04 - the product manager names a hand from the change page instead of editing the record
 
 **WHEN** a role and a handle are assigned on the locally run manual
-**THEN** `hands:` SHALL carry that handle for that role in one commit
+**THEN** `hands:` SHALL carry that handle for that role, written to the working tree in one atomic write
 **AND** the change page SHALL show the handle
 
 #### Scenario: shared-planning-change-stages-SC-69 - The hosted manual
