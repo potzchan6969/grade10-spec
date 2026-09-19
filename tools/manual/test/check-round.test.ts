@@ -12,9 +12,11 @@ import { writeStore } from "./tmp-store";
  *
  * Two readings here. The reader: one row per round, the columns as the
  * requirement tables them, absent until the first round writes the file. And
- * the rule: a written artifact or a ticked group with no row, and a row that
- * leaves a column empty, on a change opened after the day the rule landed —
- * every change already in flight that day passes the same check.
+ * the rule: a landed artifact (`landed_by:`, never a file's mere presence) or
+ * a ticked group with no row, and a row that leaves a column empty, on a
+ * change opened after the day the rule landed — every change already in
+ * flight that day passes the same check, and one whose first round has not
+ * landed carries no record at all.
  */
 
 type Finding = { rule: string; level: string; path: string; reason: string };
@@ -99,7 +101,17 @@ const WHOLE = ROUNDS(
   row(4, "1", { tests: "demo-SC-01: test/one.test.ts" }),
 );
 
-const store = (files: Record<string, string>, created: string) =>
+/** `landed_by:` for a change that has landed every artifact — what the
+ * `round` rule now keys its artifact half on, rather than a file's mere
+ * presence on disk. */
+const LANDED_BY_ALL =
+  "landed_by:\n  proposal: pm\n  decisions: pm\n  tasks: dev\n";
+
+const store = (
+  files: Record<string, string>,
+  created: string,
+  landedBy = LANDED_BY_ALL,
+) =>
   writeStore({
     "docs/prds/manual.yaml":
       "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
@@ -107,7 +119,7 @@ const store = (files: Record<string, string>, created: string) =>
     "docs/prds/products/demo-product/index.md":
       "---\ntitle: Demo product\n---\n\nThe landing.\n",
     "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
-    [`${CHANGE}/.openspec.yaml`]: `schema: demo-planning\ncreated: ${created}\n`,
+    [`${CHANGE}/.openspec.yaml`]: `schema: demo-planning\ncreated: ${created}\n${landedBy}`,
     [`${CHANGE}/proposal.md`]: PROPOSAL,
     [`${CHANGE}/decisions.md`]: DECISIONS,
     [`${CHANGE}/tasks.md`]: "## 1. Build it\n\n- [x] 1.1 Ship it\n",
@@ -124,9 +136,10 @@ const findings = async (
   files: Record<string, string>,
   created = AFTER,
   rule = "round",
+  landedBy = LANDED_BY_ALL,
 ): Promise<Finding[]> => {
   const result: { findings: Finding[] } = await runChecks(
-    store(files, created),
+    store(files, created, landedBy),
     NO_GIT,
   );
   return result.findings.filter((one) => one.rule === rule);
@@ -168,7 +181,7 @@ describe("the rounds record, read off the change", () => {
     expect(only.perspectives).toBe("");
   });
 
-  it("carries the rows onto the change entry, absent until the file is", () => {
+  it("shared-planning-agent-rounds-SC-51 - carries the rows onto the change entry, absent until the file is", () => {
     const withFile = readChanges(
       store({ [`${CHANGE}/rounds.md`]: WHOLE }, AFTER),
       NO_GIT,
@@ -189,7 +202,7 @@ describe("the `round` rule", () => {
     expect(await findings({ [`${CHANGE}/rounds.md`]: WHOLE })).toEqual([]);
   });
 
-  it("names a written artifact no row names", async () => {
+  it("shared-planning-agent-rounds-SC-54 - names a landed artifact no row names", async () => {
     const found = await findings({
       [`${CHANGE}/rounds.md`]: ROUNDS(
         row(1, "proposal"),
@@ -202,6 +215,20 @@ describe("the `round` rule", () => {
     expect(found[0].level).toBe("fail");
     expect(found[0].path).toBe(`${CHANGE}/rounds.md`);
     expect(found[0].reason).toContain("`tasks`");
+  });
+
+  it("says nothing about an artifact that is written but not yet landed", async () => {
+    // `landed_by:` names nothing, so nothing owes a row — a draft artifact on
+    // the branch, not yet landed by a hand's word, is not a round the rule
+    // has anything to check.
+    expect(
+      await findings(
+        { [`${CHANGE}/tasks.md`]: "## 1. Build it\n\n- [ ] 1.1 Ship it\n" },
+        AFTER,
+        "round",
+        "",
+      ),
+    ).toEqual([]);
   });
 
   it("names a ticked group no row names", async () => {
@@ -217,7 +244,7 @@ describe("the `round` rule", () => {
     expect(found[0].reason).toContain("group 1");
   });
 
-  it("names the column a row leaves empty", async () => {
+  it("shared-planning-agent-rounds-SC-56 - names the column a row leaves empty", async () => {
     const found = await findings({
       [`${CHANGE}/rounds.md`]: ROUNDS(
         "| 1 | proposal |  | it stood | - | - |",
@@ -239,43 +266,55 @@ describe("the `round` rule", () => {
     expect(found.map((one) => one.reason).join(" ")).toContain("`proposal`");
   });
 
-  it("does not refuse a change opened the day the rule landed", async () => {
+  it("shared-planning-agent-rounds-SC-53 - a change whose first round has not landed carries no rounds.md and is not refused", async () => {
+    const found = await findings(
+      { [`${CHANGE}/tasks.md`]: "## 1. Build it\n\n- [ ] 1.1 Ship it\n" },
+      AFTER,
+      "round",
+      "",
+    );
+
+    expect(found).toEqual([]);
+  });
+
+  it("shared-planning-agent-rounds-SC-55 - does not refuse a change opened the day the rule landed", async () => {
     expect(ROUND_RECORD_SINCE > LANDED).toBe(true);
     expect(await findings({}, LANDED)).toEqual([]);
   });
 
-  it("does not refuse a change opened before that day", async () => {
+  it("shared-planning-agent-rounds-SC-55 - does not refuse a change opened before that day", async () => {
     expect(await findings({}, "2026-09-01")).toEqual([]);
   });
 });
 
-describe("a `Q<n>` cited in backticks", () => {
-  it("says nothing where the change's decisions table issues it", async () => {
-    expect(
-      await findings(
-        {
-          [`${CHANGE}/rounds.md`]: WHOLE,
-          [`${CHANGE}/tech-design.md`]: "The row is `Q1`'s answer.\n",
-        },
-        AFTER,
-        "cited",
-      ),
-    ).toEqual([]);
-  });
+describe("the archived copy of the round record", () => {
+  const ARCHIVE_DIR = `openspec/changes/archive/${AFTER}-${ID}`;
+  const archivedStore = (withRounds: boolean) =>
+    writeStore({
+      "docs/prds/manual.yaml":
+        "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
+      "docs/prds/index.md": "---\ntitle: Demo\n---\n\nA demo store.\n",
+      "docs/prds/products/demo-product/index.md":
+        "---\ntitle: Demo product\n---\n\nThe landing.\n",
+      "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
+      [`${ARCHIVE_DIR}/.openspec.yaml`]: `schema: demo-planning\ncreated: ${AFTER}\n`,
+      [`${ARCHIVE_DIR}/proposal.md`]: PROPOSAL,
+      ...(withRounds ? { [`${ARCHIVE_DIR}/rounds.md`]: WHOLE } : {}),
+    });
 
-  it("names one the table does not issue", async () => {
-    const found = await findings(
-      {
-        [`${CHANGE}/rounds.md`]: WHOLE,
-        [`${CHANGE}/tech-design.md`]: "The row is `Q9`'s answer.\n",
-      },
-      AFTER,
-      "cited",
-    );
+  it("shared-planning-agent-rounds-SC-52 - refuses an archived copy that left rounds.md behind", async () => {
+    const result = await runChecks(archivedStore(false), NO_GIT);
+    const found = result.findings.filter((one) => one.rule === "round");
 
     expect(found).toHaveLength(1);
-    expect(found[0].level).toBe("fail");
-    expect(found[0].path).toBe(`${CHANGE}/tech-design.md`);
-    expect(found[0].reason).toContain("`Q9`");
+    expect(found[0].path).toBe(`${ARCHIVE_DIR}/rounds.md`);
+    expect(found[0].reason).toContain("is not in the archived copy");
+  });
+
+  it("shared-planning-agent-rounds-SC-52 - says nothing where the archived copy carries rounds.md", async () => {
+    const result = await runChecks(archivedStore(true), NO_GIT);
+    const found = result.findings.filter((one) => one.rule === "round");
+
+    expect(found).toEqual([]);
   });
 });

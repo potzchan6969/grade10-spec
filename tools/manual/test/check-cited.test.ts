@@ -223,3 +223,49 @@ describe("the finding itself", () => {
     expect(one.level).toBe("fail");
   });
 });
+
+describe("a `Q<n>` cited in backticks", () => {
+  const DECISIONS = (...rows: string[]) =>
+    [
+      "## Decisions",
+      "",
+      "| Q | Asked | Decided | Instead of |",
+      "| --- | --- | --- | --- |",
+      ...rows,
+      "",
+    ].join("\n");
+
+  it("says nothing where the change's decisions table issues it", async () => {
+    expect(
+      await reasons({
+        "openspec/changes/probe/decisions.md": DECISIONS(
+          "| Q1 | Who writes the row? | The landing | A second file |",
+        ),
+        "openspec/changes/probe/tech-design.md": "The row is `Q1`'s answer.\n",
+      }),
+    ).toEqual([]);
+  });
+
+  it("names one the table does not issue", async () => {
+    const found = await reasons({
+      "openspec/changes/probe/decisions.md": DECISIONS(
+        "| Q1 | Who writes the row? | The landing | A second file |",
+      ),
+      "openspec/changes/probe/tech-design.md": "The row is `Q9`'s answer.\n",
+    });
+
+    expect(found).toEqual([
+      "openspec/changes/probe/tech-design.md — line 1: `Q9` is no `## Decisions` row of probe",
+    ]);
+  });
+
+  it("names a `Q<n>` outside any change's directory as issued by nobody", async () => {
+    expect(
+      await reasons({
+        "openspec/references/loose-note.md": "Settled by `Q1` a while back.\n",
+      }),
+    ).toEqual([
+      "openspec/references/loose-note.md — line 1: `Q1` names a decisions row, and nothing outside a change's directory issues one",
+    ]);
+  });
+});
