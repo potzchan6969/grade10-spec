@@ -5,7 +5,7 @@ The slot API already exists. Close its verification gap; retain the current impl
 - [ ] 1.1 Prove `shared-ui-site-chrome-SC-22` in a Nav story: a supplied cart slot replaces the built-in control even with `onCartClick` present, and activating the slot invokes only its own callback. Retain omitted-slot handler gating from `shared-ui-site-chrome-SC-04`.
 - [ ] 1.2 Verify: run `pnpm --filter @grade10/design-system exec vitest run --project storybook src/components/layout/nav`, `pnpm --filter @grade10/design-system run typecheck`, and `pnpm run lint`; run `pnpm run design-sync:check` if the primitive implementation changes. Record the scenario evidence.
 
-## 2. SiteHeader Count Acceptance and PRD (grade10-spec)
+## 2. SiteHeader Count Acceptance and PRD (grade10-spec) (owner: @kinisworking)
 
 This group can be claimed independently of Group 1 because both shared APIs are already present. Live grade10-site wiring and a submodule bump are outside the settled scope.
 
