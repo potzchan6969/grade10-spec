@@ -519,9 +519,20 @@ test("the readers are defined once, read-only, and see no other reader", () => {
 
 test("shared-planning-agent-rounds-SC-31 - the tech and build readers name a principle per finding", () => {
   for (const file of ["tech", "build"]) {
-    const text = readFileSync(join(ROOT, ".claude/agents", `${file}.md`), "utf8");
-    assert.match(text, /system-design\.md/, `${file}.md cites the governance page`);
-    assert.match(text, /\| Principle \|/, `${file}.md returns a principle per finding`);
+    const text = readFileSync(
+      join(ROOT, ".claude/agents", `${file}.md`),
+      "utf8",
+    );
+    assert.match(
+      text,
+      /system-design\.md/,
+      `${file}.md cites the governance page`,
+    );
+    assert.match(
+      text,
+      /\| Principle \|/,
+      `${file}.md returns a principle per finding`,
+    );
   }
 });
 
