@@ -5,16 +5,11 @@ import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs, promisify } from "node:util";
+import YAML from "yaml";
 
 import { STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
 import { messagesOf, newlyBehind, readingOf } from "./lib/moves.mjs";
-import {
-  appendSentKeys,
-  escapeSlackText,
-  printable,
-  readSentKeys,
-  sendAll,
-} from "./lib/notify.mjs";
+import { deliver, escapeSlackText, readSentKeys } from "./lib/notify.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
 
 const exec = promisify(execFile);
@@ -405,19 +400,15 @@ function touchedByChange(changed) {
   return byChange;
 }
 
-/** The record with `reviewed:`, `thread:` and `landed_by:` taken out, blank
- * lines dropped: what is left is what the push said about the change. */
+/** The record with `reviewed:`, `thread:` and `landed_by:` taken out: what is
+ * left is what the push said about the change. One yaml parse of the whole
+ * record rather than a line scanner, so a quoted value that happens to open
+ * like a key, or a block scalar that spans several lines, is never mistaken
+ * for one. */
 function withoutRecordKeys(text) {
-  const kept = [];
-  let dropping = false;
-  for (const line of text.split("\n")) {
-    if (line.trim() === "") continue;
-    if (/^\S/.test(line)) {
-      dropping = RECORD_KEYS.some((key) => line.startsWith(`${key}:`));
-    }
-    if (!dropping) kept.push(line);
-  }
-  return kept.join("\n");
+  const parsed = YAML.parse(text) ?? {};
+  for (const key of RECORD_KEYS) delete parsed[key];
+  return JSON.stringify(parsed);
 }
 
 /** The changes this push touched in no way but the round's own record keys. */
@@ -503,7 +494,10 @@ async function main() {
       team: { type: "string", default: TEAM_MAP },
       "sent-keys": { type: "string" },
       send: { type: "boolean", default: false },
-      only: { type: "string", default: "all" },
+      // A repository variable turns this off in production without touching
+      // the channel post; the CLI default keeps a bare run — a test, a local
+      // dry run — showing what it would tell each hand.
+      dms: { type: "string", default: "true" },
       channel: { type: "string", default: "" },
       "sheet-url": { type: "string", default: process.env.TCS_SHEET_URL ?? "" },
       "workspace-url": {
@@ -523,9 +517,6 @@ async function main() {
     },
   });
   if (!values.base) throw new Error("--base is required");
-  if (!["all", "post", "dms"].includes(values.only)) {
-    throw new Error("--only takes all, post or dms");
-  }
   const root = values.root ? resolve(values.root) : rootDirectory;
   await mustResolve(root, values.base, values.head);
 
@@ -572,13 +563,13 @@ async function main() {
     );
     const sent = readSentKeys(values["sent-keys"]);
     // A push whose only word about a change is the round's own record keys
-    // moves nobody, and says so rather than naming the change.
+    // moves nobody, and says so rather than naming the change. Each message
+    // carries the change's own id, so it is read off directly rather than
+    // split back out of the key.
     messages = told.messages.filter(
-      (one) => !sent.has(one.key) && !suppressed.has(one.key.split(":")[0]),
+      (one) => !sent.has(one.key) && !suppressed.has(one.id),
     );
-    skipped = told.skipped.filter(
-      (one) => !suppressed.has(one.key.split(":")[0]),
-    );
+    skipped = told.skipped.filter((one) => !suppressed.has(one.id));
     matrix = rereadMatrixOf(atBase, atHead, suppressed);
   }
 
@@ -594,29 +585,39 @@ async function main() {
   const hasChanges =
     Object.values(changes).some((items) => items.length) ||
     Object.values(capabilities).some((items) => items.length);
-  const hasMessages = messages.length > 0;
 
   for (const one of skipped) {
     process.stderr.write(`nothing sent for ${one.key}: ${one.why}\n`);
   }
-  if (values.send) await send(values, { messages, payload, hasChanges });
-  else if (messages.length > 0) {
-    // The keys are the run's record of what it answered for, whether it sent
-    // the messages or printed them: a dry run twice over one push is the same
-    // push twice, and says nothing twice either.
-    process.stderr.write(`${printable(messages)}\n`);
-    if (values.only !== "post") {
-      appendSentKeys(
-        values["sent-keys"],
-        messages.map((one) => one.key),
-      );
+
+  // The channel post and the direct messages are one delivery: the post is
+  // keyed by the push's own head, so a re-run of one push does not post it
+  // twice either, and `--dms` is what a repository variable turns off in
+  // production without touching the post.
+  const toDeliver = [];
+  if (hasChanges) {
+    if (values.send && !values.channel) {
+      throw new Error("no channel to post to: pass --channel");
     }
+    toDeliver.push({
+      key: `channel:${head}`,
+      to: "channel",
+      channel: values.channel,
+      text: "OpenSpec changes on main",
+      blocks: payload.blocks,
+    });
   }
+  if (values.dms === "true") toDeliver.push(...messages);
+  await deliver(toDeliver, {
+    file: values["sent-keys"],
+    send: values.send,
+    token: process.env.SLACK_BOT_TOKEN,
+  });
 
   if (values["github-output"]) {
     await appendFile(
       values["github-output"],
-      `has-changes=${hasChanges}\nhas-messages=${hasMessages}\npayload=${JSON.stringify(payload)}\nmatrix=${JSON.stringify(matrix)}\n`,
+      `matrix=${JSON.stringify(matrix)}\n`,
     );
   }
   process.stdout.write(
@@ -628,50 +629,9 @@ async function main() {
       stages,
       messages,
       skipped,
-      hasMessages,
       matrix,
     }),
   );
-}
-
-/**
- * The one sender: this script, through `chat.postMessage`.
- *
- * `--only` is how the workflow tells the channel post from the direct
- * messages: the post goes on every push that moved something, and the
- * messages are behind a repository variable, so the two are separate steps
- * and each says in its own name what it does. The keys of what went out are
- * appended whatever happens next, so a re-run does not send them again.
- */
-async function send(values, { messages, payload, hasChanges }) {
-  const token = process.env.SLACK_BOT_TOKEN;
-  const only = values.only;
-  if (only !== "dms" && hasChanges) {
-    const channel =
-      values.channel ||
-      process.env.SLACK_PLANNING_CHANNEL_ID ||
-      process.env.SLACK_CHANNEL_ID;
-    if (!channel) throw new Error("no channel to post to: pass --channel");
-    await sendAll(
-      [
-        {
-          key: "the channel post",
-          to: "channel",
-          channel,
-          text: "OpenSpec changes on main",
-          blocks: payload.blocks,
-        },
-      ],
-      { token },
-    );
-  }
-  if (only === "post" || messages.length === 0) return;
-  try {
-    appendSentKeys(values["sent-keys"], await sendAll(messages, { token }));
-  } catch (cause) {
-    appendSentKeys(values["sent-keys"], cause.sent ?? []);
-    throw cause;
-  }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {

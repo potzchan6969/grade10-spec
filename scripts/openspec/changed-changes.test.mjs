@@ -18,7 +18,7 @@ import {
   parseChangedFiles,
   slackPayload,
 } from "./changed-changes.mjs";
-import { sendAll } from "./lib/notify.mjs";
+import { deliver, sendAll } from "./lib/notify.mjs";
 
 test("parses regular and renamed OpenSpec files from git's NUL format", () => {
   assert.deepEqual(
@@ -192,17 +192,9 @@ test("builds one Slack section for each changed status", () => {
     payload.blocks[0].text.text,
     ":new: OpenSpec *New*\n- <https://spec.grade10-stg.com/openspec/#/change/new-change|Add a cart> (`new-change`) — `proposal`, `spec`",
   );
-  assert.match(
-    payload.blocks[0].text.text,
-    /<https:\/\/spec\.grade10-stg\.com\/openspec\/#\/change\/new-change\|Add a cart> \(`new-change`\) — `proposal`, `spec`/,
-  );
   assert.equal(
     payload.blocks[1].text.text,
     ":pencil2: OpenSpec *Updated*\n- <https://spec.grade10-stg.com/openspec/#/change/active-change|Update &lt;copy&gt;> (`active-change`) — `tech-design`",
-  );
-  assert.match(
-    payload.blocks[1].text.text,
-    /Update &lt;copy&gt;.*`tech-design`/,
   );
   assert.match(
     payload.blocks[2].text.text,
@@ -438,7 +430,7 @@ function stages(root, args = []) {
 const textOf = (messages, key) =>
   messages.find((one) => one.key === key)?.text ?? "";
 
-test("--stages tells both hands the proposal's landing put on the change", () => {
+test("shared-planning-change-stages-SC-40 and shared-planning-change-stages-SC-43 - --stages tells both hands the proposal's landing put on the change, linking the change page with no thread yet", () => {
   const { root, write, commit } = sandbox();
   write({
     [`${DIR}/.openspec.yaml`]: record(...HANDS),
@@ -492,10 +484,10 @@ test("--stages names the stage a push moved a change into and tells its hand", (
   const head = commit("plan probe", 1);
 
   const { read } = stages(root, ["--base", base, "--head", head]);
-  const { messages, stages: reached, payload, hasMessages } = read();
+  const { messages, stages: reached, payload } = read();
 
   assert.equal(reached[CHANGE], "planned");
-  assert.equal(hasMessages, true);
+  assert.equal(messages.length, 1);
   assert.deepEqual(
     messages.map((one) => [one.key, one.channel]),
     [["probe:planned:dev", "U-ERIN"]],
@@ -503,7 +495,7 @@ test("--stages names the stage a push moved a change into and tells its hand", (
   assert.match(payload.blocks[0].text.text, /Planned/);
 });
 
-test("--stages tells each hand of its own change when one push moves two", () => {
+test("shared-planning-change-stages-SC-47 - --stages tells each hand of its own change when one push moves two", () => {
   const { root, write, commit } = sandbox();
   write({
     [`${DIR}/.openspec.yaml`]: record(...HANDS),
@@ -536,7 +528,7 @@ test("--stages tells each hand of its own change when one push moves two", () =>
   ]);
 });
 
-test("--stages tells the engineer again when a reverted landing lands again", () => {
+test("shared-planning-change-stages-SC-37 - --stages tells the engineer again when a reverted landing lands again", () => {
   const { root, write, drop, commit } = sandbox();
   write({
     ...throughSpecs(),
@@ -565,7 +557,7 @@ test("--stages tells the engineer again when a reverted landing lands again", ()
   );
 });
 
-test("--stages tells nobody when a push only ticks a task", () => {
+test("shared-planning-change-stages-SC-38 - --stages tells nobody when a push only ticks a task", () => {
   const { root, write, commit } = sandbox();
   write({
     ...throughSpecs(),
@@ -616,15 +608,15 @@ test("--stages names no change for a push that only writes the record's keys", (
     "--github-output",
     output,
   ]);
-  const { messages, changes, hasMessages } = read();
+  const { messages, changes, matrix } = read();
 
   assert.deepEqual(messages, []);
   assert.deepEqual(changes.updated, []);
-  assert.equal(hasMessages, false);
-  assert.match(readFileSync(output, "utf8"), /has-messages=false/);
+  assert.deepEqual(matrix, []);
+  assert.match(readFileSync(output, "utf8"), /^matrix=\[\]$/m);
 });
 
-test("--stages tells the artifact's hand what changed before it", () => {
+test("shared-planning-change-stages-SC-44 - --stages tells the artifact's hand what changed before it", () => {
   const { root, write, commit } = sandbox();
   write({
     [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
@@ -646,7 +638,7 @@ test("--stages tells the artifact's hand what changed before it", () => {
   assert.match(textOf(messages, "probe:behind:decisions"), /proposal/);
 });
 
-test("--stages sends nothing twice for one push", () => {
+test("shared-planning-change-stages-SC-36 - --stages sends nothing twice for one push", () => {
   const { root, write, commit } = sandbox();
   write({
     [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
@@ -667,10 +659,15 @@ test("--stages sends nothing twice for one push", () => {
     ["probe:behind:decisions"],
   );
   assert.deepEqual(second.messages, []);
-  assert.equal(readFileSync(keys, "utf8").trim(), "probe:behind:decisions");
+  // The channel post is keyed by the push's own head, so it is written
+  // alongside the behind message and neither is written again on a re-run.
+  assert.deepEqual(
+    readFileSync(keys, "utf8").trim().split("\n").sort(),
+    [`channel:${head}`, "probe:behind:decisions"].sort(),
+  );
 });
 
-test("--stages says it told a handle with no Slack member nothing", () => {
+test("shared-planning-change-stages-SC-18 - --stages says it told a handle with no Slack member nothing", () => {
   const { root, write, commit } = sandbox();
   write({
     ...throughSpecs(),
@@ -704,7 +701,7 @@ test("--stages says it told a handle with no Slack member nothing", () => {
   assert.match(stderr, /gina/);
 });
 
-test("--stages posts to the role's channel when the hand is unnamed", () => {
+test("shared-planning-change-stages-SC-41 - --stages posts to the role's channel when the hand is unnamed", () => {
   // Planned, not Proposed: Proposed holds the product manager until both
   // second hands are named (decisions Q49), so an unnamed hand there is no
   // turn of its own.
@@ -732,7 +729,7 @@ test("--stages posts to the role's channel when the hand is unnamed", () => {
   assert.match(messages[0].text, /`\/tasks probe`/);
 });
 
-test("--stages posts to the role's channel when the hand is taken off", () => {
+test("shared-planning-change-stages-SC-42 - --stages posts to the role's channel when the hand is taken off", () => {
   const { root, write, commit } = sandbox();
   write({
     ...throughSpecs(),
@@ -777,7 +774,7 @@ test("--stages refuses a base the checkout cannot reach, naming the range", () =
   assert.match(done.stderr, new RegExp(`${missing}\\.\\.${head}`));
 });
 
-test("--stages names the run sheet to QA and the release hand's own turn", () => {
+test("shared-planning-change-stages-SC-45 - --stages names the run sheet to QA and the release hand's own turn", () => {
   const { root, write, commit } = sandbox();
   write({
     ...throughSpecs(),
@@ -994,4 +991,95 @@ test("the sender posts each message once and retries a 429 once", async () => {
   assert.equal(calls[0].auth, "Bearer xoxb-test");
   assert.equal(calls[1].channel, "U-ERIN");
   assert.equal(calls[2].thread_ts, "1700000000.000100");
+});
+
+test("the sender's refusal carries what it did send before the channel it was refused", async () => {
+  const fetched = async (_url, init) => {
+    const body = JSON.parse(init.body);
+    if (body.channel === "C-BAD") {
+      return {
+        status: 200,
+        headers: new Map(),
+        json: async () => ({ ok: false, error: "not_in_channel" }),
+      };
+    }
+    return {
+      status: 200,
+      headers: new Map(),
+      json: async () => ({ ok: true }),
+    };
+  };
+
+  await assert.rejects(
+    () =>
+      sendAll(
+        [
+          {
+            key: "probe:planned:dev",
+            to: "member",
+            channel: "U-ERIN",
+            text: "One",
+          },
+          {
+            key: "probe:behind:decisions",
+            to: "channel",
+            channel: "C-BAD",
+            text: "Two",
+          },
+        ],
+        { token: "xoxb-test", fetch: fetched, sleep: async () => {} },
+      ),
+    (error) => {
+      assert.match(error.message, /C-BAD/);
+      assert.deepEqual(error.sent, ["probe:planned:dev"]);
+      return true;
+    },
+  );
+});
+
+test("deliver keys what went out even when the rest is refused", async () => {
+  const keys = join(mkdtempSync(join(tmpdir(), "deliver-keys-")), "sent.txt");
+  const fetched = async (_url, init) => {
+    const body = JSON.parse(init.body);
+    if (body.channel === "C-BAD") {
+      return {
+        status: 200,
+        headers: new Map(),
+        json: async () => ({ ok: false, error: "not_in_channel" }),
+      };
+    }
+    return {
+      status: 200,
+      headers: new Map(),
+      json: async () => ({ ok: true }),
+    };
+  };
+
+  await assert.rejects(() =>
+    deliver(
+      [
+        {
+          key: "probe:planned:dev",
+          to: "member",
+          channel: "U-ERIN",
+          text: "One",
+        },
+        {
+          key: "probe:behind:decisions",
+          to: "channel",
+          channel: "C-BAD",
+          text: "Two",
+        },
+      ],
+      {
+        file: keys,
+        send: true,
+        token: "xoxb-test",
+        fetch: fetched,
+        sleep: async () => {},
+      },
+    ),
+  );
+
+  assert.equal(readFileSync(keys, "utf8").trim(), "probe:planned:dev");
 });
