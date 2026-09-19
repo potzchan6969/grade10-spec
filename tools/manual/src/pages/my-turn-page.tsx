@@ -5,15 +5,18 @@ import { CheckCircle } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { useHandle } from "../api/handle";
 import { type MyTurnChange, myTurnOf } from "../api/my-turn";
-import { ROLE_LABEL, roleTitle, STAGE_LABEL } from "../api/stage-view";
-import { moveOf } from "../api/stages";
+import {
+  movesOfHands,
+  ROLE_LABEL,
+  roleTitle,
+  STAGE_LABEL,
+} from "../api/stage-view";
 import type { ChangeEntry, Role } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
 import { CopyableCommand } from "../blocks/copyable-command";
 import { HandleAsk } from "../blocks/handle-ask";
 import { InlineMarkdown } from "../blocks/inline-markdown";
 import { ThreadLink } from "../blocks/your-turn-card";
-import { browserKeyStore } from "../editor/session";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";
 
@@ -27,25 +30,24 @@ import { useDocumentTitle } from "./use-document-title";
 export function MyTurnPage() {
   const index = useManualIndex();
   useDocumentTitle("My turn");
-  const { handle, remember } = useHandle(browserKeyStore);
+  const { handle, remember } = useHandle();
+  const known =
+    handle !== undefined && index.snapshot.team.handles[handle] !== undefined;
 
   return (
     <>
       <PageHeading
         summary="What is on you, across every change in flight — the open questions addressed to you, then what is yours now, then what is coming."
         title="My turn"
-      />
+      >
+        <HandleAsk current={known ? handle : undefined} remember={remember} />
+      </PageHeading>
 
-      {handle === undefined ? (
-        <HandleAsk remember={remember} />
-      ) : index.snapshot.team?.handles[handle] === undefined ? (
-        <>
-          <Text as="p" size="sm" tone="secondary">
-            {`\`${handle}\` is not a handle this store knows. Check the spelling, or ask whoever keeps `}
-            <code className="font-mono">docs/prds/team.yaml</code> to add you.
-          </Text>
-          <HandleAsk remember={remember} />
-        </>
+      {handle === undefined ? null : !known ? (
+        <Text as="p" size="sm" tone="secondary">
+          {`\`${handle}\` is not a handle this store knows. Check the spelling, or ask whoever keeps `}
+          <code className="font-mono">docs/prds/team.yaml</code> to add you.
+        </Text>
       ) : (
         <MyTurnBody handle={handle} />
       )}
@@ -138,12 +140,7 @@ function ChangeSection({
 }
 
 function ChangeCard({ change, roles }: { change: ChangeEntry; roles: Role[] }) {
-  const moves = roles.flatMap((role) => {
-    const held = moveOf(change.stage, role);
-    return held
-      ? [{ role, ...held, command: held.command.replace(/<id>/g, change.id) }]
-      : [];
-  });
+  const moves = movesOfHands(change.stage, roles, change.id);
 
   return (
     <article className="rounded-(--radius-2xl) border border-border bg-card p-3.5">
