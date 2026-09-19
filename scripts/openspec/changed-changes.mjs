@@ -338,7 +338,13 @@ export function slackPayload({
         elements: [
           {
             type: "mrkdwn",
-            text: `<${manualUrl}|Planning> | <${commitUrl}|${commitSha.slice(0, 7)}>`,
+            // No `--commit-url` is not a link nobody clicks: it is an empty
+            // link target, so the sha stands in plain text instead.
+            text: `<${manualUrl}|Planning> | ${
+              commitUrl
+                ? `<${commitUrl}|${commitSha.slice(0, 7)}>`
+                : commitSha.slice(0, 7)
+            }`,
           },
         ],
       },
