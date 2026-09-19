@@ -20,6 +20,7 @@ import { STAGE_LABEL } from "../api/stage-view";
 import { useArchive } from "../api/use-archive";
 import { useManualIndex } from "../api/use-manual-index";
 import { StageLane } from "../blocks/stage-lane";
+import { TextField } from "../editor/fields";
 import { ReadOnlyNotice } from "../editor/read-only-notice";
 import { ArchiveTimeline } from "./archive-timeline";
 import { MaintenancePanel } from "./maintenance-panel";
@@ -156,22 +157,23 @@ function HandleAsk({ remember }: { remember: (handle: string) => void }) {
 
   return (
     <form
-      className="mb-6 flex flex-wrap items-center gap-2"
+      className="mb-6 flex flex-wrap items-end gap-2"
       onSubmit={(event) => {
         event.preventDefault();
         remember(written);
       }}
     >
-      <Text as="span" size="sm">
+      <Text as="span" className="mb-2.5" size="sm">
         Choose a handle to see the changes you are a hand of
       </Text>
-      <input
-        aria-label="Your handle"
-        className="h-8 rounded-(--radius-lg) border border-border bg-control px-2 font-mono text-sm"
-        onChange={(event) => setWritten(event.target.value)}
-        placeholder="handle"
-        value={written}
-      />
+      <div className="w-40">
+        <TextField
+          label="Your handle"
+          onChange={setWritten}
+          placeholder="handle"
+          value={written}
+        />
+      </div>
       <Button size="sm" type="submit" variant="outline">
         Remember me
       </Button>

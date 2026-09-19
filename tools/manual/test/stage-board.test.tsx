@@ -446,6 +446,8 @@ describe("the filters and the shelf", () => {
     });
 
     expect(html).toContain("Choose a handle");
+    expect(html).toContain("Your handle");
+    expect(html).toContain(">Remember me<");
     expect(html).toContain("The planned change");
     expect(html).toContain("The building change");
   });
