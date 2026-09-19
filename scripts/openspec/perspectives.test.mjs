@@ -138,28 +138,16 @@ test("shared-planning-agent-rounds-SC-08 - a proposal's words reach the reader o
 
   assert.deepEqual([...triggers].sort(), ["copy"]);
   const readers = readersFor(schema, "proposal", triggers);
-  // The whole reader set, not only its names: `product` and `reader` both
-  // read words, the always floor is `qa` and `simpler`, and nothing else -
-  // `design`, `backend`, `integration` and `operations` need a trigger this
-  // diff never raises.
+  // The whole reader set, not only its names: the reader of the words and the
+  // always floor, and nothing else - `product`, `design`, `backend`,
+  // `integration` and `operations` each need a trigger this diff never
+  // raises, and `qa` reads the plan and the build rather than the trio.
   assert.deepEqual(readers, [
-    {
-      name: "product",
-      when: ["surface", "copy"],
-      agent: ".claude/agents/product.md",
-      summonedBy: ["copy"],
-    },
     {
       name: "reader",
       when: ["copy"],
       agent: ".claude/agents/reader.md",
       summonedBy: ["copy"],
-    },
-    {
-      name: "qa",
-      when: ["always"],
-      agent: ".claude/agents/qa.md",
-      summonedBy: [],
     },
     {
       name: "simpler",
@@ -168,7 +156,26 @@ test("shared-planning-agent-rounds-SC-08 - a proposal's words reach the reader o
       summonedBy: [],
     },
   ]);
+  // Two readers, so one verifier reads both readings together.
   assert.equal(verifierNeeded(readers), true);
+});
+
+test("the trio's readers are six, and QA is not one of them", () => {
+  const root = fixture();
+  const schema = planningSchema(root);
+
+  for (const artifact of ["proposal", "decisions", "user-journeys"]) {
+    const every = readersFor(schema, artifact, new Set(TRIGGERS));
+    assert.deepEqual(names(every), [
+      "backend",
+      "design",
+      "integration",
+      "operations",
+      "product",
+      "reader",
+      "simpler",
+    ]);
+  }
 });
 
 test("shared-planning-agent-rounds-SC-09 - a tech design with an export and a migration dispatches its four readings", () => {
