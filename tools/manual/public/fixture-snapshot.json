@@ -1064,10 +1064,18 @@
       "written": [
         "proposal"
       ],
+      "hands": {
+        "design": "tester",
+        "tech": "tester"
+      },
       "awaiting": [
         {
           "artifact": "ui-design",
           "why": "2026-09-05 - waiting on the designer's Figma frame"
+        },
+        {
+          "artifact": "tech-design",
+          "why": "waiting on the tech PIC to say whether the queue can carry it"
         }
       ],
       "author": "tester",

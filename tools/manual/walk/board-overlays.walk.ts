@@ -126,6 +126,66 @@ test("shared-planning-change-stages-SC-26 - the card names the earliest behind a
     .not.toBeInTheDocument();
 });
 
+/**
+ * `demo-waiting` carries the pair: a dated line on the UI design and an
+ * undated one on the tech design, each against the hand its artifact's role
+ * names. The card's own half of `SC-21` is here beside the other chips;
+ * `change-page-waits.walk.ts` reads the same two lines on the change page,
+ * which is the other half the scenario asks for.
+ *
+ * "No message SHALL be sent for a wait" is not this walk's to decide — no
+ * Slack reaches a browser — and `scripts/openspec/changed-changes.test.mjs`
+ * proves it over the notify script instead.
+ */
+test("shared-planning-change-stages-SC-21 - a wait, dated or not, on the card", async () => {
+  await openManual("/in-flight");
+  await expect
+    .element(page.getByRole("heading", { level: 1, name: "In Flight" }))
+    .toBeVisible();
+
+  const card = page.elementLocator(cardFor("demo-waiting"));
+
+  // One line per artifact, each naming its own artifact: two chips, not one
+  // chip saying the change is waiting.
+  await expect
+    .element(card.getByText("Waiting", { exact: true }).first())
+    .toBeVisible();
+  await expect.element(card.getByText("UI", { exact: true })).toBeVisible();
+  await expect
+    .element(card.getByText("Tech Design", { exact: true }))
+    .toBeVisible();
+
+  // As written: the dated line keeps the day it opens with, and the undated
+  // one is shown undated rather than dated from somewhere else.
+  await expect
+    .element(
+      card.getByText("2026-09-05 - waiting on the designer's Figma frame", {
+        exact: true,
+      }),
+    )
+    .toBeVisible();
+  await expect
+    .element(
+      card.getByText(
+        "waiting on the tech PIC to say whether the queue can carry it",
+        { exact: true },
+      ),
+    )
+    .toBeVisible();
+
+  // Against the hand that owes it: the designer's line and the tech PIC's
+  // line both read `@tester`, the handle this fixture names for each role.
+  const owed = Array.from(
+    cardFor("demo-waiting").querySelectorAll('[data-overlay="waiting"]'),
+  ).map((one) => one.textContent?.includes("@tester"));
+  expect(owed).toEqual([true, true]);
+
+  // And the stage is unchanged: a wait is beside it, never a rung of it.
+  if (!laneSection("proposed").contains(cardFor("demo-waiting"))) {
+    throw new Error("demo-waiting is not in the Proposed lane");
+  }
+});
+
 /** One change's card, found from the `id={change.id}` its `<article>` carries
  * for deep-linking — the same anchor `/in-flight#<id>` opens, and the same
  * lookup `board.walk.ts` makes. */
