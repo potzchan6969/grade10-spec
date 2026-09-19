@@ -60,6 +60,7 @@
     "tcs:validate": "node scripts/openspec/validate-test-cases.mjs",
     "tcs:run-sheet": "node scripts/openspec/run-sheet.mjs",
     "plan:preflight": "node scripts/openspec/plan-preflight.mjs",
+    "plan:land": "node scripts/openspec/plan-land.mjs",
     "round:reviewed": "node scripts/openspec/round-reviewed.mjs",
     "round:row": "node scripts/openspec/round-row.mjs",
     "archive:preflight": "node scripts/openspec/archive-preflight.mjs",
