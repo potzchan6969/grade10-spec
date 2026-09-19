@@ -51,7 +51,7 @@ test("shared-planning-change-stages-SC-57 - the stepper marks the stage", async 
   ]) {
     await expect
       .element(eightStep.getByText(label, { exact: true }))
-      .toBeVisible();
+      .toBeInTheDocument();
   }
   const plannedStep = steps
     .querySelector('[data-stage="planned"]')

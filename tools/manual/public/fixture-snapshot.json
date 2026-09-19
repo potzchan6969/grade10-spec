@@ -259,7 +259,7 @@
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
         "A record anyone can read back."
       ],
-      "heldBy": "ui-design",
+      "heldBy": "decisions",
       "upstream": {
         "specs": {
           "id": "47e63e84",
@@ -316,6 +316,7 @@
       "dependsOn": [
         "demo-planned"
       ],
+      "decisionsWaived": "the fixture is about the Building stage, not the decisions",
       "designWaived": "the fixture is about the Building stage, not the designs",
       "uiWaived": "the fixture is about the Building stage, not the designs",
       "hands": {
@@ -346,19 +347,11 @@
             "docs/prds/products/demo-product/index.md#discounts"
           ]
         },
-        "decisions": {
+        "tasks": {
           "id": "f5914656",
           "items": [
             "docs/prds/products/demo-product/index.md#discounts",
             "proposal"
-          ]
-        },
-        "tasks": {
-          "id": "315d4889",
-          "items": [
-            "docs/prds/products/demo-product/index.md#discounts",
-            "proposal",
-            "decisions"
           ]
         }
       }
@@ -377,6 +370,8 @@
       "deltas": [],
       "written": [
         "proposal",
+        "decisions",
+        "user-journeys",
         "ui-design",
         "tech-design"
       ],
@@ -401,18 +396,37 @@
             "docs/prds/products/demo-product/index.md#discounts"
           ]
         },
-        "ui-design": {
+        "decisions": {
           "id": "65130f4e",
           "items": [
             "docs/prds/products/demo-product/index.md#discounts",
             "proposal"
           ]
         },
-        "tech-design": {
-          "id": "65130f4e",
+        "user-journeys": {
+          "id": "55a6205b",
           "items": [
             "docs/prds/products/demo-product/index.md#discounts",
-            "proposal"
+            "proposal",
+            "decisions"
+          ]
+        },
+        "ui-design": {
+          "id": "3495efb8",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts",
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "tech-design": {
+          "id": "3495efb8",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts",
+            "proposal",
+            "decisions",
+            "user-journeys"
           ]
         }
       }
@@ -448,6 +462,7 @@
         "tasks"
       ],
       "promotedBy": "tester",
+      "decisionsWaived": "the fixture is about the On staging stage, not the decisions",
       "designWaived": "the fixture is about the On staging stage, not the designs",
       "uiWaived": "the fixture is about the On staging stage, not the designs",
       "deployedEnv": "staging",
@@ -583,6 +598,7 @@
       "deltas": [],
       "written": [
         "proposal",
+        "decisions",
         "tasks"
       ],
       "promotedBy": "tester",
@@ -607,11 +623,19 @@
             "docs/prds/products/demo-product/index.md#refunds"
           ]
         },
-        "tasks": {
+        "decisions": {
           "id": "a25a70e4",
           "items": [
             "docs/prds/products/demo-product/index.md#refunds",
             "proposal"
+          ]
+        },
+        "tasks": {
+          "id": "7501932c",
+          "items": [
+            "docs/prds/products/demo-product/index.md#refunds",
+            "proposal",
+            "decisions"
           ]
         }
       }
@@ -647,6 +671,7 @@
         "tasks"
       ],
       "promotedBy": "tester",
+      "decisionsWaived": "the fixture is about the Released stage, not the decisions",
       "designWaived": "the fixture is about the Released stage, not the designs",
       "uiWaived": "the fixture is about the Released stage, not the designs",
       "deployedEnv": "staging",
@@ -691,6 +716,7 @@
       "written": [
         "proposal",
         "decisions",
+        "user-journeys",
         "specs",
         "test-cases"
       ],
@@ -731,18 +757,27 @@
             "proposal"
           ]
         },
-        "specs": {
+        "user-journeys": {
           "id": "a3bddd05",
           "items": [
             "proposal",
             "decisions"
           ]
         },
-        "test-cases": {
-          "id": "a3bddd05",
+        "specs": {
+          "id": "0e0b05b5",
           "items": [
             "proposal",
-            "decisions"
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "test-cases": {
+          "id": "0e0b05b5",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
           ]
         }
       }
@@ -788,7 +823,7 @@
         }
       ],
       "author": "tester",
-      "heldBy": "ui-design"
+      "heldBy": "decisions"
     }
   ],
   "schemas": {
