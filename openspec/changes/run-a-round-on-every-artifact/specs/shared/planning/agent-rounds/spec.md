@@ -469,7 +469,7 @@ them from there.
 
 | Artifact | Perspectives it may summon |
 | --- | --- |
-| The page's marks, `proposal.md`, `decisions.md`, the journeys | Product; the reader of the product; design; backend; integration; QA; operations |
+| The page's marks, `proposal.md`, `decisions.md`, the journeys | Product; the reader of the product; design; backend; integration; operations |
 | `ui-design.md` | The journeys, walked; the design system's inventory and its parity with the design file; the words, as the reader would say them |
 | `tech-design.md` | Deterministic, resilient, observable; simple and clear; consistent, modular, built on later; testable and buildable |
 | `spec.md` and `feature-tcs.md` | The two blind readings, then the reconciliation |

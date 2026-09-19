@@ -18,12 +18,14 @@ artifacts:
     teammate: product-manager
     hand: pm
     # The page's marks, `proposal.md`, `decisions.md` and the journeys share
-    # one reader list — `agent-rounds/spec.md`'s table names the same seven
+    # one reader list — `agent-rounds/spec.md`'s table names the same six
     # for all three — so it is written once here and aliased on the other
-    # two, never repeated by hand.
+    # two, never repeated by hand. QA is on none of them: it reads the plan
+    # and the build, so a words-only draft of these three reaches the reader
+    # of the words and the floor and nobody else.
     perspectives: &pm-readers
       - name: product
-        when: [surface, copy]
+        when: [surface]
         agent: .claude/agents/product.md
       - name: reader
         when: [copy]
@@ -37,9 +39,6 @@ artifacts:
       - name: integration
         when: [system]
         agent: .claude/agents/integration.md
-      - name: qa
-        when: [always]
-        agent: .claude/agents/qa.md
       - name: operations
         when: [migration, flag, money, deploy]
         agent: .claude/agents/operations.md
