@@ -7,7 +7,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
-import { waivedOf } from "../src/api/waivers.ts";
+import { waiverLineOf } from "../src/api/waivers.ts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { productPages } from "./context.mjs";
 
@@ -220,14 +220,7 @@ export function checkAwaiting(ctx, changes) {
     if (artifacts === undefined) continue;
     const known = new Set(artifacts.map((one) => one.id));
     const written = new Set(change.written);
-    const waived = waivedOf(artifacts, change);
-    if (change.skipSpecs !== undefined && waitsOnSpecs(change)) {
-      ctx.add(
-        "awaiting",
-        fileOf(change, ".openspec.yaml"),
-        "waits on `specs` and claims `skip_specs` — one says requirements are coming, the other that none are owed; drop whichever is untrue",
-      );
-    }
+    const waived = waiverLineOf(artifacts, change);
     for (const { artifact } of change.awaiting) {
       const file = fileOf(change, ".openspec.yaml");
       if (!known.has(artifact)) {
@@ -246,7 +239,7 @@ export function checkAwaiting(ctx, changes) {
         ctx.add(
           "awaiting",
           file,
-          `waives \`${artifact}\` and waits on it — one line says nobody owes it, the other that somebody does; drop whichever is untrue`,
+          `waives \`${artifact}\` with \`${waived.get(artifact)}\` and waits on it — one line says nobody owes it, the other that somebody does; drop whichever is untrue`,
         );
       }
     }

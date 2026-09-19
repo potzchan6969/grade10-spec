@@ -314,6 +314,22 @@ describe("a waiver beside a wait", () => {
     expect(found?.reason).toMatch(/waives/);
   });
 
+  it("names the line that waived it, `skip_specs` among them", async () => {
+    // One rule for all four waivers: the wait and the waiver contradict each
+    // other whichever line stood for the artifact.
+    const [found] = await findings(
+      [
+        "skip_specs: true",
+        "skip_specs_why: a lint sweep moves no behaviour",
+        "awaiting:",
+        "  specs: the second pass is QA's",
+        "",
+      ].join("\n"),
+    );
+
+    expect(found?.reason).toContain("waives `specs` with `skip_specs`");
+  });
+
   it("says nothing about a wait on an artifact nothing waives", async () => {
     expect(
       await findings(

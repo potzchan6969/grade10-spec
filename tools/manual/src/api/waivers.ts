@@ -37,24 +37,39 @@ export function waivedOf(
   artifacts: SchemaArtifact[],
   change: ChangeEntry,
 ): Set<string> {
-  const ids = new Set<string>();
+  return new Set(waiverLineOf(artifacts, change).keys());
+}
+
+/**
+ * The same reading, each artifact against the record key that waives it — so
+ * a rule refusing a waiver can name the line its author would delete rather
+ * than leaving them to find which of the four it was.
+ */
+export function waiverLineOf(
+  artifacts: SchemaArtifact[],
+  change: ChangeEntry,
+): Map<string, string> {
+  const waived = new Map<string, string>();
   for (const one of artifacts) {
     if (
       change.skipSpecs !== undefined &&
       (one.id === "specs" || one.generates.startsWith("specs/"))
     ) {
-      ids.add(one.id);
+      waived.set(one.id, "skip_specs");
     }
     const waiver = WAIVERS[one.id];
-    if (waiver && change[waiver]) ids.add(one.id);
+    if (waiver && change[waiver.field]) waived.set(one.id, waiver.key);
   }
-  return ids;
+  return waived;
 }
 
-/** The line each waived artifact is waived by. */
-const WAIVERS: Record<string, "decisionsWaived" | "uiWaived" | "designWaived"> =
-  {
-    decisions: "decisionsWaived",
-    "ui-design": "uiWaived",
-    "tech-design": "designWaived",
-  };
+/** The line each waived artifact is waived by: the key as the record spells
+ * it, and the field the reader put it on. */
+const WAIVERS: Record<
+  string,
+  { key: string; field: "decisionsWaived" | "uiWaived" | "designWaived" }
+> = {
+  decisions: { key: "decisions_waived", field: "decisionsWaived" },
+  "ui-design": { key: "ui_waived", field: "uiWaived" },
+  "tech-design": { key: "design_waived", field: "designWaived" },
+};
