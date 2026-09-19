@@ -133,6 +133,31 @@ test("round:reviewed says an artifact drawn from nothing has nothing to read", (
   assert.doesNotMatch(recordOf(root), /reviewed:/);
 });
 
+test("round:reviewed tells apart drawn from nothing, waived and not written yet", () => {
+  const { root } = sandbox({
+    files: {
+      [`${DIR}/.openspec.yaml`]: record(
+        'ui_waived: "nothing a reader sees moves"\n',
+      ),
+    },
+  });
+  const result = run("round-reviewed.mjs", [CHANGE, "--root", root]);
+
+  assert.equal(result.status, 0, result.stderr);
+  // `proposal` links no page section in this change, so it is drawn from
+  // nothing; `ui-design` is waived; `specs` is neither — it is simply not
+  // written yet, and the schema still names what would be before it.
+  assert.match(
+    result.stdout,
+    /proposal: nothing before it in this change — no line to write/,
+  );
+  assert.match(result.stdout, /ui-design: waived — nothing to read it against/);
+  assert.match(
+    result.stdout,
+    /specs: not written yet — nothing to read it against/,
+  );
+});
+
 test("round:reviewed's closing line names the --reviewed landing", () => {
   const { root } = sandbox();
   const result = run("round-reviewed.mjs", [
