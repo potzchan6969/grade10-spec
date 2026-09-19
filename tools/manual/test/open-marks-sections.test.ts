@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { ParsedPage } from "../src/api/derive";
-import { marksUnder, openMarksOfPage } from "../src/api/open-marks.ts";
+import { openMarksOfPage } from "../src/api/open-marks.ts";
 import { parsePage } from "../src/content/grammar";
 import { sectionTextOf } from "../src/content/sections";
 
@@ -73,34 +73,6 @@ describe("the text one section is drawn from", () => {
 
   it("says nothing about a page it could not parse", () => {
     expect(sectionTextOf({ ...page, ast: null }, "points")).toBeUndefined();
-  });
-});
-
-describe("the open marks under one section", () => {
-  it("lists the section's own lines", () => {
-    expect(marksUnder(page, "points").map((one) => one.text)).toEqual([
-      "❓ Whether a refund takes the point back",
-    ]);
-    expect(marksUnder(page, "tiers").map((one) => one.text)).toEqual([
-      "❓ Which day a tier is judged on",
-    ]);
-  });
-
-  it("leaves a titled block's row to the page", () => {
-    const rows = openMarksOfPage(page).map((one) => one.text);
-
-    // The page carries all three; the section carries one of them.
-    expect(rows).toHaveLength(3);
-    expect(rows.some((text) => text.includes("What a refund does"))).toBe(true);
-    expect(
-      marksUnder(page, "points").some((one) =>
-        one.text.includes("What a refund does"),
-      ),
-    ).toBe(false);
-  });
-
-  it("lists nothing under a section the page does not carry", () => {
-    expect(marksUnder(page, "expiry")).toEqual([]);
   });
 });
 

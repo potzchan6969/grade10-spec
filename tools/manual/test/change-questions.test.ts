@@ -65,6 +65,7 @@ const DECISIONS = [
   "| Q1 | Is the stage derived? | Derived from the files on `main` | A key set by hand |",
   "| Q2 | Where are the bounds? | ❓ pm - recommended: seven days | The UTC date |",
   "| Q3 | Who runs the export? | ❓ ops - nobody has said | A cron nobody owns |",
+  "| Q4 | What does a refund do? | ❓ nobody has said yet | Saying nothing |",
   "",
 ].join("\n");
 
@@ -102,6 +103,7 @@ describe("a decisions row nobody has settled", () => {
         role: "pm",
         hand: "ecchochan",
         text: "Where are the bounds?",
+        recommended: "recommended: seven days",
       },
       {
         id: "Q3",
@@ -109,8 +111,18 @@ describe("a decisions row nobody has settled", () => {
         role: "ops",
         hand: "ops",
         text: "Who runs the export?",
+        recommended: "nobody has said",
       },
     ]);
+  });
+
+  it("leaves a cell that names no role to its author", () => {
+    // `❓ <role> - ` is the grammar: without the separator the first word of
+    // the sentence is not a role, and reading it as one addressed Q4 to
+    // "nobody".
+    const entry = changeWith("");
+
+    expect(entry.questions?.some((one) => one.id === "Q4")).toBe(false);
   });
 
   it("is addressed to the role itself where the change names no hand", () => {
@@ -143,6 +155,8 @@ describe("a question the page still carries", () => {
       (one) => one.artifact === "proposal",
     );
 
+    // The hand is the role the line names its confirmer as, and the product
+    // manager where it names none - Q41.
     expect(asked).toEqual([
       {
         artifact: "proposal",
@@ -150,7 +164,31 @@ describe("a question the page still carries", () => {
         section: "points",
         role: "pm",
         hand: "ecchochan",
-        text: "❓ Whether a refund takes the point back",
+        text: "Whether a refund takes the point back",
+      },
+      {
+        artifact: "proposal",
+        page: PAGE,
+        section: "points",
+        role: "pm",
+        hand: "ecchochan",
+        text: "**Who sets the rate** — the shop or the product; the product manager confirms",
+      },
+      {
+        artifact: "proposal",
+        page: PAGE,
+        section: "points",
+        role: "ops",
+        hand: "ops",
+        text: "**Where a point is spent** — in the shop or the app; Operations confirms",
+      },
+      {
+        artifact: "proposal",
+        page: PAGE,
+        section: "points",
+        role: "qa",
+        hand: "qa",
+        text: "whether a downgrade is walked",
       },
     ]);
   });
@@ -170,7 +208,7 @@ describe("a question the page still carries", () => {
   });
 
   it("carries the decisions rows beside the page's lines", () => {
-    expect(questionsOf(changeWith(""), [page])).toHaveLength(3);
+    expect(questionsOf(changeWith(""), [page])).toHaveLength(6);
   });
 
   it("asks nothing of a page the snapshot does not hold", () => {
