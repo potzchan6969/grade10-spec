@@ -3,6 +3,8 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { findStoreRoot } from "../src/store/disk.mts";
+import { NO_GIT } from "../src/store/git.mts";
+import { readChanges } from "../src/store/read-changes.mts";
 import {
   applyPerspectives,
   schemaArtifacts,
@@ -141,6 +143,65 @@ describe("the readers each artifact may summon", () => {
         true,
       );
     }
+  });
+});
+
+describe("an id the schema issues nowhere", () => {
+  const schemaWith = (key: string, id: string) =>
+    writeStore({
+      "openspec/schemas/typo/schema.yaml": [
+        "name: typo",
+        "artifacts:",
+        "  - id: proposal",
+        "    generates: proposal.md",
+        "    requires: []",
+        "    upstream: []",
+        "  - id: decisions",
+        "    generates: decisions.md",
+        `    ${key}:`,
+        `      - ${id}`,
+        "",
+      ].join("\n"),
+    });
+
+  it.each(["requires", "upstream"])("is refused in `%s:`", (key) => {
+    const root = schemaWith(key, "proposals");
+
+    expect(() => schemaArtifacts(root, "typo")).toThrow(
+      new RegExp(
+        `\`decisions\` names \`proposals\` in \`${key}:\`, which this schema issues nowhere`,
+      ),
+    );
+  });
+
+  it("reads an id the schema does issue, in either list", () => {
+    const root = schemaWith("upstream", "proposal");
+
+    expect(schemaArtifacts(root, "typo")?.[1].upstream).toEqual(["proposal"]);
+  });
+
+  it("is reported against the change that names the schema", () => {
+    const root = writeStore({
+      "openspec/schemas/typo/schema.yaml": [
+        "name: typo",
+        "artifacts:",
+        "  - id: proposal",
+        "    generates: proposal.md",
+        "    upstream:",
+        "      - proposals",
+        "",
+      ].join("\n"),
+      "openspec/changes/typo-probe/.openspec.yaml": "schema: typo\n",
+      "openspec/changes/typo-probe/proposal.md":
+        "# Typo probe\n\n## Why\n\nSo the schema is read.\n",
+    });
+    const [entry] = readChanges(root, NO_GIT, null);
+
+    // The change is read, with the schema's own file named: nothing claims it
+    // owes an artifact while the schema cannot be trusted about them.
+    expect(entry.error?.file).toBe("openspec/schemas/typo/schema.yaml");
+    expect(entry.error?.message).toContain("issues nowhere");
+    expect(entry.written).toEqual([]);
   });
 });
 

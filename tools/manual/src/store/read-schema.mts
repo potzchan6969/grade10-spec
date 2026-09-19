@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import YAML from "yaml";
 import type { Perspective, SchemaArtifact } from "../api/types.ts";
-import { readTextIfExists } from "./disk.mts";
+import { readTextIfExists, StoreFileError } from "./disk.mts";
 
 /** The artifacts a schema declares, in the order it declares them — the
  * order they are written in, each built on the one before. Undefined for a
@@ -15,7 +15,12 @@ import { readTextIfExists } from "./disk.mts";
  * and the tech design is drawn beside the UI design rather than from it — so
  * an order alone would put every suite behind its own requirements. A key the
  * schema does not carry — `upstream`, or the readers a round classifies a diff
- * against — is read as absent rather than as a reason to drop the artifact. */
+ * against — is read as absent rather than as a reason to drop the artifact.
+ *
+ * Both lists name artifacts of this same schema, so an id it issues nowhere is
+ * refused rather than read as absent: the worklists would leave the artifact
+ * owed by nobody and the freshness read would draw it from nothing, and each
+ * of those is a silence where a typo was. */
 export function schemaArtifacts(
   root: string,
   schema: string,
@@ -39,6 +44,18 @@ export function schemaArtifacts(
       perspectives: perspectives(fields.perspectives),
       required: fields.required !== false,
     });
+  }
+  const issued = new Set(artifacts.map((one) => one.id));
+  for (const artifact of artifacts) {
+    for (const key of ["requires", "upstream"] as const) {
+      for (const id of artifact[key]) {
+        if (issued.has(id)) continue;
+        throw new StoreFileError(
+          1,
+          `\`${artifact.id}\` names \`${id}\` in \`${key}:\`, which this schema issues nowhere — name one of ${[...issued].map((one) => `\`${one}\``).join(", ")}`,
+        );
+      }
+    }
   }
   return artifacts;
 }

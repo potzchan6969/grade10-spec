@@ -256,7 +256,15 @@ function readChange(
     const suites = readSuites(root, dir);
     if (suites.length > 0) entry.suites = suites;
   }
-  const artifacts = artifactsOf(root, entry.schema, schemas);
+  // A schema that names an artifact it does not issue is reported against the
+  // change, the way a record nothing could read is: the ladder and the
+  // worklists then read an empty set, which claims nothing about what is owed.
+  let artifacts: SchemaArtifact[] = [];
+  try {
+    artifacts = artifactsOf(root, entry.schema, schemas);
+  } catch (cause) {
+    fail(`openspec/schemas/${entry.schema}/schema.yaml`, cause);
+  }
   entry.written = writtenArtifacts(dir, entry, artifacts, tasks !== undefined);
 
   // In flight only: an archived change's interview is over, and both readers
