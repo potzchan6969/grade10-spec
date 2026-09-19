@@ -261,12 +261,7 @@ test("reads the change's own schema: rather than always grade10-planning", () =>
     ].join("\n"),
   );
 
-  const result = cli(root, [
-    "demo",
-    "tech-design",
-    "--diff",
-    diffOf(root, ""),
-  ]);
+  const result = cli(root, ["demo", "tech-design", "--diff", diffOf(root, "")]);
 
   assert.deepEqual(
     result.readers.map((one) => one.name),
