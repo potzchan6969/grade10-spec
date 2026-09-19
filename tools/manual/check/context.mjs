@@ -146,6 +146,16 @@ export const RULES = [
     title: "Waits naming no artifact, or one already written",
   },
   {
+    key: "hands",
+    level: "fail",
+    title: "Hands naming an unknown role or handle",
+  },
+  {
+    key: "landed_by",
+    level: "fail",
+    title: "Landings naming an unknown handle or artifact",
+  },
+  {
     key: "grouping",
     level: "fail",
     title: "Durable specs holding a heading the archive would fold",

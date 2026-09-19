@@ -6,10 +6,24 @@
  */
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import {
+  memberOf,
+  ROLES,
+  readTeamMap,
+  TEAM_MAP,
+} from "../../../scripts/openspec/lib/team.mjs";
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
 import { waiverLineOf } from "../src/api/waivers.ts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { productPages } from "./context.mjs";
+
+/** A handle as `hands:` and `landed_by:` may write it — one token, the shape
+ * `read-changes.mts` and the editor's own `propose.ts` each already hold
+ * their own copy of, because the read that stops on a malformed mapping and
+ * the write that stops on a malformed proposal both need it before this rule
+ * ever sees the value. What survives to here is text, so this is the shape
+ * check, not the read's. */
+const HANDLE = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
 /** The day the deploy record became a rule: every archive before it shipped
  * without one. */
@@ -242,6 +256,108 @@ export function checkAwaiting(ctx, changes) {
           `waives \`${artifact}\` with \`${waived.get(artifact)}\` and waits on it — one line says nobody owes it, the other that somebody does; drop whichever is untrue`,
         );
       }
+    }
+  }
+}
+
+/** The known artifact ids of a schema, read once and cached against every
+ * caller that asks for the same one in this pass. `undefined` for a schema
+ * this store does not define — a CLI built-in, whose artifacts live outside
+ * it, so nothing here can say which ids it issues. */
+function knownArtifactsOf(ctx, cache, schema) {
+  if (!cache.has(schema)) {
+    cache.set(schema, schemaArtifacts(ctx.roots.store, schema));
+  }
+  return cache.get(schema);
+}
+
+const KNOWN_ROLES = ROLES.map((one) => `\`${one}\``).join(", ");
+
+/**
+ * RULE `hands`: `hands:` maps one of the six roles to one handle each,
+ * written by the product manager at the interview's end, by Assign, or by
+ * `pnpm plan hand`. `readIdMap` in `read-changes.mts` already refuses a
+ * `hands:` that is not a mapping and an entry that is not a line of text —
+ * what survives that read is what this names: a role outside the six, a
+ * value shaped like more than one handle, and a handle `docs/prds/team.yaml`
+ * does not carry.
+ */
+export function checkHands(ctx, changes) {
+  const team = readTeamMap(ctx.roots.store);
+  for (const change of changes) {
+    if (change.status !== "in-flight" || !change.hands) continue;
+    const file = fileOf(change, ".openspec.yaml");
+    for (const [role, handle] of Object.entries(change.hands)) {
+      if (!ROLES.includes(role)) {
+        ctx.add(
+          "hands",
+          file,
+          `\`hands.${role}\` names no role this store knows — name one of ${KNOWN_ROLES}`,
+        );
+      } else if (!HANDLE.test(handle)) {
+        ctx.add(
+          "hands",
+          file,
+          `\`hands.${role}: ${handle}\` is not one handle`,
+        );
+      } else if (!memberOf(team, handle)) {
+        ctx.add(
+          "hands",
+          file,
+          `\`hands.${role}\` names \`${handle}\`, which \`${TEAM_MAP}\` does not know`,
+        );
+      }
+    }
+  }
+}
+
+/**
+ * RULE `landed_by`: `landed_by:` maps a schema artifact id to the handle
+ * whose word landed it, and `reviewed:` maps one to the content id it was
+ * last read against — both key a line by an artifact id, so an id the
+ * schema issues nowhere is refused the same way in either, and this is the
+ * one place that refusal is reported for both. `readIdMap` already refuses a
+ * mapping that is not one and an entry that is not a line of text; what
+ * survives that read is a handle the team map does not know and an id the
+ * schema does not issue.
+ */
+export function checkLandedBy(ctx, changes) {
+  const team = readTeamMap(ctx.roots.store);
+  const cache = new Map();
+  for (const change of changes) {
+    if (change.status !== "in-flight") continue;
+    if (!change.landedBy && !change.reviewed) continue;
+    const artifacts = knownArtifactsOf(ctx, cache, change.schema);
+    // A schema this store does not define declares no artifacts here; nothing
+    // can be said about what it issues.
+    if (artifacts === undefined) continue;
+    const known = new Set(artifacts.map((one) => one.id));
+    const namedIds = [...known].map((one) => `\`${one}\``).join(", ");
+    const file = fileOf(change, ".openspec.yaml");
+
+    for (const [artifact, handle] of Object.entries(change.landedBy ?? {})) {
+      if (!known.has(artifact)) {
+        ctx.add(
+          "landed_by",
+          file,
+          `\`landed_by.${artifact}\` names an artifact the \`${change.schema}\` schema does not issue — name one of ${namedIds}`,
+        );
+      } else if (!memberOf(team, handle)) {
+        ctx.add(
+          "landed_by",
+          file,
+          `\`landed_by.${artifact}\` names \`${handle}\`, which \`${TEAM_MAP}\` does not know`,
+        );
+      }
+    }
+
+    for (const artifact of Object.keys(change.reviewed ?? {})) {
+      if (known.has(artifact)) continue;
+      ctx.add(
+        "landed_by",
+        file,
+        `\`reviewed.${artifact}\` names an artifact the \`${change.schema}\` schema does not issue — name one of ${namedIds}`,
+      );
     }
   }
 }

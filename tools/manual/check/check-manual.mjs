@@ -81,6 +81,8 @@ import {
   checkAwaiting,
   checkDecided,
   checkDesign,
+  checkHands,
+  checkLandedBy,
   checkUnmarked,
 } from "./record.mjs";
 import { checkRole } from "./role.mjs";
@@ -205,6 +207,8 @@ export async function runChecks(
     checkPlanned(ctx, changes);
     checkRounds(ctx, changes);
     checkAwaiting(ctx, changes);
+    checkHands(ctx, changes);
+    checkLandedBy(ctx, changes);
     checkArchived(ctx, readArchivedChanges(roots.store, index));
   } else {
     notes.push(
