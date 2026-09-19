@@ -214,8 +214,7 @@ describe("a suite the reader refuses beside a spec that parsed", () => {
     expect(entry.testCasesError).toEqual({
       file: CASES,
       line: 1,
-      message:
-        "a test-case file states `**Status:** pending-review`, `in-review` or `approved` under its title",
+      message: "`Alpha test cases` has no `**Status:**`",
     });
   });
 

@@ -198,9 +198,9 @@ describe("what a suite says about the spec beside it", () => {
 });
 
 /** `docs/governance/specs-to-test-cases.md`: `manual` means no automated
- * test runs a case yet, which is also true of a case that names no
- * Automation status at all — so a missing line reads as `manual` rather than
- * refusing the file, unlike a missing `**Status:**`. */
+ * test runs a case yet, but the property is owed on every case the same way
+ * `**Status:**` is — a case that names none is malformed, never read as
+ * `manual` by default. */
 describe("the Automation status property", () => {
   it("reads `automated` when the case states it", () => {
     const parsed = readTestCases(
@@ -228,14 +228,17 @@ describe("the Automation status property", () => {
     expect(parsed.cases[0].automationStatus).toBe("manual");
   });
 
-  it("defaults to `manual` where a case states no Automation status at all", () => {
-    const parsed = readTestCases(
-      suite(
-        "pending-review",
-        testCase("alpha-US1-TC1-1", "It happens", "draft", "alpha-US-01", ""),
+  it("refuses a case that states no Automation status at all", () => {
+    expect(() =>
+      readTestCases(
+        suite(
+          "pending-review",
+          testCase("alpha-US1-TC1-1", "It happens", "draft", "alpha-US-01", ""),
+        ),
       ),
+    ).toThrow(
+      /`alpha-US1-TC1-1: It happens` has no `\*\*Automation status:\*\*`/,
     );
-    expect(parsed.cases[0].automationStatus).toBe("manual");
   });
 
   it("refuses a value outside the vocabulary", () => {
@@ -253,7 +256,7 @@ describe("the Automation status property", () => {
         ),
       ),
     ).toThrow(
-      /test case `alpha-US1-TC1-1: It happens` is `\*\*Automation status:\*\* flaky`, which is not manual or automated/,
+      /`alpha-US1-TC1-1: It happens` is `\*\*Automation status:\*\* flaky`, which is not manual or automated/,
     );
   });
 });
@@ -266,9 +269,7 @@ describe("a suite that states no status", () => {
       readTestCases(
         suite("", testCase("alpha-US1-TC1-1", "It happens", "draft")),
       ),
-    ).toThrow(
-      /a test-case file states `\*\*Status:\*\* pending-review`, `in-review` or `approved`/,
-    );
+    ).toThrow(/`demo-product\/alpha Test Cases` has no `\*\*Status:\*\*`/);
   });
 
   it("refuses a file status outside the vocabulary", () => {
@@ -276,7 +277,7 @@ describe("a suite that states no status", () => {
       readTestCases(
         suite("draft", testCase("alpha-US1-TC1-1", "It happens", "draft")),
       ),
-    ).toThrow(/is not `pending-review`, `in-review` or `approved`/);
+    ).toThrow(/is not pending-review, in-review or approved/);
   });
 
   it("refuses a case with no `**Status:**`", () => {
@@ -284,9 +285,7 @@ describe("a suite that states no status", () => {
       readTestCases(
         suite("pending-review", testCase("alpha-US1-TC1-1", "It happens", "")),
       ),
-    ).toThrow(
-      /test case `alpha-US1-TC1-1: It happens` has no `\*\*Status:\*\*`/,
-    );
+    ).toThrow(/`alpha-US1-TC1-1: It happens` has no `\*\*Status:\*\*`/);
   });
 
   it("refuses a case status outside the vocabulary", () => {

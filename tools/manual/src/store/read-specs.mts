@@ -74,21 +74,28 @@ const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
  * canonical `-US-<n>` form. A scenario id is the older shape, and still
  * resolves — the suite beside a spec that predates journeys traces those. */
 const TRACE_ID = /[a-z0-9][a-z0-9-]*-(?:US|SC)-\d+/g;
-/** The file's own status sits at column 0 under the title; a case's is a
- * bullet in its properties list. */
-const SUITE_STATUS = /^\*\*Status:\*\*\s*(.+?)\s*$/m;
-const CASE_STATUS = /^\s*(?:[-*]\s+)?\*\*Status:\*\*\s*(.+?)\s*$/m;
 /** Derived from the cases, never chosen: every case `draft` is
  * `pending-review`, a first verdict makes it `in-review`, and no `draft`
  * left makes it `approved`. */
-const SUITE_STATUSES = new Set(["pending-review", "in-review", "approved"]);
-const CASE_STATUSES = new Set(["draft", "actual", "deprecated"]);
-/** `manual` means no automated test runs a case yet, which is also true of a
- * case naming no Automation status at all — unlike `**Status:**`, a missing
- * line here is read rather than refused. */
-const AUTOMATION_STATUS =
-  /^\s*(?:[-*]\s+)?\*\*Automation status:\*\*\s*(.+?)\s*$/m;
-const AUTOMATION_STATUSES = new Set(["manual", "automated"]);
+const SUITE_STATUSES: ReadonlySet<TestSuiteStatus> = new Set([
+  "pending-review",
+  "in-review",
+  "approved",
+]);
+const CASE_STATUSES: ReadonlySet<TestCaseStatus> = new Set([
+  "draft",
+  "actual",
+  "deprecated",
+]);
+/** `docs/governance/specs-to-test-cases.md` states this on every one of the
+ * ten classification bullets a case carries, generation writing `manual` —
+ * so a case naming none is malformed the same way one naming no
+ * `**Status:**` is, and a default here would let a generated draft wear a
+ * flip nobody made. */
+const AUTOMATION_STATUSES: ReadonlySet<AutomationStatus> = new Set([
+  "manual",
+  "automated",
+]);
 /** The scenarios a suite deliberately leaves uncovered: a labelled list at
  * column 0, inline after the label or as bullets beneath it. */
 const OUT_OF_SUITE = /^\*\*Out of suite:\*\*(.*)$/;
@@ -552,58 +559,65 @@ function outOfSuite(text: string): string[] {
   return [...ids];
 }
 
-function suiteStatus(roots: Section[]): TestSuiteStatus {
-  const head = roots[0];
-  const line = head?.line ?? 1;
-  const found =
-    head?.level === 1 ? SUITE_STATUS.exec(head.body)?.[1] : undefined;
+/**
+ * One classification value, read the same way wherever the store's own suite
+ * or case states one: a suite's `**Status:**` directly under its title, a
+ * case's `**Status:**` and `**Automation status:**` bullets under its own
+ * heading. `docs/governance/specs-to-test-cases.md` states every one of these
+ * as owed, never defaulted, so absence refuses the same as a value the
+ * vocabulary does not name.
+ */
+function enumProp<T extends string>(
+  section: Section,
+  label: string,
+  vocabulary: ReadonlySet<T>,
+): T {
+  const pattern = new RegExp(
+    `^\\s*(?:[-*]\\s+)?\\*\\*${label}:\\*\\*\\s*(.+?)\\s*$`,
+    "m",
+  );
+  const found = pattern.exec(section.body)?.[1];
   if (found === undefined) {
     throw new StoreFileError(
-      line,
-      "a test-case file states `**Status:** pending-review`, `in-review` or `approved` under its title",
+      section.line,
+      `\`${section.heading}\` has no \`**${label}:**\``,
     );
   }
-  if (!SUITE_STATUSES.has(found)) {
+  if (!vocabulary.has(found as T)) {
     throw new StoreFileError(
-      line,
-      `file \`**Status:** ${found}\` is not \`pending-review\`, \`in-review\` or \`approved\``,
+      section.line,
+      `\`${section.heading}\` is \`**${label}:** ${found}\`, which is not ${orList(vocabulary)}`,
     );
   }
-  return found as TestSuiteStatus;
+  return found as T;
+}
+
+/** `a, b or c` — the vocabulary a rejected value is measured against, in the
+ * order it is declared. */
+function orList(values: Iterable<string>): string {
+  const list = [...values];
+  return list.length < 2
+    ? list.join("")
+    : `${list.slice(0, -1).join(", ")} or ${list.at(-1)}`;
+}
+
+function suiteStatus(roots: Section[]): TestSuiteStatus {
+  const head = roots[0];
+  if (head?.level !== 1) {
+    throw new StoreFileError(
+      head?.line ?? 1,
+      "a test-case file needs a `# ` title before its `**Status:**`",
+    );
+  }
+  return enumProp(head, "Status", SUITE_STATUSES);
 }
 
 function caseStatus(section: Section): TestCaseStatus {
-  const found = CASE_STATUS.exec(section.raw)?.[1];
-  if (found === undefined) {
-    throw new StoreFileError(
-      section.line,
-      `test case \`${section.heading}\` has no \`**Status:**\``,
-    );
-  }
-  if (!CASE_STATUSES.has(found)) {
-    throw new StoreFileError(
-      section.line,
-      `test case \`${section.heading}\` is \`**Status:** ${found}\`, which is not draft, actual or deprecated`,
-    );
-  }
-  return found as TestCaseStatus;
+  return enumProp(section, "Status", CASE_STATUSES);
 }
 
-/** `manual` where the case states none — the property's own meaning for a
- * case nothing automated covers yet, so a suite written before it existed
- * reads as if every case said so, rather than being refused for silence
- * `**Status:**` would never forgive. A stated value outside the vocabulary
- * still refuses: silence is read, a typo is not. */
 function automationStatusOf(section: Section): AutomationStatus {
-  const found = AUTOMATION_STATUS.exec(section.raw)?.[1];
-  if (found === undefined) return "manual";
-  if (!AUTOMATION_STATUSES.has(found)) {
-    throw new StoreFileError(
-      section.line,
-      `test case \`${section.heading}\` is \`**Automation status:** ${found}\`, which is not manual or automated`,
-    );
-  }
-  return found as AutomationStatus;
+  return enumProp(section, "Automation status", AUTOMATION_STATUSES);
 }
 
 function traces(section: Section): string[] {

@@ -216,6 +216,7 @@ describe("a delta with a title, journeys, and a suite beside it", () => {
       "### beta-TC-01: Watching records",
       "",
       "- **Status:** draft",
+      "- **Automation status:** manual",
       "- **Trace:** beta-SC-01",
       "",
     ].join("\n"),

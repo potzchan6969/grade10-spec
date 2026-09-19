@@ -88,6 +88,7 @@ const suiteText = ({
       "**Classification:**",
       "",
       `* **Status:** ${caseStatus}`,
+      "* **Automation status:** manual",
       `* **Trace:** ${trace}`,
       "",
     ]),
@@ -448,7 +449,7 @@ describe("a suite the reader could not parse", () => {
 
   it("names the suite file, not the spec", async () => {
     expect(lines(await check(root), "store")).toEqual([
-      `${CASES_FILE} — demo-product/alpha line 1: a test-case file states \`**Status:** pending-review\`, \`in-review\` or \`approved\` under its title`,
+      `${CASES_FILE} — demo-product/alpha line 1: \`Alpha test cases\` has no \`**Status:**\``,
     ]);
   });
 
