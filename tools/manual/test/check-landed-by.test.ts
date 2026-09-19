@@ -51,6 +51,16 @@ describe("`landed_by:` on the change's record", () => {
     expect(found.reason).toContain("`proposal`");
   });
 
+  it("names a value shaped like more than one handle", async () => {
+    const [found] = await landedBy(
+      'landed_by:\n  proposal: "alice, bob"\n',
+      "landed_by",
+    );
+
+    expect(found.reason).toContain("`landed_by.proposal: alice, bob`");
+    expect(found.reason).toContain("is not one handle");
+  });
+
   it("names a handle the team map does not know", async () => {
     const [found] = await landedBy(
       "landed_by:\n  proposal: ghost\n",
