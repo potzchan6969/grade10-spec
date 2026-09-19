@@ -324,6 +324,37 @@ describe("whether an artifact is behind", () => {
     ]);
   });
 
+  it("shared-planning-change-stages-SC-49 - a stale `reviewed:` id still carries `since`, the newest of what changed", () => {
+    const root = store();
+    // The spec delta is reformatted (a commit that changes no content) after
+    // the decisions moved, so its own commit outdates what actually changed
+    // before it — the reading a `reviewed:` id compares against has to be the
+    // newest of what is before the artifact, not filtered by the artifact's
+    // own commit, or this case would carry no date at all.
+    const entry = read(
+      root,
+      dating({
+        [`${CHANGE}/proposal.md`]: "2026-09-01T00:00:00Z",
+        [`${CHANGE}/decisions.md`]: "2026-09-05T00:00:00Z",
+        [UI_FILE]: "2026-09-02T00:00:00Z",
+        [SPEC_FILE]: "2026-09-06T00:00:00Z",
+      }),
+      pageOf(RULES, "2026-09-05"),
+    );
+
+    // Every other artifact reads fresh against its own actual id; only the
+    // spec delta's own line is wrong.
+    const reviewed = { ...reviewedOf(entry), specs: "00000000" };
+
+    expect(behindOf({ ...entry, reviewed }, artifacts(root))).toEqual([
+      {
+        artifact: "specs",
+        before: [`${PAGE}#points`, "proposal", "decisions", "ui-design"],
+        since: "2026-09-05T00:00:00Z",
+      },
+    ]);
+  });
+
   it("shared-planning-agent-rounds-SC-34 - is unmoved by a page section the change does not link", () => {
     const root = store();
     const before = read(root).upstream;

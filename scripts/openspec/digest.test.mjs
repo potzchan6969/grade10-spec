@@ -273,6 +273,37 @@ test("shared-planning-change-stages-SC-49 - the digest leaves an artifact behind
   );
 });
 
+test("shared-planning-change-stages-SC-49 - a stale reviewed: id is listed once what changed is old enough", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    "openspec/changes/stale-it/.openspec.yaml": [
+      "schema: demo-planning",
+      "created: 2026-10-01",
+      "hands:",
+      "  pm: dana",
+      "  design: dana",
+      "reviewed:",
+      "  ui-design: '00000000'",
+      "",
+    ].join("\n"),
+    "openspec/changes/stale-it/proposal.md": proposalOf("Stale it"),
+    "openspec/changes/stale-it/decisions.md": "## Goals\n\n- One\n",
+    "openspec/changes/stale-it/ui-design.md": "## Screens\n\nOne screen.\n",
+  });
+  // A `reviewed:` id already on the branch, wrong from the day it was
+  // written: the digest still counts its days from the newest of what is
+  // before the artifact, an id carrying no date of its own.
+  commit("propose stale-it, already read against a stale id", 8);
+
+  const { messages } = digest(root).read();
+  const behind = (messages[0]?.lines ?? []).filter(
+    (one) => one.kind === "behind" && one.change === "stale-it",
+  );
+
+  assert.equal(behind.length, 1);
+  assert.equal(behind[0].days, 8);
+});
+
 test("the digest lists a page's open question beside the decisions rows", () => {
   const { root, write, commit } = sandbox();
   write({
