@@ -388,9 +388,9 @@ it waits on.
 #### Scenario: shared-planning-agent-rounds-SC-22 - A question id is never reused
 **Serves:** Questions, never guesses - the thread and the change name the same numbered row months apart
 
-- **GIVEN** a change whose highest numbered row is `Q7`, of which two are answered and one withdrawn
+- **GIVEN** a change whose highest numbered row is the seventh, of which two are answered and one withdrawn
 - **WHEN** a round raises another
-- **THEN** it is written as `Q8`
+- **THEN** it is written as the eighth row, never as a number a withdrawn row freed
 - **AND** no answered or withdrawn number is issued again
 
 #### Scenario: shared-planning-agent-rounds-SC-23 - An open row holds no stage
