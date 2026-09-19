@@ -1,0 +1,428 @@
+import { fileURLToPath } from "node:url";
+import { renderToStaticMarkup } from "react-dom/server";
+import { MemoryRouter, Route, Routes } from "react-router";
+import { describe, expect, it, vi } from "vitest";
+import { buildIndex } from "../src/api/derive";
+import type {
+  ChangeArtifact,
+  ChangeDocument,
+  ChangeEntry,
+  Delta,
+  SchemaArtifact,
+  Snapshot,
+} from "../src/api/types";
+import { findStoreRoot } from "../src/store/disk.mts";
+import { schemaArtifacts } from "../src/store/read-schema.mts";
+import { changeEntry, pageEntry, snapshotOf, specEntry } from "./manual-fixture";
+
+/**
+ * The change page, state by state: the stepper and its one line below `sm`,
+ * the Your turn card, the hands, the artifacts with their freshness, their
+ * open questions and who landed each, then delivery and the handoff. One case
+ * per `## States` bullet `ui-design.md` lists for the change page, named after
+ * the bullet.
+ */
+
+const storeRoot = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
+const ARTIFACTS: SchemaArtifact[] =
+  schemaArtifacts(storeRoot, "grade10-planning") ?? [];
+
+const SPEC = "demo-product/alpha";
+const delta: Delta = { spec: SPEC, kinds: ["MODIFIED"], requirements: [] };
+
+const HANDS = {
+  pm: "robin",
+  design: "dana",
+  tech: "kim",
+  dev: "sam",
+  qa: "ari",
+  release: "lee",
+};
+
+const WRITTEN = [
+  "proposal",
+  "decisions",
+  "user-journeys",
+  "ui-design",
+  "tech-design",
+  "specs",
+  "test-cases",
+  "tasks",
+];
+
+/** When each artifact landed, as the document carries it: the proposal, the
+ * decisions and the journeys on one day, the designer's first word three days
+ * later, and the rest after that. */
+const LANDED: Record<string, string> = {
+  proposal: "2026-09-01T02:00:00.000Z",
+  decisions: "2026-09-01T03:00:00.000Z",
+  "user-journeys": "2026-09-01T04:00:00.000Z",
+  "ui-design": "2026-09-04T02:00:00.000Z",
+  "tech-design": "2026-09-05T02:00:00.000Z",
+  specs: "2026-09-06T02:00:00.000Z",
+  "test-cases": "2026-09-06T03:00:00.000Z",
+  tasks: "2026-09-08T02:00:00.000Z",
+};
+
+function change(extra: Partial<ChangeEntry> = {}): ChangeEntry {
+  return changeEntry("pos", [delta], {
+    stage: "building",
+    title: "Point of sale",
+    hands: { ...HANDS },
+    written: WRITTEN,
+    landedBy: { decisions: "robin", "ui-design": "dana" },
+    taskGroups: [
+      { title: "Contracts", repo: "grade10-spec", done: 1, total: 3 },
+    ],
+    promotedBy: "sam",
+    ...extra,
+  });
+}
+
+/** The document the page fetches: one artifact row per schema artifact, each
+ * dated where the change has written it. */
+function documentOf(entry: ChangeEntry): ChangeDocument {
+  const artifacts: ChangeArtifact[] = ARTIFACTS.map((artifact) => ({
+    name: artifact.id,
+    kind: artifact.generates.startsWith("specs/") ? "specs" : "doc",
+    path: `openspec/changes/pos/${artifact.generates}`,
+    present: entry.written.includes(artifact.id),
+    ...(LANDED[artifact.id] && entry.written.includes(artifact.id)
+      ? {
+          lastCommit: {
+            sha: "0".repeat(40),
+            date: LANDED[artifact.id],
+            subject: `land ${artifact.id}`,
+          },
+        }
+      : {}),
+  }));
+  return {
+    id: "pos",
+    dir: "openspec/changes/pos",
+    schema: "grade10-planning",
+    schemaKnown: true,
+    artifacts,
+    deltas: [],
+  };
+}
+
+const held = vi.hoisted(() => ({
+  index: undefined as unknown,
+  document: { status: "loading" } as unknown,
+}));
+
+vi.mock("../src/api/use-manual-index", () => ({
+  useManualIndex: () => held.index,
+}));
+vi.mock("../src/editor/session", () => ({
+  useEditorSession: () => ({ status: "ready", store: null }),
+}));
+vi.mock("../src/api/use-archive", () => ({
+  useArchive: () => ({ status: "loading" }),
+}));
+vi.mock("../src/api/use-change-document", () => ({
+  useChangeDocument: () => held.document,
+}));
+
+const { ChangePage } = await import("../src/pages/change-page");
+
+function snapshot(entry: ChangeEntry): Snapshot {
+  return snapshotOf({
+    config: {
+      storybookBase: "",
+      groups: [{ title: "Products", products: ["demo-product"] }],
+      platform: [],
+      guides: [],
+    },
+    taxonomy: { products: ["demo-product"], topics: [] },
+    pages: [
+      pageEntry("docs/prds/products/demo-product/index.md", {
+        title: "Demo product",
+      }),
+      pageEntry("docs/prds/products/demo-product/alpha.md", {
+        title: "Alpha",
+        spec: SPEC,
+      }),
+    ],
+    specs: [specEntry(SPEC, ["Points expire"])],
+    schemas: { "grade10-planning": ARTIFACTS },
+    changes: [entry],
+  });
+}
+
+function render(entry: ChangeEntry = change()): string {
+  held.index = buildIndex(snapshot(entry));
+  held.document = { status: "ready", document: documentOf(entry) };
+  return renderToStaticMarkup(
+    <MemoryRouter initialEntries={["/in-flight/pos"]}>
+      <Routes>
+        <Route element={<ChangePage />} path="in-flight/:change" />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
+
+/** One artifact's row, from its label to the next row. */
+function row(html: string, artifact: string): string {
+  const at = html.indexOf(`data-artifact="${artifact}"`);
+  if (at === -1) return "";
+  const next = html.indexOf("data-artifact=", at + 1);
+  return html.slice(at, next === -1 ? undefined : next);
+}
+
+describe("the stepper", () => {
+  const html = render();
+
+  it("shows all eight stages and marks the one the change is in", () => {
+    for (const label of [
+      "Proposed",
+      "Designed",
+      "Specified",
+      "Planned",
+      "Building",
+      "On staging",
+      "Released",
+      "Archived",
+    ]) {
+      expect(html, label).toContain(`>${label}<`);
+    }
+    expect(html).toContain('data-stage="building"');
+    expect(html).toMatch(/data-stage="building"[^>]*data-state="progress"/);
+  });
+
+  it("A lane heading and a stepper step with the agent mark and the hand's move", () => {
+    expect(html).toContain("agent drafts the plan");
+    expect(html).toContain("agent drafts each group, test first");
+    expect(html).toContain("read each landing");
+    expect(html).not.toMatch(
+      /data-stage="on-staging"[\s\S]{0,400}agent drafts/,
+    );
+  });
+
+  it("The change page's stepper below `sm`, on one line", () => {
+    const line = html.slice(html.indexOf('data-stepper="one-line"'));
+
+    expect(line).toContain("Step 5 of 8");
+    expect(line).toContain("Building");
+    expect(line).toContain("agent drafts each group, test first");
+    // The eight steps are the wide reading; the line replaces them below `sm`.
+    expect(html).toMatch(/data-stepper="one-line"[^>]*class="[^"]*sm:hidden/);
+    expect(html).toMatch(/data-stepper="steps"[^>]*class="[^"]*hidden/);
+  });
+
+  it("names the stage in the page's eyebrow", () => {
+    expect(html).toContain("In Flight");
+    expect(html).toContain(">Building<");
+    expect(html).not.toContain(">in progress<");
+  });
+});
+
+describe("the Your turn card", () => {
+  it("The Your turn card names the hand, the thread and the command", () => {
+    const html = render(change({ thread: "C0123ABC/1758170000.001200" }));
+    const card = html.slice(html.indexOf("Your turn"));
+
+    expect(card).toContain("@sam");
+    expect(card).toContain("engineer");
+    expect(card).toContain("C0123ABC");
+    expect(card).toContain("/build pos");
+  });
+
+  it("falls back to the change page's own link where no thread is recorded", () => {
+    const html = render();
+    const card = html.slice(html.indexOf("Your turn"));
+
+    expect(card).toContain("/in-flight/pos");
+    expect(card).toContain("no thread");
+  });
+
+  it("The change page's Your turn card on the hosted manual, with Assign shown as read-only", () => {
+    const html = render();
+    const card = html.slice(html.indexOf("Your turn"));
+
+    expect(card).toContain("Assign");
+    expect(card).toMatch(/Assign[\s\S]{0,200}disabled/);
+    expect(card).toContain("read-only");
+    expect(html).toContain("Hands");
+  });
+
+  it("The change page for a change waiting on a stage whose hand is unnamed", () => {
+    const html = render(change({ hands: { pm: "robin" } }));
+    const card = html.slice(html.indexOf("Your turn"));
+
+    expect(card).toContain("engineer");
+    expect(card).toContain("channel");
+    const hands = html.slice(html.indexOf(">Hands<"));
+    expect(hands).toContain(">open<");
+  });
+});
+
+describe("the hands", () => {
+  it("shows one row per role with its handle, and open for a role nobody has taken", () => {
+    const html = render(change({ hands: { pm: "robin", dev: "sam" } }));
+    const hands = html.slice(html.indexOf(">Hands<"), html.indexOf(">Artifacts<"));
+
+    for (const label of [
+      "Product manager",
+      "Designer",
+      "Tech PIC",
+      "Engineer",
+      "QA",
+      "Release hand",
+    ]) {
+      expect(hands, label).toContain(label);
+    }
+    expect(hands).toContain("@robin");
+    expect(hands).toContain("@sam");
+    expect(hands.match(/>open</g)).toHaveLength(4);
+  });
+});
+
+describe("the artifacts", () => {
+  it("An artifact with open questions, counted, and one landed, with the handle", () => {
+    const html = render(
+      change({
+        questions: [
+          {
+            id: "Q1",
+            artifact: "decisions",
+            role: "pm",
+            hand: "robin",
+            text: "Which day does the shelf start on?",
+          },
+          {
+            id: "Q2",
+            artifact: "decisions",
+            role: "pm",
+            hand: "robin",
+            text: "Who answers a wait?",
+          },
+        ],
+      }),
+    );
+
+    expect(row(html, "decisions")).toContain("2 open questions");
+    expect(row(html, "ui-design")).toContain("@dana");
+    expect(row(html, "tasks")).not.toContain("landed by");
+  });
+
+  it("counts a question the page still carries against the proposal", () => {
+    const html = render(
+      change({
+        questions: [
+          {
+            page: "docs/prds/products/demo-product/alpha.md",
+            section: "surfaces",
+            artifact: "proposal",
+            role: "pm",
+            hand: "robin",
+            text: "Whether the shelf is a page of its own",
+          },
+        ],
+      }),
+    );
+
+    expect(row(html, "proposal")).toContain("1 open question");
+  });
+
+  it("The change page for a change with `ui_waived`, showing the design as not owed and fresh", () => {
+    const written = WRITTEN.filter((one) => one !== "ui-design");
+    const html = render(
+      change({ written, uiWaived: "nothing a reader sees moves" }),
+    );
+    const design = row(html, "ui-design");
+
+    expect(design).toContain("not owed");
+    expect(design).toContain("fresh");
+    expect(design).toContain("nothing a reader sees moves");
+  });
+
+  it("shows a design with neither a file nor a line as still owed", () => {
+    const written = WRITTEN.filter((one) => one !== "tech-design");
+    const html = render(change({ written, stage: "proposed" }));
+
+    expect(row(html, "tech-design")).toContain("not yet written");
+  });
+
+  it("An artifact behind, with the chip naming what changed before it", () => {
+    const html = render(
+      change({
+        reviewed: { "ui-design": "aaaaaaaa" },
+        upstream: {
+          "ui-design": {
+            id: "bbbbbbbb",
+            items: ["docs/prds/products/demo-product/alpha.md#surfaces"],
+          },
+        },
+      }),
+    );
+
+    const design = row(html, "ui-design");
+    expect(design).toContain("behind");
+    expect(design).toContain("alpha.md#surfaces");
+    expect(row(html, "specs")).toContain("fresh");
+  });
+
+  it("shows the later handle alone where a second landing replaced the first", () => {
+    const html = render(change({ landedBy: { "ui-design": "kim" } }));
+
+    expect(row(html, "ui-design")).toContain("@kim");
+    expect(row(html, "ui-design")).not.toContain("@dana");
+  });
+});
+
+describe("delivery and the handoff", () => {
+  it("names main, staging and the release that carried the change", () => {
+    const html = render(
+      change({ deployedEnv: "staging", releasedIn: "v2026.09.1" }),
+    );
+    const delivery = html.slice(html.indexOf(">Delivery<"));
+
+    expect(delivery).toContain("main");
+    expect(delivery).toContain("staging");
+    expect(delivery).toContain("v2026.09.1");
+  });
+
+  it("shows the days from a stage landing to the next hand's first word", () => {
+    const html = render();
+    const handoff = html.slice(html.indexOf(">Handoff<"));
+
+    expect(handoff).toContain("Proposed");
+    expect(handoff).toContain("3 days");
+    expect(handoff).toContain("@dana");
+  });
+
+  it("says what nothing dates, rather than reading it as none", () => {
+    const html = render();
+    const handoff = html.slice(html.indexOf(">Handoff<"));
+
+    // Nothing lands after the plan, so the engineer's first word on Planned
+    // has no date: the days are counted to today and the row says so.
+    expect(handoff).toContain("Planned");
+    expect(handoff).toContain("so far");
+  });
+});
+
+describe("the questions a change still carries", () => {
+  it("lists them whatever stage the change has reached", () => {
+    const html = render(
+      change({
+        stage: "building",
+        questions: [
+          {
+            id: "Q7",
+            artifact: "decisions",
+            role: "design",
+            hand: "dana",
+            text: "Whether the shelf is a page of its own",
+          },
+        ],
+      }),
+    );
+
+    expect(html).toContain("Whether the shelf is a page of its own");
+    expect(html).toContain("Q7");
+    expect(html).toContain(">Building<");
+  });
+});
