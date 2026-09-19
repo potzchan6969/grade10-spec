@@ -1006,7 +1006,7 @@ A run sheet SHALL leave out every case whose automation status is automated,
 and SHALL say how many it left out.
 
 - **The change page** — the Delivery row shows the suite's automated count
-  against its total, beside the run sheet's count
+  against its total
 
 #### Scenario: shared-planning-agent-rounds-SC-61 - Automated cases are left out and counted
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate walks the cases the suite cannot show

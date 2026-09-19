@@ -16,7 +16,7 @@ Drawn from [Agent Rounds · Surfaces](../../docs/prds/products/shared/planning/a
 
 ### Run sheet
 
-The tab `/run-sheet` writes leaves automated cases out and says how many it left out; the change page's Delivery row shows the suite's automated count against its total beside the run sheet's own count.
+The tab `/run-sheet` writes leaves automated cases out and says how many it left out; the change page's Delivery row shows the suite's automated count against its total.
 
 ## Flows
 
