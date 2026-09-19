@@ -48,6 +48,12 @@
 **I want** to be told when a change reaches staging, with its run tab,
 **so that** the manual pass starts the day it deploys.
 
+### shared-planning-change-stages-US-09: Hand learns an artifact of theirs is behind
+
+**As a** hand of an artifact,
+**I want** to be told once when something before it changed after it was written,
+**so that** I read it again before anything is built on it.
+
 ## MODIFIED User journeys
 
 ## REMOVED User journeys

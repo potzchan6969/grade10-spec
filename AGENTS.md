@@ -30,6 +30,8 @@ If a statement is testable, it belongs in `openspec/specs/` and nowhere else, re
 
 Read [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md) for the required maintenance lifecycle and a format-selection guide.
 
+Read [`docs/governance/system-design.md`](docs/governance/system-design.md) before writing a tech design or building a task group: the eight principles every mechanism is held to, and the stance every reader of a draft takes.
+
 Read [`docs/governance/design-system-workflows.md`](docs/governance/design-system-workflows.md) when you know the task but not the rail: it routes tokens, primitives, blocks, a page conversion, an audit finding, and the specification handoff to the command, skill, and governing document that own them, and records what each check does not cover.
 
 ## Product specification workflow
