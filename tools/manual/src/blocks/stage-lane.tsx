@@ -2,6 +2,7 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { CaretRight } from "@phosphor-icons/react";
 import { useState } from "react";
+import { Link } from "react-router";
 import type { BoardLane } from "../api/board";
 import type { ManualIndex } from "../api/derive";
 import { ROLE_LABEL, STAGE_LABEL } from "../api/stage-view";
@@ -28,12 +29,40 @@ const SHOWN = 12;
 export function StageLane({
   lane,
   index,
+  archivedCount,
 }: {
   lane: BoardLane;
   index: ManualIndex;
+  /** The archive's own total, for the Archived lane's heading — its rows are
+   * the in-flight changes only, which is always none, so the count a reader
+   * wants there is the archive's, not this lane's own empty one. */
+  archivedCount?: number;
 }) {
   const targeted = useHashTarget(...lane.rows.map((row) => row.change.id));
   const [open, setOpen] = useState(lane.open);
+
+  if (lane.stage === "archived") {
+    return (
+      <section className="mb-8" data-lane={lane.stage}>
+        <div className="flex items-center gap-2">
+          <h2 className="font-heading font-bold text-lg" id={lane.stage}>
+            {STAGE_LABEL[lane.stage]}
+          </h2>
+          <Badge size="sm" variant="outline">
+            {archivedCount ?? 0}
+          </Badge>
+        </div>
+        <Text as="p" className="mt-1 ml-1" size="xs" tone="secondary">
+          Shipped changes are folded into the durable specs —{" "}
+          <Link className="underline underline-offset-2" to="#archive">
+            the archive below
+          </Link>{" "}
+          keeps the record.
+        </Text>
+      </section>
+    );
+  }
+
   const expanded = (open || targeted) && lane.rows.length > 0;
   const shown = lane.rows.slice(0, SHOWN);
   const rest = lane.rows.length - shown.length;

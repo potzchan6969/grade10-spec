@@ -190,12 +190,16 @@ function lane(html: string, stage: Stage, next: Stage): string {
 }
 
 describe("the lanes", () => {
-  it("shows eight lanes in stage order, the archived one from the archive", () => {
+  it("shows eight lanes in stage order, the Archived one a heading naming the archive's count", () => {
     const html = render([at("planned")], {
       archived: [
         changeEntry("folded-in", [], {
           status: "archived",
           title: "Folded in",
+        }),
+        changeEntry("folded-in-2", [], {
+          status: "archived",
+          title: "Folded in too",
         }),
       ],
     });
@@ -216,7 +220,23 @@ describe("the lanes", () => {
       last = found;
     }
     expect(html).toContain(">On staging<");
-    expect(html).toContain("Folded in");
+
+    // The Archived lane's own rows are the in-flight changes, always none;
+    // its heading carries the archive's whole count and links to the
+    // archive's own section rather than listing a card for each.
+    const archivedLane = html.slice(
+      html.indexOf('data-lane="archived"'),
+      html.indexOf("</section>", html.indexOf('data-lane="archived"')),
+    );
+    expect(archivedLane).toContain(">Archived<");
+    expect(archivedLane).toContain(">2<");
+    expect(archivedLane).toContain('href="/in-flight#archive"');
+    expect(archivedLane).not.toContain("Folded in");
+
+    // The archive's own timeline, further down the page, still carries it.
+    expect(html.indexOf("Folded in")).toBeGreaterThan(
+      html.indexOf('data-lane="archived"'),
+    );
   });
 
   it("Board with no change in flight", () => {

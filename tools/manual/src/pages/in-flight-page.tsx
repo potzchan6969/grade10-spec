@@ -49,7 +49,7 @@ export function InFlightPage() {
   const filter = filterOf(params.get("filter"));
   const { handle, remember } = useHandle(browserKeyStore);
 
-  const rows = boardRows([...index.snapshot.changes, ...(archived ?? [])], {
+  const rows = boardRows(index.snapshot.changes, {
     now: Date.now(),
     released: new Set((archived ?? []).map((one) => one.id)),
     schemas: index.snapshot.schemas,
@@ -79,7 +79,12 @@ export function InFlightPage() {
       ) : (
         <>
           {boardLanes(kept).map((lane) => (
-            <StageLane index={index} key={lane.stage} lane={lane} />
+            <StageLane
+              archivedCount={archived?.length}
+              index={index}
+              key={lane.stage}
+              lane={lane}
+            />
           ))}
           <Shelf rows={shelved} />
         </>
