@@ -1951,6 +1951,36 @@ Runs once per row of **Test data**.
 * `rounds.md` sits in the archived change with every row it had.
 * No durable file gained its rows.
 
+### shared-planning-agent-rounds-US9-TC9-1: A ticked group with no row shows as having none
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Pre-conditions:**
+
+* <change> carries a ticked task group and no row naming that group.
+* <change> carries a second task group that landed a round.
+
+**Steps:**
+
+1. Open <change page url>.
+2. Read the Rounds row.
+
+**Expected Results:**
+
+* The ticked group with no row is listed as having no round.
+* The group that landed a round is not listed that way.
+
 ## Settled
 
 None yet - the first blind pass.
