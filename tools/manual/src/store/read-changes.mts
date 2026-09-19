@@ -19,6 +19,7 @@ import type {
   TaskGroup,
   TaskLine,
 } from "../api/types.ts";
+import { type ChangeCapability, capabilitiesOf } from "./capabilities.mts";
 import {
   featureSuitePath,
   readText,
@@ -27,7 +28,6 @@ import {
   storePath,
   subdirectories,
   toItemError,
-  walkFiles,
 } from "./disk.mts";
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
@@ -272,11 +272,11 @@ function readChange(
     fail(`openspec/schemas/${entry.schema}/schema.yaml`, cause);
   }
   entry.written = writtenArtifacts(
-    root,
     dir,
     entry,
     artifacts,
     tasks !== undefined,
+    capabilitiesOf(root, dir),
   );
 
   // The round's record, written by the first landing and absent until then —
@@ -354,43 +354,19 @@ function artifactsOf(
 }
 
 /**
- * The capability directories a change touches, walked from the tree rather
- * than from `entry.deltas` — whose capabilities `deltaFiles` finds only
- * through a capability's `spec.md`. The journeys land before the outline on
- * the workflow's own documented order (`CLAUDE.md`: "Neither hand opens 5"),
- * so a capability holding only its `user-journeys.md` must still count as
- * one, or the second half of Proposed never fires on that order. A directory
- * counts once it holds any of the three files a capability may carry.
- */
-function capabilityDirsOf(root: string, dir: string): string[] {
-  const specsDir = join(dir, "specs");
-  if (!existsSync(specsDir)) return [];
-  const marks = ["user-journeys.md", "spec.md", "feature-tcs.md"];
-  const found = new Set<string>();
-  for (const name of marks) {
-    for (const file of walkFiles(root, specsDir, name)) {
-      found.add(join(root, file.slice(0, -`/${name}`.length)));
-    }
-  }
-  return [...found].sort();
-}
-
-/**
  * The schema artifact ids this change has written, read against the schema's
  * own `generates` rather than a second list of ids here. An artifact that
  * generates a file inside a capability directory is written only when every
- * capability directory the change touches carries it — one capability's
- * suite does not answer for the others, which is how `blind` and `walked`
- * already read them.
+ * capability the change touches carries it — one capability's suite does not
+ * answer for the others, which is how `blind` and `walked` already read them.
  */
 function writtenArtifacts(
-  root: string,
   dir: string,
   entry: ChangeEntry,
   artifacts: SchemaArtifact[],
   planned: boolean,
+  capabilities: ChangeCapability[],
 ): string[] {
-  const capabilities = capabilityDirsOf(root, dir);
   const present = ({ generates }: SchemaArtifact) => {
     if (generates === "tasks.md") return planned;
     if (!generates.startsWith("specs/"))
@@ -409,7 +385,7 @@ function writtenArtifacts(
       );
     return (
       capabilities.length > 0 &&
-      capabilities.every((one) => existsSync(join(one, name)))
+      capabilities.every((one) => one.files.has(name))
     );
   };
   return artifacts.filter(present).map(({ id }) => id);
@@ -830,18 +806,15 @@ function readTaskLines(text: string): TaskLine[] {
 }
 
 /** The `specs/**\/spec.md` files one change directory holds, each against the
- * spec id it is about. */
+ * spec id it is about — the capabilities of that directory that have reached
+ * their outline. */
 export function deltaFiles(
   root: string,
   dir: string,
 ): { spec: string; file: string }[] {
-  const specsDir = join(dir, "specs");
-  if (!existsSync(specsDir)) return [];
-  const prefix = `${storePath(root, specsDir)}/`;
-  return walkFiles(root, specsDir, "spec.md").map((file) => ({
-    spec: file.slice(prefix.length, -"/spec.md".length),
-    file,
-  }));
+  return capabilitiesOf(root, dir)
+    .filter((one) => one.files.has("spec.md"))
+    .map((one) => ({ spec: one.spec, file: `${one.dir}/spec.md` }));
 }
 
 /** Every delta file the archive holds, by the change id it belongs to.

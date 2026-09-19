@@ -8,7 +8,8 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { readTeamMap, TEAM_MAP } from "../../../scripts/openspec/lib/team.mjs";
-import { readText, walkFiles } from "../src/store/disk.mts";
+import { capabilitiesOf } from "../src/store/capabilities.mts";
+import { readText } from "../src/store/disk.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 
 /** Report order, and which findings end the build. */
@@ -409,19 +410,19 @@ export const message = (cause) =>
 export function journeysOf(root, changes) {
   const found = [];
   for (const change of changes) {
-    const dir = `openspec/changes/${change.id}/specs`;
-    if (!existsSync(join(root, dir))) continue;
-    for (const file of walkFiles(root, join(root, dir), ".md")) {
-      if (!file.endsWith("/user-journeys.md")) continue;
+    for (const one of capabilitiesOf(root, join(root, change.dir))) {
+      if (!one.files.has(JOURNEYS)) continue;
       found.push({
         change: change.id,
-        spec: file.slice(`${dir}/`.length, -"/user-journeys.md".length),
-        file,
+        spec: one.spec,
+        file: `${one.dir}/${JOURNEYS}`,
       });
     }
   }
   return found;
 }
+
+const JOURNEYS = "user-journeys.md";
 
 export const plural = (count, word) =>
   `${count} ${word}${count === 1 ? "" : "s"}`;

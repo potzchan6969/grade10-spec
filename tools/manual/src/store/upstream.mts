@@ -8,6 +8,7 @@ import type {
 import { waivedOf } from "../api/waivers.ts";
 import type { PageAst } from "../content/grammar.ts";
 import { sectionTextOf } from "../content/sections.ts";
+import { type ChangeCapability, capabilitiesOf } from "./capabilities.mts";
 import { contentIdOf } from "./content-id.mts";
 import { readTextIfExists } from "./disk.mts";
 import type { GitIndex } from "./git.mts";
@@ -73,21 +74,23 @@ export function upstreamOf(
   type Before = { item: string; text: string; date?: string };
   type Own = { text: string; date?: string };
   const own = new Map<string, Own | undefined>();
-  // Nothing where a file the artifact is written as reads absent. `written`
-  // is proven against `main`, which can hold a file this checkout does not —
-  // a plan pushed from elsewhere, a partial checkout — and hashing it as ""
-  // would read an unread file as an empty one and put everything after it
-  // behind.
+  const capabilities = capabilitiesOf(root, join(root, change.dir));
+  // Nothing where a file the artifact is written as reads absent, and nothing
+  // where it is written as no file at all. `written` is proven against
+  // `main`, which can hold a file this checkout does not — a plan pushed from
+  // elsewhere, a partial checkout — and hashing it as "" would read an unread
+  // file as an empty one and put everything after it behind.
   const readOwn = (artifact: SchemaArtifact): Own | undefined => {
     if (own.has(artifact.id)) return own.get(artifact.id);
-    const files = filesOf(change, artifact);
+    const files = filesOf(change, artifact, capabilities);
     const texts = files.map((file) => readTextIfExists(join(root, file)));
-    const read = texts.some((text) => text === undefined)
-      ? undefined
-      : {
-          text: texts.join("\n"),
-          date: newest(files.map((file) => git.commitOf(file)?.date)),
-        };
+    const read =
+      files.length === 0 || texts.some((text) => text === undefined)
+        ? undefined
+        : {
+            text: texts.join("\n"),
+            date: newest(files.map((file) => git.commitOf(file)?.date)),
+          };
     own.set(artifact.id, read);
     return read;
   };
@@ -161,15 +164,22 @@ export function markUpstream(
 
 /**
  * The files one artifact of a change is written as, store-relative and in path
- * order. A `specs/**` artifact is one artifact with one file per delta
- * capability, as `written` already reads it.
+ * order. A `specs/**` artifact is one artifact with one file per capability
+ * that carries it, read off the same walk `written` is read off — through the
+ * change's deltas it was zero files for a capability that had only written
+ * its journeys, which hashed a file that exists as no text at all.
  */
-function filesOf(change: ChangeEntry, artifact: SchemaArtifact): string[] {
+function filesOf(
+  change: ChangeEntry,
+  artifact: SchemaArtifact,
+  capabilities: ChangeCapability[],
+): string[] {
   const { generates } = artifact;
   if (!generates.startsWith("specs/")) return [`${change.dir}/${generates}`];
   const name = generates.slice(generates.lastIndexOf("/") + 1);
-  return change.deltas
-    .map(({ spec }) => `${change.dir}/specs/${spec}/${name}`)
+  return capabilities
+    .filter((one) => one.files.has(name))
+    .map((one) => `${one.dir}/${name}`)
     .sort();
 }
 
