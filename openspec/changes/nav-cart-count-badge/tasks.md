@@ -1,4 +1,4 @@
-## 1. Nav Slot Contract (grade10-spec)
+## 1. Nav Slot Contract (grade10-spec) (owner: @kinisworking)
 
 The slot API already exists. Close its verification gap; retain the current implementation unless the scenarios expose a mismatch.
 
