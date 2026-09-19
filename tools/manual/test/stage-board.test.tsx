@@ -172,12 +172,13 @@ function overlaysOn(html: string): string[] {
   );
 }
 
-/** Whether one lane arrived open, read off its own toggle. */
+/** Whether one lane arrived open, read off its own `aria-expanded` — the
+ * tag `data-lane` sits on, found by its own boundaries rather than by
+ * guessing which element name carries it. */
 function laneOpen(html: string, stage: Stage): string | undefined {
   const at = html.indexOf(`data-lane="${stage}"`);
   if (at === -1) return undefined;
-  const opens = html.lastIndexOf("<button", at);
-  const tag = html.slice(opens, html.indexOf(">", at));
+  const tag = html.slice(html.lastIndexOf("<", at), html.indexOf(">", at));
   return /aria-expanded="true"/.test(tag) ? "open" : "shut";
 }
 
