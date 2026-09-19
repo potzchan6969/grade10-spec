@@ -848,6 +848,103 @@ test("--stages says the words when no run sheet is configured", () => {
   assert.match(textOf(messages, "probe:on-staging:qa"), /the run sheet/);
 });
 
+test("--stages matrix names the change whose behind set at head is not empty", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  });
+  const base = commit("propose probe", 10);
+  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
+  const head = commit("reword the proposal", 1);
+  const output = join(root, "output.txt");
+
+  const { read } = stages(root, [
+    "--base",
+    base,
+    "--head",
+    head,
+    "--github-output",
+    output,
+  ]);
+  const { matrix } = read();
+
+  assert.deepEqual(matrix, [{ id: "probe", thread: null }]);
+  assert.match(
+    readFileSync(output, "utf8"),
+    /^matrix=\[\{"id":"probe","thread":null\}\]$/m,
+  );
+});
+
+test("--stages matrix carries the change's own thread", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      "hands:",
+      "  pm: dana",
+      "thread: C0AB1/1700000000.000100",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  });
+  const base = commit("propose probe", 10);
+  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
+  const head = commit("reword the proposal", 1);
+
+  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.deepEqual(matrix, [
+    { id: "probe", thread: "C0AB1/1700000000.000100" },
+  ]);
+});
+
+test("--stages matrix names nothing when nothing at head is behind", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const base = commit("plan probe", 3);
+  write({ [`${DIR}/tasks.md`]: tasksMd(1) });
+  const head = commit("build probe 1.1", 1);
+
+  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.deepEqual(matrix, []);
+});
+
+test("--stages matrix excludes a push that only writes the record's keys", () => {
+  const { root, write, commit } = sandbox();
+  // Proposal and decisions committed together read fresh by the commit-date
+  // fallback (no `reviewed:` line yet, and neither is later than the other).
+  write({
+    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  });
+  const base = commit("propose and decide", 5);
+  // A re-read's own commit: only the record's keys change, and the wrong
+  // content id it writes would otherwise read `decisions` as newly behind —
+  // exactly the case the exclusion exists for, since nothing about the push
+  // itself moved anything.
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      "hands:",
+      "  pm: dana",
+      "reviewed:",
+      "  decisions: deadbeef",
+    ),
+  });
+  const head = commit("record the round", 1);
+
+  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.deepEqual(matrix, []);
+});
+
 test("the sender posts each message once and retries a 429 once", async () => {
   const calls = [];
   let first = true;
