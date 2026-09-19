@@ -24,11 +24,13 @@
  *          name the decision with `--tasks-waived`.
  *
  * BEHIND   Nothing is built on an artifact that is behind what it was drawn
- *          from, and the fold is no exception: this reads `behindOf` the same
- *          way `check:manual` and the manual do, and refuses while anything
- *          is, naming what changed before it. Not waivable — the round's
- *          re-read is what clears it. Skipped, not refused, on a shallow
- *          clone: it cannot date a commit outside its history.
+ *          from, and the fold is no exception: this reads the change through
+ *          the store's own reader — pages included, so a `reviewed:` id
+ *          hashes what it always hashes — and compares it with `behindOf`,
+ *          the same way `check:manual` and the manual do, refusing while
+ *          anything is and naming what changed before it. Not waivable — the
+ *          round's re-read is what clears it. Skipped, not refused, on a
+ *          shallow clone: it cannot date a commit outside its history.
  *
  * CARRY    `openspec archive` folds `## Requirements` and nothing else, so a
  *          delta's `## Purpose`, its `## Feature set`, its `user-journeys.md`
@@ -81,11 +83,9 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { behindLabelOf } from "../../tools/manual/src/api/stage-view.ts";
 import { behindOf } from "../../tools/manual/src/api/stages.ts";
-import { readGitIndex } from "../../tools/manual/src/store/git.mts";
-import { readChanges } from "../../tools/manual/src/store/read-changes.mts";
-import { schemaArtifacts } from "../../tools/manual/src/store/read-schema.mts";
-import { upstreamOf } from "../../tools/manual/src/store/upstream.mts";
+import { readChangeEntry } from "./lib/store-read.mjs";
 import { git, storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -250,15 +250,6 @@ function storeOnly(text) {
     .filter((title) => title !== undefined)
     .map((title) => REPO_TAG.exec(title)?.[1].trim() ?? "");
   return groups.length > 0 && groups.every((repo) => repo === STORE_GROUP);
-}
-
-/** What one behind artifact names, the same words `stage-view.ts` gives the
- * manual — kept as its own copy rather than an import, because that module
- * reaches its neighbours by extensionless specifiers a bundler resolves and
- * plain node does not. */
-function behindLabelOf(behind) {
-  if (behind.changed) return `${behind.changed.join(", ")} changed`;
-  return `read again against ${(behind.before ?? []).join(", ")}`;
 }
 
 /** The unchecked tasks of a task list, in file order. */
@@ -483,12 +474,13 @@ if (open.length > 0 && tasksWaived === null) {
 // ── Behind gate ─────────────────────────────────────────────────────────────
 // Nothing is built on a behind artifact, and the fold is no exception: an
 // artifact drawn from something that has since changed is read from a
-// requirement nobody has read again. `behindOf` is the store's own pure
-// comparison over `upstreamOf`'s reading — the one hasher, read the same way
-// `check:manual`, the manual and the round all read it. A shallow clone
-// cannot date a commit outside its history, so the read is skipped and said
-// so rather than refused on the clone's account; run this on a full checkout
-// to have it checked.
+// requirement nobody has read again. `readChangeEntry` is the store's own
+// change reader — pages included, so a linked section's `reviewed:` id
+// hashes the same text it always hashes — and `behindOf` is the same pure
+// comparison over its reading that `check:manual`, the manual and the round
+// all read. A shallow clone cannot date a commit outside its history, so the
+// read is skipped and said so rather than refused on the clone's account;
+// run this on a full checkout to have it checked.
 if (git(ROOT, ["rev-parse", "--is-shallow-repository"]) === "true") {
   console.log(
     yellow(
@@ -496,48 +488,22 @@ if (git(ROOT, ["rev-parse", "--is-shallow-repository"]) === "true") {
     ),
   );
 } else {
-  const gitIndex = await readGitIndex(ROOT, ["openspec"]);
-  const entry = readChanges(ROOT, gitIndex, null).find(
-    (one) => one.id === changeId,
-  );
-  if (entry) {
-    let artifacts = [];
-    try {
-      artifacts = schemaArtifacts(ROOT, entry.schema) ?? [];
-    } catch {
-      artifacts = [];
-    }
-    // No pages: this script never reads `docs/prds/`, so a linked section's
-    // freshness is the round's to answer, not this gate's. What is before an
-    // artifact within the change's own schema `upstream:` set is checked
-    // either way.
-    const upstream = upstreamOf(
-      ROOT,
-      entry,
-      artifacts,
-      [],
-      new Map(),
-      gitIndex,
+  const { entry, artifacts } = await readChangeEntry(ROOT, changeId);
+  const behind = behindOf(entry, artifacts);
+  if (behind.length > 0) {
+    fail(
+      yellow(`${changeId} archives with ${behind.length} artifact(s) behind:`),
     );
-    if (upstream) entry.upstream = upstream;
-    const behind = behindOf(entry, artifacts);
-    if (behind.length > 0) {
-      fail(
-        yellow(
-          `${changeId} archives with ${behind.length} artifact(s) behind:`,
-        ),
-      );
-      for (const one of behind) {
-        console.error(`  ${one.artifact} — ${behindLabelOf(one)}`);
-      }
-      fail(
-        "",
-        "Nothing is built on a behind artifact, and the fold is no exception.",
-        "Read it again — the round's re-read writes the record line that clears",
-        "this — then re-run this.",
-      );
-      process.exit();
+    for (const one of behind) {
+      console.error(`  ${one.artifact} — ${behindLabelOf(one)}`);
     }
+    fail(
+      "",
+      "Nothing is built on a behind artifact, and the fold is no exception.",
+      "Read it again — the round's re-read writes the record line that clears",
+      "this — then re-run this.",
+    );
+    process.exit();
   }
 }
 
