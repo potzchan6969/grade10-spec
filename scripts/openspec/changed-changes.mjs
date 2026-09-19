@@ -215,15 +215,24 @@ function scopesText(scopes = []) {
     : "";
 }
 
+/** A Slack link, or the bare label where there is no url: an empty link
+ * target is a link nobody can click, not a link nobody clicks. */
+function slackLink(url, label) {
+  return url ? `<${url}|${label}>` : label;
+}
+
 function changeLink(id, title, openspecUrl) {
   const baseUrl = openspecUrl.replace(/\/$/, "");
-  return `<${baseUrl}/#/change/${encodeURIComponent(id)}|${escapeSlackText(title)}>`;
+  return slackLink(
+    `${baseUrl}/#/change/${encodeURIComponent(id)}`,
+    escapeSlackText(title),
+  );
 }
 
 function capabilityLink(id, openspecUrl) {
   const baseUrl = openspecUrl.replace(/\/$/, "");
   const path = id.split("/").map(encodeURIComponent).join("/");
-  return `<${baseUrl}/#/spec/${path}|${escapeSlackText(id)}>`;
+  return slackLink(`${baseUrl}/#/spec/${path}`, escapeSlackText(id));
 }
 
 async function titleAt(root, ref, directory, fallback) {
@@ -292,6 +301,7 @@ export function slackPayload({
   openspecUrl = "https://spec.grade10-stg.com/openspec/",
   stages = {},
 }) {
+  const sha = commitSha.slice(0, 7);
   const sections = [
     ["new", "New", ":new:"],
     ["updated", "Updated", ":pencil2:"],
@@ -338,13 +348,7 @@ export function slackPayload({
         elements: [
           {
             type: "mrkdwn",
-            // No `--commit-url` is not a link nobody clicks: it is an empty
-            // link target, so the sha stands in plain text instead.
-            text: `<${manualUrl}|Planning> | ${
-              commitUrl
-                ? `<${commitUrl}|${commitSha.slice(0, 7)}>`
-                : commitSha.slice(0, 7)
-            }`,
+            text: `${slackLink(manualUrl, "Planning")} | ${slackLink(commitUrl, sha)}`,
           },
         ],
       },
@@ -522,7 +526,7 @@ async function main() {
         type: "string",
         default: process.env.SLACK_WORKSPACE_URL ?? "",
       },
-      "commit-url": { type: "string", default: "" },
+      "commit-url": { type: "string" },
       "manual-url": {
         type: "string",
         default: "https://spec.grade10-stg.com/planning",
