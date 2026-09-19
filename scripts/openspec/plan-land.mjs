@@ -28,15 +28,20 @@
  *              from a tree older than what the branch lands on
  *   4 behind   anything before the artifact that is behind refuses the
  *              landing, named with its hand
- *   5 gate     `validate:changes --strict`, `check:manual`, `tcs:validate`,
+ *   5 write    `landed_by: <artifact>: <handle>` (never for a task group,
+ *              whose plan is proven by the tick alone) and the `rounds.md`
+ *              row, written to the tree before the gate below reads it — the
+ *              `round` rule that refuses a tick or a landed artifact with no
+ *              row is the same rule the gate runs, so the row has to be there
+ *              for the gate to pass rather than land after it. A refusal at
+ *              the gate undoes exactly these two paths. `--reviewed` writes
+ *              neither: the `reviewed:` line it lands is already on the
+ *              branch, committed by whoever ran `round:reviewed`
+ *   6 gate     `validate:changes --strict`, `check:manual`, `tcs:validate`,
  *              run in this process against this store rather than spawned
  *              against a nonexistent copy of themselves in it
- *   6 commit   `landed_by: <artifact>: <handle>` (never for a task group,
- *              whose plan is proven by the tick alone) and the `rounds.md`
- *              row, in one commit. `--reviewed` writes neither: the
- *              `reviewed:` line it lands is already on the branch, committed
- *              by whoever ran `round:reviewed`
- *   7 push     the branch's remote sha, read once from the network rather
+ *   7 commit   what step 5 wrote, added and committed in one commit
+ *   8 push     the branch's remote sha, read once from the network rather
  *              than re-fetched before every attempt, leases the branch's own
  *              push; losing that lease means another run is on this same
  *              branch, so it stops rather than overwriting work still in
@@ -57,7 +62,7 @@
  * nothing about a real landing should ever read it.
  */
 import { spawnSync } from "node:child_process";
-import { existsSync } from "node:fs";
+import { existsSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -87,6 +92,10 @@ const dryRun = Boolean(flags["dry-run"]);
 const reviewedOnly = Boolean(flags.reviewed);
 const root = flags.root ?? join(HERE, "..", "..");
 const [change, target] = positional;
+// Set once step 5 writes `landed_by:` and the round's row, and cleared once
+// the gate passes: `fail` undoes exactly those two paths on a refusal in
+// between, and leaves a later refusal (the push losing its race) alone.
+let restoreOnFail;
 if (!change || !target) fail(USAGE);
 
 const git = (args) => storeGit(root, args);
@@ -224,7 +233,29 @@ if (behind.length > 0) {
 }
 say("behind", `nothing before ${target} is behind`);
 
-// ── 5 gate ──────────────────────────────────────────────────────────────────
+// ── 5 write, before the gate ─────────────────────────────────────────────────
+// `landed_by:` and the round's row land in the same commit as the tick or the
+// artifact they prove, so the `round` rule the gate runs reads whatever this
+// step writes — never the other way around. Writing after the gate would
+// deadlock every group whose tick already reached `main` with no row: the
+// gate refuses the tick with no row, and the landing that would write the row
+// never reaches the write that clears it. A refusal below undoes exactly
+// these two paths, through `fail`, and leaves nothing else behind.
+let pending;
+if (!reviewedOnly && !dryRun) {
+  const cells = rowOf();
+  const record = openRecord(root, change);
+  // Never for a task group: its plan is proven by the tick, not by a hand's
+  // line, and the group names no schema artifact to write one against.
+  if (artifact !== undefined)
+    setEntry(record.doc, "landed_by", artifact, handle);
+  saveRecord(record);
+  const { row, round, created } = appendRoundRow(root, change, cells);
+  pending = { record, row, round, roundsCreated: created };
+  restoreOnFail = () => restorePending(pending);
+}
+
+// ── 6 gate ──────────────────────────────────────────────────────────────────
 if (dryRun) {
   say("gate", "would run validate:changes, check:manual, tcs:validate");
 } else {
@@ -233,48 +264,42 @@ if (dryRun) {
   runTcsValidate();
   say("gate", "validate:changes, check:manual, tcs:validate pass");
 }
+// The gate passed: what step 5 wrote stands, and a later failure (the push
+// losing its race) leaves the commit below in place rather than undoing it.
+restoreOnFail = undefined;
 
-// ── 6 commit ────────────────────────────────────────────────────────────────
+// ── 7 commit ────────────────────────────────────────────────────────────────
 if (reviewedOnly) {
   say(
     "commit",
     `nothing to commit — ${target}'s reviewed: line is already on ${branch}`,
   );
+} else if (dryRun) {
+  say(
+    "commit",
+    artifact === undefined
+      ? `would write one ${roundsPath(change)} row for group ${target}`
+      : `would write landed_by: ${artifact}: ${handle} and one ${roundsPath(change)} row`,
+  );
 } else {
-  const cells = rowOf();
-  if (dryRun) {
-    say(
-      "commit",
-      artifact === undefined
-        ? `would write one ${roundsPath(change)} row for group ${target}`
-        : `would write landed_by: ${artifact}: ${handle} and one ${roundsPath(change)} row`,
-    );
-  } else {
-    const record = openRecord(root, change);
-    // Never for a task group: its plan is proven by the tick, not by a hand's
-    // line, and the group names no schema artifact to write one against.
-    if (artifact !== undefined)
-      setEntry(record.doc, "landed_by", artifact, handle);
-    saveRecord(record);
-    const { row, round } = appendRoundRow(root, change, cells);
-    gitOrDie(["add", "--", record.path, roundsPath(change)]);
-    gitOrDie([
-      "commit",
-      "--quiet",
-      "-m",
-      `chore(openspec): land ${target} of ${change}${artifact === undefined ? "" : ` on @${handle}`}`,
-    ]);
-    say(
-      "commit",
-      artifact === undefined
-        ? `round ${round}, no landed_by: for a group`
-        : `landed_by: ${artifact}: ${handle}, and round ${round}`,
-    );
-    console.log(`           ${row}`);
-  }
+  const { record, row, round } = pending;
+  gitOrDie(["add", "--", record.path, roundsPath(change)]);
+  gitOrDie([
+    "commit",
+    "--quiet",
+    "-m",
+    `chore(openspec): land ${target} of ${change}${artifact === undefined ? "" : ` on @${handle}`}`,
+  ]);
+  say(
+    "commit",
+    artifact === undefined
+      ? `round ${round}, no landed_by: for a group`
+      : `landed_by: ${artifact}: ${handle}, and round ${round}`,
+  );
+  console.log(`           ${row}`);
 }
 
-// ── 7 push ──────────────────────────────────────────────────────────────────
+// ── 8 push ──────────────────────────────────────────────────────────────────
 const mainBranch = rebase.ref.replace(/^origin\//, "");
 if (dryRun) {
   say(
@@ -509,7 +534,27 @@ function runTcsValidate() {
   if (ran.status !== 0) fail("the gate refuses: tcs:validate");
 }
 
+/** What step 5 wrote to the tree, undone: the record back to what `main`
+ * holds, and the round's row either back to it too or, where the row's own
+ * file did not exist yet, removed outright rather than left as an untracked
+ * file the next run's own clean check would have to explain. */
+function restorePending({ record, roundsCreated }) {
+  const path = roundsPath(change);
+  const ran = spawnSync("git", ["checkout", "--", record.path], {
+    cwd: root,
+    stdio: "ignore",
+  });
+  if (ran.status === 0 && roundsCreated) {
+    rmSync(join(root, path), { force: true });
+  } else if (ran.status === 0) {
+    spawnSync("git", ["checkout", "--", path], { cwd: root, stdio: "ignore" });
+  }
+}
+
 function fail(message) {
+  const restore = restoreOnFail;
+  restoreOnFail = undefined;
+  if (restore) restore();
   console.error(message);
   process.exit(1);
 }
