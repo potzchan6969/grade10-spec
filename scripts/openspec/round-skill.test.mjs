@@ -135,6 +135,21 @@ test("shared-planning-agent-rounds-SC-01 - a draft reaches its hand read and ver
   assert.match(skill, /put nothing on `main`/i);
   assert.match(skill, /one reply, of one screen/i);
   assert.match(skill, /a finding that falls is shown nowhere/i);
+  // The five items of the summary. The reply is what the hand reads instead
+  // of the diff, so an item the step drops is a hand opening the file.
+  for (const item of [
+    "The draft",
+    "Who read it",
+    "What stood",
+    "The questions",
+    "What is next",
+  ]) {
+    assert.match(
+      skill,
+      new RegExp(`\\*\\*${item}\\*\\* —`, "i"),
+      `the thread summary carries ${item}`,
+    );
+  }
 });
 
 test("shared-planning-agent-rounds-SC-02 - nothing lands without the hand's word", () => {
@@ -320,6 +335,9 @@ test("shared-planning-agent-rounds-SC-24 - a draft needs a value nobody confirme
     skill,
     /a product detail the draft needs that the page does not\s+state is a ❓ line on the page/i,
   );
+  // The two things the draft does not do: state a value of its own where the
+  // page is silent, and raise a numbered row for a detail the page holds.
+  assert.match(skill, /describe nothing of your own in its place/i);
   assert.match(
     skill,
     /a product detail on the page is not also a numbered\s+row/i,
@@ -432,7 +450,7 @@ test("shared-planning-agent-rounds-SC-50 - a requirement reaching the design wri
   assert.match(skill, /it holds no stage/i);
 });
 
-test("shared-planning-agent-rounds-SC-65 - a round from a terminal is the same round", () => {
+test("a round from a terminal is the same round", () => {
   const skill = claims(ROUND);
   assert.match(
     skill,
@@ -442,9 +460,19 @@ test("shared-planning-agent-rounds-SC-65 - a round from a terminal is the same r
 
 test("shared-planning-agent-rounds-SC-68 - a resumed run continues from what is pushed", () => {
   const skill = claims(ROUND);
+  // The three a run reads before step 1: a run that read only the branch
+  // would re-draft against what has landed and answer a question twice.
   assert.match(
     skill,
     /\*\*The branch\*\* — `change\/<id>`: what is already drafted and pushed/i,
+  );
+  assert.match(
+    skill,
+    /\*\*`main`\*\* — what has landed, and what the record says is behind/i,
+  );
+  assert.match(
+    skill,
+    /\*\*The thread\*\* — `thread:` in the change's record: the questions open, the answers given, and the last reply you wrote/i,
   );
   assert.match(
     skill,
@@ -517,22 +545,58 @@ test("the readers are defined once, read-only, and see no other reader", () => {
   }
 });
 
-test("shared-planning-agent-rounds-SC-31 - the tech and build readers name a principle per finding", () => {
-  for (const file of ["tech", "build"]) {
-    const text = readFileSync(
-      join(ROOT, ".claude/agents", `${file}.md`),
-      "utf8",
-    );
+/** The eight principles `docs/governance/system-design.md` records, read off
+ * its own table rather than listed here a second time. */
+const principles = () => {
+  const section = /\n## The Principles\n([\s\S]*?)\n## /.exec(
+    read("docs/governance/system-design.md"),
+  );
+  assert.ok(section, "the governance page carries a Principles table");
+  const named = [...section[1].matchAll(/^\| (\w+) \| /gm)]
+    .map((row) => row[1])
+    .filter((one) => one !== "Principle");
+  assert.equal(named.length, 8, "the governance page records eight");
+  return named;
+};
+
+/** Every reader a `tech-design.md` round or a task group's round dispatches:
+ * the requirement holds all of them to the principles, not `tech.md` and
+ * `build.md` alone. */
+const principledReaders = () => {
+  const schema = planningSchema(ROOT);
+  const tech = schema.artifacts.find(({ id }) => id === "tech-design");
+  const files = new Set(
+    [...(tech?.perspectives ?? []), ...schema.apply].map(({ agent }) => agent),
+  );
+  return [...files].sort();
+};
+
+test("shared-planning-agent-rounds-SC-31 - every reader of a design or a group names a principle per finding", () => {
+  const eight = principles();
+  const readers = principledReaders();
+  assert.ok(readers.length > 1, "the schema dispatches readers to check");
+
+  for (const path of readers) {
+    const text = claims(path);
     assert.match(
       text,
       /system-design\.md/,
-      `${file}.md cites the governance page`,
+      `${path} cites the governance page`,
     );
     assert.match(
       text,
       /\| Principle \|/,
-      `${file}.md returns a principle per finding`,
+      `${path} returns a principle per finding`,
     );
+    // The closed set a finding names one of: a reader that carried the count
+    // and not the names had nothing to pick from.
+    for (const principle of eight) {
+      assert.match(
+        text,
+        new RegExp(`\\b${principle}\\b`, "i"),
+        `${path} names ${principle}, one of the eight`,
+      );
+    }
   }
 });
 
