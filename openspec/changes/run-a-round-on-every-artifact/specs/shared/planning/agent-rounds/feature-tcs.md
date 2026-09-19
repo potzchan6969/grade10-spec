@@ -2,7 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-19, tcs-rules r3.0
-**Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-35
+**Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-66, shared-planning-agent-rounds-SC-67
 
 ## shared-planning-agent-rounds-US1: Product manager opens a change from one sentence
 
@@ -1990,12 +1990,16 @@ Thirteen questions went to the change's `decisions.md`, and the answers landed a
 ### Out of suite
 
 * `shared-planning-agent-rounds-SC-06` - the two readings and no verifier over them: `pnpm check:manual`'s `blind` rule, which refuses a delta whose moved behaviour no second reading brought back.
+* `shared-planning-agent-rounds-SC-08` - a words-only draft reaches the reader of the words and the floor: `scripts/openspec/perspectives.test.mjs`, which classifies the diff and asserts the whole reader set a round dispatches.
+* `shared-planning-agent-rounds-SC-09` - the readers an export and a migration summon: `scripts/openspec/perspectives.test.mjs`, as above, with what summoned each.
 * `shared-planning-agent-rounds-SC-10` - no record key changes a round's size: `scripts/openspec/perspectives.test.mjs`, which computes the readers from the diff and reads no key.
 * `shared-planning-agent-rounds-SC-23` - an open row holds no stage: `shared/planning/change-stages`' suite, where the stage's derivation is walked.
 * `shared-planning-agent-rounds-SC-28` - every round reads one table: `pnpm run test:openspec`, which reads the perspectives the schema records per artifact.
 * `shared-planning-agent-rounds-SC-29` - a new reader is one row: `pnpm run test:openspec`, as above.
 * `shared-planning-agent-rounds-SC-30` - a reader sees no other reader's output: `scripts/openspec/perspectives.test.mjs`, which gives each challenger the draft and what is before it alone.
 * `shared-planning-agent-rounds-SC-35` - the content id comparison: the store's unit tests over the content id, a pure derivation no surface shows.
+* `shared-planning-agent-rounds-SC-66` - a second push queues behind the first: `scripts/openspec/reread-workflow.test.mjs`, which reads the re-read job's `concurrency` off the workflow - one group per change, nothing cancelled.
+* `shared-planning-agent-rounds-SC-67` - the running read sees the newer landing: `scripts/openspec/reread-workflow.test.mjs`, which pins the job's bounds, and `scripts/openspec/round-scripts.test.mjs`, where the landing's own re-read of `main` is proved.
 
 ### Anchors no case reaches
 
