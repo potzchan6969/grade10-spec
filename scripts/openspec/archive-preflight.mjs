@@ -96,7 +96,18 @@ const green = (s) => c("32", s);
 const yellow = (s) => c("33", s);
 const cyan = (s) => c("36", s);
 
-const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+const HERE = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+
+// `--root <dir>` is read here, ahead of everything else below, and dropped
+// from `argv` — as `plan-land.mjs` reads its own — so the change id and
+// every other flag are read at their usual position whichever side of the
+// store it names the flag sits on. This store's own tests run the checkout's
+// script against a throwaway store this way, rather than a copy of the tree
+// it imports from.
+const argv = process.argv.slice(2);
+const rootIndex = argv.indexOf("--root");
+const ROOT = rootIndex === -1 ? HERE : (argv[rootIndex + 1] ?? HERE);
+if (rootIndex !== -1) argv.splice(rootIndex, 2);
 const CHANGES = join(ROOT, "openspec", "changes");
 
 const DOOMED = ["Feature set"];
@@ -290,7 +301,7 @@ function help() {
   console.log(
     dim(
       '                             [--tasks-waived "<who, why>"] [--journeys-copied]',
-      '                             [--decisions-carried "<what went where, or none>"]',
+      '                             [--decisions-carried "<what went where, or none>"] [--root <dir>]',
     ),
   );
   console.log(
@@ -329,7 +340,6 @@ function fail(...lines) {
   process.exitCode = 1;
 }
 
-const argv = process.argv.slice(2);
 const changeId = argv[0];
 if (!changeId || changeId === "--help" || changeId === "-h") {
   help();
