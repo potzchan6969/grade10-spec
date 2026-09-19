@@ -30,6 +30,7 @@
  */
 import { join } from "node:path";
 import { readText, walkFiles } from "../src/store/disk.mts";
+import { questionIdsOf } from "../src/store/read-changes.mts";
 
 const ID = String.raw`[a-z0-9]+(?:-[a-z0-9]+)*-(?:SC|US)-\d+[a-z]?`;
 
@@ -53,9 +54,6 @@ const CITATION = new RegExp(String.raw`\`(${ID})\``, "gi");
  * outside any change's directory names no table at all.
  */
 const Q_CITATION = /`(Q\d+)`/g;
-/** Where a decisions row is issued: the `Q` cell of a `## Decisions` row, as
- * `read-changes.mts` reads it. */
-const Q_DEFINITION = /^\|\s*(Q\d+)\s*\|/gm;
 const IN_CHANGE = /^openspec\/changes\/([^/]+)\//;
 
 const ARCHIVE = "openspec/changes/archive/";
@@ -166,10 +164,7 @@ function rowsOf(texts, change, rows) {
   const held = rows.get(change);
   if (held) return held;
   const text = texts.get(`openspec/changes/${change}/decisions.md`);
-  const read =
-    text === undefined
-      ? NONE
-      : new Set([...text.matchAll(Q_DEFINITION)].map((one) => one[1]));
+  const read = text === undefined ? NONE : questionIdsOf(text);
   rows.set(change, read);
   return read;
 }

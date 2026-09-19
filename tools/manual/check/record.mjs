@@ -16,6 +16,7 @@ import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
 import { waiverLineOf } from "../src/api/waivers.ts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { productPages } from "./context.mjs";
+import { ROUND_RECORD_SINCE } from "./rounds.mjs";
 
 /** A handle as `hands:` and `landed_by:` may write it — one token, the shape
  * `read-changes.mts` and the editor's own `propose.ts` each already hold
@@ -182,26 +183,44 @@ export function checkDecided(ctx, changes) {
 /** An archive says which deploy carried it. The store cannot see the
  * application repository's runs, so it checks the record `pnpm plan shipped`
  * leaves — unless nothing in the change deploys, which the repository tags
- * already say. */
+ * already say.
+ *
+ * The same pass checks the other thing archive can lose: `rounds.md` is
+ * folded into no durable capability, so it archives with the change like
+ * `decisions.md` does, and the one way to lose it is an archived copy that
+ * does not carry it across. Fenced the way `round`'s own rule is — a change
+ * created before the fence could have landed work with no row to carry. */
 export function checkArchived(ctx, archived) {
   for (const change of archived) {
-    if (!change.shippedOn || change.shippedOn < DEPLOY_RECORD_SINCE) continue;
-    if (change.deployedAt || change.deployWaived) continue;
-    if (
-      change.taskGroups.length > 0 &&
-      change.taskGroups.every((one) => one.repo === STORE_GROUP)
-    ) {
-      continue;
+    if (change.shippedOn && change.shippedOn >= DEPLOY_RECORD_SINCE) {
+      if (!change.deployedAt && !change.deployWaived) {
+        const isStoreOnly =
+          change.taskGroups.length > 0 &&
+          change.taskGroups.every((one) => one.repo === STORE_GROUP);
+        if (!isStoreOnly) {
+          const file = fileOf(change, ".openspec.yaml");
+          const missing = existsSync(join(ctx.roots.store, file))
+            ? "records no deploy"
+            : "carries no `.openspec.yaml`, so it records no deploy";
+          ctx.add(
+            "archived",
+            file,
+            `${missing} — \`pnpm plan shipped ${change.id}\` writes \`deployed_at\`, or say who archived it without one in \`deploy_waived\``,
+          );
+        }
+      }
     }
-    const file = fileOf(change, ".openspec.yaml");
-    const missing = existsSync(join(ctx.roots.store, file))
-      ? "records no deploy"
-      : "carries no `.openspec.yaml`, so it records no deploy";
-    ctx.add(
-      "archived",
-      file,
-      `${missing} — \`pnpm plan shipped ${change.id}\` writes \`deployed_at\`, or say who archived it without one in \`deploy_waived\``,
-    );
+
+    if (change.created && change.created >= ROUND_RECORD_SINCE) {
+      const roundsFile = fileOf(change, "rounds.md");
+      if (!existsSync(join(ctx.roots.store, roundsFile))) {
+        ctx.add(
+          "round",
+          roundsFile,
+          "`rounds.md` is not in the archived copy — the rounds archive with the change and are folded nowhere, so a copy without it loses them",
+        );
+      }
+    }
   }
 }
 

@@ -282,31 +282,9 @@ test("a change whose sections all landed is clear", () => {
   assert.equal(result.status, 0);
 });
 
-/** `rounds.md` is folded into no capability: it archives with the change, so
- * the one way to lose it is an archived copy that does not carry it. */
-test("refuses an archived copy that left rounds.md behind", () => {
-  const withRounds = {
-    ...CARRIED,
-    "rounds.md": "| Round | Artifact |\n| --- | --- |\n| 1 | proposal |\n",
-  };
-  const clear = sandbox(withRounds, DURABLE);
-  assert.equal(run(clear.script, ...SHIPPED).status, 0);
-
-  const copied = sandbox(withRounds, DURABLE);
-  const archived = join(
-    copied.root,
-    "openspec",
-    "changes",
-    "archive",
-    `2026-09-20-${CHANGE}`,
-  );
-  mkdirSync(archived, { recursive: true });
-  writeFileSync(join(archived, "proposal.md"), PROPOSAL["proposal.md"]);
-  const result = run(copied.script, ...SHIPPED);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /`rounds\.md` is not in the archived copy/);
-});
+// `rounds.md`'s own carry is checked after the archive exists, by
+// `pnpm check:manual`'s `round` rule (`tools/manual/test/check-round.test.ts`)
+// rather than by this preflight, which runs before it.
 
 /** `decisions.md` is folded nowhere and the blind pass may not read archive,
  * so a rejected option recorded only there is lost to the one pass most likely

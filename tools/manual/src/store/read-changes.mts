@@ -546,6 +546,24 @@ function readQuestions(
 }
 
 /**
+ * The `Q<n>` ids one change's `## Decisions` table issues — answered, open or
+ * withdrawn alike. What the `cited` rule's `Q<n>` citation resolves against,
+ * read through the same table reader as `readQuestions` rather than a second
+ * regex over the file: two readers of one table drift the day a column moves.
+ */
+export function questionIdsOf(text: string): Set<string> {
+  const decisions = outline(text)
+    .flatMap((one) => (one.level === 1 ? one.children : [one]))
+    .find((one) => /^Decisions\b/.test(one.heading));
+  if (!decisions) return new Set();
+  return new Set(
+    (tableRows(decisions.raw) ?? [])
+      .map((cells) => cells[0])
+      .filter((cell) => DECISION_ROW.test(cell ?? "")),
+  );
+}
+
+/**
  * How many rows of `decisions.md`'s `## Raised` table have landed nowhere.
  *
  * The blind reading's questions live there — `Capability | Raised | Landed` —

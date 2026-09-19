@@ -9,9 +9,13 @@
  * column empty is refused the same way, because a row half written says as
  * little as no row at all.
  *
+ * An artifact is landed once its `landed_by:` line is written — the record's
+ * own account of the hand's word, never a file's mere presence on disk, which
+ * a rebase or a hand-written draft can leave behind with no round at all.
+ *
  * Nothing else owes a row. A read that changed nothing ran no perspective and
- * writes its `reviewed:` line alone, which is why this reads landed artifacts
- * and ticked groups and never the record's own keys.
+ * writes its `reviewed:` line alone, which is why this reads `landed_by:` and
+ * ticked groups and never the rest of the record's keys.
  *
  * Date-fenced, for the reason `decided` is: a change opened before the rule
  * landed was planned when nobody could have written the row, and a register of
@@ -54,18 +58,18 @@ export function checkRounds(ctx, changes) {
     }
 
     const named = new Set(rows.map((row) => groupOf(row.artifact)));
-    const written = new Set(change.written);
+    const landedBy = change.landedBy ?? {};
 
     for (const { id, generates } of schemaArtifacts(
       ctx.roots.store,
       change.schema,
     ) ?? []) {
-      if (!written.has(id)) continue;
+      if (!(id in landedBy)) continue;
       if (named.has(id) || named.has(fileOf(generates))) continue;
       ctx.add(
         "round",
         file,
-        `\`${id}\` is written and no row names it — a landed artifact carries the round that read it`,
+        `\`${id}\` is landed and no row names it — a landed artifact carries the round that read it`,
       );
     }
 
