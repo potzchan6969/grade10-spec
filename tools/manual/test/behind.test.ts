@@ -14,20 +14,26 @@ import { type PageAst, parsePage } from "../src/content/grammar";
 import { sectionTextOf } from "../src/content/sections";
 import { contentIdOf } from "../src/store/content-id.mts";
 import { findStoreRoot } from "../src/store/disk.mts";
-import { type GitIndex, NO_GIT } from "../src/store/git.mts";
+import {
+  type GitIndex,
+  NO_GIT,
+  readGitIndex,
+  type StoreMain,
+} from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { upstreamOf } from "../src/store/upstream.mts";
+import { gitStore } from "./git-store";
 import { writeStore } from "./tmp-store";
 
 /**
  * What is before an artifact, and whether the artifact is behind it.
  *
- * The store reads the upstream: the page sections the change links, in link
- * order, then each artifact the schema names, and the content id of the lot.
- * The comparison is pure and reads that reading back — the recorded id
- * against the one on `main`, or, with no record line, the commit dates on
- * either side.
+ * The store reads the upstream: the page sections the change links, in
+ * `<page>#<slug>` order, then each artifact the schema names, and the content
+ * id of the lot. The comparison is pure and reads that reading back — the
+ * recorded id against the one on `main`, or, with no record line, the commit
+ * dates of the change's own artifacts on either side.
  */
 
 const ID = "behind-probe";
@@ -62,6 +68,16 @@ const PROPOSAL = [
   `- [Rules · Points](../../../${PAGE}#points)`,
   "",
 ].join("\n");
+
+/** The same proposal, linking `Tiers` before `Points`, so the reading's order
+ * is the one it sorts to and not the one the links are in. */
+const LINKED_BACKWARDS = PROPOSAL.replace(
+  `- [Rules · Points](../../../${PAGE}#points)`,
+  [
+    `- [Rules · Tiers](../../../${PAGE}#tiers)`,
+    `- [Rules · Points](../../../${PAGE}#points)`,
+  ].join("\n"),
+);
 
 const DECISIONS = "## Goals\n\n- One outcome.\n";
 const UI_DESIGN = "## Screens\n\n### Board\n\nEight lanes.\n";
@@ -125,8 +141,9 @@ function read(
   root: string,
   git: GitIndex = NO_GIT,
   page = pageOf(),
+  main: StoreMain | null = null,
 ): ChangeEntry {
-  const [entry] = readChanges(root, git, null);
+  const [entry] = readChanges(root, git, main);
   const upstream = upstreamOf(
     root,
     entry,
@@ -145,10 +162,10 @@ const reviewedOf = (entry: ChangeEntry): Record<string, string> =>
     Object.entries(entry.upstream ?? {}).map(([id, one]) => [id, one.id]),
   );
 
-/** The one text the reader draws from the page, read the same way here. */
-function sectionText(): string {
-  const text = sectionTextOf({ ast: parsePage(RULES) }, "points");
-  if (text === undefined) throw new Error("the fixture page has no `Points`");
+/** One text the reader draws from the page, read the same way here. */
+function sectionText(slug = "points", source = RULES): string {
+  const text = sectionTextOf({ ast: parsePage(source) }, slug);
+  if (text === undefined) throw new Error(`the fixture page has no ${slug}`);
   return text;
 }
 
@@ -215,6 +232,38 @@ describe("what the store reads as before an artifact", () => {
         artifacts(root),
       ),
     ).toEqual([]);
+  });
+
+  it("reads the linked sections in `<page>#<slug>` order, not link order", () => {
+    const files = filesOf();
+    files[`${CHANGE}/proposal.md`] = LINKED_BACKWARDS;
+    const entry = read(writeStore(files));
+
+    expect(entry.upstream?.proposal?.items).toEqual([
+      `${PAGE}#points`,
+      `${PAGE}#tiers`,
+    ]);
+    expect(entry.upstream?.proposal?.id).toBe(
+      contentIdOf([sectionText(), sectionText("tiers")]),
+    );
+  });
+
+  it("leaves out an artifact `main` proves and this checkout does not hold", () => {
+    // `tasks.md` is proven on `main`, which a shallow or partial checkout may
+    // not have written out: hashing the absent file as "" would read the plan
+    // as empty rather than as unread.
+    const root = store();
+    const main: StoreMain = {
+      ref: "origin/main",
+      commit: "0".repeat(40),
+      changes: new Set([ID]),
+      tasks: new Map([[ID, "## 1. Contracts\n\n- [ ] 1.1 Do it\n"]]),
+      differing: new Map(),
+    };
+    const entry = read(root, NO_GIT, pageOf(), main);
+
+    expect(entry.written).toContain("tasks");
+    expect(entry.upstream?.tasks).toBeUndefined();
   });
 
   it("reads nothing for an artifact the change has not written", () => {
@@ -293,20 +342,17 @@ describe("with no read record at all", () => {
     [SPEC_FILE]: "2026-09-04T00:00:00Z",
   };
 
-  it("reads the artifact as behind where something before it is newer", () => {
+  it("reads a linked page section as putting nothing behind", () => {
     const root = store();
     const entry = read(root, dating(DATES), pageOf(RULES, "2026-09-10"));
 
-    // The page landed after every artifact was drawn.
-    expect(behindOf(entry, artifacts(root))).toEqual([
-      { artifact: "proposal", changed: [`${PAGE}#points`] },
-      { artifact: "decisions", changed: [`${PAGE}#points`] },
-      { artifact: "ui-design", changed: [`${PAGE}#points`] },
-      { artifact: "specs", changed: [`${PAGE}#points`] },
-    ]);
+    // The page landed after every artifact was drawn, and no record line
+    // dates the edit: a commit on the page dates every section of it, so the
+    // date alone cannot say the linked one moved.
+    expect(behindOf(entry, artifacts(root))).toEqual([]);
   });
 
-  it("names only what is newer than the artifact itself", () => {
+  it("reads the artifact as behind where an artifact before it is newer", () => {
     const root = store();
     const entry = read(
       root,
@@ -317,21 +363,28 @@ describe("with no read record at all", () => {
     // The decisions are newer than everything before them, so they are the
     // one artifact the dates leave alone.
     expect(behindOf(entry, artifacts(root))).toEqual([
-      { artifact: "proposal", changed: [`${PAGE}#points`] },
-      {
-        artifact: "ui-design",
-        changed: [`${PAGE}#points`, "decisions"],
-      },
-      { artifact: "specs", changed: [`${PAGE}#points`, "decisions"] },
+      { artifact: "ui-design", changed: ["decisions"] },
+      { artifact: "specs", changed: ["decisions"] },
     ]);
   });
 
   it("says nothing where no commit dates the artifact", () => {
     const root = store();
-    const entry = read(root, dating({}), pageOf(RULES, "2026-09-10"));
+    const entry = read(
+      root,
+      dating({ [`${CHANGE}/decisions.md`]: "2026-09-09T00:00:00Z" }),
+      pageOf(RULES, "2026-09-10"),
+    );
 
     expect(entry.upstream?.["ui-design"]?.newer).toBeUndefined();
     expect(behindOf(entry, artifacts(root))).toEqual([]);
+  });
+
+  it("omits `newer` where nothing before it is newer", () => {
+    const root = store();
+    const entry = read(root, dating(DATES), pageOf(RULES, "2026-09-10"));
+
+    expect(entry.upstream?.["ui-design"]).not.toHaveProperty("newer");
   });
 
   it("says nothing where no commit dates what is before it", () => {
@@ -362,5 +415,63 @@ describe("what the row names", () => {
         before: [`${PAGE}#points`, "decisions"],
       }),
     ).toBe(`read again against ${PAGE}#points, decisions`);
+  });
+});
+
+describe("over a real history", () => {
+  /** The change and the page it draws from, in one repository whose commits
+   * carry the day they were made — the dates the fallback reads are git's
+   * here, not an injected index's. */
+  async function history() {
+    const { root, write, commit } = gitStore("manual-behind-");
+    for (const [path, text] of Object.entries(filesOf())) write(path, text);
+    commit("the change and the page it is drawn from", 5);
+    const at = async () => {
+      const git = await readGitIndex(root, ["openspec", "docs/prds"]);
+      const source = readFileSync(join(root, PAGE), "utf8");
+      const page: PageEntry = { path: PAGE, source };
+      const last = git.commitOf(PAGE);
+      if (last) page.lastCommit = last;
+      return read(root, git, {
+        pages: [page],
+        asts: new Map([[PAGE, parsePage(source)]]),
+      });
+    };
+    return { root, write, commit, at };
+  }
+
+  it("is unmoved by a commit on a section the change does not link", async () => {
+    const { root, write, commit, at } = await history();
+    const reviewed = reviewedOf(await at());
+
+    write(PAGE, RULES.replace("Three tiers", "Four tiers"));
+    commit("a section the change links nowhere", 3);
+    const after = await at();
+
+    expect(behindOf({ ...after, reviewed }, artifacts(root))).toEqual([]);
+  });
+
+  it("is behind where a commit moves a linked section, once a record line dates the read", async () => {
+    const { root, write, commit, at } = await history();
+    const reviewed = reviewedOf(await at());
+
+    write(
+      PAGE,
+      RULES.replace(
+        "A point is earned per dollar spent.",
+        "A point is earned per dollar spent, and a refund takes it back.",
+      ),
+    );
+    commit("the linked section moves", 3);
+    const after = await at();
+
+    expect(
+      behindOf({ ...after, reviewed }, artifacts(root)).map(
+        ({ artifact }) => artifact,
+      ),
+    ).toEqual(["proposal", "decisions", "ui-design", "specs"]);
+    // The same commit, read with no record line at all: the page's date says
+    // the page moved and nothing says the linked section did.
+    expect(behindOf(after, artifacts(root))).toEqual([]);
   });
 });
