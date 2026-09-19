@@ -132,6 +132,8 @@ const RECORD_KEYS = new Set([
   "deployed_env",
   "deploy_waived",
   "tasks_waived",
+  "decisions_carried",
+  "journeys_copied",
 ]);
 const SHOWN = 10;
 
@@ -792,6 +794,11 @@ const record = {
       ? { deploy_waived: deployWaived }
       : {}),
   ...(tasksWaived !== null ? { tasks_waived: tasksWaived } : {}),
+  // What the clear run was told about the fold's own two DECIDE gates,
+  // archived with the change so `pnpm check:manual` can read it back rather
+  // than being asked for again next run.
+  ...(decisionsCarried !== null ? { decisions_carried: decisionsCarried } : {}),
+  ...(journeysCopied ? { journeys_copied: "true" } : {}),
 };
 const subject =
   deployedAt !== null
