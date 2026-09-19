@@ -91,12 +91,16 @@ jobs:
       # No `restore-keys`: a prefix fallback would drag the previous push's
       # keys in and silence a stage re-entered after a revert (decisions Q26).
       - name: Restore the keys this run has sent
-        uses: actions/cache@v4
+        uses: actions/cache/restore@v4
         with:
           path: ${{ env.SENT_KEYS }}
           key: notify-sent-${{ github.run_id }}
 
-      - name: Find what this push moved and post it
+      # One run: the channel post and the direct messages are one delivery,
+      # the post keyed by the push's own head so a re-run does not post it
+      # twice either. `NOTIFY_DMS` turns the direct messages off without
+      # touching the post.
+      - name: Find what this push moved and tell it
         id: changes
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
@@ -110,7 +114,7 @@ jobs:
           node scripts/openspec/changed-changes.mjs \
             --stages \
             --send \
-            --only post \
+            --dms "${{ vars.NOTIFY_DMS }}" \
             --base "$BEFORE" \
             --head "$HEAD_SHA" \
             --channel "$CHANNEL" \
@@ -120,24 +124,14 @@ jobs:
             --commit-url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
             --github-output "$GITHUB_OUTPUT"
 
-      - name: Tell the hands
-        if: vars.NOTIFY_DMS == 'true' && steps.changes.outputs.has-messages == 'true'
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SLACK_WORKSPACE_URL: ${{ vars.SLACK_WORKSPACE_URL }}
-          TCS_SHEET_URL: ${{ vars.TCS_SHEET_URL }}
-          BEFORE: ${{ github.event.before }}
-          HEAD_SHA: ${{ github.sha }}
-        run: |
-          node scripts/openspec/changed-changes.mjs \
-            --stages \
-            --send \
-            --only dms \
-            --base "$BEFORE" \
-            --head "$HEAD_SHA" \
-            --sent-keys "$SENT_KEYS" \
-            --manual-url "$MANUAL_URL" \
-            --openspec-url "$OPENSPEC_VIEWER_URL"
+      # Whatever happened above: what went out is what went out, and the next
+      # push's run should not send it again.
+      - name: Save the keys this run has sent
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.SENT_KEYS }}
+          key: notify-sent-${{ github.run_id }}
 
   # The read again: one run per change this push put behind something, on the
   # matrix `notify` already computed from the same reading its own messages
