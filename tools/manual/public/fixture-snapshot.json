@@ -400,6 +400,24 @@
       "deployedEnv": "staging",
       "skipSpecs": "the fixture is about the On staging stage and the Idle overlay, not the requirements",
       "author": "tester",
+      "rounds": [
+        {
+          "round": 1,
+          "artifact": "tasks",
+          "perspectives": "the-simpler-thing; nitpick",
+          "stood": "nothing stood",
+          "asked": "-",
+          "tests": "-"
+        },
+        {
+          "round": 2,
+          "artifact": "1",
+          "perspectives": "missing-pieces; code-smell",
+          "stood": "the fixture's one task lands cleanly",
+          "asked": "Q1",
+          "tests": "alpha-SC-01: test/thing.test.ts"
+        }
+      ],
       "upstream": {
         "tasks": {
           "id": "800c7b56",
@@ -561,7 +579,7 @@
             "actual": 0,
             "deprecated": 0,
             "total": 1,
-            "automated": 0
+            "automated": 1
           }
         }
       ],
