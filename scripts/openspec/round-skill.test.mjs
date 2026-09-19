@@ -179,7 +179,8 @@ test("shared-planning-agent-rounds-SC-12 - a remark is applied and re-read narro
   const skill = claims(ROUND);
   assert.match(skill, /a remark re-runs only the perspectives the/i);
   assert.match(skill, /edited lines summon, and the reply names them/i);
-  assert.match(skill, /a `rounds\.md` row naming the remark/i);
+  // The round writes no row: the landing names the remark in its own row.
+  assert.match(skill, /the remark named in the landing's row as what stood/i);
 });
 
 test("shared-planning-agent-rounds-SC-13 - a remark settles a question that was asked", () => {
