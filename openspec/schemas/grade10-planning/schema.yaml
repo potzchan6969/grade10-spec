@@ -943,7 +943,8 @@ artifacts:
     hand: dev
     # `agent-rounds/spec.md`'s table names five readings for `tasks.md`: order
     # and dependencies and migration and flag, both `operations.md`'s; tests
-    # first and the end-to-end group, both `qa.md`'s; size, `simpler.md`'s.
+    # first and the end-to-end group, both `qa.md`'s; the simpler thing,
+    # `simpler.md`'s.
     # `tasks.md` is squarely qa's and operations' subject too, so their order,
     # tests-first and end-to-end readings run every round; migration and flag
     # stay conditional, as `operations.md`'s own "Summoned by" says.
@@ -1059,11 +1060,11 @@ apply:
   requires:
     - tasks
   tracks: tasks.md
-  # `agent-rounds/spec.md`'s "A task group" row names four readings, all
-  # `.claude/agents/build.md`'s: missing pieces, simplicity, code smell, the
-  # repository's conventions. A task group is squarely build's and qa's
-  # subject, so both run every round; operations stays conditional on a
-  # migration or a flag.
+  # `agent-rounds/spec.md`'s "A task group" row names seven readings: missing
+  # pieces, simplicity, code smell and the repository's conventions, all
+  # `.claude/agents/build.md`'s; QA; operations on a migration or a flag; the
+  # simpler thing. A task group is squarely build's and qa's subject, so both
+  # run every round; operations stays conditional on a migration or a flag.
   perspectives:
     - name: missing-pieces
       when: [always]

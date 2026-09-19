@@ -473,8 +473,8 @@ them from there.
 | `ui-design.md` | The journeys, walked; the design system's inventory and its parity with the design file; the words, as the reader would say them |
 | `tech-design.md` | Deterministic, resilient, observable; simple and clear; consistent, modular, built on later; testable and buildable |
 | `spec.md` and `feature-tcs.md` | The two blind readings, then the reconciliation |
-| `tasks.md` | Order and dependencies; tests first; the end-to-end group; migration and flag; size |
-| A task group | Missing pieces; simplicity; code smell; the repository's conventions |
+| `tasks.md` | Order and dependencies; tests first; the end-to-end group; migration and flag; the simpler thing |
+| A task group | Missing pieces; simplicity; code smell; the repository's conventions; QA; operations on a migration or a flag; the simpler thing |
 
 - **One entry, three facts** — each perspective carries its name, what in a
   draft summons it, and the reader it dispatches
