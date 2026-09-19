@@ -11,7 +11,9 @@ import "../src/index.css";
  * `/api/snapshot` takes, so one fixed tree is what every walk reads.
  *
  * Called once per file: the router reads the address as the module loads, so a
- * second address is a second walk - or a click, which is what a walk does.
+ * second address is a second walk - or a click, which is what a walk does. An
+ * existing `#root` is replaced rather than left beside a new one, so a second
+ * call in one session mounts once and a query for a heading never meets two.
  */
 export async function openManual(path: string): Promise<void> {
   const url = new URL(path, window.location.origin);
@@ -19,6 +21,7 @@ export async function openManual(path: string): Promise<void> {
   window.history.replaceState(null, "", url);
 
   const { App } = await import("../src/app");
+  document.getElementById("root")?.remove();
   const root = document.createElement("div");
   root.id = "root";
   document.body.append(root);
