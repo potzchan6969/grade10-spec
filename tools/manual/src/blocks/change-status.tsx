@@ -139,16 +139,16 @@ export function ChangeStatus({
         </Row>
       ) : null}
 
-      {next ? (
-        <Row label="Next">
+      {next.map((action) => (
+        <Row key={action.command} label="Next">
           <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <CopyableCommand command={next.command} />
+            <CopyableCommand command={action.command} />
             <Text as="span" size="xs" tone="secondary">
-              {next.note}
+              {action.note}
             </Text>
           </span>
         </Row>
-      ) : null}
+      ))}
     </dl>
   );
 }

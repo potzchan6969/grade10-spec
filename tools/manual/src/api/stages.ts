@@ -171,60 +171,54 @@ export function openHands(change: ChangeEntry, roles: Role[]): Role[] {
   return roles.filter((role) => !change.hands?.[role]);
 }
 
-/** What the change's agent drafts at one stage, and what the hand of that
+/** What the change's agent drafts at one stage, and what each hand of that
  * stage does about it. */
 export type Drafted = {
   /** What the agent drafts, as the stage table writes it. */
   draft: string;
-  /** The hand's move beside it. */
-  move: string;
-  /** The command that stage's hand pastes. */
-  command: string;
-  /** Who moves it, as the stage table names them. */
-  note: string;
+  /** One entry per hand the stage names: that hand's move as the stage table
+   * writes it, and the command it pastes. Per role rather than one packed
+   * sentence, because Designed names two — the designer and the tech PIC each
+   * draft one design — and a surface that needs one hand's command would
+   * otherwise split a string to find it. */
+  moves: Partial<Record<Role, { move: string; command: string }>>;
 };
 
 /**
- * The agent mark and the hand's move, one entry per drafted stage.
+ * The agent mark and the hands' moves, one entry per drafted stage.
  *
  * Partial, not total: On staging, Released and Archived are drafted by nobody
  * — the deploy, the cut and the fold — so a lookup that misses is the answer
  * for them rather than a hole. Nothing in a change's record says any of this,
  * because which stages an agent drafts is the schema's rule and not one
- * change's: two changes in one stage read the same pair.
+ * change's: two changes in one stage read the same pair. `draftedOf` in
+ * `api/stage-view.ts` is the one reader.
  */
 export const DRAFTED: Partial<Record<Stage, Drafted>> = {
   proposed: {
     draft: "the marks and the three files, from what the hand asks",
-    move: "answer",
-    command: "/plan <id>",
-    note: "Product manager: say what is wanted, answer",
+    moves: { pm: { move: "answer", command: "/plan <id>" } },
   },
   designed: {
     draft: "both designs, from the page and the journeys",
-    move: "tweak · challenge",
-    // Two commands, because two hands take the change while it is still
-    // Proposed and each drafts one design.
-    command: "/design <id> · /tech <id>",
-    note: "Designer: tweak. Tech PIC: challenge",
+    moves: {
+      design: { move: "tweak", command: "/design <id>" },
+      tech: { move: "challenge", command: "/tech <id>" },
+    },
   },
   specified: {
     draft: "two blind readings, reconciled",
-    move: "read",
-    command: "/specify <id>",
-    note: "Product manager: read the requirements and the cases together",
+    moves: { pm: { move: "read", command: "/specify <id>" } },
   },
   planned: {
     draft: "the plan",
-    move: "read",
-    command: "/tasks <id>",
-    note: "Engineer: read the summary",
+    moves: { dev: { move: "read", command: "/tasks <id>" } },
   },
   building: {
     draft: "each group, test first",
-    move: "read each landing",
-    command: "/build <id> <group>",
-    note: "Engineer: read each landing",
+    moves: {
+      dev: { move: "read each landing", command: "/build <id> <group>" },
+    },
   },
 };
 

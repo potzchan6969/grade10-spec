@@ -3,7 +3,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Warning } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { citeTarget, type Dependency, type ManualIndex } from "../api/derive";
-import { draftedOf, stageShown } from "../api/stage-view";
+import { draftedOf, roleTitle, stageShown } from "../api/stage-view";
 import { handOf, type Overlay, taskTotals } from "../api/stages";
 import type { ChangeEntry, ChangeSuite } from "../api/types";
 import { Hands } from "./change-hand";
@@ -89,32 +89,43 @@ export function ChangeFacts({
  */
 export function nextAction(
   change: ChangeEntry,
-): { command: string; note: string } | null {
+): { command: string; note: string }[] {
   const stage = stageShown(change);
-  const drafted = draftedOf(stage);
+  const drafted = draftedOf(stage, change.id);
+  // One per hand the stage names: Designed is taken by two, and a card that
+  // offered one of their commands left the other hand nothing to paste.
   if (drafted)
-    return { command: drafted.commandFor(change.id), note: drafted.note };
-  if (stage === "archived") return null;
-  return {
-    command: `/archive-change ${change.id}`,
-    note: "confirm it deployed, then fold it into the durable specs",
-  };
+    return drafted.moves.map((one) => ({
+      command: one.command,
+      note: `${roleTitle(one.role)}: ${one.move}`,
+    }));
+  if (stage === "archived") return [];
+  return [
+    {
+      command: `/archive-change ${change.id}`,
+      note: "confirm it deployed, then fold it into the durable specs",
+    },
+  ];
 }
 
 export function NextAction({ change }: { change: ChangeEntry }) {
-  const action = nextAction(change);
-  if (!action) return null;
-
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1">
-      <Text as="span" size="xs" tone="secondary">
-        Next
-      </Text>
-      <CopyableCommand command={action.command} />
-      <Text as="span" size="xs" tone="secondary">
-        {action.note}
-      </Text>
-    </div>
+    <>
+      {nextAction(change).map((action) => (
+        <div
+          className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1"
+          key={action.command}
+        >
+          <Text as="span" size="xs" tone="secondary">
+            Next
+          </Text>
+          <CopyableCommand command={action.command} />
+          <Text as="span" size="xs" tone="secondary">
+            {action.note}
+          </Text>
+        </div>
+      ))}
+    </>
   );
 }
 

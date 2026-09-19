@@ -8,7 +8,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 import { Link } from "react-router";
-import { draftedOf, ROLE_LABEL } from "../api/stage-view";
+import { draftedOf, ROLE_LABEL, roleTitle } from "../api/stage-view";
 import { handOf } from "../api/stages";
 import type { ChangeEntry, Role, Stage } from "../api/types";
 import { useEditorSession } from "../editor/session";
@@ -33,7 +33,7 @@ export function YourTurnCard({
   stage: Stage;
 }) {
   const roles = handOf(change, stage);
-  const drafted = draftedOf(stage);
+  const drafted = draftedOf(stage, change.id);
 
   return (
     <Card className="my-5">
@@ -57,14 +57,17 @@ export function YourTurnCard({
 
         <Thread change={change} />
 
-        {drafted ? (
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <CopyableCommand command={drafted.commandFor(change.id)} />
+        {(drafted?.moves ?? []).map((one) => (
+          <div
+            className="flex flex-wrap items-center gap-x-2 gap-y-1"
+            key={one.role}
+          >
+            <CopyableCommand command={one.command} />
             <Text as="span" size="xs" tone="secondary">
-              {drafted.note}
+              {`${roleTitle(one.role)}: ${one.move}`}
             </Text>
           </div>
-        ) : null}
+        ))}
 
         <Assign />
       </CardContent>

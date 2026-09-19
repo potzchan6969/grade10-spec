@@ -1,5 +1,5 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
-import { draftedOf } from "../api/stage-view";
+import { draftedOf, moveShown } from "../api/stage-view";
 import type { Stage } from "../api/types";
 
 /**
@@ -24,7 +24,7 @@ export function StageMark({ stage }: { stage: Stage }) {
     >
       <span>{`agent drafts ${drafted.mark}`}</span>
       <span aria-hidden>·</span>
-      <span>{drafted.move}</span>
+      <span>{moveShown(drafted.moves)}</span>
     </Badge>
   );
 }

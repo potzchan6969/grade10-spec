@@ -85,40 +85,60 @@ const BARE: ChangeEntry = {
   written: [],
 };
 
-/** What the agent drafts at one stage and what the hand does about it, in the
+/** One hand of a drafted stage: its move, and the command it pastes for the
+ * change the read was asked about. */
+export type DraftedMove = {
+  role: Role;
+  /** The hand's move, as the stage table writes it. */
+  move: string;
+  /** The command this hand pastes, the change's id written in. */
+  command: string;
+};
+
+/** What the agent drafts at one stage and what its hands do about it, in the
  * words a surface shows. */
 export type DraftedRead = {
   /** What the change's agent drafts, as the stage table writes it. */
   mark: string;
-  /** The hand's move beside it, one sentence however many hands take the
-   * stage. Never split: the day Designed carries a move per role, the roles
-   * are read from here and not from this sentence. */
-  move: string;
-  /** Who moves it, as the stage table names them. */
-  note: string;
-  /** The command that stage's hand pastes for one change. */
-  commandFor(id: string, role?: Role): string;
+  /** One entry per hand the stage names, in the roles' own order. */
+  moves: DraftedMove[];
 };
 
 /**
- * The agent mark and the hand's move for one stage, or nothing where the
+ * The agent mark and the hands' moves for one stage, or nothing where the
  * stage is drafted by nobody — On staging, Released and Archived are a
  * deploy, a cut and a fold.
  *
- * The one read of `DRAFTED` in the app. The table's shape is the schema's
- * rule about which stages an agent drafts, and it is still growing a move and
- * a command per role; everything that renders the pair reads it through here,
- * so that day is one function and not six components.
+ * The one read of `DRAFTED` in the app: everything that renders the pair
+ * reads it through here, so the day the table grows a hand is this function
+ * and not six components. `id` writes the change into each command, and the
+ * `<id>` the table holds is what a read with no change in hand returns.
  */
-export function draftedOf(stage: Stage): DraftedRead | undefined {
+export function draftedOf(stage: Stage, id = "<id>"): DraftedRead | undefined {
   const drafted = DRAFTED[stage];
   if (!drafted) return undefined;
   return {
     mark: drafted.draft,
-    move: drafted.move,
-    note: drafted.note,
-    commandFor: (id) => drafted.command.replace(/<id>/g, id),
+    moves: ROLES.flatMap((role) => {
+      const held = drafted.moves[role];
+      if (!held) return [];
+      return [
+        { role, move: held.move, command: held.command.replace(/<id>/g, id) },
+      ];
+    }),
   };
+}
+
+/** The hand's move as a lane heading and a stepper step carry it: the moves
+ * themselves, one phrase per hand of the stage. */
+export function moveShown(moves: DraftedMove[]): string {
+  return moves.map((one) => one.move).join(" · ");
+}
+
+/** Who moves it, each hand named by its own label — the line beside the
+ * command on the Your turn card and on a card's next action. */
+export function movedBy(moves: DraftedMove[]): string {
+  return moves.map((one) => `${roleTitle(one.role)}: ${one.move}`).join(" · ");
 }
 
 /**
