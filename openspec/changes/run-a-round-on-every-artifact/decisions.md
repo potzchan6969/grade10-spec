@@ -67,6 +67,9 @@
 | Q42 | How does a re-read that changed nothing land its `reviewed:` line? | Through the landing's own leased path with no row and no `landed_by:` - `plan:land <change> <artifact> --reviewed` - so nothing reaches `main` by an ad-hoc push | The round committing and pushing the line itself, outside the rebase, the lease and the gate |
 | Q43 | Whose hand lands a task group? | The hand the schema names for `tasks.md`, read from the schema like every other artifact's | A role written into the landing script |
 | Q44 | When is a landed artifact read as landed by the round rule? | When the record carries its `landed_by:` line, written in the same commit as the row; a file present on disk is a draft, not a landing | The file's presence in the checkout, which refused the landing that was about to write the row |
+| Q45 | Does QA read the proposal, the decisions and the journeys? | ❓ pm - recommended: no - QA reads the plan and the build (Q8, Q40), so the trio's list names six: product, the reader of the product, design, backend, integration and operations | QA `always` on the trio, which SC-08 refuses; a trigger for QA on the trio, which none of the ten fits |
+| Q46 | Is a proposal's, the decisions' or the journeys' prose words a reader sees, for the `copy` trigger? | ❓ pm - recommended: yes - the reader of the product reads the trio's prose as its own material, so any prose line of those three raises `copy` | `copy` from a page file and a `## Copy` section alone, which leaves the trio read by nobody but the simpler thing |
+| Q47 | Are the four readings of a tech design and of a task group four dispatches, or one dispatch returning four tables? | ❓ pm - recommended: four dispatches, as the page's Perspectives table and Q40 say | One session told to argue all four, three fewer sessions per round |
 
 ## Raised
 
