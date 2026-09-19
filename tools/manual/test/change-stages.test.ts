@@ -142,6 +142,24 @@ describe("the stage a change's files prove", () => {
     expect(stage(at("proposed"))).toBe("proposed");
   });
 
+  it("shared-planning-change-stages-SC-01 - proves Proposed's own rung before Designed's", () => {
+    // Only `proposal.md` is on `main`; the decisions are waived, but the
+    // journeys are not — neither written nor waived. Designed's own row
+    // (both designs, here both waived) is proven, but Proposed's remaining
+    // proof — the journeys — is not, and a rung is reached only when its own
+    // proof and every proof before it hold.
+    const change = at("proposed", {
+      written: ["proposal"],
+      decisionsWaived: "nothing to settle",
+      uiWaived: "nothing a reader sees moves",
+      designWaived: "no code lands outside the store",
+      hands: undefined,
+    });
+
+    expect(stage(change)).toBe("proposed");
+    expect(handOf(change, "proposed", artifacts())).toEqual(["pm"]);
+  });
+
   it("is not moved by a wait on the tech design", () => {
     const waiting = at("specified", {
       awaiting: [{ artifact: "tech-design", why: "2026-09-12 the increment" }],
