@@ -475,3 +475,34 @@ test("every reader the schema dispatches resolves on disk", () => {
     );
   }
 });
+
+// SC-28: the same table answers every artifact's round - `openspec
+// instructions` reads the schema the same way, so every id it names is a
+// valid argument to the vendor CLI. Needs the workspace's `openspec` binary,
+// which `pnpm openspec` otherwise reaches over `pnpm dlx`; skip rather than
+// fail where this checkout has not installed it.
+test("`openspec instructions` resolves every schema artifact id", () => {
+  if (!existsSync(join(ROOT, "node_modules", ".bin", "openspec"))) {
+    console.log(
+      "[SKIP] node_modules/.bin/openspec is not installed in this checkout",
+    );
+    return;
+  }
+  const artifacts = REAL_SCHEMA.artifacts;
+  assert.ok(artifacts.length > 0, "the schema names artifacts to check");
+  for (const { id } of artifacts) {
+    assert.doesNotThrow(() =>
+      execFileSync(
+        "pnpm",
+        [
+          "openspec",
+          "instructions",
+          id,
+          "--change",
+          "run-a-round-on-every-artifact",
+        ],
+        { cwd: ROOT, stdio: "pipe" },
+      ),
+    );
+  }
+});
