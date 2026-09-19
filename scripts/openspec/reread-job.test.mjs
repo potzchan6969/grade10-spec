@@ -5,7 +5,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-
+import { writableBy } from "./lib/writable.mjs";
 import { outOfBounds, pushedPaths } from "./reread-guard.mjs";
 import { addressFor, failureMessageOf } from "./reread-notify.mjs";
 import { otherChangeDirectories, settingsFor } from "./reread-settings.mjs";
@@ -22,6 +22,9 @@ const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
 const CHANGE = "reread-probe";
 const OTHER = "other-change";
 const DIR = `openspec/changes/${CHANGE}`;
+/** The page this change's proposal links, and one it does not. */
+const PAGE = "docs/prds/products/shared/planning/agent-rounds.md";
+const UNLINKED = "docs/prds/products/shared/planning/change-stages.md";
 
 /** A throwaway store with a bare remote: `main` carries two changes, and the
  * checkout is on `main`, as the re-read job's own checkout is. */
@@ -42,12 +45,28 @@ function sandbox() {
     );
   write({
     [`${DIR}/.openspec.yaml`]: "schema: demo-planning\ncreated: 2026-10-01\n",
-    [`${DIR}/proposal.md`]: "# Reread probe\n",
+    [`${DIR}/proposal.md`]: [
+      "# Reread probe",
+      "",
+      `The page it marks: [Agent Rounds](../../../${PAGE}#the-walk).`,
+      "",
+    ].join("\n"),
     [`openspec/changes/${OTHER}/.openspec.yaml`]:
       "schema: demo-planning\ncreated: 2026-10-01\n",
     [`openspec/changes/${OTHER}/proposal.md`]: "# Other change\n",
     "openspec/changes/archive/2026-01-01-done-change/proposal.md": "# Done\n",
+    // The trees the settings are computed from: one holding a writable path,
+    // the rest holding none.
+    [PAGE]: "# Agent Rounds\n\n## The Walk\n\nThe round reads the draft.\n",
+    [UNLINKED]: "# Change Stages\n\nAnother change's page.\n",
+    "docs/governance/writing.md": "# Writing\n",
+    "openspec/specs/shared/planning/agent-rounds/spec.md": "# Spec\n",
+    "openspec/schemas/demo-planning/schema.yaml": "name: demo-planning\n",
+    "scripts/openspec/plan-land.mjs": "// the landing step\n",
+    ".claude/skills/round/SKILL.md": "# Round\n",
+    ".github/workflows/proposal-notify.yml": "name: notify\n",
     "packages/design-system/README.md": "the design system\n",
+    "tools/manual/check/rounds.mjs": "// the round rule\n",
   });
   const remote = mkdtempSync(join(tmpdir(), "reread-remote-"));
   execFileSync("git", ["init", "--quiet", "--bare", remote]);
@@ -128,16 +147,104 @@ test("settingsFor denies the fixed paths and every other change's directory", ()
   assert.ok(!deny.some((rule) => rule.includes("openspec/changes/archive/**")));
 });
 
+test("settingsFor denies every tree that holds nothing the re-read may write", () => {
+  const { root } = sandbox();
+
+  const deny = settingsFor(root, CHANGE).permissions.deny;
+
+  // The trees a round has no business in, denied though no list names them:
+  // each is computed from the checkout for holding no writable path.
+  for (const glob of [
+    "openspec/specs/**",
+    "openspec/schemas/**",
+    "scripts/**",
+    ".claude/**",
+    "docs/governance/**",
+  ]) {
+    assert.ok(deny.includes(`Edit(${glob})`), `missing Edit(${glob})`);
+    assert.ok(deny.includes(`Write(${glob})`), `missing Write(${glob})`);
+  }
+  // `docs/prds/` holds the pages the proposal links, so it is not denied
+  // wholesale: the guard catches a write to a page this change never linked.
+  assert.ok(!deny.some((rule) => rule.includes("docs/prds/**")));
+  assert.ok(!deny.some((rule) => rule.includes("Edit(docs/**)")));
+  assert.ok(!deny.some((rule) => rule.includes("Edit(openspec/**)")));
+});
+
+test("writableBy names the change's own directory and the pages its proposal links", () => {
+  const { root } = sandbox();
+
+  assert.deepEqual(writableBy(root, CHANGE), [`${DIR}/`, PAGE]);
+});
+
 // ── The guard ────────────────────────────────────────────────────────────
 
-test("outOfBounds keeps only what falls outside the change's own directory", () => {
+test("outOfBounds keeps only what falls outside the writable set", () => {
   assert.deepEqual(
     outOfBounds(
-      [`${DIR}/decisions.md`, `${DIR}/specs/x/spec.md`, "packages/ui/src/x.ts"],
-      CHANGE,
+      [
+        `${DIR}/decisions.md`,
+        `${DIR}/specs/x/spec.md`,
+        PAGE,
+        UNLINKED,
+        "packages/ui/src/x.ts",
+      ],
+      [`${DIR}/`, PAGE],
     ),
-    ["packages/ui/src/x.ts"],
+    [UNLINKED, "packages/ui/src/x.ts"],
   );
+});
+
+test("the guard passes a page the change's proposal links", () => {
+  const { root, before, write, git } = sandbox();
+  write({ [PAGE]: "# Agent Rounds\n\n## The Walk\n\n❓ Who reads it?\n" });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "mark the page the proposal links");
+  git("push", "--quiet", "origin", "HEAD:refs/heads/main");
+
+  const result = spawnSync(
+    process.execPath,
+    [
+      join(SCRIPTS, "reread-guard.mjs"),
+      CHANGE,
+      "--before",
+      before,
+      "--root",
+      root,
+    ],
+    { encoding: "utf8" },
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test("the guard fails on a page the proposal never linked, and on a script", () => {
+  const { root, before, write, git } = sandbox();
+  write({
+    [UNLINKED]: "# Change Stages\n\nRewritten by the wrong round.\n",
+    "scripts/openspec/plan-land.mjs": "// rewritten\n",
+  });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "reached past the pages it links");
+  git("push", "--quiet", "origin", "HEAD:refs/heads/main");
+
+  const result = spawnSync(
+    process.execPath,
+    [
+      join(SCRIPTS, "reread-guard.mjs"),
+      CHANGE,
+      "--before",
+      before,
+      "--root",
+      root,
+    ],
+    { encoding: "utf8" },
+  );
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /::error::/);
+  assert.match(result.stderr, /change-stages\.md/);
+  assert.match(result.stderr, /scripts\/openspec\/plan-land\.mjs/);
 });
 
 test("the guard passes a push that stays inside the change's directory", () => {
