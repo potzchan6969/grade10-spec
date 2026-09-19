@@ -39,6 +39,9 @@ Read [the eight principles and the reader's
 stance](../../docs/governance/system-design.md) before you write, and name the
 principle each finding rests on.
 
+- **The eight** — determinism, simplicity, clarity, flexibility, modularity,
+  consistency, resilience, observability: the closed set a finding names one
+  of. The governance page holds the test each one is argued by
 - **Conscientious** — name a wrong thing already there and argue for its
   structure to be fixed, not its symptom; one fix per kind of problem,
   wherever that kind shows
