@@ -246,7 +246,10 @@ test("shared-planning-change-stages-SC-50 - the digest reaches nobody with nothi
   );
 });
 
-test("shared-planning-change-stages-SC-49 - the digest leaves an artifact behind six days off the week", () => {
+/** One change whose `decisions.md` is behind, because `proposal.md` — what it
+ * is drawn from — was reworded `daysAgo` days ago. The bound is the point of
+ * the case, so the two rows either side of it read one store each. */
+function behindFor(daysAgo) {
   const { root, write, commit } = sandbox();
   write({
     "openspec/changes/fresh-it/.openspec.yaml": [
@@ -263,14 +266,24 @@ test("shared-planning-change-stages-SC-49 - the digest leaves an artifact behind
   write({
     "openspec/changes/fresh-it/proposal.md": proposalOf("Fresh it", " Again."),
   });
-  commit("reword fresh-it", 6);
+  commit("reword fresh-it", daysAgo);
+  return digest(root).read();
+}
 
-  const { messages } = digest(root).read();
+const behindLines = (read) =>
+  (read.messages[0]?.lines ?? []).filter((one) => one.kind === "behind");
 
+test("shared-planning-change-stages-SC-49 - the digest lists an artifact behind seven days and leaves one behind six off the week", () => {
   assert.deepEqual(
-    (messages[0]?.lines ?? []).filter((one) => one.kind === "behind"),
-    [],
+    behindLines(behindFor(7)).map((one) => [
+      one.change,
+      one.artifact,
+      one.days,
+    ]),
+    [["fresh-it", "decisions", 7]],
   );
+
+  assert.deepEqual(behindLines(behindFor(6)), []);
 });
 
 test("shared-planning-change-stages-SC-49 - a stale reviewed: id is listed once what changed is old enough", () => {
