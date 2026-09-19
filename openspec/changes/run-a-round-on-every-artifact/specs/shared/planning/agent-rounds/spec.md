@@ -616,7 +616,8 @@ set by hand.
 - **A differing id is behind** — an artifact whose recorded content id differs
   from the one computed from what is before it reads as behind
 - **No line at all** — an artifact carrying no `reviewed:` line is dated by the
-  store's commit-date fallback - `shared-planning-change-stages-SC-28`
+  commit-date fallback, and that derivation is `shared/planning/change-stages`'
+  own: this capability states no rule of its own in its place
 - **A rewrap is not a change** — whitespace is collapsed before the hash, so an
   edit that moves only whitespace leaves the content id equal; a reformat that
   changes words puts what comes after it behind
@@ -626,7 +627,7 @@ set by hand.
 
 - **WHEN** an artifact's recorded content id equals the id computed from what is before it on `main`
 - **THEN** the artifact is fresh and nothing after it waits on it
-- **AND** an artifact whose recorded id differs is behind, and one carrying no `reviewed:` line is dated by the commit-date fallback - `shared-planning-change-stages-SC-28`
+- **AND** an artifact whose recorded id differs is behind, and one carrying no `reviewed:` line is dated by `shared/planning/change-stages`' commit-date fallback
 
 #### Scenario: shared-planning-agent-rounds-SC-36 - Whitespace alone changes nothing
 **Serves:** Read again, in order - an upstream file is rewrapped and every artifact after it stays as it was
