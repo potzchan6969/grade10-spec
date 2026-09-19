@@ -47,27 +47,14 @@ else
   fail "$agents_dir is required: the round's challengers and verifier live there"
 fi
 
-# Every reader the planning schema dispatches resolves to one of them. The key
-# is absent until the change that adds it lands, and an absent key is not a
-# failure - an unresolved path is.
-schema="openspec/schemas/grade10-planning/schema.yaml"
-readers=0
-while read -r declaration; do
-  [ -n "$declaration" ] || continue
-  reader="${declaration##*agent:}"
-  reader="$(echo "$reader" | tr -d '[:space:]"'"'")"
-  readers=$((readers + 1))
-  if [ -f "$reader" ]; then
-    pass "the schema's reader $reader resolves"
-  else
-    fail "the schema names the reader $reader, which resolves to nothing"
-  fi
-done < <(grep -oE '^[[:space:]]*agent:[[:space:]]*[^[:space:]]+' "$schema" || true)
-
-if [ "$readers" -eq 0 ]; then
-  echo "[SKIP] $schema declares no perspectives yet"
+# Every reader the planning schema dispatches resolves to one of them, read
+# through the store's own reader of the schema - never a second, grep-based
+# parse that a multi-line block or a YAML anchor could miss.
+if node scripts/agent-platform/check-agent-readers.mjs; then
+  :
+else
+  fail "the planning schema names a reader that resolves to nothing, or none at all"
 fi
-
 
 if [ "$failures" -gt 0 ]; then
   exit 1
