@@ -60,8 +60,8 @@ A fact beside the stage, never a stage of its own. The set is five, and closed.
   [Pending](/pending)
 - 🚧 **Idle** — counted from the last tick, claim or artifact landing, so a
   repository-wide commit moves nobody's count
-- 🚧 **Behind** — shown, told once, and listed in the digest after 7 days;
-  it holds a tick, a claim and a wait never, and the fold at archive always —
+- 🚧 **Behind** — shown, told once, and listed in the digest after 7 days
+  counted from the change's last move; it holds a tick, a claim and a wait never, and the fold at archive always —
   what clears it is [Agent Rounds · Read Again](agent-rounds#read-again)
 - 🚧 **Suite** — shown beside the stage and never holding the ladder
 - **Flag and hotfix** — the release line carries both: a flag on a change and a
@@ -101,16 +101,17 @@ Slack tells one person, once per move, in the change's thread.
 
 | When | Who is told | Carries |
 | --- | --- | --- |
-| A change reaches a hand: a stage lands, or the decisions and the journeys complete Proposed | That hand, by direct message | The change, the stage, the thread to answer in |
-| A change reaches staging | Its QA hand, by direct message | The change, and the run sheet to walk |
+| A change reaches a hand: a stage lands, the decisions and the journeys complete Proposed, or a hand is taken off | That hand, by direct message; the role's channel when the change names nobody for it | The change, the stage, the thread to answer in, the command to paste |
+| A change reaches staging | Its QA hand, by direct message; the release hand by the message above | The change, and the run sheet to walk |
 | An artifact is behind | The hand of the earliest behind artifact | The artifact, and what changed before it |
 | A push lands on `main` | The channel | Each change the push moved, and its stage |
-| Monday morning | Each person, by direct message | On you now; open questions; idle; behind; waiting; freed by a dependency |
+| Monday morning | Each person with a line to read, by direct message | On you now; open questions; idle; behind for 7 days; waiting; freed by a dependency |
 
 - 🚧 **Once per move** — a move is the hand changing; a move told twice, or a
   message per commit, never happens
-- 🚧 **One thread per change** — every message about a change is a reply in
-  its thread, and a reply there is how a hand answers
+- 🚧 **One thread per change** — every direct message links the change's
+  thread, and the change page until the round opens one; a reply in the
+  thread is how a hand answers
 - **The channel post per push** — runs today, listing the changes a push
   touched
 - ❓ **Two fewer messages** — a written wait and a freed dependency are digest
@@ -150,7 +151,7 @@ lane as one waiting on a deploy. The owner's brief is
 | Approval record | Decided | The landing: an artifact reaches `main` on its hand's word, and the change records whose. No approval key beside it. | Engineering |
 | Tech design order | Decided | Before the requirements, from the page, the decisions and the journeys, on every change; owed when the work lands outside this store. | Product, tech PIC |
 | Hands | Decided | Recorded in the change's manifest, one handle per role. | Product |
-| Messages | Decided | One direct message per move to the hand it reaches, every message a reply in the change's thread, the channel post per push kept, a weekly digest; never one per commit. | Product |
+| Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, the channel post per push kept, a weekly digest; never one per commit. | Product |
 | Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold. | Product, Engineering |
 | Suite review | Decided | An overlay beside the stage, so planning never waits on QA's verdict. | Product, QA |
 | Measure | Decided | Days between a stage landing and the next hand's word, shown on the change page. | Product |
