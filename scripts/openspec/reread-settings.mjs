@@ -5,7 +5,10 @@
  * A re-read edits one change's artifacts and the pages its proposal links —
  * `.claude/skills/round/SKILL.md` says so, and `lib/writable.mjs` is that
  * boundary read by this step and by the guard alike — so every tree of the
- * checkout that holds neither is denied. Computed from the checkout rather
+ * checkout that holds neither is denied to `Edit` and `Write`. `Read` is
+ * denied nowhere: a re-read reads the whole store — its skill and readers,
+ * the schema, the durable specs and the governance pages are what it reads
+ * against. Computed from the checkout rather
  * than declared: a tree or a change opened after this file was last touched
  * is denied to every run it does not belong to, with nothing to keep in step.
  *
@@ -36,8 +39,8 @@ export function otherChangeDirectories(root, change) {
 }
 
 /**
- * The rule set one matrix entry runs under: read, write and edit denied on
- * every tree that holds nothing this change may write.
+ * The rule set one matrix entry runs under: write and edit denied on every
+ * tree that holds nothing this change may write, and reading denied nowhere.
  *
  * Two levels deep, because two of the store's trees hold a writable path
  * among many that are nobody's business here: inside `openspec/` everything
@@ -69,11 +72,7 @@ export function settingsFor(root, change) {
   }
   return {
     permissions: {
-      deny: denyPaths.flatMap((path) => [
-        `Read(${path})`,
-        `Edit(${path})`,
-        `Write(${path})`,
-      ]),
+      deny: denyPaths.flatMap((path) => [`Edit(${path})`, `Write(${path})`]),
     },
   };
 }

@@ -158,11 +158,14 @@ test("settingsFor denies the fixed paths and every other change's directory", ()
   const deny = settings.permissions.deny;
 
   for (const glob of [".github/**", "packages/**", "tools/**"]) {
-    assert.ok(deny.includes(`Read(${glob})`), `missing Read(${glob})`);
     assert.ok(deny.includes(`Edit(${glob})`), `missing Edit(${glob})`);
+    assert.ok(deny.includes(`Write(${glob})`), `missing Write(${glob})`);
   }
-  assert.ok(deny.includes(`Read(openspec/changes/${OTHER}/**)`));
+  assert.ok(deny.includes(`Edit(openspec/changes/${OTHER}/**)`));
   assert.ok(deny.includes(`Write(openspec/changes/${OTHER}/**)`));
+  // Reading is denied nowhere: the skill, the readers, the schema and the
+  // durable specs are what a re-read reads against.
+  assert.ok(!deny.some((rule) => rule.startsWith("Read(")));
   // Never its own directory, and never the archive as though it were a
   // change with a directory of its own.
   assert.ok(!deny.some((rule) => rule.includes(`openspec/changes/${CHANGE}/`)));
