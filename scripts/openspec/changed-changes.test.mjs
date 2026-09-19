@@ -207,6 +207,22 @@ test("builds one Slack section for each changed status", () => {
   assert.match(payload.blocks.at(-1).elements[0].text, /1234567/);
 });
 
+test("names the commit sha in plain text when no --commit-url was given", () => {
+  const payload = slackPayload({
+    changes: { new: [], updated: [], archived: [], removed: [] },
+    commitSha: "1234567890",
+    commitUrl: "",
+    manualUrl: "https://spec.grade10-stg.com/planning",
+  });
+
+  const text = payload.blocks.at(-1).elements[0].text;
+  assert.equal(
+    text,
+    "<https://spec.grade10-stg.com/planning|Planning> | 1234567",
+  );
+  assert.doesNotMatch(text, /<\|/);
+});
+
 test("includes durable capability links in the Slack payload", () => {
   const payload = slackPayload({
     changes: { new: [], updated: [], archived: [], removed: [] },
