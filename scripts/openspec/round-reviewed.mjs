@@ -25,6 +25,7 @@
  */
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "./lib/args.mjs";
 import { openRecord, saveRecord, setEntry } from "./lib/record.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
 
@@ -32,7 +33,10 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const USAGE =
   "usage: pnpm run round:reviewed <change> [artifact…] [--root <dir>]";
 
-const { positional, flags } = parse(process.argv.slice(2));
+const { positional, flags } = parseArgs(process.argv.slice(2), {
+  keys: ["root"],
+  usage: USAGE,
+});
 const root = flags.root ?? join(HERE, "..", "..");
 const [change, ...named] = positional;
 if (!change) fail(USAGE);
@@ -80,34 +84,10 @@ for (const id of skipped) {
 if (written.length === 0) {
   console.log("  nothing written");
 } else {
-  console.log(`\n${record.path} is written. Commit it with the round's reply.`);
-}
-
-/** `<change> [artifact…]` with `--root <dir>`; `--help` prints the usage. */
-function parse(argv) {
-  const flags = {};
-  const positional = [];
-  for (let at = 0; at < argv.length; at += 1) {
-    const arg = argv[at];
-    if (arg === "--help" || arg === "-h") {
-      console.log(USAGE);
-      process.exit(0);
-    }
-    const named = /^--(root)(?:=(.*))?$/.exec(arg);
-    if (named) {
-      let value = named[2];
-      if (value === undefined) {
-        at += 1;
-        value = argv[at];
-      }
-      if (value === undefined) fail(`--${named[1]} needs a value\n${USAGE}`);
-      flags[named[1]] = value;
-      continue;
-    }
-    if (arg.startsWith("-")) fail(`unknown option ${arg}\n${USAGE}`);
-    positional.push(arg);
-  }
-  return { positional, flags };
+  const example = written[0].id;
+  console.log(
+    `\n${record.path} is written. Commit it, then \`pnpm run plan:land ${change} ${example} --reviewed\` lands it${written.length > 1 ? ` (repeat per artifact)` : ""}.`,
+  );
 }
 
 function fail(message) {

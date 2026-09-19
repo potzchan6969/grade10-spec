@@ -21,6 +21,7 @@
 import { existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "./lib/args.mjs";
 import {
   openRecord,
   saveRecord,
@@ -36,7 +37,10 @@ const USAGE =
  * is built: `C…` and the message's timestamp. */
 const ADDRESS = /^C[A-Z0-9]+\/\d+\.\d+$/;
 
-const { positional, flags } = parse(process.argv.slice(2));
+const { positional, flags } = parseArgs(process.argv.slice(2), {
+  keys: ["root"],
+  usage: USAGE,
+});
 const root = flags.root ?? join(HERE, "..", "..");
 const [change, address] = positional;
 if (!change || !address) fail(USAGE);
@@ -62,33 +66,6 @@ if (held !== undefined) {
 setValue(record.doc, "thread", address);
 saveRecord(record);
 console.log(`${record.path}: thread: ${address}`);
-
-/** `<change> <channel>/<ts>` with `--root <dir>`. */
-function parse(argv) {
-  const flags = {};
-  const positional = [];
-  for (let at = 0; at < argv.length; at += 1) {
-    const arg = argv[at];
-    if (arg === "--help" || arg === "-h") {
-      console.log(USAGE);
-      process.exit(0);
-    }
-    const named = /^--(root)(?:=(.*))?$/.exec(arg);
-    if (named) {
-      let value = named[2];
-      if (value === undefined) {
-        at += 1;
-        value = argv[at];
-      }
-      if (value === undefined) fail(`--${named[1]} needs a value\n${USAGE}`);
-      flags[named[1]] = value;
-      continue;
-    }
-    if (arg.startsWith("-")) fail(`unknown option ${arg}\n${USAGE}`);
-    positional.push(arg);
-  }
-  return { positional, flags };
-}
 
 function fail(message) {
   console.error(message);

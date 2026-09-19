@@ -1,12 +1,13 @@
 /**
  * A change's `.openspec.yaml`, edited a line at a time.
  *
- * The round writes three keys into it — `reviewed:`, `landed_by:` and
- * `thread:` — and a person wrote everything else that is in there: the schema,
- * the hands, the waivers, the comments above them. So the file is round-tripped
- * through the `yaml` package's document API rather than parsed and re-emitted:
- * `parseDocument` keeps every other line, its comments and its order, and a
- * write touches the one key it names.
+ * The round writes into it — `reviewed:` at a re-read, `landed_by:` at an
+ * artifact's landing (never a task group's, whose plan the tick alone
+ * proves), and `thread:` once — and a person wrote everything else that is in
+ * there: the schema, the hands, the waivers, the comments above them. So the
+ * file is round-tripped through the `yaml` package's document API rather than
+ * parsed and re-emitted: `parseDocument` keeps every other line, its comments
+ * and its order, and a write touches the one key it names.
  *
  * `tools/manual/src/store/read-changes.mts` is the reader of this file and
  * stays the only one — nothing here reads a key back to judge it, and a

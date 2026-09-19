@@ -1,10 +1,10 @@
 /**
  * `rounds.md`, appended one row at a time.
  *
- * The round writes its row and the landing commits it, so two scripts write
- * this file — `round:row` on its own and `plan:land` inside the landing
- * commit. Both append through here, and both count the round's number by
- * reading the rows already there with the store's own reader
+ * `plan-land.mjs` is the only writer: the landing commits the round's row in
+ * the same commit as `landed_by:`, so the row and the line that proves it
+ * land together or not at all. It counts the round's number by reading the
+ * rows already there with the store's own reader
  * (`tools/manual/src/store/read-rounds.mts`): a second parser would number a
  * round differently from the surface that shows it.
  *

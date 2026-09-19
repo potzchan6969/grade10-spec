@@ -24,7 +24,12 @@ export function git(root, args) {
  * Main's ref and the commit it points at, or null for a clone with no main.
  * Fetched first unless `fetch` is false, since a claim made a minute ago is
  * otherwise invisible. Best-effort — offline is not an error. PLAN_NO_FETCH=1
- * skips it.
+ * skips it, for the preflights that read plan state and spare themselves a
+ * network call.
+ *
+ * `fetch: "always"` ignores `PLAN_NO_FETCH`: a landing is not a landing on a
+ * `main` it did not read, so `plan-land.mjs` passes this rather than the
+ * plain `true` every preflight does.
  */
 export function storeMain(root, { fetch = true } = {}) {
   const ref =
@@ -32,7 +37,10 @@ export function storeMain(root, { fetch = true } = {}) {
       /^refs\/remotes\//,
       "",
     ) ?? "origin/main";
-  if (fetch && process.env.PLAN_NO_FETCH !== "1")
+  const skip =
+    fetch === false ||
+    (fetch !== "always" && process.env.PLAN_NO_FETCH === "1");
+  if (!skip)
     git(root, [
       "fetch",
       "--quiet",
