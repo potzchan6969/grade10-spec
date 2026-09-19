@@ -35,8 +35,10 @@
  *              row is the same rule the gate runs, so the row has to be there
  *              for the gate to pass rather than land after it. A refusal at
  *              the gate undoes exactly these two paths. `--reviewed` writes
- *              neither: the `reviewed:` line it lands is already on the
- *              branch, committed by whoever ran `round:reviewed`
+ *              `reviewed: <artifact>: <content id>` here instead, one
+ *              artifact per call, and neither a row nor a `landed_by:` line:
+ *              a read that changed nothing ran no perspective and waits on
+ *              nobody's word (`Q42`)
  *   6 gate     `validate:changes --strict`, `check:manual`, `tcs:validate`,
  *              run in this process against this store rather than spawned
  *              against a nonexistent copy of themselves in it
@@ -74,6 +76,7 @@ import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { isGroup } from "./lib/perspectives.mjs";
 import { openRecord, saveRecord, setEntry } from "./lib/record.mjs";
+import { readAgainst } from "./lib/reviewed.mjs";
 import { appendRoundRow, listCell, roundsPath } from "./lib/rounds.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
 import { handleOfEmail, readTeamMap, TEAM_MAP } from "./lib/team.mjs";
@@ -193,14 +196,14 @@ if (role === undefined) {
   );
 }
 
+// The line a read that changed nothing lands, read before anything is
+// written: an artifact drawn from nothing, waived, or not written yet has no
+// line to write, and each says which it is rather than landing clean and
+// reporting a read that never happened as one that did.
+let against;
 if (reviewedOnly) {
-  // The `reviewed:` line it lands is already on the branch, committed by
-  // whoever ran `round:reviewed` — with none there at all, there is no read
-  // to land, and running clean anyway would report a re-read that never
-  // happened as one that did.
-  if (read.entry.reviewed?.[artifact] === undefined) {
-    fail("nothing to land: round:reviewed writes the line first");
-  }
+  against = readAgainst(read.entry, artifacts, artifact);
+  if (against.refusal) fail(against.refusal);
   say(
     "hand",
     "a read that changes nothing is the change's agent to land — no hand's word is asked",
@@ -247,19 +250,28 @@ say("behind", `nothing before ${target} is behind`);
 // step writes — never the other way around. Writing after the gate would
 // deadlock every group whose tick already reached `main` with no row: the
 // gate refuses the tick with no row, and the landing that would write the row
-// never reaches the write that clears it. A refusal below undoes exactly
-// these two paths, through `fail`, and leaves nothing else behind.
+// never reaches the write that clears it. A refusal below undoes exactly what
+// this step wrote, through `fail`, and leaves nothing else behind.
+//
+// `--reviewed` writes one line and no row: the read ran no perspective, so
+// there is no round to record and no hand's word to record it against.
+const cells = reviewedOnly ? undefined : rowOf();
 let pending;
-if (!reviewedOnly && !dryRun) {
-  const cells = rowOf();
+if (!dryRun) {
   const record = openRecord(root, change);
-  // Never for a task group: its plan is proven by the tick, not by a hand's
-  // line, and the group names no schema artifact to write one against.
-  if (artifact !== undefined)
-    setEntry(record.doc, "landed_by", artifact, handle);
-  saveRecord(record);
-  const { row, round, created } = appendRoundRow(root, change, cells);
-  pending = { record, row, round, roundsCreated: created };
+  if (reviewedOnly) {
+    setEntry(record.doc, "reviewed", artifact, against.content);
+    saveRecord(record);
+    pending = { record };
+  } else {
+    // Never for a task group: its plan is proven by the tick, not by a hand's
+    // line, and the group names no schema artifact to write one against.
+    if (artifact !== undefined)
+      setEntry(record.doc, "landed_by", artifact, handle);
+    saveRecord(record);
+    const { row, round, created } = appendRoundRow(root, change, cells);
+    pending = { record, row, round, roundsCreated: created };
+  }
   restoreOnFail = () => restorePending(pending);
 }
 
@@ -277,18 +289,28 @@ if (dryRun) {
 restoreOnFail = undefined;
 
 // ── 7 commit ────────────────────────────────────────────────────────────────
-if (reviewedOnly) {
+if (dryRun) {
   say(
     "commit",
-    `nothing to commit — ${target}'s reviewed: line is already on ${branch}`,
+    reviewedOnly
+      ? `would write reviewed: ${artifact}: ${against.content} and no row`
+      : artifact === undefined
+        ? `would write one ${roundsPath(change)} row for group ${target}`
+        : `would write landed_by: ${artifact}: ${handle} and one ${roundsPath(change)} row`,
   );
-} else if (dryRun) {
-  say(
+  if (reviewedOnly)
+    console.log(`           read against ${against.items.join(", ")}`);
+} else if (reviewedOnly) {
+  const { record } = pending;
+  gitOrDie(["add", "--", record.path]);
+  gitOrDie([
     "commit",
-    artifact === undefined
-      ? `would write one ${roundsPath(change)} row for group ${target}`
-      : `would write landed_by: ${artifact}: ${handle} and one ${roundsPath(change)} row`,
-  );
+    "--quiet",
+    "-m",
+    `chore(openspec): ${target} of ${change} read again, nothing changed`,
+  ]);
+  say("commit", `reviewed: ${artifact}: ${against.content}, and no row`);
+  console.log(`           read against ${against.items.join(", ")}`);
 } else {
   const { record, row, round } = pending;
   gitOrDie(["add", "--", record.path, roundsPath(change)]);
@@ -539,13 +561,15 @@ function runTcsValidate() {
 /** What step 5 wrote to the tree, undone: the record back to what `main`
  * holds, and the round's row either back to it too or, where the row's own
  * file did not exist yet, removed outright rather than left as an untracked
- * file the next run's own clean check would have to explain. */
-function restorePending({ record, roundsCreated }) {
+ * file the next run's own clean check would have to explain. A `--reviewed`
+ * landing wrote the record alone, so there is no row to undo. */
+function restorePending({ record, row, roundsCreated }) {
   const path = roundsPath(change);
   const ran = spawnSync("git", ["checkout", "--", record.path], {
     cwd: root,
     stdio: "ignore",
   });
+  if (row === undefined) return;
   if (ran.status === 0 && roundsCreated) {
     rmSync(join(root, path), { force: true });
   } else if (ran.status === 0) {
