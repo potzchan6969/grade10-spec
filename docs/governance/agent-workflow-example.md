@@ -72,8 +72,9 @@ Creating the directory by hand records nothing at all.
 openspec instructions proposal --change account-setting-page
 ```
 
-`/planning-pm` in `grade10` runs this for you and reads the store's own copy of
-the lane instructions. What the agent reads first is `/planning-pm`'s — facts are the agent's job, decisions are yours.
+`/plan` in `grade10` runs this for you, following `planning-pm`'s rules and
+reading the store's own copy of the lane instructions. What the agent reads
+first is `planning-pm`'s — facts are the agent's job, decisions are yours.
 
 **3. Expect to be interviewed, and challenged.** The rules require the
 `grilling` skill, which lives in the store clone at
@@ -88,7 +89,8 @@ named buys, and what it leaves out. Holding your answer is fine - the row says
 beside it carrying its `## Purpose` and `## Feature set` — after the PRD carries
 a 🚧 line per outcome and the proposal links that section; `pnpm check:manual`
 refuses a change with neither the mark nor `page_waived`. The requirements and
-`feature-tcs.md` come from `/planning-qa`, which reads that outline twice over.
+`feature-tcs.md` come from `/specify`, following `planning-qa`'s rules, which
+reads that outline twice over.
 
 **5. Check and push.**
 
@@ -116,9 +118,11 @@ That state is the handoff signal, and it is indistinguishable from a plan the PM
 openspec status --change account-setting-page   # lists what is still to write
 ```
 
-Then `tech-design.md` and `tasks.md` as `/planning-dev` says, with
+Then `tech-design.md` and `tasks.md` with `/tech` and `/tasks`, following
+`planning-dev`'s rules, with
 `openspec instructions <artifact> --change account-setting-page` before each; a
-designer adds `ui-design.md` with `/planning-design`. Validate, then land it on `main` with `/spec-push`: a group can be claimed only once its `tasks.md` is there.
+designer adds `ui-design.md` with `/design`, following `planning-design`'s
+rules. Validate, then land it on `main` with `/spec-push`: a group can be claimed only once its `tasks.md` is there.
 
 **8. Claim and build.**
 
