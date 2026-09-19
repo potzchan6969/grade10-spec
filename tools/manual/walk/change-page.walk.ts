@@ -37,29 +37,24 @@ test("shared-planning-change-stages-SC-05 - the stepper's mark and move, and the
     .element(page.elementLocator(eyebrow).getByText("Planned", { exact: true }))
     .toBeVisible();
 
-  // The stepper step this change is in: the agent's mark for Planned, and
-  // the engineer's move — scoped to the one step, because Specified's own
-  // step carries the same word "read".
-  const steps = document.querySelector('[data-stepper="steps"]');
-  const plannedStep = steps?.querySelector('[data-stage="planned"]');
-  if (!plannedStep) throw new Error("no Planned step in the desktop stepper");
-  const step = page.elementLocator(plannedStep);
+  // The stepper, as this walk's own viewport (414px, below `sm`) reads it:
+  // the one line the design draws for a phone's width rather than the
+  // eight-step desktop row, which sits in the DOM but stays hidden here —
+  // the stage's position of eight, its name, and the mark and the move
+  // beneath it.
+  const oneLine = document.querySelector('[data-stepper="one-line"]');
+  if (!oneLine) throw new Error("no one-line stepper below sm");
+  const stepper = page.elementLocator(oneLine);
 
   await expect
-    .element(step.getByText("Planned", { exact: true }))
+    .element(stepper.getByText("Step 4 of 8 · Planned", { exact: true }))
     .toBeVisible();
-  await expect.element(step.getByText("agent drafts the plan")).toBeVisible();
-  await expect.element(step.getByText("read", { exact: true })).toBeVisible();
-
-  // On staging, Released and Archived are drafted by nobody, so no step past
-  // Building carries the mark.
-  for (const stage of ["on-staging", "released", "archived"]) {
-    const other = steps?.querySelector(`[data-stage="${stage}"]`);
-    if (!other) throw new Error(`no ${stage} step in the desktop stepper`);
-    await expect
-      .element(page.elementLocator(other).getByText("agent drafts"))
-      .not.toBeInTheDocument();
-  }
+  await expect
+    .element(stepper.getByText("agent drafts the plan"))
+    .toBeVisible();
+  await expect
+    .element(stepper.getByText("read", { exact: true }))
+    .toBeVisible();
 });
 
 test("shared-planning-change-stages-SC-57 - the Your turn card", async () => {
@@ -104,6 +99,27 @@ test("shared-planning-change-stages-SC-57 - the Your turn card", async () => {
     .toBeVisible();
 });
 
+/**
+ * Left failing on purpose: the surface, not this walk, is wrong here.
+ *
+ * The change page's own requirement reads "the hands, one row per role with
+ * its handle or open" (`openspec/changes/stage-changes-and-notify-hands/specs/shared/planning/change-stages/spec.md`,
+ * "The change page shows the stage, the turn and the artifacts") with no
+ * exception for a change naming nobody, and `shared-planning-change-stages-SC-17`
+ * ("A hand nobody has named") reads the same way for one role: "the hands
+ * SHALL show that role as open". `demo-planned` is exactly that case — its
+ * `hands:` names no role at all — so this is the fixture the scenario asks
+ * for.
+ *
+ * `HandsTable` (`tools/manual/src/blocks/hands-table.tsx`) disagrees: it
+ * special-cases an empty `hands` object into one `EmptyState` reading "No
+ * hands named", skipping the six-role list entirely — which contradicts its
+ * own docstring ("Every role is a row whether or not the change names it").
+ * No other fixture pairs a named hand with an open one, so there is no
+ * fixture that reaches the six-row table without tripping this branch. The
+ * fix is in `hands-table.tsx`, outside this task's `src/**` boundary; this
+ * case is left asserting what the spec requires; it fails today.
+ */
 test("shared-planning-change-stages-SC-58 - the hands table with an open role", async () => {
   await openManual("/in-flight/demo-planned");
   await expect
