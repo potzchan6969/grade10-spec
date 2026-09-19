@@ -52,3 +52,9 @@ scripts/tokens-sync/figma-plugins/build/
 # A round's own workspace: the diff it read, the thread reply it wrote. Never
 # the change's own files, which live under openspec/changes/ and are tracked.
 /.round/
+
+# A walk's own failure captures: a screenshot per case, written fresh on
+# every `test:walk` run and never read back by anything this repository
+# tracks.
+tools/manual/walk/__screenshots__/
+tools/manual/.vitest-attachments/
