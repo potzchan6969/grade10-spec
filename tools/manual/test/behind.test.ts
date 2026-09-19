@@ -481,3 +481,50 @@ describe("over a real history", () => {
     expect(behindOf(after, artifacts(root))).toEqual([]);
   });
 });
+
+describe("behind holds no tick, claim or wait", () => {
+  // shared-planning-change-stages-SC-30: a hand keeps working while the
+  // artifact waits to be read again — nothing here reads `behindOf` before
+  // reading a task list's ticks and claims or the record's own waits.
+  const TASKS = [
+    "## 1. Contracts (grade10-spec) (owner: @tester)",
+    "",
+    "- [x] 1.1 Ship it",
+    "- [ ] 1.2 Ship the rest",
+    "",
+  ].join("\n");
+
+  it("still ticks, claims and waits while the requirements are behind", () => {
+    const files = filesOf("awaiting:\n  tech-design: waiting on the vendor\n");
+    files[`${CHANGE}/tasks.md`] = TASKS;
+    const root = writeStore(files);
+    const entry = read(
+      root,
+      dating({
+        [`${CHANGE}/proposal.md`]: "2026-09-01T00:00:00Z",
+        [`${CHANGE}/decisions.md`]: "2026-09-10T00:00:00Z",
+        [UI_FILE]: "2026-09-03T00:00:00Z",
+        [SPEC_FILE]: "2026-09-04T00:00:00Z",
+      }),
+      pageOf(RULES, "2026-09-05"),
+    );
+
+    // The tick and the claim.
+    expect(entry.taskGroups[0]).toMatchObject({
+      owner: "tester",
+      done: 1,
+      total: 2,
+    });
+    expect(entry.owners).toContain("tester");
+    // The wait.
+    expect(entry.awaiting).toEqual([
+      { artifact: "tech-design", why: "waiting on the vendor" },
+    ]);
+    // The change is still behind: the decisions are newer than what is
+    // drawn from them.
+    expect(behindOf(entry, artifacts(root))).toEqual([
+      { artifact: "ui-design", changed: ["decisions"] },
+      { artifact: "specs", changed: ["decisions"] },
+    ]);
+  });
+});

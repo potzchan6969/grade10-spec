@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
 import {
   copyFileSync,
+  cpSync,
   mkdirSync,
   mkdtempSync,
   readFileSync,
@@ -11,22 +12,46 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { contentIdOf } from "../../tools/manual/src/store/content-id.mts";
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
+const MANUAL_SRC = join(SCRIPTS, "..", "..", "tools", "manual", "src");
+// The one runtime dependency the store's reader carries. Resolved from this
+// test's own location rather than assumed at a fixed path, since a pnpm
+// workspace may hoist it to the repository root or leave it under
+// `tools/manual/node_modules` depending on how it was installed.
+const YAML_PKG = dirname(
+  fileURLToPath(import.meta.resolve("yaml/package.json")),
+);
 const CHANGE = "build-alpha";
 
 /** The script roots itself on its own location, so a throwaway store carries a
  * throwaway copy of it, committed with `origin/main` at that commit. `files`
  * are written under the change, `durable` under `openspec/specs`; both take
  * `a/b/c.md` keys. Returns the copy to run, the manifest it writes, the
- * change's `tasks.md`, and git in the store. */
-function sandbox(files, durable = {}) {
+ * change's `tasks.md`, and git in the store.
+ *
+ * `tools/manual/src` is copied in whole beside the two scripts: the BEHIND
+ * gate imports the store's one change reader from its real path, the same
+ * way it does inside the real repository, so the throwaway copy needs the
+ * same tree beside it for that import to resolve. `schemas` writes
+ * `openspec/schemas/<id>/schema.yaml`, keyed by id; a change naming a schema
+ * this reads none for is read as owing nothing, the way a store that has not
+ * landed the schema yet is. */
+function sandbox(files, durable = {}, schemas = {}) {
   const root = mkdtempSync(join(tmpdir(), "archive-preflight-"));
   const scripts = join(root, "scripts", "openspec");
   mkdirSync(scripts, { recursive: true });
   for (const name of ["archive-preflight.mjs", "store-main.mjs"]) {
     copyFileSync(join(SCRIPTS, name), join(scripts, name));
   }
+  // The store's change reader imports the team map's handle helper by this
+  // same relative path, so the throwaway copy needs it alongside.
+  cpSync(join(SCRIPTS, "lib"), join(scripts, "lib"), { recursive: true });
+  cpSync(MANUAL_SRC, join(root, "tools", "manual", "src"), {
+    recursive: true,
+  });
+  cpSync(YAML_PKG, join(root, "node_modules", "yaml"), { recursive: true });
   const dir = join(root, "openspec", "changes", CHANGE);
   mkdirSync(dir, { recursive: true });
   const write = (base, tree) => {
@@ -38,6 +63,9 @@ function sandbox(files, durable = {}) {
   };
   write(dir, files);
   write(join(root, "openspec", "specs"), durable);
+  for (const [id, yaml] of Object.entries(schemas)) {
+    write(join(root, "openspec", "schemas"), { [`${id}/schema.yaml`]: yaml });
+  }
 
   const git = (...args) =>
     execFileSync(
@@ -138,6 +166,91 @@ test("a clear run writes the record quoted, over the waiver it replaces", () => 
     readFileSync(manifest, "utf8"),
     'schema: grade10-planning\ndeployed_at: "0f1e2d3"\ndeployed_env: "production"\n',
   );
+});
+
+// ── The behind gate ──────────────────────────────────────────────────────────
+// shared-planning-change-stages-SC-31: the archive refuses a behind delta and
+// names what changed before it, the same `behindOf` comparison `check:manual`
+// and the manual read. `reviewed:` is set to a content id, so the case needs
+// no commit dates at all - a mismatch is enough to say the artifact moved.
+const BEHIND_SCHEMA = [
+  "name: demo-planning",
+  "version: 1",
+  "artifacts:",
+  "  - id: proposal",
+  "    required: true",
+  "    generates: proposal.md",
+  "    requires: []",
+  "    upstream: []",
+  "  - id: specs",
+  "    required: true",
+  "    generates: specs/**/spec.md",
+  "    requires:",
+  "      - proposal",
+  "    upstream:",
+  "      - proposal",
+  "",
+].join("\n");
+const BEHIND_TASKS = "## 1. Store checks (grade10-spec)\n\n- [x] 1.1 Ship it\n";
+const BEHIND_DELTA = [
+  "## ADDED Requirements",
+  "",
+  "### Requirement: A lane names its stage",
+  "",
+  "#### Scenario: It names it",
+  "",
+  "- **WHEN** read",
+  "- **THEN** it names it",
+  "",
+].join("\n");
+const FRESH_SPECS_ID = contentIdOf([PROPOSAL["proposal.md"]]);
+
+function behindSandbox(reviewed) {
+  return sandbox(
+    {
+      ...PROPOSAL,
+      ".openspec.yaml": `schema: demo-planning\n${reviewed}`,
+      "tasks.md": BEHIND_TASKS,
+      "specs/demo/alpha/spec.md": BEHIND_DELTA,
+    },
+    {},
+    { "demo-planning": BEHIND_SCHEMA },
+  );
+}
+
+test("refuses a delta behind what it was drawn from, naming it", () => {
+  const result = run(behindSandbox("reviewed:\n  specs: deadbeef\n").script);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /archives with 1 artifact\(s\) behind/);
+  assert.match(result.stderr, /specs — read again against proposal/);
+});
+
+test("is clear where the read record matches the tree", () => {
+  const result = run(
+    behindSandbox(`reviewed:\n  specs: ${FRESH_SPECS_ID}\n`).script,
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test("skips the freshness read on a shallow clone rather than refusing on its account", () => {
+  const source = behindSandbox("reviewed:\n  specs: deadbeef\n").root;
+  const shallow = mkdtempSync(join(tmpdir(), "archive-preflight-shallow-"));
+  // `--depth` is silently ignored on a local-path clone; `file://` is what
+  // makes git actually write `.git/shallow` rather than a full copy.
+  execFileSync(
+    "git",
+    ["clone", "--quiet", "--depth", "1", `file://${source}`, shallow],
+    { stdio: "ignore" },
+  );
+  const result = run(
+    join(shallow, "scripts", "openspec", "archive-preflight.mjs"),
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /Freshness not checked/);
+  assert.match(result.stdout, /shallow clone/);
 });
 
 // ── The carry gate ──────────────────────────────────────────────────────────
