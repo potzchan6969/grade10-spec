@@ -177,22 +177,26 @@ the plan carries no task for them.
 
 ## How You Know It Is Your Turn
 
-Nobody sends a message. The files themselves are the signal.
+The change carries its own stage, one of eight, and the stage names the hand.
+Paste the command below in the change's thread when it names you — how each
+artifact gets written from there is [Agent Rounds](/p/shared/planning/agent-rounds).
 
-| What you see | What it means | Whose turn |
-| --- | --- | --- |
-| `proposal.md` alone | A reason, no requirements yet | PM |
-| `proposal.md`, no `decisions.md` | The interview is unrecorded — write it, or `decisions_waived: <why>` on a change older than the file | PM |
-| Deltas, no `user-journeys.md` | The stories are owed — a capability nobody walks says `**Walked by:** nobody` in the file, so a missing one is never the exemption | PM |
-| Deltas, and no 🚧 line under a section the proposal links | The PRD is unmarked — mark it, or record `page_waived: <why>` in `.openspec.yaml` | PM |
-| Journeys, no `spec.md`, and `awaiting: specs:` | The PM has handed over; the outline and both readings are owed | QA |
-| An outline, no `feature-tcs.md` | The blind pass is owed, and it comes before the scenarios | QA |
-| A suite of `draft` cases | Review, in its own pull request | QA |
-| A user-facing change, no `ui-design.md` | Screens unmapped | Designer |
-| No `tasks.md` | Still being planned — the only handover signal there is | Engineer |
-| Every box ticked | Waiting on a deploy, then the archive | Whoever owns it |
+| # | Stage | Hand | Say |
+| --- | --- | --- | --- |
+| 1 | Proposed | Product manager | `/plan <id>` |
+| 2 | Designed | Designer · Tech PIC | `/design <id>` · `/tech <id>` |
+| 3 | Specified | Product manager | `/specify <id>` |
+| 4 | Planned | Engineer | `/tasks <id>` |
+| 5 | Building | Engineer | `/build <id> <group>` |
+| 6 | On staging | QA · Release hand | walks it · cuts it |
+| 7 | Released | Release hand | — |
+| 8 | Archived | Whoever archives | — |
 
-Ask the agent where a change stands to read this for one of them; [In Flight](/in-flight) shows it for all of them.
+- **On staging, Released and Archived have no command** — the deploy, the cut
+  and the fold happen outside the agent
+- **What proves each stage** — [Change Stages](/p/shared/planning/change-stages)
+
+Ask the agent where a change stands to read this for one; [In Flight](/in-flight) shows it for all of them.
 
 ## The Ids Inside the Change
 
