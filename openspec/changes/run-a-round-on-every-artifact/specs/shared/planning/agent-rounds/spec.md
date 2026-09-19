@@ -201,7 +201,7 @@ touches, and no key SHALL declare or waive them.
 
 - **The simpler thing, always** — the `always` reader runs on every round and
   is the floor when a round has one reader
-- **One reader verifies itself** — a round that dispatched one challenger
+- **One reader verifies itself** — a round that dispatched one reader in all
   dispatches no verifier, and that reader argues its own findings
 - **No waiver** — a round's size is computed from the draft alone; a record key
   neither adds a reader nor removes one, and a size somebody believes is wrong
@@ -213,7 +213,7 @@ touches, and no key SHALL declare or waive them.
 - **WHEN** a draft's diff touches a page's words and nothing else
 - **THEN** the reader for words and the `always` reader are dispatched
 - **AND** no other perspective is dispatched
-- **AND** no verifier is dispatched, and each reader argues its own findings
+- **AND** one verifier reads the two readers' findings together
 
 #### Scenario: shared-planning-agent-rounds-SC-09 - A draft that names an export summons its readers
 **Serves:** The round - a draft is measured by what it changed, not by who wrote it

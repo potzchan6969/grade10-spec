@@ -203,13 +203,17 @@ export function readersFor(schema, target, triggers) {
   return [...readers.values()];
 }
 
-/** Whether a verifier reads this round's findings. A round that summoned one
- * challenger dispatches none: that reader argues its own findings, and the
- * `always` floor is the floor rather than a second reading to reconcile. */
+/**
+ * Whether a verifier reads this round's findings.
+ *
+ * Every dispatched reader counts, the `always` floor included: a verifier
+ * exists to reconcile two readings of one draft, and two readings are two
+ * readings however each was summoned. A round that dispatched one reader in
+ * all dispatches none — that reader argues its own findings, and there is
+ * nothing to reconcile it against.
+ */
 export function verifierNeeded(readers) {
-  return (
-    readers.filter(({ summonedBy = [] }) => summonedBy.length > 0).length > 1
-  );
+  return readers.length > 1;
 }
 
 /** The perspectives recorded for one artifact, or for a task group. */

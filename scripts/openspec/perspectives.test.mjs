@@ -135,9 +135,9 @@ test("SC-08: a words-only draft reaches the reader of the words and the floor", 
   assert.deepEqual([...triggers].sort(), ["copy"]);
   const readers = readersFor(schema, "ui-design", triggers);
   assert.deepEqual(names(readers), ["reader", "simpler"]);
-  // The `always` floor argues its own findings: one perspective was summoned,
-  // so no verifier reads it.
-  assert.equal(verifierNeeded(readers), false);
+  // Two readers read this draft - the words reader the diff summoned and the
+  // `always` floor - so one verifier reconciles them.
+  assert.equal(verifierNeeded(readers), true);
 });
 
 test("SC-09: an export and a migration group summon their readers and a verifier", () => {
@@ -352,6 +352,17 @@ test("an empty diff leaves the floor and nothing else", () => {
   );
 
   assert.deepEqual(names(readers), ["simpler", "tech"]);
+  // The floor here is two readers, so one verifier reconciles them: a round
+  // is sized by how many read the draft, not by how many the diff summoned.
+  assert.equal(verifierNeeded(readers), true);
+});
+
+test("a round of one reader in all dispatches no verifier", () => {
+  const root = fixture();
+  const schema = planningSchema(root);
+  const readers = readersFor(schema, "ui-design", new Set());
+
+  assert.deepEqual(names(readers), ["simpler"]);
   assert.equal(verifierNeeded(readers), false);
 });
 

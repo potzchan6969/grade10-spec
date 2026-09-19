@@ -85,7 +85,7 @@ record key.
   verifier's verdict
 - **One verifier per group of findings** — dispatch `.claude/agents/verifier.md`
   with that group and the draft
-- **One reader verifies itself** — a round that summoned one challenger
+- **One reader verifies itself** — a round that dispatched one reader in all
   dispatches no verifier: that reader argues its own findings
 - **The requirements are exempt** — for `spec.md` and `feature-tcs.md` the
   challenge is the two independent readings and the verify is their
