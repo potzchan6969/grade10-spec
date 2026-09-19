@@ -1,10 +1,31 @@
-import { expect, test } from "vitest";
+import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import { page } from "vitest/browser";
 import { openManual } from "./setup";
 
-/** The board a hand opens to find their turn. This walk proves the harness
- * carries the manual: the shell mounts, the fixture snapshot arrives, and the
- * board renders under its own heading. The journeys' walks follow it. */
+/**
+ * The board a hand opens to find their turn: `/in-flight`, its eight lanes,
+ * a card's own facts, the four overlay filters and the empty lane a filter
+ * leaves behind.
+ *
+ * The clock is frozen at 2026-09-19 noon, Hong Kong time, before every open:
+ * `demo-on-staging` is the only fixture `fixture-dates.json` dates, at
+ * 2026-09-07, so it is the one change this store can ever show the Idle chip
+ * on. A frozen "now" is what keeps that day count — and the Idle filter's
+ * catch — the same reading on every run and forever; the real clock would
+ * move the chip past 30 days and onto the shelf within the year.
+ */
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-09-19T12:00:00+08:00"));
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
+
+/** This walk proves the harness carries the manual: the shell mounts, the
+ * fixture snapshot arrives, and the board renders under its own heading. The
+ * cases below follow it. */
 test("the In Flight board opens", async () => {
   await openManual("/in-flight");
 
@@ -12,3 +33,233 @@ test("the In Flight board opens", async () => {
     .element(page.getByRole("heading", { level: 1, name: "In Flight" }))
     .toBeVisible();
 });
+
+/** The eight lanes an agent drafts from Proposed to Building, in stage order:
+ * the lane heading names the stage, and the pair the reader meets there — the
+ * agent's mark and the hand's move — is read from the stage alone, so every
+ * change in that stage would carry the same words. On staging, Released and
+ * Archived are a deploy, a cut and a fold: no agent drafts them, so their
+ * headings carry neither. Scoped one lane at a time, because Specified and
+ * Planned both name their hand's move "read" — the word the store reuses for
+ * two different stages — and a page-wide search for it would not say which
+ * lane it came from. */
+test("shared-planning-change-stages-SC-10 - the mark and the move on a lane heading", async () => {
+  await openManual("/in-flight");
+  await expect
+    .element(page.getByRole("heading", { level: 1, name: "In Flight" }))
+    .toBeVisible();
+
+  const drafted: { stage: string; draft: string; move: string }[] = [
+    {
+      stage: "proposed",
+      draft: "the marks and the three files, from what the hand asks",
+      move: "answer",
+    },
+    {
+      stage: "designed",
+      draft: "both designs, from the page and the journeys",
+      move: "tweak · challenge",
+    },
+    {
+      stage: "specified",
+      draft: "two blind readings, reconciled",
+      move: "read",
+    },
+    { stage: "planned", draft: "the plan", move: "read" },
+    {
+      stage: "building",
+      draft: "each group, test first",
+      move: "read each landing",
+    },
+  ];
+
+  for (const { stage, draft, move } of drafted) {
+    const lane = laneSection(stage);
+    await expect
+      .element(page.elementLocator(lane).getByText(`agent drafts ${draft}`))
+      .toBeVisible();
+    await expect
+      .element(page.elementLocator(lane).getByText(move, { exact: true }))
+      .toBeVisible();
+  }
+
+  for (const stage of ["on-staging", "released", "archived"]) {
+    const lane = laneSection(stage);
+    await expect
+      .element(page.elementLocator(lane).getByText("agent drafts"))
+      .not.toBeInTheDocument();
+  }
+});
+
+/** A card's own facts, on the change the Behind fixture carries: the hand
+ * (unnamed, so the role reads as open), the age, the overlay chip naming what
+ * changed, and the task bar every collapsed card leads with. */
+test("shared-planning-change-stages-SC-51 - the lanes and a card", async () => {
+  await openManual("/in-flight");
+
+  for (const label of [
+    "Proposed",
+    "Designed",
+    "Specified",
+    "Planned",
+    "Building",
+    "On staging",
+    "Released",
+    "Archived",
+  ]) {
+    await expect
+      .element(
+        page.getByRole("heading", { level: 2, name: label, exact: true }),
+      )
+      .toBeVisible();
+  }
+
+  const card = page.elementLocator(cardFor("demo-planned"));
+  await expect
+    .element(page.getByRole("heading", { level: 3, name: "The Planned stage" }))
+    .toBeVisible();
+
+  // The hand: nobody is named for the engineer's role, so the card says so
+  // rather than leaving the row blank.
+  await expect
+    .element(card.getByText("engineer", { exact: true }))
+    .toBeVisible();
+  await expect.element(card.getByText("open", { exact: true })).toBeVisible();
+
+  // The age: no commit dates this fixture, so the card falls back to the
+  // date `.openspec.yaml` records it created on.
+  await expect.element(card.getByText(/^created /)).toBeVisible();
+
+  // The overlay: this is the Behind fixture — `decisions.md` moved after it
+  // was reviewed, and the chip names the artifact and what it is read again
+  // against.
+  await expect.element(card.getByText("Behind", { exact: true })).toBeVisible();
+  await expect
+    .element(card.getByText("Decisions", { exact: true }))
+    .toBeVisible();
+  await expect
+    .element(card.getByText("read again against proposal"))
+    .toBeVisible();
+
+  // The task bar: one group, nothing ticked yet.
+  await expect
+    .element(
+      card.getByRole("progressbar", { name: "0 of 2 tasks done" }).first(),
+    )
+    .toBeVisible();
+});
+
+/** A lane the Blocked filter leaves with nothing in it: still its heading,
+ * a count of none, and the role the stage would put a hand on if a change
+ * arrived — said rather than left silent, because a lane with nobody's name
+ * on it is still somebody's to notice. */
+test("shared-planning-change-stages-SC-52 - a lane with nothing in it", async () => {
+  await openManual("/in-flight?filter=blocked");
+
+  await expect
+    .element(
+      page.getByRole("heading", { level: 2, name: "Proposed", exact: true }),
+    )
+    .toBeVisible();
+
+  const lane = page.elementLocator(laneSection("proposed"));
+  await expect.element(lane.getByText("0", { exact: true })).toBeVisible();
+  await expect
+    .element(lane.getByText("open: product manager", { exact: true }))
+    .toBeVisible();
+});
+
+/** The four board filters this walk can reach — Waiting, Idle, Behind and
+ * Blocked — each keeping only the change whose overlay it names. Mine is the
+ * fifth, and needs a handle before it narrows anything; that state is the
+ * next case. */
+test("shared-planning-change-stages-SC-54 - the filters narrow the board", async () => {
+  const titleOf = {
+    waiting: "The Waiting overlay",
+    idle: "The On staging stage",
+    behind: "The Planned stage",
+    blocked: "The Building stage",
+  } as const;
+
+  for (const filter of Object.keys(titleOf) as (keyof typeof titleOf)[]) {
+    await openManual(`/in-flight?filter=${filter}`);
+
+    await expect
+      .element(
+        page.getByRole("heading", {
+          level: 3,
+          name: titleOf[filter],
+          exact: true,
+        }),
+      )
+      .toBeVisible();
+
+    for (const other of Object.values(titleOf)) {
+      if (other === titleOf[filter]) continue;
+      await expect
+        .element(
+          page.getByRole("heading", { level: 3, name: other, exact: true }),
+        )
+        .not.toBeInTheDocument();
+    }
+  }
+});
+
+/** Mine before a handle is chosen: it asks rather than emptying the board —
+ * a filter that showed nothing while asking who the reader is would read as
+ * a board with nothing on it. */
+test("shared-planning-change-stages-SC-55 - Mine with no handle chosen", async () => {
+  localStorage.clear();
+  await openManual("/in-flight?filter=mine");
+
+  await expect
+    .element(
+      page.getByText("Choose a handle to see the changes you are a hand of"),
+    )
+    .toBeVisible();
+  await expect
+    .element(page.getByRole("textbox", { name: "Your handle" }))
+    .toBeVisible();
+
+  // Narrows nothing: two fixtures from two different lanes are both still
+  // on the board.
+  await expect
+    .element(
+      page.getByRole("heading", {
+        level: 3,
+        name: "The Planned stage",
+        exact: true,
+      }),
+    )
+    .toBeVisible();
+  await expect
+    .element(
+      page.getByRole("heading", {
+        level: 3,
+        name: "The Building stage",
+        exact: true,
+      }),
+    )
+    .toBeVisible();
+});
+
+/**
+ * The lane heading's own `<section>`, found from the `<h2 id={stage}>` every
+ * lane — the archived one included — carries. Scoping this way, rather than
+ * a class the stylesheet owns, is what lets one stage's "read" be told apart
+ * from another's on the same page.
+ */
+function laneSection(stage: string): Element {
+  const heading = document.getElementById(stage);
+  const section = heading?.closest("section");
+  if (!section) throw new Error(`no lane section for stage "${stage}"`);
+  return section;
+}
+
+/** One change's card, found from the `id={change.id}` its `<article>`
+ * already carries for deep-linking — the same anchor `/in-flight#<id>` opens. */
+function cardFor(id: string): Element {
+  const card = document.getElementById(id);
+  if (!card) throw new Error(`no card for change "${id}"`);
+  return card;
+}
