@@ -372,7 +372,7 @@
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-02
 
@@ -977,7 +977,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
 
@@ -1008,7 +1008,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
 
@@ -1133,7 +1133,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-05
 
@@ -1806,7 +1806,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
 
@@ -1843,7 +1843,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
 
@@ -1873,7 +1873,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-09
 
@@ -1902,7 +1902,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
 
@@ -1932,7 +1932,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
 
@@ -2037,11 +2037,77 @@ Every journey from `shared-planning-agent-rounds-US-01` to `shared-planning-agen
 
 ### Manual
 
-`US1` to `US7`'s cases stay manual. Each walks a hand's move in the change's Slack thread - a first sentence, a numbered answer, a remark, the word `land` - or the round itself, dispatched and read inside an agent's own session before it posts its summary back. No suite opens a Slack thread or an agent's conversation, so none of these has a walk to drive it.
+What an automated test decides, per case:
 
-* **The thread** - `land`, `read`, a remark, an answer, the first sentence that opens a change - is typed in Slack, never a page a walk opens.
-* **The round's own session** - the readers it runs, the summary it drafts before posting - is inside the agent's own conversation, which no browser reaches.
-* **A hand's message** - the direct message naming a change and its stage, the landing summary the thread carries - is read in Slack, not rendered anywhere a walk can look.
-* **What a check reads from git history** - a `reviewed:` content id against the tree, which artifact's upstream moved and when - is the store's own git-backed unit tests' to prove (`scripts/openspec/round-scripts.test.mjs`, `tools/manual/test/behind.test.ts`), never a browser walk's.
+| Automated | Decided by |
+| --- | --- |
+| `US2-TC6-1` | `scripts/openspec/round-scripts.test.mjs` |
+| `US5-TC5-1` | `scripts/openspec/round-scripts.test.mjs` |
+| `US5-TC6-1` | `tools/manual/test/behind.test.ts` |
+| `US5-TC10-1` | `scripts/openspec/round-scripts.test.mjs` |
+| `US8-TC2-1` | `tools/manual/walk/run-sheet-delivery.walk.ts` |
+| `US9-TC3-1` | `tools/manual/walk/rounds-record.walk.ts` |
+| `US9-TC4-1` | `tools/manual/test/check-round.test.ts` |
+| `US9-TC5-1` | `tools/manual/test/check-round.test.ts` |
+| `US9-TC6-1` | `tools/manual/test/check-round.test.ts` |
+| `US9-TC7-1` | `tools/manual/test/check-round.test.ts` |
+| `US9-TC8-1` | `tools/manual/test/check-round.test.ts` |
+| `US9-TC9-1` | `tools/manual/walk/rounds-record-roundless.walk.ts` |
 
-`US8` and `US9` are the exception: both live on the manual's own change page, which a browser can open. `rounds-record.walk.ts`, `rounds-record-roundless.walk.ts` and `run-sheet-delivery.walk.ts` walk what each journey's `SC-51` and `SC-61` state there, and flip the case each walk covers.
+Every other case is walked by hand. Most are a hand's move in the change's
+Slack thread - a first sentence, a numbered answer, a remark, the word `land`
+- or the round itself, dispatched and read inside an agent's own session
+before it posts its summary back: no suite opens a Slack thread or an agent's
+conversation, and a direct message is read in Slack rather than rendered
+anywhere a walk can look.
+
+| Manual | Why |
+| --- | --- |
+| `US1-TC1-1` | The first sentence and the reply, typed and read in Slack |
+| `US1-TC2-1` | A later reply in the same Slack thread |
+| `US1-TC3-1` | Three landings driven by answers typed in the thread |
+| `US1-TC4-1` | A Slack message naming a change that already exists |
+| `US1-TC5-1` | The reply asking an unmapped teammate for their handle |
+| `US1-TC6-1` | The same round from a terminal, inside the agent's session |
+| `US2-TC1-1` | The word `land`, typed in the thread |
+| `US2-TC2-1` | A remark in the thread, and the readers it re-runs in the session |
+| `US2-TC3-1` | A remark in the thread that settles a question |
+| `US2-TC4-1` | Which readers a round dispatched, inside the session |
+| `US2-TC5-1` | The dated wait a design round writes, inside the session |
+| `US2-TC7-1` | A remark in the thread on a page's marked lines |
+| `US3-TC1-1` | The draft's summary as the session posts it |
+| `US3-TC2-1` | A challenge typed in the thread, and the answer to it |
+| `US3-TC3-1` | The readers' own findings, inside the session |
+| `US3-TC4-1` | The dated wait on the tech PIC, written inside the session |
+| `US4-TC1-1` | The question as the thread carries it |
+| `US4-TC2-1` | An answer typed in the thread |
+| `US4-TC3-1` | A question id typed alone in the thread |
+| `US4-TC4-1` | The page line a round writes instead of a row, inside the session |
+| `US4-TC5-1` | Ids issued across several rounds of one change |
+| `US4-TC6-1` | Nothing drives it yet: `tools/manual/test/my-turn-page.test.tsx` proves the render, and the case walks the hand arriving from the thread |
+| `US4-TC7-1` | A reply naming a question the change never issued |
+| `US4-TC8-1` | A reply that is none of the moves, typed in the thread |
+| `US5-TC1-1` | The re-read a landing wakes, inside the session |
+| `US5-TC2-1` | The thread reply saying what was read and that nothing changed |
+| `US5-TC3-1` | The round a re-read opens for a hand |
+| `US5-TC4-1` | Nothing drives it yet: `tools/manual/test/behind.test.ts` proves the derivation, and the case walks two landings through the round |
+| `US5-TC7-1` | A tick, a claim and a wait taken from the board while an artifact is behind |
+| `US5-TC8-1` | A Raised row landed through the round |
+| `US5-TC9-1` | Two landings inside one run's life |
+| `US5-TC11-1` | A landing with nothing after it, read in the thread |
+| `US5-TC12-1` | A re-read that would edit several, stopping inside the session |
+| `US5-TC13-1` | The fold at archive, run by a hand |
+| `US5-TC14-1` | A run killed mid-draft and picked up again |
+| `US6-TC1-1` | The group's own commits in the application repository |
+| `US6-TC2-1` | The landing summary the thread carries |
+| `US6-TC3-1` | The last group's walks, in the application repository |
+| `US6-TC4-1` | One reader over the whole change, inside the session |
+| `US6-TC5-1` | `pnpm plan done` against the application repository's tree |
+| `US7-TC1-1` | The question the round asks in the thread |
+| `US7-TC2-1` | The product manager's answer, typed in the thread |
+| `US7-TC3-1` | A landing refused in the thread while the question is open |
+| `US8-TC1-1` | The run tab, written into the run spreadsheet |
+| `US8-TC3-1` | Both ends of the gate, in the run spreadsheet |
+| `US8-TC4-1` | A push, a staging deploy and a release cut |
+| `US9-TC1-1` | The page and `rounds.md` read together after three real rounds |
+| `US9-TC2-1` | A task group's row after a real build |
