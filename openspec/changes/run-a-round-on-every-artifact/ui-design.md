@@ -4,15 +4,15 @@ Drawn from [Agent Rounds · Surfaces](../../docs/prds/products/shared/planning/a
 
 ### The thread
 
-[Blueprint · 3.7 The thread](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#thread). One Slack thread per change in the planning channel. Its first message is the product manager's sentence or the landing that opened the change; the agent's replies carry the draft's one-screen summary, the numbered questions with a recommendation each, and each landing and re-read as one line; a hand replies in words. Nothing interactive: no buttons, no forms.
+[Blueprint · 3.4 The thread](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#thread). One Slack thread per change in the planning channel. Its first message is the product manager's sentence or the landing that opened the change; the agent's replies carry the draft's one-screen summary, the numbered questions with a recommendation each, and each landing and re-read as one line; a hand replies in words. Nothing interactive: no buttons, no forms.
 
 ### Change page
 
-[Blueprint · 3.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The artifact rows from `stage-changes-and-notify-hands` gain, per artifact, the open question ids as a link to the decisions tab; a Rounds row under Tasks lists one line per round from `rounds.md`: the artifact or group, the perspectives run, what stood, what was asked. The Your turn card links the thread first and the command second.
+[Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The artifact rows from `stage-changes-and-notify-hands` gain, per artifact, the open question ids as a link to the decisions tab; a Rounds row under Tasks lists one line per round from `rounds.md`: the artifact or group, the perspectives run, what stood, what was asked. The Your turn card links the thread first and the command second.
 
 ### My turn
 
-[Blueprint · 3.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). The open questions addressed to the reader sit above the changes on them, one row each: the change, the question id, the first line of the question, and the thread link.
+[Blueprint · 4.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). The open questions addressed to the reader sit above the changes on them, one row each: the change, the question id, the first line of the question, and the thread link.
 
 ### Run sheet
 

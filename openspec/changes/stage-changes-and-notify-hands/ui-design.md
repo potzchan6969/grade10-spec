@@ -4,23 +4,23 @@ Drawn from [Change Stages · Surfaces](../../docs/prds/products/shared/planning/
 
 ### Board
 
-[Blueprint · 3.1 Board](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#board). Eight lanes in stage order, stacked as In Flight stacks four today, each collapsible to its heading with its count and its open hands; the headings of Proposed to Building carry the agent mark and the hand's move; Archived starts collapsed, and Proposed opens because the designer's and the tech PIC's turns sit in it; Mine, Waiting, Idle, Behind and Blocked as a filter row under the page heading; the shelf as a link. The open lanes sit side by side only above 1536px. Replaces the four lanes of `/in-flight`.
+[Blueprint · 4.1 Board](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#board). Eight lanes in stage order, stacked as In Flight stacks four today, each collapsible to its heading with its count and its open hands; the headings of Proposed to Building carry the agent mark and the hand's move; Archived starts collapsed, and Proposed opens because the designer's and the tech PIC's turns sit in it; Mine, Waiting, Idle, Behind and Blocked as a filter row under the page heading; the shelf as a link. The open lanes sit side by side only above 1536px. Replaces the four lanes of `/in-flight`.
 
 ### Change page
 
-[Blueprint · 3.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading, the agent mark and the hand's move under each of its first five steps; the Your turn card with the thread link and the command; then the `ChangeStatus` rows gain Hands, Artifacts with fresh or behind, the open questions and who landed each, Delivery and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
+[Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading, the agent mark and the hand's move under each of its first five steps; the Your turn card with the thread link and the command; then the `ChangeStatus` rows gain Hands, Artifacts with fresh or behind, the open questions and who landed each, Delivery and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
 
 ### My turn
 
-[Blueprint · 3.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). A handle picker in the page heading; the open questions addressed to the reader, one row each with the change and the question id; then the changes on the reader now, then the ones that are theirs later, in the Pending page's card grammar with the thread link and the command on the card. Replaces `/pending` for a person; the per-role Pending page stays for a hand nobody has named.
+[Blueprint · 4.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). A handle picker in the page heading; the open questions addressed to the reader, one row each with the change and the question id; then the changes on the reader now, then the ones that are theirs later, in the Pending page's card grammar with the thread link and the command on the card. Replaces `/pending` for a person; the per-role Pending page stays for a hand nobody has named.
 
 ### Page ribbon and pip
 
-[Blueprint · 3.4 PRD page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#prd-ribbon). The section's in-flight row gains the stage and the hand; each 🚧 line gains the pip of its change's stage, a small outline badge with the stage number, so no colour carries the meaning on its own.
+[Blueprint · 4.4 PRD page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#prd-ribbon). The section's in-flight row gains the stage and the hand; each 🚧 line gains the pip of its change's stage, a small outline badge with the stage number, so no colour carries the meaning on its own.
 
 ### Slack messages
 
-[Blueprint · 3.6 Slack](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#slack). Your turn, Behind, Landed on main, Staging deployed and the weekly digest; each carries the link to the change's thread and to the change page, and the command as text. No interactive buttons until the identity map is settled.
+[Blueprint · 4.6 Slack](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#slack). Your turn, Behind, Landed on main, Staging deployed and the weekly digest; each carries the link to the change's thread and to the change page, and the command as text. No interactive buttons until the identity map is settled.
 
 ## Flows
 

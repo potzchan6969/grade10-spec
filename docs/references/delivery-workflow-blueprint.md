@@ -330,8 +330,8 @@ a walkthrough, each hand's six steps, what one push does, and an example week.
 | --- | --- | --- |
 | Archive retention | ❓ 60 days; the PM confirms | A monthly job removes older archived changes from the tree and leaves one row per change in `archive/INDEX.md`: id, shipped on, capabilities, the archive commit |
 | Idle | 7 days | The overlay and the digest |
-| Stale | 30 days idle, no wait | The board's stale shelf; the PM hand is asked to answer, reassign or drop |
-| Drop | 60 days stale | The monthly job proposes it; a person confirms; the directory goes with the reason in the commit, and its 🚧 lines become ❓ |
+| Shelved | 30 days idle, no wait | The board's shelf; the PM hand is asked to answer, reassign or drop |
+| Drop | 60 days shelved | The monthly job proposes it; a person confirms; the directory goes with the reason in the commit, and its 🚧 lines become ❓ |
 
 On 2026-09-17: 101 archived changes since 2026-08-13, 7.6 MB in 748 files;
 71 in flight, 29 with no `tasks.md`, 18 with every box ticked and not
@@ -407,7 +407,7 @@ One meaning per word, as the line uses it.
 | Archive | The fold, the marks off, the directory filed under `archive/` | Deleting a change |
 | Round | Ask, draft, challenge, verify, read, land: how one artifact or one task group is written | An interview, a review |
 | Question | A numbered decisions row, or a ❓ line on the page, waiting on a hand | A finding an agent settled |
-| Behind | An artifact whose page lines or artifacts before it changed after it was drawn or last read again | Idle, stale |
+| Behind | An artifact whose page lines or artifacts before it changed after it was drawn or last read again | Idle, shelved |
 | Read again | The agent reading every artifact after a landing, opening a round where the change reaches one | A rewrite |
 | The walk | The last task group: the journeys demonstrated in a browser, kept as the E2E suite | The run sheet |
 | Prune | Removing an archived change from the tree after the retention window, leaving its index row | Archiving |
