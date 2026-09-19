@@ -48,7 +48,7 @@
     },
     {
       "path": "docs/prds/products/demo-product/index.md",
-      "source": "---\ntitle: Demo product\nsummary: The product the fixture spec belongs to.\nspec: demo-product/alpha\nicon: storefront\norder: 1\n---\n\nWhat the product is for, in a person's words.\n\n::spec{id=\"demo-product/alpha\"}\n"
+      "source": "---\ntitle: Demo product\nsummary: The product the fixture spec belongs to.\nspec: demo-product/alpha\nicon: storefront\norder: 1\n---\n\nWhat the product is for, in a person's words.\n\n::spec{id=\"demo-product/alpha\"}\n\n## Refunds\n\nRefunds follow one rule the store already draws elsewhere.\n\n- 🚧 **Window** — refunds close after 30 days\n\n## Discounts\n\nA cap keeps a discount from swallowing the whole order.\n\n- 🚧 **Cap** — a customer discount never exceeds 50%\n"
     }
   ],
   "specs": [
@@ -259,7 +259,7 @@
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
         "A record anyone can read back."
       ],
-      "heldBy": "decisions",
+      "heldBy": "ui-design",
       "upstream": {
         "specs": {
           "id": "47e63e84",
@@ -274,7 +274,8 @@
             "specs"
           ]
         }
-      }
+      },
+      "lastLanded": "2026-08-05T00:00:00+00:00"
     },
     {
       "id": "demo-building",
@@ -308,22 +309,56 @@
       "deltas": [],
       "written": [
         "proposal",
+        "decisions",
         "tasks"
       ],
       "promotedBy": "tester",
       "dependsOn": [
         "demo-planned"
       ],
-      "decisionsWaived": "the fixture is about the Building stage, not the decisions",
       "designWaived": "the fixture is about the Building stage, not the designs",
       "uiWaived": "the fixture is about the Building stage, not the designs",
+      "hands": {
+        "dev": "tester"
+      },
       "skipSpecs": "the fixture is about the Building stage and the Blocked overlay, not the requirements",
       "author": "tester",
+      "sections": [
+        {
+          "page": "docs/prds/products/demo-product/index.md",
+          "slug": "discounts"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q1",
+          "artifact": "decisions",
+          "role": "tester",
+          "hand": "tester",
+          "text": "Whether the group ships behind a flag",
+          "recommended": "recommended: no, ship it plain"
+        }
+      ],
       "upstream": {
-        "tasks": {
-          "id": "a4d72b8a",
+        "proposal": {
+          "id": "355a7f65",
           "items": [
+            "docs/prds/products/demo-product/index.md#discounts"
+          ]
+        },
+        "decisions": {
+          "id": "f5914656",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts",
             "proposal"
+          ]
+        },
+        "tasks": {
+          "id": "315d4889",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts",
+            "proposal",
+            "decisions"
           ]
         }
       }
@@ -342,44 +377,42 @@
       "deltas": [],
       "written": [
         "proposal",
-        "decisions",
-        "user-journeys",
         "ui-design",
         "tech-design"
       ],
+      "reviewed": {
+        "ui-design": "0000000"
+      },
       "author": "tester",
+      "sections": [
+        {
+          "page": "docs/prds/products/demo-product/index.md",
+          "slug": "discounts"
+        }
+      ],
       "followOns": [
         "The requirements, once somebody takes the two readings."
       ],
       "heldBy": "specs",
       "upstream": {
-        "decisions": {
-          "id": "8776bc61",
+        "proposal": {
+          "id": "355a7f65",
           "items": [
-            "proposal"
-          ]
-        },
-        "user-journeys": {
-          "id": "4aab532a",
-          "items": [
-            "proposal",
-            "decisions"
+            "docs/prds/products/demo-product/index.md#discounts"
           ]
         },
         "ui-design": {
-          "id": "dbbee342",
+          "id": "65130f4e",
           "items": [
-            "proposal",
-            "decisions",
-            "user-journeys"
+            "docs/prds/products/demo-product/index.md#discounts",
+            "proposal"
           ]
         },
         "tech-design": {
-          "id": "dbbee342",
+          "id": "65130f4e",
           "items": [
-            "proposal",
-            "decisions",
-            "user-journeys"
+            "docs/prds/products/demo-product/index.md#discounts",
+            "proposal"
           ]
         }
       }
@@ -415,7 +448,6 @@
         "tasks"
       ],
       "promotedBy": "tester",
-      "decisionsWaived": "the fixture is about the On staging stage, not the decisions",
       "designWaived": "the fixture is about the On staging stage, not the designs",
       "uiWaived": "the fixture is about the On staging stage, not the designs",
       "deployedEnv": "staging",
@@ -437,6 +469,14 @@
           "stood": "the fixture's one task lands cleanly",
           "asked": "Q1",
           "tests": "alpha-SC-01: test/thing.test.ts"
+        },
+        {
+          "round": 3,
+          "artifact": "proposal",
+          "perspectives": "the-simpler-thing",
+          "stood": "the why holds without the extra paragraph",
+          "asked": "-",
+          "tests": "-"
         }
       ],
       "upstream": {
@@ -512,6 +552,71 @@
       }
     },
     {
+      "id": "demo-refund-window",
+      "dir": "openspec/changes/demo-refund-window",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "planned",
+      "owners": [],
+      "created": "2026-09-06",
+      "title": "Shorten the refund window",
+      "why": "The walk needs a Planned-stage change linking one page section on its own,\nso the pip it carries never moves what another fixture's Behind chip reads.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "The window",
+          "repo": "grade10-spec",
+          "done": 0,
+          "total": 2,
+          "tasks": [
+            {
+              "text": "1.1 Shorten the window.",
+              "done": false
+            },
+            {
+              "text": "1.2 Say so on the page.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "designWaived": "the fixture is about a page's in-flight row and pip, not the designs",
+      "uiWaived": "the fixture is about a page's in-flight row and pip, not the designs",
+      "thread": "C0PLANNING/1758170000.001200",
+      "hands": {
+        "dev": "tester"
+      },
+      "skipSpecs": "the fixture is about a page's in-flight row and pip, not the requirements",
+      "author": "tester",
+      "sections": [
+        {
+          "page": "docs/prds/products/demo-product/index.md",
+          "slug": "refunds"
+        }
+      ],
+      "upstream": {
+        "proposal": {
+          "id": "cea4987f",
+          "items": [
+            "docs/prds/products/demo-product/index.md#refunds"
+          ]
+        },
+        "tasks": {
+          "id": "a25a70e4",
+          "items": [
+            "docs/prds/products/demo-product/index.md#refunds",
+            "proposal"
+          ]
+        }
+      }
+    },
+    {
       "id": "demo-released",
       "dir": "openspec/changes/demo-released",
       "schema": "grade10-planning",
@@ -542,7 +647,6 @@
         "tasks"
       ],
       "promotedBy": "tester",
-      "decisionsWaived": "the fixture is about the Released stage, not the decisions",
       "designWaived": "the fixture is about the Released stage, not the designs",
       "uiWaived": "the fixture is about the Released stage, not the designs",
       "deployedEnv": "staging",
@@ -587,12 +691,14 @@
       "written": [
         "proposal",
         "decisions",
-        "user-journeys",
         "specs",
         "test-cases"
       ],
       "designWaived": "the fixture is about the Specified stage, not the designs",
       "uiWaived": "the fixture is about the Specified stage, not the designs",
+      "hands": {
+        "dev": "tester"
+      },
       "author": "tester",
       "suites": [
         {
@@ -607,6 +713,16 @@
           }
         }
       ],
+      "questions": [
+        {
+          "id": "Q1",
+          "artifact": "decisions",
+          "role": "tester",
+          "hand": "tester",
+          "text": "Whether the suite ships blind first",
+          "recommended": "recommended: yes, blind before the scenarios"
+        }
+      ],
       "heldBy": "tasks",
       "upstream": {
         "decisions": {
@@ -615,27 +731,18 @@
             "proposal"
           ]
         },
-        "user-journeys": {
-          "id": "0c9035fb",
+        "specs": {
+          "id": "a3bddd05",
           "items": [
             "proposal",
             "decisions"
           ]
         },
-        "specs": {
-          "id": "d43da322",
-          "items": [
-            "proposal",
-            "decisions",
-            "user-journeys"
-          ]
-        },
         "test-cases": {
-          "id": "d43da322",
+          "id": "a3bddd05",
           "items": [
             "proposal",
-            "decisions",
-            "user-journeys"
+            "decisions"
           ]
         }
       }
@@ -681,7 +788,7 @@
         }
       ],
       "author": "tester",
-      "heldBy": "decisions"
+      "heldBy": "ui-design"
     }
   ],
   "schemas": {

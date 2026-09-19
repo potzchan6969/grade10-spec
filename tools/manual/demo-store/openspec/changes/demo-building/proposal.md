@@ -11,3 +11,7 @@ not shipped yet, so the Blocked overlay has something to name.
 ## What Changes
 
 - **The first task lands**, and the second waits on `demo-planned`.
+
+## References
+
+- [Demo Product · Discounts](../../../docs/prds/products/demo-product/index.md#discounts)

@@ -2,3 +2,5 @@ schema: grade10-planning
 created: 2026-09-02
 ui_waived: "the fixture is about the Specified stage, not the designs"
 design_waived: "the fixture is about the Specified stage, not the designs"
+hands:
+  dev: tester

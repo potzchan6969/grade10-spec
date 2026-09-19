@@ -6,5 +6,7 @@ ui_waived: "the fixture is about the Building stage, not the designs"
 design_waived: "the fixture is about the Building stage, not the designs"
 skip_specs: true
 skip_specs_why: "the fixture is about the Building stage and the Blocked overlay, not the requirements"
+hands:
+  dev: tester
 depends_on:
   - demo-planned

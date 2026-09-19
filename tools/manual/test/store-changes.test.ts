@@ -20,6 +20,7 @@ describe("in-flight changes", () => {
       "demo-designed",
       "demo-on-staging",
       "demo-planned",
+      "demo-refund-window",
       "demo-released",
       "demo-specified",
       "demo-unreadable",
