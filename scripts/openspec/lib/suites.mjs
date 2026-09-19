@@ -585,6 +585,14 @@ export function deriveStatus(counts, caseCount) {
 /** A case's property, trimmed, or the empty string. */
 export const prop = (tc, name) => (tc.props.get(name) ?? "").trim();
 
+/** Whether a case's own Automation status already reads `automated` — the
+ * one gate `select-cases.mjs` and `run-sheet.mjs` both apply, each for its
+ * own purpose: one decides what leaves the store at all, the other counts
+ * what a run explicitly asked to see anyway. Two call sites, not one merged
+ * check, because the first runs before a case is picked and the second after. */
+export const isAutomated = (tc) =>
+  prop(tc, "Automation status").toLowerCase() === "automated";
+
 /** One suite read whole: its parse, the spec it reads, and every case flattened
  *  with the journey it sits under. */
 export function readSuite(root, filePath) {

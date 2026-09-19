@@ -11,7 +11,7 @@
  */
 
 import { CASE_COLUMNS } from "./run-sheet-layout.mjs";
-import { prop, readAllSuites } from "./suites.mjs";
+import { isAutomated, prop, readAllSuites } from "./suites.mjs";
 
 /** `grade10-site/store/home` → product, domain, capability. A domain suite
  *  sits one level up and names no capability. */
@@ -50,8 +50,7 @@ export function readCandidates(root, scope = null) {
  * A case whose Automation status is `automated` is left out too, unless
  * `includeAutomated` says otherwise: a run sheet is where a case a script
  * cannot cover leaves the store, and an automated case is proved on every
- * push instead (`docs/governance/specs-to-test-cases.md`, "The run sheet
- * keeps what only staging proves").
+ * push instead (`docs/governance/specs-to-test-cases.md`, "The Run Sheet").
  */
 export function selectCases(candidates, options = {}) {
   const {
@@ -85,8 +84,7 @@ export function selectCases(candidates, options = {}) {
       });
       return false;
     }
-    const automation = prop(one.tc, "Automation status").toLowerCase();
-    if (!includeAutomated && automation === "automated") {
+    if (!includeAutomated && isAutomated(one.tc)) {
       refused.push({
         id: one.tc.id,
         reason: "automation",
