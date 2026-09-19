@@ -23,6 +23,9 @@ concurrency:
 env:
   NODE_VERSION: 24.14.1
   MANUAL_URL: https://spec.grade10-stg.com/planning
+  # One file per week, restored and saved by exact key: it makes a re-run of
+  # this week's digest send nobody's message twice.
+  SENT_KEYS: digest-sent.txt
 
 jobs:
   digest:
@@ -59,10 +62,32 @@ jobs:
             exit 1
           fi
 
+      # ISO week, on the run's own date: ISO because Thursday's year is the
+      # only way a week straddling New Year belongs to one year, which is what
+      # keys the digest against sending one person's week twice.
+      - name: Compute the ISO week
+        id: week
+        run: echo "value=$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
+
+      - name: Restore the keys this week has sent
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.SENT_KEYS }}
+          key: digest-sent-${{ steps.week.outputs.value }}
+
       - name: Send each person their week
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: |
+          touch "$SENT_KEYS"
           node scripts/openspec/digest.mjs \
             --send \
+            --sent-keys "$SENT_KEYS" \
             --manual-url "$MANUAL_URL"
+
+      - name: Save the keys this week has sent
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.SENT_KEYS }}
+          key: digest-sent-${{ steps.week.outputs.value }}
