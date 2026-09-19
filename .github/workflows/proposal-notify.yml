@@ -147,7 +147,10 @@ jobs:
   # writes what it read to `.round/thread.txt` and a plain step posts it.
   reread:
     needs: notify
-    if: vars.AGENT_REREAD == 'true'
+    # Two gates: the variable is how Operations turns the cascade on, and the
+    # matrix gate keeps a push that moved no change from starting a job whose
+    # `include` is empty.
+    if: vars.AGENT_REREAD == 'true' && needs.notify.outputs.matrix != '[]'
     strategy:
       fail-fast: false
       matrix:
@@ -160,6 +163,11 @@ jobs:
       id-token: write
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      # This entry's own file, restored and saved by exact key: it makes a
+      # re-run of one read again post its summary and its failure line once
+      # each, and says nothing about the entry beside it.
+      SENT_KEYS: reread-sent.txt
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -216,14 +224,25 @@ jobs:
           node scripts/openspec/reread-guard.mjs "${{ matrix.id }}" \
             --before "${{ steps.start.outputs.sha }}"
 
+      # No `restore-keys`, as on the messages above: a prefix fallback would
+      # drag another entry's keys in and silence a summary this run owes.
+      - name: Restore the keys this read again has sent
+        if: always()
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.SENT_KEYS }}
+          key: reread-sent-${{ github.run_id }}-${{ matrix.id }}
+
       - name: Post the round's own summary
         if: success()
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: |
+          touch "$SENT_KEYS"
           node scripts/openspec/reread-notify.mjs "${{ matrix.id }}" \
             --message-file .round/thread.txt \
             --channel "${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}" \
+            --sent-keys "$SENT_KEYS" \
             --send
 
       # A run that dies silently looks to every hand like a run that found
@@ -234,7 +253,18 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: |
+          touch "$SENT_KEYS"
           node scripts/openspec/reread-notify.mjs "${{ matrix.id }}" \
             --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
             --channel "${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}" \
+            --sent-keys "$SENT_KEYS" \
             --send
+
+      # Whatever happened above: what went out is what went out, and a re-run
+      # of this entry should not post it again.
+      - name: Save the keys this read again has sent
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.SENT_KEYS }}
+          key: reread-sent-${{ github.run_id }}-${{ matrix.id }}
