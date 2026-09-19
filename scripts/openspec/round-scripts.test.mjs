@@ -597,6 +597,114 @@ test("plan:land refuses a group number tasks.md does not hold, naming the ones i
   assert.match(result.stderr, /it holds 1/);
 });
 
+// ── The tests a group's landing names ───────────────────────────────────────
+
+/** A group whose task lines cite two scenarios: what the landing holds its
+ * `--tests` cell to. The two ids are issued by an archived change of the
+ * fixture's own, so the `cited` rule the gate runs resolves them — the
+ * fixture itself carries no delta. */
+const CITING = {
+  "openspec/changes/archive/2026-01-01-demo/specs/shared/planning/demo/spec.md":
+    [
+      "## ADDED Requirements",
+      "",
+      "### Requirement: The group is built",
+      "",
+      "#### Scenario: shared-planning-agent-rounds-SC-57 - The tests land first",
+      "",
+      "- **WHEN** a group is built",
+      "- **THEN** its tests land in a commit carrying no code",
+      "",
+      "#### Scenario: shared-planning-agent-rounds-SC-58 - The summary names the tests",
+      "",
+      "- **WHEN** the readers have run",
+      "- **THEN** the row names the tests per scenario",
+      "",
+    ].join("\n"),
+  [`${DIR}/tasks.md`]: [
+    "## 1. Build it (grade10-spec)",
+    "",
+    "- [ ] 1.1 Ship it - `shared-planning-agent-rounds-SC-57`",
+    "- [ ] 1.2 Prove it - `shared-planning-agent-rounds-SC-58`",
+    "",
+  ].join("\n"),
+};
+
+const landGroup = (root, args = []) =>
+  run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "nothing stood",
+    ...args,
+  ]);
+
+test("shared-planning-agent-rounds-SC-58 - plan:land refuses a group's landing that names no test for a scenario its tasks cite", () => {
+  const { root, git } = sandbox({ files: CITING });
+  git("config", "user.email", "erin@test");
+
+  const result = landGroup(root);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /shared-planning-agent-rounds-SC-57/);
+  assert.match(result.stderr, /shared-planning-agent-rounds-SC-58/);
+  assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
+});
+
+test("shared-planning-agent-rounds-SC-58 - plan:land names the ids a group's --tests left out, and no others", () => {
+  const { root, git } = sandbox({ files: CITING });
+  git("config", "user.email", "erin@test");
+
+  const result = landGroup(root, [
+    "--tests",
+    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/round-scripts.test.mjs",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /shared-planning-agent-rounds-SC-58/);
+  assert.doesNotMatch(result.stderr, /SC-57/);
+});
+
+test("shared-planning-agent-rounds-SC-58 - plan:land lands a group whose --tests names a test per cited scenario", () => {
+  const { root, git } = sandbox({ files: CITING });
+  git("config", "user.email", "erin@test");
+  const tests = [
+    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/round-scripts.test.mjs",
+    "`shared-planning-agent-rounds-SC-58`: scripts/openspec/round-scripts.test.mjs",
+  ].join("; ");
+
+  const result = landGroup(root, ["--tests", tests]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(
+    roundsOf(root),
+    /SC-57`: scripts\/openspec\/round-scripts\.test\.mjs/,
+  );
+  assert.match(
+    roundsOf(root),
+    /SC-58`: scripts\/openspec\/round-scripts\.test\.mjs/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-58 - plan:land lands a group whose tasks cite no scenario with a dash for its tests", () => {
+  // The fixture's own group: one task line with no id in it, so there is no
+  // test the row owes and the cell says so rather than naming one.
+  const { root, git } = sandbox();
+  git("config", "user.email", "erin@test");
+
+  const result = landGroup(root);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(
+    roundsOf(root),
+    /\| 1 \| 1 \| simpler \| nothing stood \| - \| - \|/,
+  );
+});
+
 test("shared-planning-agent-rounds-SC-39 - plan:land --reviewed writes the line, commits and pushes it in one transaction", () => {
   const { root, remote, git } = sandbox();
   // A different local e-mail than any hand's — no hand's word is asked for a
