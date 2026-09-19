@@ -4,7 +4,12 @@ import { describe, expect, it } from "vitest";
 import { buildIndex } from "../src/api/derive";
 import { OVERLAYS, overlaysOf } from "../src/api/overlays";
 import { STAGES, stageOf } from "../src/api/stages";
-import { FIXTURE_FILE, fixtureSnapshot } from "../src/store/build-fixture.mts";
+import {
+  FIXTURE_CHANGES_FILE,
+  FIXTURE_FILE,
+  fixtureChanges,
+  fixtureSnapshot,
+} from "../src/store/build-fixture.mts";
 import { NO_GIT } from "../src/store/git.mts";
 import { readArchivedChanges } from "../src/store/read-changes.mts";
 import { FROZEN_NOW } from "../walk/frozen-clock";
@@ -15,12 +20,37 @@ import { FROZEN_NOW } from "../walk/frozen-clock";
  * shell only as a crash, and only where the store is not being served.
  */
 const committed = JSON.parse(readFileSync(FIXTURE_FILE, "utf8"));
+const committedChanges = JSON.parse(readFileSync(FIXTURE_CHANGES_FILE, "utf8"));
 
 const DEMO_STORE = fileURLToPath(new URL("../demo-store", import.meta.url));
 
 describe("the bundled fixture snapshot", () => {
   it("is what the readers make of the demo store", () => {
     expect(committed).toEqual(fixtureSnapshot());
+  });
+
+  it("holds one document per in-flight change, dated by the file", () => {
+    expect(committedChanges).toEqual(fixtureChanges());
+    expect(Object.keys(committedChanges).sort()).toEqual(
+      committed.changes.map((change: { id: string }) => change.id).sort(),
+    );
+  });
+
+  /** The handoff is read from these dates and from nothing else: `NO_GIT`
+   * leaves every `lastCommit` absent, so a fixture's stage landings are
+   * whatever `fixture-dates.json` names. */
+  it("dates the released change's artifacts from fixture-dates.json", () => {
+    const dates = Object.fromEntries(
+      committedChanges["demo-released"].artifacts
+        .filter((one: { lastCommit?: { date: string } }) => one.lastCommit)
+        .map((one: { name: string; lastCommit: { date: string } }) => [
+          one.name,
+          one.lastCommit.date,
+        ]),
+    );
+    expect(dates["user-journeys"]).toBe("2026-08-05T00:00:00+00:00");
+    expect(dates["ui-design"]).toBe("2026-08-08T00:00:00+00:00");
+    expect(dates["tech-design"]).toBeUndefined();
   });
 
   it("derives an index the shell can render", () => {

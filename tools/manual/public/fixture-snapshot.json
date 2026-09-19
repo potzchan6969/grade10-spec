@@ -126,7 +126,7 @@
       ],
       "testCasesStatus": "pending-review",
       "issuedThrough": {
-        "sc": 6,
+        "sc": 7,
         "us": 1,
         "tc": 2
       }
@@ -938,7 +938,7 @@
       "owners": [],
       "created": "2026-08-01",
       "title": "The Released stage",
-      "why": "The fixture walk needs a change that has shipped, so a reader can tell the\nReleased stage from On staging.",
+      "why": "The fixture walk needs a change that has shipped, so a reader can tell the\nReleased stage from On staging - and one whose artifacts landed on known\ndays, so the handoff has days to show.",
       "taskGroups": [
         {
           "num": "1",
@@ -954,24 +954,104 @@
           ]
         }
       ],
-      "deltas": [],
+      "deltas": [
+        {
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED"
+          ],
+          "requirements": [
+            {
+              "name": "The thing is shown as done",
+              "kind": "added",
+              "text": "### Requirement: The thing is shown as done\n\nThe system SHALL show the thing as done once it has happened.\n\n#### Scenario: alpha-SC-07 - The thing reads as done\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing has happened\n- **THEN** it is shown as done"
+            }
+          ]
+        }
+      ],
       "written": [
         "proposal",
+        "decisions",
+        "user-journeys",
+        "ui-design",
+        "specs",
+        "test-cases",
         "tasks"
       ],
       "promotedBy": "tester",
-      "decisionsWaived": "the fixture is about the Released stage, not the decisions",
-      "designWaived": "the fixture is about the Released stage, not the designs",
-      "uiWaived": "the fixture is about the Released stage, not the designs",
+      "designWaived": "the fixture is about the Released stage, not the tech design",
       "deployedEnv": "staging",
       "releasedIn": "v2026.09.0",
-      "skipSpecs": "the fixture is about the Released stage, not the requirements",
+      "hands": {
+        "pm": "tester",
+        "design": "tester",
+        "qa": "tester",
+        "dev": "tester",
+        "release": "tester"
+      },
       "author": "tester",
+      "suites": [
+        {
+          "spec": "demo-product/alpha",
+          "status": "approved",
+          "cases": {
+            "draft": 0,
+            "actual": 1,
+            "deprecated": 0,
+            "total": 1,
+            "automated": 0
+          }
+        }
+      ],
       "upstream": {
-        "tasks": {
-          "id": "790b71ed",
+        "decisions": {
+          "id": "37dd348d",
           "items": [
             "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "435c8f4b",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "ui-design": {
+          "id": "ee5b7522",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "specs": {
+          "id": "5524a95c",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "ui-design"
+          ]
+        },
+        "test-cases": {
+          "id": "5524a95c",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "ui-design"
+          ]
+        },
+        "tasks": {
+          "id": "53d3e38e",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "ui-design",
+            "specs",
+            "test-cases"
           ]
         }
       }

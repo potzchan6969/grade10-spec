@@ -1,10 +1,12 @@
 schema: grade10-planning
 created: 2026-08-01
 promoted_by: "@tester"
-decisions_waived: "the fixture is about the Released stage, not the decisions"
-ui_waived: "the fixture is about the Released stage, not the designs"
-design_waived: "the fixture is about the Released stage, not the designs"
-skip_specs: true
-skip_specs_why: "the fixture is about the Released stage, not the requirements"
+design_waived: "the fixture is about the Released stage, not the tech design"
 deployed_env: staging
 released_in: "v2026.09.0"
+hands:
+  pm: tester
+  design: tester
+  qa: tester
+  dev: tester
+  release: tester
