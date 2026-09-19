@@ -39,6 +39,46 @@ The owner's points, one line each.
    production branch, a tag, a preview and smoke tests; an issue found there
    is fixed on a branch from the production branch, and the step is redone
 
+### The Second Brief
+
+The owner's points of 2026-09-19, on the first draft of this shape.
+
+- **An order among the artifacts** — the page under `docs/prds/` first, then
+  `proposal.md` and `user-journeys.md`, then `ui-design.md` and
+  `tech-design.md`, then `spec.md` and the suite, then `tasks.md`; when one
+  changes, every group after it is read again in full, so nothing stale is
+  built on; `/plan`, `/design`, `/tech` and `/specify` grill one another,
+  because things change after deeper thought
+- **The PM starts with what is wanted** — agents refine the rest with what
+  makes the most sense, and raise what is a preference or a product decision
+  as a question the PM answers
+- **The tech PIC reviews, refines and challenges** — after agents propose the
+  system, the architecture and the data flow through a plan, review and
+  verify process
+- **The designer reviews, refines and tweaks** — after agents propose the UI
+  and the UX the same way
+- **Cloud agents and a real-time mechanism** — local or cloud, whatever makes
+  the loop smooth and responsive to a PM or a designer, whatever setup this
+  store and the manual need for it
+- **Layers of checks on the full-stack cycle** — a plan is written as a
+  reviewable change and peer-reviewed: challenger agents, one per part, scope
+  or perspective and one as devil's advocate, then verifier agents per group
+  of findings; each phase of the build is audited by advisory agents and
+  verified by peers; a devil's-advocate pass on simplicity after the build;
+  the whole demonstrated end to end, and that demonstration kept as a test
+  that runs as a guardrail
+- **Nine principles for the system** — determinism (deterministic or
+  stateless over many parts and mutations), conscientious (spot what is
+  wrong and fix its structure, not its symptom; one solution per category of
+  problem), simplicity, clarity (boring and obvious; code that explains
+  itself, no bloating comments), flexibility (built on cleanly later),
+  modularity, consistency (with the codebase as it is), resilience
+  (idempotent, atomic), observability (fail fast, log loudly, never a
+  silent error)
+- **Everything written the same way** — documentation, comments, briefings,
+  commit messages, replies, agent prompts: the reasoning stays in the record
+  it belongs to, and only the conclusion is delivered
+
 ### What Helps
 
 - **Progress management** — the manual and the viewer show the state of the
