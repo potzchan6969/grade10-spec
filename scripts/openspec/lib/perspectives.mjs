@@ -121,33 +121,37 @@ const ofLine = (text, found, file, section) => {
   if (/#{1,6}\s+(Data model|Database Schema)\b/i.test(place))
     found.add("schema");
 
-  // export — a public export or an interface
-  if (/\bexports?\b/i.test(line)) found.add("export");
+  // export — a public export or an interface: the line's own key term, the
+  // heading the interfaces sit under, or a `## Components` table's export
+  if (bold(line, "export") || column(line, "export") || keyed(line, "export"))
+    found.add("export");
   if (/#{1,6}\s+(Service Interfaces|API Contracts)\b/i.test(place))
     found.add("export");
   if (line.startsWith("|") && under(section, "Components") && exported(line))
     found.add("export");
 
-  // system — another system reached
-  if (/\b(slack|github|figma)\b/i.test(line) || /https?:\/\//.test(line))
+  // system — another system reached: a URL, or an integration table's row
+  if (/https?:\/\//.test(line)) found.add("system");
+  if (
+    line.startsWith("|") &&
+    (/\b(slack|github|figma)\b/i.test(line) || under(section, "Integrations"))
+  )
     found.add("system");
 
   // migration — a migration task group, or the plan for one
   if (/^#{1,6}\s+\d+\.\s.*migrat/i.test(line)) found.add("migration");
   if (/#{1,6}\s+Migration Plan\b/i.test(place)) found.add("migration");
 
-  // flag — a flag on a task group
-  if (/\bflags?\b/i.test(line)) found.add("flag");
+  // flag — a flag on a task group: a `flag:` key, a flag column, a section
+  if (keyed(line, "flag") || column(line, "flag")) found.add("flag");
+  if (/#{1,6}\s+Flags?\b/i.test(place)) found.add("flag");
 
-  // money — an amount in minor units
-  if (/\bminor units\b|\bISO 4217\b|\bmoney\b/i.test(line)) found.add("money");
+  // money — an amount in minor units, or a currency by its standard
+  if (/\bminor units\b|\bISO[\s-]?4217\b/i.test(line)) found.add("money");
 
-  // deploy — a deploy step
-  if (
-    /#{1,6}\s+Deploy\b/i.test(place) ||
-    /\bdeploy(s|ed|ing|ment)?\b/i.test(line)
-  )
-    found.add("deploy");
+  // deploy — a deploy step: a Deploy heading, or the workflow file `ofFile`
+  // reads
+  if (/#{1,6}\s+Deploy\b/i.test(place)) found.add("deploy");
 
   // copy — a page's words, or words a reader sees
   if (/#{1,6}\s+Copy\b/i.test(place)) found.add("copy");
@@ -157,6 +161,23 @@ const ofLine = (text, found, file, section) => {
 /** A backticked `PascalCase` name: what a `## Components` table calls an
  * export. */
 const exported = (line) => /`[A-Z][A-Za-z0-9]*[a-z][A-Za-z0-9]*`/.test(line);
+
+/**
+ * A line whose key term is `name`, read off the three structures the store
+ * writes one in: the bold lead an item leads with (`- **Export** `roundRow``),
+ * a table's own column (`| Flag | Off in |`), and a key (`flag: round-record`).
+ *
+ * Every trigger fetches a reader, so a trigger raised off a bare word in a
+ * sentence summoned operations to read a change that deploys nothing and
+ * backend to read one that exports nothing. Prose about the product carries
+ * none of the three.
+ */
+const bold = (line, name) =>
+  new RegExp(`^[-*+]?\\s*\\*\\*${name}s?\\*\\*`, "i").test(line);
+const column = (line, name) =>
+  new RegExp(`^\\|(?:[^|]*\\|)*\\s*${name}s?\\s*\\|`, "i").test(line);
+const keyed = (line, name) =>
+  new RegExp(`(?:^|[\\s\`|(])${name}s?\\s*:`, "i").test(line);
 
 /** Plain prose: words a reader would read as a sentence. A heading, a table
  * row, a fence and a task line are all structure, and a line of two or three
