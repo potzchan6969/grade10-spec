@@ -1,13 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import {
-  copyFileSync,
-  cpSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  writeFileSync,
-} from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -17,50 +10,32 @@ import { sectionTextOf } from "../../tools/manual/src/content/sections.ts";
 import { contentIdOf } from "../../tools/manual/src/store/content-id.mts";
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
-const MANUAL_SRC = join(SCRIPTS, "..", "..", "tools", "manual", "src");
-// The one runtime dependency the store's reader carries. Resolved from this
-// test's own location rather than assumed at a fixed path, since a pnpm
-// workspace may hoist it to the repository root or leave it under
-// `tools/manual/node_modules` depending on how it was installed.
-const YAML_PKG = dirname(
-  fileURLToPath(import.meta.resolve("yaml/package.json")),
-);
+const SCRIPT = join(SCRIPTS, "archive-preflight.mjs");
 const CHANGE = "build-alpha";
 
-/** The script roots itself on its own location, so a throwaway store carries a
- * throwaway copy of it, committed with `origin/main` at that commit. `files`
- * are written under the change, `durable` under `openspec/specs`; both take
- * `a/b/c.md` keys. Returns the copy to run, the manifest it writes, the
- * change's `tasks.md`, and git in the store.
+/**
+ * A throwaway store, committed with `origin/main` at that commit — no copy
+ * of this checkout's own tree beside it: the BEHIND gate reads the store
+ * through the manual's own change reader, so it stays where it is and takes
+ * `--root`, the way `plan-land.mjs` and `round-scripts.test.mjs` already do,
+ * rather than a copy that could not import `tools/manual/src/store/*`.
+ * `files` are written under the change, `durable` under `openspec/specs`;
+ * both take `a/b/c.md` keys. Returns the store to run against, the manifest
+ * it writes, the change's `tasks.md`, and git in the store.
  *
- * `tools/manual/src` is copied in whole beside the two scripts: the BEHIND
- * gate imports the store's one change reader from its real path, the same
- * way it does inside the real repository, so the throwaway copy needs the
- * same tree beside it for that import to resolve. `schemas` writes
- * `openspec/schemas/<id>/schema.yaml`, keyed by id; a change naming a schema
- * this reads none for is read as owing nothing, the way a store that has not
- * landed the schema yet is. `pages` writes store-relative files at the root
- * — `docs/prds/…` — for the one case where a proposal links a page section:
- * the store's change reader reads pages too, so a `reviewed:` id can only be
- * reproduced by hashing the same section text it hashed. `daysAgo` backdates
- * the one commit this writes, so a case that needs a second, later commit on
- * top of it — the fallback that dates an artifact from git history rather
- * than a `reviewed:` line — has room to date one after it with the returned
- * `commit`. */
+ * `schemas` writes `openspec/schemas/<id>/schema.yaml`, keyed by id; a
+ * change naming a schema this reads none for is read as owing nothing, the
+ * way a store that has not landed the schema yet is. `pages` writes
+ * store-relative files at the root — `docs/prds/…` — for the one case where
+ * a proposal links a page section: the store's change reader reads pages
+ * too, so a `reviewed:` id can only be reproduced by hashing the same
+ * section text it hashed. `daysAgo` backdates the one commit this writes, so
+ * a case that needs a second, later commit on top of it — the fallback that
+ * dates an artifact from git history rather than a `reviewed:` line — has
+ * room to date one after it with the returned `commit`.
+ */
 function sandbox(files, durable = {}, schemas = {}, pages = {}, daysAgo = 0) {
   const root = mkdtempSync(join(tmpdir(), "archive-preflight-"));
-  const scripts = join(root, "scripts", "openspec");
-  mkdirSync(scripts, { recursive: true });
-  for (const name of ["archive-preflight.mjs", "store-main.mjs"]) {
-    copyFileSync(join(SCRIPTS, name), join(scripts, name));
-  }
-  // The store's change reader imports the team map's handle helper by this
-  // same relative path, so the throwaway copy needs it alongside.
-  cpSync(join(SCRIPTS, "lib"), join(scripts, "lib"), { recursive: true });
-  cpSync(MANUAL_SRC, join(root, "tools", "manual", "src"), {
-    recursive: true,
-  });
-  cpSync(YAML_PKG, join(root, "node_modules", "yaml"), { recursive: true });
   const dir = join(root, "openspec", "changes", CHANGE);
   mkdirSync(dir, { recursive: true });
   const write = (base, tree) => {
@@ -102,7 +77,6 @@ function sandbox(files, durable = {}, schemas = {}, pages = {}, daysAgo = 0) {
 
   return {
     root,
-    script: join(scripts, "archive-preflight.mjs"),
     manifest: join(dir, ".openspec.yaml"),
     tasks: join(dir, "tasks.md"),
     git,
@@ -117,8 +91,8 @@ function sandbox(files, durable = {}, schemas = {}, pages = {}, daysAgo = 0) {
   };
 }
 
-const run = (script, ...args) =>
-  spawnSync(process.execPath, [script, CHANGE, ...args], {
+const run = (root, ...args) =>
+  spawnSync(process.execPath, [SCRIPT, CHANGE, "--root", root, ...args], {
     encoding: "utf8",
     env: { ...process.env, NO_COLOR: "1", PLAN_NO_FETCH: "1" },
   });
@@ -127,8 +101,8 @@ const PROPOSAL = { "proposal.md": "# Build alpha\n\n## Why\n\nTo ship it.\n" };
 const SHIPPED = ["--deployed-at", "0f1e2d3", "--deployed-env", "production"];
 
 test("refuses a deployed sha naming no environment", () => {
-  const { script } = sandbox(PROPOSAL);
-  const result = run(script, "--deployed-at", "0f1e2d3");
+  const { root } = sandbox(PROPOSAL);
+  const result = run(root, "--deployed-at", "0f1e2d3");
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /--deployed-at needs --deployed-env/);
@@ -139,13 +113,13 @@ test("refuses an unchecked task until a waiver names the decision", () => {
     ...PROPOSAL,
     "tasks.md": "## 1. Build it\n\n- [x] 1.1 Ship it\n- [ ] 1.2 Log it\n",
   };
-  const refused = run(sandbox(files).script, ...SHIPPED);
+  const refused = run(sandbox(files).root, ...SHIPPED);
   assert.equal(refused.status, 1);
   assert.match(refused.stderr, /1 task\(s\) unchecked/);
   assert.match(refused.stderr, /- \[ \] 1\.2 Log it/);
 
   const waived = run(
-    sandbox(files).script,
+    sandbox(files).root,
     ...SHIPPED,
     "--tasks-waived",
     "@echo, the logging ships separately",
@@ -159,12 +133,12 @@ const OPEN = "## 1. Build it\n\n- [x] 1.1 Ship it\n- [ ] 1.2 Log it\n";
 test("reads the checkmarks on the store's main, not in this checkout", () => {
   const behind = sandbox({ ...PROPOSAL, "tasks.md": DONE });
   writeFileSync(behind.tasks, OPEN);
-  const passed = run(behind.script, ...SHIPPED);
+  const passed = run(behind.root, ...SHIPPED);
   assert.equal(passed.status, 0, passed.stderr);
 
   const ticked = sandbox({ ...PROPOSAL, "tasks.md": OPEN });
   writeFileSync(ticked.tasks, DONE);
-  const refused = run(ticked.script, ...SHIPPED);
+  const refused = run(ticked.root, ...SHIPPED);
   assert.equal(refused.status, 1);
   assert.match(refused.stderr, /1 task\(s\) unchecked/);
 });
@@ -172,24 +146,24 @@ test("reads the checkmarks on the store's main, not in this checkout", () => {
 test("refuses a plan main does not hold, and a store with no main", () => {
   const unmerged = sandbox(PROPOSAL);
   writeFileSync(unmerged.tasks, DONE);
-  const notOnMain = run(unmerged.script, ...SHIPPED);
+  const notOnMain = run(unmerged.root, ...SHIPPED);
   assert.equal(notOnMain.status, 1);
   assert.match(notOnMain.stderr, /tasks\.md is not on origin\/main/);
 
   const orphan = sandbox({ ...PROPOSAL, "tasks.md": DONE });
   orphan.git("update-ref", "-d", "refs/remotes/origin/main");
-  const noMain = run(orphan.script, ...SHIPPED);
+  const noMain = run(orphan.root, ...SHIPPED);
   assert.equal(noMain.status, 1);
   assert.match(noMain.stderr, /no origin main/);
 });
 
 test("a clear run writes the record quoted, over the waiver it replaces", () => {
-  const { script, manifest } = sandbox({
+  const { root, manifest } = sandbox({
     ...PROPOSAL,
     ".openspec.yaml":
       'schema: grade10-planning\ndeploy_waived: "@echo, nothing shipped"\n',
   });
-  const result = run(script, ...SHIPPED);
+  const result = run(root, ...SHIPPED);
 
   assert.equal(result.status, 0);
   assert.equal(
@@ -249,7 +223,7 @@ function behindSandbox(reviewed) {
 }
 
 test("refuses a delta behind what it was drawn from, naming it", () => {
-  const result = run(behindSandbox("reviewed:\n  specs: deadbeef\n").script);
+  const result = run(behindSandbox("reviewed:\n  specs: deadbeef\n").root);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /archives with 1 artifact\(s\) behind/);
@@ -258,7 +232,7 @@ test("refuses a delta behind what it was drawn from, naming it", () => {
 
 test("is clear where the read record matches the tree", () => {
   const result = run(
-    behindSandbox(`reviewed:\n  specs: ${FRESH_SPECS_ID}\n`).script,
+    behindSandbox(`reviewed:\n  specs: ${FRESH_SPECS_ID}\n`).root,
   );
 
   assert.equal(result.status, 0, result.stderr);
@@ -306,7 +280,7 @@ test("is clear where a reviewed id was hashed with the page section it links", (
       {},
       { "demo-planning": BEHIND_SCHEMA },
       { [PAGE]: PAGE_TEXT },
-    ).script,
+    ).root,
   );
 
   assert.equal(result.status, 0, result.stderr);
@@ -336,7 +310,7 @@ test("reads the archive's own commit dates where no reviewed: line dates the rea
     "touch the proposal",
   );
 
-  const result = run(s.script);
+  const result = run(s.root);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /specs — proposal changed/);
@@ -352,9 +326,7 @@ test("skips the freshness read on a shallow clone rather than refusing on its ac
     ["clone", "--quiet", "--depth", "1", `file://${source}`, shallow],
     { stdio: "ignore" },
   );
-  const result = run(
-    join(shallow, "scripts", "openspec", "archive-preflight.mjs"),
-  );
+  const result = run(shallow);
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /Freshness not checked/);
@@ -386,7 +358,7 @@ const DURABLE = {
 };
 
 test("a change whose sections all landed is clear", () => {
-  const result = run(sandbox(CARRIED, DURABLE).script, ...SHIPPED);
+  const result = run(sandbox(CARRIED, DURABLE).root, ...SHIPPED);
   assert.equal(result.status, 0);
 });
 
@@ -403,7 +375,7 @@ test("refuses decisions the fold carries nowhere until the owner says where they
     "decisions.md":
       "## Goals\n\n- Collectors find a card.\n\n## Non-Goals\n\n- Stock per shop.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Where does search live? | The header | A dedicated page - one field is not a surface |\n",
   };
-  const refused = run(sandbox(decided, DURABLE).script, ...SHIPPED);
+  const refused = run(sandbox(decided, DURABLE).root, ...SHIPPED);
   assert.equal(refused.status, 1);
   assert.match(
     refused.stderr,
@@ -411,7 +383,7 @@ test("refuses decisions the fold carries nowhere until the owner says where they
   );
 
   const carried = run(
-    sandbox(decided, DURABLE).script,
+    sandbox(decided, DURABLE).root,
     ...SHIPPED,
     "--decisions-carried",
     "Q1 onto the listing page's Product decisions block",
@@ -419,7 +391,7 @@ test("refuses decisions the fold carries nowhere until the owner says where they
   assert.equal(carried.status, 0, carried.stderr);
 
   const none = run(
-    sandbox(decided, DURABLE).script,
+    sandbox(decided, DURABLE).root,
     ...SHIPPED,
     "--decisions-carried",
     "none",
@@ -433,7 +405,7 @@ test("asks nothing of a change whose decisions table is empty", () => {
     "decisions.md":
       "## Goals\n\n- Collectors find a card.\n\n## Non-Goals\n\n- Stock per shop.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n",
   };
-  const result = run(sandbox(empty, DURABLE).script, ...SHIPPED);
+  const result = run(sandbox(empty, DURABLE).root, ...SHIPPED);
   assert.equal(result.status, 0, result.stderr);
 });
 
@@ -446,7 +418,7 @@ test("refuses a scenario the fold would land with no anchor", () => {
       REQUIREMENTS +
       "\n#### Scenario: listing-SC-01 - It searches\n\n- **WHEN** asked\n- **THEN** it searches\n",
   };
-  const result = run(sandbox(files, DURABLE).script, ...SHIPPED);
+  const result = run(sandbox(files, DURABLE).root, ...SHIPPED);
 
   assert.equal(result.status, 1);
   assert.match(
@@ -469,7 +441,7 @@ test("takes the anchor written as its own line or as a bullet", () => {
         REQUIREMENTS +
         `\n#### Scenario: listing-SC-01 - It searches\n${serves}\n\n- **WHEN** asked\n- **THEN** it searches\n`,
     };
-    const result = run(sandbox(files, DURABLE).script, ...SHIPPED);
+    const result = run(sandbox(files, DURABLE).root, ...SHIPPED);
     assert.equal(result.status, 0, `${serves} was refused: ${result.stderr}`);
   }
 });
@@ -483,7 +455,7 @@ test("says nothing about a scenario that predates permanent ids", () => {
       REQUIREMENTS +
       "\n#### Scenario: It searches\n\n- **WHEN** asked\n- **THEN** it searches\n",
   };
-  const result = run(sandbox(files, DURABLE).script, ...SHIPPED);
+  const result = run(sandbox(files, DURABLE).root, ...SHIPPED);
   assert.equal(result.status, 0, result.stderr);
 });
 
@@ -493,7 +465,7 @@ test("refuses a durable purpose the change replaced and archive left behind", ()
     [`${CAP}/spec.md`]:
       "## Purpose\n\nCollectors browse.\n\n" + FEATURE_SET + REQUIREMENTS,
   };
-  const result = run(sandbox(CARRIED, stale).script, ...SHIPPED);
+  const result = run(sandbox(CARRIED, stale).root, ...SHIPPED);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /`## Purpose`/);
@@ -509,7 +481,7 @@ test("refuses a removed journey that leaves no tombstone, and takes one that doe
     ...DURABLE,
     [`${CAP}/user-journeys.md`]: "# User journeys\n",
   };
-  const refused = run(sandbox(files, deleted).script, ...SHIPPED);
+  const refused = run(sandbox(files, deleted).root, ...SHIPPED);
   assert.equal(refused.status, 1);
   assert.match(refused.stderr, /listing-US-01` is removed and leaves no/);
 
@@ -517,7 +489,7 @@ test("refuses a removed journey that leaves no tombstone, and takes one that doe
     ...DURABLE,
     [`${CAP}/user-journeys.md`]: `# User journeys\n\n${STORY}\n## Retired\n\n- \`listing-US-01\` - removed in \`build-alpha\`\n`,
   };
-  const stillWritten = run(sandbox(files, both).script, ...SHIPPED);
+  const stillWritten = run(sandbox(files, both).root, ...SHIPPED);
   assert.equal(stillWritten.status, 1);
   assert.match(stillWritten.stderr, /still written above it/);
 
@@ -526,7 +498,7 @@ test("refuses a removed journey that leaves no tombstone, and takes one that doe
     [`${CAP}/user-journeys.md`]:
       "# User journeys\n\n## Retired\n\n- `listing-US-01` - Collector searches the catalogue · removed in `build-alpha` · 2026-09-15\n",
   };
-  assert.equal(run(sandbox(files, tombstoned).script, ...SHIPPED).status, 0);
+  assert.equal(run(sandbox(files, tombstoned).root, ...SHIPPED).status, 0);
 });
 
 test("refuses a carried Reconciliation that keeps its scenario ids", () => {
@@ -536,7 +508,7 @@ test("refuses a carried Reconciliation that keeps its scenario ids", () => {
       SUITE +
       "\n## Reconciliation\n\n- `listing-SC-04` covers the empty result · accepted\n",
   };
-  const result = run(sandbox(CARRIED, withIds).script, ...SHIPPED);
+  const result = run(sandbox(CARRIED, withIds).root, ...SHIPPED);
 
   assert.equal(result.status, 1);
   assert.match(
@@ -550,12 +522,12 @@ test("refuses a suite carried without its Settled lines, waiver or no waiver", (
     ...DURABLE,
     [`${CAP}/feature-tcs.md`]: "# Feature test cases\n",
   };
-  const result = run(sandbox(CARRIED, dropped).script, ...SHIPPED);
+  const result = run(sandbox(CARRIED, dropped).root, ...SHIPPED);
   assert.equal(result.status, 1);
   assert.match(result.stderr, /drops 1 `## Settled` line/);
 
   const forced = run(
-    sandbox(CARRIED, dropped).script,
+    sandbox(CARRIED, dropped).root,
     ...SHIPPED,
     "--journeys-copied",
   );
@@ -565,12 +537,12 @@ test("refuses a suite carried without its Settled lines, waiver or no waiver", (
 
 test("a suite with no durable file yet is a promise --journeys-copied can make", () => {
   const { [`${CAP}/feature-tcs.md`]: _suite, ...missing } = DURABLE;
-  const refused = run(sandbox(CARRIED, missing).script, ...SHIPPED);
+  const refused = run(sandbox(CARRIED, missing).root, ...SHIPPED);
   assert.equal(refused.status, 1);
   assert.match(refused.stderr, /feature-tcs\.md` {2}· nothing durable yet/);
 
   const acknowledged = run(
-    sandbox(CARRIED, missing).script,
+    sandbox(CARRIED, missing).root,
     ...SHIPPED,
     "--journeys-copied",
   );
@@ -585,12 +557,12 @@ test("a suite with no durable file yet is a promise --journeys-copied can make",
 const STORE_ONLY = "## 1. Store checks (grade10-spec)\n\n- [x] 1.1 Ship it\n";
 
 test("a store-only plan needs no deploy evidence and records none", () => {
-  const { script, manifest } = sandbox({
+  const { root, manifest } = sandbox({
     ...PROPOSAL,
     ".openspec.yaml": "schema: grade10-planning\n",
     "tasks.md": STORE_ONLY,
   });
-  const result = run(script);
+  const result = run(root);
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /No deploy record is owed/);
@@ -598,22 +570,22 @@ test("a store-only plan needs no deploy evidence and records none", () => {
 });
 
 test("a plan landing anywhere else still owes its deploy", () => {
-  const { script } = sandbox({
+  const { root } = sandbox({
     ...PROPOSAL,
     "tasks.md": `${STORE_ONLY}\n## 2. The app (grade10)\n\n- [x] 2.1 Wire it\n`,
   });
-  const result = run(script);
+  const result = run(root);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /No deploy evidence/);
 });
 
 test("an untagged group is not a store-only plan", () => {
-  const { script } = sandbox({
+  const { root } = sandbox({
     ...PROPOSAL,
     "tasks.md": "## 1. Build it\n\n- [x] 1.1 Ship it\n",
   });
-  const result = run(script);
+  const result = run(root);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /No deploy evidence/);
