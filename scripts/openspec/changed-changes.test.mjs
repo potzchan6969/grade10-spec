@@ -485,6 +485,36 @@ test("shared-planning-change-stages-SC-40 and shared-planning-change-stages-SC-4
   }
 });
 
+test("shared-planning-change-stages-SC-40 - --stages links the change's thread where the record names one", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      "thread: C0AB/1700000000.000100",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+    [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
+  });
+  const head = commit("decide probe", 1);
+
+  const { messages } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.equal(messages.length, 2);
+  for (const message of messages) {
+    // The thread's permalink, in place of the change page's link: the
+    // workspace host, the channel, and the timestamp with its dot taken out.
+    assert.match(
+      message.text,
+      /https:\/\/grade10\.slack\.com\/archives\/C0AB\/p1700000000000100/,
+    );
+    assert.doesNotMatch(message.text, /spec\.test\/planning\/in-flight/);
+  }
+});
+
 test("--stages names the stage a push moved a change into and tells its hand", () => {
   const { root, write, commit } = sandbox();
   write({
