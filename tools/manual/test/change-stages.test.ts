@@ -287,49 +287,63 @@ describe("whose turn it is", () => {
   });
 });
 
-describe("a role whose turn has not yet come, for My turn's later list", () => {
-  const later = (rung: Stage, extra: Partial<ChangeEntry>, handle: string) =>
-    laterRolesOf(at(rung, extra), rung, artifacts(), handle);
+describe("the roles a change has not yet reached, for My turn's later list", () => {
+  // `laterRolesOf` says which roles are upcoming; narrowing that to one
+  // handle is `myTurnOf`'s own `rolesHeldBy`, covered end to end by
+  // `my-turn-page.test.tsx`.
+  const later = (rung: Stage, extra: Partial<ChangeEntry> = {}) =>
+    laterRolesOf(at(rung, extra), rung, artifacts());
 
-  it("says the engineer is later while the change is still the product manager's", () => {
-    expect(later("specified", {}, "sam")).toEqual(["dev"]);
+  it("says the engineer is later while the change is still specified", () => {
+    expect(later("specified")).toEqual(["qa", "dev", "release"]);
   });
 
   it("says nothing once that hand's own turn has come", () => {
-    // Building is the engineer's turn: sam is on the reader now, not later.
-    expect(later("building", {}, "sam")).toEqual([]);
+    // Building is the engineer's turn: dev is on the reader now, not later.
+    expect(later("building")).toEqual(["qa", "release"]);
   });
 
-  it("says QA and the release hand are later while the change is still building", () => {
-    expect(later("planned", {}, "ari")).toEqual(["qa"]);
-    expect(later("planned", {}, "lee")).toEqual(["release"]);
+  it("says QA and the release hand are later while the change is still planned", () => {
+    expect(later("planned")).toEqual(["qa", "release"]);
   });
 
-  it("says the designer is later while proposed is still the product manager's half", () => {
+  it("says the designer and the tech PIC are later while proposed is still the product manager's half", () => {
     // Tech is unnamed, so the turn has not passed to the design half yet —
-    // but the designer is already named, and has not been read yet.
+    // both halves of it are still ahead, whether or not their handle is named.
     const proposed = at("proposed", { hands: { pm: "robin", design: "dana" } });
-    expect(laterRolesOf(proposed, "proposed", artifacts(), "dana")).toEqual([
+    expect(laterRolesOf(proposed, "proposed", artifacts())).toEqual([
       "design",
+      "tech",
+      "qa",
+      "dev",
+      "release",
     ]);
-    // The product manager holds Proposed here, not later on it.
-    expect(laterRolesOf(proposed, "proposed", artifacts(), "robin")).toEqual(
-      [],
-    );
   });
 
   it("says nothing once the design half has already had its turn", () => {
-    // Once the change has reached Designed, the designer's part is done.
-    expect(later("designed", {}, "dana")).toEqual([]);
+    // Once the change has reached Designed, the design half is done; the
+    // product manager's own second turn, at Specified, is still ahead.
+    const roles = later("designed");
+    expect(roles).not.toContain("design");
+    expect(roles).not.toContain("tech");
+    expect(roles).toContain("pm");
   });
 
   it("says nothing once the product manager's own second turn has passed", () => {
     // Robin's second turn was at Specified, which Building has left behind.
-    expect(later("building", {}, "robin")).toEqual([]);
+    expect(later("building")).not.toContain("pm");
   });
 
-  it("says nothing for a handle the change does not name at all", () => {
-    expect(later("planned", {}, "nobody")).toEqual([]);
+  it("shared-planning-change-stages-SC-07 - never says a waived design is later", () => {
+    // A waiver stands for the file: nobody will draw it, so it is never
+    // anybody's to read later either.
+    const proposed = at("proposed", {
+      hands: { pm: "robin" },
+      uiWaived: "no UI to draw",
+    });
+    const roles = laterRolesOf(proposed, "proposed", artifacts());
+    expect(roles).not.toContain("design");
+    expect(roles).toContain("tech");
   });
 });
 
