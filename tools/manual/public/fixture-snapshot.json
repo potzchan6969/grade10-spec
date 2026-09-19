@@ -126,7 +126,7 @@
       ],
       "testCasesStatus": "pending-review",
       "issuedThrough": {
-        "sc": 4,
+        "sc": 6,
         "us": 1,
         "tc": 2
       }
@@ -276,6 +276,122 @@
         }
       },
       "lastLanded": "2026-08-05T00:00:00+00:00"
+    },
+    {
+      "id": "demo-approved",
+      "dir": "openspec/changes/demo-approved",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "planned",
+      "owners": [],
+      "created": "2026-09-02",
+      "title": "The approved suite",
+      "why": "The fixture walk needs a second change in the same lane whose suite QA has\nbeen through, so the suite chip can be read as a verdict rather than as a\nbadge every change wears the same way.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 0,
+          "total": 2,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": false
+            },
+            {
+              "text": "1.2 Adopt it.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [
+        {
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED"
+          ],
+          "requirements": [
+            {
+              "name": "The thing leaves a record",
+              "kind": "added",
+              "text": "### Requirement: The thing leaves a record\n\nThe system SHALL write one record for each thing that happens.\n\n#### Scenario: alpha-SC-06 - The record is written\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing happens\n- **THEN** one record is written for it"
+            }
+          ]
+        }
+      ],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "specs",
+        "test-cases",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "designWaived": "the fixture is about the suite's verdict, not the designs",
+      "uiWaived": "the fixture is about the suite's verdict, not the designs",
+      "hands": {
+        "pm": "tester",
+        "qa": "tester",
+        "dev": "tester"
+      },
+      "author": "tester",
+      "suites": [
+        {
+          "spec": "demo-product/alpha",
+          "status": "approved",
+          "cases": {
+            "draft": 0,
+            "actual": 1,
+            "deprecated": 0,
+            "total": 1,
+            "automated": 0
+          }
+        }
+      ],
+      "upstream": {
+        "decisions": {
+          "id": "1d7bbbaa",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "e7ce6426",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "specs": {
+          "id": "2f3e7021",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "test-cases": {
+          "id": "2f3e7021",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "tasks": {
+          "id": "8af647dc",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "specs",
+            "test-cases"
+          ]
+        }
+      }
     },
     {
       "id": "demo-building",
@@ -503,6 +619,138 @@
         }
       },
       "lastLanded": "2026-09-07T00:00:00+00:00"
+    },
+    {
+      "id": "demo-overlays",
+      "dir": "openspec/changes/demo-overlays",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "planned",
+      "owners": [],
+      "created": "2026-09-02",
+      "title": "The overlay set",
+      "why": "The fixture walk needs one change wearing all five overlays at once, so a\nreader can be shown the closed set and nothing outside it.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 0,
+          "total": 2,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": false
+            },
+            {
+              "text": "1.2 Adopt it.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [
+        {
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED"
+          ],
+          "requirements": [
+            {
+              "name": "The thing is counted once",
+              "kind": "added",
+              "text": "### Requirement: The thing is counted once\n\nThe system SHALL count the thing once however often it is asked for.\n\n#### Scenario: alpha-SC-05 - The count holds\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing is asked for twice\n- **THEN** the count goes up by one"
+            }
+          ]
+        }
+      ],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "specs",
+        "test-cases",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "dependsOn": [
+        "demo-planned"
+      ],
+      "designWaived": "the fixture is about the overlays, not the designs",
+      "uiWaived": "the fixture is about the overlays, not the designs",
+      "hands": {
+        "pm": "tester",
+        "design": "tester",
+        "tech": "tester",
+        "qa": "tester",
+        "dev": "tester"
+      },
+      "reviewed": {
+        "decisions": "00000000",
+        "specs": "00000000"
+      },
+      "awaiting": [
+        {
+          "artifact": "tasks",
+          "why": "2026-09-08 - waiting on the engineer to say which group goes first"
+        }
+      ],
+      "author": "tester",
+      "suites": [
+        {
+          "spec": "demo-product/alpha",
+          "status": "pending-review",
+          "cases": {
+            "draft": 1,
+            "actual": 0,
+            "deprecated": 0,
+            "total": 1,
+            "automated": 0
+          }
+        }
+      ],
+      "upstream": {
+        "decisions": {
+          "id": "153c946b",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "951cccd8",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "specs": {
+          "id": "e7d02acc",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "test-cases": {
+          "id": "e7d02acc",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "tasks": {
+          "id": "c2780edb",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "specs",
+            "test-cases"
+          ]
+        }
+      },
+      "lastLanded": "2026-09-08T00:00:00+00:00"
     },
     {
       "id": "demo-planned",
@@ -832,6 +1080,7 @@
         "id": "proposal",
         "generates": "proposal.md",
         "teammate": "product-manager",
+        "hand": "pm",
         "requires": [],
         "upstream": [],
         "perspectives": [
@@ -903,6 +1152,7 @@
         "id": "decisions",
         "generates": "decisions.md",
         "teammate": "product-manager",
+        "hand": "pm",
         "requires": [
           "proposal"
         ],
@@ -978,6 +1228,7 @@
         "id": "user-journeys",
         "generates": "specs/**/user-journeys.md",
         "teammate": "product-manager",
+        "hand": "pm",
         "requires": [
           "decisions",
           "proposal"
@@ -1055,6 +1306,7 @@
         "id": "ui-design",
         "generates": "ui-design.md",
         "teammate": "designer",
+        "hand": "design",
         "requires": [
           "decisions",
           "user-journeys"
@@ -1093,6 +1345,7 @@
         "id": "tech-design",
         "generates": "tech-design.md",
         "teammate": "engineer",
+        "hand": "tech",
         "requires": [
           "decisions",
           "user-journeys"
@@ -1123,6 +1376,7 @@
       {
         "id": "specs",
         "generates": "specs/**/spec.md",
+        "hand": "pm",
         "requires": [
           "decisions",
           "user-journeys"
@@ -1140,6 +1394,7 @@
       {
         "id": "test-cases",
         "generates": "specs/**/feature-tcs.md",
+        "hand": "qa",
         "requires": [
           "specs"
         ],
@@ -1157,6 +1412,7 @@
         "id": "tasks",
         "generates": "tasks.md",
         "teammate": "engineer",
+        "hand": "dev",
         "requires": [
           "specs"
         ],

@@ -16,6 +16,7 @@ artifacts:
   - id: proposal
     required: true
     teammate: product-manager
+    hand: pm
     perspectives:
       - name: product
         when: [surface, copy]
@@ -120,6 +121,7 @@ artifacts:
   - id: decisions
     required: true
     teammate: product-manager
+    hand: pm
     perspectives:
       - name: product
         when: [surface, copy]
@@ -274,6 +276,7 @@ artifacts:
   - id: user-journeys
     required: true
     teammate: product-manager
+    hand: pm
     perspectives:
       - name: product
         when: [surface, copy]
@@ -417,6 +420,7 @@ artifacts:
   - id: ui-design
     required: false
     teammate: designer
+    hand: design
     perspectives:
       - name: design
         when: [surface]
@@ -492,6 +496,7 @@ artifacts:
   - id: tech-design
     required: false
     teammate: engineer
+    hand: tech
     perspectives:
       - name: tech
         when: [always]
@@ -574,6 +579,7 @@ artifacts:
       - user-journeys
   - id: specs
     required: true
+    hand: pm
     generates: specs/**/spec.md
     description: The capability's purpose, the feature set, and the requirement deltas
     template: spec.md
@@ -826,6 +832,7 @@ artifacts:
       - tech-design
   - id: test-cases
     required: true
+    hand: qa
     generates: specs/**/feature-tcs.md
     description: An independent blind reading of the anchors, written without sight of the scenarios
     template: feature-tcs.md
@@ -956,6 +963,7 @@ artifacts:
   - id: tasks
     required: true
     teammate: engineer
+    hand: dev
     perspectives:
       - name: operations
         when: [always, migration, flag]

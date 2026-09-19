@@ -1,0 +1,9 @@
+schema: grade10-planning
+created: 2026-09-02
+promoted_by: "@tester"
+ui_waived: "the fixture is about the suite's verdict, not the designs"
+design_waived: "the fixture is about the suite's verdict, not the designs"
+hands:
+  pm: tester
+  qa: tester
+  dev: tester

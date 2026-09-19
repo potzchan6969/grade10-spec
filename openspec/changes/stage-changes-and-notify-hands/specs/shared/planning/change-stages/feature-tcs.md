@@ -473,7 +473,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
 
@@ -1721,4 +1721,4 @@ What stays manual after the walk (task 8.3/8.5), and why.
 - **US4-TC4-1, US4-TC5-1** — a handle the team map does not know and a malformed `hands:` record are both refusals the store's own reader raises before a page ever renders one; `check/record.mjs`'s and `read-changes.mts`'s own tests decide them, not a walk of the rendered page
 - **US5, US6** — no walk in this task opens a change carrying a waiver row or a wait; `US5-TC1-1`'s own three-row table and `US6`'s dated-and-undated pair are past this task's five files
 - **US7-TC2-1** — an archived change's line wearing no pip has no fixture to reach it (`section-pip.walk.ts`'s own header names why); `test/section-pip.test.tsx` proves it at the block level instead
-- **US8, US9** — the run sheet, the digest and "no tick, claim or wait while behind" all read outside the rendered manual; `US9-TC3-1`'s and `US9-TC4-1`'s refusals are the record reader's and the archive check's to prove, not a walk's
+- **US8, US9** — the run sheet, the digest and "no tick, claim or wait while behind" all read outside the rendered manual; `US9-TC1-1` and `US9-TC2-1` each turn on a direct message, so `board-overlays.walk.ts`'s `SC-26` decides their card's own half alone — the chip naming the earliest of two behind artifacts and its hand; `US9-TC3-1`'s and `US9-TC4-1`'s refusals are the record reader's and the archive check's to prove, not a walk's

@@ -1,0 +1,18 @@
+schema: grade10-planning
+created: 2026-09-02
+promoted_by: "@tester"
+ui_waived: "the fixture is about the overlays, not the designs"
+design_waived: "the fixture is about the overlays, not the designs"
+hands:
+  pm: tester
+  design: tester
+  tech: tester
+  qa: tester
+  dev: tester
+depends_on:
+  - demo-planned
+awaiting:
+  tasks: "2026-09-08 - waiting on the engineer to say which group goes first"
+reviewed:
+  decisions: "00000000"
+  specs: "00000000"
