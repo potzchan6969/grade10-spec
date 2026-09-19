@@ -238,9 +238,18 @@ export function QuestionList({ questions }: { questions: OpenQuestion[] }) {
           <Text as="span" size="xs">
             {question.text}
           </Text>
-          <Text as="span" className="font-mono" size="xs" tone="secondary">
-            {`@${question.hand}`}
-          </Text>
+          {/* The hand is the handle the change names for that role, and the
+              role itself where it names nobody — said as a role rather than
+              as a handle nobody answers to. */}
+          {question.hand === question.role ? (
+            <Text as="span" size="xs" tone="secondary">
+              {`${question.role} — open`}
+            </Text>
+          ) : (
+            <Text as="span" className="font-mono" size="xs" tone="secondary">
+              {`@${question.hand}`}
+            </Text>
+          )}
         </li>
       ))}
     </ul>
