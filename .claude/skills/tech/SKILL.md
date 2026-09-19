@@ -21,9 +21,10 @@ landing and the re-read.
 
 ## What the Round Adds Here
 
-- **Four readings, every round** — deterministic, resilient and observable;
+- **One reader, four readings** — deterministic, resilient and observable;
   simple and clear; consistent, modular and built on later; testable and
-  buildable. Each names one of the eight principles in
+  buildable, argued together by the one dispatch of `tech.md`. Each finding
+  names one of the eight principles in
   [`docs/governance/system-design.md`](../../../docs/governance/system-design.md),
   and a finding that names none is not carried
 - **The rejected option, every time** — a decision says what it was chosen

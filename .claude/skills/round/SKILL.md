@@ -67,26 +67,30 @@ then the change's earlier artifacts in the schema's order - and from the ask.
 The perspectives are data in
 [`openspec/schemas/grade10-planning/schema.yaml`](../../../openspec/schemas/grade10-planning/schema.yaml),
 beside each artifact's teammate. This skill carries no copy of that table; it
-asks for the readers the draft summons:
+asks for the readers the draft summons, from the draft's own diff:
 
 ```bash
-node scripts/openspec/perspectives.mjs <artifact|group> --diff <file>
+git diff $(git merge-base origin/main HEAD)...HEAD -- openspec/changes/<change> > .round/diff
+node scripts/openspec/perspectives.mjs <artifact|group> --diff .round/diff --change <change>
 ```
 
-It prints `{ readers: [{ name, agent, when }], bundle: { … } }`: the readers
-the draft's own diff summons, and the bundle each one is given. It reads no
-record key.
+It prints `{ readers: [{ name, agent, when, summonedBy }], verifier: <bool>, bundle: { … } }`:
+the readers the draft's own diff summons, whether a verifier reads their
+findings, and the bundle each one is given. It reads no record key.
 
+- **No diff, the floor alone** — a round with nothing yet on the branch reads
+  `.round/diff` empty; only the `always` reader is summoned
 - **The simpler thing, always** — the reader whose `when` is `always` runs on
   every round and is the floor when a round has one reader
 - **One challenger per perspective** — dispatch each `agent` under
   `.claude/agents/` once, with its perspective's name, the draft and its
   bundle. Never pass one reader another reader's findings, and never a
   verifier's verdict
-- **One verifier per group of findings** — dispatch `.claude/agents/verifier.md`
+- **A verifier when `verifier` is true** — dispatch `.claude/agents/verifier.md`
   with that group and the draft
-- **One reader verifies itself** — a round that dispatched one reader in all
-  dispatches no verifier: that reader argues its own findings
+- **One reader verifies itself** — where `verifier` is false because the round
+  dispatched one reader in all, no verifier runs: that reader argues its own
+  findings
 - **The requirements are exempt** — for `spec.md` and `feature-tcs.md` the
   challenge is the two independent readings and the verify is their
   reconciliation, taken by the run that wrote them. No verifier reads both,
@@ -171,12 +175,16 @@ Decide no preference and no product decision.
 
 ## Step 6: The Landing
 
-On the hand's word:
+On the hand's word, one command:
 
 ```bash
-pnpm run round:row <change>                    # the round's row
-pnpm run plan:land <change> <artifact|group>   # the landing, as one transaction
+pnpm run plan:land <change> <artifact|group> --perspectives <a,b> --stood "<what stood>" [--asked Q1,Q2] [--tests "<scenario: files>"]
 ```
+
+`--perspectives` and `--stood` are owed on every landing: a round that found
+nothing stood says so. `--asked` and `--tests` are given where the round has
+either. There is no separate row-writing step: `round-row.mjs` is gone, and
+naming the round's row is this one call's job.
 
 `plan:land` refuses a dirty tree, an e-mail the team map does not name, a
 handle that is not the hand of the stage, and anything before the artifact
@@ -199,15 +207,18 @@ and on a lost lease re-reads once and retries.
 
 1. **Oldest first** — read every artifact after the one that moved, in the
    order of the upstream set
-2. **Nothing changed** — `pnpm run round:reviewed <change> <artifact>` writes
-   that artifact's `reviewed:` line alone, in one commit, and the thread line
-   says what you read and that nothing changed. No `rounds.md` row: no
-   perspective ran
+2. **Nothing changed** — `pnpm run plan:land <change> <artifact> --reviewed`
+   writes that artifact's `reviewed:` line alone, in one commit, and no round's
+   row: it lands rowless, and the thread line says what you read and that
+   nothing changed
 3. **Something changed** — write no `reviewed:` line. Open a round for that
    artifact's hand, naming what reached it, and stop there. What comes after
    is read again once that round lands
 4. **Nothing after it** — read nothing and say nothing beyond the landing line
-5. **A goal or a non-goal moved** — ask the product manager one numbered
+5. **A landed `## Raised` row** — a row landing in `decisions.md`'s `## Raised`
+   puts `spec.md` and `feature-tcs.md` behind, the same as any other change to
+   what is before them; both are read again before `tasks.md` lands
+6. **A goal or a non-goal moved** — ask the product manager one numbered
    question with three answers, and rewrite nothing in place:
 
 | The answer | What it does |

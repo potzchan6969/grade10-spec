@@ -26,10 +26,12 @@ block rather than an artifact's.
    findings are verified
 4. **The summary** — one reply in the thread naming the perspectives that read
    the group and, per scenario id, the tests that landed
-5. **The row, then the tick** — the group's `rounds.md` row lands in this store
-   before its tasks are ticked. `pnpm plan done` refuses a tick whose task
-   names a scenario id no test in the group's tree cites, and takes a tick
-   whose task names none
+5. **The row, then the tick** — the group's `rounds.md` row lands with the
+   landing, `pnpm run plan:land <change> <group> --perspectives <a,b> --stood
+   "<what stood>" --tests "<sc>: <files>"`, before its tasks are ticked through
+   `pnpm plan done`. `pnpm plan done` refuses a tick whose task names a
+   scenario id no test in the group's tree cites, and takes a tick whose task
+   names none
 
 ## In the Application Repository
 
@@ -37,8 +39,9 @@ Code lands in `grade10`, and the round is still this one. That session reaches
 this store through `/add-dir` on a clone of it and reads the `round` skill, the
 schema's perspectives and the reader definitions under `.claude/agents/` from
 there - never from the submodule directory pinned to an older sha, because a
-round read from a pin is a round held to last month's rules. Ticks and the
-group's row go to this store's `main` through `pnpm plan done`.
+round read from a pin is a round held to last month's rules. The group's row
+lands on this store's `main` through `plan:land`, run against the store clone;
+the ticks that follow go through `pnpm plan done`.
 
 ## Never
 

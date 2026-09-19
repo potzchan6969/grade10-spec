@@ -9,28 +9,20 @@ description: Land one artifact or one task group of a change on main as the roun
 else's.
 
 ```bash
-pnpm run round:row <change>                    # the round's row
-pnpm run plan:land <change> <artifact|group>   # one transaction
+pnpm run plan:land <change> <artifact|group> --perspectives <a,b> --stood "<what stood>" [--asked Q1,Q2] [--tests "<scenario: files>"]
 ```
+
+One command: it writes the round's row and the landing commit together. There
+is no separate row-writing step.
 
 Then follow `round` for what the landing tells and what it wakes: the reply,
 the next hand, and the re-read of everything after the artifact that moved.
 
 ## What `plan:land` Does, In Order
 
-1. Refuses a dirty working tree or a rebase in progress
-2. Resolves the hand from `git config user.email` through the team map
-   (`docs/prds/team.yaml`), refusing an e-mail the map does not name and a
-   handle that is not the hand of the stage
-3. Fetches `origin main`, records that sha, and rebases the change's branch on
-   it
-4. Refuses while anything before the artifact is behind, naming the artifact
-   and the hand it waits on
-5. Runs the gate - `validate:changes`, `check:manual`, `tcs:validate`
-6. Commits `landed_by:` and the `rounds.md` row together
-7. Pushes the branch with a lease, then `main` as a plain fast-forward
-8. On a rejected push, reads `main` once more and retries; losing again, it
-   says so and stops
+The steps, in order, are the header comment of
+[`scripts/openspec/plan-land.mjs`](../../../scripts/openspec/plan-land.mjs):
+this skill names no copy of them, only what you do with each refusal.
 
 ## What You Do With Each Refusal
 
