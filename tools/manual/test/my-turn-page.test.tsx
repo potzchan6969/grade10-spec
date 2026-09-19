@@ -176,6 +176,49 @@ describe("the page's own order", () => {
     expect(afterQuestions).not.toContain("A change asking robin something");
   });
 
+  it("shared-planning-agent-rounds-SC-26 - an open question links the change's thread when the record names one, the change page otherwise", () => {
+    const withThread = changeEntry("threaded-change", [], {
+      title: "A change with a thread",
+      stage: "specified",
+      hands: { pm: "dana" },
+      thread: "C0123ABC/1758170000.001200",
+      questions: [
+        {
+          id: "Q1",
+          artifact: "decisions",
+          role: "pm",
+          hand: "robin",
+          text: "Which day does the shelf start on?",
+        },
+      ],
+    });
+    const withoutThread = changeEntry("threadless-change", [], {
+      title: "A change with no thread",
+      stage: "specified",
+      hands: { pm: "dana" },
+      questions: [
+        {
+          id: "Q2",
+          artifact: "decisions",
+          role: "pm",
+          hand: "robin",
+          text: "Where does the shelf end?",
+        },
+      ],
+    });
+
+    const html = render([withThread, withoutThread], "robin");
+    const threaded = html.slice(
+      html.indexOf("Which day does the shelf start on?"),
+      html.indexOf("Where does the shelf end?"),
+    );
+    const threadless = html.slice(html.indexOf("Where does the shelf end?"));
+
+    expect(threaded).toContain("C0123ABC");
+    expect(threadless).toContain("no thread is recorded");
+    expect(threadless).toContain("/in-flight/threadless-change");
+  });
+
   it("carries the thread link and the command on each card", () => {
     const now = changeEntry("now-change", [], {
       title: "On robin right now",

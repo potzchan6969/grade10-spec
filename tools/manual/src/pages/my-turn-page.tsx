@@ -98,6 +98,7 @@ function MyTurnBody({ handle }: { handle: string }) {
                 <Text as="span" size="sm">
                   {question.text}
                 </Text>
+                <ThreadLink change={change} />
               </li>
             ))}
           </ul>
