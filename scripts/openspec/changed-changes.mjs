@@ -638,6 +638,30 @@ async function keysOnly(root, base, head, touched) {
   return only;
 }
 
+/**
+ * The re-read job's matrix: one entry per change this push newly put
+ * something behind — the same `newlyBehind` the `behind` messages are drawn
+ * from, never a second diff.
+ *
+ * A change with something already behind before this push is left out: the
+ * push did not touch it, so re-reading it here would fire the same change
+ * again on every unrelated push until a landing clears it. A change touched
+ * only through the round's own record lines is excluded by the same
+ * `suppressed` set that silences its messages, which is what keeps the
+ * cascade finite: the re-read's own commit never re-enters this matrix, even
+ * where the content id it wrote leaves the artifact reading as behind.
+ */
+export function rereadMatrixOf(base, head, suppressed) {
+  const matrix = [];
+  for (const behind of newlyBehind(base, head)) {
+    if (suppressed.has(behind.id)) continue;
+    const at = head.get(behind.id);
+    if (!at) continue;
+    matrix.push({ id: behind.id, thread: at.thread ?? null });
+  }
+  return matrix.sort((left, right) => left.id.localeCompare(right.id));
+}
+
 function without(changes, suppressed) {
   return Object.fromEntries(
     Object.entries(changes).map(([status, items]) => [
@@ -711,8 +735,9 @@ async function main() {
   const changedPaths = changed
     .flatMap(({ oldPath, path }) => [oldPath, path])
     .filter(Boolean);
+  const touched = touchedByChange(changed);
   const suppressed = values.stages
-    ? await keysOnly(root, values.base, values.head, touchedByChange(changed))
+    ? await keysOnly(root, values.base, values.head, touched)
     : new Set();
   const changes = await titledChanges(
     without(classifyChanges(changed), suppressed),
@@ -727,6 +752,7 @@ async function main() {
   let stages = {};
   let messages = [];
   let skipped = [];
+  let matrix = [];
   if (values.stages) {
     const options = {
       manualUrl: values["manual-url"],
@@ -755,6 +781,7 @@ async function main() {
     skipped = told.skipped.filter(
       (one) => !suppressed.has(one.key.split(":")[0]),
     );
+    matrix = rereadMatrixOf(atBase, atHead, suppressed);
   }
 
   const payload = slackPayload({
@@ -791,7 +818,7 @@ async function main() {
   if (values["github-output"]) {
     await appendFile(
       values["github-output"],
-      `has-changes=${hasChanges}\nhas-messages=${hasMessages}\npayload=${JSON.stringify(payload)}\n`,
+      `has-changes=${hasChanges}\nhas-messages=${hasMessages}\npayload=${JSON.stringify(payload)}\nmatrix=${JSON.stringify(matrix)}\n`,
     );
   }
   process.stdout.write(
@@ -804,6 +831,7 @@ async function main() {
       messages,
       skipped,
       hasMessages,
+      matrix,
     }),
   );
 }
