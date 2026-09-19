@@ -326,6 +326,12 @@ export type BehindArtifact = {
   /** Everything before it, where the recorded content id is what says it
    * moved. */
   before?: string[];
+  /** The newest commit date among `changed`, carried from `UpstreamRead`'s
+   * `newerOn` — what the digest counts its seven days from. Absent where the
+   * recorded content id is what says it moved: an id carries no date, and the
+   * tech design rules an undated artifact is not behind, so a caller that
+   * needs a day count reads nothing here rather than guessing one. */
+  since?: string;
 };
 
 /**
@@ -349,6 +355,10 @@ export type UpstreamRead = {
    * section is never here: a commit on a page dates every section of it, so
    * only a record line can say the linked one moved. */
   newer?: string[];
+  /** The newest of `newer`'s own commit dates — carried onto `BehindArtifact`
+   * as `since`, which is what the digest counts its seven days from. Absent
+   * wherever `newer` is. */
+  newerOn?: string;
 };
 
 /**

@@ -254,15 +254,16 @@ export function openHands(change: ChangeEntry, roles: Role[]): Role[] {
 }
 
 /** What the change's agent drafts at one stage, and what each hand of that
- * stage does about it. */
+ * stage does about it — the page's own row of the stage table, Drafts on the
+ * left and one cell per hand on the right. */
 export type Drafted = {
-  /** What the agent drafts, as the stage table writes it. */
+  /** What the agent drafts, as the stage table's Drafts cell writes it. */
   draft: string;
-  /** One entry per hand the stage names: that hand's move as the stage table
+  /** One entry per hand cell the row carries: that hand's move as the table
    * writes it, and the command it pastes. Per role rather than one packed
-   * sentence, because Designed names two — the designer and the tech PIC each
-   * draft one design — and a surface that needs one hand's command would
-   * otherwise split a string to find it. */
+   * sentence, because Designed's row carries two cells — the designer and the
+   * tech PIC each draft one design — and a surface that needs one hand's
+   * command would otherwise split a string to find it. */
   moves: Partial<Record<Role, { move: string; command: string }>>;
 };
 
@@ -307,10 +308,15 @@ export const DRAFTED: Partial<Record<Stage, Drafted>> = {
 /**
  * The move one hand makes while the turn is theirs at a stage: the stage's
  * own entry, or the next drafted stage's where the stage names none for the
- * role. Proposed's second half hands the change to the designer and the tech
- * PIC, whose moves the stage table writes against Designed, and a card or a
- * message that read only the stage's entry offered them the product
- * manager's command.
+ * role.
+ *
+ * The one case this reaches past its own stage for is Proposed: its second
+ * half hands the change to the designer and the tech PIC, and the table
+ * writes their moves against Designed's row, not Proposed's — so their
+ * command is read off the next rung rather than left to a stage that names
+ * them nowhere. The window stays narrowed to the stage and the one after it,
+ * because that is the only pair the table ever splits this way: every other
+ * drafted stage's own row already carries every hand it moves.
  */
 export function moveOf(
   stage: Stage,
@@ -407,7 +413,11 @@ const ROLE_OF_CONFIRMER: Record<string, string> = {
  * are never read, because the store never reads an upstream for them.
  *
  * In the schema's order, so the first answer is the earliest behind artifact:
- * the one the card names and the one the message goes to.
+ * the one the card names and the one the message goes to. The dated answer
+ * carries `since` — the newest commit date among what changed — for the
+ * digest's own day count; the recorded id answers with no date at all, which
+ * is the tech design's rule that an undated artifact is not behind, so the
+ * digest never lists it.
  */
 export function behindOf(
   change: ChangeEntry,
@@ -425,7 +435,13 @@ export function behindOf(
         behind.push({ artifact: id, before: read.items });
       continue;
     }
-    if (read.newer?.length) behind.push({ artifact: id, changed: read.newer });
+    if (read.newer?.length) {
+      behind.push({
+        artifact: id,
+        changed: read.newer,
+        ...(read.newerOn ? { since: read.newerOn } : {}),
+      });
+    }
   }
   return behind;
 }

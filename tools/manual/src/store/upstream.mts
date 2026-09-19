@@ -116,15 +116,16 @@ export function upstreamOf(
     };
     const drawnAt =
       drawn.date === undefined ? undefined : Date.parse(drawn.date);
-    const newer =
+    const newerItems =
       drawnAt === undefined
         ? []
-        : before
-            .filter(
-              (one) => one.date !== undefined && Date.parse(one.date) > drawnAt,
-            )
-            .map((one) => one.item);
-    if (newer.length > 0) read.newer = newer;
+        : before.filter(
+            (one) => one.date !== undefined && Date.parse(one.date) > drawnAt,
+          );
+    if (newerItems.length > 0) {
+      read.newer = newerItems.map((one) => one.item);
+      read.newerOn = newest(newerItems.map((one) => one.date));
+    }
     reading[artifact.id] = read;
   }
   return Object.keys(reading).length > 0 ? reading : undefined;
