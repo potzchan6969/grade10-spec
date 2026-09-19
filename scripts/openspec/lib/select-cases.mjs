@@ -127,6 +127,34 @@ export function selectCases(candidates, options = {}) {
   return { picked, refused, missing };
 }
 
+/**
+ * What the automation gate did to this selection, and the one line a run
+ * prints about it: how many automated cases it left out, or how many it took
+ * with `--include-automated`.
+ *
+ * Said as zero rather than left unsaid, because the line is what proves the
+ * gate ran (`shared-planning-agent-rounds-SC-61`). Pure, so the three counts
+ * that matter — none, one and many — are asserted without a spreadsheet.
+ *
+ * `leftOut` re-reads `selectCases`' own refusals rather than running the gate
+ * again; `included` reads the picked list, which only carries an automated
+ * case where the flag let one through.
+ */
+export function automatedGateOf({ picked, refused, includeAutomated = false }) {
+  const leftOut = refused.filter((one) => one.reason === "automation").length;
+  const included = includeAutomated
+    ? picked.filter((one) => isAutomated(one.tc)).length
+    : 0;
+  const many = includeAutomated ? included : leftOut;
+  return {
+    leftOut,
+    included,
+    line: `${many} automated case${many === 1 ? "" : "s"} ${
+      includeAutomated ? "included" : "left out"
+    }`,
+  };
+}
+
 /** A case as its row, in `CASE_COLUMNS` order. The marking columns stay empty:
  *  they are the tester's. */
 export function caseRow({ read, tc }) {

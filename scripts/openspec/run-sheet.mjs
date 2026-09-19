@@ -42,12 +42,13 @@ import {
   SUMMARY_TAB,
 } from "./lib/run-sheet-layout.mjs";
 import {
+  automatedGateOf,
   caseRow,
   inReadingOrder,
   readCandidates,
   selectCases,
 } from "./lib/select-cases.mjs";
-import { isAutomated, prop, ROOT } from "./lib/suites.mjs";
+import { prop, ROOT } from "./lib/suites.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
@@ -487,30 +488,18 @@ const drafts = picked.filter(
 ).length;
 // Left out by default, taken with the flag - said either way, and said as
 // zero rather than left unsaid, so a run's own printout is what proves the
-// gate ran (`shared-planning-agent-rounds-SC-61`).
-//
-// This re-derives the same `isAutomated` reading `select-cases.mjs`'s own
-// gate already applied, rather than sharing one check across both: the gate
-// decides what never reaches `picked` at all, and this counts what a run
-// asked to see anyway despite it, once the list already exists. Merging them
-// would mean running the gate a second time just to get a count out of it.
-const automatedLeftOut = refused.filter(
-  (one) => one.reason === "automation",
-).length;
-const automatedIncluded = args.includeAutomated
-  ? picked.filter((one) => isAutomated(one.tc)).length
-  : 0;
+// gate ran (`shared-planning-agent-rounds-SC-61`). The count and the line are
+// `automatedGateOf`'s, beside the gate whose refusals they read.
+const { leftOut: automatedLeftOut, line: automatedLine } = automatedGateOf({
+  picked,
+  refused,
+  includeAutomated: args.includeAutomated,
+});
 
 console.log(
   `${bold("Run sheet")}  ${dim(`${picked.length} case${picked.length === 1 ? "" : "s"}${drafts ? `, ${drafts} draft` : ""}`)}\n`,
 );
-console.log(
-  dim(
-    args.includeAutomated
-      ? `${automatedIncluded} automated case${automatedIncluded === 1 ? "" : "s"} included`
-      : `${automatedLeftOut} automated case${automatedLeftOut === 1 ? "" : "s"} left out`,
-  ),
-);
+console.log(dim(automatedLine));
 if (picked.length === 0) {
   // Split by reason, so a selection refused for its status alone never hints
   // at the wrong flag: the two gates are read one at a time, and each names
