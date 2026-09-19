@@ -49,4 +49,5 @@ New in `tools/manual`, work in grade10-spec: `RoundsList`, `QuestionList` gains 
 - A run sheet tab with automated cases left out and the count said - `shared-planning-agent-rounds-US-08` - `shared-planning-agent-rounds-SC-61`
 - The change page's Rounds row with one line per round, and a group with no round row shown as such - `shared-planning-agent-rounds-US-09` - `shared-planning-agent-rounds-SC-51`
 - My turn with open questions above the changes, and with none - `shared-planning-agent-rounds-US-04` - `shared-planning-agent-rounds-SC-26` and `shared-planning-agent-rounds-SC-27`
+- ❓ My turn's question row for a change with no `thread:` - the row says `no thread is recorded for this change yet` and links the change page in the thread's place; the designer confirms the words - `shared-planning-agent-rounds-US-04` - `shared-planning-agent-rounds-SC-26`
 - A thread reply from a run that lost a race, saying so and stopping - `shared-planning-agent-rounds-US-05` - `shared-planning-agent-rounds-SC-69`
