@@ -1,6 +1,6 @@
-import { DRAFTED, STAGES } from "./stages";
+import { DRAFTED, STAGES } from "./stages.ts";
 import type { BehindArtifact, ChangeEntry, Role, Stage } from "./types";
-import { ROLES } from "./types";
+import { ROLES } from "./types.ts";
 
 /**
  * How a derived fact reads on a surface: the words for a stage and a role, the
@@ -17,7 +17,7 @@ import { ROLES } from "./types";
 /** The words for a stage live in `stages.ts`, which the notify script and the
  * digest read under plain node; every surface reads them from here, where the
  * rest of the wording is. */
-export { STAGE_LABEL } from "./stages";
+export { STAGE_LABEL } from "./stages.ts";
 
 /** The six roles as the stage table names them. */
 export const ROLE_LABEL: Record<Role, string> = {
