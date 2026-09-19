@@ -193,6 +193,13 @@ if (role === undefined) {
 }
 
 if (reviewedOnly) {
+  // The `reviewed:` line it lands is already on the branch, committed by
+  // whoever ran `round:reviewed` — with none there at all, there is no read
+  // to land, and running clean anyway would report a re-read that never
+  // happened as one that did.
+  if (read.entry.reviewed?.[artifact] === undefined) {
+    fail("nothing to land: round:reviewed writes the line first");
+  }
   say(
     "hand",
     "a read that changes nothing is the change's agent to land — no hand's word is asked",
