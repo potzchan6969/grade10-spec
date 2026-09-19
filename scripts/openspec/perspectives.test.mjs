@@ -239,6 +239,41 @@ test("shared-planning-agent-rounds-SC-10 - a record key neither adds a reader no
     );
 });
 
+test("reads the change's own schema: rather than always grade10-planning", () => {
+  const root = fixture({ record: "schema: demo-planning\n" });
+  const dir = join(root, "openspec", "schemas", "demo-planning");
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(
+    join(dir, "schema.yaml"),
+    [
+      "name: demo-planning",
+      "version: 1",
+      "artifacts:",
+      "  - id: tech-design",
+      "    generates: tech-design.md",
+      "    requires: []",
+      "    upstream: []",
+      "    perspectives:",
+      "      - name: distinct",
+      "        agent: .claude/agents/distinct.md",
+      "        when: always",
+      "",
+    ].join("\n"),
+  );
+
+  const result = cli(root, [
+    "demo",
+    "tech-design",
+    "--diff",
+    diffOf(root, ""),
+  ]);
+
+  assert.deepEqual(
+    result.readers.map((one) => one.name),
+    ["distinct"],
+  );
+});
+
 test("shared-planning-agent-rounds-SC-30 - a bundle is the draft and what is before it, and nothing else", () => {
   const root = fixture();
   const bundle = bundleFor(root, "demo", "tech-design");
