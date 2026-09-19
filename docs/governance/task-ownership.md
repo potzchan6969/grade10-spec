@@ -30,6 +30,7 @@ A group is a level-two heading numbered with a single integer. Its tasks are che
 | Owner tag | `(owner: @<handle>)` | Optional, and **last on the line**. The `@` is optional; handles may hold letters, digits, `.`, `-`, `_`, and match case-insensitively. |
 | No owner | Omit the tag, or write `(owner: unassigned)` | The two are equivalent everywhere. |
 | Task | `- [ ] <id> <text>` | `- [x]` or `- [X]` when done. `<id>` is the first whitespace-delimited token; `<text>` is required. |
+| Scenario ids | `` `<capability>-SC-<n>` `` in the task's text | Optional, backticked, comma-separated, conventionally last. `pnpm plan done` refuses the tick when no test in the group's tree cites one it names. |
 
 A group title that names a repository names it by clone name — `(grade10-spec)`, `(grade10)` — never "this repo" or "here": `tasks.md` is written in this store and read from the application repository, so a deictic reference flips meaning between the two.
 
@@ -45,6 +46,7 @@ Group headings are free for us to use because OpenSpec parses only the checkbox 
 - **Owners are claimed at pickup, not assigned at planning time.** A name on a group therefore always means someone is on it now. Author groups without owners and let engineers claim them.
 - **Completed work never sits with nobody's name against it.** Checking off a task in an unclaimed group claims that group, and a group with checkmarks cannot be handed back — it keeps its owner as the record of who did the work.
 - **A checkmark is a claim that the work is real.** It goes in after the code is pushed, not when it is written.
+- **An id is a promise.** A scenario id in a task's text says a test cites that id in the tree the group's repository tag names — `(grade10)` reads that clone, `(grade10-spec)` reads this store. `pnpm plan done` refuses the tick when none does, naming the id and the tree it looked in. A task that names no id — a verify step, a document, a configuration line — is taken as written; what asks the group for a record is the manual's `round` rule. Write the ids of what the group makes pass, never the ids it read.
 
 ## Who writes what
 

@@ -50,16 +50,15 @@ Three things you say in the thread, and one you can do anywhere.
 | Land | `land` | The artifact lands on `main`, with your handle on it |
 | Edit | An edit you push yourself, from a terminal or from GitHub | The same round: the push is your word for the lines it touched |
 
-- 🚧 **The first sentence opens the change** — a product manager's message in
-  the planning channel names the change, records them as its hand, and is
-  answered in the thread it started
+- 🚧 **The first sentence opens the change** — a product manager's message to
+  the app in the planning channel names the change, records them as its hand,
+  and is answered in the thread it started
 - 🚧 **Every later hand answers in the thread** — the message that says it is
   your turn points at it; you reply there
 - 🚧 **The frames come from you** — a designer's ask carries the frame links;
   a draft that needs a frame nobody has drawn writes a dated wait on the
   designer, never a screen in prose
-- 🚧 **Told once** — a draft ready for you is one reply; a landing is one
-  reply; nothing per turn
+- 🚧 **Told once** — a draft ready for you is one reply, a landing one reply
 - ❓ **Only the hand lands** — another teammate's land is refused and names
   whose word it waits on; the product manager confirms
 
@@ -121,9 +120,9 @@ Building ends by showing the change works, end to end.
 - 🚧 **Each group lands checked** — tests from the cases first, then the code,
   read by the group's perspectives and verified before the engineer reads the
   landing summary
-- 🚧 **The last group is the walk** — the journeys walked in a browser and
-  kept as the end-to-end suite: it runs on every push to `main`, and its
-  smoke cases on every staging deploy and at every cut
+- 🚧 **The last group is the walk** — the journeys walked end to end through
+  the interface each actor uses, kept as the end-to-end suite: it runs on
+  every push to `main`, its smoke cases on every staging deploy and every cut
 - 🚧 **The run sheet keeps what only staging proves** — a case the walk
   automates is marked so, and the run sheet leaves it out
 - 🚧 **One pass over the whole** — after the last group, one reader argues the
@@ -142,8 +141,9 @@ Building ends by showing the change works, end to end.
 - 🚧 **The record** — one row per round in the change: the artifact or group,
   the perspectives run, what stood, what was asked, and the tests each
   scenario landed with; archived with the change
-- ❓ **The runner** — which agent holds a change's thread, which one wakes on
-  a landing, and what the Slack workspace needs for them; Operations confirms
+- ❓ **The runner** — which agent holds a change's thread, which wakes on a
+  landing, and what the Slack workspace needs for them; Operations confirms
+  against [the runner](/references/agent-runner)
 
 :::detail{title="Product decisions" for="pm"}
 The owner's brief asks that the product manager start with what is wanted and

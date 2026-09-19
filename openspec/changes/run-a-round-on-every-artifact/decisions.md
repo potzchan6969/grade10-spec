@@ -56,8 +56,12 @@
 | Q30 | Does a rewrap put artifacts behind? | No: whitespace is collapsed before hashing, so an edit that changes only whitespace leaves the content id equal; a reformat that changes words does put them behind | Hashing the bytes, which puts every artifact behind on a rewrap |
 | Q31 | Does the code carry a `reviewed:` line? | No: the refusal on a behind `tasks.md` covers a group's landing, and the schema issues no id for the code | An entry the schema has no id for, written from the application repository |
 | Q32 | Whose word lands `spec.md` and `feature-tcs.md`? | The product manager's, at the reconciliation, both together | QA's, which Q9 took off the ladder |
-| Q33 | What is the `round` rule's date fence? | A change created on or after the day the rule lands, read from `created:` | The day after, which excuses the changes opened that day |
+| Q33 | What is the `round` rule's date fence? | A change created after the day the rule lands, read from `created:` and held in `ROUND_RECORD_SINCE` beside the `DECISIONS_SINCE` the decided rule already fences on | The day it lands, which refuses a change opened that morning for a row nobody could have written |
 | Q34 | How is the Round column numbered? | Within the change, from 1, in landing order | Per artifact, which makes two rounds share a number |
+| Q35 | Who makes the suite run on a staging deploy and a release cut? | The release line's change: this one leaves the suite and runs it on every push to `main`, and the deploy and the cut pick up its smoke cases when the release workflow lands | A deploy step written here, which would name a pipeline this change does not own |
+| Q36 | What is the landing step called? | `pnpm run plan:land <change> <artifact\|group>` in this store, running the same gate; `pnpm land` takes over when `land-on-main-through-the-gate` makes one gate for both repositories | `pnpm land` now, which names a command that does not exist yet and would have to be renamed twice |
+| Q37 | Who owns the fold's refusal of a behind delta? | `shared/planning/change-stages`, which derives Behind: its scenario refuses the fold, and this capability states the rule and cites it | A scenario of our own, which would give one refusal two owners and two tests |
+| Q38 | Whose word is a landing run from a terminal? | The committer's: `pnpm run plan:land` reads `git config user.email`, resolves it to a handle through the team map, refuses an e-mail the map does not name, and refuses a handle that is not the hand of the stage; `--as @handle` is allowed only where it resolves to the same e-mail | A `@handle` argument, which lets anybody type anybody's handle and makes the hands table decorative |
 
 ## Raised
 

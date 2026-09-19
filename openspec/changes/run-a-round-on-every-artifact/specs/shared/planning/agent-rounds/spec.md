@@ -30,7 +30,7 @@ read again before anything lands after it, with one record row per round.
   - Agent definitions: one challenger per perspective and one verifier, each seeing the draft and what is before it and never another reader's output
   - Principles cited: the tech design's and the build's readers hold the draft to the eight principles and the reader's stance
 - Read again, in order
-  - Content id: `reviewed:` holds, per artifact, a hash of what is before it, the linked page sections first, then the artifact files before it, whitespace collapsed, the record itself never upstream, a waived artifact fresh
+  - Content id: `reviewed:` holds, per artifact, a hash of the artifact's `upstream:` set read in the schema's order, the record itself never upstream, a waived artifact fresh
   - Read in order: a landing wakes the change's agent, which reads every artifact after the one that moved, oldest first
   - No-op read: a read that changes nothing writes the `reviewed:` line alone and says so in the thread; a read that edits opens a round for the artifact's hand
   - Landing refused: an artifact lands only when everything before it is fresh, the fold at archive refuses a behind delta, and a tick, a claim and a wait are never held
@@ -43,10 +43,10 @@ read again before anything lands after it, with one record row per round.
   - Archived whole: the file archives with the change and is folded nowhere
 - The walk
   - Test first: each task group lands the tests its scenario ids name in their own commit, then the code, then its readers, then the landing summary
-  - Demonstrated: the last group walks the journeys in a browser and leaves the end-to-end suite, marking each covered case automated
+  - Demonstrated: the last group walks the journeys end to end through the interface each actor uses and leaves the end-to-end suite, marking each covered case automated
   - Run sheet: the pass on staging leaves automated cases out and says how many
   - Suite on every push: the end-to-end suite runs on every push to `main`, its smoke cases on every staging deploy and cut
-  - Tick refused: a task naming no scenario id, or one no test in the tree cites, is not ticked
+  - Tick refused: a task naming a scenario id no test in the tree cites is not ticked; a task naming none is
   - Whole read: one reader argues the simpler shape for the whole change before staging
 - The thread and the runner
   - One thread: `thread:` records the channel and message a change's thread hangs off, written once when it opens, and every message and wake finds it
@@ -122,7 +122,9 @@ be refused.
   the stage it moved
 - **What comes after** — every artifact after the one that landed is read again
 - **Another teammate's word** — refused, with a reply naming whose word the
-  artifact waits on; reassigning the hand is the way around
+  artifact waits on; reassigning the hand is the way around — ❓ the
+  recommendation of `Q19`, open on the product manager; another answer changes
+  who may land and what the record names
 
 #### Scenario: shared-planning-agent-rounds-SC-04 - An artifact lands on a word
 **Serves:** shared-planning-agent-rounds-US-02 - the designer says land and reads back what happened
@@ -138,6 +140,7 @@ be refused.
 - **WHEN** another teammate in the thread says land
 - **THEN** the artifact does not reach `main` and no `landed_by:` line is written
 - **AND** the reply names the hand whose word the artifact waits on
+- **AND** a landing run from a terminal reads the committer's e-mail and resolves it to a handle through the team map, refusing an e-mail the map does not name and a handle that is not the hand of the stage
 
 ### Requirement: The blind readings stay the requirements' challenge
 
@@ -308,7 +311,7 @@ taken as a remark.
 
 A change can start from one message, with nobody opening a terminal.
 
-A message in the planning channel that names no existing change SHALL open one.
+A message in the planning channel that addresses the app and names no existing change SHALL open one.
 
 - **The id** — chosen from the sentence
 - **The hand** — the asker's handle written as the change's `hands: pm`
@@ -321,7 +324,7 @@ A message in the planning channel that names no existing change SHALL open one.
 #### Scenario: shared-planning-agent-rounds-SC-17 - A product manager opens a change from one sentence
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager says what is wanted and never opens a terminal
 
-- **WHEN** a product manager writes in the planning channel what is wanted, naming no change
+- **WHEN** a product manager writes in the planning channel what is wanted, addressing the app and naming no change
 - **THEN** a change is opened whose id is drawn from that sentence
 - **AND** the asker's handle is written as its `hands: pm`
 - **AND** the first reply in that message's thread names the change's id
@@ -337,7 +340,7 @@ A message in the planning channel that names no existing change SHALL open one.
 **Serves:** shared-planning-agent-rounds-US-01 - a teammate's sentence opens the change and the handle is asked for afterwards
 
 - **GIVEN** an asker with no entry in the team map
-- **WHEN** they write in the planning channel what is wanted, naming no change
+- **WHEN** they write in the planning channel what is wanted, addressing the app and naming no change
 - **THEN** the change opens with its product manager unnamed
 - **AND** the reply says the hand is unnamed and asks for the handle
 
@@ -475,6 +478,9 @@ them from there.
 
 - **One entry, three facts** — each perspective carries its name, what in a
   draft summons it, and the reader it dispatches
+- **A task group — on the schema's apply block** — a task group is no artifact
+  of the schema, so its readers sit as `perspectives:` on the schema's `apply:`
+  block, read through the same reader
 - **No reader without a trigger** — a perspective no draft can summon is not an
   entry
 - **One procedure** — `/plan`, `/design`, `/tech`, `/specify`, `/tasks`,
@@ -530,10 +536,11 @@ it, and SHALL NOT be given any other reader's findings or verdicts.
 
 Every artifact is drawn from the artifacts before it, in one order.
 
-Every artifact SHALL have one upstream set, read in this order, and everything
-after an artifact SHALL be drawn from it.
+Every artifact SHALL carry one upstream set, recorded as `upstream:` on that
+artifact in the planning schema and read in the schema's own artifact order,
+and everything after an artifact SHALL be drawn from it.
 
-| Artifact | What is before it, in order |
+| Artifact | `upstream:` |
 | --- | --- |
 | `proposal.md` | The page sections the change links |
 | `decisions.md` | The page sections; `proposal.md` |
@@ -541,12 +548,20 @@ after an artifact SHALL be drawn from it.
 | `ui-design.md` | The page sections; `proposal.md`; `decisions.md`; `user-journeys.md` |
 | `tech-design.md` | The page sections; `proposal.md`; `decisions.md`; `user-journeys.md` |
 | `spec.md` | The above, then `ui-design.md` and `tech-design.md` |
-| `feature-tcs.md` | The above, then `ui-design.md` and `tech-design.md` |
+| `feature-tcs.md` | The page sections; `proposal.md`; `decisions.md`; `user-journeys.md`; `ui-design.md`; `tech-design.md` |
 | `tasks.md` | The above, then `spec.md` and `feature-tcs.md` |
 | The code and its end-to-end tests | The above, then `tasks.md` |
 
-- **The order is the schema's** — the artifact list's own order, in which the
-  tech design sits above the requirements
+- **The set is data** — `upstream:` names the artifact ids on each artifact in
+  `openspec/schemas/grade10-planning/schema.yaml`, and the set is read in the
+  schema's artifact order, in which the tech design sits above the requirements
+- **`feature-tcs.md` omits `spec.md`** — the cases are a blind reading of the
+  same anchors, drawn beside the requirements and never from them
+- **`tech-design.md` omits `ui-design.md`** — both are drawn from the journeys
+  side by side, and neither waits on the other
+- **One artifact, every capability** — a change specifying several capabilities
+  carries one `upstream:` entry and one `reviewed:` line per artifact id, never
+  one per capability
 - **A change's own artifact, whole** — every line of it is upstream
 - **A page, in sections** — only the sections the change links, because a page
   carries the marks of many changes
@@ -587,10 +602,15 @@ set by hand.
 
 - **`reviewed:`** — the change's record holds one line per artifact, the
   artifact's id to a content id
+- **One function** — `contentIdOf` in the store computes every content id every
+  surface, script and check reads, and nothing computes a second one
 - **The content id** — the first 8 hexadecimal characters of the SHA-256 of the
-  upstream texts in the schema's order — the linked page sections first, then
-  each artifact file before it — each text with its whitespace collapsed,
-  joined by a NUL
+  artifact's `upstream:` texts in the schema's order, each text with its
+  whitespace collapsed and trimmed, joined by a NUL
+- **Collapsed and trimmed, nothing else** — runs of whitespace become one space
+  and the ends are trimmed; a link's target and a scenario id are part of the
+  text, so a retargeted link or a renumbered scenario puts what comes after it
+  behind
 - **Equal is fresh** — an artifact whose recorded content id equals the id
   computed from what is on `main` is fresh
 - **Anything else is behind** — a differing id, or no line at all, reads as
@@ -711,8 +731,9 @@ is behind, and the fold at archive SHALL refuse a behind delta.
 
 - **The refusal names it** — the reply says which artifact is behind and whose
   hand it is
-- **Archive** — `pnpm run archive:preflight` refuses a change whose delta is
-  behind, and prints it with what else still refuses
+- **Archive** — the fold refuses a behind delta, and that refusal is
+  `shared/planning/change-stages`' own: `pnpm run archive:preflight` prints it
+  with what else still refuses
 - **Never held** — a tick, a claim and a wait are refused by neither
 
 #### Scenario: shared-planning-agent-rounds-SC-43 - A landing is refused and says which
@@ -723,13 +744,6 @@ is behind, and the fold at archive SHALL refuse a behind delta.
 - **THEN** the landing is refused
 - **AND** the reply names `tech-design.md` and the hand it waits on
 - **AND** nothing reaches `main`
-
-#### Scenario: shared-planning-agent-rounds-SC-44 - The fold refuses a behind delta
-**Serves:** Read again, in order - a change reaching archive with a delta nobody has drawn a second time
-
-- **GIVEN** a change whose `spec.md` is behind
-- **WHEN** `pnpm run archive:preflight` runs on it
-- **THEN** it refuses and names the behind delta
 
 ### Requirement: A goal or a non-goal that moved is a question
 
@@ -743,7 +757,9 @@ nothing in place.
 - **What each answer does** — extend: the change goes on with the moved goal
   and everything after the proposal is read again; supersede: a new change
   opens from the moved goal and this one is withdrawn; split: a new change
-  takes the moved part and this one keeps the rest
+  takes the moved part and this one keeps the rest — ❓ the recommendation of
+  `Q26`, open on the product manager; another answer changes what each word
+  does to the change
 - **Recorded** — each answer is written as a decisions row
 - **Until the answer** — nothing after `decisions.md` lands
 - **Never in place** — no artifact is redrawn to the moved goal before the
@@ -886,8 +902,8 @@ already done.
   missing row is, naming the column
 - **Those two alone** — nothing else owes a row: a read that changed nothing
   ran no round
-- **Date-fenced** — the rule reads only changes whose `created:` date is on or
-  after the day it lands; an older change is not refused by it
+- **Date-fenced** — the rule reads only changes whose `created:` date is after
+  the day it lands, so a change opened that day is not refused by it
 
 #### Scenario: shared-planning-agent-rounds-SC-54 - A landed artifact with no row is refused
 **Serves:** The record - a change opened under this rule reaches its next check without a row for what it landed
@@ -896,12 +912,13 @@ already done.
 - **WHEN** `pnpm check:manual` runs and `rounds.md` carries no row naming `tasks.md`
 - **THEN** the check refuses and names the artifact
 
-#### Scenario: shared-planning-agent-rounds-SC-55 - An older change is not refused
+#### Scenario: shared-planning-agent-rounds-SC-55 - A change opened on or before the rule's day is not refused
 **Serves:** The record - the changes already in flight the day the rule lands pass the same check
 
-- **GIVEN** a change whose `created:` date is before the day the rule landed, carrying no `rounds.md`
+- **GIVEN** a change whose `created:` date is the day the rule landed, carrying no `rounds.md`
 - **WHEN** `pnpm check:manual` runs
 - **THEN** it does not refuse the change for a missing row
+- **AND** a change created before that day is not refused either
 
 #### Scenario: shared-planning-agent-rounds-SC-56 - A row missing a column is refused
 **Serves:** The record - a row half written says as little as no row at all
@@ -940,9 +957,15 @@ SHALL reach the engineer only after its readers have run.
 ### Requirement: The last group walks the journeys
 
 A change's last task group SHALL walk every journey of every capability the
-change specifies, in a browser, and SHALL leave those walks as the change's
-end-to-end suite.
+change specifies, end to end through the interface each actor uses, and SHALL
+leave those walks as the change's end-to-end suite.
 
+- **Through the actor's interface** — a journey walked in a browser is walked
+  in one; a journey whose actor reads a terminal, a channel message or a file
+  is walked there
+- **What the suite cannot hold** — a journey no suite can drive, such as one an
+  actor walks in Slack or inside an agent's session, is walked once by hand,
+  its cases stay manual, and the walk's `rounds.md` row names them
 - **Marked automated** — the commit that lands the walks flips each covered
   case's automation status to automated
 - **One pass over the whole** — after the last group, one reader argues the
@@ -952,8 +975,9 @@ end-to-end suite.
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases the walk now covers
 
 - **WHEN** the last task group lands
-- **THEN** every journey of every capability the change specifies has been walked in a browser and kept as the change's end-to-end suite
+- **THEN** every journey of every capability the change specifies has been walked end to end through the interface its actor uses and kept as the change's end-to-end suite
 - **AND** the same commit sets each covered case's automation status to automated
+- **AND** a journey no suite can drive is walked by hand, its cases stay manual, and the walk's `rounds.md` row names them
 
 #### Scenario: shared-planning-agent-rounds-SC-60 - One reader reads the whole change
 **Serves:** The walk - a change arrives at staging having been argued as one shape rather than group by group
@@ -991,25 +1015,30 @@ cases SHALL run on every staging deploy and at every release cut.
 - **THEN** the end-to-end suite runs
 - **AND** a staging deploy and a release cut each run the suite's smoke cases
 
-### Requirement: A tick names a scenario and a test that cites it
+### Requirement: A tick's named scenario reaches a test
 
-`pnpm plan done` SHALL refuse a tick whose task does not reach a test through a
-scenario id.
+`pnpm plan done` SHALL refuse a tick whose task names a scenario id that no
+test reaches.
 
 | The task | The tick |
 | --- | --- |
-| Names no scenario id | Refused, naming the task |
-| Names a scenario id no test in the tree cites | Refused, naming the scenario id |
+| Names a scenario id no test in the tree cites | Refused, naming the id and the tree it looked in |
 
+- **The tree** — the tree searched is the one the task group's repository tag
+  names, so a group tagged `(grade10)` is read against that clone and a group
+  tagged `(grade10-spec)` against this store
+- **A task that names none — accepted** — a verify step, a document and a
+  configuration line name no scenario, and the tick is taken; what guards the
+  group is the `round` rule, which refuses the group's tick with no row
 - **The row first** — the group's `rounds.md` row lands in the store before the
   tick
 
-#### Scenario: shared-planning-agent-rounds-SC-63 - A tick reaching no test is refused
+#### Scenario: shared-planning-agent-rounds-SC-63 - A tick naming a scenario no test reaches is refused
 **Serves:** shared-planning-agent-rounds-US-06 - the engineer's tick says which behaviour landed and which test proves it
 
-- **WHEN** `pnpm plan done` is run for a task whose text names no scenario id
-- **THEN** the tick is refused, naming the task
-- **AND** a task naming a scenario id that no test in the tree cites is refused, naming the scenario id
+- **WHEN** `pnpm plan done` is run for a task naming a scenario id no test in the tree its group's repository tag names cites
+- **THEN** the tick is refused, naming the scenario id and the tree it looked in
+- **AND** a task naming no scenario id is not refused
 
 ### Requirement: One thread per change, recorded once
 
@@ -1018,8 +1047,15 @@ SHALL be recorded in the change's record.
 
 - **`thread:`** — the channel and the message the thread hangs off, written
   once when the thread opens and never rewritten
+- **Who writes it** — the round writes it, from the first message in the
+  planning channel about the change: the sentence that opened it, or the first
+  later message naming it. The post a push makes in the channel is never the
+  thread, and a change opened from a terminal carries no `thread:` until a
+  channel message about it arrives
 - **Found from the record** — every reply, every direct message and every wake
   on a landing reads the thread's address from there
+- **A wrong address** — a `thread:` line pointing at the wrong message is
+  corrected by a person's edit to the record; the round never rewrites it
 - **The same round elsewhere** — a round run from a terminal against the same
   branch is the same round, and a change whose thread cannot be reached is
   worked that way
@@ -1046,6 +1082,9 @@ change the push touched that has anything behind.
 
 - **One at a time** — one run per change; a second firing joins the queue and
   neither cancels the other
+- **More than two** — one run waits at a time: a third push replaces the waiting
+  one rather than queueing behind it, and the run that finally executes reads
+  `main` and clears whatever is behind by then
 - **Reads `main` again** — the running one reads `main` again before it lands,
   so it lands against what is there
 

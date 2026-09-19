@@ -16,11 +16,11 @@ Drawn from [Agent Rounds · Surfaces](../../docs/prds/products/shared/planning/a
 
 ### Run sheet
 
-The tab `/run-sheet` writes leaves automated cases out and says how many it left out; the change page's Delivery row shows the suite's automated count against its total beside the run tab count.
+The tab `/run-sheet` writes leaves automated cases out and says how many it left out; the change page's Delivery row shows the suite's automated count against its total beside the run sheet's own count.
 
 ## Flows
 
-[Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk), the canvas beside the blueprint page: the loop every hand runs, the product manager's thread from the first sentence to the three files landing, the designer's and the tech PIC's reads of a draft, the re-read after a landing, and the walk at the end of Building. A flow the canvas draws that the page does not name is a design choice: a question's recommendation is accepted by answering with its id alone; a landing reply quotes the artifact's first line.
+[Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk), the canvas beside the blueprint page: the loop every hand runs, the product manager's thread from the first sentence to the three files landing, the designer's and the tech PIC's reads of a draft, the re-read after a landing, and the walk at the end of Building. A flow the canvas draws that the page does not name is a design choice: a question's recommendation is accepted by answering with its id alone.
 
 ## Components
 

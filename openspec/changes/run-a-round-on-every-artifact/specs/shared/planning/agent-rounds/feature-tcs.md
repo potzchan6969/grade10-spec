@@ -1369,11 +1369,13 @@ Runs once per row of **Test data**.
 1. Read the last group's landing summary in <change thread>.
 2. Check the end-to-end suite on `main`.
 3. Check `feature-tcs.md`.
+4. Check the walk's row in `rounds.md`.
 
 **Expected Results:**
 
-* The journeys are walked in a browser and kept as the end-to-end suite.
+* Each journey is walked end to end through the interface its actor uses and kept as the end-to-end suite.
 * Each case the walk covers is marked automated.
+* A journey no suite can drive is named in the walk's row, and its cases stay manual.
 
 ### shared-planning-agent-rounds-US6-TC4-1: One reader argues the simpler shape for the whole change
 
@@ -1404,9 +1406,7 @@ Runs once per row of **Test data**.
 * One round covers the whole change, run by the reader that argues the simpler shape.
 * It runs before <change> reaches staging.
 
-### shared-planning-agent-rounds-US6-TC5-1: A tick is refused without a scenario a test cites
-
-Runs once per row of **Test data**.
+### shared-planning-agent-rounds-US6-TC5-1: A tick naming a scenario no test reaches is refused
 
 **Classification:**
 
@@ -1424,24 +1424,20 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * <change> is building and admin(engineer of <change>) is at a terminal in the application repository.
-
-**Test data:**
-
-| The task | The tick |
-| --- | --- |
-| Names no scenario id | refused, naming the task |
-| Names a scenario id no test in the tree cites | refused, naming the scenario id |
+* The group is tagged with the repository whose tree the tick is read against.
 
 **Steps:**
 
-1. Mark the task from the table done.
+1. Mark done a task naming a scenario id no test in that tree cites.
 2. Read the output.
-3. Check `tasks.md`.
+3. Mark done a task in the same group naming no scenario id.
+4. Check `tasks.md`.
 
 **Expected Results:**
 
-* The tick is refused as the table names.
-* The task's box stays unticked.
+* The first tick is refused, naming the scenario id and the tree it looked in.
+* That task's box stays unticked.
+* The task naming no scenario id is ticked.
 
 ---
 
@@ -1994,11 +1990,11 @@ Thirteen questions went to the change's `decisions.md`, and the answers landed a
 ### Out of suite
 
 * `shared-planning-agent-rounds-SC-06` - the two readings and no verifier over them: `pnpm check:manual`'s `blind` rule, which refuses a delta whose moved behaviour no second reading brought back.
-* `shared-planning-agent-rounds-SC-10` - no record key changes a round's size: the store's unit tests over the round's size, which compute the readers from the diff and read no key.
+* `shared-planning-agent-rounds-SC-10` - no record key changes a round's size: `scripts/openspec/perspectives.test.mjs`, which computes the readers from the diff and reads no key.
 * `shared-planning-agent-rounds-SC-23` - an open row holds no stage: `shared/planning/change-stages`' suite, where the stage's derivation is walked.
 * `shared-planning-agent-rounds-SC-28` - every round reads one table: `pnpm run test:openspec`, which reads the perspectives the schema records per artifact.
 * `shared-planning-agent-rounds-SC-29` - a new reader is one row: `pnpm run test:openspec`, as above.
-* `shared-planning-agent-rounds-SC-30` - a reader sees no other reader's output: the store's unit tests over the round's dispatch, which give each challenger the draft and what is before it alone.
+* `shared-planning-agent-rounds-SC-30` - a reader sees no other reader's output: `scripts/openspec/perspectives.test.mjs`, which gives each challenger the draft and what is before it alone.
 * `shared-planning-agent-rounds-SC-35` - the content id comparison: the store's unit tests over the content id, a pure derivation no surface shows.
 
 ### Anchors no case reaches
