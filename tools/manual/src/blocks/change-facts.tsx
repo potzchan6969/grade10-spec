@@ -5,12 +5,14 @@ import { Link } from "react-router";
 import {
   citeTarget,
   type Dependency,
-  dependenciesOf,
-  laneOf,
   type ManualIndex,
   taskTotals,
 } from "../api/derive";
+import { draftedOf, stageShown } from "../api/stage-view";
+import { handOf, type Overlay } from "../api/stages";
 import type { ChangeEntry, ChangeSuite } from "../api/types";
+import { Hands } from "./change-hand";
+import { OverlayChips } from "./change-overlays";
 import {
   Attribution,
   DeltaKinds,
@@ -21,33 +23,37 @@ import { CopyableCommand } from "./copyable-command";
 
 /**
  * What a review reads off a change at a glance, wherever the change is shown:
- * what it is waiting on, where it stands against main, who owns it and which
- * specs it touches, the suites riding it, how far the tasks are, and the next
+ * whose turn it is, what sits beside its stage, where it stands against main,
+ * who owns it and which specs it touches, how far the tasks are, and the next
  * action. The board's card composes them in one column; the change page lays
  * the same components out as a labelled grid, so the two never disagree about
  * a fact.
+ *
+ * The overlays are the card's one list of chips: exactly the five, read from
+ * the derivation the change page and every message read, so a dependency and
+ * a suite are each named once rather than twice under two names. What one of
+ * them carries beyond its chip — every dependency, a suite's counts — is the
+ * change page's, a labelled line at a time.
  */
 export function ChangeFacts({
-  index,
   change,
-  archived = [],
+  overlays = [],
   progress = false,
 }: {
-  index: ManualIndex;
   change: ChangeEntry;
-  archived?: ChangeEntry[];
+  /** What sits beside the stage, as the board derived it. */
+  overlays?: Overlay[];
   /** Show the task bar here — where the task groups are not laid out below. */
   progress?: boolean;
 }) {
   const { done, total } = taskTotals(change);
-  const dependencies = dependenciesOf(change, index, archived);
 
   return (
     <>
-      <BlockedBy dependencies={dependencies} />
       <MainStateNote change={change} />
 
       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+        <Hands change={change} roles={handOf(change, stageShown(change))} />
         <Attribution change={change} claim />
         <ul className="flex flex-wrap items-center gap-2">
           {change.deltas.map((delta) => (
@@ -59,7 +65,7 @@ export function ChangeFacts({
         </ul>
       </div>
 
-      <SuiteLines change={change} />
+      <OverlayChips overlays={overlays} />
 
       {total > 0 && progress ? (
         <div className="mt-3">
@@ -77,26 +83,23 @@ export function ChangeFacts({
 }
 
 /**
- * The next action for the change's own state, as text to paste at an agent —
+ * The next action for the change's own stage, as text to paste at an agent —
  * the loop's continuation used to live nowhere, and its first casualty guessed
- * a skill name off a badge. In progress has none: the open task rows are the
- * work, and claiming them is the application repo's `pnpm plan claim`.
+ * a skill name off a badge.
+ *
+ * Read from the stage and never from a lane: what a change is waiting on is
+ * the command the hand of its stage pastes, and the five stages an agent
+ * drafts each name their own. The three it drafts nothing for — the deploy,
+ * the cut and the fold — leave the archive, which is the work still to do.
  */
 export function nextAction(
   change: ChangeEntry,
 ): { command: string; note: string } | null {
-  const lane = laneOf(change);
-  if (lane === "in-progress") return null;
-  if (lane === "proposed")
-    return {
-      command: `/planning-pm ${change.id}`,
-      note: "point an agent at the proposal — it interviews the author, then writes the deltas",
-    };
-  if (lane === "specified")
-    return {
-      command: `/planning-dev ${change.id}`,
-      note: "the engineer picking this up writes the delivery plan",
-    };
+  const stage = stageShown(change);
+  const drafted = draftedOf(stage);
+  if (drafted)
+    return { command: drafted.commandFor(change.id), note: drafted.note };
+  if (stage === "archived") return null;
   return {
     command: `/archive-change ${change.id}`,
     note: "confirm it deployed, then fold it into the durable specs",
@@ -128,8 +131,11 @@ export function NextAction({ change }: { change: ChangeEntry }) {
 export function MainStateNote({ change }: { change: ChangeEntry }) {
   const state = change.mainState;
   if (!state) return null;
+  const stage = stageShown(change);
   const blocked =
-    laneOf(change) === "complete" ? "archived" : "claimed or implemented";
+    stage === "on-staging" || stage === "released" || stage === "archived"
+      ? "archived"
+      : "claimed or implemented";
 
   return (
     <div className="mt-2.5 flex items-baseline gap-1.5 text-warning">
@@ -205,27 +211,16 @@ function SuiteCounts({ suite }: { suite: ChangeSuite }) {
 }
 
 /**
- * What a change is waiting on. A dependency still in flight is the loud one —
- * it is the reason this change cannot ship — a shipped one is said quietly so
- * the edge stays visible, and an id naming no change at all is a lie the board
- * says out loud rather than dropping.
+ * What a change is waiting on, for the surface that labels the row itself. A
+ * dependency still in flight is the loud one — it is the reason this change
+ * cannot ship — a shipped one is said quietly so the edge stays visible, and
+ * an id naming no change at all is a lie the board says out loud rather than
+ * dropping.
+ *
+ * The board's card wears the Blocked overlay instead: one chip that names the
+ * change it waits for, because the card carries one closed list of chips and
+ * the page carries the whole reading.
  */
-export function BlockedBy({ dependencies }: { dependencies: Dependency[] }) {
-  if (dependencies.length === 0) return null;
-
-  return (
-    <ul className="mt-2.5 flex flex-wrap items-center gap-1.5">
-      <li>
-        <Text as="span" size="xs" tone="secondary">
-          Blocked by
-        </Text>
-      </li>
-      <DependencyPills dependencies={dependencies} />
-    </ul>
-  );
-}
-
-/** The pills alone, for a surface that labels the row itself. */
 export function DependencyPills({
   dependencies,
 }: {

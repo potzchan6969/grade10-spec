@@ -25,6 +25,45 @@ function plural(count: number, unit: string): string {
 }
 
 /**
+ * Which day an instant falls on in one zone, as a count of days — the only
+ * arithmetic a calendar-day difference can be done with.
+ *
+ * Nothing where the instant cannot be read, which a caller shows as no answer
+ * rather than as 0: a landing at 23:00 in Hong Kong is that day's, and a date
+ * nobody can parse is not today.
+ */
+export function dayIn(
+  at: string | number | Date,
+  timeZone: string,
+): number | undefined {
+  const instant = at instanceof Date ? at : new Date(at);
+  if (Number.isNaN(instant.getTime())) return undefined;
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(instant);
+  const of = (type: string) =>
+    Number(parts.find((one) => one.type === type)?.value);
+  const day = Date.UTC(of("year"), of("month") - 1, of("day"));
+  return Number.isNaN(day) ? undefined : day / 86_400_000;
+}
+
+/** Whole calendar days from one instant to the next, on one zone's calendar.
+ * Never negative, and nothing where either side cannot be read. */
+export function daysBetween(
+  from: string | number | Date,
+  to: string | number | Date,
+  timeZone: string,
+): number | undefined {
+  const start = dayIn(from, timeZone);
+  const end = dayIn(to, timeZone);
+  if (start === undefined || end === undefined) return undefined;
+  return Math.max(0, end - start);
+}
+
+/**
  * A date the reader can see, as the day it names.
  *
  * `new Date("2026-09-01")` is UTC midnight, which is still August west of

@@ -1,85 +1,78 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
-import { CaretRight, Kanban } from "@phosphor-icons/react";
+import { Button } from "@grade10/design-system/components/forms/button";
+import { Kanban } from "@phosphor-icons/react";
 import { useState } from "react";
+import { Link, useSearchParams } from "react-router";
 import {
-  byLastMoved,
-  laneOf,
-  type ManualIndex,
-  taskTotals,
-} from "../api/derive";
-import type { ChangeEntry, ChangeLane } from "../api/types";
+  BOARD_FILTERS,
+  type BoardFilter,
+  type BoardRow,
+  boardLanes,
+  boardRows,
+  FILTER_LABEL,
+  filterOf,
+  narrowedBy,
+} from "../api/board";
+import { useHandle } from "../api/handle";
+import { STAGE_LABEL } from "../api/stage-view";
 import { useArchive } from "../api/use-archive";
 import { useManualIndex } from "../api/use-manual-index";
-import { useHashTarget } from "../blocks/anchor";
-import { ChangeCard } from "../blocks/change-detail";
+import { StageLane } from "../blocks/stage-lane";
 import { ReadOnlyNotice } from "../editor/read-only-notice";
 import { ArchiveTimeline } from "./archive-timeline";
 import { MaintenancePanel } from "./maintenance-panel";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";
 
-type LaneSpec = {
-  lane: ChangeLane;
-  title: string;
-  summary: string;
-  /** Open on arrival, or collapsed until somebody asks. */
-  open: boolean;
-};
-
-/** The board's columns, in the order work moves through them. Each is derived
- * from the artifacts a change has written — never stored, never set by hand. */
-const LANES: LaneSpec[] = [
-  {
-    lane: "proposed",
-    title: "Proposed",
-    summary: "No deltas yet — the reason, and what it is about.",
-    open: false,
-  },
-  {
-    lane: "specified",
-    title: "Specified",
-    summary:
-      "Deltas written, no task list. The engineer who picks one up promotes it — each card carries the command.",
-    open: true,
-  },
-  {
-    lane: "in-progress",
-    title: "In progress",
-    summary: "Boxes still open.",
-    open: true,
-  },
-  {
-    lane: "complete",
-    title: "Complete",
-    summary: "Every task done — waiting on the archive.",
-    open: true,
-  },
-];
-
+/**
+ * The board: every change in flight in the lane its own files put it in, one
+ * lane per stage.
+ *
+ * Nothing here is stored. The stage, whose turn it is and what sits beside it
+ * are all derived from the artifacts on `main`, so the board and the change
+ * page cannot disagree about a change; the filters and the shelf are URL
+ * state, so a reading of a stuck board is a link somebody can send.
+ */
 export function InFlightPage() {
   const index = useManualIndex();
   useDocumentTitle("In Flight");
-  // The archive answers whether a dependency shipped; without it a shipped one
-  // would read as missing, which is the one answer worth avoiding.
+  // The archive answers whether a dependency shipped — without it a shipped
+  // one would read as blocking — and it is what the Archived lane holds.
   const archive = useArchive();
   const archived =
     archive.status === "ready" ? archive.archive.changes : undefined;
+  const [params] = useSearchParams();
+  const filter = filterOf(params.get("filter"));
+  const shelfOnly = params.get("shelf") === "1";
+  const { handle, remember } = useHandle();
 
-  const byLane = new Map<ChangeLane, ChangeEntry[]>();
-  for (const change of [...index.snapshot.changes].sort(byLastMoved)) {
-    const lane = laneOf(change);
-    byLane.set(lane, [...(byLane.get(lane) ?? []), change]);
-  }
+  const rows = boardRows([...index.snapshot.changes, ...(archived ?? [])], {
+    now: Date.now(),
+    released: new Set((archived ?? []).map((one) => one.id)),
+    schemas: index.snapshot.schemas,
+  });
+  const kept = rows.filter((row) => narrowedBy(row, filter, handle));
+  const shelved = kept.filter((row) => row.shelved);
 
   return (
     <>
       <ReadOnlyNotice className="mb-3 text-right" />
       <PageHeading
-        summary="Every change in flight, in the lane its own artifacts put it in."
+        summary="Every change in flight, in the lane its own artifacts put it in — one lane per stage, with the hand each waits on."
         title="In Flight"
       />
+
+      <FilterRow
+        filter={filter}
+        params={params}
+        shelfOnly={shelfOnly}
+        shelved={shelved.length}
+      />
+      {filter === "mine" && handle === undefined ? (
+        <HandleAsk remember={remember} />
+      ) : null}
 
       {index.snapshot.changes.length === 0 ? (
         <EmptyState
@@ -87,16 +80,15 @@ export function InFlightPage() {
           icon={<Kanban aria-hidden />}
           title="Nothing in flight"
         />
+      ) : shelfOnly ? (
+        <Shelf rows={shelved} />
       ) : (
-        LANES.map((spec) => (
-          <Lane
-            archived={archived}
-            changes={byLane.get(spec.lane) ?? []}
-            index={index}
-            key={spec.lane}
-            spec={spec}
-          />
-        ))
+        <>
+          {boardLanes(kept).map((lane) => (
+            <StageLane index={index} key={lane.stage} lane={lane} />
+          ))}
+          <Shelf rows={shelved} />
+        </>
       )}
 
       <ArchiveTimeline title="Archive" />
@@ -105,93 +97,126 @@ export function InFlightPage() {
   );
 }
 
-/** One lane. Collapsible, and opened by a link that names a change inside it —
- * a deep link from a requirement row has to land on the card, whichever lane
- * the change has moved into since the link was copied. */
-function Lane({
-  spec,
-  changes,
-  index,
-  archived,
+/** Exactly the five filters, and the shelf beside them. Each is a link, so a
+ * narrowed board is a link and the back button leaves it. */
+function FilterRow({
+  filter,
+  params,
+  shelfOnly,
+  shelved,
 }: {
-  spec: LaneSpec;
-  changes: ChangeEntry[];
-  index: ManualIndex;
-  archived?: ChangeEntry[];
+  filter: BoardFilter | undefined;
+  params: URLSearchParams;
+  shelfOnly: boolean;
+  shelved: number;
 }) {
-  const targeted = useHashTarget(...changes.map((change) => change.id));
-  const [open, setOpen] = useState(spec.open);
-
-  if (changes.length === 0) return null;
-  const expanded = open || targeted;
+  const to = (next: Partial<Record<"filter" | "shelf", string | null>>) => {
+    const search = new URLSearchParams(params);
+    for (const [key, value] of Object.entries(next)) {
+      if (value === null) search.delete(key);
+      else search.set(key, value);
+    }
+    const written = search.toString();
+    return written === "" ? "/in-flight" : `/in-flight?${written}`;
+  };
 
   return (
-    <section className="mb-8">
-      <button
-        aria-expanded={expanded}
-        className="-mx-2 flex w-[calc(100%+1rem)] cursor-pointer items-center gap-2 rounded-(--radius-lg) px-2 py-1 text-left outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/50"
-        onClick={() => setOpen((on) => !on)}
-        type="button"
-      >
-        <span
-          className={`inline-flex shrink-0 text-secondary-foreground transition-transform ${expanded ? "rotate-90" : ""}`}
+    <nav
+      aria-label="Filters"
+      className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1.5"
+    >
+      {BOARD_FILTERS.map((one) => (
+        <Link
+          aria-current={filter === one ? "page" : undefined}
+          key={one}
+          to={to({ filter: filter === one ? null : one })}
         >
-          <CaretRight aria-hidden size={14} weight="bold" />
-        </span>
-        <h2 className="font-heading font-bold text-lg" id={spec.lane}>
-          {spec.title}
-        </h2>
-        <Badge
-          size="sm"
-          variant={spec.lane === "complete" ? "success" : "outline"}
-        >
-          {changes.length}
+          <Badge size="sm" variant={filter === one ? "info" : "outline"}>
+            {FILTER_LABEL[one]}
+          </Badge>
+        </Link>
+      ))}
+      <Link className="ml-auto" to={to({ shelf: shelfOnly ? null : "1" })}>
+        <Badge size="sm" variant={shelfOnly ? "info" : "outline"}>
+          <span>{shelfOnly ? "Back to the lanes" : "Shelf"}</span>
+          {shelfOnly ? null : <span className="opacity-70">{shelved}</span>}
         </Badge>
-        <LaneProgress changes={changes} lane={spec.lane} />
-      </button>
-
-      <Text as="p" className="mt-1 ml-6" size="sm" tone="secondary">
-        {spec.summary}
-      </Text>
-
-      <div
-        className={`grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none ${expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
-      >
-        <div className="overflow-hidden" inert={!expanded}>
-          <ul className="mt-3 space-y-3">
-            {changes.map((change) => (
-              <li key={change.id}>
-                <ChangeCard archived={archived} change={change} index={index} />
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
+      </Link>
+    </nav>
   );
 }
 
-/** The lane's own number, where a lane has one worth reading at a glance. */
-function LaneProgress({
-  changes,
-  lane,
-}: {
-  changes: ChangeEntry[];
-  lane: ChangeLane;
-}) {
-  if (lane !== "in-progress") return null;
-  const totals = changes.reduce(
-    (sum, change) => {
-      const { done, total } = taskTotals(change);
-      return { done: sum.done + done, total: sum.total + total };
-    },
-    { done: 0, total: 0 },
-  );
-  if (totals.total === 0) return null;
+/**
+ * Mine needs a handle and the manual has nobody signed in, so it asks for one
+ * and narrows nothing until it has one: a filter that emptied the board while
+ * asking who you are reads as a board with nothing on it.
+ */
+function HandleAsk({ remember }: { remember: (handle: string) => void }) {
+  const [written, setWritten] = useState("");
 
   return (
-    <Text as="span" className="ml-auto font-mono" size="xs" tone="secondary">
-      {totals.done}/{totals.total} tasks
-    </Text>
+    <form
+      className="mb-6 flex flex-wrap items-center gap-2"
+      onSubmit={(event) => {
+        event.preventDefault();
+        remember(written);
+      }}
+    >
+      <Text as="span" size="sm">
+        Choose a handle to see the changes you are a hand of
+      </Text>
+      <input
+        aria-label="Your handle"
+        className="h-8 rounded-(--radius-lg) border border-border bg-control px-2 font-mono text-sm"
+        onChange={(event) => setWritten(event.target.value)}
+        placeholder="handle"
+        value={written}
+      />
+      <Button size="sm" type="submit" variant="outline">
+        Remember me
+      </Button>
+    </form>
+  );
+}
+
+/**
+ * What was set aside: a change nothing has landed on for a month comes off
+ * its lane and sits here with its stage and its day count, so a long board is
+ * the work in flight rather than everything anybody ever proposed.
+ */
+function Shelf({ rows }: { rows: BoardRow[] }) {
+  if (rows.length === 0) return null;
+
+  return (
+    <section className="mt-12 border-border-subtle border-t pt-8">
+      <h2 className="mb-1 font-heading font-bold text-lg" id="shelf">
+        Shelf
+      </h2>
+      <Text as="p" className="mb-3" size="sm" tone="secondary">
+        Nothing has landed on these for a month. Each is off its lane until it
+        moves again.
+      </Text>
+      <ul className="flex flex-col gap-2">
+        {rows.map((row) => (
+          <li
+            className="flex flex-wrap items-center gap-x-3 gap-y-1"
+            key={row.change.id}
+          >
+            <Link
+              className="text-sm underline underline-offset-2"
+              to={`/in-flight/${row.change.id}`}
+            >
+              {row.change.title}
+            </Link>
+            <Badge size="sm" variant="outline">
+              {STAGE_LABEL[row.stage]}
+            </Badge>
+            <Text as="span" size="xs" tone="secondary">
+              {`${row.idleDays} days`}
+            </Text>
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

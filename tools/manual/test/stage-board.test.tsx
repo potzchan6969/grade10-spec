@@ -12,7 +12,12 @@ import type {
 } from "../src/api/types";
 import { findStoreRoot } from "../src/store/disk.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
-import { changeEntry, pageEntry, snapshotOf, specEntry } from "./manual-fixture";
+import {
+  changeEntry,
+  pageEntry,
+  snapshotOf,
+  specEntry,
+} from "./manual-fixture";
 
 /**
  * The board, state by state: the eight lanes, the mark and the move on the
@@ -153,7 +158,9 @@ function render(
 
 /** The chips one card wears, in the order the overlay table lists them. */
 function overlaysOn(html: string): string[] {
-  return [...html.matchAll(/data-overlay="([a-z]+)"/g)].map((match) => match[1]);
+  return [...html.matchAll(/data-overlay="([a-z]+)"/g)].map(
+    (match) => match[1],
+  );
 }
 
 /** Whether one lane arrived open, read off its own toggle. */
@@ -222,13 +229,15 @@ describe("the lanes", () => {
   });
 
   it("A lane whose stage names nobody, collapsed while a lane on a hand is open", () => {
-    const html = render([at("designed"), at("planned")]);
+    const html = render([at("proposed"), at("designed"), at("planned")]);
 
     expect(laneOpen(html, "designed")).toBe("shut");
     expect(laneOpen(html, "released")).toBe("shut");
     expect(laneOpen(html, "archived")).toBe("shut");
-    expect(laneOpen(html, "planned")).toBe("open");
     expect(laneOpen(html, "proposed")).toBe("open");
+    expect(laneOpen(html, "planned")).toBe("open");
+    // A lane with nothing in it collapses whichever it is.
+    expect(laneOpen(html, "specified")).toBe("shut");
   });
 
   it("A lane heading and a stepper step with the agent mark and the hand's move", () => {

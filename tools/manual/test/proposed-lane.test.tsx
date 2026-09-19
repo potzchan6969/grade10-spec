@@ -117,13 +117,13 @@ describe("what a proposal is not part of", () => {
   it("stands in its own lane, never among the work in flight", () => {
     const html = render([planned, proposal]);
     const proposed = html.slice(
-      html.indexOf(">Proposed<"),
-      html.indexOf(">In progress<"),
+      html.indexOf('data-lane="proposed"'),
+      html.indexOf('data-lane="designed"'),
     );
 
     expect(proposed).toContain("Loyalty points should expire");
     expect(proposed).not.toContain("Add the thing");
-    expect(html.slice(html.indexOf(">In progress<"))).toContain(
+    expect(html.slice(html.indexOf('data-lane="building"'))).toContain(
       "Add the thing",
     );
   });
@@ -149,8 +149,18 @@ describe("the proposed lane", () => {
     expect(html).toContain("expire-loyalty-points");
   });
 
-  it("is not there at all when nothing has been proposed", () => {
-    expect(render([planned])).not.toContain("Proposed");
+  /** The lane is a stage, so it is always a heading: with nothing proposed it
+   * collapses to its count of none rather than disappearing. */
+  it("collapses to its heading when nothing has been proposed", () => {
+    const html = render([planned]);
+    const proposed = html.slice(
+      html.indexOf('data-lane="proposed"'),
+      html.indexOf('data-lane="designed"'),
+    );
+
+    expect(proposed).toContain(">Proposed<");
+    expect(proposed).toContain(">0<");
+    expect(proposed).not.toContain("Add the thing");
   });
 });
 

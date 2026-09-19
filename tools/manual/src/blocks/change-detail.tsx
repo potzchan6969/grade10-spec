@@ -12,6 +12,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { laneOf, type ManualIndex, taskTotals } from "../api/derive";
 import { changeSourceUrl } from "../api/paths";
+import type { Overlay } from "../api/stages";
 import { formatDate, relativeTime } from "../api/time";
 import type { ChangeEntry, TaskGroup, TaskLine } from "../api/types";
 import { WithdrawAction } from "../editor/withdraw-action";
@@ -30,20 +31,21 @@ import { InlineMarkdown } from "./inline-markdown";
  *
  * Collapsed by default: twenty expanded cards made the board a 30,000px page
  * nobody could scan. The summary keeps everything a review reads at a glance —
- * lane facts, owners, suites, the next action — and the body opens on demand,
- * or when a deep link lands on the card. `expanded` forces it open where the
- * card is the whole page.
+ * the hand, the age, the overlays, the task bar, the next action — and the
+ * body opens on demand, or when a deep link lands on the card. `expanded`
+ * forces it open where the card is the whole page.
  */
 export function ChangeCard({
   index,
   change,
-  archived = [],
   expanded = false,
+  overlays = [],
 }: {
   index: ManualIndex;
   change: ChangeEntry;
-  archived?: ChangeEntry[];
   expanded?: boolean;
+  /** What sits beside the stage, as the board derived it. */
+  overlays?: Overlay[];
 }) {
   const targeted = useHashTarget(change.id);
   const [open, setOpen] = useState(false);
@@ -114,12 +116,7 @@ export function ChangeCard({
       </h3>
       <ClampedText className="mt-1" lines={3} text={change.why} />
 
-      <ChangeFacts
-        archived={archived}
-        change={change}
-        index={index}
-        progress={!shown}
-      />
+      <ChangeFacts change={change} overlays={overlays} progress={!shown} />
 
       <div
         className={`grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none ${shown ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}

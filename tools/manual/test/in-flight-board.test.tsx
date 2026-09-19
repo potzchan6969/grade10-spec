@@ -10,8 +10,10 @@ import {
   specEntry,
 } from "./manual-fixture";
 
-/** The board a weekly review runs from: four lanes, and cards that answer who
- * owns it, what it waits on, which box is open and what the delta will say. */
+/** The board a weekly review runs from: one lane per stage, and cards that
+ * answer whose turn it is, which box is open and what the delta will say. The
+ * states each lane and each card carries are `stage-board.test.tsx`; this is
+ * what a card says about the change itself. */
 
 const SPEC = "demo-product/alpha";
 const delta = (requirements: Delta["requirements"] = []): Delta => ({
@@ -88,7 +90,7 @@ function render(changes: ChangeEntry[], archived: ChangeEntry[] = []): string {
   );
 }
 
-describe("the four lanes", () => {
+describe("the lanes", () => {
   const idea = changeEntry("an-idea", [], { title: "Only a reason" });
   const specified = changeEntry("written-up", [delta()], {
     title: "Deltas, no plan",
@@ -112,8 +114,8 @@ describe("the four lanes", () => {
     for (const [lane, title] of [
       [">Proposed<", "Only a reason"],
       [">Specified<", "Deltas, no plan"],
-      [">In progress<", "Half built"],
-      [">Complete<", "Waiting on the archive"],
+      [">Building<", "Half built"],
+      [">On staging<", "Waiting on the archive"],
     ]) {
       expect(html).toContain(lane);
       expect(html).toContain(title);
@@ -125,15 +127,20 @@ describe("the four lanes", () => {
 
   /** Three changes have been fully checked off for months and wore the same
    * "in flight" badge as a 0/45 one. */
-  it("says the complete lane is waiting on the archive", () => {
-    expect(render([done])).toContain("waiting on the archive");
+  it("says a change every box is ticked on is waiting on the archive", () => {
+    expect(render([done])).toContain("fold it into the durable specs");
   });
 
-  it("shows no lane it has nothing for", () => {
+  it("collapses a lane it has nothing for to its heading", () => {
     const html = render([working]);
+    const proposed = html.slice(
+      html.indexOf('data-lane="proposed"'),
+      html.indexOf('data-lane="designed"'),
+    );
 
-    expect(html).not.toContain(">Proposed<");
-    expect(html).not.toContain(">Complete<");
+    expect(proposed).toContain(">Proposed<");
+    expect(proposed).toContain(">0<");
+    expect(proposed).not.toContain("Half built");
   });
 });
 
@@ -171,15 +178,17 @@ describe("what a card tells a review", () => {
   });
 
   it("carries the target date", () => {
-    expect(html).toContain("Blocked by");
     expect(html).toMatch(/Sep(tember)? 30, 2026/);
   });
 
-  it("separates a blocking dependency from a shipped one, and names a lie", () => {
-    expect(html).toContain("loyalty-rules");
-    expect(html).toContain("in flight");
-    expect(html).toContain("shipped");
-    expect(html).toContain("never-written — names no change");
+  /** The card wears the Blocked overlay: one chip per change no release has
+   * carried. Which of them shipped, and which id names nothing at all, is the
+   * change page's own row — `change-page.test.tsx`. */
+  it("names each change no release has carried yet", () => {
+    expect(html).toContain('data-overlay="blocked"');
+    expect(html).toContain('href="/in-flight#loyalty-rules"');
+    expect(html).toContain('href="/in-flight#never-written"');
+    expect(html).not.toContain('href="/in-flight#shipped-already"');
   });
 
   /** "1 of 3" is a number nobody can act on; 2.4 is the work. */
@@ -192,17 +201,18 @@ describe("what a card tells a review", () => {
 });
 
 /** The loop's continuation used to live nowhere: its first casualty guessed a
- * skill name off a badge. Every lane but in-progress names its next action. */
+ * skill name off a badge. Every stage an agent drafts names its own command,
+ * and the three it drafts nothing for leave the archive. */
 describe("the loop's continuation on the card", () => {
-  it("hands a proposed change to /planning-pm for its deltas", () => {
+  it("hands a proposed change to /plan for its three files", () => {
     const html = render([changeEntry("an-idea", [], {})]);
-    expect(html).toContain("/planning-pm an-idea");
+    expect(html).toContain("/plan an-idea");
   });
 
-  it("hands a specified change to /planning-dev for its delivery plan", () => {
+  it("hands a specified change to /specify for the reading", () => {
     const html = render([changeEntry("written-up", [delta()], {})]);
-    expect(html).toContain("/planning-dev written-up");
-    expect(html).toContain("writes the delivery plan");
+    expect(html).toContain("/specify written-up");
+    expect(html).toContain("read the requirements and the cases together");
   });
 
   it("hands a complete change to /archive-change", () => {
@@ -216,7 +226,9 @@ describe("the loop's continuation on the card", () => {
     expect(html).toContain("/archive-change finished");
   });
 
-  it("offers /tcs-review while a suite holds drafts", () => {
+  /** The card wears the suite's verdict as one of the five overlays; the
+   * counts and the review command are the change page's row. */
+  it("wears the suite's verdict while it holds drafts", () => {
     const html = render([
       changeEntry("specced", [delta()], {
         suites: [
@@ -228,9 +240,8 @@ describe("the loop's continuation on the card", () => {
         ],
       }),
     ]);
-    expect(html).toContain("/tcs-review specced");
-    expect(html).toContain("3 draft");
-    expect(html).toContain("1 reviewed");
+    expect(html).toContain('data-overlay="suite"');
+    expect(html).toContain(">draft<");
   });
 });
 

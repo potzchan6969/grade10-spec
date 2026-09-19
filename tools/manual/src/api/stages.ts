@@ -1,5 +1,7 @@
 // Explicit extensions: `check:manual`, the store's reader and the notify
 // script all load this under plain node, which resolves no extensionless path.
+
+import { daysBetween } from "./time.ts";
 import type {
   BehindArtifact,
   ChangeEntry,
@@ -456,30 +458,7 @@ export function idleDaysOf(
   now: Date | number,
 ): number | undefined {
   if (change.lastLanded === undefined) return undefined;
-  const landed = dayOn(change.lastLanded, TIME_ZONE);
-  const today = dayOn(now, TIME_ZONE);
-  if (landed === undefined || today === undefined) return undefined;
-  return Math.max(0, today - landed);
-}
-
-/** Which day an instant falls on in one zone, as a count of days — the only
- * arithmetic a calendar-day difference can be done with. */
-function dayOn(
-  at: string | number | Date,
-  timeZone: string,
-): number | undefined {
-  const instant = at instanceof Date ? at : new Date(at);
-  if (Number.isNaN(instant.getTime())) return undefined;
-  const parts = new Intl.DateTimeFormat("en-US", {
-    timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).formatToParts(instant);
-  const of = (type: string) =>
-    Number(parts.find((one) => one.type === type)?.value);
-  const day = Date.UTC(of("year"), of("month") - 1, of("day"));
-  return Number.isNaN(day) ? undefined : day / 86_400_000;
+  return daysBetween(change.lastLanded, now, TIME_ZONE);
 }
 
 /** The suite's verdict: approved once no suite of the change is left to
