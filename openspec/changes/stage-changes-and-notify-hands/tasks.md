@@ -44,11 +44,11 @@ Every group lands its tests in their own commit before its code, and its readers
 
 ## 5. My turn, the page's ribbon and the pip, and Assign (grade10-spec)
 
-- [ ] 5.1 `/my-turn`: the handle read and written through the `KeyStore` seam in `editor/config.ts` so a test can hold it, asked for before anything lists, an unknown handle reported, and the board's Mine filter reading the same key - `shared-planning-change-stages-SC-62`, `shared-planning-change-stages-SC-63`, `shared-planning-change-stages-SC-64`
-- [ ] 5.2 The page's order: open questions, then the changes on the reader now, then theirs later, and the empty page - `shared-planning-change-stages-SC-60`, `shared-planning-change-stages-SC-61`
-- [ ] 5.3 A section's in-flight row shows the stage and the hand, and each 🚧 line wears the pip of its change's stage: none once archived, the further stage when two changes deliver it - `shared-planning-change-stages-SC-65`, `shared-planning-change-stages-SC-66`, `shared-planning-change-stages-SC-67`
-- [ ] 5.4 Assign on the locally run manual: the dev server writes `hands:` as one atomic write to the working tree, behind the same confinement as a proposal - `pnpm plan hand` is what commits and pushes; the hosted manual shows it read-only - `shared-planning-change-stages-SC-68`, `shared-planning-change-stages-SC-69`
-- [ ] 5.5 Component tests for every state `ui-design.md` lists for My turn, the ribbon, the pip and Assign, the write path over `storeEndpoints` as `store-propose.test.ts` drives it
+- [x] 5.1 `/my-turn`: the handle read and written through the `KeyStore` seam in `editor/config.ts` so a test can hold it, asked for before anything lists, an unknown handle reported, and the board's Mine filter reading the same key - `shared-planning-change-stages-SC-62`, `shared-planning-change-stages-SC-63`, `shared-planning-change-stages-SC-64`
+- [x] 5.2 The page's order: open questions, then the changes on the reader now, then theirs later, and the empty page - `shared-planning-change-stages-SC-60`, `shared-planning-change-stages-SC-61`
+- [x] 5.3 A section's in-flight row shows the stage and the hand, and each 🚧 line wears the pip of its change's stage: none once archived, the further stage when two changes deliver it - `shared-planning-change-stages-SC-65`, `shared-planning-change-stages-SC-66`, `shared-planning-change-stages-SC-67`
+- [x] 5.4 Assign on the locally run manual: the dev server writes `hands:` as one atomic write to the working tree, behind the same confinement as a proposal - `pnpm plan hand` is what commits and pushes; the hosted manual shows it read-only - `shared-planning-change-stages-SC-68`, `shared-planning-change-stages-SC-69`
+- [x] 5.5 Component tests for every state `ui-design.md` lists for My turn, the ribbon, the pip and Assign, the write path over `storeEndpoints` as `store-propose.test.ts` drives it
 
 ## 6. The messages (grade10-spec)
 
