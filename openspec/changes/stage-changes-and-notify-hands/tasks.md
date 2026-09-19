@@ -36,11 +36,11 @@ Every group lands its tests in their own commit before its code, and its readers
 
 ## 4. The record's rules and the gate at the fold (grade10-spec)
 
-- [ ] 4.1 Rule `hands`: an unknown role, a handle the team map does not know, a value that is not one handle - `shared-planning-change-stages-SC-14`
-- [ ] 4.2 Rule `landed_by`: a handle the team map does not know, an artifact id the schema does not issue - and the same id refusal over `reviewed:`, which keys its content ids the same way - `shared-planning-change-stages-SC-12`
-- [ ] 4.3 `archive:preflight` refuses a behind delta and names what changed before it, and says on a shallow clone that the freshness read was skipped rather than refusing on its account - `shared-planning-change-stages-SC-31`
-- [ ] 4.4 `docs/prds/guides/working-a-change.md` carries the stage table in place of the turn table, and the command each stage's hand pastes
-- [ ] 4.5 Tests for both rules, for the tick, the claim and the wait staying accepted while an artifact is behind, and for the fold's refusal - `shared-planning-change-stages-SC-12`, `shared-planning-change-stages-SC-14`, `shared-planning-change-stages-SC-30`, `shared-planning-change-stages-SC-31`
+- [x] 4.1 Rule `hands`: an unknown role, a handle the team map does not know, a value that is not one handle - `shared-planning-change-stages-SC-14`
+- [x] 4.2 Rule `landed_by`: a handle the team map does not know, an artifact id the schema does not issue - and the same id refusal over `reviewed:`, which keys its content ids the same way - `shared-planning-change-stages-SC-12`
+- [x] 4.3 `archive:preflight` refuses a behind delta and names what changed before it, and says on a shallow clone that the freshness read was skipped rather than refusing on its account - `shared-planning-change-stages-SC-31`
+- [x] 4.4 `docs/prds/guides/working-a-change.md` carries the stage table in place of the turn table, and the command each stage's hand pastes
+- [x] 4.5 Tests for both rules, for the tick, the claim and the wait staying accepted while an artifact is behind, and for the fold's refusal - `shared-planning-change-stages-SC-12`, `shared-planning-change-stages-SC-14`, `shared-planning-change-stages-SC-30`, `shared-planning-change-stages-SC-31`
 
 ## 5. My turn, the page's ribbon and the pip, and Assign (grade10-spec)
 
