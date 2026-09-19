@@ -282,7 +282,7 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 
 | # | Stage | Whose turn |
 | --- | --- | --- |
-| 1 | Proposed | `pm` until `decisions.md`, the journeys file and `hands:` are all on `main`; then `design` and `tech` |
+| 1 | Proposed | `pm` until `decisions.md` and the journeys file are on `main` and `hands:` names every role the next stage needs - `design` unless `ui_waived`, `tech` unless `design_waived`; then those hands |
 | 2 | Designed | nobody: the requirements are drafted next and read at Specified |
 | 3 | Specified | `pm` |
 | 4 | Planned | `dev` |
@@ -294,10 +294,11 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 #### Scenario: shared-planning-change-stages-SC-15 - Proposed changes hands without changing stage
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads the Proposed lane before and after the three files land
 
-**GIVEN** a change holding its proposal and not yet its decisions, its journeys or `hands:`
-**WHEN** its card is read, and read again once the three are on `main`
+**GIVEN** a change holding its proposal and not yet its decisions, its journeys or a hand for either design
+**WHEN** its card is read, and read again once the decisions, the journeys and both hands are on `main`
 **THEN** the turn SHALL first be the product manager's
 **AND** it SHALL then be the designer's and the tech PIC's
+**AND** a change carrying `ui_waived:` SHALL pass to the tech PIC alone, on that hand's name alone
 **AND** the stage SHALL still be Proposed
 
 #### Scenario: shared-planning-change-stages-SC-16 - Each later stage names its hands
