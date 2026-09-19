@@ -22,7 +22,7 @@
  * changes that could not have complied is a check people learn to read past.
  */
 
-import { ROUND_COLUMNS } from "../src/store/read-rounds.mts";
+import { ROUND_COLUMNS, roundArtifactOf } from "../src/store/read-rounds.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 
 /** The day after the `round` rule landed. A change opened on the day itself
@@ -57,15 +57,15 @@ export function checkRounds(ctx, changes) {
       }
     }
 
-    const named = new Set(rows.map((row) => groupOf(row.artifact)));
+    // One reading of the cell, the store's own: the landing writes a group's
+    // bare digits and an artifact's id, so this compares the id it is given.
+    const named = new Set(rows.map((row) => roundArtifactOf(row.artifact)));
     const landedBy = change.landedBy ?? {};
 
-    for (const { id, generates } of schemaArtifacts(
-      ctx.roots.store,
-      change.schema,
-    ) ?? []) {
+    for (const { id } of schemaArtifacts(ctx.roots.store, change.schema) ??
+      []) {
       if (!(id in landedBy)) continue;
-      if (named.has(id) || named.has(fileOf(generates))) continue;
+      if (named.has(id)) continue;
       ctx.add(
         "round",
         file,
@@ -83,15 +83,3 @@ export function checkRounds(ctx, changes) {
     }
   }
 }
-
-/** A row's `Artifact` cell as this compares it: an artifact id as written, and
- * a task group however the row spelled its number — `3`, `3.` or `group 3`. */
-const groupOf = (cell) =>
-  String(cell)
-    .trim()
-    .replace(/^group\s+/i, "")
-    .replace(/\.$/, "");
-
-/** The file name an artifact generates, so a row naming `ui-design.md` answers
- * for `ui-design`. */
-const fileOf = (generates) => generates.slice(generates.lastIndexOf("/") + 1);

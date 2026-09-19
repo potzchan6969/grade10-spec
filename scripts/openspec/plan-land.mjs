@@ -70,6 +70,7 @@ import {
   runChecks,
 } from "../../tools/manual/check/check-manual.mjs";
 import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
+import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { isGroup } from "./lib/perspectives.mjs";
 import { openRecord, saveRecord, setEntry } from "./lib/record.mjs";
@@ -168,7 +169,7 @@ if (artifact === undefined && !isGroup(target)) {
   );
 }
 if (artifact === undefined) {
-  const wanted = groupNumberOf(target);
+  const wanted = roundArtifactOf(target);
   const known = read.entry.taskGroups.map((one) => one.num);
   if (!known.includes(wanted)) {
     fail(
@@ -372,15 +373,6 @@ function artifactIdOf(named) {
   return found?.id;
 }
 
-/** A task group's number however the target spelled it — `3`, `3.`, `group
- * 3` — as `tasks.md`'s own reader carries it. */
-function groupNumberOf(named) {
-  return String(named)
-    .trim()
-    .replace(/^group\s+/i, "")
-    .replace(/\.$/, "");
-}
-
 /** The row the landing commits: the flags a round gave it. A landing owes a
  * row, so a run with neither is refused rather than landing work the `round`
  * rule will refuse on the next push. */
@@ -391,7 +383,10 @@ function rowOf() {
     );
   }
   return {
-    artifact: artifact ?? target,
+    // A group reaches the row as its bare digits: `roundArtifactOf` is the
+    // one reading of this cell, and the writer owes what every reader of it
+    // expects rather than the spelling the target happened to use.
+    artifact: artifact ?? roundArtifactOf(target),
     perspectives: listCell(flags.perspectives),
     stood: flags.stood,
     asked: askedCell(flags.asked),
