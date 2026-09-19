@@ -798,6 +798,10 @@ export type Snapshot = {
   history: HistoryEvent[];
   warnings: CheckWarning[];
   designSync?: DesignSyncReport;
+  /** `docs/prds/team.yaml`, read the way a page is: absent only for a store
+   * with no file yet, which knows nobody rather than refusing to boot. My
+   * turn reads it to say a handle is unknown. */
+  team?: TeamMap;
 };
 
 /** `/api/archive` — fetched only by the In Flight and timeline views. */

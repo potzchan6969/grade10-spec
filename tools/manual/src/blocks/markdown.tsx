@@ -16,6 +16,7 @@ import {
   slugify,
   specTitle,
 } from "../api/paths";
+import { MARK_SECTION_PROPERTY, markSections } from "../content/mark-pips";
 import { REF_PATTERN, resolveRef } from "../content/refs";
 import {
   columnCount,
@@ -25,6 +26,7 @@ import {
 } from "../content/table-layout";
 import { AnchorLink } from "./anchor";
 import { SectionChanges } from "./section-changes";
+import { StagePip } from "./stage-pip";
 
 /** Where a markdown href actually points, once the store layout is applied. */
 type Target =
@@ -47,6 +49,7 @@ const APP_ROUTES = new Set([
   "/",
   "/in-flight",
   "/pending",
+  "/my-turn",
   "/qa",
   "/design",
   REFERENCES_ROUTE,
@@ -267,6 +270,10 @@ type MarkdownViewProps = {
   refs?: boolean;
   /** The page's own `spec:` — the scope a bare id resolves inside. */
   pageSpec?: string;
+  /** Page prose only: a 🚧 line gets the pip of its enclosing `## ` section's
+   * furthest in-flight change. Off elsewhere `anchors` is off — a spec's or a
+   * delta's own text names no page section to read a pip from. */
+  pips?: boolean;
   className?: string;
 };
 
@@ -282,6 +289,7 @@ export function MarkdownView({
   anchorPrefix,
   refs = false,
   pageSpec,
+  pips = false,
   className,
 }: MarkdownViewProps) {
   const components = useMemo<Components>(
@@ -372,8 +380,40 @@ export function MarkdownView({
           src={typeof src === "string" ? src : ""}
         />
       ),
+      ...(pips
+        ? {
+            p: ({
+              children,
+              node,
+              ...rest
+            }: ComponentProps<"p"> & { node?: HastNode }) => (
+              <p {...rest}>
+                {children}
+                <MarkPip node={node} />
+              </p>
+            ),
+            li: ({
+              children,
+              node,
+              ...rest
+            }: ComponentProps<"li"> & { node?: HastNode }) => (
+              <li {...rest}>
+                {children}
+                <MarkPip node={node} />
+              </li>
+            ),
+          }
+        : {}),
     }),
-    [anchors, anchorPrefix, baseDir, index, pageSpec],
+    [anchors, anchorPrefix, baseDir, index, pageSpec, pips],
+  );
+
+  const remarkPlugins = useMemo(
+    () =>
+      pips
+        ? [remarkGfm, equalWidthTables, markSections]
+        : [remarkGfm, equalWidthTables],
+    [pips],
   );
 
   return (
@@ -381,12 +421,19 @@ export function MarkdownView({
       <Markdown
         components={components}
         rehypePlugins={refs ? REF_PLUGINS : undefined}
-        remarkPlugins={[remarkGfm, equalWidthTables]}
+        remarkPlugins={remarkPlugins}
       >
         {text}
       </Markdown>
     </div>
   );
+}
+
+/** The pip a `p` or `li` renders beside it, where the plugin above tagged it
+ * with the section it sits in — nothing where the line carries no 🚧. */
+function MarkPip({ node }: { node?: HastNode }) {
+  const slug = node?.properties?.[MARK_SECTION_PROPERTY];
+  return typeof slug === "string" ? <StagePip slug={slug} /> : null;
 }
 
 function Heading({

@@ -1,9 +1,7 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
 import { Kanban } from "@phosphor-icons/react";
-import { useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import {
   BOARD_FILTERS,
@@ -19,8 +17,8 @@ import { useHandle } from "../api/handle";
 import { STAGE_LABEL } from "../api/stage-view";
 import { useArchive } from "../api/use-archive";
 import { useManualIndex } from "../api/use-manual-index";
+import { HandleAsk } from "../blocks/handle-ask";
 import { StageLane } from "../blocks/stage-lane";
-import { TextField } from "../editor/fields";
 import { ReadOnlyNotice } from "../editor/read-only-notice";
 import { browserKeyStore } from "../editor/session";
 import { ArchiveTimeline } from "./archive-timeline";
@@ -139,40 +137,6 @@ function FilterRow({
         </Badge>
       </Link>
     </nav>
-  );
-}
-
-/**
- * Mine needs a handle and the manual has nobody signed in, so it asks for one
- * and narrows nothing until it has one: a filter that emptied the board while
- * asking who you are reads as a board with nothing on it.
- */
-function HandleAsk({ remember }: { remember: (handle: string) => void }) {
-  const [written, setWritten] = useState("");
-
-  return (
-    <form
-      className="mb-6 flex flex-wrap items-end gap-2"
-      onSubmit={(event) => {
-        event.preventDefault();
-        remember(written);
-      }}
-    >
-      <Text as="span" className="mb-2.5" size="sm">
-        Choose a handle to see the changes you are a hand of
-      </Text>
-      <div className="w-40">
-        <TextField
-          label="Your handle"
-          onChange={setWritten}
-          placeholder="handle"
-          value={written}
-        />
-      </div>
-      <Button size="sm" type="submit" variant="outline">
-        Remember me
-      </Button>
-    </form>
   );
 }
 

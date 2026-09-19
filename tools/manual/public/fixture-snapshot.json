@@ -1007,5 +1007,35 @@
   ],
   "referencesReadme": "# References\n\nSource material behind a decision. A reference explains and preserves; it is\nnever authoritative.\n",
   "history": [],
-  "warnings": []
+  "warnings": [],
+  "team": {
+    "handles": {
+      "tester": {
+        "email": "tester@example.com",
+        "slack": "U0TESTER",
+        "roles": [
+          "pm",
+          "design",
+          "tech",
+          "qa",
+          "dev",
+          "release"
+        ]
+      },
+      "other": {
+        "email": "other@example.com",
+        "roles": [
+          "dev"
+        ]
+      }
+    },
+    "channels": {
+      "pm": "C0PLANNING",
+      "design": "C0DESIGN",
+      "tech": "C0TECH",
+      "qa": "C0QA",
+      "dev": "C0DEV",
+      "release": "C0RELEASE"
+    }
+  }
 }

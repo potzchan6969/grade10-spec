@@ -7,11 +7,15 @@ import {
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { ArrowSquareOut } from "@phosphor-icons/react";
+import { useState } from "react";
 import { Link } from "react-router";
-import { ROLE_LABEL, roleTitle } from "../api/stage-view";
+import { ROLE_LABEL, ROLES, roleTitle } from "../api/stage-view";
 import { DRAFTED, handOf, moveOf } from "../api/stages";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "../api/types";
+import { SelectField, TextField } from "../editor/fields";
 import { useEditorSession } from "../editor/session";
+import type { ContentStore } from "../editor/store";
+import { describeCause } from "../editor/store";
 import { Hand } from "./change-hand";
 import { CopyableCommand } from "./copyable-command";
 
@@ -78,7 +82,7 @@ export function YourTurnCard({
           </ul>
         )}
 
-        <Thread change={change} />
+        <ThreadLink change={change} />
 
         {moves.map((one) => (
           <div
@@ -101,7 +105,7 @@ export function YourTurnCard({
           </div>
         ) : null}
 
-        <Assign />
+        <Assign change={change} />
       </CardContent>
     </Card>
   );
@@ -125,8 +129,11 @@ function Turn({ change, role }: { change: ChangeEntry; role: Role }) {
  * a permalink is the channel with the timestamp's separator dropped — built
  * here against Slack's own host, because the manual has no workspace name to
  * build one with and the redirect lands a signed-in reader in their own.
+ *
+ * Exported: My turn's own cards carry the same link, and a change reads one
+ * thread wherever it is shown rather than a second copy of this reasoning.
  */
-function Thread({ change }: { change: ChangeEntry }) {
+export function ThreadLink({ change }: { change: ChangeEntry }) {
   const thread = change.thread;
   if (thread === undefined) {
     return (
@@ -161,21 +168,98 @@ function Thread({ change }: { change: ChangeEntry }) {
 /**
  * Naming a hand is a write, and the hosted manual writes nothing: it is shown
  * as read-only rather than hidden, because a reader who cannot find Assign
- * reads its absence as a missing feature instead of a missing dev server.
+ * reads its absence as a missing feature instead of a missing dev server. The
+ * locally run manual gets the working form instead — the same dev server a
+ * proposal writes through, one role and one handle in one write.
  */
-function Assign() {
+function Assign({ change }: { change: ChangeEntry }) {
   const { store } = useEditorSession();
 
+  if (store === null) {
+    return (
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+        <Button disabled size="sm" variant="outline">
+          Assign
+        </Button>
+        <Text as="span" size="xs" tone="secondary">
+          read-only on the hosted manual — naming a hand needs the locally-run
+          manual
+        </Text>
+      </div>
+    );
+  }
+
+  return <AssignForm change={change} store={store} />;
+}
+
+type AssignState =
+  | { kind: "idle" }
+  | { kind: "saving" }
+  | { kind: "done"; role: Role; handle: string }
+  | { kind: "error"; message: string };
+
+function AssignForm({
+  change,
+  store,
+}: {
+  change: ChangeEntry;
+  store: ContentStore;
+}) {
+  const [role, setRole] = useState<Role>(ROLES[0]);
+  const [handle, setHandle] = useState("");
+  const [state, setState] = useState<AssignState>({ kind: "idle" });
+
   return (
-    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-      <Button disabled size="sm" variant="outline">
+    <form
+      className="flex flex-wrap items-end gap-2"
+      onSubmit={(event) => {
+        event.preventDefault();
+        const written = handle.trim();
+        if (written === "") return;
+        setState({ kind: "saving" });
+        store.hand(change.id, role, written).then(
+          () => {
+            setState({ kind: "done", role, handle: written });
+            setHandle("");
+          },
+          (cause) => setState({ kind: "error", message: describeCause(cause) }),
+        );
+      }}
+    >
+      <div className="w-36">
+        <SelectField
+          label="Role"
+          onChange={(next) => setRole(next as Role)}
+          options={ROLES}
+          value={role}
+        />
+      </div>
+      <div className="w-32">
+        <TextField
+          label="Handle"
+          onChange={setHandle}
+          placeholder="handle"
+          value={handle}
+        />
+      </div>
+      <Button
+        disabled={state.kind === "saving"}
+        size="sm"
+        type="submit"
+        variant="outline"
+      >
         Assign
       </Button>
-      <Text as="span" size="xs" tone="secondary">
-        {store === null
-          ? "read-only on the hosted manual — naming a hand needs the locally-run manual"
-          : "read-only for now — the local write lands with the record's own rules"}
-      </Text>
-    </div>
+      {state.kind === "done" ? (
+        <Text as="span" size="xs" tone="secondary">
+          {`@${state.handle} is now the ${ROLE_LABEL[state.role]}`}
+        </Text>
+      ) : null}
+      {state.kind === "error" ? (
+        <Text as="span" size="xs" tone="error">
+          {state.message}
+        </Text>
+      ) : null}
+    </form>
   );
 }

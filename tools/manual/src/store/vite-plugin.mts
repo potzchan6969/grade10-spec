@@ -13,10 +13,14 @@ import {
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { basename, dirname, extname, join, sep } from "node:path";
 import type { Plugin, ViteDevServer } from "vite";
+import YAML from "yaml";
+import { handleOf } from "../../../../scripts/openspec/lib/team.mjs";
 import { STORE_CHANGED } from "../api/live.ts";
+import { ROLES, type Role } from "../api/types.ts";
 import { GrammarError, parsePage, serializePage } from "../content/grammar.ts";
 import {
   allowedProposal,
+  MANIFEST,
   type ProposalFile,
   slugProblem,
   withdrawProblem,
@@ -248,6 +252,7 @@ async function route(
   if (path === "/api/asset") return writeAsset(roots, body);
   if (path === "/api/propose") return propose(roots.store, body);
   if (path === "/api/withdraw") return withdraw(roots.store, body);
+  if (path === "/api/hands") return assignHand(roots.store, body);
   return reply(404, { error: `no such endpoint: ${path}` });
 }
 
@@ -463,6 +468,47 @@ function withdraw(root: string, body: unknown): Reply {
 
   rmSync(dir, { recursive: true });
   return reply(200, { withdrawn: true });
+}
+
+/**
+ * Assign, on the locally run manual only: the same confinement a proposal
+ * writes behind, over an existing change's own `.openspec.yaml` rather than
+ * a new directory. One field is touched — every other key the file carries,
+ * comments included, rides through untouched — so the write is one atomic
+ * rename, the way `save` below writes a page.
+ */
+function assignHand(root: string, body: unknown): Reply {
+  const fields = (body ?? {}) as Record<string, unknown>;
+  const { change, role, handle } = fields;
+  if (typeof change !== "string" || change === "") {
+    return reply(400, { error: "`change` is required" });
+  }
+  const shape = slugProblem(change);
+  if (shape) return reply(400, { error: shape });
+  if (
+    typeof role !== "string" ||
+    !(ROLES as readonly string[]).includes(role)
+  ) {
+    return reply(400, { error: `\`role\` is one of ${ROLES.join(", ")}` });
+  }
+  const written = typeof handle === "string" ? handleOf(handle) : "";
+  if (written === "") return reply(400, { error: "`handle` is required" });
+
+  const dir = changeFile(root, change);
+  if (typeof dir !== "string") return reply(400, dir);
+  if (!existsSync(dir)) return reply(404, { error: `no change \`${change}\`` });
+
+  const file = join(dir, MANIFEST);
+  const current = existsSync(file) ? readFileSync(file, "utf8") : "";
+  let manifest: YAML.Document;
+  try {
+    manifest = YAML.parseDocument(current);
+  } catch (cause) {
+    return reply(400, { error: `${MANIFEST}: ${describe(cause)}` });
+  }
+  manifest.setIn(["hands", role], written);
+  writeAtomically(file, Buffer.from(manifest.toString(), "utf8"));
+  return reply(200, { role: role as Role, handle: written });
 }
 
 function proposalFiles(body: unknown): ProposalFile[] | { error: string } {

@@ -9,6 +9,7 @@ import type {
   SchemaArtifact,
   Stage,
 } from "./types.ts";
+import { ROLES } from "./types.ts";
 import { waivedOf } from "./waivers.ts";
 
 /**
@@ -251,6 +252,36 @@ export function rolesAtStage(stage: Stage): Role[] {
  * open and a message routes to the role's channel. */
 export function openHands(change: ChangeEntry, roles: Role[]): Role[] {
   return roles.filter((role) => !change.hands?.[role]);
+}
+
+/**
+ * The roles this handle holds on a change whose turn has not yet come — My
+ * turn's "theirs later" list.
+ *
+ * `rolesAtStage` already says which stage each of the six roles turns up at,
+ * so a role whose every occurrence sits at or before the change's own stage
+ * is done rather than upcoming, and is left out rather than read as later.
+ * Design and tech never appear there — they turn up only inside Proposed's
+ * own second half, which `handOf` reads specially — so they are later exactly
+ * while the change is still in Proposed and it is not yet their half.
+ */
+export function laterRolesOf(
+  change: ChangeEntry,
+  stage: Stage,
+  artifacts: SchemaArtifact[],
+  handle: string,
+): Role[] {
+  const now = new Set(handOf(change, stage, artifacts));
+  const at = STAGES.indexOf(stage);
+  const held = handle.toLowerCase();
+  return ROLES.filter((role) => {
+    if (change.hands?.[role]?.toLowerCase() !== held) return false;
+    if (now.has(role)) return false;
+    if (role === "design" || role === "tech") return stage === "proposed";
+    return STAGES.some(
+      (rung, index) => index > at && rolesAtStage(rung).includes(role),
+    );
+  });
 }
 
 /** What the change's agent drafts at one stage, and what each hand of that

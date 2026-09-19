@@ -11,6 +11,7 @@ export function ProseBlockView({ block }: { block: ProseBlock }) {
       baseDir={usePageDir()}
       index={index}
       pageSpec={usePageSpec()}
+      pips
       refs
       text={block.markdown}
     />

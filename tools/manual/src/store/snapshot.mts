@@ -1,4 +1,5 @@
 import { join } from "node:path";
+import { readTeamMap } from "../../../../scripts/openspec/lib/team.mjs";
 import type {
   Archive,
   ChangeDocument,
@@ -107,6 +108,10 @@ export function composeStore(
   // decisions rows, so the render reads one field rather than walking the
   // pages again.
   markQuestions(changes, pages, asts);
+  // Read the way a page is: a store with no file yet knows nobody rather than
+  // failing to boot, and My turn is what tells a handle it does not know from
+  // one it has simply never met.
+  const team = readTeamMap(roots.store);
 
   return {
     snapshot: {
@@ -125,6 +130,7 @@ export function composeStore(
       history: git.history,
       warnings,
       ...(designSync ? { designSync } : {}),
+      team,
     },
     archive: {
       generatedAt,

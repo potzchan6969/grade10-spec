@@ -7,6 +7,7 @@
  * has no store at all, and every editor surface hides itself rather than
  * rendering read-only. */
 
+import type { Role } from "../api/types";
 import { allowedProposal, type ProposalFile } from "./propose";
 
 export type Version = string;
@@ -38,6 +39,11 @@ export type ContentStore = {
   propose(files: ProposalFile[]): Promise<{ id: string }>;
   /** Take a proposal back — whoever is at the keyboard may. */
   withdraw(id: string): Promise<void>;
+
+  /** Name one role's handle on a change already in flight, in one commit —
+   * the local Assign, confined to the same allowlist a proposal writes
+   * behind. */
+  hand(change: string, role: Role, handle: string): Promise<void>;
 
   deletePage(path: string, baseVersion: Version): Promise<void>;
 };
