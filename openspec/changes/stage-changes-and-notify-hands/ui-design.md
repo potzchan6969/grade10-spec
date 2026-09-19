@@ -66,7 +66,7 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 - A card whose suite is a draft, and one whose suite is approved - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-19`
 - The Mine filter with no handle chosen - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-55`
 - The change page's Your turn card on the hosted manual, with Assign shown as read-only - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-69`
-- ❓ design - this list names Assign's read-only state on the hosted manual but not its working counterpart on the locally run manual - a role and a handle to write, in the Your turn card - confirm the plain role picker and handle field built for it, or draw the state - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-68`
+- The change page's Your turn card on the locally run manual, Assign as a role picker and a handle picker over the team map's handles filtered by the chosen role - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-68`
 - The change page's stepper below `sm`, on one line - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-57`
 - The change page for a change waiting on a stage whose hand is unnamed - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-17`
 - The change page for a change with `ui_waived`, showing the design as not owed and fresh - `shared-planning-change-stages-US-05` - `shared-planning-change-stages-SC-07`

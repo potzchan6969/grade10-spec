@@ -421,6 +421,15 @@ export type TeamMap = {
   channels: Record<string, string>;
 };
 
+/** The team map, projected for the browser: a handle against the roles it
+ * may take, with no e-mail, Slack member or channel in it — those address a
+ * message, which is the notify script's own job, never the manual's. Assign's
+ * handle picker filters `handles` by the chosen role, and My turn reads it to
+ * say a handle is unknown; neither needs more of the map than this. */
+export type SnapshotTeam = {
+  handles: Record<string, Role[]>;
+};
+
 /** One `## ` heading of a manual page, as a proposal links it. */
 export type PageSectionRef = { page: string; slug: string };
 
@@ -798,10 +807,11 @@ export type Snapshot = {
   history: HistoryEvent[];
   warnings: CheckWarning[];
   designSync?: DesignSyncReport;
-  /** `docs/prds/team.yaml`, read the way a page is: absent only for a store
-   * with no file yet, which knows nobody rather than refusing to boot. My
-   * turn reads it to say a handle is unknown. */
-  team?: TeamMap;
+  /** `docs/prds/team.yaml`, projected to what the browser needs — a handle
+   * against its roles, nothing that addresses a message. Never absent: a
+   * store with no file yet knows nobody rather than refusing to boot, which
+   * is what an empty `handles` says. */
+  team: SnapshotTeam;
 };
 
 /** `/api/archive` — fetched only by the In Flight and timeline views. */

@@ -9,10 +9,12 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Link } from "react-router";
-import { ROLE_LABEL, ROLES, roleTitle } from "../api/stage-view";
-import { DRAFTED, handOf, moveOf } from "../api/stages";
+import { movesOfHands, ROLE_LABEL, ROLES, roleTitle } from "../api/stage-view";
+import { DRAFTED, handOf } from "../api/stages";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "../api/types";
-import { SelectField, TextField } from "../editor/fields";
+import { useManualIndex } from "../api/use-manual-index";
+import { SelectField } from "../editor/fields";
+import { ReadOnlyNotice } from "../editor/read-only-notice";
 import { useEditorSession } from "../editor/session";
 import type { ContentStore } from "../editor/store";
 import { describeCause } from "../editor/store";
@@ -43,12 +45,7 @@ export function YourTurnCard({
   const roles = handOf(change, stage, artifacts);
   // One command per hand whose turn it is, not per hand the stage table
   // names: Proposed's second half is the designer's and the tech PIC's.
-  const moves = roles.flatMap((role) => {
-    const held = moveOf(stage, role);
-    return held
-      ? [{ role, ...held, command: held.command.replace(/<id>/g, change.id) }]
-      : [];
-  });
+  const moves = movesOfHands(stage, roles, change.id);
   // The three stages DRAFTED carries no entry for — On staging, Released and
   // Archived — are a deploy, a cut and a fold: nobody's agent drafts them, so
   // no per-hand move exists to offer. The first two still have work to do,
@@ -171,9 +168,16 @@ export function ThreadLink({ change }: { change: ChangeEntry }) {
  * reads its absence as a missing feature instead of a missing dev server. The
  * locally run manual gets the working form instead — the same dev server a
  * proposal writes through, one role and one handle in one write.
+ *
+ * Nothing renders until the session has probed for a dev server: `store` is
+ * also `null` while that probe is in flight, and showing the hosted sentence
+ * then would flash it at a locally run manual that just has not answered
+ * yet. `ReadOnlyNotice` is the one sentence for that state everywhere else in
+ * the manual, composed here rather than a second copy of its words.
  */
 function Assign({ change }: { change: ChangeEntry }) {
-  const { store } = useEditorSession();
+  const { status, store } = useEditorSession();
+  if (status !== "ready") return null;
 
   if (store === null) {
     return (
@@ -181,10 +185,7 @@ function Assign({ change }: { change: ChangeEntry }) {
         <Button disabled size="sm" variant="outline">
           Assign
         </Button>
-        <Text as="span" size="xs" tone="secondary">
-          read-only on the hosted manual — naming a hand needs the locally-run
-          manual
-        </Text>
+        <ReadOnlyNotice />
       </div>
     );
   }
@@ -198,6 +199,13 @@ type AssignState =
   | { kind: "done"; role: Role; handle: string }
   | { kind: "error"; message: string };
 
+/**
+ * A role picker and a handle picker over the team map's handles, filtered by
+ * the chosen role — decided over the free-text field this form drew at
+ * first: a handle Assign can write is one `docs/prds/team.yaml` already
+ * carries for that role, so offering only those is a form that cannot be
+ * filled out wrong.
+ */
 function AssignForm({
   change,
   store,
@@ -205,21 +213,27 @@ function AssignForm({
   change: ChangeEntry;
   store: ContentStore;
 }) {
+  const index = useManualIndex();
   const [role, setRole] = useState<Role>(ROLES[0]);
   const [handle, setHandle] = useState("");
   const [state, setState] = useState<AssignState>({ kind: "idle" });
+
+  const handles = Object.entries(index.snapshot.team.handles)
+    .filter(([, roles]) => roles.includes(role))
+    .map(([one]) => one)
+    .sort();
+  const chosen = handles.includes(handle) ? handle : "";
 
   return (
     <form
       className="flex flex-wrap items-end gap-2"
       onSubmit={(event) => {
         event.preventDefault();
-        const written = handle.trim();
-        if (written === "") return;
+        if (chosen === "") return;
         setState({ kind: "saving" });
-        store.hand(change.id, role, written).then(
+        store.hand(change.id, role, chosen).then(
           () => {
-            setState({ kind: "done", role, handle: written });
+            setState({ kind: "done", role, handle: chosen });
             setHandle("");
           },
           (cause) => setState({ kind: "error", message: describeCause(cause) }),
@@ -229,21 +243,30 @@ function AssignForm({
       <div className="w-36">
         <SelectField
           label="Role"
-          onChange={(next) => setRole(next as Role)}
+          onChange={(next) => {
+            setRole(next as Role);
+            setHandle("");
+          }}
           options={ROLES}
           value={role}
         />
       </div>
       <div className="w-32">
-        <TextField
+        <SelectField
+          allowEmpty
+          hint={
+            handles.length === 0
+              ? `no handle in the team map takes ${ROLE_LABEL[role]}`
+              : undefined
+          }
           label="Handle"
           onChange={setHandle}
-          placeholder="handle"
-          value={handle}
+          options={handles}
+          value={chosen}
         />
       </div>
       <Button
-        disabled={state.kind === "saving"}
+        disabled={state.kind === "saving" || chosen === ""}
         size="sm"
         type="submit"
         variant="outline"

@@ -1,4 +1,4 @@
-import { DRAFTED, STAGES } from "./stages.ts";
+import { DRAFTED, moveOf, STAGES } from "./stages.ts";
 import type { BehindArtifact, ChangeEntry, Role, Stage } from "./types";
 import { ROLES } from "./types.ts";
 
@@ -104,6 +104,27 @@ export function draftedOf(stage: Stage, id = "<id>"): DraftedRead | undefined {
  * themselves, one phrase per hand of the stage. */
 export function moveShown(moves: DraftedMove[]): string {
   return moves.map((one) => one.move).join(" · ");
+}
+
+/**
+ * Every one of these hands' own move at this stage, the change's id already
+ * written into the command — what the Your turn card and My turn's own card
+ * both offer a reader, one reading rather than each composing its own from
+ * `moveOf`. `moveOf` itself stays in `stages.ts`, exported for
+ * `scripts/openspec/lib/moves.mjs`, which reads it under plain node; this is
+ * the one reader the app's own components use.
+ */
+export function movesOfHands(
+  stage: Stage,
+  roles: Role[],
+  id: string,
+): DraftedMove[] {
+  return roles.flatMap((role) => {
+    const held = moveOf(stage, role);
+    return held
+      ? [{ role, move: held.move, command: held.command.replace(/<id>/g, id) }]
+      : [];
+  });
 }
 
 /** Who moves it, each hand named by its own label — the line beside the

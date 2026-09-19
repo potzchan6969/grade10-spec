@@ -6,10 +6,14 @@ import type {
   ChangeEntry,
   CheckWarning,
   ReferenceDocument,
+  Role,
   SchemaArtifact,
   Snapshot,
+  SnapshotTeam,
   SpecEntry,
+  TeamMap,
 } from "../api/types.ts";
+import { ROLES } from "../api/types.ts";
 import { DESIGN_SYNC_REPORT, readDesignSync } from "./design-sync.mts";
 import { newestMtime } from "./disk.mts";
 import {
@@ -40,6 +44,24 @@ import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
 import { markUpstream } from "./upstream.mts";
 import { checkWarnings } from "./warnings.mts";
+
+/** `docs/prds/team.yaml`, projected to what the browser needs: a handle
+ * against the roles it may take, its e-mail, Slack member and channels left
+ * behind — those address a message, which is the notify script's own job.
+ * A role the map does not spell as one of the six is dropped rather than
+ * carried into a type that promises only those six: `checkHands` is where a
+ * change's own `hands:` is held to that set, and the map itself owes no such
+ * check yet. */
+function snapshotTeam(map: TeamMap): SnapshotTeam {
+  const known = new Set<string>(ROLES);
+  const handles: Record<string, Role[]> = {};
+  for (const [handle, member] of Object.entries(map.handles)) {
+    handles[handle] = member.roles.filter((role): role is Role =>
+      known.has(role),
+    );
+  }
+  return { handles };
+}
 
 /** The artifacts share one history walk — the only expensive part of a read.
  * `documents` is one artifact per in-flight change and `references` one per
@@ -110,8 +132,10 @@ export function composeStore(
   markQuestions(changes, pages, asts);
   // Read the way a page is: a store with no file yet knows nobody rather than
   // failing to boot, and My turn is what tells a handle it does not know from
-  // one it has simply never met.
-  const team = readTeamMap(roots.store);
+  // one it has simply never met. Projected before it reaches the snapshot: the
+  // browser is sent a handle's roles, never the e-mail or the Slack member the
+  // full map carries for the notify script alone.
+  const team = snapshotTeam(readTeamMap(roots.store));
 
   return {
     snapshot: {

@@ -136,7 +136,7 @@ vi.mock("../src/api/use-change-document", () => ({
 
 const { ChangePage } = await import("../src/pages/change-page");
 
-function snapshot(entry: ChangeEntry): Snapshot {
+function snapshot(entry: ChangeEntry, team?: Snapshot["team"]): Snapshot {
   return snapshotOf({
     config: {
       storybookBase: "",
@@ -157,14 +157,16 @@ function snapshot(entry: ChangeEntry): Snapshot {
     specs: [specEntry(SPEC, ["Points expire"])],
     schemas: { "grade10-planning": ARTIFACTS },
     changes: [entry],
+    ...(team ? { team } : {}),
   });
 }
 
 function render(
   entry: ChangeEntry = change(),
   store: ContentStore | null = null,
+  team?: Snapshot["team"],
 ): string {
-  held.index = buildIndex(snapshot(entry));
+  held.index = buildIndex(snapshot(entry, team));
   held.document = { status: "ready", document: documentOf(entry) };
   held.editor = { status: "ready", store };
   return renderToStaticMarkup(
@@ -293,20 +295,24 @@ describe("the Your turn card", () => {
     const label = card.indexOf(">Assign<");
     const button = card.slice(card.lastIndexOf("<", label), label);
     expect(button).toContain('disabled=""');
-    expect(card).toContain("read-only on the hosted manual");
+    expect(card).toContain("This hosted build is read-only");
     expect(html).toContain("Hands");
   });
 
   it("Assign on the locally run manual offers a role and a handle to write", () => {
     const store = {} as unknown as ContentStore;
-    const html = render(change(), store);
+    const html = render(change(), store, { handles: { robin: ["pm"] } });
     const card = html.slice(html.indexOf("Your turn"));
 
-    const label = card.indexOf(">Assign<");
-    const button = card.slice(card.lastIndexOf("<", label), label);
-    expect(button).not.toContain('disabled=""');
     expect(card).not.toContain("read-only");
-    // The six roles are offered, and a handle can be typed.
+    // Neither picker is disabled — a working form, not a read-only one. The
+    // submit button itself starts disabled until a handle is picked, which
+    // this slice stops short of.
+    const formStart = card.indexOf("<form");
+    expect(
+      card.slice(formStart, card.indexOf("<button", formStart)),
+    ).not.toContain("disabled=");
+    // The six roles are offered, and the handle names come from the team map.
     for (const role of [
       "Product manager",
       "Designer",
@@ -318,6 +324,24 @@ describe("the Your turn card", () => {
       expect(card).toContain(role);
     }
     expect(card).toContain("Handle");
+    expect(card).toContain("robin");
+  });
+
+  it("shared-planning-change-stages-SC-68 - Assign's handle picker is the team map's handles filtered by the chosen role", () => {
+    const store = {} as unknown as ContentStore;
+    const html = render(change(), store, {
+      handles: { robin: ["pm"], dana: ["design"] },
+    });
+    const card = html.slice(html.indexOf("Your turn"));
+    const options = card.slice(
+      card.indexOf("Handle"),
+      card.indexOf("</select", card.indexOf("Handle")),
+    );
+
+    // The default role is `pm`, the first of the six: only its own handle is
+    // offered, never a handle taken for a role nobody picked.
+    expect(options).toContain("robin");
+    expect(options).not.toContain("dana");
   });
 
   it("The change page for a change waiting on a stage whose hand is unnamed", () => {
