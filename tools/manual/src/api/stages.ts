@@ -114,14 +114,11 @@ export function ladderOf(
   // A rung is reached only when its own proof holds and every proof before it
   // does too: Designed's own row (a waiver stands for each design) says
   // nothing about whether Proposed's own remaining proof — the decisions and
-  // the journeys — is in yet, so the walk checks Proposed here rather than
-  // skipping straight to `STAGES.slice(1)`.
-  if (!proven.proposed) {
-    const owed = PROOF_OF_STAGE.proposed.find((id) => !settled(id));
-    return owed ? { stage: "proposed", heldBy: owed } : { stage: "proposed" };
-  }
+  // the journeys — is in yet. The first iteration is Proposed against the
+  // rung `reached` opens on, which is Proposed itself, so an unproven first
+  // rung leaves the walk where it started and names what it owes.
   let reached: Stage = "proposed";
-  for (const rung of STAGES.slice(1)) {
+  for (const rung of STAGES) {
     if (!proven[rung]) {
       const owed = (PROOF_OF_STAGE[rung] ?? []).find((id) => !settled(id));
       return owed ? { stage: reached, heldBy: owed } : { stage: reached };
