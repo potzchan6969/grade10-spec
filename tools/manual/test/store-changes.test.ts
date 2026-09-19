@@ -19,6 +19,7 @@ describe("in-flight changes", () => {
       "demo-approved",
       "demo-building",
       "demo-designed",
+      "demo-half-designed",
       "demo-on-staging",
       "demo-overlays",
       "demo-planned",

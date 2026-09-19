@@ -548,6 +548,47 @@
       }
     },
     {
+      "id": "demo-half-designed",
+      "dir": "openspec/changes/demo-half-designed",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "proposed",
+      "owners": [],
+      "created": "2026-09-01",
+      "title": "One design waived, one owed",
+      "why": "The fixture walk needs a change whose designer has written their line and\nwhose tech design is neither a file nor a line, so a reader can be shown\nwhat one waiver alone leaves owed.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys"
+      ],
+      "uiWaived": "nothing is drawn - the change moves no screen",
+      "hands": {
+        "pm": "tester",
+        "design": "tester",
+        "tech": "tester"
+      },
+      "author": "tester",
+      "heldBy": "tech-design",
+      "upstream": {
+        "decisions": {
+          "id": "3b47d22e",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "66986646",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        }
+      }
+    },
+    {
       "id": "demo-on-staging",
       "dir": "openspec/changes/demo-on-staging",
       "schema": "grade10-planning",
