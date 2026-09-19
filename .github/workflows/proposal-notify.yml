@@ -39,6 +39,10 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    outputs:
+      # The `reread` job's matrix, computed here from the same reading the
+      # messages are — never a second diff of the same push.
+      matrix: ${{ steps.changes.outputs.matrix }}
     steps:
       # Full history: a push can carry more than one commit, so the diff starts
       # at the branch's previous commit rather than HEAD's parent.
@@ -134,3 +138,109 @@ jobs:
             --sent-keys "$SENT_KEYS" \
             --manual-url "$MANUAL_URL" \
             --openspec-url "$OPENSPEC_VIEWER_URL"
+
+  # The read again: one run per change this push put behind something, on the
+  # matrix `notify` already computed from the same reading its own messages
+  # are — never a second diff of the same push. A change touched only by the
+  # round's own record lines never entered that matrix, which is what makes
+  # the cascade a run wakes finite.
+  #
+  # Bounded per Agent Rounds' decisions: one run per change (`concurrency`,
+  # never cancelled — a third push replaces whichever run is waiting), thirty
+  # minutes, a declared model and tool reach, a settings file denying
+  # everything but this change's own directory, and a guard that fails loudly
+  # on a path pushed outside it. The agent never holds `SLACK_BOT_TOKEN`: it
+  # writes what it read to `.round/thread.txt` and a plain step posts it.
+  reread:
+    needs: notify
+    if: vars.AGENT_REREAD == 'true'
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.notify.outputs.matrix) }}
+    concurrency:
+      group: cascade-${{ matrix.id }}
+      cancel-in-progress: false
+    permissions:
+      contents: write
+      id-token: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # What the guard diffs against: the run pushed nothing before this, so
+      # the sha the job checked out is the whole of what came before it.
+      - name: Record where the read again starts
+        id: start
+        run: echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      # Denies `.github/**`, `packages/**`, `tools/**` and every other
+      # change's own directory: computed from this checkout, so a change
+      # opened after this file was last touched is still denied to every
+      # other run.
+      - name: Write this entry's settings
+        run: |
+          mkdir -p .round
+          node scripts/openspec/reread-settings.mjs "${{ matrix.id }}" \
+            --out .round/settings.json
+
+      # No `SLACK_BOT_TOKEN` here: the round writes its thread line to
+      # `.round/thread.txt`, and a later, plain step posts it.
+      - name: Read again
+        id: round
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: "/round reread ${{ matrix.id }}"
+          claude_args: |
+            --max-turns 30
+            --allowedTools "Read,Grep,Glob,Write,Edit,Bash,Task"
+            --model ${{ vars.AGENT_MODEL }}
+          settings: .round/settings.json
+
+      # The repository's own limit, after the agent's own: fails loudly
+      # rather than reverting quietly on a path the settings should have kept
+      # the agent off in the first place.
+      - name: Guard the change's own directory
+        run: |
+          node scripts/openspec/reread-guard.mjs "${{ matrix.id }}" \
+            --before "${{ steps.start.outputs.sha }}"
+
+      - name: Post the round's own summary
+        if: success()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          node scripts/openspec/reread-notify.mjs "${{ matrix.id }}" \
+            --message-file .round/thread.txt \
+            --channel "${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}" \
+            --send
+
+      # A run that dies silently looks to every hand like a run that found
+      # nothing: this posts to the change's own thread, or its channel where
+      # the change has none.
+      - name: Say the read again failed
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          node scripts/openspec/reread-notify.mjs "${{ matrix.id }}" \
+            --run-url "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            --channel "${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}" \
+            --send
