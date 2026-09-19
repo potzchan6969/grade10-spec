@@ -61,7 +61,7 @@ A fact beside the stage, never a stage of its own. The set is five, and closed.
 - 🚧 **Idle** — counted from the last tick, claim or artifact landing, so a
   repository-wide commit moves nobody's count
 - 🚧 **Behind** — shown, told once, and listed in the digest after 7 days
-  counted from the change's last move; it holds a tick, a claim and a wait never, and the fold at archive always —
+  counted from the day it went behind; it holds a tick, a claim and a wait never, and the fold at archive always —
   what clears it is [Agent Rounds · Read Again](agent-rounds#read-again)
 - 🚧 **Suite** — shown beside the stage and never holding the ladder
 - **Flag and hotfix** — the release line carries both: a flag on a change and a
