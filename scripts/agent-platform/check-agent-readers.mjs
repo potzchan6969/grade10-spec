@@ -10,14 +10,23 @@
  * would silently miss. Prints one line per distinct reader, and fails where
  * the schema declares none: an empty round dispatches nobody, which is a
  * schema with a hole in it rather than something to skip past quietly.
+ *
+ * `--root` reads a store other than this one, which is how the tests reach
+ * either refusal: this store's own schema takes neither.
  */
 import { existsSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "../openspec/lib/args.mjs";
 import { planningSchema, SCHEMA } from "../openspec/lib/perspectives.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = resolve(here, "..", "..");
+const { flags } = parseArgs(process.argv.slice(2), {
+  keys: ["root"],
+  usage:
+    "usage: node scripts/agent-platform/check-agent-readers.mjs [--root <dir>]",
+});
+const root = flags.root ?? resolve(here, "..", "..");
 
 const schema = planningSchema(root);
 const agents = new Set(
