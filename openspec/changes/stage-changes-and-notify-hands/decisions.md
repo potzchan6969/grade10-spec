@@ -65,6 +65,7 @@
 | Q38 | Is a suite verdict, a flag or a hotfix told? | No: the three are read on the card and the change page and reach nobody by message; the five kinds of Q31 are the whole set | A message on a suite's verdict, which spends a direct message on a fact the overlay already shows |
 | Q39 | What does the staging message name? | The run sheet: the spreadsheet QA's pass is written into, named in the message to the QA hand | A run tab per change, which nothing in the store writes, so the message would have named a link that does not resolve |
 | Q40 | Where does the team map live while Operations' item is open? | `docs/prds/team.yaml` in the store, one entry per handle with its e-mail, its Slack member and its roles, read through one module both the manual and the scripts import; what stays ❓ is whether the Slack member is written there or looked up by e-mail through the Slack app | Holding the map until Operations answers, which leaves every message unaddressed and the hands rule with nothing to refuse against |
+| Q41 | Which hand does a ❓ page line address? | The product manager: the line counts against the proposal, which is the product manager's artifact, and a page line names no role of its own | The hand of the stage the change is in, which moves the question from person to person as the change advances |
 
 ## Raised
 
