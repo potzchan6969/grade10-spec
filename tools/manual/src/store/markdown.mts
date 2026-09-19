@@ -123,10 +123,38 @@ export function leadingTitle(sections: Section[]): string | undefined {
   return first?.level === 1 ? first.heading : undefined;
 }
 
+/** The rule under a table's header: every cell of it and nothing else. */
+const TABLE_RULE = /^-{2,}$/;
+
+/**
+ * The rows of the first markdown table in a body, each as its cells, with the
+ * header, the rule under it and a template's own commented placeholders
+ * dropped. `undefined` where there is no body at all — which is a different
+ * finding from a table with nothing in it.
+ *
+ * One reader for every table this store reads: the change's decisions rows,
+ * its raised rows and the `planned` rules over the same two tables. A second
+ * one drifts on the day a template gains a placeholder or a column moves.
+ */
+export function tableRows(body: string | undefined): string[][] | undefined {
+  if (body === undefined) return undefined;
+  const rows: string[][] = [];
+  for (const line of body.split("\n")) {
+    const cells = cellsOf(line);
+    if (!cells) continue;
+    if (cells.every((cell) => TABLE_RULE.test(cell))) continue;
+    if (cells.some((cell) => cell.includes("<!--"))) continue;
+    rows.push(cells);
+  }
+  // The first row left is the header: the rule under it is what makes a
+  // markdown table a table, and it is dropped above.
+  return rows.slice(1);
+}
+
 /** A markdown table row's cells, trimmed; nothing for a line that is not a
  * row. One reader, because a positional regex per table drifts from the
  * columns the file actually writes the moment one is added. The rule under
- * the header is a row too — a caller that wants the body drops it. */
+ * the header is a row too — `tableRows` is what drops it. */
 export function cellsOf(line: string): string[] | undefined {
   const trimmed = line.trim();
   if (!trimmed.startsWith("|")) return undefined;

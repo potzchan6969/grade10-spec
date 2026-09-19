@@ -29,7 +29,12 @@ import {
 } from "./disk.mts";
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
-import { cellsOf, leadingTitle, outline, type Section } from "./markdown.mts";
+import {
+  leadingTitle,
+  outline,
+  type Section,
+  tableRows,
+} from "./markdown.mts";
 import { readLandings } from "./read-landings.mts";
 import { readRounds } from "./read-rounds.mts";
 import { schemaArtifacts } from "./read-schema.mts";
@@ -526,9 +531,8 @@ function readQuestions(
     .flatMap((one) => (one.level === 1 ? one.children : [one]))
     .find((one) => /^Decisions\b/.test(one.heading));
   if (!decisions) return open;
-  for (const row of decisions.raw.split("\n")) {
-    const cells = cellsOf(row);
-    if (!cells || !DECISION_ROW.test(cells[0])) continue;
+  for (const cells of tableRows(decisions.raw) ?? []) {
+    if (!DECISION_ROW.test(cells[0])) continue;
     const asked = ASKED_OF.exec(cells[2] ?? "");
     if (!asked) continue;
     const [, role, recommended] = asked;
@@ -560,14 +564,12 @@ function openRaised(text: string): number {
     .flatMap((one) => (one.level === 1 ? one.children : [one]))
     .find((one) => /^Raised\b/.test(one.heading));
   if (!raised) return 0;
-  return raised.raw.split("\n").filter((row) => RAISED_ROW.test(row.trim()))
-    .length;
+  // A row whose `Landed` cell is empty, which is the same judgement the
+  // `raised` rule makes of the same cell, over the same rows.
+  return (tableRows(raised.raw) ?? []).filter(
+    (cells) => (cells[2] ?? "") === "",
+  ).length;
 }
-
-/** A `## Raised` row that landed nowhere: three cells, the last one blank.
- * The header and the rule under it each carry a third cell, so neither is a
- * row this counts and neither has to be dropped first. */
-const RAISED_ROW = /^\|[^|]*\|[^|]*\|\s*\|$/;
 
 /** A written line, or nothing where the key is absent or blank. Anything but
  * text is a malformed manifest: a record read as absent would waive the rule

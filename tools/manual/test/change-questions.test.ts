@@ -73,6 +73,7 @@ const DECISIONS = [
   "| --- | --- | --- |",
   "| demo-product/alpha | Does a refund take the point back? | Q2 |",
   "| demo-product/alpha | Which day is a tier judged on? |  |",
+  "| <!-- capability --> | <!-- what the blind pass asked --> |  |",
   "",
 ].join("\n");
 
@@ -148,7 +149,8 @@ describe("a decisions row nobody has settled", () => {
 
   it("counts the raised rows that landed nowhere", () => {
     // What a `Landed` cell says is the `raised` rule's to judge; an empty one
-    // is what is read here, and the header and the rule are not rows.
+    // is what is read here. The header, the rule under it and the template's
+    // own commented placeholders are not rows anybody asked.
     expect(changeWith("").raisedOpen).toBe(1);
   });
 

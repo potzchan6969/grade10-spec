@@ -27,7 +27,7 @@
  */
 import { join } from "node:path";
 import { readTextIfExists } from "../src/store/disk.mts";
-import { findSection, outline } from "../src/store/markdown.mts";
+import { findSection, outline, tableRows } from "../src/store/markdown.mts";
 
 /** A `Q<n>` the change's `## Decisions` table issues, cited from a landing. */
 const DECISION = /^Q\d+$/;
@@ -58,7 +58,7 @@ export function checkPlanned(ctx, changes) {
 function checkRaised(ctx, change, text) {
   const file = `${change.dir}/decisions.md`;
   const sections = sectionsOf(text);
-  const raised = rowsOf(findSection(sections, "Raised")?.body);
+  const raised = tableRows(findSection(sections, "Raised")?.body);
   if (raised === undefined) {
     ctx.add(
       "raised",
@@ -76,7 +76,7 @@ function checkRaised(ctx, change, text) {
     return;
   }
   const decided = new Set(
-    rowsOf(findSection(sections, "Decisions")?.body)?.map((row) => row[0]) ??
+    tableRows(findSection(sections, "Decisions")?.body)?.map((row) => row[0]) ??
       [],
   );
   for (const row of raised) {
@@ -149,29 +149,6 @@ function sectionsOf(text) {
   };
   visit(outline(text));
   return found;
-}
-
-/** The rows of the first markdown table in a section's body, each as its
- * cells, with the header row, the separator and the template's own commented
- * placeholders dropped. `undefined` where the section is not there at all —
- * which is a different finding from a table with nothing in it. */
-function rowsOf(body) {
-  if (body === undefined) return undefined;
-  const rows = [];
-  for (const line of body.split("\n")) {
-    const trimmed = line.trim();
-    if (!trimmed.startsWith("|")) continue;
-    const cells = trimmed
-      .slice(1, -1)
-      .split("|")
-      .map((one) => one.trim());
-    if (cells.every((one) => /^-{2,}$/.test(one))) continue;
-    if (cells.some((one) => one.includes("<!--"))) continue;
-    rows.push(cells);
-  }
-  // The first row left is the header: the separator under it is what makes a
-  // markdown table a table, and it is dropped above.
-  return rows.slice(1);
 }
 
 /** Top-level bullets of a section, each joined with the lines that continue
