@@ -423,8 +423,10 @@ was drawn or last read again.
 - **The read record** — `reviewed:` names, per artifact, a content id of
   everything before that artifact; the artifact is behind when the content id
   read from `main` differs from the recorded one
-- **With no record line** — the artifact is behind when anything before it
-  changed on `main` after the artifact itself last changed
+- **With no record line** — the artifact is behind when one of the change's
+  own artifacts before it changed on `main` after the artifact itself last
+  changed; a linked page section puts nothing behind until a record line is
+  written
 - **Never upstream** — the change's record is before no artifact, so writing a
   hand, a waiver or a wait puts nothing behind
 - **Waived** — a waived artifact is never behind, and the artifacts after it
@@ -440,7 +442,7 @@ was drawn or last read again.
 #### Scenario: shared-planning-change-stages-SC-25 - A page line changes after an artifact was drawn
 **Serves:** shared-planning-change-stages-US-09 - the hand opens the change and reads what moved under their artifact
 
-**GIVEN** a change whose UI design was drawn from a linked page section
+**GIVEN** a change whose UI design was drawn from a linked page section, and whose `reviewed:` line was written
 **WHEN** that section changes on `main` afterwards
 **THEN** the UI design SHALL be shown as behind
 **AND** its row SHALL name the section that changed, or what is before it where no record line dates the edit
@@ -464,8 +466,9 @@ was drawn or last read again.
 **Serves:** Overlays, a closed set - an artifact written before the record line existed is still read against what is before it
 
 **GIVEN** an artifact carrying no `reviewed:` line
-**WHEN** something before it changes on `main` after the artifact last changed
+**WHEN** one of the change's own artifacts before it changes on `main` after the artifact last changed
 **THEN** the artifact SHALL be shown as behind
+**AND** a commit on a linked page section SHALL put nothing behind
 **AND** an artifact no commit dates, or whose upstream no commit dates, SHALL NOT be shown as behind
 
 #### Scenario: shared-planning-change-stages-SC-29 - What puts nothing behind

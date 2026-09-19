@@ -25,12 +25,18 @@ import type { GitIndex } from "./git.mts";
  * behind artifact without a repository behind it.
  *
  * What is before an artifact, in reading order: the page sections the change's
- * proposal links, in link order, then each artifact the schema's `upstream:`
- * names, one text per artifact — a `specs/**` artifact being its files in
- * path order. The record is before nothing, so writing a hand, a waiver or a
- * wait puts nothing behind; a waived artifact is skipped, so it is never
- * behind and never puts anything behind; and a page section the change does
- * not link is not read at all.
+ * proposal links, in `<page>#<slug>` order, then each artifact the schema's
+ * `upstream:` names, one text per artifact — a `specs/**` artifact being its
+ * files in path order. The sections are sorted rather than left in link
+ * order, so moving a link in the proposal moves no content id. The record is
+ * before nothing, so writing a hand, a waiver or a wait puts nothing behind;
+ * a waived artifact is skipped, so it is never behind and never puts anything
+ * behind; and a page section the change does not link is not read at all.
+ *
+ * Only the change's own artifacts are dated. A commit on a page dates every
+ * section of it, so a date on a linked section cannot say that section moved
+ * — the recorded `reviewed:` id is what says it, and until the round writes
+ * one a linked section puts nothing behind.
  */
 export function upstreamOf(
   root: string,
@@ -44,30 +50,44 @@ export function upstreamOf(
   const waived = waivedOf(artifacts, change);
   const written = new Set(change.written);
   const byPath = new Map(pages.map((page) => [page.path, page]));
-  const sections = (change.sections ?? []).flatMap((ref) => {
-    const page = byPath.get(ref.page);
-    if (page === undefined) return [];
-    const text = sectionTextOf({ ast: asts.get(page.path) ?? null }, ref.slug);
-    // A link to a section the page does not carry names nothing to read: the
-    // `refs` rule is what reports it, and hashing an empty string here would
-    // read a kept link and a dropped one as the same upstream.
-    if (text === undefined) return [];
-    return [
-      { item: `${ref.page}#${ref.slug}`, text, date: page.lastCommit?.date },
-    ];
-  });
+  const sections = (change.sections ?? [])
+    .flatMap((ref) => {
+      const page = byPath.get(ref.page);
+      if (page === undefined) return [];
+      const text = sectionTextOf(
+        { ast: asts.get(page.path) ?? null },
+        ref.slug,
+      );
+      // A link to a section the page does not carry names nothing to read:
+      // the `refs` rule is what reports it, and hashing an empty string here
+      // would put every artifact after the link behind on the strength of a
+      // broken one.
+      if (text === undefined) return [];
+      // No date: the page's last commit dates the whole page.
+      return [{ item: `${ref.page}#${ref.slug}`, text }];
+    })
+    .sort((a, b) => a.item.localeCompare(b.item));
 
-  const own = new Map<string, { text: string; date?: string }>();
-  const readOwn = (artifact: SchemaArtifact) => {
-    const held = own.get(artifact.id);
-    if (held) return held;
+  /** One text before an artifact: the item as a row names it, the text that
+   * is hashed, and the date where the item is one the change owns. */
+  type Before = { item: string; text: string; date?: string };
+  type Own = { text: string; date?: string };
+  const own = new Map<string, Own | undefined>();
+  // Nothing where a file the artifact is written as reads absent. `written`
+  // is proven against `main`, which can hold a file this checkout does not —
+  // a plan pushed from elsewhere, a partial checkout — and hashing it as ""
+  // would read an unread file as an empty one and put everything after it
+  // behind.
+  const readOwn = (artifact: SchemaArtifact): Own | undefined => {
+    if (own.has(artifact.id)) return own.get(artifact.id);
     const files = filesOf(change, artifact);
-    const read = {
-      text: files
-        .map((file) => readTextIfExists(join(root, file)) ?? "")
-        .join("\n"),
-      date: newest(files.map((file) => git.commitOf(file)?.date)),
-    };
+    const texts = files.map((file) => readTextIfExists(join(root, file)));
+    const read = texts.some((text) => text === undefined)
+      ? undefined
+      : {
+          text: texts.join("\n"),
+          date: newest(files.map((file) => git.commitOf(file)?.date)),
+        };
     own.set(artifact.id, read);
     return read;
   };
@@ -75,12 +95,15 @@ export function upstreamOf(
   const reading: Record<string, UpstreamRead> = {};
   for (const artifact of artifacts) {
     if (!written.has(artifact.id) || waived.has(artifact.id)) continue;
-    const before = [
+    const drawn = readOwn(artifact);
+    if (!drawn) continue;
+    const before: Before[] = [
       ...sections,
       ...artifact.upstream.flatMap((id) => {
         const upstream = artifacts.find((one) => one.id === id);
         if (!upstream || waived.has(id) || !written.has(id)) return [];
-        return [{ item: id, ...readOwn(upstream) }];
+        const read = readOwn(upstream);
+        return read ? [{ item: id, ...read }] : [];
       }),
     ];
     // Nothing is before it: the proposal of a change that links no page
@@ -91,15 +114,17 @@ export function upstreamOf(
       id: contentIdOf(before.map((one) => one.text)),
       items: before.map((one) => one.item),
     };
-    const drawn = readOwn(artifact).date;
-    if (drawn !== undefined) {
-      read.newer = before
-        .filter(
-          (one) =>
-            one.date !== undefined && Date.parse(one.date) > Date.parse(drawn),
-        )
-        .map((one) => one.item);
-    }
+    const drawnAt =
+      drawn.date === undefined ? undefined : Date.parse(drawn.date);
+    const newer =
+      drawnAt === undefined
+        ? []
+        : before
+            .filter(
+              (one) => one.date !== undefined && Date.parse(one.date) > drawnAt,
+            )
+            .map((one) => one.item);
+    if (newer.length > 0) read.newer = newer;
     reading[artifact.id] = read;
   }
   return Object.keys(reading).length > 0 ? reading : undefined;

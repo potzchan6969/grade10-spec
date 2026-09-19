@@ -72,6 +72,7 @@
 | Q45 | Does an archived change read the ladder? | No: it reads Archived outright. The fold is the last rung, and `deploy_waived` and `tasks_waived` are how the archive answers for a rung it skipped, so walking the ladder would file shipped work as in progress | Walking the ladder for an archived change, which reports finished work as Proposed wherever an artifact was waived |
 | Q46 | When has a raised question landed? | When its `Landed` cell is not empty: what the cell says is the `raised` rule's to judge, and the count the ladder reads is of rows with nothing in it | Reading the cell's text here as well, which would have the stage and the rule disagree about the same row |
 | Q47 | What does Designed's Your turn card offer? | Both commands, `/design <id>` and `/tech <id>`: two hands take the change while it is still Proposed and each drafts one design, so the stage's entry holds both | One command per stage, which leaves whichever hand it is not addressed to with nothing to paste |
+| Q48 | Does a commit date on a page put an artifact behind? | No: with no `reviewed:` line only the change's own artifacts are read by date, and a linked page section puts nothing behind until the round writes a record line | Dating the linked section by the page's last commit, which dates every section of the page and so marks an artifact whose section nobody touched |
 
 ## Raised
 

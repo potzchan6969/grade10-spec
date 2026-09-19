@@ -342,10 +342,12 @@ export type UpstreamRead = {
   /** Each thing before it, in that order: a linked page section as
    * `<page>#<slug>`, or an upstream artifact id. */
   items: string[];
-  /** The items a commit dates later than the artifact's own newest commit —
-   * what says it is behind where no `reviewed:` line does. Absent where no
-   * commit dates the artifact, which is what a depth-1 checkout gives, and an
-   * item no commit dates is left out rather than guessed at. */
+  /** The change's own artifacts that a commit dates later than this
+   * artifact's own newest commit — what says it is behind where no `reviewed:`
+   * line does. Absent where nothing before it is newer and where no commit
+   * dates the artifact, which is what a depth-1 checkout gives. A linked page
+   * section is never here: a commit on a page dates every section of it, so
+   * only a record line can say the linked one moved. */
   newer?: string[];
 };
 
