@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import YAML from "yaml";
+import { stageOf } from "../api/stages.ts";
 import type {
   ChangeEntry,
   ChangeStatus,
@@ -249,18 +250,16 @@ function readChange(
     const suites = readSuites(root, dir);
     if (suites.length > 0) entry.suites = suites;
   }
-  entry.written = writtenArtifacts(
-    dir,
-    entry,
-    artifactsOf(root, entry.schema, schemas),
-    tasks !== undefined,
-  );
+  const artifacts = artifactsOf(root, entry.schema, schemas);
+  entry.written = writtenArtifacts(dir, entry, artifacts, tasks !== undefined);
 
   const decisions = readTextIfExists(join(dir, "decisions.md"));
   if (decisions !== undefined) {
     try {
       const open = readQuestions(decisions, entry.hands);
       if (open.length > 0) entry.questions = open;
+      const raised = openRaised(decisions);
+      if (raised > 0) entry.raisedOpen = raised;
     } catch (cause) {
       fail(`${rel}/decisions.md`, cause);
     }
@@ -273,6 +272,11 @@ function readChange(
     const landed = readLandings(root, id, tasks, commit);
     if (landed) entry.lastLanded = landed;
   }
+  // Last, and here rather than in the snapshot: the ladder reads what every
+  // reader above it has just written, and this is where the schema is at hand.
+  // Carried on the entry because six callers of `laneOf` would each otherwise
+  // have to fetch the schema to ask.
+  entry.stage = stageOf(entry, artifacts);
   return entry;
 }
 
@@ -516,6 +520,43 @@ function readQuestions(
     });
   }
   return open;
+}
+
+/**
+ * How many rows of `decisions.md`'s `## Raised` table have landed nowhere.
+ *
+ * The blind reading's questions live there — `Capability | Raised | Landed` —
+ * and the requirements are not settled while one of them is unanswered, which
+ * is why the ladder reads the count and not only the two files. A row's
+ * `Landed` cell is a `Q<n>` of this file or a ❓ on a page; what it says is the
+ * `raised` rule's to judge, and an empty cell is what is read here. A file
+ * with no table has nothing open, which is the same answer as a table whose
+ * every row landed.
+ */
+function openRaised(text: string): number {
+  const raised = outline(text)
+    .flatMap((one) => (one.level === 1 ? one.children : [one]))
+    .find((one) => /^Raised\b/.test(one.heading));
+  if (!raised) return 0;
+  return rowsOf(raised.raw).filter((cells) => !cells[2]).length;
+}
+
+/** A markdown table's rows, header and rule dropped, each row its cells. */
+function rowsOf(text: string): string[][] {
+  const rows: string[][] = [];
+  for (const line of text.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed.startsWith("|")) continue;
+    const cells = trimmed
+      .slice(1, -1)
+      .split("|")
+      .map((cell) => cell.trim());
+    if (cells.every((cell) => /^:?-{2,}:?$/.test(cell))) continue;
+    rows.push(cells);
+  }
+  // The first row left is the header: the rule under it is what makes a
+  // markdown table a table, and it is dropped above.
+  return rows.slice(1);
 }
 
 /** A written line, or nothing where the key is absent or blank. Anything but

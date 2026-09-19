@@ -255,7 +255,8 @@
       "followOns": [
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
         "A record anyone can read back."
-      ]
+      ],
+      "stage": "proposed"
     }
   ],
   "schemas": {

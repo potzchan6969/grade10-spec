@@ -36,6 +36,7 @@ import { schemaArtifacts } from "./read-schema.mts";
 import { discoverSpecs, readSpecs } from "./read-specs.mts";
 import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
+import { markUpstream } from "./upstream.mts";
 import { checkWarnings } from "./warnings.mts";
 
 /** The artifacts share one history walk — the only expensive part of a read.
@@ -96,6 +97,11 @@ export function composeStore(
   markIssuedIds(roots.store, specs);
   const references = readReferences(roots.store, git);
   const referencesReadme = readReferencesReadme(roots.store);
+  const pages = readManualPages(roots, git);
+  const schemas = schemasInUse(roots.store, changes);
+  // After both: what is before an artifact is the pages the change links and
+  // the artifacts the schema names, and this is the one place holding both.
+  markUpstream(roots.store, changes, schemas, pages, git);
 
   return {
     snapshot: {
@@ -104,10 +110,10 @@ export function composeStore(
       config,
       taxonomy: deriveTaxonomy(shape, config, roots.own),
       manualDir: roots.manual,
-      pages: readManualPages(roots, git),
+      pages,
       specs,
       changes,
-      schemas: schemasInUse(roots.store, changes),
+      schemas,
       assets: readManualAssets(roots),
       references: references.map(({ text: _text, ...entry }) => entry),
       ...(referencesReadme === undefined ? {} : { referencesReadme }),

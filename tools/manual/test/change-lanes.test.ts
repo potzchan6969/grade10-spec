@@ -165,11 +165,11 @@ describe("the real store's board", () => {
 
     for (const change of snapshot.changes) {
       expect(lanes).toContain(laneOf(change));
-      // The misfile the board existed to fix: a change with deltas read
-      // as an unplanned thought. It is never a proposal.
-      if (change.deltas.length > 0) {
-        expect(laneOf(change)).not.toBe("proposed");
-      }
+      // The misfile the board existed to fix: a change with deltas read as an
+      // unplanned thought. It is never a proposal — read off the deltas, as
+      // `isProposal` reads it, because the ladder does file a change whose
+      // plan was written before its designs under Proposed.
+      if (change.deltas.length > 0) expect(isProposal(change)).toBe(false);
     }
 
     expect(snapshot.changes.every((one) => one.lastMoved)).toBe(true);

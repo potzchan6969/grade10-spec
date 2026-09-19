@@ -303,6 +303,27 @@ export type BehindArtifact = {
   changed: string[];
 };
 
+/**
+ * What one artifact is drawn from, as the store read it off `main`.
+ *
+ * The reading is the store's, because hashing is `node:crypto`'s and the page
+ * texts are the reader's; the verdict is not stored — `behindOf` is a pure
+ * comparison over this, so no surface and no check has to be reordered to see
+ * a freshness field.
+ */
+export type UpstreamRead = {
+  /** The content id of everything before the artifact, in reading order. */
+  id: string;
+  /** Each thing before it, in that order: a linked page section as
+   * `<page>#<slug>`, or an upstream artifact id. */
+  items: string[];
+  /** The items a commit dates later than the artifact's own newest commit —
+   * what says it is behind where no `reviewed:` line does. Absent where no
+   * commit dates the artifact, which is what a depth-1 checkout gives, and an
+   * item no commit dates is left out rather than guessed at. */
+  newer?: string[];
+};
+
 /** One person the store knows, from `docs/prds/team.yaml`. */
 export type TeamMember = {
   /** The address `git config user.email` gives. */
@@ -444,6 +465,14 @@ export type ChangeEntry = {
    * questions a linked page still carries are added by `questionsOf`, which
    * has the parsed pages. */
   questions?: OpenQuestion[];
+  /** How many rows of `decisions.md`'s `## Raised` table have landed nowhere
+   * — the blind reading's questions, which the requirements are not settled
+   * without. Absent where every row landed or the file carries no table. */
+  raisedOpen?: number;
+  /** What each written artifact was drawn from, keyed by schema artifact id —
+   * read where the pages and the history are, compared by `behindOf`. Absent
+   * for a change whose record could not be read and for an archived one. */
+  upstream?: Record<string, UpstreamRead>;
   /** How far the change has got, computed where the schema is. */
   stage?: Stage;
   /** What the change says it is waiting for, from `.openspec.yaml`

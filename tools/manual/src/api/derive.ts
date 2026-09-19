@@ -19,6 +19,7 @@ import {
   specTitle,
 } from "./paths";
 import { findRequirement } from "./requirements";
+import { laneOfStage, taskTotals } from "./stages.ts";
 import type {
   ChangeEntry,
   ChangeLane,
@@ -587,12 +588,18 @@ export function isProductDir(manualDir: string, dir: string): boolean {
 }
 
 /**
- * Where a change stands, read off the artifacts it has written and nothing
- * else. Deltas are what separates an idea from a specification; tasks are what
- * separates a specification from work. A change that has finished its tasks is
- * `complete` and waiting on the archive, not still in progress.
+ * Where a change stands, in the four lanes that ran before the eight stages:
+ * the lane its stage projects to, so the two can never disagree about one
+ * change.
+ *
+ * The stage is computed where the schema is — the store's reader — so every
+ * entry a reader built carries one. An entry no reader built does not: a
+ * fixture written by hand against the four lanes is read the way it always
+ * was, off the deltas that separate an idea from a specification and the boxes
+ * that separate a specification from finished work.
  */
 export function laneOf(change: ChangeEntry): ChangeLane {
+  if (change.stage) return laneOfStage(change.stage);
   if (change.deltas.length === 0) return "proposed";
   if (change.taskGroups.length === 0) return "specified";
   const { done, total } = taskTotals(change);
@@ -602,13 +609,14 @@ export function laneOf(change: ChangeEntry): ChangeLane {
 /**
  * A change that is still only a reason: no delta, so it flips no capability
  * status, badges no row and bumps no product's count — it collects on the
- * In Flight board's own lane instead of standing among the work in flight. A
- * change that has written its deltas and no task list is `specified`, not
- * this: the finished state of a planning change is a specification, and filing
- * it as an unplanned thought hides the queue somebody has to promote.
+ * In Flight board's own lane instead of standing among the work in flight.
+ *
+ * The deltas, not the lane: the ladder reads a change whose plan was written
+ * before its designs as Proposed, and a change carrying requirements is not
+ * an unplanned thought whatever rung it sits on.
  */
 export function isProposal(change: ChangeEntry): boolean {
-  return laneOf(change) === "proposed";
+  return change.deltas.length === 0;
 }
 
 /** One artifact a change still owes, and why it is owed. */
@@ -1226,18 +1234,9 @@ export function designShelves(index: ManualIndex): DesignShelf[] {
   return shelves.sort((a, b) => a.title.localeCompare(b.title));
 }
 
-export function taskTotals(change: ChangeEntry): {
-  done: number;
-  total: number;
-} {
-  return change.taskGroups.reduce(
-    (sum, group) => ({
-      done: sum.done + group.done,
-      total: sum.total + group.total,
-    }),
-    { done: 0, total: 0 },
-  );
-}
+/** Re-exported: the ladder's last two rungs read it, so it lives beside them
+ * and every caller here keeps importing it from the index it already reads. */
+export { taskTotals } from "./stages.ts";
 
 /** Newest movement first; a change that never moved sorts last. */
 export function byLastMoved(a: ChangeEntry, b: ChangeEntry): number {
