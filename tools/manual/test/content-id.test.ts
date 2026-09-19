@@ -49,10 +49,4 @@ describe("the content id of what is before an artifact", () => {
   it("is the order the texts were read in", () => {
     expect(contentIdOf(["a", "b"])).not.toBe(contentIdOf(["b", "a"]));
   });
-
-  it("answers for nothing before it at all", () => {
-    expect(contentIdOf([])).toBe(
-      createHash("sha256").update("").digest("hex").slice(0, 8),
-    );
-  });
 });

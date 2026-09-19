@@ -324,20 +324,20 @@ describe("what the agent drafts and the hand moves", () => {
   /** Read from the stage, so two changes in one stage carry the same pair and
    * no change's record can change it. */
   it("says what the agent drafts and who moves it", () => {
-    for (const rung of STAGES) {
-      const pair = DRAFTED[rung];
-      if (!pair) continue;
-      expect(pair.draft.length).toBeGreaterThan(0);
-      expect(pair.note.length).toBeGreaterThan(0);
-      expect(DRAFTED[rung]).toBe(pair);
-    }
+    expect(DRAFTED.proposed?.draft).toBe(
+      "the marks and the three files, from what the hand asks",
+    );
+    expect(DRAFTED.building?.draft).toBe("each group, test first");
+    expect(DRAFTED.proposed?.note).toBe(
+      "Product manager: say what is wanted, answer",
+    );
+    expect(DRAFTED.building?.note).toBe("Engineer: read each landing");
   });
 });
 
-const NOW = "2026-09-19T02:00:00Z";
+const NOW = Date.parse("2026-09-19T02:00:00Z");
 const DAY = 86_400_000;
-const daysAgo = (days: number) =>
-  new Date(Date.parse(NOW) - days * DAY).toISOString();
+const daysAgo = (days: number) => new Date(NOW - days * DAY).toISOString();
 
 const suite = (status: ChangeSuite["status"]): ChangeSuite => ({
   spec: "shared/planning/change-stages",

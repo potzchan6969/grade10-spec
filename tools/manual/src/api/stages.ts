@@ -367,14 +367,12 @@ export type Overlay =
 export type OverlayContext = {
   /** Now, as an instant — the caller's clock, never this module's, so the
    * same entry read twice at one instant reads the same both times. */
-  now: string | number | Date;
+  now: Date | number;
   /** The changes a release has carried: `depends_on:` naming one of these
    * blocks nothing. The caller holds the archive and the released set. */
   released: Set<string>;
   /** The schema's artifacts, for the behind reading's order. */
   artifacts: SchemaArtifact[];
-  /** The zone the day count is a day on. */
-  timeZone?: string;
 };
 
 /** The day bounds `Q21` recommends, open on the product manager. */
@@ -414,7 +412,7 @@ export function overlaysOf(
   for (const id of change.dependsOn ?? []) {
     if (!ctx.released.has(id)) overlays.push({ kind: "blocked", change: id });
   }
-  const days = idleDaysOf(change, ctx.now, ctx.timeZone ?? TIME_ZONE);
+  const days = idleDaysOf(change, ctx.now);
   if (days !== undefined && days >= IDLE_FROM) {
     overlays.push({ kind: "idle", days, shelved: days >= SHELVED_FROM });
   }
@@ -446,7 +444,9 @@ function whose(
 
 /**
  * Whole calendar days since the change last landed something, on the day
- * count's own zone.
+ * count's own zone — one zone, the store's, because a day is a day here and
+ * a caller that could pass another would be two boards disagreeing about
+ * whether a change is idle.
  *
  * Undefined where no history dates the landing — no viewer, a store with no
  * repository, a depth-1 clone — which is not the same as 0: the chip is not
@@ -454,12 +454,11 @@ function whose(
  */
 export function idleDaysOf(
   change: ChangeEntry,
-  now: string | number | Date,
-  timeZone: string = TIME_ZONE,
+  now: Date | number,
 ): number | undefined {
   if (change.lastLanded === undefined) return undefined;
-  const landed = dayOn(change.lastLanded, timeZone);
-  const today = dayOn(now, timeZone);
+  const landed = dayOn(change.lastLanded, TIME_ZONE);
+  const today = dayOn(now, TIME_ZONE);
   if (landed === undefined || today === undefined) return undefined;
   return Math.max(0, today - landed);
 }

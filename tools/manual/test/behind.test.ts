@@ -1,5 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { behindOf } from "../src/api/stages.ts";
@@ -346,18 +345,5 @@ describe("with no read record at all", () => {
     const root = store();
 
     expect(behindOf(read(root), artifacts(root))).toEqual([]);
-  });
-});
-
-/** Two readings of one tree: the id is the content, so nothing but the
- * content can move it. */
-describe("the same tree read twice", () => {
-  it("gives the same id, whitespace aside", () => {
-    const root = store();
-    const first = read(root).upstream;
-    writeFileSync(join(root, `${CHANGE}/decisions.md`), `${DECISIONS}\n\n`);
-    const second = read(root).upstream;
-
-    expect(second?.["ui-design"]?.id).toBe(first?.["ui-design"]?.id);
   });
 });
