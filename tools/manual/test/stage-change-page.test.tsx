@@ -186,6 +186,21 @@ function row(html: string, artifact: string): string {
   return html.slice(at, next === -1 ? undefined : next);
 }
 
+/** What every `<p>` in some markup holds, its own opening tag left out — a
+ * paragraph holds no paragraph, so the next `</p>` is always its own. */
+function paragraphs(html: string): string[] {
+  const found: string[] = [];
+  for (
+    let at = html.indexOf("<p");
+    at !== -1;
+    at = html.indexOf("<p", at + 1)
+  ) {
+    if (!/^<p[\s>]/.test(html.slice(at, at + 3))) continue;
+    found.push(html.slice(html.indexOf(">", at) + 1, html.indexOf("</p>", at)));
+  }
+  return found;
+}
+
 /** The markup around one marker, for a fact carried by the tag that holds it
  * rather than by its text. */
 function around(html: string, mark: string, span = 240): string {
@@ -241,6 +256,30 @@ describe("the stepper", () => {
     // own case (8.3), not a unit test's — this only asserts both exist.
     expect(html).toContain('data-stepper="one-line"');
     expect(html).toContain('data-stepper="steps"');
+  });
+
+  // The step's label and its description are paragraphs the design system
+  // draws, so what the stepper hands each description is inline content: a
+  // block element inside a `<p>` is markup no browser keeps, and the
+  // paragraph closes before the mark the reader came for.
+  it("shared-planning-change-stages-SC-57 - nests no block element in a step's own paragraph", () => {
+    const said = vi.spyOn(console, "error").mockImplementation(() => {});
+    let markup = "";
+    try {
+      markup = render(change({ stage: "building", heldBy: "tasks" }));
+    } finally {
+      said.mockRestore();
+    }
+    const steps = markup.slice(markup.indexOf('data-stepper="steps"'));
+
+    expect(steps).toContain("agent drafts each group, test first");
+    expect(steps).toContain("held by");
+    for (const paragraph of paragraphs(steps)) {
+      expect(paragraph).not.toMatch(
+        /<(?:div|p|ul|ol|li|table|section|h[1-6])[\s>]/,
+      );
+    }
+    expect(said.mock.calls.map((one) => one.join(" "))).toEqual([]);
   });
 
   it("names the stage in the page's eyebrow", () => {
