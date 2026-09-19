@@ -28,6 +28,9 @@
  *          and its suites — and every `-US-` id in them — die with the change
  *          unless someone copies them into the durable capability. This checks
  *          whether they were carried, and refuses while they are not.
+ *          `rounds.md` is carried too, but sideways: it is folded into no
+ *          capability and archives with the change, so what this reads is an
+ *          archived copy that already exists and lacks it.
  *          `--journeys-copied` acknowledges a delta whose capability has no
  *          durable spec yet: the fold creates it, so the copy can only happen
  *          right after — the flag is a promise, and the sections stay on
@@ -630,6 +633,28 @@ for (const { file, capability } of deltaFiles(changeId)) {
         what: `${name} drops ${owed.length} \`## Settled\` line(s) — the next blind pass raises them again: "${owed[0].slice(0, 60)}"`,
       });
     }
+  }
+}
+
+// `rounds.md` is folded into no durable capability: it archives with the
+// change, like `decisions.md`, and the skill copies it across with the rest of
+// the directory. What can go wrong is the copy that lands without it, which is
+// what the journeys taught — so where an archived copy of this change already
+// exists, it is read for the file. Nothing refuses a change that has not been
+// copied yet: the copy happens after this runs.
+const rounds = join(CHANGES, changeId, "rounds.md");
+const archived = join(CHANGES, "archive");
+if (existsSync(rounds) && existsSync(archived)) {
+  for (const name of readdirSync(archived, {
+    withFileTypes: true,
+  }).filter(
+    (entry) => entry.isDirectory() && entry.name.endsWith(`-${changeId}`),
+  )) {
+    if (existsSync(join(archived, name.name, "rounds.md"))) continue;
+    wrong.push({
+      capability: `archive/${name.name}`,
+      what: "`rounds.md` is not in the archived copy — the rounds archive with the change and are folded nowhere, so a copy without it loses them",
+    });
   }
 }
 
