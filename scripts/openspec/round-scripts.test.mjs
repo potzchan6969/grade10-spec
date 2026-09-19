@@ -458,6 +458,35 @@ test("plan:land lands a task group with the dev's word, its row and no landed_by
   assert.doesNotMatch(recordOf(root), /landed_by:/);
 });
 
+test("shared-planning-agent-rounds-SC-57 - plan:land lands a ticked group's row through the gate that would otherwise refuse it", () => {
+  const { root, git } = sandbox();
+  git("config", "user.email", "erin@test");
+  // The tick lands on its own, with no row for it yet — the deadlock the
+  // `round` rule exists to name: the gate the row's own landing must pass is
+  // the same gate that refuses a tick with no row.
+  writeFileSync(
+    join(root, DIR, "tasks.md"),
+    "## 1. Build it (grade10-spec)\n\n- [x] 1.1 Ship it\n",
+  );
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "tick 1.1 with no round yet");
+  git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
+
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "nothing stood",
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(roundsOf(root), /\| 1 \| 1 \| simpler \| nothing stood \|/);
+});
+
 test("plan:land refuses a group number tasks.md does not hold, naming the ones it does", () => {
   const { root, git } = sandbox();
   git("config", "user.email", "erin@test");
