@@ -92,16 +92,52 @@ function withPages(entry: ChangeEntry, pages: PageEntry[]): ChangeEntry {
   return entry;
 }
 
-function changeWith(record: string) {
+const ROUNDS = [
+  "# Rounds",
+  "",
+  "| Round | Artifact | Perspectives | Stood | Asked | Tests |",
+  "| --- | --- | --- | --- | --- | --- |",
+  "| 1 | ui-design | design; simpler | one state named | `Q2` | - |",
+  "| 2 | group 3 | missing-pieces; simpler | nothing stood | `Q3` | - |",
+  "",
+].join("\n");
+
+function changeWith(record: string, extra: Record<string, string> = {}) {
   const root = writeStore({
     "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
     [`${DIR}/.openspec.yaml`]: `schema: demo-planning\ncreated: 2026-09-18\n${record}`,
     [`${DIR}/proposal.md`]: PROPOSAL,
     [`${DIR}/decisions.md`]: DECISIONS,
+    ...extra,
   });
   const [entry] = readChanges(root, NO_GIT, null);
   return entry;
 }
+
+const HANDS = ["hands:", "  pm: ecchochan", ""].join("\n");
+
+describe("the artifact a round raised a question against", () => {
+  it("is the round's own Artifact cell, read through `readChanges`", () => {
+    // `decisions.md`'s row always names the file it lives in, so the record
+    // is the only thing that says which draft was under challenge. Nothing
+    // read the two together before this.
+    const entry = changeWith(HANDS, { [`${DIR}/rounds.md`]: ROUNDS });
+    const against = new Map(
+      (entry.questions ?? []).map((one) => [one.id, one.artifact]),
+    );
+
+    expect(against.get("Q2")).toBe("ui-design");
+    // A task group's number, however the row spelled it.
+    expect(against.get("Q3")).toBe("3");
+  });
+
+  it("is `decisions` for every row where the change carries no record", () => {
+    const entry = changeWith(HANDS);
+
+    for (const one of entry.questions ?? [])
+      expect(one.artifact, one.id).toBe("decisions");
+  });
+});
 
 describe("a decisions row nobody has settled", () => {
   it("is listed with its number and addressed to the role's handle", () => {
