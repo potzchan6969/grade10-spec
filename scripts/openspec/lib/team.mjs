@@ -8,7 +8,9 @@
  * reader, because three would answer a rename three ways.
  *
  * It takes a root rather than a path, so the day Operations gives the map a
- * home of its own is one constant here.
+ * home of its own is one constant here; a caller that was handed another
+ * path — a script's `--team`, a fixture's own map — passes it beside the
+ * root rather than reading the file itself.
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -38,8 +40,8 @@ export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"];
  * other thing entirely: it says something wrong about who is told, so it stops
  * the run and says which line.
  */
-export function readTeamMap(root) {
-  const file = join(root, TEAM_MAP);
+export function readTeamMap(root, path = TEAM_MAP) {
+  const file = join(root, path);
   let text;
   try {
     text = readFileSync(file, "utf8");

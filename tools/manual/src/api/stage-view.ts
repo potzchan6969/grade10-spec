@@ -13,17 +13,10 @@ import type { BehindArtifact, ChangeEntry, Role, Stage } from "./types";
  * found and edited again on the day it changes; every read of both is here.
  */
 
-/** The eight stages as a reader meets them, in the ladder's own order. */
-export const STAGE_LABEL: Record<Stage, string> = {
-  proposed: "Proposed",
-  designed: "Designed",
-  specified: "Specified",
-  planned: "Planned",
-  building: "Building",
-  "on-staging": "On staging",
-  released: "Released",
-  archived: "Archived",
-};
+/** The words for a stage live in `stages.ts`, which the notify script and the
+ * digest read under plain node; every surface reads them from here, where the
+ * rest of the wording is. */
+export { STAGE_LABEL } from "./stages";
 
 /** The six roles as the stage table names them. */
 export const ROLE_LABEL: Record<Role, string> = {

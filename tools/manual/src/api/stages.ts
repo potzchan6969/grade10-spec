@@ -38,6 +38,26 @@ export const STAGES: Stage[] = [
 ];
 
 /**
+ * The eight stages as a reader meets them, in the ladder's own order.
+ *
+ * Here rather than in `stage-view.ts`, which is where every other word a
+ * surface shows is read from: a Slack message names the stage too, and the
+ * notify script and the digest read this module under plain node, where
+ * `stage-view.ts` — which reads `laneOf` from `derive.ts` — cannot go.
+ * `stage-view.ts` re-exports it, so every surface still reads one list.
+ */
+export const STAGE_LABEL: Record<Stage, string> = {
+  proposed: "Proposed",
+  designed: "Designed",
+  specified: "Specified",
+  planned: "Planned",
+  building: "Building",
+  "on-staging": "On staging",
+  released: "Released",
+  archived: "Archived",
+};
+
+/**
  * How far a change has got, proven by what is on `main` and never by a key
  * anybody sets.
  *
