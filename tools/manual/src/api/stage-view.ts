@@ -136,8 +136,15 @@ export function draftedOf(stage: Stage): DraftedRead | undefined {
   };
 }
 
-/** What changed before one behind artifact, as its chip names it: the page
- * sections and the artifacts it was drawn from, in reading order. */
+/**
+ * What is behind one artifact, as its chip and its row name it.
+ *
+ * Two sentences, because the two readings answer different questions. Where
+ * commit dates single items out, those items changed. Where the recorded
+ * content id is what says the upstream moved, it cannot say which part of it
+ * did, so the row names everything the artifact is read again against.
+ */
 export function behindLabelOf(behind: BehindArtifact): string {
-  return behind.changed.join(", ");
+  if (behind.changed) return `${behind.changed.join(", ")} changed`;
+  return `read again against ${(behind.before ?? []).join(", ")}`;
 }

@@ -45,7 +45,7 @@ export type BoardRow = {
 
 export type BoardContext = {
   /** Now, as an instant — the caller's clock, so one render reads one time. */
-  now: string | number | Date;
+  now: Date | number;
   /** The changes a release has carried: a dependency on one blocks nothing. */
   released: Set<string>;
   /** The schemas the snapshot holds, for the behind reading's order. */

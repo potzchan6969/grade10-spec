@@ -77,7 +77,7 @@ export function ArtifactList({
                   behind
                 </Badge>
                 <Text as="span" size="xs" tone="secondary">
-                  {`after ${behindLabelOf(late)}`}
+                  {behindLabelOf(late)}
                 </Text>
               </>
             ) : (
