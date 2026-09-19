@@ -373,7 +373,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
 
@@ -506,7 +506,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
 
@@ -672,7 +672,7 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-03
 
@@ -732,7 +732,7 @@ No handle has been chosen in this browser.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-03
 
@@ -1248,7 +1248,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-07
 
@@ -1306,7 +1306,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-07
 
@@ -1705,3 +1705,20 @@ Every journey is walked by at least one case. The six feature set root groups ar
 - Hands and whose turn — its rules sit on the journeys the hands walk
 - Messages, once per move — its rules sit on the journeys the hands walk
 - Surfaces that show the stage — its rules sit on the journeys the hands walk
+
+### Manual
+
+What stays manual after the walk (task 8.3/8.5), and why.
+
+- **US1's messages and the digest** — `US1-TC1-1` through `US1-TC8-1` read Slack, git history and the notify script's own sent-key file; a browser walk opens the manual, not a workspace or a repository's commits, so these are `scripts/openspec/*.test.mjs`'s to prove
+- **US2-TC1-1** — the lane order and "each change in one lane only" are unwalked; `board.walk.ts`'s `SC-51` proves only the third claim, a card's own facts, so the case stays whole and manual
+- **US2-TC3-1** — the four-row idle table (6/7/29/30 days) needs a repository-wide commit moving no change's day count, which `NO_GIT` cannot stage; `board.walk.ts`'s `SC-56` proves the fixture's own one row (idle 45 days, on the shelf) as a spec-level scenario, not this case whole
+- **US2-TC5-1** — the Mine row needs a chosen handle narrowing the board, which no walk drives; `SC-54`, `SC-55` and `board.walk.ts`'s own `SC-05` prove the other four filters and the unchosen-handle refusal, not the whole per-row case
+- **US2-TC7-1, US2-TC8-1, US2-TC9-1** — a reverted proof, a landed-by handle and a record nothing could read: none of task 8.3's five walk files drives them
+- **US3-TC2-1** — its third step crosses onto the board's own Mine filter reading the handle My turn just remembered; `my-turn.walk.ts`'s `SC-62` and `SC-63` prove My turn's own half (asking, then reading without asking again) and stop there
+- **US3-TC4-1** — "the per-role Pending page is still reachable" is the manual's persistent nav, not a fact `MyTurnPage` itself renders; `my-turn.walk.ts`'s `SC-61` proves the empty state's own words
+- **US4-TC1-1, US4-TC2-1, US4-TC3-1, US4-TC6-1** — `SC-68`'s local round trip (a role and a handle written to the working tree in one atomic write) needs the dev server `change-page-assign.walk.ts` never runs against; that walk proves `SC-69` alone, the hosted half of `US4-TC2-1`'s own case, so the case stays whole and manual
+- **US4-TC4-1, US4-TC5-1** — a handle the team map does not know and a malformed `hands:` record are both refusals the store's own reader raises before a page ever renders one; `check/record.mjs`'s and `read-changes.mts`'s own tests decide them, not a walk of the rendered page
+- **US5, US6** — no walk in this task opens a change carrying a waiver row or a wait; `US5-TC1-1`'s own three-row table and `US6`'s dated-and-undated pair are past this task's five files
+- **US7-TC2-1** — an archived change's line wearing no pip has no fixture to reach it (`section-pip.walk.ts`'s own header names why); `test/section-pip.test.tsx` proves it at the block level instead
+- **US8, US9** — the run sheet, the digest and "no tick, claim or wait while behind" all read outside the rendered manual; `US9-TC3-1`'s and `US9-TC4-1`'s refusals are the record reader's and the archive check's to prove, not a walk's
