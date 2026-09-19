@@ -549,6 +549,28 @@ test("plan:land --reviewed refuses a task group", () => {
   assert.match(result.stderr, /--reviewed names an artifact/);
 });
 
+test("plan:land --reviewed with no reviewed: line commits nothing and is refused", () => {
+  const { root, git } = sandbox();
+  // The fixture's own default record carries no `reviewed:` line at all —
+  // `round:reviewed` never ran for `decisions`.
+  git("config", "user.email", "nobody@test");
+
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "decisions",
+    "--root",
+    root,
+    "--reviewed",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /nothing to land: round:reviewed writes the line first/,
+  );
+  assert.doesNotMatch(recordOf(root), /landed_by:/);
+});
+
 test("plan:land refuses an origin with no main to land on", () => {
   const { root } = sandbox({ remote: false });
   const result = land(root);
