@@ -76,6 +76,15 @@ export const SCHEMA = [
   "    generates: ui-design.md",
   "    requires: [decisions]",
   "    upstream: [proposal, decisions]",
+  // One conditional reader and one that always runs: what the landing holds
+  // the row's `Perspectives` cell to.
+  "    perspectives:",
+  "      - name: design",
+  "        when: [surface]",
+  "        agent: .claude/agents/design.md",
+  "      - name: simpler",
+  "        when: [always]",
+  "        agent: .claude/agents/simpler.md",
   "  - id: tech-design",
   "    hand: tech",
   "    required: false",
@@ -94,6 +103,14 @@ export const SCHEMA = [
   "    generates: tasks.md",
   "    requires: [ui-design]",
   "    upstream: [proposal, decisions, ui-design, tech-design]",
+  // A task group is no artifact of the schema, so its readers sit here.
+  "apply:",
+  "  requires: [tasks]",
+  "  tracks: tasks.md",
+  "  perspectives:",
+  "    - name: simpler",
+  "      when: [always]",
+  "      agent: .claude/agents/simpler.md",
   "",
 ].join("\n");
 

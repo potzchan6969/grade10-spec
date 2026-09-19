@@ -215,6 +215,63 @@ const land = (root, args = [], env = {}) =>
     env,
   );
 
+test("shared-planning-agent-rounds-SC-51 - plan:land refuses a perspective the artifact's list does not issue", () => {
+  const { root } = sandbox();
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "ui-design",
+    "--root",
+    root,
+    "--dry-run",
+    "--perspectives",
+    "design,archivist,simpler",
+    "--stood",
+    "nothing stood",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /archivist/);
+  assert.match(result.stderr, /demo-planning/);
+});
+
+test("shared-planning-agent-rounds-SC-51 - plan:land refuses a row that leaves out a reader that always runs", () => {
+  const { root } = sandbox();
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "ui-design",
+    "--root",
+    root,
+    "--dry-run",
+    "--perspectives",
+    "design",
+    "--stood",
+    "nothing stood",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /simpler/);
+  assert.match(result.stderr, /always/);
+});
+
+test("shared-planning-agent-rounds-SC-51 - plan:land takes the readers the schema issues, and `verifier` beside them", () => {
+  const { root } = sandbox();
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "ui-design",
+    "--root",
+    root,
+    "--perspectives",
+    "design,simpler,verifier",
+    "--stood",
+    "nothing stood",
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  // `verifier` is no perspective of any artifact: it records that a verifier
+  // read the round's findings.
+  assert.match(roundsOf(root), /\| design, simpler, verifier \|/);
+});
+
 test("plan:land refuses a working tree with uncommitted edits", () => {
   const { root } = sandbox();
   writeFileSync(join(root, DIR, "ui-design.md"), "## Screens\n\nRedrawn.\n");
