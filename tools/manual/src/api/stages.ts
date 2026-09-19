@@ -460,9 +460,8 @@ const ROLE_OF_CONFIRMER: Record<string, string> = {
  *
  * In the schema's order, so the first answer is the earliest behind artifact:
  * the one the card names and the one the message goes to. Both answers carry
- * `since` — the newest commit date among what is before the artifact — for
- * the digest's own day count: a behind read always has the date its upstream
- * moved, whichever comparison is what says it moved.
+ * `since`, the day the artifact went behind, which each comparison reads off
+ * its own field of the reading — `BehindArtifact.since` says why.
  */
 export function behindOf(
   change: ChangeEntry,
@@ -481,7 +480,9 @@ export function behindOf(
           artifact: id,
           changed: read.items,
           whole: true,
-          ...(read.newerOn ? { since: read.newerOn } : {}),
+          // The newest commit before it: an id dates nothing of its own, and
+          // nothing older than that is knowable.
+          ...(read.beforeOn ? { since: read.beforeOn } : {}),
         });
       }
       continue;
@@ -490,7 +491,8 @@ export function behindOf(
       behind.push({
         artifact: id,
         changed: read.newer,
-        ...(read.newerOn ? { since: read.newerOn } : {}),
+        // The first of them to move, which is the day it went behind.
+        ...(read.firstNewerOn ? { since: read.firstNewerOn } : {}),
       });
     }
   }

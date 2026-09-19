@@ -125,14 +125,18 @@ export function upstreamOf(
         : before.filter(
             (one) => one.date !== undefined && Date.parse(one.date) > drawnAt,
           );
-    if (newerItems.length > 0) read.newer = newerItems.map((one) => one.item);
-    // The newest commit among what is before it, read the same way whether a
-    // `reviewed:` id or the dated fallback is what says the artifact moved: a
-    // content id says something before it moved without saying which, so the
-    // digest's day count is read off the newest of everything before it
-    // rather than only the subset the dated comparison could single out.
-    const newerOn = newest(before.map((one) => one.date));
-    if (newerOn !== undefined) read.newerOn = newerOn;
+    if (newerItems.length > 0) {
+      read.newer = newerItems.map((one) => one.item);
+      // The first of them to move: the day the artifact went behind, which is
+      // what `behindOf` carries as `since` on this comparison.
+      const firstNewerOn = oldest(newerItems.map((one) => one.date));
+      if (firstNewerOn !== undefined) read.firstNewerOn = firstNewerOn;
+    }
+    // The newest of everything before it: a content id says something moved
+    // without saying which, so no older day than this is knowable, and this
+    // is what `behindOf` carries as `since` on that comparison.
+    const beforeOn = newest(before.map((one) => one.date));
+    if (beforeOn !== undefined) read.beforeOn = beforeOn;
     reading[artifact.id] = read;
   }
   return Object.keys(reading).length > 0 ? reading : undefined;
@@ -183,10 +187,19 @@ function filesOf(
     .sort();
 }
 
-/** The newest of the dates that exist, or nothing where none does. */
-function newest(dates: (string | undefined)[]): string | undefined {
+/** The dates that exist, oldest first. */
+function dated(dates: (string | undefined)[]): string[] {
   return dates
     .filter((one): one is string => one !== undefined)
-    .sort((a, b) => Date.parse(a) - Date.parse(b))
-    .at(-1);
+    .sort((a, b) => Date.parse(a) - Date.parse(b));
+}
+
+/** The newest of the dates that exist, or nothing where none does. */
+function newest(dates: (string | undefined)[]): string | undefined {
+  return dated(dates).at(-1);
+}
+
+/** The oldest of the dates that exist, or nothing where none does. */
+function oldest(dates: (string | undefined)[]): string | undefined {
+  return dated(dates).at(0);
 }

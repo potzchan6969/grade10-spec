@@ -339,13 +339,13 @@ export type BehindArtifact = {
    * is the whole of what is before the artifact and every surface that names
    * it says as much. */
   whole?: true;
-  /** The newest commit date among what is before it, carried from
-   * `UpstreamRead`'s `newerOn` — what the digest counts its seven days from.
-   * Present whichever comparison says the artifact moved: a `reviewed:` id
-   * carries no date of its own, but what is before the artifact always does
-   * when a commit dates it, so the digest reads the same field either way.
-   * Absent only where no commit dates anything before the artifact, which is
-   * what a depth-1 checkout gives. */
+  /** The day the artifact went behind — what the digest counts its seven days
+   * from. Where the commit dates are what say it moved, that is the oldest
+   * commit newer than the artifact: the first thing that moved after it was
+   * drawn. Where a recorded `reviewed:` id is, the id carries no date of its
+   * own and nothing older than the newest commit before the artifact is
+   * knowable, so that is the day. Absent only where no commit dates anything
+   * before the artifact, which is what a depth-1 checkout gives. */
   since?: string;
 };
 
@@ -370,14 +370,17 @@ export type UpstreamRead = {
    * section is never here: a commit on a page dates every section of it, so
    * only a record line can say the linked one moved. */
   newer?: string[];
+  /** The oldest commit date among `newer` — the first of the change's own
+   * artifacts to move after this one was drawn, which is the day it went
+   * behind. Carried onto `BehindArtifact` as `since` where the dates are what
+   * say it moved. Absent with `newer`. */
+  firstNewerOn?: string;
   /** The newest commit date among everything before the artifact, carried
-   * onto `BehindArtifact` as `since` — what the digest counts its seven days
-   * from. Read the same way whether `newer` is what says the artifact moved
-   * or a `reviewed:` id is: an id cannot single out which item changed, so
-   * this is the newest date among all of `items` rather than only `newer`'s
-   * subset. Absent only where no commit dates anything before the
-   * artifact. */
-  newerOn?: string;
+   * onto `BehindArtifact` as `since` where a recorded `reviewed:` id is what
+   * says it moved: an id cannot single out which item changed, so no older
+   * day than this one can be claimed. Absent only where no commit dates
+   * anything before the artifact. */
+  beforeOn?: string;
 };
 
 /**
