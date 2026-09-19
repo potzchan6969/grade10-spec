@@ -36,6 +36,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import YAML from "yaml";
+import { parseArgs } from "./lib/args.mjs";
 import {
   bundleFor,
   classifyDiff,
@@ -49,29 +50,10 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const USAGE =
   "usage: node scripts/openspec/perspectives.mjs [<change>] <artifact|group> --diff <file> [--root <dir>]";
 
-const flags = { diff: undefined, root: undefined, change: undefined };
-const positional = [];
-const argv = process.argv.slice(2);
-for (let at = 0; at < argv.length; at += 1) {
-  const arg = argv[at];
-  if (arg === "--help" || arg === "-h") {
-    console.log(USAGE);
-    process.exit(0);
-  }
-  const named = /^--(diff|root|change)(?:=(.*))?$/.exec(arg);
-  if (named) {
-    let value = named[2];
-    if (value === undefined) {
-      at += 1;
-      value = argv[at];
-    }
-    if (value === undefined) fail(`--${named[1]} needs a value\n${USAGE}`);
-    flags[named[1]] = value;
-    continue;
-  }
-  if (arg.startsWith("-")) fail(`unknown option ${arg}\n${USAGE}`);
-  positional.push(arg);
-}
+const { positional, flags } = parseArgs(process.argv.slice(2), {
+  keys: ["diff", "root", "change"],
+  usage: USAGE,
+});
 
 const root = flags.root ?? join(HERE, "..", "..");
 const target = positional.length > 1 ? positional[1] : positional[0];

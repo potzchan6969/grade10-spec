@@ -16,6 +16,7 @@
 import { readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "./lib/args.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const USAGE =
@@ -57,39 +58,16 @@ export function settingsFor(root, change) {
 }
 
 function main() {
-  const { positional, flags } = parse(process.argv.slice(2));
+  const { positional, flags } = parseArgs(process.argv.slice(2), {
+    keys: ["root", "out"],
+    usage: USAGE,
+  });
   const [change] = positional;
   if (!change) fail(USAGE);
   const root = flags.root ?? join(HERE, "..", "..");
   const settings = JSON.stringify(settingsFor(root, change), null, 2);
   if (flags.out) writeFileSync(flags.out, `${settings}\n`);
   else console.log(settings);
-}
-
-function parse(argv) {
-  const flags = {};
-  const positional = [];
-  for (let at = 0; at < argv.length; at += 1) {
-    const arg = argv[at];
-    if (arg === "--help" || arg === "-h") {
-      console.log(USAGE);
-      process.exit(0);
-    }
-    const named = /^--(root|out)(?:=(.*))?$/.exec(arg);
-    if (named) {
-      let value = named[2];
-      if (value === undefined) {
-        at += 1;
-        value = argv[at];
-      }
-      if (value === undefined) fail(`--${named[1]} needs a value\n${USAGE}`);
-      flags[named[1]] = value;
-      continue;
-    }
-    if (arg.startsWith("-")) fail(`unknown option ${arg}\n${USAGE}`);
-    positional.push(arg);
-  }
-  return { positional, flags };
 }
 
 function fail(message) {

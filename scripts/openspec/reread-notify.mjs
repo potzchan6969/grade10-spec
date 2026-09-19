@@ -20,6 +20,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "./lib/args.mjs";
 import { sendAll, threadPartsOf } from "./lib/notify.mjs";
 import { openRecord, writtenValue } from "./lib/record.mjs";
 
@@ -59,7 +60,11 @@ function fileMessage(path) {
 }
 
 async function main() {
-  const { positional, flags } = parse(process.argv.slice(2));
+  const { positional, flags } = parseArgs(process.argv.slice(2), {
+    keys: ["message-file", "message", "run-url", "channel", "root"],
+    booleans: ["send"],
+    usage: USAGE,
+  });
   const [change] = positional;
   if (!change) fail(USAGE);
   const root = flags.root ?? join(HERE, "..", "..");
@@ -100,37 +105,6 @@ async function main() {
     { token: process.env.SLACK_BOT_TOKEN },
   );
   console.log(`${change}: posted to ${address.channel}`);
-}
-
-function parse(argv) {
-  const flags = {};
-  const positional = [];
-  for (let at = 0; at < argv.length; at += 1) {
-    const arg = argv[at];
-    if (arg === "--help" || arg === "-h") {
-      console.log(USAGE);
-      process.exit(0);
-    }
-    if (arg === "--send") {
-      flags.send = true;
-      continue;
-    }
-    const named =
-      /^--(message-file|message|run-url|channel|root)(?:=(.*))?$/.exec(arg);
-    if (named) {
-      let value = named[2];
-      if (value === undefined) {
-        at += 1;
-        value = argv[at];
-      }
-      if (value === undefined) fail(`--${named[1]} needs a value\n${USAGE}`);
-      flags[named[1]] = value;
-      continue;
-    }
-    if (arg.startsWith("-")) fail(`unknown option ${arg}\n${USAGE}`);
-    positional.push(arg);
-  }
-  return { positional, flags };
 }
 
 function fail(message) {

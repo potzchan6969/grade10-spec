@@ -17,8 +17,12 @@
 import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "./lib/args.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+/** What a workflow log reads as an annotation: every refusal here opens with
+ * it, the usage refusal the parser prints included. */
+const ERROR = "::error::";
 const USAGE =
   "usage: node reread-guard.mjs <change> --before <sha> [--after <ref>] [--root <dir>]";
 
@@ -39,7 +43,11 @@ export function outOfBounds(paths, change) {
 }
 
 function main() {
-  const { positional, flags } = parse(process.argv.slice(2));
+  const { positional, flags } = parseArgs(process.argv.slice(2), {
+    keys: ["before", "after", "root"],
+    usage: USAGE,
+    prefix: ERROR,
+  });
   const [change] = positional;
   if (!change || !flags.before) fail(USAGE);
   const root = flags.root ?? join(HERE, "..", "..");
@@ -59,34 +67,8 @@ function main() {
   );
 }
 
-function parse(argv) {
-  const flags = {};
-  const positional = [];
-  for (let at = 0; at < argv.length; at += 1) {
-    const arg = argv[at];
-    if (arg === "--help" || arg === "-h") {
-      console.log(USAGE);
-      process.exit(0);
-    }
-    const named = /^--(before|after|root)(?:=(.*))?$/.exec(arg);
-    if (named) {
-      let value = named[2];
-      if (value === undefined) {
-        at += 1;
-        value = argv[at];
-      }
-      if (value === undefined) fail(`--${named[1]} needs a value\n${USAGE}`);
-      flags[named[1]] = value;
-      continue;
-    }
-    if (arg.startsWith("-")) fail(`unknown option ${arg}\n${USAGE}`);
-    positional.push(arg);
-  }
-  return { positional, flags };
-}
-
 function fail(message) {
-  console.error(`::error::${message}`);
+  console.error(`${ERROR}${message}`);
   process.exit(1);
 }
 
