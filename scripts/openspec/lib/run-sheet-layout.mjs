@@ -68,6 +68,7 @@ export const SUMMARY_COLUMNS = [
   "Blocked",
   "Skipped",
   "Pass rate",
+  "Automated left out",
 ];
 
 /** A light grey band on a draft case, so a tester can see they are walking a

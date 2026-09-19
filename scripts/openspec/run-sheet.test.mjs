@@ -20,9 +20,10 @@ import {
   MARKING_COLUMNS,
   quoteTab,
   RESULT_COL,
+  SUMMARY_COLUMNS,
 } from "./lib/run-sheet-layout.mjs";
 import { caseRow, inReadingOrder, selectCases } from "./lib/select-cases.mjs";
-import { parseSuite } from "./lib/suites.mjs";
+import { isAutomated, parseSuite } from "./lib/suites.mjs";
 
 const SUITE = `# demo/thing/widget Test Cases
 
@@ -185,7 +186,7 @@ test("only `actual` cases leave the store by default", () => {
   );
 });
 
-test("an automated case is left out by default, and reported", () => {
+test("shared-planning-agent-rounds-SC-61 - an automated case is left out by default, and reported", () => {
   const { picked, refused } = selectCases(candidates, {});
   assert.equal(
     picked.some((one) => one.tc.id === "demo-thing-widget-US1-TC4-1"),
@@ -193,6 +194,16 @@ test("an automated case is left out by default, and reported", () => {
   );
   const left = refused.find((one) => one.id === "demo-thing-widget-US1-TC4-1");
   assert.equal(left?.reason, "automation");
+});
+
+test("isAutomated reads the same case the automation gate does", () => {
+  const [thing, , , automated] = journey.cases;
+  assert.equal(isAutomated(thing), false);
+  assert.equal(isAutomated(automated), true);
+});
+
+test("shared-planning-agent-rounds-SC-61 - the Summary row carries how many the run left out automated", () => {
+  assert.equal(SUMMARY_COLUMNS.at(-1), "Automated left out");
 });
 
 test("`--include-automated` takes an automated case too", () => {

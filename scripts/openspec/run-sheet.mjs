@@ -47,7 +47,7 @@ import {
   readCandidates,
   selectCases,
 } from "./lib/select-cases.mjs";
-import { prop, ROOT } from "./lib/suites.mjs";
+import { isAutomated, prop, ROOT } from "./lib/suites.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
@@ -410,7 +410,16 @@ function dressing(sheetId, picked) {
 /** The Summary row for a run. Counts are formulas, so a tester marking the tab
  *  moves them without a second sync, and `IFERROR` says so plainly when
  *  somebody renames or deletes the tab the row points at. */
-function summaryRow({ runId, tab, date, name, selection, sha, drafts }) {
+function summaryRow({
+  runId,
+  tab,
+  date,
+  name,
+  selection,
+  sha,
+  drafts,
+  automatedLeftOut,
+}) {
   const t = quoteTab(tab);
   const idCol = `${t}!A2:A`;
   const resultCol = `${t}!${colLetter(RESULT_COL)}2:${colLetter(RESULT_COL)}`;
@@ -430,6 +439,7 @@ function summaryRow({ runId, tab, date, name, selection, sha, drafts }) {
     count("blocked"),
     count("skipped"),
     `=IFERROR(COUNTIF(${resultCol},"pass")/COUNTA(${idCol}),"")`,
+    automatedLeftOut,
   ];
 }
 
@@ -478,13 +488,17 @@ const drafts = picked.filter(
 // Left out by default, taken with the flag - said either way, and said as
 // zero rather than left unsaid, so a run's own printout is what proves the
 // gate ran (`shared-planning-agent-rounds-SC-61`).
+//
+// This re-derives the same `isAutomated` reading `select-cases.mjs`'s own
+// gate already applied, rather than sharing one check across both: the gate
+// decides what never reaches `picked` at all, and this counts what a run
+// asked to see anyway despite it, once the list already exists. Merging them
+// would mean running the gate a second time just to get a count out of it.
 const automatedLeftOut = refused.filter(
   (one) => one.reason === "automation",
 ).length;
 const automatedIncluded = args.includeAutomated
-  ? picked.filter(
-      (one) => prop(one.tc, "Automation status").toLowerCase() === "automated",
-    ).length
+  ? picked.filter((one) => isAutomated(one.tc)).length
   : 0;
 
 console.log(
@@ -498,13 +512,23 @@ console.log(
   ),
 );
 if (picked.length === 0) {
+  // Split by reason, so a selection refused for its status alone never hints
+  // at the wrong flag: the two gates are read one at a time, and each names
+  // its own way past it.
+  const byStatus = refused.filter((one) => one.reason === "status").length;
+  const parts = [];
+  if (byStatus > 0) parts.push(`${byStatus} refused by the status gate`);
+  if (automatedLeftOut > 0) parts.push(`${automatedLeftOut} already automated`);
   console.log(
     yellow("Nothing selected."),
     dim(
-      `\n  ${candidates.length} cases read${args.scope ? ` under "${args.scope}"` : ""}; ` +
-        `${refused.length} refused by the status gate.` +
-        (refused.length > 0 && !args.includeDraft
+      `\n  ${candidates.length} cases read${args.scope ? ` under "${args.scope}"` : ""}` +
+        (parts.length > 0 ? `; ${parts.join(", ")}.` : ".") +
+        (byStatus > 0 && !args.includeDraft
           ? "\n  Most of the store is still `draft`; pass --include-draft to walk drafts."
+          : "") +
+        (automatedLeftOut > 0 && !args.includeAutomated
+          ? "\n  Every match is already automated; pass --include-automated to walk them anyway."
           : ""),
     ),
   );
@@ -583,6 +607,7 @@ await appendValues(token, args.sheet, `${quoteTab(SUMMARY_TAB)}!A1`, [
     selection: args.selection ?? "",
     sha,
     drafts,
+    automatedLeftOut,
   }),
 ]);
 
