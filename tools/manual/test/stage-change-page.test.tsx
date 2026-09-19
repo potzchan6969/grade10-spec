@@ -238,6 +238,25 @@ describe("the stepper", () => {
     expect(html).toContain(">Building<");
     expect(html).not.toContain(">in progress<");
   });
+
+  it("names what the ladder's walk stopped at, under the change's own step", () => {
+    const held = render(
+      change({ stage: "proposed", written: ["proposal"], heldBy: "decisions" }),
+    );
+
+    const step = held.slice(
+      held.indexOf('data-stage="proposed"'),
+      held.indexOf('data-stage="designed"'),
+    );
+    expect(step).toContain("held by");
+    expect(step).toContain("Decisions");
+    // The other stages carry no such note.
+    const next = held.slice(
+      held.indexOf('data-stage="designed"'),
+      held.indexOf('data-stage="specified"'),
+    );
+    expect(next).not.toContain("held by");
+  });
 });
 
 describe("the Your turn card", () => {

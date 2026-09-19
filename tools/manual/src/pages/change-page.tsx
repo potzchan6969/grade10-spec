@@ -156,7 +156,7 @@ function ChangeBody({ change }: { change: ChangeEntry }) {
 
   return (
     <>
-      <StageStepper stage={stage} />
+      <StageStepper heldBy={change.heldBy} stage={stage} />
       <YourTurnCard artifacts={artifacts} change={change} stage={stage} />
 
       <ChangeStatus
