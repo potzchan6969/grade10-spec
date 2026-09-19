@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { landedShas } from "./lib/landed.mjs";
 import { writableBy } from "./lib/writable.mjs";
 import { outOfBounds, pushedPaths } from "./reread-guard.mjs";
 import { addressFor, failureMessageOf } from "./reread-notify.mjs";
@@ -220,6 +221,17 @@ test("outOfBounds keeps only what falls outside the writable set", () => {
   );
 });
 
+test("landedShas reads one sha per line and nothing from a file that is not there", () => {
+  const { root, write, git } = sandbox();
+
+  assert.deepEqual(landedShas(root), []);
+
+  const head = git("rev-parse", "HEAD").trim();
+  write({ ".round/landed": `${head}\n\n${head}\n` });
+
+  assert.deepEqual(landedShas(root), [head, head]);
+});
+
 test("the guard passes a page the change's proposal links", () => {
   const { root, before, write, git } = sandbox();
   write({ [PAGE]: "# Agent Rounds\n\n## The Walk\n\n❓ Who reads it?\n" });
@@ -295,7 +307,11 @@ test("the guard passes a push that stays inside the change's directory", () => {
   );
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /1 path\(s\) pushed, all inside/);
+  assert.match(result.stdout, /1 path\(s\) pushed/);
+  assert.match(result.stdout, /all inside/);
+  // No `.round/landed` in this checkout: the guard falls back to the range
+  // the job started from, and says which it read.
+  assert.match(result.stdout, /no \.round\/landed/);
 });
 
 test("the guard fails on a path the round pushed outside its own directory", () => {
@@ -325,6 +341,68 @@ test("the guard fails on a path the round pushed outside its own directory", () 
   assert.match(result.stderr, /::error::/);
   assert.match(result.stderr, /reread-probe/);
   assert.match(result.stderr, /packages\/design-system\/README\.md/);
+});
+
+test("shared-planning-agent-rounds-SC-67 - the guard reads the commits this run made, though main moved under it", () => {
+  const { root, before, write, git } = sandbox();
+  // Somebody else's landing, which the job's checkout gains when `plan:land`
+  // rebases the change's branch on a moved `origin/main`: inside the range
+  // the job started from, and none of this run's business.
+  write({ "scripts/openspec/plan-land.mjs": "// somebody else's fix\n" });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "a fix that landed under the run");
+  // This run's own commit, the one `.round/landed` names.
+  write({ [`${DIR}/decisions.md`]: "## Goals\n\n- One\n" });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "the round's own commit");
+  git("push", "--quiet", "origin", "HEAD:refs/heads/main");
+  write({ ".round/landed": `${git("rev-parse", "HEAD").trim()}\n` });
+
+  const result = spawnSync(
+    process.execPath,
+    [
+      join(SCRIPTS, "reread-guard.mjs"),
+      CHANGE,
+      "--before",
+      before,
+      "--root",
+      root,
+    ],
+    { encoding: "utf8" },
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /1 path\(s\) pushed/);
+  assert.match(result.stdout, /\.round\/landed/);
+});
+
+test("the guard fails on a path the run's own commit reached outside, bound or not", () => {
+  const { root, before, write, git } = sandbox();
+  write({
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+    [UNLINKED]: "# Change Stages\n\nRewritten by the wrong round.\n",
+  });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "the round reached past its own pages");
+  git("push", "--quiet", "origin", "HEAD:refs/heads/main");
+  write({ ".round/landed": `${git("rev-parse", "HEAD").trim()}\n` });
+
+  const result = spawnSync(
+    process.execPath,
+    [
+      join(SCRIPTS, "reread-guard.mjs"),
+      CHANGE,
+      "--before",
+      before,
+      "--root",
+      root,
+    ],
+    { encoding: "utf8" },
+  );
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /::error::/);
+  assert.match(result.stderr, /change-stages\.md/);
 });
 
 test("the guard needs no fetch: it reads the checkout it was given --before", () => {
