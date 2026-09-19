@@ -549,6 +549,31 @@ test("a suite with no durable file yet is a promise --journeys-copied can make",
   assert.equal(acknowledged.status, 0);
 });
 
+test("a clear run records what it was told about the fold's DECIDE gates", () => {
+  const decided = {
+    ...CARRIED,
+    "decisions.md":
+      "## Goals\n\n- Collectors find a card.\n\n## Non-Goals\n\n- Stock per shop.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Where does search live? | The header | A dedicated page - one field is not a surface |\n",
+  };
+  const { [`${CAP}/feature-tcs.md`]: _suite, ...missingSuite } = DURABLE;
+  const { root, manifest } = sandbox(decided, missingSuite);
+  const result = run(
+    root,
+    ...SHIPPED,
+    "--decisions-carried",
+    "Q1 onto the listing page's Product decisions block",
+    "--journeys-copied",
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  const written = readFileSync(manifest, "utf8");
+  assert.match(
+    written,
+    /decisions_carried: "Q1 onto the listing page's Product decisions block"/,
+  );
+  assert.match(written, /journeys_copied: "true"/);
+});
+
 /** A change whose every task group lands in the store deploys nothing, so
  * there is no run to name and no waiver owed. `check:manual`'s `archived` rule
  * and the archive skill both already said so; this script did not, so the only
