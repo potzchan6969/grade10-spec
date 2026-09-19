@@ -10,7 +10,7 @@
  * never a second copy of the table.
  */
 import assert from "node:assert/strict";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import {
   copyFileSync,
   existsSync,
@@ -356,6 +356,23 @@ test("the change may be named by the flag rather than the first argument", () =>
   ]);
 
   assert.equal(printed.bundle.draft, "openspec/changes/demo/decisions.md");
+});
+
+// The one argv parser: `lib/args.mjs` refuses a valued option given no
+// value, naming the flag beside the usage. This entry point reads its own
+// arguments through it rather than a copy of the loop.
+test("the CLI's usage refusal names the flag it was given no value for", () => {
+  const result = spawnSync(process.execPath, [CLI, "decisions", "--diff"], {
+    encoding: "utf8",
+    env: { ...process.env, NO_COLOR: "1" },
+  });
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /--diff needs a value/);
+  assert.match(
+    result.stderr,
+    /usage: node scripts\/openspec\/perspectives\.mjs/,
+  );
 });
 
 test("every trigger the requirement names is classified off a diff", () => {

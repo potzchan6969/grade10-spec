@@ -67,6 +67,41 @@ function sandbox() {
   return { root, remote, git, write, before };
 }
 
+// ── One argv parser ───────────────────────────────────────────────────────
+
+// `lib/args.mjs` refuses a valued option given no value, naming the flag
+// beside the usage. All three of the job's scripts read their arguments
+// through it rather than through a copy of the loop.
+
+const refusal = (script, args) =>
+  spawnSync(process.execPath, [join(SCRIPTS, script), ...args], {
+    encoding: "utf8",
+  });
+
+test("the settings script's usage refusal names the flag it was given no value for", () => {
+  const result = refusal("reread-settings.mjs", [CHANGE, "--out"]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /--out needs a value/);
+  assert.match(result.stderr, /usage: node reread-settings\.mjs/);
+});
+
+test("the guard's usage refusal names the flag it was given no value for, for the log to read", () => {
+  const result = refusal("reread-guard.mjs", [CHANGE, "--before"]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /::error::--before needs a value/);
+  assert.match(result.stderr, /usage: node reread-guard\.mjs/);
+});
+
+test("the notify script's usage refusal names the flag it was given no value for", () => {
+  const result = refusal("reread-notify.mjs", [CHANGE, "--message-file"]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /--message-file needs a value/);
+  assert.match(result.stderr, /usage: node reread-notify\.mjs/);
+});
+
 // ── The settings a matrix entry runs under ─────────────────────────────────
 
 test("otherChangeDirectories names every active change but this one and the archive", () => {
