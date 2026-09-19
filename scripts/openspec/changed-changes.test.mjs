@@ -323,8 +323,10 @@ const SCHEMA = [
   "",
 ].join("\n");
 
-/** Four people: three with a Slack member, one QA hand the map gives none,
- * and one channel per role for a stage whose hand a change does not name. */
+/** Five people: four with a Slack member, one QA hand the map gives none,
+ * and one channel per role for a stage whose hand a change does not name.
+ * QA and the release hand are two people here, as a change reaching staging
+ * tells two, so a message is read against the hand it reached. */
 const TEAM = [
   "handles:",
   "  dana:",
@@ -338,7 +340,11 @@ const TEAM = [
   "  fred:",
   "    email: fred@test",
   "    slack: U-FRED",
-  "    roles: [release, qa]",
+  "    roles: [release]",
+  "  hana:",
+  "    email: hana@test",
+  "    slack: U-HANA",
+  "    roles: [qa]",
   "  gina:",
   "    email: gina@test",
   "    roles: [qa]",
@@ -358,7 +364,7 @@ const HANDS = [
   "  design: dana",
   "  tech: erin",
   "  dev: erin",
-  "  qa: fred",
+  "  qa: hana",
   "  release: fred",
 ];
 
@@ -850,7 +856,7 @@ test("shared-planning-change-stages-SC-45 - --stages names the run sheet to QA a
   assert.deepEqual(
     messages.map((one) => [one.key, one.kind, one.channel]),
     [
-      ["probe:on-staging:qa", "staging", "U-FRED"],
+      ["probe:on-staging:qa", "staging", "U-HANA"],
       ["probe:on-staging:release", "your-turn", "U-FRED"],
     ],
   );
