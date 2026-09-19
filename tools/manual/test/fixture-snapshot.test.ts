@@ -7,6 +7,7 @@ import { STAGES, stageOf } from "../src/api/stages";
 import { FIXTURE_FILE, fixtureSnapshot } from "../src/store/build-fixture.mts";
 import { NO_GIT } from "../src/store/git.mts";
 import { readArchivedChanges } from "../src/store/read-changes.mts";
+import { FROZEN_NOW } from "../walk/frozen-clock";
 
 /**
  * The bundled fallback is a reading of `demo-store/`, not a file anyone
@@ -42,7 +43,7 @@ describe("the fixture's coverage of every stage and overlay", () => {
   const artifacts = committed.schemas["grade10-planning"] ?? [];
   const archived = readArchivedChanges(DEMO_STORE, NO_GIT);
   const overlayContext = {
-    now: Date.now(),
+    now: FROZEN_NOW.getTime(),
     released: new Set<string>(),
     artifacts,
   };
@@ -72,6 +73,17 @@ describe("the fixture's coverage of every stage and overlay", () => {
         kind,
       );
     }
+  });
+
+  it("holds one change idle long enough to reach the shelf", () => {
+    const shelved = committed.changes.some((change: unknown) =>
+      overlaysOf(change, overlayContext).some(
+        (overlay) => overlay.kind === "idle" && overlay.shelved,
+      ),
+    );
+    expect(shelved, "no fixture change is idle past the shelf bound").toBe(
+      true,
+    );
   });
 
   it("carries a record nothing could read", () => {

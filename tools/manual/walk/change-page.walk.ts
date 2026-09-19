@@ -1,29 +1,25 @@
-import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, expect, test } from "vitest";
 import { page } from "vitest/browser";
-import { openManual } from "./setup";
+import { freezeClock, unfreezeClock } from "./frozen-clock";
+import { openManual, rowFor } from "./setup";
 
 /**
  * The hand's arrival on the change page: what the message they were told
- * about it points at, read on `demo-planned` — the Behind fixture, held at
- * Planned with nothing ticked yet and `decisions.md` moved after it was
- * reviewed.
+ * about it points at, read mostly on `demo-planned` — the Behind fixture,
+ * held at Planned with nothing ticked yet and `decisions.md` moved after it
+ * was reviewed — with `demo-designed` for the one behind reading a real
+ * (unwaived) UI design needs, and `demo-released` for delivery.
  *
- * The clock is frozen at 2026-09-19 noon, Hong Kong time, before every open —
- * the same instant the board walk freezes it, for the same reason: nothing on
- * this page reads a day count, but a walk that opened the manual with the
- * real clock running would drift from the board walk's reading the day the
- * two run apart.
+ * The clock is frozen at `FROZEN_NOW` before every open — the same instant
+ * the other walks freeze it, for the same reason: nothing on this page
+ * reads a day count, but a walk that opened the manual with the real clock
+ * running would drift from theirs the day the two run apart.
  */
-beforeEach(() => {
-  vi.useFakeTimers({ toFake: ["Date"] });
-  vi.setSystemTime(new Date("2026-09-19T12:00:00+08:00"));
-});
+beforeEach(freezeClock);
 
-afterEach(() => {
-  vi.useRealTimers();
-});
+afterEach(unfreezeClock);
 
-test("shared-planning-change-stages-SC-05 - the stepper's mark and move, and the eyebrow naming the stage", async () => {
+test("shared-planning-change-stages-SC-57 - the stepper marks the stage", async () => {
   await openManual("/in-flight/demo-planned");
 
   await expect
@@ -37,11 +33,40 @@ test("shared-planning-change-stages-SC-05 - the stepper's mark and move, and the
     .element(page.elementLocator(eyebrow).getByText("Planned", { exact: true }))
     .toBeVisible();
 
+  // The eight-step row `data-stepper="steps"` carries, hidden below `sm` but
+  // in the DOM regardless of this walk's own 414px viewport: every stage
+  // named, Planned marked as the one the change is in.
+  const steps = document.querySelector('[data-stepper="steps"]');
+  if (!steps) throw new Error("no eight-step stepper");
+  const eightStep = page.elementLocator(steps);
+  for (const label of [
+    "Proposed",
+    "Designed",
+    "Specified",
+    "Planned",
+    "Building",
+    "On staging",
+    "Released",
+    "Archived",
+  ]) {
+    await expect
+      .element(eightStep.getByText(label, { exact: true }))
+      .toBeVisible();
+  }
+  const plannedStep = steps
+    .querySelector('[data-stage="planned"]')
+    ?.querySelector("[data-state]");
+  if (!plannedStep) throw new Error("no planned step");
+  if (plannedStep.getAttribute("data-state") !== "progress") {
+    throw new Error(
+      `Planned step's own state is "${plannedStep.getAttribute("data-state")}", not the one marked as current`,
+    );
+  }
+
   // The stepper, as this walk's own viewport (414px, below `sm`) reads it:
   // the one line the design draws for a phone's width rather than the
-  // eight-step desktop row, which sits in the DOM but stays hidden here —
-  // the stage's position of eight, its name, and the mark and the move
-  // beneath it.
+  // eight-step desktop row above — the stage's position of eight, its name,
+  // and the mark and the move beneath it.
   const oneLine = document.querySelector('[data-stepper="one-line"]');
   if (!oneLine) throw new Error("no one-line stepper below sm");
   const stepper = page.elementLocator(oneLine);
@@ -57,7 +82,7 @@ test("shared-planning-change-stages-SC-05 - the stepper's mark and move, and the
     .toBeVisible();
 });
 
-test("shared-planning-change-stages-SC-57 - the Your turn card", async () => {
+test("shared-planning-change-stages-SC-58 - the Your turn card", async () => {
   await openManual("/in-flight/demo-planned");
   await expect
     .element(page.getByRole("heading", { level: 1, name: "The Planned stage" }))
@@ -100,27 +125,12 @@ test("shared-planning-change-stages-SC-57 - the Your turn card", async () => {
 });
 
 /**
- * Left failing on purpose: the surface, not this walk, is wrong here.
- *
- * The change page's own requirement reads "the hands, one row per role with
- * its handle or open" (`openspec/changes/stage-changes-and-notify-hands/specs/shared/planning/change-stages/spec.md`,
- * "The change page shows the stage, the turn and the artifacts") with no
- * exception for a change naming nobody, and `shared-planning-change-stages-SC-17`
- * ("A hand nobody has named") reads the same way for one role: "the hands
- * SHALL show that role as open". `demo-planned` is exactly that case — its
- * `hands:` names no role at all — so this is the fixture the scenario asks
- * for.
- *
- * `HandsTable` (`tools/manual/src/blocks/hands-table.tsx`) disagrees: it
- * special-cases an empty `hands` object into one `EmptyState` reading "No
- * hands named", skipping the six-role list entirely — which contradicts its
- * own docstring ("Every role is a row whether or not the change names it").
- * No other fixture pairs a named hand with an open one, so there is no
- * fixture that reaches the six-row table without tripping this branch. The
- * fix is in `hands-table.tsx`, outside this task's `src/**` boundary; this
- * case is left asserting what the spec requires; it fails today.
+ * `shared-planning-change-stages-SC-17` ("A hand nobody has named") read on
+ * the change page's own hands table rather than a card: `demo-planned`
+ * names no role at all, so every one of the six SHALL still read as a row,
+ * open, the engineer among them.
  */
-test("shared-planning-change-stages-SC-58 - the hands table with an open role", async () => {
+test("shared-planning-change-stages-SC-17 - the hands table with an open role", async () => {
   await openManual("/in-flight/demo-planned");
   await expect
     .element(page.getByRole("heading", { level: 1, name: "The Planned stage" }))
@@ -138,7 +148,7 @@ test("shared-planning-change-stages-SC-58 - the hands table with an open role", 
     .toBeVisible();
 });
 
-test("shared-planning-change-stages-SC-59 - the artifact rows, fresh and behind", async () => {
+test("shared-planning-change-stages-SC-07 - either waiver stands for its design", async () => {
   await openManual("/in-flight/demo-planned");
   await expect
     .element(page.getByRole("heading", { level: 1, name: "The Planned stage" }))
@@ -146,7 +156,8 @@ test("shared-planning-change-stages-SC-59 - the artifact rows, fresh and behind"
 
   const artifacts = rowFor("Artifacts");
 
-  // Fresh: written, and nothing before it has moved since.
+  // Fresh: proposal and tasks are written, and nothing before either has
+  // moved since.
   const proposal = artifacts.querySelector('[data-artifact="proposal"]');
   if (!proposal) throw new Error("no proposal row");
   await expect
@@ -159,21 +170,9 @@ test("shared-planning-change-stages-SC-59 - the artifact rows, fresh and behind"
     .element(page.elementLocator(tasks).getByText("fresh", { exact: true }))
     .toBeVisible();
 
-  // Behind: `decisions.md` is written, but this is the Behind fixture — it
-  // moved after it was reviewed, and the row names what it is read again
-  // against.
-  const decisions = artifacts.querySelector('[data-artifact="decisions"]');
-  if (!decisions) throw new Error("no decisions row");
-  const decisionsRow = page.elementLocator(decisions);
-  await expect
-    .element(decisionsRow.getByText("behind", { exact: true }))
-    .toBeVisible();
-  await expect
-    .element(decisionsRow.getByText("read again against proposal"))
-    .toBeVisible();
-
-  // Not owed: this fixture waives the UI design, and the row shows it as
-  // fresh with the reason on it rather than as a missing file.
+  // Not owed: both `ui_waived:` and `design_waived:` landed on this fixture,
+  // and each waived design SHALL be shown as not owed and fresh, with its
+  // reason.
   const uiDesign = artifacts.querySelector('[data-artifact="ui-design"]');
   if (!uiDesign) throw new Error("no ui-design row");
   const uiDesignRow = page.elementLocator(uiDesign);
@@ -192,18 +191,10 @@ test("shared-planning-change-stages-SC-59 - the artifact rows, fresh and behind"
     .toBeVisible();
 });
 
-/**
- * The `<dd>` beside a `ChangeStatus` row's `<dt>` — Hands, Artifacts,
- * Delivery and the rest, each a labelled fact the change page reads down the
- * column. Found by the label the row itself carries, rather than a class
- * the stylesheet owns, because that label is the one word a reader and this
- * walk both read the row by.
- */
-function rowFor(label: string): Element {
-  const term = Array.from(document.querySelectorAll("dt")).find(
-    (dt) => dt.textContent?.trim() === label,
-  );
-  const value = term?.nextElementSibling;
-  if (!value) throw new Error(`no "${label}" row on the change page`);
-  return value;
-}
+// `shared-planning-change-stages-SC-25` (behind, via a real UI design) and
+// `SC-59` (delivery) each need a different fixture than `demo-planned`, and
+// `openManual` only ever picks up the first address a file opens — a second,
+// different one leaves the mounted router pointed at the first (confirmed
+// empirically: the page never advances past the header). Each lives in its
+// own file instead: `change-page-behind-design.walk.ts` and
+// `change-page-delivery.walk.ts`.

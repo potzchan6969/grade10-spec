@@ -1,6 +1,7 @@
-import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, expect, test } from "vitest";
 import { page } from "vitest/browser";
-import { openManual } from "./setup";
+import { freezeClock, unfreezeClock } from "./frozen-clock";
+import { openManual, rowFor } from "./setup";
 
 /**
  * `shared-planning-agent-rounds-US-09`: the reader of a change tells a round
@@ -13,21 +14,19 @@ import { openManual } from "./setup";
  * rather than a second `openManual` call here.
  *
  * `demo-on-staging` is given a `rounds.md` of its own for this walk (the
- * demo store carries none yet): one row on an artifact whose round found
- * nothing, one on the fixture's own fully-ticked task group.
+ * demo store carries none yet): three rows, the GIVEN's own count — one on
+ * an artifact whose round found nothing, one on the fixture's own
+ * fully-ticked task group, and a third on a second artifact, so the row
+ * count itself is what the walk checks and not only that two happen to be
+ * present.
  *
  * The clock is frozen the same instant the other walks freeze it, for the
  * same reason: nothing here reads a day count, but a walk that let the real
  * clock run would drift from theirs the day the two run apart.
  */
-beforeEach(() => {
-  vi.useFakeTimers({ toFake: ["Date"] });
-  vi.setSystemTime(new Date("2026-09-19T12:00:00+08:00"));
-});
+beforeEach(freezeClock);
 
-afterEach(() => {
-  vi.useRealTimers();
-});
+afterEach(unfreezeClock);
 
 test("shared-planning-agent-rounds-SC-51 - one line per round, one of them finding nothing", async () => {
   await openManual("/in-flight/demo-on-staging");
@@ -76,28 +75,32 @@ test("shared-planning-agent-rounds-SC-51 - one line per round, one of them findi
     .element(rounds.getByText("the fixture's one task lands cleanly"))
     .toBeVisible();
   await expect.element(rounds.getByText("Q1", { exact: true })).toBeVisible();
+
+  // Round 3: the GIVEN's own third row — the Rounds row lists exactly the
+  // three `rounds.md` carries, not two.
+  await expect
+    .element(rounds.getByText("Round 3", { exact: true }))
+    .toBeVisible();
+  await expect
+    .element(rounds.getByText("Product", { exact: true }))
+    .toBeVisible();
+  const lines = rowFor("Rounds").querySelectorAll("li");
+  if (lines.length !== 3) {
+    throw new Error(`the Rounds row lists ${lines.length} lines, not 3`);
+  }
 });
 
-/** Round 1's own `<li>` — found from its "Round 1" badge, so the question-id
- * check below reads that line alone and never Round 2's `Q1`. */
+/** Round 1's own `<li>` — found from its exact "Round 1" badge inside the
+ * Rounds row alone, never a page-wide scan of every `<li>`, which "Round 1"
+ * as a loose substring would also meet inside "Round 10" the day this suite
+ * runs that many rounds. */
 function round1Line(): Element {
-  const badge = Array.from(document.querySelectorAll("li")).find((li) =>
-    li.textContent?.includes("Round 1"),
+  const rounds = rowFor("Rounds");
+  const badge = Array.from(rounds.querySelectorAll("li")).find((li) =>
+    Array.from(li.querySelectorAll("*")).some(
+      (el) => el.textContent?.trim() === "Round 1",
+    ),
   );
   if (!badge) throw new Error("no line for Round 1");
   return badge;
-}
-
-/**
- * The `<dd>` beside a `ChangeStatus` row's `<dt>` — the same lookup
- * `change-page.walk.ts` uses, scoped by the label because more than one row
- * can carry the same word inside a chip.
- */
-function rowFor(label: string): Element {
-  const term = Array.from(document.querySelectorAll("dt")).find(
-    (dt) => dt.textContent?.trim() === label,
-  );
-  const value = term?.nextElementSibling;
-  if (!value) throw new Error(`no "${label}" row on the change page`);
-  return value;
 }

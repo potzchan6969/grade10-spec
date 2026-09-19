@@ -1,5 +1,6 @@
-import { afterEach, beforeEach, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, expect, test } from "vitest";
 import { page } from "vitest/browser";
+import { freezeClock, unfreezeClock } from "./frozen-clock";
 import { openManual } from "./setup";
 
 /**
@@ -7,21 +8,21 @@ import { openManual } from "./setup";
  * a card's own facts, the four overlay filters and the empty lane a filter
  * leaves behind.
  *
- * The clock is frozen at 2026-09-19 noon, Hong Kong time, before every open:
- * `demo-on-staging` is the only fixture `fixture-dates.json` dates, at
- * 2026-09-07, so it is the one change this store can ever show the Idle chip
- * on. A frozen "now" is what keeps that day count — and the Idle filter's
- * catch — the same reading on every run and forever; the real clock would
- * move the chip past 30 days and onto the shelf within the year.
+ * The clock is frozen at `FROZEN_NOW` before every open: `fixture-dates.json`
+ * dates `demo-on-staging` at 2026-09-07 (12 days idle, the Idle chip) and
+ * `add-thing` at 2026-08-05 (45 days, the shelf) — the two bounds this store
+ * can ever show against a frozen reading; the real clock would move both past
+ * 30 days within the year.
+ *
+ * `shared-planning-change-stages-SC-53` (nothing in flight) has no fixture to
+ * reach it: this store always carries the changes every other case here
+ * needs. `test/stage-board.test.tsx`'s "Board with no change in flight" case
+ * proves it instead, at the component level a synthetic empty `changes`
+ * array can still construct.
  */
-beforeEach(() => {
-  vi.useFakeTimers({ toFake: ["Date"] });
-  vi.setSystemTime(new Date("2026-09-19T12:00:00+08:00"));
-});
+beforeEach(freezeClock);
 
-afterEach(() => {
-  vi.useRealTimers();
-});
+afterEach(unfreezeClock);
 
 /** This walk proves the harness carries the manual: the shell mounts, the
  * fixture snapshot arrives, and the board renders under its own heading. The
@@ -271,6 +272,74 @@ test("shared-planning-change-stages-SC-55 - Mine with no handle chosen", async (
 });
 
 /**
+ * `demo-refund-window` names a hand as plainly as this store's fixtures
+ * get: `tester` is the fixture's own engineer, at Planned. This walk reads
+ * the board's own two facts — the lane and the card's hand — and leaves the
+ * change page's own equal reading to `change-page-assign.walk.ts`'s own
+ * open of `/in-flight/demo-planned`: the two addresses read one `hands:`
+ * field through the same `Hand` component, and a card link into the change
+ * page sits, on this walk's 414px viewport, behind the sticky header at the
+ * scroll position a long fixture description leaves it at — not a seam this
+ * walk can click through without fighting the layout rather than proving
+ * the rule.
+ */
+test("shared-planning-change-stages-SC-05 - one change, one stage everywhere", async () => {
+  await openManual("/in-flight");
+  await expect
+    .element(
+      page.getByRole("heading", {
+        level: 3,
+        name: "Shorten the refund window",
+      }),
+    )
+    .toBeVisible();
+
+  // Planned: named by the lane the card sits in, the same fact a per-card
+  // badge would only repeat.
+  const planned = laneSection("planned");
+  if (!planned.contains(document.getElementById("demo-refund-window"))) {
+    throw new Error("demo-refund-window is not in the Planned lane");
+  }
+
+  const card = page.elementLocator(cardFor("demo-refund-window"));
+  await expect
+    .element(card.getByText("@tester", { exact: true }).first())
+    .toBeVisible();
+  await expect
+    .element(card.getByText("engineer", { exact: true }).first())
+    .toBeVisible();
+});
+
+/** The shelf: what has stopped moving long enough to come off its lane.
+ * `add-thing` is `fixture-dates.json`'s own 45-day fixture, the one change
+ * this store can ever push past the shelf's 30-day bound against a frozen
+ * clock. */
+test("shared-planning-change-stages-SC-56 - the shelf", async () => {
+  await openManual("/in-flight");
+
+  await expect
+    .element(page.getByRole("heading", { level: 2, name: "Shelf" }))
+    .toBeVisible();
+
+  const shelf = page.elementLocator(shelfSection());
+  await expect
+    .element(shelf.getByRole("link", { name: "Add the thing" }))
+    .toBeVisible();
+  await expect
+    .element(shelf.getByText("Proposed", { exact: true }))
+    .toBeVisible();
+  await expect
+    .element(shelf.getByText("45 days", { exact: true }))
+    .toBeVisible();
+
+  // Off its lane: the Proposed lane's own section carries no card for it.
+  const proposedLane = page.elementLocator(laneSection("proposed"));
+  await expect
+    .element(proposedLane.getByRole("link", { name: "Add the thing" }))
+    .not.toBeInTheDocument();
+});
+
+/**
  * The lane heading's own `<section>`, found from the `<h2 id={stage}>` every
  * lane — the archived one included — carries. Scoping this way, rather than
  * a class the stylesheet owns, is what lets one stage's "read" be told apart
@@ -289,6 +358,15 @@ function cardFor(id: string): Element {
   const card = document.getElementById(id);
   if (!card) throw new Error(`no card for change "${id}"`);
   return card;
+}
+
+/** The shelf's own `<section>`, found the same way a lane is - from the
+ * `<h2 id="shelf">` it carries. */
+function shelfSection(): Element {
+  const heading = document.getElementById("shelf");
+  const section = heading?.closest("section");
+  if (!section) throw new Error("no shelf section");
+  return section;
 }
 
 /** One filter's own link in the page's `Filters` row, scoped there because a

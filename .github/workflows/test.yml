@@ -63,9 +63,6 @@ jobs:
       - name: Install Playwright Chromium
         run: pnpm run setup:browsers
 
-      - name: Build the fixture snapshot
-        run: pnpm --dir tools/manual run fixture
-
       - name: Run the walk
         run: pnpm run test:walk
 
