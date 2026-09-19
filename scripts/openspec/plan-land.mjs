@@ -32,11 +32,11 @@
  *              whose plan is proven by the tick alone) and the `rounds.md`
  *              row, whose `Tests` cell owes an entry per scenario the
  *              group's own task lines cite, written to the tree before the
- *              gate below reads it — the
- *              `round` rule that refuses a tick or a landed artifact with no
- *              row is the same rule the gate runs, so the row has to be there
- *              for the gate to pass rather than land after it. A refusal at
- *              the gate undoes exactly these two paths. `--reviewed` writes
+ *              gate below reads it — the `round` rule that refuses a tick or
+ *              a landed artifact with no row is the same rule the gate runs,
+ *              so the row has to be there for the gate to pass rather than
+ *              land after it. A refusal at the gate undoes exactly these two
+ *              paths. `--reviewed` writes
  *              `reviewed: <artifact>: <content id>` here instead, one
  *              artifact per call, and neither a row nor a `landed_by:` line:
  *              a read that changed nothing ran no perspective and waits on
@@ -324,7 +324,7 @@ if (dryRun) {
   ]);
   say("commit", `reviewed: ${artifact}: ${against.content}, and no row`);
   console.log(`           read against ${against.items.join(", ")}`);
-  named();
+  nameCommit();
 } else {
   const { record, row, round } = pending;
   gitOrDie(["add", "--", record.path, roundsPath(change)]);
@@ -341,7 +341,7 @@ if (dryRun) {
       : `landed_by: ${artifact}: ${handle}, and round ${round}`,
   );
   console.log(`           ${row}`);
-  named();
+  nameCommit();
 }
 
 // ── 8 push ──────────────────────────────────────────────────────────────────
@@ -599,7 +599,7 @@ function race(attempt) {
  * while the round was reading, the landing's rebase on a moved `main`
  * included. Written after the commit, so what it names is a commit that
  * exists. */
-function named() {
+function nameCommit() {
   const sha = gitOrDie(["rev-parse", "HEAD"]);
   appendLanded(root, sha);
   console.log(`           ${short(sha)} named in ${LANDED} for the guard`);
