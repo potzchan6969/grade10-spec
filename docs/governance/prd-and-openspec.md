@@ -122,6 +122,12 @@ That is how the work reaches an engineer. The application repository has no plan
 | `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
 | `decisions_waived: "<why>"` | The author | A change with genuinely nothing to settle, or one opened before `decisions.md` existed whose scope is in its proposal | `pnpm check:manual`, rule `decided`; the Pending page |
 | `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
+| `ui_waived: "<why>"` | The designer, or the author | A change nothing a reader sees moves on, so it draws no `ui-design.md` | The stage ladder, which reads it as the UI design; the change page, which shows it as not owed |
+| `hands:` with `<role>: @handle` | The product manager at the interview's end, Assign on the locally run manual, or `pnpm plan hand` | From the interview's end; one handle for each of `pm`, `design`, `tech`, `qa`, `dev`, `release` | The board and the change page, for whose turn it is; the notify workflow, for who is told |
+| `landed_by:` with `<artifact>: @handle` | The landing — `pnpm run plan:land`, or the person's own push through it | In the same commit as the artifact it names | The change page, beside each artifact |
+| `reviewed:` with `<artifact>: <content id>` | The round's re-read | When an artifact is read again against what is before it | The freshness read, which shows an artifact behind until the id matches |
+| `thread: <channel>/<ts>` | The round, from the first planning-channel message about the change | Once, and never rewritten | Every message, which links the thread rather than the change page |
+| `released_in: "<release>"` | The release hand | At the release | The stage ladder, which reads it as Released |
 | `deployed_at`, `deployed_env` | `pnpm plan shipped` in the application repository | At archive | `pnpm check:manual`, rule `archived` |
 | `deploy_waived: "<who, why>"` | The owner, through `archive:preflight --deploy-waived` | At archive, in place of the deploy record | `pnpm check:manual`, rule `archived` |
 | `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
