@@ -17,6 +17,7 @@ import type {
 } from "../api/types";
 import { waiverOf } from "../api/waivers";
 import { HandFace } from "./change-hand";
+import { ClampedText } from "./clamped-text";
 
 /**
  * Each artifact of a change: whether it is fresh, behind, not owed or not yet
@@ -358,9 +359,11 @@ export function RoundsList({
           <Text as="span" size="xs" tone="secondary">
             {round.perspectives}
           </Text>
-          <Text as="span" size="xs">
-            {round.stood}
-          </Text>
+          {/* Clamped: what stood is a sentence per reader, and printed whole
+              it made every round a paragraph on the change page. Read more
+              opens it in place, and `InlineMarkdown` keeps the cell's
+              backticks. */}
+          <ClampedText lines={2} text={round.stood} />
           {askedIdsOf(round.asked).map((id) => (
             <Badge key={id} size="sm" variant="outline">
               {id}
