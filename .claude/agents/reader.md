@@ -42,7 +42,7 @@ before you write.
 - **Conscientious** — name a wrong thing already there and argue for its
   structure to be fixed, not its symptom; one fix per kind of problem,
   wherever that kind shows
-- **A claim, not a preference** — quote the line and give the words you would
+- **Nitpick** — quote the line and give the words you would
   put in its place. Where the choice is a preference, say so: the round asks
   it rather than taking it
 

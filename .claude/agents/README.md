@@ -26,56 +26,19 @@ resolves to one of them.
 - **Read-only** — every definition carries `tools: Read, Grep, Glob, Bash` and
   writes nothing. The round applies what the verifier says stands
 
-## Perspective to Reader
-
-| Artifact | Perspective | `when` | Agent |
-| --- | --- | --- | --- |
-| The page's marks, `proposal.md`, `decisions.md`, `user-journeys.md` | product | `surface`, `copy` | `.claude/agents/product.md` |
-| The same | the reader of the product | `copy` | `.claude/agents/reader.md` |
-| The same | design | `surface` | `.claude/agents/design.md` |
-| The same | backend | `schema`, `export` | `.claude/agents/backend.md` |
-| The same | integration | `system` | `.claude/agents/integration.md` |
-| The same | QA | `always` | `.claude/agents/qa.md` |
-| The same | operations | `migration`, `flag`, `money`, `deploy` | `.claude/agents/operations.md` |
-| `ui-design.md` | the journeys, walked | `surface` | `.claude/agents/design.md` |
-| `ui-design.md` | the design system's inventory and its parity | `surface` | `.claude/agents/design.md` |
-| `ui-design.md` | the words, as the reader would say them | `copy` | `.claude/agents/reader.md` |
-| `tech-design.md` | deterministic, resilient, observable | `always` | `.claude/agents/tech.md` |
-| `tech-design.md` | simple and clear | `always` | `.claude/agents/tech.md` |
-| `tech-design.md` | consistent, modular, built on later | `always` | `.claude/agents/tech.md` |
-| `tech-design.md` | testable and buildable | `always` | `.claude/agents/tech.md` |
-| `spec.md`, `feature-tcs.md` | the two blind readings, then the reconciliation | — | none: `planning-qa`'s own passes |
-| `tasks.md` | order and dependencies | `always` | `.claude/agents/operations.md` |
-| `tasks.md` | tests first | `always` | `.claude/agents/qa.md` |
-| `tasks.md` | the end-to-end group | `always` | `.claude/agents/qa.md` |
-| `tasks.md` | migration and flag | `migration`, `flag` | `.claude/agents/operations.md` |
-| A task group (`apply`) | missing pieces | `always` | `.claude/agents/build.md` |
-| A task group (`apply`) | simplicity | `always` | `.claude/agents/build.md` |
-| A task group (`apply`) | code smell | `always` | `.claude/agents/build.md` |
-| A task group (`apply`) | the repository's conventions | `always` | `.claude/agents/build.md` |
-| A task group (`apply`) | tests first | `always` | `.claude/agents/qa.md` |
-| A task group (`apply`) | migration and flag | `migration`, `flag` | `.claude/agents/operations.md` |
-| Every artifact and every task group | the simpler thing | `always` | `.claude/agents/simpler.md` |
-| A group of findings | the verifier | — | `.claude/agents/verifier.md` |
-
-- **The requirements are exempt** — `spec.md` and `feature-tcs.md` are
-  challenged by the two independent readings `planning-qa` runs and verified by
-  their reconciliation, so they carry no `perspectives:` entry and no verifier
-- **Size on `tasks.md`** — the plan's size reading is the simpler thing's, so
-  it is the one `always` entry rather than a second row
-- **Two readings named for one reader** — `.claude/agents/design.md` holds the
-  surface, the journeys walked and the inventory; `.claude/agents/reader.md`
-  holds the page's words and a design's copy. Each is dispatched once per
-  perspective, and the definition names which reading is which. The choice is a
-  choice: one stance per reader, rather than one file per phrase
+The mapping from an artifact to its perspectives lives once, in
+[`openspec/schemas/grade10-planning/schema.yaml`](../../openspec/schemas/grade10-planning/schema.yaml),
+and is read through
+[`scripts/openspec/perspectives.mjs`](../../scripts/openspec/perspectives.mjs).
+This file carries no copy of it.
 
 ## Adding a Reader
 
 1. Write the definition here, with `name`, `description`, `model` and
    `tools: Read, Grep, Glob, Bash`, and say what it is given, what it reads
    for, its stance and the table it returns
-2. Add its row to this table and its `perspectives:` entry in the schema, with
-   a `when` a draft can actually summon
+2. Add its `perspectives:` entry to the schema, with a `when` a draft can
+   actually summon
 3. Run `pnpm run agent:sync-parity && pnpm run agent:check-parity` and
    `node --test scripts/openspec/round-skill.test.mjs`
 

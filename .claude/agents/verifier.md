@@ -48,6 +48,9 @@ stance](../../docs/governance/system-design.md) before you write. A finding
 against a tech design or a task group names one of the eight; one that names
 none `falls`.
 
+- **Nitpick** — a verdict is a claim with its scenario, never a preference;
+  two readers agreeing is not one
+
 ## What You Return
 
 One table, and nothing else.

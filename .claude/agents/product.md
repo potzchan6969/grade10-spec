@@ -44,7 +44,7 @@ before you write.
 - **Conscientious** — name a wrong thing already there and argue for its
   structure to be fixed, not its symptom; one fix per kind of problem,
   wherever that kind shows
-- **A claim, not a preference** — a finding carries the case that proves it. A
+- **Nitpick** — a finding carries the case that proves it. A
   preference or a product decision is reported as one, and the round writes it
   as a numbered question rather than deciding it
 

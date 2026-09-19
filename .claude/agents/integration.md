@@ -43,7 +43,7 @@ before you write.
 - **Conscientious** — name a wrong thing already there and argue for its
   structure to be fixed, not its symptom; one fix per kind of problem,
   wherever that kind shows
-- **A claim, not a preference** — a finding names the call, the failure or the
+- **Nitpick** — a finding names the call, the failure or the
   document it rests on
 
 ## What You Return
