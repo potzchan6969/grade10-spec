@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { buildIndex } from "../src/api/derive";
 import type { ChangeEntry, Snapshot } from "../src/api/types";
 import { BlockScopeProvider } from "../src/blocks/block-scope";
@@ -144,6 +144,8 @@ describe("the pip's coverage past the page's first block", () => {
     "A note in the middle of the section — never a section of its own.",
     ":::",
     "",
+    "🚧 A paragraph after the callout, still under Coverage.",
+    "",
     "- 🚧 **After** — still under Coverage, past the callout",
     "",
     "| Rule | Value |",
@@ -196,10 +198,33 @@ describe("the pip's coverage past the page's first block", () => {
     expect(html).toContain("After");
     expect(html).toContain("Deadline");
     // Scoped past the section's own in-flight row, which wears its own
-    // badges for the stage and the open hand: both marks below sit under
-    // `## Coverage`, on either side of the callout and inside the table, and
-    // wear the same pip for it.
+    // badges for the stage and the open hand: all three marks below sit
+    // under `## Coverage` — a paragraph and a list item past the callout and
+    // a row inside the table — and wear the same pip for it.
     const body = html.slice(html.indexOf("Some rule that stands on its own"));
-    expect(body.match(/data-slot="badge"/g)?.length).toBe(2);
+    expect(body.match(/data-slot="badge"/g)?.length).toBe(3);
+  });
+
+  // Every element the plugin tags: a paragraph, a list item and a table row.
+  // The section a line belongs to is the plugin's own property on that
+  // element, and a property React does not know is an attribute it complains
+  // about on every marked line the reader opens.
+  it("shared-planning-change-stages-SC-65 - carries the line's section to the pip and onto no element", () => {
+    const said = vi.spyOn(console, "error").mockImplementation(() => {});
+    let html = "";
+    try {
+      html = render2([
+        changeEntry("cover-it", [], {
+          title: "Cover it",
+          stage: "planned",
+          sections: [{ page: PATH2, slug: "coverage" }],
+        }),
+      ]);
+    } finally {
+      said.mockRestore();
+    }
+
+    expect(html).not.toContain("markSection");
+    expect(said.mock.calls.map((one) => one.join(" "))).toEqual([]);
   });
 });
