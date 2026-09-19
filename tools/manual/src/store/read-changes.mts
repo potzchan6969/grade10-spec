@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import YAML from "yaml";
 import { handleOf, isHandle } from "../../../../scripts/openspec/lib/team.mjs";
+import { askedIdsOf } from "../api/rounds.ts";
 import { ASKED_OF, ladderOf } from "../api/stages.ts";
 import type {
   ChangeEntry,
@@ -13,6 +14,7 @@ import type {
   IdleClaim,
   OpenQuestion,
   PageSectionRef,
+  RoundRow,
   SchemaArtifact,
   TaskGroup,
   TaskLine,
@@ -31,7 +33,7 @@ import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
 import { leadingTitle, outline, type Section, tableRows } from "./markdown.mts";
 import { readLandings } from "./read-landings.mts";
-import { readRounds } from "./read-rounds.mts";
+import { readRounds, roundArtifactOf } from "./read-rounds.mts";
 import { schemaArtifacts } from "./read-schema.mts";
 import { readTestCases } from "./read-specs.mts";
 
@@ -271,6 +273,18 @@ function readChange(
   }
   entry.written = writtenArtifacts(dir, entry, artifacts, tasks !== undefined);
 
+  // The round's record, written by the first landing and absent until then —
+  // read ahead of the decisions so an open question can be marked against the
+  // draft a round was actually reading rather than the file its row lives in.
+  const rounds: RoundRow[] = [];
+  if (detailed) {
+    const roundsText = readTextIfExists(join(dir, "rounds.md"));
+    if (roundsText !== undefined) {
+      entry.rounds = readRounds(roundsText);
+      rounds.push(...entry.rounds);
+    }
+  }
+
   // In flight only: an archived change's interview is over, and both readers
   // are pure over the text - a row nothing matches is a row nobody asked, so
   // there is nothing here to catch and nothing to report.
@@ -278,16 +292,10 @@ function readChange(
     ? readTextIfExists(join(dir, "decisions.md"))
     : undefined;
   if (decisions !== undefined) {
-    const open = readQuestions(decisions, entry.hands);
+    const open = readQuestions(decisions, entry.hands, rounds);
     if (open.length > 0) entry.questions = open;
     const raised = openRaised(decisions);
     if (raised > 0) entry.raisedOpen = raised;
-  }
-
-  // The round's record, written by the first landing and absent until then.
-  if (detailed) {
-    const rounds = readTextIfExists(join(dir, "rounds.md"));
-    if (rounds !== undefined) entry.rounds = readRounds(rounds);
   }
 
   // Only the landings: the last commit touching the directory is not one —
@@ -508,6 +516,25 @@ function readIdMap(
 const DECISION_ROW = /^Q\d+$/;
 
 /**
+ * Which artifact or task group each open `Q<n>` was raised against, from
+ * every round's own Asked column — never `decisions.md`'s own row, which
+ * always names the file it lives in rather than the draft under challenge.
+ * A later round's line wins where an id somehow appears more than once,
+ * since it is the more recent reading; a round whose own Artifact cell names
+ * nothing (a malformed row `pnpm check:manual`'s `round` rule already
+ * refuses) raises against nobody rather than against an empty string.
+ */
+function artifactRaisedAgainst(rounds: RoundRow[]): Map<string, string> {
+  const found = new Map<string, string>();
+  for (const round of rounds) {
+    const resolved = roundArtifactOf(round.artifact);
+    if (resolved === null) continue;
+    for (const id of askedIdsOf(round.asked)) found.set(id, resolved);
+  }
+  return found;
+}
+
+/**
  * The decisions rows nobody has settled, addressed to the hand each names.
  *
  * A row is open when its `Decided` cell is written `❓ <role> - <what is
@@ -524,8 +551,10 @@ const DECISION_ROW = /^Q\d+$/;
 function readQuestions(
   text: string,
   hands: Record<string, string> | undefined,
+  rounds: RoundRow[],
 ): OpenQuestion[] {
   const open: OpenQuestion[] = [];
+  const raisedAgainst = artifactRaisedAgainst(rounds);
   const decisions = outline(text)
     .flatMap((one) => (one.level === 1 ? one.children : [one]))
     .find((one) => /^Decisions\b/.test(one.heading));
@@ -537,7 +566,7 @@ function readQuestions(
     const [, role, recommended] = asked;
     open.push({
       id: cells[0],
-      artifact: "decisions",
+      artifact: raisedAgainst.get(cells[0]) ?? "decisions",
       role,
       hand: hands?.[role] ?? role,
       text: cells[1] ?? "",

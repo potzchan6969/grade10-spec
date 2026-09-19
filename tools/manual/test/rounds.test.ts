@@ -1,17 +1,31 @@
 import { describe, expect, it } from "vitest";
-import {
-  artifactOfAskedQuestions,
-  askedIdsOf,
-  roundlessGroupsOf,
-} from "../src/api/rounds";
+import { askedIdsOf, roundlessGroupsOf } from "../src/api/rounds";
 import type { RoundRow, TaskGroup } from "../src/api/types";
+import { roundArtifactOf } from "../src/store/read-rounds.mts";
 
 /**
  * `rounds.md`'s own record is the only place that says which artifact a
  * round was reading when it raised a `Q<n>` — `decisions.md`'s row always
  * names the file it lives in, `decisions`, never the draft under challenge.
- * The change page's artifact rows read the pairing from here.
+ * `read-changes.mts` reads the pairing from here, through `roundArtifactOf`.
  */
+
+describe("roundArtifactOf", () => {
+  it("reads `3`, `3.` and `group 3` as the same group", () => {
+    expect(roundArtifactOf("3")).toBe("3");
+    expect(roundArtifactOf("3.")).toBe("3");
+    expect(roundArtifactOf("group 3")).toBe("3");
+  });
+
+  it("reads an artifact id as itself, trimmed", () => {
+    expect(roundArtifactOf(" ui-design ")).toBe("ui-design");
+  });
+
+  it("reads an empty cell as naming no artifact", () => {
+    expect(roundArtifactOf("")).toBeNull();
+    expect(roundArtifactOf("   ")).toBeNull();
+  });
+});
 
 const row = (partial: Partial<RoundRow>): RoundRow => ({
   round: 1,
@@ -34,31 +48,6 @@ describe("askedIdsOf", () => {
 
   it("drops a repeated id", () => {
     expect(askedIdsOf("Q1, Q1")).toEqual(["Q1"]);
-  });
-});
-
-describe("artifactOfAskedQuestions", () => {
-  it("pairs each `Q<n>` with the round's own artifact, not `decisions`", () => {
-    const found = artifactOfAskedQuestions([
-      row({ round: 1, artifact: "ui-design", asked: "Q1" }),
-      row({ round: 2, artifact: "tech-design", asked: "Q2, Q3" }),
-    ]);
-
-    expect(found.get("Q1")).toBe("ui-design");
-    expect(found.get("Q2")).toBe("tech-design");
-    expect(found.get("Q3")).toBe("tech-design");
-  });
-
-  it("reads a task group's own number as the artifact", () => {
-    const found = artifactOfAskedQuestions([
-      row({ round: 3, artifact: "1", asked: "Q4" }),
-    ]);
-    expect(found.get("Q4")).toBe("1");
-  });
-
-  it("carries nothing where no round has raised anything", () => {
-    expect(artifactOfAskedQuestions([]).size).toBe(0);
-    expect(artifactOfAskedQuestions([row({ asked: "-" })]).size).toBe(0);
   });
 });
 

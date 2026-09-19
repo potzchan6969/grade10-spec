@@ -41,3 +41,18 @@ export const ROUND_COLUMNS = [
   "Asked",
   "Tests",
 ] as const;
+
+/**
+ * One reading of a round's own `Artifact` cell, shared by every place that
+ * tells a task group's number from a schema artifact's id: a group however
+ * it was written (`3`, `3.`, `group 3`), normalised to its bare digits; an
+ * artifact id, trimmed but otherwise written as itself; or `null` where the
+ * cell is empty and names nothing at all — the `round` rule's own refusal for
+ * a row that leaves the column blank.
+ */
+export function roundArtifactOf(cell: string): string | null {
+  const trimmed = String(cell ?? "").trim();
+  if (trimmed === "") return null;
+  const group = trimmed.replace(/^group\s+/i, "").replace(/\.$/, "");
+  return /^\d+$/.test(group) ? group : trimmed;
+}

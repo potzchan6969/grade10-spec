@@ -3,13 +3,10 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "react-router";
 import { artifactLabel } from "../api/change-artifacts";
 import type { Handoff } from "../api/handoff";
-import {
-  artifactOfAskedQuestions,
-  askedIdsOf,
-  roundlessGroupsOf,
-} from "../api/rounds";
+import { askedIdsOf, roundArtifactOf, roundlessGroupsOf } from "../api/rounds";
 import { behindLabelOf, ROLE_LABEL, STAGE_LABEL } from "../api/stage-view";
 import { behindOf } from "../api/stages";
+import { suiteTotalsOf } from "../api/suites";
 import type {
   ChangeEntry,
   OpenQuestion,
@@ -43,18 +40,16 @@ export function ArtifactList({
   const behind = new Map(
     behindOf(change, artifacts).map((one) => [one.artifact, one]),
   );
-  // A numbered question's own decisions row always names `artifact:
-  // "decisions"`, the file it lives in — never the draft the round was
-  // reading. `rounds.md`'s Asked column is the only place that says which
-  // artifact raised it, so a numbered question is grouped by that reading
-  // and falls back to its own `artifact` only where no round names it.
-  const raisedAgainst = artifactOfAskedQuestions(change.rounds ?? []);
+  // The store already resolved which draft a round was reading when it
+  // raised a numbered question — `read-changes.mts` marks it there, falling
+  // back to `decisions`, the file the row lives in, only where no round
+  // names one — so grouping here is a plain read of `question.artifact`.
   const asked = new Map<string, OpenQuestion[]>();
   for (const question of questions) {
-    const artifact =
-      (question.id ? raisedAgainst.get(question.id) : undefined) ??
-      question.artifact;
-    asked.set(artifact, [...(asked.get(artifact) ?? []), question]);
+    asked.set(question.artifact, [
+      ...(asked.get(question.artifact) ?? []),
+      question,
+    ]);
   }
 
   return (
@@ -64,6 +59,9 @@ export function ArtifactList({
         const late = behind.get(artifact.id);
         const open = asked.get(artifact.id) ?? [];
         const openIds = open.flatMap((one) => (one.id ? [one.id] : []));
+        // A numbered question's badge is its own answer; the count text is
+        // only owed to a page's ❓ line, which carries no id to show instead.
+        const uncounted = open.length - openIds.length;
         const landed = change.landedBy?.[artifact.id];
 
         return (
@@ -109,9 +107,9 @@ export function ArtifactList({
               </Badge>
             )}
 
-            {open.length > 0 ? (
+            {uncounted > 0 ? (
               <Text as="span" size="xs" tone="secondary">
-                {`${open.length} open question${open.length === 1 ? "" : "s"}`}
+                {`${uncounted} open question${uncounted === 1 ? "" : "s"}`}
               </Text>
             ) : null}
 
@@ -154,11 +152,8 @@ export function ArtifactList({
  */
 export function DeliveryRow({ change }: { change: ChangeEntry }) {
   const state = change.mainState;
-  const suites = change.suites ?? [];
-  const totalCases = suites.reduce((sum, suite) => sum + suite.cases.total, 0);
-  const automatedCases = suites.reduce(
-    (sum, suite) => sum + (suite.cases.automated ?? 0),
-    0,
+  const { total: totalCases, automated: automatedCases } = suiteTotalsOf(
+    change.suites ?? [],
   );
 
   return (
@@ -319,12 +314,13 @@ export function QuestionList({ questions }: { questions: OpenQuestion[] }) {
   );
 }
 
-/** A round row's own `Artifact` cell, read for a reader: a task group's bare
- * number becomes "Group <n>", so a round on the plan and a round on the
- * proposal are never confused at a glance. */
+/** A round row's own `Artifact` cell, read for a reader: normalised the way
+ * every reading of this column is, so a group written `3`, `3.` or `group 3`
+ * all become "Group 3" and a round on the plan and a round on the proposal
+ * are never confused at a glance. */
 function roundArtifactLabel(cell: string): string {
-  const trimmed = cell.trim();
-  return /^\d+$/.test(trimmed) ? `Group ${trimmed}` : artifactLabel(trimmed);
+  const resolved = roundArtifactOf(cell) ?? cell.trim();
+  return /^\d+$/.test(resolved) ? `Group ${resolved}` : artifactLabel(resolved);
 }
 
 /**
@@ -345,14 +341,13 @@ export function RoundsList({
   taskGroups: TaskGroup[];
 }) {
   const missing = roundlessGroupsOf(rounds, taskGroups);
-  if (rounds.length === 0 && missing.length === 0) return null;
 
   return (
     <ul className="flex flex-col gap-1">
       {rounds.map((round) => (
         <li
           className="flex flex-wrap items-baseline gap-x-2 gap-y-1"
-          key={round.round}
+          key={`${round.round}:${round.artifact}:${round.asked}`}
         >
           <Badge size="sm" variant="outline">
             {`Round ${round.round}`}

@@ -6,6 +6,7 @@ import { artifactLabel } from "../api/change-artifacts";
 import type { Dependency } from "../api/derive";
 import type { Overlay } from "../api/overlays";
 import { behindLabelOf, ROLE_LABEL } from "../api/stage-view";
+import { suiteTotalsOf } from "../api/suites";
 import type { ChangeSuite, Role } from "../api/types";
 
 /**
@@ -167,15 +168,7 @@ function OverlayChip({
  * which leaves the chip with no title rather than an empty one. */
 function suiteCountsTitle(suites: ChangeSuite[]): string | undefined {
   if (suites.length === 0) return undefined;
-  const totals = suites.reduce(
-    (sum, suite) => ({
-      total: sum.total + suite.cases.total,
-      draft: sum.draft + suite.cases.draft,
-      actual: sum.actual + suite.cases.actual,
-      deprecated: sum.deprecated + suite.cases.deprecated,
-    }),
-    { total: 0, draft: 0, actual: 0, deprecated: 0 },
-  );
+  const totals = suiteTotalsOf(suites);
   const parts = [
     totals.draft > 0 ? `${totals.draft} draft` : null,
     totals.actual > 0 ? `${totals.actual} reviewed` : null,

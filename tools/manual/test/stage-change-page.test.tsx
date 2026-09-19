@@ -395,7 +395,7 @@ describe("the hands", () => {
 });
 
 describe("the artifacts", () => {
-  it("An artifact with open questions, counted, and one landed, with the handle", () => {
+  it("the question decided: an id's badge is the row's answer, the count text only for questions with no id", () => {
     const html = render(
       change({
         questions: [
@@ -413,16 +413,31 @@ describe("the artifacts", () => {
             hand: "robin",
             text: "Who answers a wait?",
           },
+          {
+            page: "docs/prds/products/demo-product/alpha.md",
+            section: "surfaces",
+            artifact: "decisions",
+            role: "pm",
+            hand: "robin",
+            text: "Whether a wait ever expires",
+          },
         ],
       }),
     );
+    const decisions = row(html, "decisions");
 
-    expect(row(html, "decisions")).toContain("2 open questions");
+    expect(decisions).toContain("Q1");
+    expect(decisions).toContain("Q2");
+    // The two numbered questions are answered by their own badge, so only
+    // the one question with no id is left for the count text.
+    expect(decisions).toContain("1 open question");
+    expect(decisions).not.toContain("2 open questions");
+    expect(decisions).not.toContain("3 open questions");
     expect(row(html, "ui-design")).toContain("@dana");
     expect(row(html, "tasks")).not.toContain("landed by");
   });
 
-  it("shows an open question's id on the artifact row it was raised against", () => {
+  it("shared-planning-agent-rounds-SC-26 - shows an open question's id on the artifact row it was raised against", () => {
     const html = render(
       change({
         rounds: [
@@ -438,10 +453,11 @@ describe("the artifacts", () => {
         questions: [
           {
             id: "Q9",
-            // `readQuestions` always names the file a decisions row lives
-            // in, `decisions` — never the draft the round was reading. The
-            // row above is what says this one was ui-design's.
-            artifact: "decisions",
+            // `read-changes.mts` resolves a numbered question's artifact
+            // against the round that raised it before this ever renders —
+            // the row above is what said this one was ui-design's, and the
+            // page reads only the resolved field.
+            artifact: "ui-design",
             role: "design",
             hand: "dana",
             text: "What does the empty state say?",
@@ -551,7 +567,7 @@ describe("the overlay row carries the whole dependency and suite reading", () =>
 });
 
 describe("the Rounds row", () => {
-  it("The change page's Rounds row with one line per round, and a group with no round row shown as such", () => {
+  it("shared-planning-agent-rounds-SC-51 - the change page's Rounds row with one line per round, and a group with no round row shown as such", () => {
     const html = render(
       change({
         taskGroups: [
@@ -631,7 +647,7 @@ describe("delivery and the handoff", () => {
     expect(delivery).toContain("v2026.09.1");
   });
 
-  it("shows the suite's automated count against its total on the Delivery row", () => {
+  it("shared-planning-agent-rounds-SC-61 - shows the suite's automated count against its total on the Delivery row", () => {
     const html = render(
       change({
         suites: [
@@ -713,5 +729,42 @@ describe("the questions a change still carries", () => {
 
     expect(html).toContain("designer — open");
     expect(html).not.toContain("design — open");
+  });
+
+  it("a group round's Q reaches the decisions row and the Rounds row's line", () => {
+    const html = render(
+      change({
+        taskGroups: [
+          { num: "3", title: "Walk", repo: "grade10-spec", done: 1, total: 1 },
+        ],
+        rounds: [
+          {
+            round: 1,
+            artifact: "3",
+            perspectives: "qa, simpler",
+            stood: "the walk skipped a refusal",
+            asked: "Q5",
+            tests: "-",
+          },
+        ],
+        // No schema artifact is named `3`, so the question does not group
+        // under any artifact row — but it is still on the change's own list
+        // of what is open, and the round that raised it still names it.
+        questions: [
+          {
+            id: "Q5",
+            artifact: "3",
+            role: "qa",
+            hand: "ari",
+            text: "Does the refusal need its own case?",
+          },
+        ],
+      }),
+    );
+
+    expect(html).toContain("Does the refusal need its own case?");
+    expect(html).toContain("Q5");
+    const rounds = html.slice(html.indexOf(">Rounds<"));
+    expect(rounds).toContain("Q5");
   });
 });
