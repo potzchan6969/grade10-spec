@@ -883,33 +883,10 @@ test("--stages matrix names the change whose behind set at head is not empty", (
   ]);
   const { matrix } = read();
 
-  assert.deepEqual(matrix, [{ id: "probe", thread: null }]);
-  assert.match(
-    readFileSync(output, "utf8"),
-    /^matrix=\[\{"id":"probe","thread":null\}\]$/m,
-  );
-});
-
-test("--stages matrix carries the change's own thread", () => {
-  const { root, write, commit } = sandbox();
-  write({
-    [`${DIR}/.openspec.yaml`]: record(
-      "hands:",
-      "  pm: dana",
-      "thread: C0AB1/1700000000.000100",
-    ),
-    [`${DIR}/proposal.md`]: proposalOf(),
-    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
-  });
-  const base = commit("propose probe", 10);
-  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
-  const head = commit("reword the proposal", 1);
-
-  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
-
-  assert.deepEqual(matrix, [
-    { id: "probe", thread: "C0AB1/1700000000.000100" },
-  ]);
+  // The id alone: the job's own steps name `matrix.id`, and the change's
+  // thread is read from its record by the step that posts.
+  assert.deepEqual(matrix, [{ id: "probe" }]);
+  assert.match(readFileSync(output, "utf8"), /^matrix=\[\{"id":"probe"\}\]$/m);
 });
 
 test("--stages matrix names nothing when nothing at head is behind", () => {

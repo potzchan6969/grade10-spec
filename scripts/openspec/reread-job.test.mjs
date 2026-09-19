@@ -121,6 +121,28 @@ test("the notify script's usage refusal names the flag it was given no value for
   assert.match(result.stderr, /usage: node reread-notify\.mjs/);
 });
 
+// An input nothing reads is an input a run can be given wrongly: the job
+// posts from a file and diffs against `HEAD`, so neither option is offered.
+test("the notify script knows no --message: the round writes a file", () => {
+  const result = refusal("reread-notify.mjs", [CHANGE, "--message", "a line"]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /unknown option --message/);
+});
+
+test("the guard knows no --after: it reads the checkout it was given", () => {
+  const result = refusal("reread-guard.mjs", [
+    CHANGE,
+    "--before",
+    "HEAD",
+    "--after",
+    "HEAD",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /unknown option --after/);
+});
+
 // ── The settings a matrix entry runs under ─────────────────────────────────
 
 test("otherChangeDirectories names every active change but this one and the archive", () => {
