@@ -348,17 +348,24 @@ describe("whether an artifact is behind", () => {
     const after = read(root, NO_GIT, pageOf(moved));
 
     // The recorded id says each artifact's upstream moved and cannot say
-    // which part of it, so each row names what is before it.
+    // which part of it, so each row carries the whole of what is before it
+    // and `whole` says the id is what named it.
     expect(behindOf({ ...after, reviewed }, artifacts(root))).toEqual([
-      { artifact: "proposal", before: [`${PAGE}#points`] },
-      { artifact: "decisions", before: [`${PAGE}#points`, "proposal"] },
+      { artifact: "proposal", changed: [`${PAGE}#points`], whole: true },
+      {
+        artifact: "decisions",
+        changed: [`${PAGE}#points`, "proposal"],
+        whole: true,
+      },
       {
         artifact: "ui-design",
-        before: [`${PAGE}#points`, "proposal", "decisions"],
+        changed: [`${PAGE}#points`, "proposal", "decisions"],
+        whole: true,
       },
       {
         artifact: "specs",
-        before: [`${PAGE}#points`, "proposal", "decisions", "ui-design"],
+        changed: [`${PAGE}#points`, "proposal", "decisions", "ui-design"],
+        whole: true,
       },
     ]);
   });
@@ -388,7 +395,8 @@ describe("whether an artifact is behind", () => {
     expect(behindOf({ ...entry, reviewed }, artifacts(root))).toEqual([
       {
         artifact: "specs",
-        before: [`${PAGE}#points`, "proposal", "decisions", "ui-design"],
+        changed: [`${PAGE}#points`, "proposal", "decisions", "ui-design"],
+        whole: true,
         since: "2026-09-05T00:00:00Z",
       },
     ]);
@@ -501,7 +509,8 @@ describe("what the row names", () => {
     expect(
       behindLabelOf({
         artifact: "specs",
-        before: [`${PAGE}#points`, "decisions"],
+        changed: [`${PAGE}#points`, "decisions"],
+        whole: true,
       }),
     ).toBe(`read again against ${PAGE}#points, decisions`);
   });
