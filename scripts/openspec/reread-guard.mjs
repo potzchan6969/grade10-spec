@@ -1,13 +1,15 @@
 #!/usr/bin/env node
 /**
- * Fails on a path a re-read pushed outside its own change's directory.
+ * Fails on a path a re-read pushed outside what it may write.
  *
- * A re-read edits one change's artifacts and nothing else — the settings
- * denying `.github/**`, `packages/**`, `tools/**` and every other change's
- * directory are the agent's own limit, and this is the repository's: it
- * diffs the commits the job's own checkout carries against the sha the job
- * started at, and fails loudly rather than reverting quietly when one of
- * them touched a path the round has no business in.
+ * A re-read edits one change's artifacts and the pages its proposal links —
+ * `lib/writable.mjs` is that boundary, and `reread-settings.mjs` denies the
+ * rest to the agent. This is the repository's own limit rather than the
+ * agent's: it diffs the commits the job's own checkout carries against the
+ * sha the job started at, and fails loudly rather than reverting quietly when
+ * one of them touched a path the round has no business in — a page the
+ * proposal never linked included, which the settings leave open because
+ * `docs/prds/` is where the pages it may mark live.
  *
  *   node scripts/openspec/reread-guard.mjs <change> --before <sha> [--after <ref>] [--root <dir>]
  *
@@ -18,6 +20,7 @@ import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "./lib/args.mjs";
+import { isWritable, writableBy } from "./lib/writable.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 /** What a workflow log reads as an annotation: every refusal here opens with
@@ -36,10 +39,9 @@ export function pushedPaths(root, before, after) {
   return stdout.split("\0").filter(Boolean);
 }
 
-/** The paths of those that are not inside the change's own directory. */
-export function outOfBounds(paths, change) {
-  const allowed = `openspec/changes/${change}/`;
-  return paths.filter((path) => !path.startsWith(allowed));
+/** The paths of those the writable set does not hold. */
+export function outOfBounds(paths, writable) {
+  return paths.filter((path) => !isWritable(writable, path));
 }
 
 function main() {
@@ -53,17 +55,18 @@ function main() {
   const root = flags.root ?? join(HERE, "..", "..");
   const after = flags.after ?? "HEAD";
 
+  const writable = writableBy(root, change);
   const paths = pushedPaths(root, flags.before, after);
-  const bad = outOfBounds(paths, change);
+  const bad = outOfBounds(paths, writable);
   if (bad.length > 0) {
     fail(
-      `the re-read of \`${change}\` pushed outside its own directory:\n${bad
+      `the re-read of \`${change}\` pushed outside what it may write:\n${bad
         .map((path) => `  ${path}`)
-        .join("\n")}`,
+        .join("\n")}\nIt writes ${writable.join(", ")}.`,
     );
   }
   console.log(
-    `${change}: ${paths.length} path(s) pushed, all inside openspec/changes/${change}/`,
+    `${change}: ${paths.length} path(s) pushed, all inside ${writable.join(", ")}`,
   );
 }
 

@@ -338,8 +338,9 @@ const walk = (root, dir) => {
 
 /** The page sections the change's proposal marks: every `docs/prds/` link it
  * carries, with its anchor. The proposal is where a change names the pages it
- * moves, so this is the store's own reading of "what is before it". */
-const pageSections = (root, dir) => {
+ * moves, so this is the store's own reading of "what is before it" — and,
+ * through `lib/writable.mjs`, of what a re-read of that change may write. */
+export const pageSections = (root, dir) => {
   const proposal = join(root, dir, "proposal.md");
   if (!existsSync(proposal)) return [];
   /** page → the sections it was linked by, empty where the whole page was. */
