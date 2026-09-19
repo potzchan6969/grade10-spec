@@ -8,9 +8,9 @@ import { parseArgs, promisify } from "node:util";
 
 import {
   behindOf,
-  DRAFTED,
   handOf,
   handOfArtifact,
+  moveOf,
   STAGE_LABEL,
 } from "../../tools/manual/src/api/stages.ts";
 import {
@@ -397,7 +397,8 @@ async function readingOf(root) {
       id: change.id,
       title: change.title,
       stage,
-      roles: handOf(change, stage),
+      roles: handOf(change, stage, artifactsOf(change)),
+      artifacts: artifactsOf(change),
       hands: change.hands ?? {},
       thread: change.thread,
       behind: behindOf(change, artifactsOf(change)),
@@ -477,16 +478,6 @@ function newlyBehind(base, head) {
  * per-role pair is read first and the stage's own is what a table that has
  * not grown it yet answers with.
  */
-function movedBy(stage, role) {
-  const drafted = DRAFTED[stage];
-  if (!drafted) return undefined;
-  const per = drafted.moves?.[role];
-  return {
-    move: per?.move ?? drafted.move,
-    command: per?.command ?? drafted.command,
-  };
-}
-
 const changePage = (manualUrl, id) =>
   `${manualUrl.replace(/\/$/, "")}/in-flight/${encodeURIComponent(id)}`;
 
@@ -507,7 +498,7 @@ const opening = (text) =>
  * where the change names no hand for it, which is the same message and not a
  * second kind. */
 function yourTurnText(at, role, linked) {
-  const drafted = movedBy(at.stage, role);
+  const drafted = moveOf(at.stage, role);
   const lines = [`*Your turn* — ${linked} is at *${STAGE_LABEL[at.stage]}*.`];
   if (drafted?.command) {
     const command = drafted.command.replaceAll("<id>", at.id);
@@ -585,7 +576,7 @@ function messagesOf(base, head, map, options) {
 
   for (const behind of newlyBehind(base, head)) {
     const at = head.get(behind.id);
-    const role = handOfArtifact(behind.artifact);
+    const role = at ? handOfArtifact(behind.artifact, at.artifacts) : undefined;
     if (!role) continue;
     take(
       at,

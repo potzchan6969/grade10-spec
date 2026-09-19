@@ -21,14 +21,13 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
+import { IDLE_FROM, overlaysOf } from "../../tools/manual/src/api/overlays.ts";
+import { handOf, STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
 import {
-  handOf,
-  IDLE_FROM,
-  overlaysOf,
-  STAGE_LABEL,
+  dayIn,
+  daysBetween,
   TIME_ZONE,
-} from "../../tools/manual/src/api/stages.ts";
-import { dayIn, daysBetween } from "../../tools/manual/src/api/time.ts";
+} from "../../tools/manual/src/api/time.ts";
 import {
   addressOf,
   appendSentKeys,
@@ -111,7 +110,9 @@ function linesFor(handle, changes, ctx) {
   for (const change of changes) {
     const held = rolesOf(change, handle);
     const stage = change.stage ?? "proposed";
-    const onThem = handOf(change, stage).some((role) => held.includes(role));
+    const onThem = handOf(change, stage, ctx.artifactsOf(change)).some((role) =>
+      held.includes(role),
+    );
     const named = `<${changePage(ctx.manualUrl, change.id)}|${change.title}>`;
     // The overlays are read from the schema's own order, so each change asks
     // for its own artifacts rather than the store's first schema.

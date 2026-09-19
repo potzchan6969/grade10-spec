@@ -289,6 +289,26 @@ export const DRAFTED: Partial<Record<Stage, Drafted>> = {
 };
 
 /**
+ * The move one hand makes while the turn is theirs at a stage: the stage's
+ * own entry, or the next drafted stage's where the stage names none for the
+ * role. Proposed's second half hands the change to the designer and the tech
+ * PIC, whose moves the stage table writes against Designed, and a card or a
+ * message that read only the stage's entry offered them the product
+ * manager's command.
+ */
+export function moveOf(
+  stage: Stage,
+  role: Role,
+): { move: string; command: string } | undefined {
+  const at = STAGES.indexOf(stage);
+  for (const rung of STAGES.slice(at, at + 2)) {
+    const held = DRAFTED[rung]?.moves[role];
+    if (held) return held;
+  }
+  return undefined;
+}
+
+/**
  * The role that answers for one artifact, as the schema names it — `hand:`
  * beside `teammate`, which cannot answer it: the tech design and the task
  * list are both the engineer's there, while the hand of one is the tech PIC

@@ -8,8 +8,8 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 import { Link } from "react-router";
-import { draftedOf, ROLE_LABEL, roleTitle } from "../api/stage-view";
-import { handOf } from "../api/stages";
+import { ROLE_LABEL, roleTitle } from "../api/stage-view";
+import { handOf, moveOf } from "../api/stages";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "../api/types";
 import { useEditorSession } from "../editor/session";
 import { Hand } from "./change-hand";
@@ -37,7 +37,14 @@ export function YourTurnCard({
   artifacts: SchemaArtifact[];
 }) {
   const roles = handOf(change, stage, artifacts);
-  const drafted = draftedOf(stage, change.id);
+  // One command per hand whose turn it is, not per hand the stage table
+  // names: Proposed's second half is the designer's and the tech PIC's.
+  const moves = roles.flatMap((role) => {
+    const held = moveOf(stage, role);
+    return held
+      ? [{ role, ...held, command: held.command.replace(/<id>/g, change.id) }]
+      : [];
+  });
 
   return (
     <Card className="my-5">
@@ -61,7 +68,7 @@ export function YourTurnCard({
 
         <Thread change={change} />
 
-        {(drafted?.moves ?? []).map((one) => (
+        {moves.map((one) => (
           <div
             className="flex flex-wrap items-center gap-x-2 gap-y-1"
             key={one.role}

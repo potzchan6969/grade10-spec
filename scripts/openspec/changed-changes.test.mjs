@@ -265,41 +265,49 @@ const SCHEMA = [
   "version: 1",
   "artifacts:",
   "  - id: proposal",
+  "    hand: pm",
   "    required: true",
   "    generates: proposal.md",
   "    requires: []",
   "    upstream: []",
   "  - id: decisions",
+  "    hand: pm",
   "    required: true",
   "    generates: decisions.md",
   "    requires: [proposal]",
   "    upstream: [proposal]",
   "  - id: user-journeys",
+  "    hand: pm",
   "    required: true",
   "    generates: user-journeys.md",
   "    requires: [decisions]",
   "    upstream: [proposal, decisions]",
   "  - id: ui-design",
+  "    hand: design",
   "    required: false",
   "    generates: ui-design.md",
   "    requires: [decisions]",
   "    upstream: [proposal, decisions]",
   "  - id: tech-design",
+  "    hand: tech",
   "    required: false",
   "    generates: tech-design.md",
   "    requires: [decisions]",
   "    upstream: [proposal, decisions]",
   "  - id: specs",
+  "    hand: pm",
   "    required: true",
   "    generates: spec.md",
   "    requires: [tech-design]",
   "    upstream: [proposal, decisions, user-journeys]",
   "  - id: test-cases",
+  "    hand: qa",
   "    required: true",
   "    generates: feature-tcs.md",
   "    requires: [specs]",
   "    upstream: [proposal, decisions, user-journeys]",
   "  - id: tasks",
+  "    hand: dev",
   "    required: true",
   "    generates: tasks.md",
   "    requires: [specs]",
@@ -697,55 +705,60 @@ test("--stages says it told a handle with no Slack member nothing", () => {
 });
 
 test("--stages posts to the role's channel when the hand is unnamed", () => {
+  // Planned, not Proposed: Proposed holds the product manager until both
+  // second hands are named (decisions Q49), so an unnamed hand there is no
+  // turn of its own.
   const { root, write, commit } = sandbox();
+  const named = ["hands:", "  pm: dana", "  design: dana", "  tech: erin"];
   write({
-    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
+    [`${DIR}/.openspec.yaml`]: record(...named),
     [`${DIR}/proposal.md`]: proposalOf(),
   });
   const base = commit("propose probe", 3);
   write({
-    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
-    [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...named, 'promoted_by: "@dana"'),
+    [`${DIR}/tasks.md`]: tasksMd(0),
   });
-  const head = commit("decide probe", 1);
+  const head = commit("plan probe", 1);
 
   const { read } = stages(root, ["--base", base, "--head", head]);
   const { messages } = read();
 
   assert.deepEqual(
     messages.map((one) => [one.key, one.to, one.channel]),
-    [
-      ["probe:proposed:design", "channel", "C-DESIGN"],
-      ["probe:proposed:tech", "channel", "C-TECH"],
-    ],
+    [["probe:planned:dev", "channel", "C-DEV"]],
   );
+  assert.match(messages[0].text, /`\/tasks probe`/);
 });
 
 test("--stages posts to the role's channel when the hand is taken off", () => {
   const { root, write, commit } = sandbox();
   write({
-    [`${DIR}/.openspec.yaml`]: record(...HANDS),
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
     [`${DIR}/proposal.md`]: proposalOf(),
-    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
-    [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
+    [`${DIR}/tasks.md`]: tasksMd(0),
   });
-  const base = commit("propose probe", 3);
+  const base = commit("plan probe", 3);
   write({
     [`${DIR}/.openspec.yaml`]: record(
       "hands:",
       "  pm: dana",
+      "  design: dana",
       "  tech: erin",
-      "  dev: erin",
+      'promoted_by: "@dana"',
     ),
   });
-  const head = commit("take the designer off", 1);
+  const head = commit("take the engineer off", 1);
 
   const { read } = stages(root, ["--base", base, "--head", head]);
-  const { messages } = read();
+  const { messages, stages: reached } = read();
 
+  assert.equal(reached[CHANGE], "planned");
   assert.deepEqual(
     messages.map((one) => [one.key, one.to, one.channel]),
-    [["probe:proposed:design", "channel", "C-DESIGN"]],
+    [["probe:planned:dev", "channel", "C-DEV"]],
   );
 });
 
