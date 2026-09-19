@@ -71,7 +71,7 @@ function manifestOf(root: string): Record<string, unknown> {
 }
 
 describe("what the hands endpoint writes", () => {
-  it("writes hands: on a change that carries none yet", async () => {
+  it("shared-planning-change-stages-SC-68 - writes hands: on a change that carries none yet", async () => {
     const { root, api } = store();
 
     const answer = await api(

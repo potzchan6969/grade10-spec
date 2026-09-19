@@ -288,7 +288,7 @@ describe("the Your turn card", () => {
     expect(card).toContain("no thread");
   });
 
-  it("The change page's Your turn card on the hosted manual, with Assign shown as read-only", () => {
+  it("shared-planning-change-stages-SC-69 - The change page's Your turn card on the hosted manual, with Assign shown as read-only", () => {
     const html = render();
     const card = html.slice(html.indexOf("Your turn"));
 

@@ -78,7 +78,7 @@ function render(changes: ChangeEntry[], handle?: string): string {
 }
 
 describe("My turn before a handle is chosen", () => {
-  it("asks for a handle and lists nothing", () => {
+  it("shared-planning-change-stages-SC-62 - asks for a handle and lists nothing", () => {
     const html = render([
       changeEntry("some-change", [], {
         stage: "specified",
@@ -94,7 +94,7 @@ describe("My turn before a handle is chosen", () => {
 });
 
 describe("My turn for a handle the team map does not know", () => {
-  it("says the handle is unknown and lists nothing", () => {
+  it("shared-planning-change-stages-SC-64 - says the handle is unknown and lists nothing", () => {
     const html = render(
       [
         changeEntry("some-change", [], {
@@ -114,7 +114,7 @@ describe("My turn for a handle the team map does not know", () => {
 });
 
 describe("My turn with nothing on the reader", () => {
-  it("says nothing is on the reader", () => {
+  it("shared-planning-change-stages-SC-61 - says nothing is on the reader", () => {
     const html = render([], "robin");
 
     expect(html).toContain("Nothing on you");
@@ -136,7 +136,7 @@ describe("the page's own order", () => {
     expect(html).not.toContain("Open questions");
   });
 
-  it("lists the open question first, with its change and its number, then now, then later", () => {
+  it("shared-planning-change-stages-SC-60, shared-planning-change-stages-SC-63 - lists the open question first, with its change and its number, then now, then later, for the handle the key remembers", () => {
     const question = changeEntry("question-change", [], {
       title: "A change asking robin something",
       stage: "specified",

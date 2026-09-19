@@ -63,7 +63,7 @@ const linked = (id: string, extra: Partial<ChangeEntry>): ChangeEntry =>
   });
 
 describe("the section's in-flight row", () => {
-  it("names the change's stage and its hand", () => {
+  it("shared-planning-change-stages-SC-65 - names the change's stage and its hand", () => {
     const html = render([
       linked("pos", {
         title: "Shorten the refund window",
@@ -79,7 +79,7 @@ describe("the section's in-flight row", () => {
 });
 
 describe("the pip a 🚧 line wears", () => {
-  it("bears the stage number of the change delivering it", () => {
+  it("shared-planning-change-stages-SC-65 - bears the stage number of the change delivering it", () => {
     const html = render([
       linked("pos", { title: "Shorten the refund window", stage: "planned" }),
     ]);
@@ -89,7 +89,7 @@ describe("the pip a 🚧 line wears", () => {
     expect(html).toContain(">4<");
   });
 
-  it("carries the pip for the further stage where two changes deliver it", () => {
+  it("shared-planning-change-stages-SC-67 - carries the pip for the further stage where two changes deliver it", () => {
     const html = render([
       linked("early", { title: "The designed one", stage: "designed" }),
       linked("late", { title: "The building one", stage: "building" }),
@@ -101,7 +101,7 @@ describe("the pip a 🚧 line wears", () => {
     expect(html).toContain(">5<");
   });
 
-  it("wears no pip once every change delivering it has archived", () => {
+  it("shared-planning-change-stages-SC-66 - wears no pip once every change delivering it has archived", () => {
     const html = render([
       linked("gone", {
         title: "The refund window, already shipped",
