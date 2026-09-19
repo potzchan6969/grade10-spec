@@ -2000,3 +2000,14 @@ Thirteen questions went to the change's `decisions.md`, and the answers landed a
 ### Anchors no case reaches
 
 Every journey from `shared-planning-agent-rounds-US-01` to `shared-planning-agent-rounds-US-09` is walked. No case traces a feature set root group - this suite carries a section per journey - so a rule with no actor is reached through the journey that meets it, or listed out of suite above. `Your moves` is served by no scenario: every move a hand has is a rule somebody walks, and each scenario names that walk instead.
+
+### Manual
+
+`US1` to `US7`'s cases stay manual. Each walks a hand's move in the change's Slack thread - a first sentence, a numbered answer, a remark, the word `land` - or the round itself, dispatched and read inside an agent's own session before it posts its summary back. No suite opens a Slack thread or an agent's conversation, so none of these has a walk to drive it.
+
+* **The thread** - `land`, `read`, a remark, an answer, the first sentence that opens a change - is typed in Slack, never a page a walk opens.
+* **The round's own session** - the readers it runs, the summary it drafts before posting - is inside the agent's own conversation, which no browser reaches.
+* **A hand's message** - the direct message naming a change and its stage, the landing summary the thread carries - is read in Slack, not rendered anywhere a walk can look.
+* **What a check reads from git history** - a `reviewed:` content id against the tree, which artifact's upstream moved and when - is the store's own git-backed unit tests' to prove (`scripts/openspec/round-scripts.test.mjs`, `tools/manual/test/behind.test.ts`), never a browser walk's.
+
+`US8` and `US9` are the exception: both live on the manual's own change page, which a browser can open. `rounds-record.walk.ts`, `rounds-record-roundless.walk.ts` and `run-sheet-delivery.walk.ts` walk what each journey's `SC-51` and `SC-61` state there, and flip the case each walk covers.

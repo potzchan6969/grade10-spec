@@ -283,7 +283,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
 
@@ -313,7 +313,7 @@ admin(product manager) has one change in each of the eight stages, each with its
 * **Type:** usability
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
 
@@ -416,7 +416,7 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
 
