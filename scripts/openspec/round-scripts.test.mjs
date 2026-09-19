@@ -278,7 +278,7 @@ test("shared-planning-agent-rounds-SC-05 - plan:land refuses a handle that is no
   assert.match(result.stderr, /ui-design/);
 });
 
-test("shared-planning-agent-rounds-SC-35, SC-43 - plan:land refuses while something before the artifact is behind, and names it", () => {
+test("shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-43 - plan:land refuses while something before the artifact is behind, and names it", () => {
   const { root } = sandbox({
     files: {
       [`${DIR}/.openspec.yaml`]: record("reviewed:\n  decisions: deadbeef\n"),

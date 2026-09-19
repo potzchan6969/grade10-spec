@@ -321,7 +321,7 @@ describe("whether an artifact is behind", () => {
     ]);
   });
 
-  it("is unmoved by a page section the change does not link", () => {
+  it("shared-planning-agent-rounds-SC-34 - is unmoved by a page section the change does not link", () => {
     const root = store();
     const before = read(root).upstream;
     const after = read(
@@ -504,7 +504,7 @@ describe("behind holds no tick, claim or wait", () => {
     "",
   ].join("\n");
 
-  it("still ticks, claims and waits while the requirements are behind", () => {
+  it("shared-planning-agent-rounds-SC-38 - still ticks, claims and waits while the requirements are behind", () => {
     const files = filesOf("awaiting:\n  tech-design: waiting on the vendor\n");
     files[`${CHANGE}/tasks.md`] = TASKS;
     const root = writeStore(files);
