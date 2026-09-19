@@ -6,6 +6,8 @@ import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 
+import { weekOf } from "./digest.mjs";
+
 /**
  * Monday's digest, over one store committed at fixed dates.
  *
@@ -199,7 +201,7 @@ function week() {
   return root;
 }
 
-test("the digest says all six kinds of line in one message", () => {
+test("shared-planning-change-stages-SC-48 - the digest says all six kinds of line in one message", () => {
   const { read } = digest(week());
   const { messages } = read();
 
@@ -234,7 +236,7 @@ test("the digest's lines name what each is about", () => {
   assert.match(messages[0].text, /Ask it/);
 });
 
-test("the digest reaches nobody with nothing to say", () => {
+test("shared-planning-change-stages-SC-50 - the digest reaches nobody with nothing to say", () => {
   const { read } = digest(week());
   const { messages } = read();
 
@@ -244,7 +246,7 @@ test("the digest reaches nobody with nothing to say", () => {
   );
 });
 
-test("the digest leaves an artifact behind six days off the week", () => {
+test("shared-planning-change-stages-SC-49 - the digest leaves an artifact behind six days off the week", () => {
   const { root, write, commit } = sandbox();
   write({
     "openspec/changes/fresh-it/.openspec.yaml": [
@@ -332,4 +334,64 @@ test("the digest keys one message per person per week", () => {
 
   assert.match(first.messages[0].key, /^dana:digest:\d{4}-W\d{2}$/);
   assert.deepEqual(second.messages, []);
+});
+
+// A week that straddles New Year belongs to one year: the ISO week is read
+// off its own Thursday, so the last day of one calendar year and the first of
+// the next can share one key.
+test("weekOf keys a week that straddles New Year by its own Thursday", () => {
+  assert.equal(weekOf(Date.parse("2026-12-31T12:00:00+08:00")), "2026-W53");
+  assert.equal(weekOf(Date.parse("2027-01-01T12:00:00+08:00")), "2026-W53");
+});
+
+test("weekOf starts a new key once the new ISO year's Monday arrives", () => {
+  assert.equal(weekOf(Date.parse("2027-01-04T09:00:00+08:00")), "2027-W01");
+});
+
+test("shared-planning-change-stages-SC-49 - the digest counts a behind artifact's own days, not the change's last commit", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    "openspec/changes/behind-it/.openspec.yaml": [
+      "schema: demo-planning",
+      "created: 2026-10-01",
+      "hands:",
+      "  pm: dana",
+      "",
+    ].join("\n"),
+    "openspec/changes/behind-it/proposal.md": proposalOf("Behind it"),
+    "openspec/changes/behind-it/decisions.md": DECIDED.replace(
+      "❓ pm -",
+      "It is",
+    ),
+  });
+  commit("propose behind-it", 20);
+  write({
+    "openspec/changes/behind-it/proposal.md": proposalOf(
+      "Behind it",
+      " Again.",
+    ),
+  });
+  // What puts `decisions` behind: `proposal.md` reworded 9 days ago.
+  commit("reword behind-it", 9);
+  write({
+    "openspec/changes/behind-it/.openspec.yaml": [
+      "schema: demo-planning",
+      "created: 2026-10-01",
+      "hands:",
+      "  pm: dana",
+      "  design: dana",
+      "",
+    ].join("\n"),
+  });
+  // A later, unrelated commit on the same change: naming a second hand moves
+  // `lastMoved` to 2 days ago without touching what `decisions` is behind.
+  commit("name a designer", 2);
+
+  const { messages } = digest(root).read();
+
+  const behind = (messages[0]?.lines ?? []).find(
+    (one) => one.kind === "behind",
+  );
+  assert.ok(behind, "expected `decisions` behind by its own, older date");
+  assert.equal(behind.days, 9);
 });
