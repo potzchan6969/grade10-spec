@@ -281,11 +281,17 @@ describe("what the store reads as before an artifact", () => {
 describe("whether an artifact is behind", () => {
   it("is fresh where the read record matches the tree", () => {
     const root = store();
-    const fresh = read(root);
+    // Hand-computed rather than read back off the entry: the record is
+    // written by the round, and a case that copies the reading it compares
+    // against would pass however the reading was hashed.
+    const reviewed = {
+      proposal: contentIdOf([sectionText()]),
+      decisions: contentIdOf([sectionText(), PROPOSAL]),
+      "ui-design": contentIdOf([sectionText(), PROPOSAL, DECISIONS]),
+      specs: contentIdOf([sectionText(), PROPOSAL, DECISIONS, UI_DESIGN]),
+    };
 
-    expect(
-      behindOf({ ...fresh, reviewed: reviewedOf(fresh) }, artifacts(root)),
-    ).toEqual([]);
+    expect(behindOf({ ...read(root), reviewed }, artifacts(root))).toEqual([]);
   });
 
   it("is behind where a linked section changed after it was read again", () => {
