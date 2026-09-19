@@ -254,8 +254,21 @@ export type MainState = {
  * open tasks, `complete` has finished them all and awaits the archive. */
 export type ChangeLane = "proposed" | "specified" | "in-progress" | "complete";
 
-/** A hand a change passes through, as `hands:` keys them. */
-export type Role = "pm" | "design" | "tech" | "qa" | "dev" | "release";
+/**
+ * The hands a change passes through, as `hands:` keys them, in the order it
+ * passes through them.
+ *
+ * A list and not a union alone, because the record's rules have to refuse a
+ * role outside it at run time. It mirrors `ROLES` in
+ * `scripts/openspec/lib/team.mjs`, which the checks and the scripts read under
+ * plain node: the app is bundled for a browser and that module reads a file,
+ * so the list is written twice and `team-map.test.ts` holds the two to each
+ * other rather than letting them drift.
+ */
+export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"] as const;
+
+/** A hand a change passes through. */
+export type Role = (typeof ROLES)[number];
 
 /** How far a change has got, derived from the files on the store's main and
  * never stored: the eight stages `shared/planning/change-stages` names, of
@@ -328,7 +341,10 @@ export type UpstreamRead = {
   newer?: string[];
 };
 
-/** One person the store knows, from `docs/prds/team.yaml`. */
+/** One person the store knows, from `docs/prds/team.yaml`, as
+ * `scripts/openspec/lib/team.mjs` reads it. The reader is a Node module with
+ * no types of its own, so this is the shape a surface names a hand from and
+ * `team-map.test.ts` holds the reader to it. */
 export type TeamMember = {
   /** The address `git config user.email` gives. */
   email?: string;

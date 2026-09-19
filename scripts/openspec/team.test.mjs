@@ -96,6 +96,24 @@ test("reads a store with no map as a map that knows nobody", () => {
   assert.equal(channelOf(map, "design"), undefined);
 });
 
+test("refuses two entries that are one handle", () => {
+  // The second would silently replace the first, and whichever e-mail and
+  // roles survived would be whichever the file listed last.
+  const twice = [
+    "handles:",
+    "  dana:",
+    "    roles: [pm]",
+    "  '@Dana':",
+    "    roles: [qa]",
+    "",
+  ].join("\n");
+
+  assert.throws(
+    () => readTeamMap(storeWith(twice)),
+    /`handles.@Dana` is `dana` again/,
+  );
+});
+
 test("refuses a map that is not a mapping of handles", () => {
   assert.throws(
     () => readTeamMap(storeWith("handles: dana\n")),

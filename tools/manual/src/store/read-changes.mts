@@ -1,6 +1,7 @@
 import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import YAML from "yaml";
+import { handleOf } from "../../../../scripts/openspec/lib/team.mjs";
 import { ASKED_OF, stageOf } from "../api/stages.ts";
 import type {
   ChangeEntry,
@@ -591,15 +592,12 @@ function strings(value: unknown): string[] {
 }
 
 /** `owner: echo`, `owner: "@echo"` and `owners: [echo, other]` all name the
- * same people; anything that is not a handle is not one. */
-/** A handle as the record spelled it, as every reader here spells it: no
- * leading `@`, no case. Anything that is not a handle is left as it stands,
- * for the rule that refuses it to name what was written. */
-const handleOf = (one: string) => one.replace(/^@/, "").trim().toLowerCase();
-
+ * same people; anything that is not a handle is not one. A key that maps an id
+ * to a handle keeps what was written where it is not one, for the rule that
+ * refuses it to name it. */
 function handles(values: unknown[]): string[] {
   const named = strings(values.flat())
-    .map((one) => one.replace(/^@/, "").trim().toLowerCase())
+    .map(handleOf)
     .filter((one) => HANDLE.test(one) && one !== UNASSIGNED);
   return [...new Set(named)];
 }

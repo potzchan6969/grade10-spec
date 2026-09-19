@@ -5,6 +5,11 @@
     "lib": ["ES2023"],
     "types": ["node"],
     "skipLibCheck": true,
+    // `scripts/openspec/lib/*.mjs` is read by both halves of the repository:
+    // the scripts import the store's readers, and the store imports the one
+    // handle spelling. Allowed, not checked - the scripts' own suite is what
+    // holds them.
+    "allowJs": true,
 
     /* Bundler mode */
     "module": "nodenext",

@@ -18,6 +18,17 @@ import YAML from "yaml";
 export const TEAM_MAP = "docs/prds/team.yaml";
 
 /**
+ * The hands a change passes through, in the order it passes through them.
+ *
+ * Here because both halves read it: the record's rules refuse a `hands:` key
+ * that is not one of these, and the manual's `Role` is these six. The manual
+ * mirrors the list in `src/api/types.ts` rather than importing it, because the
+ * app is bundled for a browser and this module reads a file; `team-map.test.ts`
+ * holds the two to each other.
+ */
+export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"];
+
+/**
  * The store's team map: one entry per handle, one channel per role.
  *
  * A store with no map knows nobody, which is an answer and not a failure — a
@@ -53,9 +64,18 @@ export function readTeamMap(root) {
         `${TEAM_MAP}: \`handles.${handle}\` must carry that person's e-mail, Slack member and roles`,
       );
     }
+    const spelled = handleOf(handle);
+    // Two spellings of one handle are one person written twice: the second
+    // entry would silently replace the first, and whichever e-mail and roles
+    // survived would be whichever the file happened to list last.
+    if (spelled in handles) {
+      throw new Error(
+        `${TEAM_MAP}: \`handles.${handle}\` is \`${spelled}\` again - one entry per person`,
+      );
+    }
     const email = line(entry.email, `handles.${handle}.email`);
     const slack = line(entry.slack, `handles.${handle}.slack`);
-    handles[handleOf(handle)] = {
+    handles[spelled] = {
       // An address is matched case-insensitively, so it is held one way.
       ...(email ? { email: email.toLowerCase() } : {}),
       ...(slack ? { slack } : {}),
@@ -101,8 +121,15 @@ export function handleOfEmail(map, email) {
   return undefined;
 }
 
-/** A handle as every reader in this store spells it: no leading `@`, no case. */
-const handleOf = (handle) =>
+/**
+ * A handle as every reader in this store spells it: no leading `@`, no case.
+ *
+ * One spelling, here, because the map is keyed by it and the record's
+ * `hands:`, `landed_by:`, `owner:` and owner tags are all matched against it —
+ * two readers that trimmed differently would disagree about whether the store
+ * knows a person.
+ */
+export const handleOf = (handle) =>
   String(handle).replace(/^@/, "").trim().toLowerCase();
 
 const isMapping = (value) =>
