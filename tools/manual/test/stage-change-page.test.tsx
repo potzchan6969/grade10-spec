@@ -653,6 +653,35 @@ describe("the Rounds row", () => {
     expect(rounds).not.toMatch(/Group 1[\s\S]{0,80}no round/);
   });
 
+  it("shared-planning-agent-rounds-SC-51 - a round's Stood cell is clamped to two lines", () => {
+    const stood =
+      "the reader of the words found the empty state naming no control, the design naming no state for a filter that matches nothing, and `rounds.md` naming no column for the tests each scenario landed with";
+    const html = render(
+      change({
+        taskGroups: [],
+        rounds: [
+          {
+            round: 1,
+            artifact: "proposal",
+            perspectives: "reader, simpler",
+            stood,
+            asked: "-",
+            tests: "-",
+          },
+        ],
+      }),
+    );
+    const rounds = html.slice(html.indexOf(">Rounds<"));
+
+    // Clamped, so a round of many findings is a line of the list rather than
+    // a paragraph on the change page.
+    expect(rounds).toContain("line-clamp-2");
+    expect(rounds).toContain("the reader of the words found the empty state");
+    // And the cell's backticks still reach the reader as code.
+    expect(rounds).toContain("<code");
+    expect(rounds).toContain("rounds.md");
+  });
+
   it("carries no Rounds row before the first round lands", () => {
     const html = render(change({ taskGroups: [] }));
     expect(html).not.toContain(">Rounds<");
