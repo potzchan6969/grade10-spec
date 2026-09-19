@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import YAML from "yaml";
-import { handleOf } from "../../../../scripts/openspec/lib/team.mjs";
+import { handleOf, isHandle } from "../../../../scripts/openspec/lib/team.mjs";
 import { ASKED_OF, ladderOf } from "../api/stages.ts";
 import type {
   ChangeEntry,
@@ -40,7 +40,6 @@ import { readTestCases } from "./read-specs.mts";
 // `(owner: unassigned)` and no tag are the same thing.
 const OWNER = /\(owner:\s*@?([A-Za-z0-9][A-Za-z0-9._-]*)\)/gi;
 const OWNER_TAG = new RegExp(OWNER.source, "i");
-const HANDLE = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 const UNASSIGNED = "unassigned";
 
 /** The handle an owner tag names, lower-cased; nobody for `unassigned`. */
@@ -629,7 +628,7 @@ function strings(value: unknown): string[] {
 function handles(values: unknown[]): string[] {
   const named = strings(values.flat())
     .map(handleOf)
-    .filter((one) => HANDLE.test(one) && one !== UNASSIGNED);
+    .filter((one) => isHandle(one) && one !== UNASSIGNED);
   return [...new Set(named)];
 }
 

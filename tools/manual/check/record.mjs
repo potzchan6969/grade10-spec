@@ -7,6 +7,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import {
+  isHandle,
   memberOf,
   ROLES,
   readTeamMap,
@@ -17,14 +18,6 @@ import { waiverLineOf } from "../src/api/waivers.ts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { productPages } from "./context.mjs";
 import { ROUND_RECORD_SINCE } from "./rounds.mjs";
-
-/** A handle as `hands:` and `landed_by:` may write it — one token, the shape
- * `read-changes.mts` and the editor's own `propose.ts` each already hold
- * their own copy of, because the read that stops on a malformed mapping and
- * the write that stops on a malformed proposal both need it before this rule
- * ever sees the value. What survives to here is text, so this is the shape
- * check, not the read's. */
-const HANDLE = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 
 /** The day the deploy record became a rule: every archive before it shipped
  * without one. */
@@ -313,7 +306,7 @@ export function checkHands(ctx, changes) {
           file,
           `\`hands.${role}\` names no role this store knows — name one of ${KNOWN_ROLES}`,
         );
-      } else if (!HANDLE.test(handle)) {
+      } else if (!isHandle(handle)) {
         ctx.add(
           "hands",
           file,
