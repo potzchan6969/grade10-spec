@@ -76,6 +76,7 @@ Flags:
   --name <run>        Run name; the tab becomes <id>-<slug of name>   (required)
   --selection <text>  What was asked for, recorded on the Summary row
   --include-draft     Also take \`draft\` cases (grey-banded in the tab)
+  --include-automated Also take cases an automated test already covers
   --sha <sha>         Commit to record; defaults to the current HEAD
   --sheet <id>        Spreadsheet id; defaults to TCS_SHEET_ID
   --dry-run           Print what would be written and touch no network
@@ -93,6 +94,7 @@ function parseArgs(argv) {
     scope: null,
     cases: null,
     includeDraft: false,
+    includeAutomated: false,
     sha: null,
     sheet: process.env.TCS_SHEET_ID ?? null,
     dryRun: false,
@@ -114,6 +116,7 @@ function parseArgs(argv) {
       process.exit(0);
     } else if (a === "--dry-run") args.dryRun = true;
     else if (a === "--include-draft") args.includeDraft = true;
+    else if (a === "--include-automated") args.includeAutomated = true;
     else if (a === "--cases") args.cases = (argv[++i] ?? "").split(",");
     else if (a === "--cases-file") args.cases = readIdFile(argv[++i]);
     else if (a in takes) args[takes[a]] = argv[++i] ?? null;
@@ -456,6 +459,7 @@ const {
   priority: args.priority,
   level: args.level,
   includeDraft: args.includeDraft,
+  includeAutomated: args.includeAutomated,
 });
 const picked = inReadingOrder(unordered);
 
@@ -471,9 +475,27 @@ if (missing.length > 0)
 const drafts = picked.filter(
   (one) => prop(one.tc, "Status") === "draft",
 ).length;
+// Left out by default, taken with the flag - said either way, and said as
+// zero rather than left unsaid, so a run's own printout is what proves the
+// gate ran (`shared-planning-agent-rounds-SC-61`).
+const automatedLeftOut = refused.filter(
+  (one) => one.reason === "automation",
+).length;
+const automatedIncluded = args.includeAutomated
+  ? picked.filter(
+      (one) => prop(one.tc, "Automation status").toLowerCase() === "automated",
+    ).length
+  : 0;
 
 console.log(
   `${bold("Run sheet")}  ${dim(`${picked.length} case${picked.length === 1 ? "" : "s"}${drafts ? `, ${drafts} draft` : ""}`)}\n`,
+);
+console.log(
+  dim(
+    args.includeAutomated
+      ? `${automatedIncluded} automated case${automatedIncluded === 1 ? "" : "s"} included`
+      : `${automatedLeftOut} automated case${automatedLeftOut === 1 ? "" : "s"} left out`,
+  ),
 );
 if (picked.length === 0) {
   console.log(

@@ -46,6 +46,12 @@ export function readCandidates(root, scope = null) {
  * convenience that resolves to the same thing, and both obey the status gate:
  * `actual` only unless `includeDraft`, and never `deprecated` - a deprecated
  * case is one the spec stopped stating, and walking it proves nothing.
+ *
+ * A case whose Automation status is `automated` is left out too, unless
+ * `includeAutomated` says otherwise: a run sheet is where a case a script
+ * cannot cover leaves the store, and an automated case is proved on every
+ * push instead (`docs/governance/specs-to-test-cases.md`, "The run sheet
+ * keeps what only staging proves").
  */
 export function selectCases(candidates, options = {}) {
   const {
@@ -54,6 +60,7 @@ export function selectCases(candidates, options = {}) {
     priority = null,
     level = null,
     includeDraft = false,
+    includeAutomated = false,
   } = options;
 
   const allowed = new Set(includeDraft ? ["actual", "draft"] : ["actual"]);
@@ -73,7 +80,17 @@ export function selectCases(candidates, options = {}) {
     if (!allowed.has(status)) {
       refused.push({
         id: one.tc.id,
+        reason: "status",
         why: `status is \`${status || "unset"}\``,
+      });
+      return false;
+    }
+    const automation = prop(one.tc, "Automation status").toLowerCase();
+    if (!includeAutomated && automation === "automated") {
+      refused.push({
+        id: one.tc.id,
+        reason: "automation",
+        why: "automation status is `automated`",
       });
       return false;
     }

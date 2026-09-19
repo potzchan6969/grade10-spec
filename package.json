@@ -59,6 +59,7 @@
     "tcs:stale": "node scripts/openspec/validate-test-cases.mjs --stale-report",
     "tcs:validate": "node scripts/openspec/validate-test-cases.mjs",
     "tcs:run-sheet": "node scripts/openspec/run-sheet.mjs",
+    "tcs:automated": "node scripts/openspec/tcs-automated.mjs",
     "plan:preflight": "node scripts/openspec/plan-preflight.mjs",
     "plan:land": "node scripts/openspec/plan-land.mjs",
     "round:reviewed": "node scripts/openspec/round-reviewed.mjs",
