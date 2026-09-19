@@ -88,9 +88,10 @@ export type TestCaseStatus = "draft" | "actual" | "deprecated";
 
 /** Whether an automated test already covers a case
  * (`docs/governance/specs-to-test-cases.md`, Automation status): `manual`
- * means no automated test runs it yet, which is also what a case that states
- * no Automation status at all means — the property is silent on nothing
- * else, so a missing line reads as `manual` rather than refusing the file. */
+ * means no automated test runs it yet. A case stating no Automation status at
+ * all is refused rather than read as `manual` — `AUTOMATION_STATUSES` in
+ * `../store/read-specs.mts` holds that refusal, because a default here would
+ * let a generated draft wear a flip nobody made. */
 export type AutomationStatus = "manual" | "automated";
 
 export type TestCase = {
