@@ -56,4 +56,4 @@ This group is its own test task: the walks are what prove the change. The job th
 
 - [x] 7.1 The walks of `shared-planning-agent-rounds-US-08` and `shared-planning-agent-rounds-US-09` in the harness `stage-changes-and-notify-hands`' group 8 leaves, one file per journey, against its demo-store fixtures - `shared-planning-agent-rounds-SC-51`, `shared-planning-agent-rounds-SC-61`
 - [ ] 7.2 The cases those walks cover flipped to automated with `tcs:automated` in the walk's own commit; the journeys no suite can drive - the moves a hand makes in the thread, and the round inside an agent's session - walked once by hand, their cases left manual, and named in the walk's `rounds.md` row - `shared-planning-agent-rounds-SC-59`
-- [ ] 7.3 One reader argues the simpler shape for the whole change before it goes to staging, with its row in `rounds.md` - `shared-planning-agent-rounds-SC-60`
+- [x] 7.3 One reader argues the simpler shape for the whole change before it goes to staging, with its row in `rounds.md` - `shared-planning-agent-rounds-SC-60`
