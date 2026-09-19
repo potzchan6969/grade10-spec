@@ -29,7 +29,9 @@ const usesIn = (job, action) =>
   stepsOf(job).filter((step) => (step.uses ?? "").startsWith(action));
 
 test("shared-planning-agent-rounds-SC-66 - a second push queues behind the first and neither is cancelled", () => {
-  assert.equal(reread.concurrency.group, "cascade-${{ matrix.id }}");
+  // Matched rather than compared, so the workflow expression is not a
+  // template placeholder in this file's own source.
+  assert.match(reread.concurrency.group, /^cascade-\$\{\{ matrix\.id \}\}$/);
   assert.equal(reread.concurrency["cancel-in-progress"], false);
   // One queue per change, not per run: a group keyed by the run would let two
   // pushes to one change read it at once.
@@ -97,7 +99,10 @@ test("the round's summary is posted from the file the agent wrote", () => {
   const [post] = named(reread, "Post the round's own summary");
   assert.ok(post, "a plain step posts what the round wrote");
   assert.match(post.run, /--message-file \.round\/thread\.txt/);
-  assert.equal(post.env.SLACK_BOT_TOKEN, "${{ secrets.SLACK_BOT_TOKEN }}");
+  assert.match(
+    post.env.SLACK_BOT_TOKEN,
+    /^\$\{\{ secrets\.SLACK_BOT_TOKEN \}\}$/,
+  );
 });
 
 test("the two posts are keyed, restored and saved the way the messages are", () => {
