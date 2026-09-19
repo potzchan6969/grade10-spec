@@ -2,6 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-19, tcs-rules r3.0
+**Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-35
 
 ## shared-planning-agent-rounds-US1: Product manager opens a change from one sentence
 
@@ -160,8 +161,40 @@
 
 **Expected Results:**
 
-* A change opens and the reply names its change id.
-* The reply says who it recorded as the change's product manager.
+* A change opens with its product manager unnamed, and the reply names its change id.
+* The reply says the hand is unnamed and asks for the handle.
+
+### shared-planning-agent-rounds-US1-TC6-1: A round run from a terminal lands the same way
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* <change> is open with its proposal on `main`, and <change thread> cannot be reached.
+* admin(product manager of <change>) is at a terminal in the store on <change>'s branch.
+
+**Steps:**
+
+1. Run the round for `decisions.md` from the terminal.
+2. Say land at the terminal.
+3. Check `main` and `rounds.md`.
+
+**Expected Results:**
+
+* The same six steps run, with the perspectives the draft summons.
+* `decisions.md` is on `main` with `landed_by:` naming the product manager.
+* `rounds.md` gains the round's row.
 
 ---
 
@@ -359,6 +392,46 @@
 * `ui-design.md` does not reach `main`.
 * No `landed_by:` is written for it.
 * The reply names the hand the artifact waits on.
+
+### shared-planning-agent-rounds-US2-TC7-1: A remark on the page's marked lines
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Pre-conditions:**
+
+* `ui-design.md` is drafted on <change>'s branch and its summary quotes <a marked line of the page the change links>.
+* admin(designer of <change>) and admin(product manager of <change>) are in <change thread>.
+
+**Test data:**
+
+| The hand who remarks | The page gains |
+| --- | --- |
+| admin(designer of <change>) | a ❓ line for the product manager |
+| admin(product manager of <change>) | the remark applied as written |
+
+**Steps:**
+
+1. Reply as the hand from the table with a remark changing what <a marked line of the page the change links> says.
+2. Open the page <change> links.
+3. Read the reply.
+
+**Expected Results:**
+
+* The page gains what the table names.
+* No requirement is written from the remark before the page carries it.
 
 ---
 
@@ -718,6 +791,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No decisions row changes.
+* The reply says what it could not do.
 * No artifact reaches `main` on that reply.
 
 ### shared-planning-agent-rounds-US4-TC8-1: A reply that is none of the moves holds the question open
@@ -1109,7 +1183,7 @@ Runs once per row of **Test data**.
 * No round opens.
 * No `reviewed:` line changes.
 
-### shared-planning-agent-rounds-US5-TC12-1: Every artifact after the proposal read in one run
+### shared-planning-agent-rounds-US5-TC12-1: A read that edits several artifacts stops at the earliest
 
 **Classification:**
 
@@ -1127,7 +1201,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * <change> has the designs, the requirements, the cases and the plan on `main`.
-* An edit to `proposal.md` reaching each of them is ready to land.
+* An edit to `proposal.md` reaching the design and the requirements is ready to land.
 
 **Steps:**
 
@@ -1138,8 +1212,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Each artifact after the proposal is read, oldest first.
-* Each artifact the read edits opens a round for its own hand.
-* One reply carries the run.
+* A round opens for the earliest edited artifact's hand, and the read stops there.
+* The artifacts after that one are read again once that round lands.
 
 ### shared-planning-agent-rounds-US5-TC13-1: The fold at archive refuses a behind delta
 
@@ -1170,6 +1244,37 @@ Runs once per row of **Test data**.
 
 * The check refuses the fold.
 * It names the behind delta.
+
+### shared-planning-agent-rounds-US5-TC14-1: A resumed run continues from the pushed draft
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* A run for <change> pushed a draft to <change>'s branch and then stopped.
+
+**Steps:**
+
+1. Start a run for <change> again.
+2. Read <change thread>.
+3. Check <change>'s branch.
+
+**Expected Results:**
+
+* The run reads <change>'s branch, `main` and <change thread>.
+* It continues from the pushed draft rather than drafting it again.
+* A question already answered in the thread is not asked again.
 
 ---
 
@@ -1386,7 +1491,7 @@ Runs once per row of **Test data**.
 * A question to the product manager names extend, supersede and split.
 * No artifact after the moved line is rewritten in place.
 
-### shared-planning-agent-rounds-US7-TC2-1: The answer is recorded and nothing is rewritten in place
+### shared-planning-agent-rounds-US7-TC2-1: The answer is recorded and does what it names
 
 Runs once per row of **Test data**.
 
@@ -1409,20 +1514,21 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| The answer |
-| --- |
-| extend |
-| supersede |
-| split |
+| The answer | What it does |
+| --- | --- |
+| extend | <change> goes on with the moved goal, and everything after its proposal is read again |
+| supersede | a new change opens from the moved goal and <change> is withdrawn |
+| split | a new change takes the moved part and <change> keeps the rest |
 
 **Steps:**
 
 1. Answer the moved-goal question in <change thread> with the answer from the table.
 2. Check `decisions.md`.
-3. Check the artifacts after the moved line.
+3. Check the changes in flight and the artifacts after the moved line.
 
 **Expected Results:**
 
+* What the table names has happened.
 * The decisions row records the answer and the hand who gave it.
 * No goal or non-goal is rewritten in place.
 
@@ -1789,7 +1895,7 @@ Runs once per row of **Test data**.
 * The Rounds row lists no round.
 * The check does not refuse <change>.
 
-### shared-planning-agent-rounds-US9-TC7-1: A row missing a column is reported
+### shared-planning-agent-rounds-US9-TC7-1: A row missing a column is refused
 
 **Classification:**
 
@@ -1806,7 +1912,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <change>'s `rounds.md` holds a row naming no perspective.
+* <change> was opened after the round rule, and its `rounds.md` holds a row naming no perspective.
 * admin(engineer of <change>) is at a terminal in the store.
 
 **Steps:**
@@ -1816,7 +1922,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The check reports the row and names <change>.
+* The check refuses and names the column the row leaves empty.
 * The file's other rows are not reported.
 
 ### shared-planning-agent-rounds-US9-TC8-1: The record archives with the change and folds nowhere
@@ -1857,4 +1963,44 @@ None yet - the first blind pass.
 
 Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Feature set), user-journeys.md, proposal.md, decisions.md with its Raised table, ui-design.md, the Agent Rounds and Change Stages pages and the Planning index, the store context; denied every `## Requirements` section, openspec/specs/ and openspec/changes/archive/.
 
-Pending - written by the reconciliation.
+### Folded
+
+* **The summary is one screen, and each question carries its recommendation** - `US3-TC1-1` asked of every draft's summary what the design file states of the thread's replies, and no scenario said it. Folded into `shared-planning-agent-rounds-SC-01` and the round's own requirement.
+* **A round that found nothing still writes its row** - `US9-TC3-1` reads the case the record exists for, and the scenarios said only that there is one row per round. Folded into `shared-planning-agent-rounds-SC-51` and the record's requirement.
+* **Every case automated, and none** - `US8-TC3-1` walks both ends of the run sheet's rule. Kept as a boundary of `shared-planning-agent-rounds-SC-61`, which decides both; no scenario of its own.
+
+### Rejected
+
+None. No case read a non-goal as behaviour, and none took the stage, the direct messages or the Behind chip - `shared/planning/change-stages`' - for this capability's.
+
+### Escalated
+
+Thirteen questions went to the change's `decisions.md`, and the answers landed as `Q17` to `Q28`.
+
+* **A message naming an open change** → `Q17`. Answered in that change's thread, the reply naming the id; folded into `shared-planning-agent-rounds-SC-18`, and `US1-TC4-1` stands.
+* **An asker with no entry in the team map** → `Q18`. The change opens with its product manager unnamed and the reply asks for the handle; folded as `shared-planning-agent-rounds-SC-19`, and `US1-TC5-1` recast onto the unnamed hand.
+* **Who may say land** → `Q19`, on the product manager, with the hand of the stage alone recommended and a ❓ on the page. Folded as `shared-planning-agent-rounds-SC-05`; `US2-TC6-1` stands as the blind pass wrote it.
+* **A reply that is none of the moves** → `Q20`. It is a remark, applied as written, and a reply the round cannot apply is answered with what it could not do; folded as `shared-planning-agent-rounds-SC-15`. `US4-TC8-1` stands and `US4-TC7-1` gained that reply.
+* **A re-read that would edit several artifacts** → `Q21`. It reads in order, opens a round for the earliest edited artifact's hand and stops; folded into `shared-planning-agent-rounds-SC-41`, and `US5-TC12-1` recast onto the stop, which is the one place the two readings disagreed.
+* **Two landings inside one run's life** → `Q22`. A no-op re-read is not a round and writes no row, so a joined run leaves none; folded into `shared-planning-agent-rounds-SC-39` and the record's requirement.
+* **A landing with nothing after it** → `Q23`. Nothing beyond the landing line; folded as `shared-planning-agent-rounds-SC-42`, and `US5-TC11-1` stands.
+* **When `rounds.md` exists** → `Q24`. With the first round, absent until then; folded as `shared-planning-agent-rounds-SC-53`, and `US9-TC6-1` stands.
+* **A row missing a column** → `Q25`. Refused as a missing row is, naming the column; folded as `shared-planning-agent-rounds-SC-56`, and `US9-TC7-1` recast from reported to refused.
+* **The agent's own `reviewed:` landing** → `Q22`, with the row above: the landed artifacts and the ticked groups owe rows, and a read that ran no perspective owes none.
+* **What each answer to a moved goal does** → `Q26`, on the product manager, with extend, supersede and split each doing something recommended and a ❓ on the page. Folded as `shared-planning-agent-rounds-SC-47`, and `US7-TC2-1` recast onto what each answer does.
+* **Where the product manager's read of the requirements is walked** → `Q27`. In `shared/planning/change-stages`, as the hand's move at Specified; here `shared-planning-agent-rounds-SC-06` states the two readings' exemption alone, and no journey and no case of this capability walks the read.
+* **A remark that touches a page's marked lines** → `Q28`. From the product manager it is applied as written; from any other hand it becomes a ❓ line for the product manager. Folded as `shared-planning-agent-rounds-SC-16`, with `US2-TC7-1` added.
+
+### Out of suite
+
+* `shared-planning-agent-rounds-SC-06` - the two readings and no verifier over them: `pnpm check:manual`'s `blind` rule, which refuses a delta whose moved behaviour no second reading brought back.
+* `shared-planning-agent-rounds-SC-10` - no record key changes a round's size: the store's unit tests over the round's size, which compute the readers from the diff and read no key.
+* `shared-planning-agent-rounds-SC-23` - an open row holds no stage: `shared/planning/change-stages`' suite, where the stage's derivation is walked.
+* `shared-planning-agent-rounds-SC-28` - every round reads one table: `pnpm run test:openspec`, which reads the perspectives the schema records per artifact.
+* `shared-planning-agent-rounds-SC-29` - a new reader is one row: `pnpm run test:openspec`, as above.
+* `shared-planning-agent-rounds-SC-30` - a reader sees no other reader's output: the store's unit tests over the round's dispatch, which give each challenger the draft and what is before it alone.
+* `shared-planning-agent-rounds-SC-35` - the content id comparison: the store's unit tests over the content id, a pure derivation no surface shows.
+
+### Anchors no case reaches
+
+Every journey from `shared-planning-agent-rounds-US-01` to `shared-planning-agent-rounds-US-09` is walked. No case traces a feature set root group - this suite carries a section per journey - so a rule with no actor is reached through the journey that meets it, or listed out of suite above. `Your moves` is served by no scenario: every move a hand has is a rule somebody walks, and each scenario names that walk instead.

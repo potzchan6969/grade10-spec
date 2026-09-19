@@ -60,6 +60,8 @@ Three things you say in the thread, and one you can do anywhere.
   designer, never a screen in prose
 - 🚧 **Told once** — a draft ready for you is one reply; a landing is one
   reply; nothing per turn
+- ❓ **Only the hand lands** — another teammate's land is refused and names
+  whose word it waits on; the product manager confirms
 
 ## Perspectives
 
@@ -109,6 +111,8 @@ them all.
   superseded or split, and lands nothing until they answer
 - 🚧 **A waived artifact is fresh** — a waiver says nothing is owed, so
   nothing after it waits
+- ❓ **Extend, supersede, split** — extend reads everything after the proposal again, supersede opens a new
+  change and withdraws this one, split opens a new change for the moved part; the product manager confirms
 
 ## The Walk
 

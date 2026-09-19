@@ -35,18 +35,18 @@ New in `tools/manual`, work in grade10-spec: `RoundsList`, `QuestionList` gains 
 
 ## States
 
-- A thread whose first message is the product manager's sentence, with the agent's first reply naming the change id - `shared-planning-agent-rounds-US-01`
-- A draft summary with numbered questions, each with its recommendation - `shared-planning-agent-rounds-US-04`
-- A question answered by its id alone, closing on the recommendation - `shared-planning-agent-rounds-US-04`
-- A remark applied as written, with the perspectives it re-ran named in the reply - `shared-planning-agent-rounds-US-02`
-- A challenge from the tech PIC recorded as a decisions row with the agent's answer - `shared-planning-agent-rounds-US-03`
-- A landing reply naming the artifact, the handle and the stage it moved - `shared-planning-agent-rounds-US-02`
-- A re-read reply saying what was read and that nothing changed - `shared-planning-agent-rounds-US-05`
-- A re-read reply opening a round for a hand, with the change that reached the artifact - `shared-planning-agent-rounds-US-05`
-- A round refused to land because an artifact before it is behind, saying which - `shared-planning-agent-rounds-US-05`
-- A question to the product manager on a moved goal: extend, supersede or split - `shared-planning-agent-rounds-US-07`
-- A landing summary for a task group naming the perspectives that read it and the tests per scenario - `shared-planning-agent-rounds-US-06`
-- A run sheet tab with automated cases left out and the count said - `shared-planning-agent-rounds-US-08`
-- The change page's Rounds row with one line per round, and a group with no round row shown as such - `shared-planning-agent-rounds-US-09`
-- My turn with open questions above the changes, and with none - `shared-planning-agent-rounds-US-04`
-- A thread reply from a run that lost a race, saying so and stopping - `shared-planning-agent-rounds-US-05`
+- A thread whose first message is the product manager's sentence, with the agent's first reply naming the change id - `shared-planning-agent-rounds-US-01` - `shared-planning-agent-rounds-SC-17`
+- A draft summary with numbered questions, each with its recommendation - `shared-planning-agent-rounds-US-04` - `shared-planning-agent-rounds-SC-21`
+- A question answered by its id alone, closing on the recommendation - `shared-planning-agent-rounds-US-04` - `shared-planning-agent-rounds-SC-11`
+- A remark applied as written, with the perspectives it re-ran named in the reply - `shared-planning-agent-rounds-US-02` - `shared-planning-agent-rounds-SC-12`
+- A challenge from the tech PIC recorded as a decisions row with the agent's answer - `shared-planning-agent-rounds-US-03` - `shared-planning-agent-rounds-SC-13`
+- A landing reply naming the artifact, the handle and the stage it moved - `shared-planning-agent-rounds-US-02` - `shared-planning-agent-rounds-SC-04`
+- A re-read reply saying what was read and that nothing changed - `shared-planning-agent-rounds-US-05` - `shared-planning-agent-rounds-SC-39`
+- A re-read reply opening a round for a hand, with the change that reached the artifact - `shared-planning-agent-rounds-US-05` - `shared-planning-agent-rounds-SC-40`
+- A round refused to land because an artifact before it is behind, saying which - `shared-planning-agent-rounds-US-05` - `shared-planning-agent-rounds-SC-43`
+- A question to the product manager on a moved goal: extend, supersede or split - `shared-planning-agent-rounds-US-07` - `shared-planning-agent-rounds-SC-45`
+- A landing summary for a task group naming the perspectives that read it and the tests per scenario - `shared-planning-agent-rounds-US-06` - `shared-planning-agent-rounds-SC-58`
+- A run sheet tab with automated cases left out and the count said - `shared-planning-agent-rounds-US-08` - `shared-planning-agent-rounds-SC-61`
+- The change page's Rounds row with one line per round, and a group with no round row shown as such - `shared-planning-agent-rounds-US-09` - `shared-planning-agent-rounds-SC-51`
+- My turn with open questions above the changes, and with none - `shared-planning-agent-rounds-US-04` - `shared-planning-agent-rounds-SC-26` and `shared-planning-agent-rounds-SC-27`
+- A thread reply from a run that lost a race, saying so and stopping - `shared-planning-agent-rounds-US-05` - `shared-planning-agent-rounds-SC-69`

@@ -40,10 +40,47 @@
 | Q14 | Where does the walk record what it covers? | On each case's automation status, flipped to automated by the walk's commit; the run sheet leaves automated cases out; the suite runs on every push to `main`, its smoke cases on every staging deploy and cut | A second list of covered cases, which drifts from the suite |
 | Q15 | Does the thread's address live in the record? | Yes: `thread:` in `.openspec.yaml`, written once when the thread opens, so every message and every wake finds it | A search of the app's own messages, which needs a user token; the workflow's cache, which evicts |
 | Q16 | Where does a requirement that reaches the tech design go? | A dated `awaiting: tech-design:` line for the tech PIC, cleared by their edit or a `reviewed:` line; the order stays the owner's, the tech design before the requirements | A tech design after the requirements, which the owner's brief ruled out; a second chain in which the design depends on the spec, which is circular |
+| Q17 | What does a channel message naming an open change do? | It is answered in that change's thread, and the reply names the id; no second change opens | A second change, which doubles the work and splits the thread |
+| Q18 | What if the asker has no entry in the team map? | The change opens with its product manager hand unnamed, and the reply says so and asks for the handle; the map is the fix | Refusing the sentence, which turns the smooth path into a form |
+| Q19 | Who may say land? | ❓ pm - recommended: the hand of the stage alone; another teammate's word is refused with a reply naming whose word it waits on, and reassigning the hand is the way around | Anybody in the thread, with the record naming them, which makes the hands table decorative |
+| Q20 | What is a reply that is none of the moves? | A remark, applied as written; a reply the round cannot apply is answered with what it could not do | Leaving it unapplied with the question open, which makes silence look like an answer |
+| Q21 | What does a re-read that would edit several artifacts do? | It reads in order, opens a round for the earliest edited artifact's hand and stops there; what comes after is read again once that lands | A round per edited artifact at once, which puts three hands on drafts drawn from a draft |
+| Q22 | Is a no-op re-read a round? | No: it writes the `reviewed:` lines and one thread line and no row; the `round` rule reads landed artifacts and ticked groups alone | A row per re-read, which fills the record with rounds that ran nothing |
+| Q23 | What does a landing with nothing after it say? | Nothing beyond the landing line; the re-read runs and finds nothing to read | A second line saying nothing was read, which is noise |
+| Q24 | When does `rounds.md` exist? | With the first round; absent until then, and the check refuses only a landed artifact or a ticked group with no row | An empty file from `openspec new change`, which the CLI does not write |
+| Q25 | What of a `rounds.md` row missing a column? | Refused by the `round` rule like a missing row, naming the column | A warning, which leaves the record half written |
+| Q26 | What does each answer to a moved goal do? | ❓ pm - recommended: extend: the change goes on with the moved goal and everything after the proposal is read again; supersede: a new change opens from the moved goal and this one is withdrawn; split: a new change takes the moved part and this one keeps the rest; each is recorded as a decisions row | Recording the word alone, which leaves the agent to guess what to open |
+| Q27 | Where is the product manager's read of the requirements walked? | In `change-stages`, as the hand's move at Specified; here only the exemption of the two readings is stated, and no journey or case walks the read | A journey of its own here, which would double the walk |
+| Q28 | What of a remark that touches a page's marked lines? | From the product manager it is applied to the page as written; from any other hand it becomes a ❓ line on the page for the product manager | Applying every remark to the page, which lets a designer settle a product detail |
+| Q29 | What is the schema's order for the content id? | The artifact list's order in `schema.yaml`, with `tech-design` moved above `specs` in the list so the order and the page's table agree | A list unchanged with only `requires` moved, which would hash the tech design after the suite |
+| Q30 | Does a rewrap put artifacts behind? | No: whitespace is collapsed before hashing, so an edit that changes only whitespace leaves the content id equal; a reformat that changes words does put them behind | Hashing the bytes, which puts every artifact behind on a rewrap |
+| Q31 | Does the code carry a `reviewed:` line? | No: the refusal on a behind `tasks.md` covers a group's landing, and the schema issues no id for the code | An entry the schema has no id for, written from the application repository |
+| Q32 | Whose word lands `spec.md` and `feature-tcs.md`? | The product manager's, at the reconciliation, both together | QA's, which Q9 took off the ladder |
+| Q33 | What is the `round` rule's date fence? | A change created on or after the day the rule lands, read from `created:` | The day after, which excuses the changes opened that day |
+| Q34 | How is the Round column numbered? | Within the change, from 1, in landing order | Per artifact, which makes two rounds share a number |
 
 ## Raised
 
-Empty - the blind pass has not run yet.
+Thirteen questions the blind reading of the cases could not settle from the
+outline, the journeys, the decisions, the design and the page: who may land, what
+a reply that is none of the moves does, what a re-read that edits several
+artifacts does, when the record exists and what it owes, what each answer to a
+moved goal does, and where a remark on the page lands. Each landed as a
+`## Decisions` row above, `Q17` to `Q28`, and `Q19` and `Q26` also as a ❓ line
+on the page for the product manager.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| shared/planning/agent-rounds | A planning-channel message that names an open change: does it route into that change's thread, or open a second change? The feature set states only that a message naming no change opens one. | Q17 |
+| shared/planning/agent-rounds | A first sentence from a teammate with no entry in the handle map: is the asker still recorded as the change's product manager by their Slack handle, or does the change open with the hand unnamed? | Q18 |
+| shared/planning/agent-rounds | Saying land as a teammate who is not the hand of the stage: is the word refused and the artifact held, or does any teammate in the thread land it and the record name them? | Q19 |
+| shared/planning/agent-rounds | A thread reply that is neither an answer, a remark nor land: is it taken as a remark, since a remark is applied as written, or left unapplied with the question still open? | Q20 |
+| shared/planning/agent-rounds | A re-read that edits several artifacts at once: does it open a round for each edited artifact's hand, or stop at the earliest and wait for that hand? | Q21 |
+| shared/planning/agent-rounds | Two landings inside one run's life: does the change's record carry one row for the joined run, or one row per landing? | Q22 |
+| shared/planning/agent-rounds | A landing on a change with nothing after it: does the run post a line in the thread saying it read nothing, or stay silent, given a landing is one reply? | Q23 |
+| shared/planning/agent-rounds | Is `rounds.md` owed from a change's first file, or written with its first round? A change with no round yet: no file, or a file with no row? | Q24 |
+| shared/planning/agent-rounds | A `rounds.md` row missing a column, such as the perspectives: does the check refuse it as it refuses a missing row, or report it only? | Q25 |
+| shared/planning/agent-rounds | A `reviewed:` line the agent lands on its own (Q1): does it owe a round row, which Q7 refuses a landed artifact without, or is a no-op read not a round? | Q22 |
+| shared/planning/agent-rounds | Answering a moved-goal question extend, supersede or split: does each answer do something to the change - a new change, a closed one - or does it only record the product manager's word? | Q26 |
+| shared/planning/agent-rounds | No journey walks the product manager reading the requirements and the cases together at the reconciliation (Q9, the blind readings' stops). Is that the hand of US-05, or a journey not yet written? | Q27 |
+| shared/planning/agent-rounds | A remark that touches a page's marked lines rather than the artifact: is it applied to the page as written, or asked as a ❓ line for the page's owner? | Q28 |
