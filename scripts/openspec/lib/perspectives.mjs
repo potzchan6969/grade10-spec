@@ -88,11 +88,12 @@ const heading = (text) => /^\s*#{1,6}\s+\S/.test(text);
 const under = (section, name) =>
   new RegExp(`^\\s*#{1,6}\\s+${name}\\b`, "i").test(section);
 
-/** What the file a line sits in says on its own: the design's own draft is a
- * surface, a page under `docs/prds/` is words a reader sees, and a workflow is
- * a deploy step. */
+/** What the file a line sits in says on its own: a page under `docs/prds/` is
+ * words a reader sees, and a workflow is a deploy step. `ui-design.md` is not
+ * here — its name would raise `surface` on every design round, an empty diff
+ * included, and a screen, a state and a story each raise it from the line
+ * itself. */
 const ofFile = (file, found) => {
-  if (/(^|\/)ui-design\.md$/.test(file)) found.add("surface");
   if (file.startsWith("docs/prds/")) found.add("copy");
   if (/^\.github\/workflows\/.+\.ya?ml$/.test(file)) found.add("deploy");
 };

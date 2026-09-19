@@ -381,12 +381,14 @@ artifacts:
     # `design.md`'s, then the words as `reader.md` reads them. Neither design
     # reading is `always`: a words-only draft never touches a screen, a state
     # or a story, and `design.md`'s own "Summoned by" stays trigger-based.
+    # The inventory also reads `export`, because a `## Components` table names
+    # the exports the design composes and raises that trigger alone.
     perspectives:
       - name: journeys
         when: [surface]
         agent: .claude/agents/design.md
       - name: inventory
-        when: [surface]
+        when: [surface, export]
         agent: .claude/agents/design.md
       - name: reader
         when: [copy]
