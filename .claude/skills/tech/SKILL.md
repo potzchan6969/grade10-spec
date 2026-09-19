@@ -21,9 +21,10 @@ landing and the re-read.
 
 ## What the Round Adds Here
 
-- **One reader, four readings** — deterministic, resilient and observable;
-  simple and clear; consistent, modular and built on later; testable and
-  buildable, argued together by the one dispatch of `tech.md`. Each finding
+- **Four readings, four dispatches** — deterministic, resilient and
+  observable; simple and clear; consistent, modular and built on later;
+  testable and buildable: the schema names each as its own perspective, and
+  the round dispatches `tech.md` once per reading with its name. Each finding
   names one of the eight principles in
   [`docs/governance/system-design.md`](../../../docs/governance/system-design.md),
   and a finding that names none is not carried

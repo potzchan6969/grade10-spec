@@ -82,9 +82,10 @@ findings, and the bundle each one is given. It reads no record key.
   `.round/diff` empty; only the `always` reader is summoned
 - **The simpler thing, always** — the reader whose `when` is `always` runs on
   every round and is the floor when a round has one reader
-- **One challenger per perspective** — dispatch each `agent` under
-  `.claude/agents/` once, with its perspective's name, the draft and its
-  bundle. Never pass one reader another reader's findings, and never a
+- **One challenger per perspective** — dispatch one reader per entry the
+  command returns, with that entry's `name`, the draft and its bundle; one
+  `agent` file is dispatched as many times as the entries naming it, each a
+  reading of its own. Never pass one reader another reader's findings, and never a
   verifier's verdict
 - **A verifier when `verifier` is true** — dispatch `.claude/agents/verifier.md`
   with that group and the draft
