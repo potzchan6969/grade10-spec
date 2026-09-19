@@ -66,6 +66,7 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 - A card whose suite is a draft, and one whose suite is approved - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-19`
 - The Mine filter with no handle chosen - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-55`
 - The change page's Your turn card on the hosted manual, with Assign shown as read-only - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-69`
+- ❓ design - this list names Assign's read-only state on the hosted manual but not its working counterpart on the locally run manual - a role and a handle to write, in the Your turn card - confirm the plain role picker and handle field built for it, or draw the state - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-68`
 - The change page's stepper below `sm`, on one line - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-57`
 - The change page for a change waiting on a stage whose hand is unnamed - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-17`
 - The change page for a change with `ui_waived`, showing the design as not owed and fresh - `shared-planning-change-stages-US-05` - `shared-planning-change-stages-SC-07`
@@ -75,6 +76,7 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 - My turn with open questions above the changes - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-60`
 - My turn before a handle is chosen - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-62`
 - My turn for a handle the team map does not know - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-64`
+- ❓ design - this list draws the pip's two edge cases (archived, two changes) but not its base state - a section's in-flight row naming the stage and the hand, and its 🚧 line wearing that stage's own pip - confirm the plain outline `Badge` built for it - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-65`
 - A 🚧 line whose change has archived, wearing no pip - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-66`
 - A 🚧 line delivered by two changes, wearing the further stage - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-67`
 - A Your turn message for a change reaching a stage twice, sent once - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-36`
