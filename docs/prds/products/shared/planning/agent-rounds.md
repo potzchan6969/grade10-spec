@@ -1,5 +1,6 @@
 ---
 title: Agent Rounds
+spec: shared/planning/agent-rounds
 order: 2
 ---
 

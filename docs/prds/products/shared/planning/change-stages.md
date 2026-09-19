@@ -1,5 +1,6 @@
 ---
 title: Change Stages
+spec: shared/planning/change-stages
 order: 1
 ---
 
