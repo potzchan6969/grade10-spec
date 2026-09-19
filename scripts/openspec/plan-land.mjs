@@ -30,7 +30,9 @@
  *              landing, named with its hand
  *   5 write    `landed_by: <artifact>: <handle>` (never for a task group,
  *              whose plan is proven by the tick alone) and the `rounds.md`
- *              row, written to the tree before the gate below reads it — the
+ *              row, whose `Tests` cell owes an entry per scenario the
+ *              group's own task lines cite, written to the tree before the
+ *              gate below reads it — the
  *              `round` rule that refuses a tick or a landed artifact with no
  *              row is the same rule the gate runs, so the row has to be there
  *              for the gate to pass rather than land after it. A refusal at
@@ -88,6 +90,9 @@ import { git as storeGit, storeMain } from "./store-main.mjs";
 import { main as validateChanges } from "./validate-changes.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
+/** A scenario a task line cites, the way the store writes a citation: in
+ * backticks, so prose about a scenario is not read as one. */
+const CITED = /`([a-z0-9][a-z0-9-]*-SC-\d+)`/g;
 const USAGE =
   'usage: pnpm run plan:land <change> <artifact|group> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--reviewed] [--dry-run] [--root <dir>]';
 
@@ -416,8 +421,49 @@ function rowOf() {
     perspectives: perspectivesCell(flags.perspectives),
     stood: flags.stood,
     asked: askedCell(flags.asked),
-    tests: flags.tests ?? "",
+    tests: testsCell(flags.tests),
   };
+}
+
+/** The scenarios one group's own task lines cite, in the order they are
+ * written and each once: the plan on `main` is what the group owes tests for,
+ * so they are read from `tasks.md` rather than taken from the round's word. */
+function citedByGroup() {
+  const wanted = roundArtifactOf(target);
+  const group = read.entry.taskGroups.find((one) => one.num === wanted);
+  const ids = [];
+  for (const task of group?.tasks ?? []) {
+    for (const [, id] of task.text.matchAll(CITED)) {
+      if (!ids.includes(id)) ids.push(id);
+    }
+  }
+  return ids;
+}
+
+/**
+ * The `Tests` cell, held to what the group's tasks cite: the landing summary
+ * and the row name the tests per scenario id, so a group whose task lines
+ * cite scenarios owes an entry for each of them and is refused naming the
+ * ones left out. A group whose tasks cite none owes nothing, and the row's
+ * cell reads `-` like every other column a round has nothing for.
+ *
+ * An artifact's landing is not held to anything here: no artifact of the
+ * schema carries scenario ids of its own to answer for.
+ */
+function testsCell(value) {
+  const cell = String(value ?? "");
+  if (artifact !== undefined) return cell;
+  const missing = citedByGroup().filter((id) => !cell.includes(id));
+  if (missing.length > 0) {
+    fail(
+      `${target}'s tasks cite a scenario --tests names no test for:\n${missing
+        .map((id) => `  ${id}`)
+        .join(
+          "\n",
+        )}\nThe row names the tests per scenario id, so pass --tests "<id>: <file>[; …]" naming one for each.`,
+    );
+  }
+  return cell;
 }
 
 /**
