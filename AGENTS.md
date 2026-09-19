@@ -5,7 +5,7 @@ This repository is the versioned source of truth for product requirements and th
 ## Operating principles
 
 - Treat product managers, designers, and engineers as collaborators. Check existing PRDs, specs, primitives, and conventions before proposing a new structure.
-- Write everything — specs' prose, PRDs, manual pages, commits, replies — in the house style, [`docs/governance/writing.md`](docs/governance/writing.md): headings as plain Title Case labels, values first, items leading with the key term in bold, the reader's words, short sentences with no flourish, decided facts flat and present-tense, ❓ or `TBC` on anything unconfirmed, 🚧 only on what is confirmed and being built. Copy the page its Copy table names for the kind of page you are writing — `docs/prds/products/grade10-site/loyalty/points.md` and `tiers.md` for rules, `coupons.md` for an instrument and its refusals, `docs/prds/products/grade10-site/store/product-listing.md` for a surface. Never cite a scenario id (`…-SC-32`) on a manual page — state the rule and link the capability. A page holds only what its reader would act differently without; a case that proves a rule, a state that dresses an outcome, and a mechanism belong to the suite, the design record and the architecture doc, and `pnpm check:manual` warns (`dense`) on a page past the style's budget.
+- Write everything — specs' prose, PRDs, manual pages, commits, replies — in the house style, [`docs/governance/writing.md`](docs/governance/writing.md): headings as plain Title Case labels, values first, items leading with the key term in bold, the reader's words, short sentences with no flourish, decided facts flat and present-tense, ❓ or `TBC` on anything unconfirmed, 🚧 only on what is confirmed and being built. Copy the page its Copy table names for the kind of page you are writing. Never cite a scenario id (`…-SC-32`) on a manual page — state the rule and link the capability. A case that proves a rule, a state that dresses an outcome and a mechanism belong to the suite, the design record and the architecture doc.
 - Prefer the smallest reusable artifact. Call out a preference or design-system choice as a choice, not as an objective improvement.
 - Keep changes reviewable: one product decision or component capability per pull request where practical.
 - Do not modify generated `packages/design-system/src/theme.css` or `src/themes/grade10.css` by hand. Edit `tokens.json` or `tokens.config.json` and regenerate with `pnpm run tokens:build`.
@@ -40,14 +40,16 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 
 | # | Artifact | Written by | Skill | Required |
 | --- | --- | --- | --- | --- |
-| 1 | `proposal.md` | Product manager | `planning-pm` | Always |
-| 2 | `decisions.md` | Product manager | `planning-pm` | Always — goals, non-goals, what the interview settled |
-| 3 | `specs/<capability>/user-journeys.md` | Product manager | `planning-pm` | Always — a capability nobody walks says so in it |
-| 4 | `ui-design.md` | Designer, or the PM with the design | `planning-design` | Optional — from the journeys |
-| 5 | `specs/<capability>/spec.md` | Generated, the PM reviews | `planning-qa`, or `planning-dev` on their own change | Always — two passes, with 6 between them |
-| 6 | `specs/<capability>/feature-tcs.md` | Generated, QA reviews | `planning-qa` | Always — a blind pass, before the scenarios |
-| 7 | `tech-design.md` | Engineer | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
-| 8 | `tasks.md` | Engineer | `planning-dev` | Before the change can be applied |
+| 1 | `proposal.md` | Product manager | `/plan`, `planning-pm` | Always |
+| 2 | `decisions.md` | Product manager | `/plan`, `planning-pm` | Always — goals, non-goals, what the interview settled |
+| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/plan`, `planning-pm` | Always — a capability nobody walks says so in it |
+| 4 | `ui-design.md` | Designer, or the PM with the design | `/design`, `planning-design` | Optional — from the journeys |
+| 5 | `specs/<capability>/spec.md` | Generated, the PM reviews | `/specify`, `planning-qa` or `planning-dev` | Always — two passes, with 6 between them |
+| 6 | `specs/<capability>/feature-tcs.md` | Generated, QA reviews | `/specify`, `planning-qa` | Always — a blind pass, before the scenarios |
+| 7 | `tech-design.md` | Engineer | `/tech`, `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
+| 8 | `tasks.md` | Engineer | `/tasks`, `planning-dev` | Before the change can be applied |
+
+Each command names its artifact and follows the `round` skill, which reads its readers from the schema and dispatches them from `.claude/agents/`; `/build` takes a task group, `/land` one artifact.
 
 The PM writes 1 to 3 and stops, and so does a designer specifying a change. 2 records what the interview settled, and everything after is drawn from that scope: an artifact outside its goals, or inside a non-goal, disagrees with the change. A designer hangs 4 off the journeys unless the PM has the design. **Neither hand opens 5** — it is written by whoever takes the readings: the outline first, from the journeys and the marks, then both readings on the same branch — 6 blind to the scenarios, then 5's requirements reconciled against it. The engineer adds `tech-design.md` and `tasks.md` to that change, never a second one. Engineering never opens a change in the application repository: its `openspec/` is config-only and resolves to this store. Until a change has a `tasks.md` it shows on the engineer's board as still being planned. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
 
@@ -76,7 +78,6 @@ Read [`docs/governance/ui-component-contracts.md`](docs/governance/ui-component-
 - Components receive all consumer-owned content, product state, and behavior through props. Callback props use `on<Event>` names.
 - No data fetching, mutations, routing, app stores, analytics, feature flags, browser storage, or application imports inside the component itself.
 - Components may use React state, context, effects, refs, timers, and browser APIs for internal presentation and DOM behavior. They must not use those mechanisms to acquire, persist, subscribe to, or orchestrate consumer-owned product state.
-- In this repository, “stateless” means app-neutral: it excludes external product-state integration, not ephemeral internal UI state.
 - The export contract lives in the capability spec under `openspec/specs/`. Record a contract change as an OpenSpec change whose delta names the exact exports affected and the consuming applications that must adapt.
 
 ## Design system package
@@ -124,7 +125,7 @@ Run the appropriate checks before handoff:
 
 `AGENTS.md` is canonical. `AGENT.md`, `CLAUDE.md`, and `GEMINI.md` are compatibility aliases.
 
-`.claude/skills/` is canonical for skills. `.codex/skills/` and `.cursor/skills/` are symlinks to it, so every agent platform reads the same files. Edit skills under `.claude/skills/`; adding a platform means adding its symlink to the parity check and sync scripts.
+`.claude/skills/` is canonical, with `.codex/skills/` and `.cursor/skills/` symlinked to it, so every platform reads the same files; adding a platform means adding its symlink to the parity check and sync scripts. `.claude/agents/` is canonical for the round's readers, mirrored nowhere; the parity check asserts every reader the schema names resolves.
 
 When agent-related files change, run:
 
