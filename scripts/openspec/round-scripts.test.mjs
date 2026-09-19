@@ -512,6 +512,32 @@ test("shared-planning-agent-rounds-SC-57 - plan:land lands a ticked group's row 
   assert.match(roundsOf(root), /\| 1 \| 1 \| simpler \| nothing stood \|/);
 });
 
+test("shared-planning-agent-rounds-SC-51 - plan:land writes a group's bare digits, and the rule reads the row as it stands", () => {
+  const { root, git } = sandbox({
+    files: {
+      [`${DIR}/tasks.md`]:
+        "## 3. Build it (grade10-spec)\n\n- [x] 3.1 Ship it\n",
+    },
+  });
+  git("config", "user.email", "erin@test");
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "group 3",
+    "--root",
+    root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "nothing stood",
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  // `group 3` reaches the row as `3`: the one writer normalises the spelling,
+  // and the `round` rule the gate above ran read that row for the ticked
+  // group without normalising it a second time.
+  assert.match(roundsOf(root), /\| 1 \| 3 \| simpler \| nothing stood \|/);
+});
+
 test("plan:land refuses a group number tasks.md does not hold, naming the ones it does", () => {
   const { root, git } = sandbox();
   git("config", "user.email", "erin@test");
