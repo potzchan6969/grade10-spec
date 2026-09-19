@@ -1,12 +1,11 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Warning } from "@phosphor-icons/react";
 import { Link } from "react-router";
-import { citeTarget, type Dependency, type ManualIndex } from "../api/derive";
+import { citeTarget, type ManualIndex } from "../api/derive";
 import type { Overlay } from "../api/overlays";
 import { draftedOf, roleTitle, stageShown } from "../api/stage-view";
 import { handOf, taskTotals } from "../api/stages";
-import type { ChangeEntry, ChangeSuite, SchemaArtifact } from "../api/types";
+import type { ChangeEntry, SchemaArtifact } from "../api/types";
 import { Hands } from "./change-hand";
 import { OverlayChips } from "./change-overlays";
 import {
@@ -162,118 +161,6 @@ export function MainStateNote({ change }: { change: ChangeEntry }) {
           : `${state.files} artifact(s) in this checkout differ from ${state.ref} — merge these edits, or update this checkout to ${state.ref}, before building against this`}
       </Text>
     </div>
-  );
-}
-
-/**
- * The suites riding this change's deltas, with their review counts — the
- * QA work in flight that no durable surface can show, and the one line that
- * tells a PM their review request landed.
- */
-export function SuiteLines({ change }: { change: ChangeEntry }) {
-  const suites = change.suites ?? [];
-  if (suites.length === 0) return null;
-
-  return (
-    <ul className="mt-2.5 space-y-1">
-      {suites.map((suite) => (
-        <li
-          className="flex flex-wrap items-center gap-x-2 gap-y-1"
-          key={suite.spec}
-        >
-          <Text as="span" size="xs" tone="secondary">
-            Test cases · <span className="font-mono">{suite.spec}</span>
-          </Text>
-          {suite.error ? (
-            <Text as="span" className="text-destructive" size="xs">
-              {suite.error.message}
-            </Text>
-          ) : (
-            <>
-              <Badge
-                size="sm"
-                variant={suite.status === "approved" ? "success" : "warning"}
-              >
-                {suite.status}
-              </Badge>
-              <SuiteCounts suite={suite} />
-              {suite.cases.draft > 0 ? (
-                <CopyableCommand command={`/tcs-review ${change.id}`} />
-              ) : null}
-            </>
-          )}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function SuiteCounts({ suite }: { suite: ChangeSuite }) {
-  const { cases } = suite;
-  const parts = [
-    cases.draft > 0 ? `${cases.draft} draft` : null,
-    cases.actual > 0 ? `${cases.actual} reviewed` : null,
-    cases.deprecated > 0 ? `${cases.deprecated} retired` : null,
-  ].filter((part): part is string => part !== null);
-
-  return (
-    <Text as="span" size="xs" tone="secondary">
-      {cases.total} {cases.total === 1 ? "case" : "cases"}
-      {parts.length > 0 ? ` · ${parts.join(" · ")}` : ""}
-    </Text>
-  );
-}
-
-/**
- * What a change is waiting on, for the surface that labels the row itself. A
- * dependency still in flight is the loud one — it is the reason this change
- * cannot ship — a shipped one is said quietly so the edge stays visible, and
- * an id naming no change at all is a lie the board says out loud rather than
- * dropping.
- *
- * The board's card wears the Blocked overlay instead: one chip that names the
- * change it waits for, because the card carries one closed list of chips and
- * the page carries the whole reading.
- */
-export function DependencyPills({
-  dependencies,
-}: {
-  dependencies: Dependency[];
-}) {
-  return (
-    <>
-      {dependencies.map((dependency) => (
-        <li key={dependency.id}>
-          <DependencyPill dependency={dependency} />
-        </li>
-      ))}
-    </>
-  );
-}
-
-function DependencyPill({ dependency }: { dependency: Dependency }) {
-  const label = dependency.change?.title ?? dependency.id;
-
-  if (dependency.state === "missing") {
-    return (
-      <Badge
-        size="sm"
-        title={`\`depends_on: ${dependency.id}\` names no change, in flight or archived`}
-        variant="error"
-      >
-        {dependency.id} — names no change
-      </Badge>
-    );
-  }
-
-  const blocking = dependency.state === "blocking";
-  return (
-    <Link title={label} to={`/in-flight#${dependency.id}`}>
-      <Badge size="sm" variant={blocking ? "warning" : "outline"}>
-        <span className="max-w-56 truncate">{dependency.id}</span>
-        <span className="opacity-70">{blocking ? "in flight" : "shipped"}</span>
-      </Badge>
-    </Link>
   );
 }
 

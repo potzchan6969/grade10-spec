@@ -12,12 +12,7 @@ import {
   HandoffRow,
   QuestionList,
 } from "./artifact-list";
-import {
-  DependencyPills,
-  MainStateNote,
-  SpecLines,
-  SuiteLines,
-} from "./change-facts";
+import { MainStateNote, SpecLines } from "./change-facts";
 import { OverlayChips } from "./change-overlays";
 import { Attribution, TaskProgress } from "./change-views";
 import { HandsTable } from "./hands-table";
@@ -32,6 +27,13 @@ import { HandsTable } from "./hands-table";
  * hands, the artifacts, delivery, then the handoff — and the rows that were
  * here before follow. The handoff waits on the change's document, because the
  * only thing that dates a stage landing is when each artifact landed.
+ *
+ * "Beside the stage" carries the whole dependency and suite reading, not just
+ * the overlay's own compact chip: a separate "Blocked by" row and a "Test
+ * cases" row used to repeat the same blocking dependency and the same
+ * verdict a second time, in fuller form. `OverlayChips` takes the change's
+ * dependencies and suites directly now, so the one row is where both facts
+ * live.
  */
 export function ChangeStatus({
   change,
@@ -68,9 +70,13 @@ export function ChangeStatus({
         </Row>
       ) : null}
 
-      {overlays.length > 0 ? (
+      {overlays.length > 0 || dependencies.length > 0 ? (
         <Row className="[&>ul]:mt-0" label="Beside the stage">
-          <OverlayChips overlays={overlays} />
+          <OverlayChips
+            dependencies={dependencies}
+            overlays={overlays}
+            suites={change.suites ?? []}
+          />
         </Row>
       ) : null}
 
@@ -101,20 +107,6 @@ export function ChangeStatus({
       {questions.length > 0 ? (
         <Row label="Open questions">
           <QuestionList questions={questions} />
-        </Row>
-      ) : null}
-
-      {dependencies.length > 0 ? (
-        <Row label="Blocked by">
-          <ul className="flex flex-wrap items-center gap-1.5">
-            <DependencyPills dependencies={dependencies} />
-          </ul>
-        </Row>
-      ) : null}
-
-      {change.suites && change.suites.length > 0 ? (
-        <Row className="[&>ul]:mt-0" label="Test cases">
-          <SuiteLines change={change} />
         </Row>
       ) : null}
 

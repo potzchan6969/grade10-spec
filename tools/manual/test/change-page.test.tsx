@@ -247,13 +247,15 @@ describe("where the change stands", () => {
 
   /** The card wears one Blocked chip per unreleased id; the page is where the
    * whole reading is — a shipped dependency said quietly, and an id that
-   * names no change at all said out loud rather than dropped. */
+   * names no change at all said out loud rather than dropped. All three sit
+   * on the one "Beside the stage" row now, not a second "Blocked by" list. */
   it("separates a blocking dependency from a shipped one, and names a lie", () => {
     const html = render("/in-flight/pos", { status: "ready", document }, [
       changeEntry("shipped-already", [], { status: "archived" }),
     ]);
 
-    expect(html).toContain(">Blocked by<");
+    expect(html).toContain(">Beside the stage<");
+    expect(html).not.toContain(">Blocked by<");
     expect(html).toContain("in flight");
     expect(html).toContain("shipped");
     expect(html).toContain("never-written — names no change");

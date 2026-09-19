@@ -419,6 +419,37 @@ describe("the artifacts", () => {
   });
 });
 
+describe("the overlay row carries the whole dependency and suite reading", () => {
+  it("names one chip per dependency, saying the lie an id names no change, and no second Blocked by list", () => {
+    const html = render(change({ dependsOn: ["never-written"] }));
+    const beside = html.slice(html.indexOf(">Beside the stage<"));
+
+    expect(beside).toContain("never-written — names no change");
+    expect(html).not.toContain(">Blocked by<");
+  });
+
+  it("carries the suite's counts on its own chip, and no second Test cases list", () => {
+    const html = render(
+      change({
+        suites: [
+          {
+            spec: SPEC,
+            status: "pending-review",
+            cases: { draft: 2, actual: 1, deprecated: 0, total: 3 },
+          },
+        ],
+      }),
+    );
+    const beside = html.slice(html.indexOf(">Beside the stage<"));
+
+    expect(beside).toContain(">Suite<");
+    expect(beside).toContain("3 cases");
+    expect(beside).toContain("2 draft");
+    expect(beside).toContain("1 reviewed");
+    expect(html).not.toContain(">Test cases<");
+  });
+});
+
 describe("delivery and the handoff", () => {
   it("names main, staging and the release that carried the change", () => {
     const html = render(
