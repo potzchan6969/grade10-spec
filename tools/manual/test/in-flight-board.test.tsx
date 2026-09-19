@@ -33,6 +33,11 @@ vi.mock("../src/api/use-manual-index", () => ({
 }));
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => held.session,
+  browserKeyStore: {
+    get: () => null,
+    set: () => {},
+    remove: () => {},
+  },
 }));
 vi.mock("../src/api/use-archive", () => ({
   useArchive: () => held.archive,

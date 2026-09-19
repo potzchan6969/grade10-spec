@@ -32,6 +32,11 @@ vi.mock("../src/api/use-manual-index", () => ({
 }));
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => held.session,
+  browserKeyStore: {
+    get: () => null,
+    set: () => {},
+    remove: () => {},
+  },
 }));
 
 const { InFlightPage } = await import("../src/pages/in-flight-page");
