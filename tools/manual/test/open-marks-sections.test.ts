@@ -15,18 +15,23 @@ import { sectionTextOf } from "../src/content/sections";
  * page carry every question anybody ever left there.
  */
 
-const FIXTURE = fileURLToPath(
-  new URL("./fixtures/sections/rules.md", import.meta.url),
-);
+/** One fixture page, parsed the way the snapshot parses a page of the store. */
+function pageOf(name: string): ParsedPage {
+  const source = readFileSync(
+    fileURLToPath(new URL(`./fixtures/sections/${name}`, import.meta.url)),
+    "utf8",
+  );
+  const path = `docs/prds/products/demo-product/${name}`;
+  return {
+    path,
+    entry: { path, source },
+    ast: parsePage(source),
+    error: null,
+    route: `/p/demo-product/${name.replace(/\.md$/, "")}`,
+  };
+}
 
-const source = readFileSync(FIXTURE, "utf8");
-const page: ParsedPage = {
-  path: "docs/prds/products/demo-product/rules.md",
-  entry: { path: "docs/prds/products/demo-product/rules.md", source },
-  ast: parsePage(source),
-  error: null,
-  route: "/p/demo-product/rules",
-};
+const page = pageOf("rules.md");
 
 describe("the text one section is drawn from", () => {
   it("is the heading and the prose under it, to the next level-two heading", () => {
@@ -96,5 +101,60 @@ describe("the open marks under one section", () => {
 
   it("lists nothing under a section the page does not carry", () => {
     expect(marksUnder(page, "expiry")).toEqual([]);
+  });
+});
+
+/**
+ * One boundary, drawn once. A section runs to the next `## ` heading of the
+ * page's own prose — a heading inside a fence is text, and a heading inside a
+ * callout or a flow is that block's own — so the text a section is hashed
+ * from and the questions counted under it are the same lines.
+ */
+
+const boundaries = pageOf("boundaries.md");
+
+describe("the boundary both readers draw", () => {
+  it("reads a fenced heading as text, not as a section", () => {
+    expect(sectionTextOf(boundaries, "beta")).toBeUndefined();
+
+    const alpha = sectionTextOf(boundaries, "alpha") ?? "";
+    expect(alpha).toContain("## Beta");
+    expect(alpha).toContain("A heading nobody wrote as one.");
+  });
+
+  it("holds a callout's and a flow's body inside the section", () => {
+    const alpha = sectionTextOf(boundaries, "alpha") ?? "";
+
+    expect(alpha).toContain("The callout's own line.");
+    expect(alpha).toContain("The flow's step");
+    // The flow's steps are headings of the flow, never of the page.
+    expect(alpha).not.toContain("## Gamma");
+    expect(alpha).not.toContain("The section after it.");
+  });
+
+  it("leaves a titled block's rows to the page", () => {
+    const alpha = sectionTextOf(boundaries, "alpha") ?? "";
+
+    expect(alpha).not.toContain("What the block holds");
+  });
+
+  it("counts a callout's and a flow's questions under the section", () => {
+    const asked = openMarksOfPage(boundaries).filter(
+      (one) => one.where?.anchor === "alpha",
+    );
+
+    expect(asked.map((one) => one.text)).toEqual([
+      "❓ Whether the callout's line is Alpha's",
+      "❓ Whether the flow's line is Alpha's",
+    ]);
+  });
+
+  it("leaves a titled block's row out of the section", () => {
+    const rows = openMarksOfPage(boundaries).filter((one) =>
+      one.text.includes("What the block holds"),
+    );
+
+    expect(rows).toHaveLength(1);
+    expect(rows[0].where?.anchor).toBe("detail-product-decisions");
   });
 });
