@@ -44,7 +44,10 @@
  *   6 gate     `validate:changes --strict`, `check:manual`, `tcs:validate`,
  *              run in this process against this store rather than spawned
  *              against a nonexistent copy of themselves in it
- *   7 commit   what step 5 wrote, added and committed in one commit
+ *   7 commit   what step 5 wrote, added and committed in one commit, whose
+ *              sha is named in `.round/landed`: the commits a run made are
+ *              what the re-read's own guard reads, and the rebase in step 3
+ *              leaves every commit `main` gained looking like one of them
  *   8 push     the branch's remote sha, read once from the network rather
  *              than re-fetched before every attempt, leases the branch's own
  *              push; losing that lease means another run is on this same
@@ -76,6 +79,7 @@ import {
 import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
 import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
+import { appendLanded, LANDED } from "./lib/landed.mjs";
 import {
   isGroup,
   perspectivesOf,
@@ -320,6 +324,7 @@ if (dryRun) {
   ]);
   say("commit", `reviewed: ${artifact}: ${against.content}, and no row`);
   console.log(`           read against ${against.items.join(", ")}`);
+  named();
 } else {
   const { record, row, round } = pending;
   gitOrDie(["add", "--", record.path, roundsPath(change)]);
@@ -336,6 +341,7 @@ if (dryRun) {
       : `landed_by: ${artifact}: ${handle}, and round ${round}`,
   );
   console.log(`           ${row}`);
+  named();
 }
 
 // ── 8 push ──────────────────────────────────────────────────────────────────
@@ -586,6 +592,17 @@ function race(attempt) {
     stdio: "ignore",
     env: { ...process.env, PLAN_LAND_ATTEMPT: String(attempt) },
   });
+}
+
+/** The commit this landing just made, named in `.round/landed` — what the
+ * re-read's own guard reads instead of every commit the job's checkout gained
+ * while the round was reading, the landing's rebase on a moved `main`
+ * included. Written after the commit, so what it names is a commit that
+ * exists. */
+function named() {
+  const sha = gitOrDie(["rev-parse", "HEAD"]);
+  appendLanded(root, sha);
+  console.log(`           ${short(sha)} named in ${LANDED} for the guard`);
 }
 
 function short(sha) {
