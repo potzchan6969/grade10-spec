@@ -133,6 +133,8 @@ That is how the work reaches an engineer. The application repository has no plan
 | `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
 | `target`, `owner`, `owners`, `depends_on` | ❓ The manual reads them; no document says who writes them | ❓ | The boards |
 
+A question the record cannot answer belongs in `decisions.md`, whose `Decided` cell writes one open as `❓ <role> - <what is recommended>`: the ` - ` separator is the grammar the store reads the role by, and a cell that opens ❓ and names no role that way is addressed to nobody and reaches no list.
+
 ### The three hatches
 
 `skip_specs`, `blind_pass_skipped` and `**Walked by:** nobody` are read as one set, and only the first two are hatches.

@@ -41,6 +41,12 @@
      author kept against the interview's challenge - `Instead of` then carries
      the alternative the interview put up and why it lost.
 
+     A question the interview could not close is written `❓ <role> - <what is
+     recommended>` in `Decided`: the ` - ` separator is the grammar the store
+     reads the role by, and everything after it is what that role is being
+     asked to confirm. A cell that opens ❓ and names no role that way is
+     addressed to nobody and reaches no list.
+
      `Instead of` is what the row buys: the option dropped, and in a few words
      why. Without it the same question is asked again next quarter and answered
      the other way, with nothing to say which reading is newer.

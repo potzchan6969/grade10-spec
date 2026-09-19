@@ -78,7 +78,7 @@ One handle per role on each change.
 | Designer | `design` | Proposed, once the decisions and the journeys are on `main` |
 | Tech PIC | `tech` | Proposed, once the decisions and the journeys are on `main` |
 | QA | `qa` | On staging; the suite's review, any time, as an overlay |
-| Engineer | `dev` | Planned |
+| Engineer | `dev` | Planned and Building |
 | Release hand | `release` | On staging |
 
 - 🚧 **Recorded in git** — `hands:` in the change's `.openspec.yaml`, written
