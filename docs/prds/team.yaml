@@ -1,0 +1,18 @@
+# Who the store knows, and where a role is posted to.
+#
+# One entry per handle: the address `git config user.email` gives, the Slack
+# member a message is addressed to, and the roles that handle may take. One
+# channel per role, for a stage whose hand the change does not name.
+#
+# Read through `scripts/openspec/lib/team.mjs`, the only reader: the manual
+# names a hand from it, a message is addressed from it, and a landing resolves
+# the pusher's e-mail through it. A handle with no `slack` is sent no message,
+# and a role with no channel is posted nowhere - both are the map's way of
+# saying it does not know yet, and the fix is a line here.
+#
+# `docs/prds/products/shared/planning/change-stages.md` says what reads it.
+handles:
+  ecchochan:
+    email: ecchochan@gmail.com
+    roles: [pm, tech, dev]
+channels: {}
