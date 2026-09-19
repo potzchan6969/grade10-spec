@@ -9,7 +9,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { ROLE_LABEL, roleTitle } from "../api/stage-view";
-import { handOf, moveOf } from "../api/stages";
+import { DRAFTED, handOf, moveOf } from "../api/stages";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "../api/types";
 import { useEditorSession } from "../editor/session";
 import { Hand } from "./change-hand";
@@ -45,6 +45,18 @@ export function YourTurnCard({
       ? [{ role, ...held, command: held.command.replace(/<id>/g, change.id) }]
       : [];
   });
+  // The three stages DRAFTED carries no entry for — On staging, Released and
+  // Archived — are a deploy, a cut and a fold: nobody's agent drafts them, so
+  // no per-hand move exists to offer. The first two still have work to do,
+  // which is the archive command; the fold itself is done, so Archived offers
+  // nothing.
+  const fallback =
+    stage !== "archived" && DRAFTED[stage] === undefined
+      ? {
+          command: `/archive-change ${change.id}`,
+          note: "confirm it deployed, then fold it into the durable specs",
+        }
+      : undefined;
 
   return (
     <Card className="my-5">
@@ -79,6 +91,15 @@ export function YourTurnCard({
             </Text>
           </div>
         ))}
+
+        {fallback ? (
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <CopyableCommand command={fallback.command} />
+            <Text as="span" size="xs" tone="secondary">
+              {fallback.note}
+            </Text>
+          </div>
+        ) : null}
 
         <Assign />
       </CardContent>

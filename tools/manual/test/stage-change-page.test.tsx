@@ -279,6 +279,27 @@ describe("the Your turn card", () => {
     const hands = html.slice(html.indexOf(">Hands<"));
     expect(hands).toContain(">open<");
   });
+
+  it("offers the archive command on the three stages DRAFTED lacks, and only once on the page", () => {
+    const html = render(change({ stage: "on-staging" }));
+    const card = html.slice(html.indexOf("Your turn"), html.indexOf(">Hands<"));
+
+    expect(card).toContain("/archive-change pos");
+    expect(card).toContain("confirm it deployed");
+    // The command is on the card alone: the page's own "Next" row, which used
+    // to repeat it, is gone.
+    expect(html).not.toContain(">Next<");
+    // One CopyableCommand control, not the same command offered twice.
+    expect(html.match(/Copy \/archive-change pos/g)).toHaveLength(1);
+  });
+
+  it("offers no command on Archived — the fold is already done", () => {
+    const html = render(change({ stage: "archived", status: "archived" }));
+    const card = html.slice(html.indexOf("Your turn"), html.indexOf(">Hands<"));
+
+    expect(card).not.toContain("/archive-change");
+    expect(card).toContain("waits on no hand");
+  });
 });
 
 describe("the hands", () => {

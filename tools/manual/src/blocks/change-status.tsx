@@ -1,4 +1,3 @@
-import { Text } from "@grade10/design-system/components/display/text";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import { dependenciesOf, type ManualIndex } from "../api/derive";
@@ -16,13 +15,11 @@ import {
 import {
   DependencyPills,
   MainStateNote,
-  nextAction,
   SpecLines,
   SuiteLines,
 } from "./change-facts";
 import { OverlayChips } from "./change-overlays";
 import { Attribution, TaskProgress } from "./change-views";
-import { CopyableCommand } from "./copyable-command";
 import { HandsTable } from "./hands-table";
 
 /**
@@ -51,7 +48,6 @@ export function ChangeStatus({
   const dependencies = dependenciesOf(change, index, archived);
   const { done, total } = taskTotals(change);
   const groups = change.taskGroups.length;
-  const next = nextAction(change);
   const stage = stageShown(change);
   const artifacts = index.snapshot.schemas[change.schema] ?? [];
   const questions = change.questions ?? [];
@@ -141,17 +137,6 @@ export function ChangeStatus({
           />
         </Row>
       ) : null}
-
-      {next.map((action) => (
-        <Row key={action.command} label="Next">
-          <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <CopyableCommand command={action.command} />
-            <Text as="span" size="xs" tone="secondary">
-              {action.note}
-            </Text>
-          </span>
-        </Row>
-      ))}
     </dl>
   );
 }
