@@ -99,6 +99,9 @@ vi.mock("../src/api/use-manual-index", () => ({
 }));
 vi.mock("../src/editor/session", () => ({
   useEditorSession: () => ({ status: "ready", store: null }),
+}));
+vi.mock("../src/editor/config", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../src/editor/config")>()),
   browserKeyStore: {
     get: (key: string) => held.store.get(key) ?? null,
     set: (key: string, value: string) => {

@@ -20,7 +20,6 @@ import { useManualIndex } from "../api/use-manual-index";
 import { HandleAsk } from "../blocks/handle-ask";
 import { StageLane } from "../blocks/stage-lane";
 import { ReadOnlyNotice } from "../editor/read-only-notice";
-import { browserKeyStore } from "../editor/session";
 import { ArchiveTimeline } from "./archive-timeline";
 import { MaintenancePanel } from "./maintenance-panel";
 import { PageHeading } from "./page-heading";
@@ -45,7 +44,7 @@ export function InFlightPage() {
     archive.status === "ready" ? archive.archive.changes : undefined;
   const [params] = useSearchParams();
   const filter = filterOf(params.get("filter"));
-  const { handle, remember } = useHandle(browserKeyStore);
+  const { handle, remember } = useHandle();
 
   const rows = boardRows(index.snapshot.changes, {
     now: Date.now(),

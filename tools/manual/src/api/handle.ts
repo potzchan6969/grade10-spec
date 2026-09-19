@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { handleOf } from "../../../../scripts/openspec/lib/handle.mjs";
 import { browserKeyStore, type KeyStore, STORAGE } from "../editor/config";
 
 /**
@@ -29,7 +30,7 @@ export function useHandle(store: KeyStore = browserKeyStore): HandleChoice {
   return {
     handle: handle === undefined || handle === "" ? undefined : handle,
     remember: (next) => {
-      const written = next.replace(/^@/, "").trim().toLowerCase();
+      const written = handleOf(next);
       if (written === "") return;
       store.set(STORAGE.handle, written);
       setHandle(written);

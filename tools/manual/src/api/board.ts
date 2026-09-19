@@ -1,3 +1,4 @@
+import { handleOf } from "../../../../scripts/openspec/lib/handle.mjs";
 import { byLastMoved } from "./derive";
 import { type Overlay, overlaysOf } from "./overlays";
 import { ROLES, stageShown } from "./stage-view";
@@ -136,8 +137,9 @@ export function narrowedBy(
   if (filter === undefined) return true;
   if (filter === "mine") {
     if (handle === undefined) return true;
+    const held = handleOf(handle);
     return Object.values(row.change.hands ?? {}).some(
-      (named) => named.toLowerCase() === handle.toLowerCase(),
+      (named) => handleOf(named) === held,
     );
   }
   return row.overlays.some((overlay) => overlay.kind === filter);
