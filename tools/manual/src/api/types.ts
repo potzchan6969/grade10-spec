@@ -349,6 +349,29 @@ export type UpstreamRead = {
   newer?: string[];
 };
 
+/**
+ * One round of one artifact or one task group, as `rounds.md` records it.
+ *
+ * Every column is the cell as its author wrote it, an empty one included: the
+ * `round` rule refuses a row that leaves a column blank, and a reader that
+ * dropped the blank would leave it nothing to name. `round` is the round's
+ * number in the change, from 1 in landing order, and 0 where the cell holds no
+ * number.
+ */
+export type RoundRow = {
+  round: number;
+  /** The artifact's id, or the task group's number. */
+  artifact: string;
+  /** The names of the perspectives run. */
+  perspectives: string;
+  /** The findings that stood, as short phrases. */
+  stood: string;
+  /** The `Q<n>` ids the round raised. */
+  asked: string;
+  /** Per scenario id, the tests that landed for a task group. */
+  tests: string;
+};
+
 /** One person the store knows, from `docs/prds/team.yaml`, as
  * `scripts/openspec/lib/team.mjs` reads it. The reader is a Node module with
  * no types of its own, so this is the shape a surface names a hand from and
@@ -497,6 +520,11 @@ export type ChangeEntry = {
    * — the blind reading's questions, which the requirements are not settled
    * without. Absent where every row landed or the file carries no table. */
   raisedOpen?: number;
+  /** The rounds this change has run, from `rounds.md`, one row per round in
+   * landing order. Absent until the first round writes the file — a change
+   * opened this morning owes no row, and an empty list is a file with a header
+   * and no round under it. */
+  rounds?: RoundRow[];
   /** What each written artifact was drawn from, keyed by schema artifact id —
    * read where the pages and the history are, compared by `behindOf`. Absent
    * for a change whose record could not be read and for an archived one. */

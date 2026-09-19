@@ -152,7 +152,9 @@ function inDeltas(
  * Every artifact the change could have, in schema order, then the markdown
  * files the schema never named — a change carrying a README carries it for a
  * reason, and a document that lists only what it expected hides half the
- * change. Those come last, since nothing says where they belong.
+ * change. Those come last, since nothing says where they belong. `rounds.md`
+ * is one of them: the round writes it and the schema issues no id for it, so
+ * it reads as a `doc` named `rounds`, whose text is the record's table.
  */
 function readArtifacts(
   dir: string,

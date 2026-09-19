@@ -31,6 +31,7 @@ import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
 import { cellsOf, leadingTitle, outline, type Section } from "./markdown.mts";
 import { readLandings } from "./read-landings.mts";
+import { readRounds } from "./read-rounds.mts";
 import { schemaArtifacts } from "./read-schema.mts";
 import { readTestCases } from "./read-specs.mts";
 
@@ -278,6 +279,12 @@ function readChange(
     if (open.length > 0) entry.questions = open;
     const raised = openRaised(decisions);
     if (raised > 0) entry.raisedOpen = raised;
+  }
+
+  // The round's record, written by the first landing and absent until then.
+  if (detailed) {
+    const rounds = readTextIfExists(join(dir, "rounds.md"));
+    if (rounds !== undefined) entry.rounds = readRounds(rounds);
   }
 
   // Only the landings: the last commit touching the directory is not one —
