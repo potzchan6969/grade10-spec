@@ -48,3 +48,7 @@ scripts/tokens-sync/figma-plugins/build/
 # matches every `design.md` — including the one a full-planning change carries,
 # which would then be untracked and unmentioned by `git status`.
 /DESIGN.md
+
+# A round's own workspace: the diff it read, the thread reply it wrote. Never
+# the change's own files, which live under openspec/changes/ and are tracked.
+/.round/
