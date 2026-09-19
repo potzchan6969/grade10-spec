@@ -112,10 +112,11 @@ function Chip({ overlay }: { overlay: Overlay }) {
 }
 
 /** Whose overlay it is: the handle the change names for that artifact's role,
- * or the role itself where it names nobody. */
+ * or the role read as open where it names nobody — the overlay carries no
+ * handle at all then, so there is nothing here to see through. */
 function Owed({ hand, role }: { hand?: string; role?: Role }) {
   if (role === undefined) return null;
-  const named = hand !== undefined && hand !== role;
+  const named = hand !== undefined;
 
   return (
     <Text

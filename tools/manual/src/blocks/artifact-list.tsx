@@ -199,7 +199,7 @@ export function HandoffRow({ handoffs }: { handoffs: Handoff[] }) {
                 nobody has answered it yet
               </Text>
             ) : null
-          ) : handoff.hand === undefined || handoff.hand === handoff.role ? (
+          ) : handoff.hand === undefined ? (
             <Text as="span" size="xs" tone="secondary">
               {`${ROLE_LABEL[handoff.role]} — open`}
             </Text>
