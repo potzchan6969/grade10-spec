@@ -13,7 +13,10 @@ pnpm run plan:land <change> <artifact|group> --perspectives <a,b> --stood "<what
 ```
 
 One command: it writes the round's row and the landing commit together. There
-is no separate row-writing step.
+is no separate row-writing step. The perspectives named are ones the
+artifact's list issues, every `always` reader among them; a task group whose
+tasks cite a scenario id owes `--tests` an entry per id, and the landing
+names the ids left out.
 
 Then follow `round` for what the landing tells and what it wakes: the reply,
 the next hand, and the re-read of everything after the artifact that moved.

@@ -183,9 +183,12 @@ pnpm run plan:land <change> <artifact|group> --perspectives <a,b> --stood "<what
 ```
 
 `--perspectives` and `--stood` are owed on every landing: a round that found
-nothing stood says so. `--asked` and `--tests` are given where the round has
-either. There is no separate row-writing step: `round-row.mjs` is gone, and
-naming the round's row is this one call's job.
+nothing stood says so, and the perspectives named are ones the artifact's
+list issues, every `always` reader among them. `--asked` is given where the
+round asked. `--tests` is owed on a task group whose tasks cite a scenario
+id - one entry per id, and the landing names the ids left out - and a group
+whose tasks cite none lands with `-`. There is no separate row-writing step:
+`round-row.mjs` is gone, and naming the round's row is this one call's job.
 
 `plan:land` refuses a dirty tree, an e-mail the team map does not name, a
 handle that is not the hand of the stage, and anything before the artifact

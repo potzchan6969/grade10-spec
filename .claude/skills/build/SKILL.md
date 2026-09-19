@@ -28,8 +28,9 @@ block rather than an artifact's.
    the group and, per scenario id, the tests that landed
 5. **The row, then the tick** — the group's `rounds.md` row lands with the
    landing, `pnpm run plan:land <change> <group> --perspectives <a,b> --stood
-   "<what stood>" --tests "<sc>: <files>"`, before its tasks are ticked through
-   `pnpm plan done`. `pnpm plan done` refuses a tick whose task names a
+   "<what stood>" --tests "<sc>: <files>"`, one `--tests` entry per scenario
+   id the group's tasks cite (the landing refuses a group that leaves one out,
+   and names it), before its tasks are ticked through `pnpm plan done`. `pnpm plan done` refuses a tick whose task names a
    scenario id no test in the group's tree cites, and takes a tick whose task
    names none
 
