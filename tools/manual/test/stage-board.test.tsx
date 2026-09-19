@@ -485,19 +485,26 @@ describe("the filters and the shelf", () => {
     expect(mine).not.toContain("Nobody of mine");
   });
 
-  it("lists every change idle 30 days on the shelf, with its stage and its day count", () => {
-    const html = render(
-      [
-        at("planned", { title: "Left in Planned", lastLanded: daysAgo(31) }),
-        at("building", { title: "Left in Building", lastLanded: daysAgo(44) }),
-      ],
-      { url: "/in-flight?shelf=1" },
-    );
+  it("links the filter row's Shelf badge to the section, with its count — not a second way to show it", () => {
+    const html = render([
+      at("planned", { title: "Left in Planned", lastLanded: daysAgo(31) }),
+      at("building", { title: "Left in Building", lastLanded: daysAgo(44) }),
+      at("building", { title: "Still moving" }),
+    ]);
 
-    expect(html).toContain("Left in Planned");
-    expect(html).toContain("Planned");
-    expect(html).toContain("31 days");
-    expect(html).toContain("Left in Building");
-    expect(html).toContain("44 days");
+    const filters = html.slice(html.indexOf('aria-label="Filters"'));
+    const shelfLink = filters.slice(0, filters.indexOf("</nav>"));
+    expect(shelfLink).toContain('href="/in-flight#shelf"');
+    expect(shelfLink).toContain(">Shelf<");
+    expect(shelfLink).toContain(">2<");
+    // The lanes and the shelf both render on the one page — Shelf is a jump
+    // down it, not a param that swaps one view for the other.
+    expect(html).toContain("Still moving");
+    expect(html.indexOf("Still moving")).toBeLessThan(
+      html.indexOf('id="shelf"'),
+    );
+    expect(html.indexOf("Left in Planned")).toBeGreaterThan(
+      html.indexOf('id="shelf"'),
+    );
   });
 });

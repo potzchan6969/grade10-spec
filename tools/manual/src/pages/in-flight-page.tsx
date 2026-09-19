@@ -47,7 +47,6 @@ export function InFlightPage() {
     archive.status === "ready" ? archive.archive.changes : undefined;
   const [params] = useSearchParams();
   const filter = filterOf(params.get("filter"));
-  const shelfOnly = params.get("shelf") === "1";
   const { handle, remember } = useHandle(browserKeyStore);
 
   const rows = boardRows([...index.snapshot.changes, ...(archived ?? [])], {
@@ -66,12 +65,7 @@ export function InFlightPage() {
         title="In Flight"
       />
 
-      <FilterRow
-        filter={filter}
-        params={params}
-        shelfOnly={shelfOnly}
-        shelved={shelved.length}
-      />
+      <FilterRow filter={filter} params={params} shelved={shelved.length} />
       {filter === "mine" && handle === undefined ? (
         <HandleAsk remember={remember} />
       ) : null}
@@ -82,8 +76,6 @@ export function InFlightPage() {
           icon={<Kanban aria-hidden />}
           title="Nothing in flight"
         />
-      ) : shelfOnly ? (
-        <Shelf rows={shelved} />
       ) : (
         <>
           {boardLanes(kept).map((lane) => (
@@ -99,25 +91,22 @@ export function InFlightPage() {
   );
 }
 
-/** Exactly the five filters, and the shelf beside them. Each is a link, so a
- * narrowed board is a link and the back button leaves it. */
+/** Exactly the five filters, and a link to the shelf section beside them —
+ * the section itself always renders below the lanes, so this is a jump to
+ * it, not a second way to show it. */
 function FilterRow({
   filter,
   params,
-  shelfOnly,
   shelved,
 }: {
   filter: BoardFilter | undefined;
   params: URLSearchParams;
-  shelfOnly: boolean;
   shelved: number;
 }) {
-  const to = (next: Partial<Record<"filter" | "shelf", string | null>>) => {
+  const to = (next: BoardFilter | undefined) => {
     const search = new URLSearchParams(params);
-    for (const [key, value] of Object.entries(next)) {
-      if (value === null) search.delete(key);
-      else search.set(key, value);
-    }
+    if (next === undefined) search.delete("filter");
+    else search.set("filter", next);
     const written = search.toString();
     return written === "" ? "/in-flight" : `/in-flight?${written}`;
   };
@@ -131,17 +120,17 @@ function FilterRow({
         <Link
           aria-current={filter === one ? "page" : undefined}
           key={one}
-          to={to({ filter: filter === one ? null : one })}
+          to={to(filter === one ? undefined : one)}
         >
           <Badge size="sm" variant={filter === one ? "info" : "outline"}>
             {FILTER_LABEL[one]}
           </Badge>
         </Link>
       ))}
-      <Link className="ml-auto" to={to({ shelf: shelfOnly ? null : "1" })}>
-        <Badge size="sm" variant={shelfOnly ? "info" : "outline"}>
-          <span>{shelfOnly ? "Back to the lanes" : "Shelf"}</span>
-          {shelfOnly ? null : <span className="opacity-70">{shelved}</span>}
+      <Link className="ml-auto" to="#shelf">
+        <Badge size="sm" variant="outline">
+          <span>Shelf</span>
+          <span className="opacity-70">{shelved}</span>
         </Badge>
       </Link>
     </nav>
