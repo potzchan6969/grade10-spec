@@ -24,9 +24,19 @@ describe("the artifacts a change has", () => {
       teammate: string,
       requires: string[],
       required = true,
-      // The demo store's schema carries no `upstream:`, which reads as an
-      // artifact drawn from nothing — `test/read-schema.test.ts` holds that.
-    ) => ({ id, generates, teammate, requires, upstream: [], required });
+      // The demo store's schema carries no `upstream:` and no
+      // `perspectives:`, which read as an artifact drawn from nothing and a
+      // round that reads it for itself — `test/read-schema.test.ts` holds
+      // both.
+    ) => ({
+      id,
+      generates,
+      teammate,
+      requires,
+      upstream: [],
+      perspectives: [],
+      required,
+    });
     expect(schemaArtifacts(FIXTURE, "grade10-planning")).toEqual([
       artifact("proposal", "proposal.md", "product-manager", []),
       artifact("specs", "specs/**/spec.md", "product-manager", ["proposal"]),

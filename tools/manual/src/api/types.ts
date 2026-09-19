@@ -495,10 +495,27 @@ export type SchemaArtifact = {
    * without sight of the requirements, and the tech design is drawn beside
    * the UI design rather than from it. Empty where the schema says nothing. */
   upstream: string[];
+  /** The readers a round on this artifact may dispatch, in the order the
+   * schema records them. Empty where it records none: `spec.md` and
+   * `feature-tcs.md` are challenged by the two blind readings instead. */
+  perspectives: Perspective[];
   /** Whether a change owes this artifact by default. An artifact that is not
    * required is owed only when the change says so in `awaiting:`: what makes
    * it owed is a condition no worklist can see. */
   required: boolean;
+};
+
+/** One reader a round may dispatch: its perspective's name, what in a draft
+ * summons it, and the definition under `.claude/agents/` the round runs. The
+ * size of a round is the draft's own diff read against every `when`, so a
+ * perspective no draft can summon is not an entry. */
+export type Perspective = {
+  name: string;
+  /** The triggers that summon it — `always`, or any of `surface`, `schema`,
+   * `export`, `system`, `migration`, `flag`, `money`, `deploy`, `copy`. */
+  when: string[];
+  /** The reader's definition, as a store-relative path. */
+  agent: string;
 };
 
 /** How a change's artifact renders: a prose document, the directory of
