@@ -211,6 +211,66 @@ describe("an id the schema issues nowhere", () => {
   });
 });
 
+describe("an entry the schema left half written", () => {
+  const schemaWith = (...lines: string[]) =>
+    writeStore({
+      "openspec/schemas/holed/schema.yaml": [
+        "name: holed",
+        "artifacts:",
+        ...lines,
+        "",
+      ].join("\n"),
+    });
+
+  // Skipped until now, so a schema that misspelled `generates` answered with
+  // one artifact fewer and nothing said which: the worklists would show the
+  // artifact owed by nobody and the round would read it against nothing.
+  it("refuses an artifact entry with no `id:`", () => {
+    const root = schemaWith("  - generates: proposal.md");
+
+    expect(() => schemaArtifacts(root, "holed")).toThrow(
+      /openspec\/schemas\/holed\/schema\.yaml/,
+    );
+  });
+
+  it("refuses an artifact entry with no `generates:`", () => {
+    const root = schemaWith("  - id: proposal");
+
+    expect(() => schemaArtifacts(root, "holed")).toThrow(
+      /`proposal` carries no `generates:`/,
+    );
+  });
+
+  it("refuses a perspective missing `name:`, `agent:` or `when:`", () => {
+    const root = schemaWith(
+      "  - id: proposal",
+      "    generates: proposal.md",
+      "    perspectives:",
+      "      - name: backend",
+      "        when: always",
+    );
+
+    expect(() => schemaArtifacts(root, "holed")).toThrow(
+      /`proposal` carries a `perspectives:` entry missing `name:`, `agent:` or `when:`/,
+    );
+  });
+
+  it("refuses a `when` outside the triggers", () => {
+    const root = schemaWith(
+      "  - id: proposal",
+      "    generates: proposal.md",
+      "    perspectives:",
+      "      - name: backend",
+      "        when: [pricing]",
+      "        agent: .claude/agents/backend.md",
+    );
+
+    expect(() => schemaArtifacts(root, "holed")).toThrow(
+      /`proposal`'s perspective `backend` names `pricing` in `when:`, which is no trigger/,
+    );
+  });
+});
+
 describe("a schema that says nothing about it", () => {
   it("reads an artifact with no upstream key as drawn from nothing", () => {
     const root = writeStore({

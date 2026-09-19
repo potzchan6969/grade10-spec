@@ -98,6 +98,20 @@ const cli = (root, args) =>
     }),
   );
 
+/** What the CLI said when it refused. A refusal is the point of these cases,
+ * so a run that succeeded fails the test rather than being parsed. */
+const cliRefuses = (root, args) => {
+  try {
+    execFileSync(process.execPath, [CLI, ...args, "--root", root], {
+      encoding: "utf8",
+      stdio: "pipe",
+    });
+  } catch (error) {
+    return `${error.stdout ?? ""}${error.stderr ?? ""}`;
+  }
+  return assert.fail("the run was expected to refuse");
+};
+
 // A page's words and nothing else: the diff a PM's remark leaves behind.
 const WORDS = [
   `diff --git a/${PAGE} b/${PAGE}`,
@@ -126,6 +140,28 @@ const EXPORT_AND_MIGRATION = [
   "+- [ ] 4.1 Backfill the rows",
   "",
 ].join("\n");
+
+/** Every key a change's `.openspec.yaml` can carry except `schema:`, plus the
+ * waiver nobody may invent. */
+const RECORD_KEYS = [
+  "created:",
+  "skip_specs",
+  "promoted_by",
+  "awaiting:",
+  "page_waived",
+  "decisions_waived",
+  "design_waived",
+  "ui_waived",
+  "hands:",
+  "landed_by",
+  "reviewed",
+  "thread:",
+  "released_in",
+  "deployed_at",
+  "deployed_env",
+  "deploy_waived",
+  "round_waived",
+];
 
 test("shared-planning-agent-rounds-SC-08 - a proposal's words reach the reader of the words and the floor", () => {
   const root = fixture();
@@ -178,42 +214,30 @@ test("the trio's readers are six, and QA is not one of them", () => {
   }
 });
 
-test("shared-planning-agent-rounds-SC-09 - a tech design with an export and a migration dispatches its four readings", () => {
+test("shared-planning-agent-rounds-SC-09 - a draft naming an export and a migration summons the readers of each", () => {
   const root = fixture();
   const schema = planningSchema(root);
-  const triggers = classifyDiff(EXPORT_AND_MIGRATION, schema, "tech-design");
+  const triggers = classifyDiff(EXPORT_AND_MIGRATION, schema, "decisions");
 
   assert.deepEqual([...triggers].sort(), ["export", "migration"]);
-  const readers = readersFor(schema, "tech-design", triggers);
-  // `tech-design.md` is the tech reader's own subject, so all four of its
-  // readings run every round whatever the diff raises - `export` and
-  // `migration` change nothing here, which is the whole reader set saying so:
-  // each reading is its own dispatch, sharing `tech.md` with the other three
-  // rather than being merged into one because they share an agent.
+  const readers = readersFor(schema, "decisions", triggers);
+  // `decisions.md` carries the trio's six readers and the floor, so this is
+  // the artifact where the two triggers decide anything: `backend` comes for
+  // the export, `operations` for the migration, and each reader says which
+  // trigger fetched it. `product`, `reader`, `design` and `integration` need
+  // triggers this diff raises nowhere.
   assert.deepEqual(readers, [
     {
-      name: "deterministic",
-      when: ["always"],
-      agent: ".claude/agents/tech.md",
-      summonedBy: [],
+      name: "backend",
+      when: ["schema", "export"],
+      agent: ".claude/agents/backend.md",
+      summonedBy: ["export"],
     },
     {
-      name: "simple",
-      when: ["always"],
-      agent: ".claude/agents/tech.md",
-      summonedBy: [],
-    },
-    {
-      name: "consistent",
-      when: ["always"],
-      agent: ".claude/agents/tech.md",
-      summonedBy: [],
-    },
-    {
-      name: "testable",
-      when: ["always"],
-      agent: ".claude/agents/tech.md",
-      summonedBy: [],
+      name: "operations",
+      when: ["migration", "flag", "money", "deploy"],
+      agent: ".claude/agents/operations.md",
+      summonedBy: ["migration"],
     },
     {
       name: "simpler",
@@ -238,12 +262,19 @@ test("shared-planning-agent-rounds-SC-10 - a record key neither adds a reader no
 
   assert.deepEqual(after.readers, before.readers);
   assert.equal(after.verifier, before.verifier);
-  const source = readFileSync(join(HERE, "lib", "perspectives.mjs"), "utf8");
-  for (const key of ["openspec.yaml", "round_waived"])
-    assert.ok(
-      !source.includes(key),
-      `the size is read from the draft, not ${key}`,
-    );
+  // Both modules, and every key the record can carry
+  // (`docs/governance/prd-and-openspec.md`, the changes' record) but
+  // `schema:`: the readers themselves are the schema's, so that one key is
+  // read and no other is. A key named anywhere in either source would be a
+  // round sized off the record.
+  for (const module of ["lib/perspectives.mjs", "perspectives.mjs"]) {
+    const source = readFileSync(join(HERE, module), "utf8");
+    for (const key of RECORD_KEYS)
+      assert.ok(
+        !source.includes(key),
+        `${module} sizes the round off the draft, not off ${key}`,
+      );
+  }
 });
 
 test("reads the change's own schema: rather than always grade10-planning", () => {
@@ -400,9 +431,12 @@ test("every trigger the requirement names is classified off a diff", () => {
       "@@ -8,3 +8,4 @@ ## Components\n+| `ListingTile` | `packages/ui` | the tile |",
     ],
     // system — another system reached
-    ["system", "@@ -8,3 +8,4 @@\n+The round posts its summary to Slack."],
     ["system", "@@ -8,3 +8,4 @@\n+| `github` | the action |"],
     ["system", "@@ -8,3 +8,4 @@\n+| Figma | the component set |"],
+    [
+      "system",
+      "@@ -8,3 +8,4 @@ ## Integrations\n+| the run spreadsheet | one tab per pass |",
+    ],
     [
       "system",
       "@@ -8,3 +8,4 @@\n+| `https://api.example.com/rounds` | the hook |",
@@ -411,9 +445,9 @@ test("every trigger the requirement names is classified off a diff", () => {
     ["migration", "@@ -8,3 +8,4 @@\n+## 4. The data migration (grade10)"],
     ["migration", "@@ -8,3 +8,4 @@\n+## Migration Plan"],
     ["flag", "@@ -8,3 +8,4 @@\n+| `flag: round-record` | off in production |"],
+    ["flag", "@@ -8,3 +8,4 @@\n+| Flag | Off in |"],
     ["money", "@@ -8,3 +8,4 @@\n+| `amount` | integer minor units |"],
     ["money", "@@ -8,3 +8,4 @@\n+| `currency` | ISO 4217 |"],
-    ["money", "@@ -8,3 +8,4 @@\n+| `money` | the amount held |"],
     ["deploy", "@@ -8,3 +8,4 @@\n+## Deploy"],
     [
       "deploy",
@@ -436,6 +470,35 @@ test("every trigger the requirement names is classified off a diff", () => {
       classifyDiff(diff, REAL_SCHEMA, "proposal").has(trigger),
       `${trigger} is summoned by:\n${diff}`,
     );
+  }
+});
+
+test("a trigger is keyed on structure, never on a bare word in prose", () => {
+  // Every trigger fetches a reader, so a bare word in a sentence summoned
+  // operations to read a change that deploys nothing and backend to read one
+  // that exports nothing. Each of these lines is prose about the product and
+  // raises `copy` alone.
+  const cases = [
+    ["export", "@@ -8,3 +8,4 @@\n+The round exports nothing a consumer reads."],
+    [
+      "flag",
+      "@@ -8,3 +8,4 @@\n+A finding nobody can act on is a red flag for the reader.",
+    ],
+    [
+      "deploy",
+      "@@ -8,3 +8,4 @@\n+We deploy Friday, so the walk runs Thursday.",
+    ],
+    [
+      "money",
+      "@@ -8,3 +8,4 @@\n+The money question is the product manager's to answer.",
+    ],
+    ["system", "@@ -8,3 +8,4 @@\n+The round posts its summary to Slack."],
+  ];
+
+  for (const [trigger, diff] of cases) {
+    const raised = classifyDiff(diff, REAL_SCHEMA, "proposal");
+    assert.ok(!raised.has(trigger), `${trigger} is not summoned by:\n${diff}`);
+    assert.deepEqual([...raised], ["copy"]);
   }
 });
 
@@ -577,16 +640,11 @@ test("every reader the schema dispatches resolves on disk", () => {
 
 // SC-28: the same table answers every artifact's round - `openspec
 // instructions` reads the schema the same way, so every id it names is a
-// valid argument to the vendor CLI. Needs the workspace's `openspec` binary,
-// which `pnpm openspec` otherwise reaches over `pnpm dlx`; skip rather than
-// fail where this checkout has not installed it.
+// valid argument to the vendor CLI. `pnpm openspec` reaches the CLI whether
+// or not this checkout installed the binary, so the run is made and its
+// failure is the test's: a guard that skipped it made a green run mean
+// nothing.
 test("`openspec instructions` resolves every schema artifact id", () => {
-  if (!existsSync(join(ROOT, "node_modules", ".bin", "openspec"))) {
-    console.log(
-      "[SKIP] node_modules/.bin/openspec is not installed in this checkout",
-    );
-    return;
-  }
   const artifacts = REAL_SCHEMA.artifacts;
   assert.ok(artifacts.length > 0, "the schema names artifacts to check");
   for (const { id } of artifacts) {
@@ -604,4 +662,43 @@ test("`openspec instructions` resolves every schema artifact id", () => {
       ),
     );
   }
+});
+
+test("a record whose YAML does not parse is refused, naming the file", () => {
+  // Read as the default schema until now, so a record nobody could parse gave
+  // a round the readers of a schema it never named.
+  const root = fixture({ record: "schema: [grade10-planning\n" });
+
+  const said = cliRefuses(root, [
+    "demo",
+    "decisions",
+    "--diff",
+    diffOf(root, ""),
+  ]);
+
+  assert.match(said, /openspec\/changes\/demo\/\.openspec\.yaml/);
+});
+
+test("a `schema:` the store has no file for is refused, naming the file", () => {
+  const root = fixture({ record: "schema: no-such-schema\n" });
+
+  const said = cliRefuses(root, [
+    "demo",
+    "decisions",
+    "--diff",
+    diffOf(root, ""),
+  ]);
+
+  assert.match(said, /openspec\/schemas\/no-such-schema\/schema\.yaml/);
+});
+
+test("planningSchema refuses a schema the store holds no file for", () => {
+  // Answered with no artifacts and no readers until now, which is a round of
+  // nobody reading a draft and nothing saying why.
+  const root = fixture();
+
+  assert.throws(
+    () => planningSchema(root, "no-such-schema"),
+    /openspec\/schemas\/no-such-schema\/schema\.yaml/,
+  );
 });
