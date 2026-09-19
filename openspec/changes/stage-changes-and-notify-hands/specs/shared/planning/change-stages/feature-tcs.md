@@ -264,6 +264,96 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * <qa handle> holds one staging message naming <change R> and the run sheet.
 * Each of the two holds one message for that move, not two.
 
+### shared-planning-change-stages-US1-TC9-1: A build push tells nobody and the channel still reads it
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-01
+
+**Pre-conditions:**
+<change A> sits at Planned with <dev handle> as its `dev` hand, told once when `tasks.md` landed.
+
+**Steps:**
+
+1. Push a commit to `main` ticking <change A>'s first task box.
+2. Read the direct messages of every handle in the team map.
+3. Read <planning channel>.
+
+**Expected Results:**
+
+* No direct message is sent for that push.
+* The channel post names <change A> and the stage Building.
+
+### shared-planning-change-stages-US1-TC10-1: A change with no thread links its change page
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-01
+
+**Pre-conditions:**
+<change S> sits at Specified with <dev handle> as its `dev` hand. Its record names no thread.
+
+**Steps:**
+
+1. Land <change S>'s `tasks.md` on `main`.
+2. Read <dev handle>'s direct messages.
+3. Open the link the message carries.
+
+**Expected Results:**
+
+* One direct message names <change S> and the stage Planned.
+* The link it carries is <change S>'s change page, and no thread's.
+* The link opens <change S> at <manual change page url>.
+
+### shared-planning-change-stages-US1-TC11-1: A handle the map gives no Slack member is sent nothing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-01
+
+**Pre-conditions:**
+<change T> sits at Specified. Its `hands:` names <memberless handle> as its `dev` hand, and the team map holds that handle with its roles and no Slack member.
+
+**Steps:**
+
+1. Land <change T>'s `tasks.md` on `main`.
+2. Read the direct messages of every handle in the team map.
+3. Read the engineer role's channel.
+4. Read the push workflow's run log.
+
+**Expected Results:**
+
+* No direct message is sent for that move.
+* No post reaches the engineer role's channel: the hand is named, so the role is not asked for one.
+* The run log names <change T> and <memberless handle> as told nothing, and the run does not fail.
+
 ---
 
 ## shared-planning-change-stages-US2: Product manager reads where every change stands
@@ -849,7 +939,7 @@ Runs once per row of **Test data**.
 | Edit to the record | The check names |
 | --- | --- |
 | `hands:` written as a list of handles with no roles | the malformed `hands:` block and the change |
-| `hands:` naming a role the team map has no channel for | the unknown role and the change |
+| `hands:` naming a role outside the six | the unknown role and the change |
 
 **Steps:**
 
