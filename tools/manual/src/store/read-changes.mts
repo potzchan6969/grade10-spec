@@ -549,22 +549,14 @@ function openRaised(text: string): number {
     .flatMap((one) => (one.level === 1 ? one.children : [one]))
     .find((one) => /^Raised\b/.test(one.heading));
   if (!raised) return 0;
-  return rowsOf(raised.raw).filter((cells) => !cells[2]).length;
+  return raised.raw.split("\n").filter((row) => RAISED_ROW.test(row.trim()))
+    .length;
 }
 
-/** A markdown table's rows, header and rule dropped, each row its cells. */
-function rowsOf(text: string): string[][] {
-  const rows: string[][] = [];
-  for (const line of text.split("\n")) {
-    const cells = cellsOf(line);
-    if (!cells) continue;
-    if (cells.every((cell) => /^:?-{2,}:?$/.test(cell))) continue;
-    rows.push(cells);
-  }
-  // The first row left is the header: the rule under it is what makes a
-  // markdown table a table, and it is dropped above.
-  return rows.slice(1);
-}
+/** A `## Raised` row that landed nowhere: three cells, the last one blank.
+ * The header and the rule under it each carry a third cell, so neither is a
+ * row this counts and neither has to be dropped first. */
+const RAISED_ROW = /^\|[^|]*\|[^|]*\|\s*\|$/;
 
 /** A written line, or nothing where the key is absent or blank. Anything but
  * text is a malformed manifest: a record read as absent would waive the rule

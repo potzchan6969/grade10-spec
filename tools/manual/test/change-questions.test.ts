@@ -67,6 +67,13 @@ const DECISIONS = [
   "| Q3 | Who runs the export? | ❓ ops - nobody has said | A cron nobody owns |",
   "| Q4 | What does a refund do? | ❓ nobody has said yet | Saying nothing |",
   "",
+  "## Raised",
+  "",
+  "| Capability | Raised | Landed |",
+  "| --- | --- | --- |",
+  "| demo-product/alpha | Does a refund take the point back? | Q2 |",
+  "| demo-product/alpha | Which day is a tier judged on? |  |",
+  "",
 ].join("\n");
 
 const source = readFileSync(
@@ -137,6 +144,12 @@ describe("a decisions row nobody has settled", () => {
     const entry = changeWith("");
 
     expect(entry.questions?.some((one) => one.id === "Q1")).toBe(false);
+  });
+
+  it("counts the raised rows that landed nowhere", () => {
+    // What a `Landed` cell says is the `raised` rule's to judge; an empty one
+    // is what is read here, and the header and the rule are not rows.
+    expect(changeWith("").raisedOpen).toBe(1);
   });
 
   it("counts every open row against the decisions", () => {

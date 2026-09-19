@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import { behindOf } from "../src/api/stages.ts";
@@ -11,6 +12,7 @@ import type {
 import { type PageAst, parsePage } from "../src/content/grammar";
 import { sectionTextOf } from "../src/content/sections";
 import { contentIdOf } from "../src/store/content-id.mts";
+import { findStoreRoot } from "../src/store/disk.mts";
 import { type GitIndex, NO_GIT } from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
@@ -35,32 +37,17 @@ const RULES = readFileSync(
   "utf8",
 );
 
-const SCHEMA = [
-  "name: demo-planning",
-  "version: 1",
-  "artifacts:",
-  "  - id: proposal",
-  "    required: true",
-  "    generates: proposal.md",
-  "    requires: []",
-  "    upstream: []",
-  "  - id: decisions",
-  "    required: true",
-  "    generates: decisions.md",
-  "    requires: [proposal]",
-  "    upstream: [proposal]",
-  "  - id: ui-design",
-  "    required: false",
-  "    generates: ui-design.md",
-  "    requires: [decisions]",
-  "    upstream: [proposal, decisions]",
-  "  - id: specs",
-  "    required: true",
-  "    generates: specs/**/spec.md",
-  "    requires: [decisions]",
-  "    upstream: [proposal, decisions, ui-design]",
-  "",
-].join("\n");
+/** The store's own planning schema, so the order, the `requires` and the
+ * `upstream:` sets these cases read are the ones every change reads. A
+ * fixture schema of its own would read as the real one until the day somebody
+ * moved an artifact. */
+const SCHEMA = readFileSync(
+  join(
+    findStoreRoot(fileURLToPath(new URL(".", import.meta.url))),
+    "openspec/schemas/grade10-planning/schema.yaml",
+  ),
+  "utf8",
+);
 
 const PROPOSAL = [
   "# Behind probe",
@@ -95,9 +82,9 @@ const UI_FILE = `${CHANGE}/ui-design.md`;
  * proposal links a section of. */
 function filesOf(record = ""): Record<string, string> {
   return {
-    "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
+    "openspec/schemas/grade10-planning/schema.yaml": SCHEMA,
     [PAGE]: RULES,
-    [`${CHANGE}/.openspec.yaml`]: `schema: demo-planning\ncreated: 2026-09-18\n${record}`,
+    [`${CHANGE}/.openspec.yaml`]: `schema: grade10-planning\ncreated: 2026-09-18\n${record}`,
     [`${CHANGE}/proposal.md`]: PROPOSAL,
     [`${CHANGE}/decisions.md`]: DECISIONS,
     [UI_FILE]: UI_DESIGN,
@@ -108,7 +95,7 @@ function filesOf(record = ""): Record<string, string> {
 const store = (record = "") => writeStore(filesOf(record));
 
 const artifacts = (root: string): SchemaArtifact[] =>
-  schemaArtifacts(root, "demo-planning") ?? [];
+  schemaArtifacts(root, "grade10-planning") ?? [];
 
 const commit = (date: string): CommitInfo => ({
   sha: date.slice(0, 10).replace(/-/g, ""),
@@ -231,9 +218,9 @@ describe("what the store reads as before an artifact", () => {
 
   it("reads nothing for an artifact the change has not written", () => {
     const root = writeStore({
-      "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
+      "openspec/schemas/grade10-planning/schema.yaml": SCHEMA,
       [PAGE]: RULES,
-      [`${CHANGE}/.openspec.yaml`]: "schema: demo-planning\n",
+      [`${CHANGE}/.openspec.yaml`]: "schema: grade10-planning\n",
       [`${CHANGE}/proposal.md`]: PROPOSAL,
     });
 
