@@ -19,6 +19,37 @@ import { channelOf, memberOf } from "./team.mjs";
 /** The one call that posts a message. */
 export const POST_MESSAGE = "https://slack.com/api/chat.postMessage";
 
+/** A title, safe for Slack's `mrkdwn`: the three characters its own markup
+ * reads as syntax, turned into entities before either script builds a link
+ * or a line around one. */
+export function escapeSlackText(text) {
+  return text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+/** A change's own page on the manual: `<manualUrl>/in-flight/<id>`, what a
+ * message links to where the record names no thread. */
+export function changePageOf(manualUrl, id) {
+  return `${manualUrl.replace(/\/$/, "")}/in-flight/${encodeURIComponent(id)}`;
+}
+
+/**
+ * The change, linked: its thread's permalink where the record names one, the
+ * change page otherwise — title escaped, so a change named with `<` or `&`
+ * reads as text and not as more `mrkdwn`.
+ *
+ * One function, because both scripts build this link the same way: the push
+ * workflow's Your turn and Behind messages carry the thread where the record
+ * names one, and the digest — which never reads a thread — always gets the
+ * change page.
+ */
+export function linkOf({ manualUrl, workspaceUrl, thread, id, title }) {
+  const url = permalinkOf(workspaceUrl, thread) ?? changePageOf(manualUrl, id);
+  return `<${url}|${escapeSlackText(title)}>`;
+}
+
 /**
  * Who a message is addressed to: the hand's Slack member, or the role's
  * channel where the change names no hand for it.
@@ -187,4 +218,40 @@ export function printable(messages) {
         `→ ${message.to === "member" ? "DM" : "channel"} ${message.channel} [${message.key}]\n${message.text}`,
     )
     .join("\n\n");
+}
+
+/**
+ * Every message, keyed against what this run has already sent — the one path
+ * both scripts deliver through, whether the message is a direct message, a
+ * Behind or Staging notice, or the channel post itself, once it carries a
+ * key.
+ *
+ * `--send` decides which half runs: printed and keyed where it is absent, so
+ * a dry run reads like the send it would have made and records the same keys
+ * a real one would, or sent and keyed by what `sendAll` answers, a refusal's
+ * own partial list included. Nothing here decides whom a message reaches —
+ * that is `messagesOf`'s and `digestOf`'s own words — only whether it goes
+ * out twice.
+ */
+export async function deliver(
+  messages,
+  { file, send, token, fetch: fetched, sleep } = {},
+) {
+  const sent = readSentKeys(file);
+  const due = messages.filter((message) => !sent.has(message.key));
+  if (due.length === 0) return [];
+  if (!send) {
+    process.stderr.write(`${printable(due)}\n`);
+    const keys = due.map((message) => message.key);
+    appendSentKeys(file, keys);
+    return keys;
+  }
+  try {
+    const posted = await sendAll(due, { token, fetch: fetched, sleep });
+    appendSentKeys(file, posted);
+    return posted;
+  } catch (cause) {
+    appendSentKeys(file, cause.sent ?? []);
+    throw cause;
+  }
 }
