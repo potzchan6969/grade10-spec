@@ -6,7 +6,7 @@ import type {
   UpstreamRead,
 } from "../api/types.ts";
 import { waivedOf } from "../api/waivers.ts";
-import { type PageAst, parsePage } from "../content/grammar.ts";
+import type { PageAst } from "../content/grammar.ts";
 import { sectionTextOf } from "../content/sections.ts";
 import { contentIdOf } from "./content-id.mts";
 import { readTextIfExists } from "./disk.mts";
@@ -37,6 +37,7 @@ export function upstreamOf(
   change: ChangeEntry,
   artifacts: SchemaArtifact[],
   pages: PageEntry[],
+  asts: Map<string, PageAst>,
   git: GitIndex,
 ): Record<string, UpstreamRead> | undefined {
   if (change.error || artifacts.length === 0) return undefined;
@@ -46,7 +47,7 @@ export function upstreamOf(
   const sections = (change.sections ?? []).flatMap((ref) => {
     const page = byPath.get(ref.page);
     if (page === undefined) return [];
-    const text = sectionTextOf(parsedOf(page), ref.slug);
+    const text = sectionTextOf({ ast: asts.get(page.path) ?? null }, ref.slug);
     // A link to a section the page does not carry names nothing to read: the
     // `refs` rule is what reports it, and hashing an empty string here would
     // read a kept link and a dropped one as the same upstream.
@@ -116,13 +117,14 @@ export function markUpstream(
   changes: ChangeEntry[],
   schemas: Record<string, SchemaArtifact[]>,
   pages: PageEntry[],
+  asts: Map<string, PageAst>,
   git: GitIndex,
 ): void {
   for (const change of changes) {
     if (change.status !== "in-flight") continue;
     const artifacts = schemas[change.schema];
     if (!artifacts) continue;
-    const upstream = upstreamOf(root, change, artifacts, pages, git);
+    const upstream = upstreamOf(root, change, artifacts, pages, asts, git);
     if (upstream) change.upstream = upstream;
   }
 }
@@ -147,25 +149,4 @@ function newest(dates: (string | undefined)[]): string | undefined {
     .filter((one): one is string => one !== undefined)
     .sort((a, b) => Date.parse(a) - Date.parse(b))
     .at(-1);
-}
-
-/** One parse per page, however many changes link a section of it. A page the
- * grammar refuses carries no section to read, which `sectionTextOf` answers
- * for — the `canonical` rule is what reports the parse itself. */
-const parsed = new WeakMap<PageEntry, { ast: PageAst | null }>();
-
-function parsedOf(page: PageEntry): { ast: PageAst | null } {
-  const held = parsed.get(page);
-  if (held) return held;
-  const read = { ast: astOf(page.source) };
-  parsed.set(page, read);
-  return read;
-}
-
-function astOf(source: string): PageAst | null {
-  try {
-    return parsePage(source);
-  } catch {
-    return null;
-  }
 }

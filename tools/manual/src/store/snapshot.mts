@@ -97,11 +97,11 @@ export function composeStore(
   markIssuedIds(roots.store, specs);
   const references = readReferences(roots.store, git);
   const referencesReadme = readReferencesReadme(roots.store);
-  const pages = readManualPages(roots, git);
+  const { pages, asts } = readManualPages(roots, git);
   const schemas = schemasInUse(roots.store, changes);
   // After both: what is before an artifact is the pages the change links and
   // the artifacts the schema names, and this is the one place holding both.
-  markUpstream(roots.store, changes, schemas, pages, git);
+  markUpstream(roots.store, changes, schemas, pages, asts, git);
 
   return {
     snapshot: {

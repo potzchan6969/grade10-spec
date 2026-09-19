@@ -19,7 +19,7 @@ const DUPLICATE = fileURLToPath(
 );
 
 describe("manual pages", () => {
-  const pages = readManualPages(rootsOf(FIXTURE), NO_GIT);
+  const { pages, asts } = readManualPages(rootsOf(FIXTURE), NO_GIT);
 
   it("walks docs/prds/**/*.md into store-relative entries", () => {
     expect(pages.map((page) => page.path)).toEqual([
@@ -27,6 +27,15 @@ describe("manual pages", () => {
       "docs/prds/products/demo-product/index.md",
     ]);
     expect(pages[0].source).toContain("title: Demo manual");
+  });
+
+  it("keeps the parse of every page it walked", () => {
+    // The freshness read is handed these rather than parsing the sources a
+    // second time.
+    expect([...asts.keys()]).toEqual(pages.map((page) => page.path));
+    expect(asts.get("docs/prds/index.md")?.frontmatter.title).toBe(
+      "Demo manual",
+    );
   });
 
   it("throws on a page the grammar refuses, naming file and line", () => {

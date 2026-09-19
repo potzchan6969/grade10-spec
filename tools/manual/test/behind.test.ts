@@ -8,7 +8,7 @@ import type {
   PageEntry,
   SchemaArtifact,
 } from "../src/api/types";
-import { parsePage } from "../src/content/grammar";
+import { type PageAst, parsePage } from "../src/content/grammar";
 import { sectionTextOf } from "../src/content/sections";
 import { contentIdOf } from "../src/store/content-id.mts";
 import { type GitIndex, NO_GIT } from "../src/store/git.mts";
@@ -123,20 +123,30 @@ const dating = (dates: Record<string, string>): GitIndex => ({
   commitOf: (path) => (dates[path] ? commit(dates[path]) : undefined),
 });
 
-function pageOf(source = RULES, date?: string): PageEntry[] {
+function pageOf(
+  source = RULES,
+  date?: string,
+): { pages: PageEntry[]; asts: Map<string, PageAst> } {
   const entry: PageEntry = { path: PAGE, source };
   if (date) entry.lastCommit = commit(date);
-  return [entry];
+  return { pages: [entry], asts: new Map([[PAGE, parsePage(source)]]) };
 }
 
 /** The change as the store reads it, with the upstream reading over it. */
 function read(
   root: string,
   git: GitIndex = NO_GIT,
-  pages: PageEntry[] = pageOf(),
+  page = pageOf(),
 ): ChangeEntry {
   const [entry] = readChanges(root, git, null);
-  const upstream = upstreamOf(root, entry, artifacts(root), pages, git);
+  const upstream = upstreamOf(
+    root,
+    entry,
+    artifacts(root),
+    page.pages,
+    page.asts,
+    git,
+  );
   if (upstream) entry.upstream = upstream;
   return entry;
 }
