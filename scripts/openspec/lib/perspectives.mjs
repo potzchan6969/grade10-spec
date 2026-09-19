@@ -18,25 +18,13 @@
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
+import { TRIGGERS } from "../../../tools/manual/src/api/types.ts";
 import {
   applyPerspectives,
   schemaArtifacts,
 } from "../../../tools/manual/src/store/read-schema.mts";
 
-/** What in a draft summons a reader. `always` is every round; the other nine
- * are what the draft itself says. */
-export const TRIGGERS = [
-  "always",
-  "surface",
-  "schema",
-  "export",
-  "system",
-  "migration",
-  "flag",
-  "money",
-  "deploy",
-  "copy",
-];
+export { TRIGGERS };
 
 export const SCHEMA = "grade10-planning";
 
@@ -53,19 +41,22 @@ export function planningSchema(root, schema = SCHEMA) {
 
 /**
  * The triggers a draft's own diff raises. `diffText` is a unified diff — what
- * `git diff` prints for the branch — and `artifact` names which draft it is
- * of: a task group's diff is read with these same rules and dispatched against
- * the `apply:` block, and where the artifact names its file rather than its id
- * that file stands in for a diff that carries no path of its own.
+ * `git diff` prints for the branch — and `target` names which draft it is of:
+ * an artifact id, a `generates` file, or a task group, read against `schema`
+ * (`planningSchema`'s shape) the way every other reader of it is. A task
+ * group's diff is read with these same rules, dispatched against the
+ * `apply:` block.
  *
  * A trigger is raised by a changed line, by the file the line is in, or by the
  * section the hunk sits under. Context lines raise nothing: a round is sized
- * by what the draft changed.
+ * by what the draft changed. The file a line sits in usually comes from the
+ * diff's own `diff --git` header; `target`'s own file, resolved through
+ * `artifactOf` and its `generates`, is what a diff carrying no header at all
+ * is read against instead.
  */
-export function classifyDiff(diffText, artifact = "") {
+export function classifyDiff(diffText, schema, target = "") {
   const found = new Set();
-  const named = String(artifact ?? "").trim();
-  let file = named.endsWith(".md") ? named : "";
+  let file = initialFile(schema, target);
   let section = "";
   if (file) ofFile(file, found);
   for (const line of String(diffText ?? "").split("\n")) {
@@ -79,8 +70,10 @@ export function classifyDiff(diffText, artifact = "") {
     if (line.startsWith("+++") || line.startsWith("---")) continue;
     const hunk = /^@@[^@]*@@\s*(.*)$/.exec(line);
     if (hunk) {
+      // The hunk header's trailing text is git's own unchanged context — the
+      // nearest heading before the hunk, never a line the draft touched — so
+      // it sets `section` and raises nothing on its own.
       section = heading(hunk[1]) ? hunk[1].trim() : section;
-      ofLine(hunk[1], found, file, section);
       continue;
     }
     if (!line.startsWith("+") && !line.startsWith("-")) continue;
@@ -177,9 +170,12 @@ const prose = (line, file) => {
 /**
  * The readers a round dispatches: every perspective of that artifact — or of
  * the `apply:` block, for a task group — whose `when` the draft's triggers
- * intersect, plus every `always`. One reader per definition: two perspectives
- * that share an agent are one dispatch with both their `when` lists, as the
- * definition itself says which reading is which.
+ * intersect, plus every `always`. One reader per perspective, keyed by its
+ * own `name`: several perspectives may share an agent — `tech.md`'s four
+ * readings on `tech-design.md`, `build.md`'s four on a task group — and each
+ * is still its own dispatch, its `name` telling the shared agent which
+ * reading is theirs. Two entries are never merged into one on the strength
+ * of a shared agent.
  *
  * `summonedBy` is what the draft raised for that reader, empty for one that
  * runs because it always does.
@@ -192,13 +188,7 @@ export function readersFor(schema, target, triggers) {
       (one) => one !== "always" && raised.has(one),
     );
     if (summonedBy.length === 0 && !when.includes("always")) continue;
-    const held = readers.get(agent);
-    if (held) {
-      held.when = [...new Set([...held.when, ...when])];
-      held.summonedBy = [...new Set([...held.summonedBy, ...summonedBy])];
-      continue;
-    }
-    readers.set(agent, { name, when: [...when], agent, summonedBy });
+    readers.set(name, { name, when: [...when], agent, summonedBy });
   }
   return [...readers.values()];
 }
@@ -242,6 +232,22 @@ const artifactOf = (schema, target) => {
     )
   );
 };
+
+/** The file `classifyDiff` reads a header-less diff against: `target`'s own
+ * artifact, resolved through `artifactOf`, or the plan's `tasks.md` for a
+ * task group — no artifact of its own. A globbed `generates` names one file
+ * per capability rather than one file, so it raises nothing on its own; the
+ * diff's own `diff --git` headers do that instead. */
+const initialFile = (schema, target) => {
+  const artifact = artifactOf(schema, target) ?? taskArtifact(schema, target);
+  if (!artifact || artifact.generates.includes("*")) return "";
+  return artifact.generates;
+};
+
+const taskArtifact = (schema, target) =>
+  isGroup(target)
+    ? schema.artifacts.find(({ id }) => id === "tasks")
+    : undefined;
 
 /**
  * What one reader is given: the draft, and what is before it. Nothing else —

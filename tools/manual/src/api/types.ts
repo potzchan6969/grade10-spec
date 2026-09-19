@@ -575,14 +575,33 @@ export type SchemaArtifact = {
   required: boolean;
 };
 
+/** What in a draft summons a reader. `always` is every round; the other nine
+ * answer to what the draft itself changed —
+ * `openspec/specs/shared/planning/agent-rounds/spec.md`'s "A round's size is
+ * read from the draft". Read by `scripts/openspec/lib/perspectives.mjs`,
+ * which classifies a diff against this same list, and by `read-schema.mts`,
+ * which refuses a `when` outside it the way `handOf` refuses a role outside
+ * `ROLES`. */
+export const TRIGGERS: readonly string[] = [
+  "always",
+  "surface",
+  "schema",
+  "export",
+  "system",
+  "migration",
+  "flag",
+  "money",
+  "deploy",
+  "copy",
+];
+
 /** One reader a round may dispatch: its perspective's name, what in a draft
  * summons it, and the definition under `.claude/agents/` the round runs. The
  * size of a round is the draft's own diff read against every `when`, so a
  * perspective no draft can summon is not an entry. */
 export type Perspective = {
   name: string;
-  /** The triggers that summon it — `always`, or any of `surface`, `schema`,
-   * `export`, `system`, `migration`, `flag`, `money`, `deploy`, `copy`. */
+  /** The triggers that summon it, each one of `TRIGGERS`. */
   when: string[];
   /** The reader's definition, as a store-relative path. */
   agent: string;

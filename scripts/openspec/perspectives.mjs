@@ -7,10 +7,13 @@
  *
  * The `round` skill calls this at its Challenge step. It prints
  *
- *   { "readers": [{ "name", "agent", "when" }], "verifier": <bool>, "bundle": { "draft", "upstream" } }
+ *   { "readers": [{ "name", "agent", "when", "summonedBy" }], "verifier": <bool>, "bundle": { "draft", "upstream" } }
  *
  * - **readers** — the perspectives the draft's own diff summons, plus every
- *   `always`, one dispatch per reader definition under `.claude/agents/`
+ *   `always`, one dispatch per perspective's own `name` — several may share
+ *   an agent, and each is still its own dispatch
+ * - **summonedBy** — what the draft raised for that reader, empty for one
+ *   dispatched because it always runs
  * - **verifier** — whether a verifier reads the findings: a round that
  *   summoned one challenger dispatches none, and that reader argues its own
  * - **bundle** — the draft, and what is before it: the artifact's `upstream:`
@@ -83,13 +86,18 @@ if (flags.diff !== undefined && !existsSync(flags.diff))
 // it and nothing else is summoned.
 const diff = flags.diff === undefined ? "" : readFileSync(flags.diff, "utf8");
 const schema = planningSchema(root);
-const triggers = classifyDiff(diff, target);
+const triggers = classifyDiff(diff, schema, target);
 const readers = readersFor(schema, target, triggers);
 
 console.log(
   JSON.stringify(
     {
-      readers: readers.map(({ name, agent, when }) => ({ name, agent, when })),
+      readers: readers.map(({ name, agent, when, summonedBy }) => ({
+        name,
+        agent,
+        when,
+        summonedBy,
+      })),
       verifier: verifierNeeded(readers),
       bundle: bundleFor(root, change, target, schema),
     },

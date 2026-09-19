@@ -17,7 +17,11 @@ artifacts:
     required: true
     teammate: product-manager
     hand: pm
-    perspectives:
+    # The page's marks, `proposal.md`, `decisions.md` and the journeys share
+    # one reader list — `agent-rounds/spec.md`'s table names the same seven
+    # for all three — so it is written once here and aliased on the other
+    # two, never repeated by hand.
+    perspectives: &pm-readers
       - name: product
         when: [surface, copy]
         agent: .claude/agents/product.md
@@ -122,31 +126,7 @@ artifacts:
     required: true
     teammate: product-manager
     hand: pm
-    perspectives:
-      - name: product
-        when: [surface, copy]
-        agent: .claude/agents/product.md
-      - name: reader
-        when: [copy]
-        agent: .claude/agents/reader.md
-      - name: design
-        when: [surface]
-        agent: .claude/agents/design.md
-      - name: backend
-        when: [schema, export]
-        agent: .claude/agents/backend.md
-      - name: integration
-        when: [system]
-        agent: .claude/agents/integration.md
-      - name: qa
-        when: [always]
-        agent: .claude/agents/qa.md
-      - name: operations
-        when: [migration, flag, money, deploy]
-        agent: .claude/agents/operations.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
+    perspectives: *pm-readers
     generates: decisions.md
     description: The change's decided frontier - its goals, its edges, and what the interview settled
     template: decisions.md
@@ -277,31 +257,7 @@ artifacts:
     required: true
     teammate: product-manager
     hand: pm
-    perspectives:
-      - name: product
-        when: [surface, copy]
-        agent: .claude/agents/product.md
-      - name: reader
-        when: [copy]
-        agent: .claude/agents/reader.md
-      - name: design
-        when: [surface]
-        agent: .claude/agents/design.md
-      - name: backend
-        when: [schema, export]
-        agent: .claude/agents/backend.md
-      - name: integration
-        when: [system]
-        agent: .claude/agents/integration.md
-      - name: qa
-        when: [always]
-        agent: .claude/agents/qa.md
-      - name: operations
-        when: [migration, flag, money, deploy]
-        agent: .claude/agents/operations.md
-      - name: simpler
-        when: [always]
-        agent: .claude/agents/simpler.md
+    perspectives: *pm-readers
     generates: specs/**/user-journeys.md
     description: The journeys this change adds, changes or retires, with the ones it leans on restated
     template: user-journeys.md
@@ -421,8 +377,16 @@ artifacts:
     required: false
     teammate: designer
     hand: design
+    # `agent-rounds/spec.md`'s table names three readings for `ui-design.md`:
+    # the journeys walked and the design system's inventory and parity, both
+    # `design.md`'s, then the words as `reader.md` reads them. Neither design
+    # reading is `always`: a words-only draft never touches a screen, a state
+    # or a story, and `design.md`'s own "Summoned by" stays trigger-based.
     perspectives:
-      - name: design
+      - name: journeys
+        when: [surface]
+        agent: .claude/agents/design.md
+      - name: inventory
         when: [surface]
         agent: .claude/agents/design.md
       - name: reader
@@ -497,8 +461,20 @@ artifacts:
     required: false
     teammate: engineer
     hand: tech
+    # `tech-design.md` is `.claude/agents/tech.md`'s own subject, so its four
+    # readings (`system-design.md`'s "Where a Reader Applies It" row) run
+    # every round, whatever the draft touched.
     perspectives:
-      - name: tech
+      - name: deterministic
+        when: [always]
+        agent: .claude/agents/tech.md
+      - name: simple
+        when: [always]
+        agent: .claude/agents/tech.md
+      - name: consistent
+        when: [always]
+        agent: .claude/agents/tech.md
+      - name: testable
         when: [always]
         agent: .claude/agents/tech.md
       - name: simpler
@@ -964,13 +940,25 @@ artifacts:
     required: true
     teammate: engineer
     hand: dev
+    # `agent-rounds/spec.md`'s table names five readings for `tasks.md`: order
+    # and dependencies and migration and flag, both `operations.md`'s; tests
+    # first and the end-to-end group, both `qa.md`'s; size, `simpler.md`'s.
+    # `tasks.md` is squarely qa's and operations' subject too, so their order,
+    # tests-first and end-to-end readings run every round; migration and flag
+    # stay conditional, as `operations.md`'s own "Summoned by" says.
     perspectives:
-      - name: operations
-        when: [always, migration, flag]
+      - name: order
+        when: [always]
         agent: .claude/agents/operations.md
-      - name: qa
+      - name: tests-first
         when: [always]
         agent: .claude/agents/qa.md
+      - name: end-to-end
+        when: [always]
+        agent: .claude/agents/qa.md
+      - name: migration-flag
+        when: [migration, flag]
+        agent: .claude/agents/operations.md
       - name: simpler
         when: [always]
         agent: .claude/agents/simpler.md
@@ -1070,8 +1058,22 @@ apply:
   requires:
     - tasks
   tracks: tasks.md
+  # `agent-rounds/spec.md`'s "A task group" row names four readings, all
+  # `.claude/agents/build.md`'s: missing pieces, simplicity, code smell, the
+  # repository's conventions. A task group is squarely build's and qa's
+  # subject, so both run every round; operations stays conditional on a
+  # migration or a flag.
   perspectives:
-    - name: build
+    - name: missing-pieces
+      when: [always]
+      agent: .claude/agents/build.md
+    - name: simplicity
+      when: [always]
+      agent: .claude/agents/build.md
+    - name: code-smell
+      when: [always]
+      agent: .claude/agents/build.md
+    - name: conventions
       when: [always]
       agent: .claude/agents/build.md
     - name: qa

@@ -1,6 +1,11 @@
 import { join } from "node:path";
 import YAML from "yaml";
-import { type Perspective, ROLES, type SchemaArtifact } from "../api/types.ts";
+import {
+  type Perspective,
+  ROLES,
+  type SchemaArtifact,
+  TRIGGERS,
+} from "../api/types.ts";
 import { readTextIfExists, StoreFileError } from "./disk.mts";
 
 /** The artifacts a schema declares, in the order it declares them — the
@@ -43,7 +48,7 @@ export function schemaArtifacts(
       ...(hand ? { hand } : {}),
       requires: strings(fields.requires),
       upstream: strings(fields.upstream),
-      perspectives: perspectives(fields.perspectives),
+      perspectives: perspectives(fields.perspectives, fields.id),
       required: fields.required !== false,
     });
   }
@@ -87,7 +92,7 @@ function handOf(id: string, value: unknown): SchemaArtifact["hand"] {
 export function applyPerspectives(root: string, schema: string): Perspective[] {
   const parsed = schemaOf(root, schema);
   const apply = (parsed?.apply ?? {}) as Record<string, unknown>;
-  return perspectives(apply.perspectives);
+  return perspectives(apply.perspectives, "apply");
 }
 
 function schemaOf(
@@ -103,19 +108,35 @@ function schemaOf(
 
 /** One entry is three facts: the perspective's name, the triggers a draft can
  * summon it with, and the reader that argues it. An entry missing any of them
- * dispatches nothing, so it is dropped rather than carried as a reader
- * nothing can run. A `when` written as one word is that one trigger. */
-const perspectives = (value: unknown): Perspective[] => {
+ * dispatches nothing a round could ever run, so it is refused the way a bad
+ * `hand:` is — a schema with a hole in its data is worse than one that fails
+ * loudly. A `when` written as one word is that one trigger, and one outside
+ * `TRIGGERS` is refused the same way. `label` names the artifact id, or
+ * `apply` for a task group's block, so the refusal says where to look. */
+const perspectives = (value: unknown, label: unknown): Perspective[] => {
   if (!Array.isArray(value)) return [];
   const read: Perspective[] = [];
+  const named = typeof label === "string" ? label : String(label ?? "");
   for (const entry of value) {
     const fields = (entry ?? {}) as Record<string, unknown>;
+    const name = typeof fields.name === "string" ? fields.name : undefined;
+    const agent = typeof fields.agent === "string" ? fields.agent : undefined;
     const when =
       typeof fields.when === "string" ? [fields.when] : strings(fields.when);
-    if (typeof fields.name !== "string" || typeof fields.agent !== "string")
-      continue;
-    if (when.length === 0) continue;
-    read.push({ name: fields.name, when, agent: fields.agent });
+    if (!name || !agent || when.length === 0) {
+      throw new StoreFileError(
+        1,
+        `\`${named}\` carries a \`perspectives:\` entry missing \`name:\`, \`agent:\` or \`when:\``,
+      );
+    }
+    for (const trigger of when) {
+      if (TRIGGERS.includes(trigger)) continue;
+      throw new StoreFileError(
+        1,
+        `\`${named}\`'s perspective \`${name}\` names \`${trigger}\` in \`when:\`, which is no trigger — name one of ${TRIGGERS.map((one) => `\`${one}\``).join(", ")}`,
+      );
+    }
+    read.push({ name, when, agent });
   }
   return read;
 };
