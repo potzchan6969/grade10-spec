@@ -131,14 +131,15 @@ test("shared-planning-change-stages-SC-51 - the lanes and a card", async () => {
   await expect.element(card.getByText(/^created /)).toBeVisible();
 
   // The overlay: this is the Behind fixture — `decisions.md` moved after it
-  // was reviewed, and the chip names the artifact and what it is read again
-  // against.
+  // was reviewed, and the chip names the artifact; what it is read again
+  // against sits on the chip's own `title` rather than as a second line of
+  // text, so a reader hovers for it and this reads it the same way.
   await expect.element(card.getByText("Behind", { exact: true })).toBeVisible();
   await expect
     .element(card.getByText("Decisions", { exact: true }))
     .toBeVisible();
   await expect
-    .element(card.getByText("read again against proposal"))
+    .element(card.getByTitle("read again against proposal"))
     .toBeVisible();
 
   // The task bar: one group, nothing ticked yet.
@@ -152,9 +153,25 @@ test("shared-planning-change-stages-SC-51 - the lanes and a card", async () => {
 /** A lane the Blocked filter leaves with nothing in it: still its heading,
  * a count of none, and the role the stage would put a hand on if a change
  * arrived — said rather than left silent, because a lane with nobody's name
- * on it is still somebody's to notice. */
+ * on it is still somebody's to notice.
+ *
+ * `openManual` reads the address once, as the module loads: a second address
+ * in the same session is a click, so the filter is reached the way a reader
+ * reaches it - through the filter row's own link - rather than a second
+ * `openManual` call the router would never see. */
 test("shared-planning-change-stages-SC-52 - a lane with nothing in it", async () => {
-  await openManual("/in-flight?filter=blocked");
+  await openManual("/in-flight");
+  await filterLink("Blocked").click();
+
+  // Waited for before the lane's own section is captured: a card only
+  // Proposed carries, gone once the filter keeps only what it names — so the
+  // count read off the frozen section below is the settled one, not the
+  // instant between the click and React applying it.
+  await expect
+    .element(
+      page.getByRole("heading", { level: 3, name: "The Waiting overlay" }),
+    )
+    .not.toBeInTheDocument();
 
   await expect
     .element(
@@ -172,8 +189,14 @@ test("shared-planning-change-stages-SC-52 - a lane with nothing in it", async ()
 /** The four board filters this walk can reach — Waiting, Idle, Behind and
  * Blocked — each keeping only the change whose overlay it names. Mine is the
  * fifth, and needs a handle before it narrows anything; that state is the
- * next case. */
+ * next case.
+ *
+ * One `openManual` for the file's own first address, then a click per filter
+ * - the filter row's own link, the way a reader moves from one filter to the
+ * next - rather than a fresh address the mounted router would never read. */
 test("shared-planning-change-stages-SC-54 - the filters narrow the board", async () => {
+  await openManual("/in-flight");
+
   const titleOf = {
     waiting: "The Waiting overlay",
     idle: "The On staging stage",
@@ -182,7 +205,8 @@ test("shared-planning-change-stages-SC-54 - the filters narrow the board", async
   } as const;
 
   for (const filter of Object.keys(titleOf) as (keyof typeof titleOf)[]) {
-    await openManual(`/in-flight?filter=${filter}`);
+    const label = filter.charAt(0).toUpperCase() + filter.slice(1);
+    await filterLink(label).click();
 
     await expect
       .element(
@@ -207,10 +231,13 @@ test("shared-planning-change-stages-SC-54 - the filters narrow the board", async
 
 /** Mine before a handle is chosen: it asks rather than emptying the board —
  * a filter that showed nothing while asking who the reader is would read as
- * a board with nothing on it. */
+ * a board with nothing on it. The handle is cleared before the manual mounts
+ * so no earlier walk's choice leaks in; Mine is then reached by its own
+ * link, the address `openManual` already opened this session. */
 test("shared-planning-change-stages-SC-55 - Mine with no handle chosen", async () => {
   localStorage.clear();
-  await openManual("/in-flight?filter=mine");
+  await openManual("/in-flight");
+  await filterLink("Mine").click();
 
   await expect
     .element(
@@ -262,4 +289,14 @@ function cardFor(id: string): Element {
   const card = document.getElementById(id);
   if (!card) throw new Error(`no card for change "${id}"`);
   return card;
+}
+
+/** One filter's own link in the page's `Filters` row, scoped there because a
+ * card's own chips carry the same words — a dependency chip reads "Blocked",
+ * a change's own title can read "Waiting" — and a page-wide search for the
+ * link would meet more than one. */
+function filterLink(label: string) {
+  return page
+    .getByRole("navigation", { name: "Filters" })
+    .getByRole("link", { name: label, exact: true });
 }
