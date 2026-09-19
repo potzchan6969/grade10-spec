@@ -271,7 +271,13 @@ function readChange(
   } catch (cause) {
     fail(`openspec/schemas/${entry.schema}/schema.yaml`, cause);
   }
-  entry.written = writtenArtifacts(dir, entry, artifacts, tasks !== undefined);
+  entry.written = writtenArtifacts(
+    root,
+    dir,
+    entry,
+    artifacts,
+    tasks !== undefined,
+  );
 
   // The round's record, written by the first landing and absent until then —
   // read ahead of the decisions so an open question can be marked against the
@@ -348,19 +354,43 @@ function artifactsOf(
 }
 
 /**
+ * The capability directories a change touches, walked from the tree rather
+ * than from `entry.deltas` — whose capabilities `deltaFiles` finds only
+ * through a capability's `spec.md`. The journeys land before the outline on
+ * the workflow's own documented order (`CLAUDE.md`: "Neither hand opens 5"),
+ * so a capability holding only its `user-journeys.md` must still count as
+ * one, or the second half of Proposed never fires on that order. A directory
+ * counts once it holds any of the three files a capability may carry.
+ */
+function capabilityDirsOf(root: string, dir: string): string[] {
+  const specsDir = join(dir, "specs");
+  if (!existsSync(specsDir)) return [];
+  const marks = ["user-journeys.md", "spec.md", "feature-tcs.md"];
+  const found = new Set<string>();
+  for (const name of marks) {
+    for (const file of walkFiles(root, specsDir, name)) {
+      found.add(join(root, file.slice(0, -`/${name}`.length)));
+    }
+  }
+  return [...found].sort();
+}
+
+/**
  * The schema artifact ids this change has written, read against the schema's
  * own `generates` rather than a second list of ids here. An artifact that
  * generates a file inside a capability directory is written only when every
- * delta capability carries it — one capability's suite does not answer for
- * the others, which is how `blind` and `walked` already read them.
+ * capability directory the change touches carries it — one capability's
+ * suite does not answer for the others, which is how `blind` and `walked`
+ * already read them.
  */
 function writtenArtifacts(
+  root: string,
   dir: string,
   entry: ChangeEntry,
   artifacts: SchemaArtifact[],
   planned: boolean,
 ): string[] {
-  const capabilities = entry.deltas.map(({ spec }) => join(dir, "specs", spec));
+  const capabilities = capabilityDirsOf(root, dir);
   const present = ({ generates }: SchemaArtifact) => {
     if (generates === "tasks.md") return planned;
     if (!generates.startsWith("specs/"))
