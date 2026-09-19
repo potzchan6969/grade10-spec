@@ -271,6 +271,58 @@ test("the digest leaves an artifact behind six days off the week", () => {
   );
 });
 
+test("the digest lists a page's open question beside the decisions rows", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    "docs/prds/products/demo-product/rules.md": [
+      "---",
+      "title: Rules",
+      "summary: One rule the badge turns on.",
+      "---",
+      "",
+      "## Points",
+      "",
+      "A point is earned per dollar spent.",
+      "",
+      "- ❓ design - Whether the badge shows at zero points",
+      "",
+    ].join("\n"),
+    "openspec/changes/page-it/.openspec.yaml": [
+      "schema: demo-planning",
+      "created: 2026-10-01",
+      "hands:",
+      "  pm: dana",
+      "  design: dana",
+      "",
+    ].join("\n"),
+    "openspec/changes/page-it/proposal.md": [
+      "# Page it",
+      "",
+      "## Why",
+      "",
+      "So the badge's rule is settled before the page.",
+      "",
+      "## References",
+      "",
+      "- [Rules · Points](../../../docs/prds/products/demo-product/rules.md#points)",
+      "",
+    ].join("\n"),
+    "openspec/changes/page-it/decisions.md": "## Goals\n\n- One outcome.\n",
+  });
+  commit("propose page-it", 1);
+
+  const { messages } = digest(root).read();
+
+  assert.equal(messages.length, 1);
+  const [message] = messages;
+  assert.equal(message.handle, "dana");
+  const question = message.lines.find(
+    (one) => one.kind === "question" && one.change === "page-it",
+  );
+  assert.ok(question, "expected the page's open question in the digest");
+  assert.match(question.text, /badge shows at zero points/);
+});
+
 test("the digest keys one message per person per week", () => {
   const keys = join(mkdtempSync(join(tmpdir(), "digest-keys-")), "sent.txt");
   const root = week();

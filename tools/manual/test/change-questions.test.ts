@@ -1,10 +1,10 @@
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import type { ParsedPage } from "../src/api/derive";
-import { questionsOf } from "../src/api/derive";
-import { parsePage } from "../src/content/grammar";
+import type { ChangeEntry, PageEntry } from "../src/api/types";
+import { type PageAst, parsePage } from "../src/content/grammar";
 import { NO_GIT } from "../src/store/git.mts";
+import { markQuestions } from "../src/store/questions.mts";
 import { readChanges } from "../src/store/read-changes.mts";
 import { writeStore } from "./tmp-store";
 
@@ -12,7 +12,8 @@ import { writeStore } from "./tmp-store";
  * What a change still has open, and who it is addressed to: a decisions row
  * nobody has settled, and a ❓ line the page still carries under a section the
  * proposal links. Both are read, never stored twice — the row is the change's
- * own file, the line is the page's.
+ * own file, the line is the page's — and merged onto one field, `questions`,
+ * by `markQuestions`, the way the manual and the scripts both read it.
  */
 
 const CHANGE = "key-probe";
@@ -81,13 +82,15 @@ const source = readFileSync(
   fileURLToPath(new URL("./fixtures/sections/rules.md", import.meta.url)),
   "utf8",
 );
-const page: ParsedPage = {
-  path: PAGE,
-  entry: { path: PAGE, source },
-  ast: parsePage(source),
-  error: null,
-  route: "/p/demo-product/rules",
-};
+const page: PageEntry = { path: PAGE, source };
+const asts = new Map<string, PageAst>([[PAGE, parsePage(source)]]);
+
+/** `markQuestions` mutates the entry it is handed, the way the store marks
+ * it when the snapshot is read; this reads the field back. */
+function withPages(entry: ChangeEntry, pages: PageEntry[]): ChangeEntry {
+  markQuestions([entry], pages, asts);
+  return entry;
+}
 
 function changeWith(record: string) {
   const root = writeStore({
@@ -165,8 +168,11 @@ describe("a decisions row nobody has settled", () => {
 
 describe("a question the page still carries", () => {
   it("is listed against the proposal, naming its section", () => {
-    const entry = changeWith(["hands:", "  pm: ecchochan", ""].join("\n"));
-    const asked = questionsOf(entry, [page]).filter(
+    const entry = withPages(
+      changeWith(["hands:", "  pm: ecchochan", ""].join("\n")),
+      [page],
+    );
+    const asked = (entry.questions ?? []).filter(
       (one) => one.artifact === "proposal",
     );
 
@@ -209,7 +215,7 @@ describe("a question the page still carries", () => {
   });
 
   it("leaves a titled block's row to the page", () => {
-    const asked = questionsOf(changeWith(""), [page]);
+    const asked = withPages(changeWith(""), [page]).questions ?? [];
 
     expect(asked.some((one) => one.text.includes("What a refund does"))).toBe(
       false,
@@ -217,16 +223,16 @@ describe("a question the page still carries", () => {
   });
 
   it("leaves a section the proposal does not link alone", () => {
-    const asked = questionsOf(changeWith(""), [page]);
+    const asked = withPages(changeWith(""), [page]).questions ?? [];
 
     expect(asked.some((one) => one.section === "tiers")).toBe(false);
   });
 
   it("carries the decisions rows beside the page's lines", () => {
-    expect(questionsOf(changeWith(""), [page])).toHaveLength(6);
+    expect(withPages(changeWith(""), [page]).questions).toHaveLength(6);
   });
 
   it("asks nothing of a page the snapshot does not hold", () => {
-    expect(questionsOf(changeWith(""), [])).toHaveLength(2);
+    expect(withPages(changeWith(""), []).questions).toHaveLength(2);
   });
 });
