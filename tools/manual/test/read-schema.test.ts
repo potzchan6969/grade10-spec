@@ -99,7 +99,7 @@ describe("the readers each artifact may summon", () => {
       },
       {
         name: "inventory",
-        when: ["surface"],
+        when: ["surface", "export"],
         agent: ".claude/agents/design.md",
       },
       { name: "reader", when: ["copy"], agent: ".claude/agents/reader.md" },

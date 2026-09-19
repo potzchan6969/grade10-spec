@@ -363,10 +363,6 @@ test("every trigger the requirement names is classified off a diff", () => {
     // surface — a screen, a state, or a story
     [
       "surface",
-      "diff --git a/openspec/changes/demo/ui-design.md b/openspec/changes/demo/ui-design.md\n@@ -1,2 +1,3 @@\n+| Tile | `packages/ui` |",
-    ],
-    [
-      "surface",
       "@@ -1,2 +1,3 @@\n+`ListingTile::story` shows the sold-out tile",
     ],
     ["surface", "@@ -1,2 +1,3 @@\n+::figma node-id=12:34"],
@@ -473,10 +469,59 @@ test("an empty diff leaves the floor and nothing else", () => {
 test("a round of one reader in all dispatches no verifier", () => {
   const root = fixture();
   const schema = planningSchema(root);
-  const readers = readersFor(schema, "ui-design", new Set());
+  const readers = readersFor(
+    schema,
+    "ui-design",
+    classifyDiff("", schema, "ui-design"),
+  );
 
+  // `ui-design.md` raises nothing by its name: a design round that moved no
+  // screen, no state, no story and no export is the floor alone, and a round
+  // of one reader verifies itself. The triggers are read off the diff here,
+  // never handed in, because the file rule is what this decides.
   assert.deepEqual(names(readers), ["simpler"]);
   assert.equal(verifierNeeded(readers), false);
+});
+
+test("a design's state summons the journeys walked and the inventory", () => {
+  const root = fixture();
+  const schema = planningSchema(root);
+  const diff = [
+    "diff --git a/openspec/changes/demo/ui-design.md b/openspec/changes/demo/ui-design.md",
+    "@@ -8,3 +8,4 @@ ## States",
+    "+| Catalogue | empty | the filter matched nothing |",
+    "",
+  ].join("\n");
+
+  const triggers = classifyDiff(diff, schema, "ui-design");
+
+  assert.deepEqual([...triggers].sort(), ["surface"]);
+  assert.deepEqual(names(readersFor(schema, "ui-design", triggers)), [
+    "inventory",
+    "journeys",
+    "simpler",
+  ]);
+});
+
+test("a design's Components table summons the inventory alone", () => {
+  const root = fixture();
+  const schema = planningSchema(root);
+  const diff = [
+    "diff --git a/openspec/changes/demo/ui-design.md b/openspec/changes/demo/ui-design.md",
+    "@@ -8,3 +8,4 @@ ## Components",
+    "+| `ListingTile` | `packages/ui` | the tile |",
+    "",
+  ].join("\n");
+
+  const triggers = classifyDiff(diff, schema, "ui-design");
+
+  // An export the design composes is the inventory's reading; the journeys
+  // are walked when a screen, a state or a story moves.
+  assert.deepEqual([...triggers].sort(), ["export"]);
+  assert.deepEqual(names(readersFor(schema, "ui-design", triggers)), [
+    "inventory",
+    "simpler",
+  ]);
 });
 
 test("the requirements and the cases have no readers: the two blind readings are theirs", () => {
