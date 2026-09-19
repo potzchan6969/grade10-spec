@@ -358,6 +358,15 @@ export function handOfMark(text: string): string {
 const CONFIRMS =
   /(?:^|[\s;,—-])((?:[A-Z][a-z]+|the [a-z]+(?: [a-z]+)?))\s+confirms\b/;
 
+/** The question a ❓ line asks, its mark and the grammar's role dropped — the
+ * same shape a decisions row's question carries, so a surface that lists both
+ * reads one. Beside `ASKED_OF` and `handOfMark`, the grammar's third reader. */
+export function askedText(text: string): string {
+  return ASKED_OF.exec(text)?.[2] ?? text.replace(LEADING_OPEN, "");
+}
+
+const LEADING_OPEN = /^❓\s*/;
+
 /** What a page calls each role, as `shared/planning/change-stages` names them
  * in its Hands table. A name outside it is nobody's role, so the line stays
  * the product manager's. */

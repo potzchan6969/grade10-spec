@@ -19,7 +19,7 @@ import {
   specTitle,
 } from "./paths";
 import { findRequirement } from "./requirements";
-import { ASKED_OF, handOfMark, laneOfStage } from "./stages.ts";
+import { laneOfStage } from "./stages.ts";
 import type {
   ChangeEntry,
   ChangeLane,
@@ -28,7 +28,6 @@ import type {
   DeltaRequirement,
   HistoryRef,
   ItemError,
-  OpenQuestion,
   PageEntry,
   Scenario,
   SchemaArtifact,
@@ -587,6 +586,29 @@ export function isProductDir(manualDir: string, dir: string): boolean {
   return rest !== "" && rest.split("/").length <= 2;
 }
 
+/** The marks of every page under a product, pages in their nav order. Here
+ * rather than in `open-marks.ts`, which stays reachable from plain node: this
+ * is the app's own `ParsedPage`, and the store never asks for one product's
+ * pages at a time. */
+export function openMarksForProduct(
+  index: ManualIndex,
+  productId: string,
+): OpenMark<ParsedPage>[] {
+  const dir = `${pagePath(index.manualDir, "products", productId)}/`;
+  return index.pages
+    .filter((page) => page.path.startsWith(dir) && page.route)
+    .sort(byOrder)
+    .flatMap(openMarksOfPage);
+}
+
+function byOrder(a: ParsedPage, b: ParsedPage): number {
+  const order = (page: ParsedPage) =>
+    page.path.endsWith("/index.md")
+      ? -1
+      : (page.ast?.frontmatter.order ?? Number.POSITIVE_INFINITY);
+  return order(a) - order(b) || a.path.localeCompare(b.path);
+}
+
 /**
  * Where a change stands, in the four lanes that ran before the eight stages:
  * the lane its stage projects to, so the two can never disagree about one
@@ -621,71 +643,6 @@ export type PendingItem = {
 
 /** What one teammate owes, oldest change first. */
 export type PendingTeammate = { teammate: string; items: PendingItem[] };
-
-/**
- * What a change still has open, and who each is addressed to.
- *
- * Two halves, read from where each was written. The change's own decisions
- * rows are on the entry, because `decisions.md` is a file of the change. The
- * questions a page still carries are the page's, so they are read here, where
- * the parsed pages are: a ❓ line under a section the proposal links is the
- * change's to answer, counted against the proposal that linked it.
- *
- * A mark is the section's when the page's own prose, a callout or a flow is
- * what it sits in — the boundary `sectionTextOf` draws. A `detail` and an
- * `example` stay the page's own: a `Product decisions` table carries what the
- * page keeps against every change that ever touched it, so reading its rows as
- * one change's would hand each change every question anybody has left there.
- *
- * One walk per page, however many sections of it the change links, because a
- * page with twenty marks and six linked sections is one reading of the page
- * and not six.
- */
-export function questionsOf(
-  change: ChangeEntry,
-  pages: ParsedPage[],
-): OpenQuestion[] {
-  const byPath = new Map(pages.map((page) => [page.path, page]));
-  /** The marks of one page that belong to a section, by that section. */
-  const asked = new Map<string, Map<string, OpenMark[]>>();
-  const under = (page: ParsedPage): Map<string, OpenMark[]> => {
-    const held = asked.get(page.path);
-    if (held) return held;
-    const bySection = new Map<string, OpenMark[]>();
-    for (const mark of openMarksOfPage(page)) {
-      const anchor = mark.where?.anchor;
-      if (anchor === undefined || anchor !== mark.section) continue;
-      bySection.set(anchor, [...(bySection.get(anchor) ?? []), mark]);
-    }
-    asked.set(page.path, bySection);
-    return bySection;
-  };
-
-  const linked = (change.sections ?? []).flatMap(({ page, slug }) => {
-    const parsed = byPath.get(page);
-    if (!parsed) return [];
-    return (under(parsed).get(slug) ?? []).map((mark): OpenQuestion => {
-      const role = handOfMark(mark.text);
-      return {
-        artifact: "proposal",
-        page,
-        section: slug,
-        role,
-        hand: change.hands?.[role] ?? role,
-        text: askedText(mark.text),
-      };
-    });
-  });
-  return [...(change.questions ?? []), ...linked];
-}
-
-/** The question a ❓ line asks, its mark dropped — the same shape a decisions
- * row's question carries, so a surface that lists both reads one. */
-function askedText(text: string): string {
-  return ASKED_OF.exec(text)?.[2] ?? text.replace(LEADING_OPEN, "");
-}
-
-const LEADING_OPEN = /^❓\s*/;
 
 /**
  * Every teammate's worklist, derived from the artifacts each change has written

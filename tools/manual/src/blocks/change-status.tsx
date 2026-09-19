@@ -1,7 +1,7 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-import { dependenciesOf, type ManualIndex, questionsOf } from "../api/derive";
+import { dependenciesOf, type ManualIndex } from "../api/derive";
 import { handoffsOf, type LandingDates } from "../api/handoff";
 import { overlaysOf } from "../api/overlays";
 import { stageShown } from "../api/stage-view";
@@ -54,7 +54,7 @@ export function ChangeStatus({
   const next = nextAction(change);
   const stage = stageShown(change);
   const artifacts = index.snapshot.schemas[change.schema] ?? [];
-  const questions = questionsOf(change, index.pages);
+  const questions = change.questions ?? [];
   const overlays = overlaysOf(change, {
     now: Date.now(),
     released: new Set(archived.map((one) => one.id)),

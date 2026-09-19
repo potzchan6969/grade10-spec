@@ -15,7 +15,7 @@ const FENCE = /^(`{3,}|~{3,})/;
  * steps as headings, so reading them as sections would cut the page up at
  * every step. A callout's and a flow's body are the section's lines, because
  * the section is where their author put them; a `detail` and an `example` are
- * left to the page, for the reason `questionsOf` leaves their rows there.
+ * left to the page, for the reason `markQuestions` leaves their rows there.
  *
  * Undefined where the page carries no such section, so a caller hashing it
  * cannot mistake a link nobody kept for a section with nothing in it.

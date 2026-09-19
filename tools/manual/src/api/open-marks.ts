@@ -1,11 +1,25 @@
-import type { Block } from "../content/grammar";
-import type { ManualIndex, ParsedPage } from "./derive";
-import { pagePath, sectionSlug, slugify } from "./paths.ts";
+import type { Block, PageAst } from "../content/grammar.ts";
+import { sectionSlug, slugify } from "./paths.ts";
+
+/**
+ * This module is the one reader of the ❓/`TBC` grammar, so it stays reachable
+ * from plain node — the store marks a change's questions with it — and never
+ * imports `derive.ts`, which parses pages for the app and cannot go there.
+ * The least a page needs to be scanned for marks is its path and its parsed
+ * AST: the app's own `ParsedPage`, carrying its route and its parse error,
+ * satisfies this and so does the store's own page plus the AST it keeps
+ * beside it, which is why the store can mark a change's questions without
+ * building the app's full page shape.
+ */
+export type MarkedPage = { path: string; ast: PageAst | null };
 
 /** One line a page marked ❓ or `TBC`: what nobody has confirmed, where it
- * sits, and the anchor that opens the page there. */
-export type OpenMark = {
-  page: ParsedPage;
+ * sits, and the anchor that opens the page there. Carries back whatever page
+ * shape it was read from — the app's own `ParsedPage`, with its route, where
+ * a mark opens the page, or the store's leaner `MarkedPage`, where nothing
+ * here reads more of the page than its path. */
+export type OpenMark<P extends MarkedPage = MarkedPage> = {
+  page: P;
   /** The `## ` section or the titled block the line sits under. */
   where?: { title: string; anchor: string };
   /** Slug of the `## ` section the line sits under, as a proposal's
@@ -25,16 +39,19 @@ const TABLE_RULE = /^\s*\|?\s*:?-{3,}/;
 const INLINE = /[*_]/g;
 
 /** Every ❓ and `TBC` on a page, in reading order. */
-export const openMarksOfPage = (page: ParsedPage): OpenMark[] =>
+export const openMarksOfPage = <P extends MarkedPage>(page: P): OpenMark<P>[] =>
   marksOfPage(page, OPEN);
 
 /** Every line carrying the mark, in reading order. */
-export function marksOfPage(page: ParsedPage, mark: RegExp): OpenMark[] {
+export function marksOfPage<P extends MarkedPage>(
+  page: P,
+  mark: RegExp,
+): OpenMark<P>[] {
   if (!page.ast) return [];
-  const marks: OpenMark[] = [];
-  let section: OpenMark["where"];
+  const marks: OpenMark<P>[] = [];
+  let section: OpenMark<P>["where"];
 
-  const scan = (markdown: string, where: OpenMark["where"] | null) => {
+  const scan = (markdown: string, where: OpenMark<P>["where"] | null) => {
     for (const line of items(markdown)) {
       const heading = HEADING.exec(line);
       if (heading) {
@@ -61,7 +78,7 @@ export function marksOfPage(page: ParsedPage, mark: RegExp): OpenMark[] {
   // `null` is the page's own prose, whose headings are the sections; a
   // titled block's body is read against that block, and an untitled one
   // against the section it sits in.
-  const walk = (blocks: Block[], where: OpenMark["where"] | null) => {
+  const walk = (blocks: Block[], where: OpenMark<P>["where"] | null) => {
     for (const block of blocks) {
       if (block.type === "prose") scan(block.markdown, where);
       else if ("body" in block) {
@@ -113,26 +130,6 @@ function items(markdown: string): string[] {
     }
   }
   return found;
-}
-
-/** The marks of every page under a product, pages in their nav order. */
-export function openMarksForProduct(
-  index: ManualIndex,
-  productId: string,
-): OpenMark[] {
-  const dir = `${pagePath(index.manualDir, "products", productId)}/`;
-  return index.pages
-    .filter((page) => page.path.startsWith(dir) && page.route)
-    .sort(byOrder)
-    .flatMap(openMarksOfPage);
-}
-
-function byOrder(a: ParsedPage, b: ParsedPage): number {
-  const order = (page: ParsedPage) =>
-    page.path.endsWith("/index.md")
-      ? -1
-      : (page.ast?.frontmatter.order ?? Number.POSITIVE_INFINITY);
-  return order(a) - order(b) || a.path.localeCompare(b.path);
 }
 
 function textOf(line: string): string {

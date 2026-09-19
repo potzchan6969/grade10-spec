@@ -19,6 +19,7 @@ import {
   git as runGit,
   type StoreMain,
 } from "./git.mts";
+import { markQuestions } from "./questions.mts";
 import { readChangeDocuments } from "./read-change-documents.mts";
 import {
   readArchivedChanges,
@@ -102,6 +103,10 @@ export function composeStore(
   // After both: what is before an artifact is the pages the change links and
   // the artifacts the schema names, and this is the one place holding both.
   markUpstream(roots.store, changes, schemas, pages, asts, git);
+  // The page's own open questions merge onto the entry here too, beside its
+  // decisions rows, so the render reads one field rather than walking the
+  // pages again.
+  markQuestions(changes, pages, asts);
 
   return {
     snapshot: {

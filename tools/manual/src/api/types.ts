@@ -514,9 +514,9 @@ export type ChangeEntry = {
    * `lastMoved` cannot: one repository-wide commit moves every change at
    * once. Absent where no history dates it, which is not the same as 0. */
   lastLanded?: string;
-  /** What nobody has settled: the change's own open decisions rows. The
-   * questions a linked page still carries are added by `questionsOf`, which
-   * has the parsed pages. */
+  /** What nobody has settled: the change's own open decisions rows, plus the
+   * questions a linked page still carries — merged on here by `markQuestions`
+   * when the snapshot is read, where the pages are at hand. */
   questions?: OpenQuestion[];
   /** How many rows of `decisions.md`'s `## Raised` table have landed nowhere
    * — the blind reading's questions, which the requirements are not settled

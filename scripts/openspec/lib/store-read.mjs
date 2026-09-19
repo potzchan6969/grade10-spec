@@ -2,12 +2,12 @@
  * The store as the manual reads it, at a root a script hands over.
  *
  * The round's scripts and the messages need exactly what a surface needs —
- * each change's record, its written artifacts, its stage, the schema's order
- * and the content id of what is before each artifact — so they read it
- * through the manual's own readers rather than parsing a change again.
- * `markUpstream` is the piece that wants the pages and the history beside the
- * changes, which is why this is a function and not five imports at each call
- * site.
+ * each change's record, its written artifacts, its stage, the schema's order,
+ * the content id of what is before each artifact, and a page's own open
+ * questions beside its decisions rows — so they read it through the manual's
+ * own readers rather than parsing a change again. `markUpstream` and
+ * `markQuestions` are the pieces that want the pages beside the changes,
+ * which is why each is a function and not five imports at each call site.
  *
  * The root is a parameter, because two of the callers read a tree that is not
  * the checkout: the landing rebases on `main` before it reads, and the push
@@ -17,6 +17,7 @@
  * against the origin it was cut from.
  */
 import { readRootsGitIndex } from "../../../tools/manual/src/store/git.mts";
+import { markQuestions } from "../../../tools/manual/src/store/questions.mts";
 import {
   readArchivedChanges,
   readChanges,
@@ -46,6 +47,7 @@ export async function readChangesAt(root) {
   }
   const { pages, asts } = readManualPages(roots, git);
   markUpstream(root, changes, schemas, pages, asts, git);
+  markQuestions(changes, pages, asts);
   return {
     changes,
     schemas,
