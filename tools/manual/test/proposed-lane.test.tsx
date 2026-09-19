@@ -41,6 +41,7 @@ const planned = changeEntry(
   [{ spec: SPEC, kinds: ["ADDED"], requirements: [] }],
   {
     title: "Add the thing",
+    stage: "building",
     taskGroups: [
       { title: "Contracts", repo: "grade10-spec", done: 1, total: 2 },
     ],

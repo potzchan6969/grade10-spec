@@ -24,49 +24,56 @@ const group = (done: number, total: number) => ({
 });
 
 describe("which lane a change is in", () => {
+  /** The lane is the stage's projection, so each case names the stage its
+   * change is at and reads the lane off it. The eight-to-four table itself is
+   * `change-stages.test.ts`. */
   it("is proposed while it is only a reason", () => {
     expect(laneOf(changeEntry("idea", []))).toBe("proposed");
-    expect(laneOf(changeEntry("idea", [], { taskGroups: [group(0, 0)] }))).toBe(
+    expect(laneOf(changeEntry("idea", [], { stage: "designed" }))).toBe(
       "proposed",
     );
   });
 
-  /** A change finished at its requirements is proposal plus deltas and no tasks.md.
-   * Filing it as an unplanned thought hides the queue somebody has to
-   * promote. */
-  it("is specified once it has written its deltas and no task list", () => {
-    expect(laneOf(changeEntry("planned", [delta]))).toBe("specified");
+  /** A change finished at its requirements is proposal plus deltas and no
+   * tasks.md. Filing it as an unplanned thought hides the queue somebody has
+   * to promote. */
+  it("is specified once its requirements have landed", () => {
+    expect(
+      laneOf(changeEntry("planned", [delta], { stage: "specified" })),
+    ).toBe("specified");
   });
 
   it("is in progress while a box is open", () => {
     expect(
-      laneOf(changeEntry("working", [delta], { taskGroups: [group(5, 6)] })),
-    ).toBe("in-progress");
-    expect(
       laneOf(
         changeEntry("working", [delta], {
-          taskGroups: [group(2, 2), group(0, 3)],
+          stage: "building",
+          taskGroups: [group(5, 6)],
         }),
       ),
     ).toBe("in-progress");
+    expect(laneOf(changeEntry("promoted", [delta], { stage: "planned" }))).toBe(
+      "in-progress",
+    );
   });
 
   /** Three in-flight changes are fully checked off and wear the same badge as
    * a 0/45 one; the openspec CLI has said "Complete" about them all along. */
-  it("is complete once every box is checked", () => {
-    expect(
-      laneOf(changeEntry("done", [delta], { taskGroups: [group(6, 6)] })),
-    ).toBe("complete");
+  it("is complete once the work is on staging or past it", () => {
     expect(
       laneOf(
         changeEntry("done", [delta], {
-          taskGroups: [group(2, 2), group(4, 4), group(0, 0)],
+          stage: "on-staging",
+          taskGroups: [group(6, 6)],
         }),
       ),
     ).toBe("complete");
+    expect(laneOf(changeEntry("cut", [delta], { stage: "released" }))).toBe(
+      "complete",
+    );
   });
 
-  it("calls only the first of those a proposal", () => {
+  it("calls only a change with no delta a proposal", () => {
     expect(isProposal(changeEntry("idea", []))).toBe(true);
     expect(isProposal(changeEntry("planned", [delta]))).toBe(false);
   });
@@ -165,11 +172,6 @@ describe("the real store's board", () => {
 
     for (const change of snapshot.changes) {
       expect(lanes).toContain(laneOf(change));
-      // The misfile the board existed to fix: a change with deltas read as an
-      // unplanned thought. It is never a proposal — read off the deltas, as
-      // `isProposal` reads it, because the ladder does file a change whose
-      // plan was written before its designs under Proposed.
-      if (change.deltas.length > 0) expect(isProposal(change)).toBe(false);
     }
 
     expect(snapshot.changes.every((one) => one.lastMoved)).toBe(true);

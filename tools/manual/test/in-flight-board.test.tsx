@@ -94,15 +94,18 @@ describe("the lanes", () => {
   const idea = changeEntry("an-idea", [], { title: "Only a reason" });
   const specified = changeEntry("written-up", [delta()], {
     title: "Deltas, no plan",
+    stage: "specified",
   });
   const working = changeEntry("under-way", [delta()], {
     title: "Half built",
+    stage: "building",
     taskGroups: [
       { title: "Contracts", repo: "grade10-spec", done: 1, total: 2 },
     ],
   });
   const done = changeEntry("finished", [delta()], {
     title: "Waiting on the archive",
+    stage: "on-staging",
     taskGroups: [
       { title: "Contracts", repo: "grade10-spec", done: 3, total: 3 },
     ],
@@ -210,7 +213,9 @@ describe("the loop's continuation on the card", () => {
   });
 
   it("hands a specified change to /specify for the reading", () => {
-    const html = render([changeEntry("written-up", [delta()], {})]);
+    const html = render([
+      changeEntry("written-up", [delta()], { stage: "specified" }),
+    ]);
     expect(html).toContain("/specify written-up");
     expect(html).toContain("read the requirements and the cases together");
   });
@@ -218,6 +223,7 @@ describe("the loop's continuation on the card", () => {
   it("hands a complete change to /archive-change", () => {
     const html = render([
       changeEntry("finished", [delta()], {
+        stage: "on-staging",
         taskGroups: [
           { title: "Contracts", repo: "grade10-spec", done: 3, total: 3 },
         ],
@@ -251,6 +257,7 @@ describe("where the change stands against the store's main", () => {
   it("says a complete change cannot archive off main", () => {
     const html = render([
       changeEntry("finished", [delta()], {
+        stage: "on-staging",
         taskGroups: [
           { title: "Contracts", repo: "grade10-spec", done: 3, total: 3 },
         ],
@@ -290,33 +297,41 @@ describe("who promoted it", () => {
 });
 
 describe("what a card says the change will change", () => {
-  const modified = changeEntry("rewrite", [
-    {
-      spec: SPEC,
-      kinds: ["MODIFIED"],
-      requirements: [
-        {
-          name: "Points expire",
-          kind: "modified",
-          text: "### Requirement: Points expire\n\nPoints last two years.",
-        },
-      ],
-    },
-  ]);
+  const modified = changeEntry(
+    "rewrite",
+    [
+      {
+        spec: SPEC,
+        kinds: ["MODIFIED"],
+        requirements: [
+          {
+            name: "Points expire",
+            kind: "modified",
+            text: "### Requirement: Points expire\n\nPoints last two years.",
+          },
+        ],
+      },
+    ],
+    { stage: "specified" },
+  );
 
-  const added = changeEntry("introduce", [
-    {
-      spec: SPEC,
-      kinds: ["ADDED"],
-      requirements: [
-        {
-          name: "A gift card earns nothing",
-          kind: "added",
-          text: "### Requirement: A gift card earns nothing\n\nBuying a gift card SHALL earn no points.",
-        },
-      ],
-    },
-  ]);
+  const added = changeEntry(
+    "introduce",
+    [
+      {
+        spec: SPEC,
+        kinds: ["ADDED"],
+        requirements: [
+          {
+            name: "A gift card earns nothing",
+            kind: "added",
+            text: "### Requirement: A gift card earns nothing\n\nBuying a gift card SHALL earn no points.",
+          },
+        ],
+      },
+    ],
+    { stage: "specified" },
+  );
 
   it("names every requirement row a delta touches, with its kind", () => {
     const html = render([modified, added]);

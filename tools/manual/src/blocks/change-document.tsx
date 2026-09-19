@@ -29,9 +29,10 @@ import {
   tabForHash,
 } from "../api/change-artifacts";
 import { blockBody, durableBlock } from "../api/delta-text";
-import { type ManualIndex, taskTotals } from "../api/derive";
+import type { ManualIndex } from "../api/derive";
 import { dirOf, GITHUB_BLOB, slugify } from "../api/paths";
 import { findRequirement } from "../api/requirements";
+import { taskTotals } from "../api/stages";
 import { relativeTime } from "../api/time";
 import type {
   ChangeArtifact,

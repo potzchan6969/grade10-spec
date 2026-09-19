@@ -1,6 +1,7 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "react-router";
-import { changesForSection, taskTotals } from "../api/derive";
+import { changesForSection } from "../api/derive";
+import { taskTotals } from "../api/stages";
 import type { ChangeEntry } from "../api/types";
 import { useBlockScopeMaybe } from "./block-scope";
 import { InlineMarkdown } from "./inline-markdown";

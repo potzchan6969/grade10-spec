@@ -143,6 +143,10 @@ function readChange(
     dir: rel,
     schema: "",
     status,
+    // The lowest rung, until the ladder is walked at the end of this read:
+    // every reader above it writes what the walk reads, and a record nothing
+    // could read stays here.
+    stage: "proposed",
     owners: [],
     created: "",
     title: humanize(id),

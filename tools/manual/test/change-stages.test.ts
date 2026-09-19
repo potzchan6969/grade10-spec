@@ -14,7 +14,6 @@ import {
 import type {
   ChangeEntry,
   ChangeSuite,
-  Delta,
   SchemaArtifact,
   Stage,
 } from "../src/api/types";
@@ -187,10 +186,8 @@ describe("a waiver standing for the design it names", () => {
 });
 
 describe("the four lanes the eight stages project to", () => {
-  const staged = (rung: Stage) => ({ ...at(rung), stage: rung });
-
   it("gives each stage exactly one lane", () => {
-    expect(STAGES.map((rung) => laneOf(staged(rung)))).toEqual([
+    expect(STAGES.map((rung) => laneOf(at(rung)))).toEqual([
       "proposed",
       "proposed",
       "specified",
@@ -209,26 +206,6 @@ describe("the four lanes the eight stages project to", () => {
     });
 
     expect(laneOf(carried)).toBe("complete");
-  });
-
-  /** An entry no reader built carries no stage — every fixture in this suite
-   * that predates the ladder is one — and the four lanes answer for it the
-   * way they always did. */
-  it("falls back to the deltas and the boxes for an entry with no stage", () => {
-    const delta: Delta = {
-      spec: "demo-product/alpha",
-      kinds: ["ADDED"],
-      requirements: [],
-    };
-
-    expect(laneOf(changeEntry("idea", []))).toBe("proposed");
-    expect(laneOf(changeEntry("specified", [delta]))).toBe("specified");
-    expect(
-      laneOf(changeEntry("working", [delta], { taskGroups: [group(1, 3)] })),
-    ).toBe("in-progress");
-    expect(
-      laneOf(changeEntry("done", [delta], { taskGroups: [group(3, 3)] })),
-    ).toBe("complete");
   });
 });
 

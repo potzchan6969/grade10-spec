@@ -1,12 +1,5 @@
-import { laneOf } from "./derive";
 import { DRAFTED, handOf, STAGES } from "./stages";
-import type {
-  BehindArtifact,
-  ChangeEntry,
-  ChangeLane,
-  Role,
-  Stage,
-} from "./types";
+import type { BehindArtifact, ChangeEntry, Role, Stage } from "./types";
 
 /**
  * How a derived fact reads on a surface: the words for a stage and a role, the
@@ -52,22 +45,12 @@ export function roleTitle(role: Role): string {
   return label.charAt(0).toUpperCase() + label.slice(1);
 }
 
-/** Which of the eight a change is in, as a surface reads it. Every entry a
- * store reader built carries its stage; one written by hand against the four
- * lanes is read through the projection, so no surface has to ask for a schema
- * it does not have. */
+/** Which of the eight a change is in, as a surface reads it. Every entry
+ * carries its stage, computed where the schema is, so no surface derives a
+ * second answer from a schema it does not have. */
 export function stageShown(change: ChangeEntry): Stage {
-  if (change.stage) return change.stage;
-  if (change.status === "archived") return "archived";
-  return STAGE_OF_LANE[laneOf(change)];
+  return change.stage;
 }
-
-const STAGE_OF_LANE: Record<ChangeLane, Stage> = {
-  proposed: "proposed",
-  specified: "specified",
-  "in-progress": "building",
-  complete: "on-staging",
-};
 
 /** Which step of the eight this stage is — the number the one-line stepper
  * reads out below `sm`, where eight steps do not fit. */
@@ -91,6 +74,8 @@ const BARE: ChangeEntry = {
   dir: "",
   schema: "",
   status: "in-flight",
+  // Never read: `handOf` is asked about the stage the lane is, not this one.
+  stage: "proposed",
   owners: [],
   created: "",
   title: "",

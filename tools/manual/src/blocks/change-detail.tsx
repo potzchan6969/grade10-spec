@@ -10,9 +10,9 @@ import {
 } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Link } from "react-router";
-import { laneOf, type ManualIndex, taskTotals } from "../api/derive";
+import { laneOf, type ManualIndex } from "../api/derive";
 import { changeSourceUrl } from "../api/paths";
-import type { Overlay } from "../api/stages";
+import { type Overlay, taskTotals } from "../api/stages";
 import { formatDate, relativeTime } from "../api/time";
 import type { ChangeEntry, TaskGroup, TaskLine } from "../api/types";
 import { WithdrawAction } from "../editor/withdraw-action";

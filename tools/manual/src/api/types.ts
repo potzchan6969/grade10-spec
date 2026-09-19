@@ -531,8 +531,9 @@ export type ChangeEntry = {
    * read where the pages and the history are, compared by `behindOf`. Absent
    * for a change whose record could not be read and for an archived one. */
   upstream?: Record<string, UpstreamRead>;
-  /** How far the change has got, computed where the schema is. */
-  stage?: Stage;
+  /** How far the change has got, computed where the schema is — on every
+   * entry, so no surface carries a second derivation for one that has none. */
+  stage: Stage;
   /** What the change says it is waiting for, from `.openspec.yaml`
    * `awaiting:` — an artifact id against the line its author wrote. */
   awaiting?: { artifact: string; why: string }[];

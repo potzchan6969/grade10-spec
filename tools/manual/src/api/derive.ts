@@ -19,7 +19,7 @@ import {
   specTitle,
 } from "./paths";
 import { findRequirement } from "./requirements";
-import { ASKED_OF, handOfMark, laneOfStage, taskTotals } from "./stages.ts";
+import { ASKED_OF, handOfMark, laneOfStage } from "./stages.ts";
 import type {
   ChangeEntry,
   ChangeLane,
@@ -590,20 +590,11 @@ export function isProductDir(manualDir: string, dir: string): boolean {
 /**
  * Where a change stands, in the four lanes that ran before the eight stages:
  * the lane its stage projects to, so the two can never disagree about one
- * change.
- *
- * The stage is computed where the schema is — the store's reader — so every
- * entry a reader built carries one. An entry no reader built does not: a
- * fixture written by hand against the four lanes is read the way it always
- * was, off the deltas that separate an idea from a specification and the boxes
- * that separate a specification from finished work.
+ * change. Every entry carries a stage, computed where the schema is, so there
+ * is one derivation and this is a projection of it.
  */
 export function laneOf(change: ChangeEntry): ChangeLane {
-  if (change.stage) return laneOfStage(change.stage);
-  if (change.deltas.length === 0) return "proposed";
-  if (change.taskGroups.length === 0) return "specified";
-  const { done, total } = taskTotals(change);
-  return total > 0 && done === total ? "complete" : "in-progress";
+  return laneOfStage(change.stage);
 }
 
 /**
@@ -1260,10 +1251,6 @@ export function designShelves(index: ManualIndex): DesignShelf[] {
   }
   return shelves.sort((a, b) => a.title.localeCompare(b.title));
 }
-
-/** Re-exported: the ladder's last two rungs read it, so it lives beside them
- * and every caller here keeps importing it from the index it already reads. */
-export { taskTotals } from "./stages.ts";
 
 /** Newest movement first; a change that never moved sorts last. */
 export function byLastMoved(a: ChangeEntry, b: ChangeEntry): number {

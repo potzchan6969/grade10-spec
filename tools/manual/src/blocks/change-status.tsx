@@ -1,15 +1,10 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-import {
-  dependenciesOf,
-  type ManualIndex,
-  questionsOf,
-  taskTotals,
-} from "../api/derive";
+import { dependenciesOf, type ManualIndex, questionsOf } from "../api/derive";
 import { handoffsOf, type LandingDates } from "../api/handoff";
 import { stageShown } from "../api/stage-view";
-import { overlaysOf } from "../api/stages";
+import { overlaysOf, taskTotals } from "../api/stages";
 import type { ChangeDocument, ChangeEntry } from "../api/types";
 import {
   ArtifactList,

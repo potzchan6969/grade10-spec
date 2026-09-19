@@ -2,14 +2,9 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Warning } from "@phosphor-icons/react";
 import { Link } from "react-router";
-import {
-  citeTarget,
-  type Dependency,
-  type ManualIndex,
-  taskTotals,
-} from "../api/derive";
+import { citeTarget, type Dependency, type ManualIndex } from "../api/derive";
 import { draftedOf, stageShown } from "../api/stage-view";
-import { handOf, type Overlay } from "../api/stages";
+import { handOf, type Overlay, taskTotals } from "../api/stages";
 import type { ChangeEntry, ChangeSuite } from "../api/types";
 import { Hands } from "./change-hand";
 import { OverlayChips } from "./change-overlays";

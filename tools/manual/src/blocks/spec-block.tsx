@@ -9,13 +9,10 @@ import {
   requirementAnchor,
   scenarioAnchor,
 } from "../api/anchors";
-import {
-  changesForRequirement,
-  type RequirementChange,
-  taskTotals,
-} from "../api/derive";
+import { changesForRequirement, type RequirementChange } from "../api/derive";
 import { specDir, specSourceUrl, specTitle } from "../api/paths";
 import { findRequirement } from "../api/requirements";
+import { taskTotals } from "../api/stages";
 import type {
   ChangeEntry,
   DeltaKind,
