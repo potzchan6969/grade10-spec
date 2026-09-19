@@ -259,7 +259,7 @@
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
         "A record anyone can read back."
       ],
-      "heldBy": "ui-design",
+      "heldBy": "decisions",
       "upstream": {
         "specs": {
           "id": "47e63e84",
@@ -314,6 +314,7 @@
       "dependsOn": [
         "demo-planned"
       ],
+      "decisionsWaived": "the fixture is about the Building stage, not the decisions",
       "designWaived": "the fixture is about the Building stage, not the designs",
       "uiWaived": "the fixture is about the Building stage, not the designs",
       "skipSpecs": "the fixture is about the Building stage and the Blocked overlay, not the requirements",
@@ -341,6 +342,8 @@
       "deltas": [],
       "written": [
         "proposal",
+        "decisions",
+        "user-journeys",
         "ui-design",
         "tech-design"
       ],
@@ -350,16 +353,33 @@
       ],
       "heldBy": "specs",
       "upstream": {
-        "ui-design": {
+        "decisions": {
           "id": "8776bc61",
           "items": [
             "proposal"
           ]
         },
-        "tech-design": {
-          "id": "8776bc61",
+        "user-journeys": {
+          "id": "4aab532a",
           "items": [
-            "proposal"
+            "proposal",
+            "decisions"
+          ]
+        },
+        "ui-design": {
+          "id": "dbbee342",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "tech-design": {
+          "id": "dbbee342",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
           ]
         }
       }
@@ -395,6 +415,7 @@
         "tasks"
       ],
       "promotedBy": "tester",
+      "decisionsWaived": "the fixture is about the On staging stage, not the decisions",
       "designWaived": "the fixture is about the On staging stage, not the designs",
       "uiWaived": "the fixture is about the On staging stage, not the designs",
       "deployedEnv": "staging",
@@ -521,6 +542,7 @@
         "tasks"
       ],
       "promotedBy": "tester",
+      "decisionsWaived": "the fixture is about the Released stage, not the decisions",
       "designWaived": "the fixture is about the Released stage, not the designs",
       "uiWaived": "the fixture is about the Released stage, not the designs",
       "deployedEnv": "staging",
@@ -564,6 +586,8 @@
       ],
       "written": [
         "proposal",
+        "decisions",
+        "user-journeys",
         "specs",
         "test-cases"
       ],
@@ -585,16 +609,33 @@
       ],
       "heldBy": "tasks",
       "upstream": {
-        "specs": {
+        "decisions": {
           "id": "fdbf2cd6",
           "items": [
             "proposal"
           ]
         },
-        "test-cases": {
-          "id": "fdbf2cd6",
+        "user-journeys": {
+          "id": "0c9035fb",
           "items": [
-            "proposal"
+            "proposal",
+            "decisions"
+          ]
+        },
+        "specs": {
+          "id": "d43da322",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "test-cases": {
+          "id": "d43da322",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
           ]
         }
       }
@@ -640,7 +681,7 @@
         }
       ],
       "author": "tester",
-      "heldBy": "ui-design"
+      "heldBy": "decisions"
     }
   ],
   "schemas": {

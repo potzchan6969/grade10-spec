@@ -1,6 +1,7 @@
 schema: grade10-planning
 created: 2026-09-04
 promoted_by: "@tester"
+decisions_waived: "the fixture is about the Building stage, not the decisions"
 ui_waived: "the fixture is about the Building stage, not the designs"
 design_waived: "the fixture is about the Building stage, not the designs"
 skip_specs: true
