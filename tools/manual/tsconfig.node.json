@@ -20,5 +20,10 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["vite.config.ts", "src/store", "src/content"]
+  "include": [
+    "vite.config.ts",
+    "vitest.walk.config.ts",
+    "src/store",
+    "src/content"
+  ]
 }
