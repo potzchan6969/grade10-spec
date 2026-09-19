@@ -97,6 +97,11 @@ const SPEC_DELTA = [
 
 const SPEC_FILE = `${CHANGE}/specs/demo-product/alpha/spec.md`;
 const UI_FILE = `${CHANGE}/ui-design.md`;
+const JOURNEYS_FILE = `${CHANGE}/specs/demo-product/alpha/user-journeys.md`;
+const TECH_FILE = `${CHANGE}/tech-design.md`;
+const JOURNEYS =
+  "**Walked by:** nobody on their own - a policy nobody reaches\n";
+const TECH_DESIGN = "## Context\n\nOne reader of the capabilities.\n";
 
 /** The store the cases read: the schema, the change, and the fixture page the
  * proposal links a section of. */
@@ -267,6 +272,40 @@ describe("what the store reads as before an artifact", () => {
 
     expect(entry.written).toContain("tasks");
     expect(entry.upstream?.tasks).toBeUndefined();
+  });
+
+  it("shared-planning-change-stages-SC-15, shared-planning-change-stages-SC-28 - hashes a journeys-only capability's own file, so an outline landing beside it moves nothing", () => {
+    // The order the workflow documents: the journeys land, and the outline
+    // comes later. A capability holding only its journeys is still one
+    // capability, so the journeys artifact is read as the file that is there
+    // — not as the empty text a reading through the change's deltas gave it,
+    // which moved every id drawn from it the day `spec.md` landed.
+    const files = filesOf();
+    delete files[SPEC_FILE];
+    files[JOURNEYS_FILE] = JOURNEYS;
+    files[TECH_FILE] = TECH_DESIGN;
+    const before = read(writeStore(files));
+
+    expect(before.written).toContain("user-journeys");
+    expect(before.upstream?.["tech-design"]?.items).toEqual([
+      `${PAGE}#points`,
+      "proposal",
+      "decisions",
+      "user-journeys",
+    ]);
+    expect(before.upstream?.["tech-design"]?.id).toBe(
+      contentIdOf([sectionText(), PROPOSAL, DECISIONS, JOURNEYS]),
+    );
+
+    // The outline lands beside journeys nobody touched: the tech design is
+    // drawn from the journeys and not from the requirements, so what is
+    // before it is the same text and the same id.
+    files[SPEC_FILE] = SPEC_DELTA;
+    const after = read(writeStore(files));
+
+    expect(after.upstream?.["tech-design"]?.id).toBe(
+      before.upstream?.["tech-design"]?.id,
+    );
   });
 
   it("reads nothing for an artifact the change has not written", () => {

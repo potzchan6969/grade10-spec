@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { laneOf } from "../src/api/derive";
 import { OVERLAYS, type Overlay, overlaysOf } from "../src/api/overlays.ts";
@@ -18,9 +20,12 @@ import type {
   SchemaArtifact,
   Stage,
 } from "../src/api/types";
+import { NO_GIT } from "../src/store/git.mts";
+import { readChanges } from "../src/store/read-changes.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { changeEntry } from "./manual-fixture";
 import { realStore, storeRoot } from "./real-store";
+import { writeStore } from "./tmp-store";
 
 /**
  * Where a change stands, whose turn it is, and what sits beside the stage.
@@ -187,6 +192,103 @@ describe("the stage a change's files prove", () => {
     });
 
     expect(stage(waiting)).toBe(stage(at("specified")));
+  });
+});
+
+/**
+ * What a change has written, read over a store rather than off a fixture
+ * entry: the reading under test is the walk of the change's own `specs/`
+ * tree, and the journeys land before the outline on the workflow's own
+ * documented order — so a capability holding only its journeys is one
+ * capability, and one set of them answers for the journeys and the suite
+ * alike.
+ */
+describe("what counts as written before the outline lands", () => {
+  const CHANGE = "openspec/changes/journey-probe";
+  const SCHEMA = readFileSync(
+    join(storeRoot, "openspec/schemas/grade10-planning/schema.yaml"),
+    "utf8",
+  );
+  const PROPOSAL = [
+    "# Journey probe",
+    "",
+    "## Why",
+    "",
+    "So the ladder has a change to read.",
+    "",
+  ].join("\n");
+  const JOURNEYS =
+    "**Walked by:** nobody on their own - a policy nobody reaches\n";
+  const DELTA = [
+    "## ADDED Requirements",
+    "",
+    "### Requirement: A lane names its stage",
+    "",
+    "#### Scenario: demo-SC-01 - it names it",
+    "",
+    "**WHEN** read **THEN** it names it",
+    "",
+  ].join("\n");
+  const SUITE = "# demo-product/alpha Test Cases\n\n**Status:** draft\n";
+
+  /** The change as the store reads it, with the capability files the case is
+   * about and nothing else. */
+  function written(files: Record<string, string>): ChangeEntry {
+    const root = writeStore({
+      "openspec/schemas/grade10-planning/schema.yaml": SCHEMA,
+      [`${CHANGE}/.openspec.yaml`]: [
+        "schema: grade10-planning",
+        "created: 2026-09-18",
+        "hands:",
+        "  pm: robin",
+        "  design: dana",
+        "  tech: kim",
+        "",
+      ].join("\n"),
+      [`${CHANGE}/proposal.md`]: PROPOSAL,
+      [`${CHANGE}/decisions.md`]: "## Goals\n\n- One outcome.\n",
+      ...files,
+    });
+    const [entry] = readChanges(root, NO_GIT, null);
+    return entry;
+  }
+
+  it("shared-planning-change-stages-SC-15 - counts the journeys once landed, before `spec.md` exists", () => {
+    const entry = written({
+      [`${CHANGE}/specs/demo-product/alpha/user-journeys.md`]: JOURNEYS,
+    });
+
+    expect(entry.error).toBeUndefined();
+    // The journeys count as written with no `spec.md` beside them yet.
+    expect(entry.written).toEqual(
+      expect.arrayContaining(["proposal", "decisions", "user-journeys"]),
+    );
+    expect(entry.written).not.toContain("specs");
+    // The stage stays Proposed, and its second half hands the change to the
+    // designer and the tech PIC — the order `CLAUDE.md` documents, where
+    // neither hand opens `spec.md`.
+    expect(stage(entry)).toBe("proposed");
+    expect(handOf(entry, "proposed", artifacts())).toEqual(["design", "tech"]);
+  });
+
+  it("shared-planning-change-stages-SC-15 - reads the journeys and the suite off one set of capabilities", () => {
+    const entry = written({
+      [`${CHANGE}/specs/demo-product/alpha/user-journeys.md`]: JOURNEYS,
+      [`${CHANGE}/specs/demo-product/alpha/spec.md`]: DELTA,
+      [`${CHANGE}/specs/demo-product/alpha/feature-tcs.md`]: SUITE,
+      [`${CHANGE}/specs/demo-product/beta/user-journeys.md`]: JOURNEYS,
+    });
+
+    expect(entry.error).toBeUndefined();
+    // `beta` is a capability of the change on the strength of its journeys
+    // alone: both carry them, so the journeys are written, and only `alpha`
+    // carries a suite — one capability's suite does not answer for the
+    // other's.
+    expect(entry.written).toContain("user-journeys");
+    expect(entry.written).not.toContain("test-cases");
+    // `spec.md` is the one artifact the delta headings prove rather than the
+    // set: `beta` names no requirement for the second pass to read.
+    expect(entry.written).toContain("specs");
   });
 });
 
