@@ -13,8 +13,17 @@ import {
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { basename, dirname, extname, join, sep } from "node:path";
 import type { Plugin, ViteDevServer } from "vite";
-import YAML from "yaml";
-import { handleOf } from "../../../../scripts/openspec/lib/team.mjs";
+import {
+  openRecord,
+  setEntry,
+} from "../../../../scripts/openspec/lib/record.mjs";
+import {
+  handleOf,
+  isHandle,
+  memberOf,
+  readTeamMap,
+  TEAM_MAP,
+} from "../../../../scripts/openspec/lib/team.mjs";
 import { STORE_CHANGED } from "../api/live.ts";
 import { ROLES, type Role } from "../api/types.ts";
 import { GrammarError, parsePage, serializePage } from "../content/grammar.ts";
@@ -471,11 +480,18 @@ function withdraw(root: string, body: unknown): Reply {
 }
 
 /**
- * Assign, on the locally run manual only: the same confinement a proposal
- * writes behind, over an existing change's own `.openspec.yaml` rather than
- * a new directory. One field is touched — every other key the file carries,
- * comments included, rides through untouched — so the write is one atomic
- * rename, the way `save` below writes a page.
+ * Assign, on the locally run manual only: `record.mjs`'s own reader, so a
+ * change with no record and a record the `yaml` package cannot parse are the
+ * same two problems the round already knows how to report, and `setEntry`
+ * writes the mapping the way it would create one for `reviewed:`. One field
+ * is touched — every other key the file carries, comments included, rides
+ * through untouched — so the write is one atomic rename, the way `save`
+ * below writes a page.
+ *
+ * Refuses before the write what `checkHands` would refuse on the push: a
+ * handle that is not one token, or one `docs/prds/team.yaml` does not carry —
+ * the same two conditions, in the rule's own words, so a mistake here is
+ * never a commit the check then has to catch.
  */
 function assignHand(root: string, body: unknown): Reply {
   const fields = (body ?? {}) as Record<string, unknown>;
@@ -493,21 +509,31 @@ function assignHand(root: string, body: unknown): Reply {
   }
   const written = typeof handle === "string" ? handleOf(handle) : "";
   if (written === "") return reply(400, { error: "`handle` is required" });
+  if (!isHandle(written)) {
+    return reply(400, {
+      error: `\`hands.${role}: ${written}\` is not one handle`,
+    });
+  }
+  if (!memberOf(readTeamMap(root), written)) {
+    return reply(400, {
+      error: `\`hands.${role}\` names \`${written}\`, which \`${TEAM_MAP}\` does not know`,
+    });
+  }
 
   const dir = changeFile(root, change);
   if (typeof dir !== "string") return reply(400, dir);
-  if (!existsSync(dir)) return reply(404, { error: `no change \`${change}\`` });
-
-  const file = join(dir, MANIFEST);
-  const current = existsSync(file) ? readFileSync(file, "utf8") : "";
-  let manifest: YAML.Document;
-  try {
-    manifest = YAML.parseDocument(current);
-  } catch (cause) {
-    return reply(400, { error: `${MANIFEST}: ${describe(cause)}` });
+  if (!existsSync(join(dir, MANIFEST))) {
+    return reply(404, { error: `no change \`${change}\`` });
   }
-  manifest.setIn(["hands", role], written);
-  writeAtomically(file, Buffer.from(manifest.toString(), "utf8"));
+
+  let record: ReturnType<typeof openRecord>;
+  try {
+    record = openRecord(root, change);
+  } catch (cause) {
+    return reply(400, { error: describe(cause) });
+  }
+  setEntry(record.doc, "hands", role, written);
+  writeAtomically(record.file, Buffer.from(record.doc.toString(), "utf8"));
   return reply(200, { role: role as Role, handle: written });
 }
 
