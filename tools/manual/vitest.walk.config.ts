@@ -1,21 +1,9 @@
 /// <reference types="vitest/config" />
 
-import { existsSync } from "node:fs";
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vite";
-
-/**
- * The browser the walk runs in. CI installs the build this Playwright asks for
- * (`pnpm setup:browsers`) and the provider finds it on its own; an environment
- * that already carries a chromium of another build leaves it here, and naming
- * it is what keeps the run headless rather than not a run at all.
- */
-const PREINSTALLED_CHROMIUM = "/opt/pw-browsers/chromium";
-const launchOptions = existsSync(PREINSTALLED_CHROMIUM)
-  ? { executablePath: PREINSTALLED_CHROMIUM }
-  : {};
 
 /**
  * The walk: the manual opened in a real browser, one file per journey under
@@ -36,11 +24,10 @@ export default defineConfig({
   test: {
     name: "walk",
     include: ["walk/**/*.walk.ts"],
-    setupFiles: ["./walk/setup.ts"],
     browser: {
       enabled: true,
       headless: true,
-      provider: playwright({ launchOptions }),
+      provider: playwright({}),
       instances: [{ browser: "chromium" }],
     },
   },
