@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { runChecks } from "../check/check-manual.mjs";
+import { handOf, stageOf } from "../src/api/stages.ts";
 import { waivedOf } from "../src/api/waivers";
 import { NO_GIT } from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
@@ -277,6 +278,109 @@ describe("what a record waives", () => {
     expect([
       ...waivedOf(schemaArtifacts(root, "demo-planning") ?? [], entry),
     ]).toEqual(["ui-design", "tech-design"]);
+  });
+});
+
+/**
+ * A schema naming `user-journeys`, so a capability's journeys file can be
+ * checked as written before its `spec.md` exists — `SCHEMA` above never
+ * issues that id, since the record tests it stands in for have no use for it.
+ */
+const SCHEMA_WITH_JOURNEYS = [
+  "name: demo-planning",
+  "version: 1",
+  "artifacts:",
+  "  - id: proposal",
+  "    teammate: product-manager",
+  "    required: true",
+  "    generates: proposal.md",
+  "    requires: []",
+  "    upstream: []",
+  "  - id: decisions",
+  "    teammate: product-manager",
+  "    required: true",
+  "    generates: decisions.md",
+  "    requires:",
+  "      - proposal",
+  "    upstream:",
+  "      - proposal",
+  "  - id: user-journeys",
+  "    teammate: product-manager",
+  "    required: true",
+  "    generates: specs/**/user-journeys.md",
+  "    requires:",
+  "      - decisions",
+  "    upstream:",
+  "      - proposal",
+  "      - decisions",
+  "  - id: ui-design",
+  "    teammate: designer",
+  "    required: false",
+  "    generates: ui-design.md",
+  "    requires:",
+  "      - user-journeys",
+  "    upstream:",
+  "      - proposal",
+  "      - decisions",
+  "      - user-journeys",
+  "  - id: tech-design",
+  "    teammate: engineer",
+  "    required: false",
+  "    generates: tech-design.md",
+  "    requires:",
+  "      - user-journeys",
+  "    upstream:",
+  "      - proposal",
+  "      - decisions",
+  "      - user-journeys",
+  "  - id: specs",
+  "    required: true",
+  "    generates: specs/**/spec.md",
+  "    requires:",
+  "      - user-journeys",
+  "    upstream:",
+  "      - proposal",
+  "      - decisions",
+  "      - user-journeys",
+  "      - ui-design",
+  "      - tech-design",
+  "",
+].join("\n");
+
+const JOURNEY_CHANGE = "openspec/changes/journey-probe";
+
+describe("what counts as written before the outline lands", () => {
+  it("shared-planning-change-stages-SC-15 - the journeys count once landed, before spec.md exists", () => {
+    const root = writeStore({
+      "openspec/schemas/demo-planning/schema.yaml": SCHEMA_WITH_JOURNEYS,
+      [`${JOURNEY_CHANGE}/.openspec.yaml`]: [
+        "schema: demo-planning",
+        "created: 2026-09-18",
+        "hands:",
+        "  pm: robin",
+        "  design: dana",
+        "  tech: kim",
+        "",
+      ].join("\n"),
+      [`${JOURNEY_CHANGE}/proposal.md`]: PROPOSAL,
+      [`${JOURNEY_CHANGE}/decisions.md`]: "## Goals\n\n- One outcome.\n",
+      [`${JOURNEY_CHANGE}/specs/demo/alpha/user-journeys.md`]:
+        "**Walked by:** nobody on their own - a policy nobody reaches\n",
+    });
+    const [entry] = readChanges(root, NO_GIT, null);
+    const artifacts = schemaArtifacts(root, "demo-planning") ?? [];
+
+    expect(entry.error).toBeUndefined();
+    // The journeys count as written with no `spec.md` beside them yet.
+    expect(entry.written).toEqual(
+      expect.arrayContaining(["proposal", "decisions", "user-journeys"]),
+    );
+    expect(entry.written).not.toContain("specs");
+    // The stage stays Proposed, and its second half hands the change to the
+    // designer and the tech PIC — the order `CLAUDE.md` documents, where
+    // neither hand opens `spec.md`.
+    expect(stageOf(entry, artifacts)).toBe("proposed");
+    expect(handOf(entry, "proposed", artifacts)).toEqual(["design", "tech"]);
   });
 });
 
