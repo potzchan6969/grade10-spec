@@ -51,19 +51,26 @@ const roundsOf = (root) => readFileSync(join(root, DIR, "rounds.md"), "utf8");
 
 // ── The read record ─────────────────────────────────────────────────────────
 
-test("shared-planning-agent-rounds-SC-36, shared-planning-change-stages-SC-27 - round:reviewed writes the content id of what is before the artifact", async () => {
-  const { root } = sandbox();
-  const result = run("round-reviewed.mjs", [
+/** The landing of a read that changed nothing: one artifact, no row. */
+const reviewed = (root, artifact, args = []) =>
+  run("plan-land.mjs", [
     CHANGE,
-    "decisions",
+    artifact,
     "--root",
     root,
+    "--reviewed",
+    ...args,
   ]);
+
+test("shared-planning-agent-rounds-SC-36, shared-planning-change-stages-SC-27 - plan:land --reviewed writes the content id of what is before the artifact", async () => {
+  const { root } = sandbox();
+  const result = reviewed(root, "decisions");
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(recordOf(root), /reviewed:\n\s+decisions: c54a5887/);
   assert.match(result.stdout, /decisions/);
   assert.match(result.stdout, new RegExp(BEFORE_DECISIONS));
+  assert.match(result.stdout, /read against proposal/);
 
   const { contentIdOf } = await import(
     "../../tools/manual/src/store/content-id.mts"
@@ -80,9 +87,9 @@ test("shared-planning-agent-rounds-SC-36, shared-planning-change-stages-SC-27 - 
   );
 });
 
-test("round:reviewed keeps every other line of the record", () => {
+test("plan:land --reviewed keeps every other line of the record", () => {
   const { root } = sandbox();
-  run("round-reviewed.mjs", [CHANGE, "decisions", "--root", root]);
+  reviewed(root, "decisions");
   const written = recordOf(root);
 
   assert.match(written, /# The change's record\./);
@@ -91,27 +98,21 @@ test("round:reviewed keeps every other line of the record", () => {
   assert.match(written, /^ {2}design: dana$/m);
 });
 
-test("round:reviewed writes every artifact that has something before it", () => {
+test("plan:land --reviewed writes the named artifact's line and no other", () => {
   const { root } = sandbox();
-  const result = run("round-reviewed.mjs", [CHANGE, "--root", root]);
+  const result = reviewed(root, "decisions");
 
   assert.equal(result.status, 0, result.stderr);
   const written = recordOf(root);
   assert.match(written, new RegExp(`decisions: ${BEFORE_DECISIONS}`));
-  assert.match(written, new RegExp(`ui-design: ${BEFORE_UI_DESIGN}`));
-  // The proposal is drawn from nothing in this change, so there is no id to
-  // write and no line to read it back against.
+  // One artifact per call: a landing that put three behind lands three times.
+  assert.doesNotMatch(written, /^ {2}ui-design:/m);
   assert.doesNotMatch(written, /^ {2}proposal:/m);
 });
 
-test("round:reviewed refuses an artifact the schema does not issue", () => {
+test("plan:land --reviewed refuses an artifact the schema does not issue", () => {
   const { root } = sandbox();
-  const result = run("round-reviewed.mjs", [
-    CHANGE,
-    "ui-desgin",
-    "--root",
-    root,
-  ]);
+  const result = reviewed(root, "ui-desgin");
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /ui-desgin/);
@@ -119,21 +120,10 @@ test("round:reviewed refuses an artifact the schema does not issue", () => {
   assert.doesNotMatch(recordOf(root), /reviewed:/);
 });
 
-test("round:reviewed says an artifact drawn from nothing has nothing to read", () => {
-  const { root } = sandbox();
-  const result = run("round-reviewed.mjs", [
-    CHANGE,
-    "proposal",
-    "--root",
-    root,
-  ]);
-
-  assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /nothing before it/);
-  assert.doesNotMatch(recordOf(root), /reviewed:/);
-});
-
-test("round:reviewed tells apart drawn from nothing, waived and not written yet", () => {
+test("shared-planning-agent-rounds-SC-32 - plan:land --reviewed tells apart drawn from nothing, waived and not written yet", () => {
+  // `proposal` links no page section in this change, so it is drawn from
+  // nothing; `ui-design` is waived; `specs` is neither — it is simply not
+  // written yet, and the schema still names what would be before it.
   const { root } = sandbox({
     files: {
       [`${DIR}/.openspec.yaml`]: record(
@@ -141,33 +131,26 @@ test("round:reviewed tells apart drawn from nothing, waived and not written yet"
       ),
     },
   });
-  const result = run("round-reviewed.mjs", [CHANGE, "--root", root]);
 
-  assert.equal(result.status, 0, result.stderr);
-  // `proposal` links no page section in this change, so it is drawn from
-  // nothing; `ui-design` is waived; `specs` is neither — it is simply not
-  // written yet, and the schema still names what would be before it.
+  const drawnFromNothing = reviewed(root, "proposal");
+  assert.equal(drawnFromNothing.status, 1);
   assert.match(
-    result.stdout,
+    drawnFromNothing.stderr,
     /proposal: nothing before it in this change — no line to write/,
   );
-  assert.match(result.stdout, /ui-design: waived — nothing to read it against/);
+
+  const waived = reviewed(root, "ui-design");
+  assert.equal(waived.status, 1);
+  assert.match(waived.stderr, /ui-design: waived — nothing to read it against/);
+
+  const notWritten = reviewed(root, "specs");
+  assert.equal(notWritten.status, 1);
   assert.match(
-    result.stdout,
+    notWritten.stderr,
     /specs: not written yet — nothing to read it against/,
   );
-});
 
-test("round:reviewed's closing line names the --reviewed landing", () => {
-  const { root } = sandbox();
-  const result = run("round-reviewed.mjs", [
-    CHANGE,
-    "decisions",
-    "--root",
-    root,
-  ]);
-
-  assert.match(result.stdout, /plan:land round-probe decisions --reviewed/);
+  assert.doesNotMatch(recordOf(root), /reviewed:/);
 });
 
 // ── The thread's address ────────────────────────────────────────────────────
@@ -557,69 +540,61 @@ test("plan:land refuses a group number tasks.md does not hold, naming the ones i
   assert.match(result.stderr, /it holds 1/);
 });
 
-test("shared-planning-agent-rounds-SC-39 - plan:land --reviewed lands the leased push with no row, no landed_by: and no hand refusal", () => {
-  const { root, git } = sandbox();
-  // The agent's own commit, as `round:reviewed` leaves it for a hand to
-  // commit and this step to push — no hand's word is asked for a read that
-  // changed nothing.
-  writeFileSync(
-    join(root, DIR, ".openspec.yaml"),
-    record(`reviewed:\n  decisions: ${BEFORE_DECISIONS}\n`),
-  );
-  git("add", "-A");
-  git("commit", "--quiet", "-m", "round: decisions reviewed, nothing changed");
-  // A different local e-mail than any hand's — the agent lands it regardless.
+test("shared-planning-agent-rounds-SC-39 - plan:land --reviewed writes the line, commits and pushes it in one transaction", () => {
+  const { root, remote, git } = sandbox();
+  // A different local e-mail than any hand's — no hand's word is asked for a
+  // read that changed nothing, and the agent lands it regardless.
   git("config", "user.email", "nobody@test");
 
-  const result = run("plan-land.mjs", [
-    CHANGE,
-    "decisions",
-    "--root",
-    root,
-    "--reviewed",
-  ]);
+  const result = reviewed(root, "decisions");
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /no hand's word is asked/);
-  assert.match(result.stdout, /nothing to commit/);
+  assert.match(recordOf(root), new RegExp(`decisions: ${BEFORE_DECISIONS}`));
+  // No row and no `landed_by:`: the read ran no perspective and waits on
+  // nobody's word.
   assert.doesNotMatch(recordOf(root), /landed_by:/);
   assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
+  // One commit, carrying the record alone, and `main` fast-forwarded to it.
+  const landed = git("show", "--stat", "--format=", "HEAD");
+  assert.match(landed, /\.openspec\.yaml/);
+  assert.doesNotMatch(landed, /rounds\.md/);
+  assert.equal(
+    execFileSync("git", ["-C", remote, "rev-parse", "main"], {
+      encoding: "utf8",
+    }).trim(),
+    git("rev-parse", "HEAD").trim(),
+  );
 });
 
 test("plan:land --reviewed refuses a task group", () => {
   const { root } = sandbox();
-  const result = run("plan-land.mjs", [
-    CHANGE,
-    "1",
-    "--root",
-    root,
-    "--reviewed",
-  ]);
+  const result = reviewed(root, "1");
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /--reviewed names an artifact/);
 });
 
-test("plan:land --reviewed with no reviewed: line commits nothing and is refused", () => {
-  const { root, git } = sandbox();
-  // The fixture's own default record carries no `reviewed:` line at all —
-  // `round:reviewed` never ran for `decisions`.
-  git("config", "user.email", "nobody@test");
+test("plan:land --reviewed's dry run writes the line nowhere and pushes nothing", () => {
+  const { root, remote } = sandbox();
+  const before = execFileSync("git", ["-C", remote, "rev-parse", "main"], {
+    encoding: "utf8",
+  }).trim();
 
-  const result = run("plan-land.mjs", [
-    CHANGE,
-    "decisions",
-    "--root",
-    root,
-    "--reviewed",
-  ]);
+  const result = reviewed(root, "decisions", ["--dry-run"]);
 
-  assert.equal(result.status, 1);
+  assert.equal(result.status, 0, result.stderr);
   assert.match(
-    result.stderr,
-    /nothing to land: round:reviewed writes the line first/,
+    result.stdout,
+    new RegExp(`would write reviewed: decisions: ${BEFORE_DECISIONS}`),
   );
-  assert.doesNotMatch(recordOf(root), /landed_by:/);
+  assert.doesNotMatch(recordOf(root), /reviewed:/);
+  assert.equal(
+    execFileSync("git", ["-C", remote, "rev-parse", "main"], {
+      encoding: "utf8",
+    }).trim(),
+    before,
+  );
 });
 
 test("plan:land refuses an origin with no main to land on", () => {
