@@ -282,7 +282,7 @@ describe("what the store reads as before an artifact", () => {
 });
 
 describe("whether an artifact is behind", () => {
-  it("is fresh where the read record matches the tree", () => {
+  it("shared-planning-change-stages-SC-27 - is fresh where the read record matches the tree", () => {
     const root = store();
     // Hand-computed rather than read back off the entry: the record is
     // written by the round, and a case that copies the reading it compares

@@ -62,7 +62,7 @@ const reviewed = (root, artifact, args = []) =>
     ...args,
   ]);
 
-test("shared-planning-agent-rounds-SC-36, shared-planning-change-stages-SC-27 - plan:land --reviewed writes the content id of what is before the artifact", async () => {
+test("shared-planning-agent-rounds-SC-36 - plan:land --reviewed writes the content id of what is before the artifact", async () => {
   const { root } = sandbox();
   const result = reviewed(root, "decisions");
 
@@ -343,7 +343,11 @@ test("shared-planning-agent-rounds-SC-05 - plan:land refuses a handle that is no
   assert.match(result.stderr, /ui-design/);
 });
 
-test("shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-43 - plan:land refuses while something before the artifact is behind, and names it", () => {
+test("shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-43 - plan:land refuses while a differing id leaves something before the artifact behind, and names it", () => {
+  // The differing-id half of SC-35: the recorded id is not the one computed
+  // from what is before `decisions`, so it is behind and the landing after it
+  // is refused. An artifact carrying no `reviewed:` line at all is read by
+  // the dated fallback, which `tools/manual/test/behind.test.ts` decides.
   const { root } = sandbox({
     files: {
       [`${DIR}/.openspec.yaml`]: record("reviewed:\n  decisions: deadbeef\n"),
@@ -371,49 +375,46 @@ test("shared-planning-agent-rounds-SC-33 - editing the record itself puts nothin
   assert.equal(result.status, 0, result.stderr);
 });
 
-test("shared-planning-agent-rounds-SC-32 - a waived tech-design counts as fresh and does not hold a group's landing", () => {
+test("shared-planning-agent-rounds-SC-32 - a waived ui-design counts as fresh and does not hold the requirements' landing", () => {
+  // The scenario's own shape: the record waives `ui-design.md`, and the
+  // requirements land with nothing waiting on the waived artifact. Both
+  // stores record a differing id for it, so the waiver is the only thing
+  // between the two results.
+  const landRequirements = (root) =>
+    run("plan-land.mjs", [
+      CHANGE,
+      "specs",
+      "--root",
+      root,
+      "--perspectives",
+      "simpler",
+      "--stood",
+      "nothing stood",
+    ]);
+
   const staleAndUnwaived = sandbox({
     files: {
-      [`${DIR}/.openspec.yaml`]: record("reviewed:\n  tech-design: deadbeef\n"),
+      [`${DIR}/.openspec.yaml`]: record("reviewed:\n  ui-design: deadbeef\n"),
     },
   });
-  staleAndUnwaived.git("config", "user.email", "erin@test");
-  const blocked = run("plan-land.mjs", [
-    CHANGE,
-    "1",
-    "--root",
-    staleAndUnwaived.root,
-    "--perspectives",
-    "simpler",
-    "--stood",
-    "nothing stood",
-  ]);
+  const blocked = landRequirements(staleAndUnwaived.root);
   assert.equal(blocked.status, 1);
-  assert.match(blocked.stderr, /tech-design/);
+  assert.match(blocked.stderr, /ui-design/);
 
   const staleAndWaived = sandbox({
     files: {
       [`${DIR}/.openspec.yaml`]: record(
-        "reviewed:\n  tech-design: deadbeef\n",
-        'design_waived: "no tech design needed for this fixture"',
+        "reviewed:\n  ui-design: deadbeef\n",
+        'ui_waived: "nothing a reader sees moves"',
       ),
     },
   });
-  staleAndWaived.git("config", "user.email", "erin@test");
-  const landed = run("plan-land.mjs", [
-    CHANGE,
-    "1",
-    "--root",
-    staleAndWaived.root,
-    "--perspectives",
-    "simpler",
-    "--stood",
-    "nothing stood",
-  ]);
+  const landed = landRequirements(staleAndWaived.root);
   assert.equal(landed.status, 0, landed.stderr);
+  assert.match(recordOf(staleAndWaived.root), /landed_by:\n\s+specs: dana/);
 });
 
-test("shared-planning-agent-rounds-SC-37 - what follows a landed artifact is behind until it is read again", () => {
+test("shared-planning-agent-rounds-SC-43 - plan:land refuses a group while an artifact before it is behind, and names it", () => {
   const { root, git } = sandbox({
     files: {
       [`${DIR}/.openspec.yaml`]: record("reviewed:\n  ui-design: deadbeef\n"),
@@ -433,6 +434,52 @@ test("shared-planning-agent-rounds-SC-37 - what follows a landed artifact is beh
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /ui-design/);
+});
+
+test("shared-planning-agent-rounds-SC-37 - a landing with changed content puts every artifact drawn from it behind", async () => {
+  const { behindOf } = await import("../../tools/manual/src/api/stages.ts");
+  const { readChangeEntry } = await import("./lib/store-read.mjs");
+  const { root, git } = sandbox();
+
+  // A change whose artifacts are all fresh: every one of them recorded
+  // against the id computed from what is before it as the fixture stands.
+  const drafted = await readChangeEntry(root, CHANGE);
+  writeFileSync(
+    join(root, DIR, ".openspec.yaml"),
+    record(
+      "reviewed:",
+      ...Object.entries(drafted.entry.upstream).map(
+        ([id, read]) => `  ${id}: ${read.id}`,
+      ),
+    ),
+  );
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "read every artifact again");
+  git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
+  const fresh = await readChangeEntry(root, CHANGE);
+  assert.deepEqual(behindOf(fresh.entry, fresh.artifacts), []);
+
+  writeFileSync(
+    join(root, DIR, "ui-design.md"),
+    "## Screens\n\nTwo screens now, and a state each.\n",
+  );
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "redraw the screens");
+  git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
+
+  const result = land(root);
+  assert.equal(result.status, 0, result.stderr);
+
+  // `tasks` is the fixture's one artifact drawn from `ui-design`:
+  // `tech-design` omits it by the schema's own `upstream:`, and `specs` is
+  // not written. The row names what is before it, `ui-design` among it.
+  const after = await readChangeEntry(root, CHANGE);
+  const rows = behindOf(after.entry, after.artifacts);
+  assert.deepEqual(
+    rows.map(({ artifact }) => artifact),
+    ["tasks"],
+  );
+  assert.ok(rows[0].before.includes("ui-design"), rows[0].before.join(", "));
 });
 
 test("plan:land's dry run prints every step and pushes nothing", () => {
@@ -464,7 +511,10 @@ test("plan:land's dry run prints every step and pushes nothing", () => {
   assert.doesNotMatch(recordOf(root), /landed_by:/);
 });
 
-test("shared-planning-agent-rounds-SC-04 - plan:land lands the artifact, its record line and its row in one commit, through the real gate", () => {
+test("shared-planning-agent-rounds-SC-04, shared-planning-agent-rounds-SC-65 - plan:land lands the artifact, its record line and its row in one commit, through the real gate", () => {
+  // The landing a round run from a terminal makes: the hand is read from
+  // `git config user.email`, and what reaches `main` is the artifact, its
+  // `landed_by:` line and its row, as it would be from the channel.
   const { root, remote, git } = sandbox();
   const result = land(root);
 
