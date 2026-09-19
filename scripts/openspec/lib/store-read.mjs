@@ -50,10 +50,11 @@ export async function readChangesAt(root) {
   markQuestions(changes, pages, asts);
   return {
     changes,
-    schemas,
     /** The archive, for the one thing the changes in flight cannot answer:
-     * whether the change another one depends on has shipped. */
-    archived: readArchivedChanges(root, git),
+     * whether the change another one depends on has shipped. A call, not a
+     * value: a caller with nothing in flight that depends on anything — the
+     * push workflow's own `readingOf` — never walks the archive at all. */
+    archivedOf: () => readArchivedChanges(root, git),
     /** The schema's artifacts for one change, in the order it declares them;
      * empty for a change on a schema this store does not define. */
     artifactsOf: (change) => schemas[change.schema] ?? [],

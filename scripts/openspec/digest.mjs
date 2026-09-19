@@ -28,13 +28,7 @@ import {
   daysBetween,
   TIME_ZONE,
 } from "../../tools/manual/src/api/time.ts";
-import {
-  addressOf,
-  appendSentKeys,
-  printable,
-  readSentKeys,
-  sendAll,
-} from "./lib/notify.mjs";
+import { addressOf, deliver, linkOf, readSentKeys } from "./lib/notify.mjs";
 import { readChangesAt } from "./lib/store-read.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
 
@@ -42,9 +36,6 @@ import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
  * dependency freed a change within the last seven days is still news — one
  * bound, the week the digest covers. */
 const AFTER_DAYS = IDLE_FROM;
-
-const changePage = (manualUrl, id) =>
-  `${manualUrl.replace(/\/$/, "")}/in-flight/${encodeURIComponent(id)}`;
 
 /**
  * The week a digest is for, on the Hong Kong clock — the zone every day count
@@ -109,11 +100,15 @@ function linesFor(handle, changes, ctx) {
   const lines = [];
   for (const change of changes) {
     const held = rolesOf(change, handle);
-    const stage = change.stage ?? "proposed";
+    const stage = change.stage;
     const onThem = handOf(change, stage, ctx.artifactsOf(change)).some((role) =>
       held.includes(role),
     );
-    const named = `<${changePage(ctx.manualUrl, change.id)}|${change.title}>`;
+    const named = linkOf({
+      manualUrl: ctx.manualUrl,
+      id: change.id,
+      title: change.title,
+    });
     // The overlays are read from the schema's own order, so each change asks
     // for its own artifacts rather than the store's first schema.
     const overlays = overlaysOf(change, {
@@ -147,21 +142,23 @@ function linesFor(handle, changes, ctx) {
       });
     }
     // The earliest behind artifact, as the card and the Behind message name
-    // it. The day it went behind is the change's last commit: what put it
-    // behind is a commit on this change or on a page it links, and the
-    // reading carries the item rather than its date.
+    // it. `since` is the newest commit among what changed before it — carried
+    // from `UpstreamRead.newerOn` through `behindOf` — and absent where the
+    // recorded content id is what says it moved: an id carries no date, so
+    // the tech design's undated-is-not-behind rule keeps it out of a digest
+    // that has to count days.
     const behind = overlays.find((one) => one.kind === "behind");
-    const since =
-      change.lastMoved === undefined
+    const days =
+      behind?.since === undefined
         ? undefined
-        : daysBetween(change.lastMoved, ctx.now, TIME_ZONE);
-    if (behind?.hand === handle && (since ?? 0) >= AFTER_DAYS) {
+        : daysBetween(behind.since, ctx.now, TIME_ZONE);
+    if (behind?.hand === handle && days !== undefined && days >= AFTER_DAYS) {
       lines.push({
         kind: "behind",
         change: change.id,
-        days: since,
+        days,
         artifact: behind.artifact,
-        text: `\`${behind.artifact}\` on ${named} — behind for ${since} days`,
+        text: `\`${behind.artifact}\` on ${named} — behind for ${days} days`,
       });
     }
     for (const wait of overlays) {
@@ -261,7 +258,12 @@ async function main() {
     : resolve(dirname(fileURLToPath(import.meta.url)), "../..");
   const read = await readChangesAt(root);
   const now = values.now ? Date.parse(values.now) : Date.now();
-  const releases = releasedOf(read);
+  // The archive is walked only when a change in flight depends on something:
+  // most digests read nobody's `depends_on:`, so the walk stays a call.
+  const releases = releasedOf({
+    changes: read.changes,
+    archived: read.archivedOf(),
+  });
   const told = digestOf(read, readTeamMap(root, values.team), {
     now,
     released: new Set(releases.keys()),
@@ -275,21 +277,11 @@ async function main() {
   for (const one of told.skipped) {
     process.stderr.write(`nothing sent for ${one.key}: ${one.why}\n`);
   }
-  if (values.send) {
-    const token = process.env.SLACK_BOT_TOKEN;
-    try {
-      appendSentKeys(values["sent-keys"], await sendAll(messages, { token }));
-    } catch (cause) {
-      appendSentKeys(values["sent-keys"], cause.sent ?? []);
-      throw cause;
-    }
-  } else if (messages.length > 0) {
-    process.stderr.write(`${printable(messages)}\n`);
-    appendSentKeys(
-      values["sent-keys"],
-      messages.map((one) => one.key),
-    );
-  }
+  await deliver(messages, {
+    file: values["sent-keys"],
+    send: values.send,
+    token: process.env.SLACK_BOT_TOKEN,
+  });
   process.stdout.write(
     JSON.stringify({ week: weekOf(now), messages, skipped: told.skipped }),
   );
