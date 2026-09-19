@@ -255,29 +255,33 @@ export function openHands(change: ChangeEntry, roles: Role[]): Role[] {
 }
 
 /**
- * The roles this handle holds on a change whose turn has not yet come — My
- * turn's "theirs later" list.
+ * The roles a change has not yet reached — My turn's "theirs later" list,
+ * before it is narrowed to one handle.
  *
- * `rolesAtStage` already says which stage each of the six roles turns up at,
- * so a role whose every occurrence sits at or before the change's own stage
- * is done rather than upcoming, and is left out rather than read as later.
- * Design and tech never appear there — they turn up only inside Proposed's
- * own second half, which `handOf` reads specially — so they are later exactly
- * while the change is still in Proposed and it is not yet their half.
+ * `HANDS_AT` says which stage each of the six roles turns up at, so a role
+ * whose every occurrence sits at or before the change's own stage is done
+ * rather than upcoming, and is left out rather than read as later.
+ * `SECOND_HANDS`, filtered by the same waiver `handOf` reads, is Proposed's
+ * own second half: design and tech are upcoming exactly while the change is
+ * still in Proposed and it is not yet their half, and a waived design is
+ * never upcoming — nobody will hold a hand nothing will be drawn for.
  */
 export function laterRolesOf(
   change: ChangeEntry,
   stage: Stage,
   artifacts: SchemaArtifact[],
-  handle: string,
 ): Role[] {
   const now = new Set(handOf(change, stage, artifacts));
+  const waived = waivedOf(artifacts, change);
+  const second = new Set(
+    SECOND_HANDS.filter((one) => !waived.has(one.artifact)).map(
+      (one) => one.role,
+    ),
+  );
   const at = STAGES.indexOf(stage);
-  const held = handle.toLowerCase();
   return ROLES.filter((role) => {
-    if (change.hands?.[role]?.toLowerCase() !== held) return false;
     if (now.has(role)) return false;
-    if (role === "design" || role === "tech") return stage === "proposed";
+    if (second.has(role)) return stage === "proposed";
     return STAGES.some(
       (rung, index) => index > at && rolesAtStage(rung).includes(role),
     );
@@ -348,6 +352,10 @@ export const DRAFTED: Partial<Record<Stage, Drafted>> = {
  * them nowhere. The window stays narrowed to the stage and the one after it,
  * because that is the only pair the table ever splits this way: every other
  * drafted stage's own row already carries every hand it moves.
+ *
+ * Exported for `scripts/openspec/lib/moves.mjs`, which reads it under plain
+ * node for the Your turn message's own command line; `api/stage-view.ts`'s
+ * `movesOfHands` is the one reader the app's components use.
  */
 export function moveOf(
   stage: Stage,
