@@ -119,6 +119,20 @@ describe("My turn with nothing on the reader", () => {
 });
 
 describe("the page's own order", () => {
+  it("shared-planning-agent-rounds-SC-27 - a hand with no open question reads their changes with no question rows above them", () => {
+    const mine = changeEntry("quiet-change", [], {
+      title: "A change on robin with nothing to answer",
+      stage: "planned",
+      hands: { pm: "dana", dev: "robin" },
+      questions: [],
+    });
+    const html = render([mine], "robin");
+
+    expect(html).toContain("On you now");
+    expect(html).toContain("A change on robin with nothing to answer");
+    expect(html).not.toContain("Open questions");
+  });
+
   it("lists the open question first, with its change and its number, then now, then later", () => {
     const question = changeEntry("question-change", [], {
       title: "A change asking robin something",

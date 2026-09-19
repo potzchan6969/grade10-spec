@@ -136,14 +136,12 @@ Building ends by showing the change works, end to end.
   and each re-read are replies, and the direct message that says it is your
   turn points at it
 - 🚧 **Change page** — each artifact with fresh or behind, its open questions
-  by hand, and who landed it; the rounds run on the change, one row each
-- 🚧 **The Delivery row** — shows the suite's automated count against its
-  total, beside the run sheet's own count
+  by hand, and who landed it; the rounds run on the change, one row each; the
+  Delivery row's automated count against the suite's total
 - 🚧 **My turn** — the open questions addressed to the reader, above the
   changes on them
-- 🚧 **The record** — one row per round in the change: the artifact or group,
-  the perspectives run, what stood, what was asked, and the tests each
-  scenario landed with; archived with the change
+- 🚧 **The record** — one row per round: the artifact or group, the readers,
+  what stood, what was asked, the tests per scenario; archived with the change
 - ❓ **The runner** — which agent holds a change's thread, which wakes on a
   landing, and what the Slack workspace needs for them; Operations confirms
   against [the runner](/references/agent-runner)

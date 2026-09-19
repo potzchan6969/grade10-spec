@@ -31,10 +31,10 @@ Depends on `stage-changes-and-notify-hands` groups 1 to 5 for the record's keys,
 
 ## 4. The surfaces and the run sheet (grade10-spec)
 
-- [ ] 4.1 `read-specs` reads each case's `**Automation status:**`; the change page's Rounds row, the question ids on each artifact row, the thread link on My turn's questions, and the suite's automated count against its total on the Delivery row - `shared-planning-agent-rounds-SC-26`, `shared-planning-agent-rounds-SC-27`, `shared-planning-agent-rounds-SC-51`, `shared-planning-agent-rounds-SC-61`
-- [ ] 4.2 `run-sheet.mjs --include-automated`, off by default, saying how many automated cases it left out, zero included - `shared-planning-agent-rounds-SC-61`
-- [ ] 4.3 `pnpm run tcs:automated <case…>` flips a case's automation status in place and pushes nothing, so the walk's own commit carries the flip - `shared-planning-agent-rounds-SC-59`
-- [ ] 4.4 Component and script tests for the six: the Automation status reader, the Rounds row, the question ids on the artifact rows, the thread link on My turn, the automated count on the Delivery row, and the two scripts - `run-sheet.mjs`'s filter and `tcs:automated` - `shared-planning-agent-rounds-SC-26`, `shared-planning-agent-rounds-SC-27`, `shared-planning-agent-rounds-SC-51`, `shared-planning-agent-rounds-SC-59`, `shared-planning-agent-rounds-SC-61`
+- [x] 4.1 `read-specs` reads each case's `**Automation status:**`; the change page's Rounds row, the question ids on each artifact row, the thread link on My turn's questions, and the suite's automated count against its total on the Delivery row - `shared-planning-agent-rounds-SC-26`, `shared-planning-agent-rounds-SC-27`, `shared-planning-agent-rounds-SC-51`, `shared-planning-agent-rounds-SC-61`
+- [x] 4.2 `run-sheet.mjs --include-automated`, off by default, saying how many automated cases it left out, zero included - `shared-planning-agent-rounds-SC-61`
+- [x] 4.3 `pnpm run tcs:automated <case…>` flips a case's automation status in place and pushes nothing, so the walk's own commit carries the flip - `shared-planning-agent-rounds-SC-59`
+- [x] 4.4 Component and script tests for the six: the Automation status reader, the Rounds row, the question ids on the artifact rows, the thread link on My turn, the automated count on the Delivery row, and the two scripts - `run-sheet.mjs`'s filter and `tcs:automated` - `shared-planning-agent-rounds-SC-26`, `shared-planning-agent-rounds-SC-27`, `shared-planning-agent-rounds-SC-51`, `shared-planning-agent-rounds-SC-59`, `shared-planning-agent-rounds-SC-61`
 
 ## 5. The re-read job and the runner (grade10-spec)
 
