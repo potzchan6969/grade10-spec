@@ -1,4 +1,4 @@
-import { handOfArtifact, STAGES } from "./stages";
+import { handOfArtifact, PROOF_OF_STAGE, STAGES } from "./stages";
 import { daysBetween, TIME_ZONE } from "./time";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "./types";
 
@@ -18,16 +18,6 @@ import type { ChangeEntry, Role, SchemaArtifact, Stage } from "./types";
  * days are still running, which is the fact a reader wants from a change that
  * has stopped.
  */
-
-/** The artifacts whose landing proves one stage. Proposed is complete when
- * the proposal, the decisions and the journeys are all on `main`, so the
- * newest of the three is when it landed. */
-const PROOF: Partial<Record<Stage, string[]>> = {
-  proposed: ["proposal", "decisions", "user-journeys"],
-  designed: ["ui-design", "tech-design"],
-  specified: ["specs", "test-cases"],
-  planned: ["tasks"],
-};
 
 export type Handoff = {
   stage: Stage;
@@ -58,7 +48,7 @@ export function handoffsOf(
 ): Handoff[] {
   const handoffs: Handoff[] = [];
   for (const left of STAGES.slice(0, STAGES.indexOf(stage))) {
-    const proof = PROOF[left];
+    const proof = PROOF_OF_STAGE[left];
     if (!proof) continue;
     const landed = newest(proof.map((id) => dates[id]));
     if (landed === undefined) {
@@ -88,7 +78,7 @@ function firstWordAfter(
   dates: LandingDates,
 ): { artifact: string; date: string } | undefined {
   const later = STAGES.slice(STAGES.indexOf(stage) + 1).flatMap(
-    (one) => PROOF[one] ?? [],
+    (one) => PROOF_OF_STAGE[one] ?? [],
   );
   const words = later
     .flatMap((artifact) => {

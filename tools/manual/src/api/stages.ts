@@ -99,10 +99,11 @@ export function ladderOf(
   const settled = settledOf(change, artifacts);
   const { done, total } = taskTotals(change);
   const proven: Partial<Record<Stage, boolean>> = {
-    designed: OWED_AT.designed.every(settled),
+    designed: PROOF_OF_STAGE.designed.every(settled),
     specified:
-      OWED_AT.specified.every(settled) && (change.raisedOpen ?? 0) === 0,
-    planned: OWED_AT.planned.every(settled) && change.promotedBy !== undefined,
+      PROOF_OF_STAGE.specified.every(settled) && (change.raisedOpen ?? 0) === 0,
+    planned:
+      PROOF_OF_STAGE.planned.every(settled) && change.promotedBy !== undefined,
     building: done > 0,
     "on-staging":
       total > 0 && done === total && change.deployedEnv === "staging",
@@ -111,7 +112,7 @@ export function ladderOf(
   let reached: Stage = "proposed";
   for (const rung of STAGES.slice(1)) {
     if (!proven[rung]) {
-      const owed = (OWED_AT[rung] ?? []).find((id) => !settled(id));
+      const owed = (PROOF_OF_STAGE[rung] ?? []).find((id) => !settled(id));
       return owed ? { stage: reached, heldBy: owed } : { stage: reached };
     }
     reached = rung;
@@ -119,14 +120,20 @@ export function ladderOf(
   return { stage: reached };
 }
 
-/** The artifacts each rung of the ladder is proven by, in the order a change
- * owes them. The rungs below carry none: a box, a deploy, a tag and the fold
- * are proven by no artifact of the schema. */
-const OWED_AT: Partial<Record<Stage, string[]>> & {
+/**
+ * The artifacts that prove each rung of the ladder, in the order a change
+ * owes them — one declaration, read by the ladder's own walk and by
+ * `handoffsOf` in `api/handoff.ts`, which needs `proposed`'s own proof to date
+ * when that rung landed. The rungs below carry none: a box, a deploy, a tag
+ * and the fold are proven by no artifact of the schema.
+ */
+export const PROOF_OF_STAGE: Partial<Record<Stage, string[]>> & {
+  proposed: string[];
   designed: string[];
   specified: string[];
   planned: string[];
 } = {
+  proposed: ["proposal", "decisions", "user-journeys"],
   designed: ["ui-design", "tech-design"],
   specified: ["specs", "test-cases"],
   planned: ["tasks"],
@@ -199,7 +206,7 @@ export function handOf(
   // A record nothing could read is the product manager's to fix, and its
   // hands are open because nothing could read them either.
   if (change.error) return ["pm"];
-  if (stage !== "proposed") return HANDS_AT[stage];
+  if (stage !== "proposed") return rolesAtStage(stage);
   const settled = settledOf(change, artifacts);
   const waived = waivedOf(artifacts, change);
   const next = SECOND_HANDS.filter((one) => !waived.has(one.artifact)).map(
@@ -230,6 +237,15 @@ const HANDS_AT: Record<Stage, Role[]> = {
   released: [],
   archived: [],
 };
+
+/** The roles a stage names, with no change in hand: what an empty lane says
+ * about who would take a change that arrived in it, and the non-Proposed
+ * answer `handOf` itself reads. Proposed names nobody's decisions are read
+ * yet, so it is always the product manager's — the same answer `handOf`
+ * gives a change with no `decisions` or `user-journeys` on `main`. */
+export function rolesAtStage(stage: Stage): Role[] {
+  return stage === "proposed" ? ["pm"] : HANDS_AT[stage];
+}
 
 /** The roles of these the change names nobody for — the hands a card shows as
  * open and a message routes to the role's channel. */

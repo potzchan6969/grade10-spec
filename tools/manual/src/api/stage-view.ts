@@ -1,5 +1,6 @@
-import { DRAFTED, handOf, STAGES } from "./stages";
+import { DRAFTED, STAGES } from "./stages";
 import type { BehindArtifact, ChangeEntry, Role, Stage } from "./types";
+import { ROLES } from "./types";
 
 /**
  * How a derived fact reads on a surface: the words for a stage and a role, the
@@ -28,8 +29,9 @@ export const ROLE_LABEL: Record<Role, string> = {
   release: "release hand",
 };
 
-/** The roles, in the order the `hands:` table lists them. */
-export const ROLES: Role[] = ["pm", "design", "tech", "dev", "qa", "release"];
+/** The roles, in the order the `hands:` table lists them — `ROLES` in
+ * `api/types.ts`, the one declaration every reader of the six imports. */
+export { ROLES };
 
 /** A role as a row's own label, where it opens a line rather than sitting in
  * one. `QA` is already a name and is left as it is written. */
@@ -53,30 +55,6 @@ export function stageNumber(stage: Stage): number {
 
 /** How many steps there are, so the one line does not restate it. */
 export const STAGE_COUNT = STAGES.length;
-
-/** The roles a stage names, with no change in hand: what an empty lane says
- * about who would take a change that arrived in it. A bare entry and no
- * schema are the whole input — `handOf` reads the record and the waivers for
- * the two halves of Proposed, and a lane has neither to read. */
-export function rolesAtStage(stage: Stage): Role[] {
-  return handOf(BARE, stage, []);
-}
-
-const BARE: ChangeEntry = {
-  id: "",
-  dir: "",
-  schema: "",
-  status: "in-flight",
-  // Never read: `handOf` is asked about the stage the lane is, not this one.
-  stage: "proposed",
-  owners: [],
-  created: "",
-  title: "",
-  why: "",
-  taskGroups: [],
-  deltas: [],
-  written: [],
-};
 
 /** One hand of a drafted stage: its move, and the command it pastes for the
  * change the read was asked about. */

@@ -1,7 +1,7 @@
 import { byLastMoved } from "./derive";
 import { type Overlay, overlaysOf } from "./overlays";
-import { ROLES, rolesAtStage, stageShown } from "./stage-view";
-import { handOf, openHands, STAGES } from "./stages";
+import { ROLES, stageShown } from "./stage-view";
+import { handOf, openHands, rolesAtStage, STAGES } from "./stages";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "./types";
 
 /**
