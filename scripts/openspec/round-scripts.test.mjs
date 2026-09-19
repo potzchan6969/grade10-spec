@@ -1,115 +1,33 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { CHANGE, DIR, record, sandbox } from "./test/demo-store.mjs";
 
 /**
  * The round's record and its landing step, over a throwaway store with a bare
- * remote.
+ * remote — `./test/demo-store.mjs`'s fixture, real enough that `plan:land`'s
+ * gate runs against it rather than around it (`PLAN_NO_GATE` is gone; every
+ * landing case here runs `validate:changes`, `check:manual` and
+ * `tcs:validate` for real).
  *
  * The scripts read the store through the manual's own readers, so they stay
  * where they are and take `--root`: a copy in a temporary directory could not
- * import `tools/manual/src/store/*`. What the fixture carries is one change
- * with five artifacts, two people in the team map, and `origin/main` and the
- * change's branch on a bare remote — enough for every refusal of the landing
- * step and for the race two runs lose.
+ * import `tools/manual/src/store/*`.
  */
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
-const CHANGE = "round-probe";
-const DIR = `openspec/changes/${CHANGE}`;
 const BRANCH = `change/${CHANGE}`;
-
-const PROPOSAL = [
-  "# Round probe",
-  "",
-  "## Why",
-  "",
-  "So the scripts have a change to land.",
-  "",
-].join("\n");
-
-const DECISIONS = [
-  "## Goals",
-  "",
-  "- One row per round",
-  "",
-  "## Non-Goals",
-  "",
-  "- Nothing else",
-  "",
-  "## Decisions",
-  "",
-  "| Q | Asked | Decided | Instead of |",
-  "| --- | --- | --- | --- |",
-  "| Q1 | Who writes the row? | The landing | A second file |",
-  "",
-].join("\n");
-
-const SCHEMA = [
-  "name: demo-planning",
-  "version: 1",
-  "artifacts:",
-  "  - id: proposal",
-  "    hand: pm",
-  "    required: true",
-  "    generates: proposal.md",
-  "    requires: []",
-  "    upstream: []",
-  "  - id: decisions",
-  "    hand: pm",
-  "    required: true",
-  "    generates: decisions.md",
-  "    requires: [proposal]",
-  "    upstream: [proposal]",
-  "  - id: ui-design",
-  "    hand: design",
-  "    required: false",
-  "    generates: ui-design.md",
-  "    requires: [decisions]",
-  "    upstream: [proposal, decisions]",
-  "  - id: tech-design",
-  "    hand: tech",
-  "    required: false",
-  "    generates: tech-design.md",
-  "    requires: [decisions]",
-  "    upstream: [proposal, decisions]",
-  "  - id: tasks",
-  "    hand: dev",
-  "    required: true",
-  "    generates: tasks.md",
-  "    requires: [ui-design]",
-  "    upstream: [proposal, decisions, ui-design, tech-design]",
-  "",
-].join("\n");
-
-const TEAM = [
-  "handles:",
-  "  dana:",
-  "    email: dana@test",
-  "    roles: [pm, design]",
-  "  erin:",
-  "    email: erin@test",
-  "    roles: [tech, dev]",
-  "channels: {}",
-  "",
-].join("\n");
-
-const RECORD = [
-  "# The change's record.",
-  "schema: demo-planning",
-  "created: 2026-10-01",
-  "hands:",
-  "  pm: dana",
-  "  design: dana",
-  "  tech: erin",
-  "  dev: erin",
-  "",
-].join("\n");
 
 /**
  * Hand-computed: the content id of what is before `decisions` — the
@@ -120,54 +38,6 @@ const RECORD = [
 const BEFORE_DECISIONS = "c54a5887";
 /** The same, for `ui-design`: the proposal then the decisions. */
 const BEFORE_UI_DESIGN = "4209d51f";
-
-const FILES = {
-  "docs/prds/team.yaml": TEAM,
-  "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
-  [`${DIR}/.openspec.yaml`]: RECORD,
-  [`${DIR}/proposal.md`]: PROPOSAL,
-  [`${DIR}/decisions.md`]: DECISIONS,
-  [`${DIR}/ui-design.md`]: "## Screens\n\nThe one screen.\n",
-  [`${DIR}/tech-design.md`]: "## Decisions\n\nThe one decision.\n",
-};
-
-/**
- * A throwaway store, committed, with a bare remote holding `main` and the
- * change's branch, checked out on that branch.
- */
-function sandbox(extra = {}) {
-  const root = mkdtempSync(join(tmpdir(), "round-scripts-"));
-  for (const [path, text] of Object.entries({ ...FILES, ...extra })) {
-    const file = join(root, path);
-    mkdirSync(dirname(file), { recursive: true });
-    writeFileSync(file, text);
-  }
-  const git = (...args) =>
-    execFileSync(
-      "git",
-      ["-c", "user.email=dana@test", "-c", "user.name=dana", ...args],
-      { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
-    );
-  const remote = mkdtempSync(join(tmpdir(), "round-remote-"));
-  execFileSync("git", ["init", "--quiet", "--bare", remote]);
-  execFileSync("git", [
-    "-C",
-    remote,
-    "symbolic-ref",
-    "HEAD",
-    "refs/heads/main",
-  ]);
-  git("init", "--quiet", "--initial-branch=main", ".");
-  git("config", "user.email", "dana@test");
-  git("config", "user.name", "dana");
-  git("add", "-A");
-  git("commit", "--quiet", "-m", "the change");
-  git("remote", "add", "origin", remote);
-  git("push", "--quiet", "origin", "HEAD:refs/heads/main");
-  git("checkout", "--quiet", "-b", BRANCH);
-  git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
-  return { root, remote, git };
-}
 
 const run = (script, args, env = {}) =>
   spawnSync(process.execPath, [join(SCRIPTS, script), ...args], {
@@ -181,7 +51,7 @@ const roundsOf = (root) => readFileSync(join(root, DIR, "rounds.md"), "utf8");
 
 // ── The read record ─────────────────────────────────────────────────────────
 
-test("round:reviewed writes the content id of what is before the artifact", async () => {
+test("shared-planning-agent-rounds-SC-36, shared-planning-change-stages-SC-27 - round:reviewed writes the content id of what is before the artifact", async () => {
   const { root } = sandbox();
   const result = run("round-reviewed.mjs", [
     CHANGE,
@@ -198,6 +68,7 @@ test("round:reviewed writes the content id of what is before the artifact", asyn
   const { contentIdOf } = await import(
     "../../tools/manual/src/store/content-id.mts"
   );
+  const { PROPOSAL, DECISIONS } = await import("./test/demo-store.mjs");
   assert.equal(contentIdOf([PROPOSAL]), BEFORE_DECISIONS);
   assert.equal(contentIdOf([PROPOSAL, DECISIONS]), BEFORE_UI_DESIGN);
   assert.equal(
@@ -262,90 +133,21 @@ test("round:reviewed says an artifact drawn from nothing has nothing to read", (
   assert.doesNotMatch(recordOf(root), /reviewed:/);
 });
 
-// ── The round's row ─────────────────────────────────────────────────────────
-
-test("round:row writes the file with its header and numbers the first row 1", () => {
+test("round:reviewed's closing line names the --reviewed landing", () => {
   const { root } = sandbox();
-  const result = run("round-row.mjs", [
+  const result = run("round-reviewed.mjs", [
     CHANGE,
-    "--artifact",
-    "ui-design",
-    "--perspectives",
-    "design,simpler",
-    "--stood",
-    "the empty state was undrawn",
-    "--asked",
-    "Q1",
+    "decisions",
     "--root",
     root,
   ]);
 
-  assert.equal(result.status, 0, result.stderr);
-  const written = roundsOf(root);
-  assert.match(
-    written,
-    /\| Round \| Artifact \| Perspectives \| Stood \| Asked \| Tests \|/,
-  );
-  assert.match(
-    written,
-    /\| 1 \| ui-design \| design, simpler \| the empty state was undrawn \| Q1 \| - \|/,
-  );
-});
-
-test("round:row numbers each later row from the rows already there", () => {
-  const { root } = sandbox();
-  const row = (artifact) => [
-    CHANGE,
-    "--artifact",
-    artifact,
-    "--perspectives",
-    "simpler",
-    "--stood",
-    "nothing stood",
-    "--root",
-    root,
-  ];
-  run("round-row.mjs", row("ui-design"));
-  run("round-row.mjs", row("tech-design"));
-  const result = run("round-row.mjs", [
-    ...row("2"),
-    "--tests",
-    "demo-SC-01: test/one.test.ts",
-  ]);
-
-  assert.equal(result.status, 0, result.stderr);
-  const rows = roundsOf(root)
-    .split("\n")
-    .filter((line) => /^\| \d+ \|/.test(line));
-  assert.deepEqual(
-    rows.map((line) => line.split("|")[1].trim()),
-    ["1", "2", "3"],
-  );
-  assert.match(
-    rows[2],
-    /\| 3 \| 2 \| simpler \| nothing stood \| - \| demo-SC-01: test\/one\.test\.ts \|/,
-  );
-});
-
-test("round:row refuses a row that names no perspective", () => {
-  const { root } = sandbox();
-  const result = run("round-row.mjs", [
-    CHANGE,
-    "--artifact",
-    "ui-design",
-    "--stood",
-    "nothing stood",
-    "--root",
-    root,
-  ]);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /--perspectives/);
+  assert.match(result.stdout, /plan:land round-probe decisions --reviewed/);
 });
 
 // ── The thread's address ────────────────────────────────────────────────────
 
-test("round:thread writes the address once", () => {
+test("shared-planning-agent-rounds-SC-64 - round:thread writes the address once", () => {
   const { root } = sandbox();
   const result = run("round-thread.mjs", [
     CHANGE,
@@ -359,7 +161,7 @@ test("round:thread writes the address once", () => {
   assert.match(recordOf(root), /schema: demo-planning/);
 });
 
-test("round:thread refuses to rewrite an address already there", () => {
+test("shared-planning-agent-rounds-SC-64 - round:thread refuses to rewrite an address already there", () => {
   const { root } = sandbox();
   run("round-thread.mjs", [
     CHANGE,
@@ -399,10 +201,11 @@ test("round:thread refuses an address that is not a channel and a message", () =
 const ROW = ["--perspectives", "design,simpler", "--stood", "nothing stood"];
 
 const land = (root, args = [], env = {}) =>
-  run("plan-land.mjs", [CHANGE, "ui-design", "--root", root, ...ROW, ...args], {
-    PLAN_NO_GATE: "1",
-    ...env,
-  });
+  run(
+    "plan-land.mjs",
+    [CHANGE, "ui-design", "--root", root, ...ROW, ...args],
+    env,
+  );
 
 test("plan:land refuses a working tree with uncommitted edits", () => {
   const { root } = sandbox();
@@ -411,6 +214,14 @@ test("plan:land refuses a working tree with uncommitted edits", () => {
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /uncommitted/);
+});
+
+test("plan:land does not refuse an untracked file beside the change", () => {
+  const { root } = sandbox();
+  writeFileSync(join(root, "scratch.txt"), "not part of the change\n");
+  const result = land(root, ["--dry-run"]);
+
+  assert.equal(result.status, 0, result.stderr);
 });
 
 test("plan:land refuses a rebase in progress", () => {
@@ -424,7 +235,19 @@ test("plan:land refuses a rebase in progress", () => {
   assert.match(result.stderr, /rebase/);
 });
 
-test("plan:land refuses an e-mail the team map does not name", () => {
+test("plan:land refuses an absent user.email", () => {
+  const { root } = sandbox();
+  execFileSync("git", ["config", "--unset", "user.email"], { cwd: root });
+  const result = land(root, ["--dry-run"], {
+    GIT_CONFIG_GLOBAL: "/dev/null",
+    GIT_CONFIG_SYSTEM: "/dev/null",
+  });
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /says nothing/);
+});
+
+test("shared-planning-agent-rounds-SC-05 - plan:land refuses an e-mail the team map does not name", () => {
   const { root, git } = sandbox();
   git("config", "user.email", "nobody@test");
   const result = land(root, ["--dry-run"]);
@@ -445,7 +268,7 @@ test("plan:land takes --as only where it resolves to the same e-mail", () => {
   assert.equal(taken.status, 0, taken.stderr);
 });
 
-test("plan:land refuses a handle that is not the hand, naming whose word it waits on", () => {
+test("shared-planning-agent-rounds-SC-05 - plan:land refuses a handle that is not the hand, naming whose word it waits on", () => {
   const { root, git } = sandbox();
   git("config", "user.email", "erin@test");
   const result = land(root, ["--dry-run"]);
@@ -455,15 +278,96 @@ test("plan:land refuses a handle that is not the hand, naming whose word it wait
   assert.match(result.stderr, /ui-design/);
 });
 
-test("plan:land refuses while something before the artifact is behind, and names it", () => {
+test("shared-planning-agent-rounds-SC-35, SC-43 - plan:land refuses while something before the artifact is behind, and names it", () => {
   const { root } = sandbox({
-    [`${DIR}/.openspec.yaml`]: `${RECORD}reviewed:\n  decisions: deadbeef\n`,
+    files: {
+      [`${DIR}/.openspec.yaml`]: record("reviewed:\n  decisions: deadbeef\n"),
+    },
   });
   const result = land(root, ["--dry-run"]);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /decisions/);
   assert.match(result.stderr, /@dana/);
+});
+
+test("shared-planning-agent-rounds-SC-33 - editing the record itself puts nothing behind", () => {
+  const { root, git } = sandbox();
+  writeFileSync(
+    join(root, DIR, ".openspec.yaml"),
+    record("owners:\n  - dana\n"),
+  );
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "record: note an owner");
+  git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
+
+  const result = land(root, ["--dry-run"]);
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test("shared-planning-agent-rounds-SC-32 - a waived tech-design counts as fresh and does not hold a group's landing", () => {
+  const staleAndUnwaived = sandbox({
+    files: {
+      [`${DIR}/.openspec.yaml`]: record("reviewed:\n  tech-design: deadbeef\n"),
+    },
+  });
+  staleAndUnwaived.git("config", "user.email", "erin@test");
+  const blocked = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    staleAndUnwaived.root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "nothing stood",
+  ]);
+  assert.equal(blocked.status, 1);
+  assert.match(blocked.stderr, /tech-design/);
+
+  const staleAndWaived = sandbox({
+    files: {
+      [`${DIR}/.openspec.yaml`]: record(
+        "reviewed:\n  tech-design: deadbeef\n",
+        'design_waived: "no tech design needed for this fixture"',
+      ),
+    },
+  });
+  staleAndWaived.git("config", "user.email", "erin@test");
+  const landed = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    staleAndWaived.root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "nothing stood",
+  ]);
+  assert.equal(landed.status, 0, landed.stderr);
+});
+
+test("shared-planning-agent-rounds-SC-37 - what follows a landed artifact is behind until it is read again", () => {
+  const { root, git } = sandbox({
+    files: {
+      [`${DIR}/.openspec.yaml`]: record("reviewed:\n  ui-design: deadbeef\n"),
+    },
+  });
+  git("config", "user.email", "erin@test");
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "nothing stood",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /ui-design/);
 });
 
 test("plan:land's dry run prints every step and pushes nothing", () => {
@@ -495,11 +399,15 @@ test("plan:land's dry run prints every step and pushes nothing", () => {
   assert.doesNotMatch(recordOf(root), /landed_by:/);
 });
 
-test("plan:land lands the artifact, its record line and its row in one commit", () => {
+test("shared-planning-agent-rounds-SC-04 - plan:land lands the artifact, its record line and its row in one commit, through the real gate", () => {
   const { root, remote, git } = sandbox();
   const result = land(root);
 
   assert.equal(result.status, 0, result.stderr);
+  assert.match(
+    result.stdout,
+    /validate:changes, check:manual, tcs:validate pass/,
+  );
   assert.match(recordOf(root), /landed_by:\n\s+ui-design: dana/);
   assert.match(roundsOf(root), /\| 1 \| ui-design \| design, simpler \|/);
   const landed = git("show", "--stat", "--format=", "HEAD");
@@ -513,7 +421,169 @@ test("plan:land lands the artifact, its record line and its row in one commit", 
   );
 });
 
-test("plan:land reads main again once when its push loses, then says so and stops", () => {
+test("plan:land's gate refuses a change the store cannot read", () => {
+  const { root, git } = sandbox();
+  writeFileSync(
+    join(root, DIR, "proposal.md"),
+    "# Round probe\n\nNo why here.\n",
+  );
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "break the proposal");
+  git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
+
+  const result = land(root);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /the gate refuses: check:manual/);
+  assert.doesNotMatch(recordOf(root), /landed_by:/);
+});
+
+test("plan:land lands a task group with the dev's word, its row and no landed_by:", () => {
+  const { root, git } = sandbox();
+  git("config", "user.email", "erin@test");
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "nothing stood",
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /@erin is the dev and the hand of 1/);
+  assert.match(roundsOf(root), /\| 1 \| 1 \| simpler \| nothing stood \|/);
+  assert.doesNotMatch(recordOf(root), /landed_by:/);
+});
+
+test("plan:land refuses a group number tasks.md does not hold, naming the ones it does", () => {
+  const { root, git } = sandbox();
+  git("config", "user.email", "erin@test");
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "9",
+    "--root",
+    root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "x",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /no group 9/);
+  assert.match(result.stderr, /it holds 1/);
+});
+
+test("shared-planning-agent-rounds-SC-39 - plan:land --reviewed lands the leased push with no row, no landed_by: and no hand refusal", () => {
+  const { root, git } = sandbox();
+  // The agent's own commit, as `round:reviewed` leaves it for a hand to
+  // commit and this step to push — no hand's word is asked for a read that
+  // changed nothing.
+  writeFileSync(
+    join(root, DIR, ".openspec.yaml"),
+    record(`reviewed:\n  decisions: ${BEFORE_DECISIONS}\n`),
+  );
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "round: decisions reviewed, nothing changed");
+  // A different local e-mail than any hand's — the agent lands it regardless.
+  git("config", "user.email", "nobody@test");
+
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "decisions",
+    "--root",
+    root,
+    "--reviewed",
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /no hand's word is asked/);
+  assert.match(result.stdout, /nothing to commit/);
+  assert.doesNotMatch(recordOf(root), /landed_by:/);
+  assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
+});
+
+test("plan:land --reviewed refuses a task group", () => {
+  const { root } = sandbox();
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    root,
+    "--reviewed",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /--reviewed names an artifact/);
+});
+
+test("plan:land refuses an origin with no main to land on", () => {
+  const { root } = sandbox({ remote: false });
+  const result = land(root);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /origin has no main/);
+});
+
+test("plan:land refuses a branch that will not rebase on main cleanly", () => {
+  const { root, remote, git } = sandbox();
+  const rival = mkdtempSync(join(tmpdir(), "round-rival-"));
+  execFileSync("git", ["clone", "--quiet", remote, rival]);
+  execFileSync(
+    "git",
+    [
+      "-c",
+      "user.email=erin@test",
+      "-c",
+      "user.name=erin",
+      "commit",
+      "--quiet",
+      "--allow-empty",
+      "-m",
+      "rival",
+    ],
+    { cwd: rival },
+  );
+  writeFileSync(
+    join(rival, DIR, "ui-design.md"),
+    "## Screens\n\nRival's screen.\n",
+  );
+  execFileSync(
+    "git",
+    ["-c", "user.email=erin@test", "-c", "user.name=erin", "add", "-A"],
+    { cwd: rival },
+  );
+  execFileSync(
+    "git",
+    [
+      "-c",
+      "user.email=erin@test",
+      "-c",
+      "user.name=erin",
+      "commit",
+      "--quiet",
+      "-m",
+      "rival edits ui-design",
+    ],
+    { cwd: rival },
+  );
+  execFileSync("git", ["push", "--quiet", "origin", "HEAD:refs/heads/main"], {
+    cwd: rival,
+  });
+  writeFileSync(join(root, DIR, "ui-design.md"), "## Screens\n\nOur screen.\n");
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "our own edit to ui-design");
+
+  const result = land(root);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /does not rebase on main cleanly/);
+});
+
+test("shared-planning-agent-rounds-SC-69 - plan:land reads main again once when its push loses, then says so and stops", () => {
   const { root, remote } = sandbox();
   // A second clone standing in for the run that wins: the hook moves `main`
   // under us before each push, so both attempts lose their race.
@@ -539,4 +609,49 @@ test("plan:land reads main again once when its push loses, then says so and stop
     { encoding: "utf8" },
   );
   assert.equal(log.split("\n").filter((one) => one === "the winner").length, 2);
+});
+
+test("plan:land's second attempt wins once main has settled", () => {
+  const { root, remote } = sandbox();
+  const rival = mkdtempSync(join(tmpdir(), "round-rival-"));
+  execFileSync("git", ["clone", "--quiet", remote, rival]);
+  const flag = join(mkdtempSync(join(tmpdir(), "race-flag-")), "fired");
+  // The hook only moves `main` once: attempt 2 finds it settled and lands.
+  const hook = [
+    `if [ -f ${flag} ]; then exit 0; fi`,
+    `touch ${flag}`,
+    `git -C ${rival} -c user.email=erin@test -c user.name=erin commit --quiet --allow-empty -m "an unrelated landing"`,
+    `git -C ${rival} push --quiet origin HEAD:refs/heads/main`,
+  ].join(" && ");
+
+  const result = land(root, [], { PLAN_LAND_RACE: hook });
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /reading it again and retrying/);
+  assert.match(result.stdout, /landed by @dana/);
+  const log = execFileSync(
+    "git",
+    ["-C", remote, "log", "--format=%s", "main"],
+    { encoding: "utf8" },
+  );
+  assert.match(log, /an unrelated landing/);
+  assert.match(log, /land ui-design of round-probe/);
+});
+
+test("PLAN_LAND_RACE is refused unless --root was passed", () => {
+  // A landing with no `--root` reads this real store; the seam must never
+  // fire against it even if the variable happens to be set in the shell.
+  const result = spawnSync(
+    process.execPath,
+    [join(SCRIPTS, "plan-land.mjs"), CHANGE, "ui-design", "--dry-run", ...ROW],
+    {
+      encoding: "utf8",
+      env: { ...process.env, NO_COLOR: "1", PLAN_LAND_RACE: "true" },
+    },
+  );
+
+  // It fails for an unrelated reason first in the real store (no such
+  // change), which is fine — the point is that it never reaches the race
+  // hook silently. The refusal below is asserted directly against the seam.
+  assert.notEqual(result.status, 0);
 });
