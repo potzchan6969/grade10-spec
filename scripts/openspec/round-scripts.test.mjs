@@ -479,7 +479,7 @@ test("shared-planning-agent-rounds-SC-37 - a landing with changed content puts e
     rows.map(({ artifact }) => artifact),
     ["tasks"],
   );
-  assert.ok(rows[0].before.includes("ui-design"), rows[0].before.join(", "));
+  assert.ok(rows[0].changed.includes("ui-design"), rows[0].changed.join(", "));
 });
 
 test("plan:land's dry run prints every step and pushes nothing", () => {
