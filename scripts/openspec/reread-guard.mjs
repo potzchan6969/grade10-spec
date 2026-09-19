@@ -11,10 +11,11 @@
  * proposal never linked included, which the settings leave open because
  * `docs/prds/` is where the pages it may mark live.
  *
- *   node scripts/openspec/reread-guard.mjs <change> --before <sha> [--after <ref>] [--root <dir>]
+ *   node scripts/openspec/reread-guard.mjs <change> --before <sha> [--root <dir>]
  *
- * `--after` defaults to `HEAD`: the round commits locally before it pushes,
- * so the job's own checkout already carries whatever it wrote.
+ * The range ends at `HEAD`: the round commits locally before it pushes, so
+ * the job's own checkout already carries whatever it wrote, and a range
+ * ending anywhere else is a guard reading somebody else's work.
  */
 import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
@@ -27,7 +28,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
  * it, the usage refusal the parser prints included. */
 const ERROR = "::error::";
 const USAGE =
-  "usage: node reread-guard.mjs <change> --before <sha> [--after <ref>] [--root <dir>]";
+  "usage: node reread-guard.mjs <change> --before <sha> [--root <dir>]";
 
 /** Every path a range of commits touched, oldest first. */
 export function pushedPaths(root, before, after) {
@@ -46,17 +47,16 @@ export function outOfBounds(paths, writable) {
 
 function main() {
   const { positional, flags } = parseArgs(process.argv.slice(2), {
-    keys: ["before", "after", "root"],
+    keys: ["before", "root"],
     usage: USAGE,
     prefix: ERROR,
   });
   const [change] = positional;
   if (!change || !flags.before) fail(USAGE);
   const root = flags.root ?? join(HERE, "..", "..");
-  const after = flags.after ?? "HEAD";
 
   const writable = writableBy(root, change);
-  const paths = pushedPaths(root, flags.before, after);
+  const paths = pushedPaths(root, flags.before, "HEAD");
   const bad = outOfBounds(paths, writable);
   if (bad.length > 0) {
     fail(

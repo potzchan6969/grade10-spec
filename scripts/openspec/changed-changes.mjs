@@ -445,14 +445,17 @@ async function keysOnly(root, base, head, touched) {
  * `suppressed` set that silences its messages, which is what keeps the
  * cascade finite: the re-read's own commit never re-enters this matrix, even
  * where the content id it wrote leaves the artifact reading as behind.
+ *
+ * The id is the whole entry: every step of the job names `matrix.id`, and the
+ * step that posts reads the change's `thread:` from its own record, so an
+ * entry carrying the address too would be a second copy of it to keep true.
  */
 export function rereadMatrixOf(base, head, suppressed) {
   const matrix = [];
   for (const behind of newlyBehind(base, head)) {
     if (suppressed.has(behind.id)) continue;
-    const at = head.get(behind.id);
-    if (!at) continue;
-    matrix.push({ id: behind.id, thread: at.thread ?? null });
+    if (!head.has(behind.id)) continue;
+    matrix.push({ id: behind.id });
   }
   return matrix.sort((left, right) => left.id.localeCompare(right.id));
 }

@@ -5,8 +5,8 @@
  * The agent never holds `SLACK_BOT_TOKEN` — it writes what it read to a file
  * — so a plain step, with no writable path the agent must stay off, posts
  * that file's text here. The same script says what happened when the run
- * dies before it writes one: `if: failure()` calls it with no `--message` and
- * gets the one line naming the change and the run.
+ * dies before it writes one: `if: failure()` calls it with no
+ * `--message-file` and gets the one line naming the change and the run.
  *
  *   node scripts/openspec/reread-notify.mjs <change> \
  *     [--message-file <path>] [--run-url <url>] \
@@ -26,7 +26,7 @@ import { openRecord, writtenValue } from "./lib/record.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const USAGE =
-  "usage: node reread-notify.mjs <change> [--message-file <path>] [--message <text>] [--run-url <url>] [--channel <id>] [--root <dir>] [--send]";
+  "usage: node reread-notify.mjs <change> [--message-file <path>] [--run-url <url>] [--channel <id>] [--root <dir>] [--send]";
 
 /** The one line a dead run leaves behind, naming the change and the run a
  * hand can open to see why. */
@@ -61,7 +61,7 @@ function fileMessage(path) {
 
 async function main() {
   const { positional, flags } = parseArgs(process.argv.slice(2), {
-    keys: ["message-file", "message", "run-url", "channel", "root"],
+    keys: ["message-file", "run-url", "channel", "root"],
     booleans: ["send"],
     usage: USAGE,
   });
@@ -82,7 +82,6 @@ async function main() {
   }
   const message =
     fileMessage(flags["message-file"]) ??
-    flags.message ??
     failureMessageOf(change, flags["run-url"]);
 
   const address = addressFor(root, change, flags.channel);
