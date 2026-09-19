@@ -24,31 +24,36 @@ export function fixtureSnapshot(): Snapshot {
   const { snapshot } = composeStore(rootsOf(DEMO_STORE), NO_GIT, null);
   return {
     ...snapshot,
-    changes: snapshot.changes.map(undated),
+    changes: snapshot.changes.map(strippedClaims),
     generatedAt: GENERATED_AT,
   };
 }
 
 /**
- * The same change with no age against it: none on its claimed groups, and no
- * landing to count one from.
+ * The same change with no claim age against it — `lastLanded` stays.
  *
- * `demo-store/` sits inside this repository's checkout, so the readers find a
- * history for it and date every claimed group and every landing against today.
- * That age is a true reading and an impossible fixture: it moves every day,
- * and it is absent altogether in a clone whose `openspec-viewer` submodule is
- * not initialised, so the committed file could only ever match the machine
- * that wrote it. A fallback payload's ages would be stale on arrival in any
- * case — the shell falls back to this file precisely where nothing is serving
- * the store — so it carries none, for the reason `generatedAt` is pinned above
- * it.
+ * `demo-store/` sits inside this repository's checkout, so `readLandings`
+ * reads a real history for it: `lastLanded` is the committer date of a real,
+ * already-landed commit, fixed the moment that commit is made and read back
+ * identically by every full checkout of this same repository — the CI job
+ * that runs this test already fetches full history
+ * (`.github/workflows/test.yml`'s `catalogs` job, `fetch-depth: 0`) for the
+ * same reason the claim ages below need it. `IDLE_FROM`/`SHELVED_FROM`
+ * (`api/overlays.ts`) are read live against it, so the Idle overlay on the
+ * fixture demonstrating it (`demo-on-staging`) only holds for as long as its
+ * backdated commit stays under `SHELVED_FROM` days old — see that change's
+ * `proposal.md`.
+ *
+ * A claimed group's age is different: `readIdleClaims` bakes a day count in
+ * at read time (`api/derive.ts`'s doc), which moves every day the fixture is
+ * rebuilt, and is absent altogether in a clone whose `openspec-viewer`
+ * submodule is not initialised — so the committed file could only ever match
+ * the machine that wrote it. That is stripped, same as before.
  */
-function undated(change: ChangeEntry): ChangeEntry {
-  const undatedChange = { ...change };
-  delete undatedChange.lastLanded;
-  if (!change.taskGroups.some((group) => group.idle)) return undatedChange;
+function strippedClaims(change: ChangeEntry): ChangeEntry {
+  if (!change.taskGroups.some((group) => group.idle)) return change;
   return {
-    ...undatedChange,
+    ...change,
     taskGroups: change.taskGroups.map((group) => {
       const undatedGroup = { ...group };
       delete undatedGroup.idle;

@@ -1,0 +1,23 @@
+# Who the fixture store knows, and where a role is posted to.
+#
+# Shaped exactly as `docs/prds/team.yaml`: one entry per handle, one channel
+# per role. The manual's own snapshot does not read this file yet — only the
+# Node scripts under `scripts/openspec/` do (the notify script, the digest,
+# and a landing resolving `git config user.email`) — so this fixture is here
+# for the walk to read directly, or for the day the snapshot gains a `team`
+# field of its own, whichever comes first.
+handles:
+  tester:
+    email: tester@example.com
+    slack: U0TESTER
+    roles: [pm, design, tech, qa, dev, release]
+  other:
+    email: other@example.com
+    roles: [dev]
+channels:
+  pm: C0PLANNING
+  design: C0DESIGN
+  tech: C0TECH
+  qa: C0QA
+  dev: C0DEV
+  release: C0RELEASE

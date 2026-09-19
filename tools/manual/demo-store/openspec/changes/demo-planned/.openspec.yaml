@@ -1,0 +1,9 @@
+schema: grade10-planning
+created: 2026-09-03
+promoted_by: "@tester"
+ui_waived: "the fixture is about the Planned stage, not the designs"
+design_waived: "the fixture is about the Planned stage, not the designs"
+skip_specs: true
+skip_specs_why: "the fixture is about the Planned stage and the Behind overlay, not the requirements"
+reviewed:
+  decisions: "1fe721a5"
