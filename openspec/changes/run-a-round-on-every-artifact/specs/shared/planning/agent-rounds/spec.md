@@ -868,6 +868,9 @@ in the landing's own commit.
   group, the perspectives run, what stood, what was asked
 - **Archived whole** — the file archives with the change and is folded into no
   durable capability
+- **The ids in backticks** — a row's question ids are written in backticks, so
+  the store's citation rule resolves each one against that change's own
+  `decisions.md`
 
 #### Scenario: shared-planning-agent-rounds-SC-51 - A reader sees what a round did
 **Serves:** shared-planning-agent-rounds-US-09 - a reader of the change tells a round that found nothing from one that never ran
@@ -892,6 +895,13 @@ in the landing's own commit.
 - **WHEN** a reader opens the change page and `pnpm check:manual` runs
 - **THEN** the change carries no `rounds.md` and the Rounds row lists no round
 - **AND** the check does not refuse the change
+
+#### Scenario: shared-planning-agent-rounds-SC-70 - A question id the change issues nowhere is refused
+**Serves:** The record - a reader follows a row's question id to the decisions row it names
+
+- **GIVEN** a change whose `rounds.md` row names a `Q<n>` in backticks
+- **WHEN** `pnpm check:manual` runs and the change's `decisions.md` holds no row with that id
+- **THEN** the check refuses and names the id and the change
 
 ### Requirement: A landing or a tick with no row is refused
 
