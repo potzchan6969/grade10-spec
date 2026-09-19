@@ -8,6 +8,7 @@ import type {
 import { type PageAst, parsePage } from "../content/grammar";
 import type { PageIcon } from "../content/icons";
 import { resolveRef } from "../content/refs";
+import { marksUnder } from "./open-marks";
 import {
   dirOf,
   humanize,
@@ -26,6 +27,7 @@ import type {
   DeltaRequirement,
   HistoryRef,
   ItemError,
+  OpenQuestion,
   PageEntry,
   Scenario,
   SchemaArtifact,
@@ -34,6 +36,7 @@ import type {
   TestCase,
   TestSuiteStatus,
 } from "./types";
+import { waivedOf } from "./waivers";
 
 /** A page as the app reads it: parsed, or contained with the parse error. */
 export type ParsedPage = {
@@ -621,36 +624,42 @@ export type PendingItem = {
 export type PendingTeammate = { teammate: string; items: PendingItem[] };
 
 /**
- * The artifacts a change's own record says it does not owe.
+ * What a change still has open, and who each is addressed to.
  *
- * `skip_specs` says a change alters no behaviour, so it owes no requirements —
- * and nothing that lives inside a capability directory either. There is no
- * capability, so there is nowhere for a journeys file or a suite to be
- * written, and asking for one put an impossible row on the product manager's
- * list for every tooling change in the store.
- *
- * `decisions_waived` says this change records no decisions: the interview
- * settled nothing it had to keep, or it was opened before `decisions.md`
- * existed and its scope is in the proposal. That is read here and not only by
- * `check:manual`, because unlike `design_waived` and `tasks_waived` — which
- * answer for a file's absence at archive — this one answers for whose turn it
- * is now. The row it would otherwise leave is the product manager's, and an
- * artifact their own record waives is not their turn. Without this, the only
- * thing that clears the row is the file, which pushes an author towards
- * writing a record of an interview nobody held.
+ * Two halves, read from where each was written. The change's own decisions
+ * rows are on the entry, because `decisions.md` is a file of the change. The
+ * questions a page still carries are the page's, so they are read here, where
+ * the parsed pages are: a ❓ line under a section the proposal links is the
+ * change's to answer, counted against the proposal that linked it and
+ * addressed to whoever holds the proposal. A row inside a titled block stays
+ * the page's own — `marksUnder` is what draws that line.
  */
-const waivedOf = (artifacts: SchemaArtifact[], change: ChangeEntry) => {
-  const ids = new Set<string>();
-  if (change.skipSpecs !== undefined) {
-    for (const one of artifacts) {
-      if (one.id === "specs" || one.generates.startsWith("specs/")) {
-        ids.add(one.id);
-      }
-    }
-  }
-  if (change.decisionsWaived) ids.add("decisions");
-  return ids;
-};
+export function questionsOf(
+  change: ChangeEntry,
+  pages: ParsedPage[],
+): OpenQuestion[] {
+  const byPath = new Map(pages.map((page) => [page.path, page]));
+  const linked = (change.sections ?? []).flatMap(({ page, slug }) => {
+    const parsed = byPath.get(page);
+    if (!parsed) return [];
+    return marksUnder(parsed, slug).map(
+      (mark): OpenQuestion => ({
+        artifact: "proposal",
+        page,
+        section: slug,
+        role: PAGE_QUESTIONS_ROLE,
+        hand: change.hands?.[PAGE_QUESTIONS_ROLE] ?? PAGE_QUESTIONS_ROLE,
+        text: mark.text,
+      }),
+    );
+  });
+  return [...(change.questions ?? []), ...linked];
+}
+
+/** A question the page carries is counted against the proposal, and the
+ * proposal is the product manager's — so they are the hand it is addressed
+ * to, whatever the line is about. A page line names no role of its own. */
+const PAGE_QUESTIONS_ROLE = "pm";
 
 /**
  * Every teammate's worklist, derived from the artifacts each change has written

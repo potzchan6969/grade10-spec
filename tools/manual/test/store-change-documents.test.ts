@@ -24,7 +24,9 @@ describe("the artifacts a change has", () => {
       teammate: string,
       requires: string[],
       required = true,
-    ) => ({ id, generates, teammate, requires, required });
+      // The demo store's schema carries no `upstream:`, which reads as an
+      // artifact drawn from nothing — `test/read-schema.test.ts` holds that.
+    ) => ({ id, generates, teammate, requires, upstream: [], required });
     expect(schemaArtifacts(FIXTURE, "grade10-planning")).toEqual([
       artifact("proposal", "proposal.md", "product-manager", []),
       artifact("specs", "specs/**/spec.md", "product-manager", ["proposal"]),

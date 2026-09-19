@@ -7,7 +7,15 @@ import { readTextIfExists } from "./disk.mts";
  * order they are written in, each built on the one before. Undefined for a
  * schema this store does not define: the built-ins live inside the CLI, and
  * guessing their shape would let a reader claim a file is missing that the
- * schema never asked for. */
+ * schema never asked for.
+ *
+ * `requires` is what makes an artifact owed and `upstream` is what its text is
+ * drawn from. They are two lists because they answer two questions: the blind
+ * suite is written without sight of the requirements it is reconciled against,
+ * and the tech design is drawn beside the UI design rather than from it — so
+ * an order alone would put every suite behind its own requirements. A key the
+ * schema does not carry — `upstream`, or the readers a round classifies a diff
+ * against — is read as absent rather than as a reason to drop the artifact. */
 export function schemaArtifacts(
   root: string,
   schema: string,
@@ -30,6 +38,7 @@ export function schemaArtifacts(
       generates: fields.generates,
       ...(teammate ? { teammate } : {}),
       requires: strings(fields.requires),
+      upstream: strings(fields.upstream),
       required: fields.required !== false,
     });
   }

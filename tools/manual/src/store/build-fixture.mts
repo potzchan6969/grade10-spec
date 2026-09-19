@@ -30,21 +30,25 @@ export function fixtureSnapshot(): Snapshot {
 }
 
 /**
- * The same change with no age against its claimed groups.
+ * The same change with no age against it: none on its claimed groups, and no
+ * landing to count one from.
  *
  * `demo-store/` sits inside this repository's checkout, so the readers find a
- * history for it and date every claimed group against today. That age is a
- * true reading and an impossible fixture: it moves every day, and it is absent
- * altogether in a clone whose `openspec-viewer` submodule is not initialised,
- * so the committed file could only ever match the machine that wrote it. A
- * fallback payload's ages would be stale on arrival in any case — the shell
- * falls back to this file precisely where nothing is serving the store — so it
- * carries none, for the reason `generatedAt` is pinned above it.
+ * history for it and date every claimed group and every landing against today.
+ * That age is a true reading and an impossible fixture: it moves every day,
+ * and it is absent altogether in a clone whose `openspec-viewer` submodule is
+ * not initialised, so the committed file could only ever match the machine
+ * that wrote it. A fallback payload's ages would be stale on arrival in any
+ * case — the shell falls back to this file precisely where nothing is serving
+ * the store — so it carries none, for the reason `generatedAt` is pinned above
+ * it.
  */
 function undated(change: ChangeEntry): ChangeEntry {
-  if (!change.taskGroups.some((group) => group.idle)) return change;
+  const undatedChange = { ...change };
+  delete undatedChange.lastLanded;
+  if (!change.taskGroups.some((group) => group.idle)) return undatedChange;
   return {
-    ...change,
+    ...undatedChange,
     taskGroups: change.taskGroups.map((group) => {
       const undatedGroup = { ...group };
       delete undatedGroup.idle;

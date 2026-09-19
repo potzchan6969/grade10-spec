@@ -84,6 +84,53 @@ export function marksOfPage(page: ParsedPage, mark: RegExp): OpenMark[] {
   return marks;
 }
 
+/**
+ * The open marks sitting under one `## ` section of the page — the questions
+ * a change that links that section is answerable for.
+ *
+ * A titled block's rows are the page's own, never the section's: a
+ * `Product decisions` table carries what the page keeps against every change
+ * that ever touched it, so reading its rows as one change's would hand each
+ * change every question anybody has left there. A mark is the section's when
+ * the page's own prose is what it sits in, which is what `where` says.
+ */
+export const marksUnder = (page: ParsedPage, slug: string): OpenMark[] =>
+  openMarksOfPage(page).filter(
+    (one) => one.section === slug && one.where?.anchor === slug,
+  );
+
+/**
+ * The text one `## ` section is drawn from: its heading and the page's own
+ * prose under it, to the next level-two heading. A `### ` under it is inside
+ * the section — only a `## ` ends one — and a titled block is left to the
+ * page, for the reason `marksUnder` leaves its rows there.
+ *
+ * Undefined where the page carries no such section, so a caller hashing it
+ * cannot mistake a link nobody kept for a section with nothing in it.
+ */
+export function sectionTextOf(
+  page: ParsedPage,
+  slug: string,
+): string | undefined {
+  if (!page.ast) return undefined;
+  const lines: string[] = [];
+  let inside = false;
+  let found = false;
+  for (const block of page.ast.blocks) {
+    if (block.type !== "prose") continue;
+    for (const line of block.markdown.split("\n")) {
+      const heading = HEADING.exec(line);
+      if (heading) {
+        inside = sectionSlug(heading[1]) === slug;
+        if (!inside) continue;
+        found = true;
+      }
+      if (inside) lines.push(line);
+    }
+  }
+  return found ? lines.join("\n").trimEnd() : undefined;
+}
+
 const STARTS = [HEADING, FENCE, LIST_MARKER, TABLE_ROW, /^\s*:{2,}/];
 
 /** The lines as items: a wrapped bullet or paragraph folded back into one

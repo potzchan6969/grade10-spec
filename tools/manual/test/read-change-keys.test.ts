@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { runChecks } from "../check/check-manual.mjs";
+import { waivedOf } from "../src/api/waivers";
 import { NO_GIT } from "../src/store/git.mts";
-import { readChanges, waivedOf } from "../src/store/read-changes.mts";
+import { readChanges } from "../src/store/read-changes.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { writeStore } from "./tmp-store";
 
@@ -240,7 +241,7 @@ describe("the lines beside them", () => {
 describe("what a record waives", () => {
   const waivedBy = (record: string) => {
     const { entry, root } = changeWith(record);
-    return waivedOf(entry, schemaArtifacts(root, "demo-planning") ?? []);
+    return waivedOf(schemaArtifacts(root, "demo-planning") ?? [], entry);
   };
 
   it("stands the UI waiver for the UI design and the design waiver for the tech design", () => {
@@ -270,12 +271,14 @@ describe("what a record waives", () => {
   });
 
   it("never counts a waiver as a file that exists", () => {
-    const { entry } = changeWith(
+    const { entry, root } = changeWith(
       ['ui_waived: "no screen"', 'design_waived: "all here"', ""].join("\n"),
     );
 
     expect(entry.written).toEqual(["proposal"]);
-    expect(entry.waived).toEqual(["ui-design", "tech-design"]);
+    expect([
+      ...waivedOf(schemaArtifacts(root, "demo-planning") ?? [], entry),
+    ]).toEqual(["ui-design", "tech-design"]);
   });
 });
 

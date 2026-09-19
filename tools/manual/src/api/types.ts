@@ -254,6 +254,75 @@ export type MainState = {
  * open tasks, `complete` has finished them all and awaits the archive. */
 export type ChangeLane = "proposed" | "specified" | "in-progress" | "complete";
 
+/** A hand a change passes through, as `hands:` keys them. */
+export type Role = "pm" | "design" | "tech" | "qa" | "dev" | "release";
+
+/** How far a change has got, derived from the files on the store's main and
+ * never stored: the eight stages `shared/planning/change-stages` names, of
+ * which `ChangeLane`'s four are a projection. */
+export type Stage =
+  | "proposed"
+  | "designed"
+  | "specified"
+  | "planned"
+  | "building"
+  | "on-staging"
+  | "released"
+  | "archived";
+
+/** One thing about a change nobody has settled, and the hand it is addressed
+ * to. A decisions row carries its number; a line the page still holds carries
+ * the page and the section it sits under. */
+export type OpenQuestion = {
+  /** `Q<n>` from the `## Decisions` row, where a row asked it. */
+  id?: string;
+  /** The page a ❓ line sits on, where the page asked it. */
+  page?: string;
+  /** Slug of the `## ` section the line sits under. */
+  section?: string;
+  /** The schema artifact it counts against: `decisions` for a row, `proposal`
+   * for a line under a section the proposal links. */
+  artifact: string;
+  /** The role it is addressed to, which is where it is routed when the change
+   * names no hand for it. Any role a row names, the six or not. */
+  role: string;
+  /** The handle `hands:` names for that role, or the role itself where the
+   * change names none. */
+  hand: string;
+  /** What was asked, as written. */
+  text: string;
+};
+
+/** One artifact whose upstream moved after it was drawn or last read again,
+ * and what moved. Derived per read, never stored. */
+export type BehindArtifact = {
+  /** The schema artifact id. */
+  artifact: string;
+  /** What changed before it: a linked page section as `<page>#<slug>`, or an
+   * upstream artifact id. */
+  changed: string[];
+};
+
+/** One person the store knows, from `docs/prds/team.yaml`. */
+export type TeamMember = {
+  /** The address `git config user.email` gives. */
+  email?: string;
+  /** The Slack member id a message is addressed to. A handle with none is
+   * sent no message. */
+  slack?: string;
+  /** The roles this handle may take. */
+  roles: string[];
+};
+
+/** Who the store knows and where a role is posted to — the one map every
+ * surface that names a person and every message that addresses one reads.
+ * `scripts/openspec/lib/team.mjs` is its only reader. */
+export type TeamMap = {
+  handles: Record<string, TeamMember>;
+  /** One channel id per role, for a stage whose hand is unnamed. */
+  channels: Record<string, string>;
+};
+
 /** One `## ` heading of a manual page, as a proposal links it. */
 export type PageSectionRef = { page: string; slug: string };
 
@@ -302,6 +371,10 @@ export type ChangeEntry = {
   /** Why this change writes no `tech-design.md`, from `.openspec.yaml`
    * `design_waived:`. */
   designWaived?: string;
+  /** Why this change draws no `ui-design.md`, from `.openspec.yaml`
+   * `ui_waived:` — the line that stands in for the UI design on a change
+   * nothing a reader sees moves on. */
+  uiWaived?: string;
   /** The deploy that carried the change, from `.openspec.yaml` `deployed_at:`
    * and `deployed_env:` — the sha the application repository verified, and the
    * environment it ran in. */
@@ -344,6 +417,35 @@ export type ChangeEntry = {
   mainState?: MainState;
   /** The schema artifact ids this change has written. */
   written: string[];
+  /** Who takes this change at each stage, from `.openspec.yaml` `hands:` —
+   * one handle per role, as the record wrote it. A role outside `Role`
+   * survives the read so the `hands` rule can refuse it, and a role the
+   * change does not name is unnamed rather than an error. */
+  hands?: Record<string, string>;
+  /** Whose word landed each artifact, from `.openspec.yaml` `landed_by:` — a
+   * schema artifact id against one handle, written by the landing. */
+  landedBy?: Record<string, string>;
+  /** What each artifact was last read again against, from `.openspec.yaml`
+   * `reviewed:` — a schema artifact id against the content id of what was
+   * before it. Written by the round; read here. */
+  reviewed?: Record<string, string>;
+  /** The change's Slack thread, from `.openspec.yaml` `thread:`, as
+   * `<channel>/<ts>`. Written by the round; every message links it. */
+  thread?: string;
+  /** The release this change went out in, from `.openspec.yaml`
+   * `released_in:`. */
+  releasedIn?: string;
+  /** ISO timestamp of the last commit that ticked a task, claimed a group or
+   * added an artifact of this change — what says it has stopped moving, which
+   * `lastMoved` cannot: one repository-wide commit moves every change at
+   * once. Absent where no history dates it, which is not the same as 0. */
+  lastLanded?: string;
+  /** What nobody has settled: the change's own open decisions rows. The
+   * questions a linked page still carries are added by `questionsOf`, which
+   * has the parsed pages. */
+  questions?: OpenQuestion[];
+  /** How far the change has got, computed where the schema is. */
+  stage?: Stage;
   /** What the change says it is waiting for, from `.openspec.yaml`
    * `awaiting:` — an artifact id against the line its author wrote. */
   awaiting?: { artifact: string; why: string }[];
@@ -359,6 +461,11 @@ export type SchemaArtifact = {
    * every worklist rather than guessing whose turn it is. */
   teammate?: string;
   requires: string[];
+  /** The artifacts this one's text is drawn from, in reading order — the
+   * graph, which the artifact list's order is not: the blind suite is written
+   * without sight of the requirements, and the tech design is drawn beside
+   * the UI design rather than from it. Empty where the schema says nothing. */
+  upstream: string[];
   /** Whether a change owes this artifact by default. An artifact that is not
    * required is owed only when the change says so in `awaiting:`: what makes
    * it owed is a condition no worklist can see. */

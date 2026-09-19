@@ -7,6 +7,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
+import { waivedOf } from "../src/api/waivers.ts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { productPages } from "./context.mjs";
 
@@ -192,11 +193,13 @@ export function checkArchived(ctx, archived) {
 
 /**
  * A wait names an artifact of the change's own schema, and stops being a wait
- * once that artifact exists. Neither of these is a judgement about whether
- * the wait is over — only its author ends that — but about whether the line
- * says anything: an artifact the schema does not declare reaches no worklist
- * at all, and one already written is a record that contradicts the tree.
- * Both are one line to delete, in a file the author has just edited.
+ * once that artifact exists or the record waives it. None of these is a
+ * judgement about whether the wait is over — only its author ends that — but
+ * about whether the line says anything: an artifact the schema does not
+ * declare reaches no worklist at all, one already written is a record that
+ * contradicts the tree, and one the same record waives is the change saying
+ * both that nobody owes it and that it is waiting for it. Each is one line to
+ * delete, in a file the author has just edited.
  */
 const waitsOnSpecs = (change) =>
   (change.awaiting ?? []).some((one) => one.artifact === "specs");
@@ -217,6 +220,7 @@ export function checkAwaiting(ctx, changes) {
     if (artifacts === undefined) continue;
     const known = new Set(artifacts.map((one) => one.id));
     const written = new Set(change.written);
+    const waived = waivedOf(artifacts, change);
     if (change.skipSpecs !== undefined && waitsOnSpecs(change)) {
       ctx.add(
         "awaiting",
@@ -237,6 +241,12 @@ export function checkAwaiting(ctx, changes) {
           "awaiting",
           file,
           `waits on \`${artifact}\`, which this change has written — the wait is over, so delete the line`,
+        );
+      } else if (waived.has(artifact)) {
+        ctx.add(
+          "awaiting",
+          file,
+          `waives \`${artifact}\` and waits on it — one line says nobody owes it, the other that somebody does; drop whichever is untrue`,
         );
       }
     }

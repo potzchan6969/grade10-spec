@@ -9,6 +9,7 @@ import type {
   DeltaKind,
   DeltaRequirement,
   IdleClaim,
+  OpenQuestion,
   PageSectionRef,
   SchemaArtifact,
   TaskGroup,
@@ -26,6 +27,7 @@ import {
 } from "./disk.mts";
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
+import { readLandings } from "./landings.mts";
 import { leadingTitle, outline, type Section } from "./markdown.mts";
 import { schemaArtifacts } from "./read-schema.mts";
 import { readTestCases } from "./read-specs.mts";
@@ -165,6 +167,21 @@ function readChange(
         const written = line(key, fields[key]);
         if (written) entry[field] = written;
       }
+      const hands = mapping("hands", fields.hands, "name one handle", handleOf);
+      if (hands) entry.hands = hands;
+      const landedBy = mapping(
+        "landed_by",
+        fields.landed_by,
+        "name one handle",
+        handleOf,
+      );
+      if (landedBy) entry.landedBy = landedBy;
+      const reviewed = mapping(
+        "reviewed",
+        fields.reviewed,
+        "carry the content id it was read against",
+      );
+      if (reviewed) entry.reviewed = reviewed;
       const skipped = skipSpecsOf(fields.skip_specs, fields.skip_specs_why);
       if (skipped !== undefined) entry.skipSpecs = skipped;
       const awaiting = readAwaiting(fields.awaiting);
@@ -238,6 +255,24 @@ function readChange(
     artifactsOf(root, entry.schema, schemas),
     tasks !== undefined,
   );
+
+  const decisions = readTextIfExists(join(dir, "decisions.md"));
+  if (decisions !== undefined) {
+    try {
+      const open = readQuestions(decisions, entry.hands);
+      if (open.length > 0) entry.questions = open;
+    } catch (cause) {
+      fail(`${rel}/decisions.md`, cause);
+    }
+  }
+
+  // In flight only, and only the landings: an archived change is finished, and
+  // the last commit touching the directory is not a landing — one repository
+  // wide commit moves every change at once.
+  if (detailed) {
+    const landed = readLandings(root, id, tasks, commit);
+    if (landed) entry.lastLanded = landed;
+  }
   return entry;
 }
 
@@ -378,10 +413,13 @@ const RECORDED = [
   ["page_waived", "pageWaived"],
   ["decisions_waived", "decisionsWaived"],
   ["design_waived", "designWaived"],
+  ["ui_waived", "uiWaived"],
   ["deployed_at", "deployedAt"],
   ["deployed_env", "deployedEnv"],
   ["deploy_waived", "deployWaived"],
   ["tasks_waived", "tasksWaived"],
+  ["thread", "thread"],
+  ["released_in", "releasedIn"],
 ] as const;
 
 /** `skip_specs` turns the whole cross-check off, so it is read on its own. The
@@ -401,6 +439,83 @@ export function skipSpecsOf(value: unknown, why: unknown): string | undefined {
     );
   }
   return line("skip_specs_why", why) ?? "";
+}
+
+/**
+ * A record key that maps an id to one line — `hands:` against a role,
+ * `landed_by:` and `reviewed:` against a schema artifact id.
+ *
+ * The line is read as written, normalized only by `normalize`, and a key with
+ * no line is refused rather than read as absent: a blank entry claims the id
+ * is answered and answers it with nobody, which is the one reading no rule
+ * downstream could tell from a typo. What the line says is not judged here —
+ * an unknown role, an artifact id the schema does not issue and a value that
+ * is not one handle all survive the read, because the rules in
+ * `check/record.mjs` are what name them, and a reader that dropped them would
+ * leave those rules nothing to refuse.
+ */
+function mapping(
+  key: string,
+  value: unknown,
+  owed: string,
+  normalize: (one: string) => string = (one) => one,
+): Record<string, string> | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value !== "object" || Array.isArray(value)) {
+    throw new StoreFileError(1, `\`${key}\` must be a mapping`);
+  }
+  const read: Record<string, string> = {};
+  for (const [id, written] of Object.entries(value)) {
+    const only = line(`${key}.${id}`, written);
+    if (only === undefined) {
+      throw new StoreFileError(1, `\`${key}.${id}\` must ${owed}`);
+    }
+    read[id] = normalize(only);
+  }
+  return Object.keys(read).length > 0 ? read : undefined;
+}
+
+/** The `## Decisions` table of `decisions.md`: the number, the question, and
+ * the cell that either settles it or leaves it open. */
+const DECISION_ROW = /^\|\s*(Q\d+)\s*\|([^|]*)\|\s*(❓[^|]*)\|/;
+/** An open cell names the role that settles it, first word, lower-case as
+ * every role in this store is spelled. A cell that opens ❓ and names nobody
+ * is a question the change has not addressed to anybody, and is left to its
+ * author rather than routed at a guess. */
+const ASKED_OF = /^❓\s+([a-z][a-z0-9._-]*)\b/;
+
+/**
+ * The decisions rows nobody has settled, addressed to the hand each names.
+ *
+ * A row is open when its `Decided` cell opens with ❓ and names a role, which
+ * is how the interview records what it could not close. Any role is read, the
+ * six or not: a question naming one outside them is listed under that role and
+ * routed to its channel, the way an unnamed hand is, and narrowing the set
+ * here would drop the question instead.
+ */
+function readQuestions(
+  text: string,
+  hands: Record<string, string> | undefined,
+): OpenQuestion[] {
+  const open: OpenQuestion[] = [];
+  const decisions = outline(text)
+    .flatMap((one) => (one.level === 1 ? one.children : [one]))
+    .find((one) => /^Decisions\b/.test(one.heading));
+  if (!decisions) return open;
+  for (const row of decisions.raw.split("\n")) {
+    const cells = DECISION_ROW.exec(row);
+    if (!cells) continue;
+    const role = ASKED_OF.exec(cells[3].trim())?.[1];
+    if (role === undefined) continue;
+    open.push({
+      id: cells[1],
+      artifact: "decisions",
+      role,
+      hand: hands?.[role] ?? role,
+      text: cells[2].trim(),
+    });
+  }
+  return open;
 }
 
 /** A written line, or nothing where the key is absent or blank. Anything but
@@ -436,6 +551,11 @@ function strings(value: unknown): string[] {
 
 /** `owner: echo`, `owner: "@echo"` and `owners: [echo, other]` all name the
  * same people; anything that is not a handle is not one. */
+/** A handle as the record spelled it, as every reader here spells it: no
+ * leading `@`, no case. Anything that is not a handle is left as it stands,
+ * for the rule that refuses it to name what was written. */
+const handleOf = (one: string) => one.replace(/^@/, "").trim().toLowerCase();
+
 function handles(values: unknown[]): string[] {
   const named = strings(values.flat())
     .map((one) => one.replace(/^@/, "").trim().toLowerCase())

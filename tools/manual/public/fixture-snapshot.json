@@ -265,6 +265,7 @@
         "generates": "proposal.md",
         "teammate": "product-manager",
         "requires": [],
+        "upstream": [],
         "required": true
       },
       {
@@ -274,6 +275,7 @@
         "requires": [
           "proposal"
         ],
+        "upstream": [],
         "required": true
       },
       {
@@ -283,6 +285,7 @@
         "requires": [
           "specs"
         ],
+        "upstream": [],
         "required": true
       },
       {
@@ -292,6 +295,7 @@
         "requires": [
           "user-journeys"
         ],
+        "upstream": [],
         "required": true
       },
       {
@@ -301,6 +305,7 @@
         "requires": [
           "specs"
         ],
+        "upstream": [],
         "required": false
       },
       {
@@ -310,6 +315,7 @@
         "requires": [
           "specs"
         ],
+        "upstream": [],
         "required": false
       },
       {
@@ -319,6 +325,7 @@
         "requires": [
           "specs"
         ],
+        "upstream": [],
         "required": true
       }
     ]
