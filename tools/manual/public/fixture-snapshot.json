@@ -267,6 +267,7 @@
         "teammate": "product-manager",
         "requires": [],
         "upstream": [],
+        "perspectives": [],
         "required": true
       },
       {
@@ -277,6 +278,7 @@
           "proposal"
         ],
         "upstream": [],
+        "perspectives": [],
         "required": true
       },
       {
@@ -287,6 +289,7 @@
           "specs"
         ],
         "upstream": [],
+        "perspectives": [],
         "required": true
       },
       {
@@ -297,6 +300,7 @@
           "user-journeys"
         ],
         "upstream": [],
+        "perspectives": [],
         "required": true
       },
       {
@@ -307,6 +311,7 @@
           "specs"
         ],
         "upstream": [],
+        "perspectives": [],
         "required": false
       },
       {
@@ -317,6 +322,7 @@
           "specs"
         ],
         "upstream": [],
+        "perspectives": [],
         "required": false
       },
       {
@@ -327,6 +333,7 @@
           "specs"
         ],
         "upstream": [],
+        "perspectives": [],
         "required": true
       }
     ]
