@@ -897,7 +897,7 @@ test("--stages says the words when no run sheet is configured", () => {
   assert.match(textOf(messages, "probe:on-staging:qa"), /the run sheet/);
 });
 
-test("--stages matrix names the change whose behind set at head is not empty", () => {
+test("--stages matrix names the change the push touched, as its id alone", () => {
   const { root, write, commit } = sandbox();
   write({
     [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
@@ -923,6 +923,51 @@ test("--stages matrix names the change whose behind set at head is not empty", (
   // thread is read from its record by the step that posts.
   assert.deepEqual(matrix, [{ id: "probe" }]);
   assert.match(readFileSync(output, "utf8"), /^matrix=\[\{"id":"probe"\}\]$/m);
+});
+
+test("--stages matrix names every change of one push whose behind set at head is not empty, in id order", () => {
+  const { root, write, commit } = sandbox();
+  for (const id of ["alpha", "zebra"]) {
+    write({
+      [`openspec/changes/${id}/.openspec.yaml`]: record("hands:", "  pm: dana"),
+      [`openspec/changes/${id}/proposal.md`]: proposalOf(),
+      [`openspec/changes/${id}/decisions.md`]: "## Goals\n\n- One\n",
+    });
+  }
+  const base = commit("propose both", 10);
+  for (const id of ["alpha", "zebra"]) {
+    write({
+      [`openspec/changes/${id}/proposal.md`]: proposalOf(" Again."),
+    });
+  }
+  const head = commit("reword both proposals", 1);
+
+  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
+
+  // One entry per change, in id order: the job runs them as a matrix, and
+  // the order is the store's own rather than the diff's.
+  assert.deepEqual(matrix, [{ id: "alpha" }, { id: "zebra" }]);
+});
+
+test("--stages matrix names a change the push touched that was behind already", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana", "  design: dana"),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  });
+  commit("propose and decide", 10);
+  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
+  // The decisions are behind before this push, and stay behind after it: the
+  // designer's own landing arrives with nothing newly behind, and the read
+  // again is still owed on what is.
+  const base = commit("reword the proposal", 5);
+  write({ [`${DIR}/ui-design.md`]: "## Screens\n\nOne.\n" });
+  const head = commit("draw the screens", 1);
+
+  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.deepEqual(matrix, [{ id: CHANGE }]);
 });
 
 test("--stages matrix names nothing when nothing at head is behind", () => {
