@@ -59,10 +59,13 @@ export function StageStepper({
               <Step
                 description={
                   index === at ? (
-                    <div className="flex flex-col gap-1">
+                    // A `span`, not a `div`: the design system draws the
+                    // description as a paragraph, so what a step is handed is
+                    // inline content however it lays itself out.
+                    <span className="flex flex-col gap-1">
                       {draftedOf(one) ? <StageMark stage={one} /> : null}
                       {held ? <HeldBy label={held} /> : null}
-                    </div>
+                    </span>
                   ) : draftedOf(one) ? (
                     <StageMark stage={one} />
                   ) : null
