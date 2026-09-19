@@ -9,6 +9,8 @@ the first hour is different depending on what you came to do, so pick a path.
 
 ## If you are a product manager
 
+- [My turn](/my-turn) — what is on you, across every change in flight: the
+  open questions addressed to you, then what is yours now, then what is coming.
 - [Points](/p/grade10-site/loyalty/points) — the deepest spec we
   have, and the one written most nearly in product language. Read its journeys
   first, then the rest of [Membership](/p/grade10-site/loyalty).
@@ -40,6 +42,8 @@ proposing takes thirty seconds in the browser, and everything after it is an
 agent's job — the card on [In Flight](/in-flight) names the command to hand
 over, or hand the change id to a PM or engineer.
 
+- [My turn](/my-turn) — what is on you, across every change in flight: the
+  open questions addressed to you, then what is yours now, then what is coming.
 - [Package Rules](/p/shared/ui/component-package) — what the shared UI
   package owes a product, and what it refuses to hold.
 - [Site Header and Footer](/p/shared/ui/site-chrome) and
@@ -71,6 +75,8 @@ runner or export consumes it yet. The whole derivation, spec journeys to
 classified cases, is
 [specs to test cases](https://github.com/9gag/grade10-spec/blob/main/docs/governance/specs-to-test-cases.md).
 
+- [My turn](/my-turn) — what is on you, across every change in flight: the
+  open questions addressed to you, then what is yours now, then what is coming.
 - [Points](/p/grade10-site/loyalty/points) — journeys, the
   scenarios that accept them, and the test cases tracing back.
 - [Sign-In](/p/shared/auth/sign-in) and [Sessions](/p/shared/auth/sessions) —
@@ -86,6 +92,8 @@ classified cases, is
 
 ## If you are an engineer
 
+- [My turn](/my-turn) — what is on you, across every change in flight: the
+  open questions addressed to you, then what is yours now, then what is coming.
 - [Frontend composition](/platform/shared/frontend-composition) — where a feature
   lives and what an application is allowed to load.
 - [Package Rules](/p/shared/ui/component-package) — what to compose before
@@ -104,6 +112,8 @@ classified cases, is
 
 ## If you are an operator
 
+- [My turn](/my-turn) — what is on you, across every change in flight: the
+  open questions addressed to you, then what is yours now, then what is coming.
 - [Console blocks](/p/shared/console/blocks) — the shapes every console
   section is built from.
 - [User directory](/p/shared/console/user-directory) — roles, standing, and

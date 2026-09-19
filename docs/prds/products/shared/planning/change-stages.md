@@ -129,7 +129,7 @@ Slack tells one person, once per move, in the change's thread.
   command; the hands; each artifact with fresh or behind, its open questions
   and who landed it; tasks by group; where the code is: `main`, staging, a
   release
-- 🚧 **My turn** — the open questions addressed to the reader, then the
+- 🚧 **[My turn](/my-turn)** — the open questions addressed to the reader, then the
   changes whose current stage names them, then the ones that are theirs
   later; the handle is chosen once per browser
 - 🚧 **A section's in-flight row** — names the stage and the hand of each
