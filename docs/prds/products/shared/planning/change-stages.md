@@ -132,6 +132,8 @@ Slack tells one person, once per move, in the change's thread.
 - 🚧 **My turn** — the open questions addressed to the reader, then the
   changes whose current stage names them, then the ones that are theirs
   later; the handle is chosen once per browser
+- 🚧 **A section's in-flight row** — names the stage and the hand of each
+  change delivering it
 - 🚧 **A page's marked line** — a line a page marks as being built wears the
   pip of its change's stage
 - ❓ **Actions on the hosted manual** — Assign stays on the locally run
