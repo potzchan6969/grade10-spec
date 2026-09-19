@@ -1,4 +1,4 @@
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import type { ChangeEntry, Snapshot } from "../api/types.ts";
 import { NO_GIT } from "./git.mts";
@@ -24,36 +24,39 @@ export function fixtureSnapshot(): Snapshot {
   const { snapshot } = composeStore(rootsOf(DEMO_STORE), NO_GIT, null);
   return {
     ...snapshot,
-    changes: snapshot.changes.map(strippedClaims),
+    changes: snapshot.changes.map(dated),
     generatedAt: GENERATED_AT,
   };
 }
 
 /**
- * The same change with no claim age against it — `lastLanded` stays.
+ * The same change with no age read from history: none on its claimed groups,
+ * and no landing date unless `fixture-dates.json` names one.
  *
- * `demo-store/` sits inside this repository's checkout, so `readLandings`
- * reads a real history for it: `lastLanded` is the committer date of a real,
- * already-landed commit, fixed the moment that commit is made and read back
- * identically by every full checkout of this same repository — the CI job
- * that runs this test already fetches full history
- * (`.github/workflows/test.yml`'s `catalogs` job, `fetch-depth: 0`) for the
- * same reason the claim ages below need it. `IDLE_FROM`/`SHELVED_FROM`
- * (`api/overlays.ts`) are read live against it, so the Idle overlay on the
- * fixture demonstrating it (`demo-on-staging`) only holds for as long as its
- * backdated commit stays under `SHELVED_FROM` days old — see that change's
- * `proposal.md`.
- *
- * A claimed group's age is different: `readIdleClaims` bakes a day count in
- * at read time (`api/derive.ts`'s doc), which moves every day the fixture is
- * rebuilt, and is absent altogether in a clone whose `openspec-viewer`
- * submodule is not initialised — so the committed file could only ever match
- * the machine that wrote it. That is stripped, same as before.
+ * `demo-store/` sits inside this repository's checkout, so the readers find a
+ * history for it and date every claimed group and every landing against the
+ * commits that carried the files. That reading is true and an impossible
+ * fixture: a committer date moves on every cherry-pick, rebase and squash
+ * merge, a claimed group's age moves every day, and both are absent in a
+ * clone with no history — so the committed file could only ever match the
+ * machine that wrote it. The dates the fixture needs are data instead:
+ * `demo-store/fixture-dates.json` maps a change id to the `lastLanded` it
+ * carries, which is what lets one change show the Idle overlay for good. The
+ * walk freezes its clock, so the day count it reads is fixed too; the dev
+ * preview reads the same date against today and ages, as a real change does.
  */
-function strippedClaims(change: ChangeEntry): ChangeEntry {
-  if (!change.taskGroups.some((group) => group.idle)) return change;
+const FIXTURE_DATES: Record<string, string> = JSON.parse(
+  readFileSync(`${DEMO_STORE}/fixture-dates.json`, "utf8"),
+);
+
+function dated(change: ChangeEntry): ChangeEntry {
+  const datedChange = { ...change };
+  delete datedChange.lastLanded;
+  const landed = FIXTURE_DATES[change.id];
+  if (landed) datedChange.lastLanded = landed;
+  if (!change.taskGroups.some((group) => group.idle)) return datedChange;
   return {
-    ...change,
+    ...datedChange,
     taskGroups: change.taskGroups.map((group) => {
       const undatedGroup = { ...group };
       delete undatedGroup.idle;
