@@ -429,6 +429,33 @@ describe("with no read record at all", () => {
     [SPEC_FILE]: "2026-09-04T00:00:00Z",
   };
 
+  it("shared-planning-change-stages-SC-49 - dates `since` from the first thing that moved after the artifact was drawn", () => {
+    const root = store();
+    // The decisions moved on the 3rd and the UI design on the 9th, both
+    // after the delta was drawn on the 2nd: the delta went behind on the 3rd,
+    // so that is the day the digest's seven are counted from. Read off the
+    // newest of the two, a change behind since the 3rd would first be listed
+    // on the 16th.
+    const entry = read(
+      root,
+      dating({
+        [`${CHANGE}/proposal.md`]: "2026-09-01T00:00:00Z",
+        [`${CHANGE}/decisions.md`]: "2026-09-03T00:00:00Z",
+        [UI_FILE]: "2026-09-09T00:00:00Z",
+        [SPEC_FILE]: "2026-09-02T00:00:00Z",
+      }),
+      pageOf(RULES, "2026-09-05"),
+    );
+
+    expect(behindOf(entry, artifacts(root))).toEqual([
+      {
+        artifact: "specs",
+        changed: ["decisions", "ui-design"],
+        since: "2026-09-03T00:00:00Z",
+      },
+    ]);
+  });
+
   it("reads a linked page section as putting nothing behind", () => {
     const root = store();
     const entry = read(root, dating(DATES), pageOf(RULES, "2026-09-10"));
@@ -449,8 +476,8 @@ describe("with no read record at all", () => {
 
     // The decisions are newer than everything before them, so they are the
     // one artifact the dates leave alone. `since` is decisions' own commit
-    // date — the newest of what changed — which is what the digest counts its
-    // seven days from.
+    // date — the one thing that moved after either artifact was drawn — which
+    // is what the digest counts its seven days from.
     expect(behindOf(entry, artifacts(root))).toEqual([
       {
         artifact: "ui-design",

@@ -286,6 +286,46 @@ test("shared-planning-change-stages-SC-49 - the digest lists an artifact behind 
   assert.deepEqual(behindLines(behindFor(6)), []);
 });
 
+test("shared-planning-change-stages-SC-49 - the digest counts the days from the day the artifact went behind", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    "openspec/changes/first-moved/.openspec.yaml": [
+      "schema: demo-planning",
+      "created: 2026-10-01",
+      "hands:",
+      "  pm: dana",
+      "  design: dana",
+      "",
+    ].join("\n"),
+    "openspec/changes/first-moved/proposal.md": proposalOf("First moved"),
+    "openspec/changes/first-moved/decisions.md": "## Goals\n\n- One\n",
+    "openspec/changes/first-moved/ui-design.md": "## Screens\n\nOne screen.\n",
+  });
+  commit("propose first-moved", 20);
+  // The UI design is drawn from both: the proposal moved seven days ago, so
+  // that is the day it went behind, and the decisions moving again yesterday
+  // does not restart the week.
+  write({
+    "openspec/changes/first-moved/proposal.md": proposalOf(
+      "First moved",
+      " Again.",
+    ),
+  });
+  commit("reword the proposal", 7);
+  write({ "openspec/changes/first-moved/decisions.md": "## Goals\n\n- Two\n" });
+  commit("reword the decisions", 1);
+
+  const { messages } = digest(root).read();
+  const behind = (messages[0]?.lines ?? []).filter(
+    (one) => one.kind === "behind",
+  );
+
+  assert.deepEqual(
+    behind.map((one) => [one.artifact, one.days]),
+    [["ui-design", 7]],
+  );
+});
+
 test("shared-planning-change-stages-SC-49 - a stale reviewed: id is listed once what changed is old enough", () => {
   const { root, write, commit } = sandbox();
   write({
