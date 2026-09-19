@@ -516,7 +516,7 @@ function yourTurnText(at, role, linked) {
   return lines.join("\n");
 }
 
-function stagingText(at, linked, sheetUrl) {
+function stagingText(linked, sheetUrl) {
   const sheet = sheetUrl
     ? `<${sheetUrl}|the run sheet>`
     : // No per-change run tab exists in the store to link (decisions Q39), so
@@ -578,7 +578,7 @@ function messagesOf(base, head, map, options) {
       move.role,
       move.hand,
       staging
-        ? stagingText(at, linked, options.sheetUrl)
+        ? stagingText(linked, options.sheetUrl)
         : yourTurnText(at, move.role, linked),
     );
   }
@@ -606,7 +606,7 @@ function touchedByChange(changed) {
   for (const record of changed) {
     for (const path of [record.oldPath, record.path]) {
       const item = artifact(path);
-      if (!item || item.kind !== "active") continue;
+      if (item?.kind !== "active") continue;
       const prefix = `${CHANGE_ROOT}${item.directory}/`;
       const files = byChange.get(item.id) ?? new Set();
       files.add(item.path.slice(prefix.length));

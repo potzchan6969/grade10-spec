@@ -17,7 +17,10 @@
  * against the origin it was cut from.
  */
 import { readRootsGitIndex } from "../../../tools/manual/src/store/git.mts";
-import { readChanges } from "../../../tools/manual/src/store/read-changes.mts";
+import {
+  readArchivedChanges,
+  readChanges,
+} from "../../../tools/manual/src/store/read-changes.mts";
 import { readManualPages } from "../../../tools/manual/src/store/read-manual.mts";
 import { schemaArtifacts } from "../../../tools/manual/src/store/read-schema.mts";
 import { rootsOf } from "../../../tools/manual/src/store/roots.mts";
@@ -46,6 +49,9 @@ export async function readChangesAt(root) {
   return {
     changes,
     schemas,
+    /** The archive, for the one thing the changes in flight cannot answer:
+     * whether the change another one depends on has shipped. */
+    archived: readArchivedChanges(root, git),
     /** The schema's artifacts for one change, in the order it declares them;
      * empty for a change on a schema this store does not define. */
     artifactsOf: (change) => schemas[change.schema] ?? [],
