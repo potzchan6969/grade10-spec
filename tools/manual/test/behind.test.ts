@@ -2,6 +2,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { createContext, createReport } from "../check/context.mjs";
+import { checkAwaiting } from "../check/record.mjs";
 import { behindLabelOf } from "../src/api/stage-view.ts";
 import { behindOf } from "../src/api/stages.ts";
 import type {
@@ -22,6 +24,7 @@ import {
 } from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
+import { rootsOf } from "../src/store/roots.mts";
 import { upstreamOf } from "../src/store/upstream.mts";
 import { gitStore } from "./git-store";
 import { writeStore } from "./tmp-store";
@@ -540,5 +543,36 @@ describe("behind holds no tick, claim or wait", () => {
       },
       { artifact: "specs", changed: ["decisions"], since: expect.any(String) },
     ]);
+  });
+
+  it("accepts the wait itself: the record's own rule raises nothing on it", () => {
+    // The wait is accepted rather than refused, over the same behind store —
+    // `checkAwaiting`, not the whole of `runChecks`, since this is the one
+    // rule the wait could trip.
+    const files = filesOf("awaiting:\n  tech-design: waiting on the vendor\n");
+    files[`${CHANGE}/tasks.md`] = TASKS;
+    const root = writeStore(files);
+    const entry = read(
+      root,
+      dating({
+        [`${CHANGE}/proposal.md`]: "2026-09-01T00:00:00Z",
+        [`${CHANGE}/decisions.md`]: "2026-09-10T00:00:00Z",
+        [UI_FILE]: "2026-09-03T00:00:00Z",
+        [SPEC_FILE]: "2026-09-04T00:00:00Z",
+      }),
+      pageOf(RULES, "2026-09-05"),
+    );
+
+    const report = createReport();
+    const ctx = createContext(rootsOf(root), report, {
+      specs: new Map(),
+      changes: [entry],
+      stories: null,
+    });
+    checkAwaiting(ctx, [entry]);
+
+    expect(report.findings.filter((one) => one.rule === "awaiting")).toEqual(
+      [],
+    );
   });
 });
