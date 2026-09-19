@@ -480,8 +480,7 @@ export function behindOf(
           artifact: id,
           changed: read.items,
           whole: true,
-          // The newest commit before it: an id dates nothing of its own, and
-          // nothing older than that is knowable.
+          // `beforeOn` is this comparison's day, `BehindArtifact.since` why.
           ...(read.beforeOn ? { since: read.beforeOn } : {}),
         });
       }
@@ -491,7 +490,7 @@ export function behindOf(
       behind.push({
         artifact: id,
         changed: read.newer,
-        // The first of them to move, which is the day it went behind.
+        // `firstNewerOn` is this one's.
         ...(read.firstNewerOn ? { since: read.firstNewerOn } : {}),
       });
     }

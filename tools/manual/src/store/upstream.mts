@@ -127,14 +127,11 @@ export function upstreamOf(
           );
     if (newerItems.length > 0) {
       read.newer = newerItems.map((one) => one.item);
-      // The first of them to move: the day the artifact went behind, which is
-      // what `behindOf` carries as `since` on this comparison.
+      // `firstNewerOn`: the first of them to move.
       const firstNewerOn = oldest(newerItems.map((one) => one.date));
       if (firstNewerOn !== undefined) read.firstNewerOn = firstNewerOn;
     }
-    // The newest of everything before it: a content id says something moved
-    // without saying which, so no older day than this is knowable, and this
-    // is what `behindOf` carries as `since` on that comparison.
+    // `beforeOn`: the newest commit among everything before the artifact.
     const beforeOn = newest(before.map((one) => one.date));
     if (beforeOn !== undefined) read.beforeOn = beforeOn;
     reading[artifact.id] = read;

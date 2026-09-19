@@ -142,10 +142,8 @@ function linesFor(handle, changes, ctx) {
       });
     }
     // The earliest behind artifact, as the card and the Behind message name
-    // it. `since` is the newest commit among everything before it — carried
-    // from `UpstreamRead.newerOn` through `behindOf` — present whichever
-    // comparison is what says the artifact moved, so a `reviewed:` id reaches
-    // the digest's day count the same as the dated fallback does.
+    // it. The week is counted from `since`, the day it went behind, which
+    // `behindOf` carries whichever comparison says the artifact moved.
     const behind = overlays.find((one) => one.kind === "behind");
     const days =
       behind?.since === undefined
