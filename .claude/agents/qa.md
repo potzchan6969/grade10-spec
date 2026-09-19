@@ -1,6 +1,6 @@
 ---
 name: qa
-description: Reads a draft for what proves it - the case a statement owes, the tests a task group lands first, and the end-to-end group that walks the journeys. The round dispatches it on every round of the requirements, the plan and a task group.
+description: Reads a draft for what proves it - the case a statement owes, the tests a task group lands first, and the end-to-end group that walks the journeys. The round dispatches it on every round of the plan and of a task group.
 model: opus
 tools: Read, Grep, Glob, Bash
 ---
