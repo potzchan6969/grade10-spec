@@ -25,7 +25,7 @@ ribbon, My turn and Slack.
   - Unnamed hand: a stage whose hand is unnamed shows the hand as open and routes to the role's channel
   - Team map: one entry per handle with its Slack member and roles, and a channel per role
 - Overlays, a closed set
-  - Seven overlays: Waiting, Blocked, Idle, Behind, Suite, Flag and Hotfix, each read from a file and shown beside the stage
+  - Five overlays: Waiting, Blocked, Idle, Behind and Suite, each read from a file and shown beside the stage
   - Idle counts landings: days since the last tick, claim or artifact landing, never since a repository-wide commit; shelved at 30
   - Behind is shown: an artifact whose linked page lines or artifacts before it changed after it was drawn or last read again is marked on the card and the artifact, holds no tick, claim or wait here
   - Open questions: a ❓ decisions row or a ❓ line under a linked section, counted per artifact and listed per hand
@@ -216,6 +216,9 @@ An artifact on `main` is one a hand's word landed, and the record says whose.
   word SHALL replace the last
 - **Shown beside the artifact** — the change page SHALL show that handle
   beside the artifact, and an artifact with no entry SHALL show none
+- **One artifact, every capability** — an artifact id SHALL address that
+  artifact in every capability the change holds, so one entry for `spec.md`
+  names the hand who landed each capability's requirements
 - **Refused** — the check SHALL refuse a handle the team map does not know and
   an artifact the schema does not issue
 
@@ -332,11 +335,11 @@ One map turns a handle into a person and a role into somewhere to post.
 **AND** it SHALL give one channel for that role
 **AND** a handle with no Slack member SHALL be sent no message
 
-### Requirement: Seven overlays sit beside the stage
+### Requirement: Five overlays sit beside the stage
 
 An overlay is a fact beside the stage, never a stage of its own.
 
-- **The set** — exactly the seven below, each read from what is on `main` and
+- **The set** — exactly the five below, each read from what is on `main` and
   shown beside the stage on the card and the change page
 - **Closed** — nothing outside this set SHALL be shown as an overlay, and no
   overlay SHALL move the stage
@@ -345,16 +348,14 @@ An overlay is a fact beside the stage, never a stage of its own.
 | --- | --- | --- |
 | Waiting | `awaiting:`, one line per artifact | the line as written, with its date where the line carries one |
 | Blocked | `depends_on:` naming a change not yet released | the change it waits for |
-| Idle | the whole calendar days on the UTC date since the last tick, claim or artifact landing | the day count, from the seventh day |
+| Idle | the whole calendar days on the Hong Kong date since the last tick, claim or artifact landing | the day count, from the seventh day |
 | Behind | an artifact whose page lines or artifacts before it changed after it was drawn or last read again | the earliest behind artifact and its hand |
 | Suite | `feature-tcs.md` status, `draft` or `approved` | the verdict |
-| Flag | `flag:` on a tasks heading | the flag's name |
-| Hotfix | a hotfix branch naming the change | the tag |
 
 #### Scenario: shared-planning-change-stages-SC-19 - The overlays a change wears
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads why a change with every file in place is not moving
 
-**GIVEN** a change whose `depends_on:` names a change not yet released, whose suite is `draft`, whose tasks heading carries a flag, and which a hotfix branch names
+**GIVEN** a change whose `depends_on:` names a change not yet released and whose suite is `draft`
 **WHEN** its card is read
 **THEN** each SHALL be shown beside the stage as the table says
 **AND** a change whose suite is `approved` SHALL show that verdict instead
@@ -364,7 +365,7 @@ An overlay is a fact beside the stage, never a stage of its own.
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads every card against one list of chips
 
 **WHEN** a change carrying every overlay is read
-**THEN** exactly the seven SHALL be shown
+**THEN** exactly the five SHALL be shown
 **AND** its stage SHALL be the one its files prove
 
 #### Scenario: shared-planning-change-stages-SC-21 - A wait, dated or not
@@ -379,14 +380,16 @@ An overlay is a fact beside the stage, never a stage of its own.
 
 ### Requirement: Idle counts landings, never commits
 
-Idle SHALL be the whole calendar days on the UTC date since the last tick,
-claim or artifact landing on the change.
+Idle SHALL be the whole calendar days on the Hong Kong date since the last
+tick, claim or artifact landing on the change.
 
 - **What does not count** — a commit that ticks no task, claims no group and
   adds no artifact SHALL NOT move the count, so one commit touching every
   change moves nobody's
 - **The bounds** — the count SHALL be shown from the seventh day, and a
-  change SHALL move to the shelf and off the lanes from the thirtieth
+  change SHALL move to the shelf and off the lanes from the thirtieth — ❓ the
+  recommendation of `Q21`, open on the product manager; another answer changes
+  the day the chip and the shelf appear and the zone the day is counted on
 
 #### Scenario: shared-planning-change-stages-SC-22 - A change that has stopped moving
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads which changes have stopped moving
@@ -415,8 +418,8 @@ claim or artifact landing on the change.
 An artifact SHALL be behind when what is before it changed after the artifact
 was drawn or last read again.
 
-- **What is before it** — the page sections the change links, then the
-  change's artifacts before it in the schema's order
+- **What is before it** — the upstream set `shared/planning/agent-rounds`
+  states for that artifact, read in the schema's order
 - **The read record** — `reviewed:` names, per artifact, a content id of
   everything before that artifact; the artifact is behind when the content id
   read from `main` differs from the recorded one
@@ -462,6 +465,7 @@ was drawn or last read again.
 **GIVEN** an artifact carrying no `reviewed:` line
 **WHEN** something before it changes on `main` after the artifact last changed
 **THEN** the artifact SHALL be shown as behind
+**AND** an artifact no commit dates, or whose upstream no commit dates, SHALL NOT be shown as behind
 
 #### Scenario: shared-planning-change-stages-SC-29 - What puts nothing behind
 **Serves:** Overlays, a closed set - a push that touches something else must not mark a change
@@ -493,7 +497,9 @@ was drawn or last read again.
 An open question is a line nobody has answered yet, and it holds no stage.
 
 - **What counts** — a decisions row whose decision starts with ❓ and names
-  the role that settles it, or a ❓ line under a page section the change links
+  the role that settles it, or a ❓ line under a top-level page section the
+  change links; a row inside a titled block belongs to the page, not to the
+  change
 - **What it carries** — the row's number or the section, and the hand it is
   addressed to: the handle `hands:` names for that role, or the role itself
   when the change names none
@@ -515,10 +521,11 @@ An open question is a line nobody has answered yet, and it holds no stage.
 #### Scenario: shared-planning-change-stages-SC-33 - A question on the page
 **Serves:** shared-planning-change-stages-US-03 - the teammate reads the questions the page still carries against the change
 
-**GIVEN** a ❓ line under a page section the change links
+**GIVEN** a ❓ line under a top-level page section the change links
 **WHEN** the change is read
 **THEN** the line SHALL be listed as an open question against the proposal
 **AND** SHALL name the section it sits under
+**AND** a ❓ row inside a titled block of that page SHALL NOT be listed
 
 #### Scenario: shared-planning-change-stages-SC-34 - Questions counted per artifact
 **Serves:** shared-planning-change-stages-US-02 - the product manager opens the change to see what is unanswered and who answered what
@@ -538,11 +545,15 @@ An open question is a line nobody has answered yet, and it holds no stage.
 
 ### Requirement: Every message is keyed and sent once per move
 
-Every message SHALL be one of the kinds below and SHALL be sent once for the
-key it carries, so a re-run of the same push sends nothing again.
+Every message the push workflow and the digest send SHALL be one of the kinds
+below and SHALL be sent once for the key it carries, so a re-run of the same
+push sends nothing again.
 
 - **Five kinds** — nothing else SHALL be sent: a written wait and a change
-  freed by a dependency SHALL be lines of the digest
+  freed by a dependency SHALL be lines of the digest, and the round's own
+  replies are `shared/planning/agent-rounds` — ❓ the recommendation of `Q31`,
+  open on the product manager; another answer adds a message for a written wait
+  and one for a freed dependency
 - **Never per commit** — no message SHALL be sent per commit or per tick
 - **Per entry** — a stage re-entered after a revert SHALL send again, and one
   entry SHALL never send twice
@@ -550,7 +561,7 @@ key it carries, so a re-run of the same push sends nothing again.
 | Kind | Sent when | Who is told | Key |
 | --- | --- | --- | --- |
 | Your turn | a push to `main` moves the change to a hand | that hand, by direct message; the role's channel when the hand is unnamed | the change, the stage and the role |
-| Staging | a change reaches On staging | its QA hand, with the run tab | the change, the stage and QA |
+| Staging | a change reaches On staging | its QA hand, with the run sheet | the change, the stage and QA |
 | Behind | an artifact is newly behind | the hand of the earliest behind artifact | the change and the artifact |
 | Landed | every push to `main` | the channel | the push |
 | Digest | Monday 09:00 on the Hong Kong clock | each person with a line to say | the person and the week |
@@ -640,9 +651,8 @@ Two moves that are not a stage landing still reach a person.
 - **Behind** — an artifact newly behind SHALL send one message to its hand,
   naming the artifact and what changed before it
 - **Staging** — a change reaching On staging SHALL send one message to its QA
-  hand, naming the change and the run tab to walk, and one Your turn message
+  hand, naming the change and the run sheet to walk, and one Your turn message
   to its release hand
-- **No run tab** — where no run tab exists yet, the message to QA SHALL say so
 
 #### Scenario: shared-planning-change-stages-SC-44 - An artifact goes behind
 **Serves:** shared-planning-change-stages-US-09 - the hand is told before anything is built on the artifact
@@ -655,16 +665,8 @@ Two moves that are not a stage landing still reach a person.
 **Serves:** shared-planning-change-stages-US-08 - QA starts the manual pass the day the change deploys
 
 **WHEN** a push moves a change to On staging
-**THEN** one direct message SHALL be sent to its QA hand, naming the change and the run tab
+**THEN** one direct message SHALL be sent to its QA hand, naming the change and the run sheet
 **AND** one Your turn message SHALL be sent to its release hand, naming the change and On staging
-
-#### Scenario: shared-planning-change-stages-SC-46 - No run tab yet
-**Serves:** shared-planning-change-stages-US-08 - QA is told the pass is theirs and the sheet is not written
-
-**GIVEN** a change reaching On staging with no run tab
-**WHEN** the message to QA is sent
-**THEN** it SHALL name the change
-**AND** SHALL say no run tab exists yet
 
 ### Requirement: The channel post per push and the weekly digest
 

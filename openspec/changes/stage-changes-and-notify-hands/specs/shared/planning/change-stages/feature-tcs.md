@@ -261,7 +261,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 **Expected Results:**
 
 * <release handle> holds one Your turn message naming <change R>, the stage On staging and the thread.
-* <qa handle> holds one staging message naming <change R> and its run tab.
+* <qa handle> holds one staging message naming <change R> and the run sheet.
 * Each of the two holds one message for that move, not two.
 
 ---
@@ -372,7 +372,7 @@ Runs once per row of **Test data**.
 * <change E> shows what the row states.
 * The repository-wide commit moves no change's day count.
 
-### shared-planning-change-stages-US2-TC4-1: Blocked, suite, flag and hotfix sit beside the stage
+### shared-planning-change-stages-US2-TC4-1: Blocked and the suite sit beside the stage
 
 **Classification:**
 
@@ -388,7 +388,7 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-02
 
 **Pre-conditions:**
-<change F> is at Planned with `depends_on:` naming a change not yet released, a `draft` suite, `flag:` on a tasks heading, and a `hotfix/<tag>` branch naming it. <change G> is at Planned with an approved suite.
+<change F> is at Planned with `depends_on:` naming a change not yet released and a `draft` suite. <change G> is at Planned with an approved suite.
 
 **Steps:**
 
@@ -398,8 +398,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* <change F> carries a blocked chip naming the change it waits for, a suite chip reading draft, a flag chip with the flag's name and a hotfix chip with the tag.
+* <change F> carries a blocked chip naming the change it waits for and a suite chip reading draft.
 * <change G>'s suite chip reads approved.
+* Neither card carries a chip outside the five overlays.
 * Both cards stay in the Planned lane.
 
 ### shared-planning-change-stages-US2-TC5-1: Each filter narrows the board
@@ -1266,10 +1267,10 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 ## shared-planning-change-stages-US8: QA learns a change has reached staging
 
 **As a** QA teammate,
-**I want** to be told when a change reaches staging, with its run tab,
+**I want** to be told when a change reaches staging, with the run sheet,
 **so that** the manual pass starts the day it deploys.
 
-### shared-planning-change-stages-US8-TC1-1: Staging tells QA with the run tab
+### shared-planning-change-stages-US8-TC1-1: Staging tells QA with the run sheet
 
 **Classification:**
 
@@ -1285,7 +1286,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change R> is at Building with every task box ticked. <qa handle> is its QA hand and the team map knows it. A run tab exists for <change R>.
+<change R> is at Building with every task box ticked. <qa handle> is its QA hand and the team map knows it. The run sheet exists in the store.
 
 **Steps:**
 
@@ -1295,10 +1296,10 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 
 **Expected Results:**
 
-* One direct message names <change R>, the stage On staging, and links its run tab and its thread.
+* One direct message names <change R>, the stage On staging, and links the run sheet and its thread.
 * The card sits in the On staging lane.
 
-### shared-planning-change-stages-US8-TC2-1: Staging message with no run tab yet
+### shared-planning-change-stages-US8-TC2-1: Staging names the run sheet with no tab written for the change
 
 **Classification:**
 
@@ -1314,7 +1315,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change S> is at Building with every task box ticked, <qa handle> as its QA hand, and no run tab written.
+<change S> is at Building with every task box ticked, <qa handle> as its QA hand, and no tab written in the run sheet for <change S>.
 
 **Steps:**
 
@@ -1323,8 +1324,8 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 
 **Expected Results:**
 
-* The message names <change S> and the stage On staging.
-* No run tab link is shown, and the thread link is.
+* The message names <change S>, the stage On staging and the run sheet.
+* The message says nothing about a tab, and the thread link is shown.
 
 ### shared-planning-change-stages-US8-TC3-1: Ticked boxes alone do not reach staging
 

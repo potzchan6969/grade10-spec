@@ -45,7 +45,7 @@ Building the change's agent drafts, and a person's word lands.
 
 ## Overlays
 
-A fact beside the stage, never a stage of its own. The set is closed.
+A fact beside the stage, never a stage of its own. The set is five, and closed.
 
 | Overlay | Read from | Shown as |
 | --- | --- | --- |
@@ -54,8 +54,6 @@ A fact beside the stage, never a stage of its own. The set is closed.
 | Idle | 7 days without a tick, a claim or an artifact landing; shelved at 30 | A red chip with the day count |
 | Behind | An artifact whose page lines or artifacts before it changed after it was drawn or last read again | A chip naming the earliest behind artifact and its hand |
 | Suite | `feature-tcs.md` status, `draft` or `approved` | A chip beside the stage |
-| Flag | `flag:` on the tasks heading | A blue chip with the flag's name |
-| Hotfix | A `hotfix/<tag>` branch naming the change | A chip with the tag |
 
 - **Waiting and blocked** — read today from the same two keys —
   [Pending](/pending)
@@ -64,10 +62,11 @@ A fact beside the stage, never a stage of its own. The set is closed.
 - 🚧 **Behind** — shown, told once, and listed in the digest after 7 days;
   it holds a tick, a claim and a wait never, and the fold at archive always —
   what clears it is [Agent Rounds · Read Again](agent-rounds#read-again)
-- 🚧 **Suite, flag and hotfix** — shown beside the stage and never holding
-  the ladder
-- ❓ **Day bounds** — whole calendar days on the UTC date, the chip from the
-  seventh and the shelf from the thirtieth; the product manager confirms
+- 🚧 **Suite** — shown beside the stage and never holding the ladder
+- **Flag and hotfix** — the release line carries both: a flag on a change and a
+  hotfix branch are read where releases are cut, not here
+- ❓ **Day bounds** — whole calendar days on the Hong Kong date, the chip from
+  the seventh and the shelf from the thirtieth; the product manager confirms
 
 ## Hands
 
@@ -89,9 +88,11 @@ One handle per role on each change.
   the hand is open
 - 🚧 **Who landed it** — each artifact records the hand whose word landed it,
   and the change page shows the handle beside the artifact
-- ❓ **Team map** — where the handle-to-Slack map lives: `docs/prds/team.yaml`
-  in the store, or a lookup by e-mail through the Slack app; Operations
-  confirms
+- 🚧 **Team map** — `docs/prds/team.yaml` in the store: one entry per handle
+  with its e-mail, its Slack member and the roles it takes, and one channel per
+  role
+- ❓ **A handle's Slack member** — written into the map, or looked up by e-mail
+  through the Slack app; Operations confirms
 
 ## Messages
 
@@ -100,7 +101,7 @@ Slack tells one person, once per move, in the change's thread.
 | When | Who is told | Carries |
 | --- | --- | --- |
 | A change reaches a hand: a stage lands, or the decisions and the journeys complete Proposed | That hand, by direct message | The change, the stage, the thread to answer in |
-| A draft is ready for a hand | That hand, in the change's thread | The summary and the numbered questions |
+| A change reaches staging | Its QA hand, by direct message | The change, and the run sheet to walk |
 | An artifact is behind | The hand of the earliest behind artifact | The artifact, and what changed before it |
 | A push lands on `main` | The channel | Each change the push moved, and its stage |
 | Monday morning | Each person, by direct message | On you now; open questions; idle; behind; waiting; freed by a dependency |

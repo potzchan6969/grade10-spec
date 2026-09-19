@@ -4,11 +4,13 @@ Drawn from [Change Stages · Surfaces](../../docs/prds/products/shared/planning/
 
 ### Board
 
-[Blueprint · 4.1 Board](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#board). Eight lanes in stage order, stacked as In Flight stacks four today, each collapsible to its heading with its count and its open hands; the headings of Proposed to Building carry the agent mark and the hand's move; Archived starts collapsed, and Proposed opens because the designer's and the tech PIC's turns sit in it; Mine, Waiting, Idle, Behind and Blocked as a filter row under the page heading; the shelf as a link. The open lanes sit side by side only above 1536px. Replaces the four lanes of `/in-flight`.
+[Blueprint · 4.1 Board](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#board). Eight lanes in stage order, stacked down the reading column as In Flight stacks four today, each collapsible to its heading with its count and its open hands; the headings of Proposed to Building carry the agent mark and the hand's move; Mine, Waiting, Idle, Behind and Blocked as a filter row under the page heading; the shelf as a link. Replaces the four lanes of `/in-flight`.
+
+A lane opens when its stage names a hand - Proposed, Specified, Planned, Building and On staging - and starts collapsed when it names nobody: Designed, Released and Archived. A lane with nothing in it collapses whichever it is, and a reader may open or shut any lane.
 
 ### Change page
 
-[Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading, the agent mark and the hand's move under each of its first five steps; the Your turn card with the thread link and the command; then the `ChangeStatus` rows gain Hands, Artifacts with fresh or behind, the open questions and who landed each, Delivery and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
+[Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading, the agent mark and the hand's move under each of its first five steps; below `sm` the stepper reads as one line - the stage's position of eight, its name, and the mark and the move beneath it - because eight steps do not fit a phone's width; the Your turn card with the thread link and the command; then the `ChangeStatus` rows gain Hands, Artifacts with fresh or behind, the open questions and who landed each, Delivery and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
 
 ### My turn
 
@@ -24,7 +26,7 @@ Drawn from [Change Stages · Surfaces](../../docs/prds/products/shared/planning/
 
 ## Flows
 
-[Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk), a canvas beside the blueprint page: the loop every hand runs (told, open, answer, read, land, next), the hands and the agent against the eight stages, one hand's day as a walkthrough (the message, the change page, the thread, the landed messages), My turn, the board, the page, the Storybook walk, the release page, the remaining Slack messages, each hand's six steps, what one push does, and an example week. The states below are the ones those screens show. A flow the canvas draws that the page does not name is a design choice: My turn takes the arrow keys, Enter to open and C to copy the command; every message and card carries the thread link; the thread shows the summary before anything lands.
+[Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk), a canvas beside the blueprint page: the loop every hand runs (told, open, answer, read, land, next), the hands and the agent against the eight stages, one hand's day as a walkthrough (the message, the change page, the thread, the landed messages), My turn, the board, the page, the Storybook walk, the release page, the remaining Slack messages, each hand's six steps, what one push does, and an example week. The states below are the ones those screens show. A flow the canvas draws that the page does not name is a design choice: every message and card carries the thread link, and the thread shows the summary before anything lands. My turn takes no keyboard shortcut of its own - the rows are links, and the command is a `CopyableCommand` as the manual composes it everywhere else.
 
 ## Components
 
@@ -36,7 +38,7 @@ Design-system primitives, from `@grade10/design-system/components/`:
 | --- | --- |
 | `Stepper`, `Step`, `StepIndicator` | The change page's stepper, one `Step` per stage |
 | `Badge` (`sm`, `outline`) with the stage number | The pip on a page's 🚧 line and in the section's in-flight row; the hover names the change and the hand |
-| `Badge` (`sm`, `outline`) with the agent mark and the hand's move | On a lane heading and under a stepper step, from Proposed to Building; the text carries the meaning, and the hollow dashed dot beside it says an agent drafts the stage |
+| `Badge` (`sm`, `outline`) with the agent mark and the hand's move | On a lane heading and under a stepper step, from Proposed to Building; the text carries the meaning, and no mark beside it - the design system draws no hollow dashed dot, and a variant Figma does not define is not ours to add |
 | `Badge` | Every overlay chip, the suite's verdict, and who landed an artifact |
 | `Avatar`, `AvatarFallback` | The hand on a card and in the hands table |
 | `Card`, `CardHeader`, `CardContent` | The Your turn card and the board's cards |
@@ -52,6 +54,7 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 
 - Board with no change in flight - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-53`
 - A lane with no change in it, collapsed to its heading - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-52`
+- A lane whose stage names nobody, collapsed while a lane on a hand is open - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-51`
 - A lane heading and a stepper step with the agent mark and the hand's move - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-10`
 - A card in Proposed on the product manager, and one on the designer once the decisions and the journeys are in - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-15`
 - A card whose hand is unnamed, showing the hand as open - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-17`
@@ -61,9 +64,9 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 - A card idle 30 days, on the shelf - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-24`
 - A card wearing Behind, naming the earliest behind artifact and its hand - `shared-planning-change-stages-US-09` - `shared-planning-change-stages-SC-26`
 - A card whose suite is a draft, and one whose suite is approved - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-19`
-- A card behind a flag, with the flag's name - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-19`
 - The Mine filter with no handle chosen - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-55`
 - The change page's Your turn card on the hosted manual, with Assign shown as read-only - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-69`
+- The change page's stepper below `sm`, on one line - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-57`
 - The change page for a change waiting on a stage whose hand is unnamed - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-17`
 - The change page for a change with `ui_waived`, showing the design as not owed and fresh - `shared-planning-change-stages-US-05` - `shared-planning-change-stages-SC-07`
 - An artifact behind, with the chip naming what changed before it - `shared-planning-change-stages-US-09` - `shared-planning-change-stages-SC-25`
@@ -76,5 +79,5 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 - A 🚧 line delivered by two changes, wearing the further stage - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-67`
 - A Your turn message for a change reaching a stage twice, sent once - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-36`
 - A Behind message for an artifact behind twice before it is read, sent once - `shared-planning-change-stages-US-09` - `shared-planning-change-stages-SC-39`
-- A Staging deployed message with no run tab yet - `shared-planning-change-stages-US-08` - `shared-planning-change-stages-SC-46`
+- A Staging deployed message naming the run sheet - `shared-planning-change-stages-US-08` - `shared-planning-change-stages-SC-45`
 - A weekly digest with nothing to say, not sent - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-50`
