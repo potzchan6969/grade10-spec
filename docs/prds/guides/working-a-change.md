@@ -119,9 +119,14 @@ right person for goes into the proposal's open questions, naming who settles it
 `proposal.md`, `decisions.md`, and `user-journeys.md`. What you commit has
 journeys and no `spec.md`, which both gates refuse without a line saying why, so
 write `awaiting: specs: <what is still to come>` in the change's
-`.openspec.yaml` before you validate. The skill validates strictly before it
-stops; fix what that names, then say the change is ready — for a designer where
-it has a surface, and for `/planning-qa` either way.
+`.openspec.yaml` before you validate — once that line is written, the page rule
+applies too: link a 🚧-marked PRD section from the proposal, or say why there is
+none yet in `page_waived: <why>`. A change with nothing to settle skips
+`decisions.md` itself and writes `decisions_waived: <why>` in its place — an
+empty `## Decisions` table is a different claim, that nothing had to be
+chosen, not a waiver. The skill validates strictly before it stops; fix what
+that names, then say the change is ready — for a designer where it has a
+surface, and for `/planning-qa` either way.
 
 # Designer
 
@@ -168,11 +173,11 @@ branch merges.
 ## Leave the Archive Copy Out of the Tasks
 
 The fold keeps `## Requirements` and nothing else, and `pnpm run archive:preflight`
-holds four gates: proof of deploy, every task ticked, the feature set and
-`user-journeys.md` carried across, and `--decisions-carried` saying which
-decision rows outlived the change and went onto the capability's
-`Product decisions` block. None of them could be ticked before the deploy, so
-the plan carries no task for them.
+holds five gates: proof of deploy, every task ticked, nothing behind what it
+was drawn from, the feature set and `user-journeys.md` carried across, and
+`--decisions-carried` saying which decision rows outlived the change and went
+onto the capability's `Product decisions` block. None of them could be ticked
+before the deploy, so the plan carries no task for them.
 :::
 
 ## How You Know It Is Your Turn
@@ -183,15 +188,20 @@ artifact gets written from there is [Agent Rounds](/p/shared/planning/agent-roun
 
 | # | Stage | Hand | Say |
 | --- | --- | --- | --- |
-| 1 | Proposed | Product manager | `/plan <id>` |
-| 2 | Designed | Designer · Tech PIC | `/design <id>` · `/tech <id>` |
+| 1 | Proposed | Product manager, then Designer · Tech PIC | `/plan <id>`, then `/design <id>` · `/tech <id>` |
+| 2 | Designed | nobody | — |
 | 3 | Specified | Product manager | `/specify <id>` |
 | 4 | Planned | Engineer | `/tasks <id>` |
 | 5 | Building | Engineer | `/build <id> <group>` |
-| 6 | On staging | QA · Release hand | walks it · cuts it |
-| 7 | Released | Release hand | — |
-| 8 | Archived | Whoever archives | — |
+| 6 | On staging | QA · Release hand | — |
+| 7 | Released | nobody | — |
+| 8 | Archived | nobody | — |
 
+- **Proposed's turn moves without moving the stage** — the product manager
+  answers first; once the decisions and the journeys land, the turn passes to
+  the designer and the tech PIC while the stage is still Proposed
+- **Designed names nobody** — its designs already landed during Proposed's
+  second turn, and the requirements are drafted next, read at Specified
 - **On staging, Released and Archived have no command** — the deploy, the cut
   and the fold happen outside the agent
 - **What proves each stage** — [Change Stages](/p/shared/planning/change-stages)
