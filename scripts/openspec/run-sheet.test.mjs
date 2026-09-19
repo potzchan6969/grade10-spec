@@ -119,6 +119,31 @@ The user holds \`<a thing>\`.
 **Expected Results:**
 
 * Nothing happens.
+
+### demo-thing-widget-US1-TC4-1: A case an automated test already covers
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** demo-thing-widget-US-01
+
+**Pre-conditions:** None.
+
+**Steps:**
+
+1. Do the thing again.
+
+**Expected Results:**
+
+* It still happens.
 `;
 
 const parsed = parseSuite(SUITE);
@@ -160,6 +185,32 @@ test("only `actual` cases leave the store by default", () => {
   );
 });
 
+test("an automated case is left out by default, and reported", () => {
+  const { picked, refused } = selectCases(candidates, {});
+  assert.equal(
+    picked.some((one) => one.tc.id === "demo-thing-widget-US1-TC4-1"),
+    false,
+  );
+  const left = refused.find((one) => one.id === "demo-thing-widget-US1-TC4-1");
+  assert.equal(left?.reason, "automation");
+});
+
+test("`--include-automated` takes an automated case too", () => {
+  const { picked } = selectCases(candidates, { includeAutomated: true });
+  assert.deepEqual(
+    picked.map((one) => one.tc.id).sort(),
+    ["demo-thing-widget-US1-TC1-1", "demo-thing-widget-US1-TC4-1"].sort(),
+  );
+});
+
+test("an explicit id is still held to the automation gate", () => {
+  const { picked, refused } = selectCases(candidates, {
+    ids: ["demo-thing-widget-US1-TC4-1"],
+  });
+  assert.equal(picked.length, 0);
+  assert.equal(refused[0]?.reason, "automation");
+});
+
 test("`--include-draft` takes drafts and still refuses a deprecated case", () => {
   const { picked, refused } = selectCases(candidates, { includeDraft: true });
   assert.deepEqual(
@@ -168,7 +219,7 @@ test("`--include-draft` takes drafts and still refuses a deprecated case", () =>
   );
   assert.deepEqual(
     refused.map((one) => one.id),
-    ["demo-thing-widget-US1-TC3-1"],
+    ["demo-thing-widget-US1-TC3-1", "demo-thing-widget-US1-TC4-1"],
   );
 });
 
