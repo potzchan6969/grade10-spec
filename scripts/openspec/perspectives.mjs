@@ -19,9 +19,13 @@
  * - **bundle** — the draft, and what is before it: the artifact's `upstream:`
  *   set as the change wrote it, and the page sections the proposal marks
  *
- * The size is read from the draft. No key of the change's record is read, so
- * none can add a reader or remove one; a size somebody believes is wrong is a
- * question for the interview.
+ * The size is read from the draft. No key of the change's record is read for
+ * that, so none can add a reader or remove one; a size somebody believes is
+ * wrong is a question for the interview. The schema the readers themselves
+ * come from is the one exception: it is read from the change's own `schema:`,
+ * falling back to the store's default where the change names none or cannot
+ * be read at all — one workflow schema exists today, so this is latent until
+ * a second one does.
  *
  * The change may be left out where `--change` names it or the branch is
  * `change/<id>`. `--root` reads a store other than this one, which is how the
@@ -31,11 +35,13 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import YAML from "yaml";
 import {
   bundleFor,
   classifyDiff,
   planningSchema,
   readersFor,
+  SCHEMA,
   verifierNeeded,
 } from "./lib/perspectives.mjs";
 
@@ -85,7 +91,7 @@ if (flags.diff !== undefined && !existsSync(flags.diff))
 // A round with no diff yet is a round on an untouched draft: the floor reads
 // it and nothing else is summoned.
 const diff = flags.diff === undefined ? "" : readFileSync(flags.diff, "utf8");
-const schema = planningSchema(root);
+const schema = planningSchema(root, schemaOf(root, change));
 const triggers = classifyDiff(diff, schema, target);
 const readers = readersFor(schema, target, triggers);
 
@@ -105,6 +111,21 @@ console.log(
     2,
   ),
 );
+
+/** The schema the change's own record names, or the store's default where it
+ * names none — a change opened before `schema:` was written, or whose record
+ * cannot be read at all, still gets a schema to read readers from. */
+function schemaOf(store, change) {
+  const file = join(store, "openspec", "changes", change, ".openspec.yaml");
+  if (!existsSync(file)) return SCHEMA;
+  try {
+    const parsed = YAML.parse(readFileSync(file, "utf8")) ?? {};
+    const named = typeof parsed.schema === "string" ? parsed.schema.trim() : "";
+    return named === "" ? SCHEMA : named;
+  } catch {
+    return SCHEMA;
+  }
+}
 
 /** The change a round is on, from the branch it drafts on. */
 function onBranch(store) {
