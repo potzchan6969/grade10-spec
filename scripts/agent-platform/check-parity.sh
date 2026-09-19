@@ -38,6 +38,36 @@ if [ ! -d "$source_dir" ]; then
   fail "$source_dir is required as the skill source of truth"
 fi
 
+# .claude/agents is canonical for the round's challenger and verifier
+# definitions, and is mirrored nowhere: every platform reads these files.
+agents_dir=".claude/agents"
+if [ -d "$agents_dir" ]; then
+  pass "$agents_dir holds the round's readers"
+else
+  fail "$agents_dir is required: the round's challengers and verifier live there"
+fi
+
+# Every reader the planning schema dispatches resolves to one of them. The key
+# is absent until the change that adds it lands, and an absent key is not a
+# failure - an unresolved path is.
+schema="openspec/schemas/grade10-planning/schema.yaml"
+readers=0
+while read -r declaration; do
+  [ -n "$declaration" ] || continue
+  reader="${declaration##*agent:}"
+  reader="$(echo "$reader" | tr -d '[:space:]"'"'")"
+  readers=$((readers + 1))
+  if [ -f "$reader" ]; then
+    pass "the schema's reader $reader resolves"
+  else
+    fail "the schema names the reader $reader, which resolves to nothing"
+  fi
+done < <(grep -oE '^[[:space:]]*agent:[[:space:]]*[^[:space:]]+' "$schema" || true)
+
+if [ "$readers" -eq 0 ]; then
+  echo "[SKIP] $schema declares no perspectives yet"
+fi
+
 
 if [ "$failures" -gt 0 ]; then
   exit 1
