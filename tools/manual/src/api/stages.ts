@@ -316,8 +316,10 @@ export function behindOf(
     if (!read) continue;
     const reviewed = change.reviewed?.[id];
     if (reviewed !== undefined) {
+      // The id says something before it moved and cannot say which, so what
+      // is reported is what is before it.
       if (reviewed !== read.id)
-        behind.push({ artifact: id, changed: read.items });
+        behind.push({ artifact: id, before: read.items });
       continue;
     }
     if (read.newer?.length) behind.push({ artifact: id, changed: read.newer });
@@ -355,13 +357,11 @@ export type Overlay =
     }
   | { kind: "blocked"; change: string }
   | { kind: "idle"; days: number; shelved: boolean }
-  | {
+  | ({
       kind: "behind";
-      artifact: string;
-      changed: string[];
       role?: Role;
       hand?: string;
-    }
+    } & BehindArtifact)
   | { kind: "suite"; verdict: SuiteVerdict };
 
 export type OverlayContext = {
@@ -420,8 +420,7 @@ export function overlaysOf(
   if (earliest) {
     overlays.push({
       kind: "behind",
-      artifact: earliest.artifact,
-      changed: earliest.changed,
+      ...earliest,
       ...whose(change, earliest.artifact),
     });
   }

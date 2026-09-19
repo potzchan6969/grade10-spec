@@ -262,16 +262,18 @@ describe("whether an artifact is behind", () => {
     );
     const after = read(root, NO_GIT, pageOf(moved));
 
+    // The recorded id says each artifact's upstream moved and cannot say
+    // which part of it, so each row names what is before it.
     expect(behindOf({ ...after, reviewed }, artifacts(root))).toEqual([
-      { artifact: "proposal", changed: [`${PAGE}#points`] },
-      { artifact: "decisions", changed: [`${PAGE}#points`, "proposal"] },
+      { artifact: "proposal", before: [`${PAGE}#points`] },
+      { artifact: "decisions", before: [`${PAGE}#points`, "proposal"] },
       {
         artifact: "ui-design",
-        changed: [`${PAGE}#points`, "proposal", "decisions"],
+        before: [`${PAGE}#points`, "proposal", "decisions"],
       },
       {
         artifact: "specs",
-        changed: [`${PAGE}#points`, "proposal", "decisions", "ui-design"],
+        before: [`${PAGE}#points`, "proposal", "decisions", "ui-design"],
       },
     ]);
   });

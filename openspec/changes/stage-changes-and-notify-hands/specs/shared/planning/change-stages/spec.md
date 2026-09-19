@@ -433,8 +433,9 @@ was drawn or last read again.
   puts nothing behind
 - **Held** — behind SHALL hold no tick, no claim, no wait and no stage; the
   archive check SHALL refuse a behind delta
-- **Shown** — the artifact's row SHALL name what changed before it, and the
-  card SHALL name the earliest behind artifact and its hand
+- **Shown** — the artifact's row SHALL name what changed before it, or what is
+  before it where no record line dates the edit, and the card SHALL name the
+  earliest behind artifact and its hand
 
 #### Scenario: shared-planning-change-stages-SC-25 - A page line changes after an artifact was drawn
 **Serves:** shared-planning-change-stages-US-09 - the hand opens the change and reads what moved under their artifact
@@ -442,7 +443,7 @@ was drawn or last read again.
 **GIVEN** a change whose UI design was drawn from a linked page section
 **WHEN** that section changes on `main` afterwards
 **THEN** the UI design SHALL be shown as behind
-**AND** its row SHALL name the section that changed
+**AND** its row SHALL name the section that changed, or what is before it where no record line dates the edit
 
 #### Scenario: shared-planning-change-stages-SC-26 - The card names the earliest behind artifact
 **Serves:** shared-planning-change-stages-US-09 - the hand finds the change from the board rather than from the message
