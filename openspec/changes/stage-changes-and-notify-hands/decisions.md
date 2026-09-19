@@ -79,6 +79,9 @@
 | Q52 | Which host does the change page's thread link use? | `slack.com/archives/<channel>/p<ts>`: the manual holds no workspace URL, and the workflow, which does hold it, is what links the workspace host | Reading the workspace URL into the snapshot, which puts a deploy-time value into a file the hosted manual serves |
 | Q53 | What does an overlay show for a role the change names nobody for? | `<role> — open`: the overlay carries the role and no handle at all | The role's own name in the handle's place, which reads as a person who answers to it |
 | Q54 | How many cards does one lane show? | ❓ design - recommended: twelve, then a line pointing at the archive's own timeline below the board - past a dozen a lane is a list, not a lane | Every change in the lane, which makes the Archived lane a page nobody reaches the end of |
+| Q55 | Does the preflight probe channel membership? | ❓ tech - recommended: no; the send reports a channel that refused it, naming it, and the preflight names the unset secret and the missing workspace URL, which a run can know before it sends | A `conversations.info` probe per channel, which spends a `channels:read` scope on a fact the send already reports |
+| Q56 | One Slack sender or two? | ❓ tech - recommended: two, recorded: the CI alerts in `lint.yml` and `storybook.yml` keep the Slack action, and the planning messages have their own sender, because the alerts address no hand and carry no key | Converting the two alerts, churn on two workflows the change does not touch |
+| Q57 | Is a change first seen in a push told to every hand at its stage? | ❓ pm - recommended: yes; a change created and handed over in one push must reach its hand, who is usually not the pusher, and a product manager who opens a change reads one message about their own push | No message for a change absent at the push's base, which silences a change created and moved in one push |
 
 ## Raised
 
