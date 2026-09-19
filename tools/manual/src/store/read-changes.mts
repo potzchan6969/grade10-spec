@@ -28,8 +28,8 @@ import {
 } from "./disk.mts";
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
-import { readLandings } from "./landings.mts";
 import { leadingTitle, outline, type Section } from "./markdown.mts";
+import { readLandings } from "./read-landings.mts";
 import { schemaArtifacts } from "./read-schema.mts";
 import { readTestCases } from "./read-specs.mts";
 
@@ -73,10 +73,23 @@ export function readChanges(
 ): ChangeEntry[] {
   const dir = join(root, "openspec", "changes");
   const schemas: SchemaCache = new Map();
+  // Two walks for the whole store rather than two per change, at the revision
+  // the task lists themselves are read from. An archived change is finished
+  // and is dated by nothing, so only these ask for a landing.
+  const landed = readLandings(root, main?.commit ?? null);
   return subdirectories(dir)
     .filter((name) => name !== "archive")
     .map((name) =>
-      readChange(root, join(dir, name), name, "in-flight", git, schemas, main),
+      readChange(
+        root,
+        join(dir, name),
+        name,
+        "in-flight",
+        git,
+        schemas,
+        main,
+        landed.get(name),
+      ),
     );
 }
 
@@ -120,6 +133,7 @@ function readChange(
   git: GitIndex,
   schemas: SchemaCache,
   main: StoreMain | null,
+  landed?: string,
 ): ChangeEntry {
   const rel = storePath(root, dir);
   const entry: ChangeEntry = {
@@ -265,13 +279,9 @@ function readChange(
     }
   }
 
-  // In flight only, and only the landings: an archived change is finished, and
-  // the last commit touching the directory is not a landing — one repository
-  // wide commit moves every change at once.
-  if (detailed) {
-    const landed = readLandings(root, id, tasks, commit);
-    if (landed) entry.lastLanded = landed;
-  }
+  // Only the landings: the last commit touching the directory is not one —
+  // a single repository-wide commit moves every change at once.
+  if (landed !== undefined) entry.lastLanded = landed;
   // Last, and here rather than in the snapshot: the ladder reads what every
   // reader above it has just written, and this is where the schema is at hand.
   // Carried on the entry because six callers of `laneOf` would each otherwise

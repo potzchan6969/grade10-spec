@@ -93,9 +93,11 @@ describe("the landing a change is dated by", () => {
     git(["mv", DIR, "openspec/changes/renamed-probe"]);
     commit("rename the change", 0);
 
-    // The rename ticked nothing and added nothing: every line and every file
-    // it moved was already there.
-    expect(landedIn(root, "renamed-probe")).toBe(13);
+    // The rename ticked nothing and added nothing — every line and every file
+    // it moved was already there — so it is nobody's landing: the renamed
+    // change shows no age until it lands something, rather than showing one
+    // the rename invented.
+    expect(landedIn(root, "renamed-probe")).toBeUndefined();
   });
 
   it("is not moved by a tick taken back", () => {
