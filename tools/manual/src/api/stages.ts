@@ -100,6 +100,7 @@ export function ladderOf(
   const settled = settledOf(change, artifacts);
   const { done, total } = taskTotals(change);
   const proven: Partial<Record<Stage, boolean>> = {
+    proposed: PROOF_OF_STAGE.proposed.every(settled),
     designed: PROOF_OF_STAGE.designed.every(settled),
     specified:
       PROOF_OF_STAGE.specified.every(settled) && (change.raisedOpen ?? 0) === 0,
@@ -110,6 +111,15 @@ export function ladderOf(
       total > 0 && done === total && change.deployedEnv === "staging",
     released: change.releasedIn !== undefined,
   };
+  // A rung is reached only when its own proof holds and every proof before it
+  // does too: Designed's own row (a waiver stands for each design) says
+  // nothing about whether Proposed's own remaining proof — the decisions and
+  // the journeys — is in yet, so the walk checks Proposed here rather than
+  // skipping straight to `STAGES.slice(1)`.
+  if (!proven.proposed) {
+    const owed = PROOF_OF_STAGE.proposed.find((id) => !settled(id));
+    return owed ? { stage: "proposed", heldBy: owed } : { stage: "proposed" };
+  }
   let reached: Stage = "proposed";
   for (const rung of STAGES.slice(1)) {
     if (!proven[rung]) {
