@@ -84,6 +84,7 @@ import {
   checkUnmarked,
 } from "./record.mjs";
 import { checkRole } from "./role.mjs";
+import { checkRounds } from "./rounds.mjs";
 import { checkSections } from "./sections.mjs";
 import {
   checkCoverage,
@@ -202,6 +203,7 @@ export async function runChecks(
     checkDesign(ctx, changes);
     checkDecided(ctx, changes);
     checkPlanned(ctx, changes);
+    checkRounds(ctx, changes);
     checkAwaiting(ctx, changes);
     checkArchived(ctx, readArchivedChanges(roots.store, index));
   } else {

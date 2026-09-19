@@ -202,6 +202,15 @@ export const RULES = [
     title: "Changes with no record of what they settled",
   },
   {
+    // A round is the only thing in this workflow that leaves no file of its
+    // own, so the row is its whole record. Without this a group could be
+    // ticked and an artifact landed with nobody able to tell a round that
+    // found nothing from one that never ran.
+    key: "round",
+    level: "fail",
+    title: "Landings and ticks with no round's row",
+  },
+  {
     key: "archived",
     level: "fail",
     title: "Archives recording no deploy",
