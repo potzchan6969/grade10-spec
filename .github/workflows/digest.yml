@@ -65,9 +65,15 @@ jobs:
       # ISO week, on the run's own date: ISO because Thursday's year is the
       # only way a week straddling New Year belongs to one year, which is what
       # keys the digest against sending one person's week twice.
+      #
+      # On the Hong Kong clock, because that is the clock `weekOf` keys each
+      # person's message on: read in UTC, a run between Sunday 16:00 and
+      # midnight UTC would restore last week's file and send the week again.
       - name: Compute the ISO week
         id: week
-        run: echo "value=$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
+        env:
+          TZ: Asia/Hong_Kong
+        run: echo "value=$(date +%G-W%V)" >> "$GITHUB_OUTPUT"
 
       - name: Restore the keys this week has sent
         uses: actions/cache/restore@v4
