@@ -1,15 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { laneOf } from "../src/api/derive";
+import { OVERLAYS, type Overlay, overlaysOf } from "../src/api/overlays.ts";
 import { draftedOf, movedBy, moveShown } from "../src/api/stage-view.ts";
 import {
   handOf,
   handOfArtifact,
   ladderOf,
   laneOfStage,
-  OVERLAYS,
-  type Overlay,
   openHands,
-  overlaysOf,
   STAGES,
   stageOf,
 } from "../src/api/stages.ts";

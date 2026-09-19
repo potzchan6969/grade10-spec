@@ -11,8 +11,9 @@ import {
 import { useState } from "react";
 import { Link } from "react-router";
 import { laneOf, type ManualIndex } from "../api/derive";
+import type { Overlay } from "../api/overlays";
 import { changeSourceUrl } from "../api/paths";
-import { type Overlay, taskTotals } from "../api/stages";
+import { taskTotals } from "../api/stages";
 import { formatDate, relativeTime } from "../api/time";
 import type { ChangeEntry, TaskGroup, TaskLine } from "../api/types";
 import { WithdrawAction } from "../editor/withdraw-action";

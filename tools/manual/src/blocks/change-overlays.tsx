@@ -2,8 +2,8 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "react-router";
 import { artifactLabel } from "../api/change-artifacts";
+import type { Overlay } from "../api/overlays";
 import { behindLabelOf, ROLE_LABEL } from "../api/stage-view";
-import type { Overlay } from "../api/stages";
 import type { Role } from "../api/types";
 
 /**

@@ -1,3 +1,9 @@
+/** The clock a day count is counted on: a landing at 23:00 in Hong Kong is
+ * that day's, not the next UTC day's. One zone, the store's, because a day is
+ * a day here and a caller that could pass another would be two readers
+ * disagreeing about which day something landed on. */
+export const TIME_ZONE = "Asia/Hong_Kong";
+
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;

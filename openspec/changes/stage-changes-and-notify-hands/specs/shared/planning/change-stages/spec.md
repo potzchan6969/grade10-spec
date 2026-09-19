@@ -220,7 +220,9 @@ An artifact on `main` is one a hand's word landed, and the record says whose.
   artifact in every capability the change holds, so one entry for `spec.md`
   names the hand who landed each capability's requirements
 - **Refused** — the check SHALL refuse a handle the team map does not know and
-  an artifact the schema does not issue
+  an artifact the schema does not issue, in `landed_by:` and in `reviewed:`
+  alike: both key a line by an artifact id, and an id the schema issues
+  nowhere is read by nothing
 
 #### Scenario: shared-planning-change-stages-SC-11 - Who landed each artifact
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads who approved each artifact of a change
@@ -237,6 +239,7 @@ An artifact on `main` is one a hand's word landed, and the record says whose.
 **WHEN** `landed_by:` names a handle the team map does not know, or an artifact the schema does not issue
 **THEN** the check SHALL refuse the change
 **AND** SHALL name the handle or the artifact it refused
+**AND** a `reviewed:` entry against an artifact the schema does not issue SHALL be refused the same way
 
 ### Requirement: `hands:` names one handle per role
 
