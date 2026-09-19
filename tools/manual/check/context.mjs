@@ -7,7 +7,9 @@
  */
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import { readTeamMap, TEAM_MAP } from "../../../scripts/openspec/lib/team.mjs";
 import { readText, walkFiles } from "../src/store/disk.mts";
+import { schemaArtifacts } from "../src/store/read-schema.mts";
 
 /** Report order, and which findings end the build. */
 export const RULES = [
@@ -303,6 +305,19 @@ export function createReport() {
 }
 
 export function createContext(roots, report, { specs, changes, stories }) {
+  // Read once for the whole pass: `hands` and `landed_by` both resolve a
+  // handle against it, and a map that is there and cannot be read says
+  // something wrong about who is told rather than nothing about anyone —
+  // reported here, once, under the family a store file that will not parse
+  // already owns, so neither rule reports the same broken file again.
+  let team;
+  try {
+    team = readTeamMap(roots.store);
+  } catch (cause) {
+    report.add("store", TEAM_MAP, message(cause));
+  }
+
+  const schemaCache = new Map();
   return {
     roots,
     specs,
@@ -314,6 +329,18 @@ export function createContext(roots, report, { specs, changes, stories }) {
     cased: new Set(),
     storyIds: new Set(),
     add: report.add,
+    team,
+    /** The artifacts one schema declares, read once per schema and shared by
+     * every rule that asks for the same one — `checkAwaiting`'s wait and
+     * `checkLandedBy`'s landing both key off the same set, so one reading
+     * answers both instead of each rule caching its own. `undefined` for a
+     * schema this store does not define. */
+    schemaArtifacts: (schema) => {
+      if (!schemaCache.has(schema)) {
+        schemaCache.set(schema, schemaArtifacts(roots.store, schema));
+      }
+      return schemaCache.get(schema);
+    },
   };
 }
 

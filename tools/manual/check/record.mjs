@@ -10,12 +10,10 @@ import {
   isHandle,
   memberOf,
   ROLES,
-  readTeamMap,
   TEAM_MAP,
 } from "../../../scripts/openspec/lib/team.mjs";
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
 import { waiverLineOf } from "../src/api/waivers.ts";
-import { schemaArtifacts } from "../src/store/read-schema.mts";
 import { productPages } from "./context.mjs";
 import { ROUND_RECORD_SINCE } from "./rounds.mjs";
 
@@ -231,16 +229,9 @@ const waitsOnSpecs = (change) =>
   (change.awaiting ?? []).some((one) => one.artifact === "specs");
 
 export function checkAwaiting(ctx, changes) {
-  const declared = new Map();
   for (const change of changes) {
     if (change.status !== "in-flight" || !change.awaiting) continue;
-    if (!declared.has(change.schema)) {
-      declared.set(
-        change.schema,
-        schemaArtifacts(ctx.roots.store, change.schema),
-      );
-    }
-    const artifacts = declared.get(change.schema);
+    const artifacts = ctx.schemaArtifacts(change.schema);
     // A schema this store does not define lives inside the CLI; nothing here
     // can say which artifacts it declares, so nothing is claimed about it.
     if (artifacts === undefined) continue;
@@ -253,7 +244,7 @@ export function checkAwaiting(ctx, changes) {
         ctx.add(
           "awaiting",
           file,
-          `waits on \`${artifact}\`, which the \`${change.schema}\` schema does not declare — name one of ${[...known].map((one) => `\`${one}\``).join(", ")}`,
+          `waits on \`${artifact}\`, which the \`${change.schema}\` schema does not issue — name one of ${[...known].map((one) => `\`${one}\``).join(", ")}`,
         );
       } else if (written.has(artifact)) {
         ctx.add(
@@ -272,17 +263,6 @@ export function checkAwaiting(ctx, changes) {
   }
 }
 
-/** The known artifact ids of a schema, read once and cached against every
- * caller that asks for the same one in this pass. `undefined` for a schema
- * this store does not define — a CLI built-in, whose artifacts live outside
- * it, so nothing here can say which ids it issues. */
-function knownArtifactsOf(ctx, cache, schema) {
-  if (!cache.has(schema)) {
-    cache.set(schema, schemaArtifacts(ctx.roots.store, schema));
-  }
-  return cache.get(schema);
-}
-
 const KNOWN_ROLES = ROLES.map((one) => `\`${one}\``).join(", ");
 
 /**
@@ -295,7 +275,9 @@ const KNOWN_ROLES = ROLES.map((one) => `\`${one}\``).join(", ");
  * does not carry.
  */
 export function checkHands(ctx, changes) {
-  const team = readTeamMap(ctx.roots.store);
+  // The team map failed to read: `store` already named it, and nothing here
+  // can say whether a handle is one it knows.
+  if (!ctx.team) return;
   for (const change of changes) {
     if (change.status !== "in-flight" || !change.hands) continue;
     const file = fileOf(change, ".openspec.yaml");
@@ -312,7 +294,7 @@ export function checkHands(ctx, changes) {
           file,
           `\`hands.${role}: ${handle}\` is not one handle`,
         );
-      } else if (!memberOf(team, handle)) {
+      } else if (!memberOf(ctx.team, handle)) {
         ctx.add(
           "hands",
           file,
@@ -334,12 +316,13 @@ export function checkHands(ctx, changes) {
  * schema does not issue.
  */
 export function checkLandedBy(ctx, changes) {
-  const team = readTeamMap(ctx.roots.store);
-  const cache = new Map();
+  // The team map failed to read: `store` already named it, and nothing here
+  // can say whether a handle is one it knows.
+  if (!ctx.team) return;
   for (const change of changes) {
     if (change.status !== "in-flight") continue;
     if (!change.landedBy && !change.reviewed) continue;
-    const artifacts = knownArtifactsOf(ctx, cache, change.schema);
+    const artifacts = ctx.schemaArtifacts(change.schema);
     // A schema this store does not define declares no artifacts here; nothing
     // can be said about what it issues.
     if (artifacts === undefined) continue;
@@ -354,7 +337,7 @@ export function checkLandedBy(ctx, changes) {
           file,
           `\`landed_by.${artifact}\` names an artifact the \`${change.schema}\` schema does not issue — name one of ${namedIds}`,
         );
-      } else if (!memberOf(team, handle)) {
+      } else if (!memberOf(ctx.team, handle)) {
         ctx.add(
           "landed_by",
           file,
