@@ -106,7 +106,11 @@ async function main() {
         text: message,
       },
     ],
-    { file: flags["sent-keys"], send: true, token: process.env.SLACK_BOT_TOKEN },
+    {
+      file: flags["sent-keys"],
+      send: true,
+      token: process.env.SLACK_BOT_TOKEN,
+    },
   );
   console.log(
     posted.length === 0
