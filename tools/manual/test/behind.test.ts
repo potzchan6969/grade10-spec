@@ -367,10 +367,20 @@ describe("with no read record at all", () => {
     );
 
     // The decisions are newer than everything before them, so they are the
-    // one artifact the dates leave alone.
+    // one artifact the dates leave alone. `since` is decisions' own commit
+    // date — the newest of what changed — which is what the digest counts its
+    // seven days from.
     expect(behindOf(entry, artifacts(root))).toEqual([
-      { artifact: "ui-design", changed: ["decisions"] },
-      { artifact: "specs", changed: ["decisions"] },
+      {
+        artifact: "ui-design",
+        changed: ["decisions"],
+        since: "2026-09-09T00:00:00Z",
+      },
+      {
+        artifact: "specs",
+        changed: ["decisions"],
+        since: "2026-09-09T00:00:00Z",
+      },
     ]);
   });
 
