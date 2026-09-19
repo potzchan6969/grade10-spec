@@ -246,7 +246,7 @@ describe("a `Q<n>` cited in backticks", () => {
     ).toEqual([]);
   });
 
-  it("names one the table does not issue", async () => {
+  it("shared-planning-agent-rounds-SC-70 - names one the table does not issue", async () => {
     const found = await reasons({
       "openspec/changes/probe/decisions.md": DECISIONS(
         "| Q1 | Who writes the row? | The landing | A second file |",
