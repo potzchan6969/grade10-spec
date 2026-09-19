@@ -450,4 +450,23 @@ describe("the questions a change still carries", () => {
     expect(html).toContain("Q7");
     expect(html).toContain(">Building<");
   });
+
+  it("names the role's own label for a question the change names no hand for", () => {
+    const html = render(
+      change({
+        questions: [
+          {
+            id: "Q8",
+            artifact: "decisions",
+            role: "design",
+            hand: "design",
+            text: "Whether the shelf is a page of its own",
+          },
+        ],
+      }),
+    );
+
+    expect(html).toContain("designer — open");
+    expect(html).not.toContain("design — open");
+  });
 });

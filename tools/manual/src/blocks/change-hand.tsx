@@ -24,7 +24,7 @@ export function Hand({
   handle: string | undefined;
   role: Role;
 }) {
-  if (handle === undefined || handle === "") return <OpenHand role={role} />;
+  if (handle === undefined || handle === "") return <Open role={role} />;
 
   return (
     <span className="inline-flex items-center gap-1.5">
@@ -51,26 +51,22 @@ export function HandFace({ handle }: { handle: string }) {
   );
 }
 
-/** A role the change names nobody for, where the role is not already the
- * row's own label. */
-export function OpenHand({ role }: { role: Role }) {
+/** A role nobody has taken: the role's own label beside "open" where nothing
+ * else on the row names it, or "open" alone on a row that already names the
+ * role itself. */
+export function Open({ role }: { role?: Role }) {
   return (
     <Badge
       size="sm"
-      title={`No ${ROLE_LABEL[role]} is named on this change`}
+      title={
+        role
+          ? `No ${ROLE_LABEL[role]} is named on this change`
+          : "Nobody is named for this role"
+      }
       variant="outline"
     >
-      <span>{ROLE_LABEL[role]}</span>
+      {role ? <span>{ROLE_LABEL[role]}</span> : null}
       <span className="opacity-70">open</span>
-    </Badge>
-  );
-}
-
-/** A role nobody has taken, on a row that names the role itself. */
-export function Open() {
-  return (
-    <Badge size="sm" title="Nobody is named for this role" variant="outline">
-      open
     </Badge>
   );
 }

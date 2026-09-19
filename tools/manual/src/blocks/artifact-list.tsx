@@ -4,7 +4,12 @@ import { artifactLabel } from "../api/change-artifacts";
 import type { Handoff } from "../api/handoff";
 import { behindLabelOf, ROLE_LABEL, STAGE_LABEL } from "../api/stage-view";
 import { behindOf } from "../api/stages";
-import type { ChangeEntry, OpenQuestion, SchemaArtifact } from "../api/types";
+import type {
+  ChangeEntry,
+  OpenQuestion,
+  Role,
+  SchemaArtifact,
+} from "../api/types";
 import { waiverOf } from "../api/waivers";
 import { HandFace } from "./change-hand";
 
@@ -212,6 +217,13 @@ export function HandoffRow({ handoffs }: { handoffs: Handoff[] }) {
   );
 }
 
+/** A question's role by its label, where it is one of the six the change
+ * page otherwise names, or the raw word a row named some other confirmer by
+ * (`operations`), unchanged — read against nothing rather than guessed. */
+function roleLabelOf(role: string): string {
+  return role in ROLE_LABEL ? ROLE_LABEL[role as Role] : role;
+}
+
 /**
  * What nobody has settled: one line per open question, with the number the
  * decisions row carries and the hand it is addressed to.
@@ -243,7 +255,7 @@ export function QuestionList({ questions }: { questions: OpenQuestion[] }) {
               as a handle nobody answers to. */}
           {question.hand === question.role ? (
             <Text as="span" size="xs" tone="secondary">
-              {`${question.role} — open`}
+              {`${roleLabelOf(question.role)} — open`}
             </Text>
           ) : (
             <Text as="span" className="font-mono" size="xs" tone="secondary">
