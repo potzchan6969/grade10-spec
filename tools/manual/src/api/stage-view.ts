@@ -142,6 +142,6 @@ export function movedBy(moves: DraftedMove[]): string {
  * did, so the row names everything the artifact is read again against.
  */
 export function behindLabelOf(behind: BehindArtifact): string {
-  if (behind.changed) return `${behind.changed.join(", ")} changed`;
-  return `read again against ${(behind.before ?? []).join(", ")}`;
+  if (behind.whole) return `read again against ${behind.changed.join(", ")}`;
+  return `${behind.changed.join(", ")} changed`;
 }

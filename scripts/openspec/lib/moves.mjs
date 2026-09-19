@@ -76,13 +76,7 @@ export function newlyBehind(base, head) {
     );
     const first = at.behind.find((one) => !was.has(one.artifact));
     if (!first) continue;
-    fresh.push({
-      id,
-      artifact: first.artifact,
-      // One of the two, never both: the commit dates single out what changed,
-      // and a recorded content id says something moved without saying which.
-      changed: first.changed ?? first.before ?? [],
-    });
+    fresh.push({ id, artifact: first.artifact, changed: first.changed });
   }
   return fresh;
 }

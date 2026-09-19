@@ -326,21 +326,19 @@ export type OpenQuestion = {
 };
 
 /** One artifact whose upstream moved after it was drawn or last read again,
- * and what says so. Derived per read, never stored.
- *
- * Exactly one of the two: the commit dates single out what changed, and a
- * content id says something before it moved without saying which of them, so
- * the reading that cannot name it says what is before it instead of naming
- * everything as changed. Each item is a linked page section as `<page>#<slug>`
- * or an upstream artifact id. */
+ * and what says so. Derived per read, never stored. */
 export type BehindArtifact = {
   /** The schema artifact id. */
   artifact: string;
-  /** What a commit dates later than the artifact itself. */
-  changed?: string[];
-  /** Everything before it, where the recorded content id is what says it
-   * moved. */
-  before?: string[];
+  /** What the artifact is read again against, each item a linked page section
+   * as `<page>#<slug>` or an upstream artifact id: what a commit dates later
+   * than the artifact itself, or, with `whole`, everything before it. */
+  changed: string[];
+  /** Set where the recorded content id is what says the artifact moved. An id
+   * says something before it moved without saying which of them, so `changed`
+   * is the whole of what is before the artifact and every surface that names
+   * it says as much. */
+  whole?: true;
   /** The newest commit date among what is before it, carried from
    * `UpstreamRead`'s `newerOn` — what the digest counts its seven days from.
    * Present whichever comparison says the artifact moved: a `reviewed:` id

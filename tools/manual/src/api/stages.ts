@@ -474,13 +474,13 @@ export function behindOf(
     if (!read) continue;
     const reviewed = change.reviewed?.[id];
     if (reviewed !== undefined) {
-      // The id says something before it moved and cannot say which, so what
-      // is reported is what is before it — but `since` is still the newest
-      // commit among it, the same field the dated branch below reads.
+      // `whole`: the id says something before it moved and cannot say which,
+      // so what is read again against is all of it.
       if (reviewed !== read.id) {
         behind.push({
           artifact: id,
-          before: read.items,
+          changed: read.items,
+          whole: true,
           ...(read.newerOn ? { since: read.newerOn } : {}),
         });
       }
