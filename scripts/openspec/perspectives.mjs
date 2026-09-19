@@ -23,9 +23,10 @@
  * that, so none can add a reader or remove one; a size somebody believes is
  * wrong is a question for the interview. The schema the readers themselves
  * come from is the one exception: it is read from the change's own `schema:`,
- * falling back to the store's default where the change names none or cannot
- * be read at all — one workflow schema exists today, so this is latent until
- * a second one does.
+ * falling back to the store's default where the change names none — one
+ * workflow schema exists today, so this is latent until a second one does. A
+ * record nobody can parse is refused, naming the file; the store's default is
+ * not what a change with a broken record meant.
  *
  * The change may be left out where `--change` names it or the branch is
  * `change/<id>`. `--root` reads a store other than this one, which is how the
@@ -33,7 +34,7 @@
  */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import YAML from "yaml";
 import { parseArgs } from "./lib/args.mjs";
@@ -95,18 +96,21 @@ console.log(
 );
 
 /** The schema the change's own record names, or the store's default where it
- * names none — a change opened before `schema:` was written, or whose record
- * cannot be read at all, still gets a schema to read readers from. */
+ * names none — a change opened before `schema:` was written still gets a
+ * schema to read readers from. A record that will not parse is refused,
+ * naming the file: read as the default it gave the round the readers of a
+ * schema the change never named. */
 function schemaOf(store, change) {
   const file = join(store, "openspec", "changes", change, ".openspec.yaml");
   if (!existsSync(file)) return SCHEMA;
+  let parsed;
   try {
-    const parsed = YAML.parse(readFileSync(file, "utf8")) ?? {};
-    const named = typeof parsed.schema === "string" ? parsed.schema.trim() : "";
-    return named === "" ? SCHEMA : named;
-  } catch {
-    return SCHEMA;
+    parsed = YAML.parse(readFileSync(file, "utf8")) ?? {};
+  } catch (error) {
+    fail(`${relative(store, file)} is not YAML: ${error.message}`);
   }
+  const named = typeof parsed.schema === "string" ? parsed.schema.trim() : "";
+  return named === "" ? SCHEMA : named;
 }
 
 /** The change a round is on, from the branch it drafts on. */

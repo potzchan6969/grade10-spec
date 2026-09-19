@@ -31,12 +31,19 @@ export const SCHEMA = "grade10-planning";
 /** The schema as this module needs it: the artifacts with their perspectives
  * and their upstream sets, and the readers of a task group off the `apply:`
  * block. Read through `tools/manual/src/store/read-schema.mts` — the store's
- * one reader of the file — rather than a second parse of it here. */
+ * one reader of the file — rather than a second parse of it here.
+ *
+ * A schema the store holds no file for is refused rather than answered with
+ * no artifacts and no readers: that answer is a round nobody reads and a
+ * target that is "neither an artifact of the schema nor a task group",
+ * neither of which says the file is missing. */
 export function planningSchema(root, schema = SCHEMA) {
-  return {
-    artifacts: schemaArtifacts(root, schema) ?? [],
-    apply: applyPerspectives(root, schema),
-  };
+  const artifacts = schemaArtifacts(root, schema);
+  if (artifacts === undefined)
+    throw new Error(
+      `no schema at openspec/schemas/${schema}/schema.yaml — a round reads its readers from there`,
+    );
+  return { artifacts, apply: applyPerspectives(root, schema) };
 }
 
 /**

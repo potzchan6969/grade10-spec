@@ -25,19 +25,32 @@ import { readTextIfExists, StoreFileError } from "./disk.mts";
  * Both lists name artifacts of this same schema, so an id it issues nowhere is
  * refused rather than read as absent: the worklists would leave the artifact
  * owed by nobody and the freshness read would draw it from nothing, and each
- * of those is a silence where a typo was. */
+ * of those is a silence where a typo was. An entry with no `id:` or no
+ * `generates:` is refused for the same reason: skipped, it answered with one
+ * artifact fewer and nothing named the entry that went missing. */
 export function schemaArtifacts(
   root: string,
   schema: string,
 ): SchemaArtifact[] | undefined {
   const parsed = schemaOf(root, schema);
   if (parsed === undefined) return undefined;
+  const file = `openspec/schemas/${schema}/schema.yaml`;
   const listed = Array.isArray(parsed.artifacts) ? parsed.artifacts : [];
   const artifacts: SchemaArtifact[] = [];
-  for (const entry of listed) {
+  for (const [at, entry] of listed.entries()) {
     const fields = (entry ?? {}) as Record<string, unknown>;
-    if (typeof fields.id !== "string" || typeof fields.generates !== "string")
-      continue;
+    if (typeof fields.id !== "string") {
+      throw new StoreFileError(
+        1,
+        `${file}: \`artifacts:\` entry ${at + 1} carries no \`id:\``,
+      );
+    }
+    if (typeof fields.generates !== "string") {
+      throw new StoreFileError(
+        1,
+        `\`${fields.id}\` carries no \`generates:\` in ${file}`,
+      );
+    }
     const teammate =
       typeof fields.teammate === "string" ? fields.teammate : undefined;
     const hand = handOf(fields.id, fields.hand);
