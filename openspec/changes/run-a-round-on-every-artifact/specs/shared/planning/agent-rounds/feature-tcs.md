@@ -1615,7 +1615,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <change> is on staging and its run tab is written.
+* <change> is on staging, specifying two capabilities, each with a suite holding <cases the walk automated> and <cases still manual>.
 
 **Steps:**
 
@@ -1625,7 +1625,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The row shows the suite's automated count against its total.
-* It shows the run tab's count beside them.
+* Both capabilities' cases are summed once, and a suite with no automated case reads 0 against its total rather than reading nothing.
 
 ### shared-planning-agent-rounds-US8-TC3-1: Every case automated, and none
 
