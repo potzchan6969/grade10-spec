@@ -58,3 +58,6 @@ scripts/tokens-sync/figma-plugins/build/
 # tracks.
 tools/manual/walk/__screenshots__/
 tools/manual/.vitest-attachments/
+
+# Builders' live git worktrees, never repository content.
+.claude/worktrees/
