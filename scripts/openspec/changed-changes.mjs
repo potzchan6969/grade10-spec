@@ -434,28 +434,37 @@ async function keysOnly(root, base, head, touched) {
 }
 
 /**
- * The re-read job's matrix: one entry per change this push newly put
- * something behind — the same `newlyBehind` the `behind` messages are drawn
- * from, never a second diff.
+ * The re-read job's matrix: one entry per change this push touched whose
+ * behind set at head is not empty.
  *
- * A change with something already behind before this push is left out: the
- * push did not touch it, so re-reading it here would fire the same change
- * again on every unrelated push until a landing clears it. A change touched
- * only through the round's own record lines is excluded by the same
- * `suppressed` set that silences its messages, which is what keeps the
- * cascade finite: the re-read's own commit never re-enters this matrix, even
- * where the content id it wrote leaves the artifact reading as behind.
+ * Behind at head, not newly behind against the base: a landing that arrives
+ * while something of the change is already behind puts nothing new behind,
+ * and the read again is owed on what is. A change the push did not touch is
+ * left out either way — re-reading it here would fire the same change again
+ * on every unrelated push until a landing clears it. Touched is its own
+ * directory or an artifact of it this push put newly behind, which is how a
+ * commit on a page the proposal links reaches the change that links it.
+ *
+ * A change touched only through the round's own record lines is excluded by
+ * the same `suppressed` set that silences its messages, which is what keeps
+ * the cascade finite: the re-read's own commit never re-enters this matrix,
+ * even where the content id it wrote leaves the artifact reading as behind.
  *
  * The id is the whole entry: every step of the job names `matrix.id`, and the
  * step that posts reads the change's `thread:` from its own record, so an
  * entry carrying the address too would be a second copy of it to keep true.
  */
-export function rereadMatrixOf(base, head, suppressed) {
+export function rereadMatrixOf(touched, base, head, suppressed) {
+  const ids = new Set([
+    ...touched.keys(),
+    ...newlyBehind(base, head).map((one) => one.id),
+  ]);
   const matrix = [];
-  for (const behind of newlyBehind(base, head)) {
-    if (suppressed.has(behind.id)) continue;
-    if (!head.has(behind.id)) continue;
-    matrix.push({ id: behind.id });
+  for (const id of ids) {
+    if (suppressed.has(id)) continue;
+    const at = head.get(id);
+    if (at === undefined || at.behind.length === 0) continue;
+    matrix.push({ id });
   }
   return matrix.sort((left, right) => left.id.localeCompare(right.id));
 }
@@ -579,7 +588,7 @@ async function main() {
       (one) => !sent.has(one.key) && !suppressed.has(one.id),
     );
     skipped = told.skipped.filter((one) => !suppressed.has(one.id));
-    matrix = rereadMatrixOf(atBase, atHead, suppressed);
+    matrix = rereadMatrixOf(touched, atBase, atHead, suppressed);
   }
 
   const payload = slackPayload({
