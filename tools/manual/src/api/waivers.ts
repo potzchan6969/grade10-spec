@@ -73,3 +73,24 @@ const WAIVERS: Record<
   "ui-design": { key: "ui_waived", field: "uiWaived" },
   "tech-design": { key: "design_waived", field: "designWaived" },
 };
+
+/**
+ * The line that waives one artifact, as its author wrote it — what the change
+ * page shows beside an artifact it says is not owed. A line with no reason
+ * waives nothing: the store's reader refuses a bare waiver, and `skip_specs`
+ * says its own reason on `skip_specs_why`.
+ */
+export function waiverOf(
+  change: ChangeEntry,
+  artifact: SchemaArtifact,
+): string | undefined {
+  if (
+    change.skipSpecs !== undefined &&
+    (artifact.id === "specs" || artifact.generates.startsWith("specs/"))
+  ) {
+    return change.skipSpecs;
+  }
+  const waiver = WAIVERS[artifact.id];
+  const written = waiver ? change[waiver.field] : undefined;
+  return written ? written : undefined;
+}

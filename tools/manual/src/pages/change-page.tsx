@@ -4,10 +4,10 @@ import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Text } from "@grade10/design-system/components/display/text";
 import { ArrowSquareOut, CalendarBlank, Kanban } from "@phosphor-icons/react";
 import { Link, useParams } from "react-router";
-import { laneOf } from "../api/derive";
 import { changeSourceUrl } from "../api/paths";
+import { STAGE_LABEL, stageShown } from "../api/stage-view";
 import { formatDate, relativeTime } from "../api/time";
-import type { ChangeEntry, ChangeLane } from "../api/types";
+import type { ChangeEntry } from "../api/types";
 import { useArchive } from "../api/use-archive";
 import { useChangeDocument } from "../api/use-change-document";
 import { useManualIndex } from "../api/use-manual-index";
@@ -16,16 +16,11 @@ import { ChangeTabs } from "../blocks/change-document";
 import { ChangeStatus } from "../blocks/change-status";
 import { InlineMarkdown } from "../blocks/inline-markdown";
 import { MarkdownView } from "../blocks/markdown";
+import { StageStepper } from "../blocks/stage-stepper";
+import { YourTurnCard } from "../blocks/your-turn-card";
 import { WithdrawAction } from "../editor/withdraw-action";
 import { PageHeading } from "./page-heading";
 import { useDocumentTitle } from "./use-document-title";
-
-const LANE_LABEL: Record<ChangeLane, string> = {
-  proposed: "proposed",
-  specified: "specified",
-  "in-progress": "in progress",
-  complete: "complete",
-};
 
 /**
  * One change as a page of its own: what it is, where it stands, then the files
@@ -94,7 +89,7 @@ export function ChangePage() {
 }
 
 function ChangeHeader({ change }: { change: ChangeEntry }) {
-  const lane = laneOf(change);
+  const stage = stageShown(change);
 
   return (
     <PageHeading
@@ -103,9 +98,13 @@ function ChangeHeader({ change }: { change: ChangeEntry }) {
           <span>In Flight</span>
           <Badge
             size="sm"
-            variant={lane === "complete" ? "success" : "outline"}
+            variant={
+              stage === "released" || stage === "archived"
+                ? "success"
+                : "outline"
+            }
           >
-            {LANE_LABEL[lane]}
+            {STAGE_LABEL[stage]}
           </Badge>
           {change.target ? (
             <Badge size="sm" variant="info">
@@ -152,14 +151,19 @@ function ChangeBody({ change }: { change: ChangeEntry }) {
   const index = useManualIndex();
   const archive = useArchive();
   const document = useChangeDocument(change.id);
+  const stage = stageShown(change);
 
   return (
     <>
+      <StageStepper stage={stage} />
+      <YourTurnCard change={change} stage={stage} />
+
       <ChangeStatus
         archived={
           archive.status === "ready" ? archive.archive.changes : undefined
         }
         change={change}
+        document={document.status === "ready" ? document.document : undefined}
         index={index}
       />
 

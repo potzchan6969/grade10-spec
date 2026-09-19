@@ -13,7 +13,12 @@ import type {
 } from "../src/api/types";
 import { findStoreRoot } from "../src/store/disk.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
-import { changeEntry, pageEntry, snapshotOf, specEntry } from "./manual-fixture";
+import {
+  changeEntry,
+  pageEntry,
+  snapshotOf,
+  specEntry,
+} from "./manual-fixture";
 
 /**
  * The change page, state by state: the stepper and its one line below `sm`,
@@ -171,6 +176,14 @@ function row(html: string, artifact: string): string {
   return html.slice(at, next === -1 ? undefined : next);
 }
 
+/** The markup around one marker, for a fact carried by the tag that holds it
+ * rather than by its text. */
+function around(html: string, mark: string, span = 240): string {
+  const at = html.indexOf(mark);
+  if (at === -1) return "";
+  return html.slice(Math.max(0, at - span), at + span);
+}
+
 describe("the stepper", () => {
   const html = render();
 
@@ -188,7 +201,15 @@ describe("the stepper", () => {
       expect(html, label).toContain(`>${label}<`);
     }
     expect(html).toContain('data-stage="building"');
-    expect(html).toMatch(/data-stage="building"[^>]*data-state="progress"/);
+    expect(around(html, 'data-stage="building"', 400)).toContain(
+      'data-state="progress"',
+    );
+    expect(around(html, 'data-stage="archived"', 400)).toContain(
+      'data-state="upcoming"',
+    );
+    expect(around(html, 'data-stage="proposed"', 400)).toContain(
+      'data-state="completed"',
+    );
   });
 
   it("A lane heading and a stepper step with the agent mark and the hand's move", () => {
@@ -207,8 +228,8 @@ describe("the stepper", () => {
     expect(line).toContain("Building");
     expect(line).toContain("agent drafts each group, test first");
     // The eight steps are the wide reading; the line replaces them below `sm`.
-    expect(html).toMatch(/data-stepper="one-line"[^>]*class="[^"]*sm:hidden/);
-    expect(html).toMatch(/data-stepper="steps"[^>]*class="[^"]*hidden/);
+    expect(around(html, 'data-stepper="one-line"')).toContain("sm:hidden");
+    expect(around(html, 'data-stepper="steps"')).toContain("hidden sm:block");
   });
 
   it("names the stage in the page's eyebrow", () => {
@@ -241,9 +262,10 @@ describe("the Your turn card", () => {
     const html = render();
     const card = html.slice(html.indexOf("Your turn"));
 
-    expect(card).toContain("Assign");
-    expect(card).toMatch(/Assign[\s\S]{0,200}disabled/);
-    expect(card).toContain("read-only");
+    const label = card.indexOf(">Assign<");
+    const button = card.slice(card.lastIndexOf("<button", label), label);
+    expect(button).toContain('disabled=""');
+    expect(card).toContain("read-only on the hosted manual");
     expect(html).toContain("Hands");
   });
 
@@ -261,7 +283,10 @@ describe("the Your turn card", () => {
 describe("the hands", () => {
   it("shows one row per role with its handle, and open for a role nobody has taken", () => {
     const html = render(change({ hands: { pm: "robin", dev: "sam" } }));
-    const hands = html.slice(html.indexOf(">Hands<"), html.indexOf(">Artifacts<"));
+    const hands = html.slice(
+      html.indexOf(">Hands<"),
+      html.indexOf(">Artifacts<"),
+    );
 
     for (const label of [
       "Product manager",

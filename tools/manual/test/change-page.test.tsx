@@ -21,6 +21,7 @@ const SPEC = "demo-product/alpha";
 const held = vi.hoisted(() => ({
   index: undefined as unknown,
   document: { status: "loading" } as unknown,
+  archive: { status: "loading" } as unknown,
 }));
 
 vi.mock("../src/api/use-manual-index", () => ({
@@ -30,7 +31,7 @@ vi.mock("../src/editor/session", () => ({
   useEditorSession: () => ({ store: null }),
 }));
 vi.mock("../src/api/use-archive", () => ({
-  useArchive: () => ({ status: "loading" }),
+  useArchive: () => held.archive,
 }));
 vi.mock("../src/api/use-change-document", () => ({
   useChangeDocument: () => held.document,
@@ -161,7 +162,14 @@ const document: ChangeDocument = {
   ],
 };
 
-function snapshot(): Snapshot {
+/** The same change, waiting on three ids: one still in flight, one a release
+ * carried, and one that names nothing at all. */
+const withDeps: ChangeEntry = {
+  ...change,
+  dependsOn: ["loyalty-rules", "shipped-already", "never-written"],
+};
+
+function snapshot(entry: ChangeEntry = change): Snapshot {
   return snapshotOf({
     config: {
       storybookBase: "",
@@ -180,16 +188,27 @@ function snapshot(): Snapshot {
       }),
     ],
     specs: [alpha],
-    changes: [change],
+    changes:
+      entry === change
+        ? [entry]
+        : [entry, changeEntry("loyalty-rules", [], { title: "Loyalty rules" })],
   });
 }
 
 function render(
   url: string,
   state: unknown = { status: "ready", document },
+  archived?: ChangeEntry[],
 ): string {
-  held.index = buildIndex(snapshot());
+  held.index = buildIndex(snapshot(archived === undefined ? change : withDeps));
   held.document = state;
+  held.archive =
+    archived === undefined
+      ? { status: "loading" }
+      : {
+          status: "ready",
+          archive: { generatedAt: "", storeHead: "", changes: archived },
+        };
   return renderToStaticMarkup(
     <MemoryRouter initialEntries={[url]}>
       <Routes>
@@ -202,10 +221,10 @@ function render(
 describe("the page's head", () => {
   const html = render("/in-flight/pos");
 
-  it("wears the change's title, id, and lane", () => {
+  it("wears the change's title, id, and stage", () => {
     expect(html).toContain("Point of sale");
     expect(html).toContain("openspec/changes/pos");
-    expect(html).toContain(">in progress<");
+    expect(html).toContain(">Building<");
   });
 
   it("keeps the board's facts and leaves the why to the Product tab", () => {
@@ -224,6 +243,20 @@ describe("where the change stands", () => {
     expect(html).toContain(">Owners<");
     expect(html).toContain(">Specs<");
     expect(html).toContain(">Tasks<");
+  });
+
+  /** The card wears one Blocked chip per unreleased id; the page is where the
+   * whole reading is — a shipped dependency said quietly, and an id that
+   * names no change at all said out loud rather than dropped. */
+  it("separates a blocking dependency from a shipped one, and names a lie", () => {
+    const html = render("/in-flight/pos", { status: "ready", document }, [
+      changeEntry("shipped-already", [], { status: "archived" }),
+    ]);
+
+    expect(html).toContain(">Blocked by<");
+    expect(html).toContain("in flight");
+    expect(html).toContain("shipped");
+    expect(html).toContain("never-written — names no change");
   });
 });
 
