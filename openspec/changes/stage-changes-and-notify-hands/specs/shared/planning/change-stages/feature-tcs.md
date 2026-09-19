@@ -877,20 +877,20 @@ Runs once per row of **Test data**.
 * **Trace:** shared-planning-change-stages-US-04
 
 **Pre-conditions:**
-<change J> sits at Designed with <design handle> as its `design` hand. The team map names a channel for the designer role.
+<change J> sits at Planned with <dev handle> as its `dev` hand. The team map names a channel for the engineer role.
 
 **Steps:**
 
-1. Remove the `design` handle from <change J>'s `hands:` and push to `main`.
-2. Read the designer role's channel.
+1. Remove the `dev` handle from <change J>'s `hands:` and push to `main`.
+2. Read the engineer role's channel.
 3. Push a later commit to <change J> that leaves the hand open, and read the channel again.
 4. Read <change J>'s card at <manual board url>.
 
 **Expected Results:**
 
-* One post in the designer role's channel names <change J> and the stage it sits on.
+* One post in the engineer role's channel names <change J> and the stage it sits on.
 * The later push adds no second post.
-* The card shows the design hand as open.
+* The card shows the engineer hand as open.
 
 ---
 

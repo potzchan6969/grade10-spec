@@ -640,8 +640,8 @@ to that hand.
 #### Scenario: shared-planning-change-stages-SC-42 - A hand is taken off a change it sits on
 **Serves:** shared-planning-change-stages-US-04 - the product manager takes a hand off a change and the role hears once
 
-**GIVEN** a change in Designed whose designer is named
-**WHEN** the designer's handle is removed from `hands:`
+**GIVEN** a change in Planned whose engineer is named
+**WHEN** the engineer's handle is removed from `hands:`
 **THEN** the role's channel SHALL be told once
 **AND** the card SHALL show the hand as open
 
