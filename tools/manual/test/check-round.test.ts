@@ -4,6 +4,7 @@ import { ROUND_RECORD_SINCE } from "../check/rounds.mjs";
 import { NO_GIT } from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
 import { readRounds } from "../src/store/read-rounds.mts";
+import { demoSchema } from "./demo-schema";
 import { writeStore } from "./tmp-store";
 
 /**
@@ -24,27 +25,7 @@ type Finding = { rule: string; level: string; path: string; reason: string };
 const ID = "round-probe";
 const CHANGE = `openspec/changes/${ID}`;
 
-const SCHEMA = [
-  "name: demo-planning",
-  "version: 1",
-  "artifacts:",
-  "  - id: proposal",
-  "    required: true",
-  "    generates: proposal.md",
-  "    requires: []",
-  "    upstream: []",
-  "  - id: decisions",
-  "    required: true",
-  "    generates: decisions.md",
-  "    requires: [proposal]",
-  "    upstream: [proposal]",
-  "  - id: tasks",
-  "    required: true",
-  "    generates: tasks.md",
-  "    requires: [decisions]",
-  "    upstream: [proposal, decisions]",
-  "",
-].join("\n");
+const SCHEMA = demoSchema(["proposal", "decisions", "tasks"]);
 
 const PROPOSAL = [
   "# Round probe",

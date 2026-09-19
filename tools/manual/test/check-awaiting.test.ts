@@ -1,31 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { demoSchema } from "./demo-schema";
 import { findingsFrom, findingsOf, recordStoreFiles } from "./record-store";
 
 /** A wait is the change's own record of what it needs. Nothing ends one but
  * its author, so the checker only names a wait no worklist could reach. */
 
-const SCHEMA = [
-  "name: demo-planning",
-  "version: 1",
-  "artifacts:",
-  "  - id: proposal",
-  "    teammate: product-manager",
-  "    required: true",
-  "    generates: proposal.md",
-  "    requires: []",
-  "  - id: ui-design",
-  "    teammate: designer",
-  "    required: false",
-  "    generates: ui-design.md",
-  "    requires:",
-  "      - proposal",
-  "  - id: specs",
-  "    required: true",
-  "    generates: specs/**/spec.md",
-  "    requires:",
-  "      - proposal",
-  "",
-].join("\n");
+const SCHEMA = demoSchema(["proposal", "ui-design", "specs"]);
 
 const CHANGE = "wait-probe";
 

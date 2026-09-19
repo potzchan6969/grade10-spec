@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { demoSchema } from "./demo-schema";
 import { findingsFrom, TEAM } from "./record-store";
 
 /** `landed_by:` names the handle whose word landed one of the change's own
@@ -6,22 +7,7 @@ import { findingsFrom, TEAM } from "./record-store";
  * both key a line by a schema artifact id, so the same refusal covers both -
  * shared-planning-change-stages-SC-12. */
 
-const SCHEMA = [
-  "name: demo-planning",
-  "version: 1",
-  "artifacts:",
-  "  - id: proposal",
-  "    teammate: product-manager",
-  "    required: true",
-  "    generates: proposal.md",
-  "    requires: []",
-  "  - id: specs",
-  "    required: true",
-  "    generates: specs/**/spec.md",
-  "    requires:",
-  "      - proposal",
-  "",
-].join("\n");
+const SCHEMA = demoSchema(["proposal", "specs"]);
 
 const CHANGE = "landed-by-probe";
 

@@ -6,6 +6,7 @@ import { type PageAst, parsePage } from "../src/content/grammar";
 import { NO_GIT } from "../src/store/git.mts";
 import { markQuestions } from "../src/store/questions.mts";
 import { readChanges } from "../src/store/read-changes.mts";
+import { demoSchema } from "./demo-schema";
 import { writeStore } from "./tmp-store";
 
 /**
@@ -20,26 +21,7 @@ const CHANGE = "key-probe";
 const DIR = `openspec/changes/${CHANGE}`;
 const PAGE = "docs/prds/products/demo-product/rules.md";
 
-const SCHEMA = [
-  "name: demo-planning",
-  "version: 1",
-  "artifacts:",
-  "  - id: proposal",
-  "    teammate: product-manager",
-  "    required: true",
-  "    generates: proposal.md",
-  "    requires: []",
-  "    upstream: []",
-  "  - id: decisions",
-  "    teammate: product-manager",
-  "    required: true",
-  "    generates: decisions.md",
-  "    requires:",
-  "      - proposal",
-  "    upstream:",
-  "      - proposal",
-  "",
-].join("\n");
+const SCHEMA = demoSchema(["proposal", "decisions"]);
 
 const PROPOSAL = [
   "# Key probe",

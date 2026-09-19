@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { demoSchema } from "./demo-schema";
 import { findingsFrom, TEAM } from "./record-store";
 
 /** `hands:` names one handle per role. `readIdMap` already refuses a value
@@ -6,17 +7,7 @@ import { findingsFrom, TEAM } from "./record-store";
  * is what names the three ways a surviving line can still be wrong -
  * shared-planning-change-stages-SC-14. */
 
-const SCHEMA = [
-  "name: demo-planning",
-  "version: 1",
-  "artifacts:",
-  "  - id: proposal",
-  "    teammate: product-manager",
-  "    required: true",
-  "    generates: proposal.md",
-  "    requires: []",
-  "",
-].join("\n");
+const SCHEMA = demoSchema(["proposal"]);
 
 const CHANGE = "hands-probe";
 
