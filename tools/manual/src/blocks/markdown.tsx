@@ -397,13 +397,17 @@ export function MarkdownView({
           src={typeof src === "string" ? src : ""}
         />
       ),
+      // `markSection` is the plugin's own property on the element, read from
+      // `node` by the pip. It is dropped from what reaches the DOM: React
+      // knows no such attribute and says so on every marked line otherwise.
       ...(pips
         ? {
             p: ({
               children,
               node,
+              markSection: _section,
               ...rest
-            }: ComponentProps<"p"> & { node?: HastNode }) => (
+            }: Marked<"p">) => (
               <p {...rest}>
                 {children}
                 <MarkPip node={node} />
@@ -412,8 +416,9 @@ export function MarkdownView({
             li: ({
               children,
               node,
+              markSection: _section,
               ...rest
-            }: ComponentProps<"li"> & { node?: HastNode }) => (
+            }: Marked<"li">) => (
               <li {...rest}>
                 {children}
                 <MarkPip node={node} />
@@ -422,10 +427,9 @@ export function MarkdownView({
             tr: ({
               children,
               node,
+              markSection: _section,
               ...rest
-            }: ComponentProps<"tr"> & { node?: HastNode }) => (
-              <tr {...rest}>{withRowPip(children, node)}</tr>
-            ),
+            }: Marked<"tr">) => <tr {...rest}>{withRowPip(children, node)}</tr>,
           }
         : {}),
     }),
@@ -454,6 +458,15 @@ export function MarkdownView({
     </div>
   );
 }
+
+/** What react-markdown hands one of the three elements the plugin tags: the
+ * element's own props, the hast node the pip reads its section from, and
+ * `markSection` itself, which the plugin set as a property of the element and
+ * which no DOM attribute answers. */
+type Marked<Tag extends "p" | "li" | "tr"> = ComponentProps<Tag> & {
+  node?: HastNode;
+  markSection?: string;
+};
 
 /** The pip a `p` or `li` renders beside it, where the plugin above tagged it
  * with the section it sits in — nothing where the line carries no 🚧. */
