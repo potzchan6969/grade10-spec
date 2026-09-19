@@ -248,9 +248,10 @@ if (behind.length > 0) {
   const [first] = behind;
   const whose =
     read.entry.hands?.[handOfArtifact(first.artifact, artifacts) ?? ""];
-  // One of the two: what commit dates single out, or what the recorded id
-  // says it is read again against without saying which part of it moved.
-  const what = first.changed ?? first.before ?? [];
+  // What the artifact is read again against: the items the commit dates
+  // single out, or the whole of what is before it where the recorded id is
+  // what says it moved.
+  const what = first.changed;
   fail(
     `${first.artifact} is behind ${what.join(", ")}${whose ? ` and waits on @${whose}` : ""} — it is read again before ${target} lands`,
   );
