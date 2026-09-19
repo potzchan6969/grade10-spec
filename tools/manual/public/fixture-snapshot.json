@@ -1028,32 +1028,17 @@
   "warnings": [],
   "team": {
     "handles": {
-      "tester": {
-        "email": "tester@example.com",
-        "slack": "U0TESTER",
-        "roles": [
-          "pm",
-          "design",
-          "tech",
-          "qa",
-          "dev",
-          "release"
-        ]
-      },
-      "other": {
-        "email": "other@example.com",
-        "roles": [
-          "dev"
-        ]
-      }
-    },
-    "channels": {
-      "pm": "C0PLANNING",
-      "design": "C0DESIGN",
-      "tech": "C0TECH",
-      "qa": "C0QA",
-      "dev": "C0DEV",
-      "release": "C0RELEASE"
+      "tester": [
+        "pm",
+        "design",
+        "tech",
+        "qa",
+        "dev",
+        "release"
+      ],
+      "other": [
+        "dev"
+      ]
     }
   }
 }
