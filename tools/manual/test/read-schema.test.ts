@@ -90,7 +90,7 @@ describe("what each artifact is drawn from", () => {
  * lives once, in `../src/api/types.ts`.
  */
 describe("the readers each artifact may summon", () => {
-  it("reads the perspectives beside every artifact that has them", () => {
+  it("shared-planning-agent-rounds-SC-28 - reads the perspectives beside every artifact that has them", () => {
     expect(byId.get("ui-design")?.perspectives).toEqual([
       {
         name: "journeys",
@@ -136,7 +136,7 @@ describe("the readers each artifact may summon", () => {
     }
   });
 
-  it("dispatches a reader that exists, on a `when` a draft can summon", () => {
+  it("shared-planning-agent-rounds-SC-29 - dispatches a reader that exists, on a `when` a draft can summon", () => {
     const entries = [
       ...planning.flatMap(({ perspectives }) => perspectives),
       ...applyPerspectives(storeRoot, "grade10-planning"),

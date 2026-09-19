@@ -127,7 +127,7 @@ const EXPORT_AND_MIGRATION = [
   "",
 ].join("\n");
 
-test("SC-08: a proposal's words reach the reader of the words and the floor", () => {
+test("shared-planning-agent-rounds-SC-08 - a proposal's words reach the reader of the words and the floor", () => {
   const root = fixture();
   const schema = planningSchema(root);
   const triggers = classifyDiff(
@@ -171,7 +171,7 @@ test("SC-08: a proposal's words reach the reader of the words and the floor", ()
   assert.equal(verifierNeeded(readers), true);
 });
 
-test("SC-09: a tech design with an export and a migration dispatches its four readings", () => {
+test("shared-planning-agent-rounds-SC-09 - a tech design with an export and a migration dispatches its four readings", () => {
   const root = fixture();
   const schema = planningSchema(root);
   const triggers = classifyDiff(EXPORT_AND_MIGRATION, schema, "tech-design");
@@ -218,7 +218,7 @@ test("SC-09: a tech design with an export and a migration dispatches its four re
   assert.equal(verifierNeeded(readers), true);
 });
 
-test("SC-10: a record key neither adds a reader nor removes one", () => {
+test("shared-planning-agent-rounds-SC-10 - a record key neither adds a reader nor removes one", () => {
   const plain = fixture();
   const waived = fixture({
     record: "schema: grade10-planning\nround_waived: the artifact is small\n",
@@ -239,7 +239,7 @@ test("SC-10: a record key neither adds a reader nor removes one", () => {
     );
 });
 
-test("SC-30: a bundle is the draft and what is before it, and nothing else", () => {
+test("shared-planning-agent-rounds-SC-30 - a bundle is the draft and what is before it, and nothing else", () => {
   const root = fixture();
   const bundle = bundleFor(root, "demo", "tech-design");
 
@@ -260,7 +260,7 @@ test("SC-30: a bundle is the draft and what is before it, and nothing else", () 
     );
 });
 
-test("SC-30: the round hands every reader one bundle and no other reader's output", () => {
+test("shared-planning-agent-rounds-SC-30 - the round hands every reader one bundle and no other reader's output", () => {
   const root = fixture();
   const printed = cli(root, [
     "demo",
