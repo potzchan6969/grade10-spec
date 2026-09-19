@@ -62,19 +62,32 @@ const linked = (id: string, extra: Partial<ChangeEntry>): ChangeEntry =>
     ...extra,
   });
 
+/** One in-flight row's own markup: the link to the change, from its opening
+ * tag to its close. The pip on the marked line carries the same change, stage
+ * and hand in its `title`, so a row read from the whole page would pass on
+ * the pip alone. */
+function rowOf(html: string, id: string): string {
+  const at = html.indexOf(`href="/in-flight/${id}"`);
+  if (at === -1) return "";
+  return html.slice(html.lastIndexOf("<a ", at), html.indexOf("</a>", at));
+}
+
 describe("the section's in-flight row", () => {
   it("shared-planning-change-stages-SC-65 - names the change's stage and its hand", () => {
-    const html = render([
-      linked("pos", {
-        title: "Shorten the refund window",
-        stage: "planned",
-        hands: { dev: "sam" },
-      }),
-    ]);
+    const row = rowOf(
+      render([
+        linked("pos", {
+          title: "Shorten the refund window",
+          stage: "planned",
+          hands: { dev: "sam" },
+        }),
+      ]),
+      "pos",
+    );
 
-    expect(html).toContain("Shorten the refund window");
-    expect(html).toContain("Planned");
-    expect(html).toContain("@sam");
+    expect(row).toContain("Shorten the refund window");
+    expect(row).toContain("Planned");
+    expect(row).toContain("@sam");
   });
 });
 
