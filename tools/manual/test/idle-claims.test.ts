@@ -1,12 +1,5 @@
 import { execFileSync } from "node:child_process";
-import {
-  existsSync,
-  mkdirSync,
-  mkdtempSync,
-  readFileSync,
-  writeFileSync,
-} from "node:fs";
-import { tmpdir } from "node:os";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -16,6 +9,7 @@ import {
   readArchivedChanges,
   readChanges,
 } from "../src/store/read-changes.mts";
+import { MANIFEST, PROPOSAL, storeWithHistory, tasksMd } from "./git-store";
 import { writeStore } from "./tmp-store";
 
 /**
@@ -43,58 +37,7 @@ const VIEWER = fileURLToPath(
 );
 const withViewer = describe.skipIf(!existsSync(VIEWER));
 
-const DAY = 86_400_000;
 const CHANGE = "add-gift-cards";
-
-/** A group with an owner and `done` of its three tasks checked off. `note`
- * varies the text without touching ownership or a checkbox — a real commit
- * that must not reset the clock, the way rewording a task does not. */
-const tasksMd = (owner: string, done: number, note = "") =>
-  [
-    `## 1. Contracts (grade10-spec)${owner ? ` (owner: @${owner})` : ""}`,
-    "",
-    ...[1, 2, 3].map(
-      (n) => `- [${n <= done ? "x" : " "}] 1.${n} Task ${n}${note}`,
-    ),
-    "",
-    "## 2. Adoption (grade10)",
-    "",
-    "- [ ] 2.1 Wire it up",
-    "",
-  ].join("\n");
-
-const MANIFEST = "schema: grade10-planning\n";
-const PROPOSAL = "# Gift cards\n\n## Why\n\nNobody can buy one.\n";
-
-/** A store whose `tasks.md` has a history, committed at fixed dates so an
- * elapsed day count is exact rather than approximately today. */
-function storeWithHistory(
-  states: [owner: string, done: number, ago: number][],
-) {
-  const root = mkdtempSync(join(tmpdir(), "manual-idle-"));
-  const dir = join(root, "openspec", "changes", CHANGE);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(join(dir, ".openspec.yaml"), MANIFEST);
-  writeFileSync(join(dir, "proposal.md"), PROPOSAL);
-
-  const git = (...args: string[]) =>
-    execFileSync("git", args, { cwd: root, stdio: "ignore" });
-  git("init", "-q");
-  git("config", "user.email", "test@example.com");
-  git("config", "user.name", "Test");
-
-  for (const [owner, done, ago] of states) {
-    writeFileSync(join(dir, "tasks.md"), tasksMd(owner, done, ` (${ago})`));
-    const at = new Date(Date.now() - ago * DAY).toISOString();
-    git("add", "-A");
-    execFileSync("git", ["commit", "-q", "-m", `${owner} ${done}`], {
-      cwd: root,
-      stdio: "ignore",
-      env: { ...process.env, GIT_AUTHOR_DATE: at, GIT_COMMITTER_DATE: at },
-    });
-  }
-  return root;
-}
 
 /** The claims of the task list the checkout holds, dated from HEAD — how a
  * change only this checkout has is read. */
