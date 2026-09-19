@@ -51,6 +51,7 @@ function sandbox(files, durable = {}) {
   git("update-ref", "refs/remotes/origin/main", "HEAD");
 
   return {
+    root,
     script: join(scripts, "archive-preflight.mjs"),
     manifest: join(dir, ".openspec.yaml"),
     tasks: join(dir, "tasks.md"),
@@ -166,6 +167,32 @@ const DURABLE = {
 test("a change whose sections all landed is clear", () => {
   const result = run(sandbox(CARRIED, DURABLE).script, ...SHIPPED);
   assert.equal(result.status, 0);
+});
+
+/** `rounds.md` is folded into no capability: it archives with the change, so
+ * the one way to lose it is an archived copy that does not carry it. */
+test("refuses an archived copy that left rounds.md behind", () => {
+  const withRounds = {
+    ...CARRIED,
+    "rounds.md": "| Round | Artifact |\n| --- | --- |\n| 1 | proposal |\n",
+  };
+  const clear = sandbox(withRounds, DURABLE);
+  assert.equal(run(clear.script, ...SHIPPED).status, 0);
+
+  const copied = sandbox(withRounds, DURABLE);
+  const archived = join(
+    copied.root,
+    "openspec",
+    "changes",
+    "archive",
+    `2026-09-20-${CHANGE}`,
+  );
+  mkdirSync(archived, { recursive: true });
+  writeFileSync(join(archived, "proposal.md"), PROPOSAL["proposal.md"]);
+  const result = run(copied.script, ...SHIPPED);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /`rounds\.md` is not in the archived copy/);
 });
 
 /** `decisions.md` is folded nowhere and the blind pass may not read archive,
