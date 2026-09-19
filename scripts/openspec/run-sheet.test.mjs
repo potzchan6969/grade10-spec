@@ -22,7 +22,12 @@ import {
   RESULT_COL,
   SUMMARY_COLUMNS,
 } from "./lib/run-sheet-layout.mjs";
-import { caseRow, inReadingOrder, selectCases } from "./lib/select-cases.mjs";
+import {
+  automatedGateOf,
+  caseRow,
+  inReadingOrder,
+  selectCases,
+} from "./lib/select-cases.mjs";
 import { isAutomated, parseSuite } from "./lib/suites.mjs";
 
 const SUITE = `# demo/thing/widget Test Cases
@@ -204,6 +209,45 @@ test("isAutomated reads the same case the automation gate does", () => {
 
 test("shared-planning-agent-rounds-SC-61 - the Summary row carries how many the run left out automated", () => {
   assert.equal(SUMMARY_COLUMNS.at(-1), "Automated left out");
+});
+
+test("shared-planning-agent-rounds-SC-61 - the count and its line, at none, one and many", () => {
+  // Said as zero rather than left unsaid: the printed line is what proves the
+  // gate ran at all, so a run that left nothing out still says so.
+  const automation = (many) =>
+    Array.from({ length: many }, (_, at) => ({
+      id: `demo-thing-widget-US1-TC${at + 5}-1`,
+      reason: "automation",
+    }));
+
+  for (const [many, line] of [
+    [0, "0 automated cases left out"],
+    [1, "1 automated case left out"],
+    [3, "3 automated cases left out"],
+  ]) {
+    const gate = automatedGateOf({ picked: [], refused: automation(many) });
+    assert.equal(gate.leftOut, many);
+    assert.equal(gate.included, 0);
+    assert.equal(gate.line, line);
+  }
+
+  // With the flag the run says what it took instead: nothing is left out, so
+  // the left-out count would read as a gate that did not run.
+  const taken = (many) =>
+    Array.from({ length: many }, () => ({ tc: journey.cases[3] }));
+  for (const [many, line] of [
+    [0, "0 automated cases included"],
+    [1, "1 automated case included"],
+    [4, "4 automated cases included"],
+  ]) {
+    const gate = automatedGateOf({
+      picked: taken(many),
+      refused: automation(2),
+      includeAutomated: true,
+    });
+    assert.equal(gate.included, many);
+    assert.equal(gate.line, line);
+  }
 });
 
 test("`--include-automated` takes an automated case too", () => {
