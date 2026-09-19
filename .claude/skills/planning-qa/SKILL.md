@@ -139,6 +139,15 @@ Everything this run produces is `draft`. Nothing in it claims review;
    it gets `feature-tcs.md` with `## Reconciliation` stripped: those lines carry
    scenario ids, and on a re-run they would be the leak.
 
+   **The scenario pass also reads `tech-design.md`.** It is drawn before the
+   requirements and the requirements are drawn from it, so it is read beside
+   `ui-design.md`, and a requirement contradicting either is not written. A
+   requirement that needs the proposed mechanism changed writes a dated wait on
+   the tech PIC rather than writing over them -
+   `awaiting: tech-design: "<date>, <requirement> re-read - @<tech>"` in the
+   change's record, cleared by their edit or by that artifact's `reviewed:`
+   line. The suite pass does not read it: a mechanism is not an anchor.
+
 5. **Reconcile, then take the second pass.** Join on anchors, apply the
    dispositions below, and the scenarios that survive are written with the
    `## Reconciliation` block.
