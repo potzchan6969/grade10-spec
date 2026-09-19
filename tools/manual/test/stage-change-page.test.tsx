@@ -330,6 +330,24 @@ describe("the Your turn card", () => {
     expect(hands).toContain(">open<");
   });
 
+  it("shared-planning-change-stages-SC-17, shared-planning-change-stages-SC-58 - every role is a row, open, on a change naming nobody", () => {
+    const html = render(change({ hands: undefined }));
+    const hands = html.slice(html.indexOf(">Hands<"));
+
+    expect(hands).not.toContain("No hands named");
+    for (const label of [
+      "Product manager",
+      "Designer",
+      "Tech PIC",
+      "Engineer",
+      "QA",
+      "Release hand",
+    ]) {
+      expect(hands).toContain(label);
+    }
+    expect(hands.split(">open<").length - 1).toBe(6);
+  });
+
   it("offers the archive command on the three stages DRAFTED lacks, and only once on the page", () => {
     const html = render(change({ stage: "on-staging" }));
     const card = html.slice(html.indexOf("Your turn"), html.indexOf(">Hands<"));

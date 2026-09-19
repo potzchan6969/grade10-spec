@@ -1,4 +1,3 @@
-import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
 import { ROLES, roleTitle } from "../api/stage-view";
 import type { ChangeEntry } from "../api/types";
@@ -14,16 +13,6 @@ import { HandFace, Open } from "./change-hand";
  */
 export function HandsTable({ change }: { change: ChangeEntry }) {
   const hands = change.hands ?? {};
-  if (Object.keys(hands).length === 0) {
-    return (
-      <EmptyState
-        compact
-        description="This change names nobody yet: the product manager writes the hands at the interview's end."
-        frameless
-        title="No hands named"
-      />
-    );
-  }
 
   return (
     <ul className="flex flex-col gap-1">
