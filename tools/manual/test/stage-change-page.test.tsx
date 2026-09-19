@@ -531,6 +531,11 @@ describe("the artifacts", () => {
 
     expect(row(html, "ui-design")).toContain("Q9");
     expect(row(html, "decisions")).not.toContain("Q9");
+    // The id is a link to the change's decisions tab, which is where the row
+    // it names is read: the badge alone leaves the hand looking for it.
+    expect(row(html, "ui-design")).toContain(
+      'href="/in-flight/pos?tab=decisions"',
+    );
   });
 
   it("counts a question the page still carries against the proposal", () => {
@@ -686,6 +691,11 @@ describe("the Rounds row", () => {
     expect(rounds).toContain("Round 2");
     expect(rounds).toContain("nothing stood");
     expect(rounds).toContain("Q3");
+    // Each row says which artifact or group it read: a reader counting rounds
+    // without them cannot tell which draft any of them was of.
+    expect(rounds).toContain("proposal");
+    expect(rounds).toContain("decisions");
+    expect(rounds).toContain("Group 1");
     // Group 1 landed a round; Group 2 is ticked and carries none.
     expect(rounds).toContain("Group 2");
     expect(rounds).toContain("no round");
