@@ -63,6 +63,7 @@
     "plan:land": "node scripts/openspec/plan-land.mjs",
     "round:reviewed": "node scripts/openspec/round-reviewed.mjs",
     "round:row": "node scripts/openspec/round-row.mjs",
+    "round:thread": "node scripts/openspec/round-thread.mjs",
     "archive:preflight": "node scripts/openspec/archive-preflight.mjs",
     "spec:view": "bash scripts/openspec-viewer/spec-view.sh",
     "spec:id": "node scripts/openspec/spec-id.mjs",
