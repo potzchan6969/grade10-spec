@@ -533,8 +533,12 @@ describe("behind holds no tick, claim or wait", () => {
     // The change is still behind: the decisions are newer than what is
     // drawn from them.
     expect(behindOf(entry, artifacts(root))).toEqual([
-      { artifact: "ui-design", changed: ["decisions"] },
-      { artifact: "specs", changed: ["decisions"] },
+      {
+        artifact: "ui-design",
+        changed: ["decisions"],
+        since: expect.any(String),
+      },
+      { artifact: "specs", changed: ["decisions"], since: expect.any(String) },
     ]);
   });
 });
