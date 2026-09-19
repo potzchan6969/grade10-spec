@@ -566,14 +566,23 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
   const CUSTOMER =
     /\b(customer|collector|member|shopper|buyer|bidder|borrower|guest|person|visitor|user|winner|bidder|watcher)\b/;
 
+  /** A capability under `shared/planning/` is the delivery line itself: the
+   *  team that runs the store is who walks it, so a hand of a change is an
+   *  `admin` there and nowhere else. */
+  const PLANNING = /(^|\/)shared\/planning\//;
+  const TEAM =
+    /\b(teammate|hand|product manager|designer|tech pic|qa|engineer|release hand|reader)\b/;
+
   for (const dir of dirsHolding(ROOT, "user-journeys.md").filter(inScope)) {
     const file = join(dir, "user-journeys.md");
     const rel = relative(ROOT, file);
+    const planning = PLANNING.test(rel);
     const lines = readFileSync(file, "utf8").split("\n");
     for (let i = 0; i < lines.length; i++) {
       const m = lines[i].match(/^\*\*As an?\*\*\s+(.+?),?\s*$/);
       if (!m) continue;
       const role = m[1].toLowerCase();
+      if (planning && TEAM.test(role)) continue;
       if (NOT_AN_END_USER.test(role))
         record(
           "error",
