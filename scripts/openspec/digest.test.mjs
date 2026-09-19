@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -390,6 +390,44 @@ test("weekOf keys a week that straddles New Year by its own Thursday", () => {
 
 test("weekOf starts a new key once the new ISO year's Monday arrives", () => {
   assert.equal(weekOf(Date.parse("2027-01-04T09:00:00+08:00")), "2027-W01");
+});
+
+/** The workflow's own week: the digest keys one message per person per week
+ * on the Hong Kong clock, and the cache key that restores what the week has
+ * already sent has to name the same week. One clock, read here so the
+ * workflow's step and `weekOf` cannot drift apart. */
+const WORKFLOW = join(
+  SCRIPTS,
+  "..",
+  "..",
+  ".github",
+  "workflows",
+  "digest.yml",
+);
+
+test("shared-planning-change-stages-SC-36 - the workflow's cache key names the week weekOf names", () => {
+  const yaml = readFileSync(WORKFLOW, "utf8");
+  const step = yaml.slice(yaml.indexOf("Compute the ISO week"));
+  const zone = /TZ:\s*(\S+)/.exec(step);
+  const format = /date\s+(\+[%\w-]+)/.exec(step);
+
+  assert.ok(zone, "the week step names no TZ");
+  assert.ok(format, "the week step runs no plain `date <format>`");
+
+  for (const at of [
+    "2026-12-31T12:00:00+08:00",
+    "2027-01-01T12:00:00+08:00",
+    "2027-01-04T09:00:00+08:00",
+    // Monday 00:30 in Hong Kong is still Sunday in UTC, and the two clocks
+    // read different ISO weeks: the key follows the digest's.
+    "2027-01-11T00:30:00+08:00",
+  ]) {
+    const shell = execFileSync("date", ["-d", at, format[1]], {
+      encoding: "utf8",
+      env: { ...process.env, TZ: zone[1] },
+    }).trim();
+    assert.equal(shell, weekOf(Date.parse(at)), at);
+  }
 });
 
 test("shared-planning-change-stages-SC-49 - the digest counts a behind artifact's own days, not the change's last commit", () => {
