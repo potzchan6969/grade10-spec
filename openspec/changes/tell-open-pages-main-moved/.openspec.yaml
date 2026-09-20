@@ -3,6 +3,7 @@ promoted_by: "@ecchochan"
 created: 2026-09-20
 depends_on:
   - stage-changes-and-notify-hands
+  - run-a-round-on-every-artifact
 hands:
   pm: "@ecchochan"
   tech: "@ecchochan"
