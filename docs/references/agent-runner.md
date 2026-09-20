@@ -4,7 +4,7 @@ What Operations sets up so a change's thread wakes a run, a run posts back,
 and a landing reaches `main`, as of 2026-09-20. Three parts: a custom Slack
 app, the relay in [`tools/relay`](../../tools/relay/README.md), and a Claude
 Code Routine with an API trigger. The rounds change decided the shape (its
-decisions `Q52` to `Q63`); [Agent Rounds](../prds/products/shared/planning/agent-rounds.md)
+decisions `Q52` to `Q68`); [Agent Rounds](../prds/products/shared/planning/agent-rounds.md)
 names this page as the runner and links back. Read it as what the workspace,
 the repository and the runner need, not as a requirement — nothing here is
 tested but the relay's own code.
@@ -14,7 +14,7 @@ tested but the relay's own code.
 | Part | What it is | What it holds |
 | --- | --- | --- |
 | **The Slack app** | A custom app in the workspace; its events go to the relay | Nothing: its signing secret and bot token live in the relay |
-| **The relay** | A Cloudflare Worker with one Durable Object per thread, `tools/relay` | The Slack signing secret and bot token, the Routine's fire URL and token, a GitHub token with `contents: write` on this repository, the wake-token secret, the workflow's wake token |
+| **The relay** | A Cloudflare Worker with one Durable Object per change, `tools/relay`; a thread's room forwards to its change's | The Slack signing secret and bot token, the Routine's fire URL and token, a GitHub token with `contents: write` on this repository, the wake-token secret, the workflow's wake token |
 | **The Routine** | A Claude Code on the web Routine with an API trigger; every firing is a fresh session on this store, drafting on `claude/<id>` | The store's GitHub access through the Claude GitHub App; no Slack token and no GitHub token of its own |
 | **The push workflow** | `.github/workflows/proposal-notify.yml`: the stage messages as before, and a `reread` job that wakes the relay | `SLACK_BOT_TOKEN` in plain steps, `AGENT_WAKE_TOKEN` |
 
@@ -23,16 +23,20 @@ tested but the relay's own code.
 1. A teammate writes in the planning channel, or replies in a change's
    thread. The relay verifies the event, drops a repeat and a bot's post,
    waits a minute for the rest of the burst, and fires the Routine with a
-   payload: the change, why it woke, the messages since the run's last post
-   with the senders' handles, and a token for posting back.
+   payload: the change, why it woke, the messages since the previous wake
+   with the senders' handles, and a token for posting back. A repeat of an
+   event, or of the workflow's wake, wakes nothing twice.
 2. The relay posts "Reading…" with the run's link in the thread.
 3. The run writes the payload to `.round/relay.json`, runs the round from the
    branch, `main` and the thread, pushes `claude/<id>` after every artifact,
    and posts its summary through the relay.
-4. On `land`, the run pushes the landing commit to its branch and asks the
-   relay. The relay checks that the Slack member who said land is the hand of
-   the artifact's stage in the record at that sha and that the diff stays
-   inside the change and the pages, then moves `main` as a fast-forward.
+4. On `land`, the run cuts the landing commit from `main` with that
+   artifact's files alone, pushes it to its branch and asks the relay. The
+   relay checks that the Slack member who said land is the hand of the
+   artifact's stage in the record at that sha, that the record's `landed_by:`
+   names the same handle, and, for an artifact, that the diff stays inside
+   the change and the pages; then it moves `main` as a fast-forward. A task
+   group's code lands on the word, the hand and the fast-forward alone.
 5. The run's last act is `done`. A wake that reaches its budget — thirty
    minutes on a reply or a landing, two hours on a plan — without it is
    reported in the thread with the run's link, and the thread is freed.
