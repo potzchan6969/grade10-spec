@@ -2545,6 +2545,41 @@ Runs once per row of **Test data**.
 
 None yet - the first blind pass.
 
+### shared-planning-agent-rounds-US9-TC11-1: The change page mirrors the thread and says what the hands are told
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/test/thread-section.test.tsx`, `tools/manual/test/told-now.test.tsx`, `tools/manual/test/read-change-history.test.ts`, `scripts/openspec/wording.test.mjs`
+
+**Pre-conditions:**
+
+* admin(hand) is reading <change page> of a change whose thread has been opened, landed twice and ticked once, and whose stage names them.
+
+**Steps:**
+
+1. Read Told now under the thread link in Your turn.
+2. Read the Thread row, last before the document tabs.
+3. Read the same two on a change with no history.
+
+**Expected Results:**
+
+* Told now quotes the message each hand of the stage is being sent, in the words the push sends to Slack, and one for the earliest behind artifact.
+* The Thread row lists the change's history from `main` oldest first: opened, each landing with whose word, and each tick, and nothing the store never wrote.
+* A change with no history shows one line saying so in each place, and no error.
+
+---
+
 ## Reconciliation
 
 Run: 2026-09-20, later that day: the wake's tests landed, so `US5-TC17-1` is automated again and names them; `US4-TC9-1` stays manual for its thread leg and names the landing's own test.

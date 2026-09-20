@@ -33,6 +33,7 @@ Every group lands its tests in their own commit before its code, and its readers
 - [x] 3.5 The artifact rows - fresh, behind naming what changed, not owed and fresh for a waiver - with the question count and who landed each; the delivery and handoff rows - `shared-planning-change-stages-SC-07`, `shared-planning-change-stages-SC-08`, `shared-planning-change-stages-SC-11`, `shared-planning-change-stages-SC-25`, `shared-planning-change-stages-SC-34`, `shared-planning-change-stages-SC-35`, `shared-planning-change-stages-SC-59`
 - [x] 3.6 The next action per stage in place of the four-lane one, read from `DRAFTED`'s command, and the page eyebrow naming the stage - `shared-planning-change-stages-SC-05`, `shared-planning-change-stages-SC-58`
 - [x] 3.7 Component tests for every state `ui-design.md` lists for the board and the change page, the stepper below `sm` among them
+- [ ] 3.8 On the pages on the change page, between the artifacts and the delivery: every section the change links under its page's title, each 🚧 and ❓ line as written and the ❓ with its hand, read through `marksOfPage` and `askedText` in `tools/manual/src/blocks/on-the-pages.tsx`, and the empty state where the change marks no section - `shared-planning-change-stages-SC-71`
 
 ## 4. The record's rules and the gate at the fold (grade10-spec)
 

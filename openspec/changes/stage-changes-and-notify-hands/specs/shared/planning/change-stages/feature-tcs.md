@@ -698,6 +698,38 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * Its hands show as open, one row per role.
 * No lane leaves <change U> out, and no lane reads as an error.
 
+### shared-planning-change-stages-US2-TC10-1: The change page lists the lines it marks
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-change-stages-US-02
+
+**Decided by:** `tools/manual/test/on-the-pages.test.tsx`
+
+**Pre-conditions:**
+
+* admin(engineer) is reading <change page> of a change that links two page sections, carrying two 🚧 lines and one ❓ line addressed to Finance between them.
+
+**Steps:**
+
+1. Read the rows between the artifacts and the delivery.
+2. Read the same rows on a change that marks no section.
+
+**Expected Results:**
+
+* On the pages lists each linked section under its page's title, with every 🚧 and ❓ line as the page writes it.
+* The ❓ line names Finance as the hand it waits on.
+* A change that marks no section shows one line saying so, and no empty list.
+
 ---
 
 ## shared-planning-change-stages-US3: Teammate lists what is on them
