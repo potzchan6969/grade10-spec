@@ -18,19 +18,7 @@ import {
 } from "../../../tools/manual/src/api/stages.ts";
 import { addressOf, linkOf, threadPartsOf } from "./notify.mjs";
 import { readChangesAt } from "./store-read.mjs";
-import {
-  behindText,
-  landedText,
-  stagingText,
-  toldBodyOf,
-  yourTurnText,
-} from "./wording.mjs";
-
-/** The three bodies, re-exported: they moved to `wording.mjs` so the manual's
- * Told now block composes the same sentences without dragging a `node:fs`
- * import into the browser, and every reader that had them from here still
- * does. */
-export { behindText, landedText, stagingText, yourTurnText };
+import { behindText, landedText, toldBodyOf } from "./wording.mjs";
 
 /** Every change of one tree: its stage, whose turn it is, the handle each of
  * those roles names, and the artifacts behind what they were drawn from. */

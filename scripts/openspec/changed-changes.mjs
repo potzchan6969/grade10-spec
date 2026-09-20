@@ -9,8 +9,9 @@ import YAML from "yaml";
 
 import { STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
 import { messagesOf, newlyBehind, readingOf } from "./lib/moves.mjs";
-import { deliver, escapeSlackText, readSentKeys } from "./lib/notify.mjs";
+import { deliver, readSentKeys } from "./lib/notify.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
+import { escapeSlackText } from "./lib/wording.mjs";
 
 const exec = promisify(execFile);
 const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../..");

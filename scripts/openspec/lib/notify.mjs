@@ -15,15 +15,10 @@
 import { appendFileSync, readFileSync } from "node:fs";
 
 import { channelOf, memberOf } from "./team.mjs";
-import { escapeSlackText, linkedOf, threadPathOf } from "./wording.mjs";
+import { linkedOf, threadPathOf } from "./wording.mjs";
 
 /** The one call that posts a message. */
 export const POST_MESSAGE = "https://slack.com/api/chat.postMessage";
-
-/** Re-exported: the escape moved to `wording.mjs`, beside the sentences built
- * around it, so the manual reads one of them without a `node:fs` import
- * behind it. */
-export { escapeSlackText };
 
 /** A change's own page on the manual: `<manualUrl>/in-flight/<id>`, what a
  * message links to where the record names no thread. */

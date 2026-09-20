@@ -5,9 +5,8 @@
  * compose the same sentences: the push workflow, which sends them, and the
  * manual's Told now block, which shows a hand exactly what they are being
  * told. A second composer anywhere would have the manual say one thing and
- * Slack another about the same change. `moves.mjs` re-exports the four
- * bodies and `notify.mjs` the escape, so nothing that already read them from
- * there changes.
+ * Slack another about the same change, so every reader of a sentence reads it
+ * from here — no module re-exports one.
  *
  * Slack `mrkdwn` is the one dialect here — `*bold*`, `` `code` `` and
  * `<url|title>`. The link is the caller's: the workflow builds it from the

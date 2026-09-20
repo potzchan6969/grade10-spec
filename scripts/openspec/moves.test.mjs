@@ -3,11 +3,11 @@ import { test } from "node:test";
 
 import {
   landedBetween,
-  landedText,
   messagesOf,
   movesBetween,
   newlyBehind,
 } from "./lib/moves.mjs";
+import { landedText } from "./lib/wording.mjs";
 
 /**
  * What a push moved and who hears about it: `movesBetween`, `newlyBehind`,

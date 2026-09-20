@@ -1,7 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import * as moves from "./lib/moves.mjs";
 import {
   behindText,
   escapeSlackText,
@@ -19,7 +18,8 @@ import {
  * Their own suite because their own module: the push workflow sends these
  * sentences and the manual's Told now block shows them, so a case here is
  * what a hand reads wherever they read it. `moves.test.mjs` keeps the cases
- * about who a message reaches and what key stops it twice.
+ * about who a message reaches and what key stops it twice, and reads
+ * `landedText` from here.
  */
 
 const LINKED = "<https://spec.test/in-flight/probe|Probe>";
@@ -136,10 +136,4 @@ test("linkedOf links a title, escaped, in Slack's own markup", () => {
 
 test("escapeSlackText turns the three characters Slack reads as markup into entities", () => {
   assert.equal(escapeSlackText("A & <b> c"), "A &amp; &lt;b&gt; c");
-});
-
-test("moves.mjs re-exports the same three composers, so nothing that read them there changes", () => {
-  assert.equal(moves.yourTurnText, yourTurnText);
-  assert.equal(moves.stagingText, stagingText);
-  assert.equal(moves.behindText, behindText);
 });
