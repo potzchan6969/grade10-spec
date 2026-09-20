@@ -27,12 +27,8 @@ Building the change's agent drafts, and a person's word lands.
 
 - 🚧 **One stage per change** — the board, the change page, a page's in-flight
   ribbon and My turn all show the same one
-- 🚧 **Read, never set** — a stage moves when a file lands on `main`, and
-  nothing else moves it
-- 🚧 **One stage for what is wanted** — the proposal, the decisions and the
-  journeys sit in Proposed together, because the product manager settles the
-  three in one sitting; an item still open stays `❓` on the decisions or the
-  page and holds nothing
+- 🚧 **One stage for what is wanted** — the product manager settles the proposal,
+  the decisions and the journeys in one sitting; an item still open holds nothing
 - 🚧 **Drafted, then landed on your word** — every stage from Proposed to
   Building is written by the change's agent and reaches `main` only when the
   hand of that stage says so; the landing records who said it, and every
@@ -140,6 +136,12 @@ Slack tells one person, once per move, in the change's thread.
   pip of its change's stage
 - 🚧 **Actions on the hosted manual** — Assign stays on the locally run
   manual until the hosted site has a sign-in
+- 🚧 **A page open while `main` moves** — the hosted manual says `main` moved,
+  with the commit's subject and how long ago, and refreshes on its own once the
+  site has caught up; nothing is reloaded under a reader who is typing
+- 🚧 **The locally run manual and `main`** — says how many commits behind
+  `main` the checkout is, and pulls on one click when the tree is clean and
+  nothing is ahead
 
 :::detail{title="Product decisions" for="pm"}
 A change passes through five hands and nobody is told when it reaches theirs;
@@ -161,4 +163,5 @@ lane as one waiting on a deploy. The owner's brief is
 | Measure | Decided | Days between a stage landing and the next hand's word, shown on the change page. | Product |
 | Team map | Decided | `docs/prds/team.yaml`: one entry per handle with the e-mail, the Slack member and the roles, and a channel per role. | Operations |
 | Hosted actions | Decided | Assign stays on the locally run manual until the hosted site has a sign-in. | Operations |
+| Open pages | Decided | A page open while `main` moves is told and refreshes once the site has caught up; the locally run manual pulls. | Operations, Engineering |
 :::
