@@ -8,6 +8,7 @@
  * burst of messages into one wake, then the budget that frees a room whose run
  * never said it was done. `alarm.kind` says which is set.
  */
+import { isLandingWord, wordOf } from "./slack.ts";
 
 export type Reason = "plan" | "message" | "landing";
 
@@ -44,6 +45,15 @@ const PRECEDENCE: Record<Reason, number> = { plan: 3, landing: 2, message: 1 };
  * state, which a list in storage was not. */
 export const SEEN_MAX = 200;
 
+/** How many lines a room holds for the next wake. Bounded for the same reason
+ * `seen` is: a thread nobody wakes would otherwise grow a room's state without
+ * end. What falls off the front is said in the thread, so a hand reads that
+ * the wake did not carry everything. */
+export const PENDING_MAX = 200;
+
+/** How many words of the opening message name a room with no change. */
+const SUBJECT_WORDS = 8;
+
 export interface RoomMessage {
   slack: string;
   text: string;
@@ -60,20 +70,26 @@ export interface RunHandle {
 }
 
 export interface RoomState {
-  status: "idle" | "running";
   /** The wake counter. The running wake's token names this number, so a token
    * from the wake before is refused the moment the next one starts. */
   wake: number;
-  /** The running wake's reason, or null when idle. */
+  /** The running wake's reason, or null when nothing is running: a room is
+   * running exactly while it has a reason. */
   reason: Reason | null;
   /** The reason of the wake that waits — through the debounce, or through a
    * run. Null is the room having nothing behind it. */
   queued: Reason | null;
   pending: RoomMessage[];
+  /** How many lines fell off the front of `pending`, until a wake says so. */
+  dropped: number;
   thread: Thread | null;
   change: string | null;
-  /** The last thing said before this wake started, and who said it: the word a
-   * landing on a word is checked against. */
+  /** The first words said in this room, which name a room no change is bound
+   * to. */
+  opened: string | null;
+  /** The latest landing word said in this room, and the member who said it,
+   * kept until a landing consumes them: `land` then `thanks!` lands, and a
+   * chain the budget cut is finished by the next wake on the same word. */
   word: string | null;
   senderSlack: string | null;
   run: RunHandle | null;
@@ -89,10 +105,8 @@ export interface Wake {
   change: string | null;
   thread: Thread | null;
   messages: RoomMessage[];
-  /** The last thing said before the wake started, and the member who said
-   * it: the wake carries its own sender rather than the payload picking one
-   * out of the messages. */
-  word: string | null;
+  /** The member who woke the room: the latest line of the burst. A landing
+   * wake has none. */
   sender: string | null;
   /** The token's `exp`: this wake's start plus its budget. */
   expiresAt: number;
@@ -120,13 +134,14 @@ export interface EnqueueInput {
 
 export function freshRoom(): RoomState {
   return {
-    status: "idle",
     wake: 0,
     reason: null,
     queued: null,
     pending: [],
+    dropped: 0,
     thread: null,
     change: null,
+    opened: null,
     word: null,
     senderSlack: null,
     run: null,
@@ -161,14 +176,22 @@ export function enqueue(
   input: EnqueueInput,
   now: number,
 ): Step {
+  const said = input.message
+    ? [...state.pending, input.message]
+    : state.pending;
+  const pending = said.slice(-PENDING_MAX);
   const next: RoomState = {
     ...state,
     thread: input.thread ?? state.thread,
     change: input.change ?? state.change,
-    pending: input.message ? [...state.pending, input.message] : state.pending,
+    opened:
+      state.opened ??
+      (input.message ? firstWords(input.message.text) : state.opened),
+    pending,
+    dropped: state.dropped + (said.length - pending.length),
     queued: stronger(state.queued, input.reason),
   };
-  if (state.status === "running") return { state: next, commands: [] };
+  if (state.reason !== null) return { state: next, commands: [] };
   const at = now + DEBOUNCE_MS[input.reason];
   // A second message inside the debounce does not push the wake further out —
   // otherwise a thread that keeps talking never wakes at all. A reason that
@@ -186,47 +209,59 @@ export function enqueue(
 function startWake(state: RoomState, reason: Reason, now: number): Step {
   const wake = state.wake + 1;
   const expiresAt = now + BUDGET_MS[reason];
-  const last = state.pending.at(-1) ?? null;
+  // The word is the latest landing word of the burst, and a burst that says
+  // none leaves the one the room already held: a landing is what spends it.
+  const said = [...state.pending]
+    .reverse()
+    .find((message) => isLandingWord(message.text));
+  const commands: Command[] = [{ kind: "setAlarm", at: expiresAt }];
+  if (state.dropped > 0)
+    commands.push({ kind: "post", text: droppedLine(state.dropped) });
+  commands.push({
+    kind: "fire",
+    wake: {
+      wake,
+      reason,
+      change: state.change,
+      thread: state.thread,
+      messages: state.pending,
+      sender: state.pending.at(-1)?.slack ?? null,
+      expiresAt,
+    },
+  });
   return {
     state: {
       ...state,
-      status: "running",
       wake,
       reason,
-      word: last?.text ?? null,
-      senderSlack: last?.slack ?? null,
+      word: said ? wordOf(said.text) : state.word,
+      senderSlack: said ? said.slack : state.senderSlack,
       queued: null,
       pending: [],
+      dropped: 0,
       run: null,
       alarm: { kind: "budget", at: expiresAt },
     },
     // The budget is set before the fire, so a fire that never answers still
     // leaves the room with an alarm that frees it.
-    commands: [
-      { kind: "setAlarm", at: expiresAt },
-      {
-        kind: "fire",
-        wake: {
-          wake,
-          reason,
-          change: state.change,
-          thread: state.thread,
-          messages: state.pending,
-          word: last?.text ?? null,
-          sender: last?.slack ?? null,
-          expiresAt,
-        },
-      },
-    ],
+    commands,
   };
 }
 
-/** The run started and named itself: the ack carries the link, so a wake that
- * dies later still has one. */
-export function fired(state: RoomState, run: RunHandle): Step {
+/** The run started: the ack carries the wake's subject and, where the runner
+ * named a session, its link — so a wake that dies later still has one. A
+ * runner that named none leaves the room saying the run did not start. */
+export function fired(state: RoomState, run: RunHandle | null): Step {
   return {
     state: { ...state, run },
-    commands: [{ kind: "post", text: `Reading… ${run.url}` }],
+    commands: [
+      {
+        kind: "post",
+        text: run
+          ? `Reading ${subjectOf(state)}… ${run.url}`
+          : didNotStart(state),
+      },
+    ],
   };
 }
 
@@ -236,7 +271,6 @@ export function fireFailed(state: RoomState, why: string): Step {
   return {
     state: {
       ...state,
-      status: "idle",
       reason: null,
       queued: null,
       run: null,
@@ -266,7 +300,6 @@ export function done(state: RoomState, now: number): Step {
   return {
     state: {
       ...state,
-      status: "idle",
       reason: null,
       queued: null,
       run: null,
@@ -277,8 +310,9 @@ export function done(state: RoomState, now: number): Step {
 }
 
 /** The alarm went off: the debounce elapsed, or the budget ran out with no
- * `done`. A budget alarm on a room that is not running answers nothing —
- * there is no wake to say anything about. */
+ * `done`. Anything else — a budget alarm before its time, or one on a room
+ * that is not running — answers nothing, because there is no wake to say
+ * anything about. */
 export function onAlarm(state: RoomState, now: number): Step {
   if (state.alarm?.kind === "debounce") {
     const queued = state.queued;
@@ -289,11 +323,12 @@ export function onAlarm(state: RoomState, now: number): Step {
       };
     return startWake({ ...state, alarm: null }, queued, now);
   }
-  if (state.status !== "running") return { state, commands: [] };
-  const name = nameOf(state.reason);
+  if (state.alarm?.kind !== "budget" || now < state.alarm.at)
+    return { state, commands: [] };
+  if (state.reason === null) return { state, commands: [] };
   const text = state.run
-    ? `${name} of ${subjectOf(state)} did not finish: ${state.run.url}`
-    : `${name} of ${subjectOf(state)} did not start.`;
+    ? `${nameOf(state.reason)} of ${subjectOf(state)} did not finish: ${state.run.url}`
+    : didNotStart(state);
   const step = done(state, now);
   return {
     state: step.state,
@@ -306,14 +341,21 @@ export function bind(state: RoomState, change: string): RoomState {
   return { ...state, change };
 }
 
-/** A call from a session is the running wake's, or it is nobody's. */
-export function isRunningWake(state: RoomState, wake: number): boolean {
-  return state.status === "running" && state.wake === wake;
+/** A landing took the word: the next wake starts without it, so one word
+ * lands one chain. */
+export function consumeWord(state: RoomState): RoomState {
+  return { ...state, word: null, senderSlack: null };
 }
 
-/** What a line in the thread calls the room it is about. */
+/** A call from a session is the running wake's, or it is nobody's. */
+export function isRunningWake(state: RoomState, wake: number): boolean {
+  return state.reason !== null && state.wake === wake;
+}
+
+/** What a line in the thread calls the room it is about: the change, or the
+ * words the thread opened with until a run names one. */
 function subjectOf(state: RoomState): string {
-  return state.change ?? "this thread";
+  return state.change ?? state.opened ?? "this thread";
 }
 
 /** How a line names the wake it is about. A room with no reason is a room
@@ -321,4 +363,29 @@ function subjectOf(state: RoomState): string {
  * nobody asked for. */
 function nameOf(reason: Reason | null): string {
   return reason === null ? "The wake" : WAKE_NAME[reason];
+}
+
+/** The one sentence for a wake with no run behind it, said by the ack that
+ * found no session and by the budget that found no link. */
+function didNotStart(state: RoomState): string {
+  return `${nameOf(state.reason)} of ${subjectOf(state)} did not start.`;
+}
+
+/** What the wake says about the lines it is not carrying. */
+function droppedLine(dropped: number): string {
+  const lines = dropped === 1 ? "line is" : "lines are";
+  return `${dropped} earlier ${lines} not in this wake: the room keeps the latest ${PENDING_MAX}.`;
+}
+
+/** The opening message, short enough to name a room in one line: the app's
+ * mention off the front, the whitespace collapsed. */
+function firstWords(text: string): string | null {
+  const words = text
+    .replace(/^\s*<@[^>]+>/, "")
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word !== "");
+  if (words.length === 0) return null;
+  const first = words.slice(0, SUBJECT_WORDS).join(" ");
+  return words.length > SUBJECT_WORDS ? `${first}…` : first;
 }

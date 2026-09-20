@@ -6,13 +6,13 @@
  * builds that request and one type it accepts: a call the room does not know
  * is a call this file does not let anybody make.
  */
-import type { EnqueueInput, RoomState } from "./room-state.ts";
+import type { EnqueueInput, Thread } from "./room-state.ts";
 
 export type LandKind = "word" | "reviewed";
 
 export type RoomOp =
   | ({ op: "enqueue"; dedupe?: string; requireRoom?: boolean } & EnqueueInput)
-  | { op: "takeover"; change: string; state: RoomState }
+  | { op: "alias"; change: string; thread: Thread }
   | { op: "bind"; wake: number; change: string }
   | { op: "post"; wake: number; text: string }
   | { op: "land"; wake: number; sha: string; kind: LandKind; artifact: string }

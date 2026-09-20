@@ -1,11 +1,12 @@
 /**
  * One room: the Durable Object behind one change, and behind one Slack thread
- * until a run names the change that thread is about.
+ * for as long as the wake that thread started is running.
  *
  * The change is the room's identity, because a landing wake is addressed by
- * the change and a thread is not always known when it arrives. A thread room
- * exists only until its run calls `bind`: from then on it forwards every op to
- * the change's room, which has taken the running wake over.
+ * the change and a thread is not always known when it arrives. A run names the
+ * change with `bind`: the change's room takes that thread as its alias, so
+ * every later message in the thread queues there — and the wake stays where it
+ * started, because the token the session holds names this room.
  *
  * It holds no rules. Every decision is `room-state.ts`'s, and this class does
  * what the commands say: keep the state, set the one alarm, fire the Routine,
@@ -34,6 +35,7 @@ import {
   type Thread,
   type Wake,
 } from "./room-state.ts";
+import { changeRoom } from "./rooms.ts";
 import { type Fired, fireRoutine } from "./routine.ts";
 import { callRoom, json, type RoomOp } from "./rpc.ts";
 import { postMessage } from "./slack.ts";
@@ -42,6 +44,10 @@ import { mintWakeToken } from "./token.ts";
 
 /** The planning schema a landing's role is read from. */
 const SCHEMA_PATH = "openspec/schemas/grade10-planning/schema.yaml";
+
+/** Where the change's room is kept, once a run has named the change this
+ * thread is about. */
+const CHANGE_ROOM = "change-room";
 
 /** The record's `thread:` line, as the round writes it. */
 const THREAD_LINE = /^\s*thread:\s*"?([^\s"/]+)\/([^\s"]+)"?\s*$/m;
@@ -55,9 +61,6 @@ export class Room {
   private readonly env: Env;
   /** One cache per live room, which is one cache per change being answered. */
   private readonly team: TeamMap;
-  /** The thread the record names, read once per instance: a room addressed by
-   * the change alone has no thread of its own until a run binds one. */
-  private recorded: Thread | null = null;
 
   constructor(ctx: DurableObjectState, env: Env) {
     this.ctx = ctx;
@@ -73,8 +76,8 @@ export class Room {
       switch (op.op) {
         case "enqueue":
           return await this.onEnqueue(op);
-        case "takeover":
-          return await this.onTakeover(op);
+        case "alias":
+          return await this.onAlias(op);
         case "bind":
           return await this.onBind(op);
         case "post":
@@ -115,11 +118,13 @@ export class Room {
     await this.ctx.storage.put("state", state);
   }
 
-  /** The change's room, once a run has bound one. A thread room forwards
-   * everything there: the wake it started is being run by that room, and the
-   * token the session holds still names this one. */
+  /** A message that arrives in a thread whose change a run has named belongs
+   * to the change's room, which holds the queue for every edge the change is
+   * reached on. Nothing else is forwarded: the wake's own calls are answered
+   * here, because the wake never migrates. */
   private async forward(op: RoomOp): Promise<Response | null> {
-    const to = await this.ctx.storage.get<string>("forward");
+    if (op.op !== "enqueue") return null;
+    const to = await this.ctx.storage.get<string>(CHANGE_ROOM);
     if (!to) return null;
     const id = this.env.ROOM.idFromName(to);
     if (id.toString() === this.ctx.id.toString()) return null;
@@ -154,46 +159,46 @@ export class Room {
   }
 
   /**
-   * The thread room's running wake, handed over at `bind`. An idle change
-   * room adopts it whole — the wake number included, because the session's
-   * token names that number.
+   * A thread's room says this change is what that thread is about. The change
+   * takes it as the thread it answers in, and a message that arrives in it
+   * from now on queues here.
    *
-   * A change room already running a wake of its own keeps it: a room runs one
-   * wake at a time, and the wake that could not be taken over is stale from
-   * the moment its next call is refused.
+   * A room already running a wake of its own keeps its thread: a wake that
+   * answered in a thread it never read is worse than a bind refused, and the
+   * run is told to ask again.
    */
-  private async onTakeover(
-    op: Extract<RoomOp, { op: "takeover" }>,
+  private async onAlias(
+    op: Extract<RoomOp, { op: "alias" }>,
   ): Promise<Response> {
     const state = await this.load();
-    if (state.status === "running" || op.state.wake <= state.wake)
-      return json(409, { taken: false, reason: "room-busy" });
-    const taken: RoomState = { ...op.state, change: op.change };
-    await this.put(taken);
-    if (taken.alarm) await this.ctx.storage.setAlarm(taken.alarm.at);
-    return json(200, { taken: true });
+    if (state.reason !== null)
+      return json(409, { bound: false, reason: "room-busy" });
+    await this.put({ ...state, change: op.change, thread: op.thread });
+    return json(200, { aliased: op.change });
   }
 
   private async onBind(op: Extract<RoomOp, { op: "bind" }>): Promise<Response> {
     const state = await this.load();
     if (!isRunningWake(state, op.wake))
       return json(401, { reason: "stale-wake" });
-    const id = this.env.ROOM.idFromName(`change/${op.change}`);
+    const bound = bind(state, op.change);
+    const id = this.env.ROOM.idFromName(changeRoom(op.change));
     if (id.toString() === this.ctx.id.toString()) {
-      await this.put(bind(state, op.change));
+      await this.put(bound);
       return json(200, { bound: op.change });
     }
-    // The change now has the room: this one hands the running wake over and
-    // becomes the address the session's token still names.
+    if (!state.thread) return json(400, { reason: "no-thread" });
+    // The change's room takes this thread as its alias. The pointer runs the
+    // other way from here: this room keeps the wake it is running, and the
+    // change's room holds the thread and the queue.
     const answer = await callRoom(this.env.ROOM.get(id), {
-      op: "takeover",
+      op: "alias",
       change: op.change,
-      state: bind(state, op.change),
+      thread: state.thread,
     });
     if (!answer.ok) return answer;
-    await this.ctx.storage.put("forward", `change/${op.change}`);
-    await this.ctx.storage.delete("state");
-    await this.ctx.storage.deleteAlarm();
+    await this.put(bound);
+    await this.ctx.storage.put(CHANGE_ROOM, changeRoom(op.change));
     return json(200, { bound: op.change });
   }
 
@@ -275,11 +280,23 @@ export class Room {
     );
   }
 
-  /** The thread the change's record names on `main`, read once per instance.
-   * A record that names none, and a change the relay cannot read, both answer
-   * nothing — the post falls back to the planning channel. */
+  /** A line the room says itself, best-effort: a post that does not land is
+   * this room's own voice going missing, and never the reason a state already
+   * committed is left with no alarm. */
+  private async said(state: RoomState, text: string): Promise<void> {
+    try {
+      await this.post(state, text);
+    } catch (error) {
+      console.error(
+        `relay room ${this.ctx.id.toString()}: "${text}" did not post: ${reasonOf(error)}`,
+      );
+    }
+  }
+
+  /** The thread the change's record names on `main`. A record that names
+   * none, and a change the relay cannot read, both answer nothing — the post
+   * falls back to the planning channel. */
   private async threadOf(state: RoomState): Promise<Thread | null> {
-    if (this.recorded) return this.recorded;
     if (!state.change) return null;
     let text: string;
     try {
@@ -293,14 +310,22 @@ export class Room {
     }
     const line = THREAD_LINE.exec(text);
     if (!line) return null;
-    this.recorded = { channel: line[1], ts: line[2] };
-    return this.recorded;
+    return { channel: line[1], ts: line[2] };
   }
 
-  /** Carry out one step: the state first, then its commands in order. A fire
-   * answers with the run's link, which is the ack, so the step it returns is
-   * carried out the same way. */
+  /** Carry out one step: the state, then its alarm and its fire, and the
+   * lines it says last — so a post that fails cannot leave a committed state
+   * without the alarm that frees it. */
   private async apply(step: Step): Promise<RoomState> {
+    const lines: string[] = [];
+    const state = await this.carry(step, lines);
+    for (const line of lines) await this.said(state, line);
+    return state;
+  }
+
+  /** The state and the commands that change it, with what the step says
+   * collected for the caller to post. */
+  private async carry(step: Step, lines: string[]): Promise<RoomState> {
     let state = step.state;
     await this.put(state);
     for (const command of step.commands) {
@@ -312,9 +337,13 @@ export class Room {
           await this.ctx.storage.deleteAlarm();
           break;
         case "post":
-          await this.post(state, command.text);
+          lines.push(command.text);
           break;
         case "fire": {
+          // The payload is built before the try: a payload the relay cannot
+          // build is not the runner refusing the fire, and saying it was
+          // would free a room for the wrong reason.
+          const text = await this.payload(command.wake);
           // A fire that fails — refused by the runner, or never answered at
           // all — is the wake not starting, so the thread is told and the
           // room freed rather than left holding a run that does not exist.
@@ -322,7 +351,7 @@ export class Room {
           try {
             run = await fireRoutine(
               { url: this.env.ROUTINE_FIRE_URL, token: this.env.ROUTINE_TOKEN },
-              await this.payload(command.wake),
+              text,
             );
           } catch (error) {
             run = {
@@ -330,8 +359,9 @@ export class Room {
               why: `the runner could not be reached: ${reasonOf(error)}`,
             };
           }
-          state = await this.apply(
+          state = await this.carry(
             run.ok ? fired(state, run.run) : fireFailed(state, run.why),
+            lines,
           );
           break;
         }

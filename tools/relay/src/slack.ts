@@ -8,6 +8,7 @@
  */
 import { equalBytes, fromHex, hmacSha256, toHex } from "./bytes.ts";
 import type { Thread } from "./room-state.ts";
+import { threadRoom } from "./rooms.ts";
 
 /** Slack's replay window. A request signed longer ago than this is refused
  * whatever its signature says. */
@@ -80,6 +81,15 @@ export function wordOf(text: string): string {
     .replace(/^\s*<@[^>]+>/, "")
     .trim()
     .toLowerCase();
+}
+
+/** The two words that land, as `wordOf` leaves them. */
+export const LANDING_WORDS = ["land", "land with recommendations"];
+
+/** Whether a message is one of them, and nothing else: a landing is one of
+ * two words however the rest of the thread reads. */
+export function isLandingWord(text: string | null): boolean {
+  return LANDING_WORDS.includes(wordOf(text ?? ""));
 }
 
 interface SlackEnvelope {
@@ -173,16 +183,18 @@ export function routeMessage(
     if (!message.mentionsApp) return null;
     // The change is unknown until the run names it, so a first sentence is a
     // plan wake on a room keyed by the sentence itself.
+    const thread = { channel: message.channel, ts: message.ts };
     return {
-      room: `${message.channel}/${message.ts}`,
-      thread: { channel: message.channel, ts: message.ts },
+      room: threadRoom(thread),
+      thread,
       reason: "plan",
       requireRoom: false,
     };
   }
+  const thread = { channel: message.channel, ts: message.threadTs };
   return {
-    room: `${message.channel}/${message.threadTs}`,
-    thread: { channel: message.channel, ts: message.threadTs },
+    room: threadRoom(thread),
+    thread,
     reason: "message",
     requireRoom: !message.mentionsApp,
   };
