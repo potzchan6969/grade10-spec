@@ -96,20 +96,28 @@ type ThreadRow = {
  *
  * A round is placed by the landing that wrote it — `rounds.md` is written in
  * the landing's own commit — so it reads as a second line under that landing
- * rather than as a row of its own. A round no landing on this reading
- * accounts for keeps its own row at the end, undated, because a round that
- * ran is a thing that happened whether or not its commit is in hand.
+ * rather than as a row of its own. An artifact is read more than once, so the
+ * pairing is by count and not by name: the nth landing of an artifact carries
+ * the nth round of it, keyed by the round's own number so no two rounds of one
+ * artifact are ever the same row. A round no landing on this reading accounts
+ * for keeps its own row, in round order, undated, because a round that ran is
+ * a thing that happened whether or not its commit is in hand.
  */
 function threadRowsOf(
   change: ChangeEntry,
   history: ThreadEvent[],
 ): ThreadRow[] {
-  const rounds = new Map(
-    (change.rounds ?? []).map((round) => [
-      roundArtifactOf(round.artifact) ?? round.artifact,
-      round,
-    ]),
-  );
+  const ordered = change.rounds ?? [];
+  /** Each artifact's rounds, in round order — the queue a landing takes from. */
+  const rounds = new Map<string, RoundRow[]>();
+  for (const round of ordered) {
+    const artifact = roundArtifactOf(round.artifact) ?? round.artifact;
+    rounds.set(artifact, [...(rounds.get(artifact) ?? []), round]);
+  }
+  /** Which round numbers a landing already carries. */
+  const placed = new Set<number>();
+  /** How many landings of each artifact this reading has passed. */
+  const landings = new Map<string, number>();
   const rows: ThreadRow[] = [];
 
   for (const event of history) {
@@ -117,8 +125,13 @@ function threadRowsOf(
       event.kind === "landed" && event.target
         ? roundArtifactOf(event.target)
         : null;
-    const round = target === null ? undefined : rounds.get(target);
-    if (target !== null && round) rounds.delete(target);
+    let round: RoundRow | undefined;
+    if (target !== null) {
+      const nth = landings.get(target) ?? 0;
+      landings.set(target, nth + 1);
+      round = rounds.get(target)?.[nth];
+      if (round) placed.add(round.round);
+    }
     rows.push({
       key: `${event.sha}:${event.kind}`,
       date: event.date,
@@ -127,9 +140,10 @@ function threadRowsOf(
     });
   }
 
-  for (const round of rounds.values()) {
+  for (const round of ordered) {
+    if (placed.has(round.round)) continue;
     rows.push({
-      key: `round-${round.round}-${round.artifact}`,
+      key: `round-${round.round}`,
       line: roundLine(round),
     });
   }
