@@ -107,7 +107,7 @@ Run the appropriate checks before handoff:
 - `pnpm run plan:preflight <change-id>` before editing a `tasks.md` engineering is implementing.
 - `pnpm run archive:preflight <change-id>` before archiving a change; it prints what still refuses.
 - `pnpm run test:openspec` after anything under `scripts/openspec/` changes.
-- `pnpm --dir tools/relay test` and `pnpm --dir tools/relay typecheck` after anything under `tools/relay/` changes; the root `test` and `typecheck` chains run both.
+- `pnpm --dir tools/relay test` after anything under `tools/relay/` changes.
 - `pnpm run validate:changes <change-id>` after a change's artifacts change; CI runs it over every change.
 - `pnpm run tcs:validate` after a suite — `feature-tcs.md`, `domain-tcs.md`, `product-tcs.md`, `platform-tcs.md` — changes; CI runs it on every push.
 - `pnpm run design-sync:check` after a design-system primitive changes.
