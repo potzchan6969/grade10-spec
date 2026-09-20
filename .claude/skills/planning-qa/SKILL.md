@@ -84,18 +84,7 @@ Everything this run produces is `draft`. Nothing in it claims review;
    write, not one to interpret. Writing groups over an unsettled scope is how a
    feature set comes to name something nobody chose.
 
-2. **Read the enriched instructions.**
-
-   ```bash
-   openspec instructions specs --change <change-name>
-   openspec instructions test-cases --change <change-name>
-   ```
-
-   These carry this store's own rules on top of the schema's. Read them rather
-   than working from memory; `specs` carries both of its passes, and the second
-   is yours.
-
-3. **Write the outline, then run on it.** `## Purpose` and `## Feature set`,
+2. **Write the outline, then run on it.** `## Purpose` and `## Feature set`,
    from the journeys and the marked PRD - the rules are the `specs`
    instruction's. Root group names are the anchors everything downstream
    resolves against, so they are fixed once and deliberately.
@@ -111,7 +100,7 @@ Everything this run produces is `draft`. Nothing in it claims review;
    naming it moves in the same change. So read the groups once more yourself
    before you dispatch, and fix one you can already see is wrong.
 
-4. **Run the two readings.** Dispatch both sub-agents. Neither sees the
+3. **Run the two readings.** Dispatch both sub-agents. Neither sees the
    other's output. They read the same anchors, not the same bundle: the suite
    pass gets the isolated input `spec-to-tcs` builds, and the scenario pass
    also reads the durable requirements, because a MODIFIED block is copied
@@ -135,7 +124,7 @@ Everything this run produces is `draft`. Nothing in it claims review;
    change's record, cleared by their edit or by that artifact's `reviewed:`
    line. The suite pass does not read it: a mechanism is not an anchor.
 
-5. **Reconcile, then take the second pass.** Join on anchors, apply the
+4. **Reconcile, then take the second pass.** Join on anchors, apply the
    dispositions below, and the scenarios that survive are written with the
    `## Reconciliation` block.
 
@@ -161,7 +150,7 @@ Everything this run produces is `draft`. Nothing in it claims review;
    artifact has answered, so one left behind is a finding rather than a note.
    A wait on a requirement nobody can decide yet is a different line and stays.
 
-6. **Lay the requirements out for one pass.** After the reconciliation and
+5. **Lay the requirements out for one pass.** After the reconciliation and
    before the PM reads the root groups, read each requirement as a new hire
    would and rewrite its block so it reads in one pass. The sentences are
    settled; only their layout moves.
@@ -188,7 +177,7 @@ Everything this run produces is `draft`. Nothing in it claims review;
    engineer reading for one rule should find it without reading the nine
    around it.
 
-7. **Validate.**
+6. **Validate.**
 
    ```bash
    pnpm run validate:changes <change-name>
