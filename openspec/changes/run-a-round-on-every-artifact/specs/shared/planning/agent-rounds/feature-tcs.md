@@ -2550,7 +2550,7 @@ Slack thread either.
 | `US8-TC1-1` | The run tab, written into the run spreadsheet |
 | `US8-TC3-1` | Both ends of the gate, in the run spreadsheet |
 | `US8-TC4-1` | A push, a staging deploy and a release cut |
-| `US8-TC5-1` | A person judges which test decides a case, so no script drives it |
+| `US8-TC5-1` | Nothing drives it yet: `scripts/openspec/decided-by.test.mjs` proves the line and its refusals, and the case walks the flip riding the test's commit |
 | `US9-TC1-1` | The page and `rounds.md` read together after three real rounds |
 | `US9-TC2-1` | A task group's row after a real build |
 | `US9-TC10-1` | A fix pass's row is read from a record a person wrote |
