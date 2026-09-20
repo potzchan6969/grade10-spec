@@ -1,7 +1,11 @@
+import { ShoppingBag } from "@phosphor-icons/react";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
+import { IconButton } from "../forms/icon-button";
 import { Nav } from "./nav";
 import { NAV_BASE_ARGS, NAV_ITEMS } from "./nav.story-shared";
+
+const cartSlotClick = fn();
 
 const meta = {
   title: "Components/Nav/Overview",
@@ -48,6 +52,40 @@ export const AllControls: Story = {
     expect(
       canvasElement.querySelector('[data-slot="nav-logo"]'),
     ).toHaveAttribute("href", "/");
+  },
+};
+
+/** A compound header can replace the built-in cart control with its own slot. */
+export const CartSlot: Story = {
+  name: "Cart slot",
+  args: {
+    cartSlot: (
+      <IconButton
+        aria-label="Cart (3)"
+        onClick={cartSlotClick}
+        size="md"
+        variant="ghost"
+      >
+        <ShoppingBag aria-hidden size={14} />
+      </IconButton>
+    ),
+  },
+  play: async ({ canvasElement, args, step }) => {
+    await step(
+      "shared-ui-site-chrome-SC-22 - Cart slot replaces the built-in cart",
+      async () => {
+        const canvas = within(canvasElement);
+        const cart = canvas.getByRole("button", { name: "Cart (3)" });
+
+        expect(cart).toBeInTheDocument();
+        expect(canvas.queryByRole("button", { name: "Cart" })).toBeNull();
+
+        await userEvent.click(cart);
+
+        expect(cartSlotClick).toHaveBeenCalledTimes(1);
+        expect(args.onCartClick).not.toHaveBeenCalled();
+      },
+    );
   },
 };
 

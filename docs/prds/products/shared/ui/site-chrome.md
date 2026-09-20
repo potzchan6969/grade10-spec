@@ -47,7 +47,9 @@ utility strip / compact utility list.
 
 🚧 When the cart control is present and the cart holds active lines, `SiteHeader`
 shows a round count on the cart icon — the same number as the cart drawer title
-badge. An empty cart hides it. Design-system `Nav` stays count-agnostic.
+badge. An empty, omitted, or unknown count hides it. Signed-out visitors have
+no guest cart, so they receive no count. Design-system `Nav` stays
+count-agnostic.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937" title="Nav — the site header (reference; Storybook is SoT)"}
 

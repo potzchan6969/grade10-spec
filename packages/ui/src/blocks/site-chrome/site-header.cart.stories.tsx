@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
+import { CartDrawerHeader } from "../store-cart/cart-drawer";
+import { DEFAULT_CART_COPY } from "../store-cart/fixtures";
 import { SiteHeader } from "./site-header";
 import { SITE_HEADER_BASE_ARGS } from "./site-header.story-shared";
 
@@ -49,6 +51,78 @@ function cartBadge(canvasElement: HTMLElement) {
   );
 }
 
+const wideContainer: NonNullable<Story["decorators"]> = [
+  (Story) => (
+    <div style={{ width: 1200 }}>
+      <Story />
+    </div>
+  ),
+];
+const compactContainer: NonNullable<Story["decorators"]> = [
+  (Story) => (
+    <div style={{ width: 375 }}>
+      <Story />
+    </div>
+  ),
+];
+
+function countPlay(
+  count: number,
+  scenario: string,
+  compact = false,
+): NonNullable<Story["play"]> {
+  return async ({ canvasElement, args, step }) => {
+    await step(
+      `${scenario} - Full count ${count} at ${compact ? 375 : 1200}px`,
+      async () => {
+        const canvas = within(canvasElement);
+        const cart = canvas.getByRole("button", { name: `Cart (${count})` });
+        const account = canvas.getByRole("button", { name: "Account" });
+        const badge = cartBadge(canvasElement) as HTMLElement;
+        expect(cart).toBeVisible();
+        expect(account).toBeVisible();
+        expect(badge).toBeVisible();
+        expect(badge).toHaveAttribute("data-variant", "brand");
+        expect(badge).toHaveAttribute("data-type", "count");
+        expect(badge.textContent).toBe(String(count));
+        expect(badge.scrollWidth).toBeLessThanOrEqual(badge.clientWidth);
+        const header =
+          canvasElement.querySelector<HTMLElement>('[data-slot="nav"]');
+        expect(header).not.toBeNull();
+        if (header === null) throw new Error("Nav must render");
+        const bounds = header.getBoundingClientRect();
+        const badgeBounds = badge.getBoundingClientRect();
+        expect(bounds.width).toBe(compact ? 375 : 1200);
+        expect(badgeBounds.left).toBeGreaterThanOrEqual(bounds.left);
+        expect(badgeBounds.right).toBeLessThanOrEqual(bounds.right);
+        expect(badgeBounds.top).toBeGreaterThanOrEqual(bounds.top);
+        expect(badgeBounds.bottom).toBeLessThanOrEqual(bounds.bottom);
+        const text = document.createRange();
+        text.selectNodeContents(badge);
+        const digits = text.getBoundingClientRect();
+        expect(digits.left).toBeGreaterThanOrEqual(badgeBounds.left);
+        expect(digits.right).toBeLessThanOrEqual(badgeBounds.right);
+        const controls = compact
+          ? [account, canvas.getByRole("button", { name: "Menu" })]
+          : [account];
+        const cartBounds = cart.getBoundingClientRect();
+        for (const control of controls) {
+          expect(control).toBeVisible();
+          const rect = control.getBoundingClientRect();
+          expect(
+            rect.right <= cartBounds.left || rect.left >= cartBounds.right,
+          ).toBe(true);
+          expect(
+            rect.right <= badgeBounds.left || rect.left >= badgeBounds.right,
+          ).toBe(true);
+        }
+        await userEvent.click(cart);
+        expect(args.onCartClick).toHaveBeenCalledTimes(1);
+      },
+    );
+  };
+}
+
 /**
  * Empty cart — cart control present, count badge hidden.
  * Signed-out is valid here: Grade10 has no guest checkout, so a signed-out
@@ -57,11 +131,15 @@ function cartBadge(canvasElement: HTMLElement) {
 export const EmptyCart: Story = {
   name: "Empty cart — no badge",
   args: { cartItemCount: 0 },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Sign In" })).toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: "Cart" })).toBeInTheDocument();
-    expect(cartBadge(canvasElement)).toBeNull();
+  play: async ({ canvasElement, step }) => {
+    await step("shared-ui-site-chrome-SC-23 - EmptyCart", async () => {
+      const canvas = within(canvasElement);
+      expect(
+        canvas.getByRole("button", { name: "Sign In" }),
+      ).toBeInTheDocument();
+      expect(canvas.getByRole("button", { name: "Cart" })).toBeInTheDocument();
+      expect(cartBadge(canvasElement)).toBeNull();
+    });
   },
 };
 
@@ -72,17 +150,8 @@ export const EmptyCart: Story = {
 export const OneItem: Story = {
   name: "One item",
   args: { session: "signed-in", cartItemCount: 1 },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Account" })).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: "Sign In" })).toBeNull();
-    expect(
-      canvas.getByRole("button", { name: "Cart (1)" }),
-    ).toBeInTheDocument();
-    const badge = cartBadge(canvasElement);
-    expect(badge).not.toBeNull();
-    expect(badge).toHaveTextContent("1");
-  },
+  decorators: wideContainer,
+  play: countPlay(1, "shared-ui-site-chrome-SC-24"),
 };
 
 /**
@@ -92,14 +161,8 @@ export const OneItem: Story = {
 export const MultiItem: Story = {
   name: "Multi-item",
   args: { session: "signed-in", cartItemCount: 3 },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Account" })).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: "Cart (3)" }),
-    ).toBeInTheDocument();
-    expect(cartBadge(canvasElement)).toHaveTextContent("3");
-  },
+  decorators: wideContainer,
+  play: countPlay(3, "shared-ui-site-chrome-SC-25"),
 };
 
 /**
@@ -110,14 +173,38 @@ export const MultiItem: Story = {
 export const LargeCount: Story = {
   name: "Large count",
   args: { session: "signed-in", cartItemCount: 12 },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Account" })).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: "Cart (12)" }),
-    ).toBeInTheDocument();
-    expect(cartBadge(canvasElement)).toHaveTextContent("12");
+  decorators: wideContainer,
+  play: countPlay(12, "shared-ui-site-chrome-SC-26"),
+};
+
+/** A positive count is ignored when the host omits the cart handler. */
+export const CountWithoutHandler: Story = {
+  name: "Positive count without cart handler — no cart",
+  args: {
+    session: "signed-in",
+    onCartClick: undefined,
+    cartItemCount: 3,
   },
+  play: async ({ canvasElement, step }) => {
+    await step(
+      "shared-ui-site-chrome-SC-04 - CountWithoutHandler",
+      async () => {
+        const canvas = within(canvasElement);
+        expect(canvas.queryByRole("button", { name: /Cart/ })).toBeNull();
+        expect(
+          canvasElement.querySelector('[data-slot="status-indicator"]'),
+        ).toBeNull();
+      },
+    );
+  },
+};
+
+/** Counts above two digits stay complete instead of changing to `99+`. */
+export const Above99Count: Story = {
+  name: "Count above 99",
+  args: { session: "signed-in", cartItemCount: 123 },
+  decorators: wideContainer,
+  play: countPlay(123, "shared-ui-site-chrome-SC-26"),
 };
 
 /**
@@ -127,11 +214,72 @@ export const LargeCount: Story = {
 export const CountOmitted: Story = {
   name: "Count omitted — no badge",
   args: { cartItemCount: undefined },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByRole("button", { name: "Sign In" })).toBeInTheDocument();
-    expect(cartBadge(canvasElement)).toBeNull();
+  play: async ({ canvasElement, step }) => {
+    await step("shared-ui-site-chrome-SC-23 - CountOmitted", async () => {
+      const canvas = within(canvasElement);
+      expect(
+        canvas.getByRole("button", { name: "Sign In" }),
+      ).toBeInTheDocument();
+      expect(cartBadge(canvasElement)).toBeNull();
+    });
   },
+};
+
+/** The header and drawer title use the same supplied active-line count. */
+export const CountMatchesDrawer: Story = {
+  name: "Count matches drawer title",
+  args: { session: "signed-in", cartItemCount: 3 },
+  render: (args) => (
+    <div className="space-y-4">
+      <SiteHeader {...args} />
+      <CartDrawerHeader
+        itemCount={args.cartItemCount ?? 0}
+        copy={DEFAULT_CART_COPY.header}
+        onClose={fn()}
+      />
+    </div>
+  ),
+  play: async ({ canvasElement, step }) => {
+    await step("shared-ui-site-chrome-SC-25 - CountMatchesDrawer", async () => {
+      const canvas = within(canvasElement);
+      expect(
+        canvas.getByRole("button", { name: "Cart (3)" }),
+      ).toBeInTheDocument();
+      expect(cartBadge(canvasElement)).toHaveTextContent("3");
+      expect(canvas.getByRole("heading", { name: "Cart" })).toBeInTheDocument();
+      expect(
+        canvasElement.querySelector('[data-slot="badge"]'),
+      ).toHaveTextContent("3");
+    });
+  },
+};
+
+export const CompactOneItem: Story = {
+  ...OneItem,
+  name: "Compact one item (375px)",
+  decorators: compactContainer,
+  play: countPlay(1, "shared-ui-site-chrome-SC-24", true),
+};
+
+export const CompactMultiItem: Story = {
+  ...MultiItem,
+  name: "Compact multi-item (375px)",
+  decorators: compactContainer,
+  play: countPlay(3, "shared-ui-site-chrome-SC-25", true),
+};
+
+export const CompactLargeCount: Story = {
+  ...LargeCount,
+  name: "Compact large count (375px)",
+  decorators: compactContainer,
+  play: countPlay(12, "shared-ui-site-chrome-SC-26", true),
+};
+
+export const CompactAbove99Count: Story = {
+  ...Above99Count,
+  name: "Compact count above 99 (375px)",
+  decorators: compactContainer,
+  play: countPlay(123, "shared-ui-site-chrome-SC-26", true),
 };
 
 /**
