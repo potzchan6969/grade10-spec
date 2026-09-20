@@ -110,8 +110,7 @@ export function relayOf(wake) {
      * record names no thread. `confirm` is the button under it, from
      * `confirmOf`: the thread then shows one button, and a press is the same
      * word as typing it. */
-    post: (text, confirm) =>
-      call("POST", "/post", confirm ? { text, confirm } : { text }),
+    post: (text, confirm) => call("POST", "/post", { text, confirm }),
     /** The wake closed; the room fires again when it is dirty. */
     done: () => call("POST", "/done", {}),
     /** The room's mapping warmed with the change this run opened. */

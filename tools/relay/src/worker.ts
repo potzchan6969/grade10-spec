@@ -493,17 +493,17 @@ function opOf(
       if (change === "") return { bad: "no-change" };
       return { op: { op: "bind", wake, change } };
     }
-    case "post": {
-      // A line the run has nothing to say in is still a line it may post;
-      // the room is the token's, and the thread is the room's.
-      const text = String(body.text ?? "");
-      const confirm = confirmOf(body.confirm);
+    // A line the run has nothing to say in is still a line it may post; the
+    // room is the token's, and the thread is the room's.
+    case "post":
       return {
-        op: confirm
-          ? { op: "post", wake, text, confirm }
-          : { op: "post", wake, text },
+        op: {
+          op: "post",
+          wake,
+          text: String(body.text ?? ""),
+          confirm: confirmOf(body.confirm),
+        },
       };
-    }
     case "land": {
       const sha = field("sha");
       if (!IS_SHA.test(sha)) return { bad: "bad-sha" };
@@ -554,13 +554,15 @@ const SURFACES: Record<string, Surface> = {
   "/wake": { method: "POST", handler: (request, env) => onWake(request, env) },
 };
 
-/** The button a post asks for, or nothing. Both words are the run's own — the
- * relay composes no label — so a post that names neither is a line. */
-function confirmOf(given: unknown): Confirm | null {
+/** The button a post asks for, or nothing — which is the field left off the
+ * op, as a post that asks for no button leaves it off. Both words are the
+ * run's own — the relay composes no label — so a post that names neither is a
+ * line. */
+function confirmOf(given: unknown): Confirm | undefined {
   const asked = (given ?? {}) as { label?: unknown; word?: unknown };
   const label = String(asked.label ?? "").trim();
   const word = String(asked.word ?? "").trim();
-  if (label === "" || word === "") return null;
+  if (label === "" || word === "") return undefined;
   return { label, word };
 }
 
