@@ -73,34 +73,60 @@ export class Live {
   /** Whatever a page says, it is answered with the head: a page that woke from
    * sleep asks on the socket it has rather than opening a second one. */
   async webSocketMessage(socket: WebSocket): Promise<void> {
-    socket.send(headText(await this.stored()));
+    this.send(socket, headText(await this.stored()));
   }
 
-  /** The page went away. The object's end is closed with it, so the runtime
-   * stops handing that socket back. */
-  async webSocketClose(socket: WebSocket): Promise<void> {
-    socket.close(1000, "the page closed the socket");
+  /** The page went away. The object's end is closed with the code and the
+   * reason the page sent, so the runtime stops handing that socket back and the
+   * log reads how it went: a reader who navigated away and one whose network
+   * dropped close the same socket for different reasons. */
+  async webSocketClose(
+    socket: WebSocket,
+    code: number,
+    reason: string,
+    wasClean: boolean,
+  ): Promise<void> {
+    console.log(
+      `relay live: a socket closed ${wasClean ? "cleanly" : "not cleanly"}, ${code} ${reason}`,
+    );
+    socket.close(code, reason);
+  }
+
+  /** The socket itself failed. Nothing more is coming on it, so the object's
+   * end is closed as an error and the runtime's own words are logged: a socket
+   * torn down with nothing said is a page nobody knows stopped listening. */
+  async webSocketError(socket: WebSocket, error: unknown): Promise<void> {
+    console.error(`relay live: a socket failed: ${reasonOf(error)}`);
+    socket.close(1011, "the socket failed");
   }
 
   private async stored(): Promise<Head | null> {
     return (await this.ctx.storage.get<Head>(HEAD)) ?? null;
   }
 
-  /** The head to every socket the object holds, and how many took it. A send
-   * that throws is a page that went away between the push and this line: it is
-   * dropped, and the rest are still told. */
+  /** The head to every socket the object holds, and how many took it. */
   private tell(text: string): number {
     let told = 0;
     for (const socket of this.ctx.getWebSockets()) {
-      try {
-        socket.send(text);
-        told += 1;
-      } catch (error) {
-        console.error(
-          `relay live: a socket did not take the head: ${reasonOf(error)}`,
-        );
-      }
+      if (this.send(socket, text)) told += 1;
     }
     return told;
+  }
+
+  /** The head to one socket, and whether it took it. One guard for every send
+   * the object makes to a socket it holds: a send that throws is a page that
+   * went away between the push and this line, which is logged while the rest
+   * are still told. The upgrade's own send is not one of these — a page whose
+   * first send fails has no socket to keep. */
+  private send(socket: WebSocket, text: string): boolean {
+    try {
+      socket.send(text);
+      return true;
+    } catch (error) {
+      console.error(
+        `relay live: a socket did not take the head: ${reasonOf(error)}`,
+      );
+      return false;
+    }
   }
 }
