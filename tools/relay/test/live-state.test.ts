@@ -32,15 +32,12 @@ describe("a move", () => {
   it("takes the push as the head and tells every open page", () => {
     const step = moved(null, HEAD);
     expect(step.head).toEqual(HEAD);
-    expect(step.commands).toEqual([
-      { kind: "broadcast", text: headText(HEAD) },
-    ]);
+    expect(step.broadcast).toBe(headText(HEAD));
   });
 
   it("carries the same shape the socket was accepted with", () => {
-    const [command] = moved(HEAD, NEXT).commands;
-    expect(command).toEqual({ kind: "broadcast", text: headText(NEXT) });
-    expect(JSON.parse(command.text)).toEqual(NEXT);
+    const { broadcast } = moved(HEAD, NEXT);
+    expect(JSON.parse(String(broadcast))).toEqual(NEXT);
   });
 
   it("tells nobody twice about one commit", () => {
@@ -48,12 +45,12 @@ describe("a move", () => {
     // twice would refresh twice for one move.
     const step = moved(HEAD, { ...HEAD, subject: "read again" });
     expect(step.head).toEqual(HEAD);
-    expect(step.commands).toEqual([]);
+    expect(step.broadcast).toBe(null);
   });
 
   it("tells every page about the next commit", () => {
     const step = moved(HEAD, NEXT);
     expect(step.head).toEqual(NEXT);
-    expect(step.commands).toHaveLength(1);
+    expect(step.broadcast).toBe(headText(NEXT));
   });
 });

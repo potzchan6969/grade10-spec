@@ -58,7 +58,7 @@ interface Asked {
 function liveStub(
   asked: Asked[],
   answer: () => Response = () =>
-    new Response(JSON.stringify({ told: 0 }), { status: 200 }),
+    new Response(JSON.stringify({ moved: true, told: 2 }), { status: 200 }),
 ): Partial<Env> {
   return {
     LIVE: stubNamespace(async (name, request) => {
@@ -920,9 +920,9 @@ describe("/github/events", () => {
     const asked: Asked[] = [];
     const response = await delivery(testEnv(liveStub(asked)), "push", push());
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ told: 0 });
+    expect(await response.json()).toEqual({ moved: true, told: 2 });
     expect(asked).toEqual([
-      { name: "main", op: { op: "moved", ...HEAD }, upgrade: false },
+      { name: "main", op: { op: "moved", head: HEAD }, upgrade: false },
     ]);
   });
 

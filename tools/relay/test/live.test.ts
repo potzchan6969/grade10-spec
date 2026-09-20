@@ -134,7 +134,7 @@ afterEach(() => {
 describe("a page's socket", () => {
   it("is accepted and sent where `main` is", async () => {
     const relay = harness();
-    await relay.send({ op: "moved", ...HEAD });
+    await relay.send({ op: "moved", head: HEAD });
     const answer = await relay.upgrade();
     expect(answer.status).toBe(101);
     expect(answer.socket).not.toBeNull();
@@ -150,7 +150,7 @@ describe("a page's socket", () => {
 
   it("is answered with the head whatever it says", async () => {
     const relay = harness();
-    await relay.send({ op: "moved", ...HEAD });
+    await relay.send({ op: "moved", head: HEAD });
     await relay.upgrade();
     const socket = relay.accepted[0];
     socket.sent.length = 0;
@@ -177,9 +177,9 @@ describe("a move", () => {
     await relay.upgrade();
     for (const socket of relay.accepted) socket.sent.length = 0;
 
-    const answer = await relay.send({ op: "moved", ...HEAD });
+    const answer = await relay.send({ op: "moved", head: HEAD });
     expect(answer.status).toBe(200);
-    expect(answer.read()).toEqual({ told: 2 });
+    expect(answer.read()).toEqual({ moved: true, told: 2 });
     expect(relay.stored()).toEqual(HEAD);
     for (const socket of relay.accepted)
       expect(socket.sent).toEqual([headText(HEAD)]);
@@ -193,9 +193,18 @@ describe("a move", () => {
     gone.gone = true;
     open.sent.length = 0;
 
-    const answer = await relay.send({ op: "moved", ...HEAD });
-    expect(answer.read()).toEqual({ told: 1 });
+    const answer = await relay.send({ op: "moved", head: HEAD });
+    expect(answer.read()).toEqual({ moved: true, told: 1 });
     expect(open.sent).toEqual([headText(HEAD)]);
+    expect(relay.stored()).toEqual(HEAD);
+  });
+
+  it("says it moved the head where no page was open to be told", async () => {
+    // A relay nobody has a page on still moved `main`: the delivery log reads
+    // the move, where a count alone reads the same as a replay.
+    const relay = harness();
+    const answer = await relay.send({ op: "moved", head: HEAD });
+    expect(answer.read()).toEqual({ moved: true, told: 0 });
     expect(relay.stored()).toEqual(HEAD);
   });
 
@@ -205,12 +214,12 @@ describe("a move", () => {
     const socket = relay.accepted[0];
     socket.sent.length = 0;
 
-    await relay.send({ op: "moved", ...HEAD });
-    const again = await relay.send({ op: "moved", ...HEAD });
-    expect(again.read()).toEqual({ told: 0 });
+    await relay.send({ op: "moved", head: HEAD });
+    const again = await relay.send({ op: "moved", head: HEAD });
+    expect(again.read()).toEqual({ moved: false, told: 0 });
     expect(socket.sent).toEqual([headText(HEAD)]);
 
-    await relay.send({ op: "moved", ...NEXT });
+    await relay.send({ op: "moved", head: NEXT });
     expect(socket.sent).toEqual([headText(HEAD), headText(NEXT)]);
     expect(relay.stored()).toEqual(NEXT);
   });
@@ -226,7 +235,7 @@ describe("where `main` is", () => {
 
   it("answers the head the last push stored", async () => {
     const relay = harness();
-    await relay.send({ op: "moved", ...HEAD });
+    await relay.send({ op: "moved", head: HEAD });
     expect((await relay.send({ op: "head" })).read()).toEqual(HEAD);
   });
 });
