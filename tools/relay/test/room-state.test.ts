@@ -60,7 +60,11 @@ describe("the debounce", () => {
   it("waits 60 s for a message", () => {
     const step = enqueue(
       freshRoom(),
-      { reason: "message", thread: THREAD, message: saidAt("1.1", "land") },
+      {
+        reason: "message",
+        thread: THREAD,
+        message: saidAt("1.1", "the badge caps at 99"),
+      },
       NOW,
     );
     expect(step.commands).toEqual([{ kind: "setAlarm", at: NOW + 60_000 }]);
@@ -125,6 +129,92 @@ describe("the debounce", () => {
     // A plan and a landing both need the longer budget of the two reasons
     // waiting, and a landing needs no debounce.
     expect(second.state.queued).toBe("landing");
+  });
+
+  it("wakes at once on a landing word, with the reply's own budget", () => {
+    // Nothing more is coming after `land`, so the minute the rest of a burst
+    // is waited for is not waited for here. The reason stays `message`: the
+    // wake keeps the reply's thirty minutes.
+    const step = enqueue(
+      freshRoom(),
+      { reason: "message", thread: THREAD, message: saidAt("1.1", "land") },
+      NOW,
+    );
+    expect(step.commands).toEqual([{ kind: "setAlarm", at: NOW }]);
+    expect(step.state.alarm).toEqual({ kind: "debounce", at: NOW });
+    expect(step.state.queued).toBe("message");
+  });
+
+  it("wakes at once on a landing word behind a mention of the app", () => {
+    const step = enqueue(
+      freshRoom(),
+      {
+        reason: "message",
+        thread: THREAD,
+        message: saidAt("1.1", "<@U0APP> Land"),
+      },
+      NOW,
+    );
+    expect(step.commands).toEqual([{ kind: "setAlarm", at: NOW }]);
+  });
+
+  it("waits the minute out for a sentence that is no landing word", () => {
+    const step = enqueue(
+      freshRoom(),
+      {
+        reason: "message",
+        thread: THREAD,
+        message: saidAt("1.1", "land the proposal please"),
+      },
+      NOW,
+    );
+    expect(step.commands).toEqual([{ kind: "setAlarm", at: NOW + 60_000 }]);
+  });
+
+  it("pulls the alarm in when a landing word closes a burst, and carries both lines", () => {
+    const first = enqueue(
+      freshRoom(),
+      { reason: "message", thread: THREAD, message: saidAt("1.1", "Q4: x") },
+      NOW,
+    );
+    expect(first.state.alarm).toEqual({ kind: "debounce", at: NOW + 60_000 });
+    const second = enqueue(
+      first.state,
+      { reason: "message", message: saidAt("1.2", "land") },
+      NOW + 10_000,
+    );
+    expect(second.commands).toEqual([{ kind: "setAlarm", at: NOW + 10_000 }]);
+    expect(second.state.alarm).toEqual({ kind: "debounce", at: NOW + 10_000 });
+
+    const woken = onAlarm(second.state, NOW + 10_000);
+    const wake = fireOf(woken.commands);
+    expect(wake.reason).toBe("message");
+    expect(wake.messages.map((message) => message.text)).toEqual([
+      "Q4: x",
+      "land",
+    ]);
+    expect(wake.expiresAt).toBe(NOW + 10_000 + BUDGET_MS.message);
+  });
+
+  it("leaves a landing word during a run to the wake after it", () => {
+    // A running room still only marks dirty: one wake runs per room, whatever
+    // the word says.
+    const arrived = enqueue(
+      running(),
+      { reason: "message", message: saidAt("1.9", "land") },
+      NOW + 60_000,
+    );
+    expect(arrived.commands).toEqual([]);
+    expect(arrived.state.queued).toBe("message");
+    expect(arrived.state.alarm).toEqual({
+      kind: "budget",
+      at: NOW + BUDGET_MS.message,
+    });
+
+    const after = done(arrived.state, NOW + 120_000);
+    expect(fireOf(after.commands).messages.map((one) => one.text)).toEqual([
+      "land",
+    ]);
   });
 
   it("answers a debounce with nothing behind it by clearing the alarm", () => {
