@@ -366,7 +366,7 @@ describe("the Your turn card", () => {
     expect(card).toContain("robin");
   });
 
-  it("the Assign picker lists every known handle, the role's own first", () => {
+  it("shared-planning-change-stages-SC-68 - The change page's Your turn card on the locally run manual, Assign as a role picker and a handle picker over every handle the team map knows, the chosen role's own first, then everyone else, each group alphabetical", () => {
     const store = {} as unknown as ContentStore;
     const html = render(change(), store, {
       handles: { sam: ["dev"], dana: ["design"], robin: ["pm"] },
@@ -377,14 +377,13 @@ describe("the Your turn card", () => {
       card.indexOf("</select", card.indexOf("Handle")),
     );
 
-    // The default role is `pm`: the record rule is membership-only, so
-    // robin's stand-in for another role is one write away, and the picker
-    // offers every handle it would accept — robin's own first, then dana and
-    // sam after it in the team map's own order.
-    const at = (one: string) => options.indexOf(`>${one}<`);
-    expect(at("robin")).toBeGreaterThan(-1);
-    expect(at("sam")).toBeGreaterThan(at("robin"));
-    expect(at("dana")).toBeGreaterThan(at("sam"));
+    // The page's own job is to offer what `handlesFor` ordered — the rule is
+    // the role's own handles first, then the rest, each group alphabetical,
+    // and `stage-view.test.ts` holds the rule itself. The default role is
+    // `pm`, and the empty option `allowEmpty` draws carries no handle.
+    expect(
+      [...options.matchAll(/<option value="([^"]+)"/g)].map((one) => one[1]),
+    ).toEqual(["robin", "dana", "sam"]);
   });
 
   it("The change page for a change waiting on a stage whose hand is unnamed", () => {

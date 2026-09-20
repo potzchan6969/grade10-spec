@@ -113,6 +113,17 @@ describe("what the hands endpoint writes", () => {
     expect(manifestOf(root).hands).toEqual({ pm: "kim" });
   });
 
+  it("shared-planning-change-stages-SC-68 - a stand-in the map lists under another role is written", async () => {
+    const { root, api } = store();
+
+    const answer = await api(
+      assign({ change: "expire-loyalty-points", role: "dev", handle: "robin" }),
+    );
+
+    expect(answer.status).toBe(200);
+    expect(manifestOf(root).hands).toEqual({ dev: "robin" });
+  });
+
   it("normalizes the handle the way every reader in the store spells one", async () => {
     const { root, api } = store();
 

@@ -1,10 +1,17 @@
 import { DRAFTED, moveOf, STAGES } from "./stages.ts";
-import type { BehindArtifact, ChangeEntry, Role, Stage } from "./types";
+import type {
+  BehindArtifact,
+  ChangeEntry,
+  Role,
+  SnapshotTeam,
+  Stage,
+} from "./types";
 import { ROLES } from "./types.ts";
 
 /**
  * How a derived fact reads on a surface: the words for a stage and a role, the
- * agent's mark and the hand's move, and what one behind artifact names.
+ * handles a role is offered, the agent's mark and the hand's move, and what
+ * one behind artifact names.
  *
  * One module because every surface says the same thing about the same fact —
  * the lane heading, the stepper, the Your turn card, the hands table, the
@@ -32,6 +39,26 @@ export const ROLE_LABEL: Record<Role, string> = {
 /** The roles, in the order the `hands:` table lists them — `ROLES` in
  * `api/types.ts`, the one declaration every reader of the six imports. */
 export { ROLES };
+
+/**
+ * Every handle the team map names, in the order one role is offered them: the
+ * role's own first, then everyone else, each group alphabetical.
+ *
+ * The record rule is membership-only, so a handle standing in for a role the
+ * map does not list it under is one write: the picker sorts the role's own to
+ * the top rather than filtering the rest out. The order is this function's
+ * because the map's own key order is the YAML file's, which nobody reading a
+ * picker can see.
+ */
+export function handlesFor(team: SnapshotTeam, role: Role): string[] {
+  const byHandle = (one: string, two: string) => one.localeCompare(two);
+  const own: string[] = [];
+  const rest: string[] = [];
+  for (const [handle, roles] of Object.entries(team.handles)) {
+    (roles.includes(role) ? own : rest).push(handle);
+  }
+  return [...own.sort(byHandle), ...rest.sort(byHandle)];
+}
 
 /** A role as a row's own label, where it opens a line rather than sitting in
  * one. `QA` is already a name and is left as it is written. */

@@ -9,7 +9,13 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { ArrowSquareOut } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Link } from "react-router";
-import { movesOfHands, ROLE_LABEL, ROLES, roleTitle } from "../api/stage-view";
+import {
+  handlesFor,
+  movesOfHands,
+  ROLE_LABEL,
+  ROLES,
+  roleTitle,
+} from "../api/stage-view";
 import { DRAFTED, handOf } from "../api/stages";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
@@ -200,11 +206,13 @@ type AssignState =
   | { kind: "error"; message: string };
 
 /**
- * A role picker and a handle picker over every handle the team map knows,
- * the chosen role's own listed first — decided over the free-text field this
- * form drew at first: the record rule is membership-only, so a handle
- * standing in for a role the map does not list it under is one write, and
- * the picker offers exactly what that write accepts.
+ * A role picker and a handle picker over every handle the team map knows, the
+ * chosen role's own first and each group alphabetical — decided over the
+ * free-text field this form drew at first: the record rule is
+ * membership-only, so a handle standing in for a role the map does not list
+ * it under is one write, and the picker offers exactly what that write
+ * accepts. `handlesFor` is the order, so the one list every surface offers is
+ * read from one place.
  */
 function AssignForm({
   change,
@@ -218,10 +226,7 @@ function AssignForm({
   const [handle, setHandle] = useState("");
   const [state, setState] = useState<AssignState>({ kind: "idle" });
 
-  const entries = Object.entries(index.snapshot.team.handles);
-  const own = entries.filter(([, roles]) => roles.includes(role));
-  const rest = entries.filter(([, roles]) => !roles.includes(role));
-  const handles = [...own, ...rest].map(([one]) => one);
+  const handles = handlesFor(index.snapshot.team, role);
   const chosen = handles.includes(handle) ? handle : "";
 
   return (
@@ -241,12 +246,12 @@ function AssignForm({
       }}
     >
       <div className="w-36">
+        {/* The pick stays as the role changes: the list no longer depends on
+         * the role, and `chosen` already drops a handle the map stops
+         * naming. */}
         <SelectField
           label="Role"
-          onChange={(next) => {
-            setRole(next as Role);
-            setHandle("");
-          }}
+          onChange={(next) => setRole(next as Role)}
           options={ROLES}
           value={role}
         />

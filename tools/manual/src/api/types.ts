@@ -432,8 +432,9 @@ export type TeamMap = {
 /** The team map, projected for the browser: a handle against the roles it
  * may take, with no e-mail, Slack member or channel in it — those address a
  * message, which is the notify script's own job, never the manual's. Assign's
- * handle picker filters `handles` by the chosen role, and My turn reads it to
- * say a handle is unknown; neither needs more of the map than this. */
+ * handle picker offers every handle in `handles`, the chosen role's own
+ * first, and My turn reads it to say a handle is unknown; neither needs more
+ * of the map than this. */
 export type SnapshotTeam = {
   handles: Record<string, Role[]>;
 };
