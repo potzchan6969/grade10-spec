@@ -239,9 +239,10 @@ describe("a landing on a word", () => {
     ).toEqual({ ok: false, check: "file-outside-change" });
   });
 
-  it("holds a task group to the word, the hand and its own landed_by line", () => {
+  it("holds a task group to the word and the hand, and to no record line", () => {
     // A group lands code: its paths are the group's own, held by the run's
-    // guard before it pushes, so the relay checks everything but them (`Q68`).
+    // guard before it pushes, and the record carries no `landed_by:` for a
+    // group, so the relay checks the word and the hand alone (`Q68`).
     const group = {
       artifact: "3",
       senderHandle: "kinisworking",
@@ -259,10 +260,7 @@ describe("a landing on a word", () => {
       ok: false,
       check: "word-not-said",
     });
-    expect(checkWord(word({ ...group, artifact: "4" }))).toEqual({
-      ok: false,
-      check: "landed-by-mismatch",
-    });
+    expect(checkWord(word({ ...group, artifact: "4" }))).toEqual({ ok: true });
   });
 });
 

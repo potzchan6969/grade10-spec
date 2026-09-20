@@ -122,9 +122,12 @@ async function onRun(
 ): Promise<Response> {
   const claims = await verifyWakeToken(env.TOKEN_SECRET, token, Date.now());
   if (!claims) return json(401, { reason: "bad-token" });
+  const room = env.ROOM.get(env.ROOM.idFromString(claims.room));
+  // The one GET: a question with no body, asked before every push.
+  if (call === "alive")
+    return callRoom(room, { op: "alive", wake: claims.wake });
   const body = (await readJson(request)) as Record<string, unknown> | null;
   if (body === null) return notJson();
-  const room = env.ROOM.get(env.ROOM.idFromString(claims.room));
   const op = opOf(call, claims.wake, body);
   if (!op) return json(404, { reason: "unknown-call" });
   return callRoom(room, op);
@@ -166,10 +169,12 @@ export default {
     if (missing)
       return json(500, { reason: "missing-secret", secret: missing });
     const path = new URL(request.url).pathname;
-    if (request.method !== "POST") return json(405, { reason: "post-only" });
+    const run = /^\/runs\/([^/]+)\/([a-z]+)$/.exec(path);
+    const alive = run !== null && run[2] === "alive";
+    if (request.method !== (alive ? "GET" : "POST"))
+      return json(405, { reason: alive ? "get-only" : "post-only" });
     if (path === "/slack/events") return onSlackEvents(request, env, ctx);
     if (path === "/wake") return onWake(request, env);
-    const run = /^\/runs\/([^/]+)\/([a-z]+)$/.exec(path);
     if (run) return onRun(request, env, run[1], run[2]);
     return json(404, { reason: "no-route" });
   },

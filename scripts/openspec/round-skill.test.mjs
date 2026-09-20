@@ -615,7 +615,10 @@ test("shared-planning-agent-rounds-SC-68 - a resumed run continues from what is 
     skill,
     /A run that died mid-draft is picked up, never re-drafted: the files and the thread are the only state a round keeps/i,
   );
-  assert.match(skill, /every wake is a fresh session that remembers nothing else/i);
+  assert.match(
+    skill,
+    /every wake is a fresh session that remembers nothing else/i,
+  );
   assert.match(skill, /\*\*The wake\*\* — `\.round\/relay\.json`/i);
 });
 

@@ -83,6 +83,8 @@ export class Room {
           return await this.onLand(op);
         case "done":
           return await this.onDone(op);
+        case "alive":
+          return await this.onAlive(op);
         default:
           return json(400, { reason: "unknown-op" });
       }
@@ -200,6 +202,18 @@ export class Room {
     if (!isRunningWake(state, op.wake))
       return json(401, { reason: "stale-wake" });
     return json(200, { ts: await this.post(state, op.text) });
+  }
+
+  /** Whether the token's wake is still the one this room is running: the
+   * guard asks before every push, so a run the room gave up on stops pushing
+   * instead of landing on a thread that has moved on. */
+  private async onAlive(
+    op: Extract<RoomOp, { op: "alive" }>,
+  ): Promise<Response> {
+    const state = await this.load();
+    if (!isRunningWake(state, op.wake))
+      return json(401, { reason: "stale-wake" });
+    return json(200, { alive: true });
   }
 
   private async onDone(op: Extract<RoomOp, { op: "done" }>): Promise<Response> {

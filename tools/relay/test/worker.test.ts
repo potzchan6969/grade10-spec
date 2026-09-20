@@ -333,6 +333,27 @@ describe("/runs/:token", () => {
     ]);
   });
 
+  it("asks the token's room whether the wake is alive, on a GET with no body", async () => {
+    const sent: Sent[] = [];
+    const env = testEnv(sent);
+    const token = await mintWakeToken(TOKEN_SECRET, claims);
+    const get = (method: string, who = token) =>
+      worker.fetch(
+        new Request(`https://relay.example/runs/${who}/alive`, { method }),
+        env,
+        context([]),
+      );
+    const bad = await get("GET", "not.atoken");
+    expect(bad.status).toBe(401);
+    expect(sent).toEqual([]);
+    const posted = await get("POST");
+    expect(posted.status).toBe(405);
+    expect(await posted.json()).toEqual({ reason: "get-only" });
+    const asked = await get("GET");
+    expect(asked.status).toBe(200);
+    expect(sent).toEqual([{ room: ROOM_ID, op: { op: "alive", wake: 1 } }]);
+  });
+
   it("refuses a token past its budget", async () => {
     const sent: Sent[] = [];
     const token = await mintWakeToken(TOKEN_SECRET, {

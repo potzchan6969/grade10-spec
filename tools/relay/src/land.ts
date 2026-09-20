@@ -158,14 +158,15 @@ export function checkWord(landing: WordLanding): Verdict {
   const sender = handleOf(landing.senderHandle);
   const hand = handFor(landing.record, role.role);
   if (!hand || handleOf(hand) !== sender) return refuse("not-the-hand");
+
+  // A task group lands code: the record carries no `landed_by:` line for a
+  // group, and its paths are the group's own, held by the run's guard before
+  // it pushes (`Q68`). An artifact lands text, claims its hand in the record,
+  // and text has one writable set.
+  if (IS_GROUP.test(landing.artifact.trim())) return { ok: true };
   const landed = landedBy(landing.record, landing.artifact);
   if (!landed || handleOf(landed) !== sender)
     return refuse("landed-by-mismatch");
-
-  // A task group lands code, whose paths are the group's own and are held by
-  // the run's guard before it pushes; an artifact lands text, and text has one
-  // writable set.
-  if (IS_GROUP.test(landing.artifact.trim())) return { ok: true };
   const allowed = [`openspec/changes/${landing.change}/`, ...LANDING_PATHS];
   const inside = landing.paths.every((path) =>
     allowed.some((prefix) => path.startsWith(prefix)),

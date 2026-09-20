@@ -16,7 +16,8 @@ export type RoomOp =
   | { op: "bind"; wake: number; change: string }
   | { op: "post"; wake: number; text: string }
   | { op: "land"; wake: number; sha: string; kind: LandKind; artifact: string }
-  | { op: "done"; wake: number };
+  | { op: "done"; wake: number }
+  | { op: "alive"; wake: number };
 
 export function json(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {

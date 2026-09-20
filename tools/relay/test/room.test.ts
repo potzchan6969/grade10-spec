@@ -503,11 +503,24 @@ describe("the change's room", () => {
       { op: "bind", wake: 2, change: CHANGE },
       { op: "done", wake: 2 },
       { op: "land", wake: 2, sha: SHA, kind: "word", artifact: "proposal" },
+      { op: "alive", wake: 2 },
     ] as RoomOp[]) {
       const response = await relay.send(CHANGE_ROOM, op);
       expect(response.status).toBe(401);
       expect(await response.json()).toEqual({ reason: "stale-wake" });
     }
+  });
+
+  it("says the running wake is alive, and an idle room says nothing is", async () => {
+    const relay = harness();
+    await landing(relay);
+    const alive = await relay.send(CHANGE_ROOM, { op: "alive", wake: 1 });
+    expect(alive.status).toBe(200);
+    expect(await alive.json()).toEqual({ alive: true });
+    await relay.send(CHANGE_ROOM, { op: "done", wake: 1 });
+    const after = await relay.send(CHANGE_ROOM, { op: "alive", wake: 1 });
+    expect(after.status).toBe(401);
+    expect(await after.json()).toEqual({ reason: "stale-wake" });
   });
 
   it("frees the room on done, and fires again for what waited", async () => {
