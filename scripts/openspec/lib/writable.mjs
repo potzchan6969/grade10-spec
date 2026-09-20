@@ -2,11 +2,9 @@
  * What a re-read of one change may write, in one place.
  *
  * `.claude/skills/round/SKILL.md`: "`openspec/changes/<change>/` and the
- * pages the proposal links, and nothing else". Two steps of the job hold the
- * agent to that — `reread-settings.mjs` denies what it may not reach,
- * `reread-guard.mjs` fails on what it pushed anyway — and a boundary written
- * twice is a boundary the two steps can disagree about, which is how a page
- * write came to be allowed by the settings and failed by the guard.
+ * pages the proposal links, and nothing else". `reread-guard.mjs` is what
+ * holds a session to that — it fails on a path a run pushed anyway — so the
+ * boundary is written once here rather than beside each thing that reads it.
  *
  * The pages come from the proposal, through `pageSections` — the same reading
  * that gives a reader what is before the draft, so what a round is given and

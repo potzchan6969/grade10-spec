@@ -3,23 +3,27 @@
  * Fails on a path a re-read pushed outside what it may write.
  *
  * A re-read edits one change's artifacts and the pages its proposal links —
- * `lib/writable.mjs` is that boundary, and `reread-settings.mjs` denies the
- * rest to the agent. This is the repository's own limit rather than the
- * agent's: it reads the paths of the commits this run made and fails loudly
- * rather than reverting quietly when one of them touched a path the round has
- * no business in — a page the proposal never linked included, which the
- * settings leave open because `docs/prds/` is where the pages it may mark
- * live.
+ * `lib/writable.mjs` is that boundary. This is the repository's own limit
+ * rather than the agent's: the session runs it itself before every push it
+ * makes, and it fails loudly rather than reverting quietly when one of the
+ * commits it made touched a path the round has no business in — a page the
+ * proposal never linked included, since `docs/prds/` is where the pages it
+ * may mark live and nothing narrower denies the rest of it up front. The
+ * relay checks its own coarser set again before it moves `main` — the
+ * change's own directory, `docs/prds/` and `docs/references/` (Q55) — so a
+ * session that skipped this guard is still caught, just later and more
+ * broadly.
  *
  *   node scripts/openspec/reread-guard.mjs <change> --before <sha> [--root <dir>]
  *
- * The commits this run made are the ones `plan:land` named in `.round/landed`
- * as it committed them. The range `<before>..HEAD` is not those: the landing
- * rebases the change's branch on a moved `origin/main`, so every commit
- * `main` gained while the round was reading arrives in the job's checkout and
- * would read as a path the re-read pushed. `--before` is the fallback for a
- * run that committed nothing through the landing, and the guard says which of
- * the two it read.
+ * `--before` is the branch tip the session read at the start, before its
+ * first push. The commits this run made are the ones `plan:land` named in
+ * `.round/landed` as it committed them, not the range `<before>..HEAD`: the
+ * landing rebases the change's branch on a moved `origin/main`, so every
+ * commit `main` gained while the round was reading arrives in the checkout
+ * and would read as a path the re-read pushed. `--before` is the fallback for
+ * a run that committed nothing through the landing, and the guard says which
+ * of the two it read.
  */
 import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
