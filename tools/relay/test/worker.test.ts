@@ -530,6 +530,32 @@ describe("/slack/actions", () => {
     expect(slack.updates()).toEqual([]);
   });
 
+  it("answers a body with no press in it, rather than refusing it", async () => {
+    // Slack's own `ssl_check=1` arrives here when the request URL is saved,
+    // signed and carrying no payload.
+    const slack = answered();
+    const sent: Sent[] = [];
+    const body = "ssl_check=1";
+    const timestamp = String(Math.floor(Date.now() / 1000));
+    const response = await worker.fetch(
+      new Request("https://relay.example/slack/actions", {
+        method: "POST",
+        headers: {
+          "x-slack-request-timestamp": timestamp,
+          "x-slack-signature": await signSlackRequest(SIGNING, timestamp, body),
+          "content-type": "application/x-www-form-urlencoded",
+        },
+        body,
+      }),
+      testEnv(rooms(sent)),
+      context([]),
+    );
+    expect(response.status).toBe(200);
+    expect(await response.text()).toBe("");
+    expect(sent).toEqual([]);
+    expect(slack.posts()).toEqual([]);
+  });
+
   it("logs an update Slack refused and lets the word stand", async () => {
     const told = vi.spyOn(console, "error").mockImplementation(() => {});
     const slack = answered({
