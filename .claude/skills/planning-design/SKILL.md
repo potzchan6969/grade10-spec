@@ -46,8 +46,7 @@ is what this change chose - and a state that contradicts a recorded decision is
 not automatically your error to absorb.
 
 Optional: **a change with no user-facing surface skips the file entirely.**
-Nothing downstream waits on it, and `openspec status` simply lists it as not
-produced. Do not write an empty one to look complete. A PM who already has the
+Nothing downstream waits on it. Do not write an empty one to look complete. A PM who already has the
 design writes it themselves — what the file must hold does not change with who
 types it.
 
