@@ -37,7 +37,7 @@ function spoken(text: string): string {
     .replaceAll("&amp;", "&");
 }
 
-export function parseMrkdwn(text: string): SlackToken[] {
+function parseMrkdwn(text: string): SlackToken[] {
   const tokens: SlackToken[] = [];
   let cut = 0;
   for (const match of text.matchAll(MRKDWN)) {

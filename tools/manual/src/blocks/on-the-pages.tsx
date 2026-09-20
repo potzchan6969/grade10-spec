@@ -126,7 +126,7 @@ function sectionsOf(change: ChangeEntry, index: ManualIndex): MarkedSection[] {
       route: page.route,
       lines: marks.map((mark) => ({
         text: mark.text,
-        ...handOf(change.questions ?? [], path, slug, mark.text),
+        ...handOfLine(change.questions ?? [], path, slug, mark.text),
       })),
     });
   }
@@ -137,7 +137,7 @@ function sectionsOf(change: ChangeEntry, index: ManualIndex): MarkedSection[] {
  * text `markQuestions` wrote — the line with its ❓ taken off, read by the
  * same function that wrote it. A handle where the change names one, the role
  * as open where it does not. */
-function handOf(
+function handOfLine(
   questions: OpenQuestion[],
   path: string,
   slug: string,
