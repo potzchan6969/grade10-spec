@@ -366,10 +366,10 @@ describe("the Your turn card", () => {
     expect(card).toContain("robin");
   });
 
-  it("shared-planning-change-stages-SC-68 - Assign's handle picker is the team map's handles filtered by the chosen role", () => {
+  it("the Assign picker lists every known handle, the role's own first", () => {
     const store = {} as unknown as ContentStore;
     const html = render(change(), store, {
-      handles: { robin: ["pm"], dana: ["design"] },
+      handles: { sam: ["dev"], dana: ["design"], robin: ["pm"] },
     });
     const card = html.slice(html.indexOf("Your turn"));
     const options = card.slice(
@@ -377,10 +377,14 @@ describe("the Your turn card", () => {
       card.indexOf("</select", card.indexOf("Handle")),
     );
 
-    // The default role is `pm`, the first of the six: only its own handle is
-    // offered, never a handle taken for a role nobody picked.
-    expect(options).toContain("robin");
-    expect(options).not.toContain("dana");
+    // The default role is `pm`: the record rule is membership-only, so
+    // robin's stand-in for another role is one write away, and the picker
+    // offers every handle it would accept — robin's own first, then dana and
+    // sam after it in the team map's own order.
+    const at = (one: string) => options.indexOf(`>${one}<`);
+    expect(at("robin")).toBeGreaterThan(-1);
+    expect(at("sam")).toBeGreaterThan(at("robin"));
+    expect(at("dana")).toBeGreaterThan(at("sam"));
   });
 
   it("The change page for a change waiting on a stage whose hand is unnamed", () => {
