@@ -1,7 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { type Env, REQUIRED_SECRETS } from "../src/env.ts";
 import { signGithubEvent } from "../src/github-events.ts";
-import type { Head } from "../src/live-state.ts";
 import type { LiveOp, RoomOp } from "../src/rpc.ts";
 import { signSlackRequest } from "../src/slack.ts";
 import { mintWakeToken } from "../src/token.ts";
@@ -10,7 +9,8 @@ import {
   APP,
   BOT_TOKEN,
   CHANNEL,
-  REPO,
+  HEAD,
+  push,
   SIGNING,
   stubNamespace,
   TOKEN_SECRET,
@@ -871,26 +871,6 @@ describe("/runs/:token", () => {
     expect(await response.json()).toEqual({ reason: "unknown-call" });
   });
 });
-
-const HEAD: Head = {
-  main: "d6fde92930d4715a2b49857d24b940956b26d2d3",
-  at: "2026-09-20T14:02:11+08:00",
-  subject: "docs(planning): the live line",
-};
-
-/** A push of `main`, with whatever this test changes of it. */
-function push(over: Record<string, unknown> = {}): unknown {
-  return {
-    ref: "refs/heads/main",
-    after: HEAD.main,
-    repository: { full_name: REPO },
-    head_commit: {
-      timestamp: HEAD.at,
-      message: `${HEAD.subject}\n\nThe body a page never shows.`,
-    },
-    ...over,
-  };
-}
 
 describe("/github/events", () => {
   async function delivery(

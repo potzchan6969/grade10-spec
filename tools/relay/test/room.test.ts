@@ -2,7 +2,13 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { Room } from "../src/room.ts";
 import { freshRoom, type RoomState } from "../src/room-state.ts";
 import type { RoomOp } from "../src/rpc.ts";
-import { CHANNEL, stubNamespace, testEnv } from "./fixtures.ts";
+import {
+  CHANNEL,
+  type StorageMap,
+  storageMap,
+  stubNamespace,
+  testEnv,
+} from "./fixtures.ts";
 
 /** The room, driven over a stub `DurableObjectState` — a storage map and one
  * alarm — with the code host, the runner and Slack all answered by an
@@ -111,37 +117,10 @@ function answers(over: Partial<Answers> = {}): Answers {
   };
 }
 
-class Storage {
-  readonly held = new Map<string, unknown>();
-  alarm: number | null = null;
-
-  async get<T>(key: string): Promise<T | undefined> {
-    return this.held.get(key) as T | undefined;
-  }
-
-  async put(key: string, value: unknown): Promise<void> {
-    // The runtime stores what it can serialize, so a state that stopped being
-    // plain data would fail here rather than in production.
-    this.held.set(key, JSON.parse(JSON.stringify(value)));
-  }
-
-  async delete(key: string): Promise<boolean> {
-    return this.held.delete(key);
-  }
-
-  async setAlarm(at: number): Promise<void> {
-    this.alarm = at;
-  }
-
-  async deleteAlarm(): Promise<void> {
-    this.alarm = null;
-  }
-}
-
 function harness(over: Partial<Answers> = {}) {
   const table = answers(over);
   const calls: Call[] = [];
-  const rooms = new Map<string, { room: Room; storage: Storage }>();
+  const rooms = new Map<string, { room: Room; storage: StorageMap }>();
 
   const env = testEnv({
     ROOM: stubNamespace(async (name, request) => of(name).room.fetch(request)),
@@ -150,7 +129,7 @@ function harness(over: Partial<Answers> = {}) {
   function of(name: string) {
     let held = rooms.get(name);
     if (!held) {
-      const storage = new Storage();
+      const storage = storageMap();
       const ctx = {
         id: { toString: () => name },
         storage,
@@ -217,7 +196,7 @@ function harness(over: Partial<Answers> = {}) {
     state(name: string): RoomState | undefined {
       return of(name).storage.held.get("state") as RoomState | undefined;
     },
-    storage(name: string): Storage {
+    storage(name: string): StorageMap {
       return of(name).storage;
     },
     /** What the room asked the runner to fire, as the run reads it. */

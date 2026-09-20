@@ -1,20 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { type Head, headBody, headText, moved } from "../src/live-state.ts";
+import { headBody, headText, moved } from "../src/live-state.ts";
+import { HEAD, NEXT } from "./fixtures.ts";
 
 /** Where `main` is: the shape a page reads before any push and after one, and
  * the one move — the next head, and the broadcast that tells every open page. */
-
-const HEAD: Head = {
-  main: "d6fde92930d4715a2b49857d24b940956b26d2d3",
-  at: "2026-09-20T14:02:11+08:00",
-  subject: "docs(planning): the live line",
-};
-
-const NEXT: Head = {
-  main: "9f1c0a7b2d3e4f5061728394a5b6c7d8e9f01234",
-  at: "2026-09-20T15:11:02+08:00",
-  subject: "feat(relay): the eighth secret",
-};
 
 describe("the head a page reads", () => {
   it("names `main` as null before any push", () => {

@@ -4,12 +4,10 @@ import {
   signGithubEvent,
   verifyGithubSignature,
 } from "../src/github-events.ts";
+import { HEAD, push, REPO } from "./fixtures.ts";
 
 /** The code host's side: the signature over the body as it arrived, the push
  * read down to one move, and the deliveries that tell nobody. */
-
-const REPO = "9gag/grade10-spec";
-const SHA = "d6fde92930d4715a2b49857d24b940956b26d2d3";
 
 // The code host's own published vector: HMAC-SHA256 of the body below under the
 // secret below, computed away from this code.
@@ -17,21 +15,6 @@ const SECRET = "It's a Secret to Everybody";
 const BODY = "Hello, World!";
 const SIGNATURE =
   "sha256=757107ea0eb2509fc211221cce984b8a37570b6d7586c22c46f4379c8b043e17";
-
-/** A push of `main`, with whatever this test changes of it. */
-function push(over: Record<string, unknown> = {}): unknown {
-  return {
-    ref: "refs/heads/main",
-    after: SHA,
-    repository: { full_name: REPO },
-    head_commit: {
-      id: SHA,
-      timestamp: "2026-09-20T14:02:11+08:00",
-      message: "docs(planning): the live line\n\nThe body a page never shows.",
-    },
-    ...over,
-  };
-}
 
 describe("the signature", () => {
   it("accepts the code host's own vector", async () => {
@@ -101,11 +84,7 @@ describe("the delivery", () => {
   it("reads a push of `main` as the commit, its time and its subject", () => {
     expect(parseGithubEvent("push", push(), REPO)).toEqual({
       kind: "moved",
-      head: {
-        main: SHA,
-        at: "2026-09-20T14:02:11+08:00",
-        subject: "docs(planning): the live line",
-      },
+      head: HEAD,
     });
   });
 
@@ -174,18 +153,12 @@ describe("the delivery", () => {
     expect(
       parseGithubEvent(
         "push",
-        push({
-          head_commit: { timestamp: "2026-09-20T14:02:11+08:00", message: "" },
-        }),
+        push({ head_commit: { timestamp: HEAD.at, message: "" } }),
         REPO,
       ),
     ).toEqual({
       kind: "moved",
-      head: {
-        main: SHA,
-        at: "2026-09-20T14:02:11+08:00",
-        subject: SHA.slice(0, 7),
-      },
+      head: { main: HEAD.main, at: HEAD.at, subject: HEAD.main.slice(0, 7) },
     });
   });
 

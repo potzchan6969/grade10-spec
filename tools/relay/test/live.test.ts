@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { Live } from "../src/live.ts";
 import { type Head, headText } from "../src/live-state.ts";
 import type { LiveOp } from "../src/rpc.ts";
+import { HEAD, NEXT, storageMap } from "./fixtures.ts";
 
 /** The live object, driven over a stub `DurableObjectState` — a storage map and
  * a list of sockets — with no runtime behind it.
@@ -10,18 +11,6 @@ import type { LiveOp } from "../src/rpc.ts";
  * wiring: what a socket is sent the moment it is accepted, who is told when
  * `main` moves, what is stored, and what happens to a socket whose page went
  * away. */
-
-const HEAD: Head = {
-  main: "d6fde92930d4715a2b49857d24b940956b26d2d3",
-  at: "2026-09-20T14:02:11+08:00",
-  subject: "docs(planning): the live line",
-};
-
-const NEXT: Head = {
-  main: "9f1c0a7b2d3e4f5061728394a5b6c7d8e9f01234",
-  at: "2026-09-20T15:11:02+08:00",
-  subject: "feat(relay): the eighth secret",
-};
 
 /** A page's socket: what it was sent, and whether its page is still there.
  * Sending on a socket that went away throws, as the runtime's does. */
@@ -70,22 +59,8 @@ class Answer {
   }
 }
 
-class Storage {
-  readonly held = new Map<string, unknown>();
-
-  async get<T>(key: string): Promise<T | undefined> {
-    return this.held.get(key) as T | undefined;
-  }
-
-  async put(key: string, value: unknown): Promise<void> {
-    // The runtime stores what it can serialize, so a head that stopped being
-    // plain data would fail here rather than in production.
-    this.held.set(key, JSON.parse(JSON.stringify(value)));
-  }
-}
-
 function harness() {
-  const storage = new Storage();
+  const storage = storageMap();
   const accepted: FakeSocket[] = [];
   const ctx = {
     id: { toString: () => "main" },
@@ -101,8 +76,8 @@ function harness() {
   vi.stubGlobal("WebSocketPair", FakePair);
 
   return {
-    accepted,
     /** The sockets the object holds, as a page's own end reads them. */
+    accepted,
     live,
     async send(op: LiveOp): Promise<Answer> {
       return (await live.fetch(
@@ -220,7 +195,7 @@ describe("a page's socket", () => {
 });
 
 describe("a move", () => {
-  it("stores the head and tells every open socket", async () => {
+  it("shared-planning-change-stages-SC-72 - stores the head and tells every open socket", async () => {
     const relay = harness();
     await relay.upgrade();
     await relay.upgrade();
@@ -234,18 +209,24 @@ describe("a move", () => {
       expect(socket.sent).toEqual([headText(HEAD)]);
   });
 
-  it("drops a socket whose page went away and tells the rest", async () => {
+  it("tells the rest, and logs it, where one page went away", async () => {
     const relay = harness();
     await relay.upgrade();
     await relay.upgrade();
     const [gone, open] = relay.accepted;
     gone.gone = true;
     open.sent.length = 0;
+    const told = vi.spyOn(console, "error").mockImplementation(() => {});
 
     const answer = await relay.send({ op: "moved", head: HEAD });
     expect(answer.read()).toEqual({ moved: true, told: 1 });
     expect(open.sent).toEqual([headText(HEAD)]);
     expect(relay.stored()).toEqual(HEAD);
+    expect(told).toHaveBeenCalledTimes(1);
+    expect(String(told.mock.calls[0][0])).toContain(
+      "a socket did not take the head",
+    );
+    told.mockRestore();
   });
 
   it("says it moved the head where no page was open to be told", async () => {
