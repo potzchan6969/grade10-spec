@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import type { MainHead } from "../src/api/head";
 import type { CheckoutStanding } from "../src/api/types";
-import { fakeClock, fakeHttp } from "./fake-net";
+import { fakeClock, fakeHttp, fakeLines, settle } from "./fake-net";
 import { snapshotOf } from "./manual-fixture";
 
 /**
@@ -19,6 +19,9 @@ import { snapshotOf } from "./manual-fixture";
 const HEAD = "0".repeat(40);
 const MOVED = "9f1c2b4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b";
 const SUBJECT = "docs(planning): the surfaces round on both changes";
+const AFTER = "3b6a1d9c8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b";
+const AFTER_SUBJECT = "feat(relay): the eighth secret";
+const RELAY = "/api/relay";
 
 const held = vi.hoisted(() => ({
   checkout: undefined as unknown,
@@ -43,7 +46,7 @@ vi.mock("../src/api/head", async (importOriginal) => ({
   useMainHead: () => held.head,
 }));
 
-const { pullMain } = await import("../src/api/head");
+const { pullMain, watchMainHead } = await import("../src/api/head");
 const {
   DEPLOYED_POLL_MS,
   isTyping,
@@ -75,11 +78,15 @@ function fakeFocus() {
 
 /** A head `main` reached `minutes` ago, which is what the sentence dates
  * itself by. */
-function movedHead(minutes: number, main = MOVED): MainHead {
+function movedHead(
+  minutes: number,
+  main = MOVED,
+  subject = SUBJECT,
+): MainHead {
   return {
     at: new Date(Date.now() - minutes * 60_000).toISOString(),
     main,
-    subject: SUBJECT,
+    subject,
   };
 }
 
@@ -137,6 +144,32 @@ describe("a hosted page the site has not caught up with", () => {
     expect(html).toContain("This site has not caught up yet.");
     expect(html).not.toContain("rebuilds in a few minutes");
     expect(html).toContain("Refresh now");
+  });
+});
+
+describe("a second commit landing before the page catches up", () => {
+  it("shared-planning-change-stages-SC-72 - leaves one notice, naming the later commit", async () => {
+    const { http } = fakeHttp({ [RELAY]: { url: "https://relay.test" } });
+    const lines = fakeLines();
+    const clock = fakeClock();
+    const arrived: MainHead[] = [];
+    watchMainHead({
+      http,
+      onHead: (head) => arrived.push(head),
+      open: lines.open,
+      wait: clock.wait,
+    });
+    await settle();
+
+    lines.last().message(JSON.stringify(movedHead(4)));
+    lines.last().message(JSON.stringify(movedHead(1, AFTER, AFTER_SUBJECT)));
+
+    const html = render({ head: arrived.at(-1) ?? null });
+
+    expect(arrived).toHaveLength(2);
+    expect(html.match(/data-slot="manual-main-moved"/g)).toHaveLength(1);
+    expect(html).toContain(AFTER_SUBJECT);
+    expect(html).not.toContain(SUBJECT);
   });
 });
 
