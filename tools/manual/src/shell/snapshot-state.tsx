@@ -1,6 +1,7 @@
 import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Text } from "@grade10/design-system/components/display/text";
 import { WarningCircle } from "@phosphor-icons/react";
+import { ShellNotice } from "./shell-notice";
 
 export function SnapshotLoading() {
   return (
@@ -33,14 +34,11 @@ export function SnapshotUnavailable({ message }: { message: string }) {
 
 export function FixtureNotice({ reason }: { reason?: string }) {
   return (
-    <div
-      className="mb-8 rounded-lg border border-warning-border bg-background-subtle px-4 py-3"
-      role="status"
-    >
+    <ShellNotice>
       <Text as="p" size="sm" tone="secondary">
         Showing the bundled fixture — the store snapshot is not being served.
         {reason ? ` (${reason})` : null}
       </Text>
-    </div>
+    </ShellNotice>
   );
 }

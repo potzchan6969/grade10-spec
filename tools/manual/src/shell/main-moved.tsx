@@ -14,6 +14,7 @@ import { relativeTime } from "../api/time";
 import type { CheckoutStanding } from "../api/types";
 import { InlineMarkdown } from "../blocks/inline-markdown";
 import { useEditorSession } from "../editor/session";
+import { ShellNotice } from "./shell-notice";
 
 /**
  * What a page says while it is behind `main`.
@@ -239,11 +240,7 @@ export function MainMoved() {
   if (moved === null && line === null) return null;
 
   return (
-    <div
-      className="mb-8 rounded-lg border border-warning-border bg-background-subtle px-4 py-3"
-      data-slot="manual-main-moved"
-      role="status"
-    >
+    <ShellNotice slot="manual-main-moved">
       {moved === null ? null : (
         <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
           <Text as="p" className="min-w-0 flex-1" size="sm" tone="secondary">
@@ -282,7 +279,7 @@ export function MainMoved() {
           )}
         </div>
       )}
-    </div>
+    </ShellNotice>
   );
 }
 
