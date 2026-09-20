@@ -14,8 +14,11 @@
  * workspace and the manual from its own route, and the sentence around it is
  * the same either way.
  */
-import { ROLE_LABEL } from "../../../tools/manual/src/api/stage-view.ts";
-import { moveOf, STAGE_LABEL } from "../../../tools/manual/src/api/stages.ts";
+import {
+  moveOf,
+  ROLE_LABEL,
+  STAGE_LABEL,
+} from "../../../tools/manual/src/api/stages.ts";
 
 /** A title, safe for Slack's `mrkdwn`: the three characters its own markup
  * reads as syntax, turned into entities before anything builds a link or a

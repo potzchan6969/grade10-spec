@@ -59,6 +59,23 @@ export const STAGE_LABEL: Record<Stage, string> = {
 };
 
 /**
+ * The six roles as the stage table names them.
+ *
+ * Here beside `STAGE_LABEL`, and for the same reason: a Slack message names a
+ * role too - the landing reply says whose turn it is now - and the notify
+ * script reads this module under plain node, where `stage-view.ts` cannot go.
+ * `stage-view.ts` re-exports it, so every surface still reads one list.
+ */
+export const ROLE_LABEL: Record<Role, string> = {
+  pm: "product manager",
+  design: "designer",
+  tech: "tech PIC",
+  dev: "engineer",
+  qa: "QA",
+  release: "release hand",
+};
+
+/**
  * How far a change has got, proven by what is on `main` and never by a key
  * anybody sets.
  *

@@ -1,4 +1,4 @@
-import { DRAFTED, moveOf, STAGES } from "./stages.ts";
+import { DRAFTED, moveOf, ROLE_LABEL, STAGES } from "./stages.ts";
 import type {
   BehindArtifact,
   ChangeEntry,
@@ -21,20 +21,10 @@ import { ROLES } from "./types.ts";
  * found and edited again on the day it changes; every read of both is here.
  */
 
-/** The words for a stage live in `stages.ts`, which the notify script and the
- * digest read under plain node; every surface reads them from here, where the
- * rest of the wording is. */
-export { STAGE_LABEL } from "./stages.ts";
-
-/** The six roles as the stage table names them. */
-export const ROLE_LABEL: Record<Role, string> = {
-  pm: "product manager",
-  design: "designer",
-  tech: "tech PIC",
-  dev: "engineer",
-  qa: "QA",
-  release: "release hand",
-};
+/** The words for a stage and for a role live in `stages.ts`, which the notify
+ * script and the digest read under plain node; every surface reads them from
+ * here, where the rest of the wording is. */
+export { ROLE_LABEL, STAGE_LABEL } from "./stages.ts";
 
 /** The roles, in the order the `hands:` table lists them — `ROLES` in
  * `api/types.ts`, the one declaration every reader of the six imports. */
