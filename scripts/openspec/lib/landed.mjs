@@ -52,10 +52,33 @@ export function landedShas(root) {
 
 /** Every path that changed between two commits, in git's own order and each
  * once: `-z`, so a path with a space or a quote in it is one entry rather
- * than a line git decided to quote. */
+ * than a line git decided to quote.
+ *
+ * A git that refused throws. There is no reading of a diff git would not
+ * give: an empty answer is a range that changed nothing, and a refusal is
+ * this reader broken — a sha the checkout does not hold, or no repository at
+ * all — which a caller that took it for "nothing" would pass silently. */
 export function changedPaths(root, base, after) {
   const listed = git(root, ["diff", "--name-only", "-z", base, after]);
-  return (listed ?? "").split("\0").filter(Boolean);
+  if (listed === null)
+    throw new Error(`git diff ${base}..${after} refused in ${root}`);
+  return listed.split("\0").filter(Boolean);
+}
+
+/** A commit's first parent, or `NOTHING` where it has none. `^@` names every
+ * parent a commit has, which tells the two silences apart that `<sha>^` gives
+ * as one: an empty answer is a commit with no parent, read against the empty
+ * tree, and `null` is git refusing the sha at all. */
+function parentOf(root, sha) {
+  const parents = git(root, ["rev-parse", "--quiet", `${sha}^@`]);
+  if (parents === null)
+    throw new Error(`git rev-parse ${sha}^@ refused in ${root}`);
+  return (
+    parents
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean)[0] ?? NOTHING
+  );
 }
 
 /** Every path a named set of commits touched, each commit against its own
@@ -66,9 +89,8 @@ export function changedPaths(root, base, after) {
 export function commitPaths(root, shas) {
   const paths = new Set();
   for (const sha of shas) {
-    const parent =
-      git(root, ["rev-parse", "--verify", "--quiet", `${sha}^`]) ?? NOTHING;
-    for (const path of changedPaths(root, parent, sha)) paths.add(path);
+    for (const path of changedPaths(root, parentOf(root, sha), sha))
+      paths.add(path);
   }
   return [...paths];
 }

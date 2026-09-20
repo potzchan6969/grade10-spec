@@ -61,17 +61,26 @@ export function outOfBounds(paths, writable) {
  * holds that `main` does not. Read with no fetch — the checkout's own
  * `origin/main` is what the run has been landing against — and each sha
  * once, since a landing that is also unpushed is one commit either way.
+ *
+ * A checkout with no `main`, and a `rev-list` git refused, both throw: what
+ * this run pushed is the whole of what the guard holds it to, and a run that
+ * cannot be read is not a run that pushed nothing.
  */
-export function runCommits(root) {
+function runCommits(root) {
   const main = storeMain(root, { fetch: false });
-  const unpushed = main
-    ? (git(root, ["rev-list", "HEAD", "--not", main.ref]) ?? "")
-        .split("\n")
-        .map((line) => line.trim())
-        .filter(Boolean)
-    : [];
+  if (!main)
+    throw new Error(
+      "no origin/main in this checkout: the guard cannot say what this run pushed",
+    );
+  const listed = git(root, ["rev-list", "HEAD", "--not", main.ref]);
+  if (listed === null)
+    throw new Error(`git rev-list HEAD --not ${main.ref} refused in ${root}`);
+  const unpushed = listed
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
   return {
-    ref: main?.ref,
+    ref: main.ref,
     shas: [...new Set([...landedShas(root), ...unpushed])],
   };
 }
@@ -116,7 +125,7 @@ async function main() {
   const writable = writableBy(root, change);
   const { ref, shas } = runCommits(root);
   const paths = commitPaths(root, shas);
-  const read = `the ${shas.length} commit(s) this run made — ${LANDED}, and HEAD above ${ref ?? "no main"}`;
+  const read = `the ${shas.length} commit(s) this run made — ${LANDED}, and HEAD above ${ref}`;
   const bad = outOfBounds(paths, writable);
   if (bad.length > 0) {
     fail(

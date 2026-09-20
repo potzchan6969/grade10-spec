@@ -57,12 +57,13 @@
  *   8 branch   Rebase the branch onto `L`, so the drafts sit above the
  *              landing, and
  *              `git push --force-with-lease=refs/heads/<branch>:<the sha the run read>`
- *   9 again    On a 409 from the relay, or a push the remote rejected because
- *              the ref moved under it, re-read `main` once and retry from 3;
- *              losing again, reply in the thread and stop. Every other
- *              status the relay gives and every other way git can refuse a
- *              push stops the run, naming the status and the relay's reason
- *              or git's own stderr
+ *   9 again    On a 409 from the relay, or a push of `main` or the branch the
+ *              remote rejected because the ref moved under it, re-read `main`
+ *              once and retry from 3; losing again, reply in the thread and
+ *              stop. Every other status the relay gives and every other way
+ *              git can refuse a push stops the run, naming the status and
+ *              the relay's reason or git's own stderr - the side ref
+ *              included, which this run alone owns and nobody races it for
  *
  * `pnpm land` becomes this step when `land-on-main-through-the-gate` makes one
  * gate for both repositories (`Q36`).
@@ -138,6 +139,11 @@ const root = flags.root ?? join(HERE, "..", "..");
  * object database and the two refs it moves. */
 const scratch = [];
 process.on("exit", done);
+// A signal kills the default listener's process without running `exit`, so
+// the interrupt is turned into an exit of this run's own: the scratch a
+// landing cut goes with it either way.
+for (const signal of ["SIGINT", "SIGTERM"])
+  process.on(signal, () => process.exit(130));
 if (process.env.PLAN_LAND_RACE && !flags.root)
   fail("PLAN_LAND_RACE is a test seam and needs --root");
 let wake;
@@ -388,7 +394,14 @@ async function attemptLanding(attempt) {
   const cells = reviewedOnly ? undefined : rowOf(read, artifact, group);
   const tip = git(["rev-parse", "HEAD"]);
   const base = group ? tip : MAIN;
-  const changed = changedPaths(root, MAIN, tip);
+  // A git that refused is this reading broken, not a branch that changed
+  // nothing: it leaves through `fail`, as `heldIdsOf` does.
+  let changed = [];
+  try {
+    changed = changedPaths(root, MAIN, tip);
+  } catch (cause) {
+    fail(cause.message);
+  }
   // The pages the change may write, held to the exact set the guard holds
   // every push of this run to: the change's own directory is carried by the
   // legs above this one, artifact by artifact, so the pages are what is left
@@ -501,11 +514,13 @@ async function attemptLanding(attempt) {
     // branch exactly as the round left it.
     const side = `refs/heads/claude/${change}-landing`;
     race(attempt);
+    // Forced onto a ref this run alone owns, so a push it refuses is no
+    // race: nothing moved it under this run, and cutting the landing again
+    // would ask the remote the same question twice. Step 9's retry is the
+    // relay's 409 and nothing else.
     const pushed = push([`+${commit}:${side}`]);
-    if (!pushed.ok) {
-      if (!pushed.rejected) fail(`git push refused:\n${pushed.stderr}`);
-      return false;
-    }
+    if (!pushed.ok)
+      fail(`the landing's side ref ${side} would not push:\n${pushed.stderr}`);
     const ref = { kind: "ref", path: side };
     scratch.push(ref);
     const answer = await askTheRelay(() =>
