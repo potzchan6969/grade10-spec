@@ -112,8 +112,12 @@ describe("the stages that say something else", () => {
     expect(html).toContain("decisions");
   });
 
-  it("says nothing at all for a stage that waits on no hand", () => {
-    expect(render(gift(), "designed")).toBe("");
+  it("says so for a stage that waits on no hand", () => {
+    const html = render(gift(), "designed");
+
+    expect(html).toContain("Told now");
+    expect(html).toContain("No message: this stage waits on no hand");
+    expect(html).not.toContain("<blockquote");
   });
 });
 
