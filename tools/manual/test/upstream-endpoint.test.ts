@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { CheckoutStanding } from "../src/api/types";
+import { git as runGit, type GitRun } from "../src/store/git.mts";
 import { originMain, relayOf } from "../src/store/main-moved.mts";
 import { rootsOf } from "../src/store/roots.mts";
 import type { Store } from "../src/store/snapshot.mts";
@@ -42,7 +43,8 @@ function body(answer: Reply) {
 
 /** A clone whose `main` can be moved from somewhere else, which is the only
  * way a fetch has anything to find. `at` is the clock the fetch is throttled
- * on, in the test's hand. */
+ * on, and `calls` is every git call the reading made with what it was given —
+ * both in the test's hand. */
 function checkout() {
   const remote = mkdtempSync(join(tmpdir(), "manual-origin-"));
   execFileSync("git", [
@@ -61,13 +63,18 @@ function checkout() {
   git(["push", "--quiet", "origin", "main"]);
 
   let at = Date.now();
+  const calls: { args: string[]; run?: GitRun }[] = [];
   const endpoints = storeEndpoints(
     rootsOf(root),
     artifacts,
-    originMain(root, () => at),
+    originMain(root, () => at, (where, args, run) => {
+      calls.push({ args, run });
+      return runGit(where, args, run);
+    }),
   );
   return {
     api: async (request: StoreRequest) => body(await endpoints(request)),
+    calls,
     commit,
     git,
     remote,
@@ -106,12 +113,7 @@ describe("what the checkout stands at", () => {
 
     const read = await upstreamOf(store.api);
 
-    expect(read).toMatchObject({
-      ahead: 0,
-      behind: 2,
-      dirty: false,
-      fetched: true,
-    });
+    expect(read).toMatchObject({ ahead: 0, behind: 2, dirty: false });
     expect(Date.parse(String(read.fetchedAt))).not.toBeNaN();
   });
 
@@ -155,12 +157,21 @@ describe("what the checkout stands at", () => {
     const read = body(await endpoints({ path: "/api/upstream" }));
 
     expect(read.status).toBe(200);
-    expect(read.body).toEqual({
-      ahead: 0,
-      behind: 0,
-      dirty: false,
-      fetched: false,
-    });
+    expect(read.body).toEqual({ ahead: 0, behind: 0, dirty: false });
+  });
+
+  it("counts the minute from the attempt, not from a read that worked", async () => {
+    // A remote that is unreachable is the one a page would ask about per tab
+    // per minute. The next reader is answered from the refs the clone has.
+    const store = checkout();
+    store.git(["remote", "set-url", "origin", join(tmpdir(), "manual-gone")]);
+
+    const first = await upstreamOf(store.api);
+    const again = await upstreamOf(store.api);
+
+    expect(store.calls.filter((one) => one.args[0] === "fetch")).toHaveLength(1);
+    expect(first.fetchedAt).toBeUndefined();
+    expect(again.fetchedAt).toBeUndefined();
   });
 });
 
@@ -189,7 +200,7 @@ describe("the pull", () => {
     const answer = await pull(store);
 
     expect(answer.status).toBe(409);
-    expect(String(answer.body.reason)).toContain("uncommitted");
+    expect(String(answer.body.error)).toContain("uncommitted");
     store.waitAMinute();
     expect(await upstreamOf(store.api)).toMatchObject({ behind: 1 });
   });
@@ -206,7 +217,56 @@ describe("the pull", () => {
     const answer = await pull(store);
 
     expect(answer.status).toBe(409);
-    expect(String(answer.body.reason)).toContain("1 commit ahead");
+    expect(String(answer.body.error)).toContain("1 commit ahead");
+  });
+
+  it("carries back the fast-forward git itself refused", async () => {
+    // The third refusal: the tree is clean and nothing is ahead, and git still
+    // says no. What it said is the line the reader is shown.
+    const store = checkout();
+    execFileSync("git", [
+      "--git-dir",
+      store.remote,
+      "update-ref",
+      "-d",
+      "refs/heads/main",
+    ]);
+
+    const answer = await pull(store);
+
+    expect(answer.status).toBe(409);
+    expect(String(answer.body.error)).toContain("main");
+    expect(String(answer.body.error).split("\n")).toHaveLength(1);
+  });
+
+  it("runs one pull at a time, and says so to the second", async () => {
+    // Two tabs, or one reader pressing twice: two fast-forwards over one
+    // working tree race each other through git's own index lock.
+    const store = checkout();
+    moveMain(store.remote, "one");
+
+    const [first, second] = await Promise.all([pull(store), pull(store)]);
+
+    expect(first.status).toBe(200);
+    expect(second.status).toBe(409);
+    expect(second.body.error).toBe("A pull is already running.");
+  });
+
+  it("gives every leg that reaches the network a deadline and no prompt", async () => {
+    // Nobody is at the dev server's terminal to type a password, and a remote
+    // that never answers would hold the endpoint open until the tab closed.
+    const store = checkout();
+    moveMain(store.remote, "one");
+    await pull(store);
+
+    const legs = store.calls.filter((one) =>
+      ["fetch", "pull"].includes(one.args[0]),
+    );
+    expect(legs.map((one) => one.args[0])).toEqual(["fetch", "pull"]);
+    for (const leg of legs) {
+      expect(leg.run?.timeout).toBe(30_000);
+      expect(leg.run?.env?.GIT_TERMINAL_PROMPT).toBe("0");
+    }
   });
 
   it("refuses a checkout with no `origin`", async () => {
@@ -220,7 +280,7 @@ describe("the pull", () => {
     const answer = body(await endpoints({ method: "POST", path: "/api/pull" }));
 
     expect(answer.status).toBe(409);
-    expect(String(answer.body.reason)).toContain("origin");
+    expect(String(answer.body.error)).toContain("origin");
   });
 });
 

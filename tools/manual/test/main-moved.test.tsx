@@ -58,7 +58,7 @@ function movedHead(minutes: number, main = MOVED): MainHead {
 }
 
 function standing(parts: Partial<CheckoutStanding> = {}): CheckoutStanding {
-  return { ahead: 0, behind: 0, dirty: false, fetched: true, ...parts };
+  return { ahead: 0, behind: 0, dirty: false, ...parts };
 }
 
 function render(
@@ -250,7 +250,7 @@ describe("the pull the button presses", () => {
   it("carries a refusal back in the endpoint's own words", async () => {
     const http = (async () =>
       new Response(
-        JSON.stringify({ reason: "Your checkout has uncommitted changes." }),
+        JSON.stringify({ error: "Your checkout has uncommitted work." }),
         {
           headers: { "content-type": "application/json" },
           status: 409,
@@ -258,7 +258,7 @@ describe("the pull the button presses", () => {
       )) as typeof fetch;
 
     expect(await pullMain(http)).toEqual({
-      reason: "Your checkout has uncommitted changes.",
+      error: "Your checkout has uncommitted work.",
     });
   });
 
@@ -266,6 +266,21 @@ describe("the pull the button presses", () => {
     const http = (async () =>
       new Response("no", { status: 404 })) as typeof fetch;
 
-    expect(await pullMain(http)).toHaveProperty("reason");
+    expect(await pullMain(http)).toHaveProperty("error");
+  });
+
+  it("carries an answer of any other shape as an error too", async () => {
+    // A press the reader is told nothing about is the one failure the banner
+    // cannot have: whatever the dev server answered, one line is shown.
+    const http = (async () =>
+      new Response(JSON.stringify({ moved: "who knows" }), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      })) as typeof fetch;
+
+    const outcome = await pullMain(http);
+
+    expect(outcome).toHaveProperty("error");
+    expect(String((outcome as { error: string }).error)).not.toBe("");
   });
 });
