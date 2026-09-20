@@ -297,6 +297,50 @@
 * The second wake fires on the `land` and carries the sentence before it.
 * The sentence alone is acknowledged after the minute.
 
+### shared-planning-agent-rounds-US1-TC10-1: A sentence overlapping a change in flight is answered in its thread
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* <change> is in flight with its deltas naming <capability>, and <change thread> is its thread.
+* The asker is in <planning channel> and names no change in what they post.
+
+**Test data:**
+
+| <change>'s stage, and who asks | What the run does |
+| --- | --- |
+| Proposed or Designed, its own product manager asking | extends <change>, the round deciding it, and the reply names <change> |
+| Proposed or Designed, another hand asking | holds a row on <change>'s product manager, recommending extend |
+| Specified or Planned | holds a row recommending extend where the moved part is smaller than a task group of work, split otherwise |
+| Building | holds a row recommending split, or supersede where the sentence contradicts what is built |
+| On staging, Released or Archived | opens a new change whose `depends_on:` names <change> |
+
+**Steps:**
+
+1. Post a sentence about <capability> in <planning channel>, naming no change.
+2. Read <change thread>.
+3. Read the changes in flight and <change>'s `decisions.md`.
+
+**Expected Results:**
+
+* The reply is in <change thread> and names <change>.
+* What the row names has happened, and no second change on <capability> is opened except where the row says one is.
+* A held row the table above names is a numbered row in <change>'s `decisions.md`, addressed to <change>'s product manager, and holds <change>'s landings.
+
 ---
 
 ## shared-planning-agent-rounds-US2: Designer tweaks a proposed design
@@ -1997,49 +2041,6 @@ Runs once per row of **Test data**.
 * `tasks.md` does not reach `main`.
 * The reply names the open moved-goal question.
 
-### shared-planning-agent-rounds-US7-TC4-1: A sentence overlapping a change in flight is answered in its thread
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** manual
-* **Trace:** shared-planning-agent-rounds-US-07
-
-**Pre-conditions:**
-
-* <change> is in flight with its deltas naming <capability>, and <change thread> is its thread.
-* The asker is in <planning channel> and names no change in what they post.
-
-**Test data:**
-
-| <change>'s stage, and who asks | What the run does |
-| --- | --- |
-| Proposed or Designed, its own product manager asking | extends <change>, the round deciding it, and the reply names <change> |
-| Proposed or Designed, another hand asking | holds a row on <change>'s product manager, recommending extend |
-| Specified or Planned | holds a row recommending extend where the moved part is smaller than a task group of work, split otherwise |
-| Building | holds a row recommending split, or supersede where the sentence contradicts what is built |
-| On staging, Released or Archived | opens a new change whose `depends_on:` names <change> |
-
-**Steps:**
-
-1. Post a sentence about <capability> in <planning channel>, naming no change.
-2. Read <change thread>.
-3. Read the changes in flight and <change>'s decisions.
-
-**Expected Results:**
-
-* The reply is in <change thread> and names <change>.
-* What the row names has happened, and no second change on <capability> is opened except where the row says one is.
-
 ---
 
 ## shared-planning-agent-rounds-US8: QA walks only what staging proves
@@ -2582,6 +2583,8 @@ None yet - the first blind pass.
 
 ## Reconciliation
 
+Run: 2026-09-20, fix pass on the overlap rule: `shared-planning-agent-rounds-SC-80` moved to the requirement that opens a change and now serves `shared-planning-agent-rounds-US-01`, so `US7-TC4-1` moved with it as `US1-TC10-1`, tracing that journey; its expected results name the held row written in the overlapped change's `decisions.md`.
+
 Run: 2026-09-20, later that day: the wake's tests landed, so `US5-TC17-1` is automated again and names them; `US4-TC9-1` stays manual for its thread leg and names the landing's own test.
 
 Run: 2026-09-20, amendment pass over the amended requirements and `decisions.md`'s `Q52` to `Q63`, the questions the runner and the held rows settled. Wrote `US4-TC12-1` and `US4-TC13-1` for the row the round decides and the reply that overturns it; recast `US4-TC1-1` onto the held row, `US1-TC7-1` onto the cases drawn from the anchors, `US2-TC8-1` onto the writable set and a `main` that moved under the run, and `US9-TC10-1` onto the Perspectives column; named the actor and the arrival on `US4-TC10-1`, `US4-TC11-1`, `US5-TC15-1`, `US5-TC16-1` and `US5-TC17-1`, and the layer each is checked on; moved `US4-TC9-1` and `US5-TC17-1` back to manual until the tests that decide them land; dropped `US5-TC18-1`, whose scenario is out of suite above.
@@ -2656,6 +2659,7 @@ Slack thread either.
 | `US1-TC5-1` | The reply asking an unmapped teammate for their handle |
 | `US1-TC6-1` | The same round from a terminal, inside the agent's session |
 | `US1-TC7-1` | The whole chain drafted inside one run's session, from one sentence in Slack |
+| `US1-TC10-1` | The sentence and the reply, typed and read in Slack, and the held row read in the overlapped change; `scripts/openspec/round-skill.test.mjs` already proves the table's words |
 | `US2-TC1-1` | The word `land`, typed in the thread |
 | `US2-TC2-1` | A remark in the thread, and the readers it re-runs in the session |
 | `US2-TC3-1` | A remark in the thread that settles a question |
