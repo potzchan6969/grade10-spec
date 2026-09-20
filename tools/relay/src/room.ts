@@ -61,6 +61,9 @@ export class Room {
   private readonly env: Env;
   /** One cache per live room, which is one cache per change being answered. */
   private readonly team: TeamMap;
+  /** The thread the change's record named, once one was read: a thread moves
+   * nowhere, so it is read once per live room. */
+  private recorded: Thread | null = null;
   /** Whether this instance has already said it could not read the record. */
   private toldOfRecord = false;
 
@@ -355,13 +358,15 @@ export class Room {
     }
   }
 
-  /** The thread the change's record names on `main`, read for every post: a
-   * record whose `thread:` the round has just written is read by the next
-   * line, which a cache for the life of the instance would not be. A record
-   * that names none, and a change the relay cannot read, both answer nothing
-   * — the post falls back to the planning channel, and the dropped read is
-   * reported once rather than on every line. */
+  /** The thread the change's record names on `main`. A record that named one
+   * is held: a thread moves nowhere, and reading it again on every line is a
+   * call on the host per post. A record that names none, and a change the
+   * relay cannot read, are read again for the next line — the `thread:` the
+   * round has just written is read by the line after it — and meanwhile the
+   * post falls back to the planning channel, with the dropped read reported
+   * once rather than on every line. */
   private async threadOf(state: RoomState): Promise<Thread | null> {
+    if (this.recorded) return this.recorded;
     if (!state.change) return null;
     let text: string;
     try {
@@ -377,7 +382,8 @@ export class Room {
     }
     const line = THREAD_LINE.exec(text);
     if (!line) return null;
-    return { channel: line[1], ts: line[2] };
+    this.recorded = { channel: line[1], ts: line[2] };
+    return this.recorded;
   }
 
   /** Carry out one step: the state, then its alarm and its fire, and the

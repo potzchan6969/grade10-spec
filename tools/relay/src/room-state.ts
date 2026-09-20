@@ -80,6 +80,10 @@ export interface RoomState {
    * run. Null is the room having nothing behind it. */
   queued: Reason | null;
   pending: RoomMessage[];
+  /** The lines the running wake carries. A wake the budget cuts answered none
+   * of them, so they go back to the front of `pending` for the wake after it;
+   * a run that says it is done has read them and they go. */
+  carried: RoomMessage[];
   /** How many lines fell off the front of `pending`, until a wake says so. */
   dropped: number;
   thread: Thread | null;
@@ -143,6 +147,7 @@ export function freshRoom(): RoomState {
     reason: null,
     queued: null,
     pending: [],
+    carried: [],
     dropped: 0,
     thread: null,
     change: null,
@@ -250,6 +255,7 @@ function startWake(state: RoomState, reason: Reason, now: number): Step {
       senderSlack: said ? said.slack : state.senderSlack,
       queued: null,
       pending: [],
+      carried: state.pending,
       dropped: 0,
       run: null,
       alarm: { kind: "budget", at: expiresAt },
@@ -262,16 +268,16 @@ function startWake(state: RoomState, reason: Reason, now: number): Step {
 
 /** The run started: the ack carries the wake's subject and, where the runner
  * named a session, its link — so a wake that dies later still has one. A
- * runner that named none leaves the room saying the run did not start. */
+ * runner that named none took the fire all the same, so the ack says the wake
+ * started and the link is missing; a wake that did not start is the budget's
+ * line and `fireFailed`'s. */
 export function fired(state: RoomState, run: RunHandle | null): Step {
   return {
     state: { ...state, run },
     commands: [
       {
         kind: "post",
-        text: run
-          ? `Reading ${subjectOf(state)}… ${run.url}`
-          : didNotStart(state),
+        text: `Reading ${subjectOf(state)}… ${run ? run.url : "(the runner named no session)"}`,
       },
     ],
   };
@@ -299,11 +305,13 @@ export function fireFailed(state: RoomState, why: string): Step {
 }
 
 /** The run's last act. A room with something behind it fires again — never
- * alongside the wake that just ended. */
+ * alongside the wake that just ended. The lines the wake carried go: the run
+ * read them and answered in the thread. */
 export function done(state: RoomState, now: number): Step {
-  const queued = state.queued;
+  const read: RoomState = { ...state, carried: [] };
+  const queued = read.queued;
   if (queued) {
-    const step = startWake({ ...state, alarm: null }, queued, now);
+    const step = startWake({ ...read, alarm: null }, queued, now);
     return {
       state: step.state,
       commands: [{ kind: "clearAlarm" }, ...step.commands],
@@ -311,7 +319,7 @@ export function done(state: RoomState, now: number): Step {
   }
   return {
     state: {
-      ...state,
+      ...read,
       reason: null,
       queued: null,
       run: null,
@@ -321,10 +329,17 @@ export function done(state: RoomState, now: number): Step {
   };
 }
 
-/** The alarm went off: the debounce elapsed, or the budget ran out with no
- * `done`. Anything else — a budget alarm before its time, or one on a room
- * that is not running — answers nothing, because there is no wake to say
- * anything about. */
+/**
+ * The alarm went off: the debounce elapsed, or the budget ran out with no
+ * `done`.
+ *
+ * Three rings say nothing about a wake, and each leaves the room differently.
+ * An alarm no timer of this room's set answers nothing at all. A budget alarm
+ * before its time is armed again, because the runtime holds one alarm per
+ * room and a ring the room ignored would otherwise leave a running wake with
+ * nothing to free it. A budget alarm on a room that is running nothing is
+ * cleared, because it outlived the wake it was set for.
+ */
 export function onAlarm(state: RoomState, now: number): Step {
   if (state.alarm?.kind === "debounce") {
     const queued = state.queued;
@@ -335,13 +350,18 @@ export function onAlarm(state: RoomState, now: number): Step {
       };
     return startWake({ ...state, alarm: null }, queued, now);
   }
-  if (state.alarm?.kind !== "budget" || now < state.alarm.at)
-    return { state, commands: [] };
-  if (state.reason === null) return { state, commands: [] };
+  if (state.alarm?.kind !== "budget") return { state, commands: [] };
+  if (now < state.alarm.at)
+    return { state, commands: [{ kind: "setAlarm", at: state.alarm.at }] };
+  if (state.reason === null)
+    return {
+      state: { ...state, alarm: null },
+      commands: [{ kind: "clearAlarm" }],
+    };
   const text = state.run
     ? `${nameOf(state.reason)} of ${subjectOf(state)} did not finish: ${state.run.url}`
     : didNotStart(state);
-  const step = done(state, now);
+  const step = done(carriedBack(state), now);
   return {
     state: step.state,
     commands: [{ kind: "post", text }, ...step.commands],
@@ -351,6 +371,20 @@ export function onAlarm(state: RoomState, now: number): Step {
 /** The run names the change it opened or picked up. */
 export function bind(state: RoomState, change: string): RoomState {
   return { ...state, change };
+}
+
+/** The lines a cut wake carried, back at the front of the queue: the wake
+ * answered none of them, so the wake after it reads them again, ahead of
+ * whatever arrived since and bounded the way `pending` is. */
+function carriedBack(state: RoomState): RoomState {
+  const all = [...state.carried, ...state.pending];
+  const pending = all.slice(-PENDING_MAX);
+  return {
+    ...state,
+    pending,
+    carried: [],
+    dropped: state.dropped + (all.length - pending.length),
+  };
 }
 
 /** The run that the word woke is done with it: the next wake starts without
@@ -378,8 +412,8 @@ function nameOf(reason: Reason | null): string {
   return reason === null ? "The wake" : WAKE_NAME[reason];
 }
 
-/** The one sentence for a wake with no run behind it, said by the ack that
- * found no session and by the budget that found no link. */
+/** The one sentence for a wake nothing is running behind: said by the budget
+ * that found no link, and by the fire the runner refused. */
 function didNotStart(state: RoomState): string {
   return `${nameOf(state.reason)} of ${subjectOf(state)} did not start.`;
 }
