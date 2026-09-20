@@ -89,6 +89,9 @@ export function selectCases(candidates, options = {}) {
         id: one.tc.id,
         reason: "automation",
         why: "automation status is `automated`",
+        // What the case's own `**Decided by:**` line names, so the run can
+        // print the file a tester would otherwise have to take on trust.
+        decidedBy: (one.tc.decidedBy ?? []).map(({ path }) => path),
       });
       return false;
     }
@@ -139,9 +142,17 @@ export function selectCases(candidates, options = {}) {
  * `leftOut` re-reads `selectCases`' own refusals rather than running the gate
  * again; `included` reads the picked list, which only carries an automated
  * case where the flag let one through.
+ *
+ * `leftOutLines` names each one under the count (Q72 of
+ * `run-a-round-on-every-artifact`): the case, then what its `**Decided by:**`
+ * line names. A count alone points at no file, so a tester wondering why a
+ * journey they walk has a hole in it has nothing to open; a case carrying no
+ * line says so in the same shape, which is how a hole in the store shows up
+ * in a run's own printout.
  */
 export function automatedGateOf({ picked, refused, includeAutomated = false }) {
-  const leftOut = refused.filter((one) => one.reason === "automation").length;
+  const left = refused.filter((one) => one.reason === "automation");
+  const leftOut = left.length;
   const included = includeAutomated
     ? picked.filter((one) => isAutomated(one.tc)).length
     : 0;
@@ -149,6 +160,14 @@ export function automatedGateOf({ picked, refused, includeAutomated = false }) {
   return {
     leftOut,
     included,
+    leftOutLines: left.map(
+      (one) =>
+        `  ${one.id} - ${
+          one.decidedBy?.length > 0
+            ? one.decidedBy.join(", ")
+            : "decided by no named test"
+        }`,
+    ),
     line: `${many} automated case${many === 1 ? "" : "s"} ${
       includeAutomated ? "included" : "left out"
     }`,

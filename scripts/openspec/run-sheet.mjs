@@ -711,7 +711,11 @@ const drafts = picked.filter(
 // zero rather than left unsaid, so a run's own printout is what proves the
 // gate ran (`shared-planning-agent-rounds-SC-61`). The count and the line are
 // `automatedGateOf`'s, beside the gate whose refusals they read.
-const { leftOut: automatedLeftOut, line: automatedLine } = automatedGateOf({
+const {
+  leftOut: automatedLeftOut,
+  leftOutLines: automatedLeftOutLines,
+  line: automatedLine,
+} = automatedGateOf({
   picked,
   refused,
   includeAutomated: args.includeAutomated,
@@ -721,6 +725,9 @@ console.log(
   `${bold("Run sheet")}  ${dim(`${picked.length} case${picked.length === 1 ? "" : "s"}${drafts ? `, ${drafts} draft` : ""}`)}\n`,
 );
 console.log(dim(automatedLine));
+// Each one by name, with what decides it: the count says the gate ran, and
+// these say where to read what it ran on (Q72).
+for (const line of automatedLeftOutLines) console.log(dim(line));
 if (picked.length === 0) {
   // Split by reason, so a selection refused for its status alone never hints
   // at the wrong flag: the two gates are read one at a time, and each names
