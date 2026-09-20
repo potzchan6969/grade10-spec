@@ -97,8 +97,10 @@ export function readChangeDocument(
     deltas,
     // Only where the index found a repository: the fixture is read with none,
     // and a reading whose commits nobody can look up would be a thread the
-    // machine that wrote it invented.
-    history: git.head === "" ? [] : readChangeHistory(root, rel),
+    // machine that wrote it invented. On `main`'s commit, as the task list is
+    // read: the checkout's own branch is where a round drafts.
+    history:
+      git.head === "" ? [] : readChangeHistory(root, rel, main?.commit ?? null),
   };
 }
 

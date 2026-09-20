@@ -17,6 +17,11 @@ import type { ThreadEvent } from "../api/types.ts";
  * kept as the subject it carries — a commit nobody can name is still a thing
  * that happened, and dropping it would leave a gap in the thread.
  *
+ * Read on `main`, the way every other reader of the store's history is: the
+ * checkout the manual runs out of is ahead of `main` while a round drafts, and
+ * a thread showing those commits would say the change had landed things nobody
+ * else can see.
+ *
  * A depth-1 checkout gives one event, which is honest: the history is not
  * there to be read.
  */
@@ -45,13 +50,20 @@ const ENTRY = /^\s+([a-z][a-z0-9._-]*):\s*"?@?([A-Za-z0-9][\w.-]*)"?\s*$/;
  * spells them. */
 const TICKED = /^-\s*\[[xX]\]\s*(\d+(?:\.\d+)*)/;
 
-export function readChangeHistory(root: string, dir: string): ThreadEvent[] {
+/** `commit` is the store's `main`, where the thread is read: a checkout
+ * drafting a round sits ahead of it, and those commits are not in the thread
+ * yet. `null` reads `HEAD`, which is a store whose `main` does not resolve. */
+export function readChangeHistory(
+  root: string,
+  dir: string,
+  commit: string | null,
+): ThreadEvent[] {
   const log = walk(root, [
     "log",
     "--format=%H%x00%cI%x00%s",
     "--name-only",
     "--no-renames",
-    "HEAD",
+    commit ?? "HEAD",
     "--",
     dir,
   ]);
