@@ -522,6 +522,60 @@ describe("the budget", () => {
     });
   });
 
+  it("carries the cut wake's own lines into the wake after it", () => {
+    // A wake that dies has read the words the burst carried and answered
+    // none of them, so the next wake reads them again — the same rule as the
+    // landing word the room keeps.
+    const first = enqueue(
+      freshRoom(),
+      { reason: "message", thread: THREAD, message: saidAt("1.1", "land") },
+      NOW,
+    );
+    const second = enqueue(
+      first.state,
+      { reason: "message", message: saidAt("1.2", "the badge one") },
+      NOW + 10_000,
+    );
+    const ran = onAlarm(second.state, NOW);
+    expect(ran.state.pending).toEqual([]);
+    expect(ran.state.carried.map((one) => one.text)).toEqual([
+      "land",
+      "the badge one",
+    ]);
+
+    const since = enqueue(
+      ran.state,
+      { reason: "message", message: saidAt("1.9", "any news?") },
+      NOW + 60_000,
+    );
+    const cut = onAlarm(since.state, NOW + BUDGET_MS.message);
+    expect(fireOf(cut.commands).messages.map((one) => one.text)).toEqual([
+      "land",
+      "the badge one",
+      "any news?",
+    ]);
+    // The lines are the next wake's now, and nothing carries them twice.
+    expect(cut.state.carried.map((one) => one.text)).toEqual([
+      "land",
+      "the badge one",
+      "any news?",
+    ]);
+    expect(cut.state.pending).toEqual([]);
+  });
+
+  it("drops the cut wake's lines once the run says it is done", () => {
+    const ran = onAlarm(
+      enqueue(
+        freshRoom(),
+        { reason: "message", thread: THREAD, message: saidAt("1.1", "land") },
+        NOW,
+      ).state,
+      NOW,
+    );
+    expect(ran.state.carried).toHaveLength(1);
+    expect(done(ran.state, NOW + 60_000).state.carried).toEqual([]);
+  });
+
   it("posts the line and fires again when something is behind", () => {
     const arrived = enqueue(
       running(),
