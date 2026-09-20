@@ -36,6 +36,7 @@ Depends on `stage-changes-and-notify-hands` groups 1 to 5 for the record's keys,
 - [x] 3.10 `openspec-propose`, `spec-push` and `dev-help` retired, and every skill and governance page that named them swept: `spec-push`'s conflict rules in `/land`'s refusal list, the suite-impact line carrying no gate, and the spec row's rules `planning-qa`'s alone; verified by the skill-reference assertion and the `SKILLS_BUDGET` map in `scripts/openspec/instruction-budget.test.mjs` - `Q84`
 - [ ] 3.11 `planning-qa` cut to what `/specify` needs, each other section checked for its home in `docs/governance/specs-to-test-cases.md`, `spec-to-tcs` or `tcs-review` before it goes
 - [ ] 3.12 `openspec-apply-change` folded into `/build`: its two check bullets into that skill's step 2, its rules line rewritten, `openspec/config.yaml:82`, `openspec/README.md:7` and `planning-dev` repointed, and the file deleted
+- [ ] 3.13 The plan skill reads the changes in flight before it opens one: a sentence that overlaps a change is answered in that change's thread by the overlap table - Proposed or Designed under the same product manager extends it and the round decides, another hand's or Specified and Planned hold an extend-or-split row, Building holds split-or-supersede, and On staging or later opens a new change with `depends_on:` - and `round-skill.test.mjs` holds the table to the decisions - `shared-planning-agent-rounds-SC-80`
 
 ## 4. The surfaces and the run sheet (grade10-spec)
 
